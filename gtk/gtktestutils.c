@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
+#include <gtk/gtkx.h>
 #include "gtkspinbutton.h"
 
 #include <locale.h>
