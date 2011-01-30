@@ -2927,7 +2927,7 @@ gtk_text_view_finalize (GObject *object)
   gtk_text_view_set_buffer (text_view, NULL);
 
   /* at this point, no "notify::buffer" handler should recreate the buffer. */
-  g_assert (priv->buffer == NULL);
+  g_assert (text_view->buffer == NULL);
   
   cancel_pending_scroll (text_view);
 
