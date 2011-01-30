@@ -159,7 +159,7 @@ send_event_handler (Display *dpy,
   else if (dpy->last_request_read == state->get_input_focus_req)
     {
       xGetInputFocusReply replbuf;
-      xGetInputFocusReply *repl;
+      xGetInputFocusReply *repl G_GNUC_UNUSED;
       
       if (rep->generic.type != X_Error)
 	{
@@ -312,7 +312,7 @@ set_input_focus_handler (Display *dpy,
   if (dpy->last_request_read == state->get_input_focus_req)
     {
       xGetInputFocusReply replbuf;
-      xGetInputFocusReply *repl;
+      xGetInputFocusReply *repl G_GNUC_UNUSED;
       
       if (rep->generic.type != X_Error)
 	{
@@ -781,7 +781,7 @@ roundtrip_handler (Display *dpy,
   if (dpy->last_request_read == state->get_input_focus_req)
     {
       xGetInputFocusReply replbuf;
-      xGetInputFocusReply *repl;
+      xGetInputFocusReply *repl G_GNUC_UNUSED;
       
       if (rep->generic.type != X_Error)
 	{
