@@ -950,7 +950,7 @@ gtk_arrow_draw (GtkWidget *widget,
   </section>
 
   <section>
-    <title>Check your expand flags</title>
+    <title>Check your expand and fill flags</title>
 
     <para>
       The behaviour of expanding widgets has changed slightly in GTK+ 3,
@@ -960,6 +960,11 @@ gtk_arrow_draw (GtkWidget *widget,
       setting the container explicity as not expanding will stop the
       expand flag of the child from being inherited. See
       gtk_widget_set_hexpand() and gtk_widget_set_vexpand().
+    </para>
+    <para>
+      If you experience sizing problems with widgets in ported code,
+      carefully check the #GtkBox::expand and #GtkBox::fill flags of your
+      boxes.
     </para>
   </section>
 
