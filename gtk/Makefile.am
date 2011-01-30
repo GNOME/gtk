@@ -16,8 +16,8 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = theme-bits . tests
-DIST_SUBDIRS = theme-bits tests
+SUBDIRS = tests
+DIST_SUBDIRS = tests
 
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
@@ -1348,12 +1348,6 @@ gtkbuiltincache.h: @REBUILD@ stamp-icons
 EXTRA_DIST +=                   \
 	$(STOCK_ICONS)		\
 	$(GENERATED_ICONS)	\
-	line-arrow.xbm 		\
-	line-wrap.xbm 		\
-	tree_plus.xbm		\
-	tree_minus.xbm		\
-	tree_minus.xpm		\
-	tree_plus.xpm		\
 	gtk.def			\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\

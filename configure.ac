@@ -1674,7 +1674,6 @@ gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
-gtk/theme-bits/Makefile
 gtk/tests/Makefile
 modules/Makefile
 modules/other/Makefile
