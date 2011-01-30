@@ -186,9 +186,9 @@
   </simplesect>
 
   <simplesect>
-    <title>Building UIs</title>
+    <title>Building interfaces</title>
 
-    <para>When construcing a more complicated interface, with dozens
+    <para>When construcing a more complicated user interface, with dozens
     or hundreds of widgets, doing all the setup work in C code is
     cumbersome, and making changes becomes next to impossible.</para>
 
