@@ -26,6 +26,7 @@
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
 
+#include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput2.h>
@@ -362,7 +363,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   if (mask)
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state);
 
-  g_free (button_state.mask);
+  free (button_state.mask);
 
   return TRUE;
 }
@@ -531,7 +532,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
                   XSetWindowAttributes attributes;
                   Window w;
 
-                  g_free (button_state.mask);
+                  free (button_state.mask);
 
                   w = XCreateWindow (xdisplay, xwindow, (int)xwin_x, (int)xwin_y, 1, 1, 0,
                                      CopyFromParent, InputOnly, CopyFromParent,
@@ -566,7 +567,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
   while (xwindow)
     {
       last = xwindow;
-      g_free (button_state.mask);
+      free (button_state.mask);
 
       gdk_x11_display_error_trap_push (display);
       XIQueryPointer (xdisplay,
@@ -603,7 +604,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
   if (mask)
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state);
 
-  g_free (button_state.mask);
+  free (button_state.mask);
 
   return window;
 }
