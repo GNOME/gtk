@@ -8761,7 +8761,8 @@ gtk_widget_reset_style (GtkWidget *widget)
  *
  * This function is not useful for applications.
  *
- * Deprecated:3.0: Use #GtkStyleContext instead
+ * Deprecated:3.0: Use #GtkStyleContext instead, and
+ *     gtk_widget_reset_style()
  */
 void
 gtk_widget_reset_rc_styles (GtkWidget *widget)
@@ -8779,7 +8780,9 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
  * Returns: (transfer none): the default style. This #GtkStyle
  *     object is owned by GTK+ and should not be modified or freed.
  *
- * Deprecated:3.0: Use #GtkStyleContext instead
+ * Deprecated:3.0: Use #GtkStyleContext instead, and
+ *     gtk_css_provider_get_default() to obtain a #GtkStyleProvider
+ *     with the default widget style information.
  */
 GtkStyle*
 gtk_widget_get_default_style (void)
