@@ -508,7 +508,6 @@ gail_text_view_get_offset_at_point (AtkText      *text,
                                     AtkCoordType coords)
 {
   GtkTextView *view;
-  GtkTextBuffer *buffer;
   GtkTextIter loc_itr;
   gint x_widget, y_widget, x_window, y_window, buff_x, buff_y;
   GtkWidget *widget;
@@ -521,7 +520,6 @@ gail_text_view_get_offset_at_point (AtkText      *text,
     return -1;
 
   view = GTK_TEXT_VIEW (widget);
-  buffer = gtk_text_view_get_buffer (view);
 
   window = gtk_text_view_get_window (view, GTK_TEXT_WINDOW_WIDGET);
   gdk_window_get_origin (window, &x_widget, &y_widget);

@@ -1479,10 +1479,7 @@ gail_tree_view_add_row_selection (AtkTable *table,
       else
         { 
           set_iter_nth_row (tree_view, &iter_to_row, row);
-          if (&iter_to_row != NULL)
-            gtk_tree_selection_select_iter (selection, &iter_to_row);
-          else
-            return FALSE;
+          gtk_tree_selection_select_iter (selection, &iter_to_row);
         }
     }
 
@@ -3936,7 +3933,6 @@ static void
 toggle_cell_toggled (GailCell *cell)
 {
   GailTreeViewCellInfo *cell_info;
-  GtkTreeView *tree_view;
   GtkTreePath *path;
   gchar *pathstring;
   GList *renderers, *cur_renderer;
@@ -3955,7 +3951,6 @@ toggle_cell_toggled (GailCell *cell)
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
 
-  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
   gail_return_if_fail (path);
   pathstring = gtk_tree_path_to_string (path);
@@ -3993,15 +3988,11 @@ edit_cell (GailCell *cell)
   GtkTreeView *tree_view;
   GtkTreePath *path;
   AtkObject *parent;
-  gboolean is_container_cell = FALSE;
 
   editing = TRUE;
   parent = atk_object_get_parent (ATK_OBJECT (cell));
   if (GAIL_IS_CONTAINER_CELL (parent))
-    {
-      is_container_cell = TRUE;
-      parent = atk_object_get_parent (parent);
-    }
+    parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
   gail_return_if_fail (cell_info);
@@ -4023,15 +4014,11 @@ activate_cell (GailCell *cell)
   GtkTreeView *tree_view;
   GtkTreePath *path;
   AtkObject *parent;
-  gboolean is_container_cell = FALSE;
 
   editing = TRUE;
   parent = atk_object_get_parent (ATK_OBJECT (cell));
   if (GAIL_IS_CONTAINER_CELL (parent))
-    {
-      is_container_cell = TRUE;
-      parent = atk_object_get_parent (parent);
-    }
+    parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
   gail_return_if_fail (cell_info);

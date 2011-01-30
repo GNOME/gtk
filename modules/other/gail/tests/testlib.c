@@ -553,15 +553,12 @@ _create_select_tests_window (AtkObject    *obj,
                              TLruntest    runtest,
                              OutputWindow **outwin)
 {
-  AtkText   *textwidget;
   GtkWidget *hbuttonbox;
   GtkWidget *scrolledWindow;
 
   if (window_no >= 0 && window_no < MAX_WINDOWS)
     {
       md[window_no] = (MainDialog *) malloc (sizeof(MainDialog));
-     
-      textwidget = ATK_TEXT (obj);
      
       /* Setup Window */
       md[window_no]->selecttestsTitle = "Test Setting";

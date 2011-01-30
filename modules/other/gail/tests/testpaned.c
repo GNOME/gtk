@@ -52,10 +52,7 @@ static gint _test_paned (gpointer data)
 {
   AtkObject *obj = ATK_OBJECT (data);
   AtkRole role = atk_object_get_role (obj);
-  GtkWidget *widget;
   static gint times = 0;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
   if (role == ATK_ROLE_SPLIT_PANE)
   {

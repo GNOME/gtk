@@ -70,7 +70,6 @@ gail_renderer_cell_new (void)
 {
   GObject *object;
   AtkObject *atk_object;
-  GailRendererCell *cell;
 
   object = g_object_new (GAIL_TYPE_RENDERER_CELL, NULL);
 
@@ -78,8 +77,6 @@ gail_renderer_cell_new (void)
 
   atk_object = ATK_OBJECT (object);
   atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  cell = GAIL_RENDERER_CELL(object);
 
   return atk_object;
 }
