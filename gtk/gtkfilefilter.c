@@ -33,7 +33,7 @@
  * types; e.g. a filter for text/plain also matches a file with mime
  * type application/rtf, since application/rtf is a subclass of
  * text/plain. Note that #GtkFileFilter allows wildcards for the
- * subtype of a mime type, so you can e.g. filter for image/<!---->*.
+ * subtype of a mime type, so you can e.g. filter for image/&ast;.
  *
  * Normally, filters are used by adding them to a #GtkFileChooser,
  * see gtk_file_chooser_add_filter(), but it is also possible
@@ -54,7 +54,7 @@
  * <object class="GtkFileFilter">
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
- *     <mime-type>image/png</mime-type>
+ *     <mime-type>image/&ast;</mime-type>
  *   </mime-types>
  *   <patterns>
  *     <pattern>*.txt</pattern>
