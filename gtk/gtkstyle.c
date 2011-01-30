@@ -44,7 +44,8 @@
 
 /**
  * SECTION:gtkstyle
- * @Short_description: An object that hold style information for widgets
+ * @Short_description: Deprecated object that holds style information
+ *     for widgets
  * @Title: GtkStyle
  *
  * A #GtkStyle object encapsulates the information that provides the look and
