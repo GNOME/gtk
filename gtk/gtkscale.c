@@ -30,7 +30,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "gtkscale.h"
+#include "gtkscaleprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"

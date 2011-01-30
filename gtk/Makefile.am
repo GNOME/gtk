@@ -417,6 +417,7 @@ gtk_private_h_sources =		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h	\
+	gtkscaleprivate.h	\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
 	gtkselectionprivate.h	\
