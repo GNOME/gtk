@@ -58,7 +58,7 @@
  * and specifying &lt;item&gt elements for each item. Each &lt;item&gt
  * element supports the regular translation attributes "translatable",
  * "context" and "comments".
- *
+ * </para>
  * <example>
  * <title>A UI definition fragment specifying GtkComboBoxText items</title>
  * <programlisting><![CDATA[
@@ -71,7 +71,7 @@
  * </object>
  * ]]></programlisting>
  * </example>
- *
+ * </refsect2>
  */
 
 static void     gtk_combo_box_text_buildable_interface_init     (GtkBuildableIface *iface);
