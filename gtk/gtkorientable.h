@@ -55,9 +55,6 @@ void           gtk_orientable_set_orientation (GtkOrientable  *orientable,
                                                GtkOrientation  orientation);
 GtkOrientation gtk_orientable_get_orientation (GtkOrientable  *orientable);
 
-/* Private */
-void           _gtk_orientable_set_style_classes (GtkOrientable *orientable);
-
 G_END_DECLS
 
 #endif /* __GTK_ORIENTABLE_H__ */

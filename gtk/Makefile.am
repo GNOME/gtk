@@ -406,6 +406,7 @@ gtk_private_h_sources =		\
 	gtkmodifierstyle.h	\
 	gtkmountoperationprivate.h \
 	gtknumerableiconprivate.h \
+	gtkorientableprivate.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkprintoperation-private.h \

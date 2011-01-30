@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-#include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

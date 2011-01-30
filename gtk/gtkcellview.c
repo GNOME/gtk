@@ -26,7 +26,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkprivate.h"
-#include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
 

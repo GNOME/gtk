@@ -29,6 +29,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
+#include "gtkorientableprivate.h"
 #include "gtkintl.h"
 
 #define DEFAULT_ICON_SIZE       GTK_ICON_SIZE_SMALL_TOOLBAR

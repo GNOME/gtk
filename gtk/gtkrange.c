@@ -32,7 +32,7 @@
 
 #include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkrange.h"
 #include "gtkscale.h"
 #include "gtkscrollbar.h"
