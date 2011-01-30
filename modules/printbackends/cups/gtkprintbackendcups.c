@@ -2235,7 +2235,6 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
                      GtkCupsResult       *result,
                      GetPPDData          *data)
 {
-  ipp_t *response;
   GtkPrinter *printer;
 
   GDK_THREADS_ENTER ();
@@ -2263,8 +2262,6 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
       g_signal_emit_by_name (printer, "details-acquired", success);
       goto done;
     }
-
-  response = gtk_cups_result_get_response (result);
 
   /* let ppdOpenFd take over the ownership of the open file */
   g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
