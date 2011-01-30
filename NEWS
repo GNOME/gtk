@@ -1,5 +1,5 @@
-Overview of Changes from GTK+ 2.23.90 to 2.24
-=============================================
+Overview of Changes from GTK+ 2.23.90 to 2.24.0
+===============================================
 
 * GtkBuilder has gained support for
  - items in GtkComboBoxText
@@ -15,6 +15,7 @@ Overview of Changes from GTK+ 2.23.90 to 2.24
  351755 GTK_RANGE (range) -> round_digits should be exposed...
  590459 Text is sometimes not pasted at the right location
  639327 gtk-builder-convert needs to convert gtkcomboboxentry...
+ 634677 assertion in finalize assuring that buffer is NULL...
 
 * Updated translations:
  British English
