@@ -529,7 +529,10 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
           if (prev == NULL)
             prev = priv->messages;
 
-          list = prev->next;
+          if (prev)
+            list = prev->next;
+          else
+            list = NULL;
         }
       else
         {
