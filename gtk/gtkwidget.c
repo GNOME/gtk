@@ -1966,7 +1966,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal
    * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
    *
-   * The ::key-press-event signal is emitted when a key is pressed.
+   * The ::key-press-event signal is emitted when a key is pressed. The signal
+   * emission will reoccur at the key-repeat rate when the key is kept pressed.
    *
    * To receive this signal, the #GdkWindow associated to the widget needs
    * to enable the #GDK_KEY_PRESS_MASK mask.
@@ -1991,7 +1992,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal
    * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
    *
-   * The ::key-release-event signal is emitted when a key is pressed.
+   * The ::key-release-event signal is emitted when a key is released.
    *
    * To receive this signal, the #GdkWindow associated to the widget needs
    * to enable the #GDK_KEY_RELEASE_MASK mask.
