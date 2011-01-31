@@ -736,13 +736,26 @@ gtk_binding_set_by_class (gpointer object_class)
     return binding_set;
 
   binding_set = gtk_binding_set_new (g_type_name (G_OBJECT_CLASS_TYPE (class)));
-  gtk_binding_set_add_path (binding_set,
-                            GTK_PATH_CLASS,
-                            g_type_name (G_OBJECT_CLASS_TYPE (class)),
-                            GTK_PATH_PRIO_GTK);
   g_dataset_id_set_data (class, key_id_class_binding_set, binding_set);
 
   return binding_set;
+}
+
+static GtkBindingSet*
+gtk_binding_set_find_interned (const gchar *set_name)
+{
+  GSList *slist;
+
+  for (slist = binding_set_list; slist; slist = slist->next)
+    {
+      GtkBindingSet *binding_set;
+
+      binding_set = slist->data;
+      if (binding_set->set_name == set_name)
+        return binding_set;
+    }
+
+  return NULL;
 }
 
 /**
@@ -759,19 +772,9 @@ gtk_binding_set_by_class (gpointer object_class)
 GtkBindingSet*
 gtk_binding_set_find (const gchar *set_name)
 {
-  GSList *slist;
-
   g_return_val_if_fail (set_name != NULL, NULL);
 
-  for (slist = binding_set_list; slist; slist = slist->next)
-    {
-      GtkBindingSet *binding_set;
-
-      binding_set = slist->data;
-      if (g_str_equal (binding_set->set_name, (gpointer) set_name))
-        return binding_set;
-    }
-  return NULL;
+  return gtk_binding_set_find_interned (g_intern_string (set_name));
 }
 
 /**
@@ -1406,8 +1409,10 @@ gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
  * @path_pattern: the actual match pattern
  * @priority: binding priority
  *
- * This function is used internally by the GtkRC parsing mechanism to
- * assign match patterns to #GtkBindingSet structures.
+ * This function was used internally by the GtkRC parsing mechanism
+ * to assign match patterns to #GtkBindingSet structures.
+ *
+ * In GTK+ 3, these match patterns are unused.
  *
  * Deprecated: 3.0
  */
@@ -1572,7 +1577,7 @@ gtk_bindings_activate_list (GObject  *object,
 
       while (class_type && !handled)
         {
-          binding_set = gtk_binding_set_find (g_type_name (class_type));
+          binding_set = gtk_binding_set_find_interned (g_type_name (class_type));
           class_type = g_type_parent (class_type);
 
           if (!binding_set)
