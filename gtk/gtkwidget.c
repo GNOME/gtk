@@ -429,7 +429,6 @@ enum {
   SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
-  CLIENT_EVENT,
   VISIBILITY_NOTIFY_EVENT,
   WINDOW_STATE_EVENT,
   DAMAGE_EVENT,
@@ -2740,29 +2739,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, visibility_notify_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  /**
-   * GtkWidget::client-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventClient): the #GdkEventClient which triggered
-   *   this signal.
-   *
-   * The ::client-event will be emitted when the @widget's window
-   * receives a message (via a ClientMessage event) from another
-   * application.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for
-   *   the event. %FALSE to propagate the event further.
-   */
-  widget_signals[CLIENT_EVENT] =
-    g_signal_new (I_("client-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, client_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
@@ -6059,9 +6035,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_PROXIMITY_OUT:
 	  signal_num = PROXIMITY_OUT_EVENT;
-	  break;
-	case GDK_CLIENT_EVENT:
-	  signal_num = CLIENT_EVENT;
 	  break;
 	case GDK_EXPOSE:
 	  signal_num = EXPOSE_EVENT;

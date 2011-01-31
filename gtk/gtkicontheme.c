@@ -1209,23 +1209,6 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
       if (was_valid)
 	{
 	  g_signal_emit (icon_theme, signal_changed, 0);
-
-	  if (!priv->check_reload && priv->screen)
-	    {	  
-	      static GdkAtom atom_iconthemes = GDK_NONE;
-	      GdkEvent *event = gdk_event_new (GDK_CLIENT_EVENT);
-	      int i;
-
-	      if (!atom_iconthemes)
-		atom_iconthemes = gdk_atom_intern_static_string ("_GTK_LOAD_ICONTHEMES");
-
-	      for (i = 0; i < 5; i++)
-		event->client.data.l[i] = 0;
-	      event->client.data_format = 32;
-	      event->client.message_type = atom_iconthemes;
-
-	      gdk_screen_broadcast_client_message (priv->screen, event);
-	    }
 	}
     }
 

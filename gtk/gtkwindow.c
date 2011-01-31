@@ -336,8 +336,6 @@ static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static void gtk_window_style_updated      (GtkWidget         *widget);
-static gint gtk_window_client_event	  (GtkWidget	     *widget,
-					   GdkEventClient    *event);
 static gboolean gtk_window_state_event    (GtkWidget          *widget,
                                            GdkEventWindowState *event);
 static void gtk_window_check_resize       (GtkContainer      *container);
@@ -575,7 +573,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->button_press_event = gtk_window_button_press_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
-  widget_class->client_event = gtk_window_client_event;
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->draw = gtk_window_draw;
@@ -2293,52 +2290,6 @@ gtk_window_list_toplevels (void)
 
   return list;
 }
-
-#ifdef GDK_WINDOWING_X11
-void
-_gtk_window_add_embedded_xid (GtkWindow *window, Window xid)
-{
-  GList *embedded_windows;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  embedded_windows = g_object_get_qdata (G_OBJECT (window), quark_gtk_embedded);
-  if (embedded_windows)
-    g_object_steal_qdata (G_OBJECT (window), quark_gtk_embedded);
-  embedded_windows = g_list_prepend (embedded_windows,
-				     GDK_XID_TO_POINTER (xid));
-
-  g_object_set_qdata_full (G_OBJECT (window), quark_gtk_embedded, 
-			   embedded_windows,
-			   embedded_windows ?
-			   (GDestroyNotify) g_list_free : NULL);
-}
-
-void
-_gtk_window_remove_embedded_xid (GtkWindow *window, Window xid)
-{
-  GList *embedded_windows;
-  GList *node;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  
-  embedded_windows = g_object_get_qdata (G_OBJECT (window), quark_gtk_embedded);
-  if (embedded_windows)
-    g_object_steal_qdata (G_OBJECT (window), quark_gtk_embedded);
-
-  node = g_list_find (embedded_windows, GDK_XID_TO_POINTER (xid));
-  if (node)
-    {
-      embedded_windows = g_list_remove_link (embedded_windows, node);
-      g_list_free_1 (node);
-    }
-  
-  g_object_set_qdata_full (G_OBJECT (window), quark_gtk_embedded,
-			   embedded_windows,
-			   embedded_windows ?
-			   (GDestroyNotify) g_list_free : NULL);
-}
-#endif
 
 static void
 gtk_window_dispose (GObject *object)
@@ -5910,66 +5861,6 @@ gtk_window_focus_out_event (GtkWidget     *widget,
                 "gtk-auto-mnemonics", &auto_mnemonics, NULL);
   if (auto_mnemonics)
     gtk_window_set_mnemonics_visible (window, FALSE);
-
-  return FALSE;
-}
-
-#ifdef GDK_WINDOWING_X11
-static GdkAtom atom_rcfiles = GDK_NONE;
-static GdkAtom atom_iconthemes = GDK_NONE;
-
-static void
-send_client_message_to_embedded_windows (GtkWidget *widget,
-					 GdkAtom    message_type)
-{
-  GList *embedded_windows;
-
-  embedded_windows = g_object_get_qdata (G_OBJECT (widget), quark_gtk_embedded);
-  if (embedded_windows)
-    {
-      GdkEvent *send_event = gdk_event_new (GDK_CLIENT_EVENT);
-      int i;
-      
-      for (i = 0; i < 5; i++)
-	send_event->client.data.l[i] = 0;
-      send_event->client.data_format = 32;
-      send_event->client.message_type = message_type;
-      
-      while (embedded_windows)
-	{
-	  Window xid = GDK_POINTER_TO_XID (embedded_windows->data);
-	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), send_event, xid);
-	  embedded_windows = embedded_windows->next;
-	}
-
-      gdk_event_free (send_event);
-    }
-}
-#endif
-
-static gint
-gtk_window_client_event (GtkWidget	*widget,
-			 GdkEventClient	*event)
-{
-#ifdef GDK_WINDOWING_X11
-  if (!atom_rcfiles)
-    {
-      atom_rcfiles = gdk_atom_intern_static_string ("_GTK_READ_RCFILES");
-      atom_iconthemes = gdk_atom_intern_static_string ("_GTK_LOAD_ICONTHEMES");
-    }
-
-  if (event->message_type == atom_rcfiles) 
-    {
-      send_client_message_to_embedded_windows (widget, atom_rcfiles);
-      gtk_style_context_reset_widgets (gtk_widget_get_screen (widget));
-    }
-
-  if (event->message_type == atom_iconthemes) 
-    {
-      send_client_message_to_embedded_windows (widget, atom_iconthemes);
-      _gtk_icon_theme_check_reload (gtk_widget_get_display (widget));    
-    }
-#endif
 
   return FALSE;
 }

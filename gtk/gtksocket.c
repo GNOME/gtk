@@ -34,7 +34,6 @@
 #include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
-#include "gtkwindowprivate.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
 #include "gtkdnd.h"
@@ -450,11 +449,6 @@ static void
 gtk_socket_end_embedding (GtkSocket *socket)
 {
   GtkSocketPrivate *private = socket->priv;
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-
-  if (GTK_IS_WINDOW (toplevel))
-    _gtk_window_remove_embedded_xid (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (socket))),
-                                    GDK_WINDOW_XID (socket->priv->plug_window));
 
   g_object_unref (private->plug_window);
   private->plug_window = NULL;
@@ -1064,7 +1058,6 @@ gtk_socket_add_window (GtkSocket       *socket,
     }
   else  /* A foreign window */
     {
-      GtkWidget *toplevel;
       GdkDragProtocol protocol;
 
       gdk_error_trap_push ();
@@ -1128,12 +1121,6 @@ gtk_socket_add_window (GtkSocket       *socket,
       gdk_window_add_filter (private->plug_window,
 			     gtk_socket_filter_func,
 			     socket);
-
-      /* Add a pointer to the socket on our toplevel window */
-
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-      if (GTK_IS_WINDOW (toplevel))
-	_gtk_window_add_embedded_xid (GTK_WINDOW (toplevel), xid);
 
 #ifdef HAVE_XFIXES
       gdk_error_trap_push ();
