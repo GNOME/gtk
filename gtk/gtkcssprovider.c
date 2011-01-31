@@ -290,7 +290,7 @@
  * &commat;import url ("path/to/common.css");
  * </programlisting>
  * </example>
- * <para>
+ * <para id="css-binding-set">
  * In order to extend key bindings affecting different widgets, GTK+
  * supports the &commat;binding-set rule to parse a set of bind/unbind
  * directives, see #GtkBindingSet for the supported syntax. Note that
