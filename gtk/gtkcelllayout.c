@@ -83,6 +83,55 @@
  * </example>
  * </para>
  * </refsect2>
+ *
+ * <refsect2>
+ * <title>Subclassing GtkCellLayout implementations</title>
+ * <para>
+ * When subclassing a widget that implements #GtkCellLayout like
+ * #GtkIconView or #GtkComboBox, there are some considerations related
+ * to the fact that these widgets internally use a #GtkCellArea.
+ * The cell area is exposed as a construct-only property by these
+ * widgets. This means that it is possible to e.g. do
+ * <informalexample><programlisting>
+ * combo = g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", my_cell_area, NULL);
+ * </programlisting></informalexample>
+ * to use a custom cell area with a combo box. But construct properties
+ * are only initialized <emphasis>after</emphasis> instance init()
+ * functions have run, which means that using functions which rely on
+ * the existence of the cell area in your subclass' init() function will
+ * cause the default cell area to be instantiated. In this case, a provided
+ * construct property value will be ignored (with a warning, to alert
+ * you to the problem).
+ * <informalexample><programlisting>
+ * static void
+ * my_combo_box_init (MyComboBox *b)
+ * {
+ *   GtkCellRenderer *cell;
+ *
+ *   cell = gtk_cell_renderer_pixbuf_new ();
+ *   /&ast; The following call causes the default cell area for combo boxes,
+ *    &ast; a GtkCellAreaBox, to be instantiated
+ *    &ast;/
+ *   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (b), cell, FALSE);
+ *   ...
+ * }
+ *
+ * GtkWidget *
+ * my_combo_box_new (GtkCellArea *area)
+ * {
+ *   /&ast; This call is going to cause a warning
+ *    &ast; about area being ignored
+ *    &ast;/
+ *   return g_object_new (MY_TYPE_COMBO_BOX, "cell-area", area, NULL);
+ * }
+ * </programlisting></informalexample>
+ * If supporting alternative cell areas with your derived widget is
+ * not important, then this does not have to concern you. If you want
+ * to support alternative cell areas, you can do so by moving the
+ * problematic calls out of init() and into a constructor()
+ * for your class.
+ * </para>
+ * </refsect2>
  */
 
 #include "config.h"

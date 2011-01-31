@@ -347,15 +347,14 @@ gtk_cell_view_constructor (GType                  type,
 
   if (!priv->area)
     {
-      GtkCellArea *area = gtk_cell_area_box_new ();
-
-      priv->area = g_object_ref_sink (area);
+      priv->area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->area);
     }
 
   if (!priv->context)
     priv->context = gtk_cell_area_create_context (priv->area);
 
-  priv->size_changed_id = 
+  priv->size_changed_id =
     g_signal_connect (priv->context, "notify",
 		      G_CALLBACK (context_size_changed_cb), view);
 
@@ -421,15 +420,16 @@ gtk_cell_view_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GtkCellView *view = GTK_CELL_VIEW (object);
+  GtkCellViewPrivate *priv = view->priv;
   GtkCellArea *area;
   GtkCellAreaContext *context;
 
   switch (param_id)
     {
     case PROP_ORIENTATION:
-      view->priv->orientation = g_value_get_enum (value);
-      if (view->priv->context)
-	gtk_cell_area_context_reset (view->priv->context);
+      priv->orientation = g_value_get_enum (value);
+      if (priv->context)
+        gtk_cell_area_context_reset (priv->context);
 
       _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
       break;
@@ -462,16 +462,34 @@ gtk_cell_view_set_property (GObject      *object,
     case PROP_CELL_AREA:
       /* Construct-only, can only be assigned once */
       area = g_value_get_object (value);
-      
+
       if (area)
-	view->priv->area = g_object_ref_sink (area);
+        {
+          if (priv->area != NULL)
+            {
+              g_warning ("cell-area has already been set, ignoring construct property");
+              g_object_ref_sink (area);
+              g_object_unref (area);
+            }
+          else
+            priv->area = g_object_ref_sink (area);
+        }
       break;
     case PROP_CELL_AREA_CONTEXT:
       /* Construct-only, can only be assigned once */
       context = g_value_get_object (value);
-      
+
       if (context)
-	view->priv->context = g_object_ref (context);
+        {
+          if (priv->context != NULL)
+            {
+              g_warning ("cell-area-context has already been set, ignoring construct property");
+              g_object_ref_sink (context);
+              g_object_unref (context);
+            }
+          else
+            priv->context = g_object_ref (context);
+        }
       break;
 
     case PROP_DRAW_SENSITIVE:
@@ -809,8 +827,15 @@ static GtkCellArea *
 gtk_cell_view_cell_layout_get_area (GtkCellLayout   *layout)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
+  GtkCellViewPrivate *priv = cellview->priv;
 
-  return cellview->priv->area;
+  if (G_UNLIKELY (!priv->area))
+    {
+      priv->area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->area);
+    }
+
+  return priv->area;
 }
 
 /* GtkBuildable implementation */
@@ -1391,8 +1416,8 @@ gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
  * Since: 3.0
  */
 void
-gtk_cell_view_set_fit_model (GtkCellView     *cell_view,
-			     gboolean         fit_model)
+gtk_cell_view_set_fit_model (GtkCellView *cell_view,
+                             gboolean     fit_model)
 {
   GtkCellViewPrivate *priv;
 

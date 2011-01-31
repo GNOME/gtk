@@ -370,6 +370,9 @@ static GtkIconViewItem *    gtk_icon_view_get_item_at_coords             (GtkIco
 static void                 gtk_icon_view_set_cell_data                  (GtkIconView            *icon_view,
 									  GtkIconViewItem        *item);
 
+static void                 gtk_icon_view_ensure_cell_area               (GtkIconView            *icon_view,
+                                                                          GtkCellArea            *cell_area);
+
 static GtkCellArea         *gtk_icon_view_cell_layout_get_area           (GtkCellLayout          *layout);
 
 static void                 gtk_icon_view_item_selected_changed          (GtkIconView            *icon_view,
@@ -1100,35 +1103,14 @@ gtk_icon_view_constructor (GType               type,
 			   GObjectConstructParam *construct_properties)
 {
   GtkIconView        *icon_view;
-  GtkIconViewPrivate *priv;
   GObject            *object;
 
   object = G_OBJECT_CLASS (gtk_icon_view_parent_class)->constructor
     (type, n_construct_properties, construct_properties);
 
   icon_view = (GtkIconView *) object;
-  priv      = icon_view->priv;
 
-  if (!priv->cell_area)
-    {
-      priv->cell_area = gtk_cell_area_box_new ();
-      g_object_ref_sink (priv->cell_area);
-    }
-
-  if (GTK_IS_ORIENTABLE (priv->cell_area))
-    gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->cell_area), priv->item_orientation);
-
-  priv->cell_area_context = gtk_cell_area_create_context (priv->cell_area);
-
-  priv->add_editable_id = 
-    g_signal_connect (priv->cell_area, "add-editable", 
-		      G_CALLBACK (gtk_icon_view_add_editable), icon_view);
-  priv->remove_editable_id = 
-    g_signal_connect (priv->cell_area, "remove-editable", 
-		      G_CALLBACK (gtk_icon_view_remove_editable), icon_view);
-  priv->context_changed_id = 
-    g_signal_connect (priv->cell_area_context, "notify", 
-		      G_CALLBACK (gtk_icon_view_context_changed), icon_view);
+  gtk_icon_view_ensure_cell_area (icon_view, NULL);
 
   return object;
 }
@@ -1237,9 +1219,17 @@ gtk_icon_view_set_property (GObject      *object,
     case PROP_CELL_AREA:
       /* Construct-only, can only be assigned once */
       area = g_value_get_object (value);
-
       if (area)
-	icon_view->priv->cell_area = g_object_ref_sink (area);
+        {
+          if (icon_view->priv->cell_area != NULL)
+            {
+              g_warning ("cell-area has already been set, ignoring construct property");
+              g_object_ref_sink (area);
+              g_object_unref (area);
+            }
+          else
+            gtk_icon_view_ensure_cell_area (icon_view, area);
+        }
       break;
 
     case PROP_HADJUSTMENT:
@@ -4097,21 +4087,58 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
 }
 
 /* GtkCellLayout implementation */
+
+static void
+gtk_icon_view_ensure_cell_area (GtkIconView *icon_view,
+                                GtkCellArea *cell_area)
+{
+  GtkIconViewPrivate *priv = icon_view->priv;
+
+  if (priv->cell_area)
+    return;
+
+  if (cell_area)
+    priv->cell_area = cell_area;
+  else
+    priv->cell_area = gtk_cell_area_box_new ();
+
+  g_object_ref_sink (priv->cell_area);
+
+  if (GTK_IS_ORIENTABLE (priv->cell_area))
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->cell_area), priv->item_orientation);
+
+  priv->cell_area_context = gtk_cell_area_create_context (priv->cell_area);
+
+  priv->add_editable_id =
+    g_signal_connect (priv->cell_area, "add-editable",
+                      G_CALLBACK (gtk_icon_view_add_editable), icon_view);
+  priv->remove_editable_id =
+    g_signal_connect (priv->cell_area, "remove-editable",
+                      G_CALLBACK (gtk_icon_view_remove_editable), icon_view);
+  priv->context_changed_id =
+    g_signal_connect (priv->cell_area_context, "notify",
+                      G_CALLBACK (gtk_icon_view_context_changed), icon_view);
+}
+
 static GtkCellArea *
 gtk_icon_view_cell_layout_get_area (GtkCellLayout *cell_layout)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (cell_layout);
+  GtkIconViewPrivate *priv = icon_view->priv;
+
+  if (G_UNLIKELY (!priv->cell_area))
+    gtk_icon_view_ensure_cell_area (icon_view, NULL);
 
   return icon_view->priv->cell_area;
 }
 
 static void
-gtk_icon_view_set_cell_data (GtkIconView     *icon_view, 
+gtk_icon_view_set_cell_data (GtkIconView     *icon_view,
 			     GtkIconViewItem *item)
 {
   gboolean iters_persist;
   GtkTreeIter iter;
-  
+
   iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
   if (!iters_persist)

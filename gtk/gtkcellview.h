@@ -65,7 +65,7 @@ struct _GtkCellViewClass
 GType             gtk_cell_view_get_type                (void) G_GNUC_CONST;
 GtkWidget        *gtk_cell_view_new                     (void);
 GtkWidget        *gtk_cell_view_new_with_context        (GtkCellArea        *area,
-							 GtkCellAreaContext *context);
+                                                         GtkCellAreaContext *context);
 GtkWidget        *gtk_cell_view_new_with_text           (const gchar     *text);
 GtkWidget        *gtk_cell_view_new_with_markup         (const gchar     *markup);
 GtkWidget        *gtk_cell_view_new_with_pixbuf         (GdkPixbuf       *pixbuf);
@@ -81,10 +81,10 @@ void              gtk_cell_view_set_background_rgba     (GtkCellView     *cell_v
                                                          const GdkRGBA   *rgba);
 gboolean          gtk_cell_view_get_draw_sensitive      (GtkCellView     *cell_view);
 void              gtk_cell_view_set_draw_sensitive      (GtkCellView     *cell_view,
-							 gboolean         draw_sensitive);
+                                                         gboolean         draw_sensitive);
 gboolean          gtk_cell_view_get_fit_model           (GtkCellView     *cell_view);
 void              gtk_cell_view_set_fit_model           (GtkCellView     *cell_view,
-							 gboolean         fit_model);
+                                                         gboolean         fit_model);
 
 #ifndef GTK_DISABLE_DEPRECATED
 gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_view,

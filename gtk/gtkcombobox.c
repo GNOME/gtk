@@ -406,7 +406,7 @@ static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box,
                                                     guint32           activate_time);
 
 /* cell layout */
-GtkCellArea    *gtk_combo_box_cell_layout_get_area (GtkCellLayout    *cell_layout);
+static GtkCellArea *gtk_combo_box_cell_layout_get_area       (GtkCellLayout    *cell_layout);
 
 static gboolean gtk_combo_box_mnemonic_activate              (GtkWidget    *widget,
                                                               gboolean      group_cycling);
@@ -1049,6 +1049,7 @@ gtk_combo_box_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  GtkComboBoxPrivate *priv = combo_box->priv;
   GtkCellArea *area;
 
   switch (prop_id)
@@ -1078,16 +1079,15 @@ gtk_combo_box_set_property (GObject      *object,
       break;
 
     case PROP_HAS_FRAME:
-      combo_box->priv->has_frame = g_value_get_boolean (value);
+      priv->has_frame = g_value_get_boolean (value);
 
-      if (combo_box->priv->has_entry)
+      if (priv->has_entry)
         {
           GtkWidget *child;
 
           child = gtk_bin_get_child (GTK_BIN (combo_box));
 
-          gtk_entry_set_has_frame (GTK_ENTRY (child),
-                                   combo_box->priv->has_frame);
+          gtk_entry_set_has_frame (GTK_ENTRY (child), priv->has_frame);
         }
 
       break;
@@ -1119,11 +1119,11 @@ gtk_combo_box_set_property (GObject      *object,
       break;
 
     case PROP_EDITING_CANCELED:
-      combo_box->priv->editing_canceled = g_value_get_boolean (value);
+      priv->editing_canceled = g_value_get_boolean (value);
       break;
 
     case PROP_HAS_ENTRY:
-      combo_box->priv->has_entry = g_value_get_boolean (value);
+      priv->has_entry = g_value_get_boolean (value);
       break;
 
     case PROP_ENTRY_TEXT_COLUMN:
@@ -1141,9 +1141,17 @@ gtk_combo_box_set_property (GObject      *object,
     case PROP_CELL_AREA:
       /* Construct-only, can only be assigned once */
       area = g_value_get_object (value);
-
       if (area)
-        combo_box->priv->area = g_object_ref_sink (area);
+        {
+          if (priv->area != NULL)
+            {
+              g_warning ("cell-area has already been set, ignoring construct property");
+              g_object_ref_sink (area);
+              g_object_unref (area);
+            }
+          else
+            priv->area = g_object_ref_sink (area);
+        }
       break;
 
     default:
@@ -3757,10 +3765,19 @@ gtk_combo_box_list_row_changed (GtkTreeModel *model,
 /*
  * GtkCellLayout implementation
  */
-GtkCellArea *
-gtk_combo_box_cell_layout_get_area (GtkCellLayout    *cell_layout)
+static GtkCellArea *
+gtk_combo_box_cell_layout_get_area (GtkCellLayout *cell_layout)
 {
-  return GTK_COMBO_BOX (cell_layout)->priv->area;
+  GtkComboBox *combo = GTK_COMBO_BOX (cell_layout);
+  GtkComboBoxPrivate *priv = combo->priv;
+
+  if (G_UNLIKELY (!priv->area))
+    {
+      priv->area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->area);
+    }
+
+  return priv->area;
 }
 
 /*
@@ -4552,9 +4569,8 @@ gtk_combo_box_constructor (GType                  type,
 
   if (!priv->area)
     {
-      GtkCellArea *area = gtk_cell_area_box_new ();
-
-      priv->area = g_object_ref_sink (area);
+      priv->area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->area);
     }
 
   priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);

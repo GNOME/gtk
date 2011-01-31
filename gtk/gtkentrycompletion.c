@@ -481,9 +481,9 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
 }
 
 static GObject *
-gtk_entry_completion_constructor (GType                    type,
-                                  guint                    n_construct_properties,
-                                  GObjectConstructParam   *construct_properties)
+gtk_entry_completion_constructor (GType                  type,
+                                  guint                  n_construct_properties,
+                                  GObjectConstructParam *construct_properties)
 {
   GtkEntryCompletion        *completion;
   GtkEntryCompletionPrivate *priv;
@@ -657,9 +657,17 @@ gtk_entry_completion_set_property (GObject      *object,
       case PROP_CELL_AREA:
         /* Construct-only, can only be assigned once */
         area = g_value_get_object (value);
-
         if (area)
-          priv->cell_area = g_object_ref_sink (area);
+          {
+            if (priv->cell_area != NULL)
+              {
+                g_warning ("cell-area has already been set, ignoring construct property");
+                g_object_ref_sink (area);
+                g_object_unref (area);
+              }
+            else
+              priv->cell_area = g_object_ref_sink (area);
+          }
         break;
 
       default:
@@ -785,6 +793,12 @@ gtk_entry_completion_get_area (GtkCellLayout *cell_layout)
   GtkEntryCompletionPrivate *priv;
 
   priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
+
+  if (G_UNLIKELY (!priv->cell_area))
+    {
+      priv->cell_area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->cell_area);
+    }
 
   return priv->cell_area;
 }
