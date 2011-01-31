@@ -49,20 +49,22 @@
  * @Title: GtkStyle
  *
  * A #GtkStyle object encapsulates the information that provides the look and
- * feel for a widget. Each #GtkWidget has an associated #GTkStyle object that
- * is used when rendering that widget. Also, a #GtkStyle holds information for
- * the five possible widget states though not every widget supports all five
- * states; see #GtkStateType.
- *
- * Usually the #GtkStyle for a widget is the same as the default style that is
- * set by GTK+ and modified the theme engine.
- *
- * Usually applications should not need to use or modify the #GtkStyle of their
- * widgets.
+ * feel for a widget.
  *
  * <warning>
  * In GTK+ 3.0, GtkStyle has been deprecated and replaced by #GtkStyleContext.
  * </warning>
+ *
+ * Each #GtkWidget has an associated #GtkStyle object that is used when
+ * rendering that widget. Also, a #GtkStyle holds information for the five
+ * possible widget states though not every widget supports all five
+ * states; see #GtkStateType.
+ *
+ * Usually the #GtkStyle for a widget is the same as the default style that
+ * is set by GTK+ and modified the theme engine.
+ *
+ * Usually applications should not need to use or modify the #GtkStyle of
+ * their widgets.
  */
 
 

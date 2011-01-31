@@ -293,7 +293,15 @@
  * <para>
  * In order to extend key bindings affecting different widgets, GTK+
  * supports the &commat;binding-set rule to parse a set of bind/unbind
- * directives, see #GtkBindingSet for the syntax supported
+ * directives, see #GtkBindingSet for the supported syntax. Note that
+ * the binding sets defined in this way must be associated with rule sets
+ * by setting the gtk-key-bindings style property.
+ * </para>
+ * <para>
+ * Customized key bindings are typically defined in a separate
+ * <filename>gtk-keys.css</filename> CSS file and GTK+ loads this file
+ * according to the current key theme, which is defined by the
+ * #GtkSettings:gtk-key-theme-name setting.
  * </para>
  * <example>
  * <title>Using the &commat;binding rule</title>
@@ -306,7 +314,7 @@
  * &commat;binding-set binding-set2 {
  *   bind "&lt;alt&gt;Right" { "move-cursor" (visual-positions, 3, 0) };
  *   bind "&lt;alt&gt;KP_space" { "delete-from-cursor" (whitespace, 1)
- *                                "insert-at-cursor" (" ") };
+ *                          "insert-at-cursor" (" ") };
  * };
  *
  * GtkEntry {

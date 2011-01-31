@@ -395,7 +395,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-theme-name",
                                                                    P_("Theme Name"),
-                                                                   P_("Name of theme RC file to load"),
+                                                                   P_("Name of theme to load"),
                                                                   "Raleigh",
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
@@ -422,7 +422,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-key-theme-name",
                                                                   P_("Key Theme Name"),
-                                                                  P_("Name of key theme RC file to load"),
+                                                                  P_("Name of key theme to load"),
                                                                   DEFAULT_KEY_THEME,
                                                                   GTK_PARAM_READWRITE),
                                              NULL);

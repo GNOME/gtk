@@ -10,10 +10,10 @@ GTK+ provides resource file mechanism for configuring
 various aspects of the operation of a GTK+ program
 at runtime.
 </para>
-<para>
+<warning>
 In GTK+ 3.0, resource files have been deprecated and replaced
 by CSS-like style sheets, which are understood by #GtkCssProvider.
-</para>
+</warning>
 
 <refsect2><title>Default files</title>
 <para>

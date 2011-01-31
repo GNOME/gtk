@@ -39,11 +39,11 @@
 
 /**
  * SECTION:gtkbindings
- * @Title: GtkBindings
+ * @Title: Bindings
  * @Short_description: Key bindings for individual widgets
- * @See_also: <link linkend="gtk-keyboard-accelerators">Keyboard Accelerators</link>, #GtkCssProvider
+ * @See_also: Keyboard Accelerators, Mnemonics, #GtkCssProvider
  *
- * GtkBinding provides a mechanism for configuring GTK+ key bindings
+ * #GtkBindingSet provides a mechanism for configuring GTK+ key bindings
  * through CSS files. This eases key binding adjustments for application
  * developers as well as users and provides GTK+ users or administrators
  * with high key  binding configurability which requires no application
@@ -56,7 +56,7 @@
  * statement to apply the binding set to specific widget types. Details
  * on the matching mechanism are described under
  * <link linkend="gtkcssprovider-selectors">Selectors</link>
- * in the #GtkCssProvider documentation. Inside the binding-set definition,
+ * in the #GtkCssProvider documentation. Inside the binding set definition,
  * key combinations are bound to one or more specific signal emissions on
  * the target widget. Key combinations are strings consisting of an optional
  * #GdkModifierType name and <link linkend="gdk-Keyboard-Handling">key names</link>
@@ -71,7 +71,7 @@
  * of a #GtkEntry widget to the #GtkEntry::move-cursor signal (so movement
  * occurs in 3-character steps), the following binding can be used:
  * <informalexample><programlisting>
- * @binding-set "MoveCursor3"
+ * @binding-set MoveCursor3
  * {
  *   bind "&lt;Control&gt;Right" { "move-cursor" (visual-positions, 3, 0) };
  *   bind "&lt;Control&gt;Left" { "move-cursor" (visual-positions, -3, 0) };
@@ -94,7 +94,7 @@
  * works as expected. The same mechanism can not be used to "unbind"
  * existing bindings, however.
  * <informalexample><programlisting>
- * @binding-set "MoveCursor3"
+ * @binding-set MoveCursor3
  * {
  *   bind "&lt;Control&gt;Right" {  };
  *   bind "&lt;Control&gt;Left" {  };
@@ -115,7 +115,7 @@
  * implement word movement. To keep GTK+ from activating its default
  * bindings, the "unbind" keyword can be used like this:
  * <informalexample><programlisting>
- * @binding-set "MoveCursor3"
+ * @binding-set MoveCursor3
  * {
  *   unbind "&lt;Control&gt;Right";
  *   unbind "&lt;Control&gt;Left";
@@ -134,6 +134,7 @@
  * </para>
  * </refsect2>
  */
+
 /* --- defines --- */
 #define BINDING_MOD_MASK() (gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
 
@@ -1352,18 +1353,18 @@ create_signal_scanner (void)
  * Parses a signal description from @signal_desc and incorporates
  * it into @binding_set.
  *
- * signal descriptions may either bind a key combination to
+ * Signal descriptions may either bind a key combination to
  * one or more signals:
  * <informalexample><programlisting>
- *   bind <replaceable>key</replaceable> {
- *     <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
+ *   bind "key" {
+ *     "signalname" (param, ...)
  *     ...
  *   }
  * </programlisting></informalexample>
  *
  * Or they may also unbind a key combination:
  * <informalexample><programlisting>
- *   unbind <replaceable>key</replaceable>
+ *   unbind "key"
  * </programlisting></informalexample>
  *
  * Key combinations must be in a format that can be parsed by
