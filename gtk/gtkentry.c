@@ -9586,6 +9586,8 @@ keypress_completion_out:
     {
       GtkTreeIter iter;
       GtkTreeModel *model = NULL;
+      GtkTreeModel *child_model;
+      GtkTreeIter child_iter;
       GtkTreeSelection *sel;
       gboolean retval = TRUE;
 
@@ -9599,9 +9601,11 @@ keypress_completion_out:
           sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
           if (gtk_tree_selection_get_selected (sel, &model, &iter))
             {
+              gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_iter, &iter);
+              child_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
               g_signal_handler_block (widget, completion->priv->changed_id);
               g_signal_emit_by_name (completion, "match-selected",
-                                     model, &iter, &entry_set);
+                                     child_model, &child_iter, &entry_set);
               g_signal_handler_unblock (widget, completion->priv->changed_id);
 
               if (!entry_set)
