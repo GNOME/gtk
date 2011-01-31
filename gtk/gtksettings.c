@@ -2672,7 +2672,8 @@ settings_update_theme (GtkSettings *settings)
   static GQuark quark_theme_name = 0;
 
   GtkSettingsPrivate *priv = settings->priv;
-  GtkCssProvider *provider, *new_provider = NULL;
+  GtkCssProvider *provider;
+  GtkCssProvider *new_provider;
   gboolean prefer_dark_theme;
   gchar *theme_name;
 
@@ -2686,14 +2687,15 @@ settings_update_theme (GtkSettings *settings)
                 "gtk-application-prefer-dark-theme", &prefer_dark_theme,
                 NULL);
 
+  new_provider = NULL;
+
   if (theme_name && *theme_name)
     {
-      gchar *variant = NULL;
-
       if (prefer_dark_theme)
-        variant = "dark";
+        new_provider = gtk_css_provider_get_named (theme_name, "dark");
 
-      new_provider = gtk_css_provider_get_named (theme_name, variant);
+      if (!new_provider)
+        new_provider = gtk_css_provider_get_named (theme_name, NULL);
     }
 
   if (new_provider != provider)

@@ -4003,24 +4003,31 @@ _gtk_css_provider_get_theme_dir (void)
 /**
  * gtk_css_provider_get_named:
  * @name: A theme name
- * @variant: variant to load, for example, "dark", or %NULL for the default
+ * @variant: (allow-none): variant to load, for example, "dark", or
+ *     %NULL for the default
  *
  * Loads a theme from the usual theme paths
  *
  * Returns: (transfer none): a #GtkCssProvider with the theme loaded.
- *          This memory is owned by GTK+, and you must not free it.
- **/
+ *     This memory is owned by GTK+, and you must not free it.
+ */
 GtkCssProvider *
 gtk_css_provider_get_named (const gchar *name,
                             const gchar *variant)
 {
   static GHashTable *themes = NULL;
   GtkCssProvider *provider;
+  gchar *key;
 
   if (G_UNLIKELY (!themes))
     themes = g_hash_table_new (g_str_hash, g_str_equal);
 
-  provider = g_hash_table_lookup (themes, name);
+  if (variant == NULL)
+    key = (gchar *)name;
+  else
+    key = g_strconcat (name, "-", variant, NULL);
+
+  provider = g_hash_table_lookup (themes, key);
 
   if (!provider)
     {
@@ -4048,7 +4055,9 @@ gtk_css_provider_get_named (const gchar *name,
 
       if (!path)
         {
-          gchar *theme_dir = _gtk_css_provider_get_theme_dir ();
+          gchar *theme_dir;
+
+          theme_dir = _gtk_css_provider_get_theme_dir ();
           path = g_build_filename (theme_dir, name, subpath, NULL);
           g_free (theme_dir);
 
@@ -4063,12 +4072,11 @@ gtk_css_provider_get_named (const gchar *name,
 
       if (path)
         {
-          GError *error = NULL;
+          GError *error;
 
           provider = gtk_css_provider_new ();
-          gtk_css_provider_load_from_path (provider, path, &error);
-
-          if (error)
+          error = NULL;
+          if (!gtk_css_provider_load_from_path (provider, path, &error))
             {
               g_warning ("Could not load named theme \"%s\": %s", name, error->message);
               g_error_free (error);
@@ -4077,9 +4085,12 @@ gtk_css_provider_get_named (const gchar *name,
               provider = NULL;
             }
           else
-            g_hash_table_insert (themes, g_strdup (name), provider);
+            g_hash_table_insert (themes, g_strdup (key), provider);
         }
     }
+
+  if (key != name)
+    g_free (key);
 
   return provider;
 }
