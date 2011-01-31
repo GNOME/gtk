@@ -3798,7 +3798,7 @@ gtk_css_provider_get_default (void)
         "}\n"
         "\n"
         ".expander:active {\n"
-        "  transition: 300ms linear;\n"
+        "  transition: 200ms linear;\n"
         "}\n"
         "\n"
         "*:insensitive {\n"
