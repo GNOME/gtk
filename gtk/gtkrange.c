@@ -3970,6 +3970,7 @@ _gtk_range_get_stop_positions (GtkRange  *range,
  *
  * Since: 2.24
  */
+void
 gtk_range_set_round_digits (GtkRange *range,
                             gint      round_digits)
 {
