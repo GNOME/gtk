@@ -665,11 +665,8 @@ gtk_plug_finalize (GObject *object)
   GtkPlugPrivate *priv = plug->priv;
 
   if (priv->grabbed_keys)
-    {
-      g_hash_table_destroy (priv->grabbed_keys);
-      priv->grabbed_keys = NULL;
-    }
-  
+    g_hash_table_destroy (priv->grabbed_keys);
+
   G_OBJECT_CLASS (gtk_plug_parent_class)->finalize (object);
 }
 
@@ -937,15 +934,17 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
 		  break; /* FIXME: shouldn't this unref the plug? i.e. "goto done;" instead */
 	      }
 
-            g_hash_table_iter_init (&iter, priv->grabbed_keys);
-
-            while (g_hash_table_iter_next (&iter, &key, NULL))
+            if (priv->grabbed_keys)
               {
-                GrabbedKey *grabbed_key = key;
+                g_hash_table_iter_init (&iter, priv->grabbed_keys);
+                while (g_hash_table_iter_next (&iter, &key, NULL))
+                  {
+                    GrabbedKey *grabbed_key = key;
 
-                _gtk_xembed_send_message (priv->socket_window, XEMBED_GTK_GRAB_KEY, 0,
-                                          grabbed_key->accelerator_key,
-                                          grabbed_key->accelerator_mods);
+                    _gtk_xembed_send_message (priv->socket_window, XEMBED_GTK_GRAB_KEY, 0,
+                                              grabbed_key->accelerator_key,
+                                              grabbed_key->accelerator_mods);
+                  }
               }
 
 	    if (!was_embedded)
@@ -1344,7 +1343,7 @@ gtk_plug_keys_changed (GtkWindow *window)
   if (old_grabbed_keys)
     {
       if (priv->socket_window)
-	g_hash_table_foreach (old_grabbed_keys, remove_grabbed_key, plug);
+        g_hash_table_foreach (old_grabbed_keys, remove_grabbed_key, plug);
       g_hash_table_destroy (old_grabbed_keys);
     }
 }
