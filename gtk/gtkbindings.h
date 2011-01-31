@@ -45,6 +45,24 @@ typedef struct _GtkBindingEntry  GtkBindingEntry;
 typedef struct _GtkBindingSignal GtkBindingSignal;
 typedef struct _GtkBindingArg    GtkBindingArg;
 
+/**
+ * GtkBindingSet:
+ * @set_name: unique name of this binding set
+ * @priority: unused
+ * @widget_path_pspecs: unused
+ * @widget_class_pspecs: unused
+ * @class_branch_pspecs: unused
+ * @entries: the key binding entries in this binding set
+ * @current: implementation detail
+ * @parsed: whether this binding set stems from a CSS file and is reset upon theme changes
+ *
+ * A binding set maintains a list of activatable key bindings.
+ * A single binding set can match multiple types of widgets.
+ * Similar to style contexts, can be matched by any information contained
+ * in a widgets #GtkWidgetPath. When a binding within a set is matched upon
+ * activation, an action signal is emitted on the target widget to carry out
+ * the actual activation.
+ */
 struct _GtkBindingSet
 {
   gchar           *set_name;
@@ -57,6 +75,21 @@ struct _GtkBindingSet
   guint            parsed : 1;
 };
 
+/**
+ * GtkBindingEntry:
+ * @keyval: key value to match
+ * @modifiers: key modifiers to match
+ * @binding_set: binding set this entry belongs to
+ * @destroyed: implementation detail
+ * @in_emission: implementation detail
+ * @marks_unbound: implementation detail
+ * @set_next: linked list of entries maintained by binding set
+ * @hash_next: implementation detail
+ * @signals: action signals of this entry
+ *
+ * Each key binding element of a binding sets binding list is
+ * represented by a GtkBindingEntry.
+ */
 struct _GtkBindingEntry
 {
   /* key portion */
@@ -72,6 +105,14 @@ struct _GtkBindingEntry
   GtkBindingSignal *signals;
 };
 
+/**
+ * GtkBindingArg:
+ * @arg_type: implementation detail
+ *
+ * A #GtkBindingArg holds the data associated with
+ * an argument for a key binding signal emission as
+ * stored in #GtkBindingSignal.
+ */
 struct _GtkBindingArg
 {
   GType      arg_type;
@@ -82,6 +123,18 @@ struct _GtkBindingArg
   } d;
 };
 
+/**
+ * GtkBindingSignal:
+ * @next: implementation detail
+ * @signal_name: the action signal to be emitted
+ * @n_args: number of arguments specified for the signal
+ * @args: the arguments specified for the signal
+ *
+ * <anchor id="keybinding-signals"/>
+ * A GtkBindingSignal stores the necessary information to
+ * activate a widget in response to a key press via a signal
+ * emission.
+ */
 struct _GtkBindingSignal
 {
   GtkBindingSignal *next;
