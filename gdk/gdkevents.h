@@ -840,7 +840,7 @@ struct _GdkEventOwnerChange
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
-  GdkNativeWindow owner;
+  GdkWindow *owner;
   GdkOwnerChange reason;
   GdkAtom selection;
   guint32 time;

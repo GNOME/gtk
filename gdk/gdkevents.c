@@ -567,6 +567,10 @@ gdk_event_copy (const GdkEvent *event)
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
       break;
 
+    case GDK_OWNER_CHANGE:
+      new_event->owner_change.owner = g_object_ref (event->owner_change.owner);
+      break;
+
     default:
       break;
     }
@@ -636,6 +640,10 @@ gdk_event_free (GdkEvent *event)
       g_free (event->setting.name);
       break;
       
+    case GDK_OWNER_CHANGE:
+      g_object_unref (event->owner_change.owner);
+      break;
+
     default:
       break;
     }
