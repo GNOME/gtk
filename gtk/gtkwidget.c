@@ -8761,8 +8761,7 @@ gtk_widget_reset_style (GtkWidget *widget)
  *
  * This function is not useful for applications.
  *
- * Deprecated:3.0: Use #GtkStyleContext instead, and
- *     gtk_widget_reset_style()
+ * Deprecated:3.0: Use #GtkStyleContext instead, and gtk_widget_reset_style()
  */
 void
 gtk_widget_reset_rc_styles (GtkWidget *widget)
@@ -9193,17 +9192,17 @@ gtk_widget_render_icon_pixbuf (GtkWidget   *widget,
  *     multiple source sizes, GTK+ picks one of the available sizes).
  * @detail: (allow-none): render detail to pass to theme engine
  *
- * A convenience function that uses the theme engine and RC file
- * settings for @widget to look up @stock_id and render it to
- * a pixbuf. @stock_id should be a stock icon ID such as
- * #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size should be a size
- * such as #GTK_ICON_SIZE_MENU. @detail should be a string that
- * identifies the widget or code doing the rendering, so that
- * theme engines can special-case rendering for that widget or code.
+ * A convenience function that uses the theme settings for @widget
+ * to look up @stock_id and render it to a pixbuf. @stock_id should
+ * be a stock icon ID such as #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size
+ * should be a size such as #GTK_ICON_SIZE_MENU. @detail should be a
+ * string that identifies the widget or code doing the rendering, so
+ * that theme engines can special-case rendering for that widget or
+ * code.
  *
  * The pixels in the returned #GdkPixbuf are shared with the rest of
- * the application and should not be modified. The pixbuf should be freed
- * after use with g_object_unref().
+ * the application and should not be modified. The pixbuf should be
+ * freed after use with g_object_unref().
  *
  * Return value: (transfer full): a new pixbuf, or %NULL if the
  *     stock ID wasn't known
@@ -9226,7 +9225,7 @@ gtk_widget_render_icon (GtkWidget      *widget,
  *
  * Sets a non default parent window for @widget.
  *
- * For GtkWindow classes, setting a @parent_window effects whether 
+ * For GtkWindow classes, setting a @parent_window effects whether
  * the window is a toplevel window or can be embedded into other
  * widgets.
  *
@@ -10213,15 +10212,14 @@ gtk_widget_get_visual (GtkWidget *widget)
  * gtk_widget_get_settings:
  * @widget: a #GtkWidget
  *
- * Gets the settings object holding the settings (global property
- * settings, RC file information, etc) used for this widget.
+ * Gets the settings object holding the settings used for this widget.
  *
  * Note that this function can only be called when the #GtkWidget
  * is attached to a toplevel, since the settings object is specific
  * to a particular #GdkScreen.
  *
  * Return value: (transfer none): the relevant #GtkSettings object
- **/
+ */
 GtkSettings*
 gtk_widget_get_settings (GtkWidget *widget)
 {
