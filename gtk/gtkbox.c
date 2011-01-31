@@ -261,6 +261,10 @@ gtk_box_class_init (GtkBoxClass *class)
    * Note that the default value for this property is %FALSE for GtkBox,
    * but #GtkHBox, #GtkVBox and other subclasses use the old default
    * of %TRUE.
+   *
+   * Note that the #GtkWidget:halign, #GtkWidget:valign, #GtkWidget:hexpand
+   * and #GtkWidget:vexpand properties are the preferred way to influence
+   * child size allocation in containers.
    */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_EXPAND,
@@ -274,6 +278,10 @@ gtk_box_class_init (GtkBoxClass *class)
    * GtkBox:fill:
    *
    * Whether the child should receive extra space when the parent grows.
+   *
+   * Note that the #GtkWidget:halign, #GtkWidget:valign, #GtkWidget:hexpand
+   * and #GtkWidget:vexpand properties are the preferred way to influence
+   * child size allocation in containers.
    */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_FILL,
