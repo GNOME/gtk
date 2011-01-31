@@ -216,17 +216,38 @@ test_spin_button_arrows (void)
   g_assert (oldval == 0);
 }
 
+static void
+test_statusbar_remove_all (void)
+{
+  GtkWidget *statusbar;
+
+  g_test_bug ("640487");
+
+  statusbar = gtk_statusbar_new ();
+  g_object_ref_sink (statusbar);
+
+  gtk_statusbar_push (GTK_STATUSBAR (statusbar), 1, "bla");
+  gtk_statusbar_push (GTK_STATUSBAR (statusbar), 1, "bla");
+  gtk_statusbar_remove_all (GTK_STATUSBAR (statusbar), 1);
+
+  g_object_unref (statusbar);
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv);
+  g_test_bug_base ("http://bugzilla.gnome.org/");
   gtk_test_register_all_types();
+
+  g_test_add_func ("/tests/statusbar-remove-all", test_statusbar_remove_all);
   g_test_add_func ("/ui-tests/text-access", test_text_access);
   g_test_add_func ("/ui-tests/button-clicks", test_button_clicks);
   g_test_add_func ("/ui-tests/keys-events", test_button_keys);
   g_test_add_func ("/ui-tests/slider-ranges", test_slider_ranges);
   g_test_add_func ("/ui-tests/xserver-sync", test_xserver_sync);
   g_test_add_func ("/ui-tests/spin-button-arrows", test_spin_button_arrows);
+
   return g_test_run();
 }
