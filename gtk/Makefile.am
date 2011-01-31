@@ -380,6 +380,7 @@ gtk_private_h_sources =		\
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
 	gtkappchooseronline.h	\
+	gtkbindingsprivate.h	\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\

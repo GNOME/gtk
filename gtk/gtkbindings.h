@@ -11,7 +11,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -40,113 +40,97 @@
 
 G_BEGIN_DECLS
 
-
-/* Binding sets
- */
-
-typedef struct _GtkBindingSet		GtkBindingSet;
-typedef struct _GtkBindingEntry		GtkBindingEntry;
-typedef struct _GtkBindingSignal	GtkBindingSignal;
-typedef struct _GtkBindingArg		GtkBindingArg;
+typedef struct _GtkBindingSet    GtkBindingSet;
+typedef struct _GtkBindingEntry  GtkBindingEntry;
+typedef struct _GtkBindingSignal GtkBindingSignal;
+typedef struct _GtkBindingArg    GtkBindingArg;
 
 struct _GtkBindingSet
 {
-  gchar			*set_name;
-  gint			 priority;
-  GSList		*widget_path_pspecs;
-  GSList		*widget_class_pspecs;
-  GSList		*class_branch_pspecs;
-  GtkBindingEntry	*entries;
-  GtkBindingEntry	*current;
-  guint                  parsed : 1; /* From RC content */
+  gchar           *set_name;
+  gint             priority;
+  GSList          *widget_path_pspecs;
+  GSList          *widget_class_pspecs;
+  GSList          *class_branch_pspecs;
+  GtkBindingEntry *entries;
+  GtkBindingEntry *current;
+  guint            parsed : 1;
 };
 
 struct _GtkBindingEntry
 {
-  /* key portion
-   */
-  guint			 keyval;
-  GdkModifierType	 modifiers;
-  
-  GtkBindingSet		*binding_set;
-  guint			destroyed : 1;
-  guint			in_emission : 1;
-  guint                 marks_unbound : 1;
-  GtkBindingEntry	*set_next;
-  GtkBindingEntry	*hash_next;
-  GtkBindingSignal	*signals;
+  /* key portion */
+  guint             keyval;
+  GdkModifierType   modifiers;
+
+  GtkBindingSet    *binding_set;
+  guint             destroyed     : 1;
+  guint             in_emission   : 1;
+  guint             marks_unbound : 1;
+  GtkBindingEntry  *set_next;
+  GtkBindingEntry  *hash_next;
+  GtkBindingSignal *signals;
 };
 
 struct _GtkBindingArg
 {
-  GType		 arg_type;
+  GType      arg_type;
   union {
-    glong	 long_data;
-    gdouble	 double_data;
-    gchar	*string_data;
+    glong    long_data;
+    gdouble  double_data;
+    gchar   *string_data;
   } d;
 };
 
 struct _GtkBindingSignal
 {
-  GtkBindingSignal	*next;
-  gchar 		*signal_name;
-  guint			 n_args;
-  GtkBindingArg		*args;
+  GtkBindingSignal *next;
+  gchar            *signal_name;
+  guint             n_args;
+  GtkBindingArg    *args;
 };
 
-/* Application-level methods */
+GtkBindingSet *gtk_binding_set_new           (const gchar         *set_name);
+GtkBindingSet *gtk_binding_set_by_class      (gpointer             object_class);
+GtkBindingSet *gtk_binding_set_find          (const gchar         *set_name);
 
-GtkBindingSet*	gtk_binding_set_new	(const gchar	*set_name);
-GtkBindingSet*	gtk_binding_set_by_class(gpointer	 object_class);
-GtkBindingSet*	gtk_binding_set_find	(const gchar	*set_name);
-gboolean gtk_bindings_activate		(GObject	*object,
-					 guint		 keyval,
-					 GdkModifierType modifiers);
-gboolean gtk_bindings_activate_event    (GObject        *object,
-					 GdkEventKey    *event);
-gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 GdkModifierType modifiers,
-					 GObject	*object);
+gboolean       gtk_bindings_activate         (GObject             *object,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers);
+gboolean       gtk_bindings_activate_event   (GObject             *object,
+                                              GdkEventKey         *event);
+gboolean       gtk_binding_set_activate      (GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              GObject             *object);
 
-void	 gtk_binding_entry_skip         (GtkBindingSet  *binding_set,
-                                         guint           keyval,
-                                         GdkModifierType modifiers);
-void	 gtk_binding_entry_add_signal   (GtkBindingSet  *binding_set,
-                                         guint           keyval,
-                                         GdkModifierType modifiers,
-                                         const gchar    *signal_name,
-                                         guint           n_args,
-                                         ...);
-void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 GdkModifierType modifiers,
-					 const gchar	*signal_name,
-					 GSList		*binding_args);
+void           gtk_binding_entry_skip        (GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers);
+void           gtk_binding_entry_add_signal  (GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              const gchar         *signal_name,
+                                              guint                n_args,
+                                              ...);
+void           gtk_binding_entry_add_signall (GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              const gchar         *signal_name,
+                                              GSList              *binding_args);
 
-GTokenType gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
-                                                     const gchar   *signal_desc);
+GTokenType     gtk_binding_entry_add_signal_from_string
+                                             (GtkBindingSet       *binding_set,
+                                              const gchar         *signal_desc);
 
-void	 gtk_binding_entry_remove	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 GdkModifierType modifiers);
+void           gtk_binding_entry_remove      (GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers);
 
-void	 gtk_binding_set_add_path	(GtkBindingSet	*binding_set,
-					 GtkPathType	 path_type,
-					 const gchar	*path_pattern,
-					 GtkPathPriorityType priority);
-
-
-/* Non-public methods */
-
-guint	 _gtk_binding_parse_binding     (GScanner       *scanner);
-void     _gtk_binding_reset_parsed      (void);
-void	 _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
-					 guint		 keyval,
-					 GdkModifierType modifiers,
-					 const gchar	*signal_name,
-					 GSList		*binding_args);
+void           gtk_binding_set_add_path      (GtkBindingSet       *binding_set,
+                                              GtkPathType          path_type,
+                                              const gchar         *path_pattern,
+                                              GtkPathPriorityType  priority);
 
 G_END_DECLS
 

@@ -24,14 +24,14 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
 #include <string.h>
 #include <stdarg.h>
 
-#include "gtkbindings.h"
+#include "gtkbindingsprivate.h"
 #include "gtkkeyhash.h"
 #include "gtkwidget.h"
 #include "gtkrc.h"
@@ -241,7 +241,7 @@ binding_entry_new (GtkBindingSet  *binding_set,
       GtkKeyHash *key_hash = tmp_list->data;
       binding_key_hash_insert_entry (key_hash, entry);
     }
-  
+
   return entry;
 }
 
