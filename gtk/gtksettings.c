@@ -1608,6 +1608,7 @@ gtk_settings_notify (GObject    *object,
       settings_update_color_scheme (settings);
       gtk_style_context_reset_widgets (priv->screen);
       break;
+    case PROP_APPLICATION_PREFER_DARK_THEME:
     case PROP_THEME_NAME:
       settings_update_theme (settings);
       break;
