@@ -4587,6 +4587,7 @@ gtk_window_show (GtkWidget *widget)
   GtkWindowPrivate *priv = window->priv;
   GtkContainer *container = GTK_CONTAINER (window);
   gboolean need_resize;
+  gboolean is_plug;
 
   if (!gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
@@ -4658,7 +4659,12 @@ gtk_window_show (GtkWidget *widget)
 
   /* Try to make sure that we have some focused widget
    */
-  if (!priv->focus_widget && !GTK_IS_PLUG (window))
+#ifdef GDK_WINDOWING_X11
+  is_plug = GTK_IS_PLUG (window);
+#else
+  is_plug = FALSE;
+#endif
+  if (!priv->focus_widget && !is_plug)
     gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
   
   if (priv->modal)

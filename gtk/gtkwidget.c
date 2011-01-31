@@ -9249,6 +9249,8 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
 
   if (parent_window != old_parent_window)
     {
+      gboolean is_plug;
+
       g_object_set_qdata (G_OBJECT (widget), quark_parent_window,
 			  parent_window);
       if (old_parent_window)
@@ -9260,7 +9262,12 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
        * this is the primary entry point to allow toplevels to be
        * embeddable.
        */
-      if (GTK_IS_WINDOW (widget) && !GTK_IS_PLUG (widget))
+#ifdef GDK_WINDOWING_X11
+      is_plug = GTK_IS_PLUG (widget);
+#else
+      is_plug = FALSE;
+#endif
+      if (GTK_IS_WINDOW (widget) && !is_plug)
 	_gtk_window_set_is_toplevel (GTK_WINDOW (widget), parent_window == NULL);
     }
 }
