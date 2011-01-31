@@ -38,7 +38,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
-#include "gtktrayicon.h"
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtktooltip.h"
@@ -48,6 +47,7 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "gdk/x11/gdkx.h"
+#include "gtktrayicon.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
