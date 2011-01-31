@@ -29,10 +29,18 @@
     </para>
 
     <para>
-      If your theme gtkrc file was providing values for #GtkSettings, you
+      If your theme RC file was providing values for #GtkSettings, you
       can install a <filename>settings.ini</filename> keyfile along with
       the <filename>gtk.css</filename> to provide theme-specific defaults
       for settings.
+    </para>
+
+    <para>
+      Key themes have been converted to CSS syntax too. See the
+      <link linkend="css-binding-set">GtkCssProvider</link> documentation
+      information about the syntax. GTK+ looks for key themes in the file
+      <filename>$datadir/themes/<replaceable>theme</replaceable>/gtk-3.0/gtk-keys.css</filename>, where <replaceable>theme</replaceable> is the current
+      key theme name.
     </para>
   </section>
 
