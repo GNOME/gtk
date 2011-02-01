@@ -308,7 +308,7 @@ _gdk_x11_display_get_selection_property (GdkDisplay  *display,
 
 void
 _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
-                                        GdkNativeWindow  requestor,
+                                        GdkWindow        *requestor,
                                         GdkAtom          selection,
                                         GdkAtom          target,
                                         GdkAtom          property,
@@ -319,7 +319,7 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
   xevent.type = SelectionNotify;
   xevent.serial = 0;
   xevent.send_event = True;
-  xevent.requestor = requestor;
+  xevent.requestor = GDK_WINDOW_XID (requestor);
   xevent.selection = gdk_x11_atom_to_xatom_for_display (display, selection);
   xevent.target = gdk_x11_atom_to_xatom_for_display (display, target);
   if (property == GDK_NONE)
@@ -328,7 +328,7 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
     xevent.property = gdk_x11_atom_to_xatom_for_display (display, property);
   xevent.time = time;
 
-  _gdk_x11_display_send_xevent (display, requestor, False, NoEventMask, (XEvent*) & xevent);
+  _gdk_x11_display_send_xevent (display, xevent.requestor, False, NoEventMask, (XEvent*) & xevent);
 }
 
 /**

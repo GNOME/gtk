@@ -190,7 +190,7 @@ gboolean    _gdk_x11_display_set_selection_owner   (GdkDisplay *display,
 GdkWindow * _gdk_x11_display_get_selection_owner   (GdkDisplay *display,
                                                     GdkAtom     selection);
 void        _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
-                                                    GdkNativeWindow  requestor,
+                                                    GdkWindow        *requestor,
                                                     GdkAtom          selection,
                                                     GdkAtom          target,
                                                     GdkAtom          property,

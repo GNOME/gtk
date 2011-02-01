@@ -573,6 +573,14 @@ gdk_event_copy (const GdkEvent *event)
         g_object_ref (new_event->owner_change.owner);
       break;
 
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_SELECTION_REQUEST:
+      new_event->selection.requestor = event->selection.requestor;
+      if (new_event->selection.requestor)
+        g_object_unref (new_event->selection.requestor);
+      break;
+
     default:
       break;
     }
@@ -645,6 +653,13 @@ gdk_event_free (GdkEvent *event)
     case GDK_OWNER_CHANGE:
       if (event->owner_change.owner)
         g_object_unref (event->owner_change.owner);
+      break;
+
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_SELECTION_REQUEST:
+      if (event->selection.requestor)
+        g_object_unref (event->selection.requestor);
       break;
 
     default:

@@ -814,7 +814,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.selection);
       event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.target);
       event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.property);
-      event->selection.requestor = xevent->xselectionrequest.requestor;
+      if (xevent->xselectionrequest.requestor != None)
+        event->selection.requestor = gdk_x11_window_foreign_new_for_display (display,
+                                                                             xevent->xselectionrequest.requestor);
+      else
+        event->selection.requestor = NULL;
       event->selection.time = xevent->xselectionrequest.time;
 
       break;

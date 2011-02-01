@@ -126,13 +126,13 @@ gdk_selection_owner_get (GdkAtom selection)
  * Sends a response to SelectionRequest event.
  */
 void
-gdk_selection_send_notify (GdkNativeWindow requestor,
+gdk_selection_send_notify (GdkWindow      *requestor,
 			   GdkAtom         selection,
 			   GdkAtom         target,
 			   GdkAtom         property,
 			   guint32         time)
 {
-  gdk_selection_send_notify_for_display (gdk_display_get_default (), 
+  gdk_selection_send_notify_for_display (gdk_window_get_display (requestor),
 					 requestor, selection, 
 					 target, property, time);
 }
@@ -213,7 +213,7 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
  */
 void
 gdk_selection_send_notify_for_display (GdkDisplay       *display,
-                                       GdkNativeWindow  requestor,
+                                       GdkWindow        *requestor,
                                        GdkAtom          selection,
                                        GdkAtom          target,
                                        GdkAtom          property,

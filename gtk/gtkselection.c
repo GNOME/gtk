@@ -2324,15 +2324,7 @@ _gtk_selection_request (GtkWidget *widget,
 
   info->selection = event->selection;
   info->num_incrs = 0;
-
-  /* Create GdkWindow structure for the requestor */
-
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
-    info->requestor = gdk_x11_window_foreign_new_for_display (display, event->requestor);
-  else
-#endif
-    info->requestor = NULL;
+  info->requestor = g_object_ref (event->requestor);
 
   /* Determine conversions we need to perform */
   if (event->target == gtk_selection_atoms[MULTIPLE])

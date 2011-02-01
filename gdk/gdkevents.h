@@ -798,7 +798,7 @@ struct _GdkEventProperty
  * @target: the target to which the selection should be converted.
  * @property: the property in which to place the result of the conversion.
  * @time: the time of the event in milliseconds.
- * @requestor: the native window on which to place @property.
+ * @requestor: the window on which to place @property or %NULL if none.
  *
  * Generated when a selection is requested or ownership of a selection
  * is taken over by another client application.
@@ -812,7 +812,7 @@ struct _GdkEventSelection
   GdkAtom target;
   GdkAtom property;
   guint32 time;
-  GdkNativeWindow requestor;
+  GdkWindow *requestor;
 };
 
 /**

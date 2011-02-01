@@ -876,7 +876,9 @@ x_event_mask_to_gdk_event_mask (long mask)
  * @display: the #GdkDisplay where the window handle comes from.
  * @window: an XLib <type>Window</type>
  *
- * Wraps a native window in a #GdkWindow.
+ * Wraps a native window in a #GdkWindow. The function will try to
+ * look up the window using gdk_x11_window_lookup_for_display() first.
+ * If it does not find it there, it will create a new window.
  *
  * This may fail if the window has been destroyed. If the window
  * was already known to GDK, a new reference to the existing
