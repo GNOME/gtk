@@ -819,15 +819,15 @@ struct _GdkEventSelection
 /**
  * GdkEventOwnerChange:
  * @type: the type of the event (%GDK_OWNER_CHANGE).
- * @window: the window which received the event.
+ * @window: the window which received the event
  * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
- * @owner: the new owner of the selection.
- * @reason: the reason for the ownership change as a #GdkOwnerChange value.
- * @selection: the atom identifying the selection.
- * @time: the timestamp of the event.
+ *   <function>XSendEvent</function>)
+ * @owner: the new owner of the selection, or %NULL if there is none
+ * @reason: the reason for the ownership change as a #GdkOwnerChange value
+ * @selection: the atom identifying the selection
+ * @time: the timestamp of the event
  * @selection_time: the time at which the selection ownership was taken
- *   over.
+ *   over
  *
  * Generated when the owner of a selection changes. On X11, this
  * information is only available if the X server supports the XFIXES

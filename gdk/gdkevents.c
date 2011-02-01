@@ -568,7 +568,9 @@ gdk_event_copy (const GdkEvent *event)
       break;
 
     case GDK_OWNER_CHANGE:
-      new_event->owner_change.owner = g_object_ref (event->owner_change.owner);
+      new_event->owner_change.owner = event->owner_change.owner;
+      if (new_event->owner_change.owner)
+        g_object_ref (new_event->owner_change.owner);
       break;
 
     default:
@@ -641,7 +643,8 @@ gdk_event_free (GdkEvent *event)
       break;
       
     case GDK_OWNER_CHANGE:
-      g_object_unref (event->owner_change.owner);
+      if (event->owner_change.owner)
+        g_object_unref (event->owner_change.owner);
       break;
 
     default:
