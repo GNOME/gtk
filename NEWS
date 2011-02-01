@@ -1,3 +1,140 @@
+Overview of Changes in GTK+ 2.99.3
+==================================
+
+* This release adds some forgotten padding to class structs,
+  and thus breaks ABI for a last time before 3.0
+
+* Many Introspection annotation improvements
+
+* We no longer build the gtk-update-icon-cache utility, and
+  use a preexisting one, if --enable-gtk2-dependency is passed
+  to configure
+
+* GtkBuilder can now fill GtkComboBoxText and GtkMenToolButton
+  widgets with data, as well as GtkFileFilters and GtkTextTagTables
+
+* GtkImage now has a ::use-fallback property to allow generic
+  fallback with GIcons and icon-names (e.g. for symbolic icons)
+
+* There's a new gtk_text_view_get_cursor_locations() to enable
+  popup-at-cursor functionality
+
+* The application chooser widgets can now set a custom
+  dialog heading
+
+* The file chooser and application chooser widgets have received
+  minor visual improvements
+
+* gtk-auto-mnemonics is now backed by an XSetting
+
+* Defaults for GtkSettings, as well as theme-specific settings,
+  are now read from key files
+
+* Key themes are now supported again, their syntax has been changed
+  to be CSS-like
+
+* More objects use GtkStyleContext directly now:
+  GtkTreeView
+  GtkIconView
+  GtkCellArea
+  GtkCellRendererText
+  GtkCellRendererPixbuf
+  GtkCellRendererAccel
+  GtkCellRendererProgress
+
+* GtkPlug and GtkSocket have been reduced to X11-specific API, and
+  using them requires including the <gtk/gtkx.h> header, and uses
+  of GdkNativeWindow in their APIs have been replaced by the X11
+  Window type.
+  A number of other API changes were necessary in GDK to ensure
+  that multiple GDK backends can coexist:
+  - GdkNativeWindow has been dropped
+  - The GdkEventOwnerChange owner field is a GdkWindow now
+  - The GdkEventSelection requestor field is a GdkWindow now
+  - The GtkWidget::client_event vfunc is gone
+  - GdkEventClient is gone, together with related API:
+    gdk_add_client_message_filter
+    gdk_display_add_client_message_filter
+    gdk_screen_broadcast_client_message
+    gdk_event_send_client_message
+    gdk_event_send_client_message_for_display
+    gdk_event_send_clientmessage_toall
+  - gdk_drag_get_protocol_for_display has been changed to
+    gdk_window_get_drag_protocol
+
+* Migration guide and tutorial and other documentation improvements
+
+* Bug fixes
+ 322926 FileChooser: Alt-Shift-Down should work like Alt-Down
+ 351755 GTK_RANGE (range) -> round_digits should be exposed...
+ 586635 gtk_info_bar_add_button() should return GtkButton*
+ 590459 Text is sometimes not pasted at the right location
+ 598952 Implement object attribute to expose toolkit/source
+ 626336 Warning when activating GtkButton outside of an event...
+ 634677 assertion in finalize assuring that buffer is NULL...
+ 635287 Specify packages when generating GIR
+ 636691 Rendering icons with prelight state doesn't...
+ 638920 gail should provide toolkit as an AtkAttribute
+ 639139 Subclassing GtkIconView broken lately in master
+ 639186 gtk_paper_size_new fails to recognize valid name
+ 639325 Generated introspection broken
+ 639380 Critical warnings when detaching tab
+ 639455 accel cell renderer critical warning
+ 639520 Update docs about colormap to use visual instead.
+ 639531 No error is given when attempting to save to "nonexistent...
+ 639625 Crashes on dereferencing a NULL GtkBorder.
+ 639750 Support css3 colors
+ 639754 Must widget class names begin with uppercase letter?
+ 639767 password not accepted in gnome-screensaver dialog
+ 639792 Regional panel: "Add" dialog: combos not sorted
+ 639822 Synthesized button2/button3 does not transfer source_device
+ 639845 insensitive and separator items in comboboxes not working...
+ 639931 gtk_application_add_window() docs should mention window destr...
+ 639949 pygobject leaks references on GtkWindows
+ 640005 removable media dialog should use app names
+ 640006 choose app dialog shows other apps by default
+ 640011 Selects application on cancel
+ 640105 Crash showing a offscreen window with a textview inside
+ 640161 GtkFileChooserWidget 0xbbf6c0 is mapped but visible=1...
+ 640188 gdk_pixbuf_get_from_drawable missing from migration guide
+ 640195 gdk_cairo_create gets cairo context with badly clipped...
+ 640282 insensitive, active check button becomes sensitive
+ 640313 BadDevice X error when ungrabbing a SLAVE device
+ 640391 Display lines between rows when window is focused
+ 640487 crash on gtk_statusbar_remove_all()
+ 640698 Incompatibility in 'matched-selected' signal invocation
+ 640712 GtkAssistant fonts are too big
+ 640744 mount-operation: don't show the dialog until the tree...
+ 640902 X11 headers included by default in public headers
+ 640965 XCompose does not work with GTK+ 2.99.x
+ 640983 GtkSettings: Fix theme not updating for dark theme
+ 640999 GtkSpinner Class check macro is invalid
+ 641023 assertion `hash_table != NULL' failed in gtkplug.c
+ 641039 Cannot expand/collapse nodes by mouse
+ 641042 assertion `G_IS_OBJECT (object) in gdkevents.c
+ 641059 Fix several bugs handling GtkTrayIcon symbolic colors
+ 641073 Please be consistent with GtkEntryCompletion
+
+* Translation updates
+ Arabic
+ Basque
+ Catalan
+ Chinese
+ Esperanto
+ Estonian
+ Galician
+ German
+ Greek
+ Hebrew
+ Italian
+ Kazakh
+ Norwegian bokmål
+ Persian
+ Punjabi
+ Spanish
+ Uighur
+
+
 Overview of Changes in GTK+ 2.99.2
 ==================================
 
@@ -47,7 +184,7 @@ Overview of Changes from GTK+ 2.99.0 to 2.99.1
  639105 Port GtkTextDisplay to StyleContext.
  639106 New CSS style misses distinction between "selected focused"...
  639127 Misc Win32 GDK building problems
- 639157 GtkOrientable should add/ remove "horizontal" and "vertical"...
+ 639157 GtkOrientable should add/remove "horizontal" and "vertical"...
 
 * Translation updates:
  British English
