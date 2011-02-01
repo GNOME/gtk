@@ -114,6 +114,7 @@ Overview of Changes in GTK+ 2.99.3
  641042 assertion `G_IS_OBJECT (object) in gdkevents.c
  641059 Fix several bugs handling GtkTrayIcon symbolic colors
  641073 Please be consistent with GtkEntryCompletion
+ 641176 Fix crash in gtk_fixed_remove()
 
 * Translation updates
  Arabic
