@@ -882,11 +882,11 @@ gdk_drag_begin
 gdk_drag_begin_for_device
 gdk_drag_motion
 gdk_drop_finish
-gdk_drag_get_protocol_for_display
 GdkDragProtocol
 GdkDragAction
 gdk_drag_status
 gdk_drag_drop_succeeded
+gdk_window_get_drag_protocol
 
 gdk_drag_context_get_actions
 gdk_drag_context_get_suggested_action

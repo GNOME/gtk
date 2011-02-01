@@ -1664,28 +1664,6 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
 }
 
 /**
- * gdk_drag_get_protocol_for_display:
- * @display: the #GdkDisplay where the destination window resides
- * @xid: the windowing system id of the destination window.
- * @protocol: (out): location where the supported DND protocol is returned.
- *
- * Finds out the DND protocol supported by a window.
- *
- * Return value: the windowing system id of the window where the drop
- *    should happen. This may be @xid or the id of a proxy window,
- *    or zero if @xid does not support Drag and Drop.
- *
- * Since: 2.2
- */
-GdkNativeWindow
-gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-                                   GdkNativeWindow  xid,
-                                   GdkDragProtocol *protocol)
-{
-  return GDK_DISPLAY_GET_CLASS (display)->get_drag_protocol (display, xid, protocol, NULL);
-}
-
-/**
  * gdk_display_open:
  * @display_name: the name of the display to open
  *

@@ -780,6 +780,10 @@ void          gdk_window_set_opacity     (GdkWindow       *window,
                                           gdouble          opacity);
 void          gdk_window_register_dnd    (GdkWindow       *window);
 
+GdkDragProtocol
+              gdk_window_get_drag_protocol(GdkWindow      *window,
+                                          GdkWindow      **target);
+
 void gdk_window_begin_resize_drag (GdkWindow     *window,
                                    GdkWindowEdge  edge,
                                    gint           button,

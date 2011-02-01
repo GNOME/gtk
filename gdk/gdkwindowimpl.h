@@ -248,6 +248,8 @@ struct _GdkWindowImplClass
   void         (* set_composited)       (GdkWindow *window,
                                          gboolean   composited);
   void         (* destroy_notify)       (GdkWindow *window);
+  GdkDragProtocol (* get_drag_protocol) (GdkWindow *window,
+                                         GdkWindow **target);
   void         (* register_dnd)         (GdkWindow *window);
   GdkDragContext * (*drag_begin)        (GdkWindow *window,
                                          GdkDevice *device,

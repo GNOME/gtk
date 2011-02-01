@@ -143,7 +143,6 @@ gdk_drag_context_set_device
 gdk_drag_drop
 gdk_drag_drop_succeeded
 gdk_drag_find_window_for_screen
-gdk_drag_get_protocol_for_display
 gdk_drag_get_selection
 gdk_drag_motion
 gdk_drag_protocol_get_type G_GNUC_CONST
@@ -390,6 +389,7 @@ gdk_window_get_device_cursor
 gdk_window_get_device_events
 gdk_window_get_device_position
 gdk_window_get_display
+gdk_window_get_drag_protocol
 gdk_window_get_effective_parent
 gdk_window_get_effective_toplevel
 gdk_window_get_events

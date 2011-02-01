@@ -128,10 +128,6 @@ GdkDragContext * gdk_drag_begin_for_device (GdkWindow      *window,
                                             GdkDevice      *device,
                                             GList          *targets);
 
-GdkNativeWindow gdk_drag_get_protocol_for_display (GdkDisplay       *display,
-                                                   GdkNativeWindow   xid,
-                                                   GdkDragProtocol  *protocol);
-
 void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
                                            GdkWindow        *drag_window,
                                            GdkScreen        *screen,
