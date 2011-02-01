@@ -1021,7 +1021,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
        * We need to override that with an XI2 device, since we are
        * using XI2.
        */
-      device = gdk_x11_device_manager_xi2_get_client_pointer (device_manager);
+      device = gdk_x11_device_manager_xi2_get_client_pointer ((GdkDeviceManager *)device_manager);
       gdk_event_set_device (event, gdk_device_get_associated_device (device));
 
       return TRUE;
