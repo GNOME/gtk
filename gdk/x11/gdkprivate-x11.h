@@ -183,10 +183,10 @@ void _gdk_x11_display_queue_events            (GdkDisplay *display);
 
 
 GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
-GdkNativeWindow      _gdk_x11_display_get_drag_protocol      (GdkDisplay *display,
-                                                              GdkNativeWindow  xid,
-                                                              GdkDragProtocol *protocol,
-                                                              guint           *version);
+Window      _gdk_x11_display_get_drag_protocol     (GdkDisplay      *display,
+                                                    Window           xid,
+                                                    GdkDragProtocol *protocol,
+                                                    guint           *version);
 
 gboolean    _gdk_x11_display_set_selection_owner   (GdkDisplay *display,
                                                     GdkWindow  *owner,

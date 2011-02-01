@@ -3193,15 +3193,15 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
   return context;
 }
 
-GdkNativeWindow
+Window
 _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
-                                    GdkNativeWindow  xid,
+                                    Window           xid,
                                     GdkDragProtocol *protocol,
                                     guint           *version)
 
 {
   GdkWindow *window;
-  GdkNativeWindow retval;
+  Window retval;
 
   base_precache_atoms (display);
 
@@ -3214,10 +3214,10 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
           *protocol = GDK_DRAG_PROTO_XDND;
           *version = 5;
           xdnd_precache_atoms (display);
-          GDK_NOTE (DND, g_message ("Entering local Xdnd window %#x\n", xid));
+          GDK_NOTE (DND, g_message ("Entering local Xdnd window %#x\n", (guint) xid));
           return xid;
         }
-      else if (_gdk_x11_display_is_root_window (display, (Window) xid))
+      else if (_gdk_x11_display_is_root_window (display, xid))
         {
           *protocol = GDK_DRAG_PROTO_ROOTWIN;
           GDK_NOTE (DND, g_message ("Entering root window\n"));
@@ -3228,13 +3228,13 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
     {
       *protocol = GDK_DRAG_PROTO_XDND;
       xdnd_precache_atoms (display);
-      GDK_NOTE (DND, g_message ("Entering Xdnd window %#x\n", xid));
+      GDK_NOTE (DND, g_message ("Entering Xdnd window %#x\n", (guint) xid));
       return retval;
     }
   else if ((retval = motif_check_dest (display, xid)))
     {
       *protocol = GDK_DRAG_PROTO_MOTIF;
-      GDK_NOTE (DND, g_message ("Entering motif window %#x\n", xid));
+      GDK_NOTE (DND, g_message ("Entering motif window %#x\n", (guint) xid));
       return retval;
     }
   else
