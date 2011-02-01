@@ -2946,7 +2946,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 			"horizontal-separator", &horizontal_separator,
 			NULL);
 
-
   /* Because grab_focus can cause reentrancy, we delay grab_focus until after
    * we're done handling the button press.
    */
@@ -3438,7 +3437,6 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 
   if (event->button == 1)
     {
-      gtk_grab_remove (widget);
       if (tree_view->priv->button_pressed_node == tree_view->priv->prelight_node &&
           tree_view->priv->arrow_prelit)
 	{
@@ -3460,6 +3458,7 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 	  gtk_tree_path_free (path);
 	}
 
+      gtk_grab_remove (widget);
       tree_view->priv->button_pressed_tree = NULL;
       tree_view->priv->button_pressed_node = NULL;
     }
@@ -12797,7 +12796,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   if (node->children == NULL)
     return FALSE;
-
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 
   g_signal_emit (tree_view, tree_view_signals[TEST_COLLAPSE_ROW], 0, &iter, path, &collapse);
