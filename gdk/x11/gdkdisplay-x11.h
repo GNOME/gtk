@@ -146,6 +146,10 @@ GdkScreen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,
 void       _gdk_x11_display_error_event         (GdkDisplay  *display,
                                                  XErrorEvent *error);
 
+GdkFilterReturn _gdk_wm_protocols_filter        (GdkXEvent   *xev,
+                                                 GdkEvent    *event,
+                                                 gpointer     data);
+
 G_END_DECLS
 
 #endif  /* __GDK_X11_DISPLAY__ */

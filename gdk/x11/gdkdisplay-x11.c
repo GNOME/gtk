@@ -1016,21 +1016,28 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   return return_val;
 }
 
-static GdkFilterReturn
-gdk_wm_protocols_filter (GdkXEvent *xev,
-			 GdkEvent  *event,
-			 gpointer data)
+GdkFilterReturn
+_gdk_wm_protocols_filter (GdkXEvent *xev,
+			  GdkEvent  *event,
+			  gpointer   data)
 {
   XEvent *xevent = (XEvent *)xev;
   GdkWindow *win = event->any.window;
   GdkDisplay *display;
   Atom atom;
 
-  if (!win)
-      return GDK_FILTER_REMOVE;
+  if (!GDK_IS_X11_WINDOW (win))
+    return GDK_FILTER_CONTINUE;
+
+  if (xevent->type != ClientMessage)
+    return GDK_FILTER_CONTINUE;
 
   display = GDK_WINDOW_DISPLAY (win);
-  atom = (Atom)xevent->xclient.data.l[0];
+
+  if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, "WM_PROTOCOLS"))
+    return GDK_FILTER_CONTINUE;
+
+  atom = (Atom) xevent->xclient.data.l[0];
 
   if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW"))
     {
@@ -1113,11 +1120,6 @@ gdk_event_init (GdkDisplay *display)
   device_manager = gdk_display_get_device_manager (display);
   gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                         GDK_EVENT_TRANSLATOR (device_manager));
-
-  gdk_display_add_client_message_filter (display,
-                                         gdk_atom_intern_static_string ("WM_PROTOCOLS"),
-                                         gdk_wm_protocols_filter,
-                                         NULL);
 }
 
 static void

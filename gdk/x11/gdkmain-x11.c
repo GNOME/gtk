@@ -116,6 +116,10 @@ _gdk_x11_windowing_init (void)
 {
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
+
+  gdk_window_add_filter (NULL,
+                         _gdk_wm_protocols_filter,
+                         NULL);
 }
 
 GdkGrabStatus
