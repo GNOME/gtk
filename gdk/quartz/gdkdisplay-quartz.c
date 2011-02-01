@@ -342,9 +342,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
   display_class->supports_composite = gdk_quartz_display_supports_composite;
   display_class->list_devices = gdk_quartz_display_list_devices;
-  display_class->send_client_message = _gdk_quartz_display_send_client_message;
-  display_class->add_client_message_filter = _gdk_quartz_display_add_client_message_filter;
-  display_class->get_drag_protocol = _gdk_quartz_display_get_drag_protocol;
   display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
   display_class->get_cursor_for_pixbuf = _gdk_quartz_display_get_cursor_for_pixbuf;
@@ -363,7 +360,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
   display_class->get_selection_owner = _gdk_quartz_display_get_selection_owner;
   display_class->set_selection_owner = _gdk_quartz_display_set_selection_owner;
-  display_class->send_selection_notify = _gdk_quartz_display_send_selection_notify;
   display_class->get_selection_property = _gdk_quartz_display_get_selection_property;
   display_class->convert_selection = _gdk_quartz_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
