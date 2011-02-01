@@ -84,7 +84,7 @@ static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTra
                                                                      GdkEventMask        event_mask);
 
 
-G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK_TYPE_DEVICE_MANAGER,
+G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK_TYPE_X11_DEVICE_MANAGER_CORE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_x11_device_manager_xi2_event_translator_init))
 
@@ -993,6 +993,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             XEvent             *xevent)
 {
   GdkX11DeviceManagerXI2 *device_manager;
+  GdkEventTranslatorIface *parent_iface;
   XGenericEventCookie *cookie;
   gboolean return_val = TRUE;
   GdkWindow *window;
@@ -1002,6 +1003,31 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   dpy = GDK_DISPLAY_XDISPLAY (display);
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
   cookie = &xevent->xcookie;
+
+  parent_iface = g_type_interface_peek_parent (GDK_EVENT_TRANSLATOR_GET_IFACE (translator));
+
+  /* The X input methods (when triggered via XFilterEvent) generate
+   * a core key press event with keycode 0 to signal the end of a
+   * key sequence. We use the core translate_event implementation
+   * to translate this event.
+   *
+   * This is just a bandaid fix to keep xim working with a single
+   * keyboard until XFilterEvent learns about XI2.
+   */
+  if (xevent->type == KeyPress && xevent->xkey.keycode == 0 &&
+      parent_iface->translate_event (translator, display, event, xevent))
+    {
+      GdkDevice *device;
+
+      /* The core device manager sets a core device on the event.
+       * We need to override that with an XI2 device, since we are
+       * using XI2.
+       */
+      device = gdk_x11_device_manager_xi2_get_client_pointer (device_manager);
+      gdk_event_set_device (event, gdk_device_get_associated_device (device));
+
+      return TRUE;
+    }
 
   if (!XGetEventData (dpy, cookie))
     return FALSE;
