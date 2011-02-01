@@ -146,12 +146,14 @@ static const struct {
   const char *atom_name;
   GdkFilterFunc func;
 } xdnd_filters[] = {
-  { "XdndEnter",    xdnd_enter_filter },
-  { "XdndLeave",    xdnd_leave_filter },
-  { "XdndPosition", xdnd_position_filter },
-  { "XdndStatus",   xdnd_status_filter },
-  { "XdndFinished", xdnd_finished_filter },
-  { "XdndDrop",     xdnd_drop_filter },
+  { "_MOTIF_DRAG_AND_DROP_MESSAGE", motif_dnd_filter },
+
+  { "XdndEnter",                    xdnd_enter_filter },
+  { "XdndLeave",                    xdnd_leave_filter },
+  { "XdndPosition",                 xdnd_position_filter },
+  { "XdndStatus",                   xdnd_status_filter },
+  { "XdndFinished",                 xdnd_finished_filter },
+  { "XdndDrop",                     xdnd_drop_filter },
 };
 
 
@@ -3131,11 +3133,6 @@ _gdk_x11_display_init_dnd (GdkDisplay *display)
 {
   int i;
   init_byte_order ();
-
-  gdk_display_add_client_message_filter (
-        display,
-        gdk_atom_intern_static_string ("_MOTIF_DRAG_AND_DROP_MESSAGE"),
-        motif_dnd_filter, NULL);
 
   for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
     {
