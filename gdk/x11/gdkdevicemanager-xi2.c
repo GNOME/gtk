@@ -44,8 +44,6 @@ struct _GdkX11DeviceManagerXI2
 
   GList *devices;
 
-  GdkDevice *client_pointer;
-
   gint opcode;
 };
 
