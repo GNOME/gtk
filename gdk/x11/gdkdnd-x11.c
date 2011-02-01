@@ -846,7 +846,11 @@ enum {
 /* Byte swapping routines. The motif specification leaves it
  * up to us to save a few bytes in the client messages
  */
-static gchar local_byte_order = '\0';
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+static gchar local_byte_order = 'B';
+#else
+static gchar local_byte_order = 'l';
+#endif
 
 #ifdef G_ENABLE_DEBUG
 static void
@@ -861,13 +865,6 @@ print_target_list (GList *targets)
     }
 }
 #endif /* G_ENABLE_DEBUG */
-
-static void
-init_byte_order (void)
-{
-  guint32 myint = 0x01020304;
-  local_byte_order = (*(gchar *)&myint == 1) ? 'B' : 'l';
-}
 
 static guint16
 card16_to_host (guint16 x, gchar byte_order)
@@ -3132,7 +3129,6 @@ void
 _gdk_x11_display_init_dnd (GdkDisplay *display)
 {
   int i;
-  init_byte_order ();
 
   for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
     {
