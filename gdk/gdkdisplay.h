@@ -80,11 +80,6 @@ void      gdk_display_put_event  (GdkDisplay     *display,
                                   const GdkEvent *event);
 gboolean  gdk_display_has_pending (GdkDisplay  *display);
 
-void gdk_display_add_client_message_filter (GdkDisplay   *display,
-                                            GdkAtom       message_type,
-                                            GdkFilterFunc func,
-                                            gpointer      data);
-
 void gdk_display_set_double_click_time     (GdkDisplay   *display,
                                             guint         msec);
 void gdk_display_set_double_click_distance (GdkDisplay   *display,

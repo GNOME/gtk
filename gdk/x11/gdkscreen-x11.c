@@ -1086,92 +1086,6 @@ gdk_x11_screen_get_window_stack (GdkScreen *screen)
   return ret;
 }
 
-/* Sends a ClientMessage to all toplevel client windows */
-static gboolean
-gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
-					      XEvent     *xev,
-					      guint32     xid,
-					      guint       level)
-{
-  Atom type = None;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data;
-  Window *ret_children, ret_root, ret_parent;
-  unsigned int ret_nchildren;
-  gboolean send = FALSE;
-  gboolean found = FALSE;
-  gboolean result = FALSE;
-  int i;
-
-  gdk_x11_display_error_trap_push (display);
-
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid,
-			  gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE"),
-			  0, 0, False, AnyPropertyType,
-			  &type, &format, &nitems, &after, &data) != Success)
-    goto out;
-
-  if (type)
-    {
-      send = TRUE;
-      XFree (data);
-    }
-  else
-    {
-      /* OK, we're all set, now let's find some windows to send this to */
-      if (!XQueryTree (GDK_DISPLAY_XDISPLAY (display), xid,
-		      &ret_root, &ret_parent,
-		      &ret_children, &ret_nchildren))
-	goto out;
-
-      for(i = 0; i < ret_nchildren; i++)
-	if (gdk_event_send_client_message_to_all_recurse (display, xev, ret_children[i], level + 1))
-	  found = TRUE;
-
-      XFree (ret_children);
-    }
-
-  if (send || (!found && (level == 1)))
-    {
-      xev->xclient.window = xid;
-      _gdk_x11_display_send_xevent (display, xid, False, NoEventMask, xev);
-    }
-
-  result = send || found;
-
- out:
-  gdk_x11_display_error_trap_pop_ignored (display);
-
-  return result;
-}
-
-static void
-gdk_x11_screen_broadcast_client_message (GdkScreen *screen,
-					 GdkEvent  *event)
-{
-  XEvent sev;
-  GdkWindow *root_window;
-
-  g_return_if_fail (event != NULL);
-
-  root_window = gdk_screen_get_root_window (screen);
-
-  /* Set up our event to send, with the exception of its target window */
-  sev.xclient.type = ClientMessage;
-  sev.xclient.display = GDK_WINDOW_XDISPLAY (root_window);
-  sev.xclient.format = event->client.data_format;
-  memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
-  sev.xclient.message_type =
-    gdk_x11_atom_to_xatom_for_display (GDK_WINDOW_DISPLAY (root_window),
-				       event->client.message_type);
-
-  gdk_event_send_client_message_to_all_recurse (gdk_screen_get_display (screen),
-						&sev,
-						GDK_WINDOW_XID (root_window),
-						0);
-}
-
 static gboolean
 check_transform (const gchar *xsettings_name,
 		 GType        src_type,
@@ -1691,7 +1605,6 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   screen_class->make_display_name = gdk_x11_screen_make_display_name;
   screen_class->get_active_window = gdk_x11_screen_get_active_window;
   screen_class->get_window_stack = gdk_x11_screen_get_window_stack;
-  screen_class->broadcast_client_message = gdk_x11_screen_broadcast_client_message;
   screen_class->get_setting = gdk_x11_screen_get_setting;
   screen_class->visual_get_best_depth = _gdk_x11_screen_visual_get_best_depth;
   screen_class->visual_get_best_type = _gdk_x11_screen_visual_get_best_type;

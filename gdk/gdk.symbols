@@ -1,7 +1,6 @@
 /* This file lists all exported symbols. It is used to generate
  * the gdk.def file used to control exports on Windows.
  */
-gdk_add_client_message_filter
 gdk_add_option_entries_libgtk_only
 gdk_app_launch_context_get_type G_GNUC_CONST
 gdk_app_launch_context_new
@@ -79,7 +78,6 @@ gdk_device_type_get_type G_GNUC_CONST
 gdk_device_ungrab
 gdk_device_warp
 gdk_disable_multidevice
-gdk_display_add_client_message_filter
 gdk_display_beep
 gdk_display_close
 gdk_display_device_is_grabbed
@@ -173,9 +171,6 @@ gdk_event_new
 gdk_event_peek
 gdk_event_put
 gdk_event_request_motions
-gdk_event_send_client_message
-gdk_event_send_client_message_for_display
-gdk_event_send_clientmessage_toall
 gdk_event_set_device
 gdk_event_set_screen
 gdk_event_set_source_device
@@ -260,7 +255,6 @@ gdk_rgba_get_type
 gdk_rgba_hash
 gdk_rgba_parse
 gdk_rgba_to_string
-gdk_screen_broadcast_client_message
 gdk_screen_get_active_window
 gdk_screen_get_default
 gdk_screen_get_display

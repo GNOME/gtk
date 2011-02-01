@@ -523,48 +523,6 @@ gdk_flush (void)
   g_slist_free (list);
 }
 
-/**
- * gdk_event_send_client_message:
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- * @winid:  the window to send the X ClientMessage event to.
- * 
- * Sends an X ClientMessage event to a given window (which must be
- * on the default #GdkDisplay.)
- * This could be used for communicating between different applications,
- * though the amount of data is limited to 20 bytes.
- * 
- * Return value: non-zero on success.
- **/
-gboolean
-gdk_event_send_client_message (GdkEvent        *event,
-			       GdkNativeWindow  winid)
-{
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  return gdk_event_send_client_message_for_display (gdk_display_get_default (),
-						    event, winid);
-}
-
-/**
- * gdk_event_send_clientmessage_toall:
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- *
- * Sends an X ClientMessage event to all toplevel windows on the default
- * #GdkScreen.
- *
- * Toplevel windows are determined by checking for the WM_STATE property, as
- * described in the Inter-Client Communication Conventions Manual (ICCCM).
- * If no windows are found with the WM_STATE property set, the message is sent
- * to all children of the root window.
- **/
-void
-gdk_event_send_clientmessage_toall (GdkEvent *event)
-{
-  g_return_if_fail (event != NULL);
-
-  gdk_screen_broadcast_client_message (gdk_screen_get_default (), event);
-}
-
 void
 _gdk_display_enable_motion_hints (GdkDisplay *display,
                                   GdkDevice  *device)
@@ -1673,76 +1631,6 @@ GList *
 gdk_display_list_devices (GdkDisplay *display)
 {
   return GDK_DISPLAY_GET_CLASS(display)->list_devices (display);
-}
-
-/**
- * gdk_event_send_client_message_for_display:
- * @display: the #GdkDisplay for the window where the message is to be sent.
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- * @winid: the window to send the client message to.
- *
- * On X11, sends an X ClientMessage event to a given window. On
- * Windows, sends a message registered with the name
- * GDK_WIN32_CLIENT_MESSAGE.
- *
- * This could be used for communicating between different
- * applications, though the amount of data is limited to 20 bytes on
- * X11, and to just four bytes on Windows.
- *
- * Returns: non-zero on success.
- *
- * Since: 2.2
- */
-gboolean
-gdk_event_send_client_message_for_display (GdkDisplay     *display,
-					   GdkEvent       *event,
-					   GdkNativeWindow winid)
-{
-  return GDK_DISPLAY_GET_CLASS(display)->send_client_message (display, event, winid);
-}
-
-/**
- * gdk_display_add_client_message_filter: (skip)
- * @display: a #GdkDisplay for which this message filter applies
- * @message_type: the type of ClientMessage events to receive.
- *   This will be checked against the @message_type field
- *   of the XClientMessage event struct.
- * @func: the function to call to process the event.
- * @data: user data to pass to @func.
- *
- * Adds a filter to be called when X ClientMessage events are received.
- * See gdk_window_add_filter() if you are interested in filtering other
- * types of events.
- *
- * Since: 2.2
- **/
-void
-gdk_display_add_client_message_filter (GdkDisplay   *display,
-				       GdkAtom       message_type,
-				       GdkFilterFunc func,
-				       gpointer      data)
-{
-  GDK_DISPLAY_GET_CLASS(display)->add_client_message_filter (display, message_type, func, data);
-}
-
-/**
- * gdk_add_client_message_filter: (skip)
- * @message_type: the type of ClientMessage events to receive. This will be
- *     checked against the <structfield>message_type</structfield> field of the
- *     XClientMessage event struct.
- * @func: the function to call to process the event.
- * @data: user data to pass to @func.
- *
- * Adds a filter to the default display to be called when X ClientMessage events
- * are received. See gdk_display_add_client_message_filter().
- **/
-void
-gdk_add_client_message_filter (GdkAtom       message_type,
-			       GdkFilterFunc func,
-			       gpointer      data)
-{
-  gdk_display_add_client_message_filter (gdk_display_get_default (),
-					 message_type, func, data);
 }
 
 static GdkAppLaunchContext *

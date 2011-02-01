@@ -95,9 +95,6 @@ struct _GdkX11Display
   GdkWindow *leader_gdk_window;
   gboolean leader_window_title_set;
 
-  /* list of filters for client messages */
-  GList *client_filters;
-
   /* List of functions to go from extension event => X window */
   GSList *event_types;
 

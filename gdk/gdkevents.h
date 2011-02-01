@@ -89,7 +89,6 @@ typedef struct _GdkEventProperty    GdkEventProperty;
 typedef struct _GdkEventSelection   GdkEventSelection;
 typedef struct _GdkEventOwnerChange GdkEventOwnerChange;
 typedef struct _GdkEventProximity   GdkEventProximity;
-typedef struct _GdkEventClient	    GdkEventClient;
 typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
@@ -875,35 +874,6 @@ struct _GdkEventProximity
 };
 
 /**
- * GdkEventClient:
- * @type: the type of the event (%GDK_CLIENT_EVENT).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
- * @message_type: the type of the message, which can be defined by the
- *   application.
- * @data_format: the format of the data, given as the number of bits in each
- *   data element, i.e. 8, 16, or 32. 8-bit data uses the b array of the
- *   data union, 16-bit data uses the s array, and 32-bit data uses the l
- *   array.
- *
- * An event sent by another client application.
- */
-struct _GdkEventClient
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkAtom message_type;
-  gushort data_format;
-  union {
-    char b[20];
-    short s[10];
-    long l[5];
-  } data;
-};
-
-/**
  * GdkEventSetting:
  * @type: the type of the event (%GDK_SETTING).
  * @window: the window which received the event.
@@ -1060,7 +1030,6 @@ union _GdkEvent
   GdkEventSelection	    selection;
   GdkEventOwnerChange  	    owner_change;
   GdkEventProximity	    proximity;
-  GdkEventClient	    client;
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;
   GdkEventSetting           setting;
@@ -1125,18 +1094,8 @@ gboolean  gdk_get_show_events		(void);
 
 gboolean gdk_setting_get                           (const gchar *name,
                                                     GValue          *value);
-void gdk_add_client_message_filter                 (GdkAtom          message_type,
-                                                    GdkFilterFunc    func,
-                                                    gpointer         data);
-gboolean gdk_event_send_client_message             (GdkEvent        *event,
-                                                    GdkNativeWindow  winid);
-void     gdk_event_send_clientmessage_toall        (GdkEvent        *event);
 
 #endif /* GDK_MULTIHEAD_SAFE */
-
-gboolean gdk_event_send_client_message_for_display (GdkDisplay      *display,
-                                                    GdkEvent        *event,
-                                                    GdkNativeWindow  winid);
 
 G_END_DECLS
 
