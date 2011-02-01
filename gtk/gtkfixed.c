@@ -526,8 +526,6 @@ gtk_fixed_remove (GtkContainer *container,
 
           break;
         }
-
-      children = children->next;
     }
 }
 
