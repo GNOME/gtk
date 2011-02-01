@@ -3125,18 +3125,32 @@ xdnd_drop_filter (GdkXEvent *xev,
   return GDK_FILTER_REMOVE;
 }
 
-void
-_gdk_x11_display_init_dnd (GdkDisplay *display)
+GdkFilterReturn
+_gdk_x11_dnd_filter (GdkXEvent *xev,
+                     GdkEvent  *event,
+                     gpointer   data)
 {
+  XEvent *xevent = (XEvent *) xev;
+  GdkDisplay *display;
   int i;
+
+  if (!GDK_IS_X11_WINDOW (event->any.window))
+    return GDK_FILTER_CONTINUE;
+
+  if (xevent->type != ClientMessage)
+    return GDK_FILTER_CONTINUE;
+
+  display = GDK_WINDOW_DISPLAY (event->any.window);
 
   for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
     {
-      gdk_display_add_client_message_filter (
-        display,
-        gdk_atom_intern_static_string (xdnd_filters[i].atom_name),
-        xdnd_filters[i].func, NULL);
+      if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name))
+        continue;
+
+      return xdnd_filters[i].func (xev, event, data);
     }
+
+  return GDK_FILTER_CONTINUE;
 }
 
 /* Source side */

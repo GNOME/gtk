@@ -120,6 +120,9 @@ _gdk_x11_windowing_init (void)
   gdk_window_add_filter (NULL,
                          _gdk_wm_protocols_filter,
                          NULL);
+  gdk_window_add_filter (NULL,
+                         _gdk_x11_dnd_filter,
+                         NULL);
 }
 
 GdkGrabStatus

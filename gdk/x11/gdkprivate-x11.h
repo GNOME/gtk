@@ -286,7 +286,10 @@ void _gdk_x11_precache_atoms (GdkDisplay          *display,
                               const gchar * const *atom_names,
                               gint                 n_atoms);
 
-void _gdk_x11_display_init_dnd        (GdkDisplay *display);
+GdkFilterReturn
+_gdk_x11_dnd_filter (GdkXEvent *xev,
+                     GdkEvent  *event,
+                     gpointer   data);
 
 void _gdk_x11_screen_init_root_window (GdkScreen *screen);
 void _gdk_x11_screen_init_visuals     (GdkScreen *screen);
