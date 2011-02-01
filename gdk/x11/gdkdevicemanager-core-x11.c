@@ -272,7 +272,7 @@ set_user_time (GdkWindow *window,
 {
   g_return_if_fail (event != NULL);
 
-  window = gdk_window_get_toplevel (event->client.window);
+  window = gdk_window_get_toplevel (event->any.window);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* If an event doesn't have a valid timestamp, we shouldn't use it
