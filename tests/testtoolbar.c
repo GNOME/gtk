@@ -24,24 +24,6 @@
 #include "prop-editor.h"
 
 static void
-reload_clicked (GtkWidget *widget)
-{
-  static GdkAtom atom_rcfiles = GDK_NONE;
-
-  GdkEventClient sev;
-  int i;
-  
-  if (!atom_rcfiles)
-    atom_rcfiles = gdk_atom_intern("_GTK_READ_RCFILES", FALSE);
-
-  for(i = 0; i < 5; i++)
-    sev.data.l[i] = 0;
-  sev.data_format = 32;
-  sev.message_type = atom_rcfiles;
-  gdk_event_send_clientmessage_toall ((GdkEvent *) &sev);
-}
-
-static void
 change_orientation (GtkWidget *button, GtkWidget *toolbar)
 {
   GtkWidget *table;
@@ -635,11 +617,6 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "-----");    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
-  add_item_to_list (store, item, "Refresh");
-  g_signal_connect (item, "clicked", G_CALLBACK (reload_clicked), NULL);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
   item = gtk_tool_item_new ();
   gtk_widget_show (image);
