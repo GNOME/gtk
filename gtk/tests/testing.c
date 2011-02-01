@@ -22,6 +22,12 @@
 #include <string.h>
 #include <math.h>
 
+/* Use a keyval that requires Shift to be active (in typical layouts)
+ * like GDK_KEY_ampersand, which is '<shift>6'
+ */
+#define KEYVAL_THAT_REQUIRES_SHIFT GDK_KEY_ampersand
+
+
 /* --- test functions --- */
 static void
 test_button_clicks (void)
@@ -69,6 +75,40 @@ test_button_keys (void)
   g_assert (a == 0);
   g_assert (b > 0);
   g_assert (c == 0);
+}
+
+static gboolean
+store_last_key_release (GtkWidget   *widget,
+                        GdkEventKey *event,
+                        gpointer     user_data)
+{
+  *((gint *)user_data) = event->keyval;
+  return FALSE;
+}
+
+static void
+test_send_shift_key (void)
+{
+  GtkWidget *window = gtk_test_display_button_window ("Test Window",
+                                                      "Test: test_send_shift_key()",
+                                                      "IgnoreMe1", NULL,
+                                                      "SendMeKeys", NULL,
+                                                      "IgnoreMe2", NULL,
+                                                      NULL);
+  GtkWidget *button = gtk_test_find_widget (window, "SendMeKeys", GTK_TYPE_BUTTON);
+  gint last_key_release = 0;
+  gboolean simsuccess;
+  g_assert (button != NULL);
+  g_signal_connect (button, "key-release-event",
+                    G_CALLBACK (store_last_key_release),
+                    &last_key_release);
+  gtk_widget_grab_focus (button);
+  g_assert (gtk_widget_has_focus (button));
+  simsuccess = gtk_test_widget_send_key (button, KEYVAL_THAT_REQUIRES_SHIFT, 0 /*modifiers*/);
+  g_assert (simsuccess == TRUE);
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+  g_assert_cmpint (KEYVAL_THAT_REQUIRES_SHIFT, ==, last_key_release);
 }
 
 static void
@@ -261,6 +301,7 @@ main (int   argc,
   g_test_add_func ("/ui-tests/text-access", test_text_access);
   g_test_add_func ("/ui-tests/button-clicks", test_button_clicks);
   g_test_add_func ("/ui-tests/keys-events", test_button_keys);
+  g_test_add_func ("/ui-tests/send-shift-key", test_send_shift_key);
   g_test_add_func ("/ui-tests/slider-ranges", test_slider_ranges);
   g_test_add_func ("/ui-tests/xserver-sync", test_xserver_sync);
   g_test_add_func ("/ui-tests/spin-button-arrows", test_spin_button_arrows);
