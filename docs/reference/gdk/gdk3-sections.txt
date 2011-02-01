@@ -811,7 +811,6 @@ GdkEventFocus
 GdkEventConfigure
 GdkEventProperty
 GdkEventSelection
-GdkNativeWindow
 GdkEventDND
 GdkEventProximity
 GdkEventWindowState

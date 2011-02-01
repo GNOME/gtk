@@ -326,7 +326,6 @@ if test "x$enable_win32_backend" == xyes; then
   GDK_BACKENDS="$GDK_BACKENDS win32"
   backend_immodules="$backend_immodules,ime"
   GDK_WINDOWING="$GDK_WINDOWING
-#define GDK_NATIVE_WINDOW_POINTER
 #define GDK_WINDOWING_WIN32"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
   AM_CONDITIONAL(USE_WIN32, true)
