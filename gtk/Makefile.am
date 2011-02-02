@@ -1342,7 +1342,9 @@ gtk_update_icon_cache_program = ./gtk-update-icon-cache
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
+if !USE_EXTERNAL_ICON_CACHE
 	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+endif
 	$(AM_V_GEN) $(gtk_update_icon_cache_program) --quiet --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
