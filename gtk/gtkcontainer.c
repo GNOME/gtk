@@ -643,29 +643,27 @@ attributes_end_element (GMarkupParseContext *context,
 {
   PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
 
-  /* Append the translated strings */
-  if (parser_data->string->len)
+  /* translate the string */
+  if (parser_data->string->len && parser_data->translatable)
     {
-      if (parser_data->translatable)
-	{
-	  gchar *translated;
-	  const gchar* domain;
+      gchar *translated;
+      const gchar* domain;
 
-	  domain = gtk_builder_get_translation_domain (parser_data->builder);
+      domain = gtk_builder_get_translation_domain (parser_data->builder);
 
-	  translated = _gtk_builder_parser_translate (domain,
-						      parser_data->context,
-						      parser_data->string->str);
-	  g_string_set_size (parser_data->string, 0);
-	  g_string_append (parser_data->string, translated);
-	}
-
-      gtk_container_buildable_set_child_property (parser_data->container,
-						  parser_data->builder,
-						  parser_data->child,
-						  parser_data->child_prop_name,
+      translated = _gtk_builder_parser_translate (domain,
+						  parser_data->context,
 						  parser_data->string->str);
+      g_string_set_size (parser_data->string, 0);
+      g_string_append (parser_data->string, translated);
     }
+
+  if (parser_data->child_prop_name)
+    gtk_container_buildable_set_child_property (parser_data->container,
+						parser_data->builder,
+						parser_data->child,
+						parser_data->child_prop_name,
+						parser_data->string->str);
 
   g_string_set_size (parser_data->string, 0);
   g_free (parser_data->child_prop_name);
