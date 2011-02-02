@@ -1200,7 +1200,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
 }
 
 /**
- * gtk_drag_dest_set:
+ * gtk_drag_dest_set: (method)
  * @widget: a #GtkWidget
  * @flags: which types of default drag behavior to use
  * @targets: (allow-none) (array length=n_targets): a pointer to an array of #GtkTargetEntry<!-- -->s
@@ -1278,7 +1278,7 @@ gtk_drag_dest_set (GtkWidget            *widget,
 }
 
 /*************************************************************
- * gtk_drag_dest_set_proxy:
+ * gtk_drag_dest_set_proxy: (method)
  *     Set up this widget to proxy drags elsewhere.
  *   arguments:
  *     widget:          
@@ -1319,7 +1319,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
 }
 
 /*************************************************************
- * gtk_drag_dest_unset
+ * gtk_drag_dest_unset: (method)
  *     Unregister this widget as a drag target.
  *   arguments:
  *     widget:
@@ -1349,7 +1349,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_dest_get_target_list:
+ * gtk_drag_dest_get_target_list: (method)
  * @widget: a #GtkWidget
  * 
  * Returns the list of targets this widget can accept from
@@ -1370,7 +1370,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_dest_set_target_list:
+ * gtk_drag_dest_set_target_list: (method)
  * @widget: a #GtkWidget that's a drag destination
  * @target_list: (allow-none): list of droppable targets, or %NULL for none
  * 
@@ -1405,7 +1405,7 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
 }
 
 /**
- * gtk_drag_dest_add_text_targets:
+ * gtk_drag_dest_add_text_targets: (method)
  * @widget: a #GtkWidget that's a drag destination
  *
  * Add the text targets supported by #GtkSelection to
@@ -1432,7 +1432,7 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_dest_add_image_targets:
+ * gtk_drag_dest_add_image_targets: (method)
  * @widget: a #GtkWidget that's a drag destination
  *
  * Add the image targets supported by #GtkSelection to
@@ -1459,7 +1459,7 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_dest_add_uri_targets:
+ * gtk_drag_dest_add_uri_targets: (method)
  * @widget: a #GtkWidget that's a drag destination
  *
  * Add the URI targets supported by #GtkSelection to
@@ -1486,7 +1486,7 @@ gtk_drag_dest_add_uri_targets (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_dest_set_track_motion:
+ * gtk_drag_dest_set_track_motion: (method)
  * @widget: a #GtkWidget that's a drag destination
  * @track_motion: whether to accept all targets
  * 
@@ -1515,7 +1515,7 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
 }
 
 /**
- * gtk_drag_dest_get_track_motion:
+ * gtk_drag_dest_get_track_motion: (method)
  * @widget: a #GtkWidget that's a drag destination
  * 
  * Returns whether the widget has been configured to always
@@ -1541,7 +1541,7 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
 }
 
 /*************************************************************
- * _gtk_drag_dest_handle_event:
+ * _gtk_drag_dest_handle_event: (method)
  *     Called from widget event handling code on Drag events
  *     for destinations.
  *
@@ -1652,7 +1652,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 }
 
 /**
- * gtk_drag_dest_find_target:
+ * gtk_drag_dest_find_target: (method)
  * @widget: drag destination widget
  * @context: drag context
  * @target_list: (allow-none): list of droppable targets, or %NULL to use
@@ -2508,7 +2508,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 }
 
 /**
- * gtk_drag_begin:
+ * gtk_drag_begin: (method)
  * @widget: the source widget.
  * @targets: The targets (data formats) in which the
  *    source can provide the data.
@@ -2562,7 +2562,7 @@ gtk_drag_begin (GtkWidget         *widget,
 }
 
 /**
- * gtk_drag_source_set:
+ * gtk_drag_source_set: (method)
  * @widget: a #GtkWidget
  * @start_button_mask: the bitmask of buttons that can start the drag
  * @targets: (allow-none) (array length=n_targets): the table of targets that the drag will support,
@@ -2624,14 +2624,12 @@ gtk_drag_source_set (GtkWidget            *widget,
   site->actions = actions;
 }
 
-/*************************************************************
- * gtk_drag_source_unset
- *     Unregister this widget as a drag source.
- *   arguments:
- *     widget:
- *   results:
- *************************************************************/
-
+/**
+ * gtk_drag_source_unset: (method)
+ * @widget: a #GtkWidget
+ *
+ * Unregister this widget as a drag source.
+ */
 void 
 gtk_drag_source_unset (GtkWidget *widget)
 {
@@ -2651,7 +2649,7 @@ gtk_drag_source_unset (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_source_get_target_list:
+ * gtk_drag_source_get_target_list: (method)
  * @widget: a #GtkWidget
  *
  * Gets the list of targets this widget can provide for
@@ -2674,7 +2672,7 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_source_set_target_list:
+ * gtk_drag_source_set_target_list: (method)
  * @widget: a #GtkWidget that's a drag source
  * @target_list: (allow-none): list of draggable targets, or %NULL for none
  *
@@ -2710,7 +2708,7 @@ gtk_drag_source_set_target_list (GtkWidget     *widget,
 }
 
 /**
- * gtk_drag_source_add_text_targets:
+ * gtk_drag_source_add_text_targets: (method)
  * @widget: a #GtkWidget that's is a drag source
  *
  * Add the text targets supported by #GtkSelection to
@@ -2737,7 +2735,7 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_source_add_image_targets:
+ * gtk_drag_source_add_image_targets: (method)
  * @widget: a #GtkWidget that's is a drag source
  *
  * Add the writable image targets supported by #GtkSelection to
@@ -2764,7 +2762,7 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
 }
 
 /**
- * gtk_drag_source_add_uri_targets:
+ * gtk_drag_source_add_uri_targets: (method)
  * @widget: a #GtkWidget that's is a drag source
  *
  * Add the URI targets supported by #GtkSelection to
@@ -2814,7 +2812,7 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
 }
 
 /**
- * gtk_drag_source_set_icon_pixbuf:
+ * gtk_drag_source_set_icon_pixbuf: (method)
  * @widget: a #GtkWidget
  * @pixbuf: the #GdkPixbuf for the drag icon
  * 
@@ -2842,7 +2840,7 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
 }
 
 /**
- * gtk_drag_source_set_icon_stock:
+ * gtk_drag_source_set_icon_stock: (method)
  * @widget: a #GtkWidget
  * @stock_id: the ID of the stock icon to use
  *
@@ -2868,7 +2866,7 @@ gtk_drag_source_set_icon_stock (GtkWidget   *widget,
 }
 
 /**
- * gtk_drag_source_set_icon_name:
+ * gtk_drag_source_set_icon_name: (method)
  * @widget: a #GtkWidget
  * @icon_name: name of icon to use
  * 
