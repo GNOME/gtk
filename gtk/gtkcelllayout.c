@@ -807,37 +807,35 @@ cell_packing_end_element (GMarkupParseContext *context,
   CellPackingSubParserData *parser_data = (CellPackingSubParserData*)user_data;
   GtkCellArea *area;
 
-  /* Append the translated strings */
-  if (parser_data->string->len)
+  area = gtk_cell_layout_get_area (parser_data->cell_layout);
+
+  if (area)
     {
-      area = gtk_cell_layout_get_area (parser_data->cell_layout);
-
-      if (area)
+      /* translate the string */
+      if (parser_data->string->len && parser_data->translatable)
 	{
-	  if (parser_data->translatable)
-	    {
-	      gchar *translated;
-	      const gchar* domain;
+	  gchar *translated;
+	  const gchar* domain;
 
-	      domain = gtk_builder_get_translation_domain (parser_data->builder);
+	  domain = gtk_builder_get_translation_domain (parser_data->builder);
 
-	      translated = _gtk_builder_parser_translate (domain,
-							  parser_data->context,
-							  parser_data->string->str);
-	      g_string_set_size (parser_data->string, 0);
-	      g_string_append (parser_data->string, translated);
-	    }
-
-	  gtk_cell_layout_buildable_set_cell_property (area, 
-						       parser_data->builder,
-						       parser_data->renderer,
-						       parser_data->cell_prop_name,
-						       parser_data->string->str);
+	  translated = _gtk_builder_parser_translate (domain,
+						      parser_data->context,
+						      parser_data->string->str);
+	  g_string_set_size (parser_data->string, 0);
+	  g_string_append (parser_data->string, translated);
 	}
-      else
-	g_warning ("%s does not have an internal GtkCellArea class and cannot apply child cell properties",
-		   g_type_name (G_OBJECT_TYPE (parser_data->cell_layout)));
+
+      if (parser_data->cell_prop_name)
+	gtk_cell_layout_buildable_set_cell_property (area, 
+						     parser_data->builder,
+						     parser_data->renderer,
+						     parser_data->cell_prop_name,
+						     parser_data->string->str);
     }
+  else
+    g_warning ("%s does not have an internal GtkCellArea class and cannot apply child cell properties",
+	       g_type_name (G_OBJECT_TYPE (parser_data->cell_layout)));
 
   g_string_set_size (parser_data->string, 0);
   g_free (parser_data->cell_prop_name);
