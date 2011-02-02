@@ -500,7 +500,7 @@ gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
 }
 
 /**
- * gtk_radio_button_new_with_label_from_widget:
+ * gtk_radio_button_new_with_label_from_widget: (constructor)
  * @radio_group_member: (allow-none): widget to get radio group from or %NULL
  * @label: a text string to display next to the radio button.
  *
@@ -520,7 +520,7 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
 }
 
 /**
- * gtk_radio_button_new_with_mnemonic_from_widget:
+ * gtk_radio_button_new_with_mnemonic_from_widget: (constructor)
  * @radio_group_member: (allow-none): widget to get radio group from or %NULL
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character

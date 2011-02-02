@@ -1240,7 +1240,7 @@ sync_native_window_stack_position (GdkWindow *window)
 }
 
 /**
- * gdk_window_new:
+ * gdk_window_new: (constructor):
  * @parent: (allow-none): a #GdkWindow, or %NULL to create the window as a child of
  *   the default root window for the default display.
  * @attributes: attributes of the new window
