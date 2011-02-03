@@ -285,6 +285,8 @@ void gdk_synthesize_window_state (GdkWindow     *window,
 gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
                                      GdkRectangle *extents);
 
+cairo_surface_t *_gdk_cairo_create_surface_for_pixbuf (const GdkPixbuf *pixbuf);
+
 /*************************************
  * Interfaces used by windowing code *
  *************************************/

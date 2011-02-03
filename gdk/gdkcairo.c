@@ -195,6 +195,16 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
                              gdouble          pixbuf_x,
                              gdouble          pixbuf_y)
 {
+  cairo_surface_t *surface;
+  
+  surface = _gdk_cairo_create_surface_for_pixbuf (pixbuf);
+  cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
+  cairo_surface_destroy (surface);
+}
+
+cairo_surface_t *
+_gdk_cairo_create_surface_for_pixbuf (const GdkPixbuf *pixbuf)
+{
   gint width = gdk_pixbuf_get_width (pixbuf);
   gint height = gdk_pixbuf_get_height (pixbuf);
   guchar *gdk_pixels = gdk_pixbuf_get_pixels (pixbuf);
@@ -277,8 +287,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
       cairo_pixels += cairo_stride;
     }
 
-  cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
-  cairo_surface_destroy (surface);
+  return surface;
 }
 
 /**
