@@ -959,17 +959,15 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
  * Destination side *
  ********************/
 
-/*************************************************************
- * gtk_drag_get_data:
- *     Get the data for a drag or drop
- *   arguments:
- *     context - drag context
- *     target  - format to retrieve the data in.
- *     time    - timestamp of triggering event.
- *     
- *   results:
- *************************************************************/
-
+/**
+ * gtk_drag_get_data: (method)
+ * @widget: a #GtkWidget
+ * @context: drag context
+ * @target: format to retrieve the data in.
+ * @time: timestamp of triggering event.
+ *
+ * Get the data for a drag or drop
+ */
 void 
 gtk_drag_get_data (GtkWidget      *widget,
 		   GdkDragContext *context,
@@ -1125,14 +1123,12 @@ gtk_drag_highlight_draw (GtkWidget *widget,
   return FALSE;
 }
 
-/*************************************************************
- * gtk_drag_highlight:
- *     Highlight the given widget in the default manner.
- *   arguments:
- *     widget:
- *   results:
- *************************************************************/
-
+ /**
+ * gtk_drag_highlight: (method)
+ * @widget: a #GtkWidget
+ *
+ * Highlight the given widget in the default manner.
+ */
 void 
 gtk_drag_highlight (GtkWidget  *widget)
 {
@@ -1145,14 +1141,12 @@ gtk_drag_highlight (GtkWidget  *widget)
   gtk_widget_queue_draw (widget);
 }
 
-/*************************************************************
- * gtk_drag_unhighlight:
- *     Refresh the given widget to remove the highlight.
- *   arguments:
- *     widget:
- *   results:
- *************************************************************/
-
+ /**
+ * gtk_drag_unhighlight: (method)
+ * @widget: a #GtkWidget
+ *
+ * Refresh the given widget to remove the highlight.
+ */
 void 
 gtk_drag_unhighlight (GtkWidget *widget)
 {
@@ -1277,19 +1271,17 @@ gtk_drag_dest_set (GtkWidget            *widget,
   gtk_drag_dest_set_internal (widget, site);
 }
 
-/*************************************************************
+/**
  * gtk_drag_dest_set_proxy: (method)
- *     Set up this widget to proxy drags elsewhere.
- *   arguments:
- *     widget:          
- *     proxy_window:    window to which forward drag events
- *     protocol:        Drag protocol which the dest widget accepts
- *     use_coordinates: If true, send the same coordinates to the
- *                      destination, because it is a embedded 
- *                      subwindow.
- *   results:
- *************************************************************/
-
+ * @widget: a #GtkWidget
+ * @proxy_window:    window to which forward drag events
+ * @protocol:        Drag protocol which the dest widget accepts
+ * @use_coordinates: If true, send the same coordinates to the
+ *                   destination, because it is a embedded
+ *                   subwindow.
+ *
+ * Set up this widget to proxy drags elsewhere.
+ */
 void 
 gtk_drag_dest_set_proxy (GtkWidget      *widget,
 			 GdkWindow      *proxy_window,
@@ -1318,14 +1310,12 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   gtk_drag_dest_set_internal (widget, site);
 }
 
-/*************************************************************
+ /**
  * gtk_drag_dest_unset: (method)
- *     Unregister this widget as a drag target.
- *   arguments:
- *     widget:
- *   results:
- *************************************************************/
-
+ * @widget: a #GtkWidget
+ *
+ * Unregister this widget as a drag target.
+ */
 void 
 gtk_drag_dest_unset (GtkWidget *widget)
 {
@@ -1541,7 +1531,7 @@ gtk_drag_dest_get_track_motion (GtkWidget *widget)
 }
 
 /*************************************************************
- * _gtk_drag_dest_handle_event: (method)
+ * _gtk_drag_dest_handle_event:
  *     Called from widget event handling code on Drag events
  *     for destinations.
  *
@@ -4363,7 +4353,7 @@ gtk_drag_abort_timeout (gpointer data)
 }
 
 /**
- * gtk_drag_check_threshold:
+ * gtk_drag_check_threshold: (method)
  * @widget: a #GtkWidget
  * @start_x: X coordinate of start of drag
  * @start_y: Y coordinate of start of drag
