@@ -1891,10 +1891,10 @@ gtk_tree_view_column_get_spacing (GtkTreeViewColumn *tree_column)
  * @visible: %TRUE if the @tree_column is visible.
  * 
  * Sets the visibility of @tree_column.
- **/
+ */
 void
 gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
-				  gboolean           visible)
+                                  gboolean           visible)
 {
   GtkTreeViewColumnPrivate *priv;
 
@@ -1902,7 +1902,7 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 
   priv    = tree_column->priv;
   visible = !! visible;
-  
+
   if (priv->visible == visible)
     return;
 
@@ -1911,7 +1911,8 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
   if (priv->visible)
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 
-  _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
+  if (priv->tree_view)
+    _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
 
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify (G_OBJECT (tree_column), "visible");
