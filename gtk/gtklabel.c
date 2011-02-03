@@ -4883,22 +4883,24 @@ drag_begin_cb (GtkWidget      *widget,
 
       if (end > len)
         end = len;
-      
+
       if (start > len)
         start = len;
-      
-      surface = _gtk_text_util_create_drag_icon (widget, 
-						 priv->text + start,
-						 end - start);
+
+      surface = _gtk_text_util_create_drag_icon (widget,
+                                                 priv->text + start,
+                                                 end - start);
     }
 
   if (surface)
-    gtk_drag_set_icon_surface (context, surface);
+    {
+      gtk_drag_set_icon_surface (context, surface);
+      cairo_surface_destroy (surface);
+    }
   else
-    gtk_drag_set_icon_default (context);
-  
-  if (surface)
-    g_object_unref (surface);
+    {
+      gtk_drag_set_icon_default (context);
+    }
 }
 
 static gboolean
