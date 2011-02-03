@@ -2151,7 +2151,7 @@ gtk_grab_notify (GtkWindowGroup *group,
 }
 
 /**
- * gtk_grab_add:
+ * gtk_grab_add: (method)
  * @widget: The widget that grabs keyboard and pointer events
  *
  * Makes @widget the current grabbed widget.
@@ -2205,7 +2205,7 @@ gtk_grab_get_current (void)
 }
 
 /**
- * gtk_grab_remove:
+ * gtk_grab_remove: (method)
  * @widget: The widget which gives up the grab
  *
  * Removes the grab from the given widget.
