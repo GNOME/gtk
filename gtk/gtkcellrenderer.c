@@ -80,6 +80,7 @@ static void set_cell_bg_color               (GtkCellRenderer      *cell,
 					     GdkRGBA              *rgba);
 
 /* Fallback GtkCellRenderer    implementation to use remaining ->get_size() implementations */
+static GtkSizeRequestMode gtk_cell_renderer_real_get_request_mode(GtkCellRenderer         *cell);
 static void gtk_cell_renderer_real_get_preferred_width           (GtkCellRenderer         *cell,
                                                                   GtkWidget               *widget,
                                                                   gint                    *minimum_size,
@@ -193,6 +194,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   class->render = NULL;
   class->get_size = NULL;
+  class->get_request_mode               = gtk_cell_renderer_real_get_request_mode;
   class->get_preferred_width            = gtk_cell_renderer_real_get_preferred_width;
   class->get_preferred_height           = gtk_cell_renderer_real_get_preferred_height;
   class->get_preferred_width_for_height = gtk_cell_renderer_real_get_preferred_width_for_height;
@@ -1212,6 +1214,13 @@ gtk_cell_renderer_real_get_preferred_size (GtkCellRenderer   *cell,
     }
 }
 
+static GtkSizeRequestMode 
+gtk_cell_renderer_real_get_request_mode (GtkCellRenderer *cell)
+{
+  /* By default cell renderers are height-for-width. */
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+}
+
 static void
 gtk_cell_renderer_real_get_preferred_width (GtkCellRenderer *cell,
                                             GtkWidget       *widget,
@@ -1368,16 +1377,9 @@ _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
 GtkSizeRequestMode
 gtk_cell_renderer_get_request_mode (GtkCellRenderer *cell)
 {
-  GtkCellRendererClass *klass;
-
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
 
-  klass = GTK_CELL_RENDERER_GET_CLASS (cell);
-  if (klass->get_request_mode)
-    return klass->get_request_mode (cell);
-
-  /* By default cell renderers are height-for-width. */
-  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  return GTK_CELL_RENDERER_GET_CLASS (cell)->get_request_mode (cell);
 }
 
 /**
