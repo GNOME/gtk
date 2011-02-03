@@ -685,6 +685,12 @@ gdk_offscreen_window_set_boolean (GdkWindow *window,
 }
 
 static void
+gdk_offscreen_window_set_transient_for (GdkWindow *window,
+					GdkWindow *another)
+{
+}
+
+static void
 gdk_offscreen_window_process_updates_recurse (GdkWindow *window,
                                               cairo_region_t *region)
 {
@@ -739,7 +745,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_title = NULL;
   impl_class->set_role = NULL;
   impl_class->set_startup_id = NULL;
-  impl_class->set_transient_for = NULL;
+  impl_class->set_transient_for = gdk_offscreen_window_set_transient_for;
   impl_class->get_root_origin = NULL;
   impl_class->get_frame_extents = NULL;
   impl_class->set_override_redirect = NULL;
