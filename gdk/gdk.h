@@ -47,6 +47,7 @@
 #include <gdk/gdkpango.h>
 #include <gdk/gdkpicture.h>
 #include <gdk/gdkpixbuf.h>
+#include <gdk/gdkpixbufpicture.h>
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkrectangle.h>
 #include <gdk/gdkrgba.h>
