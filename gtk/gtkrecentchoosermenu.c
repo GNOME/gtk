@@ -711,11 +711,10 @@ gtk_recent_chooser_menu_set_current_filter (GtkRecentChooserMenu *menu,
   if (priv->current_filter)
     g_object_unref (G_OBJECT (priv->current_filter));
   
-  if (filter)
-    {
-      priv->current_filter = filter;
-      g_object_ref_sink (priv->current_filter);
-    }
+  priv->current_filter = filter;
+
+  if (priv->current_filter)
+    g_object_ref_sink (priv->current_filter);
 
   gtk_recent_chooser_menu_populate (menu);
   
