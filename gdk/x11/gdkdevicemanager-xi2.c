@@ -1016,7 +1016,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       parent_iface->translate_event (translator, display, event, xevent))
     {
       GdkDevice *device;
-g_print ("translating core keypress with keycode 0 and state %d\n", xevent->xkey.state);
       /* The core device manager sets a core device on the event.
        * We need to override that with an XI2 device, since we are
        * using XI2.
