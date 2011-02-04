@@ -6,13 +6,10 @@ CFLAGS = -Wall			 	\
 	-DGDK_DISABLE_DEPRECATED 	\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED
 
-all: menu itemfactory
+all: menu
 
 menu: menu.c 
-	$(CC) menu.c -o menu $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
-
-itemfactory: itemfactory.c
-	$(CC) itemfactory.c -o itemfactory $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
+	$(CC) menu.c -o menu $(CFLAGS) `pkg-config gtk+-3.0 --cflags --libs`
 
 clean: 
-	rm -f *.o menu itemfactory
+	rm -f *.o menu

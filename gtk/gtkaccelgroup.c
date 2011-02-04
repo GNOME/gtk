@@ -47,10 +47,9 @@
  * A #GtkAccelGroup represents a group of keyboard accelerators,
  * typically attached to a toplevel #GtkWindow (with
  * gtk_window_add_accel_group()). Usually you won't need to create a
- * #GtkAccelGroup directly; instead, when using #GtkItemFactory, GTK+
- * automatically sets up the accelerators for your menus in the item
- * factory's #GtkAccelGroup.
- * 
+ * #GtkAccelGroup directly; instead, when using #GtkUIManager, GTK+
+ * automatically sets up the accelerators for your menus in the ui
+ * manager's #GtkAccelGroup.
  * 
  * Note that <firstterm>accelerators</firstterm> are different from
  * <firstterm>mnemonics</firstterm>. Accelerators are shortcuts for

@@ -41,7 +41,7 @@
  * SECTION:gtkaccellabel
  * @Short_description: A label which displays an accelerator key on the right of the text
  * @Title: GtkAccelLabel
- * @See_also: #GtkItemFactory, #GtkAccelGroup
+ * @See_also: #GtkAccelGroup
  *
  * The #GtkAccelLabel widget is a subclass of #GtkLabel that also displays an
  * accelerator key on the right of the label text, e.g. 'Ctl+S'.
