@@ -600,13 +600,27 @@ gtk_accel_label_get_string (GtkAccelLabel *accel_label)
  * E.g., Page_Up should be "Page Up"
  */
 static void
-substitute_underscores (char *str)
+substitute_underscores (gchar *str)
 {
   char *p;
 
   for (p = str; *p; p++)
     if (*p == '_')
       *p = ' ';
+}
+
+/* Some keynames have prefixes that are not suitable
+ * for display, e.g XF86AudioMute
+ */
+static gchar *
+strip_prefix (gchar *str)
+{
+  if (g_str_has_prefix (str, "XF86"))
+    return str + 4;
+  else if (g_str_has_prefix (str, "ISO_"))
+    return str + 4;
+
+  return str;
 }
 
 /* On Mac, if the key has symbolic representation (e.g. arrow keys),
@@ -833,8 +847,9 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
               str = g_dpgettext2 (GETTEXT_PACKAGE, "keyboard label", tmp);
 	      if (str == tmp)
 		{
+		  substitute_underscores (tmp);
+                  tmp = strip_prefix (tmp);
 		  g_string_append (gstring, tmp);
-		  substitute_underscores (gstring->str);
 		}
 	      else
 		g_string_append (gstring, str);
