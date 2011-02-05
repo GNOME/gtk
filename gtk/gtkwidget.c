@@ -14179,7 +14179,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
                         G_CALLBACK (style_context_changed), widget);
 
       gtk_style_context_set_screen (widget->priv->context,
-                                    gtk_widget_get_screen_unchecked (widget));
+                                    gtk_widget_get_screen (widget));
 
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context,
