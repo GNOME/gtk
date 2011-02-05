@@ -1017,7 +1017,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->key.window = window;
 
         event->key.time = xev->time;
-        event->key.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->key.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
         event->key.group = _gdk_x11_get_group_for_state (display, event->key.state);
 
         event->key.hardware_keycode = xev->detail;
@@ -1095,7 +1095,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                      GUINT_TO_POINTER (xev->sourceid));
                 gdk_event_set_source_device (event, source_device);
 
-                event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+                event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
                 break;
               }
             /* else (XI_ButtonRelease) fall thru */
@@ -1131,7 +1131,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                 gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &event->button.y);
               }
 
-            event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+            event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
             event->button.button = xev->detail;
           }
 
@@ -1167,7 +1167,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
 
-        event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
         /* There doesn't seem to be motion hints in XI */
         event->motion.is_hint = FALSE;
@@ -1216,7 +1216,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->crossing.mode = translate_crossing_mode (xev->mode);
         event->crossing.detail = translate_notify_type (xev->detail);
-        event->crossing.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->crossing.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
       }
       break;
     case XI_FocusIn:

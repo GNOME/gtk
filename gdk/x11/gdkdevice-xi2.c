@@ -361,7 +361,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
     *win_y = (gint) xwin_y;
 
   if (mask)
-    *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state);
+    *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);
 
   free (button_state.mask);
 
@@ -602,7 +602,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
     *win_y = (window) ? (gint) xwin_y : -1;
 
   if (mask)
-    *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state);
+    *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);
 
   free (button_state.mask);
 
@@ -685,7 +685,8 @@ _gdk_x11_device_xi2_translate_event_mask (GdkEventMask  event_mask,
 
 guint
 _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
-                                     XIButtonState   *buttons_state)
+                                     XIButtonState   *buttons_state,
+                                     XIGroupState    *group_state)
 {
   guint state = 0;
 

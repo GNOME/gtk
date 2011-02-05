@@ -241,7 +241,8 @@ void _gdk_x11_device_xi_translate_axes     (GdkDevice *device,
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkEventMask     event_mask,
                                                    gint            *len);
 guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
-                                                   XIButtonState   *buttons_state);
+                                                   XIButtonState   *buttons_state,
+                                                   XIGroupState    *group_state);
 
 void     _gdk_x11_event_translate_keyboard_string (GdkEventKey *event);
 
