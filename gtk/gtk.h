@@ -179,6 +179,7 @@
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkstylablepicture.h>
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleproperties.h>
 #include <gtk/gtkstyleprovider.h>
