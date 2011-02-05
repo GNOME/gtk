@@ -788,8 +788,6 @@ gtk_tree_view_column_ensure_cell_area (GtkTreeViewColumn *column,
 
   g_object_ref_sink (priv->cell_area);
 
- priv->cell_area_context = gtk_cell_area_create_context (priv->cell_area);
-
   priv->add_editable_signal =
     g_signal_connect (priv->cell_area, "add-editable",
                       G_CALLBACK (gtk_tree_view_column_add_editable_callback),
