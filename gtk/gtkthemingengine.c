@@ -1486,7 +1486,9 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
-  gint radius;
+  GtkBorder *border;
+  gint radius, border_width;
+  GtkBorderStyle border_style;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1495,7 +1497,12 @@ render_background_internal (GtkThemingEngine *engine,
                           "background-image", &pattern,
                           "background-color", &bg_color,
                           "border-radius", &radius,
+                          "border-width", &border,
+                          "border-style", &border_style,
                           NULL);
+
+  border_width = MIN (MIN (border->top, border->bottom),
+                      MIN (border->left, border->right));
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
 
@@ -1711,15 +1718,48 @@ render_background_internal (GtkThemingEngine *engine,
 
   cairo_pop_group_to_source (cr);
 
+  if (border_width > 1 &&
+      border_style == GTK_BORDER_STYLE_NONE)
+    {
+      cairo_set_line_width (cr, border_width);
+
+      x += (gdouble) border_width / 2;
+      y += (gdouble) border_width / 2;
+      width -= border_width;
+      height -= border_width;
+    }
+  else
+    {
+      x += border->left;
+      y += border->top;
+      width -= border->left + border->right;
+      height -= border->top + border->bottom;
+    }
+
   _cairo_round_rectangle_sides (cr, (gdouble) radius,
                                 x, y, width, height,
                                 SIDE_ALL, junction);
   cairo_close_path (cr);
-  cairo_fill (cr);
+
+  if (border_width > 1 &&
+      border_style != GTK_BORDER_STYLE_NONE)
+    {
+      /* stroke with the same source, so the background
+       * has exactly the shape than the frame, this
+       * is important so gtk_render_background() and
+       * gtk_render_frame() fit perfectly with round
+       * borders.
+       */
+      cairo_fill_preserve (cr);
+      cairo_stroke (cr);
+    }
+  else
+    cairo_fill (cr);
 
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
+  gtk_border_free (border);
 }
 
 static void
@@ -1731,26 +1771,12 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       gdouble           height)
 {
   GtkJunctionSides junction;
-  GtkStateFlags flags;
-  GtkBorder *border;
 
   junction = gtk_theming_engine_get_junction_sides (engine);
-
-  flags = gtk_theming_engine_get_state (engine);
-  gtk_theming_engine_get (engine, flags,
-                          "border-width", &border,
-                          NULL);
-
-  x += border->left;
-  y += border->top;
-  width -= border->left + border->right;
-  height -= border->top + border->bottom;
 
   render_background_internal (engine, cr,
                               x, y, width, height,
                               junction);
-
-  gtk_border_free (border);
 }
 
 /* Renders the small triangle on corners so
