@@ -1004,8 +1004,9 @@ gtk_container_child_set_valist (GtkContainer *container,
                      G_OBJECT_TYPE_NAME (container));
           break;
         }
-      g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-      G_VALUE_COLLECT (&value, var_args, 0, &error);
+
+      G_VALUE_COLLECT_INIT (&value, G_PARAM_SPEC_VALUE_TYPE (pspec),
+                            var_args, 0, &error);
       if (error)
         {
           g_warning ("%s: %s", G_STRLOC, error);
