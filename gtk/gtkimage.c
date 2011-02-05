@@ -35,6 +35,7 @@
 #include "gtkstock.h"
 #include "gtkicontheme.h"
 #include "gtksizerequest.h"
+#include "gtkstylablepicture.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
@@ -43,11 +44,11 @@
  * SECTION:gtkimage
  * @Short_description: A widget displaying an image
  * @Title: GtkImage
- * @See_also:#GdkPixbuf
+ * @See_also:#GdkPixbuf, #GdkPicture
  *
  * The #GtkImage widget displays an image. Various kinds of object
  * can be displayed as an image; most typically, you would load a
- * #GdkPixbuf ("pixel buffer") from a file, and then display that.
+ * #GdkPicture ("pixel buffer") from a file, and then display that.
  * There's a convenience function to do this, gtk_image_new_from_file(),
  * used as follows:
  * <informalexample><programlisting>
@@ -137,6 +138,7 @@ struct _GtkImagePrivate
 
   union
   {
+    GtkImagePictureData    picture;
     GtkImagePixbufData     pixbuf;
     GtkImageStockData      stock;
     GtkImageIconSetData    icon_set;
@@ -194,6 +196,7 @@ static void icon_theme_changed             (GtkImage     *image);
 enum
 {
   PROP_0,
+  PROP_PICTURE,
   PROP_PIXBUF,
   PROP_FILE,
   PROP_STOCK,
@@ -230,6 +233,14 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->style_updated = gtk_image_style_updated;
   widget_class->screen_changed = gtk_image_screen_changed;
   
+  g_object_class_install_property (gobject_class,
+                                   PROP_PICTURE,
+                                   g_param_spec_object ("picture",
+                                                        P_("Picture"),
+                                                        P_("A GdkPicture to display"),
+                                                        GDK_TYPE_PICTURE,
+                                                        GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
                                    PROP_PIXBUF,
                                    g_param_spec_object ("pixbuf",
@@ -401,6 +412,10 @@ gtk_image_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_PICTURE:
+      gtk_image_set_from_picture (image,
+                                  g_value_get_object (value));
+      break;
     case PROP_PIXBUF:
       gtk_image_set_from_pixbuf (image,
                                  g_value_get_object (value));
@@ -488,6 +503,13 @@ gtk_image_get_property (GObject     *object,
   
   switch (prop_id)
     {
+    case PROP_PICTURE:
+      if (priv->storage_type != GTK_IMAGE_PICTURE)
+        g_value_set_object (value, NULL);
+      else
+        g_value_set_object (value,
+                            gtk_image_get_picture (image));
+      break;
     case PROP_PIXBUF:
       if (priv->storage_type != GTK_IMAGE_PIXBUF)
         g_value_set_object (value, NULL);
@@ -587,6 +609,29 @@ gtk_image_new_from_file   (const gchar *filename)
   gtk_image_set_from_file (image, filename);
 
   return GTK_WIDGET (image);
+}
+
+/**
+ * gtk_image_new_from_picture:
+ * @picture: (allow-none): a #GdkPicture, or %NULL
+ *
+ * Creates a new #GtkImage displaying @picture.
+ * The #GtkImage does not assume a reference to the
+ * picture; you still need to unref it if you own references.
+ * #GtkImage will add its own reference rather than adopting yours.
+ * 
+ * Return value: a new #GtkImage
+ **/
+GtkWidget*
+gtk_image_new_from_picture (GdkPicture *picture)
+{
+  GtkImage *image;
+
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
+
+  gtk_image_set_from_picture (image, picture);
+
+  return GTK_WIDGET (image);  
 }
 
 /**
@@ -813,6 +858,67 @@ gtk_image_set_from_file   (GtkImage    *image,
   g_object_unref (anim);
 
   priv->filename = g_strdup (filename);
+  
+  g_object_thaw_notify (G_OBJECT (image));
+}
+
+static void
+gtk_image_picture_resized (GdkPicture *picture, GtkImage *image)
+{
+  gtk_image_update_size (image,
+                         gdk_picture_get_width (picture),
+                         gdk_picture_get_height (picture));
+}
+
+static void
+gtk_image_picture_changed (GdkPicture           *picture,
+                           const cairo_region_t *region,
+                           GtkImage             *image)
+{
+  /* XXX: take region into account */
+  gtk_widget_queue_draw (GTK_WIDGET (image));
+}
+
+/**
+ * gtk_image_set_from_picture:
+ * @image: a #GtkImage
+ * @picture: (allow-none): a #GdkPicture or %NULL
+ *
+ * See gtk_image_new_from_picture() for details.
+ **/
+void
+gtk_image_set_from_picture (GtkImage  *image,
+                            GdkPicture *picture)
+{
+  GtkImagePrivate *priv;
+
+  g_return_if_fail (GTK_IS_IMAGE (image));
+  g_return_if_fail (picture == NULL || GDK_IS_PICTURE (picture));
+
+  priv = image->priv;
+
+  g_object_freeze_notify (G_OBJECT (image));
+  
+  if (picture)
+    picture = gtk_widget_style_picture (GTK_WIDGET (image), picture);
+
+  gtk_image_clear (image);
+
+  if (picture != NULL)
+    {
+      priv->storage_type = GTK_IMAGE_PICTURE;
+
+      g_signal_connect (picture, "resized", G_CALLBACK (gtk_image_picture_resized), image);
+      g_signal_connect (picture, "changed", G_CALLBACK (gtk_image_picture_changed), image);
+
+      priv->data.picture.picture = picture;
+
+      gtk_image_update_size (image,
+                             gdk_picture_get_width (picture),
+                             gdk_picture_get_height (picture));
+    }
+
+  g_object_notify (G_OBJECT (image), "picture");
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1106,6 +1212,37 @@ gtk_image_get_storage_type (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_IMAGE_EMPTY);
 
   return image->priv->storage_type;
+}
+
+/**
+ * gtk_image_get_picture:
+ * @image: a #GtkImage
+ *
+ * Gets the #GdkPicture being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_PIXBUF (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned picture.
+ * 
+ * Return value: (transfer none): the displayed picture, or %NULL if
+ * the image is empty
+ **/
+GdkPicture*
+gtk_image_get_picture (GtkImage *image)
+{
+  GtkImagePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
+
+  priv = image->priv;
+
+  g_return_val_if_fail (priv->storage_type == GTK_IMAGE_PICTURE ||
+                        priv->storage_type == GTK_IMAGE_EMPTY, NULL);
+
+  if (priv->storage_type == GTK_IMAGE_EMPTY)
+    return NULL;
+  
+  return gtk_picture_get_unstyled (priv->data.picture.picture);
 }
 
 /**
@@ -1659,6 +1796,11 @@ gtk_image_draw (GtkWidget *widget,
 
       switch (priv->storage_type)
         {
+        case GTK_IMAGE_PICTURE:
+          cairo_translate (cr, x, y);
+          gdk_picture_draw (priv->data.picture.picture, cr);
+          pixbuf = NULL;
+          break;
 
         case GTK_IMAGE_PIXBUF:
           pixbuf = priv->data.pixbuf.pixbuf;
@@ -1804,6 +1946,23 @@ gtk_image_reset (GtkImage *image)
   
   switch (priv->storage_type)
     {
+    case GTK_IMAGE_PICTURE:
+
+      if (priv->data.picture.picture)
+        {
+          g_object_unref (priv->data.picture.picture);
+          g_signal_handlers_disconnect_by_func (priv->data.picture.picture,
+                                                gtk_image_picture_resized,
+                                                image);
+          g_signal_handlers_disconnect_by_func (priv->data.picture.picture,
+                                                gtk_image_picture_changed,
+                                                image);
+        }
+
+      g_object_notify (G_OBJECT (image), "picture");
+      
+      break;
+
 
     case GTK_IMAGE_PIXBUF:
 

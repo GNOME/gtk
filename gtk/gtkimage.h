@@ -62,6 +62,8 @@ typedef struct _GtkImageClass         GtkImageClass;
  *  This image type was added in GTK+ 2.6
  * @GTK_IMAGE_GICON: the widget contains a #GIcon.
  *  This image type was added in GTK+ 2.14
+ * @GTK_IMAGE_PICTURE: the widget contains a #GdkPicture.
+ *  This image type was added in GTK+ 3.2
  *
  * Describes the image data representation used by a #GtkImage. If you
  * want to get the image from the widget, you can only get the
@@ -79,7 +81,8 @@ typedef enum
   GTK_IMAGE_ICON_SET,
   GTK_IMAGE_ANIMATION,
   GTK_IMAGE_ICON_NAME,
-  GTK_IMAGE_GICON
+  GTK_IMAGE_GICON,
+  GTK_IMAGE_PICTURE
 } GtkImageType;
 
 /**
@@ -111,6 +114,7 @@ GType      gtk_image_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_image_new                (void);
 GtkWidget* gtk_image_new_from_file      (const gchar     *filename);
+GtkWidget* gtk_image_new_from_picture   (GdkPicture       *picture);
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GtkWidget* gtk_image_new_from_stock     (const gchar     *stock_id,
                                          GtkIconSize      size);
@@ -125,6 +129,8 @@ GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon,
 void gtk_image_clear              (GtkImage        *image);
 void gtk_image_set_from_file      (GtkImage        *image,
                                    const gchar     *filename);
+void gtk_image_set_from_picture   (GtkImage        *image,
+                                   GdkPicture      *picture);
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
 void gtk_image_set_from_stock     (GtkImage        *image,
@@ -147,6 +153,7 @@ void gtk_image_set_pixel_size     (GtkImage        *image,
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
 GdkPixbuf* gtk_image_get_pixbuf   (GtkImage         *image);
+GdkPicture*gtk_image_get_picture  (GtkImage         *image);
 void       gtk_image_get_stock    (GtkImage         *image,
                                    gchar           **stock_id,
                                    GtkIconSize      *size);

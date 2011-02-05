@@ -34,6 +34,7 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkImagePixbufData  GtkImagePixbufData;
+typedef struct _GtkImagePictureData  GtkImagePictureData;
 typedef struct _GtkImageStockData   GtkImageStockData;
 typedef struct _GtkImageIconSetData GtkImageIconSetData;
 typedef struct _GtkImageAnimationData GtkImageAnimationData;
@@ -43,6 +44,11 @@ typedef struct _GtkImageGIconData     GtkImageGIconData;
 struct _GtkImagePixbufData
 {
   GdkPixbuf *pixbuf;
+};
+
+struct _GtkImagePictureData
+{
+  GdkPicture *picture;
 };
 
 struct _GtkImageStockData
