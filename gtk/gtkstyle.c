@@ -813,13 +813,15 @@ gtk_style_copy (GtkStyle *style)
 
 GtkStyle*
 _gtk_style_new_for_path (GdkScreen     *screen,
-			 GtkWidgetPath *path)
+                         GtkWidgetPath *path)
 {
   GtkStyleContext *context;
   GtkStyle *style;
 
   context = gtk_style_context_new ();
-  gtk_style_context_set_screen (context, screen);
+
+  if (screen)
+    gtk_style_context_set_screen (context, screen);
   gtk_style_context_set_path (context, path);
 
   style = g_object_new (GTK_TYPE_STYLE,
@@ -848,8 +850,7 @@ gtk_style_new (void)
   path = gtk_widget_path_new ();
   gtk_widget_path_append_type (path, GTK_TYPE_WIDGET);
 
-  style = _gtk_style_new_for_path (gdk_screen_get_default (),
-				   path);
+  style = _gtk_style_new_for_path (gdk_screen_get_default (), path);
 
   gtk_widget_path_free (path);
 

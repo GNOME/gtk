@@ -1108,8 +1108,9 @@ gtk_window_init (GtkWindow *window)
   priv->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);
 
-  g_signal_connect (priv->screen, "composited-changed",
-		    G_CALLBACK (gtk_window_on_composited_changed), window);
+  if (priv->screen)
+    g_signal_connect (priv->screen, "composited-changed",
+                      G_CALLBACK (gtk_window_on_composited_changed), window);
 }
 
 static void
@@ -7961,7 +7962,7 @@ gtk_window_set_screen (GtkWindow *window,
   GtkWidget *widget;
   GdkScreen *previous_screen;
   gboolean was_mapped;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_SCREEN (screen));
 
@@ -7979,17 +7980,18 @@ gtk_window_set_screen (GtkWindow *window,
     gtk_widget_unmap (widget);
   if (gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
-      
+
   gtk_window_free_key_hash (window);
   priv->screen = screen;
   gtk_widget_reset_rc_styles (widget);
   if (screen != previous_screen)
     {
-      g_signal_handlers_disconnect_by_func (previous_screen,
-					    gtk_window_on_composited_changed, window);
-      g_signal_connect (screen, "composited-changed", 
-			G_CALLBACK (gtk_window_on_composited_changed), window);
-      
+      if (previous_screen)
+        g_signal_handlers_disconnect_by_func (previous_screen,
+                                              gtk_window_on_composited_changed, window);
+      g_signal_connect (screen, "composited-changed",
+                        G_CALLBACK (gtk_window_on_composited_changed), window);
+
       _gtk_widget_propagate_screen_changed (widget, previous_screen);
       _gtk_widget_propagate_composited_changed (widget);
     }
