@@ -780,6 +780,73 @@ on_alpha_screen_changed (GtkWindow *window,
   </section>
 
   <section>
+    <title>Event filtering</title>
+
+    <para>
+      If your application uses the low-level event filtering facilities in GDK,
+      there are some changes you need to be aware of.
+    </para>
+
+    <para>
+      The special-purpose GdkEventClient events and the gdk_add_client_message_filter() and gdk_display_add_client_message_filter() functions have been
+      removed. Receiving X11 ClientMessage events is still possible, using
+      the general gdk_window_add_filter() API. A client message filter like
+<informalexample><programlisting>
+static GdkFilterReturn
+message_filter (GdkXEvent *xevent, GdkEvent *event, gpointer data)
+{
+  XClientMessageEvent *evt = (XClientMessageEvent *)xevent;
+
+  /* do something with evt ... */
+}
+
+ ...
+
+message_type = gdk_atom_intern ("MANAGER", FALSE);
+gdk_display_add_client_message_filter (display, message_type, message_filter, NULL);
+</programlisting></informalexample>
+    then looks like this:
+    <informalexample><programlisting>
+static GdkFilterReturn
+event_filter (GdkXEvent *xevent, GdkEvent *event, gpointer data)
+{
+  XClientMessageEvent *evt;
+  GdkAtom message_type;
+
+  if (((XEvent *)xevent)->type != ClientMessage)
+    return GDK_FILTER_CONTINUE;
+
+  evt = (XClientMessageEvent *)xevent;
+  message_type = XInternAtom (evt->display, "MANAGER", FALSE);
+
+  if (evt->message_type != message_type)
+    return GDK_FILTER_CONTINUE;
+
+  /* do something with evt ... */
+}
+
+ ...
+
+gdk_window_add_filter (NULL, message_filter, NULL);
+</programlisting></informalexample>
+      One advantage of using an event filter is that you can actually
+      remove the filter when you don't need it anymore, using
+      gdk_window_remove_filter().
+    </para>
+
+    <para>
+      The other difference to be aware of when working with event filters
+      in GTK+ 3 is that GDK now uses XI2 by default when available. That
+      means that your application does not receive core X11 key or button
+      events. Instead, all input events are delivered as XIDeviceEvents.
+      As a short-term workaround for this, you can force your application
+      to not use XI2, with gdk_disable_multidevice(). In the long term,
+      you probably want to rewrite your event filter to deal with
+      XIDeviceEvents.
+    </para>
+  </section>
+
+  <section>
     <title>Backend-specific code</title>
     <para>
       In GTK+ 2.x, GDK could only be compiled for one backend at a time,
@@ -819,6 +886,17 @@ on_alpha_screen_changed (GtkWindow *window,
          g_warning ("Unsupported GDK backend");
        }
       </programlisting></informalexample>
+    </para>
+  </section>
+
+  <section>
+    <title>GtkPlug and GtkSocket</title>
+
+    <para>
+      The #GtkPlug and #GtkSocket widgets are now X11-specific, and you
+      have to include the <filename>&lt;gtk/gtkx.h&gt;</filename> header
+      to use them. The previous section about proper handling of
+      backend-specific code applies, if you care about other backends.
     </para>
   </section>
 
