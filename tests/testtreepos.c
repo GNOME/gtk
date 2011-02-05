@@ -10,15 +10,32 @@ clicked_icon (GtkTreeView  *tv,
   gint cell_x, cell_y;
   gint cell_pos, cell_width;
   GList *cells, *l;
+  gint depth;
+  gint level_indentation;
+  gint expander_size;
+  gint indent;
 
   if (gtk_tree_view_get_path_at_pos (tv, x, y, path, &col, &cell_x, &cell_y))
     {
       cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
 
+#if 1
+      /* ugly workaround to fix the problem:
+       * manually calculate the indent for the row
+       */
+      depth = gtk_tree_path_get_depth (*path);
+      level_indentation = gtk_tree_view_get_level_indentation (tv);
+      gtk_widget_style_get (GTK_WIDGET (tv), "expander-size", &expander_size, NULL);
+      expander_size += 4;
+      indent = (depth - 1) * level_indentation + depth * expander_size;
+#else
+      indent = 0;
+#endif
+
       for (l = cells; l; l = l->next)
         {
           gtk_tree_view_column_cell_get_position (col, l->data, &cell_pos, &cell_width);
-          if (cell_pos <= cell_x && cell_x <= cell_pos + cell_width)
+          if (cell_pos + indent <= cell_x && cell_x <= cell_pos + indent + cell_width)
             {
               g_print ("clicked in %s\n", g_type_name_from_instance (l->data));
               if (GTK_IS_CELL_RENDERER_PIXBUF (l->data))
