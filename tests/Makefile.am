@@ -103,7 +103,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testswitch			\
 	styleexamples			\
 	testtreemenu			\
-	testtoplevelembed
+	testtoplevelembed		\
+	testnoscreen
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -199,6 +200,7 @@ testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
 styleexamples_DEPENDENCIES = $(TEST_DEPS)
 testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
+testnoscreen_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -280,6 +282,7 @@ testexpander_LDADD = $(LDADDS)
 testswitch_LDADD = $(LDADDS)
 styleexamples_LDADD = $(LDADDS)
 testtoplevelembed_LDADD = $(LDADDS)
+testnoscreen_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
