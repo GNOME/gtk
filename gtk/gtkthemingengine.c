@@ -1498,10 +1498,8 @@ render_background_internal (GtkThemingEngine *engine,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-  _cairo_round_rectangle_sides (cr, (gdouble) radius,
-                                x, y, width, height,
-                                SIDE_ALL, junction);
-  cairo_clip (cr);
+
+  cairo_push_group (cr);
 
   if (gtk_theming_engine_has_class (engine, "background"))
     {
@@ -1710,6 +1708,14 @@ render_background_internal (GtkThemingEngine *engine,
       cairo_mask (cr, mask);
       cairo_pattern_destroy (mask);
     }
+
+  cairo_pop_group_to_source (cr);
+
+  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                x, y, width, height,
+                                SIDE_ALL, junction);
+  cairo_close_path (cr);
+  cairo_fill (cr);
 
   cairo_restore (cr);
 
