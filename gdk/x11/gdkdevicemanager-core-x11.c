@@ -145,8 +145,6 @@ translate_key_event (GdkDisplay              *display,
 {
   GdkKeymap *keymap = gdk_keymap_get_for_display (display);
   GdkModifierType consumed, state;
-  gunichar c = 0;
-  gchar buf[7];
 
   event->key.type = xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
   event->key.time = xevent->xkey.time;
@@ -171,64 +169,8 @@ translate_key_event (GdkDisplay              *display,
 
   event->key.is_modifier = _gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
-  /* Fill in event->string crudely, since various programs
-   * depend on it.
-   */
-  event->key.string = NULL;
+  _gdk_x11_event_translate_keyboard_string (&event->key);
 
-  if (event->key.keyval != GDK_KEY_VoidSymbol)
-    c = gdk_keyval_to_unicode (event->key.keyval);
-
-  if (c)
-    {
-      gsize bytes_written;
-      gint len;
-
-      /* Apply the control key - Taken from Xlib
-       */
-      if (event->key.state & GDK_CONTROL_MASK)
-        {
-          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
-          else if (c == '2')
-            {
-              event->key.string = g_memdup ("\0\0", 2);
-              event->key.length = 1;
-              buf[0] = '\0';
-              goto out;
-            }
-          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
-          else if (c == '8') c = '\177';
-          else if (c == '/') c = '_' & 0x1F;
-        }
-
-      len = g_unichar_to_utf8 (c, buf);
-      buf[len] = '\0';
-
-      event->key.string = g_locale_from_utf8 (buf, len,
-                                              NULL, &bytes_written,
-                                              NULL);
-      if (event->key.string)
-        event->key.length = bytes_written;
-    }
-  else if (event->key.keyval == GDK_KEY_Escape)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\033");
-    }
-  else if (event->key.keyval == GDK_KEY_Return ||
-          event->key.keyval == GDK_KEY_KP_Enter)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\r");
-    }
-
-  if (!event->key.string)
-    {
-      event->key.length = 0;
-      event->key.string = g_strdup ("");
-    }
-
- out:
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
     {
@@ -240,7 +182,7 @@ translate_key_event (GdkDisplay              *display,
 
       if (event->key.length > 0)
         g_message ("\t\tlength: %4d string: \"%s\"",
-                   event->key.length, buf);
+                   event->key.length, event->key.string);
     }
 #endif /* G_ENABLE_DEBUG */
   return;
@@ -905,4 +847,68 @@ gdk_x11_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager
 
   device_manager_core = (GdkX11DeviceManagerCore *) device_manager;
   return device_manager_core->core_pointer;
+}
+
+void
+_gdk_x11_event_translate_keyboard_string (GdkEventKey *event)
+{
+  gunichar c = 0;
+  gchar buf[7];
+
+  /* Fill in event->string crudely, since various programs
+   * depend on it.
+   */
+  event->string = NULL;
+
+  if (event->keyval != GDK_KEY_VoidSymbol)
+    c = gdk_keyval_to_unicode (event->keyval);
+
+  if (c)
+    {
+      gsize bytes_written;
+      gint len;
+
+      /* Apply the control key - Taken from Xlib
+       */
+      if (event->state & GDK_CONTROL_MASK)
+        {
+          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
+          else if (c == '2')
+            {
+              event->string = g_memdup ("\0\0", 2);
+              event->length = 1;
+              buf[0] = '\0';
+              return;
+            }
+          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+          else if (c == '8') c = '\177';
+          else if (c == '/') c = '_' & 0x1F;
+        }
+
+      len = g_unichar_to_utf8 (c, buf);
+      buf[len] = '\0';
+
+      event->string = g_locale_from_utf8 (buf, len,
+                                          NULL, &bytes_written,
+                                          NULL);
+      if (event->string)
+        event->length = bytes_written;
+    }
+  else if (event->keyval == GDK_KEY_Escape)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\033");
+    }
+  else if (event->keyval == GDK_KEY_Return ||
+          event->keyval == GDK_KEY_KP_Enter)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\r");
+    }
+
+  if (!event->string)
+    {
+      event->length = 0;
+      event->string = g_strdup ("");
+    }
 }
