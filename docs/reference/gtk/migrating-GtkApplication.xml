@@ -59,11 +59,21 @@ The same application using GtkApplication:
 static void
 activate (GtkApplication *app)
 {
+  GList *list;
   GtkWidget *window;
 
-  window = create_my_window ();
-  gtk_window_set_application (GTK_WINDOW (window), app);
-  gtk_widget_show (window);
+  list = gtk_application_get_windows (app);
+
+  if (list)
+    {
+      gtk_window_present (GTK_WINDOW (list->data));
+    }
+  else
+    {
+      window = create_my_window ();
+      gtk_window_set_application (GTK_WINDOW (window), app);
+      gtk_widget_show (window);
+    }
 }
 
 int
