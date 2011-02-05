@@ -232,7 +232,7 @@ static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button,
                                             cairo_t            *cr,
                                             GtkArrowType        arrow_type);
 static gboolean gtk_spin_button_timer          (GtkSpinButton      *spin_button);
-static void gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
+static gboolean gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
                                             GtkSpinButton      *spin_button);
 static gint gtk_spin_button_key_release    (GtkWidget          *widget,
@@ -1155,8 +1155,8 @@ gtk_spin_button_grab_notify (GtkWidget *widget,
 
   if (!was_grabbed)
     {
-      gtk_spin_button_stop_spinning (spin);
-      gtk_widget_queue_draw (GTK_WIDGET (spin));
+      if (gtk_spin_button_stop_spinning (spin))
+        gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
 }
 
@@ -1168,8 +1168,8 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
 
   if (!gtk_widget_is_sensitive (widget))
     {
-      gtk_spin_button_stop_spinning (spin);
-      gtk_widget_queue_draw (GTK_WIDGET (spin));
+      if (gtk_spin_button_stop_spinning (spin))
+        gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
 }
 
@@ -1216,26 +1216,28 @@ gtk_spin_button_scroll (GtkWidget      *widget,
   return TRUE;
 }
 
-static void
+static gboolean
 gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 {
   GtkSpinButtonPrivate *priv = spin->priv;
+  gboolean did_spin = FALSE;
 
   if (priv->timer)
     {
       g_source_remove (priv->timer);
       priv->timer = 0;
-      priv->timer_calls = 0;
       priv->need_timer = FALSE;
+
+      did_spin = TRUE;
     }
 
   priv->button = 0;
-  priv->timer = 0;
   priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
   priv->timer_calls = 0;
 
   priv->click_child = NO_ARROW;
-  priv->button = 0;
+
+  return did_spin;
 }
 
 static void
