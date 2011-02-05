@@ -515,7 +515,6 @@ static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
 static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
                                                         gboolean        include_preedit);
 static void         gtk_entry_reset_layout             (GtkEntry       *entry);
-static void         gtk_entry_queue_draw               (GtkEntry       *entry);
 static void         gtk_entry_recompute                (GtkEntry       *entry);
 static gint         gtk_entry_find_position            (GtkEntry       *entry,
 							gint            x);
@@ -1866,7 +1865,6 @@ gtk_entry_set_property (GObject         *object,
 {
   GtkEntry *entry = GTK_ENTRY (object);
   GtkEntryPrivate *priv = entry->priv;
-  GtkWidget *widget;
 
   switch (prop_id)
     {
@@ -1880,7 +1878,8 @@ gtk_entry_set_property (GObject         *object,
 
         if (new_value != priv->editable)
 	  {
-            widget = GTK_WIDGET (entry);
+            GtkWidget *widget = GTK_WIDGET (entry);
+
 	    if (!new_value)
 	      {
 		_gtk_entry_reset_im_context (entry);
@@ -1896,7 +1895,7 @@ gtk_entry_set_property (GObject         *object,
 	    if (new_value && gtk_widget_has_focus (widget))
 	      gtk_im_context_focus_in (priv->im_context);
 
-	    gtk_entry_queue_draw (entry);
+	    gtk_widget_queue_draw (widget);
 	  }
       }
       break;
@@ -5370,8 +5369,8 @@ recompute_idle_func (gpointer data)
   if (gtk_widget_has_screen (GTK_WIDGET (entry)))
     {
       gtk_entry_adjust_scroll (entry);
-      gtk_entry_queue_draw (entry);
-      
+      gtk_widget_queue_draw (GTK_WIDGET (entry));
+
       update_im_cursor_location (entry);
     }
 
@@ -5843,14 +5842,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
       cairo_restore (cr);
     }
-}
-
-static void
-gtk_entry_queue_draw (GtkEntry *entry)
-{
-  if (gtk_widget_is_drawable (GTK_WIDGET (entry)))
-    gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (entry)),
-                                NULL, FALSE);
 }
 
 void
