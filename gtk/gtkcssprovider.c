@@ -4232,6 +4232,8 @@ gtk_css_provider_get_named (const gchar *name,
             }
           else
             g_hash_table_insert (themes, g_strdup (key), provider);
+
+          g_free (path);
         }
     }
 
