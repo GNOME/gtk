@@ -514,10 +514,10 @@ AC_CHECK_FUNCS(localtime_r)
 
 # _NL_TIME_FIRST_WEEKDAY is an enum and not a define
 AC_MSG_CHECKING([for _NL_TIME_FIRST_WEEKDAY])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_TIME_FIRST_WEEKDAY], [1],
@@ -526,10 +526,10 @@ fi
 
 # _NL_MEASUREMENT_MEASUREMENT is an enum and not a define
 AC_MSG_CHECKING([for _NL_MEASUREMENT_MEASUREMENT])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_MEASUREMENT_MEASUREMENT));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_MEASUREMENT_MEASUREMENT));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_MEASUREMENT_MEASUREMENT], [1],
@@ -538,10 +538,10 @@ fi
 
 # _NL_PAPER_HEIGHT is an enum and not a define
 AC_MSG_CHECKING([for _NL_PAPER_HEIGHT])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_PAPER_HEIGHT));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_PAPER_HEIGHT));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_PAPER_HEIGHT], [1],
@@ -550,10 +550,10 @@ fi
 
 # _NL_PAPER_WIDTH is an enum and not a define
 AC_MSG_CHECKING([for _NL_PAPER_WIDTH])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_PAPER_WIDTH));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_PAPER_WIDTH));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_PAPER_WIDTH], [1],
@@ -1605,11 +1605,12 @@ AC_ARG_ENABLE(Bsymbolic,
               [SAVED_LDFLAGS="${LDFLAGS}"
                AC_MSG_CHECKING([for -Bsymbolic-functions linker flag])
                LDFLAGS=-Wl,-Bsymbolic-functions
-               AC_TRY_LINK([], [int main (void) { return 0; }],
-                           AC_MSG_RESULT(yes)
-                           enable_Bsymbolic=yes,
-                           AC_MSG_RESULT(no)
-                           enable_Bsymbolic=no)
+               AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
+                                               [[int main (void) { return 0; }]])],
+                              [AC_MSG_RESULT(yes)
+                               enable_Bsymbolic=yes],
+                              [AC_MSG_RESULT(no)
+                               enable_Bsymbolic=no])
                LDFLAGS="${SAVED_LDFLAGS}"])
 
 if test "x${enable_Bsymbolic}" = "xyes" ; then
