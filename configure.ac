@@ -703,14 +703,7 @@ saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 
 
-# Checks for header files.
-AC_HEADER_STDC
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-
 # Checks for library functions.
-AC_TYPE_SIGNAL
 AC_FUNC_MMAP
 
 AC_CHECK_FUNCS(mallinfo)
