@@ -1700,7 +1700,7 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   g_return_val_if_fail (!cell || GTK_IS_CELL_RENDERER (cell), 0);
   g_return_val_if_fail (!widget || GTK_IS_WIDGET (widget), 0);
 
-  if ((widget && !gtk_widget_get_sensitive (widget)) ||
+  if ((widget && !gtk_widget_is_sensitive (widget)) ||
       (cell && !gtk_cell_renderer_get_sensitive (cell)) ||
       (cell_state & GTK_CELL_RENDERER_INSENSITIVE) != 0)
     {
