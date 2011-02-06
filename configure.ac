@@ -233,61 +233,61 @@ m4_define([debug_default],
 
 dnl declare --enable-* args and collect ac_help strings
 AC_ARG_ENABLE(debug,
-              AC_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
-                             [turn on debugging @<:@default=debug_default@:>@]),,
-              enable_debug=debug_default)
+              [AS_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
+                              [turn on debugging @<:@default=debug_default@:>@])],,
+              [enable_debug=debug_default])
 
 AC_ARG_ENABLE(rebuilds,
-              [AC_HELP_STRING([--disable-rebuilds],
+              [AS_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
               [enable_rebuilds=yes])
 
 AC_ARG_ENABLE(gtk2-dependency,
-              AC_HELP_STRING([--enable-gtk2-dependency],
-                             [Do not build gtk-update-icon-cache and other shared tools]),,
+              [AS_HELP_STRING([--enable-gtk2-dependency],
+                              [Do not build gtk-update-icon-cache and other shared tools])],,
               [enable_gtk2_dependency=no])
 
 AM_CONDITIONAL(BUILD_ICON_CACHE, [test "x$enable_gtk2_dependency" = xno])
 
 AC_ARG_ENABLE(xkb,
-              [AC_HELP_STRING([--enable-xkb],
+              [AS_HELP_STRING([--enable-xkb],
                               [support XKB extension [default=maybe]])],,
               [enable_xkb="maybe"])
 AC_ARG_ENABLE(xinerama,
-              [AC_HELP_STRING([--enable-xinerama],
+              [AS_HELP_STRING([--enable-xinerama],
 	                      [support Xinerama extension if available [default=maybe]])],,
               [enable_xinerama="maybe"])
 AC_ARG_ENABLE(xinput,
-              [AC_HELP_STRING([--enable-xinput],
+              [AS_HELP_STRING([--enable-xinput],
                               [support XInput extension if available [default=yes]])],,
               [enable_xinput="maybe"])
 AC_ARG_ENABLE(xrandr,
-              [AC_HELP_STRING([--enable-xrandr],
+              [AS_HELP_STRING([--enable-xrandr],
                               [support XRandR extension if available [default=maybe]])],,
               [enable_xrandr="maybe"])
 AC_ARG_ENABLE(xfixes,
-              [AC_HELP_STRING([--enable-xfixes],
+              [AS_HELP_STRING([--enable-xfixes],
                               [support XFixes extension if available [default=maybe]])],,
               [enable_xfixes="maybe"])
 AC_ARG_ENABLE(xcomposite,
-              [AC_HELP_STRING([--enable-xcomposite],
+              [AS_HELP_STRING([--enable-xcomposite],
                               [support X Composite extension if available [default=maybe]])],,
               [enable_xcomposite="maybe"])
 AC_ARG_ENABLE(xdamage,
-              [AC_HELP_STRING([--enable-xdamage],
+              [AS_HELP_STRING([--enable-xdamage],
                               [support X Damage extension if available [default=maybe]])],,
               [enable_xdamage="maybe"])
 
 AC_ARG_ENABLE(x11-backend,
-              [AC_HELP_STRING([--enable-x11-backend],
+              [AS_HELP_STRING([--enable-x11-backend],
                               [enable the X11 gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(win32-backend,
-              [AC_HELP_STRING([--enable-win32-backend],
+              [AS_HELP_STRING([--enable-win32-backend],
                               [enable the Win32 gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(quartz-backend,
-              [AC_HELP_STRING([--enable-quartz-backend],
+              [AS_HELP_STRING([--enable-quartz-backend],
                               [enable the quartz gdk backend])],
 			      [backend_set=yes])
 
@@ -462,7 +462,7 @@ dnl * See whether to include shared library dependencies *
 dnl ******************************************************
 
 AC_ARG_ENABLE(explicit-deps,
-              [AC_HELP_STRING([--enable-explicit-deps=@<:@yes/no/auto@:>@],
+              [AS_HELP_STRING([--enable-explicit-deps=@<:@yes/no/auto@:>@],
                               [use explicit dependencies in .pc files [default=auto]])],,
               [enable_explicit_deps=auto])
 
@@ -744,7 +744,7 @@ AC_CHECK_FUNCS(_NSGetEnviron)
 AC_MSG_CHECKING(whether to build dynamic modules)
 
 AC_ARG_ENABLE(modules,
-              [AC_HELP_STRING([--disable-modules],
+              [AS_HELP_STRING([--disable-modules],
                               [disable dynamic module loading])])
 
 dynworks=false
@@ -793,13 +793,9 @@ AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
 #
 AC_MSG_CHECKING(immodules to build)
 
-dnl due to an autoconf bug, commas in the first arg to
-dnl AC_HELP_STRING cause problems.
-dnl AC_HELP_STRING([--with-included-immodules=MODULE1 MODULE2 ...],
-dnl                [build the specified input method modules into gtk])
 AC_ARG_WITH(included_immodules,
-            AC_HELP_STRING([--with-included-immodules=MODULE1,MODULE2,...],
-                           [build the specified input methods into gtk]))
+            [AS_HELP_STRING([--with-included-immodules=MODULE1,MODULE2,...],
+                            [build the specified input methods into gtk])])
 
 if $dynworks; then
    :
@@ -1359,7 +1355,7 @@ LIBS="$old_LIBS"
 PRINT_BACKENDS="file lpr"
 
 AC_ARG_ENABLE(cups,
-              [AC_HELP_STRING([--disable-cups],
+              [AS_HELP_STRING([--disable-cups],
                               [disable cups print backend])],,
               [enable_cups=auto])
 
@@ -1420,9 +1416,9 @@ fi
 #
 
 AC_ARG_ENABLE(papi,
-              [AC_HELP_STRING([--disable-papi],
+              [AS_HELP_STRING([--disable-papi],
                               [disable papi print backend])],,
-             [enable_papi=auto])
+              [enable_papi=auto])
 
 if test "x$enable_papi" = "xno"; then
   AM_CONDITIONAL(HAVE_PAPI, false)
@@ -1464,7 +1460,7 @@ CPPFLAGS="$gtk_save_cppflags"
 
 
 AC_ARG_ENABLE(test-print-backend,
-              [AC_HELP_STRING([--enable-test-print-backend],
+              [AS_HELP_STRING([--enable-test-print-backend],
                               [build test print backend])],,
               [enable_test_print_backend=no])
 if test "x$enable_test_print_backend" != "xno" ; then
@@ -1510,8 +1506,8 @@ GOBJECT_INTROSPECTION_CHECK([0.10.1])
 #################################################
 
 AC_ARG_ENABLE(packagekit,
-              AC_HELP_STRING([--disable-packagekit],
-                             [build packagekit open-with module]))
+              [AS_HELP_STRING([--disable-packagekit],
+                              [build packagekit open-with module])])
 
 build_packagekit=no
 if test "os_win32" != "yes"; then
@@ -1533,9 +1529,10 @@ AC_CHECK_PROG(DB2HTML, db2html, true, false)
 AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
 
 AC_ARG_ENABLE(man,
-              [AC_HELP_STRING([--enable-man],
-                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,
-              enable_man=no)
+              [AS_HELP_STRING([--enable-man],
+                              [regenerate man pages from Docbook [default=no]])],
+              [enable_man=yes],
+              [enable_man=no])
 
 if test "${enable_man}" != no; then
   dnl
@@ -1608,7 +1605,7 @@ dnl Check for -Bsymbolic-functions linker flag used to avoid
 dnl intra-library PLT jumps, if available.
 dnl
 AC_ARG_ENABLE(Bsymbolic,
-              [AC_HELP_STRING([--disable-Bsymbolic],
+              [AS_HELP_STRING([--disable-Bsymbolic],
                               [avoid linking with -Bsymbolic])],,
               [SAVED_LDFLAGS="${LDFLAGS}"
                AC_MSG_CHECKING([for -Bsymbolic-functions linker flag])
