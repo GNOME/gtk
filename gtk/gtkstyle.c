@@ -822,6 +822,7 @@ _gtk_style_new_for_path (GdkScreen     *screen,
 
   if (screen)
     gtk_style_context_set_screen (context, screen);
+
   gtk_style_context_set_path (context, path);
 
   style = g_object_new (GTK_TYPE_STYLE,

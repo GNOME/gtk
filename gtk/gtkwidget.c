@@ -7738,11 +7738,15 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   if (widget->priv->context)
     {
+      GdkScreen *screen;
+
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context, widget->priv->path);
 
-      gtk_style_context_set_screen (widget->priv->context,
-                                    gtk_widget_get_screen (widget));
+      screen = gtk_widget_get_screen (widget);
+
+      if (screen)
+        gtk_style_context_set_screen (widget->priv->context, screen);
     }
 
   gtk_widget_pop_verify_invariants (widget);
@@ -14171,6 +14175,8 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
   if (G_UNLIKELY (!widget->priv->context))
     {
+      GdkScreen *screen;
+
       widget->priv->context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
                                             "direction", gtk_widget_get_direction (widget),
                                             NULL);
@@ -14178,8 +14184,10 @@ gtk_widget_get_style_context (GtkWidget *widget)
       g_signal_connect (widget->priv->context, "changed",
                         G_CALLBACK (style_context_changed), widget);
 
-      gtk_style_context_set_screen (widget->priv->context,
-                                    gtk_widget_get_screen (widget));
+      screen = gtk_widget_get_screen (widget);
+
+      if (screen)
+        gtk_style_context_set_screen (widget->priv->context, screen);
 
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context,
