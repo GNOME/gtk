@@ -495,10 +495,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->supports_composite = gdk_win32_display_supports_composite;
 
   display_class->list_devices = _gdk_win32_display_list_devices;
-  display_class->send_client_message = _gdk_win32_display_send_client_message;
-  display_class->add_client_message_filter = _gdk_win32_display_add_client_message_filter;
   //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;
-  display_class->get_drag_protocol = _gdk_win32_display_get_drag_protocol;
   display_class->get_cursor_for_type = _gdk_win32_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_win32_display_get_cursor_for_name;
   display_class->get_cursor_for_pixbuf = _gdk_win32_display_get_cursor_for_pixbuf;

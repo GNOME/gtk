@@ -1972,33 +1972,32 @@ _gdk_win32_dnd_do_dragdrop (void)
     }
 }
 
-GdkNativeWindow
-_gdk_win32_display_get_drag_protocol (GdkDisplay      *display,
-				      GdkNativeWindow  xid,
-				      GdkDragProtocol *protocol,
-				      guint           *version)
+/* Untested, may not work ...
+ * ... but as of this writing is only used by exlusive X11 gtksocket.c
+ */
+GdkDragProtocol
+_gdk_win32_window_get_drag_protocol (GdkWindow *window,
+                                     GdkWindow **target)
 {
-  GdkWindow *window;
+  GdkDragProtocol protocol = GDK_DRAG_PROTO_NONE;
 
-  window = gdk_win32_window_lookup_for_display (display, xid);
-  if (window &&
-      gdk_window_get_window_type (window) != GDK_WINDOW_FOREIGN)
+  if (gdk_window_get_window_type (window) != GDK_WINDOW_FOREIGN)
     {
       if (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
 	{
 	  if (use_ole2_dnd)
-	    *protocol = GDK_DRAG_PROTO_OLE2;
+	    protocol = GDK_DRAG_PROTO_OLE2;
 	  else
-	    *protocol = GDK_DRAG_PROTO_LOCAL;
-
-	  /* even X11 code not always intializes it */
-	  *version = 0;
-
-	  return xid;
+	    protocol = GDK_DRAG_PROTO_LOCAL;
 	}
     }
 
-  return 0;
+  if (target)
+    {
+      *target = NULL;
+    }
+
+  return protocol;
 }
 
 static GdkWindow *
