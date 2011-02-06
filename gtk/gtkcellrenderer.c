@@ -1703,21 +1703,21 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   if ((widget && !gtk_widget_get_sensitive (widget)) ||
       (cell && !gtk_cell_renderer_get_sensitive (cell)) ||
       (cell_state & GTK_CELL_RENDERER_INSENSITIVE) != 0)
-    state |= GTK_STATE_FLAG_INSENSITIVE;
+    {
+      state |= GTK_STATE_FLAG_INSENSITIVE;
+    }
   else
     {
-      if ((cell_state & GTK_CELL_RENDERER_SELECTED) != 0)
-        {
-          state |= GTK_STATE_FLAG_SELECTED;
-
-          if ((widget && gtk_widget_has_focus (widget)) &&
-              (cell_state & GTK_CELL_RENDERER_FOCUSED) != 0)
-            state |= GTK_STATE_FLAG_FOCUSED;
-        }
+      if ((widget && gtk_widget_has_focus (widget)) &&
+          (cell_state & GTK_CELL_RENDERER_FOCUSED) != 0)
+        state |= GTK_STATE_FLAG_FOCUSED;
 
       if ((cell_state & GTK_CELL_RENDERER_PRELIT) != 0)
         state |= GTK_STATE_FLAG_PRELIGHT;
     }
+
+  if ((cell_state & GTK_CELL_RENDERER_SELECTED) != 0)
+    state |= GTK_STATE_FLAG_SELECTED;
 
   return state;
 }
