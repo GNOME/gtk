@@ -564,9 +564,11 @@ fi
 ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
-AC_OUTPUT_COMMANDS([case "$CONFIG_FILES" in *po-properties/Makefile.in*)
-        sed -e "/POTFILES =/r po-properties/POTFILES" po-properties/Makefile.in > po-properties/Makefile
-      esac])
+AC_CONFIG_COMMANDS([po-properties],
+                   [[case "$CONFIG_FILES" in *po-properties/Makefile.in*)
+                       sed -e "/POTFILES =/r po-properties/POTFILES" po-properties/Makefile.in > po-properties/Makefile
+                     esac]],
+                   [[]])
 
 dnl Snippet below is copied from AM_GLIB_GNU_GETTEXT to generate a first
 dnl po-properties/POTFILES during configure; see GNOME #573515.
