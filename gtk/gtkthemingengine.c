@@ -1490,6 +1490,9 @@ render_background_internal (GtkThemingEngine *engine,
   gint radius, border_width;
   GtkBorderStyle border_style;
 
+  if (width <= 0 || height <= 0)
+    return;
+
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
 
