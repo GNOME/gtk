@@ -847,10 +847,6 @@ AM_CONDITIONAL(INCLUDE_IM_TI_ET, [test x"$INCLUDE_ti_et" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_VIQR, [test x"$INCLUDE_viqr" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_XIM, [test x"$INCLUDE_xim" = xyes])
 
-AC_HEADER_SYS_WAIT
-
-AC_TYPE_SIGNAL
-
 # Checks to see whether we should include mediaLib
 # support.
 #
