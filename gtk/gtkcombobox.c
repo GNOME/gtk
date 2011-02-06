@@ -266,8 +266,8 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GValue          *value,
                                                     GParamSpec      *spec);
 
-static void     gtk_combo_box_state_changed        (GtkWidget        *widget,
-                                                    GtkStateType      previous);
+static void     gtk_combo_box_state_flags_changed  (GtkWidget       *widget,
+                                                    GtkStateFlags    previous);
 static void     gtk_combo_box_grab_focus           (GtkWidget       *widget);
 static void     gtk_combo_box_style_updated        (GtkWidget       *widget);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
@@ -493,7 +493,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->style_updated = gtk_combo_box_style_updated;
-  widget_class->state_changed = gtk_combo_box_state_changed;
+  widget_class->state_flags_changed = gtk_combo_box_state_flags_changed;
   widget_class->get_preferred_width = gtk_combo_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_combo_box_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_combo_box_get_preferred_height_for_width;
@@ -1250,8 +1250,8 @@ gtk_combo_box_get_property (GObject    *object,
 }
 
 static void
-gtk_combo_box_state_changed (GtkWidget    *widget,
-                             GtkStateType  previous)
+gtk_combo_box_state_flags_changed (GtkWidget     *widget,
+                                   GtkStateFlags  previous)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
