@@ -727,7 +727,8 @@ fi
 
 # Check for uxtheme.h (for MS-Windows Engine)
 AC_MSG_CHECKING(for uxtheme.h)
-AC_TRY_CPP([#include <uxtheme.h>], gtk_uxtheme_h=yes, gtk_uxtheme_h=no)
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <uxtheme.h>]])],
+                  [gtk_uxtheme_h=yes], [gtk_uxtheme_h=no])
 if test $gtk_uxtheme_h = yes; then
    AC_DEFINE(HAVE_UXTHEME_H, 1, [Have uxtheme.h include file])
 fi
