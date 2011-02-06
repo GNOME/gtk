@@ -170,12 +170,16 @@ dnl
 AC_CHECK_TOOLS(CXX, [$CCC c++ g++ gcc CC cxx cc++ cl], gcc)
 AC_LANG_PUSH([C++])
 
-AC_TRY_COMPILE(,[class a { int b; } c;], ,CXX=)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
+                                   [[class a { int b; } c;]])],
+                  [],[CXX=])
 AM_CONDITIONAL(HAVE_CXX, test "$CXX" != "")
 
 gtk_save_cxxflags="$CXXFLAGS"
 CXXFLAGS="$CXXFLAGS -x objective-c++"
-AC_TRY_COMPILE([@interface Foo @end],,OBJC=yes,OBJC=no)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[@interface Foo @end]],
+                                   [[]])],
+                  [OBJC=yes],[OBJC=no])
 AM_CONDITIONAL(HAVE_OBJC, test "$OBJC" = "yes")
 CXXFLAGS="$gtk_save_cxxflags"
 AC_LANG_POP([C++])
@@ -633,18 +637,6 @@ case $host_os in
   ;;
 esac
 
-dnl NeXTStep cc seems to need this
-AC_MSG_CHECKING([for extra flags for POSIX compliance])
-AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
-  AC_MSG_RESULT(none needed),
-  gtk_save_CFLAGS="$CFLAGS"
-  CFLAGS="$CFLAGS -posix"
-  AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
-    AC_MSG_RESULT(-posix),
-    AC_MSG_RESULT()
-    CFLAGS="$gtk_save_CFLAGS"
-    AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
-
 #
 # Run AM_PATH_GLIB_2_0 to make sure that GLib is installed and working
 #
@@ -689,9 +681,11 @@ AC_CHECK_HEADERS(ftw.h,
                            [Define to 1 if ftw.h is available]))
 
 AC_MSG_CHECKING([for GNU ftw extensions])
-AC_TRY_COMPILE([#define _XOPEN_SOURCE 500
-#define _GNU_SOURCE
-#include <ftw.h>], [int flags = FTW_ACTIONRETVAL;], gtk_ok=yes, gtk_ok=no)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#define _XOPEN_SOURCE 500
+                                     #define _GNU_SOURCE
+                                     #include <ftw.h>]],
+                                   [[int flags = FTW_ACTIONRETVAL;]])],
+                  [gtk_ok=yes],[gtk_ok=no])
 if test $gtk_ok = yes; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_GNU_FTW, 1, [Have GNU ftw])
@@ -712,8 +706,9 @@ AC_TYPE_UID_T
 
 # Check if <sys/select.h> needs to be included for fd_set
 AC_MSG_CHECKING([for fd_set])
-AC_TRY_COMPILE([#include <sys/types.h>],
-        [fd_set readMask, writeMask;], gtk_ok=yes, gtk_ok=no)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]],
+                                   [[fd_set readMask, writeMask;]])],
+                  [gtk_ok=yes],[gtk_ok=no])
 if test $gtk_ok = yes; then
     AC_MSG_RESULT([yes, found in sys/types.h])
 else
@@ -963,17 +958,17 @@ if test "x$enable_x11_backend" == xyes; then
   # Check for xReply
 
   AC_MSG_CHECKING([if <X11/extensions/XIproto.h> is needed for xReply])
-  AC_TRY_COMPILE([#include <X11/Xlibint.h>],
-      [xReply *rep;],
-      [AC_MSG_RESULT([no])],
-      [AC_TRY_COMPILE([#include <X11/extensions/XIproto.h>
-#include <X11/Xlibint.h>],
-           [xReply *rep;],
-           [AC_MSG_RESULT([yes])
-            AC_DEFINE([NEED_XIPROTO_H_FOR_XREPLY], 1,
-                      [Define if <X11/extensions/XIproto.h> needed for xReply])],
-           [AC_MSG_RESULT([unknown])
-            AC_MSG_ERROR([xReply type unavailable. X11 is too old])])])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/Xlibint.h>]],
+                                     [[xReply *rep;]])],
+                    [AC_MSG_RESULT([no])],
+                    [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/XIproto.h>
+                                                          #include <X11/Xlibint.h>]],
+                                                        [[xReply *rep;]])],
+                                       [AC_MSG_RESULT([yes])
+                                        AC_DEFINE([NEED_XIPROTO_H_FOR_XREPLY], [1],
+                                                  [Define if <X11/extensions/XIproto.h> needed for xReply])],
+                                       [AC_MSG_RESULT([unknown])
+                                        AC_MSG_ERROR([xReply type unavailable. X11 is too old])])])
 
   # Check for XConvertCase, XInternAtoms (X11R6 specific)
 
@@ -1397,10 +1392,11 @@ else
 
     gtk_save_cflags="$CFLAGS"
     CFLAGS="$CUPS_CFLAGS"
-    AC_TRY_COMPILE([#include <cups/http.h>],
-                   [http_t http; char *s = http.authstring;],
-                   [AC_DEFINE(HAVE_HTTP_AUTHSTRING, [],
-                              [Define if cups http_t authstring field is accessible])],)
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cups/http.h>]],
+                                       [[http_t http; char *s = http.authstring;]])],
+                      [AC_DEFINE([HAVE_HTTP_AUTHSTRING], [],
+                                 [Define if cups http_t authstring field is accessible])],
+                      [])
     CFLAGS="$gtk_save_cflags"
 
     AC_SUBST(HAVE_HTTP_AUTHSTRING)
