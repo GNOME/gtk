@@ -324,6 +324,8 @@ struct _GtkWidgetPrivate
   guint multidevice           : 1;
   guint has_shape_mask        : 1;
   guint in_reparent           : 1;
+
+  /* Queue-resize related flags */
   guint resize_pending        : 1;
   guint alloc_needed          : 1;
   guint width_request_needed  : 1;
@@ -337,6 +339,11 @@ struct _GtkWidgetPrivate
   guint vexpand               : 1;
   guint hexpand_set           : 1; /* whether to use application-forced  */
   guint vexpand_set           : 1; /* instead of computing from children */
+
+  /* SizeGroup related flags */
+  guint sizegroup_visited     : 1;
+  guint sizegroup_bumping     : 1;
+  guint have_size_groups      : 1;
 
   /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
@@ -697,6 +704,7 @@ static GQuark		quark_tooltip_window = 0;
 static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
+static GQuark           quark_size_groups = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -811,6 +819,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_visual = g_quark_from_static_string ("gtk-widget-visual");
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
+  quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -14062,6 +14071,67 @@ _gtk_widget_set_height_request_needed (GtkWidget *widget,
                                        gboolean   height_request_needed)
 {
   widget->priv->height_request_needed = height_request_needed;
+}
+
+gboolean
+_gtk_widget_get_sizegroup_visited (GtkWidget    *widget)
+{
+  return widget->priv->sizegroup_visited;
+}
+
+void
+_gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
+				   gboolean      visited)
+{
+  widget->priv->sizegroup_visited = visited;
+}
+
+gboolean
+_gtk_widget_get_sizegroup_bumping (GtkWidget    *widget)
+{
+  return widget->priv->sizegroup_bumping;
+}
+
+void
+_gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
+				   gboolean      bumping)
+{
+  widget->priv->sizegroup_bumping = bumping;
+}
+
+void
+_gtk_widget_add_sizegroup (GtkWidget    *widget,
+			   gpointer      group)
+{
+  GSList *groups;
+
+  groups = g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+  groups = g_slist_prepend (groups, group);
+  g_object_set_qdata (G_OBJECT (widget), quark_size_groups, groups);
+
+  widget->priv->have_size_groups = TRUE;
+}
+
+void
+_gtk_widget_remove_sizegroup (GtkWidget    *widget,
+			      gpointer      group)
+{
+  GSList *groups;
+
+  groups = g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+  groups = g_slist_remove (groups, group);
+  g_object_set_qdata (G_OBJECT (widget), quark_size_groups, groups);
+
+  widget->priv->have_size_groups = groups != NULL;
+}
+
+GSList *
+_gtk_widget_get_sizegroups (GtkWidget    *widget)
+{
+  if (widget->priv->have_size_groups)
+    return g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+
+  return NULL;
 }
 
 /**

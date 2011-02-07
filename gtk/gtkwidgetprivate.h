@@ -79,6 +79,18 @@ gboolean     _gtk_widget_get_height_request_needed (GtkWidget *widget);
 void         _gtk_widget_set_height_request_needed (GtkWidget *widget,
                                                     gboolean   height_request_needed);
 
+gboolean     _gtk_widget_get_sizegroup_visited (GtkWidget    *widget);
+void         _gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
+						gboolean      visited);
+gboolean     _gtk_widget_get_sizegroup_bumping (GtkWidget    *widget);
+void         _gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
+						gboolean      bumping);
+void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
+						gpointer      group);
+void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
+						gpointer      group);
+GSList      *_gtk_widget_get_sizegroups        (GtkWidget    *widget);
+
 void _gtk_widget_override_size_request (GtkWidget *widget,
                                         int        width,
                                         int        height,

@@ -41,6 +41,7 @@ struct _GtkSizeGroupPrivate
   guint           have_width    : 1;
   guint           have_height   : 1;
   guint           ignore_hidden : 1;
+  guint           visited       : 1;
 };
 
 enum {
@@ -81,56 +82,16 @@ static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
-static GQuark size_groups_quark;
-static const gchar size_groups_tag[] = "gtk-size-groups";
-
-static GQuark visited_quark;
-static const gchar visited_tag[] = "gtk-size-group-visited";
-
-static GQuark bumping_quark;
-static const gchar bumping_tag[] = "gtk-size-group-bumping";
-
-static GSList *
-get_size_groups (GtkWidget *widget)
+static void
+mark_group_unvisited (GtkSizeGroup *group)
 {
-  return g_object_get_qdata (G_OBJECT (widget), size_groups_quark);
+  group->priv->visited = FALSE;
 }
 
 static void
-set_size_groups (GtkWidget *widget,
-		 GSList    *groups)
+mark_widget_unvisited (GtkWidget *widget)
 {
-  g_object_set_qdata (G_OBJECT (widget), size_groups_quark, groups);
-}
-
-static void
-mark_visited (gpointer object)
-{
-  g_object_set_qdata (object, visited_quark, "visited");
-}
-
-static void
-mark_unvisited (gpointer object)
-{
-  g_object_set_qdata (object, visited_quark, NULL);
-}
-
-static gboolean
-is_visited (gpointer object)
-{
-  return g_object_get_qdata (object, visited_quark) != NULL;
-}
-
-static void
-mark_bumping (gpointer object, gboolean bumping)
-{
-  g_object_set_qdata (object, bumping_quark, bumping ? "bumping" : NULL);
-}
-
-static gboolean
-is_bumping (gpointer object)
-{
-  return g_object_get_qdata (object, bumping_quark) != NULL;
+  _gtk_widget_set_sizegroup_visited (widget, FALSE);
 }
 
 static void
@@ -143,14 +104,14 @@ add_group_to_closure (GtkSizeGroup    *group,
   GSList *tmp_widgets;
   
   *groups = g_slist_prepend (*groups, group);
-  mark_visited (group);
+  priv->visited = TRUE;
 
   tmp_widgets = priv->widgets;
   while (tmp_widgets)
     {
       GtkWidget *tmp_widget = tmp_widgets->data;
       
-      if (!is_visited (tmp_widget))
+      if (!_gtk_widget_get_sizegroup_visited (tmp_widget))
 	add_widget_to_closure (tmp_widget, mode, groups, widgets);
       
       tmp_widgets = tmp_widgets->next;
@@ -166,16 +127,16 @@ add_widget_to_closure (GtkWidget       *widget,
   GSList *tmp_groups;
 
   *widgets = g_slist_prepend (*widgets, widget);
-  mark_visited (widget);
+  _gtk_widget_set_sizegroup_visited (widget, TRUE);
 
-  tmp_groups = get_size_groups (widget);
+  tmp_groups = _gtk_widget_get_sizegroups (widget);
   while (tmp_groups)
     {
-      GtkSizeGroup *tmp_group = tmp_groups->data;
-      GtkSizeGroupPrivate *tmp_priv = tmp_group->priv;
+      GtkSizeGroup        *tmp_group = tmp_groups->data;
+      GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
 
       if ((tmp_priv->mode == GTK_SIZE_GROUP_BOTH || tmp_priv->mode == mode) &&
-	  !is_visited (tmp_group))
+	  !tmp_group->priv->visited)
 	add_group_to_closure (tmp_group, mode, groups, widgets);
 
       tmp_groups = tmp_groups->next;
@@ -243,7 +204,7 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  continue;
 	}
       
-      widget_groups = get_size_groups (parent);
+      widget_groups = _gtk_widget_get_sizegroups (parent);
       if (!widget_groups)
 	{
 	  if (widget == parent)
@@ -257,8 +218,8 @@ queue_resize_on_widget (GtkWidget          *widget,
       widgets = NULL;
 	  
       add_widget_to_closure (parent, GTK_SIZE_GROUP_HORIZONTAL, &groups, &widgets);
-      g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
-      g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);
+      g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
+      g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
       reset_group_sizes (groups);
 	      
@@ -287,8 +248,8 @@ queue_resize_on_widget (GtkWidget          *widget,
       widgets = NULL;
 	      
       add_widget_to_closure (parent, GTK_SIZE_GROUP_VERTICAL, &groups, &widgets);
-      g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
-      g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);
+      g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
+      g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
       reset_group_sizes (groups);
 	      
@@ -327,17 +288,6 @@ queue_resize_on_group (GtkSizeGroup       *size_group)
 }
 
 static void
-initialize_size_group_quarks (void)
-{
-  if (!size_groups_quark)
-    {
-      size_groups_quark = g_quark_from_static_string (size_groups_tag);
-      visited_quark = g_quark_from_static_string (visited_tag);
-      bumping_quark = g_quark_from_static_string (bumping_tag);
-    }
-}
-
-static void
 gtk_size_group_class_init (GtkSizeGroupClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -372,8 +322,6 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 							 GTK_PARAM_READWRITE));
 
   g_type_class_add_private (klass, sizeof (GtkSizeGroupPrivate));
-
-  initialize_size_group_quarks ();
 }
 
 static void
@@ -391,6 +339,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
   priv->have_width = 0;
   priv->have_height = 0;
   priv->ignore_hidden = 0;
+  priv->visited  = FALSE;
 }
 
 static void
@@ -600,12 +549,11 @@ gtk_size_group_add_widget (GtkSizeGroup     *size_group,
 
   priv = size_group->priv;
 
-  groups = get_size_groups (widget);
+  groups = _gtk_widget_get_sizegroups (widget);
 
   if (!g_slist_find (groups, size_group))
     {
-      groups = g_slist_prepend (groups, size_group);
-      set_size_groups (widget, groups);
+      _gtk_widget_add_sizegroup (widget, size_group);
 
       priv->widgets = g_slist_prepend (priv->widgets, widget);
 
@@ -631,7 +579,6 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 			      GtkWidget    *widget)
 {
   GtkSizeGroupPrivate *priv;
-  GSList *groups;
   
   g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -644,9 +591,7 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 					gtk_size_group_widget_destroyed,
 					size_group);
   
-  groups = get_size_groups (widget);
-  groups = g_slist_remove (groups, size_group);
-  set_size_groups (widget, groups);
+  _gtk_widget_remove_sizegroup (widget, size_group);
 
   priv->widgets = g_slist_remove (priv->widgets, widget);
   queue_resize_on_group (size_group);
@@ -684,10 +629,9 @@ compute_dimension (GtkWidget        *widget,
   gint    min_result = 0, nat_result = 0;
 
   add_widget_to_closure (widget, mode, &groups, &widgets);
+  g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
+  g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
-  g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
-  g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);
-  
   g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
   
   if (!groups)
@@ -755,7 +699,6 @@ compute_dimension (GtkWidget        *widget,
 	      else
 		{
 		  tmp_priv->have_height = TRUE;
-
 		  tmp_priv->minimum_req.height = min_result;
 		  tmp_priv->natural_req.height = nat_result;
 		}
@@ -795,15 +738,15 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
 				  gint             *minimum,
 				  gint             *natural)
 {
-  if (!is_bumping (widget))
+  if (!_gtk_widget_get_sizegroup_bumping (widget))
     {
       /* Avoid recursion here */
-      mark_bumping (widget, TRUE);
+      _gtk_widget_set_sizegroup_bumping (widget, TRUE);
 
-      if (get_size_groups (widget))
+      if (_gtk_widget_get_sizegroups (widget))
 	compute_dimension (widget, mode, minimum, natural);
 
-      mark_bumping (widget, FALSE);
+      _gtk_widget_set_sizegroup_bumping (widget, FALSE);
     }
 }
 
@@ -819,8 +762,6 @@ void
 _gtk_size_group_queue_resize (GtkWidget           *widget,
 			      GtkQueueResizeFlags  flags)
 {
-  initialize_size_group_quarks ();
-
   queue_resize_on_widget (widget, TRUE, flags);
 }
 
