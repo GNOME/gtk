@@ -2343,17 +2343,19 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                   GtkSymbolicColor *color;
                   GdkRGBA rgba;
 
-                  color = g_value_get_boxed (&pcache->value);
+                  color = g_value_dup_boxed (&pcache->value);
+
+                  g_value_unset (&pcache->value);
+
+                  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
+                    g_value_init (&pcache->value, GDK_TYPE_RGBA);
+                  else
+                    g_value_init (&pcache->value, GDK_TYPE_COLOR);
 
                   if (gtk_symbolic_color_resolve (color, data->store, &rgba))
                     {
-                      g_value_unset (&pcache->value);
-
                       if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
-                        {
-                          g_value_init (&pcache->value, GDK_TYPE_RGBA);
-                          g_value_set_boxed (&pcache->value, &rgba);
-                        }
+                        g_value_set_boxed (&pcache->value, &rgba);
                       else
                         {
                           GdkColor rgb;
@@ -2362,12 +2364,13 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                           rgb.green = rgba.green * 65535. + 0.5;
                           rgb.blue = rgba.blue * 65535. + 0.5;
 
-                          g_value_init (&pcache->value, GDK_TYPE_COLOR);
                           g_value_set_boxed (&pcache->value, &rgb);
                         }
                     }
                   else
                     g_param_value_set_default (pspec, &pcache->value);
+
+                  gtk_symbolic_color_unref (color);
                 }
 
               return &pcache->value;
