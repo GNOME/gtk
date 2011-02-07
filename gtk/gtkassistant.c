@@ -1123,6 +1123,8 @@ gtk_assistant_style_updated (GtkWidget *widget)
   GtkAssistantPrivate *priv = assistant->priv;
   GList *list;
 
+  GTK_WIDGET_CLASS (gtk_assistant_parent_class)->style_updated (widget);
+
   list = priv->pages;
 
   while (list)

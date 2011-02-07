@@ -5341,6 +5341,8 @@ gtk_window_style_updated (GtkWidget *widget)
   GtkWindowPrivate *priv = window->priv;
   GdkRectangle rect;
 
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->style_updated (widget);
+
   if (priv->grip_window != NULL && gtk_window_get_resize_grip_area (window, &rect))
     {
       gdk_window_move_resize (priv->grip_window,

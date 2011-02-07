@@ -366,9 +366,9 @@ gtk_link_button_add (GtkContainer *container,
 static void
 gtk_link_button_style_updated (GtkWidget *widget)
 {
-  GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
+  GTK_WIDGET_CLASS (gtk_link_button_parent_class)->style_updated (widget);
 
-  set_link_color (link_button);
+  set_link_color (GTK_LINK_BUTTON (widget));
 }
 
 static void

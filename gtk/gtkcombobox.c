@@ -1347,6 +1347,8 @@ gtk_combo_box_style_updated (GtkWidget *widget)
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *child;
 
+  GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->style_updated (widget);
+
   gtk_combo_box_check_appearance (combo_box);
 
   if (priv->tree_view && priv->cell_view)

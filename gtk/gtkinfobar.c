@@ -495,6 +495,8 @@ gtk_info_bar_style_updated (GtkWidget *widget)
   gint content_area_spacing;
   gint content_area_border;
 
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->style_updated (widget);
+
   gtk_widget_style_get (widget,
                         "button-spacing", &button_spacing,
                         "action-area-border", &action_area_border,

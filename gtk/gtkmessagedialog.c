@@ -997,7 +997,7 @@ gtk_message_dialog_style_updated (GtkWidget *widget)
     {
       gtk_widget_style_get (widget, "message-border",
                             &border_width, NULL);
-      
+
       gtk_container_set_border_width (GTK_CONTAINER (parent),
                                       MAX (0, border_width - 7));
     }

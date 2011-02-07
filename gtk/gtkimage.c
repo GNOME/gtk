@@ -2002,13 +2002,9 @@ gtk_image_get_preferred_height (GtkWidget *widget,
 static void
 gtk_image_style_updated (GtkWidget *widget)
 {
-  GtkImage *image;
-
-  image = GTK_IMAGE (widget);
-
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
-  icon_theme_changed (image);
+  icon_theme_changed (GTK_IMAGE (widget));
 }
 
 static void

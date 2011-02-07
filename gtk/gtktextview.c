@@ -4143,6 +4143,8 @@ gtk_text_view_style_updated (GtkWidget *widget)
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->style_updated (widget);
+
   if (gtk_widget_get_realized (widget))
     {
       gtk_text_view_set_background (text_view);

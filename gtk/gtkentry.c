@@ -4468,6 +4468,8 @@ gtk_entry_style_updated (GtkWidget *widget)
   gint focus_width;
   gboolean interior_focus;
 
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->style_updated (widget);
+
   gtk_widget_style_get (widget,
 			"focus-line-width", &focus_width,
 			"interior-focus", &interior_focus,

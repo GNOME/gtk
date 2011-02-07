@@ -1386,6 +1386,8 @@ gtk_button_style_updated (GtkWidget *widget)
 {
   GtkStyleContext *context;
 
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->style_updated (widget);
+
   context = gtk_widget_get_style_context (widget);
 
   gtk_button_update_image_spacing (GTK_BUTTON (widget), context);

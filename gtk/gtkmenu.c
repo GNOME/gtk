@@ -2445,6 +2445,8 @@ gtk_menu_reorder_child (GtkMenu   *menu,
 static void
 gtk_menu_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->style_updated (widget);
+
   if (gtk_widget_get_realized (widget))
     {
       GtkMenu *menu = GTK_MENU (widget);

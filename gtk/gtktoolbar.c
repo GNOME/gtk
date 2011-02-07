@@ -1868,11 +1868,13 @@ gtk_toolbar_style_updated (GtkWidget *widget)
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
 
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->style_updated (widget);
+
   priv->max_homogeneous_pixels = -1;
 
   if (gtk_widget_get_realized (widget))
     gtk_style_context_set_background (gtk_widget_get_style_context (widget),
-				      gtk_widget_get_window (widget));
+                                      gtk_widget_get_window (widget));
 
   gtk_toolbar_update_button_relief (GTK_TOOLBAR (widget));
 }

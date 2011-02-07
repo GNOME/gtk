@@ -656,6 +656,8 @@ gtk_font_selection_screen_changed (GtkWidget *widget,
 static void
 gtk_font_selection_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_font_selection_parent_class)->style_updated (widget);
+
   /* Maybe fonts where installed or removed... */
   gtk_font_selection_reload_fonts (GTK_FONT_SELECTION (widget));
 }
