@@ -6959,10 +6959,12 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
   /* Handle insensitive first, since it is propagated
    * differently throughout the widget hierarchy.
    */
-  if ((flags & GTK_STATE_FLAG_INSENSITIVE) !=
-      (priv->state_flags & GTK_STATE_FLAG_INSENSITIVE))
-    gtk_widget_set_sensitive (widget,
-                              operation != STATE_CHANGE_UNSET);
+  if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_UNSET))
+    gtk_widget_set_sensitive (widget, TRUE);
+  else if (!(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation != STATE_CHANGE_UNSET))
+    gtk_widget_set_sensitive (widget, FALSE);
+  else if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && !(flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_REPLACE))
+    gtk_widget_set_sensitive (widget, TRUE);
 
   if (operation != STATE_CHANGE_REPLACE)
     flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
@@ -11245,8 +11247,8 @@ gtk_widget_propagate_state (GtkWidget    *widget,
         {
           data->parent_sensitive = gtk_widget_is_sensitive (widget);
 
-          /* Do not propagate insensitive state further */
-          data->flags &= ~(GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_FOCUSED);
+          /* Do not propagate focused state further */
+          data->flags &= ~GTK_STATE_FLAG_FOCUSED;
 
           if (data->use_forall)
             gtk_container_forall (GTK_CONTAINER (widget),
