@@ -1280,6 +1280,10 @@ gtk_style_context_new (void)
  *
  * Adds a style provider to @context, to be used in style construction.
  *
+ * <note><para>If both priorities are the same, A #GtkStyleProvider
+ * added through this function takes precedence over another added
+ * through gtk_style_context_add_provider_for_screen().</para></note>
+ *
  * Since: 3.0
  **/
 void
@@ -1377,6 +1381,10 @@ gtk_style_context_reset_widgets (GdkScreen *screen)
  *
  * GTK+ uses this to make styling information from #GtkSettings
  * available.
+ *
+ * <note><para>If both priorities are the same, A #GtkStyleProvider
+ * added through gtk_style_context_add_provider() takes precedence
+ * over another added through this function.</para></note>
  *
  * Since: 3.0
  **/
