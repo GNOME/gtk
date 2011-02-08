@@ -43,17 +43,21 @@ m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
 m4_define([cairo_required_version], [1.10.0])
 m4_define([gdk_pixbuf_required_version], [2.21.0])
+m4_define([introspection_required_version], [0.10.1])
+
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
 ATK_REQUIRED_VERSION=atk_required_version
 CAIRO_REQUIRED_VERSION=cairo_required_version
 GDK_PIXBUF_REQUIRED_VERSION=gdk_pixbuf_required_version
+INTROSPECTION_REQUIRED_VERSION=introspection_required_version
+
 AC_SUBST(GLIB_REQUIRED_VERSION)
 AC_SUBST(PANGO_REQUIRED_VERSION)
 AC_SUBST(ATK_REQUIRED_VERSION)
 AC_SUBST(CAIRO_REQUIRED_VERSION)
 AC_SUBST(GDK_PIXBUF_REQUIRED_VERSION)
-
+AC_SUBST(INTROSPECTION_REQUIRED_VERSION)
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
@@ -1491,7 +1495,7 @@ GLIB_GSETTINGS
 # GObject introspection
 ##################################################
 
-GOBJECT_INTROSPECTION_CHECK([0.10.1])
+GOBJECT_INTROSPECTION_CHECK(introspection_required_version)
 
 ##################################################
 # Packagekit module
