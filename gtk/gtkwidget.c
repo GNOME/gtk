@@ -484,6 +484,7 @@ enum {
   QUERY_TOOLTIP,
   DRAG_FAILED,
   STYLE_UPDATED,
+  CAPTURED_EVENT,
   LAST_SIGNAL
 };
 
@@ -705,6 +706,7 @@ static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
                                                     GdkDevice *device,
                                                     gboolean   recurse,
                                                     gboolean   enabled);
+static gboolean event_window_is_still_viewable (GdkEvent *event);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -1798,6 +1800,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * #GtkWidget::key-press-event) and finally a generic
    * #GtkWidget::event-after signal.
    *
+   * An event can be captured before ::event signal is emitted by connecting to
+   * ::captured-event event signal.
+   *
    * Returns: %TRUE to stop other handlers from being invoked for the event
    * and to cancel the emission of the second specific ::event signal.
    *   %FALSE to propagate the event further and to allow the emission of
@@ -1832,6 +1837,34 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GtkWidget::captured-event:
+   * @widget: the object which received the signal.
+   * @event: the #GdkEvent which triggered this signal
+   *
+   * The #GtkWidget::captured-event signal is emitted before the
+   * #GtkWidget::event signal to allow capturing an event before the
+   * specialized events are emitted. The event is propagated starting
+   * from the top-level container to the widget that received the event
+   * going down the hierarchy.
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event
+   * and to cancel the emission of the ::event signal.
+   *   %FALSE to propagate the event further and to allow the emission of
+   *   the ::event signal.
+   *
+   * Since: 3.2
+   */
+  widget_signals[CAPTURED_EVENT] =
+    g_signal_new (I_("captured-event"),
+		  G_TYPE_FROM_CLASS (klass),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, captured_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
@@ -5868,6 +5901,36 @@ gtk_widget_event (GtkWidget *widget,
     }
 
   return gtk_widget_event_internal (widget, event);
+}
+
+gboolean
+_gtk_widget_captured_event (GtkWidget *widget,
+                            GdkEvent  *event)
+{
+  gboolean return_val = FALSE;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
+  g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
+
+  if (event->type == GDK_EXPOSE)
+    {
+      g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
+		 "the same effect, call gdk_window_invalidate_rect/region(), "
+		 "followed by gdk_window_process_updates().");
+      return TRUE;
+    }
+
+  if (!event_window_is_still_viewable (event))
+    return TRUE;
+
+  g_object_ref (widget);
+
+  g_signal_emit (widget, widget_signals[CAPTURED_EVENT], 0, event, &return_val);
+  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
+
+  g_object_unref (widget);
+
+  return return_val;
 }
 
 /* Returns TRUE if a translation should be done */

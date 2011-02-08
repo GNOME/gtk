@@ -74,6 +74,10 @@ gboolean _gtk_translate_keyboard_accel_state   (GdkKeymap       *keymap,
                                                 gint            *level,
                                                 GdkModifierType *consumed_modifiers);
 
+gboolean        _gtk_propagate_captured_event  (GtkWidget       *widget,
+                                                GdkEvent        *event,
+                                                GtkWidget       *topmost);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
