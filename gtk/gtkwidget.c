@@ -10437,9 +10437,13 @@ gtk_widget_pop_composite_child (void)
 
 static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
-				   GtkTextDirection  old_dir)
+                                   GtkTextDirection  old_dir)
 {
   gtk_widget_update_pango_context (widget);
+
+  if (widget->priv->context)
+    gtk_style_context_set_direction (widget->priv->context,
+                                     gtk_widget_get_direction (widget));
 
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }
@@ -10464,7 +10468,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
  **/
 void
 gtk_widget_set_direction (GtkWidget        *widget,
-			  GtkTextDirection  dir)
+                          GtkTextDirection  dir)
 {
   GtkTextDirection old_dir;
 
@@ -10476,13 +10480,7 @@ gtk_widget_set_direction (GtkWidget        *widget,
   widget->priv->direction = dir;
 
   if (old_dir != gtk_widget_get_direction (widget))
-    {
-      if (widget->priv->context)
-        gtk_style_context_set_direction (widget->priv->context,
-                                         gtk_widget_get_direction (widget));
-
-      gtk_widget_emit_direction_changed (widget, old_dir);
-    }
+    gtk_widget_emit_direction_changed (widget, old_dir);
 }
 
 /**
