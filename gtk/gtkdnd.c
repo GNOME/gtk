@@ -964,15 +964,15 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
  * @widget: a #GtkWidget
  * @context: drag context
  * @target: format to retrieve the data in.
- * @time: timestamp of triggering event.
+ * @time_: timestamp of triggering event.
  *
  * Get the data for a drag or drop
  */
-void 
+void
 gtk_drag_get_data (GtkWidget      *widget,
 		   GdkDragContext *context,
 		   GdkAtom         target,
-		   guint32         time)
+		   guint32         time_)
 {
   GtkWidget *selection_widget;
 
@@ -983,7 +983,7 @@ gtk_drag_get_data (GtkWidget      *widget,
 
   g_object_ref (context);
   g_object_ref (widget);
-  
+
   g_signal_connect (selection_widget, "selection-received",
 		    G_CALLBACK (gtk_drag_selection_received), widget);
 
@@ -992,7 +992,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   gtk_selection_convert (selection_widget,
 			 gdk_drag_get_selection (context),
 			 target,
-			 time);
+			 time_);
 }
 
 
