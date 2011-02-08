@@ -30,7 +30,7 @@
 #include <string.h>
 
 #include "gtkcontainer.h"
-#include "gtkimage.h"
+#include "gtkimageprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkstock.h"
 #include "gtkicontheme.h"

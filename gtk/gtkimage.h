@@ -50,49 +50,6 @@ typedef struct _GtkImage              GtkImage;
 typedef struct _GtkImagePrivate       GtkImagePrivate;
 typedef struct _GtkImageClass         GtkImageClass;
 
-typedef struct _GtkImagePixbufData  GtkImagePixbufData;
-typedef struct _GtkImageStockData   GtkImageStockData;
-typedef struct _GtkImageIconSetData GtkImageIconSetData;
-typedef struct _GtkImageAnimationData GtkImageAnimationData;
-typedef struct _GtkImageIconNameData  GtkImageIconNameData;
-typedef struct _GtkImageGIconData     GtkImageGIconData;
-
-struct _GtkImagePixbufData
-{
-  GdkPixbuf *pixbuf;
-};
-
-struct _GtkImageStockData
-{
-  gchar *stock_id;
-};
-
-struct _GtkImageIconSetData
-{
-  GtkIconSet *icon_set;
-};
-
-struct _GtkImageAnimationData
-{
-  GdkPixbufAnimation *anim;
-  GdkPixbufAnimationIter *iter;
-  guint frame_timeout;
-};
-
-struct _GtkImageIconNameData
-{
-  gchar *icon_name;
-  GdkPixbuf *pixbuf;
-  guint theme_change_id;
-};
-
-struct _GtkImageGIconData
-{
-  GIcon *icon;
-  GdkPixbuf *pixbuf;
-  guint theme_change_id;
-};
-
 /**
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
