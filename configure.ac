@@ -38,13 +38,12 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.27.5])
+m4_define([glib_required_version], [2.28])
 m4_define([pango_required_version], [1.20])
-m4_define([atk_required_version], [1.29.2])
+m4_define([atk_required_version], [1.30])
 m4_define([cairo_required_version], [1.10.0])
-m4_define([gdk_pixbuf_required_version], [2.21.0])
+m4_define([gdk_pixbuf_required_version], [2.22.0])
 m4_define([introspection_required_version], [0.10.1])
-
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
 ATK_REQUIRED_VERSION=atk_required_version
