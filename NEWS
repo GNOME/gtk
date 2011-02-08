@@ -1,3 +1,32 @@
+Overview of Changes in GTK+ 3.0.0
+=================================
+
+* Bugs fixed:
+ 632775 Back / Forward button's icons don't respect RTL settings
+ 639846 GdkEventScroll events are sent twice
+ 639945 Gtk.Widget does not have drag_* methods (but in pygtk it did)
+ 640801 Crash gtk_tree_view_reset_header_styles at gtktreeview.c:11871
+ 641196 Fix another GtkFixed regression, in gtk_fixed_forall()
+ 641302 show something nicer than XF86AudioMute etc
+ 641367 [region] gnome-applications ignore layout switching
+ 641409 not chaining up in ::style-updated
+ 641429 Errors creating a GtkWidget without a display
+ 641431 Apply button goes grey after two mode switching
+ 641517 "Migrating from libunique to GtkApplication" examples do not do...
+ 641558 GtkCssProvider leaks path string
+ 641621 Use faster new G_VALUE_COLLECT_INIT variant instead...
+ 641640 Update autotools configuration
+
+* Translation updates:
+ Arabic
+ English
+ Galician
+ Hebrew
+ Korean
+ Norwegian bokmål
+ Polish
+
+
 Overview of Changes in GTK+ 2.99.3
 ==================================
 
