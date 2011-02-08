@@ -67,6 +67,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testoffscreen			\
 	testoffscreenwindow		\
 	testorientable			\
+	testpicture			\
 	testprint			\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
@@ -167,6 +168,7 @@ testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
 testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
+testpicture_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
@@ -249,6 +251,7 @@ testoffscreenwindow_LDADD = $(LDADDS)
 testappchooser_LDADD = $(LDADDS)
 testappchooserbutton_LDADD = $(LDADDS)
 testorientable_LDADD = $(LDADDS)
+testpicture_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrecentchoosermenu_LDADD = $(LDADDS)
