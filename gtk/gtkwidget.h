@@ -425,6 +425,8 @@ struct _GtkWidgetClass
 
   void         (* style_updated)          (GtkWidget *widget);
 
+  void         (* captured_event)         (GtkWidget *widget,
+                                           GdkEvent  *event);
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
@@ -436,7 +438,6 @@ struct _GtkWidgetClass
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
 };
 
 struct _GtkWidgetAuxInfo
