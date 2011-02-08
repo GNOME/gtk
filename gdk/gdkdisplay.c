@@ -1536,7 +1536,7 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  * @display:          a #GdkDisplay
  * @clipboard_window: a #GdkWindow belonging to the clipboard owner
  * @time_:            a timestamp
- * @targets:	      (array length=n_targets): an array of targets
+ * @targets:          (array length=n_targets): an array of targets
  *                    that should be saved, or %NULL
  *                    if all available targets should be saved.
  * @n_targets:        length of the @targets array
