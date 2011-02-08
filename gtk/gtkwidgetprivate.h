@@ -163,6 +163,9 @@ void              _gtk_widget_set_style                    (GtkWidget *widget,
                                                             GtkStyle  *style);
 
 
+gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
+                                                            GdkEvent  *event);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */
