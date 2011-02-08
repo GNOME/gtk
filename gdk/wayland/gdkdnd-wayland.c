@@ -160,12 +160,8 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->get_selection = gdk_wayland_drag_context_get_selection;
 }
 
-GdkNativeWindow
-_gdk_wayland_display_get_drag_protocol (GdkDisplay      *display,
-					GdkNativeWindow  xid,
-					GdkDragProtocol *protocol,
-					guint           *version)
-
+GdkDragProtocol
+_gdk_wayland_window_get_drag_protocol (GdkWindow *window, GdkWindow **target)
 {
   return 0;
 }

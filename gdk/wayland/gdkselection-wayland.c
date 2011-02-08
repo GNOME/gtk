@@ -43,8 +43,8 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
 }
 
 void
-_gdk_wayland_display_send_selection_notify (GdkDisplay       *display,
-					    GdkNativeWindow  requestor,
+_gdk_wayland_display_send_selection_notify (GdkDisplay *dispay,
+					    GdkWindow        *requestor,
 					    GdkAtom          selection,
 					    GdkAtom          target,
 					    GdkAtom          property,

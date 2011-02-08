@@ -154,8 +154,6 @@ void
 _gdk_wayland_window_update_size (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkDisplayWayland *display_wayland =
-    GDK_DISPLAY_WAYLAND (gdk_window_get_display (impl->wrapper));
   GdkRectangle area;
   cairo_region_t *region;
 
@@ -234,10 +232,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					 gint           attributes_mask)
 {
   GdkWindowImplWayland *impl;
-  GdkDisplayWayland *display_wayland;
   const char *title;
-
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
@@ -356,14 +351,11 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 static void
 gdk_window_impl_wayland_finalize (GObject *object)
 {
-  GdkWindow *wrapper;
   GdkWindowImplWayland *impl;
 
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (object));
 
   impl = GDK_WINDOW_IMPL_WAYLAND (object);
-
-  wrapper = impl->wrapper;
 
   g_free (impl->toplevel);
 
@@ -575,10 +567,6 @@ gdk_window_wayland_move_resize (GdkWindow *window,
 				gint       width,
 				gint       height)
 {
-  GdkWindowImplWayland *impl;
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
   window->x = x;
   window->y = y;
   if (width > 0)
@@ -1131,35 +1119,35 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   switch (edge)
     {
     case GDK_WINDOW_EDGE_NORTH_WEST:
-      grab_type = WL_GRAB_RESIZE_TOP_LEFT;
+      grab_type = WL_SHELL_RESIZE_TOP_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_NORTH:
-      grab_type = WL_GRAB_RESIZE_TOP;
+      grab_type = WL_SHELL_RESIZE_TOP;
       break;
 
     case GDK_WINDOW_EDGE_NORTH_EAST:
-      grab_type = WL_GRAB_RESIZE_RIGHT;
+      grab_type = WL_SHELL_RESIZE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_WEST:
-      grab_type = WL_GRAB_RESIZE_LEFT;
+      grab_type = WL_SHELL_RESIZE_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_EAST:
-      grab_type = WL_GRAB_RESIZE_RIGHT;
+      grab_type = WL_SHELL_RESIZE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_WEST:
-      grab_type = WL_GRAB_RESIZE_BOTTOM_LEFT;
+      grab_type = WL_SHELL_RESIZE_BOTTOM_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH:
-      grab_type = WL_GRAB_RESIZE_BOTTOM;
+      grab_type = WL_SHELL_RESIZE_BOTTOM;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_EAST:
-      grab_type = WL_GRAB_RESIZE_BOTTOM_RIGHT;
+      grab_type = WL_SHELL_RESIZE_BOTTOM_RIGHT;
       break;
 
     default:
@@ -1210,15 +1198,11 @@ gdk_wayland_window_enable_synchronized_configure (GdkWindow *window)
 static void
 gdk_wayland_window_configure_finished (GdkWindow *window)
 {
-  GdkWindowImplWayland *impl;
-
   if (!WINDOW_IS_TOPLEVEL (window))
     return;
 
   if (!GDK_IS_WINDOW_IMPL_WAYLAND (window->impl))
     return;
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   fprintf(stderr, "configure %p finished\n", window);
 }
@@ -1238,10 +1222,6 @@ gdk_wayland_window_set_composited (GdkWindow *window,
 static void
 gdk_wayland_window_destroy_notify (GdkWindow *window)
 {
-  GdkWindowImplWayland *window_impl;
-
-  window_impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (GDK_WINDOW_TYPE(window) != GDK_WINDOW_FOREIGN)
@@ -1416,6 +1396,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->set_opacity = gdk_wayland_window_set_opacity;
   impl_class->set_composited = gdk_wayland_window_set_composited;
   impl_class->destroy_notify = gdk_wayland_window_destroy_notify;
+  impl_class->get_drag_protocol = _gdk_wayland_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_wayland_window_register_dnd;
   impl_class->drag_begin = _gdk_wayland_window_drag_begin;
   impl_class->process_updates_recurse = gdk_wayland_window_process_updates_recurse;

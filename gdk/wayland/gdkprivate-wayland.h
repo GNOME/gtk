@@ -67,10 +67,9 @@ void       _gdk_wayland_display_get_maximal_cursor_size (GdkDisplay *display,
 gboolean   _gdk_wayland_display_supports_cursor_alpha (GdkDisplay *display);
 gboolean   _gdk_wayland_display_supports_cursor_color (GdkDisplay *display);
 
-GdkNativeWindow _gdk_wayland_display_get_drag_protocol (GdkDisplay      *display,
-							GdkNativeWindow  xid,
-							GdkDragProtocol *protocol,
-							guint           *version);
+GdkDragProtocol _gdk_wayland_window_get_drag_protocol (GdkWindow *window,
+						       GdkWindow **target);
+
 void            _gdk_wayland_window_register_dnd (GdkWindow *window);
 GdkDragContext *_gdk_wayland_window_drag_begin (GdkWindow *window,
 						GdkDevice *device,
@@ -93,8 +92,8 @@ gboolean   _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
 						     GdkAtom     selection,
 						     guint32     time,
 						     gboolean    send_event);
-void       _gdk_wayland_display_send_selection_notify (GdkDisplay       *display,
-						       GdkNativeWindow  requestor,
+void       _gdk_wayland_display_send_selection_notify (GdkDisplay *dispay,
+						       GdkWindow        *requestor,
 						       GdkAtom          selection,
 						       GdkAtom          target,
 						       GdkAtom          property,

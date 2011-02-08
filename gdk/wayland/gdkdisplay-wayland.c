@@ -306,7 +306,6 @@ _gdk_wayland_display_open (const gchar *display_name)
   struct wl_display *wl_display;
   GdkDisplay *display;
   GdkDisplayWayland *display_wayland;
-  GdkWindowAttr attr;
 
   gint i;
 
@@ -339,14 +338,6 @@ _gdk_wayland_display_open (const gchar *display_name)
   gdk_display_init_egl(display);
 
   display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
-
-  attr.window_type = GDK_WINDOW_TOPLEVEL;
-  attr.wclass = GDK_INPUT_OUTPUT;
-  attr.x = 10;
-  attr.y = 10;
-  attr.width = 10;
-  attr.height = 10;
-  attr.event_mask = 0;
 
   gdk_input_init (display);
 
@@ -566,33 +557,6 @@ gdk_wayland_display_list_devices (GdkDisplay *display)
   return GDK_DISPLAY_WAYLAND (display)->input_devices;
 }
 
-static gboolean
-gdk_wayland_display_send_client_message (GdkDisplay     *display,
-					 GdkEvent       *event,
-					 GdkNativeWindow winid)
-{
-  return 0;
-}
-
-static void
-gdk_wayland_display_add_client_message_filter (GdkDisplay   *display,
-					       GdkAtom       message_type,
-					       GdkFilterFunc func,
-					       gpointer      data)
-{
-  GdkClientFilter *filter;
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  filter = g_new (GdkClientFilter, 1);
-
-  filter->type = message_type;
-  filter->function = func;
-  filter->data = data;
-
-  GDK_DISPLAY_WAYLAND(display)->client_filters =
-    g_list_append (GDK_DISPLAY_WAYLAND (display)->client_filters,
-		   filter);
-}
-
 static void
 gdk_wayland_display_before_process_all_updates (GdkDisplay *display)
 {
@@ -754,15 +718,12 @@ _gdk_display_wayland_class_init (GdkDisplayWaylandClass * class)
   display_class->supports_input_shapes = gdk_wayland_display_supports_input_shapes;
   display_class->supports_composite = gdk_wayland_display_supports_composite;
   display_class->list_devices = gdk_wayland_display_list_devices;
-  display_class->send_client_message = gdk_wayland_display_send_client_message;
-  display_class->add_client_message_filter = gdk_wayland_display_add_client_message_filter;
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
-  display_class->get_drag_protocol = _gdk_wayland_display_get_drag_protocol;
+  display_class->get_default_cursor_size = _gdk_wayland_display_get_default_cursor_size;
+  display_class->get_maximal_cursor_size = _gdk_wayland_display_get_maximal_cursor_size;
   display_class->get_cursor_for_type = _gdk_wayland_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_wayland_display_get_cursor_for_name;
   display_class->get_cursor_for_pixbuf = _gdk_wayland_display_get_cursor_for_pixbuf;
-  display_class->get_default_cursor_size = _gdk_wayland_display_get_default_cursor_size;
-  display_class->get_maximal_cursor_size = _gdk_wayland_display_get_maximal_cursor_size;
   display_class->supports_cursor_alpha = _gdk_wayland_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_wayland_display_supports_cursor_color;
   display_class->before_process_all_updates = gdk_wayland_display_before_process_all_updates;
