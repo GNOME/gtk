@@ -80,6 +80,7 @@ gdk_public_h_sources = 				\
 	gdkmain.h				\
 	gdkpango.h				\
 	gdkpicture.h				\
+	gdkpictureloader.h			\
 	gdkpixbuf.h				\
 	gdkpixbufpicture.h			\
 	gdkprivate.h				\
@@ -131,6 +132,7 @@ gdk_c_sources = 				\
 	gdkoffscreenwindow.c			\
 	gdkpango.c				\
 	gdkpicture.c				\
+	gdkpictureloader.c			\
 	gdkpixbuf-drawable.c			\
 	gdkpixbufpicture.c			\
 	gdkrectangle.c				\
