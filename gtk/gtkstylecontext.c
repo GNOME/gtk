@@ -716,7 +716,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                             (GDestroyNotify) style_data_free);
   priv->theming_engine = g_object_ref ((gpointer) gtk_theming_engine_load (NULL));
 
-  priv->direction = GTK_TEXT_DIR_RTL;
+  priv->direction = GTK_TEXT_DIR_LTR;
 
   priv->screen = gdk_screen_get_default ();
 
