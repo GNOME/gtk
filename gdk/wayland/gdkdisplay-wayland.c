@@ -40,7 +40,7 @@
 #include "gdkdevicemanager-wayland.h"
 #include "gdkkeysprivate.h"
 
-#include <xf86drm.h>
+#include <wayland-egl.h>
 
 typedef struct _GdkEventTypeWayland GdkEventTypeWayland;
 
@@ -121,28 +121,6 @@ gdk_input_init (GdkDisplay *display)
 }
 
 static void
-drm_handle_device(void *data, struct wl_drm *compositor, const char *device)
-{
-  GdkDisplayWayland *display_wayland = data;
-
-  fprintf(stderr, "display name: %s\n", device);
-
-  display_wayland->device_name = g_strdup (device);
-}
-
-static void drm_handle_authenticated(void *data, struct wl_drm *drm)
-{
-  GdkDisplayWayland *display_wayland = data;
-
-  display_wayland->authenticated = TRUE;
-}
-
-static const struct wl_drm_listener drm_listener = {
-	drm_handle_device,
-	drm_handle_authenticated
-};
-
-static void
 shell_handle_configure(void *data, struct wl_shell *shell,
 		       uint32_t time, uint32_t edges,
 		       struct wl_surface *surface,
@@ -205,10 +183,6 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
 
   if (strcmp(interface, "compositor") == 0) {
     display_wayland->compositor = wl_compositor_create(display, id);
-  } else if (strcmp(interface, "drm") == 0) {
-    display_wayland->drm = wl_drm_create(display, id);
-    wl_drm_add_listener(display_wayland->drm,
-			&drm_listener, display_wayland);
   } else if (strcmp(interface, "shell") == 0) {
     display_wayland->shell = wl_shell_create(display, id);
     wl_shell_add_listener(display_wayland->shell,
@@ -228,36 +202,17 @@ gdk_display_init_egl(GdkDisplay *display)
 {
   GdkDisplayWayland *display_wayland = GDK_DISPLAY_WAYLAND (display);
   EGLint major, minor, i;
-  drm_magic_t magic;
   void *p;
 
   static const struct { const char *f; unsigned int offset; }
   extension_functions[] = {
-    { "eglCreateDRMImageMESA", offsetof(GdkDisplayWayland, create_drm_image) },
     { "glEGLImageTargetTexture2DOES", offsetof(GdkDisplayWayland, image_target_texture_2d) },
-    { "eglExportDRMImageMESA", offsetof(GdkDisplayWayland, export_drm_image) },
+    { "eglCreateImageKHR", offsetof(GdkDisplayWayland, create_image) },
     { "eglDestroyImageKHR", offsetof(GdkDisplayWayland, destroy_image) }
   };
 
-  display_wayland->fd = open(display_wayland->device_name, O_RDWR);
-  if (display_wayland->fd < 0) {
-    fprintf(stderr, "drm open failed: %m\n");
-    return FALSE;
-  }
-
-  if (drmGetMagic(display_wayland->fd, &magic))
-    {
-      fprintf(stderr, "DRI2: failed to get drm magic");
-      return FALSE;
-    }
-
-  /* Authenticate and wait for authenticated event */
-  wl_drm_authenticate(display_wayland->drm, magic);
-  wl_display_iterate(display_wayland->wl_display, WL_DISPLAY_WRITABLE);
-  while (!display_wayland->authenticated)
-    wl_display_iterate(display_wayland->wl_display, WL_DISPLAY_READABLE);
-
-  display_wayland->egl_display = eglGetDRMDisplayMESA(display_wayland->fd);
+  display_wayland->egl_display =
+    eglGetDisplay((EGLNativeDisplayType) display_wayland->native_display);
   if (!eglInitialize(display_wayland->egl_display, &major, &minor)) {
     fprintf(stderr, "failed to initialize display\n");
     return FALSE;
@@ -318,6 +273,12 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   display_wayland->wl_display = wl_display;
 
+  display_wayland->native_display = wl_egl_display_create(wl_display);
+  if (display_wayland->native_display == NULL) {
+    wl_display_destroy(wl_display);
+    return NULL;
+  }
+
   /* initialize the display's screens */
   display_wayland->screens = g_new (GdkScreen *, 1);
   for (i = 0; i < 1; i++)
@@ -331,9 +292,6 @@ _gdk_wayland_display_open (const gchar *display_name)
   /* Set up listener so we'll catch all events. */
   wl_display_add_global_listener(display_wayland->wl_display,
 				 gdk_display_handle_global, display_wayland);
-
-  /* Process connection events. */
-  wl_display_iterate(display_wayland->wl_display, WL_DISPLAY_READABLE);
 
   gdk_display_init_egl(display);
 
@@ -368,6 +326,9 @@ gdk_wayland_display_dispose (GObject *object)
       g_source_unref (display_wayland->event_source);
       display_wayland->event_source = NULL;
     }
+
+  eglTerminate(display_wayland->egl_display);
+  wl_egl_display_destroy(display_wayland->native_display);
 
   G_OBJECT_CLASS (_gdk_display_wayland_parent_class)->dispose (object);
 }

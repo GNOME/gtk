@@ -28,6 +28,8 @@
 #include <wayland-client.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
 #include <cairo-gl.h>
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -139,23 +141,19 @@ struct _GdkDisplayWayland
   GdkWindow *active_offscreen_window;
 
   /* Wayland fields below */
-  char *device_name;
   struct wl_display *wl_display;
-  struct wl_drm *drm;
+  struct wl_egl_display *native_display;
   struct wl_compositor *compositor;
   struct wl_shell *shell;
   struct wl_output *output;
   struct wl_input_device *input_device;
   GSource *event_source;
-  int fd;
   EGLDisplay egl_display;
   EGLContext egl_context;
   cairo_device_t *cairo_device;
-  int authenticated;
 
-  PFNEGLCREATEDRMIMAGEMESA create_drm_image;
-  PFNEGLEXPORTDRMIMAGEMESA export_drm_image;
   PFNGLEGLIMAGETARGETTEXTURE2DOESPROC image_target_texture_2d;
+  PFNEGLCREATEIMAGEKHRPROC create_image;
   PFNEGLDESTROYIMAGEKHRPROC destroy_image;
 };
 

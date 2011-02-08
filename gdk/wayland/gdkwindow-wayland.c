@@ -40,6 +40,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <wayland-egl.h>
+
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
@@ -295,6 +297,7 @@ static const cairo_user_data_key_t gdk_wayland_cairo_key;
 typedef struct _GdkWaylandCairoSurfaceData {
   EGLImageKHR image;
   GLuint texture;
+  struct wl_egl_pixmap *pixmap;
   struct wl_buffer *buffer;
   GdkDisplayWayland *display;
 } GdkWaylandCairoSurfaceData;
@@ -304,24 +307,12 @@ _gdk_wayland_surface_get_buffer (GdkDisplayWayland *display,
 				 cairo_surface_t *surface)
 {
   GdkWaylandCairoSurfaceData *data;
-  EGLint name, stride;
-  struct wl_visual *visual;
-  int width, height;
 
   data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
 
-  if (data->buffer)
-    return data->buffer;
-
-  visual =
-    wl_display_get_premultiplied_argb_visual(display->wl_display);
-
-  width = cairo_gl_surface_get_width (surface);
-  height = cairo_gl_surface_get_height (surface);
-  display->export_drm_image (display->egl_display,
-			     data->image, &name, NULL, &stride);
-  data->buffer = wl_drm_create_buffer(display->drm,
-				      name, width, height, stride, visual);
+  if (!data->buffer)
+    data->buffer =
+      wl_egl_pixmap_create_buffer(display->native_display, data->pixmap);
 
   return data->buffer;
 }
@@ -387,21 +378,18 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
 {
   GdkWaylandCairoSurfaceData *data;
   cairo_surface_t *surface;
-
-  EGLint image_attribs[] = {
-    EGL_WIDTH,			0,
-    EGL_HEIGHT,			0,
-    EGL_DRM_BUFFER_FORMAT_MESA,	EGL_DRM_BUFFER_FORMAT_ARGB32_MESA,
-    EGL_DRM_BUFFER_USE_MESA,	EGL_DRM_BUFFER_USE_SCANOUT_MESA,
-    EGL_NONE
-  };
+  struct wl_visual *visual;
 
   data = g_new (GdkWaylandCairoSurfaceData, 1);
   data->display = display;
   data->buffer = NULL;
-  image_attribs[1] = width;
-  image_attribs[3] = height;
-  data->image = display->create_drm_image(display->egl_display, image_attribs);
+  visual = wl_display_get_premultiplied_argb_visual(display->wl_display);
+  data->pixmap =
+    wl_egl_pixmap_create(display->native_display, width, height, visual, 0);
+  data->image =
+    display->create_image(display->egl_display, NULL, EGL_NATIVE_PIXMAP_KHR,
+			  (EGLClientBuffer) data->pixmap, NULL);
+
   glGenTextures(1, &data->texture);
   glBindTexture(GL_TEXTURE_2D, data->texture);
   display->image_target_texture_2d(GL_TEXTURE_2D, data->image);
