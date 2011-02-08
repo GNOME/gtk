@@ -225,6 +225,9 @@ gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
 
 gchar *_gtk_get_lc_ctype (void);
 
+gboolean _gtk_module_has_mixed_deps (GModule *module);
+
+
 G_END_DECLS
 
 #endif /* __GTK_MAIN_H__ */
