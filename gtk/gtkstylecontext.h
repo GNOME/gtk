@@ -40,11 +40,12 @@ G_BEGIN_DECLS
 
 typedef struct _GtkStyleContext GtkStyleContext;
 typedef struct _GtkStyleContextClass GtkStyleContextClass;
+typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
 
 struct _GtkStyleContext
 {
   GObject parent_object;
-  gpointer priv;
+  GtkStyleContextPrivate *priv;
 };
 
 struct _GtkStyleContextClass

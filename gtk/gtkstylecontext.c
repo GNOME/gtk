@@ -406,7 +406,6 @@
  * </refsect2>
  */
 
-typedef struct GtkStyleContextPrivate GtkStyleContextPrivate;
 typedef struct GtkStyleProviderData GtkStyleProviderData;
 typedef struct GtkStyleInfo GtkStyleInfo;
 typedef struct GtkRegion GtkRegion;
@@ -468,7 +467,7 @@ struct AnimationInfo
   GArray *rectangles;
 };
 
-struct GtkStyleContextPrivate
+struct _GtkStyleContextPrivate
 {
   GdkScreen *screen;
 
