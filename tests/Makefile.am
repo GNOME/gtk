@@ -108,7 +108,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtoplevelembed		\
 	testnoscreen			\
 	testtreepos			\
-	testsensitive
+	testsensitive			\
+	testtextview
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -207,6 +208,7 @@ testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
 testnoscreen_DEPENDENCIES = $(TEST_DEPS)
 testtreepos_DEPENDENCIES = $(TEST_DEPS)
 testsensitive_DEPENDENCIES = $(TEST_DEPS)
+testtextview_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -291,6 +293,7 @@ testtoplevelembed_LDADD = $(LDADDS)
 testnoscreen_LDADD = $(LDADDS)
 testtreepos_LDADD = $(LDADDS)
 testsensitive_LDADD = $(LDADDS)
+testtextview_LDADD = $(LDADDS)
 
 
 testentrycompletion_SOURCES = 	\
@@ -435,6 +438,9 @@ testswitch_SOURCES = testswitch.c
 styleexamples_SOURCES = styleexamples.c
 
 testtoplevelembed_SOURCES = testtoplevelembed.c
+
+testtextview_SOURCES = testtextview.c
+
 
 EXTRA_DIST += 			\
 	gradient1.png		\

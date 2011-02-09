@@ -61,17 +61,17 @@
  * Creates a #GtkTextAttributes, which describes
  * a set of properties on some text.
  * 
- * Return value: a new #GtkTextAttributes
- **/
+ * Return value: a new #GtkTextAttributes,
+ *     free with gtk_text_attributes_unref().
+ */
 GtkTextAttributes*
 gtk_text_attributes_new (void)
 {
   GtkTextAttributes *values;
 
-  values = g_new0 (GtkTextAttributes, 1);
+  values = g_slice_new0 (GtkTextAttributes);
 
   /* 0 is a valid value for most of the struct */
-
   values->refcount = 1;
 
   values->language = gtk_get_default_language ();
@@ -79,18 +79,19 @@ gtk_text_attributes_new (void)
   values->font_scale = 1.0;
 
   values->editable = TRUE;
-      
+
   return values;
 }
 
 /**
  * gtk_text_attributes_copy:
  * @src: a #GtkTextAttributes to be copied
- * 
+ *
  * Copies @src and returns a new #GtkTextAttributes.
- * 
- * Return value: a copy of @src
- **/
+ *
+ * Return value: a copy of @src,
+ *     free with gtk_text_attributes_unref()
+ */
 GtkTextAttributes*
 gtk_text_attributes_copy (GtkTextAttributes *src)
 {
@@ -110,10 +111,10 @@ G_DEFINE_BOXED_TYPE (GtkTextAttributes, gtk_text_attributes,
  * gtk_text_attributes_copy_values:
  * @src: a #GtkTextAttributes
  * @dest: another #GtkTextAttributes
- * 
- * Copies the values from @src to @dest so that @dest has the same values
- * as @src. Frees existing values in @dest.
- **/
+ *
+ * Copies the values from @src to @dest so that @dest has
+ * the same values as @src. Frees existing values in @dest.
+ */
 void
 gtk_text_attributes_copy_values (GtkTextAttributes *src,
                                  GtkTextAttributes *dest)
@@ -124,10 +125,24 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
     return;
 
   /* Remove refs */
+  if (dest->tabs)
+    pango_tab_array_free (dest->tabs);
 
   if (dest->font)
     pango_font_description_free (dest->font);
-  
+
+  if (dest->pg_bg_color)
+    gdk_color_free (dest->pg_bg_color);
+
+  if (dest->pg_bg_rgba)
+    gdk_rgba_free (dest->pg_bg_rgba);
+
+  if (dest->appearance.rgba[0])
+    gdk_rgba_free (dest->appearance.rgba[0]);
+
+  if (dest->appearance.rgba[1])
+    gdk_rgba_free (dest->appearance.rgba[1]);
+
   /* Copy */
   orig_refcount = dest->refcount;
 
@@ -138,11 +153,20 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 
   dest->language = src->language;
 
-  if (dest->font)
+  if (src->font)
     dest->font = pango_font_description_copy (src->font);
-  
+
   if (src->pg_bg_color)
     dest->pg_bg_color = gdk_color_copy (src->pg_bg_color);
+
+  if (src->pg_bg_rgba)
+    dest->pg_bg_rgba = gdk_rgba_copy (src->pg_bg_rgba);
+
+  if (src->appearance.rgba[0])
+    dest->appearance.rgba[0] = gdk_rgba_copy (src->appearance.rgba[0]);
+
+  if (src->appearance.rgba[1])
+    dest->appearance.rgba[1] = gdk_rgba_copy (src->appearance.rgba[1]);
 
   dest->refcount = orig_refcount;
 }
@@ -191,7 +215,16 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
       if (values->pg_bg_color)
 	gdk_color_free (values->pg_bg_color);
 
-      g_free (values);
+      if (values->pg_bg_rgba)
+	gdk_rgba_free (values->pg_bg_rgba);
+
+      if (values->appearance.rgba[0])
+	gdk_rgba_free (values->appearance.rgba[0]);
+
+      if (values->appearance.rgba[1])
+	gdk_rgba_free (values->appearance.rgba[1]);
+
+      g_slice_free (GtkTextAttributes, values);
     }
 }
 
@@ -216,16 +249,41 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->priv->bg_color_set)
         {
-          dest->appearance.bg_color = vals->appearance.bg_color;
+	  if (dest->appearance.rgba[0])
+	    {
+	      gdk_rgba_free (dest->appearance.rgba[0]);
+	      dest->appearance.rgba[0] = NULL;
+	    }
+
+	  if (vals->appearance.rgba[0])
+	    dest->appearance.rgba[0] = gdk_rgba_copy (vals->appearance.rgba[0]);
 
           dest->appearance.draw_bg = TRUE;
         }
+
       if (tag->priv->fg_color_set)
-        dest->appearance.fg_color = vals->appearance.fg_color;
+	{
+	  if (dest->appearance.rgba[1])
+	    {
+	      gdk_rgba_free (dest->appearance.rgba[1]);
+	      dest->appearance.rgba[1] = NULL;
+	    }
+
+	  if (vals->appearance.rgba[1])
+	    dest->appearance.rgba[1] = gdk_rgba_copy (vals->appearance.rgba[1]);
+	}
 
       if (tag->priv->pg_bg_color_set)
         {
-          dest->pg_bg_color = gdk_color_copy (vals->pg_bg_color);
+	  if (dest->pg_bg_rgba)
+	    {
+	      gdk_rgba_free (dest->pg_bg_rgba);
+	      dest->pg_bg_rgba = NULL;
+
+	    }
+
+	  if (vals->pg_bg_rgba)
+	    dest->pg_bg_rgba = gdk_rgba_copy (vals->pg_bg_rgba);
         }
 
       if (vals->font)

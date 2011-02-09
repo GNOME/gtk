@@ -110,8 +110,11 @@ struct _GtkTextRenderer
   
   GdkColor *error_color;	/* Error underline color for this widget */
   GList *widgets;		/* widgets encountered when drawing */
-  
-  int state;
+
+  GdkRGBA rgba[4];
+  guint8  rgba_set[4];
+
+  guint state : 2;
 };
 
 struct _GtkTextRendererClass
@@ -122,45 +125,34 @@ struct _GtkTextRendererClass
 G_DEFINE_TYPE (GtkTextRenderer, _gtk_text_renderer, PANGO_TYPE_RENDERER)
 
 static void
-text_renderer_set_gdk_color (GtkTextRenderer *text_renderer,
-			     PangoRenderPart  part,
-			     GdkColor        *gdk_color)
-{
-  PangoRenderer *renderer = PANGO_RENDERER (text_renderer);
-
-  if (gdk_color)
-    {
-      PangoColor color;
-
-      color.red = gdk_color->red;
-      color.green = gdk_color->green;
-      color.blue = gdk_color->blue;
-      
-      pango_renderer_set_color (renderer, part, &color);
-    }
-  else
-    pango_renderer_set_color (renderer, part, NULL);
-}
-
-static void
 text_renderer_set_rgba (GtkTextRenderer *text_renderer,
 			PangoRenderPart  part,
-			GdkRGBA         *rgba)
+			const GdkRGBA   *rgba)
 {
   PangoRenderer *renderer = PANGO_RENDERER (text_renderer);
+  PangoColor     dummy = { 0, };
+
+  if ((!rgba && !text_renderer->rgba_set[part]) ||
+      (rgba && text_renderer->rgba_set[part] &&
+       text_renderer->rgba[part].red == rgba->red &&
+       text_renderer->rgba[part].green == rgba->green &&
+       text_renderer->rgba[part].blue == rgba->blue &&
+       text_renderer->rgba[part].alpha == rgba->alpha))
+    return;
 
   if (rgba)
     {
-      PangoColor color;
+      text_renderer->rgba_set[part] = TRUE;
+      text_renderer->rgba[part] = *rgba;
 
-      color.red = CLAMP (rgba->red * 65535. + 0.5, 0, 65535);
-      color.green = CLAMP (rgba->green * 65535. + 0.5, 0, 65535);
-      color.blue = CLAMP (rgba->blue * 65535. + 0.5, 0, 65535);
-
-      pango_renderer_set_color (renderer, part, &color);
+      pango_renderer_set_color (renderer, part, &dummy);
     }
   else
-    pango_renderer_set_color (renderer, part, NULL);
+    {
+      text_renderer->rgba_set[part] = FALSE;
+
+      pango_renderer_set_color (renderer, part, NULL);
+    }
 }
 
 static GtkTextAppearance *
@@ -188,9 +180,8 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
-  GdkColor *bg_color = NULL;
+  GdkRGBA *bg_rgba = NULL;
   GdkRGBA *fg_rgba = NULL;
-  GdkColor *fg_color = NULL;
   GtkTextAppearance *appearance;
 
   PANGO_RENDERER_CLASS (_gtk_text_renderer_parent_class)->prepare_run (renderer, run);
@@ -199,15 +190,14 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   g_assert (appearance != NULL);
 
   context = gtk_widget_get_style_context (text_renderer->widget);
-
-  state = gtk_widget_get_state_flags (text_renderer->widget);
+  state   = gtk_widget_get_state_flags (text_renderer->widget);
 
   if (appearance->draw_bg && text_renderer->state == NORMAL)
-    bg_color = &appearance->bg_color;
+    bg_rgba = appearance->rgba[0];
   else
-    bg_color = NULL;
+    bg_rgba = NULL;
   
-  text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_BACKGROUND, bg_color);
+  text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_BACKGROUND, bg_rgba);
 
   if (text_renderer->state == SELECTED)
     {
@@ -224,18 +214,10 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
                               NULL);
     }
   else
-    fg_color = &appearance->fg_color;
+    fg_rgba = appearance->rgba[1];
 
-  if (fg_rgba)
-    {
-      text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_FOREGROUND, fg_rgba);
-      text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH,fg_rgba);
-    }
-  else
-    {
-      text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_FOREGROUND, fg_color);
-      text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_color);
-    }
+  text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_FOREGROUND, fg_rgba);
+  text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH,fg_rgba);
 
   if (appearance->underline == PANGO_UNDERLINE_ERROR)
     {
@@ -252,28 +234,24 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
             }
         }
 
-      text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_UNDERLINE, text_renderer->error_color);
+      // XXX Transform the gdk color to an gdk rgba here 
+      //text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_UNDERLINE, text_renderer->error_color);
     }
-  else if (fg_rgba)
-    text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
   else
-    text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_UNDERLINE, fg_color);
+    text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
+
+  if (fg_rgba != appearance->rgba[1])
+    gdk_rgba_free (fg_rgba);
 }
 
 static void
 set_color (GtkTextRenderer *text_renderer,
            PangoRenderPart  part)
 {
-  PangoColor *color;
-
   cairo_save (text_renderer->cr);
 
-  color = pango_renderer_get_color (PANGO_RENDERER (text_renderer), part);
-  if (color)
-    cairo_set_source_rgb (text_renderer->cr,
-                          color->red / 65535.,
-                          color->green / 65535.,
-                          color->blue / 65535.);
+  if (text_renderer->rgba_set[part])
+    gdk_cairo_set_source_rgba (text_renderer->cr, &text_renderer->rgba[part]);
 }
 
 static void

@@ -1424,7 +1424,25 @@ gtk_text_attr_appearance_destroy (PangoAttribute *attr)
 {
   GtkTextAttrAppearance *appearance_attr = (GtkTextAttrAppearance *)attr;
 
+  if (appearance_attr->appearance.rgba[0])
+    gdk_rgba_free (appearance_attr->appearance.rgba[0]);
+
+  if (appearance_attr->appearance.rgba[1])
+    gdk_rgba_free (appearance_attr->appearance.rgba[1]);
+
   g_slice_free (GtkTextAttrAppearance, appearance_attr);
+}
+
+static gboolean 
+rgba_equal (const GdkRGBA *rgba1, const GdkRGBA *rgba2)
+{
+  if (rgba1 && rgba2)
+    return gdk_rgba_equal (rgba1, rgba2);
+  
+  if (rgba1 || rgba2)
+    return FALSE;
+
+  return TRUE;
 }
 
 static gboolean
@@ -1434,8 +1452,8 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
   const GtkTextAppearance *appearance1 = &((const GtkTextAttrAppearance *)attr1)->appearance;
   const GtkTextAppearance *appearance2 = &((const GtkTextAttrAppearance *)attr2)->appearance;
 
-  return (gdk_color_equal (&appearance1->fg_color, &appearance2->fg_color) &&
-          gdk_color_equal (&appearance1->bg_color, &appearance2->bg_color) &&
+  return (rgba_equal (appearance1->rgba[0], appearance2->rgba[0]) &&
+          rgba_equal (appearance1->rgba[1], appearance2->rgba[1]) &&
           appearance1->underline == appearance2->underline &&
           appearance1->strikethrough == appearance2->strikethrough &&
           appearance1->draw_bg == appearance2->draw_bg);
@@ -1471,6 +1489,12 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   result->attr.klass = &klass;
 
   result->appearance = *appearance;
+
+  if (appearance->rgba[0])
+    result->appearance.rgba[0] = gdk_rgba_copy (appearance->rgba[0]);
+
+  if (appearance->rgba[1])
+    result->appearance.rgba[1] = gdk_rgba_copy (appearance->rgba[1]);
 
   return (PangoAttribute *)result;
 }
