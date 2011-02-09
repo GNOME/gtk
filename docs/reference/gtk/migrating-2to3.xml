@@ -144,8 +144,8 @@
         GAppLaunchContext *context;
         GError *error = NULL;
 
-        info = (GAppInfo *) g_desktop_app_info_new ("epiphany.desktop");
-        context = gdk_display_get_app_launch_context (display);
+        info = (GAppInfo*) g_desktop_app_info_new ("epiphany.desktop");
+        context = (GAppLaunchContext*) gdk_display_get_app_launch_context (display);
         g_app_info_launch (info, NULL, context, &amp;error);
 
         if (error)
