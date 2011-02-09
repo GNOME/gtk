@@ -1472,6 +1472,32 @@ _cairo_round_rectangle_sides (cairo_t          *cr,
     }
 }
 
+/* Set the appropriate matrix for
+ * patterns coming from the style context
+ */
+static void
+style_pattern_set_matrix (cairo_pattern_t *pattern,
+                          gdouble          width,
+                          gdouble          height)
+{
+  cairo_matrix_t matrix;
+  gint w, h;
+
+  if (cairo_pattern_get_type (pattern) == CAIRO_PATTERN_TYPE_SURFACE)
+    {
+      cairo_surface_t *surface;
+
+      cairo_pattern_get_surface (pattern, &surface);
+      w = cairo_image_surface_get_width (surface);
+      h = cairo_image_surface_get_height (surface);
+    }
+  else
+    w = h = 1;
+
+  cairo_matrix_init_scale (&matrix, (gdouble) w / width, (gdouble) h / height);
+  cairo_pattern_set_matrix (pattern, &matrix);
+}
+
 static void
 render_background_internal (GtkThemingEngine *engine,
                             cairo_t          *cr,
@@ -1489,12 +1515,16 @@ render_background_internal (GtkThemingEngine *engine,
   GtkBorder *border;
   gint radius, border_width;
   GtkBorderStyle border_style;
+  gdouble mat_w, mat_h;
+  cairo_matrix_t identity;
 
-  if (width <= 0 || height <= 0)
-    return;
+  /* Use unmodified size for pattern scaling */
+  mat_w = width;
+  mat_h = height;
 
   flags = gtk_theming_engine_get_state (engine);
-  cairo_save (cr);
+
+  cairo_matrix_init_identity (&identity);
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
@@ -1507,9 +1537,31 @@ render_background_internal (GtkThemingEngine *engine,
   border_width = MIN (MIN (border->top, border->bottom),
                       MIN (border->left, border->right));
 
-  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+  if (border_width > 1 &&
+      border_style == GTK_BORDER_STYLE_NONE)
+    {
+      cairo_set_line_width (cr, border_width);
 
-  cairo_push_group (cr);
+      x += (gdouble) border_width / 2;
+      y += (gdouble) border_width / 2;
+      width -= border_width;
+      height -= border_width;
+    }
+  else
+    {
+      x += border->left;
+      y += border->top;
+      width -= border->left + border->right;
+      height -= border->top + border->bottom;
+    }
+
+  if (width <= 0 || height <= 0)
+    return;
+
+  cairo_save (cr);
+  cairo_translate (cr, x, y);
+
+  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
 
   if (gtk_theming_engine_has_class (engine, "background"))
     {
@@ -1517,9 +1569,6 @@ render_background_internal (GtkThemingEngine *engine,
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
       cairo_paint (cr);
     }
-
-  cairo_translate (cr, x, y);
-  cairo_scale (cr, width, height);
 
   if (running)
     {
@@ -1611,9 +1660,15 @@ render_background_internal (GtkThemingEngine *engine,
               /* Different pattern types, or different color
                * stop counts, alpha blend both patterns.
                */
-              cairo_rectangle (cr, 0, 0, 1, 1);
+              _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                            0, 0, width, height,
+                                            SIDE_ALL, junction);
+
+              style_pattern_set_matrix (other_pattern, mat_w, mat_h);
               cairo_set_source (cr, other_pattern);
               cairo_fill_preserve (cr);
+
+              cairo_pattern_set_matrix (other_pattern, &identity);
 
               /* Set alpha for posterior drawing
                * of the target pattern
@@ -1698,66 +1753,52 @@ render_background_internal (GtkThemingEngine *engine,
         gdk_rgba_free (other_bg);
     }
 
-  cairo_rectangle (cr, 0, 0, 1, 1);
-
+  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                0, 0, width, height,
+                                SIDE_ALL, junction);
   if (pattern)
     {
+      style_pattern_set_matrix (pattern, mat_w, mat_h);
       cairo_set_source (cr, pattern);
-      cairo_pattern_destroy (pattern);
     }
   else
     gdk_cairo_set_source_rgba (cr, bg_color);
 
   if (alpha == 1)
-    cairo_fill (cr);
-  else
     {
-      cairo_pattern_t *mask;
-
-      mask = cairo_pattern_create_rgba (1, 1, 1, alpha);
-      cairo_mask (cr, mask);
-      cairo_pattern_destroy (mask);
-    }
-
-  cairo_pop_group_to_source (cr);
-
-  if (border_width > 1 &&
-      border_style == GTK_BORDER_STYLE_NONE)
-    {
-      cairo_set_line_width (cr, border_width);
-
-      x += (gdouble) border_width / 2;
-      y += (gdouble) border_width / 2;
-      width -= border_width;
-      height -= border_width;
+      if (border_width > 1 &&
+          border_style != GTK_BORDER_STYLE_NONE)
+        {
+          /* stroke with the same source, so the background
+           * has exactly the shape than the frame, this
+           * is important so gtk_render_background() and
+           * gtk_render_frame() fit perfectly with round
+           * borders.
+           */
+          cairo_fill_preserve (cr);
+          cairo_stroke (cr);
+        }
+      else
+        cairo_fill (cr);
     }
   else
     {
-      x += border->left;
-      y += border->top;
-      width -= border->left + border->right;
-      height -= border->top + border->bottom;
+      cairo_save (cr);
+      _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                    0, 0, width, height,
+                                    SIDE_ALL, junction);
+      cairo_clip (cr);
+
+      cairo_paint_with_alpha (cr, alpha);
+
+      cairo_restore (cr);
     }
 
-  _cairo_round_rectangle_sides (cr, (gdouble) radius,
-                                x, y, width, height,
-                                SIDE_ALL, junction);
-  cairo_close_path (cr);
-
-  if (border_width > 1 &&
-      border_style != GTK_BORDER_STYLE_NONE)
+  if (pattern)
     {
-      /* stroke with the same source, so the background
-       * has exactly the shape than the frame, this
-       * is important so gtk_render_background() and
-       * gtk_render_frame() fit perfectly with round
-       * borders.
-       */
-      cairo_fill_preserve (cr);
-      cairo_stroke (cr);
+      cairo_pattern_set_matrix (pattern, &identity);
+      cairo_pattern_destroy (pattern);
     }
-  else
-    cairo_fill (cr);
 
   cairo_restore (cr);
 
