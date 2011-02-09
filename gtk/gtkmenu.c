@@ -1987,12 +1987,12 @@ gtk_menu_set_accel_group (GtkMenu       *menu,
 
 /**
  * gtk_menu_get_accel_group:
- * @menu a #GtkMenu
+ * @menu: a #GtkMenu
  *
  * Gets the #GtkAccelGroup which holds global accelerators for the
- * menu.  See gtk_menu_set_accel_group().
+ * menu. See gtk_menu_set_accel_group().
  *
- * Returns: (transfer none): the #GtkAccelGroup associated with the menu.
+ * Returns: (transfer none): the #GtkAccelGroup associated with the menu
  */
 GtkAccelGroup*
 gtk_menu_get_accel_group (GtkMenu *menu)
@@ -2418,8 +2418,11 @@ gtk_menu_get_title (GtkMenu *menu)
  * gtk_menu_reorder_child:
  * @menu: a #GtkMenu
  * @child: the #GtkMenuItem to move
- * @position: the new position to place @child.  Positions are
- *            numbered from 0 to n-1.
+ * @position: the new position to place @child.
+ *     Positions are numbered from 0 to n - 1
+ *
+ * Moves @child to a new @position in the list of @menu
+ * children.
  */
 void
 gtk_menu_reorder_child (GtkMenu   *menu,

@@ -297,7 +297,7 @@ _gtk_print_backend_create (const gchar *backend_name)
 }
 
 /**
- * gtk_printer_backend_load_modules:
+ * gtk_print_backend_load_modules:
  *
  * Return value: (element-type GtkPrintBackend) (transfer container):
  */

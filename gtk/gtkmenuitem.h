@@ -119,9 +119,9 @@ void       gtk_menu_item_set_use_underline    (GtkMenuItem         *menu_item,
                                                gboolean             setting);
 gboolean   gtk_menu_item_get_use_underline    (GtkMenuItem         *menu_item);
 
-void       gtk_menu_item_set_reserve_indicator(GtkMenuItem         *menu_item,
-					       gboolean             reserve);
-gboolean   gtk_menu_item_get_reserve_indicator(GtkMenuItem         *menu_item);
+void       gtk_menu_item_set_reserve_indicator (GtkMenuItem        *menu_item,
+                                                gboolean            reserve);
+gboolean   gtk_menu_item_get_reserve_indicator (GtkMenuItem        *menu_item);
 
 G_END_DECLS
 

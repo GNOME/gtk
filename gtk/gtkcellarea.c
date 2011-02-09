@@ -3100,8 +3100,10 @@ gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
  * @renderer: the #GtkCellRenderer expected to have focus
  * @sibling: the #GtkCellRenderer to check against @renderer's sibling list
  *
- * Returns %TRUE if @sibling is one of @renderer's focus siblings
+ * Returns whether @sibling is one of @renderer's focus siblings
  * (see gtk_cell_area_add_focus_sibling()).
+ *
+ * Return value: %TRUE if @sibling is a focus sibling of @renderer
  *
  * Since: 3.0
  */

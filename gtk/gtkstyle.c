@@ -858,6 +858,16 @@ gtk_style_new (void)
   return style;
 }
 
+/**
+ * gtk_style_has_context:
+ * @style: a #GtkStyle
+ *
+ * Returns whether @style has an associated #GtkStyleContext.
+ *
+ * Returns: %TRUE if @style has a #GtkStyleContext
+ *
+ * Since: 3.0
+ */
 gboolean
 gtk_style_has_context (GtkStyle *style)
 {

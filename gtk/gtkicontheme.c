@@ -738,21 +738,19 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_get_search_path:
  * @icon_theme: a #GtkIconTheme
-
  * @path: (allow-none) (array length=n_elements) (element-type filename) (out):
- *        location to store a list of icon theme path directories or %NULL .
- *        The stored value should be freed with g_strfreev().
- * @n_elements: location to store number of elements
- *              in @path, or %NULL
- * 
+ *     location to store a list of icon theme path directories or %NULL.
+ *     The stored value should be freed with g_strfreev().
+ * @n_elements: location to store number of elements in @path, or %NULL
+ *
  * Gets the current search path. See gtk_icon_theme_set_search_path().
  *
  * Since: 2.4
- **/
+ */
 void
-gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
-				gchar            **path[],
-				gint              *n_elements)
+gtk_icon_theme_get_search_path (GtkIconTheme  *icon_theme,
+                                gchar        **path[],
+                                gint          *n_elements)
 {
   GtkIconThemePrivate *priv;
   int i;
