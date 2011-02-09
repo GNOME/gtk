@@ -102,8 +102,10 @@ struct _GtkTextAppearance
   guint inside_selection : 1;
   guint is_text : 1;
 
+  GdkRGBA *rgba[2];
+
   /*< private >*/
-  guint padding[4];
+  guint padding[2];
 };
 
 struct _GtkTextAttributes
@@ -155,7 +157,9 @@ struct _GtkTextAttributes
   guint editable : 1;
 
   /*< private >*/
-  guint padding[4];
+  GdkRGBA *pg_bg_rgba;
+
+  guint padding[3];
 };
 
 GtkTextAttributes* gtk_text_attributes_new         (void);

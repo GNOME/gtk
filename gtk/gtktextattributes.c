@@ -68,10 +68,9 @@ gtk_text_attributes_new (void)
 {
   GtkTextAttributes *values;
 
-  values = g_new0 (GtkTextAttributes, 1);
+  values = g_slice_new0 (GtkTextAttributes);
 
   /* 0 is a valid value for most of the struct */
-
   values->refcount = 1;
 
   values->language = gtk_get_default_language ();
@@ -124,10 +123,24 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
     return;
 
   /* Remove refs */
+  if (dest->tabs)
+    pango_tab_array_free (dest->tabs);
 
   if (dest->font)
     pango_font_description_free (dest->font);
+
+  if (dest->pg_bg_color)
+    gdk_color_free (dest->pg_bg_color);
+
+  if (dest->pg_bg_rgba)
+    gdk_rgba_free (dest->pg_bg_rgba);
+
+  if (dest->appearance.rgba[0])
+    gdk_rgba_free (dest->appearance.rgba[0]);
   
+  if (dest->appearance.rgba[1])
+    gdk_rgba_free (dest->appearance.rgba[1]);
+
   /* Copy */
   orig_refcount = dest->refcount;
 
@@ -143,6 +156,15 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   
   if (src->pg_bg_color)
     dest->pg_bg_color = gdk_color_copy (src->pg_bg_color);
+
+  if (src->pg_bg_rgba)
+    dest->pg_bg_rgba = gdk_rgba_copy (src->pg_bg_rgba);
+
+  if (src->appearance.rgba[0])
+    dest->appearance.rgba[0] = gdk_rgba_copy (src->appearance.rgba[0]);
+
+  if (src->appearance.rgba[1])
+    dest->appearance.rgba[1] = gdk_rgba_copy (src->appearance.rgba[1]);
 
   dest->refcount = orig_refcount;
 }
@@ -191,7 +213,16 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
       if (values->pg_bg_color)
 	gdk_color_free (values->pg_bg_color);
 
-      g_free (values);
+      if (values->pg_bg_rgba)
+	gdk_rgba_free (values->pg_bg_rgba);
+
+      if (values->appearance.rgba[0])
+	gdk_rgba_free (values->appearance.rgba[0]);
+
+      if (values->appearance.rgba[1])
+	gdk_rgba_free (values->appearance.rgba[1]);
+
+      g_slice_free (GtkTextAttributes, values);
     }
 }
 
@@ -216,16 +247,41 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->priv->bg_color_set)
         {
-          dest->appearance.bg_color = vals->appearance.bg_color;
+	  if (dest->appearance.rgba[0])
+	    {
+	      gdk_rgba_free (dest->appearance.rgba[0]);
+	      dest->appearance.rgba[0] = NULL;
+	    }
+
+	  if (vals->appearance.rgba[0])
+	    dest->appearance.rgba[0] = gdk_rgba_copy (vals->appearance.rgba[0]);
 
           dest->appearance.draw_bg = TRUE;
         }
+
       if (tag->priv->fg_color_set)
-        dest->appearance.fg_color = vals->appearance.fg_color;
+	{
+	  if (dest->appearance.rgba[1])
+	    {
+	      gdk_rgba_free (dest->appearance.rgba[1]);
+	      dest->appearance.rgba[1] = NULL;
+	    }
+
+	  if (vals->appearance.rgba[1])
+	    dest->appearance.rgba[1] = gdk_rgba_copy (vals->appearance.rgba[1]);
+	}
 
       if (tag->priv->pg_bg_color_set)
         {
-          dest->pg_bg_color = gdk_color_copy (vals->pg_bg_color);
+	  if (dest->pg_bg_rgba)
+	    {
+	      gdk_rgba_free (dest->pg_bg_rgba);
+	      dest->pg_bg_rgba = NULL;
+
+	    }
+
+	  if (vals->pg_bg_rgba)
+	    dest->pg_bg_rgba = gdk_rgba_copy (vals->pg_bg_rgba);
         }
 
       if (vals->font)

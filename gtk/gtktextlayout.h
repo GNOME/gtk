@@ -233,6 +233,7 @@ struct _GtkTextCursorDisplay
   guint is_strong : 1;
   guint is_weak : 1;
 };
+
 struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
