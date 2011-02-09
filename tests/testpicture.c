@@ -2,6 +2,64 @@
 
 #include <math.h>
 
+
+
+#define IMAGE_TYPE_PICTURE         (image_picture_get_type ())
+#define IMAGE_PICTURE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), IMAGE_TYPE_PICTURE, ImagePicture))
+#define IMAGE_PICTURE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), IMAGE_TYPE_PICTURE, ImagePictureClass))
+#define IMAGE_IS_PICTURE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), IMAGE_TYPE_PICTURE))
+#define IMAGE_IS_PICTURE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), IMAGE_TYPE_PICTURE))
+#define IMAGE_PICTURE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), IMAGE_TYPE_PICTURE, ImagePictureClass))
+
+typedef struct _ImagePicture ImagePicture;
+typedef GdkPictureClass       ImagePictureClass;
+struct _ImagePicture {
+  GdkPicture picture;
+  cairo_surface_t *surface;
+};
+
+G_DEFINE_TYPE (ImagePicture, image_picture, GDK_TYPE_PICTURE)
+
+static void
+image_picture_finalize (GObject *object)
+{
+  cairo_surface_destroy (IMAGE_PICTURE (object)->surface);
+
+  G_OBJECT_CLASS (image_picture_parent_class)->finalize (object);
+}
+
+static cairo_surface_t *
+image_picture_ref_surface (GdkPicture *picture)
+{
+  return cairo_surface_reference (IMAGE_PICTURE (picture)->surface);
+}
+
+static void
+image_picture_class_init (ImagePictureClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkPictureClass *picture_class = GDK_PICTURE_CLASS (klass);
+
+  object_class->finalize = image_picture_finalize;
+
+  picture_class->ref_surface = image_picture_ref_surface;
+}
+
+static void
+image_picture_init (ImagePicture *picture)
+{
+  picture->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 100, 100);
+  gdk_picture_resized (GDK_PICTURE (picture), 100, 100);
+}
+
+static GdkPicture *
+image_picture_new (void)
+{
+  return g_object_new (IMAGE_TYPE_PICTURE, NULL);
+}
+
+
+
 #define SLOW_TYPE_INPUT_STREAM         (slow_input_stream_get_type ())
 #define SLOW_INPUT_STREAM(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), SLOW_TYPE_INPUT_STREAM, SlowInputStream))
 #define SLOW_INPUT_STREAM_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), SLOW_TYPE_INPUT_STREAM, SlowInputStreamClass))
@@ -68,6 +126,8 @@ slow_input_stream_new (GInputStream *base_stream)
 {
   return g_object_new (slow_input_stream_get_type (), "base-stream", base_stream, NULL);
 }
+
+
 
 typedef struct _Demo Demo;
 struct _Demo
@@ -194,11 +254,126 @@ create_icon_set_picture (Demo *demo)
   gtk_icon_set_unref (set);
 }
 
+static GdkRGBA scribble_colors[2] = 
+{
+  { 0.0, 0.0, 0.0, 1.0 },
+  { 0.0, 0.0, 0.0, 0.0 }
+};
+
+/* Draw a rectangle onto the picture */
+static void
+scribble (ImagePicture * picture,
+          gdouble        x,
+          gdouble        y,
+          const GdkRGBA *color)
+{
+  GdkRectangle update_rect;
+  cairo_t *cr;
+
+  update_rect.x = x - 3;
+  update_rect.y = y - 3;
+  update_rect.width = 6;
+  update_rect.height = 6;
+
+  /* Paint to the surface, where we store our state */
+  cr = cairo_create (picture->surface);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  gdk_cairo_set_source_rgba (cr, color);
+  gdk_cairo_rectangle (cr, &update_rect);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
+
+  /* Now invalidate the affected region of the drawing area. */
+  gdk_picture_changed_rect (GDK_PICTURE (picture), &update_rect);
+}
+
+static gboolean
+scribble_button_press_event (GtkWidget      *widget,
+                             GdkEventButton *event,
+                             ImagePicture   *picture)
+{
+  if (event->button == 1)
+    scribble (picture, event->x, event->y, &scribble_colors[0]);
+  else if (event->button == 3)
+    scribble (picture, event->x, event->y, &scribble_colors[1]);
+
+  /* We've handled the event, stop processing */
+  return TRUE;
+}
+
+static gboolean
+scribble_motion_notify_event (GtkWidget      *widget,
+                              GdkEventMotion *event,
+                              ImagePicture   *picture)
+{
+  int x, y;
+  GdkModifierType state;
+
+  /* This call is very important; it requests the next motion event.
+   * If you don't call gdk_window_get_pointer() you'll only get
+   * a single motion event. The reason is that we specified
+   * GDK_POINTER_MOTION_HINT_MASK to gtk_widget_set_events().
+   * If we hadn't specified that, we could just use event->x, event->y
+   * as the pointer location. But we'd also get deluged in events.
+   * By requesting the next event as we handle the current one,
+   * we avoid getting a huge number of events faster than we
+   * can cope.
+   */
+
+  gdk_window_get_pointer (event->window, &x, &y, &state);
+
+  if (state & GDK_BUTTON1_MASK)
+    scribble (picture, x, y, &scribble_colors[0]);
+  if (state & GDK_BUTTON3_MASK)
+    scribble (picture, x, y, &scribble_colors[1]);
+
+  /* We've handled it, stop processing */
+  return TRUE;
+}
+
+static void
+create_scribble_area (Demo *demo)
+{
+  GtkWidget *frame, *image, *eventbox;
+
+  demo->picture = image_picture_new ();
+
+  demo->widget = gtk_alignment_new (0.5, 0.5, 0, 0);
+
+  frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+  gtk_container_add (GTK_CONTAINER (demo->widget), frame);
+
+  eventbox = gtk_event_box_new ();
+  gtk_container_add (GTK_CONTAINER (frame), eventbox);
+
+  /* Event signals */
+
+  g_signal_connect (eventbox, "motion-notify-event",
+                    G_CALLBACK (scribble_motion_notify_event), demo->picture);
+  g_signal_connect (eventbox, "button-press-event",
+                    G_CALLBACK (scribble_button_press_event), demo->picture);
+
+  /* Ask to receive events the drawing area doesn't normally
+   * subscribe to
+   */
+  gtk_widget_add_events (eventbox,
+                         GDK_BUTTON_PRESS_MASK
+                         | GDK_POINTER_MOTION_MASK
+                         | GDK_POINTER_MOTION_HINT_MASK);
+
+  image = gtk_image_new_from_picture (demo->picture);
+  gtk_container_add (GTK_CONTAINER (eventbox), image);
+}
+
 Demo demos[] = {
   { "Slowly loading image", create_slowly_loading_image, NULL, NULL },
   { "Another slowly loading image", create_slowly_loading_image, NULL, NULL },
   { "Named theme icons", create_stock_picture, NULL, NULL },
-  { "Icon Set", create_icon_set_picture, NULL, NULL }
+  { "Icon Set", create_icon_set_picture, NULL, NULL },
+  { "Scribble Area", create_scribble_area, NULL, NULL }
 };
 
 static guint rotation = 0;
@@ -389,7 +564,7 @@ main (int argc, char **argv)
 
   gtk_init (&argc, &argv);
 
-  //gdk_window_set_debug_updates (TRUE);
+  gdk_window_set_debug_updates (TRUE);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Pictures");
