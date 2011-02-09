@@ -227,7 +227,6 @@ gtk_public_h_sources = 		\
 	gtkhseparator.h		\
 	gtkhsv.h		\
 	gtkiconfactory.h	\
-	gtkiconpicture.h	\
 	gtkicontheme.h		\
 	gtkiconview.h		\
 	gtkimage.h		\
@@ -297,6 +296,7 @@ gtk_public_h_sources = 		\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
+	gtkstockpicture.h	\
 	gtkstylablepicture.h	\
 	gtkstylecontext.h	\
 	gtkstyleproperties.h	\
@@ -548,7 +548,6 @@ gtk_base_c_sources = 		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\
-	gtkiconpicture.c	\
 	gtkicontheme.c		\
 	gtkiconview.c		\
 	gtkimage.c		\
@@ -626,6 +625,7 @@ gtk_base_c_sources = 		\
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
 	gtkstock.c		\
+	gtkstockpicture.c	\
 	gtkstylablepicture.c	\
 	gtkstylecontext.c	\
 	gtkstyledpicture.c	\

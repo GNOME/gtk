@@ -113,7 +113,6 @@
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtkhsv.h>
 #include <gtk/gtkiconfactory.h>
-#include <gtk/gtkiconpicture.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconview.h>
 #include <gtk/gtkimage.h>
@@ -180,6 +179,7 @@
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkstockpicture.h>
 #include <gtk/gtkstylablepicture.h>
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleproperties.h>
