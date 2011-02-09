@@ -205,7 +205,7 @@ additional environment variables.
   </warning>
 </formalpara>
 
-<formalpara>
+<formalpara id="gtk-path">
   <title><envar>GTK_PATH</envar></title>
 
   <para>
@@ -265,7 +265,7 @@ additional environment variables.
   </para>
 </formalpara>
 
-<formalpara id="im-module-file">
+<formalpara id="gtk-im-module-file">
   <title><envar>GTK_IM_MODULE_FILE</envar></title>
 
   <para>

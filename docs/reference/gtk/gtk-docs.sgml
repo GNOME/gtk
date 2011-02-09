@@ -10,9 +10,13 @@
   <bookinfo>
     <title>GTK+ 3 Reference Manual</title>
     <releaseinfo>
-      This document is for GTK+ 3 library; the latest version can be found online at
-      <ulink role="online-location" url="http://library.gnome.org/devel/gtk/unstable/">http://library.gnome.org/devel/gtk/unstable/</ulink>.  
-      If you're looking for the older GTK+ 2 series of libraries, they can be found under their version numbers; for example, 2.22 is available at <ulink role="online-location" url="http://library.gnome.org/devel/gtk/2.22/">http://library.gnome.org/devel/gtk/2.22/</ulink>.
+      This document is for the GTK+ 3 library, version &version;.
+      The latest version can be found online at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gtk/unstable/">http://library.gnome.org/devel/gtk/unstable/</ulink>.
+      If you are looking for the older GTK+ 2 series of libraries,
+      they can be found under their version numbers; for example,
+      2.22 is available at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gtk/2.22/">http://library.gnome.org/devel/gtk/2.22/</ulink>.
     </releaseinfo>
   </bookinfo>
 
