@@ -8058,7 +8058,7 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
     {
       GtkStyleContext *context;
 
-      style = gtk_modifier_style_new ();
+      style = _gtk_modifier_style_new ();
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_modifier_style,
                                style,
@@ -8121,7 +8121,7 @@ gtk_widget_override_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_color (style, state, color);
+  _gtk_modifier_style_set_color (style, state, color);
 }
 
 /**
@@ -8148,7 +8148,7 @@ gtk_widget_override_background_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_background_color (style, state, color);
+  _gtk_modifier_style_set_background_color (style, state, color);
 }
 
 /**
@@ -8171,7 +8171,7 @@ gtk_widget_override_font (GtkWidget                  *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_font (style, font_desc);
+  _gtk_modifier_style_set_font (style, font_desc);
 }
 
 /**
@@ -8200,7 +8200,7 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_map_color (style, name, color);
+  _gtk_modifier_style_map_color (style, name, color);
 }
 
 /**
@@ -8233,13 +8233,13 @@ gtk_widget_override_cursor (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_color_property (style,
-                                         GTK_TYPE_WIDGET,
-                                         "cursor-color", cursor);
-  gtk_modifier_style_set_color_property (style,
-                                         GTK_TYPE_WIDGET,
-                                         "secondary-cursor-color",
-                                         secondary_cursor);
+  _gtk_modifier_style_set_color_property (style,
+                                          GTK_TYPE_WIDGET,
+                                          "cursor-color", cursor);
+  _gtk_modifier_style_set_color_property (style,
+                                          GTK_TYPE_WIDGET,
+                                          "secondary-cursor-color",
+                                          secondary_cursor);
 }
 
 /**
@@ -9895,18 +9895,20 @@ gtk_widget_set_device_events (GtkWidget    *widget,
 }
 
 /**
- * gtk_widget_enable_device:
+ * gtk_widget_set_device_enabled:
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
+ * @enabled: whether to enable the device
  *
- * Enables a #GdkDevice to interact with @widget and
- * all its children, it does so by descending through
- * the #GdkWindow hierarchy and enabling the same mask
- * that is has for core events (i.e. the one that
- * gdk_window_get_events() returns).
+ * Enables or disables a #GdkDevice to interact with @widget
+ * and all its children.
+ *
+ * It does so by descending through the #GdkWindow hierarchy
+ * and enabling the same mask that is has for core events
+ * (i.e. the one that gdk_window_get_events() returns).
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_set_device_enabled (GtkWidget *widget,
                                GdkDevice *device,
@@ -9927,6 +9929,18 @@ gtk_widget_set_device_enabled (GtkWidget *widget,
     gtk_widget_set_device_enabled_internal (widget, device, TRUE, enabled);
 }
 
+/**
+ * gtk_widget_get_device_enabled:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ *
+ * Returns whether @device can interact with @widget and its
+ * children. See gtk_widget_set_device_enabled().
+ *
+ * Return value: %TRUE is @device is enabled for @widget
+ *
+ * Since: 3.0
+ */
 gboolean
 gtk_widget_get_device_enabled (GtkWidget *widget,
                                GdkDevice *device)
