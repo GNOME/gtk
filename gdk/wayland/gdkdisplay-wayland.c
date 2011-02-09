@@ -36,7 +36,6 @@
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager.h"
-#include "gdkdevicemanager-wayland.h"
 #include "gdkkeysprivate.h"
 
 typedef struct _GdkEventTypeWayland GdkEventTypeWayland;
@@ -192,7 +191,8 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
 			   &output_listener, display_wayland);
   } else if (strcmp(interface, "input_device") == 0) {
     input = wl_input_device_create(display, id);
-    gdk_device_manager_core_add_device (gdk_display->device_manager, input);
+    _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
+					    input);
   }
 }
 
@@ -286,7 +286,7 @@ _gdk_wayland_display_open (const gchar *display_name)
   /*set the default screen */
   display_wayland->default_screen = display_wayland->screens[0];
 
-  display->device_manager = _gdk_device_manager_new (display);
+  display->device_manager = _gdk_wayland_device_manager_new (display);
 
   /* Set up listener so we'll catch all events. */
   wl_display_add_global_listener(display_wayland->wl_display,

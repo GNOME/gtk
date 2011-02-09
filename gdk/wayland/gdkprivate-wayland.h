@@ -121,7 +121,10 @@ gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *disp
 gchar *     _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
 							const gchar *str);
 
-GdkDeviceManager *_gdk_device_manager_new (GdkDisplay *display);
+GdkDeviceManager *_gdk_wayland_device_manager_new (GdkDisplay *display);
+void              _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
+							  struct wl_input_device *device);
+struct wl_input_device *_gdk_wayland_device_get_device (GdkDevice *device);
 
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
 GSource *_gdk_wayland_display_event_source_new (GdkDisplay *display);

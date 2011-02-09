@@ -20,10 +20,7 @@ noinst_LTLIBRARIES =				\
 libgdk_wayland_la_SOURCES =			\
 	gdkapplaunchcontext-wayland.c		\
 	gdkcursor-wayland.c			\
-	gdkdevice-wayland.h			\
 	gdkdevice-wayland.c			\
-	gdkdevicemanager-wayland.h		\
-	gdkdevicemanager-wayland.c		\
 	gdkdisplay-wayland.c			\
 	gdkdisplay-wayland.h			\
 	gdkdisplaymanager-wayland.c		\

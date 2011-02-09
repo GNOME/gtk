@@ -33,7 +33,6 @@
 #include "gdkinternals.h"
 #include "gdkwindow-wayland.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdevice-wayland.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1148,7 +1147,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   device = gdk_device_manager_get_client_pointer (dm);
 
   wl_shell_resize(GDK_DISPLAY_WAYLAND (display)->shell, impl->surface,
-		  GDK_DEVICE_CORE (device)->device->device,
+		  _gdk_wayland_device_get_device (device),
 		  timestamp, grab_type);
 }
 
@@ -1174,7 +1173,7 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
   device = gdk_device_manager_get_client_pointer (dm);
 
   wl_shell_move(GDK_DISPLAY_WAYLAND (display)->shell, impl->surface,
-		GDK_DEVICE_CORE (device)->device->device, timestamp);
+		_gdk_wayland_device_get_device (device), timestamp);
 }
 
 static void
