@@ -495,6 +495,7 @@ update_modifiers(GdkWaylandDevice *device, struct wl_array *keys)
   xkb = _gdk_wayland_keymap_get_xkb_desc (keymap);
 
   end = keys->data + keys->size;
+  device->modifiers = 0;
   for (k = keys->data; k < end; k++)
     device->modifiers |= xkb->map->modmap[*k];
 
