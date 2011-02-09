@@ -131,6 +131,19 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
                                    GdkWindow *window,
                                    GdkCursor *cursor)
 {
+  GdkWaylandDevice *wd = GDK_DEVICE_CORE(device)->device;
+  struct wl_buffer *buffer;
+  int x, y;
+
+  if (cursor)
+    {
+      buffer = _gdk_wayland_cursor_get_buffer(cursor, &x, &y);
+      wl_input_device_attach(wd->device, wd->time, buffer, x, y);
+    }
+  else
+    {
+      wl_input_device_attach(wd->device, wd->time, NULL, 0, 0);
+    }
 }
 
 static void

@@ -26,6 +26,7 @@
 
 #include <stdint.h>
 #include <wayland-client.h>
+#include <wayland-egl.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GL/gl.h>
@@ -60,61 +61,12 @@ struct _GdkDisplayWayland
   gint grab_count;
 
   /* Keyboard related information */
-
-  gint xkb_event_type;
-  gboolean use_xkb;
-  
-  /* Whether we were able to turn on detectable-autorepeat using
-   * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
-   * to checking the next event with XPending(). */
-  gboolean have_xkb_autorepeat;
-
   GdkKeymap *keymap;
   guint	    keymap_serial;
-
-  gboolean have_xfixes;
-  gint xfixes_event_base;
-
-  gboolean have_xcomposite;
-  gboolean have_xdamage;
-  gint xdamage_event_base;
-
-  gboolean have_randr13;
-  gint xrandr_event_base;
-
-  /* If the SECURITY extension is in place, whether this client holds 
-   * a trusted authorization and so is allowed to make various requests 
-   * (grabs, properties etc.) Otherwise always TRUE. */
-  gboolean trusted_client;
 
   /* drag and drop information */
   GdkDragContext *current_dest_drag;
 
-  /* data needed for MOTIF DnD */
-
-  Window motif_drag_window;
-  GdkWindow *motif_drag_gdk_window;
-  GList **motif_target_lists;
-  gint motif_n_target_lists;
-
-  /* Mapping to/from virtual atoms */
-
-  GHashTable *atom_from_virtual;
-  GHashTable *atom_to_virtual;
-
-  /* list of filters for client messages */
-  GList *client_filters;
-
-  /* List of functions to go from extension event => X window */
-  GSList *event_types;
-  
-  /* X ID hashtable */
-  GHashTable *xid_ht;
-
-  /* translation queue */
-  GQueue *translate_queue;
-
-  /* Input device */
   /* input GdkDevice list */
   GList *input_devices;
 
@@ -127,16 +79,6 @@ struct _GdkDisplayWayland
   /* Time of most recent user interaction. */
   gulong user_time;
 
-  /* Sets of atoms for DND */
-  guint base_dnd_atoms_precached : 1;
-  guint xdnd_atoms_precached : 1;
-  guint motif_atoms_precached : 1;
-  guint use_sync : 1;
-
-  guint have_shapes : 1;
-  guint have_input_shapes : 1;
-  gint shape_event_base;
-
   /* The offscreen window that has the pointer in it (if any) */
   GdkWindow *active_offscreen_window;
 
@@ -144,6 +86,7 @@ struct _GdkDisplayWayland
   struct wl_display *wl_display;
   struct wl_egl_display *native_display;
   struct wl_compositor *compositor;
+  struct wl_shm *shm;
   struct wl_shell *shell;
   struct wl_output *output;
   struct wl_input_device *input_device;
@@ -151,6 +94,8 @@ struct _GdkDisplayWayland
   EGLDisplay egl_display;
   EGLContext egl_context;
   cairo_device_t *cairo_device;
+
+  GdkCursor **cursors;
 
   PFNGLEGLIMAGETARGETTEXTURE2DOESPROC image_target_texture_2d;
   PFNEGLCREATEIMAGEKHRPROC create_image;
@@ -163,8 +108,6 @@ struct _GdkDisplayWaylandClass
 };
 
 GType      _gdk_display_wayland_get_type            (void);
-GdkScreen *_gdk_wayland_display_screen_for_xrootwin (GdkDisplay *display,
-						     Window      xrootwin);
 
 G_END_DECLS
 

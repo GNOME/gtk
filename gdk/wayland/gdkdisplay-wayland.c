@@ -17,9 +17,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#define EGL_EGLEXT_PROTOTYPES 1
-
 #include "config.h"
+
+#include <wayland-egl.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +31,6 @@
 #include "gdkwayland.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-wayland.h"
-#include "gdkeventsource.h"
 #include "gdkscreen.h"
 #include "gdkscreen-wayland.h"
 #include "gdkinternals.h"
@@ -39,8 +38,6 @@
 #include "gdkdevicemanager.h"
 #include "gdkdevicemanager-wayland.h"
 #include "gdkkeysprivate.h"
-
-#include <wayland-egl.h>
 
 typedef struct _GdkEventTypeWayland GdkEventTypeWayland;
 
@@ -183,6 +180,8 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
 
   if (strcmp(interface, "compositor") == 0) {
     display_wayland->compositor = wl_compositor_create(display, id);
+  } else if (strcmp(interface, "shm") == 0) {
+    display_wayland->shm = wl_shm_create(display, id);
   } else if (strcmp(interface, "shell") == 0) {
     display_wayland->shell = wl_shell_create(display, id);
     wl_shell_add_listener(display_wayland->shell,
@@ -212,7 +211,7 @@ gdk_display_init_egl(GdkDisplay *display)
   };
 
   display_wayland->egl_display =
-    eglGetDisplay((EGLNativeDisplayType) display_wayland->native_display);
+    eglGetDisplay(display_wayland->native_display);
   if (!eglInitialize(display_wayland->egl_display, &major, &minor)) {
     fprintf(stderr, "failed to initialize display\n");
     return FALSE;
@@ -300,8 +299,7 @@ _gdk_wayland_display_open (const gchar *display_name)
   gdk_input_init (display);
 
   g_signal_emit_by_name (display, "opened");
-  g_signal_emit_by_name (gdk_display_manager_get(),
-			 "display_opened", display);
+  g_signal_emit_by_name (gdk_display_manager_get(), "display_opened", display);
 
   return display;
 }
@@ -343,18 +341,6 @@ gdk_wayland_display_finalize (GObject *object)
   if (display_wayland->keymap)
     g_object_unref (display_wayland->keymap);
 
-  /* Atom Hashtable */
-  g_hash_table_destroy (display_wayland->atom_from_virtual);
-  g_hash_table_destroy (display_wayland->atom_to_virtual);
-
-  /* list of filters for client messages */
-  g_list_foreach (display_wayland->client_filters, (GFunc) g_free, NULL);
-  g_list_free (display_wayland->client_filters);
-
-  /* List of event window extraction functions */
-  g_slist_foreach (display_wayland->event_types, (GFunc)g_free, NULL);
-  g_slist_free (display_wayland->event_types);
-
   /* input GdkDevice list */
   g_list_foreach (display_wayland->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (display_wayland->input_devices);
@@ -369,9 +355,6 @@ gdk_wayland_display_finalize (GObject *object)
   g_free (display_wayland->screens);
 
   g_free (display_wayland->startup_notification_id);
-
-  /* X ID hashtable */
-  g_hash_table_destroy (display_wayland->xid_ht);
 
   G_OBJECT_CLASS (_gdk_display_wayland_parent_class)->finalize (object);
 }
@@ -464,9 +447,7 @@ gdk_wayland_display_get_default_group (GdkDisplay *display)
 static gboolean
 gdk_wayland_display_supports_selection_notification (GdkDisplay *display)
 {
-  GdkDisplayWayland *display_wayland = GDK_DISPLAY_WAYLAND (display);
-
-  return display_wayland->have_xfixes;
+  return TRUE;
 }
 
 static gboolean
@@ -495,13 +476,13 @@ gdk_wayland_display_store_clipboard (GdkDisplay    *display,
 static gboolean
 gdk_wayland_display_supports_shapes (GdkDisplay *display)
 {
-  return GDK_DISPLAY_WAYLAND (display)->have_shapes;
+  return TRUE;
 }
 
 static gboolean
 gdk_wayland_display_supports_input_shapes (GdkDisplay *display)
 {
-  return GDK_DISPLAY_WAYLAND (display)->have_input_shapes;
+  return TRUE;
 }
 
 static gboolean

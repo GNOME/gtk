@@ -34,7 +34,6 @@
 #include "gdkwindow-wayland.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-wayland.h"
-#include "gdkeventsource.h"
 
 #include <stdlib.h>
 #include <stdio.h>

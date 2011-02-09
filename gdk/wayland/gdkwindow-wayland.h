@@ -32,6 +32,7 @@
 
 #include <stdint.h>
 #include <wayland-client.h>
+#include <wayland-egl.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GL/gl.h>
@@ -82,12 +83,6 @@ struct _GdkToplevelWayland
 
   /* Time of most recent user interaction. */
   gulong user_time;
-
-  /* We use an extra X window for toplevel windows that we XSetInputFocus()
-   * to in order to avoid getting keyboard events redirected to subwindows
-   * that might not even be part of this app
-   */
-  Window focus_window;
 };
 
 GType               _gdk_window_impl_wayland_get_type  (void);

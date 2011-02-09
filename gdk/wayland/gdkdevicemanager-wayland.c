@@ -26,9 +26,9 @@
 #include "gdkdevice-wayland.h"
 #include "gdkkeysyms.h"
 #include "gdkprivate-wayland.h"
-#include "gdkeventsource.h"
 
 #include <X11/extensions/XKBcommon.h>
+#include <X11/keysym.h>
 
 static void    gdk_device_manager_core_finalize    (GObject *object);
 
@@ -59,6 +59,7 @@ input_handle_motion(void *data, struct wl_input_device *input_device,
 
   event = gdk_event_new (GDK_NOTHING);
 
+  device->time = time;
   device->x = x;
   device->y = y;
   device->surface_x = sx;
@@ -89,6 +90,7 @@ input_handle_button(void *data, struct wl_input_device *input_device,
 
   fprintf (stderr, "button event %d, state %d\n", button, state);
 
+  device->time = time;
   event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
   event->button.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->pointer);
@@ -120,6 +122,7 @@ input_handle_key(void *data, struct wl_input_device *input_device,
   struct xkb_desc *xkb;
   GdkKeymap *keymap;
 
+  device->time = time;
   event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
   event->key.window = g_object_ref (device->keyboard_focus);
   gdk_event_set_device (event, device->keyboard);
@@ -134,7 +137,7 @@ input_handle_key(void *data, struct wl_input_device *input_device,
   code = key + xkb->min_key_code;
 
   level = 0;
-  if (device->modifiers & ShiftMask &&
+  if (device->modifiers & XKB_COMMON_SHIFT_MASK &&
       XkbKeyGroupWidth(xkb, code, 0) > 1)
     level = 1;
 
@@ -216,6 +219,7 @@ input_handle_pointer_focus(void *data,
   GdkWaylandDevice *device = data;
   GdkEvent *event;
 
+  device->time = time;
   if (device->pointer_focus)
     {
       event = gdk_event_new (GDK_LEAVE_NOTIFY);
@@ -300,6 +304,7 @@ input_handle_keyboard_focus(void *data,
 
   fprintf (stderr, "keyboard focus surface %p\n", surface);
 
+  device->time = time;
   if (device->keyboard_focus)
     {
       event = gdk_event_new (GDK_FOCUS_CHANGE);

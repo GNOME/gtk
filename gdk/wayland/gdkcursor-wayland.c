@@ -36,6 +36,8 @@
 #include "gdkwayland.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+#include <sys/mman.h>
+
 #define GDK_TYPE_WAYLAND_CURSOR              (_gdk_wayland_cursor_get_type ())
 #define GDK_WAYLAND_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_CURSOR, GdkWaylandCursor))
 #define GDK_WAYLAND_CURSOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WAYLAND_CURSOR, GdkWaylandCursorClass))
@@ -51,6 +53,9 @@ struct _GdkWaylandCursor
   GdkCursor cursor;
   gchar *name;
   guint serial;
+  int x, y, width, height, size;
+  void *map;
+  struct wl_buffer *buffer;
 };
 
 struct _GdkWaylandCursorClass
@@ -78,6 +83,17 @@ gdk_wayland_cursor_get_image (GdkCursor *cursor)
   return NULL;
 }
 
+struct wl_buffer *
+_gdk_wayland_cursor_get_buffer (GdkCursor *cursor, int *x, int *y)
+{
+  GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
+
+  *x = wayland_cursor->x;
+  *y = wayland_cursor->y;
+
+  return wayland_cursor->buffer;
+}
+
 static void
 _gdk_wayland_cursor_class_init (GdkWaylandCursorClass *wayland_cursor_class)
 {
@@ -94,20 +110,171 @@ _gdk_wayland_cursor_init (GdkWaylandCursor *cursor)
 {
 }
 
-GdkCursor*
+static void
+set_pixbuf (GdkWaylandCursor *cursor, GdkPixbuf *pixbuf)
+{
+  int stride, i, n_channels;
+  unsigned char *pixels, *end, *argb_pixels, *s, *d;
+
+  stride = gdk_pixbuf_get_rowstride(pixbuf);
+  pixels = gdk_pixbuf_get_pixels(pixbuf);
+  n_channels = gdk_pixbuf_get_n_channels(pixbuf);
+  argb_pixels = cursor->map;
+
+#define MULT(_d,c,a,t) \
+	do { t = c * a + 0x7f; _d = ((t >> 8) + t) >> 8; } while (0)
+
+  if (n_channels == 4)
+    {
+      for (i = 0; i < cursor->height; i++)
+	{
+	  s = pixels + i * stride;
+	  end = s + cursor->width * 4;
+	  d = argb_pixels + i * cursor->width * 4;
+	  while (s < end)
+	    {
+	      unsigned int t;
+
+	      MULT(d[0], s[2], s[3], t);
+	      MULT(d[1], s[1], s[3], t);
+	      MULT(d[2], s[0], s[3], t);
+	      d[3] = s[3];
+	      s += 4;
+	      d += 4;
+	    }
+	}
+    }
+  else if (n_channels == 3)
+    {
+      for (i = 0; i < cursor->height; i++)
+	{
+	  s = pixels + i * stride;
+	  end = s + cursor->width * 3;
+	  d = argb_pixels + i * cursor->width * 4;
+	  while (s < end)
+	    {
+	      d[0] = s[2];
+	      d[1] = s[1];
+	      d[2] = s[0];
+	      d[3] = 0xff;
+	      s += 3;
+	      d += 4;
+	    }
+	}
+    }
+}
+
+static GdkCursor *
+create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
+{
+  GdkWaylandCursor *cursor;
+  struct wl_visual *visual;
+  int stride, fd;
+  char *filename;
+  GError *error = NULL;
+
+  cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
+			 "cursor-type", GDK_CURSOR_IS_PIXMAP,
+			 "display", display,
+			 NULL);
+  cursor->name = NULL;
+  cursor->serial = theme_serial;
+  cursor->x = x;
+  cursor->y = y;
+  cursor->width = gdk_pixbuf_get_width (pixbuf);
+  cursor->height = gdk_pixbuf_get_height (pixbuf);
+
+  stride = cursor->width * 4;
+  cursor->size = stride * cursor->height;
+
+  fd = g_file_open_tmp("wayland-shm-XXXXXX", &filename, &error);
+  if (fd < 0) {
+    fprintf(stderr, "g_file_open_tmp failed: %s\n", error->message);
+    g_error_free (error);
+    return NULL;
+  }
+
+  unlink (filename);
+  g_free (filename);
+
+  if (ftruncate(fd, cursor->size) < 0) {
+    fprintf(stderr, "ftruncate failed: %m\n");
+    close(fd);
+    return NULL;
+  }
+
+  cursor->map = mmap(NULL, cursor->size,
+		     PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  if (cursor->map == MAP_FAILED) {
+    fprintf(stderr, "mmap failed: %m\n");
+    close(fd);
+    return NULL;
+  }
+
+  set_pixbuf (cursor, pixbuf);
+
+  visual = wl_display_get_premultiplied_argb_visual(display->wl_display);
+  cursor->buffer = wl_shm_create_buffer(display->shm,
+					fd,
+					cursor->width,
+					cursor->height,
+					stride, visual);
+
+  close(fd);
+
+  return GDK_CURSOR (cursor);
+}
+
+#define DATADIR "/usr/share/wayland"
+
+static const struct {
+  GdkCursorType type;
+  const char *filename;
+  int hotspot_x, hotspot_y;
+} cursor_definitions[] = {
+  { GDK_XTERM, DATADIR "/xterm.png", 15, 15 },
+  { GDK_BOTTOM_RIGHT_CORNER, DATADIR "/bottom_right_corner.png", 28, 28 }
+};
+
+GdkCursor *
 _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 					  GdkCursorType  cursor_type)
 {
-  GdkWaylandCursor *private;
+  GdkDisplayWayland *wayland_display;
+  GdkPixbuf *pixbuf;
+  GError *error = NULL;
+  int i;
 
-  private = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
-                          "display", display,
-                          NULL);
-  private->name = NULL;
-  private->serial = theme_serial;
+  for (i = 0; i < G_N_ELEMENTS (cursor_definitions); i++)
+    {
+      if (cursor_definitions[i].type == cursor_type)
+	break;
+    }
 
-  return GDK_CURSOR (private);
+  if (i == G_N_ELEMENTS (cursor_definitions))
+    return NULL;
+
+  wayland_display = GDK_DISPLAY_WAYLAND (display);
+  if (!wayland_display->cursors)
+    wayland_display->cursors =
+      g_new0 (GdkCursor *, G_N_ELEMENTS(cursor_definitions));
+  if (wayland_display->cursors[i])
+    return g_object_ref (wayland_display->cursors[i]);
+
+  pixbuf = gdk_pixbuf_new_from_file(cursor_definitions[i].filename, &error);
+  if (error != NULL)
+    {
+      g_error_free(error);
+      return NULL;
+    }
+
+  wayland_display->cursors[i] =
+    create_cursor(wayland_display, pixbuf,
+		  cursor_definitions[i].hotspot_x,
+		  cursor_definitions[i].hotspot_y);
+  g_object_unref (pixbuf);
+
+  return g_object_ref (wayland_display->cursors[i]);
 }
 
 GdkCursor*

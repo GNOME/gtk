@@ -53,8 +53,6 @@ struct _GdkScreenWayland
   int width_mm, height_mm;
 
   /* Window manager */
-  long last_wmspec_check_time;
-  Window wmspec_check_window;
   char *window_manager_name;
   /* TRUE if wmspec_check_window has changed since last
    * fetch of _NET_SUPPORTED
@@ -99,7 +97,6 @@ struct _GdkScreenWaylandClass
 struct _GdkWaylandMonitor
 {
   GdkRectangle  geometry;
-  XID		output;
   int		width_mm;
   int		height_mm;
   char *	output_name;
@@ -117,7 +114,6 @@ init_monitor_geometry (GdkWaylandMonitor *monitor,
   monitor->geometry.width = width;
   monitor->geometry.height = height;
 
-  monitor->output = None;
   monitor->width_mm = -1;
   monitor->height_mm = -1;
   monitor->output_name = NULL;
@@ -173,8 +169,6 @@ gdk_wayland_screen_dispose (GObject *object)
     _gdk_window_destroy (screen_wayland->root_window, TRUE);
 
   G_OBJECT_CLASS (_gdk_screen_wayland_parent_class)->dispose (object);
-
-  screen_wayland->wmspec_check_window = None;
 }
 
 static void
@@ -511,7 +505,6 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 
   screen_wayland = GDK_SCREEN_WAYLAND (screen);
   screen_wayland->display = display;
-  screen_wayland->wmspec_check_window = None;
   /* we want this to be always non-null */
   screen_wayland->window_manager_name = g_strdup ("unknown");
 

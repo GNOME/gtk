@@ -46,6 +46,7 @@ struct _GdkWaylandDevice
   GdkWindow *keyboard_focus;
   struct wl_input_device *device;
   int32_t x, y, surface_x, surface_y;
+  uint32_t time;
 };
 
 struct _GdkDeviceCore

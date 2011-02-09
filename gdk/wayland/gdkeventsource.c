@@ -19,8 +19,8 @@
 
 #include "config.h"
 
-#include "gdkeventsource.h"
 #include "gdkinternals.h"
+#include "gdkprivate-wayland.h"
 
 typedef struct _GdkWaylandEventSource {
   GSource source;
