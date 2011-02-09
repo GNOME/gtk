@@ -39,16 +39,16 @@ G_BEGIN_DECLS
 
 /**
  * GdkColor:
- * @pixel: For allocated colors, the value used to
- *  draw this color on the screen.
+ * @pixel: For allocated colors, the pixel value used to
+ *     draw this color on the screen. Not used anymore.
  * @red: The red component of the color. This is
- *  a value between 0 and 65535, with 65535 indicating
- *  full intensitiy.
- * @green: The green component of the color.
- * @blue: The blue component of the color.
+ *     a value between 0 and 65535, with 65535 indicating
+ *     full intensitiy
+ * @green: The green component of the color
+ * @blue: The blue component of the color
  *
- * The #GdkColor structure is used to describe an
- * allocated or unallocated color.
+ * The #GdkColor structure is used to describe a color,
+ * similar to the XColor struct used in the X11 drawing API.
  */
 struct _GdkColor
 {
@@ -58,18 +58,20 @@ struct _GdkColor
   guint16 blue;
 };
 
-#define GDK_TYPE_COLOR                 (gdk_color_get_type ())
+#define GDK_TYPE_COLOR (gdk_color_get_type ())
+
+GType     gdk_color_get_type (void) G_GNUC_CONST;
 
 GdkColor *gdk_color_copy      (const GdkColor *color);
 void      gdk_color_free      (GdkColor       *color);
-gboolean  gdk_color_parse     (const gchar    *spec,
-			       GdkColor       *color);
-guint     gdk_color_hash      (const GdkColor *colora);
-gboolean  gdk_color_equal     (const GdkColor *colora,
-			       const GdkColor *colorb);
-gchar *   gdk_color_to_string (const GdkColor *color);
 
-GType     gdk_color_get_type (void) G_GNUC_CONST;
+guint     gdk_color_hash      (const GdkColor *color);
+gboolean  gdk_color_equal     (const GdkColor *colora,
+                               const GdkColor *colorb);
+
+gboolean  gdk_color_parse     (const gchar    *spec,
+                               GdkColor       *color);
+gchar *   gdk_color_to_string (const GdkColor *color);
 
 
 G_END_DECLS
