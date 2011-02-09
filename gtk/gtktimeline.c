@@ -35,6 +35,7 @@ struct GtkTimelinePriv
   guint source_id;
 
   GTimer *timer;
+  gdouble elapsed_time;
 
   gdouble progress;
   gdouble last_progress;
@@ -309,16 +310,15 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
   gdouble delta_progress, progress;
-  guint elapsed_time;
 
   priv = timeline->priv;
 
-  elapsed_time = (guint) (g_timer_elapsed (priv->timer, NULL) * 1000);
+  priv->elapsed_time = (guint) (g_timer_elapsed (priv->timer, NULL) * 1000);
   g_timer_start (priv->timer);
 
   if (priv->animations_enabled)
     {
-      delta_progress = (gdouble) elapsed_time / priv->duration;
+      delta_progress = (gdouble) priv->elapsed_time / priv->duration;
       progress = priv->last_progress;
 
       if (priv->direction == GTK_TIMELINE_DIRECTION_BACKWARD)
@@ -507,6 +507,25 @@ _gtk_timeline_is_running (GtkTimeline *timeline)
   priv = timeline->priv;
 
   return (priv->source_id != 0);
+}
+
+/**
+ * gtk_timeline_get_elapsed_time:
+ * @timeline: A #GtkTimeline
+ *
+ * Returns the elapsed time since the last GtkTimeline::frame signal
+ *
+ * Return Value: elapsed time in milliseconds since the last frame
+ **/
+guint
+_gtk_timeline_get_elapsed_time (GtkTimeline *timeline)
+{
+  GtkTimelinePriv *priv;
+
+  g_return_val_if_fail (GTK_IS_TIMELINE (timeline), 0);
+
+  priv = timeline->priv;
+  return priv->elapsed_time;
 }
 
 /**
