@@ -247,16 +247,51 @@ draw_callback (GtkWidget *area,
   return FALSE;
 }
 
-#define ROTATE_FPS 40
-#define ROTATE_SECONDS 3
+#define ROTATE_FPS 30
+#define ROTATE_SECONDS 6
+
+static void
+area_invalidate_picture (GtkWidget *area, guint i, const cairo_region_t *region)
+{
+  cairo_region_t *copy;
+  double x, y;
+  int dx, dy;
+
+  get_picture_offset (area, i, &x, &y);
+  if (region)
+    copy = cairo_region_copy (region);
+  else
+    {
+      cairo_rectangle_int_t rect = { 0, 0,
+                                     gdk_picture_get_width (demos[i].attached_picture),
+                                     gdk_picture_get_height (demos[i].attached_picture) };
+      copy = cairo_region_create_rectangle (&rect);
+    }
+  cairo_region_translate (copy, floor (x), floor (y));
+  gtk_widget_queue_draw_region (area, copy);
+  dx = (floor (x) != ceil (x)) ? 1 : 0;
+  dy = (floor (y) != ceil (y)) ? 1 : 0;
+  if (dx || dy)
+    {
+      cairo_region_translate (copy, dx, dy);
+      gtk_widget_queue_draw_region (area, copy);
+    }
+  cairo_region_destroy (copy);
+}
 
 static gboolean
 rotate_area (gpointer area)
 {
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (demos); i++)
+    area_invalidate_picture (area, i, NULL);
+
   rotation += 360 / ROTATE_SECONDS / ROTATE_FPS;
   rotation %= 360;
 
-  gtk_widget_queue_draw (area);
+  for (i = 0; i < G_N_ELEMENTS (demos); i++)
+    area_invalidate_picture (area, i, NULL);
 
   return TRUE;
 }
@@ -280,9 +315,6 @@ rotation_toggled (GtkButton *button, GtkWidget *area)
 static void
 picture_changed (GdkPicture *picture, const cairo_region_t *region, GtkWidget *area)
 {
-  cairo_region_t *copy;
-  double x, y;
-  int dx, dy;
   guint i;
 
   for (i = 0; i < G_N_ELEMENTS (demos); i++)
@@ -292,18 +324,7 @@ picture_changed (GdkPicture *picture, const cairo_region_t *region, GtkWidget *a
     }
   g_assert (i < G_N_ELEMENTS (demos));
 
-  get_picture_offset (area, i, &x, &y);
-  copy = cairo_region_copy (region);
-  cairo_region_translate (copy, floor (x), floor (y));
-  gtk_widget_queue_draw_region (area, copy);
-  dx = (floor (x) != ceil (x)) ? 1 : 0;
-  dy = (floor (y) != ceil (y)) ? 1 : 0;
-  if (dx || dy)
-    {
-      cairo_region_translate (copy, dx, dy);
-      gtk_widget_queue_draw_region (area, copy);
-    }
-  cairo_region_destroy (copy);
+  area_invalidate_picture (area, i, region);
 }
 
 static void
