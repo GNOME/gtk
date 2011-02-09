@@ -25,3 +25,17 @@ Installation
 ============
 
 See the file 'INSTALL'
+
+
+Release notes for 3.0
+=====================
+
+* GTK+ 3 is a major new version of GTK+, which is parallel installable
+  with GTK+ 2.x. For information about porting applications from GTK+ 2.x
+  to GTK+ 3, see the file:
+
+  docs/reference/gtk/html/migrating.html
+
+  Or online at:
+
+  http://library.gnome.org/devel/gtk/2.99/migrating.html
