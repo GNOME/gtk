@@ -636,8 +636,8 @@ init_context_group (GtkCellAreaBox        *box,
       align_groups[i]  = group->align;
     }
 
-  /* This call implies reseting the request info */
-  gtk_cell_area_box_init_groups (context, priv->groups->len, expand_groups, align_groups);
+  /* This call implies resetting the request info */
+  _gtk_cell_area_box_init_groups (context, priv->groups->len, expand_groups, align_groups);
   g_free (expand_groups);
   g_free (align_groups);
 }
