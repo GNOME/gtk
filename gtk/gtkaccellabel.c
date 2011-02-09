@@ -597,30 +597,34 @@ gtk_accel_label_get_string (GtkAccelLabel *accel_label)
 }
 
 /* Underscores in key names are better displayed as spaces
- * E.g., Page_Up should be "Page Up"
+ * E.g., Page_Up should be "Page Up".
+ *
+ * Some keynames also have prefixes that are not suitable
+ * for display, e.g XF86AudioMute, so strip those out, too.
+ *
+ * This function is only called on untranslated keynames,
+ * so no need to be UTF-8 safe.
  */
 static void
-substitute_underscores (gchar *str)
+append_without_underscores (GString *s,
+                            gchar   *str)
 {
-  char *p;
+  gchar *p;
 
-  for (p = str; *p; p++)
-    if (*p == '_')
-      *p = ' ';
-}
-
-/* Some keynames have prefixes that are not suitable
- * for display, e.g XF86AudioMute
- */
-static gchar *
-strip_prefix (gchar *str)
-{
   if (g_str_has_prefix (str, "XF86"))
-    return str + 4;
+    p = str + 4;
   else if (g_str_has_prefix (str, "ISO_"))
-    return str + 4;
+    p = str + 4;
+  else
+    p = str;
 
-  return str;
+  for ( ; *p; p++)
+    {
+      if (*p == '_')
+        g_string_append_c (s, ' ');
+      else
+        g_string_append_c (s, *p);
+    }
 }
 
 /* On Mac, if the key has symbolic representation (e.g. arrow keys),
@@ -846,11 +850,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 	      const gchar *str;
               str = g_dpgettext2 (GETTEXT_PACKAGE, "keyboard label", tmp);
 	      if (str == tmp)
-		{
-		  substitute_underscores (tmp);
-                  tmp = strip_prefix (tmp);
-		  g_string_append (gstring, tmp);
-		}
+                append_without_underscores (gstring, tmp);
 	      else
 		g_string_append (gstring, str);
 	    }
