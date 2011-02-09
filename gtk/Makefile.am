@@ -428,6 +428,7 @@ gtk_private_h_sources =		\
 	gtksizegroup-private.h	\
 	gtksocketprivate.h	\
 	gtkstylecontextprivate.h \
+	gtkstyledpicture.h	\
 	gtktextbtree.h		\
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
@@ -625,6 +626,7 @@ gtk_base_c_sources = 		\
 	gtkstock.c		\
 	gtkstylablepicture.c	\
 	gtkstylecontext.c	\
+	gtkstyledpicture.c	\
 	gtkstyleproperties.c	\
 	gtkstyleprovider.c	\
 	gtkstyle.c		\
