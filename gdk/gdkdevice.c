@@ -32,7 +32,8 @@
  * @Title: GdkDevice
  * @See_also: #GdkDeviceManager
  *
- * The #GdkDevice object represents a single input device.
+ * The #GdkDevice object represents a single input device, such
+ * as a keyboard, a mouse, a touchpad, etc.
  *
  * See the #GdkDeviceManager documentation for more information
  * about the various kinds of master and slave devices, and their
@@ -48,7 +49,6 @@ struct _GdkAxisInfo
 
   gdouble min_axis;
   gdouble max_axis;
-
   gdouble min_value;
   gdouble max_value;
   gdouble resolution;

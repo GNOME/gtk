@@ -51,8 +51,7 @@ MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=gdk
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files = 		\
-	version.xml		\
-	multihead.sgml
+	version.xml
 
 # Images to copy into HTML directory
 HTML_IMAGES = 				\

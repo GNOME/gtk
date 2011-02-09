@@ -8,21 +8,24 @@
   <bookinfo>
     <title>GDK Reference Manual</title>
     <releaseinfo>
-      for GDK &version;
-      The latest version of this documentation can be found on-line at
+      This document is for the GDK 3 library, version &version;
+      The latest version can be found online at
       <ulink role="online-location" url="http://library.gnome.org/devel/gdk/unstable/">http://library.gnome.org/devel/gdk/unstable/</ulink>.
+      If you are looking for the older GDK 2 series of libraries,
+      they can be found under their version numbers; for example,
+      2.22 is available at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gdk/2.22/">http://library.gnome.org/devel/gdk/2.22/</ulink>.
     </releaseinfo>
   </bookinfo>
 
   <reference id="reference">
     <title>API Reference</title>
     <xi:include href="xml/general.xml" />
-    <xi:include href="multihead.sgml" />
-    <xi:include href="xml/gdkdisplay.xml" />
     <xi:include href="xml/gdkdisplaymanager.xml" />
-    <xi:include href="xml/gdkdevice.xml" />
-    <xi:include href="xml/gdkdevicemanager.xml" />
+    <xi:include href="xml/gdkdisplay.xml" />
     <xi:include href="xml/gdkscreen.xml" />
+    <xi:include href="xml/gdkdevicemanager.xml" />
+    <xi:include href="xml/gdkdevice.xml" />
     <xi:include href="xml/regions.xml" />
     <xi:include href="xml/pixbufs.xml" />
     <xi:include href="xml/colors.xml" />

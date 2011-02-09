@@ -54,27 +54,7 @@
  * The #GDK_WINDOWING_X11 macro is defined if the X11 backend
  * is supported.
  *
- * Use this macro to guard code that is specific to the X11-backend.
- * Since GDK may be configured with multiple backends, an additional
- * runtime check for the used backend is recommended:
- *
- * |[
- * #ifdef GDK_WINDOWING_X11
- *   if (GDK_IS_X11_DISPLAY (display))
- *     {
- *       /&ast; make X11-specific calls here &ast;/
- *     }
- *   else
- * #endif
- * #ifdef GDK_WINDOWING_QUARTZ
- *   if (GDK_IS_QUARTZ_DISPLAY (display))
- *     {
- *       /&ast; make Quartz-specific calls here &ast/
- *     }
- *   else
- * #endif
- *   g_error ("Unsupported GDK backend");
- * ]|
+ * Use this macro to guard code that is specific to the X11 backend.
  */
 
 /**
@@ -82,6 +62,8 @@
  *
  * The #GDK_WINDOWING_WIN32 macro is defined if the Win32 backend
  * is supported.
+ *
+ * Use this macro to guard code that is specific to the Win32 backend.
  */
 
 /**
@@ -89,6 +71,8 @@
  *
  * The #GDK_WINDOWING_QUARTZ macro is defined if the Quartz backend
  * is supported.
+ *
+ * Use this macro to guard code that is specific to the Quartz backend.
  */
 
 typedef struct _GdkPredicate  GdkPredicate;
