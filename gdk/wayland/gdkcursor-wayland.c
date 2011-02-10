@@ -244,6 +244,10 @@ static const struct {
   int hotspot_x, hotspot_y;
 } cursor_definitions[] = {
   { GDK_BLANK_CURSOR, NULL, 0, 0 },
+  { GDK_HAND1, DATADIR "/hand1.png", 18, 11 },
+  { GDK_HAND2, DATADIR "/hand2.png", 14,  8 },
+  { GDK_SB_H_DOUBLE_ARROW, DATADIR "/sb_h_double_arrow.png", 15, 15 },
+  { GDK_SB_V_DOUBLE_ARROW, DATADIR "/sb_v_double_arrow.png", 15, 15 },
   { GDK_XTERM, DATADIR "/xterm.png", 15, 15 },
   { GDK_BOTTOM_RIGHT_CORNER, DATADIR "/bottom_right_corner.png", 28, 28 }
 };
@@ -277,12 +281,19 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
   if (wayland_display->cursors[i])
     return g_object_ref (wayland_display->cursors[i]);
 
+  GDK_NOTE (CURSOR,
+	    g_message ("creating new cursor for type %d, filename %s",
+		       cursor_type, cursor_definitions[i].filename));
+
   if (cursor_type != GDK_BLANK_CURSOR)
     pixbuf = gdk_pixbuf_new_from_file(cursor_definitions[i].filename, &error);
   else
     pixbuf = NULL;
   if (error != NULL)
     {
+      GDK_NOTE (CURSOR,
+		g_message ("failed to load %s: %s",
+			   cursor_definitions[i].filename, error->message));
       g_error_free(error);
       return NULL;
     }
