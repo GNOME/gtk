@@ -587,11 +587,11 @@ input_handle_keyboard_focus(void *data,
 }
 
 static const struct wl_input_device_listener input_device_listener = {
-	input_handle_motion,
-	input_handle_button,
-	input_handle_key,
-	input_handle_pointer_focus,
-	input_handle_keyboard_focus,
+  input_handle_motion,
+  input_handle_button,
+  input_handle_key,
+  input_handle_pointer_focus,
+  input_handle_keyboard_focus,
 };
 
 void
