@@ -264,6 +264,7 @@ input_handle_motion(void *data, struct wl_input_device *input_device,
 		    int32_t x, int32_t y, int32_t sx, int32_t sy)
 {
   GdkWaylandDevice *device = data;
+  GdkDisplayWayland *display = GDK_DISPLAY_WAYLAND (device->display);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_NOTHING);
@@ -285,6 +286,7 @@ input_handle_motion(void *data, struct wl_input_device *input_device,
   event->motion.axes = NULL;
   event->motion.state = device->modifiers;
   event->motion.is_hint = 0;
+  gdk_event_set_screen (event, display->screens[0]);
 
   _gdk_wayland_display_deliver_event (device->display, event);
 }
@@ -294,6 +296,7 @@ input_handle_button(void *data, struct wl_input_device *input_device,
 		     uint32_t time, uint32_t button, uint32_t state)
 {
   GdkWaylandDevice *device = data;
+  GdkDisplayWayland *display = GDK_DISPLAY_WAYLAND (device->display);
   GdkEvent *event;
   uint32_t modifier;
 
@@ -311,6 +314,7 @@ input_handle_button(void *data, struct wl_input_device *input_device,
   event->button.axes = NULL;
   event->button.state = device->modifiers;
   event->button.button = button - 271;
+  gdk_event_set_screen (event, display->screens[0]);
 
   modifier = 1 << (8 + button - 272);
   if (state)
