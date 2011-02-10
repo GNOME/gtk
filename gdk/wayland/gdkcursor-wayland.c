@@ -181,8 +181,16 @@ create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
   cursor->serial = theme_serial;
   cursor->x = x;
   cursor->y = y;
-  cursor->width = gdk_pixbuf_get_width (pixbuf);
-  cursor->height = gdk_pixbuf_get_height (pixbuf);
+  if (pixbuf)
+    {
+      cursor->width = gdk_pixbuf_get_width (pixbuf);
+      cursor->height = gdk_pixbuf_get_height (pixbuf);
+    }
+  else
+    {
+      cursor->width = 1;
+      cursor->height = 1;
+    }
 
   stride = cursor->width * 4;
   cursor->size = stride * cursor->height;
@@ -211,7 +219,10 @@ create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
     return NULL;
   }
 
-  set_pixbuf (cursor, pixbuf);
+  if (pixbuf)
+    set_pixbuf (cursor, pixbuf);
+  else
+    memset (cursor->map, 0, 4);
 
   visual = wl_display_get_premultiplied_argb_visual(display->wl_display);
   cursor->buffer = wl_shm_create_buffer(display->shm,
@@ -232,6 +243,7 @@ static const struct {
   const char *filename;
   int hotspot_x, hotspot_y;
 } cursor_definitions[] = {
+  { GDK_BLANK_CURSOR, NULL, 0, 0 },
   { GDK_XTERM, DATADIR "/xterm.png", 15, 15 },
   { GDK_BOTTOM_RIGHT_CORNER, DATADIR "/bottom_right_corner.png", 28, 28 }
 };
@@ -252,7 +264,11 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
     }
 
   if (i == G_N_ELEMENTS (cursor_definitions))
-    return NULL;
+    {
+      g_warning("unhandled cursor type %d, falling back to blank\n",
+		cursor_type);
+      i = 0;
+    }
 
   wayland_display = GDK_DISPLAY_WAYLAND (display);
   if (!wayland_display->cursors)
@@ -261,7 +277,10 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
   if (wayland_display->cursors[i])
     return g_object_ref (wayland_display->cursors[i]);
 
-  pixbuf = gdk_pixbuf_new_from_file(cursor_definitions[i].filename, &error);
+  if (cursor_type != GDK_BLANK_CURSOR)
+    pixbuf = gdk_pixbuf_new_from_file(cursor_definitions[i].filename, &error);
+  else
+    pixbuf = NULL;
   if (error != NULL)
     {
       g_error_free(error);
@@ -272,7 +291,8 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
     create_cursor(wayland_display, pixbuf,
 		  cursor_definitions[i].hotspot_x,
 		  cursor_definitions[i].hotspot_y);
-  g_object_unref (pixbuf);
+  if (pixbuf)
+    g_object_unref (pixbuf);
 
   return g_object_ref (wayland_display->cursors[i]);
 }
