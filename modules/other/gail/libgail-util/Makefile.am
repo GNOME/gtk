@@ -29,7 +29,7 @@ uninstall-ms-lib:
 endif
 
 
-lib_LTLIBRARIES = libgailutil-3.0.la
+lib_LTLIBRARIES = libgailutil-3.la
 
 util_c_sources =		\
 	gailmisc.c		\
@@ -42,13 +42,13 @@ util_public_h_sources =		\
 	gailtextutil.h		\
 	gail-util.h
 
-libgailutil_3_0_la_SOURCES = 	\
+libgailutil_3_la_SOURCES = 	\
 	$(util_c_sources)
 
 libgailutilinclude_HEADERS =	\
 	$(util_public_h_sources)
 
-libgailutil_3_0_la_CPPFLAGS = \
+libgailutil_3_la_CPPFLAGS = \
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
@@ -58,23 +58,23 @@ libgailutil_3_0_la_CPPFLAGS = \
 	-DGDK_DISABLE_DEPRECATED\
 	-DGTK_DISABLE_DEPRECATED
 
-libgailutil_3_0_la_CFLAGS = \
+libgailutil_3_la_CFLAGS = \
 	$(GTK_DEP_CFLAGS)	\
 	$(GTK_DEBUG_FLAGS)	\
 	$(AM_CFLAGS)
 
-libgailutil_3_0_la_LIBADD = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
-	$(top_builddir)/gdk/libgdk-3.0.la	\
+libgailutil_3_la_LIBADD = \
+	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)
 
-libgailutil_3_0_la_LDFLAGS = \
+libgailutil_3_la_LDFLAGS = \
 	-version-info $(GAIL_LT_VERSION_INFO)	\
 	$(no_undefined)				\
 	$(export_symbols)			\
         $(LDFLAGS)
 
-gailutil.lib: libgailutil-3.0.la gailutil.def
+gailutil.lib: libgailutil-3.la gailutil.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgailutil-3.0-$(GAIL_LT_CURRENT_MINUS_AGE).dll -def:gailutil.def -out:$@
 
 install-data-local: install-ms-lib install-def-file

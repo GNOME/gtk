@@ -39,3 +39,8 @@ Release notes for 3.0
   Or online at:
 
   http://library.gnome.org/devel/gtk/3.0/migrating.html
+
+* Note that the library sonames in this release have been changed from
+  libgtk-3.0 and libgdk-3.0 to libgtk-3 and libgdk-3, to prevent the
+  library versions from going backwards, compared to the 2.90/91/99
+  releases. Applications will have to be recompiled.

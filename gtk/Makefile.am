@@ -108,7 +108,7 @@ endif
 
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
-	$(top_builddir)/gdk/libgdk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)
 deps =
 
@@ -879,7 +879,7 @@ gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h $(top_srcdir)/gtk/*.h $(top_sr
 gtktestutils.c: gtktypefuncs.c
 
 # target platform:
-lib_LTLIBRARIES = libgtk-3.0.la
+lib_LTLIBRARIES = libgtk-3.la
 
 gtkincludedir = $(includedir)/gtk-3.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
@@ -887,22 +887,22 @@ gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk
 gtkunixprintincludedir = $(includedir)/gtk-3.0/unix-print/gtk
 gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
 
-libgtk_3_0_la_SOURCES = $(gtk_c_sources)
-libgtk_3_0_la_LDFLAGS = $(libtool_opts)
-libgtk_3_0_la_LIBADD = $(libadd)
-libgtk_3_0_la_DEPENDENCIES = $(deps)
+libgtk_3_la_SOURCES = $(gtk_c_sources)
+libgtk_3_la_LDFLAGS = $(libtool_opts)
+libgtk_3_la_LIBADD = $(libadd)
+libgtk_3_la_DEPENDENCIES = $(deps)
 
-#libgtk_win32_3_0_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
+#libgtk_win32_3_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
 
 if USE_WIN32
-libgtk_3_0_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32 -luuid
-libgtk_3_0_la_DEPENDENCIES += $(gtk_def) $(gtk_win32_res) $(deps)
+libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32 -luuid
+libgtk_3_la_DEPENDENCIES += $(gtk_def) $(gtk_win32_res) $(deps)
 libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
 endif
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
-	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgtk-3.0.la
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgtk-3.la
 endif
 
 if USE_QUARTZ
@@ -949,13 +949,13 @@ distclean-local:
 	  rm -f $(MAINTAINERCLEANFILES); \
 	fi
 
-DEPS = libgtk-3.0.la $(top_builddir)/gdk/libgdk-3.0.la
+DEPS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
 
 TEST_DEPS = $(DEPS) immodules.cache
 
 LDADDS =								\
-	libgtk-3.0.la							\
-	$(top_builddir)/gdk/libgdk-3.0.la				\
+	libgtk-3.la							\
+	$(top_builddir)/gdk/libgdk-3.la				\
 	$(GTK_DEP_LIBS)
 
 if HAVE_INTROSPECTION
@@ -966,7 +966,7 @@ introspection_files = \
     gtktypebuiltins.h \
     gtktypebuiltins.c
 
-Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.0.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
+Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
 Gtk_3_0_gir_SCANNERFLAGS = 			\
 	--add-include-path=$(top_builddir)/gdk	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
@@ -980,7 +980,7 @@ Gtk_3_0_gir_CFLAGS = \
 		-UGDK_DISABLE_DEPRECATED \
 		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-Gtk_3_0_gir_LIBS = libgtk-3.0.la
+Gtk_3_0_gir_LIBS = libgtk-3.la
 Gtk_3_0_gir_FILES = $(introspection_files)
 Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
 INTROSPECTION_GIRS += Gtk-3.0.gir

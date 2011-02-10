@@ -157,23 +157,23 @@ common_sources = 		\
 	gdkmarshalers.c		\
 	gdkmarshalers.h
 
-libgdk_3_0_la_SOURCES = $(common_sources)
-libgdk_3_0_la_LIBADD = $(GDK_DEP_LIBS)
-libgdk_3_0_la_LDFLAGS = $(LDADD)
+libgdk_3_la_SOURCES = $(common_sources)
+libgdk_3_la_LIBADD = $(GDK_DEP_LIBS)
+libgdk_3_la_LDFLAGS = $(LDADD)
 
 if USE_X11
-libgdk_3_0_la_LIBADD += x11/libgdk-x11.la
+libgdk_3_la_LIBADD += x11/libgdk-x11.la
 endif # USE_X11
 
 if USE_QUARTZ
-libgdk_3_0_la_LIBADD += quartz/libgdk-quartz.la
+libgdk_3_la_LIBADD += quartz/libgdk-quartz.la
 endif # USE_QUARTZ
 
 if USE_WIN32
-libgdk_3_0_la_SOURCES += gdkkeynames.c
-libgdk_3_0_la_LIBADD += win32/libgdk-win32.la
-libgdk_3_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
-libgdk_3_0_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
+libgdk_3_la_SOURCES += gdkkeynames.c
+libgdk_3_la_LIBADD += win32/libgdk-win32.la
+libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
+libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
 endif # USE_WIN32
 
 if HAVE_INTROSPECTION
@@ -184,11 +184,11 @@ introspection_files = 		\
         gdkenumtypes.c		\
         gdkenumtypes.h
 
-Gdk-3.0.gir: libgdk-3.0.la Makefile
+Gdk-3.0.gir: libgdk-3.la Makefile
 Gdk_3_0_gir_SCANNERFLAGS = 	\
 	--c-include="gdk/gdk.h"
 Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
-Gdk_3_0_gir_LIBS = libgdk-3.0.la
+Gdk_3_0_gir_LIBS = libgdk-3.la
 Gdk_3_0_gir_FILES = $(introspection_files)
 Gdk_3_0_gir_CFLAGS = $(INCLUDES)
 Gdk_3_0_gir_EXPORT_PACKAGES = gdk-3.0
@@ -235,13 +235,13 @@ x11_introspection_files = 		\
 	x11/gdkx11visual.h		\
 	x11/gdkx11window.h
 
-GdkX11-3.0.gir: libgdk-3.0.la Gdk-3.0.gir Makefile
+GdkX11-3.0.gir: libgdk-3.la Gdk-3.0.gir Makefile
 GdkX11_3_0_gir_SCANNERFLAGS = 		\
 	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkx.h"	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
-GdkX11_3_0_gir_LIBS = libgdk-3.0.la
+GdkX11_3_0_gir_LIBS = libgdk-3.la
 GdkX11_3_0_gir_FILES = $(x11_introspection_files)
 GdkX11_3_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
 GdkX11_3_0_gir_EXPORT_PACKAGES = gdk-x11-3.0
@@ -297,7 +297,7 @@ if OS_LINUX
 TESTS = abicheck.sh
 endif
 
-lib_LTLIBRARIES = libgdk-3.0.la
+lib_LTLIBRARIES = libgdk-3.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += $(gdk_built_sources)
@@ -305,7 +305,7 @@ EXTRA_HEADERS =
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
-	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgdk-3.0.la
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgdk-3.la
 endif
 
 #note: not gdkconfig.h
@@ -349,7 +349,7 @@ stamp-gc-h: $(top_builddir)/config.status
 dist-hook: ../build/win32/vs9/gdk.vcproj
 
 ../build/win32/vs9/gdk.vcproj: ../build/win32/vs9/gdk.vcprojin
-	for F in $(libgdk_3_0_la_SOURCES); do \
+	for F in $(libgdk_3_la_SOURCES); do \
 		case $$F in \
 		*.c) echo '   <File RelativePath="..\..\..\gdk\'$$F'" />' \
 		     ;; \
