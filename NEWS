@@ -1,6 +1,9 @@
 Overview of Changes in GTK+ 3.0.0
 =================================
 
+* Library sonames have been changed from libgdk-3.0 and libgtk-3.0
+  to libgdk-3 and libgtk-3.
+
 * Bugs fixed:
  632775 Back / Forward button's icons don't respect RTL settings
  639846 GdkEventScroll events are sent twice
