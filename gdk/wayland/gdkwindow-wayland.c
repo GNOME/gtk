@@ -442,6 +442,7 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
   GdkDisplayWayland *display_wayland;
   GdkToplevelWayland *toplevel;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkEvent *event;
 
   display = gdk_window_get_display (window);
   display_wayland = GDK_DISPLAY_WAYLAND (display);
@@ -460,6 +461,8 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
   wl_surface_set_user_data(impl->surface, window);
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
+  event = _gdk_make_event (window, GDK_VISIBILITY_NOTIFY, NULL, FALSE);
+  event->visibility.state = GDK_VISIBILITY_UNOBSCURED;
 
   fprintf(stderr, "window show, faked map event\n");
 }
