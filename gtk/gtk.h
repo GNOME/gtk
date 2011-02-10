@@ -115,6 +115,7 @@
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkiconsetpicture.h>
 #include <gtk/gtkicontheme.h>
+#include <gtk/gtkiconthemepicture.h>
 #include <gtk/gtkiconview.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkimagemenuitem.h>

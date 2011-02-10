@@ -229,6 +229,7 @@ gtk_public_h_sources = 		\
 	gtkiconfactory.h	\
 	gtkiconsetpicture.h	\
 	gtkicontheme.h		\
+	gtkiconthemepicture.h	\
 	gtkiconview.h		\
 	gtkimage.h		\
 	gtkimagemenuitem.h	\
@@ -551,6 +552,7 @@ gtk_base_c_sources = 		\
 	gtkiconfactory.c	\
 	gtkiconsetpicture.c	\
 	gtkicontheme.c		\
+	gtkiconthemepicture.c	\
 	gtkiconview.c		\
 	gtkimage.c		\
 	gtkimagemenuitem.c	\
