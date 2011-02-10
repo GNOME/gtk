@@ -409,6 +409,9 @@ input_handle_key(void *data, struct wl_input_device *input_device,
   struct xkb_desc *xkb;
   GdkKeymap *keymap;
 
+  keymap = gdk_keymap_get_for_display (device->display);
+  xkb = _gdk_wayland_keymap_get_xkb_desc (keymap);
+
   device->time = time;
   event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
   event->key.window = g_object_ref (device->keyboard_focus);
@@ -416,12 +419,8 @@ input_handle_key(void *data, struct wl_input_device *input_device,
   event->button.time = time;
   event->key.state = device->modifiers;
   event->key.group = 0;
-  event->key.hardware_keycode = key;
-
-  keymap = gdk_keymap_get_for_display (device->display);
-  xkb = _gdk_wayland_keymap_get_xkb_desc (keymap);
-
   code = key + xkb->min_key_code;
+  event->key.hardware_keycode = code;
 
   level = 0;
   if (device->modifiers & XKB_COMMON_SHIFT_MASK &&
