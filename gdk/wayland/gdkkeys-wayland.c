@@ -270,6 +270,136 @@ gdk_wayland_keymap_lookup_key (GdkKeymap          *keymap,
   return XkbKeySymEntry (xkb, key->keycode, key->level, key->group);
 }
 
+/* This is copied straight from XFree86 Xlib, to:
+ *  - add the group and level return.
+ *  - change the interpretation of mods_rtrn as described
+ *    in the docs for gdk_keymap_translate_keyboard_state()
+ * It's unchanged for ease of diff against the Xlib sources; don't
+ * reformat it.
+ */
+static int
+MyEnhancedXkbTranslateKeyCode(struct xkb_desc *       xkb,
+                              KeyCode                 key,
+                              unsigned int            mods,
+                              unsigned int *          mods_rtrn,
+                              uint32_t *              keysym_rtrn,
+                              int *                   group_rtrn,
+                              int *                   level_rtrn)
+{
+    struct xkb_key_type *type;
+    int col,nKeyGroups;
+    unsigned preserve,effectiveGroup;
+    uint32_t *syms;
+
+    if (mods_rtrn!=NULL)
+        *mods_rtrn = 0;
+
+    nKeyGroups= XkbKeyNumGroups(xkb,key);
+    if ((!XkbKeycodeInRange(xkb,key))||(nKeyGroups==0)) {
+        if (keysym_rtrn!=NULL)
+            *keysym_rtrn = 0;
+        return 0;
+    }
+
+    syms = XkbKeySymsPtr(xkb,key);
+
+    /* find the offset of the effective group */
+    col = 0;
+    effectiveGroup= XkbGroupForCoreState(mods);
+    if ( effectiveGroup>=nKeyGroups ) {
+        unsigned groupInfo= XkbKeyGroupInfo(xkb,key);
+        switch (XkbOutOfRangeGroupAction(groupInfo)) {
+            default:
+                effectiveGroup %= nKeyGroups;
+                break;
+            case XkbClampIntoRange:
+                effectiveGroup = nKeyGroups-1;
+                break;
+            case XkbRedirectIntoRange:
+                effectiveGroup = XkbOutOfRangeGroupNumber(groupInfo);
+                if (effectiveGroup>=nKeyGroups)
+                    effectiveGroup= 0;
+                break;
+        }
+    }
+    col= effectiveGroup*XkbKeyGroupsWidth(xkb,key);
+    type = XkbKeyKeyType(xkb,key,effectiveGroup);
+
+    preserve= 0;
+    if (type->map) { /* find the column (shift level) within the group */
+        register int i;
+        struct xkb_kt_map_entry *entry;
+        /* ---- Begin section modified for GDK  ---- */
+        int found = 0;
+
+        for (i=0,entry=type->map;i<type->map_count;i++,entry++) {
+            if (mods_rtrn) {
+                int bits = 0;
+                unsigned long tmp = entry->mods.mask;
+                while (tmp) {
+                    if ((tmp & 1) == 1)
+                        bits++;
+                    tmp >>= 1;
+                }
+                /* We always add one-modifiers levels to mods_rtrn since
+                 * they can't wipe out bits in the state unless the
+                 * level would be triggered. But return other modifiers
+                 *
+                 */
+                if (bits == 1 || (mods&type->mods.mask)==entry->mods.mask)
+                    *mods_rtrn |= entry->mods.mask;
+            }
+
+            if (!found&&entry->active&&((mods&type->mods.mask)==entry->mods.mask)) {
+                col+= entry->level;
+                if (type->preserve)
+                    preserve= type->preserve[i].mask;
+
+                if (level_rtrn)
+                  *level_rtrn = entry->level;
+
+                found = 1;
+            }
+        }
+        /* ---- End section modified for GDK ---- */
+    }
+
+    if (keysym_rtrn!=NULL)
+        *keysym_rtrn= syms[col];
+    if (mods_rtrn) {
+        /* ---- Begin section modified for GDK  ---- */
+        *mods_rtrn &= ~preserve;
+        /* ---- End section modified for GDK ---- */
+
+        /* ---- Begin stuff GDK comments out of the original Xlib version ---- */
+        /* This is commented out because xkb_info is a private struct */
+
+#if 0
+        /* The Motif VTS doesn't get the help callback called if help
+         * is bound to Shift+<whatever>, and it appears as though it
+         * is XkbTranslateKeyCode that is causing the problem.  The
+         * core X version of XTranslateKey always OR's in ShiftMask
+         * and LockMask for mods_rtrn, so this "fix" keeps this behavior
+         * and solves the VTS problem.
+         */
+        if ((xkb->dpy)&&(xkb->dpy->xkb_info)&&
+            (xkb->dpy->xkb_info->xlib_ctrls&XkbLC_AlwaysConsumeShiftAndLock)) {            *mods_rtrn|= (ShiftMask|LockMask);
+        }
+#endif
+
+        /* ---- End stuff GDK comments out of the original Xlib version ---- */
+    }
+
+    /* ---- Begin stuff GDK adds to the original Xlib version ---- */
+
+    if (group_rtrn)
+      *group_rtrn = effectiveGroup;
+
+    /* ---- End stuff GDK adds to the original Xlib version ---- */
+
+    return (syms[col] != 0);
+}
+
 static gboolean
 gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					     guint            hardware_keycode,
@@ -280,7 +410,59 @@ gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					     gint            *level,
 					     GdkModifierType *consumed_modifiers)
 {
-  return FALSE;
+  GdkWaylandKeymap *wayland_keymap;
+  uint32_t tmp_keyval = 0;
+  guint tmp_modifiers;
+  struct xkb_desc *xkb;
+
+  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
+  g_return_val_if_fail (group < 4, FALSE);
+
+  wayland_keymap = GDK_WAYLAND_KEYMAP (keymap);
+  xkb = wayland_keymap->xkb;
+
+  if (keyval)
+    *keyval = 0;
+  if (effective_group)
+    *effective_group = 0;
+  if (level)
+    *level = 0;
+  if (consumed_modifiers)
+    *consumed_modifiers = 0;
+
+  if (hardware_keycode < xkb->min_key_code ||
+      hardware_keycode > xkb->max_key_code)
+    return FALSE;
+
+
+  /* replace bits 13 and 14 with the provided group */
+  state &= ~(1 << 13 | 1 << 14);
+  state |= group << 13;
+
+  MyEnhancedXkbTranslateKeyCode (xkb,
+				 hardware_keycode,
+				 state,
+				 &tmp_modifiers,
+				 &tmp_keyval,
+				 effective_group,
+				 level);
+
+  if (state & ~tmp_modifiers & XKB_COMMON_LOCK_MASK)
+    tmp_keyval = gdk_keyval_to_upper (tmp_keyval);
+
+  /* We need to augment the consumed modifiers with LockMask, since
+   * we handle that ourselves, and also with the group bits
+   */
+  tmp_modifiers |= XKB_COMMON_LOCK_MASK | 1 << 13 | 1 << 14;
+
+
+  if (consumed_modifiers)
+    *consumed_modifiers = tmp_modifiers;
+
+  if (keyval)
+    *keyval = tmp_keyval;
+
+  return tmp_keyval != 0;
 }
 
 
