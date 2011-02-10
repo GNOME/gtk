@@ -555,7 +555,7 @@ input_handle_keyboard_focus(void *data,
       event->focus_change.in = FALSE;
       gdk_event_set_device (event, device->keyboard);
 
-      g_object_unref(device->pointer_focus);
+      g_object_unref(device->keyboard_focus);
       device->keyboard_focus = NULL;
 
       GDK_NOTE (EVENTS,
