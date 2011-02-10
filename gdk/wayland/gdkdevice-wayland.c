@@ -288,6 +288,10 @@ input_handle_motion(void *data, struct wl_input_device *input_device,
   event->motion.is_hint = 0;
   gdk_event_set_screen (event, display->screens[0]);
 
+  GDK_NOTE (EVENTS,
+	    g_message ("motion %d %d, state %d",
+		       sx, sy, event->button.state));
+
   _gdk_wayland_display_deliver_event (device->display, event);
 }
 
@@ -299,8 +303,6 @@ input_handle_button(void *data, struct wl_input_device *input_device,
   GdkDisplayWayland *display = GDK_DISPLAY_WAYLAND (device->display);
   GdkEvent *event;
   uint32_t modifier;
-
-  fprintf (stderr, "button event %d, state %d\n", button, state);
 
   device->time = time;
   event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
@@ -321,6 +323,11 @@ input_handle_button(void *data, struct wl_input_device *input_device,
     device->modifiers |= modifier;
   else
     device->modifiers &= ~modifier;
+
+  GDK_NOTE (EVENTS,
+	    g_message ("button %d %s, state %d",
+		       event->button.button,
+		       state ? "press" : "release", event->button.state));
 
   _gdk_wayland_display_deliver_event (device->display, event);
 }
@@ -432,8 +439,11 @@ input_handle_key(void *data, struct wl_input_device *input_device,
 
   _gdk_wayland_display_deliver_event (device->display, event);
 
-  fprintf (stderr, "keyboard event, code %d, sym %d, string %s, mods 0x%x\n",
-	   code, event->key.keyval, event->key.string, event->key.state);
+  GDK_NOTE (EVENTS,
+	    g_message ("keyboard event, code %d, sym %d, "
+		       "string %s, mods 0x%x",
+		       code, event->key.keyval,
+		       event->key.string, event->key.state));
 }
 
 static void
@@ -465,6 +475,10 @@ input_handle_pointer_focus(void *data,
 
       _gdk_wayland_display_deliver_event (device->display, event);
 
+      GDK_NOTE (EVENTS,
+		g_message ("leave, device %p surface %p",
+			   device, device->pointer_focus));
+
       g_object_unref(device->pointer_focus);
       device->pointer_focus = NULL;
     }
@@ -495,10 +509,11 @@ input_handle_pointer_focus(void *data,
       device->y = y;
 
       _gdk_wayland_display_deliver_event (device->display, event);
-    }
 
-  fprintf (stderr, "pointer focus surface %p, window %p\n",
-	   surface, device->pointer_focus);
+      GDK_NOTE (EVENTS,
+		g_message ("enter, device %p surface %p",
+			   device, device->pointer_focus));
+    }
 }
 
 static void
@@ -543,6 +558,10 @@ input_handle_keyboard_focus(void *data,
       g_object_unref(device->pointer_focus);
       device->keyboard_focus = NULL;
 
+      GDK_NOTE (EVENTS,
+		g_message ("focus out, device %p surface %p",
+			   device, device->keyboard_focus));
+
       _gdk_wayland_display_deliver_event (device->display, event);
     }
 
@@ -558,6 +577,10 @@ input_handle_keyboard_focus(void *data,
       gdk_event_set_device (event, device->keyboard);
 
       update_modifiers (device, keys);
+
+      GDK_NOTE (EVENTS,
+		g_message ("focus int, device %p surface %p",
+			   device, device->keyboard_focus));
 
       _gdk_wayland_display_deliver_event (device->display, event);
     }
