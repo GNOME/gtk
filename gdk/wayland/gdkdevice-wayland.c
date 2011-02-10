@@ -255,7 +255,7 @@ gdk_device_core_init (GdkDeviceCore *device_core)
 struct wl_input_device *
 _gdk_wayland_device_get_device (GdkDevice *device)
 {
-  GDK_DEVICE_CORE (device)->device->device;
+  return GDK_DEVICE_CORE (device)->device->device;
 }
 
 static void
