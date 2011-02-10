@@ -113,6 +113,7 @@
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtkhsv.h>
 #include <gtk/gtkiconfactory.h>
+#include <gtk/gtkiconpicture.h>
 #include <gtk/gtkiconsetpicture.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconthemepicture.h>

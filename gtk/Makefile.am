@@ -227,6 +227,7 @@ gtk_public_h_sources = 		\
 	gtkhseparator.h		\
 	gtkhsv.h		\
 	gtkiconfactory.h	\
+	gtkiconpicture.h	\
 	gtkiconsetpicture.h	\
 	gtkicontheme.h		\
 	gtkiconthemepicture.h	\
@@ -550,6 +551,7 @@ gtk_base_c_sources = 		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\
+	gtkiconpicture.c	\
 	gtkiconsetpicture.c	\
 	gtkicontheme.c		\
 	gtkiconthemepicture.c	\
