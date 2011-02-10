@@ -35,6 +35,8 @@
 #include <gtk/gtkmenu.h>
 #include <gio/gio.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_APP_CHOOSER_WIDGET            (gtk_app_chooser_widget_get_type ())
 #define GTK_APP_CHOOSER_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidget))
 #define GTK_APP_CHOOSER_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidgetClass))
@@ -97,5 +99,7 @@ gboolean      gtk_app_chooser_widget_get_show_all         (GtkAppChooserWidget *
 void          gtk_app_chooser_widget_set_default_text     (GtkAppChooserWidget *self,
                                                            const gchar         *text);
 const gchar * gtk_app_chooser_widget_get_default_text     (GtkAppChooserWidget *self);
+
+G_END_DECLS
 
 #endif /* __GTK_APP_CHOOSER_WIDGET_H__ */
