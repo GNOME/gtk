@@ -179,10 +179,10 @@ GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
 GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info,
-                                                        GdkRGBA       *fg,
-                                                        GdkRGBA       *success_color,
-                                                        GdkRGBA       *warning_color,
-                                                        GdkRGBA       *error_color,
+                                                        const GdkRGBA *fg,
+                                                        const GdkRGBA *success_color,
+                                                        const GdkRGBA *warning_color,
+                                                        const GdkRGBA *error_color,
                                                         gboolean      *was_symbolic,
                                                         GError       **error);
 GdkPixbuf *           gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,

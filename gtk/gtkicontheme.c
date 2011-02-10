@@ -3053,7 +3053,7 @@ gdk_color_to_css (GdkColor *color)
 }
 
 static gchar *
-gdk_rgba_to_css (GdkRGBA *color)
+gdk_rgba_to_css (const GdkRGBA *color)
 {
   /* drop alpha for now, since librsvg does not understand rgba() */
   return g_strdup_printf ("rgb(%d,%d,%d)",
@@ -3175,13 +3175,13 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
  * Since: 3.0
  **/
 GdkPixbuf *
-gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
-                             GdkRGBA      *fg,
-                             GdkRGBA      *success_color,
-                             GdkRGBA      *warning_color,
-                             GdkRGBA      *error_color,
-                             gboolean     *was_symbolic,
-                             GError      **error)
+gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
+                             const GdkRGBA  *fg,
+                             const GdkRGBA  *success_color,
+                             const GdkRGBA  *warning_color,
+                             const GdkRGBA  *error_color,
+                             gboolean       *was_symbolic,
+                             GError        **error)
 {
   GdkPixbuf *pixbuf;
   gchar *css_fg;
