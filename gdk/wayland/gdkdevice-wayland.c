@@ -214,6 +214,9 @@ gdk_device_core_window_at_position (GdkDevice       *device,
   GdkWaylandDevice *wd;
 
   wd = GDK_DEVICE_CORE(device)->device;
+  *win_x = wd->surface_x;
+  *win_y = wd->surface_y;
+  *mask = wd->modifiers;
 
   return wd->pointer_focus;
 }
