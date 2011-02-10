@@ -322,6 +322,70 @@ input_handle_button(void *data, struct wl_input_device *input_device,
 }
 
 static void
+translate_keyboard_string (GdkEventKey *event)
+{
+  gunichar c = 0;
+  gchar buf[7];
+
+  /* Fill in event->string crudely, since various programs
+   * depend on it.
+   */
+  event->string = NULL;
+
+  if (event->keyval != GDK_KEY_VoidSymbol)
+    c = gdk_keyval_to_unicode (event->keyval);
+
+  if (c)
+    {
+      gsize bytes_written;
+      gint len;
+
+      /* Apply the control key - Taken from Xlib
+       */
+      if (event->state & GDK_CONTROL_MASK)
+        {
+          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
+          else if (c == '2')
+            {
+              event->string = g_memdup ("\0\0", 2);
+              event->length = 1;
+              buf[0] = '\0';
+              return;
+            }
+          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+          else if (c == '8') c = '\177';
+          else if (c == '/') c = '_' & 0x1F;
+        }
+
+      len = g_unichar_to_utf8 (c, buf);
+      buf[len] = '\0';
+
+      event->string = g_locale_from_utf8 (buf, len,
+                                          NULL, &bytes_written,
+                                          NULL);
+      if (event->string)
+        event->length = bytes_written;
+    }
+  else if (event->keyval == GDK_KEY_Escape)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\033");
+    }
+  else if (event->keyval == GDK_KEY_Return ||
+          event->keyval == GDK_KEY_KP_Enter)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\r");
+    }
+
+  if (!event->string)
+    {
+      event->length = 0;
+      event->string = g_strdup ("");
+    }
+}
+
+static void
 input_handle_key(void *data, struct wl_input_device *input_device,
 		 uint32_t time, uint32_t key, uint32_t state)
 {
@@ -360,59 +424,8 @@ input_handle_key(void *data, struct wl_input_device *input_device,
 
   event->key.is_modifier = modifier > 0;
 
-  if (event->key.keyval == GDK_KEY_Escape)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\033");
-    }
-  else if (event->key.keyval == GDK_KEY_Return ||
-	   event->key.keyval == GDK_KEY_KP_Enter)
-    {
-      event->key.length = 1;
-      event->key.string = g_strdup ("\r");
-    }
-  else if (event->key.state & GDK_CONTROL_MASK)
-    {
-      gsize bytes_written;
-      gint len;
-      gchar buf[7];
-      int c = event->key.keyval;
+  translate_keyboard_string (&event->key);
 
-      /* Apply the control key - Taken from Xlib */
-      if ((c >= XK_at && c < '\177') || c == ' ')
-	c &= 0x1F;
-      else if (c == XK_2)
-	{
-	  event->key.string = g_memdup ("\0\0", 2);
-	  event->key.length = 1;
-	  buf[0] = '\0';
-	  goto out;
-	}
-      else if (c >= XK_3 && c <= XK_7)
-	c -= (XK_3 - '\033');
-      else if (c == XK_8)
-	c = '\177';
-      else if (c == XK_slash)
-	c = '_' & 0x1F;
-
-      len = g_unichar_to_utf8 (c, buf);
-      buf[len] = '\0';
-
-      event->key.string = g_locale_from_utf8 (buf, len,
-					      NULL, &bytes_written,
-					      NULL);
-      if (event->key.string)
-	event->key.length = bytes_written;
-    }
-  else
-    {
-      char buffer[128];
-      xkb_keysym_to_string(event->key.keyval, buffer, sizeof buffer);
-      event->key.string = g_strdup (buffer);
-      event->key.length = strlen(event->key.string);
-    }
-
- out:
   _gdk_wayland_display_deliver_event (device->display, event);
 
   fprintf (stderr, "keyboard event, code %d, sym %d, string %s, mods 0x%x\n",
