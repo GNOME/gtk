@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 #include <math.h>
+#include <string.h>
 
 
 
@@ -254,6 +255,158 @@ create_icon_set_picture (Demo *demo)
   gtk_icon_set_unref (set);
 }
 
+static void
+change_icon_theme_callback (GtkWidget *combo, GtkIconThemePicture *picture)
+{
+  const char *theme_name = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (combo));
+
+  if (theme_name == NULL || g_str_equal (theme_name, "") || g_str_equal (theme_name, "(default)"))
+    {
+      gtk_icon_theme_picture_set_icon_theme (picture, NULL);
+    }
+  else
+    {
+      GtkIconTheme *icon_theme = gtk_icon_theme_new ();
+      gtk_icon_theme_set_custom_theme (icon_theme, theme_name);
+      gtk_icon_theme_picture_set_icon_theme (picture, icon_theme);
+      g_object_unref (icon_theme);
+    }
+}
+
+static GtkWidget *
+theme_selector_new (GdkPicture *picture)
+{
+  GtkWidget *combo;
+  GList *names, *walk;
+  GtkIconTheme *icon_theme;
+  char **paths;
+  guint i;
+
+  icon_theme = gtk_icon_theme_new ();
+  gtk_icon_theme_get_search_path (icon_theme, &paths, NULL);
+
+  combo = gtk_combo_box_text_new_with_entry ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "(default)");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  g_signal_connect (combo, "changed", G_CALLBACK (change_icon_theme_callback), picture);
+
+  names = NULL;
+
+  for (i = 0; paths[i]; i++)
+    {
+      GDir *dir = g_dir_open (paths[i], 0, NULL);
+      const char *name;
+
+      if (dir == NULL)
+        continue;
+
+      while ((name = g_dir_read_name (dir)))
+        {
+          char *full = g_build_filename (paths[i], name, "index.theme", NULL);
+
+          if (g_file_test (full, G_FILE_TEST_EXISTS))
+            names = g_list_prepend (names, g_strdup (name));
+
+          g_free (full);
+        }
+
+      g_dir_close (dir);
+    }
+
+  names = g_list_sort (names, (GCompareFunc) strcmp);
+
+  for (walk = names; walk; walk = walk->next)
+    {
+      /* skip identical names */
+      while (walk->next && g_str_equal (walk->data, walk->next->data))
+        walk = walk->next;
+
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), walk->data);
+    }
+
+  g_list_free_full (names, g_free);
+  g_strfreev (paths);
+  g_object_unref (icon_theme);
+
+  return combo;
+}
+
+static void
+create_gicon_picture (Demo *demo)
+{
+  GIcon *icon = g_themed_icon_new ("folder");
+
+  demo->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  demo->picture = gtk_icon_picture_new (icon, GTK_ICON_SIZE_BUTTON);
+  
+  gtk_box_pack_start (GTK_BOX (demo->widget), gtk_label_new ("Theme:"), FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (demo->widget), theme_selector_new (demo->picture), FALSE, TRUE, 0);
+
+  g_object_unref (icon);
+}
+
+static void
+update_icon_names (GtkNamedPicture *picture, GParamSpec *pspec, GtkComboBoxText *combo)
+{
+  GList *names, *walk;
+  GtkIconTheme *icon_theme;
+  char *current;
+  guint i;
+
+  icon_theme = gtk_icon_theme_picture_get_icon_theme (GTK_ICON_THEME_PICTURE (picture));
+  if (icon_theme == NULL)
+    icon_theme = gtk_icon_theme_get_default ();
+
+  names = gtk_icon_theme_list_icons (icon_theme, NULL);
+  names = g_list_sort (names, (GCompareFunc) strcmp);
+
+  current = g_strdup (gtk_named_picture_get_name (picture));
+
+  gtk_combo_box_text_remove_all (combo);
+  for (walk = names, i = 0; walk; walk = walk->next, i++)
+    {
+      gtk_combo_box_text_append_text (combo, walk->data);
+      if (current && g_str_equal (walk->data, current))
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combo), i);
+    }
+
+  g_list_free_full (names, g_free);
+  g_free (current);
+}
+
+static void
+change_icon_name_callback (GtkComboBoxText *combo, GtkNamedPicture *picture)
+{
+  gtk_named_picture_set_name (picture, gtk_combo_box_text_get_active_text (combo));
+}
+
+static GtkWidget *
+icon_name_selector_new (GdkPicture *picture)
+{
+  GtkWidget *combo;
+
+  combo = gtk_combo_box_text_new_with_entry ();
+  g_signal_connect (combo, "changed", G_CALLBACK (change_icon_name_callback), picture);
+
+  g_signal_connect (picture, "notify::icon-theme", G_CALLBACK (update_icon_names), combo);
+  update_icon_names (GTK_NAMED_PICTURE (picture), NULL, GTK_COMBO_BOX_TEXT (combo));
+
+  return combo;
+}
+
+static void
+create_icon_name_picture (Demo *demo)
+{
+  demo->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  demo->picture = gtk_named_picture_new ("window-new", GTK_ICON_SIZE_BUTTON);
+  
+  gtk_box_pack_start (GTK_BOX (demo->widget), gtk_label_new ("Theme:"), FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (demo->widget), theme_selector_new (demo->picture), FALSE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (demo->widget), gtk_label_new ("Icon:"), FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (demo->widget), icon_name_selector_new (demo->picture), FALSE, TRUE, 0);
+}
+
 static GdkRGBA scribble_colors[2] = 
 {
   { 0.0, 0.0, 0.0, 1.0 },
@@ -370,9 +523,10 @@ create_scribble_area (Demo *demo)
 
 Demo demos[] = {
   { "Slowly loading image", create_slowly_loading_image, NULL, NULL },
-  { "Another slowly loading image", create_slowly_loading_image, NULL, NULL },
   { "Named theme icons", create_stock_picture, NULL, NULL },
   { "Icon Set", create_icon_set_picture, NULL, NULL },
+  { "GIcon", create_gicon_picture, NULL, NULL },
+  { "Named Icon", create_icon_name_picture, NULL, NULL },
   { "Scribble Area", create_scribble_area, NULL, NULL }
 };
 
