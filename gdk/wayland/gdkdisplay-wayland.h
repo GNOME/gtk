@@ -55,8 +55,7 @@ typedef struct _GdkDisplayWaylandClass GdkDisplayWaylandClass;
 struct _GdkDisplayWayland
 {
   GdkDisplay parent_instance;
-  GdkScreen *default_screen;
-  GdkScreen **screens;
+  GdkScreen *screen;
 
   /* Keyboard related information */
   GdkKeymap *keymap;

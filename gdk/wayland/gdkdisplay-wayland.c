@@ -227,8 +227,6 @@ _gdk_wayland_display_open (const gchar *display_name)
   GdkDisplay *display;
   GdkDisplayWayland *display_wayland;
 
-  gint i;
-
   wl_display = wl_display_connect(display_name);
   if (!wl_display)
     return NULL;
@@ -244,13 +242,7 @@ _gdk_wayland_display_open (const gchar *display_name)
     return NULL;
   }
 
-  /* initialize the display's screens */
-  display_wayland->screens = g_new (GdkScreen *, 1);
-  for (i = 0; i < 1; i++)
-    display_wayland->screens[i] = _gdk_wayland_screen_new (display);
-
-  /*set the default screen */
-  display_wayland->default_screen = display_wayland->screens[0];
+  display_wayland->screen = _gdk_wayland_screen_new (display);
 
   display->device_manager = _gdk_wayland_device_manager_new (display);
 
@@ -274,15 +266,13 @@ static void
 gdk_wayland_display_dispose (GObject *object)
 {
   GdkDisplayWayland *display_wayland = GDK_DISPLAY_WAYLAND (object);
-  gint           i;
 
   _gdk_wayland_display_manager_remove_display (gdk_display_manager_get (),
 					       GDK_DISPLAY (display_wayland));
   g_list_foreach (display_wayland->input_devices,
 		  (GFunc) g_object_run_dispose, NULL);
 
-  for (i = 0; i < 1; i++)
-    _gdk_screen_close (display_wayland->screens[i]);
+  _gdk_screen_close (display_wayland->screen);
 
   if (display_wayland->event_source)
     {
@@ -301,7 +291,6 @@ static void
 gdk_wayland_display_finalize (GObject *object)
 {
   GdkDisplayWayland *display_wayland = GDK_DISPLAY_WAYLAND (object);
-  gint           i;
 
   /* Keymap */
   if (display_wayland->keymap)
@@ -311,10 +300,7 @@ gdk_wayland_display_finalize (GObject *object)
   g_list_foreach (display_wayland->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (display_wayland->input_devices);
 
-  /* Free all GdkScreens */
-  for (i = 0; i < 1; i++)
-    g_object_unref (display_wayland->screens[i]);
-  g_free (display_wayland->screens);
+  g_object_unref (display_wayland->screen);
 
   g_free (display_wayland->startup_notification_id);
 
@@ -340,7 +326,7 @@ gdk_wayland_display_get_screen (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (screen_num == 0, NULL);
 
-  return GDK_DISPLAY_WAYLAND (display)->screens[0];
+  return GDK_DISPLAY_WAYLAND (display)->screen;
 }
 
 static GdkScreen *
@@ -348,7 +334,7 @@ gdk_wayland_display_get_default_screen (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_WAYLAND (display)->default_screen;
+  return GDK_DISPLAY_WAYLAND (display)->screen;
 }
 
 static void

@@ -289,7 +289,7 @@ input_handle_motion(void *data, struct wl_input_device *input_device,
   event->motion.axes = NULL;
   event->motion.state = device->modifiers;
   event->motion.is_hint = 0;
-  gdk_event_set_screen (event, display->screens[0]);
+  gdk_event_set_screen (event, display->screen);
 
   GDK_NOTE (EVENTS,
 	    g_message ("motion %d %d, state %d",
@@ -319,7 +319,7 @@ input_handle_button(void *data, struct wl_input_device *input_device,
   event->button.axes = NULL;
   event->button.state = device->modifiers;
   event->button.button = button - 271;
-  gdk_event_set_screen (event, display->screens[0]);
+  gdk_event_set_screen (event, display->screen);
 
   modifier = 1 << (8 + button - 272);
   if (state)
