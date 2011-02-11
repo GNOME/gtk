@@ -49,6 +49,7 @@ typedef struct _GdkWaylandKeymapClass     GdkWaylandKeymapClass;
 struct _GdkWaylandKeymap
 {
   GdkKeymap parent_instance;
+  GdkModifierType modmap[8];
   struct xkb_desc *xkb;
 };
 
@@ -467,16 +468,102 @@ gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
 
 static void
+update_modmap (GdkWaylandKeymap *wayland_keymap)
+{
+  static struct {
+    const gchar *name;
+    uint32_t atom;
+    GdkModifierType mask;
+  } vmods[] = {
+    { "Meta", 0, GDK_META_MASK },
+    { "Super", 0, GDK_SUPER_MASK },
+    { "Hyper", 0, GDK_HYPER_MASK },
+    { NULL, 0, 0 }
+  };
+
+  gint i, j, k;
+
+  if (!vmods[0].atom)
+    for (i = 0; vmods[i].name; i++)
+      vmods[i].atom = xkb_intern_atom(vmods[i].name);
+
+  for (i = 0; i < 8; i++)
+    wayland_keymap->modmap[i] = 1 << i;
+
+  for (i = 0; i < XkbNumVirtualMods; i++)
+    {
+      for (j = 0; vmods[j].atom; j++)
+	{
+	  if (wayland_keymap->xkb->names->vmods[i] == vmods[j].atom)
+	    {
+	      for (k = 0; k < 8; k++)
+		{
+		  if (wayland_keymap->xkb->server->vmods[i] & (1 << k))
+		    wayland_keymap->modmap[k] |= vmods[j].mask;
+		}
+	    }
+	}
+    }
+}
+
+static void
 gdk_wayland_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 					  GdkModifierType *state)
 {
+  GdkWaylandKeymap *wayland_keymap;
+  int i;
+
+  wayland_keymap = GDK_WAYLAND_KEYMAP (keymap);
+
+  for (i = 3; i < 8; i++)
+    {
+      if ((1 << i) & *state)
+	{
+	  if (wayland_keymap->modmap[i] & GDK_MOD1_MASK)
+	    *state |= GDK_MOD1_MASK;
+	  if (wayland_keymap->modmap[i] & GDK_SUPER_MASK)
+	    *state |= GDK_SUPER_MASK;
+	  if (wayland_keymap->modmap[i] & GDK_HYPER_MASK)
+	    *state |= GDK_HYPER_MASK;
+	  if (wayland_keymap->modmap[i] & GDK_META_MASK)
+	    *state |= GDK_META_MASK;
+	}
+    }
 }
 
 static gboolean
 gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 					  GdkModifierType *state)
 {
-  return FALSE;
+  const guint vmods[] = {
+    GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK
+  };
+  int i, j;
+  gboolean retval;
+  GdkWaylandKeymap *wayland_keymap;
+  struct xkb_desc *xkb;
+
+  wayland_keymap = GDK_WAYLAND_KEYMAP (keymap);
+  xkb = wayland_keymap->xkb;
+
+  for (j = 0; j < 3; j++)
+    {
+      if (*state & vmods[j])
+	{
+	  for (i = 3; i < 8; i++)
+	    {
+	      if (wayland_keymap->modmap[i] & vmods[j])
+		{
+		  if (*state & (1 << i))
+		    retval = FALSE;
+		  else
+		    *state |= 1 << i;
+		}
+	    }
+	}
+    }
+
+  return TRUE;
 }
 
 static void
@@ -519,6 +606,7 @@ _gdk_wayland_keymap_new (GdkDisplay *display)
   names.variant = "";
   names.options = "";
   keymap->xkb = xkb_compile_keymap_from_rules(&names);
+  update_modmap (keymap);
 
   return GDK_KEYMAP (keymap);
 }
