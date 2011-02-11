@@ -100,6 +100,7 @@ struct _GdkWindowImplWayland
 
   struct wl_surface *surface;
   unsigned int mapped : 1;
+  GdkWindow *transient_for;
 
   cairo_surface_t *cairo_surface;
   cairo_surface_t *server_surface;
@@ -445,6 +446,32 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
 static void
 gdk_wayland_window_set_user_time (GdkWindow *window, guint32 user_time)
 {
+}
+
+static void
+gdk_wayland_window_map (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowImplWayland *parent;
+
+  if (!impl->mapped)
+    {
+      if (impl->transient_for)
+	{
+	  fprintf(stderr, "parent surface: %d, %d, transient surface %d, %d\n",
+		  impl->transient_for->x,
+		  impl->transient_for->y,
+		  window->x,
+		  window->y);
+
+	  parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+	  wl_surface_map_transient (impl->surface, parent->surface,
+				    window->x, window->y, 0);
+	}
+      else
+	wl_surface_map_toplevel (impl->surface);
+      impl->mapped = TRUE;
+    }
 }
 
 static void
@@ -881,6 +908,10 @@ static void
 gdk_wayland_window_set_transient_for (GdkWindow *window,
 				      GdkWindow *parent)
 {
+  GdkWindowImplWayland *impl;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  impl->transient_for = parent;
 }
 
 static void
@@ -1214,11 +1245,7 @@ gdk_wayland_window_process_updates_recurse (GdkWindow *window,
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
 
-  if (!impl->mapped)
-    {
-      wl_surface_map_toplevel (impl->surface);
-      impl->mapped = TRUE;
-    }
+  gdk_wayland_window_map (window);
 
   n = cairo_region_num_rectangles(region);
   for (i = 0; i < n; i++)
