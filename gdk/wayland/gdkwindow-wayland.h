@@ -94,7 +94,10 @@ void                _gdk_wayland_window_get_offsets   (GdkWindow   *window,
 						       gint        *x_offset,
 						       gint        *y_offset);
 
-void                _gdk_wayland_window_update_size   (GdkWindow   *window);
+void                _gdk_wayland_window_update_size (GdkWindow *window,
+						     int32_t width,
+						     int32_t height,
+						     uint32_t edges);
 
 G_END_DECLS
 

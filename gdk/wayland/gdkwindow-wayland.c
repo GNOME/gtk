@@ -108,6 +108,7 @@ struct _GdkWindowImplWayland
   cairo_surface_t *cairo_surface;
   cairo_surface_t *server_surface;
   GLuint texture;
+  uint32_t resize_edges;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -151,7 +152,8 @@ _gdk_wayland_window_get_toplevel (GdkWindow *window)
  * cairo surface) when its size has changed.
  **/
 void
-_gdk_wayland_window_update_size (GdkWindow *window)
+_gdk_wayland_window_update_size (GdkWindow *window,
+				 int32_t width, int32_t height, uint32_t edges)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkRectangle area;
@@ -162,6 +164,10 @@ _gdk_wayland_window_update_size (GdkWindow *window)
       cairo_surface_destroy (impl->cairo_surface);
       impl->cairo_surface = NULL;
     }
+
+  window->width = width;
+  window->height = height;
+  impl->resize_edges = edges;
 
   area.x = 0;
   area.y = 0;
@@ -294,6 +300,7 @@ typedef struct _GdkWaylandCairoSurfaceData {
   struct wl_egl_pixmap *pixmap;
   struct wl_buffer *buffer;
   GdkDisplayWayland *display;
+  int32_t width, height;
 } GdkWaylandCairoSurfaceData;
 
 static void
@@ -304,6 +311,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandCairoSurfaceData *data;
   struct wl_buffer *buffer;
+  int32_t server_width, server_height, dx, dy;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -311,18 +319,38 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (impl->server_surface == impl->cairo_surface)
     return;
 
-  cairo_surface_reference (impl->cairo_surface);
   if (impl->server_surface)
-    cairo_surface_destroy (impl->server_surface);
-  impl->server_surface = impl->cairo_surface;
+    {
+      data = cairo_surface_get_user_data (impl->server_surface,
+					  &gdk_wayland_cairo_key);
+      server_width = data->width;
+      server_height = data->height;
+      cairo_surface_destroy (impl->server_surface);
+    }
+  else
+    {
+      server_width = 0;
+      server_height = 0;
+    }
 
+  impl->server_surface = cairo_surface_reference (impl->cairo_surface);
   data = cairo_surface_get_user_data (impl->cairo_surface,
 				      &gdk_wayland_cairo_key);
   if (!data->buffer)
     data->buffer =
       wl_egl_pixmap_create_buffer(display->native_display, data->pixmap);
 
-  wl_surface_attach (impl->surface, data->buffer, 0, 0);
+  if (impl->resize_edges & WL_SHELL_RESIZE_LEFT)
+    dx = server_width - data->width;
+  else
+    dx = 0;
+
+  if (impl->resize_edges & WL_SHELL_RESIZE_TOP)
+    dy = server_height - data->height;
+  else
+    dy = 0;
+
+  wl_surface_attach (impl->surface, data->buffer, dx, dy);
 }
 
 static void
@@ -372,6 +400,8 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
   data->display = display;
   data->buffer = NULL;
   visual = wl_display_get_premultiplied_argb_visual(display->wl_display);
+  data->width = width;
+  data->height = height;
   data->pixmap =
     wl_egl_pixmap_create(display->native_display, width, height, visual, 0);
   data->image =
@@ -548,12 +578,8 @@ gdk_window_wayland_move_resize (GdkWindow *window,
 {
   window->x = x;
   window->y = y;
-  if (width > 0)
-    window->width = width;
-  if (height > 0)
-    window->height = height;
 
-  _gdk_wayland_window_update_size (window);
+  _gdk_wayland_window_update_size (window, width, height, 0);
 }
 
 static void

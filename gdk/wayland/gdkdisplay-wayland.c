@@ -136,11 +136,8 @@ shell_handle_configure(void *data, struct wl_shell *shell,
   event->configure.width = width;
   event->configure.height = height;
 
-  window->width = width;
-  window->height = height;
-
   _gdk_window_update_size (window);
-  _gdk_wayland_window_update_size (window);
+  _gdk_wayland_window_update_size (window, width, height, edges);
 
   g_object_ref(window);
 
