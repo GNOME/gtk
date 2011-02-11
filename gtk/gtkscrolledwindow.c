@@ -35,6 +35,9 @@
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
 #include "gtkviewport.h"
+#include "gtktimeline.h"
+#include "gtkdnd.h"
+#include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
@@ -122,6 +125,25 @@
 
 #define DEFAULT_SCROLLBAR_SPACING  3
 
+/* Kinetic scrolling */
+#define FPS 60
+#define FRAME_INTERVAL(fps) (1000. / fps)
+#define INTERPOLATION_DURATION 250
+#define INTERPOLATION_DURATION_OVERSHOOT(overshoot) (overshoot > 0.0 ? INTERPOLATION_DURATION : 10)
+
+typedef struct
+{
+  gdouble  x;
+  gdouble  y;
+  GTimeVal time;
+} MotionData;
+
+typedef struct
+{
+  GArray *buffer;
+  guint   len;
+} MotionEventList;
+
 struct _GtkScrolledWindowPrivate
 {
   GtkWidget     *hscrollbar;
@@ -140,8 +162,24 @@ struct _GtkScrolledWindowPrivate
 
   gint     min_content_width;
   gint     min_content_height;
-};
 
+  /* Kinetic scrolling */
+  GdkWindow             *event_window;
+  guint                  kinetic_scrolling_enabled : 1;
+  guint                  in_drag                   : 1;
+  guint                  hmoving                   : 1;
+  guint                  vmoving                   : 1;
+  guint                  button_press_id;
+  guint                  motion_notify_id;
+  guint                  button_release_id;
+  MotionEventList        motion_events;
+  GtkTimeline           *deceleration_timeline;
+  gdouble                dx;
+  gdouble                dy;
+  gdouble                deceleration_rate;
+  gdouble                overshoot;
+  guint                  accumulated_delta;
+};
 
 enum {
   PROP_0,
@@ -153,7 +191,8 @@ enum {
   PROP_WINDOW_PLACEMENT_SET,
   PROP_SHADOW_TYPE,
   PROP_MIN_CONTENT_WIDTH,
-  PROP_MIN_CONTENT_HEIGHT
+  PROP_MIN_CONTENT_HEIGHT,
+  PROP_KINETIC_SCROLLING
 };
 
 /* Signals */
@@ -174,6 +213,10 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
                                                         GParamSpec        *pspec);
 
 static void     gtk_scrolled_window_destroy            (GtkWidget         *widget);
+static void     gtk_scrolled_window_realize            (GtkWidget         *widget);
+static void     gtk_scrolled_window_unrealize          (GtkWidget         *widget);
+static void     gtk_scrolled_window_map                (GtkWidget         *widget);
+static void     gtk_scrolled_window_unmap              (GtkWidget         *widget);
 static void     gtk_scrolled_window_screen_changed     (GtkWidget         *widget,
                                                         GdkScreen         *previous_screen);
 static gboolean gtk_scrolled_window_draw               (GtkWidget         *widget,
@@ -182,6 +225,8 @@ static void     gtk_scrolled_window_size_allocate      (GtkWidget         *widge
                                                         GtkAllocation     *allocation);
 static gboolean gtk_scrolled_window_scroll_event       (GtkWidget         *widget,
                                                         GdkEventScroll    *event);
+static gboolean gtk_scrolled_window_button_press_event (GtkWidget         *widget,
+                                                        GdkEvent          *event);
 static gboolean gtk_scrolled_window_focus              (GtkWidget         *widget,
                                                         GtkDirectionType   direction);
 static void     gtk_scrolled_window_add                (GtkContainer      *container,
@@ -219,6 +264,11 @@ static void  gtk_scrolled_window_get_preferred_width_for_height  (GtkWidget     
 							gint                 width,
 							gint                *minimum_height,
 							gint                *natural_height);
+
+static void     motion_event_list_init                 (MotionEventList     *motion_events,
+                                                        guint                size);
+static void     motion_event_list_clear                (MotionEventList     *motion_events);
+
 
 static guint signals[LAST_SIGNAL] = {0};
 
@@ -272,6 +322,10 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   gobject_class->get_property = gtk_scrolled_window_get_property;
 
   widget_class->destroy = gtk_scrolled_window_destroy;
+  widget_class->realize = gtk_scrolled_window_realize;
+  widget_class->unrealize = gtk_scrolled_window_unrealize;
+  widget_class->map = gtk_scrolled_window_map;
+  widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->screen_changed = gtk_scrolled_window_screen_changed;
   widget_class->draw = gtk_scrolled_window_draw;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
@@ -409,6 +463,21 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                      P_("The minimum height that the scrolled window will allocate to its content"),
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkScrolledWindow:kinetic-scrolling:
+   *
+   * Whether kinetic scrolling mode is enabled.
+   *
+   * Since: 3.2
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_KINETIC_SCROLLING,
+                                   g_param_spec_boolean ("kinetic-scrolling",
+                                                         P_("Kinetic Scrolling"),
+                                                         P_("Enable kinetic scrolling mode."),
+                                                         FALSE,
+                                                         GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
   /**
    * GtkScrolledWindow::scroll-child:
    * @scrolled_window: a #GtkScrolledWindow
@@ -508,6 +577,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_update_real_placement (scrolled_window);
   priv->min_content_width = -1;
   priv->min_content_height = -1;
+  priv->deceleration_rate = 1.1f;
 }
 
 /**
@@ -1006,6 +1076,99 @@ gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
   return scrolled_window->priv->shadow_type;
 }
 
+/**
+ * gtk_scrolled_window_set_kinetic_scrolling:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @enable: %TRUE to enable kinetic scrolling
+ *
+ * Enables or disables kinetic scrolling in @scrolled_window.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
+                                           gboolean           enable)
+{
+  GtkScrolledWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
+  priv = scrolled_window->priv;
+  if (priv->kinetic_scrolling_enabled == enable)
+    return;
+
+  priv->kinetic_scrolling_enabled = enable;
+  if (priv->kinetic_scrolling_enabled)
+    {
+      if (priv->event_window)
+        gdk_window_show (priv->event_window);
+      motion_event_list_init (&priv->motion_events, 3);
+      priv->button_press_id =
+              g_signal_connect (scrolled_window, "captured_event",
+                                G_CALLBACK (gtk_scrolled_window_button_press_event),
+                                NULL);
+    }
+  else
+    {
+      if (priv->deceleration_timeline)
+        {
+          g_object_unref (priv->deceleration_timeline);
+          priv->deceleration_timeline = NULL;
+        }
+      if (priv->hscrollbar)
+        {
+          g_object_set_data (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar))),
+                             I_("gtk-adjustment-interpolation"), NULL);
+        }
+      if (priv->vscrollbar)
+        {
+          g_object_set_data (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar))),
+                             I_("gtk-adjustment-interpolation"), NULL);
+        }
+      if (priv->button_press_id > 0)
+        {
+          g_signal_handler_disconnect (scrolled_window, priv->button_press_id);
+          priv->button_press_id = 0;
+        }
+      if (priv->motion_notify_id > 0)
+        {
+          g_signal_handler_disconnect (scrolled_window, priv->motion_notify_id);
+          priv->motion_notify_id = 0;
+        }
+      if (priv->button_release_id > 0)
+        {
+          g_signal_handler_disconnect (scrolled_window, priv->button_release_id);
+          priv->button_release_id = 0;
+        }
+      motion_event_list_clear (&priv->motion_events);
+      if (priv->event_window)
+        gdk_window_hide (priv->event_window);
+    }
+  g_object_notify (G_OBJECT (scrolled_window), "kinetic-scrolling");
+}
+
+/**
+ * gtk_scrolled_window_get_kinetic_scrolling:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Returns whether kinetic scrolling is turned on for @scrolled_window.
+ *
+ * Return value: %TRUE if kinetic scrolling in @scrolled_window is enabled.
+ *
+ * Since: 3.2
+ **/
+gboolean
+gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), FALSE);
+
+  priv = scrolled_window->priv;
+
+  return priv->kinetic_scrolling_enabled;
+}
+
 static void
 gtk_scrolled_window_destroy (GtkWidget *widget)
 {
@@ -1033,7 +1196,101 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
       priv->vscrollbar = NULL;
     }
 
+  if (priv->button_press_id > 0)
+    {
+      g_signal_handler_disconnect (scrolled_window, priv->button_press_id);
+      priv->button_press_id = 0;
+    }
+  if (priv->motion_notify_id > 0)
+    {
+      g_signal_handler_disconnect (widget, priv->motion_notify_id);
+      priv->motion_notify_id = 0;
+    }
+  if (priv->button_release_id > 0)
+    {
+      g_signal_handler_disconnect (widget, priv->button_release_id);
+      priv->button_release_id = 0;
+    }
+  motion_event_list_clear (&priv->motion_events);
+
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
+}
+
+static void
+gtk_scrolled_window_realize (GtkWidget *widget)
+{
+  GtkAllocation allocation;
+  GdkWindow *window;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+  gint border_width;
+  GtkScrolledWindowPrivate *priv;
+
+  priv = GTK_SCROLLED_WINDOW (widget)->priv;
+
+  gtk_widget_set_realized (widget, TRUE);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.x = allocation.x + border_width;
+  attributes.y = allocation.y + border_width;
+  attributes.width = allocation.width - 2 * border_width;
+  attributes.height = allocation.height - 2 * border_width;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.event_mask = gtk_widget_get_events (widget)
+                        | GDK_BUTTON_PRESS_MASK
+                        | GDK_BUTTON_RELEASE_MASK
+                        | GDK_BUTTON1_MOTION_MASK;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
+
+  window = gtk_widget_get_parent_window (widget);
+  gtk_widget_set_window (widget, window);
+  g_object_ref (window);
+
+  priv->event_window = gdk_window_new (window, &attributes, attributes_mask);
+  gdk_window_set_user_data (priv->event_window, widget);
+}
+
+static void
+gtk_scrolled_window_unrealize (GtkWidget *widget)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  if (priv->event_window)
+    {
+      gdk_window_set_user_data (priv->event_window, NULL);
+      gdk_window_destroy (priv->event_window);
+      priv->event_window = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_scrolled_window_map (GtkWidget *widget)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  if (priv->kinetic_scrolling_enabled && priv->event_window)
+    gdk_window_show (priv->event_window);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
+}
+
+static void
+gtk_scrolled_window_unmap (GtkWidget *widget)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  if (priv->event_window)
+    gdk_window_hide (priv->event_window);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
 }
 
 static void
@@ -1086,6 +1343,10 @@ gtk_scrolled_window_set_property (GObject      *object,
       gtk_scrolled_window_set_min_content_height (scrolled_window,
                                                   g_value_get_int (value));
       break;
+    case PROP_KINETIC_SCROLLING:
+      gtk_scrolled_window_set_kinetic_scrolling (scrolled_window,
+                                                 g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1131,6 +1392,9 @@ gtk_scrolled_window_get_property (GObject    *object,
       break;
     case PROP_MIN_CONTENT_HEIGHT:
       g_value_set_int (value, priv->min_content_height);
+      break;
+    case PROP_KINETIC_SCROLLING:
+      g_value_set_boolean (value, priv->kinetic_scrolling_enabled);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1550,7 +1814,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
 
   gtk_widget_set_allocation (widget, allocation);
-
   gtk_style_context_restore (context);
 
   if (priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
@@ -1747,6 +2010,16 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
     }
 
+  if (priv->event_window)
+    {
+      gdk_window_move_resize (priv->event_window,
+                              relative_allocation.x + allocation->x,
+                              relative_allocation.y + allocation->y,
+                              relative_allocation.width,
+                              relative_allocation.height);
+
+    }
+
   if (priv->hscrollbar_visible)
     {
       if (!gtk_widget_get_visible (priv->hscrollbar))
@@ -1870,6 +2143,743 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
       return TRUE;
     }
+
+  return FALSE;
+}
+
+static void
+motion_event_list_init (MotionEventList *motion_events,
+                        guint            size)
+{
+  if (G_UNLIKELY (motion_events->buffer))
+    g_array_free (motion_events->buffer, TRUE);
+  motion_events->buffer = g_array_sized_new (FALSE, TRUE, sizeof (MotionData), size);
+  g_array_set_size (motion_events->buffer, size);
+  motion_events->len = 0;
+}
+
+static void
+motion_event_list_reset (MotionEventList *motion_events)
+{
+  motion_events->len = 0;
+}
+
+static void
+motion_event_list_clear (MotionEventList *motion_events)
+{
+  if (G_LIKELY (motion_events->buffer))
+    g_array_free (motion_events->buffer, TRUE);
+  motion_events->buffer = NULL;
+  motion_events->len = 0;
+}
+
+static MotionData *
+motion_event_list_first (MotionEventList *motion_events)
+{
+  return &g_array_index (motion_events->buffer, MotionData, 0);
+}
+
+static MotionData *
+motion_event_list_last (MotionEventList *motion_events)
+{
+  guint n_motions = MIN (motion_events->len, motion_events->buffer->len);
+
+  return &g_array_index (motion_events->buffer, MotionData, n_motions - 1);
+}
+
+static MotionData *
+motion_event_list_append (MotionEventList *motion_events)
+{
+  if (motion_events->len == motion_events->buffer->len)
+    {
+      motion_events->buffer = g_array_remove_index (motion_events->buffer, 0);
+      g_array_set_size (motion_events->buffer, motion_events->len);
+    }
+  else
+    {
+      motion_events->len++;
+    }
+
+  return &g_array_index (motion_events->buffer, MotionData, motion_events->len - 1);
+}
+
+static void
+motion_event_list_average (MotionEventList *motion_events,
+                           gdouble         *x_average,
+                           gdouble         *y_average,
+                           GTimeVal        *time_average)
+{
+  guint i;
+  guint n_motions = MIN (motion_events->len, motion_events->buffer->len);
+
+  for (i = 0; i < n_motions; i++)
+    {
+      MotionData *motion = &g_array_index (motion_events->buffer, MotionData, i);
+
+      *x_average += motion->x;
+      *y_average += motion->y;
+      time_average->tv_sec += motion->time.tv_sec;
+      time_average->tv_usec += motion->time.tv_usec;
+    }
+
+  *x_average /= n_motions;
+  *y_average /= n_motions;
+  time_average->tv_sec /= n_motions;
+  time_average->tv_usec /= n_motions;
+}
+
+typedef struct {
+  gdouble old_position;
+  gdouble new_position;
+  gdouble value;
+
+  GtkTimeline *timeline;
+  gdouble progress;
+} InterpolationData;
+
+static void
+interpolation_free (InterpolationData *interpolation)
+{
+  if (G_UNLIKELY (!interpolation))
+    return;
+
+  if (interpolation->timeline)
+    g_object_unref (interpolation->timeline);
+
+  g_slice_free (InterpolationData, interpolation);
+}
+
+static InterpolationData *
+adjustment_get_interpolation (GtkAdjustment *adjustment)
+{
+  InterpolationData *interpolation;
+
+  interpolation = g_object_get_data (G_OBJECT (adjustment), "gtk-adjustment-interpolation");
+  if (!interpolation)
+    {
+      interpolation = g_slice_new0 (InterpolationData);
+      g_object_set_data_full (G_OBJECT (adjustment),
+                              I_("gtk-adjustment-interpolation"),
+                              interpolation,
+                              (GDestroyNotify)interpolation_free);
+    }
+
+  return interpolation;
+}
+
+static void
+interpolation_frame_cb (GtkTimeline   *timeline,
+                        gdouble        progress,
+                        GtkAdjustment *adjustment)
+{
+  gdouble new_value, lower, upper, page_size;
+  InterpolationData *interpolation;
+
+  interpolation = adjustment_get_interpolation (adjustment);
+
+  /* EASE_OUT_QUAD */
+  progress = -1.0 * progress * (progress - 2);
+
+  new_value = interpolation->old_position +
+          (interpolation->new_position - interpolation->old_position) * progress;
+
+  gtk_adjustment_set_value (adjustment, new_value);
+
+  lower = gtk_adjustment_get_lower (adjustment);
+  upper = gtk_adjustment_get_upper (adjustment);
+  page_size = gtk_adjustment_get_page_size (adjustment);
+
+  /* Stop the interpolation if we've reached the end of the adjustment */
+  if (new_value < lower || new_value > upper - page_size)
+    {
+      g_object_unref (interpolation->timeline);
+      interpolation->timeline = NULL;
+    }
+}
+
+static void
+interpolation_finished_cb (GtkTimeline   *timeline,
+                           GtkAdjustment *adjustment)
+{
+  InterpolationData *interpolation;
+  gdouble value;
+
+  interpolation = adjustment_get_interpolation (adjustment);
+  value = interpolation->new_position;
+
+#if 0 /* FIXME: elastic effect doesn't work because gtk_adjustment_set_value() always clamps */
+  if (_gtk_timeline_get_direction (timeline) == GTK_TIMELINE_DIRECTION_FORWARD)
+    {
+      gdouble lower, upper, page_size;
+
+      _gtk_timeline_set_direction (timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+      _gtk_timeline_set_duration (timeline, INTERPOLATION_DURATION);
+      _gtk_timeline_rewind (timeline);
+
+      lower = gtk_adjustment_get_lower (adjustment);
+      upper = gtk_adjustment_get_upper (adjustment);
+      page_size = gtk_adjustment_get_page_size (adjustment);
+
+      if (interpolation->new_position < lower)
+        {
+          interpolation->old_position = lower;
+          _gtk_timeline_start (interpolation->timeline);
+        }
+      else if (interpolation->new_position > (upper - page_size))
+        {
+          interpolation->old_position = upper - page_size;
+          _gtk_timeline_start (interpolation->timeline);
+        }
+      return;
+    }
+  else
+    value = interpolation->old_position;
+#endif
+
+  /* Stop interpolation */
+  g_object_unref (interpolation->timeline);
+  interpolation->timeline = NULL;
+  gtk_adjustment_set_value (adjustment, value);
+}
+
+static void
+adjustment_interpolate (GtkAdjustment *adjustment,
+                        gdouble        value,
+                        guint          duration)
+{
+  InterpolationData *interpolation;
+
+  interpolation = adjustment_get_interpolation (adjustment);
+
+  interpolation->old_position = gtk_adjustment_get_value (adjustment);
+  interpolation->new_position = value;
+
+  if (!interpolation->timeline)
+    {
+      interpolation->timeline = _gtk_timeline_new (duration);
+      _gtk_timeline_set_fps (interpolation->timeline, FPS);
+      g_signal_connect (interpolation->timeline, "frame",
+                        G_CALLBACK (interpolation_frame_cb),
+                        adjustment);
+      g_signal_connect (interpolation->timeline, "finished",
+                        G_CALLBACK (interpolation_finished_cb),
+                        adjustment);
+    }
+  else
+    {
+      /* Extend the animation if it gets interrupted, otherwise frequent calls
+       * to this function will end up with no advancements until the calls
+       * finish (as the animation never gets a chance to start).
+       */
+       _gtk_timeline_set_direction (interpolation->timeline, GTK_TIMELINE_DIRECTION_FORWARD);
+       _gtk_timeline_rewind (interpolation->timeline);
+       _gtk_timeline_set_duration (interpolation->timeline, duration);
+    }
+
+  _gtk_timeline_start (interpolation->timeline);
+}
+
+static void
+gtk_scrolled_window_clamp_adjustments (GtkScrolledWindow *scrolled_window,
+                                       guint              duration,
+                                       gboolean           horizontal,
+                                       gboolean           vertical)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *child;
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
+  gdouble value, lower, upper, step_increment, page_size;
+  gdouble new_value;
+
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
+  if (!child)
+    return;
+
+  hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+  vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+
+  if (horizontal && hadjustment)
+    {
+      value = gtk_adjustment_get_value (hadjustment);
+      lower = gtk_adjustment_get_lower (hadjustment);
+      upper = gtk_adjustment_get_upper (hadjustment);
+      page_size = gtk_adjustment_get_page_size (hadjustment);
+      step_increment = gtk_adjustment_get_step_increment (hadjustment);
+
+      new_value = (rint ((value - lower) / step_increment) * step_increment) + lower;
+      new_value = CLAMP (new_value, lower, upper - page_size);
+      adjustment_interpolate (hadjustment, new_value, duration);
+    }
+
+  if (vertical && vadjustment)
+    {
+      value = gtk_adjustment_get_value (vadjustment);
+      lower = gtk_adjustment_get_lower (vadjustment);
+      upper = gtk_adjustment_get_upper (vadjustment);
+      page_size = gtk_adjustment_get_page_size (vadjustment);
+      step_increment = gtk_adjustment_get_step_increment (vadjustment);
+
+      new_value = (rint ((value - lower) / step_increment) * step_increment) + lower;
+      new_value = CLAMP (new_value, lower, upper - page_size);
+      adjustment_interpolate (vadjustment, new_value, duration);
+    }
+}
+
+static void
+deceleration_finished_cb (GtkTimeline       *timeline,
+                          GtkScrolledWindow *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  gtk_scrolled_window_clamp_adjustments (scrolled_window,
+                                         INTERPOLATION_DURATION_OVERSHOOT (priv->overshoot),
+                                         priv->hmoving, priv->vmoving);
+  g_object_unref (timeline);
+  priv->deceleration_timeline = NULL;
+}
+
+static void
+deceleration_frame_cb (GtkTimeline       *timeline,
+                       gdouble            progress,
+                       GtkScrolledWindow *scrolled_window)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *child;
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
+  gboolean stop = TRUE;
+  gdouble frame_interval;
+
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
+  if (!child)
+    return;
+
+  hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+  vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+
+  priv->accumulated_delta += _gtk_timeline_get_elapsed_time (timeline);
+  frame_interval = FRAME_INTERVAL (FPS);
+
+  if (priv->accumulated_delta <= frame_interval)
+    stop = FALSE;
+
+  while (priv->accumulated_delta > frame_interval)
+    {
+      gdouble value;
+
+      if (hadjustment)
+        {
+          if (ABS (priv->dx) > 0.1)
+            {
+              value = priv->dx + gtk_adjustment_get_value (hadjustment);
+              gtk_adjustment_set_value (hadjustment, value);
+
+              if (priv->overshoot > 0.0)
+                {
+                  if (value > gtk_adjustment_get_upper (hadjustment) - gtk_adjustment_get_page_size (hadjustment) ||
+                      value < gtk_adjustment_get_lower (hadjustment))
+                    priv->dx *= priv->overshoot;
+                }
+
+              priv->dx = priv->dx / priv->deceleration_rate;
+
+              stop = FALSE;
+            }
+          else if (priv->hmoving)
+            {
+              priv->hmoving = FALSE;
+              gtk_scrolled_window_clamp_adjustments (scrolled_window,
+                                                     INTERPOLATION_DURATION_OVERSHOOT (priv->overshoot),
+                                                     TRUE, FALSE);
+            }
+        }
+
+      if (vadjustment)
+        {
+          if (ABS (priv->dy) > 0.1)
+            {
+              value = priv->dy + gtk_adjustment_get_value (vadjustment);
+              gtk_adjustment_set_value (vadjustment, value);
+
+              if (priv->overshoot > 0.0)
+                {
+                  if (value > gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment) ||
+                      value < gtk_adjustment_get_lower (vadjustment))
+                    priv->dy *= priv->overshoot;
+                }
+
+              priv->dy = priv->dy / priv->deceleration_rate;
+
+              stop = FALSE;
+            }
+          else if (priv->vmoving)
+            {
+              priv->vmoving = FALSE;
+              gtk_scrolled_window_clamp_adjustments (scrolled_window,
+                                                     INTERPOLATION_DURATION_OVERSHOOT (priv->overshoot),
+                                                     FALSE, TRUE);
+            }
+        }
+      priv->accumulated_delta -= frame_interval;
+    }
+
+  if (stop)
+    {
+      _gtk_timeline_pause (timeline);
+      deceleration_finished_cb (timeline, scrolled_window);
+    }
+}
+
+static gdouble
+gtk_scrolled_window_get_deceleration_distance (GtkScrolledWindow *scrolled_window,
+                                               gdouble            pos_x,
+                                               gdouble            pos_y)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GTimeVal release_time, motion_time;
+  gdouble x_origin, y_origin;
+  glong time_diff;
+  gfloat frac;
+  gdouble y, nx, ny;
+
+  g_get_current_time (&release_time);
+
+  /* Get average position/time of last x mouse events */
+  x_origin = y_origin = 0;
+  motion_time = (GTimeVal){ 0, 0 };
+  motion_event_list_average (&priv->motion_events, &x_origin, &y_origin, &motion_time);
+
+  if (motion_time.tv_sec == release_time.tv_sec)
+    time_diff = release_time.tv_usec - motion_time.tv_usec;
+  else
+    time_diff = release_time.tv_usec + (G_USEC_PER_SEC - motion_time.tv_usec);
+
+  /* Work out the fraction of 1/60th of a second that has elapsed */
+  frac = (time_diff / 1000.0) / FRAME_INTERVAL (FPS);
+
+  /* See how many units to move in 1/60th of a second */
+  priv->dx = (x_origin - pos_x) / frac;
+  priv->dy = (y_origin - pos_y) / frac;
+
+  /* If the delta is too low for the equations to work,
+   * bump the values up a bit.
+   */
+  if (ABS (priv->dx) < 1)
+    priv->dx = (priv->dx > 0) ? 1 : -1;
+  if (ABS (priv->dy) < 1)
+    priv->dy = (priv->dy > 0) ? 1 : -1;
+
+  /* We want n, where x / y^n < z,
+   * x = Distance to move per frame
+   * y = Deceleration rate
+   * z = maximum distance from target
+   *
+   * Rearrange to n = log (x / z) / log (y)
+   * To simplify, z = 1, so n = log (x) / log (y)
+   */
+  y = priv->deceleration_rate;
+  nx = logf (ABS (priv->dx)) / logf (y);
+  ny = logf (ABS (priv->dy)) / logf (y);
+
+  return MAX (nx, ny);
+}
+
+static void
+gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window,
+                                        gdouble            distance)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  guint duration;
+
+  duration = MAX (1, (gint)(distance * FRAME_INTERVAL (FPS)));
+  if (duration > INTERPOLATION_DURATION)
+    {
+      GtkAdjustment *hadjustment;
+      GtkAdjustment *vadjustment;
+      gdouble value, lower, upper, step_increment, page_size;
+      gdouble n, y, d;
+
+      /* Now we have n, adjust dx/dy so that we finish on a step
+       * boundary.
+       *
+       * Distance moved, using the above variable names:
+       *
+       * d = x + x/y + x/y^2 + ... + x/y^n
+       *
+       * Using geometric series,
+       *
+       * d = (1 - 1/y^(n+1))/(1 - 1/y)*x
+       *
+       * Let a = (1 - 1/y^(n+1))/(1 - 1/y),
+       *
+       * d = a * x
+       *
+       * Find d and find its nearest page boundary, then solve for x
+       *
+       * x = d / a
+       */
+      n = distance;
+      y = priv->deceleration_rate;
+
+      hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+      if (hadjustment)
+        {
+          gdouble ax;
+
+          value = gtk_adjustment_get_value (hadjustment);
+          lower = gtk_adjustment_get_lower (hadjustment);
+          upper = gtk_adjustment_get_upper (hadjustment);
+          page_size = gtk_adjustment_get_page_size (hadjustment);
+          step_increment = gtk_adjustment_get_step_increment (hadjustment);
+
+          ax = (1.0 - 1.0 / pow (y, n + 1)) / (1.0 - 1.0 / y);
+
+          /* Make sure we pick the next nearest step increment in the
+           * same direction as the push.
+           */
+          priv->dx *= n;
+          if (ABS (priv->dx) < step_increment / 2)
+            d = round ((value + priv->dx - lower) / step_increment);
+          else if (priv->dx > 0)
+            d = ceil ((value + priv->dx - lower) / step_increment);
+          else
+            d = floor ((value + priv->dx - lower) / step_increment);
+
+          if (priv->overshoot <= 0.0)
+            d = CLAMP ((d * step_increment) + lower, lower, upper - page_size) - value;
+          else
+            d = ((d * step_increment) + lower) - value;
+
+          priv->dx = d / ax;
+        }
+
+      vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+      if (vadjustment)
+        {
+          gdouble ay;
+
+          value = gtk_adjustment_get_value (vadjustment);
+          lower = gtk_adjustment_get_lower (vadjustment);
+          upper = gtk_adjustment_get_upper (vadjustment);
+          page_size = gtk_adjustment_get_page_size (vadjustment);
+          step_increment = gtk_adjustment_get_step_increment (vadjustment);
+
+          ay = (1.0 - 1.0 / pow (y, n + 1)) / (1.0 - 1.0 / y);
+
+          priv->dy *= n;
+          if (ABS (priv->dy) < step_increment / 2)
+            d = round ((value + priv->dy - lower) / step_increment);
+          else if (priv->dy > 0)
+            d = ceil ((value + priv->dy - lower) / step_increment);
+          else
+            d = floor ((value + priv->dy - lower) / step_increment);
+
+          if (priv->overshoot <= 0.0)
+            d = CLAMP ((d * step_increment) + lower, lower, upper - page_size) - value;
+          else
+            d = ((d * step_increment) + lower) - value;
+
+          priv->dy = d / ay;
+        }
+
+      priv->deceleration_timeline = _gtk_timeline_new (duration);
+      _gtk_timeline_set_fps (priv->deceleration_timeline, FPS);
+      g_signal_connect (priv->deceleration_timeline, "frame",
+                        G_CALLBACK (deceleration_frame_cb),
+                        scrolled_window);
+      g_signal_connect (priv->deceleration_timeline, "finished",
+                        G_CALLBACK (deceleration_finished_cb),
+                        scrolled_window);
+      priv->accumulated_delta = 0;
+      priv->hmoving = priv->vmoving = TRUE;
+      _gtk_timeline_start (priv->deceleration_timeline);
+    }
+  else
+    {
+      gtk_scrolled_window_clamp_adjustments (scrolled_window,
+                                             INTERPOLATION_DURATION,
+                                             TRUE, TRUE);
+    }
+}
+
+static gboolean
+gtk_scrolled_window_button_release_event (GtkWidget *widget,
+                                          GdkEvent  *_event)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *child;
+  gdouble distance;
+  GdkEventButton *event;
+
+  if (_event->type != GDK_BUTTON_RELEASE)
+    return FALSE;
+
+  event = (GdkEventButton *)_event;
+
+  if (event->button != 1)
+    return FALSE;
+
+  gdk_device_ungrab (gdk_event_get_device (_event), event->time);
+
+  if (priv->motion_notify_id > 0)
+    {
+      g_signal_handler_disconnect (widget, priv->motion_notify_id);
+      priv->motion_notify_id = 0;
+    }
+  if (priv->button_release_id > 0)
+    {
+      g_signal_handler_disconnect (widget, priv->button_release_id);
+      priv->button_release_id = 0;
+    }
+
+  if (!priv->in_drag)
+    return FALSE;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (!child)
+    return FALSE;
+
+  distance = gtk_scrolled_window_get_deceleration_distance (scrolled_window, event->x_root, event->y_root);
+  gtk_scrolled_window_start_deceleration (scrolled_window, distance);
+
+  /* Reset motion event buffer */
+  motion_event_list_reset (&priv->motion_events);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_scrolled_window_motion_notify_event (GtkWidget *widget,
+                                         GdkEvent  *_event)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *child;
+  MotionData *motion;
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
+  gdouble dx, dy;
+  GdkEventMotion *event;
+
+  if (_event->type != GDK_MOTION_NOTIFY)
+    return FALSE;
+
+  event = (GdkEventMotion *)_event;
+
+  if (!(event->state & GDK_BUTTON1_MASK))
+    return FALSE;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (!child)
+    return FALSE;
+
+  /* Check if we've passed the drag threshold */
+  if (!priv->in_drag)
+    {
+      motion = motion_event_list_first (&priv->motion_events);
+      if (gtk_drag_check_threshold (widget, motion->x, motion->y, event->x_root, event->y_root))
+        priv->in_drag = TRUE;
+      else
+        return FALSE;
+    }
+
+  motion = motion_event_list_last (&priv->motion_events);
+
+  hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+  if (hadjustment)
+    {
+      dx = (motion->x - event->x_root) + gtk_adjustment_get_value (hadjustment);
+      gtk_adjustment_set_value (hadjustment, dx);
+    }
+
+  vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+  if (vadjustment)
+    {
+      dy = (motion->y - event->y_root) + gtk_adjustment_get_value (vadjustment);
+      gtk_adjustment_set_value (vadjustment, dy);
+    }
+
+  motion = motion_event_list_append (&priv->motion_events);
+  motion->x = event->x_root;
+  motion->y = event->y_root;
+  g_get_current_time (&motion->time);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_scrolled_window_button_press_event (GtkWidget *widget,
+                                        GdkEvent  *_event)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *child;
+  MotionData *motion;
+  gint threshold;
+  GtkWidget *event_widget;
+  GdkEventButton *event;
+
+  if (_event->type != GDK_BUTTON_PRESS)
+    return FALSE;
+
+  event = (GdkEventButton *)_event;
+
+  if (event->button != 1)
+    return FALSE;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (!child)
+    return FALSE;
+
+  event_widget = gtk_get_event_widget (_event);
+  if (priv->hscrollbar == event_widget || priv->vscrollbar == event_widget)
+    return FALSE;
+
+  gdk_device_grab (gdk_event_get_device (_event),
+                   priv->event_window,
+                   GDK_OWNERSHIP_WINDOW,
+                   TRUE,
+                   GDK_BUTTON_RELEASE_MASK | GDK_BUTTON1_MOTION_MASK,
+                   NULL,
+                   event->time);
+  gdk_window_lower (priv->event_window);
+
+  /* Reset motion buffer */
+  motion_event_list_reset (&priv->motion_events);
+  motion = motion_event_list_append (&priv->motion_events);
+  motion->x = event->x_root;
+  motion->y = event->y_root;
+  g_get_current_time (&motion->time);
+  if (priv->deceleration_timeline)
+    {
+      g_object_unref (priv->deceleration_timeline);
+      priv->deceleration_timeline = NULL;
+    }
+
+  priv->motion_notify_id =
+          g_signal_connect (widget, "captured-event",
+                            G_CALLBACK (gtk_scrolled_window_motion_notify_event),
+                            NULL);
+  priv->button_release_id =
+          g_signal_connect (widget, "captured-event",
+                            G_CALLBACK (gtk_scrolled_window_button_release_event),
+                            NULL);
+
+  /* If there's a zero drag threshold, start the drag immediately */
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-dnd-drag-threshold", &threshold,
+                NULL);
+  if (threshold == 0)
+    {
+      priv->in_drag = TRUE;
+
+      /* Swallow the press event */
+      return TRUE;
+    }
+  else
+    priv->in_drag = FALSE;
 
   return FALSE;
 }
