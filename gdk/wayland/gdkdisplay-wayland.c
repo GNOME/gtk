@@ -128,9 +128,6 @@ shell_handle_configure(void *data, struct wl_shell *shell,
 
   window = wl_surface_get_user_data(surface);
 
-  printf("got configure: window %p, %dx%d, edges %d\n",
-	 window, width, height, edges);
-
   display = gdk_window_get_display (window);
 
   event = gdk_event_new (GDK_CONFIGURE);
@@ -248,8 +245,6 @@ gdk_display_init_egl(GdkDisplay *display)
       return FALSE;
     }
   }
-
-  fprintf(stderr, "egl initialized\n");
 
   return TRUE;
 }
