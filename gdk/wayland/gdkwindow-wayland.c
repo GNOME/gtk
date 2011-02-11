@@ -95,7 +95,6 @@ struct _GdkWindowImplWayland
   GdkWindow *wrapper;
 
   GdkCursor *cursor;
-  GHashTable *device_cursor;
 
   gint8 toplevel_window_type;
 
@@ -158,8 +157,6 @@ static void
 _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 {
   impl->toplevel_window_type = -1;
-  impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
-					       (GDestroyNotify) gdk_cursor_unref);
 }
 
 /**
@@ -367,8 +364,6 @@ gdk_window_impl_wayland_finalize (GObject *object)
     gdk_cursor_unref (impl->cursor);
   if (impl->server_surface)
     cairo_surface_destroy (impl->server_surface);
-
-  g_hash_table_destroy (impl->device_cursor);
 
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
@@ -595,20 +590,8 @@ gdk_window_wayland_set_device_cursor (GdkWindow *window,
 				      GdkDevice *device,
 				      GdkCursor *cursor)
 {
-  GdkWindowImplWayland *impl;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  if (!cursor)
-    g_hash_table_remove (impl->device_cursor, device);
-  else
-    {
-      g_hash_table_replace (impl->device_cursor,
-			    device, gdk_cursor_ref (cursor));
-    }
 
   if (!GDK_WINDOW_DESTROYED (window))
     GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
