@@ -32,11 +32,11 @@
 #include "gdkdisplay.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkscreen.h"
-#include "gdkscreen-wayland.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager.h"
 #include "gdkkeysprivate.h"
+#include "gdkprivate-wayland.h"
 
 typedef struct _GdkEventTypeWayland GdkEventTypeWayland;
 

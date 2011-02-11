@@ -25,7 +25,6 @@
 #include "gdkinternals.h"
 #include "gdkproperty.h"
 #include "gdkprivate-wayland.h"
-#include "gdkscreen-wayland.h"
 #include "gdkdisplay-wayland.h"
 
 #include <string.h>
