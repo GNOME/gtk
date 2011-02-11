@@ -11,12 +11,10 @@
     <title>GTK+ 3 Reference Manual</title>
     <releaseinfo>
       This document is for the GTK+ 3 library, version &version;.
-      The latest version can be found online at
-      <ulink role="online-location" url="http://library.gnome.org/devel/gtk3/unstable/">http://library.gnome.org/devel/gtk3/unstable/</ulink>.
+      The latest versions can be found online at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gtk3/">http://library.gnome.org/devel/gtk3/</ulink>.
       If you are looking for the older GTK+ 2 series of libraries,
-      they can be found under their version numbers; for example,
-      2.24 is available at
-      <ulink role="online-location" url="http://library.gnome.org/devel/gtk/2.24/">http://library.gnome.org/devel/gtk/2.24/</ulink>.
+      see <ulink role="online-location" url="http://library.gnome.org/devel/gtk/">http://library.gnome.org/devel/gtk/</ulink>.
     </releaseinfo>
   </bookinfo>
 
