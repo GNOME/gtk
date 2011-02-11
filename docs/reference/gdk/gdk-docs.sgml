@@ -6,11 +6,14 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>GDK Reference Manual</title>
+    <title>GDK 2 Reference Manual</title>
     <releaseinfo>
-      for GDK &version;
-      The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://library.gnome.org/devel/gdk/unstable/">http://library.gnome.org/devel/gdk/unstable/</ulink>.
+      This document is for GDK 2 library; the latest versions can be found online at
+      <ulink role="online-location"
+      url="http://library.gnome.org/devel/gdk/">http://library.gnome.org/devel/gdk/</ulink>.
+      If you're looking for the newer GDK 3 series of libraries,
+      see <ulink role="online-location"
+      url="http://library.gnome.org/devel/gdk3/">http://library.gnome.org/devel/gdk3/</ulink>.
     </releaseinfo>
   </bookinfo>
 
