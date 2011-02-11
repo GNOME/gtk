@@ -31,7 +31,6 @@
 #include "gdkscreen-wayland.h"
 #include "gdkprivate-wayland.h"
 #include "gdkinternals.h"
-#include "gdkwindow-wayland.h"
 #include "gdkdeviceprivate.h"
 
 #include <stdlib.h>
@@ -96,7 +95,6 @@ struct _GdkWindowImplWayland
 
   GdkWindow *wrapper;
 
-  GdkToplevelWayland *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
   GHashTable *device_cursor;
 
@@ -109,6 +107,45 @@ struct _GdkWindowImplWayland
   cairo_surface_t *server_surface;
   GLuint texture;
   uint32_t resize_edges;
+
+  /* Set if the window, or any descendent of it, is the server's focus window
+   */
+  guint has_focus_window : 1;
+
+  /* Set if window->has_focus_window and the focus isn't grabbed elsewhere.
+   */
+  guint has_focus : 1;
+
+  /* Set if the pointer is inside this window. (This is needed for
+   * for focus tracking)
+   */
+  guint has_pointer : 1;
+  
+  /* Set if the window is a descendent of the focus window and the pointer is
+   * inside it. (This is the case where the window will receive keystroke
+   * events even window->has_focus_window is FALSE)
+   */
+  guint has_pointer_focus : 1;
+
+  /* Set if we are requesting these hints */
+  guint skip_taskbar_hint : 1;
+  guint skip_pager_hint : 1;
+  guint urgency_hint : 1;
+
+  guint on_all_desktops : 1;   /* _NET_WM_STICKY == 0xFFFFFFFF */
+
+  guint have_sticky : 1;	/* _NET_WM_STATE_STICKY */
+  guint have_maxvert : 1;       /* _NET_WM_STATE_MAXIMIZED_VERT */
+  guint have_maxhorz : 1;       /* _NET_WM_STATE_MAXIMIZED_HORZ */
+  guint have_fullscreen : 1;    /* _NET_WM_STATE_FULLSCREEN */
+
+  gulong map_serial;	/* Serial of last transition from unmapped */
+
+  cairo_surface_t *icon_pixmap;
+  cairo_surface_t *icon_mask;
+
+  /* Time of most recent user interaction. */
+  gulong user_time;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -124,24 +161,6 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
   impl->toplevel_window_type = -1;
   impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
 					       (GDestroyNotify) gdk_cursor_unref);
-}
-
-GdkToplevelWayland *
-_gdk_wayland_window_get_toplevel (GdkWindow *window)
-{
-  GdkWindowImplWayland *impl;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return NULL;
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  if (!impl->toplevel)
-    impl->toplevel = g_new0 (GdkToplevelWayland, 1);
-
-  return impl->toplevel;
 }
 
 /**
@@ -276,22 +295,6 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
     gdk_window_set_type_hint (window, attributes->type_hint);
 }
 
-static void
-gdk_toplevel_wayland_free_contents (GdkDisplay *display,
-				GdkToplevelWayland *toplevel)
-{
-  if (toplevel->icon_pixmap)
-    {
-      cairo_surface_destroy (toplevel->icon_pixmap);
-      toplevel->icon_pixmap = NULL;
-    }
-  if (toplevel->icon_mask)
-    {
-      cairo_surface_destroy (toplevel->icon_mask);
-      toplevel->icon_mask = NULL;
-    }
-}
-
 static const cairo_user_data_key_t gdk_wayland_cairo_key;
 
 typedef struct _GdkWaylandCairoSurfaceData {
@@ -361,8 +364,6 @@ gdk_window_impl_wayland_finalize (GObject *object)
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (object));
 
   impl = GDK_WINDOW_IMPL_WAYLAND (object);
-
-  g_free (impl->toplevel);
 
   if (impl->cursor)
     gdk_cursor_unref (impl->cursor);
@@ -458,22 +459,16 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
 {
   GdkDisplay *display;
   GdkDisplayWayland *display_wayland;
-  GdkToplevelWayland *toplevel;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkEvent *event;
 
   display = gdk_window_get_display (window);
   display_wayland = GDK_DISPLAY_WAYLAND (display);
 
-  if (WINDOW_IS_TOPLEVEL (window))
-    {
-      toplevel = _gdk_wayland_window_get_toplevel (window);
-
-      if (toplevel->user_time != 0 &&
-	      display_wayland->user_time != 0 &&
-	  XSERVER_TIME_IS_LATER (display_wayland->user_time, toplevel->user_time))
-	gdk_wayland_window_set_user_time (window, display_wayland->user_time);
-    }
+  if (impl->user_time != 0 &&
+      display_wayland->user_time != 0 &&
+      XSERVER_TIME_IS_LATER (display_wayland->user_time, impl->user_time))
+    gdk_wayland_window_set_user_time (window, impl->user_time);
 
   impl->surface = wl_compositor_create_surface(display_wayland->compositor);
   wl_surface_set_user_data(impl->surface, window);
@@ -742,15 +737,9 @@ gdk_wayland_window_destroy (GdkWindow *window,
 			    gboolean   recursing,
 			    gboolean   foreign_destroy)
 {
-  GdkToplevelWayland *toplevel;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-
-  toplevel = _gdk_wayland_window_get_toplevel (window);
-  if (toplevel)
-    gdk_toplevel_wayland_free_contents (gdk_window_get_display (window),
-					toplevel);
 
   if (impl->cairo_surface)
     {

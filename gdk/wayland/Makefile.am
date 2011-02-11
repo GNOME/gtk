@@ -31,7 +31,6 @@ libgdk_wayland_la_SOURCES =			\
 	gdkscreen-wayland.h			\
 	gdkselection-wayland.c			\
 	gdkwindow-wayland.c			\
-	gdkwindow-wayland.h			\
 	gdkwayland.h				\
 	gdkprivate-wayland.h
 

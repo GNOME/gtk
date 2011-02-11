@@ -33,7 +33,6 @@
 
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkprivate.h>
-#include <gdk/wayland/gdkwindow-wayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 
 #include "gdkinternals.h"
@@ -45,7 +44,11 @@
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_WAYLAND (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
-GType      _gdk_wayland_window_get_type            (void);
+GType _gdk_wayland_window_get_type    (void);
+void  _gdk_wayland_window_update_size (GdkWindow *window,
+				       int32_t width,
+				       int32_t height,
+				       uint32_t edges);
 
 GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
 struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap);
