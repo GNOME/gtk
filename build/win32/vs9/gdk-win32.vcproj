@@ -139,7 +139,7 @@
 			<File RelativePath="..\..\..\gdk\win32\gdkselection-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdktestutils-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkvisual-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkwin32displaymanager.c" />
+			<File RelativePath="..\..\..\gdk\win32\gdkdisplaymanager-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkwin32id.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkwindow-win32.c" />
 		</Filter>
