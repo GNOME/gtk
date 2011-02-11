@@ -254,6 +254,7 @@ gtk_public_h_sources = 		\
 	gtkmisc.h		\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
+	gtknamedpicture.h	\
 	gtknotebook.h		\
 	gtknumerableicon.h	\
 	gtkoffscreenwindow.h	\
@@ -582,6 +583,7 @@ gtk_base_c_sources = 		\
 	gtkmodifierstyle.c	\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
+	gtknamedpicture.c	\
 	gtknotebook.c		\
 	gtknumerableicon.c	\
 	gtkoffscreenwindow.c	\

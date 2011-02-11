@@ -139,6 +139,7 @@
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkmodules.h>
 #include <gtk/gtkmountoperation.h>
+#include <gtk/gtknamedpicture.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtknumerableicon.h>
 #include <gtk/gtkoffscreenwindow.h>
