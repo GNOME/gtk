@@ -64,6 +64,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testicontheme			\
 	testimage			\
 	testinput			\
+	testkineticscrolling		\
 	testlockbutton			\
 	testmenubars			\
 	testmountoperation		\
@@ -181,6 +182,7 @@ testgrid_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
+testkineticscrolling_DEPENDENCIES = $(TEST_DEPS)
 testlockbutton_DEPENDENCIES = $(TEST_DEPS)
 testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmountoperation_DEPENDENCIES = $(TEST_DEPS)
@@ -280,6 +282,7 @@ testiconview_LDADD = $(LDADDS)
 testiconview_keynav_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
+testkineticscrolling_LDADD = $(LDADDS)
 testlockbutton_LDADD = $(LDADDS)
 testmenubars_LDADD = $(LDADDS)
 testmountoperation_LDADD = $(LDADDS)
@@ -523,6 +526,8 @@ testpixbuf_color_SOURCES = testpixbuf-color.c
 testpixbuf_save_SOURCES = testpixbuf-save.c
 
 testcolorchooser_SOURCES = testcolorchooser.c
+
+testkineticscrolling_SOURCES = testkineticscrolling.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
