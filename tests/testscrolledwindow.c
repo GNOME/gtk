@@ -54,6 +54,16 @@ content_height_changed (GtkSpinButton *spin_button,
 }
 
 static void
+kinetic_scrolling_changed (GtkToggleButton *toggle_button,
+                           gpointer         data)
+{
+  GtkScrolledWindow *swindow = data;
+  gboolean enabled = gtk_toggle_button_get_active (toggle_button);
+
+  gtk_scrolled_window_set_kinetic_scrolling (swindow, enabled);
+}
+
+static void
 scrollable_policy (void)
 {
   GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl;
@@ -198,6 +208,13 @@ scrollable_policy (void)
 
   g_signal_connect (G_OBJECT (widget), "changed",
                     G_CALLBACK (label_flip_changed), label);
+
+  /* Add Kinetic scrolling control here */
+  widget = gtk_check_button_new_with_label ("Kinetic scrolling");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (cntl), widget, TRUE, TRUE, 0);
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (kinetic_scrolling_changed), swindow);
 
   gtk_widget_show (window);
 }
