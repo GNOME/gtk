@@ -52,17 +52,6 @@ struct _GdkScreenWayland
   int width, height;
   int width_mm, height_mm;
 
-  /* Window manager */
-  char *window_manager_name;
-  /* TRUE if wmspec_check_window has changed since last
-   * fetch of _NET_SUPPORTED
-   */
-  guint need_refetch_net_supported : 1;
-  /* TRUE if wmspec_check_window has changed since last
-   * fetch of window manager name
-   */
-  guint need_refetch_wm_name : 1;
-
   /* Visual Part */
   GdkVisual *argb_visual;
   GdkVisual *premultiplied_argb_visual;
@@ -72,21 +61,8 @@ struct _GdkScreenWayland
   gint		     n_monitors;
   GdkWaylandMonitor *monitors;
   gint               primary_monitor;
-
-  /* Xft resources for the display, used for default values for
-   * the Xft/ XSETTINGS
-   */
-  gboolean xft_init;		/* Whether we've intialized these values yet */
-  gboolean xft_antialias;
-  gboolean xft_hinting;
-  gint xft_hintstyle;
-  gint xft_rgba;
-  gint xft_dpi;
-
-  GdkAtom cm_selection_atom;
-  gboolean is_composited;
 };
-  
+
 struct _GdkScreenWaylandClass
 {
   GdkScreenClass parent_class;
@@ -183,8 +159,6 @@ gdk_wayland_screen_finalize (GObject *object)
   g_object_unref (screen_wayland->argb_visual);
   g_object_unref (screen_wayland->premultiplied_argb_visual);
   g_object_unref (screen_wayland->rgb_visual);
-
-  g_free (screen_wayland->window_manager_name);
 
   deinit_multihead (GDK_SCREEN (object));
 
@@ -505,9 +479,6 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 
   screen_wayland = GDK_SCREEN_WAYLAND (screen);
   screen_wayland->display = display;
-  /* we want this to be always non-null */
-  screen_wayland->window_manager_name = g_strdup ("unknown");
-
   screen_wayland->width = 8192;
   screen_wayland->height = 8192;
 

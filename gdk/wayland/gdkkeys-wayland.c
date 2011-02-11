@@ -539,12 +539,10 @@ gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
     GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK
   };
   int i, j;
-  gboolean retval;
   GdkWaylandKeymap *wayland_keymap;
-  struct xkb_desc *xkb;
+  gboolean retval;
 
   wayland_keymap = GDK_WAYLAND_KEYMAP (keymap);
-  xkb = wayland_keymap->xkb;
 
   for (j = 0; j < 3; j++)
     {
@@ -563,7 +561,7 @@ gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 	}
     }
 
-  return TRUE;
+  return retval;
 }
 
 static void

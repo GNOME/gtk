@@ -312,7 +312,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
     GDK_DISPLAY_WAYLAND (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandCairoSurfaceData *data;
-  struct wl_buffer *buffer;
   int32_t server_width, server_height, dx, dy;
 
   if (GDK_WINDOW_DESTROYED (window))

@@ -38,33 +38,7 @@
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 
-typedef struct _GdkEventTypeWayland GdkEventTypeWayland;
-
-struct _GdkEventTypeWayland
-{
-  gint base;
-  gint n_events;
-};
-
 G_DEFINE_TYPE (GdkDisplayWayland, _gdk_display_wayland, GDK_TYPE_DISPLAY)
-
-/* GDK_VISIBILITY,
- * GDK_MAP,
- * GDK_UNMAP,
- * GDK_PROPERTY_NOTIFY
- * GDK_SELECTION_CLEAR
- * GDK_SELECTION_ REQUEST
- * GDK_SELECTION_NOTIFY
- * GDK_CLIENT_EVENT,
- *
- * new keyboard mapping: _gdk_keymap_keys_changed (display);
- *
- * Selection owner change: GDK_OWNER_CHANGE;
- *
- * Screen size changes: _gdk_wayland_screen_size_changed (screen, xevent);
- *
- * XkbStateNotify: _gdk_keymap_state_changed (display, xevent);
- */
 
 static void
 gdk_input_init (GdkDisplay *display)
@@ -336,10 +310,6 @@ gdk_wayland_display_finalize (GObject *object)
   /* input GdkDevice list */
   g_list_foreach (display_wayland->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (display_wayland->input_devices);
-
-  /* input GdkWindow list */
-  g_list_foreach (display_wayland->input_windows, (GFunc) g_free, NULL);
-  g_list_free (display_wayland->input_windows);
 
   /* Free all GdkScreens */
   for (i = 0; i < 1; i++)

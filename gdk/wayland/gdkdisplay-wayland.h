@@ -58,29 +58,17 @@ struct _GdkDisplayWayland
   GdkScreen *default_screen;
   GdkScreen **screens;
 
-  gint grab_count;
-
   /* Keyboard related information */
   GdkKeymap *keymap;
-  guint	    keymap_serial;
-
-  /* drag and drop information */
-  GdkDragContext *current_dest_drag;
 
   /* input GdkDevice list */
   GList *input_devices;
-
-  /* input GdkWindow list */
-  GList *input_windows;
 
   /* Startup notification */
   gchar *startup_notification_id;
 
   /* Time of most recent user interaction. */
   gulong user_time;
-
-  /* The offscreen window that has the pointer in it (if any) */
-  GdkWindow *active_offscreen_window;
 
   /* Wayland fields below */
   struct wl_display *wl_display;
