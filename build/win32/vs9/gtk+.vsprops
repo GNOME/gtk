@@ -316,7 +316,6 @@ copy ..\..\..\gtk\gtkwidget.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#
 copy ..\..\..\gtk\gtkwidgetpath.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 
-mkdir $(OutDir)\lib\gtk-$(GtkApiVersion)\include&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkconfig.h $(OutDir)\include\gtk-3.0\gdk&#x0D;&#x0A;
 
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\lib&#x0D;&#x0A;
