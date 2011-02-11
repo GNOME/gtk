@@ -102,13 +102,11 @@ _gdk_broadway_window_drag_begin (GdkWindow *window,
   return new_context;
 }
 
-GdkNativeWindow
-_gdk_broadway_display_get_drag_protocol (GdkDisplay      *display,
-					 GdkNativeWindow  xid,
-					 GdkDragProtocol *protocol,
-					 guint           *version)
+GdkDragProtocol
+_gdk_broadway_window_get_drag_protocol (GdkWindow *window,
+					GdkWindow **target)
 {
-  return 0;
+  return GDK_DRAG_PROTO_NONE;
 }
 
 static GdkWindow *

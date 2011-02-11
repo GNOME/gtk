@@ -712,22 +712,6 @@ gdk_broadway_display_list_devices (GdkDisplay *display)
   return GDK_BROADWAY_DISPLAY (display)->input_devices;
 }
 
-static gboolean
-gdk_broadway_display_send_client_message (GdkDisplay     *display,
-					  GdkEvent       *event,
-					  GdkNativeWindow winid)
-{
-  return FALSE;
-}
-
-static void
-gdk_broadway_display_add_client_message_filter (GdkDisplay   *display,
-						GdkAtom       message_type,
-						GdkFilterFunc func,
-						gpointer      data)
-{
-}
-
 static gulong
 gdk_broadway_display_get_next_serial (GdkDisplay *display)
 {
@@ -777,9 +761,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->supports_input_shapes = gdk_broadway_display_supports_input_shapes;
   display_class->supports_composite = gdk_broadway_display_supports_composite;
   display_class->list_devices = gdk_broadway_display_list_devices;
-  display_class->send_client_message = gdk_broadway_display_send_client_message;
-  display_class->add_client_message_filter = gdk_broadway_display_add_client_message_filter;
-  display_class->get_drag_protocol = _gdk_broadway_display_get_drag_protocol;
   display_class->get_cursor_for_type = _gdk_broadway_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_broadway_display_get_cursor_for_name;
   display_class->get_cursor_for_pixbuf = _gdk_broadway_display_get_cursor_for_pixbuf;

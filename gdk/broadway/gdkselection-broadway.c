@@ -113,8 +113,8 @@ _gdk_broadway_display_get_selection_property (GdkDisplay *display,
 }
 
 void
-_gdk_broadway_display_send_selection_notify (GdkDisplay       *display,
-					     GdkNativeWindow  requestor,
+_gdk_broadway_display_send_selection_notify (GdkDisplay      *display,
+					     GdkWindow       *requestor,
 					     GdkAtom          selection,
 					     GdkAtom          target,
 					     GdkAtom          property, 

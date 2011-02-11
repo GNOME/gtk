@@ -128,10 +128,8 @@ void _gdk_broadway_screen_init_visuals (GdkScreen *screen);
 void _gdk_broadway_display_init_dnd (GdkDisplay *display);
 GdkDisplay * _gdk_broadway_display_open (const gchar *display_name);
 void _gdk_broadway_display_queue_events (GdkDisplay *display);
-GdkNativeWindow _gdk_broadway_display_get_drag_protocol (GdkDisplay      *display,
-							 GdkNativeWindow  xid,
-							 GdkDragProtocol *protocol,
-							 guint           *version);
+GdkDragProtocol _gdk_broadway_window_get_drag_protocol (GdkWindow *window,
+							GdkWindow **target);
 GdkCursor*_gdk_broadway_display_get_cursor_for_type (GdkDisplay    *display,
 						     GdkCursorType  cursor_type);
 GdkCursor*_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
@@ -170,7 +168,7 @@ gint _gdk_broadway_display_get_selection_property (GdkDisplay *display,
 						   GdkAtom    *ret_type,
 						   gint       *ret_format);
 void _gdk_broadway_display_send_selection_notify (GdkDisplay       *display,
-						  GdkNativeWindow  requestor,
+						  GdkWindow       *requestor,
 						  GdkAtom          selection,
 						  GdkAtom          target,
 						  GdkAtom          property, 
