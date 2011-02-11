@@ -38,7 +38,7 @@
 
 struct _GdkX11DeviceManagerXI2
 {
-  GdkDeviceManager parent_object;
+  GdkX11DeviceManagerCoreClass parent_class;
 
   GHashTable *id_table;
 
