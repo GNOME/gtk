@@ -177,7 +177,7 @@ libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gd
 endif # USE_WIN32
 
 if USE_BROADWAY
-libgdk_3_0_la_LIBADD += broadway/libgdk-broadway.la
+libgdk_3_la_LIBADD += broadway/libgdk-broadway.la
 endif # USE_BROADWAY
 
 if HAVE_INTROSPECTION
