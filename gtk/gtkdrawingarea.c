@@ -122,11 +122,11 @@
  *
  * To receive mouse events on a drawing area, you will need to enable
  * them with gtk_widget_add_events(). To receive keyboard events, you
- * will need to set the #GTK_CAN_FOCUS flag on the drawing area, and
+ * will need to set the "can-focus" property on the drawing area, and you
  * should probably draw some user-visible indication that the drawing
- * area is focused. Use the GTK_HAS_FOCUS() macro in your expose event
+ * area is focused. Use gtk_widget_has_focus() in your expose event
  * handler to decide whether to draw the focus indicator. See
- * gtk_paint_focus() for one way to draw focus.
+ * gtk_render_focus() for one way to draw focus.
  */
 
 static void gtk_drawing_area_realize       (GtkWidget           *widget);

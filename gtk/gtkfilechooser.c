@@ -222,18 +222,25 @@
  * 	      <row>
  * 		<entry>up-folder</entry>
  * 		<entry>
- * 		  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>
+ * 		  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>;
+ *                <keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Up</keycap></keycombo>
  *                <footnote>
  * 		      Both the individual Up key and the numeric
  * 		      keypad's Up key are supported.
- * 		  </footnote>
- * 		  ;
+ * 		  </footnote>;
  * 		  <keycap>Backspace</keycap>
  * 		</entry>
  * 	      </row>
  * 	      <row>
  * 		<entry>down-folder</entry>
- * 		<entry><keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo></entry>
+ * 		<entry>
+ *                <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>;
+ *                <keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Down</keycap></keycombo>
+ *                <footnote>
+ * 		      Both the individual Down key and the numeric
+ * 		      keypad's Down key are supported.
+ * 		  </footnote>
+ *              </entry>
  * 	      </row>
  * 	      <row>
  * 		<entry>home-folder</entry>
@@ -1698,9 +1705,10 @@ gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
  * Lists all the selected files and subfolders in the current folder of @chooser
  * as #GFile. An internal function, see gtk_file_chooser_get_uris().
  *
- * Return value: (element-type utf8) (transfer full): a #GSList containing a #GFile for each selected
- *   file and subfolder in the current folder.  Free the returned list
- *   with g_slist_free(), and the files with g_object_unref().
+ * Return value: (element-type GFile) (transfer full): a #GSList
+ *   containing a #GFile for each selected file and subfolder in the
+ *   current folder.  Free the returned list with g_slist_free(), and
+ *   the files with g_object_unref().
  *
  * Since: 2.14
  **/
@@ -1988,7 +1996,7 @@ gtk_file_chooser_get_use_preview_label (GtkFileChooser *chooser)
  * Gets the #GFile that should be previewed in a custom preview
  * Internal function, see gtk_file_chooser_get_preview_uri().
  *
- * Return value: (transfer none): the #GFile for the file to preview,
+ * Return value: (transfer full): the #GFile for the file to preview,
  *     or %NULL if no file is selected. Free with g_object_unref().
  *
  * Since: 2.14
@@ -2208,10 +2216,10 @@ gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
  * Lists the current set of user-selectable filters; see
  * gtk_file_chooser_add_filter(), gtk_file_chooser_remove_filter().
  *
- * Return value: (element-type utf8) (transfer container): a #GSList containing the current set of
- *  user selectable filters. The contents of the list are
- *  owned by GTK+, but you must free the list itself with
- *  g_slist_free() when you are done with it.
+ * Return value: (element-type GtkFileFilter) (transfer container): a
+ *  #GSList containing the current set of user selectable filters. The
+ *  contents of the list are owned by GTK+, but you must free the list
+ *  itself with g_slist_free() when you are done with it.
  *
  * Since: 2.4
  **/

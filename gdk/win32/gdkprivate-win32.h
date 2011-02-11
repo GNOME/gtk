@@ -99,9 +99,7 @@
 
 
 /* Define some combinations of GdkDebugFlags */
-#define GDK_DEBUG_EVENTS_OR_COLORMAP (GDK_DEBUG_EVENTS|GDK_DEBUG_COLORMAP)
 #define GDK_DEBUG_EVENTS_OR_INPUT (GDK_DEBUG_EVENTS|GDK_DEBUG_INPUT)
-#define GDK_DEBUG_MISC_OR_COLORMAP (GDK_DEBUG_MISC|GDK_DEBUG_COLORMAP)
 #define GDK_DEBUG_MISC_OR_EVENTS (GDK_DEBUG_MISC|GDK_DEBUG_EVENTS)
 
 GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
@@ -165,6 +163,9 @@ void _gdk_win32_window_move_region (GdkWindow       *window,
 
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
+
+GdkDragProtocol _gdk_win32_window_get_drag_protocol (GdkWindow *window,
+						     GdkWindow **target);
 
 void	 gdk_win32_handle_table_insert  (HANDLE   *handle,
 					 gpointer data);
@@ -366,11 +367,6 @@ HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 gboolean _gdk_win32_pixbuf_to_hicon_supports_alpha (void);
 
 /* GdkDisplay member functions */
-GdkNativeWindow _gdk_win32_display_get_drag_protocol (GdkDisplay      *display,
-						      GdkNativeWindow  xid,
-						      GdkDragProtocol *protocol,
-						      guint           *version);
-
 GdkCursor *_gdk_win32_display_get_cursor_for_type (GdkDisplay   *display,
 						   GdkCursorType cursor_type);
 GdkCursor *_gdk_win32_display_get_cursor_for_name (GdkDisplay  *display,
@@ -390,13 +386,6 @@ gboolean _gdk_win32_display_supports_cursor_color (GdkDisplay    *display);
 
 GList *_gdk_win32_display_list_devices (GdkDisplay *dpy);
 
-gboolean _gdk_win32_display_send_client_message   (GdkDisplay     *display,
-						   GdkEvent       *event,
-						   GdkNativeWindow winid);
-void _gdk_win32_display_add_client_message_filter (GdkDisplay   *display,
-						   GdkAtom       message_type,
-						   GdkFilterFunc func,
-						   gpointer      data);
 void _gdk_win32_display_sync (GdkDisplay * display);
 gboolean _gdk_win32_display_has_pending (GdkDisplay *display);
 void _gdk_win32_display_queue_events (GdkDisplay *display);
@@ -414,7 +403,7 @@ gboolean   _gdk_win32_display_set_selection_owner   (GdkDisplay *display,
 						     guint32     time,
 						     gboolean    send_event);
 void       _gdk_win32_display_send_selection_notify (GdkDisplay      *display,
-						     GdkNativeWindow  requestor,
+						     HWND             requestor,
 						     GdkAtom   	      selection,
 						     GdkAtom          target,
 						     GdkAtom          property,
@@ -484,7 +473,6 @@ void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
 
 /* Stray GdkWin32Screen members */
 GdkVisual *_gdk_win32_screen_get_system_visual (GdkScreen *screen);
-void _gdk_win32_screen_broadcast_client_message (GdkScreen *screen, GdkEvent  *event);
 gboolean _gdk_win32_screen_get_setting (GdkScreen   *screen, const gchar *name, GValue *value);
 gint _gdk_win32_screen_visual_get_best_depth (GdkScreen *screen);
 GdkVisualType _gdk_win32_screen_visual_get_best_type (GdkScreen *screen);

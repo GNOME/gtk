@@ -163,18 +163,7 @@ struct _GdkDisplayClass
                                                          gint           y);
 
   GList *                    (*list_devices)       (GdkDisplay *display);
-  gboolean                   (*send_client_message) (GdkDisplay     *display,
-                                                     GdkEvent       *event,
-                                                     GdkNativeWindow winid);
-  void                       (*add_client_message_filter) (GdkDisplay   *display,
-                                                           GdkAtom       message_type,
-                                                           GdkFilterFunc func,
-                                                           gpointer      data);
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
-  GdkNativeWindow            (*get_drag_protocol)      (GdkDisplay      *display,
-                                                        GdkNativeWindow  winid,
-                                                        GdkDragProtocol *protocol,
-                                                        guint           *version);
 
   void                       (*before_process_all_updates) (GdkDisplay *display);
   void                       (*after_process_all_updates)  (GdkDisplay *display);
@@ -209,7 +198,7 @@ struct _GdkDisplayClass
                                                      guint32       time,
                                                      gboolean      send_event);
   void                       (*send_selection_notify) (GdkDisplay *dispay,
-                                                       GdkNativeWindow  requestor,
+                                                       GdkWindow        *requestor,
                                                        GdkAtom          selection,
                                                        GdkAtom          target,
                                                        GdkAtom          property,

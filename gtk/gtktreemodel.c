@@ -421,7 +421,7 @@ gtk_tree_model_base_init (gpointer g_class)
                        row_deleted_params);
 
       /**
-       * GtkTreeModel::rows-reordered:
+       * GtkTreeModel::rows-reordered: (skip)
        * @tree_model: the #GtkTreeModel on which the signal is emitted
        * @path: a #GtkTreePath identifying the tree node whose children
        *     have been reordered
@@ -784,7 +784,7 @@ gtk_tree_path_get_depth (GtkTreePath *path)
 }
 
 /**
- * gtk_tree_path_get_indices:
+ * gtk_tree_path_get_indices: (skip)
  * @path: a #GtkTreePath
  *
  * Returns the current indices of @path.
@@ -1404,7 +1404,7 @@ gtk_tree_model_iter_previous_default (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_previous:
  * @tree_model: a #GtkTreeModel
- * @iter: (inout): the #GtkTreeIter
+ * @iter: (in): the #GtkTreeIter
  *
  * Sets @iter to point to the previous node at the current level.
  *
@@ -1825,7 +1825,7 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
 }
 
 /**
- * gtk_tree_model_rows_reordered:
+ * gtk_tree_model_rows_reordered: (skip)
  * @tree_model: a #GtkTreeModel
  * @path: a #GtkTreePath pointing to the tree node whose children
  *     have been reordered
@@ -2431,7 +2431,7 @@ gtk_tree_row_reference_deleted (GObject     *proxy,
 }
 
 /**
- * gtk_tree_row_reference_reordered:
+ * gtk_tree_row_reference_reordered: (skip)
  * @proxy: a #GObject
  * @path: the parent path of the reordered signal
  * @iter: the iter pointing to the parent of the reordered

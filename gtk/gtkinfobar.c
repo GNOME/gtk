@@ -187,11 +187,7 @@ gtk_info_bar_set_property (GObject      *object,
                            const GValue *value,
                            GParamSpec   *pspec)
 {
-  GtkInfoBar *info_bar;
-  GtkInfoBarPrivate *priv;
-
-  info_bar = GTK_INFO_BAR (object);
-  priv = info_bar->priv;
+  GtkInfoBar *info_bar = GTK_INFO_BAR (object);
 
   switch (prop_id)
     {
@@ -210,11 +206,7 @@ gtk_info_bar_get_property (GObject    *object,
                            GValue     *value,
                            GParamSpec *pspec)
 {
-  GtkInfoBar *info_bar;
-  GtkInfoBarPrivate *priv;
-
-  info_bar = GTK_INFO_BAR (object);
-  priv = info_bar->priv;
+  GtkInfoBar *info_bar = GTK_INFO_BAR (object);
 
   switch (prop_id)
     {
@@ -503,6 +495,8 @@ gtk_info_bar_style_updated (GtkWidget *widget)
   gint content_area_spacing;
   gint content_area_border;
 
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->style_updated (widget);
+
   gtk_widget_style_get (widget,
                         "button-spacing", &button_spacing,
                         "action-area-border", &action_area_border,
@@ -696,7 +690,7 @@ gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
  * to the end of the info bars's action area. The button widget is
  * returned, but usually you don't need it.
  *
- * Returns: (transfer none): the button widget that was added
+ * Returns: (transfer none): the #GtkButton widget that was added
  *
  * Since: 2.18
  */

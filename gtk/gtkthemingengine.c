@@ -329,7 +329,7 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
 }
 
 /**
- * gtk_theming_engine_register_property:
+ * gtk_theming_engine_register_property: (skip)
  * @name_space: namespace for the property name
  * @parse_func: parsing function to use, or %NULL
  * @pspec: the #GParamSpec for the new property
@@ -473,7 +473,7 @@ gtk_theming_engine_get (GtkThemingEngine *engine,
  * gtk_theming_engine_get_style_property:
  * @engine: a #GtkThemingEngine
  * @property_name: the name of the widget style property
- * @value: (out) (transfer full): Return location for the property value, free with
+ * @value: Return location for the property value, free with
  *         g_value_unset() after use.
  *
  * Gets the value for a widget style property.
@@ -881,8 +881,9 @@ gtk_theming_engine_get_margin (GtkThemingEngine *engine,
  *
  * Returns the font description for a given state.
  *
- * Returns: the #PangoFontDescription for the given state. This
- *          object is owned by GTK+ and should not be freed.
+ * Returns: (transfer none): the #PangoFontDescription for the given
+ *          state. This object is owned by GTK+ and should not be
+ *          freed.
  *
  * Since: 3.0
  **/
@@ -1029,7 +1030,7 @@ gtk_theming_engine_load (const gchar *name)
  *
  * Returns the #GdkScreen to which @engine currently rendering to.
  *
- * Returns: a #GdkScreen, or %NULL.
+ * Returns: (transfer none): a #GdkScreen, or %NULL.
  **/
 GdkScreen *
 gtk_theming_engine_get_screen (GtkThemingEngine *engine)
@@ -1183,10 +1184,8 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
   GtkBorder *border;
-  gdouble radius;
 
   flags = gtk_theming_engine_get_state (engine);
-  radius = MIN (width, height) / 2 - 0.5;
 
   cairo_save (cr);
 
@@ -1214,10 +1213,10 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 
       cairo_new_sub_path (cr);
       cairo_arc (cr,
-		 x + exterior_size / 2.,
-		 y + exterior_size / 2.,
-		 (exterior_size - 1) / 2.,
-		 0, 2 * G_PI);
+                 x + exterior_size / 2.,
+                 y + exterior_size / 2.,
+                 (exterior_size - 1) / 2.,
+                 0, 2 * G_PI);
 
       gdk_cairo_set_source_rgba (cr, bg_color);
       cairo_fill_preserve (cr);
@@ -1251,10 +1250,10 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
       line_thickness = MAX (1, (3 + interior_size * 2) / 7);
 
       cairo_rectangle (cr,
-		       x + pad,
-		       y + pad + (interior_size - line_thickness) / 2.,
-		       interior_size,
-		       line_thickness);
+                       x + pad,
+                       y + pad + (interior_size - line_thickness) / 2.,
+                       interior_size,
+                       line_thickness);
       cairo_fill (cr);
     }
   if (flags & GTK_STATE_FLAG_ACTIVE)
@@ -1263,17 +1262,17 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
       interior_size = MAX (1, exterior_size - 2 * pad);
 
       if (interior_size < 5)
-	{
-	  interior_size = 7;
-	  pad = MAX (0, (exterior_size - interior_size) / 2);
-	}
+        {
+          interior_size = 7;
+          pad = MAX (0, (exterior_size - interior_size) / 2);
+        }
 
       cairo_new_sub_path (cr);
       cairo_arc (cr,
-		 x + pad + interior_size / 2.,
-		 y + pad + interior_size / 2.,
-		 interior_size / 2.,
-		 0, 2 * G_PI);
+                 x + pad + interior_size / 2.,
+                 y + pad + interior_size / 2.,
+                 interior_size / 2.,
+                 0, 2 * G_PI);
       cairo_fill (cr);
     }
 
@@ -1473,6 +1472,32 @@ _cairo_round_rectangle_sides (cairo_t          *cr,
     }
 }
 
+/* Set the appropriate matrix for
+ * patterns coming from the style context
+ */
+static void
+style_pattern_set_matrix (cairo_pattern_t *pattern,
+                          gdouble          width,
+                          gdouble          height)
+{
+  cairo_matrix_t matrix;
+  gint w, h;
+
+  if (cairo_pattern_get_type (pattern) == CAIRO_PATTERN_TYPE_SURFACE)
+    {
+      cairo_surface_t *surface;
+
+      cairo_pattern_get_surface (pattern, &surface);
+      w = cairo_image_surface_get_width (surface);
+      h = cairo_image_surface_get_height (surface);
+    }
+  else
+    w = h = 1;
+
+  cairo_matrix_init_scale (&matrix, (gdouble) w / width, (gdouble) h / height);
+  cairo_pattern_set_matrix (pattern, &matrix);
+}
+
 static void
 render_background_internal (GtkThemingEngine *engine,
                             cairo_t          *cr,
@@ -1487,22 +1512,56 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
-  gint radius;
+  GtkBorder *border;
+  gint radius, border_width;
+  GtkBorderStyle border_style;
+  gdouble mat_w, mat_h;
+  cairo_matrix_t identity;
+
+  /* Use unmodified size for pattern scaling */
+  mat_w = width;
+  mat_h = height;
 
   flags = gtk_theming_engine_get_state (engine);
-  cairo_save (cr);
+
+  cairo_matrix_init_identity (&identity);
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
                           "background-color", &bg_color,
                           "border-radius", &radius,
+                          "border-width", &border,
+                          "border-style", &border_style,
                           NULL);
 
+  border_width = MIN (MIN (border->top, border->bottom),
+                      MIN (border->left, border->right));
+
+  if (border_width > 1 &&
+      border_style == GTK_BORDER_STYLE_NONE)
+    {
+      cairo_set_line_width (cr, border_width);
+
+      x += (gdouble) border_width / 2;
+      y += (gdouble) border_width / 2;
+      width -= border_width;
+      height -= border_width;
+    }
+  else
+    {
+      x += border->left;
+      y += border->top;
+      width -= border->left + border->right;
+      height -= border->top + border->bottom;
+    }
+
+  if (width <= 0 || height <= 0)
+    return;
+
+  cairo_save (cr);
+  cairo_translate (cr, x, y);
+
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-  _cairo_round_rectangle_sides (cr, (gdouble) radius,
-                                x, y, width, height,
-                                SIDE_ALL, junction);
-  cairo_clip (cr);
 
   if (gtk_theming_engine_has_class (engine, "background"))
     {
@@ -1510,9 +1569,6 @@ render_background_internal (GtkThemingEngine *engine,
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
       cairo_paint (cr);
     }
-
-  cairo_translate (cr, x, y);
-  cairo_scale (cr, width, height);
 
   if (running)
     {
@@ -1604,9 +1660,15 @@ render_background_internal (GtkThemingEngine *engine,
               /* Different pattern types, or different color
                * stop counts, alpha blend both patterns.
                */
-              cairo_rectangle (cr, 0, 0, 1, 1);
+              _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                            0, 0, width, height,
+                                            SIDE_ALL, junction);
+
+              style_pattern_set_matrix (other_pattern, mat_w, mat_h);
               cairo_set_source (cr, other_pattern);
               cairo_fill_preserve (cr);
+
+              cairo_pattern_set_matrix (other_pattern, &identity);
 
               /* Set alpha for posterior drawing
                * of the target pattern
@@ -1691,30 +1753,57 @@ render_background_internal (GtkThemingEngine *engine,
         gdk_rgba_free (other_bg);
     }
 
-  cairo_rectangle (cr, 0, 0, 1, 1);
-
+  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                0, 0, width, height,
+                                SIDE_ALL, junction);
   if (pattern)
     {
+      style_pattern_set_matrix (pattern, mat_w, mat_h);
       cairo_set_source (cr, pattern);
-      cairo_pattern_destroy (pattern);
     }
   else
     gdk_cairo_set_source_rgba (cr, bg_color);
 
   if (alpha == 1)
-    cairo_fill (cr);
+    {
+      if (border_width > 1 &&
+          border_style != GTK_BORDER_STYLE_NONE)
+        {
+          /* stroke with the same source, so the background
+           * has exactly the shape than the frame, this
+           * is important so gtk_render_background() and
+           * gtk_render_frame() fit perfectly with round
+           * borders.
+           */
+          cairo_fill_preserve (cr);
+          cairo_stroke (cr);
+        }
+      else
+        cairo_fill (cr);
+    }
   else
     {
-      cairo_pattern_t *mask;
+      cairo_save (cr);
+      _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                    0, 0, width, height,
+                                    SIDE_ALL, junction);
+      cairo_clip (cr);
 
-      mask = cairo_pattern_create_rgba (1, 1, 1, alpha);
-      cairo_mask (cr, mask);
-      cairo_pattern_destroy (mask);
+      cairo_paint_with_alpha (cr, alpha);
+
+      cairo_restore (cr);
+    }
+
+  if (pattern)
+    {
+      cairo_pattern_set_matrix (pattern, &identity);
+      cairo_pattern_destroy (pattern);
     }
 
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
+  gtk_border_free (border);
 }
 
 static void
@@ -1726,26 +1815,12 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       gdouble           height)
 {
   GtkJunctionSides junction;
-  GtkStateFlags flags;
-  GtkBorder *border;
 
   junction = gtk_theming_engine_get_junction_sides (engine);
-
-  flags = gtk_theming_engine_get_state (engine);
-  gtk_theming_engine_get (engine, flags,
-                          "border-width", &border,
-                          NULL);
-
-  x += border->left;
-  y += border->top;
-  width -= border->left + border->right;
-  height -= border->top + border->bottom;
 
   render_background_internal (engine, cr,
                               x, y, width, height,
                               junction);
-
-  gtk_border_free (border);
 }
 
 /* Renders the small triangle on corners so
@@ -2260,7 +2335,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   const PangoMatrix *matrix;
   GdkRGBA *fg_color;
   GtkStateFlags flags;
-  GdkScreen *screen;
   gdouble progress;
   gboolean running;
 
@@ -2271,7 +2345,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                           "color", &fg_color,
                           NULL);
 
-  screen = gtk_theming_engine_get_screen (engine);
   matrix = pango_context_get_matrix (pango_layout_get_context (layout));
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
@@ -2308,7 +2381,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   if (matrix)
     {
       cairo_matrix_t cairo_matrix;
-      PangoMatrix tmp_matrix;
       PangoRectangle rect;
 
       cairo_matrix_init (&cairo_matrix,
@@ -2320,7 +2392,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       pango_matrix_transform_rectangle (matrix, &rect);
       pango_extents_to_pixels (&rect, NULL);
 
-      tmp_matrix = *matrix;
       cairo_matrix.x0 += x - rect.x;
       cairo_matrix.y0 += y - rect.y;
 
@@ -2611,7 +2682,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
       GtkJunctionSides sides;
-      gint skip = -1;
 
       cairo_save (cr);
 
@@ -2640,8 +2710,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
             height = width;
           else if (height < width)
             width = height;
-
-          skip = 2;
         }
       else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
         {
@@ -2653,8 +2721,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
             }
           else if (height < width)
             width = height;
-
-          skip = 1;
         }
       else if (sides == GTK_JUNCTION_RIGHT)
         {
@@ -2674,8 +2740,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               x += (width - height);
               width = height;
             }
-
-          skip = 3;
         }
       else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
         {
@@ -2690,8 +2754,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               x += (width - height);
               width = height;
             }
-
-          skip = 0;
         }
       else if (sides == GTK_JUNCTION_TOP)
         {
@@ -2747,7 +2809,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               gdk_cairo_set_source_rgba (cr, &darker);
               add_path_line (cr, x, yi, x + width, yi);
               cairo_stroke (cr);
-              yi+= 2;
+              yi += 2;
             }
         }
       else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
@@ -2885,11 +2947,11 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   else
     {
       for (yy = y; yy < y + height; yy += 3)
-	for (xx = x; xx < x + width; xx += 6)
-	  {
-	    render_dot (cr, &lighter, &darker, xx, yy, 2);
-	    render_dot (cr, &lighter, &darker, xx + 3, yy + 1, 2);
-	  }
+        for (xx = x; xx < x + width; xx += 6)
+          {
+            render_dot (cr, &lighter, &darker, xx, yy, 2);
+            render_dot (cr, &lighter, &darker, xx + 3, yy + 1, 2);
+          }
     }
 
   cairo_restore (cr);

@@ -182,6 +182,12 @@ void _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
 void _gdk_x11_display_queue_events            (GdkDisplay *display);
 
 
+GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
+Window      _gdk_x11_display_get_drag_protocol     (GdkDisplay      *display,
+                                                    Window           xid,
+                                                    GdkDragProtocol *protocol,
+                                                    guint           *version);
+
 gboolean    _gdk_x11_display_set_selection_owner   (GdkDisplay *display,
                                                     GdkWindow  *owner,
                                                     GdkAtom     selection,
@@ -190,7 +196,7 @@ gboolean    _gdk_x11_display_set_selection_owner   (GdkDisplay *display,
 GdkWindow * _gdk_x11_display_get_selection_owner   (GdkDisplay *display,
                                                     GdkAtom     selection);
 void        _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
-                                                    GdkNativeWindow  requestor,
+                                                    GdkWindow        *requestor,
                                                     GdkAtom          selection,
                                                     GdkAtom          target,
                                                     GdkAtom          property,
@@ -235,7 +241,10 @@ void _gdk_x11_device_xi_translate_axes     (GdkDevice *device,
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkEventMask     event_mask,
                                                    gint            *len);
 guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
-                                                   XIButtonState   *buttons_state);
+                                                   XIButtonState   *buttons_state,
+                                                   XIGroupState    *group_state);
+
+void     _gdk_x11_event_translate_keyboard_string (GdkEventKey *event);
 
 void _gdk_x11_display_manager_add_display      (GdkDisplayManager *manager,
                                                 GdkDisplay        *display);
@@ -286,7 +295,10 @@ void _gdk_x11_precache_atoms (GdkDisplay          *display,
                               const gchar * const *atom_names,
                               gint                 n_atoms);
 
-void _gdk_x11_display_init_dnd        (GdkDisplay *display);
+GdkFilterReturn
+_gdk_x11_dnd_filter (GdkXEvent *xev,
+                     GdkEvent  *event,
+                     gpointer   data);
 
 void _gdk_x11_screen_init_root_window (GdkScreen *screen);
 void _gdk_x11_screen_init_visuals     (GdkScreen *screen);

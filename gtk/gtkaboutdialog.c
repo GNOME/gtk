@@ -1480,9 +1480,9 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
  * Returns the string which are displayed in the authors tab
  * of the secondary credits dialog.
  *
- * Return value: A %NULL-terminated string array containing
- *  the authors. The array is owned by the about dialog
- *  and must not be modified.
+ * Return value: (array zero-terminated=1) (transfer none): A
+ *  %NULL-terminated string array containing the authors. The array is
+ *  owned by the about dialog and must not be modified.
  *
  * Since: 2.6
  */
@@ -1535,9 +1535,9 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
  * Returns the string which are displayed in the documenters
  * tab of the secondary credits dialog.
  *
- * Return value: A %NULL-terminated string array containing
- *  the documenters. The array is owned by the about dialog
- *  and must not be modified.
+ * Return value: (array zero-terminated=1) (transfer none): A
+ *  %NULL-terminated string array containing the documenters. The
+ *  array is owned by the about dialog and must not be modified.
  *
  * Since: 2.6
  */
@@ -1590,9 +1590,9 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
  * Returns the string which are displayed in the artists tab
  * of the secondary credits dialog.
  *
- * Return value: A %NULL-terminated string array containing
- *  the artists. The array is owned by the about dialog
- *  and must not be modified.
+ * Return value: (array zero-terminated=1) (transfer none): A
+ *  %NULL-terminated string array containing the artists. The array is
+ *  owned by the about dialog and must not be modified.
  *
  * Since: 2.6
  */
@@ -1706,9 +1706,9 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
  *
  * Returns the pixbuf displayed as logo in the about dialog.
  *
- * Return value: the pixbuf displayed as logo. The pixbuf is
- *   owned by the about dialog. If you want to keep a reference
- *   to it, you have to call g_object_ref() on it.
+ * Return value: (transfer none): the pixbuf displayed as logo. The
+ *   pixbuf is owned by the about dialog. If you want to keep a
+ *   reference to it, you have to call g_object_ref() on it.
  *
  * Since: 2.6
  */

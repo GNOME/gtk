@@ -67,11 +67,11 @@ typedef enum
 
 /**
  * GdkDragProtocol:
+ * @GDK_DRAG_PROTO_NONE: no protocol.
  * @GDK_DRAG_PROTO_MOTIF: The Motif DND protocol.
  * @GDK_DRAG_PROTO_XDND: The Xdnd protocol.
  * @GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
  *  unclaimed root window drops.
- * @GDK_DRAG_PROTO_NONE: no protocol.
  * @GDK_DRAG_PROTO_WIN32_DROPFILES: The simple WM_DROPFILES protocol.
  * @GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented).
  * @GDK_DRAG_PROTO_LOCAL: Intra-application DND.
@@ -81,10 +81,10 @@ typedef enum
  */
 typedef enum
 {
+  GDK_DRAG_PROTO_NONE = 0,
   GDK_DRAG_PROTO_MOTIF,
   GDK_DRAG_PROTO_XDND,
   GDK_DRAG_PROTO_ROOTWIN,
-  GDK_DRAG_PROTO_NONE,
   GDK_DRAG_PROTO_WIN32_DROPFILES,
   GDK_DRAG_PROTO_OLE2,
   GDK_DRAG_PROTO_LOCAL
@@ -127,10 +127,6 @@ GdkDragContext * gdk_drag_begin            (GdkWindow      *window,
 GdkDragContext * gdk_drag_begin_for_device (GdkWindow      *window,
                                             GdkDevice      *device,
                                             GList          *targets);
-
-GdkNativeWindow gdk_drag_get_protocol_for_display (GdkDisplay       *display,
-                                                   GdkNativeWindow   xid,
-                                                   GdkDragProtocol  *protocol);
 
 void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
                                            GdkWindow        *drag_window,

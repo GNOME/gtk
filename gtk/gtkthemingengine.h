@@ -168,6 +168,9 @@ struct _GtkThemingEngineClass
   GdkPixbuf * (* render_icon_pixbuf) (GtkThemingEngine    *engine,
                                       const GtkIconSource *source,
                                       GtkIconSize          size);
+
+  /*< private >*/
+  gpointer padding[16];
 };
 
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
@@ -246,7 +249,6 @@ const PangoFontDescription * gtk_theming_engine_get_font (GtkThemingEngine *engi
 GtkThemingEngine * gtk_theming_engine_load (const gchar *name);
 
 GdkScreen * gtk_theming_engine_get_screen (GtkThemingEngine *engine);
-
 
 G_END_DECLS
 

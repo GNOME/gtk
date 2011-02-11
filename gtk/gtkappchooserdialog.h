@@ -34,6 +34,8 @@
 #include <gtk/gtkdialog.h>
 #include <gio/gio.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_APP_CHOOSER_DIALOG            (gtk_app_chooser_dialog_get_type ())
 #define GTK_APP_CHOOSER_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_DIALOG, GtkAppChooserDialog))
 #define GTK_APP_CHOOSER_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_DIALOG, GtkAppChooserDialogClass))
@@ -59,15 +61,20 @@ struct _GtkAppChooserDialogClass {
   gpointer padding[16];
 };
 
-GType       gtk_app_chooser_dialog_get_type             (void) G_GNUC_CONST;
+GType         gtk_app_chooser_dialog_get_type             (void) G_GNUC_CONST;
 
-GtkWidget * gtk_app_chooser_dialog_new                  (GtkWindow      *parent,
-                                                         GtkDialogFlags  flags,
-                                                         GFile          *file);
-GtkWidget * gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
-                                                         GtkDialogFlags  flags,
-                                                         const gchar    *content_type);
+GtkWidget *   gtk_app_chooser_dialog_new                  (GtkWindow           *parent,
+                                                           GtkDialogFlags       flags,
+                                                           GFile               *file);
+GtkWidget *   gtk_app_chooser_dialog_new_for_content_type (GtkWindow           *parent,
+                                                           GtkDialogFlags       flags,
+                                                           const gchar         *content_type);
 
-GtkWidget * gtk_app_chooser_dialog_get_widget           (GtkAppChooserDialog *self);
+GtkWidget *   gtk_app_chooser_dialog_get_widget           (GtkAppChooserDialog *self);
+void          gtk_app_chooser_dialog_set_heading          (GtkAppChooserDialog *self,
+                                                           const gchar         *heading);
+const gchar * gtk_app_chooser_dialog_get_heading          (GtkAppChooserDialog *self);
+
+G_END_DECLS
 
 #endif /* __GTK_APP_CHOOSER_DIALOG_H__ */

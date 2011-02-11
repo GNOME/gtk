@@ -151,8 +151,9 @@ typedef struct {
   GObject       *object;
   const gchar   *domain;
 
+  GString       *string;
+
   gchar         *context;
-  gchar         *string;
   guint          translatable : 1;
 
   guint          is_text : 1;
@@ -205,29 +206,9 @@ item_text (GMarkupParseContext *context,
 	   GError             **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
-  gchar *string;
 
-  if (!data->is_text)
-    return;
-
-  string = g_strndup (text, text_len);
-
-  if (data->translatable && text_len)
-    {
-      gchar *translated;
-
-      /* FIXME: This will not use the domain set in the .ui file,
-       * since the parser is not telling the builder about the domain.
-       * However, it will work for gtk_builder_set_translation_domain() calls.
-       */
-      translated = _gtk_builder_parser_translate (data->domain,
-						  data->context,
-						  string);
-      g_free (string);
-      string = translated;
-    }
-
-  data->string = string;
+  if (data->is_text)
+    g_string_append_len (data->string, text, text_len);
 }
 
 static void
@@ -239,14 +220,30 @@ item_end_element (GMarkupParseContext *context,
   ItemParserData *data = (ItemParserData*)user_data;
 
   /* Append the translated strings */
-  if (data->string)
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->object), data->string);
+  if (data->string->len)
+    {
+      if (data->translatable)
+	{
+	  gchar *translated;
+
+	  /* FIXME: This will not use the domain set in the .ui file,
+	   * since the parser is not telling the builder about the domain.
+	   * However, it will work for gtk_builder_set_translation_domain() calls.
+	   */
+	  translated = _gtk_builder_parser_translate (data->domain,
+						      data->context,
+						      data->string->str);
+	  g_string_set_size (data->string, 0);
+	  g_string_append (data->string, translated);
+	}
+
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->object), data->string->str);
+    }
 
   data->translatable = FALSE;
+  g_string_set_size (data->string, 0);
   g_free (data->context);
-  g_free (data->string);
   data->context = NULL;
-  data->string = NULL;
   data->is_text = FALSE;
 }
 
@@ -277,6 +274,7 @@ gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable     *buildable,
       parser_data->builder = g_object_ref (builder);
       parser_data->object = g_object_ref (buildable);
       parser_data->domain = gtk_builder_get_translation_domain (builder);
+      parser_data->string = g_string_new ("");
       *parser = item_parser;
       *data = parser_data;
       return TRUE;
@@ -302,6 +300,7 @@ gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
 
       g_object_unref (data->object);
       g_object_unref (data->builder);
+      g_string_free (data->string, TRUE);
       g_slice_free (ItemParserData, data);
     }
 }
@@ -409,10 +408,11 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
 /**
  * gtk_combo_box_text_append:
  * @combo_box: A #GtkComboBoxText
+ * @id: (allow-none): a string ID for this value, or %NULL
  * @text: A string
  *
- * Appends @text to the list of strings stored in @combo_box.  If @id is
- * non-%NULL then it is used as the ID of the row.
+ * Appends @text to the list of strings stored in @combo_box.
+ * If @id is non-%NULL then it is used as the ID of the row.
  *
  * This is the same as calling gtk_combo_box_text_insert() with a
  * position of -1.
@@ -433,8 +433,8 @@ gtk_combo_box_text_append (GtkComboBoxText *combo_box,
  * @id: (allow-none): a string ID for this value, or %NULL
  * @text: a string
  *
- * Prepends @text to the list of strings stored in @combo_box.  If @id
- * is non-%NULL then it is used as the ID of the row.
+ * Prepends @text to the list of strings stored in @combo_box.
+ * If @id is non-%NULL then it is used as the ID of the row.
  *
  * This is the same as calling gtk_combo_box_text_insert() with a
  * position of 0.

@@ -14,7 +14,6 @@ static void _check_children (AtkObject *obj)
   gint n_children, i, j;
   AtkObject *child;
   AtkObject *grand_child;
-  AtkObject *parent;
 
   n_children = atk_object_get_n_accessible_children (obj);
 
@@ -28,7 +27,6 @@ static void _check_children (AtkObject *obj)
   {
     child = atk_object_ref_accessible_child (obj, 1);
     g_return_if_fail (atk_object_get_role (child) == ATK_ROLE_TEXT);
-    parent = atk_object_get_parent (child);
     j = atk_object_get_index_in_parent (child);
     if (j != 1)
      g_print ("*** inconsistency between parent and children %d %d ***\n",
@@ -38,7 +36,6 @@ static void _check_children (AtkObject *obj)
 
   child = atk_object_ref_accessible_child (obj, 0);
   g_return_if_fail (atk_object_get_role (child) == ATK_ROLE_LIST);
-  parent = atk_object_get_parent (child);
   j = atk_object_get_index_in_parent (child);
   if (j != 0)
      g_print ("*** inconsistency between parent and children %d %d ***\n",

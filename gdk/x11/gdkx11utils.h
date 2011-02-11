@@ -52,6 +52,23 @@ Display *gdk_x11_get_default_xdisplay     (void);
 #define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
 #endif
 
+/**
+ * GDK_XID_TO_POINTER:
+ *
+ * Converts an XID into a @gpointer. This is useful with data structures
+ * that use pointer arguments such as #GHashTable. Use GDK_POINTER_TO_XID()
+ * to convert the argument back to an XID.
+ */
+#define GDK_XID_TO_POINTER(pointer) GUINT_TO_POINTER(pointer)
+
+/**
+ * GDK_POINTER_TO_XID:
+ *
+ * Converts a @gpointer back to an XID that was previously converted
+ * using GDK_XID_TO_POINTER().
+ */
+#define GDK_POINTER_TO_XID(pointer) GPOINTER_TO_UINT(pointer)
+
 #ifndef GDK_MULTIHEAD_SAFE
 void          gdk_x11_grab_server    (void);
 void          gdk_x11_ungrab_server  (void);

@@ -55,7 +55,7 @@ struct _GtkNumerableIconClass {
   GEmblemedIconClass parent_class;
 
   /* padding for future class expansion */
-  gpointer padding[8];
+  gpointer padding[16];
 };
 
 GType             gtk_numerable_icon_get_type                 (void) G_GNUC_CONST;

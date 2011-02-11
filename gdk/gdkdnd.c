@@ -70,7 +70,7 @@ gdk_drag_context_list_targets (GdkDragContext *context)
  * @context: a #GdkDragContext
  *
  * Determines the bitmask of actions proposed by the source if
- * gdk_drag_context_suggested_action() returns GDK_ACTION_ASK.
+ * gdk_drag_context_get_suggested_action() returns GDK_ACTION_ASK.
  *
  * Return value: the #GdkDragAction flags
  *
@@ -445,7 +445,7 @@ gdk_drag_drop_succeeded (GdkDragContext *context)
  *
  * Returns the selection atom for the current source window.
  *
- * Return value: the selection atom, or %GDK_NONE
+ * Return value: (transfer none): the selection atom, or %GDK_NONE
  */
 GdkAtom
 gdk_drag_get_selection (GdkDragContext *context)

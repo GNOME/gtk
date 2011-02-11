@@ -503,9 +503,9 @@ gdk_event_copy (const GdkEvent *event)
 {
   GdkEventPrivate *new_private;
   GdkEvent *new_event;
-  
+
   g_return_val_if_fail (event != NULL, NULL);
-  
+
   new_event = gdk_event_new (GDK_NOTHING);
   new_private = (GdkEventPrivate *)new_event;
 
@@ -519,21 +519,22 @@ gdk_event_copy (const GdkEvent *event)
 
       new_private->screen = private->screen;
       new_private->device = private->device;
+      new_private->source_device = private->source_device;
     }
-  
+
   switch (event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
       new_event->key.string = g_strdup (event->key.string);
       break;
-      
+
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.subwindow != NULL)
-	g_object_ref (event->crossing.subwindow);
+        g_object_ref (event->crossing.subwindow);
       break;
-      
+
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
@@ -542,28 +543,42 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_DROP_FINISHED:
       g_object_ref (event->dnd.context);
       break;
-      
+
     case GDK_EXPOSE:
     case GDK_DAMAGE:
       if (event->expose.region)
-	new_event->expose.region = cairo_region_copy (event->expose.region);
+        new_event->expose.region = cairo_region_copy (event->expose.region);
       break;
-      
+
     case GDK_SETTING:
       new_event->setting.name = g_strdup (new_event->setting.name);
       break;
 
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      if (event->button.axes) 
-	new_event->button.axes = g_memdup (event->button.axes,
+      if (event->button.axes)
+        new_event->button.axes = g_memdup (event->button.axes,
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->button.device));
       break;
 
     case GDK_MOTION_NOTIFY:
-      if (event->motion.axes) 
-	new_event->motion.axes = g_memdup (event->motion.axes,
-					   sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
+      if (event->motion.axes)
+        new_event->motion.axes = g_memdup (event->motion.axes,
+                                           sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
+      break;
+
+    case GDK_OWNER_CHANGE:
+      new_event->owner_change.owner = event->owner_change.owner;
+      if (new_event->owner_change.owner)
+        g_object_ref (new_event->owner_change.owner);
+      break;
+
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_SELECTION_REQUEST:
+      new_event->selection.requestor = event->selection.requestor;
+      if (new_event->selection.requestor)
+        g_object_unref (new_event->selection.requestor);
       break;
 
     default:
@@ -635,6 +650,18 @@ gdk_event_free (GdkEvent *event)
       g_free (event->setting.name);
       break;
       
+    case GDK_OWNER_CHANGE:
+      if (event->owner_change.owner)
+        g_object_unref (event->owner_change.owner);
+      break;
+
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_SELECTION_REQUEST:
+      if (event->selection.requestor)
+        g_object_unref (event->selection.requestor);
+      break;
+
     default:
       break;
     }
@@ -917,7 +944,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
 /**
  * gdk_event_get_axis:
  * @event: a #GdkEvent
- * @axis_use: (out): the axis use to look for
+ * @axis_use: the axis use to look for
  * @value: (out): location to store the value found
  * 
  * Extract the axis value for a particular axis use from
@@ -1129,9 +1156,10 @@ gdk_event_get_device (const GdkEvent *event)
  * @event: a #GdkEvent
  * @device: a #GdkDevice
  *
- * Sets the slave device for @event to @device. The event
- * must have been allocated by GTK+, for instance, by
- * gdk_event_copy().
+ * Sets the slave device for @event to @device.
+ *
+ * The event must have been allocated by GTK+,
+ * for instance by gdk_event_copy().
  *
  * Since: 3.0
  **/
@@ -1153,15 +1181,17 @@ gdk_event_set_source_device (GdkEvent  *event,
  * gdk_event_get_source_device:
  * @event: a #GdkEvent
  *
- * This function returns the hardware (slave) #GdkDevice that has triggered the event,
- * falling back to the virtual (master) device (as in gdk_event_get_device()) if the
- * event wasn't caused by interaction with a hardware device. This may happen for
- * example in synthesized crossing events after a #GdkWindow updates its geometry or
- * a grab is acquired/released.
+ * This function returns the hardware (slave) #GdkDevice that has
+ * triggered the event, falling back to the virtual (master) device
+ * (as in gdk_event_get_device()) if the event wasn't caused by
+ * interaction with a hardware device. This may happen for example
+ * in synthesized crossing events after a #GdkWindow updates its
+ * geometry or a grab is acquired/released.
  *
- * If the event does not contain device field, this function will return %NULL.
+ * If the event does not contain a device field, this function will
+ * return %NULL.
  *
- * Returns: a #GdkDevice, or %NULL.
+ * Returns: (transfer none): a #GdkDevice, or %NULL.
  *
  * Since: 3.0
  **/
@@ -1189,6 +1219,7 @@ gdk_event_get_source_device (const GdkEvent *event)
  * @event: a valid #GdkEvent
  *
  * Request more motion notifies if @event is a motion notify hint event.
+ *
  * This function should be used instead of gdk_window_get_pointer() to
  * request further motion notifies, because it also works for extension
  * events where motion notifies are provided for devices other than the
@@ -1196,7 +1227,7 @@ gdk_event_get_source_device (const GdkEvent *event)
  * motion events from a %GDK_MOTION_NOTIFY event usually works like this:
  *
  * |[
- * { 
+ * {
  *   /&ast; motion_event handler &ast;/
  *   x = motion_event->x;
  *   y = motion_event->y;
@@ -1256,7 +1287,7 @@ gdk_events_get_axis_distances (GdkEvent *event1,
  * gdk_events_get_distance:
  * @event1: first #GdkEvent
  * @event2: second #GdkEvent
- * @distance: return location for the distance
+ * @distance: (out): return location for the distance
  *
  * If both events have X/Y information, the distance between both coordinates
  * (as in a straight line going from @event1 to @event2) will be returned.
@@ -1279,7 +1310,7 @@ gdk_events_get_distance (GdkEvent *event1,
  * gdk_events_get_angle:
  * @event1: first #GdkEvent
  * @event2: second #GdkEvent
- * @angle: return location for the relative angle between both events
+ * @angle: (out): return location for the relative angle between both events
  *
  * If both events contain X/Y information, this function will return %TRUE
  * and return in @angle the relative angle from @event1 to @event2. The rotation
@@ -1450,20 +1481,15 @@ gdk_get_show_events (void)
 
 static void
 gdk_synthesize_click (GdkDisplay *display,
-		      GdkEvent   *event,
-		      gint	  nclicks)
+                      GdkEvent   *event,
+                      gint        nclicks)
 {
-  GdkEvent temp_event;
   GdkEvent *event_copy;
-  GList *link;
-  
-  g_return_if_fail (event != NULL);
-  
-  temp_event = *event;
-  temp_event.type = (nclicks == 2) ? GDK_2BUTTON_PRESS : GDK_3BUTTON_PRESS;
 
-  event_copy = gdk_event_copy (&temp_event);
-  link = _gdk_event_queue_append (display, event_copy);
+  event_copy = gdk_event_copy (event);
+  event_copy->type = (nclicks == 2) ? GDK_2BUTTON_PRESS : GDK_3BUTTON_PRESS;
+
+  _gdk_event_queue_append (display, event_copy);
 }
 
 void
@@ -1471,6 +1497,8 @@ _gdk_event_button_generate (GdkDisplay *display,
 			    GdkEvent   *event)
 {
   GdkMultipleClickInfo *info;
+
+  g_return_if_fail (event->type == GDK_BUTTON_PRESS);
 
   info = g_hash_table_lookup (display->multiple_click_info, event->button.device);
 

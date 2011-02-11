@@ -146,12 +146,14 @@ static const struct {
   const char *atom_name;
   GdkFilterFunc func;
 } xdnd_filters[] = {
-  { "XdndEnter",    xdnd_enter_filter },
-  { "XdndLeave",    xdnd_leave_filter },
-  { "XdndPosition", xdnd_position_filter },
-  { "XdndStatus",   xdnd_status_filter },
-  { "XdndFinished", xdnd_finished_filter },
-  { "XdndDrop",     xdnd_drop_filter },
+  { "_MOTIF_DRAG_AND_DROP_MESSAGE", motif_dnd_filter },
+
+  { "XdndEnter",                    xdnd_enter_filter },
+  { "XdndLeave",                    xdnd_leave_filter },
+  { "XdndPosition",                 xdnd_position_filter },
+  { "XdndStatus",                   xdnd_status_filter },
+  { "XdndFinished",                 xdnd_finished_filter },
+  { "XdndDrop",                     xdnd_drop_filter },
 };
 
 
@@ -844,7 +846,11 @@ enum {
 /* Byte swapping routines. The motif specification leaves it
  * up to us to save a few bytes in the client messages
  */
-static gchar local_byte_order = '\0';
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+static gchar local_byte_order = 'B';
+#else
+static gchar local_byte_order = 'l';
+#endif
 
 #ifdef G_ENABLE_DEBUG
 static void
@@ -859,13 +865,6 @@ print_target_list (GList *targets)
     }
 }
 #endif /* G_ENABLE_DEBUG */
-
-static void
-init_byte_order (void)
-{
-  guint32 myint = 0x01020304;
-  local_byte_order = (*(gchar *)&myint == 1) ? 'B' : 'l';
-}
 
 static guint16
 card16_to_host (guint16 x, gchar byte_order)
@@ -1730,17 +1729,11 @@ motif_drag_context_new (GdkWindow *dest_window,
   context->protocol = GDK_DRAG_PROTO_MOTIF;
   context->is_source = FALSE;
 
-  context->source_window = gdk_x11_window_lookup_for_display (display, source_window);
-  if (context->source_window)
-    g_object_ref (context->source_window);
-  else
+  context->source_window = gdk_x11_window_foreign_new_for_display (display, source_window);
+  if (!context->source_window)
     {
-      context->source_window = gdk_x11_window_foreign_new_for_display (display, source_window);
-      if (!context->source_window)
-        {
-          g_object_unref (context_x11);
-          return NULL;
-        }
+      g_object_unref (context_x11);
+      return NULL;
     }
 
   context->dest_window = dest_window;
@@ -2900,17 +2893,11 @@ xdnd_enter_filter (GdkXEvent *xev,
   device_manager = gdk_display_get_device_manager (display);
   gdk_drag_context_set_device (context, gdk_device_manager_get_client_pointer (device_manager));
 
-  context->source_window = gdk_x11_window_lookup_for_display (display, source_window);
-  if (context->source_window)
-    g_object_ref (context->source_window);
-  else
+  context->source_window = gdk_x11_window_foreign_new_for_display (display, source_window);
+  if (!context->source_window)
     {
-      context->source_window = gdk_x11_window_foreign_new_for_display (display, source_window);
-      if (!context->source_window)
-        {
-          g_object_unref (context);
-          return GDK_FILTER_REMOVE;
-        }
+      g_object_unref (context);
+      return GDK_FILTER_REMOVE;
     }
   context->dest_window = event->any.window;
   g_object_ref (context->dest_window);
@@ -3126,24 +3113,32 @@ xdnd_drop_filter (GdkXEvent *xev,
   return GDK_FILTER_REMOVE;
 }
 
-void
-_gdk_x11_display_init_dnd (GdkDisplay *display)
+GdkFilterReturn
+_gdk_x11_dnd_filter (GdkXEvent *xev,
+                     GdkEvent  *event,
+                     gpointer   data)
 {
+  XEvent *xevent = (XEvent *) xev;
+  GdkDisplay *display;
   int i;
-  init_byte_order ();
 
-  gdk_display_add_client_message_filter (
-        display,
-        gdk_atom_intern_static_string ("_MOTIF_DRAG_AND_DROP_MESSAGE"),
-        motif_dnd_filter, NULL);
+  if (!GDK_IS_X11_WINDOW (event->any.window))
+    return GDK_FILTER_CONTINUE;
+
+  if (xevent->type != ClientMessage)
+    return GDK_FILTER_CONTINUE;
+
+  display = GDK_WINDOW_DISPLAY (event->any.window);
 
   for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
     {
-      gdk_display_add_client_message_filter (
-        display,
-        gdk_atom_intern_static_string (xdnd_filters[i].atom_name),
-        xdnd_filters[i].func, NULL);
+      if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name))
+        continue;
+
+      return xdnd_filters[i].func (xev, event, data);
     }
+
+  return GDK_FILTER_CONTINUE;
 }
 
 /* Source side */
@@ -3198,15 +3193,15 @@ _gdk_x11_window_drag_begin (GdkWindow *window,
   return context;
 }
 
-GdkNativeWindow
+Window
 _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
-                                    GdkNativeWindow  xid,
+                                    Window           xid,
                                     GdkDragProtocol *protocol,
                                     guint           *version)
 
 {
   GdkWindow *window;
-  GdkNativeWindow retval;
+  Window retval;
 
   base_precache_atoms (display);
 
@@ -3219,10 +3214,10 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
           *protocol = GDK_DRAG_PROTO_XDND;
           *version = 5;
           xdnd_precache_atoms (display);
-          GDK_NOTE (DND, g_message ("Entering local Xdnd window %#x\n", xid));
+          GDK_NOTE (DND, g_message ("Entering local Xdnd window %#x\n", (guint) xid));
           return xid;
         }
-      else if (_gdk_x11_display_is_root_window (display, (Window) xid))
+      else if (_gdk_x11_display_is_root_window (display, xid))
         {
           *protocol = GDK_DRAG_PROTO_ROOTWIN;
           GDK_NOTE (DND, g_message ("Entering root window\n"));
@@ -3233,13 +3228,13 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
     {
       *protocol = GDK_DRAG_PROTO_XDND;
       xdnd_precache_atoms (display);
-      GDK_NOTE (DND, g_message ("Entering Xdnd window %#x\n", xid));
+      GDK_NOTE (DND, g_message ("Entering Xdnd window %#x\n", (guint) xid));
       return retval;
     }
   else if ((retval = motif_check_dest (display, xid)))
     {
       *protocol = GDK_DRAG_PROTO_MOTIF;
-      GDK_NOTE (DND, g_message ("Entering motif window %#x\n", xid));
+      GDK_NOTE (DND, g_message ("Entering motif window %#x\n", (guint) xid));
       return retval;
     }
   else
@@ -3325,13 +3320,7 @@ gdk_x11_drag_context_find_window (GdkDragContext  *context,
                                                       &context_x11->version);
 
       if (recipient != None)
-        {
-          dest_window = gdk_x11_window_lookup_for_display (display, recipient);
-          if (dest_window)
-            g_object_ref (dest_window);
-          else
-            dest_window = gdk_x11_window_foreign_new_for_display (display, recipient);
-        }
+        dest_window = gdk_x11_window_foreign_new_for_display (display, recipient);
       else
         dest_window = NULL;
     }

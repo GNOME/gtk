@@ -34,12 +34,14 @@
 
 /**
  * SECTION:pixbufs
- * @Short_description: Functions for rendering pixbufs on drawables
+ * @Short_description: Functions for obtaining pixbufs
  * @Title: Pixbufs
  *
- * These functions allow to render pixbufs on drawables. Pixbufs are
- * client-side images. For details on how to create and manipulate
- * pixbufs, see the #GdkPixbuf API documentation.
+ * Pixbufs are client-side images. For details on how to create
+ * and manipulate pixbufs, see the #GdkPixbuf API documentation.
+ *
+ * The functions described here allow to obtain pixbufs from
+ * #GdkWindows and cairo surfaces.
  */
 
 
@@ -55,7 +57,7 @@
  * representation inside a #GdkPixbuf. In other words, copies
  * image data from a server-side drawable to a client-side RGB(A) buffer.
  * This allows you to efficiently read individual pixels on the client side.
- * 
+ *
  * This function will create an RGB pixbuf with 8 bits per channel with
  * the same size specified by the @width and @height arguments. The pixbuf
  * will contain an alpha channel if the @window contains one.
@@ -78,16 +80,18 @@
  *  it returns %NULL; so check the return value.)
  *
  * Return value: (transfer full): A newly-created pixbuf with a reference
- * count of 1, or %NULL on error
- **/
+ *     count of 1, or %NULL on error
+ */
 GdkPixbuf *
-gdk_pixbuf_get_from_window (GdkWindow   *src,
-                            int src_x,  int src_y,
-                            int width,  int height)
+gdk_pixbuf_get_from_window (GdkWindow *src,
+                            gint       src_x,
+                            gint       src_y,
+                            gint       width,
+                            gint       height)
 {
   cairo_surface_t *surface;
   GdkPixbuf *dest;
-  
+
   g_return_val_if_fail (GDK_IS_WINDOW (src), NULL);
   g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
 
@@ -99,7 +103,7 @@ gdk_pixbuf_get_from_window (GdkWindow   *src,
 
   return dest;
 }
-        
+
 static cairo_format_t
 gdk_cairo_format_for_content (cairo_content_t content)
 {
@@ -117,11 +121,11 @@ gdk_cairo_format_for_content (cairo_content_t content)
 
 static cairo_surface_t *
 gdk_cairo_surface_coerce_to_image (cairo_surface_t *surface,
-                                   cairo_content_t content,
-                                   int src_x,
-                                   int src_y,
-                                   int width,
-                                   int height)
+                                   cairo_content_t  content,
+                                   int              src_x,
+                                   int              src_y,
+                                   int              width,
+                                   int              height)
 {
   cairo_surface_t *copy;
   cairo_t *cr;
@@ -140,14 +144,14 @@ gdk_cairo_surface_coerce_to_image (cairo_surface_t *surface,
 }
 
 static void
-convert_alpha (guchar  *dest_data,
-               int      dest_stride,
-               guchar  *src_data,
-               int      src_stride,
-               int      src_x,
-               int      src_y,
-               int      width,
-               int      height)
+convert_alpha (guchar *dest_data,
+               int     dest_stride,
+               guchar *src_data,
+               int     src_stride,
+               int     src_x,
+               int     src_y,
+               int     width,
+               int     height)
 {
   int x, y;
 
@@ -180,14 +184,14 @@ convert_alpha (guchar  *dest_data,
 }
 
 static void
-convert_no_alpha (guchar  *dest_data,
-                  int      dest_stride,
-                  guchar  *src_data,
-                  int      src_stride,
-                  int      src_x,
-                  int      src_y,
-                  int      width,
-                  int      height)
+convert_no_alpha (guchar *dest_data,
+                  int     dest_stride,
+                  guchar *src_data,
+                  int     src_stride,
+                  int     src_x,
+                  int     src_y,
+                  int     width,
+                  int     height)
 {
   int x, y;
 
@@ -220,22 +224,22 @@ convert_no_alpha (guchar  *dest_data,
  * individual pixels from cairo surfaces. For #GdkWindows, use
  * gdk_pixbuf_get_from_window() instead.
  *
- * This function will create an RGB pixbuf with 8 bits per channel. The pixbuf
- * will contain an alpha channel if the @surface contains one.
+ * This function will create an RGB pixbuf with 8 bits per channel.
+ * The pixbuf will contain an alpha channel if the @surface contains one.
  *
- * Return value: (transfer full): A newly-created pixbuf with a reference count
- * of 1, or %NULL on error
- **/
+ * Return value: (transfer full): A newly-created pixbuf with a reference
+ *     count of 1, or %NULL on error
+ */
 GdkPixbuf *
 gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
-                              int              src_x,
-                              int              src_y,
-                              int              width,
-                              int              height)
+                              gint             src_x,
+                              gint             src_y,
+                              gint             width,
+                              gint             height)
 {
   cairo_content_t content;
   GdkPixbuf *dest;
-  
+
   /* General sanity checks */
   g_return_val_if_fail (surface != NULL, NULL);
   g_return_val_if_fail (width > 0 && height > 0, NULL);
@@ -246,7 +250,8 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                          8,
                          width, height);
 
-  surface = gdk_cairo_surface_coerce_to_image (surface, content, src_x, src_y,
+  surface = gdk_cairo_surface_coerce_to_image (surface, content,
+                                               src_x, src_y,
                                                width, height);
   cairo_surface_flush (surface);
   if (cairo_surface_status (surface) || dest == NULL)
@@ -273,4 +278,3 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
   cairo_surface_destroy (surface);
   return dest;
 }
-

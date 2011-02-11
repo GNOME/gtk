@@ -65,16 +65,12 @@ _gdk_visual_init (void)
   system_visual = g_object_new (GDK_TYPE_VISUAL, NULL);
   system_visual->screen = gdk_screen_get_default();
 
-  GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d\n",
-			       bitspixel, numcolors));
-
   if (rastercaps & RC_PALETTE)
     {
       const int sizepalette = GetDeviceCaps (_gdk_display_hdc, SIZEPALETTE);
       gchar *max_colors = getenv ("GDK_WIN32_MAX_COLORS");
       system_visual->type = GDK_VISUAL_PSEUDO_COLOR;
 
-      GDK_NOTE (COLORMAP, g_print ("SIZEPALETTE=%d\n", sizepalette));
       g_assert (sizepalette == 256);
 
       if (max_colors != NULL)

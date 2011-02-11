@@ -1008,7 +1008,7 @@ gtk_numerable_icon_get_background_icon_name (GtkNumerableIcon *self)
  *
  * Creates a new unthemed #GtkNumerableIcon.
  *
- * Returns: a new #GIcon
+ * Returns: (transfer full): a new #GIcon
  *
  * Since: 3.0
  */
@@ -1031,7 +1031,7 @@ gtk_numerable_icon_new (GIcon *base_icon)
  * to the passed #GtkStyleContext. This is a convenience constructor
  * that calls gtk_numerable_icon_set_style_context() internally.
  *
- * Returns: a new #GIcon
+ * Returns: (transfer full): a new #GIcon
  *
  * Since: 3.0
  */

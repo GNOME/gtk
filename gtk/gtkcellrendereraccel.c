@@ -641,7 +641,8 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererAccelPrivate *priv;
   GtkCellRendererText *celltext;
   GtkCellRendererAccel *accel;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GdkRGBA color;
   GtkWidget *label;
   GtkWidget *eventbox;
   GdkDevice *device, *keyb, *pointer;
@@ -659,7 +660,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
     return NULL;
 
   window = gtk_widget_get_window (widget);
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
 
   g_return_val_if_fail (window != NULL, NULL);
 
@@ -715,13 +716,11 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
-  
+  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_SELECTED, &color);
+  gtk_widget_override_background_color (label, 0, &color);
 
-  gtk_widget_modify_bg (eventbox, GTK_STATE_NORMAL,
-                        &style->bg[GTK_STATE_SELECTED]);
-
-  gtk_widget_modify_fg (label, GTK_STATE_NORMAL,
-                        &style->fg[GTK_STATE_SELECTED]);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_SELECTED, &color);
+  gtk_widget_override_color (label, 0, &color);
 
   /* This label is displayed in a treeview cell displaying
    * an accelerator when the cell is clicked to change the 

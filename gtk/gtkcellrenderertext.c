@@ -1690,12 +1690,17 @@ get_size (GtkCellRenderer    *cell,
 
   if (priv->calc_fixed_height)
     {
+      GtkStyleContext *style_context;
+      GtkStateFlags state;
       PangoContext *context;
       PangoFontMetrics *metrics;
       PangoFontDescription *font_desc;
       gint row_height;
 
-      font_desc = pango_font_description_copy_static (gtk_widget_get_style (widget)->font_desc);
+      style_context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      font_desc = pango_font_description_copy_static (gtk_style_context_get_font (style_context, state));
       pango_font_description_merge_static (font_desc, priv->font, TRUE);
 
       if (priv->scale_set)
@@ -1743,14 +1748,14 @@ get_size (GtkCellRenderer    *cell,
       gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
 
       rect.height = MIN (rect.height, cell_area->height - 2 * ypad);
-      rect.width  = MIN (rect.width, cell_area->width - (2 * xpad) - rect.x);
+      rect.width  = MIN (rect.width, cell_area->width - 2 * xpad);
 
       if (x_offset)
 	{
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    *x_offset = (1.0 - xalign) * (cell_area->width - (rect.x + rect.width + (2 * xpad)));
+	    *x_offset = (1.0 - xalign) * (cell_area->width - (rect.width + (2 * xpad)));
 	  else 
-	    *x_offset = xalign * (cell_area->width - (rect.x + rect.width + (2 * xpad)));
+	    *x_offset = xalign * (cell_area->width - (rect.width + (2 * xpad)));
 
 	  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
 	    *x_offset = MAX(*x_offset, 0);
@@ -1771,7 +1776,7 @@ get_size (GtkCellRenderer    *cell,
     *height = ypad * 2 + rect.height;
 
   if (width)
-    *width = xpad * 2 + rect.x + rect.width;
+    *width = xpad * 2 + rect.width;
 
   g_object_unref (layout);
 }
@@ -1787,41 +1792,18 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkStyleContext *context;
   PangoLayout *layout;
-  GtkStateType state;
   gint x_offset = 0;
   gint y_offset = 0;
   gint xpad, ypad;
+  PangoRectangle rect;
 
   layout = get_layout (celltext, widget, cell_area, flags);
   get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
+  context = gtk_widget_get_style_context (widget);
 
-  if (!gtk_cell_renderer_get_sensitive (cell))
-    {
-      state = GTK_STATE_INSENSITIVE;
-    }
-  else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
-    {
-      if (gtk_widget_has_focus (widget))
-	state = GTK_STATE_SELECTED;
-      else
-	state = GTK_STATE_ACTIVE;
-    }
-  else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
-	   gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
-    {
-      state = GTK_STATE_PRELIGHT;
-    }
-  else
-    {
-      if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE)
-	state = GTK_STATE_INSENSITIVE;
-      else
-	state = GTK_STATE_NORMAL;
-    }
-
-  if (priv->background_set && 
-      (flags & GTK_CELL_RENDERER_SELECTED) == 0)
+  if (priv->background_set && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
       gdk_cairo_rectangle (cr, background_area);
       gdk_cairo_set_source_rgba (cr, &priv->background);
@@ -1831,25 +1813,23 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
   if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
-    pango_layout_set_width (layout, 
+    pango_layout_set_width (layout,
 			    (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
   else if (priv->wrap_width == -1)
     pango_layout_set_width (layout, -1);
+
+  pango_layout_get_pixel_extents (layout, NULL, &rect);
+  x_offset = x_offset - rect.x;
 
   cairo_save (cr);
 
   gdk_cairo_rectangle (cr, cell_area);
   cairo_clip (cr);
 
-  gtk_paint_layout (gtk_widget_get_style (widget),
-                          cr,
-                          state,
-                          TRUE,
-                          widget,
-                          "cellrenderertext",
-                          cell_area->x + x_offset + xpad,
-                          cell_area->y + y_offset + ypad,
-                          layout);
+  gtk_render_layout (context, cr,
+                     cell_area->x + x_offset + xpad,
+                     cell_area->y + y_offset + ypad,
+                     layout);
 
   cairo_restore (cr);
 
@@ -2106,14 +2086,15 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
                                             gint            *minimum_size,
                                             gint            *natural_size)
 {
-  GtkCellRendererTextPrivate    *priv;
+  GtkCellRendererTextPrivate *priv;
   GtkCellRendererText        *celltext;
-  GtkStyle                   *style;
+  GtkStyleContext            *style_context;
+  const PangoFontDescription *font_desc;
   PangoLayout                *layout;
   PangoContext               *context;
   PangoFontMetrics           *metrics;
   PangoRectangle              rect;
-  gint char_width, digit_width, char_pixels, text_width, ellipsize_chars, xpad;
+  gint char_width, text_width, ellipsize_chars, xpad;
   gint min_width, nat_width;
 
   /* "width-chars" Hard-coded minimum width:
@@ -2128,7 +2109,7 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   priv = celltext->priv;
 
-  style = gtk_widget_get_style (widget);
+  style_context = gtk_widget_get_style_context (widget);
 
   gtk_cell_renderer_get_padding (cell, &xpad, NULL);
 
@@ -2141,12 +2122,11 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
 
   /* Fetch the average size of a charachter */
   context = pango_layout_get_context (layout);
-  metrics = pango_context_get_metrics (context, style->font_desc,
-				       pango_context_get_language (context));
-  
+  font_desc = gtk_style_context_get_font (style_context, 0);
+  metrics = pango_context_get_metrics (context, font_desc,
+                                       pango_context_get_language (context));
+
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
-  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-  char_pixels = MAX (char_width, digit_width);
 
   pango_font_metrics_unref (metrics);
   g_object_unref (layout);
@@ -2156,12 +2136,11 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
     ellipsize_chars = 3;
   else
     ellipsize_chars = 0;
-  
+
   if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->width_chars > 0)
-    min_width = 
-      xpad * 2 + 
-      MIN (PANGO_PIXELS_CEIL (text_width), 
-	   (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars)));
+    min_width = xpad * 2 +
+      MIN (PANGO_PIXELS_CEIL (text_width),
+           (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars)));
   /* If no width-chars set, minimum for wrapping text will be the wrap-width */
   else if (priv->wrap_width > -1)
     min_width = xpad * 2 + rect.x + MIN (PANGO_PIXELS_CEIL (text_width), priv->wrap_width);
@@ -2169,14 +2148,13 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
     min_width = xpad * 2 + rect.x + PANGO_PIXELS_CEIL (text_width);
 
   if (priv->width_chars > 0)
-    nat_width = xpad * 2 + 
+    nat_width = xpad * 2 +
       MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS_CEIL (text_width));
   else
     nat_width = xpad * 2 + PANGO_PIXELS_CEIL (text_width);
 
-
   nat_width = MAX (nat_width, min_width);
-  
+
   if (priv->max_width_chars > 0)
     {
       gint max_width = xpad * 2 + PANGO_PIXELS (char_width) * priv->max_width_chars;
@@ -2199,14 +2177,12 @@ gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer *cell,
                                                        gint            *minimum_height,
                                                        gint            *natural_height)
 {
-  GtkCellRendererTextPrivate    *priv;
-  GtkCellRendererText        *celltext;
-  PangoLayout                *layout;
-  gint                        text_height, xpad, ypad;
+  GtkCellRendererText *celltext;
+  PangoLayout         *layout;
+  gint                 text_height, xpad, ypad;
 
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
-  priv = celltext->priv;
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 

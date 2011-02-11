@@ -51,12 +51,12 @@
  * @Short_description: Onscreen display areas in the target window system
  * @Title: Windows
  *
- * A #GdkWindow is a rectangular region on the screen. It's a low-level object,
- * used to implement high-level objects such as #GtkWidget and #GtkWindow on the
- * GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think
- * of as a "window" with a titlebar and so on; a #GtkWindow may contain many
- * #GdkWindow<!-- -->s. For example, each #GtkButton has a #GdkWindow associated
- * with it.
+ * A #GdkWindow is a (usually) rectangular region on the screen.
+ * It's a low-level object, used to implement high-level objects such as
+ * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
+ * window, the thing a user might think of as a "window" with a titlebar and
+ * so on; a #GtkWindow may contain many #GdkWindows. For example, each
+ * #GtkButton has a #GdkWindow associated with it.
  *
  * <refsect2 id="COMPOSITED-WINDOWS">
  * <title>Composited Windows</title>
@@ -384,7 +384,8 @@ gdk_window_class_init (GdkWindowClass *klass)
    * The ::pick-embedded-child signal is emitted to find an embedded
    * child at the given position.
    *
-   * Returns: the #GdkWindow of the embedded child at @x, @y, or %NULL
+   * Returns: (transfer none): the #GdkWindow of the embedded child at
+   *     @x, @y, or %NULL
    *
    * Since: 2.18
    */
@@ -405,8 +406,10 @@ gdk_window_class_init (GdkWindowClass *klass)
    * @window: the offscreen window on which the signal is emitted
    * @offscreen-x: x coordinate in the offscreen window
    * @offscreen-y: y coordinate in the offscreen window
-   * @embedder-x: return location for the x coordinate in the embedder window
-   * @embedder-y: return location for the y coordinate in the embedder window
+   * @embedder-x: (out) (type double): return location for the x
+   *     coordinate in the embedder window
+   * @embedder-y: (out) (type double): return location for the y
+   *     coordinate in the embedder window
    *
    * The ::to-embedder signal is emitted to translate coordinates
    * in an offscreen window to its embedder.
@@ -434,8 +437,10 @@ gdk_window_class_init (GdkWindowClass *klass)
    * @window: the offscreen window on which the signal is emitted
    * @embedder-x: x coordinate in the embedder window
    * @embedder-y: y coordinate in the embedder window
-   * @offscreen-x: return location for the x coordinate in the offscreen window
-   * @offscreen-y: return location for the y coordinate in the offscreen window
+   * @offscreen-x: (out) (type double): return location for the x
+   *     coordinate in the offscreen window
+   * @offscreen-y: (out) (type double): return location for the y
+   *     coordinate in the offscreen window
    *
    * The ::from-embedder signal is emitted to translate coordinates
    * in the embedder of an offscreen window to the offscreen window.
@@ -1235,7 +1240,7 @@ sync_native_window_stack_position (GdkWindow *window)
 }
 
 /**
- * gdk_window_new:
+ * gdk_window_new: (constructor)
  * @parent: (allow-none): a #GdkWindow, or %NULL to create the window as a child of
  *   the default root window for the default display.
  * @attributes: attributes of the new window
@@ -1246,7 +1251,7 @@ sync_native_window_stack_position (GdkWindow *window)
  * more details.  Note: to use this on displays other than the default
  * display, @parent must be specified.
  *
- * Return value: (transfer none): the new #GdkWindow
+ * Return value: (transfer full): the new #GdkWindow
  **/
 GdkWindow*
 gdk_window_new (GdkWindow     *parent,
@@ -2075,7 +2080,7 @@ gdk_window_set_user_data (GdkWindow *window,
 /**
  * gdk_window_get_user_data:
  * @window: a #GdkWindow
- * @data: return location for user data
+ * @data: (out): return location for user data
  *
  * Retrieves the user data for @window, which is normally the widget
  * that @window belongs to. See gdk_window_set_user_data().
@@ -2406,7 +2411,7 @@ gdk_window_peek_children (GdkWindow *window)
 }
 
 /**
- * gdk_window_add_filter:
+ * gdk_window_add_filter: (skip)
  * @window: a #GdkWindow
  * @function: filter callback
  * @data: data to pass to filter callback
@@ -2467,20 +2472,19 @@ gdk_window_add_filter (GdkWindow     *window,
 }
 
 /**
- * gdk_window_remove_filter:
+ * gdk_window_remove_filter: (skip)
  * @window: a #GdkWindow
  * @function: previously-added filter function
  * @data: user data for previously-added filter function
  *
  * Remove a filter previously added with gdk_window_add_filter().
- *
- **/
+ */
 void
 gdk_window_remove_filter (GdkWindow     *window,
-			  GdkFilterFunc  function,
-			  gpointer       data)
+                          GdkFilterFunc  function,
+                          gpointer       data)
 {
-  GList *tmp_list, *node;
+  GList *tmp_list;
   GdkEventFilter *filter;
 
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
@@ -2493,17 +2497,16 @@ gdk_window_remove_filter (GdkWindow     *window,
   while (tmp_list)
     {
       filter = (GdkEventFilter *)tmp_list->data;
-      node = tmp_list;
       tmp_list = tmp_list->next;
 
       if ((filter->function == function) && (filter->data == data))
-	{
+        {
           filter->flags |= GDK_EVENT_FILTER_REMOVED;
 
-	  _gdk_event_filter_unref (window, filter);
+          _gdk_event_filter_unref (window, filter);
 
-	  return;
-	}
+          return;
+        }
     }
 }
 
@@ -2672,7 +2675,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
 static cairo_surface_t *
 gdk_window_ref_impl_surface (GdkWindow *window)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->ref_cairo_surface (window);
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->ref_cairo_surface (gdk_window_get_impl_window (window));
 }
 
 static cairo_t *
@@ -4431,8 +4434,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  * gdk_window_invalidate_maybe_recurse:
  * @window: a #GdkWindow
  * @region: a #cairo_region_t
- * @child_func: function to use to decide if to recurse to a child,
- *              %NULL means never recurse.
+ * @child_func: (scope call): function to use to decide if to recurse
+ *     to a child, %NULL means never recurse.
  * @user_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the
@@ -4780,8 +4783,8 @@ gdk_window_set_debug_updates (gboolean setting)
  * @flags: a mask indicating what portions of @geometry are set
  * @width: desired width of window
  * @height: desired height of the window
- * @new_width: location to store resulting width
- * @new_height: location to store resulting height
+ * @new_width: (out): location to store resulting width
+ * @new_height: (out): location to store resulting height
  *
  * Constrains a desired width and height according to a
  * set of geometry hints (such as minimum and maximum size).
@@ -5896,24 +5899,19 @@ gdk_window_get_device_events (GdkWindow *window,
 
 static void
 gdk_window_move_resize_toplevel (GdkWindow *window,
-				 gboolean   with_move,
-				 gint       x,
-				 gint       y,
-				 gint       width,
-				 gint       height)
+                                 gboolean   with_move,
+                                 gint       x,
+                                 gint       y,
+                                 gint       width,
+                                 gint       height)
 {
   cairo_region_t *old_region, *new_region;
   GdkWindowImplClass *impl_class;
   gboolean expose;
-  int old_x, old_y, old_abs_x, old_abs_y;
-  int dx, dy;
   gboolean is_resize;
 
   expose = FALSE;
   old_region = NULL;
-
-  old_x = window->x;
-  old_y = window->y;
 
   is_resize = (width != -1) || (height != -1);
 
@@ -5927,12 +5925,6 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
   impl_class->move_resize (window, with_move, x, y, width, height);
 
-  dx = window->x - old_x;
-  dy = window->y - old_y;
-
-  old_abs_x = window->abs_x;
-  old_abs_y = window->abs_y;
-
   /* Avoid recomputing for pure toplevel moves, for performance reasons */
   if (is_resize)
     recompute_visible_regions (window, TRUE, FALSE);
@@ -5942,8 +5934,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
       new_region = cairo_region_copy (window->clip_region);
 
       /* This is the newly exposed area (due to any resize),
-       * X will expose it, but lets do that without the
-       * roundtrip
+       * X will expose it, but lets do that without the roundtrip
        */
       cairo_region_subtract (new_region, old_region);
       gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_WINCLEARED);
@@ -6584,8 +6575,8 @@ gdk_window_set_background_pattern (GdkWindow *window,
  * does not have its own background and reuses the parent's, %NULL is
  * returned and you'll have to query it yourself.
  *
- * Returns: The pattern to use for the background or %NULL to use the
- * parent's background.
+ * Returns: (transfer none): The pattern to use for the background or
+ *     %NULL to use the parent's background.
  *
  * Since: 2.22
  **/
@@ -6622,9 +6613,10 @@ update_cursor_foreach (GdkDisplay           *display,
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
- * Return value: a #GdkCursor, or %NULL. The returned object is owned
- *   by the #GdkWindow and should not be unreferenced directly. Use
- *   gdk_window_set_cursor() to unset the cursor of the window
+ * Return value: (transfer none): a #GdkCursor, or %NULL. The returned
+ *   object is owned by the #GdkWindow and should not be unreferenced
+ *   directly. Use gdk_window_set_cursor() to unset the cursor of the
+ *   window
  *
  * Since: 2.18
  */
@@ -6686,9 +6678,10 @@ gdk_window_set_cursor (GdkWindow *window,
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
- * Returns: a #GdkCursor, or %NULL. The returned object is owned
- *   by the #GdkWindow and should not be unreferenced directly. Use
- *   gdk_window_set_cursor() to unset the cursor of the window
+ * Returns: (transfer none): a #GdkCursor, or %NULL. The returned
+ *   object is owned by the #GdkWindow and should not be unreferenced
+ *   directly. Use gdk_window_set_cursor() to unset the cursor of the
+ *   window
  *
  * Since: 3.0
  **/
@@ -6921,8 +6914,8 @@ gdk_window_get_origin (GdkWindow *window,
  * @window: a #GdkWindow
  * @x: X coordinate in window
  * @y: Y coordinate in window
- * @root_x: return location for X coordinate
- * @root_y: return location for Y coordinate
+ * @root_x: (out): return location for X coordinate
+ * @root_y: (out): return location for Y coordinate
  *
  * Obtains the position of a window position in root
  * window coordinates. This is similar to
@@ -9052,13 +9045,10 @@ do_synthesize_crossing_event (gpointer data)
 void
 _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 {
-  GdkDisplay *display;
   GdkWindow *toplevel;
 
   if (_gdk_native_windows)
     return; /* We use the native crossing events if all native */
-
-  display = gdk_window_get_display (changed_window);
 
   toplevel = get_event_toplevel (changed_window);
 
@@ -10060,8 +10050,8 @@ gdk_window_set_transient_for (GdkWindow *window,
 /**
  * gdk_window_get_root_origin:
  * @window: a toplevel #GdkWindow
- * @x: return location for X position of window frame
- * @y: return location for Y position of window frame
+ * @x: (out): return location for X position of window frame
+ * @y: (out): return location for Y position of window frame
  *
  * Obtains the top-left corner of the window manager frame in root
  * window coordinates.
@@ -10484,7 +10474,7 @@ gdk_window_set_decorations (GdkWindow      *window,
 /**
  * gdk_window_get_decorations:
  * @window: The toplevel #GdkWindow to get the decorations from
- * @decorations: The window decorations will be written here
+ * @decorations: (out): The window decorations will be written here
  *
  * Returns the decorations set on the GdkWindow with
  * gdk_window_set_decorations().
@@ -10668,6 +10658,28 @@ gdk_window_register_dnd (GdkWindow *window)
 }
 
 /**
+ * gdk_window_get_drag_protocol:
+ * @window: the destination window
+ * @target: (out) (allow-none) (transfer full): location of the window
+ *    where the drop should happen. This may be @window or a proxy window,
+ *    or %NULL if @window does not support Drag and Drop.
+ *
+ * Finds out the DND protocol supported by a window.
+ *
+ * Returns: the supported DND protocol.
+ *
+ * Since: 3.0
+ */
+GdkDragProtocol
+gdk_window_get_drag_protocol (GdkWindow  *window,
+                              GdkWindow **target)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_DRAG_PROTO_NONE);
+
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_drag_protocol (window, target);
+}
+
+/**
  * gdk_drag_begin:
  * @window: the source window for this drag.
  * @targets: (transfer none) (element-type GdkAtom): the offered targets,
@@ -10834,9 +10846,9 @@ gdk_test_simulate_button (GdkWindow      *window,
  *   when rounded up).
  * @pdelete: if %TRUE, delete the property after retrieving the
  *   data.
- * @actual_property_type: location to store the actual type of
-*   the property.
- * @actual_format: location to store the actual return format of the
+ * @actual_property_type: (out) (transfer none): location to store the
+ *   actual type of the property.
+ * @actual_format: (out): location to store the actual return format of the
  *   data; either 8, 16 or 32 bits.
  * @actual_length: location to store the length of the retrieved data, in
  *   bytes.  Data returned in the 32 bit format is stored
@@ -10844,9 +10856,9 @@ gdk_test_simulate_button (GdkWindow      *window,
  *   elements should be be calculated via
  *   @actual_length / sizeof(glong) to ensure portability to
  *   64 bit systems.
- * @data: location to store a pointer to the data. The retrieved
- *   data should be freed with g_free() when you are finished
- *   using it.
+ * @data: (out) (array length=actual_length) (transfer full): location
+ *   to store a pointer to the data. The retrieved data should be
+ *   freed with g_free() when you are finished using it.
  *
  * Retrieves a portion of the contents of a property. If the
  * property does not exist, then the function returns %FALSE,
@@ -10889,7 +10901,7 @@ gdk_property_get (GdkWindow  *window,
 }
 
 /**
- * gdk_property_change:
+ * gdk_property_change: (skip)
  * @window: a #GdkWindow
  * @property: the property to change
  * @type: the new type for the property. If @mode is

@@ -45,15 +45,18 @@ INCLUDES = \
 	$(GTK_DEP_CFLAGS)
 
 LDADD = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gtk/libgtk-3.la	\
 	$(GTK_DEP_LIBS)
 
 drawing_LDADD = $(LDADD) \
-	$(top_builddir)/gdk/libgdk-3.0.la
+	$(top_builddir)/gdk/libgdk-3.la
 
 noinst_PROGRAMS = \
 	hello-world				\
 	window-default				\
 	bloatpad				\
 	grid-packing				\
-	drawing
+	drawing					\
+	builder
+
+EXTRA_DIST = builder.ui

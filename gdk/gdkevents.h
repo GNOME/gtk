@@ -89,7 +89,6 @@ typedef struct _GdkEventProperty    GdkEventProperty;
 typedef struct _GdkEventSelection   GdkEventSelection;
 typedef struct _GdkEventOwnerChange GdkEventOwnerChange;
 typedef struct _GdkEventProximity   GdkEventProximity;
-typedef struct _GdkEventClient	    GdkEventClient;
 typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
@@ -491,8 +490,9 @@ struct _GdkEventVisibility
  * @y: the y coordinate of the pointer relative to the window.
  * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
  *   the mouse.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @is_hint: set to 1 if this event is just a hint, see the
  *   %GDK_POINTER_MOTION_HINT_MASK value of #GdkEventMask.
  * @device: the device where the event originated.
@@ -530,8 +530,9 @@ struct _GdkEventMotion
  * @y: the y coordinate of the pointer relative to the window.
  * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
  *   the mouse.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @button: the button which was pressed or released, numbered from 1 to 5.
  *   Normally button 1 is the left mouse button, 2 is the middle button,
  *   and 3 is the right button. On 2-button mice, the middle button can
@@ -601,8 +602,9 @@ struct _GdkEventButton
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the window.
  * @y: the y coordinate of the pointer relative to the window.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @direction: the direction to scroll to (one of %GDK_SCROLL_UP,
  *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT and %GDK_SCROLL_RIGHT).
  * @device: the device where the event originated.
@@ -636,8 +638,9 @@ struct _GdkEventScroll
  * @send_event: %TRUE if the event was sent explicitly (e.g. using
  *   <function>XSendEvent</function>).
  * @time: the time of the event in milliseconds.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @keyval: the key that was pressed or released. See the
  *   <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file for a
  *   complete list of GDK key codes.
@@ -696,8 +699,9 @@ struct _GdkEventKey
  *  %GDK_NOTIFY_ANCESTOR, %GDK_NOTIFY_VIRTUAL, %GDK_NOTIFY_NONLINEAR or
  *  %GDK_NOTIFY_NONLINEAR_VIRTUAL).
  * @focus: %TRUE if @window is the focus window or an inferior.
- * @state: a bit-mask representing the state of the modifier keys (e.g. Control,
- *  Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  *
  * Generated when the pointer enters or leaves a window.
  */
@@ -794,7 +798,7 @@ struct _GdkEventProperty
  * @target: the target to which the selection should be converted.
  * @property: the property in which to place the result of the conversion.
  * @time: the time of the event in milliseconds.
- * @requestor: the native window on which to place @property.
+ * @requestor: the window on which to place @property or %NULL if none.
  *
  * Generated when a selection is requested or ownership of a selection
  * is taken over by another client application.
@@ -808,21 +812,21 @@ struct _GdkEventSelection
   GdkAtom target;
   GdkAtom property;
   guint32 time;
-  GdkNativeWindow requestor;
+  GdkWindow *requestor;
 };
 
 /**
  * GdkEventOwnerChange:
  * @type: the type of the event (%GDK_OWNER_CHANGE).
- * @window: the window which received the event.
+ * @window: the window which received the event
  * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
- * @owner: the new owner of the selection.
- * @reason: the reason for the ownership change as a #GdkOwnerChange value.
- * @selection: the atom identifying the selection.
- * @time: the timestamp of the event.
+ *   <function>XSendEvent</function>)
+ * @owner: the new owner of the selection, or %NULL if there is none
+ * @reason: the reason for the ownership change as a #GdkOwnerChange value
+ * @selection: the atom identifying the selection
+ * @time: the timestamp of the event
  * @selection_time: the time at which the selection ownership was taken
- *   over.
+ *   over
  *
  * Generated when the owner of a selection changes. On X11, this
  * information is only available if the X server supports the XFIXES
@@ -835,7 +839,7 @@ struct _GdkEventOwnerChange
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
-  GdkNativeWindow owner;
+  GdkWindow *owner;
   GdkOwnerChange reason;
   GdkAtom selection;
   guint32 time;
@@ -867,35 +871,6 @@ struct _GdkEventProximity
   gint8 send_event;
   guint32 time;
   GdkDevice *device;
-};
-
-/**
- * GdkEventClient:
- * @type: the type of the event (%GDK_CLIENT_EVENT).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
- * @message_type: the type of the message, which can be defined by the
- *   application.
- * @data_format: the format of the data, given as the number of bits in each
- *   data element, i.e. 8, 16, or 32. 8-bit data uses the b array of the
- *   data union, 16-bit data uses the s array, and 32-bit data uses the l
- *   array.
- *
- * An event sent by another client application.
- */
-struct _GdkEventClient
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkAtom message_type;
-  gushort data_format;
-  union {
-    char b[20];
-    short s[10];
-    long l[5];
-  } data;
 };
 
 /**
@@ -1055,7 +1030,6 @@ union _GdkEvent
   GdkEventSelection	    selection;
   GdkEventOwnerChange  	    owner_change;
   GdkEventProximity	    proximity;
-  GdkEventClient	    client;
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;
   GdkEventSetting           setting;
@@ -1120,18 +1094,8 @@ gboolean  gdk_get_show_events		(void);
 
 gboolean gdk_setting_get                           (const gchar *name,
                                                     GValue          *value);
-void gdk_add_client_message_filter                 (GdkAtom          message_type,
-                                                    GdkFilterFunc    func,
-                                                    gpointer         data);
-gboolean gdk_event_send_client_message             (GdkEvent        *event,
-                                                    GdkNativeWindow  winid);
-void     gdk_event_send_clientmessage_toall        (GdkEvent        *event);
 
 #endif /* GDK_MULTIHEAD_SAFE */
-
-gboolean gdk_event_send_client_message_for_display (GdkDisplay      *display,
-                                                    GdkEvent        *event,
-                                                    GdkNativeWindow  winid);
 
 G_END_DECLS
 

@@ -656,6 +656,8 @@ gtk_font_selection_screen_changed (GtkWidget *widget,
 static void
 gtk_font_selection_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_font_selection_parent_class)->style_updated (widget);
+
   /* Maybe fonts where installed or removed... */
   gtk_font_selection_reload_fonts (GTK_FONT_SELECTION (widget));
 }
@@ -1150,17 +1152,18 @@ gtk_font_selection_get_font_description (GtkFontSelection *fontsel)
   return font_desc;
 }
 
-/* This sets the font in the preview entry to the selected font, and tries to
-   make sure that the preview entry is a reasonable size, i.e. so that the
-   text can be seen with a bit of space to spare. But it tries to avoid
-   resizing the entry every time the font changes.
-   This also used to shrink the preview if the font size was decreased, but
-   that made it awkward if the user wanted to resize the window themself. */
+/* This sets the font in the preview entry to the selected font,
+ * and tries to make sure that the preview entry is a reasonable
+ * size, i.e. so that the text can be seen with a bit of space to
+ * spare. But it tries to avoid resizing the entry every time the
+ * font changes. This also used to shrink the preview if the font
+ * size was decreased, but that made it awkward if the user wanted
+ * to resize the window themself.
+ */
 static void
 gtk_font_selection_update_preview (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
-  GtkStyleContext *context;
   gint new_height;
   GtkRequisition old_requisition, new_requisition;
   GtkWidget *preview_entry = priv->preview_entry;
@@ -1168,18 +1171,17 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
 
   gtk_widget_get_preferred_size (preview_entry, &old_requisition, NULL);
 
-  context = gtk_widget_get_style_context (preview_entry);
   gtk_widget_override_font (preview_entry,
                             gtk_font_selection_get_font_description (fontsel));
 
   gtk_widget_get_preferred_size (preview_entry, &new_requisition, NULL);
-  
+
   /* We don't ever want to be over MAX_PREVIEW_HEIGHT pixels high. */
   new_height = CLAMP (new_requisition.height, INITIAL_PREVIEW_HEIGHT, MAX_PREVIEW_HEIGHT);
 
   if (new_height > old_requisition.height || new_height < old_requisition.height - 30)
     gtk_widget_set_size_request (preview_entry, -1, new_height);
-  
+
   /* This sets the preview text, if it hasn't been set already. */
   text = gtk_entry_get_text (GTK_ENTRY (preview_entry));
   if (strlen (text) == 0)

@@ -820,19 +820,21 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
  * @key_file.
  *
  * Returns: a new #GtkPaperSize object with the restored
- *          paper size, or %NULL if an error occurred.
+ *     paper size, or %NULL if an error occurred
  *
  * Since: 2.12
  */
 GtkPaperSize *
-gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
-                                  const gchar *group_name,
-                                  GError     **error)
+gtk_paper_size_new_from_key_file (GKeyFile     *key_file,
+                                  const gchar  *group_name,
+                                  GError      **error)
 {
   GtkPaperSize *paper_size = NULL;
-  char *name = NULL, *ppd_name = NULL, *display_name = NULL, *freeme = NULL;
+  gchar *name = NULL;
+  gchar *ppd_name = NULL;
+  gchar *display_name = NULL;
+  gchar *freeme = NULL;
   gdouble width, height;
-  gboolean retval = TRUE;
   GError *err = NULL;
 
   g_return_val_if_fail (key_file != NULL, NULL);
@@ -845,7 +847,6 @@ gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
                            GTK_PRINT_ERROR,
                            GTK_PRINT_ERROR_INVALID_FILE,
                            _("Not a valid page setup file"));
-      retval = FALSE;
       goto out;
     }
 
@@ -854,7 +855,6 @@ gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
   if (err != NULL) \
     {\
       g_propagate_error (error, err);\
-      retval = FALSE;\
       goto out;\
     }
 
@@ -887,9 +887,9 @@ gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
                            GTK_PRINT_ERROR,
                            GTK_PRINT_ERROR_INVALID_FILE,
                            _("Not a valid page setup file"));
-      retval = FALSE;
       goto out;
     }
+
   g_assert (paper_size != NULL);
 
 out:

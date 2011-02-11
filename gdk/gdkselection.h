@@ -192,16 +192,14 @@ gint       gdk_selection_property_get (GdkWindow  *requestor,
 				       GdkAtom	  *prop_type,
 				       gint	  *prop_format);
 
-#ifndef GDK_MULTIHEAD_SAFE
-void	   gdk_selection_send_notify (GdkNativeWindow requestor,
+void	   gdk_selection_send_notify (GdkWindow      *requestor,
 				      GdkAtom	      selection,
 				      GdkAtom	      target,
 				      GdkAtom	      property,
 				      guint32	      time_);
-#endif /* GDK_MULTIHEAD_SAFE */
 
 void       gdk_selection_send_notify_for_display (GdkDisplay      *display,
-						  GdkNativeWindow  requestor,
+						  GdkWindow       *requestor,
 						  GdkAtom     	   selection,
 						  GdkAtom     	   target,
 						  GdkAtom     	   property,

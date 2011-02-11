@@ -1723,21 +1723,19 @@ model_add_special (GtkFileChooserButton *button)
 
 static void
 model_add_volumes (GtkFileChooserButton *button,
-		   GSList               *volumes)
+                   GSList               *volumes)
 {
   GtkListStore *store;
   gint pos;
   gboolean local_only;
-  GtkFileSystem *file_system;
   GSList *l;
-  
+
   if (!volumes)
     return;
 
   store = GTK_LIST_STORE (button->priv->model);
   pos = model_get_type_position (button, ROW_TYPE_VOLUME);
   local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (button->priv->dialog));
-  file_system = button->priv->fs;
 
   for (l = volumes; l; l = l->next)
     {
@@ -1749,13 +1747,13 @@ model_add_volumes (GtkFileChooserButton *button,
       volume = l->data;
 
       if (local_only)
-	{
-	  if (_gtk_file_system_volume_is_mounted (volume))
-	    {
-	      GFile *base_file;
+        {
+          if (_gtk_file_system_volume_is_mounted (volume))
+            {
+              GFile *base_file;
 
-	      base_file = _gtk_file_system_volume_get_root (volume);
-	      if (base_file != NULL)
+              base_file = _gtk_file_system_volume_get_root (volume);
+              if (base_file != NULL)
                 {
                   if (!g_file_is_native (base_file))
                     {
@@ -1765,26 +1763,26 @@ model_add_volumes (GtkFileChooserButton *button,
                   else
                     g_object_unref (base_file);
                 }
-	    }
-	}
+            }
+        }
 
       pixbuf = _gtk_file_system_volume_render_icon (volume,
-						    GTK_WIDGET (button),
-						    button->priv->icon_size,
-						    NULL);
+                                                    GTK_WIDGET (button),
+                                                    button->priv->icon_size,
+                                                    NULL);
       display_name = _gtk_file_system_volume_get_display_name (volume);
 
       gtk_list_store_insert (store, &iter, pos);
       gtk_list_store_set (store, &iter,
-			  ICON_COLUMN, pixbuf,
-			  DISPLAY_NAME_COLUMN, display_name,
-			  TYPE_COLUMN, ROW_TYPE_VOLUME,
-			  DATA_COLUMN, _gtk_file_system_volume_ref (volume),
-			  IS_FOLDER_COLUMN, TRUE,
-			  -1);
+                          ICON_COLUMN, pixbuf,
+                          DISPLAY_NAME_COLUMN, display_name,
+                          TYPE_COLUMN, ROW_TYPE_VOLUME,
+                          DATA_COLUMN, _gtk_file_system_volume_ref (volume),
+                          IS_FOLDER_COLUMN, TRUE,
+                          -1);
 
       if (pixbuf)
-	g_object_unref (pixbuf);
+        g_object_unref (pixbuf);
       g_free (display_name);
 
       button->priv->n_volumes++;
@@ -2278,13 +2276,11 @@ static void
 update_label_and_image (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GdkPixbuf *pixbuf;
   gchar *label_text;
   GSList *files;
 
   files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
   label_text = NULL;
-  pixbuf = NULL;
 
   if (priv->update_button_cancellable)
     {
@@ -2301,51 +2297,53 @@ update_label_and_image (GtkFileChooserButton *button)
 
       volume = _gtk_file_system_get_volume_for_file (priv->fs, file);
       if (volume)
-	{
-	  GFile *base_file;
+        {
+          GFile *base_file;
 
-	  base_file = _gtk_file_system_volume_get_root (volume);
-	  if (base_file && g_file_equal (base_file, file))
-	    {
-	      label_text = _gtk_file_system_volume_get_display_name (volume);
-	      pixbuf = _gtk_file_system_volume_render_icon (volume,
-							    GTK_WIDGET (button),
-							    priv->icon_size,
-							    NULL);
-	    }
+          base_file = _gtk_file_system_volume_get_root (volume);
+          if (base_file && g_file_equal (base_file, file))
+            {
+              GdkPixbuf *pixbuf;
 
-	  if (base_file)
-	    g_object_unref (base_file);
+              label_text = _gtk_file_system_volume_get_display_name (volume);
+              pixbuf = _gtk_file_system_volume_render_icon (volume,
+                                                            GTK_WIDGET (button),
+                                                            priv->icon_size,
+                                                            NULL);
+              gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
+              if (pixbuf)
+                g_object_unref (pixbuf);
+            }
 
-	  _gtk_file_system_volume_unref (volume);
+          if (base_file)
+            g_object_unref (base_file);
 
-	  if (label_text)
-	    goto out;
-	}
+          _gtk_file_system_volume_unref (volume);
+
+          if (label_text)
+            goto out;
+        }
 
       if (g_file_is_native (file))
-	{
-	  priv->update_button_cancellable =
-	    _gtk_file_system_get_info (priv->fs, file,
-				       "standard::icon,standard::display-name",
-				       update_label_get_info_cb,
-				       g_object_ref (button));
-	}
+        {
+          priv->update_button_cancellable =
+            _gtk_file_system_get_info (priv->fs, file,
+                                       "standard::icon,standard::display-name",
+                                       update_label_get_info_cb,
+                                       g_object_ref (button));
+        }
       else
-	{
-	  GdkPixbuf *pixbuf;
+        {
+          GdkPixbuf *pixbuf;
 
-	  label_text = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
-	  
-	  pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)), 
-					     "text-x-generic",
-					     priv->icon_size, 0, NULL);
-	  
-	  gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
-
-	  if (pixbuf)
-	    g_object_unref (pixbuf);
-	}
+          label_text = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
+          pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)),
+                                             "text-x-generic",
+                                             priv->icon_size, 0, NULL);
+          gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
+          if (pixbuf)
+            g_object_unref (pixbuf);
+        }
     }
 out:
   g_slist_foreach (files, (GFunc) g_object_unref, NULL);

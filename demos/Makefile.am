@@ -12,11 +12,11 @@ INCLUDES = 				\
 	$(GTK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk-3.0.la
+	$(top_builddir)/gtk/libgtk-3.la
 
 LDADDS = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
-	$(top_builddir)/gdk/libgdk-3.0.la	\
+	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)				\
 	$(MATH_LIB)
 

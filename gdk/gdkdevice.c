@@ -32,7 +32,8 @@
  * @Title: GdkDevice
  * @See_also: #GdkDeviceManager
  *
- * The #GdkDevice object represents a single input device.
+ * The #GdkDevice object represents a single input device, such
+ * as a keyboard, a mouse, a touchpad, etc.
  *
  * See the #GdkDeviceManager documentation for more information
  * about the various kinds of master and slave devices, and their
@@ -48,7 +49,6 @@ struct _GdkAxisInfo
 
   gdouble min_axis;
   gdouble max_axis;
-
   gdouble min_value;
   gdouble max_value;
   gdouble resolution;
@@ -273,7 +273,9 @@ gdk_device_dispose (GObject *object)
 
   if (device->associated)
     {
-      _gdk_device_set_associated_device (device->associated, NULL);
+      if (device->type == GDK_DEVICE_TYPE_MASTER)
+        _gdk_device_set_associated_device (device->associated, NULL);
+
       g_object_unref (device->associated);
       device->associated = NULL;
     }
@@ -377,14 +379,17 @@ gdk_device_get_property (GObject    *object,
 }
 
 /**
- * gdk_device_get_state:
+ * gdk_device_get_state: (skip)
  * @device: a #GdkDevice.
  * @window: a #GdkWindow.
  * @axes: an array of doubles to store the values of the axes of @device in,
  * or %NULL.
  * @mask: location to store the modifiers, or %NULL.
  *
- * Gets the current state of a pointer device relative to @window.
+ * Gets the current state of a pointer device relative to @window. As a slave
+ * device coordinates are those of its master pointer, This
+ * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
@@ -395,6 +400,8 @@ gdk_device_get_state (GdkDevice       *device,
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+                    gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
   if (GDK_DEVICE_GET_CLASS (device)->get_state)
     GDK_DEVICE_GET_CLASS (device)->get_state (device, window, axes, mask);
@@ -408,7 +415,10 @@ gdk_device_get_state (GdkDevice       *device,
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
- * Gets the current location of @device.
+ * Gets the current location of @device. As a slave device
+ * coordinates are those of its master pointer, This function
+ * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
  *
  * Since: 3.0
  **/
@@ -427,6 +437,10 @@ gdk_device_get_position (GdkDevice        *device,
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
 
   display = gdk_device_get_display (device);
+
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+                    gdk_display_device_is_grabbed (display, device));
+
   default_screen = gdk_display_get_default_screen (display);
 
   _gdk_device_query_state (device,
@@ -454,6 +468,10 @@ gdk_device_get_position (GdkDevice        *device,
  * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
  * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
  *
+ * As a slave device coordinates are those of its master pointer, This
+ * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
+ *
  * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
  *
  * Since: 3.0
@@ -468,6 +486,8 @@ gdk_device_get_window_at_position (GdkDevice  *device,
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+                        gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
   window = _gdk_device_window_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
 
@@ -493,12 +513,12 @@ gdk_device_get_window_at_position (GdkDevice  *device,
 }
 
 /**
- * gdk_device_get_history:
+ * gdk_device_get_history: (skip)
  * @device: a #GdkDevice
  * @window: the window with respect to which which the event coordinates will be reported
  * @start: starting timestamp for range of events to return
  * @stop: ending timestamp for the range of events to return
- * @events: (array length=n_events) (out) (transfer none): location to store a newly-allocated array of #GdkTimeCoord, or %NULL
+ * @events: (array length=n_events) (out) (transfer full): location to store a newly-allocated array of #GdkTimeCoord, or %NULL
  * @n_events: location to store the length of @events, or %NULL
  *
  * Obtains the motion history for a pointer device; given a starting and
@@ -554,8 +574,8 @@ _gdk_device_allocate_history (GdkDevice *device,
 }
 
 /**
- * gdk_device_free_history:
- * @events: (inout) (transfer none): an array of #GdkTimeCoord.
+ * gdk_device_free_history: (skip)
+ * @events: an array of #GdkTimeCoord.
  * @n_events: the length of the array.
  *
  * Frees an array of #GdkTimeCoord that was returned by gdk_device_get_history().
@@ -697,8 +717,8 @@ gdk_device_get_n_keys (GdkDevice *device)
  * gdk_device_get_key:
  * @device: a #GdkDevice.
  * @index_: the index of the macro button to get.
- * @keyval: return value for the keyval.
- * @modifiers: return value for modifiers.
+ * @keyval: (out): return value for the keyval.
+ * @modifiers: (out): return value for modifiers.
  *
  * If @index_ has a valid keyval, this function will return %TRUE
  * and fill in @keyval and @modifiers with the keyval settings.
@@ -912,9 +932,10 @@ _gdk_device_set_associated_device (GdkDevice *device,
  * the list of slave devices attached to it, otherwise it will return
  * %NULL
  *
- * Returns: (transfer container): the list of slave devices, or %NULL. The
- *          list must be freed with g_list_free(), the contents of the list
- *          are owned by GTK+ and should not be freed.
+ * Returns: (transfer container) (element-type GdkDevice): the list of
+ *          slave devices, or %NULL. The list must be freed with
+ *          g_list_free(), the contents of the list are owned by GTK+
+ *          and should not be freed.
  **/
 GList *
 gdk_device_list_slave_devices (GdkDevice *device)
@@ -1023,9 +1044,9 @@ gdk_device_list_axes (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_axis_value:
+ * gdk_device_get_axis_value: (skip)
  * @device: a pointer #GdkDevice.
- * @axes: pointer to an array of axes
+ * @axes: (array): pointer to an array of axes
  * @axis_label: #GdkAtom with the axis label.
  * @value: location to store the found value.
  *
@@ -1070,11 +1091,11 @@ gdk_device_get_axis_value (GdkDevice *device,
 }
 
 /**
- * gdk_device_get_axis:
+ * gdk_device_get_axis: (skip)
  * @device: a #GdkDevice
- * @axes: pointer to an array of axes
+ * @axes: (array): pointer to an array of axes
  * @use: the use to look for
- * @value: location to store the found value.
+ * @value: (out): location to store the found value.
  *
  * Interprets an array of double as axis values for a given device,
  * and locates the value in the array for a given axis use.
@@ -1148,7 +1169,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  *                @event_mask. In either mode, unreported events are discarded.
  * @event_mask: specifies the event mask, which is used in accordance with
  *              @owner_events.
- * @cursor: the cursor to display while the grab is active if the device is
+ * @cursor: (allow-none): the cursor to display while the grab is active if the device is
  *          a pointer. If this is %NULL then the normal cursors are used for
  *          @window and its descendants, and the cursor for @window is used
  *          elsewhere.

@@ -32,7 +32,7 @@
 
 #include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkrange.h"
 #include "gtkscale.h"
 #include "gtkscrollbar.h"
@@ -1031,7 +1031,7 @@ gtk_range_get_min_slider_size (GtkRange *range)
 /**
  * gtk_range_get_range_rect:
  * @range: a #GtkRange
- * @range_rect: return location for the range rectangle
+ * @range_rect: (out): return location for the range rectangle
  *
  * This function returns the area that contains the range's trough
  * and its steppers, in widget->window coordinates.
@@ -1059,8 +1059,10 @@ gtk_range_get_range_rect (GtkRange     *range,
 /**
  * gtk_range_get_slider_range:
  * @range: a #GtkRange
- * @slider_start: (allow-none): return location for the slider's start, or %NULL
- * @slider_end: (allow-none): return location for the slider's end, or %NULL
+ * @slider_start: (out) (allow-none): return location for the slider's
+ *     start, or %NULL
+ * @slider_end: (out) (allow-none): return location for the slider's
+ *     end, or %NULL
  *
  * This function returns sliders range along the long dimension,
  * in widget->window coordinates.
@@ -1856,7 +1858,6 @@ draw_stepper (GtkRange     *range,
   GtkStateFlags state = 0;
   GtkStyleContext *context;
   GtkWidget *widget = GTK_WIDGET (range);
-  GdkWindow *window;
   gfloat arrow_scaling;
   GdkRectangle *rect;
   gint arrow_x;
@@ -1908,7 +1909,6 @@ draw_stepper (GtkRange     *range,
         state |= GTK_STATE_FLAG_PRELIGHT;
     }
 
-  window = gtk_widget_get_window (widget);
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
@@ -1935,8 +1935,8 @@ draw_stepper (GtkRange     *range,
 
       gtk_range_get_props (GTK_RANGE (widget),
                            NULL, NULL, NULL, NULL, NULL, NULL,
-			   &arrow_displacement_x, &arrow_displacement_y);
-      
+                           &arrow_displacement_x, &arrow_displacement_y);
+
       arrow_x += arrow_displacement_x;
       arrow_y += arrow_displacement_y;
     }
@@ -1967,14 +1967,13 @@ draw_stepper (GtkRange     *range,
 }
 
 static gboolean
-gtk_range_draw (GtkWidget      *widget,
-                cairo_t        *cr)
+gtk_range_draw (GtkWidget *widget,
+                cairo_t   *cr)
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   gboolean sensitive;
   GtkStateFlags state = 0;
-  GdkWindow *window;
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
@@ -1995,8 +1994,6 @@ gtk_range_draw (GtkWidget      *widget,
                           "focus-line-width", &focus_line_width,
                           "focus-padding", &focus_padding,
                           NULL);
-
-  window = gtk_widget_get_window (widget);
 
   /* we're now exposing, so there's no need to force early repaints */
   if (priv->repaint_id)
@@ -2083,22 +2080,22 @@ gtk_range_draw (GtkWidget      *widget,
               y      += offset;
               height -= shorter;
             }
-	}
+        }
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
       if (draw_trough)
         {
-	  gint trough_change_pos_x = width;
-	  gint trough_change_pos_y = height;
+          gint trough_change_pos_x = width;
+          gint trough_change_pos_y = height;
 
-	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    trough_change_pos_x = (priv->slider.x +
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+            trough_change_pos_x = (priv->slider.x +
                                    priv->slider.width / 2 -
                                    x);
-	  else
-	    trough_change_pos_y = (priv->slider.y +
+          else
+            trough_change_pos_y = (priv->slider.y +
                                    priv->slider.height / 2 -
                                    y);
 
@@ -2109,10 +2106,10 @@ gtk_range_draw (GtkWidget      *widget,
                                  trough_change_pos_x,
                                  trough_change_pos_y);
 
-	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    trough_change_pos_y = 0;
-	  else
-	    trough_change_pos_x = 0;
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+            trough_change_pos_y = 0;
+          else
+            trough_change_pos_x = 0;
 
           gtk_render_background (context, cr,
                                  x + trough_change_pos_x, y + trough_change_pos_y,
@@ -2135,13 +2132,12 @@ gtk_range_draw (GtkWidget      *widget,
       if (priv->show_fill_level &&
           gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
           gtk_adjustment_get_lower (priv->adjustment) != 0)
-	{
+        {
           gdouble  fill_level  = priv->fill_level;
-	  gint     fill_x      = x;
-	  gint     fill_y      = y;
-	  gint     fill_width  = width;
-	  gint     fill_height = height;
-	  gchar   *fill_detail;
+          gint     fill_x      = x;
+          gint     fill_y      = y;
+          gint     fill_width  = width;
+          gint     fill_height = height;
 
           gtk_style_context_save (context);
           gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
@@ -2150,10 +2146,10 @@ gtk_range_draw (GtkWidget      *widget,
                               gtk_adjustment_get_upper (priv->adjustment) -
                               gtk_adjustment_get_page_size (priv->adjustment));
 
-	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    {
-	      fill_x     = priv->trough.x;
-	      fill_width = (priv->slider.width +
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              fill_x     = priv->trough.x;
+              fill_width = (priv->slider.width +
                             (fill_level - gtk_adjustment_get_lower (priv->adjustment)) /
                             (gtk_adjustment_get_upper (priv->adjustment) -
                              gtk_adjustment_get_lower (priv->adjustment) -
@@ -2163,11 +2159,11 @@ gtk_range_draw (GtkWidget      *widget,
 
               if (should_invert (range))
                 fill_x += priv->trough.width - fill_width;
-	    }
-	  else
-	    {
-	      fill_y      = priv->trough.y;
-	      fill_height = (priv->slider.height +
+            }
+          else
+            {
+              fill_y      = priv->trough.y;
+              fill_height = (priv->slider.height +
                              (fill_level - gtk_adjustment_get_lower (priv->adjustment)) /
                              (gtk_adjustment_get_upper (priv->adjustment) -
                               gtk_adjustment_get_lower (priv->adjustment) -
@@ -2177,19 +2173,21 @@ gtk_range_draw (GtkWidget      *widget,
 
               if (should_invert (range))
                 fill_y += priv->trough.height - fill_height;
-	    }
+            }
 
-	  if (fill_level < gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment))
-	    fill_detail = "trough-fill-level-full";
-	  else
-	    fill_detail = "trough-fill-level";
+#if 0
+          if (fill_level < gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment))
+            fill_detail = "trough-fill-level-full";
+          else
+            fill_detail = "trough-fill-level";
+#endif
 
           gtk_render_activity (context, cr,
                                fill_x, fill_y,
                                fill_width, fill_height);
 
           gtk_style_context_restore (context);
-	}
+        }
 
       gtk_style_context_restore (context);
 
@@ -2264,7 +2262,7 @@ gtk_range_draw (GtkWidget      *widget,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_D,
                   !touchscreen && priv->mouse_location == MOUSE_STEPPER_D);
-  
+
   return FALSE;
 }
 

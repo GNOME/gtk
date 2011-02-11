@@ -370,16 +370,9 @@ compute_size_for_orientation (GtkWidget         *widget,
 GtkSizeRequestMode
 gtk_widget_get_request_mode (GtkWidget *widget)
 {
-  GtkWidgetClass *klass;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH);
 
-  klass = GTK_WIDGET_GET_CLASS (widget);
-  if (klass->get_request_mode)
-    return klass->get_request_mode (widget);
-
-  /* By default widgets are height-for-width. */
-  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  return GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
 }
 
 /**

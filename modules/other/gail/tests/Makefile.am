@@ -56,7 +56,7 @@ libferret_la_LDFLAGS =		\
 	$(LDFLAGS)
 
 libferret_la_LIBADD =			    \
-	$(top_builddir)/gtk/libgtk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
         $(GTK_DEP_LIBS)  		    \
 	$(GAIL_INET_LIBS)
 endif
@@ -66,8 +66,8 @@ libtestaction_la_SOURCES = 	\
 
 libtestaction_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -78,8 +78,8 @@ libtestbutton_la_SOURCES = 	\
 
 libtestbutton_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -90,8 +90,8 @@ libtestcombo_la_SOURCES = 	\
 
 libtestcombo_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -100,8 +100,8 @@ libtestcomponent_la_SOURCES =	\
 
 libtestcomponent_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -110,8 +110,8 @@ libtestimage_la_SOURCES = 	\
 
 libtestimage_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -122,8 +122,8 @@ libtestmenuitem_la_SOURCES = 	\
 
 libtestmenuitem_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -134,8 +134,8 @@ libtestnotebook_la_SOURCES = 	\
 
 libtestnotebook_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -146,8 +146,8 @@ libtestobject_la_SOURCES = 	\
 
 libtestobject_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -158,8 +158,8 @@ libtestpaned_la_SOURCES = 	\
 
 libtestpaned_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -170,8 +170,8 @@ libtestprops_la_SOURCES = 	\
 
 libtestprops_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -180,8 +180,8 @@ libtestselection_la_SOURCES = \
 
 libtestselection_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -190,8 +190,8 @@ libteststatusbar_la_SOURCES = \
 
 libteststatusbar_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -204,8 +204,8 @@ libtesttable_la_SOURCES = 	\
 
 libtesttable_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -218,8 +218,8 @@ libtesttext_la_SOURCES = 	\
 
 libtesttext_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -230,8 +230,8 @@ libtesttoplevel_la_SOURCES = 	\
 
 libtesttoplevel_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -242,8 +242,8 @@ libtesttreetable_la_SOURCES =	\
 
 libtesttreetable_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
@@ -252,8 +252,8 @@ libtestvalues_la_SOURCES = 	\
 
 libtestvalues_la_LDFLAGS =	\
 	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/libgtk-3.0.la \
-	$(top_builddir)/gdk/libgdk-3.0.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 

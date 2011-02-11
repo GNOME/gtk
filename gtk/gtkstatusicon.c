@@ -38,7 +38,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
-#include "gtktrayicon.h"
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtktooltip.h"
@@ -48,6 +47,7 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "gdk/x11/gdkx.h"
+#include "gtktrayicon.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
@@ -860,6 +860,12 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   gtk_container_add (GTK_CONTAINER (priv->tray_icon), priv->image);
   gtk_widget_show (priv->image);
 
+  /* Force-initialize the symbolic colors */
+  g_object_notify (G_OBJECT (priv->tray_icon), "fg-color");
+  g_object_notify (G_OBJECT (priv->tray_icon), "error-color");
+  g_object_notify (G_OBJECT (priv->tray_icon), "warning-color");
+  g_object_notify (G_OBJECT (priv->tray_icon), "success-color");
+
   g_signal_connect_swapped (priv->image, "size-allocate",
 			    G_CALLBACK (gtk_status_icon_size_allocate), status_icon);
 
@@ -1658,10 +1664,11 @@ static void
 gtk_status_icon_fg_changed (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
-  GdkColor color;
+  GdkColor *color;
 
   g_object_get (priv->tray_icon, "fg-color", &color, NULL);
-  gtk_widget_modify_fg (priv->image, GTK_STATE_NORMAL, &color);
+  gtk_widget_modify_fg (priv->image, GTK_STATE_NORMAL, color);
+  gdk_color_free (color);
 }
 
 static void
@@ -1671,7 +1678,7 @@ gtk_status_icon_color_changed (GtkTrayIcon   *tray,
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
   const gchar *name;
-  GdkColor color;
+  GdkColor *color;
 
   switch (pspec->name[0])
     {
@@ -1695,10 +1702,11 @@ gtk_status_icon_color_changed (GtkTrayIcon   *tray,
 
       g_object_get (priv->tray_icon, pspec->name, &color, NULL);
 
-      rgba.red = color.red / 65535.;
-      rgba.green = color.green / 65535.;
-      rgba.blue = color.blue / 65535.;
+      rgba.red = color->red / 65535.;
+      rgba.green = color->green / 65535.;
+      rgba.blue = color->blue / 65535.;
       rgba.alpha = 1;
+      gdk_color_free (color);
 
       gtk_widget_override_symbolic_color (priv->image, name, &rgba);
     }
@@ -2337,11 +2345,12 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
 /**
  * gtk_status_icon_position_menu:
  * @menu: the #GtkMenu
- * @x: return location for the x position
- * @y: return location for the y position
- * @push_in: whether the first menu item should be offset (pushed in) to be
- *           aligned with the menu popup position (only useful for GtkOptionMenu).
- * @user_data: the status icon to position the menu on
+ * @x: (out): return location for the x position
+ * @y: (out): return location for the y position
+ * @push_in: (out): whether the first menu item should be offset
+ *           (pushed in) to be aligned with the menu popup position
+ *           (only useful for GtkOptionMenu).
+ * @user_data: (type GtkStatusIcon): the status icon to position the menu on
  *
  * Menu positioning function to use with gtk_menu_popup()
  * to position @menu aligned to the status icon @user_data.
@@ -2901,6 +2910,4 @@ gtk_status_icon_set_name (GtkStatusIcon *status_icon,
 #ifdef GDK_WINDOWING_X11
   gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
 #endif
-
-  g_object_notify (G_OBJECT (status_icon), "name");
 }

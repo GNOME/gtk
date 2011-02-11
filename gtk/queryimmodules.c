@@ -88,9 +88,6 @@ query_module (const char *dir, const char *name, GString *contents)
 {
   void          (*list)   (const GtkIMContextInfo ***contexts,
                            guint                    *n_contexts);
-  void          (*init)   (GTypeModule              *type_module);
-  void          (*exit)   (void);
-  GtkIMContext *(*create) (const gchar             *context_id);
 
   gpointer list_ptr;
   gpointer init_ptr;
@@ -125,9 +122,6 @@ query_module (const char *dir, const char *name, GString *contents)
       int i;
 
       list = list_ptr;
-      init = init_ptr;
-      exit = exit_ptr;
-      create = create_ptr;
 
       print_escaped (contents, path);
       g_string_append_c (contents, '\n');

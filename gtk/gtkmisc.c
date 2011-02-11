@@ -239,8 +239,8 @@ gtk_misc_set_alignment (GtkMisc *misc,
 /**
  * gtk_misc_get_alignment:
  * @misc: a #GtkMisc
- * @xalign: (allow-none): location to store X alignment of @misc, or %NULL
- * @yalign: (allow-none): location to store Y alignment of @misc, or %NULL
+ * @xalign: (out) (allow-none): location to store X alignment of @misc, or %NULL
+ * @yalign: (out) (allow-none): location to store Y alignment of @misc, or %NULL
  *
  * Gets the X and Y alignment of the widget within its allocation. 
  * See gtk_misc_set_alignment().
@@ -300,8 +300,10 @@ gtk_misc_set_padding (GtkMisc *misc,
 /**
  * gtk_misc_get_padding:
  * @misc: a #GtkMisc
- * @xpad: (allow-none): location to store padding in the X direction, or %NULL
- * @ypad: (allow-none): location to store padding in the Y direction, or %NULL
+ * @xpad: (out) (allow-none): location to store padding in the X
+ *        direction, or %NULL
+ * @ypad: (out) (allow-none): location to store padding in the Y
+ *        direction, or %NULL
  *
  * Gets the padding in the X and Y directions of the widget. 
  * See gtk_misc_set_padding().

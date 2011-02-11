@@ -228,7 +228,6 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   screen_class->make_display_name = gdk_win32_screen_make_display_name;
   screen_class->get_active_window = gdk_win32_screen_get_active_window;
   screen_class->get_window_stack = gdk_win32_screen_get_window_stack;
-  screen_class->broadcast_client_message = _gdk_win32_screen_broadcast_client_message;
   screen_class->get_setting = _gdk_win32_screen_get_setting;
   screen_class->visual_get_best_depth = _gdk_win32_screen_visual_get_best_depth;
   screen_class->visual_get_best_type = _gdk_win32_screen_visual_get_best_type;

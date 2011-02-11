@@ -1095,14 +1095,13 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
       int name_offset;
       int name_size;
       int image_list_offset;
-      int tmp;
       int i, len;
       GList *list;
 
       g_assert (*offset == ftell (cache));
 
       node->offset = *offset;
-	  
+
       get_single_node_size (node, &node_size, &image_data_size);
       g_assert (node_size % 4 == 0);
       g_assert (image_data_size % 4 == 0);
@@ -1110,16 +1109,16 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
       next_offset = *offset + node_size + image_data_size;
       /* Chain offset */
       if (node->next != NULL)
-	{
-	  if (!write_card32 (cache, next_offset))
-	    return FALSE;
-	}
+        {
+          if (!write_card32 (cache, next_offset))
+            return FALSE;
+        }
       else
-	{
-	  if (!write_card32 (cache, 0xffffffff))
-	    return FALSE;
-	}
-      
+        {
+          if (!write_card32 (cache, 0xffffffff))
+            return FALSE;
+        }
+
       name_size = 0;
       name_offset = find_string (node->name);
       if (name_offset <= 0)
@@ -1129,113 +1128,110 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
           add_string (node->name, name_offset);
         }
       if (!write_card32 (cache, name_offset))
-	return FALSE;
-      
+        return FALSE;
+
       image_list_offset = *offset + 12 + name_size;
       if (!write_card32 (cache, image_list_offset))
-	return FALSE;
-      
+        return FALSE;
+
       /* Icon name */
       if (name_size > 0)
         {
           if (!write_string (cache, node->name))
-	    return FALSE;
+            return FALSE;
         }
 
       /* Image list */
       len = g_list_length (node->image_list);
       if (!write_card32 (cache, len))
-	return FALSE;
-      
-      /* Image data goes right after the image list */
-      tmp = image_list_offset + 4 + len * 8;
+        return FALSE;
 
       list = node->image_list;
       data_offset = image_data_offset;
       for (i = 0; i < len; i++)
-	{
-	  Image *image = list->data;
-	  int image_data_size = get_image_data_size (image);
+        {
+          Image *image = list->data;
+          int image_data_size = get_image_data_size (image);
 
-	  /* Directory index */
-	  if (!write_card16 (cache, image->dir_index))
-	    return FALSE;
-	  
-	  /* Flags */
-	  if (!write_card16 (cache, image->flags))
-	    return FALSE;
+          /* Directory index */
+          if (!write_card16 (cache, image->dir_index))
+            return FALSE;
 
-	  /* Image data offset */
-	  if (image_data_size > 0)
-	    {
-	      if (!write_card32 (cache, data_offset))
-		return FALSE;
-	      data_offset += image_data_size;
-	    }
-	  else 
-	    {
-	      if (!write_card32 (cache, 0))
-		return FALSE;
-	    }
+          /* Flags */
+          if (!write_card16 (cache, image->flags))
+            return FALSE;
 
-	  list = list->next;
-	}
+          /* Image data offset */
+          if (image_data_size > 0)
+            {
+              if (!write_card32 (cache, data_offset))
+                return FALSE;
+              data_offset += image_data_size;
+            }
+          else
+            {
+              if (!write_card32 (cache, 0))
+                return FALSE;
+            }
+
+          list = list->next;
+        }
 
       /* Now write the image data */
       list = node->image_list;
       for (i = 0; i < len; i++, list = list->next)
-	{
-	  Image *image = list->data;
-	  int pixel_data_size = get_image_pixel_data_size (image);
-	  int meta_data_size = get_image_meta_data_size (image);
+        {
+          Image *image = list->data;
+          int pixel_data_size = get_image_pixel_data_size (image);
+          int meta_data_size = get_image_meta_data_size (image);
 
-	  if (get_image_data_size (image) == 0)
-	    continue;
+          if (get_image_data_size (image) == 0)
+            continue;
 
-	  /* Pixel data */
-	  if (pixel_data_size > 0) 
-	    {
-	      image->image_data->offset = image_data_offset + 8;
-	      if (!write_card32 (cache, image->image_data->offset))
-		return FALSE;
-	    }
-	  else
-	    {
-	      if (!write_card32 (cache, (guint32) (image->image_data ? image->image_data->offset : 0)))
-		return FALSE;
-	    }
+          /* Pixel data */
+          if (pixel_data_size > 0)
+            {
+              image->image_data->offset = image_data_offset + 8;
+              if (!write_card32 (cache, image->image_data->offset))
+                return FALSE;
+            }
+          else
+            {
+              if (!write_card32 (cache, (guint32) (image->image_data ? image->image_data->offset : 0)))
+                return FALSE;
+            }
 
-	  if (meta_data_size > 0)
-	    {
-	      image->icon_data->offset = image_data_offset + pixel_data_size + 8;
-	      if (!write_card32 (cache, image->icon_data->offset))
-		return FALSE;
-	    }
-	  else
-	    {
-	      if (!write_card32 (cache, image->icon_data ? image->icon_data->offset : 0))
-		return FALSE;
-	    }
+          if (meta_data_size > 0)
+            {
+              image->icon_data->offset = image_data_offset + pixel_data_size + 8;
+              if (!write_card32 (cache, image->icon_data->offset))
+                return FALSE;
+            }
+          else
+            {
+              if (!write_card32 (cache, image->icon_data ? image->icon_data->offset : 0))
+                return FALSE;
+            }
 
-	  if (pixel_data_size > 0)
-	    {
-	      if (!write_image_data (cache, image->image_data, image->image_data->offset))
-		return FALSE;
-	    }
-	  
-	  if (meta_data_size > 0)
-	    {
+          if (pixel_data_size > 0)
+            {
+              if (!write_image_data (cache, image->image_data, image->image_data->offset))
+                return FALSE;
+            }
+
+          if (meta_data_size > 0)
+            {
               if (!write_icon_data (cache, image->icon_data, image->icon_data->offset))
                 return FALSE;
             }
 
-	  image_data_offset += pixel_data_size + meta_data_size + 8;
-	}
-      
+          image_data_offset += pixel_data_size + meta_data_size + 8;
+        }
+
       *offset = next_offset;
       node = node->next;
     }
-  
+
   return TRUE;
 }
 

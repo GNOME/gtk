@@ -163,13 +163,10 @@ gtk_offscreen_window_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  gint border_width;
 
   bin = GTK_BIN (widget);
 
   gtk_widget_set_realized (widget, TRUE);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   gtk_widget_get_allocation (widget, &allocation);
 

@@ -565,10 +565,10 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 }
 
 /**
- * gtk_clipboard_set_with_data:
+ * gtk_clipboard_set_with_data: (skip)
  * @clipboard: a #GtkClipboard
- * @targets: array containing information about the available forms for the
- *     clipboard data
+ * @targets: (array length=n_targets): array containing information
+ *     about the available forms for the clipboard data
  * @n_targets: number of elements in @targets
  * @get_func: (scope async): function to call to get the actual clipboard data
  * @clear_func: (scope async): when the clipboard contents are set again,
@@ -602,10 +602,10 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
 }
 
 /**
- * gtk_clipboard_set_with_owner:
+ * gtk_clipboard_set_with_owner: (skip)
  * @clipboard: a #GtkClipboard
- * @targets: array containing information about the available forms for
- *     the clipboard data
+ * @targets: (array length=n_targets): array containing information
+ *     about the available forms for the clipboard data
  * @n_targets: number of elements in @targets
  * @get_func: (scope async): function to call to get the actual clipboard data
  * @clear_func: (scope async): when the clipboard contents are set again,
@@ -1405,19 +1405,20 @@ clipboard_rich_text_received_func (GtkClipboard *clipboard,
  * gtk_clipboard_wait_for_rich_text:
  * @clipboard: a #GtkClipboard
  * @buffer: a #GtkTextBuffer
- * @format: return location for the format of the returned data
+ * @format: (out): return location for the format of the returned data
  * @length: return location for the length of the returned data
  *
  * Requests the contents of the clipboard as rich text.  This function
  * waits for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Return value: a newly-allocated binary block of data which must
- *               be freed with g_free(), or %NULL if retrieving
- *               the selection data failed. (This could happen
- *               for various reasons, in particular if the
- *               clipboard was empty or if the contents of the
- *               clipboard could not be converted into text form.)
+ * Return value: (array length=length) (transfer full): a
+ *               newly-allocated binary block of data which must be
+ *               freed with g_free(), or %NULL if retrieving the
+ *               selection data failed. (This could happen for various
+ *               reasons, in particular if the clipboard was empty or
+ *               if the contents of the clipboard could not be
+ *               converted into text form.)
  *
  * Since: 2.10
  **/
@@ -1730,8 +1731,9 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
 /**
  * gtk_clipboard_wait_for_targets
  * @clipboard: a #GtkClipboard
- * @targets: location to store an array of targets. The result
- *           stored here must be freed with g_free().
+ * @targets: (out) (array length=n_targets) (transfer container): location
+ *           to store an array of targets. The result stored here must
+ *           be freed with g_free().
  * @n_targets: location to store number of items in @targets.
  *
  * Returns a list of targets that are present on the clipboard, or %NULL
@@ -1932,9 +1934,9 @@ gtk_clipboard_store_timeout (GtkClipboard *clipboard)
 /**
  * gtk_clipboard_set_can_store:
  * @clipboard: a #GtkClipboard
- * @targets: (allow-none): array containing information about which forms 
- *           should be stored or %NULL to indicate that all forms should 
- *           be stored.
+ * @targets: (allow-none) (array length=n_targets): array containing
+ *           information about which forms should be stored or %NULL
+ *           to indicate that all forms should be stored.
  * @n_targets: number of elements in @targets
  *
  * Hints that the clipboard data should be stored somewhere when the

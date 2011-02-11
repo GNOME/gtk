@@ -232,7 +232,7 @@ static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button,
                                             cairo_t            *cr,
                                             GtkArrowType        arrow_type);
 static gboolean gtk_spin_button_timer          (GtkSpinButton      *spin_button);
-static void gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
+static gboolean gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
                                             GtkSpinButton      *spin_button);
 static gint gtk_spin_button_key_release    (GtkWidget          *widget,
@@ -397,7 +397,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   /**
    * GtkSpinButton::input:
    * @spin_button: the object on which the signal was emitted
-   * @new_value: return location for the new value
+   * @new_value: (out) (type double): return location for the new value
    *
    * The ::input signal can be used to influence the conversion of
    * the users input into a double value. The signal handler is
@@ -921,17 +921,12 @@ gtk_spin_button_draw (GtkWidget      *widget,
 
   is_rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
 
-  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
-
-  gtk_style_context_restore (context);
   cairo_save (cr);
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
+  cairo_restore (cr);
 
   state = gtk_widget_get_state_flags (widget);
-
-  if (gtk_widget_has_focus (widget))
-    state |= GTK_STATE_FLAG_FOCUSED;
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
@@ -953,7 +948,6 @@ gtk_spin_button_draw (GtkWidget      *widget,
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_DOWN);
 
   gtk_style_context_restore (context);
-  cairo_restore (cr);
 
   return FALSE;
 }
@@ -1161,8 +1155,8 @@ gtk_spin_button_grab_notify (GtkWidget *widget,
 
   if (!was_grabbed)
     {
-      gtk_spin_button_stop_spinning (spin);
-      gtk_widget_queue_draw (GTK_WIDGET (spin));
+      if (gtk_spin_button_stop_spinning (spin))
+        gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
 }
 
@@ -1174,8 +1168,8 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
 
   if (!gtk_widget_is_sensitive (widget))
     {
-      gtk_spin_button_stop_spinning (spin);
-      gtk_widget_queue_draw (GTK_WIDGET (spin));
+      if (gtk_spin_button_stop_spinning (spin))
+        gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
 }
 
@@ -1222,26 +1216,28 @@ gtk_spin_button_scroll (GtkWidget      *widget,
   return TRUE;
 }
 
-static void
+static gboolean
 gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 {
   GtkSpinButtonPrivate *priv = spin->priv;
+  gboolean did_spin = FALSE;
 
   if (priv->timer)
     {
       g_source_remove (priv->timer);
       priv->timer = 0;
-      priv->timer_calls = 0;
       priv->need_timer = FALSE;
+
+      did_spin = TRUE;
     }
 
   priv->button = 0;
-  priv->timer = 0;
   priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
   priv->timer_calls = 0;
 
   priv->click_child = NO_ARROW;
-  priv->button = 0;
+
+  return did_spin;
 }
 
 static void
@@ -2133,8 +2129,8 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_increments:
  * @spin_button: a #GtkSpinButton
- * @step: (allow-none): location to store step increment, or %NULL
- * @page: (allow-none): location to store page increment, or %NULL
+ * @step: (out) (allow-none): location to store step increment, or %NULL
+ * @page: (out) (allow-none): location to store page increment, or %NULL
  *
  * Gets the current step and page the increments used by @spin_button. See
  * gtk_spin_button_set_increments().
@@ -2187,8 +2183,8 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_range:
  * @spin_button: a #GtkSpinButton
- * @min: (allow-none): location to store minimum allowed value, or %NULL
- * @max: (allow-none): location to store maximum allowed value, or %NULL
+ * @min: (out) (allow-none): location to store minimum allowed value, or %NULL
+ * @max: (out) (allow-none): location to store maximum allowed value, or %NULL
  *
  * Gets the range allowed for @spin_button.
  * See gtk_spin_button_set_range().

@@ -548,7 +548,7 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
 static GdkPixbuf *
 create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
 			GtkWidget             *widget,
-			GtkStateType           state)
+                        GtkStateFlags          state)
 {
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
   GdkScreen *screen;
@@ -604,11 +604,17 @@ create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
       GtkStyleContext *context;
 
       context = gtk_widget_get_style_context (GTK_WIDGET (widget));
+
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
       pixbuf = gtk_icon_info_load_symbolic_for_context (info,
                                                         context,
                                                         NULL,
                                                         NULL);
+
+      gtk_style_context_restore (context);
       gtk_icon_info_free (info);
+
       return pixbuf;
     }
 
@@ -616,8 +622,8 @@ create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
 }
 
 static GdkPixbuf *
-create_colorized_pixbuf (GdkPixbuf *src, 
-			 GdkColor  *new_color)
+create_colorized_pixbuf (GdkPixbuf *src,
+                         GdkRGBA   *new_color)
 {
   gint i, j;
   gint width, height, has_alpha, src_row_stride, dst_row_stride;
@@ -627,11 +633,11 @@ create_colorized_pixbuf (GdkPixbuf *src,
   guchar *pixsrc;
   guchar *pixdest;
   GdkPixbuf *dest;
-  
-  red_value = new_color->red / 255.0;
-  green_value = new_color->green / 255.0;
-  blue_value = new_color->blue / 255.0;
-  
+
+  red_value = (new_color->red * 65535.0) / 255.0;
+  green_value = (new_color->green * 65535.0) / 255.0;
+  blue_value = (new_color->blue * 65535.0) / 255.0;
+
   dest = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src),
 			 gdk_pixbuf_get_has_alpha (src),
 			 gdk_pixbuf_get_bits_per_sample (src),
@@ -750,6 +756,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkStyleContext *context;
   GdkPixbuf *pixbuf;
   GdkPixbuf *invisible = NULL;
   GdkPixbuf *colorized = NULL;
@@ -794,7 +801,9 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   if (!pixbuf)
     return;
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
+  context = gtk_widget_get_style_context (widget);
+
+  if (!gtk_widget_get_sensitive (widget) ||
       !gtk_cell_renderer_get_sensitive (cell))
     {
       GtkIconSource *source;
@@ -808,43 +817,32 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
       gtk_icon_source_set_size_wildcarded (source, FALSE);
 
-     invisible = gtk_style_render_icon (gtk_widget_get_style (widget),
-					source,
-					gtk_widget_get_direction (widget),
-					GTK_STATE_INSENSITIVE,
-					/* arbitrary */
-					(GtkIconSize)-1,
-					widget,
-					"gtkcellrendererpixbuf");
-     
-     gtk_icon_source_free (source);
-     
-     pixbuf = invisible;
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, GTK_STATE_FLAG_INSENSITIVE);
+
+      pixbuf = invisible = gtk_render_icon_pixbuf (context, source,
+                                                   (GtkIconSize) -1);
+
+      gtk_style_context_restore (context);
+      gtk_icon_source_free (source);
     }
   else if (priv->follow_state && 
 	   (flags & (GTK_CELL_RENDERER_SELECTED|GTK_CELL_RENDERER_PRELIT)) != 0)
     {
-      GtkStateType state;
+      GtkStateFlags state;
 
-      if ((flags & GTK_CELL_RENDERER_SELECTED) != 0)
-	{
-	  if (gtk_widget_has_focus (widget))
-	    state = GTK_STATE_SELECTED;
-	  else
-	    state = GTK_STATE_ACTIVE;
-	}
-      else
-	state = GTK_STATE_PRELIGHT;
-
+      state = gtk_cell_renderer_get_state (cell, widget, flags);
       symbolic = create_symbolic_pixbuf (cellpixbuf, widget, state);
-      if (!symbolic) {
-        colorized = create_colorized_pixbuf (pixbuf,
-                                             &gtk_widget_get_style (widget)->base[state]);
 
-	pixbuf = colorized;
-      } else {
+      if (!symbolic)
+        {
+          GdkRGBA color;
+
+          gtk_style_context_get_background_color (context, state, &color);
+          pixbuf = colorized = create_colorized_pixbuf (pixbuf, &color);
+        }
+      else
         pixbuf = symbolic;
-      }
     }
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, pix_rect.x, pix_rect.y);

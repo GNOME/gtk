@@ -126,13 +126,13 @@ gdk_selection_owner_get (GdkAtom selection)
  * Sends a response to SelectionRequest event.
  */
 void
-gdk_selection_send_notify (GdkNativeWindow requestor,
+gdk_selection_send_notify (GdkWindow      *requestor,
 			   GdkAtom         selection,
 			   GdkAtom         target,
 			   GdkAtom         property,
 			   guint32         time)
 {
-  gdk_selection_send_notify_for_display (gdk_display_get_default (), 
+  gdk_selection_send_notify_for_display (gdk_window_get_display (requestor),
 					 requestor, selection, 
 					 target, property, time);
 }
@@ -213,7 +213,7 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
  */
 void
 gdk_selection_send_notify_for_display (GdkDisplay       *display,
-                                       GdkNativeWindow  requestor,
+                                       GdkWindow        *requestor,
                                        GdkAtom          selection,
                                        GdkAtom          target,
                                        GdkAtom          property,
@@ -226,7 +226,7 @@ gdk_selection_send_notify_for_display (GdkDisplay       *display,
 }
 
 /**
- * gdk_selection_property_get:
+ * gdk_selection_property_get: (skip)
  * @requestor: the window on which the data is stored
  * @data: location to store a pointer to the retrieved data.
        If the retrieval failed, %NULL we be stored here, otherwise, it
@@ -282,10 +282,11 @@ gdk_selection_convert (GdkWindow *requestor,
  * @display:  a #GdkDisplay
  * @encoding: an atom representing the encoding of the text
  * @format:   the format of the property
- * @text:     the text to convert
+ * @text:     (array length=length): the text to convert
  * @length:   the length of @text, in bytes
- * @list:     location to store the list of strings or %NULL. The
- *            list should be freed with g_strfreev().
+ * @list:     (out) (array zero-terminated=1): location to store the list
+ *            of strings or %NULL. The list should be freed with
+ *            g_strfreev().
  *
  * Converts a text property in the given encoding to
  * a list of UTF-8 strings.

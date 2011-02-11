@@ -253,7 +253,6 @@ struct _GtkTextLineDisplay
   gint bottom_margin;
   gint insert_index;		/* Byte index of insert cursor within para or -1 */
 
-  gboolean size_only;
   GtkTextLine *line;
   
   GdkColor *pg_bg_color;
@@ -262,6 +261,9 @@ struct _GtkTextLineDisplay
   guint cursors_invalid : 1;
   guint has_block_cursor : 1;
   guint cursor_at_line_end : 1;
+  guint size_only : 1;
+
+  gpointer padding1;
 };
 
 #ifdef GTK_COMPILATION

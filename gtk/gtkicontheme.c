@@ -688,7 +688,8 @@ gtk_icon_theme_finalize (GObject *object)
 /**
  * gtk_icon_theme_set_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: array of directories that are searched for icon themes
+ * @path: (array length=n_elements) (element-type filename): array of
+ *     directories that are searched for icon themes
  * @n_elements: number of elements in @path.
  * 
  * Sets the search path for the icon theme object. When looking
@@ -737,21 +738,19 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_get_search_path:
  * @icon_theme: a #GtkIconTheme
-
  * @path: (allow-none) (array length=n_elements) (element-type filename) (out):
- *        location to store a list of icon theme path directories or %NULL .
- *        The stored value should be freed with g_strfreev().
- * @n_elements: location to store number of elements
- *              in @path, or %NULL
- * 
+ *     location to store a list of icon theme path directories or %NULL.
+ *     The stored value should be freed with g_strfreev().
+ * @n_elements: location to store number of elements in @path, or %NULL
+ *
  * Gets the current search path. See gtk_icon_theme_set_search_path().
  *
  * Since: 2.4
- **/
+ */
 void
-gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
-				gchar            **path[],
-				gint              *n_elements)
+gtk_icon_theme_get_search_path (GtkIconTheme  *icon_theme,
+                                gchar        **path[],
+                                gint          *n_elements)
 {
   GtkIconThemePrivate *priv;
   int i;
@@ -1208,23 +1207,6 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
       if (was_valid)
 	{
 	  g_signal_emit (icon_theme, signal_changed, 0);
-
-	  if (!priv->check_reload && priv->screen)
-	    {	  
-	      static GdkAtom atom_iconthemes = GDK_NONE;
-	      GdkEvent *event = gdk_event_new (GDK_CLIENT_EVENT);
-	      int i;
-
-	      if (!atom_iconthemes)
-		atom_iconthemes = gdk_atom_intern_static_string ("_GTK_LOAD_ICONTHEMES");
-
-	      for (i = 0; i < 5; i++)
-		event->client.data.l[i] = 0;
-	      event->client.data_format = 32;
-	      event->client.message_type = atom_iconthemes;
-
-	      gdk_screen_broadcast_client_message (priv->screen, event);
-	    }
 	}
     }
 
@@ -1440,7 +1422,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 /**
  * gtk_icon_theme_choose_icon:
  * @icon_theme: a #GtkIconTheme
- * @icon_names: %NULL-terminated array of icon names to lookup
+ * @icon_names: (array zero-terminated=1): %NULL-terminated array of
+ *     icon names to lookup
  * @size: desired icon size
  * @flags: flags modifying the behavior of the icon lookup
  * 
@@ -1616,9 +1599,9 @@ add_size (gpointer  key,
  * that the icon is available in a scalable format. The array 
  * is zero-terminated.
  * 
- * Return value: An newly allocated array describing the sizes at
- * which the icon is available. The array should be freed with g_free()
- * when it is no longer needed.
+ * Return value: (array zero-terminated=1): An newly allocated array
+ * describing the sizes at which the icon is available. The array
+ * should be freed with g_free() when it is no longer needed.
  *
  * Since: 2.6
  **/
@@ -1731,10 +1714,10 @@ add_key_to_list (gpointer  key,
  * but will typically include such values as "Applications" and
  * "MimeTypes".
  *
- * Return value: (element-type utf8) (transfer none): a #GList list holding the names of all the
- *  icons in the theme. You must first free each element
- *  in the list with g_free(), then free the list itself
- *  with g_list_free().
+ * Return value: (element-type utf8) (transfer full): a #GList list
+ *  holding the names of all the icons in the theme. You must first
+ *  free each element in the list with g_free(), then free the list
+ *  itself with g_list_free().
  *
  * Since: 2.4
  **/
@@ -3072,7 +3055,7 @@ gdk_color_to_css (GdkColor *color)
 static gchar *
 gdk_rgba_to_css (GdkRGBA *color)
 {
-  /* drop a for now, since librsvg does not understand rgba() */
+  /* drop alpha for now, since librsvg does not understand rgba() */
   return g_strdup_printf ("rgb(%d,%d,%d)",
                           (gint)(color->red * 255),
                           (gint)(color->green * 255),
@@ -3164,8 +3147,9 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
  *     of the icon or %NULL to use the default color
  * @error_color: (allow-none): a #GdkRGBA representing the error color
  *     of the icon or %NULL to use the default color (allow-none)
- * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
- *     was a symbolic one and whether the @fg color was applied to it.
+ * @was_symbolic: (out) (allow-none): a #gboolean, returns whether the
+ *     loaded icon was a symbolic one and whether the @fg color was
+ *     applied to it.
  * @error: (allow-none): location to store error information on failure,
  *     or %NULL.
  *
@@ -3218,18 +3202,18 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
   if (was_symbolic)
     *was_symbolic = TRUE;
 
-  css_fg = gdk_rgba_to_string (fg);
+  css_fg = gdk_rgba_to_css (fg);
 
   css_success = css_warning = css_error = NULL;
 
   if (warning_color)
-    css_warning = gdk_rgba_to_string (warning_color);
+    css_warning = gdk_rgba_to_css (warning_color);
 
   if (error_color)
-    css_error = gdk_rgba_to_string (error_color);
+    css_error = gdk_rgba_to_css (error_color);
 
   if (success_color)
-    css_success = gdk_rgba_to_string (success_color);
+    css_success = gdk_rgba_to_css (success_color);
 
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
                                                   css_fg, css_success,
@@ -3247,8 +3231,9 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
  * gtk_icon_info_load_symbolic_for_context:
  * @icon_info: a #GtkIconInfo
  * @context: a #GtkStyleContext
- * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
- *     was a symbolic one and whether the @fg color was applied to it.
+ * @was_symbolic: (out) (allow-none): a #gboolean, returns whether the
+ *     loaded icon was a symbolic one and whether the @fg color was
+ *     applied to it.
  * @error: (allow-none): location to store error information on failure,
  *     or %NULL.
  *
@@ -3328,8 +3313,9 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
  * @icon_info: a #GtkIconInfo
  * @style: a #GtkStyle to take the colors from
  * @state: the widget state to use for colors
- * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
- *     was a symbolic one and whether the @fg color was applied to it.
+ * @was_symbolic: (out) (allow-none): a #gboolean, returns whether the
+ *     loaded icon was a symbolic one and whether the @fg color was
+ *     applied to it.
  * @error: (allow-none): location to store error information on failure,
  *     or %NULL.
  *
@@ -3463,7 +3449,7 @@ icon_info_scale_point (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_get_embedded_rect:
  * @icon_info: a #GtkIconInfo
- * @rectangle: #GdkRectangle in which to store embedded
+ * @rectangle: (out): #GdkRectangle in which to store embedded
  *   rectangle coordinates; coordinates are only stored
  *   when this function returns %TRUE.
  *

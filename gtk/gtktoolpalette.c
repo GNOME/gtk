@@ -29,6 +29,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
+#include "gtkorientableprivate.h"
 #include "gtkintl.h"
 
 #define DEFAULT_ICON_SIZE       GTK_ICON_SIZE_SMALL_TOOLBAR
@@ -830,15 +831,21 @@ gtk_tool_palette_forall (GtkContainer *container,
                          gpointer      callback_data)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (container);
-  guint i;
-
+  guint i, len;
 
   for (i = 0; i < palette->priv->groups->len; ++i)
     {
       GtkToolItemGroupInfo *info = g_ptr_array_index (palette->priv->groups, i);
+
+      len = palette->priv->groups->len;
+
       if (info->widget)
         callback (GTK_WIDGET (info->widget),
                   callback_data);
+
+      /* At destroy time, 'callback' results in removing a widget,
+       * here we just reset the current index to account for the removed widget. */
+      i -= (len - palette->priv->groups->len);
     }
 }
 

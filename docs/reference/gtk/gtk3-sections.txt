@@ -2058,6 +2058,8 @@ gtk_menu_item_deselect
 gtk_menu_item_activate
 gtk_menu_item_toggle_size_request
 gtk_menu_item_toggle_size_allocate
+gtk_menu_item_get_reserve_indicator
+gtk_menu_item_set_reserve_indicator
 <SUBSECTION Standard>
 GTK_MENU_ITEM
 GTK_IS_MENU_ITEM
@@ -3448,6 +3450,7 @@ gtk_text_view_move_mark_onscreen
 gtk_text_view_place_cursor_onscreen
 gtk_text_view_get_visible_rect
 gtk_text_view_get_iter_location
+gtk_text_view_get_cursor_locations
 gtk_text_view_get_line_at_y
 gtk_text_view_get_line_yrange
 gtk_text_view_get_iter_at_location
@@ -4201,6 +4204,7 @@ gtk_tree_view_column_set_clickable
 gtk_tree_view_column_get_clickable
 gtk_tree_view_column_set_widget
 gtk_tree_view_column_get_widget
+gtk_tree_view_column_get_button
 gtk_tree_view_column_set_alignment
 gtk_tree_view_column_get_alignment
 gtk_tree_view_column_set_reorderable
@@ -4285,6 +4289,7 @@ gtk_tree_view_row_expanded
 gtk_tree_view_set_reorderable
 gtk_tree_view_get_reorderable
 gtk_tree_view_get_path_at_pos
+gtk_tree_view_is_blank_at_pos
 gtk_tree_view_get_cell_area
 gtk_tree_view_get_background_area
 gtk_tree_view_get_visible_rect
@@ -4425,8 +4430,6 @@ gtk_cell_area_foreach
 gtk_cell_area_foreach_alloc
 gtk_cell_area_event
 gtk_cell_area_render
-gtk_cell_area_set_style_detail
-gtk_cell_area_get_style_detail
 gtk_cell_area_get_cell_allocation
 gtk_cell_area_get_cell_at_position
 gtk_cell_area_create_context
@@ -4556,6 +4559,7 @@ gtk_cell_renderer_get_alignment
 gtk_cell_renderer_set_alignment
 gtk_cell_renderer_get_padding
 gtk_cell_renderer_set_padding
+gtk_cell_renderer_get_state
 gtk_cell_renderer_is_activatable
 
 <SUBSECTION Width-for-height>
@@ -5749,6 +5753,7 @@ gtk_style_new
 gtk_style_copy
 gtk_style_attach
 gtk_style_detach
+gtk_style_get_context
 gtk_style_set_background
 gtk_style_apply_default_background
 gtk_style_lookup_color
@@ -6009,6 +6014,7 @@ gtk_bindings_activate
 gtk_bindings_activate_event
 gtk_binding_set_activate
 gtk_binding_entry_add_signal
+gtk_binding_entry_add_signal_from_string
 gtk_binding_entry_skip
 gtk_binding_entry_remove
 gtk_binding_set_add_path
@@ -6959,6 +6965,8 @@ gtk_app_chooser_button_append_separator
 gtk_app_chooser_button_set_active_custom_item
 gtk_app_chooser_button_get_show_dialog_item
 gtk_app_chooser_button_set_show_dialog_item
+gtk_app_chooser_button_get_heading
+gtk_app_chooser_button_set_heading
 
 <SUBSECTION Standard>
 GtkAppChooserButtonClass
@@ -6981,6 +6989,8 @@ GtkAppChooserDialog
 gtk_app_chooser_dialog_new
 gtk_app_chooser_dialog_new_for_content_type
 gtk_app_chooser_dialog_get_widget
+gtk_app_chooser_dialog_set_heading
+gtk_app_chooser_dialog_get_heading
 
 <SUBSECTION Standard>
 GtkAppChooserDialogClass

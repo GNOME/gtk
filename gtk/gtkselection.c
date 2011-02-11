@@ -216,12 +216,12 @@ static const char gtk_selection_handler_key[] = "gtk-selection-handlers";
 
 /**
  * gtk_target_list_new:
- * @targets: Pointer to an array of #GtkTargetEntry
- * @ntargets:  number of entries in @targets.
+ * @targets: (array length=ntargets): Pointer to an array of #GtkTargetEntry
+ * @ntargets: number of entries in @targets.
  * 
  * Creates a new #GtkTargetList from an array of #GtkTargetEntry.
  * 
- * Return value: the new #GtkTargetList.
+ * Return value: (transfer full): the new #GtkTargetList.
  **/
 GtkTargetList *
 gtk_target_list_new (const GtkTargetEntry *targets,
@@ -499,7 +499,7 @@ gtk_target_list_add_uri_targets (GtkTargetList *list,
 /**
  * gtk_target_list_add_table:
  * @list: a #GtkTargetList
- * @targets: the table of #GtkTargetEntry
+ * @targets: (array length=ntargets): the table of #GtkTargetEntry
  * @ntargets: number of targets in the table
  * 
  * Prepends a table of #GtkTargetEntry to a target list.
@@ -598,14 +598,14 @@ gtk_target_list_find (GtkTargetList *list,
 /**
  * gtk_target_table_new_from_list:
  * @list: a #GtkTargetList
- * @n_targets: return location for the number ot targets in the table
+ * @n_targets: (out): return location for the number ot targets in the table
  *
  * This function creates an #GtkTargetEntry array that contains the
  * same targets as the passed %list. The returned table is newly
  * allocated and should be freed using gtk_target_table_free() when no
  * longer needed.
  *
- * Return value: the new table.
+ * Return value: (array length=n_targets) (transfer full): the new table.
  *
  * Since: 2.10
  **/
@@ -639,7 +639,7 @@ gtk_target_table_new_from_list (GtkTargetList *list,
 
 /**
  * gtk_target_table_free:
- * @targets: a #GtkTargetEntry array
+ * @targets: (array length=n_targets): a #GtkTargetEntry array
  * @n_targets: the number of entries in the array
  *
  * This function frees a target table as returned by
@@ -931,7 +931,7 @@ gtk_selection_add_target (GtkWidget	    *widget,
  * gtk_selection_add_targets:
  * @widget: a #GtkWidget
  * @selection: the selection
- * @targets: a table of targets to add
+ * @targets: (array length=ntargets): a table of targets to add
  * @ntargets:  number of entries in @targets
  * 
  * Prepends a table of targets to the list of supported targets
@@ -1146,7 +1146,7 @@ gtk_selection_convert (GtkWidget *widget,
  *
  * Retrieves the selection #GdkAtom of the selection data.
  *
- * Returns: the selection #GdkAtom of the selection data.
+ * Returns: (transfer none): the selection #GdkAtom of the selection data.
  *
  * Since: 2.16
  **/
@@ -1164,7 +1164,7 @@ gtk_selection_data_get_selection (const GtkSelectionData *selection_data)
  *
  * Retrieves the target of the selection.
  *
- * Returns:  the target of the selection.
+ * Returns: (transfer none): the target of the selection.
  *
  * Since: 2.14
  **/
@@ -1182,7 +1182,7 @@ gtk_selection_data_get_target (const GtkSelectionData *selection_data)
  *
  * Retrieves the data type of the selection.
  *
- * Returns:  the data type of the selection.
+ * Returns: (transfer none): the data type of the selection.
  *
  * Since: 2.14
  **/
@@ -1213,7 +1213,7 @@ gtk_selection_data_get_format (const GtkSelectionData *selection_data)
 }
 
 /**
- * gtk_selection_data_get_data:
+ * gtk_selection_data_get_data: (skip)
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *
  * Retrieves the raw data of the selection.
@@ -1251,7 +1251,7 @@ gtk_selection_data_get_length (const GtkSelectionData *selection_data)
 /**
  * gtk_selection_data_get_data_with_length:
  * @selection_data: a pointer to a #GtkSelectionData structure
- * @length: return location for length of the data segment
+ * @length: (out): return location for length of the data segment
  *
  * Retrieves the raw data of the selection along with its length.
  *
@@ -1294,7 +1294,7 @@ gtk_selection_data_get_display (const GtkSelectionData *selection_data)
  * @selection_data: a pointer to a #GtkSelectionData structure.
  * @type: the type of selection data
  * @format: format (number of bits in a unit)
- * @data: (array) (element-type guchar): pointer to the data (will be copied)
+ * @data: (array length=length): pointer to the data (will be copied)
  * @length: length of the data
  * 
  * Stores new data into a #GtkSelectionData object. Should
@@ -1596,9 +1596,9 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
  * 
  * Gets the contents of the selection data as a UTF-8 string.
  * 
- * Return value: if the selection data contained a recognized
- *   text type and it could be converted to UTF-8, a newly allocated
- *   string containing the converted text, otherwise %NULL.
+ * Return value: (type utf8): if the selection data contained a
+ *   recognized text type and it could be converted to UTF-8, a newly
+ *   allocated string containing the converted text, otherwise %NULL.
  *   If the result is non-%NULL it must be freed with g_free().
  **/
 guchar *
@@ -1752,7 +1752,8 @@ gtk_selection_data_get_pixbuf (const GtkSelectionData *selection_data)
 /**
  * gtk_selection_data_set_uris:
  * @selection_data: a #GtkSelectionData
- * @uris: a %NULL-terminated array of strings holding URIs
+ * @uris: (array zero-terminated=1): a %NULL-terminated array of
+ *     strings holding URIs
  * 
  * Sets the contents of the selection from a list of URIs.
  * The string is converted to the form determined by
@@ -1852,8 +1853,9 @@ gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
 /**
  * gtk_selection_data_get_targets:
  * @selection_data: a #GtkSelectionData object
- * @targets: location to store an array of targets. The result
- *           stored here must be freed with g_free().
+ * @targets: (out) (array length=n_atoms) (transfer container):
+ *           location to store an array of targets. The result stored
+ *           here must be freed with g_free().
  * @n_atoms: location to store number of items in @targets.
  * 
  * Gets the contents of @selection_data as an array of targets.
@@ -1895,7 +1897,7 @@ gtk_selection_data_get_targets (const GtkSelectionData  *selection_data,
 
 /**
  * gtk_targets_include_text:
- * @targets: an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
  * @n_targets: the length of @targets
  * 
  * Determines if any of the targets in @targets can be used to
@@ -1940,7 +1942,7 @@ gtk_targets_include_text (GdkAtom *targets,
 
 /**
  * gtk_targets_include_rich_text:
- * @targets: an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
  * @n_targets: the length of @targets
  * @buffer: a #GtkTextBuffer
  *
@@ -2058,7 +2060,7 @@ gtk_selection_data_targets_include_rich_text (const GtkSelectionData *selection_
 
 /**
  * gtk_targets_include_image:
- * @targets: an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
  * @n_targets: the length of @targets
  * @writable: whether to accept only targets for which GTK+ knows
  *   how to convert a pixbuf into the format
@@ -2140,7 +2142,7 @@ gtk_selection_data_targets_include_image (const GtkSelectionData *selection_data
 
 /**
  * gtk_targets_include_uri:
- * @targets: an array of #GdkAtom<!-- -->s
+ * @targets: (array length=n_targets): an array of #GdkAtom<!-- -->s
  * @n_targets: the length of @targets
  * 
  * Determines if any of the targets in @targets can be used to
@@ -2322,15 +2324,7 @@ _gtk_selection_request (GtkWidget *widget,
 
   info->selection = event->selection;
   info->num_incrs = 0;
-
-  /* Create GdkWindow structure for the requestor */
-
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
-    info->requestor = gdk_x11_window_foreign_new_for_display (display, event->requestor);
-  else
-#endif
-    info->requestor = NULL;
+  info->requestor = g_object_ref (event->requestor);
 
   /* Determine conversions we need to perform */
   if (event->target == gtk_selection_atoms[MULTIPLE])

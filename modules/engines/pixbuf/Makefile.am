@@ -12,9 +12,9 @@ INCLUDES = \
 	$(GTK_DEP_CFLAGS)
 
 LDADDS = \
-	$(GTK_DEP_LIBS)							\
-	$(top_builddir)/gdk/libgdk-3.0.la				\
-	$(top_builddir)/gtk/libgtk-3.0.la
+	$(GTK_DEP_LIBS)				\
+	$(top_builddir)/gdk/libgdk-3.la		\
+	$(top_builddir)/gtk/libgtk-3.la
 
 enginedir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/engines
 

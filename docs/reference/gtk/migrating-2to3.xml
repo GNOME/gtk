@@ -144,8 +144,8 @@
         GAppLaunchContext *context;
         GError *error = NULL;
 
-        info = g_desktop_app_info_new ("epiphany.desktop");
-        context = gdk_display_get_app_launch_context (display);
+        info = (GAppInfo*) g_desktop_app_info_new ("epiphany.desktop");
+        context = (GAppLaunchContext*) gdk_display_get_app_launch_context (display);
         g_app_info_launch (info, NULL, context, &amp;error);
 
         if (error)
@@ -157,6 +157,10 @@
         g_object_unref (info);
         g_object_unref (context);
         </programlisting></informalexample>
+        Remember that you have to include
+        <filename>gio/gdesktopappinfo.h</filename>
+        and use the <filename>gio-unix-2.0</filename> pkg-config file
+        when using g_desktop_app_info_new().
         </listitem>
         <listitem>If you are launching a custom commandline, you can
         still use g_app_info_launch() with a GAppInfo that is constructed
@@ -606,6 +610,7 @@ gtk_fixed_get_preferred_height (GtkWidget *widget,
       find-and-replace task. Please refer to the following table:
       <table>
         <tgroup cols="2">
+          <title>GdkRegion to cairo_region_t</title>
           <thead>
             <row><entry>GDK</entry><entry>cairo</entry></row>
           </thead>
@@ -697,7 +702,7 @@ g_object_unref (pixbuf);
   </section>
 
   <section>
-    <title>Replace colormaps by visuals</title>
+    <title>Replace GdkColormap by GdkVisual</title>
     <para>
       For drawing with cairo, it is not necessary to allocate colors, and
       a #GdkVisual provides enough information for cairo to handle colors
@@ -747,6 +752,105 @@ on_alpha_screen_changed (GtkWindow *window,
   </section>
 
   <section>
+    <title>GdkDrawable is gone</title>
+
+    <para>
+      #GdkDrawable has been removed in GTK+ 3, together with #GdkPixmap
+      and #GdkImage. The only remaining drawable class is #GdkWindow.
+      For dealing with image data, you should use cairo surfaces or
+      #GdkPixbufs.
+    </para>
+
+    <para>
+      GdkDrawable functions that are useful with windows have been replaced
+      by corresponding GdkWindow functions:
+      <table>
+        <title>GdkDrawable to GdkWindow</title>
+        <tgroup cols="2">
+          <thead>
+            <row><entry>GDK 2.x</entry><entry>GDK 3</entry></row>
+          </thead>
+          <tbody>
+            <row><entry>gdk_drawable_get_visual()</entry><entry>gdk_window_get_visual()</entry></row>
+            <row><entry>gdk_drawable_get_size()</entry><entry>gdk_window_get_width()
+                                                              gdk_window_get_height()</entry></row>
+            <row><entry>gdk_pixbuf_get_from_drawable()</entry><entry>gdk_pixbuf_get_from_window()</entry></row>
+            <row><entry>gdk_drawable_get_clip_region()</entry><entry>gdk_window_get_clip_region()</entry></row>
+            <row><entry>gdk_drawable_get_visible_region()</entry><entry>gdk_window_get_visible_region()</entry></row>
+          </tbody>
+        </tgroup>
+      </table>
+    </para>
+  </section>
+
+  <section>
+    <title>Event filtering</title>
+
+    <para>
+      If your application uses the low-level event filtering facilities in GDK,
+      there are some changes you need to be aware of.
+    </para>
+
+    <para>
+      The special-purpose GdkEventClient events and the gdk_add_client_message_filter() and gdk_display_add_client_message_filter() functions have been
+      removed. Receiving X11 ClientMessage events is still possible, using
+      the general gdk_window_add_filter() API. A client message filter like
+<informalexample><programlisting>
+static GdkFilterReturn
+message_filter (GdkXEvent *xevent, GdkEvent *event, gpointer data)
+{
+  XClientMessageEvent *evt = (XClientMessageEvent *)xevent;
+
+  /* do something with evt ... */
+}
+
+ ...
+
+message_type = gdk_atom_intern ("MANAGER", FALSE);
+gdk_display_add_client_message_filter (display, message_type, message_filter, NULL);
+</programlisting></informalexample>
+    then looks like this:
+    <informalexample><programlisting>
+static GdkFilterReturn
+event_filter (GdkXEvent *xevent, GdkEvent *event, gpointer data)
+{
+  XClientMessageEvent *evt;
+  GdkAtom message_type;
+
+  if (((XEvent *)xevent)->type != ClientMessage)
+    return GDK_FILTER_CONTINUE;
+
+  evt = (XClientMessageEvent *)xevent;
+  message_type = XInternAtom (evt->display, "MANAGER", FALSE);
+
+  if (evt->message_type != message_type)
+    return GDK_FILTER_CONTINUE;
+
+  /* do something with evt ... */
+}
+
+ ...
+
+gdk_window_add_filter (NULL, message_filter, NULL);
+</programlisting></informalexample>
+      One advantage of using an event filter is that you can actually
+      remove the filter when you don't need it anymore, using
+      gdk_window_remove_filter().
+    </para>
+
+    <para>
+      The other difference to be aware of when working with event filters
+      in GTK+ 3 is that GDK now uses XI2 by default when available. That
+      means that your application does not receive core X11 key or button
+      events. Instead, all input events are delivered as XIDeviceEvents.
+      As a short-term workaround for this, you can force your application
+      to not use XI2, with gdk_disable_multidevice(). In the long term,
+      you probably want to rewrite your event filter to deal with
+      XIDeviceEvents.
+    </para>
+  </section>
+
+  <section>
     <title>Backend-specific code</title>
     <para>
       In GTK+ 2.x, GDK could only be compiled for one backend at a time,
@@ -786,6 +890,17 @@ on_alpha_screen_changed (GtkWindow *window,
          g_warning ("Unsupported GDK backend");
        }
       </programlisting></informalexample>
+    </para>
+  </section>
+
+  <section>
+    <title>GtkPlug and GtkSocket</title>
+
+    <para>
+      The #GtkPlug and #GtkSocket widgets are now X11-specific, and you
+      have to include the <filename>&lt;gtk/gtkx.h&gt;</filename> header
+      to use them. The previous section about proper handling of
+      backend-specific code applies, if you care about other backends.
     </para>
   </section>
 
@@ -917,7 +1032,7 @@ gtk_arrow_draw (GtkWidget *widget,
   </section>
 
   <section>
-    <title>Check your expand flags</title>
+    <title>Check your expand and fill flags</title>
 
     <para>
       The behaviour of expanding widgets has changed slightly in GTK+ 3,
@@ -927,6 +1042,11 @@ gtk_arrow_draw (GtkWidget *widget,
       setting the container explicity as not expanding will stop the
       expand flag of the child from being inherited. See
       gtk_widget_set_hexpand() and gtk_widget_set_vexpand().
+    </para>
+    <para>
+      If you experience sizing problems with widgets in ported code,
+      carefully check the #GtkBox::expand and #GtkBox::fill flags of your
+      boxes.
     </para>
   </section>
 
@@ -974,6 +1094,18 @@ gtk_arrow_draw (GtkWidget *widget,
       In the unlikely case that you have a non-widget class that is derived
       from GtkObject and makes use of the destroy functionality, you have
       to implement ::destroy yourself.
+    </para>
+  </section>
+
+  <section>
+    <title>GtkEntryCompletion signal parameters</title>
+
+    <para>
+      The #GtkEntryCompletion::match-selected and
+      #GtkEntryCompletion::cursor-on-match signals were erroneously
+      given the internal filter model instead of the users model.
+      This oversight has been fixed in GTK+ 3; if you have handlers
+      for these signals, they will likely need slight adjustments.
     </para>
   </section>
 

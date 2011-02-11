@@ -62,6 +62,7 @@
 struct _GtkAppChooserDialogPrivate {
   char *content_type;
   GFile *gfile;
+  char *heading;
 
   GtkWidget *label;
   GtkWidget *button;
@@ -80,7 +81,7 @@ struct _GtkAppChooserDialogPrivate {
 enum {
   PROP_GFILE = 1,
   PROP_CONTENT_TYPE,
-  N_PROPERTIES
+  PROP_HEADING
 };
 
 static void gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface);
@@ -348,10 +349,13 @@ set_dialog_properties (GtkAppChooserDialog *self)
 
   font_desc = pango_font_description_new ();
   pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
-  gtk_widget_modify_font (self->priv->label, font_desc);
+  gtk_widget_override_font (self->priv->label, font_desc);
   pango_font_description_free (font_desc);
 
-  gtk_label_set_markup (GTK_LABEL (self->priv->label), label);
+  if (self->priv->heading != NULL)
+    gtk_label_set_markup (GTK_LABEL (self->priv->label), self->priv->heading);
+  else
+    gtk_label_set_markup (GTK_LABEL (self->priv->label), label);
 
   default_text = g_strdup_printf ("<big><b>%s</b></big>\n%s",
                                   string,
@@ -394,7 +398,7 @@ widget_notify_for_button_cb (GObject    *source,
   GtkAppChooserWidget *widget = GTK_APP_CHOOSER_WIDGET (source);
   gboolean should_hide;
 
-  should_hide = gtk_app_chooser_widget_get_show_all (widget) ||
+  should_hide = gtk_app_chooser_widget_get_show_other (widget) ||
     self->priv->show_more_clicked;
 
   if (should_hide)
@@ -485,7 +489,7 @@ build_dialog_ui (GtkAppChooserDialog *self)
                     G_CALLBACK (widget_application_selected_cb), self);
   g_signal_connect (self->priv->app_chooser_widget, "application-activated",
                     G_CALLBACK (widget_application_activated_cb), self);
-  g_signal_connect (self->priv->app_chooser_widget, "notify::show-all",
+  g_signal_connect (self->priv->app_chooser_widget, "notify::show-other",
                     G_CALLBACK (widget_notify_for_button_cb), self);
   g_signal_connect (self->priv->app_chooser_widget, "populate-popup",
                     G_CALLBACK (widget_populate_popup_cb), self);
@@ -508,7 +512,7 @@ build_dialog_ui (GtkAppChooserDialog *self)
   /* Create a custom stock icon */
   self->priv->button = gtk_button_new ();
 
-  label = gtk_label_new_with_mnemonic (_("_Open"));
+  label = gtk_label_new_with_mnemonic (_("_Select"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (self->priv->button));
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
@@ -621,6 +625,9 @@ gtk_app_chooser_dialog_set_property (GObject      *object,
       if (self->priv->content_type == NULL)
         self->priv->content_type = g_value_dup_string (value);
       break;
+    case PROP_HEADING:
+      gtk_app_chooser_dialog_set_heading (self, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -643,6 +650,9 @@ gtk_app_chooser_dialog_get_property (GObject    *object,
       break;
     case PROP_CONTENT_TYPE:
       g_value_set_string (value, self->priv->content_type);
+      break;
+    case PROP_HEADING:
+      g_value_set_string (value, self->priv->heading);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -686,6 +696,20 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
                                G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
                                G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (gobject_class, PROP_GFILE, pspec);
+
+  /**
+   * GtkAppChooserDialog:heading:
+   *
+   * The text to show at the top of the dialog.
+   * The string may contain Pango markup.
+   */
+  pspec = g_param_spec_string ("heading",
+                               P_("Heading"),
+                               P_("The text to show at the top of the dialog"),
+                               NULL,
+                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
+
 
   g_type_class_add_private (klass, sizeof (GtkAppChooserDialogPrivate));
 }
@@ -796,4 +820,44 @@ gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
   g_return_val_if_fail (GTK_IS_APP_CHOOSER_DIALOG (self), NULL);
 
   return self->priv->app_chooser_widget;
+}
+
+/**
+ * gtk_app_chooser_dialog_set_heading:
+ * @self: a #GtkAppChooserDialog
+ * @heading: a string containing Pango markup
+ *
+ * Sets the text to display at the top of the dialog.
+ * If the heading is not set, the dialog displays a default text.
+ */
+void
+gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
+                                    const gchar         *heading)
+{
+  g_return_if_fail (GTK_IS_APP_CHOOSER_DIALOG (self));
+
+  g_free (self->priv->heading);
+  self->priv->heading = g_strdup (heading);
+
+  if (self->priv->label && self->priv->heading)
+    gtk_label_set_markup (GTK_LABEL (self->priv->label), self->priv->heading);
+
+  g_object_notify (G_OBJECT (self), "heading");
+}
+
+/**
+ * gtk_app_chooser_dialog_get_heading:
+ * @self: a #GtkAppChooserDialog
+ *
+ * Returns the text to display at the top of the dialog.
+ *
+ * Returns: the text to display at the top of the dialog, or %NULL, in which
+ *     case a default text is displayed
+ */
+const gchar *
+gtk_app_chooser_dialog_get_heading (GtkAppChooserDialog *self)
+{
+  g_return_val_if_fail (GTK_IS_APP_CHOOSER_DIALOG (self), NULL);
+
+  return self->priv->heading;
 }

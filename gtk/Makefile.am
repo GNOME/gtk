@@ -16,8 +16,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = theme-bits . tests
-DIST_SUBDIRS = theme-bits tests
+SUBDIRS = . tests
 
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
@@ -109,7 +108,7 @@ endif
 
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
-	$(top_builddir)/gdk/libgdk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)
 deps =
 
@@ -144,6 +143,7 @@ endif
 # by configure)
 gtk_public_h_sources = 		\
 	gtk.h			\
+	gtkx.h			\
 	gtkaboutdialog.h	\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
@@ -174,7 +174,6 @@ gtk_public_h_sources = 		\
 	gtkcellarea.h		\
 	gtkcellareacontext.h	\
 	gtkcellareabox.h	\
-	gtkcellareaboxcontextprivate.h	\
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
@@ -381,8 +380,11 @@ gtk_private_h_sources =		\
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
 	gtkappchooseronline.h	\
+	gtkbindingsprivate.h	\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
+	gtkcellareaboxcontextprivate.h	\
+	gtkcssproviderprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
@@ -394,6 +396,7 @@ gtk_private_h_sources =		\
 	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
 	gtkiconcache.h		\
+	gtkimageprivate.h	\
 	gtkimcontextsimpleseqs.h \
 	gtkintl.h		\
 	gtkkeyhash.h		\
@@ -405,9 +408,9 @@ gtk_private_h_sources =		\
 	gtkmodifierstyle.h	\
 	gtkmountoperationprivate.h \
 	gtknumerableiconprivate.h \
+	gtkorientableprivate.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
-	gtkplugprivate.h	\
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
 	gtkprivate.h		\
@@ -416,12 +419,14 @@ gtk_private_h_sources =		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h	\
+	gtkscaleprivate.h	\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
 	gtkselectionprivate.h	\
 	gtksettingsprivate.h	\
 	gtksizegroup-private.h	\
 	gtksocketprivate.h	\
+	gtkstylecontextprivate.h \
 	gtktextbtree.h		\
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
@@ -577,7 +582,6 @@ gtk_base_c_sources = 		\
 	gtkpango.c		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
-	gtkplug.c		\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
 	gtkprintoperationpreview.c \
@@ -613,7 +617,6 @@ gtk_base_c_sources = 		\
 	gtksizegroup.c		\
 	gtksizerequest.c	\
 	gtkshow.c		\
-	gtksocket.c		\
 	gtkspinbutton.c		\
 	gtkspinner.c		\
 	gtkstatusbar.c		\
@@ -723,25 +726,19 @@ gtk_c_sources += $(gtk_os_win32_c_sources)
 endif
 
 gtk_use_x11_c_sources = 	\
-	gtkplug-x11.c		\
-	gtksocket-x11.c		\
+	gtkplug.c		\
+	gtksocket.c		\
 	gtkxembed.c		\
 	gtktrayicon-x11.c	\
 	gtkmountoperation-x11.c
 gtk_use_win32_c_sources = 	\
-	gtkplug-win32.c		\
-	gtksocket-win32.c	\
 	gtkwin32embed.c		\
 	gtkwin32embedwidget.c	\
 	gtkmountoperation-stub.c
 gtk_use_quartz_c_sources = 	\
 	gtksearchenginequartz.c	\
-	gtkplug-stub.c		\
-	gtksocket-stub.c	\
 	gtkmountoperation-stub.c
 gtk_use_stub_c_sources = 	\
-	gtkplug-stub.c		\
-	gtksocket-stub.c	\
 	gtkmountoperation-stub.c
 gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
 if USE_X11
@@ -873,7 +870,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) gtktypebuiltins.c.template
 	&& rm -f xgen-gtbc
 
 gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
-	$(AM_V_GEN) echo '#include <gtk/gtk.h>' > xgen-gtfsrc.c && \
+	$(AM_V_GEN) echo '#include <gtk/gtkx.h>' > xgen-gtfsrc.c && \
 	  ${CPP} $(DEFS) $(INCLUDES) -DGTK_ENABLE_BROKEN $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
 	  sort | uniq | \
@@ -882,7 +879,7 @@ gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h $(top_srcdir)/gtk/*.h $(top_sr
 gtktestutils.c: gtktypefuncs.c
 
 # target platform:
-lib_LTLIBRARIES = libgtk-3.0.la
+lib_LTLIBRARIES = libgtk-3.la
 
 gtkincludedir = $(includedir)/gtk-3.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
@@ -890,30 +887,30 @@ gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk
 gtkunixprintincludedir = $(includedir)/gtk-3.0/unix-print/gtk
 gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
 
-libgtk_3_0_la_SOURCES = $(gtk_c_sources)
-libgtk_3_0_la_LDFLAGS = $(libtool_opts)
-libgtk_3_0_la_LIBADD = $(libadd)
-libgtk_3_0_la_DEPENDENCIES = $(deps)
+libgtk_3_la_SOURCES = $(gtk_c_sources)
+libgtk_3_la_LDFLAGS = $(libtool_opts)
+libgtk_3_la_LIBADD = $(libadd)
+libgtk_3_la_DEPENDENCIES = $(deps)
 
-#libgtk_win32_3_0_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
+#libgtk_win32_3_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
 
 if USE_WIN32
-libgtk_3_0_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32 -luuid
-libgtk_3_0_la_DEPENDENCIES += $(gtk_def) $(gtk_win32_res) $(deps)
+libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32 -luuid
+libgtk_3_la_DEPENDENCIES += $(gtk_def) $(gtk_win32_res) $(deps)
 libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
 endif
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
-	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgtk-3.0.la
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgtk-3.la
 endif
 
 if USE_QUARTZ
 install-mac-key-theme:
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
 uninstall-mac-key-theme:
-	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
 else
 install-mac-key-theme:
 uninstall-mac-key-theme:
@@ -934,16 +931,16 @@ dist-hook: ../build/win32/vs9/gtk.vcproj
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
 	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0
-	$(INSTALL_DATA) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
+	$(INSTALL_DATA) $(srcdir)/gtk.css.raleigh $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtk.css
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
-	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
-	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
-	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtk.css
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
+	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 # if srcdir!=builddir, clean out maintainer-clean files from builddir
 # this allows dist to pass.
@@ -952,37 +949,38 @@ distclean-local:
 	  rm -f $(MAINTAINERCLEANFILES); \
 	fi
 
-DEPS = libgtk-3.0.la $(top_builddir)/gdk/libgdk-3.0.la
+DEPS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
 
 TEST_DEPS = $(DEPS) immodules.cache
 
 LDADDS =								\
-	libgtk-3.0.la							\
-	$(top_builddir)/gdk/libgdk-3.0.la				\
+	libgtk-3.la							\
+	$(top_builddir)/gdk/libgdk-3.la				\
 	$(GTK_DEP_LIBS)
 
 if HAVE_INTROSPECTION
 introspection_files = \
-    $(filter-out %private.h gtktextlayout.h, $(gtkinclude_HEADERS)) \
+    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS)) \
     $(gtk_base_c_sources) \
+    gtkprintoperation-unix.c \
     gtktypebuiltins.h \
     gtktypebuiltins.c
 
-Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.0.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
+Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
 Gtk_3_0_gir_SCANNERFLAGS = 			\
 	--add-include-path=$(top_builddir)/gdk	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 if USE_X11
 Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
 endif
-Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtk.h"
-Gtk_3_0_gir_INCLUDES = Atk-1.0 Gdk-3.0
+Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtkx.h"
+Gtk_3_0_gir_INCLUDES = Atk-1.0
 Gtk_3_0_gir_CFLAGS = \
 		$(INCLUDES) \
 		-UGDK_DISABLE_DEPRECATED \
 		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-Gtk_3_0_gir_LIBS = libgtk-3.0.la
+Gtk_3_0_gir_LIBS = libgtk-3.la
 Gtk_3_0_gir_FILES = $(introspection_files)
 Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
 INTROSPECTION_GIRS += Gtk-3.0.gir
@@ -1345,7 +1343,9 @@ gtk_update_icon_cache_program = ./gtk-update-icon-cache
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
+if !USE_EXTERNAL_ICON_CACHE
 	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+endif
 	$(AM_V_GEN) $(gtk_update_icon_cache_program) --quiet --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
@@ -1353,12 +1353,6 @@ gtkbuiltincache.h: @REBUILD@ stamp-icons
 EXTRA_DIST +=                   \
 	$(STOCK_ICONS)		\
 	$(GENERATED_ICONS)	\
-	line-arrow.xbm 		\
-	line-wrap.xbm 		\
-	tree_plus.xbm		\
-	tree_minus.xbm		\
-	tree_minus.xpm		\
-	tree_plus.xpm		\
 	gtk.def			\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
@@ -1368,10 +1362,10 @@ EXTRA_DIST +=                   \
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
 	gtksearchenginequartz.h \
-	gtkrc.default		\
-	gtkrc.key.default	\
-	gtkrc.key.emacs		\
-	gtkrc.key.mac		\
+	gtk.css.raleigh		\
+	gtk-keys.css.default	\
+	gtk-keys.css.emacs	\
+	gtk-keys.css.mac	\
 	makefile.msc		\
 	makefile.msc.in		\
 	abicheck.sh		\

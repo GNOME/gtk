@@ -95,14 +95,6 @@ void       _gdk_quartz_display_event_data_copy (GdkDisplay     *display,
 void       _gdk_quartz_display_event_data_free (GdkDisplay     *display,
                                                 GdkEvent       *event);
 
-gboolean    _gdk_quartz_display_send_client_message       (GdkDisplay      *display,
-                                                           GdkEvent        *event,
-                                                           GdkNativeWindow  winid);
-void        _gdk_quartz_display_add_client_message_filter (GdkDisplay      *display,
-                                                           GdkAtom          message_type,
-                                                           GdkFilterFunc    func,
-                                                           gpointer         data);
-
 /* Display methods - cursor */
 GdkCursor *_gdk_quartz_display_get_cursor_for_type     (GdkDisplay    *display,
                                                         GdkCursorType  type);
@@ -135,12 +127,6 @@ void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 /* Display methods - keymap */
 GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
-/* Display methods - Drag and Drop */
-GdkNativeWindow _gdk_quartz_display_get_drag_protocol     (GdkDisplay      *display,
-                                                           GdkNativeWindow  xid,
-                                                           GdkDragProtocol *protocol,
-                                                           guint           *version);
-
 /* Display methods - selection */
 gboolean    _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
                                                      GdkWindow  *owner,
@@ -149,12 +135,6 @@ gboolean    _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
                                                      gboolean    send_event);
 GdkWindow * _gdk_quartz_display_get_selection_owner (GdkDisplay *display,
                                                      GdkAtom     selection);
-void        _gdk_quartz_display_send_selection_notify (GdkDisplay       *display,
-                                                       GdkNativeWindow  requestor,
-                                                       GdkAtom          selection,
-                                                       GdkAtom          target,
-                                                       GdkAtom          property,
-                                                       guint32          time);
 gint        _gdk_quartz_display_get_selection_property (GdkDisplay     *display,
                                                         GdkWindow      *requestor,
                                                         guchar        **data,

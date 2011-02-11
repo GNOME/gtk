@@ -1386,6 +1386,8 @@ gtk_button_style_updated (GtkWidget *widget)
 {
   GtkStyleContext *context;
 
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->style_updated (widget);
+
   context = gtk_widget_get_style_context (widget);
 
   gtk_button_update_image_spacing (GTK_BUTTON (widget), context);
@@ -1566,7 +1568,6 @@ _gtk_button_paint (GtkButton          *button,
   gint focus_width;
   gint focus_pad;
   GtkAllocation allocation;
-  GdkWindow *window;
   GtkStyleContext *context;
 
   widget = GTK_WIDGET (button);
@@ -1582,7 +1583,6 @@ _gtk_button_paint (GtkButton          *button,
                                NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
-  window = gtk_widget_get_window (widget);
 
   x = 0;
   y = 0;
@@ -1860,20 +1860,24 @@ gtk_real_button_activate (GtkButton *button)
   if (device && gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
 
-  g_return_if_fail (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD);
-
   if (gtk_widget_get_realized (widget) && !priv->activate_timeout)
     {
       time = gtk_get_current_event_time ();
 
-      if (gdk_device_grab (device, priv->event_window,
-                           GDK_OWNERSHIP_WINDOW, TRUE,
-                           GDK_KEY_PRESS | GDK_KEY_RELEASE,
-                           NULL, time) == GDK_GRAB_SUCCESS)
-        {
-          gtk_device_grab_add (widget, device, TRUE);
-	  priv->grab_keyboard = device;
-	  priv->grab_time = time;
+      /* bgo#626336 - Only grab if we have a device (from an event), not if we
+       * were activated programmatically when no event is available.
+       */
+      if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+	{
+	  if (gdk_device_grab (device, priv->event_window,
+			       GDK_OWNERSHIP_WINDOW, TRUE,
+			       GDK_KEY_PRESS | GDK_KEY_RELEASE,
+			       NULL, time) == GDK_GRAB_SUCCESS)
+	    {
+	      gtk_device_grab_add (widget, device, TRUE);
+	      priv->grab_keyboard = device;
+	      priv->grab_time = time;
+	    }
 	}
 
       priv->activate_timeout = gdk_threads_add_timeout (ACTIVATE_TIMEOUT,
@@ -2240,8 +2244,8 @@ gtk_button_set_alignment (GtkButton *button,
 /**
  * gtk_button_get_alignment:
  * @button: a #GtkButton
- * @xalign: return location for horizontal alignment
- * @yalign: return location for vertical alignment
+ * @xalign: (out): return location for horizontal alignment
+ * @yalign: (out): return location for vertical alignment
  *
  * Gets the alignment of the child in the button.
  *
@@ -2294,13 +2298,16 @@ static void
 gtk_button_update_state (GtkButton *button)
 {
   GtkButtonPrivate *priv = button->priv;
-  GtkStateFlags new_state = 0;
+  GtkStateFlags new_state;
   gboolean depressed;
 
   if (priv->activate_timeout)
     depressed = priv->depress_on_activate;
   else
     depressed = priv->in_button && priv->button_down;
+
+  new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
+    ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
 
   if (priv->in_button)
     new_state |= GTK_STATE_FLAG_PRELIGHT;

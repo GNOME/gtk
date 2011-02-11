@@ -261,6 +261,10 @@ gtk_box_class_init (GtkBoxClass *class)
    * Note that the default value for this property is %FALSE for GtkBox,
    * but #GtkHBox, #GtkVBox and other subclasses use the old default
    * of %TRUE.
+   *
+   * Note that the #GtkWidget:halign, #GtkWidget:valign, #GtkWidget:hexpand
+   * and #GtkWidget:vexpand properties are the preferred way to influence
+   * child size allocation in containers.
    */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_EXPAND,
@@ -274,6 +278,10 @@ gtk_box_class_init (GtkBoxClass *class)
    * GtkBox:fill:
    *
    * Whether the child should receive extra space when the parent grows.
+   *
+   * Note that the #GtkWidget:halign, #GtkWidget:valign, #GtkWidget:hexpand
+   * and #GtkWidget:vexpand properties are the preferred way to influence
+   * child size allocation in containers.
    */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_FILL,
@@ -1505,10 +1513,14 @@ gtk_box_reorder_child (GtkBox    *box,
  * gtk_box_query_child_packing:
  * @box: a #GtkBox
  * @child: the #GtkWidget of the child to query
- * @expand: pointer to return location for #GtkBox:expand child property
- * @fill: pointer to return location for #GtkBox:fill child property
- * @padding: pointer to return location for #GtkBox:padding child property
- * @pack_type: pointer to return location for #GtkBox:pack-type child property
+ * @expand: (out): pointer to return location for #GtkBox:expand child
+ *     property
+ * @fill: (out): pointer to return location for #GtkBox:fill child
+ *     property
+ * @padding: (out): pointer to return location for #GtkBox:padding
+ *     child property
+ * @pack_type: (out): pointer to return location for #GtkBox:pack-type
+ *     child property
  *
  * Obtains information about how @child is packed into @box.
  */

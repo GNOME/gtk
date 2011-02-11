@@ -366,8 +366,9 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
  * gdk_keymap_get_entries_for_keyval:
  * @keymap: a #GdkKeymap
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
- * @keys: (out): return location for an array of #GdkKeymapKey
- * @n_keys: (out): return location for number of elements in returned array
+ * @keys: (out) (array length=n_keys) (transfer full): return location
+ *     for an array of #GdkKeymapKey
+ * @n_keys: return location for number of elements in returned array
  *
  * Obtains a list of keycode/group/level combinations that will
  * generate @keyval. Groups and levels are two kinds of keyboard mode;
@@ -396,8 +397,10 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  * gdk_keymap_get_entries_for_keycode:
  * @keymap: a #GdkKeymap
  * @hardware_keycode: a keycode
- * @keys: (out): return location for array of #GdkKeymapKey, or %NULL
- * @keyvals: (out): return location for array of keyvals, or %NULL
+ * @keys: (out) (array length=n_entries) (transfer full): return
+ *     location for array of #GdkKeymapKey, or %NULL
+ * @keyvals: (out) (array length=n_entries) (transfer full): return
+ *     location for array of keyvals, or %NULL
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @hardware_keycode.
@@ -531,7 +534,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 /**
  * gdk_keymap_add_virtual_modifiers:
  * @keymap: a #GdkKeymap
- * @state: pointer to the modifier mask to change
+ * @state: (out): pointer to the modifier mask to change
  *
  * Adds virtual modifiers (i.e. Super, Hyper and Meta) which correspond
  * to the real modifiers (i.e Mod2, Mod3, ...) in @modifiers.
@@ -557,7 +560,7 @@ gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 /**
  * gdk_keymap_map_virtual_modifiers:
  * @keymap: a #GdkKeymap
- * @state: pointer to the modifier state to map
+ * @state: (out): pointer to the modifier state to map
  *
  * Maps the virtual modifiers (i.e. Super, Hyper and Meta) which
  * are set in @state to their non-virtual counterparts (i.e. Mod2,

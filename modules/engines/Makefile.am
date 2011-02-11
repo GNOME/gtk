@@ -4,8 +4,8 @@ if USE_WIN32
 wimp = ms-windows
 endif
 
-# the theme engines need to be ported to GtkThemingEngine
-SUBDIRS = $(wimp) pixbuf
+# the pixbuf engine needs to be ported to GtkThemingEngine
+SUBDIRS = $(wimp) # pixbuf
 
 DIST_SUBDIRS = ms-windows pixbuf
 

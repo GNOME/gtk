@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#include <gtk/gtkx.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -249,7 +250,7 @@ void
 add_local_passive_child (GtkWidget *window)
 {
   Socket *socket;
-  GdkNativeWindow xid;
+  Window xid;
 
   socket = create_socket ();
   gtk_box_pack_start (GTK_BOX (box), socket->box, TRUE, TRUE, 0);

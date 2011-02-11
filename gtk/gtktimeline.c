@@ -186,10 +186,8 @@ gtk_timeline_set_property (GObject      *object,
                            GParamSpec   *pspec)
 {
   GtkTimeline *timeline;
-  GtkTimelinePriv *priv;
 
   timeline = GTK_TIMELINE (object);
-  priv = timeline->priv;
 
   switch (prop_id)
     {

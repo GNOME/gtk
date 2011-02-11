@@ -3937,6 +3937,17 @@ static const gdk_key gdk_keys_by_name[] = {
 
 #if 0
 
+/*
+ * Translators, the strings in the 'keyboard label' context are
+ * display names for keyboard keys. Some of them have prefixes like
+ * XF86 or ISO_ - these should be removed in the translation. Similarly,
+ * underscores should be replaced by spaces. The prefix 'KP_' stands
+ * for 'key pad' and you may want to include that in your translation.
+ * Here are some examples of English translations:
+ * XF86AudioMute - Audio mute
+ * Scroll_lock   - Scroll lock
+ * KP_Space      - Space (keypad)
+ */
 NC_("keyboard label", "BackSpace")
 NC_("keyboard label", "Tab")
 NC_("keyboard label", "Return")
@@ -3957,6 +3968,7 @@ NC_("keyboard label", "Begin")
 NC_("keyboard label", "Print")
 NC_("keyboard label", "Insert")
 NC_("keyboard label", "Num_Lock")
+/* Translators: KP_ means 'key pad' here */
 NC_("keyboard label", "KP_Space")
 NC_("keyboard label", "KP_Tab")
 NC_("keyboard label", "KP_Enter")
@@ -3974,5 +3986,32 @@ NC_("keyboard label", "KP_Begin")
 NC_("keyboard label", "KP_Insert")
 NC_("keyboard label", "KP_Delete")
 NC_("keyboard label", "Delete")
+/* Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed */
+NC_("keyboard label", "XF86MonBrightnessUp")
+NC_("keyboard label", "XF86MonBrightnessDown")
+NC_("keyboard label", "XF86AudioMute")
+NC_("keyboard label", "XF86AudioLowerVolume")
+NC_("keyboard label", "XF86AudioRaiseVolume")
+NC_("keyboard label", "XF86AudioPlay")
+NC_("keyboard label", "XF86AudioStop")
+NC_("keyboard label", "XF86AudioNext")
+NC_("keyboard label", "XF86AudioPrev")
+NC_("keyboard label", "XF86AudioRecord")
+NC_("keyboard label", "XF86AudioPause")
+NC_("keyboard label", "XF86AudioRewind")
+NC_("keyboard label", "XF86AudioMedia")
+NC_("keyboard label", "XF86ScreenSaver")
+NC_("keyboard label", "XF86Battery")
+NC_("keyboard label", "XF86Launch1")
+NC_("keyboard label", "XF86Forward")
+NC_("keyboard label", "XF86Back")
+NC_("keyboard label", "XF86Sleep")
+NC_("keyboard label", "XF86Hibernate")
+NC_("keyboard label", "XF86WLAN")
+NC_("keyboard label", "XF86WebCam")
+NC_("keyboard label", "XF86Display")
+NC_("keyboard label", "XF86TouchpadToggle")
+NC_("keyboard label", "XF86WakeUp")
+NC_("keyboard label", "XF86Suspend")
 
 #endif

@@ -116,6 +116,13 @@ _gdk_x11_windowing_init (void)
 {
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
+
+  gdk_window_add_filter (NULL,
+                         _gdk_wm_protocols_filter,
+                         NULL);
+  gdk_window_add_filter (NULL,
+                         _gdk_x11_dnd_filter,
+                         NULL);
 }
 
 GdkGrabStatus
@@ -435,7 +442,7 @@ gdk_x11_get_default_screen (void)
 }
 
 /**
- * gdk_x11_get_default_root_xwindow:
+ * gdk_x11_get_default_root_xwindow: (skip)
  * 
  * Gets the root window of the default screen 
  * (see gdk_x11_get_default_screen()).  
@@ -449,7 +456,7 @@ gdk_x11_get_default_root_xwindow (void)
 }
 
 /**
- * gdk_x11_get_default_xdisplay:
+ * gdk_x11_get_default_xdisplay: (skip)
  * 
  * Gets the default GTK+ display.
  * 

@@ -1990,7 +1990,7 @@ gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
  *
  * Gets the currently selected item.
  *
- * Returns: the currently selected item
+ * Returns: (transfer none): the currently selected item
  *
  * Since: 3.0
  */
@@ -2011,7 +2011,7 @@ gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell)
  * The parent menu shell of a submenu is the #GtkMenu or #GtkMenuBar
  * from which it was opened up.
  *
- * Returns: the parent #GtkMenuShell
+ * Returns: (transfer none): the parent #GtkMenuShell
  *
  * Since: 3.0
  */

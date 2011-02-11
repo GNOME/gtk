@@ -189,10 +189,14 @@ gtk_app_chooser_button_get_type G_GNUC_CONST;
 gtk_app_chooser_button_new
 gtk_app_chooser_button_set_active_custom_item
 gtk_app_chooser_button_set_show_dialog_item
+gtk_app_chooser_button_get_heading
+gtk_app_chooser_button_set_heading
 gtk_app_chooser_dialog_new
 gtk_app_chooser_dialog_new_for_content_type
 gtk_app_chooser_dialog_get_type G_GNUC_CONST
 gtk_app_chooser_dialog_get_widget
+gtk_app_chooser_dialog_get_heading
+gtk_app_chooser_dialog_set_heading
 gtk_app_chooser_widget_new
 gtk_app_chooser_widget_get_show_all
 gtk_app_chooser_widget_get_default_text
@@ -250,6 +254,7 @@ gtk_assistant_update_buttons_state
 gtk_attach_options_get_type G_GNUC_CONST
 gtk_binding_entry_add_signal
 gtk_binding_entry_add_signall
+gtk_binding_entry_add_signal_from_string
 gtk_binding_entry_remove
 gtk_binding_entry_skip
 gtk_bindings_activate
@@ -369,7 +374,6 @@ gtk_cell_area_attribute_connect
 gtk_cell_area_attribute_disconnect
 gtk_cell_area_box_get_spacing
 gtk_cell_area_box_get_type G_GNUC_CONST
-gtk_cell_area_box_init_groups
 gtk_cell_area_box_new
 gtk_cell_area_box_pack_end
 gtk_cell_area_box_pack_start
@@ -413,7 +417,6 @@ gtk_cell_area_get_preferred_height_for_width
 gtk_cell_area_get_preferred_width
 gtk_cell_area_get_preferred_width_for_height
 gtk_cell_area_get_request_mode
-gtk_cell_area_get_style_detail
 gtk_cell_area_get_type G_GNUC_CONST
 gtk_cell_area_has_renderer
 gtk_cell_area_inner_cell_area
@@ -424,7 +427,6 @@ gtk_cell_area_remove_focus_sibling
 gtk_cell_area_render
 gtk_cell_area_request_renderer
 gtk_cell_area_set_focus_cell
-gtk_cell_area_set_style_detail
 gtk_cell_area_stop_editing
 gtk_cell_editable_editing_done
 gtk_cell_editable_get_type G_GNUC_CONST
@@ -459,6 +461,7 @@ gtk_cell_renderer_get_preferred_width_for_height
 gtk_cell_renderer_get_request_mode
 gtk_cell_renderer_get_sensitive
 gtk_cell_renderer_get_size
+gtk_cell_renderer_get_state
 gtk_cell_renderer_get_type G_GNUC_CONST
 gtk_cell_renderer_get_visible
 gtk_cell_renderer_is_activatable
@@ -592,7 +595,6 @@ gtk_color_selection_set_has_palette
 gtk_color_selection_set_previous_alpha
 gtk_color_selection_set_previous_color
 gtk_color_selection_set_previous_rgba
-gtk_combo_box_cell_layout_get_area
 gtk_combo_box_get_active
 gtk_combo_box_get_active_id
 gtk_combo_box_get_active_iter
@@ -1532,13 +1534,6 @@ gtk_misc_get_padding
 gtk_misc_get_type G_GNUC_CONST
 gtk_misc_set_alignment
 gtk_misc_set_padding
-gtk_modifier_style_get_type
-gtk_modifier_style_map_color
-gtk_modifier_style_new
-gtk_modifier_style_set_background_color
-gtk_modifier_style_set_color
-gtk_modifier_style_set_color_property
-gtk_modifier_style_set_font
 gtk_mount_operation_get_parent
 gtk_mount_operation_get_screen
 gtk_mount_operation_get_type G_GNUC_CONST
@@ -1710,6 +1705,7 @@ gtk_parse_args
 gtk_path_bar_get_type G_GNUC_CONST
 gtk_path_priority_type_get_type G_GNUC_CONST
 gtk_path_type_get_type G_GNUC_CONST
+#ifdef G_OS_UNIX
 gtk_plug_construct
 gtk_plug_construct_for_display
 gtk_plug_get_embedded
@@ -1718,6 +1714,7 @@ gtk_plug_get_socket_window
 gtk_plug_get_type G_GNUC_CONST
 gtk_plug_new
 gtk_plug_new_for_display
+#endif
 gtk_policy_type_get_type G_GNUC_CONST
 gtk_position_type_get_type G_GNUC_CONST
 #ifdef G_OS_UNIX
@@ -2351,11 +2348,13 @@ gtk_size_group_remove_widget
 gtk_size_group_set_ignore_hidden
 gtk_size_group_set_mode
 gtk_size_request_mode_get_type G_GNUC_CONST
+#ifdef G_OS_UNIX
 gtk_socket_add_id
 gtk_socket_get_id
 gtk_socket_get_plug_window
 gtk_socket_get_type G_GNUC_CONST
 gtk_socket_new
+#endif
 gtk_sort_type_get_type G_GNUC_CONST
 gtk_spin_button_configure
 gtk_spin_button_get_adjustment
@@ -2855,6 +2854,7 @@ gtk_text_view_get_accepts_tab
 gtk_text_view_get_border_window_size
 gtk_text_view_get_buffer
 gtk_text_view_get_cursor_visible
+gtk_text_view_get_cursor_locations
 gtk_text_view_get_default_attributes
 gtk_text_view_get_editable
 gtk_text_view_get_hadjustment
@@ -3674,7 +3674,6 @@ gtk_window_activate_default
 gtk_window_activate_focus
 gtk_window_activate_key
 gtk_window_add_accel_group
-gtk_window_add_embedded_xid
 gtk_window_add_mnemonic
 gtk_window_begin_move_drag
 gtk_window_begin_resize_drag
@@ -3737,7 +3736,6 @@ gtk_window_present
 gtk_window_present_with_time
 gtk_window_propagate_key_event
 gtk_window_remove_accel_group
-gtk_window_remove_embedded_xid
 gtk_window_remove_mnemonic
 gtk_window_reshow_with_initial_size
 gtk_window_resize

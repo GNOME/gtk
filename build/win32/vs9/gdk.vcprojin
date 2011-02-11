@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;$(GdkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

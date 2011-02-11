@@ -876,7 +876,9 @@ x_event_mask_to_gdk_event_mask (long mask)
  * @display: the #GdkDisplay where the window handle comes from.
  * @window: an XLib <type>Window</type>
  *
- * Wraps a native window in a #GdkWindow.
+ * Wraps a native window in a #GdkWindow. The function will try to
+ * look up the window using gdk_x11_window_lookup_for_display() first.
+ * If it does not find it there, it will create a new window.
  *
  * This may fail if the window has been destroyed. If the window
  * was already known to GDK, a new reference to the existing
@@ -1104,6 +1106,32 @@ gdk_x11_window_destroy_notify (GdkWindow *window)
   _gdk_x11_window_grab_check_destroy (window);
 
   g_object_unref (window);
+}
+
+static GdkDragProtocol
+gdk_x11_window_get_drag_protocol (GdkWindow *window,
+                                  GdkWindow **target)
+{
+  GdkDragProtocol protocol;
+  GdkDisplay *display;
+  guint version;
+  Window xid;
+
+  display = gdk_window_get_display (window);
+  xid = _gdk_x11_display_get_drag_protocol (display,
+                                            GDK_WINDOW_XID (window->impl_window),
+                                            &protocol,
+                                            &version);
+
+  if (target)
+    {
+      if (xid != None)
+        *target = gdk_x11_window_foreign_new_for_display (display, xid);
+      else
+        *target = NULL;
+    }
+
+  return protocol;
 }
 
 static void
@@ -4663,7 +4691,7 @@ gdk_x11_get_server_time (GdkWindow *window)
 }
 
 /**
- * gdk_x11_window_get_xid:
+ * gdk_x11_window_get_xid: (skip)
  * @window: a native #GdkWindow.
  * 
  * Returns the X resource (window) belonging to a #GdkWindow.
@@ -4777,6 +4805,7 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_opacity = gdk_x11_window_set_opacity;
   impl_class->set_composited = gdk_x11_window_set_composited;
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;
+  impl_class->get_drag_protocol = gdk_x11_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
   impl_class->drag_begin = _gdk_x11_window_drag_begin;
   impl_class->process_updates_recurse = gdk_x11_window_process_updates_recurse;

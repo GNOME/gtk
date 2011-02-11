@@ -52,6 +52,12 @@ struct _GtkCssProvider
 struct _GtkCssProviderClass
 {
   GObjectClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GType gtk_css_provider_get_type (void) G_GNUC_CONST;

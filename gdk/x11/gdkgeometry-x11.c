@@ -272,7 +272,6 @@ _gdk_x11_window_translate (GdkWindow      *window,
   GC xgc;
   GdkRectangle extents;
   GdkWindow *parent;
-  int px, py;
 
   /* We need to get data from subwindows here, because we might have
    * shaped a native window over the moving region (with bg none,
@@ -281,7 +280,6 @@ _gdk_x11_window_translate (GdkWindow      *window,
    * so we copy from the toplevel with INCLUDE_INFERIORS.
    */
   parent = window;
-  px = py = 0;
   while (parent->parent != NULL &&
          parent->parent->window_type != GDK_WINDOW_ROOT)
     {

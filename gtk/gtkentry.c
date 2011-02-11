@@ -65,7 +65,8 @@
 #include "gtktooltip.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
-
+#include "gtkwidgetprivate.h"
+#include "gtkstylecontextprivate.h"
 
 /**
  * SECTION:gtkentry
@@ -514,7 +515,6 @@ static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
 static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
                                                         gboolean        include_preedit);
 static void         gtk_entry_reset_layout             (GtkEntry       *entry);
-static void         gtk_entry_queue_draw               (GtkEntry       *entry);
 static void         gtk_entry_recompute                (GtkEntry       *entry);
 static gint         gtk_entry_find_position            (GtkEntry       *entry,
 							gint            x);
@@ -1865,7 +1865,6 @@ gtk_entry_set_property (GObject         *object,
 {
   GtkEntry *entry = GTK_ENTRY (object);
   GtkEntryPrivate *priv = entry->priv;
-  GtkWidget *widget;
 
   switch (prop_id)
     {
@@ -1879,7 +1878,8 @@ gtk_entry_set_property (GObject         *object,
 
         if (new_value != priv->editable)
 	  {
-            widget = GTK_WIDGET (entry);
+            GtkWidget *widget = GTK_WIDGET (entry);
+
 	    if (!new_value)
 	      {
 		_gtk_entry_reset_im_context (entry);
@@ -1895,7 +1895,7 @@ gtk_entry_set_property (GObject         *object,
 	    if (new_value && gtk_widget_has_focus (widget))
 	      gtk_im_context_focus_in (priv->im_context);
 
-	    gtk_entry_queue_draw (entry);
+	    gtk_widget_queue_draw (widget);
 	  }
       }
       break;
@@ -3346,14 +3346,11 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GdkWindow *window;
   gint x = 0, y = 0, width, height;
   GtkAllocation allocation;
   gint frame_x, frame_y;
 
   cairo_save (cr);
-
-  window = gtk_widget_get_window (widget);
 
   get_frame_size (GTK_ENTRY (widget), &frame_x, &frame_y, &width, &height);
   gtk_widget_get_allocation (widget, &allocation);
@@ -3502,9 +3499,6 @@ gtk_entry_draw (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
-
-  if (gtk_widget_has_focus (widget))
-    state |= GTK_STATE_FLAG_FOCUSED;
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
@@ -3939,7 +3933,6 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = NULL;
-  GdkDragContext *context;
   gint tmp_pos;
   gint i;
 
@@ -3962,11 +3955,11 @@ gtk_entry_motion_notify (GtkWidget      *widget,
             {
               icon_info->in_drag = TRUE;
               icon_info->pressed = FALSE;
-              context = gtk_drag_begin (widget,
-                                        icon_info->target_list,
-                                        icon_info->actions,
-                                        1,
-                                        (GdkEvent*)event);
+              gtk_drag_begin (widget,
+                              icon_info->target_list,
+                              icon_info->actions,
+                              1,
+                              (GdkEvent*)event);
             }
 
           return TRUE;
@@ -3976,7 +3969,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   if (priv->mouse_cursor_obscured)
     {
       GdkCursor *cursor;
-      
+
       cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       gdk_window_set_cursor (priv->text_area, cursor);
       g_object_unref (cursor);
@@ -4474,6 +4467,8 @@ gtk_entry_style_updated (GtkWidget *widget)
   GtkEntryPrivate *priv = entry->priv;
   gint focus_width;
   gboolean interior_focus;
+
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->style_updated (widget);
 
   gtk_widget_style_get (widget,
 			"focus-line-width", &focus_width,
@@ -5376,8 +5371,8 @@ recompute_idle_func (gpointer data)
   if (gtk_widget_has_screen (GTK_WIDGET (entry)))
     {
       gtk_entry_adjust_scroll (entry);
-      gtk_entry_queue_draw (entry);
-      
+      gtk_widget_queue_draw (GTK_WIDGET (entry));
+
       update_im_cursor_location (entry);
     }
 
@@ -5811,7 +5806,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
     }
   else /* overwrite_mode */
     {
-      GdkColor cursor_color;
+      GtkStyleContext *context;
+      GdkRGBA cursor_color;
       GdkRectangle rect;
       gint x, y;
 
@@ -5824,18 +5820,18 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       rect.width = PANGO_PIXELS (cursor_rect.width);
       rect.height = PANGO_PIXELS (cursor_rect.height);
 
-      _gtk_widget_get_cursor_color (widget, &cursor_color);
-      gdk_cairo_set_source_color (cr, &cursor_color);
+      context = gtk_widget_get_style_context (widget);
+
+      _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
+      gdk_cairo_set_source_rgba (cr, &cursor_color);
       gdk_cairo_rectangle (cr, &rect);
       cairo_fill (cr);
 
       if (!block_at_line_end)
         {
-          GtkStyleContext *context;
           GtkStateFlags state;
           GdkRGBA color;
 
-          context = gtk_widget_get_style_context (widget);
           state = gtk_widget_get_state_flags (widget);
           gtk_style_context_get_background_color (context, state, &color);
 
@@ -5848,14 +5844,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
       cairo_restore (cr);
     }
-}
-
-static void
-gtk_entry_queue_draw (GtkEntry *entry)
-{
-  if (gtk_widget_is_drawable (GTK_WIDGET (entry)))
-    gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (entry)),
-                                NULL, FALSE);
 }
 
 void
@@ -6814,7 +6802,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 /**
  * gtk_entry_get_text_area:
  * @entry: a #GtkEntry
- * @text_area: Return location for the text area.
+ * @text_area: (out): Return location for the text area.
  *
  * Gets the area where the entry's text is drawn. This function is
  * useful when drawing something to the entry in a draw callback.
@@ -7485,8 +7473,8 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
 /**
  * gtk_entry_get_layout_offsets:
  * @entry: a #GtkEntry
- * @x: (allow-none): location to store X offset of layout, or %NULL
- * @y: (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (allow-none): location to store X offset of layout, or %NULL
+ * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
  *
  *
  * Obtains the position of the #PangoLayout used to render text
@@ -8293,7 +8281,7 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * gtk_entry_get_icon_area:
  * @entry: A #GtkEntry
  * @icon_pos: Icon position
- * @icon_area: Return location for the icon's area
+ * @icon_area: (out): Return location for the icon's area
  *
  * Gets the area where entry's icon at @icon_pos is drawn.
  * This function is useful when drawing something to the
@@ -9591,6 +9579,8 @@ keypress_completion_out:
     {
       GtkTreeIter iter;
       GtkTreeModel *model = NULL;
+      GtkTreeModel *child_model;
+      GtkTreeIter child_iter;
       GtkTreeSelection *sel;
       gboolean retval = TRUE;
 
@@ -9604,9 +9594,11 @@ keypress_completion_out:
           sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
           if (gtk_tree_selection_get_selected (sel, &model, &iter))
             {
+              gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_iter, &iter);
+              child_model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
               g_signal_handler_block (widget, completion->priv->changed_id);
               g_signal_emit_by_name (completion, "match-selected",
-                                     model, &iter, &entry_set);
+                                     child_model, &child_iter, &entry_set);
               g_signal_handler_unblock (widget, completion->priv->changed_id);
 
               if (!entry_set)

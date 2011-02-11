@@ -54,27 +54,7 @@
  * The #GDK_WINDOWING_X11 macro is defined if the X11 backend
  * is supported.
  *
- * Use this macro to guard code that is specific to the X11-backend.
- * Since GDK may be configured with multiple backends, an additional
- * runtime check for the used backend is recommended:
- *
- * |[
- * #ifdef GDK_WINDOWING_X11
- *   if (GDK_IS_X11_DISPLAY (display))
- *     {
- *       /&ast; make X11-specific calls here &ast;/
- *     }
- *   else
- * #endif
- * #ifdef GDK_WINDOWING_QUARTZ
- *   if (GDK_IS_QUARTZ_DISPLAY (display))
- *     {
- *       /&ast; make Quartz-specific calls here &ast/
- *     }
- *   else
- * #endif
- *   g_error ("Unsupported GDK backend");
- * ]|
+ * Use this macro to guard code that is specific to the X11 backend.
  */
 
 /**
@@ -82,6 +62,8 @@
  *
  * The #GDK_WINDOWING_WIN32 macro is defined if the Win32 backend
  * is supported.
+ *
+ * Use this macro to guard code that is specific to the Win32 backend.
  */
 
 /**
@@ -89,6 +71,8 @@
  *
  * The #GDK_WINDOWING_QUARTZ macro is defined if the Quartz backend
  * is supported.
+ *
+ * Use this macro to guard code that is specific to the Quartz backend.
  */
 
 typedef struct _GdkPredicate  GdkPredicate;
@@ -129,7 +113,6 @@ static const GDebugKey gdk_debug_keys[] = {
   {"dnd",           GDK_DEBUG_DND},
   {"xim",           GDK_DEBUG_XIM},
   {"nograbs",       GDK_DEBUG_NOGRABS},
-  {"colormap",      GDK_DEBUG_COLORMAP},
   {"input",         GDK_DEBUG_INPUT},
   {"cursor",        GDK_DEBUG_CURSOR},
   {"multihead",     GDK_DEBUG_MULTIHEAD},
@@ -268,7 +251,7 @@ gdk_pre_parse_libgtk_only (void)
 /**
  * gdk_parse_args:
  * @argc: the number of command line arguments.
- * @argv: the array of command line arguments.
+ * @argv: (inout) (array length=argc): the array of command line arguments.
  * 
  * Parse command line arguments, and store for future
  * use by calls to gdk_display_open().
@@ -707,7 +690,7 @@ gdk_threads_init (void)
 }
 
 /**
- * gdk_threads_set_lock_functions:
+ * gdk_threads_set_lock_functions: (skip)
  * @enter_fn:   function called to guard GDK
  * @leave_fn: function called to release the guard
  *
@@ -827,6 +810,7 @@ gdk_threads_dispatch_free (gpointer data)
  * Return value: the ID (greater than 0) of the event source.
  *
  * Since: 2.12
+ * Rename to: gdk_threads_add_idle
  */
 guint
 gdk_threads_add_idle_full (gint           priority,
@@ -850,7 +834,7 @@ gdk_threads_add_idle_full (gint           priority,
 }
 
 /**
- * gdk_threads_add_idle:
+ * gdk_threads_add_idle: (skip)
  * @function: function to call
  * @data:     data to pass to @function
  *
@@ -929,6 +913,7 @@ gdk_threads_add_idle (GSourceFunc    function,
  * Return value: the ID (greater than 0) of the event source.
  * 
  * Since: 2.12
+ * Rename to: gdk_threads_add_timeout
  */
 guint
 gdk_threads_add_timeout_full (gint           priority,
@@ -954,7 +939,7 @@ gdk_threads_add_timeout_full (gint           priority,
 }
 
 /**
- * gdk_threads_add_timeout:
+ * gdk_threads_add_timeout: (skip)
  * @interval: the time between calls to the function, in milliseconds
  *             (1/1000ths of a second)
  * @function: function to call
@@ -995,6 +980,7 @@ gdk_threads_add_timeout (guint       interval,
  *  Return value: the ID (greater than 0) of the event source.
  * 
  * Since: 2.14
+ * Rename to: gdk_threads_add_timeout_seconds
  */
 guint
 gdk_threads_add_timeout_seconds_full (gint           priority,
@@ -1020,7 +1006,7 @@ gdk_threads_add_timeout_seconds_full (gint           priority,
 }
 
 /**
- * gdk_threads_add_timeout_seconds:
+ * gdk_threads_add_timeout_seconds: (skip)
  * @interval: the time between calls to the function, in seconds
  * @function: function to call
  * @data:     data to pass to @function

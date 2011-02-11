@@ -618,7 +618,7 @@ gail_entry_get_character_extents (AtkText *text,
   GtkWidget *widget;
   GtkEntry *entry;
   PangoRectangle char_rect;
-  gint index, cursor_index, x_layout, y_layout;
+  gint index, x_layout, y_layout;
   const gchar *entry_text;
   gint start_pos, end_pos;
 
@@ -635,8 +635,9 @@ gail_entry_get_character_extents (AtkText *text,
   entry_text = gtk_entry_get_text (entry);
 
   index = g_utf8_offset_to_pointer (entry_text, offset) - entry_text;
-  cursor_index = g_utf8_offset_to_pointer (entry_text, end_pos) - entry_text;
+
   /* FIXME: entry->preedit cannot be accessed directly
+  cursor_index = g_utf8_offset_to_pointer (entry_text, end_pos) - entry_text;
   if (index > cursor_index)
     index += entry->preedit_length;
   */
@@ -654,7 +655,7 @@ gail_entry_get_offset_at_point (AtkText *text,
 { 
   GtkWidget *widget;
   GtkEntry *entry;
-  gint index, cursor_index, x_layout, y_layout;
+  gint index, x_layout, y_layout;
   const gchar *entry_text;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -682,8 +683,8 @@ gail_entry_get_offset_at_point (AtkText *text,
 
       gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
                                          &start_pos, &end_pos);
-      cursor_index = g_utf8_offset_to_pointer (entry_text, end_pos) - entry_text;
       /* FIXME: entry->preedit_length cannot be accessed directly
+      cursor_index = g_utf8_offset_to_pointer (entry_text, end_pos) - entry_text;
       if (index >= cursor_index && entry->preedit_length)
         {
           if (index >= cursor_index + entry->preedit_length)

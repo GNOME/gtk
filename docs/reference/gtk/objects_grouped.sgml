@@ -127,7 +127,6 @@
 
 <emphasis>Misc. Objects</emphasis>
     <link linkend="GtkAdjustment">GtkAdjustment</link>
-    <link linkend="GtkItemFactory">GtkItemFactory</link>
     <link linkend="GtkInvisible">GtkInvisible</link>
 </literallayout></entry>
 

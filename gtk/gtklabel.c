@@ -2036,7 +2036,8 @@ gtk_label_set_attributes (GtkLabel         *label,
  * effective attributes for the label, use
  * pango_layout_get_attribute (gtk_label_get_layout (label)).
  *
- * Return value: the attribute list, or %NULL if none was set.
+ * Return value: (transfer none): the attribute list, or %NULL
+ *     if none was set.
  **/
 PangoAttrList *
 gtk_label_get_attributes (GtkLabel *label)
@@ -2480,7 +2481,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
  * g_markup_printf_escaped()<!-- -->:
  * |[
  * char *markup;
- *   
+ *
  * markup = g_markup_printf_escaped ("&lt;span style=\"italic\"&gt;&percnt;s&lt;/span&gt;", str);
  * gtk_label_set_markup (GTK_LABEL (label), markup);
  * g_free (markup);
@@ -2490,18 +2491,14 @@ void
 gtk_label_set_markup (GtkLabel    *label,
                       const gchar *str)
 {
-  GtkLabelPrivate *priv;
-
   g_return_if_fail (GTK_IS_LABEL (label));
-
-  priv = label->priv;
 
   g_object_freeze_notify (G_OBJECT (label));
 
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
   gtk_label_set_use_underline_internal (label, FALSE);
-  
+
   gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
@@ -2510,32 +2507,30 @@ gtk_label_set_markup (GtkLabel    *label,
 /**
  * gtk_label_set_markup_with_mnemonic:
  * @label: a #GtkLabel
- * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
- * 
- * Parses @str which is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>,
+ * @str: a markup string (see
+ *     <link linkend="PangoMarkupFormat">Pango markup format</link>)
+ *
+ * Parses @str which is marked up with the
+ * <link linkend="PangoMarkupFormat">Pango text markup language</link>,
  * setting the label's text and attribute list based on the parse results.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  *
- * The mnemonic key can be used to activate another widget, chosen 
+ * The mnemonic key can be used to activate another widget, chosen
  * automatically, or explicitly using gtk_label_set_mnemonic_widget().
- **/
+ */
 void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
-				    const gchar *str)
+                                    const gchar *str)
 {
-  GtkLabelPrivate *priv;
-
   g_return_if_fail (GTK_IS_LABEL (label));
-
-  priv = label->priv;
 
   g_object_freeze_notify (G_OBJECT (label));
 
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
   gtk_label_set_use_underline_internal (label, TRUE);
-  
+
   gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
@@ -3826,6 +3821,8 @@ gtk_label_style_updated (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
 
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->style_updated (widget);
+
   /* We have to clear the layout, fonts etc. may have changed */
   gtk_label_clear_layout (label);
   gtk_label_invalidate_wrap_width (label);
@@ -4082,7 +4079,6 @@ gtk_label_draw (GtkWidget *widget,
   GtkAllocation allocation;
   GtkStyleContext *context;
   GtkStateFlags state;
-  GdkWindow *window;
   gint x, y;
 
   gtk_label_ensure_layout (label, FALSE);
@@ -4094,7 +4090,6 @@ gtk_label_draw (GtkWidget *widget,
       get_layout_location (label, &x, &y);
 
       context = gtk_widget_get_style_context (widget);
-      window = gtk_widget_get_window (widget);
       gtk_widget_get_allocation (widget, &allocation);
 
       cairo_translate (cr, -allocation.x, -allocation.y);
@@ -4111,7 +4106,6 @@ gtk_label_draw (GtkWidget *widget,
         {
           gint range[2];
           cairo_region_t *clip;
-	  GtkStateType state;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -4128,10 +4122,7 @@ gtk_label_draw (GtkWidget *widget,
                                                    range,
                                                    1);
 
-         /* FIXME should use gtk_paint, but it can't use a clip
-           * region
-           */
-
+         /* FIXME should use gtk_paint, but it can't use a clip region */
           cairo_save (cr);
 
           gdk_cairo_region (cr, clip);
@@ -4139,8 +4130,8 @@ gtk_label_draw (GtkWidget *widget,
 
           state = GTK_STATE_FLAG_SELECTED;
 
-	  if (gtk_widget_has_focus (widget))
-	    state |= GTK_STATE_FLAG_FOCUSED;
+          if (gtk_widget_has_focus (widget))
+            state |= GTK_STATE_FLAG_FOCUSED;
 
           gtk_style_context_get (context, state,
                                  "background-color", &bg_color,
@@ -4172,7 +4163,7 @@ gtk_label_draw (GtkWidget *widget,
           GdkColor *visited_link_color;
 
           if (info->selectable && gtk_widget_has_focus (widget))
-	    gtk_label_draw_cursor (label, cr, x, y);
+            gtk_label_draw_cursor (label, cr, x, y);
 
           focus_link = gtk_label_get_focus_link (label);
           active_link = info->active_link;
@@ -4894,22 +4885,24 @@ drag_begin_cb (GtkWidget      *widget,
 
       if (end > len)
         end = len;
-      
+
       if (start > len)
         start = len;
-      
-      surface = _gtk_text_util_create_drag_icon (widget, 
-						 priv->text + start,
-						 end - start);
+
+      surface = _gtk_text_util_create_drag_icon (widget,
+                                                 priv->text + start,
+                                                 end - start);
     }
 
   if (surface)
-    gtk_drag_set_icon_surface (context, surface);
+    {
+      gtk_drag_set_icon_surface (context, surface);
+      cairo_surface_destroy (surface);
+    }
   else
-    gtk_drag_set_icon_default (context);
-  
-  if (surface)
-    g_object_unref (surface);
+    {
+      gtk_drag_set_icon_default (context);
+    }
 }
 
 static gboolean
@@ -5468,8 +5461,8 @@ gtk_label_select_region  (GtkLabel *label,
 /**
  * gtk_label_get_selection_bounds:
  * @label: a #GtkLabel
- * @start: return location for start of selection, as a character offset
- * @end: return location for end of selection, as a character offset
+ * @start: (out): return location for start of selection, as a character offset
+ * @end: (out): return location for end of selection, as a character offset
  * 
  * Gets the selected range of characters in the label, returning %TRUE
  * if there's a selection.
@@ -5567,8 +5560,8 @@ gtk_label_get_layout (GtkLabel *label)
 /**
  * gtk_label_get_layout_offsets:
  * @label: a #GtkLabel
- * @x: (allow-none): location to store X offset of layout, or %NULL
- * @y: (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (allow-none): location to store X offset of layout, or %NULL
+ * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
  *
  * Obtains the coordinates where the label will draw the #PangoLayout
  * representing the text in the label; useful to convert mouse events

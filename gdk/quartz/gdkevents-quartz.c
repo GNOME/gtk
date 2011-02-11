@@ -1332,25 +1332,6 @@ _gdk_quartz_display_queue_events (GdkDisplay *display)
 }
 
 void
-_gdk_quartz_display_add_client_message_filter (GdkDisplay   *display,
-                                               GdkAtom       message_type,
-                                               GdkFilterFunc func,
-                                               gpointer      data)
-{
-  /* Not supported. */
-}
-
-
-gboolean
-_gdk_quartz_display_send_client_message (GdkDisplay      *display,
-                                         GdkEvent        *event,
-                                         GdkNativeWindow  winid)
-{
-  /* Not supported. */
-  return FALSE;
-}
-
-void
 _gdk_quartz_screen_broadcast_client_message (GdkScreen *screen,
                                              GdkEvent  *event)
 {

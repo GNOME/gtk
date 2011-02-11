@@ -308,7 +308,7 @@ _gdk_x11_display_get_selection_property (GdkDisplay  *display,
 
 void
 _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
-                                        GdkNativeWindow  requestor,
+                                        GdkWindow        *requestor,
                                         GdkAtom          selection,
                                         GdkAtom          target,
                                         GdkAtom          property,
@@ -319,7 +319,7 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
   xevent.type = SelectionNotify;
   xevent.serial = 0;
   xevent.send_event = True;
-  xevent.requestor = requestor;
+  xevent.requestor = GDK_WINDOW_XID (requestor);
   xevent.selection = gdk_x11_atom_to_xatom_for_display (display, selection);
   xevent.target = gdk_x11_atom_to_xatom_for_display (display, target);
   if (property == GDK_NONE)
@@ -328,7 +328,7 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
     xevent.property = gdk_x11_atom_to_xatom_for_display (display, property);
   xevent.time = time;
 
-  _gdk_x11_display_send_xevent (display, requestor, False, NoEventMask, (XEvent*) & xevent);
+  _gdk_x11_display_send_xevent (display, xevent.requestor, False, NoEventMask, (XEvent*) & xevent);
 }
 
 /**
@@ -576,11 +576,12 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
  * gdk_x11_display_string_to_compound_text:
  * @display: the #GdkDisplay where the encoding is defined
  * @str: a nul-terminated string
- * @encoding: location to store the encoding atom
+ * @encoding: (out) (transfer none): location to store the encoding atom
  *     (to be used as the type for the property)
- * @format: location to store the format of the property
- * @ctext: location to store newly allocated data for the property
- * @length: the length of @text, in bytes
+ * @format: (out): location to store the format of the property
+ * @ctext: (out) (array length=length): location to store newly
+ *     allocated data for the property
+ * @length: the length of @ctext, in bytes
  *
  * Convert a string from the encoding of the current
  * locale into a form suitable for storing in a window property.
@@ -696,9 +697,9 @@ _gdk_x11_display_utf8_to_string_target (GdkDisplay  *display,
  * gdk_x11_display_utf8_to_compound_text:
  * @display: a #GdkDisplay
  * @str: a UTF-8 string
- * @encoding: location to store resulting encoding
- * @format: location to store format of the result
- * @ctext: location to store the data of the result
+ * @encoding: (out): location to store resulting encoding
+ * @format: (out): location to store format of the result
+ * @ctext: (out) (array length=length): location to store the data of the result
  * @length: location to store the length of the data
  *     stored in @ctext
  *

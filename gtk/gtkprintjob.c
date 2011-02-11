@@ -336,7 +336,7 @@ gtk_print_job_new (const gchar      *title,
  * 
  * Gets the #GtkPrintSettings of the print job.
  * 
- * Return value: the settings of @job
+ * Return value: (transfer none): the settings of @job
  *
  * Since: 2.10
  */
@@ -354,7 +354,7 @@ gtk_print_job_get_settings (GtkPrintJob *job)
  * 
  * Gets the #GtkPrinter of the print job.
  * 
- * Return value: the printer of @job
+ * Return value: (transfer none): the printer of @job
  *
  * Since: 2.10
  */
@@ -471,7 +471,7 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
  * Gets a cairo surface onto which the pages of
  * the print job should be rendered.
  * 
- * Return value: the cairo surface of @job
+ * Return value: (transfer none): the cairo surface of @job
  *
  * Since: 2.10
  **/
@@ -749,7 +749,8 @@ gtk_print_job_set_pages (GtkPrintJob   *job,
  *
  * Gets the page ranges for this job.
  *
- * Returns: a pointer to an array of #GtkPageRange structs
+ * Returns: (array length=n_ranges) (transfer none): a pointer to an
+ * array of #GtkPageRange structs
  *
  * Since: 3.0
  */
@@ -764,7 +765,8 @@ gtk_print_job_get_page_ranges (GtkPrintJob *job,
 /**
  * gtk_print_job_set_page_ranges:
  * @job: a #GtkPrintJob
- * @ranges: pointer to an array of #GtkPageRange structs
+ * @ranges: (array length=n_ranges): pointer to an array of
+ *    #GtkPageRange structs
  * @n_ranges: the length of the @ranges array
  *
  * Sets the page ranges for this job.
@@ -990,7 +992,7 @@ gtk_print_job_get_collate (GtkPrintJob *job)
 }
 
 /**
- * gtk_print_job_set_collated:
+ * gtk_print_job_set_collate:
  * @job: a #GtkPrintJob
  * @collate: whether the job is printed collated
  *

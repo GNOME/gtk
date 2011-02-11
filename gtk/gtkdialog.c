@@ -508,6 +508,8 @@ gtk_dialog_map (GtkWidget *widget)
 static void
 gtk_dialog_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_dialog_parent_class)->style_updated (widget);
+
   update_spacings (GTK_DIALOG (widget));
 }
 
@@ -765,7 +767,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * appended to the end of the dialog's action area. The button widget is
  * returned, but usually you don't need it.
  *
- * Return value: (transfer full): the button widget that was added
+ * Return value: (transfer none): the #GtkButton widget that was added
  **/
 GtkWidget*
 gtk_dialog_add_button (GtkDialog   *dialog,
@@ -1323,7 +1325,8 @@ gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
  * gtk_dialog_set_alternative_button_order_from_array:
  * @dialog: a #GtkDialog
  * @n_params: the number of response ids in @new_order
- * @new_order: an array of response ids of @dialog's buttons
+ * @new_order: (array length=n_params): an array of response ids of
+ *     @dialog's buttons
  *
  * Sets an alternative button order. If the
  * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE,

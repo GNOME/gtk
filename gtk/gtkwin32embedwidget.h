@@ -66,7 +66,7 @@ struct _GtkWin32EmbedWidgetClass
 
 
 GType      gtk_win32_embed_widget_get_type (void) G_GNUC_CONST;
-GtkWidget* _gtk_win32_embed_widget_new              (GdkNativeWindow  parent_id);
+GtkWidget* _gtk_win32_embed_widget_new              (HWND parent);
 BOOL       _gtk_win32_embed_widget_dialog_procedure (GtkWin32EmbedWidget *embed_widget,
 						     HWND wnd, UINT message, WPARAM wparam, LPARAM lparam);
 

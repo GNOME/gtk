@@ -56,13 +56,14 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtksizerequest.h"
-#include "gtkstylecontext.h"
+#include "gtkstylecontextprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkcssprovider.h"
 #include "gtkanimationdescription.h"
 #include "gtkmodifierstyle.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
+#include "gtkplug.h"
 #include "gtktypebuiltins.h"
 
 
@@ -323,6 +324,8 @@ struct _GtkWidgetPrivate
   guint multidevice           : 1;
   guint has_shape_mask        : 1;
   guint in_reparent           : 1;
+
+  /* Queue-resize related flags */
   guint resize_pending        : 1;
   guint alloc_needed          : 1;
   guint width_request_needed  : 1;
@@ -336,6 +339,11 @@ struct _GtkWidgetPrivate
   guint vexpand               : 1;
   guint hexpand_set           : 1; /* whether to use application-forced  */
   guint vexpand_set           : 1; /* instead of computing from children */
+
+  /* SizeGroup related flags */
+  guint sizegroup_visited     : 1;
+  guint sizegroup_bumping     : 1;
+  guint have_size_groups      : 1;
 
   /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
@@ -428,7 +436,6 @@ enum {
   SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
-  CLIENT_EVENT,
   VISIBILITY_NOTIFY_EVENT,
   WINDOW_STATE_EVENT,
   DAMAGE_EVENT,
@@ -634,6 +641,7 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder);
 
+static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget         *widget);
 static void             gtk_widget_real_get_width               (GtkWidget         *widget,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
@@ -696,6 +704,7 @@ static GQuark		quark_tooltip_window = 0;
 static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
+static GQuark           quark_size_groups = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -810,6 +819,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_visual = g_quark_from_static_string ("gtk-widget-visual");
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
+  quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -834,6 +844,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->realize = gtk_widget_real_realize;
   klass->unrealize = gtk_widget_real_unrealize;
   klass->size_allocate = gtk_widget_real_size_allocate;
+  klass->get_request_mode = gtk_widget_real_get_request_mode;
   klass->get_preferred_width = gtk_widget_real_get_width;
   klass->get_preferred_height = gtk_widget_real_get_height;
   klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
@@ -1963,7 +1974,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal
    * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
    *
-   * The ::key-press-event signal is emitted when a key is pressed.
+   * The ::key-press-event signal is emitted when a key is pressed. The signal
+   * emission will reoccur at the key-repeat rate when the key is kept pressed.
    *
    * To receive this signal, the #GdkWindow associated to the widget needs
    * to enable the #GDK_KEY_PRESS_MASK mask.
@@ -1988,7 +2000,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal
    * @event: (type Gdk.EventKey): the #GdkEventKey which triggered this signal.
    *
-   * The ::key-release-event signal is emitted when a key is pressed.
+   * The ::key-release-event signal is emitted when a key is released.
    *
    * To receive this signal, the #GdkWindow associated to the widget needs
    * to enable the #GDK_KEY_RELEASE_MASK mask.
@@ -2736,29 +2748,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, visibility_notify_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  /**
-   * GtkWidget::client-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventClient): the #GdkEventClient which triggered
-   *   this signal.
-   *
-   * The ::client-event will be emitted when the @widget's window
-   * receives a message (via a ClientMessage event) from another
-   * application.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for
-   *   the event. %FALSE to propagate the event further.
-   */
-  widget_signals[CLIENT_EVENT] =
-    g_signal_new (I_("client-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, client_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
@@ -4200,6 +4189,9 @@ gtk_widget_unmap (GtkWidget *widget)
 
       if (priv->context)
         gtk_style_context_cancel_animations (priv->context, NULL);
+
+      /* Unset pointer/window info */
+      g_object_set_qdata (G_OBJECT (widget), quark_pointer_window, NULL);
     }
 }
 
@@ -4503,7 +4495,13 @@ gtk_widget_queue_draw_region (GtkWidget      *widget,
  *
  * Convenience function that calls gtk_widget_queue_draw_region() on
  * the region created from the given coordinates.
- **/
+ *
+ * The region here is specified in widget coordinates.
+ * Widget coordinates are a bit odd; for historical reasons, they are
+ * defined as @widget->window coordinates for widgets that are not
+ * #GTK_NO_WINDOW widgets, and are relative to @widget->allocation.x,
+ * @widget->allocation.y for widgets that are #GTK_NO_WINDOW widgets.
+ */
 void
 gtk_widget_queue_draw_area (GtkWidget *widget,
 			    gint       x,
@@ -4719,7 +4717,7 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
 /**
  * gtk_widget_size_allocate:
  * @widget: a #GtkWidget
- * @allocation: (inout): position and size to be allocated to @widget
+ * @allocation: position and size to be allocated to @widget
  *
  * This function is only used by #GtkContainer subclasses, to assign a size
  * and position to their child widgets.
@@ -6047,9 +6045,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	case GDK_PROXIMITY_OUT:
 	  signal_num = PROXIMITY_OUT_EVENT;
 	  break;
-	case GDK_CLIENT_EVENT:
-	  signal_num = CLIENT_EVENT;
-	  break;
 	case GDK_EXPOSE:
 	  signal_num = EXPOSE_EVENT;
 	  break;
@@ -6964,12 +6959,15 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
   /* Handle insensitive first, since it is propagated
    * differently throughout the widget hierarchy.
    */
-  if ((flags & GTK_STATE_FLAG_INSENSITIVE) !=
-      (priv->state_flags & GTK_STATE_FLAG_INSENSITIVE))
-    gtk_widget_set_sensitive (widget,
-                              operation != STATE_CHANGE_UNSET);
+  if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_UNSET))
+    gtk_widget_set_sensitive (widget, TRUE);
+  else if (!(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation != STATE_CHANGE_UNSET))
+    gtk_widget_set_sensitive (widget, FALSE);
+  else if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && !(flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_REPLACE))
+    gtk_widget_set_sensitive (widget, TRUE);
 
-  flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+  if (operation != STATE_CHANGE_REPLACE)
+    flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
 
   if (flags != 0 ||
       operation == STATE_CHANGE_REPLACE)
@@ -7075,6 +7073,9 @@ gtk_widget_get_state_flags (GtkWidget *widget)
   if (!gtk_widget_is_sensitive (widget))
     flags |= GTK_STATE_FLAG_INSENSITIVE;
 
+  if (gtk_widget_has_focus (widget))
+    flags |= GTK_STATE_FLAG_FOCUSED;
+
   return flags;
 }
 
@@ -7150,14 +7151,10 @@ gtk_widget_get_state (GtkWidget *widget)
 
   if (flags & GTK_STATE_FLAG_INSENSITIVE)
     return GTK_STATE_INSENSITIVE;
-  else if (flags & GTK_STATE_FLAG_INCONSISTENT)
-    return GTK_STATE_INCONSISTENT;
   else if (flags & GTK_STATE_FLAG_ACTIVE)
     return GTK_STATE_ACTIVE;
   else if (flags & GTK_STATE_FLAG_SELECTED)
     return GTK_STATE_SELECTED;
-  else if (flags & GTK_STATE_FLAG_FOCUSED)
-    return GTK_STATE_FOCUSED;
   else if (flags & GTK_STATE_FLAG_PRELIGHT)
     return GTK_STATE_PRELIGHT;
   else
@@ -7752,11 +7749,15 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   if (widget->priv->context)
     {
+      GdkScreen *screen;
+
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context, widget->priv->path);
 
-      gtk_style_context_set_screen (widget->priv->context,
-                                    gtk_widget_get_screen (widget));
+      screen = gtk_widget_get_screen (widget);
+
+      if (screen)
+        gtk_style_context_set_screen (widget->priv->context, screen);
     }
 
   gtk_widget_pop_verify_invariants (widget);
@@ -7840,19 +7841,21 @@ gtk_widget_has_rc_style (GtkWidget *widget)
 /**
  * gtk_widget_set_style:
  * @widget: a #GtkWidget
- * @style: (allow-none): a #GtkStyle, or %NULL to remove the effect of a previous
- *         gtk_widget_set_style() and go back to the default style
+ * @style: (allow-none): a #GtkStyle, or %NULL to remove the effect
+ *     of a previous call to gtk_widget_set_style() and go back to
+ *     the default style
  *
- * Sets the #GtkStyle for a widget (@widget->style). You probably don't
- * want to use this function; it interacts badly with themes, because
- * themes work by replacing the #GtkStyle. Instead, use
- * gtk_widget_modify_style().
+ * Sets the #GtkStyle for a widget (@widget->style).
+ *
+ * You probably don't want to use this function; it interacts
+ * badly with themes, because themes work by replacing the #GtkStyle.
+ * Instead, use gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
- **/
+ */
 void
 gtk_widget_set_style (GtkWidget *widget,
-		      GtkStyle	*style)
+                      GtkStyle  *style)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 }
@@ -7861,13 +7864,14 @@ gtk_widget_set_style (GtkWidget *widget,
  * gtk_widget_ensure_style:
  * @widget: a #GtkWidget
  *
- * Ensures that @widget has a style (@widget->style). Not a very useful
- * function; most of the time, if you want the style, the widget is
- * realized, and realized widgets are guaranteed to have a style
- * already.
+ * Ensures that @widget has a style (@widget->style).
+ *
+ * Not a very useful function; most of the time, if you
+ * want the style, the widget is realized, and realized
+ * widgets are guaranteed to have a style already.
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
- **/
+ */
 void
 gtk_widget_ensure_style (GtkWidget *widget)
 {
@@ -7904,7 +7908,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
  * Return value: (transfer none): the widget's #GtkStyle
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
- **/
+ */
 GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
 {
@@ -7918,13 +7922,14 @@ gtk_widget_get_style (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @style: the #GtkRcStyle holding the style modifications
  *
- * Modifies style values on the widget. Modifications made using this
- * technique take precedence over style values set via an RC file,
- * however, they will be overriden if a style is explicitely set on
- * the widget using gtk_widget_set_style(). The #GtkRcStyle structure
- * is designed so each field can either be set or unset, so it is
- * possible, using this function, to modify some style values and
- * leave the others unchanged.
+ * Modifies style values on the widget.
+ *
+ * Modifications made using this technique take precedence over
+ * style values set via an RC file, however, they will be overridden
+ * if a style is explicitely set on the widget using gtk_widget_set_style().
+ * The #GtkRcStyle structure is designed so each field can either be
+ * set or unset, so it is possible, using this function, to modify some
+ * style values and leave the others unchanged.
  *
  * Note that modifications made with this function are not cumulative
  * with previous calls to gtk_widget_modify_style() or with such
@@ -7937,18 +7942,18 @@ gtk_widget_get_style (GtkWidget *widget)
  * effect with the initial modifications.
  *
  * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
- **/
+ */
 void
 gtk_widget_modify_style (GtkWidget      *widget,
-			 GtkRcStyle     *style)
+                         GtkRcStyle     *style)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_RC_STYLE (style));
 
   g_object_set_qdata_full (G_OBJECT (widget),
-			   quark_rc_style,
-			   gtk_rc_style_copy (style),
-			   (GDestroyNotify) g_object_unref);
+                           quark_rc_style,
+                           gtk_rc_style_copy (style),
+                           (GDestroyNotify) g_object_unref);
 }
 
 /**
@@ -7974,7 +7979,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
  *     g_object_ref().
  *
  * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
- **/
+ */
 GtkRcStyle *
 gtk_widget_get_modifier_style (GtkWidget *widget)
 {
@@ -7988,9 +7993,9 @@ gtk_widget_get_modifier_style (GtkWidget *widget)
     {
       rc_style = gtk_rc_style_new ();
       g_object_set_qdata_full (G_OBJECT (widget),
-			       quark_rc_style,
-			       rc_style,
-			       (GDestroyNotify) g_object_unref);
+                               quark_rc_style,
+                               rc_style,
+                               (GDestroyNotify) g_object_unref);
     }
 
   return rc_style;
@@ -7998,31 +8003,31 @@ gtk_widget_get_modifier_style (GtkWidget *widget)
 
 static void
 gtk_widget_modify_color_component (GtkWidget      *widget,
-				   GtkRcFlags      component,
-				   GtkStateType    state,
-				   const GdkColor *color)
+                                   GtkRcFlags      component,
+                                   GtkStateType    state,
+                                   const GdkColor *color)
 {
   GtkRcStyle *rc_style = gtk_widget_get_modifier_style (widget);
 
   if (color)
     {
       switch (component)
-	{
-	case GTK_RC_FG:
-	  rc_style->fg[state] = *color;
-	  break;
-	case GTK_RC_BG:
-	  rc_style->bg[state] = *color;
-	  break;
-	case GTK_RC_TEXT:
-	  rc_style->text[state] = *color;
-	  break;
-	case GTK_RC_BASE:
-	  rc_style->base[state] = *color;
-	  break;
-	default:
-	  g_assert_not_reached();
-	}
+        {
+        case GTK_RC_FG:
+          rc_style->fg[state] = *color;
+          break;
+        case GTK_RC_BG:
+          rc_style->bg[state] = *color;
+          break;
+        case GTK_RC_TEXT:
+          rc_style->text[state] = *color;
+          break;
+        case GTK_RC_BASE:
+          rc_style->base[state] = *color;
+          break;
+        default:
+          g_assert_not_reached();
+        }
 
       rc_style->color_flags[state] |= component;
     }
@@ -8053,7 +8058,7 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
     {
       GtkStyleContext *context;
 
-      style = gtk_modifier_style_new ();
+      style = _gtk_modifier_style_new ();
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_modifier_style,
                                style,
@@ -8077,39 +8082,35 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @state: the state for which to set the color
  * @color: the color to assign, or %NULL to undo the effect
- *         of previous calls to gtk_widget_override_color()
+ *     of previous calls to gtk_widget_override_color()
  *
- * Sets the color to use for a widget. All other style values are left
- * untouched.
+ * Sets the color to use for a widget.
  *
- * <note>
- * <para>
- * This API is mostly meant as a quick way for applications to change a
- * widget appearance. If you are developing a widgets library and intend
- * this change to be themeable, it is better done by setting meaningful
- * CSS classes and regions in your widget/container implementation through
- * gtk_style_context_add_class() and gtk_style_context_add_region().
- * </para>
- * <para>
- * This way, your widget library can install a #GtkCssProvider with the
- * %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK priority in order to provide a
- * default styling for those widgets that need so, and this theming may
- * fully overridden by the user's theme.
- * </para>
- * </note>
+ * All other style values are left untouched.
  *
- * <note>
- * <para>
- * Note that for complex widgets this may bring in
- * undesired results (such as uniform background color everywhere),
- * in these cases it is better to fully style such widgets through a
+ * <note><para>
+ * This API is mostly meant as a quick way for applications to
+ * change a widget appearance. If you are developing a widgets
+ * library and intend this change to be themeable, it is better
+ * done by setting meaningful CSS classes and regions in your
+ * widget/container implementation through gtk_style_context_add_class()
+ * and gtk_style_context_add_region().
+ * </para><para>
+ * This way, your widget library can install a #GtkCssProvider
+ * with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK priority in order
+ * to provide a default styling for those widgets that need so, and
+ * this theming may fully overridden by the user's theme.
+ * </para></note>
+ * <note><para>
+ * Note that for complex widgets this may bring in undesired
+ * results (such as uniform background color everywhere), in
+ * these cases it is better to fully style such widgets through a
  * #GtkCssProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
  * priority.
- * </para>
- * </note>
+ * </para></note>
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_color (GtkWidget     *widget,
                            GtkStateFlags  state,
@@ -8120,7 +8121,7 @@ gtk_widget_override_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_color (style, state, color);
+  _gtk_modifier_style_set_color (style, state, color);
 }
 
 /**
@@ -8128,13 +8129,15 @@ gtk_widget_override_color (GtkWidget     *widget,
  * @widget: a #GtkWidget
  * @state: the state for which to set the background color
  * @color: the color to assign, or %NULL to undo the effect
- *         of previous calls to gtk_widget_override_background_color()
+ *     of previous calls to gtk_widget_override_background_color()
  *
- * Sets the background color to use for a widget. All other style values
- * are left untouched. See gtk_widget_override_color().
+ * Sets the background color to use for a widget.
+ *
+ * All other style values are left untouched.
+ * See gtk_widget_override_color().
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_background_color (GtkWidget     *widget,
                                       GtkStateFlags  state,
@@ -8145,21 +8148,20 @@ gtk_widget_override_background_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_background_color (style, state, color);
+  _gtk_modifier_style_set_background_color (style, state, color);
 }
 
 /**
  * gtk_widget_override_font:
  * @widget: a #GtkWidget
  * @font_desc: the font descriptiong to use, or %NULL to undo
- *             the effect of previous calls to
- *             gtk_widget_override_font().
+ *     the effect of previous calls to gtk_widget_override_font()
  *
  * Sets the font to use for a widget. All other style values are
  * left untouched. See gtk_widget_override_color().
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_font (GtkWidget                  *widget,
                           const PangoFontDescription *font_desc)
@@ -8169,23 +8171,25 @@ gtk_widget_override_font (GtkWidget                  *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_font (style, font_desc);
+  _gtk_modifier_style_set_font (style, font_desc);
 }
 
 /**
  * gtk_widget_override_symbolic_color:
  * @widget: a #GtkWidget
  * @name: the name of the symbolic color to modify
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         gtk_widget_override_symbolic_color().
+ * @color: (allow-none): the color to assign (does not need
+ *     to be allocated), or %NULL to undo the effect of previous
+ *     calls to gtk_widget_override_symbolic_color()
  *
- * Sets a symbolic color for a widget, All other style values are left
- * untouched. See gtk_widget_override_color() for overriding the foreground
+ * Sets a symbolic color for a widget.
+ *
+ * All other style values are left untouched.
+ * See gtk_widget_override_color() for overriding the foreground
  * or background color.
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_symbolic_color (GtkWidget     *widget,
                                     const gchar   *name,
@@ -8196,7 +8200,7 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_map_color (style, name, color);
+  _gtk_modifier_style_map_color (style, name, color);
 }
 
 /**
@@ -8229,13 +8233,13 @@ gtk_widget_override_cursor (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_color_property (style,
-                                         GTK_TYPE_WIDGET,
-                                         "cursor-color", cursor);
-  gtk_modifier_style_set_color_property (style,
-                                         GTK_TYPE_WIDGET,
-                                         "secondary-cursor-color",
-                                         secondary_cursor);
+  _gtk_modifier_style_set_color_property (style,
+                                          GTK_TYPE_WIDGET,
+                                          "cursor-color", cursor);
+  _gtk_modifier_style_set_color_property (style,
+                                          GTK_TYPE_WIDGET,
+                                          "secondary-cursor-color",
+                                          secondary_cursor);
 }
 
 /**
@@ -8243,19 +8247,20 @@ gtk_widget_override_cursor (GtkWidget     *widget,
  * @widget: a #GtkWidget
  * @state: the state for which to set the foreground color
  * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_fg().
+ *     or %NULL to undo the effect of previous calls to
+ *     of gtk_widget_modify_fg().
  *
  * Sets the foreground color for a widget in a particular state.
- * All other style values are left untouched. See also
- * gtk_widget_modify_style().
+ *
+ * All other style values are left untouched.
+ * See also gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use gtk_widget_override_color() instead
- **/
+ */
 void
 gtk_widget_modify_fg (GtkWidget      *widget,
-		      GtkStateType    state,
-		      const GdkColor *color)
+                      GtkStateType    state,
+                      const GdkColor *color)
 {
   GtkStateFlags flags;
   GdkRGBA rgba;
@@ -8289,38 +8294,43 @@ gtk_widget_modify_fg (GtkWidget      *widget,
       rgba.blue = color->blue / 65535.;
       rgba.alpha = 1;
 
-      gtk_widget_override_color (widget, state, &rgba);
+      gtk_widget_override_color (widget, flags, &rgba);
     }
   else
-    gtk_widget_override_color (widget, state, NULL);
+    gtk_widget_override_color (widget, flags, NULL);
 }
 
 /**
  * gtk_widget_modify_bg:
  * @widget: a #GtkWidget
  * @state: the state for which to set the background color
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_bg().
+ * @color: (allow-none): the color to assign (does not need
+ *     to be allocated), or %NULL to undo the effect of previous
+ *     calls to of gtk_widget_modify_bg().
  *
  * Sets the background color for a widget in a particular state.
- * All other style values are left untouched. See also
- * gtk_widget_modify_style().
  *
- * Note that "no window" widgets (which have the %GTK_NO_WINDOW flag set)
- * draw on their parent container's window and thus may not draw any
- * background themselves. This is the case for e.g. #GtkLabel. To modify
- * the background of such widgets, you have to set the background color
- * on their parent; if you want to set the background of a rectangular
- * area around a label, try placing the label in a #GtkEventBox widget
- * and setting the background color on that.
+ * All other style values are left untouched.
+ * See also gtk_widget_modify_style().
+ *
+ * <note><para>
+ * Note that "no window" widgets (which have the %GTK_NO_WINDOW
+ * flag set) draw on their parent container's window and thus may
+ * not draw any background themselves. This is the case for e.g.
+ * #GtkLabel.
+ * </para><para>
+ * To modify the background of such widgets, you have to set the
+ * background color on their parent; if you want to set the background
+ * of a rectangular area around a label, try placing the label in
+ * a #GtkEventBox widget and setting the background color on that.
+ * </para></note>
  *
  * Deprecated:3.0: Use gtk_widget_override_background_color() instead
- **/
+ */
 void
 gtk_widget_modify_bg (GtkWidget      *widget,
-		      GtkStateType    state,
-		      const GdkColor *color)
+                      GtkStateType    state,
+                      const GdkColor *color)
 {
   GtkStateFlags flags;
   GdkRGBA rgba;
@@ -8354,32 +8364,34 @@ gtk_widget_modify_bg (GtkWidget      *widget,
       rgba.blue = color->blue / 65535.;
       rgba.alpha = 1;
 
-      gtk_widget_override_background_color (widget, state, &rgba);
+      gtk_widget_override_background_color (widget, flags, &rgba);
     }
   else
-    gtk_widget_override_background_color (widget, state, NULL);
+    gtk_widget_override_background_color (widget, flags, NULL);
 }
 
 /**
  * gtk_widget_modify_text:
  * @widget: a #GtkWidget
  * @state: the state for which to set the text color
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_text().
+ * @color: (allow-none): the color to assign (does not need to
+ *     be allocated), or %NULL to undo the effect of previous
+ *     calls to of gtk_widget_modify_text().
  *
- * Sets the text color for a widget in a particular state.  All other
- * style values are left untouched. The text color is the foreground
- * color used along with the base color (see gtk_widget_modify_base())
- * for widgets such as #GtkEntry and #GtkTextView. See also
- * gtk_widget_modify_style().
+ * Sets the text color for a widget in a particular state.
+ *
+ * All other style values are left untouched.
+ * The text color is the foreground color used along with the
+ * base color (see gtk_widget_modify_base()) for widgets such
+ * as #GtkEntry and #GtkTextView.
+ * See also gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use gtk_widget_override_color() instead
- **/
+ */
 void
 gtk_widget_modify_text (GtkWidget      *widget,
-			GtkStateType    state,
-			const GdkColor *color)
+                        GtkStateType    state,
+                        const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
@@ -8391,9 +8403,9 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * gtk_widget_modify_base:
  * @widget: a #GtkWidget
  * @state: the state for which to set the base color
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_base().
+ * @color: (allow-none): the color to assign (does not need to
+ *     be allocated), or %NULL to undo the effect of previous
+ *     calls to of gtk_widget_modify_base().
  *
  * Sets the base color for a widget in a particular state.
  * All other style values are left untouched. The base color
@@ -8401,20 +8413,24 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * (see gtk_widget_modify_text()) for widgets such as #GtkEntry
  * and #GtkTextView. See also gtk_widget_modify_style().
  *
- * Note that "no window" widgets (which have the %GTK_NO_WINDOW flag set)
- * draw on their parent container's window and thus may not draw any
- * background themselves. This is the case for e.g. #GtkLabel. To modify
- * the background of such widgets, you have to set the base color on their
- * parent; if you want to set the background of a rectangular area around
- * a label, try placing the label in a #GtkEventBox widget and setting
- * the base color on that.
+ * <note><para>
+ * Note that "no window" widgets (which have the %GTK_NO_WINDOW
+ * flag set) draw on their parent container's window and thus may
+ * not draw any background themselves. This is the case for e.g.
+ * #GtkLabel.
+ * </para><para>
+ * To modify the background of such widgets, you have to set the
+ * base color on their parent; if you want to set the background
+ * of a rectangular area around a label, try placing the label in
+ * a #GtkEventBox widget and setting the base color on that.
+ * </para></note>
  *
  * Deprecated:3.0: Use gtk_widget_override_background_color() instead
- **/
+ */
 void
 gtk_widget_modify_base (GtkWidget      *widget,
-			GtkStateType    state,
-			const GdkColor *color)
+                        GtkStateType    state,
+                        const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
@@ -8426,25 +8442,27 @@ gtk_widget_modify_base (GtkWidget      *widget,
  * gtk_widget_modify_cursor:
  * @widget: a #GtkWidget
  * @primary: the color to use for primary cursor (does not need to be
- *           allocated), or %NULL to undo the effect of previous calls to
- *           of gtk_widget_modify_cursor().
+ *     allocated), or %NULL to undo the effect of previous calls to
+ *     of gtk_widget_modify_cursor().
  * @secondary: the color to use for secondary cursor (does not need to be
- *             allocated), or %NULL to undo the effect of previous calls to
- *             of gtk_widget_modify_cursor().
+ *     allocated), or %NULL to undo the effect of previous calls to
+ *     of gtk_widget_modify_cursor().
  *
  * Sets the cursor color to use in a widget, overriding the
  * #GtkWidget:cursor-color and #GtkWidget:secondary-cursor-color
- * style properties. All other style values are left untouched.
+ * style properties.
+ *
+ * All other style values are left untouched.
  * See also gtk_widget_modify_style().
  *
  * Since: 2.12
  *
  * Deprecated: 3.0. Use gtk_widget_override_cursor() instead.
- **/
+ */
 void
 gtk_widget_modify_cursor (GtkWidget      *widget,
-			  const GdkColor *primary,
-			  const GdkColor *secondary)
+                          const GdkColor *primary,
+                          const GdkColor *secondary)
 {
   GdkRGBA primary_rgba, secondary_rgba;
 
@@ -8466,17 +8484,19 @@ gtk_widget_modify_cursor (GtkWidget      *widget,
 /**
  * gtk_widget_modify_font:
  * @widget: a #GtkWidget
- * @font_desc: (allow-none): the font description to use, or %NULL to undo
- *   the effect of previous calls to gtk_widget_modify_font().
+ * @font_desc: (allow-none): the font description to use, or %NULL
+ *     to undo the effect of previous calls to gtk_widget_modify_font()
  *
- * Sets the font to use for a widget.  All other style values are left
- * untouched. See also gtk_widget_modify_style().
+ * Sets the font to use for a widget.
+ *
+ * All other style values are left untouched.
+ * See also gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use gtk_widget_override_font() instead
- **/
+ */
 void
 gtk_widget_modify_font (GtkWidget            *widget,
-			PangoFontDescription *font_desc)
+                        PangoFontDescription *font_desc)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -8730,7 +8750,7 @@ gtk_widget_reset_style (GtkWidget *widget)
  *
  * This function is not useful for applications.
  *
- * Deprecated:3.0: Use #GtkStyleContext instead
+ * Deprecated:3.0: Use #GtkStyleContext instead, and gtk_widget_reset_style()
  */
 void
 gtk_widget_reset_rc_styles (GtkWidget *widget)
@@ -8748,7 +8768,9 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
  * Returns: (transfer none): the default style. This #GtkStyle
  *     object is owned by GTK+ and should not be modified or freed.
  *
- * Deprecated:3.0: Use #GtkStyleContext instead
+ * Deprecated:3.0: Use #GtkStyleContext instead, and
+ *     gtk_css_provider_get_default() to obtain a #GtkStyleProvider
+ *     with the default widget style information.
  */
 GtkStyle*
 gtk_widget_get_default_style (void)
@@ -9159,17 +9181,17 @@ gtk_widget_render_icon_pixbuf (GtkWidget   *widget,
  *     multiple source sizes, GTK+ picks one of the available sizes).
  * @detail: (allow-none): render detail to pass to theme engine
  *
- * A convenience function that uses the theme engine and RC file
- * settings for @widget to look up @stock_id and render it to
- * a pixbuf. @stock_id should be a stock icon ID such as
- * #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size should be a size
- * such as #GTK_ICON_SIZE_MENU. @detail should be a string that
- * identifies the widget or code doing the rendering, so that
- * theme engines can special-case rendering for that widget or code.
+ * A convenience function that uses the theme settings for @widget
+ * to look up @stock_id and render it to a pixbuf. @stock_id should
+ * be a stock icon ID such as #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size
+ * should be a size such as #GTK_ICON_SIZE_MENU. @detail should be a
+ * string that identifies the widget or code doing the rendering, so
+ * that theme engines can special-case rendering for that widget or
+ * code.
  *
  * The pixels in the returned #GdkPixbuf are shared with the rest of
- * the application and should not be modified. The pixbuf should be freed
- * after use with g_object_unref().
+ * the application and should not be modified. The pixbuf should be
+ * freed after use with g_object_unref().
  *
  * Return value: (transfer full): a new pixbuf, or %NULL if the
  *     stock ID wasn't known
@@ -9192,7 +9214,7 @@ gtk_widget_render_icon (GtkWidget      *widget,
  *
  * Sets a non default parent window for @widget.
  *
- * For GtkWindow classes, setting a @parent_window effects whether 
+ * For GtkWindow classes, setting a @parent_window effects whether
  * the window is a toplevel window or can be embedded into other
  * widgets.
  *
@@ -9215,6 +9237,8 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
 
   if (parent_window != old_parent_window)
     {
+      gboolean is_plug;
+
       g_object_set_qdata (G_OBJECT (widget), quark_parent_window,
 			  parent_window);
       if (old_parent_window)
@@ -9226,7 +9250,12 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
        * this is the primary entry point to allow toplevels to be
        * embeddable.
        */
-      if (GTK_IS_WINDOW (widget) && !GTK_IS_PLUG (widget))
+#ifdef GDK_WINDOWING_X11
+      is_plug = GTK_IS_PLUG (widget);
+#else
+      is_plug = FALSE;
+#endif
+      if (GTK_IS_WINDOW (widget) && !is_plug)
 	_gtk_window_set_is_toplevel (GTK_WINDOW (widget), parent_window == NULL);
     }
 }
@@ -9866,18 +9895,20 @@ gtk_widget_set_device_events (GtkWidget    *widget,
 }
 
 /**
- * gtk_widget_enable_device:
+ * gtk_widget_set_device_enabled:
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
+ * @enabled: whether to enable the device
  *
- * Enables a #GdkDevice to interact with @widget and
- * all its children, it does so by descending through
- * the #GdkWindow hierarchy and enabling the same mask
- * that is has for core events (i.e. the one that
- * gdk_window_get_events() returns).
+ * Enables or disables a #GdkDevice to interact with @widget
+ * and all its children.
+ *
+ * It does so by descending through the #GdkWindow hierarchy
+ * and enabling the same mask that is has for core events
+ * (i.e. the one that gdk_window_get_events() returns).
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_set_device_enabled (GtkWidget *widget,
                                GdkDevice *device,
@@ -9898,6 +9929,18 @@ gtk_widget_set_device_enabled (GtkWidget *widget,
     gtk_widget_set_device_enabled_internal (widget, device, TRUE, enabled);
 }
 
+/**
+ * gtk_widget_get_device_enabled:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ *
+ * Returns whether @device can interact with @widget and its
+ * children. See gtk_widget_set_device_enabled().
+ *
+ * Return value: %TRUE is @device is enabled for @widget
+ *
+ * Since: 3.0
+ */
 gboolean
 gtk_widget_get_device_enabled (GtkWidget *widget,
                                GdkDevice *device)
@@ -10179,15 +10222,14 @@ gtk_widget_get_visual (GtkWidget *widget)
  * gtk_widget_get_settings:
  * @widget: a #GtkWidget
  *
- * Gets the settings object holding the settings (global property
- * settings, RC file information, etc) used for this widget.
+ * Gets the settings object holding the settings used for this widget.
  *
  * Note that this function can only be called when the #GtkWidget
  * is attached to a toplevel, since the settings object is specific
  * to a particular #GdkScreen.
  *
  * Return value: (transfer none): the relevant #GtkSettings object
- **/
+ */
 GtkSettings*
 gtk_widget_get_settings (GtkWidget *widget)
 {
@@ -10409,9 +10451,13 @@ gtk_widget_pop_composite_child (void)
 
 static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
-				   GtkTextDirection  old_dir)
+                                   GtkTextDirection  old_dir)
 {
   gtk_widget_update_pango_context (widget);
+
+  if (widget->priv->context)
+    gtk_style_context_set_direction (widget->priv->context,
+                                     gtk_widget_get_direction (widget));
 
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }
@@ -10436,7 +10482,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
  **/
 void
 gtk_widget_set_direction (GtkWidget        *widget,
-			  GtkTextDirection  dir)
+                          GtkTextDirection  dir)
 {
   GtkTextDirection old_dir;
 
@@ -10448,13 +10494,7 @@ gtk_widget_set_direction (GtkWidget        *widget,
   widget->priv->direction = dir;
 
   if (old_dir != gtk_widget_get_direction (widget))
-    {
-      if (widget->priv->context)
-        gtk_style_context_set_direction (widget->priv->context,
-                                         gtk_widget_get_direction (widget));
-
-      gtk_widget_emit_direction_changed (widget, old_dir);
-    }
+    gtk_widget_emit_direction_changed (widget, old_dir);
 }
 
 /**
@@ -10801,38 +10841,33 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
 
 /*
  * _gtk_widget_set_device_window:
- * @widget: a #GtkWidget.
- * @device: a #GdkDevice.
- * @window: the new device window.
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ * @window: the new device window
  *
- * Sets pointer window for @widget and @device.  Does not ref @window.
- * Actually stores it on the #GdkScreen, but you don't need to know that.
+ * Sets pointer window for @widget and @device.
+ * Does not ref @window.
  */
 void
 _gtk_widget_set_device_window (GtkWidget *widget,
                                GdkDevice *device,
                                GdkWindow *window)
 {
-  GtkWidgetPrivate *priv;
-  GdkScreen *screen;
   GHashTable *device_window;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (!window || GDK_IS_WINDOW (window));
+  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
 
-  priv = widget->priv;
-
-  if (!gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
-  screen = gdk_window_get_screen (priv->window);
-  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
 
-  if (G_UNLIKELY (!device_window))
+  if (!device_window && window)
     {
       device_window = g_hash_table_new (NULL, NULL);
-      g_object_set_qdata_full (G_OBJECT (screen),
+      g_object_set_qdata_full (G_OBJECT (widget),
                                quark_pointer_window,
                                device_window,
                                (GDestroyNotify) g_hash_table_destroy);
@@ -10840,68 +10875,54 @@ _gtk_widget_set_device_window (GtkWidget *widget,
 
   if (window)
     g_hash_table_insert (device_window, device, window);
-  else
-    g_hash_table_remove (device_window, device);
+  else if (device_window)
+    {
+      g_hash_table_remove (device_window, device);
+
+      if (g_hash_table_size (device_window) == 0)
+        g_object_set_qdata (G_OBJECT (widget), quark_pointer_window, NULL);
+    }
 }
 
 /*
  * _gtk_widget_get_device_window:
- * @widget: a #GtkWidget.
- * @device: a #GdkDevice.
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
  *
- * Return value: the device window set on the #GdkScreen @widget is attached
- * to, or %NULL.
+ * Return value: the device window set on @widget, or %NULL
  */
 GdkWindow *
 _gtk_widget_get_device_window (GtkWidget *widget,
                                GdkDevice *device)
 {
-  GtkWidgetPrivate *priv;
-  GdkScreen *screen;
   GHashTable *device_window;
-  GdkWindow *window;
-  GtkWidget *w;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
-  priv = widget->priv;
-
-  if (!gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_mapped (widget))
     return NULL;
 
-  screen = gdk_window_get_screen (priv->window);
-  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
 
-  if (G_UNLIKELY (!device_window))
+  if (!device_window)
     return NULL;
 
-  window = g_hash_table_lookup (device_window, device);
-
-  if (!window)
-    return NULL;
-
-  gdk_window_get_user_data (window, (gpointer *) &w);
-
-  if (widget != w)
-    return NULL;
-
-  return window;
+  return g_hash_table_lookup (device_window, device);
 }
 
 /*
  * _gtk_widget_list_devices:
- * @widget: a #GtkWidget.
+ * @widget: a #GtkWidget
  *
- * Returns the list of #GdkDevices that is currently on top of any widget #GdkWindow.
- * Free the list with g_list_free(), the elements are owned by GTK+ and must not
- * be freed.
+ * Returns the list of #GdkDevices that is currently on top
+ * of any window belonging to @widget.
+ * Free the list with g_list_free(), the elements are owned
+ * by GTK+ and must not be freed.
  */
 GList *
 _gtk_widget_list_devices (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
-  GdkScreen *screen;
   GHashTableIter iter;
   GHashTable *device_window;
   GList *devices = NULL;
@@ -10909,13 +10930,10 @@ _gtk_widget_list_devices (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  priv = widget->priv;
-
-  if (!gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_mapped (widget))
     return NULL;
 
-  screen = gdk_window_get_screen (priv->window);
-  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
 
   if (G_UNLIKELY (!device_window))
     return NULL;
@@ -10923,19 +10941,7 @@ _gtk_widget_list_devices (GtkWidget *widget)
   g_hash_table_iter_init (&iter, device_window);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      GdkDevice *device = key;
-      GdkWindow *window = value;
-      GtkWidget *w;
-
-      if (window)
-        {
-          gdk_window_get_user_data (window, (gpointer *) &w);
-
-          if (widget == w)
-            devices = g_list_prepend (devices, device);
-        }
-    }
+    devices = g_list_prepend (devices, key);
 
   return devices;
 }
@@ -11164,8 +11170,8 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 }
 
 static void
-gtk_widget_propagate_state (GtkWidget           *widget,
-			    GtkStateData        *data)
+gtk_widget_propagate_state (GtkWidget    *widget,
+                            GtkStateData *data)
 {
   GtkWidgetPrivate *priv = widget->priv;
   GtkStateFlags new_flags, old_flags = priv->state_flags;
@@ -11198,7 +11204,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       window = gtk_widget_get_toplevel (widget);
 
       if (window && gtk_widget_is_toplevel (window))
-	gtk_window_set_focus (GTK_WINDOW (window), NULL);
+        gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
   new_flags = gtk_widget_get_state_flags (widget);
@@ -11208,7 +11214,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       g_object_ref (widget);
 
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
-	gtk_grab_remove (widget);
+        gtk_grab_remove (widget);
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
@@ -11253,8 +11259,8 @@ gtk_widget_propagate_state (GtkWidget           *widget,
         {
           data->parent_sensitive = gtk_widget_is_sensitive (widget);
 
-          /* Do not propagate insensitive state further */
-          data->flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+          /* Do not propagate focused state further */
+          data->flags &= ~GTK_STATE_FLAG_FOCUSED;
 
           if (data->use_forall)
             gtk_container_forall (GTK_CONTAINER (widget),
@@ -11271,10 +11277,8 @@ gtk_widget_propagate_state (GtkWidget           *widget,
           gtk_widget_get_mapped (widget))
         {
           gint diff, flag = 1;
-          GdkWindow *window;
 
           diff = old_flags ^ new_flags;
-          window = gtk_widget_get_window (widget);
 
           while (diff != 0)
             {
@@ -11459,7 +11463,7 @@ gtk_widget_input_shape_combine_region (GtkWidget *widget,
  */
 
 /**
- * gtk_widget_class_install_style_property_parser:
+ * gtk_widget_class_install_style_property_parser: (skip)
  * @klass: a #GtkWidgetClass
  * @pspec: the #GParamSpec for the style property
  * @parser: the parser for the style property
@@ -11515,8 +11519,8 @@ gtk_widget_class_install_style_property (GtkWidgetClass *klass,
  * gtk_widget_class_find_style_property:
  * @klass: a #GtkWidgetClass
  * @property_name: the name of the style property to find
- * @returns: (allow-none): the #GParamSpec of the style property or %NULL if @class has no
- *   style property with that name.
+ * @returns: (transfer none): the #GParamSpec of the style property or
+ *   %NULL if @class has no style property with that name.
  *
  * Finds a style property of a widget class by name.
  *
@@ -11538,8 +11542,9 @@ gtk_widget_class_find_style_property (GtkWidgetClass *klass,
  * gtk_widget_class_list_style_properties:
  * @klass: a #GtkWidgetClass
  * @n_properties: location to return the number of style properties found
- * @returns: an newly allocated array of #GParamSpec*. The array must
- *       be freed with g_free().
+ * @returns: (array length=n_properties) (transfer container): an
+ *       newly allocated array of #GParamSpec*. The array must be
+ *       freed with g_free().
  *
  * Returns all style properties of a widget class.
  *
@@ -12916,6 +12921,13 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
     }
 }
 
+static GtkSizeRequestMode 
+gtk_widget_real_get_request_mode (GtkWidget *widget)
+{ 
+  /* By default widgets are height-for-width. */
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+}
+
 static void
 gtk_widget_real_get_width (GtkWidget *widget,
 			   gint      *minimum_size,
@@ -13905,6 +13917,11 @@ _gtk_widget_set_has_focus (GtkWidget *widget,
                            gboolean   has_focus)
 {
   widget->priv->has_focus = has_focus;
+
+  if (has_focus)
+    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_FOCUSED, FALSE);
+  else
+    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_FOCUSED);
 }
 
 /**
@@ -14070,6 +14087,67 @@ _gtk_widget_set_height_request_needed (GtkWidget *widget,
   widget->priv->height_request_needed = height_request_needed;
 }
 
+gboolean
+_gtk_widget_get_sizegroup_visited (GtkWidget    *widget)
+{
+  return widget->priv->sizegroup_visited;
+}
+
+void
+_gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
+				   gboolean      visited)
+{
+  widget->priv->sizegroup_visited = visited;
+}
+
+gboolean
+_gtk_widget_get_sizegroup_bumping (GtkWidget    *widget)
+{
+  return widget->priv->sizegroup_bumping;
+}
+
+void
+_gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
+				   gboolean      bumping)
+{
+  widget->priv->sizegroup_bumping = bumping;
+}
+
+void
+_gtk_widget_add_sizegroup (GtkWidget    *widget,
+			   gpointer      group)
+{
+  GSList *groups;
+
+  groups = g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+  groups = g_slist_prepend (groups, group);
+  g_object_set_qdata (G_OBJECT (widget), quark_size_groups, groups);
+
+  widget->priv->have_size_groups = TRUE;
+}
+
+void
+_gtk_widget_remove_sizegroup (GtkWidget    *widget,
+			      gpointer      group)
+{
+  GSList *groups;
+
+  groups = g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+  groups = g_slist_remove (groups, group);
+  g_object_set_qdata (G_OBJECT (widget), quark_size_groups, groups);
+
+  widget->priv->have_size_groups = groups != NULL;
+}
+
+GSList *
+_gtk_widget_get_sizegroups (GtkWidget    *widget)
+{
+  if (widget->priv->have_size_groups)
+    return g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+
+  return NULL;
+}
+
 /**
  * gtk_widget_get_path:
  * @widget: a #GtkWidget
@@ -14181,6 +14259,8 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
   if (G_UNLIKELY (!widget->priv->context))
     {
+      GdkScreen *screen;
+
       widget->priv->context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
                                             "direction", gtk_widget_get_direction (widget),
                                             NULL);
@@ -14188,8 +14268,10 @@ gtk_widget_get_style_context (GtkWidget *widget)
       g_signal_connect (widget->priv->context, "changed",
                         G_CALLBACK (style_context_changed), widget);
 
-      gtk_style_context_set_screen (widget->priv->context,
-                                    gtk_widget_get_screen (widget));
+      screen = gtk_widget_get_screen (widget);
+
+      if (screen)
+        gtk_style_context_set_screen (widget->priv->context, screen);
 
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context,

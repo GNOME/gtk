@@ -29,7 +29,7 @@
 #include <string.h>
 
 #include "gtkprogressbar.h"
-#include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

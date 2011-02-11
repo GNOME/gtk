@@ -559,8 +559,9 @@ gtk_scale_button_dispose (GObject *object)
  * @max: the maximum value of the scale (usually 100)
  * @step: the stepping of value when a scroll-wheel event,
  *        or up/down arrow event occurs (usually 2)
- * @icons: (allow-none): a %NULL-terminated array of icon names, or %NULL if
- *         you want to set the list later with gtk_scale_button_set_icons()
+ * @icons: (allow-none) (array zero-terminated=1): a %NULL-terminated
+ *         array of icon names, or %NULL if you want to set the list
+ *         later with gtk_scale_button_set_icons()
  *
  * Creates a #GtkScaleButton, with a range between @min and @max, with
  * a stepping of @step.
@@ -640,7 +641,7 @@ gtk_scale_button_set_value (GtkScaleButton *button,
 /**
  * gtk_scale_button_set_icons:
  * @button: a #GtkScaleButton
- * @icons: a %NULL-terminated array of icon names
+ * @icons: (array zero-terminated=1): a %NULL-terminated array of icon names
  *
  * Sets the icons to be used by the scale button.
  * For details, see the #GtkScaleButton:icons property.
@@ -901,7 +902,6 @@ gtk_scale_popup (GtkWidget *widget,
   gint x, y, m, dx, dy, sx, sy, startoff;
   gint min_slider_size;
   gdouble v;
-  GdkDisplay *display;
   GdkScreen *screen;
   gboolean is_moved;
   GdkDevice *device, *keyboard, *pointer;
@@ -911,7 +911,6 @@ gtk_scale_popup (GtkWidget *widget,
   priv = button->priv;
   adjustment = priv->adjustment;
 
-  display = gtk_widget_get_display (widget);
   screen = gtk_widget_get_screen (widget);
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -1144,9 +1143,8 @@ gtk_scale_button_key_release (GtkWidget   *widget,
  * either the dock, or the scale itself */
 static void
 gtk_scale_button_grab_notify (GtkScaleButton *button,
-			      gboolean        was_grabbed)
+                              gboolean        was_grabbed)
 {
-  GdkDisplay *display;
   GtkScaleButtonPrivate *priv;
   GtkWidget *toplevel, *grab_widget;
   GtkWindowGroup *group;
@@ -1170,7 +1168,6 @@ gtk_scale_button_grab_notify (GtkScaleButton *button,
       gtk_widget_is_ancestor (grab_widget, priv->dock))
     return;
 
-  display = gtk_widget_get_display (priv->dock);
   gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
   gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
   gtk_device_grab_remove (priv->dock, priv->grab_pointer);
@@ -1298,22 +1295,18 @@ cb_dock_grab_broken_event (GtkWidget *widget,
   return FALSE;
 }
 
-/*
- * Scale callbacks.
- */
+/* Scale callbacks  */
 
 static void
 gtk_scale_button_release_grab (GtkScaleButton *button,
-			       GdkEventButton *event)
+                               GdkEventButton *event)
 {
   GdkEventButton *e;
-  GdkDisplay *display;
   GtkScaleButtonPrivate *priv;
 
   priv = button->priv;
 
   /* ungrab focus */
-  display = gtk_widget_get_display (GTK_WIDGET (button));
   gdk_device_ungrab (priv->grab_keyboard, event->time);
   gdk_device_ungrab (priv->grab_pointer, event->time);
   gtk_device_grab_remove (priv->dock, priv->grab_pointer);
@@ -1354,13 +1347,11 @@ gtk_scale_button_popdown (GtkWidget *widget)
 {
   GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
-  GdkDisplay *display;
 
   button = GTK_SCALE_BUTTON (widget);
   priv = button->priv;
 
   /* ungrab focus */
-  display = gtk_widget_get_display (widget);
   gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
   gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
   gtk_device_grab_remove (priv->dock, priv->grab_pointer);
@@ -1529,7 +1520,6 @@ static void
 gtk_scale_button_update_icon (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv;
-  GtkRange *range;
   GtkAdjustment *adjustment;
   gdouble value;
   const gchar *name;
@@ -1540,8 +1530,8 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   if (!priv->icon_list || priv->icon_list[0] == '\0')
     {
       gtk_image_set_from_stock (GTK_IMAGE (priv->image),
-				GTK_STOCK_MISSING_IMAGE,
-				priv->size);
+                                GTK_STOCK_MISSING_IMAGE,
+                                priv->size);
       return;
     }
 
@@ -1551,12 +1541,11 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   if (num_icons == 1)
     {
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-				    priv->icon_list[0],
-				    priv->size);
+                                    priv->icon_list[0],
+                                    priv->size);
       return;
     }
 
-  range = GTK_RANGE (priv->scale);
   adjustment = priv->adjustment;
   value = gtk_scale_button_get_value (button);
 
@@ -1564,15 +1553,16 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   if (num_icons == 2)
     {
       gdouble limit;
+
       limit = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) / 2 + gtk_adjustment_get_lower (adjustment);
       if (value < limit)
-	name = priv->icon_list[0];
+        name = priv->icon_list[0];
       else
-	name = priv->icon_list[1];
+        name = priv->icon_list[1];
 
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-				    name,
-				    priv->size);
+                                    name,
+                                    priv->size);
       return;
     }
 
@@ -1597,8 +1587,8 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
     }
 
   gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-				name,
-				priv->size);
+                                name,
+                                priv->size);
 }
 
 static void

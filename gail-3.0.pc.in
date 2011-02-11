@@ -7,5 +7,5 @@ Name: Gail
 Description: GNOME Accessibility Implementation Library
 Version: @VERSION@
 Requires: atk gtk+-3.0
-Libs: -L${libdir} -lgailutil-3.0
+Libs: -L${libdir} -lgailutil-3
 Cflags: -I${includedir}/gail-3.0

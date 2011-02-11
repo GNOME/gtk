@@ -96,6 +96,7 @@ main (int argc,
   sel_name = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (w), sel_name, TRUE, TRUE, 0);
 
+  gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (combobox), "Choose one, <i>not</i> two");
   gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (combobox));
   gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
                                              CUSTOM_ITEM,

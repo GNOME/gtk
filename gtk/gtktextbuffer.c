@@ -3292,9 +3292,7 @@ get_paste_point (GtkTextBuffer *buffer,
       gtk_text_buffer_get_iter_at_mark (buffer, &insert_point,
                                         paste_point_override);
       if (clear_afterward)
-        gtk_text_buffer_delete_mark (buffer,
-                                     gtk_text_buffer_get_mark (buffer,
-                                                               "gtk_paste_point_override"));
+        gtk_text_buffer_delete_mark (buffer, paste_point_override);
     }
   else
     {
@@ -3392,6 +3390,18 @@ clipboard_text_received (GtkClipboard *clipboard,
 	gtk_text_buffer_end_user_action (buffer);
 
       emit_paste_done (buffer, clipboard);
+    }
+  else
+    {
+      /* It may happen that we set a point override but we are not inserting
+         any text, so we must remove it afterwards */
+      GtkTextMark *paste_point_override;
+
+      paste_point_override = gtk_text_buffer_get_mark (buffer,
+                                                       "gtk_paste_point_override");
+
+      if (paste_point_override != NULL)
+        gtk_text_buffer_delete_mark (buffer, paste_point_override);
     }
 
   free_clipboard_request (request_data);
@@ -4193,7 +4203,7 @@ gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
- * Return value: the #GtkTargetList
+ * Return value: (transfer none): the #GtkTargetList
  *
  * Since: 2.10
  **/
@@ -4225,7 +4235,7 @@ gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
- * Return value: the #GtkTargetList
+ * Return value: (transfer none): the #GtkTargetList
  *
  * Since: 2.10
  **/

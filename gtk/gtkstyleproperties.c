@@ -171,6 +171,13 @@ gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
                                                               "Transition animation description",
                                                               GTK_TYPE_ANIMATION_DESCRIPTION, 0));
 
+  /* Private property holding the binding sets */
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("gtk-key-bindings",
+                                                              "Key bindings",
+                                                              "Key bindings",
+                                                              G_TYPE_PTR_ARRAY, 0));
+
   g_type_class_add_private (object_class, sizeof (GtkStylePropertiesPrivate));
 }
 
@@ -406,7 +413,7 @@ property_node_lookup (GQuark quark)
 /* Property registration functions */
 
 /**
- * gtk_style_properties_register_property:
+ * gtk_style_properties_register_property: (skip)
  * @parse_func: parsing function to use, or %NULL
  * @pspec: the #GParamSpec for the new property
  *
@@ -457,10 +464,10 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
 }
 
 /**
- * gtk_style_properties_lookup_property:
+ * gtk_style_properties_lookup_property: (skip)
  * @property_name: property name to look up
  * @parse_func: (out): return location for the parse function
- * @pspec: (out): return location for the #GParamSpec
+ * @pspec: (out) (transfer none): return location for the #GParamSpec
  *
  * Returns %TRUE if a property has been registered, if @pspec or
  * @parse_func are not %NULL, the #GParamSpec and parsing function
@@ -574,7 +581,7 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
  * Returns the symbolic color that is mapped
  * to @name.
  *
- * Returns: The mapped color
+ * Returns: (transfer none): The mapped color
  *
  * Since: 3.0
  **/
@@ -729,9 +736,8 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
       if (G_IS_VALUE (val))
         g_value_unset (val);
 
-      g_value_init (val, node->pspec->value_type);
-      G_VALUE_COLLECT (val, args, 0, &error);
-
+      G_VALUE_COLLECT_INIT (val, node->pspec->value_type,
+                            args, 0, &error);
       if (error)
         {
           g_warning ("Could not set style property \"%s\": %s", property_name, error);
@@ -868,6 +874,10 @@ lookup_default_value (PropertyNode *node,
       GdkRGBA color;
       gdk_rgba_parse (&color, "pink");
       g_value_set_boxed (value, &color);
+    }
+  else if (node->pspec->value_type == GTK_TYPE_BORDER)
+    {
+      g_value_take_boxed (value, gtk_border_new ());
     }
   else
     g_param_value_set_default (node->pspec, value);
@@ -1234,6 +1244,21 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               font_desc_to_merge = g_value_get_boxed (&data->value);
 
               pango_font_description_merge (font_desc, font_desc_to_merge, replace);
+            }
+          else if (G_VALUE_TYPE (&data->value) == G_TYPE_PTR_ARRAY &&
+                   G_IS_VALUE (value))
+            {
+              GPtrArray *array, *array_to_merge;
+              gint i;
+
+              /* Append the array, mainly thought
+               * for the gtk-key-bindings property
+               */
+              array = g_value_get_boxed (value);
+              array_to_merge = g_value_get_boxed (&data->value);
+
+              for (i = 0; i < array_to_merge->len; i++)
+                g_ptr_array_add (array, g_ptr_array_index (array_to_merge, i));
             }
           else if (replace || !G_IS_VALUE (value))
             {

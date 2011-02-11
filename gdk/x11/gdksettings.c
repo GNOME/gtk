@@ -32,7 +32,8 @@
 /* WARNING:
  * You will need to update gdk_settings_map when adding a
  * new setting, and make sure that checksettings does not
- * fail before committing */
+ * fail before committing
+ */
 static const char gdk_settings_names[] =
   "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
   "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
@@ -77,8 +78,9 @@ static const char gdk_settings_names[] =
   "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
   "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
   "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
-  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0"
-  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0";
+  "Net/EnableEventSounds\0"   "gtk-enable-event-sounds\0"
+  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
+  "Gtk/AutoMnemonics\0"       "gtk-auto-mnemonics\0";
 
 
 static const struct
@@ -131,4 +133,5 @@ static const struct
   { 1573, 1603 },
   { 1636, 1658 },
   { 1682, 1705 },
+  { 1730, 1748 }
 };

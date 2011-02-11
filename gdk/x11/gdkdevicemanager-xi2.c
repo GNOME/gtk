@@ -42,10 +42,7 @@ struct _GdkX11DeviceManagerXI2
 
   GHashTable *id_table;
 
-  GList *master_devices;
-  GList *slave_devices;
-
-  GdkDevice *client_pointer;
+  GList *devices;
 
   gint opcode;
 };
@@ -85,7 +82,7 @@ static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTra
                                                                      GdkEventMask        event_mask);
 
 
-G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK_TYPE_DEVICE_MANAGER,
+G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK_TYPE_X11_DEVICE_MANAGER_CORE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_x11_device_manager_xi2_event_translator_init))
 
@@ -309,12 +306,7 @@ add_device (GdkX11DeviceManagerXI2 *device_manager,
                         GINT_TO_POINTER (dev->deviceid),
                         g_object_ref (device));
 
-  if (dev->use == XIMasterPointer || dev->use == XIMasterKeyboard)
-    device_manager->master_devices = g_list_append (device_manager->master_devices, device);
-  else if (dev->use == XISlavePointer || dev->use == XISlaveKeyboard || dev->use == XIFloatingSlave)
-    device_manager->slave_devices = g_list_append (device_manager->slave_devices, device);
-  else
-    g_warning ("Unhandled device: %s\n", gdk_device_get_name (device));
+  device_manager->devices = g_list_append (device_manager->devices, device);
 
   if (emit_signal)
     {
@@ -349,8 +341,7 @@ remove_device (GdkX11DeviceManagerXI2 *device_manager,
 
   if (device)
     {
-      device_manager->master_devices = g_list_remove (device_manager->master_devices, device);
-      device_manager->slave_devices = g_list_remove (device_manager->slave_devices, device);
+      device_manager->devices = g_list_remove (device_manager->devices, device);
 
       g_signal_emit_by_name (device_manager, "device-removed", device);
 
@@ -418,10 +409,8 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   /* Initialize devices list */
   for (i = 0; i < ndevices; i++)
     {
-      GdkDevice *device;
-
       dev = &info[i];
-      device = add_device (device_manager, dev, FALSE);
+      add_device (device_manager, dev, FALSE);
 
       if (dev->use == XIMasterPointer ||
           dev->use == XIMasterKeyboard)
@@ -469,11 +458,8 @@ gdk_x11_device_manager_xi2_dispose (GObject *object)
 
   device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
 
-  g_list_free_full (device_manager->master_devices, g_object_unref);
-  device_manager->master_devices = NULL;
-
-  g_list_free_full (device_manager->slave_devices, g_object_unref);
-  device_manager->slave_devices = NULL;
+  g_list_free_full (device_manager->devices, g_object_unref);
+  device_manager->devices = NULL;
 
   if (device_manager->id_table)
     {
@@ -489,34 +475,16 @@ gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
                                          GdkDeviceType     type)
 {
   GdkX11DeviceManagerXI2 *device_manager_xi2;
-  GList *list = NULL;
+  GList *cur, *list = NULL;
 
   device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (device_manager);
 
-  switch (type)
+  for (cur = device_manager_xi2->devices; cur; cur = cur->next)
     {
-    case GDK_DEVICE_TYPE_MASTER:
-      list = g_list_copy (device_manager_xi2->master_devices);
-      break;
-    case GDK_DEVICE_TYPE_SLAVE:
-    case GDK_DEVICE_TYPE_FLOATING:
-      {
-        GList *devs = device_manager_xi2->slave_devices;
+      GdkDevice *dev = cur->data;
 
-        while (devs)
-          {
-            GdkDevice *dev;
-
-            dev = devs->data;
-            devs = devs->next;
-
-            if (type == gdk_device_get_device_type (dev))
-              list = g_list_prepend (list, dev);
-          }
-      }
-      break;
-    default:
-      g_assert_not_reached ();
+      if (type == gdk_device_get_device_type (dev))
+        list = g_list_prepend (list, dev);
     }
 
   return list;
@@ -595,7 +563,6 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
 {
   GdkDisplay *display;
   Display *xdisplay;
-  GdkDevice *device;
   XIDeviceInfo *info;
   int ndevices;
   gint i;
@@ -608,7 +575,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
       if (ev->info[i].flags & XIDeviceEnabled)
         {
           info = XIQueryDevice (xdisplay, ev->info[i].deviceid, &ndevices);
-          device = add_device (device_manager, &info[0], TRUE);
+          add_device (device_manager, &info[0], TRUE);
           XIFreeDeviceInfo (info);
         }
       else if (ev->info[i].flags & XIDeviceDisabled)
@@ -742,70 +709,6 @@ set_user_time (GdkEvent *event)
 }
 
 static void
-translate_keyboard_string (GdkEventKey *event)
-{
-  gunichar c = 0;
-  gchar buf[7];
-
-  /* Fill in event->string crudely, since various programs
-   * depend on it.
-   */
-  event->string = NULL;
-
-  if (event->keyval != GDK_KEY_VoidSymbol)
-    c = gdk_keyval_to_unicode (event->keyval);
-
-  if (c)
-    {
-      gsize bytes_written;
-      gint len;
-
-      /* Apply the control key - Taken from Xlib
-       */
-      if (event->state & GDK_CONTROL_MASK)
-        {
-          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
-          else if (c == '2')
-            {
-              event->string = g_memdup ("\0\0", 2);
-              event->length = 1;
-              buf[0] = '\0';
-              return;
-            }
-          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
-          else if (c == '8') c = '\177';
-          else if (c == '/') c = '_' & 0x1F;
-        }
-
-      len = g_unichar_to_utf8 (c, buf);
-      buf[len] = '\0';
-
-      event->string = g_locale_from_utf8 (buf, len,
-                                          NULL, &bytes_written,
-                                          NULL);
-      if (event->string)
-        event->length = bytes_written;
-    }
-  else if (event->keyval == GDK_KEY_Escape)
-    {
-      event->length = 1;
-      event->string = g_strdup ("\033");
-    }
-  else if (event->keyval == GDK_KEY_Return ||
-          event->keyval == GDK_KEY_KP_Enter)
-    {
-      event->length = 1;
-      event->string = g_strdup ("\r");
-    }
-
-  if (!event->string)
-    {
-      event->length = 0;
-      event->string = g_strdup ("");
-    }
-}
-
-static void
 generate_focus_event (GdkWindow *window,
                       GdkDevice *device,
                       GdkDevice *source_device,
@@ -898,17 +801,13 @@ translate_axes (GdkDevice       *device,
                 XIValuatorState *valuators)
 {
   guint n_axes, i;
-  gint width, height;
   gdouble *axes;
-  double *vals;
+  gdouble *vals;
 
   g_object_get (device, "n-axes", &n_axes, NULL);
 
   axes = g_new0 (gdouble, n_axes);
   vals = valuators->values;
-
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
 
   for (i = 0; i < valuators->mask_len * 8; i++)
     {
@@ -1028,6 +927,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             XEvent             *xevent)
 {
   GdkX11DeviceManagerXI2 *device_manager;
+  GdkEventTranslatorIface *parent_iface;
   XGenericEventCookie *cookie;
   gboolean return_val = TRUE;
   GdkWindow *window;
@@ -1037,6 +937,30 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   dpy = GDK_DISPLAY_XDISPLAY (display);
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
   cookie = &xevent->xcookie;
+
+  parent_iface = g_type_interface_peek_parent (GDK_EVENT_TRANSLATOR_GET_IFACE (translator));
+
+  /* The X input methods (when triggered via XFilterEvent) generate
+   * a core key press event with keycode 0 to signal the end of a
+   * key sequence. We use the core translate_event implementation
+   * to translate this event.
+   *
+   * This is just a bandaid fix to keep xim working with a single
+   * keyboard until XFilterEvent learns about XI2.
+   */
+  if (xevent->type == KeyPress && xevent->xkey.keycode == 0 &&
+      parent_iface->translate_event (translator, display, event, xevent))
+    {
+      GdkDevice *device;
+      /* The core device manager sets a core device on the event.
+       * We need to override that with an XI2 device, since we are
+       * using XI2.
+       */
+      device = gdk_x11_device_manager_xi2_get_client_pointer ((GdkDeviceManager *)device_manager);
+      gdk_event_set_device (event, gdk_device_get_associated_device (device));
+
+      return TRUE;
+    }
 
   if (!XGetEventData (dpy, cookie))
     return FALSE;
@@ -1093,7 +1017,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->key.window = window;
 
         event->key.time = xev->time;
-        event->key.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->key.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
         event->key.group = _gdk_x11_get_group_for_state (display, event->key.state);
 
         event->key.hardware_keycode = xev->detail;
@@ -1120,7 +1044,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         _gdk_x11_keymap_add_virt_mods (keymap, &state);
         event->key.state |= state;
 
-        translate_keyboard_string ((GdkEventKey *) event);
+        _gdk_x11_event_translate_keyboard_string (&event->key);
 
         if (ev->evtype == XI_KeyPress)
           set_user_time (event);
@@ -1143,33 +1067,38 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           case 5:
           case 6:
           case 7:
-            event->scroll.type = GDK_SCROLL;
+             /* Button presses of button 4-7 are scroll events */
+            if (ev->evtype == XI_ButtonPress)
+              {
+                event->scroll.type = GDK_SCROLL;
 
-            if (xev->detail == 4)
-              event->scroll.direction = GDK_SCROLL_UP;
-            else if (xev->detail == 5)
-              event->scroll.direction = GDK_SCROLL_DOWN;
-            else if (xev->detail == 6)
-              event->scroll.direction = GDK_SCROLL_LEFT;
-            else
-              event->scroll.direction = GDK_SCROLL_RIGHT;
+                if (xev->detail == 4)
+                  event->scroll.direction = GDK_SCROLL_UP;
+                else if (xev->detail == 5)
+                  event->scroll.direction = GDK_SCROLL_DOWN;
+                else if (xev->detail == 6)
+                  event->scroll.direction = GDK_SCROLL_LEFT;
+                else
+                  event->scroll.direction = GDK_SCROLL_RIGHT;
 
-            event->scroll.window = window;
-            event->scroll.time = xev->time;
-            event->scroll.x = (gdouble) xev->event_x;
-            event->scroll.y = (gdouble) xev->event_y;
-            event->scroll.x_root = (gdouble) xev->root_x;
-            event->scroll.y_root = (gdouble) xev->root_y;
+                event->scroll.window = window;
+                event->scroll.time = xev->time;
+                event->scroll.x = (gdouble) xev->event_x;
+                event->scroll.y = (gdouble) xev->event_y;
+                event->scroll.x_root = (gdouble) xev->root_x;
+                event->scroll.y_root = (gdouble) xev->root_y;
 
-            event->scroll.device = g_hash_table_lookup (device_manager->id_table,
-                                                        GUINT_TO_POINTER (xev->deviceid));
+                event->scroll.device = g_hash_table_lookup (device_manager->id_table,
+                                                            GUINT_TO_POINTER (xev->deviceid));
 
-            source_device = g_hash_table_lookup (device_manager->id_table,
-                                                 GUINT_TO_POINTER (xev->sourceid));
-            gdk_event_set_source_device (event, source_device);
+                source_device = g_hash_table_lookup (device_manager->id_table,
+                                                     GUINT_TO_POINTER (xev->sourceid));
+                gdk_event_set_source_device (event, source_device);
 
-            event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
-            break;
+                event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+                break;
+              }
+            /* else (XI_ButtonRelease) fall thru */
           default:
             event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
 
@@ -1202,7 +1131,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                 gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &event->button.y);
               }
 
-            event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+            event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
             event->button.button = xev->detail;
           }
 
@@ -1238,7 +1167,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
 
-        event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
         /* There doesn't seem to be motion hints in XI */
         event->motion.is_hint = FALSE;
@@ -1287,7 +1216,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->crossing.mode = translate_crossing_mode (xev->mode);
         event->crossing.detail = translate_notify_type (xev->detail);
-        event->crossing.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->crossing.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
       }
       break;
     case XI_FocusIn:

@@ -104,7 +104,6 @@ struct _GtkComboBoxPrivate
   GtkTreeRowReference *active_row;
 
   GtkWidget *tree_view;
-  GtkTreeViewColumn *column;
 
   GtkWidget *cell_view;
   GtkWidget *cell_view_frame;
@@ -129,7 +128,8 @@ struct _GtkComboBoxPrivate
   guint resize_idle_id;
 
   /* For "has-entry" specific behavior we track
-   * an automated cell renderer and text column */
+   * an automated cell renderer and text column
+   */
   gint  text_column;
   GtkCellRenderer *text_renderer;
 
@@ -266,8 +266,8 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GValue          *value,
                                                     GParamSpec      *spec);
 
-static void     gtk_combo_box_state_changed        (GtkWidget        *widget,
-                                                    GtkStateType      previous);
+static void     gtk_combo_box_state_flags_changed  (GtkWidget       *widget,
+                                                    GtkStateFlags    previous);
 static void     gtk_combo_box_grab_focus           (GtkWidget       *widget);
 static void     gtk_combo_box_style_updated        (GtkWidget       *widget);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
@@ -406,7 +406,7 @@ static void     gtk_combo_box_menu_popup           (GtkComboBox      *combo_box,
                                                     guint32           activate_time);
 
 /* cell layout */
-GtkCellArea    *gtk_combo_box_cell_layout_get_area (GtkCellLayout    *cell_layout);
+static GtkCellArea *gtk_combo_box_cell_layout_get_area       (GtkCellLayout    *cell_layout);
 
 static gboolean gtk_combo_box_mnemonic_activate              (GtkWidget    *widget,
                                                               gboolean      group_cycling);
@@ -493,7 +493,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->style_updated = gtk_combo_box_style_updated;
-  widget_class->state_changed = gtk_combo_box_state_changed;
+  widget_class->state_flags_changed = gtk_combo_box_state_flags_changed;
   widget_class->get_preferred_width = gtk_combo_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_combo_box_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_combo_box_get_preferred_height_for_width;
@@ -1049,6 +1049,7 @@ gtk_combo_box_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  GtkComboBoxPrivate *priv = combo_box->priv;
   GtkCellArea *area;
 
   switch (prop_id)
@@ -1078,16 +1079,15 @@ gtk_combo_box_set_property (GObject      *object,
       break;
 
     case PROP_HAS_FRAME:
-      combo_box->priv->has_frame = g_value_get_boolean (value);
+      priv->has_frame = g_value_get_boolean (value);
 
-      if (combo_box->priv->has_entry)
+      if (priv->has_entry)
         {
           GtkWidget *child;
 
           child = gtk_bin_get_child (GTK_BIN (combo_box));
 
-          gtk_entry_set_has_frame (GTK_ENTRY (child),
-                                   combo_box->priv->has_frame);
+          gtk_entry_set_has_frame (GTK_ENTRY (child), priv->has_frame);
         }
 
       break;
@@ -1119,11 +1119,11 @@ gtk_combo_box_set_property (GObject      *object,
       break;
 
     case PROP_EDITING_CANCELED:
-      combo_box->priv->editing_canceled = g_value_get_boolean (value);
+      priv->editing_canceled = g_value_get_boolean (value);
       break;
 
     case PROP_HAS_ENTRY:
-      combo_box->priv->has_entry = g_value_get_boolean (value);
+      priv->has_entry = g_value_get_boolean (value);
       break;
 
     case PROP_ENTRY_TEXT_COLUMN:
@@ -1141,9 +1141,17 @@ gtk_combo_box_set_property (GObject      *object,
     case PROP_CELL_AREA:
       /* Construct-only, can only be assigned once */
       area = g_value_get_object (value);
-
       if (area)
-        combo_box->priv->area = g_object_ref_sink (area);
+        {
+          if (priv->area != NULL)
+            {
+              g_warning ("cell-area has already been set, ignoring construct property");
+              g_object_ref_sink (area);
+              g_object_unref (area);
+            }
+          else
+            priv->area = g_object_ref_sink (area);
+        }
       break;
 
     default:
@@ -1242,8 +1250,8 @@ gtk_combo_box_get_property (GObject    *object,
 }
 
 static void
-gtk_combo_box_state_changed (GtkWidget    *widget,
-                             GtkStateType  previous)
+gtk_combo_box_state_flags_changed (GtkWidget     *widget,
+                                   GtkStateFlags  previous)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
@@ -1338,6 +1346,8 @@ gtk_combo_box_style_updated (GtkWidget *widget)
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *child;
+
+  GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->style_updated (widget);
 
   gtk_combo_box_check_appearance (combo_box);
 
@@ -1961,12 +1971,12 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 }
 
 static gboolean
-cell_view_is_sensitive (GtkCellView *cell_view)
+cell_layout_is_sensitive (GtkCellLayout *layout)
 {
   GList *cells, *list;
   gboolean sensitive;
 
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view));
+  cells = gtk_cell_layout_get_cells (layout);
 
   sensitive = FALSE;
   for (list = cells; list; list = list->next)
@@ -1982,15 +1992,21 @@ cell_view_is_sensitive (GtkCellView *cell_view)
 }
 
 static gboolean
+cell_is_sensitive (GtkCellRenderer *cell,
+                   gpointer         data)
+{
+  gboolean *sensitive = data;
+
+  g_object_get (cell, "sensitive", sensitive, NULL);
+
+  return *sensitive;
+}
+
+static gboolean
 tree_column_row_is_sensitive (GtkComboBox *combo_box,
                               GtkTreeIter *iter)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
-  GList *cells, *list;
-  gboolean sensitive;
-
-  if (!priv->column)
-    return TRUE;
 
   if (priv->row_separator_func)
     {
@@ -1999,23 +2015,20 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
         return FALSE;
     }
 
-  gtk_tree_view_column_cell_set_cell_data (priv->column,
-                                           priv->model,
-                                           iter, FALSE, FALSE);
-
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->column));
-
-  sensitive = FALSE;
-  for (list = cells; list; list = list->next)
+  if (priv->area)
     {
-      g_object_get (list->data, "sensitive", &sensitive, NULL);
+      gboolean sensitive;
 
-      if (sensitive)
-        break;
+      gtk_cell_area_apply_attributes (priv->area, priv->model, iter, FALSE, FALSE);
+
+      sensitive = FALSE;
+
+      gtk_cell_area_foreach (priv->area, cell_is_sensitive, &sensitive);
+
+      return sensitive;
     }
-  g_list_free (cells);
 
-  return sensitive;
+  return TRUE;
 }
 
 static void
@@ -2049,7 +2062,7 @@ update_menu_sensitivity (GtkComboBox *combo_box,
         }
       else
         {
-          sensitive = cell_view_is_sensitive (GTK_CELL_VIEW (cell_view));
+          sensitive = cell_layout_is_sensitive (GTK_CELL_LAYOUT (cell_view));
 
           if (menu != priv->popup_widget && child == children)
             {
@@ -3048,8 +3061,6 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
   priv->arrow = NULL;
   priv->separator = NULL;
 
-  priv->column = NULL;
-
   /* changing the popup window will unref the menu and the children */
 }
 
@@ -3325,8 +3336,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   if (priv->model)
     gtk_tree_view_set_model (GTK_TREE_VIEW (priv->tree_view), priv->model);
 
-  priv->column = gtk_tree_view_column_new_with_area (priv->area);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->tree_view), priv->column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->tree_view),
+                               gtk_tree_view_column_new_with_area (priv->area));
 
   if (gtk_tree_row_reference_valid (priv->active_row))
     {
@@ -3756,10 +3767,19 @@ gtk_combo_box_list_row_changed (GtkTreeModel *model,
 /*
  * GtkCellLayout implementation
  */
-GtkCellArea *
-gtk_combo_box_cell_layout_get_area (GtkCellLayout    *cell_layout)
+static GtkCellArea *
+gtk_combo_box_cell_layout_get_area (GtkCellLayout *cell_layout)
 {
-  return GTK_COMBO_BOX (cell_layout)->priv->area;
+  GtkComboBox *combo = GTK_COMBO_BOX (cell_layout);
+  GtkComboBoxPrivate *priv = combo->priv;
+
+  if (G_UNLIKELY (!priv->area))
+    {
+      priv->area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->area);
+    }
+
+  return priv->area;
 }
 
 /*
@@ -4551,9 +4571,8 @@ gtk_combo_box_constructor (GType                  type,
 
   if (!priv->area)
     {
-      GtkCellArea *area = gtk_cell_area_box_new ();
-
-      priv->area = g_object_ref_sink (area);
+      priv->area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->area);
     }
 
   priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);
@@ -4944,7 +4963,7 @@ gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
 }
 
 /**
- * gtk_combo_box_get_row_separator_func:
+ * gtk_combo_box_get_row_separator_func: (skip)
  * @combo_box: a #GtkComboBox
  *
  * Returns the current row separator function.

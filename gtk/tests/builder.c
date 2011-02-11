@@ -2503,11 +2503,9 @@ test_file (const gchar *filename)
 
       if (GTK_IS_DIALOG (obj))
 	{
-	  int response;
-
 	  g_print ("Running dialog %s.\n",
 		   gtk_widget_get_name (GTK_WIDGET (obj)));
-	  response = gtk_dialog_run (GTK_DIALOG (obj));
+	  gtk_dialog_run (GTK_DIALOG (obj));
 	}
       else if (GTK_IS_WINDOW (obj))
 	{

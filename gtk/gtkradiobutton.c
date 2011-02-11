@@ -403,8 +403,8 @@ gtk_radio_button_join_group (GtkRadioButton *radio_button,
 
 /**
  * gtk_radio_button_new:
- * @group: (allow-none): an existing radio button group, or %NULL if you are
- *  creating a new group.
+ * @group: (element-type GtkRadioButton) (allow-none): an existing
+ *         radio button group, or %NULL if you are creating a new group.
  *
  * Creates a new #GtkRadioButton. To be of any practical value, a widget should
  * then be packed into the radio button.
@@ -426,13 +426,13 @@ gtk_radio_button_new (GSList *group)
 
 /**
  * gtk_radio_button_new_with_label:
- * @group: (allow-none): an existing radio button group, or %NULL if you are
- *  creating a new group.
+ * @group: (element-type GtkRadioButton) (allow-none): an existing
+ *         radio button group, or %NULL if you are creating a new group.
  * @label: the text label to display next to the radio button.
  *
  * Creates a new #GtkRadioButton with a text label.
  *
- * Returns: (transfer full): a new radio button.
+ * Returns: a new radio button.
  */
 GtkWidget*
 gtk_radio_button_new_with_label (GSList      *group,
@@ -451,7 +451,8 @@ gtk_radio_button_new_with_label (GSList      *group,
 
 /**
  * gtk_radio_button_new_with_mnemonic:
- * @group: (allow-none): the radio button group
+ * @group: (element-type GtkRadioButton) (allow-none): the radio button
+ *         group
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
  *
@@ -460,7 +461,7 @@ gtk_radio_button_new_with_label (GSList      *group,
  * gtk_label_new_with_mnemonic(), so underscores in @label indicate the
  * mnemonic for the button.
  *
- * Returns: (transfer full): a new #GtkRadioButton
+ * Returns: a new #GtkRadioButton
  */
 GtkWidget*
 gtk_radio_button_new_with_mnemonic (GSList      *group,
@@ -487,7 +488,7 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
  * @radio_group_member. As with gtk_radio_button_new(), a widget
  * should be packed into the radio button.
  *
- * Returns: (transfer full): a new radio button.
+ * Returns: (transfer none): a new radio button.
  */
 GtkWidget*
 gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
@@ -499,7 +500,7 @@ gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
 }
 
 /**
- * gtk_radio_button_new_with_label_from_widget:
+ * gtk_radio_button_new_with_label_from_widget: (constructor)
  * @radio_group_member: (allow-none): widget to get radio group from or %NULL
  * @label: a text string to display next to the radio button.
  *
@@ -519,7 +520,7 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
 }
 
 /**
- * gtk_radio_button_new_with_mnemonic_from_widget:
+ * gtk_radio_button_new_with_mnemonic_from_widget: (constructor)
  * @radio_group_member: (allow-none): widget to get radio group from or %NULL
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
@@ -528,7 +529,7 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the button.
  *
- * Returns: (transfer full): a new #GtkRadioButton
+ * Returns: (transfer none): a new #GtkRadioButton
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,
@@ -893,7 +894,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkToggleButton *toggle_button;
   GtkStyleContext *context;
   GtkStateFlags state = 0;
-  GdkWindow *window;
   gint x, y;
   gint indicator_size, indicator_spacing;
   gint focus_width;
@@ -914,8 +914,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
                         "focus-padding", &focus_pad,
                         NULL);
 
-  window = gtk_widget_get_window (widget);
-
   _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -925,14 +923,15 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   child = gtk_bin_get_child (GTK_BIN (check_button));
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
-    x += focus_width + focus_pad;      
+    x += focus_width + focus_pad;
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     state |= GTK_STATE_FLAG_INCONSISTENT;
   else if (gtk_toggle_button_get_active (toggle_button))
     state |= GTK_STATE_FLAG_ACTIVE;
 
-  if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
+  if (button->priv->activate_timeout ||
+      (button->priv->button_down && button->priv->in_button))
     state |= GTK_STATE_FLAG_SELECTED;
 
   if (button->priv->in_button)

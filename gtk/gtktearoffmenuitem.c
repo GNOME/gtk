@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -41,16 +41,16 @@ struct _GtkTearoffMenuItemPrivate
 };
 
 static void gtk_tearoff_menu_item_get_preferred_width  (GtkWidget      *widget,
-							gint           *minimum,
-							gint           *natural);
+                                                        gint           *minimum,
+                                                        gint           *natural);
 static void gtk_tearoff_menu_item_get_preferred_height (GtkWidget      *widget,
-							gint           *minimum,
-							gint           *natural);
+                                                        gint           *minimum,
+                                                        gint           *natural);
 static gboolean gtk_tearoff_menu_item_draw             (GtkWidget      *widget,
-							cairo_t        *cr);
+                                                        cairo_t        *cr);
 static void gtk_tearoff_menu_item_activate             (GtkMenuItem    *menu_item);
 static void gtk_tearoff_menu_item_parent_set           (GtkWidget      *widget,
-							GtkWidget      *previous);
+                                                        GtkWidget      *previous);
 
 G_DEFINE_TYPE (GtkTearoffMenuItem, gtk_tearoff_menu_item, GTK_TYPE_MENU_ITEM)
 
@@ -94,8 +94,8 @@ gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
 
 static void
 gtk_tearoff_menu_item_get_preferred_width (GtkWidget      *widget,
-					   gint           *minimum,
-					   gint           *natural)
+                                           gint           *minimum,
+                                           gint           *natural)
 {
   GtkStyleContext *context;
   guint border_width;
@@ -113,8 +113,8 @@ gtk_tearoff_menu_item_get_preferred_width (GtkWidget      *widget,
 
 static void
 gtk_tearoff_menu_item_get_preferred_height (GtkWidget      *widget,
-					    gint           *minimum,
-					    gint           *natural)
+                                            gint           *minimum,
+                                            gint           *natural)
 {
   GtkStyleContext *context;
   GtkBorder padding;
@@ -156,12 +156,10 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
   guint border_width;
   GtkTextDirection direction;
   GtkWidget *parent;
-  GdkWindow *window;
   gdouble angle;
 
   menu_item = GTK_MENU_ITEM (widget);
   context = gtk_widget_get_style_context (widget);
-  window = gtk_widget_get_window (widget);
   direction = gtk_widget_get_direction (widget);
   state = gtk_widget_get_state_flags (widget);
 
@@ -189,14 +187,16 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
 
       if (menu_item->priv->toggle_size > ARROW_SIZE)
         {
-          if (direction == GTK_TEXT_DIR_LTR) {
-            arrow_x = x + (menu_item->priv->toggle_size - ARROW_SIZE)/2;
-            angle = (3 * G_PI) / 2;
-          }
-          else {
-            arrow_x = x + width - menu_item->priv->toggle_size + (menu_item->priv->toggle_size - ARROW_SIZE)/2;
-            angle = G_PI / 2;
-          }
+          if (direction == GTK_TEXT_DIR_LTR)
+            {
+              arrow_x = x + (menu_item->priv->toggle_size - ARROW_SIZE)/2;
+              angle = (3 * G_PI) / 2;
+            }
+          else
+            {
+              arrow_x = x + width - menu_item->priv->toggle_size + (menu_item->priv->toggle_size - ARROW_SIZE)/2;
+              angle = G_PI / 2;
+            }
           x += menu_item->priv->toggle_size + BORDER_SPACING;
         }
       else
@@ -223,14 +223,16 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
     {
       gint x1, x2;
 
-      if (direction == GTK_TEXT_DIR_LTR) {
-        x1 = x;
-        x2 = MIN (x + TEAR_LENGTH, right_max);
-      }
-      else {
-        x1 = right_max - x;
-        x2 = MAX (right_max - x - TEAR_LENGTH, 0);
-      }
+      if (direction == GTK_TEXT_DIR_LTR)
+        {
+          x1 = x;
+          x2 = MIN (x + TEAR_LENGTH, right_max);
+        }
+      else
+        {
+          x1 = right_max - x;
+          x2 = MAX (right_max - x - TEAR_LENGTH, 0);
+        }
 
       gtk_render_line (context, cr,
                        x1, y + (height - padding.bottom) / 2,
@@ -255,14 +257,14 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 
       gtk_widget_queue_resize (GTK_WIDGET (menu_item));
       gtk_menu_set_tearoff_state (GTK_MENU (parent),
-				  !menu->priv->torn_off);
+                                  !menu->priv->torn_off);
     }
 }
 
 static void
 tearoff_state_changed (GtkMenu            *menu,
-		       GParamSpec         *pspec,
-		       gpointer            data)
+                       GParamSpec         *pspec,
+                       gpointer            data)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (data);
   GtkTearoffMenuItemPrivate *priv = tearoff_menu_item->priv;
@@ -272,7 +274,7 @@ tearoff_state_changed (GtkMenu            *menu,
 
 static void
 gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
-				  GtkWidget *previous)
+                                  GtkWidget *previous)
 {
   GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (widget);
   GtkTearoffMenuItemPrivate *priv = tearoff_menu_item->priv;
@@ -283,15 +285,15 @@ gtk_tearoff_menu_item_parent_set (GtkWidget *widget,
   menu = GTK_IS_MENU (parent) ? GTK_MENU (parent) : NULL;
 
   if (previous)
-    g_signal_handlers_disconnect_by_func (previous, 
-					  tearoff_state_changed, 
-					  tearoff_menu_item);
-  
+    g_signal_handlers_disconnect_by_func (previous,
+                                          tearoff_state_changed,
+                                          tearoff_menu_item);
+
   if (menu)
     {
       priv->torn_off = gtk_menu_get_tearoff_state (menu);
-      g_signal_connect (menu, "notify::tearoff-state", 
-			G_CALLBACK (tearoff_state_changed), 
-			tearoff_menu_item);
-    }  
+      g_signal_connect (menu, "notify::tearoff-state",
+                        G_CALLBACK (tearoff_state_changed),
+                        tearoff_menu_item);
+    }
 }

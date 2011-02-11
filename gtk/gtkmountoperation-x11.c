@@ -183,9 +183,6 @@ find_largest_sizes (gulong *data,
   while (nitems > 0)
     {
       int w, h;
-      gboolean replace;
-
-      replace = FALSE;
 
       if (nitems < 3)
         return FALSE; /* no space for w, h */

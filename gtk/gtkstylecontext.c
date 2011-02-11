@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
 
-#include "gtkstylecontext.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengine.h"
 #include "gtkintl.h"
@@ -716,7 +716,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                             (GDestroyNotify) style_data_free);
   priv->theming_engine = g_object_ref ((gpointer) gtk_theming_engine_load (NULL));
 
-  priv->direction = GTK_TEXT_DIR_RTL;
+  priv->direction = GTK_TEXT_DIR_LTR;
 
   priv->screen = gdk_screen_get_default ();
 
@@ -941,11 +941,9 @@ gtk_style_context_impl_set_property (GObject      *object,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  GtkStyleContextPrivate *priv;
   GtkStyleContext *style_context;
 
   style_context = GTK_STYLE_CONTEXT (object);
-  priv = style_context->priv;
 
   switch (prop_id)
     {
@@ -969,8 +967,8 @@ gtk_style_context_impl_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  GtkStyleContextPrivate *priv;
   GtkStyleContext *style_context;
+  GtkStyleContextPrivate *priv;
 
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
@@ -1282,6 +1280,10 @@ gtk_style_context_new (void)
  *
  * Adds a style provider to @context, to be used in style construction.
  *
+ * <note><para>If both priorities are the same, A #GtkStyleProvider
+ * added through this function takes precedence over another added
+ * through gtk_style_context_add_provider_for_screen().</para></note>
+ *
  * Since: 3.0
  **/
 void
@@ -1379,6 +1381,10 @@ gtk_style_context_reset_widgets (GdkScreen *screen)
  *
  * GTK+ uses this to make styling information from #GtkSettings
  * available.
+ *
+ * <note><para>If both priorities are the same, A #GtkStyleProvider
+ * added through gtk_style_context_add_provider() takes precedence
+ * over another added through this function.</para></note>
  *
  * Since: 3.0
  **/
@@ -2345,17 +2351,19 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                   GtkSymbolicColor *color;
                   GdkRGBA rgba;
 
-                  color = g_value_get_boxed (&pcache->value);
+                  color = g_value_dup_boxed (&pcache->value);
+
+                  g_value_unset (&pcache->value);
+
+                  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
+                    g_value_init (&pcache->value, GDK_TYPE_RGBA);
+                  else
+                    g_value_init (&pcache->value, GDK_TYPE_COLOR);
 
                   if (gtk_symbolic_color_resolve (color, data->store, &rgba))
                     {
-                      g_value_unset (&pcache->value);
-
                       if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
-                        {
-                          g_value_init (&pcache->value, GDK_TYPE_RGBA);
-                          g_value_set_boxed (&pcache->value, &rgba);
-                        }
+                        g_value_set_boxed (&pcache->value, &rgba);
                       else
                         {
                           GdkColor rgb;
@@ -2364,12 +2372,13 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                           rgb.green = rgba.green * 65535. + 0.5;
                           rgb.blue = rgba.blue * 65535. + 0.5;
 
-                          g_value_init (&pcache->value, GDK_TYPE_COLOR);
                           g_value_set_boxed (&pcache->value, &rgb);
                         }
                     }
                   else
                     g_param_value_set_default (pspec, &pcache->value);
+
+                  gtk_symbolic_color_unref (color);
                 }
 
               return &pcache->value;
@@ -2387,7 +2396,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
  * gtk_style_context_get_style_property:
  * @context: a #GtkStyleContext
  * @property_name: the name of the widget style property
- * @value: (out) (transfer full): Return location for the property value
+ * @value: Return location for the property value
  *
  * Gets the value for a widget style property.
  *
@@ -2638,7 +2647,7 @@ gtk_style_context_set_screen (GtkStyleContext *context,
  *
  * Returns the #GdkScreen to which @context is attached.
  *
- * Returns: a #GdkScreen.
+ * Returns: (transfer none): a #GdkScreen.
  **/
 GdkScreen *
 gtk_style_context_get_screen (GtkStyleContext *context)
@@ -2970,7 +2979,7 @@ gtk_style_context_cancel_animations (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   AnimationInfo *info;
-  GSList *l, *node;
+  GSList *l;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
@@ -2980,7 +2989,6 @@ gtk_style_context_cancel_animations (GtkStyleContext *context,
   while (l)
     {
       info = l->data;
-      node = l;
       l = l->next;
 
       if (!region_id ||
@@ -3571,8 +3579,9 @@ gtk_style_context_get_margin (GtkStyleContext *context,
  * object is const and will remain valid until the
  * #GtkStyleContext::changed signal happens.
  *
- * Returns: the #PangoFontDescription for the given state. This
- *          object is owned by GTK+ and should not be freed.
+ * Returns: (transfer none): the #PangoFontDescription for the given
+ *          state.  This object is owned by GTK+ and should not be
+ *          freed.
  *
  * Since: 3.0
  **/
@@ -3596,6 +3605,56 @@ gtk_style_context_get_font (GtkStyleContext *context,
     return g_value_get_boxed (value);
 
   return NULL;
+}
+
+static void
+get_cursor_color (GtkStyleContext *context,
+                  gboolean         primary,
+                  GdkRGBA         *color)
+{
+  GdkColor *style_color;
+
+  gtk_style_context_get_style (context,
+                               primary ? "cursor-color" : "secondary-cursor-color",
+                               &style_color,
+                               NULL);
+
+  if (style_color)
+    {
+      color->red = style_color->red / 65535;
+      color->green = style_color->green / 65535;
+      color->blue = style_color->blue / 65535;
+      color->alpha = 1;
+
+      gdk_color_free (style_color);
+    }
+  else
+    {
+      gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, color);
+
+      if (!primary)
+      {
+        GdkRGBA bg;
+
+        gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+
+        color->red = (color->red + bg.red) * 0.5;
+        color->green = (color->green + bg.green) * 0.5;
+        color->blue = (color->blue + bg.blue) * 0.5;
+      }
+    }
+}
+
+void
+_gtk_style_context_get_cursor_color (GtkStyleContext *context,
+                                     GdkRGBA         *primary_color,
+                                     GdkRGBA         *secondary_color)
+{
+  if (primary_color)
+    get_cursor_color (context, TRUE, primary_color);
+
+  if (secondary_color)
+    get_cursor_color (context, FALSE, secondary_color);
 }
 
 /* Paint methods */

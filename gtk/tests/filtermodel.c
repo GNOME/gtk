@@ -2317,7 +2317,7 @@ specific_filter_add_child (void)
   GtkTreeIter iter_first;
   GtkTreeIter child;
   GtkTreeStore *store;
-  GtkTreeModel *filter;
+  GtkTreeModel *filter G_GNUC_UNUSED;
 
   store = gtk_tree_store_new (1, G_TYPE_STRING);
 
@@ -2346,7 +2346,7 @@ specific_list_store_clear (void)
   GtkTreeIter iter;
   GtkListStore *list;
   GtkTreeModel *filter;
-  GtkWidget *view;
+  GtkWidget *view G_GNUC_UNUSED;
 
   list = gtk_list_store_new (1, G_TYPE_INT);
   gtk_list_store_insert_with_values (list, &iter, 0, 0, 1, -1);
@@ -2429,7 +2429,7 @@ specific_bug_301558 (void)
   GtkTreeModel *filter;
   GtkTreeModel *sort;
   GtkTreeIter root, iter, iter2;
-  GtkWidget *view;
+  GtkWidget *view G_GNUC_UNUSED;
   int i;
   gboolean add;
 
@@ -2501,7 +2501,7 @@ specific_bug_311955 (void)
   GtkTreeModel *sort;
   GtkTreeModel *filter;
 
-  GtkWidget *window;
+  GtkWidget *window G_GNUC_UNUSED;
   GtkWidget *tree_view;
   int i;
   int n;
@@ -2680,7 +2680,7 @@ specific_bug_464173 (void)
   GtkTreeStore *model;
   GtkTreeModelFilter *f_model;
   GtkTreeIter iter1, iter2;
-  GtkWidget *view;
+  GtkWidget *view G_GNUC_UNUSED;
   gboolean visible = TRUE;
 
   model = gtk_tree_store_new (1, G_TYPE_STRING);
@@ -2723,7 +2723,7 @@ specific_bug_540201 (void)
   GtkTreeStore *store;
   GtkTreeModel *filter;
 
-  GtkWidget *tree_view;
+  GtkWidget *tree_view G_GNUC_UNUSED;
 
   store = gtk_tree_store_new (1, G_TYPE_INT);
 
@@ -2772,7 +2772,7 @@ specific_bug_549287 (void)
   int i;
   GtkTreeStore *store;
   GtkTreeModel *filtered;
-  GtkWidget *view;
+  GtkWidget *view G_GNUC_UNUSED;
   GtkTreeIter iter;
   GtkTreeIter *swap, *parent, *child;
 

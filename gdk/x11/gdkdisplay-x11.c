@@ -814,7 +814,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.selection);
       event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.target);
       event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselectionrequest.property);
-      event->selection.requestor = xevent->xselectionrequest.requestor;
+      if (xevent->xselectionrequest.requestor != None)
+        event->selection.requestor = gdk_x11_window_foreign_new_for_display (display,
+                                                                             xevent->xselectionrequest.requestor);
+      else
+        event->selection.requestor = NULL;
       event->selection.time = xevent->xselectionrequest.time;
 
       break;
@@ -846,56 +850,12 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case ClientMessage:
-      {
-	GList *tmp_list;
-	GdkFilterReturn result = GDK_FILTER_CONTINUE;
-	GdkAtom message_type = gdk_x11_xatom_to_atom_for_display (display, xevent->xclient.message_type);
+      GDK_NOTE (EVENTS,
+                g_message ("client message:\twindow: %ld",
+                           xevent->xclient.window));
 
-	GDK_NOTE (EVENTS,
-		  g_message ("client message:\twindow: %ld",
-			     xevent->xclient.window));
-
-	tmp_list = display_x11->client_filters;
-	while (tmp_list)
-	  {
-	    GdkClientFilter *filter = tmp_list->data;
-	    tmp_list = tmp_list->next;
-
-	    if (filter->type == message_type)
-	      {
-		result = (*filter->function) (xevent, event, filter->data);
-		if (result != GDK_FILTER_CONTINUE)
-		  break;
-	      }
-	  }
-
-	switch (result)
-	  {
-	  case GDK_FILTER_REMOVE:
-	    return_val = FALSE;
-	    break;
-	  case GDK_FILTER_TRANSLATE:
-	    return_val = TRUE;
-	    break;
-	  case GDK_FILTER_CONTINUE:
-	    /* Send unknown ClientMessage's on to Gtk for it to use */
-            if (window == NULL)
-              {
-                return_val = FALSE;
-              }
-            else
-              {
-                event->client.type = GDK_CLIENT_EVENT;
-                event->client.window = window;
-                event->client.message_type = message_type;
-                event->client.data_format = xevent->xclient.format;
-                memcpy(&event->client.data, &xevent->xclient.data,
-                       sizeof(event->client.data));
-              }
-            break;
-          }
-      }
-
+      /* Not currently handled */
+      return_val = FALSE;
       break;
 
     case MappingNotify:
@@ -919,7 +879,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  
 	  event->owner_change.type = GDK_OWNER_CHANGE;
 	  event->owner_change.window = window;
-	  event->owner_change.owner = selection_notify->owner;
+          if (selection_notify->owner != None)
+            event->owner_change.owner = gdk_x11_window_foreign_new_for_display (display,
+                                                                                selection_notify->owner);
+          else
+            event->owner_change.owner = NULL;
 	  event->owner_change.reason = selection_notify->subtype;
 	  event->owner_change.selection = 
 	    gdk_x11_xatom_to_atom_for_display (display, 
@@ -1012,21 +976,28 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   return return_val;
 }
 
-static GdkFilterReturn
-gdk_wm_protocols_filter (GdkXEvent *xev,
-			 GdkEvent  *event,
-			 gpointer data)
+GdkFilterReturn
+_gdk_wm_protocols_filter (GdkXEvent *xev,
+			  GdkEvent  *event,
+			  gpointer   data)
 {
   XEvent *xevent = (XEvent *)xev;
   GdkWindow *win = event->any.window;
   GdkDisplay *display;
   Atom atom;
 
-  if (!win)
-      return GDK_FILTER_REMOVE;
+  if (!GDK_IS_X11_WINDOW (win))
+    return GDK_FILTER_CONTINUE;
+
+  if (xevent->type != ClientMessage)
+    return GDK_FILTER_CONTINUE;
 
   display = GDK_WINDOW_DISPLAY (win);
-  atom = (Atom)xevent->xclient.data.l[0];
+
+  if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, "WM_PROTOCOLS"))
+    return GDK_FILTER_CONTINUE;
+
+  atom = (Atom) xevent->xclient.data.l[0];
 
   if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW"))
     {
@@ -1109,11 +1080,6 @@ gdk_event_init (GdkDisplay *display)
   device_manager = gdk_display_get_device_manager (display);
   gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                         GDK_EVENT_TRANSLATOR (device_manager));
-
-  gdk_display_add_client_message_filter (display,
-                                         gdk_atom_intern_static_string ("WM_PROTOCOLS"),
-                                         gdk_wm_protocols_filter,
-                                         NULL);
 }
 
 static void
@@ -1440,7 +1406,6 @@ _gdk_x11_display_open (const gchar *display_name)
 #endif
 
   gdk_x11_display_init_input (display);
-  _gdk_x11_display_init_dnd (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_x11_screen_setup (display_x11->screens[i]);
@@ -1766,10 +1731,6 @@ gdk_x11_display_finalize (GObject *object)
   /* Leader Window */
   XDestroyWindow (display_x11->xdisplay, display_x11->leader_window);
 
-  /* list of filters for client messages */
-  g_list_foreach (display_x11->client_filters, (GFunc) g_free, NULL);
-  g_list_free (display_x11->client_filters);
-
   /* List of event window extraction functions */
   g_slist_foreach (display_x11->event_types, (GFunc)g_free, NULL);
   g_slist_free (display_x11->event_types);
@@ -1854,7 +1815,8 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
  * Given the root window ID of one of the screen's of a #GdkDisplay,
  * finds the screen.
  * 
- * Return value: the #GdkScreen corresponding to @xrootwin, or %NULL.
+ * Return value: (transfer none): the #GdkScreen corresponding to
+ *     @xrootwin, or %NULL.
  **/
 GdkScreen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
@@ -1873,7 +1835,7 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 }
 
 /**
- * gdk_x11_display_get_xdisplay:
+ * gdk_x11_display_get_xdisplay: (skip)
  * @display: a #GdkDisplay
  * @returns: an X display.
  *
@@ -2305,45 +2267,6 @@ gdk_x11_display_list_devices (GdkDisplay *display)
   return GDK_X11_DISPLAY (display)->input_devices;
 }
 
-static gboolean
-gdk_x11_display_send_client_message (GdkDisplay     *display,
-				     GdkEvent       *event,
-				     GdkNativeWindow winid)
-{
-  XEvent sev;
-
-  g_return_val_if_fail(event != NULL, FALSE);
-
-  /* Set up our event to send, with the exception of its target window */
-  sev.xclient.type = ClientMessage;
-  sev.xclient.display = GDK_DISPLAY_XDISPLAY (display);
-  sev.xclient.format = event->client.data_format;
-  sev.xclient.window = winid;
-  memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
-  sev.xclient.message_type = gdk_x11_atom_to_xatom_for_display (display, event->client.message_type);
-
-  return _gdk_x11_display_send_xevent (display, winid, False, NoEventMask, &sev);
-}
-
-static void
-gdk_x11_display_add_client_message_filter (GdkDisplay   *display,
-					   GdkAtom       message_type,
-					   GdkFilterFunc func,
-					   gpointer      data)
-{
-  GdkClientFilter *filter;
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  filter = g_new (GdkClientFilter, 1);
-
-  filter->type = message_type;
-  filter->function = func;
-  filter->data = data;
-
-  GDK_X11_DISPLAY(display)->client_filters =
-    g_list_append (GDK_X11_DISPLAY (display)->client_filters,
-		   filter);
-}
-
 /**
  * gdk_x11_register_standard_event_type:
  * @display: a #GdkDisplay
@@ -2633,13 +2556,6 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
   gdk_x11_display_error_trap_pop_internal (display, FALSE);
 }
 
-extern GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
-extern GdkNativeWindow      _gdk_x11_display_get_drag_protocol      (GdkDisplay *display,
-                                                                     GdkNativeWindow  xid,
-                                                                     GdkDragProtocol *protocol,
-                                                                     guint           *version);
-
-
 /**
  * gdk_x11_set_sm_client_id:
  * @sm_client_id: the client id assigned by the session manager when the
@@ -2741,10 +2657,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->supports_input_shapes = gdk_x11_display_supports_input_shapes;
   display_class->supports_composite = gdk_x11_display_supports_composite;
   display_class->list_devices = gdk_x11_display_list_devices;
-  display_class->send_client_message = gdk_x11_display_send_client_message;
-  display_class->add_client_message_filter = gdk_x11_display_add_client_message_filter;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
-  display_class->get_drag_protocol = _gdk_x11_display_get_drag_protocol;
   display_class->get_cursor_for_type = _gdk_x11_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_x11_display_get_cursor_for_name;
   display_class->get_cursor_for_pixbuf = _gdk_x11_display_get_cursor_for_pixbuf;

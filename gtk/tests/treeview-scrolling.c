@@ -778,12 +778,9 @@ test_editable_position (GtkWidget   *tree_view,
 {
         GtkAllocation allocation;
 	GdkRectangle rect;
-	GtkAdjustment *vadjustment;
 
 	gtk_tree_view_get_background_area (GTK_TREE_VIEW (tree_view),
 					   cursor_path, NULL, &rect);
-
-	vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
 
 	/* There are all in bin_window coordinates */
         gtk_widget_get_allocation (editable, &allocation);

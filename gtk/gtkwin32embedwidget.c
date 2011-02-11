@@ -89,7 +89,7 @@ gtk_win32_embed_widget_init (GtkWin32EmbedWidget *embed_widget)
 }
 
 GtkWidget*
-_gtk_win32_embed_widget_new (GdkNativeWindow parent_id)
+_gtk_win32_embed_widget_new (HWND parent)
 {
   GtkWin32EmbedWidget *embed_widget;
 
@@ -97,12 +97,12 @@ _gtk_win32_embed_widget_new (GdkNativeWindow parent_id)
   
   embed_widget->parent_window =
     gdk_win32_window_lookup_for_display (gdk_display_get_default (),
-					 parent_id);
+					 parent);
   
   if (!embed_widget->parent_window)
     embed_widget->parent_window =
       gdk_win32_window_foreign_new_for_display (gdk_display_get_default (),
-					  parent_id);
+					  parent);
   
   return GTK_WIDGET (embed_widget);
 }
@@ -150,8 +150,7 @@ gtk_win32_embed_widget_window_process (HWND hwnd, UINT msg, WPARAM wparam, LPARA
   GtkWin32EmbedWidget *embed_widget;
   gpointer user_data;
 
-  window = gdk_win32_window_lookup_for_display (gdk_display_get_default (),
-						(GdkNativeWindow)hwnd);
+  window = gdk_win32_window_lookup_for_display (gdk_display_get_default (), hwnd);
   if (window == NULL) {
     g_warning ("No such window!");
     return 0;

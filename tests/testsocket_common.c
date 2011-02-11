@@ -21,7 +21,7 @@
 #include "config.h"
 #include <gtk/gtk.h>
 #if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"
+#include <gtk/gtkx.h>
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
 #endif

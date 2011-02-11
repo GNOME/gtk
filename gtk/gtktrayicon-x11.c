@@ -555,8 +555,6 @@ gtk_tray_icon_get_colors_property (GtkTrayIcon *icon)
           g_object_notify (G_OBJECT (icon), "error-color");
         }
 
-      g_object_thaw_notify (G_OBJECT (icon));
-
       color.red = prop.prop[6];
       color.green = prop.prop[7];
       color.blue = prop.prop[8];
@@ -567,8 +565,6 @@ gtk_tray_icon_get_colors_property (GtkTrayIcon *icon)
 
           g_object_notify (G_OBJECT (icon), "warning-color");
         }
-
-      g_object_thaw_notify (G_OBJECT (icon));
 
       color.red = prop.prop[9];
       color.green = prop.prop[10];

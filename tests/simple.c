@@ -38,7 +38,6 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
   
   window = g_object_connect (g_object_new (gtk_window_get_type (),
-					     "user_data", NULL,
 					     "type", GTK_WINDOW_TOPLEVEL,
 					     "title", "hello world",
 					     "resizable", FALSE,

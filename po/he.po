@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-18 12:54+0200\n"
-"PO-Revision-Date: 2011-01-18 12:55+0200\n"
+"POT-Creation-Date: 2011-01-23 02:37+0200\n"
+"PO-Revision-Date: 2011-01-23 02:39+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,48 +20,48 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../gdk/gdk.c:152
+#: ../gdk/gdk.c:151
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Error parsing option --gdk-debug"
 
-#: ../gdk/gdk.c:172
+#: ../gdk/gdk.c:171
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Error parsing option --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:200
+#: ../gdk/gdk.c:199
 msgid "Program class as used by the window manager"
 msgstr "Program class as used by the window manager"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:201
+#: ../gdk/gdk.c:200
 msgid "CLASS"
 msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:203
+#: ../gdk/gdk.c:202
 msgid "Program name as used by the window manager"
 msgstr "Program name as used by the window manager"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:203
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:205
 msgid "X display to use"
 msgstr "X display to use"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:206
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:210
+#: ../gdk/gdk.c:209
 msgid "GDK debugging flags to set"
 msgstr "GDK debugging flags to set"
 
@@ -69,12 +69,12 @@ msgstr "GDK debugging flags to set"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:211 ../gdk/gdk.c:214 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
+#: ../gdk/gdk.c:210 ../gdk/gdk.c:213 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:212
 msgid "GDK debugging flags to unset"
 msgstr "GDK debugging flags to unset"
 
@@ -118,12 +118,12 @@ msgstr "Escape"
 #: ../gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "צירוף _מקשים"
+msgstr "צירוף מ_קשים"
 
 #: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "בית"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
 msgctxt "keyboard label"
@@ -440,54 +440,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "לוכסן אחורי"
 
-#: ../gtk/gtkappchooserbutton.c:259
+#: ../gtk/gtkappchooserbutton.c:260
 msgid "Other application..."
 msgstr "יישום אחר..."
 
-#: ../gtk/gtkappchooserdialog.c:127
+#: ../gtk/gtkappchooserdialog.c:129
 msgid "Failed to look for applications online"
 msgstr "אירע כשל בחיפוש אחר יישומים באינטרנט"
 
-#: ../gtk/gtkappchooserdialog.c:164
+#: ../gtk/gtkappchooserdialog.c:166
 msgid "Find applications online"
 msgstr "חיפוש יישומים באינטרנט"
 
-#: ../gtk/gtkappchooserdialog.c:208
+#: ../gtk/gtkappchooserdialog.c:210
 msgid "Could not run application"
 msgstr "לא ניתן להפעיל את היישום"
 
-#: ../gtk/gtkappchooserdialog.c:221
+#: ../gtk/gtkappchooserdialog.c:223
 #, c-format
 msgid "Could not find '%s'"
 msgstr "לא ניתן למצוא את '%s'"
 
-#: ../gtk/gtkappchooserdialog.c:224
+#: ../gtk/gtkappchooserdialog.c:226
 msgid "Could not find application"
 msgstr "לא ניתן למצוא יישום"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:334
+#: ../gtk/gtkappchooserdialog.c:336
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "נא לבחור יישום לפתיחת \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:335 ../gtk/gtkappchooserwidget.c:644
+#: ../gtk/gtkappchooserdialog.c:337 ../gtk/gtkappchooserwidget.c:640
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "אין יישומים הזמינים לפתיחת \"%s\""
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:341
+#: ../gtk/gtkappchooserdialog.c:343
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "נא לבחור יישום עבור קובצי \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:344
+#: ../gtk/gtkappchooserdialog.c:346
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "אין יישומים זמינים לפתיחת קובצי \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:358
+#: ../gtk/gtkappchooserdialog.c:363
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -495,31 +495,31 @@ msgstr ""
 "יש ללחוץ על \"הצגת יישומים אחרים\", להצגת אפשרויות נוספות, או על \"חיפוש "
 "יישומים באינטרנט\" כדי להתקין יישום חדש"
 
-#: ../gtk/gtkappchooserdialog.c:428
+#: ../gtk/gtkappchooserdialog.c:433
 msgid "Forget association"
 msgstr "מחיקת השיוך"
 
-#: ../gtk/gtkappchooserdialog.c:493
+#: ../gtk/gtkappchooserdialog.c:498
 msgid "Show other applications"
 msgstr "הצגת יישומים אחרים"
 
-#: ../gtk/gtkappchooserdialog.c:511
-msgid "_Open"
-msgstr "_פתיחה"
+#: ../gtk/gtkappchooserdialog.c:516
+msgid "_Select"
+msgstr "ב_חירה"
 
-#: ../gtk/gtkappchooserwidget.c:593
+#: ../gtk/gtkappchooserwidget.c:591
 msgid "Default Application"
 msgstr "יישום בררת המחדל"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:726
 msgid "Recommended Applications"
 msgstr "היישומים המומלצים"
 
-#: ../gtk/gtkappchooserwidget.c:744
+#: ../gtk/gtkappchooserwidget.c:740
 msgid "Related Applications"
 msgstr "יישומים קשורים"
 
-#: ../gtk/gtkappchooserwidget.c:758
+#: ../gtk/gtkappchooserwidget.c:754
 msgid "Other Applications"
 msgstr "יישומים אחרים"
 
@@ -856,23 +856,23 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:8760 ../gtk/gtktextview.c:8228
+#: ../gtk/gtkentry.c:8754 ../gtk/gtktextview.c:8269
 msgid "Input _Methods"
 msgstr "_שיטות קלט"
 
-#: ../gtk/gtkentry.c:8774 ../gtk/gtktextview.c:8242
+#: ../gtk/gtkentry.c:8768 ../gtk/gtktextview.c:8283
 msgid "_Insert Unicode Control Character"
 msgstr "_הזנת תו בקרה יוניקוד"
 
-#: ../gtk/gtkentry.c:10178
+#: ../gtk/gtkentry.c:10172
 msgid "Caps Lock and Num Lock are on"
 msgstr "ה־Caps Lock וה־Num Lock פעילים"
 
-#: ../gtk/gtkentry.c:10180
+#: ../gtk/gtkentry.c:10174
 msgid "Num Lock is on"
 msgstr "ה־Num Lock פעיל"
 
-#: ../gtk/gtkentry.c:10182
+#: ../gtk/gtkentry.c:10176
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -883,7 +883,7 @@ msgstr "ה־Caps Lock פעיל"
 msgid "Select a File"
 msgstr "נא לבחור קובץ"
 
-#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1834
+#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1849
 msgid "Desktop"
 msgstr "שולחן עבודה"
 
@@ -924,17 +924,26 @@ msgstr ""
 "חדש לתיקייה, או לשנות את שם הקובץ."
 
 #: ../gtk/gtkfilechooserdefault.c:1004
+msgid "You need to choose a valid filename."
+msgstr "עליך לבחור בשם קובץ תקני."
+
+#: ../gtk/gtkfilechooserdefault.c:1007
+#, c-format
+msgid "Cannot create a file under %s as it is not a folder"
+msgstr "לא ניתן ליצור קובץ תחת %s כיוון שזו איננה תיקייה"
+
+#: ../gtk/gtkfilechooserdefault.c:1019
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
 "ניתן לבחור תיקיות בלבד.  הפריט שברחת אינו תיקייה; נא לנסות לבחור בפריט אחר."
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:1029
 msgid "Invalid file name"
 msgstr "שם קובץ לא תקני"
 
-#: ../gtk/gtkfilechooserdefault.c:1024
+#: ../gtk/gtkfilechooserdefault.c:1039
 msgid "The folder contents could not be displayed"
 msgstr "לא ניתן להציג את תוכן התיקייה"
 
@@ -942,216 +951,216 @@ msgstr "לא ניתן להציג את תוכן התיקייה"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1577
+#: ../gtk/gtkfilechooserdefault.c:1592
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "‏%1$s ב־%2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1753
+#: ../gtk/gtkfilechooserdefault.c:1768
 msgid "Search"
 msgstr "חיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:1777 ../gtk/gtkfilechooserdefault.c:9424
+#: ../gtk/gtkfilechooserdefault.c:1792 ../gtk/gtkfilechooserdefault.c:9457
 msgid "Recently Used"
 msgstr "בשימוש לאחרונה"
 
-#: ../gtk/gtkfilechooserdefault.c:2438
+#: ../gtk/gtkfilechooserdefault.c:2453
 msgid "Select which types of files are shown"
 msgstr "בחירה בסוגי הקבצים שיוצגו"
 
-#: ../gtk/gtkfilechooserdefault.c:2797
+#: ../gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "הוסף את התיקייה '%s' לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:2841
+#: ../gtk/gtkfilechooserdefault.c:2856
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "הוסף את התיקייה הנוכחית לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:2843
+#: ../gtk/gtkfilechooserdefault.c:2858
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "הוסף את התיקיות הנבחרות לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:2881
+#: ../gtk/gtkfilechooserdefault.c:2896
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "הסרת הסימנייה '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2883
+#: ../gtk/gtkfilechooserdefault.c:2898
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "לא ניתן להסיר את הסימנייה '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2890 ../gtk/gtkfilechooserdefault.c:3758
+#: ../gtk/gtkfilechooserdefault.c:2905 ../gtk/gtkfilechooserdefault.c:3773
 msgid "Remove the selected bookmark"
 msgstr "הסרת הסימנייה הנבחרת"
 
-#: ../gtk/gtkfilechooserdefault.c:3453
+#: ../gtk/gtkfilechooserdefault.c:3468
 msgid "Remove"
 msgstr "הסרה"
 
-#: ../gtk/gtkfilechooserdefault.c:3462
+#: ../gtk/gtkfilechooserdefault.c:3477
 msgid "Rename..."
 msgstr "שינוי שם..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3625
+#: ../gtk/gtkfilechooserdefault.c:3640
 msgid "Places"
 msgstr "מקומות"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3682
+#: ../gtk/gtkfilechooserdefault.c:3697
 msgid "_Places"
 msgstr "_מקומות"
 
-#: ../gtk/gtkfilechooserdefault.c:3739
+#: ../gtk/gtkfilechooserdefault.c:3754
 msgid "_Add"
 msgstr "_הוספה"
 
-#: ../gtk/gtkfilechooserdefault.c:3746
+#: ../gtk/gtkfilechooserdefault.c:3761
 msgid "Add the selected folder to the Bookmarks"
 msgstr "הוספת התיקייה הנבחרת לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:3751
+#: ../gtk/gtkfilechooserdefault.c:3766
 msgid "_Remove"
 msgstr "_הסרה"
 
-#: ../gtk/gtkfilechooserdefault.c:3893
+#: ../gtk/gtkfilechooserdefault.c:3908
 msgid "Could not select file"
 msgstr "לא ניתן לבחור את הקובץ"
 
-#: ../gtk/gtkfilechooserdefault.c:4068
+#: ../gtk/gtkfilechooserdefault.c:4083
 msgid "_Add to Bookmarks"
 msgstr "_הוספה לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:4081
+#: ../gtk/gtkfilechooserdefault.c:4096
 msgid "Show _Hidden Files"
 msgstr "הצגת קבצים _נסתרים"
 
-#: ../gtk/gtkfilechooserdefault.c:4088
+#: ../gtk/gtkfilechooserdefault.c:4103
 msgid "Show _Size Column"
 msgstr "הצגת _רוחב העמודה"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: ../gtk/gtkfilechooserdefault.c:4314
+#: ../gtk/gtkfilechooserdefault.c:4329
 msgid "Files"
 msgstr "קבצים"
 
-#: ../gtk/gtkfilechooserdefault.c:4365
+#: ../gtk/gtkfilechooserdefault.c:4380
 msgid "Name"
 msgstr "שם"
 
-#: ../gtk/gtkfilechooserdefault.c:4388
+#: ../gtk/gtkfilechooserdefault.c:4403
 msgid "Size"
 msgstr "גודל"
 
-#: ../gtk/gtkfilechooserdefault.c:4402
+#: ../gtk/gtkfilechooserdefault.c:4417
 msgid "Modified"
 msgstr "שונה"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4657 ../gtk/gtkprinteroptionwidget.c:793
+#: ../gtk/gtkfilechooserdefault.c:4672 ../gtk/gtkprinteroptionwidget.c:793
 msgid "_Name:"
 msgstr "_שם:"
 
-#: ../gtk/gtkfilechooserdefault.c:4700
+#: ../gtk/gtkfilechooserdefault.c:4715
 msgid "_Browse for other folders"
 msgstr "_דפדוף לתיקיות אחרות"
 
-#: ../gtk/gtkfilechooserdefault.c:4970
+#: ../gtk/gtkfilechooserdefault.c:4985
 msgid "Type a file name"
 msgstr "הזנת שם קובץ"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5013
+#: ../gtk/gtkfilechooserdefault.c:5028
 msgid "Create Fo_lder"
 msgstr "יצירת _תיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:5023
+#: ../gtk/gtkfilechooserdefault.c:5038
 msgid "_Location:"
 msgstr "_מיקום:"
 
-#: ../gtk/gtkfilechooserdefault.c:5227
+#: ../gtk/gtkfilechooserdefault.c:5242
 msgid "Save in _folder:"
 msgstr "שמירה ב_תיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:5229
+#: ../gtk/gtkfilechooserdefault.c:5244
 msgid "Create in _folder:"
 msgstr "יצירה ב_תיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:6296
+#: ../gtk/gtkfilechooserdefault.c:6311
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "לא ניתן לקרוא את התוכן של %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6300
+#: ../gtk/gtkfilechooserdefault.c:6315
 msgid "Could not read the contents of the folder"
 msgstr "לא ניתן לקרוא את תכני התיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:6393 ../gtk/gtkfilechooserdefault.c:6461
-#: ../gtk/gtkfilechooserdefault.c:6606
+#: ../gtk/gtkfilechooserdefault.c:6408 ../gtk/gtkfilechooserdefault.c:6476
+#: ../gtk/gtkfilechooserdefault.c:6621
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../gtk/gtkfilechooserdefault.c:6408
+#: ../gtk/gtkfilechooserdefault.c:6423
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6410
+#: ../gtk/gtkfilechooserdefault.c:6425
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב־%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7076
+#: ../gtk/gtkfilechooserdefault.c:7091
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: ../gtk/gtkfilechooserdefault.c:7673 ../gtk/gtkfilechooserdefault.c:7694
+#: ../gtk/gtkfilechooserdefault.c:7688 ../gtk/gtkfilechooserdefault.c:7709
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "הקיצור %s כבר קיים"
 
-#: ../gtk/gtkfilechooserdefault.c:7784
+#: ../gtk/gtkfilechooserdefault.c:7799
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "הקיצור %s אינו קיים"
 
-#: ../gtk/gtkfilechooserdefault.c:8046 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8061 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "קובץ בשם \"%s\" כבר קיים. האם ברצונך להחליפו?"
 
-#: ../gtk/gtkfilechooserdefault.c:8049 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8064 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים ב-\"%s\". החלפתו תגרום לאיבוד תוכנו."
 
-#: ../gtk/gtkfilechooserdefault.c:8054 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8069 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: ../gtk/gtkfilechooserdefault.c:8762
+#: ../gtk/gtkfilechooserdefault.c:8795
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:8763
+#: ../gtk/gtkfilechooserdefault.c:8796
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "התנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
-#: ../gtk/gtkfilechooserdefault.c:8777
+#: ../gtk/gtkfilechooserdefault.c:8810
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:8996
+#: ../gtk/gtkfilechooserdefault.c:9029
 msgid "Search:"
 msgstr "חיפוש:"
 
-#: ../gtk/gtkfilechooserdefault.c:9601
+#: ../gtk/gtkfilechooserdefault.c:9634
 #, c-format
 msgid "Could not mount %s"
 msgstr "לא ניתן לעגון את %s"
@@ -1272,7 +1281,7 @@ msgstr "בחירת גופן"
 msgid "Error loading icon: %s"
 msgstr "שגיאה בטעינת סמל: %s"
 
-#: ../gtk/gtkicontheme.c:1352
+#: ../gtk/gtkicontheme.c:1355
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1285,12 +1294,12 @@ msgstr ""
 "אתה יכול לקבל עותק מ:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1533
+#: ../gtk/gtkicontheme.c:1537
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "הסמל '%s' לא קיים בערכת הנושא"
 
-#: ../gtk/gtkicontheme.c:3054
+#: ../gtk/gtkicontheme.c:3057
 msgid "Failed to load icon"
 msgstr "ארע כשל בטעינת סמל"
 
@@ -1317,12 +1326,12 @@ msgid "System (%s)"
 msgstr "מערכת (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6250
+#: ../gtk/gtklabel.c:6251
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6262
+#: ../gtk/gtklabel.c:6263
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
@@ -1461,7 +1470,7 @@ msgstr "מעטפת Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
-#: ../gtk/gtknotebook.c:4817 ../gtk/gtknotebook.c:7392
+#: ../gtk/gtknotebook.c:4818 ../gtk/gtknotebook.c:7393
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -2015,7 +2024,7 @@ msgstr "חלק מההגדרות בתיבת הדו־שיח מתנגשות"
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../gtk/gtkrc.c:946
+#: ../gtk/gtkrc.c:948
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "לא ניתן לאתר את קובץ התמונה ב־pixmap_path:‏ \"%s\""
@@ -2668,12 +2677,12 @@ msgstr "החלפה"
 msgid "Switches between on and off states"
 msgstr "החלפה בין המצבים פעיל ולא פעיל"
 
-#: ../gtk/gtktextbufferrichtext.c:650
+#: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Unknown error when trying to deserialize %s"
 
-#: ../gtk/gtktextbufferrichtext.c:709
+#: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "No deserialize function found for format %s"
@@ -4310,6 +4319,9 @@ msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
 
+#~ msgid "_Open"
+#~ msgstr "_פתיחה"
+
 #~ msgid "X screen to use"
 #~ msgstr "X screen to use"
 
@@ -5052,9 +5064,6 @@ msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידוע�
 
 #~ msgid "_Rename"
 #~ msgstr "_שנה שם"
-
-#~ msgid "_Selection: "
-#~ msgstr "_בחירה:"
 
 #~ msgid ""
 #~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "

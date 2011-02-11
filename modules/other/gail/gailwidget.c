@@ -102,7 +102,7 @@ static void       gail_widget_focus_event        (AtkObject     *obj,
 
 static void       gail_widget_real_initialize    (AtkObject     *obj,
                                                   gpointer      data);
-static char *gail_widget_get_attributes(AtkObject *obj);
+static AtkAttributeSet *gail_widget_get_attributes(AtkObject *obj);
 static GtkWidget* gail_widget_find_viewport      (GtkWidget     *widget);
 static gboolean   gail_widget_on_screen          (GtkWidget     *widget);
 static gboolean   gail_widget_all_parents_visible(GtkWidget     *widget);
@@ -1120,7 +1120,7 @@ static gboolean gail_widget_all_parents_visible (GtkWidget *widget)
   return result;
 }
 
-static char *gail_widget_get_attributes(AtkObject *obj)
+static AtkAttributeSet *gail_widget_get_attributes(AtkObject *obj)
 {
 	AtkAttributeSet *attributes;
 	AtkAttribute *toolkit = g_malloc(sizeof(AtkAttribute));
@@ -1128,7 +1128,7 @@ static char *gail_widget_get_attributes(AtkObject *obj)
 	toolkit->name = g_strdup("toolkit");
 	toolkit->value = g_strdup("gail");
 
-attributes = g_slist_append(NULL, toolkit);
+        attributes = g_slist_append(NULL, toolkit);
 
-return attributes;
+        return attributes;
 }

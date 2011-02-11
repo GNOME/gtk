@@ -3,6 +3,7 @@ gtkactiongroup.sgml
 gtkaboutdialog.sgml
 gtkadjustment.sgml
 gtkbbox.sgml
+gtkbindings.sgml
 gtkbox.sgml
 gtkbuilder.sgml
 gtkbutton.sgml
@@ -49,6 +50,7 @@ gtkpaned.sgml
 gtkpapersize.sgml
 gtkprinter.sgml
 gtkprintjob.sgml
+gtkprintoperation.sgml
 gtkprogressbar.sgml
 gtkradioaction.sgml
 gtkradiobutton.sgml

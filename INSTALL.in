@@ -9,23 +9,23 @@ GTK+ requires the following packages:
    GdkPixbuf @GDK_PIXBUF_REQUIRED_VERSION@, ATK @ATK_REQUIRED_VERSION@
    and cairo @CAIRO_REQUIRED_VERSION@.
 
- - gobject-introspection 0.9.3 or newer.
+ - gobject-introspection @INTROSPECTION_REQUIRED_VERSION@ or newer.
 
 Simple install procedure
 ========================
 
   % gzip -cd gtk+-@GTK_VERSION@.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-@GTK_VERSION@			   # change to the toplevel directory
-  % ./configure				   # run the `configure' script
-  % make				   # build GTK+
+  % cd gtk+-@GTK_VERSION@                          # change to the toplevel directory
+  % ./configure                                    # run the `configure' script
+  % make                                           # build GTK+
   [ Become root if necessary ]
-  % make install			   # install GTK+
+  % make install                                   # install GTK+
 
 The Details
 ===========
 
-Complete information about installing GTK+ and related libraries can be found 
-in the file:
+Complete information about installing GTK+ and related libraries
+can be found in the file:
 
  docs/reference/gtk/html/gtk-building.html
 

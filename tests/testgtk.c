@@ -9532,26 +9532,6 @@ create_idle_test (GtkWidget *widget)
  */
 
 void
-reload_all_rc_files (void)
-{
-  static GdkAtom atom_rcfiles = GDK_NONE;
-
-  GdkEvent *send_event = gdk_event_new (GDK_CLIENT_EVENT);
-  int i;
-  
-  if (!atom_rcfiles)
-    atom_rcfiles = gdk_atom_intern("_GTK_READ_RCFILES", FALSE);
-
-  for(i = 0; i < 5; i++)
-    send_event->client.data.l[i] = 0;
-  send_event->client.data_format = 32;
-  send_event->client.message_type = atom_rcfiles;
-  gdk_event_send_clientmessage_toall (send_event);
-
-  gdk_event_free (send_event);
-}
-
-void
 create_rc_file (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -9603,12 +9583,6 @@ create_rc_file (GtkWidget *widget)
       gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
-
-      button = gtk_button_new_with_label ("Reload All");
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (reload_all_rc_files), NULL);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",

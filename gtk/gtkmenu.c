@@ -1184,10 +1184,10 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
 }
 
 /**
- * gtk_menu_attach_to_widget:
+ * gtk_menu_attach_to_widget: (skip)
  * @menu: a #GtkMenu
  * @attach_widget: the #GtkWidget that the menu will be attached to
- * @detacher: the user supplied callback functions that will be called
+ * @detacher: the user supplied callback function that will be called
  *            when the menu calls gtk_menu_detach()
  *
  * Attaches the menu to the widget and provides a callback function
@@ -1251,7 +1251,7 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
  *
  * Returns the #GtkWidget that the menu is attached to.
  *
- * Returns: the #GtkWidget that the menu is attached to
+ * Returns: (transfer none): the #GtkWidget that the menu is attached to
  */
 GtkWidget*
 gtk_menu_get_attach_widget (GtkMenu *menu)
@@ -1373,10 +1373,7 @@ static void
 gtk_menu_tearoff_bg_copy (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = menu->priv;
-  GtkWidget *widget;
   gint width, height;
-
-  widget = GTK_WIDGET (menu);
 
   if (priv->torn_off)
     {
@@ -1737,15 +1734,15 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
 }
 
 /**
- * gtk_menu_popup:
- * @menu: a #GtkMenu.
+ * gtk_menu_popup: (skip)
+ * @menu: a #GtkMenu
  * @parent_menu_shell: (allow-none): the menu shell containing the
  *     triggering menu item, or %NULL
  * @parent_menu_item: (allow-none): the menu item whose activation
  *     triggered the popup, or %NULL
  * @func: (allow-none): a user supplied function used to position
  *     the menu, or %NULL
- * @data: (allow-none): user supplied data to be passed to @func.
+ * @data: user supplied data to be passed to @func.
  * @button: the mouse button which was pressed to initiate the event.
  * @activate_time: the time at which the activation event occurred.
  *
@@ -1889,9 +1886,9 @@ gtk_menu_popdown (GtkMenu *menu)
  * Returns the selected menu item from the menu.  This is used by the
  * #GtkOptionMenu.
  *
- * Returns: the #GtkMenuItem that was last selected in the menu.  If a
- *          selection has not yet been made, the first menu item is
- *          selected.
+ * Returns: (transfer none): the #GtkMenuItem that was last selected
+ *          in the menu.  If a selection has not yet been made, the
+ *          first menu item is selected.
  */
 GtkWidget*
 gtk_menu_get_active (GtkMenu *menu)
@@ -1990,12 +1987,12 @@ gtk_menu_set_accel_group (GtkMenu       *menu,
 
 /**
  * gtk_menu_get_accel_group:
- * @menu a #GtkMenu
+ * @menu: a #GtkMenu
  *
  * Gets the #GtkAccelGroup which holds global accelerators for the
- * menu.  See gtk_menu_set_accel_group().
+ * menu. See gtk_menu_set_accel_group().
  *
- * Returns: the #GtkAccelGroup associated with the menu.
+ * Returns: (transfer none): the #GtkAccelGroup associated with the menu
  */
 GtkAccelGroup*
 gtk_menu_get_accel_group (GtkMenu *menu)
@@ -2421,8 +2418,11 @@ gtk_menu_get_title (GtkMenu *menu)
  * gtk_menu_reorder_child:
  * @menu: a #GtkMenu
  * @child: the #GtkMenuItem to move
- * @position: the new position to place @child.  Positions are
- *            numbered from 0 to n-1.
+ * @position: the new position to place @child.
+ *     Positions are numbered from 0 to n - 1
+ *
+ * Moves @child to a new @position in the list of @menu
+ * children.
  */
 void
 gtk_menu_reorder_child (GtkMenu   *menu,
@@ -2448,6 +2448,8 @@ gtk_menu_reorder_child (GtkMenu   *menu,
 static void
 gtk_menu_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->style_updated (widget);
+
   if (gtk_widget_get_realized (widget))
     {
       GtkMenu *menu = GTK_MENU (widget);
@@ -3039,16 +3041,12 @@ gtk_menu_draw (GtkWidget *widget,
   GdkRectangle border;
   GdkRectangle upper;
   GdkRectangle lower;
-  GdkWindow *window;
   gint arrow_space;
-  GtkStateFlags state;
   GtkBorder menu_border;
 
   menu = GTK_MENU (widget);
   priv = menu->priv;
   context = gtk_widget_get_style_context (widget);
-  window = gtk_widget_get_window (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   get_arrows_visible_area (menu, &border, &upper, &lower, &arrow_space);
   get_menu_border (widget, &menu_border);
@@ -3084,9 +3082,9 @@ gtk_menu_draw (GtkWidget *widget,
                             upper.width, upper.height);
 
           gtk_render_arrow (context, cr, 0,
-                           upper.x + (upper.width - arrow_size) / 2,
-                           upper.y + menu_border.top + (arrow_space - arrow_size) / 2,
-                           arrow_size);
+                            upper.x + (upper.width - arrow_size) / 2,
+                            upper.y + menu_border.top + (arrow_space - arrow_size) / 2,
+                            arrow_size);
 
           gtk_style_context_restore (context);
         }
@@ -4568,7 +4566,6 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   gint submenu_top = 0;
   gint submenu_bottom = 0;
   gint width = 0;
-  gint height = 0;
   GtkWidget *event_widget;
   GtkMenuPopdownData *popdown_data;
   GdkWindow *window;
@@ -4585,7 +4582,6 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   submenu_bottom = submenu_top + gdk_window_get_height (window);
 
   width = gdk_window_get_width (gtk_widget_get_window (event_widget));
-  height = gdk_window_get_height (gtk_widget_get_window (event_widget));
 
   if (event->x >= 0 && event->x < width)
     {
@@ -5155,7 +5151,7 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
   GtkMenuPrivate *priv = menu->priv;
   GtkWidget *widget = GTK_WIDGET (menu_shell);
   gint child_offset, child_height;
-  gint width, height;
+  gint height;
   gint y;
   gint arrow_height;
   gboolean last_child = 0;
@@ -5164,7 +5160,6 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
    * If not we need to scroll the menu so that it becomes fully
    * visible.
    */
-
   if (compute_child_offset (menu, menu_item,
                             &child_offset, &child_height, &last_child))
     {
@@ -5175,7 +5170,6 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
       GtkBorder padding;
 
       y = priv->scroll_offset;
-      width = gdk_window_get_width (gtk_widget_get_window (widget));
       height = gdk_window_get_height (gtk_widget_get_window (widget));
 
       gtk_widget_style_get (widget,

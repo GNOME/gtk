@@ -12,12 +12,12 @@ INCLUDES =				\
 	$(GDK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk-3.0.la
+	$(top_builddir)/gtk/libgtk-3.la
 
 LDADDS = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
-	$(top_builddir)/gdk/libgdk-3.0.la	\
-	$(GTK_DEP_LIBS)				\
+	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gdk/libgdk-3.la	\
+	$(GTK_DEP_LIBS)			\
 	-lm
 
 if USE_X11
@@ -40,7 +40,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testcombo			\
 	testcombochange			\
 	testcellrenderertext		\
-	testclientmessage		\
 	testdnd				\
 	testellipsise			\
 	testentrycompletion 		\
@@ -104,7 +103,10 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testswitch			\
 	styleexamples			\
 	testtreemenu			\
-	testtoplevelembed
+	testtoplevelembed		\
+	testnoscreen			\
+	testtreepos			\
+	testsensitive
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -139,7 +141,6 @@ testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testcellrenderertext_DEPENDENCIES = $(TEST_DEPS)
-testclientmessage_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
 testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
@@ -201,6 +202,9 @@ testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
 styleexamples_DEPENDENCIES = $(TEST_DEPS)
 testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
+testnoscreen_DEPENDENCIES = $(TEST_DEPS)
+testtreepos_DEPENDENCIES = $(TEST_DEPS)
+testsensitive_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -215,7 +219,6 @@ testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testcombochange_LDADD = $(LDADDS)
 testcellrenderertext_LDADD = $(LDADDS)
-testclientmessage_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 testellipsise_LDADD = $(LDADDS)
 testentrycompletion_LDADD = $(LDADDS)
@@ -283,6 +286,10 @@ testexpander_LDADD = $(LDADDS)
 testswitch_LDADD = $(LDADDS)
 styleexamples_LDADD = $(LDADDS)
 testtoplevelembed_LDADD = $(LDADDS)
+testnoscreen_LDADD = $(LDADDS)
+testtreepos_LDADD = $(LDADDS)
+testsensitive_LDADD = $(LDADDS)
+
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\

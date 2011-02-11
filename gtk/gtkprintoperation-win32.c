@@ -1360,7 +1360,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 
       SetWindowLongPtrW (wnd, GWLP_USERDATA, (LONG_PTR)op);
       
-      plug = _gtk_win32_embed_widget_new ((GdkNativeWindow) wnd);
+      plug = _gtk_win32_embed_widget_new (wnd);
       gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
       op_win32->embed_widget = plug;
       gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);

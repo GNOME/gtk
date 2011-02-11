@@ -60,6 +60,43 @@
  * The purpose of the #GdkDisplayManager singleton object is to offer
  * notification when displays appear or disappear or the default display
  * changes.
+ *
+ * You can use gdk_display_manager_get() to obtain the GdkDisplayManager
+ * singleton, but that should be rarely necessary. Typically, initializing
+ * GTK+ opens a display that you can work with without ever accessing the
+ * GdkDisplayManager.
+ *
+ * The GDK library can be built with support for multiple backends.
+ * The GdkDisplayManager object determines which backend is used
+ * at runtime.
+ *
+ * When writing backend-specific code that is supposed to work with
+ * multiple GDK backends, you have to consider both compile time and
+ * runtime. At compile time, use the #GDK_WINDOWING_X11, #GDK_WINDOWING_WIN32
+ * macros, etc. to find out which backends are present in the GDK library
+ * you are building your application against. At runtime, use type-check
+ * macros like GDK_IS_X11_DISPLAY() to find out which backend is in use:
+ *
+ * <example id="backend-specific">
+ * <title>Backend-specific code</title>
+ * <programlisting>
+ * #ifdef GDK_WINDOWING_X11
+ *   if (GDK_IS_X11_DISPLAY (display))
+ *     {
+ *       /&ast; make X11-specific calls here &ast;/
+ *     }
+ *   else
+ * #endif
+ * #ifdef GDK_WINDOWING_QUARTZ
+ *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ *     {
+ *       /&ast; make Quartz-specific calls here &ast;/
+*     }
+ *   else
+ * #endif
+ *   g_error ("Unsupported GDK backend");
+ * </programlisting>
+ * </example>
  */
 
 
@@ -172,9 +209,9 @@ gdk_display_manager_get_property (GObject      *object,
  * Gets the singleton #GdkDisplayManager object.
  *
  * When called for the first time, this function consults the
- * <envar>GDK_BACKEND</envar> to find out which of the supported
- * GDK backends to use (in case GDK has been compiled with multiple
- * backends).
+ * <envar>GDK_BACKEND</envar> environment variable to find out which
+ * of the supported GDK backends to use (in case GDK has been compiled
+ * with multiple backends).
  *
  * Returns: (transfer none): The global #GdkDisplayManager singleton;
  *     gdk_parse_args(), gdk_init(), or gdk_init_check() must have
@@ -344,7 +381,7 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
  *
  * Finds or creates an atom corresponding to a given string.
  *
- * Returns: the atom corresponding to @atom_name.
+ * Returns: (transfer none): the atom corresponding to @atom_name.
  */
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -370,7 +407,7 @@ gdk_atom_intern (const gchar *atom_name,
  * ever unload the module again (e.g. do not use this function in
  * GTK+ theme engines).
  *
- * Returns: the atom corresponding to @atom_name
+ * Returns: (transfer none): the atom corresponding to @atom_name
  *
  * Since: 2.10
  */

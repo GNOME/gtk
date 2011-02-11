@@ -29,7 +29,7 @@
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkprivate.h"
-#include "gtkcssprovider.h"
+#include "gtkcssproviderprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
@@ -45,19 +45,27 @@
  * @Short_description: Sharing settings between applications
  * @Title: Settings
  *
- * GtkSettings provide a mechanism to share global settings between applications.
+ * GtkSettings provide a mechanism to share global settings between
+ * applications.
+ *
  * On the X window system, this sharing is realized by an
  * <ulink url="http://www.freedesktop.org/wiki/Specifications/xsettings-spec">XSettings</ulink>
- * manager that is usually part of the desktop environment, along with utilities
- * that let the user change these settings. In the absence of an Xsettings manager,
- * settings can also be specified in RC files.
+ * manager that is usually part of the desktop environment, along with
+ * utilities that let the user change these settings. In the absence of
+ * an Xsettings manager, GTK+ reads default values for settings from
+ * <filename>settings.ini</filename> files in
+ * <filename>/etc/gtk-3.0</filename> and <filename>$XDG_CONFIG_HOME/gtk-3.0</filename>. These files must be valid key files (see #GKeyFile), and have
+ * a section called Settings. Themes can also provide default values
+ * for settings by installing a <filename>settings.ini</filename> file
+ * next to their <filename>gtk.css</filename> file.
  *
- * Applications can override system-wide settings with gtk_settings_set_string_property(),
- * gtk_settings_set_long_property(), etc. This should be restricted to special
- * cases though; GtkSettings are not meant as an application configuration
- * facility. When doing so, you need to be aware that settings that are specific
- * to individual widgets may not be available before the widget type has been
- * realized at least once. The following example demonstrates a way to do this:
+ * Applications can override system-wide settings with
+ * gtk_settings_set_string_property(), gtk_settings_set_long_property(),
+ * etc. This should be restricted to special cases though; GtkSettings are
+ * not meant as an application configuration facility. When doing so, you
+ * need to be aware that settings that are specific to individual widgets
+ * may not be available before the widget type has been realized at least
+ * once. The following example demonstrates a way to do this:
  * <informalexample><programlisting>
  *   gtk_init (&argc, &argv);
  *
@@ -92,12 +100,14 @@ struct _GtkSettingsPrivate
   GData *queued_settings;      /* of type GtkSettingsValue* */
   GtkSettingsPropertyValue *property_values;
   GdkScreen *screen;
+  GtkCssProvider *theme_provider;
+  GtkCssProvider *key_theme_provider;
 };
 
 typedef enum
 {
   GTK_SETTINGS_SOURCE_DEFAULT,
-  GTK_SETTINGS_SOURCE_RC_FILE,
+  GTK_SETTINGS_SOURCE_THEME,
   GTK_SETTINGS_SOURCE_XSETTING,
   GTK_SETTINGS_SOURCE_APPLICATION
 } GtkSettingsSource;
@@ -217,12 +227,16 @@ static gboolean settings_update_fontconfig       (GtkSettings           *setting
 #endif
 static void    settings_update_color_scheme      (GtkSettings *settings);
 static void    settings_update_theme             (GtkSettings *settings);
+static void    settings_update_key_theme         (GtkSettings *settings);
 
 static void    merge_color_scheme                (GtkSettings           *settings,
                                                   const GValue          *value,
                                                   GtkSettingsSource      source);
 static gchar  *get_color_scheme                  (GtkSettings           *settings);
 static GHashTable *get_color_hash                (GtkSettings           *settings);
+static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
+                                                  const gchar           *path,
+                                                  GtkSettingsSource      source);
 
 /* the default palette for GtkColorSelelection */
 static const gchar default_color_palette[] =
@@ -246,6 +260,7 @@ gtk_settings_init (GtkSettings *settings)
   GtkSettingsPrivate *priv;
   GParamSpec **pspecs, **p;
   guint i = 0;
+  gchar *path;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (settings,
                                       GTK_TYPE_SETTINGS,
@@ -266,20 +281,34 @@ gtk_settings_init (GtkSettings *settings)
   priv->property_values = g_new0 (GtkSettingsPropertyValue, i);
   i = 0;
   g_object_freeze_notify (G_OBJECT (settings));
+
   for (p = pspecs; *p; p++)
     {
       GParamSpec *pspec = *p;
+      GType value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
 
       if (pspec->owner_type != G_OBJECT_TYPE (settings))
         continue;
-      g_value_init (&priv->property_values[i].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      g_value_init (&priv->property_values[i].value, value_type);
       g_param_value_set_default (pspec, &priv->property_values[i].value);
+
       g_object_notify (G_OBJECT (settings), pspec->name);
       priv->property_values[i].source = GTK_SETTINGS_SOURCE_DEFAULT;
       i++;
     }
-  g_object_thaw_notify (G_OBJECT (settings));
   g_free (pspecs);
+
+  path = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "settings.ini", NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+  g_free (path);
+
+  path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "settings.ini", NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+  g_free (path);
+
+  g_object_thaw_notify (G_OBJECT (settings));
 }
 
 static void
@@ -366,7 +395,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-theme-name",
                                                                    P_("Theme Name"),
-                                                                   P_("Name of theme RC file to load"),
+                                                                   P_("Name of theme to load"),
                                                                   "Raleigh",
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
@@ -393,7 +422,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-key-theme-name",
                                                                   P_("Key Theme Name"),
-                                                                  P_("Name of key theme RC file to load"),
+                                                                  P_("Name of key theme to load"),
                                                                   DEFAULT_KEY_THEME,
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
@@ -1357,6 +1386,12 @@ gtk_settings_finalize (GObject *object)
 
   g_datalist_clear (&priv->queued_settings);
 
+  if (priv->theme_provider)
+    g_object_unref (priv->theme_provider);
+
+  if (priv->key_theme_provider)
+    g_object_unref (priv->key_theme_provider);
+
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
 
@@ -1400,6 +1435,7 @@ settings_init_style (GtkSettings *settings)
                                              GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
   settings_update_theme (settings);
+  settings_update_key_theme (settings);
 }
 
 /**
@@ -1582,7 +1618,11 @@ gtk_settings_notify (GObject    *object,
       settings_update_color_scheme (settings);
       gtk_style_context_reset_widgets (priv->screen);
       break;
+    case PROP_KEY_THEME_NAME:
+      settings_update_key_theme (settings);
+      break;
     case PROP_THEME_NAME:
+    case PROP_APPLICATION_PREFER_DARK_THEME:
       settings_update_theme (settings);
       break;
 #ifdef GDK_WINDOWING_X11
@@ -1647,7 +1687,8 @@ _gtk_settings_parse_convert (GtkRcPropertyParser parser,
         {
           gchar *tstr = g_strescape (g_value_get_string (src_value), NULL);
 
-          gstring = g_string_new ("\"");
+          gstring = g_string_new (NULL);
+          g_string_append_c (gstring, '\"');
           g_string_append (gstring, tstr);
           g_string_append_c (gstring, '\"');
           g_free (tstr);
@@ -1828,6 +1869,11 @@ gtk_settings_install_property (GParamSpec *pspec)
   settings_install_property_parser (klass, pspec, parser);
 }
 
+/**
+ * gtk_settings_install_property_parser:
+ * @psepc:
+ * @parser: (scope call):
+ */
 void
 gtk_settings_install_property_parser (GParamSpec          *pspec,
                                       GtkRcPropertyParser  parser)
@@ -1870,7 +1916,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
       !G_VALUE_HOLDS_STRING (&new_value->value) &&
       !G_VALUE_HOLDS (&new_value->value, G_TYPE_GSTRING))
     {
-      g_warning (G_STRLOC ": value type invalid");
+      g_warning (G_STRLOC ": value type invalid (%s)", g_type_name (G_VALUE_TYPE (&new_value->value)));
       return;
     }
 
@@ -1922,7 +1968,7 @@ _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
   g_return_if_fail (new_value != NULL);
 
   gtk_settings_set_property_value_internal (settings, prop_name, new_value,
-                                            GTK_SETTINGS_SOURCE_RC_FILE);
+                                            GTK_SETTINGS_SOURCE_THEME);
 }
 
 void
@@ -2353,7 +2399,7 @@ reset_rc_values_foreach (GQuark   key_id,
   GtkSettingsValuePrivate *qvalue = data;
   GSList **to_reset = user_data;
 
-  if (qvalue->source == GTK_SETTINGS_SOURCE_RC_FILE)
+  if (qvalue->source == GTK_SETTINGS_SOURCE_THEME)
     *to_reset = g_slist_prepend (*to_reset, GUINT_TO_POINTER (key_id));
 }
 
@@ -2387,7 +2433,7 @@ _gtk_settings_reset_rc_values (GtkSettings *settings)
   g_object_freeze_notify (G_OBJECT (settings));
   for (p = pspecs; *p; p++)
     {
-      if (priv->property_values[i].source == GTK_SETTINGS_SOURCE_RC_FILE)
+      if (priv->property_values[i].source == GTK_SETTINGS_SOURCE_THEME)
         {
           GParamSpec *pspec = *p;
 
@@ -2634,19 +2680,37 @@ settings_update_color_scheme (GtkSettings *settings)
 }
 
 static void
+settings_update_provider (GdkScreen       *screen,
+                          GtkCssProvider **old,
+                          GtkCssProvider  *new)
+{
+  if (*old != new)
+    {
+      if (*old)
+        {
+          gtk_style_context_remove_provider_for_screen (screen,
+                                                        GTK_STYLE_PROVIDER (*old));
+          g_object_unref (*old);
+          *old = NULL;
+        }
+
+      if (new)
+        {
+          gtk_style_context_add_provider_for_screen (screen,
+                                                     GTK_STYLE_PROVIDER (new),
+                                                     GTK_STYLE_PROVIDER_PRIORITY_THEME);
+          *old = g_object_ref (new);
+        }
+    }
+}
+
+static void
 settings_update_theme (GtkSettings *settings)
 {
-  static GQuark quark_theme_name = 0;
-
   GtkSettingsPrivate *priv = settings->priv;
-  GtkCssProvider *provider, *new_provider = NULL;
+  GtkCssProvider *provider = NULL;
   gboolean prefer_dark_theme;
   gchar *theme_name;
-
-  if (G_UNLIKELY (!quark_theme_name))
-    quark_theme_name = g_quark_from_static_string ("gtk-settings-theme-name");
-
-  provider = g_object_get_qdata (G_OBJECT (settings), quark_theme_name);
 
   g_object_get (settings,
                 "gtk-theme-name", &theme_name,
@@ -2655,32 +2719,50 @@ settings_update_theme (GtkSettings *settings)
 
   if (theme_name && *theme_name)
     {
-      gchar *variant = NULL;
-
       if (prefer_dark_theme)
-        variant = "dark";
+        provider = gtk_css_provider_get_named (theme_name, "dark");
 
-      new_provider = gtk_css_provider_get_named (theme_name, variant);
-      g_free (theme_name);
+      if (!provider)
+        provider = gtk_css_provider_get_named (theme_name, NULL);
     }
 
-  if (new_provider != provider)
+  settings_update_provider (priv->screen, &priv->theme_provider, provider);
+
+  if (theme_name && *theme_name)
     {
-      if (provider)
-        gtk_style_context_remove_provider_for_screen (priv->screen,
-                                                      GTK_STYLE_PROVIDER (provider));
+      gchar *theme_dir;
+      gchar *path;
 
-      if (new_provider)
-        {
-          gtk_style_context_add_provider_for_screen (priv->screen,
-                                                     GTK_STYLE_PROVIDER (new_provider),
-                                                     GTK_STYLE_PROVIDER_PRIORITY_THEME);
-          g_object_ref (new_provider);
-        }
+      /* reload per-theme settings */
+      theme_dir = _gtk_css_provider_get_theme_dir ();
+      path = g_build_filename (theme_dir, theme_name, "gtk-3.0", "settings.ini", NULL);
 
-      g_object_set_qdata_full (G_OBJECT (settings), quark_theme_name,
-                               new_provider, (GDestroyNotify) g_object_unref);
+     if (g_file_test (path, G_FILE_TEST_EXISTS))
+       gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
+
+      g_free (theme_dir);
+      g_free (path);
     }
+
+  g_free (theme_name);
+}
+
+static void
+settings_update_key_theme (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+  GtkCssProvider *provider = NULL;
+  gchar *key_theme_name;
+
+  g_object_get (settings,
+                "gtk-key-theme-name", &key_theme_name,
+                NULL);
+
+  if (key_theme_name && *key_theme_name)
+    provider = gtk_css_provider_get_named (key_theme_name, "keys");
+
+  settings_update_provider (priv->screen, &priv->key_theme_provider, provider);
+  g_free (key_theme_name);
 }
 
 static gboolean
@@ -2767,10 +2849,10 @@ update_color_hash (ColorSchemeData   *data,
   if (str && data->lastentry[source] && strcmp (str, data->lastentry[source]) == 0)
     return FALSE;
 
-  /* For the RC_FILE source we merge the values rather than over-writing
+  /* For the THEME source we merge the values rather than over-writing
    * them, since multiple rc files might define independent sets of colors
    */
-  if ((source != GTK_SETTINGS_SOURCE_RC_FILE) &&
+  if ((source != GTK_SETTINGS_SOURCE_THEME) &&
       data->tables[source] && g_hash_table_size (data->tables[source]) > 0)
     {
       g_hash_table_unref (data->tables[source]);
@@ -2918,4 +3000,124 @@ GdkScreen *
 _gtk_settings_get_screen (GtkSettings *settings)
 {
   return settings->priv->screen;
+}
+
+
+static void
+gtk_settings_load_from_key_file (GtkSettings       *settings,
+                                 const gchar       *path,
+                                 GtkSettingsSource  source)
+{
+  GError *error;
+  GKeyFile *keyfile;
+  gchar **keys;
+  gsize n_keys;
+  gint i;
+
+  error = NULL;
+  keys = NULL;
+
+  keyfile = g_key_file_new ();
+
+  if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_NONE, &error))
+    {
+      g_warning ("Failed to parse %s: %s", path, error->message);
+
+      g_error_free (error);
+
+      goto out;
+    }
+
+  keys = g_key_file_get_keys (keyfile, "Settings", &n_keys, &error);
+  if (error)
+    {
+      g_warning ("Failed to parse %s: %s", path, error->message);
+      g_error_free (error);
+      goto out;
+    }
+
+  for (i = 0; i < n_keys; i++)
+    {
+      gchar *key;
+      GParamSpec *pspec;
+      GType value_type;
+      GtkSettingsValue svalue = { NULL, { 0, }, };
+
+      key = keys[i];
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), key);
+      if (!pspec)
+        {
+          g_warning ("Unknown key %s in %s", key, path);
+          continue;
+        }
+
+      if (pspec->owner_type != G_OBJECT_TYPE (settings))
+        continue;
+
+      value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
+      switch (value_type)
+        {
+        case G_TYPE_BOOLEAN:
+          {
+            gboolean b_val;
+
+            g_value_init (&svalue.value, G_TYPE_LONG);
+            b_val = g_key_file_get_boolean (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_long (&svalue.value, b_val);
+            break;
+          }
+
+        case G_TYPE_INT:
+          {
+            gint i_val;
+
+            g_value_init (&svalue.value, G_TYPE_LONG);
+            i_val = g_key_file_get_integer (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_long (&svalue.value, i_val);
+            break;
+          }
+
+        case G_TYPE_DOUBLE:
+          {
+            gdouble d_val;
+
+            g_value_init (&svalue.value, G_TYPE_DOUBLE);
+            d_val = g_key_file_get_double (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_double (&svalue.value, d_val);
+            break;
+          }
+
+        default:
+          {
+            gchar *s_val;
+
+            g_value_init (&svalue.value, G_TYPE_GSTRING);
+            s_val = g_key_file_get_string (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_boxed (&svalue.value, g_string_new (s_val));
+            g_free (s_val);
+            break;
+          }
+        }
+      if (error)
+        {
+          g_warning ("Error setting %s in %s: %s", key, path, error->message);
+          g_error_free (error);
+          error = NULL;
+        }
+      else
+        {
+          if (g_getenv ("GTK_DEBUG"))
+            svalue.origin = (gchar *)path;
+          gtk_settings_set_property_value_internal (settings, key, &svalue, source);
+          g_value_unset (&svalue.value);
+        }
+    }
+
+ out:
+  g_strfreev (keys);
+  g_key_file_free (keyfile);
 }

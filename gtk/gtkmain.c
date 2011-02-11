@@ -738,20 +738,30 @@ setlocale_initialization (void)
     }
 }
 
-static void
-check_mixed_deps (void)
+/* Return TRUE if module_to_check causes version conflicts.
+ * If module_to_check is NULL, check the main module.
+ */
+gboolean
+_gtk_module_has_mixed_deps (GModule *module_to_check)
 {
   GModule *module;
   gpointer func;
+  gboolean result;
 
-  module = g_module_open (NULL, 0);
+  if (!module_to_check)
+    module = g_module_open (NULL, 0);
+  else
+    module = module_to_check;
 
   if (g_module_symbol (module, "gtk_progress_get_type", &func))
-    {
-      g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
-    }
+    result = TRUE;
+  else
+    result = FALSE;
 
-  g_module_close (module);
+  if (!module_to_check)
+    g_module_close (module);
+
+  return result;
 }
 
 static void
@@ -765,11 +775,12 @@ do_pre_parse_initialization (int    *argc,
 
   pre_initialized = TRUE;
 
-  check_mixed_deps ();
+  if (_gtk_module_has_mixed_deps (NULL))
+    g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
 
   gdk_pre_parse_libgtk_only ();
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
-  
+
 #ifdef G_ENABLE_DEBUG
   env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)
@@ -935,7 +946,7 @@ gtk_set_debug_flags (guint flags)
 }
 
 /**
- * gtk_get_option_group:
+ * gtk_get_option_group: (skip)
  * @open_default_display: whether to open the default display
  *     when parsing the commandline arguments
  *
@@ -975,12 +986,13 @@ gtk_get_option_group (gboolean open_default_display)
 /**
  * gtk_init_with_args:
  * @argc: a pointer to the number of command line arguments
- * @argv: a pointer to the array of command line arguments
+ * @argv: (inout) (array length=argc): a pointer to the array of
+ * command line arguments
  * @parameter_string: a string which is displayed in
  *    the first line of <option>--help</option> output, after
  *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
- * @entries: a %NULL-terminated array of #GOptionEntrys
- *    describing the options of your program
+ * @entries: (array zero-terminated=1): a %NULL-terminated array
+ *    of #GOptionEntrys describing the options of your program
  * @translation_domain: a translation domain to use for translating
  *    the <option>--help</option> output for the options in @entries
  *    and the @parameter_string with gettext(), or %NULL
@@ -1036,7 +1048,8 @@ gtk_init_with_args (gint                 *argc,
 /**
  * gtk_parse_args:
  * @argc: (inout): a pointer to the number of command line arguments
- * @argv: (array) (inout): a pointer to the array of command line arguments
+ * @argv: (array length=argc) (inout): a pointer to the array of
+ *     command line arguments
  *
  * Parses command line arguments, and initializes global
  * attributes of GTK+, but does not actually open a connection
@@ -2149,7 +2162,7 @@ gtk_grab_notify (GtkWindowGroup *group,
 }
 
 /**
- * gtk_grab_add:
+ * gtk_grab_add: (method)
  * @widget: The widget that grabs keyboard and pointer events
  *
  * Makes @widget the current grabbed widget.
@@ -2203,7 +2216,7 @@ gtk_grab_get_current (void)
 }
 
 /**
- * gtk_grab_remove:
+ * gtk_grab_remove: (method)
  * @widget: The widget which gives up the grab
  *
  * Removes the grab from the given widget.
@@ -2297,7 +2310,7 @@ gtk_device_grab_remove (GtkWidget *widget,
 }
 
 /**
- * gtk_key_snooper_install:
+ * gtk_key_snooper_install: (skip)
  * @snooper: a #GtkKeySnoopFunc
  * @func_data: data to pass to @snooper
  *
@@ -2383,9 +2396,9 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
  * the current event will be the #GdkEventButton that triggered
  * the ::clicked signal.
  *
- * Return value: a copy of the current event, or %NULL if there is
- *     no current event. The returned event must be freed with
- *     gdk_event_free().
+ * Return value: (transfer full): a copy of the current event, or
+ *     %NULL if there is no current event. The returned event must be
+ *     freed with gdk_event_free().
  */
 GdkEvent*
 gtk_get_current_event (void)
@@ -2416,7 +2429,7 @@ gtk_get_current_event_time (void)
 
 /**
  * gtk_get_current_event_state:
- * @state: a location to store the state of the current event
+ * @state: (out): a location to store the state of the current event
  *
  * If there is a current event and it has a state field, place
  * that state field in @state and return %TRUE, otherwise return

@@ -1468,24 +1468,23 @@ find_button_type (GtkPathBar  *path_bar,
 }
 
 static void
-button_drag_data_get_cb (GtkWidget          *widget,
-			 GdkDragContext     *context,
-			 GtkSelectionData   *selection_data,
-			 guint               info,
-			 guint               time_,
-			 gpointer            data)
+button_drag_data_get_cb (GtkWidget        *widget,
+                         GdkDragContext   *context,
+                         GtkSelectionData *selection_data,
+                         guint             info,
+                         guint             time_,
+                         gpointer          data)
 {
   ButtonData *button_data;
-  GtkPathBar *path_bar;
   char *uris[2];
 
   button_data = data;
-  path_bar = GTK_PATH_BAR (gtk_widget_get_parent (widget)); /* the button's parent *is* the path bar */
 
   uris[0] = g_file_get_uri (button_data->file);
   uris[1] = NULL;
 
   gtk_selection_data_set_uris (selection_data, uris);
+
   g_free (uris[0]);
 }
 
@@ -1746,18 +1745,15 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 }
 
 gboolean
-_gtk_path_bar_set_file (GtkPathBar         *path_bar,
-			GFile              *file,
-			const gboolean      keep_trail,
-			GError            **error)
+_gtk_path_bar_set_file (GtkPathBar      *path_bar,
+                        GFile           *file,
+                        const gboolean   keep_trail,
+                        GError         **error)
 {
   struct SetFileInfo *info;
-  gboolean result;
 
   g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
-
-  result = TRUE;
 
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
@@ -1777,10 +1773,10 @@ _gtk_path_bar_set_file (GtkPathBar         *path_bar,
 
   path_bar->get_info_cancellable =
     _gtk_file_system_get_info (path_bar->file_system,
-			       info->file,
-			       "standard::display-name,standard::is-hidden,standard::is-backup",
-			       gtk_path_bar_get_info_callback,
-			       info);
+                               info->file,
+                               "standard::display-name,standard::is-hidden,standard::is-backup",
+                               gtk_path_bar_get_info_callback,
+                               info);
 
   return TRUE;
 }

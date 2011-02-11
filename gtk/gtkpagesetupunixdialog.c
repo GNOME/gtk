@@ -148,10 +148,8 @@ static void
 gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
 {
   GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
 
   object_class = (GObjectClass *) class;
-  widget_class = (GtkWidgetClass *) class;
 
   object_class->finalize = gtk_page_setup_unix_dialog_finalize;
 
@@ -1099,7 +1097,7 @@ gtk_page_setup_unix_dialog_set_page_setup (GtkPageSetupUnixDialog *dialog,
  * 
  * Gets the currently selected page setup from the dialog. 
  * 
- * Returns: the current page setup 
+ * Returns: (transfer none): the current page setup 
  *
  * Since: 2.10
  **/
@@ -1196,7 +1194,7 @@ gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
  * 
  * Gets the current print settings from the dialog.
  * 
- * Returns: the current print settings
+ * Returns: (transfer none): the current print settings
  *
  * Since: 2.10
  **/

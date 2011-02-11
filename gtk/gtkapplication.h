@@ -56,7 +56,7 @@ struct _GtkApplicationClass
   GApplicationClass parent_class;
 
   /*< private >*/
-  gpointer padding[12];
+  gpointer padding[16];
 };
 
 GType                   gtk_application_get_type                        (void) G_GNUC_CONST;

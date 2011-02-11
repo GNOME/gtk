@@ -31,6 +31,13 @@ see <link linkend="gdk-X-Window-System-Interaction">GDK X Window
 System interaction</link> in the GDK manual.
 </para>
 
+<para>
+GTK+ includes an cross-process embedding facility in the form of
+the #GtkSocket and #GtkPlug widgets. These are X11-specific, and
+you have to include the <filename>gtk/gtkx.h</filename> header
+to use them.
+</para>
+
 <refsect2 id="x11-cmdline">
 <title>X11-specific commandline options</title>
 

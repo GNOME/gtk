@@ -11,11 +11,11 @@ INCLUDES = \
 	$(GTK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk-3.0.la
+	$(top_builddir)/gtk/libgtk-3.la
 
 progs_ldadd = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
-	$(top_builddir)/gdk/libgdk-3.0.la	\
+	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)
 
 noinst_PROGRAMS = $(TEST_PROGS)
@@ -104,6 +104,10 @@ EXTRA_DIST			+= test.css test.png
 TEST_PROGS			+= papersize
 papersize_SOURCES		 = papersize.c
 papersize_LDADD			 = $(progs_ldadd)
+
+TEST_PROGS			+= cellarea
+cellarea_SOURCES		 = cellarea.c
+cellarea_LDADD			 = $(progs_ldadd)
 
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \

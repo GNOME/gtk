@@ -37,23 +37,29 @@
  * SECTION:colors
  * @Short_description: Manipulation of colors
  * @Title: Colors
+ *
+ * A #GdkColor represents a color.
+ *
+ * When working with cairo, it is often more convenient
+ * to use a #GdkRGBA instead.
  */
 
 
 /**
  * gdk_color_copy:
- * @color: a #GdkColor.
- * 
- * Makes a copy of a color structure. The result
- * must be freed using gdk_color_free().
- * 
- * Return value: a copy of @color.
- **/
+ * @color: a #GdkColor
+ *
+ * Makes a copy of a color structure.
+ *
+ * The result must be freed using gdk_color_free().
+ *
+ * Return value: a copy of @color
+ */
 GdkColor*
 gdk_color_copy (const GdkColor *color)
 {
   GdkColor *new_color;
-  
+
   g_return_val_if_fail (color != NULL, NULL);
 
   new_color = g_slice_new (GdkColor);
@@ -63,11 +69,10 @@ gdk_color_copy (const GdkColor *color)
 
 /**
  * gdk_color_free:
- * @color: a #GdkColor.
- * 
- * Frees a color structure created with 
- * gdk_color_copy().
- **/
+ * @color: a #GdkColor
+ *
+ * Frees a color structure created with gdk_color_copy().
+ */
 void
 gdk_color_free (GdkColor *color)
 {
@@ -78,41 +83,41 @@ gdk_color_free (GdkColor *color)
 
 /**
  * gdk_color_hash:
- * @colora: a #GdkColor.
- * 
+ * @color: a #GdkColor
+ *
  * A hash function suitable for using for a hash
- * table that stores #GdkColor's.
- * 
- * Return value: The hash function applied to @colora
- **/
+ * table that stores #GdkColors.
+ *
+ * Return value: The hash function applied to @color
+ */
 guint
-gdk_color_hash (const GdkColor *colora)
+gdk_color_hash (const GdkColor *color)
 {
-  return ((colora->red) +
-	  (colora->green << 11) +
-	  (colora->blue << 22) +
-	  (colora->blue >> 6));
+  return ((color->red) +
+          (color->green << 11) +
+          (color->blue << 22) +
+          (color->blue >> 6));
 }
 
 /**
  * gdk_color_equal:
- * @colora: a #GdkColor.
- * @colorb: another #GdkColor.
- * 
- * Compares two colors. 
- * 
+ * @colora: a #GdkColor
+ * @colorb: another #GdkColor
+ *
+ * Compares two colors.
+ *
  * Return value: %TRUE if the two colors compare equal
- **/
+ */
 gboolean
 gdk_color_equal (const GdkColor *colora,
-		 const GdkColor *colorb)
+                 const GdkColor *colorb)
 {
   g_return_val_if_fail (colora != NULL, FALSE);
   g_return_val_if_fail (colorb != NULL, FALSE);
 
   return ((colora->red == colorb->red) &&
-	  (colora->green == colorb->green) &&
-	  (colora->blue == colorb->blue));
+          (colora->green == colorb->green) &&
+          (colora->blue == colorb->blue));
 }
 
 G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
@@ -121,25 +126,28 @@ G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
 
 /**
  * gdk_color_parse:
- * @spec: the string specifying the color.
+ * @spec: the string specifying the color
  * @color: (out): the #GdkColor to fill in
  *
  * Parses a textual specification of a color and fill in the
  * <structfield>red</structfield>, <structfield>green</structfield>,
  * and <structfield>blue</structfield> fields of a #GdkColor
- * structure. The string can either one of a large set of standard
- * names. (Taken from the X11 <filename>rgb.txt</filename> file), or
+ * structure.
+ *
+ * The string can either one of a large set of standard names
+ * (taken from the X11 <filename>rgb.txt</filename> file), or
  * it can be a hex value in the form '&num;rgb' '&num;rrggbb'
- * '&num;rrrgggbbb' or '&num;rrrrggggbbbb' where 'r', 'g' and 'b' are
- * hex digits of the red, green, and blue components of the color,
- * respectively. (White in the four forms is '&num;fff' '&num;ffffff'
- * '&num;fffffffff' and '&num;ffffffffffff')
- * 
- * Return value: %TRUE if the parsing succeeded.
- **/
+ * '&num;rrrgggbbb' or '&num;rrrrggggbbbb' where 'r', 'g' and
+ * 'b' are hex digits of the red, green, and blue components
+ * of the color, respectively. (White in the four forms is
+ * '&num;fff', '&num;ffffff', '&num;fffffffff' and
+ * '&num;ffffffffffff').
+ *
+ * Return value: %TRUE if the parsing succeeded
+ */
 gboolean
 gdk_color_parse (const gchar *spec,
-		 GdkColor    *color)
+                 GdkColor    *color)
 {
   PangoColor pango_color;
 
@@ -164,10 +172,12 @@ gdk_color_parse (const gchar *spec,
  * <literal>g</literal> and <literal>b</literal> are hex digits
  * representing the red, green and blue components respectively.
  *
+ * The returned string can be parsed by gdk_color_parse().
+ *
  * Return value: a newly-allocated text string
  *
  * Since: 2.12
- **/
+ */
 gchar *
 gdk_color_to_string (const GdkColor *color)
 {

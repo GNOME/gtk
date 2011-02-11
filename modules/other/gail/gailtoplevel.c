@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gtk/gtk.h>
+#include <gtk/gtkx.h>
 
 #include "gailtoplevel.h"
 
@@ -341,7 +341,6 @@ is_combo_window (GtkWidget *widget)
 {
   GtkWidget *child;
   AtkObject *obj;
-  GtkAccessible *accessible;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
@@ -360,7 +359,6 @@ is_combo_window (GtkWidget *widget)
 
   obj = gtk_widget_get_accessible (child);
   obj = atk_object_get_parent (obj);
-  accessible = GTK_ACCESSIBLE (obj);
 
   return  FALSE;
 }

@@ -38,26 +38,32 @@
 
 /**
  * SECTION:gdkdisplay
- * @Short_description: Controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
+ * @Short_description: Controls a set of GdkScreens and their associated input devices
  * @Title: GdkDisplay
  *
  * #GdkDisplay objects purpose are two fold:
  * <itemizedlist>
- * <listitem><para>
- *   To grab/ungrab keyboard focus and mouse pointer
- * </para></listitem>
- * <listitem><para>
- *   To manage and provide information about the #GdkScreen(s)
- *   available for this #GdkDisplay
- * </para></listitem>
+ * <listitem>
+ *   To manage and provide information about input devices (pointers
+ *   and keyboards)
+ * </listitem>
+ * <listitem>
+ *   To manage and provide information about the available #GdkScreens
+ * </listitem>
  * </itemizedlist>
  *
- * #GdkDisplay objects are the GDK representation of the X Display which can be
- * described as <emphasis>a workstation consisting of a keyboard a pointing
- * device (such as a mouse) and one or more screens</emphasis>.
- * It is used to open and keep track of various #GdkScreen objects currently
- * instanciated by the application. It is also used to grab and release the keyboard
- * and the mouse pointer.
+ * GdkDisplay objects are the GDK representation of an X Display,
+ * which can be described as <emphasis>a workstation consisting of
+ * a keyboard, a pointing device (such as a mouse) and one or more
+ * screens</emphasis>.
+ * It is used to open and keep track of various GdkScreen objects
+ * currently instantiated by the application. It is also used to
+ * access the keyboard(s) and mouse pointer(s) of the display.
+ *
+ * Most of the input device handling has been factored out into
+ * the separate #GdkDeviceManager object. Every display has a
+ * device manager, which you can obtain using
+ * gdk_display_get_device_manager().
  */
 
 
@@ -523,48 +529,6 @@ gdk_flush (void)
   g_slist_free (list);
 }
 
-/**
- * gdk_event_send_client_message:
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- * @winid:  the window to send the X ClientMessage event to.
- * 
- * Sends an X ClientMessage event to a given window (which must be
- * on the default #GdkDisplay.)
- * This could be used for communicating between different applications,
- * though the amount of data is limited to 20 bytes.
- * 
- * Return value: non-zero on success.
- **/
-gboolean
-gdk_event_send_client_message (GdkEvent        *event,
-			       GdkNativeWindow  winid)
-{
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  return gdk_event_send_client_message_for_display (gdk_display_get_default (),
-						    event, winid);
-}
-
-/**
- * gdk_event_send_clientmessage_toall:
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- *
- * Sends an X ClientMessage event to all toplevel windows on the default
- * #GdkScreen.
- *
- * Toplevel windows are determined by checking for the WM_STATE property, as
- * described in the Inter-Client Communication Conventions Manual (ICCCM).
- * If no windows are found with the WM_STATE property set, the message is sent
- * to all children of the root window.
- **/
-void
-gdk_event_send_clientmessage_toall (GdkEvent *event)
-{
-  g_return_if_fail (event != NULL);
-
-  gdk_screen_broadcast_client_message (gdk_screen_get_default (), event);
-}
-
 void
 _gdk_display_enable_motion_hints (GdkDisplay *display,
                                   GdkDevice  *device)
@@ -597,7 +561,7 @@ _gdk_display_enable_motion_hints (GdkDisplay *display,
 /**
  * gdk_display_get_pointer:
  * @display: a #GdkDisplay
- * @screen: (allow-none): location to store the screen that the
+ * @screen: (out) (allow-none): location to store the screen that the
  *          cursor is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of pointer, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of pointer, or %NULL.
@@ -913,7 +877,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
   GdkPointerWindowInfo *info;
   GList *old_grabs;
   GdkModifierType state;
-  int x, y;
+  int x = 0, y = 0;
 
   /* Temporarily unset pointer to make sure we send the crossing events below */
   old_grabs = g_hash_table_lookup (display->device_grabs, device);
@@ -966,7 +930,14 @@ switch_to_pointer_grab (GdkDisplay        *display,
 	    g_object_unref (info->toplevel_under_pointer);
 	  info->toplevel_under_pointer = NULL;
 
-	  new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
+          /* Ungrabbed slave devices don't have a position by
+           * itself, rather depend on its master pointer, so
+           * it doesn't make sense to track any position for
+           * these after the grab
+           */
+          if (grab || gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE)
+            new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
+
 	  if (new_toplevel)
 	    {
 	      /* w is now toplevel and x,y in toplevel coords */
@@ -1571,7 +1542,8 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  * @display:          a #GdkDisplay
  * @clipboard_window: a #GdkWindow belonging to the clipboard owner
  * @time_:            a timestamp
- * @targets:	      an array of targets that should be saved, or %NULL
+ * @targets:          (array length=n_targets): an array of targets
+ *                    that should be saved, or %NULL
  *                    if all available targets should be saved.
  * @n_targets:        length of the @targets array
  *
@@ -1667,76 +1639,6 @@ gdk_display_list_devices (GdkDisplay *display)
   return GDK_DISPLAY_GET_CLASS(display)->list_devices (display);
 }
 
-/**
- * gdk_event_send_client_message_for_display:
- * @display: the #GdkDisplay for the window where the message is to be sent.
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- * @winid: the window to send the client message to.
- *
- * On X11, sends an X ClientMessage event to a given window. On
- * Windows, sends a message registered with the name
- * GDK_WIN32_CLIENT_MESSAGE.
- *
- * This could be used for communicating between different
- * applications, though the amount of data is limited to 20 bytes on
- * X11, and to just four bytes on Windows.
- *
- * Returns: non-zero on success.
- *
- * Since: 2.2
- */
-gboolean
-gdk_event_send_client_message_for_display (GdkDisplay     *display,
-					   GdkEvent       *event,
-					   GdkNativeWindow winid)
-{
-  return GDK_DISPLAY_GET_CLASS(display)->send_client_message (display, event, winid);
-}
-
-/**
- * gdk_display_add_client_message_filter:
- * @display: a #GdkDisplay for which this message filter applies
- * @message_type: the type of ClientMessage events to receive.
- *   This will be checked against the @message_type field
- *   of the XClientMessage event struct.
- * @func: the function to call to process the event.
- * @data: user data to pass to @func.
- *
- * Adds a filter to be called when X ClientMessage events are received.
- * See gdk_window_add_filter() if you are interested in filtering other
- * types of events.
- *
- * Since: 2.2
- **/
-void
-gdk_display_add_client_message_filter (GdkDisplay   *display,
-				       GdkAtom       message_type,
-				       GdkFilterFunc func,
-				       gpointer      data)
-{
-  GDK_DISPLAY_GET_CLASS(display)->add_client_message_filter (display, message_type, func, data);
-}
-
-/**
- * gdk_add_client_message_filter:
- * @message_type: the type of ClientMessage events to receive. This will be
- *     checked against the <structfield>message_type</structfield> field of the
- *     XClientMessage event struct.
- * @func: the function to call to process the event.
- * @data: user data to pass to @func.
- *
- * Adds a filter to the default display to be called when X ClientMessage events
- * are received. See gdk_display_add_client_message_filter().
- **/
-void
-gdk_add_client_message_filter (GdkAtom       message_type,
-			       GdkFilterFunc func,
-			       gpointer      data)
-{
-  gdk_display_add_client_message_filter (gdk_display_get_default (),
-					 message_type, func, data);
-}
-
 static GdkAppLaunchContext *
 gdk_display_real_get_app_launch_context (GdkDisplay *display)
 {
@@ -1756,7 +1658,7 @@ gdk_display_real_get_app_launch_context (GdkDisplay *display)
  * Returns a #GdkAppLaunchContext suitable for launching
  * applications on the given display.
  *
- * Returns: a new #GdkAppLaunchContext for @display.
+ * Returns: (transfer full): a new #GdkAppLaunchContext for @display.
  *     Free with g_object_unref() when done
  *
  * Since: 3.0
@@ -1765,28 +1667,6 @@ GdkAppLaunchContext *
 gdk_display_get_app_launch_context (GdkDisplay *display)
 {
   return GDK_DISPLAY_GET_CLASS(display)->get_app_launch_context (display);
-}
-
-/**
- * gdk_drag_get_protocol_for_display:
- * @display: the #GdkDisplay where the destination window resides
- * @xid: the windowing system id of the destination window.
- * @protocol: location where the supported DND protocol is returned.
- *
- * Finds out the DND protocol supported by a window.
- *
- * Return value: the windowing system id of the window where the drop
- *    should happen. This may be @xid or the id of a proxy window,
- *    or zero if @xid does not support Drag and Drop.
- *
- * Since: 2.2
- */
-GdkNativeWindow
-gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-                                   GdkNativeWindow  xid,
-                                   GdkDragProtocol *protocol)
-{
-  return GDK_DISPLAY_GET_CLASS (display)->get_drag_protocol (display, xid, protocol, NULL);
 }
 
 /**

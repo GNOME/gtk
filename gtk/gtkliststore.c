@@ -304,6 +304,7 @@ gtk_list_store_new (gint n_columns,
  * Non-vararg creation function.  Used primarily by language bindings.
  *
  * Return value: (transfer none): a new #GtkListStore
+ * Rename to: gtk_list_store_new
  **/
 GtkListStore *
 gtk_list_store_newv (gint   n_columns,
@@ -874,9 +875,9 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 	  g_warning ("%s: Invalid column number %d added to iter (remember to end your list of columns with a -1)", G_STRLOC, column);
 	  break;
 	}
-      g_value_init (&value, priv->column_headers[column]);
 
-      G_VALUE_COLLECT (&value, var_args, 0, &error);
+      G_VALUE_COLLECT_INIT (&value, priv->column_headers[column],
+                            var_args, 0, &error);
       if (error)
 	{
 	  g_warning ("%s: %s", G_STRLOC, error);
@@ -920,6 +921,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
  * change is not known until run-time.
  *
  * Since: 2.12
+ * Rename to: gtk_list_store_set
  */
 void
 gtk_list_store_set_valuesv (GtkListStore *list_store,
@@ -1531,7 +1533,7 @@ gtk_list_store_reorder_func (GSequenceIter *a,
 }
   
 /**
- * gtk_list_store_reorder:
+ * gtk_list_store_reorder: (skip)
  * @store: A #GtkListStore.
  * @new_order: (array): an array of integers mapping the new position of each child
  *      to its old position before the re-ordering,
@@ -1799,15 +1801,15 @@ gtk_list_store_compare_func (GSequenceIter *a,
 
   g_assert (VALID_ITER (&iter_a, list_store));
   g_assert (VALID_ITER (&iter_b, list_store));
-  
+
   retval = (* func) (GTK_TREE_MODEL (list_store), &iter_a, &iter_b, data);
 
   if (priv->order == GTK_SORT_DESCENDING)
     {
       if (retval > 0)
-	retval = -1;
+        retval = -1;
       else if (retval < 0)
-	retval = 1;
+        retval = 1;
     }
 
   return retval;

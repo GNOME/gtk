@@ -22,7 +22,7 @@
 
 #include "gtkgrid.h"
 
-#include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -79,19 +79,31 @@ gboolean     _gtk_widget_get_height_request_needed (GtkWidget *widget);
 void         _gtk_widget_set_height_request_needed (GtkWidget *widget,
                                                     gboolean   height_request_needed);
 
+gboolean     _gtk_widget_get_sizegroup_visited (GtkWidget    *widget);
+void         _gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
+						gboolean      visited);
+gboolean     _gtk_widget_get_sizegroup_bumping (GtkWidget    *widget);
+void         _gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
+						gboolean      bumping);
+void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
+						gpointer      group);
+void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
+						gpointer      group);
+GSList      *_gtk_widget_get_sizegroups        (GtkWidget    *widget);
+
 void _gtk_widget_override_size_request (GtkWidget *widget,
-					int        width,
-					int        height,
-					int       *old_width,
-					int       *old_height);
+                                        int        width,
+                                        int        height,
+                                        int       *old_width,
+                                        int       *old_height);
 void _gtk_widget_restore_size_request  (GtkWidget *widget,
-					int        old_width,
-					int        old_height);
+                                        int        old_width,
+                                        int        old_height);
 
 gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
-						GdkWindow      *window,
-						int            *x,
-						int            *y);
+                                                GdkWindow      *window,
+                                                int            *x,
+                                                int            *y);
 
 G_END_DECLS
 

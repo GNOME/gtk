@@ -122,7 +122,7 @@ real_add (const GtkStockItem *items,
 
 /**
  * gtk_stock_add:
- * @items: a #GtkStockItem or array of items
+ * @items: (array length=n_items): a #GtkStockItem or array of items
  * @n_items: number of #GtkStockItem in @items
  *
  * Registers each of the stock items in @items. If an item already
@@ -144,7 +144,7 @@ gtk_stock_add (const GtkStockItem *items,
 
 /**
  * gtk_stock_add_static:
- * @items: a #GtkStockItem or array of #GtkStockItem
+ * @items: (array length=n_items): a #GtkStockItem or array of #GtkStockItem
  * @n_items: number of items
  *
  * Same as gtk_stock_add(), but doesn't copy @items, so
@@ -163,7 +163,7 @@ gtk_stock_add_static (const GtkStockItem *items,
 /**
  * gtk_stock_lookup:
  * @stock_id: a stock item name
- * @item: stock item to initialize with values
+ * @item: (out): stock item to initialize with values
  * 
  * Fills @item with the registered values for @stock_id, returning %TRUE
  * if @stock_id was known.
@@ -260,7 +260,7 @@ gtk_stock_list_ids (void)
 }
 
 /**
- * gtk_stock_item_copy:
+ * gtk_stock_item_copy: (skip)
  * @item: a #GtkStockItem
  * 
  * Copies a stock item, mostly useful for language bindings and not in applications.

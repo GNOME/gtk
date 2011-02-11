@@ -526,8 +526,6 @@ gtk_fixed_remove (GtkContainer *container,
 
           break;
         }
-
-      children = children->next;
     }
 }
 
@@ -542,9 +540,11 @@ gtk_fixed_forall (GtkContainer *container,
   GtkFixedChild *child;
   GList *children;
 
-  for (children = priv->children; children; children = children->next)
+  children = priv->children;
+  while (children)
     {
       child = children->data;
+      children = children->next;
 
       (* callback) (child->widget, callback_data);
     }

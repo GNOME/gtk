@@ -753,10 +753,14 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
 /**
  * gtk_alignment_get_padding:
  * @alignment: a #GtkAlignment
- * @padding_top: (allow-none): location to store the padding for the top of the widget, or %NULL
- * @padding_bottom: (allow-none): location to store the padding for the bottom of the widget, or %NULL
- * @padding_left: (allow-none): location to store the padding for the left of the widget, or %NULL
- * @padding_right: (allow-none): location to store the padding for the right of the widget, or %NULL
+ * @padding_top: (out) (allow-none): location to store the padding for
+ *     the top of the widget, or %NULL
+ * @padding_bottom: (out) (allow-none): location to store the padding
+ *     for the bottom of the widget, or %NULL
+ * @padding_left: (out) (allow-none): location to store the padding
+ *     for the left of the widget, or %NULL
+ * @padding_right: (out) (allow-none): location to store the padding
+ *     for the right of the widget, or %NULL
  *
  * Gets the padding on the different sides of the widget.
  * See gtk_alignment_set_padding ().

@@ -82,7 +82,7 @@ G_BEGIN_DECLS
 gboolean      gdk_win32_window_is_win32 (GdkWindow *window);
 
 /* Return the Gdk* for a particular HANDLE */
-gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
+gpointer      gdk_win32_handle_table_lookup (HWND handle);
 /* Translate from window to Windows handle */
 HGDIOBJ       gdk_win32_window_get_handle (GdkWindow *window);
 
@@ -97,9 +97,9 @@ HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
 GdkWindow *   gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
-                                                        GdkNativeWindow anid);
+                                                        HWND        anid);
 GdkWindow *   gdk_win32_window_lookup_for_display (GdkDisplay *display,
-                                                   GdkNativeWindow anid);
+                                                   HWND        anid);
 
 G_END_DECLS
 

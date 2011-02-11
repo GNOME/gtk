@@ -49,6 +49,19 @@
  * "actions" in the popup window. Their appearance is similar to menuitems,
  * to differentiate them clearly from completion strings. When an action is
  * selected, the #GtkEntryCompletion::action-activated signal is emitted.
+ *
+ * GtkEntryCompletion uses a #GtkTreeModelFilter model to represent the
+ * subset of the entire model that is currently matching. While the
+ * GtkEntryCompletion signals #GtkEntryCompletion::match-selected and
+ * #GtkEntryCompletion::cursor-on-match take the original model and an
+ * iter pointing to that model as arguments, other callbacks and signals
+ * (such as #GtkCellLayoutDataFuncs or #GtkCellArea::apply-attributes)
+ * will generally take the filter model as argument. As long as you are
+ * only calling gtk_tree_model_get(), this will make no difference to
+ * you. If for some reason, you need the original model, use
+ * gtk_tree_model_filter_get_model(). Don't forget to use
+ * gtk_tree_model_filter_convert_iter_to_child_iter() to obtain a
+ * matching iter.
  */
 
 #include "config.h"
@@ -235,6 +248,9 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * entry with the contents of the text column in the row
    * pointed to by @iter.
    *
+   * Note that @model is the model that was passed to
+   * gtk_entry_completion_set_model().
+   *
    * Return value: %TRUE if the signal has been handled
    *
    * Since: 2.4
@@ -260,6 +276,9 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * of the list. The default behaviour is to replace the contents
    * of the entry with the contents of the text column in the row
    * pointed to by @iter.
+   *
+   * Note that @model is the model that was passed to
+   * gtk_entry_completion_set_model().
    *
    * Return value: %TRUE if the signal has been handled
    *
@@ -481,9 +500,9 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
 }
 
 static GObject *
-gtk_entry_completion_constructor (GType                    type,
-                                  guint                    n_construct_properties,
-                                  GObjectConstructParam   *construct_properties)
+gtk_entry_completion_constructor (GType                  type,
+                                  guint                  n_construct_properties,
+                                  GObjectConstructParam *construct_properties)
 {
   GtkEntryCompletion        *completion;
   GtkEntryCompletionPrivate *priv;
@@ -657,9 +676,17 @@ gtk_entry_completion_set_property (GObject      *object,
       case PROP_CELL_AREA:
         /* Construct-only, can only be assigned once */
         area = g_value_get_object (value);
-
         if (area)
-          priv->cell_area = g_object_ref_sink (area);
+          {
+            if (priv->cell_area != NULL)
+              {
+                g_warning ("cell-area has already been set, ignoring construct property");
+                g_object_ref_sink (area);
+                g_object_unref (area);
+              }
+            else
+              priv->cell_area = g_object_ref_sink (area);
+          }
         break;
 
       default:
@@ -785,6 +812,12 @@ gtk_entry_completion_get_area (GtkCellLayout *cell_layout)
   GtkEntryCompletionPrivate *priv;
 
   priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
+
+  if (G_UNLIKELY (!priv->cell_area))
+    {
+      priv->cell_area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->cell_area);
+    }
 
   return priv->cell_area;
 }

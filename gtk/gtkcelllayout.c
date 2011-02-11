@@ -83,6 +83,55 @@
  * </example>
  * </para>
  * </refsect2>
+ *
+ * <refsect2>
+ * <title>Subclassing GtkCellLayout implementations</title>
+ * <para>
+ * When subclassing a widget that implements #GtkCellLayout like
+ * #GtkIconView or #GtkComboBox, there are some considerations related
+ * to the fact that these widgets internally use a #GtkCellArea.
+ * The cell area is exposed as a construct-only property by these
+ * widgets. This means that it is possible to e.g. do
+ * <informalexample><programlisting>
+ * combo = g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", my_cell_area, NULL);
+ * </programlisting></informalexample>
+ * to use a custom cell area with a combo box. But construct properties
+ * are only initialized <emphasis>after</emphasis> instance init()
+ * functions have run, which means that using functions which rely on
+ * the existence of the cell area in your subclass' init() function will
+ * cause the default cell area to be instantiated. In this case, a provided
+ * construct property value will be ignored (with a warning, to alert
+ * you to the problem).
+ * <informalexample><programlisting>
+ * static void
+ * my_combo_box_init (MyComboBox *b)
+ * {
+ *   GtkCellRenderer *cell;
+ *
+ *   cell = gtk_cell_renderer_pixbuf_new ();
+ *   /&ast; The following call causes the default cell area for combo boxes,
+ *    &ast; a GtkCellAreaBox, to be instantiated
+ *    &ast;/
+ *   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (b), cell, FALSE);
+ *   ...
+ * }
+ *
+ * GtkWidget *
+ * my_combo_box_new (GtkCellArea *area)
+ * {
+ *   /&ast; This call is going to cause a warning
+ *    &ast; about area being ignored
+ *    &ast;/
+ *   return g_object_new (MY_TYPE_COMBO_BOX, "cell-area", area, NULL);
+ * }
+ * </programlisting></informalexample>
+ * If supporting alternative cell areas with your derived widget is
+ * not important, then this does not have to concern you. If you want
+ * to support alternative cell areas, you can do so by moving the
+ * problematic calls out of init() and into a constructor()
+ * for your class.
+ * </para>
+ * </refsect2>
  */
 
 #include "config.h"
@@ -693,6 +742,7 @@ typedef struct {
   GtkBuilder      *builder;
   GtkCellLayout   *cell_layout;
   GtkCellRenderer *renderer;
+  GString         *string;
   gchar           *cell_prop_name;
   gchar           *context;
   gboolean         translatable;
@@ -743,53 +793,63 @@ cell_packing_text_element (GMarkupParseContext *context,
 			   GError             **error)
 {
   CellPackingSubParserData *parser_data = (CellPackingSubParserData*)user_data;
+
+  if (parser_data->cell_prop_name)
+    g_string_append_len (parser_data->string, text, text_len);
+}
+
+static void
+cell_packing_end_element (GMarkupParseContext *context,
+			  const gchar         *element_name,
+			  gpointer             user_data,
+			  GError             **error)
+{
+  CellPackingSubParserData *parser_data = (CellPackingSubParserData*)user_data;
   GtkCellArea *area;
-  gchar* value;
-
-  if (!parser_data->cell_prop_name)
-    return;
-
-  if (parser_data->translatable && text_len)
-    {
-      const gchar* domain;
-      domain = gtk_builder_get_translation_domain (parser_data->builder);
-
-      value = _gtk_builder_parser_translate (domain,
-					     parser_data->context,
-					     text);
-    }
-  else
-    {
-      value = g_strdup (text);
-    }
 
   area = gtk_cell_layout_get_area (parser_data->cell_layout);
 
-  if (!area)
+  if (area)
     {
-      g_warning ("%s does not have an internal GtkCellArea class and cannot apply child cell properties",
-		 g_type_name (G_OBJECT_TYPE (parser_data->cell_layout)));
-      return;
+      /* translate the string */
+      if (parser_data->string->len && parser_data->translatable)
+	{
+	  gchar *translated;
+	  const gchar* domain;
+
+	  domain = gtk_builder_get_translation_domain (parser_data->builder);
+
+	  translated = _gtk_builder_parser_translate (domain,
+						      parser_data->context,
+						      parser_data->string->str);
+	  g_string_set_size (parser_data->string, 0);
+	  g_string_append (parser_data->string, translated);
+	}
+
+      if (parser_data->cell_prop_name)
+	gtk_cell_layout_buildable_set_cell_property (area, 
+						     parser_data->builder,
+						     parser_data->renderer,
+						     parser_data->cell_prop_name,
+						     parser_data->string->str);
     }
+  else
+    g_warning ("%s does not have an internal GtkCellArea class and cannot apply child cell properties",
+	       g_type_name (G_OBJECT_TYPE (parser_data->cell_layout)));
 
-  gtk_cell_layout_buildable_set_cell_property (area, 
-					       parser_data->builder,
-					       parser_data->renderer,
-					       parser_data->cell_prop_name,
-					       value);
-
+  g_string_set_size (parser_data->string, 0);
   g_free (parser_data->cell_prop_name);
   g_free (parser_data->context);
-  g_free (value);
   parser_data->cell_prop_name = NULL;
   parser_data->context = NULL;
   parser_data->translatable = FALSE;
 }
 
+
 static const GMarkupParser cell_packing_parser =
   {
     cell_packing_start_element,
-    NULL,
+    cell_packing_end_element,
     cell_packing_text_element,
   };
 
@@ -821,6 +881,7 @@ _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
   else if (strcmp (tagname, "cell-packing") == 0)
     {
       packing_data = g_slice_new0 (CellPackingSubParserData);
+      packing_data->string = g_string_new ("");
       packing_data->builder = builder;
       packing_data->cell_layout = GTK_CELL_LAYOUT (buildable);
       packing_data->renderer = GTK_CELL_RENDERER (child);
@@ -841,6 +902,7 @@ _gtk_cell_layout_buildable_custom_tag_end (GtkBuildable *buildable,
 					   gpointer     *data)
 {
   AttributesSubParserData *attr_data;
+  CellPackingSubParserData *packing_data;
 
   if (strcmp (tagname, "attributes") == 0)
     {
@@ -851,7 +913,9 @@ _gtk_cell_layout_buildable_custom_tag_end (GtkBuildable *buildable,
     }
   else if (strcmp (tagname, "cell-packing") == 0)
     {
-      g_slice_free (CellPackingSubParserData, (gpointer)data);
+      packing_data = (CellPackingSubParserData *)data;
+      g_string_free (packing_data->string, TRUE);
+      g_slice_free (CellPackingSubParserData, packing_data);
       return TRUE;
     }
   return FALSE;

@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
-"POT-Creation-Date: 2011-01-15 11:09+0000\n"
-"PO-Revision-Date: 2011-01-15 15:48+0200\n"
+"POT-Creation-Date: 2011-01-21 22:53+0000\n"
+"PO-Revision-Date: 2011-01-22 11:38+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -416,8 +416,8 @@ msgstr "Unusta seos"
 msgid "Show other applications"
 msgstr "Näita teisi rakendusi"
 
-msgid "_Open"
-msgstr "_Ava"
+msgid "_Select"
+msgstr "_Vali"
 
 msgid "Default Application"
 msgstr "Vaikimisi rakendus"
@@ -731,7 +731,7 @@ msgstr "Caps Lock on sisse lülitatud"
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
-msgid "Select A File"
+msgid "Select a File"
 msgstr "Faili valimine"
 
 msgid "Desktop"
@@ -765,6 +765,13 @@ msgstr ""
 "Kataloogi pole võimalik luua kuna selle nimega fail on juba olemas. Proovi "
 "kataloogile määrata mõni muu nimi või nimeta fail enne kataloogi loomist "
 "ümber."
+
+msgid "You need to choose a valid filename."
+msgstr "Sa pead valima korrektse failinime."
+
+#, c-format
+msgid "Cannot create a file under %s as it is not a folder"
+msgstr "Faili pole %s alla võimalik luua, kuna see pole kataloog"
 
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
@@ -3452,6 +3459,9 @@ msgid ""
 msgstr ""
 "Tõrge pildifaili '%s' laadimisel: põhjus teadmata, arvatavasti on pildifail "
 "rikutud"
+
+#~ msgid "_Open"
+#~ msgstr "_Ava"
 
 #~ msgid "X screen to use"
 #~ msgstr "Kasutatav X'i ekraan"

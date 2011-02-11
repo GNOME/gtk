@@ -209,7 +209,6 @@ gail_expander_ref_child (AtkObject *obj,
   GtkWidget *widget;
   GtkWidget *label;
   gint index;
-  gint count;
 
   g_return_val_if_fail (GAIL_IS_CONTAINER (obj), NULL);
   g_return_val_if_fail ((i >= 0), NULL);
@@ -225,7 +224,6 @@ gail_expander_ref_child (AtkObject *obj,
    */
   label = gtk_expander_get_label_widget (GTK_EXPANDER (widget));
   if (label) {
-    count = g_list_length (children);
     for (index = 0; index <= i; index++) {
       tmp_list = g_list_nth (children, index);
       if (label == GTK_WIDGET (tmp_list->data)) {

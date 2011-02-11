@@ -23,14 +23,18 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
+#if !defined (__GTKX_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtkx.h> can be included directly."
 #endif
 
 #ifndef __GTK_SOCKET_H__
 #define __GTK_SOCKET_H__
 
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtk.h>
+
+#ifdef GDK_WINDOWING_X11
+
+#include <gdk/gdkx.h>
 
 G_BEGIN_DECLS
 
@@ -67,15 +71,15 @@ struct _GtkSocketClass
   void (*_gtk_reserved4) (void);
 };
 
-
-GType          gtk_socket_get_type (void) G_GNUC_CONST;
-GtkWidget*     gtk_socket_new      (void);
-
-void            gtk_socket_add_id (GtkSocket       *socket_,
-				   GdkNativeWindow  window_id);
-GdkNativeWindow gtk_socket_get_id (GtkSocket       *socket_);
-GdkWindow*      gtk_socket_get_plug_window (GtkSocket       *socket_);
+GType      gtk_socket_get_type        (void) G_GNUC_CONST;
+GtkWidget *gtk_socket_new             (void);
+void       gtk_socket_add_id          (GtkSocket *socket_,
+                                       Window     window);
+Window     gtk_socket_get_id          (GtkSocket *socket_);
+GdkWindow *gtk_socket_get_plug_window (GtkSocket *socket_);
 
 G_END_DECLS
+
+#endif /* GDK_WINDOWING_X11 */
 
 #endif /* __GTK_SOCKET_H__ */

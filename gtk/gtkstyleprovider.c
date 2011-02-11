@@ -62,7 +62,8 @@ gtk_style_provider_iface_init (gpointer g_iface)
  * Returns the style settings affecting a widget defined by @path, or %NULL if
  * @provider doesn't contemplate styling @path.
  *
- * Returns: a #GtkStyleProperties containing the style settings affecting @path
+ * Returns: (transfer full): a #GtkStyleProperties containing the
+ * style settings affecting @path
  *
  * Since: 3.0
  **/
@@ -126,7 +127,7 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
  * Returns the #GtkIconFactory defined to be in use for @path, or %NULL if none
  * is defined.
  *
- * Returns: The icon factory to use for @path, or %NULL
+ * Returns: (transfer none): The icon factory to use for @path, or %NULL
  *
  * Since: 3.0
  **/
