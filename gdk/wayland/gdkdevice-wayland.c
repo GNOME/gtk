@@ -532,8 +532,6 @@ update_modifiers(GdkWaylandDevice *device, struct wl_array *keys)
   device->modifiers = 0;
   for (k = keys->data; k < end; k++)
     device->modifiers |= xkb->map->modmap[*k];
-
-  fprintf (stderr, "modifiers: 0x%x\n", device->modifiers);
 }
 
 static void
@@ -545,8 +543,6 @@ input_handle_keyboard_focus(void *data,
 {
   GdkWaylandDevice *device = data;
   GdkEvent *event;
-
-  fprintf (stderr, "keyboard focus surface %p\n", surface);
 
   device->time = time;
   if (device->keyboard_focus)

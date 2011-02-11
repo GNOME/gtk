@@ -236,8 +236,6 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   window->impl = GDK_WINDOW_IMPL (impl);
   impl->wrapper = GDK_WINDOW (window);
 
-  printf("impl_new for window %p: %p\n", window, impl);
-
   if (window->width > 65535 ||
       window->height > 65535)
     {
