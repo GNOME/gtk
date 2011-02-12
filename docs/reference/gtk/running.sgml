@@ -392,6 +392,34 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GDK_BACKEND</envar></title>
+
+  <para>
+    If set, selects the GDK backend to use. Selecting a backend requires that GTK is compiled
+    with support for that backend. The following backends can be selected:
+    <variablelist>
+
+      <varlistentry>
+        <term>quartz</term>
+        <listitem><para>Selects the native Quartz backend</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>win32</term>
+        <listitem><para>Selects the native backend for Microsoft Windows</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>x11</term>
+        <listitem><para>Selects the native backend for connecting to X11 servers.</para></listitem>
+      </varlistentry>
+
+    </variablelist>
+    For more information about selecting backends, see the gdk_display_manager_get() function.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>GDK_SYNCHRONIZE</envar></title>
 
   <para>
