@@ -225,11 +225,6 @@ gdk_display_manager_get (void)
       const gchar *backend;
 
       backend = g_getenv ("GDK_BACKEND");
-#ifdef GDK_WINDOWING_X11
-      if (backend == NULL || strcmp (backend, "x11") == 0)
-        manager = g_object_new (gdk_x11_display_manager_get_type (), NULL);
-      else
-#endif
 #ifdef GDK_WINDOWING_QUARTZ
       if (backend == NULL || strcmp (backend, "quartz") == 0)
         manager = g_object_new (gdk_quartz_display_manager_get_type (), NULL);
@@ -238,6 +233,11 @@ gdk_display_manager_get (void)
 #ifdef GDK_WINDOWING_WIN32
       if (backend == NULL || strcmp (backend, "win32") == 0)
         manager = g_object_new (gdk_win32_display_manager_get_type (), NULL);
+      else
+#endif
+#ifdef GDK_WINDOWING_X11
+      if (backend == NULL || strcmp (backend, "x11") == 0)
+        manager = g_object_new (gdk_x11_display_manager_get_type (), NULL);
       else
 #endif
       if (backend != NULL)
