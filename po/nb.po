@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.92.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-06 19:13+0100\n"
-"PO-Revision-Date: 2011-02-06 19:14+0100\n"
+"POT-Creation-Date: 2011-02-12 13:43+0100\n"
+"PO-Revision-Date: 2011-02-12 13:44+0100\n"
 "Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "Language: nn\n"
@@ -18,48 +18,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.1\n"
 
-#: ../gdk/gdk.c:151
+#: ../gdk/gdk.c:135
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Feil ved lesing av flagg --gdk-debug"
 
-#: ../gdk/gdk.c:171
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Feil ved lesing av flagg --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:199
+#: ../gdk/gdk.c:183
 msgid "Program class as used by the window manager"
 msgstr "Programklasse som brukes av vindushåndtereren"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:200
+#: ../gdk/gdk.c:184
 msgid "CLASS"
 msgstr "KLASSE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:202
+#: ../gdk/gdk.c:186
 msgid "Program name as used by the window manager"
 msgstr "Programnavn som brukes av vindushåndtereren"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:203
+#: ../gdk/gdk.c:187
 msgid "NAME"
 msgstr "NAVN"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:189
 msgid "X display to use"
 msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:190
 msgid "DISPLAY"
 msgstr "SKJERM"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:209
+#: ../gdk/gdk.c:193
 msgid "GDK debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GDK"
 
@@ -67,12 +67,12 @@ msgstr "Feilsøkingsflagg som skal settes for GDK"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:210 ../gdk/gdk.c:213 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
+#: ../gdk/gdk.c:194 ../gdk/gdk.c:197 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
 msgid "FLAGS"
 msgstr "FLAGG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:212
+#: ../gdk/gdk.c:196
 msgid "GDK debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
@@ -277,67 +277,67 @@ msgstr "Slett"
 #: ../gdk/keyname-table.h:3990
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
-msgstr ""
+msgstr "Lysstyrke opp"
 
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
-msgstr ""
+msgstr "Lysstyrke ned"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
-msgstr ""
+msgstr "Demp lyd"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
-msgstr ""
+msgstr "Senk volum"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
-msgstr ""
+msgstr "Hev volum"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
-msgstr ""
+msgstr "Spill av"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
-msgstr ""
+msgstr "Stopp"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
-msgstr ""
+msgstr "Neste"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
-msgstr ""
+msgstr "Forrige"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
-msgstr ""
+msgstr "Ta opp"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
-msgstr ""
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
-msgstr ""
+msgstr "Spol tilbake"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
-msgstr ""
+msgstr "Medie"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
@@ -352,7 +352,7 @@ msgstr "Batteri"
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Launch1"
-msgstr ""
+msgstr "Start1"
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
@@ -387,17 +387,17 @@ msgstr "Webkamera"
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86Display"
-msgstr ""
+msgstr "Skjerm"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
-msgstr ""
+msgstr "Slå av/på pekerflate"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
-msgstr ""
+msgstr "Våkne"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
@@ -545,7 +545,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:782
+#: ../gtk/gtkaccellabel.c:786
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -555,7 +555,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:795
+#: ../gtk/gtkaccellabel.c:799
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -565,17 +565,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:809
+#: ../gtk/gtkaccellabel.c:813
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:825
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mellomrom"
 
-#: ../gtk/gtkaccellabel.c:828
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1002,23 +1002,23 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8746 ../gtk/gtktextview.c:8270
+#: ../gtk/gtkentry.c:8748 ../gtk/gtktextview.c:8272
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8760 ../gtk/gtktextview.c:8284
+#: ../gtk/gtkentry.c:8762 ../gtk/gtktextview.c:8286
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10168
+#: ../gtk/gtkentry.c:10170
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock og Num Lock er på"
 
-#: ../gtk/gtkentry.c:10170
+#: ../gtk/gtkentry.c:10172
 msgid "Num Lock is on"
 msgstr "Num Lock er på"
 
-#: ../gtk/gtkentry.c:10172
+#: ../gtk/gtkentry.c:10174
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -1408,7 +1408,7 @@ msgstr "St_ørrelse:"
 msgid "_Preview:"
 msgstr "_Forhåndsvisning:"
 
-#: ../gtk/gtkfontsel.c:1651
+#: ../gtk/gtkfontsel.c:1653
 msgid "Font Selection"
 msgstr "Valg av skrift"
 
@@ -1420,7 +1420,7 @@ msgstr "Valg av skrift"
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
 
-#: ../gtk/gtkicontheme.c:1338
+#: ../gtk/gtkicontheme.c:1336
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1433,12 +1433,12 @@ msgstr ""
 "Du kan finne en kopi av det på:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1520
+#: ../gtk/gtkicontheme.c:1518
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon «%s» er ikke tilstede i tema"
 
-#: ../gtk/gtkicontheme.c:3040
+#: ../gtk/gtkicontheme.c:3038
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
@@ -1463,12 +1463,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6241
+#: ../gtk/gtklabel.c:6243
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6253
+#: ../gtk/gtklabel.c:6255
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -1510,20 +1510,20 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:846
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:899
+#: ../gtk/gtkmain.c:910
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:965
+#: ../gtk/gtkmain.c:976
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:965
+#: ../gtk/gtkmain.c:976
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -4452,9 +4452,3 @@ msgid ""
 msgstr ""
 "Feil under lasting av bilde «%s»: årsak ikke kjent, sannsynligvis korrupt "
 "bildefil"
-
-#~ msgid "_Add"
-#~ msgstr "_Legg til"
-
-#~ msgid "_Remove"
-#~ msgstr "Fje_rn"
