@@ -26,11 +26,6 @@ static void
 on_toggle_hexpand (GtkToggleButton *toggle,
                    void            *data)
 {
-  GtkWidget *parent;
-
-  /* get the event box with color set on it */
-  parent = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (toggle)));
-
   g_object_set (toggle,
                 "hexpand", gtk_toggle_button_get_active (toggle),
                 NULL);
@@ -40,11 +35,6 @@ static void
 on_toggle_vexpand (GtkToggleButton *toggle,
                    void            *data)
 {
-  GtkWidget *parent;
-
-  /* get the event box with color set on it */
-  parent = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (toggle)));
-
   g_object_set (toggle,
                 "vexpand", gtk_toggle_button_get_active (toggle),
                 NULL);

@@ -8841,7 +8841,6 @@ snapshot_widget (GtkButton *button,
 {
   GtkWidget *widget = GTK_WIDGET (button);
   GdkDevice *device;
-  gint failure;
 
   device = gtk_get_current_event_device ();
   if (device == NULL)
@@ -8856,13 +8855,13 @@ snapshot_widget (GtkButton *button,
     data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 					       GDK_TARGET);
 
-  failure = gdk_device_grab (device,
-                             gtk_widget_get_window (widget),
-                             GDK_OWNERSHIP_APPLICATION,
-			     TRUE,
-			     GDK_BUTTON_RELEASE_MASK,
-			     data->cursor,
-			     GDK_CURRENT_TIME);
+  gdk_device_grab (device,
+                   gtk_widget_get_window (widget),
+                   GDK_OWNERSHIP_APPLICATION,
+		   TRUE,
+		   GDK_BUTTON_RELEASE_MASK,
+		   data->cursor,
+		   GDK_CURRENT_TIME);
 
   g_signal_connect (button, "event",
 		    G_CALLBACK (snapshot_widget_event), data);
