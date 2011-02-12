@@ -28,8 +28,11 @@
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
 
+#ifdef XINPUT_XFREE
+
 #include <X11/extensions/XInput.h>
 
+#endif /* XINPUT_XFREE */
 
 struct _GdkX11DeviceManagerXI
 {
@@ -46,6 +49,13 @@ struct _GdkX11DeviceManagerXIClass
   GdkX11DeviceManagerCoreClass parent_class;
 };
 
+static void     gdk_x11_device_manager_xi_event_translator_init  (GdkEventTranslatorIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI, gdk_x11_device_manager_xi, GDK_TYPE_X11_DEVICE_MANAGER_CORE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
+                                                gdk_x11_device_manager_xi_event_translator_init))
+
+#ifdef XINPUT_XFREE
 
 static void gdk_x11_device_manager_xi_constructed  (GObject      *object);
 static void gdk_x11_device_manager_xi_dispose      (GObject      *object);
@@ -58,7 +68,6 @@ static void gdk_x11_device_manager_xi_get_property (GObject      *object,
                                                     GValue       *value,
                                                     GParamSpec   *pspec);
 
-static void     gdk_x11_device_manager_xi_event_translator_init  (GdkEventTranslatorIface *iface);
 static gboolean gdk_x11_device_manager_xi_translate_event (GdkEventTranslator *translator,
                                                            GdkDisplay         *display,
                                                            GdkEvent           *event,
@@ -66,10 +75,6 @@ static gboolean gdk_x11_device_manager_xi_translate_event (GdkEventTranslator *t
 static GList *  gdk_x11_device_manager_xi_list_devices    (GdkDeviceManager  *device_manager,
                                                            GdkDeviceType      type);
 
-
-G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI, gdk_x11_device_manager_xi, GDK_TYPE_X11_DEVICE_MANAGER_CORE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
-                                                gdk_x11_device_manager_xi_event_translator_init))
 
 enum {
   PROP_0,
@@ -661,3 +666,22 @@ gdk_x11_device_manager_xi_list_devices (GdkDeviceManager *manager,
   else
     return NULL;
 }
+
+#else /* XINPUT_XFREE */
+
+static void
+gdk_x11_device_manager_xi_class_init (GdkX11DeviceManagerXIClass *klass)
+{
+}
+
+static void
+gdk_x11_device_manager_xi_init (GdkX11DeviceManagerXI *device_manager)
+{
+}
+
+static void
+gdk_x11_device_manager_xi_event_translator_init (GdkEventTranslatorIface *iface)
+{
+}
+
+#endif /* XINPUT_XFREE */

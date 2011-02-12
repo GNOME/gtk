@@ -20,12 +20,21 @@
 #include "config.h"
 
 #include "gdkx11device-xi.h"
+
 #include "gdkdeviceprivate-xi.h"
+
+#ifdef XINPUT_XFREE
 
 #include "gdkwindow.h"
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
 #include "gdkasync.h"
+
+#endif
+
+G_DEFINE_TYPE (GdkX11DeviceXI, gdk_x11_device_xi, GDK_TYPE_DEVICE)
+
+#ifdef XINPUT_XFREE
 
 #define MAX_DEVICE_CLASSES 13
 
@@ -96,8 +105,6 @@ static void gdk_x11_device_xi_select_window_events (GdkDevice    *device,
                                                     GdkWindow    *window,
                                                     GdkEventMask  mask);
 
-
-G_DEFINE_TYPE (GdkX11DeviceXI, gdk_x11_device_xi, GDK_TYPE_DEVICE)
 
 enum {
   PROP_0,
@@ -639,3 +646,17 @@ _gdk_x11_device_xi_translate_axes (GdkDevice *device,
   if (y)
     *y = temp_y;
 }
+
+#else /* XINPUT_XFREE */
+
+static void
+gdk_x11_device_xi_class_init (GdkX11DeviceXIClass *klass)
+{
+}
+
+static void
+gdk_x11_device_xi_init (GdkX11DeviceXI *device)
+{
+}
+
+#endif /* XINPUT_XFREE */
