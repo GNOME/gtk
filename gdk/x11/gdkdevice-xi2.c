@@ -749,7 +749,7 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
   return state;
 }
 
-#else /* XINPUT_XI2 */
+#else /* XINPUT_2 */
 
 static void
 gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
@@ -761,4 +761,4 @@ gdk_x11_device_xi2_init (GdkX11DeviceXI2 *device)
 {
 }
 
-#endif /* XINPUT_XI2 */
+#endif /* XINPUT_2 */

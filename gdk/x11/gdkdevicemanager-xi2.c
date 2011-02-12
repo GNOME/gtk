@@ -30,7 +30,7 @@
 #include "gdkintl.h"
 #include "gdkkeysyms.h"
 
-#ifdef XINPUT_XI2
+#ifdef XINPUT_2
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -38,7 +38,7 @@
 
 #include <string.h>
 
-#endif /* XINPUT_XI2 */
+#endif /* XINPUT_2 */
 
 struct _GdkX11DeviceManagerXI2
 {
@@ -63,7 +63,7 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK
                                                 gdk_x11_device_manager_xi2_event_translator_init))
 
 
-#ifdef XINPUT_XI2
+#ifdef XINPUT_2
 
 #define HAS_FOCUS(toplevel) ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
@@ -1308,7 +1308,7 @@ gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
   g_free (event_mask.mask);
 }
 
-#else /* XINPUT_XI2 */
+#else /* XINPUT_2 */
 
 static void
 gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
@@ -1325,4 +1325,4 @@ gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface
 {
 }
 
-#endif /* XINPUT_XI2 */
+#endif /* XINPUT_2 */

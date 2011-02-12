@@ -44,7 +44,7 @@
 #ifdef XINPUT_XFREE
 #include <X11/extensions/XInput.h>
 #endif
-#ifdef XINPUT_XI2
+#ifdef XINPUT_2
 #include <X11/extensions/XInput2.h>
 #endif
 
@@ -244,7 +244,7 @@ void _gdk_x11_device_xi_translate_axes     (GdkDevice *device,
                                             gdouble   *y);
 #endif
 
-#ifdef XINPUT_XI2
+#ifdef XINPUT_2
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkEventMask     event_mask,
                                                    gint            *len);
 guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
