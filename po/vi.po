@@ -2,16 +2,16 @@
 # Copyright © 2010 GNOME i18n Project for Vietnamese.
 # Hoang Ngoc Tu <hntu@gmx.de>, 2000-2002.
 # Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009,2011.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&component=general\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&component=general\n"
 "POT-Creation-Date: 2011-02-12 13:17+0000\n"
-"PO-Revision-Date: 2010-12-19 16:22+0700\n"
+"PO-Revision-Date: 2011-02-13 17:51+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -280,138 +280,136 @@ msgstr "Del"
 #: ../gdk/keyname-table.h:3990
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
-msgstr ""
+msgstr "MànHìnhTăngSáng"
 
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
-msgstr ""
+msgstr "MànHìnhGiảmSáng"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
-msgstr ""
+msgstr "ÂmThanhTắt"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
-msgstr ""
+msgstr "ÂmThanhVặnNhỏ"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
-msgstr ""
+msgstr "ÂmThanhVặnLớn"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
-msgstr ""
+msgstr "ÂmThanhPhát"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
-msgstr ""
+msgstr "ÂmThanhDừng"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
-msgstr ""
+msgstr "ÂmThanhTiếp"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
-msgstr ""
+msgstr "ÂmThanhLùi"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
-msgstr ""
+msgstr "ÂmThanhThu"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
-msgstr ""
+msgstr "ÂmThanhTạmDừng"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
-msgstr ""
+msgstr "ÂmThanhVòngLại"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
-msgstr ""
+msgstr "ÂmThanhPhươngTiện"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
-msgstr ""
+msgstr "BảoVệMànHình"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86Battery"
-msgstr ""
+msgstr "Pin"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Launch1"
-msgstr ""
+msgstr "Phóng1"
 
 #: ../gdk/keyname-table.h:4006
-#, fuzzy
 #| msgctxt "Stock label, navigation"
 #| msgid "_Forward"
 msgctxt "keyboard label"
 msgid "XF86Forward"
-msgstr "_Tiếp"
+msgstr "Tới"
 
 #: ../gdk/keyname-table.h:4007
-#, fuzzy
 #| msgctxt "Stock label, navigation"
 #| msgid "_Back"
 msgctxt "keyboard label"
 msgid "XF86Back"
-msgstr "Lù_i"
+msgstr "Lùi"
 
 #: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
 msgid "XF86Sleep"
-msgstr ""
+msgstr "Ngủ"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
 msgid "XF86Hibernate"
-msgstr ""
+msgstr "Ngủ đông"
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86WLAN"
-msgstr ""
+msgstr "WLAN"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
 msgid "XF86WebCam"
-msgstr ""
+msgstr "WebCam"
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86Display"
-msgstr ""
+msgstr "HiểnThị"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
-msgstr ""
+msgstr "TouchpadBậtTắt"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
-msgstr ""
+msgstr "ThứcDậy"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86Suspend"
-msgstr ""
+msgstr "Tạm ngưng"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
@@ -468,6 +466,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
 msgstr ""
+"Chương trình này HOÀN TOÀN KHÔNG CÓ BẢO HÀNH; xem <a href=\"%s\">%s</a> để "
+"biết chi tiết"
 
 #: ../gtk/gtkaboutdialog.c:346
 msgid "License"
@@ -492,11 +492,10 @@ msgid "Could not show link"
 msgstr "Không thể hiện liên kết"
 
 #: ../gtk/gtkaboutdialog.c:994
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Home"
 msgid "Homepage"
-msgstr "Home"
+msgstr "Trang chủ"
 
 #: ../gtk/gtkaboutdialog.c:1048
 #, c-format
@@ -504,10 +503,9 @@ msgid "About %s"
 msgstr "Giới thiệu %s"
 
 #: ../gtk/gtkaboutdialog.c:2372
-#, fuzzy
 #| msgid "C_reate"
 msgid "Created by"
-msgstr "_Tạo"
+msgstr "Tác giả:"
 
 #: ../gtk/gtkaboutdialog.c:2375
 msgid "Documented by"
@@ -592,106 +590,98 @@ msgid "Backslash"
 msgstr "Gạch chéo ngược"
 
 #: ../gtk/gtkappchooserbutton.c:264
-#, fuzzy
 #| msgid "Application"
 msgid "Other application..."
-msgstr "Ứng dụng"
+msgstr "Ứng dụng khác..."
 
 #: ../gtk/gtkappchooserdialog.c:128
 msgid "Failed to look for applications online"
-msgstr ""
+msgstr "Lỗi tìm ứng dụng trực tuyến"
 
 #: ../gtk/gtkappchooserdialog.c:165
 msgid "Find applications online"
-msgstr ""
+msgstr "Tìm ứng dụng trực tuyến"
 
 #: ../gtk/gtkappchooserdialog.c:209
-#, fuzzy
 #| msgid "Could not clear list"
 msgid "Could not run application"
-msgstr "Không thể xoá danh sách"
+msgstr "Không thể chạy ứng dụng"
 
 #: ../gtk/gtkappchooserdialog.c:222
-#, fuzzy, c-format
+#, c-format
 #| msgid "Could not mount %s"
 msgid "Could not find '%s'"
-msgstr "Không thể gắn kết %s"
+msgstr "Không thể tìm '%s'"
 
 #: ../gtk/gtkappchooserdialog.c:225
-#, fuzzy
 #| msgid "Could not show link"
 msgid "Could not find application"
-msgstr "Không thể hiện liên kết"
+msgstr "Không thể tìm ứng dụng"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:335
 #, c-format
 msgid "Select an application to open \"%s\""
-msgstr ""
+msgstr "Chọn ứng dụng để mở \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:336 ../gtk/gtkappchooserwidget.c:640
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr ""
+msgstr "Không có ứng dụng mở \"%s\""
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
 msgid "Select an application for \"%s\" files"
-msgstr ""
+msgstr "Chọn ứng dụng cho tập tin \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:345
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr ""
+msgstr "Không có ứng dụng mở tập tin \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:362
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"Nhấn \"Hiện ứng dụng khác\" để xem chi tiết hoặc \"Tìm ứng dụng trực tuyến\" "
+"để cài đặt ứng dụng mới"
 
 #: ../gtk/gtkappchooserdialog.c:432
-#, fuzzy
 #| msgid "Forget password _immediately"
 msgid "Forget association"
-msgstr "_Quên mật khẩu ngay"
+msgstr "Quên liên kết"
 
 #: ../gtk/gtkappchooserdialog.c:497
-#, fuzzy
 #| msgid "Show GTK+ Options"
 msgid "Show other applications"
-msgstr "Hiện tùy chọn GTK+"
+msgstr "Hiện ứng dụng khác"
 
 #: ../gtk/gtkappchooserdialog.c:515
-#, fuzzy
 #| msgid "_Selection: "
 msgid "_Select"
-msgstr "_Vùng chọn: "
+msgstr "_Chọn"
 
 #: ../gtk/gtkappchooserwidget.c:591
-#, fuzzy
 #| msgid "Application"
 msgid "Default Application"
-msgstr "Ứng dụng"
+msgstr "Ứng dụng mặc định"
 
 #: ../gtk/gtkappchooserwidget.c:726
-#, fuzzy
 #| msgid "Application"
 msgid "Recommended Applications"
-msgstr "Ứng dụng"
+msgstr "Ứng dụng khuyến khích"
 
 #: ../gtk/gtkappchooserwidget.c:740
-#, fuzzy
 #| msgid "Application"
 msgid "Related Applications"
-msgstr "Ứng dụng"
+msgstr "Ứng dụng liên quan"
 
 #: ../gtk/gtkappchooserwidget.c:754
-#, fuzzy
 #| msgid "Application"
 msgid "Other Applications"
-msgstr "Ứng dụng"
+msgstr "Ứng dụng khác"
 
 #: ../gtk/gtkbuilderparser.c:342
 #, c-format
@@ -1056,7 +1046,6 @@ msgstr "Caps Lock đã bật"
 #. *  Private Macros  *
 #. * ****************
 #: ../gtk/gtkfilechooserbutton.c:62
-#, fuzzy
 #| msgid "Select A File"
 msgid "Select a File"
 msgstr "Chọn tập tin"
@@ -1103,20 +1092,21 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:1020
 msgid "You need to choose a valid filename."
-msgstr ""
+msgstr "Bạn cần tên tập tin hợp lệ."
 
 #: ../gtk/gtkfilechooserdefault.c:1023
-#, fuzzy, c-format
+#, c-format
 #| msgid "Cannot change to folder because it is not local"
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr ""
-"Không thể chuyển đổi sang thư mục đó vì nó không phải là thư mục cục bộ."
+msgstr "Không thể tạo tập tin trong %s vì đó không phải là thư mục"
 
 #: ../gtk/gtkfilechooserdefault.c:1035
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
+"Bạn chỉ có thể chọn thư mục. Mục bạn chọn không phải là thư mục; thử chọn "
+"cái khác."
 
 #: ../gtk/gtkfilechooserdefault.c:1045
 msgid "Invalid file name"
@@ -1649,7 +1639,7 @@ msgstr "Trang %u"
 #. * in the number emblem.
 #.
 #: ../gtk/gtknumerableicon.c:481
-#, fuzzy, c-format
+#, c-format
 #| msgctxt "calendar:day:digits"
 #| msgid "%d"
 msgctxt "Number format"
@@ -2301,7 +2291,7 @@ msgstr "Không thể tìm thấy mục có URI « %s »"
 #: ../gtk/gtkrecentmanager.c:2436
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr ""
+msgstr "Không tìm thấy ứng dụng nào đăng ký tên '%s' cho mục có URI '%s'"
 
 #: ../gtk/gtkspinner.c:287
 msgctxt "throbbing progress animation widget"
@@ -2823,7 +2813,7 @@ msgstr "Thu _nhỏ"
 #: ../gtk/gtkswitch.c:313 ../gtk/gtkswitch.c:362 ../gtk/gtkswitch.c:553
 msgctxt "switch"
 msgid "ON"
-msgstr ""
+msgstr "BẬT"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -2831,18 +2821,17 @@ msgstr ""
 #: ../gtk/gtkswitch.c:321 ../gtk/gtkswitch.c:363 ../gtk/gtkswitch.c:569
 msgctxt "switch"
 msgid "OFF"
-msgstr ""
+msgstr "TẮT"
 
 #: ../gtk/gtkswitch.c:968
-#, fuzzy
 #| msgid "inch"
 msgctxt "light switch widget"
 msgid "Switch"
-msgstr "inch"
+msgstr "Công tắc"
 
 #: ../gtk/gtkswitch.c:969
 msgid "Switches between on and off states"
-msgstr ""
+msgstr "Công tắc chuyển trạng thái bật/tắt"
 
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -2921,7 +2910,8 @@ msgstr "« %s » không phải là tên thuộc tính hợp lệ"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « %s »"
+"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « "
+"%s »"
 
 #: ../gtk/gtktextbufferserialize.c:1211
 #, c-format
@@ -4524,8 +4514,8 @@ msgstr ""
 
 #~ msgid "Unable to locate theme engine in module_path: \"%s\","
 #~ msgstr ""
-#~ "Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « "
-#~ "%s »,"
+#~ "Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): "
+#~ "« %s »,"
 
 #~ msgid "Color profile has invalid length %d."
 #~ msgstr "Hồ sơ màu sắc có chiều dài sai %d."
@@ -5262,8 +5252,9 @@ msgstr ""
 #~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 #~ "environment variable G_FILENAME_ENCODING): %s"
 #~ msgstr ""
-#~ "Tên tập tin « %s » không thể được chuyển đổi sang dạng thức UTF-8 (hãy thử "
-#~ "đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): %s"
+#~ "Tên tập tin « %s » không thể được chuyển đổi sang dạng thức UTF-8 (hãy "
+#~ "thử đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): "
+#~ "%s"
 
 #~ msgid "Invalid UTF-8"
 #~ msgstr "UTF-8 không hợp lệ"
