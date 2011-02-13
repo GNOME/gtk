@@ -210,6 +210,17 @@ create_slowly_loading_image (Demo *demo)
 }
 
 static void
+create_animation (Demo *demo)
+{
+  GdkPixbufAnimation *animation = gdk_pixbuf_animation_new_from_file ("1234.gif", NULL);
+
+  demo->widget = gtk_label_new ("bla");
+  demo->picture = gdk_pixbuf_animation_picture_new (animation);
+
+  g_object_unref (animation);
+}
+
+static void
 create_stock_picture (Demo *demo)
 {
   demo->widget = gtk_image_new_from_stock (GTK_STOCK_GOTO_FIRST, GTK_ICON_SIZE_BUTTON);
@@ -523,6 +534,7 @@ create_scribble_area (Demo *demo)
 
 Demo demos[] = {
   { "Slowly loading image", create_slowly_loading_image, NULL, NULL },
+  { "Animation", create_animation, NULL, NULL },
   { "Named theme icons", create_stock_picture, NULL, NULL },
   { "Icon Set", create_icon_set_picture, NULL, NULL },
   { "GIcon", create_gicon_picture, NULL, NULL },
@@ -718,7 +730,7 @@ main (int argc, char **argv)
 
   gtk_init (&argc, &argv);
 
-  gdk_window_set_debug_updates (TRUE);
+  //gdk_window_set_debug_updates (TRUE);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Pictures");
