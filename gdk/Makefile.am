@@ -83,6 +83,7 @@ gdk_public_h_sources = 				\
 	gdkpictureloader.h			\
 	gdkpixbuf.h				\
 	gdkpixbufpicture.h			\
+	gdkpixbufanimationpicture.h		\
 	gdkprivate.h				\
 	gdkproperty.h				\
 	gdkrectangle.h				\
@@ -134,6 +135,7 @@ gdk_c_sources = 				\
 	gdkpicture.c				\
 	gdkpictureloader.c			\
 	gdkpixbuf-drawable.c			\
+	gdkpixbufanimationpicture.c		\
 	gdkpixbufpicture.c			\
 	gdkrectangle.c				\
 	gdkrgba.c				\
