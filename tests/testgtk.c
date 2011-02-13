@@ -2426,6 +2426,8 @@ grippy_draw (GtkWidget *area, cairo_t *cr, GdkWindowEdge edge)
     case GDK_WINDOW_EDGE_SOUTH_EAST:
       sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
       break;
+    default:
+      g_assert_not_reached();
     }
 
   context = gtk_widget_get_style_context (area);
