@@ -707,26 +707,6 @@ AC_CHECK_FUNCS(mallinfo)
 AC_CHECK_FUNCS(getresuid)
 AC_TYPE_UID_T
 
-# Check if <sys/select.h> needs to be included for fd_set
-AC_MSG_CHECKING([for fd_set])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]],
-                                   [[fd_set readMask, writeMask;]])],
-                  [gtk_ok=yes],[gtk_ok=no])
-if test $gtk_ok = yes; then
-    AC_MSG_RESULT([yes, found in sys/types.h])
-else
-    AC_HEADER_EGREP(fd_mask, sys/select.h, gtk_ok=yes)
-    if test $gtk_ok = yes; then
-        AC_DEFINE(HAVE_SYS_SELECT_H, 1,
-                  [Define to 1 if sys/select.h is available])
-        AC_MSG_RESULT([yes, found in sys/select.h])
-    else
-	AC_DEFINE(NO_FD_SET, 1,
-                  [Define to 1 if fd_set is not available])
-	AC_MSG_RESULT(no)
-    fi
-fi
-
 # Check for uxtheme.h (for MS-Windows Engine)
 AC_MSG_CHECKING(for uxtheme.h)
 AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <uxtheme.h>]])],
