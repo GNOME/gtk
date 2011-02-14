@@ -49,6 +49,13 @@ typedef enum
   GTK_WIDGET_HELP_WHATS_THIS
 } GtkWidgetHelpType;
 
+typedef enum
+{
+  GTK_PRESS_AND_HOLD_QUERY,
+  GTK_PRESS_AND_HOLD_TRIGGER,
+  GTK_PRESS_AND_HOLD_CANCEL
+} GtkPressAndHoldAction;
+
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
  * Macros for testing whether `widget' or `klass' are of type GTK_TYPE_WIDGET.
  */
@@ -427,6 +434,10 @@ struct _GtkWidgetClass
 
   void         (* captured_event)         (GtkWidget *widget,
                                            GdkEvent  *event);
+  gboolean     (* press_and_hold)         (GtkWidget             *widget,
+                                           GtkPressAndHoldAction  action,
+                                           gint                   x,
+                                           gint                   y);
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
@@ -437,7 +448,6 @@ struct _GtkWidgetClass
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
 };
 
 struct _GtkWidgetAuxInfo

@@ -208,7 +208,8 @@ enum {
   PROP_IM_PREEDIT_STYLE,
   PROP_IM_STATUS_STYLE,
   PROP_SHELL_SHOWS_APP_MENU,
-  PROP_SHELL_SHOWS_MENUBAR
+  PROP_SHELL_SHOWS_MENUBAR,
+  PROP_PRESS_AND_HOLD_TIMEOUT
 };
 
 /* --- prototypes --- */
@@ -1347,6 +1348,24 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    FALSE, GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHELL_SHOWS_MENUBAR);
+
+  /**
+   * GtkSettings:gtk-press-and-hold-timeout:
+   *
+   * The amount of time, in milliseconds, a button has to be pressed
+   * before the press-and-hold signal with the trigger action is emitted.
+   *
+   * Since: 3.2
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-press-and-hold-timeout",
+                                                               P_("Press And Hold Timeout"),
+                                                               P_("Timeout before press-and-hold action activates"),
+                                                               0, G_MAXINT,
+                                                               DEFAULT_TIMEOUT_PRESS_AND_HOLD,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_PRESS_AND_HOLD_TIMEOUT);
 
   g_type_class_add_private (class, sizeof (GtkSettingsPrivate));
 }

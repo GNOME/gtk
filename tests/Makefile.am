@@ -77,6 +77,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testorientable			\
 	testoverlay			\
 	testprint			\
+	testpressandhold		\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
 	testrichtext			\
@@ -196,6 +197,7 @@ testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
 testoverlay_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
+testpressandhold_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
 testrichtext_DEPENDENCIES = $(TEST_DEPS)
@@ -295,6 +297,7 @@ testappchooserbutton_LDADD = $(LDADDS)
 testorientable_LDADD = $(LDADDS)
 testoverlay_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
+testpressandhold_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrecentchoosermenu_LDADD = $(LDADDS)
 testrichtext_LDADD = $(LDADDS)
@@ -407,6 +410,9 @@ testprint_SOURCES =    	\
 	testprint.c		\
 	testprintfileoperation.h \
 	testprintfileoperation.c
+
+testpressandhold_SOURCES =	\
+	testpressandhold.c
 
 testsocket_SOURCES =    	\
 	testsocket.c		\

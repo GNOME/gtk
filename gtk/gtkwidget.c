@@ -480,6 +480,7 @@ enum {
   DRAG_FAILED,
   STYLE_UPDATED,
   CAPTURED_EVENT,
+  PRESS_AND_HOLD,
   LAST_SIGNAL
 };
 
@@ -534,6 +535,26 @@ struct _GtkStateData
   guint         flags : GTK_STATE_FLAGS_BITS;
   guint         operation : 2;
 };
+
+typedef struct
+{
+  /* timeout */
+  guint press_and_hold_id;
+
+  /* animation */
+  GtkWidget *popup;
+  guint animation_id;
+
+  /* signal handlers */
+  guint motion_id;
+  guint button_release_id;
+  guint drag_begin_id;
+
+  gint start_x;
+  gint start_y;
+  gint current_x;
+  gint current_y;
+} PressAndHoldData;
 
 /* --- prototypes --- */
 static void	gtk_widget_base_class_init	(gpointer            g_class);
@@ -642,6 +663,12 @@ static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widg
 static void             gtk_widget_real_set_has_tooltip         (GtkWidget *widget,
 								 gboolean   has_tooltip,
 								 gboolean   force);
+static gboolean         gtk_widget_press_and_hold_cancel        (GtkWidget         *widget,
+                                                                 gpointer           unused,
+                                                                 PressAndHoldData  *data);
+static gboolean         gtk_widget_press_and_hold_button_press_event (GtkWidget      *widget,
+                                                                      GdkEventButton *button,
+                                                                      gpointer        user_data);
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable     *buildable,
                                                                  const gchar      *name);
@@ -730,6 +757,7 @@ static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
+static GQuark           quark_press_and_hold = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -854,6 +882,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
+  quark_press_and_hold = g_quark_from_static_string ("gtk-widget-press-and-hold");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -932,6 +961,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->grab_broken_event = NULL;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
+  klass->press_and_hold = NULL;
 
   klass->show_help = gtk_widget_real_show_help;
 
@@ -3032,6 +3062,66 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__UINT,
                   G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
 
+  /**
+   * GtkWidget::press-and-hold:
+   * @widget: the object which received the signal
+   * @action: a #GtkPressAndHoldAction specifying the action
+   * @x: if the action is not %GTK_PRESS_AND_HOLD_CANCEL, the x coordinate
+   *     of the cursor position where the request has been emitted, relative
+   *     to widget->window, otherwise undefined
+   * @y: if the action is not %GTK_PRESS_AND_HOLD_CANCEL, the y coordinate
+   *     of the cursor position where the request has been emitted, relative
+   *     to widget->window, otherwise undefined
+   *
+   * Connect to this signal and correctly handle all of its actions if you
+   * want your widget to support the press-n-hold operation.  The
+   * press-and-hold operation is defined as keeping a mouse button pressed
+   * for a given amount of time (specified in the "press-and-hold-timeout"
+   * GtkSetting); during this time the mouse is only allowed to move a little
+   * bit (not past the drag threshold), else the press-and-hold operation will
+   * be terminated.
+   *
+   * From the above passage we can distill three actions for which this
+   * signal will be emitted: query, emitted when the mouse button goes
+   * down; trigger, emitted if the mouse button has been kept down for the
+   * specified amount of time and movements did not pass the drag threshold;
+   * and cancel, emitted when the press-and-hold operation has been terminated
+   * before the trigger action has been emitted.
+   *
+   * For query, @action will be set to %GTK_PRESS_AND_HOLD_QUERY, @x and @y
+   * will be set to the cursor position.
+   * A return value of %FALSE means no press-and-hold action should occur
+   * for these coordinates on the given widget, when %TRUE is returned
+   * a trigger action may be emitted later on.
+   *
+   * The trigger action is emitted by setting @action to be
+   * %GTK_PRESS_AND_HOLD_TRIGGER, the @x and @y coordinates are set to the
+   * cursor's current location (this includes any movements made between
+   * the original query and this trigger) and @keyboard_mode is set to
+   * %TRUE if the trigger was initiated by a keyboard action, %FALSE
+   * otherwise.  In this case the return value is ignored.
+   *
+   * When @action is %GTK_WIDGET_PRESS_AND_HOLD_CANCEL, @x and @y are both
+   * undefined.  The return value is ignored too as
+   * this action is only there for informational purposes.
+   *
+   * Returns: a boolean indicating how to proceed based on the value of
+   *          @action, as described above.
+   *
+   * Since: 3.2
+   */
+  widget_signals[PRESS_AND_HOLD] =
+    g_signal_new (I_("press-and-hold"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, press_and_hold),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__ENUM_INT_INT,
+		  G_TYPE_BOOLEAN, 3,
+		  GTK_TYPE_PRESS_AND_HOLD_ACTION,
+		  G_TYPE_INT,
+		  G_TYPE_INT);
+
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
                                 "popup-menu", 0);
@@ -4453,6 +4543,12 @@ gtk_widget_realize (GtkWidget *widget)
 
       _gtk_widget_enable_device_events (widget);
       gtk_widget_update_devices_mask (widget, TRUE);
+
+      /* Enable button motion events for press and hold */
+      if (!gtk_widget_get_has_window (widget))
+        gdk_window_set_events (priv->window,
+                               gdk_window_get_events (priv->window) | GDK_BUTTON_MOTION_MASK);
+      gtk_widget_add_events (widget, GDK_BUTTON_MOTION_MASK);
 
       gtk_widget_pop_verify_invariants (widget);
     }
@@ -5917,6 +6013,10 @@ _gtk_widget_captured_event (GtkWidget *widget,
 
   g_object_ref (widget);
 
+  /* Make sure we always handle press and hold */
+  if (event->type == GDK_BUTTON_PRESS)
+    gtk_widget_press_and_hold_button_press_event (widget, (GdkEventButton *)event, NULL);
+
   g_signal_emit (widget, widget_signals[CAPTURED_EVENT], 0, event, &return_val);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
@@ -6774,6 +6874,350 @@ gtk_widget_has_focus (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return widget->priv->has_focus;
+}
+
+/* --- Press and hold --- */
+
+static inline PressAndHoldData *
+gtk_widget_peek_press_and_hold_data (GtkWidget *widget)
+{
+  return g_object_get_qdata (G_OBJECT (widget), quark_press_and_hold);
+}
+
+static void
+press_and_hold_data_free (PressAndHoldData *data)
+{
+  if (data->popup)
+    gtk_widget_destroy (data->popup);
+
+  if (data->press_and_hold_id)
+    g_source_remove (data->press_and_hold_id);
+
+  if (data->animation_id)
+    g_source_remove (data->animation_id);
+
+  g_slice_free (PressAndHoldData, data);
+}
+
+static inline void
+gtk_widget_set_press_and_hold_data (GtkWidget        *widget,
+				    PressAndHoldData *data)
+{
+  g_object_set_qdata_full (G_OBJECT (widget),
+                           quark_press_and_hold,
+                           data,
+                           (GDestroyNotify) press_and_hold_data_free);
+}
+
+static inline PressAndHoldData *
+gtk_widget_get_press_and_hold_data (GtkWidget *widget)
+{
+  PressAndHoldData *data;
+
+  data = gtk_widget_peek_press_and_hold_data (widget);
+  if (!data)
+    {
+      data = g_slice_new0 (PressAndHoldData);
+      gtk_widget_set_press_and_hold_data (widget, data);
+    }
+
+  return data;
+}
+
+static inline void
+gtk_widget_press_and_hold_finish (GtkWidget        *widget,
+                                  PressAndHoldData *data)
+{
+  if (data->popup)
+    gtk_widget_destroy (data->popup);
+  data->popup = NULL;
+
+  if (data->motion_id)
+    g_signal_handler_disconnect (widget, data->motion_id);
+  data->motion_id = 0;
+
+  if (data->button_release_id)
+    g_signal_handler_disconnect (widget, data->button_release_id);
+  data->button_release_id = 0;
+
+  if (data->drag_begin_id)
+    g_signal_handler_disconnect (widget, data->drag_begin_id);
+  data->drag_begin_id = 0;
+
+  if (data->press_and_hold_id)
+    g_source_remove (data->press_and_hold_id);
+  data->press_and_hold_id = 0;
+
+  if (data->animation_id)
+    g_source_remove (data->animation_id);
+  data->animation_id = 0;
+}
+
+static gboolean
+gtk_widget_press_and_hold_button_release (GtkWidget        *widget,
+                                          GdkEvent         *_event,
+                                          PressAndHoldData *data)
+{
+  if (_event->type != GDK_BUTTON_RELEASE)
+    return FALSE;
+
+  gtk_widget_press_and_hold_cancel (widget, NULL, data);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_widget_press_and_hold_motion_notify (GtkWidget        *widget,
+                                         GdkEvent         *_event,
+                                         PressAndHoldData *data)
+{
+  GdkEventMotion *event;
+
+  if (_event->type != GDK_MOTION_NOTIFY)
+    return FALSE;
+
+  event = (GdkEventMotion *)_event;
+
+  if (!data->press_and_hold_id)
+    {
+      gtk_widget_press_and_hold_finish (widget, data);
+
+      return FALSE;
+    }
+
+  _gtk_widget_find_at_coords (event->window, event->x, event->y,
+                              &data->current_x, &data->current_y);
+
+  /* Stop press-and-hold if we dragged too far from the starting point */
+  if (gtk_drag_check_threshold (widget, data->start_x, data->start_y,
+                                data->current_x, data->current_y))
+    {
+      gtk_widget_press_and_hold_cancel (widget, NULL, data);
+
+      return FALSE;
+    }
+
+  if (data->popup)
+    {
+      gint x, y;
+      guint cursor_size;
+
+      gdk_window_get_pointer (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
+                              &x, &y, NULL);
+      cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
+      gtk_window_move (GTK_WINDOW (data->popup),
+                       x - cursor_size / 2,
+                       y - cursor_size / 2);
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_widget_press_and_hold_timeout (gpointer user_data)
+{
+  gboolean return_value;
+  GtkWidget *widget = GTK_WIDGET (user_data);
+  PressAndHoldData *data = gtk_widget_peek_press_and_hold_data (widget);
+
+  /* Done, clean up and emit the trigger signal */
+  gtk_widget_press_and_hold_finish (widget, data);
+  _gtk_widget_grab_notify (widget, FALSE);
+
+  g_signal_emit (widget, widget_signals[PRESS_AND_HOLD],
+                 0,
+                 GTK_PRESS_AND_HOLD_TRIGGER,
+                 data->current_x, data->current_y,
+                 &return_value);
+
+  return FALSE;
+}
+
+static gboolean
+press_and_hold_animation_draw (GtkWidget        *widget,
+                               cairo_t          *cr,
+                               PressAndHoldData *data)
+{
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  gint width, height;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_set_state (context, state);
+
+  if (!gtk_widget_is_composited (widget))
+    {
+      cairo_t *mask_cr;
+      cairo_region_t *region;
+      cairo_surface_t *mask;
+
+      mask = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
+
+      mask_cr = cairo_create (mask);
+      gtk_render_activity (context, mask_cr, 0, 0, width, height);
+      cairo_destroy (mask_cr);
+
+      region = gdk_cairo_region_create_from_surface (mask);
+      gdk_window_shape_combine_region (gtk_widget_get_window (widget), region, 0, 0);
+      cairo_region_destroy (region);
+
+      cairo_surface_destroy (mask);
+    }
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+
+  gtk_render_activity (context, cr, 0, 0, width, height);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_widget_press_and_hold_begin_animation_timeout (gpointer user_data)
+{
+  GtkWidget *widget = GTK_WIDGET (user_data);
+  PressAndHoldData *data = gtk_widget_peek_press_and_hold_data (widget);
+  gint x, y;
+  guint cursor_size;
+
+  if (data->popup)
+    {
+      gtk_widget_set_state_flags (GTK_WIDGET (data->popup),
+                                  GTK_STATE_FLAG_ACTIVE, FALSE);
+      gdk_window_get_pointer (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
+                              &x, &y, NULL);
+      cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
+      gtk_window_move (GTK_WINDOW (data->popup),
+                       x - cursor_size / 2,
+                       y - cursor_size / 2);
+      gtk_widget_show (data->popup);
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_widget_press_and_hold_query (GtkWidget *widget,
+                                 gint       x,
+                                 gint       y)
+{
+  gboolean return_value = FALSE;
+
+  g_signal_emit (widget, widget_signals[PRESS_AND_HOLD],
+                 0,
+                 GTK_PRESS_AND_HOLD_QUERY,
+                 x, y,
+                 &return_value);
+
+  return return_value;
+}
+
+static gboolean
+gtk_widget_press_and_hold_cancel (GtkWidget        *widget,
+                                  gpointer          unused,
+                                  PressAndHoldData *data)
+{
+  gboolean return_value;
+
+  if (!data->press_and_hold_id)
+    return FALSE;
+
+  gtk_widget_press_and_hold_finish (widget, data);
+
+  g_signal_emit (widget, widget_signals[PRESS_AND_HOLD],
+                 0,
+                 GTK_PRESS_AND_HOLD_CANCEL,
+                 -1, -1,
+                 &return_value);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_widget_press_and_hold_button_press_event (GtkWidget      *widget,
+                                              GdkEventButton *event,
+                                              gpointer        user_data)
+{
+  PressAndHoldData *data = gtk_widget_get_press_and_hold_data (widget);
+
+  if (!data)
+    return FALSE;
+
+  if (gtk_widget_press_and_hold_query (widget, event->x, event->y)
+      && !data->press_and_hold_id)
+    {
+      gint timeout, begin_ani_timeout;
+      GdkScreen *screen;
+      GdkVisual *visual;
+      GtkStyleContext *context;
+      cairo_region_t *region;
+      guint cursor_size;
+
+      _gtk_widget_find_at_coords (event->window, event->x, event->y,
+                                  &data->start_x, &data->start_y);
+
+      data->current_x = data->start_x;
+      data->current_y = data->start_y;
+
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (widget)),
+                    "gtk-press-and-hold-timeout", &timeout,
+                    "gtk-timeout-initial", &begin_ani_timeout,
+                    NULL);
+
+      screen = gtk_widget_get_screen (widget);
+      visual = gdk_screen_get_rgba_visual (screen);
+
+      data->popup = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_screen (GTK_WINDOW (data->popup), screen);
+      if (visual)
+        gtk_widget_set_visual (data->popup, visual);
+      gtk_widget_set_app_paintable (data->popup, TRUE);
+      gtk_widget_realize (data->popup);
+
+      context = gtk_widget_get_style_context (data->popup);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_PRESS_AND_HOLD);
+
+      g_signal_connect (data->popup, "draw",
+                        G_CALLBACK (press_and_hold_animation_draw),
+                        data);
+
+      cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
+      gtk_window_resize (GTK_WINDOW (data->popup), cursor_size, cursor_size);
+
+      region = cairo_region_create ();
+      gdk_window_input_shape_combine_region (gtk_widget_get_window (data->popup), region, 0, 0);
+      cairo_region_destroy (region);
+
+      /* delay loading the animation by the double click timeout */
+      data->animation_id =
+        gdk_threads_add_timeout (begin_ani_timeout,
+                                 gtk_widget_press_and_hold_begin_animation_timeout,
+                                 widget);
+
+      data->motion_id =
+              g_signal_connect (widget, "captured-event",
+                                G_CALLBACK (gtk_widget_press_and_hold_motion_notify),
+                                data);
+      data->button_release_id =
+              g_signal_connect (widget, "captured-event",
+                                G_CALLBACK (gtk_widget_press_and_hold_button_release),
+                                data);
+      data->drag_begin_id =
+              g_signal_connect (widget, "drag-begin",
+                                G_CALLBACK (gtk_widget_press_and_hold_cancel),
+                                data);
+
+      data->press_and_hold_id =
+              gdk_threads_add_timeout (timeout,
+                                       gtk_widget_press_and_hold_timeout,
+                                       widget);
+    }
+
+  return FALSE;
 }
 
 /**
