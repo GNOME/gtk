@@ -108,8 +108,8 @@ struct _GtkTextRenderer
   GtkWidget *widget;
   cairo_t *cr;
   
-  GdkColor *error_color;	/* Error underline color for this widget */
-  GList *widgets;		/* widgets encountered when drawing */
+  GdkRGBA *error_color;	/* Error underline color for this widget */
+  GList *widgets;      	/* widgets encountered when drawing */
 
   GdkRGBA rgba[4];
   guint8  rgba_set[4];
@@ -191,9 +191,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     {
       state |= GTK_STATE_FLAG_SELECTED;
 
-      gtk_style_context_get (context, state,
-                             "color", &fg_rgba,
-                              NULL);
+      gtk_style_context_get (context, state, "color", &fg_rgba, NULL);
     }
   else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
     {
@@ -205,25 +203,38 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     fg_rgba = appearance->rgba[1];
 
   text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_FOREGROUND, fg_rgba);
-  text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH,fg_rgba);
+  text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_rgba);
 
   if (appearance->underline == PANGO_UNDERLINE_ERROR)
     {
       if (!text_renderer->error_color)
         {
+	  GdkColor *color = NULL;
+
           gtk_style_context_get_style (context,
-                                       "error-underline-color", &text_renderer->error_color,
+                                       "error-underline-color", &color,
                                        NULL);
 
-          if (!text_renderer->error_color)
-            {
-              static const GdkColor red = { 0, 0xffff, 0, 0 };
-              text_renderer->error_color = gdk_color_copy (&red);
-            }
+	  if (color)
+	    {
+	      GdkRGBA   rgba;
+
+	      rgba.red = color->red / 65535.;
+	      rgba.green = color->green / 65535.;
+	      rgba.blue = color->blue / 65535.;
+	      rgba.alpha = 1;
+	      gdk_color_free (color);
+
+	      text_renderer->error_color = gdk_rgba_copy (&rgba);
+	    }
+	  else
+	    {
+	      static const GdkRGBA red = { 1, 0, 0, 1 };
+	      text_renderer->error_color = gdk_rgba_copy (&red);
+	    }
         }
 
-      // XXX Transform the gdk color to an gdk rgba here 
-      //text_renderer_set_gdk_color (text_renderer, PANGO_RENDER_PART_UNDERLINE, text_renderer->error_color);
+      text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, text_renderer->error_color);
     }
   else
     text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
@@ -506,7 +517,7 @@ text_renderer_end (GtkTextRenderer *text_renderer)
 
   if (text_renderer->error_color)
     {
-      gdk_color_free (text_renderer->error_color);
+      gdk_rgba_free (text_renderer->error_color);
       text_renderer->error_color = NULL;
     }
 
