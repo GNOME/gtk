@@ -851,12 +851,45 @@ gtk_image_set_from_file   (GtkImage    *image,
 }
 
 static void
+gtk_image_compute_picture_offset (GtkImage *image,
+                                  int      *xoffset,
+                                  int      *yoffset)
+{
+  GtkImagePrivate *priv = image->priv;
+  GtkMisc *misc = GTK_MISC (image);
+  GtkWidget *widget = GTK_WIDGET (image);
+  gint xpad, ypad;
+  gfloat xalign, yalign;
+
+  gtk_misc_get_alignment (misc, &xalign, &yalign);
+  gtk_misc_get_padding (misc, &xpad, &ypad);
+
+  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
+    xalign = 1.0 - xalign;
+
+  *xoffset = floor (xpad + ((gtk_widget_get_allocated_width (widget) - gdk_picture_get_width (priv->picture)) * xalign));
+  *yoffset = floor (ypad + ((gtk_widget_get_allocated_height (widget) - gdk_picture_get_height (priv->picture)) * yalign));
+}
+
+static void
 gtk_image_picture_changed (GdkPicture           *picture,
                            const cairo_region_t *region,
                            GtkImage             *image)
 {
-  /* XXX: take region into account */
-  gtk_widget_queue_draw (GTK_WIDGET (image));
+  int x, y;
+
+  gtk_image_compute_picture_offset (image, &x, &y);
+
+  if (x || y)
+    {
+      cairo_region_t *copy = cairo_region_copy (region);
+
+      cairo_region_translate (copy, x, y);
+      gtk_widget_queue_draw_region (GTK_WIDGET (image), copy);
+      cairo_region_destroy (copy);
+    }
+  else
+    gtk_widget_queue_draw_region (GTK_WIDGET (image), region);
 }
 
 static void
@@ -1434,27 +1467,6 @@ gtk_image_unrealize (GtkWidget *widget)
   /* XXX: stop animation */
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_image_compute_picture_offset (GtkImage *image,
-                                  int      *xoffset,
-                                  int      *yoffset)
-{
-  GtkImagePrivate *priv = image->priv;
-  GtkMisc *misc = GTK_MISC (image);
-  GtkWidget *widget = GTK_WIDGET (image);
-  gint xpad, ypad;
-  gfloat xalign, yalign;
-
-  gtk_misc_get_alignment (misc, &xalign, &yalign);
-  gtk_misc_get_padding (misc, &xpad, &ypad);
-
-  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
-    xalign = 1.0 - xalign;
-
-  *xoffset = floor (xpad + ((gtk_widget_get_allocated_width (widget) - gdk_picture_get_width (priv->picture)) * xalign));
-  *yoffset = floor (ypad + ((gtk_widget_get_allocated_height (widget) - gdk_picture_get_height (priv->picture)) * yalign));
 }
 
 static gint
