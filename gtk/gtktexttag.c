@@ -776,6 +776,25 @@ gtk_text_tag_finalize (GObject *object)
 }
 
 static void
+copy_rgba_to_gdk_color (GdkRGBA  *src,
+			GdkColor *dest)
+{
+  dest->red   = CLAMP (src->red,   0.0, 1.0) * 65535.0;
+  dest->green = CLAMP (src->green, 0.0, 1.0) * 65535.0;
+  dest->blue  = CLAMP (src->blue,  0.0, 1.0) * 65535.0;
+}
+
+static void
+copy_gdk_color_to_rgba (GdkColor *src,
+			GdkRGBA  *dest)
+{
+  dest->red   = src->red / 65535.;
+  dest->green = src->green / 65535.;
+  dest->blue  = src->blue / 65535.;
+  dest->alpha = 1;
+}
+
+static void
 set_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
 {
   GtkTextTagPrivate *priv = tag->priv;
@@ -794,6 +813,8 @@ set_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
         }
 
       priv->values->appearance.rgba[0] = gdk_rgba_copy (rgba);
+
+      copy_rgba_to_gdk_color (rgba, &priv->values->appearance.bg_color);
     }
   else
     {
@@ -824,6 +845,8 @@ set_fg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
         }
 
       priv->values->appearance.rgba[1] = gdk_rgba_copy (rgba);
+
+      copy_rgba_to_gdk_color (rgba, &priv->values->appearance.fg_color);
     }
   else
     {
@@ -843,10 +866,16 @@ set_pg_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
   if (priv->values->pg_bg_rgba)
     gdk_rgba_free (priv->values->pg_bg_rgba);
 
+  if (priv->values->pg_bg_color)
+    gdk_color_free (priv->values->pg_bg_color);
+
   priv->values->pg_bg_rgba = NULL;
+  priv->values->pg_bg_color = NULL;
 
   if (rgba)
     {
+      GdkColor color = { 0, };
+
       if (!priv->pg_bg_color_set)
         {
           priv->pg_bg_color_set = TRUE;
@@ -854,6 +883,9 @@ set_pg_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
         }
 
       priv->values->pg_bg_rgba = gdk_rgba_copy (rgba);
+
+      copy_rgba_to_gdk_color (rgba, &color);
+      priv->values->pg_bg_color = gdk_color_copy (&color);
     }
   else
     {
@@ -871,13 +903,9 @@ set_bg_color (GtkTextTag *tag, GdkColor *color)
 {
   if (color)
     {
-      gchar  *str;
       GdkRGBA rgba;
 
-      str = gdk_color_to_string (color);
-      gdk_rgba_parse (&rgba, str);
-      g_free (str);
-
+      copy_gdk_color_to_rgba (color, &rgba);
       set_bg_rgba (tag, &rgba);
     }
   else
@@ -889,13 +917,9 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
 {
   if (color)
     {
-      gchar  *str;
       GdkRGBA rgba;
 
-      str = gdk_color_to_string (color);
-      gdk_rgba_parse (&rgba, str);
-      g_free (str);
-
+      copy_gdk_color_to_rgba (color, &rgba);
       set_fg_rgba (tag, &rgba);
     }
   else
@@ -907,13 +931,9 @@ set_pg_bg_color (GtkTextTag *tag, GdkColor *color)
 {
   if (color)
     {
-      gchar  *str;
       GdkRGBA rgba;
 
-      str = gdk_color_to_string (color);
-      gdk_rgba_parse (&rgba, str);
-      g_free (str);
-
+      copy_gdk_color_to_rgba (color, &rgba);
       set_pg_bg_rgba (tag, &rgba);
     }
   else
@@ -1555,7 +1575,6 @@ gtk_text_tag_get_property (GObject      *object,
 {
   GtkTextTag *tag = GTK_TEXT_TAG (object);
   GtkTextTagPrivate *priv = tag->priv;
-  GdkColor color = { 0, };
 
   switch (prop_id)
     {
@@ -1564,23 +1583,19 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_BACKGROUND_GDK:
-      if (priv->values->appearance.rgba[0])
-	{
-	  color.red   = CLAMP (priv->values->appearance.rgba[0]->red,   0.0, 1.0) * 65535.0;
-	  color.green = CLAMP (priv->values->appearance.rgba[0]->green, 0.0, 1.0) * 65535.0;
-	  color.blue  = CLAMP (priv->values->appearance.rgba[0]->blue,  0.0, 1.0) * 65535.0;
-	}
-      g_value_set_boxed (value, &color);
+      g_value_set_boxed (value, &priv->values->appearance.bg_color);
+      break;
+
+    case PROP_BACKGROUND_RGBA:
+      g_value_set_boxed (value, priv->values->appearance.rgba[0]);
       break;
 
     case PROP_FOREGROUND_GDK:
-      if (priv->values->appearance.rgba[1])
-	{
-	  color.red   = CLAMP (priv->values->appearance.rgba[1]->red,   0.0, 1.0) * 65535.0;
-	  color.green = CLAMP (priv->values->appearance.rgba[1]->green, 0.0, 1.0) * 65535.0;
-	  color.blue  = CLAMP (priv->values->appearance.rgba[1]->blue,  0.0, 1.0) * 65535.0;
-	}
       g_value_set_boxed (value, &priv->values->appearance.fg_color);
+      break;
+
+    case PROP_FOREGROUND_RGBA:
+      g_value_set_boxed (value, priv->values->appearance.rgba[1]);
       break;
 
     case PROP_FONT:
@@ -1713,8 +1728,11 @@ gtk_text_tag_get_property (GObject      *object,
       break;
       
     case PROP_PARAGRAPH_BACKGROUND_GDK:
-      /* XXX Transform the GdkRGBA here */
       g_value_set_boxed (value, priv->values->pg_bg_color);
+      break;
+
+    case PROP_PARAGRAPH_BACKGROUND_RGBA:
+      g_value_set_boxed (value, priv->values->pg_bg_rgba);
       break;
 
     case PROP_ACCUMULATIVE_MARGIN:
