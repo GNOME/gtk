@@ -1408,7 +1408,12 @@ set_para_values (GtkTextLayout      *layout,
   if (style->pg_bg_color)
     display->pg_bg_color = gdk_color_copy (style->pg_bg_color);
   else
-    display->pg_bg_color = NULL;  
+    display->pg_bg_color = NULL;
+
+  if (style->pg_bg_rgba)
+    display->pg_bg_rgba = gdk_rgba_copy (style->pg_bg_rgba);
+  else
+    display->pg_bg_rgba = NULL;
 }
 
 static PangoAttribute *
@@ -2532,6 +2537,9 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 
       if (display->pg_bg_color)
         gdk_color_free (display->pg_bg_color);
+
+      if (display->pg_bg_rgba)
+        gdk_rgba_free (display->pg_bg_rgba);
 
       g_free (display);
     }

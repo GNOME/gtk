@@ -277,11 +277,19 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 	    {
 	      gdk_rgba_free (dest->pg_bg_rgba);
 	      dest->pg_bg_rgba = NULL;
+	    }
 
+	  if (dest->pg_bg_color)
+	    {
+	      gdk_color_free (dest->pg_bg_color);
+	      dest->pg_bg_color = NULL;
 	    }
 
 	  if (vals->pg_bg_rgba)
 	    dest->pg_bg_rgba = gdk_rgba_copy (vals->pg_bg_rgba);
+
+	  if (vals->pg_bg_color)
+	    dest->pg_bg_color = gdk_color_copy (vals->pg_bg_color);
         }
 
       if (vals->font)

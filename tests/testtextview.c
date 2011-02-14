@@ -23,6 +23,9 @@ create_tags (GtkTextBuffer *buffer)
   gtk_text_buffer_create_tag (buffer, "semi_red_background",
                               "background", "rgba(255,0,0,0.5)", NULL);
 
+  gtk_text_buffer_create_tag (buffer, "semi_orange_paragraph_background",
+                              "paragraph-background", "rgba(255,165,0,0.5)", NULL);
+
   gtk_text_buffer_create_tag (buffer, "word_wrap",
                               "wrap_mode", GTK_WRAP_WORD, NULL);
 }
@@ -31,8 +34,9 @@ create_tags (GtkTextBuffer *buffer)
 static void
 insert_text (GtkTextBuffer *buffer)
 {
-  GtkTextIter iter;
-  GtkTextIter start, end;
+  GtkTextIter  iter;
+  GtkTextIter  start, end;
+  GtkTextMark *para_start;
 
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
@@ -59,33 +63,42 @@ insert_text (GtkTextBuffer *buffer)
 					    "semi_red_background",
 					    "x-large",
 					    NULL);
-  gtk_text_buffer_insert (buffer, &iter, ".", -1);
+  gtk_text_buffer_insert (buffer, &iter, ".\n\n", -1);
+
+  /* Store the beginning of the other paragraph */
+  para_start = gtk_text_buffer_create_mark (buffer, "para_start", &iter, TRUE);
+
+  gtk_text_buffer_insert (buffer, &iter,
+      "Paragraph background colors can also be set with rgba color values .\n", -1);
+
+  gtk_text_buffer_insert (buffer, &iter, "For instance, you can have ", -1);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
+                                            "bold translucent blue text", -1,
+                                            "bold", 
+					    "semi_blue_foreground",
+					    "x-large",
+					    NULL);
+
+  gtk_text_buffer_insert (buffer, &iter, ", or ", -1);
+
+  gtk_text_buffer_insert (buffer, &iter, ", ", -1);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
+                                            "italic text with translucent red background", -1,
+                                            "italic", 
+					    "semi_red_background",
+					    "x-large",
+					    NULL);
+
+  gtk_text_buffer_insert (buffer, &iter, " all rendered onto a translucent orange paragraph background.\n", -1);
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, para_start);
+  gtk_text_buffer_apply_tag_by_name (buffer, "semi_orange_paragraph_background", &iter, &end);
 
   /* Apply word_wrap tag to whole buffer */
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
-}
-
-
-static cairo_pattern_t *
-get_pattern (void)
-{
-  static cairo_pattern_t *static_pattern = NULL;
-
-  if (!static_pattern)
-    {
-      cairo_surface_t *surface = 
-	cairo_image_surface_create_from_png ("gradient1.png");
-
-      if (surface)
-	{
-	  static_pattern = cairo_pattern_create_for_surface (surface);
-	  cairo_pattern_set_extend (static_pattern, CAIRO_EXTEND_REFLECT);
-	}
-      else 
-	g_warning ("Failed to create surface for gradient1.png\n");
-    }
-  return static_pattern;
 }
 
 static void
@@ -98,25 +111,13 @@ draw_background (GtkWidget *widget, cairo_t *cr)
 
   cairo_save (cr);
 
-#if 0
-  pat = cairo_pattern_create_linear (0.0, 0.0,  30.0, 30.0);
+  pat = cairo_pattern_create_linear (0.0, 0.0,  allocation.width, allocation.height);
   cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 0, 1);
   cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1);
-  cairo_pattern_set_extend (pat, CAIRO_EXTEND_REPEAT);
   cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
   cairo_set_source (cr, pat);
   cairo_fill (cr);
   cairo_pattern_destroy (pat);
-
-#else
-
-  if (get_pattern ())
-    {
-      cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
-      cairo_set_source (cr, get_pattern ());
-      cairo_fill (cr);
-    }
-#endif
 
   cairo_restore (cr);
 }
@@ -132,6 +133,8 @@ main (int argc, char **argv)
   window   = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   textview = gtk_text_view_new ();
   buffer   = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+
+  gtk_window_set_default_size (GTK_WINDOW (window), 400, -1);
 
   create_tags (buffer);
   insert_text (buffer);
