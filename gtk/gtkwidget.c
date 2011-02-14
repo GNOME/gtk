@@ -4464,8 +4464,8 @@ gtk_widget_unrealize (GtkWidget *widget)
  * Since: 3.0
  **/
 void
-gtk_widget_queue_draw_region (GtkWidget      *widget,
-                              cairo_region_t *region)
+gtk_widget_queue_draw_region (GtkWidget            *widget,
+                              const cairo_region_t *region)
 {
   GtkWidgetPrivate *priv;
   GtkWidget *w;
