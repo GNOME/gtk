@@ -132,27 +132,15 @@ text_renderer_set_rgba (GtkTextRenderer *text_renderer,
   PangoRenderer *renderer = PANGO_RENDERER (text_renderer);
   PangoColor     dummy = { 0, };
 
-  if ((!rgba && !text_renderer->rgba_set[part]) ||
-      (rgba && text_renderer->rgba_set[part] &&
-       text_renderer->rgba[part].red == rgba->red &&
-       text_renderer->rgba[part].green == rgba->green &&
-       text_renderer->rgba[part].blue == rgba->blue &&
-       text_renderer->rgba[part].alpha == rgba->alpha))
-    return;
-
   if (rgba)
     {
-      text_renderer->rgba_set[part] = TRUE;
       text_renderer->rgba[part] = *rgba;
-
       pango_renderer_set_color (renderer, part, &dummy);
     }
   else
-    {
-      text_renderer->rgba_set[part] = FALSE;
+    pango_renderer_set_color (renderer, part, NULL);
 
-      pango_renderer_set_color (renderer, part, NULL);
-    }
+  text_renderer->rgba_set[part] = (rgba != NULL);
 }
 
 static GtkTextAppearance *
