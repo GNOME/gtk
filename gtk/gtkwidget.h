@@ -477,7 +477,7 @@ void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
 					   gint                 width,
 					   gint                 height);
 void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
-                                           cairo_region_t      *region);
+                                           const cairo_region_t*region);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
 #ifndef GTK_DISABLE_DEPRECATED
