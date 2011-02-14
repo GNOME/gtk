@@ -209,12 +209,18 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_COLOR,
                                                        GTK_PARAM_READWRITE));
 
-
+  /**
+   * GtkTextTag:background-rgba:
+   *
+   * Background color as a (possibly unallocated) #GdkRGBA.
+   *
+   * Since: 3.2
+   */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_RGBA,
                                    g_param_spec_boxed ("background-rgba",
                                                        P_("Background rgba"),
-                                                       P_("Background rgba as a (possibly unallocated) GdkRGBA"),
+                                                       P_("Background color as a (possibly unallocated) GdkRGBA"),
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
@@ -242,11 +248,18 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GDK_TYPE_COLOR,
                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextTag:foreground-rgba:
+   *
+   * Foreground color as a (possibly unallocated) #GdkRGBA.
+   *
+   * Since: 3.2
+   */
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_RGBA,
                                    g_param_spec_boxed ("foreground-rgba",
                                                        P_("Foreground rgba"),
-                                                       P_("Foreground rgba as a (possibly unallocated) GdkRGBA"),
+                                                       P_("Foreground color as a (possibly unallocated) GdkRGBA"),
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
