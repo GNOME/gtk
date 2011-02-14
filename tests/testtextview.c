@@ -18,7 +18,7 @@ create_tags (GtkTextBuffer *buffer)
                               "scale", PANGO_SCALE_X_LARGE, NULL);
 
   gtk_text_buffer_create_tag (buffer, "semi_blue_foreground",
-                              "foreground", "rgba(0,0,255,0.5)", NULL);
+                              "foreground", "rgba(0,0,255,0.7)", NULL);
 
   gtk_text_buffer_create_tag (buffer, "semi_red_background",
                               "background", "rgba(255,0,0,0.5)", NULL);
@@ -101,22 +101,50 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
 }
 
+
+/* Size of checks and gray levels for alpha compositing checkerboard */
+#define CHECK_SIZE  10
+#define CHECK_DARK  (1.0 / 3.0)
+#define CHECK_LIGHT (2.0 / 3.0)
+
+static cairo_pattern_t *
+get_checkered (void)
+{
+  /* need to respect pixman's stride being a multiple of 4 */
+  static unsigned char data[8] = { 0xFF, 0x00, 0x00, 0x00,
+                                   0x00, 0xFF, 0x00, 0x00 };
+  static cairo_surface_t *checkered = NULL;
+  cairo_pattern_t *pattern;
+
+  if (checkered == NULL)
+    {
+      checkered = cairo_image_surface_create_for_data (data,
+                                                       CAIRO_FORMAT_A8,
+                                                       2, 2, 4);
+    }
+
+  pattern = cairo_pattern_create_for_surface (checkered);
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+  cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
+
+  return pattern;
+}
+
 static void
 draw_background (GtkWidget *widget, cairo_t *cr)
 {
-  GtkAllocation allocation;
   cairo_pattern_t *pat;
-  
-  gtk_widget_get_allocation (widget, &allocation);
 
   cairo_save (cr);
 
-  pat = cairo_pattern_create_linear (0.0, 0.0,  allocation.width, allocation.height);
-  cairo_pattern_add_color_stop_rgba (pat, 1, 0, 0, 0, 1);
-  cairo_pattern_add_color_stop_rgba (pat, 0, 1, 1, 1, 1);
-  cairo_rectangle (cr, 0, 0, allocation.width, allocation.height);
-  cairo_set_source (cr, pat);
-  cairo_fill (cr);
+  cairo_set_source_rgb (cr, CHECK_DARK, CHECK_DARK, CHECK_DARK);
+  cairo_paint (cr);
+
+  cairo_set_source_rgb (cr, CHECK_LIGHT, CHECK_LIGHT, CHECK_LIGHT);
+  cairo_scale (cr, CHECK_SIZE, CHECK_SIZE);
+
+  pat = get_checkered ();
+  cairo_mask (cr, pat);
   cairo_pattern_destroy (pat);
 
   cairo_restore (cr);
