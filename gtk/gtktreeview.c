@@ -2530,9 +2530,12 @@ row_is_separator (GtkTreeView *tree_view,
       GtkTreeIter tmpiter;
 
       if (iter)
-	tmpiter = *iter;
+        tmpiter = *iter;
       else
-	gtk_tree_model_get_iter (tree_view->priv->model, &tmpiter, path);
+        {
+          if (!gtk_tree_model_get_iter (tree_view->priv->model, &tmpiter, path))
+            return FALSE;
+        }
 
       is_separator = tree_view->priv->row_separator_func (tree_view->priv->model,
                                                           &tmpiter,
