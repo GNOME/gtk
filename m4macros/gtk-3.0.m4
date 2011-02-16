@@ -194,3 +194,35 @@ main ()
   AC_SUBST(GTK_LIBS)
   rm -f conf.gtktest
 ])
+
+dnl GTK_CHECK_BACKEND(BACKEND-NAME [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl   Tests for BACKEND-NAME in the GTK targets list
+dnl
+AC_DEFUN([GTK_CHECK_BACKEND],
+[
+  backend=$1
+  if test "x$backend" = "x"; then
+    AC_MSG_ERROR([A backend must be specified])
+  fi
+
+  PKG_PROG_PKG_CONFIG([0.16])
+  GDK_TARGETS=`$PKG_CONFIG --variable=targets gdk-3.0`
+  if test "x$GDK_TARGETS" = "x"; then
+    ifelse([$3],,[AC_MSG_ERROR([GDK targets not found.])],[$3])
+  else
+    ifelse([$2],,[:],[$2])
+  fi
+
+  target_found=no
+  for target in $GDK_TARGETS; do
+    if test "x$target" = "x$backend"; then
+      target_found=yes
+    fi
+  done
+
+  if test "x$target_found" = "xno"; then
+    ifelse([$3],,[AC_MSG_ERROR([Backend $backend not found.])],[$3])
+  else
+    ifelse([$2],,[:],[$2])
+  fi
+])

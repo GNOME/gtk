@@ -69,5 +69,33 @@ define the preprocessor symbol GDK_MULTIDEVICE_SAFE by using the command
 line option <literal>-DGTK_MULTIDEVICE_SAFE=1</literal>.
 </para>
 
+  <refsect2>
+    <title>Useful autotools macros</title>
+
+    <para>
+      GTK+ provides various macros for easily checking version and backends
+      supported. The macros are
+      <variablelist>
+        <varlistentry>
+          <term>AM_PATH_GTK_3_0([minimum-version], [if-found], [if-not-found], [modules])</term>
+          <listitem>This macro should be used to check that GTK+ is installed
+          and available for compilation. The four arguments are optional, and
+          they are: <emphasis>minimum-version</emphasis>, the minimum version
+          of GTK+ required for compilation; <emphasis>if-found</emphasis>, the
+          action to perform if a valid version of GTK+ has been found;
+          <emphasis>if-not-found</emphasis>, the action to perform if a valid
+          version of GTK+ has not been found; <emphasis>modules</emphasis>, a
+          list of modules to be checked along with GTK+.</listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>GTK_CHECK_BACKEND([backend-name], [if-found], [if-not-found])</term>
+          <listitem>This macro should be used to check if a specific backend
+          is supported by GTK+. The <emphasis>if-found</emphasis> and the
+          <emphasis>if-not-found</emphasis> arguments are optional.</listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </refsect2>
+
 </refsect1>
 </refentry>

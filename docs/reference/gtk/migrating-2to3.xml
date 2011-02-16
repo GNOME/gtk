@@ -891,6 +891,19 @@ gdk_window_add_filter (NULL, message_filter, NULL);
        }
       </programlisting></informalexample>
     </para>
+    <para>
+      If you used the pkg-config variable <varname>target</varname> to
+      conditionally build part of your project depending on the GDK backend,
+      for instance like this:
+      <informalexample><programlisting>
+AM_CONDITIONAL(BUILD_X11, test `$PKG_CONFIG --variable=target gtk+-2.0` = "x11")
+      </programlisting></informalexample>
+      then you should now use the M4 macro provided by GTK+ itself:
+      <informalexample><programlisting>
+GTK_CHECK_BACKEND([x11], [have_x11=yes], [have_x11=no])
+AM_CONDITIONAL(BUILD_x11, [test "x$have_x11" = "xyes"])
+      </programlisting></informalexample>
+    </para>
   </section>
 
   <section>
