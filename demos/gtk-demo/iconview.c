@@ -105,6 +105,7 @@ fill_store (GtkListStore *store)
 
       name = g_dir_read_name (dir);
     }
+  g_dir_close (dir);
 }
 
 static gint
