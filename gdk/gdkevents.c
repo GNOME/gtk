@@ -632,6 +632,8 @@ gdk_event_free (GdkEvent *event)
       break;
 
     case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       g_free (event->button.axes);
       break;
