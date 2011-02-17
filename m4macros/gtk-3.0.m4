@@ -195,34 +195,25 @@ main ()
   rm -f conf.gtktest
 ])
 
-dnl GTK_CHECK_BACKEND(BACKEND-NAME [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl GTK_CHECK_BACKEND(BACKEND-NAME [, MINIMUM-VERSION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
 dnl   Tests for BACKEND-NAME in the GTK targets list
 dnl
 AC_DEFUN([GTK_CHECK_BACKEND],
 [
-  backend=$1
-  if test "x$backend" = "x"; then
-    AC_MSG_ERROR([A backend must be specified])
-  fi
+  pkg_config_args=ifelse([$1],,gtk+-3.0, gtk+-$1-3.0)
+  min_gtk_version=ifelse([$2],,3.0.0,$2)
 
-  PKG_PROG_PKG_CONFIG([0.16])
-  GDK_TARGETS=`$PKG_CONFIG --variable=targets gdk-3.0`
-  if test "x$GDK_TARGETS" = "x"; then
-    ifelse([$3],,[AC_MSG_ERROR([GDK targets not found.])],[$3])
+  AC_PATH_PROG(PKG_CONFIG, [pkg-config], [AC_MSG_ERROR([No pkg-config found])])
+
+  if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args ; then
+    target_found=yes
   else
-    ifelse([$2],,[:],[$2])
+    target_found=no
   fi
-
-  target_found=no
-  for target in $GDK_TARGETS; do
-    if test "x$target" = "x$backend"; then
-      target_found=yes
-    fi
-  done
 
   if test "x$target_found" = "xno"; then
-    ifelse([$3],,[AC_MSG_ERROR([Backend $backend not found.])],[$3])
+    ifelse([$4],,[AC_MSG_ERROR([Backend $backend not found.])],[$4])
   else
-    ifelse([$2],,[:],[$2])
+    ifelse([$3],,[:],[$3])
   fi
 ])

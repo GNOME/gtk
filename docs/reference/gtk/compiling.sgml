@@ -88,10 +88,11 @@ line option <literal>-DGTK_MULTIDEVICE_SAFE=1</literal>.
           list of modules to be checked along with GTK+.</listitem>
         </varlistentry>
         <varlistentry>
-          <term>GTK_CHECK_BACKEND([backend-name], [if-found], [if-not-found])</term>
+          <term>GTK_CHECK_BACKEND([backend-name], [minimum-version], [if-found], [if-not-found])</term>
           <listitem>This macro should be used to check if a specific backend
-          is supported by GTK+. The <emphasis>if-found</emphasis> and the
-          <emphasis>if-not-found</emphasis> arguments are optional.</listitem>
+          is supported by GTK+. The <emphasis>minimum-version</emphasis>,
+          <emphasis>if-found</emphasis> and <emphasis>if-not-found</emphasis>
+          arguments are optional.</listitem>
         </varlistentry>
       </variablelist>
     </para>
