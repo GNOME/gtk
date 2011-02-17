@@ -2485,24 +2485,8 @@ gtk_assistant_get_accessible (GtkWidget *widget)
 
   if (first_time)
     {
-      AtkObjectFactory *factory;
-      AtkRegistry *registry;
-      GType derived_type;
-      GType derived_atk_type;
-
-      /* Figure out whether accessibility is enabled by looking
-       * at the type of the accessible object which would be
-       * created for the parent type of GtkAssistant.
-       */
-      derived_type = g_type_parent (GTK_TYPE_ASSISTANT);
-
-      registry = atk_get_default_registry ();
-      factory = atk_registry_get_factory (registry, derived_type);
-      derived_atk_type = atk_object_factory_get_accessible_type (factory);
-      if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE))
-        atk_registry_set_factory_type (registry,
-                                       GTK_TYPE_ASSISTANT,
-                                       gtk_assistant_accessible_factory_get_type ());
+      _gtk_accessible_set_factory_type (GTK_TYPE_ASSISTANT,
+                                        gtk_assistant_accessible_factory_get_type ());
 
       first_time = FALSE;
     }
