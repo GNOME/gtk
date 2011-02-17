@@ -9704,6 +9704,13 @@ check_preview_change (GtkFileChooserDefault *impl)
 
       g_signal_emit_by_name (impl, "update-preview");
     }
+  else
+    {
+      if (new_file)
+        g_object_unref (new_file);
+
+      g_free (new_display_name);
+    }
 }
 
 static void
