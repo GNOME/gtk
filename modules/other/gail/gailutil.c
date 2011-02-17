@@ -282,16 +282,18 @@ gail_key_snooper (GtkWidget *the_widget, GdkEventKey *event, gpointer func_data)
 
 static guint
 gail_util_add_key_event_listener (AtkKeySnoopFunc  listener,
-				  gpointer         data)
+                                  gpointer         data)
 {
-  static guint key=0;
+  static guint key = 0;
   if (!key_listener_list)
   {
-    key_listener_list = g_hash_table_new (NULL, NULL);	  
+    key_listener_list = g_hash_table_new (NULL, NULL);
     key_snooper_id = gtk_key_snooper_install (gail_key_snooper, data);
   }
-  g_hash_table_insert (key_listener_list, GUINT_TO_POINTER (key++), (gpointer) listener);
+  key++;
+  g_hash_table_insert (key_listener_list, GUINT_TO_POINTER (key), (gpointer) listener);
   /* XXX: we don't check to see if n_listeners > MAXUINT */
+
   return key;
 }
 
