@@ -630,7 +630,21 @@ static GtkWidget*
 get_label_from_statusbar (GtkWidget *statusbar)
 {
   GtkWidget *message_area;
+  GList *children, *l;
+  GtkWidget *child;
 
   message_area = gtk_statusbar_get_message_area (GTK_STATUSBAR (statusbar));
-  return gtk_bin_get_child (GTK_BIN (message_area));
+
+  children = gtk_container_get_children (GTK_CONTAINER (message_area));
+  for (l = children; l; l = l->next)
+    {
+      child = l->data;
+      if (GTK_IS_LABEL (child))
+        break;
+      child = NULL;
+    }
+
+  g_list_free (children);
+
+  return child;
 }
