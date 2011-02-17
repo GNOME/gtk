@@ -31,6 +31,7 @@ gail_c_sources =			\
 	gailimage.c			\
 	gailimagecell.c			\
 	gaillabel.c			\
+	gaillinkbutton.c		\
 	gailmenu.c			\
 	gailmenushell.c			\
 	gailmenuitem.c			\
