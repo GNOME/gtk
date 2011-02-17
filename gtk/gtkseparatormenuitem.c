@@ -25,6 +25,7 @@
  */
 
 #include "config.h"
+#include "gtkaccessible.h"
 #include "gtkseparatormenuitem.h"
 
 /**
@@ -37,6 +38,7 @@
  * make it appear sunken into the interface.
  */
 
+static AtkObject *gtk_separator_menu_item_get_accessible (GtkWidget *widget);
 
 G_DEFINE_TYPE (GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM)
 
@@ -44,6 +46,7 @@ static void
 gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
 {
   GTK_CONTAINER_CLASS (class)->child_type = NULL;
+  GTK_WIDGET_CLASS (class)->get_accessible = gtk_separator_menu_item_get_accessible;
 }
 
 static void 
@@ -62,4 +65,99 @@ GtkWidget *
 gtk_separator_menu_item_new (void)
 {
   return g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM, NULL);
+}
+
+typedef struct _GtkSeparatorMenuItemAccessible GtkSeparatorMenuItemAccessible;
+typedef struct _GtkSeparatorMenuItemAccessibleClass GtkSeparatorMenuItemAccessibleClass;
+
+ATK_DEFINE_TYPE (GtkSeparatorMenuItemAccessible, _gtk_separator_menu_item_accessible, GTK_TYPE_MENU_ITEM);
+
+static void
+_gtk_separator_menu_item_accessible_initialize (AtkObject *accessible,
+                                                gpointer   widget)
+{
+  ATK_OBJECT_CLASS (_gtk_separator_menu_item_accessible_parent_class)->initialize (accessible, widget);
+
+  atk_object_set_role (accessible, ATK_ROLE_SEPARATOR);
+}
+
+static void
+_gtk_separator_menu_item_accessible_class_init (GtkSeparatorMenuItemAccessibleClass *klass)
+{
+  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
+
+  atk_class->initialize = _gtk_separator_menu_item_accessible_initialize;
+}
+
+static void
+_gtk_separator_menu_item_accessible_init (GtkSeparatorMenuItemAccessible *self)
+{
+}
+
+typedef AtkObjectFactoryClass   GtkSeparatorMenuItemAccessibleFactoryClass;
+typedef AtkObjectFactory        GtkSeparatorMenuItemAccessibleFactory;
+
+G_DEFINE_TYPE (GtkSeparatorMenuItemAccessibleFactory,
+               gtk_separator_menu_item_accessible_factory,
+               ATK_TYPE_OBJECT_FACTORY);
+
+static GType
+gtk_separator_menu_item_accessible_factory_get_accessible_type (void)
+{
+  return _gtk_separator_menu_item_accessible_get_type ();
+}
+
+static AtkObject *
+gtk_separator_menu_item_accessible_factory_create_accessible (GObject *obj)
+{
+  AtkObject *accessible;
+
+  accessible = g_object_new (_gtk_separator_menu_item_accessible_get_type (), NULL);
+  atk_object_initialize (accessible, obj);
+
+  return accessible;
+}
+
+static void
+gtk_separator_menu_item_accessible_factory_class_init (AtkObjectFactoryClass *klass)
+{
+  klass->create_accessible = gtk_separator_menu_item_accessible_factory_create_accessible;
+  klass->get_accessible_type = gtk_separator_menu_item_accessible_factory_get_accessible_type;
+}
+
+static void
+gtk_separator_menu_item_accessible_factory_init (AtkObjectFactory *factory)
+{
+}
+
+static AtkObject *
+gtk_separator_menu_item_get_accessible (GtkWidget *widget)
+{
+  static gboolean initialized = FALSE;
+
+  if (G_UNLIKELY (!initialized))
+    {
+      AtkObjectFactory *factory;
+      AtkRegistry *registry;
+      GType derived_type;
+      GType derived_atk_type;
+
+      /* Figure out whether accessibility is enabled by looking at the
+       * type of the accessible object which would be created for our
+       * parent type
+       */
+      derived_type = g_type_parent (GTK_TYPE_SEPARATOR_MENU_ITEM);
+
+      registry = atk_get_default_registry ();
+      factory = atk_registry_get_factory (registry, derived_type);
+      derived_atk_type = atk_object_factory_get_accessible_type (factory);
+      if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE))
+        atk_registry_set_factory_type (registry,
+                                       GTK_TYPE_SEPARATOR_MENU_ITEM,
+                                       gtk_separator_menu_item_accessible_factory_get_type ());
+
+      initialized = TRUE;
+    }
+
+  return GTK_WIDGET_CLASS (gtk_separator_menu_item_parent_class)->get_accessible (widget);
 }
