@@ -12882,32 +12882,37 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 
 	  accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
 
-	  action = ATK_ACTION (accessible);
-	  n_actions = atk_action_get_n_actions (action);
+          if (ATK_IS_ACTION (accessible))
+            {
+	      action = ATK_ACTION (accessible);
+	      n_actions = atk_action_get_n_actions (action);
 
-	  for (l = a11y_data->actions; l; l = l->next)
-	    {
-	      AtkActionData *action_data = (AtkActionData*)l->data;
+	      for (l = a11y_data->actions; l; l = l->next)
+	        {
+	          AtkActionData *action_data = (AtkActionData*)l->data;
 
-	      for (i = 0; i < n_actions; i++)
-		if (strcmp (atk_action_get_name (action, i),
-			    action_data->action_name) == 0)
-		  break;
+	          for (i = 0; i < n_actions; i++)
+		    if (strcmp (atk_action_get_name (action, i),
+		  	        action_data->action_name) == 0)
+		      break;
 
-	      if (i < n_actions)
-                {
-                  gchar *description;
+	          if (i < n_actions)
+                    {
+                      gchar *description;
 
-                  if (action_data->translatable && action_data->description->len)
-                    description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
-                                                                 action_data->context,
-                                                                 action_data->description->str);
-                  else
-                    description = action_data->description->str;
+                      if (action_data->translatable && action_data->description->len)
+                        description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
+                                                                     action_data->context,
+                                                                     action_data->description->str);
+                      else
+                        description = action_data->description->str;
 
-		  atk_action_set_description (action, i, description);
+		      atk_action_set_description (action, i, description);
+                    }
                 }
 	    }
+          else
+            g_warning ("accessibility action on a widget that does not implement AtkAction");
 
 	  g_slist_foreach (a11y_data->actions, (GFunc)free_action, NULL);
 	  g_slist_free (a11y_data->actions);
