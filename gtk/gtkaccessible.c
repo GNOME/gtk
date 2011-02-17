@@ -131,3 +131,34 @@ gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
                       &priv->widget);
   }
 }
+
+/*
+ * _gtk_accessible_set_factory_type:
+ * @widget_type: a #GtkWidget subtype
+ * @factory_type: a #AtkObjectFactory subtype
+ *
+ * A wrapper around atk_registry_set_factory_type().
+ *
+ * Only installs the factory if accessibility is
+ * enabled.
+ */
+void
+_gtk_accessible_set_factory_type (GType widget_type,
+                                  GType factory_type)
+{
+  AtkObjectFactory *factory;
+  AtkRegistry *registry;
+  GType accessible_type;
+
+  /*
+   * Figure out whether accessibility is enabled by looking
+   * at the type of the accessible object which would be created
+   * for GtkWidget.
+   */
+  registry = atk_get_default_registry ();
+  factory = atk_registry_get_factory (registry, GTK_TYPE_WIDGET);
+  accessible_type = atk_object_factory_get_accessible_type (factory);
+  if (g_type_is_a (accessible_type, GTK_TYPE_ACCESSIBLE))
+    atk_registry_set_factory_type (registry, widget_type, factory_type);
+}
+

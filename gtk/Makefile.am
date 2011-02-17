@@ -376,6 +376,7 @@ endif
 gtk_private_h_sources =		\
 	gtk9slice.h		\
 	gtkaccelgroupprivate.h	\
+	gtkaccessibleprivate.h	\
 	gtkanimationdescription.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
