@@ -133,7 +133,7 @@ gtk_separator_menu_item_accessible_factory_init (AtkObjectFactory *factory)
 static AtkObject *
 gtk_separator_menu_item_get_accessible (GtkWidget *widget)
 {
-  static gboolean initialized = FALSE
+  static gboolean initialized = FALSE;
 
   if (G_UNLIKELY (!initialized))
     {
