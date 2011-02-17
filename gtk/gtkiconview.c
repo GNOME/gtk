@@ -8809,26 +8809,6 @@ gtk_icon_view_item_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (accessible_item_parent_class)->finalize (object);
 }
 
-static G_CONST_RETURN gchar*
-gtk_icon_view_item_accessible_get_name (AtkObject *obj)
-{
-  if (obj->name)
-    return obj->name;
-  else
-    {
-      GtkIconViewItemAccessible *item;
-      GtkTextIter start_iter;
-      GtkTextIter end_iter;
-
-      item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
- 
-      gtk_text_buffer_get_start_iter (item->text_buffer, &start_iter); 
-      gtk_text_buffer_get_end_iter (item->text_buffer, &end_iter); 
-
-      return gtk_text_buffer_get_text (item->text_buffer, &start_iter, &end_iter, FALSE);
-    }
-}
-
 static AtkObject*
 gtk_icon_view_item_accessible_get_parent (AtkObject *obj)
 {
@@ -8890,10 +8870,9 @@ gtk_icon_view_item_accessible_class_init (AtkObjectClass *klass)
 
   gobject_class->finalize = gtk_icon_view_item_accessible_finalize;
 
-  klass->get_index_in_parent = gtk_icon_view_item_accessible_get_index_in_parent; 
-  klass->get_name = gtk_icon_view_item_accessible_get_name; 
-  klass->get_parent = gtk_icon_view_item_accessible_get_parent; 
-  klass->ref_state_set = gtk_icon_view_item_accessible_ref_state_set; 
+  klass->get_index_in_parent = gtk_icon_view_item_accessible_get_index_in_parent;
+  klass->get_parent = gtk_icon_view_item_accessible_get_parent;
+  klass->ref_state_set = gtk_icon_view_item_accessible_ref_state_set;
 }
 
 static GType
@@ -9250,7 +9229,7 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
       icon_view = GTK_ICON_VIEW (widget);
       item = a11y_item->item;
 
-      name = gtk_icon_view_item_accessible_get_name (ATK_OBJECT (a11y_item));
+      name = atk_object_get_name (ATK_OBJECT (a11y_item));
 
       if (!name || strcmp (name, "") == 0)
         {
