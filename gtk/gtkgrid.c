@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "gtkgrid.h"
 
 #include "gtkorientableprivate.h"
@@ -1061,6 +1063,7 @@ gtk_grid_get_size (GtkGrid        *grid,
   gtk_grid_request_count_lines (&request);
   lines = &request.lines[orientation];
   lines->lines = g_newa (GtkGridLine, lines->max - lines->min);
+  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
 
   gtk_grid_request_run (&request, orientation, FALSE);
   gtk_grid_request_sum (&request, orientation, minimum, natural);
@@ -1081,8 +1084,10 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
   gtk_grid_request_count_lines (&request);
   lines = &request.lines[0];
   lines->lines = g_newa (GtkGridLine, lines->max - lines->min);
+  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
   lines = &request.lines[1];
   lines->lines = g_newa (GtkGridLine, lines->max - lines->min);
+  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
 
   gtk_grid_request_run (&request, 1 - orientation, FALSE);
   gtk_grid_request_sum (&request, 1 - orientation, &min_size, NULL);
@@ -1218,11 +1223,14 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   GtkGridLines *lines;
 
   request.grid = grid;
+
   gtk_grid_request_count_lines (&request);
   lines = &request.lines[0];
   lines->lines = g_newa (GtkGridLine, lines->max - lines->min);
+  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
   lines = &request.lines[1];
   lines->lines = g_newa (GtkGridLine, lines->max - lines->min);
+  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
 
   gtk_widget_set_allocation (widget, allocation);
 
