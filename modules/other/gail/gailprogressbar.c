@@ -92,6 +92,8 @@ gail_progress_bar_get_current_value (AtkValue   *obj,
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
+  memset (value, 0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (widget)));
 }
 
@@ -101,6 +103,8 @@ gail_progress_bar_get_maximum_value (AtkValue   *obj,
 {
   g_return_if_fail (GAIL_IS_PROGRESS_BAR (obj));
 
+  memset (value, 0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, 1.0);
 }
 
@@ -110,6 +114,8 @@ gail_progress_bar_get_minimum_value (AtkValue    *obj,
 {
   g_return_if_fail (GAIL_IS_PROGRESS_BAR (obj));
 
+  memset (value, 0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, 0.0);
 }
 
