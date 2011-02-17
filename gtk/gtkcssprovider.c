@@ -1982,7 +1982,7 @@ symbolic_color_parse_str (const gchar  *string,
       str++;
       end = str;
 
-      while (*end == '-' || *end == '_' || g_ascii_isalpha (*end))
+      while (*end == '-' || *end == '_' || g_ascii_isalnum (*end))
         end++;
 
       name = g_strndup (str, end - str);
