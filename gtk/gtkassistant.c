@@ -62,7 +62,7 @@
 
 #include "gtkassistant.h"
 
-#include "gtkaccessible.h"
+#include "gtkaccessibleprivate.h"
 #include "gtkbutton.h"
 #include "gtkhbox.h"
 #include "gtkhbbox.h"
@@ -2511,7 +2511,7 @@ gtk_assistant_accessible_get_n_children (AtkObject *accessible)
   if (widget == NULL)
     return 0;
 
-  return g_list_length (GTK_ASSISTANT (accessible)->priv->pages) + 1;
+  return g_list_length (GTK_ASSISTANT (widget)->priv->pages) + 1;
 }
 
 static AtkObject *
