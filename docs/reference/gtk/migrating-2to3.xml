@@ -199,7 +199,7 @@
        <title>Drawing a GdkPixbuf onto a GdkWindow</title>
          <para>
            Drawing a pixbuf onto a drawable used to be done like this:
-<programlisting><![CDATA[
+           <informalexample><programlisting>
 gdk_draw_pixbuf (window,
                  gtk_widget_get_style (widget)->black_gc,
                  pixbuf,
@@ -209,14 +209,14 @@ gdk_draw_pixbuf (window,
                  gdk_pixbuf_get_height (pixbuf),
                  GDK_RGB_DITHER_NORMAL,
                  0, 0);
-]]></programlisting>
+           </programlisting></informalexample>
            Doing the same thing with cairo:
-<programlisting><![CDATA[
+           <informalexample><programlisting>
 cairo_t *cr = gdk_cairo_create (window);
 gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 cairo_paint (cr);
 cairo_destroy (cr);
-]]></programlisting>
+           </programlisting></informalexample>
            Note that very similar code can be used for drawing pixmaps
            by using gdk_cairo_set_source_pixmap() instead of
            gdk_cairo_set_source_pixbuf().
@@ -227,7 +227,7 @@ cairo_destroy (cr);
         <para>
           Tiled pixmaps are often used for drawing backgrounds.
           Old code looked something like this:
-          <programlisting><![CDATA[
+          <informalexample><programlisting>
 GdkGCValues gc_values;
 GdkGC *gc;
 
@@ -242,9 +242,9 @@ gdk_draw_rectangle (drawable, gc, TRUE, 0, 0, width, height);
 gdk_gc_set_tile (gc, NULL);
 gdk_gc_set_fill (gc, GDK_SOLID);
 gdk_gc_set_ts_origin (gc, 0, 0);
-]]></programlisting>
+          </programlisting></informalexample>
           The equivalent cairo code looks like this:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
 cairo_t *cr;
 
 cr = gdk_cairo_create (drawable);
@@ -253,7 +253,7 @@ cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
 cairo_rectangle (cr, 0, 0, width, height);
 cairo_fill (cr);
 cairo_destroy (cr);
-]]></programlisting>
+          </programlisting></informalexample>
           Again, you can exchange pixbufs and pixmaps by using
           gdk_cairo_set_source_pixbuf() instead of
           gdk_cairo_set_source_pixmap().
@@ -264,32 +264,32 @@ cairo_destroy (cr);
         <para>
           Drawing layouts clipped is often used to avoid overdraw or to
           allow drawing selections. Code would have looked like this:
-<programlisting><![CDATA[
+	  <informalexample><programlisting>
 GdkGC *gc;
 
 /* setup */
 gc = gtk_widget_get_style (widget)->text_gc[state];
-gdk_gc_set_clip_rectangle (gc, &area);
+gdk_gc_set_clip_rectangle (gc, &amp;area);
 /* use */
 gdk_draw_layout (drawable, gc, x, y, layout);
 /* restore */
 gdk_gc_set_clip_rectangle (gc, NULL);
-]]></programlisting>
+          </programlisting></informalexample>
           With cairo, the same effect can be achieved using:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
 cairo_t *cr;
 
 cr = gdk_cairo_create (drawable);
 /* clip */
-gdk_cairo_rectangle (cr, &area);
+gdk_cairo_rectangle (cr, &amp;area);
 cairo_clip (cr);
 /* set the correct source color */
-gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->text[state]);
+gdk_cairo_set_source_color (cr, &amp;gtk_widget_get_style (widget)->text[state]);
 /* draw the text */
 cairo_move_to (cr, x, y);
 pango_cairo_show_layout (cr, layout);
 cairo_destroy (cr);
-]]></programlisting>
+          </programlisting></informalexample>
           Clipping using cairo_clip() is of course not restricted to text
           rendering and can be used everywhere where GC clips were used.
           And using gdk_cairo_set_source_color() with style colors should
@@ -305,7 +305,7 @@ cairo_destroy (cr);
           It was often used to achieve a checkerboard effect. You can use
           cairo_mask() to achieve this effect. To get a checkerbox mask,
           you can use code like this:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
 static cairo_pattern_t *
 gtk_color_button_get_checkered (void)
 {
@@ -326,7 +326,7 @@ gtk_color_button_get_checkered (void)
 
     return pattern;
 }
-]]></programlisting>
+          </programlisting></informalexample>
           Note that stippling looks very outdated in UIs, and is rarely
           used in modern applications. All properties that made use of
           stippling have been removed from GTK+ 3. Most prominently,
@@ -340,20 +340,20 @@ gtk_color_button_get_checkered (void)
           effect. Cairo does not allow this yet. You can however use
           cairo_push_group() to get a different intermediate target that
           you can copy to. So you can replace this code:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
 gdk_draw_drawable (pixmap,
                    gc,
                    pixmap,
                    area.x + dx, area.y + dy,
                    area.x, area.y,
                    area.width, area.height);
-]]></programlisting>
+          </programlisting></informalexample>
           By using this code:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
 cairo_t *cr = gdk_cairo_create (pixmap);
 /* clipping restricts the intermediate surface's size, so it's a good idea
  * to use it. */
-gdk_cairo_rectangle (cr, &area);
+gdk_cairo_rectangle (cr, &amp;area);
 cairo_clip (cr);
 /* Now push a group to change the target */
 cairo_push_group (cr);
@@ -363,7 +363,7 @@ cairo_paint (cr);
 cairo_pop_group_to_source (cr);
 cairo_paint (cr);
 cairo_destroy (cr);
-]]></programlisting>
+          </programlisting></informalexample>
           The cairo developers plan to add self-copies in the future to allow
           exactly this effect, so you might want to keep up on cairo
           development to be able to change your code.
@@ -656,7 +656,7 @@ gtk_fixed_get_preferred_height (GtkWidget *widget,
       <para>
         One place where pixmaps were commonly used is to create custom
         cursors:
-      <programlisting>
+      <informalexample><programlisting>
 GdkCursor *cursor;
 GdkPixmap *pixmap;
 cairo_t *cr;
@@ -672,10 +672,10 @@ cairo_destroy (cr);
 cursor = gdk_cursor_new_from_pixmap (pixmap, pixmap, &amp;fg, &amp;fg, 0, 0);
 
 g_object_unref (pixmap);
-      </programlisting>
+      </programlisting></informalexample>
       The same can be achieved without pixmaps, by drawing onto
       an image surface:
-      <programlisting>
+      <informalexample><programlisting>
 GdkCursor *cursor;
 cairo_surface_t *s;
 cairo_t *cr;
@@ -696,7 +696,7 @@ cairo_surface_destroy (s);
 cursor = gdk_cursor_new_from_pixbuf (display, pixbuf, 0, 0);
 
 g_object_unref (pixbuf);
-      </programlisting>
+      </programlisting></informalexample>
       </para>
     </example>
   </section>
@@ -715,7 +715,7 @@ g_object_unref (pixbuf);
     <para>You might have a screen-changed handler like the following
      to set up a translucent window with an alpha-channel:
     </para>
-    <programlisting>
+    <informalexample><programlisting>
 static void
 on_alpha_screen_changed (GtkWidget *widget,
                          GdkScreen *old_screen,
@@ -729,11 +729,11 @@ on_alpha_screen_changed (GtkWidget *widget,
 
   gtk_widget_set_colormap (widget, colormap);
 }
-    </programlisting>
+    </programlisting></informalexample>
     <para>
     With visuals instead of colormaps, this will look as follows:
     </para>
-    <programlisting>
+    <informalexample><programlisting>
 static void
 on_alpha_screen_changed (GtkWindow *window,
                          GdkScreen *old_screen,
@@ -747,7 +747,7 @@ on_alpha_screen_changed (GtkWindow *window,
 
   gtk_widget_set_visual (window, visual);
 }
-    </programlisting>
+    </programlisting></informalexample>
     </example>
   </section>
 
