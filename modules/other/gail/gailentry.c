@@ -294,6 +294,14 @@ gail_entry_real_notify_gtk (GObject		*obj,
     {
       text_setup (entry, gtk_entry);
     }
+  else if (strcmp (pspec->name, "editing-canceled") == 0)
+    {
+      if (entry->insert_idle_handler)
+        {
+          g_source_remove (entry->insert_idle_handler);
+          entry->insert_idle_handler = 0;
+        }
+    }
   else
     GAIL_WIDGET_CLASS (gail_entry_parent_class)->notify_gtk (obj, pspec);
 }
