@@ -598,6 +598,7 @@ static AtkObject *
 gtk_switch_get_accessible (GtkWidget *widget)
 {
   static gboolean first_time = TRUE;
+  AtkObject *acc;
 
   if (G_UNLIKELY (first_time))
     {
@@ -921,7 +922,7 @@ gtk_switch_activatable_interface_init (GtkActivatableIface *iface)
 typedef struct _GtkSwitchAccessible             GtkSwitchAccessible;
 typedef struct _GtkSwitchAccessibleClass        GtkSwitchAccessibleClass;
 
-ATK_DEFINE_TYPE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_WIDGET);
+ATK_DEFINE_TYPE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_SWITCH);
 
 static AtkStateSet *
 gtk_switch_accessible_ref_state_set (AtkObject *accessible)
