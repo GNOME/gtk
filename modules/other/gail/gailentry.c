@@ -298,11 +298,7 @@ gail_entry_real_notify_gtk (GObject		*obj,
     }
   else if (strcmp (pspec->name, "editing-canceled") == 0)
     {
-      gboolean canceled;
-
-      g_object_get (obj, "editing-canceled", &canceled, NULL);
-
-      if (entry->insert_idle_handler && canceled)
+      if (entry->insert_idle_handler)
         {
           g_source_remove (entry->insert_idle_handler);
           entry->insert_idle_handler = 0;
