@@ -935,7 +935,7 @@ AM_CONDITIONAL(BUILD_x11, [test "x$have_x11" = "xyes"])
       is available via the new gtk_widget_get_allocated_width() and
       gtk_widget_get_allocated_height() functions. It is not necessary to
       check for GTK_WIDGET_IS_DRAWABLE(), since GTK+ already does this check
-      before emitting the ::draw signal.
+      before emitting the #GtkWidget::draw signal.
     </para>
     <para>
       There are some special considerations for widgets with multiple windows.
@@ -954,7 +954,7 @@ AM_CONDITIONAL(BUILD_x11, [test "x$have_x11" = "xyes"])
         }
       ...
       </programlisting></informalexample>
-      In contrast, the ::draw signal handler may have to draw multiple
+      In contrast, the #GtkWidget::draw signal handler may have to draw multiple
       windows in one call. GTK+ has a convenience function
       gtk_cairo_should_draw_window() that can be used to find out if
       a window needs to be drawn. With that, the example above would look
