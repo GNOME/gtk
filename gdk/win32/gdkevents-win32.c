@@ -2131,12 +2131,16 @@ gdk_event_translate (MSG  *msg,
       
       build_key_event_state (event, key_state);
 
-      gdk_keymap_translate_keyboard_state (NULL,
-					   event->key.hardware_keycode,
-					   event->key.state,
-					   event->key.group,
-					   &event->key.keyval,
-					   NULL, NULL, NULL);
+      if (msg->wParam == VK_PACKET &&
+	  ToUnicode (VK_PACKET, HIWORD (msg->lParam), key_state, wbuf, 1, 0) == 1)
+	event->key.keyval = gdk_unicode_to_keyval (wbuf[0]);
+      else
+	gdk_keymap_translate_keyboard_state (NULL,
+					     event->key.hardware_keycode,
+					     event->key.state,
+					     event->key.group,
+					     &event->key.keyval,
+					     NULL, NULL, NULL);
 
       fill_key_event_string (event);
 
