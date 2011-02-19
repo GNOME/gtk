@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "gtkmodules.h"
+#include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h" /* GTK_LIBDIR */
