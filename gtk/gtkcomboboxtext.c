@@ -478,12 +478,13 @@ gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
  * gtk_combo_box_text_get_active_text:
  * @combo_box: A #GtkComboBoxText
  *
- * Returns the currently active string in @combo_box or %NULL if none
- * is selected. If @combo_box contains an entry, this function will return
- * its contents (which will not necessarily be an item from the list).
+ * Returns the currently active string in @combo_box, or %NULL
+ * if none is selected. If @combo_box contains an entry, this
+ * function will return its contents (which will not necessarily
+ * be an item from the list).
  *
- * Returns: a newly allocated string containing the currently active text.
- *     Must be freed with g_free().
+ * Returns: a newly allocated string containing the currently
+ *     active text. Must be freed with g_free().
  *
  * Since: 2.24
  */
@@ -495,7 +496,14 @@ gtk_combo_box_text_get_active_text (GtkComboBoxText *combo_box)
 
   g_return_val_if_fail (GTK_IS_COMBO_BOX_TEXT (combo_box), NULL);
 
-  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo_box), &iter))
+ if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo_box)))
+   {
+     GtkWidget *entry;
+
+     entry = gtk_bin_get_child (GTK_BIN (combo_box));
+     text = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+   }
+  else if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo_box), &iter))
     {
       GtkTreeModel *model;
       gint text_column;
