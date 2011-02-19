@@ -1091,7 +1091,7 @@ gtk_arrow_draw (GtkWidget *widget,
       classes that are directly derived from GtkObject, you have to make
       them derive from #GInitiallyUnowned (or, if you don't need the floating
       functionality, #GObject). If you have widgets that override the
-      destroy class handler, you have to adust your class_init function,
+      destroy class handler, you have to adjust your class_init function,
       since destroy is now a member of GtkWidgetClass:
       <informalexample><programlisting>
       GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
