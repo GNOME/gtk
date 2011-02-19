@@ -1691,7 +1691,7 @@ msgstr "Fehler beim Aufrufen der Druckvorschau"
 
 #: ../gtk/gtkprintoperation-unix.c:477 ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
-msgstr "Anwendunge"
+msgstr "Anwendung"
 
 #: ../gtk/gtkprintoperation-win32.c:611
 msgid "Printer offline"
