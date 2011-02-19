@@ -482,9 +482,9 @@ gdk_x11_screen_get_monitor_output (GdkScreen *screen,
 
 /**
  * gdk_screen_get_monitor_geometry:
- * @screen : a #GdkScreen
+ * @screen: a #GdkScreen
  * @monitor_num: the monitor number, between 0 and gdk_screen_get_n_monitors (screen)
- * @dest : a #GdkRectangle to be filled with the monitor geometry
+ * @dest: a #GdkRectangle to be filled with the monitor geometry
  *
  * Retrieves the #GdkRectangle representing the size and position of
  * the individual monitor within the entire screen area.
