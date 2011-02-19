@@ -301,6 +301,18 @@ sparql_append_string_literal (GString     *sparql,
 }
 
 static void
+sparql_append_string_literal_lower_case (GString     *sparql,
+                                         const gchar *str)
+{
+  gchar *s;
+
+  s = g_utf8_strdown (str, -1);
+  sparql_append_string_literal (sparql, s);
+
+  g_free (s);
+}
+
+static void
 gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 {
   GtkSearchEngineTracker *tracker;
@@ -350,8 +362,8 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
                          "WHERE {"
                          "  ?urn a nfo:FileDataObject ;"
                          "    tracker:available true ."
-                         "  FILTER (fn:contains(nfo:fileName(?urn),");
-  sparql_append_string_literal (sparql, search_text);
+                         "  FILTER (fn:contains(fn:lower-case(nfo:fileName(?urn)),");
+  sparql_append_string_literal_lower_case (sparql, search_text);
 
   g_string_append (sparql, 
                    "))"
