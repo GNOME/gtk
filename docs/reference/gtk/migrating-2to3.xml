@@ -277,6 +277,9 @@ gdk_gc_set_clip_rectangle (gc, NULL);
           </programlisting></informalexample>
           With cairo, the same effect can be achieved using:
           <informalexample><programlisting>
+GtkStyleContext *context;
+GtkStateFlags flags;
+GdkRGBA rgba;
 cairo_t *cr;
 
 cr = gdk_cairo_create (drawable);
@@ -284,7 +287,10 @@ cr = gdk_cairo_create (drawable);
 gdk_cairo_rectangle (cr, &amp;area);
 cairo_clip (cr);
 /* set the correct source color */
-gdk_cairo_set_source_color (cr, &amp;gtk_widget_get_style (widget)->text[state]);
+context = gtk_widget_get_style_context (widget));
+state = gtk_widget_get_state_flags (widget);
+gtk_style_context_get_color (context, state, &amp;rgba);
+gdk_cairo_set_source_rgba (cr, &amp;rgba);
 /* draw the text */
 cairo_move_to (cr, x, y);
 pango_cairo_show_layout (cr, layout);
@@ -987,9 +993,12 @@ gboolean
 gtk_arrow_draw (GtkWidget *widget,
                 cairo_t   *cr)
 {
+  GtkStyleContext *context;
   gint x, y;
   gint width, height;
   gint extent;
+
+  context = gtk_widget_get_style_context (widget);
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -998,15 +1007,7 @@ gtk_arrow_draw (GtkWidget *widget,
   x = PAD;
   y = PAD;
 
-  gtk_paint_arrow (gtk_widget_get_style (widget),
-                   cr,
-                   gtk_widget_get_state (widget),
-                   GTK_SHADOW_OUT,
-                   widget,
-                   "arrow",
-                   widget->priv->arrow_type,
-                   TRUE,
-                   x, y, extent, extent);
+  gtk_render_arrow (context, rc, G_PI / 2, x, y, extent);
 }
     </programlisting>
     </example>
