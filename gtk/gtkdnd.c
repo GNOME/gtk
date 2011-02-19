@@ -305,8 +305,6 @@ static struct {
   { 0              ,  "dnd-none", dnd_cursor_none, NULL, NULL },
 };
 
-static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[0]);
-
 /*********************
  * Utility functions *
  *********************/
@@ -731,7 +729,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
    */ 
   if (!info)
     {
-      for (i = 0 ; i < n_drag_cursors - 1; i++)
+      for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
 	if (drag_cursors[i].cursor != NULL)
 	  {
 	    g_object_unref (drag_cursors[i].cursor);
@@ -739,7 +737,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
 	  }
     }
  
-  for (i = 0 ; i < n_drag_cursors - 1; i++)
+  for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
     if (drag_cursors[i].action == action)
       break;
 
@@ -930,12 +928,12 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
   if (!info->have_grab)
     return;
 
-  for (i = 0 ; i < n_drag_cursors - 1; i++)
+  for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
     if (info->cursor == drag_cursors[i].cursor ||
 	info->cursor == info->drag_cursors[i])
       break;
   
-  if (i == n_drag_cursors)
+  if (i == G_N_ELEMENTS (drag_cursors))
     return;
 
   cursor = gtk_drag_get_cursor (gdk_cursor_get_display (info->cursor), 
@@ -3879,7 +3877,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
   gint i;
 
-  for (i = 0; i < n_drag_cursors; i++)
+  for (i = 0; i < G_N_ELEMENTS (drag_cursors); i++)
     {
       if (info->drag_cursors[i] != NULL)
         {
