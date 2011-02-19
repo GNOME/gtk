@@ -201,6 +201,10 @@ additional environment variables.
   <para>
     A list of modules to load. Note that GTK+ also allows to specify modules to load via a commandline option (<option>--gtk-module</option>) and with the <literal>gtk-modules</literal> setting.
   </para>
+  <warning>
+    Note that this environment variable is read by GTK+ 3 too,
+    which may not have the same set of modules available for loading.
+  </warning>
 </formalpara>
 
 <formalpara>
@@ -243,6 +247,12 @@ additional environment variables.
     The components of GTK_PATH are separated by the ':' character on
     Linux and Unix, and the ';' character on Windows.
   </para>
+  <warning>
+    Note that this environment variable is read by GTK+ 3 too, which
+    makes it unsuitable for setting it system-wide (or session-wide),
+    since doing so will cause either GTK+ 2.x applications or GTK+ 3
+    applications to see incompatible modules.
+  </warning>
 </formalpara>
 
 <formalpara>
@@ -277,6 +287,12 @@ additional environment variables.
     Specifies a list of RC files to parse instead of the default ones;
     see <link linkend="gtk-Resource-Files">Resource Files</link>.
   </para>
+  <warning>
+    Note that this environment variable is read by GTK+ 3 too, which
+    makes it unsuitable for setting it system-wide (or session-wide),
+    since doing so will cause either GTK+ 2.x applications or GTK+ 3
+    applications to see the wrong list of IM modules.
+  </warning>
 </formalpara>
 
 <formalpara>
