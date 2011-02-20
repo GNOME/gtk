@@ -847,7 +847,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                       cairo_t *cr,
                       GList **widgets)
 {
-  gint current_y;
+  gint offset_y;
   GSList *cursor_list;
   GtkTextRenderer *text_renderer;
   GtkTextIter selection_start, selection_end;
@@ -865,13 +865,16 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   if (!gdk_cairo_get_clip_rectangle (cr, &clip))
     return;
 
-  line_list =  gtk_text_layout_get_lines (layout, clip.y, clip.y + clip.height, &current_y);
+  line_list = gtk_text_layout_get_lines (layout, clip.y, clip.y + clip.height, &offset_y);
 
   if (line_list == NULL)
     return; /* nothing on the screen */
 
   text_renderer = get_text_renderer ();
   text_renderer_begin (text_renderer, widget, cr);
+
+  /* text_renderer_begin/end does cairo_save/restore */
+  cairo_translate (cr, 0, offset_y);
 
   gtk_text_layout_wrap_loop_start (layout);
 
@@ -926,7 +929,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
             }
 
           render_para (text_renderer, line_display,
-                       0, current_y,
+                       0, 0,
                        selection_start_index, selection_end_index);
 
           /* We paint the cursors last, because they overlap another chunk
@@ -962,7 +965,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
  		}
  
  	      cursor_location.x = line_display->x_offset + cursor->x;
- 	      cursor_location.y = current_y + line_display->top_margin + cursor->y;
+ 	      cursor_location.y = line_display->top_margin + cursor->y;
  	      cursor_location.width = 0;
  	      cursor_location.height = cursor->height;
 
@@ -974,7 +977,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
             }
         } /* line_display->height > 0 */
           
-      current_y += line_display->height;
+      cairo_translate (cr, 0, line_display->height);
       gtk_text_layout_free_line_display (layout, line_display);
       
       tmp_list = g_slist_next (tmp_list);
