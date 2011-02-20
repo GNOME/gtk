@@ -7850,7 +7850,7 @@ msgid "The GtkApplication for the window"
 msgstr "El GtkApplication para la ventana"
 
 #~ msgid "Tab pack type"
-#~ msgstr "Tipo de empaquetado de la solapa"
+#~ msgstr "Tipo de empaquetado de la pestaña"
 
 #~ msgid "Update policy"
 #~ msgstr "Política de actualización"
