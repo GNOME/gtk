@@ -217,6 +217,10 @@ gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 cairo_paint (cr);
 cairo_destroy (cr);
            </programlisting></informalexample>
+           Note that very similar code can be used when porting code
+           using GdkPixmap to #cairo_surface_t by calling
+           cairo_set_source_surface() instead of
+           gdk_cairo_set_source_pixbuf().
          </para>
       </example>
       <example>
@@ -234,20 +238,21 @@ gdk_gc_set_tile (gc, pixmap);
 gdk_gc_set_fill (gc, GDK_TILED);
 gdk_gc_set_ts_origin (gc, x_origin, y_origin);
 /* use */
-gdk_draw_rectangle (drawable, gc, TRUE, 0, 0, width, height);
+gdk_draw_rectangle (window, gc, TRUE, 0, 0, width, height);
 /* restore */
 gdk_gc_set_tile (gc, NULL);
 gdk_gc_set_fill (gc, GDK_SOLID);
 gdk_gc_set_ts_origin (gc, 0, 0);
           </programlisting></informalexample>
-          The equivalent cairo code looks like this:
+          The equivalent cairo code to draw a tiled surfacelooks
+          like this:
           <informalexample><programlisting>
 cairo_t *cr;
 cairo_surface_t *surface;
 
 surface = ...
 cr = gdk_cairo_create (window);
-gdk_cairo_set_source_surface (cr, surface, x_origin, y_origin);
+cairo_set_source_surface (cr, surface, x_origin, y_origin);
 cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
 cairo_rectangle (cr, 0, 0, width, height);
 cairo_fill (cr);
@@ -356,14 +361,14 @@ gdk_draw_drawable (pixmap,
           </programlisting></informalexample>
           By using this code:
           <informalexample><programlisting>
-cairo_t *cr = gdk_cairo_create (window);
+cairo_t *cr = cairo_create (surface);
 /* clipping restricts the intermediate surface's size, so it's a good idea
  * to use it. */
 gdk_cairo_rectangle (cr, &amp;area);
 cairo_clip (cr);
 /* Now push a group to change the target */
 cairo_push_group (cr);
-gdk_cairo_set_source_surface (cr, surface, dx, dy);
+cairo_set_source_surface (cr, surface, dx, dy);
 cairo_paint (cr);
 /* Now copy the intermediate target back */
 cairo_pop_group_to_source (cr);
@@ -769,8 +774,8 @@ on_alpha_screen_changed (GtkWindow *window,
     <para>
       #GdkDrawable has been removed in GTK+ 3, together with #GdkPixmap
       and #GdkImage. The only remaining drawable class is #GdkWindow.
-      For dealing with image data, you should use cairo surfaces or
-      #GdkPixbufs.
+      For dealing with image data, you should use a #cairo_surface_t or
+      a #GdkPixbuf.
     </para>
 
     <para>
