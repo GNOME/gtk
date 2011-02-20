@@ -217,9 +217,6 @@ gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 cairo_paint (cr);
 cairo_destroy (cr);
            </programlisting></informalexample>
-           Note that very similar code can be used for drawing pixmaps
-           by using gdk_cairo_set_source_pixmap() instead of
-           gdk_cairo_set_source_pixbuf().
          </para>
       </example>
       <example>
@@ -246,17 +243,20 @@ gdk_gc_set_ts_origin (gc, 0, 0);
           The equivalent cairo code looks like this:
           <informalexample><programlisting>
 cairo_t *cr;
+cairo_surface_t *surface;
 
-cr = gdk_cairo_create (drawable);
-gdk_cairo_set_source_pixmap (cr, pixmap, x_origin, y_origin);
+surface = ...
+cr = gdk_cairo_create (window);
+gdk_cairo_set_source_surface (cr, surface, x_origin, y_origin);
 cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
 cairo_rectangle (cr, 0, 0, width, height);
 cairo_fill (cr);
 cairo_destroy (cr);
           </programlisting></informalexample>
-          Again, you can exchange pixbufs and pixmaps by using
-          gdk_cairo_set_source_pixbuf() instead of
-          gdk_cairo_set_source_pixmap().
+The surface here can be either an image surface or a X surface,
+and can either be created on the spot or kept around for caching purposes.
+Another alternative is to use pixbufs instead of surfaces with
+gdk_cairo_set_source_pixbuf() instead of cairo_set_source_surface().
         </para>
       </example>
       <example>
@@ -339,7 +339,7 @@ gtk_color_button_get_checkered (void)
           stippling is absent from text rendering, in particular #GtkTextTag.
         </para>
       </formalpara>
-      <formalpara><title>Using the the target drawable also as source or mask</title>
+      <formalpara><title>Using the target also as source or mask</title>
         <para>
           The gdk_draw_drawable() function allowed using the same drawable
           as source and target. This was often used to achieve a scrolling
@@ -356,20 +356,26 @@ gdk_draw_drawable (pixmap,
           </programlisting></informalexample>
           By using this code:
           <informalexample><programlisting>
-cairo_t *cr = gdk_cairo_create (pixmap);
+cairo_t *cr = gdk_cairo_create (window);
 /* clipping restricts the intermediate surface's size, so it's a good idea
  * to use it. */
 gdk_cairo_rectangle (cr, &amp;area);
 cairo_clip (cr);
 /* Now push a group to change the target */
 cairo_push_group (cr);
-gdk_cairo_set_source_pixmap (cr, pixmap, dx, dy);
+gdk_cairo_set_source_surface (cr, surface, dx, dy);
 cairo_paint (cr);
 /* Now copy the intermediate target back */
 cairo_pop_group_to_source (cr);
 cairo_paint (cr);
 cairo_destroy (cr);
           </programlisting></informalexample>
+The surface here can be either an image surface or a X surface,
+and can either be created on the spot or kept around for caching purposes.
+Another alternative is to use pixbufs instead of surfaces with
+gdk_cairo_set_source_pixbuf() instead of cairo_set_source_surface().
+        </para>
+        <para>
           The cairo developers plan to add self-copies in the future to allow
           exactly this effect, so you might want to keep up on cairo
           development to be able to change your code.
