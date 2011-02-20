@@ -8242,28 +8242,28 @@ msgstr "El GtkApplication para la ventana"
 #~ msgstr "Indica si se deben mostrar botones para crear/manipular archivos"
 
 #~ msgid "Tab Border"
-#~ msgstr "Borde de la solapa"
+#~ msgstr "Borde de la pestaña"
 
 #~ msgid "Width of the border around the tab labels"
-#~ msgstr "Anchura del borde alrededor de las etiquetas de las solapas"
+#~ msgstr "Anchura del borde alrededor de las etiquetas de las pestañas"
 
 #~ msgid "Horizontal Tab Border"
 #~ msgstr "Borde de la pestaña horizontal"
 
 #~ msgid "Width of the horizontal border of tab labels"
-#~ msgstr "Anchura del borde horizontal de las etiquetas de las solapas"
+#~ msgstr "Anchura del borde horizontal de las etiquetas de las pestañas"
 
 #~ msgid "Vertical Tab Border"
 #~ msgstr "Borde de la pestaña vertical"
 
 #~ msgid "Width of the vertical border of tab labels"
-#~ msgstr "Anchura del borde vertical de las etiquetas de las solapas"
+#~ msgstr "Anchura del borde vertical de las etiquetas de las pestañas"
 
 #~ msgid "Whether tabs should have homogeneous sizes"
-#~ msgstr "Indica si las solapas deben tener tamaños homogéneos"
+#~ msgstr "Indica si las pestañas deben tener tamaños homogéneos"
 
 #~ msgid "Group ID for tabs drag and drop"
-#~ msgstr "ID de grupo para arrastre y suelte de las solapas"
+#~ msgstr "ID de grupo para arrastre y suelte de las pestañas"
 
 #~ msgid "User Data"
 #~ msgstr "Datos del usuario"
