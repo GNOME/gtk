@@ -244,7 +244,7 @@ gdk_gc_set_tile (gc, NULL);
 gdk_gc_set_fill (gc, GDK_SOLID);
 gdk_gc_set_ts_origin (gc, 0, 0);
           </programlisting></informalexample>
-          The equivalent cairo code to draw a tiled surfacelooks
+          The equivalent cairo code to draw a tiled surface looks
           like this:
           <informalexample><programlisting>
 cairo_t *cr;
