@@ -16,9 +16,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&component=general\n"
-"POT-Creation-Date: 2011-02-13 14:23+0000\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2011-02-20 13:02+0000\n"
 "PO-Revision-Date: 2011-02-19 18:43+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
@@ -883,7 +883,7 @@ msgstr ""
 "por ejemplo, botones de ayuda"
 
 #: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:318 ../gtk/gtkexpander.c:311
-#: ../gtk/gtkiconview.c:642 ../gtk/gtktreeviewcolumn.c:271
+#: ../gtk/gtkiconview.c:643 ../gtk/gtktreeviewcolumn.c:271
 msgid "Spacing"
 msgstr "Espaciado"
 
@@ -1481,8 +1481,7 @@ msgstr "Tiene entrada"
 
 #: ../gtk/gtkcellrenderercombo.c:151
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
+msgstr "Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
 
 #: ../gtk/gtkcellrendererpixbuf.c:120
 msgid "Pixbuf Object"
@@ -1630,7 +1629,7 @@ msgid "The number of decimal places to display"
 msgstr "El número de lugares decimales que mostrar"
 
 #: ../gtk/gtkcellrendererspinner.c:119 ../gtk/gtkcheckmenuitem.c:106
-#: ../gtk/gtkmenu.c:586 ../gtk/gtkspinner.c:118 ../gtk/gtkswitch.c:752
+#: ../gtk/gtkmenu.c:586 ../gtk/gtkspinner.c:118 ../gtk/gtkswitch.c:735
 #: ../gtk/gtktoggleaction.c:133 ../gtk/gtktogglebutton.c:125
 #: ../gtk/gtktoggletoolbutton.c:112
 msgid "Active"
@@ -1749,8 +1748,7 @@ msgstr "Tipografía"
 
 #: ../gtk/gtkcellrenderertext.c:359 ../gtk/gtktexttag.c:262
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
-"Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
+msgstr "Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
 
 #: ../gtk/gtkcellrenderertext.c:367 ../gtk/gtktexttag.c:270
 msgid "Font description as a PangoFontDescription struct"
@@ -2090,13 +2088,13 @@ msgid "The model for cell view"
 msgstr "El modelo para la vista de celda"
 
 #: ../gtk/gtkcellview.c:241 ../gtk/gtkcombobox.c:941
-#: ../gtk/gtkentrycompletion.c:445 ../gtk/gtkiconview.c:764
+#: ../gtk/gtkentrycompletion.c:445 ../gtk/gtkiconview.c:765
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:412
 msgid "Cell Area"
 msgstr "Área de la celda"
 
 #: ../gtk/gtkcellview.c:242 ../gtk/gtkcombobox.c:942
-#: ../gtk/gtkentrycompletion.c:446 ../gtk/gtkiconview.c:765
+#: ../gtk/gtkentrycompletion.c:446 ../gtk/gtkiconview.c:766
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:413
 msgid "The GtkCellArea used to layout cells"
 msgstr "El GtkCellArea usado para la distribución de las celdas"
@@ -2862,7 +2860,7 @@ msgstr "Longitud mínima de clave"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Longitud mínima de la clave de búsqueda para buscar coincidencias"
 
-#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:563
+#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:564
 msgid "Text column"
 msgstr "Columna de texto"
 
@@ -3221,67 +3219,67 @@ msgstr "Apariencia del borde del marco"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Un widget a mostrar en lugar de la usual etiqueta del marco"
 
-#: ../gtk/gtkgrid.c:1269 ../gtk/gtktable.c:175
+#: ../gtk/gtkgrid.c:1277 ../gtk/gtktable.c:175
 msgid "Row spacing"
 msgstr "Espaciado entre filas"
 
-#: ../gtk/gtkgrid.c:1270 ../gtk/gtktable.c:176
+#: ../gtk/gtkgrid.c:1278 ../gtk/gtktable.c:176
 msgid "The amount of space between two consecutive rows"
 msgstr "La cantidad de espacio entre dos filas consecutivas"
 
-#: ../gtk/gtkgrid.c:1276 ../gtk/gtktable.c:184
+#: ../gtk/gtkgrid.c:1284 ../gtk/gtktable.c:184
 msgid "Column spacing"
 msgstr "Espaciado de la columna"
 
-#: ../gtk/gtkgrid.c:1277 ../gtk/gtktable.c:185
+#: ../gtk/gtkgrid.c:1285 ../gtk/gtktable.c:185
 msgid "The amount of space between two consecutive columns"
 msgstr "La cantidad de espacio entre dos columnas consecutivas"
 
-#: ../gtk/gtkgrid.c:1283
+#: ../gtk/gtkgrid.c:1291
 msgid "Row Homogeneous"
 msgstr "Fila homogénea"
 
-#: ../gtk/gtkgrid.c:1284
+#: ../gtk/gtkgrid.c:1292
 msgid "If TRUE, the rows are all the same height"
 msgstr "Si es cierto, las filas tienen todas la misma altura"
 
-#: ../gtk/gtkgrid.c:1290
+#: ../gtk/gtkgrid.c:1298
 msgid "Column Homogeneous"
 msgstr "Columna homogénea"
 
-#: ../gtk/gtkgrid.c:1291
+#: ../gtk/gtkgrid.c:1299
 msgid "If TRUE, the columns are all the same width"
 msgstr "Si es cierto, las columnas tienen todas la misma altura"
 
-#: ../gtk/gtkgrid.c:1297 ../gtk/gtktable.c:201
+#: ../gtk/gtkgrid.c:1305 ../gtk/gtktable.c:201
 msgid "Left attachment"
 msgstr "Acoplado izquierdo"
 
-#: ../gtk/gtkgrid.c:1298 ../gtk/gtkmenu.c:759 ../gtk/gtktable.c:202
+#: ../gtk/gtkgrid.c:1306 ../gtk/gtkmenu.c:759 ../gtk/gtktable.c:202
 msgid "The column number to attach the left side of the child to"
 msgstr "El número de columnas que acoplar al lado izquierdo del hijo"
 
-#: ../gtk/gtkgrid.c:1304 ../gtk/gtktable.c:215
+#: ../gtk/gtkgrid.c:1312 ../gtk/gtktable.c:215
 msgid "Top attachment"
 msgstr "Acoplado superior"
 
-#: ../gtk/gtkgrid.c:1305
+#: ../gtk/gtkgrid.c:1313
 msgid "The row number to attach the top side of a child widget to"
 msgstr "El número de fila que acoplar a la parte superior de un widget hijo"
 
-#: ../gtk/gtkgrid.c:1311 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:262
+#: ../gtk/gtkgrid.c:1319 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:262
 msgid "Width"
 msgstr "Anchura"
 
-#: ../gtk/gtkgrid.c:1312
+#: ../gtk/gtkgrid.c:1320
 msgid "The number of columns that a child spans"
 msgstr "El número de columnas que un hijo engendra"
 
-#: ../gtk/gtkgrid.c:1318 ../gtk/gtklayout.c:669
+#: ../gtk/gtkgrid.c:1326 ../gtk/gtklayout.c:669
 msgid "Height"
 msgstr "Altura"
 
-#: ../gtk/gtkgrid.c:1319
+#: ../gtk/gtkgrid.c:1327
 msgid "The number of rows that a child spans"
 msgstr "El número de filas que un hijo engendra"
 
@@ -3333,135 +3331,135 @@ msgstr ""
 "Una variable booleana indicando si el hijo del manejador de la caja está "
 "acoplado o desacoplado."
 
-#: ../gtk/gtkiconview.c:526
+#: ../gtk/gtkiconview.c:527
 msgid "Selection mode"
 msgstr "Modo de selección"
 
-#: ../gtk/gtkiconview.c:527
+#: ../gtk/gtkiconview.c:528
 msgid "The selection mode"
 msgstr "El modo de selección"
 
-#: ../gtk/gtkiconview.c:545
+#: ../gtk/gtkiconview.c:546
 msgid "Pixbuf column"
 msgstr "Columna de pixbuf"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:547
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Columna modelo usada para obtener el pixbuf del icono"
 
-#: ../gtk/gtkiconview.c:564
+#: ../gtk/gtkiconview.c:565
 msgid "Model column used to retrieve the text from"
 msgstr "Columna modelo usada para obtener el texto"
 
-#: ../gtk/gtkiconview.c:583
+#: ../gtk/gtkiconview.c:584
 msgid "Markup column"
 msgstr "Columna de marcado"
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:585
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Columna modelo usada para obtener el texto si se usa marcado Pango"
 
-#: ../gtk/gtkiconview.c:591
+#: ../gtk/gtkiconview.c:592
 msgid "Icon View Model"
 msgstr "Modelo de vista de icono"
 
-#: ../gtk/gtkiconview.c:592
+#: ../gtk/gtkiconview.c:593
 msgid "The model for the icon view"
 msgstr "El modelo para la vista de icono"
 
-#: ../gtk/gtkiconview.c:608
+#: ../gtk/gtkiconview.c:609
 msgid "Number of columns"
 msgstr "Número de columnas"
 
-#: ../gtk/gtkiconview.c:609
+#: ../gtk/gtkiconview.c:610
 msgid "Number of columns to display"
 msgstr "El número de columnas que se mostrarán"
 
-#: ../gtk/gtkiconview.c:626
+#: ../gtk/gtkiconview.c:627
 msgid "Width for each item"
 msgstr "Anchura de cada elemento"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:628
 msgid "The width used for each item"
 msgstr "La anchura usada por cada elemento"
 
-#: ../gtk/gtkiconview.c:643
+#: ../gtk/gtkiconview.c:644
 msgid "Space which is inserted between cells of an item"
 msgstr "Espacio que se introduce entre las celdas de un elemento"
 
-#: ../gtk/gtkiconview.c:658
+#: ../gtk/gtkiconview.c:659
 msgid "Row Spacing"
 msgstr "Espaciado entre filas"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:660
 msgid "Space which is inserted between grid rows"
 msgstr "Espacio que se introduce entre las filas de la rejilla"
 
-#: ../gtk/gtkiconview.c:674
+#: ../gtk/gtkiconview.c:675
 msgid "Column Spacing"
 msgstr "Espaciado entre columnas"
 
-#: ../gtk/gtkiconview.c:675
+#: ../gtk/gtkiconview.c:676
 msgid "Space which is inserted between grid columns"
 msgstr "Espacio que se inserta entre las columnas de la rejilla"
 
-#: ../gtk/gtkiconview.c:690
+#: ../gtk/gtkiconview.c:691
 msgid "Margin"
 msgstr "Margen"
 
-#: ../gtk/gtkiconview.c:691
+#: ../gtk/gtkiconview.c:692
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Espacio que se introduce entre los bordes de la vista de icono"
 
-#: ../gtk/gtkiconview.c:706
+#: ../gtk/gtkiconview.c:707
 msgid "Item Orientation"
 msgstr "Orientación del elemento"
 
-#: ../gtk/gtkiconview.c:707
+#: ../gtk/gtkiconview.c:708
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Cómo se sitúan el texto y el icono para cada elemento relativo a los demás"
 
-#: ../gtk/gtkiconview.c:723 ../gtk/gtktreeview.c:1022
+#: ../gtk/gtkiconview.c:724 ../gtk/gtktreeview.c:1022
 #: ../gtk/gtktreeviewcolumn.c:362
 msgid "Reorderable"
 msgstr "Reordenable"
 
-#: ../gtk/gtkiconview.c:724 ../gtk/gtktreeview.c:1023
+#: ../gtk/gtkiconview.c:725 ../gtk/gtktreeview.c:1023
 msgid "View is reorderable"
 msgstr "La vista es reordenable"
 
-#: ../gtk/gtkiconview.c:731 ../gtk/gtktreeview.c:1173
+#: ../gtk/gtkiconview.c:732 ../gtk/gtktreeview.c:1173
 msgid "Tooltip Column"
 msgstr "Columna de consejo"
 
-#: ../gtk/gtkiconview.c:732
+#: ../gtk/gtkiconview.c:733
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr ""
 "La columna del modelo que contiene los textos de consejo para los elementos"
 
-#: ../gtk/gtkiconview.c:749
+#: ../gtk/gtkiconview.c:750
 msgid "Item Padding"
 msgstr "Separación del elemento"
 
-#: ../gtk/gtkiconview.c:750
+#: ../gtk/gtkiconview.c:751
 msgid "Padding around icon view items"
 msgstr "Separación alrededor de la vista de iconos"
 
-#: ../gtk/gtkiconview.c:778
+#: ../gtk/gtkiconview.c:779
 msgid "Selection Box Color"
 msgstr "Color de la caja de selección"
 
-#: ../gtk/gtkiconview.c:779
+#: ../gtk/gtkiconview.c:780
 msgid "Color of the selection box"
 msgstr "Color de la caja de selección"
 
-#: ../gtk/gtkiconview.c:785
+#: ../gtk/gtkiconview.c:786
 msgid "Selection Box Alpha"
 msgstr "Alfa de la caja de selección"
 
-#: ../gtk/gtkiconview.c:786
+#: ../gtk/gtkiconview.c:787
 msgid "Opacity of the selection box"
 msgstr "Opacidad de la caja de selección"
 
@@ -4869,7 +4867,7 @@ msgstr "Redondear dígitos"
 msgid "The number of digits to round the value to."
 msgstr "El número de dígitos al que redondear el valor."
 
-#: ../gtk/gtkrange.c:519 ../gtk/gtkswitch.c:786
+#: ../gtk/gtkrange.c:519 ../gtk/gtkswitch.c:769
 msgid "Slider Width"
 msgstr "Anchura del deslizador"
 
@@ -5408,8 +5406,8 @@ msgstr "Suavizado Xft"
 #: ../gtk/gtksettings.c:494
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, "
-"-1=predeterminado"
+"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, -"
+"1=predeterminado"
 
 #: ../gtk/gtksettings.c:503
 msgid "Xft Hinting"
@@ -6050,11 +6048,11 @@ msgstr "Dirección"
 msgid "Text direction"
 msgstr "Dirección del texto"
 
-#: ../gtk/gtkswitch.c:753
+#: ../gtk/gtkswitch.c:736
 msgid "Whether the switch is on or off"
 msgstr "Indica si el interruptor está encendido o apagado"
 
-#: ../gtk/gtkswitch.c:787
+#: ../gtk/gtkswitch.c:770
 msgid "The minimum width of the handle"
 msgstr "La anchura mínima del tirador"
 
@@ -8250,13 +8248,13 @@ msgstr "El GtkApplication para la ventana"
 #~ msgstr "Anchura del borde alrededor de las etiquetas de las solapas"
 
 #~ msgid "Horizontal Tab Border"
-#~ msgstr "Borde de la solapa horizontal"
+#~ msgstr "Borde de la pestaña horizontal"
 
 #~ msgid "Width of the horizontal border of tab labels"
 #~ msgstr "Anchura del borde horizontal de las etiquetas de las solapas"
 
 #~ msgid "Vertical Tab Border"
-#~ msgstr "Borde de la solapa vertical"
+#~ msgstr "Borde de la pestaña vertical"
 
 #~ msgid "Width of the vertical border of tab labels"
 #~ msgstr "Anchura del borde vertical de las etiquetas de las solapas"
