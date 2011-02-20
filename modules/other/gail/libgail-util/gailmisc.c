@@ -720,11 +720,12 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
       g_object_get (tag, "foreground-set", &val_set, NULL);
       if (val_set)
         {
-          GdkColor c;
+          GdkColor *c;
           gchar *value;
 
           g_object_get (tag, "foreground-gdk", &c, NULL);
-          value = g_strdup_printf ("%u,%u,%u", c.red, c.green, c.blue);
+          value = g_strdup_printf ("%u,%u,%u", c->red, c->green, c->blue);
+          gdk_color_free (c);
           attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FG_COLOR, value);
         }
       temp_tags = temp_tags->next;
@@ -739,11 +740,12 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
       g_object_get (tag, "background-set", &val_set, NULL);
       if (val_set)
         {
-          GdkColor c;
+          GdkColor *c;
           gchar *value;
 
           g_object_get (tag, "background-gdk", &c, NULL);
-          value = g_strdup_printf ("%u,%u,%u", c.red, c.green, c.blue);
+          value = g_strdup_printf ("%u,%u,%u", c->red, c->green, c->blue);
+          gdk_color_free (c);
           attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_COLOR, value);
         }
       temp_tags = temp_tags->next;
