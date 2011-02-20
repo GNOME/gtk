@@ -45,11 +45,11 @@ static void gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessi
 G_DEFINE_TYPE (GtkAccessible, gtk_accessible, ATK_TYPE_OBJECT)
 
 static void
-gtk_accessible_init (GtkAccessible *accesible)
+gtk_accessible_init (GtkAccessible *accessible)
 {
-  accesible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accesible,
-                                                 GTK_TYPE_ACCESSIBLE,
-                                                 GtkAccessiblePrivate);
+  accessible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accessible,
+                                                  GTK_TYPE_ACCESSIBLE,
+                                                  GtkAccessiblePrivate);
 }
 
 static void
