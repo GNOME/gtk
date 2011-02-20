@@ -48,11 +48,11 @@
 #include "gdk.h"
 #include "gdkdisplayprivate.h"
 #include "gdkprivate-win32.h"
+#include "gdkwin32.h"
 #include "gdkkeysyms.h"
 #include "gdkdevicemanager-win32.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-wintab.h"
-#include "gdkwin32.h"
 #include "gdkwin32dnd.h"
 #include "gdkdndprivate.h"
 
