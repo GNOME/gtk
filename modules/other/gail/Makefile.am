@@ -85,6 +85,7 @@ gail_private_h_sources =		\
 	gailimage.h			\
 	gailimagecell.h			\
 	gaillabel.h			\
+	gaillinkbutton.h		\
 	gailmenu.h			\
 	gailmenushell.h			\
 	gailmenuitem.h			\
