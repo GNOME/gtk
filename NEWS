@@ -1,3 +1,28 @@
+Overview of Changes from GTK+ 2.24.0 to 2.24.1
+==============================================
+
+* GTK+ now refuses to load modules that are linked against
+  the wrong GTK+ version, preventing GTK_PATH accidents.
+
+* A number of memory leaks and segfaults involving accessibility
+  have been fixed.
+
+* Bugs fixed:
+ 599907 Gail implementation of atk_add_key_event_listener return...
+ 626730 Check menu item does not set indeterminate state
+ 633291 Handle Shift-keys in X11 gdk_test_simulate_key()
+ 640487 crash on gtk_statusbar_remove_all()
+ 640992 Missed Return Type in gtk/gtkrange.c: gtk_range_set_round_digits
+ 642137 gtk+-2.24.0 requires Xcomposite.h
+ 642642 Missed include in gtk/gtkmodules.c
+ 642681 gtk_combo_box_text_get_active_text doesn't work as stated
+ 642772 GTK does not correctly process input sent via SendInput...
+
+* Translation updates:
+ Hungarian
+ Polish
+
+
 Overview of Changes from GTK+ 2.23.90 to 2.24.0
 ===============================================
 
