@@ -98,17 +98,17 @@ typedef AtkObjectFactoryClass   GtkSeparatorMenuItemAccessibleFactoryClass;
 typedef AtkObjectFactory        GtkSeparatorMenuItemAccessibleFactory;
 
 G_DEFINE_TYPE (GtkSeparatorMenuItemAccessibleFactory,
-               gtk_separator_menu_item_accessible_factory,
+               _gtk_separator_menu_item_accessible_factory,
                ATK_TYPE_OBJECT_FACTORY);
 
 static GType
-gtk_separator_menu_item_accessible_factory_get_accessible_type (void)
+_gtk_separator_menu_item_accessible_factory_get_accessible_type (void)
 {
   return _gtk_separator_menu_item_accessible_get_type ();
 }
 
 static AtkObject *
-gtk_separator_menu_item_accessible_factory_create_accessible (GObject *obj)
+_gtk_separator_menu_item_accessible_factory_create_accessible (GObject *obj)
 {
   AtkObject *accessible;
 
@@ -119,14 +119,14 @@ gtk_separator_menu_item_accessible_factory_create_accessible (GObject *obj)
 }
 
 static void
-gtk_separator_menu_item_accessible_factory_class_init (AtkObjectFactoryClass *klass)
+_gtk_separator_menu_item_accessible_factory_class_init (AtkObjectFactoryClass *klass)
 {
-  klass->create_accessible = gtk_separator_menu_item_accessible_factory_create_accessible;
-  klass->get_accessible_type = gtk_separator_menu_item_accessible_factory_get_accessible_type;
+  klass->create_accessible = _gtk_separator_menu_item_accessible_factory_create_accessible;
+  klass->get_accessible_type = _gtk_separator_menu_item_accessible_factory_get_accessible_type;
 }
 
 static void
-gtk_separator_menu_item_accessible_factory_init (AtkObjectFactory *factory)
+_gtk_separator_menu_item_accessible_factory_init (AtkObjectFactory *factory)
 {
 }
 
@@ -138,7 +138,7 @@ gtk_separator_menu_item_get_accessible (GtkWidget *widget)
   if (G_UNLIKELY (!initialized))
     {
       _gtk_accessible_set_factory_type (GTK_TYPE_SEPARATOR_MENU_ITEM,
-                                        gtk_separator_menu_item_accessible_factory_get_type ());
+                                        _gtk_separator_menu_item_accessible_factory_get_type ());
 
       initialized = TRUE;
     }
