@@ -1,3 +1,46 @@
+Overview of Changes in GTK+ 3.0.1
+=================================
+
+* A autoconf macro, GTK_CHECK_BACKEND, has been added
+  to allow easy checking for certain gdk backends
+
+* A number of memory leaks and segfaults involving accessibility
+  have been fixed
+
+* Bugs fixed:
+ 586201 GtkLinkButton doesn't implement neither HyperLink nor...
+ 599907 Gail implementation of atk_add_key_event_listener return...
+ 626730 Check menu item does not set indeterminate state
+ 630971 gailstatusbar attempts to cast a GtkHBox to a GtkBin
+ 633291 Handle Shift-keys in X11 gdk_test_simulate_key()
+ 642213 gtk_widget_render_icon_pixbuf fails with non-standard...
+ 642263 undefined reference to "GTK_IS_SOCKET" and "GTK_IS_PLUG"
+ 642541 Missing semi-colon in gtkseparatormenuitem.c
+ 642677 "migrating" guide not in sync with GTK+ 3.0
+ 642681 gtk_combo_box_text_get_active_text doesn't work as stated
+ 642751 Typo in migrating-2to3.xml
+ 642771 Fix tiny leak in tracker backend
+ 642772 GTK does not correctly process input sent via SendInput...
+ 642778 TextView broken for large files
+ 642782 gail_misc_buffer_get_run_attributes doesn't set background-gdk...
+ 642791 Fix a typo in gtk_socket_notify
+
+
+* Translation updates:
+ Bengali India
+ British English
+ Bulgarian
+ Hebrew
+ Hungarian
+ Korean
+ Norwegian bokmål
+ Punjabi
+ Spanish
+ Uighur
+ Ukranian
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.0.0
 =================================
 
