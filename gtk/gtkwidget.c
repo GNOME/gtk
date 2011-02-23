@@ -418,7 +418,6 @@ enum {
   MOTION_NOTIFY_EVENT,
   DELETE_EVENT,
   DESTROY_EVENT,
-  EXPOSE_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
   ENTER_NOTIFY_EVENT,
@@ -5972,6 +5971,7 @@ gtk_widget_event_internal (GtkWidget *widget,
 
       switch (event->type)
 	{
+	case GDK_EXPOSE:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6044,9 +6044,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_PROXIMITY_OUT:
 	  signal_num = PROXIMITY_OUT_EVENT;
-	  break;
-	case GDK_EXPOSE:
-	  signal_num = EXPOSE_EVENT;
 	  break;
 	case GDK_VISIBILITY_NOTIFY:
 	  signal_num = VISIBILITY_NOTIFY_EVENT;
