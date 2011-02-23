@@ -3,6 +3,18 @@
 #
 # IM = Input method => Eingabemethode
 #
+# #. * Translators, the strings in the 'keyboard label' context are
+# #. * display names for keyboard keys. Some of them have prefixes like
+# #. * XF86 or ISO_ - these should be removed in the translation. Similarly,
+# #. * underscores should be replaced by spaces. The prefix 'KP_' stands
+# #. * for 'key pad' and you may want to include that in your translation.
+# #. * Here are some examples of English translations:
+# #. * XF86AudioMute - Audio mute
+# #. * Scroll_lock   - Scroll lock
+# #. * KP_Space      - Space (keypad)
+#
+#
+#
 # Daniel Egger <Daniel.Egger@t-online>, 1998.
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
@@ -18,62 +30,61 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&component=general\n"
-"POT-Creation-Date: 2011-01-30 07:44+0000\n"
-"PO-Revision-Date: 2011-01-01 23:27+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-02-23 23:07+0100\n"
+"PO-Revision-Date: 2011-02-13 14:22+0100\n"
 "Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 
-#: ../gdk/gdk.c:151
+#: ../gdk/gdk.c:135
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Fehler beim Verarbeiten der Option --gdk-debug"
 
-#: ../gdk/gdk.c:171
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Fehler beim Verarbeiten der Option --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:199
+#: ../gdk/gdk.c:183
 msgid "Program class as used by the window manager"
 msgstr "Programmklasse, die vom Fenstermanager benutzt wird"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:200
+#: ../gdk/gdk.c:184
 msgid "CLASS"
 msgstr "KLASSE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:202
+#: ../gdk/gdk.c:186
 msgid "Program name as used by the window manager"
 msgstr "Programmname, der vom Fenstermanager benutzt wird"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:203
+#: ../gdk/gdk.c:187
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:189
 msgid "X display to use"
 msgstr "X-Anzeige, die verwendet werden soll"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:190
 msgid "DISPLAY"
 msgstr "ANZEIGE"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:209
+#: ../gdk/gdk.c:193
 msgid "GDK debugging flags to set"
 msgstr "Zu übergebende GDK-Fehlerdiagnoseoptionen"
 
@@ -81,199 +92,343 @@ msgstr "Zu übergebende GDK-Fehlerdiagnoseoptionen"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:210 ../gdk/gdk.c:213 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
+#: ../gdk/gdk.c:194 ../gdk/gdk.c:197 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
 msgid "FLAGS"
 msgstr "OPTIONEN"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:212
+#: ../gdk/gdk.c:196
 msgid "GDK debugging flags to unset"
 msgstr "Nicht zu übergebende GDK-Fehlerdiagnoseoptionen"
 
-#: ../gdk/keyname-table.h:3940
+#.
+#. * Translators, the strings in the 'keyboard label' context are
+#. * display names for keyboard keys. Some of them have prefixes like
+#. * XF86 or ISO_ - these should be removed in the translation. Similarly,
+#. * underscores should be replaced by spaces. The prefix 'KP_' stands
+#. * for 'key pad' and you may want to include that in your translation.
+#. * Here are some examples of English translations:
+#. * XF86AudioMute - Audio mute
+#. * Scroll_lock   - Scroll lock
+#. * KP_Space      - Space (keypad)
+#.
+#: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "Löschen"
 
-#: ../gdk/keyname-table.h:3941
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tabulator"
 
-#: ../gdk/keyname-table.h:3942
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Eingabe"
 
-#: ../gdk/keyname-table.h:3943
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pause"
 
-#: ../gdk/keyname-table.h:3944
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Rollen"
 
-#: ../gdk/keyname-table.h:3945
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "S_Abf"
+msgstr "S-_Abf"
 
-#: ../gdk/keyname-table.h:3946
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Esc"
 
-#: ../gdk/keyname-table.h:3947
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multifunktionstaste"
 
-#: ../gdk/keyname-table.h:3948
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Pos1"
 
-#: ../gdk/keyname-table.h:3949
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Links"
 
-#: ../gdk/keyname-table.h:3950
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Hoch"
 
-#: ../gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Rechts"
 
-#: ../gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Runter"
 
-#: ../gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Bild_auf"
+msgstr "Bild _auf"
 
-#: ../gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Bild_ab"
+msgstr "Bild a_b"
 
-#: ../gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "End"
 msgstr "Ende"
 
-#: ../gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Pos1"
 
-#: ../gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Drucken"
 
-#: ../gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Einfg"
 
-#: ../gdk/keyname-table.h:3959
-msgctxt "keyboard label"
-msgid "Num_Lock"
-msgstr "Num_Lock"
-
-#: ../gdk/keyname-table.h:3960
-msgctxt "keyboard label"
-msgid "KP_Space"
-msgstr "NB_Leertaste"
-
-#: ../gdk/keyname-table.h:3961
-msgctxt "keyboard label"
-msgid "KP_Tab"
-msgstr "NB_Tab"
-
-#: ../gdk/keyname-table.h:3962
-msgctxt "keyboard label"
-msgid "KP_Enter"
-msgstr "NB_Eingabe"
-
-#: ../gdk/keyname-table.h:3963
-msgctxt "keyboard label"
-msgid "KP_Home"
-msgstr "NB_Pos1"
-
-#: ../gdk/keyname-table.h:3964
-msgctxt "keyboard label"
-msgid "KP_Left"
-msgstr "NB_Links"
-
-#: ../gdk/keyname-table.h:3965
-msgctxt "keyboard label"
-msgid "KP_Up"
-msgstr "NB_Hoch"
-
-#: ../gdk/keyname-table.h:3966
-msgctxt "keyboard label"
-msgid "KP_Right"
-msgstr "NB_Rechts"
-
-#: ../gdk/keyname-table.h:3967
-msgctxt "keyboard label"
-msgid "KP_Down"
-msgstr "NB_Runter"
-
-#: ../gdk/keyname-table.h:3968
-msgctxt "keyboard label"
-msgid "KP_Page_Up"
-msgstr "NB_Bild_auf"
-
-#: ../gdk/keyname-table.h:3969
-msgctxt "keyboard label"
-msgid "KP_Prior"
-msgstr "NB_Zurück"
-
 #: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
-msgid "KP_Page_Down"
-msgstr "NB_Bild_ab"
+msgid "Num_Lock"
+msgstr "Num"
 
-#: ../gdk/keyname-table.h:3971
-msgctxt "keyboard label"
-msgid "KP_Next"
-msgstr "NB_Vor"
-
+#. Translators: KP_ means 'key pad' here
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
-msgid "KP_End"
-msgstr "NB_Ende"
+msgid "KP_Space"
+msgstr "Leertaste (Nmblck)"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
-msgid "KP_Begin"
-msgstr "NB_Pos1"
+msgid "KP_Tab"
+msgstr "Tabulator (Nmblck)"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
-msgid "KP_Insert"
-msgstr "NB_Einf"
+msgid "KP_Enter"
+msgstr "Eingabe (Nmblck)"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
-msgid "KP_Delete"
-msgstr "NB_Entf"
+msgid "KP_Home"
+msgstr "Pos1 (Nmblck)"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
+msgid "KP_Left"
+msgstr "Links (Nmblck)"
+
+#: ../gdk/keyname-table.h:3977
+msgctxt "keyboard label"
+msgid "KP_Up"
+msgstr "Hoch (Nmblck)"
+
+#: ../gdk/keyname-table.h:3978
+msgctxt "keyboard label"
+msgid "KP_Right"
+msgstr "Rechts (Nmblck)"
+
+#: ../gdk/keyname-table.h:3979
+msgctxt "keyboard label"
+msgid "KP_Down"
+msgstr "Runter (Nmblck)"
+
+#: ../gdk/keyname-table.h:3980
+msgctxt "keyboard label"
+msgid "KP_Page_Up"
+msgstr "Bild auf (Nmblck)"
+
+#: ../gdk/keyname-table.h:3981
+msgctxt "keyboard label"
+msgid "KP_Prior"
+msgstr "Zurück (Nmblck)"
+
+#: ../gdk/keyname-table.h:3982
+msgctxt "keyboard label"
+msgid "KP_Page_Down"
+msgstr "Bild ab (Nmblck)"
+
+#: ../gdk/keyname-table.h:3983
+msgctxt "keyboard label"
+msgid "KP_Next"
+msgstr "Vor (Nmblck)"
+
+#: ../gdk/keyname-table.h:3984
+msgctxt "keyboard label"
+msgid "KP_End"
+msgstr "Ende (Nmblck)"
+
+#: ../gdk/keyname-table.h:3985
+msgctxt "keyboard label"
+msgid "KP_Begin"
+msgstr "Pos1 (Nmblck)"
+
+#: ../gdk/keyname-table.h:3986
+msgctxt "keyboard label"
+msgid "KP_Insert"
+msgstr "Einf (Nmblck)"
+
+#: ../gdk/keyname-table.h:3987
+msgctxt "keyboard label"
+msgid "KP_Delete"
+msgstr "Entf (Nmblck)"
+
+#: ../gdk/keyname-table.h:3988
+msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Entf"
+
+#. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
+#: ../gdk/keyname-table.h:3990
+msgctxt "keyboard label"
+msgid "XF86MonBrightnessUp"
+msgstr "Monitorhelligkeit erhöhen"
+
+#: ../gdk/keyname-table.h:3991
+msgctxt "keyboard label"
+msgid "XF86MonBrightnessDown"
+msgstr "Monitorhelligkeit senken"
+
+#: ../gdk/keyname-table.h:3992
+msgctxt "keyboard label"
+msgid "XF86AudioMute"
+msgstr "Stumm schalten"
+
+#: ../gdk/keyname-table.h:3993
+msgctxt "keyboard label"
+msgid "XF86AudioLowerVolume"
+msgstr "Lautstärke senken"
+
+#: ../gdk/keyname-table.h:3994
+msgctxt "keyboard label"
+msgid "XF86AudioRaiseVolume"
+msgstr "Lautstärke erhöhen"
+
+#: ../gdk/keyname-table.h:3995
+msgctxt "keyboard label"
+msgid "XF86AudioPlay"
+msgstr "Wiedergabe starten"
+
+#: ../gdk/keyname-table.h:3996
+msgctxt "keyboard label"
+msgid "XF86AudioStop"
+msgstr "Wiedergabe stoppen"
+
+#: ../gdk/keyname-table.h:3997
+msgctxt "keyboard label"
+msgid "XF86AudioNext"
+msgstr "Nächster Titel"
+
+#: ../gdk/keyname-table.h:3998
+msgctxt "keyboard label"
+msgid "XF86AudioPrev"
+msgstr "Vorheriger Titel"
+
+#: ../gdk/keyname-table.h:3999
+msgctxt "keyboard label"
+msgid "XF86AudioRecord"
+msgstr "Aufnahme starten"
+
+#: ../gdk/keyname-table.h:4000
+msgctxt "keyboard label"
+msgid "XF86AudioPause"
+msgstr "Aufnahme pausieren"
+
+#: ../gdk/keyname-table.h:4001
+msgctxt "keyboard label"
+msgid "XF86AudioRewind"
+msgstr "Zurückspulen"
+
+#: ../gdk/keyname-table.h:4002
+#, fuzzy
+msgctxt "keyboard label"
+msgid "XF86AudioMedia"
+msgstr "Medien"
+
+#: ../gdk/keyname-table.h:4003
+msgctxt "keyboard label"
+msgid "XF86ScreenSaver"
+msgstr "Bildschirmschoner"
+
+#: ../gdk/keyname-table.h:4004
+msgctxt "keyboard label"
+msgid "XF86Battery"
+msgstr "Batterie"
+
+#: ../gdk/keyname-table.h:4005
+msgctxt "keyboard label"
+msgid "XF86Launch1"
+msgstr "Starten1"
+
+#: ../gdk/keyname-table.h:4006
+msgctxt "keyboard label"
+msgid "XF86Forward"
+msgstr "Vorwärts"
+
+#: ../gdk/keyname-table.h:4007
+msgctxt "keyboard label"
+msgid "XF86Back"
+msgstr "Rückwärts"
+
+#: ../gdk/keyname-table.h:4008
+msgctxt "keyboard label"
+msgid "XF86Sleep"
+msgstr "Bereitschaft"
+
+#: ../gdk/keyname-table.h:4009
+msgctxt "keyboard label"
+msgid "XF86Hibernate"
+msgstr "Ruhezustand"
+
+#: ../gdk/keyname-table.h:4010
+msgctxt "keyboard label"
+msgid "XF86WLAN"
+msgstr "WLAN"
+
+#: ../gdk/keyname-table.h:4011
+msgctxt "keyboard label"
+msgid "XF86WebCam"
+msgstr "WebCam"
+
+#: ../gdk/keyname-table.h:4012
+msgctxt "keyboard label"
+msgid "XF86Display"
+msgstr "Anzeige"
+
+#: ../gdk/keyname-table.h:4013
+msgctxt "keyboard label"
+msgid "XF86TouchpadToggle"
+msgstr ""
+
+#: ../gdk/keyname-table.h:4014
+msgctxt "keyboard label"
+msgid "XF86WakeUp"
+msgstr "Aufwecken"
+
+#: ../gdk/keyname-table.h:4015
+msgctxt "keyboard label"
+msgid "XF86Suspend"
+msgstr "In Bereitschaft versetzen"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
@@ -416,7 +571,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:768
+#: ../gtk/gtkaccellabel.c:786
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -426,7 +581,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:781
+#: ../gtk/gtkaccellabel.c:799
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -436,122 +591,103 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:795
+#: ../gtk/gtkaccellabel.c:813
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:811
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Leertaste"
 
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
 #: ../gtk/gtkappchooserbutton.c:264
-#, fuzzy
-#| msgid "Application"
 msgid "Other application..."
-msgstr "Anwendunge"
+msgstr "Andere Anwendung …"
 
 #: ../gtk/gtkappchooserdialog.c:128
 msgid "Failed to look for applications online"
-msgstr ""
+msgstr "Online-Suche nach Anwendungen ist fehlgeschlagen"
 
 #: ../gtk/gtkappchooserdialog.c:165
 msgid "Find applications online"
-msgstr ""
+msgstr "Anwendungen online suchen"
 
 #: ../gtk/gtkappchooserdialog.c:209
-#, fuzzy
-#| msgid "Could not clear list"
 msgid "Could not run application"
-msgstr "Liste konnte nicht geleert werden"
+msgstr "Anwendung konnte nicht gestartet werden"
 
 #: ../gtk/gtkappchooserdialog.c:222
-#, fuzzy, c-format
-#| msgid "Could not mount %s"
+#, c-format
 msgid "Could not find '%s'"
-msgstr "%s konnte nicht eingebunden werden"
+msgstr "»%s« konnte nicht gefunden werden"
 
 #: ../gtk/gtkappchooserdialog.c:225
-#, fuzzy
-#| msgid "Could not show link"
 msgid "Could not find application"
-msgstr "Link konnte nicht angezeigt werden"
+msgstr "Anwendung konnte nicht gefunden werden"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:335
 #, c-format
 msgid "Select an application to open \"%s\""
-msgstr ""
+msgstr "Anwendung zum Öffnen von »%s« auswählen"
 
 #: ../gtk/gtkappchooserdialog.c:336 ../gtk/gtkappchooserwidget.c:640
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr ""
+msgstr "Keine Anwendung zum Öffnen von »%s« verfügbar"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
 msgid "Select an application for \"%s\" files"
-msgstr ""
+msgstr "Anwendung für »%s«-Dateien auswählen"
 
 #: ../gtk/gtkappchooserdialog.c:345
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr ""
+msgstr "Keine Anwendungen zum Öffnen von »%s«-Dateien verfügbar"
 
 #: ../gtk/gtkappchooserdialog.c:362
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"Klicken Sie für weitere Optionen auf »Weitere Anwendungen anzeigen« oder auf "
+"»Anwendungen online suchen«, um eine neue Anwendung zu installieren."
 
 #: ../gtk/gtkappchooserdialog.c:432
-#, fuzzy
-#| msgid "Forget password _immediately"
 msgid "Forget association"
-msgstr "Passwort sofort _vergessen"
+msgstr "Zuordnung aufheben"
 
 #: ../gtk/gtkappchooserdialog.c:497
-#, fuzzy
-#| msgid "Show GTK+ Options"
 msgid "Show other applications"
-msgstr "GTK+-Optionen anzeigen"
+msgstr "Weitere Anwendungen anzeigen"
 
 #: ../gtk/gtkappchooserdialog.c:515
-#, fuzzy
-#| msgid "_Selection: "
 msgid "_Select"
-msgstr "Au_swahl: "
+msgstr "Aus_wählen"
 
 #: ../gtk/gtkappchooserwidget.c:591
-#, fuzzy
-#| msgid "Application"
 msgid "Default Application"
-msgstr "Anwendunge"
+msgstr "Standard-Anwendung"
 
 #: ../gtk/gtkappchooserwidget.c:726
-#, fuzzy
-#| msgid "Application"
 msgid "Recommended Applications"
-msgstr "Anwendunge"
+msgstr "Empfohlene Anwendungen"
 
 #: ../gtk/gtkappchooserwidget.c:740
-#, fuzzy
-#| msgid "Application"
 msgid "Related Applications"
-msgstr "Anwendunge"
+msgstr "Zugehörige Anwendungen"
 
 #: ../gtk/gtkappchooserwidget.c:754
-#, fuzzy
-#| msgid "Application"
 msgid "Other Applications"
-msgstr "Anwendunge"
+msgstr "Weitere Anwendungen"
 
 #: ../gtk/gtkbuilderparser.c:342
 #, c-format
@@ -895,23 +1031,23 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papierränder"
 
-#: ../gtk/gtkentry.c:8755 ../gtk/gtktextview.c:8270
+#: ../gtk/gtkentry.c:8748 ../gtk/gtktextview.c:8272
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
-#: ../gtk/gtkentry.c:8769 ../gtk/gtktextview.c:8284
+#: ../gtk/gtkentry.c:8762 ../gtk/gtktextview.c:8286
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode-Steuerzeichen einfügen"
 
-#: ../gtk/gtkentry.c:10173
+#: ../gtk/gtkentry.c:10170
 msgid "Caps Lock and Num Lock are on"
 msgstr "Feststelltaste und Nummernblock-Feststelltaste sind aktiviert"
 
-#: ../gtk/gtkentry.c:10175
+#: ../gtk/gtkentry.c:10172
 msgid "Num Lock is on"
 msgstr "Nummernblock-Feststelltaste ist aktiviert"
 
-#: ../gtk/gtkentry.c:10177
+#: ../gtk/gtkentry.c:10174
 msgid "Caps Lock is on"
 msgstr "Feststelltaste ist aktiviert"
 
@@ -919,12 +1055,10 @@ msgstr "Feststelltaste ist aktiviert"
 #. *  Private Macros  *
 #. * ****************
 #: ../gtk/gtkfilechooserbutton.c:62
-#, fuzzy
-#| msgid "Select A File"
 msgid "Select a File"
 msgstr "Datei auswählen"
 
-#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1851
+#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1865
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -941,44 +1075,41 @@ msgstr "Andere …"
 msgid "Type name of new folder"
 msgstr "Geben Sie den neuen Ordnernamen ein"
 
-#: ../gtk/gtkfilechooserdefault.c:946
+#: ../gtk/gtkfilechooserdefault.c:960
 msgid "Could not retrieve information about the file"
 msgstr "Es konnten keine Informationen zu dieser Datei abgerufen werden"
 
-#: ../gtk/gtkfilechooserdefault.c:957
+#: ../gtk/gtkfilechooserdefault.c:971
 msgid "Could not add a bookmark"
 msgstr "Lesezeichen konnte nicht hinzugefügt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:968
+#: ../gtk/gtkfilechooserdefault.c:982
 msgid "Could not remove bookmark"
 msgstr "Das Lesezeichen konnte nicht entfernt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:979
+#: ../gtk/gtkfilechooserdefault.c:993
 msgid "The folder could not be created"
 msgstr "Der Ordner konnte nicht angelegt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:992
+#: ../gtk/gtkfilechooserdefault.c:1006
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"Der Ordner konnte nicht angelegt werden, da es bereits eine Datei mit diesem "
-"Namen gibt. Versuchen Sie einen anderen Namen für den Ordner oder benennen "
-"Sie die Datei erst um."
+"Der Ordner konnte nicht angelegt werden, weil es bereits eine Datei mit "
+"diesem Namen gibt. Versuchen Sie einen anderen Namen für den Ordner oder "
+"benennen Sie die Datei erst um."
 
-#: ../gtk/gtkfilechooserdefault.c:1006
+#: ../gtk/gtkfilechooserdefault.c:1020
 msgid "You need to choose a valid filename."
-msgstr ""
+msgstr "Sie müssen einen gültigen Dateinamen auswählen."
 
-#: ../gtk/gtkfilechooserdefault.c:1009
-#, fuzzy, c-format
-#| msgid "Cannot change to folder because it is not local"
+#: ../gtk/gtkfilechooserdefault.c:1023
+#, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr ""
-"Es konnte nicht in den angegebenen Ordner gewechselt werden, da dieser nicht "
-"lokal ist."
+msgstr "Datei in %s konnte nicht erstellt werden, weil dies kein Ordner ist."
 
-#: ../gtk/gtkfilechooserdefault.c:1021
+#: ../gtk/gtkfilechooserdefault.c:1035
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -986,11 +1117,11 @@ msgstr ""
 "Sie dürfen nur Ordner auswählen. Das von Ihnen ausgewählte Objekt ist kein "
 "Ordner. Versuchen Sie, ein anderes Objekt auszuwählen."
 
-#: ../gtk/gtkfilechooserdefault.c:1031
+#: ../gtk/gtkfilechooserdefault.c:1045
 msgid "Invalid file name"
 msgstr "Ungültiger Dateiname"
 
-#: ../gtk/gtkfilechooserdefault.c:1041
+#: ../gtk/gtkfilechooserdefault.c:1055
 msgid "The folder contents could not be displayed"
 msgstr "Der Ordnerinhalt konnte nicht angezeigt werden"
 
@@ -998,181 +1129,181 @@ msgstr "Der Ordnerinhalt konnte nicht angezeigt werden"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1594
+#: ../gtk/gtkfilechooserdefault.c:1608
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1770
+#: ../gtk/gtkfilechooserdefault.c:1784
 msgid "Search"
 msgstr "Suchen"
 
-#: ../gtk/gtkfilechooserdefault.c:1794 ../gtk/gtkfilechooserdefault.c:9452
+#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9466
 msgid "Recently Used"
 msgstr "Zuletzt verwendet"
 
-#: ../gtk/gtkfilechooserdefault.c:2450
+#: ../gtk/gtkfilechooserdefault.c:2464
 msgid "Select which types of files are shown"
 msgstr "Wählen Sie die anzuzeigenden Dateitypen"
 
-#: ../gtk/gtkfilechooserdefault.c:2809
+#: ../gtk/gtkfilechooserdefault.c:2823
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Ordner »%s« zu den Lesezeichen hinzufügen"
 
-#: ../gtk/gtkfilechooserdefault.c:2853
+#: ../gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Aktuellen Ordner zu den Lesezeichen hinzufügen"
 
-#: ../gtk/gtkfilechooserdefault.c:2855
+#: ../gtk/gtkfilechooserdefault.c:2869
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Ausgewählte Ordner zu den Lesezeichen hinzufügen"
 
-#: ../gtk/gtkfilechooserdefault.c:2893
+#: ../gtk/gtkfilechooserdefault.c:2907
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Lesezeichen »%s« entfernen"
 
-#: ../gtk/gtkfilechooserdefault.c:2895
+#: ../gtk/gtkfilechooserdefault.c:2909
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Lesezeichen »%s« kann nicht entfernt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:2902 ../gtk/gtkfilechooserdefault.c:3784
+#: ../gtk/gtkfilechooserdefault.c:2916 ../gtk/gtkfilechooserdefault.c:3798
 msgid "Remove the selected bookmark"
 msgstr "Ausgewähltes Lesezeichen entfernen"
 
-#: ../gtk/gtkfilechooserdefault.c:3465
+#: ../gtk/gtkfilechooserdefault.c:3479
 msgid "Remove"
 msgstr "Entfernen"
 
-#: ../gtk/gtkfilechooserdefault.c:3474
+#: ../gtk/gtkfilechooserdefault.c:3488
 msgid "Rename..."
 msgstr "Umbenennen …"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3637
+#: ../gtk/gtkfilechooserdefault.c:3651
 msgid "Places"
 msgstr "Orte"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3694
+#: ../gtk/gtkfilechooserdefault.c:3708
 msgid "_Places"
 msgstr "_Orte"
 
-#: ../gtk/gtkfilechooserdefault.c:3772
+#: ../gtk/gtkfilechooserdefault.c:3786
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Den ausgewählten Ordner zu den Lesezeichen hinzufügen"
 
-#: ../gtk/gtkfilechooserdefault.c:3919
+#: ../gtk/gtkfilechooserdefault.c:3933
 msgid "Could not select file"
 msgstr "Datei konnte nicht ausgewählt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:4092
+#: ../gtk/gtkfilechooserdefault.c:4106
 msgid "_Add to Bookmarks"
 msgstr "Zu Lesezeichen _hinzufügen"
 
-#: ../gtk/gtkfilechooserdefault.c:4105
+#: ../gtk/gtkfilechooserdefault.c:4119
 msgid "Show _Hidden Files"
 msgstr "_Verborgene Dateien anzeigen"
 
-#: ../gtk/gtkfilechooserdefault.c:4112
+#: ../gtk/gtkfilechooserdefault.c:4126
 msgid "Show _Size Column"
 msgstr "Spalte »_Größe« anzeigen"
 
-#: ../gtk/gtkfilechooserdefault.c:4337
+#: ../gtk/gtkfilechooserdefault.c:4351
 msgid "Files"
 msgstr "Dateien"
 
-#: ../gtk/gtkfilechooserdefault.c:4388
+#: ../gtk/gtkfilechooserdefault.c:4402
 msgid "Name"
 msgstr "Name"
 
-#: ../gtk/gtkfilechooserdefault.c:4411
+#: ../gtk/gtkfilechooserdefault.c:4425
 msgid "Size"
 msgstr "Größe"
 
 # CHECK
-#: ../gtk/gtkfilechooserdefault.c:4425
+#: ../gtk/gtkfilechooserdefault.c:4439
 msgid "Modified"
 msgstr "Letzte Änderung"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4680 ../gtk/gtkprinteroptionwidget.c:793
+#: ../gtk/gtkfilechooserdefault.c:4694 ../gtk/gtkprinteroptionwidget.c:793
 msgid "_Name:"
 msgstr "_Name:"
 
-#: ../gtk/gtkfilechooserdefault.c:4723
+#: ../gtk/gtkfilechooserdefault.c:4737
 msgid "_Browse for other folders"
 msgstr "Ordner-_Browser"
 
-#: ../gtk/gtkfilechooserdefault.c:4993
+#: ../gtk/gtkfilechooserdefault.c:5007
 msgid "Type a file name"
 msgstr "Geben Sie einen Dateinamen an"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5036
+#: ../gtk/gtkfilechooserdefault.c:5050
 msgid "Create Fo_lder"
 msgstr "Ordner anle_gen"
 
-#: ../gtk/gtkfilechooserdefault.c:5046
+#: ../gtk/gtkfilechooserdefault.c:5060
 msgid "_Location:"
 msgstr "_Ort:"
 
-#: ../gtk/gtkfilechooserdefault.c:5251
+#: ../gtk/gtkfilechooserdefault.c:5265
 msgid "Save in _folder:"
 msgstr "In _Ordner speichern:"
 
-#: ../gtk/gtkfilechooserdefault.c:5253
+#: ../gtk/gtkfilechooserdefault.c:5267
 msgid "Create in _folder:"
 msgstr "In _Ordner anlegen"
 
-#: ../gtk/gtkfilechooserdefault.c:6317
+#: ../gtk/gtkfilechooserdefault.c:6331
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Inhalt von %s konnte nicht gelesen werden"
 
-#: ../gtk/gtkfilechooserdefault.c:6321
+#: ../gtk/gtkfilechooserdefault.c:6335
 msgid "Could not read the contents of the folder"
 msgstr "Inhalt des Ordners konnte nicht gelesen werden"
 
-#: ../gtk/gtkfilechooserdefault.c:6414 ../gtk/gtkfilechooserdefault.c:6482
-#: ../gtk/gtkfilechooserdefault.c:6627
+#: ../gtk/gtkfilechooserdefault.c:6428 ../gtk/gtkfilechooserdefault.c:6496
+#: ../gtk/gtkfilechooserdefault.c:6641
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../gtk/gtkfilechooserdefault.c:6429
+#: ../gtk/gtkfilechooserdefault.c:6443
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6431
+#: ../gtk/gtkfilechooserdefault.c:6445
 msgid "Yesterday at %H:%M"
 msgstr "Gestern um %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7093
+#: ../gtk/gtkfilechooserdefault.c:7107
 msgid "Cannot change to folder because it is not local"
 msgstr ""
-"Es konnte nicht in den angegebenen Ordner gewechselt werden, da dieser nicht "
-"lokal ist."
+"Es konnte nicht in den angegebenen Ordner gewechselt werden, weil dieser "
+"nicht lokal ist."
 
-#: ../gtk/gtkfilechooserdefault.c:7690 ../gtk/gtkfilechooserdefault.c:7711
+#: ../gtk/gtkfilechooserdefault.c:7704 ../gtk/gtkfilechooserdefault.c:7725
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Das Lesezeichen %s existiert bereits"
 
-#: ../gtk/gtkfilechooserdefault.c:7801
+#: ../gtk/gtkfilechooserdefault.c:7815
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Das Lesezeichen %s existiert nicht"
 
-#: ../gtk/gtkfilechooserdefault.c:8060 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8074 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Eine Datei namens »%s« existiert bereits. Möchten Sie diese ersetzen?"
 
-#: ../gtk/gtkfilechooserdefault.c:8063 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8077 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1180,15 +1311,15 @@ msgstr ""
 "Die Datei existiert bereits in »%s«. Durch ihr Ersetzen wird sämtlicher "
 "Inhalt überschrieben."
 
-#: ../gtk/gtkfilechooserdefault.c:8068 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8082 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: ../gtk/gtkfilechooserdefault.c:8794
+#: ../gtk/gtkfilechooserdefault.c:8808
 msgid "Could not start the search process"
 msgstr "Der Suchprozess konnte nicht gestartet werden"
 
-#: ../gtk/gtkfilechooserdefault.c:8795
+#: ../gtk/gtkfilechooserdefault.c:8809
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1196,15 +1327,15 @@ msgstr ""
 "Es konnte keine Verbindung zum Indexer-Dienst hergestellt werden. Bitte "
 "stellen Sie sicher, dass er läuft."
 
-#: ../gtk/gtkfilechooserdefault.c:8809
+#: ../gtk/gtkfilechooserdefault.c:8823
 msgid "Could not send the search request"
 msgstr "Die Suchanfrage konnte nicht gestellt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:9028
+#: ../gtk/gtkfilechooserdefault.c:9042
 msgid "Search:"
 msgstr "Suchen:"
 
-#: ../gtk/gtkfilechooserdefault.c:9629
+#: ../gtk/gtkfilechooserdefault.c:9650
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s konnte nicht eingebunden werden"
@@ -1311,7 +1442,7 @@ msgstr "_Größe:"
 msgid "_Preview:"
 msgstr "_Vorschau:"
 
-#: ../gtk/gtkfontsel.c:1651
+#: ../gtk/gtkfontsel.c:1653
 msgid "Font Selection"
 msgstr "Schriftwahl"
 
@@ -1323,7 +1454,7 @@ msgstr "Schriftwahl"
 msgid "Error loading icon: %s"
 msgstr "Fehler beim Laden des Symbols: %s"
 
-#: ../gtk/gtkicontheme.c:1355
+#: ../gtk/gtkicontheme.c:1336
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1336,12 +1467,12 @@ msgstr ""
 "Sie können sich eine Kopie herunterladen unter:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1537
+#: ../gtk/gtkicontheme.c:1518
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Symbol »%s« nicht im Thema vorhanden"
 
-#: ../gtk/gtkicontheme.c:3057
+#: ../gtk/gtkicontheme.c:3038
 msgid "Failed to load icon"
 msgstr "Symbol konnte nicht geladen werden"
 
@@ -1366,12 +1497,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6239
+#: ../gtk/gtklabel.c:6243
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6251
+#: ../gtk/gtklabel.c:6255
 msgid "Copy _Link Address"
 msgstr "Link-Adresse _kopieren"
 
@@ -1413,20 +1544,20 @@ msgstr "Nicht zu übergebende GTK+-Fehlerdiagnoseoptionen"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:846
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:899
+#: ../gtk/gtkmain.c:910
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Anzeige kann nicht geöffnet werden: %s"
 
-#: ../gtk/gtkmain.c:965
+#: ../gtk/gtkmain.c:976
 msgid "GTK+ Options"
 msgstr "GTK+-Optionen"
 
-#: ../gtk/gtkmain.c:965
+#: ../gtk/gtkmain.c:976
 msgid "Show GTK+ Options"
 msgstr "GTK+-Optionen anzeigen"
 
@@ -1521,9 +1652,7 @@ msgstr "Seite %u"
 #. * in the number emblem.
 #.
 #: ../gtk/gtknumerableicon.c:481
-#, fuzzy, c-format
-#| msgctxt "calendar:day:digits"
-#| msgid "%d"
+#, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
@@ -1691,7 +1820,7 @@ msgstr "Fehler beim Aufrufen der Druckvorschau"
 
 #: ../gtk/gtkprintoperation-unix.c:477 ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
-msgstr "Anwendung"
+msgstr "Anwendunge"
 
 #: ../gtk/gtkprintoperation-win32.c:611
 msgid "Printer offline"
@@ -2144,12 +2273,12 @@ msgstr ""
 "Es konnte keine vor kurzem geöffnete Ressource mit der Adresse »%s« gefunden "
 "werden"
 
-#: ../gtk/gtkrecentchoosermenu.c:795
+#: ../gtk/gtkrecentchoosermenu.c:794
 #, c-format
 msgid "Open '%s'"
 msgstr "»%s« öffnen"
 
-#: ../gtk/gtkrecentchoosermenu.c:825
+#: ../gtk/gtkrecentchoosermenu.c:824
 msgid "Unknown item"
 msgstr "Unbekannter Eintrag"
 
@@ -2158,7 +2287,7 @@ msgstr "Unbekannter Eintrag"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:836
+#: ../gtk/gtkrecentchoosermenu.c:835
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2167,7 +2296,7 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:841
+#: ../gtk/gtkrecentchoosermenu.c:840
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
@@ -2184,7 +2313,8 @@ msgstr "Es konnte kein Eintrag mit der Adresse »%s« gefunden werden"
 #: ../gtk/gtkrecentmanager.c:2436
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Keine registrierte Anwendung namens »%s« für Objektadresse »%s« gefunden"
+msgstr ""
+"Keine registrierte Anwendung namens »%s« für Objektadresse »%s« gefunden"
 
 #: ../gtk/gtkspinner.c:287
 msgctxt "throbbing progress animation widget"
@@ -2721,12 +2851,12 @@ msgctxt "switch"
 msgid "OFF"
 msgstr "AUS"
 
-#: ../gtk/gtkswitch.c:968
+#: ../gtk/gtkswitch.c:974
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Schalter"
 
-#: ../gtk/gtkswitch.c:969
+#: ../gtk/gtkswitch.c:975
 msgid "Switches between on and off states"
 msgstr "Schaltet zwischen »an« und »aus« um"
 
@@ -2806,8 +2936,8 @@ msgstr "»%s« ist kein gültiger Attributsname"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« konvertiert "
-"werden"
+"»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« "
+"konvertiert werden"
 
 #: ../gtk/gtktextbufferserialize.c:1211
 #, c-format
@@ -3815,7 +3945,8 @@ msgstr "Der erstellte Cache war ungültig.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen entfernt.\n"
+"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen "
+"entfernt.\n"
 
 #: ../gtk/updateiconcache.c:1561
 #, c-format
@@ -5111,8 +5242,8 @@ msgstr ""
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte für "
-#~ "dieses Programm nicht verfügbar sein.\n"
+#~ "Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte "
+#~ "für dieses Programm nicht verfügbar sein.\n"
 #~ "Sind Sie sicher, dass Sie sie markieren wollen?"
 
 #~ msgid "_New Folder"
@@ -6031,8 +6162,8 @@ msgstr ""
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
 #~ msgstr ""
-#~ "Datei »%s« konnte nicht ausgewählt werden, da dies ein ungültiger Pfadname "
-#~ "ist."
+#~ "Datei »%s« konnte nicht ausgewählt werden, da dies ein ungültiger "
+#~ "Pfadname ist."
 
 #~ msgid "%d byte"
 #~ msgid_plural "%d bytes"
@@ -6052,8 +6183,8 @@ msgstr ""
 #~ "The name \"%s\" is not valid because it contains the character \"%s\". "
 #~ "Please use a different name."
 #~ msgstr ""
-#~ "Der Name »%s« ist ungültig, da er das Zeichen »%s« enthält. Bitte verwenden "
-#~ "Sie einen anderen Namen."
+#~ "Der Name »%s« ist ungültig, da er das Zeichen »%s« enthält. Bitte "
+#~ "verwenden Sie einen anderen Namen."
 
 #~ msgid "Bookmark saving failed: %s"
 #~ msgstr "Speichern des Lesezeichens gescheitert: %s"
@@ -6111,7 +6242,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-#~ msgstr "Zeile %d, Spalte %d: »%s« oder »%s« wurde erwartet, aber »%s« gefunden"
+#~ msgstr ""
+#~ "Zeile %d, Spalte %d: »%s« oder »%s« wurde erwartet, aber »%s« gefunden"
 
 #~ msgid "Error creating directory '%s': %s"
 #~ msgstr "Fehler beim Anlegen des Ordners »%s«: %s"
