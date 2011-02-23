@@ -3137,7 +3137,7 @@ update_cell_value (GailRendererCell *renderer_cell,
   gail_return_val_if_fail (renderers, FALSE);
 
   /*
-   * If the cell is in a container, it's index is used to find the renderer 
+   * If the cell is in a container, its index is used to find the renderer 
    * in the list
    */
 
@@ -3959,7 +3959,7 @@ toggle_cell_toggled (GailCell *cell)
   gail_return_if_fail (renderers);
 
   /* 
-   * if the cell is in a container, it's index is used to find the 
+   * if the cell is in a container, its index is used to find the 
    * renderer in the list
    */
 

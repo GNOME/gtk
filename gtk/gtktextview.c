@@ -2178,7 +2178,7 @@ gtk_text_view_update_im_spot_location (GtkTextView *text_view)
   area.y -= text_view->priv->yoffset;
     
   /* Width returned by Pango indicates direction of cursor,
-   * by it's sign more than the size of cursor.
+   * by its sign more than the size of cursor.
    */
   area.width = 0;
 

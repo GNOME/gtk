@@ -924,7 +924,7 @@ gtk_range_get_flippable (GtkRange *range)
  * @size_fixed: %TRUE to make the slider size constant
  *
  * Sets whether the range's slider has a fixed size, or a size that
- * depends on it's adjustment's page size.
+ * depends on its adjustment's page size.
  *
  * This function is useful mainly for #GtkRange subclasses.
  *

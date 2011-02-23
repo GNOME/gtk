@@ -266,7 +266,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * GtkButton:xalign:
    *
    * If the child of the button is a #GtkMisc or #GtkAlignment, this property 
-   * can be used to control it's horizontal alignment. 0.0 is left aligned, 
+   * can be used to control its horizontal alignment. 0.0 is left aligned, 
    * 1.0 is right aligned.
    *
    * Since: 2.4
@@ -285,7 +285,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * GtkButton:yalign:
    *
    * If the child of the button is a #GtkMisc or #GtkAlignment, this property 
-   * can be used to control it's vertical alignment. 0.0 is top aligned, 
+   * can be used to control its vertical alignment. 0.0 is top aligned, 
    * 1.0 is bottom aligned.
    *
    * Since: 2.4

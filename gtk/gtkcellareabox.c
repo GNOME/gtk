@@ -1769,7 +1769,7 @@ compute_size_for_opposing_orientation (GtkCellAreaBox        *box,
         }
 
       /* Now we have the allocation for the group,
-       * request it's height-for-width
+       * request its height-for-width
        */
       compute_group_size_for_opposing_orientation (box, group, widget,
                                                    orientation_sizes[i].minimum_size,

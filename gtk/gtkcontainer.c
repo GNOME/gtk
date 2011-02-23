@@ -2837,7 +2837,7 @@ gtk_container_set_focus_chain (GtkContainer *container,
       g_return_if_fail (GTK_IS_WIDGET (tmp_list->data));
 
       /* In principle each widget in the chain should be a descendant
-       * of the container, but we don't want to check that here, it's
+       * of the container, but we don't want to check that here. It's
        * expensive and also it's allowed to set the focus chain before
        * you pack the widgets, or have a widget in the chain that isn't
        * always packed. So we check for ancestor during actual traversal.

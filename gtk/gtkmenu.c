@@ -5127,7 +5127,7 @@ compute_child_offset (GtkMenu   *menu,
   if (!priv->heights || priv->heights_length < gtk_menu_get_n_rows (menu))
     return FALSE;
 
-  /* when we have a row with only invisible children, it's height will
+  /* when we have a row with only invisible children, its height will
    * be zero, so there's no need to check WIDGET_VISIBLE here
    */
   for (i = 0; i < item_top_attach; i++)

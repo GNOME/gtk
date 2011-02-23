@@ -10188,7 +10188,7 @@ keymap_state_changed (GdkKeymap *keymap,
  * This is a helper function for GtkComboBox. A GtkEntry in a GtkComboBox
  * is supposed to behave like a GtkCellEditable when placed in a combo box.
  *
- * I.e take up it's allocation and get GtkEntry->is_cell_renderer = TRUE.
+ * I.e take up its allocation and get GtkEntry->is_cell_renderer = TRUE.
  *
  */
 void

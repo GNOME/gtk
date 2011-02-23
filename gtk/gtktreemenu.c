@@ -300,7 +300,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    *
    * If you dont provide a root for the #GtkTreeMenu then the whole
    * model will be added to the menu. Specifying a root allows you
-   * to build a menu for a given #GtkTreePath and it's children.
+   * to build a menu for a given #GtkTreePath and its children.
    * 
    * Since: 3.0
    */
@@ -690,7 +690,7 @@ gtk_tree_menu_get_path_item (GtkTreeMenu          *menu,
               path = gtk_tree_row_reference_get_path (row);
 
               if (!path)
-                /* Return any first child where it's row-reference became invalid,
+                /* Return any first child where its row-reference became invalid,
                  * this is because row-references get null paths before we recieve
                  * the "row-deleted" signal.
                  */
@@ -706,7 +706,7 @@ gtk_tree_menu_get_path_item (GtkTreeMenu          *menu,
             path = gtk_cell_view_get_displayed_row (GTK_CELL_VIEW (view));
 
           if (!path)
-            /* Return any first child where it's row-reference became invalid,
+            /* Return any first child where its row-reference became invalid,
              * this is because row-references get null paths before we recieve
              * the "row-deleted" signal.
              */
@@ -882,7 +882,7 @@ row_inserted_cb (GtkTreeModel     *model,
           depth   = gtk_tree_path_get_depth (path);
           index   = indices[depth -1];
 
-          /* Menus with a header include a menuitem for it's root node
+          /* Menus with a header include a menuitem for its root node
            * and a separator menu item */
           if (priv->menu_with_header)
             index += 2;
@@ -1552,7 +1552,7 @@ _gtk_tree_menu_new (void)
  * _gtk_tree_menu_new_with_area:
  * @area: the #GtkCellArea to use to render cells in the menu
  *
- * Creates a new #GtkTreeMenu using @area to render it's cells.
+ * Creates a new #GtkTreeMenu using @area to render its cells.
  *
  * Return value: A newly created #GtkTreeMenu with no model or root.
  *
@@ -1572,7 +1572,7 @@ _gtk_tree_menu_new_with_area (GtkCellArea    *area)
  * @model: (allow-none): the #GtkTreeModel to build the menu heirarchy from, or %NULL.
  * @root: (allow-none): the #GtkTreePath indicating the root row for this menu, or %NULL.
  *
- * Creates a new #GtkTreeMenu hierarchy from the provided @model and @root using @area to render it's cells.
+ * Creates a new #GtkTreeMenu hierarchy from the provided @model and @root using @area to render its cells.
  *
  * Return value: A newly created #GtkTreeMenu.
  *

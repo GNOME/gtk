@@ -9157,7 +9157,7 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
       _gtk_widget_set_is_toplevel (widget, TRUE);
 
       /* When a window becomes toplevel after being embedded and anchored
-       * into another window we need to unset it's anchored flag so that
+       * into another window we need to unset its anchored flag so that
        * the hierarchy changed signal kicks in properly.
        */
       _gtk_widget_set_anchored (widget, FALSE);

@@ -874,7 +874,7 @@ run_loop_before_waiting (void)
     }
   else if (timeout > 0)
     {
-      /* We need to get the run loop to break out of it's wait when our timeout
+      /* We need to get the run loop to break out of its wait when our timeout
        * expires. We do this by adding a dummy timer that we'll remove immediately
        * after the wait wakes up.
        */

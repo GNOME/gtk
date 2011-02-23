@@ -253,7 +253,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    * the same context.
    *
    * #GtkComboBox menus uses this to assign the same context to all cell views
-   * in the menu items for a single menu (each submenu creates it's own
+   * in the menu items for a single menu (each submenu creates its own
    * context since the size of each submenu does not depend on parent
    * or sibling menus).
    *
@@ -1328,10 +1328,10 @@ gtk_cell_view_set_background_rgba (GtkCellView   *cell_view,
  * gtk_cell_view_get_draw_sensitive:
  * @cell_view: a #GtkCellView
  *
- * Gets whether @cell_view is configured to draw all of it's
+ * Gets whether @cell_view is configured to draw all of its
  * cells in a sensitive state.
  *
- * Return value: whether @cell_view draws all of it's
+ * Return value: whether @cell_view draws all of its
  * cells in a sensitive state
  *
  * Since: 3.0
@@ -1353,7 +1353,7 @@ gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
  * @cell_view: a #GtkCellView
  * @draw_sensitive: whether to draw all cells in a sensitive state.
  *
- * Sets whether @cell_view should draw all of it's
+ * Sets whether @cell_view should draw all of its
  * cells in a sensitive state, this is used by #GtkComboBox menus
  * to ensure that rows with insensitive cells that contain
  * children appear sensitive in the parent menu item.

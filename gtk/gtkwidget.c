@@ -4559,7 +4559,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * queues a resize to ensure there's enough space for the new text.
  *
  * <note><para>You cannot call gtk_widget_queue_resize() on a widget
- * from inside it's implementation of the GtkWidgetClass::size_allocate 
+ * from inside its implementation of the GtkWidgetClass::size_allocate 
  * virtual method. Calls to gtk_widget_queue_resize() from inside
  * GtkWidgetClass::size_allocate will be silently ignored.</para></note>
  **/

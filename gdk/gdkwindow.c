@@ -78,7 +78,7 @@
  * composited and therefore is no longer automatically drawn to the screen.
  *
  * When the contents of the event box change, an expose event is generated on
- * it's parent window (which, in this case, belongs to the toplevel #GtkWindow).
+ * its parent window (which, in this case, belongs to the toplevel #GtkWindow).
  * The expose handler for this widget is responsible for merging the changes
  * back on the screen in the way that it wishes.
  *

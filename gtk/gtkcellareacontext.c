@@ -27,7 +27,7 @@
  * @Title: GtkCellAreaContext
  *
  * The #GtkCellAreaContext object is created by a given #GtkCellArea
- * implementation via it's #GtkCellAreaClass.create_context() virtual
+ * implementation via its #GtkCellAreaClass.create_context() virtual
  * method and is used to store cell sizes and alignments for a series of
  * #GtkTreeModel rows that are requested and rendered in the same context.
  *
@@ -344,7 +344,7 @@ gtk_cell_area_context_real_allocate (GtkCellAreaContext *context,
  * fetch information about the area it is being used for.
  *
  * For instance at #GtkCellAreaContextClass.allocate() time
- * it's important to know details about any cell spacing
+ * its important to know details about any cell spacing
  * that the #GtkCellArea is configured with in order to
  * compute a proper allocation.
  *
@@ -371,7 +371,7 @@ gtk_cell_area_context_get_area (GtkCellAreaContext *context)
  * Resets any previously cached request and allocation
  * data.
  *
- * When underlying #GtkTreeModel data changes it's
+ * When underlying #GtkTreeModel data changes its
  * important to reset the context if the content
  * size is allowed to shrink. If the content size
  * is only allowed to grow (this is usually an option

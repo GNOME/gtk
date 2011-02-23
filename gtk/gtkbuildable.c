@@ -30,7 +30,7 @@
  *
  * The GtkBuildable interface is implemented by all widgets and
  * many of the non-widget objects that are provided by GTK+. The
- * main user of this interface is #GtkBuilder, there should be
+ * main user of this interface is #GtkBuilder. There should be
  * very little need for applications to call any
  * <function>gtk_buildable_...</function> functions.
  *
