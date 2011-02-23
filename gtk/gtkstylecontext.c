@@ -49,14 +49,14 @@
  * can be either attached explicitly to the context through
  * gtk_style_context_add_provider(), or to the screen through
  * gtk_style_context_add_provider_for_screen(). The resulting style is a
- * combination of all provider's information in priority order.
+ * combination of all providers' information in priority order.
  *
  * For GTK+ widgets, any #GtkStyleContext returned by
  * gtk_widget_get_style_context() will already have a #GtkWidgetPath, a
- * #GdkScreen and RTL/LTR information set, the style context will be also
+ * #GdkScreen and RTL/LTR information set. The style context will be also
  * updated automatically if any of these settings change on the widget.
  *
- * If you are using are the theming layer standalone, you will need to set a
+ * If you are using the theming layer standalone, you will need to set a
  * widget path and a screen yourself to the created style context through
  * gtk_style_context_set_path() and gtk_style_context_set_screen(), as well
  * as updating the context yourself using gtk_style_context_invalidate()
