@@ -41,19 +41,19 @@
  * By default, and if the platform supports it, GDK is aware of multiple
  * keyboard/pointer pairs and multitouch devices, this behavior can be
  * changed by calling gdk_disable_multidevice() before gdk_display_open(),
- * although there would be rarely a reason to do that. For a widget or
+ * although there would rarely be a reason to do that. For a widget or
  * window to be dealt as multipointer aware,
  * gdk_window_set_support_multidevice() or
  * gtk_widget_set_support_multidevice() must have been called on it.
  *
- * Conceptually, in multidevice mode there are 2 device types, virtual
+ * Conceptually, in multidevice mode there are 2 device types. Virtual
  * devices (or master devices) are represented by the pointer cursors
  * and keyboard foci that are seen on the screen. Physical devices (or
  * slave devices) represent the hardware that is controlling the virtual
- * devices, and thus has no visible cursor on the screen.
+ * devices, and thus have no visible cursor on the screen.
  *
- * Virtual devices are always paired, there is a keyboard device for every
- * pointer device, associations between devices may be inspected through
+ * Virtual devices are always paired, so there is a keyboard device for every
+ * pointer device. Associations between devices may be inspected through
  * gdk_device_get_associated_device().
  *
  * There may be several virtual devices, and several physical devices could
@@ -72,9 +72,9 @@
  * #GDK_DRAG_MOTION, #GDK_DRAG_STATUS, #GDK_DROP_START, #GDK_DROP_FINISHED
  * and #GDK_GRAB_BROKEN.
  * </footnote>
- * although gdk_window_set_support_multidevice() has to be called on
+ * Although gdk_window_set_support_multidevice() must be called on
  * #GdkWindows in order to support additional features of multiple pointer
- * interaction, such as multiple, per-device enter/leave events. The default
+ * interaction, such as multiple per-device enter/leave events, the default
  * setting will emit just one enter/leave event pair for all devices on the
  * window. See gdk_window_set_support_multidevice() documentation for more
  * information.
@@ -101,7 +101,7 @@
  * physical devices being plugged or unplugged), GDK provides
  * #GdkDeviceManager. On X11, multidevice support is implemented through
  * XInput 2. Unless gdk_disable_multidevice() is called, the XInput 2.x
- * #GdkDeviceManager implementation will be used as input source, else
+ * #GdkDeviceManager implementation will be used as the input source. Otherwise
  * either the core or XInput 1.x implementations will be used.
  */
 
