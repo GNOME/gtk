@@ -1139,9 +1139,11 @@ process_monitors_change (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
   gint		 n_monitors;
+  gint		 primary_monitor;
   GdkX11Monitor	*monitors;
   gboolean changed;
 
+  primary_monitor = screen_x11->primary_monitor;
   n_monitors = screen_x11->n_monitors;
   monitors = screen_x11->monitors;
 
@@ -1150,8 +1152,10 @@ process_monitors_change (GdkScreen *screen)
 
   init_multihead (screen);
 
-  changed = !compare_monitors (monitors, n_monitors,
-                               screen_x11->monitors, screen_x11->n_monitors);
+  changed =
+    !compare_monitors (monitors, n_monitors,
+		       screen_x11->monitors, screen_x11->n_monitors) ||
+    screen_x11->primary_monitor != primary_monitor;
 
   free_monitors (monitors, n_monitors);
 
@@ -1175,10 +1179,7 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
   display_x11 = GDK_DISPLAY_X11 (gdk_screen_get_display (screen));
 
   if (display_x11->have_randr13 && event->type == ConfigureNotify)
-    {
-      g_signal_emit_by_name (screen, "monitors-changed");
-      return;
-    }
+    return;
 
   XRRUpdateConfiguration (event);
 #else
