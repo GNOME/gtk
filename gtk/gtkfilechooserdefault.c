@@ -6229,19 +6229,24 @@ show_and_select_files (GtkFileChooserDefault *impl,
 {
   GtkTreeSelection *selection;
   GtkFileSystemModel *fsmodel;
-  gboolean can_have_hidden, can_have_filtered, selected_a_file;
+  gboolean enabled_hidden, removed_filters;
+  gboolean selected_a_file;
   GSList *walk;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
   fsmodel = GTK_FILE_SYSTEM_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view)));
-  can_have_hidden = !impl->show_hidden;
-  can_have_filtered = impl->current_filter != NULL;
+
+  enabled_hidden = impl->show_hidden;
+  removed_filters = (impl->current_filter == NULL);
+
   selected_a_file = FALSE;
 
-  for (walk = files; walk && (can_have_hidden || can_have_filtered); walk = walk->next)
+  for (walk = files; walk; walk = walk->next)
     {
       GFile *file = walk->data;
       GtkTreeIter iter;
+
+      /* Is it a hidden file? */
 
       if (!_gtk_file_system_model_get_iter_for_file (fsmodel, &iter, file))
         continue;
@@ -6250,21 +6255,35 @@ show_and_select_files (GtkFileChooserDefault *impl,
         {
           GFileInfo *info = _gtk_file_system_model_get_info (fsmodel, &iter);
 
-          if (can_have_hidden &&
+          if (!enabled_hidden &&
               (g_file_info_get_is_hidden (info) ||
                g_file_info_get_is_backup (info)))
             {
               g_object_set (impl, "show-hidden", TRUE, NULL);
-              can_have_hidden = FALSE;
-            }
-
-          if (can_have_filtered)
-            {
-              set_current_filter (impl, NULL);
-              can_have_filtered = FALSE;
+              enabled_hidden = TRUE;
             }
         }
+
+      /* Is it a filtered file? */
+
+      if (!_gtk_file_system_model_get_iter_for_file (fsmodel, &iter, file))
+        continue; /* re-get the iter as it may change when the model refilters */
+
+      if (!_gtk_file_system_model_iter_is_visible (fsmodel, &iter))
+        {
+	  /* Maybe we should have a way to ask the fsmodel if it had filtered a file */
+	  if (!removed_filters)
+	    {
+	      set_current_filter (impl, NULL);
+	      removed_filters = TRUE;
+	    }
+	}
+
+      /* Okay, can we select the file now? */
           
+      if (!_gtk_file_system_model_get_iter_for_file (fsmodel, &iter, file))
+        continue;
+
       if (_gtk_file_system_model_iter_is_visible (fsmodel, &iter))
         {
           GtkTreePath *path;
