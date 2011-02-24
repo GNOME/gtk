@@ -555,6 +555,8 @@ gdk_event_copy (const GdkEvent *event)
       break;
 
     case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       if (event->button.axes)
         new_event->button.axes = g_memdup (event->button.axes,
