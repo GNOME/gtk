@@ -3772,6 +3772,7 @@ gtk_css_provider_get_default (void)
         "@define-color selected_fg_color #fff; \n"
         "@define-color tooltip_bg_color #eee1b3; \n"
         "@define-color tooltip_fg_color #000; \n"
+        "@define-color placeholder_text_color #808080; \n"
         "\n"
         "@define-color info_fg_color rgb (181, 171, 156);\n"
         "@define-color info_bg_color rgb (252, 252, 189);\n"

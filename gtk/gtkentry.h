@@ -213,6 +213,10 @@ gdouble        gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
 
 void           gtk_entry_progress_pulse          (GtkEntry     *entry);
 
+G_CONST_RETURN gchar* gtk_entry_get_placeholder_text     (GtkEntry             *entry);
+
+void           gtk_entry_set_placeholder_text            (GtkEntry             *entry,
+                                                          const gchar          *text);
 /* Setting and managing icons
  */
 void           gtk_entry_set_icon_from_pixbuf            (GtkEntry             *entry,

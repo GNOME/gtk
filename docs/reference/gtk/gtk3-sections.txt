@@ -1028,6 +1028,8 @@ gtk_entry_set_width_chars
 gtk_entry_get_invisible_char
 gtk_entry_set_alignment
 gtk_entry_get_alignment
+gtk_entry_set_placeholder_text
+gtk_entry_get_placeholder_text
 gtk_entry_set_overwrite_mode
 gtk_entry_get_overwrite_mode
 gtk_entry_get_layout

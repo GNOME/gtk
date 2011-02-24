@@ -155,6 +155,8 @@ struct _GtkEntryPrivate
   gdouble       progress_pulse_fraction;
   gdouble       progress_pulse_current;
 
+  gchar        *placeholder_text;
+
   gfloat        xalign;
 
   gint          ascent;                     /* font ascent in pango units  */
@@ -306,7 +308,8 @@ enum {
   PROP_TOOLTIP_MARKUP_PRIMARY,
   PROP_TOOLTIP_MARKUP_SECONDARY,
   PROP_IM_MODULE,
-  PROP_EDITING_CANCELED
+  PROP_EDITING_CANCELED,
+  PROP_PLACEHOLDER_TEXT
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -596,7 +599,6 @@ static void         begin_change                       (GtkEntry *entry);
 static void         end_change                         (GtkEntry *entry);
 static void         emit_changed                       (GtkEntry *entry);
 
-
 static void         buffer_inserted_text               (GtkEntryBuffer *buffer, 
                                                         guint           position,
                                                         const gchar    *chars,
@@ -618,7 +620,6 @@ static void         buffer_notify_max_length           (GtkEntryBuffer *buffer,
 static void         buffer_connect_signals             (GtkEntry       *entry);
 static void         buffer_disconnect_signals          (GtkEntry       *entry);
 static GtkEntryBuffer *get_buffer                      (GtkEntry       *entry);
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
@@ -983,6 +984,21 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         GTK_PARAM_READWRITE));
 
   /**
+  * GtkEntry:placeholder-text:
+  *
+  * The text that will be displayed in the #GtkEntry when it is empty and unfocused.
+  *
+  * Since: 3.2
+  */
+ g_object_class_install_property (gobject_class,
+                                  PROP_PLACEHOLDER_TEXT,
+                                  g_param_spec_string ("placeholder-text",
+                                                       P_("Placeholder text"),
+                                                       P_("Show text in the entry when it's empty and unfocused"),
+                                                       NULL,
+                                                       GTK_PARAM_READWRITE));
+
+   /**
    * GtkEntry:primary-icon-pixbuf:
    *
    * A pixbuf to use as the primary icon for the entry.
@@ -1967,6 +1983,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_progress_pulse_step (entry, g_value_get_double (value));
       break;
 
+    case PROP_PLACEHOLDER_TEXT:
+      gtk_entry_set_placeholder_text (entry, g_value_get_string (value));
+      break;
+
     case PROP_PIXBUF_PRIMARY:
       gtk_entry_set_icon_from_pixbuf (entry,
                                       GTK_ENTRY_ICON_PRIMARY,
@@ -2183,6 +2203,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_PROGRESS_PULSE_STEP:
       g_value_set_double (value, priv->progress_pulse_fraction);
+      break;
+
+    case PROP_PLACEHOLDER_TEXT:
+      g_value_set_string (value, gtk_entry_get_placeholder_text (entry));
       break;
 
     case PROP_PIXBUF_PRIMARY:
@@ -2581,6 +2605,7 @@ gtk_entry_finalize (GObject *object)
   if (priv->recompute_idle)
     g_source_remove (priv->recompute_idle);
 
+  g_free (priv->placeholder_text);
   g_free (priv->im_module);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
@@ -2667,7 +2692,6 @@ gtk_entry_get_display_text (GtkEntry *entry,
 
       return g_string_free (str, FALSE);
     }
-
 }
 
 static void
@@ -4191,8 +4215,16 @@ gtk_entry_focus_in (GtkWidget     *widget,
   g_signal_connect (keymap, "direction-changed",
 		    G_CALLBACK (keymap_direction_changed), entry);
 
-  gtk_entry_reset_blink_time (entry);
-  gtk_entry_check_cursor_blink (entry);
+  if (gtk_entry_buffer_get_bytes (get_buffer (entry)) == 0 &&
+      priv->placeholder_text != NULL)
+    {
+      gtk_entry_recompute (entry);
+    }
+  else
+    {
+      gtk_entry_reset_blink_time (entry);
+      gtk_entry_check_cursor_blink (entry);
+    }
 
   return FALSE;
 }
@@ -4217,8 +4249,16 @@ gtk_entry_focus_out (GtkWidget     *widget,
       remove_capslock_feedback (entry);
     }
 
-  gtk_entry_check_cursor_blink (entry);
-  
+  if (gtk_entry_buffer_get_bytes (get_buffer (entry)) == 0 &&
+      priv->placeholder_text != NULL)
+    {
+      gtk_entry_recompute (entry);
+    }
+  else
+    {
+      gtk_entry_check_cursor_blink (entry);
+    }
+
   g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
 
@@ -5394,6 +5434,35 @@ gtk_entry_recompute (GtkEntry *entry)
     }
 }
 
+static void
+gtk_entry_get_placeholder_text_color (GtkEntry   *entry,
+                                      PangoColor *color)
+{
+  GtkWidget *widget = GTK_WIDGET (entry);
+  GtkStyleContext *context;
+  GdkRGBA fg = { 0.5, 0.5, 0.5 };
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_lookup_color (context, "placeholder_text_color", &fg);
+
+  color->red = CLAMP (fg.red * 65535. + 0.5, 0, 65535);
+  color->green = CLAMP (fg.green * 65535. + 0.5, 0, 65535);
+  color->blue = CLAMP (fg.blue * 65535. + 0.5, 0, 65535);
+}
+
+static inline gboolean
+show_placeholder_text (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (entry)) &&
+      gtk_entry_buffer_get_bytes (get_buffer (entry)) == 0 &&
+      priv->placeholder_text != NULL)
+    return TRUE;
+
+  return FALSE;
+}
+
 static PangoLayout *
 gtk_entry_create_layout (GtkEntry *entry,
 			 gboolean  include_preedit)
@@ -5402,6 +5471,7 @@ gtk_entry_create_layout (GtkEntry *entry,
   GtkWidget *widget = GTK_WIDGET (entry);
   PangoLayout *layout = gtk_widget_create_pango_layout (widget, NULL);
   PangoAttrList *tmp_attrs = pango_attr_list_new ();
+  gboolean placeholder_layout = show_placeholder_text (entry);
 
   gchar *preedit_string = NULL;
   gint preedit_length = 0;
@@ -5412,14 +5482,25 @@ gtk_entry_create_layout (GtkEntry *entry,
 
   pango_layout_set_single_paragraph_mode (layout, TRUE);
 
-  display = gtk_entry_get_display_text (entry, 0, -1);
+  display = placeholder_layout ? g_strdup (priv->placeholder_text) : gtk_entry_get_display_text (entry, 0, -1);
   n_bytes = strlen (display);
 
-  if (include_preedit)
+  if (!placeholder_layout && include_preedit)
     {
       gtk_im_context_get_preedit_string (priv->im_context,
 					 &preedit_string, &preedit_attrs, NULL);
       preedit_length = priv->preedit_length;
+    }
+  else if (placeholder_layout)
+    {
+      PangoColor color;
+      PangoAttribute *attr;
+
+      gtk_entry_get_placeholder_text_color (entry, &color);
+      attr = pango_attr_foreground_new (color.red, color.green, color.blue);
+      attr->start_index = 0;
+      attr->end_index = G_MAXINT;
+      pango_attr_list_insert (tmp_attrs, attr);
     }
 
   if (preedit_length)
@@ -10130,6 +10211,61 @@ gtk_entry_progress_pulse (GtkEntry *entry)
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (entry));
+}
+
+/**
+ * gtk_entry_set_placeholder_text:
+ * @entry: a #GtkEntry
+ * @text: a string to be displayed when @entry is empty an unfocused, or %NULL
+ *
+ * Sets text to be displayed in @entry when
+ * it is empty and unfocused. This can be used to give a visual hint
+ * of the expected contents of the #GtkEntry.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_entry_set_placeholder_text (GtkEntry    *entry,
+                                const gchar *text)
+{
+  GtkEntryPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  priv = entry->priv;
+
+  if (g_strcmp0 (priv->placeholder_text, text) == 0)
+    return;
+
+  g_free (priv->placeholder_text);
+  priv->placeholder_text = g_strdup (text);
+
+  gtk_entry_recompute (entry);
+
+  g_object_notify (G_OBJECT (entry), "placeholder-text");
+}
+
+/**
+ * gtk_entry_get_placeholder_text:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the text that will be displayed when @entry is empty and unfocused
+ *
+ * Returns: a pointer to the placeholder text as a string. This string points to internally allocated
+ * storage in the widget and must not be freed, modified or stored.
+ *
+ * Since: 3.2
+ **/
+G_CONST_RETURN gchar *
+gtk_entry_get_placeholder_text (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  priv = entry->priv;
+
+  return priv->placeholder_text;
 }
 
 /* Caps Lock warning for password entries */

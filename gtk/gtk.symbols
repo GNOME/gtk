@@ -828,6 +828,7 @@ gtk_entry_get_completion
 gtk_entry_get_current_icon_drag_source
 gtk_entry_get_cursor_hadjustment
 gtk_entry_get_has_frame
+gtk_entry_get_placeholder_text
 gtk_entry_get_icon_activatable
 gtk_entry_get_icon_area
 gtk_entry_get_icon_at_pos
@@ -866,6 +867,7 @@ gtk_entry_set_buffer
 gtk_entry_set_completion
 gtk_entry_set_cursor_hadjustment
 gtk_entry_set_has_frame
+gtk_entry_set_placeholder_text
 gtk_entry_set_icon_activatable
 gtk_entry_set_icon_drag_source
 gtk_entry_set_icon_from_gicon
