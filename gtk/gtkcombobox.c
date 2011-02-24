@@ -933,6 +933,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     *
     * The #GtkCellArea used to layout cell renderers for this combo box.
     *
+    * If no area is specified when creating the combo box with gtk_combo_box_new_with_area() 
+    * a horizontally oriented #GtkCellAreaBox will be used.
+    *
     * Since: 3.0
     */
    g_object_class_install_property (object_class,

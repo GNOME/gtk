@@ -759,6 +759,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    *
    * The #GtkCellArea used to layout cell renderers for this view.
    *
+   * If no area is specified when creating the icon view with gtk_icon_view_new_with_area() 
+   * a #GtkCellAreaBox will be used.
+   *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,

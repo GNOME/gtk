@@ -437,6 +437,9 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    *
    * The #GtkCellArea used to layout cell renderers in the treeview column.
    *
+   * If no area is specified when creating the entry completion with gtk_entry_completion_new_with_area() 
+   * a horizontally oriented #GtkCellAreaBox will be used.
+   *
    * Since: 3.0
    */
   g_object_class_install_property (object_class,

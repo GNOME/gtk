@@ -233,6 +233,9 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    *
    * The #GtkCellArea rendering cells
    *
+   * If no area is specified when creating the cell view with gtk_cell_view_new_with_context() 
+   * a horizontally oriented #GtkCellAreaBox will be used.
+   *
    * since 3.0
    */
    g_object_class_install_property (gobject_class,
