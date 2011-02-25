@@ -197,6 +197,8 @@ gtk_tray_icon_dispose (GObject *object)
   gtk_tray_icon_clear_manager_window (icon);
 
   gdk_window_remove_filter (root_window, gtk_tray_icon_manager_filter, icon);
+
+  G_OBJECT_CLASS (gtk_tray_icon_parent_class)->dispose (object);
 }
 
 static void
