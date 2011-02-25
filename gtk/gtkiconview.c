@@ -1904,7 +1904,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   g_return_if_fail (path != NULL);
   g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (gtk_tree_path_get_depth (path) == 1)
     item = g_list_nth_data (icon_view->priv->items,
@@ -1916,7 +1917,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   gtk_icon_view_set_cursor_item (icon_view, item, cell);
   gtk_icon_view_scroll_to_path (icon_view, path, FALSE, 0.0, 0.0);
 
-  if (start_editing)
+  if (start_editing && 
+      icon_view->priv->cell_area)
     {
       GtkCellAreaContext *context;
 
@@ -1964,7 +1966,7 @@ gtk_icon_view_get_cursor (GtkIconView      *icon_view,
 	*path = NULL;
     }
 
-  if (cell != NULL && item != NULL)
+  if (cell != NULL && item != NULL && icon_view->priv->cell_area != NULL)
     *cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
 
   return (item != NULL);
@@ -5525,7 +5527,9 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
     {
       icon_view->priv->columns = columns;
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_queue_layout (icon_view);
       
       g_object_notify (G_OBJECT (icon_view), "columns");
