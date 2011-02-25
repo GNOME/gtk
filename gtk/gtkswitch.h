@@ -72,13 +72,14 @@ struct _GtkSwitchClass
   /*< private >*/
   GtkWidgetClass parent_class;
 
+  void (* activate) (GtkSwitch *sw);
+
   void (* _switch_padding_1) (void);
   void (* _switch_padding_2) (void);
   void (* _switch_padding_3) (void);
   void (* _switch_padding_4) (void);
   void (* _switch_padding_5) (void);
   void (* _switch_padding_6) (void);
-  void (* _switch_padding_7) (void);
 };
 
 GType gtk_switch_get_type (void) G_GNUC_CONST;

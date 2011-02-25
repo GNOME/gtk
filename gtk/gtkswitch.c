@@ -47,6 +47,8 @@
 #include "gtkprivate.h"
 #include "gtktoggleaction.h"
 #include "gtkwidget.h"
+#include "gtkmarshalers.h"
+
 
 #define DEFAULT_SLIDER_WIDTH    (36)
 #define DEFAULT_SLIDER_HEIGHT   (22)
@@ -76,6 +78,14 @@ enum
   PROP_USE_ACTION_APPEARANCE,
   LAST_PROP
 };
+
+enum
+{
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *switch_props[LAST_PROP] = { NULL, };
 
@@ -262,22 +272,12 @@ gtk_switch_leave (GtkWidget        *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_switch_key_release (GtkWidget   *widget,
-                        GdkEventKey *event)
+static void
+gtk_switch_activate (GtkSwitch *sw)
 {
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
+  GtkSwitchPrivate *priv = sw->priv;
 
-  if (event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter ||
-      event->keyval == GDK_KEY_space ||
-      event->keyval == GDK_KEY_KP_Space)
-    {
-      gtk_switch_set_active (GTK_SWITCH (widget), !priv->is_active);
-    }
-
-  return FALSE;
+  gtk_switch_set_active (sw, !priv->is_active);
 }
 
 static void
@@ -756,8 +756,9 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->motion_notify_event = gtk_switch_motion;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
-  widget_class->key_release_event = gtk_switch_key_release;
   widget_class->get_accessible = gtk_switch_get_accessible;
+
+  klass->activate = gtk_switch_activate;
 
   /**
    * GtkSwitch:slider-width:
@@ -771,6 +772,26 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                                                              DEFAULT_SLIDER_WIDTH, G_MAXINT,
                                                              DEFAULT_SLIDER_WIDTH,
                                                              GTK_PARAM_READABLE));
+
+  /**
+   * GtkSwitch::activate:
+   * @widget: the object which received the signal.
+   *
+   * The ::activate signal on GtkSwitch is an action signal and
+   * emitting it causes the switch to animate.
+   * Applications should never connect to this signal, but use the
+   * notify::active signal.
+   */
+  signals[ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkSwitchClass, activate),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  widget_class->activate_signal = signals[ACTIVATE];
+
 }
 
 static void
