@@ -3355,7 +3355,8 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
   list = g_list_nth (icon_view->priv->items, index);
   item = list->data;
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (item == icon_view->priv->anchor_item)
     icon_view->priv->anchor_item = NULL;
@@ -3403,7 +3404,8 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   if (iter != NULL)
     return;
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   length = gtk_tree_model_iter_n_children (model, NULL);
 
