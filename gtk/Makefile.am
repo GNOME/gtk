@@ -1061,6 +1061,7 @@ STOCK_ICONS = \
 	stock-icons/16/window-close.png 		\
 	stock-icons/16/gtk-connect.png 			\
 	stock-icons/16/gtk-convert.png 			\
+	stock-icons/16/edit-clear.png 			\
 	stock-icons/16/edit-copy.png 			\
 	stock-icons/16/edit-cut.png 			\
 	stock-icons/16/edit-delete.png 			\
@@ -1081,6 +1082,8 @@ STOCK_ICONS = \
 	stock-icons/16/go-last-ltr.png 			\
 	stock-icons/16/go-top.png 			\
 	stock-icons/16/go-up.png 			\
+	stock-icons/16/gtk-caps-lock-warning.png	\
+	stock-icons/16/gtk-color-picker.png		\
 	stock-icons/16/drive-harddisk.png 		\
 	stock-icons/16/help-contents.png 		\
 	stock-icons/16/go-home.png 			\
@@ -1108,6 +1111,10 @@ STOCK_ICONS = \
 	stock-icons/16/network-idle.png 		\
 	stock-icons/16/document-new.png 		\
 	stock-icons/16/document-open.png 		\
+	stock-icons/16/gtk-orientation-landscape.png	\
+	stock-icons/16/gtk-orientation-portrait.png	\
+	stock-icons/16/gtk-orientation-reverse-landscape.png \
+	stock-icons/16/gtk-orientation-reverse-portrait.png \
 	stock-icons/16/gtk-page-setup.png 		\
 	stock-icons/16/edit-paste.png 			\
 	stock-icons/16/gtk-preferences.png 		\
@@ -1165,6 +1172,7 @@ STOCK_ICONS = \
 	stock-icons/24/media-optical.png 		\
 	stock-icons/24/edit-clear.png 			\
 	stock-icons/24/window-close.png 		\
+	stock-icons/24/gtk-caps-lock-warning.png	\
 	stock-icons/24/gtk-color-picker.png 		\
 	stock-icons/24/gtk-connect.png 			\
 	stock-icons/24/gtk-convert.png 			\
