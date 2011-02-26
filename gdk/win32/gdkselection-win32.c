@@ -324,7 +324,7 @@ _gdk_win32_display_set_selection_owner (GdkDisplay *display,
       tmp_event.selection.selection = selection;
       tmp_event.selection.target = _utf8_string;
       tmp_event.selection.property = _gdk_selection;
-      tmp_event.selection.requestor = hwnd;
+      tmp_event.selection.requestor = gdk_win32_handle_table_lookup (hwnd);
       tmp_event.selection.time = time;
 
       gdk_event_put (&tmp_event);
@@ -349,11 +349,11 @@ _gdk_win32_display_get_selection_owner (GdkDisplay *display,
       if (owner == NULL)
 	return NULL;
 
-      return gdk_win32_handle_table_lookup ((GdkNativeWindow) owner);
+      return gdk_win32_handle_table_lookup (owner);
     }
 
   window = gdk_win32_window_lookup_for_display (display,
-                                                (GdkNativeWindow) g_hash_table_lookup (sel_owner_table, selection));
+                                                g_hash_table_lookup (sel_owner_table, selection));
 
   GDK_NOTE (DND, {
       gchar *sel_name = gdk_atom_name (selection);
@@ -873,8 +873,8 @@ _gdk_selection_property_delete (GdkWindow *window)
 }
 
 void
-_gdk_win32_display_send_selection_notify (GdkDisplay      *display,
-					  GdkNativeWindow  requestor,
+_gdk_win32_display_send_selection_notify (GdkDisplay   *display,
+					  HWND          requestor,
 					  GdkAtom     	selection,
 					  GdkAtom     	target,
 					  GdkAtom     	property,

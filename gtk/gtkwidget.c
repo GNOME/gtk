@@ -324,6 +324,8 @@ struct _GtkWidgetPrivate
   guint multidevice           : 1;
   guint has_shape_mask        : 1;
   guint in_reparent           : 1;
+
+  /* Queue-resize related flags */
   guint resize_pending        : 1;
   guint alloc_needed          : 1;
   guint width_request_needed  : 1;
@@ -337,6 +339,11 @@ struct _GtkWidgetPrivate
   guint vexpand               : 1;
   guint hexpand_set           : 1; /* whether to use application-forced  */
   guint vexpand_set           : 1; /* instead of computing from children */
+
+  /* SizeGroup related flags */
+  guint sizegroup_visited     : 1;
+  guint sizegroup_bumping     : 1;
+  guint have_size_groups      : 1;
 
   /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
@@ -697,6 +704,7 @@ static GQuark		quark_tooltip_window = 0;
 static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
+static GQuark           quark_size_groups = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -811,6 +819,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_visual = g_quark_from_static_string ("gtk-widget-visual");
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
+  quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -6950,10 +6959,12 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
   /* Handle insensitive first, since it is propagated
    * differently throughout the widget hierarchy.
    */
-  if ((flags & GTK_STATE_FLAG_INSENSITIVE) !=
-      (priv->state_flags & GTK_STATE_FLAG_INSENSITIVE))
-    gtk_widget_set_sensitive (widget,
-                              operation != STATE_CHANGE_UNSET);
+  if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_UNSET))
+    gtk_widget_set_sensitive (widget, TRUE);
+  else if (!(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation != STATE_CHANGE_UNSET))
+    gtk_widget_set_sensitive (widget, FALSE);
+  else if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && !(flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_REPLACE))
+    gtk_widget_set_sensitive (widget, TRUE);
 
   if (operation != STATE_CHANGE_REPLACE)
     flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
@@ -7738,11 +7749,15 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   if (widget->priv->context)
     {
+      GdkScreen *screen;
+
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context, widget->priv->path);
 
-      gtk_style_context_set_screen (widget->priv->context,
-                                    gtk_widget_get_screen (widget));
+      screen = gtk_widget_get_screen (widget);
+
+      if (screen)
+        gtk_style_context_set_screen (widget->priv->context, screen);
     }
 
   gtk_widget_pop_verify_invariants (widget);
@@ -8043,7 +8058,7 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
     {
       GtkStyleContext *context;
 
-      style = gtk_modifier_style_new ();
+      style = _gtk_modifier_style_new ();
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_modifier_style,
                                style,
@@ -8106,7 +8121,7 @@ gtk_widget_override_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_color (style, state, color);
+  _gtk_modifier_style_set_color (style, state, color);
 }
 
 /**
@@ -8133,7 +8148,7 @@ gtk_widget_override_background_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_background_color (style, state, color);
+  _gtk_modifier_style_set_background_color (style, state, color);
 }
 
 /**
@@ -8156,7 +8171,7 @@ gtk_widget_override_font (GtkWidget                  *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_font (style, font_desc);
+  _gtk_modifier_style_set_font (style, font_desc);
 }
 
 /**
@@ -8185,7 +8200,7 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_map_color (style, name, color);
+  _gtk_modifier_style_map_color (style, name, color);
 }
 
 /**
@@ -8218,13 +8233,13 @@ gtk_widget_override_cursor (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = _gtk_widget_get_modifier_properties (widget);
-  gtk_modifier_style_set_color_property (style,
-                                         GTK_TYPE_WIDGET,
-                                         "cursor-color", cursor);
-  gtk_modifier_style_set_color_property (style,
-                                         GTK_TYPE_WIDGET,
-                                         "secondary-cursor-color",
-                                         secondary_cursor);
+  _gtk_modifier_style_set_color_property (style,
+                                          GTK_TYPE_WIDGET,
+                                          "cursor-color", cursor);
+  _gtk_modifier_style_set_color_property (style,
+                                          GTK_TYPE_WIDGET,
+                                          "secondary-cursor-color",
+                                          secondary_cursor);
 }
 
 /**
@@ -9880,18 +9895,20 @@ gtk_widget_set_device_events (GtkWidget    *widget,
 }
 
 /**
- * gtk_widget_enable_device:
+ * gtk_widget_set_device_enabled:
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
+ * @enabled: whether to enable the device
  *
- * Enables a #GdkDevice to interact with @widget and
- * all its children, it does so by descending through
- * the #GdkWindow hierarchy and enabling the same mask
- * that is has for core events (i.e. the one that
- * gdk_window_get_events() returns).
+ * Enables or disables a #GdkDevice to interact with @widget
+ * and all its children.
+ *
+ * It does so by descending through the #GdkWindow hierarchy
+ * and enabling the same mask that is has for core events
+ * (i.e. the one that gdk_window_get_events() returns).
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_set_device_enabled (GtkWidget *widget,
                                GdkDevice *device,
@@ -9912,6 +9929,18 @@ gtk_widget_set_device_enabled (GtkWidget *widget,
     gtk_widget_set_device_enabled_internal (widget, device, TRUE, enabled);
 }
 
+/**
+ * gtk_widget_get_device_enabled:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ *
+ * Returns whether @device can interact with @widget and its
+ * children. See gtk_widget_set_device_enabled().
+ *
+ * Return value: %TRUE is @device is enabled for @widget
+ *
+ * Since: 3.0
+ */
 gboolean
 gtk_widget_get_device_enabled (GtkWidget *widget,
                                GdkDevice *device)
@@ -10422,9 +10451,13 @@ gtk_widget_pop_composite_child (void)
 
 static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
-				   GtkTextDirection  old_dir)
+                                   GtkTextDirection  old_dir)
 {
   gtk_widget_update_pango_context (widget);
+
+  if (widget->priv->context)
+    gtk_style_context_set_direction (widget->priv->context,
+                                     gtk_widget_get_direction (widget));
 
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }
@@ -10449,7 +10482,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
  **/
 void
 gtk_widget_set_direction (GtkWidget        *widget,
-			  GtkTextDirection  dir)
+                          GtkTextDirection  dir)
 {
   GtkTextDirection old_dir;
 
@@ -10461,13 +10494,7 @@ gtk_widget_set_direction (GtkWidget        *widget,
   widget->priv->direction = dir;
 
   if (old_dir != gtk_widget_get_direction (widget))
-    {
-      if (widget->priv->context)
-        gtk_style_context_set_direction (widget->priv->context,
-                                         gtk_widget_get_direction (widget));
-
-      gtk_widget_emit_direction_changed (widget, old_dir);
-    }
+    gtk_widget_emit_direction_changed (widget, old_dir);
 }
 
 /**
@@ -11232,8 +11259,8 @@ gtk_widget_propagate_state (GtkWidget    *widget,
         {
           data->parent_sensitive = gtk_widget_is_sensitive (widget);
 
-          /* Do not propagate insensitive state further */
-          data->flags &= ~(GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_FOCUSED);
+          /* Do not propagate focused state further */
+          data->flags &= ~GTK_STATE_FLAG_FOCUSED;
 
           if (data->use_forall)
             gtk_container_forall (GTK_CONTAINER (widget),
@@ -14060,6 +14087,67 @@ _gtk_widget_set_height_request_needed (GtkWidget *widget,
   widget->priv->height_request_needed = height_request_needed;
 }
 
+gboolean
+_gtk_widget_get_sizegroup_visited (GtkWidget    *widget)
+{
+  return widget->priv->sizegroup_visited;
+}
+
+void
+_gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
+				   gboolean      visited)
+{
+  widget->priv->sizegroup_visited = visited;
+}
+
+gboolean
+_gtk_widget_get_sizegroup_bumping (GtkWidget    *widget)
+{
+  return widget->priv->sizegroup_bumping;
+}
+
+void
+_gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
+				   gboolean      bumping)
+{
+  widget->priv->sizegroup_bumping = bumping;
+}
+
+void
+_gtk_widget_add_sizegroup (GtkWidget    *widget,
+			   gpointer      group)
+{
+  GSList *groups;
+
+  groups = g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+  groups = g_slist_prepend (groups, group);
+  g_object_set_qdata (G_OBJECT (widget), quark_size_groups, groups);
+
+  widget->priv->have_size_groups = TRUE;
+}
+
+void
+_gtk_widget_remove_sizegroup (GtkWidget    *widget,
+			      gpointer      group)
+{
+  GSList *groups;
+
+  groups = g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+  groups = g_slist_remove (groups, group);
+  g_object_set_qdata (G_OBJECT (widget), quark_size_groups, groups);
+
+  widget->priv->have_size_groups = groups != NULL;
+}
+
+GSList *
+_gtk_widget_get_sizegroups (GtkWidget    *widget)
+{
+  if (widget->priv->have_size_groups)
+    return g_object_get_qdata (G_OBJECT (widget), quark_size_groups);
+
+  return NULL;
+}
+
 /**
  * gtk_widget_get_path:
  * @widget: a #GtkWidget
@@ -14171,6 +14259,8 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
   if (G_UNLIKELY (!widget->priv->context))
     {
+      GdkScreen *screen;
+
       widget->priv->context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
                                             "direction", gtk_widget_get_direction (widget),
                                             NULL);
@@ -14178,8 +14268,10 @@ gtk_widget_get_style_context (GtkWidget *widget)
       g_signal_connect (widget->priv->context, "changed",
                         G_CALLBACK (style_context_changed), widget);
 
-      gtk_style_context_set_screen (widget->priv->context,
-                                    gtk_widget_get_screen (widget));
+      screen = gtk_widget_get_screen (widget);
+
+      if (screen)
+        gtk_style_context_set_screen (widget->priv->context, screen);
 
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context,

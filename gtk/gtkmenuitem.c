@@ -2564,9 +2564,23 @@ gtk_menu_item_get_use_underline (GtkMenuItem *menu_item)
   return FALSE;
 }
 
+/**
+ * gtk_menu_item_set_reserve_indicator:
+ * @menu_item: a #GtkMenuItem
+ * @reserve: the new value
+ *
+ * Sets whether the @menu_item should reserve space for
+ * the submenu indicator, regardless if it actually has
+ * a submenu or not.
+ *
+ * There should be little need for applications to call
+ * this functions.
+ *
+ * Since: 3.0
+ */
 void
-gtk_menu_item_set_reserve_indicator (GtkMenuItem         *menu_item,
-				     gboolean             reserve)
+gtk_menu_item_set_reserve_indicator (GtkMenuItem *menu_item,
+                                     gboolean     reserve)
 {
   GtkMenuItemPrivate *priv;
 
@@ -2581,8 +2595,21 @@ gtk_menu_item_set_reserve_indicator (GtkMenuItem         *menu_item,
     }
 }
 
+/**
+ * gtk_menu_item_get_reserve_indicator:
+ * @menu_item: a #GtkMenuItem
+ *
+ * Returns whether the @menu_item reserves space for
+ * the submenu indicator, regardless if it has a submenu
+ * or not.
+ *
+ * Returns: %TRUE if @menu_item always reserves space for the
+ *     submenu indicator
+ *
+ * Since: 3.0
+ */
 gboolean
-gtk_menu_item_get_reserve_indicator (GtkMenuItem         *menu_item)
+gtk_menu_item_get_reserve_indicator (GtkMenuItem *menu_item)
 {
   g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), FALSE);
 

@@ -8489,6 +8489,8 @@ gtk_tree_view_style_updated (GtkWidget *widget)
   GList *list;
   GtkTreeViewColumn *column;
 
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->style_updated (widget);
+
   if (gtk_widget_get_realized (widget))
     {
       GtkStyleContext *context;

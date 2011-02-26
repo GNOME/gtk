@@ -35,7 +35,6 @@ create_color_pixbuf (const char *color)
 
         int x;
         int num;
-        int rowstride;
         guchar *pixels, *p;
 
         if (!gdk_color_parse (color, &col))
@@ -45,7 +44,6 @@ create_color_pixbuf (const char *color)
                                  FALSE, 8,
                                  16, 16);
 
-        rowstride = gdk_pixbuf_get_rowstride (pixbuf);
         p = pixels = gdk_pixbuf_get_pixels (pixbuf);
 
         num = gdk_pixbuf_get_width (pixbuf) *

@@ -34,14 +34,17 @@
  * @Short_description: Object representing a physical screen
  * @Title: GdkScreen
  *
- * #GdkScreen objects are the GDK representation of a physical screen. It is used
- * throughout GDK and GTK+ to specify which screen the top level windows
- * are to be displayed on.
- * It is also used to query the screen specification and default settings such as
- * the screen width (gdk_screen_get_width()), etc.
+ * #GdkScreen objects are the GDK representation of the screen on
+ * which windows can be displayed and on which the pointer moves.
+ * X originally identified screens with physical screens, but
+ * nowadays it is more common to have a single #GdkScreen which
+ * combines several physical monitors (see gdk_screen_get_n_monitors()).
  *
- * Note that a screen may consist of multiple monitors which are merged to
- * form a large screen area.
+ * GdkScreen is used throughout GDK and GTK+ to specify which screen
+ * the top level windows are to be displayed on. it is also used to
+ * query the screen specification and default settings such as
+ * the default visual (gdk_screen_get_system_visual()), the dimensions
+ * of the physical monitors (gdk_screen_get_monitor_geometry()), etc.
  */
 
 

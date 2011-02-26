@@ -2671,8 +2671,8 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
           break;
         }
 
-      g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-      G_VALUE_COLLECT (&value, var_args, 0, &error);
+      G_VALUE_COLLECT_INIT (&value, G_PARAM_SPEC_VALUE_TYPE (pspec),
+                            var_args, 0, &error);
       if (error)
         {
           g_warning ("%s: %s", G_STRLOC, error);
@@ -3100,8 +3100,10 @@ gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
  * @renderer: the #GtkCellRenderer expected to have focus
  * @sibling: the #GtkCellRenderer to check against @renderer's sibling list
  *
- * Returns %TRUE if @sibling is one of @renderer's focus siblings
+ * Returns whether @sibling is one of @renderer's focus siblings
  * (see gtk_cell_area_add_focus_sibling()).
+ *
+ * Return value: %TRUE if @sibling is a focus sibling of @renderer
  *
  * Since: 3.0
  */

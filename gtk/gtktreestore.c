@@ -1041,9 +1041,9 @@ gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
 	  g_warning ("%s: Invalid column number %d added to iter (remember to end your list of columns with a -1)", G_STRLOC, column);
 	  break;
 	}
-      g_value_init (&value, priv->column_headers[column]);
 
-      G_VALUE_COLLECT (&value, var_args, 0, &error);
+      G_VALUE_COLLECT_INIT (&value, priv->column_headers[column],
+                            var_args, 0, &error);
       if (error)
 	{
 	  g_warning ("%s: %s", G_STRLOC, error);

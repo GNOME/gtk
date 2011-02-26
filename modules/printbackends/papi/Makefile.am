@@ -13,7 +13,7 @@ INCLUDES = \
 	$(GTK_DEBUG_FLAGS)
 
 LDADDS = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gtk/libgtk-3.la	\
 	$(GTK_DEP_LIBS)
 
 backenddir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/printbackends

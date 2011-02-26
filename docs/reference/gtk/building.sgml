@@ -172,7 +172,7 @@ How to compile GTK+ itself
           such as high level data types, Unicode manipulation, and
           an object and type system to C programs. It is available
           from the <ulink url="ftp://ftp.gtk.org/pub/glib/">GTK+
-          FTP site.</ulink>
+          FTP site</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -180,7 +180,7 @@ How to compile GTK+ itself
           <ulink url="http://www.pango.org">Pango</ulink> is a library
           for internationalized text handling. It is available from
           the <ulink url="ftp://ftp.gtk.org/pub/pango/">GTK+ FTP
-          site.</ulink>.
+          site</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -189,7 +189,7 @@ How to compile GTK+ itself
           interfaces allowing accessibility technologies such as
           screen readers to interact with a graphical user interface.
           It is available from the <ulink
-          url="ftp://ftp.gtk.org/pub/atk/">GTK+ FTP site.</ulink>
+          url="ftp://ftp.gtk.org/pub/atk/">GTK+ FTP site</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -309,49 +309,60 @@ How to compile GTK+ itself
 
         <cmdsynopsis>
           <command>configure</command>
-
+          <sbr/>
           <group>
             <arg>--disable-modules</arg>
             <arg>--enable-modules</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--enable-debug=[no/minimum/yes]</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--disable-Bsymbolic</arg>
             <arg>--enable-Bsymbolic</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--disable-xkb</arg>
             <arg>--enable-xkb</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--disable-xinerama</arg>
             <arg>--enable-xinerama</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--disable-gtk-doc</arg>
             <arg>--enable-gtk-doc</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--disable-cups</arg>
             <arg>--enable-cups</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--disable-papi</arg>
             <arg>--enable-papi</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--enable-xinput</arg>
             <arg>--disable-xinput</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--enable-packagekit</arg>
             <arg>--disable-packagekit</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--enable-x11-backend</arg>
             <arg>--disable-x11-backend</arg>
@@ -360,9 +371,11 @@ How to compile GTK+ itself
             <arg>--enable-quartz-backend</arg>
             <arg>--disable-quartz-backend</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--enable-introspection=[no/auto/yes]</arg>
           </group>
+          <sbr/>
           <group>
             <arg>--enable-gtk2-dependency</arg>
             <arg>--disable-gtk2-dependency</arg>

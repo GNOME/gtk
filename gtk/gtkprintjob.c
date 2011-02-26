@@ -765,9 +765,8 @@ gtk_print_job_get_page_ranges (GtkPrintJob *job,
 /**
  * gtk_print_job_set_page_ranges:
  * @job: a #GtkPrintJob
-
  * @ranges: (array length=n_ranges): pointer to an array of
- *          #GtkPageRange structs
+ *    #GtkPageRange structs
  * @n_ranges: the length of the @ranges array
  *
  * Sets the page ranges for this job.
@@ -993,7 +992,7 @@ gtk_print_job_get_collate (GtkPrintJob *job)
 }
 
 /**
- * gtk_print_job_set_collated:
+ * gtk_print_job_set_collate:
  * @job: a #GtkPrintJob
  * @collate: whether the job is printed collated
  *

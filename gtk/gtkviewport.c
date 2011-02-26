@@ -926,11 +926,13 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 static void
 gtk_viewport_style_updated (GtkWidget *widget)
 {
+   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->style_updated (widget);
+
    if (gtk_widget_get_realized (widget) &&
        gtk_widget_get_has_window (widget))
      {
         GtkStyleContext *context;
-	GtkViewport *viewport = GTK_VIEWPORT (widget);
+        GtkViewport *viewport = GTK_VIEWPORT (widget);
         GtkViewportPrivate *priv = viewport->priv;
 
         context = gtk_widget_get_style_context (widget);

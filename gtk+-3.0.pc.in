@@ -11,5 +11,5 @@ Name: GTK+
 Description: GTK+ Graphical UI Library
 Version: @VERSION@
 Requires: gdk-@GTK_API_VERSION@ @GTK_PACKAGES@
-Libs: -L${libdir} -lgtk-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
+Libs: -L${libdir} -lgtk-3 @GTK_EXTRA_LIBS@
 Cflags: -I${includedir}/gtk-@GTK_API_VERSION@ @GTK_EXTRA_CFLAGS@ -DGSEAL_ENABLE

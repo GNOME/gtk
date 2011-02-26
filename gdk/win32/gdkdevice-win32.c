@@ -290,7 +290,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
       hwndc = ChildWindowFromPoint (hwnd, point);
 
       if (hwndc && hwndc != hwnd)
-        *child_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwndc);
+        *child_window = gdk_win32_handle_table_lookup (hwndc);
       else
         *child_window = NULL; /* Direct child unknown to gdk */
     }
@@ -372,7 +372,7 @@ gdk_device_win32_window_at_position (GdkDevice       *device,
   do
     {
       if (get_toplevel &&
-          (window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd)) != NULL &&
+          (window = gdk_win32_handle_table_lookup (hwnd)) != NULL &&
           GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
         break;
 
@@ -382,7 +382,7 @@ gdk_device_win32_window_at_position (GdkDevice       *device,
     }
   while (hwndc != hwnd && (hwnd = hwndc, 1));
 
-  window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
+  window = gdk_win32_handle_table_lookup (hwnd);
 
   if (window && (win_x || win_y))
     {

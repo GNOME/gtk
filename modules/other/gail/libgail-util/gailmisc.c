@@ -611,7 +611,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "style", &style, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_STYLE, style));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_STYLE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_STYLE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -630,7 +630,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "variant", &variant, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_VARIANT, variant));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_VARIANT, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_VARIANT, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -649,7 +649,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "stretch", &stretch, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_STRETCH, stretch));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_STRETCH, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_STRETCH, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -668,7 +668,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "justification", &justification, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_JUSTIFICATION, justification));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_JUSTIFICATION, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_JUSTIFICATION, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -687,7 +687,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           val_set = TRUE;
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION, direction));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_DIRECTION, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_DIRECTION, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -706,7 +706,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "wrap-mode", &wrap_mode, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_WRAP_MODE, wrap_mode));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_WRAP_MODE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_WRAP_MODE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -725,7 +725,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "foreground-gdk", &c, NULL);
           value = g_strdup_printf ("%u,%u,%u", c.red, c.green, c.blue);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FG_COLOR, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FG_COLOR, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -744,7 +744,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "background-gdk", &c, NULL);
           value = g_strdup_printf ("%u,%u,%u", c.red, c.green, c.blue);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_COLOR, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_COLOR, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -761,7 +761,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
         {
           gchar *value;
           g_object_get (tag, "family", &value, NULL);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FAMILY_NAME, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FAMILY_NAME, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -778,7 +778,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
         {
           gchar *value;
           g_object_get (tag, "language", &value, NULL);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_LANGUAGE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_LANGUAGE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -798,7 +798,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
 
           g_object_get (tag, "weight", &weight, NULL);
           value = g_strdup_printf ("%d", weight);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_WEIGHT, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_WEIGHT, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -847,7 +847,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "size", &size, NULL);
           value = g_strdup_printf ("%i", size);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_SIZE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_SIZE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -865,7 +865,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "strikethrough", &strikethrough, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_STRIKETHROUGH, strikethrough));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_STRIKETHROUGH, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_STRIKETHROUGH, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -883,7 +883,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "underline", &underline, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_UNDERLINE, underline));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_UNDERLINE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_UNDERLINE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -901,7 +901,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "rise", &rise, NULL);
           value = g_strdup_printf ("%i", rise);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_RISE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_RISE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -919,7 +919,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "background-full-height", &bg_full_height, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_BG_FULL_HEIGHT, bg_full_height));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_FULL_HEIGHT, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_FULL_HEIGHT, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -937,7 +937,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "pixels-inside-wrap", &pixels, NULL);
           value = g_strdup_printf ("%i", pixels);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -955,7 +955,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "pixels-below-lines", &pixels, NULL);
           value = g_strdup_printf ("%i", pixels);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_BELOW_LINES, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_BELOW_LINES, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -973,7 +973,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "pixels-above-lines", &pixels, NULL);
           value = g_strdup_printf ("%i", pixels);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -991,7 +991,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "editable", &editable, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_EDITABLE, editable));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_EDITABLE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_EDITABLE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -1009,7 +1009,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "invisible", &invisible, NULL);
           value = g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_INVISIBLE, invisible));
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_INVISIBLE, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_INVISIBLE, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -1027,7 +1027,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "indent", &indent, NULL);
           value = g_strdup_printf ("%i", indent);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_INDENT, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_INDENT, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -1045,7 +1045,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "right-margin", &margin, NULL);
           value = g_strdup_printf ("%i", margin);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_RIGHT_MARGIN, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_RIGHT_MARGIN, value);
         }
       temp_tags = temp_tags->next;
     }
@@ -1063,7 +1063,7 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
           gchar *value;
           g_object_get (tag, "left-margin", &margin, NULL);
           value = g_strdup_printf ("%i", margin);
-          gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_LEFT_MARGIN, value);
+          attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_LEFT_MARGIN, value);
         }
       temp_tags = temp_tags->next;
     }

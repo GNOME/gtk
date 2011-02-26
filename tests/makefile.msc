@@ -27,7 +27,6 @@ TOUCH = copy makefile.msc+nul
 all :	\
 	..\config.h	\
 	prop-editor.obj \
-	testsocket_common.obj \
 	all-test-apps
 
 ..\config.h : ..\config.h.win32
@@ -59,7 +58,7 @@ TESTAPPS = \
 	testtoolbar testtooltips \
 	testtreecolumns testtreecolumnsizing testtreeedit testtreeflow testtreefocus \
 	testtreemodel testtreesort testtreeview treestoretest \
-	testsocket testsocket_child teststatusicon \
+	teststatusicon \
 	testthreads testvolumebutton testwindows testxinerama \
 	simple
 

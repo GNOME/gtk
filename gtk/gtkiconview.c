@@ -1479,6 +1479,8 @@ gtk_icon_view_state_flags_changed (GtkWidget     *widget,
 static void
 gtk_icon_view_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->style_updated (widget);
+
   _gtk_icon_view_update_background (GTK_ICON_VIEW (widget));
   gtk_widget_queue_resize (widget);
 }

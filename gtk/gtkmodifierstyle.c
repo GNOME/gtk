@@ -40,12 +40,12 @@ static guint signals [LAST_SIGNAL] = { 0 };
 static void gtk_modifier_style_provider_init (GtkStyleProviderIface *iface);
 static void gtk_modifier_style_finalize      (GObject      *object);
 
-G_DEFINE_TYPE_EXTENDED (GtkModifierStyle, gtk_modifier_style, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GtkModifierStyle, _gtk_modifier_style, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
                                                gtk_modifier_style_provider_init));
 
 static void
-gtk_modifier_style_class_init (GtkModifierStyleClass *klass)
+_gtk_modifier_style_class_init (GtkModifierStyleClass *klass)
 {
   GObjectClass *object_class;
 
@@ -65,7 +65,7 @@ gtk_modifier_style_class_init (GtkModifierStyleClass *klass)
 }
 
 static void
-gtk_modifier_style_init (GtkModifierStyle *modifier_style)
+_gtk_modifier_style_init (GtkModifierStyle *modifier_style)
 {
   GtkModifierStylePrivate *priv;
 
@@ -141,11 +141,11 @@ gtk_modifier_style_finalize (GObject *object)
   g_hash_table_destroy (priv->color_properties);
   g_object_unref (priv->style);
 
-  G_OBJECT_CLASS (gtk_modifier_style_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_modifier_style_parent_class)->finalize (object);
 }
 
 GtkModifierStyle *
-gtk_modifier_style_new (void)
+_gtk_modifier_style_new (void)
 {
   return g_object_new (GTK_TYPE_MODIFIER_STYLE, NULL);
 }
@@ -185,9 +185,9 @@ modifier_style_set_color (GtkModifierStyle *style,
 }
 
 void
-gtk_modifier_style_set_background_color (GtkModifierStyle *style,
-                                         GtkStateFlags     state,
-                                         const GdkRGBA    *color)
+_gtk_modifier_style_set_background_color (GtkModifierStyle *style,
+                                          GtkStateFlags     state,
+                                          const GdkRGBA    *color)
 {
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
@@ -195,9 +195,9 @@ gtk_modifier_style_set_background_color (GtkModifierStyle *style,
 }
 
 void
-gtk_modifier_style_set_color (GtkModifierStyle *style,
-                              GtkStateFlags     state,
-                              const GdkRGBA    *color)
+_gtk_modifier_style_set_color (GtkModifierStyle *style,
+                               GtkStateFlags     state,
+                               const GdkRGBA    *color)
 {
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
@@ -205,8 +205,8 @@ gtk_modifier_style_set_color (GtkModifierStyle *style,
 }
 
 void
-gtk_modifier_style_set_font (GtkModifierStyle           *style,
-                             const PangoFontDescription *font_desc)
+_gtk_modifier_style_set_font (GtkModifierStyle           *style,
+                              const PangoFontDescription *font_desc)
 {
   GtkModifierStylePrivate *priv;
   PangoFontDescription *old_font;
@@ -223,7 +223,7 @@ gtk_modifier_style_set_font (GtkModifierStyle           *style,
        pango_font_description_equal (old_font, font_desc)))
     {
       if (old_font)
-	pango_font_description_free (old_font);
+        pango_font_description_free (old_font);
 
       return;
     }
@@ -242,9 +242,9 @@ gtk_modifier_style_set_font (GtkModifierStyle           *style,
 }
 
 void
-gtk_modifier_style_map_color (GtkModifierStyle *style,
-                              const gchar      *name,
-                              const GdkRGBA    *color)
+_gtk_modifier_style_map_color (GtkModifierStyle *style,
+                               const gchar      *name,
+                               const GdkRGBA    *color)
 {
   GtkModifierStylePrivate *priv;
   GtkSymbolicColor *symbolic_color = NULL;
@@ -264,10 +264,10 @@ gtk_modifier_style_map_color (GtkModifierStyle *style,
 }
 
 void
-gtk_modifier_style_set_color_property (GtkModifierStyle *style,
-                                       GType             widget_type,
-                                       const gchar      *prop_name,
-                                       const GdkRGBA    *color)
+_gtk_modifier_style_set_color_property (GtkModifierStyle *style,
+                                        GType             widget_type,
+                                        const gchar      *prop_name,
+                                        const GdkRGBA    *color)
 {
   GtkModifierStylePrivate *priv;
   const GdkRGBA *old_color;

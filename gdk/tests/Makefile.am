@@ -12,7 +12,7 @@ AM_CPPFLAGS = \
 
 progs_ldadd = \
 	$(GDK_DEP_LIBS) \
-	$(top_builddir)/gdk/libgdk-$(GTK_API_VERSION).la \
+	$(top_builddir)/gdk/libgdk-3.la \
 	$(NULL)
 
 #TEST_PROGS              += check-gdk-cairo

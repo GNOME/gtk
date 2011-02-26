@@ -28,7 +28,7 @@ libprintbackend_file_la_LDFLAGS =  \
 	-avoid-version -module $(no_undefined)
 
 libprintbackend_file_la_LIBADD = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gtk/libgtk-3.la	\
 	$(GTK_DEP_LIBS)
 
 noinst_HEADERS =			\

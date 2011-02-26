@@ -808,6 +808,8 @@ gtk_tool_button_update_icon_spacing (GtkToolButton *button)
 static void
 gtk_tool_button_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (parent_class)->style_updated (widget);
+
   gtk_tool_button_update_icon_spacing (GTK_TOOL_BUTTON (widget));
 }
 

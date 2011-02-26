@@ -8,10 +8,10 @@
 # if backwards compatibility has been broken,
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
-m4_define([gtk_major_version], [2])
-m4_define([gtk_minor_version], [99])
-m4_define([gtk_micro_version], [4])
-m4_define([gtk_interface_age], [0])
+m4_define([gtk_major_version], [3])
+m4_define([gtk_minor_version], [0])
+m4_define([gtk_micro_version], [1])
+m4_define([gtk_interface_age], [1])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
 m4_define([gtk_version],
@@ -38,22 +38,25 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.27.5])
+m4_define([glib_required_version], [2.28.0])
 m4_define([pango_required_version], [1.20])
-m4_define([atk_required_version], [1.29.2])
+m4_define([atk_required_version], [1.30])
 m4_define([cairo_required_version], [1.10.0])
-m4_define([gdk_pixbuf_required_version], [2.21.0])
+m4_define([gdk_pixbuf_required_version], [2.22.0])
+m4_define([introspection_required_version], [0.10.1])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
 ATK_REQUIRED_VERSION=atk_required_version
 CAIRO_REQUIRED_VERSION=cairo_required_version
 GDK_PIXBUF_REQUIRED_VERSION=gdk_pixbuf_required_version
+INTROSPECTION_REQUIRED_VERSION=introspection_required_version
+
 AC_SUBST(GLIB_REQUIRED_VERSION)
 AC_SUBST(PANGO_REQUIRED_VERSION)
 AC_SUBST(ATK_REQUIRED_VERSION)
 AC_SUBST(CAIRO_REQUIRED_VERSION)
 AC_SUBST(GDK_PIXBUF_REQUIRED_VERSION)
-
+AC_SUBST(INTROSPECTION_REQUIRED_VERSION)
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
@@ -170,12 +173,16 @@ dnl
 AC_CHECK_TOOLS(CXX, [$CCC c++ g++ gcc CC cxx cc++ cl], gcc)
 AC_LANG_PUSH([C++])
 
-AC_TRY_COMPILE(,[class a { int b; } c;], ,CXX=)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
+                                   [[class a { int b; } c;]])],
+                  [],[CXX=])
 AM_CONDITIONAL(HAVE_CXX, test "$CXX" != "")
 
 gtk_save_cxxflags="$CXXFLAGS"
 CXXFLAGS="$CXXFLAGS -x objective-c++"
-AC_TRY_COMPILE([@interface Foo @end],,OBJC=yes,OBJC=no)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[@interface Foo @end]],
+                                   [[]])],
+                  [OBJC=yes],[OBJC=no])
 AM_CONDITIONAL(HAVE_OBJC, test "$OBJC" = "yes")
 CXXFLAGS="$gtk_save_cxxflags"
 AC_LANG_POP([C++])
@@ -233,61 +240,61 @@ m4_define([debug_default],
 
 dnl declare --enable-* args and collect ac_help strings
 AC_ARG_ENABLE(debug,
-              AC_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
-                             [turn on debugging @<:@default=debug_default@:>@]),,
-              enable_debug=debug_default)
+              [AS_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
+                              [turn on debugging @<:@default=debug_default@:>@])],,
+              [enable_debug=debug_default])
 
 AC_ARG_ENABLE(rebuilds,
-              [AC_HELP_STRING([--disable-rebuilds],
+              [AS_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
               [enable_rebuilds=yes])
 
 AC_ARG_ENABLE(gtk2-dependency,
-              AC_HELP_STRING([--enable-gtk2-dependency],
-                             [Do not build gtk-update-icon-cache and other shared tools]),,
+              [AS_HELP_STRING([--enable-gtk2-dependency],
+                              [Do not build gtk-update-icon-cache and other shared tools])],,
               [enable_gtk2_dependency=no])
 
 AM_CONDITIONAL(BUILD_ICON_CACHE, [test "x$enable_gtk2_dependency" = xno])
 
 AC_ARG_ENABLE(xkb,
-              [AC_HELP_STRING([--enable-xkb],
+              [AS_HELP_STRING([--enable-xkb],
                               [support XKB extension [default=maybe]])],,
               [enable_xkb="maybe"])
 AC_ARG_ENABLE(xinerama,
-              [AC_HELP_STRING([--enable-xinerama],
+              [AS_HELP_STRING([--enable-xinerama],
 	                      [support Xinerama extension if available [default=maybe]])],,
               [enable_xinerama="maybe"])
 AC_ARG_ENABLE(xinput,
-              [AC_HELP_STRING([--enable-xinput],
+              [AS_HELP_STRING([--enable-xinput],
                               [support XInput extension if available [default=yes]])],,
               [enable_xinput="maybe"])
 AC_ARG_ENABLE(xrandr,
-              [AC_HELP_STRING([--enable-xrandr],
+              [AS_HELP_STRING([--enable-xrandr],
                               [support XRandR extension if available [default=maybe]])],,
               [enable_xrandr="maybe"])
 AC_ARG_ENABLE(xfixes,
-              [AC_HELP_STRING([--enable-xfixes],
+              [AS_HELP_STRING([--enable-xfixes],
                               [support XFixes extension if available [default=maybe]])],,
               [enable_xfixes="maybe"])
 AC_ARG_ENABLE(xcomposite,
-              [AC_HELP_STRING([--enable-xcomposite],
+              [AS_HELP_STRING([--enable-xcomposite],
                               [support X Composite extension if available [default=maybe]])],,
               [enable_xcomposite="maybe"])
 AC_ARG_ENABLE(xdamage,
-              [AC_HELP_STRING([--enable-xdamage],
+              [AS_HELP_STRING([--enable-xdamage],
                               [support X Damage extension if available [default=maybe]])],,
               [enable_xdamage="maybe"])
 
 AC_ARG_ENABLE(x11-backend,
-              [AC_HELP_STRING([--enable-x11-backend],
+              [AS_HELP_STRING([--enable-x11-backend],
                               [enable the X11 gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(win32-backend,
-              [AC_HELP_STRING([--enable-win32-backend],
+              [AS_HELP_STRING([--enable-win32-backend],
                               [enable the Win32 gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(quartz-backend,
-              [AC_HELP_STRING([--enable-quartz-backend],
+              [AS_HELP_STRING([--enable-quartz-backend],
                               [enable the quartz gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(wayland-backend,
@@ -479,7 +486,7 @@ dnl * See whether to include shared library dependencies *
 dnl ******************************************************
 
 AC_ARG_ENABLE(explicit-deps,
-              [AC_HELP_STRING([--enable-explicit-deps=@<:@yes/no/auto@:>@],
+              [AS_HELP_STRING([--enable-explicit-deps=@<:@yes/no/auto@:>@],
                               [use explicit dependencies in .pc files [default=auto]])],,
               [enable_explicit_deps=auto])
 
@@ -524,10 +531,10 @@ AC_CHECK_FUNCS(localtime_r)
 
 # _NL_TIME_FIRST_WEEKDAY is an enum and not a define
 AC_MSG_CHECKING([for _NL_TIME_FIRST_WEEKDAY])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_TIME_FIRST_WEEKDAY], [1],
@@ -536,10 +543,10 @@ fi
 
 # _NL_MEASUREMENT_MEASUREMENT is an enum and not a define
 AC_MSG_CHECKING([for _NL_MEASUREMENT_MEASUREMENT])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_MEASUREMENT_MEASUREMENT));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_MEASUREMENT_MEASUREMENT));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_MEASUREMENT_MEASUREMENT], [1],
@@ -548,10 +555,10 @@ fi
 
 # _NL_PAPER_HEIGHT is an enum and not a define
 AC_MSG_CHECKING([for _NL_PAPER_HEIGHT])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_PAPER_HEIGHT));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_PAPER_HEIGHT));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_PAPER_HEIGHT], [1],
@@ -560,10 +567,10 @@ fi
 
 # _NL_PAPER_WIDTH is an enum and not a define
 AC_MSG_CHECKING([for _NL_PAPER_WIDTH])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_PAPER_WIDTH));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_PAPER_WIDTH));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_PAPER_WIDTH], [1],
@@ -574,9 +581,11 @@ fi
 ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
-AC_OUTPUT_COMMANDS([case "$CONFIG_FILES" in *po-properties/Makefile.in*)
-        sed -e "/POTFILES =/r po-properties/POTFILES" po-properties/Makefile.in > po-properties/Makefile
-      esac])
+AC_CONFIG_COMMANDS([po-properties],
+                   [[case "$CONFIG_FILES" in *po-properties/Makefile.in*)
+                       sed -e "/POTFILES =/r po-properties/POTFILES" po-properties/Makefile.in > po-properties/Makefile
+                     esac]],
+                   [[]])
 
 dnl Snippet below is copied from AM_GLIB_GNU_GETTEXT to generate a first
 dnl po-properties/POTFILES during configure; see GNOME #573515.
@@ -606,22 +615,20 @@ AC_MSG_CHECKING([for extra flags to get ANSI library prototypes])
 
 gtk_save_LIBS=$LIBS
 LIBS="$LIBS -lm"
-AC_TRY_RUN([#include <math.h>
-             int main (void) { return (log(1) != log(1.)); }],
-     AC_MSG_RESULT(none needed),
-     gtk_save_CFLAGS="$CFLAGS"
-     CFLAGS="$CFLAGS -std1"
-     AC_TRY_RUN([#include <math.h>
-	         int main (void) { return (log(1) != log(1.)); }],
-         AC_MSG_RESULT(-std1),
-         AC_MSG_RESULT()
-         CFLAGS="$gtk_save_CFLAGS"
-         AC_MSG_WARN(
-                [No ANSI prototypes found in library. (-std1 didn't work.)]),
-	 true
-     ),
-     AC_MSG_RESULT(none needed)
-)
+AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <math.h>
+                                int main (void) { return (log(1) != log(1.)); }]])],
+              [AC_MSG_RESULT(none needed)],
+              [gtk_save_CFLAGS="$CFLAGS"
+               CFLAGS="$CFLAGS -std1"
+               AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <math.h>
+                                               int main (void) { return (log(1) != log(1.)); }]])],
+                             [AC_MSG_RESULT(-std1)],
+                             [AC_MSG_RESULT()
+                              CFLAGS="$gtk_save_CFLAGS"
+                              AC_MSG_WARN([No ANSI prototypes found in library. (-std1 did not work.)])],
+                             [true])],
+              [AC_MSG_RESULT(none needed)])
+
 LIBS=$gtk_save_LIBS
 
 AC_MSG_CHECKING(for the BeOS)
@@ -649,18 +656,6 @@ case $host_os in
     AC_MSG_RESULT(no)
   ;;
 esac
-
-dnl NeXTStep cc seems to need this
-AC_MSG_CHECKING([for extra flags for POSIX compliance])
-AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
-  AC_MSG_RESULT(none needed),
-  gtk_save_CFLAGS="$CFLAGS"
-  CFLAGS="$CFLAGS -posix"
-  AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
-    AC_MSG_RESULT(-posix),
-    AC_MSG_RESULT()
-    CFLAGS="$gtk_save_CFLAGS"
-    AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
 #
 # Run AM_PATH_GLIB_2_0 to make sure that GLib is installed and working
@@ -706,9 +701,11 @@ AC_CHECK_HEADERS(ftw.h,
                            [Define to 1 if ftw.h is available]))
 
 AC_MSG_CHECKING([for GNU ftw extensions])
-AC_TRY_COMPILE([#define _XOPEN_SOURCE 500
-#define _GNU_SOURCE
-#include <ftw.h>], [int flags = FTW_ACTIONRETVAL;], gtk_ok=yes, gtk_ok=no)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#define _XOPEN_SOURCE 500
+                                     #define _GNU_SOURCE
+                                     #include <ftw.h>]],
+                                   [[int flags = FTW_ACTIONRETVAL;]])],
+                  [gtk_ok=yes],[gtk_ok=no])
 if test $gtk_ok = yes; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_GNU_FTW, 1, [Have GNU ftw])
@@ -720,42 +717,17 @@ saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 
 
-# Checks for header files.
-AC_HEADER_STDC
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-
 # Checks for library functions.
-AC_TYPE_SIGNAL
 AC_FUNC_MMAP
 
 AC_CHECK_FUNCS(mallinfo)
 AC_CHECK_FUNCS(getresuid)
 AC_TYPE_UID_T
 
-# Check if <sys/select.h> needs to be included for fd_set
-AC_MSG_CHECKING([for fd_set])
-AC_TRY_COMPILE([#include <sys/types.h>],
-        [fd_set readMask, writeMask;], gtk_ok=yes, gtk_ok=no)
-if test $gtk_ok = yes; then
-    AC_MSG_RESULT([yes, found in sys/types.h])
-else
-    AC_HEADER_EGREP(fd_mask, sys/select.h, gtk_ok=yes)
-    if test $gtk_ok = yes; then
-        AC_DEFINE(HAVE_SYS_SELECT_H, 1,
-                  [Define to 1 if sys/select.h is available])
-        AC_MSG_RESULT([yes, found in sys/select.h])
-    else
-	AC_DEFINE(NO_FD_SET, 1,
-                  [Define to 1 if fd_set is not available])
-	AC_MSG_RESULT(no)
-    fi
-fi
-
 # Check for uxtheme.h (for MS-Windows Engine)
 AC_MSG_CHECKING(for uxtheme.h)
-AC_TRY_CPP([#include <uxtheme.h>], gtk_uxtheme_h=yes, gtk_uxtheme_h=no)
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <uxtheme.h>]])],
+                  [gtk_uxtheme_h=yes], [gtk_uxtheme_h=no])
 if test $gtk_uxtheme_h = yes; then
    AC_DEFINE(HAVE_UXTHEME_H, 1, [Have uxtheme.h include file])
 fi
@@ -768,7 +740,7 @@ AC_CHECK_FUNCS(_NSGetEnviron)
 AC_MSG_CHECKING(whether to build dynamic modules)
 
 AC_ARG_ENABLE(modules,
-              [AC_HELP_STRING([--disable-modules],
+              [AS_HELP_STRING([--disable-modules],
                               [disable dynamic module loading])])
 
 dynworks=false
@@ -817,13 +789,9 @@ AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
 #
 AC_MSG_CHECKING(immodules to build)
 
-dnl due to an autoconf bug, commas in the first arg to
-dnl AC_HELP_STRING cause problems.
-dnl AC_HELP_STRING([--with-included-immodules=MODULE1 MODULE2 ...],
-dnl                [build the specified input method modules into gtk])
 AC_ARG_WITH(included_immodules,
-            AC_HELP_STRING([--with-included-immodules=MODULE1,MODULE2,...],
-                           [build the specified input methods into gtk]))
+            [AS_HELP_STRING([--with-included-immodules=MODULE1,MODULE2,...],
+                            [build the specified input methods into gtk])])
 
 if $dynworks; then
    :
@@ -879,10 +847,6 @@ AM_CONDITIONAL(INCLUDE_IM_TI_ER, [test x"$INCLUDE_ti_er" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_TI_ET, [test x"$INCLUDE_ti_et" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_VIQR, [test x"$INCLUDE_viqr" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_XIM, [test x"$INCLUDE_xim" = xyes])
-
-AC_HEADER_SYS_WAIT
-
-AC_TYPE_SIGNAL
 
 # Checks to see whether we should include mediaLib
 # support.
@@ -991,17 +955,17 @@ if test "x$enable_x11_backend" == xyes; then
   # Check for xReply
 
   AC_MSG_CHECKING([if <X11/extensions/XIproto.h> is needed for xReply])
-  AC_TRY_COMPILE([#include <X11/Xlibint.h>],
-      [xReply *rep;],
-      [AC_MSG_RESULT([no])],
-      [AC_TRY_COMPILE([#include <X11/extensions/XIproto.h>
-#include <X11/Xlibint.h>],
-           [xReply *rep;],
-           [AC_MSG_RESULT([yes])
-            AC_DEFINE([NEED_XIPROTO_H_FOR_XREPLY], 1,
-                      [Define if <X11/extensions/XIproto.h> needed for xReply])],
-           [AC_MSG_RESULT([unknown])
-            AC_MSG_ERROR([xReply type unavailable. X11 is too old])])])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/Xlibint.h>]],
+                                     [[xReply *rep;]])],
+                    [AC_MSG_RESULT([no])],
+                    [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/extensions/XIproto.h>
+                                                          #include <X11/Xlibint.h>]],
+                                                        [[xReply *rep;]])],
+                                       [AC_MSG_RESULT([yes])
+                                        AC_DEFINE([NEED_XIPROTO_H_FOR_XREPLY], [1],
+                                                  [Define if <X11/extensions/XIproto.h> needed for xReply])],
+                                       [AC_MSG_RESULT([unknown])
+                                        AC_MSG_ERROR([xReply type unavailable. X11 is too old])])])
 
   # Check for XConvertCase, XInternAtoms (X11R6 specific)
 
@@ -1383,7 +1347,7 @@ LIBS="$old_LIBS"
 PRINT_BACKENDS="file lpr"
 
 AC_ARG_ENABLE(cups,
-              [AC_HELP_STRING([--disable-cups],
+              [AS_HELP_STRING([--disable-cups],
                               [disable cups print backend])],,
               [enable_cups=auto])
 
@@ -1425,10 +1389,11 @@ else
 
     gtk_save_cflags="$CFLAGS"
     CFLAGS="$CUPS_CFLAGS"
-    AC_TRY_COMPILE([#include <cups/http.h>],
-                   [http_t http; char *s = http.authstring;],
-                   [AC_DEFINE(HAVE_HTTP_AUTHSTRING, [],
-                              [Define if cups http_t authstring field is accessible])],)
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cups/http.h>]],
+                                       [[http_t http; char *s = http.authstring;]])],
+                      [AC_DEFINE([HAVE_HTTP_AUTHSTRING], [],
+                                 [Define if cups http_t authstring field is accessible])],
+                      [])
     CFLAGS="$gtk_save_cflags"
 
     AC_SUBST(HAVE_HTTP_AUTHSTRING)
@@ -1444,9 +1409,9 @@ fi
 #
 
 AC_ARG_ENABLE(papi,
-              [AC_HELP_STRING([--disable-papi],
+              [AS_HELP_STRING([--disable-papi],
                               [disable papi print backend])],,
-             [enable_papi=auto])
+              [enable_papi=auto])
 
 if test "x$enable_papi" = "xno"; then
   AM_CONDITIONAL(HAVE_PAPI, false)
@@ -1488,7 +1453,7 @@ CPPFLAGS="$gtk_save_cppflags"
 
 
 AC_ARG_ENABLE(test-print-backend,
-              [AC_HELP_STRING([--enable-test-print-backend],
+              [AS_HELP_STRING([--enable-test-print-backend],
                               [build test print backend])],,
               [enable_test_print_backend=no])
 if test "x$enable_test_print_backend" != "xno" ; then
@@ -1527,15 +1492,15 @@ GLIB_GSETTINGS
 # GObject introspection
 ##################################################
 
-GOBJECT_INTROSPECTION_CHECK([0.10.1])
+GOBJECT_INTROSPECTION_CHECK(introspection_required_version)
 
 ##################################################
 # Packagekit module
 #################################################
 
 AC_ARG_ENABLE(packagekit,
-              AC_HELP_STRING([--disable-packagekit],
-                             [build packagekit open-with module]))
+              [AS_HELP_STRING([--disable-packagekit],
+                              [build packagekit open-with module])])
 
 build_packagekit=no
 if test "os_win32" != "yes"; then
@@ -1557,9 +1522,10 @@ AC_CHECK_PROG(DB2HTML, db2html, true, false)
 AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
 
 AC_ARG_ENABLE(man,
-              [AC_HELP_STRING([--enable-man],
-                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,
-              enable_man=no)
+              [AS_HELP_STRING([--enable-man],
+                              [regenerate man pages from Docbook [default=no]])],
+              [enable_man=yes],
+              [enable_man=no])
 
 if test "${enable_man}" != no; then
   dnl
@@ -1632,16 +1598,17 @@ dnl Check for -Bsymbolic-functions linker flag used to avoid
 dnl intra-library PLT jumps, if available.
 dnl
 AC_ARG_ENABLE(Bsymbolic,
-              [AC_HELP_STRING([--disable-Bsymbolic],
+              [AS_HELP_STRING([--disable-Bsymbolic],
                               [avoid linking with -Bsymbolic])],,
               [SAVED_LDFLAGS="${LDFLAGS}"
                AC_MSG_CHECKING([for -Bsymbolic-functions linker flag])
                LDFLAGS=-Wl,-Bsymbolic-functions
-               AC_TRY_LINK([], [int main (void) { return 0; }],
-                           AC_MSG_RESULT(yes)
-                           enable_Bsymbolic=yes,
-                           AC_MSG_RESULT(no)
-                           enable_Bsymbolic=no)
+               AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
+                                               [[int main (void) { return 0; }]])],
+                              [AC_MSG_RESULT(yes)
+                               enable_Bsymbolic=yes],
+                              [AC_MSG_RESULT(no)
+                               enable_Bsymbolic=no])
                LDFLAGS="${SAVED_LDFLAGS}"])
 
 if test "x${enable_Bsymbolic}" = "xyes" ; then

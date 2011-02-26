@@ -7,16 +7,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&component=general\n"
-"POT-Creation-Date: 2011-02-02 15:24+0000\n"
-"PO-Revision-Date: 2011-02-02 17:15+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2011-02-04 20:37+0000\n"
+"PO-Revision-Date: 2011-02-06 14:05+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Language: Polish\n"
@@ -80,190 +80,333 @@ msgstr "ZNACZNIKI"
 msgid "GDK debugging flags to unset"
 msgstr "Wyczyszczone znaczniki debugowania biblioteki GDK"
 
-#: ../gdk/keyname-table.h:3940
+#.
+#. * Translators, the strings in the 'keyboard label' context are
+#. * display names for keyboard keys. Some of them have prefixes like
+#. * XF86 or ISO_ - these should be removed in the translation. Similarly,
+#. * underscores should be replaced by spaces. The prefix 'KP_' stands
+#. * for 'key pad' and you may want to include that in your translation.
+#. * Here are some examples of English translations:
+#. * XF86AudioMute - Audio mute
+#. * Scroll_lock   - Scroll lock
+#. * KP_Space      - Space (keypad)
+#.
+#: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "Backspace"
 
-#: ../gdk/keyname-table.h:3941
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3942
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Enter"
 
-#: ../gdk/keyname-table.h:3943
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pause"
 
-#: ../gdk/keyname-table.h:3944
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Scroll_Lock"
+msgstr "Scroll Lock"
 
-#: ../gdk/keyname-table.h:3945
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Sys_Req"
+msgstr "Sys Req"
 
-#: ../gdk/keyname-table.h:3946
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3947
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multi_key"
+msgstr "Multi Key"
 
-#: ../gdk/keyname-table.h:3948
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
-#: ../gdk/keyname-table.h:3949
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Lewo"
 
-#: ../gdk/keyname-table.h:3950
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Góra"
 
-#: ../gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Prawo"
 
-#: ../gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Dół"
 
-#: ../gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page_Up"
+msgstr "Page Up"
 
-#: ../gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page_Down"
+msgstr "Page Down"
 
-#: ../gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: ../gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Num_Lock"
+msgstr "Num Lock"
 
-#: ../gdk/keyname-table.h:3960
+#. Translators: KP_ means 'key pad' here
+#: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "Spacja"
 
-#: ../gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "Tabulator"
 
-#: ../gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "Enter"
 
-#: ../gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "Home"
 
-#: ../gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "Lewo"
 
-#: ../gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "Góra"
 
-#: ../gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "Prawo"
 
-#: ../gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "Dół"
 
-#: ../gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "Page_Up"
+msgstr "Page Up"
 
-#: ../gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "Poprzedni"
 
-#: ../gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "Page_Down"
+msgstr "Page Down"
 
-#: ../gdk/keyname-table.h:3971
+#: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "Następny"
 
-#: ../gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "Delete"
 
-#: ../gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
+
+#. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
+#: ../gdk/keyname-table.h:3990
+msgctxt "keyboard label"
+msgid "XF86MonBrightnessUp"
+msgstr "Jasność monitora w górę"
+
+#: ../gdk/keyname-table.h:3991
+msgctxt "keyboard label"
+msgid "XF86MonBrightnessDown"
+msgstr "Jasność monitora w dół"
+
+#: ../gdk/keyname-table.h:3992
+msgctxt "keyboard label"
+msgid "XF86AudioMute"
+msgstr "Wyciszenie dźwięku"
+
+#: ../gdk/keyname-table.h:3993
+msgctxt "keyboard label"
+msgid "XF86AudioLowerVolume"
+msgstr "Zmniejszenie głośności dźwięku"
+
+#: ../gdk/keyname-table.h:3994
+msgctxt "keyboard label"
+msgid "XF86AudioRaiseVolume"
+msgstr "Zwiększenie głośności dźwięku"
+
+#: ../gdk/keyname-table.h:3995
+msgctxt "keyboard label"
+msgid "XF86AudioPlay"
+msgstr "Odtworzenie dźwięku"
+
+#: ../gdk/keyname-table.h:3996
+msgctxt "keyboard label"
+msgid "XF86AudioStop"
+msgstr "Zatrzymanie dźwięku"
+
+#: ../gdk/keyname-table.h:3997
+msgctxt "keyboard label"
+msgid "XF86AudioNext"
+msgstr "Następny utwór"
+
+#: ../gdk/keyname-table.h:3998
+msgctxt "keyboard label"
+msgid "XF86AudioPrev"
+msgstr "Poprzedni utwór"
+
+#: ../gdk/keyname-table.h:3999
+msgctxt "keyboard label"
+msgid "XF86AudioRecord"
+msgstr "Nagrywanie dźwięku"
+
+#: ../gdk/keyname-table.h:4000
+msgctxt "keyboard label"
+msgid "XF86AudioPause"
+msgstr "Wstrzymanie dźwięku"
+
+#: ../gdk/keyname-table.h:4001
+msgctxt "keyboard label"
+msgid "XF86AudioRewind"
+msgstr "Przewinięcie dźwięku"
+
+#: ../gdk/keyname-table.h:4002
+msgctxt "keyboard label"
+msgid "XF86AudioMedia"
+msgstr "Uruchomienie odtwarzacza multimediów"
+
+#: ../gdk/keyname-table.h:4003
+msgctxt "keyboard label"
+msgid "XF86ScreenSaver"
+msgstr "Wygaszacz ekranu"
+
+#: ../gdk/keyname-table.h:4004
+msgctxt "keyboard label"
+msgid "XF86Battery"
+msgstr "Akumulator"
+
+#: ../gdk/keyname-table.h:4005
+msgctxt "keyboard label"
+msgid "XF86Launch1"
+msgstr "Uruchomienie pierwszego programu"
+
+#: ../gdk/keyname-table.h:4006
+msgctxt "keyboard label"
+msgid "XF86Forward"
+msgstr "Dalej"
+
+#: ../gdk/keyname-table.h:4007
+msgctxt "keyboard label"
+msgid "XF86Back"
+msgstr "Wstecz"
+
+#: ../gdk/keyname-table.h:4008
+msgctxt "keyboard label"
+msgid "XF86Sleep"
+msgstr "Uśpienie"
+
+#: ../gdk/keyname-table.h:4009
+msgctxt "keyboard label"
+msgid "XF86Hibernate"
+msgstr "Hibernacja"
+
+#: ../gdk/keyname-table.h:4010
+msgctxt "keyboard label"
+msgid "XF86WLAN"
+msgstr "WLAN"
+
+#: ../gdk/keyname-table.h:4011
+msgctxt "keyboard label"
+msgid "XF86WebCam"
+msgstr "Kamera internetowa"
+
+#: ../gdk/keyname-table.h:4012
+msgctxt "keyboard label"
+msgid "XF86Display"
+msgstr "Ekran"
+
+#: ../gdk/keyname-table.h:4013
+msgctxt "keyboard label"
+msgid "XF86TouchpadToggle"
+msgstr "Przełączenie panelu dotykowego"
+
+#: ../gdk/keyname-table.h:4014
+msgctxt "keyboard label"
+msgid "XF86WakeUp"
+msgstr "Przebudzenie"
+
+#: ../gdk/keyname-table.h:4015
+msgctxt "keyboard label"
+msgid "XF86Suspend"
+msgstr "Uśpienie"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
@@ -407,7 +550,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:768
+#: ../gtk/gtkaccellabel.c:782
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -417,7 +560,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:781
+#: ../gtk/gtkaccellabel.c:795
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -427,17 +570,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:795
+#: ../gtk/gtkaccellabel.c:809
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:811
+#: ../gtk/gtkaccellabel.c:825
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Spacja"
 
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:828
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1326,12 +1469,12 @@ msgid "System (%s)"
 msgstr "Systemowa (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6239
+#: ../gtk/gtklabel.c:6241
 msgid "_Open Link"
 msgstr "_Otwórz odnośnik"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6251
+#: ../gtk/gtklabel.c:6253
 msgid "Copy _Link Address"
 msgstr "Sk_opiuj adres odnośnika"
 
@@ -2089,12 +2232,12 @@ msgstr "Nie odnaleziono elementów"
 msgid "No recently used resource found with URI `%s'"
 msgstr "Nie odnaleziono ostatnio używanego zasobu z URI \"%s\""
 
-#: ../gtk/gtkrecentchoosermenu.c:795
+#: ../gtk/gtkrecentchoosermenu.c:794
 #, c-format
 msgid "Open '%s'"
 msgstr "Otwórz \"%s\""
 
-#: ../gtk/gtkrecentchoosermenu.c:825
+#: ../gtk/gtkrecentchoosermenu.c:824
 msgid "Unknown item"
 msgstr "Nieznany element"
 
@@ -2103,7 +2246,7 @@ msgstr "Nieznany element"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:836
+#: ../gtk/gtkrecentchoosermenu.c:835
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2112,7 +2255,7 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:841
+#: ../gtk/gtkrecentchoosermenu.c:840
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"

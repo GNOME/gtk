@@ -94,12 +94,17 @@ _gdk_x11_window_simulate_key (GdkWindow      *window,
     {
       gint i;
       for (i = 0; i < n_keys; i++)
-        if (keys[i].group == 0 && keys[i].level == 0)
+        if (keys[i].group == 0 && (keys[i].level == 0 || keys[i].level == 1))
           {
             xev.keycode = keys[i].keycode;
+            if (keys[i].level == 1)
+              {
+                /* Assume shift takes us to level 1 */
+                xev.state |= GDK_SHIFT_MASK;
+              }
             break;
           }
-      if (i >= n_keys) /* no match for group==0 and level==0 */
+      if (i >= n_keys) /* no match for group==0 and level==0 or 1 */
         xev.keycode = keys[0].keycode;
     }
   g_free (keys);

@@ -753,14 +753,15 @@ gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
 }
 
 /**
- * gtk_app_chooser_button_select_custom_item:
+ * gtk_app_chooser_button_set_active_custom_item:
  * @self: a #GtkAppChooserButton
  * @name: the name of the custom item
  *
  * Selects a custom item previously added with
  * gtk_app_chooser_button_append_custom_item().
- * Use gtk_app_chooser_refresh() to bring the selection to its initial
- * state.
+ *
+ * Use gtk_app_chooser_refresh() to bring the selection
+ * to its initial state.
  *
  * Since: 3.0
  */

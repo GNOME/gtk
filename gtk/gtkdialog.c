@@ -508,6 +508,8 @@ gtk_dialog_map (GtkWidget *widget)
 static void
 gtk_dialog_style_updated (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_dialog_parent_class)->style_updated (widget);
+
   update_spacings (GTK_DIALOG (widget));
 }
 

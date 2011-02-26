@@ -1,4 +1,4 @@
-/* GDK - The GIMP Drawing Kit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -24,31 +24,59 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdk.h> can be included directly."
-#endif
+#ifndef __GTK_IMAGE_PRIVATE_H__
+#define __GTK_IMAGE_PRIVATE_H__
 
-#ifndef __GDK_PIXBUF_H__
-#define __GDK_PIXBUF_H__
 
-#include <cairo.h>
-#include <gdk/gdktypes.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gtkimage.h"
+
 
 G_BEGIN_DECLS
 
-GdkPixbuf *gdk_pixbuf_get_from_window  (GdkWindow       *window,
-                                        gint             src_x,
-                                        gint             src_y,
-                                        gint             width,
-                                        gint             height);
+typedef struct _GtkImagePixbufData  GtkImagePixbufData;
+typedef struct _GtkImageStockData   GtkImageStockData;
+typedef struct _GtkImageIconSetData GtkImageIconSetData;
+typedef struct _GtkImageAnimationData GtkImageAnimationData;
+typedef struct _GtkImageIconNameData  GtkImageIconNameData;
+typedef struct _GtkImageGIconData     GtkImageGIconData;
 
-GdkPixbuf *gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
-                                        gint             src_x,
-                                        gint             src_y,
-                                        gint             width,
-                                        gint             height);
+struct _GtkImagePixbufData
+{
+  GdkPixbuf *pixbuf;
+};
+
+struct _GtkImageStockData
+{
+  gchar *stock_id;
+};
+
+struct _GtkImageIconSetData
+{
+  GtkIconSet *icon_set;
+};
+
+struct _GtkImageAnimationData
+{
+  GdkPixbufAnimation *anim;
+  GdkPixbufAnimationIter *iter;
+  guint frame_timeout;
+};
+
+struct _GtkImageIconNameData
+{
+  gchar *icon_name;
+  GdkPixbuf *pixbuf;
+  guint theme_change_id;
+};
+
+struct _GtkImageGIconData
+{
+  GIcon *icon;
+  GdkPixbuf *pixbuf;
+  guint theme_change_id;
+};
+
 
 G_END_DECLS
 
-#endif /* __GDK_PIXBUF_H__ */
+#endif /* __GTK_IMAGE_H__ */

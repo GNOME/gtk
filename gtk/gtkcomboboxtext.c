@@ -408,10 +408,11 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
 /**
  * gtk_combo_box_text_append:
  * @combo_box: A #GtkComboBoxText
+ * @id: (allow-none): a string ID for this value, or %NULL
  * @text: A string
  *
- * Appends @text to the list of strings stored in @combo_box.  If @id is
- * non-%NULL then it is used as the ID of the row.
+ * Appends @text to the list of strings stored in @combo_box.
+ * If @id is non-%NULL then it is used as the ID of the row.
  *
  * This is the same as calling gtk_combo_box_text_insert() with a
  * position of -1.
@@ -432,8 +433,8 @@ gtk_combo_box_text_append (GtkComboBoxText *combo_box,
  * @id: (allow-none): a string ID for this value, or %NULL
  * @text: a string
  *
- * Prepends @text to the list of strings stored in @combo_box.  If @id
- * is non-%NULL then it is used as the ID of the row.
+ * Prepends @text to the list of strings stored in @combo_box.
+ * If @id is non-%NULL then it is used as the ID of the row.
  *
  * This is the same as calling gtk_combo_box_text_insert() with a
  * position of 0.

@@ -2058,6 +2058,8 @@ gtk_menu_item_deselect
 gtk_menu_item_activate
 gtk_menu_item_toggle_size_request
 gtk_menu_item_toggle_size_allocate
+gtk_menu_item_get_reserve_indicator
+gtk_menu_item_set_reserve_indicator
 <SUBSECTION Standard>
 GTK_MENU_ITEM
 GTK_IS_MENU_ITEM
@@ -4202,6 +4204,7 @@ gtk_tree_view_column_set_clickable
 gtk_tree_view_column_get_clickable
 gtk_tree_view_column_set_widget
 gtk_tree_view_column_get_widget
+gtk_tree_view_column_get_button
 gtk_tree_view_column_set_alignment
 gtk_tree_view_column_get_alignment
 gtk_tree_view_column_set_reorderable
@@ -4286,6 +4289,7 @@ gtk_tree_view_row_expanded
 gtk_tree_view_set_reorderable
 gtk_tree_view_get_reorderable
 gtk_tree_view_get_path_at_pos
+gtk_tree_view_is_blank_at_pos
 gtk_tree_view_get_cell_area
 gtk_tree_view_get_background_area
 gtk_tree_view_get_visible_rect
@@ -5749,6 +5753,7 @@ gtk_style_new
 gtk_style_copy
 gtk_style_attach
 gtk_style_detach
+gtk_style_get_context
 gtk_style_set_background
 gtk_style_apply_default_background
 gtk_style_lookup_color

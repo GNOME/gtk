@@ -99,7 +99,7 @@ typedef enum
  * @GDK_AXIS_Y: the axis is used as the y axis.
  * @GDK_AXIS_PRESSURE: the axis is used for pressure information.
  * @GDK_AXIS_XTILT: the axis is used for x tilt information.
- * @GDK_AXIS_YTILT: the axis is used for x tilt information.
+ * @GDK_AXIS_YTILT: the axis is used for y tilt information.
  * @GDK_AXIS_WHEEL: the axis is used for wheel information.
  * @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
  *

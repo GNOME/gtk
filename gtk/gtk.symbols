@@ -374,7 +374,6 @@ gtk_cell_area_attribute_connect
 gtk_cell_area_attribute_disconnect
 gtk_cell_area_box_get_spacing
 gtk_cell_area_box_get_type G_GNUC_CONST
-gtk_cell_area_box_init_groups
 gtk_cell_area_box_new
 gtk_cell_area_box_pack_end
 gtk_cell_area_box_pack_start
@@ -1535,13 +1534,6 @@ gtk_misc_get_padding
 gtk_misc_get_type G_GNUC_CONST
 gtk_misc_set_alignment
 gtk_misc_set_padding
-gtk_modifier_style_get_type
-gtk_modifier_style_map_color
-gtk_modifier_style_new
-gtk_modifier_style_set_background_color
-gtk_modifier_style_set_color
-gtk_modifier_style_set_color_property
-gtk_modifier_style_set_font
 gtk_mount_operation_get_parent
 gtk_mount_operation_get_screen
 gtk_mount_operation_get_type G_GNUC_CONST
@@ -1713,6 +1705,7 @@ gtk_parse_args
 gtk_path_bar_get_type G_GNUC_CONST
 gtk_path_priority_type_get_type G_GNUC_CONST
 gtk_path_type_get_type G_GNUC_CONST
+#ifdef G_OS_UNIX
 gtk_plug_construct
 gtk_plug_construct_for_display
 gtk_plug_get_embedded
@@ -1721,6 +1714,7 @@ gtk_plug_get_socket_window
 gtk_plug_get_type G_GNUC_CONST
 gtk_plug_new
 gtk_plug_new_for_display
+#endif
 gtk_policy_type_get_type G_GNUC_CONST
 gtk_position_type_get_type G_GNUC_CONST
 #ifdef G_OS_UNIX
@@ -2354,11 +2348,13 @@ gtk_size_group_remove_widget
 gtk_size_group_set_ignore_hidden
 gtk_size_group_set_mode
 gtk_size_request_mode_get_type G_GNUC_CONST
+#ifdef G_OS_UNIX
 gtk_socket_add_id
 gtk_socket_get_id
 gtk_socket_get_plug_window
 gtk_socket_get_type G_GNUC_CONST
 gtk_socket_new
+#endif
 gtk_sort_type_get_type G_GNUC_CONST
 gtk_spin_button_configure
 gtk_spin_button_get_adjustment

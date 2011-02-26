@@ -34,6 +34,8 @@
 #include <gtk/gtkdialog.h>
 #include <gio/gio.h>
 
+G_BEGIN_DECLS
+
 #define GTK_TYPE_APP_CHOOSER_DIALOG            (gtk_app_chooser_dialog_get_type ())
 #define GTK_APP_CHOOSER_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_DIALOG, GtkAppChooserDialog))
 #define GTK_APP_CHOOSER_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_DIALOG, GtkAppChooserDialogClass))
@@ -72,5 +74,7 @@ GtkWidget *   gtk_app_chooser_dialog_get_widget           (GtkAppChooserDialog *
 void          gtk_app_chooser_dialog_set_heading          (GtkAppChooserDialog *self,
                                                            const gchar         *heading);
 const gchar * gtk_app_chooser_dialog_get_heading          (GtkAppChooserDialog *self);
+
+G_END_DECLS
 
 #endif /* __GTK_APP_CHOOSER_DIALOG_H__ */

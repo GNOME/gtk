@@ -12,12 +12,12 @@ INCLUDES =				\
 	$(GDK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gtk/libgtk-3.0.la
+	$(top_builddir)/gtk/libgtk-3.la
 
 LDADDS = \
-	$(top_builddir)/gtk/libgtk-3.0.la	\
-	$(top_builddir)/gdk/libgdk-3.0.la	\
-	$(GTK_DEP_LIBS)				\
+	$(top_builddir)/gtk/libgtk-3.la	\
+	$(top_builddir)/gdk/libgdk-3.la	\
+	$(GTK_DEP_LIBS)			\
 	-lm
 
 if USE_X11
@@ -105,7 +105,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtreemenu			\
 	testtoplevelembed		\
 	testnoscreen			\
-	testtreepos
+	testtreepos			\
+	testsensitive
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -203,6 +204,7 @@ styleexamples_DEPENDENCIES = $(TEST_DEPS)
 testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
 testnoscreen_DEPENDENCIES = $(TEST_DEPS)
 testtreepos_DEPENDENCIES = $(TEST_DEPS)
+testsensitive_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -286,6 +288,8 @@ styleexamples_LDADD = $(LDADDS)
 testtoplevelembed_LDADD = $(LDADDS)
 testnoscreen_LDADD = $(LDADDS)
 testtreepos_LDADD = $(LDADDS)
+testsensitive_LDADD = $(LDADDS)
+
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\

@@ -144,8 +144,8 @@
         GAppLaunchContext *context;
         GError *error = NULL;
 
-        info = g_desktop_app_info_new ("epiphany.desktop");
-        context = gdk_display_get_app_launch_context (display);
+        info = (GAppInfo*) g_desktop_app_info_new ("epiphany.desktop");
+        context = (GAppLaunchContext*) gdk_display_get_app_launch_context (display);
         g_app_info_launch (info, NULL, context, &amp;error);
 
         if (error)
@@ -157,6 +157,10 @@
         g_object_unref (info);
         g_object_unref (context);
         </programlisting></informalexample>
+        Remember that you have to include
+        <filename>gio/gdesktopappinfo.h</filename>
+        and use the <filename>gio-unix-2.0</filename> pkg-config file
+        when using g_desktop_app_info_new().
         </listitem>
         <listitem>If you are launching a custom commandline, you can
         still use g_app_info_launch() with a GAppInfo that is constructed

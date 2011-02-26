@@ -51,12 +51,12 @@
  * @Short_description: Onscreen display areas in the target window system
  * @Title: Windows
  *
- * A #GdkWindow is a rectangular region on the screen. It's a low-level object,
- * used to implement high-level objects such as #GtkWidget and #GtkWindow on the
- * GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think
- * of as a "window" with a titlebar and so on; a #GtkWindow may contain many
- * #GdkWindow<!-- -->s. For example, each #GtkButton has a #GdkWindow associated
- * with it.
+ * A #GdkWindow is a (usually) rectangular region on the screen.
+ * It's a low-level object, used to implement high-level objects such as
+ * #GtkWidget and #GtkWindow on the GTK+ level. A #GtkWindow is a toplevel
+ * window, the thing a user might think of as a "window" with a titlebar and
+ * so on; a #GtkWindow may contain many #GdkWindows. For example, each
+ * #GtkButton has a #GdkWindow associated with it.
  *
  * <refsect2 id="COMPOSITED-WINDOWS">
  * <title>Composited Windows</title>
@@ -1240,7 +1240,7 @@ sync_native_window_stack_position (GdkWindow *window)
 }
 
 /**
- * gdk_window_new: (constructor):
+ * gdk_window_new: (constructor)
  * @parent: (allow-none): a #GdkWindow, or %NULL to create the window as a child of
  *   the default root window for the default display.
  * @attributes: attributes of the new window

@@ -738,21 +738,19 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_get_search_path:
  * @icon_theme: a #GtkIconTheme
-
  * @path: (allow-none) (array length=n_elements) (element-type filename) (out):
- *        location to store a list of icon theme path directories or %NULL .
- *        The stored value should be freed with g_strfreev().
- * @n_elements: location to store number of elements
- *              in @path, or %NULL
- * 
+ *     location to store a list of icon theme path directories or %NULL.
+ *     The stored value should be freed with g_strfreev().
+ * @n_elements: location to store number of elements in @path, or %NULL
+ *
  * Gets the current search path. See gtk_icon_theme_set_search_path().
  *
  * Since: 2.4
- **/
+ */
 void
-gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
-				gchar            **path[],
-				gint              *n_elements)
+gtk_icon_theme_get_search_path (GtkIconTheme  *icon_theme,
+                                gchar        **path[],
+                                gint          *n_elements)
 {
   GtkIconThemePrivate *priv;
   int i;
@@ -3055,7 +3053,7 @@ gdk_color_to_css (GdkColor *color)
 }
 
 static gchar *
-gdk_rgba_to_css (GdkRGBA *color)
+gdk_rgba_to_css (const GdkRGBA *color)
 {
   /* drop alpha for now, since librsvg does not understand rgba() */
   return g_strdup_printf ("rgb(%d,%d,%d)",
@@ -3177,13 +3175,13 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
  * Since: 3.0
  **/
 GdkPixbuf *
-gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
-                             GdkRGBA      *fg,
-                             GdkRGBA      *success_color,
-                             GdkRGBA      *warning_color,
-                             GdkRGBA      *error_color,
-                             gboolean     *was_symbolic,
-                             GError      **error)
+gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
+                             const GdkRGBA  *fg,
+                             const GdkRGBA  *success_color,
+                             const GdkRGBA  *warning_color,
+                             const GdkRGBA  *error_color,
+                             gboolean       *was_symbolic,
+                             GError        **error)
 {
   GdkPixbuf *pixbuf;
   gchar *css_fg;

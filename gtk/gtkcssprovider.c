@@ -3903,6 +3903,7 @@ gtk_css_provider_get_default (void)
         "}\n"
         "\n"
         ".trough {\n"
+        "  background-color: darker (@bg_color);\n"
         "  border-style: inset;\n"
         "  border-width: 1;\n"
         "  padding: 0;\n"

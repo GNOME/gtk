@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -27,17 +27,18 @@
 
 /**
  * SECTION:cairo_interaction
- * @Short_description: Functions to support using Cairo
+ * @Short_description: Functions to support using cairo
  * @Title: Cairo Interaction
  *
  * <link href="http://cairographics.org">Cairo</link> is a graphics
  * library that supports vector graphics and image compositing that
- * can be used with GDK. GTK+ does all of its drawing using Cairo.
+ * can be used with GDK. GTK+ does all of its drawing using cairo.
  *
- * GDK does not wrap the Cairo API, instead it allows to create Cairo
+ * GDK does not wrap the cairo API, instead it allows to create cairo
  * contexts which can be used to draw on #GdkWindows. Additional
  * functions allow use #GdkRectangles with cairo and to use #GdkColors,
- * #GdkPixbufs and #GdkWindows as sources for drawing operations.
+ * #GdkRGBAs, #GdkPixbufs and #GdkWindows as sources for drawing
+ * operations.
  */
 
 
@@ -46,13 +47,13 @@
  * @cr: a cairo context
  * @rect: (out) (allow-none): return location for the clip, or %NULL
  *
- * This is a convenience function around cairo_clip_extents(). It rounds
- * the clip extents to integer coordinates and returns a boolean
- * indicating if a clip area exists.
+ * This is a convenience function around cairo_clip_extents().
+ * It rounds the clip extents to integer coordinates and returns
+ * a boolean indicating if a clip area exists.
  *
  * Returns: %TRUE if a clip rectangle exists, %FALSE if all of @cr is
- * clipped and all drawing can be skipped.
- **/
+ *     clipped and all drawing can be skipped
+ */
 gboolean
 gdk_cairo_get_clip_rectangle (cairo_t      *cr,
                               GdkRectangle *rect)
@@ -82,35 +83,35 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
 
 /**
  * gdk_cairo_set_source_color:
- * @cr: a #cairo_t
+ * @cr: a cairo context
  * @color: a #GdkColor
  *
  * Sets the specified #GdkColor as the source color of @cr.
  *
  * Since: 2.8
- **/
+ */
 void
 gdk_cairo_set_source_color (cairo_t        *cr,
-			    const GdkColor *color)
+                            const GdkColor *color)
 {
   g_return_if_fail (cr != NULL);
   g_return_if_fail (color != NULL);
     
   cairo_set_source_rgb (cr,
-			color->red / 65535.,
-			color->green / 65535.,
-			color->blue / 65535.);
+                        color->red / 65535.,
+                        color->green / 65535.,
+                        color->blue / 65535.);
 }
 
 /**
  * gdk_cairo_set_source_rgba:
- * @cr: a #cairo_t
+ * @cr: a cairo context
  * @rgba: a #GdkRGBA
  *
  * Sets the specified #GdkRGBA as the source color of @cr.
  *
  * Since: 3.0
- **/
+ */
 void
 gdk_cairo_set_source_rgba (cairo_t       *cr,
                            const GdkRGBA *rgba)
@@ -127,37 +128,37 @@ gdk_cairo_set_source_rgba (cairo_t       *cr,
 
 /**
  * gdk_cairo_rectangle:
- * @cr: a #cairo_t
+ * @cr: a cairo context
  * @rectangle: a #GdkRectangle
- * 
+ *
  * Adds the given rectangle to the current path of @cr.
  *
  * Since: 2.8
- **/
+ */
 void
 gdk_cairo_rectangle (cairo_t            *cr,
-		     const GdkRectangle *rectangle)
+                     const GdkRectangle *rectangle)
 {
   g_return_if_fail (cr != NULL);
   g_return_if_fail (rectangle != NULL);
 
   cairo_rectangle (cr,
-		   rectangle->x,     rectangle->y,
-		   rectangle->width, rectangle->height);
+                   rectangle->x,     rectangle->y,
+                   rectangle->width, rectangle->height);
 }
 
 /**
  * gdk_cairo_region:
- * @cr: a #cairo_t
+ * @cr: a cairo context
  * @region: a #cairo_region_t
- * 
+ *
  * Adds the given region to the current path of @cr.
  *
  * Since: 2.8
- **/
+ */
 void
 gdk_cairo_region (cairo_t         *cr,
-		  const cairo_region_t *region)
+                  const cairo_region_t *region)
 {
   cairo_rectangle_int_t box;
   gint n_boxes, i;
@@ -176,22 +177,23 @@ gdk_cairo_region (cairo_t         *cr,
 
 /**
  * gdk_cairo_set_source_pixbuf:
- * @cr: a #Cairo context
+ * @cr: a cairo context
  * @pixbuf: a #GdkPixbuf
  * @pixbuf_x: X coordinate of location to place upper left corner of @pixbuf
  * @pixbuf_y: Y coordinate of location to place upper left corner of @pixbuf
- * 
- * Sets the given pixbuf as the source pattern for the Cairo context.
+ *
+ * Sets the given pixbuf as the source pattern for @cr.
+ *
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
- * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y
+ * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.
  *
  * Since: 2.8
- **/
+ */
 void
 gdk_cairo_set_source_pixbuf (cairo_t         *cr,
-			     const GdkPixbuf *pixbuf,
-			     double           pixbuf_x,
-			     double           pixbuf_y)
+                             const GdkPixbuf *pixbuf,
+                             gdouble          pixbuf_x,
+                             gdouble          pixbuf_y)
 {
   gint width = gdk_pixbuf_get_width (pixbuf);
   gint height = gdk_pixbuf_get_height (pixbuf);
@@ -217,7 +219,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
                                                  width, height, cairo_stride);
 
   cairo_surface_set_user_data (surface, &key,
-			       cairo_pixels, (cairo_destroy_func_t)g_free);
+                               cairo_pixels, (cairo_destroy_func_t)g_free);
 
   for (j = height; j; j--)
     {
@@ -225,51 +227,51 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
       guchar *q = cairo_pixels;
 
       if (n_channels == 3)
-	{
-	  guchar *end = p + 3 * width;
-	  
-	  while (p < end)
-	    {
+        {
+          guchar *end = p + 3 * width;
+
+          while (p < end)
+            {
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN
-	      q[0] = p[2];
-	      q[1] = p[1];
-	      q[2] = p[0];
-#else	  
-	      q[1] = p[0];
-	      q[2] = p[1];
-	      q[3] = p[2];
+              q[0] = p[2];
+              q[1] = p[1];
+              q[2] = p[0];
+#else
+              q[1] = p[0];
+              q[2] = p[1];
+              q[3] = p[2];
 #endif
-	      p += 3;
-	      q += 4;
-	    }
-	}
+              p += 3;
+              q += 4;
+            }
+        }
       else
-	{
-	  guchar *end = p + 4 * width;
-	  guint t1,t2,t3;
-	    
+        {
+          guchar *end = p + 4 * width;
+          guint t1,t2,t3;
+
 #define MULT(d,c,a,t) G_STMT_START { t = c * a + 0x7f; d = ((t >> 8) + t) >> 8; } G_STMT_END
 
-	  while (p < end)
-	    {
+          while (p < end)
+            {
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN
-	      MULT(q[0], p[2], p[3], t1);
-	      MULT(q[1], p[1], p[3], t2);
-	      MULT(q[2], p[0], p[3], t3);
-	      q[3] = p[3];
-#else	  
-	      q[0] = p[3];
-	      MULT(q[1], p[0], p[3], t1);
-	      MULT(q[2], p[1], p[3], t2);
-	      MULT(q[3], p[2], p[3], t3);
+              MULT(q[0], p[2], p[3], t1);
+              MULT(q[1], p[1], p[3], t2);
+              MULT(q[2], p[0], p[3], t3);
+              q[3] = p[3];
+#else
+              q[0] = p[3];
+              MULT(q[1], p[0], p[3], t1);
+              MULT(q[2], p[1], p[3], t2);
+              MULT(q[3], p[2], p[3], t3);
 #endif
-	      
-	      p += 4;
-	      q += 4;
-	    }
-	  
+
+              p += 4;
+              q += 4;
+            }
+
 #undef MULT
-	}
+        }
 
       gdk_pixels += gdk_rowstride;
       cairo_pixels += cairo_stride;
@@ -281,12 +283,13 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
 
 /**
  * gdk_cairo_set_source_window:
- * @cr: a #Cairo context
+ * @cr: a cairo context
  * @window: a #GdkWindow
  * @x: X coordinate of location to place upper left corner of @window
  * @y: Y coordinate of location to place upper left corner of @window
  *
- * Sets the given window as the source pattern for the Cairo context.
+ * Sets the given window as the source pattern for @cr.
+ *
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
  * so that the origin of @window is @x, @y. The window contains all its
  * subwindows when rendering.
@@ -299,11 +302,11 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
 void
 gdk_cairo_set_source_window (cairo_t   *cr,
                              GdkWindow *window,
-                             double     x,
-                             double     y)
+                             gdouble    x,
+                             gdouble    y)
 {
   cairo_surface_t *surface;
-  
+
   g_return_if_fail (cr != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -312,23 +315,24 @@ gdk_cairo_set_source_window (cairo_t   *cr,
   cairo_surface_destroy (surface);
 }
 
-/**
+/*
  * _gdk_cairo_surface_extents:
  * @surface: surface to measure
  * @extents: (out): rectangle to put the extents
  *
  * Measures the area covered by @surface and puts it into @extents.
+ *
  * Note that this function respects device offsets set on @surface.
- * if @surface is unbounded, the resulting extents will be empty and
+ * If @surface is unbounded, the resulting extents will be empty and
  * not be a maximal sized rectangle. This is to avoid careless coding.
  * You must explicitly check the return value of you want to handle
  * that case.
  *
- * Returns: %TRUE if the extents fit in a #GdkRectangle, %FALSE if not.
- **/
+ * Returns: %TRUE if the extents fit in a #GdkRectangle, %FALSE if not
+ */
 gboolean
 _gdk_cairo_surface_extents (cairo_surface_t *surface,
-                            GdkRectangle *extents)
+                            GdkRectangle    *extents)
 {
   double x1, x2, y1, y2;
   cairo_t *cr;
@@ -346,7 +350,7 @@ _gdk_cairo_surface_extents (cairo_surface_t *surface,
   y2 = ceil (y2);
   x2 -= x1;
   y2 -= y1;
-  
+
   if (x1 < G_MININT || x1 > G_MAXINT ||
       y1 < G_MININT || y1 > G_MAXINT ||
       x2 > G_MAXINT || y2 > G_MAXINT)
@@ -371,14 +375,15 @@ _gdk_cairo_surface_extents (cairo_surface_t *surface,
  */
 /**
  * gdk_cairo_region_create_from_surface:
- * @surface: A surface
+ * @surface: a cairo surface
  *
- * Creates region that describes covers the area where the given @surface
- * is more than 50% opaque. This function takes into account device
- * offsets that might be set with cairo_surface_set_device_offset().
+ * Creates region that describes covers the area where the given
+ * @surface is more than 50% opaque.
  *
- * Returns: A #cairo_region_t. This must be freed with cairo_region_destroy()
- *   when you are done.
+ * This function takes into account device offsets that might be
+ * set with cairo_surface_set_device_offset().
+ *
+ * Returns: A #cairo_region_t; must be freed with cairo_region_destroy()
  */
 cairo_region_t *
 gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
@@ -417,37 +422,36 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
   for (y = 0; y < extents.height; y++)
     {
       for (x = 0; x < extents.width; x++)
-	{
-	  /* Search for a continuous range of "non transparent pixels"*/
-	  gint x0 = x;
-	  while (x < extents.width)
-	    {
-	      if (((data[x / 8] >> (x%8)) & 1) == 0)
-		/* This pixel is "transparent"*/
-		break;
-	      x++;
-	    }
-	  
-	  if (x > x0)
-	    {
-	      /* Add the pixels (x0, y) to (x, y+1) as a new rectangle
-	       * in the region
-	       */
+        {
+          /* Search for a continuous range of "non transparent pixels"*/
+          gint x0 = x;
+          while (x < extents.width)
+            {
+              if (((data[x / 8] >> (x%8)) & 1) == 0)
+                /* This pixel is "transparent"*/
+                break;
+              x++;
+            }
+
+          if (x > x0)
+            {
+              /* Add the pixels (x0, y) to (x, y+1) as a new rectangle
+               * in the region
+               */
               rect.x = x0;
               rect.width = x - x0;
               rect.y = y;
               rect.height = 1;
 
               cairo_region_union_rectangle (region, &rect);
-	    }
-	}
+            }
+        }
       data += stride;
     }
 
   cairo_surface_destroy (image);
-  
+
   cairo_region_translate (region, extents.x, extents.y);
 
   return region;
 }
-

@@ -736,9 +736,8 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
       if (G_IS_VALUE (val))
         g_value_unset (val);
 
-      g_value_init (val, node->pspec->value_type);
-      G_VALUE_COLLECT (val, args, 0, &error);
-
+      G_VALUE_COLLECT_INIT (val, node->pspec->value_type,
+                            args, 0, &error);
       if (error)
         {
           g_warning ("Could not set style property \"%s\": %s", property_name, error);

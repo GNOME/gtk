@@ -512,6 +512,8 @@ gtk_handle_box_style_updated (GtkWidget *widget)
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
   GtkHandleBoxPrivate *priv = hb->priv;
 
+  GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->style_updated (widget);
+
   if (gtk_widget_get_realized (widget) &&
       gtk_widget_get_has_window (widget))
     {

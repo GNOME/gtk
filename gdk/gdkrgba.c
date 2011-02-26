@@ -34,7 +34,7 @@
  * @Title: RGBA Colors
  *
  * The #GdkRGBA struct is a convenient way to pass rgba colors around.
- * It's based on cairo's way to deal with colors and mirros its behavior.
+ * It's based on cairo's way to deal with colors and mirrors its behavior.
  * All values are in the range from 0.0 to 1.0 inclusive. So the color
  * (0.0, 0.0, 0.0, 0.0) represents transparent black and
  * (1.0, 1.0, 1.0, 1.0) is opaque white. Other values will be clamped
@@ -46,28 +46,28 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
 
 /**
  * GdkRGBA:
- * @red: The intensity of the red channel from 0.0 to 1.0 inclusive.
- * @green: The intensity of the green channel from 0.0 to 1.0 inclusive.
- * @blue: The intensity of the blue channel from 0.0 to 1.0 inclusive.
+ * @red: The intensity of the red channel from 0.0 to 1.0 inclusive
+ * @green: The intensity of the green channel from 0.0 to 1.0 inclusive
+ * @blue: The intensity of the blue channel from 0.0 to 1.0 inclusive
  * @alpha: The opacity of the color from 0.0 for completely translucent to
- *   1.0 for opaque.
+ *   1.0 for opaque
  *
- * The GdkRGBA structure is used to pass around color data. When using it
- * as struct members or on the stack, you want to use the struct directly
- * and not allocate it.
+ * The GdkRGBA structure is used to represent a (possibly translucent)
+ * color, in a way that is compatible with cairos notion of color.
  */
 
 /**
  * gdk_rgba_copy:
  * @rgba: a #GdkRGBA
  *
- * Makes a copy of a #GdkRGBA structure, the result must be freed
- * through gdk_rgba_free().
+ * Makes a copy of a #GdkRGBA structure.
  *
- * Returns: A newly allocated #GdkRGBA
+ * The result must be freed through gdk_rgba_free().
+ *
+ * Returns: A newly allocated #GdkRGBA, with the same contents as @rgba
  *
  * Since: 3.0
- **/
+ */
 GdkRGBA *
 gdk_rgba_copy (const GdkRGBA *rgba)
 {
@@ -89,7 +89,7 @@ gdk_rgba_copy (const GdkRGBA *rgba)
  * Frees a #GdkRGBA struct created with gdk_rgba_copy()
  *
  * Since: 3.0
- **/
+ */
 void
 gdk_rgba_free (GdkRGBA *rgba)
 {
@@ -111,7 +111,7 @@ gdk_rgba_free (GdkRGBA *rgba)
  */
 static double
 parse_rgb_value (const char  *str,
-		 char       **endp)
+                 char       **endp)
 {
   double number;
   const char *p;
@@ -168,7 +168,7 @@ parse_rgb_value (const char  *str,
  * Returns: %TRUE if the parsing succeeded
  *
  * Since: 3.0
- **/
+ */
 gboolean
 gdk_rgba_parse (GdkRGBA     *rgba,
                 const gchar *spec)
@@ -193,7 +193,8 @@ gdk_rgba_parse (GdkRGBA     *rgba,
       PangoColor pango_color;
 
       /* Resort on PangoColor for rgb.txt color
-       * map and '#' prefixed colors */
+       * map and '#' prefixed colors
+       */
       if (pango_color_parse (&pango_color, str))
         {
           if (rgba)
@@ -272,37 +273,37 @@ gdk_rgba_parse (GdkRGBA     *rgba,
 
 /**
  * gdk_rgba_hash:
- * @p: (type GdkRGBA): a #GdkRGBA pointer.
+ * @p: (type GdkRGBA): a #GdkRGBA pointer
  *
  * A hash function suitable for using for a hash
- * table that stores #GdkRGBA<!-- -->s.
+ * table that stores #GdkRGBAs.
  *
- * Return value: The hash function applied to @p
+ * Return value: The hash value for @p
  *
  * Since: 3.0
- **/
+ */
 guint
 gdk_rgba_hash (gconstpointer p)
 {
   const GdkRGBA *rgba = p;
 
   return ((guint) (rgba->red * 65535) +
-	  ((guint) (rgba->green * 65535) << 11) +
-	  ((guint) (rgba->blue * 65535) << 22) +
-	  ((guint) (rgba->alpha * 65535) >> 6));
+          ((guint) (rgba->green * 65535) << 11) +
+          ((guint) (rgba->blue * 65535) << 22) +
+          ((guint) (rgba->alpha * 65535) >> 6));
 }
 
 /**
  * gdk_rgba_equal:
- * @p1: (type GdkRGBA): a #GdkRGBA pointer.
- * @p2: (type GdkRGBA): another #GdkRGBA pointer.
+ * @p1: (type GdkRGBA): a #GdkRGBA pointer
+ * @p2: (type GdkRGBA): another #GdkRGBA pointer
  *
  * Compares two RGBA colors.
  *
  * Return value: %TRUE if the two colors compare equal
  *
  * Since: 3.0
- **/
+ */
 gboolean
 gdk_rgba_equal (gconstpointer p1,
                 gconstpointer p2)
@@ -325,27 +326,35 @@ gdk_rgba_equal (gconstpointer p1,
  * gdk_rgba_to_string:
  * @rgba: a #GdkRGBA
  *
- * Returns a textual specification of @rgba in the form <literal>rgb
- * (r, g, b)</literal> or <literal>rgba (r, g, b, a)</literal>,
- * where 'r', 'g', 'b' and 'a' represent the red, green, blue and alpha values
- * respectively. r, g, and b are integers in the range 0 to 255, and a
- * is a floating point value in the range 0 to 1.
+ * Returns a textual specification of @rgba in the form
+ * <literal>rgb (r, g, b)</literal> or
+ * <literal>rgba (r, g, b, a)</literal>,
+ * where 'r', 'g', 'b' and 'a' represent the red, green,
+ * blue and alpha values respectively. r, g, and b are
+ * represented as integers in the range 0 to 255, and a
+ * is represented as floating point value in the range 0 to 1.
  *
- * (These string forms are string forms those supported by the CSS3 colors module)
+ * These string forms are string forms those supported by
+ * the CSS3 colors module, and can be parsed by gdk_rgba_parse().
+ *
+ * Note that this string representation may loose some
+ * precision, since r, g and b are represented as 8-bit
+ * integers. If this is a concern, you should use a
+ * different representation.
  *
  * Returns: A newly allocated text string
  *
  * Since: 3.0
- **/
+ */
 gchar *
 gdk_rgba_to_string (const GdkRGBA *rgba)
 {
   if (rgba->alpha > 0.999)
     {
       return g_strdup_printf ("rgb(%d,%d,%d)",
-			      (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
-			      (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
-			      (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
+                              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
     }
   else
     {
@@ -354,9 +363,9 @@ gdk_rgba_to_string (const GdkRGBA *rgba)
       g_ascii_dtostr (alpha, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->alpha, 0, 1));
 
       return g_strdup_printf ("rgba(%d,%d,%d,%s)",
-			      (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
-			      (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
-			      (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.),
-			      alpha);
+                              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.),
+                              alpha);
     }
 }

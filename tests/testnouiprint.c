@@ -71,7 +71,7 @@ draw_page (GtkPrintOperation *operation,
   /* Font Fill */
   cairo_set_source_rgb (cr, 0, 0.0, 1.0);
   cairo_fill (cr);
-  
+
   g_object_unref (layout);
 }
 
@@ -79,24 +79,20 @@ draw_page (GtkPrintOperation *operation,
 int
 main (int argc, char **argv)
 {
-  GMainLoop *loop;
   GtkPrintOperation *print;
-  GtkPrintOperationResult res;
   GtkPrintSettings *settings;
 
-  g_type_init (); 
- 
-  loop = g_main_loop_new (NULL, TRUE);
+  g_type_init ();
 
   settings = gtk_print_settings_new ();
   /* gtk_print_settings_set_printer (settings, "printer"); */
-  
+
   print = gtk_print_operation_new ();
   gtk_print_operation_set_print_settings (print, settings);
   gtk_print_operation_set_n_pages (print, 1);
   gtk_print_operation_set_unit (print, GTK_UNIT_MM);
   g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), NULL);
-  res = gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT, NULL, NULL);
+  gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_PRINT, NULL, NULL);
 
   return 0;
 }

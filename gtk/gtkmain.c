@@ -738,20 +738,30 @@ setlocale_initialization (void)
     }
 }
 
-static void
-check_mixed_deps (void)
+/* Return TRUE if module_to_check causes version conflicts.
+ * If module_to_check is NULL, check the main module.
+ */
+gboolean
+_gtk_module_has_mixed_deps (GModule *module_to_check)
 {
   GModule *module;
   gpointer func;
+  gboolean result;
 
-  module = g_module_open (NULL, 0);
+  if (!module_to_check)
+    module = g_module_open (NULL, 0);
+  else
+    module = module_to_check;
 
   if (g_module_symbol (module, "gtk_progress_get_type", &func))
-    {
-      g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
-    }
+    result = TRUE;
+  else
+    result = FALSE;
 
-  g_module_close (module);
+  if (!module_to_check)
+    g_module_close (module);
+
+  return result;
 }
 
 static void
@@ -765,11 +775,12 @@ do_pre_parse_initialization (int    *argc,
 
   pre_initialized = TRUE;
 
-  check_mixed_deps ();
+  if (_gtk_module_has_mixed_deps (NULL))
+    g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
 
   gdk_pre_parse_libgtk_only ();
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
-  
+
 #ifdef G_ENABLE_DEBUG
   env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)

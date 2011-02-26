@@ -527,7 +527,7 @@ find_window_for_mouse_event (GdkWindow* reported_window,
       if (!PtInRect (&rect, pt))
 	return _gdk_root;
 
-      other_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
+      other_window = gdk_win32_handle_table_lookup (hwnd);
     }
 
   if (other_window == NULL)
@@ -542,21 +542,6 @@ find_window_for_mouse_event (GdkWindow* reported_window,
   msg->lParam = MAKELPARAM (pt.x, pt.y);
 
   return other_window;
-}
-
-void
-_gdk_win32_display_add_client_message_filter (GdkDisplay   *display,
-					      GdkAtom       message_type,
-					      GdkFilterFunc func,
-					      gpointer      data)
-{
-  GdkClientFilter *filter = g_new (GdkClientFilter, 1);
-
-  filter->type = message_type;
-  filter->function = func;
-  filter->data = data;
-  
-  client_filters = g_list_append (client_filters, filter);
 }
 
 static void
@@ -834,14 +819,7 @@ _gdk_win32_print_event (const GdkEvent *event)
 		 event->dnd.context->dest_window == NULL ? NULL : GDK_WINDOW_HWND (event->dnd.context->dest_window));
       break;
     case GDK_CLIENT_EVENT:
-      g_print ("%s %d %ld %ld %ld %ld %ld",
-	       gdk_atom_name (event->client.message_type),
-	       event->client.data_format,
-	       event->client.data.l[0],
-	       event->client.data.l[1],
-	       event->client.data.l[2],
-	       event->client.data.l[3],
-	       event->client.data.l[4]);
+      /* no more GdkEventClient */
       break;
     case GDK_SCROLL:
       g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",
@@ -1756,7 +1734,7 @@ gdk_event_translate (MSG  *msg,
 	return TRUE;
     }
 
-  window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd);
+  window = gdk_win32_handle_table_lookup (msg->hwnd);
   orig_window = window;
 
   if (window == NULL)
@@ -1868,15 +1846,7 @@ gdk_event_translate (MSG  *msg,
 	  goto done;
 
 	case GDK_FILTER_CONTINUE:
-	  /* Send unknown client messages on to Gtk for it to use */
-
-	  event->client.type = GDK_CLIENT_EVENT;
-	  event->client.window = window;
-	  event->client.message_type = GDK_POINTER_TO_ATOM (msg->wParam);
-	  event->client.data_format = 32;
-	  event->client.data.l[0] = msg->lParam;
-	  for (i = 1; i < 5; i++)
-	    event->client.data.l[i] = 0;
+	  /* No more: Send unknown client messages on to Gtk for it to use */
 	  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 	  return_val = TRUE;
 	  goto done;
@@ -2235,7 +2205,7 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %d (%ld,%ld)",
 				 HIWORD (msg->wParam), msg->pt.x, msg->pt.y));
 
-      if (!gdk_win32_handle_table_lookup ((GdkNativeWindow) WindowFromPoint (msg->pt)))
+      if (!gdk_win32_handle_table_lookup (WindowFromPoint (msg->pt)))
 	{
 	  /* we are only interested if we don't know the new window */
 	  if (current_toplevel)
@@ -2266,7 +2236,7 @@ gdk_event_translate (MSG  *msg,
 	break;
 
       msg->hwnd = hwnd;
-      if ((new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd)) == NULL)
+      if ((new_window = gdk_win32_handle_table_lookup (msg->hwnd)) == NULL)
 	break;
 
       if (new_window != window)
@@ -2994,7 +2964,7 @@ gdk_event_translate (MSG  *msg,
       event->selection.selection = GDK_SELECTION_CLIPBOARD;
       event->selection.target = target;
       event->selection.property = _gdk_selection;
-      event->selection.requestor = msg->hwnd;
+      event->selection.requestor = gdk_win32_handle_table_lookup (msg->hwnd);
       event->selection.time = msg->time;
 
       fixup_event (event);
@@ -3218,41 +3188,6 @@ is_modally_blocked (GdkWindow *window)
 {
   GdkWindow *modal_current = _gdk_modal_current ();
   return modal_current != NULL ? gdk_window_get_toplevel (window) != modal_current : FALSE;
-}
-
-static void
-check_for_too_much_data (GdkEvent *event)
-{
-  if (event->client.data.l[1] ||
-      event->client.data.l[2] ||
-      event->client.data.l[3] ||
-      event->client.data.l[4])
-    {
-      g_warning ("Only four bytes of data are passed in client messages on Win32\n");
-    }
-}
-
-gboolean
-_gdk_win32_display_send_client_message (GdkDisplay     *display,
-                                        GdkEvent       *event, 
-                                        GdkNativeWindow winid)
-{
-  check_for_too_much_data (event);
-
-  return PostMessageW ((HWND) winid, client_message,
-		       (WPARAM) event->client.message_type,
-		       event->client.data.l[0]);
-}
-
-void
-_gdk_win32_screen_broadcast_client_message (GdkScreen *screen, 
-				     GdkEvent  *event)
-{
-  check_for_too_much_data (event);
-
-  PostMessageW (HWND_BROADCAST, client_message,
-	       (WPARAM) event->client.message_type,
-		event->client.data.l[0]);
 }
 
 void

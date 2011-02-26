@@ -3821,6 +3821,8 @@ gtk_label_style_updated (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
 
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->style_updated (widget);
+
   /* We have to clear the layout, fonts etc. may have changed */
   gtk_label_clear_layout (label);
   gtk_label_invalidate_wrap_width (label);

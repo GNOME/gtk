@@ -649,7 +649,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
 GdkWindow *
 gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
-                                          GdkNativeWindow  anid)
+                                          HWND             anid)
 {
   GdkWindow *window;
   GdkWindowImplWin32 *impl;
@@ -660,14 +660,17 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
 
   g_return_val_if_fail (display == _gdk_display, NULL);
 
+  if ((window = gdk_win32_window_lookup_for_display (display, anid)) != NULL)
+    return g_object_ref (window);
+
   window = _gdk_display_create_window (display);
   window->visual = gdk_screen_get_system_visual (_gdk_screen);
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   impl->wrapper = window;
-  parent = GetParent ((HWND)anid);
+  parent = GetParent (anid);
   
-  window->parent = gdk_win32_handle_table_lookup ((GdkNativeWindow) parent);
+  window->parent = gdk_win32_handle_table_lookup (parent);
   if (!window->parent || GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_FOREIGN)
     window->parent = _gdk_root;
   
@@ -3063,8 +3066,8 @@ gdk_win32_window_shape_combine_region (GdkWindow       *window,
 }
 
 GdkWindow *
-gdk_win32_window_lookup_for_display (GdkDisplay      *display,
-                                     GdkNativeWindow  anid)
+gdk_win32_window_lookup_for_display (GdkDisplay *display,
+                                     HWND        anid)
 {
   g_return_val_if_fail (display == _gdk_display, NULL);
 
@@ -3390,6 +3393,7 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->set_opacity = gdk_win32_window_set_opacity;
   //impl_class->set_composited = gdk_win32_window_set_composited;
   impl_class->destroy_notify = gdk_win32_window_destroy_notify;
+  impl_class->get_drag_protocol = _gdk_win32_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_win32_window_register_dnd;
   impl_class->drag_begin = _gdk_win32_window_drag_begin;
   impl_class->process_updates_recurse = gdk_win32_window_process_updates_recurse;

@@ -38,26 +38,32 @@
 
 /**
  * SECTION:gdkdisplay
- * @Short_description: Controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
+ * @Short_description: Controls a set of GdkScreens and their associated input devices
  * @Title: GdkDisplay
  *
  * #GdkDisplay objects purpose are two fold:
  * <itemizedlist>
- * <listitem><para>
- *   To grab/ungrab keyboard focus and mouse pointer
- * </para></listitem>
- * <listitem><para>
- *   To manage and provide information about the #GdkScreen(s)
- *   available for this #GdkDisplay
- * </para></listitem>
+ * <listitem>
+ *   To manage and provide information about input devices (pointers
+ *   and keyboards)
+ * </listitem>
+ * <listitem>
+ *   To manage and provide information about the available #GdkScreens
+ * </listitem>
  * </itemizedlist>
  *
- * #GdkDisplay objects are the GDK representation of the X Display which can be
- * described as <emphasis>a workstation consisting of a keyboard a pointing
- * device (such as a mouse) and one or more screens</emphasis>.
- * It is used to open and keep track of various #GdkScreen objects currently
- * instanciated by the application. It is also used to grab and release the keyboard
- * and the mouse pointer.
+ * GdkDisplay objects are the GDK representation of an X Display,
+ * which can be described as <emphasis>a workstation consisting of
+ * a keyboard, a pointing device (such as a mouse) and one or more
+ * screens</emphasis>.
+ * It is used to open and keep track of various GdkScreen objects
+ * currently instantiated by the application. It is also used to
+ * access the keyboard(s) and mouse pointer(s) of the display.
+ *
+ * Most of the input device handling has been factored out into
+ * the separate #GdkDeviceManager object. Every display has a
+ * device manager, which you can obtain using
+ * gdk_display_get_device_manager().
  */
 
 
@@ -1536,7 +1542,7 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  * @display:          a #GdkDisplay
  * @clipboard_window: a #GdkWindow belonging to the clipboard owner
  * @time_:            a timestamp
- * @targets:	      (array length=n_targets): an array of targets
+ * @targets:          (array length=n_targets): an array of targets
  *                    that should be saved, or %NULL
  *                    if all available targets should be saved.
  * @n_targets:        length of the @targets array

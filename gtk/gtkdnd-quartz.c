@@ -34,7 +34,7 @@
 #include "gtkdnd.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
-#include "gtkimage.h"
+#include "gtkimageprivate.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkplug.h"

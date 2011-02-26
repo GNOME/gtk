@@ -22,7 +22,7 @@
 #include "gdkx11devicemanager-xi2.h"
 #include "gdkx11device-xi2.h"
 
-#include "gdkdevicemanagerprivate.h"
+#include "gdkdevicemanagerprivate-core.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
@@ -30,15 +30,19 @@
 #include "gdkintl.h"
 #include "gdkkeysyms.h"
 
+#ifdef XINPUT_2
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput2.h>
 
 #include <string.h>
 
+#endif /* XINPUT_2 */
+
 struct _GdkX11DeviceManagerXI2
 {
-  GdkDeviceManager parent_object;
+  GdkX11DeviceManagerCore parent_object;
 
   GHashTable *id_table;
 
@@ -51,6 +55,15 @@ struct _GdkX11DeviceManagerXI2Class
 {
   GdkDeviceManagerClass parent_class;
 };
+
+static void     gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK_TYPE_X11_DEVICE_MANAGER_CORE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
+                                                gdk_x11_device_manager_xi2_event_translator_init))
+
+
+#ifdef XINPUT_2
 
 #define HAS_FOCUS(toplevel) ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
@@ -70,8 +83,6 @@ static GList * gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device
                                                         GdkDeviceType     type);
 static GdkDevice * gdk_x11_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager);
 
-static void     gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface);
-
 static gboolean gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                             GdkDisplay         *display,
                                                             GdkEvent           *event,
@@ -80,11 +91,6 @@ static GdkEventMask gdk_x11_device_manager_xi2_get_handled_events   (GdkEventTra
 static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
                                                                      Window              window,
                                                                      GdkEventMask        event_mask);
-
-
-G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK_TYPE_X11_DEVICE_MANAGER_CORE,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
-                                                gdk_x11_device_manager_xi2_event_translator_init))
 
 
 enum {
@@ -1301,3 +1307,22 @@ gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
   _gdk_x11_device_manager_xi2_select_events (device_manager, window, &event_mask);
   g_free (event_mask.mask);
 }
+
+#else /* XINPUT_2 */
+
+static void
+gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
+{
+}
+
+static void
+gdk_x11_device_manager_xi2_init (GdkX11DeviceManagerXI2 *device_manager)
+{
+}
+
+static void
+gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface)
+{
+}
+
+#endif /* XINPUT_2 */

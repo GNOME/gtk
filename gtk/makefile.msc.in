@@ -58,7 +58,7 @@ gtkbuiltincache.h: gtk-update-icon-cache.exe
 GENERATED = \
 	gtktypebuiltins.h gtktypebuiltins.c \
 	gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtkalias.h gtkaliasdef.c gtktypefuncs.c
+	gtk.def gtktypefuncs.c
 
 all :						\
 	..\config.h				\
@@ -71,21 +71,25 @@ all :						\
 #	gtk-x11-$(GTK_VER).dll
 
 gtk_OBJECTS_cell = \
+	gtkcellarea.obj \
+	gtkcellareabox.obj \
+	gtkcellareaboxcontext.obj \
+	gtkcellareacontext.obj \
 	gtkcelleditable.obj \
 	gtkcelllayout.obj \
 	gtkcellrenderer.obj \
 	gtkcellrendereraccel.obj \
 	gtkcellrenderercombo.obj \
-	gtkcellrenderertext.obj \
-	gtkcellrenderertoggle.obj \
 	gtkcellrendererpixbuf.obj \
 	gtkcellrendererprogress.obj \
 	gtkcellrendererspin.obj	\
 	gtkcellrendererspinner.obj \
-#	gtkcellsizerequest.obj \
+	gtkcellrenderertext.obj \
+	gtkcellrenderertoggle.obj \
 	gtkcellview.obj \
 	gtkliststore.obj \
 	gtktreednd.obj \
+	gtktreemenu.obj \
 	gtktreemodel.obj \
 	gtktreemodelfilter.obj \
 	gtktreemodelsort.obj \
@@ -119,7 +123,7 @@ gtk_OBJECTS_print = \
 	gtkprintutils.obj \
 
 gtk_OBJECTS_text = \
-	gtktestutils.obj \
+	gtktextattributes.obj \
 	gtktextbtree.obj \
 	gtktextbuffer.obj \
 	gtktextbufferrichtext.obj \
@@ -182,10 +186,6 @@ gtk_OBJECTS = \
 	gtkbuilderparser.obj \
 	gtkbutton.obj \
 	gtkcalendar.obj \
-	gtkcellarea.obj \
-	gtkcellareabox.obj \
-	gtkcellareaboxcontext.obj \
-	gtkcellareacontext.obj \
 	gtkcheckbutton.obj \
 	gtkcheckmenuitem.obj \
 	gtkclipboard.obj \
@@ -251,6 +251,7 @@ gtk_OBJECTS = \
 	gtkmountoperation.obj \
 	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
+	gtknumerableicon.obj \
 	gtkoffscreenwindow.obj \
 	gtkorientable.obj \
 	gtkpagesetup.obj \
@@ -297,6 +298,7 @@ gtk_OBJECTS = \
 	gtksymboliccolor.obj \
 	gtktable.obj \
 	gtktearoffmenuitem.obj \
+	gtktestutils.obj \
 	gtkthemingengine.obj \
 	gtktimeline.obj \
 	gtktoggleaction.obj \
@@ -311,7 +313,6 @@ gtk_OBJECTS = \
 	gtktooltip.obj \
 	gtktreedatalist.obj \
 	gtktypebuiltins.obj \
-	gtktypeutils.obj \
 	gtkuimanager.obj \
 	gtkvbbox.obj \
 	gtkvbox.obj \
@@ -361,7 +362,6 @@ gtk_public_h_sources = 		\
 	gtkcellarea.h		\
 	gtkcellareacontext.h	\
 	gtkcellareabox.h	\
-	gtkcellareaboxcontext.h	\
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
@@ -521,7 +521,6 @@ gtk_public_h_sources = 		\
 	gtktreestore.h		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
-	gtktypeutils.h		\
 	gtkuimanager.h		\
 	gtkvbbox.h		\
 	gtkvbox.h		\
