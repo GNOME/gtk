@@ -183,16 +183,17 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
                               GdkModifierType *mask)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
-  GdkDisplay *display;
-  XIDeviceInfo *info;
-  gint i, j, ndevices;
-
-  display = gdk_device_get_display (device);
 
   if (axes)
     {
-      info = XIQueryDevice(GDK_DISPLAY_XDISPLAY (display),
-                           device_xi2->device_id, &ndevices);
+      GdkDisplay *display;
+      XIDeviceInfo *info;
+      gint i, j, ndevices;
+
+      display = gdk_device_get_display (device);
+
+      info = XIQueryDevice (GDK_DISPLAY_XDISPLAY (display),
+                            device_xi2->device_id, &ndevices);
 
       for (i = 0, j = 0; i < info->num_classes; i++)
         {
