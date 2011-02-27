@@ -1859,8 +1859,8 @@ draw_stepper (GtkRange     *range,
   GtkWidget *widget = GTK_WIDGET (range);
   gfloat arrow_scaling;
   GdkRectangle *rect;
-  gint arrow_x;
-  gint arrow_y;
+  gdouble arrow_x;
+  gdouble arrow_y;
   gdouble arrow_size, angle;
   gboolean arrow_sensitive;
 
