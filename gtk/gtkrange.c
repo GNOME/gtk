@@ -1842,7 +1842,6 @@ _gtk_range_update_context_for_stepper (GtkRange        *range,
     }
 
   gtk_style_context_set_junction_sides (context, sides);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
 }
 
 static void
@@ -1912,7 +1911,14 @@ draw_stepper (GtkRange     *range,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-  _gtk_range_update_context_for_stepper (range, context, stepper);
+
+  /* don't set juction sides on scrollbar steppers */
+  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_SCROLLBAR))
+    gtk_style_context_set_junction_sides (context, GTK_JUNCTION_NONE);
+  else
+    _gtk_range_update_context_for_stepper (range, context, stepper);
+
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
   gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr,
