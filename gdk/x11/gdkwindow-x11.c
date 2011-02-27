@@ -1821,11 +1821,14 @@ gdk_x11_window_focus (GdkWindow *window,
       XRaiseWindow (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window));
 
       /* There is no way of knowing reliably whether we are viewable;
-       * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
+       * so trap errors asynchronously around the XSetInputFocus call
        */
-      _gdk_x11_set_input_focus_safe (display, GDK_WINDOW_XID (window),
-				     RevertToParent,
-				     timestamp);
+      gdk_x11_display_error_trap_push (display);
+      XSetInputFocus (GDK_DISPLAY_XDISPLAY (display),
+                      GDK_WINDOW_XID (window),
+                      RevertToParent,
+                      timestamp);
+      gdk_x11_display_error_trap_pop_ignored (display);
     }
 }
 
