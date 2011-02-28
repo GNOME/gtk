@@ -445,6 +445,7 @@ gdk_event_new (GdkEventType type)
   switch (type)
     {
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       new_event->motion.x = 0.;
       new_event->motion.y = 0.;
       new_event->motion.x_root = 0.;
@@ -564,6 +565,7 @@ gdk_event_copy (const GdkEvent *event)
       break;
 
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       if (event->motion.axes)
         new_event->motion.axes = g_memdup (event->motion.axes,
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
@@ -647,6 +649,7 @@ gdk_event_free (GdkEvent *event)
       break;
       
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       g_free (event->motion.axes);
       break;
       
@@ -692,6 +695,7 @@ gdk_event_get_time (const GdkEvent *event)
     switch (event->type)
       {
       case GDK_MOTION_NOTIFY:
+      case GDK_TOUCH_MOTION:
 	return event->motion.time;
       case GDK_BUTTON_PRESS:
       case GDK_2BUTTON_PRESS:
@@ -767,6 +771,7 @@ gdk_event_get_state (const GdkEvent        *event,
     switch (event->type)
       {
       case GDK_MOTION_NOTIFY:
+      case GDK_TOUCH_MOTION:
 	*state = event->motion.state;
         return TRUE;
       case GDK_BUTTON_PRESS:
@@ -865,6 +870,7 @@ gdk_event_get_coords (const GdkEvent *event,
       y = event->button.y;
       break;
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       x = event->motion.x;
       y = event->motion.y;
       break;
@@ -904,6 +910,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
   switch (event->type)
     {
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       x = event->motion.x_root;
       y = event->motion.y_root;
       break;
@@ -972,7 +979,8 @@ gdk_event_get_axis (const GdkEvent *event,
       
       switch (event->type)
 	{
-	case GDK_MOTION_NOTIFY:
+        case GDK_MOTION_NOTIFY:
+        case GDK_TOUCH_MOTION:
 	  x = event->motion.x;
 	  y = event->motion.y;
 	  break;
@@ -1008,7 +1016,8 @@ gdk_event_get_axis (const GdkEvent *event,
       device = event->button.device;
       axes = event->button.axes;
     }
-  else if (event->type == GDK_MOTION_NOTIFY)
+  else if (event->type == GDK_MOTION_NOTIFY ||
+           event->type == GDK_TOUCH_MOTION)
     {
       device = event->motion.device;
       axes = event->motion.axes;
@@ -1045,6 +1054,7 @@ gdk_event_set_device (GdkEvent  *event,
   switch (event->type)
     {
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       event->motion.device = device;
       break;
     case GDK_BUTTON_PRESS:
@@ -1092,6 +1102,7 @@ gdk_event_get_device (const GdkEvent *event)
   switch (event->type)
     {
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       return event->motion.device;
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
@@ -1111,6 +1122,7 @@ gdk_event_get_device (const GdkEvent *event)
   switch (event->type)
     {
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
