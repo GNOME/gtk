@@ -348,6 +348,7 @@ typedef enum
  * @GDK_SUBSTRUCTURE_MASK: receive events about window configuration changes of
  *   child windows
  * @GDK_SCROLL_MASK: receive scroll events
+ * @GDK_TOUCH_MASK: receive touch events
  * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
  *
  * A set of bit-flags to indicate which events a window is to receive.
@@ -363,6 +364,13 @@ typedef enum
  * some of which are marked as a hint (the is_hint member is %TRUE).
  * To receive more motion events after a motion hint event, the application
  * needs to asks for more, by calling gdk_event_request_motions().
+ *
+ * If %GDK_TOUCH_MASK is enabled, the window will receive touch events
+ * from touch-enabled devices. Those will come as sequences of #GdkEventTouch
+ * with type %GDK_TOUCH_UPDATE, enclosed by two events with
+ * type %GDK_TOUCH_BEGIN and %GDK_TOUCH_END (or %GDK_TOUCH_CANCEL).
+ * gdk_event_get_event_sequence() returns the event sequence for these
+ * events, so different sequences may be distinguished.
  */
 typedef enum
 {
@@ -387,7 +395,8 @@ typedef enum
   GDK_PROXIMITY_OUT_MASK        = 1 << 19,
   GDK_SUBSTRUCTURE_MASK         = 1 << 20,
   GDK_SCROLL_MASK               = 1 << 21,
-  GDK_ALL_EVENTS_MASK           = 0x3FFFFE
+  GDK_TOUCH_MASK                = 1 << 22,
+  GDK_ALL_EVENTS_MASK           = 0x7FFFFE
 } GdkEventMask;
 
 /**

@@ -829,6 +829,7 @@ GdkEvent
 GdkEventAny
 GdkEventKey
 GdkEventButton
+GdkEventTouch
 GdkEventScroll
 GdkEventMotion
 GdkEventExpose
