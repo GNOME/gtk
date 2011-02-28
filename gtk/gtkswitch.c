@@ -473,10 +473,14 @@ gtk_switch_paint_handle (GtkWidget    *widget,
                          cairo_t      *cr,
                          GdkRectangle *box)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
   GtkStateFlags state;
 
   state = gtk_widget_get_state_flags (widget);
+
+  if (priv->is_active)
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
