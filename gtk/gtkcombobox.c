@@ -973,6 +973,23 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                              GTK_PARAM_READABLE));
 
   /**
+   * GtkComboBox:arrow-scaling:
+   *
+   * Sets the amount of space used up by the combobox arrow,
+   * proportional to the font size.
+   *
+   * Since: 3.2
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_float ("arrow-scaling",
+                                                               P_("Arrow Scaling"),
+                                                               P_("The amount of space used by the arrow"),
+                                                             0,
+                                                             2.0,
+                                                             1.0,
+                                                             GTK_PARAM_READABLE));
+
+  /**
    * GtkComboBox:shadow-type:
    *
    * Which kind of shadow to draw around the combo box.
@@ -5264,6 +5281,7 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   GtkStyleContext       *style_context;
   GtkStateFlags          state;
   GtkBorder             *border;
+  gfloat                 arrow_scaling;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
@@ -5274,6 +5292,7 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
                         "focus-line-width", &focus_width,
                         "focus-padding", &focus_pad,
                         "arrow-size", &arrow_size,
+                        "arrow-scaling", &arrow_scaling,
                         NULL);
 
   style_context = gtk_widget_get_style_context (widget);
@@ -5292,7 +5311,7 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   pango_font_metrics_unref (metrics);
   pango_font_description_free (font_desc);
 
-  arrow_size = MAX (arrow_size, font_size);
+  arrow_size = MAX (arrow_size, font_size) * arrow_scaling;
 
   gtk_widget_set_size_request (priv->arrow, arrow_size, arrow_size);
 
