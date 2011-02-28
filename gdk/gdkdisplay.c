@@ -1342,7 +1342,9 @@ gdk_display_get_device_manager (GdkDisplay *display)
 G_CONST_RETURN gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->get_name (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_name (display);
 }
 
 gchar *
@@ -1364,7 +1366,9 @@ gdk_get_display (void)
 gint
 gdk_display_get_n_screens (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->get_n_screens (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_n_screens (display);
 }
 
 /**
@@ -1382,7 +1386,9 @@ GdkScreen *
 gdk_display_get_screen (GdkDisplay *display,
 			gint        screen_num)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->get_screen (display, screen_num);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_screen (display, screen_num);
 }
 
 /**
@@ -1398,7 +1404,9 @@ gdk_display_get_screen (GdkDisplay *display,
 GdkScreen *
 gdk_display_get_default_screen (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->get_default_screen (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
 }
 
 /**
@@ -1412,7 +1420,9 @@ gdk_display_get_default_screen (GdkDisplay *display)
 void
 gdk_display_beep (GdkDisplay *display)
 {
-  GDK_DISPLAY_GET_CLASS(display)->beep (display);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  GDK_DISPLAY_GET_CLASS (display)->beep (display);
 }
 
 /**
@@ -1434,7 +1444,9 @@ gdk_display_beep (GdkDisplay *display)
 void
 gdk_display_sync (GdkDisplay *display)
 {
-  GDK_DISPLAY_GET_CLASS(display)->sync (display);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  GDK_DISPLAY_GET_CLASS (display)->sync (display);
 }
 
 /**
@@ -1456,7 +1468,9 @@ gdk_display_sync (GdkDisplay *display)
 void
 gdk_display_flush (GdkDisplay *display)
 {
-  GDK_DISPLAY_GET_CLASS(display)->flush (display);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  GDK_DISPLAY_GET_CLASS (display)->flush (display);
 }
 
 /**
@@ -1475,7 +1489,9 @@ gdk_display_flush (GdkDisplay *display)
 GdkWindow *
 gdk_display_get_default_group (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->get_default_group (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_default_group (display);
 }
 
 /**
@@ -1493,7 +1509,9 @@ gdk_display_get_default_group (GdkDisplay *display)
 gboolean
 gdk_display_supports_selection_notification (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->supports_selection_notification (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->supports_selection_notification (display);
 }
 
 /**
@@ -1515,7 +1533,9 @@ gdk_display_request_selection_notification (GdkDisplay *display,
 					    GdkAtom     selection)
 
 {
-  return GDK_DISPLAY_GET_CLASS(display)->request_selection_notification (display, selection);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->request_selection_notification (display, selection);
 }
 
 /**
@@ -1534,7 +1554,9 @@ gdk_display_request_selection_notification (GdkDisplay *display,
 gboolean
 gdk_display_supports_clipboard_persistence (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->supports_clipboard_persistence (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->supports_clipboard_persistence (display);
 }
 
 /**
@@ -1562,7 +1584,9 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 			     const GdkAtom *targets,
 			     gint           n_targets)
 {
-  GDK_DISPLAY_GET_CLASS(display)->store_clipboard (display, clipboard_window, time_, targets, n_targets);
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  GDK_DISPLAY_GET_CLASS (display)->store_clipboard (display, clipboard_window, time_, targets, n_targets);
 }
 
 /**
@@ -1579,7 +1603,9 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 gboolean
 gdk_display_supports_shapes (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->supports_shapes (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->supports_shapes (display);
 }
 
 /**
@@ -1596,7 +1622,9 @@ gdk_display_supports_shapes (GdkDisplay *display)
 gboolean
 gdk_display_supports_input_shapes (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->supports_input_shapes (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->supports_input_shapes (display);
 }
 
 /**
@@ -1616,7 +1644,9 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
 gboolean
 gdk_display_supports_composite (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->supports_composite (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->supports_composite (display);
 }
 
 /**
@@ -1636,7 +1666,9 @@ gdk_display_supports_composite (GdkDisplay *display)
 GList *
 gdk_display_list_devices (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->list_devices (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->list_devices (display);
 }
 
 static GdkAppLaunchContext *
@@ -1666,7 +1698,9 @@ gdk_display_real_get_app_launch_context (GdkDisplay *display)
 GdkAppLaunchContext *
 gdk_display_get_app_launch_context (GdkDisplay *display)
 {
-  return GDK_DISPLAY_GET_CLASS(display)->get_app_launch_context (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_app_launch_context (display);
 }
 
 /**
@@ -1683,7 +1717,8 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
-  return gdk_display_manager_open_display (gdk_display_manager_get (), display_name);
+  return gdk_display_manager_open_display (gdk_display_manager_get (),
+                                           display_name);
 }
 
 /**
@@ -1700,6 +1735,8 @@ gdk_display_open (const gchar *display_name)
 gboolean
 gdk_display_has_pending (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
   return GDK_DISPLAY_GET_CLASS (display)->has_pending (display);
 }
 
@@ -1818,6 +1855,8 @@ gdk_display_warp_pointer (GdkDisplay *display,
                           gint        x,
                           gint        y)
 {
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
   gdk_device_warp (display->core_pointer,
                    screen,
                    x, y);
@@ -1895,6 +1934,8 @@ void
 gdk_display_notify_startup_complete (GdkDisplay  *display,
                                      const gchar *startup_id)
 {
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
   GDK_DISPLAY_GET_CLASS (display)->notify_startup_complete (display, startup_id);
 }
 
@@ -1950,6 +1991,8 @@ _gdk_display_create_window (GdkDisplay *display)
 GdkKeymap*
 gdk_keymap_get_for_display (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
   return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
 }
 
