@@ -350,6 +350,7 @@ typedef enum
  * @GDK_SUBSTRUCTURE_MASK: receive events about window configuration changes of
  *   child windows
  * @GDK_SCROLL_MASK: receive scroll events
+ * @GDK_TOUCH_MASK: receive (multi)touch events
  * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
  *
  * A set of bit-flags to indicate which events a window is to receive.
@@ -389,7 +390,8 @@ typedef enum
   GDK_PROXIMITY_OUT_MASK        = 1 << 19,
   GDK_SUBSTRUCTURE_MASK         = 1 << 20,
   GDK_SCROLL_MASK               = 1 << 21,
-  GDK_ALL_EVENTS_MASK           = 0x3FFFFE
+  GDK_TOUCH_MASK                = 1 << 22,
+  GDK_ALL_EVENTS_MASK           = 0x3FFFFF
 } GdkEventMask;
 
 /**
