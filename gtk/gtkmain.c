@@ -1649,7 +1649,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
-      if ((event->type == GDK_BUTTON_PRESS) &&
+    case GDK_TOUCH_PRESS:
+      if ((event->type == GDK_BUTTON_PRESS ||
+           event->type == GDK_TOUCH_PRESS) &&
           event->button.button == 1)
         {
           /* Handle press and hold on the grab widget before propagating up,
@@ -1709,10 +1711,14 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_BUTTON_RELEASE:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-      if ((event->type == GDK_BUTTON_RELEASE) &&
+    case GDK_TOUCH_MOTION:
+    case GDK_TOUCH_RELEASE:
+      if ((event->type == GDK_BUTTON_RELEASE ||
+           event->type == GDK_TOUCH_RELEASE) &&
           event->button.button == 1)
         _gtk_widget_press_and_hold_check_cancel (grab_widget, &event->button);
-      else if (event->type == GDK_MOTION_NOTIFY)
+      else if (event->type == GDK_MOTION_NOTIFY ||
+               event->type == GDK_TOUCH_MOTION)
         _gtk_widget_press_and_hold_check_threshold (grab_widget,
                                                     &event->motion);
 
@@ -1766,6 +1772,7 @@ gtk_main_do_event (GdkEvent *event)
       || event->type == GDK_DRAG_ENTER
       || event->type == GDK_GRAB_BROKEN
       || event->type == GDK_MOTION_NOTIFY
+      || event->type == GDK_TOUCH_MOTION
       || event->type == GDK_SCROLL)
     {
       _gtk_tooltip_handle_event (event);
