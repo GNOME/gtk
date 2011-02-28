@@ -5993,15 +5993,18 @@ gtk_widget_event_internal (GtkWidget *widget,
 	case GDK_BUTTON_PRESS:
 	case GDK_2BUTTON_PRESS:
 	case GDK_3BUTTON_PRESS:
+        case GDK_TOUCH_PRESS:
 	  signal_num = BUTTON_PRESS_EVENT;
 	  break;
 	case GDK_SCROLL:
 	  signal_num = SCROLL_EVENT;
 	  break;
 	case GDK_BUTTON_RELEASE:
+        case GDK_TOUCH_RELEASE:
 	  signal_num = BUTTON_RELEASE_EVENT;
 	  break;
 	case GDK_MOTION_NOTIFY:
+        case GDK_TOUCH_MOTION:
 	  signal_num = MOTION_NOTIFY_EVENT;
 	  break;
 	case GDK_DELETE:

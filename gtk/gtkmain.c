@@ -1869,6 +1869,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_BUTTON_RELEASE:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
+    case GDK_TOUCH_MOTION:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       gtk_propagate_event (grab_widget, event);
       break;
 
@@ -1912,6 +1915,7 @@ gtk_main_do_event (GdkEvent *event)
       || event->type == GDK_DRAG_ENTER
       || event->type == GDK_GRAB_BROKEN
       || event->type == GDK_MOTION_NOTIFY
+      || event->type == GDK_TOUCH_MOTION
       || event->type == GDK_SCROLL)
     {
       _gtk_tooltip_handle_event (event);
