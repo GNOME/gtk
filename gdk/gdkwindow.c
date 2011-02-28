@@ -8121,6 +8121,10 @@ static const guint type_masks[] = {
   0, /* GDK_OWNER_CHANGE = 34 */
   0, /* GDK_GRAB_BROKEN = 35 */
   0, /* GDK_DAMAGE = 36 */
+  GDK_TOUCH_MASK, /* GDK_TOUCH_BEGIN = 37 */
+  GDK_TOUCH_MASK, /* GDK_TOUCH_UPDATE = 38 */
+  GDK_TOUCH_MASK, /* GDK_TOUCH_END = 39 */
+  GDK_TOUCH_MASK /* GDK_TOUCH_CANCEL = 40 */
 };
 G_STATIC_ASSERT (G_N_ELEMENTS (type_masks) == GDK_EVENT_LAST);
 
@@ -8234,6 +8238,16 @@ _gdk_make_event (GdkWindow    *window,
       event->button.axes = NULL;
       event->button.state = the_state;
       break;
+
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      event->touch.time = the_time;
+      event->touch.axes = NULL;
+      event->touch.state = the_state;
+      break;
+
 
     case GDK_SCROLL:
       event->scroll.time = the_time;
