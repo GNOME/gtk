@@ -1126,6 +1126,10 @@ if test "x$enable_x11_backend" = xyes; then
                     AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]),
                     X_EXTENSIONS="$X_EXTENSIONS XInput")
 
+    gtk_save_LIBS="$LIBS"
+    LIBS="$LIBS -lXi"
+    AC_CHECK_FUNC(XIAllowTouchEvents, AC_DEFINE(XINPUT_2_1, 1, [Define to 1 if XInput 2.1 is available]))
+    LIBS="$gtk_save_LIBS"
   else
     AC_DEFINE(XINPUT_NONE, 1,
               [Define to 1 if no XInput should be used])
