@@ -263,6 +263,8 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   was added in 2.8.
  * @GDK_DAMAGE: the content of the window has been changed. This event type
  *   was added in 2.14.
+ * @GDK_TOUCH_MOTION: A touch device has been updated. This event type
+ *   was added in 3.4.
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
  *
  * Specifies the type of the event.
@@ -310,6 +312,7 @@ typedef enum
   GDK_OWNER_CHANGE      = 34,
   GDK_GRAB_BROKEN       = 35,
   GDK_DAMAGE            = 36,
+  GDK_TOUCH_MOTION      = 37,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
 
@@ -552,8 +555,9 @@ struct _GdkEventVisibility
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
+ * @touch_id: touch ID, only meaningful if event is of type %GDK_TOUCH_MOTION.
  *
- * Generated when the pointer moves.
+ * Generated when the pointer/touch moves.
  */
 struct _GdkEventMotion
 {
@@ -568,6 +572,7 @@ struct _GdkEventMotion
   gint16 is_hint;
   GdkDevice *device;
   gdouble x_root, y_root;
+  guint touch_id;
 };
 
 /**
