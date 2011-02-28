@@ -54,7 +54,11 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
           int major, minor;
 
           major = 2;
+#ifdef XINPUT_2_1
+	  minor = 1;
+#else
           minor = 0;
+#endif /* XINPUT_2_1 */
 
           if (!_gdk_disable_multidevice &&
               XIQueryVersion (xdisplay, &major, &minor) != BadRequest)
