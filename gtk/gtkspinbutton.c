@@ -637,6 +637,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_spin_button_set_adjustment (spin_button,
                                   gtk_adjustment_new (0, 0, 0, 0, 0, 0));
 
+  gtk_entry_set_alignment (GTK_ENTRY (spin_button), 0.5);
+
   context = gtk_widget_get_style_context (GTK_WIDGET (spin_button));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SPINBUTTON);
 }
