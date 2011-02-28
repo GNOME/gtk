@@ -147,8 +147,10 @@ _gdk_x11_device_manager_xi2_select_events (GdkDeviceManager *device_manager,
 static void
 translate_valuator_class (GdkDisplay          *display,
                           GdkDevice           *device,
-                          XIValuatorClassInfo *info,
-                          gint                 n_valuator)
+                          Atom                 valuator_label,
+                          gdouble              min,
+                          gdouble              max,
+                          gdouble              resolution)
 {
   static gboolean initialized = FALSE;
   static Atom label_atoms [GDK_AXIS_LAST] = { 0 };
@@ -169,24 +171,19 @@ translate_valuator_class (GdkDisplay          *display,
 
   for (i = GDK_AXIS_IGNORE; i <= GDK_AXIS_LAST; i++)
     {
-      if (label_atoms[i] == info->label)
+      if (label_atoms[i] == valuator_label)
         {
           use = i;
           break;
         }
     }
 
-  if (info->label != None)
-    label = gdk_x11_xatom_to_atom_for_display (display, info->label);
+  if (valuator_label != None)
+    label = gdk_x11_xatom_to_atom_for_display (display, valuator_label);
   else
     label = GDK_NONE;
 
-  _gdk_device_add_axis (device,
-                        label,
-                        use,
-                        info->min,
-                        info->max,
-                        info->resolution);
+  _gdk_device_add_axis (device, label, use, min, max, resolution);
 }
 
 static void
@@ -195,7 +192,7 @@ translate_device_classes (GdkDisplay      *display,
                           XIAnyClassInfo **classes,
                           guint            n_classes)
 {
-  gint i, n_valuator = 0;
+  gint i;
 
   g_object_freeze_notify (G_OBJECT (device));
 
@@ -217,11 +214,28 @@ translate_device_classes (GdkDisplay      *display,
           }
           break;
         case XIValuatorClass:
-          translate_valuator_class (display, device,
-                                    (XIValuatorClassInfo *) class_info,
-                                    n_valuator);
-          n_valuator++;
+          {
+            XIValuatorClassInfo *valuator_info = (XIValuatorClassInfo *) class_info;
+            translate_valuator_class (display, device,
+                                      valuator_info->label,
+                                      valuator_info->min,
+                                      valuator_info->max,
+                                      valuator_info->resolution);
+          }
           break;
+#ifdef XINPUT_2_1
+        case XITouchValuatorClass:
+          {
+            XITouchValuatorClassInfo *valuator_info = (XITouchValuatorClassInfo *) class_info;
+
+            translate_valuator_class (display, device,
+                                      valuator_info->label,
+                                      valuator_info->min,
+                                      valuator_info->max,
+                                      valuator_info->resolution);
+          }
+          break;
+#endif /* XINPUT_2_1 */
         default:
           /* Ignore */
           break;
@@ -256,6 +270,8 @@ create_device (GdkDeviceManager *device_manager,
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;
+      else if (strstr (tmp_name, "multitouch"))
+        input_source = GDK_SOURCE_TOUCH;
       else
         input_source = GDK_SOURCE_MOUSE;
 
@@ -883,6 +899,10 @@ get_event_window (GdkEventTranslator *translator,
     case XI_ButtonPress:
     case XI_ButtonRelease:
     case XI_Motion:
+#ifdef XINPUT_2_1
+    case XI_TouchMotion:
+    case XI_TouchMotionUnowned:
+#endif /* XINPUT_2_1 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
@@ -1161,11 +1181,32 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         break;
       }
     case XI_Motion:
+#ifdef XINPUT_2_1
+    case XI_TouchMotion:
+    case XI_TouchMotionUnowned:
+      /* FIXME: Unowned events should be rollback-able,
+       * the easiest way to go could be just storing the
+       * events so they can be replayed in arrival order
+       * when an ownership event arrives, needs further
+       * investigation though.
+       */
+#endif /* XINPUT_2_1 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
 
-        event->motion.type = GDK_MOTION_NOTIFY;
+        if (ev->evtype == XI_Motion)
+          {
+            event->motion.touch_id = 0;
+            event->motion.type = GDK_MOTION_NOTIFY;
+          }
+#ifdef XINPUT_2_1
+        else
+          {
+            event->motion.touch_id = xev->detail;
+            event->motion.type = GDK_TOUCH_MOTION;
+          }
+#endif
 
         event->motion.window = window;
 
@@ -1252,6 +1293,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         return_val = FALSE;
       }
+      break;
     default:
       return_val = FALSE;
       break;
@@ -1297,7 +1339,8 @@ gdk_x11_device_manager_xi2_get_handled_events (GdkEventTranslator *translator)
           GDK_BUTTON2_MOTION_MASK |
           GDK_BUTTON3_MOTION_MASK |
           GDK_BUTTON_MOTION_MASK |
-          GDK_FOCUS_CHANGE_MASK);
+          GDK_FOCUS_CHANGE_MASK |
+          GDK_TOUCH_MASK);
 }
 
 static void

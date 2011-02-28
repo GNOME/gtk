@@ -61,6 +61,7 @@ typedef enum
  *                     of a stylus on a graphics tablet.
  * @GDK_SOURCE_CURSOR: the device is a graphics tablet "puck" or similar device.
  * @GDK_SOURCE_KEYBOARD: the device is a keyboard.
+ * @GDK_SOURCE_TOUCH: the device is a touch capable device.
  *
  * An enumeration describing the type of an input device in general terms.
  */
@@ -70,7 +71,8 @@ typedef enum
   GDK_SOURCE_PEN,
   GDK_SOURCE_ERASER,
   GDK_SOURCE_CURSOR,
-  GDK_SOURCE_KEYBOARD
+  GDK_SOURCE_KEYBOARD,
+  GDK_SOURCE_TOUCH
 } GdkInputSource;
 
 /**
