@@ -935,7 +935,7 @@ if test "x$enable_x11_backend" = xyes; then
     have_base_x_pc=true
     X_PACKAGES="$X_PACKAGES x11 xext"
     x_libs="`$PKG_CONFIG --libs x11 xext`"
-    X_CFLAGS="`$PKG_CONFIG --cflags x11 xext`"
+    X_CFLAGS="`$PKG_CONFIG --cflags x11 xext` -DXINPUT2_1_USE_UNSTABLE_PROTOCOL -DXINPUT2_2_USE_UNSTABLE_PROTOCOL"
 
     # Strip out any .la files that pkg-config might give us (this happens
     # with -uninstalled.pc files)
@@ -1126,6 +1126,10 @@ if test "x$enable_x11_backend" = xyes; then
                     AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]),
                     X_EXTENSIONS="$X_EXTENSIONS XInput")
 
+    gtk_save_LIBS="$LIBS"
+    LIBS="$LIBS -lXi"
+    AC_CHECK_FUNC(XIAllowTouchEvents, AC_DEFINE(XINPUT_2_2, 1, [Define to 1 if XInput 2.2 is available]))
+    LIBS="$gtk_save_LIBS"
   else
     AC_DEFINE(XINPUT_NONE, 1,
               [Define to 1 if no XInput should be used])
