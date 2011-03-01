@@ -246,6 +246,7 @@ static const struct {
   { GDK_BLANK_CURSOR, NULL, 0, 0 },
   { GDK_HAND1, DATADIR "/hand1.png", 18, 11 },
   { GDK_HAND2, DATADIR "/hand2.png", 14,  8 },
+  { GDK_LEFT_PTR, DATADIR "/left_ptr.png", 10, 5 },
   { GDK_SB_H_DOUBLE_ARROW, DATADIR "/sb_h_double_arrow.png", 15, 15 },
   { GDK_SB_V_DOUBLE_ARROW, DATADIR "/sb_v_double_arrow.png", 15, 15 },
   { GDK_XTERM, DATADIR "/xterm.png", 15, 15 },
