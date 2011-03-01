@@ -571,12 +571,15 @@ gtk_switch_draw (GtkWidget *widget,
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
 
-  /* XXX the +1/-1 it's pixel wriggling after checking with the default
-   * theme and xmag
-   */
-  handle.y = y + padding.top + 1;
-  handle.width = (width - padding.left - padding.right) / 2;
-  handle.height = (height - padding.top - padding.bottom) - 1;
+  width -= padding.left + padding.right;
+  height -= padding.top + padding.bottom;
+
+  x += padding.left;
+  y += padding.top;
+
+  handle.y = y;
+  handle.width = width / 2;
+  handle.height = height;
 
   /* Translators: if the "on" state label requires more than three
    * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -586,10 +589,8 @@ gtk_switch_draw (GtkWidget *widget,
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
 
-  label_x = x + padding.left
-          + ((width / 2) - rect.width - padding.left - padding.right) / 2;
-  label_y = y + padding.top
-          + (height - rect.height - padding.top - padding.bottom) / 2;
+  label_x = x +  ((width / 2) - rect.width) / 2;
+  label_y = y + (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
@@ -602,11 +603,8 @@ gtk_switch_draw (GtkWidget *widget,
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
 
-  label_x = x + padding.left
-          + (width / 2)
-          + ((width / 2) - rect.width - padding.left - padding.right) / 2;
-  label_y = y + padding.top
-          + (height - rect.height - padding.top - padding.bottom) / 2;
+  label_x = x +  (width / 2) + ((width / 2) - rect.width) / 2;
+  label_y = y + (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
@@ -615,9 +613,9 @@ gtk_switch_draw (GtkWidget *widget,
   if (priv->is_dragging)
     handle.x = x + priv->handle_x;
   else if (priv->is_active)
-    handle.x = x + width - handle.width - padding.right;
+    handle.x = x + width - handle.width;
   else
-    handle.x = x + padding.left;
+    handle.x = x;
 
   gtk_style_context_restore (context);
 
