@@ -1723,6 +1723,47 @@ gdk_event_get_screen (const GdkEvent *event)
 }
 
 /**
+ * gdk_event_get_touch_id:
+ * @event: a #GdkEvent
+ * @touch_id: return location of the touch ID of a touch event
+ *
+ * If @event if of type %GDK_TOUCH_MOTION, %GDK_TOUCH_PRESS or
+ * %GDK_TOUCH_RELEASE, fills in @touch_id and returns %TRUE,
+ * else it returns %FALSE.
+ *
+ * Returns: %TRUE if the touch ID can be extracted from @event.
+ *
+ * Since: 3.4
+ */
+gboolean
+gdk_event_get_touch_id (const GdkEvent *event,
+                        guint          *touch_id)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_TOUCH_MOTION)
+    {
+      if (touch_id)
+        *touch_id = event->motion.touch_id;
+      return TRUE;
+    }
+  else if (event->type == GDK_TOUCH_PRESS ||
+           event->type == GDK_TOUCH_RELEASE)
+    {
+      if (touch_id)
+        *touch_id = event->button.touch_id;
+      return TRUE;
+    }
+  else
+    {
+      if (touch_id)
+        *touch_id = 0;
+      return FALSE;
+    }
+}
+
+/**
  * gdk_set_show_events:
  * @show_events:  %TRUE to output event debugging information.
  * 
