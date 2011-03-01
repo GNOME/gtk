@@ -33,6 +33,7 @@
     <xi:include href="xml/windows.xml" />
     <xi:include href="xml/events.xml" />
     <xi:include href="xml/event_structs.xml" />
+    <xi:include href="xml/touchcluster.xml" />
     <xi:include href="xml/keys.xml" />
     <xi:include href="xml/selections.xml" />
     <xi:include href="xml/dnd.xml" />

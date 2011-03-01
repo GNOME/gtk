@@ -88,6 +88,7 @@ gdk_public_h_sources = 				\
 	gdkselection.h				\
 	gdktestutils.h				\
 	gdkthreads.h				\
+	gdktouchcluster.h			\
 	gdktypes.h				\
 	gdkvisual.h				\
 	gdkwindow.h
@@ -130,6 +131,7 @@ gdk_c_sources = 				\
 	gdkrgba.c				\
 	gdkscreen.c				\
 	gdkselection.c				\
+	gdktouchcluster.c			\
 	gdkvisual.c				\
 	gdkwindow.c				\
 	gdkwindowimpl.c
