@@ -248,7 +248,7 @@ gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
 {
   GtkTreeIter iter, iter2;
 
-  if (!self->priv->show_dialog_item)
+  if (!self->priv->show_dialog_item || !self->priv->content_type)
     return;
 
   if (prev_iter == NULL)
@@ -275,7 +275,8 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
   gboolean cycled_recommended;
 
 #ifndef G_OS_WIN32
-  recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
+  if (self->priv->content_type)
+    recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
 #endif
   cycled_recommended = FALSE;
 
@@ -324,14 +325,6 @@ gtk_app_chooser_button_build_ui (GtkAppChooserButton *self)
 {
   GtkCellRenderer *cell;
   GtkCellArea *area;
-
-  self->priv->store = gtk_list_store_new (NUM_COLUMNS,
-                                          G_TYPE_APP_INFO,
-                                          G_TYPE_STRING, /* name */
-                                          G_TYPE_STRING, /* label */
-                                          G_TYPE_ICON,
-                                          G_TYPE_BOOLEAN, /* separator */
-                                          G_TYPE_BOOLEAN); /* custom */
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (self),
                            GTK_TREE_MODEL (self->priv->store));
@@ -457,8 +450,6 @@ gtk_app_chooser_button_constructed (GObject *obj)
   if (G_OBJECT_CLASS (gtk_app_chooser_button_parent_class)->constructed != NULL)
     G_OBJECT_CLASS (gtk_app_chooser_button_parent_class)->constructed (obj);
 
-  g_assert (self->priv->content_type != NULL);
-
   gtk_app_chooser_button_build_ui (self);
 }
 
@@ -520,6 +511,8 @@ gtk_app_chooser_button_finalize (GObject *obj)
   g_hash_table_destroy (self->priv->custom_item_names);
   g_free (self->priv->content_type);
   g_free (self->priv->heading);
+
+  g_object_unref (self->priv->store);
 
   G_OBJECT_CLASS (gtk_app_chooser_button_parent_class)->finalize (obj);
 }
@@ -605,6 +598,14 @@ gtk_app_chooser_button_init (GtkAppChooserButton *self)
   self->priv->custom_item_names =
     g_hash_table_new_full (g_str_hash, g_str_equal,
                            g_free, NULL);
+
+  self->priv->store = gtk_list_store_new (NUM_COLUMNS,
+                                          G_TYPE_APP_INFO,
+                                          G_TYPE_STRING, /* name */
+                                          G_TYPE_STRING, /* label */
+                                          G_TYPE_ICON,
+                                          G_TYPE_BOOLEAN, /* separator */
+                                          G_TYPE_BOOLEAN); /* custom */
 }
 
 static gboolean
