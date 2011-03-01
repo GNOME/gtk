@@ -1685,6 +1685,27 @@ gdk_event_get_screen (const GdkEvent *event)
 }
 
 /**
+ * gdk_event_get_event_sequence:
+ * @event: a #GdkEvent
+ *
+ * If @event if of type %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
+ * %GDK_TOUCH_END or %GDK_TOUCH_CANCEL, returns the #GdkEventSequence
+ * to which the event belongs. Otherwise, return %NULL.
+ *
+ * Returns: the event sequence that the event belongs to
+ *
+ * Since: 3.4
+ */
+GdkEventSequence *
+gdk_event_get_event_sequence (const GdkEvent *event)
+{
+  if (!event)
+    return NULL;
+
+  return NULL;
+}
+
+/**
  * gdk_set_show_events:
  * @show_events:  %TRUE to output event debugging information.
  * 

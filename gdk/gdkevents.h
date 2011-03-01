@@ -143,6 +143,8 @@ typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
 typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
 
+typedef struct _GdkEventSequence    GdkEventSequence;
+
 typedef union  _GdkEvent	    GdkEvent;
 
 /**
@@ -1154,6 +1156,9 @@ void	  gdk_event_handler_set 	(GdkEventFunc    func,
 void       gdk_event_set_screen         (GdkEvent        *event,
                                          GdkScreen       *screen);
 GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
+
+GDK_AVAILABLE_IN_3_4
+GdkEventSequence *gdk_event_get_event_sequence (const GdkEvent *event);
 
 void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);

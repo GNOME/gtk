@@ -790,6 +790,8 @@ gdk_event_get_root_coords
 gdk_event_get_scroll_direction
 gdk_event_get_state
 gdk_event_get_time
+GdkEventSequence
+gdk_event_get_event_sequence
 gdk_event_request_motions
 gdk_events_get_angle
 gdk_events_get_center
