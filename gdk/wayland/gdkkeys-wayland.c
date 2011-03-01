@@ -589,6 +589,43 @@ _gdk_wayland_keymap_init (GdkWaylandKeymap *keymap)
 {
 }
 
+static void
+update_keymaps (GdkWaylandKeymap *keymap)
+{
+  struct xkb_desc *xkb = keymap->xkb;
+  gint keycode, total_syms, i, modifier;
+  uint32_t *entry;
+  guint mask;
+
+  for (keycode = xkb->min_key_code; keycode <= xkb->max_key_code; keycode++)
+    {
+      total_syms = XkbKeyNumSyms (xkb, keycode);
+
+      entry = XkbKeySymsPtr (xkb, keycode);
+      mask = 0;
+      for (i = 0; i < total_syms; i++)
+	{
+	  switch (entry[i]) {
+	  case GDK_KEY_Meta_L:
+	  case GDK_KEY_Meta_R:
+	    mask |= GDK_META_MASK;
+	    break;
+	  case GDK_KEY_Hyper_L:
+	  case GDK_KEY_Hyper_R:
+	    mask |= GDK_HYPER_MASK;
+	    break;
+	  case GDK_KEY_Super_L:
+	  case GDK_KEY_Super_R:
+	    mask |= GDK_SUPER_MASK;
+	    break;
+	  }
+	}
+
+      modifier = g_bit_nth_lsf(xkb->map->modmap[keycode], -1);
+      keymap->modmap[modifier] |= mask;
+    }
+}
+
 GdkKeymap *
 _gdk_wayland_keymap_new (GdkDisplay *display)
 {
@@ -604,7 +641,9 @@ _gdk_wayland_keymap_new (GdkDisplay *display)
   names.variant = "";
   names.options = "";
   keymap->xkb = xkb_compile_keymap_from_rules(&names);
+
   update_modmap (keymap);
+  update_keymaps (keymap);
 
   return GDK_KEYMAP (keymap);
 }
