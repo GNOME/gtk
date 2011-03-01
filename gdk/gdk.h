@@ -53,6 +53,7 @@
 #include <gdk/gdkselection.h>
 #include <gdk/gdktestutils.h>
 #include <gdk/gdkthreads.h>
+#include <gdk/gdktouchcluster.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>

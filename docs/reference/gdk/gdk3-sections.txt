@@ -766,7 +766,6 @@ gdk_event_get_state
 gdk_event_get_axis
 gdk_event_get_coords
 gdk_event_get_root_coords
-gdk_event_get_touch_id
 gdk_event_request_motions
 gdk_events_get_angle
 gdk_events_get_center
@@ -845,6 +844,25 @@ GDK_TYPE_OWNER_CHANGE
 gdk_event_get_type
 gdk_owner_change_get_type
 </SECTION>
+
+<SECTION>
+<TITLE>Multitouch</TITLE>
+<FILE>touchcluster</FILE>
+GdkTouchCluster
+gdk_touch_cluster_add_touch
+gdk_touch_cluster_remove_touch
+gdk_touch_cluster_remove_all
+gdk_touch_cluster_set_device
+gdk_touch_cluster_get_device
+gdk_touch_cluster_get_touches
+
+<SUBSECTION Standard>
+GDK_TYPE_TOUCH_CLUSTER
+
+<SUBSECTION Private>
+gdk_touch_cluster_get_type
+</SECTION>
+
 
 <SECTION>
 <TITLE>Cursors</TITLE>

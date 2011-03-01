@@ -9,5 +9,6 @@ gdk_display_manager_get_type
 gdk_drag_context_get_type
 gdk_keymap_get_type
 gdk_screen_get_type
+gdk_touch_cluster_get_type
 gdk_visual_get_type
 gdk_window_get_type
