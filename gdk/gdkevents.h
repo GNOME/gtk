@@ -1173,6 +1173,9 @@ void       gdk_event_set_screen         (GdkEvent        *event,
                                          GdkScreen       *screen);
 GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 
+gboolean   gdk_event_get_touch_id       (const GdkEvent  *event,
+                                         guint           *touch_id);
+
 void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);
 

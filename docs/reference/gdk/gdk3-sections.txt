@@ -782,11 +782,13 @@ gdk_event_get_root_coords
 gdk_event_get_scroll_direction
 gdk_event_get_state
 gdk_event_get_time
+gdk_event_get_touch_id
 gdk_event_request_motions
 gdk_events_get_angle
 gdk_events_get_center
 gdk_events_get_distance
 gdk_event_triggers_context_menu
+gdk_event_get_touch_id
 
 <SUBSECTION>
 gdk_event_handler_set
