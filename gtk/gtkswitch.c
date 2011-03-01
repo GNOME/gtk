@@ -285,18 +285,29 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context;
   GtkStateFlags state;
-  GtkBorder padding;
+  GtkBorder padding, border;
   gint width, slider_width, focus_width, focus_pad;
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
+
+  if (priv->is_active)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
 
   width = padding.left + padding.right;
+
+  gtk_style_context_restore (context);
 
   gtk_widget_style_get (widget,
                         "slider-width", &slider_width,
@@ -337,6 +348,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum,
                                  gint      *natural)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
@@ -347,9 +359,19 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
+
+  if (priv->is_active)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
 
   height = padding.top + padding.bottom;
+
+  gtk_style_context_restore (context);
 
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
@@ -520,7 +542,14 @@ gtk_switch_draw (GtkWidget *widget,
   if (priv->is_active)
     state |= GTK_STATE_FLAG_ACTIVE;
 
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+
   gtk_style_context_get_padding (context, state, &padding);
+
+  gtk_style_context_restore (context);
 
   x = 0;
   y = 0;
@@ -530,15 +559,14 @@ gtk_switch_draw (GtkWidget *widget,
   if (gtk_widget_has_focus (widget))
     gtk_render_focus (context, cr, x, y, width, height);
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-
   x += focus_width + focus_pad;
   y += focus_width + focus_pad;
   width -= 2 * (focus_width + focus_pad);
   height -= 2 * (focus_width + focus_pad);
 
+  gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
+  gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
