@@ -163,6 +163,7 @@ gdk_event_get_screen
 gdk_event_get_source_device
 gdk_event_get_state
 gdk_event_get_time
+gdk_event_get_touch_id
 gdk_event_get_type G_GNUC_CONST
 gdk_event_handler_set
 gdk_event_mask_get_type G_GNUC_CONST
