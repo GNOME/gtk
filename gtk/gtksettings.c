@@ -141,7 +141,6 @@ enum {
   PROP_FONT_NAME,
   PROP_ICON_SIZES,
   PROP_MODULES,
-#ifdef GDK_WINDOWING_X11
   PROP_XFT_ANTIALIAS,
   PROP_XFT_HINTING,
   PROP_XFT_HINTSTYLE,
@@ -149,7 +148,6 @@ enum {
   PROP_XFT_DPI,
   PROP_CURSOR_THEME_NAME,
   PROP_CURSOR_THEME_SIZE,
-#endif
   PROP_ALTERNATIVE_BUTTON_ORDER,
   PROP_ALTERNATIVE_SORT_ARROWS,
   PROP_SHOW_INPUT_METHOD_MENU,
@@ -219,12 +217,10 @@ static guint    settings_install_property_parser (GtkSettingsClass      *class,
 static void    settings_update_double_click      (GtkSettings           *settings);
 static void    settings_update_modules           (GtkSettings           *settings);
 
-#ifdef GDK_WINDOWING_X11
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
 static void    settings_update_resolution        (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
-#endif
 static void    settings_update_color_scheme      (GtkSettings *settings);
 static void    settings_update_theme             (GtkSettings *settings);
 static void    settings_update_key_theme         (GtkSettings *settings);
@@ -1465,11 +1461,9 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 
       settings_init_style (settings);
       settings_update_double_click (settings);
-#ifdef GDK_WINDOWING_X11
       settings_update_cursor_theme (settings);
       settings_update_resolution (settings);
       settings_update_font_options (settings);
-#endif
       settings_update_color_scheme (settings);
     }
 
@@ -1625,7 +1619,6 @@ gtk_settings_notify (GObject    *object,
     case PROP_APPLICATION_PREFER_DARK_THEME:
       settings_update_theme (settings);
       break;
-#ifdef GDK_WINDOWING_X11
     case PROP_XFT_DPI:
       settings_update_resolution (settings);
       /* This is a hack because with gtk_rc_reset_styles() doesn't get
@@ -1649,7 +1642,6 @@ gtk_settings_notify (GObject    *object,
     case PROP_CURSOR_THEME_SIZE:
       settings_update_cursor_theme (settings);
       break;
-#endif /* GDK_WINDOWING_X11 */
     }
 }
 
@@ -2481,7 +2473,6 @@ settings_update_modules (GtkSettings *settings)
   g_free (modules);
 }
 
-#ifdef GDK_WINDOWING_X11
 static void
 settings_update_cursor_theme (GtkSettings *settings)
 {
@@ -2489,14 +2480,19 @@ settings_update_cursor_theme (GtkSettings *settings)
   gchar *theme = NULL;
   gint size = 0;
 
-  g_object_get (settings,
-                "gtk-cursor-theme-name", &theme,
-                "gtk-cursor-theme-size", &size,
-                NULL);
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    {
+      g_object_get (settings,
+                    "gtk-cursor-theme-name", &theme,
+                    "gtk-cursor-theme-size", &size,
+                    NULL);
 
-  gdk_x11_display_set_cursor_theme (display, theme, size);
+      gdk_x11_display_set_cursor_theme (display, theme, size);
 
-  g_free (theme);
+      g_free (theme);
+    }
+#endif
 }
 
 static void
@@ -2573,10 +2569,10 @@ settings_update_font_options (GtkSettings *settings)
   cairo_font_options_destroy (options);
 }
 
-#ifdef GDK_WINDOWING_X11
 static gboolean
 settings_update_fontconfig (GtkSettings *settings)
 {
+#ifdef GDK_WINDOWING_X11
   static guint    last_update_timestamp;
   static gboolean last_update_needed;
 
@@ -2608,8 +2604,8 @@ settings_update_fontconfig (GtkSettings *settings)
     }
 
   return last_update_needed;
-}
 #endif /* GDK_WINDOWING_X11 */
+}
 
 static void
 settings_update_resolution (GtkSettings *settings)
@@ -2629,7 +2625,6 @@ settings_update_resolution (GtkSettings *settings)
 
   gdk_screen_set_resolution (priv->screen, dpi);
 }
-#endif
 
 typedef struct
 {
