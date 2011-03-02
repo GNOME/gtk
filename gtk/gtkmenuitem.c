@@ -413,6 +413,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 static void
 gtk_menu_item_init (GtkMenuItem *menu_item)
 {
+  GtkStyleContext *context;
   GtkMenuItemPrivate *priv;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_item,
@@ -437,6 +438,9 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   priv->use_action_appearance = TRUE;
   priv->timer = 0;
   priv->action = NULL;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (menu_item));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUITEM);
 }
 
 GtkWidget*
