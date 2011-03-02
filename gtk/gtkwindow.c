@@ -4978,9 +4978,12 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->startup_id)
     {
 #ifdef GDK_WINDOWING_X11
-      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
-      if (timestamp != GDK_CURRENT_TIME)
-	gdk_x11_window_set_user_time (gdk_window, timestamp);
+      if (GDK_IS_X11_WINDOW (gdk_window))
+        {
+          guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+          if (timestamp != GDK_CURRENT_TIME)
+            gdk_x11_window_set_user_time (gdk_window, timestamp);
+        }
 #endif
       if (!startup_id_is_fake (priv->startup_id)) 
 	gdk_window_set_startup_id (gdk_window, priv->startup_id);
