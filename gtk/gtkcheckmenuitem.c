@@ -34,7 +34,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-
+#define INDICATOR_SIZE 16
 
 struct _GtkCheckMenuItemPrivate
 {
@@ -130,7 +130,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                              P_("Size of check or radio indicator"),
                                                              0,
                                                              G_MAXINT,
-                                                             13,
+                                                             INDICATOR_SIZE,
                                                              GTK_PARAM_READABLE));
 
   widget_class->draw = gtk_check_menu_item_draw;

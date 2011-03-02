@@ -35,7 +35,7 @@
 #include "gtkintl.h"
 
 
-#define INDICATOR_SIZE     13
+#define INDICATOR_SIZE     16
 #define INDICATOR_SPACING  2
 
 

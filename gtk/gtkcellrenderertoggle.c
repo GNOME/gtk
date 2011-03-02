@@ -70,7 +70,7 @@ enum {
   PROP_INDICATOR_SIZE
 };
 
-#define TOGGLE_WIDTH 13
+#define TOGGLE_WIDTH 16
 
 static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 
