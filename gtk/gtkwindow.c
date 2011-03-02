@@ -2648,12 +2648,12 @@ gtk_window_set_type_hint (GtkWindow           *window,
   priv = window->priv;
 
   if (hint < GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU)
-    priv->gdk_type_hint = hint;
+    priv->type_hint = hint;
   else
-    priv->gdk_type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+    priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
 
   priv->reset_type_hint = TRUE;
-  priv->type_hint = hint;
+  priv->gdk_type_hint = hint;
 }
 
 /**
@@ -2669,7 +2669,7 @@ gtk_window_get_type_hint (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
 
-  return window->priv->type_hint;
+  return window->priv->gdk_type_hint;
 }
 
 /**
@@ -4705,7 +4705,7 @@ gtk_window_map (GtkWidget *widget)
        * Some applications use X directly to change the properties;
        * in that case, we shouldn't overwrite what they did.
        */
-      gdk_window_set_type_hint (gdk_window, priv->type_hint);
+      gdk_window_set_type_hint (gdk_window, priv->gdk_type_hint);
       priv->reset_type_hint = FALSE;
     }
 
