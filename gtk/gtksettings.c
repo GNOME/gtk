@@ -2671,7 +2671,7 @@ settings_update_color_scheme (GtkSettings *settings)
                               data, (GDestroyNotify) color_scheme_data_free);
 
       g_value_init (&value, G_TYPE_STRING);
-      if (gdk_screen_get_setting (priv->screen, "gtk-color-scheme", &value))
+      if (priv->screen && gdk_screen_get_setting (priv->screen, "gtk-color-scheme", &value))
         {
           merge_color_scheme (settings, &value, GTK_SETTINGS_SOURCE_XSETTING);
           g_value_unset (&value);
