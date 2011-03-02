@@ -40,7 +40,8 @@ static gint       gail_entry_get_index_in_parent   (AtkObject            *access
 
 /* atkobject.h */
 
-static AtkStateSet* gail_entry_ref_state_set       (AtkObject            *accessible);
+static AtkStateSet*     gail_entry_ref_state_set   (AtkObject            *accessible);
+static AtkAttributeSet* gail_entry_get_attributes  (AtkObject            *accessible);
 
 /* atktext.h */
 
@@ -144,21 +145,21 @@ static void	  _gail_entry_changed_cb           (GtkEntry		 *entry);
 static gboolean   check_for_selection_change       (GailEntry            *entry,
                                                     GtkEntry             *gtk_entry);
 
-static void                  atk_action_interface_init   (AtkActionIface  *iface);
+static void                  atk_action_interface_init          (AtkActionIface  *iface);
 
-static gboolean              gail_entry_do_action        (AtkAction       *action,
-                                                          gint            i);
-static gboolean              idle_do_action              (gpointer        data);
-static gint                  gail_entry_get_n_actions    (AtkAction       *action);
-static G_CONST_RETURN gchar* gail_entry_get_description  (AtkAction       *action,
-                                                          gint            i);
-static G_CONST_RETURN gchar* gail_entry_get_keybinding   (AtkAction       *action,
-                                                          gint            i);
-static G_CONST_RETURN gchar* gail_entry_action_get_name  (AtkAction       *action,
-                                                          gint            i);
-static gboolean              gail_entry_set_description  (AtkAction       *action,
-                                                          gint            i,
-                                                          const gchar     *desc);
+static gboolean              gail_entry_do_action               (AtkAction       *action,
+                                                                 gint            i);
+static gboolean              idle_do_action                     (gpointer        data);
+static gint                  gail_entry_get_n_actions           (AtkAction       *action);
+static G_CONST_RETURN gchar* gail_entry_action_get_description  (AtkAction       *action,
+                                                                 gint            i);
+static G_CONST_RETURN gchar* gail_entry_get_keybinding          (AtkAction       *action,
+                                                                 gint            i);
+static G_CONST_RETURN gchar* gail_entry_action_get_name         (AtkAction       *action,
+                                                                 gint            i);
+static gboolean              gail_entry_action_set_description  (AtkAction       *action,
+                                                                 gint            i,
+                                                                 const gchar     *desc);
 
 typedef struct _GailEntryPaste			GailEntryPaste;
 
@@ -187,6 +188,7 @@ gail_entry_class_init (GailEntryClass *klass)
   class->ref_state_set = gail_entry_ref_state_set;
   class->get_index_in_parent = gail_entry_get_index_in_parent;
   class->initialize = gail_entry_real_initialize;
+  class->get_attributes = gail_entry_get_attributes;
 
   widget_class->notify_gtk = gail_entry_real_notify_gtk;
 }
@@ -401,6 +403,33 @@ gail_entry_ref_state_set (AtkObject *accessible)
   atk_state_set_add_state (state_set, ATK_STATE_SINGLE_LINE);
 
   return state_set;
+}
+
+static AtkAttributeSet *
+gail_entry_get_attributes (AtkObject *accessible)
+{
+  GtkWidget *widget;
+  AtkAttributeSet *attributes;
+  AtkAttribute *placeholder_text;
+  const gchar *text;
+
+  attributes = ATK_OBJECT_CLASS (gail_entry_parent_class)->get_attributes (accessible);
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+  if (widget == NULL)
+    return attributes;
+
+  text = gtk_entry_get_placeholder_text (GTK_ENTRY (widget));
+  if (text == NULL)
+    return attributes;
+
+  placeholder_text = g_malloc (sizeof (AtkAttribute));
+  placeholder_text->name = g_strdup ("placeholder-text");
+  placeholder_text->value = g_strdup (text);
+
+  attributes = g_slist_append (attributes, placeholder_text);
+
+  return attributes;
 }
 
 /* atktext.h */
@@ -1216,10 +1245,10 @@ atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_entry_do_action;
   iface->get_n_actions = gail_entry_get_n_actions;
-  iface->get_description = gail_entry_get_description;
+  iface->get_description = gail_entry_action_get_description;
   iface->get_keybinding = gail_entry_get_keybinding;
   iface->get_name = gail_entry_action_get_name;
-  iface->set_description = gail_entry_set_description;
+  iface->set_description = gail_entry_action_set_description;
 }
 
 static gboolean
@@ -1281,8 +1310,8 @@ gail_entry_get_n_actions (AtkAction *action)
 }
 
 static G_CONST_RETURN gchar*
-gail_entry_get_description (AtkAction *action,
-                            gint      i)
+gail_entry_action_get_description (AtkAction *action,
+                                   gint      i)
 {
   GailEntry *entry;
   G_CONST_RETURN gchar *return_value;
@@ -1383,9 +1412,9 @@ gail_entry_action_get_name (AtkAction *action,
 }
 
 static gboolean
-gail_entry_set_description (AtkAction      *action,
-                            gint           i,
-                            const gchar    *desc)
+gail_entry_action_set_description (AtkAction      *action,
+                                   gint           i,
+                                   const gchar    *desc)
 {
   GailEntry *entry;
   gchar **value;
