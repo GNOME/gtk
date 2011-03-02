@@ -82,12 +82,6 @@
  */
 
 
-#ifdef GDK_WINDOWING_QUARTZ
-#define DEFAULT_KEY_THEME "Mac"
-#else
-#define DEFAULT_KEY_THEME NULL
-#endif
-
 #define DEFAULT_TIMEOUT_INITIAL 200
 #define DEFAULT_TIMEOUT_REPEAT   20
 #define DEFAULT_TIMEOUT_EXPAND  500
@@ -419,7 +413,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-key-theme-name",
                                                                   P_("Key Theme Name"),
                                                                   P_("Name of key theme to load"),
-                                                                  DEFAULT_KEY_THEME,
+                                                                  NULL,
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_KEY_THEME_NAME);
@@ -1454,7 +1448,12 @@ gtk_settings_get_for_screen (GdkScreen *screen)
   settings = g_object_get_data (G_OBJECT (screen), "gtk-settings");
   if (!settings)
     {
-      settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
+#ifdef GDK_WINDOWING_QUARTZ
+      if (GDK_IS_QUARTZ_SCREEN (screen))
+        settings = g_object_new (GTK_TYPE_SETTINGS, "gtk-key-theme-name", "Mac", NULL);
+      else
+#endif
+        settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
       settings->priv->screen = screen;
       g_object_set_data_full (G_OBJECT (screen), I_("gtk-settings"),
                               settings, g_object_unref);
