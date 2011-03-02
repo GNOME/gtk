@@ -1594,6 +1594,9 @@ gtk_menu_item_draw (GtkWidget *widget,
 
   gtk_style_context_get_padding (context, state, &padding);
 
+  if (GTK_IS_MENU_BAR (parent))
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUBAR);
+
   if (child && (state & GTK_STATE_FLAG_PRELIGHT))
     {
       gtk_render_background (context, cr, x, y, w, h);
