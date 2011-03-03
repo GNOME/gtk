@@ -96,7 +96,7 @@ struct _GtkScaleMark
 {
   gdouble          value;
   gchar           *markup;
-  GtkPositionType  position;
+  GtkPositionType  position; /* always GTK_POS_TOP or GTK_POS_BOTTOM */
 };
 
 enum {
@@ -792,17 +792,17 @@ gtk_scale_get_range_border (GtkRange  *range,
                             NULL);
 
 
+      gtk_scale_get_mark_label_size (scale, GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
+
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (scale)) == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_scale_get_mark_label_size (scale, GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
           if (n1 > 0)
             border->top += h1 + value_spacing + slider_width / 2;
           if (n2 > 0)
-            border->bottom += h2 + value_spacing + slider_width / 2; 
+            border->bottom += h2 + value_spacing + slider_width / 2;
         }
       else
         {
-          gtk_scale_get_mark_label_size (scale, GTK_POS_LEFT, &n1, &w1, &h1, &n2, &w2, &h2);
           if (n1 > 0)
             border->left += w1 + value_spacing + slider_width / 2;
           if (n2 > 0)
@@ -897,8 +897,8 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
           pango_layout_set_markup (layout, mark->markup, -1);
           pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-	  w = logical_rect.width;
-	  h = logical_rect.height;
+          w = logical_rect.width;
+          h = logical_rect.height;
         }
       else
         {
@@ -991,7 +991,7 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
 
       gtk_widget_style_get (widget, "slider-length", &slider_length, NULL);
 
-      gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_LEFT, &n1, &w1, &h1, &n2, &w2, &h2);
+      gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
       h1 = (n1 - 1) * h1 + MAX (h1, slider_length);
       h2 = (n2 - 1) * h1 + MAX (h2, slider_length);
       h = MAX (h1, h2);
@@ -1021,7 +1021,7 @@ find_next_pos (GtkWidget      *widget,
     }
 
   gtk_widget_get_allocation (widget, &allocation);
-  if (pos == GTK_POS_TOP || pos == GTK_POS_BOTTOM)
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
     return allocation.width;
   else
     return allocation.height;
@@ -1095,15 +1095,14 @@ gtk_scale_draw (GtkWidget *widget,
                   y1 = range_rect.y + range_rect.height;
                   y2 = y1 + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 0) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM, 1) - min_sep;
                 }
 
               gtk_style_context_save (context);
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
               gtk_style_context_set_state (context, state);
 
-              gtk_render_line (context, cr,
-                               x1, y1, x1, y2);
+              gtk_render_line (context, cr, x1, y1, x1, y2);
 
               if (mark->markup)
                 {
@@ -1128,27 +1127,26 @@ gtk_scale_draw (GtkWidget *widget,
                       min_pos_after = x3 + logical_rect.width + min_sep;
                     }
 
-                  gtk_render_layout (context, cr,
-                                     x3, y3, layout);
+                  gtk_render_layout (context, cr, x3, y3, layout);
                 }
 
               gtk_style_context_restore (context);
             }
           else
             {
-              if (mark->position == GTK_POS_LEFT)
+              if (mark->position == GTK_POS_TOP)
                 {
                   x1 = range_rect.x;
                   x2 = range_rect.x - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
                 }
               else
                 {
                   x1 = range_rect.x + range_rect.width;
                   x2 = range_rect.x + range_rect.width + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 0) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM, 1) - min_sep;
                 }
               y1 = marks[i];
 
@@ -1156,8 +1154,7 @@ gtk_scale_draw (GtkWidget *widget,
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
               gtk_style_context_set_state (context, state);
 
-              gtk_render_line (context, cr,
-                               x1, y1, x2, y1);
+              gtk_render_line (context, cr, x1, y1, x2, y1);
 
               if (mark->markup)
                 {
@@ -1171,7 +1168,7 @@ gtk_scale_draw (GtkWidget *widget,
                     y3 = max_pos - logical_rect.height;
                   if (y3 < 0)
                     y3 = 0;
-                  if (mark->position == GTK_POS_LEFT)
+                  if (mark->position == GTK_POS_TOP)
                     {
                       x3 = x2 - value_spacing - logical_rect.width;
                       min_pos_before = y3 + logical_rect.height + min_sep;
@@ -1182,8 +1179,7 @@ gtk_scale_draw (GtkWidget *widget,
                       min_pos_after = y3 + logical_rect.height + min_sep;
                     }
 
-                  gtk_render_layout (context, cr,
-                                     x3, y3, layout);
+                  gtk_render_layout (context, cr, x3, y3, layout);
                 }
 
               gtk_style_context_restore (context);
@@ -1490,22 +1486,22 @@ compare_marks (gpointer a, gpointer b)
 /**
  * gtk_scale_add_mark:
  * @scale: a #GtkScale
- * @value: the value at which the mark is placed, must be between 
+ * @value: the value at which the mark is placed, must be between
  *   the lower and upper limits of the scales' adjustment
  * @position: where to draw the mark. For a horizontal scale, #GTK_POS_TOP
- *   is drawn above the scale, anything else below. For a vertical scale,
- *   #GTK_POS_LEFT is drawn to the left of the scale, anything else to the
- *   right.
+ *   and %GTK_POS_LEFT are drawn above the scale, anything else below.
+ *   For a vertical scale, #GTK_POS_LEFT and %GTK_POS_TOP are drawn to
+ *   the left of the scale, anything else to the right.
  * @markup: (allow-none): Text to be shown at the mark, using <link linkend="PangoMarkupFormat">Pango markup</link>, or %NULL
  *
  *
- * Adds a mark at @value. 
+ * Adds a mark at @value.
  *
- * A mark is indicated visually by drawing a tick mark next to the scale, 
- * and GTK+ makes it easy for the user to position the scale exactly at the 
+ * A mark is indicated visually by drawing a tick mark next to the scale,
+ * and GTK+ makes it easy for the user to position the scale exactly at the
  * marks value.
  *
- * If @markup is not %NULL, text is shown next to the tick mark. 
+ * If @markup is not %NULL, text is shown next to the tick mark.
  *
  * To remove marks from a scale, use gtk_scale_clear_marks().
  *
@@ -1530,7 +1526,11 @@ gtk_scale_add_mark (GtkScale        *scale,
   mark = g_new (GtkScaleMark, 1);
   mark->value = value;
   mark->markup = g_strdup (markup);
-  mark->position = position;
+  if (position == GTK_POS_LEFT ||
+      position == GTK_POS_TOP)
+    mark->position = GTK_POS_TOP;
+  else
+    mark->position = GTK_POS_BOTTOM;
  
   priv->marks = g_slist_insert_sorted (priv->marks, mark,
                                        (GCompareFunc) compare_marks);
@@ -1671,7 +1671,11 @@ marks_start_element (GMarkupParseContext *context,
 
       mark = g_slice_new (MarkData);
       mark->value = value;
-      mark->position = position;
+      if (position == GTK_POS_LEFT ||
+          position == GTK_POS_TOP)
+        mark->position = GTK_POS_TOP;
+      else
+        mark->position = GTK_POS_BOTTOM;
       mark->markup = g_string_new ("");
       mark->context = g_strdup (msg_context);
       mark->translatable = translatable;
