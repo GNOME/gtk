@@ -402,6 +402,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_PANE_SEPARATOR "pane-separator"
 
 /**
+ * GTK_STYLE_CLASS_SEPARATOR:
+ *
+ * A CSS class for a separator.
+ */
+#define GTK_STYLE_CLASS_SEPARATOR "separator"
+
+/**
  * GTK_STYLE_CLASS_INFO:
  *
  * A widget class for an area displaying an informational message,

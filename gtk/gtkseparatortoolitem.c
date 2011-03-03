@@ -152,12 +152,17 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
+  GtkStyleContext *context;
+
   separator_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (separator_item,
                                                       GTK_TYPE_SEPARATOR_TOOL_ITEM,
                                                       GtkSeparatorToolItemPrivate);
   separator_item->priv->draw = TRUE;
 
   gtk_widget_set_has_window (GTK_WIDGET (separator_item), FALSE);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (separator_item));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 }
 
 static void
