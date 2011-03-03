@@ -288,7 +288,7 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context;
   GtkStateFlags state;
-  GtkBorder padding, border;
+  GtkBorder padding;
   gint width, slider_width, focus_width, focus_pad;
   PangoLayout *layout;
   PangoRectangle logical_rect;
