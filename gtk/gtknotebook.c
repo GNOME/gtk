@@ -5740,7 +5740,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
         {
         case GTK_POS_TOP:
         case GTK_POS_BOTTOM:
-          child_allocation.width = page->requisition.width + tab_overlap + tab_extra_space;
+          child_allocation.width = MAX (1, page->requisition.width + tab_overlap + tab_extra_space);
 
           /* make sure that the reordered tab doesn't go past the last position */
           if (priv->operation == DRAG_OPERATION_REORDER &&
@@ -5795,7 +5795,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
           break;
         case GTK_POS_LEFT:
         case GTK_POS_RIGHT:
-          child_allocation.height = page->requisition.height + tab_overlap + tab_extra_space;
+          child_allocation.height = MAX (1, page->requisition.height + tab_overlap + tab_extra_space);
 
           /* make sure that the reordered tab doesn't go past the last position */
           if (priv->operation == DRAG_OPERATION_REORDER &&
