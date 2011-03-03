@@ -2189,8 +2189,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
                   if (!priv->homogeneous || priv->scrollable)
                     vis_pages = 1;
                   requisition->height = MAX (requisition->height,
-                                             vis_pages * tab_max +
-                                             tab_overlap);
+                                             vis_pages * tab_max + tab_overlap);
 
                   requisition->width += tab_width;
                   break;
@@ -5720,9 +5719,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
       else
         {
           *children = (*children)->next;
-
-          if (!gtk_widget_get_visible (page->child))
-            continue;
+          continue;
         }
 
       if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page))
@@ -6134,7 +6131,6 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 {
   GtkNotebookPage *page = NULL;
   GList *children;
-  GList *last_list = NULL;
   GList *last_calculated_child = NULL;
   gint tab_pos = get_effective_tab_pos (notebook);
 
@@ -6143,81 +6139,71 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 
   children = start;
 
-  while (1)
+  switch (tab_pos)
     {
-      switch (tab_pos)
+    case GTK_POS_TOP:
+    case GTK_POS_BOTTOM:
+      while (children)
         {
-        case GTK_POS_TOP:
-        case GTK_POS_BOTTOM:
-          while (children)
+          page = children->data;
+          if (NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) &&
+              gtk_widget_get_visible (page->child))
             {
-              page = children->data;
-              if (NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) &&
-                  gtk_widget_get_visible (page->child))
+              *tab_space -= page->requisition.width;
+              if (*tab_space < 0 || children == *end)
                 {
-                  *tab_space -= page->requisition.width;
-                  if (*tab_space < 0 || children == *end)
+                  if (*tab_space < 0)
                     {
-                      if (*tab_space < 0)
-                        {
-                          *tab_space = - (*tab_space +
-                                          page->requisition.width);
+                      *tab_space = - (*tab_space +
+                                      page->requisition.width);
 
-                          if (*tab_space == 0 && direction == STEP_PREV)
-                            children = last_calculated_child;
+                      if (*tab_space == 0 && direction == STEP_PREV)
+                        children = last_calculated_child;
 
-                          *end = children;
-                        }
-                      return;
+                      *end = children;
                     }
-
-                  last_calculated_child = children;
-                  last_list = children;
+                  return;
                 }
-              if (direction == STEP_NEXT)
-                children = children->next;
-              else
-                children = children->prev;
+
+              last_calculated_child = children;
             }
-          break;
-        case GTK_POS_LEFT:
-        case GTK_POS_RIGHT:
-          while (children)
-            {
-              page = children->data;
-              if (NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) &&
-                  gtk_widget_get_visible (page->child))
-                {
-                  *tab_space -= page->requisition.height;
-                  if (*tab_space < 0 || children == *end)
-                    {
-                      if (*tab_space < 0)
-                        {
-                          *tab_space = - (*tab_space +
-                                          page->requisition.height);
-
-                          if (*tab_space == 0 && direction == STEP_PREV)
-                            children = last_calculated_child;
-
-                          *end = children;
-                        }
-                      return;
-                    }
-
-                  last_calculated_child = children;
-                  last_list = children;
-                }
-              if (direction == STEP_NEXT)
-                children = children->next;
-              else
-                children = children->prev;
-            }
-          break;
+          if (direction == STEP_NEXT)
+            children = children->next;
+          else
+            children = children->prev;
         }
-      if (direction == STEP_PREV)
-        return;
-      direction = STEP_PREV;
-      children = last_list;
+      break;
+    case GTK_POS_LEFT:
+    case GTK_POS_RIGHT:
+      while (children)
+        {
+          page = children->data;
+          if (NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) &&
+              gtk_widget_get_visible (page->child))
+            {
+              *tab_space -= page->requisition.height;
+              if (*tab_space < 0 || children == *end)
+                {
+                  if (*tab_space < 0)
+                    {
+                      *tab_space = - (*tab_space + page->requisition.height);
+
+                      if (*tab_space == 0 && direction == STEP_PREV)
+                        children = last_calculated_child;
+
+                      *end = children;
+                    }
+                  return;
+                }
+
+              last_calculated_child = children;
+            }
+          if (direction == STEP_NEXT)
+            children = children->next;
+          else
+            children = children->prev;
+        }
+      break;
     }
 }
 
