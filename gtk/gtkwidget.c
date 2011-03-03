@@ -2287,7 +2287,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::selection-notify-event:
    * @widget: the object which received the signal.
-   * @event:
+   * @event: (type Gdk.EventSelection):
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
    */
@@ -2796,7 +2796,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::damage-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventExpose event
+   * @event: (type Gdk.EventExpose): the #GdkEventExpose event
    *
    * Emitted when a redirected window belonging to @widget gets drawn into.
    * The region/area members of the event shows what area of the redirected
@@ -2820,7 +2820,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 /**
    * GtkWidget::grab-broken-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventGrabBroken event
+   * @event: (type Gdk.EventGrabBroken): the #GdkEventGrabBroken event
    *
    * Emitted when a pointer or keyboard grab on a window belonging
    * to @widget gets broken.
