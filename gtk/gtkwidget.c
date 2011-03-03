@@ -281,6 +281,21 @@
  * </object>
  * ]]></programlisting>
  * </example>
+ * <para>
+ * Finally, GtkWidget allows style information such as style classes to
+ * be associated with widgets, using the custom &lt;style&gt; element:
+ * <example>
+ * <title>A UI definition fragment specifying an style class</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkButton" id="button1">
+ *   <style>
+ *     <class name="my-special-button-class"/>
+ *     <class name="dark-button"/>
+ *   </style>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </para>
  * </refsect2>
  */
 
@@ -12776,6 +12791,45 @@ static const GMarkupParser accel_group_parser =
     accel_group_start_element,
   };
 
+typedef struct
+{
+  GSList *classes;
+} StyleParserData;
+
+static void
+style_start_element (GMarkupParseContext  *context,
+                     const gchar          *element_name,
+                     const gchar         **names,
+                     const gchar         **values,
+                     gpointer              user_data,
+                     GError              **error)
+{
+  StyleParserData *style_data = (StyleParserData *)user_data;
+  gchar *class_name;
+
+  if (strcmp (element_name, "class") == 0)
+    {
+      if (g_markup_collect_attributes (element_name,
+                                       names,
+                                       values,
+                                       error,
+                                       G_MARKUP_COLLECT_STRDUP, "name", &class_name,
+                                       G_MARKUP_COLLECT_INVALID))
+        {
+          style_data->classes = g_slist_append (style_data->classes, class_name);
+        }
+    }
+  else if (strcmp (element_name, "style") == 0)
+    ;
+  else
+    g_warning ("Unsupported tag for GtkWidget: %s\n", element_name);
+}
+
+static const GMarkupParser style_parser =
+  {
+    style_start_element,
+  };
+
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 				       GtkBuilder       *builder,
@@ -12805,6 +12859,16 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
       *data = parser_data;
       return TRUE;
     }
+  if (strcmp (tagname, "style") == 0)
+    {
+      StyleParserData *parser_data;
+
+      parser_data = g_slice_new0 (StyleParserData);
+      *parser = style_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -12853,12 +12917,11 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 				      const gchar  *tagname,
 				      gpointer      user_data)
 {
-  AccelGroupParserData *accel_data;
-  AccessibilitySubParserData *a11y_data;
-  GtkWidget *toplevel;
-
   if (strcmp (tagname, "accelerator") == 0)
     {
+      AccelGroupParserData *accel_data;
+      GtkWidget *toplevel;
+
       accel_data = (AccelGroupParserData*)user_data;
       g_assert (accel_data->object);
 
@@ -12868,6 +12931,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
     }
   else if (strcmp (tagname, "accessibility") == 0)
     {
+      AccessibilitySubParserData *a11y_data;
+
       a11y_data = (AccessibilitySubParserData*)user_data;
 
       if (a11y_data->actions)
@@ -12920,6 +12985,20 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 			    a11y_data->relations);
 
       g_slice_free (AccessibilitySubParserData, a11y_data);
+    }
+  else if (strcmp (tagname, "style") == 0)
+    {
+      StyleParserData *style_data = (StyleParserData *)user_data;
+      GtkStyleContext *context;
+      GSList *l;
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (buildable));
+
+      for (l = style_data->classes; l; l = l->next)
+        gtk_style_context_add_class (context, (const gchar *)l->data);
+
+      g_slist_free_full (style_data->classes, g_free);
+      g_slice_free (StyleParserData, style_data);
     }
 }
 
