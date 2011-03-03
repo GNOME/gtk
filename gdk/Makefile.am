@@ -92,10 +92,6 @@ gdk_public_h_sources = 				\
 	gdkvisual.h				\
 	gdkwindow.h
 
-gdk_built_public_sources = 			\
-	gdkconfig.h				\
-	gdkenumtypes.h
-
 gdk_private_headers = 				\
 	gdkapplaunchcontextprivate.h		\
 	gdkcursorprivate.h			\
@@ -141,14 +137,15 @@ gdk_built_sources = 				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
 	gdkmarshalers.c				\
-	$(gdk_built_public_sources)
+	gdkenumtypes.h
 
 #
 # setup GDK sources and their dependencies
 #
 
 gdkincludedir = $(includedir)/gtk-3.0/gdk
-gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
+gdkinclude_HEADERS = $(gdk_public_h_sources) gdkenumtypes.h
+nodist_gdkinclude_HEADERS = gdkconfig.h
 
 common_sources = 		\
 	$(gdk_private_headers)	\
@@ -225,7 +222,7 @@ x11_introspection_files = 		\
 	x11/gdkxid.c			\
 	x11/xsettings-client.c		\
 	x11/xsettings-common.c		\
-        x11/gdkx.h			\
+	x11/gdkx.h			\
 	x11/gdkx11cursor.h		\
 	x11/gdkx11display.h		\
 	x11/gdkx11property.h		\
@@ -301,14 +298,12 @@ lib_LTLIBRARIES = libgdk-3.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += $(gdk_built_sources)
-EXTRA_HEADERS =
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
 	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgdk-3.la
 endif
 
-#note: not gdkconfig.h
 BUILT_SOURCES = \
 	$(gdk_built_sources)			\
 	gdkconfig.h
