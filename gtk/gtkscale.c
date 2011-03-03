@@ -77,7 +77,6 @@
 				 *    unrelated code portions otherwise
 				 */
 
-
 typedef struct _GtkScaleMark GtkScaleMark;
 
 struct _GtkScalePrivate
@@ -1459,6 +1458,7 @@ void
 gtk_scale_clear_marks (GtkScale *scale)
 {
   GtkScalePrivate *priv;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -1467,6 +1467,10 @@ gtk_scale_clear_marks (GtkScale *scale)
   g_slist_foreach (priv->marks, (GFunc)gtk_scale_mark_free, NULL);
   g_slist_free (priv->marks);
   priv->marks = NULL;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
@@ -1518,6 +1522,8 @@ gtk_scale_add_mark (GtkScale        *scale,
   GSList *m;
   gdouble *values;
   gint n, i;
+  GtkStyleContext *context;
+  int all_pos;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
@@ -1531,21 +1537,43 @@ gtk_scale_add_mark (GtkScale        *scale,
     mark->position = GTK_POS_TOP;
   else
     mark->position = GTK_POS_BOTTOM;
- 
+
   priv->marks = g_slist_insert_sorted (priv->marks, mark,
                                        (GCompareFunc) compare_marks);
 
+#define MARKS_ABOVE 1
+#define MARKS_BELOW 2
+
+  all_pos = 0;
   n = g_slist_length (priv->marks);
   values = g_new (gdouble, n);
   for (m = priv->marks, i = 0; m; m = m->next, i++)
     {
       mark = m->data;
       values[i] = mark->value;
+      if (mark->position == GTK_POS_TOP)
+        all_pos |= MARKS_ABOVE;
+      else
+        all_pos |= MARKS_BELOW;
     }
-  
+
   _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
 
   g_free (values);
+
+  /* Set the style classes for the slider, so it could
+   * point to the right direction when marks are present
+   */
+  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
+
+  if (all_pos & MARKS_ABOVE)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+  if (all_pos & MARKS_BELOW)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
 
   gtk_widget_queue_resize (GTK_WIDGET (scale));
 }

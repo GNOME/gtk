@@ -277,6 +277,24 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_SCALE "scale"
 
 /**
+ * GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE:
+ *
+ * A CSS class to match scale widgets with marks attached,
+ * all the marks are above for horizontal #GtkScale.
+ * left for vertical #GtkScale.
+ */
+#define GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE "scale-has-marks-above"
+
+/**
+ * GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW:
+ *
+ * A CSS class to match scale widgets with marks attached,
+ * all the marks are below for horizontal #GtkScale,
+ * right for vertical #GtkScale.
+ */
+#define GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW "scale-has-marks-below"
+
+/**
  * GTK_STYLE_CLASS_HEADER:
  *
  * A CSS class to match a header element.
