@@ -235,6 +235,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_TOOLBAR "toolbar"
 
 /**
+ * GTK_STYLE_CLASS_PRIMARY_TOOLBAR:
+ *
+ * A CSS class to match primary toolbars.
+ */
+#define GTK_STYLE_CLASS_PRIMARY_TOOLBAR "primary-toolbar"
+
+/**
  * GTK_STYLE_CLASS_RADIO:
  *
  * A CSS class to match radio buttons.
