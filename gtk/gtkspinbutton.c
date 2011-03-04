@@ -990,7 +990,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton   *spin_button,
   GtkWidget *widget;
   gdouble angle;
   gint panel_height;
-  gdouble size, width, height, actual_width, x, y;
+  gdouble size, width, height, x, y;
 
   g_return_if_fail (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN);
 
