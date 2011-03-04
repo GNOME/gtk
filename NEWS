@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.0.2
+=================================
+
+* GtkSettings have been made multi-backend-safe
+
+* Many improvements to themability and the default theme
+ - GtkScale slider theming can adjust to scale marks, using style classes
+ - A new style class for 'primary' toolbars
+ - Widget style classes can now be specified in GtkBuilder files
+ - Improved scrollbar drawing
+ - Improved combobox drawing
+ - Improved spinbutton drawing
+ - Improved switch drawing
+ - Improved checkbutton drawing
+ - Improved menu drawing
+
+* Bugs fixed:
+ 643041 Gtk-CRITICAL **: gtk_render_slider: assertion `height > 0'...
+ 643131 gtk_tray_icon_dispose
+ 643170 gtk_file_chooser_set_filename does not work if "Show hidden...
+ 643216 Extraneous emits of GdkScreen::monitors-changed
+ 643321 Keypresses in window contextual menu go through to app
+ 643347 consider allowing style data in builder data
+ 643370 gtk_style_context_get_font return NULL
+ 643440 gdkconfig.h included in tarball
+ 643496 GtkDialog does not use separators any more. Description is...
+ 643543 App Chooser classes abort if no content-type is given
+ 643584 crash in gdk_event_free()
+ 643630 Tabs disappear from notebook on scrolling back and resizing...
+ 643685 Normalise marks positions internally in GtkScale
+
+* Translation updates:
+ German
+ Portuguese
+ Russian
+ Simplified Chinese
+ Slovenian
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.0.1
 =================================
 
