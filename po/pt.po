@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-02 23:25+0000\n"
+"POT-Creation-Date: 2011-03-04 23:33+0000\n"
 "PO-Revision-Date: 2011-03-02 23:40+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -460,8 +460,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
 msgstr ""
-"Esta aplicação vem SEM QUALQUER GARANTIA; para detalhes, visite <a href="
-"\"%s\">%s</a>"
+"Esta aplicação vem SEM QUALQUER GARANTIA; para detalhes, visite <a href=\"%s"
+"\">%s</a>"
 
 #: ../gtk/gtkaboutdialog.c:346
 msgid "License"
@@ -1609,7 +1609,7 @@ msgstr "Consola Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Incapaz de terminar o processo com o PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4808 ../gtk/gtknotebook.c:7383
+#: ../gtk/gtknotebook.c:4807 ../gtk/gtknotebook.c:7369
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2271,7 +2271,9 @@ msgstr "Incapaz de encontrar um item com o URI '%s'"
 #: ../gtk/gtkrecentmanager.c:2436
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Não foi encontrada uma aplicação registada denominada '%s' para o item com o URI '%s'"
+msgstr ""
+"Não foi encontrada uma aplicação registada denominada '%s' para o item com o "
+"URI '%s'"
 
 #: ../gtk/gtkspinner.c:287
 msgctxt "throbbing progress animation widget"
@@ -2790,7 +2792,7 @@ msgstr "_Dim Zoom"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:313 ../gtk/gtkswitch.c:362 ../gtk/gtkswitch.c:553
+#: ../gtk/gtkswitch.c:324 ../gtk/gtkswitch.c:384 ../gtk/gtkswitch.c:588
 msgctxt "switch"
 msgid "ON"
 msgstr "LIG"
@@ -2798,17 +2800,17 @@ msgstr "LIG"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:321 ../gtk/gtkswitch.c:363 ../gtk/gtkswitch.c:569
+#: ../gtk/gtkswitch.c:332 ../gtk/gtkswitch.c:385 ../gtk/gtkswitch.c:602
 msgctxt "switch"
 msgid "OFF"
 msgstr "DES"
 
-#: ../gtk/gtkswitch.c:995
+#: ../gtk/gtkswitch.c:1025
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Interruptor"
 
-#: ../gtk/gtkswitch.c:996
+#: ../gtk/gtkswitch.c:1026
 msgid "Switches between on and off states"
 msgstr "Alterna entre os estados ligado e desligado"
 
