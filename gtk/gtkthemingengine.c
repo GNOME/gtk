@@ -3005,7 +3005,7 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
           /* transparency is a function of time and intial value */
           gdouble t = 1.0 - (gdouble) ((i + step) % num_steps) / num_steps;
           gdouble xscale = cos (i * G_PI / half);
-          gdouble yscale = sin (i * G_PI / half);
+          gdouble yscale = - sin (i * G_PI / half);
 
           cairo_set_source_rgba (cr,
                                  color->red,
