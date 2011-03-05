@@ -2991,10 +2991,9 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
 
       cairo_save (cr);
 
-      cairo_translate (cr, x + width / 2, y + height / 2);
-
-      /* draw clip region */
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_set_line_width (cr, 2.0);
+      cairo_translate (cr, x + width / 2, y + height / 2);
 
       radius = MIN (width / 2, height / 2);
       half = num_steps / 2;
@@ -3013,7 +3012,6 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                  color->blue,
                                  color->alpha * t);
 
-          cairo_set_line_width (cr, 2.0);
           cairo_move_to (cr,
                          (radius - inset) * cos (i * G_PI / half),
                          (radius - inset) * sin (i * G_PI / half));
