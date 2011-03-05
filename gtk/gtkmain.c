@@ -985,9 +985,12 @@ gtk_get_option_group (gboolean open_default_display)
 
 /**
  * gtk_init_with_args:
- * @argc: a pointer to the number of command line arguments
- * @argv: (inout) (array length=argc): a pointer to the array of
- * command line arguments
+ * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
+ *     your main() function (or 0 if @argv is %NULL). This will be changed if 
+ *     any arguments were handled.
+ * @argv: (array length=argc) (inout) (allow-none): Address of the
+ *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
+ *     understood by GTK+ are stripped before return.
  * @parameter_string: a string which is displayed in
  *    the first line of <option>--help</option> output, after
  *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
@@ -1102,10 +1105,11 @@ gtk_parse_args (int    *argc,
 /**
  * gtk_init_check:
  * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
- *     your main() function. Changed if any arguments were handled
+ *     your main() function (or 0 if @argv is %NULL). This will be changed if 
+ *     any arguments were handled.
  * @argv: (array length=argc) (inout) (allow-none): Address of the
- *     <parameter>argv</parameter> parameter of main()
- *   Any parameters understood by gtk_init() are stripped before return
+ *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
+ *     understood by GTK+ are stripped before return.
  *
  * This function does the same work as gtk_init() with only a single
  * change: It does not terminate the program if the windowing system
@@ -1135,14 +1139,19 @@ gtk_init_check (int    *argc,
 /**
  * gtk_init:
  * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
- *     your main() function. Changed if any arguments were handled
+ *     your main() function (or 0 if @argv is %NULL). This will be changed if 
+ *     any arguments were handled.
  * @argv: (array length=argc) (inout) (allow-none): Address of the
- *     <parameter>argv</parameter> parameter of main(). Any options
+ *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
  *     understood by GTK+ are stripped before return.
  *
  * Call this function before using any other GTK+ functions in your GUI
  * applications.  It will initialize everything needed to operate the
  * toolkit and parses some standard command line options.
+ *
+ * Although you are expected to pass the @argc, @argv parameters from main() to 
+ * this function, it is possible to pass %NULL if @argv is not available or 
+ * commandline handling is not required.
  *
  * @argc and @argv are adjusted accordingly so your own code will
  * never see those standard arguments.
