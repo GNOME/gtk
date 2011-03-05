@@ -2972,7 +2972,6 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
       GtkStateFlags state;
       guint num_steps, step;
       GdkRGBA *color;
-      gdouble dx, dy;
       gdouble progress;
       gdouble radius;
       gdouble half;
@@ -2992,13 +2991,11 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
 
       cairo_save (cr);
 
-      cairo_translate (cr, x, y);
+      cairo_translate (cr, x + width / 2, y + height / 2);
 
       /* draw clip region */
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
 
-      dx = width / 2;
-      dy = height / 2;
       radius = MIN (width / 2, height / 2);
       half = num_steps / 2;
 
@@ -3020,11 +3017,11 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
 
           cairo_set_line_width (cr, 2.0);
           cairo_move_to (cr,
-                         dx + (radius - inset) * cos (i * G_PI / half),
-                         dy + (radius - inset) * sin (i * G_PI / half));
+                         (radius - inset) * cos (i * G_PI / half),
+                         (radius - inset) * sin (i * G_PI / half));
           cairo_line_to (cr,
-                         dx + radius * cos (i * G_PI / half),
-                         dy + radius * sin (i * G_PI / half));
+                         radius * cos (i * G_PI / half),
+                         radius * sin (i * G_PI / half));
           cairo_stroke (cr);
 
           cairo_restore (cr);
