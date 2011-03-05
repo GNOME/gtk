@@ -6017,7 +6017,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   GtkStyleContext *context;
   gint padding;
   gint focus_width;
-  gint tab_curvature;
+  gint tab_curvature, tab_overlap;
   gint tab_pos = get_effective_tab_pos (notebook);
   gboolean tab_allocation_changed;
   gboolean was_visible = page->tab_allocated_visible;
@@ -6043,6 +6043,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
                         "tab-curvature", &tab_curvature,
+                        "tab-overlap", &tab_overlap,
                         NULL);
   switch (tab_pos)
     {
@@ -6056,6 +6057,22 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
                                             tab_padding.left - tab_padding.right -
                                             2 * (padding)));
           child_allocation.x += page->allocation.x;
+
+          /* if we're drawing an inactive page, trim the allocation width
+           * for the children by the difference between tab-curvature
+           * and tab-overlap.
+           * if we're after the active tab, we need to trim the x
+           * coordinate of the allocation too, to position it after
+           * the end of the overlap.
+           */
+          if (page != priv->cur_page && tab_overlap > tab_curvature)
+            {
+              child_allocation.width -= tab_overlap - tab_curvature;
+
+              if (gtk_notebook_page_num (notebook, page->child) >
+                  gtk_notebook_page_num (notebook, priv->cur_page->child))
+                child_allocation.x += tab_overlap - tab_curvature;
+            }
         }
       else
         {
@@ -6084,6 +6101,22 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
                                              tab_padding.bottom - tab_padding.top -
                                              2 * padding));
           child_allocation.y += page->allocation.y;
+
+          /* if we're drawing an inactive page, trim the allocation height
+           * for the children by the difference between tab-curvature
+           * and tab-overlap.
+           * if we're after the active tab, we need to trim the y
+           * coordinate of the allocation too, to position it after
+           * the end of the overlap.
+           */
+          if (page != priv->cur_page && tab_overlap > tab_curvature)
+            {
+              child_allocation.height -= tab_overlap - tab_curvature;
+
+              if (gtk_notebook_page_num (notebook, page->child) >
+                  gtk_notebook_page_num (notebook, priv->cur_page->child))
+                child_allocation.y += tab_overlap - tab_curvature;
+            }
         }
       else
         {
