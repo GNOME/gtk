@@ -3007,8 +3007,6 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
           gdouble t = (gdouble) ((i + num_steps - step)
                                  % num_steps) / num_steps;
 
-          cairo_save (cr);
-
           cairo_set_source_rgba (cr,
                                  color->red,
                                  color->green,
@@ -3023,8 +3021,6 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                          radius * cos (i * G_PI / half),
                          radius * sin (i * G_PI / half));
           cairo_stroke (cr);
-
-          cairo_restore (cr);
         }
 
       cairo_restore (cr);
