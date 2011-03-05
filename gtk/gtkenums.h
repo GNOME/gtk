@@ -790,6 +790,7 @@ typedef enum
  * GtkSizeRequestMode:
  * @GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH: Prefer height-for-width geometry management
  * @GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT: Prefer width-for-height geometry management
+ * @GTK_SIZE_REQUEST_CONSTANT_SIZE: Dont trade height-for-width or width-for-height
  * 
  * Specifies a preference for height-for-width or
  * width-for-height geometry management.
@@ -797,7 +798,8 @@ typedef enum
 typedef enum
 {
   GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH = 0,
-  GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
+  GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT,
+  GTK_SIZE_REQUEST_CONSTANT_SIZE
 } GtkSizeRequestMode;
 
 /**

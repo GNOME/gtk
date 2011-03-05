@@ -139,12 +139,15 @@ struct _GtkWidget
  *   %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
  *   %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to have
  *   #GtkWidgetClass.get_preferred_width() called and then
- *   #GtkWidgetClass.get_preferred_height_for_width() and is the default
- *   return for unimplemented cases.
- *   However it's important to note (as described below) that any widget
- *   which trades height-for-width must respond properly to both
- *   #GtkSizeRequestModes since it might be queried in either orientation
- *   by its parent container.
+ *   #GtkWidgetClass.get_preferred_height_for_width().
+ *   %GTK_SIZE_REQUEST_CONSTANT_SIZE disables any height-for-width or
+ *   width-for-height geometry management for a said widget and is the
+ *   default return.
+ *   It's important to note (as described below) that any widget
+ *   which trades height-for-width or width-for-height must respond properly 
+ *   to both of the virtual methods #GtkWidgetClass.get_preferred_height_for_width()
+ *   and #GtkWidgetClass.get_preferred_width_for_height() since it might be 
+ *   queried in either #GtkSizeRequestMode by its parent container.
  * @get_preferred_height: This is called by containers to obtain the minimum
  *   and natural height of a widget. A widget that does not actually trade
  *   any height for width or width for height only has to implement these

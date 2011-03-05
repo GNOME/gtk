@@ -458,17 +458,6 @@ gtk_grid_child_type (GtkContainer *container)
   return GTK_TYPE_WIDGET;
 }
 
-static GtkSizeRequestMode
-gtk_grid_get_request_mode (GtkWidget *widget)
-{
-  GtkGridPrivate *priv = GTK_GRID (widget)->priv;
-
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-  else
-    return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
-}
-
 /* Calculates the min and max numbers for both orientations.
  */
 static void
@@ -1104,8 +1093,7 @@ gtk_grid_get_preferred_width (GtkWidget *widget,
 {
   GtkGrid *grid = GTK_GRID (widget);
 
-  if (gtk_grid_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
-
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_HORIZONTAL, 0, minimum, natural);
   else
     gtk_grid_get_size (grid, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
@@ -1118,7 +1106,7 @@ gtk_grid_get_preferred_height (GtkWidget *widget,
 {
   GtkGrid *grid = GTK_GRID (widget);
 
-  if (gtk_grid_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_VERTICAL, 0, minimum, natural);
   else
     gtk_grid_get_size (grid, GTK_ORIENTATION_VERTICAL, minimum, natural);
@@ -1132,7 +1120,7 @@ gtk_grid_get_preferred_width_for_height (GtkWidget *widget,
 {
   GtkGrid *grid = GTK_GRID (widget);
 
-  if (gtk_grid_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_HORIZONTAL, height, minimum, natural);
   else
     gtk_grid_get_size (grid, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
@@ -1146,7 +1134,7 @@ gtk_grid_get_preferred_height_for_width (GtkWidget *widget,
 {
   GtkGrid *grid = GTK_GRID (widget);
 
-  if (gtk_grid_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_VERTICAL, width, minimum, natural);
   else
     gtk_grid_get_size (grid, GTK_ORIENTATION_VERTICAL, minimum, natural);
@@ -1258,7 +1246,6 @@ gtk_grid_class_init (GtkGridClass *class)
   widget_class->size_allocate = gtk_grid_size_allocate;
   widget_class->get_preferred_width = gtk_grid_get_preferred_width;
   widget_class->get_preferred_height = gtk_grid_get_preferred_height;
-  widget_class->get_request_mode = gtk_grid_get_request_mode;
   widget_class->get_preferred_width_for_height = gtk_grid_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_grid_get_preferred_height_for_width;
 

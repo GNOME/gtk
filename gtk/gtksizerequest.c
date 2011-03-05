@@ -156,6 +156,11 @@ pop_recursion_check (GtkWidget       *widget,
 #endif
 }
 
+/* This is the main function that checks for a cached size and
+ * possibly queries the widget class to compute the size if it's
+ * not cached. If the for_size here is -1, then get_preferred_width()
+ * or get_preferred_height() will be used.
+ */
 static void
 compute_size_for_orientation (GtkWidget         *widget,
                               GtkSizeGroupMode   orientation,
@@ -167,9 +172,6 @@ compute_size_for_orientation (GtkWidget         *widget,
   SizeRequest      *cached_size;
   gboolean          found_in_cache = FALSE;
   int adjusted_min, adjusted_natural;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (minimum_size != NULL || natural_size != NULL);
 
   cache  = _gtk_widget_peek_request_cache (widget);
 
@@ -399,6 +401,9 @@ gtk_widget_get_preferred_width (GtkWidget *widget,
                                 gint      *minimum_width,
                                 gint      *natural_width)
 {
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (minimum_width != NULL || natural_width != NULL);
+
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
                                 -1, minimum_width, natural_width);
 }
@@ -427,6 +432,9 @@ gtk_widget_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum_height,
                                  gint      *natural_height)
 {
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (minimum_height != NULL || natural_height != NULL);
+
   compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
                                 -1, minimum_height, natural_height);
 }
@@ -457,8 +465,16 @@ gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
                                            gint      *minimum_width,
                                            gint      *natural_width)
 {
-  compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
-                                height, minimum_width, natural_width);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (minimum_width != NULL || natural_width != NULL);
+  g_return_if_fail (height >= 0);
+
+  if (GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+    compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
+				  -1, minimum_width, natural_width);
+  else
+    compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
+				  height, minimum_width, natural_width);
 }
 
 /**
@@ -485,8 +501,16 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
                                            gint      *minimum_height,
                                            gint      *natural_height)
 {
-  compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
-                                width, minimum_height, natural_height);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (minimum_height != NULL || natural_height != NULL);
+  g_return_if_fail (width >= 0);
+
+  if (GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+    compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
+				  -1, minimum_height, natural_height);
+  else
+    compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
+				  width, minimum_height, natural_height);
 }
 
 /**
@@ -538,7 +562,7 @@ gtk_widget_get_preferred_size (GtkWidget      *widget,
                                                      NULL, &natural_size->height);
 	}
     }
-  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
+  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT or CONSTANT_SIZE */
     {
       gtk_widget_get_preferred_height (widget, &min_height, &nat_height);
 
