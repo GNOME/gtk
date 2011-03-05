@@ -4906,7 +4906,7 @@ gtk_notebook_paint (GtkWidget    *widget,
   GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
   GtkAllocation allocation;
-  GList *children;
+  GList *children, *other_order;
   gboolean showarrow;
   gint width, height;
   gint x, y;
@@ -5061,14 +5061,50 @@ gtk_notebook_paint (GtkWidget    *widget,
   while (children)
     {
       page = children->data;
+
+      if (page == priv->cur_page)
+        break;
+
       children = gtk_notebook_search_page (notebook, children,
                                            step, TRUE);
+
       if (!gtk_widget_get_visible (page->child) ||
           !gtk_widget_get_mapped (page->tab_label))
         continue;
 
       tab_flags = _gtk_notebook_get_tab_flags (notebook, page);
       gtk_notebook_draw_tab (notebook, page, cr, tab_flags);
+    }
+
+  if (children != NULL)
+    {
+      other_order = NULL;
+
+      while (children)
+        {
+          page = children->data;
+          children = gtk_notebook_search_page (notebook, children,
+                                               step, TRUE);
+          if (!gtk_widget_get_visible (page->child) ||
+              !gtk_widget_get_mapped (page->tab_label))
+            continue;
+
+          if (children != NULL)
+            other_order = g_list_prepend (other_order, children->data);
+        }
+
+      /* draw them with the opposite order */
+      children = other_order;
+
+      while (children)
+        {
+          page = children->data;
+
+          tab_flags = _gtk_notebook_get_tab_flags (notebook, page);
+          gtk_notebook_draw_tab (notebook, page, cr, tab_flags);
+
+          children = children->next;
+        }
     }
 
   if (showarrow && priv->scrollable)
