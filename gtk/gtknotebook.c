@@ -6051,10 +6051,10 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       padding = tab_curvature + focus_width + priv->tab_hborder;
       if (page->fill)
         {
-          child_allocation.x = tab_padding.left + focus_width + priv->tab_hborder;
+          child_allocation.x = tab_padding.left + padding;
           child_allocation.width = MAX (1, (page->allocation.width -
                                             tab_padding.left - tab_padding.right -
-                                            2 * (focus_width + priv->tab_hborder)));
+                                            2 * (padding)));
           child_allocation.x += page->allocation.x;
         }
       else
