@@ -3003,8 +3003,8 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
           gint inset = 0.7 * radius;
 
           /* transparency is a function of time and intial value */
-          gdouble t = (gdouble) ((i + num_steps - step)
-                                 % num_steps) / num_steps;
+          gdouble t = 1.0 - (gdouble) ((i + num_steps - step)
+                                       % num_steps) / num_steps;
           gdouble xscale = cos (i * G_PI / half);
           gdouble yscale = sin (i * G_PI / half);
 
