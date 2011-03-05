@@ -185,7 +185,6 @@ static void gtk_box_get_child_property (GtkContainer   *container,
 static GType gtk_box_child_type        (GtkContainer   *container);
 
 
-static GtkSizeRequestMode gtk_box_get_request_mode               (GtkWidget           *widget);
 static void               gtk_box_get_preferred_width            (GtkWidget           *widget,
                                                                   gint                *minimum_size,
                                                                   gint                *natural_size);
@@ -216,7 +215,6 @@ gtk_box_class_init (GtkBoxClass *class)
   object_class->get_property = gtk_box_get_property;
 
   widget_class->size_allocate                  = gtk_box_size_allocate;
-  widget_class->get_request_mode               = gtk_box_get_request_mode;
   widget_class->get_preferred_width            = gtk_box_get_preferred_width;
   widget_class->get_preferred_height           = gtk_box_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_box_get_preferred_height_for_width;
@@ -868,16 +866,6 @@ gtk_box_pack (GtkBox      *box,
   gtk_widget_child_notify (child, "pack-type");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
-}
-
-
-static GtkSizeRequestMode
-gtk_box_get_request_mode  (GtkWidget       *widget)
-{
-  GtkBoxPrivate *private = GTK_BOX (widget)->priv;
-
-  return (private->orientation == GTK_ORIENTATION_VERTICAL) ?
-    GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH : GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
 }
 
 static void

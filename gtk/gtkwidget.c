@@ -12980,8 +12980,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 static GtkSizeRequestMode 
 gtk_widget_real_get_request_mode (GtkWidget *widget)
 { 
-  /* By default widgets are height-for-width. */
-  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  /* By default widgets dont trade size at all. */
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
 static void

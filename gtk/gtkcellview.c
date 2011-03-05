@@ -93,6 +93,7 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								const gchar   	      *tagname,
 								gpointer      	      *data);
 
+static GtkSizeRequestMode gtk_cell_view_get_request_mode       (GtkWidget             *widget);
 static void       gtk_cell_view_get_preferred_width            (GtkWidget             *widget,
 								gint                  *minimum_size,
 								gint                  *natural_size);
@@ -175,6 +176,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 
   widget_class->draw                           = gtk_cell_view_draw;
   widget_class->size_allocate                  = gtk_cell_view_size_allocate;
+  widget_class->get_request_mode               = gtk_cell_view_get_request_mode;
   widget_class->get_preferred_width            = gtk_cell_view_get_preferred_width;
   widget_class->get_preferred_height           = gtk_cell_view_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_cell_view_get_preferred_width_for_height;
@@ -635,6 +637,15 @@ gtk_cell_view_request_model (GtkCellView        *cellview,
 
       valid = gtk_tree_model_iter_next (priv->model, &iter);
     }
+}
+
+static GtkSizeRequestMode 
+gtk_cell_view_get_request_mode (GtkWidget *widget)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  return gtk_cell_area_get_request_mode (priv->area);
 }
 
 static void

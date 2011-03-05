@@ -59,7 +59,6 @@ static void gtk_bin_forall      (GtkContainer   *container,
 static GType gtk_bin_child_type (GtkContainer   *container);
 
 
-static GtkSizeRequestMode gtk_bin_get_request_mode                (GtkWidget           *widget);
 static void               gtk_bin_get_preferred_width_for_height  (GtkWidget           *widget,
                                                                    gint                 height,
                                                                    gint                *minimum_width,
@@ -77,7 +76,6 @@ gtk_bin_class_init (GtkBinClass *class)
   GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
   GtkContainerClass *container_class = (GtkContainerClass*) class;
 
-  widget_class->get_request_mode               = gtk_bin_get_request_mode;
   widget_class->get_preferred_width_for_height = gtk_bin_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_bin_get_preferred_height_for_width;
 
@@ -184,18 +182,6 @@ gtk_bin_forall (GtkContainer *container,
  * deduce a common code path for the get_width_for_height()/get_height_for_width()
  * cases by using the delta of the base size requsts.
  */
-static GtkSizeRequestMode
-gtk_bin_get_request_mode (GtkWidget           *widget)
-{
-  GtkBin *bin = GTK_BIN (widget);
-  GtkBinPrivate *priv = bin->priv;
-
-  if (priv->child)
-    return gtk_widget_get_request_mode (priv->child);
-
-  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 get_child_padding_delta (GtkBin *bin,
 			 gint   *delta_h,

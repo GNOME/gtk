@@ -239,6 +239,7 @@ struct _GtkContainerPrivate
   guint need_resize        : 1;
   guint reallocate_redraws : 1;
   guint resize_mode        : 2;
+  guint request_mode       : 2;
 };
 
 enum {
@@ -307,6 +308,7 @@ static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
                                                       gint            *natural_size,
                                                       gint            *allocated_pos,
                                                       gint            *allocated_size);
+static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
                                                           GtkWidget    *child);
@@ -437,6 +439,7 @@ gtk_container_class_init (GtkContainerClass *class)
 
   widget_class->adjust_size_request = gtk_container_adjust_size_request;
   widget_class->adjust_size_allocation = gtk_container_adjust_size_allocation;
+  widget_class->get_request_mode = gtk_container_get_request_mode;
 
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
@@ -1849,6 +1852,57 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
   parent_class->adjust_size_allocation (widget, orientation,
                                         minimum_size, natural_size, allocated_pos,
                                         allocated_size);
+}
+
+typedef struct {
+  gint hfw;
+  gint wfh;
+} RequestModeCount;
+
+static void
+count_request_modes (GtkWidget        *widget,
+		     RequestModeCount *count)
+{
+  GtkSizeRequestMode mode = gtk_widget_get_request_mode (widget);
+
+  switch (mode)
+    {
+    case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+      count->hfw++;
+      break;
+    case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+      count->wfh++;
+      break;
+    case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+    default:
+      break;
+    }
+}
+
+static GtkSizeRequestMode 
+gtk_container_get_request_mode (GtkWidget *widget)
+{
+  GtkContainer        *container = GTK_CONTAINER (widget);
+  GtkContainerPrivate *priv      = container->priv;
+
+  /* Recalculate the request mode of the children by majority
+   * vote whenever the internal content changes */
+  if (_gtk_widget_get_width_request_needed (widget) ||
+      _gtk_widget_get_height_request_needed (widget))
+    {
+      RequestModeCount count = { 0, 0 };
+
+      gtk_container_forall (container, (GtkCallback)count_request_modes, &count);
+
+      if (!count.hfw && !count.wfh)
+	priv->request_mode = GTK_SIZE_REQUEST_CONSTANT_SIZE;
+      else
+	priv->request_mode = count.wfh > count.hfw ? 
+	  GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
+	  GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+    }
+
+  return priv->request_mode;
 }
 
 /**
