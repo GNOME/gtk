@@ -5163,6 +5163,14 @@ gtk_notebook_paint (GtkWidget    *widget,
   else
     page = priv->cur_page;
 
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HEADER);
+  gtk_render_background (context, cr,
+                         x, y, width, page->allocation.height);
+  gtk_render_frame (context, cr,
+                    x, y, width, page->allocation.height);
+  gtk_style_context_restore (context);
+
   switch (tab_pos)
     {
     case GTK_POS_TOP:
