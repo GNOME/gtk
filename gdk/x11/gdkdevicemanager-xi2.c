@@ -1104,6 +1104,12 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                 event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
                 break;
               }
+            /* Button presses of button 4-7 are scroll events, so ignore the release */
+            else if (ev->evtype == XI_ButtonRelease)
+              {
+                return_val = FALSE;
+                break;
+              }
             /* else (XI_ButtonRelease) fall thru */
           default:
             event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
@@ -1140,6 +1146,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
             event->button.button = xev->detail;
           }
+
+        if (return_val == FALSE)
+          break;
 
         if (!set_screen_from_root (display, event, xev->root))
           {
