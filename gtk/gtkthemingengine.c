@@ -3005,6 +3005,8 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
           /* transparency is a function of time and intial value */
           gdouble t = (gdouble) ((i + num_steps - step)
                                  % num_steps) / num_steps;
+          gdouble xscale = cos (i * G_PI / half);
+          gdouble yscale = sin (i * G_PI / half);
 
           cairo_set_source_rgba (cr,
                                  color->red,
@@ -3013,11 +3015,11 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                  color->alpha * t);
 
           cairo_move_to (cr,
-                         (radius - inset) * cos (i * G_PI / half),
-                         (radius - inset) * sin (i * G_PI / half));
+                         (radius - inset) * xscale,
+                         (radius - inset) * yscale);
           cairo_line_to (cr,
-                         radius * cos (i * G_PI / half),
-                         radius * sin (i * G_PI / half));
+                         radius * xscale,
+                         radius * yscale);
           cairo_stroke (cr);
         }
 
