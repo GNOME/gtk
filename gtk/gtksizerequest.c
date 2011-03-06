@@ -112,7 +112,7 @@ clear_cache (SizeRequestCache   *cache,
 
   if (sizes)
     {
-      for (i = 0; sizes[i] != NULL; i++)
+      for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
 	g_slice_free (SizeRequest, sizes[i]);
       
       g_slice_free1 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES, sizes);
