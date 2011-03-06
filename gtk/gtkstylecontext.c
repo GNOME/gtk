@@ -3620,9 +3620,9 @@ get_cursor_color (GtkStyleContext *context,
 
   if (style_color)
     {
-      color->red = style_color->red / 65535;
-      color->green = style_color->green / 65535;
-      color->blue = style_color->blue / 65535;
+      color->red = style_color->red / 65535.0;
+      color->green = style_color->green / 65535.0;
+      color->blue = style_color->blue / 65535.0;
       color->alpha = 1;
 
       gdk_color_free (style_color);
