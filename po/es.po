@@ -9,17 +9,17 @@
 # Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002, 2003.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
-# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2011.
+# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
-"POT-Creation-Date: 2011-02-04 20:37+0000\n"
-"PO-Revision-Date: 2011-02-08 06:44+0100\n"
-"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
+"POT-Creation-Date: 2011-03-01 22:47+0000\n"
+"PO-Revision-Date: 2011-03-06 15:18+0100\n"
+"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,48 +28,48 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../gdk/gdk.c:151
+#: ../gdk/gdk.c:135
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Error al analizar la opción --gdk-debug"
 
-#: ../gdk/gdk.c:171
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Error al analizar la opción --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:199
+#: ../gdk/gdk.c:183
 msgid "Program class as used by the window manager"
 msgstr "Clase del programa tal como la usa el gestor de ventanas"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:200
+#: ../gdk/gdk.c:184
 msgid "CLASS"
 msgstr "CLASE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:202
+#: ../gdk/gdk.c:186
 msgid "Program name as used by the window manager"
 msgstr "Nombre del programa tal como lo usa el gestor de ventanas"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:203
+#: ../gdk/gdk.c:187
 msgid "NAME"
 msgstr "NOMBRE"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:189
 msgid "X display to use"
 msgstr "Visor [display] X que usar"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:190
 msgid "DISPLAY"
 msgstr "VISOR"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:209
+#: ../gdk/gdk.c:193
 msgid "GDK debugging flags to set"
 msgstr "Opciones de depuración GTK+ que establecer"
 
@@ -77,12 +77,12 @@ msgstr "Opciones de depuración GTK+ que establecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:210 ../gdk/gdk.c:213 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
+#: ../gdk/gdk.c:194 ../gdk/gdk.c:197 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
 msgid "FLAGS"
 msgstr "OPCIONES"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:212
+#: ../gdk/gdk.c:196
 msgid "GDK debugging flags to unset"
 msgstr "Opciones de depuración GTK+ que quitar"
 
@@ -365,15 +365,11 @@ msgid "XF86Launch1"
 msgstr "Ejecutar1"
 
 #: ../gdk/keyname-table.h:4006
-#| msgctxt "Stock label, navigation"
-#| msgid "_Forward"
 msgctxt "keyboard label"
 msgid "XF86Forward"
 msgstr "Adelante"
 
 #: ../gdk/keyname-table.h:4007
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgctxt "keyboard label"
 msgid "XF86Back"
 msgstr "Atrás"
@@ -559,7 +555,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:782
+#: ../gtk/gtkaccellabel.c:786
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -569,7 +565,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:795
+#: ../gtk/gtkaccellabel.c:799
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -579,17 +575,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:809
+#: ../gtk/gtkaccellabel.c:813
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:825
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espacio"
 
-#: ../gtk/gtkaccellabel.c:828
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
@@ -606,42 +602,42 @@ msgstr "Falló al buscar aplicaciones en línea"
 msgid "Find applications online"
 msgstr "Buscar aplicaciones en línea"
 
-#: ../gtk/gtkappchooserdialog.c:209
+#: ../gtk/gtkappchooserdialog.c:213
 msgid "Could not run application"
 msgstr "No se pudo ejecutar la aplicación"
 
-#: ../gtk/gtkappchooserdialog.c:222
+#: ../gtk/gtkappchooserdialog.c:226
 #, c-format
 msgid "Could not find '%s'"
 msgstr "No se pudo encontrar «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:225
+#: ../gtk/gtkappchooserdialog.c:229
 msgid "Could not find application"
 msgstr "No se pudo encontrar la aplicación"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:335
+#: ../gtk/gtkappchooserdialog.c:347
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Seleccionar una aplicación para abrir «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:336 ../gtk/gtkappchooserwidget.c:640
+#: ../gtk/gtkappchooserdialog.c:348 ../gtk/gtkappchooserwidget.c:642
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "No existen aplicaciones disponibles para abrir «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:342
+#: ../gtk/gtkappchooserdialog.c:354
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Seleccionar una aplicación para archivos de «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:345
+#: ../gtk/gtkappchooserdialog.c:356
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "No existen aplicaciones disponibles para abrir archivos de «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:362
+#: ../gtk/gtkappchooserdialog.c:372
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -649,15 +645,15 @@ msgstr ""
 "Para más opciones, pulsar «Mostrar otras aplicaciones» o para instalar una "
 "nueva aplicación, pulsar «Buscar aplicaciones en línea»"
 
-#: ../gtk/gtkappchooserdialog.c:432
+#: ../gtk/gtkappchooserdialog.c:442
 msgid "Forget association"
 msgstr "Olvidar asociación"
 
-#: ../gtk/gtkappchooserdialog.c:497
+#: ../gtk/gtkappchooserdialog.c:507
 msgid "Show other applications"
 msgstr "Mostrar otras aplicaciones"
 
-#: ../gtk/gtkappchooserdialog.c:515
+#: ../gtk/gtkappchooserdialog.c:525
 msgid "_Select"
 msgstr "_Seleccionar"
 
@@ -665,15 +661,15 @@ msgstr "_Seleccionar"
 msgid "Default Application"
 msgstr "Aplicación predeterminada"
 
-#: ../gtk/gtkappchooserwidget.c:726
+#: ../gtk/gtkappchooserwidget.c:729
 msgid "Recommended Applications"
 msgstr "Aplicaciones recomendadas"
 
-#: ../gtk/gtkappchooserwidget.c:740
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Related Applications"
 msgstr "Aplicaciones relacionadas"
 
-#: ../gtk/gtkappchooserwidget.c:754
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Other Applications"
 msgstr "Otras aplicaciones"
 
@@ -1020,23 +1016,23 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:8755 ../gtk/gtktextview.c:8270
+#: ../gtk/gtkentry.c:8748 ../gtk/gtktextview.c:8272
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8769 ../gtk/gtktextview.c:8284
+#: ../gtk/gtkentry.c:8762 ../gtk/gtktextview.c:8286
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:10177
+#: ../gtk/gtkentry.c:10170
 msgid "Caps Lock and Num Lock are on"
 msgstr "Bloq Mayús y Bloq Num están activados"
 
-#: ../gtk/gtkentry.c:10179
+#: ../gtk/gtkentry.c:10172
 msgid "Num Lock is on"
 msgstr "Bloq Num está activado"
 
-#: ../gtk/gtkentry.c:10181
+#: ../gtk/gtkentry.c:10174
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -1126,7 +1122,7 @@ msgstr "%1$s en %2$s"
 msgid "Search"
 msgstr "Buscar"
 
-#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9466
+#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9485
 msgid "Recently Used"
 msgstr "Usados recientemente"
 
@@ -1249,63 +1245,63 @@ msgstr "_Guardar en la carpeta:"
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6331
+#: ../gtk/gtkfilechooserdefault.c:6350
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No se pudo leer el contenido de %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6335
+#: ../gtk/gtkfilechooserdefault.c:6354
 msgid "Could not read the contents of the folder"
 msgstr "No se pudo leer el contenido del la carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:6428 ../gtk/gtkfilechooserdefault.c:6496
-#: ../gtk/gtkfilechooserdefault.c:6641
+#: ../gtk/gtkfilechooserdefault.c:6447 ../gtk/gtkfilechooserdefault.c:6515
+#: ../gtk/gtkfilechooserdefault.c:6660
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:6443
+#: ../gtk/gtkfilechooserdefault.c:6462
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6445
+#: ../gtk/gtkfilechooserdefault.c:6464
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7107
+#: ../gtk/gtkfilechooserdefault.c:7126
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:7704 ../gtk/gtkfilechooserdefault.c:7725
+#: ../gtk/gtkfilechooserdefault.c:7723 ../gtk/gtkfilechooserdefault.c:7744
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La combinación %s ya existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7815
+#: ../gtk/gtkfilechooserdefault.c:7834
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La combinación %s no existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8074 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8093 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8077 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8096 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:8082 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8101 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:8808
+#: ../gtk/gtkfilechooserdefault.c:8827
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:8809
+#: ../gtk/gtkfilechooserdefault.c:8828
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1313,15 +1309,15 @@ msgstr ""
 "El programa no fue capaz de crear una conexión con el demonio indexador. Por "
 "favor asegúrese de que se está ejecutando."
 
-#: ../gtk/gtkfilechooserdefault.c:8823
+#: ../gtk/gtkfilechooserdefault.c:8842
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:9042
+#: ../gtk/gtkfilechooserdefault.c:9061
 msgid "Search:"
 msgstr "Buscar:"
 
-#: ../gtk/gtkfilechooserdefault.c:9643
+#: ../gtk/gtkfilechooserdefault.c:9669
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
@@ -1430,7 +1426,7 @@ msgstr "_Tamaño:"
 msgid "_Preview:"
 msgstr "_Vista previa:"
 
-#: ../gtk/gtkfontsel.c:1651
+#: ../gtk/gtkfontsel.c:1653
 msgid "Font Selection"
 msgstr "Selección de tipografías"
 
@@ -1442,7 +1438,7 @@ msgstr "Selección de tipografías"
 msgid "Error loading icon: %s"
 msgstr "Ocurrió un error al cargar el icono: %s"
 
-#: ../gtk/gtkicontheme.c:1338
+#: ../gtk/gtkicontheme.c:1336
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1455,12 +1451,12 @@ msgstr ""
 "Puede obtener una copia desde:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1520
+#: ../gtk/gtkicontheme.c:1518
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "El icono «%s» no está presente en el tema"
 
-#: ../gtk/gtkicontheme.c:3040
+#: ../gtk/gtkicontheme.c:3038
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
@@ -1486,12 +1482,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6241
+#: ../gtk/gtklabel.c:6243
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6253
+#: ../gtk/gtklabel.c:6255
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -1533,20 +1529,20 @@ msgstr "Opciones de depuración GTK+ a quitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:846
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:899
+#: ../gtk/gtkmain.c:910
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "No se puede abrir el visor: %s"
 
-#: ../gtk/gtkmain.c:965
+#: ../gtk/gtkmain.c:976
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: ../gtk/gtkmain.c:965
+#: ../gtk/gtkmain.c:976
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
@@ -1991,11 +1987,11 @@ msgstr "Orden de las hojas"
 
 #: ../gtk/gtkprintunixdialog.c:3075
 msgid "Left to right"
-msgstr "Izquierda a derecha"
+msgstr "De izquierda a derecha"
 
 #: ../gtk/gtkprintunixdialog.c:3076
 msgid "Right to left"
-msgstr "Derecha a izquierda"
+msgstr "De derecha a izquierda"
 
 #: ../gtk/gtkprintunixdialog.c:3088
 msgid "Top to bottom"
@@ -2826,12 +2822,12 @@ msgctxt "switch"
 msgid "OFF"
 msgstr "○"
 
-#: ../gtk/gtkswitch.c:968
+#: ../gtk/gtkswitch.c:995
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Interruptor"
 
-#: ../gtk/gtkswitch.c:969
+#: ../gtk/gtkswitch.c:996
 msgid "Switches between on and off states"
 msgstr "Cambia entre los estados encendido y apagado"
 
