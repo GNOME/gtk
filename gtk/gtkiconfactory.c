@@ -481,7 +481,7 @@ get_default_icons (GtkIconFactory *factory)
   register_bidi_stock_icon (factory, GTK_STOCK_UNDELETE, GTK_STOCK_UNDELETE);
   register_bidi_stock_icon (factory, GTK_STOCK_UNDO, "edit-undo");
   register_stock_icon (factory, GTK_STOCK_GO_UP, "go-up");
-  register_stock_icon (factory, GTK_STOCK_FILE, "document-x-generic");
+  register_stock_icon (factory, GTK_STOCK_FILE, "text-x-generic");
   register_stock_icon (factory, GTK_STOCK_DIRECTORY, "folder");
   register_stock_icon (factory, GTK_STOCK_ABOUT, "help-about");
   register_stock_icon (factory, GTK_STOCK_CONNECT, GTK_STOCK_CONNECT);
