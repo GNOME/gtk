@@ -1087,7 +1087,7 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-disconnect.png 		\
 	stock-icons/16/gtk-edit.png 			\
 	stock-icons/16/system-run.png 			\
-	stock-icons/16/document-x-generic.png 		\
+	stock-icons/16/text-x-generic.png 		\
 	stock-icons/16/edit-find-replace.png 		\
 	stock-icons/16/edit-find.png 			\
 	stock-icons/16/media-floppy.png 		\
@@ -1193,7 +1193,7 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-disconnect.png 		\
 	stock-icons/24/gtk-edit.png 			\
 	stock-icons/24/system-run.png 			\
-	stock-icons/24/document-x-generic.png 		\
+	stock-icons/24/text-x-generic.png 		\
 	stock-icons/24/edit-find-replace.png 		\
 	stock-icons/24/edit-find.png 			\
 	stock-icons/24/gtk-font.png 			\
@@ -1351,8 +1351,6 @@ stamp-icons: $(STOCK_ICONS)
 	   && $(LN_S) folder.png user-home.png 				\
 	   && $(RM) user-desktop.png 					\
 	   && $(LN_S) folder.png user-desktop.png 			\
-	   && $(RM) text-x-generic.png 					\
-	   && $(LN_S) document-x-generic.png text-x-generic.png 	\
 	) done 								\
 	&& touch stamp-icons
 
