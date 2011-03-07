@@ -10026,6 +10026,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gint x2;
   gint vertical_separator;
   gint expander_size;
+  GtkCellRendererState flags;
 
   widget = GTK_WIDGET (tree_view);
   context = gtk_widget_get_style_context (widget);
@@ -10051,10 +10052,17 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
     state |= GTK_STATE_FLAG_INSENSITIVE;
   else
     {
+      flags = 0;
+
+      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+        flags |= GTK_CELL_RENDERER_SELECTED;
+
+      state = gtk_cell_renderer_get_state (NULL, widget, flags);
+
       if (node == tree_view->priv->button_pressed_node &&
           x >= area.x && x <= (area.x + area.width) &&
           y >= area.y && y <= (area.y + area.height))
-        state |= GTK_STATE_FLAG_SELECTED;
+        state |= GTK_STATE_FLAG_FOCUSED;
 
       if (node == tree_view->priv->prelight_node &&
           tree_view->priv->arrow_prelit)
