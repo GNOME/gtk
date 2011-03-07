@@ -187,7 +187,6 @@ gdk_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GSList *tmp_list;
   
   g_list_free (context->targets);
 
