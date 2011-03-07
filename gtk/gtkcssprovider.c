@@ -3564,6 +3564,8 @@ parse_stylesheet (GtkCssProvider  *css_provider,
               g_clear_error (&err);
             }
 
+          css_provider_reset_parser (css_provider);
+
           while (!g_scanner_eof (priv->scanner) &&
                  priv->scanner->token != G_TOKEN_RIGHT_CURLY)
             g_scanner_get_next_token (priv->scanner);
