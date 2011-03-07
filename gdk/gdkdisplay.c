@@ -764,10 +764,6 @@ synthesize_crossing_events (GdkDisplay      *display,
   GdkModifierType state;
   int x, y;
 
-  /* We use the native crossing events if all native */
-  if (_gdk_native_windows)
-    return;
-  
   if (src_window)
     src_toplevel = gdk_window_get_toplevel (src_window);
   else

@@ -920,14 +920,8 @@ recompute_visible_regions_internal (GdkWindow *private,
 	    {
 	      cairo_region_intersect (new_clip, private->parent->clip_region);
 
-	      /* Remove all overlapping children from parent.
-	       * Unless we're all native, because then we don't need to take
-	       * siblings into account since X does that clipping for us.
-	       * This makes things like SWT that modify the raw X stacking
-	       * order without GDKs knowledge work.
-	       */
-	      if (!_gdk_native_windows)
-		remove_child_area (private->parent, private, FALSE, new_clip);
+	      /* Remove all overlapping children from parent. */
+	      remove_child_area (private->parent, private, FALSE, new_clip);
 	    }
 
 	  /* Convert from parent coords to window coords */
@@ -1146,8 +1140,7 @@ get_native_device_event_mask (GdkWindow *private,
   else
     event_mask = private->event_mask;
 
-  if (_gdk_native_windows ||
-      private->window_type == GDK_WINDOW_ROOT ||
+  if (private->window_type == GDK_WINDOW_ROOT ||
       private->window_type == GDK_WINDOW_FOREIGN)
     return event_mask;
   else
@@ -1288,13 +1281,6 @@ gdk_window_new (GdkWindow     *parent,
       return NULL;
     }
 
-  if (attributes->window_type == GDK_WINDOW_OFFSCREEN &&
-      _gdk_native_windows)
-    {
-      g_warning ("Offscreen windows not supported with native-windows gdk");
-      return NULL;
-    }
-
   display = gdk_screen_get_display (screen);
 
   window = _gdk_display_create_window (display);
@@ -1384,7 +1370,7 @@ gdk_window_new (GdkWindow     *parent,
   window->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
 
-  native = _gdk_native_windows; /* Default */
+  native = FALSE;
   if (window->parent->window_type == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
   else if (!window->input_only &&
@@ -2638,9 +2624,6 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
   GdkWindowPaint *paint;
 
   g_assert (gdk_window_has_impl (window));
-
-  if (_gdk_native_windows)
-    return FALSE; /* No need for implicit paints since we can't merge draws anyway */
 
   if (GDK_IS_PAINTABLE (window->impl))
     return FALSE; /* Implementation does double buffering */
@@ -5143,8 +5126,7 @@ set_viewable (GdkWindow *w,
 	set_viewable (child, val);
     }
 
-  if (!_gdk_native_windows &&
-      gdk_window_has_impl (w)  &&
+  if (gdk_window_has_impl (w)  &&
       w->window_type != GDK_WINDOW_FOREIGN &&
       !gdk_window_is_toplevel (w))
     {
@@ -5169,9 +5151,6 @@ set_viewable (GdkWindow *w,
        * do the show ourselves. We can't really tell this case from the normal
        * toplevel show as such toplevels are seen by gdk as parents of the
        * root window, so we make an exception for all toplevels.
-       *
-       * Also, when in GDK_NATIVE_WINDOW mode we never need to play games
-       * like this, so we just always show/hide directly.
        */
 
       impl_class = GDK_WINDOW_IMPL_GET_CLASS (w->impl);
@@ -5843,10 +5822,7 @@ gdk_window_set_device_events (GdkWindow    *window,
     g_hash_table_insert (window->device_events, device,
                          GINT_TO_POINTER (event_mask));
 
-  if (_gdk_native_windows)
-    native = window;
-  else
-    native = gdk_window_get_toplevel (window);
+  native = gdk_window_get_toplevel (window);
 
   while (gdk_window_is_offscreen (native))
     {
@@ -6596,8 +6572,7 @@ update_cursor_foreach (GdkDisplay           *display,
 {
   GdkWindow *window = user_data;
 
-  if (_gdk_native_windows ||
-      window->window_type == GDK_WINDOW_ROOT ||
+  if (window->window_type == GDK_WINDOW_ROOT ||
       window->window_type == GDK_WINDOW_FOREIGN)
     GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_device_cursor (window, device, window->cursor);
   else if (_gdk_window_event_parent_of (window, pointer_info->window_under_pointer))
@@ -8569,11 +8544,6 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
 {
   GdkPointerWindowInfo *device_info;
 
-  /* We don't track this if all native, and it can cause issues
-     with the update_cursor call below */
-  if (_gdk_native_windows)
-    return;
-
   device_info = _gdk_display_get_pointer_info (display, device);
 
   if (device_info->window_under_pointer)
@@ -8672,10 +8642,7 @@ gdk_pointer_grab (GdkWindow *	  window,
       !gdk_window_is_viewable (window))
     return GDK_GRAB_NOT_VIEWABLE;
 
-  if (_gdk_native_windows)
-    native = window;
-  else
-    native = gdk_window_get_toplevel (window);
+  native = gdk_window_get_toplevel (window);
   while (gdk_window_is_offscreen (native))
     {
       native = gdk_offscreen_window_get_embedder (native);
@@ -8775,10 +8742,7 @@ gdk_keyboard_grab (GdkWindow *window,
       !gdk_window_is_viewable (window))
     return GDK_GRAB_NOT_VIEWABLE;
 
-  if (_gdk_native_windows)
-    native = window;
-  else
-    native = gdk_window_get_toplevel (window);
+  native = gdk_window_get_toplevel (window);
 
   while (gdk_window_is_offscreen (native))
     {
@@ -9046,9 +9010,6 @@ void
 _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 {
   GdkWindow *toplevel;
-
-  if (_gdk_native_windows)
-    return; /* We use the native crossing events if all native */
 
   toplevel = get_event_toplevel (changed_window);
 
@@ -9583,45 +9544,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
 			     event->key.keyval == 0xbd);
     }
 #endif
-
-  if (_gdk_native_windows)
-    {
-      if (event->type == GDK_BUTTON_PRESS &&
-	  !event->any.send_event &&
-	  _gdk_display_has_device_grab (display, device, serial) == NULL)
-	{
-	  _gdk_display_add_device_grab  (display,
-                                         device,
-                                         event_window,
-                                         event_window,
-                                         GDK_OWNERSHIP_NONE,
-                                         FALSE,
-                                         gdk_window_get_events (event_window),
-                                         serial,
-                                         gdk_event_get_time (event),
-                                         TRUE);
-	  _gdk_display_device_grab_update (display, device, source_device, serial);
-	}
-      if (event->type == GDK_BUTTON_RELEASE &&
-	  !event->any.send_event)
-	{
-	  button_release_grab =
-            _gdk_display_has_device_grab (display, device, serial);
-	  if (button_release_grab &&
-	      button_release_grab->implicit &&
-	      (event->button.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
-	    {
-	      button_release_grab->serial_end = serial;
-	      button_release_grab->implicit_ungrab = FALSE;
-	      _gdk_display_device_grab_update (display, device, source_device, serial);
-	    }
-	}
-
-      if (event->type == GDK_BUTTON_PRESS)
-	_gdk_event_button_generate (display, event);
-
-      return;
-    }
 
   if (event->type == GDK_VISIBILITY_NOTIFY)
     {

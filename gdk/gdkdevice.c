@@ -1216,10 +1216,7 @@ gdk_device_grab (GdkDevice        *device,
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_SUCCESS);
   g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_SUCCESS);
 
-  if (_gdk_native_windows)
-    native = window;
-  else
-    native = gdk_window_get_toplevel (window);
+  native = gdk_window_get_toplevel (window);
 
   while (native->window_type == GDK_WINDOW_OFFSCREEN)
     {

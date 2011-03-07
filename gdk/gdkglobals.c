@@ -36,6 +36,5 @@ guint               _gdk_debug_flags = 0;
 GList              *_gdk_default_filters = NULL;
 gchar              *_gdk_display_name = NULL;
 gchar              *_gdk_display_arg_name = NULL;
-gboolean            _gdk_native_windows = FALSE;
 gboolean            _gdk_disable_multidevice = FALSE;
 

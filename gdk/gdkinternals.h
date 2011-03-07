@@ -91,7 +91,6 @@ extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
-extern gboolean _gdk_native_windows;
 
 #ifdef G_ENABLE_DEBUG
 
