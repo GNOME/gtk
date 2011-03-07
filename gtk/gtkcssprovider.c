@@ -835,6 +835,7 @@ static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
 static void scanner_apply_scope (GScanner    *scanner,
                                  ParserScope  scope);
+static void     css_provider_reset_parser (GtkCssProvider *css_provider);
 static gboolean css_provider_parse_value (GtkCssProvider  *css_provider,
                                           const gchar     *value_str,
                                           GValue          *value,
@@ -1468,6 +1469,8 @@ gtk_css_provider_finalize (GObject *object)
 
   css_provider = GTK_CSS_PROVIDER (object);
   priv = css_provider->priv;
+
+  css_provider_reset_parser (css_provider);
 
   g_scanner_destroy (priv->scanner);
   g_free (priv->filename);
@@ -2463,6 +2466,8 @@ gradient_parse_str (const gchar  *str,
 
           if (*str != ')')
             {
+              if (color)
+                gtk_symbolic_color_unref (color);
               *end_ptr = (gchar *) str;
               return gradient;
             }
