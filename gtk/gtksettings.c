@@ -477,7 +477,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_MODULES);
 
-#ifdef GDK_WINDOWING_X11
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-xft-antialias",
                                                                P_("Xft Antialias"),
@@ -547,7 +546,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_CURSOR_THEME_SIZE);
 
-#endif  /* GDK_WINDOWING_X11 */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-alternative-button-order",
                                                                    P_("Alternative button order"),
