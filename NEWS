@@ -13,6 +13,7 @@ Overview of Changes in GTK+ 3.0.2
  - Improved switch drawing
  - Improved checkbutton drawing
  - Improved menu drawing
+ - Improved notebook tab drawing
 
 * Bugs fixed:
  643041 Gtk-CRITICAL **: gtk_render_slider: assertion `height > 0'...
@@ -28,13 +29,21 @@ Overview of Changes in GTK+ 3.0.2
  643584 crash in gdk_event_free()
  643630 Tabs disappear from notebook on scrolling back and resizing...
  643685 Normalise marks positions internally in GtkScale
+ 643911 Inactive tab content allocation should respect tab-overlap
+ 643912 Tab allocation should respect tab-curvature
+ 643925 Mouse wheel is following URLs
+ 643967 Add a style property to flip rendering order
+ 644089 treeview: propagate the selected state from the row
 
 * Translation updates:
+ Esperanto
  German
+ Latvian
  Portuguese
  Russian
  Simplified Chinese
  Slovenian
+ Spanish
  Ukrainian
 
 
