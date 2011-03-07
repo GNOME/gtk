@@ -3240,7 +3240,9 @@ do_move_region_bits_on_impl (GdkWindowObject *impl_window,
    * so we copy from the toplevel with INCLUDE_INFERIORS.
    */
   private = impl_window;
-  while (!gdk_window_is_toplevel (private))
+  while (!gdk_window_is_toplevel (private) &&
+         !private->composited &&
+         gdk_drawable_get_visual ((GdkDrawable *) private) == gdk_drawable_get_visual ((GdkDrawable *) private->parent))
     {
       dx -= private->parent->abs_x + private->x;
       dy -= private->parent->abs_y + private->y;
