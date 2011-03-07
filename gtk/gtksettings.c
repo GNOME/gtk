@@ -3089,7 +3089,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
             g_value_init (&svalue.value, G_TYPE_GSTRING);
             s_val = g_key_file_get_string (keyfile, "Settings", key, &error);
             if (!error)
-              g_value_set_boxed (&svalue.value, g_string_new (s_val));
+              g_value_take_boxed (&svalue.value, g_string_new (s_val));
             g_free (s_val);
             break;
           }
