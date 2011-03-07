@@ -3087,12 +3087,16 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
       parsed = FALSE;
     }
 
+  if (end)
+    SKIP_SPACES (end);
+
   if (end && *end)
     {
       /* Set error position in the scanner
        * according to what we've parsed so far
        */
       priv->value_pos += (end - value_str);
+      parsed = FALSE;
 
       if (error && !*error)
         g_set_error_literal (error,
