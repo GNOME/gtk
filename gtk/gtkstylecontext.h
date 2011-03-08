@@ -316,6 +316,14 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_ACCELERATOR "accelerator"
 
 /**
+ * GTK_STYLE_CLASS_RAISED:
+ *
+ * A CSS class to match a raised control, such as a raised
+ * button on a toolbar.
+ */
+#define GTK_STYLE_CLASS_RAISED "raised"
+
+/**
  * GTK_STYLE_CLASS_GRIP:
  *
  * A widget class defining a resize grip
