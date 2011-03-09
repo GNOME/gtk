@@ -904,6 +904,23 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              GTK_PARAM_READABLE));
 
   /**
+   * GtkNotebook:initial-gap:
+   *
+   * The "initial-gap" property defines the minimum size for the initial
+   * gap between the first tab.
+   *
+   * Since: 3.2
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("initial-gap",
+                                                             P_("Initial gap"),
+                                                             P_("Initial gap before the first tab"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             0,
+                                                             GTK_PARAM_READABLE));
+
+  /**
    * GtkNotebook::switch-page:
    * @notebook: the object which received the signal.
    * @page: the new current page
@@ -5276,6 +5293,7 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
   gint i;
   guint border_width;
   GtkBorder padding;
+  gint initial_gap;
 
   widget = GTK_WIDGET (notebook);
   children = priv->children;
@@ -5287,12 +5305,16 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
                         "arrow-spacing", &arrow_spacing,
                         "scroll-arrow-hlength", &scroll_arrow_hlength,
                         "scroll-arrow-vlength", &scroll_arrow_vlength,
+                        "initial-gap", &initial_gap,
                         NULL);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (notebook));
   gtk_style_context_get_padding (context, 0, &padding);
 
   gtk_widget_get_allocation (widget, &allocation);
+
+  allocation.x += initial_gap;
+  allocation.width -= 2 * initial_gap;
 
   switch (tab_pos)
     {
