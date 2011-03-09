@@ -685,9 +685,6 @@ gtk_paned_init (GtkPaned *paned)
   priv->handle_pos.y = -1;
 
   priv->drag_pos = -1;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (paned));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR);
 }
 
 static void
@@ -1213,6 +1210,7 @@ gtk_paned_draw (GtkWidget *widget,
 
       gtk_style_context_save (context);
       gtk_style_context_set_state (context, state);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR);
       gtk_render_handle (context, cr,
                          priv->handle_pos.x - allocation.x,
                          priv->handle_pos.y - allocation.y,
