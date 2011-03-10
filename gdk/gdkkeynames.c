@@ -45,6 +45,20 @@ gdk_keys_keyval_compare (const void *pkey, const void *pbase)
   return (*(int *) pkey) - ((gdk_key *) pbase)->keyval;
 }
 
+/**
+ * gdk_keyval_name:
+ * @keyval: a key value
+ *
+ * Converts a key value into a symbolic name.
+ *
+ * The names are the same as those in the
+ * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+ * but without the leading "GDK_KEY_".
+ *
+ * Return value: (transfer none): a string containing the name of the key,
+ *     or %NULL if @keyval is not a valid key. The string should not be
+ *     modified.
+ */
 gchar*
 gdk_keyval_name (guint keyval)
 {
@@ -86,6 +100,19 @@ gdk_keys_name_compare (const void *pkey, const void *pbase)
 		 (const char *) (keynames + ((const gdk_key *) pbase)->offset));
 }
 
+/**
+ * gdk_keyval_from_name:
+ * @keyval_name: a key name
+ *
+ * Converts a key name to a key value.
+ *
+ * The names are the same as those in the
+ * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+ * but without the leading "GDK_KEY_".
+ *
+ * Returns: the corresponding key value, or %GDK_KEY_VoidSymbol
+ *     if the key name is not a valid key
+ */
 guint
 gdk_keyval_from_name (const gchar *keyval_name)
 {
