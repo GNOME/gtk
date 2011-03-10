@@ -39,6 +39,10 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
+#ifdef GDK_WINDOWING_QUARTZ
+#include "quartz/gdkquartz.h"
+#endif
+
 
 /**
  * SECTION:gtksettings
