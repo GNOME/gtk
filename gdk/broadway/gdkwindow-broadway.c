@@ -186,6 +186,7 @@ dirty_flush_idle (gpointer data)
 
   if (!broadway_output_flush (display->output))
     {
+      display->saved_serial = broadway_output_get_next_serial (display->output);
       broadway_output_free (display->output);
       display->output = NULL;
     }
@@ -662,7 +663,8 @@ gdk_window_broadway_move_resize (GdkWindow *window,
       gdk_event_set_device (event, GDK_DISPLAY_OBJECT (broadway_display)->core_pointer);
 
       node = _gdk_event_queue_append (GDK_DISPLAY_OBJECT (broadway_display), event);
-      _gdk_windowing_got_event (GDK_DISPLAY_OBJECT (broadway_display), node, event, 0);
+      _gdk_windowing_got_event (GDK_DISPLAY_OBJECT (broadway_display), node, event,
+				_gdk_display_get_next_serial (GDK_DISPLAY (broadway_display)) - 1);
     }
 }
 

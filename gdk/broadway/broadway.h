@@ -1,3 +1,5 @@
+#include <glib.h>
+
 typedef struct BroadwayOutput BroadwayOutput;
 
 typedef struct  {
@@ -5,10 +7,12 @@ typedef struct  {
     int width, height;
 } BroadwayRect;
 
-BroadwayOutput *broadway_output_new             (int             fd);
+BroadwayOutput *broadway_output_new             (int             fd,
+						 guint32         serial);
 void            broadway_output_free            (BroadwayOutput *output);
 int             broadway_output_flush           (BroadwayOutput *output);
 int             broadway_output_has_error       (BroadwayOutput *output);
+guint32         broadway_output_get_next_serial (BroadwayOutput *output);
 void            broadway_output_new_surface     (BroadwayOutput *output,
 						 int             id,
 						 int             x,

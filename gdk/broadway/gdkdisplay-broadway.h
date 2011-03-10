@@ -81,6 +81,7 @@ struct _GdkBroadwayDisplay
 
   GSocketService *service;
   BroadwayOutput *output;
+  guint32 saved_serial;
   HttpRequest *input;
 };
 

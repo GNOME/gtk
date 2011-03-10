@@ -61,6 +61,7 @@ gdk_event_init (GdkDisplay *display)
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
   broadway_display->event_source = _gdk_broadway_event_source_new (display);
+  broadway_display->saved_serial = 1;
 }
 
 static void
@@ -350,7 +351,14 @@ start_output (HttpRequest *request)
   fd = g_socket_get_fd (socket);
   set_fd_blocking (fd);
   /* We dup this because otherwise it'll be closed with the request SocketConnection */
-  broadway_display->output = broadway_output_new (dup(fd));
+
+  if (broadway_display->output)
+    {
+      broadway_display->saved_serial = broadway_output_get_next_serial (broadway_display->output);
+      broadway_output_free (broadway_display->output);
+    }
+
+  broadway_display->output = broadway_output_new (dup(fd), broadway_display->saved_serial);
   _gdk_broadway_resync_windows ();
   http_request_free (request);
 }
@@ -715,7 +723,11 @@ gdk_broadway_display_list_devices (GdkDisplay *display)
 static gulong
 gdk_broadway_display_get_next_serial (GdkDisplay *display)
 {
-  return 0;
+  GdkBroadwayDisplay *broadway_display;
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  if (broadway_display->output)
+    return broadway_output_get_next_serial (broadway_display->output);
+  return broadway_display->saved_serial;
 }
 
 

@@ -63,6 +63,7 @@ function createXHR()
   return null;
 }
 
+var last_serial = 0;
 var surfaces = {};
 var outstanding_commands = new Array();
 var input_socket = null;
@@ -89,6 +90,8 @@ function handleCommands(cmd_obj)
 
   while (i < cmd.length) {
     var command = cmd[i++];
+    last_serial = base64_32(cmd, i);
+    i = i + 6;
     switch (command) {
       /* create new surface */
       case 's':
@@ -277,7 +280,7 @@ function get_surface_id(ev) {
 function send_input(cmd, args)
 {
   if (input_socket != null) {
-      input_socket.send(cmd + args.join(","));
+      input_socket.send(cmd + ([last_serial].concat(args)).join(","));
   }
 }
 

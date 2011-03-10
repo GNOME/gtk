@@ -1,4 +1,3 @@
-#include <glib.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -450,6 +449,7 @@ struct BroadwayOutput {
   int fd;
   gzFile *zfd;
   int error;
+  guint32 serial;
 };
 
 static void
@@ -537,13 +537,14 @@ send_boundary (BroadwayOutput *output)
 }
 
 BroadwayOutput *
-broadway_output_new(int fd)
+broadway_output_new(int fd, guint32 serial)
 {
   BroadwayOutput *output;
 
   output = g_new0 (BroadwayOutput, 1);
 
   output->fd = fd;
+  output->serial = serial;
 
   broadway_output_write_header (output);
 
@@ -565,6 +566,12 @@ broadway_output_free (BroadwayOutput *output)
   free (output);
 }
 
+guint32
+broadway_output_get_next_serial (BroadwayOutput *output)
+{
+  return output->serial;
+}
+
 int
 broadway_output_flush (BroadwayOutput *output)
 {
@@ -578,7 +585,7 @@ broadway_output_flush (BroadwayOutput *output)
  *                     Core rendering operations                        *
  ************************************************************************/
 
-#define HEADER_LEN 1
+#define HEADER_LEN (1+6)
 
 static void
 append_uint16 (guint32 v, char *buf, int *p)
@@ -601,6 +608,7 @@ write_header(BroadwayOutput *output, char *buf, char op)
 
   p = 0;
   buf[p++] = op;
+  append_uint32 (output->serial++, buf, &p);
 
   return p;
 }
@@ -1008,7 +1016,9 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
       len = strlen (url);
       append_uint32 (len, buf, &p);
 
-      broadway_output_write (output, buf, 16);
+      assert (p == sizeof (buf));
+
+      broadway_output_write (output, buf, sizeof (buf));
 
       broadway_output_write (output, url, len);
 

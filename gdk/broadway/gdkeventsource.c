@@ -97,6 +97,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   GdkWindow *root, *window;
   char *p;
   int x, y, button, id, dir,key;
+  guint32 serial;
   guint64 time;
   GdkEvent *event = NULL;
   char cmd;
@@ -107,6 +108,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 
   p = (char *)message;
   cmd = *p++;
+  serial = (guint32)strtol(p, &p, 10);
+  p++; /* Skip , */
   switch (cmd) {
   case 'm':
     id = strtol(p, &p, 10);
@@ -137,7 +140,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	    gdk_event_set_device (event, display->core_pointer);
 
 	    node = _gdk_event_queue_append (display, event);
-	    _gdk_windowing_got_event (display, node, event, 0);
+	    _gdk_windowing_got_event (display, node, event, serial);
 
 	    event = gdk_event_new (GDK_FOCUS_CHANGE);
 	    event->focus_change.window = g_object_ref (display_broadway->mouse_in_toplevel);
@@ -145,7 +148,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	    gdk_event_set_device (event, display->core_pointer);
 
 	    node = _gdk_event_queue_append (display, event);
-	    _gdk_windowing_got_event (display, node, event, 0);
+	    _gdk_windowing_got_event (display, node, event, serial);
 	  }
 
 	/* TODO: Unset when it dies */
@@ -165,7 +168,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	    gdk_event_set_device (event, display->core_pointer);
 
 	    node = _gdk_event_queue_append (display, event);
-	    _gdk_windowing_got_event (display, node, event, 0);
+	    _gdk_windowing_got_event (display, node, event, serial);
 
 	    event = gdk_event_new (GDK_FOCUS_CHANGE);
 	    event->focus_change.window = g_object_ref (window);
@@ -173,7 +176,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	    gdk_event_set_device (event, display->core_pointer);
 
 	    node = _gdk_event_queue_append (display, event);
-	    _gdk_windowing_got_event (display, node, event, 0);
+	    _gdk_windowing_got_event (display, node, event, serial);
 
 	  }
       }
@@ -190,7 +193,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, 0);
+	_gdk_windowing_got_event (display, node, event, serial);
       }
 
     break;
@@ -223,7 +226,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, 0);
+	_gdk_windowing_got_event (display, node, event, serial);
       }
 
     break;
@@ -255,7 +258,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, 0);
+	_gdk_windowing_got_event (display, node, event, serial);
       }
 
     break;
@@ -277,7 +280,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, 0);
+	_gdk_windowing_got_event (display, node, event, serial);
       }
 
     break;

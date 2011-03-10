@@ -223,7 +223,7 @@ main (int argc, char *argv[])
 {
   BroadwayOutput *output;
 
-  output = broadway_output_new (STDOUT_FILENO);
+  output = broadway_output_new (STDOUT_FILENO, 1);
   demo2(output);
 
   return 0;
