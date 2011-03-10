@@ -578,6 +578,33 @@ broadway_output_flush (BroadwayOutput *output)
  *                     Core rendering operations                        *
  ************************************************************************/
 
+#define HEADER_LEN 1
+
+static void
+append_uint16 (guint32 v, char *buf, int *p)
+{
+  base64_uint16 (v, &buf[*p]);
+  *p += 3;
+}
+
+static void
+append_uint32 (guint32 v, char *buf, int *p)
+{
+  base64_uint32 (v, &buf[*p]);
+  *p += 6;
+}
+
+static int
+write_header(BroadwayOutput *output, char *buf, char op)
+{
+  int p;
+
+  p = 0;
+  buf[p++] = op;
+
+  return p;
+}
+
 void
 broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
 				 BroadwayRect *rects, int n_rects,
@@ -586,22 +613,23 @@ broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
   char *buf;
   int len, i, p;
 
-  len = 1 + 3 + 3 + 3*4*n_rects + 3 + 3;
+  len = HEADER_LEN + 3 + 3 + 3*4*n_rects + 3 + 3;
 
   buf = g_malloc (len);
-  p = 0;
-  buf[p++] = 'b';
-  base64_uint16(id, &buf[p]); p +=3;
-  base64_uint16(n_rects, &buf[p]); p +=3;
+  p = write_header (output, buf, 'b');
+  append_uint16 (id, buf, &p);
+  append_uint16 (n_rects, buf, &p);
   for (i = 0; i < n_rects; i++)
     {
-      base64_uint16(rects[i].x, &buf[p]); p +=3;
-      base64_uint16(rects[i].y, &buf[p]); p +=3;
-      base64_uint16(rects[i].width, &buf[p]); p +=3;
-      base64_uint16(rects[i].height, &buf[p]); p +=3;
+      append_uint16 (rects[i].x, buf, &p);
+      append_uint16 (rects[i].y, buf, &p);
+      append_uint16 (rects[i].width, buf, &p);
+      append_uint16 (rects[i].height, buf, &p);
     }
-  base64_uint16(dx, &buf[p]); p +=3;
-  base64_uint16(dy, &buf[p]); p +=3;
+  append_uint16 (dx, buf, &p);
+  append_uint16 (dy, buf, &p);
+
+  assert (p == len);
 
   broadway_output_write (output, buf, len);
   free (buf);
@@ -610,95 +638,119 @@ broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
 void
 broadway_output_new_surface(BroadwayOutput *output,  int id, int x, int y, int w, int h)
 {
-  char buf[16];
+  char buf[HEADER_LEN + 15];
+  int p;
 
-  buf[0] = 's';
-  base64_uint16(id, &buf[1]);
-  base64_uint16(x, &buf[4]);
-  base64_uint16(y, &buf[7]);
-  base64_uint16(w, &buf[10]);
-  base64_uint16(h, &buf[13]);
+  p = write_header (output, buf, 's');
+  append_uint16 (id, buf, &p);
+  append_uint16 (x, buf, &p);
+  append_uint16 (y, buf, &p);
+  append_uint16 (w, buf, &p);
+  append_uint16 (h, buf, &p);
 
-  broadway_output_write (output, buf, 16);
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 }
 
 void
 broadway_output_show_surface(BroadwayOutput *output,  int id)
 {
-  char buf[4];
+  char buf[HEADER_LEN + 3];
+  int p;
 
-  buf[0] = 'S';
-  base64_uint16(id, &buf[1]);
+  p = write_header (output, buf, 'S');
+  append_uint16 (id, buf, &p);
 
-  broadway_output_write (output, buf, 4);
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 }
 
 void
 broadway_output_hide_surface(BroadwayOutput *output,  int id)
 {
-  char buf[4];
+  char buf[HEADER_LEN + 3];
+  int p;
 
-  buf[0] = 'H';
-  base64_uint16(id, &buf[1]);
+  p = write_header (output, buf, 'H');
+  append_uint16 (id, buf, &p);
 
-  broadway_output_write (output, buf, 4);
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 }
 
 void
 broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 {
-  char buf[4];
+  char buf[HEADER_LEN + 3];
+  int p;
 
-  buf[0] = 'd';
-  base64_uint16(id, &buf[1]);
+  p = write_header (output, buf, 'd');
+  append_uint16 (id, buf, &p);
 
-  broadway_output_write (output, buf, 4);
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 }
 
 void
 broadway_output_move_surface(BroadwayOutput *output,  int id, int x, int y)
 {
-  char buf[10];
+  char buf[HEADER_LEN + 9];
+  int p;
 
-  buf[0] = 'm';
-  base64_uint16(id, &buf[1]);
-  base64_uint16(x, &buf[4]);
-  base64_uint16(y, &buf[7]);
+  p = write_header (output, buf, 'm');
 
-  broadway_output_write (output, buf, 10);
+  append_uint16 (id, buf, &p);
+  append_uint16 (x, buf, &p);
+  append_uint16 (y, buf, &p);
+
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 }
 
 void
 broadway_output_resize_surface(BroadwayOutput *output,  int id, int w, int h)
 {
-  char buf[10];
+  char buf[HEADER_LEN + 9];
+  int p;
 
-  buf[0] = 'r';
-  base64_uint16(id, &buf[1]);
-  base64_uint16(w, &buf[4]);
-  base64_uint16(h, &buf[7]);
+  p = write_header (output, buf, 'r');
 
-  broadway_output_write (output, buf, 10);
+  append_uint16 (id, buf, &p);
+  append_uint16 (w, buf, &p);
+  append_uint16 (h, buf, &p);
+
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 }
 
 void
 broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {
-  char buf[16];
+  char buf[HEADER_LEN + 15];
   gsize len;
   char *url;
+  int p;
 
-  buf[0] = 'i';
-  base64_uint16(id, &buf[1]);
-  base64_uint16(x, &buf[4]);
-  base64_uint16(y, &buf[7]);
+  p = write_header (output, buf, 'i');
+
+  append_uint16 (id, buf, &p);
+  append_uint16 (x, buf, &p);
+  append_uint16 (y, buf, &p);
 
   url = to_png_rgb (w, h, byte_stride, (guint32*)data);
   len = strlen (url);
-  base64_uint32(len, &buf[10]);
+  append_uint32 (len, buf, &p);
 
-  broadway_output_write (output, buf, 16);
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 
   broadway_output_write (output, url, len);
 
@@ -932,11 +984,11 @@ void
 broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 			  int w, int h, int byte_stride, void *data)
 {
-  char buf[16];
+  char buf[HEADER_LEN + 15];
   gsize len;
   char *url;
   BroadwayBox *rects;
-  int i, n_rects;
+  int p, i, n_rects;
   guint8 *subdata;
 
   rects = rgba_find_rects (data, w, h, byte_stride, &n_rects);
@@ -945,16 +997,16 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
     {
       subdata = (guint8 *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
 
-      buf[0] = 'i';
-      base64_uint16(id, &buf[1]);
-      base64_uint16(x + rects[i].x1, &buf[4]);
-      base64_uint16(y + rects[i].y1, &buf[7]);
+      p = write_header (output, buf, 'i');
+      append_uint16 (id, buf, &p);
+      append_uint16 (x + rects[i].x1, buf, &p);
+      append_uint16 (y + rects[i].y1, buf, &p);
 
       url = to_png_rgba (rects[i].x2 - rects[i].x1,
 			 rects[i].y2 - rects[i].y1,
 			 byte_stride, (guint32*)subdata);
       len = strlen (url);
-      base64_uint32(len, &buf[10]);
+      append_uint32 (len, buf, &p);
 
       broadway_output_write (output, buf, 16);
 
@@ -971,20 +1023,22 @@ static void
 send_image_a (BroadwayOutput *output,  int id, int x, int y,
 	      int w, int h, int byte_stride, guint8 *data)
 {
-  char buf[16];
+  char buf[HEADER_LEN + 15];
   gsize len;
   char *url;
 
-  buf[0] = 'i';
-  base64_uint16(id, &buf[1]);
-  base64_uint16(x, &buf[4]);
-  base64_uint16(y, &buf[7]);
+  p = write_header (output, buf, 'i');
+  append_uint16 (id, buf, &p);
+  append_uint16 (x, buf, &p);
+  append_uint16 (y, buf, &p);
 
   url = to_png_a (w, h, byte_stride, data);
   len = strlen (url);
-  base64_uint32(len, &buf[10]);
+  append_uint32 (len, buf, &p);
 
-  broadway_output_write (output, buf, 16);
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
 
   broadway_output_write (output, url, len);
 
