@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 typedef struct _GdkBroadwayDisplay GdkBroadwayDisplay;
 typedef struct _GdkBroadwayDisplayClass GdkBroadwayDisplayClass;
 
-typedef  struct HttpRequest HttpRequest;
+typedef struct BroadwayInput BroadwayInput;
 
 #define GDK_TYPE_BROADWAY_DISPLAY              (gdk_broadway_display_get_type())
 #define GDK_BROADWAY_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplay))
@@ -82,7 +82,7 @@ struct _GdkBroadwayDisplay
   GSocketService *service;
   BroadwayOutput *output;
   guint32 saved_serial;
-  HttpRequest *input;
+  BroadwayInput *input;
 };
 
 struct _GdkBroadwayDisplayClass
