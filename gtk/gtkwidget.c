@@ -281,6 +281,21 @@
  * </object>
  * ]]></programlisting>
  * </example>
+ * <para>
+ * Finally, GtkWidget allows style information such as style classes to
+ * be associated with widgets, using the custom &lt;style&gt; element:
+ * <example>
+ * <title>A UI definition fragment specifying an style class</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkButton" id="button1">
+ *   <style>
+ *     <class name="my-special-button-class"/>
+ *     <class name="dark-button"/>
+ *   </style>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </para>
  * </refsect2>
  */
 
@@ -418,7 +433,6 @@ enum {
   MOTION_NOTIFY_EVENT,
   DELETE_EVENT,
   DESTROY_EVENT,
-  EXPOSE_EVENT,
   KEY_PRESS_EVENT,
   KEY_RELEASE_EVENT,
   ENTER_NOTIFY_EVENT,
@@ -2273,7 +2287,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::selection-notify-event:
    * @widget: the object which received the signal.
-   * @event:
+   * @event: (type Gdk.EventSelection):
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
    */
@@ -2782,7 +2796,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::damage-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventExpose event
+   * @event: (type Gdk.EventExpose): the #GdkEventExpose event
    *
    * Emitted when a redirected window belonging to @widget gets drawn into.
    * The region/area members of the event shows what area of the redirected
@@ -2806,7 +2820,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 /**
    * GtkWidget::grab-broken-event:
    * @widget: the object which received the signal
-   * @event: the #GdkEventGrabBroken event
+   * @event: (type Gdk.EventGrabBroken): the #GdkEventGrabBroken event
    *
    * Emitted when a pointer or keyboard grab on a window belonging
    * to @widget gets broken.
@@ -4339,7 +4353,7 @@ gtk_widget_update_devices_mask (GtkWidget *widget,
  * isn't very useful otherwise. Many times when you think you might
  * need it, a better approach is to connect to a signal that will be
  * called after the widget is realized automatically, such as
- * #GtkWidget::expose-event. Or simply g_signal_connect () to the
+ * #GtkWidget::draw. Or simply g_signal_connect () to the
  * #GtkWidget::realize signal.
  **/
 void
@@ -4559,7 +4573,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * queues a resize to ensure there's enough space for the new text.
  *
  * <note><para>You cannot call gtk_widget_queue_resize() on a widget
- * from inside it's implementation of the GtkWidgetClass::size_allocate 
+ * from inside its implementation of the GtkWidgetClass::size_allocate 
  * virtual method. Calls to gtk_widget_queue_resize() from inside
  * GtkWidgetClass::size_allocate will be silently ignored.</para></note>
  **/
@@ -5972,6 +5986,7 @@ gtk_widget_event_internal (GtkWidget *widget,
 
       switch (event->type)
 	{
+	case GDK_EXPOSE:
 	case GDK_NOTHING:
 	  signal_num = -1;
 	  break;
@@ -6044,9 +6059,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_PROXIMITY_OUT:
 	  signal_num = PROXIMITY_OUT_EVENT;
-	  break;
-	case GDK_EXPOSE:
-	  signal_num = EXPOSE_EVENT;
 	  break;
 	case GDK_VISIBILITY_NOTIFY:
 	  signal_num = VISIBILITY_NOTIFY_EVENT;
@@ -12779,6 +12791,45 @@ static const GMarkupParser accel_group_parser =
     accel_group_start_element,
   };
 
+typedef struct
+{
+  GSList *classes;
+} StyleParserData;
+
+static void
+style_start_element (GMarkupParseContext  *context,
+                     const gchar          *element_name,
+                     const gchar         **names,
+                     const gchar         **values,
+                     gpointer              user_data,
+                     GError              **error)
+{
+  StyleParserData *style_data = (StyleParserData *)user_data;
+  gchar *class_name;
+
+  if (strcmp (element_name, "class") == 0)
+    {
+      if (g_markup_collect_attributes (element_name,
+                                       names,
+                                       values,
+                                       error,
+                                       G_MARKUP_COLLECT_STRDUP, "name", &class_name,
+                                       G_MARKUP_COLLECT_INVALID))
+        {
+          style_data->classes = g_slist_append (style_data->classes, class_name);
+        }
+    }
+  else if (strcmp (element_name, "style") == 0)
+    ;
+  else
+    g_warning ("Unsupported tag for GtkWidget: %s\n", element_name);
+}
+
+static const GMarkupParser style_parser =
+  {
+    style_start_element,
+  };
+
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 				       GtkBuilder       *builder,
@@ -12808,6 +12859,16 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
       *data = parser_data;
       return TRUE;
     }
+  if (strcmp (tagname, "style") == 0)
+    {
+      StyleParserData *parser_data;
+
+      parser_data = g_slice_new0 (StyleParserData);
+      *parser = style_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -12856,12 +12917,11 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 				      const gchar  *tagname,
 				      gpointer      user_data)
 {
-  AccelGroupParserData *accel_data;
-  AccessibilitySubParserData *a11y_data;
-  GtkWidget *toplevel;
-
   if (strcmp (tagname, "accelerator") == 0)
     {
+      AccelGroupParserData *accel_data;
+      GtkWidget *toplevel;
+
       accel_data = (AccelGroupParserData*)user_data;
       g_assert (accel_data->object);
 
@@ -12871,6 +12931,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
     }
   else if (strcmp (tagname, "accessibility") == 0)
     {
+      AccessibilitySubParserData *a11y_data;
+
       a11y_data = (AccessibilitySubParserData*)user_data;
 
       if (a11y_data->actions)
@@ -12882,32 +12944,37 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 
 	  accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
 
-	  action = ATK_ACTION (accessible);
-	  n_actions = atk_action_get_n_actions (action);
+          if (ATK_IS_ACTION (accessible))
+            {
+	      action = ATK_ACTION (accessible);
+	      n_actions = atk_action_get_n_actions (action);
 
-	  for (l = a11y_data->actions; l; l = l->next)
-	    {
-	      AtkActionData *action_data = (AtkActionData*)l->data;
+	      for (l = a11y_data->actions; l; l = l->next)
+	        {
+	          AtkActionData *action_data = (AtkActionData*)l->data;
 
-	      for (i = 0; i < n_actions; i++)
-		if (strcmp (atk_action_get_name (action, i),
-			    action_data->action_name) == 0)
-		  break;
+	          for (i = 0; i < n_actions; i++)
+		    if (strcmp (atk_action_get_name (action, i),
+		  	        action_data->action_name) == 0)
+		      break;
 
-	      if (i < n_actions)
-                {
-                  gchar *description;
+	          if (i < n_actions)
+                    {
+                      gchar *description;
 
-                  if (action_data->translatable && action_data->description->len)
-                    description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
-                                                                 action_data->context,
-                                                                 action_data->description->str);
-                  else
-                    description = action_data->description->str;
+                      if (action_data->translatable && action_data->description->len)
+                        description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
+                                                                     action_data->context,
+                                                                     action_data->description->str);
+                      else
+                        description = action_data->description->str;
 
-		  atk_action_set_description (action, i, description);
+		      atk_action_set_description (action, i, description);
+                    }
                 }
 	    }
+          else
+            g_warning ("accessibility action on a widget that does not implement AtkAction");
 
 	  g_slist_foreach (a11y_data->actions, (GFunc)free_action, NULL);
 	  g_slist_free (a11y_data->actions);
@@ -12918,6 +12985,20 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 			    a11y_data->relations);
 
       g_slice_free (AccessibilitySubParserData, a11y_data);
+    }
+  else if (strcmp (tagname, "style") == 0)
+    {
+      StyleParserData *style_data = (StyleParserData *)user_data;
+      GtkStyleContext *context;
+      GSList *l;
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (buildable));
+
+      for (l = style_data->classes; l; l = l->next)
+        gtk_style_context_add_class (context, (const gchar *)l->data);
+
+      g_slist_free_full (style_data->classes, g_free);
+      g_slice_free (StyleParserData, style_data);
     }
 }
 

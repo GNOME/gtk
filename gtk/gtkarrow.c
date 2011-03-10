@@ -312,7 +312,8 @@ gtk_arrow_draw (GtkWidget *widget,
   GtkMisc *misc = GTK_MISC (widget);
   GtkStyleContext *context;
   GtkStateFlags state;
-  gint x, y, width, height;
+  gdouble x, y;
+  gint width, height;
   gint extent;
   gint xpad, ypad;
   gfloat xalign, yalign;
@@ -344,8 +345,8 @@ gtk_arrow_draw (GtkWidget *widget,
         effective_arrow_type = GTK_ARROW_LEFT;
     }
 
-  x = floor (xpad + ((width  - extent) * xalign));
-  y = floor (ypad + ((height - extent) * yalign));
+  x = xpad + ((width  - extent) * xalign);
+  y = ypad + ((height - extent) * yalign);
 
   switch (effective_arrow_type)
     {

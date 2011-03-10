@@ -31,6 +31,7 @@ gail_c_sources =			\
 	gailimage.c			\
 	gailimagecell.c			\
 	gaillabel.c			\
+	gaillinkbutton.c		\
 	gailmenu.c			\
 	gailmenushell.c			\
 	gailmenuitem.c			\
@@ -84,6 +85,7 @@ gail_private_h_sources =		\
 	gailimage.h			\
 	gailimagecell.h			\
 	gaillabel.h			\
+	gaillinkbutton.h		\
 	gailmenu.h			\
 	gailmenushell.h			\
 	gailmenuitem.h			\

@@ -29,8 +29,8 @@
  * @Title: GtkStyleProvider
  * @See_also: #GtkStyleContext, #GtkCssProvider
  *
- * GtkStyleProvider is an interface used to provide style information to a #GtkStyleContext,
- * see gtk_style_context_add_provider() and gtk_style_context_add_provider_for_screen().
+ * GtkStyleProvider is an interface used to provide style information to a #GtkStyleContext.
+ * See gtk_style_context_add_provider() and gtk_style_context_add_provider_for_screen().
  */
 
 static void gtk_style_provider_iface_init (gpointer g_iface);

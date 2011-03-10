@@ -56,7 +56,7 @@
  * be packed. The bottom area is known as the
  * <structfield>action_area</structfield>. This is generally used for
  * packing buttons into the dialog which may perform functions such as
- * cancel, ok, or apply. The two areas are separated by a #GtkHSeparator.
+ * cancel, ok, or apply.
  *
  * #GtkDialog boxes are created with a call to gtk_dialog_new() or
  * gtk_dialog_new_with_buttons(). gtk_dialog_new_with_buttons() is

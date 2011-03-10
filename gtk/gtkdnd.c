@@ -465,7 +465,7 @@ grab_dnd_keys (GtkWidget *widget,
     }
 
   gdk_flush ();
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 
   gdk_window_add_filter (NULL, root_key_filter, (gpointer) GDK_WINDOW_XID (window));
 }
@@ -495,7 +495,7 @@ ungrab_dnd_keys (GtkWidget *widget,
     }
 
   gdk_flush ();
-  gdk_error_trap_pop ();
+  gdk_error_trap_pop_ignored ();
 }
 
 #else /* GDK_WINDOWING_X11 && !XINPUT_2 */

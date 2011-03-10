@@ -199,7 +199,7 @@
        <title>Drawing a GdkPixbuf onto a GdkWindow</title>
          <para>
            Drawing a pixbuf onto a drawable used to be done like this:
-<programlisting><![CDATA[
+           <informalexample><programlisting>
 gdk_draw_pixbuf (window,
                  gtk_widget_get_style (widget)->black_gc,
                  pixbuf,
@@ -209,16 +209,17 @@ gdk_draw_pixbuf (window,
                  gdk_pixbuf_get_height (pixbuf),
                  GDK_RGB_DITHER_NORMAL,
                  0, 0);
-]]></programlisting>
+           </programlisting></informalexample>
            Doing the same thing with cairo:
-<programlisting><![CDATA[
+           <informalexample><programlisting>
 cairo_t *cr = gdk_cairo_create (window);
 gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 cairo_paint (cr);
 cairo_destroy (cr);
-]]></programlisting>
-           Note that very similar code can be used for drawing pixmaps
-           by using gdk_cairo_set_source_pixmap() instead of
+           </programlisting></informalexample>
+           Note that very similar code can be used when porting code
+           using GdkPixmap to #cairo_surface_t by calling
+           cairo_set_source_surface() instead of
            gdk_cairo_set_source_pixbuf().
          </para>
       </example>
@@ -227,7 +228,7 @@ cairo_destroy (cr);
         <para>
           Tiled pixmaps are often used for drawing backgrounds.
           Old code looked something like this:
-          <programlisting><![CDATA[
+          <informalexample><programlisting>
 GdkGCValues gc_values;
 GdkGC *gc;
 
@@ -237,26 +238,30 @@ gdk_gc_set_tile (gc, pixmap);
 gdk_gc_set_fill (gc, GDK_TILED);
 gdk_gc_set_ts_origin (gc, x_origin, y_origin);
 /* use */
-gdk_draw_rectangle (drawable, gc, TRUE, 0, 0, width, height);
+gdk_draw_rectangle (window, gc, TRUE, 0, 0, width, height);
 /* restore */
 gdk_gc_set_tile (gc, NULL);
 gdk_gc_set_fill (gc, GDK_SOLID);
 gdk_gc_set_ts_origin (gc, 0, 0);
-]]></programlisting>
-          The equivalent cairo code looks like this:
-<programlisting><![CDATA[
+          </programlisting></informalexample>
+          The equivalent cairo code to draw a tiled surface looks
+          like this:
+          <informalexample><programlisting>
 cairo_t *cr;
+cairo_surface_t *surface;
 
-cr = gdk_cairo_create (drawable);
-gdk_cairo_set_source_pixmap (cr, pixmap, x_origin, y_origin);
+surface = ...
+cr = gdk_cairo_create (window);
+cairo_set_source_surface (cr, surface, x_origin, y_origin);
 cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
 cairo_rectangle (cr, 0, 0, width, height);
 cairo_fill (cr);
 cairo_destroy (cr);
-]]></programlisting>
-          Again, you can exchange pixbufs and pixmaps by using
-          gdk_cairo_set_source_pixbuf() instead of
-          gdk_cairo_set_source_pixmap().
+          </programlisting></informalexample>
+The surface here can be either an image surface or a X surface,
+and can either be created on the spot or kept around for caching purposes.
+Another alternative is to use pixbufs instead of surfaces with
+gdk_cairo_set_source_pixbuf() instead of cairo_set_source_surface().
         </para>
       </example>
       <example>
@@ -264,32 +269,38 @@ cairo_destroy (cr);
         <para>
           Drawing layouts clipped is often used to avoid overdraw or to
           allow drawing selections. Code would have looked like this:
-<programlisting><![CDATA[
+	  <informalexample><programlisting>
 GdkGC *gc;
 
 /* setup */
 gc = gtk_widget_get_style (widget)->text_gc[state];
-gdk_gc_set_clip_rectangle (gc, &area);
+gdk_gc_set_clip_rectangle (gc, &amp;area);
 /* use */
 gdk_draw_layout (drawable, gc, x, y, layout);
 /* restore */
 gdk_gc_set_clip_rectangle (gc, NULL);
-]]></programlisting>
+          </programlisting></informalexample>
           With cairo, the same effect can be achieved using:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
+GtkStyleContext *context;
+GtkStateFlags flags;
+GdkRGBA rgba;
 cairo_t *cr;
 
 cr = gdk_cairo_create (drawable);
 /* clip */
-gdk_cairo_rectangle (cr, &area);
+gdk_cairo_rectangle (cr, &amp;area);
 cairo_clip (cr);
 /* set the correct source color */
-gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->text[state]);
+context = gtk_widget_get_style_context (widget));
+state = gtk_widget_get_state_flags (widget);
+gtk_style_context_get_color (context, state, &amp;rgba);
+gdk_cairo_set_source_rgba (cr, &amp;rgba);
 /* draw the text */
 cairo_move_to (cr, x, y);
 pango_cairo_show_layout (cr, layout);
 cairo_destroy (cr);
-]]></programlisting>
+          </programlisting></informalexample>
           Clipping using cairo_clip() is of course not restricted to text
           rendering and can be used everywhere where GC clips were used.
           And using gdk_cairo_set_source_color() with style colors should
@@ -305,7 +316,7 @@ cairo_destroy (cr);
           It was often used to achieve a checkerboard effect. You can use
           cairo_mask() to achieve this effect. To get a checkerbox mask,
           you can use code like this:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
 static cairo_pattern_t *
 gtk_color_button_get_checkered (void)
 {
@@ -326,44 +337,50 @@ gtk_color_button_get_checkered (void)
 
     return pattern;
 }
-]]></programlisting>
+          </programlisting></informalexample>
           Note that stippling looks very outdated in UIs, and is rarely
           used in modern applications. All properties that made use of
           stippling have been removed from GTK+ 3. Most prominently,
           stippling is absent from text rendering, in particular #GtkTextTag.
         </para>
       </formalpara>
-      <formalpara><title>Using the the target drawable also as source or mask</title>
+      <formalpara><title>Using the target also as source or mask</title>
         <para>
           The gdk_draw_drawable() function allowed using the same drawable
           as source and target. This was often used to achieve a scrolling
           effect. Cairo does not allow this yet. You can however use
           cairo_push_group() to get a different intermediate target that
           you can copy to. So you can replace this code:
-<programlisting><![CDATA[
+          <informalexample><programlisting>
 gdk_draw_drawable (pixmap,
                    gc,
                    pixmap,
                    area.x + dx, area.y + dy,
                    area.x, area.y,
                    area.width, area.height);
-]]></programlisting>
+          </programlisting></informalexample>
           By using this code:
-<programlisting><![CDATA[
-cairo_t *cr = gdk_cairo_create (pixmap);
+          <informalexample><programlisting>
+cairo_t *cr = cairo_create (surface);
 /* clipping restricts the intermediate surface's size, so it's a good idea
  * to use it. */
-gdk_cairo_rectangle (cr, &area);
+gdk_cairo_rectangle (cr, &amp;area);
 cairo_clip (cr);
 /* Now push a group to change the target */
 cairo_push_group (cr);
-gdk_cairo_set_source_pixmap (cr, pixmap, dx, dy);
+cairo_set_source_surface (cr, surface, dx, dy);
 cairo_paint (cr);
 /* Now copy the intermediate target back */
 cairo_pop_group_to_source (cr);
 cairo_paint (cr);
 cairo_destroy (cr);
-]]></programlisting>
+          </programlisting></informalexample>
+The surface here can be either an image surface or a X surface,
+and can either be created on the spot or kept around for caching purposes.
+Another alternative is to use pixbufs instead of surfaces with
+gdk_cairo_set_source_pixbuf() instead of cairo_set_source_surface().
+        </para>
+        <para>
           The cairo developers plan to add self-copies in the future to allow
           exactly this effect, so you might want to keep up on cairo
           development to be able to change your code.
@@ -656,7 +673,7 @@ gtk_fixed_get_preferred_height (GtkWidget *widget,
       <para>
         One place where pixmaps were commonly used is to create custom
         cursors:
-      <programlisting>
+      <informalexample><programlisting>
 GdkCursor *cursor;
 GdkPixmap *pixmap;
 cairo_t *cr;
@@ -672,10 +689,10 @@ cairo_destroy (cr);
 cursor = gdk_cursor_new_from_pixmap (pixmap, pixmap, &amp;fg, &amp;fg, 0, 0);
 
 g_object_unref (pixmap);
-      </programlisting>
+      </programlisting></informalexample>
       The same can be achieved without pixmaps, by drawing onto
       an image surface:
-      <programlisting>
+      <informalexample><programlisting>
 GdkCursor *cursor;
 cairo_surface_t *s;
 cairo_t *cr;
@@ -696,7 +713,7 @@ cairo_surface_destroy (s);
 cursor = gdk_cursor_new_from_pixbuf (display, pixbuf, 0, 0);
 
 g_object_unref (pixbuf);
-      </programlisting>
+      </programlisting></informalexample>
       </para>
     </example>
   </section>
@@ -715,7 +732,7 @@ g_object_unref (pixbuf);
     <para>You might have a screen-changed handler like the following
      to set up a translucent window with an alpha-channel:
     </para>
-    <programlisting>
+    <informalexample><programlisting>
 static void
 on_alpha_screen_changed (GtkWidget *widget,
                          GdkScreen *old_screen,
@@ -729,11 +746,11 @@ on_alpha_screen_changed (GtkWidget *widget,
 
   gtk_widget_set_colormap (widget, colormap);
 }
-    </programlisting>
+    </programlisting></informalexample>
     <para>
     With visuals instead of colormaps, this will look as follows:
     </para>
-    <programlisting>
+    <informalexample><programlisting>
 static void
 on_alpha_screen_changed (GtkWindow *window,
                          GdkScreen *old_screen,
@@ -747,7 +764,7 @@ on_alpha_screen_changed (GtkWindow *window,
 
   gtk_widget_set_visual (window, visual);
 }
-    </programlisting>
+    </programlisting></informalexample>
     </example>
   </section>
 
@@ -757,8 +774,8 @@ on_alpha_screen_changed (GtkWindow *window,
     <para>
       #GdkDrawable has been removed in GTK+ 3, together with #GdkPixmap
       and #GdkImage. The only remaining drawable class is #GdkWindow.
-      For dealing with image data, you should use cairo surfaces or
-      #GdkPixbufs.
+      For dealing with image data, you should use a #cairo_surface_t or
+      a #GdkPixbuf.
     </para>
 
     <para>
@@ -891,6 +908,19 @@ gdk_window_add_filter (NULL, message_filter, NULL);
        }
       </programlisting></informalexample>
     </para>
+    <para>
+      If you used the pkg-config variable <varname>target</varname> to
+      conditionally build part of your project depending on the GDK backend,
+      for instance like this:
+      <informalexample><programlisting>
+AM_CONDITIONAL(BUILD_X11, test `$PKG_CONFIG --variable=target gtk+-2.0` = "x11")
+      </programlisting></informalexample>
+      then you should now use the M4 macro provided by GTK+ itself:
+      <informalexample><programlisting>
+GTK_CHECK_BACKEND([x11], [3.0.2], [have_x11=yes], [have_x11=no])
+AM_CONDITIONAL(BUILD_x11, [test "x$have_x11" = "xyes"])
+      </programlisting></informalexample>
+    </para>
   </section>
 
   <section>
@@ -922,7 +952,7 @@ gdk_window_add_filter (NULL, message_filter, NULL);
       is available via the new gtk_widget_get_allocated_width() and
       gtk_widget_get_allocated_height() functions. It is not necessary to
       check for GTK_WIDGET_IS_DRAWABLE(), since GTK+ already does this check
-      before emitting the ::draw signal.
+      before emitting the #GtkWidget::draw signal.
     </para>
     <para>
       There are some special considerations for widgets with multiple windows.
@@ -941,7 +971,7 @@ gdk_window_add_filter (NULL, message_filter, NULL);
         }
       ...
       </programlisting></informalexample>
-      In contrast, the ::draw signal handler may have to draw multiple
+      In contrast, the #GtkWidget::draw signal handler may have to draw multiple
       windows in one call. GTK+ has a convenience function
       gtk_cairo_should_draw_window() that can be used to find out if
       a window needs to be drawn. With that, the example above would look
@@ -974,9 +1004,12 @@ gboolean
 gtk_arrow_draw (GtkWidget *widget,
                 cairo_t   *cr)
 {
+  GtkStyleContext *context;
   gint x, y;
   gint width, height;
   gint extent;
+
+  context = gtk_widget_get_style_context (widget);
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -985,15 +1018,7 @@ gtk_arrow_draw (GtkWidget *widget,
   x = PAD;
   y = PAD;
 
-  gtk_paint_arrow (gtk_widget_get_style (widget),
-                   cr,
-                   gtk_widget_get_state (widget),
-                   GTK_SHADOW_OUT,
-                   widget,
-                   "arrow",
-                   widget->priv->arrow_type,
-                   TRUE,
-                   x, y, extent, extent);
+  gtk_render_arrow (context, rc, G_PI / 2, x, y, extent);
 }
     </programlisting>
     </example>
@@ -1078,7 +1103,7 @@ gtk_arrow_draw (GtkWidget *widget,
       classes that are directly derived from GtkObject, you have to make
       them derive from #GInitiallyUnowned (or, if you don't need the floating
       functionality, #GObject). If you have widgets that override the
-      destroy class handler, you have to adust your class_init function,
+      destroy class handler, you have to adjust your class_init function,
       since destroy is now a member of GtkWidgetClass:
       <informalexample><programlisting>
       GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);

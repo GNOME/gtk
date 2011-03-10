@@ -47,7 +47,7 @@
  * is rendered in the correct location using gtk_cell_renderer_render().
  *
  * There are a number of rules that must be followed when writing a new
- * #GtkCellRenderer.  First and formost, it's important that a certain set
+ * #GtkCellRenderer.  First and formost, its important that a certain set
  * of properties will always yield a cell renderer of the same size,
  * barring a #GtkStyle change.  The #GtkCellRenderer also has a number of
  * generic properties that are expected to be honored by all children.
@@ -1266,7 +1266,7 @@ gtk_cell_renderer_real_get_preferred_width_for_height (GtkCellRenderer *cell,
 
 
 /* Default implementation assumes that a cell renderer will never use more
- * space than it's natural size (this is fine for toggles and pixbufs etc
+ * space than its natural size (this is fine for toggles and pixbufs etc
  * but needs to be overridden from wrapping/ellipsizing text renderers) */
 static void
 gtk_cell_renderer_real_get_aligned_area (GtkCellRenderer         *cell,

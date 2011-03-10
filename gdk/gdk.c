@@ -236,8 +236,8 @@ gdk_pre_parse_libgtk_only (void)
 
   if (getenv ("GDK_NATIVE_WINDOWS"))
     {
-      _gdk_native_windows = TRUE;
-      /* Ensure that this is not propagated to spawned applications */
+      g_warning ("The GDK_NATIVE_WINDOWS environment variable is not supported in GTK3.\n"
+                 "See the documentation for gdk_window_ensure_native() on how to get native windows.");
       g_unsetenv ("GDK_NATIVE_WINDOWS");
     }
 

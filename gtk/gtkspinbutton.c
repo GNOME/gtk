@@ -988,14 +988,9 @@ gtk_spin_button_draw_arrow (GtkSpinButton   *spin_button,
   GtkJunctionSides junction;
   GtkStateFlags state;
   GtkWidget *widget;
-  GtkBorder padding;
   gdouble angle;
-  gint x;
-  gint y;
   gint panel_height;
-  gint height;
-  gint width;
-  gint h, w;
+  gdouble size, width, height, x, y;
 
   g_return_if_fail (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN);
 
@@ -1007,25 +1002,6 @@ gtk_spin_button_draw_arrow (GtkSpinButton   *spin_button,
   junction = gtk_style_context_get_junction_sides (context);
 
   panel_height = gdk_window_get_height (priv->panel);
-
-  if (arrow_type == GTK_ARROW_UP)
-    {
-      x = 0;
-      y = 0;
-
-      height = panel_height / 2;
-      angle = 0;
-      junction |= GTK_JUNCTION_BOTTOM;
-    }
-  else
-    {
-      x = 0;
-      y = panel_height / 2;
-
-      height = (panel_height + 1) / 2;
-      angle = G_PI;
-      junction |= GTK_JUNCTION_TOP;
-    }
 
   if (spin_button_at_limit (spin_button, arrow_type))
     state = GTK_STATE_FLAG_INSENSITIVE;
@@ -1043,47 +1019,52 @@ gtk_spin_button_draw_arrow (GtkSpinButton   *spin_button,
         }
     }
 
-  gtk_style_context_get_padding (context, state, &padding);
+  /* first, draw the background and the frame */
+  if (arrow_type == GTK_ARROW_UP)
+    {
+      x = 0;
+      y = 0;
+
+      junction |= GTK_JUNCTION_BOTTOM;
+    }
+  else if (arrow_type == GTK_ARROW_DOWN)
+    {
+      x = 0;
+      y = panel_height / 2.0;
+
+      junction |= GTK_JUNCTION_TOP;
+    }
+
   gtk_style_context_set_junction_sides (context, junction);
   gtk_style_context_set_state (context, state);
 
-  width = spin_button_get_arrow_size (spin_button) + padding.left + padding.right;
+  height = panel_height / 2.0;
+  width = gdk_window_get_width (priv->panel);
+  gtk_render_background (context, cr,
+                         x, y, width, height);
+  gtk_render_frame (context, cr,
+                    x, y, width, height);
 
-  gtk_render_background (context, cr, x, y, width, height);
-  gtk_render_frame (context, cr, x, y, width, height);
+  /* make the actual rendered arrow smaller than text size */
+  size = spin_button_get_arrow_size (spin_button);
+  size = MIN (size, width);
+  size *= 0.8;
 
-  height = panel_height;
+  x = (width - size) / 2.0;
 
-  if (arrow_type == GTK_ARROW_DOWN)
+  if (arrow_type == GTK_ARROW_UP)
     {
-      y = height / 2;
-      height = height - y - 2;
+      y = (height - size / 2.0) / 2.0;
+      angle = 0;
     }
-  else
+  else if (arrow_type == GTK_ARROW_DOWN)
     {
-      y = 2;
-      height = height / 2 - 2;
+      y = height + ((height - size / 2.0) / 2.0) - size / 2.0;
+      angle = G_PI;
     }
-
-  width -= 3;
-
-  if (widget && gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    x = 2;
-  else
-    x = 1;
-
-  w = width / 2;
-  w -= w % 2 - 1; /* force odd */
-  h = (w + 1) / 2;
-
-  x += (width - w) / 2;
-  y += (height - h) / 2;
-
-  height = h;
-  width = w;
 
   gtk_render_arrow (context, cr,
-                    angle, x, y, width);
+                    angle, x, y, size);
 
   gtk_style_context_restore (context);
 }
@@ -1115,10 +1096,7 @@ gtk_spin_button_enter_notify (GtkWidget        *widget,
       gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
 
-  if (GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event)
-    return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event (widget, event);
-
-  return FALSE;
+  return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event (widget, event);
 }
 
 static gint
@@ -1128,13 +1106,13 @@ gtk_spin_button_leave_notify (GtkWidget        *widget,
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin->priv;
 
-  priv->in_child = NO_ARROW;
-  gtk_widget_queue_draw (GTK_WIDGET (spin));
+  if (priv->in_child != NO_ARROW)
+    {
+      priv->in_child = NO_ARROW;
+      gtk_widget_queue_draw (GTK_WIDGET (spin));
+    }
 
-  if (GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->leave_notify_event)
-    return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->leave_notify_event (widget, event);
-
-  return FALSE;
+  return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->leave_notify_event (widget, event);
 }
 
 static gint

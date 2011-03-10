@@ -24,16 +24,13 @@
 #include <math.h>
 
 #include <gdk/gdk.h>
+#include "gdkwin32.h"
 #include "gdkprivate-win32.h"
 #include "gdkdevicemanager-win32.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-win32.h"
 #include "gdkdevice-wintab.h"
-#include "gdkwin32.h"
 #include "gdkdisplayprivate.h"
-
-#include <windows.h>
-#include <wintab.h>
 
 #define WINTAB32_DLL "Wintab32.dll"
 

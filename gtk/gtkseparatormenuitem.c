@@ -25,6 +25,7 @@
  */
 
 #include "config.h"
+#include "gtkaccessibleprivate.h"
 #include "gtkseparatormenuitem.h"
 
 /**
@@ -37,6 +38,7 @@
  * make it appear sunken into the interface.
  */
 
+static AtkObject *gtk_separator_menu_item_get_accessible (GtkWidget *widget);
 
 G_DEFINE_TYPE (GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM)
 
@@ -44,11 +46,16 @@ static void
 gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
 {
   GTK_CONTAINER_CLASS (class)->child_type = NULL;
+  GTK_WIDGET_CLASS (class)->get_accessible = gtk_separator_menu_item_get_accessible;
 }
 
 static void 
 gtk_separator_menu_item_init (GtkSeparatorMenuItem *item)
 {
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (item));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 }
 
 /**
@@ -62,4 +69,83 @@ GtkWidget *
 gtk_separator_menu_item_new (void)
 {
   return g_object_new (GTK_TYPE_SEPARATOR_MENU_ITEM, NULL);
+}
+
+typedef struct _GtkSeparatorMenuItemAccessible GtkSeparatorMenuItemAccessible;
+typedef struct _GtkSeparatorMenuItemAccessibleClass GtkSeparatorMenuItemAccessibleClass;
+
+ATK_DEFINE_TYPE (GtkSeparatorMenuItemAccessible, _gtk_separator_menu_item_accessible, GTK_TYPE_MENU_ITEM);
+
+static void
+_gtk_separator_menu_item_accessible_initialize (AtkObject *accessible,
+                                                gpointer   widget)
+{
+  ATK_OBJECT_CLASS (_gtk_separator_menu_item_accessible_parent_class)->initialize (accessible, widget);
+
+  atk_object_set_role (accessible, ATK_ROLE_SEPARATOR);
+}
+
+static void
+_gtk_separator_menu_item_accessible_class_init (GtkSeparatorMenuItemAccessibleClass *klass)
+{
+  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
+
+  atk_class->initialize = _gtk_separator_menu_item_accessible_initialize;
+}
+
+static void
+_gtk_separator_menu_item_accessible_init (GtkSeparatorMenuItemAccessible *self)
+{
+}
+
+typedef AtkObjectFactoryClass   GtkSeparatorMenuItemAccessibleFactoryClass;
+typedef AtkObjectFactory        GtkSeparatorMenuItemAccessibleFactory;
+
+G_DEFINE_TYPE (GtkSeparatorMenuItemAccessibleFactory,
+               _gtk_separator_menu_item_accessible_factory,
+               ATK_TYPE_OBJECT_FACTORY);
+
+static GType
+_gtk_separator_menu_item_accessible_factory_get_accessible_type (void)
+{
+  return _gtk_separator_menu_item_accessible_get_type ();
+}
+
+static AtkObject *
+_gtk_separator_menu_item_accessible_factory_create_accessible (GObject *obj)
+{
+  AtkObject *accessible;
+
+  accessible = g_object_new (_gtk_separator_menu_item_accessible_get_type (), NULL);
+  atk_object_initialize (accessible, obj);
+
+  return accessible;
+}
+
+static void
+_gtk_separator_menu_item_accessible_factory_class_init (AtkObjectFactoryClass *klass)
+{
+  klass->create_accessible = _gtk_separator_menu_item_accessible_factory_create_accessible;
+  klass->get_accessible_type = _gtk_separator_menu_item_accessible_factory_get_accessible_type;
+}
+
+static void
+_gtk_separator_menu_item_accessible_factory_init (AtkObjectFactory *factory)
+{
+}
+
+static AtkObject *
+gtk_separator_menu_item_get_accessible (GtkWidget *widget)
+{
+  static gboolean initialized = FALSE;
+
+  if (G_UNLIKELY (!initialized))
+    {
+      _gtk_accessible_set_factory_type (GTK_TYPE_SEPARATOR_MENU_ITEM,
+                                        _gtk_separator_menu_item_accessible_factory_get_type ());
+
+      initialized = TRUE;
+    }
+
+  return GTK_WIDGET_CLASS (gtk_separator_menu_item_parent_class)->get_accessible (widget);
 }

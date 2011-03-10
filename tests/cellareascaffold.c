@@ -684,7 +684,7 @@ cell_area_scaffold_focus (GtkWidget       *widget,
 	      else
 		{
 		  /* XXX A real implementation should check if the
-		   * previous row can focus with it's attributes setup */
+		   * previous row can focus with its attributes setup */
 		  focus_row--;
 		  valid = gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, focus_row);
 		}
@@ -696,7 +696,7 @@ cell_area_scaffold_focus (GtkWidget       *widget,
 	      else
 		{
 		  /* XXX A real implementation should check if the
-		   * previous row can focus with it's attributes setup */
+		   * previous row can focus with its attributes setup */
 		  focus_row++;
 		  valid = gtk_tree_model_iter_next (priv->model, &iter);
 		}

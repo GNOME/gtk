@@ -630,13 +630,15 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
 static void
 add_no_applications_label (GtkAppChooserWidget *self)
 {
-  gchar *text = NULL, *desc;
+  gchar *text = NULL, *desc = NULL;
   const gchar *string;
   GtkTreeIter iter;
 
   if (self->priv->default_text == NULL)
     {
-      desc = g_content_type_get_description (self->priv->content_type);
+      if (self->priv->content_type)
+	desc = g_content_type_get_description (self->priv->content_type);
+
       string = text = g_strdup_printf (_("No applications available to open \"%s\""),
                                        desc);
       g_free (desc);
@@ -706,7 +708,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
   if (self->priv->show_all)
     show_headings = FALSE;
 
-  if (self->priv->show_default)
+  if (self->priv->show_default && self->priv->content_type)
     {
       default_app = g_app_info_get_default_for_type (self->priv->content_type, FALSE);
 
@@ -719,9 +721,10 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
     }
 
 #ifndef G_OS_WIN32
-  if (self->priv->show_recommended || self->priv->show_all)
+  if ((self->priv->content_type && self->priv->show_recommended) || self->priv->show_all)
     {
-      recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
+      if (self->priv->content_type)
+	recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
 
       apps_added |= gtk_app_chooser_widget_add_section (self, _("Recommended Applications"),
                                                         show_headings,
@@ -733,9 +736,10 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
                                     g_list_copy (recommended_apps));
     }
 
-  if (self->priv->show_fallback || self->priv->show_all)
+  if ((self->priv->content_type && self->priv->show_fallback) || self->priv->show_all)
     {
-      fallback_apps = g_app_info_get_fallback_for_type (self->priv->content_type);
+      if (self->priv->content_type)
+	fallback_apps = g_app_info_get_fallback_for_type (self->priv->content_type);
 
       apps_added |= gtk_app_chooser_widget_add_section (self, _("Related Applications"),
                                                         show_headings,
@@ -952,8 +956,6 @@ static void
 gtk_app_chooser_widget_constructed (GObject *object)
 {
   GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (object);
-
-  g_assert (self->priv->content_type != NULL);
 
   if (G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->constructed != NULL)
     G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->constructed (object);

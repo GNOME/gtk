@@ -271,22 +271,6 @@ _gdk_x11_window_translate (GdkWindow      *window,
   GdkWindowQueueItem *item;
   GC xgc;
   GdkRectangle extents;
-  GdkWindow *parent;
-
-  /* We need to get data from subwindows here, because we might have
-   * shaped a native window over the moving region (with bg none,
-   * so the pixels are still there). In fact we might need to get data
-   * from overlapping native window that are not children of this window,
-   * so we copy from the toplevel with INCLUDE_INFERIORS.
-   */
-  parent = window;
-  while (parent->parent != NULL &&
-         parent->parent->window_type != GDK_WINDOW_ROOT)
-    {
-      dx -= parent->parent->abs_x + parent->x;
-      dy -= parent->parent->abs_y + parent->y;
-      parent = _gdk_window_get_impl_window (parent->parent);
-    }
 
   cairo_region_get_extents (area, &extents);
 
@@ -302,7 +286,7 @@ _gdk_x11_window_translate (GdkWindow      *window,
   gdk_window_queue (window, item);
 
   XCopyArea (GDK_WINDOW_XDISPLAY (window),
-             GDK_WINDOW_XID (parent),
+             GDK_WINDOW_XID (window),
              GDK_WINDOW_XID (window),
              xgc,
              extents.x - dx, extents.y - dy,

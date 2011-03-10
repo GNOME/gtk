@@ -694,7 +694,7 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
   xbg.blue = bg->blue;
   xbg.green = bg->green;
   
-  if (gdk_display_is_closed (display->closed))
+  if (gdk_display_is_closed (display))
     xcursor = None;
   else
     xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),

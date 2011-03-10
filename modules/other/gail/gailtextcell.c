@@ -94,14 +94,14 @@ gchar *gail_text_cell_property_list[] = {
   "font_desc",
 
   "attributes",
-  "background_gdk",
+  "background-gdk",
   "editable",
   "family",
-  "foreground_gdk",
+  "foreground-gdk",
   "rise",
   "scale",
   "size",
-  "size_points",
+  "size-points",
   "stretch",
   "strikethrough",
   "style",
@@ -111,19 +111,19 @@ gchar *gail_text_cell_property_list[] = {
   "weight",
 
   /* Also need the sets */
-  "background_set",
-  "editable_set",
-  "family_set",
-  "foreground_set",
-  "rise_set",
-  "scale_set",
-  "size_set",
-  "stretch_set",
-  "strikethrough_set",
-  "style_set",
-  "underline_set",
-  "variant_set",
-  "weight_set",
+  "background-set",
+  "editable-set",
+  "family-set",
+  "foreground-set",
+  "rise-set",
+  "scale-set",
+  "size-set",
+  "stretch-set",
+  "strikethrough-set",
+  "style-set",
+  "underline-set",
+  "variant-set",
+  "weight-set",
   NULL
 };
 
@@ -538,9 +538,9 @@ create_pango_layout(GtkCellRendererText *gtk_renderer,
   pango_attr_list_unref (attr_list);
 
   pango_font_description_free (font_desc);
-  g_free (foreground_gdk);
   pango_attr_list_unref (attributes);
   g_free (renderer_text);
+  gdk_color_free (foreground_gdk);
 
   return layout;
 }

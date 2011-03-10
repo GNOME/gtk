@@ -924,7 +924,7 @@ gtk_range_get_flippable (GtkRange *range)
  * @size_fixed: %TRUE to make the slider size constant
  *
  * Sets whether the range's slider has a fixed size, or a size that
- * depends on it's adjustment's page size.
+ * depends on its adjustment's page size.
  *
  * This function is useful mainly for #GtkRange subclasses.
  *
@@ -1842,7 +1842,6 @@ _gtk_range_update_context_for_stepper (GtkRange        *range,
     }
 
   gtk_style_context_set_junction_sides (context, sides);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
 }
 
 static void
@@ -1860,8 +1859,8 @@ draw_stepper (GtkRange     *range,
   GtkWidget *widget = GTK_WIDGET (range);
   gfloat arrow_scaling;
   GdkRectangle *rect;
-  gint arrow_x;
-  gint arrow_y;
+  gdouble arrow_x;
+  gdouble arrow_y;
   gdouble arrow_size, angle;
   gboolean arrow_sensitive;
 
@@ -1912,7 +1911,14 @@ draw_stepper (GtkRange     *range,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-  _gtk_range_update_context_for_stepper (range, context, stepper);
+
+  /* don't set juction sides on scrollbar steppers */
+  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_SCROLLBAR))
+    gtk_style_context_set_junction_sides (context, GTK_JUNCTION_NONE);
+  else
+    _gtk_range_update_context_for_stepper (range, context, stepper);
+
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
   gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr,

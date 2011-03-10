@@ -404,7 +404,6 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
  * Create native windows.
  *
  * With the default Gdk the created windows are mostly toplevel windows.
- * A lot of child windows are only created for GDK_NATIVE_WINDOWS.
  *
  * Placement of the window is derived from the passed in window,
  * except for toplevel window where OS/Window Manager placement

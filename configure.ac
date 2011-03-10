@@ -10,8 +10,8 @@
 
 m4_define([gtk_major_version], [3])
 m4_define([gtk_minor_version], [0])
-m4_define([gtk_micro_version], [1])
-m4_define([gtk_interface_age], [1])
+m4_define([gtk_micro_version], [3])
+m4_define([gtk_interface_age], [3])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
 m4_define([gtk_version],
@@ -39,7 +39,7 @@ m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
 m4_define([glib_required_version], [2.28.0])
-m4_define([pango_required_version], [1.20])
+m4_define([pango_required_version], [1.24.0])
 m4_define([atk_required_version], [1.30])
 m4_define([cairo_required_version], [1.10.0])
 m4_define([gdk_pixbuf_required_version], [2.22.0])
@@ -529,10 +529,10 @@ AC_CHECK_FUNCS(localtime_r)
 
 # _NL_TIME_FIRST_WEEKDAY is an enum and not a define
 AC_MSG_CHECKING([for _NL_TIME_FIRST_WEEKDAY])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_TIME_FIRST_WEEKDAY));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_TIME_FIRST_WEEKDAY], [1],
@@ -541,10 +541,10 @@ fi
 
 # _NL_MEASUREMENT_MEASUREMENT is an enum and not a define
 AC_MSG_CHECKING([for _NL_MEASUREMENT_MEASUREMENT])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_MEASUREMENT_MEASUREMENT));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_MEASUREMENT_MEASUREMENT));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_MEASUREMENT_MEASUREMENT], [1],
@@ -553,10 +553,10 @@ fi
 
 # _NL_PAPER_HEIGHT is an enum and not a define
 AC_MSG_CHECKING([for _NL_PAPER_HEIGHT])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_PAPER_HEIGHT));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_PAPER_HEIGHT));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_PAPER_HEIGHT], [1],
@@ -565,10 +565,10 @@ fi
 
 # _NL_PAPER_WIDTH is an enum and not a define
 AC_MSG_CHECKING([for _NL_PAPER_WIDTH])
-AC_TRY_LINK([#include <langinfo.h>], [
-char c;
-c = *((unsigned char *)  nl_langinfo(_NL_PAPER_WIDTH));
-], gtk_ok=yes, gtk_ok=no)
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <langinfo.h>]],
+                                [[char c;
+                                  c = *((unsigned char *)  nl_langinfo(_NL_PAPER_WIDTH));]])],
+               [gtk_ok=yes], [gtk_ok=no])
 AC_MSG_RESULT($gtk_ok)
 if test "$gtk_ok" = "yes"; then
   AC_DEFINE([HAVE__NL_PAPER_WIDTH], [1],
@@ -579,9 +579,11 @@ fi
 ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
-AC_OUTPUT_COMMANDS([case "$CONFIG_FILES" in *po-properties/Makefile.in*)
-        sed -e "/POTFILES =/r po-properties/POTFILES" po-properties/Makefile.in > po-properties/Makefile
-      esac])
+AC_CONFIG_COMMANDS([po-properties],
+                   [[case "$CONFIG_FILES" in *po-properties/Makefile.in*)
+                       sed -e "/POTFILES =/r po-properties/POTFILES" po-properties/Makefile.in > po-properties/Makefile
+                     esac]],
+                   [[]])
 
 dnl Snippet below is copied from AM_GLIB_GNU_GETTEXT to generate a first
 dnl po-properties/POTFILES during configure; see GNOME #573515.
@@ -611,22 +613,20 @@ AC_MSG_CHECKING([for extra flags to get ANSI library prototypes])
 
 gtk_save_LIBS=$LIBS
 LIBS="$LIBS -lm"
-AC_TRY_RUN([#include <math.h>
-             int main (void) { return (log(1) != log(1.)); }],
-     AC_MSG_RESULT(none needed),
-     gtk_save_CFLAGS="$CFLAGS"
-     CFLAGS="$CFLAGS -std1"
-     AC_TRY_RUN([#include <math.h>
-	         int main (void) { return (log(1) != log(1.)); }],
-         AC_MSG_RESULT(-std1),
-         AC_MSG_RESULT()
-         CFLAGS="$gtk_save_CFLAGS"
-         AC_MSG_WARN(
-                [No ANSI prototypes found in library. (-std1 didn't work.)]),
-	 true
-     ),
-     AC_MSG_RESULT(none needed)
-)
+AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <math.h>
+                                int main (void) { return (log(1) != log(1.)); }]])],
+              [AC_MSG_RESULT(none needed)],
+              [gtk_save_CFLAGS="$CFLAGS"
+               CFLAGS="$CFLAGS -std1"
+               AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <math.h>
+                                               int main (void) { return (log(1) != log(1.)); }]])],
+                             [AC_MSG_RESULT(-std1)],
+                             [AC_MSG_RESULT()
+                              CFLAGS="$gtk_save_CFLAGS"
+                              AC_MSG_WARN([No ANSI prototypes found in library. (-std1 did not work.)])],
+                             [true])],
+              [AC_MSG_RESULT(none needed)])
+
 LIBS=$gtk_save_LIBS
 
 AC_MSG_CHECKING(for the BeOS)
@@ -722,29 +722,10 @@ AC_CHECK_FUNCS(mallinfo)
 AC_CHECK_FUNCS(getresuid)
 AC_TYPE_UID_T
 
-# Check if <sys/select.h> needs to be included for fd_set
-AC_MSG_CHECKING([for fd_set])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]],
-                                   [[fd_set readMask, writeMask;]])],
-                  [gtk_ok=yes],[gtk_ok=no])
-if test $gtk_ok = yes; then
-    AC_MSG_RESULT([yes, found in sys/types.h])
-else
-    AC_HEADER_EGREP(fd_mask, sys/select.h, gtk_ok=yes)
-    if test $gtk_ok = yes; then
-        AC_DEFINE(HAVE_SYS_SELECT_H, 1,
-                  [Define to 1 if sys/select.h is available])
-        AC_MSG_RESULT([yes, found in sys/select.h])
-    else
-	AC_DEFINE(NO_FD_SET, 1,
-                  [Define to 1 if fd_set is not available])
-	AC_MSG_RESULT(no)
-    fi
-fi
-
 # Check for uxtheme.h (for MS-Windows Engine)
 AC_MSG_CHECKING(for uxtheme.h)
-AC_TRY_CPP([#include <uxtheme.h>], gtk_uxtheme_h=yes, gtk_uxtheme_h=no)
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <uxtheme.h>]])],
+                  [gtk_uxtheme_h=yes], [gtk_uxtheme_h=no])
 if test $gtk_uxtheme_h = yes; then
    AC_DEFINE(HAVE_UXTHEME_H, 1, [Have uxtheme.h include file])
 fi
@@ -1620,11 +1601,12 @@ AC_ARG_ENABLE(Bsymbolic,
               [SAVED_LDFLAGS="${LDFLAGS}"
                AC_MSG_CHECKING([for -Bsymbolic-functions linker flag])
                LDFLAGS=-Wl,-Bsymbolic-functions
-               AC_TRY_LINK([], [int main (void) { return 0; }],
-                           AC_MSG_RESULT(yes)
-                           enable_Bsymbolic=yes,
-                           AC_MSG_RESULT(no)
-                           enable_Bsymbolic=no)
+               AC_LINK_IFELSE([AC_LANG_PROGRAM([[]],
+                                               [[int main (void) { return 0; }]])],
+                              [AC_MSG_RESULT(yes)
+                               enable_Bsymbolic=yes],
+                              [AC_MSG_RESULT(no)
+                               enable_Bsymbolic=no])
                LDFLAGS="${SAVED_LDFLAGS}"])
 
 if test "x${enable_Bsymbolic}" = "xyes" ; then

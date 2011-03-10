@@ -1164,7 +1164,7 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
   gint           largest_child = 0, largest_natural = 0;
 
   for (children = private->children; children != NULL;
-       children = children->next, nvis_children++)
+       children = children->next)
     {
       GtkBoxChild *child = children->data;
 
@@ -1190,6 +1190,8 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
 
 	  required_size    += child_size;
 	  required_natural += child_natural;
+
+          nvis_children += 1;
         }
     }
 

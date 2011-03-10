@@ -376,6 +376,7 @@ endif
 gtk_private_h_sources =		\
 	gtk9slice.h		\
 	gtkaccelgroupprivate.h	\
+	gtkaccessibleprivate.h	\
 	gtkanimationdescription.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
@@ -871,10 +872,10 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) gtktypebuiltins.c.template
 
 gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
 	$(AM_V_GEN) echo '#include <gtk/gtkx.h>' > xgen-gtfsrc.c && \
-	  ${CPP} $(DEFS) $(INCLUDES) -DGTK_ENABLE_BROKEN $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
+	  ${CPP} $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
 	  sort | uniq | \
-	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; }' > xgen-gtf \
+	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; s/^.*\(gdk_x11\|gtk_plug_\|gtk_socket_\).*$$/#ifdef GDK_WINDOWING_X11\n&\n#endif/; }' > xgen-gtf \
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
 gtktestutils.c: gtktypefuncs.c
 
@@ -1060,6 +1061,7 @@ STOCK_ICONS = \
 	stock-icons/16/window-close.png 		\
 	stock-icons/16/gtk-connect.png 			\
 	stock-icons/16/gtk-convert.png 			\
+	stock-icons/16/edit-clear.png 			\
 	stock-icons/16/edit-copy.png 			\
 	stock-icons/16/edit-cut.png 			\
 	stock-icons/16/edit-delete.png 			\
@@ -1067,7 +1069,7 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-disconnect.png 		\
 	stock-icons/16/gtk-edit.png 			\
 	stock-icons/16/system-run.png 			\
-	stock-icons/16/document-x-generic.png 		\
+	stock-icons/16/text-x-generic.png 		\
 	stock-icons/16/edit-find-replace.png 		\
 	stock-icons/16/edit-find.png 			\
 	stock-icons/16/media-floppy.png 		\
@@ -1080,6 +1082,8 @@ STOCK_ICONS = \
 	stock-icons/16/go-last-ltr.png 			\
 	stock-icons/16/go-top.png 			\
 	stock-icons/16/go-up.png 			\
+	stock-icons/16/gtk-caps-lock-warning.png	\
+	stock-icons/16/gtk-color-picker.png		\
 	stock-icons/16/drive-harddisk.png 		\
 	stock-icons/16/help-contents.png 		\
 	stock-icons/16/go-home.png 			\
@@ -1107,6 +1111,10 @@ STOCK_ICONS = \
 	stock-icons/16/network-idle.png 		\
 	stock-icons/16/document-new.png 		\
 	stock-icons/16/document-open.png 		\
+	stock-icons/16/gtk-orientation-landscape.png	\
+	stock-icons/16/gtk-orientation-portrait.png	\
+	stock-icons/16/gtk-orientation-reverse-landscape.png \
+	stock-icons/16/gtk-orientation-reverse-portrait.png \
 	stock-icons/16/gtk-page-setup.png 		\
 	stock-icons/16/edit-paste.png 			\
 	stock-icons/16/gtk-preferences.png 		\
@@ -1164,6 +1172,7 @@ STOCK_ICONS = \
 	stock-icons/24/media-optical.png 		\
 	stock-icons/24/edit-clear.png 			\
 	stock-icons/24/window-close.png 		\
+	stock-icons/24/gtk-caps-lock-warning.png	\
 	stock-icons/24/gtk-color-picker.png 		\
 	stock-icons/24/gtk-connect.png 			\
 	stock-icons/24/gtk-convert.png 			\
@@ -1173,7 +1182,7 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-disconnect.png 		\
 	stock-icons/24/gtk-edit.png 			\
 	stock-icons/24/system-run.png 			\
-	stock-icons/24/document-x-generic.png 		\
+	stock-icons/24/text-x-generic.png 		\
 	stock-icons/24/edit-find-replace.png 		\
 	stock-icons/24/edit-find.png 			\
 	stock-icons/24/gtk-font.png 			\
@@ -1331,8 +1340,6 @@ stamp-icons: $(STOCK_ICONS)
 	   && $(LN_S) folder.png user-home.png 				\
 	   && $(RM) user-desktop.png 					\
 	   && $(LN_S) folder.png user-desktop.png 			\
-	   && $(RM) text-x-generic.png 					\
-	   && $(LN_S) document-x-generic.png text-x-generic.png 	\
 	) done 								\
 	&& touch stamp-icons
 

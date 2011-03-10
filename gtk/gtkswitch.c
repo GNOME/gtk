@@ -40,13 +40,15 @@
 
 #include "gtkswitch.h"
 
-#include "gtkaccessible.h"
+#include "gtkaccessibleprivate.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtkstyle.h"
 #include "gtkprivate.h"
 #include "gtktoggleaction.h"
 #include "gtkwidget.h"
+#include "gtkmarshalers.h"
+
 
 #define DEFAULT_SLIDER_WIDTH    (36)
 #define DEFAULT_SLIDER_HEIGHT   (22)
@@ -76,6 +78,14 @@ enum
   PROP_USE_ACTION_APPEARANCE,
   LAST_PROP
 };
+
+enum
+{
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *switch_props[LAST_PROP] = { NULL, };
 
@@ -262,22 +272,12 @@ gtk_switch_leave (GtkWidget        *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_switch_key_release (GtkWidget   *widget,
-                        GdkEventKey *event)
+static void
+gtk_switch_activate (GtkSwitch *sw)
 {
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
+  GtkSwitchPrivate *priv = sw->priv;
 
-  if (event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter ||
-      event->keyval == GDK_KEY_space ||
-      event->keyval == GDK_KEY_KP_Space)
-    {
-      gtk_switch_set_active (GTK_SWITCH (widget), !priv->is_active);
-    }
-
-  return FALSE;
+  gtk_switch_set_active (sw, !priv->is_active);
 }
 
 static void
@@ -285,6 +285,7 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
@@ -294,9 +295,19 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
+
+  if (priv->is_active)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
 
   width = padding.left + padding.right;
+
+  gtk_style_context_restore (context);
 
   gtk_widget_style_get (widget,
                         "slider-width", &slider_width,
@@ -337,6 +348,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum,
                                  gint      *natural)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
@@ -347,9 +359,19 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
+
+  if (priv->is_active)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
 
   height = padding.top + padding.bottom;
+
+  gtk_style_context_restore (context);
 
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
@@ -473,10 +495,14 @@ gtk_switch_paint_handle (GtkWidget    *widget,
                          cairo_t      *cr,
                          GdkRectangle *box)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
   GtkStateFlags state;
 
   state = gtk_widget_get_state_flags (widget);
+
+  if (priv->is_active)
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
@@ -516,7 +542,14 @@ gtk_switch_draw (GtkWidget *widget,
   if (priv->is_active)
     state |= GTK_STATE_FLAG_ACTIVE;
 
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+
   gtk_style_context_get_padding (context, state, &padding);
+
+  gtk_style_context_restore (context);
 
   x = 0;
   y = 0;
@@ -526,25 +559,27 @@ gtk_switch_draw (GtkWidget *widget,
   if (gtk_widget_has_focus (widget))
     gtk_render_focus (context, cr, x, y, width, height);
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-
   x += focus_width + focus_pad;
   y += focus_width + focus_pad;
   width -= 2 * (focus_width + focus_pad);
   height -= 2 * (focus_width + focus_pad);
 
+  gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
+  gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
 
-  /* XXX the +1/-1 it's pixel wriggling after checking with the default
-   * theme and xmag
-   */
-  handle.y = y + padding.top + 1;
-  handle.width = (width - padding.left - padding.right) / 2;
-  handle.height = (height - padding.top - padding.bottom) - 1;
+  width -= padding.left + padding.right;
+  height -= padding.top + padding.bottom;
+
+  x += padding.left;
+  y += padding.top;
+
+  handle.y = y;
+  handle.width = width / 2;
+  handle.height = height;
 
   /* Translators: if the "on" state label requires more than three
    * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -554,10 +589,8 @@ gtk_switch_draw (GtkWidget *widget,
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
 
-  label_x = x + padding.left
-          + ((width / 2) - rect.width - padding.left - padding.right) / 2;
-  label_y = y + padding.top
-          + (height - rect.height - padding.top - padding.bottom) / 2;
+  label_x = x +  ((width / 2) - rect.width) / 2;
+  label_y = y + (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
@@ -570,11 +603,8 @@ gtk_switch_draw (GtkWidget *widget,
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
 
-  label_x = x + padding.left
-          + (width / 2)
-          + ((width / 2) - rect.width - padding.left - padding.right) / 2;
-  label_y = y + padding.top
-          + (height - rect.height - padding.top - padding.bottom) / 2;
+  label_x = x +  (width / 2) + ((width / 2) - rect.width) / 2;
+  label_y = y + (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
@@ -583,9 +613,9 @@ gtk_switch_draw (GtkWidget *widget,
   if (priv->is_dragging)
     handle.x = x + priv->handle_x;
   else if (priv->is_active)
-    handle.x = x + width - handle.width - padding.right;
+    handle.x = x + width - handle.width;
   else
-    handle.x = x + padding.left;
+    handle.x = x;
 
   gtk_style_context_restore (context);
 
@@ -601,25 +631,8 @@ gtk_switch_get_accessible (GtkWidget *widget)
 
   if (G_UNLIKELY (first_time))
     {
-      AtkObjectFactory *factory;
-      AtkRegistry *registry;
-      GType derived_type;
-      GType derived_atk_type;
-
-      /* Figure out whether accessibility is enabled by looking at the
-       * type of the accessible object which would be created for the
-       * parent type of GtkSwitch
-       */
-      derived_type = g_type_parent (GTK_TYPE_SWITCH);
-
-      registry = atk_get_default_registry ();
-      factory = atk_registry_get_factory (registry, derived_type);
-      derived_atk_type = atk_object_factory_get_accessible_type (factory);
-      if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE))
-        atk_registry_set_factory_type (registry,
-                                       GTK_TYPE_SWITCH,
-                                       gtk_switch_accessible_factory_get_type ());
-
+      _gtk_accessible_set_factory_type (GTK_TYPE_SWITCH,
+                                        gtk_switch_accessible_factory_get_type ());
       first_time = FALSE;
     }
 
@@ -773,8 +786,9 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->motion_notify_event = gtk_switch_motion;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
-  widget_class->key_release_event = gtk_switch_key_release;
   widget_class->get_accessible = gtk_switch_get_accessible;
+
+  klass->activate = gtk_switch_activate;
 
   /**
    * GtkSwitch:slider-width:
@@ -788,6 +802,26 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                                                              DEFAULT_SLIDER_WIDTH, G_MAXINT,
                                                              DEFAULT_SLIDER_WIDTH,
                                                              GTK_PARAM_READABLE));
+
+  /**
+   * GtkSwitch::activate:
+   * @widget: the object which received the signal.
+   *
+   * The ::activate signal on GtkSwitch is an action signal and
+   * emitting it causes the switch to animate.
+   * Applications should never connect to this signal, but use the
+   * notify::active signal.
+   */
+  signals[ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkSwitchClass, activate),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  widget_class->activate_signal = signals[ACTIVATE];
+
 }
 
 static void
@@ -934,11 +968,21 @@ gtk_switch_activatable_interface_init (GtkActivatableIface *iface)
 
 /* accessibility: object */
 
-/* dummy typedefs */
-typedef struct _GtkSwitchAccessible             GtkSwitchAccessible;
-typedef struct _GtkSwitchAccessibleClass        GtkSwitchAccessibleClass;
+typedef struct _GtkSwitchAccessible      GtkSwitchAccessible;
+typedef struct _GtkSwitchAccessibleClass GtkSwitchAccessibleClass;
 
-ATK_DEFINE_TYPE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_WIDGET);
+struct _GtkSwitchAccessible
+{
+  GtkAccessible object;
+
+  gchar *description;
+  guint  action_idle;
+};
+
+static void atk_action_interface_init (AtkActionIface *iface);
+
+ATK_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_SWITCH,
+                           G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static AtkStateSet *
 gtk_switch_accessible_ref_state_set (AtkObject *accessible)
@@ -959,6 +1003,19 @@ gtk_switch_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
+gtk_switch_accessible_finalize (GObject *obj)
+{
+  GtkSwitchAccessible *accessible = (GtkSwitchAccessible *)obj;
+
+  g_free (accessible->description);
+
+  if (accessible->action_idle)
+    g_source_remove (accessible->action_idle);
+
+  G_OBJECT_CLASS (_gtk_switch_accessible_parent_class)->finalize (obj);
+}
+
+static void
 _gtk_switch_accessible_initialize (AtkObject *accessible,
                                    gpointer   widget)
 {
@@ -972,7 +1029,10 @@ _gtk_switch_accessible_initialize (AtkObject *accessible,
 static void
 _gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
+
+  object_class->finalize = gtk_switch_accessible_finalize;
 
   atk_class->initialize = _gtk_switch_accessible_initialize;
   atk_class->ref_state_set = gtk_switch_accessible_ref_state_set;
@@ -981,6 +1041,98 @@ _gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 static void
 _gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
+  self->description = NULL;
+  self->action_idle = 0;
+}
+
+/* accessibility: action interface */
+
+static gint
+gtk_switch_action_get_n_actions (AtkAction *action)
+{
+  return 1;
+}
+
+static const gchar *
+gtk_switch_action_get_name (AtkAction *action,
+                            gint       i)
+{
+  return "toggle";
+}
+
+static const gchar *
+gtk_switch_action_get_description (AtkAction *action,
+                                   gint       i)
+{
+  GtkSwitchAccessible *accessible = (GtkSwitchAccessible*)action;
+
+  return accessible->description;
+}
+
+static gboolean
+gtk_switch_action_set_description (AtkAction   *action,
+                                   gint         i,
+                                   const gchar *description)
+{
+  GtkSwitchAccessible *accessible = (GtkSwitchAccessible*)action;
+
+  g_free (accessible->description);
+  accessible->description = g_strdup (description);
+
+  return TRUE;
+}
+
+static gboolean
+idle_do_action (gpointer data)
+{
+  GtkSwitchAccessible *accessible = data;
+  GtkWidget *widget;
+  GtkSwitch *sw;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (data));
+  sw = GTK_SWITCH (widget);
+
+  accessible->action_idle = 0;
+
+  if (widget == NULL ||
+      !gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
+    return FALSE;
+
+  gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+
+  return FALSE;
+}
+
+static gboolean
+gtk_switch_action_do_action (AtkAction *action,
+                             gint       i)
+{
+  GtkSwitchAccessible *accessible;
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
+  if (widget == NULL)
+    return FALSE;
+
+  if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
+    return FALSE;
+
+  accessible = (GtkSwitchAccessible *)action;
+
+  if (!accessible->action_idle)
+    accessible->action_idle = gdk_threads_add_idle (idle_do_action, accessible);
+
+  return TRUE;
+}
+
+static void
+atk_action_interface_init (AtkActionIface *iface)
+{
+  iface->do_action = gtk_switch_action_do_action;
+  iface->get_n_actions = gtk_switch_action_get_n_actions;
+  iface->get_name = gtk_switch_action_get_name;
+  iface->get_description = gtk_switch_action_get_description;
+  iface->set_description = gtk_switch_action_set_description;
 }
 
 /* accessibility: factory */

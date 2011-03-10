@@ -111,7 +111,6 @@ main (int   argc,
   GtkWidget *vbbox;
   GtkWidget *button;
   GtkWidget *dialog;
-  GtkWidget *prop_editor;
   GtkRecentFilter *filter;
   gint i;
   gboolean multiple = FALSE;
@@ -172,7 +171,7 @@ main (int   argc,
 
   gtk_widget_show_all (dialog);
 
-  prop_editor = create_prop_editor (G_OBJECT (dialog), GTK_TYPE_RECENT_CHOOSER);
+  create_prop_editor (G_OBJECT (dialog), GTK_TYPE_RECENT_CHOOSER);
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 

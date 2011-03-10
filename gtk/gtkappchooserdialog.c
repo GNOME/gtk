@@ -142,10 +142,10 @@ online_button_clicked_cb (GtkButton *b,
   GtkAppChooserDialog *self = user_data;
 
   _gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
-                                                     self->priv->content_type,
-                                                     GTK_WINDOW (self),
-                                                     search_for_mimetype_ready_cb,
-                                                     self);
+						     self->priv->content_type,
+						     GTK_WINDOW (self),
+						     search_for_mimetype_ready_cb,
+						     self);
 }
 
 static void
@@ -169,6 +169,10 @@ app_chooser_online_get_default_ready_cb (GObject *source,
                                           TRUE);
       g_signal_connect (self->priv->online_button, "clicked",
                         G_CALLBACK (online_button_clicked_cb), self);
+
+
+      if (!self->priv->content_type)
+	gtk_widget_set_sensitive (self->priv->online_button, FALSE);
 
       gtk_widget_show (self->priv->online_button);
     }
@@ -247,9 +251,10 @@ add_or_find_application (GtkAppChooserDialog *self)
   app = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self));
 
   /* we don't care about reporting errors here */
-  g_app_info_set_as_last_used_for_type (app,
-                                        self->priv->content_type,
-                                        NULL);
+  if (self->priv->content_type)
+    g_app_info_set_as_last_used_for_type (app,
+					  self->priv->content_type,
+					  NULL);
 
   g_object_unref (app);
 }
@@ -313,12 +318,14 @@ set_dialog_properties (GtkAppChooserDialog *self)
   gchar *description;
   gchar *default_text;
   gchar *string;
+  gboolean unknown;
   PangoFontDescription *font_desc;
 
   name = NULL;
   extension = NULL;
   label = NULL;
   description = NULL;
+  unknown = TRUE;
 
   if (self->priv->gfile != NULL)
     {
@@ -326,7 +333,12 @@ set_dialog_properties (GtkAppChooserDialog *self)
       extension = get_extension (name);
     }
 
-  description = g_content_type_get_description (self->priv->content_type);
+  if (self->priv->content_type)
+    {
+      description = g_content_type_get_description (self->priv->content_type);
+      unknown = g_content_type_is_unknown (self->priv->content_type);
+    }
+
   gtk_window_set_title (GTK_WINDOW (self), "");
 
   if (name != NULL)
@@ -340,11 +352,9 @@ set_dialog_properties (GtkAppChooserDialog *self)
     {
       /* Translators: %s is a file type description */
       label = g_strdup_printf (_("Select an application for \"%s\" files"),
-                               g_content_type_is_unknown (self->priv->content_type) ?
-                               self->priv->content_type : description);
+                               unknown ? self->priv->content_type : description);
       string = g_strdup_printf (_("No applications available to open \"%s\" files"),
-                               g_content_type_is_unknown (self->priv->content_type) ?
-                               self->priv->content_type : description);
+                               unknown ? self->priv->content_type : description);
     }
 
   font_desc = pango_font_description_new ();
@@ -574,9 +584,6 @@ static void
 gtk_app_chooser_dialog_constructed (GObject *object)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
-
-  g_assert (self->priv->content_type != NULL ||
-            self->priv->gfile != NULL);
 
   if (G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->constructed != NULL)
     G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->constructed (object);

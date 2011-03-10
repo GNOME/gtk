@@ -53,6 +53,9 @@ int main (int argc, char *argv[])
     "<span color='Red' size='small'>Hot</span>" 
   };
 
+  gdouble pos_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
+  const gchar *pos_labels[4] = { "Left", "Right", "Top", "Bottom" };
+
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -104,6 +107,17 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[1], GTK_POS_BOTTOM, bath_labels[1]);
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[2], GTK_POS_BOTTOM, bath_labels[2]);
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[3], GTK_POS_TOP, bath_labels[3]);
+  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
+
+  frame = gtk_frame_new ("Positions");
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
+                                    0, 100, 1);
+  gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[0], GTK_POS_LEFT, pos_labels[0]);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[1], GTK_POS_RIGHT, pos_labels[1]);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[2], GTK_POS_TOP, pos_labels[2]);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[3], GTK_POS_BOTTOM, pos_labels[3]);
   gtk_container_add (GTK_CONTAINER (frame), scale);
   gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
 
@@ -168,6 +182,17 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[1], GTK_POS_LEFT, bath_labels[1]);
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[2], GTK_POS_LEFT, bath_labels[2]);
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[3], GTK_POS_RIGHT, bath_labels[3]);
+  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_box_pack_start (GTK_BOX (box2), frame, FALSE, FALSE, 0);
+
+  frame = gtk_frame_new ("Positions");
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
+                                    0, 100, 1);
+  gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[0], GTK_POS_LEFT, pos_labels[0]);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[1], GTK_POS_RIGHT, pos_labels[1]);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[2], GTK_POS_TOP, pos_labels[2]);
+  gtk_scale_add_mark (GTK_SCALE (scale), pos_marks[3], GTK_POS_BOTTOM, pos_labels[3]);
   gtk_container_add (GTK_CONTAINER (frame), scale);
   gtk_box_pack_start (GTK_BOX (box2), frame, FALSE, FALSE, 0);
 

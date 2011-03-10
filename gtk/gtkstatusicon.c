@@ -493,7 +493,8 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
   /**
    * GtkStatusIcon::button-press-event:
    * @status_icon: the object which received the signal
-   * @event: the #GdkEventButton which triggered this signal
+   * @event: (type Gdk.EventButton): the #GdkEventButton which triggered 
+   *                                 this signal
    *
    * The ::button-press-event signal will be emitted when a button
    * (typically from a mouse) is pressed.
@@ -519,7 +520,8 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
   /**
    * GtkStatusIcon::button-release-event:
    * @status_icon: the object which received the signal
-   * @event: the #GdkEventButton which triggered this signal
+   * @event: (type Gdk.EventButton): the #GdkEventButton which triggered 
+   *                                 this signal
    *
    * The ::button-release-event signal will be emitted when a button
    * (typically from a mouse) is released.
@@ -545,7 +547,8 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
   /**
    * GtkStatusIcon::scroll-event:
    * @status_icon: the object which received the signal.
-   * @event: the #GdkEventScroll which triggered this signal
+   * @event: (type Gdk.EventScroll): the #GdkEventScroll which triggered 
+   *                                 this signal
    *
    * The ::scroll-event signal is emitted when a button in the 4 to 7
    * range is pressed. Wheel mice are usually configured to generate

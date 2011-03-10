@@ -481,7 +481,6 @@ main (int argc, char **argv)
   GtkWidget *vbbox;
   GtkWidget *button;
   GtkWidget *dialog;
-  GtkWidget *prop_editor;
   GtkWidget *extra;
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
@@ -640,7 +639,7 @@ main (int argc, char **argv)
 
   /* Extra controls for manipulating the test environment
    */
-  prop_editor = create_prop_editor (G_OBJECT (dialog), GTK_TYPE_FILE_CHOOSER);
+  create_prop_editor (G_OBJECT (dialog), GTK_TYPE_FILE_CHOOSER);
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 

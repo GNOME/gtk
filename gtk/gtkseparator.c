@@ -101,6 +101,7 @@ static void
 gtk_separator_init (GtkSeparator *separator)
 {
   GtkSeparatorPrivate *private;
+  GtkStyleContext *context;
 
   separator->priv = G_TYPE_INSTANCE_GET_PRIVATE (separator,
                                                  GTK_TYPE_SEPARATOR,
@@ -110,6 +111,9 @@ gtk_separator_init (GtkSeparator *separator)
   gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
 
   private->orientation = GTK_ORIENTATION_HORIZONTAL;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (separator));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 }
 
 static void

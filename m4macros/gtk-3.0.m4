@@ -194,3 +194,26 @@ main ()
   AC_SUBST(GTK_LIBS)
   rm -f conf.gtktest
 ])
+
+dnl GTK_CHECK_BACKEND(BACKEND-NAME [, MINIMUM-VERSION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
+dnl   Tests for BACKEND-NAME in the GTK targets list
+dnl
+AC_DEFUN([GTK_CHECK_BACKEND],
+[
+  pkg_config_args=ifelse([$1],,gtk+-3.0, gtk+-$1-3.0)
+  min_gtk_version=ifelse([$2],,3.0.0,$2)
+
+  AC_PATH_PROG(PKG_CONFIG, [pkg-config], [AC_MSG_ERROR([No pkg-config found])])
+
+  if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args ; then
+    target_found=yes
+  else
+    target_found=no
+  fi
+
+  if test "x$target_found" = "xno"; then
+    ifelse([$4],,[AC_MSG_ERROR([Backend $backend not found.])],[$4])
+  else
+    ifelse([$3],,[:],[$3])
+  fi
+])

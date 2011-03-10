@@ -26,10 +26,14 @@
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
 
+#ifdef XINPUT_2
+
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput2.h>
+
+#endif
 
 struct _GdkX11DeviceXI2
 {
@@ -42,6 +46,10 @@ struct _GdkX11DeviceXI2Class
 {
   GdkDeviceClass parent_class;
 };
+
+G_DEFINE_TYPE (GdkX11DeviceXI2, gdk_x11_device_xi2, GDK_TYPE_DEVICE)
+
+#ifdef XINPUT_2
 
 static void gdk_x11_device_xi2_get_property (GObject      *object,
                                              guint         prop_id,
@@ -92,8 +100,6 @@ static void  gdk_x11_device_xi2_select_window_events (GdkDevice    *device,
                                                       GdkWindow    *window,
                                                       GdkEventMask  event_mask);
 
-
-G_DEFINE_TYPE (GdkX11DeviceXI2, gdk_x11_device_xi2, GDK_TYPE_DEVICE)
 
 enum {
   PROP_0,
@@ -177,16 +183,17 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
                               GdkModifierType *mask)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
-  GdkDisplay *display;
-  XIDeviceInfo *info;
-  gint i, j, ndevices;
-
-  display = gdk_device_get_display (device);
 
   if (axes)
     {
-      info = XIQueryDevice(GDK_DISPLAY_XDISPLAY (display),
-                           device_xi2->device_id, &ndevices);
+      GdkDisplay *display;
+      XIDeviceInfo *info;
+      gint i, j, ndevices;
+
+      display = gdk_device_get_display (device);
+
+      info = XIQueryDevice (GDK_DISPLAY_XDISPLAY (display),
+                            device_xi2->device_id, &ndevices);
 
       for (i = 0, j = 0; i < info->num_classes; i++)
         {
@@ -742,3 +749,17 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
 
   return state;
 }
+
+#else /* XINPUT_2 */
+
+static void
+gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
+{
+}
+
+static void
+gdk_x11_device_xi2_init (GdkX11DeviceXI2 *device)
+{
+}
+
+#endif /* XINPUT_2 */

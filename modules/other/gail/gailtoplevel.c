@@ -94,8 +94,10 @@ gail_toplevel_init (GailToplevel *toplevel)
       if (!window || 
           !gtk_widget_get_visible (widget) ||
           is_attached_menu_window (widget) ||
-          gtk_widget_get_parent (GTK_WIDGET (window)) ||
-          GTK_IS_PLUG (window))
+#ifdef GDK_WINDOWING_X11
+          GTK_IS_PLUG (window) ||
+#endif
+          gtk_widget_get_parent (GTK_WIDGET (window)))
         {
           GList *temp_l  = l->next;
 
@@ -215,8 +217,10 @@ gail_toplevel_show_event_watcher (GSignalInvocationHint *ihint,
   widget = GTK_WIDGET (object);
   if (gtk_widget_get_parent (widget) ||
       is_attached_menu_window (widget) ||
-      is_combo_window (widget) ||
-      GTK_IS_PLUG (widget))
+#ifdef GDK_WINDOWING_X11
+      GTK_IS_PLUG (widget) ||
+#endif
+      is_combo_window (widget))
     return TRUE;
 
   child = gtk_widget_get_accessible (widget);

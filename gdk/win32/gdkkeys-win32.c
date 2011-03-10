@@ -417,7 +417,7 @@ update_keymap (void)
 		    {
 		      guint keysym = gdk_unicode_to_keyval (wcs[0]);
 
-		      /* It is a dead key, and it's has been stored in
+		      /* It is a dead key, and it has been stored in
 		       * the keyboard layout's state by
 		       * ToAsciiEx()/ToUnicodeEx(). Yes, this is an
 		       * incredibly silly API! Make the keyboard

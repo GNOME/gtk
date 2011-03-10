@@ -1988,7 +1988,7 @@ gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
                     G_CALLBACK (gtk_tool_palette_adjustment_value_changed),
                     palette);
   priv->hadjustment = g_object_ref_sink (adjustment);
-  /* FIXME: Adjustment should probably have it's values updated now */
+  /* FIXME: Adjustment should probably have its values updated now */
   g_object_notify (G_OBJECT (palette), "hadjustment");
 }
 
@@ -2037,7 +2037,7 @@ gtk_tool_palette_set_vadjustment (GtkToolPalette *palette,
                     G_CALLBACK (gtk_tool_palette_adjustment_value_changed),
                     palette);
   priv->vadjustment = g_object_ref_sink (adjustment);
-  /* FIXME: Adjustment should probably have it's values updated now */
+  /* FIXME: Adjustment should probably have its values updated now */
   g_object_notify (G_OBJECT (palette), "vadjustment");
 }
 

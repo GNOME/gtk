@@ -2972,7 +2972,6 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
       GtkStateFlags state;
       guint num_steps, step;
       GdkRGBA *color;
-      gdouble dx, dy;
       gdouble progress;
       gdouble radius;
       gdouble half;
@@ -2992,13 +2991,10 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
 
       cairo_save (cr);
 
-      cairo_translate (cr, x, y);
-
-      /* draw clip region */
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_set_line_width (cr, 2.0);
+      cairo_translate (cr, x + width / 2, y + height / 2);
 
-      dx = width / 2;
-      dy = height / 2;
       radius = MIN (width / 2, height / 2);
       half = num_steps / 2;
 
@@ -3007,10 +3003,9 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
           gint inset = 0.7 * radius;
 
           /* transparency is a function of time and intial value */
-          gdouble t = (gdouble) ((i + num_steps - step)
-                                 % num_steps) / num_steps;
-
-          cairo_save (cr);
+          gdouble t = 1.0 - (gdouble) ((i + step) % num_steps) / num_steps;
+          gdouble xscale = - sin (i * G_PI / half);
+          gdouble yscale = - cos (i * G_PI / half);
 
           cairo_set_source_rgba (cr,
                                  color->red,
@@ -3018,16 +3013,13 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                  color->blue,
                                  color->alpha * t);
 
-          cairo_set_line_width (cr, 2.0);
           cairo_move_to (cr,
-                         dx + (radius - inset) * cos (i * G_PI / half),
-                         dy + (radius - inset) * sin (i * G_PI / half));
+                         (radius - inset) * xscale,
+                         (radius - inset) * yscale);
           cairo_line_to (cr,
-                         dx + radius * cos (i * G_PI / half),
-                         dy + radius * sin (i * G_PI / half));
+                         radius * xscale,
+                         radius * yscale);
           cairo_stroke (cr);
-
-          cairo_restore (cr);
         }
 
       cairo_restore (cr);

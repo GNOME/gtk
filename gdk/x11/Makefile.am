@@ -24,9 +24,13 @@ libgdk_x11_la_SOURCES = 	\
 	gdkasync.h		\
 	gdkcursor-x11.c		\
 	gdkdevice-core-x11.c	\
+	gdkdevice-xi.c		\
+	gdkdevice-xi2.c		\
 	gdkdeviceprivate-xi.h	\
 	gdkdevicemanager-core-x11.c \
 	gdkdevicemanager-x11.c	\
+	gdkdevicemanager-xi.c	\
+	gdkdevicemanager-xi2.c	\
 	gdkdevicemanagerprivate-core.h \
 	gdkdisplaymanager-x11.c	\
 	gdkdisplay-x11.c	\
@@ -56,34 +60,18 @@ libgdk_x11_la_SOURCES = 	\
 	xsettings-common.h	\
 	xsettings-common.c
 
-libgdkx11include_HEADERS =
-
-if XINPUT_XFREE
-libgdk_x11_la_SOURCES += 	\
-	gdkdevicemanager-xi.c	\
-	gdkdevice-xi.c
-libgdkx11include_HEADERS +=	\
-	gdkx11devicemanager-xi.h \
-	gdkx11device-xi.h
-if XINPUT_2
-libgdk_x11_la_SOURCES += 	\
-	gdkdevicemanager-xi2.c	\
-	gdkdevice-xi2.c
-libgdkx11include_HEADERS +=	\
-	gdkx11devicemanager-xi2.h \
-	gdkx11device-xi2.h
-endif
-endif
-
-
 libgdkinclude_HEADERS = 	\
 	gdkx.h
 
-libgdkx11include_HEADERS += 	\
+libgdkx11include_HEADERS = 	\
 	gdkx11applaunchcontext.h \
 	gdkx11cursor.h		\
 	gdkx11device-core.h	\
+	gdkx11device-xi.h	\
+	gdkx11device-xi2.h	\
 	gdkx11devicemanager-core.h \
+	gdkx11devicemanager-xi.h \
+	gdkx11devicemanager-xi2.h \
 	gdkx11display.h		\
 	gdkx11displaymanager.h	\
 	gdkx11dnd.h		\

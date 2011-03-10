@@ -317,6 +317,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 
   g_debug ("Query starting, search criteria:'%s', location:'%s'", search_text, location_uri);
 
+#ifdef FTS_MATCHING
   /* Using FTS: */
   sparql = g_string_new ("SELECT nie:url(?urn) "
                          "WHERE {"
@@ -325,7 +326,6 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
                          "  fts:match ");
   sparql_append_string_literal (sparql, search_text);
 
-#ifdef FTS_MATCHING
   if (location_uri)
 	  {
 		  g_string_append (sparql, " . FILTER (fn:starts-with(nie:url(?urn),");

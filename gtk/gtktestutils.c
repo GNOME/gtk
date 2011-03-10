@@ -332,7 +332,7 @@ widget_geo_cmp (gconstpointer a,
  * @base_widget will be returned.
  * The general purpose of this function is to find the most likely "action"
  * widget, relative to another labeling widget. Such as finding a
- * button or text entry widget, given it's corresponding label widget.
+ * button or text entry widget, given its corresponding label widget.
  *
  * Returns: (transfer none): a widget of type @widget_type if any is found.
  *

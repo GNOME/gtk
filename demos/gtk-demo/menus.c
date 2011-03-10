@@ -74,47 +74,17 @@ change_orientation (GtkWidget *button,
                     GtkWidget *menubar)
 {
   GtkWidget *parent;
-  GtkWidget *box = NULL;
+  GtkOrientation orientation;
 
   parent = gtk_widget_get_parent (menubar);
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (parent));
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), 1 - orientation);
 
-  if (GTK_IS_VBOX (parent))
-    {
-      box = gtk_widget_get_parent (parent);
-
-      g_object_ref (menubar);
-      gtk_container_remove (GTK_CONTAINER (parent), menubar);
-      gtk_container_add (GTK_CONTAINER (box), menubar);
-      gtk_box_reorder_child (GTK_BOX (box), menubar, 0);
-      g_object_unref (menubar);
-      g_object_set (menubar, 
-		    "pack-direction", GTK_PACK_DIRECTION_TTB,
-		    NULL);
-    }
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    g_object_set (menubar, "pack-direction", GTK_PACK_DIRECTION_TTB, NULL);
   else
-    {
-      GList *children, *l;
+    g_object_set (menubar, "pack-direction", GTK_PACK_DIRECTION_LTR, NULL);
 
-      children = gtk_container_get_children (GTK_CONTAINER (parent));
-      for (l = children; l; l = l->next)
-	{
-	  if (GTK_IS_VBOX (l->data))
-	    {
-	      box = l->data;
-	      break;
-	    }
-	}
-      g_list_free (children);
-
-      g_object_ref (menubar);
-      gtk_container_remove (GTK_CONTAINER (parent), menubar);
-      gtk_container_add (GTK_CONTAINER (box), menubar);
-      gtk_box_reorder_child (GTK_BOX (box), menubar, 0);
-      g_object_unref (menubar);
-      g_object_set (menubar, 
-		    "pack-direction", GTK_PACK_DIRECTION_LTR,
-		    NULL);
-    }
 }
 
 static GtkWidget *window = NULL;

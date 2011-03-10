@@ -413,6 +413,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 static void
 gtk_menu_item_init (GtkMenuItem *menu_item)
 {
+  GtkStyleContext *context;
   GtkMenuItemPrivate *priv;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_item,
@@ -437,6 +438,9 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   priv->use_action_appearance = TRUE;
   priv->timer = 0;
   priv->action = NULL;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (menu_item));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUITEM);
 }
 
 GtkWidget*
@@ -1589,6 +1593,9 @@ gtk_menu_item_draw (GtkWidget *widget,
   gtk_style_context_set_state (context, state);
 
   gtk_style_context_get_padding (context, state, &padding);
+
+  if (GTK_IS_MENU_BAR (parent))
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUBAR);
 
   if (child && (state & GTK_STATE_FLAG_PRELIGHT))
     {

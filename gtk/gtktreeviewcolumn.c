@@ -404,6 +404,9 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
    *
    * The #GtkCellArea used to layout cell renderers for this column.
    *
+   * If no area is specified when creating the tree view column with gtk_tree_view_column_new_with_area() 
+   * a horizontally oriented #GtkCellAreaBox will be used.
+   *
    * Since: 3.0
    */
   g_object_class_install_property (object_class,
@@ -1604,7 +1607,7 @@ gtk_tree_view_column_new (void)
  * gtk_tree_view_column_new_with_area:
  * @area: the #GtkCellArea that the newly created column should use to layout cells.
  * 
- * Creates a new #GtkTreeViewColumn using @area to render it's cells.
+ * Creates a new #GtkTreeViewColumn using @area to render its cells.
  * 
  * Return value: A newly created #GtkTreeViewColumn.
  *

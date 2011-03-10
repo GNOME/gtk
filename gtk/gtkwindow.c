@@ -2648,12 +2648,12 @@ gtk_window_set_type_hint (GtkWindow           *window,
   priv = window->priv;
 
   if (hint < GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU)
-    priv->gdk_type_hint = hint;
+    priv->type_hint = hint;
   else
-    priv->gdk_type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+    priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
 
   priv->reset_type_hint = TRUE;
-  priv->type_hint = hint;
+  priv->gdk_type_hint = hint;
 }
 
 /**
@@ -2669,7 +2669,7 @@ gtk_window_get_type_hint (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
 
-  return window->priv->type_hint;
+  return window->priv->gdk_type_hint;
 }
 
 /**
@@ -4705,7 +4705,7 @@ gtk_window_map (GtkWidget *widget)
        * Some applications use X directly to change the properties;
        * in that case, we shouldn't overwrite what they did.
        */
-      gdk_window_set_type_hint (gdk_window, priv->type_hint);
+      gdk_window_set_type_hint (gdk_window, priv->gdk_type_hint);
       priv->reset_type_hint = FALSE;
     }
 
@@ -4978,9 +4978,12 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->startup_id)
     {
 #ifdef GDK_WINDOWING_X11
-      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
-      if (timestamp != GDK_CURRENT_TIME)
-	gdk_x11_window_set_user_time (gdk_window, timestamp);
+      if (GDK_IS_X11_WINDOW (gdk_window))
+        {
+          guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+          if (timestamp != GDK_CURRENT_TIME)
+            gdk_x11_window_set_user_time (gdk_window, timestamp);
+        }
 #endif
       if (!startup_id_is_fake (priv->startup_id)) 
 	gdk_window_set_startup_id (gdk_window, priv->startup_id);
@@ -9157,7 +9160,7 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
       _gtk_widget_set_is_toplevel (widget, TRUE);
 
       /* When a window becomes toplevel after being embedded and anchored
-       * into another window we need to unset it's anchored flag so that
+       * into another window we need to unset its anchored flag so that
        * the hierarchy changed signal kicks in properly.
        */
       _gtk_widget_set_anchored (widget, FALSE);

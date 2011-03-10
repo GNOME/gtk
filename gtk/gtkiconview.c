@@ -23,6 +23,7 @@
 
 #include <atk/atk.h>
 
+#include "gtkaccessibleprivate.h"
 #include "gtkiconview.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderer.h"
@@ -391,6 +392,8 @@ static void                 gtk_icon_view_remove_editable                (GtkCel
 static void                 gtk_icon_view_context_changed                (GtkCellAreaContext     *context,
 									  GParamSpec             *pspec,
 									  GtkIconView            *icon_view);
+static void                 update_text_cell                             (GtkIconView            *icon_view);
+static void                 update_pixbuf_cell                           (GtkIconView            *icon_view);
 
 /* Source side drag signals */
 static void gtk_icon_view_drag_begin       (GtkWidget        *widget,
@@ -755,6 +758,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * GtkIconView:cell-area:
    *
    * The #GtkCellArea used to layout cell renderers for this view.
+   *
+   * If no area is specified when creating the icon view with gtk_icon_view_new_with_area() 
+   * a #GtkCellAreaBox will be used.
    *
    * Since: 3.0
    */
@@ -1898,7 +1904,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   g_return_if_fail (path != NULL);
   g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (gtk_tree_path_get_depth (path) == 1)
     item = g_list_nth_data (icon_view->priv->items,
@@ -1910,7 +1917,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   gtk_icon_view_set_cursor_item (icon_view, item, cell);
   gtk_icon_view_scroll_to_path (icon_view, path, FALSE, 0.0, 0.0);
 
-  if (start_editing)
+  if (start_editing && 
+      icon_view->priv->cell_area)
     {
       GtkCellAreaContext *context;
 
@@ -1958,7 +1966,7 @@ gtk_icon_view_get_cursor (GtkIconView      *icon_view,
 	*path = NULL;
     }
 
-  if (cell != NULL && item != NULL)
+  if (cell != NULL && item != NULL && icon_view->priv->cell_area != NULL)
     *cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
 
   return (item != NULL);
@@ -2883,11 +2891,14 @@ gtk_icon_view_invalidate_sizes (GtkIconView *icon_view)
 		  (GFunc)gtk_icon_view_item_invalidate_size, NULL);
 
   /* Reset the context */
-  g_signal_handler_block (icon_view->priv->cell_area_context, 
-			  icon_view->priv->context_changed_id);
-  gtk_cell_area_context_reset (icon_view->priv->cell_area_context);
-  g_signal_handler_unblock (icon_view->priv->cell_area_context, 
-			    icon_view->priv->context_changed_id);
+  if (icon_view->priv->cell_area_context)
+    {
+      g_signal_handler_block (icon_view->priv->cell_area_context, 
+			      icon_view->priv->context_changed_id);
+      gtk_cell_area_context_reset (icon_view->priv->cell_area_context);
+      g_signal_handler_unblock (icon_view->priv->cell_area_context, 
+				icon_view->priv->context_changed_id);
+    }
 
   /* Re-layout the items */
   gtk_icon_view_queue_layout (icon_view);
@@ -3257,7 +3268,12 @@ gtk_icon_view_row_changed (GtkTreeModel *model,
   if (gtk_tree_path_get_depth (path) > 1)
     return;
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  /* An icon view subclass might add it's own model and populate
+   * things at init() time instead of waiting for the constructor() 
+   * to be called 
+   */
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   /* Here we can use a "grow-only" strategy for optimization
    * and only invalidate a single item and queue a relayout
@@ -3339,7 +3355,8 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
   list = g_list_nth (icon_view->priv->items, index);
   item = list->data;
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (item == icon_view->priv->anchor_item)
     icon_view->priv->anchor_item = NULL;
@@ -3387,7 +3404,8 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   if (iter != NULL)
     return;
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   length = gtk_tree_model_iter_n_children (model, NULL);
 
@@ -4120,6 +4138,9 @@ gtk_icon_view_ensure_cell_area (GtkIconView *icon_view,
   priv->context_changed_id =
     g_signal_connect (priv->cell_area_context, "notify",
                       G_CALLBACK (gtk_icon_view_context_changed), icon_view);
+
+  update_text_cell (icon_view);
+  update_pixbuf_cell (icon_view);
 }
 
 static GtkCellArea *
@@ -4880,6 +4901,9 @@ gtk_icon_view_get_model (GtkIconView *icon_view)
 static void
 update_text_cell (GtkIconView *icon_view)
 {
+  if (!icon_view->priv->cell_area)
+    return;
+
   if (icon_view->priv->text_column == -1 &&
       icon_view->priv->markup_column == -1)
     {
@@ -4930,6 +4954,9 @@ update_text_cell (GtkIconView *icon_view)
 static void
 update_pixbuf_cell (GtkIconView *icon_view)
 {
+  if (!icon_view->priv->cell_area)
+    return;
+
   if (icon_view->priv->pixbuf_column == -1)
     {
       if (icon_view->priv->pixbuf_cell != NULL)
@@ -5000,8 +5027,8 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
       icon_view->priv->text_column = column;
     }
 
-
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   update_text_cell (icon_view);
 
@@ -5063,7 +5090,8 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
       icon_view->priv->markup_column = column;
     }
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   update_text_cell (icon_view);
 
@@ -5123,7 +5151,8 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
       icon_view->priv->pixbuf_column = column;
     }
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   update_pixbuf_cell (icon_view);
 
@@ -5440,11 +5469,15 @@ gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
     {
       icon_view->priv->item_orientation = orientation;
 
-      if (GTK_IS_ORIENTABLE (icon_view->priv->cell_area))
-	gtk_orientable_set_orientation (GTK_ORIENTABLE (icon_view->priv->cell_area), 
-					icon_view->priv->item_orientation);
+      if (icon_view->priv->cell_area)
+	{
+	  if (GTK_IS_ORIENTABLE (icon_view->priv->cell_area))
+	    gtk_orientable_set_orientation (GTK_ORIENTABLE (icon_view->priv->cell_area), 
+					    icon_view->priv->item_orientation);
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+	  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+	}
+
       gtk_icon_view_invalidate_sizes (icon_view);
 
       update_text_cell (icon_view);
@@ -5496,7 +5529,9 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
     {
       icon_view->priv->columns = columns;
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_queue_layout (icon_view);
       
       g_object_notify (G_OBJECT (icon_view), "columns");
@@ -5542,7 +5577,9 @@ gtk_icon_view_set_item_width (GtkIconView *icon_view,
     {
       icon_view->priv->item_width = item_width;
       
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_invalidate_sizes (icon_view);
       
       update_text_cell (icon_view);
@@ -5591,9 +5628,11 @@ gtk_icon_view_set_spacing (GtkIconView *icon_view,
     {
       icon_view->priv->spacing = spacing;
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_invalidate_sizes (icon_view);
-      
+
       g_object_notify (G_OBJECT (icon_view), "spacing");
     }  
 }
@@ -5636,9 +5675,11 @@ gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
     {
       icon_view->priv->row_spacing = row_spacing;
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_invalidate_sizes (icon_view);
-      
+
       g_object_notify (G_OBJECT (icon_view), "row-spacing");
     }  
 }
@@ -5681,9 +5722,11 @@ gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
     {
       icon_view->priv->column_spacing = column_spacing;
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_invalidate_sizes (icon_view);
-      
+
       g_object_notify (G_OBJECT (icon_view), "column-spacing");
     }  
 }
@@ -5727,9 +5770,11 @@ gtk_icon_view_set_margin (GtkIconView *icon_view,
     {
       icon_view->priv->margin = margin;
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_invalidate_sizes (icon_view);
-      
+
       g_object_notify (G_OBJECT (icon_view), "margin");
     }  
 }
@@ -5772,9 +5817,11 @@ gtk_icon_view_set_item_padding (GtkIconView *icon_view,
     {
       icon_view->priv->item_padding = item_padding;
 
-      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      if (icon_view->priv->cell_area)
+	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       gtk_icon_view_invalidate_sizes (icon_view);
-      
+
       g_object_notify (G_OBJECT (icon_view), "item-padding");
     }  
 }
@@ -8171,26 +8218,6 @@ gtk_icon_view_item_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (accessible_item_parent_class)->finalize (object);
 }
 
-static G_CONST_RETURN gchar*
-gtk_icon_view_item_accessible_get_name (AtkObject *obj)
-{
-  if (obj->name)
-    return obj->name;
-  else
-    {
-      GtkIconViewItemAccessible *item;
-      GtkTextIter start_iter;
-      GtkTextIter end_iter;
-
-      item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
- 
-      gtk_text_buffer_get_start_iter (item->text_buffer, &start_iter); 
-      gtk_text_buffer_get_end_iter (item->text_buffer, &end_iter); 
-
-      return gtk_text_buffer_get_text (item->text_buffer, &start_iter, &end_iter, FALSE);
-    }
-}
-
 static AtkObject*
 gtk_icon_view_item_accessible_get_parent (AtkObject *obj)
 {
@@ -8252,10 +8279,9 @@ gtk_icon_view_item_accessible_class_init (AtkObjectClass *klass)
 
   gobject_class->finalize = gtk_icon_view_item_accessible_finalize;
 
-  klass->get_index_in_parent = gtk_icon_view_item_accessible_get_index_in_parent; 
-  klass->get_name = gtk_icon_view_item_accessible_get_name; 
-  klass->get_parent = gtk_icon_view_item_accessible_get_parent; 
-  klass->ref_state_set = gtk_icon_view_item_accessible_ref_state_set; 
+  klass->get_index_in_parent = gtk_icon_view_item_accessible_get_index_in_parent;
+  klass->get_parent = gtk_icon_view_item_accessible_get_parent;
+  klass->ref_state_set = gtk_icon_view_item_accessible_ref_state_set;
 }
 
 static GType
@@ -8591,7 +8617,7 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
       icon_view = GTK_ICON_VIEW (widget);
       item = a11y_item->item;
 
-      name = gtk_icon_view_item_accessible_get_name (ATK_OBJECT (a11y_item));
+      name = atk_object_get_name (ATK_OBJECT (a11y_item));
 
       if (!name || strcmp (name, "") == 0)
         {
@@ -9310,28 +9336,10 @@ gtk_icon_view_get_accessible (GtkWidget *widget)
 
   if (first_time)
     {
-      AtkObjectFactory *factory;
-      AtkRegistry *registry;
-      GType derived_type; 
-      GType derived_atk_type; 
-
-      /*
-       * Figure out whether accessibility is enabled by looking at the
-       * type of the accessible object which would be created for
-       * the parent type of GtkIconView.
-       */
-      derived_type = g_type_parent (GTK_TYPE_ICON_VIEW);
-
-      registry = atk_get_default_registry ();
-      factory = atk_registry_get_factory (registry,
-                                          derived_type);
-      derived_atk_type = atk_object_factory_get_accessible_type (factory);
-      if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE)) 
-	atk_registry_set_factory_type (registry, 
-				       GTK_TYPE_ICON_VIEW,
-				       gtk_icon_view_accessible_factory_get_type ());
+      _gtk_accessible_set_factory_type (GTK_TYPE_ICON_VIEW,
+                                        gtk_icon_view_accessible_factory_get_type ());
       first_time = FALSE;
-    } 
+    }
   return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->get_accessible (widget);
 }
 

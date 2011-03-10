@@ -41,8 +41,12 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#ifdef XINPUT_XFREE
 #include <X11/extensions/XInput.h>
+#endif
+#ifdef XINPUT_2
 #include <X11/extensions/XInput2.h>
+#endif
 
 #include <cairo-xlib.h>
 
@@ -225,6 +229,7 @@ void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
 GdkDeviceManager *_gdk_x11_device_manager_new (GdkDisplay *display);
 
+#ifdef XINPUT_XFREE
 void _gdk_x11_device_xi_update_window_info (GdkWindow *window);
 
 void _gdk_x11_device_xi_update_axes        (GdkDevice *device,
@@ -237,12 +242,15 @@ void _gdk_x11_device_xi_translate_axes     (GdkDevice *device,
                                             gdouble   *axes,
                                             gdouble   *x,
                                             gdouble   *y);
+#endif
 
+#ifdef XINPUT_2
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkEventMask     event_mask,
                                                    gint            *len);
 guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
                                                    XIButtonState   *buttons_state,
                                                    XIGroupState    *group_state);
+#endif
 
 void     _gdk_x11_event_translate_keyboard_string (GdkEventKey *event);
 
