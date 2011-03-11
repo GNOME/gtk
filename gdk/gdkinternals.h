@@ -248,6 +248,8 @@ struct _GdkWindow
   GHashTable *source_event_masks;
   gulong device_added_handler_id;
   gulong device_changed_handler_id;
+
+  GList *touch_clusters;
 };
 
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)

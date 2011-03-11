@@ -33,6 +33,7 @@
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
+#include <gdk/gdktouchcluster.h>
 
 G_BEGIN_DECLS
 
@@ -861,6 +862,11 @@ void       gdk_window_geometry_changed         (GdkWindow     *window);
 void       gdk_window_set_support_multidevice (GdkWindow *window,
                                                gboolean   support_multidevice);
 gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
+
+/* Multitouch support */
+GdkTouchCluster * gdk_window_create_touch_cluster (GdkWindow       *window);
+void              gdk_window_remove_touch_cluster (GdkWindow       *window,
+                                                   GdkTouchCluster *cluster);
 
 G_END_DECLS
 

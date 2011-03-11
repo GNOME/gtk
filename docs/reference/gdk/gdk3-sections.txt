@@ -856,6 +856,10 @@ gdk_touch_cluster_set_device
 gdk_touch_cluster_get_device
 gdk_touch_cluster_get_touches
 
+<SUBSECTION>
+gdk_window_create_touch_cluster
+gdk_window_remove_touch_cluster
+
 <SUBSECTION Standard>
 GDK_TYPE_TOUCH_CLUSTER
 
