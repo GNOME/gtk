@@ -28,6 +28,7 @@ demos =						\
 	links.c					\
 	list_store.c				\
 	menus.c					\
+	multitouch.c				\
 	offscreen_window.c			\
 	offscreen_window2.c			\
 	panes.c					\
