@@ -1713,6 +1713,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_PROXIMITY_OUT:
     case GDK_TOUCH_MOTION:
     case GDK_TOUCH_RELEASE:
+    case GDK_MULTITOUCH_ADDED:
+    case GDK_MULTITOUCH_REMOVED:
+    case GDK_MULTITOUCH_UPDATED:
       if ((event->type == GDK_BUTTON_RELEASE ||
            event->type == GDK_TOUCH_RELEASE) &&
           event->button.button == 1)

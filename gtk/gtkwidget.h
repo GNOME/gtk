@@ -440,6 +440,10 @@ struct _GtkWidgetClass
                                            GtkPressAndHoldAction  action,
                                            gint                   x,
                                            gint                   y);
+
+  gboolean     (* multitouch_event)       (GtkWidget             *widget,
+                                           GdkEventMultiTouch    *event);
+
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
@@ -449,7 +453,6 @@ struct _GtkWidgetClass
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 struct _GtkWidgetAuxInfo
