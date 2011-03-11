@@ -565,6 +565,9 @@ gdk_window_finalize (GObject *object)
   if (window->layered_region)
       cairo_region_destroy (window->layered_region);
 
+  g_list_foreach (window->touch_clusters, (GFunc) g_object_unref, NULL);
+  g_list_free (window->touch_clusters);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -11140,4 +11143,50 @@ gdk_property_delete (GdkWindow *window,
                      GdkAtom    property)
 {
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->delete_property (window, property);
+}
+
+/**
+ * gdk_window_create_touch_cluster:
+ * @window: a #GdkWindow
+ *
+ * Creates a #GdkTouchCluster associated to @window.
+ *
+ * Returns: (transfer none): a newly created @GdkTouchCluster. This
+ *          object is owned by @window and must be freed through
+ *          gdk_window_remove_touch_cluster().
+ **/
+GdkTouchCluster *
+gdk_window_create_touch_cluster (GdkWindow *window)
+{
+  GdkTouchCluster *cluster;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  cluster = g_object_new (GDK_TYPE_TOUCH_CLUSTER, NULL);
+  window->touch_clusters = g_list_prepend (window->touch_clusters, cluster);
+
+  return cluster;
+}
+
+/**
+ * gdk_window_remove_touch_cluster:
+ * @window: a #GdkWindow
+ * @cluster: a #GdkTouchCluster from @window
+ *
+ * Removes @cluster from @window.
+ **/
+void
+gdk_window_remove_touch_cluster (GdkWindow       *window,
+                                 GdkTouchCluster *cluster)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_TOUCH_CLUSTER (cluster));
+
+  if (!window->touch_clusters ||
+      !g_list_find (window->touch_clusters, cluster))
+    return;
+
+  gdk_touch_cluster_remove_all (cluster);
+  window->touch_clusters = g_list_remove (window->touch_clusters, cluster);
+  g_object_unref (cluster);
 }

@@ -260,6 +260,7 @@ struct _GdkWindow
   gulong device_changed_handler_id;
 
   guint num_offscreen_children;
+  GList *touch_clusters;
 };
 
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
