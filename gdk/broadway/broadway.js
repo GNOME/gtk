@@ -66,6 +66,7 @@ function createXHR()
 var last_serial = 0;
 var last_x = 0;
 var last_y = 0;
+var window_with_mouse = 0;
 var surfaces = {};
 var outstanding_commands = new Array();
 var input_socket = null;
@@ -293,24 +294,75 @@ function send_input(cmd, args)
   }
 }
 
-function update_positions_from_event(ev) {
-    last_x = ev.pageX;
-    last_y = ev.pageY;
+function get_document_coordinates(element)
+{
+    var res = new Object();
+    res.x = element.offsetLeft;
+    res.y = element.offsetTop;
+
+    var offsetParent = element.offsetParent;
+    while (offsetParent != null) {
+	res.x += offsetParent.offsetLeft;
+	res.y += offsetParent.offsetTop;
+	offsetParent = offsetParent.offsetParent;
+    }
+    return res;
+}
+
+function getPositionsFromEvent(ev, relativeId) {
+    var res = Object();
+
+    res.root_x = ev.pageX;
+    res.root_y = ev.pageY;
+    res.win_x = ev.pageX;
+    res.win_y = ev.pageY;
+    if (relativeId != 0) {
+	var pos = get_document_coordinates(ev.target);
+	res.win_x = res.win_x - pos.x;
+	res.win_y = res.win_y - pos.y;
+    }
+
+    last_x = res.root_x;
+    last_y = res.root_y;
+
+    return res;
 }
 
 function on_mouse_move (ev) {
-  update_positions_from_event(ev);
-  send_input ("m", [get_surface_id(ev), last_x, last_y, ev.timeStamp]);
+    var id = get_surface_id(ev);
+    var pos = getPositionsFromEvent(ev, id);
+    send_input ("m", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp]);
+}
+
+function on_mouse_over (ev) {
+    var id = get_surface_id(ev);
+    var pos = getPositionsFromEvent(ev, id);
+    window_with_mouse = id;
+    if (window_with_mouse != 0) {
+	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp]);
+    }
+}
+
+function on_mouse_out (ev) {
+    var id = get_surface_id(ev);
+    var pos = getPositionsFromEvent(ev, id);
+
+    if (id != 0) {
+	send_input ("l", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp]);
+    }
+    window_with_mouse = 0;
 }
 
 function on_mouse_down (ev) {
-  update_positions_from_event(ev);
-  send_input ("b", [get_surface_id(ev), last_x, last_y, ev.button, ev.timeStamp]);
+    var id = get_surface_id(ev);
+    var pos = getPositionsFromEvent(ev, id);
+    send_input ("b", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, ev.button]);
 }
 
 function on_mouse_up (ev) {
-  update_positions_from_event(ev);
-  send_input ("B", [get_surface_id(ev), last_x, last_y, ev.button, ev.timeStamp]);
+    var id = get_surface_id(ev);
+    var pos = getPositionsFromEvent(ev, id);
+    send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, ev.button]);
 }
 
 var last_key_down = 0;
@@ -344,11 +396,15 @@ function cancel_event(ev)
 function on_mouse_wheel(ev)
 {
   ev = ev ? ev : window.event;
+
+  var id = get_surface_id(ev);
+  var pos = getPositionsFromEvent(ev, id);
+
   var offset = ev.detail ? ev.detail : ev.wheelDelta;
   var dir = 0
   if (offset > 0)
     dir = 1;
-  send_input ("s", [get_surface_id(ev), ev.pageX, ev.pageY, dir, ev.timeStamp])
+  send_input ("s", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, dir])
 
   return cancel_event(ev);
 }
@@ -383,6 +439,8 @@ function connect()
   }
   document.oncontextmenu = function () { return false; }
   document.onmousemove = on_mouse_move;
+  document.onmouseover = on_mouse_over;
+  document.onmouseout = on_mouse_out;
   document.onmousedown = on_mouse_down;
   document.onmouseup = on_mouse_up;
   document.onkeydown = on_key_down;
