@@ -2969,6 +2969,7 @@ gdk_window_end_paint (GdkWindow *window)
       cairo_region_intersect (full_clip, paint->region);
 
       cr = gdk_cairo_create (window);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
       cairo_set_source_surface (cr, paint->surface, 0, 0);
       gdk_cairo_region (cr, full_clip);
       cairo_fill (cr);
