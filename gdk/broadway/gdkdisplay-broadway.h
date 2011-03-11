@@ -83,6 +83,7 @@ struct _GdkBroadwayDisplay
   BroadwayOutput *output;
   guint32 saved_serial;
   BroadwayInput *input;
+  GList *input_messages;
 };
 
 struct _GdkBroadwayDisplayClass

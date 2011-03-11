@@ -148,48 +148,77 @@ broadway_input_free (BroadwayInput *input)
   g_free (input);
 }
 
-static gboolean
-process_input (BroadwayInput *input)
+static void
+process_input_messages (GdkBroadwayDisplay *broadway_display)
 {
-  char *buf, *ptr;
+  char *message;
+
+  while (broadway_display->input_messages)
+    {
+      message = broadway_display->input_messages->data;
+      broadway_display->input_messages =
+	g_list_delete_link (broadway_display->input_messages,
+			    broadway_display->input_messages);
+
+      _gdk_broadway_events_got_input (GDK_DISPLAY (broadway_display), message);
+      g_free (message);
+    }
+}
+
+static void
+parse_input (BroadwayInput *input)
+{
+  GdkBroadwayDisplay *broadway_display;
+  char *buf, *ptr, *message;
   gsize len;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (input->display);
 
   buf = (char *)input->buffer->data;
   len = input->buffer->len;
 
   if (len == 0)
-    return TRUE;
+    return;
 
   if (buf[0] != 0)
-    return FALSE;
+    {
+      broadway_display->input = NULL;
+      broadway_input_free (input);
+      return;
+    }
 
   while ((ptr = memchr (buf, 0xff, len)) != NULL)
     {
-      *ptr = 0;
       ptr++;
 
-      _gdk_broadway_events_got_input (input->display, buf + 1);
+      message = g_strndup (buf+1, (ptr-1) - (buf + 1));
+      broadway_display->input_messages = g_list_append (broadway_display->input_messages, message);
 
       len -= ptr - buf;
       buf = ptr;
 
-      if (len > 0 &&buf[0] != 0)
-	return FALSE;
+      if (len > 0 && buf[0] != 0)
+	{
+	  broadway_display->input = NULL;
+	  broadway_input_free (input);
+	  break;
+	}
     }
 
   g_byte_array_remove_range (input->buffer, 0, buf - (char *)input->buffer->data);
-  return TRUE;
 }
 
 static gboolean
 input_data_cb (GObject  *stream,
 	       BroadwayInput *input)
 {
+  GdkBroadwayDisplay *broadway_display;
   GInputStream *in;
   gssize res;
   guint8 buffer[1024];
   GError *error;
 
+  broadway_display = GDK_BROADWAY_DISPLAY (input->display);
   in = g_io_stream_get_input_stream (G_IO_STREAM (input->connection));
 
   error = NULL;
@@ -205,7 +234,7 @@ input_data_cb (GObject  *stream,
 	  return TRUE;
 	}
 
-      GDK_BROADWAY_DISPLAY (input->display)->input = NULL;
+      broadway_display->input = NULL;
       broadway_input_free (input);
       if (res < 0)
 	{
@@ -217,12 +246,8 @@ input_data_cb (GObject  *stream,
 
   g_byte_array_append (input->buffer, buffer, res);
 
-  if (!process_input (input))
-    {
-      GDK_BROADWAY_DISPLAY (input->display)->input = NULL;
-      broadway_input_free (input);
-      return FALSE;
-    }
+  parse_input (input);
+  process_input_messages (broadway_display);
 
   return TRUE;
 }
@@ -419,11 +444,9 @@ start_input (HttpRequest *request)
   g_source_set_callback (input->source, (GSourceFunc)input_data_cb, input, NULL);
   g_source_attach (input->source, NULL);
 
-  if (!process_input (input))
-    {
-      GDK_BROADWAY_DISPLAY (input->display)->input = NULL;
-      broadway_input_free (input);
-    }
+  /* Process any data in the pipe already */
+  parse_input (input);
+  process_input_messages (broadway_display);
 
   g_strfreev (lines);
 }
