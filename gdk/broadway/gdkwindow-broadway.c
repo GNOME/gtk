@@ -184,12 +184,7 @@ dirty_flush_idle (gpointer data)
 	}
     }
 
-  if (!broadway_output_flush (display->output))
-    {
-      display->saved_serial = broadway_output_get_next_serial (display->output);
-      broadway_output_free (display->output);
-      display->output = NULL;
-    }
+  gdk_display_flush (GDK_DISPLAY (display));
 
   return FALSE;
 }
@@ -236,7 +231,7 @@ _gdk_broadway_resync_windows (void)
 	}
     }
 
-  broadway_output_flush (display->output);
+  gdk_display_flush (GDK_DISPLAY (display));
 }
 
 static void

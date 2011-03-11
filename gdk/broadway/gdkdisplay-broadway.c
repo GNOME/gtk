@@ -679,8 +679,17 @@ gdk_broadway_display_sync (GdkDisplay *display)
 static void
 gdk_broadway_display_flush (GdkDisplay *display)
 {
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
+  if (broadway_display->output &&
+      !broadway_output_flush (broadway_display->output))
+    {
+      broadway_display->saved_serial = broadway_output_get_next_serial (broadway_display->output);
+      broadway_output_free (broadway_display->output);
+      broadway_display->output = NULL;
+    }
 }
 
 static gboolean
