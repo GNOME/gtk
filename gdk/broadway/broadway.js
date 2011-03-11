@@ -247,7 +247,9 @@ function handleCommands(cmd_obj)
         var id = base64_16(cmd, i);
         i = i + 3;
 
-	send_input ("q", [last_x, last_y]);
+	var pos = getPositionsFromAbsCoord(last_x, last_y, id);
+
+	send_input ("q", [pos.root_x, pos.root_y, pos.win_x, pos.win_x, window_with_mouse]);
 	break;
 
       default:

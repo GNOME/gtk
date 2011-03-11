@@ -159,7 +159,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   guint32 serial;
   GdkScreen *screen;
   char *reply;
-  gint device_root_x, device_root_y;
+  gint device_root_x, device_root_y, device_win_x, device_win_y, id;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
     return FALSE;
@@ -175,9 +175,6 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 
   if (mask)
     *mask = 0; /* TODO */
-
-  device_root_x = broadway_display->last_x;
-  device_root_y = broadway_display->last_y;
 
   if (broadway_display->output)
     {
@@ -203,12 +200,36 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 	  p++; /* Skip , */
 	  device_root_y = strtol(p, &p, 10);
 	  p++; /* Skip , */
+	  device_win_x = strtol(p, &p, 10);
+	  p++; /* Skip , */
+	  device_win_y = strtol(p, &p, 10);
+	  p++; /* Skip , */
+	  id = strtol(p, &p, 10);
 
+	  if (root_x)
+	    *root_x = device_root_x;
+	  if (root_y)
+	    *root_y = device_root_y;
+	  if (win_x)
+	    *win_x = device_win_x;
+	  if (win_y)
+	    *win_y = device_win_y;
+	  if (child_window)
+	    {
+	      if (gdk_window_get_window_type (window) == GDK_WINDOW_ROOT)
+		*child_window = g_hash_table_lookup (broadway_display->id_ht, GINT_TO_POINTER (id));
+	      else
+		*child_window = window; /* No native children */
+	    }
 	  g_free (reply);
+	  return TRUE;
 	}
     }
 
   /* Fallback when unconnected */
+
+  device_root_x = broadway_display->last_x;
+  device_root_y = broadway_display->last_y;
 
   if (root_x)
     *root_x = device_root_x;
