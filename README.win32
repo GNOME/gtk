@@ -7,9 +7,18 @@ Building GTK+ on Win32
 ======================
 
 First you obviously need developer packages for the compile-time
-dependencies: Pango, atk, glib, gettext-runtime, libiconv, libpng,
-zlib, libtiff at least. See
-http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies .
+dependencies: GDK-Pixbuf, Pango, atk, glib, gettext-runtime, libiconv
+at least.  See
+http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies.
+
+For people compiling GTK+ on Visual C++ 2005 or later, it is recommended
+that you build GDK-Pixbuf, Pango, atk, glib with the same compiler to avoid
+crashes and errors caused by the usage of different CRTS.  VS 2008
+project files and/or VS Makefiles are either already available in these
+packages or will be available in the next stable release.  Unfortunately
+compiling with Microsoft's compilers (version 2003 or earlier) is not
+supported as compiling GLib requires features from the newer compilers
+and/or the newer Platform SDKs at this time of writing.
 
 After installing the dependencies, there are two ways to build GTK+
 for win32.
@@ -147,11 +156,19 @@ Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
 makefile.msc in gdk and gtk. Be prepared to manually edit various
 makefile.msc files, and the makefile snippets in build/win32.
 
+Since this release, there are also Visual Studio 9 (2008) Project Files
+that can be used to compile GTK+.  They can be found in ./build/win32/vs9
+for usage, and should build GTK+ out of the box provided the afore-mentioned
+compile-time dependencies are installed.  The VS2008 Solution and Project
+files are currently maintained by Chun-wei Fan, and they currently build
+GDK with the Win32 backend, GTK+ and the gtk-demo demonstration program
+(GAIL and GAIL-utils are not built with this method yet)
+
 Alternative 1 also generates Microsoft import libraries (.lib), if you
 have lib.exe available. It might also work for cross-compilation from
 Unix.
 
-I use method 1 myself. Hans Breuer has been taking care of the MSVC
+I (Tor) use method 1 myself. Hans Breuer has been taking care of the MSVC
 makefiles. At times, we disagree a bit about various issues, and for
 instance the makefile.msc files might not produce identically named
 DLLs and import libraries as the "autoconfiscated" makefiles and
@@ -182,3 +199,4 @@ sources. Unfortunately it seems that only Wacom tablets come with
 support for the Wintab API nowadays.
 
 --Tor Lillqvist <tml@iki.fi>, <tml@novell.com>
+--Updated by Fan, Chun-wei <fanc999@yahoo.com.tw>
