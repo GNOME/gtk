@@ -423,6 +423,10 @@ struct _GtkWidgetClass
 
   void         (* style_updated)          (GtkWidget *widget);
 
+  /* Multitouch */
+  gboolean (* multitouch_event) (GtkWidget          *widget,
+                                 GdkEventMultiTouch *event);
+
   /*< private >*/
 
   /* Padding for future expansion */
@@ -433,7 +437,6 @@ struct _GtkWidgetClass
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
 };
 
 struct _GtkWidgetAuxInfo

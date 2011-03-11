@@ -1872,6 +1872,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_TOUCH_MOTION:
     case GDK_TOUCH_PRESS:
     case GDK_TOUCH_RELEASE:
+    case GDK_MULTITOUCH_ADDED:
+    case GDK_MULTITOUCH_REMOVED:
+    case GDK_MULTITOUCH_UPDATED:
       gtk_propagate_event (grab_widget, event);
       break;
 

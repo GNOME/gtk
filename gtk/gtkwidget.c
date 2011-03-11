@@ -471,6 +471,7 @@ enum {
   QUERY_TOOLTIP,
   DRAG_FAILED,
   STYLE_UPDATED,
+  MULTITOUCH_EVENT,
   LAST_SIGNAL
 };
 
@@ -2844,6 +2845,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  widget_signals[MULTITOUCH_EVENT] =
+    g_signal_new (I_("multitouch-event"),
+		  G_TYPE_FROM_CLASS (klass),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, multitouch_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   /**
    * GtkWidget::query-tooltip:
    * @widget: the object which received the signal
@@ -6072,6 +6082,11 @@ gtk_widget_event_internal (GtkWidget *widget,
 	case GDK_DAMAGE:
 	  signal_num = DAMAGE_EVENT;
 	  break;
+        case GDK_MULTITOUCH_ADDED:
+        case GDK_MULTITOUCH_REMOVED:
+        case GDK_MULTITOUCH_UPDATED:
+          signal_num = MULTITOUCH_EVENT;
+          break;
 	default:
 	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
 	  signal_num = -1;
