@@ -6997,8 +6997,7 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
 
       gtk_widget_propagate_state (widget, &data);
 
-      if (gtk_widget_is_drawable (widget))
-	gtk_widget_queue_draw (widget);
+      gtk_widget_queue_resize (widget);
     }
 }
 
