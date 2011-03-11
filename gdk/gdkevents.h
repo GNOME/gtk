@@ -35,6 +35,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkdevice.h>
+#include <gdk/gdktouchcluster.h>
 
 G_BEGIN_DECLS
 
@@ -93,6 +94,7 @@ typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
 typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
+typedef struct _GdkEventMultiTouch  GdkEventMultiTouch;
 
 typedef union  _GdkEvent	    GdkEvent;
 
@@ -216,6 +218,9 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_TOUCH_MOTION: A touch device has been updated.
  * @GDK_TOUCH_PRESS: A new touch stream has just started.
  * @GDK_TOUCH_RELEASE: A touch stream has finished.
+ * @GDK_MULTITOUCH_ADDED: A touch ID was added to a #GdkTouchCluster
+ * @GDK_MULTITOUCH_UPDATED: A touch within a #GdkTouchCluster has been updated.
+ * @GDK_MULTITOUCH_REMOVED: A touch ID was removed from a #GdkTouchCluster.
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
  *
  * Specifies the type of the event.
@@ -266,6 +271,9 @@ typedef enum
   GDK_TOUCH_MOTION      = 37,
   GDK_TOUCH_PRESS       = 38,
   GDK_TOUCH_RELEASE     = 39,
+  GDK_MULTITOUCH_ADDED  = 40,
+  GDK_MULTITOUCH_UPDATED = 41,
+  GDK_MULTITOUCH_REMOVED = 42,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
 
@@ -524,6 +532,55 @@ struct _GdkEventMotion
   GdkDevice *device;
   gdouble x_root, y_root;
   guint touch_id;
+};
+
+/**
+ * GdkEventMultiTouch:
+ * @type: the type of the event (%GDK_MULTITOUCH_ADDED, %GDK_MULTITOUCH_UPDATED
+ *   or %GDK_MULTITOUCH_REMOVED).
+ * @window: the window which received the event.
+ * @send_event: %TRUE if the event was sent explicitly (e.g. using
+ *   <function>XSendEvent</function>).
+ * @time: the time of the event in milliseconds.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
+ * @device: the device where the event originated.
+ * @group: the #GdkTouchCluster containing the touches that generated this event
+ * @events: an array of events of type %GDK_TOUCH_MOTION for the touches in @group
+ * @updated_touch_id: the touch ID that caused this event to be generated
+ * @n_events: the number of events in @events
+ * @n_updated_event: the index in @events of the event corresponding to
+ *   @updated_touch_id, or -1 for %GDK_MULTITOUCH_REMOVED events.
+ *
+ * Used for multitouch events. The @type field will be one of
+ * %GDK_MULTITOUCH_ADDED, %GDK_MULTITOUCH_UPDATED or
+ * %GDK_MULTITOUCH_REMOVED.
+ *
+ * Multitouch events group the events from the touches in a
+ * #GdkTouchCluster, so one of these events is generated
+ * whenever a touch ID generates a new event, or a touch ID
+ * is added or removed.
+ *
+ * For any given touch ID, %GDK_MULTITOUCH_ADDED and
+ * %GDK_MULTITOUCH_REMOVED events are always paired,
+ * with any number of %GDK_MULTITOUCH_UPDATED
+ * events in between. The minimum event stream is an
+ * added/removed pair.
+ */
+struct _GdkEventMultiTouch
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  guint state;
+  GdkDevice *device;
+  GdkTouchCluster *group;
+  GdkEventMotion **events;
+  guint updated_touch_id;
+  gint8 n_events;
+  gint8 n_updated_event;
 };
 
 /**
@@ -1045,6 +1102,7 @@ union _GdkEvent
   GdkEventWindowState       window_state;
   GdkEventSetting           setting;
   GdkEventGrabBroken        grab_broken;
+  GdkEventMultiTouch        multitouch;
 };
 
 GType     gdk_event_get_type            (void) G_GNUC_CONST;

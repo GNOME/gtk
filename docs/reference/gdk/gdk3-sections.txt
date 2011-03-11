@@ -818,6 +818,7 @@ GdkEventWindowState
 GdkEventSetting
 GdkEventOwnerChange
 GdkEventGrabBroken
+GdkEventMultiTouch
 
 <SUBSECTION>
 GdkScrollDirection

@@ -589,6 +589,22 @@ gdk_event_copy (const GdkEvent *event)
         g_object_unref (new_event->selection.requestor);
       break;
 
+    case GDK_MULTITOUCH_ADDED:
+    case GDK_MULTITOUCH_REMOVED:
+    case GDK_MULTITOUCH_UPDATED:
+      {
+        GdkEventMotion **motion_events;
+        guint i;
+
+        motion_events = g_new0 (GdkEventMotion*, event->multitouch.n_events);
+
+        for (i = 0; i < event->multitouch.n_events; i++)
+          motion_events[i] = (GdkEventMotion *) gdk_event_copy ((GdkEvent *) event->multitouch.events[i]);
+
+        new_event->multitouch.events = motion_events;
+      }
+      break;
+
     default:
       break;
     }
@@ -675,6 +691,20 @@ gdk_event_free (GdkEvent *event)
         g_object_unref (event->selection.requestor);
       break;
 
+    case GDK_MULTITOUCH_ADDED:
+    case GDK_MULTITOUCH_REMOVED:
+    case GDK_MULTITOUCH_UPDATED:
+      if (event->multitouch.events)
+        {
+          guint i;
+
+          for (i = 0; i < event->multitouch.n_events; i++)
+            gdk_event_free ((GdkEvent *) event->multitouch.events[i]);
+
+          g_free (event->multitouch.events);
+        }
+      break;
+
     default:
       break;
     }
@@ -734,6 +764,10 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_DROP_START:
       case GDK_DROP_FINISHED:
 	return event->dnd.time;
+      case GDK_MULTITOUCH_ADDED:
+      case GDK_MULTITOUCH_REMOVED:
+      case GDK_MULTITOUCH_UPDATED:
+        return event->multitouch.time;
       case GDK_CLIENT_EVENT:
       case GDK_VISIBILITY_NOTIFY:
       case GDK_CONFIGURE:
@@ -800,6 +834,11 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_ENTER_NOTIFY:
       case GDK_LEAVE_NOTIFY:
 	*state =  event->crossing.state;
+        return TRUE;
+      case GDK_MULTITOUCH_ADDED:
+      case GDK_MULTITOUCH_REMOVED:
+      case GDK_MULTITOUCH_UPDATED:
+        *state = event->multitouch.state;
         return TRUE;
       case GDK_PROPERTY_NOTIFY:
       case GDK_VISIBILITY_NOTIFY:
@@ -1090,6 +1129,10 @@ gdk_event_set_device (GdkEvent  *event,
     case GDK_PROXIMITY_OUT:
       event->proximity.device = device;
       break;
+    case GDK_MULTITOUCH_ADDED:
+    case GDK_MULTITOUCH_REMOVED:
+    case GDK_MULTITOUCH_UPDATED:
+      event->multitouch.device = device;
     default:
       break;
     }
@@ -1136,6 +1179,10 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
       return event->proximity.device;
+    case GDK_MULTITOUCH_ADDED:
+    case GDK_MULTITOUCH_REMOVED:
+    case GDK_MULTITOUCH_UPDATED:
+      return event->multitouch.device;
     default:
       break;
     }
@@ -1166,6 +1213,9 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_GRAB_BROKEN:
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
+    case GDK_MULTITOUCH_ADDED:
+    case GDK_MULTITOUCH_REMOVED:
+    case GDK_MULTITOUCH_UPDATED:
       {
         GdkDisplay *display;
         GdkDeviceManager *device_manager;
