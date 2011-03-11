@@ -643,6 +643,24 @@ broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
   free (buf);
 }
 
+guint32
+broadway_output_query_pointer (BroadwayOutput *output, int id)
+{
+  char buf[HEADER_LEN + 3];
+  guint32 serial;
+  int p;
+
+  serial = output->serial;
+  p = write_header (output, buf, 'q');
+  append_uint16 (id, buf, &p);
+
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
+
+  return serial;
+}
+
 void
 broadway_output_new_surface(BroadwayOutput *output,  int id, int x, int y, int w, int h)
 {

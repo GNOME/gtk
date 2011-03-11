@@ -64,6 +64,8 @@ function createXHR()
 }
 
 var last_serial = 0;
+var last_x = 0;
+var last_y = 0;
 var surfaces = {};
 var outstanding_commands = new Array();
 var input_socket = null;
@@ -240,6 +242,13 @@ function handleCommands(cmd_obj)
 	context.restore();
         break;
 
+      case 'q': // Query pointer
+        var id = base64_16(cmd, i);
+        i = i + 3;
+
+	send_input ("q", [last_x, last_y]);
+	break;
+
       default:
         alert("Unknown op " + command);
     }
@@ -284,16 +293,24 @@ function send_input(cmd, args)
   }
 }
 
+function update_positions_from_event(ev) {
+    last_x = ev.pageX;
+    last_y = ev.pageY;
+}
+
 function on_mouse_move (ev) {
-  send_input ("m", [get_surface_id(ev), ev.pageX, ev.pageY, ev.timeStamp])
+  update_positions_from_event(ev);
+  send_input ("m", [get_surface_id(ev), last_x, last_y, ev.timeStamp]);
 }
 
 function on_mouse_down (ev) {
-  send_input ("b", [get_surface_id(ev), ev.pageX, ev.pageY, ev.button, ev.timeStamp])
+  update_positions_from_event(ev);
+  send_input ("b", [get_surface_id(ev), last_x, last_y, ev.button, ev.timeStamp]);
 }
 
 function on_mouse_up (ev) {
-  send_input ("B", [get_surface_id(ev), ev.pageX, ev.pageY, ev.button, ev.timeStamp])
+  update_positions_from_event(ev);
+  send_input ("B", [get_surface_id(ev), last_x, last_y, ev.button, ev.timeStamp]);
 }
 
 var last_key_down = 0;

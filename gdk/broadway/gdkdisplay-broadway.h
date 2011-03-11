@@ -56,7 +56,7 @@ struct _GdkBroadwayDisplay
 
   GSource *event_source;
   GdkWindow *mouse_in_toplevel;
-  int last_x, last_y;
+  int last_x, last_y; /* in root coords */
 
   /* Keyboard related information */
   GdkKeymap *keymap;

@@ -284,8 +284,11 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
       }
 
     break;
+  case 'q':
+    g_printerr ("Got unexpected query pointer reply w serial %d\n", serial);
+    break;
   default:
-    g_print ("Unknown input command %s\n", message);
+    g_printerr ("Unknown input command %s\n", message);
     break;
   }
 }

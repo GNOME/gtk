@@ -55,3 +55,5 @@ void            broadway_output_copy_rectangles (BroadwayOutput *output,
 						 int             n_rects,
 						 int             dx,
 						 int             dy);
+guint32         broadway_output_query_pointer   (BroadwayOutput *output,
+						 int id);

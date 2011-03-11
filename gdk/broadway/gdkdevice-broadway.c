@@ -18,6 +18,7 @@
  */
 
 #include "config.h"
+#include <stdlib.h>
 
 #include "gdkdevice-broadway.h"
 
@@ -152,17 +153,87 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 				 gint             *win_y,
 				 GdkModifierType  *mask)
 {
-  if (root_x)
-    *root_x = 0;
-  if (root_y)
-    *root_y = 0;
-  if (win_x)
-    *win_x = 0;
-  if (win_y)
-    *win_y = 0;
+  GdkDisplay *display;
+  GdkBroadwayDisplay *broadway_display;
+  GdkWindowImplBroadway *impl;
+  guint32 serial;
+  GdkScreen *screen;
+  char *reply;
+  gint device_root_x, device_root_y;
+
+  if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
+    return FALSE;
+
+  display = gdk_device_get_display (device);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  if (root_window)
+    {
+      screen = gdk_window_get_screen (window);
+      *root_window = gdk_screen_get_root_window (screen);
+    }
+
   if (mask)
-    *mask = 0;
-  return FALSE;
+    *mask = 0; /* TODO */
+
+  device_root_x = broadway_display->last_x;
+  device_root_y = broadway_display->last_y;
+
+  if (broadway_display->output)
+    {
+      impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+      serial = broadway_output_query_pointer (broadway_display->output, impl->id);
+
+      reply = _gdk_broadway_display_block_for_input (display, 'q', serial);
+
+      if (reply != NULL)
+	{
+	  char *p;
+	  char cmd;
+	  guint32 reply_serial;
+
+	  p = reply;
+
+	  cmd = *p++;
+	  reply_serial = (guint32)strtol(p, &p, 10);
+	  p++; /* Skip , */
+
+	  device_root_x = strtol(p, &p, 10);
+	  p++; /* Skip , */
+	  device_root_y = strtol(p, &p, 10);
+	  p++; /* Skip , */
+
+	  g_free (reply);
+	}
+    }
+
+  /* Fallback when unconnected */
+
+  if (root_x)
+    *root_x = device_root_x;
+  if (root_y)
+    *root_y = device_root_y;
+  if (win_x)
+    *win_x = device_root_y - window->x;
+  if (win_y)
+    *win_y = device_root_y - window->y;
+  if (child_window)
+    {
+      if (gdk_window_get_window_type (window) == GDK_WINDOW_ROOT)
+	{
+	  *child_window = broadway_display->mouse_in_toplevel;
+	  if (*child_window == NULL)
+	    *child_window = window;
+	}
+      else
+	{
+	  /* No native children */
+	  *child_window = window;
+	}
+    }
+
+  return TRUE;
 }
 
 static GdkGrabStatus
