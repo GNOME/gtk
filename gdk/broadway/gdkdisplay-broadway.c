@@ -252,6 +252,77 @@ input_data_cb (GObject  *stream,
   return TRUE;
 }
 
+static gboolean
+process_input_idle_cb (GdkBroadwayDisplay *display)
+{
+  process_input_messages (display);
+  return FALSE;
+}
+
+/* Note: This may be called while handling a message (i.e. sorta recursively) */
+char *
+_gdk_broadway_display_block_for_input (GdkDisplay *display, char op, guint32 serial)
+{
+  GdkBroadwayDisplay *broadway_display;
+  char *message;
+  guint32 msg_serial;
+  gboolean queued_idle;
+  gssize res;
+  guint8 buffer[1024];
+  BroadwayInput *input;
+  GInputStream *in;
+  GList *l;
+
+  queued_idle = FALSE;
+
+  gdk_display_flush (display);
+
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  if (broadway_display->input == NULL)
+    return NULL;
+
+  input = broadway_display->input;
+
+  while (TRUE) {
+    /* Check for existing reply in queue */
+
+    for (l = broadway_display->input_messages; l != NULL; l = l->next)
+      {
+	message = l->data;
+
+	if (message[0] == op)
+	  {
+	    msg_serial = (guint32)strtol(message+1, NULL, 10);
+	    if (msg_serial == serial)
+	      {
+		broadway_display->input_messages =
+		  g_list_delete_link (broadway_display->input_messages, l);
+		return message;
+	      }
+	  }
+      }
+
+    /* Not found, read more, blocking */
+
+    in = g_io_stream_get_input_stream (G_IO_STREAM (input->connection));
+    res = g_input_stream_read (in, buffer, sizeof (buffer), NULL, NULL);
+    if (res <= 0)
+      return NULL;
+    g_byte_array_append (input->buffer, buffer, res);
+
+    parse_input (input);
+
+    /* Since we're parsing input but not processing the resulting messages
+       we might not get a readable callback on the stream, so queue an idle to
+       process the messages */
+    if (!queued_idle)
+      {
+	queued_idle = TRUE;
+	g_idle_add_full (G_PRIORITY_DEFAULT, (GSourceFunc)process_input_idle_cb, display, NULL);
+      }
+  }
+}
+
 #include <unistd.h>
 #include <fcntl.h>
 static void

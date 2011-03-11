@@ -187,6 +187,9 @@ gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
 gchar *_gdk_broadway_display_utf8_to_string_target (GdkDisplay  *display,
 						    const gchar *str);
 GdkKeymap* _gdk_broadway_display_get_keymap (GdkDisplay *display);
+char * _gdk_broadway_display_block_for_input (GdkDisplay *display,
+					      char op,
+					      guint32 serial);
 
 /* Window methods - testing */
 void     _gdk_broadway_window_sync_rendering    (GdkWindow       *window);
