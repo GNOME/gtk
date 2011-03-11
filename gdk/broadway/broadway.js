@@ -309,18 +309,24 @@ function get_document_coordinates(element)
     return res;
 }
 
-function getPositionsFromEvent(ev, relativeId) {
+function getPositionsFromAbsCoord(absX, absY, relativeId) {
     var res = Object();
 
-    res.root_x = ev.pageX;
-    res.root_y = ev.pageY;
-    res.win_x = ev.pageX;
-    res.win_y = ev.pageY;
+    res.root_x = absX;
+    res.root_y = absY;
+    res.win_x = absX;
+    res.win_y = absY;
     if (relativeId != 0) {
-	var pos = get_document_coordinates(ev.target);
+	var pos = get_document_coordinates(surfaces[relativeId].canvas);
 	res.win_x = res.win_x - pos.x;
 	res.win_y = res.win_y - pos.y;
     }
+
+    return res;
+}
+
+function getPositionsFromEvent(ev, relativeId) {
+    var res = getPositionsFromAbsCoord(ev.pageX, ev.pageY, relativeId);
 
     last_x = res.root_x;
     last_y = res.root_y;
