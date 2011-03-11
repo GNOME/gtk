@@ -264,6 +264,8 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_DAMAGE: the content of the window has been changed. This event type
  *   was added in 2.14.
  * @GDK_TOUCH_MOTION: A touch device has been updated.
+ * @GDK_TOUCH_PRESS: A new touch stream has just started.
+ * @GDK_TOUCH_RELEASE: A touch stream has finished.
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
  *
  * Specifies the type of the event.
@@ -312,6 +314,8 @@ typedef enum
   GDK_GRAB_BROKEN       = 35,
   GDK_DAMAGE            = 36,
   GDK_TOUCH_MOTION      = 37,
+  GDK_TOUCH_PRESS       = 38,
+  GDK_TOUCH_RELEASE     = 39,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
 
@@ -610,6 +614,8 @@ struct _GdkEventMotion
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
+ * @touch_id: touch ID, only meaningful if event is of type %GDK_TOUCH_PRESS
+ *   or %GDK_TOUCH_RELEASE.
  *
  * Used for button press and button release events. The
  * @type field will be one of %GDK_BUTTON_PRESS,
@@ -659,6 +665,7 @@ struct _GdkEventButton
   guint button;
   GdkDevice *device;
   gdouble x_root, y_root;
+  guint touch_id;
 };
 
 /**
