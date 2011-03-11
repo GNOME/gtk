@@ -152,6 +152,16 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 				 gint             *win_y,
 				 GdkModifierType  *mask)
 {
+  if (root_x)
+    *root_x = 0;
+  if (root_y)
+    *root_y = 0;
+  if (win_x)
+    *win_x = 0;
+  if (win_y)
+    *win_y = 0;
+  if (mask)
+    *mask = 0;
   return FALSE;
 }
 

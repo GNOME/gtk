@@ -873,10 +873,18 @@ gdk_window_broadway_get_device_state (GdkWindow       *window,
 				      gint            *y,
 				      GdkModifierType *mask)
 {
-  *x = 0;
-  *y = 0;
-  *mask = 0;
-  return FALSE;
+  GdkWindow *child;
+
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
+
+  GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
+                                              NULL, &child,
+                                              NULL, NULL,
+                                              x, y, mask);
+  return child != NULL;
 }
 
 static GdkEventMask
