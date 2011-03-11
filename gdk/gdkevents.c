@@ -455,6 +455,8 @@ gdk_event_new (GdkEventType type)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       new_event->button.x = 0.;
       new_event->button.y = 0.;
       new_event->button.x_root = 0.;
@@ -559,6 +561,8 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       if (event->button.axes)
         new_event->button.axes = g_memdup (event->button.axes,
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->button.device));
@@ -639,6 +643,8 @@ gdk_event_free (GdkEvent *event)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       g_free (event->button.axes);
       break;
       
@@ -701,6 +707,8 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_2BUTTON_PRESS:
       case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
+      case GDK_TOUCH_PRESS:
+      case GDK_TOUCH_RELEASE:
 	return event->button.time;
       case GDK_SCROLL:
         return event->scroll.time;
@@ -778,6 +786,8 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_2BUTTON_PRESS:
       case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
+      case GDK_TOUCH_PRESS:
+      case GDK_TOUCH_RELEASE:
         *state =  event->button.state;
         return TRUE;
       case GDK_SCROLL:
@@ -866,6 +876,8 @@ gdk_event_get_coords (const GdkEvent *event,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       x = event->button.x;
       y = event->button.y;
       break;
@@ -922,6 +934,8 @@ gdk_event_get_root_coords (const GdkEvent *event,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       x = event->button.x_root;
       y = event->button.y_root;
       break;
@@ -990,6 +1004,8 @@ gdk_event_get_axis (const GdkEvent *event,
 	  break;
 	case GDK_BUTTON_PRESS:
 	case GDK_BUTTON_RELEASE:
+        case GDK_TOUCH_PRESS:
+        case GDK_TOUCH_RELEASE:
 	  x = event->button.x;
 	  y = event->button.y;
 	  break;
@@ -1011,7 +1027,9 @@ gdk_event_get_axis (const GdkEvent *event,
       return TRUE;
     }
   else if (event->type == GDK_BUTTON_PRESS ||
-	   event->type == GDK_BUTTON_RELEASE)
+	   event->type == GDK_BUTTON_RELEASE ||
+           event->type == GDK_TOUCH_PRESS ||
+           event->type == GDK_TOUCH_RELEASE)
     {
       device = event->button.device;
       axes = event->button.axes;
@@ -1061,6 +1079,8 @@ gdk_event_set_device (GdkEvent  *event,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       event->button.device = device;
       break;
     case GDK_SCROLL:
@@ -1108,6 +1128,8 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       return event->button.device;
     case GDK_SCROLL:
       return event->scroll.device;
@@ -1127,6 +1149,8 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_FOCUS_CHANGE:
