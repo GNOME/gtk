@@ -260,6 +260,11 @@ struct _GdkWindow
   gulong device_changed_handler_id;
 
   guint num_offscreen_children;
+
+  /* Store of latest per-touch events, keys are
+   * GdkDevices, values are hashtables of touchID/info
+   */
+  GHashTable *touch_event_tracker;
   GList *touch_clusters;
 };
 
