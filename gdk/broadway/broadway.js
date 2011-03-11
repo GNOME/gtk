@@ -74,16 +74,16 @@ var input_socket = null;
 function initContext(canvas, x, y, id)
 {
   canvas.surface_id = id;
-  canvas.style["position"] = "absolute"
-  canvas.style["left"] = x + "px"
-  canvas.style["top"] = y + "px"
-  canvas.style["display"] = "none"
-  context = canvas.getContext("2d")
-  context.globalCompositeOperation = "src-over"
+  canvas.style["position"] = "absolute";
+  canvas.style["left"] = x + "px";
+  canvas.style["top"] = y + "px";
+  canvas.style["display"] = "none";
+  var context = canvas.getContext("2d");
+  context.globalCompositeOperation = "src-over";
   context.fillRect(0, 0, canvas.width, canvas.height);
-  document.body.appendChild(canvas)
+  document.body.appendChild(canvas);
 
-  return context
+  return context;
 }
 
 function handleCommands(cmd_obj)
@@ -132,8 +132,8 @@ function handleCommands(cmd_obj)
       case 'd':
         var id = base64_16(cmd, i);
         i = i + 3;
-	var canvas = surfaces[id].canvas
-	delete surfaces[id]
+	var canvas = surfaces[id].canvas;
+	delete surfaces[id];
 	canvas.parentNode.removeChild(canvas);
 
         break;
@@ -175,13 +175,13 @@ function handleCommands(cmd_obj)
 	var url = cmd.slice(i, i + size);
 	i = i + size;
         var img = new Image();
-	img.src = url
+	img.src = url;
 	if (img.complete) {
           surfaces[id].drawImage(img, x, y);
 	} else {
 	  cmd_obj.pos = i;
-	  img.onload = function() { surfaces[id].drawImage(img, x, y); handleOutstanding(); }
-	  return false
+	  img.onload = function() { surfaces[id].drawImage(img, x, y); handleOutstanding(); };
+	  return false;
 	}
 
         break;
@@ -229,7 +229,7 @@ function handleCommands(cmd_obj)
 	  }
 	}
 
-	context.clip()
+	context.clip();
 
         var dx = base64_16s(cmd, i);
         i = i + 3;
@@ -276,7 +276,7 @@ function handleLoad(event)
 
   outstanding_commands.push(cmd_obj);
   if (outstanding_commands.length == 1) {
-    handleOutstanding()
+    handleOutstanding();
   }
 }
 
@@ -401,10 +401,10 @@ function on_mouse_wheel(ev)
   var pos = getPositionsFromEvent(ev, id);
 
   var offset = ev.detail ? ev.detail : ev.wheelDelta;
-  var dir = 0
+  var dir = 0;
   if (offset > 0)
     dir = 1;
-  send_input ("s", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, dir])
+  send_input ("s", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, dir]);
 
   return cancel_event(ev);
 }
@@ -437,7 +437,7 @@ function connect()
   } else {
      alert("WebSocket not supported, input will not work!");
   }
-  document.oncontextmenu = function () { return false; }
+  document.oncontextmenu = function () { return false; };
   document.onmousemove = on_mouse_move;
   document.onmouseover = on_mouse_over;
   document.onmouseout = on_mouse_out;
