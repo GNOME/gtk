@@ -213,6 +213,11 @@ typedef struct {
   int dx, dy; /* The amount that the source was moved to reach dest_region */
 } GdkWindowRegionMove;
 
+typedef struct {
+  GdkEvent *event;          /* latest event for touch */
+  GdkTouchCluster *cluster; /* touch cluster the ID currently pertains to */
+} TouchEventInfo;
+
 /* Global info */
 
 static void             gdk_window_drop_cairo_surface (GdkWindow *private);
@@ -566,6 +571,9 @@ gdk_window_finalize (GObject *object)
 
   if (window->devices_inside)
     g_list_free (window->devices_inside);
+
+  if (window->touch_event_tracker)
+    g_hash_table_destroy (window->touch_event_tracker);
 
   g_list_foreach (window->touch_clusters, (GFunc) g_object_unref, NULL);
   g_list_free (window->touch_clusters);
@@ -8071,7 +8079,10 @@ static const guint type_masks[] = {
   0, /* GDK_DAMAGE = 36 */
   GDK_TOUCH_MASK, /* GDK_TOUCH_MOTION                  = 37 */
   GDK_TOUCH_MASK, /* GDK_TOUCH_PRESS                   = 38 */
-  GDK_TOUCH_MASK  /* GDK_TOUCH_RELEASE                 = 39 */
+  GDK_TOUCH_MASK, /* GDK_TOUCH_RELEASE                 = 39 */
+  GDK_TOUCH_MASK, /* GDK_MULTITOUCH_ADDED              = 40 */
+  GDK_TOUCH_MASK, /* GDK_MULTITOUCH_REMOVED            = 41 */
+  GDK_TOUCH_MASK  /* GDK_MULTITOUCH_UPDATED            = 42 */
 };
 G_STATIC_ASSERT (G_N_ELEMENTS (type_masks) == GDK_EVENT_LAST);
 
@@ -8256,6 +8267,79 @@ _gdk_make_event (GdkWindow    *window,
     _gdk_event_queue_append (gdk_window_get_display (window), event);
 
   return event;
+}
+
+GdkEvent *
+gdk_make_multitouch_event (GdkWindow        *window,
+                           GdkEventType      type,
+                           GdkTouchCluster  *cluster,
+                           GdkDevice        *device,
+                           guint             touch_id,
+                           GdkEvent         *event_in_queue)
+{
+  GdkEvent *mt_event, *event = NULL;
+  gint i, n_touches, n_updated = -1;
+  GdkEventMotion **subevents;
+  TouchEventInfo *info;
+  GHashTable *by_touch;
+  GList *touches;
+
+  if (!window->touch_event_tracker)
+    return NULL;
+
+  by_touch = g_hash_table_lookup (window->touch_event_tracker, device);
+
+  if (by_touch)
+    {
+      info = g_hash_table_lookup (by_touch, GUINT_TO_POINTER (touch_id));
+      if (info)
+        event = info->event;
+    }
+
+  if (!event)
+    {
+      g_warning ("Creating a multitouch event but no input was pre-recorded");
+      return NULL;
+    }
+
+  /* Generate multitouch event */
+  mt_event = _gdk_make_event (window, type, event_in_queue, FALSE);
+  mt_event->multitouch.time = event->motion.time;
+  mt_event->multitouch.state = event->motion.state;
+  gdk_event_set_device (mt_event, gdk_event_get_device (event));
+  gdk_event_set_source_device (mt_event, gdk_event_get_source_device (event));
+
+  mt_event->multitouch.group = cluster;
+
+  /* Fill in individual motion sub-events */
+  touches = gdk_touch_cluster_get_touches (cluster);
+  n_touches = g_list_length (touches);
+  i = 0;
+
+  subevents = g_new0 (GdkEventMotion *, n_touches);
+
+  while (touches)
+    {
+      TouchEventInfo *subevent_info;
+      GdkEvent *subevent;
+
+      subevent_info = g_hash_table_lookup (by_touch, touches->data);
+      subevent = gdk_event_copy (subevent_info->event);
+      subevents[i] = (GdkEventMotion *) subevent;
+
+      if (subevent->motion.touch_id == touch_id)
+        n_updated = i;
+
+      touches = touches->next;
+      i++;
+    }
+
+  mt_event->multitouch.events = subevents;
+  mt_event->multitouch.n_updated_event = n_updated;
+  mt_event->multitouch.n_events = n_touches;
+  mt_event->multitouch.updated_touch_id = touch_id;
+
+  return mt_event;
 }
 
 static void
@@ -9102,6 +9186,127 @@ get_event_window (GdkDisplay                 *display,
   return NULL;
 }
 
+static TouchEventInfo *
+touch_event_info_new (void)
+{
+  return g_slice_new0 (TouchEventInfo);
+}
+
+static void
+touch_event_info_free (TouchEventInfo *info)
+{
+  if (info->event)
+    gdk_event_free (info->event);
+  g_slice_free (TouchEventInfo, info);
+}
+
+static TouchEventInfo *
+touch_event_info_lookup (GdkWindow *window,
+                         GdkDevice *device,
+                         guint      touch_id,
+                         gboolean   create)
+{
+  TouchEventInfo *info;
+  GHashTable *by_touch;
+
+  if (G_UNLIKELY (!window->touch_event_tracker))
+    window->touch_event_tracker = g_hash_table_new_full (NULL, NULL, NULL,
+                                                         (GDestroyNotify) g_hash_table_destroy);
+
+  by_touch = g_hash_table_lookup (window->touch_event_tracker, device);
+
+  if (!by_touch)
+    {
+      by_touch = g_hash_table_new_full (NULL, NULL, NULL,
+                                        (GDestroyNotify) touch_event_info_free);
+      g_hash_table_insert (window->touch_event_tracker, device, by_touch);
+    }
+
+  info = g_hash_table_lookup (by_touch, GUINT_TO_POINTER (touch_id));
+
+  if (create && !info)
+    {
+      info = touch_event_info_new ();
+      g_hash_table_insert (by_touch, GUINT_TO_POINTER (touch_id), info);
+    }
+
+  return info;
+}
+
+/* Stores touch event for posterior multitouch
+ * events generation, takes ownership of event
+ */
+static void
+store_touch_event (GdkWindow *window,
+                   GdkEvent  *event,
+                   guint      touch_id)
+{
+  GdkDevice *device, *source_device;
+  TouchEventInfo *info;
+
+  if (event->type != GDK_TOUCH_PRESS &&
+      event->type != GDK_TOUCH_RELEASE &&
+      event->type != GDK_TOUCH_MOTION)
+    return;
+
+  device = gdk_event_get_device (event);
+  source_device = gdk_event_get_source_device (event);
+
+  if (event->type == GDK_TOUCH_PRESS ||
+      event->type == GDK_TOUCH_RELEASE)
+    {
+      GdkEvent *new_event;
+
+      /* Create GDK_TOUCH_MOTION event from the available data */
+      new_event = gdk_event_new (GDK_TOUCH_MOTION);
+
+      if (event->button.window)
+        new_event->motion.window = g_object_ref (event->button.window);
+
+      new_event->motion.send_event = event->button.send_event;
+      new_event->motion.time = event->button.time;
+      new_event->motion.x = event->button.x;
+      new_event->motion.y = event->button.y;
+      new_event->motion.x_root = event->button.x_root;
+      new_event->motion.y_root = event->button.y_root;
+      new_event->motion.state = event->button.state;
+      new_event->motion.touch_id = event->button.touch_id;
+      new_event->motion.is_hint = FALSE;
+
+      gdk_event_set_device (new_event, device);
+      gdk_event_set_source_device (new_event, source_device);
+
+      new_event->motion.axes = g_memdup (event->button.axes,
+                                         sizeof (gdouble) * gdk_device_get_n_axes (device));
+
+      gdk_event_free (event);
+      event = new_event;
+    }
+
+  info = touch_event_info_lookup (window, source_device, touch_id, TRUE);
+  info->event = event;
+}
+
+static GdkTouchCluster *
+_gdk_window_lookup_touch_cluster (GdkWindow *window,
+                                  GdkEvent  *event)
+{
+  TouchEventInfo *info;
+  GdkDevice *device;
+  guint touch_id;
+
+  if (!gdk_event_get_touch_id (event, &touch_id))
+    return NULL;
+
+  device = gdk_event_get_source_device (event);
+  info = touch_event_info_lookup (window, device, touch_id, FALSE);
+
+  if (!info)
+    return NULL;
+
+  return info->cluster;
+}
+
 static gboolean
 proxy_pointer_event (GdkDisplay                 *display,
 		     GdkEvent                   *source_event,
@@ -9293,11 +9498,17 @@ proxy_pointer_event (GdkDisplay                 *display,
 
       if (!display->ignore_core_events)
         {
+          GdkTouchCluster *cluster = NULL;
           GdkEventType event_type;
           guint touch_id;
 
-          gdk_event_get_touch_id (source_event, &touch_id);
-          event_type = source_event->type;
+          if (gdk_event_get_touch_id (source_event, &touch_id))
+            cluster = _gdk_window_lookup_touch_cluster (event_win, source_event);
+
+          if (cluster)
+            event_type = GDK_TOUCH_MOTION;
+          else
+            event_type = source_event->type;
 
           event = gdk_event_new (event_type);
           event->any.window = g_object_ref (event_win);
@@ -9316,9 +9527,26 @@ proxy_pointer_event (GdkDisplay                 *display,
           event->motion.touch_id = touch_id;
           gdk_event_set_source_device (event, source_device);
 
-          /* Just insert the event */
-          _gdk_event_queue_insert_after (gdk_window_get_display (event_win),
-                                         source_event, event);
+          if (cluster)
+            {
+              store_touch_event (event_win, event, touch_id);
+
+              /* Event is not added to the queue, instead it's stored
+               * in order to generate a multitouch event for the touch
+               * ID's cluster.
+               */
+              gdk_make_multitouch_event (event_win, GDK_MULTITOUCH_UPDATED,
+                                         cluster, source_device, touch_id,
+                                         source_event);
+            }
+          else
+            {
+              store_touch_event (event_win, gdk_event_copy (event), touch_id);
+
+              /* Just insert the event */
+              _gdk_event_queue_insert_after (gdk_window_get_display (event_win),
+                                             source_event, event);
+            }
 	}
     }
 
@@ -9335,7 +9563,8 @@ proxy_pointer_event (GdkDisplay                 *display,
 
 static gboolean
 proxy_button_event (GdkEvent *source_event,
-		    gulong serial)
+                    gulong    serial,
+                    gboolean *handle_ungrab)
 {
   GdkWindow *toplevel_window, *event_window;
   GdkWindow *event_win;
@@ -9349,6 +9578,7 @@ proxy_button_event (GdkEvent *source_event,
   GdkDisplay *display;
   GdkWindow *w;
   GdkDevice *device, *source_device;
+  GdkEventMask evmask;
 
   type = source_event->any.type;
   event_window = source_event->any.window;
@@ -9361,6 +9591,7 @@ proxy_button_event (GdkEvent *source_event,
   toplevel_window = convert_native_coords_to_toplevel (event_window,
 						       toplevel_x, toplevel_y,
 						       &toplevel_x, &toplevel_y);
+  *handle_ungrab = TRUE;
 
   if (type == GDK_BUTTON_PRESS &&
       !source_event->any.send_event &&
@@ -9404,7 +9635,20 @@ proxy_button_event (GdkEvent *source_event,
                                 device,
 				pointer_window,
 				type, state,
-				NULL, serial);
+				&evmask, serial);
+
+  /* Block button press/release events coming from touch devices, only if
+   * the event mask allows both normal and touch events, since
+   * the latter will come right after.
+   */
+  if ((evmask & GDK_TOUCH_MASK) &&
+      gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH &&
+      source_event->type != GDK_TOUCH_PRESS &&
+      source_event->type != GDK_TOUCH_RELEASE)
+    {
+      *handle_ungrab = FALSE;
+      return TRUE;
+    }
 
   if (event_win == NULL || display->ignore_core_events)
     return TRUE;
@@ -9437,7 +9681,7 @@ proxy_button_event (GdkEvent *source_event,
 
       if (type == GDK_BUTTON_PRESS)
 	_gdk_event_button_generate (display, event);
-      return TRUE;
+      break;
 
     case GDK_SCROLL:
       event->scroll.direction = source_event->scroll.direction;
@@ -9449,11 +9693,38 @@ proxy_button_event (GdkEvent *source_event,
       event->scroll.state = state;
       event->scroll.device = source_event->scroll.device;
       gdk_event_set_source_device (event, source_device);
-      return TRUE;
+      break;
 
     default:
       return FALSE;
     }
+
+  if (type == GDK_TOUCH_RELEASE)
+    {
+      GdkTouchCluster *cluster;
+      GHashTable *by_touch;
+      guint touch_id;
+
+      touch_id = source_event->button.touch_id;
+
+      /* Remove the touch ID from any touch cluster it could pertain to */
+      cluster = _gdk_window_lookup_touch_cluster (event_win, source_event);
+
+      if (cluster)
+        gdk_touch_cluster_remove_touch (cluster, touch_id);
+
+      /* Remove in any case the touch ID from the event tracker */
+      by_touch = g_hash_table_lookup (event_win->touch_event_tracker, source_device);
+
+      if (by_touch)
+        g_hash_table_remove (by_touch, GUINT_TO_POINTER (touch_id));
+
+      /* Only remove the grab if it was the last pending touch on the window */
+      *handle_ungrab = (g_hash_table_size (by_touch) == 0);
+    }
+  else if (type == GDK_TOUCH_PRESS)
+    store_touch_event (event_win, gdk_event_copy (event),
+                       event->button.touch_id);
 
   return TRUE; /* Always unlink original, we want to obey the emulated event mask */
 }
@@ -9543,7 +9814,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerWindowInfo *pointer_info;
   GdkDevice *device, *source_device;
-  gboolean is_toplevel;
+  gboolean is_toplevel, handle_ungrab = TRUE;
 
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
     display->last_event_time = gdk_event_get_time (event);
@@ -9686,9 +9957,11 @@ _gdk_windowing_got_event (GdkDisplay *display,
 					serial);
   else if (is_button_type (event->type))
     unlink_event = proxy_button_event (event,
-				       serial);
+                                       serial,
+                                       &handle_ungrab);
 
-  if ((event->type == GDK_BUTTON_RELEASE ||
+  if (handle_ungrab &&
+      (event->type == GDK_BUTTON_RELEASE ||
        event->type == GDK_TOUCH_RELEASE) &&
       !event->any.send_event)
     {
@@ -10929,6 +11202,70 @@ gdk_property_delete (GdkWindow *window,
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->delete_property (window, property);
 }
 
+static void
+touch_cluster_touch_added (GdkTouchCluster *cluster,
+                           guint            touch_id,
+                           gpointer         user_data)
+{
+  GdkWindow *window;
+  TouchEventInfo *info;
+  GHashTable *by_touch;
+  GdkDevice *device;
+
+  device = gdk_touch_cluster_get_device (cluster);
+
+  if (!device)
+    return;
+
+  window = user_data;
+  by_touch = g_hash_table_lookup (window->touch_event_tracker, device);
+  g_assert (by_touch != NULL);
+
+  info = g_hash_table_lookup (by_touch, GUINT_TO_POINTER (touch_id));
+
+  if (info->cluster == cluster)
+    return;
+
+  if (info->cluster)
+    {
+      /* Remove touch from old cluster, but keep the stored data around */
+      g_hash_table_steal (by_touch, GUINT_TO_POINTER (touch_id));
+
+      gdk_touch_cluster_remove_touch (info->cluster, touch_id);
+
+      g_hash_table_insert (by_touch,
+                           GUINT_TO_POINTER (touch_id),
+                           info);
+    }
+
+  info->cluster = cluster;
+  gdk_make_multitouch_event (window, GDK_MULTITOUCH_ADDED,
+                             cluster, device, touch_id,
+                             NULL);
+}
+
+static void
+touch_cluster_touch_removed (GdkTouchCluster *cluster,
+                             guint            touch_id,
+                             gpointer         user_data)
+{
+  GdkWindow *window;
+  GdkDevice *device;
+  GHashTable *by_touch;
+
+  window = user_data;
+  device = gdk_touch_cluster_get_device (cluster);
+  by_touch = g_hash_table_lookup (window->touch_event_tracker, device);
+
+  g_assert (by_touch != NULL);
+
+  gdk_make_multitouch_event (window, GDK_MULTITOUCH_REMOVED,
+                             cluster, device, touch_id,
+                             NULL);
+
+  g_hash_table_remove (by_touch, GUINT_TO_POINTER (touch_id));
+}
+
 /**
  * gdk_window_create_touch_cluster:
  * @window: a #GdkWindow
@@ -10947,6 +11284,11 @@ gdk_window_create_touch_cluster (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   cluster = g_object_new (GDK_TYPE_TOUCH_CLUSTER, NULL);
+  g_signal_connect (cluster, "touch-added",
+                    G_CALLBACK (touch_cluster_touch_added), window);
+  g_signal_connect (cluster, "touch-removed",
+                    G_CALLBACK (touch_cluster_touch_removed), window);
+
   window->touch_clusters = g_list_prepend (window->touch_clusters, cluster);
 
   return cluster;
@@ -10957,7 +11299,9 @@ gdk_window_create_touch_cluster (GdkWindow *window)
  * @window: a #GdkWindow
  * @cluster: a #GdkTouchCluster from @window
  *
- * Removes @cluster from @window.
+ * Removes @cluster from @window. All contained touches will be
+ * removed one by one, causing %GDK_MULTITOUCH_REMOVED events
+ * for these before destroying @cluster.
  **/
 void
 gdk_window_remove_touch_cluster (GdkWindow       *window,
@@ -10971,6 +11315,10 @@ gdk_window_remove_touch_cluster (GdkWindow       *window,
     return;
 
   gdk_touch_cluster_remove_all (cluster);
+
+  g_signal_handlers_disconnect_by_func (cluster, "touch-added", window);
+  g_signal_handlers_disconnect_by_func (cluster, "touch-removed", window);
+
   window->touch_clusters = g_list_remove (window->touch_clusters, cluster);
   g_object_unref (cluster);
 }
