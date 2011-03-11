@@ -215,6 +215,8 @@ gdk_add_option_entries_libgtk_only (GOptionGroup *group)
 void
 gdk_pre_parse_libgtk_only (void)
 {
+  const char *rendering_mode;
+
   gdk_initialized = TRUE;
 
   /* We set the fallback program class here, rather than lazily in
@@ -239,6 +241,17 @@ gdk_pre_parse_libgtk_only (void)
       g_warning ("The GDK_NATIVE_WINDOWS environment variable is not supported in GTK3.\n"
                  "See the documentation for gdk_window_ensure_native() on how to get native windows.");
       g_unsetenv ("GDK_NATIVE_WINDOWS");
+    }
+
+  rendering_mode = g_getenv ("GDK_RENDERING");
+  if (rendering_mode)
+    {
+      if (g_str_equal (rendering_mode, "similar"))
+        _gdk_rendering_mode = GDK_RENDERING_MODE_SIMILAR;
+      else if (g_str_equal (rendering_mode, "image"))
+        _gdk_rendering_mode = GDK_RENDERING_MODE_IMAGE;
+      else if (g_str_equal (rendering_mode, "recording"))
+        _gdk_rendering_mode = GDK_RENDERING_MODE_RECORDING;
     }
 
   g_type_init ();

@@ -382,6 +382,41 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GDK_RENDERING</envar></title>
+
+  <para>
+    If set, selects the way how GDK creates similar surfaces. This affects both the
+    functionality of the function gdk_window_create_similar_surface() as well as the
+    way GDK creates backing surfaces for double buffering. The following values can
+    be used:
+    <variablelist>
+
+      <varlistentry>
+        <term>similar</term>
+        <listitem><para>Create similar surfaces to the window in use. This is the
+          default behavior when the variable is not set.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>image</term>
+        <listitem><para>Always create image surfaces. This essentially turns off
+          all hardware acceleration inside GTK.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>recording</term>
+        <listitem><para>Always create recording surfaces. This causes bare rendering
+          to the backend without the creation of intermediate surfaces (Pixmaps in X)
+          and will likely cause flicker.</para></listitem>
+      </varlistentry>
+
+    </variablelist>
+    All other values will be ignored and fall back to the default behavior. More
+    values might be added in the future. 
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>GDK_BACKEND</envar></title>
 
   <para>

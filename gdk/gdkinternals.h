@@ -87,10 +87,17 @@ typedef enum {
   GDK_DEBUG_EVENTLOOP     = 1 << 10
 } GdkDebugFlag;
 
+typedef enum {
+  GDK_RENDERING_MODE_SIMILAR = 0,
+  GDK_RENDERING_MODE_IMAGE,
+  GDK_RENDERING_MODE_RECORDING
+} GdkRenderingMode;
+
 extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
+extern GdkRenderingMode    _gdk_rendering_mode;
 
 #ifdef G_ENABLE_DEBUG
 

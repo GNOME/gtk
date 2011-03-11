@@ -27,14 +27,13 @@
 #include "config.h"
 
 #include "gdktypes.h"
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 
 #include <stdio.h>
-
 
 guint               _gdk_debug_flags = 0;
 GList              *_gdk_default_filters = NULL;
 gchar              *_gdk_display_name = NULL;
 gchar              *_gdk_display_arg_name = NULL;
 gboolean            _gdk_disable_multidevice = FALSE;
-
+GdkRenderingMode    _gdk_rendering_mode = GDK_RENDERING_MODE_SIMILAR;

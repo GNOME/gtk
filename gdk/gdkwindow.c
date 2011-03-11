@@ -9709,9 +9709,26 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   
   window_surface = _gdk_window_ref_cairo_surface (window);
 
-  surface = cairo_surface_create_similar (window_surface,
-                                          content,
-                                          width, height);
+  switch (_gdk_rendering_mode)
+  {
+    case GDK_RENDERING_MODE_RECORDING:
+      {
+        cairo_rectangle_t rect = { 0, 0, width, height };
+        surface = cairo_recording_surface_create (content, &rect);
+      }
+      break;
+    case GDK_RENDERING_MODE_IMAGE:
+      surface = cairo_image_surface_create (content == CAIRO_CONTENT_COLOR ? CAIRO_FORMAT_RGB24 :
+                                            content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
+                                            width, height);
+      break;
+    case GDK_RENDERING_MODE_SIMILAR:
+    default:
+      surface = cairo_surface_create_similar (window_surface,
+                                              content,
+                                              width, height);
+      break;
+  }
 
   cairo_surface_destroy (window_surface);
 
