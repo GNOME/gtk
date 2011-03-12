@@ -731,8 +731,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_widget_show (hbox);
 
   /* Add the close button */
-  close_button = gtk_dialog_add_button (GTK_DIALOG (about), GTK_STOCK_CLOSE,
-                                        GTK_RESPONSE_CANCEL);
+  close_button = gtk_dialog_add_button (GTK_DIALOG (about),
+                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL);
   gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
 
   /* Add the credits button */
@@ -2467,7 +2467,11 @@ gtk_about_dialog_new (void)
 static void
 close_cb (GtkAboutDialog *about)
 {
+  GtkAboutDialogPrivate *priv = about->priv;
+
   switch_page (about, 0);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->credits_button), FALSE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->license_button), FALSE);
   gtk_widget_hide (GTK_WIDGET (about));
 }
 
