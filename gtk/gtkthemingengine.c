@@ -2662,12 +2662,14 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   GtkStateFlags flags;
   GdkRGBA *bg_color;
   GdkRGBA lighter, darker;
+  GtkJunctionSides sides;
   gint xx, yy;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
 
-  cairo_set_line_width (cr, 1);
+  cairo_set_line_width (cr, 1.0);
+  sides = gtk_theming_engine_get_junction_sides (engine);
 
   gtk_theming_engine_get (engine, flags,
                           "background-color", &bg_color,
@@ -2675,19 +2677,10 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   color_shade (bg_color, 0.7, &darker);
   color_shade (bg_color, 1.3, &lighter);
 
-  gdk_cairo_set_source_rgba (cr, bg_color);
-  cairo_rectangle (cr, x, y, width, height);
-  cairo_fill (cr);
+  render_background_internal (engine, cr, x, y, width, height, sides);
 
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
-      GtkJunctionSides sides;
-
-      cairo_save (cr);
-
-      cairo_set_line_width (cr, 1.0);
-      sides = gtk_theming_engine_get_junction_sides (engine);
-
       /* reduce confusing values to a meaningful state */
       if ((sides & (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT)) == (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT))
         sides &= ~GTK_JUNCTION_CORNER_TOPLEFT;
@@ -2932,8 +2925,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               yi += 3;
             }
         }
-
-      cairo_restore (cr);
     }
   else if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_PANE_SEPARATOR))
     {
