@@ -4277,14 +4277,16 @@ gtk_window_move (GtkWindow *window,
 /**
  * gtk_window_get_position:
  * @window: a #GtkWindow
- * @root_x: (out): return location for X coordinate of gravity-determined reference point
- * @root_y: (out): return location for Y coordinate of gravity-determined reference point
+ * @root_x: (out) (allow-none): eturn location for X coordinate of
+ *     gravity-determined reference point, or %NULL
+ * @root_y: (out) (allow-none): return location for Y coordinate of
+ *     gravity-determined reference point, or %NULL
  *
  * This function returns the position you need to pass to
- * gtk_window_move() to keep @window in its current position.  This
- * means that the meaning of the returned value varies with window
- * gravity. See gtk_window_move() for more details.
- * 
+ * gtk_window_move() to keep @window in its current position.
+ * This means that the meaning of the returned value varies with
+ * window gravity. See gtk_window_move() for more details.
+ *
  * If you haven't changed the window gravity, its gravity will be
  * #GDK_GRAVITY_NORTH_WEST. This means that gtk_window_get_position()
  * gets the position of the top-left corner of the window manager
