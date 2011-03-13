@@ -1141,9 +1141,11 @@ is_hyper (const gchar *string)
 
 /**
  * gtk_accelerator_parse:
- * @accelerator:      string representing an accelerator
- * @accelerator_key: (out):  return location for accelerator keyval
- * @accelerator_mods: (out): return location for accelerator modifier mask
+ * @accelerator: string representing an accelerator
+ * @accelerator_key: (out) (allow-none): return location for accelerator
+ *     keyval, or %NULL
+ * @accelerator_mods: (out) (allow-none): return location for accelerator
+ *     modifier mask, %NULL
  *
  * Parses a string representing an accelerator. The
  * format looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1" or
