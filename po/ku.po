@@ -4,12 +4,15 @@
 # Erdal Ronahi <erdal dot ronahi at gmail dot com>, 2008.
 # Erdal Ronahi <erdal dot ronahi at gmail dot com>, 2009
 # Erdal Ronahî <erdal dot ronahi at gmail dot com>, 2010.
+# Erdal Ronahî <erdal dot ronahi at gmail dot com>, 2011.
+# Erdal Ronahî <erdal dot ronahi at gmail dot com>, 2011.
+# Erdal Ronahî <erdal dot ronahi at gmail dot com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-23 13:45+0100\n"
-"PO-Revision-Date: 2010-12-23 14:13+0200\n"
+"PO-Revision-Date: 2011-03-13 21:51+0200\n"
 "Last-Translator: Erdal Ronahî <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: Kurdish Team http://pckurd.net\n"
 "Language: None\n"
@@ -38,7 +41,7 @@ msgstr ""
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:204
 msgid "CLASS"
-msgstr "Celeb"
+msgstr "POL"
 
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:206
@@ -81,10 +84,9 @@ msgid "GDK debugging flags to unset"
 msgstr "Nîşenekên neqandina çewtiyên GTK+ yên wê werine rakirin"
 
 #: ../gdk/keyname-table.h:3940
-#, fuzzy
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "_Guhestin"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
@@ -107,22 +109,19 @@ msgid "Scroll_Lock"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3945
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Pergala Pelan"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3946
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "Serpahnayê"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3947
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multipress"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
@@ -150,15 +149,14 @@ msgid "Down"
 msgstr "Berjêr"
 
 #: ../gdk/keyname-table.h:3953
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Mîhengên Rûpelê"
+msgstr "Rûpel berj_or"
 
 #: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr ""
+msgstr "Rûpel ber_jêr"
 
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
@@ -171,26 +169,24 @@ msgid "Begin"
 msgstr "Destpêk"
 
 #: ../gdk/keyname-table.h:3957
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Print"
-msgstr "Çap"
+msgstr "Çapkirin"
 
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr ""
+msgstr "Texistin"
 
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr ""
+msgstr "Num _lock"
 
 #: ../gdk/keyname-table.h:3960
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "_Guhestin"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
@@ -198,22 +194,19 @@ msgid "KP_Tab"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3962
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Çaper"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3963
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "_Mal"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3964
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "_Çep:"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
@@ -221,10 +214,9 @@ msgid "KP_Up"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3966
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "_Rast:"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
@@ -242,10 +234,9 @@ msgid "KP_Prior"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3970
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_Page_Down"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
@@ -268,10 +259,9 @@ msgid "KP_Insert"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "_Rake"
+msgstr ""
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
@@ -322,8 +312,8 @@ msgstr "%s tê vekirin"
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d hêman tê vekirin"
+msgstr[1] "%d hêman tên vekirin"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -337,7 +327,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:347
 msgid "License"
-msgstr "Peyman"
+msgstr "Lîsans"
 
 #: ../gtk/gtkaboutdialog.c:348
 msgid "The license of the program"
@@ -354,14 +344,12 @@ msgid "_License"
 msgstr "_Lîsans"
 
 #: ../gtk/gtkaboutdialog.c:958
-#, fuzzy
 msgid "Could not show link"
-msgstr "Lîste nehate paqijkirin"
+msgstr "Nekarî lînkê nîşan bide"
 
 #: ../gtk/gtkaboutdialog.c:995
-#, fuzzy
 msgid "Homepage"
-msgstr "Mal"
+msgstr "Malper"
 
 #: ../gtk/gtkaboutdialog.c:1049
 #, c-format
@@ -412,7 +400,7 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -455,9 +443,9 @@ msgid "Backslash"
 msgstr ""
 
 #: ../gtk/gtkbuilderparser.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "Fonksiyona nivîsandina nederbasdar: `%s'"
+msgstr "Fonksiyona nivîsandina nederbasdar di rêzika %d de: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:407
 #, c-format
@@ -621,9 +609,8 @@ msgid "_Saturation:"
 msgstr "_Têrkirin:"
 
 #: ../gtk/gtkcolorsel.c:452
-#, fuzzy
 msgid "Intensity of the color."
-msgstr "Zelaliya rengî."
+msgstr "Siftiya rengî."
 
 #: ../gtk/gtkcolorsel.c:453
 msgid "_Value:"
@@ -711,7 +698,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:1044
 msgid "The color you've chosen."
-msgstr ""
+msgstr "Rengê ku te hilbijart."
 
 #: ../gtk/gtkcolorsel.c:1444
 msgid "_Save color here"
@@ -803,15 +790,15 @@ msgstr "_Şifreya kontrola sembolê derbas bike"
 
 #: ../gtk/gtkentry.c:10227
 msgid "Caps Lock and Num Lock are on"
-msgstr ""
+msgstr "Caps lock û Num lock vekirî ne"
 
 #: ../gtk/gtkentry.c:10229
 msgid "Num Lock is on"
-msgstr ""
+msgstr "Num lock vekirî ye"
 
 #: ../gtk/gtkentry.c:10231
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Caps lock vekirî ye"
 
 #. **************** *
 #. *  Private Macros  *
@@ -865,6 +852,8 @@ msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
+"Dikarî tenê peldankan hilbijêrî.  Hêmana ku te hilbijart ne peldank e; "
+"hêmaneke din biceribîne."
 
 #: ../gtk/gtkfilechooserdefault.c:1016
 msgid "Invalid file name"
@@ -918,7 +907,7 @@ msgstr "Bijareya '%s' rake"
 #: ../gtk/gtkfilechooserdefault.c:2882
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr ""
+msgstr "Bijareya '%s' nayê rakirin"
 
 #: ../gtk/gtkfilechooserdefault.c:2889 ../gtk/gtkfilechooserdefault.c:3757
 msgid "Remove the selected bookmark"
@@ -968,7 +957,7 @@ msgstr "Pelên veşartî _nîşan bide"
 
 #: ../gtk/gtkfilechooserdefault.c:4087
 msgid "Show _Size Column"
-msgstr ""
+msgstr "Sitûna _mezinahiyê nîşan bide"
 
 #: ../gtk/gtkfilechooserdefault.c:4313
 msgid "Files"
@@ -1105,7 +1094,7 @@ msgstr "Rêç nederbasdar e"
 #.
 #: ../gtk/gtkfilechooserentry.c:1104
 msgid "No match"
-msgstr ""
+msgstr "Lihevhatin tune"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
@@ -1126,7 +1115,7 @@ msgstr ""
 #. * for possible completions for filenames in a file chooser entry.
 #: ../gtk/gtkfilechooserentry.c:1163
 msgid "Completing..."
-msgstr ""
+msgstr "Tê tewawkirin..."
 
 #. hostnames in a local_only file chooser?  user error
 #. Translators: this is shown in the feedback for Tab-completion in a
@@ -1134,7 +1123,7 @@ msgstr ""
 #. * "sftp://blahblah" in an app that only supports local filenames.
 #: ../gtk/gtkfilechooserentry.c:1185 ../gtk/gtkfilechooserentry.c:1210
 msgid "Only local files may be selected"
-msgstr ""
+msgstr "Tenê pelên herêmî werin hilbijartin"
 
 #. Another option is to complete the hostname based on the remote volumes that are mounted
 #. Translators: this is shown in the feedback for Tab-completion in a
@@ -1142,7 +1131,7 @@ msgstr ""
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: ../gtk/gtkfilechooserentry.c:1194
 msgid "Incomplete hostname; end it with '/'"
-msgstr ""
+msgstr "Navê mêvandarê ne temam e; bila dawiya wî '/' be"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
@@ -1305,7 +1294,7 @@ msgstr "default:LTR"
 #: ../gtk/gtkmain.c:851
 #, c-format
 msgid "Cannot open display: %s"
-msgstr ""
+msgstr "Dîmendêr nayê vekirin: %s"
 
 #: ../gtk/gtkmain.c:915
 msgid "GTK+ Options"
@@ -1321,11 +1310,11 @@ msgstr "_Girêdan"
 
 #: ../gtk/gtkmountoperation.c:558
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "_bênav girê bide"
 
 #: ../gtk/gtkmountoperation.c:567
 msgid "Connect as u_ser:"
-msgstr ""
+msgstr "Wekî bikar_hêner girê bide:"
 
 #: ../gtk/gtkmountoperation.c:605
 msgid "_Username:"
@@ -1333,7 +1322,7 @@ msgstr "_Navê bikarhêner:"
 
 #: ../gtk/gtkmountoperation.c:610
 msgid "_Domain:"
-msgstr ""
+msgstr "_Domain:"
 
 #: ../gtk/gtkmountoperation.c:616
 msgid "_Password:"
@@ -1341,7 +1330,7 @@ msgstr "Şî_fre:"
 
 #: ../gtk/gtkmountoperation.c:634
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "Şîfre heman _ji bîr bike"
 
 #: ../gtk/gtkmountoperation.c:644
 msgid "Remember password until you _logout"
@@ -1349,7 +1338,7 @@ msgstr "Heta _derketinê şîfreyê bi bîr bîne"
 
 #: ../gtk/gtkmountoperation.c:654
 msgid "Remember _forever"
-msgstr ""
+msgstr "Daîmî bi _bîr bîne"
 
 #: ../gtk/gtkmountoperation.c:883
 #, c-format
@@ -1358,16 +1347,16 @@ msgstr "Sepana nenas (PID %d)"
 
 #: ../gtk/gtkmountoperation.c:1066
 msgid "Unable to end process"
-msgstr ""
+msgstr "Nikarî dawiya pêvajoyê bîne"
 
 #: ../gtk/gtkmountoperation.c:1103
 msgid "_End Process"
-msgstr ""
+msgstr "_Dawiya pêvajoyê bîne"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr ""
+msgstr "Pêvajoya bi PID %d nayê kuştin. Operasiyon nayê bikaranîn."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:862
@@ -1375,26 +1364,25 @@ msgid "Terminal Pager"
 msgstr ""
 
 #: ../gtk/gtkmountoperation-x11.c:863
-#, fuzzy
 msgid "Top Command"
-msgstr "Rêzika Fermanê"
+msgstr "Fermana top"
 
 #: ../gtk/gtkmountoperation-x11.c:864
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Qalika Bourne Again"
 
 #: ../gtk/gtkmountoperation-x11.c:865
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Qalika Bourne"
 
 #: ../gtk/gtkmountoperation-x11.c:866
 msgid "Z Shell"
-msgstr ""
+msgstr "Qalika Z"
 
 #: ../gtk/gtkmountoperation-x11.c:963
 #, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr ""
+msgstr "Pêvajoya bi PID %d nayê bi dawî anîn: %s"
 
 #: ../gtk/gtknotebook.c:4910 ../gtk/gtknotebook.c:7567
 #, c-format
@@ -1407,16 +1395,12 @@ msgid "Not a valid page setup file"
 msgstr "Pelê sazkirina rûpelê yê nederbasdar"
 
 #: ../gtk/gtkpagesetupunixdialog.c:179
-#, fuzzy
 msgid "Any Printer"
-msgstr "Çaper"
+msgstr "Çaperê çawalêhato"
 
 #: ../gtk/gtkpagesetupunixdialog.c:179
-#, fuzzy
 msgid "For portable documents"
-msgstr ""
-"<b>Kîjan çaper be</b>\n"
-"Ji bo belgeyên guhêrbar"
+msgstr "Ji bo belgeyên tevgerdar"
 
 #: ../gtk/gtkpagesetupunixdialog.c:809
 #, c-format
@@ -1466,18 +1450,16 @@ msgid "File System Root"
 msgstr "Koka Pergala Pelan"
 
 #: ../gtk/gtkprintbackend.c:749
-#, fuzzy
 msgid "Authentication"
-msgstr "Sepan"
+msgstr "Erêkirin"
 
 #: ../gtk/gtkprinteroptionwidget.c:686
 msgid "Not available"
 msgstr "Ne amade ye"
 
 #: ../gtk/gtkprinteroptionwidget.c:786
-#, fuzzy
 msgid "Select a folder"
-msgstr "Pelekî Hilbijêre"
+msgstr "Peldankekê hilbijêre"
 
 #: ../gtk/gtkprinteroptionwidget.c:805
 msgid "_Save in folder:"
@@ -1495,23 +1477,22 @@ msgstr "Xebata %s a #%d"
 #: ../gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
-msgstr ""
+msgstr "Rewşa destpêkê"
 
 #: ../gtk/gtkprintoperation.c:1696
-#, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "%d tê amadekirin"
+msgstr "Ji bo çapkirinê tê amadekirin"
 
 #: ../gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
-msgstr ""
+msgstr "Danê tê afirandin"
 
 #: ../gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr ""
+msgstr "Dane tê şandin"
 
 #: ../gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
@@ -1529,13 +1510,11 @@ msgid "Printing"
 msgstr "Tê çapkirin"
 
 #: ../gtk/gtkprintoperation.c:1702
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
-msgstr "Bidawîkirin"
+msgstr "Bi dawî bû"
 
 #: ../gtk/gtkprintoperation.c:1703
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Qediya lê çewtiyek derket"
@@ -1555,9 +1534,8 @@ msgid "Printing %d"
 msgstr "%d tê çapkirin"
 
 #: ../gtk/gtkprintoperation.c:2932
-#, fuzzy
 msgid "Error creating print preview"
-msgstr "Çewtî di dema destpêkirinê"
+msgstr "Di afirandina pêşdîtina çapkirinê de çewtî"
 
 #: ../gtk/gtkprintoperation.c:2935
 msgid "The most probable reason is that a temporary file could not be created."
@@ -1881,6 +1859,8 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
+"Dema çapkirin diyar bike, \n"
+"mînak 15:30, 2:35, 14:15:20, 11:46:30, 4"
 
 #: ../gtk/gtkprintunixdialog.c:3626
 msgid "Time of print"
@@ -2054,13 +2034,12 @@ msgstr "Hêmaneke ku bi URIya '%s' têkildar e nehate dîtin"
 #: ../gtk/gtkrecentmanager.c:2437
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr ""
+msgstr "Sepana qeydbuyî bi navê '%s' ji bo hêmana bi URI '%s' nehate dîtin"
 
 #: ../gtk/gtkspinner.c:326
-#, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Super"
+msgstr ""
 
 #: ../gtk/gtkspinner.c:327
 msgid "Provides visual indication of progress"
@@ -2121,10 +2100,9 @@ msgid "_CD-ROM"
 msgstr "_CD-ROM"
 
 #: ../gtk/gtkstock.c:327
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
-msgstr "_Jê bibe"
+msgstr "_Pakijkirin"
 
 #: ../gtk/gtkstock.c:328
 msgctxt "Stock label"
@@ -2270,16 +2248,14 @@ msgid "_Home"
 msgstr "_Mal"
 
 #: ../gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Çalikê mezintir bike"
 
 #: ../gtk/gtkstock.c:364
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
-msgstr "Bialîkirinê kêmtir bike"
+msgstr "Çalikê kêmtir bike"
 
 #: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
@@ -2297,23 +2273,21 @@ msgid "_Italic"
 msgstr "_Paldayî"
 
 #: ../gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr "_Qevastin"
+msgstr "_Qevastin li"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "_Veguherîne"
+msgstr "_Navîn"
 
 #. This is about text justification
 #: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr ""
+msgstr "_Tijîkirin"
 
 #. This is about text justification, "left-justified text"
 #: ../gtk/gtkstock.c:374
@@ -2335,7 +2309,6 @@ msgstr "_Pêş"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Ya dû"
@@ -2596,11 +2569,11 @@ msgstr "○"
 #: ../gtk/gtkswitch.c:943
 msgctxt "light switch widget"
 msgid "Switch"
-msgstr ""
+msgstr "Şalter"
 
 #: ../gtk/gtkswitch.c:944
 msgid "Switches between on and off states"
-msgstr ""
+msgstr "Nava rewşên vekirî û girtî tê û dice"
 
 #: ../gtk/gtktextbufferrichtext.c:650
 #, c-format
@@ -2787,11 +2760,11 @@ msgstr "Deng"
 
 #: ../gtk/gtkvolumebutton.c:172
 msgid "Turns volume down or up"
-msgstr ""
+msgstr "Dengî kêm an zêde dike"
 
 #: ../gtk/gtkvolumebutton.c:175
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "Dengî eyar dike"
 
 #: ../gtk/gtkvolumebutton.c:181 ../gtk/gtkvolumebutton.c:184
 msgid "Volume Down"
@@ -2799,7 +2772,7 @@ msgstr "Kêmtir Deng"
 
 #: ../gtk/gtkvolumebutton.c:183
 msgid "Decreases the volume"
-msgstr ""
+msgstr "Dengî kêmtir dike"
 
 #: ../gtk/gtkvolumebutton.c:187 ../gtk/gtkvolumebutton.c:190
 msgid "Volume Up"
@@ -2807,7 +2780,7 @@ msgstr "Zêdetir Deng"
 
 #: ../gtk/gtkvolumebutton.c:189
 msgid "Increases the volume"
-msgstr ""
+msgstr "Denkî zêdetir dike"
 
 #: ../gtk/gtkvolumebutton.c:247
 msgid "Muted"
@@ -2829,10 +2802,9 @@ msgid "%d %%"
 msgstr ""
 
 #: ../gtk/paper_names_offsets.c:4
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "Nav"
+msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
@@ -3137,7 +3109,7 @@ msgstr "C9"
 #: ../gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "DL Envelope"
-msgstr ""
+msgstr "Zarfa DL"
 
 #: ../gtk/paper_names_offsets.c:66
 msgctxt "paper size"
@@ -3227,55 +3199,47 @@ msgstr "JB9"
 #: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #: ../gtk/paper_names_offsets.c:84
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
-msgstr "Choukei 2 Envelope"
+msgstr "Zarfa Choukei 2"
 
 #: ../gtk/paper_names_offsets.c:85
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
-msgstr "Choukei 3 Envelope"
+msgstr "Zarfa Choukei 3"
 
 #: ../gtk/paper_names_offsets.c:86
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
-msgstr "Choukei 4 Envelope"
+msgstr "Zarfa Choukei 4"
 
 #: ../gtk/paper_names_offsets.c:87
-#, fuzzy
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr "hagaki (postcard)"
+msgstr "hagaki (kartpostal)"
 
 #: ../gtk/paper_names_offsets.c:88
-#, fuzzy
 msgctxt "paper size"
 msgid "kahu Envelope"
-msgstr "kahu Envelope"
+msgstr "Zarfa kahu"
 
 #: ../gtk/paper_names_offsets.c:89
-#, fuzzy
 msgctxt "paper size"
 msgid "kaku2 Envelope"
-msgstr "kaku2 Envelope"
+msgstr "Zarfa kahu2"
 
 #: ../gtk/paper_names_offsets.c:90
-#, fuzzy
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr "oufuku (reply postcard)"
+msgstr "oufuku (kartpostala bersivê)"
 
 #: ../gtk/paper_names_offsets.c:91
-#, fuzzy
 msgctxt "paper size"
 msgid "you4 Envelope"
-msgstr "you4 Envelope"
+msgstr "Zarfa you4"
 
 #: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
@@ -3318,165 +3282,149 @@ msgid "5x7"
 msgstr "5x7"
 
 #: ../gtk/paper_names_offsets.c:101
-#, fuzzy
 msgctxt "paper size"
 msgid "6x9 Envelope"
-msgstr "6x9 Envelope"
+msgstr "Zarfa 6x9"
 
 #: ../gtk/paper_names_offsets.c:102
-#, fuzzy
 msgctxt "paper size"
 msgid "7x9 Envelope"
-msgstr "7x9 Envelope"
+msgstr "Zarfa 7x9"
 
 #: ../gtk/paper_names_offsets.c:103
-#, fuzzy
 msgctxt "paper size"
 msgid "9x11 Envelope"
-msgstr "9x11 Envelope"
+msgstr "Zarfa 9x11"
 
 #: ../gtk/paper_names_offsets.c:104
-#, fuzzy
 msgctxt "paper size"
 msgid "a2 Envelope"
-msgstr "a2 Envelope"
+msgstr "Zarfa a2"
 
 #: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #: ../gtk/paper_names_offsets.c:112
-#, fuzzy
 msgctxt "paper size"
 msgid "c5 Envelope"
-msgstr "c5 Envelope"
+msgstr "Zarfa c5"
 
 #: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: ../gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
-msgstr ""
+msgstr "e"
 
 #: ../gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
-msgstr ""
+msgstr "edp"
 
 #: ../gtk/paper_names_offsets.c:116
-#, fuzzy
 msgctxt "paper size"
 msgid "European edp"
 msgstr "edp ya ewropî"
 
 #: ../gtk/paper_names_offsets.c:117
-#, fuzzy
 msgctxt "paper size"
 msgid "Executive"
-msgstr "Bisepîne"
+msgstr "Executive"
 
 #: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: ../gtk/paper_names_offsets.c:119
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold European"
-msgstr "FanFold European"
+msgstr "FanFold ya ewropî"
 
 #: ../gtk/paper_names_offsets.c:120
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold US"
-msgstr "FanFold US"
+msgstr "FanFold ya DYA"
 
 #: ../gtk/paper_names_offsets.c:121
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold German Legal"
-msgstr "FanFold German Legal"
+msgstr "FanFold Legal a alman"
 
 #: ../gtk/paper_names_offsets.c:122
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Government Legal"
 
 #: ../gtk/paper_names_offsets.c:123
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Government Letter"
 
 #: ../gtk/paper_names_offsets.c:124
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "_Pêrist"
+msgstr "Index 3x5"
 
 #: ../gtk/paper_names_offsets.c:125
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (kart)"
+msgstr "Index 4x6 (kartpostal)"
 
 #: ../gtk/paper_names_offsets.c:126
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 ext"
 msgstr "Index 4x6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "_Pêrist"
+msgstr "Index 5x8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "Fatura"
 
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
@@ -3484,7 +3432,6 @@ msgid "US Legal"
 msgstr "US Legal"
 
 #: ../gtk/paper_names_offsets.c:131
-#, fuzzy
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "US Legal Extra"
@@ -3495,113 +3442,96 @@ msgid "US Letter"
 msgstr "US Letter"
 
 #: ../gtk/paper_names_offsets.c:133
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "US Letter Extra"
 
 #: ../gtk/paper_names_offsets.c:134
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "US Letter Plus"
 
 #: ../gtk/paper_names_offsets.c:135
-#, fuzzy
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Monarch Envelope"
 
 #: ../gtk/paper_names_offsets.c:136
-#, fuzzy
 msgctxt "paper size"
 msgid "#10 Envelope"
-msgstr "#10 Envelope"
+msgstr "Zarfa #10"
 
 #: ../gtk/paper_names_offsets.c:137
-#, fuzzy
 msgctxt "paper size"
 msgid "#11 Envelope"
-msgstr "#11 Envelope"
+msgstr "Zarfa #11"
 
 #: ../gtk/paper_names_offsets.c:138
-#, fuzzy
 msgctxt "paper size"
 msgid "#12 Envelope"
-msgstr "#12 Envelope"
+msgstr "Zarfa #12"
 
 #: ../gtk/paper_names_offsets.c:139
-#, fuzzy
 msgctxt "paper size"
 msgid "#14 Envelope"
-msgstr "#14 Envelope"
+msgstr "Zarfa #14"
 
 #: ../gtk/paper_names_offsets.c:140
-#, fuzzy
 msgctxt "paper size"
 msgid "#9 Envelope"
-msgstr "#9 Envelope"
+msgstr "Zarfa #9"
 
 #: ../gtk/paper_names_offsets.c:141
-#, fuzzy
 msgctxt "paper size"
 msgid "Personal Envelope"
-msgstr "Personal Envelope"
+msgstr "Zarfa Personal"
 
 #: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #: ../gtk/paper_names_offsets.c:143
-#, fuzzy
 msgctxt "paper size"
 msgid "Super A"
-msgstr "Kaxiz"
+msgstr "Super A"
 
 #: ../gtk/paper_names_offsets.c:144
-#, fuzzy
 msgctxt "paper size"
 msgid "Super B"
-msgstr "Kaxiz"
+msgstr "Super B"
 
 #: ../gtk/paper_names_offsets.c:145
-#, fuzzy
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Teşeya fireh"
 
 #: ../gtk/paper_names_offsets.c:146
-#, fuzzy
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #: ../gtk/paper_names_offsets.c:147
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio"
-msgstr "Reng"
+msgstr "Folio"
 
 #: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #: ../gtk/paper_names_offsets.c:149
-#, fuzzy
 msgctxt "paper size"
 msgid "Invite Envelope"
-msgstr "Invite Envelope"
+msgstr "Zarfa Invite"
 
 #: ../gtk/paper_names_offsets.c:150
-#, fuzzy
 msgctxt "paper size"
 msgid "Italian Envelope"
-msgstr "Italian Envelope"
+msgstr "Zarfa îtalî"
 
 #: ../gtk/paper_names_offsets.c:151
-#, fuzzy
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
@@ -3609,99 +3539,87 @@ msgstr "juuro-ku-kai"
 #: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #: ../gtk/paper_names_offsets.c:153
-#, fuzzy
 msgctxt "paper size"
 msgid "Postfix Envelope"
-msgstr "Postfix Envelope"
+msgstr "Zarfa Postfix"
 
 #: ../gtk/paper_names_offsets.c:154
-#, fuzzy
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Small Photo"
 
 #: ../gtk/paper_names_offsets.c:155
-#, fuzzy
 msgctxt "paper size"
 msgid "prc1 Envelope"
-msgstr "prc1 Envelope"
+msgstr "Zarfa prc1"
 
 #: ../gtk/paper_names_offsets.c:156
-#, fuzzy
 msgctxt "paper size"
 msgid "prc10 Envelope"
-msgstr "prc10 Envelope"
+msgstr "Zarfa prc10"
 
 #: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #: ../gtk/paper_names_offsets.c:158
-#, fuzzy
 msgctxt "paper size"
 msgid "prc2 Envelope"
-msgstr "prc2 Envelope"
+msgstr "Zarfa prc2"
 
 #: ../gtk/paper_names_offsets.c:159
-#, fuzzy
 msgctxt "paper size"
 msgid "prc3 Envelope"
-msgstr "prc3 Envelope"
+msgstr "Zarfa prc3"
 
 #: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #: ../gtk/paper_names_offsets.c:161
-#, fuzzy
 msgctxt "paper size"
 msgid "prc4 Envelope"
-msgstr "prc4 Envelope"
+msgstr "Zarfa prc4"
 
 #: ../gtk/paper_names_offsets.c:162
-#, fuzzy
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "c5 Envelope"
+msgstr "Zarfa prc5"
 
 #: ../gtk/paper_names_offsets.c:163
-#, fuzzy
 msgctxt "paper size"
 msgid "prc6 Envelope"
-msgstr "Enveloppe prc6"
+msgstr "Zarfa prc6"
 
 #: ../gtk/paper_names_offsets.c:164
-#, fuzzy
 msgctxt "paper size"
 msgid "prc7 Envelope"
-msgstr "prc7 Envelope"
+msgstr "Zarfa prc7"
 
 #: ../gtk/paper_names_offsets.c:165
-#, fuzzy
 msgctxt "paper size"
 msgid "prc8 Envelope"
-msgstr "prc8 Envelope"
+msgstr "Zarfa prc8"
 
 #: ../gtk/paper_names_offsets.c:166
-#, fuzzy
 msgctxt "paper size"
 msgid "prc9 Envelope"
-msgstr "prc1 Envelope"
+msgstr "Zarfa prc9"
 
 #: ../gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #: ../gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
@@ -3729,9 +3647,9 @@ msgid "Failed to rewrite header\n"
 msgstr "Ji nû nivisîna sernivîsê biserneket\n"
 
 #: ../gtk/updateiconcache.c:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Vekirina pelê '%s' biserneket: %s"
+msgstr "Vekirina pelê %s biserneket: %s\n"
 
 #: ../gtk/updateiconcache.c:1496 ../gtk/updateiconcache.c:1526
 #, c-format
@@ -3800,7 +3718,7 @@ msgstr "Pêşbîra îkonan a nederbasdar: %s\n"
 #: ../gtk/updateiconcache.c:1732
 #, c-format
 msgid "No theme index file.\n"
-msgstr ""
+msgstr "Pelê endeksa dirbê tune.\n"
 
 #: ../gtk/updateiconcache.c:1736
 #, c-format
@@ -3869,93 +3787,90 @@ msgstr "Metoda Ketana X"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:810
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1020
-#, fuzzy
 msgid "Username:"
-msgstr "_Navê bikarhêneê"
+msgstr "Navê bikarhêner:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:811
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1029
-#, fuzzy
 msgid "Password:"
-msgstr "Şî_fre:"
+msgstr "Şîfre:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:850
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
+msgstr "Ji bo çapkirina belgeya '%s' di çapera %s de erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:852
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "Ji bo çapkirina belgeyekê di %s de erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr ""
+msgstr "Ji bo standina taybetmendiyen peywira '%s' erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:858
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "Ji bo standina taybetmendiyen peywirekê erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:862
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "Ji bo standina taybetmendiyen çapera '%s' erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:864
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "Ji bo standina taybetmendiyen çaperekê erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:867
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "Ji bo standina çapera standard a '%s' erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:870
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "Ji bo standina çaperan ji '%s' erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:875
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "Ji bo standina pelekî ji %s erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:877
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "Di %s de erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1014
-#, fuzzy
 msgid "Domain:"
-msgstr "_Cih:"
+msgstr "Domain:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr ""
+msgstr "Ji bo çapkirina belgeya '%s' erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr ""
+msgstr "Ji bo çapkirina vê belgeyê di çapera %s de erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
-msgstr ""
+msgstr "Ji bo çapkirina vê belgeyê erêkirin pêwist e"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "Di çapera '%s' de boyax hindik e."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "Di çapera '%s' de boyax êdî nema."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
@@ -3984,42 +3899,42 @@ msgstr ""
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr ""
+msgstr "Devê çapera '%s' vekirî ye."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr ""
+msgstr "Dêriya çapera '%s' vekirî ye."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr ""
+msgstr "Di çapera '%s' de kaxiz hindik e."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "Di çapera '%s' de kaxiz êdî nema."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently offline."
-msgstr "Çaper ne girêdayî ye"
+msgstr "Çapera '%s' niha ne girêdayî ye."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr ""
+msgstr "Di çapera '%s' de pirsgirêk heye."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
-msgstr ""
+msgstr "Sekinî ; Peywiran napejirîne"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "Peywiran napejirîne"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
@@ -4038,13 +3953,12 @@ msgid "Output Tray"
 msgstr "Tepsiya derketanê"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2781
-#, fuzzy
 msgid "Resolution"
-msgstr "Pirs"
+msgstr "Rêjeşane"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
-msgstr ""
+msgstr "Pêşparzûnkirina GhostScript"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
@@ -4053,12 +3967,12 @@ msgstr "Yek alî"
 #. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
-msgstr ""
+msgstr "Keleka dirêj (standard)"
 
 #. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
-msgstr ""
+msgstr "Keleka kin (flip)"
 
 #. Translators: this is an option of "Paper Source"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2797
@@ -4085,24 +3999,23 @@ msgstr ""
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
-msgstr ""
+msgstr "Veguherîne li PS asta 1"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
-msgstr ""
+msgstr "Veguherîne li PS asta 2"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
-#, fuzzy
 msgid "No pre-filtering"
-msgstr "Hêman nehatine dîtin"
+msgstr "Pêşparzûnkirin tune"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Curbecur"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
@@ -4128,25 +4041,22 @@ msgstr "Nizim"
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
-#, fuzzy
 msgid "Pages per Sheet"
-msgstr "Serê Kaxiz Rûpelek"
+msgstr "Serê kaxiz rûpel"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
-#, fuzzy
 msgid "Job Priority"
-msgstr "Pê_şikî:"
+msgstr "Girîngiya peywirê"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3601
-#, fuzzy
 msgid "Billing Info"
-msgstr "_Agahiyên fatorê:"
+msgstr "Agahiyên fatorê:"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -4198,26 +4108,24 @@ msgstr "Piştî"
 #. * or 'on hold'
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
-#, fuzzy
 msgid "Print at"
-msgstr "Çap"
+msgstr "Çap bike li"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3697
-#, fuzzy
 msgid "Print at time"
-msgstr "Li ser pelê (file) çap bike"
+msgstr "Di demê de çap bike"
 
 #. Translators: this format is used to display a custom paper
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3732
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "Taybet %.2fx%.2f"
+msgstr "Taybet %sx%s"
 
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:250
@@ -4279,7 +4187,7 @@ msgstr "ji bo çapkirinê amade"
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
-msgstr ""
+msgstr "peywir tê pêkanîn"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:836
