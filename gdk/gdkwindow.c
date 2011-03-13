@@ -2301,8 +2301,8 @@ gdk_window_has_native (GdkWindow *window)
 /**
  * gdk_window_get_position:
  * @window: a #GdkWindow
- * @x: X coordinate of window
- * @y: Y coordinate of window
+ * @x: (out) (allow-none): X coordinate of window
+ * @y: (out) (allow-none): Y coordinate of window
  *
  * Obtains the position of the window as reported in the
  * most-recently-processed #GdkEventConfigure. Contrast with

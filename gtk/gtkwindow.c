@@ -4230,8 +4230,8 @@ gtk_window_move (GtkWindow *window,
 /**
  * gtk_window_get_position:
  * @window: a #GtkWindow
- * @root_x: return location for X coordinate of gravity-determined reference point
- * @root_y: return location for Y coordinate of gravity-determined reference point
+ * @root_x: (out) (allow-none): return location for X coordinate of gravity-determined reference point
+ * @root_y: (out) (allow-none): return location for Y coordinate of gravity-determined reference point
  *
  * This function returns the position you need to pass to
  * gtk_window_move() to keep @window in its current position.  This
