@@ -99,7 +99,7 @@ function initContext(canvas, x, y, id)
   canvas.style["top"] = y + "px";
   canvas.style["display"] = "none";
   var context = canvas.getContext("2d");
-  context.globalCompositeOperation = "src-over";
+  context.globalCompositeOperation = "source-over";
   document.body.appendChild(canvas);
 
   return context;
@@ -236,6 +236,7 @@ function handleCommands(cmd_obj)
 	i = i + size;
         var img = new Image();
 	img.src = url;
+	surfaces[id].globalCompositeOperation = "source-over";
 	if (img.complete) {
           surfaces[id].drawImage(img, x, y);
 	} else {
@@ -296,6 +297,7 @@ function handleCommands(cmd_obj)
         var dy = base64_16s(cmd, i);
         i = i + 3;
 
+	context.globalCompositeOperation = "copy";
         context.drawImage(context.canvas,
 			  minx - dx, miny - dy, maxx - minx, maxy - miny,
 			  minx, miny, maxx - minx, maxy - miny);
