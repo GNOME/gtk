@@ -1960,6 +1960,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
   gboolean switch_page = FALSE;
   gint vis_pages;
   gint focus_width;
+  gint focus_pad;
   gint tab_overlap;
   gint tab_curvature;
   gint arrow_spacing;
@@ -1969,6 +1970,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
+                        "focus-padding", &focus_pad,
                         "tab-overlap", &tab_overlap,
                         "tab-curvature", &tab_curvature,
                         "arrow-spacing", &arrow_spacing,
@@ -2061,24 +2063,22 @@ gtk_notebook_size_request (GtkWidget      *widget,
                   gtk_style_context_restore (context);
 
                   page->requisition.width = child_requisition.width +
-                    tab_padding.left + tab_padding.right;
+                    tab_padding.left + tab_padding.right + 2 * (focus_width + focus_pad);
 
                   page->requisition.height = child_requisition.height +
-                    tab_padding.top + tab_padding.bottom;
+                    tab_padding.top + tab_padding.bottom + 2 * (focus_width + focus_pad);
 
                   switch (priv->tab_pos)
                     {
                     case GTK_POS_TOP:
                     case GTK_POS_BOTTOM:
-                      page->requisition.height += 2 * (priv->tab_vborder +
-                                                       focus_width);
+                      page->requisition.height += 2 * priv->tab_vborder;
                       tab_height = MAX (tab_height, page->requisition.height);
                       tab_max = MAX (tab_max, page->requisition.width);
                       break;
                     case GTK_POS_LEFT:
                     case GTK_POS_RIGHT:
-                      page->requisition.width += 2 * (priv->tab_hborder +
-                                                      focus_width);
+                      page->requisition.width += 2 * priv->tab_hborder;
                       tab_width = MAX (tab_width, page->requisition.width);
                       tab_max = MAX (tab_max, page->requisition.height);
                       break;
@@ -2117,8 +2117,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
                   tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_START].height);
                   tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_END].height);
 
-                  padding = 2 * (tab_curvature + focus_width +
-                                 priv->tab_hborder) - tab_overlap;
+                  padding = 2 * (tab_curvature + priv->tab_hborder) - tab_overlap;
                   tab_max += padding;
                   while (children)
                     {
@@ -2166,8 +2165,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
                   tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_START].width);
                   tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_END].width);
 
-                  padding = 2 * (tab_curvature + focus_width +
-                                 priv->tab_vborder) - tab_overlap;
+                  padding = 2 * (tab_curvature + priv->tab_vborder) - tab_overlap;
                   tab_max += padding;
 
                   while (children)
@@ -5180,17 +5178,18 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   if (gtk_widget_has_focus (widget) &&
       priv->cur_page == page)
     {
-      gint focus_width;
+      gint focus_width, focus_pad;
       GtkAllocation allocation;
 
       gtk_widget_get_allocation (page->tab_label, &allocation);
       gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
+      gtk_widget_style_get (widget, "focus-padding", &focus_pad, NULL);
 
       gtk_render_focus (context, cr,
-                        allocation.x - focus_width,
-                        allocation.y - focus_width,
-                        allocation.width + 2 * focus_width,
-                        allocation.height + 2 * focus_width);
+                        allocation.x - focus_width - focus_pad,
+                        allocation.y - focus_width - focus_pad,
+                        allocation.width + 2 * (focus_width + focus_pad),
+                        allocation.height + 2 * (focus_width + focus_pad));
     }
 
   gtk_style_context_restore (context);
@@ -6074,7 +6073,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   GtkRequisition tab_requisition;
   GtkStyleContext *context;
   gint padding;
-  gint focus_width;
+  gint focus_width, focus_padding;
   gint tab_curvature, tab_overlap;
   gint tab_pos = get_effective_tab_pos (notebook);
   gboolean tab_allocation_changed;
@@ -6100,6 +6099,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   gtk_widget_get_preferred_size (page->tab_label, &tab_requisition, NULL);
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
+                        "focus-padding", &focus_padding,
                         "tab-curvature", &tab_curvature,
                         "tab-overlap", &tab_overlap,
                         NULL);
@@ -6107,7 +6107,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
     {
     case GTK_POS_TOP:
     case GTK_POS_BOTTOM:
-      padding = tab_curvature + focus_width + priv->tab_hborder;
+      padding = tab_curvature + priv->tab_hborder + focus_width + focus_padding;
       if (page->fill)
         {
           child_allocation.x = tab_padding.left + padding;
@@ -6145,18 +6145,18 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
           child_allocation.width = tab_requisition.width;
         }
 
-      child_allocation.y = priv->tab_vborder + focus_width + page->allocation.y;
+      child_allocation.y = priv->tab_vborder + page->allocation.y;
 
       if (tab_pos == GTK_POS_TOP)
-        child_allocation.y += tab_padding.top;
+        child_allocation.y += tab_padding.top + focus_width + focus_padding;
 
       child_allocation.height = MAX (1, (page->allocation.height -
                                          tab_padding.top - tab_padding.bottom -
-                                         2 * (priv->tab_vborder + focus_width)));
+                                         2 * (priv->tab_vborder + focus_width + focus_padding)));
       break;
     case GTK_POS_LEFT:
     case GTK_POS_RIGHT:
-      padding = tab_curvature + focus_width + priv->tab_vborder;
+      padding = tab_curvature + priv->tab_vborder + focus_width + focus_padding;
       if (page->fill)
         {
           child_allocation.y = tab_padding.top + padding;
@@ -6189,13 +6189,13 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
           child_allocation.height = tab_requisition.height;
         }
 
-      child_allocation.x = priv->tab_hborder + focus_width + page->allocation.x;
+      child_allocation.x = priv->tab_hborder + page->allocation.x;
 
       if (tab_pos == GTK_POS_LEFT)
-        child_allocation.x += tab_padding.left;
+        child_allocation.x += tab_padding.left + focus_width + focus_padding;
 
       child_allocation.width = MAX (1, (page->allocation.width - tab_padding.right -
-                                        2 * (priv->tab_hborder + focus_width)));
+                                        2 * (priv->tab_hborder + focus_width + focus_padding)));
       break;
     }
 
