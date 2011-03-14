@@ -127,7 +127,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   GdkScreen *screen;
   GdkWindow *root, *window;
   char *p;
-  int button, dir, key, detail;
+  int button, dir, key, mode;
   guint32 serial;
   guint64 time;
   GdkEvent *event = NULL;
@@ -146,7 +146,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'e': /* Enter */
     p = parse_pointer_data (p, &data);
     p++; /* Skip , */
-    detail = strtol(p, &p, 10);
+    mode = strtol(p, &p, 10);
 
     display_broadway->last_x = data.root_x;
     display_broadway->last_y = data.root_y;
@@ -166,7 +166,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->crossing.x_root = data.root_x;
 	event->crossing.y_root = data.root_y;
 	event->crossing.state = data.state;
-	event->crossing.mode = detail;
+	event->crossing.mode = mode;
 	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
 	gdk_event_set_device (event, display->core_pointer);
 
@@ -185,7 +185,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'l': /* Leave */
     p = parse_pointer_data (p, &data);
     p++; /* Skip , */
-    detail = strtol(p, &p, 10);
+    mode = strtol(p, &p, 10);
 
     display_broadway->last_x = data.root_x;
     display_broadway->last_y = data.root_y;
@@ -204,8 +204,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->crossing.x_root = data.root_x;
 	event->crossing.y_root = data.root_y;
 	event->crossing.state = data.state;
-	event->crossing.mode = GDK_CROSSING_NORMAL;
-	event->crossing.detail = detail;
+	event->crossing.mode = mode;
+	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
