@@ -679,6 +679,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
   GError *error;
+  int port;
 
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
@@ -706,9 +707,18 @@ _gdk_broadway_display_open (const gchar *display_name)
 
   _gdk_broadway_screen_setup (broadway_display->screens[0]);
 
+  if (display_name == NULL)
+    display_name = g_getenv ("BROADWAY_DISPLAY");
+
+  port = 0;
+  if (display_name != NULL)
+    port = strtol(display_name, NULL, 10);
+  if (port == 0)
+    port = 8080;
+
   broadway_display->service = g_socket_service_new ();
   if (!g_socket_listener_add_inet_port (G_SOCKET_LISTENER (broadway_display->service),
-					8080,
+					port,
 					G_OBJECT (display),
 					&error))
     {
