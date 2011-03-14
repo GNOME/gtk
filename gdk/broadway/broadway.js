@@ -76,9 +76,15 @@ function createXHR()
   return null;
 }
 
+var grab = new Object();
+grab.window = null;
+grab.owner_events = false;
+grab.time = 0;
+grab.implicit = false;
 var last_serial = 0;
 var last_x = 0;
 var last_y = 0;
+var real_window_with_mouse = 0;
 var window_with_mouse = 0;
 var surfaces = {};
 var outstanding_commands = new Array();
@@ -98,6 +104,14 @@ function initContext(canvas, x, y, id)
 
   return context;
 }
+
+var GDK_GRAB_SUCCESS = 0;
+var GDK_GRAB_ALREADY_GRABBED = 1;
+var GDK_GRAB_INVALID_TIME = 2;
+
+var GDK_CROSSING_NORMAL = 0;
+var GDK_CROSSING_GRAB = 1;
+var GDK_CROSSING_UNGRAB = 2;
 
 function handleCommands(cmd_obj)
 {
@@ -265,6 +279,40 @@ function handleCommands(cmd_obj)
 	send_input ("q", [pos.root_x, pos.root_y, pos.win_x, pos.win_x, window_with_mouse]);
 	break;
 
+      case 'g': // Grab
+        var id = base64_16(cmd, i);
+        i = i + 3;
+	var owner_events = cmd[i++] == '1';
+	var time = base64_32(cmd, i);
+	i = i + 6;
+
+	if (grab.window != null) {
+	    /* Previous grab, compare times */
+	    if (time != 0 && grab.time != 0 &&
+		time > grab.time) {
+		send_input ("g", [GDK_GRAB_INVALID_TIME]);
+		break;
+	    }
+	}
+
+	doGrab(id, owner_events, time, false);
+
+	send_input ("g", [GDK_GRAB_SUCCESS]);
+
+	break;
+
+      case 'u': // Ungrab
+	var time = base64_32(cmd, i);
+	i = i + 6;
+	send_input ("u", []);
+
+	if (grab.window != null) {
+	    if (grab.time == 0 || time == 0 ||
+		grab.time < time)
+		grab.window = null;
+	}
+
+	break;
       default:
         alert("Unknown op " + command);
     }
@@ -349,41 +397,99 @@ function getPositionsFromEvent(ev, relativeId) {
     return res;
 }
 
+function getEffectiveEventTarget (id) {
+    if (grab.window != null) {
+	if (!grab.owner_events)
+	    return grab.window;
+	if (id == 0)
+	    return grab.window;
+    }
+    return id;
+}
+
 function on_mouse_move (ev) {
     var id = get_surface_id(ev);
+    id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
     send_input ("m", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp]);
 }
 
 function on_mouse_over (ev) {
     var id = get_surface_id(ev);
+    real_window_with_mouse = id;
+    id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
     window_with_mouse = id;
     if (window_with_mouse != 0) {
-	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp]);
+	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_NORMAL]);
     }
 }
 
 function on_mouse_out (ev) {
     var id = get_surface_id(ev);
+    var origId = id;
+    id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
 
     if (id != 0) {
-	send_input ("l", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp]);
+	send_input ("l", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_NORMAL]);
     }
+    real_window_with_mouse = 0;
     window_with_mouse = 0;
+}
+
+function doGrab(id, owner_events, time, implicit) {
+    var pos;
+
+    if (window_with_mouse != id) {
+	if (window_with_mouse != 0) {
+	    pos = getPositionsFromAbsCoord(last_x, last_y, window_with_mouse);
+	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_GRAB]);
+	}
+	pos = getPositionsFromAbsCoord(last_x, last_y, id);
+	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_GRAB]);
+	window_with_mouse = id;
+    }
+
+    grab.window = id;
+    grab.owner_events = owner_events;
+    grab.time = time;
+    grab.implicit = implicit;
+}
+
+function doUngrab() {
+    var pos;
+    if (real_window_with_mouse != window_with_mouse) {
+	if (window_with_mouse != 0) {
+	    pos = getPositionsFromAbsCoord(last_x, last_y, window_with_mouse);
+	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_UNGRAB]);
+	}
+	if (real_window_with_mouse != 0) {
+	    pos = getPositionsFromAbsCoord(last_x, last_y, id);
+	    send_input ("e", [real_window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_UNGRAB]);
+	}
+	window_with_mouse = real_window_with_mouse;
+    }
+    grab.window = null;
 }
 
 function on_mouse_down (ev) {
     var id = get_surface_id(ev);
+    id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
+    if (grab.window != null)
+	doGrab (id, false, ev.timeStamp, true);
     send_input ("b", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, ev.button]);
 }
 
 function on_mouse_up (ev) {
     var id = get_surface_id(ev);
+    id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
     send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, ev.button]);
+
+    if (grab.window != null && grab.implicit)
+	doUngrab();
 }
 
 var last_key_down = 0;

@@ -189,7 +189,8 @@ gchar *_gdk_broadway_display_utf8_to_string_target (GdkDisplay  *display,
 GdkKeymap* _gdk_broadway_display_get_keymap (GdkDisplay *display);
 char * _gdk_broadway_display_block_for_input (GdkDisplay *display,
 					      char op,
-					      guint32 serial);
+					      guint32 serial,
+					      gboolean remove);
 
 /* Window methods - testing */
 void     _gdk_broadway_window_sync_rendering    (GdkWindow       *window);

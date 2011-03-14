@@ -661,6 +661,48 @@ broadway_output_query_pointer (BroadwayOutput *output, int id)
   return serial;
 }
 
+guint32
+broadway_output_grab_pointer (BroadwayOutput *output,
+			      int id,
+			      gboolean owner_event,
+			      guint32 time_)
+{
+  char buf[HEADER_LEN + 3 + 1 + 6];
+  guint32 serial;
+  int p;
+
+  serial = output->serial;
+  p = write_header (output, buf, 'g');
+  append_uint16 (id, buf, &p);
+  buf[p++] = owner_event ? '1': '0';
+  append_uint32 (time_, buf, &p);
+
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
+
+  return serial;
+}
+
+guint32
+broadway_output_ungrab_pointer (BroadwayOutput *output,
+				guint32 time_)
+{
+  char buf[HEADER_LEN + 6];
+  guint32 serial;
+  int p;
+
+  serial = output->serial;
+  p = write_header (output, buf, 'u');
+  append_uint32 (time_, buf, &p);
+
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
+
+  return serial;
+}
+
 void
 broadway_output_new_surface(BroadwayOutput *output,  int id, int x, int y, int w, int h)
 {

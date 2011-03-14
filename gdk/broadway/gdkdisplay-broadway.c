@@ -261,7 +261,8 @@ process_input_idle_cb (GdkBroadwayDisplay *display)
 
 /* Note: This may be called while handling a message (i.e. sorta recursively) */
 char *
-_gdk_broadway_display_block_for_input (GdkDisplay *display, char op, guint32 serial)
+_gdk_broadway_display_block_for_input (GdkDisplay *display, char op,
+				       guint32 serial, gboolean remove_message)
 {
   GdkBroadwayDisplay *broadway_display;
   char *message;
@@ -295,8 +296,9 @@ _gdk_broadway_display_block_for_input (GdkDisplay *display, char op, guint32 ser
 	    msg_serial = (guint32)strtol(message+1, NULL, 10);
 	    if (msg_serial == serial)
 	      {
-		broadway_display->input_messages =
-		  g_list_delete_link (broadway_display->input_messages, l);
+		if (remove_message)
+		  broadway_display->input_messages =
+		    g_list_delete_link (broadway_display->input_messages, l);
 		return message;
 	      }
 	  }

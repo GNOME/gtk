@@ -124,7 +124,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   GdkScreen *screen;
   GdkWindow *root, *window;
   char *p;
-  int button, dir,key;
+  int button, dir, key, detail;
   guint32 serial;
   guint64 time;
   GdkEvent *event = NULL;
@@ -142,6 +142,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   switch (cmd) {
   case 'e': /* Enter */
     p = parse_pointer_data (p, &data);
+    p++; /* Skip , */
+    detail = strtol(p, &p, 10);
 
     display_broadway->last_x = data.root_x;
     display_broadway->last_y = data.root_y;
@@ -160,7 +162,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->crossing.y = data.win_y;
 	event->crossing.x_root = data.root_x;
 	event->crossing.y_root = data.root_y;
-	event->crossing.mode = GDK_CROSSING_NORMAL;
+	event->crossing.mode = detail;
 	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
 	gdk_event_set_device (event, display->core_pointer);
 
@@ -178,6 +180,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     break;
   case 'l': /* Leave */
     p = parse_pointer_data (p, &data);
+    p++; /* Skip , */
+    detail = strtol(p, &p, 10);
 
     display_broadway->last_x = data.root_x;
     display_broadway->last_y = data.root_y;
@@ -196,7 +200,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->crossing.x_root = data.root_x;
 	event->crossing.y_root = data.root_y;
 	event->crossing.mode = GDK_CROSSING_NORMAL;
-	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+	event->crossing.detail = detail;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
@@ -309,6 +313,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	_gdk_windowing_got_event (display, node, event, serial);
       }
 
+    break;
+  case 'g':
+  case 'u':
+    _gdk_display_device_grab_update (display, display->core_pointer, NULL, serial);
     break;
   case 'q':
     g_printerr ("Got unexpected query pointer reply w serial %d\n", serial);

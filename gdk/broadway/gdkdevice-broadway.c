@@ -182,7 +182,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 
       serial = broadway_output_query_pointer (broadway_display->output, impl->id);
 
-      reply = _gdk_broadway_display_block_for_input (display, 'q', serial);
+      reply = _gdk_broadway_display_block_for_input (display, 'q', serial, TRUE);
 
       if (reply != NULL)
 	{
@@ -266,13 +266,93 @@ gdk_broadway_device_grab (GdkDevice    *device,
 			  GdkCursor    *cursor,
 			  guint32       time_)
 {
-  return GDK_GRAB_NOT_VIEWABLE;
+  GdkDisplay *display;
+  GdkBroadwayDisplay *broadway_display;
+  GdkWindowImplBroadway *impl;
+  guint32 serial;
+  char *reply;
+
+  display = gdk_device_get_display (device);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      /* Device is a keyboard */
+      return GDK_GRAB_SUCCESS;
+    }
+  else
+    {
+      /* Device is a pointer */
+
+      if (broadway_display->output)
+	{
+	  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+	  serial = broadway_output_grab_pointer (broadway_display->output,
+						 impl->id, owner_events, time_);
+	  reply = _gdk_broadway_display_block_for_input (display, 'g', serial, FALSE);
+	  if (reply != NULL)
+	    {
+	      char *p;
+	      char cmd;
+	      guint32 reply_serial;
+	      int res;
+
+	      p = reply;
+
+	      cmd = *p++;
+	      reply_serial = (guint32)strtol(p, &p, 10);
+	      p++; /* Skip , */
+
+	      res = strtol(p, &p, 10);
+
+	      return res;
+	    }
+	}
+
+      return GDK_GRAB_NOT_VIEWABLE;
+    }
 }
+
+#define TIME_IS_LATER(time1, time2)                        \
+  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
+    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
+  )
 
 static void
 gdk_broadway_device_ungrab (GdkDevice *device,
 			    guint32    time_)
 {
+  GdkDisplay *display;
+  GdkBroadwayDisplay *broadway_display;
+  GdkDeviceGrabInfo *grab;
+  guint32 serial;
+
+  display = gdk_device_get_display (device);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      /* Device is a keyboard */
+    }
+  else
+    {
+      /* Device is a pointer */
+
+      if (broadway_display->output)
+	{
+	  serial = broadway_output_ungrab_pointer (broadway_display->output, time_);
+
+	  gdk_display_flush (display);
+
+	  grab = _gdk_display_get_last_device_grab (display, device);
+	  if (grab &&
+	      (time_ == GDK_CURRENT_TIME ||
+	       grab->time == GDK_CURRENT_TIME ||
+	       !TIME_IS_LATER (grab->time, time_)))
+	    grab->serial_end = serial;
+	}
+    }
 }
 
 static GdkWindow *

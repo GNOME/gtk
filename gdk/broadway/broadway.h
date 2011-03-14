@@ -57,3 +57,9 @@ void            broadway_output_copy_rectangles (BroadwayOutput *output,
 						 int             dy);
 guint32         broadway_output_query_pointer   (BroadwayOutput *output,
 						 int id);
+guint32         broadway_output_grab_pointer    (BroadwayOutput *output,
+						 int id,
+						 gboolean owner_event,
+						 guint32 time_);
+guint32         broadway_output_ungrab_pointer  (BroadwayOutput *output,
+						 guint32 time_);
