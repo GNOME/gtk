@@ -526,7 +526,7 @@ function on_mouse_up (ev) {
     send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, ev.timeStamp, button]);
 
     if (grab.window != null && grab.implicit)
-	doUngrab(time);
+	doUngrab(ev.timeStamp);
 }
 
 var last_key_down = 0;
