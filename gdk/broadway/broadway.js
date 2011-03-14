@@ -84,6 +84,7 @@ grab.implicit = false;
 var last_serial = 0;
 var last_x = 0;
 var last_y = 0;
+var last_state;
 var real_window_with_mouse = 0;
 var window_with_mouse = 0;
 var surfaces = {};
@@ -112,6 +113,39 @@ var GDK_GRAB_INVALID_TIME = 2;
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
 var GDK_CROSSING_UNGRAB = 2;
+
+// GdkModifierType
+var GDK_SHIFT_MASK = 1 << 0;
+var GDK_LOCK_MASK     = 1 << 1;
+var GDK_CONTROL_MASK  = 1 << 2;
+var GDK_MOD1_MASK     = 1 << 3;
+var GDK_MOD2_MASK     = 1 << 4;
+var GDK_MOD3_MASK     = 1 << 5;
+var GDK_MOD4_MASK     = 1 << 6;
+var GDK_MOD5_MASK     = 1 << 7;
+var GDK_BUTTON1_MASK  = 1 << 8;
+var GDK_BUTTON2_MASK  = 1 << 9;
+var GDK_BUTTON3_MASK  = 1 << 10;
+var GDK_BUTTON4_MASK  = 1 << 11;
+var GDK_BUTTON5_MASK  = 1 << 12;
+var GDK_SUPER_MASK    = 1 << 26;
+var GDK_HYPER_MASK    = 1 << 27;
+var GDK_META_MASK     = 1 << 28;
+var GDK_RELEASE_MASK  = 1 << 30;
+
+function getButtonMask (button) {
+    if (button == 1)
+	return GDK_BUTTON1_MASK;
+    if (button == 2)
+	return GDK_BUTTON2_MASK;
+    if (button == 3)
+	return GDK_BUTTON3_MASK;
+    if (button == 4)
+	return GDK_BUTTON4_MASK;
+    if (button == 5)
+	return GDK_BUTTON5_MASK;
+    return 0;
+}
 
 function handleCommands(cmd_obj)
 {
@@ -411,7 +445,7 @@ function on_mouse_move (ev) {
     var id = get_surface_id(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    send_input ("m", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp]);
+    send_input ("m", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, ev.timeStamp]);
 }
 
 function on_mouse_over (ev) {
@@ -421,7 +455,7 @@ function on_mouse_over (ev) {
     var pos = getPositionsFromEvent(ev, id);
     window_with_mouse = id;
     if (window_with_mouse != 0) {
-	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_NORMAL]);
+	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, ev.timeStamp, GDK_CROSSING_NORMAL]);
     }
 }
 
@@ -432,7 +466,7 @@ function on_mouse_out (ev) {
     var pos = getPositionsFromEvent(ev, id);
 
     if (id != 0) {
-	send_input ("l", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_NORMAL]);
+	send_input ("l", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, ev.timeStamp, GDK_CROSSING_NORMAL]);
     }
     real_window_with_mouse = 0;
     window_with_mouse = 0;
@@ -444,10 +478,10 @@ function doGrab(id, owner_events, time, implicit) {
     if (window_with_mouse != id) {
 	if (window_with_mouse != 0) {
 	    pos = getPositionsFromAbsCoord(last_x, last_y, window_with_mouse);
-	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_GRAB]);
+	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, time, GDK_CROSSING_GRAB]);
 	}
 	pos = getPositionsFromAbsCoord(last_x, last_y, id);
-	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_GRAB]);
+	send_input ("e", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, time, GDK_CROSSING_GRAB]);
 	window_with_mouse = id;
     }
 
@@ -462,11 +496,11 @@ function doUngrab(time) {
     if (real_window_with_mouse != window_with_mouse) {
 	if (window_with_mouse != 0) {
 	    pos = getPositionsFromAbsCoord(last_x, last_y, window_with_mouse);
-	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_UNGRAB]);
+	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, time, GDK_CROSSING_UNGRAB]);
 	}
 	if (real_window_with_mouse != 0) {
 	    pos = getPositionsFromAbsCoord(last_x, last_y, id);
-	    send_input ("e", [real_window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_UNGRAB]);
+	    send_input ("e", [real_window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, time, GDK_CROSSING_UNGRAB]);
 	}
 	window_with_mouse = real_window_with_mouse;
     }
@@ -479,14 +513,18 @@ function on_mouse_down (ev) {
     var pos = getPositionsFromEvent(ev, id);
     if (grab.window != null)
 	doGrab (id, false, ev.timeStamp, true);
-    send_input ("b", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, ev.button]);
+    var button = ev.button + 1;
+    last_state = last_state | getButtonMask (button);
+    send_input ("b", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, ev.timeStamp, button]);
 }
 
 function on_mouse_up (ev) {
     var id = get_surface_id(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, ev.button]);
+    var button = ev.button + 1;
+    last_state = last_state & ~getButtonMask (button);
+    send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, , ev.timeStamp, button]);
 
     if (grab.window != null && grab.implicit)
 	doUngrab(time);
@@ -531,7 +569,7 @@ function on_mouse_wheel(ev)
   var dir = 0;
   if (offset > 0)
     dir = 1;
-  send_input ("s", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, dir]);
+  send_input ("s", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, ev.timeStamp, dir]);
 
   return cancel_event(ev);
 }

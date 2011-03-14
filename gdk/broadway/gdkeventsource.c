@@ -94,6 +94,7 @@ typedef struct {
   int root_y;
   int win_x;
   int win_y;
+  guint32 state;
   guint64 time;
 } PointerData;
 
@@ -109,6 +110,8 @@ parse_pointer_data (char *p, PointerData *data)
   data->win_x = strtol (p, &p, 10);
   p++; /* Skip , */
   data->win_y = strtol (p, &p, 10);
+  p++; /* Skip , */
+  data->state = strtol (p, &p, 10);
   p++; /* Skip , */
   data->time = strtol(p, &p, 10);
 
@@ -162,6 +165,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->crossing.y = data.win_y;
 	event->crossing.x_root = data.root_x;
 	event->crossing.y_root = data.root_y;
+	event->crossing.state = data.state;
 	event->crossing.mode = detail;
 	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
 	gdk_event_set_device (event, display->core_pointer);
@@ -199,6 +203,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->crossing.y = data.win_y;
 	event->crossing.x_root = data.root_x;
 	event->crossing.y_root = data.root_y;
+	event->crossing.state = data.state;
 	event->crossing.mode = GDK_CROSSING_NORMAL;
 	event->crossing.detail = detail;
 	gdk_event_set_device (event, display->core_pointer);
@@ -232,6 +237,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->motion.y = data.win_y;
 	event->motion.x_root = data.root_x;
 	event->motion.y_root = data.root_y;
+	event->motion.state = data.state;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
@@ -259,6 +265,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->button.x_root = data.root_x;
 	event->button.y_root = data.root_y;
 	event->button.button = button + 1;
+	event->button.state = data.state;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
