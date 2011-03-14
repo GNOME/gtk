@@ -1,3 +1,14 @@
+Overview of Changes from GTK+ 2.24.1 to 2.24.2
+==============================================
+
+* Bugs fixed:
+ 642905 reference lists 2 links for "Index of new symbols...
+ 643170 gtk_file_chooser_set_filename does not work...
+ 643216 Extraneous emits of GdkScreen::monitors-changed
+ 643416 Composited children of GtkScrolledWindow are drawn...
+ 644353 Missing annotations in Gtk/Gdk Window and gtk_acce...
+
+
 Overview of Changes from GTK+ 2.24.0 to 2.24.1
 ==============================================
 
