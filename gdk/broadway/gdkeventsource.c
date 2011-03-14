@@ -264,7 +264,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->button.y = data.win_y;
 	event->button.x_root = data.root_x;
 	event->button.y_root = data.root_y;
-	event->button.button = button + 1;
+	event->button.button = button;
 	event->button.state = data.state;
 	gdk_event_set_device (event, display->core_pointer);
 

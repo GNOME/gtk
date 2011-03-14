@@ -310,7 +310,7 @@ function handleCommands(cmd_obj)
 
 	var pos = getPositionsFromAbsCoord(last_x, last_y, id);
 
-	send_input ("q", [pos.root_x, pos.root_y, pos.win_x, pos.win_x, window_with_mouse]);
+	send_input ("q", [pos.root_x, pos.root_y, pos.win_x, pos.win_y, window_with_mouse]);
 	break;
 
       case 'g': // Grab
@@ -524,7 +524,7 @@ function on_mouse_up (ev) {
     var pos = getPositionsFromEvent(ev, id);
     var button = ev.button + 1;
     last_state = last_state & ~getButtonMask (button);
-    send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, , ev.timeStamp, button]);
+    send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, ev.timeStamp, button]);
 
     if (grab.window != null && grab.implicit)
 	doUngrab(time);
