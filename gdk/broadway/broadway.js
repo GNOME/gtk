@@ -1,3 +1,16 @@
+/* Helper functions for debugging */
+var logDiv = null;
+function log(str) {
+    if (!logDiv) {
+	logDiv = document.createElement('div');
+	document.body.appendChild(logDiv);
+	logDiv.style["position"] = "absolute";
+	logDiv.style["right"] = "0px";
+    }
+    logDiv.appendChild(document.createTextNode(str));
+    logDiv.appendChild(document.createElement('br'));
+}
+
 var base64_val = [
   255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
   255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
