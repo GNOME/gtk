@@ -812,19 +812,40 @@ gdk_window_broadway_get_geometry (GdkWindow *window,
 				  gint      *width,
 				  gint      *height)
 {
+  GdkWindowImplBroadway *impl;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+  /* TODO: These should really roundtrip to the client to get the current data */
+
+  if (x)
+    *x = impl->wrapper->x;
+  if (y)
+    *y = impl->wrapper->y;
+  if (width)
+    *width = impl->wrapper->width;
+  if (height)
+    *height = impl->wrapper->height;
+
 }
 
 static gint
 gdk_window_broadway_get_root_coords (GdkWindow *window,
-				gint       x,
-				gint       y,
-				gint      *root_x,
-				gint      *root_y)
+				     gint       x,
+				     gint       y,
+				     gint      *root_x,
+				     gint      *root_y)
 {
+  GdkWindowImplBroadway *impl;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
   if (root_x)
-    *root_x = x;
+    *root_x = x + impl->wrapper->x;
   if (root_y)
-    *root_y = y;
+    *root_y = y + impl->wrapper->y;
 
   return 1;
 }
@@ -834,11 +855,17 @@ gdk_broadway_window_get_root_origin (GdkWindow *window,
 				     gint      *x,
 				     gint      *y)
 {
+  GdkWindowImplBroadway *impl;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+  /* TODO: This should take wm frame into account */
+
   if (x)
-    *x = 0;
+    *x = impl->wrapper->x;
 
   if (y)
-    *y = 0;
+    *y = impl->wrapper->x;
 }
 
 static void
@@ -846,6 +873,8 @@ gdk_broadway_window_get_frame_extents (GdkWindow    *window,
 				       GdkRectangle *rect)
 {
   g_return_if_fail (rect != NULL);
+
+  /* TODO: This should take wm frame into account */
 
   rect->x = window->x;
   rect->y = window->y;
