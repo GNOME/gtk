@@ -378,14 +378,6 @@ resize_surface (GdkWindow *window)
 						       gdk_window_get_width (impl->wrapper),
 						       gdk_window_get_height (impl->wrapper));
 
-      { cairo_t *cr;
-      cr = cairo_create (impl->surface);
-      cairo_set_source_rgb (cr, 0.0, 1.0, 0.0);
-      cairo_rectangle (cr, 0, 0, 1000, 1000);
-      cairo_fill (cr);
-      cairo_destroy (cr);
-      }
-
       cairo_surface_destroy (old);
       cairo_surface_destroy (last_old);
     }
@@ -665,9 +657,9 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 
 static gboolean
 gdk_window_broadway_reparent (GdkWindow *window,
-                         GdkWindow *new_parent,
-                         gint       x,
-                         gint       y)
+			      GdkWindow *new_parent,
+			      gint       x,
+			      gint       y)
 {
   return FALSE;
 }
@@ -679,14 +671,14 @@ gdk_window_broadway_raise (GdkWindow *window)
 
 static void
 gdk_window_broadway_restack_under (GdkWindow *window,
-			      GList *native_siblings /* in requested order, first is bottom-most */)
+				   GList *native_siblings /* in requested order, first is bottom-most */)
 {
 }
 
 static void
 gdk_window_broadway_restack_toplevel (GdkWindow *window,
-				 GdkWindow *sibling,
-				 gboolean   above)
+				      GdkWindow *sibling,
+				      gboolean   above)
 {
 }
 
@@ -955,7 +947,7 @@ gdk_broadway_window_set_icon_list (GdkWindow *window,
 }
 
 static void
-gdk_broadway_window_set_icon_name (GdkWindow   *window, 
+gdk_broadway_window_set_icon_name (GdkWindow   *window,
 				   const gchar *name)
 {
   GdkDisplay *display;
@@ -967,7 +959,7 @@ gdk_broadway_window_set_icon_name (GdkWindow   *window,
   display = gdk_window_get_display (window);
 
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
-                      GUINT_TO_POINTER (name != NULL));
+		      GUINT_TO_POINTER (name != NULL));
 }
 
 static void
@@ -1135,11 +1127,11 @@ gdk_window_broadway_set_static_gravities (GdkWindow *window,
 
 static void
 gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
-                              GdkWindowEdge  edge,
-                              gint           button,
-                              gint           root_x,
-                              gint           root_y,
-                              guint32        timestamp)
+				       GdkWindowEdge  edge,
+				       gint           button,
+				       gint           root_x,
+				       gint           root_y,
+				       guint32        timestamp)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -1203,7 +1195,7 @@ gdk_broadway_window_set_opacity (GdkWindow *window,
 
 static void
 gdk_broadway_window_set_composited (GdkWindow *window,
-				     gboolean   composited)
+				    gboolean   composited)
 {
 }
 
