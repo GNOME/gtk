@@ -1,3 +1,32 @@
+Overview of Changes in GTK+ 3.0.3
+=================================
+
+* Support for the GDK_NATIVE_WINDOWS environment variable has
+  been removed
+
+* Bugs fixed:
+ 642604 GtkCssProvider leaks GError
+ 643416 Composited children of GtkScrolledWindow are drawn incorrectly...
+ 644119 Remove support for GDK_NATIVE_WINDOWS
+ 644248 stylecontext: add a raised style class
+ 644276 don't set the "pane-separator" style class to all the container
+ 644348 make GtkNotebook respect the focus-padding style property
+ 644353 Missing annotations in Gtk/Gdk Window and gtk_accelerator_parse
+ 644355 credits toggle inconsintency
+ 644570 handles with a background image don't work
+
+
+* Updated translations:
+ Czech
+ French
+ Italian
+ Hebrew
+ Korean
+ Kurdish
+ Slovenian
+ Swedish
+
+
 Overview of Changes in GTK+ 3.0.2
 =================================
 
