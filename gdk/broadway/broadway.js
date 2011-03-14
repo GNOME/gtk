@@ -457,16 +457,16 @@ function doGrab(id, owner_events, time, implicit) {
     grab.implicit = implicit;
 }
 
-function doUngrab() {
+function doUngrab(time) {
     var pos;
     if (real_window_with_mouse != window_with_mouse) {
 	if (window_with_mouse != 0) {
 	    pos = getPositionsFromAbsCoord(last_x, last_y, window_with_mouse);
-	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_UNGRAB]);
+	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_UNGRAB]);
 	}
 	if (real_window_with_mouse != 0) {
 	    pos = getPositionsFromAbsCoord(last_x, last_y, id);
-	    send_input ("e", [real_window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, GDK_CROSSING_UNGRAB]);
+	    send_input ("e", [real_window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, time, GDK_CROSSING_UNGRAB]);
 	}
 	window_with_mouse = real_window_with_mouse;
     }
@@ -489,7 +489,7 @@ function on_mouse_up (ev) {
     send_input ("B", [id, pos.root_x, pos.root_y, pos.win_x, pos.win_y, ev.timeStamp, ev.button]);
 
     if (grab.window != null && grab.implicit)
-	doUngrab();
+	doUngrab(time);
 }
 
 var last_key_down = 0;
