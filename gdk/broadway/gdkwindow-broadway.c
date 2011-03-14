@@ -624,9 +624,12 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 	  impl->dirty = TRUE;
 	  impl->last_synced = FALSE;
 
-	  broadway_output_resize_surface (broadway_display->output,
-					  impl->id, width, height);
-	  queue_dirty_flush (broadway_display);
+	  if (broadway_display->output != NULL)
+	    {
+	      broadway_output_resize_surface (broadway_display->output,
+					      impl->id, width, height);
+	      queue_dirty_flush (broadway_display);
+	    }
 
 	  window->width = width;
 	  window->height = height;
@@ -1302,7 +1305,9 @@ _gdk_broadway_window_translate (GdkWindow      *window,
   if (impl->surface)
     {
       copy_region (impl->surface, area, dx, dy);
-      if (GDK_WINDOW_IMPL_BROADWAY (impl)->last_synced)
+      broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
+      if (GDK_WINDOW_IMPL_BROADWAY (impl)->last_synced &&
+	  broadway_display->output)
 	{
 	  copy_region (impl->last_surface, area, dx, dy);
 	  n_rects = cairo_region_num_rectangles (area);
@@ -1315,7 +1320,6 @@ _gdk_broadway_window_translate (GdkWindow      *window,
 	      rects[i].width = rect.width;
 	      rects[i].height = rect.height;
 	    }
-	  broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
 	  broadway_output_copy_rectangles (broadway_display->output,
 					   GDK_WINDOW_IMPL_BROADWAY (impl)->id,
 					   rects, n_rects, dx, dy);
