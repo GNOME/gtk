@@ -125,7 +125,7 @@ function handleCommands(cmd_obj)
       case 'H':
         var id = base64_16(cmd, i);
         i = i + 3;
-	surfaces[id].canvas.style["display"] = "inline";
+	surfaces[id].canvas.style["display"] = "none";
         break;
 
       /* delete surface */
