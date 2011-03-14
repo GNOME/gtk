@@ -100,7 +100,6 @@ function initContext(canvas, x, y, id)
   canvas.style["display"] = "none";
   var context = canvas.getContext("2d");
   context.globalCompositeOperation = "src-over";
-  context.fillRect(0, 0, canvas.width, canvas.height);
   document.body.appendChild(canvas);
 
   return context;
