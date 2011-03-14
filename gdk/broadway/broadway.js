@@ -257,6 +257,7 @@ function handleCommands(cmd_obj)
 
 	var context = surfaces[id];
 	context.save();
+	context.beginPath();
 
 	var minx;
 	var miny;
