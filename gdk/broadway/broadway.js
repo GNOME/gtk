@@ -499,7 +499,7 @@ function doUngrab(time) {
 	    send_input ("l", [window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, time, GDK_CROSSING_UNGRAB]);
 	}
 	if (real_window_with_mouse != 0) {
-	    pos = getPositionsFromAbsCoord(last_x, last_y, id);
+	    pos = getPositionsFromAbsCoord(last_x, last_y, real_window_with_mouse);
 	    send_input ("e", [real_window_with_mouse, pos.root_x, pos.root_y, pos.win_x, pos.win_y, last_state, time, GDK_CROSSING_UNGRAB]);
 	}
 	window_with_mouse = real_window_with_mouse;
