@@ -542,8 +542,6 @@ gtk_range_class_init (GtkRangeClass *class)
    * GtkRange:stepper-spacing:
    *
    * The spacing between the stepper buttons and thumb. Note that
-   * setting this value to anything > 0 will automatically set the
-   * trough-under-steppers style property to %TRUE as well. Also,
    * stepper-spacing won't have any effect if there are no steppers.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -575,9 +573,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * GtkRange:trough-under-steppers:
    *
    * Whether to draw the trough across the full length of the range or
-   * to exclude the steppers and their spacing. Note that setting the
-   * #GtkRange:stepper-spacing style property to any value > 0 will
-   * automatically enable trough-under-steppers too.
+   * to exclude the steppers and their spacing.
    *
    * Since: 2.10
    */
@@ -2043,9 +2039,6 @@ gtk_range_draw (GtkWidget *widget,
       if (!sensitive)
         gtk_style_context_set_state (context, GTK_STATE_FLAG_INSENSITIVE);
 
-      if (stepper_spacing > 0)
-        trough_under_steppers = FALSE;
-
       if (!trough_under_steppers)
         {
           gint offset  = 0;
@@ -3215,9 +3208,6 @@ gtk_range_get_props (GtkRange  *range,
 			"arrow-displacement-x", &tmp_arrow_displacement_x,
 			"arrow-displacement-y", &tmp_arrow_displacement_y,
                         NULL);
-
-  if (tmp_stepper_spacing > 0)
-    tmp_trough_under_steppers = FALSE;
 
   if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
     {
