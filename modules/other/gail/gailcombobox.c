@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -214,7 +216,8 @@ gail_combo_box_get_n_children (AtkObject* obj)
     return 0;
 
   n_children++;
-  if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)))
+  if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)) ||
+      GTK_IS_COMBO_BOX_ENTRY (widget))
     n_children ++;
 
   return n_children;
@@ -248,7 +251,8 @@ gail_combo_box_ref_child (AtkObject *obj,
           box->popup_set = TRUE;
         }
     }
-  else if (i == 1 && gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)))
+  else if (i == 1 && (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)) ||
+                      GTK_IS_COMBO_BOX_ENTRY (widget)))
     {
       child = gtk_widget_get_accessible (gtk_bin_get_child (GTK_BIN (widget)));
     }
