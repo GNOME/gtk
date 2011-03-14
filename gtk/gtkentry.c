@@ -5088,7 +5088,7 @@ static void
 gtk_entry_paste_clipboard (GtkEntry *entry)
 {
   if (entry->editable)
-    gtk_entry_paste (entry, GDK_NONE);
+    gtk_entry_paste (entry, GDK_SELECTION_CLIPBOARD);
   else
     gtk_widget_error_bell (GTK_WIDGET (entry));
 }
