@@ -24,6 +24,7 @@
 #include <gobject/gvaluecollector.h>
 
 #include "gtkstylecontextprivate.h"
+#include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengine.h"
 #include "gtkintl.h"
