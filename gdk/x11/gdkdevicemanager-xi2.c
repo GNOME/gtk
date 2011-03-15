@@ -927,13 +927,82 @@ get_event_window (GdkEventTranslator *translator,
 }
 
 static gboolean
+gdk_x11_device_manager_xi2_translate_core_event (GdkEventTranslator *translator,
+						 GdkDisplay         *display,
+						 GdkEvent           *event,
+						 XEvent             *xevent)
+{
+  GdkEventTranslatorIface *parent_iface;
+  gboolean keyboard = FALSE;
+  GdkDevice *device;
+
+  if (xevent->type == KeyPress && xevent->xkey.keycode == 0)
+    {
+      /* The X input methods (when triggered via XFilterEvent)
+       * generate a core key press event with keycode 0 to signal the
+       * end of a key sequence. We use the core translate_event
+       * implementation to translate this event.
+       *
+       * This is just a bandaid fix to keep xim working with a single
+       * keyboard until XFilterEvent learns about XI2.
+       */
+      keyboard = TRUE;
+    }
+  else if (xevent->xany.send_event)
+    {
+      /* If another process sends us core events, process them; we
+       * assume that it won't send us redundant core and XI2 events.
+       * (At the moment, it's not possible to send XI2 events anyway.
+       * In the future, an app that was trying to decide whether to
+       * send core or XI2 events could look at the event mask on the
+       * window to see which kind we are listening to.)
+       */
+      switch (xevent->type)
+	{
+	case KeyPress:
+	case KeyRelease:
+	case FocusIn:
+	case FocusOut:
+	  keyboard = TRUE;
+	  break;
+
+	case ButtonPress:
+	case ButtonRelease:
+	case MotionNotify:
+	case EnterNotify:
+	case LeaveNotify:
+	  break;
+
+	default:
+	  return FALSE;
+	}
+    }
+  else
+    return FALSE;
+
+  parent_iface = g_type_interface_peek_parent (GDK_EVENT_TRANSLATOR_GET_IFACE (translator));
+  if (!parent_iface->translate_event (translator, display, event, xevent))
+    return FALSE;
+
+  /* The core device manager sets a core device on the event.
+   * We need to override that with an XI2 device, since we are
+   * using XI2.
+   */
+  device = gdk_x11_device_manager_xi2_get_client_pointer ((GdkDeviceManager *)translator);
+  if (keyboard)
+    device = gdk_device_get_associated_device (device);
+  gdk_event_set_device (event, device);
+
+  return TRUE;
+}
+
+static gboolean
 gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             GdkDisplay         *display,
                                             GdkEvent           *event,
                                             XEvent             *xevent)
 {
   GdkX11DeviceManagerXI2 *device_manager;
-  GdkEventTranslatorIface *parent_iface;
   XGenericEventCookie *cookie;
   gboolean return_val = TRUE;
   GdkWindow *window;
@@ -944,29 +1013,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
   cookie = &xevent->xcookie;
 
-  parent_iface = g_type_interface_peek_parent (GDK_EVENT_TRANSLATOR_GET_IFACE (translator));
-
-  /* The X input methods (when triggered via XFilterEvent) generate
-   * a core key press event with keycode 0 to signal the end of a
-   * key sequence. We use the core translate_event implementation
-   * to translate this event.
-   *
-   * This is just a bandaid fix to keep xim working with a single
-   * keyboard until XFilterEvent learns about XI2.
-   */
-  if (xevent->type == KeyPress && xevent->xkey.keycode == 0 &&
-      parent_iface->translate_event (translator, display, event, xevent))
-    {
-      GdkDevice *device;
-      /* The core device manager sets a core device on the event.
-       * We need to override that with an XI2 device, since we are
-       * using XI2.
-       */
-      device = gdk_x11_device_manager_xi2_get_client_pointer ((GdkDeviceManager *)device_manager);
-      gdk_event_set_device (event, gdk_device_get_associated_device (device));
-
-      return TRUE;
-    }
+  if (xevent->type != GenericEvent)
+    return gdk_x11_device_manager_xi2_translate_core_event (translator, display, event, xevent);
 
   if (!XGetEventData (dpy, cookie))
     return FALSE;
