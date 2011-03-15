@@ -4,6 +4,10 @@
 #include <assert.h>
 #include <errno.h>
 #include <zlib.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 
 #include "broadway.h"
 
@@ -540,11 +544,14 @@ BroadwayOutput *
 broadway_output_new(int fd, guint32 serial)
 {
   BroadwayOutput *output;
+  int flag = 1;
 
   output = g_new0 (BroadwayOutput, 1);
 
   output->fd = fd;
   output->serial = serial;
+
+  setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
 
   broadway_output_write_header (output);
 
