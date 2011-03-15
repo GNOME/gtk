@@ -12,68 +12,68 @@ function log(str) {
 }
 
 var base64Values = [
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-  255,255,255,255,255,255,255,255,255,255,255, 62,255,255,255, 63,
-   52, 53, 54, 55, 56, 57, 58, 59, 60, 61,255,255,255,  0,255,255,
-  255,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-   15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,255,255,255,255,255,
-  255, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-   41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,255,255,255,255,255
+    255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+    255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+    255,255,255,255,255,255,255,255,255,255,255, 62,255,255,255, 63,
+    52, 53, 54, 55, 56, 57, 58, 59, 60, 61,255,255,255,  0,255,255,
+    255,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,255,255,255,255,255,
+    255, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,255,255,255,255,255
 ]
 
 function base64_8(str, index) {
-  var v =
-    (base64Values[str.charCodeAt(index)]) +
-    (base64Values[str.charCodeAt(index+1)] << 6);
-  return v;
-}
-
-function base64_16(str, index) {
-  var v =
-    (base64Values[str.charCodeAt(index)]) +
-    (base64Values[str.charCodeAt(index+1)] << 6) +
-    (base64Values[str.charCodeAt(index+2)] << 12);
-  return v;
-}
-
-function base64_16s(str, index) {
-  var v = base64_16(str, index);
-  if (v > 32767)
-    return v - 65536;
-  else
+    var v =
+	(base64Values[str.charCodeAt(index)]) +
+	(base64Values[str.charCodeAt(index+1)] << 6);
     return v;
 }
 
+function base64_16(str, index) {
+    var v =
+	(base64Values[str.charCodeAt(index)]) +
+	(base64Values[str.charCodeAt(index+1)] << 6) +
+	(base64Values[str.charCodeAt(index+2)] << 12);
+    return v;
+}
+
+function base64_16s(str, index) {
+    var v = base64_16(str, index);
+    if (v > 32767)
+	return v - 65536;
+    else
+	return v;
+}
+
 function base64_24(str, index) {
-  var v =
-    (base64Values[str.charCodeAt(index)]) +
-    (base64Values[str.charCodeAt(index+1)] << 6) +
-    (base64Values[str.charCodeAt(index+2)] << 12) +
-    (base64Values[str.charCodeAt(index+3)] << 18);
-  return v;
+    var v =
+	(base64Values[str.charCodeAt(index)]) +
+	(base64Values[str.charCodeAt(index+1)] << 6) +
+	(base64Values[str.charCodeAt(index+2)] << 12) +
+	(base64Values[str.charCodeAt(index+3)] << 18);
+    return v;
 }
 
 function base64_32(str, index) {
-  var v =
-    (base64Values[str.charCodeAt(index)]) +
-    (base64Values[str.charCodeAt(index+1)] << 6) +
-    (base64Values[str.charCodeAt(index+2)] << 12) +
-    (base64Values[str.charCodeAt(index+3)] << 18) +
-    (base64Values[str.charCodeAt(index+4)] << 24) +
-    (base64Values[str.charCodeAt(index+5)] << 30);
-  return v;
+    var v =
+	(base64Values[str.charCodeAt(index)]) +
+	(base64Values[str.charCodeAt(index+1)] << 6) +
+	(base64Values[str.charCodeAt(index+2)] << 12) +
+	(base64Values[str.charCodeAt(index+3)] << 18) +
+	(base64Values[str.charCodeAt(index+4)] << 24) +
+	(base64Values[str.charCodeAt(index+5)] << 30);
+    return v;
 }
 
 function createXHR()
 {
-  try { return new XMLHttpRequest(); } catch(e) {}
-  try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e) {}
-  try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e) {}
-  try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {}
-  try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch (e) {}
+    try { return new XMLHttpRequest(); } catch(e) {}
+    try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e) {}
+    try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e) {}
+    try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {}
+    try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch (e) {}
 
-  return null;
+    return null;
 }
 
 var grab = new Object();
@@ -93,17 +93,17 @@ var inputSocket = null;
 
 function initContext(canvas, x, y, id)
 {
-  canvas.surfaceId = id;
-  canvas.style["position"] = "absolute";
-  canvas.style["left"] = x + "px";
-  canvas.style["top"] = y + "px";
-  canvas.style["display"] = "none";
-  var context = canvas.getContext("2d");
-  context.globalCompositeOperation = "source-over";
-  document.body.appendChild(canvas);
-  context.drawQueue = [];
+    canvas.surfaceId = id;
+    canvas.style["position"] = "absolute";
+    canvas.style["left"] = x + "px";
+    canvas.style["top"] = y + "px";
+    canvas.style["display"] = "none";
+    var context = canvas.getContext("2d");
+    context.globalCompositeOperation = "source-over";
+    document.body.appendChild(canvas);
+    context.drawQueue = [];
 
-  return context;
+    return context;
 }
 
 var GDK_GRAB_SUCCESS = 0;
@@ -206,245 +206,235 @@ function flushSurface(surface)
 
 function handleCommands(cmdObj)
 {
-  var cmd = cmdObj.data;
-  var i = cmdObj.pos;
+    var cmd = cmdObj.data;
+    var i = cmdObj.pos;
 
-  while (i < cmd.length) {
-    var command = cmd[i++];
-    lastSerial = base64_32(cmd, i);
-    i = i + 6;
-    switch (command) {
-      /* create new surface */
-      case 's':
-        var id = base64_16(cmd, i);
-        i = i + 3;
-        var x = base64_16(cmd, i);
-        i = i + 3;
-        var y = base64_16(cmd, i);
-        i = i + 3;
-        var w = base64_16(cmd, i);
-        i = i + 3;
-        var h = base64_16(cmd, i);
-        i = i + 3;
-        var surface = document.createElement("canvas");
-	surface.width = w;
-	surface.height = h;
-	surfaces[id] = initContext(surface, x, y, id);
-        break;
-
-      /* show a surface */
-      case 'S':
-        var id = base64_16(cmd, i);
-        i = i + 3;
-	surfaces[id].canvas.style["display"] = "inline";
-        break;
-
-      /* hide a surface */
-      case 'H':
-        var id = base64_16(cmd, i);
-        i = i + 3;
-	surfaces[id].canvas.style["display"] = "none";
-        break;
-
-      /* delete surface */
-      case 'd':
-        var id = base64_16(cmd, i);
-        i = i + 3;
-	var canvas = surfaces[id].canvas;
-	delete surfaces[id];
-	canvas.parentNode.removeChild(canvas);
-
-        break;
-
-      /* move a surface */
-      case 'm':
-        var id = base64_16(cmd, i);
-        i = i + 3;
-        var x = base64_16(cmd, i);
-        i = i + 3;
-        var y = base64_16(cmd, i);
-        i = i + 3;
-	surfaces[id].canvas.style["left"] = x + "px";
-	surfaces[id].canvas.style["top"] = y + "px";
-        break;
-
-      /* resize a surface */
-      case 'r':
-        var id = base64_16(cmd, i);
-        i = i + 3;
-        var w = base64_16(cmd, i);
-        i = i + 3;
-        var h = base64_16(cmd, i);
-        i = i + 3;
-	var surface = surfaces[id];
-
-	/* Flush any outstanding draw ops before changing size */
-	flushSurface(surface);
-
-	/* Canvas resize clears the data, so we need to save it first */
-	var tmpCanvas = document.createElement("canvas");
-	tmpCanvas.width = surface.canvas.width;
-	tmpCanvas.height = surface.canvas.height;
-	var tmpContext = tmpCanvas.getContext("2d");
-	tmpContext.globalCompositeOperation = "copy";
-	tmpContext.drawImage(surface.canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-
-	surface.canvas.width = w;
-	surface.canvas.height = h;
-
-	surface.globalCompositeOperation = "copy";
-	surface.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-
-	break;
-
-      /* put image data surface */
-      case 'i':
-	var q = new Object();
-	q.op = 'i';
-        q.id = base64_16(cmd, i);
-        i = i + 3;
-        q.x = base64_16(cmd, i);
-        i = i + 3;
-        q.y = base64_16(cmd, i);
-        i = i + 3;
-        var size = base64_32(cmd, i);
-        i = i + 6;
-	var url = cmd.slice(i, i + size);
-	i = i + size;
-        q.img = new Image();
-	q.img.src = url;
-	surfaces[q.id].drawQueue.push(q);
-	if (!q.img.complete) {
-	  cmdObj.pos = i;
-	  q.img.onload = function() { handleOutstanding(); };
-	  return false;
-	}
-
-        break;
-
-      /* copy rects */
-      case 'b':
-	var q = new Object();
-	q.op = 'b';
-        q.id = base64_16(cmd, i);
-        i = i + 3;
-
-	var nrects = base64_16(cmd, i);
-        i = i + 3;
-
-	q.rects = [];
-	for (var r = 0; r < nrects; r++) {
-	  var rect = new Object();
-	  rect.x = base64_16(cmd, i);
-          i = i + 3;
-          rect.y = base64_16(cmd, i);
-          i = i + 3;
-          rect.w = base64_16(cmd, i);
-          i = i + 3;
-          rect.h = base64_16(cmd, i);
-          i = i + 3;
-	  q.rects.push (rect);
-	}
-
-        q.dx = base64_16s(cmd, i);
-        i = i + 3;
-        q.dy = base64_16s(cmd, i);
-        i = i + 3;
-	surfaces[q.id].drawQueue.push(q);
-        break;
-
-      case 'f': // Flush surface
-        var id = base64_16(cmd, i);
-        i = i + 3;
-
-	flushSurface(surfaces[id]);
-	break;
-
-      case 'q': // Query pointer
-        var id = base64_16(cmd, i);
-        i = i + 3;
-
-	var pos = getPositionsFromAbsCoord(lastX, lastY, id);
-
-	sendInput ("q", [pos.rootX, pos.rootY, pos.winX, pos.winY, windowWithMouse]);
-	break;
-
-      case 'g': // Grab
-        var id = base64_16(cmd, i);
-        i = i + 3;
-	var ownerEvents = cmd[i++] == '1';
-	var time = base64_32(cmd, i);
+    while (i < cmd.length) {
+	var command = cmd[i++];
+	lastSerial = base64_32(cmd, i);
 	i = i + 6;
+	switch (command) {
+	case 's': // create new surface
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    var x = base64_16(cmd, i);
+	    i = i + 3;
+	    var y = base64_16(cmd, i);
+	    i = i + 3;
+	    var w = base64_16(cmd, i);
+	    i = i + 3;
+	    var h = base64_16(cmd, i);
+	    i = i + 3;
+	    var surface = document.createElement("canvas");
+	    surface.width = w;
+	    surface.height = h;
+	    surfaces[id] = initContext(surface, x, y, id);
+	    break;
 
-	if (grab.window != null) {
-	    /* Previous grab, compare times */
-	    if (time != 0 && grab.time != 0 &&
-		time > grab.time) {
-		sendInput ("g", [GDK_GRAB_INVALID_TIME]);
-		break;
+	case 'S': // Show a surface
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    surfaces[id].canvas.style["display"] = "inline";
+	    break;
+
+	case 'H': // Hide a surface
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    surfaces[id].canvas.style["display"] = "none";
+	    break;
+
+	case 'd': // Delete surface
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    var canvas = surfaces[id].canvas;
+	    delete surfaces[id];
+	    canvas.parentNode.removeChild(canvas);
+
+	    break;
+
+	case 'm': // Move a surface
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    var x = base64_16(cmd, i);
+	    i = i + 3;
+	    var y = base64_16(cmd, i);
+	    i = i + 3;
+	    surfaces[id].canvas.style["left"] = x + "px";
+	    surfaces[id].canvas.style["top"] = y + "px";
+	    break;
+
+	case 'r': // Resize a surface
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    var w = base64_16(cmd, i);
+	    i = i + 3;
+	    var h = base64_16(cmd, i);
+	    i = i + 3;
+	    var surface = surfaces[id];
+
+	    /* Flush any outstanding draw ops before changing size */
+	    flushSurface(surface);
+
+	    /* Canvas resize clears the data, so we need to save it first */
+	    var tmpCanvas = document.createElement("canvas");
+	    tmpCanvas.width = surface.canvas.width;
+	    tmpCanvas.height = surface.canvas.height;
+	    var tmpContext = tmpCanvas.getContext("2d");
+	    tmpContext.globalCompositeOperation = "copy";
+	    tmpContext.drawImage(surface.canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+
+	    surface.canvas.width = w;
+	    surface.canvas.height = h;
+
+	    surface.globalCompositeOperation = "copy";
+	    surface.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+
+	    break;
+
+	case 'i': // Put image data surface
+	    var q = new Object();
+	    q.op = 'i';
+	    q.id = base64_16(cmd, i);
+	    i = i + 3;
+	    q.x = base64_16(cmd, i);
+	    i = i + 3;
+	    q.y = base64_16(cmd, i);
+	    i = i + 3;
+	    var size = base64_32(cmd, i);
+	    i = i + 6;
+	    var url = cmd.slice(i, i + size);
+	    i = i + size;
+	    q.img = new Image();
+	    q.img.src = url;
+	    surfaces[q.id].drawQueue.push(q);
+	    if (!q.img.complete) {
+		cmdObj.pos = i;
+		q.img.onload = function() { handleOutstanding(); };
+		return false;
 	    }
+	    break;
+
+	case 'b': // Copy rects
+	    var q = new Object();
+	    q.op = 'b';
+	    q.id = base64_16(cmd, i);
+	    i = i + 3;
+
+	    var nrects = base64_16(cmd, i);
+	    i = i + 3;
+
+	    q.rects = [];
+	    for (var r = 0; r < nrects; r++) {
+		var rect = new Object();
+		rect.x = base64_16(cmd, i);
+		i = i + 3;
+		rect.y = base64_16(cmd, i);
+		i = i + 3;
+		rect.w = base64_16(cmd, i);
+		i = i + 3;
+		rect.h = base64_16(cmd, i);
+		i = i + 3;
+		q.rects.push (rect);
+	    }
+
+	    q.dx = base64_16s(cmd, i);
+	    i = i + 3;
+	    q.dy = base64_16s(cmd, i);
+	    i = i + 3;
+	    surfaces[q.id].drawQueue.push(q);
+	    break;
+
+	case 'f': // Flush surface
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+
+	    flushSurface(surfaces[id]);
+	    break;
+
+	case 'q': // Query pointer
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+
+	    var pos = getPositionsFromAbsCoord(lastX, lastY, id);
+
+	    sendInput ("q", [pos.rootX, pos.rootY, pos.winX, pos.winY, windowWithMouse]);
+	    break;
+
+	case 'g': // Grab
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    var ownerEvents = cmd[i++] == '1';
+	    var time = base64_32(cmd, i);
+	    i = i + 6;
+
+	    if (grab.window != null) {
+		/* Previous grab, compare times */
+		if (time != 0 && grab.time != 0 &&
+		    time > grab.time) {
+		    sendInput ("g", [GDK_GRAB_INVALID_TIME]);
+		    break;
+		}
+	    }
+
+	    doGrab(id, ownerEvents, time, false);
+
+	    sendInput ("g", [GDK_GRAB_SUCCESS]);
+	    break;
+
+	case 'u': // Ungrab
+	    var time = base64_32(cmd, i);
+	    i = i + 6;
+	    sendInput ("u", []);
+
+	    if (grab.window != null) {
+		if (grab.time == 0 || time == 0 ||
+		    grab.time < time)
+		    grab.window = null;
+	    }
+
+	    break;
+	default:
+	    alert("Unknown op " + command);
 	}
-
-	doGrab(id, ownerEvents, time, false);
-
-	sendInput ("g", [GDK_GRAB_SUCCESS]);
-
-	break;
-
-      case 'u': // Ungrab
-	var time = base64_32(cmd, i);
-	i = i + 6;
-	sendInput ("u", []);
-
-	if (grab.window != null) {
-	    if (grab.time == 0 || time == 0 ||
-		grab.time < time)
-		grab.window = null;
-	}
-
-	break;
-      default:
-        alert("Unknown op " + command);
     }
-  }
-  return true;
+    return true;
 }
 
 function handleOutstanding()
 {
-  while (outstandingCommands.length > 0) {
-    var cmd = outstandingCommands.shift();
-    if (!handleCommands(cmd)) {
-      outstandingCommands.unshift(cmd);
-      return;
+    while (outstandingCommands.length > 0) {
+	var cmd = outstandingCommands.shift();
+	if (!handleCommands(cmd)) {
+	    outstandingCommands.unshift(cmd);
+	    return;
+	}
     }
-  }
 }
 
 function handleLoad(event)
 {
-  var cmdObj = {};
-  cmdObj.data = event.target.responseText;
-  cmdObj.pos = 0;
+    var cmdObj = {};
+    cmdObj.data = event.target.responseText;
+    cmdObj.pos = 0;
 
-  outstandingCommands.push(cmdObj);
-  if (outstandingCommands.length == 1) {
-    handleOutstanding();
-  }
+    outstandingCommands.push(cmdObj);
+    if (outstandingCommands.length == 1) {
+	handleOutstanding();
+    }
 }
 
 function getSurfaceId(ev) {
-  var id = ev.target.surfaceId;
-  if (id != undefined)
-    return id;
-  return 0;
+    var id = ev.target.surfaceId;
+    if (id != undefined)
+	return id;
+    return 0;
 }
 
 function sendInput(cmd, args)
 {
-  if (inputSocket != null) {
-      inputSocket.send(cmd + ([lastSerial].concat(args)).join(","));
-  }
+    if (inputSocket != null) {
+	inputSocket.send(cmd + ([lastSerial].concat(args)).join(","));
+    }
 }
 
 function getDocumentCoordinates(element)
@@ -588,90 +578,89 @@ function onMouseUp (ev) {
 
 var lastKeyDown = 0;
 function onKeyDown (ev) {
-  var keyCode = ev.keyCode;
-  if (keyCode != lastKeyDown) {
-    sendInput ("k", [keyCode, ev.timeStamp]);
-    lastKeyDown = keyCode;
-  }
+    var keyCode = ev.keyCode;
+    if (keyCode != lastKeyDown) {
+	sendInput ("k", [keyCode, ev.timeStamp]);
+	lastKeyDown = keyCode;
+    }
 }
 
 function onKeyUp (ev) {
-  var keyCode = ev.keyCode;
-  sendInput ("K", [keyCode, ev.timeStamp]);
-  lastKeyDown = 0;
+    var keyCode = ev.keyCode;
+    sendInput ("K", [keyCode, ev.timeStamp]);
+    lastKeyDown = 0;
 }
 
 function cancelEvent(ev)
 {
-  ev = ev ? ev : window.event;
-  if (ev.stopPropagation)
-    ev.stopPropagation();
-  if (ev.preventDefault)
-    ev.preventDefault();
-  ev.cancelBubble = true;
-  ev.cancel = true;
-  ev.returnValue = false;
-  return false;
+    ev = ev ? ev : window.event;
+    if (ev.stopPropagation)
+	ev.stopPropagation();
+    if (ev.preventDefault)
+	ev.preventDefault();
+    ev.cancelBubble = true;
+    ev.cancel = true;
+    ev.returnValue = false;
+    return false;
 }
 
 function onMouseWheel(ev)
 {
-  ev = ev ? ev : window.event;
+    ev = ev ? ev : window.event;
 
-  var id = getSurfaceId(ev);
-  var pos = getPositionsFromEvent(ev, id);
+    var id = getSurfaceId(ev);
+    var pos = getPositionsFromEvent(ev, id);
 
-  var offset = ev.detail ? ev.detail : ev.wheelDelta;
-  var dir = 0;
-  if (offset > 0)
-    dir = 1;
-  sendInput ("s", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, ev.timeStamp, dir]);
+    var offset = ev.detail ? ev.detail : ev.wheelDelta;
+    var dir = 0;
+    if (offset > 0)
+	dir = 1;
+    sendInput ("s", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, ev.timeStamp, dir]);
 
-  return cancelEvent(ev);
+    return cancelEvent(ev);
 }
 
 function connect()
 {
-  var xhr = createXHR();
-  if (xhr) {
-    if (typeof xhr.multipart == 'undefined') {
-      alert("Sorry, this example only works in browsers that support multipart.");
-      return;
+    var xhr = createXHR();
+    if (xhr) {
+	if (typeof xhr.multipart == 'undefined') {
+	    alert("Sorry, this example only works in browsers that support multipart.");
+	    return;
+	}
+
+	xhr.multipart = true;
+	xhr.open("GET", "/output", true);
+	xhr.onload = handleLoad;
+	xhr.send(null);
     }
 
-    xhr.multipart = true;
-    xhr.open("GET", "/output", true);
-    xhr.onload = handleLoad;
-    xhr.send(null);
-  }
+    if ("WebSocket" in window) {
+	var loc = window.location.toString().replace("http:", "ws:");
+	loc = loc.substr(0, loc.lastIndexOf('/')) + "/input";
+	var ws = new WebSocket(loc, "broadway");
+	ws.onopen = function() {
+	    inputSocket = ws;
+	};
+	ws.onclose = function() {
+	    inputSocket = null;
+	};
+    } else {
+	alert("WebSocket not supported, input will not work!");
+    }
+    document.oncontextmenu = function () { return false; };
+    document.onmousemove = onMouseMove;
+    document.onmouseover = onMouseOver;
+    document.onmouseout = onMouseOut;
+    document.onmousedown = onMouseDown;
+    document.onmouseup = onMouseUp;
+    document.onkeydown = onKeyDown;
+    document.onkeyup = onKeyUp;
 
-  if ("WebSocket" in window) {
-    var loc = window.location.toString().replace("http:", "ws:");
-    loc = loc.substr(0, loc.lastIndexOf('/')) + "/input";
-    var ws = new WebSocket(loc, "broadway");
-    ws.onopen = function() {
-      inputSocket = ws;
-    };
-    ws.onclose = function() {
-      inputSocket = null;
-    };
-  } else {
-     alert("WebSocket not supported, input will not work!");
-  }
-  document.oncontextmenu = function () { return false; };
-  document.onmousemove = onMouseMove;
-  document.onmouseover = onMouseOver;
-  document.onmouseout = onMouseOut;
-  document.onmousedown = onMouseDown;
-  document.onmouseup = onMouseUp;
-  document.onkeydown = onKeyDown;
-  document.onkeyup = onKeyUp;
-
-  if (document.addEventListener) {
-    document.addEventListener('DOMMouseScroll', onMouseWheel, false);
-    document.addEventListener('mousewheel', onMouseWheel, false);
-  } else if (document.attachEvent) {
-    element.attachEvent("onmousewheel", onMouseWheel);
-  }
-
+    if (document.addEventListener) {
+	document.addEventListener('DOMMouseScroll', onMouseWheel, false);
+	document.addEventListener('mousewheel', onMouseWheel, false);
+    } else if (document.attachEvent) {
+	element.attachEvent("onmousewheel", onMouseWheel);
+    }
 }
