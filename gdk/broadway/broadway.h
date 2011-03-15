@@ -1,0 +1,67 @@
+#include <glib.h>
+
+typedef struct BroadwayOutput BroadwayOutput;
+
+typedef struct  {
+    int x, y;
+    int width, height;
+} BroadwayRect;
+
+BroadwayOutput *broadway_output_new             (int             fd,
+						 guint32         serial);
+void            broadway_output_free            (BroadwayOutput *output);
+int             broadway_output_flush           (BroadwayOutput *output);
+int             broadway_output_has_error       (BroadwayOutput *output);
+guint32         broadway_output_get_next_serial (BroadwayOutput *output);
+void            broadway_output_new_surface     (BroadwayOutput *output,
+						 int             id,
+						 int             x,
+						 int             y,
+						 int             w,
+						 int             h);
+void            broadway_output_show_surface    (BroadwayOutput *output,
+						 int             id);
+void            broadway_output_hide_surface    (BroadwayOutput *output,
+						 int             id);
+void            broadway_output_destroy_surface (BroadwayOutput *output,
+						 int             id);
+void            broadway_output_move_surface    (BroadwayOutput *output,
+						 int             id,
+						 int             x,
+						 int             y);
+void            broadway_output_resize_surface  (BroadwayOutput *output,
+						 int             id,
+						 int             w,
+						 int             h);
+void            broadway_output_put_rgb         (BroadwayOutput *output,
+						 int             id,
+						 int             x,
+						 int             y,
+						 int             w,
+						 int             h,
+						 int             byte_stride,
+						 void           *data);
+void            broadway_output_put_rgba        (BroadwayOutput *output,
+						 int             id,
+						 int             x,
+						 int             y,
+						 int             w,
+						 int             h,
+						 int             byte_stride,
+						 void           *data);
+void            broadway_output_surface_flush   (BroadwayOutput *output,
+						 int             id);
+void            broadway_output_copy_rectangles (BroadwayOutput *output,
+						 int             id,
+						 BroadwayRect   *rects,
+						 int             n_rects,
+						 int             dx,
+						 int             dy);
+guint32         broadway_output_query_pointer   (BroadwayOutput *output,
+						 int id);
+guint32         broadway_output_grab_pointer    (BroadwayOutput *output,
+						 int id,
+						 gboolean owner_event,
+						 guint32 time_);
+guint32         broadway_output_ungrab_pointer  (BroadwayOutput *output,
+						 guint32 time_);

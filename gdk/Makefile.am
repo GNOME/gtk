@@ -11,7 +11,7 @@ INTROSPECTION_COMPILER_ARGS = \
 
 SUBDIRS = $(GDK_BACKENDS) . tests
 
-DIST_SUBDIRS = win32 x11 quartz tests
+DIST_SUBDIRS = win32 x11 quartz broadway tests
 
 CLEANFILES =
 
@@ -172,6 +172,10 @@ libgdk_3_la_LIBADD += win32/libgdk-win32.la
 libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
 libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
 endif # USE_WIN32
+
+if USE_BROADWAY
+libgdk_3_la_LIBADD += broadway/libgdk-broadway.la
+endif # USE_BROADWAY
 
 if HAVE_INTROSPECTION
 

@@ -297,6 +297,10 @@ AC_ARG_ENABLE(quartz-backend,
               [AS_HELP_STRING([--enable-quartz-backend],
                               [enable the quartz gdk backend])],
 			      [backend_set=yes])
+AC_ARG_ENABLE(broadway-backend,
+              [AC_HELP_STRING([--enable-broadway-backend],
+                              [enable the broadway (HTML5) gdk backend])],
+			      [backend_set=yes])
 
 if test -z "$backend_set"; then
   if test "$platform_win32" = yes; then
@@ -350,6 +354,17 @@ if test "x$enable_quartz_backend" == xyes; then
   AM_CONDITIONAL(USE_QUARTZ, true)
 else
   AM_CONDITIONAL(USE_QUARTZ, false)
+fi
+
+if test "x$enable_broadway_backend" == xyes; then
+  GDK_BACKENDS="$GDK_BACKENDS broadway"
+  cairo_backends="$cairo_backends cairo"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_BROADWAY"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lz"
+  AM_CONDITIONAL(USE_BROADWAY, true)
+else
+  AM_CONDITIONAL(USE_BROADWAY, false)
 fi
 
 # strip leading space
@@ -1630,6 +1645,7 @@ build/Makefile
 build/win32/Makefile
 build/win32/vs9/Makefile
 gdk/Makefile
+gdk/broadway/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile
 gdk/win32/rc/Makefile

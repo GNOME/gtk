@@ -44,6 +44,10 @@
 #include "quartz/gdkquartzdisplaymanager.h"
 #endif
 
+#ifdef GDK_WINDOWING_BROADWAY
+#include "broadway/gdkbroadwaydisplaymanager.h"
+#endif
+
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
 #endif
@@ -238,6 +242,11 @@ gdk_display_manager_get (void)
 #ifdef GDK_WINDOWING_X11
       if (backend == NULL || strcmp (backend, "x11") == 0)
         manager = g_object_new (gdk_x11_display_manager_get_type (), NULL);
+      else
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+      if (backend == NULL || strcmp (backend, "broadway") == 0)
+        manager = g_object_new (gdk_broadway_display_manager_get_type (), NULL);
       else
 #endif
       if (backend != NULL)
