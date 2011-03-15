@@ -276,10 +276,26 @@ function handleCommands(cmd_obj)
         i = i + 3;
         var h = base64_16(cmd, i);
         i = i + 3;
-	flushSurface(surfaces[id]);
-	surfaces[id].canvas.width = w;
-	surfaces[id].canvas.height = h;
-        break;
+	var surface = surfaces[id];
+
+	/* Flush any outstanding draw ops before changing size */
+	flushSurface(surface);
+
+	/* Canvas resize clears the data, so we need to save it first */
+	var tmpCanvas = document.createElement("canvas");
+	tmpCanvas.width = surface.canvas.width;
+	tmpCanvas.height = surface.canvas.height;
+	var tmpContext = tmpCanvas.getContext("2d");
+	tmpContext.globalCompositeOperation = "copy";
+	tmpContext.drawImage(surface.canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+
+	surface.canvas.width = w;
+	surface.canvas.height = h;
+
+	surface.globalCompositeOperation = "copy";
+	surface.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+
+	break;
 
       /* put image data surface */
       case 'i':
