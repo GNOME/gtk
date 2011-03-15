@@ -101,6 +101,7 @@ function initContext(canvas, x, y, id)
   var context = canvas.getContext("2d");
   context.globalCompositeOperation = "source-over";
   document.body.appendChild(canvas);
+  context.drawQueue = [];
 
   return context;
 }
@@ -144,6 +145,63 @@ function getButtonMask (button) {
     if (button == 5)
 	return GDK_BUTTON5_MASK;
     return 0;
+}
+
+function flushSurface(surface)
+{
+    var commands = surface.drawQueue;
+    surface.queue = [];
+    var i = 0;
+    for (i = 0; i < commands.length; i++) {
+	var cmd = commands[i];
+	var context = surfaces[cmd.id];
+	switch (cmd.op) {
+      /* put image data surface */
+	case 'i':
+	    context.globalCompositeOperation = "source-over";
+	    context.drawImage(cmd.img, cmd.x, cmd.y);
+	    break;
+
+      /* copy rects */
+	case 'b':
+	    context.save();
+	    context.beginPath();
+
+	    var minx;
+	    var miny;
+	    var maxx;
+	    var maxy;
+	    for (var j = 0; j < cmd.rects.length; j++) {
+		var rect = cmd.rects[j];
+		context.rect(rect.x, rect.y, rect.w, rect.h);
+		if (j == 0) {
+		    minx = rect.x;
+		    miny = rect.y;
+		    maxx = rect.x + rect.w;
+		    maxy = rect.y + rect.h;
+		} else {
+		    if (rect.x < minx)
+			minx = rect.x;
+		    if (rect.y < miny)
+			miny = rect.y;
+		    if (rect.x + rect.w > maxx)
+			maxx = rect.x + rect.w;
+		    if (rect.y + rect.h > maxy)
+			maxy = rect.y + rect.h;
+		}
+	    }
+	    context.clip();
+	    context.globalCompositeOperation = "copy";
+	    context.drawImage(context.canvas,
+			      minx - cmd.dx, miny - cmd.dy, maxx - minx, maxy - miny,
+			      minx, miny, maxx - minx, maxy - miny);
+	    context.restore();
+	    break;
+
+      default:
+	    alert("Unknown drawing op " + cmd.op);
+	}
+    }
 }
 
 function handleCommands(cmd_obj)
@@ -218,30 +276,31 @@ function handleCommands(cmd_obj)
         i = i + 3;
         var h = base64_16(cmd, i);
         i = i + 3;
+	flushSurface(surfaces[id]);
 	surfaces[id].canvas.width = w;
 	surfaces[id].canvas.height = h;
         break;
 
       /* put image data surface */
       case 'i':
-        var id = base64_16(cmd, i);
+	var q = new Object();
+	q.op = 'i';
+        q.id = base64_16(cmd, i);
         i = i + 3;
-        var x = base64_16(cmd, i);
+        q.x = base64_16(cmd, i);
         i = i + 3;
-        var y = base64_16(cmd, i);
+        q.y = base64_16(cmd, i);
         i = i + 3;
         var size = base64_32(cmd, i);
         i = i + 6;
 	var url = cmd.slice(i, i + size);
 	i = i + size;
-        var img = new Image();
-	img.src = url;
-	surfaces[id].globalCompositeOperation = "source-over";
-	if (img.complete) {
-          surfaces[id].drawImage(img, x, y);
-	} else {
+        q.img = new Image();
+	q.img.src = url;
+	surfaces[q.id].drawQueue.push(q);
+	if (!q.img.complete) {
 	  cmd_obj.pos = i;
-	  img.onload = function() { surfaces[id].drawImage(img, x, y); handleOutstanding(); };
+	  q.img.onload = function() { handleOutstanding(); };
 	  return false;
 	}
 
@@ -249,62 +308,41 @@ function handleCommands(cmd_obj)
 
       /* copy rects */
       case 'b':
-        var id = base64_16(cmd, i);
+	var q = new Object();
+	q.op = 'b';
+        q.id = base64_16(cmd, i);
         i = i + 3;
 
 	var nrects = base64_16(cmd, i);
         i = i + 3;
 
-	var context = surfaces[id];
-	context.save();
-	context.beginPath();
-
-	var minx;
-	var miny;
-	var maxx;
-	var maxy;
+	q.rects = [];
 	for (var r = 0; r < nrects; r++) {
-	  var x = base64_16(cmd, i);
+	  var rect = new Object();
+	  rect.x = base64_16(cmd, i);
           i = i + 3;
-          var y = base64_16(cmd, i);
+          rect.y = base64_16(cmd, i);
           i = i + 3;
-          var w = base64_16(cmd, i);
+          rect.w = base64_16(cmd, i);
           i = i + 3;
-          var h = base64_16(cmd, i);
+          rect.h = base64_16(cmd, i);
           i = i + 3;
-	  context.rect(x, y, w, h);
-
-	  if (r == 0) {
-	      minx = x;
-	      miny = y;
-	      maxx = x + w;
-	      maxy = y + h;
-	  } else {
-	      if (x < minx)
-		  minx = x;
-	      if (y < miny)
-		  miny = y;
-	      if (x + w > maxx)
-		  maxx = x + w;
-	      if (y + h > maxy)
-		  maxy = y + h;
-	  }
+	  q.rects.push (rect);
 	}
 
-	context.clip();
-
-        var dx = base64_16s(cmd, i);
+        q.dx = base64_16s(cmd, i);
         i = i + 3;
-        var dy = base64_16s(cmd, i);
+        q.dy = base64_16s(cmd, i);
         i = i + 3;
-
-	context.globalCompositeOperation = "copy";
-        context.drawImage(context.canvas,
-			  minx - dx, miny - dy, maxx - minx, maxy - miny,
-			  minx, miny, maxx - minx, maxy - miny);
-
-	context.restore();
+	surfaces[q.id].drawQueue.push(q);
         break;
+
+      case 'f': // Flush surface
+        var id = base64_16(cmd, i);
+        i = i + 3;
+
+	flushSurface(surfaces[id]);
+	break;
 
       case 'q': // Query pointer
         var id = base64_16(cmd, i);

@@ -153,6 +153,8 @@ window_data_send (BroadwayOutput *output, GdkWindowImplBroadway *impl)
 			       cairo_image_surface_get_data (impl->surface));
     }
 
+  broadway_output_surface_flush (output, impl->id);
+
   cr = cairo_create (impl->last_surface);
   cairo_set_source_surface (cr, impl->surface, 0, 0);
   cairo_paint (cr);

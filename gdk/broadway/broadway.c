@@ -1088,6 +1088,21 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
   free (rects);
 }
 
+void
+broadway_output_surface_flush (BroadwayOutput *output,
+			       int             id)
+{
+  char buf[HEADER_LEN + 3];
+  int p;
+
+  p = write_header (output, buf, 'f');
+  append_uint16 (id, buf, &p);
+
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
+}
+
 #if 0
 static void
 send_image_a (BroadwayOutput *output,  int id, int x, int y,

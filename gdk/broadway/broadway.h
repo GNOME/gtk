@@ -49,6 +49,8 @@ void            broadway_output_put_rgba        (BroadwayOutput *output,
 						 int             h,
 						 int             byte_stride,
 						 void           *data);
+void            broadway_output_surface_flush   (BroadwayOutput *output,
+						 int             id);
 void            broadway_output_copy_rectangles (BroadwayOutput *output,
 						 int             id,
 						 BroadwayRect   *rects,
