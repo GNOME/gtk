@@ -12996,6 +12996,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       for (l = style_data->classes; l; l = l->next)
         gtk_style_context_add_class (context, (const gchar *)l->data);
 
+      gtk_widget_reset_style (GTK_WIDGET (buildable));
+
       g_slist_free_full (style_data->classes, g_free);
       g_slice_free (StyleParserData, style_data);
     }
