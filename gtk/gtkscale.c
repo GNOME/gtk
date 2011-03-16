@@ -1300,8 +1300,8 @@ gtk_scale_get_layout (GtkScale *scale)
 /**
  * gtk_scale_get_layout_offsets:
  * @scale: a #GtkScale
- * @x: (allow-none): location to store X offset of layout, or %NULL
- * @y: (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (allow-none): location to store X offset of layout, or %NULL
+ * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
  *
  * Obtains the coordinates where the scale will draw the 
  * #PangoLayout representing the text in the scale. Remember

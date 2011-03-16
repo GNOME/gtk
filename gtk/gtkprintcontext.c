@@ -384,10 +384,10 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
 /**
  * gtk_print_context_get_hard_margins:
  * @context: a #GtkPrintContext
- * @top: top hardware printer margin
- * @bottom: bottom hardware printer margin
- * @left: left hardware printer margin
- * @right: right hardware printer margin
+ * @top: (out): top hardware printer margin
+ * @bottom: (out): bottom hardware printer margin
+ * @left: (out): left hardware printer margin
+ * @right: (out): right hardware printer margin
  *
  * Obtains the hardware printer margins of the #GtkPrintContext, in units.
  *

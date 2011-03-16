@@ -486,7 +486,7 @@ _gdk_display_enable_motion_hints (GdkDisplay *display)
 /**
  * gdk_display_get_pointer:
  * @display: a #GdkDisplay
- * @screen: (allow-none): location to store the screen that the
+ * @screen: (out) (allow-none): location to store the screen that the
  *          cursor is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of pointer, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of pointer, or %NULL.

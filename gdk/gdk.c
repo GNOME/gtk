@@ -225,7 +225,7 @@ gdk_pre_parse_libgtk_only (void)
 /**
  * gdk_parse_args:
  * @argc: the number of command line arguments.
- * @argv: the array of command line arguments.
+ * @argv: (inout) (array length=argc): the array of command line arguments.
  * 
  * Parse command line arguments, and store for future
  * use by calls to gdk_display_open().

@@ -2027,8 +2027,8 @@ gtk_button_set_alignment (GtkButton *button,
 /**
  * gtk_button_get_alignment:
  * @button: a #GtkButton
- * @xalign: return location for horizontal alignment
- * @yalign: return location for vertical alignment
+ * @xalign: (out): return location for horizontal alignment
+ * @yalign: (out): return location for vertical alignment
  *
  * Gets the alignment of the child in the button.
  *

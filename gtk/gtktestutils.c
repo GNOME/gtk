@@ -44,7 +44,8 @@
  * gtk_test_init:
  * @argcp: Address of the <parameter>argc</parameter> parameter of the
  *        main() function. Changed if any arguments were handled.
- * @argvp: Address of the <parameter>argv</parameter> parameter of main().
+ * @argvp: (inout) (array length=argcp): Address of the 
+ *        <parameter>argv</parameter> parameter of main().
  *        Any parameters understood by g_test_init() or gtk_init() are
  *        stripped before return.
  * @Varargs: currently unused
@@ -620,7 +621,8 @@ static guint  n_all_registered_types = 0;
 /**
  * gtk_test_list_all_types
  * @n_types: location to store number of types
- * @returns: 0-terminated array of type ids
+ * @returns: (array length=n_types zero-terminated=1) (transfer none):
+ *    0-terminated array of type ids
  *
  * Return the type ids that have been registered after
  * calling gtk_test_register_all_types().

@@ -1123,7 +1123,7 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * @builder: a #GtkBuilder
  * @pspec: the #GParamSpec for the property
  * @string: the string representation of the value
- * @value: the #GValue to store the result in
+ * @value: (out): the #GValue to store the result in
  * @error: (allow-none): return location for an error, or %NULL
  *
  * This function demarshals a value from a string. This function
@@ -1179,7 +1179,7 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @type: the #GType of the value
  * @string: the string representation of the value
- * @value: the #GValue to store the result in
+ * @value: (out): the #GValue to store the result in
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Like gtk_builder_value_from_string(), this function demarshals 

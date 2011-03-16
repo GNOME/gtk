@@ -529,8 +529,10 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
    * @window: the offscreen window on which the signal is emitted
    * @offscreen-x: x coordinate in the offscreen window
    * @offscreen-y: y coordinate in the offscreen window
-   * @embedder-x: return location for the x coordinate in the embedder window
-   * @embedder-y: return location for the y coordinate in the embedder window
+   * @embedder-x: (out) (type double): return location for the x
+   *     coordinate in the embedder window
+   * @embedder-y: (out) (type double): return location for the y
+   *     coordinate in the embedder window
    *
    * The ::to-embedder signal is emitted to translate coordinates
    * in an offscreen window to its embedder.
@@ -558,8 +560,10 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
    * @window: the offscreen window on which the signal is emitted
    * @embedder-x: x coordinate in the embedder window
    * @embedder-y: y coordinate in the embedder window
-   * @offscreen-x: return location for the x coordinate in the offscreen window
-   * @offscreen-y: return location for the y coordinate in the offscreen window
+   * @offscreen-x: (out) (type double): return location for the x
+   *     coordinate in the offscreen window
+   * @offscreen-y: (out) (type double): return location for the y
+   *     coordinate in the offscreen window
    *
    * The ::from-embedder signal is emitted to translate coordinates
    * in the embedder of an offscreen window to the offscreen window.
@@ -2204,7 +2208,7 @@ gdk_window_set_user_data (GdkWindow *window,
 /**
  * gdk_window_get_user_data:
  * @window: a #GdkWindow
- * @data: return location for user data
+ * @data: (out): return location for user data
  *
  * Retrieves the user data for @window, which is normally the widget
  * that @window belongs to. See gdk_window_set_user_data().
@@ -6343,8 +6347,8 @@ gdk_window_set_debug_updates (gboolean setting)
  * @flags: a mask indicating what portions of @geometry are set
  * @width: desired width of window
  * @height: desired height of the window
- * @new_width: location to store resulting width
- * @new_height: location to store resulting height
+ * @new_width: (out): location to store resulting width
+ * @new_height: (out): location to store resulting height
  *
  * Constrains a desired width and height according to a
  * set of geometry hints (such as minimum and maximum size).
@@ -8346,8 +8350,8 @@ gdk_window_get_origin (GdkWindow *window,
  * @window: a #GdkWindow
  * @x: X coordinate in window
  * @y: Y coordinate in window
- * @root_x: return location for X coordinate
- * @root_y: return location for Y coordinate
+ * @root_x: (out): return location for X coordinate
+ * @root_y: (out): return location for Y coordinate
  *
  * Obtains the position of a window position in root
  * window coordinates. This is similar to

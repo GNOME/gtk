@@ -1059,7 +1059,7 @@ gtk_range_get_min_slider_size (GtkRange *range)
 /**
  * gtk_range_get_range_rect:
  * @range: a #GtkRange
- * @range_rect: return location for the range rectangle
+ * @range_rect: (out): return location for the range rectangle
  *
  * This function returns the area that contains the range's trough
  * and its steppers, in widget->window coordinates.
@@ -1083,8 +1083,10 @@ gtk_range_get_range_rect (GtkRange     *range,
 /**
  * gtk_range_get_slider_range:
  * @range: a #GtkRange
- * @slider_start: (allow-none): return location for the slider's start, or %NULL
- * @slider_end: (allow-none): return location for the slider's end, or %NULL
+ * @slider_start: (out) (allow-none): return location for the slider's
+ *     start, or %NULL
+ * @slider_end: (out) (allow-none): return location for the slider's
+ *     end, or %NULL
  *
  * This function returns sliders range along the long dimension,
  * in widget->window coordinates.

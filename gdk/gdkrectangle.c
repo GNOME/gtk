@@ -32,7 +32,7 @@
  * gdk_rectangle_union:
  * @src1: a #GdkRectangle
  * @src2: a #GdkRectangle
- * @dest: return location for the union of @src1 and @src2
+ * @dest: (out): return location for the union of @src1 and @src2
  *
  * Calculates the union of two rectangles.
  * The union of rectangles @src1 and @src2 is the smallest rectangle which

@@ -409,8 +409,8 @@ gtk_text_buffer_deserialize_get_can_create_tags (GtkTextBuffer *buffer,
  * with @buffer using gtk_text_buffer_register_serialize_format() or
  * gtk_text_buffer_register_serialize_tagset()
  *
- * Return value: an array of #GdkAtom<!-- -->s representing the registered
- *               formats.
+ * Return value: (array length=n_formats) (transfer container): an array of
+ *               #GdkAtom<!-- -->s representing the registered formats.
  *
  * Since: 2.10
  **/
@@ -437,8 +437,8 @@ gtk_text_buffer_get_serialize_formats (GtkTextBuffer *buffer,
  * with @buffer using gtk_text_buffer_register_deserialize_format() or
  * gtk_text_buffer_register_deserialize_tagset()
  *
- * Return value: an array of #GdkAtom<!-- -->s representing the registered
- *               formats.
+ * Return value: (array length=n_formats) (transfer container): an array of
+ *               #GdkAtom<!-- -->s representing the registered formats.
  *
  * Since: 2.10
  **/
@@ -472,7 +472,8 @@ gtk_text_buffer_get_deserialize_formats (GtkTextBuffer *buffer,
  * gtk_text_buffer_register_serialize_format() or
  * gtk_text_buffer_register_serialize_tagset() beforehand.
  *
- * Return value: the serialized data, encoded as @format
+ * Return value: (array length=length) (transfer full): the serialized
+ *               data, encoded as @format
  *
  * Since: 2.10
  **/
@@ -521,7 +522,7 @@ gtk_text_buffer_serialize (GtkTextBuffer     *register_buffer,
  * @content_buffer: the #GtkTextBuffer to deserialize into
  * @format: the rich text format to use for deserializing
  * @iter: insertion point for the deserialized text
- * @data: data to deserialize
+ * @data: (array length=length): data to deserialize
  * @length: length of @data
  * @error: return location for a #GError
  *

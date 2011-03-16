@@ -696,7 +696,8 @@ gtk_icon_theme_finalize (GObject *object)
 /**
  * gtk_icon_theme_set_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: array of directories that are searched for icon themes
+ * @path: (array length=n_elements) (element-type filename): array of
+ *     directories that are searched for icon themes
  * @n_elements: number of elements in @path.
  * 
  * Sets the search path for the icon theme object. When looking
@@ -1450,7 +1451,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 /**
  * gtk_icon_theme_choose_icon:
  * @icon_theme: a #GtkIconTheme
- * @icon_names: %NULL-terminated array of icon names to lookup
+ * @icon_names: (array zero-terminated=1): %NULL-terminated array of
+ *     icon names to lookup
  * @size: desired icon size
  * @flags: flags modifying the behavior of the icon lookup
  * 
@@ -1625,9 +1627,9 @@ add_size (gpointer  key,
  * that the icon is available in a scalable format. The array 
  * is zero-terminated.
  * 
- * Return value: An newly allocated array describing the sizes at
- * which the icon is available. The array should be freed with g_free()
- * when it is no longer needed.
+ * Return value: (array zero-terminated=1): An newly allocated array
+ * describing the sizes at which the icon is available. The array
+ * should be freed with g_free() when it is no longer needed.
  *
  * Since: 2.6
  **/
@@ -3152,7 +3154,7 @@ icon_info_scale_point (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_get_embedded_rect:
  * @icon_info: a #GtkIconInfo
- * @rectangle: #GdkRectangle in which to store embedded
+ * @rectangle: (out): #GdkRectangle in which to store embedded
  *   rectangle coordinates; coordinates are only stored
  *   when this function returns %TRUE.
  *

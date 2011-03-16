@@ -7494,8 +7494,8 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
 /**
  * gtk_entry_get_layout_offsets:
  * @entry: a #GtkEntry
- * @x: (allow-none): location to store X offset of layout, or %NULL
- * @y: (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (allow-none): location to store X offset of layout, or %NULL
+ * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
  *
  *
  * Obtains the position of the #PangoLayout used to render text

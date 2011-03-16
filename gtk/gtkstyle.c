@@ -906,7 +906,7 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
  * gtk_style_lookup_color:
  * @style: a #GtkStyle
  * @color_name: the name of the logical color to look up
- * @color: the #GdkColor to fill in
+ * @color: (out): the #GdkColor to fill in
  *
  * Looks up @color_name in the style's logical color mappings,
  * filling in @color and returning %TRUE if found, otherwise

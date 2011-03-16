@@ -855,12 +855,13 @@ gtk_get_option_group (gboolean open_default_display)
 /**
  * gtk_init_with_args:
  * @argc: a pointer to the number of command line arguments.
- * @argv: a pointer to the array of command line arguments.
+ * @argv: (inout) (array length=argc): a pointer to the array of
+ *    command line arguments.
  * @parameter_string: a string which is displayed in
  *    the first line of <option>--help</option> output, after 
  *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
- * @entries: a %NULL-terminated array of #GOptionEntry<!-- -->s
- *    describing the options of your program
+ * @entries: (array zero-terminated=1):  a %NULL-terminated array
+ *    of #GOptionEntry<!-- -->s describing the options of your program
  * @translation_domain: a translation domain to use for translating
  *    the <option>--help</option> output for the options in @entries
  *    with gettext(), or %NULL
@@ -2328,7 +2329,7 @@ gtk_get_current_event_time (void)
 
 /**
  * gtk_get_current_event_state:
- * @state: a location to store the state of the current event
+ * @state: (out): a location to store the state of the current event
  * 
  * If there is a current event and it has a state field, place
  * that state field in @state and return %TRUE, otherwise return

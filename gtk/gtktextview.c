@@ -2281,7 +2281,7 @@ gtk_text_view_move_mark_onscreen (GtkTextView *text_view,
 /**
  * gtk_text_view_get_visible_rect:
  * @text_view: a #GtkTextView
- * @visible_rect: rectangle to fill
+ * @visible_rect: (out): rectangle to fill
  *
  * Fills @visible_rect with the currently-visible
  * region of the buffer, in buffer coordinates. Convert to window coordinates

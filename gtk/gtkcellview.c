@@ -971,7 +971,7 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  * gtk_cell_view_get_size_of_row:
  * @cell_view: a #GtkCellView
  * @path: a #GtkTreePath 
- * @requisition: return location for the size 
+ * @requisition: (out): return location for the size 
  *
  * Sets @requisition to the size needed by @cell_view to display 
  * the model row pointed to by @path.

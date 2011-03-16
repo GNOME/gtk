@@ -848,7 +848,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
 /**
  * gdk_event_get_axis:
  * @event: a #GdkEvent
- * @axis_use: (out): the axis use to look for
+ * @axis_use: the axis use to look for
  * @value: (out): location to store the value found
  * 
  * Extract the axis value for a particular axis use from

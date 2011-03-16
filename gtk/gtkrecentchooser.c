@@ -925,8 +925,9 @@ gtk_recent_chooser_get_items (GtkRecentChooser *chooser)
  *
  * Since the returned array is %NULL terminated, @length may be %NULL.
  * 
- * Return value: (transfer full): A newly allocated, %NULL-terminated array
- *     of strings. Use g_strfreev() to free it.
+ * Return value: (array length=length zero-terminated=1) (transfer full):
+ *     A newly allocated, %NULL-terminated array of strings. Use
+ *     g_strfreev() to free it.
  *
  * Since: 2.10
  */

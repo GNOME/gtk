@@ -1319,7 +1319,8 @@ gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
  * gtk_dialog_set_alternative_button_order_from_array:
  * @dialog: a #GtkDialog
  * @n_params: the number of response ids in @new_order
- * @new_order: an array of response ids of @dialog's buttons
+ * @new_order: (array length=n_params): an array of response ids of
+ *     @dialog's buttons
  *
  * Sets an alternative button order. If the 
  * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE, 

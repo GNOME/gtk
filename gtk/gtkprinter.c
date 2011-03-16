@@ -978,10 +978,10 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
 /**
  * gtk_printer_get_hard_margins:
  * @printer: a #GtkPrinter
- * @top: a location to store the top margin in
- * @bottom: a location to store the bottom margin in
- * @left: a location to store the left margin in
- * @right: a location to store the right margin in
+ * @top: (out): a location to store the top margin in
+ * @bottom: (out): a location to store the bottom margin in
+ * @left: (out): a location to store the left margin in
+ * @right: (out): a location to store the right margin in
  *
  * Retrieve the hard margins of @printer, i.e. the margins that define
  * the area at the borders of the paper that the printer cannot print to.

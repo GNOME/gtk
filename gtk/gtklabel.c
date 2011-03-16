@@ -4950,8 +4950,8 @@ gtk_label_select_region  (GtkLabel *label,
 /**
  * gtk_label_get_selection_bounds:
  * @label: a #GtkLabel
- * @start: return location for start of selection, as a character offset
- * @end: return location for end of selection, as a character offset
+ * @start: (out): return location for start of selection, as a character offset
+ * @end: (out): return location for end of selection, as a character offset
  * 
  * Gets the selected range of characters in the label, returning %TRUE
  * if there's a selection.
@@ -5040,8 +5040,8 @@ gtk_label_get_layout (GtkLabel *label)
 /**
  * gtk_label_get_layout_offsets:
  * @label: a #GtkLabel
- * @x: (allow-none): location to store X offset of layout, or %NULL
- * @y: (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (allow-none): location to store X offset of layout, or %NULL
+ * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
  *
  * Obtains the coordinates where the label will draw the #PangoLayout
  * representing the text in the label; useful to convert mouse events
