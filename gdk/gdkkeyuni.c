@@ -831,15 +831,25 @@ static const struct {
 
   /* Following items added to GTK, not in the xterm table */
 
+  /* A few ASCII control characters */
+
+  { 0xFF08 /* Backspace */, '\b' },
+  { 0xFF09 /* Tab       */, '\t'  },
+  { 0xFF0A /* Linefeed  */, '\n' },
+  { 0xFF0B /* Vert. Tab */, '\v' },
+  { 0xFF0D /* Return    */, '\r' },
+  { 0xFF1B /* Escape    */, '\033' },
+  { 0xFFFF /* Delete    */, '\177' },
+
   /* Numeric keypad */
-  
-  { 0xFF80 /* Space */, ' ' },
-  { 0xFFAA /* Multiply */, '*' },
-  { 0xFFAB /* Add */, '+' },
+
+  { 0xFF80 /* Space     */, ' ' },
+  { 0xFFAA /* Multiply  */, '*' },
+  { 0xFFAB /* Add       */, '+' },
   { 0xFFAC /* Separator */, ',' },
-  { 0xFFAD /* Subtract */, '-' },
-  { 0xFFAE /* Decimal */, '.' },
-  { 0xFFAF /* Divide */, '/' },
+  { 0xFFAD /* Subtract  */, '-' },
+  { 0xFFAE /* Decimal   */, '.' },
+  { 0xFFAF /* Divide    */, '/' },
   { 0xFFB0 /* 0 */, '0' },
   { 0xFFB1 /* 1 */, '1' },
   { 0xFFB2 /* 2 */, '2' },
