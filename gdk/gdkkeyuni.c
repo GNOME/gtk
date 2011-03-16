@@ -839,7 +839,6 @@ static const struct {
   { 0xFF0B /* Vert. Tab */, '\v' },
   { 0xFF0D /* Return    */, '\r' },
   { 0xFF1B /* Escape    */, '\033' },
-  { 0xFFFF /* Delete    */, '\177' },
 
   /* Numeric keypad */
 
@@ -863,6 +862,8 @@ static const struct {
   { 0xFFBD /* Equal */, '=' },  
 
   /* End numeric keypad */
+
+  { 0xFFFF /* Delete */, '\177' }
 };
 
 /**
