@@ -746,7 +746,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 	}
   
       ch = gdk_keyval_to_unicode (event->keyval);
-      if (ch != 0)
+      if (ch != 0 && !g_unichar_iscntrl (ch))
 	{
 	  gtk_im_context_simple_commit_char (context, ch);
 	  return TRUE;
