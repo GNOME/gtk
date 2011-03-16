@@ -355,7 +355,7 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
       gunichar ch;
 
       ch = gdk_keyval_to_unicode (event->keyval);
-      if (ch != 0)
+      if (ch != 0 && !g_unichar_iscntrl (ch))
         {
           gint len;
           gchar buf[10];
