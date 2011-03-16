@@ -819,7 +819,7 @@ gdk_window_broadway_get_geometry (GdkWindow *window,
 {
   GdkWindowImplBroadway *impl;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
