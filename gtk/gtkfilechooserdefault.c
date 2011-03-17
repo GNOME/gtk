@@ -3766,11 +3766,12 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_MENU);
 
-  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
-  gtk_widget_show (toolbar);
-
   context = gtk_widget_get_style_context (toolbar);
   gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
+  
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
+  gtk_widget_show (toolbar);
 
   /* Add bookmark button */
   icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
