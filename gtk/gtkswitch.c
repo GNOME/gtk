@@ -162,17 +162,30 @@ gtk_switch_motion (GtkWidget      *widget,
       GtkStyleContext *context;
       GtkStateFlags state;
       GtkBorder padding;
+      gint width, focus_width, focus_pad;
+
+      gtk_widget_style_get (widget,
+                            "focus-line-width", &focus_width,
+                            "focus-padding", &focus_pad,
+                            NULL);
 
       context = gtk_widget_get_style_context (widget);
       state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
       gtk_style_context_get_padding (context, state, &padding);
+      gtk_style_context_restore (context);
+      
       gtk_widget_get_allocation (widget, &allocation);
 
+      width = allocation.width - 2 * (focus_width + focus_pad);
+
       /* constrain the handle within the trough width */
-      if (position > (allocation.width / 2 - padding.right))
-        priv->handle_x = allocation.width / 2 - padding.right;
+      if (position > (width / 2) - padding.right)
+        priv->handle_x = width / 2 - padding.right;
       else if (position < padding.left)
-        priv->handle_x = padding.left;
+        priv->handle_x = 0;
       else
         priv->handle_x = position;
 
