@@ -7632,7 +7632,7 @@ gtk_widget_get_sensitive (GtkWidget *widget)
  * @widget: a #GtkWidget
  *
  * Returns the widget's effective sensitivity, which means
- * it is sensitive itself and also its parent widget is sensntive
+ * it is sensitive itself and also its parent widget is sensitive
  *
  * Returns: %TRUE if the widget is effectively sensitive
  *
