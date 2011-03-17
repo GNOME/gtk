@@ -7600,8 +7600,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 
   gtk_widget_propagate_state (widget, &data);
 
-  if (gtk_widget_is_drawable (widget))
-    gtk_widget_queue_draw (widget);
+  gtk_widget_queue_resize (widget);
 
   g_object_notify (G_OBJECT (widget), "sensitive");
 }
