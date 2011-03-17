@@ -33,9 +33,11 @@ gtk/gtkappchooserdialog.c
 gtk/gtkappchooserwidget.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
+gtk/gtkanimationdescription.c
 gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
+gtk/gtkbindings.c
 gtk/gtkbox.c
 gtk/gtkbuildable.c
 gtk/gtkbuilder.c
@@ -124,6 +126,7 @@ gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
 gtk/gtkmisc.c
+gtk/gtkmodifierstyle.c
 gtk/gtkmodules.c
 gtk/gtkmountoperation.c
 gtk/gtkmountoperation-stub.c
@@ -176,6 +179,7 @@ gtk/gtkstatusicon.c
 gtk/gtkstock.c
 gtk/gtkstyle.c
 gtk/gtkstylecontext.c
+gtk/gtkstyleprovider.c
 gtk/gtkswitch.c
 gtk/gtktable.c
 gtk/gtktearoffmenuitem.c
