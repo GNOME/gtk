@@ -394,6 +394,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_VIEW "view"
 
 /**
+ * GTK_STYLE_CLASS_SIDEBAR:
+ *
+ * A widget class defining a sidebar
+ */
+#define GTK_STYLE_CLASS_SIDEBAR "sidebar"
+
+/**
  * GTK_STYLE_CLASS_HIGHLIGHT:
  *
  * A CSS class defining a highlighted area, such as headings in
