@@ -7100,6 +7100,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv;
   GtkNotebookPage *page;
+  GtkStyleContext *context;
   GList *children;
   gint i;
 
@@ -7114,6 +7115,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 
   priv->show_tabs = show_tabs;
   children = priv->children;
+  context = gtk_widget_get_style_context (GTK_WIDGET (notebook));
 
   if (!show_tabs)
     {
@@ -7131,11 +7133,14 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
           else
             gtk_widget_hide (page->tab_label);
         }
+
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NOTEBOOK);
     }
   else
     {
       gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
       gtk_notebook_update_labels (notebook);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_NOTEBOOK);
     }
 
   for (i = 0; i < N_ACTION_WIDGETS; i++)
