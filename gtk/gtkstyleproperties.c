@@ -1243,7 +1243,7 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               font_desc = g_value_get_boxed (value);
               font_desc_to_merge = g_value_get_boxed (&data->value);
 
-              pango_font_description_merge (font_desc, font_desc_to_merge, replace);
+              pango_font_description_merge (font_desc, font_desc_to_merge, FALSE);
             }
           else if (G_VALUE_TYPE (&data->value) == G_TYPE_PTR_ARRAY &&
                    G_IS_VALUE (value))
