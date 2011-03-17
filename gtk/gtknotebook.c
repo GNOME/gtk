@@ -7127,6 +7127,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
         gtk_widget_set_child_visible (priv->action_widget[i], show_tabs);
     }
 
+  gtk_widget_reset_style (GTK_WIDGET (notebook));
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
   g_object_notify (G_OBJECT (notebook), "show-tabs");
