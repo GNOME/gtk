@@ -3603,7 +3603,6 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-  GtkStyleContext *style;
 
   /* Target types for dragging a row to/from the shortcuts list */
   const GtkTargetEntry tree_model_row_targets[] = {
