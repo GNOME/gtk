@@ -2052,6 +2052,8 @@ text_view_visibility_notify_event (GtkWidget          *text_view,
       set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), dev, bx, by);
     }
 
+  g_list_free (devices);
+
   return FALSE;
 }
 
