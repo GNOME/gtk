@@ -10933,6 +10933,8 @@ send_focus_change (GtkWidget *widget,
 
       gdk_event_free (fevent);
     }
+
+  g_list_free (devices);
 }
 
 static void

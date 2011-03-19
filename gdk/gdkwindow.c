@@ -8903,6 +8903,8 @@ gdk_window_set_source_events (GdkWindow      *window,
         gdk_window_set_device_events (window, device, event_mask);
     }
 
+  g_list_free (devices);
+
   /* Update accounting */
   if (G_UNLIKELY (!window->source_event_masks))
     window->source_event_masks = g_hash_table_new (NULL, NULL);
