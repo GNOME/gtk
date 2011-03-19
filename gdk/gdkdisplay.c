@@ -237,6 +237,7 @@ gdk_display_finalize (GObject *object)
                                NULL);
   g_hash_table_destroy (display->device_grabs);
 
+  g_hash_table_destroy (display->motion_hint_info);
   g_hash_table_destroy (display->pointers_info);
   g_hash_table_destroy (display->multiple_click_info);
 
