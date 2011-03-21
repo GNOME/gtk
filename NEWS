@@ -20,6 +20,7 @@ Overview of Changes in GTK+ 3.0.4
  645234 Leaky calls to gdk_device_manager_list_devices()
  645235 Free the motion hint infos in GdkDisplay
  645405 themingengine: don't hardcode white to draw insensitive...
+ 635254 Check whether a resolution is set in GtkPrintSettings before...
 
 * Translation updates:
  British English
