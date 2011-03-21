@@ -2402,8 +2402,14 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   if (flags & GTK_STATE_FLAG_INSENSITIVE)
     {
+      GdkRGBA bg;
+
+      gtk_theming_engine_get_background_color (engine, flags, &bg);
+
       cairo_save (cr);
-      cairo_set_source_rgb (cr, 1, 1, 1);
+
+      gdk_cairo_set_source_rgba (cr, &bg);
+
       cairo_move_to (cr, x + 1, y + 1);
       _gtk_pango_fill_layout (cr, layout);
       cairo_restore (cr);
