@@ -319,7 +319,7 @@ GDK_WINDOWING=
 GIO_PACKAGE=gio-2.0
 PANGO_PACKAGES="pango pangocairo"
 
-if test "x$enable_x11_backend" == xyes; then
+if test "x$enable_x11_backend" = xyes; then
   # GDK calls the xlib backend "x11," cairo calls it "xlib." Other
   # backend names are identical.
   cairo_backends="$cairo_backends cairo-xlib"
@@ -332,7 +332,7 @@ if test "x$enable_x11_backend" == xyes; then
 #define GDK_WINDOWING_X11"
 fi
 
-if test "x$enable_win32_backend" == xyes; then
+if test "x$enable_win32_backend" = xyes; then
   cairo_backends="$cairo_backends cairo-win32"
   GDK_BACKENDS="$GDK_BACKENDS win32"
   backend_immodules="$backend_immodules,ime"
@@ -345,7 +345,7 @@ else
   AM_CONDITIONAL(USE_WIN32, false)
 fi
 
-if test "x$enable_quartz_backend" == xyes; then
+if test "x$enable_quartz_backend" = xyes; then
   cairo_backends="$cairo_backends cairo-quartz"
   GDK_BACKENDS="$GDK_BACKENDS quartz"
   GDK_WINDOWING="$GDK_WINDOWING
@@ -368,7 +368,7 @@ else
 fi
 
 # strip leading space
-GDK_BACKENDS=${GDK_BACKENDS/# }
+GDK_BACKENDS=${GDK_BACKENDS#* }
 
 AC_SUBST(GDK_BACKENDS)
 
@@ -493,7 +493,7 @@ case $enable_explicit_deps in
   auto)
     export SED
     deplibs_check_method=`(./libtool --config; echo 'eval echo \"$deplibs_check_method\"') | sh`
-    if test "x$deplibs_check_method" '!=' xpass_all || test "x$enable_static" = xyes ; then
+    if test "x$deplibs_check_method" != xpass_all || test "x$enable_static" = xyes ; then
       enable_explicit_deps=yes
     else
       enable_explicit_deps=no
@@ -888,7 +888,7 @@ GTK_DEP_PACKAGES_FOR_X=
 GTK_DEP_LIBS_FOR_X=
 X_EXTENSIONS=
 
-if test "x$enable_x11_backend" == xyes; then
+if test "x$enable_x11_backend" = xyes; then
   X_PACKAGES=fontconfig
 
   #
@@ -1181,7 +1181,7 @@ if test "x$enable_x11_backend" == xyes; then
   AM_CONDITIONAL(USE_X11, true)
 
   # strip leading space
-  X_EXTENSIONS=${X_EXTENSIONS/# }
+  X_EXTENSIONS=${X_EXTENSIONS#* }
 
 else
   XPACKAGES=
@@ -1273,7 +1273,7 @@ else
 fi
 
 GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
-if test "x$enable_x11_backend" == xyes; then
+if test "x$enable_x11_backend" = xyes; then
   GTK_PACKAGES="$GTK_PACKAGES pangoft2"
 fi
 GTK_EXTRA_LIBS=
@@ -1680,8 +1680,8 @@ perf/Makefile
 AC_OUTPUT
 
 # beautify the immodule list a bit
-included_immodules=${included_immodules//,/ }
-included_immodules=${included_immodules:-none}
+included_immodules=$(echo "${included_immodules}" | $SED 's/,/ /g')
+if test -z "${included_immodules}"; then included_immodules="none"; fi
 
 echo ""
 echo "        GTK+ $GTK_VERSION"
