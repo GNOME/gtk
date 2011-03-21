@@ -6871,6 +6871,17 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
 }
 
 static gboolean
+get_visible_range (GtkTreePath **start, GtkTreePath **end,
+                   GtkFileChooserDefault *impl)
+{
+  if (impl->view_mode == VIEW_MODE_LIST)
+    return gtk_tree_view_get_visible_range (GTK_TREE_VIEW (impl->browse_files_tree_view), start, end);
+  if (impl->view_mode == VIEW_MODE_ICON)
+    return gtk_icon_view_get_visible_range (GTK_ICON_VIEW (impl->browse_files_icon_view), start, end);
+  g_assert_not_reached ();
+}
+
+static gboolean
 file_system_model_set (GtkFileSystemModel *model,
                        GFile              *file,
                        GFileInfo          *info,
@@ -6929,37 +6940,51 @@ file_system_model_set (GtkFileSystemModel *model,
         g_value_set_boolean (value, TRUE);
       break;
     case MODEL_COL_LIST_PIXBUF:
+    case MODEL_COL_ICON_PIXBUF:
       if (info)
         {
+          /* not loading icon view's icon in the list view */
+          if (column == MODEL_COL_ICON_PIXBUF && impl->view_mode == VIEW_MODE_LIST)
+            return FALSE;
+
+          GtkTreeModel *tree_model;
+          GtkTreePath *path, *start, *end;
+          GtkTreeIter iter;
+
+          tree_model = impl->current_model;
+          if (tree_model != GTK_TREE_MODEL (model))
+            return FALSE;
+
+          if (!_gtk_file_system_model_get_iter_for_file (model,
+                                                         &iter,
+                                                         file))
+            g_assert_not_reached ();
+
+          /* #1 use standard icon if it is loaded */
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
             {
-              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->list_icon_size));
+              gint icon_size = impl->list_icon_size;
+              if (column == MODEL_COL_ICON_PIXBUF)
+                icon_size = impl->icon_icon_size;
+              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), icon_size));
+              return TRUE;
             }
-          else
+
+          if (!get_visible_range (&start, &end, impl))
+            return FALSE;
+          path = gtk_tree_model_get_path (tree_model, &iter);
+          gboolean file_visible = (gtk_tree_path_compare (start, path) != 1 &&
+                                   gtk_tree_path_compare (path, end) != 1);
+          gtk_tree_path_free (path);
+          gtk_tree_path_free (start);
+          gtk_tree_path_free (end);
+
+          if (file_visible)
             {
-              GtkTreeModel *tree_model;
-              GtkTreePath *path, *start, *end;
-              GtkTreeIter iter;
-
-              if (impl->browse_files_tree_view == NULL ||
-                  g_file_info_has_attribute (info, "filechooser::queried"))
-                return FALSE;
-
-              tree_model = gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view));
-              if (tree_model != GTK_TREE_MODEL (model))
-                return FALSE;
-
-              if (!_gtk_file_system_model_get_iter_for_file (model,
-                                                             &iter,
-                                                             file))
-                g_assert_not_reached ();
-              if (!gtk_tree_view_get_visible_range (GTK_TREE_VIEW (impl->browse_files_tree_view), &start, &end))
-                return FALSE;
-              path = gtk_tree_model_get_path (tree_model, &iter);
-              if (gtk_tree_path_compare (start, path) != 1 &&
-                  gtk_tree_path_compare (path, end) != 1)
+              /* #2 start loading standard icon (callback will be handled by #1) */
+              if (!g_file_info_has_attribute (info, "filechooser::icon_queried"))
                 {
-                  g_file_info_set_attribute_boolean (info, "filechooser::queried", TRUE);
+                  g_file_info_set_attribute_boolean (info, "filechooser::icon_queried", TRUE);
                   g_file_query_info_async (file,
                                            G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
                                            G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
@@ -6970,11 +6995,9 @@ file_system_model_set (GtkFileSystemModel *model,
                                            file_system_model_got_thumbnail,
                                            model);
                 }
-              gtk_tree_path_free (path);
-              gtk_tree_path_free (start);
-              gtk_tree_path_free (end);
-              return FALSE;
+
             }
+          return FALSE;
         }
       else
         g_value_set_object (value, NULL);
