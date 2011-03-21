@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.0.4
+=================================
+
+* New style classes for 'inline' toolbars and sidebars
+  have been added
+
+* Theming fixes and enhancement in many widgets, including
+  GtkRange, GtkFileChooser, GtkNotebook, GtkTreeview and
+  GtkRadioButton
+
+* Bugs fixed:
+ 640692 GtkNotebook has wrong background colour when border and tabs...
+ 642712 improve the file chooser design
+ 644836 gdk_keyval_to_unicode returns incorrect value for keyval = Return
+ 644975 styleproperties: make sure to merge the font descriptions right
+ 644976 Fix "backspace", "enter", "escape" input.
+ 645057 ./configure fails on gtk+3.0 git head
+ 645134 switch: fix boundaries for the switch motion
+ 645172 radiobutton: don't forget to set the insensitive state when...
+ 645234 Leaky calls to gdk_device_manager_list_devices()
+ 645235 Free the motion hint infos in GdkDisplay
+ 645405 themingengine: don't hardcode white to draw insensitive...
+
+* Translation updates:
+ British English
+ Dutch
+ Galician
+ German
+ Hungarian
+ Latvian
+ Lithuanian
+ Serbian
+
+
 Overview of Changes in GTK+ 3.0.3
 =================================
 
