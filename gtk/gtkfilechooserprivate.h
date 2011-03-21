@@ -223,6 +223,7 @@ struct _GtkFileChooserDefault
   GtkWidget *extra_align;
   GtkWidget *extra_widget;
 
+  GtkWidget *view_mode_combo_box;
   ViewMode view_mode;
 
   GtkWidget *location_button;
