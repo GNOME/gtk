@@ -207,7 +207,8 @@ enum {
   MODEL_COL_NAME_COLLATED,
   MODEL_COL_IS_FOLDER,
   MODEL_COL_IS_SENSITIVE,
-  MODEL_COL_PIXBUF,
+  MODEL_COL_LIST_PIXBUF,
+  MODEL_COL_ICON_PIXBUF,
   MODEL_COL_SIZE_TEXT,
   MODEL_COL_MTIME_TEXT,
   MODEL_COL_ELLIPSIZE,
@@ -224,7 +225,8 @@ enum {
 	G_TYPE_STRING,		  /* MODEL_COL_NAME_COLLATED */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_FOLDER */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_SENSITIVE */	\
-	GDK_TYPE_PIXBUF,	  /* MODEL_COL_PIXBUF */	\
+	GDK_TYPE_PIXBUF,	  /* MODEL_COL_LIST_PIXBUF */	\
+	GDK_TYPE_PIXBUF,	  /* MODEL_COL_ICON_PIXBUF */   \
 	G_TYPE_STRING,		  /* MODEL_COL_SIZE_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_MTIME_TEXT */	\
 	PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
@@ -250,7 +252,11 @@ typedef enum {
 } ShortcutsIndex;
 
 /* Icon size for if we can't get it from the theme */
-#define FALLBACK_ICON_SIZE 16
+#define FALLBACK_LIST_ICON_SIZE 16
+#define FALLBACK_ICON_ICON_SIZE 48
+
+#define THUMBNAIL_ICON_SIZE 100
+#define ICON_VIEW_ITEM_WIDTH 120
 
 #define PREVIEW_HBOX_SPACING 12
 #define NUM_LINES 45
@@ -389,6 +395,9 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkTreePath           *path,
 					GtkTreeViewColumn     *column,
 					GtkFileChooserDefault *impl);
+static void icon_item_activated        (GtkIconView           *icon_view,
+                                        GtkTreePath           *path,
+                                        GtkFileChooserDefault *impl);
 static void item_activated             (GtkTreeModel          *model,
                                         GtkTreePath           *path,
                                         GtkFileChooserDefault *impl);
@@ -754,7 +763,8 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
   impl->show_size_column = TRUE;
-  impl->icon_size = FALLBACK_ICON_SIZE;
+  impl->list_icon_size = FALLBACK_LIST_ICON_SIZE;
+  impl->icon_icon_size = FALLBACK_ICON_ICON_SIZE;
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
   impl->pending_select_files = NULL;
@@ -764,6 +774,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->sort_order = GTK_SORT_ASCENDING;
   impl->recent_manager = gtk_recent_manager_get_default ();
   impl->create_folders = TRUE;
+  impl->view_mode = VIEW_MODE_LIST;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (impl),
                                   GTK_ORIENTATION_VERTICAL);
@@ -1194,7 +1205,7 @@ render_recent_icon (GtkFileChooserDefault *impl)
     theme = gtk_icon_theme_get_default ();
 
   retval = gtk_icon_theme_load_icon (theme, "document-open-recent",
-                                     impl->icon_size, 0,
+                                     impl->list_icon_size, 0,
                                      NULL);
 
   /* fallback */
@@ -1232,7 +1243,7 @@ shortcuts_reload_icons_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->list_icon_size);
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
   if (path)
@@ -1296,7 +1307,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 
 	      volume = data;
 	      pixbuf = _gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
-						 	    impl->icon_size, NULL);
+						 	    impl->list_icon_size, NULL);
 	    }
 	  else if (shortcut_type == SHORTCUT_TYPE_FILE)
             {
@@ -1332,7 +1343,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	           */
 	          icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 	          pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
-						     impl->icon_size, 0, NULL);
+						     impl->list_icon_size, 0, NULL);
 	        }
             }
 	  else if (shortcut_type == SHORTCUT_TYPE_SEARCH)
@@ -1535,7 +1546,7 @@ get_file_info_finished (GCancellable *cancellable,
   if (!request->label_copy)
     request->label_copy = g_strdup (g_file_info_get_display_name (info));
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
-				       request->impl->icon_size);
+				       request->impl->list_icon_size);
 
   gtk_list_store_set (request->impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
@@ -1644,7 +1655,7 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
       data = volume;
       label_copy = _gtk_file_system_volume_get_display_name (volume);
       pixbuf = _gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
-				 		    impl->icon_size, NULL);
+				 		    impl->list_icon_size, NULL);
     }
   else if (shortcut_type == SHORTCUT_TYPE_FILE)
     {
@@ -1703,7 +1714,7 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
            */
           icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
           pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
-					     impl->icon_size, 0, NULL);
+					     impl->list_icon_size, 0, NULL);
         }
     }
    else
@@ -4387,27 +4398,17 @@ set_icon_cell_renderer_fixed_size (GtkFileChooserDefault *impl, GtkCellRenderer 
 
   gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
   gtk_cell_renderer_set_fixed_size (renderer, 
-                                    xpad * 2 + impl->icon_size,
-                                    ypad * 2 + impl->icon_size);
+                                    xpad * 2 + impl->list_icon_size,
+                                    ypad * 2 + impl->list_icon_size);
 }
 
-/* Creates the widgets for the file list */
+/* Creates list view */
 static GtkWidget *
-create_file_list (GtkFileChooserDefault *impl)
+create_browse_files_tree_view (GtkFileChooserDefault *impl)
 {
-  GtkWidget *swin;
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-
-  /* Scrolled window */
-  swin = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
-				       GTK_SHADOW_IN);
-
-  /* Tree/list view */
 
   impl->browse_files_tree_view = gtk_tree_view_new ();
 #ifdef PROFILE_FILE_CHOOSER
@@ -4417,7 +4418,6 @@ create_file_list (GtkFileChooserDefault *impl)
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_files_tree_view), _("Files"));
 
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->browse_files_tree_view), TRUE);
-  gtk_container_add (GTK_CONTAINER (swin), impl->browse_files_tree_view);
 
   gtk_drag_dest_set (impl->browse_files_tree_view,
                      GTK_DEST_DEFAULT_ALL,
@@ -4511,6 +4511,71 @@ create_file_list (GtkFileChooserDefault *impl)
   
   file_list_set_sort_column_ids (impl);
   update_cell_renderer_attributes (impl);
+
+  return impl->browse_files_tree_view;
+}
+
+/* Creates icon view (alternative for the list view) */
+static GtkWidget *
+create_browse_files_icon_view (GtkFileChooserDefault *impl)
+{
+  impl->browse_files_icon_view = gtk_icon_view_new ();
+  gtk_icon_view_set_text_column (GTK_ICON_VIEW (impl->browse_files_icon_view),
+                                 MODEL_COL_NAME);
+  gtk_icon_view_set_pixbuf_column (GTK_ICON_VIEW (impl->browse_files_icon_view),
+                                   MODEL_COL_ICON_PIXBUF);
+  gtk_icon_view_set_item_width (GTK_ICON_VIEW (impl->browse_files_icon_view),
+                                ICON_VIEW_ITEM_WIDTH);
+
+  g_signal_connect (impl->browse_files_icon_view, "item-activated",
+                    G_CALLBACK (icon_item_activated), impl);
+  g_signal_connect (impl->browse_files_icon_view, "key-press-event",
+                    G_CALLBACK (browse_files_key_press_event_cb), impl);
+  g_signal_connect (impl->browse_files_icon_view, "selection-changed",
+                    G_CALLBACK (list_selection_changed), impl);
+  g_signal_connect (impl->browse_files_icon_view, "popup-menu",
+                    G_CALLBACK (list_popup_menu_cb), impl);
+  g_signal_connect (impl->browse_files_icon_view, "button-press-event",
+                    G_CALLBACK (list_button_press_event_cb), impl);
+
+  gtk_drag_dest_set (impl->browse_files_icon_view,
+                     GTK_DEST_DEFAULT_ALL,
+                     NULL, 0,
+                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_dest_add_uri_targets (impl->browse_files_icon_view);
+  g_signal_connect (impl->browse_files_icon_view, "drag-data-received",
+                    G_CALLBACK (file_list_drag_data_received_cb), impl);
+  g_signal_connect (impl->browse_files_icon_view, "drag-drop",
+                    G_CALLBACK (file_list_drag_drop_cb), impl);
+  g_signal_connect (impl->browse_files_icon_view, "drag-motion",
+                    G_CALLBACK (file_list_drag_motion_cb), impl);
+  gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (impl->browse_files_icon_view),
+                                          GDK_BUTTON1_MASK,
+                                          NULL, 0,
+                                          GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_source_add_uri_targets (impl->browse_files_icon_view);
+
+  return impl->browse_files_icon_view;
+}
+
+/* Creates the widgets for the file list */
+static GtkWidget *
+create_file_list (GtkFileChooserDefault *impl)
+{
+  GtkWidget *swin;
+
+  /* Scrolled window */
+  swin = gtk_scrolled_window_new (NULL, NULL);
+  impl->browse_files_scrolled_window = swin;
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
+				       GTK_SHADOW_IN);
+
+  /* Using list view by default */
+  create_browse_files_tree_view (impl);
+  impl->browse_files_current_view = impl->browse_files_tree_view;
+  gtk_container_add (GTK_CONTAINER (swin), impl->browse_files_tree_view);
 
   gtk_widget_show_all (swin);
 
@@ -5889,9 +5954,14 @@ change_icon_theme (GtkFileChooserDefault *impl)
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 
   if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
-    impl->icon_size = MAX (width, height);
+    impl->list_icon_size = MAX (width, height);
   else
-    impl->icon_size = FALLBACK_ICON_SIZE;
+    impl->list_icon_size = FALLBACK_LIST_ICON_SIZE;
+
+  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_DIALOG, &width, &height))
+    impl->icon_icon_size = MAX (width, height);
+  else
+    impl->icon_icon_size = FALLBACK_ICON_ICON_SIZE;
 
   shortcuts_reload_icons (impl);
   /* the first cell in the first column is the icon column, and we have a fixed size there */
@@ -5901,7 +5971,10 @@ change_icon_theme (GtkFileChooserDefault *impl)
   set_icon_cell_renderer_fixed_size (impl, renderer);
   g_list_free (cells);
   if (impl->browse_files_model)
-    _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_PIXBUF);
+    {
+      _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_LIST_PIXBUF);
+      _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_ICON_PIXBUF);
+    }
   gtk_widget_queue_resize (impl->browse_files_tree_view);
 
   profile_end ("end", NULL);
@@ -6861,12 +6934,12 @@ file_system_model_set (GtkFileSystemModel *model,
       else
         g_value_set_boolean (value, TRUE);
       break;
-    case MODEL_COL_PIXBUF:
+    case MODEL_COL_LIST_PIXBUF:
       if (info)
         {
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
             {
-              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->icon_size));
+              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->list_icon_size));
             }
           else
             {
@@ -10138,6 +10211,17 @@ list_row_activated (GtkTreeView           *tree_view,
   item_activated (model, path, impl);
 }
 
+/* Callback used when a item in the icon file list is activated. */
+static void
+icon_item_activated (GtkIconView           *icon_view,
+                     GtkTreePath           *path,
+                     GtkFileChooserDefault *impl)
+{
+  GtkTreeModel *model;
+  model = gtk_icon_view_get_model (icon_view);
+  item_activated (model, path, impl);
+}
+
 /* Common implementation for list_row_activated and icon_item_activated */
 static void
 item_activated (GtkTreeModel          *model,
@@ -10213,7 +10297,7 @@ update_cell_renderer_attributes (GtkFileChooserDefault *impl)
       if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
         {
           gtk_tree_view_column_set_attributes (column, renderer, 
-                                               "pixbuf", MODEL_COL_PIXBUF,
+                                               "pixbuf", MODEL_COL_LIST_PIXBUF,
                                                NULL);
         }
       else

@@ -179,6 +179,8 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_shortcuts_popup_menu;
   GtkWidget *browse_shortcuts_popup_menu_remove_item;
   GtkWidget *browse_shortcuts_popup_menu_rename_item;
+  GtkWidget *browse_files_scrolled_window;
+  GtkWidget *browse_files_current_view;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_icon_view;
   GtkWidget *browse_files_popup_menu;
@@ -279,7 +281,8 @@ struct _GtkFileChooserDefault
   char *edited_new_text;
 
   gulong settings_signal_id;
-  int icon_size;
+  int list_icon_size;
+  int icon_icon_size;
 
   GSource *focus_entry_idle;
 
