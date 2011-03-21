@@ -459,6 +459,8 @@ static void     current_view_set_file_model           (GtkFileChooserDefault *im
                                                        GtkTreeModel          *model);
 static void     current_view_set_cursor               (GtkFileChooserDefault *impl,
                                                        GtkTreePath           *path);
+static void     current_view_set_select_multiple      (GtkFileChooserDefault *impl,
+                                                       gboolean select_multiple);
 
 
 
@@ -5259,18 +5261,10 @@ set_select_multiple (GtkFileChooserDefault *impl,
 		     gboolean               select_multiple,
 		     gboolean               property_notify)
 {
-  GtkTreeSelection *selection;
-  GtkSelectionMode mode;
-
   if (select_multiple == impl->select_multiple)
     return;
 
-  mode = select_multiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_SINGLE;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_selection_set_mode (selection, mode);
-
-  gtk_tree_view_set_rubber_banding (GTK_TREE_VIEW (impl->browse_files_tree_view), select_multiple);
+  current_view_set_select_multiple (impl, select_multiple);
 
   impl->select_multiple = select_multiple;
   g_object_notify (G_OBJECT (impl), "select-multiple");
@@ -10733,6 +10727,26 @@ current_view_set_cursor (GtkFileChooserDefault *impl, GtkTreePath *path)
     gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
   else if (impl->view_mode == VIEW_MODE_ICON)
     gtk_icon_view_set_cursor (GTK_ICON_VIEW (impl->browse_files_icon_view), path, NULL, FALSE);
+  else
+    g_assert_not_reached ();
+}
+
+static void
+current_view_set_select_multiple (GtkFileChooserDefault *impl, gboolean select_multiple)
+{
+  GtkTreeSelection *selection;
+  GtkSelectionMode mode;
+
+  mode = select_multiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_BROWSE;
+
+  if (impl->view_mode == VIEW_MODE_LIST)
+    {
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+      gtk_tree_selection_set_mode (selection, mode);
+      gtk_tree_view_set_rubber_banding (GTK_TREE_VIEW (impl->browse_files_tree_view), select_multiple);
+    }
+  else if (impl->view_mode == VIEW_MODE_ICON)
+    gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (impl->browse_files_icon_view), mode);
   else
     g_assert_not_reached ();
 }
