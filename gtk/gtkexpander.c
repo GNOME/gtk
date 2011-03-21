@@ -128,7 +128,8 @@ enum
   PROP_USE_MARKUP,
   PROP_SPACING,
   PROP_LABEL_WIDGET,
-  PROP_LABEL_FILL
+  PROP_LABEL_FILL,
+  PROP_RESIZE_TOPLEVEL
 };
 
 struct _GtkExpanderPrivate
@@ -145,6 +146,7 @@ struct _GtkExpanderPrivate
   guint             button_down : 1;
   guint             prelight : 1;
   guint             label_fill : 1;
+  guint             resize_toplevel : 1;
 };
 
 static void gtk_expander_set_property (GObject          *object,
@@ -331,6 +333,22 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
+  /**
+   * GtkExpander:resize-toplevel:
+   *
+   * When this property is %TRUE, the expander will resize the toplevel
+   * widget containing the expander upon expanding and collapsing.
+   *
+   * Since: 3.2
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_RESIZE_TOPLEVEL,
+                                   g_param_spec_boolean ("resize-toplevel",
+                                                         P_("Resize tolevel"),
+                                                         P_("Whether the expander will resize the toplevel window upon expanding and collapsing"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("expander-size",
                                                              P_("Expander Size"),
@@ -382,6 +400,7 @@ gtk_expander_init (GtkExpander *expander)
   priv->prelight = FALSE;
   priv->label_fill = FALSE;
   priv->expand_timer = 0;
+  priv->resize_toplevel = 0;
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
@@ -438,6 +457,9 @@ gtk_expander_set_property (GObject      *object,
     case PROP_LABEL_FILL:
       gtk_expander_set_label_fill (expander, g_value_get_boolean (value));
       break;
+    case PROP_RESIZE_TOPLEVEL:
+      gtk_expander_set_resize_toplevel (expander, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -477,6 +499,9 @@ gtk_expander_get_property (GObject    *object,
       break;
     case PROP_LABEL_FILL:
       g_value_set_boolean (value, priv->label_fill);
+      break;
+    case PROP_RESIZE_TOPLEVEL:
+      g_value_set_boolean (value, gtk_expander_get_resize_toplevel (expander));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1275,6 +1300,47 @@ get_next_site (GtkExpander      *expander,
   return FOCUS_NONE;
 }
 
+static void
+gtk_expander_resize_toplevel (GtkExpander *expander)
+{
+  GtkExpanderPrivate *priv = expander->priv;
+  GtkWidget *child = gtk_bin_get_child (GTK_BIN (expander));
+
+  if (child && priv->resize_toplevel &&
+      gtk_widget_get_realized (GTK_WIDGET (expander)))
+    {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (expander));
+
+      if (toplevel && gtk_widget_get_realized (toplevel))
+        {
+          GtkAllocation toplevel_allocation;
+
+          gtk_widget_get_allocation (toplevel, &toplevel_allocation);
+
+          if (priv->expanded)
+            {
+              GtkRequisition child_requisition;
+
+              gtk_widget_get_preferred_size (child, &child_requisition, NULL);
+
+              toplevel_allocation.height += child_requisition.height;
+            }
+          else
+            {
+              GtkAllocation child_allocation;
+
+              gtk_widget_get_allocation (child, &child_allocation);
+
+              toplevel_allocation.height -= child_allocation.height;
+            }
+
+          gtk_window_resize (GTK_WINDOW (toplevel),
+                             toplevel_allocation.width,
+                             toplevel_allocation.height);
+        }
+    }
+}
+
 static gboolean
 gtk_expander_focus (GtkWidget        *widget,
                     GtkDirectionType  direction)
@@ -1668,6 +1734,7 @@ gtk_expander_set_expanded (GtkExpander *expander,
         {
           gtk_widget_set_child_visible (child, priv->expanded);
           gtk_widget_queue_resize (widget);
+          gtk_expander_resize_toplevel (expander);
         }
 
       g_object_notify (G_OBJECT (expander), "expanded");
@@ -2047,4 +2114,46 @@ gtk_expander_get_label_fill (GtkExpander *expander)
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
   return expander->priv->label_fill;
+}
+
+/**
+ * gtk_expander_set_resize_toplevel:
+ * @expander: a #GtkExpander
+ * @resize_toplevel: whether to resize the toplevel
+ *
+ * Sets whether the expander will resize the toplevel widget
+ * containing the expander upon resizing and collpasing.
+ *
+ * Since: 3.2
+ */
+void
+gtk_expander_set_resize_toplevel (GtkExpander *expander,
+                                  gboolean     resize_toplevel)
+{
+  g_return_if_fail (GTK_IS_EXPANDER (expander));
+
+  if (expander->priv->resize_toplevel != resize_toplevel)
+    {
+      expander->priv->resize_toplevel = resize_toplevel ? TRUE : FALSE;
+      g_object_notify (G_OBJECT (expander), "resize-toplevel");
+    }
+}
+
+/**
+ * gtk_expander_get_resize_toplevel:
+ * @expander: a #GtkExpander
+ *
+ * Returns whether the expander will resize the toplevel widget
+ * containing the expander upon resizing and collpasing.
+ *
+ * Return value: the "resize toplevel" setting.
+ *
+ * Since: 3.2
+ */
+gboolean
+gtk_expander_get_resize_toplevel (GtkExpander *expander)
+{
+  g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
+
+  return expander->priv->resize_toplevel;
 }

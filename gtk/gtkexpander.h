@@ -66,38 +66,42 @@ struct _GtkExpanderClass
   void (*_gtk_reserved4) (void);
 };
 
-GType                 gtk_expander_get_type          (void) G_GNUC_CONST;
+GType                 gtk_expander_get_type            (void) G_GNUC_CONST;
 
-GtkWidget            *gtk_expander_new               (const gchar *label);
-GtkWidget            *gtk_expander_new_with_mnemonic (const gchar *label);
+GtkWidget            *gtk_expander_new                 (const gchar *label);
+GtkWidget            *gtk_expander_new_with_mnemonic   (const gchar *label);
 
-void                  gtk_expander_set_expanded      (GtkExpander *expander,
-						      gboolean     expanded);
-gboolean              gtk_expander_get_expanded      (GtkExpander *expander);
+void                  gtk_expander_set_expanded        (GtkExpander *expander,
+                                                        gboolean     expanded);
+gboolean              gtk_expander_get_expanded        (GtkExpander *expander);
 
 /* Spacing between the expander/label and the child */
-void                  gtk_expander_set_spacing       (GtkExpander *expander,
-						      gint         spacing);
-gint                  gtk_expander_get_spacing       (GtkExpander *expander);
+void                  gtk_expander_set_spacing         (GtkExpander *expander,
+                                                        gint         spacing);
+gint                  gtk_expander_get_spacing         (GtkExpander *expander);
 
-void                  gtk_expander_set_label         (GtkExpander *expander,
-						      const gchar *label);
-G_CONST_RETURN gchar *gtk_expander_get_label         (GtkExpander *expander);
+void                  gtk_expander_set_label           (GtkExpander *expander,
+                                                        const gchar *label);
+G_CONST_RETURN gchar *gtk_expander_get_label           (GtkExpander *expander);
 
-void                  gtk_expander_set_use_underline (GtkExpander *expander,
-						      gboolean     use_underline);
-gboolean              gtk_expander_get_use_underline (GtkExpander *expander);
+void                  gtk_expander_set_use_underline   (GtkExpander *expander,
+                                                        gboolean     use_underline);
+gboolean              gtk_expander_get_use_underline   (GtkExpander *expander);
 
-void                  gtk_expander_set_use_markup    (GtkExpander *expander,
-						      gboolean    use_markup);
-gboolean              gtk_expander_get_use_markup    (GtkExpander *expander);
+void                  gtk_expander_set_use_markup      (GtkExpander *expander,
+                                                        gboolean    use_markup);
+gboolean              gtk_expander_get_use_markup      (GtkExpander *expander);
 
-void                  gtk_expander_set_label_widget  (GtkExpander *expander,
-						      GtkWidget   *label_widget);
-GtkWidget            *gtk_expander_get_label_widget  (GtkExpander *expander);
-void                  gtk_expander_set_label_fill    (GtkExpander *expander,
-						      gboolean     label_fill);
-gboolean              gtk_expander_get_label_fill    (GtkExpander *expander);
+void                  gtk_expander_set_label_widget    (GtkExpander *expander,
+						        GtkWidget   *label_widget);
+GtkWidget            *gtk_expander_get_label_widget    (GtkExpander *expander);
+void                  gtk_expander_set_label_fill      (GtkExpander *expander,
+						        gboolean     label_fill);
+gboolean              gtk_expander_get_label_fill      (GtkExpander *expander);
+
+void                  gtk_expander_set_resize_toplevel (GtkExpander *expander,
+                                                        gboolean     resize_toplevel);
+gboolean              gtk_expander_get_resize_toplevel (GtkExpander *expander);
 
 G_END_DECLS
 
