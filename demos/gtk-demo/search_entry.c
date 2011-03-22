@@ -93,6 +93,7 @@ search_by_name (GtkWidget *item,
                                    GTK_ENTRY_ICON_PRIMARY,
                                    "Search by name\n"
                                    "Click here to change the search type");
+  gtk_entry_set_placeholder_text (entry, "name");
 }
 
 static void
@@ -106,6 +107,7 @@ search_by_description (GtkWidget *item,
                                    GTK_ENTRY_ICON_PRIMARY,
                                    "Search by description\n"
                                    "Click here to change the search type");
+  gtk_entry_set_placeholder_text (entry, "description");
 }
 
 static void
@@ -119,6 +121,7 @@ search_by_file (GtkWidget *item,
                                    GTK_ENTRY_ICON_PRIMARY,
                                    "Search by file name\n"
                                    "Click here to change the search type");
+  gtk_entry_set_placeholder_text (entry, "file name");
 }
 
 GtkWidget *
@@ -246,6 +249,7 @@ do_search_entry (GtkWidget *do_widget)
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *entry;
+  GtkWidget *button;
   GtkWidget *find_button;
   GtkWidget *cancel_button;
 
@@ -323,6 +327,10 @@ do_search_entry (GtkWidget *do_widget)
       /* add accessible alternatives for icon functionality */
       g_signal_connect (entry, "populate-popup",
                         G_CALLBACK (entry_populate_popup), NULL);
+
+      /* Give the focus to the close button */
+      button = gtk_dialog_get_widget_for_response (GTK_DIALOG (window), GTK_RESPONSE_NONE);
+      gtk_widget_grab_focus (button);
     }
 
   if (!gtk_widget_get_visible (window))
