@@ -1345,6 +1345,24 @@ gtk_settings_get_style (GtkStyleProvider *provider,
 
   font_desc = pango_font_description_from_string (font_name);
 
+  /* Unset normal attributes from this description,
+   * so they do not override theme values */
+  if (pango_font_description_get_weight (font_desc) == PANGO_WEIGHT_NORMAL)
+    pango_font_description_unset_fields (font_desc,
+                                         PANGO_FONT_MASK_WEIGHT);
+
+  if (pango_font_description_get_stretch (font_desc) == PANGO_STRETCH_NORMAL)
+    pango_font_description_unset_fields (font_desc,
+                                         PANGO_FONT_MASK_STRETCH);
+
+  if (pango_font_description_get_variant (font_desc) == PANGO_VARIANT_NORMAL)
+    pango_font_description_unset_fields (font_desc,
+                                         PANGO_FONT_MASK_VARIANT);
+
+  if (pango_font_description_get_style (font_desc) == PANGO_STYLE_NORMAL)
+    pango_font_description_unset_fields (font_desc,
+                                         PANGO_FONT_MASK_STYLE);
+
   gtk_style_properties_set (props, 0,
                             "font", font_desc,
                             NULL);
