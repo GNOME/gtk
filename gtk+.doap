@@ -1,0 +1,46 @@
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+  <name xml:lang="en">Gtk+</name>
+  <shortdesc xml:lang="en">Multi-platform toolkit</shortdesc>
+  <description xml:lang="en">GTK+ is a multi-platform toolkit for creating graphical user
+interfaces. Offering a complete set of widgets, GTK+ is suitable for
+projects ranging from small one-off tools to complete application
+suites.
+
+GTK+ has been designed from the ground up to support a range of
+languages, not only C/C++. Using GTK+ from languages such as Perl and
+Python (especially in combination with the Glade GUI builder) provides
+an effective method of rapid application development.
+
+GTK+ is free software and part of the GNU Project. However, the
+licensing terms for GTK+, the GNU LGPL, allow it to be used by all
+developers, including those developing proprietary software, without
+any license fees or royalties.</description>
+  <homepage rdf:resource="http://www.gtk+.org/" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-list" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-app-devel-list" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-devel-list" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-doc-list" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-i18n-list" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-perl-list" />
+  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/language-bindings" />
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Matthias Clasen</foaf:name>
+      <foaf:mbox rdf:resource="mailto:mclasen@redhat.com"/>
+      <gnome:userid>matthiasc</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Tim Janik</foaf:name>
+      <foaf:mbox rdf:resource="mailto:timj@gtk.org"/>
+      <gnome:userid>timj</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+</Project>
