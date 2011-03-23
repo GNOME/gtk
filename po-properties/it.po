@@ -28,19 +28,22 @@
 #
 # Il nome deve essere mantenuto il più corto possibile,
 # evitando articoli e, dove possibile, preposizioni.
-# Luca Ferretti <lferrett@gnome.org>, 2007, 2008, 2009, 2010.
+# Luca Ferretti <lferrett@gnome.org>, 2007, 2008, 2009, 2010, 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-12 01:01+0100\n"
-"PO-Revision-Date: 2011-03-12 02:09+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-03-23 13:59+0000\n"
+"PO-Revision-Date: 2011-03-23 20:07+0100\n"
 "Last-Translator: Luca Ferretti <lferrett@gnome.org>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:136
 #: ../gdk/gdkdevicemanager.c:146
@@ -113,7 +116,8 @@ msgstr "Indica se il dispositivo ha un cursore"
 
 #: ../gdk/gdkdevice.c:220
 msgid "Whether there is a visible cursor following device motion"
-msgstr "Indica se c'è un cursore visibile che segue il movimento del dispositivo"
+msgstr ""
+"Indica se c'è un cursore visibile che segue il movimento del dispositivo"
 
 #: ../gdk/gdkdevice.c:234 ../gdk/gdkdevice.c:235
 msgid "Number of axes in the device"
@@ -169,12 +173,10 @@ msgid "Opcode for XInput2 requests"
 msgstr "Opcode per richieste XInput2"
 
 #: ../gdk/x11/gdkdevicemanager-xi.c:100
-#, fuzzy
 msgid "Event base"
 msgstr "Base eventi"
 
 #: ../gdk/x11/gdkdevicemanager-xi.c:101
-#, fuzzy
 msgid "Event base for XInput events"
 msgstr "Base degli eventi per gli eventi XInput"
 
@@ -651,7 +653,9 @@ msgstr "Include una voce «Altre...»"
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
-msgstr "Indica se la casella combinata include una voce che attiva un GtkAppChooserDialog"
+msgstr ""
+"Indica se la casella combinata include una voce che attiva un "
+"GtkAppChooserDialog"
 
 #: ../gtk/gtkappchooserbutton.c:564 ../gtk/gtkappchooserdialog.c:714
 msgid "Heading"
@@ -662,14 +666,12 @@ msgid "The text to show at the top of the dialog"
 msgstr "Il testo da mostrare nella parte superiore del dialogo"
 
 #: ../gtk/gtkappchooser.c:58
-#, fuzzy
 msgid "Content type"
 msgstr "Content type"
 
 #: ../gtk/gtkappchooser.c:59
-#, fuzzy
 msgid "The content type used by the open with object"
-msgstr "Il content type usato dall'apri con oggetto"
+msgstr "Il content type usato dall'oggetto «apri con»"
 
 #: ../gtk/gtkappchooserdialog.c:700
 msgid "GFile"
@@ -892,7 +894,9 @@ msgstr "Stile disposizione"
 msgid ""
 "How to lay out the buttons in the box. Possible values are: spread, edge, "
 "start and end"
-msgstr "Modalità di disposizione dei pulsanti nel riquadro. I valori possibili sono: spread, edge, start e end"
+msgstr ""
+"Modalità di disposizione dei pulsanti nel riquadro. I valori possibili sono: "
+"spread, edge, start e end"
 
 #: ../gtk/gtkbbox.c:197
 msgid "Secondary"
@@ -1271,7 +1275,9 @@ msgstr "Tipo inserimento"
 msgid ""
 "A GtkPackType indicating whether the cell is packed with reference to the "
 "start or end of the cell area"
-msgstr "Un GtkPackType che indica se la cella è inserita avendo come riferimento l'inizio o la fine dell'area cella"
+msgstr ""
+"Un GtkPackType che indica se la cella è inserita avendo come riferimento "
+"l'inizio o la fine dell'area cella"
 
 #: ../gtk/gtkcellarea.c:803
 msgid "Focus Cell"
@@ -1312,9 +1318,8 @@ msgstr "Larghezza minima"
 
 # nel senso di messa da parte
 #: ../gtk/gtkcellareacontext.c:145 ../gtk/gtkcellareacontext.c:164
-#, fuzzy
 msgid "Minimum cached width"
-msgstr "Larghezza minima provveduta"
+msgstr "Larghezza minima riservata"
 
 #: ../gtk/gtkcellareacontext.c:182 ../gtk/gtkcellareacontext.c:201
 msgid "Minimum Height"
@@ -1322,9 +1327,8 @@ msgstr "Altezza minima"
 
 # come sopra
 #: ../gtk/gtkcellareacontext.c:183 ../gtk/gtkcellareacontext.c:202
-#, fuzzy
 msgid "Minimum cached height"
-msgstr "Altezza minima messa da parte"
+msgstr "Altezza minima riservata"
 
 #: ../gtk/gtkcelleditable.c:53
 msgid "Editing Canceled"
@@ -1669,7 +1673,7 @@ msgid "The number of decimal places to display"
 msgstr "Il numero di cifre decimali da visualizzare"
 
 #: ../gtk/gtkcellrendererspinner.c:119 ../gtk/gtkcheckmenuitem.c:106
-#: ../gtk/gtkmenu.c:586 ../gtk/gtkspinner.c:118 ../gtk/gtkswitch.c:765
+#: ../gtk/gtkmenu.c:586 ../gtk/gtkspinner.c:118 ../gtk/gtkswitch.c:801
 #: ../gtk/gtktoggleaction.c:133 ../gtk/gtktogglebutton.c:125
 #: ../gtk/gtktoggletoolbutton.c:112
 msgid "Active"
@@ -2149,7 +2153,8 @@ msgstr "Contesto area cella"
 
 #: ../gtk/gtkcellview.c:269
 msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
-msgstr "Il GtkCellAreaContext usato per calcolare la geometria della vista celle"
+msgstr ""
+"Il GtkCellAreaContext usato per calcolare la geometria della vista celle"
 
 #: ../gtk/gtkcellview.c:286
 msgid "Draw Sensitive"
@@ -3035,7 +3040,9 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:330
 msgid "Whether the label widget should fill all available horizontal space"
-msgstr "Indica se il widget etichetta deve riempire tutto lo spazio orizzontale disponibile"
+msgstr ""
+"Indica se il widget etichetta deve riempire tutto lo spazio orizzontale "
+"disponibile"
 
 #: ../gtk/gtkexpander.c:336 ../gtk/gtktoolitemgroup.c:1631
 #: ../gtk/gtktreeview.c:1187
@@ -3333,7 +3340,8 @@ msgstr "Inserimento in alto"
 
 #: ../gtk/gtkgrid.c:1313
 msgid "The row number to attach the top side of a child widget to"
-msgstr "Il numero di riga in cui attaccare la parte superiore del widget figlio"
+msgstr ""
+"Il numero di riga in cui attaccare la parte superiore del widget figlio"
 
 #: ../gtk/gtkgrid.c:1319 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:262
 msgid "Width"
@@ -4339,12 +4347,10 @@ msgid "Scroll arrow spacing"
 msgstr "Spaziatura freccia scorrimento"
 
 #: ../gtk/gtknumerableicon.c:652
-#, fuzzy
 msgid "Icon's count"
 msgstr "Contatore dell'icona"
 
 #: ../gtk/gtknumerableicon.c:653
-#, fuzzy
 msgid "The count of the emblem currently displayed"
 msgstr "Il contatore del simbolo attualmente mostrato"
 
@@ -4985,7 +4991,7 @@ msgstr "Arrotonda cifre"
 msgid "The number of digits to round the value to."
 msgstr "Il numero di cifre a cui arrotondare il valore."
 
-#: ../gtk/gtkrange.c:519 ../gtk/gtkswitch.c:800
+#: ../gtk/gtkrange.c:519 ../gtk/gtkswitch.c:836
 msgid "Slider Width"
 msgstr "Larghezza dello slider"
 
@@ -5011,41 +5017,41 @@ msgstr "Dimensione pulsante di passo"
 msgid "Length of step buttons at ends"
 msgstr "Lunghezza dei pulsanti di passo alle estremità"
 
-#: ../gtk/gtkrange.c:551
+#: ../gtk/gtkrange.c:549
 msgid "Stepper Spacing"
 msgstr "Spaziatura pulsante di passo"
 
-#: ../gtk/gtkrange.c:552
+#: ../gtk/gtkrange.c:550
 msgid "Spacing between step buttons and thumb"
 msgstr "Spaziatura tra i pulsanti di passo e il cursore di scorrimento"
 
-#: ../gtk/gtkrange.c:559
+#: ../gtk/gtkrange.c:557
 msgid "Arrow X Displacement"
 msgstr "Spostamento orizzontale della freccia"
 
-#: ../gtk/gtkrange.c:560
+#: ../gtk/gtkrange.c:558
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Spostamento orizzontale della freccia quando il pulsante viene rilasciato"
 
-#: ../gtk/gtkrange.c:567
+#: ../gtk/gtkrange.c:565
 msgid "Arrow Y Displacement"
 msgstr "Spostamento verticale della freccia"
 
-#: ../gtk/gtkrange.c:568
+#: ../gtk/gtkrange.c:566
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Spostamento verticale della freccia quando il pulsante viene rilasciato"
 
 # GTK-2-12
-#: ../gtk/gtkrange.c:586
+#: ../gtk/gtkrange.c:582
 msgid "Trough Under Steppers"
 msgstr "Avvallamento sotto gli stepper"
 
 # GTK-2-12
-#: ../gtk/gtkrange.c:587
+#: ../gtk/gtkrange.c:583
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5056,11 +5062,11 @@ msgstr ""
 # NOTA: scalatura è stato usato prima per scale,
 # non so se in originale scale e scaling hanno
 # diverso significato...  --Luca
-#: ../gtk/gtkrange.c:600
+#: ../gtk/gtkrange.c:596
 msgid "Arrow scaling"
 msgstr "Scalatura freccia"
 
-#: ../gtk/gtkrange.c:601
+#: ../gtk/gtkrange.c:597
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 "Scalatura della freccia in base alla dimensione del pulsante di scorrimento"
@@ -5242,7 +5248,9 @@ msgstr "Regolazione orizzontale"
 msgid ""
 "Horizontal adjustment that is shared between the scrollable widget and its "
 "controller"
-msgstr "Regolazione orizzontale che è condivisa tra il widget scorrevole e il suo controllore"
+msgstr ""
+"Regolazione orizzontale che è condivisa tra il widget scorrevole e il suo "
+"controllore"
 
 #: ../gtk/gtkscrollable.c:103
 msgid "Vertical adjustment"
@@ -5252,7 +5260,9 @@ msgstr "Regolazione verticale"
 msgid ""
 "Vertical adjustment that is shared between the scrollable widget and its "
 "controller"
-msgstr "Regolazione verticale che è condivisa tra il widget scorrevole e il suo controllore"
+msgstr ""
+"Regolazione verticale che è condivisa tra il widget scorrevole e il suo "
+"controllore"
 
 #: ../gtk/gtkscrollable.c:120
 msgid "Horizontal Scrollable Policy"
@@ -5393,7 +5403,8 @@ msgstr "Larghezza minima contenuto"
 
 #: ../gtk/gtkscrolledwindow.c:392
 msgid "The minimum width that the scrolled window will allocate to its content"
-msgstr "La larghezza minima che la finestra scorrevole allocherà per il suo contenuto"
+msgstr ""
+"La larghezza minima che la finestra scorrevole allocherà per il suo contenuto"
 
 #: ../gtk/gtkscrolledwindow.c:406
 msgid "Minimum Content Height"
@@ -5402,7 +5413,8 @@ msgstr "Altezza minima contenuto"
 #: ../gtk/gtkscrolledwindow.c:407
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
-msgstr "L'altezza minima che la finestra scorrevole allocherà per il suo contenuto"
+msgstr ""
+"L'altezza minima che la finestra scorrevole allocherà per il suo contenuto"
 
 #: ../gtk/gtkseparatortoolitem.c:143
 msgid "Draw"
@@ -6208,7 +6220,6 @@ msgid "Style context"
 msgstr "Contesto stile"
 
 #: ../gtk/gtkstyle.c:472
-#, fuzzy
 msgid "GtkStyleContext to get style from"
 msgstr "Il GtkStyleContest da cui ottenere lo stile"
 
@@ -6224,11 +6235,11 @@ msgstr "Direzione"
 msgid "Text direction"
 msgstr "Direzione del testo"
 
-#: ../gtk/gtkswitch.c:766
+#: ../gtk/gtkswitch.c:802
 msgid "Whether the switch is on or off"
 msgstr "Indica se lo switch è su ON o su OFF"
 
-#: ../gtk/gtkswitch.c:801
+#: ../gtk/gtkswitch.c:837
 msgid "The minimum width of the handle"
 msgstr "La larghezza minima della maniglia"
 
@@ -7734,7 +7745,8 @@ msgstr "Trascinamento finestra"
 
 #: ../gtk/gtkwidget.c:3049
 msgid "Whether windows can be dragged by clicking on empty areas"
-msgstr "Indica se le finestre possono essere trascinate facendo clic sulle aree vuote"
+msgstr ""
+"Indica se le finestre possono essere trascinate facendo clic sulle aree vuote"
 
 #: ../gtk/gtkwidget.c:3062
 msgid "Unvisited Link Color"
