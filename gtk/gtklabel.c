@@ -3808,7 +3808,9 @@ gtk_label_state_changed (GtkWidget   *widget,
 
   if (priv->select_info)
     {
-      gtk_label_select_region (label, 0, 0);
+      if (!gtk_widget_is_sensitive (widget))
+        gtk_label_select_region (label, 0, 0);
+
       gtk_label_update_cursor (label);
     }
 
