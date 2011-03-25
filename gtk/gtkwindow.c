@@ -1117,7 +1117,7 @@ gtk_window_init (GtkWindow *window)
                       G_CALLBACK (gtk_window_on_composited_changed), window);
 
 #ifdef GDK_WINDOWING_X11
-  g_signal_connect (gtk_settings_get_default (),
+  g_signal_connect (gtk_settings_get_for_screen (priv->screen),
                     "notify::gtk-application-prefer-dark-theme",
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
@@ -8013,10 +8013,21 @@ gtk_window_set_screen (GtkWindow *window,
   if (screen != previous_screen)
     {
       if (previous_screen)
-        g_signal_handlers_disconnect_by_func (previous_screen,
-                                              gtk_window_on_composited_changed, window);
+        {
+          g_signal_handlers_disconnect_by_func (previous_screen,
+                                                gtk_window_on_composited_changed, window);
+#ifdef GDK_WINDOWING_X11
+          g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (previous_screen),
+                                                gtk_window_on_theme_variant_changed, window);
+#endif
+        }
       g_signal_connect (screen, "composited-changed",
                         G_CALLBACK (gtk_window_on_composited_changed), window);
+#ifdef GDK_WINDOWING_X11
+      g_signal_connect (gtk_settings_get_for_screen (screen),
+                        "notify::gtk-application-prefer-dark-theme",
+                        G_CALLBACK (gtk_window_on_theme_variant_changed), window);
+#endif
 
       _gtk_widget_propagate_screen_changed (widget, previous_screen);
       _gtk_widget_propagate_composited_changed (widget);
@@ -8034,7 +8045,7 @@ gtk_window_set_theme_variant (GtkWindow *window)
   GdkWindow *gdk_window;
   gboolean   dark_theme_requested;
 
-  g_object_get (gtk_settings_get_default (),
+  g_object_get (gtk_settings_get_for_screen (window->priv->screen),
                 "gtk-application-prefer-dark-theme", &dark_theme_requested,
                 NULL);
 
