@@ -121,6 +121,8 @@ search_for_mimetype_ready_cb (GObject      *source,
   GtkAppChooserDialog *self = user_data;
   GError *error = NULL;
 
+  gdk_threads_enter ();
+
   _gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
 
   if (error != NULL)
@@ -133,6 +135,8 @@ search_for_mimetype_ready_cb (GObject      *source,
     {
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
     }
+
+  gdk_threads_leave ();
 }
 
 static void
@@ -155,6 +159,8 @@ app_chooser_online_get_default_ready_cb (GObject *source,
 {
   GtkAppChooserDialog *self = user_data;
 
+  gdk_threads_enter ();
+
   self->priv->online = _gtk_app_chooser_online_get_default_finish (source, res);
 
   if (self->priv->online != NULL)
@@ -176,6 +182,8 @@ app_chooser_online_get_default_ready_cb (GObject *source,
 
       gtk_widget_show (self->priv->online_button);
     }
+
+  gdk_threads_leave ();
 }
 
 static void

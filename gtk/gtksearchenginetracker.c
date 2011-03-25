@@ -203,6 +203,8 @@ cursor_callback (GObject      *object,
 	GList *hits;
   gboolean success;
 
+  gdk_threads_enter ();
+
   tracker = GTK_SEARCH_ENGINE_TRACKER (user_data);
 
 	cursor = TRACKER_SPARQL_CURSOR (object);
@@ -217,6 +219,7 @@ cursor_callback (GObject      *object,
       if (cursor)
 	      g_object_unref (cursor);
 
+      gdk_threads_leave ();
       return;
     }
 
@@ -227,6 +230,7 @@ cursor_callback (GObject      *object,
 		  if (cursor)
 			  g_object_unref (cursor);
 
+		  gdk_threads_leave ();
 		  return;
 	  }
 
@@ -237,6 +241,9 @@ cursor_callback (GObject      *object,
 
   /* Get next */
   cursor_next (tracker, cursor);
+
+  gdk_threads_leave ();
+
 }
 
 static void
@@ -248,6 +255,8 @@ query_callback (GObject      *object,
   TrackerSparqlConnection *connection;
   TrackerSparqlCursor *cursor;
   GError *error = NULL;
+
+  gdk_threads_enter ();
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (user_data);
 
@@ -264,16 +273,19 @@ query_callback (GObject      *object,
     {
       _gtk_search_engine_error (GTK_SEARCH_ENGINE (tracker), error->message);
       g_error_free (error);
+      gdk_threads_leave ();
       return;
     }
 
   if (!cursor)
 	  {
 		  _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
+		  gdk_threads_leave ();
 		  return;
 	  }
 
   cursor_next (tracker, cursor);
+  gdk_threads_leave ();
 }
 
 static void

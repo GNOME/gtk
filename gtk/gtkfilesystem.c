@@ -1324,6 +1324,8 @@ query_created_file_info_callback (GObject      *source_object,
       return;
     }
 
+  gdk_threads_enter ();
+
   folder = GTK_FOLDER (user_data);
   gtk_folder_add_file (folder, file, info);
 
@@ -1332,6 +1334,7 @@ query_created_file_info_callback (GObject      *source_object,
   g_slist_free (files);
 
   g_object_unref (info);
+  gdk_threads_leave ();
 }
 
 static void
