@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
 "POT-Creation-Date: 2011-02-12 13:17+0000\n"
-"PO-Revision-Date: 2011-02-13 04:53+0900\n"
+"PO-Revision-Date: 2011-03-25 22:00+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -491,7 +491,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:346
 msgid "License"
-msgstr "사용권"
+msgstr "라이선스"
 
 #: ../gtk/gtkaboutdialog.c:347
 msgid "The license of the program"
@@ -505,7 +505,7 @@ msgstr "만든 사람들(_R)"
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:752
 msgid "_License"
-msgstr "사용권(_L)"
+msgstr "라이선스(_L)"
 
 #: ../gtk/gtkaboutdialog.c:957
 msgid "Could not show link"
@@ -2817,7 +2817,7 @@ msgstr "축소(_O)"
 #: ../gtk/gtkswitch.c:313 ../gtk/gtkswitch.c:362 ../gtk/gtkswitch.c:553
 msgctxt "switch"
 msgid "ON"
-msgstr "❙"
+msgstr "켬"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -2825,7 +2825,7 @@ msgstr "❙"
 #: ../gtk/gtkswitch.c:321 ../gtk/gtkswitch.c:363 ../gtk/gtkswitch.c:569
 msgctxt "switch"
 msgid "OFF"
-msgstr "○"
+msgstr "끔"
 
 #: ../gtk/gtkswitch.c:968
 msgctxt "light switch widget"
