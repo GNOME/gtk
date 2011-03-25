@@ -1,3 +1,16 @@
+Overview of Changes in GTK+ 3.0.6
+=================================
+
+* Export dark themes for the window manager
+
+* Make selectable labels work again
+
+* Translation updates:
+ Afrikaans
+ Assamese
+ Korean
+ Simplified Chinese
+
 Overview of Changes in GTK+ 3.0.5
 =================================
 
