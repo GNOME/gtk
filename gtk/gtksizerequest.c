@@ -339,6 +339,8 @@ compute_size_for_orientation (GtkWidget         *widget,
     {
       gint adjusted_min, adjusted_natural, adjusted_for_size = for_size;
 
+      gtk_widget_ensure_style (widget);
+
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
         {
           if (for_size < 0)

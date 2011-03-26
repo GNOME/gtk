@@ -9201,6 +9201,8 @@ gtk_widget_render_icon (GtkWidget      *widget,
                         GtkIconSize     size,
                         const gchar    *detail)
 {
+  gtk_widget_ensure_style (widget);
+
   return gtk_widget_render_icon_pixbuf (widget, stock_id, size);
 }
 
@@ -10622,7 +10624,8 @@ gtk_widget_real_destroy (GtkWidget *object)
 
   gtk_grab_remove (widget);
 
-  g_object_unref (priv->style);
+  if (priv->style)
+    g_object_unref (priv->style);
   priv->style = gtk_widget_get_default_style ();
   g_object_ref (priv->style);
 }
