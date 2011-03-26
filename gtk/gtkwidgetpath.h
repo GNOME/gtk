@@ -39,6 +39,7 @@ GtkWidgetPath * gtk_widget_path_new                 (void);
 GtkWidgetPath * gtk_widget_path_copy                (const GtkWidgetPath *path);
 void            gtk_widget_path_free                (GtkWidgetPath       *path);
 
+char *          gtk_widget_path_to_string           (const GtkWidgetPath *path);
 gint            gtk_widget_path_length              (const GtkWidgetPath *path);
 
 gint            gtk_widget_path_append_type         (GtkWidgetPath       *path,

@@ -3588,6 +3588,7 @@ gtk_widget_path_iter_set_object_type
 gtk_widget_path_length
 gtk_widget_path_new
 gtk_widget_path_prepend_type
+gtk_widget_path_to_string
 gtk_widget_pop_composite_child
 gtk_widget_push_composite_child
 gtk_widget_queue_compute_expand

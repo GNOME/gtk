@@ -5438,6 +5438,7 @@ gtk_widget_path_iter_set_object_type
 gtk_widget_path_length
 gtk_widget_path_new
 gtk_widget_path_prepend_type
+gtk_widget_path_to_string
 
 <SUBSECTION Standard>
 GTK_TYPE_WIDGET_PATH
