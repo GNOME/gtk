@@ -14327,15 +14327,23 @@ style_context_changed (GtkStyleContext *context,
 GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv;
+  GtkWidgetPath *path;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (G_UNLIKELY (!widget->priv->context))
+  priv = widget->priv;
+  
+  /* updates style context if it exists already */
+  path = gtk_widget_get_path (widget);
+
+  if (G_UNLIKELY (priv->context == NULL))
     {
       GdkScreen *screen;
 
-      widget->priv->context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
-                                            "direction", gtk_widget_get_direction (widget),
-                                            NULL);
+      priv->context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
+                                    "direction", gtk_widget_get_direction (widget),
+                                    NULL);
 
       g_signal_connect (widget->priv->context, "changed",
                         G_CALLBACK (style_context_changed), widget);
@@ -14343,18 +14351,9 @@ gtk_widget_get_style_context (GtkWidget *widget)
       screen = gtk_widget_get_screen (widget);
 
       if (screen)
-        gtk_style_context_set_screen (widget->priv->context, screen);
+        gtk_style_context_set_screen (priv->context, screen);
 
-      _gtk_widget_update_path (widget);
-      gtk_style_context_set_path (widget->priv->context,
-                                  widget->priv->path);
-    }
-  else
-    {
-      /* Force widget path regeneration if needed, the
-       * context will be updated within this function.
-       */
-      gtk_widget_get_path (widget);
+      gtk_style_context_set_path (priv->context, path);
     }
 
   return widget->priv->context;
