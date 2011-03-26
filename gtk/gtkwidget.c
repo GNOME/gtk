@@ -7808,14 +7808,8 @@ gtk_widget_get_parent (GtkWidget *widget)
 void
 gtk_widget_style_attach (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_realized (widget));
-
-  priv = widget->priv;
-
-  priv->style = gtk_style_attach (priv->style, priv->window);
 }
 
 /**
@@ -10735,7 +10729,6 @@ gtk_widget_real_realize (GtkWidget *widget)
       priv->window = gtk_widget_get_parent_window (widget);
       g_object_ref (priv->window);
     }
-  priv->style = gtk_style_attach (priv->style, priv->window);
 }
 
 /*****************************************
@@ -10767,7 +10760,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 			  (GtkCallback) gtk_widget_unrealize,
 			  NULL);
 
-  gtk_style_detach (priv->style);
   if (gtk_widget_get_has_window (widget))
     {
       gdk_window_set_user_data (priv->window, NULL);
