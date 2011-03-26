@@ -8530,7 +8530,7 @@ do_screen_change (GtkWidget *widget,
 {
   if (old_screen != new_screen)
     {
-      GtkStyleContext *context;
+      GtkWidgetPrivate *priv = widget->priv;
 
       if (old_screen)
 	{
@@ -8541,8 +8541,8 @@ do_screen_change (GtkWidget *widget,
 
       _gtk_tooltip_hide (widget);
 
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_set_screen (context, gtk_widget_get_screen (widget));
+      if (new_screen && priv->context)
+        gtk_style_context_set_screen (priv->context, new_screen);
 
       g_signal_emit (widget, widget_signals[SCREEN_CHANGED], 0, old_screen);
     }
