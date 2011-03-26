@@ -7874,21 +7874,13 @@ gtk_widget_ensure_style (GtkWidget *widget)
 
   if (priv->style == gtk_widget_get_default_style ())
     {
-      GtkStyle *style;
-
       g_object_unref (priv->style);
 
-      style = g_object_new (GTK_TYPE_STYLE,
-                            "context", gtk_widget_get_style_context (widget),
-                            NULL);
-
-      priv->style = g_object_ref (style);
+      priv->style = NULL;
 
       g_signal_emit (widget,
                      widget_signals[STYLE_SET],
                      0, NULL);
-
-      g_object_unref (style);
     }
 }
 
@@ -7905,9 +7897,21 @@ gtk_widget_ensure_style (GtkWidget *widget)
 GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return widget->priv->style;
+  priv = widget->priv;
+
+  if (priv->style == NULL)
+    {
+      priv->style = g_object_new (GTK_TYPE_STYLE,
+                                  "context", gtk_widget_get_style_context (widget),
+                                  NULL);
+
+    }
+
+  return priv->style;
 }
 
 /**
