@@ -7876,19 +7876,23 @@ gtk_widget_set_style (GtkWidget *widget,
 void
 gtk_widget_ensure_style (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->priv->style == gtk_widget_get_default_style ())
+  priv = widget->priv;
+
+  if (priv->style == gtk_widget_get_default_style ())
     {
       GtkStyle *style;
 
-      g_object_unref (widget->priv->style);
+      g_object_unref (priv->style);
 
       style = g_object_new (GTK_TYPE_STYLE,
                             "context", gtk_widget_get_style_context (widget),
                             NULL);
 
-      widget->priv->style = g_object_ref (style);
+      priv->style = g_object_ref (style);
 
       g_signal_emit (widget,
                      widget_signals[STYLE_SET],
