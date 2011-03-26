@@ -3046,8 +3046,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
                                   (GtkTreeMenuHeaderFunc)gtk_combo_box_header_func,
                                   combo_box, NULL);
 
-  gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
-
   g_signal_connect (menu, "key-press-event",
                     G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
   gtk_combo_box_set_popup_widget (combo_box, menu);
