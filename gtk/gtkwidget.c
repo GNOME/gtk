@@ -7846,11 +7846,8 @@ gtk_widget_has_rc_style (GtkWidget *widget)
  *     of a previous call to gtk_widget_set_style() and go back to
  *     the default style
  *
- * Sets the #GtkStyle for a widget (@widget->style).
- *
- * You probably don't want to use this function; it interacts
- * badly with themes, because themes work by replacing the #GtkStyle.
- * Instead, use gtk_widget_modify_style().
+ * Used to set the #GtkStyle for a widget (@widget->style). Since
+ * GTK 3, this function does nothing, the passed in style is ignored.
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
  */
