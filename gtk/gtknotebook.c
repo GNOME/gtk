@@ -6308,6 +6308,9 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GList *list;
+  int pos;
+
+  pos = gtk_widget_path_length (gtk_widget_get_path (GTK_WIDGET (notebook))) - 1;
 
   for (list = priv->children; list != NULL; list = list->next)
     {
@@ -6315,12 +6318,21 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
 
       if (page->tab_label)
         {
+          GtkRegionFlags current_flags;
+
           if (page == priv->cur_page)
             gtk_widget_set_state_flags (page->tab_label, GTK_STATE_FLAG_ACTIVE, FALSE);
           else
             gtk_widget_unset_state_flags (page->tab_label, GTK_STATE_FLAG_ACTIVE);
 
-          gtk_widget_reset_style (page->tab_label);
+          /* FIXME: We should store these flags somewhere instead of poking
+           * the widget's path */
+          if (!gtk_widget_path_iter_has_region (gtk_widget_get_path (page->tab_label),
+                                                pos,
+                                                GTK_STYLE_REGION_TAB,
+                                                &current_flags)
+              || current_flags != _gtk_notebook_get_tab_flags (notebook, page))
+            gtk_widget_reset_style (page->tab_label);
         }
     }
 }
