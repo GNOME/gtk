@@ -8692,12 +8692,7 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 static void
 reset_style_recurse (GtkWidget *widget, gpointer data)
 {
-  if (widget->priv->context)
-    {
-      _gtk_widget_update_path (widget);
-      gtk_style_context_set_path (widget->priv->context,
-                                  widget->priv->path);
-    }
+  _gtk_widget_update_path (widget);
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
