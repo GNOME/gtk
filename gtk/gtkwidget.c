@@ -6468,7 +6468,10 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
 static void
 gtk_widget_real_style_updated (GtkWidget *widget)
 {
-  if (gtk_widget_get_realized (widget))
+  GtkWidgetPrivate *priv = widget->priv;
+
+  if (priv->style != NULL &&
+      priv->style != gtk_widget_get_default_style ())
     {
       /* Trigger ::style-set for old
        * widgets not listening to this
