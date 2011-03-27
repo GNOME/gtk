@@ -7747,19 +7747,6 @@ gtk_widget_set_parent (GtkWidget *widget,
       gtk_widget_queue_compute_expand (parent);
     }
 
-  if (widget->priv->context)
-    {
-      GdkScreen *screen;
-
-      _gtk_widget_update_path (widget);
-      gtk_style_context_set_path (widget->priv->context, widget->priv->path);
-
-      screen = gtk_widget_get_screen (widget);
-
-      if (screen)
-        gtk_style_context_set_screen (widget->priv->context, screen);
-    }
-
   gtk_widget_pop_verify_invariants (widget);
 }
 
