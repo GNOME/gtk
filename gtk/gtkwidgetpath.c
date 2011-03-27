@@ -231,11 +231,13 @@ gtk_widget_path_length (const GtkWidgetPath *path)
  * Dumps the widget path into a string representation. It tries to match
  * the CSS style as closely as possible (Note that there might be paths
  * that cannot be represented in CSS).
- *                 
+ *
  * The main use of this code is for debugging purposes, so that you can
  * g_print() the path or dump it in a gdb session.
  *
  * Returns: A new string describing @path.
+ *
+ * Since: 3.2
  **/
 char *
 gtk_widget_path_to_string (const GtkWidgetPath *path)
