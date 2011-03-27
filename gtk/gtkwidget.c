@@ -7708,7 +7708,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   data.use_forall = gtk_widget_is_sensitive (parent) != gtk_widget_is_sensitive (widget);
   gtk_widget_propagate_state (widget, &data);
 
-  gtk_widget_reset_rc_styles (widget);
+  gtk_widget_reset_style (widget);
 
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, NULL);
   if (priv->parent->priv->anchored)
