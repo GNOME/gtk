@@ -178,7 +178,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/32/gtk-dnd-multiple.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-edit.png			\
 	$(top_srcdir)/gtk/stock-icons/24/system-run.png			\
-	$(top_srcdir)/gtk/stock-icons/24/document-x-generic.png		\
+	$(top_srcdir)/gtk/stock-icons/24/text-x-generic.png		\
 	$(top_srcdir)/gtk/stock-icons/24/edit-find.png			\
 	$(top_srcdir)/gtk/stock-icons/24/edit-find-replace.png		\
 	$(top_srcdir)/gtk/stock-icons/24/go-bottom.png			\

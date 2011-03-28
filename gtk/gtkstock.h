@@ -319,7 +319,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_FILE:
  *
  * The "File" item.
- * <inlinegraphic fileref="document-x-generic.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="text-x-generic.png" format="PNG"></inlinegraphic>
  *
  * Since 3.0, this item has a label, before it only had an icon.
  *
