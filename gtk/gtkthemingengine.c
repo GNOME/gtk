@@ -1455,6 +1455,32 @@ _cairo_round_rectangle_sides (cairo_t          *cr,
     }
 }
 
+static void
+_cairo_uneven_frame (cairo_t          *cr,
+                     gdouble           radius,
+                     gdouble           x,
+                     gdouble           y,
+                     gdouble           width,
+                     gdouble           height,
+                     GtkBorder        *border,
+                     GtkJunctionSides  junction)
+{
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+  cairo_set_line_width (cr, 1);
+
+  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                x, y,
+                                width, height,
+                                SIDE_ALL, junction);
+
+  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                x + border->left,
+                                y + border->top,
+                                width - border->left - border->right,
+                                height - border->top - border->bottom,
+                                SIDE_ALL, junction);
+}
+
 /* Set the appropriate matrix for
  * patterns coming from the style context
  */
@@ -1836,6 +1862,7 @@ render_frame_internal (GtkThemingEngine *engine,
   gdouble progress, d1, d2, m;
   gboolean running;
   GtkBorder border;
+  gboolean uniform_border;
 
   state = gtk_theming_engine_get_state (engine);
 
@@ -1850,6 +1877,9 @@ render_frame_internal (GtkThemingEngine *engine,
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
+  uniform_border = (border.top == border.bottom &&
+                    border.top == border.left &&
+                    border.top == border.right);
 
   if (running)
     {
@@ -1884,27 +1914,40 @@ render_frame_internal (GtkThemingEngine *engine,
       cairo_set_line_width (cr, border_width);
       cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
 
-      if (border_width > 1)
-        {
-          x += (gdouble) border_width / 2;
-          y += (gdouble) border_width / 2;
-          width -= border_width;
-          height -= border_width;
-        }
-      else if (border_width == 1)
-        {
-          x += 0.5;
-          y += 0.5;
-          width -= 1;
-          height -= 1;
-        }
-
-      _cairo_round_rectangle_sides (cr, (gdouble) radius,
-                                    x, y, width, height,
-                                    SIDE_ALL & ~(hidden_side),
-                                    junction);
       gdk_cairo_set_source_rgba (cr, &border_color);
-      cairo_stroke (cr);
+
+      if (uniform_border)
+        {
+          if (border_width > 1)
+            {
+              x += (gdouble) border_width / 2;
+              y += (gdouble) border_width / 2;
+              width -= border_width;
+              height -= border_width;
+            }
+          else if (border_width == 1)
+            {
+              x += 0.5;
+              y += 0.5;
+              width -= 1;
+              height -= 1;
+            }
+
+          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                        x, y, width, height,
+                                        SIDE_ALL & ~(hidden_side),
+                                        junction);
+          cairo_stroke (cr);
+        }
+      else
+        {
+          cairo_save (cr);
+          _cairo_uneven_frame (cr, (gdouble) radius,
+                               x, y, width, height,
+                               &border, junction);
+          cairo_fill (cr);
+          cairo_restore (cr);
+        }
 
       break;
     case GTK_BORDER_STYLE_INSET:
@@ -1932,29 +1975,69 @@ render_frame_internal (GtkThemingEngine *engine,
       m = MIN (width, height);
       m /= 2;
 
-      if (border_style == GTK_BORDER_STYLE_INSET)
-        gdk_cairo_set_source_rgba (cr, &lighter);
+      if (uniform_border)
+        {
+          if (border_style == GTK_BORDER_STYLE_INSET)
+            gdk_cairo_set_source_rgba (cr, &lighter);
+          else
+            gdk_cairo_set_source_rgba (cr, &border_color);
+
+          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                        x + d1, y + d1,
+                                        width - d2, height - d2,
+                                        (SIDE_BOTTOM | SIDE_RIGHT) & ~(hidden_side),
+                                        junction);
+          cairo_stroke (cr);
+
+          if (border_style == GTK_BORDER_STYLE_INSET)
+            gdk_cairo_set_source_rgba (cr, &border_color);
+          else
+            gdk_cairo_set_source_rgba (cr, &lighter);
+
+          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                        x + d1, y + d1,
+                                        width - d2, height - d2,
+                                        (SIDE_TOP | SIDE_LEFT) & ~(hidden_side),
+                                        junction);
+          cairo_stroke (cr);
+        }
       else
-        gdk_cairo_set_source_rgba (cr, &border_color);
+        {
+          cairo_save (cr);
 
-      _cairo_round_rectangle_sides (cr, (gdouble) radius,
-                                    x + d1, y + d1,
-                                    width - d2, height - d2,
-                                    (SIDE_BOTTOM | SIDE_RIGHT) & ~(hidden_side),
-                                    junction);
-      cairo_stroke (cr);
+          /* Bottom/right */
+          if (border_style == GTK_BORDER_STYLE_INSET)
+            gdk_cairo_set_source_rgba (cr, &lighter);
+          else
+            gdk_cairo_set_source_rgba (cr, &border_color);
 
-      if (border_style == GTK_BORDER_STYLE_INSET)
-        gdk_cairo_set_source_rgba (cr, &border_color);
-      else
-        gdk_cairo_set_source_rgba (cr, &lighter);
+          _cairo_uneven_frame (cr, (gdouble) radius,
+                               x, y, width, height,
+                               &border, junction);
+          cairo_fill (cr);
 
-      _cairo_round_rectangle_sides (cr, (gdouble) radius,
-                                    x + d1, y + d1,
-                                    width - d2, height - d2,
-                                    (SIDE_TOP | SIDE_LEFT) & ~(hidden_side),
-                                    junction);
-      cairo_stroke (cr);
+          /* Top/left */
+          cairo_move_to (cr, x, y);
+          cairo_line_to (cr, x + width, y);
+          cairo_line_to (cr, x + width - border.right - radius / 2, y + border.top + radius / 2);
+          cairo_line_to (cr, x + width - border.right - radius / 2, y + height - border.bottom - radius / 2);
+          cairo_line_to (cr, x + border.left + radius / 2, y + height - border.bottom - radius / 2);
+          cairo_line_to (cr, x, y + height);
+          cairo_close_path (cr);
+
+          cairo_clip (cr);
+
+          if (border_style == GTK_BORDER_STYLE_INSET)
+            gdk_cairo_set_source_rgba (cr, &border_color);
+          else
+            gdk_cairo_set_source_rgba (cr, &lighter);
+
+          _cairo_uneven_frame (cr, (gdouble) radius,
+                               x, y, width, height,
+                               &border, junction);
+          cairo_fill (cr);
+          cairo_restore (cr);
+        }
 
       if (border_width > 1)
         {
