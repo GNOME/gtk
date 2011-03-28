@@ -226,6 +226,8 @@ search_callback (gpointer results,
   gchar *uri;
   gint i;
 
+  gdk_threads_enter ();
+
   tracker = GTK_SEARCH_ENGINE_TRACKER (user_data);
   hit_uris = NULL;
 
@@ -235,11 +237,15 @@ search_callback (gpointer results,
     {
       _gtk_search_engine_error (GTK_SEARCH_ENGINE (tracker), error->message);
       g_error_free (error);
+      gdk_threads_leave ();
       return;
     }
 
   if (!results)
-    return;
+    {
+      gdk_threads_leave ();
+      return;
+    }
 
   if (tracker->priv->version == TRACKER_0_8 ||
       tracker->priv->version == TRACKER_0_9)
@@ -276,6 +282,8 @@ search_callback (gpointer results,
 
   g_list_foreach (hit_uris, (GFunc) g_free, NULL);
   g_list_free (hit_uris);
+
+  gdk_threads_leave ();
 }
 
 

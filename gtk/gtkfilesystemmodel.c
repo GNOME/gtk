@@ -1150,7 +1150,9 @@ gtk_file_system_model_query_done (GObject *     object,
   if (info == NULL)
     return;
 
+  gdk_threads_enter ();
   _gtk_file_system_model_update_file (model, file, info, TRUE);
+  gdk_threads_leave ();
 }
 
 static void
@@ -1175,7 +1177,9 @@ gtk_file_system_model_monitor_change (GFileMonitor *      monitor,
                                  model);
         break;
       case G_FILE_MONITOR_EVENT_DELETED:
+	gdk_threads_enter ();
         remove_file (model, file);
+	gdk_threads_leave ();
         break;
       case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
         /* FIXME: use freeze/thaw with this somehow? */

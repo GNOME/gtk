@@ -6648,11 +6648,16 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
   if (queried == NULL)
     return;
 
+  GDK_THREADS_ENTER ();
+
   /* now we know model is valid */
 
   /* file was deleted */
   if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
-    return;
+    {
+      GDK_THREADS_LEAVE ();
+      return;
+    }
 
   info = g_file_info_dup (_gtk_file_system_model_get_info (model, &iter));
 
@@ -6663,6 +6668,8 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
   _gtk_file_system_model_update_file (model, file, info, FALSE);
 
   g_object_unref (info);
+
+  GDK_THREADS_LEAVE ();
 }
 
 static gboolean
