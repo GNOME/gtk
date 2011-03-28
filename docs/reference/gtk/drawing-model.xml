@@ -78,33 +78,64 @@
       of the resources they use from the windowing system.
     </para>
 
+    <para>
+      A <link linkend="GdkWindow"><classname>GdkWindow</classname></link>
+      represents a window from the underlying windowing system on which GTK+
+      is running.  For example, on X11 it corresponds to a
+      <type>Window</type>; on Win32, it corresponds to a <type>HANDLE</type>.
+      The windowing system generates events for these windows.  The GDK
+      interface to the windowing system translates such native events into
+      <link linkend="GdkEvent"><structname>GdkEvent</structname></link>
+      structures and sends them on to the GTK layer.  In turn, the GTK layer
+      finds the widget that corresponds to a particular
+      <classname>GdkWindow</classname> and emits the corresponding event
+      signals on that widget.
+    </para>
+
+    <refsect2 id="emission of the draw event">
+      <title>Emission of the draw event</title>
+
+      <para>
+        When the program needs to redraw a region of a
+        <classname>GdkWindow</classname>, generates an event of
+        type <link
+        linkend="GDK_EVENT_EXPOSE"><constant>GDK_EVENT_EXPOSE</constant></link>
+        for that window, specifying the region to redraw in the process.
+      </para>
+
+      <para>
+        When generating the event, GDK also sets up double buffering to
+        avoid the flickering that would result from each widget drawing
+        itself in turn.  <xref linkend="double-buffering"/> describes
+        the double buffering mechanism in detail.
+      </para>
+        
+      <para>
+        When the GTK+ widget layer receives the event, it finds the widget that
+        corresponds to the window, and causes it to render itself using the
+        widget's #GtkWidget::draw signal. For this purpose it creates a
+        <link linkend="#cairo_t">cairo context</link>. It then clips the context
+        to the area that needs to be drawn. This makes sure that the minimal
+        amount of work is done if only a small part of the widget needs to be
+        repainted. After translating the context so that its (0, 0) coordinate
+        corresponds to the top left corner of the widget, it effectively calls
+        the widget's <function>gtk_widget_draw</function> function.
+      </para>
+
+      <para>
+        <function>gtk_widget_draw</function> takes care of drawing the widget
+        to the cairo context. It first checks that the widget actually needs to
+        be drawn. Widgets might for example be empty or outside of the cairo
+        context's clipped area, which would make drawing them not do anything.
+        Usually they will need to be drawn. In this case, the context will be
+        clipped to the widget's allocated size and the
+        <link linkend="GtkWidget::draw">draw signal</link> will be emitted on 
+        the widget which will finally draw the widget.
+      </para>
+    </refsect2>
+
     <refsect2 id="window-no-window-widgets">
       <title>Window and no-window widgets</title>
-
-      <para>
-	A <link linkend="GdkWindow"><classname>GdkWindow</classname></link>
-	represents a window from the underlying windowing system on which GTK+
-	is running.  For example, on X11 it corresponds to a
-	<type>Window</type>; on Win32, it corresponds to a <type>HANDLE</type>.
-	The windowing system generates events for these windows.  The GDK
-	interface to the windowing system translates such native events into
-	<link linkend="GdkEvent"><structname>GdkEvent</structname></link>
-	structures and sends them on to the GTK layer.  In turn, the GTK layer
-	finds the widget that corresponds to a particular
-	<classname>GdkWindow</classname> and emits the corresponding event
-	signals on that widget.
-      </para>
-
-      <para>
-	When the program needs to redraw a region of a
-	<classname>GdkWindow</classname>, GDK generates an event of
-	type <link
-	linkend="GDK_EVENT_EXPOSE"><constant>GDK_EVENT_EXPOSE</constant></link>
-	for that window.  The GTK+ widget layer in turn finds the
-	widget that corresponds to that window, and emits the <link
-	linkend="GtkWidget-expose-event">expose-event signal</link>
-	for that widget.
-      </para>
 
       <para>
 	In principle, each widget could have a
@@ -112,8 +143,7 @@
 	scheme, the drawing cycle would be trivial:  when GDK notifies
 	the GTK layer about an exposure event for a
 	<classname>GdkWindow</classname>, the GTK layer would simply
-	emit the <link linkend="GtkWidget-expose-event">expose-event
-	signal</link> for that widget.  The widget's expose event
+	emit the #GtkWidget::draw signal for that widget.  The signal
 	handler would subsequently repaint the widget.  No further
 	work would be necessary; the windowing system would generate
 	exposure events for each window that needs it, and then each
@@ -293,56 +323,8 @@
 
 	<graphic fileref="figure-hierarchical-drawing.png" format="png"/>
       </figure>
-
-      <para>
-	To avoid the flickering that would result from each widget drawing
-	itself in turn, GTK+ uses a double-buffering mechanism.  The following
-	sections describe this mechanism in detail.
-      </para>
     </refsect2>
 
-    <refsect2 id="notes-on-drawing-no-window-widgets">
-      <title>Notes on drawing no-window widgets</title>
-
-      <para>
-	Remember that the coordinates in a <link
-	linkend="GdkEventExpose">GdkEventExpose</link> are relative to
-	the <classname>GdkWindow</classname> that received the event,
-	<emphasis>not</emphasis> to the widget whose expose-event
-	handler is being called.  If your widget owns the window, then
-	these coordinates are probably what you expect.  However, if
-	you have a <constant>GTK_NO_WINDOW</constant> widget that
-	shares its parent's window, then the event's coordinates will
-	be offset by your widget's allocation:  remember that the
-	allocation is always relative to the parent
-	<emphasis>window</emphasis> of the widget, not to the parent
-	<emphasis>widget</emphasis> itself.
-      </para>
-
-      <para>
-	For example, if you have a no-window widget whose allocation
-	is {&nbsp;x=5,&nbsp;y=6,
-	<replaceable>width</replaceable>,&nbsp;<replaceable>height</replaceable>&nbsp;},
-	then your drawing origin should be at (5,&nbsp;6), not at
-	(0,&nbsp;0).
-      </para>
-    </refsect2>
-
-    <refsect2 id="include-inferiors">
-      <title>Drawing over child windows</title>
-
-      <para>
-	When you draw on a <classname>GdkWindow</classname>, your
-	drawing gets clipped by any child windows that it may
-	intersect.  Sometimes you need to draw over your child windows
-	as well; for example, when drawing a drag-handle to resize
-	something.  In this case, turn on the <link
-	linkend="GDK-INCLUDE-INFERIORS:CAPS">GDK_INCLUDE_INFERIORS</link>
-	subwindow mode for the <link
-	linkend="gdk-Graphics-Contexts">GdkGC</link> which you use for
-	drawing.
-      </para>
-    </refsect2>
   </refsect1>
 
   <refsect1 id="double-buffering">
@@ -351,8 +333,8 @@
     <para>
       When the GTK layer receives an exposure event from GDK, it first finds
       the <literal>!<constant>GTK_NO_WINDOW</constant></literal> widget that
-      corresponds to the event's window.  Then, it emits the <link
-	linkend="GtkWidget-expose-event">expose-event signal</link> for that
+      corresponds to the event's window.  Then, it emits the
+      #GtkWidget::draw signal for that
       widget.  As described above, that widget will first draw its background,
       and then ask each of its <constant>GTK_NO_WINDOW</constant> children to
       draw themselves.
@@ -360,7 +342,7 @@
 
     <para>
       If each of the drawing calls made by each subwidget's
-      <literal>expose-event</literal> handler were sent directly to the
+      <literal>draw</literal> handler were sent directly to the
       windowing system, flicker could result.  This is because areas may get
       redrawn repeatedly:  the background, then decorative frames, then text
       labels, etc.  To avoid flicker, GTK+ employs a <firstterm>double
@@ -410,7 +392,7 @@
 	It would be inconvenient for all widgets to call
 	<function>gdk_window_begin_paint_region()</function> and
 	<function>gdk_window_end_paint()</function> at the beginning
-	and end of their expose-event handlers.
+	and end of their draw handlers.
       </para>
 
       <para>
@@ -419,7 +401,7 @@
 	linkend="GtkWidgetFlags">widget flag</link> turned on by
 	default.  When GTK+ encounters such a widget, it automatically
 	calls <function>gdk_window_begin_paint_region()</function>
-	before emitting the expose-event signal for the widget, and
+	before emitting the #GtkWidget::draw signal for the widget, and
 	then it calls <function>gdk_window_end_paint()</function>
 	after the signal has been emitted.  This is convenient for
 	most widgets, as they do not need to worry about creating
@@ -430,8 +412,9 @@
       <para>
 	However, some widgets may prefer to disable this kind of
 	automatic double buffering and do things on their own.  To do
-	this, turn off the <constant>GTK_DOUBLE_BUFFERED</constant>
-	flag in your widget's constructor.
+        this, call the
+        <function>gtk_widget_set_double_buffered()</function> function
+	in your widget's constructor.
       </para>
 
       <example id="disabling-double-buffering">
@@ -463,8 +446,7 @@ my_widget_init (MyWidget *widget)
       </para>
 
       <para>
-	Even if you turn off the
-	<constant>GTK_DOUBLE_BUFFERED</constant> flag on a widget, you
+	Even if you turn off double buffering on a widget, you
 	can still call
 	<function>gdk_window_begin_paint_region()</function> and
 	<function>gdk_window_end_paint()</function> by hand to use
@@ -489,69 +471,42 @@ my_widget_init (MyWidget *widget)
 
     <para>
       <classname>GtkWindow</classname> and
-      <classname>GtkEventBox</classname> are the only two widgets
-      which will draw their default contents unless you turn on the
-      <constant>GTK_APP_PAINTABLE</constant> <link
-      linkend="GtkWidgetFlags">widget flag</link>.  If you turn on
-      this flag, then they will not draw their contents and let you do
+      <classname>GtkEventBox</classname> are the two widgets that allow
+      turning off drawing of default contents by calling
+      <function>gtk_widget_set_app_paintable()</function>. If you call
+      this function, they will not draw their contents and let you do
       it instead.
     </para>
 
     <para>
-      The expose-event handler for <classname>GtkWindow</classname> is
-      implemented effectively like this:
-    </para>
-
-    <programlisting>
-static gint
-gtk_window_expose (GtkWidget      *widget,
-		   GdkEventExpose *event)
-{
-  if (!gtk_widget_get_app_paintable (widget))
-    gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
-                        GTK_SHADOW_NONE, event->area, widget, "base", 0, 0, -1, -1);
-
-  if (GTK_WIDGET_CLASS (gtk_window_parent_class)->expose_event)
-    return GTK_WIDGET_CLASS (gtk_window_parent_class)->expose_event (widget, event);
-
-  return FALSE;
-}
-    </programlisting>
-
-    <para>
-      The expose-event handler for <classname>GtkEventBox</classname>
-      is implemented in a similar fashion.
-    </para>
-
-    <para>
-      Since the <link linkend="GtkWidget-expose-event">expose-event
-	signal</link> runs user-connected handlers
+      Since the #GtkWidget::draw signal runs user-connected handlers
       <emphasis>before</emphasis> the widget's default handler, what
-      happens is this:
+      usually happens is this:
     </para>
 
     <orderedlist>
       <listitem>
 	<para>
-	  Your own expose-event handler gets run.  It paints something
+	  Your own draw handler gets run.  It paints something
 	  on the window or the event box.
 	</para>
       </listitem>
 
       <listitem>
 	<para>
-	  The widget's default expose-event handler gets run.  If
-	  <constant>GTK_APP_PAINTABLE</constant> is turned off (this
+	  The widget's default draw handler gets run.  If
+          <function>gtk_widget_set_app_paintable()</function> has not
+          been called to turn off widget drawing (this
 	  is the default), <emphasis>your drawing will be
-	  overwritten</emphasis>.  If that flag is turned on, the
-	  widget will not draw its default contents and preserve your
-	  drawing instead.
+            overwritten</emphasis>.  An app paintable widget will not
+          draw its default contents however and preserve your drawing
+          instead.
 	</para>
       </listitem>
 
       <listitem>
 	<para>
-	  The expose-event handler for the parent class gets run.
+	  The draw handler for the parent class gets run.
 	  Since both <classname>GtkWindow</classname> and
 	  <classname>GtkEventBox</classname> are descendants of
 	  <classname>GtkContainer</classname>, their no-window
@@ -565,7 +520,7 @@ gtk_window_expose (GtkWidget      *widget,
       <title>Summary of app-paintable widgets</title>
 
       <para>
-	Turn on the <constant>GTK_APP_PAINTABLE</constant> flag if you
+        Call <function>gtk_widget_set_app_paintable()</function> if you
 	intend to draw your own content directly on a
 	<classname>GtkWindow</classname> and
 	<classname>GtkEventBox</classname>.  You seldom need to draw
