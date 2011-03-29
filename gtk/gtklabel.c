@@ -3091,20 +3091,12 @@ get_label_width (GtkLabel    *label,
 {
   GtkLabelPrivate     *priv;
   PangoLayout      *layout;
-  PangoContext     *context;
-  PangoFontMetrics *metrics;
   PangoRectangle    rect;
-  gint              char_width, digit_width, char_pixels, text_width, ellipsize_chars, guess_width;
+  gint              text_width, ellipsize_chars, guess_width;
 
   priv     = label->priv;
 
   layout  = gtk_label_get_measuring_layout (label, NULL, -1);
-  context = pango_layout_get_context (layout);
-  metrics = get_font_metrics (context, GTK_WIDGET (label));
-  char_width = pango_font_metrics_get_approximate_char_width (metrics);
-  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-  char_pixels = MAX (char_width, digit_width);
-  pango_font_metrics_unref (metrics);
       
   /* Fetch the length of the complete unwrapped text */
   pango_layout_get_extents (layout, NULL, &rect);
@@ -3141,6 +3133,17 @@ get_label_width (GtkLabel    *label,
 
   if (priv->ellipsize || priv->wrap)
     {
+      PangoContext     *context;
+      PangoFontMetrics *metrics;
+      gint              char_width, digit_width, char_pixels;
+
+      context = pango_layout_get_context (layout);
+      metrics = get_font_metrics (context, GTK_WIDGET (label));
+      char_width = pango_font_metrics_get_approximate_char_width (metrics);
+      digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
+      char_pixels = MAX (char_width, digit_width);
+      pango_font_metrics_unref (metrics);
+
       *minimum = char_pixels * MAX (priv->width_chars, ellipsize_chars);
 
       /* Default to the minimum width regularly guessed by GTK+ if no minimum
