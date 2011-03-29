@@ -3025,10 +3025,56 @@ get_font_metrics (PangoContext *context, GtkWidget *widget)
   return retval;
 }
 
+/**
+ * gtk_label_get_measuring_layout:
+ * @label: the label
+ * @existing_layout: %NULL or an existing layout already in use.
+ * @width: the width to measure with in pango units, or -1 for infinite
+ *
+ * Gets a layout that can be used for measuring sizes. The returned
+ * layout will be identical to the label's layout except for the
+ * layout's width, which will be set to @width. Do not modify the returned
+ * layout.
+ *
+ * Returns: a new reference to a pango layout
+ **/
+static PangoLayout *
+gtk_label_get_measuring_layout (GtkLabel *   label,
+                                PangoLayout *existing_layout,
+                                int          width)
+{
+  GtkLabelPrivate *priv = label->priv;
+  PangoLayout *copy;
+
+  if (existing_layout != NULL)
+    {
+      if (existing_layout != priv->layout)
+        {
+          pango_layout_set_width (existing_layout, width);
+          return existing_layout;
+        }
+
+      g_object_unref (existing_layout);
+    }
+
+  gtk_label_ensure_layout (label, FALSE);
+
+  if (pango_layout_get_width (priv->layout) == width)
+    {
+      g_object_ref (priv->layout);
+      return priv->layout;
+    }
+
+  copy = pango_layout_copy (priv->layout);
+  pango_layout_set_width (copy, width);
+  return copy;
+}
+
 static void
-get_label_width (GtkLabel *label,
-		 gint     *minimum,
-		 gint     *natural)
+get_label_width (GtkLabel    *label,
+                 PangoLayout *guess_layout,
+		 gint        *minimum,
+		 gint        *natural)
 {
   GtkLabelPrivate     *priv;
   PangoLayout      *layout;
@@ -3039,7 +3085,7 @@ get_label_width (GtkLabel *label,
 
   priv     = label->priv;
 
-  layout  = pango_layout_copy (priv->layout);
+  layout  = gtk_label_get_measuring_layout (label, NULL, -1);
   context = pango_layout_get_context (layout);
   metrics = get_font_metrics (context, GTK_WIDGET (label));
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
@@ -3048,12 +3094,11 @@ get_label_width (GtkLabel *label,
   pango_font_metrics_unref (metrics);
       
   /* Fetch the length of the complete unwrapped text */
-  pango_layout_set_width (layout, -1);
   pango_layout_get_extents (layout, NULL, &rect);
   text_width = rect.width;
 
-  /* Fetch the width that was guessed by gtk_label_ensure_layout() */
-  pango_layout_get_extents (priv->layout, NULL, &rect);
+  /* Fetch the width that was guessed */
+  pango_layout_get_extents (guess_layout, NULL, &rect);
   guess_width = rect.width;
 
   /* enforce minimum width for ellipsized labels at ~3 chars */
@@ -3158,7 +3203,7 @@ get_label_wrap_width (GtkLabel *label)
 	  PangoRectangle    rect;
 	  gint              char_width, digit_width, char_pixels, text_width;
 
-	  layout  = pango_layout_copy (priv->layout);
+	  layout  = gtk_label_get_measuring_layout (label, NULL, -1);
 	  context = pango_layout_get_context (layout);
 	  metrics = get_font_metrics (context, GTK_WIDGET (label));
 	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
@@ -3166,7 +3211,6 @@ get_label_wrap_width (GtkLabel *label)
 	  char_pixels = MAX (char_width, digit_width);
 	  pango_font_metrics_unref (metrics);
 	  
-	  pango_layout_set_width (layout, -1);
 	  pango_layout_get_extents (layout, NULL, &rect);
 	  g_object_unref (layout);
 
@@ -3396,15 +3440,11 @@ get_size_for_allocation (GtkLabel        *label,
                          gint            *minimum_size,
                          gint            *natural_size)
 {
-  GtkLabelPrivate *priv = label->priv;
   PangoLayout *layout;
   GtkWidgetAuxInfo *aux_info =
     _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
   gint aux_size;
   gint text_height;
-
-  gtk_label_ensure_layout (label, FALSE);
-  layout = pango_layout_copy (priv->layout);
 
   if (aux_info)
     {
@@ -3417,9 +3457,9 @@ get_size_for_allocation (GtkLabel        *label,
     aux_size = 0;
 
   if (aux_size > 0)
-    pango_layout_set_width (layout, aux_size * PANGO_SCALE);
+    layout = gtk_label_get_measuring_layout (label, NULL, aux_size * PANGO_SCALE);
   else
-    pango_layout_set_width (layout, allocation * PANGO_SCALE);
+    layout = gtk_label_get_measuring_layout (label, NULL, allocation * PANGO_SCALE);
 
   pango_layout_get_pixel_size (layout, NULL, &text_height);
 
@@ -3470,7 +3510,7 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   natural_rect = required_rect;
 
   /* Calculate text width itself based on GtkLabel property rules */
-  get_label_width (label, &required_rect.width, &natural_rect.width);
+  get_label_width (label, priv->layout, &required_rect.width, &natural_rect.width);
 
   /* Now that we have minimum and natural sizes in pango extents, apply a possible transform */
   if (priv->have_transform)
