@@ -3044,6 +3044,7 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
                                 int          width)
 {
   GtkLabelPrivate *priv = label->priv;
+  PangoRectangle rect;
   PangoLayout *copy;
 
   if (existing_layout != NULL)
@@ -3060,6 +3061,18 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
   gtk_label_ensure_layout (label);
 
   if (pango_layout_get_width (priv->layout) == width)
+    {
+      g_object_ref (priv->layout);
+      return priv->layout;
+    }
+
+  /* oftentimes we want to measure a width that is far wider than the current width,
+   * even though the layout is not wrapped. In that case, we can just return the
+   * current layout, because for measuring purposes, it will be identical.
+   */
+  pango_layout_get_extents (priv->layout, NULL, &rect);
+  if ((width == -1 || rect.width <= width) &&
+      !pango_layout_is_wrapped (priv->layout))
     {
       g_object_ref (priv->layout);
       return priv->layout;
