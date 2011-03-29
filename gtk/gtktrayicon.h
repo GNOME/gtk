@@ -69,6 +69,7 @@ void           _gtk_tray_icon_cancel_message  (GtkTrayIcon *icon,
 
 GtkOrientation _gtk_tray_icon_get_orientation (GtkTrayIcon *icon);
 gint           _gtk_tray_icon_get_padding     (GtkTrayIcon *icon);
+gint           _gtk_tray_icon_get_icon_size   (GtkTrayIcon *icon);
 
 G_END_DECLS
 
