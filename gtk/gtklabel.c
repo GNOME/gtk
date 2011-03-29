@@ -3066,6 +3066,17 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
       return priv->layout;
     }
 
+  /* We can use the label's own layout if we're not allocated a size yet,
+   * because we don't need it to be properly setup at that point.
+   * This way we can make use of caching upon the label's creation.
+   */
+  if (gtk_widget_get_allocated_width (GTK_WIDGET (label)) <= 1)
+    {
+      g_object_ref (priv->layout);
+      pango_layout_set_width (priv->layout, width);
+      return priv->layout;
+    }
+
   /* oftentimes we want to measure a width that is far wider than the current width,
    * even though the layout is not wrapped. In that case, we can just return the
    * current layout, because for measuring purposes, it will be identical.
