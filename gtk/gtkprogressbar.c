@@ -1045,8 +1045,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
       if (priv->activity_mode)
         gtk_progress_bar_act_mode_enter (pbar);
 
-      if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
-        gtk_widget_queue_resize (GTK_WIDGET (pbar));
+      gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
 }
 
@@ -1116,8 +1115,7 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
   g_free (priv->text);
   priv->text = text && *text ? g_strdup (text) : NULL;
 
-  if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
-    gtk_widget_queue_resize (GTK_WIDGET (pbar));
+  gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   g_object_notify (G_OBJECT (pbar), "text");
 }
@@ -1150,8 +1148,7 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
     {
       priv->show_text = show_text;
 
-      if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
-        gtk_widget_queue_resize (GTK_WIDGET (pbar));
+      gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
       g_object_notify (G_OBJECT (pbar), "show-text");
     }
@@ -1210,8 +1207,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
       priv->orientation = orientation;
       _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
 
-      if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
-        gtk_widget_queue_resize (GTK_WIDGET (pbar));
+      gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
 }
 
@@ -1237,8 +1233,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
     {
       priv->inverted = inverted;
 
-      if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
-        gtk_widget_queue_resize (GTK_WIDGET (pbar));
+      gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
       g_object_notify (G_OBJECT (pbar), "inverted");
     }
