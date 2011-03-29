@@ -576,12 +576,8 @@ source_drag_data_delete  (GtkWidget          *widget,
 void
 test_init (void)
 {
-  if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
-		   G_FILE_TEST_EXISTS))
-    {
-      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../gdk-pixbuf/loaders.cache", TRUE);
-      g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
-    }
+  if (g_file_test ("../modules/input/immodules.cache", G_FILE_TEST_EXISTS))
+    g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
 }
 
 int 
