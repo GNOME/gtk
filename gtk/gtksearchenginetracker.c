@@ -25,6 +25,7 @@
 
 #include <gio/gio.h>
 #include <gmodule.h>
+#include <gdk/gdk.h>
 
 #include "gtksearchenginetracker.h"
 
