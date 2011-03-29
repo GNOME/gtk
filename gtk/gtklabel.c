@@ -283,7 +283,7 @@ static void gtk_label_ensure_select_info  (GtkLabel *label);
 static void gtk_label_clear_select_info   (GtkLabel *label);
 static void gtk_label_update_cursor       (GtkLabel *label);
 static void gtk_label_clear_layout        (GtkLabel *label);
-static void gtk_label_ensure_layout       (GtkLabel *label, gboolean guess_wrap_width);
+static void gtk_label_ensure_layout       (GtkLabel *label);
 static void gtk_label_invalidate_wrap_width (GtkLabel *label);
 static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
@@ -3057,7 +3057,7 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
       g_object_unref (existing_layout);
     }
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
 
   if (pango_layout_get_width (priv->layout) == width)
     {
@@ -3300,10 +3300,9 @@ gtk_label_get_layout_with_guessed_wrap_width (GtkLabel *label)
 }
 
 static void
-gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
+gtk_label_ensure_layout (GtkLabel *label)
 {
   GtkLabelPrivate *priv = label->priv;
-  PangoRectangle logical_rect;
   GtkWidget *widget;
   gboolean rtl;
 
@@ -3376,8 +3375,7 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
       else if (priv->wrap)
 	{
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
-	  gint longest_paragraph;
-	  gint width, height;
+	  gint width;
 	  gint aux_width = 0;
 
  	  if ((angle == 90 || angle == 270) && aux_info && aux_info->height > 0)
@@ -3387,7 +3385,7 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 
  	  if (aux_width > 0)
 	    pango_layout_set_width (priv->layout, aux_width * PANGO_SCALE);
-	  else if (guess_wrap_width == FALSE && allocation.width > 1 && allocation.height > 1)
+	  else
  	    {
 	      PangoRectangle rect;
 	      gint xpad, ypad, natural_width;
@@ -3407,62 +3405,6 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	      pango_layout_set_wrap (priv->layout, priv->wrap_mode);
 	      pango_layout_set_width (priv->layout, MAX (width, 1) * PANGO_SCALE);
  	    }
-	  else
-	    {
-	      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (label));
-	      gint wrap_width;
-
-	      pango_layout_set_width (priv->layout, -1);
-	      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
-
-	      width = logical_rect.width;
-	      /* Try to guess a reasonable maximum width */
-	      longest_paragraph = width;
-
-	      wrap_width = get_label_wrap_width (label);
-	      width = MIN (width, wrap_width);
-	      width = MIN (width,
-			   PANGO_SCALE * (gdk_screen_get_width (screen) + 1) / 2);
-
-	      pango_layout_set_width (priv->layout, width);
-	      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
-	      width = logical_rect.width;
-	      height = logical_rect.height;
-
-	      /* Unfortunately, the above may leave us with a very unbalanced looking paragraph,
-	       * so we try short search for a narrower width that leaves us with the same height
-	       */
-	      if (longest_paragraph > 0)
-		{
-		  gint nlines, perfect_width;
-
-		  nlines = pango_layout_get_line_count (priv->layout);
-		  perfect_width = (longest_paragraph + nlines - 1) / nlines;
-		  
-		  if (perfect_width < width)
-		    {
-		      pango_layout_set_width (priv->layout, perfect_width);
-		      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
-
-		      if (logical_rect.height <= height)
-			width = logical_rect.width;
-		      else
-			{
-			  gint mid_width = (perfect_width + width) / 2;
-			  
-			  if (mid_width > perfect_width)
-			    {
-			      pango_layout_set_width (priv->layout, mid_width);
-			      pango_layout_get_extents (priv->layout, NULL, &logical_rect);
-
-			      if (logical_rect.height <= height)
-				width = logical_rect.width;
-			    }
-			}
-		    }
-		}
-	      pango_layout_set_width (priv->layout, width);
-	    }
 	}
       else /* !priv->wrap */
 	pango_layout_set_width (priv->layout, -1);
@@ -3777,7 +3719,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
   if (priv->wrap)
     gtk_label_clear_layout (label);
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
 
   if (priv->ellipsize)
     {
@@ -4052,7 +3994,7 @@ get_cursor_direction (GtkLabel *label)
 
   g_assert (priv->select_info);
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
 
   for (l = pango_layout_get_lines_readonly (priv->layout); l; l = l->next)
     {
@@ -4098,7 +4040,7 @@ gtk_label_draw_cursor (GtkLabel  *label, cairo_t *cr, gint xoffset, gint yoffset
       keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (gtk_widget_get_display (widget)));
       cursor_direction = get_cursor_direction (label);
 
-      gtk_label_ensure_layout (label, FALSE);
+      gtk_label_ensure_layout (label);
       
       pango_layout_get_cursor_pos (priv->layout, priv->select_info->selection_end,
 				   &strong_pos, &weak_pos);
@@ -4187,7 +4129,7 @@ gtk_label_draw (GtkWidget *widget,
   GtkStateFlags state;
   gint x, y;
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
 
   if (priv->text && (*priv->text != '\0'))
     {
@@ -4596,7 +4538,7 @@ get_layout_index (GtkLabel *label,
 
   *index = 0;
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
 
   window_to_layout_coords (label, &x, &y);
 
@@ -5658,7 +5600,7 @@ gtk_label_get_layout (GtkLabel *label)
 
   priv = label->priv;
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
 
   return priv->layout;
 }
@@ -5685,7 +5627,7 @@ gtk_label_get_layout_offsets (GtkLabel *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
 
   get_layout_location (label, x, y);
 }
@@ -5835,7 +5777,7 @@ get_better_cursor (GtkLabel *label,
 		"gtk-split-cursor", &split_cursor,
 		NULL);
 
-  gtk_label_ensure_layout (label, FALSE);
+  gtk_label_ensure_layout (label);
   
   pango_layout_get_cursor_pos (priv->layout, index,
 			       &strong_pos, &weak_pos);
@@ -5876,7 +5818,7 @@ gtk_label_move_logically (GtkLabel *label,
       gint n_attrs;
       gint length;
 
-      gtk_label_ensure_layout (label, FALSE);
+      gtk_label_ensure_layout (label);
       
       length = g_utf8_strlen (priv->text, -1);
 
@@ -5921,7 +5863,7 @@ gtk_label_move_visually (GtkLabel *label,
       gboolean split_cursor;
       gboolean strong;
 
-      gtk_label_ensure_layout (label, FALSE);
+      gtk_label_ensure_layout (label);
 
       g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
 		    "gtk-split-cursor", &split_cursor,
@@ -5975,7 +5917,7 @@ gtk_label_move_forward_word (GtkLabel *label,
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      gtk_label_ensure_layout (label, FALSE);
+      gtk_label_ensure_layout (label);
 
       pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
 
@@ -6004,7 +5946,7 @@ gtk_label_move_backward_word (GtkLabel *label,
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
-      gtk_label_ensure_layout (label, FALSE);
+      gtk_label_ensure_layout (label);
 
       pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
 
