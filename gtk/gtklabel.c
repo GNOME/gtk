@@ -3803,13 +3803,8 @@ gtk_label_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
-  /* The layout may have been recently cleared in get_size_for_orientation(),
-   * but the width at that point may not be the same as the allocated width
-   */
-  if (priv->wrap)
-    gtk_label_clear_layout (label);
-
-  gtk_label_ensure_layout (label);
+  if (priv->layout)
+    gtk_label_update_layout_width (label);
 
   if (priv->select_info && priv->select_info->window)
     {
