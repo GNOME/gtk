@@ -158,6 +158,7 @@ static void     gtk_status_icon_screen_changed   (GtkStatusIcon  *status_icon,
 static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_padding_changed  (GtkStatusIcon *status_icon);
+static void     gtk_status_icon_icon_size_changed(GtkStatusIcon *status_icon);
 static void     gtk_status_icon_fg_changed       (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_color_changed    (GtkTrayIcon   *tray,
                                                   GParamSpec    *pspec,
@@ -840,6 +841,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 			    G_CALLBACK (gtk_status_icon_orientation_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "notify::padding",
 			    G_CALLBACK (gtk_status_icon_padding_changed), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "notify::icon-size",
+			    G_CALLBACK (gtk_status_icon_icon_size_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "notify::fg-color",
                             G_CALLBACK (gtk_status_icon_fg_changed), status_icon);
   g_signal_connect (priv->tray_icon, "notify::error-color",
@@ -985,6 +988,8 @@ gtk_status_icon_finalize (GObject *object)
 			                gtk_status_icon_orientation_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
 			                gtk_status_icon_padding_changed, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_icon_size_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
                                         gtk_status_icon_fg_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
@@ -1650,9 +1655,24 @@ gtk_status_icon_padding_changed (GtkStatusIcon *status_icon)
 }
 
 static void
+gtk_status_icon_icon_size_changed (GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv = status_icon->priv;
+  gint icon_size;
+
+  icon_size = _gtk_tray_icon_get_icon_size (GTK_TRAY_ICON (priv->tray_icon));
+
+  if (icon_size != 0)
+    gtk_image_set_pixel_size (GTK_IMAGE (priv->image), icon_size);
+  else
+    gtk_image_set_pixel_size (GTK_IMAGE (priv->image), -1);
+}
+
+static void
 gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon)
 {
   gtk_status_icon_padding_changed (status_icon);
+  gtk_status_icon_icon_size_changed (status_icon);
   g_object_notify (G_OBJECT (status_icon), "embedded");
 }
 
