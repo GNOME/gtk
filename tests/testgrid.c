@@ -252,6 +252,9 @@ main (int argc, char *argv[])
 {
   gtk_init (NULL, NULL);
 
+  if (g_getenv ("RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+
   simple_grid ();
   text_grid ();
   box_comparison ();
