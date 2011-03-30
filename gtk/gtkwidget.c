@@ -5115,11 +5115,27 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
      }
 }
 
+/* translate initial/final into start/end */
+static GtkAlign
+effective_align (GtkAlign         align,
+                 GtkTextDirection direction)
+{
+  switch (align)
+    {
+    case GTK_ALIGN_START:
+      return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_END : GTK_ALIGN_START;
+    case GTK_ALIGN_END:
+      return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_START : GTK_ALIGN_END;
+    default:
+      return align;
+    }
+}
+
 static void
-adjust_for_align(GtkAlign           align,
-                 gint              *natural_size,
-                 gint              *allocated_pos,
-                 gint              *allocated_size)
+adjust_for_align (GtkAlign  align,
+                  gint     *natural_size,
+                  gint     *allocated_pos,
+                  gint     *allocated_size)
 {
   switch (align)
     {
@@ -5177,18 +5193,18 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
     {
       adjust_for_margin (aux_info->margin.left,
                          aux_info->margin.right,
-                         minimum_size, natural_size, 
-			 allocated_pos, allocated_size);
-      adjust_for_align (aux_info->halign,
+                         minimum_size, natural_size,
+                         allocated_pos, allocated_size);
+      adjust_for_align (effective_align (aux_info->halign, gtk_widget_get_direction (widget)),
                         natural_size, allocated_pos, allocated_size);
     }
   else
     {
       adjust_for_margin (aux_info->margin.top,
                          aux_info->margin.bottom,
-                         minimum_size, natural_size, 
-			 allocated_pos, allocated_size);
-      adjust_for_align (aux_info->valign,
+                         minimum_size, natural_size,
+                         allocated_pos, allocated_size);
+      adjust_for_align (effective_align (aux_info->valign, GTK_TEXT_DIR_NONE),
                         natural_size, allocated_pos, allocated_size);
     }
 }
