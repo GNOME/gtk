@@ -63,6 +63,9 @@ G_BEGIN_DECLS
  * you have for example a 16x16 icon inside a 32x32 space, the icon
  * could be scaled and stretched, it could be centered, or it could be
  * positioned to one side of the space.
+ *
+ * Note that in horizontal context @GTK_ALIGN_START and @GTK_ALIGN_END
+ * are interpreted relative to text direction.
  */
 typedef enum
 {
