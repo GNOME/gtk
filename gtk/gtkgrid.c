@@ -1195,6 +1195,10 @@ gtk_grid_request_allocate_children (GtkGridRequest *request)
       child_allocation.width = MAX (1, width);
       child_allocation.height = MAX (1, height);
 
+      if (gtk_widget_get_direction (GTK_WIDGET (request->grid)) == GTK_TEXT_DIR_RTL)
+        child_allocation.x = allocation.x + allocation.width
+                             - (child_allocation.x - allocation.x) - child_allocation.width;
+
       gtk_widget_size_allocate (child->widget, &child_allocation);
     }
 }
