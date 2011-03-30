@@ -3313,20 +3313,13 @@ gtk_label_update_layout_width (GtkLabel *label)
         pango_layout_set_width (priv->layout, aux_width * PANGO_SCALE);
       else
         {
-          PangoRectangle rect;
-          gint xpad, ypad, natural_width;
+          gint xpad, ypad;
           gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
           if (angle == 90 || angle == 270)
             width = allocation.height - ypad * 2;
           else
             width = allocation.width  - xpad * 2;
-
-          /* dont set a wrap width wider than the label's natural width
-           * incase we're allocated more space than needed */
-          pango_layout_get_extents (priv->layout, NULL, &rect);
-          natural_width = PANGO_PIXELS (rect.width);
-          width = MIN (natural_width, width);
 
           pango_layout_set_wrap (priv->layout, priv->wrap_mode);
           pango_layout_set_width (priv->layout, MAX (width, 1) * PANGO_SCALE);
