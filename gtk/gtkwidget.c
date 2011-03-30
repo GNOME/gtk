@@ -299,6 +299,13 @@
  * </refsect2>
  */
 
+/* Add flags here that should not be propagated to children. By default,
+ * all flags will be set on children (think prelight or active), but we
+ * might want to not do this for some.
+ */
+#define GTK_STATE_FLAGS_DONT_PROPAGATE (GTK_STATE_FLAG_FOCUSED)
+#define GTK_STATE_FLAGS_DO_PROPAGATE (~GTK_STATE_FLAGS_DONT_PROPAGATE)
+
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
 
@@ -7698,9 +7705,8 @@ gtk_widget_set_parent (GtkWidget *widget,
   parent_flags = gtk_widget_get_state_flags (parent);
 
   /* Merge both old state and current parent state,
-   * We don't want the insensitive flag to propagate
-   * to the new child though */
-  data.flags = parent_flags & ~GTK_STATE_FLAG_INSENSITIVE;
+   * making sure to only propagate the right states */
+  data.flags = parent_flags & GTK_STATE_FLAGS_DO_PROPAGATE;
   data.flags |= priv->state_flags;
 
   data.operation = STATE_CHANGE_REPLACE;
@@ -11240,8 +11246,8 @@ gtk_widget_propagate_state (GtkWidget    *widget,
         {
           GtkStateData child_data = *data;
 
-          /* Do not propagate focused state further */
-          child_data.flags &= ~GTK_STATE_FLAG_FOCUSED;
+          /* Make sure to only propate the right states further */
+          child_data.flags &= GTK_STATE_FLAGS_DO_PROPAGATE;
 
           if (child_data.use_forall)
             gtk_container_forall (GTK_CONTAINER (widget),
