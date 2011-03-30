@@ -321,7 +321,6 @@ struct _GtkWidgetPrivate
   guint mapped                : 1;
   guint visible               : 1;
   guint sensitive             : 1;
-  guint parent_sensitive      : 1;
   guint can_focus             : 1;
   guint has_focus             : 1;
   guint can_default           : 1;
@@ -524,7 +523,6 @@ struct _GtkStateData
 {
   guint         flags : 6;
   guint         operation : 2;
-  guint         parent_sensitive : 1;
   guint		use_forall : 1;
 };
 
@@ -3514,7 +3512,6 @@ gtk_widget_init (GtkWidget *widget)
   priv->parent = NULL;
 
   priv->sensitive = TRUE;
-  priv->parent_sensitive = TRUE;
   priv->composite_child = composite_child_stack != 0;
   priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
@@ -6996,11 +6993,6 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
       data.operation = operation;
       data.use_forall = FALSE;
 
-      if (priv->parent)
-	data.parent_sensitive = (gtk_widget_is_sensitive (priv->parent) != FALSE);
-      else
-	data.parent_sensitive = TRUE;
-
       gtk_widget_propagate_state (widget, &data);
 
       gtk_widget_queue_resize (widget);
@@ -7086,9 +7078,6 @@ gtk_widget_get_state_flags (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
   flags = widget->priv->state_flags;
-
-  if (!gtk_widget_is_sensitive (widget))
-    flags |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (gtk_widget_has_focus (widget))
     flags |= GTK_STATE_FLAG_FOCUSED;
@@ -7599,11 +7588,6 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 
   data.use_forall = TRUE;
 
-  if (priv->parent)
-    data.parent_sensitive = gtk_widget_is_sensitive (priv->parent);
-  else
-    data.parent_sensitive = TRUE;
-
   gtk_widget_propagate_state (widget, &data);
 
   if (gtk_widget_is_drawable (widget))
@@ -7650,7 +7634,7 @@ gtk_widget_is_sensitive (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return widget->priv->sensitive && widget->priv->parent_sensitive;
+  return !(widget->priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
 }
 
 static void
@@ -7720,7 +7704,6 @@ gtk_widget_set_parent (GtkWidget *widget,
   data.flags |= priv->state_flags;
 
   data.operation = STATE_CHANGE_REPLACE;
-  data.parent_sensitive = (gtk_widget_is_sensitive (parent) != FALSE);
   data.use_forall = gtk_widget_is_sensitive (parent) != gtk_widget_is_sensitive (widget);
   gtk_widget_propagate_state (widget, &data);
 
@@ -11176,11 +11159,6 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
   old_state = gtk_widget_get_state (widget);
 
-  if (!priv->parent_sensitive)
-    old_flags |= GTK_STATE_FLAG_INSENSITIVE;
-
-  priv->parent_sensitive = data->parent_sensitive;
-
   switch (data->operation)
     {
     case STATE_CHANGE_REPLACE:
@@ -11194,6 +11172,10 @@ gtk_widget_propagate_state (GtkWidget    *widget,
       break;
     }
 
+  /* make insensitivity unoverridable */
+  if (!priv->sensitive)
+    priv->state_flags |= GTK_STATE_FLAG_INSENSITIVE;
+
   if (gtk_widget_is_focus (widget) && !gtk_widget_is_sensitive (widget))
     {
       GtkWidget *window;
@@ -11204,7 +11186,7 @@ gtk_widget_propagate_state (GtkWidget    *widget,
         gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
-  new_flags = gtk_widget_get_state_flags (widget);
+  new_flags = priv->state_flags;
 
   if (old_flags != new_flags)
     {
@@ -11255,8 +11237,6 @@ gtk_widget_propagate_state (GtkWidget    *widget,
       if (GTK_IS_CONTAINER (widget))
         {
           GtkStateData child_data = *data;
-
-          child_data.parent_sensitive = gtk_widget_is_sensitive (widget);
 
           /* Do not propagate focused state further */
           child_data.flags &= ~GTK_STATE_FLAG_FOCUSED;
