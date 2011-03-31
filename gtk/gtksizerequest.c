@@ -508,7 +508,7 @@ compute_size_for_orientation (GtkWidget         *widget,
 GtkSizeRequestMode
 gtk_widget_get_request_mode (GtkWidget *widget)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_SIZE_REQUEST_CONSTANT_SIZE);
 
   return GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
 }
