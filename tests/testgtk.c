@@ -8233,8 +8233,11 @@ static void
 destroy_progress (GtkWidget     *widget,
 		  ProgressData **pdata)
 {
-  g_source_remove ((*pdata)->timer);
-  (*pdata)->timer = 0;
+  if ((*pdata)->timer)
+    {
+      g_source_remove ((*pdata)->timer);
+      (*pdata)->timer = 0;
+    }
   (*pdata)->window = NULL;
   g_free (*pdata);
   *pdata = NULL;
@@ -8289,6 +8292,24 @@ static void
 toggle_activity_mode (GtkWidget *widget, ProgressData *pdata)
 {
   pdata->activity = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+}
+
+static void
+toggle_running (GtkWidget *widget, ProgressData *pdata)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+    {
+      if (pdata->timer == 0)
+        pdata->timer = g_timeout_add (100, (GSourceFunc)progress_timeout, pdata);
+    }
+  else
+    {
+      if (pdata->timer != 0)
+        {
+          g_source_remove (pdata->timer);
+          pdata->timer = 0;
+        }
+    }
 }
 
 static void
@@ -8369,7 +8390,6 @@ create_progress_bar (GtkWidget *widget)
                                       PANGO_ELLIPSIZE_MIDDLE);
 
       gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
-      pdata->timer = g_timeout_add (100, (GSourceFunc)progress_timeout, pdata);
 
       align = gtk_alignment_new (0.5, 0.5, 0, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 5);
@@ -8405,16 +8425,25 @@ create_progress_bar (GtkWidget *widget)
 			5, 5);
       gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu1, TRUE, TRUE, 0);
       
+      check = gtk_check_button_new_with_label ("Running");
+      g_signal_connect (check, "toggled",
+			G_CALLBACK (toggle_running),
+			pdata);
+      gtk_table_attach (GTK_TABLE (tab), check, 0, 2, 1, 2,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+
       check = gtk_check_button_new_with_label ("Show text");
       g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_show_text),
 			pdata);
-      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 1, 2,
+      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 1, 2,
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 2, 3,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
 
