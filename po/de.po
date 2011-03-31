@@ -30,15 +30,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 23:07+0100\n"
-"PO-Revision-Date: 2011-02-13 14:22+0100\n"
-"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-03-31 07:41+0000\n"
+"PO-Revision-Date: 2011-03-31 09:50+0100\n"
+"Last-Translator: Mario Blättermann <mariobl@gnome.org>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
@@ -360,10 +361,9 @@ msgid "XF86AudioRewind"
 msgstr "Zurückspulen"
 
 #: ../gdk/keyname-table.h:4002
-#, fuzzy
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
-msgstr "Medien"
+msgstr "XF86AudioMedia"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
@@ -418,7 +418,7 @@ msgstr "Anzeige"
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
-msgstr ""
+msgstr "XF86TouchpadToggle"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
@@ -520,19 +520,19 @@ msgstr "Homepage"
 msgid "About %s"
 msgstr "Info zu %s"
 
-#: ../gtk/gtkaboutdialog.c:2372
+#: ../gtk/gtkaboutdialog.c:2374
 msgid "Created by"
 msgstr "Erstellt von"
 
-#: ../gtk/gtkaboutdialog.c:2375
+#: ../gtk/gtkaboutdialog.c:2377
 msgid "Documented by"
 msgstr "Dokumentation von"
 
-#: ../gtk/gtkaboutdialog.c:2385
+#: ../gtk/gtkaboutdialog.c:2387
 msgid "Translated by"
 msgstr "Übersetzung von"
 
-#: ../gtk/gtkaboutdialog.c:2390
+#: ../gtk/gtkaboutdialog.c:2392
 msgid "Artwork by"
 msgstr "Grafiken von"
 
@@ -610,50 +610,50 @@ msgstr "Backslash"
 msgid "Other application..."
 msgstr "Andere Anwendung …"
 
-#: ../gtk/gtkappchooserdialog.c:128
+#: ../gtk/gtkappchooserdialog.c:130
 msgid "Failed to look for applications online"
 msgstr "Online-Suche nach Anwendungen ist fehlgeschlagen"
 
-#: ../gtk/gtkappchooserdialog.c:165
+#: ../gtk/gtkappchooserdialog.c:171
 msgid "Find applications online"
 msgstr "Anwendungen online suchen"
 
-#: ../gtk/gtkappchooserdialog.c:209
+#: ../gtk/gtkappchooserdialog.c:221
 msgid "Could not run application"
 msgstr "Anwendung konnte nicht gestartet werden"
 
-#: ../gtk/gtkappchooserdialog.c:222
+#: ../gtk/gtkappchooserdialog.c:234
 #, c-format
 msgid "Could not find '%s'"
 msgstr "»%s« konnte nicht gefunden werden"
 
-#: ../gtk/gtkappchooserdialog.c:225
+#: ../gtk/gtkappchooserdialog.c:237
 msgid "Could not find application"
 msgstr "Anwendung konnte nicht gefunden werden"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:335
+#: ../gtk/gtkappchooserdialog.c:355
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Anwendung zum Öffnen von »%s« auswählen"
 
-#: ../gtk/gtkappchooserdialog.c:336 ../gtk/gtkappchooserwidget.c:640
+#: ../gtk/gtkappchooserdialog.c:356 ../gtk/gtkappchooserwidget.c:642
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Keine Anwendung zum Öffnen von »%s« verfügbar"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:342
+#: ../gtk/gtkappchooserdialog.c:362
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Anwendung für »%s«-Dateien auswählen"
 
-#: ../gtk/gtkappchooserdialog.c:345
+#: ../gtk/gtkappchooserdialog.c:364
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Keine Anwendungen zum Öffnen von »%s«-Dateien verfügbar"
 
-#: ../gtk/gtkappchooserdialog.c:362
+#: ../gtk/gtkappchooserdialog.c:380
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -661,15 +661,15 @@ msgstr ""
 "Klicken Sie für weitere Optionen auf »Weitere Anwendungen anzeigen« oder auf "
 "»Anwendungen online suchen«, um eine neue Anwendung zu installieren."
 
-#: ../gtk/gtkappchooserdialog.c:432
+#: ../gtk/gtkappchooserdialog.c:450
 msgid "Forget association"
 msgstr "Zuordnung aufheben"
 
-#: ../gtk/gtkappchooserdialog.c:497
+#: ../gtk/gtkappchooserdialog.c:515
 msgid "Show other applications"
 msgstr "Weitere Anwendungen anzeigen"
 
-#: ../gtk/gtkappchooserdialog.c:515
+#: ../gtk/gtkappchooserdialog.c:533
 msgid "_Select"
 msgstr "Aus_wählen"
 
@@ -677,15 +677,15 @@ msgstr "Aus_wählen"
 msgid "Default Application"
 msgstr "Standard-Anwendung"
 
-#: ../gtk/gtkappchooserwidget.c:726
+#: ../gtk/gtkappchooserwidget.c:729
 msgid "Recommended Applications"
 msgstr "Empfohlene Anwendungen"
 
-#: ../gtk/gtkappchooserwidget.c:740
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Related Applications"
 msgstr "Zugehörige Anwendungen"
 
-#: ../gtk/gtkappchooserwidget.c:754
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Other Applications"
 msgstr "Weitere Anwendungen"
 
@@ -1031,23 +1031,23 @@ msgstr "_Rechts:"
 msgid "Paper Margins"
 msgstr "Papierränder"
 
-#: ../gtk/gtkentry.c:8748 ../gtk/gtktextview.c:8272
+#: ../gtk/gtkentry.c:8757 ../gtk/gtktextview.c:8272
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
-#: ../gtk/gtkentry.c:8762 ../gtk/gtktextview.c:8286
+#: ../gtk/gtkentry.c:8771 ../gtk/gtktextview.c:8286
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode-Steuerzeichen einfügen"
 
-#: ../gtk/gtkentry.c:10170
+#: ../gtk/gtkentry.c:10179
 msgid "Caps Lock and Num Lock are on"
 msgstr "Feststelltaste und Nummernblock-Feststelltaste sind aktiviert"
 
-#: ../gtk/gtkentry.c:10172
+#: ../gtk/gtkentry.c:10181
 msgid "Num Lock is on"
 msgstr "Nummernblock-Feststelltaste ist aktiviert"
 
-#: ../gtk/gtkentry.c:10174
+#: ../gtk/gtkentry.c:10183
 msgid "Caps Lock is on"
 msgstr "Feststelltaste ist aktiviert"
 
@@ -1138,7 +1138,7 @@ msgstr "%1$s, %2$s"
 msgid "Search"
 msgstr "Suchen"
 
-#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9466
+#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9494
 msgid "Recently Used"
 msgstr "Zuletzt verwendet"
 
@@ -1171,7 +1171,7 @@ msgstr "Lesezeichen »%s« entfernen"
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Lesezeichen »%s« kann nicht entfernt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:2916 ../gtk/gtkfilechooserdefault.c:3798
+#: ../gtk/gtkfilechooserdefault.c:2916 ../gtk/gtkfilechooserdefault.c:3800
 msgid "Remove the selected bookmark"
 msgstr "Ausgewähltes Lesezeichen entfernen"
 
@@ -1184,126 +1184,126 @@ msgid "Rename..."
 msgstr "Umbenennen …"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3651
+#: ../gtk/gtkfilechooserdefault.c:3652
 msgid "Places"
 msgstr "Orte"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3708
+#: ../gtk/gtkfilechooserdefault.c:3709
 msgid "_Places"
 msgstr "_Orte"
 
-#: ../gtk/gtkfilechooserdefault.c:3786
+#: ../gtk/gtkfilechooserdefault.c:3788
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Den ausgewählten Ordner zu den Lesezeichen hinzufügen"
 
-#: ../gtk/gtkfilechooserdefault.c:3933
+#: ../gtk/gtkfilechooserdefault.c:3935
 msgid "Could not select file"
 msgstr "Datei konnte nicht ausgewählt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:4106
+#: ../gtk/gtkfilechooserdefault.c:4108
 msgid "_Add to Bookmarks"
 msgstr "Zu Lesezeichen _hinzufügen"
 
-#: ../gtk/gtkfilechooserdefault.c:4119
+#: ../gtk/gtkfilechooserdefault.c:4121
 msgid "Show _Hidden Files"
 msgstr "_Verborgene Dateien anzeigen"
 
-#: ../gtk/gtkfilechooserdefault.c:4126
+#: ../gtk/gtkfilechooserdefault.c:4128
 msgid "Show _Size Column"
 msgstr "Spalte »_Größe« anzeigen"
 
-#: ../gtk/gtkfilechooserdefault.c:4351
+#: ../gtk/gtkfilechooserdefault.c:4353
 msgid "Files"
 msgstr "Dateien"
 
-#: ../gtk/gtkfilechooserdefault.c:4402
+#: ../gtk/gtkfilechooserdefault.c:4404
 msgid "Name"
 msgstr "Name"
 
-#: ../gtk/gtkfilechooserdefault.c:4425
+#: ../gtk/gtkfilechooserdefault.c:4427
 msgid "Size"
 msgstr "Größe"
 
 # CHECK
-#: ../gtk/gtkfilechooserdefault.c:4439
+#: ../gtk/gtkfilechooserdefault.c:4441
 msgid "Modified"
 msgstr "Letzte Änderung"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4694 ../gtk/gtkprinteroptionwidget.c:793
+#: ../gtk/gtkfilechooserdefault.c:4696 ../gtk/gtkprinteroptionwidget.c:793
 msgid "_Name:"
 msgstr "_Name:"
 
-#: ../gtk/gtkfilechooserdefault.c:4737
+#: ../gtk/gtkfilechooserdefault.c:4739
 msgid "_Browse for other folders"
 msgstr "Ordner-_Browser"
 
-#: ../gtk/gtkfilechooserdefault.c:5007
+#: ../gtk/gtkfilechooserdefault.c:5009
 msgid "Type a file name"
 msgstr "Geben Sie einen Dateinamen an"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5050
+#: ../gtk/gtkfilechooserdefault.c:5052
 msgid "Create Fo_lder"
 msgstr "Ordner anle_gen"
 
-#: ../gtk/gtkfilechooserdefault.c:5060
+#: ../gtk/gtkfilechooserdefault.c:5062
 msgid "_Location:"
 msgstr "_Ort:"
 
-#: ../gtk/gtkfilechooserdefault.c:5265
+#: ../gtk/gtkfilechooserdefault.c:5267
 msgid "Save in _folder:"
 msgstr "In _Ordner speichern:"
 
-#: ../gtk/gtkfilechooserdefault.c:5267
+#: ../gtk/gtkfilechooserdefault.c:5269
 msgid "Create in _folder:"
 msgstr "In _Ordner anlegen"
 
-#: ../gtk/gtkfilechooserdefault.c:6331
+#: ../gtk/gtkfilechooserdefault.c:6352
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Inhalt von %s konnte nicht gelesen werden"
 
-#: ../gtk/gtkfilechooserdefault.c:6335
+#: ../gtk/gtkfilechooserdefault.c:6356
 msgid "Could not read the contents of the folder"
 msgstr "Inhalt des Ordners konnte nicht gelesen werden"
 
-#: ../gtk/gtkfilechooserdefault.c:6428 ../gtk/gtkfilechooserdefault.c:6496
-#: ../gtk/gtkfilechooserdefault.c:6641
+#: ../gtk/gtkfilechooserdefault.c:6449 ../gtk/gtkfilechooserdefault.c:6517
+#: ../gtk/gtkfilechooserdefault.c:6669
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../gtk/gtkfilechooserdefault.c:6443
+#: ../gtk/gtkfilechooserdefault.c:6464
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6445
+#: ../gtk/gtkfilechooserdefault.c:6466
 msgid "Yesterday at %H:%M"
 msgstr "Gestern um %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7107
+#: ../gtk/gtkfilechooserdefault.c:7135
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 "Es konnte nicht in den angegebenen Ordner gewechselt werden, weil dieser "
 "nicht lokal ist."
 
-#: ../gtk/gtkfilechooserdefault.c:7704 ../gtk/gtkfilechooserdefault.c:7725
+#: ../gtk/gtkfilechooserdefault.c:7732 ../gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Das Lesezeichen %s existiert bereits"
 
-#: ../gtk/gtkfilechooserdefault.c:7815
+#: ../gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Das Lesezeichen %s existiert nicht"
 
-#: ../gtk/gtkfilechooserdefault.c:8074 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8102 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Eine Datei namens »%s« existiert bereits. Möchten Sie diese ersetzen?"
 
-#: ../gtk/gtkfilechooserdefault.c:8077 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8105 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1311,15 +1311,15 @@ msgstr ""
 "Die Datei existiert bereits in »%s«. Durch ihr Ersetzen wird sämtlicher "
 "Inhalt überschrieben."
 
-#: ../gtk/gtkfilechooserdefault.c:8082 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8110 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: ../gtk/gtkfilechooserdefault.c:8808
+#: ../gtk/gtkfilechooserdefault.c:8836
 msgid "Could not start the search process"
 msgstr "Der Suchprozess konnte nicht gestartet werden"
 
-#: ../gtk/gtkfilechooserdefault.c:8809
+#: ../gtk/gtkfilechooserdefault.c:8837
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1327,15 +1327,15 @@ msgstr ""
 "Es konnte keine Verbindung zum Indexer-Dienst hergestellt werden. Bitte "
 "stellen Sie sicher, dass er läuft."
 
-#: ../gtk/gtkfilechooserdefault.c:8823
+#: ../gtk/gtkfilechooserdefault.c:8851
 msgid "Could not send the search request"
 msgstr "Die Suchanfrage konnte nicht gestellt werden"
 
-#: ../gtk/gtkfilechooserdefault.c:9042
+#: ../gtk/gtkfilechooserdefault.c:9070
 msgid "Search:"
 msgstr "Suchen:"
 
-#: ../gtk/gtkfilechooserdefault.c:9650
+#: ../gtk/gtkfilechooserdefault.c:9678
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s konnte nicht eingebunden werden"
@@ -1497,12 +1497,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6243
+#: ../gtk/gtklabel.c:6247
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6255
+#: ../gtk/gtklabel.c:6259
 msgid "Copy _Link Address"
 msgstr "Link-Adresse _kopieren"
 
@@ -1643,7 +1643,7 @@ msgstr "Z-Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Prozess mit Kennung %d kann nicht abgewürgt werden: %s"
 
-#: ../gtk/gtknotebook.c:4808 ../gtk/gtknotebook.c:7383
+#: ../gtk/gtknotebook.c:4805 ../gtk/gtknotebook.c:7461
 #, c-format
 msgid "Page %u"
 msgstr "Seite %u"
@@ -2302,19 +2302,18 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1000 ../gtk/gtkrecentmanager.c:1013
-#: ../gtk/gtkrecentmanager.c:1150 ../gtk/gtkrecentmanager.c:1160
-#: ../gtk/gtkrecentmanager.c:1212 ../gtk/gtkrecentmanager.c:1221
-#: ../gtk/gtkrecentmanager.c:1236
+#: ../gtk/gtkrecentmanager.c:1006 ../gtk/gtkrecentmanager.c:1019
+#: ../gtk/gtkrecentmanager.c:1156 ../gtk/gtkrecentmanager.c:1166
+#: ../gtk/gtkrecentmanager.c:1218 ../gtk/gtkrecentmanager.c:1227
+#: ../gtk/gtkrecentmanager.c:1242
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Es konnte kein Eintrag mit der Adresse »%s« gefunden werden"
 
-#: ../gtk/gtkrecentmanager.c:2436
+#: ../gtk/gtkrecentmanager.c:2442
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr ""
-"Keine registrierte Anwendung namens »%s« für Objektadresse »%s« gefunden"
+msgstr "Keine registrierte Anwendung namens »%s« für Objektadresse »%s« gefunden"
 
 #: ../gtk/gtkspinner.c:287
 msgctxt "throbbing progress animation widget"
@@ -2838,7 +2837,7 @@ msgstr "_Wegzoomen"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:313 ../gtk/gtkswitch.c:362 ../gtk/gtkswitch.c:553
+#: ../gtk/gtkswitch.c:338 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:605
 msgctxt "switch"
 msgid "ON"
 msgstr "AN"
@@ -2846,17 +2845,17 @@ msgstr "AN"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:321 ../gtk/gtkswitch.c:363 ../gtk/gtkswitch.c:569
+#: ../gtk/gtkswitch.c:346 ../gtk/gtkswitch.c:399 ../gtk/gtkswitch.c:634
 msgctxt "switch"
 msgid "OFF"
 msgstr "AUS"
 
-#: ../gtk/gtkswitch.c:974
+#: ../gtk/gtkswitch.c:1061
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Schalter"
 
-#: ../gtk/gtkswitch.c:975
+#: ../gtk/gtkswitch.c:1062
 msgid "Switches between on and off states"
 msgstr "Schaltet zwischen »an« und »aus« um"
 
@@ -2936,8 +2935,8 @@ msgstr "»%s« ist kein gültiger Attributsname"
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« "
-"konvertiert werden"
+"»%s« konnte für das Attribut »%s« nicht in einen Wert vom Typ »%s« konvertiert "
+"werden"
 
 #: ../gtk/gtktextbufferserialize.c:1211
 #, c-format
@@ -3945,8 +3944,7 @@ msgstr "Der erstellte Cache war ungültig.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen "
-"entfernt.\n"
+"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen entfernt.\n"
 
 #: ../gtk/updateiconcache.c:1561
 #, c-format
@@ -5242,8 +5240,8 @@ msgstr ""
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte "
-#~ "für dieses Programm nicht verfügbar sein.\n"
+#~ "Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte für "
+#~ "dieses Programm nicht verfügbar sein.\n"
 #~ "Sind Sie sicher, dass Sie sie markieren wollen?"
 
 #~ msgid "_New Folder"
@@ -6162,8 +6160,8 @@ msgstr ""
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
 #~ msgstr ""
-#~ "Datei »%s« konnte nicht ausgewählt werden, da dies ein ungültiger "
-#~ "Pfadname ist."
+#~ "Datei »%s« konnte nicht ausgewählt werden, da dies ein ungültiger Pfadname "
+#~ "ist."
 
 #~ msgid "%d byte"
 #~ msgid_plural "%d bytes"
@@ -6183,8 +6181,8 @@ msgstr ""
 #~ "The name \"%s\" is not valid because it contains the character \"%s\". "
 #~ "Please use a different name."
 #~ msgstr ""
-#~ "Der Name »%s« ist ungültig, da er das Zeichen »%s« enthält. Bitte "
-#~ "verwenden Sie einen anderen Namen."
+#~ "Der Name »%s« ist ungültig, da er das Zeichen »%s« enthält. Bitte verwenden "
+#~ "Sie einen anderen Namen."
 
 #~ msgid "Bookmark saving failed: %s"
 #~ msgstr "Speichern des Lesezeichens gescheitert: %s"
@@ -6242,8 +6240,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-#~ msgstr ""
-#~ "Zeile %d, Spalte %d: »%s« oder »%s« wurde erwartet, aber »%s« gefunden"
+#~ msgstr "Zeile %d, Spalte %d: »%s« oder »%s« wurde erwartet, aber »%s« gefunden"
 
 #~ msgid "Error creating directory '%s': %s"
 #~ msgstr "Fehler beim Anlegen des Ordners »%s«: %s"
