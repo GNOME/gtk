@@ -2372,7 +2372,7 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
 #else /* !G_ENABLE_DEBUG */
       g_warning ("%s\n", msg);
 
-      exit (1);
+      _exit (1);
 #endif /* G_ENABLE_DEBUG */
     }
 }

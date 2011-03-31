@@ -265,7 +265,7 @@ gdk_x_io_error (Display *display)
                  display ? DisplayString (display) : gdk_get_display_arg_name ());
     }
 
-  exit(1);
+  _exit (1);
 }
 
 /* X error handler. Keep the name the same because people are used to
