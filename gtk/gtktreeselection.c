@@ -24,6 +24,7 @@
 #include "gtkrbtree.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtktypebuiltins.h"
 
 
 /**
@@ -76,6 +77,21 @@ static gint gtk_tree_selection_real_select_node  (GtkTreeSelection      *selecti
 						  GtkRBTree             *tree,
 						  GtkRBNode             *node,
 						  gboolean               select);
+static void gtk_tree_selection_set_property      (GObject               *object,
+                                                  guint                  prop_id,
+                                                  const GValue          *value,
+                                                  GParamSpec            *pspec);
+static void gtk_tree_selection_get_property      (GObject               *object,
+                                                  guint                  prop_id,
+                                                  GValue                *value,
+                                                  GParamSpec            *pspec);
+
+enum
+{
+  PROP_0,
+  PROP_MODE,
+  N_PROPERTIES
+};
 
 enum
 {
@@ -83,6 +99,7 @@ enum
   LAST_SIGNAL
 };
 
+static GParamSpec *properties[N_PROPERTIES];
 static guint tree_selection_signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GtkTreeSelection, gtk_tree_selection, G_TYPE_OBJECT)
@@ -95,8 +112,33 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
   object_class = (GObjectClass*) class;
 
   object_class->finalize = gtk_tree_selection_finalize;
+  object_class->set_property = gtk_tree_selection_set_property;
+  object_class->get_property = gtk_tree_selection_get_property;
   class->changed = NULL;
 
+  /* Properties */
+  
+  /**
+   * GtkTreeSelection:mode:
+   *
+   * Selection mode.
+   * See gtk_tree_selection_set_mode() for more information on this property.
+   *
+   * Since: 3.2
+   */
+  properties[PROP_MODE] = g_param_spec_enum ("mode",
+                                             P_("Mode"),
+                                             P_("Selection mode"),
+                                             GTK_TYPE_SELECTION_MODE,
+                                             GTK_SELECTION_SINGLE,
+                                             G_PARAM_READWRITE |
+                                             G_PARAM_STATIC_STRINGS);
+
+  /* Install all properties */
+  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+  
+  /* Signals */
+  
   /**
    * GtkTreeSelection::changed:
    * @treeselection: the object which received the signal.
@@ -142,6 +184,44 @@ gtk_tree_selection_finalize (GObject *object)
 
   /* chain parent_class' handler */
   G_OBJECT_CLASS (gtk_tree_selection_parent_class)->finalize (object);
+}
+
+static void
+gtk_tree_selection_set_property (GObject *object,
+                                 guint prop_id,
+                                 const GValue *value,
+                                 GParamSpec *pspec)
+{
+  g_return_if_fail (GTK_IS_TREE_SELECTION (object));
+
+  switch (prop_id)
+    {
+      case PROP_MODE:
+        gtk_tree_selection_set_mode (GTK_TREE_SELECTION (object), g_value_get_enum (value));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
+gtk_tree_selection_get_property (GObject *object,
+                                 guint prop_id,
+                                 GValue *value,
+                                 GParamSpec *pspec)
+{
+  g_return_if_fail (GTK_IS_TREE_SELECTION (object));
+
+  switch (prop_id)
+    {
+      case PROP_MODE:
+        g_value_set_enum (value, gtk_tree_selection_get_mode (GTK_TREE_SELECTION (object)));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
 }
 
 /**
@@ -281,6 +361,8 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
     }
 
   priv->type = type;
+  
+  g_object_notify_by_pspec (G_OBJECT (selection), properties[PROP_MODE]);
 }
 
 /**
