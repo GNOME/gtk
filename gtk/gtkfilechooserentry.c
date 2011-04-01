@@ -336,8 +336,9 @@ match_selected_callback (GtkEntryCompletion  *completion,
 
   if (!display_name || !file)
     {
-      /* these shouldn't complain if passed NULL */
-      g_object_unref (file);
+      if (file)
+	g_object_unref (file);
+
       g_free (display_name);
       return FALSE;
     }

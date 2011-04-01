@@ -1551,7 +1551,10 @@ model_free_row_data (GtkFileChooserButton *button,
 		      -1);
 
   if (cancellable)
-    g_cancellable_cancel (cancellable);
+    {
+      g_cancellable_cancel (cancellable);
+      g_object_unref (cancellable);
+    }
 
   switch (type)
     {

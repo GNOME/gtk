@@ -3195,7 +3195,7 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
   int bookmarks_index;
   GFile *file;
   GError *error;
-  gchar *name;
+  gchar *name = NULL;
 
   /* Get the selected path */
 
@@ -3241,6 +3241,7 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
  out:
 
   g_object_unref (file);
+  g_free (name);
 }
 
 /* Callback used when we get the drag data for the bookmarks list.  We add the
@@ -10035,6 +10036,7 @@ list_row_activated (GtkTreeView           *tree_view,
   if (is_folder && file)
     {
       change_folder_and_display_error (impl, file, FALSE);
+      g_object_unref (file);
       goto out;
     }
 
