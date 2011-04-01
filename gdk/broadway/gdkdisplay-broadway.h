@@ -145,6 +145,8 @@ struct _GdkBroadwayDisplay
   guint32 saved_serial;
   BroadwayInput *input;
   GList *input_messages;
+
+  guint64 last_event_time;
 };
 
 struct _GdkBroadwayDisplayClass
