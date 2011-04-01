@@ -1138,23 +1138,15 @@ compare_selector_element (GtkWidgetPath   *path,
         *score |= 0xF;
       else
         {
-          GType parent = type;
+          guint diff = g_type_depth (type) - g_type_depth (elem->type);
 
-          *score = 0xE;
-
-          while ((parent = g_type_parent (parent)) != G_TYPE_INVALID)
+          if (G_UNLIKELY (diff > 0xE))
             {
-              if (parent == elem->type)
-                break;
-
-              *score -= 1;
-
-              if (*score == 1)
-                {
-                  g_warning ("Hierarchy is higher than expected.");
-                  break;
-                }
+              g_warning ("Hierarchy is higher than expected.");
+              diff = 0xE;
             }
+          
+          *score = 0XF - diff;
         }
 
       return TRUE;
