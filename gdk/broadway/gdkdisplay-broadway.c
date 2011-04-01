@@ -298,17 +298,30 @@ parse_input (BroadwayInput *input)
   g_byte_array_remove_range (input->buffer, 0, buf - (char *)input->buffer->data);
 }
 
+
 static gboolean
-input_data_cb (GObject  *stream,
-	       BroadwayInput *input)
+process_input_idle_cb (GdkBroadwayDisplay *display)
+{
+  process_input_messages (display);
+  return FALSE;
+}
+
+static void
+_gdk_broadway_display_read_all_input_nonblocking (GdkDisplay *display )
 {
   GdkBroadwayDisplay *broadway_display;
   GInputStream *in;
   gssize res;
   guint8 buffer[1024];
   GError *error;
+  BroadwayInput *input;
 
-  broadway_display = GDK_BROADWAY_DISPLAY (input->display);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  if (broadway_display->input == NULL)
+    return;
+
+  input = broadway_display->input;
+
   in = g_io_stream_get_input_stream (G_IO_STREAM (input->connection));
 
   error = NULL;
@@ -321,7 +334,7 @@ input_data_cb (GObject  *stream,
 	  g_error_matches (error, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK))
 	{
 	  g_error_free (error);
-	  return TRUE;
+	  return;
 	}
 
       broadway_display->input = NULL;
@@ -331,22 +344,26 @@ input_data_cb (GObject  *stream,
 	  g_print ("input error %s", error->message);
 	  g_error_free (error);
 	}
-      return FALSE;
+      return;
     }
 
   g_byte_array_append (input->buffer, buffer, res);
 
   parse_input (input);
-  process_input_messages (broadway_display);
-
-  return TRUE;
 }
 
 static gboolean
-process_input_idle_cb (GdkBroadwayDisplay *display)
+input_data_cb (GObject  *stream,
+	       BroadwayInput *input)
 {
-  process_input_messages (display);
-  return FALSE;
+  GdkBroadwayDisplay *broadway_display;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (input->display);
+  _gdk_broadway_display_read_all_input_nonblocking (input->display);
+
+  process_input_messages (broadway_display);
+
+  return TRUE;
 }
 
 /* Note: This may be called while handling a message (i.e. sorta recursively) */
