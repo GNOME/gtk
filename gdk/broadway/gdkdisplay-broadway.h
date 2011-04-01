@@ -45,6 +45,67 @@ typedef struct BroadwayInput BroadwayInput;
 #define GDK_IS_BROADWAY_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_DISPLAY))
 #define GDK_BROADWAY_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplayClass))
 
+typedef struct {
+  char type;
+  guint32 serial;
+  guint64 time;
+} BroadwayInputBaseMsg;
+
+typedef struct {
+  BroadwayInputBaseMsg base;
+  guint32 id;
+  int root_x;
+  int root_y;
+  int win_x;
+  int win_y;
+  guint32 state;
+} BroadwayInputPointerMsg;
+
+typedef struct {
+  BroadwayInputPointerMsg pointer;
+  guint32 mode;
+} BroadwayInputCrossingMsg;
+
+typedef struct {
+  BroadwayInputPointerMsg pointer;
+  guint32 button;
+} BroadwayInputButtonMsg;
+
+typedef struct {
+  BroadwayInputPointerMsg pointer;
+  int dir;
+} BroadwayInputScrollMsg;
+
+typedef struct {
+  BroadwayInputBaseMsg base;
+  int key;
+} BroadwayInputKeyMsg;
+
+typedef struct {
+  BroadwayInputBaseMsg base;
+  int res;
+} BroadwayInputGrabReply;
+
+typedef struct {
+  BroadwayInputBaseMsg base;
+  int root_x;
+  int root_y;
+  int win_x;
+  int win_y;
+  guint32 window_with_mouse;
+} BroadwayInputQueryReply;
+
+typedef union {
+  BroadwayInputBaseMsg base;
+  BroadwayInputPointerMsg pointer;
+  BroadwayInputCrossingMsg crossing;
+  BroadwayInputButtonMsg button;
+  BroadwayInputScrollMsg scroll;
+  BroadwayInputKeyMsg key;
+  BroadwayInputGrabReply grab_reply;
+  BroadwayInputQueryReply query_reply;
+} BroadwayInputMsg;
+
 struct _GdkBroadwayDisplay
 {
   GdkDisplay parent_instance;

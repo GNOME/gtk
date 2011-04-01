@@ -121,7 +121,7 @@ void _gdk_broadway_screen_query_visual_types (GdkScreen * screen,
 GList *_gdk_broadway_screen_list_visuals (GdkScreen *screen);
 
 void _gdk_broadway_events_got_input      (GdkDisplay *display,
-					  const char *message);
+					  BroadwayInputMsg *message);
 
 void _gdk_broadway_screen_init_root_window (GdkScreen *screen);
 void _gdk_broadway_screen_init_visuals (GdkScreen *screen);
@@ -187,10 +187,10 @@ gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
 gchar *_gdk_broadway_display_utf8_to_string_target (GdkDisplay  *display,
 						    const gchar *str);
 GdkKeymap* _gdk_broadway_display_get_keymap (GdkDisplay *display);
-char * _gdk_broadway_display_block_for_input (GdkDisplay *display,
-					      char op,
-					      guint32 serial,
-					      gboolean remove);
+BroadwayInputMsg * _gdk_broadway_display_block_for_input (GdkDisplay *display,
+							  char op,
+							  guint32 serial,
+							  gboolean remove);
 
 /* Window methods - testing */
 void     _gdk_broadway_window_sync_rendering    (GdkWindow       *window);

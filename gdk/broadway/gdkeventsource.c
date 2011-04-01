@@ -88,90 +88,43 @@ gdk_event_source_check (GSource *source)
   return retval;
 }
 
-typedef struct {
-  int id;
-  int root_x;
-  int root_y;
-  int win_x;
-  int win_y;
-  guint32 state;
-  guint64 time;
-} PointerData;
-
-static char *
-parse_pointer_data (char *p, PointerData *data)
-{
-  data->id = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->root_x = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->root_y = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->win_x = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->win_y = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->state = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->time = strtol(p, &p, 10);
-
-  return p;
-}
-
-
 void
 _gdk_broadway_events_got_input (GdkDisplay *display,
-				const char *message)
+				BroadwayInputMsg *message)
 {
   GdkBroadwayDisplay *display_broadway = GDK_BROADWAY_DISPLAY (display);
   GdkScreen *screen;
-  GdkWindow *root, *window;
-  char *p;
-  int button, dir, key, mode;
-  guint32 serial;
-  guint64 time;
+  GdkWindow *window;
   GdkEvent *event = NULL;
-  char cmd;
   GList *node;
-  PointerData data;
 
   screen = gdk_display_get_default_screen (display);
-  root = gdk_screen_get_root_window (screen);
 
-  p = (char *)message;
-  cmd = *p++;
-  serial = (guint32)strtol (p, &p, 10);
-  p++; /* Skip , */
-  switch (cmd) {
+  switch (message->base.type) {
   case 'e': /* Enter */
-    p = parse_pointer_data (p, &data);
-    p++; /* Skip , */
-    mode = strtol(p, &p, 10);
+    display_broadway->last_x = message->pointer.root_x;
+    display_broadway->last_y = message->pointer.root_y;
 
-    display_broadway->last_x = data.root_x;
-    display_broadway->last_y = data.root_y;
-
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (data.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
 
     /* TODO: Unset when it dies */
     display_broadway->mouse_in_toplevel = window;
-
     if (window)
       {
 	event = gdk_event_new (GDK_ENTER_NOTIFY);
 	event->crossing.window = g_object_ref (window);
-	event->crossing.time = data.time;
-	event->crossing.x = data.win_x;
-	event->crossing.y = data.win_y;
-	event->crossing.x_root = data.root_x;
-	event->crossing.y_root = data.root_y;
-	event->crossing.state = data.state;
-	event->crossing.mode = mode;
+	event->crossing.time = message->base.time;
+	event->crossing.x = message->pointer.win_x;
+	event->crossing.y = message->pointer.win_y;
+	event->crossing.x_root = message->pointer.root_x;
+	event->crossing.y_root = message->pointer.root_y;
+	event->crossing.state = message->pointer.state;
+	event->crossing.mode = message->crossing.mode;
 	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
 
 	event = gdk_event_new (GDK_FOCUS_CHANGE);
 	event->focus_change.window = g_object_ref (window);
@@ -179,37 +132,32 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
     break;
   case 'l': /* Leave */
-    p = parse_pointer_data (p, &data);
-    p++; /* Skip , */
-    mode = strtol(p, &p, 10);
+    display_broadway->last_x = message->pointer.root_x;
+    display_broadway->last_y = message->pointer.root_y;
 
-    display_broadway->last_x = data.root_x;
-    display_broadway->last_y = data.root_y;
-
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (data.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
 
     display_broadway->mouse_in_toplevel = NULL;
-
     if (window)
       {
 	event = gdk_event_new (GDK_LEAVE_NOTIFY);
 	event->crossing.window = g_object_ref (window);
-	event->crossing.time = data.time;
-	event->crossing.x = data.win_x;
-	event->crossing.y = data.win_y;
-	event->crossing.x_root = data.root_x;
-	event->crossing.y_root = data.root_y;
-	event->crossing.state = data.state;
-	event->crossing.mode = mode;
+	event->crossing.time = message->base.time;
+	event->crossing.x = message->pointer.win_x;
+	event->crossing.y = message->pointer.win_y;
+	event->crossing.x_root = message->pointer.root_x;
+	event->crossing.y_root = message->pointer.root_y;
+	event->crossing.state = message->pointer.state;
+	event->crossing.mode = message->crossing.mode;
 	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
 
 	event = gdk_event_new (GDK_FOCUS_CHANGE);
 	event->focus_change.window = g_object_ref (window);
@@ -217,119 +165,101 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
     break;
   case 'm': /* Mouse move */
-    p = parse_pointer_data (p, &data);
+    display_broadway->last_x = message->pointer.root_x;
+    display_broadway->last_y = message->pointer.root_y;
 
-    display_broadway->last_x = data.root_x;
-    display_broadway->last_y = data.root_y;
-
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (data.id));
-
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
     if (window)
       {
 	event = gdk_event_new (GDK_MOTION_NOTIFY);
 	event->motion.window = g_object_ref (window);
-	event->motion.time = data.time;
-	event->motion.x = data.win_x;
-	event->motion.y = data.win_y;
-	event->motion.x_root = data.root_x;
-	event->motion.y_root = data.root_y;
-	event->motion.state = data.state;
+	event->motion.time = message->base.time;
+	event->motion.x = message->pointer.win_x;
+	event->motion.y = message->pointer.win_y;
+	event->motion.x_root = message->pointer.root_x;
+	event->motion.y_root = message->pointer.root_y;
+	event->motion.state = message->pointer.state;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
 
     break;
   case 'b':
   case 'B':
-    p = parse_pointer_data (p, &data);
-    p++; /* Skip , */
-    button = strtol(p, &p, 10);
-    display_broadway->last_x = data.root_x;
-    display_broadway->last_y = data.root_y;
+    display_broadway->last_x = message->pointer.root_x;
+    display_broadway->last_y = message->pointer.root_y;
 
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (data.id));
-
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
     if (window)
       {
-	event = gdk_event_new (cmd == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
+	event = gdk_event_new (message->base.type == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
 	event->button.window = g_object_ref (window);
-	event->button.time = data.time;
-	event->button.x = data.win_x;
-	event->button.y = data.win_y;
-	event->button.x_root = data.root_x;
-	event->button.y_root = data.root_y;
-	event->button.button = button;
-	event->button.state = data.state;
+	event->button.time = message->base.time;
+	event->button.x = message->pointer.win_x;
+	event->button.y = message->pointer.win_y;
+	event->button.x_root = message->pointer.root_x;
+	event->button.y_root = message->pointer.root_y;
+	event->button.button = message->button.button;
+	event->button.state = message->pointer.state;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
 
     break;
   case 's':
-    p = parse_pointer_data (p, &data);
-    p++; /* Skip , */
-    dir = strtol(p, &p, 10);
-    display_broadway->last_x = data.root_x;
-    display_broadway->last_y = data.root_y;
+    display_broadway->last_x = message->pointer.root_x;
+    display_broadway->last_y = message->pointer.root_y;
 
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (data.id));
-
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
     if (window)
       {
 	event = gdk_event_new (GDK_SCROLL);
 	event->scroll.window = g_object_ref (window);
-	event->scroll.time = data.time;
-	event->scroll.x = data.win_x;
-	event->scroll.y = data.win_y;
-	event->scroll.x_root = data.root_x;
-	event->scroll.y_root = data.root_y;
-	event->scroll.direction = dir == 0 ? GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+	event->scroll.time = message->base.time;
+	event->scroll.x = message->pointer.win_x;
+	event->scroll.y = message->pointer.win_y;
+	event->scroll.x_root = message->pointer.root_x;
+	event->scroll.y_root = message->pointer.root_y;
+	event->scroll.direction = message->scroll.dir == 0 ? GDK_SCROLL_UP : GDK_SCROLL_DOWN;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
 
     break;
   case 'k':
   case 'K':
-    key = strtol(p, &p, 10);
-    p++; /* Skip , */
-    time = strtol(p, &p, 10);
-
     window = display_broadway->mouse_in_toplevel;
 
     if (window)
       {
-	event = gdk_event_new (cmd == 'k' ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+	event = gdk_event_new (message->base.type == 'k' ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
 	event->key.window = g_object_ref (window);
-	event->key.time = time;
-	event->key.keyval = key;
+	event->key.time = message->base.time;
+	event->key.keyval = message->key.key;
 	event->key.length = 0;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, serial);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
 
     break;
   case 'g':
   case 'u':
-    _gdk_display_device_grab_update (display, display->core_pointer, NULL, serial);
-    break;
-  case 'q':
-    g_printerr ("Got unexpected query pointer reply w serial %d\n", serial);
+    _gdk_display_device_grab_update (display, display->core_pointer, NULL, message->base.serial);
     break;
   default:
-    g_printerr ("Unknown input command %s\n", message);
+    g_printerr ("Unknown input command %c\n", message->base.type);
     break;
   }
 }

@@ -158,8 +158,8 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   GdkWindowImplBroadway *impl;
   guint32 serial;
   GdkScreen *screen;
-  char *reply;
-  gint device_root_x, device_root_y, device_win_x, device_win_y, id;
+  BroadwayInputMsg *reply;
+  gint device_root_x, device_root_y;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
     return FALSE;
@@ -186,38 +186,18 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 
       if (reply != NULL)
 	{
-	  char *p;
-	  char cmd;
-	  guint32 reply_serial;
-
-	  p = reply;
-
-	  cmd = *p++;
-	  reply_serial = (guint32)strtol(p, &p, 10);
-	  p++; /* Skip , */
-
-	  device_root_x = strtol(p, &p, 10);
-	  p++; /* Skip , */
-	  device_root_y = strtol(p, &p, 10);
-	  p++; /* Skip , */
-	  device_win_x = strtol(p, &p, 10);
-	  p++; /* Skip , */
-	  device_win_y = strtol(p, &p, 10);
-	  p++; /* Skip , */
-	  id = strtol(p, &p, 10);
-
 	  if (root_x)
-	    *root_x = device_root_x;
+	    *root_x = reply->query_reply.root_x;
 	  if (root_y)
-	    *root_y = device_root_y;
+	    *root_y = reply->query_reply.root_y;
 	  if (win_x)
-	    *win_x = device_win_x;
+	    *win_x = reply->query_reply.win_x;
 	  if (win_y)
-	    *win_y = device_win_y;
+	    *win_y = reply->query_reply.win_y;
 	  if (child_window)
 	    {
 	      if (gdk_window_get_window_type (window) == GDK_WINDOW_ROOT)
-		*child_window = g_hash_table_lookup (broadway_display->id_ht, GINT_TO_POINTER (id));
+		*child_window = g_hash_table_lookup (broadway_display->id_ht, GINT_TO_POINTER (reply->query_reply.window_with_mouse));
 	      else
 		*child_window = window; /* No native children */
 	    }
@@ -270,7 +250,7 @@ gdk_broadway_device_grab (GdkDevice    *device,
   GdkBroadwayDisplay *broadway_display;
   GdkWindowImplBroadway *impl;
   guint32 serial;
-  char *reply;
+  BroadwayInputMsg *reply;
 
   display = gdk_device_get_display (device);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
@@ -292,22 +272,7 @@ gdk_broadway_device_grab (GdkDevice    *device,
 						 impl->id, owner_events, time_);
 	  reply = _gdk_broadway_display_block_for_input (display, 'g', serial, FALSE);
 	  if (reply != NULL)
-	    {
-	      char *p;
-	      char cmd;
-	      guint32 reply_serial;
-	      int res;
-
-	      p = reply;
-
-	      cmd = *p++;
-	      reply_serial = (guint32)strtol(p, &p, 10);
-	      p++; /* Skip , */
-
-	      res = strtol(p, &p, 10);
-
-	      return res;
-	    }
+	    return reply->grab_reply.res;
 	}
 
       return GDK_GRAB_NOT_VIEWABLE;

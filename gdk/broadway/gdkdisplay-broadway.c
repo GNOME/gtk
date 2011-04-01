@@ -151,7 +151,7 @@ broadway_input_free (BroadwayInput *input)
 static void
 process_input_messages (GdkBroadwayDisplay *broadway_display)
 {
-  char *message;
+  BroadwayInputMsg *message;
 
   while (broadway_display->input_messages)
     {
@@ -165,11 +165,101 @@ process_input_messages (GdkBroadwayDisplay *broadway_display)
     }
 }
 
+static char *
+parse_pointer_data (char *p, BroadwayInputPointerMsg *data)
+{
+  data->id = strtol (p, &p, 10);
+  p++; /* Skip , */
+  data->root_x = strtol (p, &p, 10);
+  p++; /* Skip , */
+  data->root_y = strtol (p, &p, 10);
+  p++; /* Skip , */
+  data->win_x = strtol (p, &p, 10);
+  p++; /* Skip , */
+  data->win_y = strtol (p, &p, 10);
+  p++; /* Skip , */
+  data->state = strtol (p, &p, 10);
+
+  return p;
+}
+
+static void
+parse_input_message (BroadwayInput *input, const char *message)
+{
+  GdkBroadwayDisplay *broadway_display;
+  BroadwayInputMsg msg;
+  char *p;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (input->display);
+
+  p = (char *)message;
+  msg.base.type = *p++;
+  msg.base.serial = (guint32)strtol (p, &p, 10);
+  p++; /* Skip , */
+  msg.base.time = strtol(p, &p, 10);
+  p++; /* Skip , */
+
+  switch (msg.base.type) {
+  case 'e': /* Enter */
+  case 'l': /* Leave */
+    p = parse_pointer_data (p, &msg.pointer);
+    p++; /* Skip , */
+    msg.crossing.mode = strtol(p, &p, 10);
+    break;
+
+  case 'm': /* Mouse move */
+    p = parse_pointer_data (p, &msg.pointer);
+    break;
+
+  case 'b':
+  case 'B':
+    p = parse_pointer_data (p, &msg.pointer);
+    p++; /* Skip , */
+    msg.button.button = strtol(p, &p, 10);
+    break;
+
+  case 's':
+    p = parse_pointer_data (p, &msg.pointer);
+    p++; /* Skip , */
+    msg.scroll.dir = strtol(p, &p, 10);
+    break;
+
+  case 'k':
+  case 'K':
+    msg.key.key = strtol(p, &p, 10);
+    break;
+
+  case 'g':
+  case 'u':
+    msg.grab_reply.res = strtol(p, &p, 10);
+    break;
+
+  case 'q':
+    msg.query_reply.root_x = strtol(p, &p, 10);
+    p++; /* Skip , */
+    msg.query_reply.root_y = strtol(p, &p, 10);
+    p++; /* Skip , */
+    msg.query_reply.win_x = strtol(p, &p, 10);
+    p++; /* Skip , */
+    msg.query_reply.win_y = strtol(p, &p, 10);
+    p++; /* Skip , */
+    msg.query_reply.window_with_mouse = strtol(p, &p, 10);
+
+    break;
+  default:
+    g_printerr ("Unknown input command %s\n", message);
+    break;
+  }
+
+  broadway_display->input_messages = g_list_append (broadway_display->input_messages, g_memdup (&msg, sizeof (msg)));
+
+}
+
 static void
 parse_input (BroadwayInput *input)
 {
   GdkBroadwayDisplay *broadway_display;
-  char *buf, *ptr, *message;
+  char *buf, *ptr;
   gsize len;
 
   broadway_display = GDK_BROADWAY_DISPLAY (input->display);
@@ -189,10 +279,10 @@ parse_input (BroadwayInput *input)
 
   while ((ptr = memchr (buf, 0xff, len)) != NULL)
     {
+      *ptr = 0;
       ptr++;
 
-      message = g_strndup (buf+1, (ptr-1) - (buf + 1));
-      broadway_display->input_messages = g_list_append (broadway_display->input_messages, message);
+      parse_input_message (input, buf + 1);
 
       len -= ptr - buf;
       buf = ptr;
@@ -260,13 +350,12 @@ process_input_idle_cb (GdkBroadwayDisplay *display)
 }
 
 /* Note: This may be called while handling a message (i.e. sorta recursively) */
-char *
+BroadwayInputMsg *
 _gdk_broadway_display_block_for_input (GdkDisplay *display, char op,
 				       guint32 serial, gboolean remove_message)
 {
   GdkBroadwayDisplay *broadway_display;
-  char *message;
-  guint32 msg_serial;
+  BroadwayInputMsg *message;
   gboolean queued_idle;
   gssize res;
   guint8 buffer[1024];
@@ -291,10 +380,9 @@ _gdk_broadway_display_block_for_input (GdkDisplay *display, char op,
       {
 	message = l->data;
 
-	if (message[0] == op)
+	if (message->base.type == op)
 	  {
-	    msg_serial = (guint32)strtol(message+1, NULL, 10);
-	    if (msg_serial == serial)
+	    if (message->base.serial == serial)
 	      {
 		if (remove_message)
 		  broadway_display->input_messages =
