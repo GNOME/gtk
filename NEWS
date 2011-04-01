@@ -1,3 +1,39 @@
+Overview of Changes in GTK+ 3.0.7
+=================================
+
+* Performance improvements for theming and size allocation
+
+* Thread-safety fixes in file chooser and app chooser code
+
+* GtkStatusIcon can now receive icon size hints from the tray
+  it is embedded in
+
+* RTL fixes for GtkGrid and GtkWidget::halign
+
+* Bugs fixed
+ 639584 initial emission of GtkWidget:style-set...
+ 642918 Sensitivity of buttons sometimes screws up
+ 645232 symbolic status icons are the wrong size
+
+* Translation updates
+ Brazilian Portuguese
+ British English
+ Bulgarian
+ Danish
+ French
+ German
+ Hebrew
+ Hungarian
+ Latvian
+ Marathi
+ Polish
+ Portuguese
+ Russian
+ Serbian
+ Simplified Chinese
+ Swedish
+
+
 Overview of Changes in GTK+ 3.0.6
 =================================
 
