@@ -634,6 +634,12 @@ start_output (HttpRequest *request)
 
   broadway_display->output = broadway_output_new (dup(fd), broadway_display->saved_serial);
   _gdk_broadway_resync_windows ();
+
+  if (broadway_display->pointer_grab_window)
+    broadway_output_grab_pointer (broadway_display->output,
+				  GDK_WINDOW_IMPL_BROADWAY (broadway_display->pointer_grab_window->impl)->id,
+				  broadway_display->pointer_grab_owner_events);
+
   http_request_free (request);
 }
 

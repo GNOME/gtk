@@ -147,6 +147,11 @@ struct _GdkBroadwayDisplay
   GList *input_messages;
 
   guint64 last_event_time;
+
+  /* Explicit pointer grabs: */
+  GdkWindow *pointer_grab_window;
+  guint32 pointer_grab_time;
+  gboolean pointer_grab_owner_events;
 };
 
 struct _GdkBroadwayDisplayClass

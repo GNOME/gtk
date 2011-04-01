@@ -107,10 +107,6 @@ function initContext(canvas, x, y, id)
     return context;
 }
 
-var GDK_GRAB_SUCCESS = 0;
-var GDK_GRAB_ALREADY_GRABBED = 1;
-var GDK_GRAB_INVALID_TIME = 2;
-
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
 var GDK_CROSSING_UNGRAB = 2;
@@ -365,21 +361,10 @@ function handleCommands(cmdObj)
 	    var id = base64_16(cmd, i);
 	    i = i + 3;
 	    var ownerEvents = cmd[i++] == '1';
-	    var time = base64_32(cmd, i);
-	    i = i + 6;
-
-	    if (grab.window != null) {
-		/* Previous grab, compare times */
-		if (time != 0 && grab.time != 0 &&
-		    time > grab.time) {
-		    sendInput ("g", [GDK_GRAB_INVALID_TIME]);
-		    break;
-		}
-	    }
 
 	    doGrab(id, ownerEvents, time, false);
 
-	    sendInput ("g", [GDK_GRAB_SUCCESS]);
+	    sendInput ("g", []);
 	    break;
 
 	case 'u': // Ungrab
