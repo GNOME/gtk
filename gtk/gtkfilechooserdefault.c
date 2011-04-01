@@ -10031,12 +10031,14 @@ list_row_activated (GtkTreeView           *tree_view,
   if (is_folder && file)
     {
       change_folder_and_display_error (impl, file, FALSE);
-      return;
+      goto out;
     }
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     g_signal_emit_by_name (impl, "file-activated");
+
+ out:
 
   if (file)
     g_object_unref (file);
