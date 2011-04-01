@@ -1,3 +1,19 @@
+Overview of Changes from GTK+ 2.24.2 to 2.24.3
+==============================================
+
+* Add missing introspection annotations
+
+* Fix GtkComboBoxEntry accessibility support
+
+* Thread-safety fixes in file chooser and app chooser code
+
+* Fix some deficiencies with the builtin icon theme
+
+* Translation updates
+ Dutch
+ Norwegian bokmål
+
+
 Overview of Changes from GTK+ 2.24.1 to 2.24.2
 ==============================================
 
