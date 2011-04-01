@@ -1399,7 +1399,7 @@ set_info_get_info_cb (GCancellable *cancellable,
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
   GtkTreeIter iter;
-  GCancellable *model_cancellable;
+  GCancellable *model_cancellable = NULL;
   struct SetDisplayNameData *data = callback_data;
   gboolean is_folder;
 
@@ -1452,7 +1452,8 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
-  g_object_unref (cancellable);
+  if (model_cancellable)
+    g_object_unref (model_cancellable);
 }
 
 static void
@@ -1578,7 +1579,7 @@ model_add_special_get_info_cb (GCancellable *cancellable,
   GtkTreeIter iter;
   GtkTreePath *path;
   GdkPixbuf *pixbuf;
-  GCancellable *model_cancellable;
+  GCancellable *model_cancellable = NULL;
   struct ChangeIconThemeData *data = user_data;
   gchar *name;
 
@@ -1631,7 +1632,8 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
-  g_object_unref (cancellable);
+  if (model_cancellable)
+    g_object_unref (model_cancellable);
 }
 
 static inline void

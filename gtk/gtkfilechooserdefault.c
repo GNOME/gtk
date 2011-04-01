@@ -763,7 +763,10 @@ shortcuts_free_row_data (GtkFileChooserDefault *impl,
 		      -1);
 
   if (cancellable)
-    g_cancellable_cancel (cancellable);
+    {
+      g_cancellable_cancel (cancellable);
+      g_object_unref (cancellable);
+    }
 
   if (!(shortcut_type == SHORTCUT_TYPE_FILE || 
 	shortcut_type == SHORTCUT_TYPE_VOLUME) ||
@@ -1457,7 +1460,7 @@ get_file_info_finished (GCancellable *cancellable,
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
   GtkTreeIter iter;
-  GCancellable *model_cancellable;
+  GCancellable *model_cancellable = NULL;
   struct ShortcutsInsertRequest *request = data;
 
   path = gtk_tree_row_reference_get_path (request->row_ref);
@@ -1560,7 +1563,8 @@ out:
   g_free (request->label_copy);
   g_free (request);
 
-  g_object_unref (cancellable);
+  if (model_cancellable)
+    g_object_unref (model_cancellable);
 }
 
 /* FIXME: GtkFileSystem needs a function to split a remote path
