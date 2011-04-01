@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-20 15:55+0100\n"
-"PO-Revision-Date: 2011-02-20 15:55+0100\n"
+"PO-Revision-Date: 2011-04-01 15:15+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
 "Language: \n"
@@ -1280,8 +1280,7 @@ msgstr "A(z) „%s” nevű fájl már létezik. Le akarja cserélni?"
 
 #: ../gtk/gtkfilechooserdefault.c:8077 ../gtk/gtkprintunixdialog.c:484
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "A fájl már létezik a(z) „%s” helyen. Lecserélésével a tartalma felül lesz "
 "írva."
@@ -1588,8 +1587,7 @@ msgstr "Folyamat _befejezése"
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr ""
-"Nem lőhető ki a(z) %d azonosítójú folyamat. A művelet nincs megvalósítva."
+msgstr "Nem lőhető ki a(z) %d azonosítójú folyamat. A művelet nincs megvalósítva."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:859
@@ -2277,8 +2275,7 @@ msgstr "Nem található a következő URI című elem: „%s”"
 #: ../gtk/gtkrecentmanager.c:2436
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr ""
-"Nem található „%s” nevű regisztrált alkalmazás a(z) „%s” URI-című elemhez"
+msgstr "Nem található „%s” nevű regisztrált alkalmazás a(z) „%s” URI-című elemhez"
 
 #: ../gtk/gtkspinner.c:287
 msgctxt "throbbing progress animation widget"
@@ -2680,7 +2677,7 @@ msgstr "_Kilépés"
 #: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Redo"
-msgstr "Új_ra"
+msgstr "Mé_gis"
 
 #: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
@@ -2710,7 +2707,7 @@ msgstr "Men_tés másként"
 #: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Select _All"
-msgstr "_Mindent kijelöl"
+msgstr "Ö_sszes kijelölése"
 
 #: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
@@ -2852,14 +2849,12 @@ msgstr "A(z) <%s> elem nem rendelkezik sem „név” sem „azonosító” attr
 #: ../gtk/gtktextbufferserialize.c:949
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
-"A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
+msgstr "A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
 
 #: ../gtk/gtktextbufferserialize.c:967 ../gtk/gtktextbufferserialize.c:992
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
-"A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
+msgstr "A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
 
 #: ../gtk/gtktextbufferserialize.c:1031
 #, c-format
@@ -2893,8 +2888,7 @@ msgstr "A(z) „%s” nem érvényes attribútumnév"
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "„%s” nem alakítható „%s” típusú értékké „%s” attribútumhoz"
 
 #: ../gtk/gtktextbufferserialize.c:1211
@@ -2915,8 +2909,7 @@ msgstr "A(z) „%s” címke prioritása („%s”) érvénytelen"
 #: ../gtk/gtktextbufferserialize.c:1362
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
-"A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
+msgstr "A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
 
 #: ../gtk/gtktextbufferserialize.c:1371 ../gtk/gtktextbufferserialize.c:1387
 #, c-format
@@ -2932,8 +2925,7 @@ msgid "Serialized data is malformed"
 msgstr "A sorba fejtett adatok rosszul formázottak"
 
 #: ../gtk/gtktextbufferserialize.c:1871
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "A sorba fejtett adatok rosszul formázottak. Az első szakasz nem "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -3862,8 +3854,7 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
-"eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
+msgstr "eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
 
 #: ../gtk/updateiconcache.c:1370
 #, c-format
@@ -4070,8 +4061,7 @@ msgstr "Hitelesítés szükséges a nyomtató jellemzőinek lekéréséhez"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
-"Hitelesítés szükséges a(z) %s alapértelmezett nyomtatójának lekéréséhez"
+msgstr "Hitelesítés szükséges a(z) %s alapértelmezett nyomtatójának lekéréséhez"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
@@ -4100,8 +4090,7 @@ msgstr "Hitelesítés szükséges a dokumentum („%s”) kinyomtatásához"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1053
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr ""
-"Hitelesítés szükséges a dokumentum kinyomtatásához ezen a nyomtatón: %s"
+msgstr "Hitelesítés szükséges a dokumentum kinyomtatásához ezen a nyomtatón: %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1055
 msgid "Authentication is required to print this document"
@@ -4466,8 +4455,8 @@ msgstr "Nem sikerült megnyitni a(z) „%s” fájlt: %s"
 
 #: ../tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Nem sikerült betölteni a(z) „%s” képet: ok ismeretlen, valószínűleg sérült a "
 "képfájl"
+
