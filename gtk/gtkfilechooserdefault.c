@@ -8732,7 +8732,7 @@ search_selected_foreach_get_file_cb (GtkTreeModel *model,
   list = data;
 
   gtk_tree_model_get (model, iter, MODEL_COL_FILE, &file, -1);
-  *list = g_slist_prepend (*list, g_object_ref (file));
+  *list = g_slist_prepend (*list, file); /* The file already has a new ref courtesy of gtk_tree_model_get(); this will be unreffed by the caller */
 }
 
 /* Constructs a list of the selected paths in search mode */
