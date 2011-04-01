@@ -309,7 +309,8 @@ enum {
   PROP_TOOLTIP_MARKUP_SECONDARY,
   PROP_IM_MODULE,
   PROP_EDITING_CANCELED,
-  PROP_PLACEHOLDER_TEXT
+  PROP_PLACEHOLDER_TEXT,
+  PROP_COMPLETION
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1330,6 +1331,21 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         GTK_PARAM_READWRITE));
 
   /**
+   * GtkEntry:completion:
+   *
+   * The auxiliary completion object to use with the entry.
+   *
+   * Since: 3.2
+   */     
+  g_object_class_install_property (gobject_class,
+                                   PROP_COMPLETION,
+                                   g_param_spec_object ("completion",
+                                                        P_("Completion"),
+                                                        P_("The auxiliary completion object"),
+                                                        GTK_TYPE_ENTRY_COMPLETION,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
    * GtkEntry:icon-prelight:
    *
    * The prelight style property determines whether activatable
@@ -2094,6 +2110,10 @@ gtk_entry_set_property (GObject         *object,
       priv->editing_canceled = g_value_get_boolean (value);
       break;
 
+    case PROP_COMPLETION:
+      gtk_entry_set_completion (entry, GTK_ENTRY_COMPLETION (g_value_get_object (value)));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2312,6 +2332,10 @@ gtk_entry_get_property (GObject         *object,
     case PROP_EDITING_CANCELED:
       g_value_set_boolean (value,
                            priv->editing_canceled);
+      break;
+
+    case PROP_COMPLETION:
+      g_value_set_object (value, G_OBJECT (gtk_entry_get_completion (entry)));
       break;
 
     default:
@@ -9957,6 +9981,8 @@ gtk_entry_set_completion (GtkEntry           *entry,
   connect_completion_signals (entry, completion);    
   completion->priv->entry = GTK_WIDGET (entry);
   g_object_set_data (G_OBJECT (entry), I_(GTK_ENTRY_COMPLETION_KEY), completion);
+
+  g_object_notify (G_OBJECT (entry), "completion");
 }
 
 /**
