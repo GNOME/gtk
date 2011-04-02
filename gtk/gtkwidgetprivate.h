@@ -34,18 +34,15 @@ G_BEGIN_DECLS
  * (Note this define is limited by the bitfield sizes
  * defined on the SizeRequestCache structure).
  */
-#define GTK_SIZE_REQUEST_CACHED_SIZES   (2)
-
-typedef struct {
-  gint minimum_size;
-  gint natural_size;
-} CachedSize;
+#define GTK_SIZE_REQUEST_CACHED_SIZES   (3)
 
 typedef struct
 {
   /* the size this request is for */
-  gint       for_size;
-  CachedSize cached_size;
+  gint for_size;
+
+  gint minimum_size;
+  gint natural_size;
 } SizeRequest;
 
 typedef struct {
@@ -56,13 +53,6 @@ typedef struct {
   guint       cached_heights     : 2;
   guint       last_cached_width  : 2;
   guint       last_cached_height : 2;
-} ContextualSizes;
-
-typedef struct {
-  ContextualSizes *sizes;
-
-  CachedSize cached_width;
-  CachedSize cached_height;
 } SizeRequestCache;
 
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
