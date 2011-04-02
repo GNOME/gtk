@@ -774,13 +774,11 @@ void set_cell_sensitivity_func (GtkTreeViewColumn *tree_column,
   gtk_tree_model_get (tree_model, iter, PRINTER_LIST_COL_PRINTER_OBJ, &printer, -1);
 
   if (printer != NULL && !gtk_printer_is_accepting_jobs (printer))
-    g_object_set (cell,
-                  "sensitive", FALSE,
-                  NULL);
+    g_object_set (cell, "sensitive", FALSE, NULL);
   else
-    g_object_set (cell,
-                  "sensitive", TRUE,
-                  NULL);
+    g_object_set (cell, "sensitive", TRUE, NULL);
+
+  g_object_unref (printer);
 }
 
 static void
@@ -1009,10 +1007,8 @@ is_printer_active (GtkTreeModel       *model,
   GtkPrinter *printer;
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
-  gtk_tree_model_get (model,
-                      iter,
-                      PRINTER_LIST_COL_PRINTER_OBJ,
-                      &printer,
+  gtk_tree_model_get (model, iter,
+                      PRINTER_LIST_COL_PRINTER_OBJ, &printer,
                       -1);
 
   if (printer == NULL)
@@ -1082,8 +1078,10 @@ default_printer_list_sort_func (GtkTreeModel *model,
 
   g_free (a_name);
   g_free (b_name);
-  g_object_unref (a_printer);
-  g_object_unref (b_printer);
+  if (a_printer)
+    g_object_unref (a_printer);
+  if (b_printer)
+    g_object_unref (b_printer);
 
   return result;
 }
