@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-30 17:47+0300\n"
-"PO-Revision-Date: 2011-03-30 17:54+0300\n"
+"POT-Creation-Date: 2011-04-02 16:35+0300\n"
+"PO-Revision-Date: 2011-04-02 16:37+0300\n"
 "Last-Translator: Korostil Daniel <ted.korostiled@gmail.com>\n"
 "Language-Team: translation@linux.org.ua\n"
 "Language: uk\n"
@@ -613,21 +613,21 @@ msgstr "Доповнення справа"
 msgid "The padding to insert at the right of the widget."
 msgstr "Простір, що додається до елемента керування справа."
 
-#: ../gtk/gtkappchooserbutton.c:551
+#: ../gtk/gtkappchooserbutton.c:555
 msgid "Include an 'Other...' item"
 msgstr "Зокрема пункт «Інші…»"
 
-#: ../gtk/gtkappchooserbutton.c:552
+#: ../gtk/gtkappchooserbutton.c:556
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
 msgstr "Чи спадному списку слід враховувати пункт GtkAppChooserDialog"
 
-#: ../gtk/gtkappchooserbutton.c:564 ../gtk/gtkappchooserdialog.c:722
+#: ../gtk/gtkappchooserbutton.c:568 ../gtk/gtkappchooserdialog.c:722
 msgid "Heading"
 msgstr "Заголовок"
 
-#: ../gtk/gtkappchooserbutton.c:565 ../gtk/gtkappchooserdialog.c:723
+#: ../gtk/gtkappchooserbutton.c:569 ../gtk/gtkappchooserdialog.c:723
 msgid "The text to show at the top of the dialog"
 msgstr "Текст на вершині вікна"
 
@@ -1072,7 +1072,7 @@ msgstr ""
 "Чи повинні властивості child_displacement_x/_y також впливати на прямокутник "
 "фокусу"
 
-#: ../gtk/gtkbutton.c:509 ../gtk/gtkentry.c:788 ../gtk/gtkentry.c:1848
+#: ../gtk/gtkbutton.c:509 ../gtk/gtkentry.c:789 ../gtk/gtkentry.c:1864
 msgid "Inner Border"
 msgstr "Внутрішній бордюр"
 
@@ -1535,7 +1535,7 @@ msgid "Value of the progress bar"
 msgstr "Значення індикатора поступу"
 
 #: ../gtk/gtkcellrendererprogress.c:144 ../gtk/gtkcellrenderertext.c:255
-#: ../gtk/gtkentry.c:831 ../gtk/gtkentrybuffer.c:352
+#: ../gtk/gtkentry.c:832 ../gtk/gtkentrybuffer.c:352
 #: ../gtk/gtkmessagedialog.c:227 ../gtk/gtkprogressbar.c:177
 #: ../gtk/gtktextbuffer.c:210
 msgid "Text"
@@ -1711,7 +1711,7 @@ msgstr "Колір тексту за RGBA"
 msgid "Foreground color as a GdkRGBA"
 msgstr "Колір тексту за GdkRGBA"
 
-#: ../gtk/gtkcellrenderertext.c:350 ../gtk/gtkentry.c:755
+#: ../gtk/gtkcellrenderertext.c:350 ../gtk/gtkentry.c:756
 #: ../gtk/gtktexttag.c:245 ../gtk/gtktextview.c:684
 msgid "Editable"
 msgstr "Редагується"
@@ -2287,7 +2287,7 @@ msgstr "Додати елементи відривання до меню"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Чи повинні розкривні елементи мати лінію відриву"
 
-#: ../gtk/gtkcombobox.c:783 ../gtk/gtkentry.c:780
+#: ../gtk/gtkcombobox.c:783 ../gtk/gtkentry.c:781
 msgid "Has Frame"
 msgstr "Має рамку"
 
@@ -2399,7 +2399,7 @@ msgstr "Мінімальний розмір стрілки у полі зі сп
 msgid "The amount of space used by the arrow"
 msgstr "Обсяг простору, що займає стрілка"
 
-#: ../gtk/gtkcombobox.c:1001 ../gtk/gtkentry.c:880 ../gtk/gtkhandlebox.c:190
+#: ../gtk/gtkcombobox.c:1001 ../gtk/gtkentry.c:881 ../gtk/gtkhandlebox.c:190
 #: ../gtk/gtkmenubar.c:207 ../gtk/gtkstatusbar.c:180 ../gtk/gtktoolbar.c:601
 #: ../gtk/gtkviewport.c:153
 msgid "Shadow type"
@@ -2466,48 +2466,48 @@ msgstr "Бордюр ділянки дій"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Ширина відступу навколо області кнопок діалогового вікна"
 
-#: ../gtk/gtkentry.c:727
+#: ../gtk/gtkentry.c:728
 msgid "Text Buffer"
 msgstr "Буфер тексту"
 
-#: ../gtk/gtkentry.c:728
+#: ../gtk/gtkentry.c:729
 msgid "Text buffer object which actually stores entry text"
 msgstr "Буфер тексту є об'єктом, який зберігає текст елементу"
 
-#: ../gtk/gtkentry.c:735 ../gtk/gtklabel.c:662
+#: ../gtk/gtkentry.c:736 ../gtk/gtklabel.c:662
 msgid "Cursor Position"
 msgstr "Позиція курсора"
 
-#: ../gtk/gtkentry.c:736 ../gtk/gtklabel.c:663
+#: ../gtk/gtkentry.c:737 ../gtk/gtklabel.c:663
 msgid "The current position of the insertion cursor in chars"
 msgstr "Поточна позиція точки вставки в символах"
 
-#: ../gtk/gtkentry.c:745 ../gtk/gtklabel.c:672
+#: ../gtk/gtkentry.c:746 ../gtk/gtklabel.c:672
 msgid "Selection Bound"
 msgstr "Границя виділення"
 
-#: ../gtk/gtkentry.c:746 ../gtk/gtklabel.c:673
+#: ../gtk/gtkentry.c:747 ../gtk/gtklabel.c:673
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Позиція протилежного кінця вибору від курсора в символах"
 
-#: ../gtk/gtkentry.c:756
+#: ../gtk/gtkentry.c:757
 msgid "Whether the entry contents can be edited"
 msgstr "Чи можна бути змінений вміст поля"
 
-#: ../gtk/gtkentry.c:763 ../gtk/gtkentrybuffer.c:382
+#: ../gtk/gtkentry.c:764 ../gtk/gtkentrybuffer.c:382
 msgid "Maximum length"
 msgstr "Максимальна довжина"
 
-#: ../gtk/gtkentry.c:764 ../gtk/gtkentrybuffer.c:383
+#: ../gtk/gtkentry.c:765 ../gtk/gtkentrybuffer.c:383
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Максимальна кількість символів у полі. \"0\" — без обмежень."
 
-#: ../gtk/gtkentry.c:772
+#: ../gtk/gtkentry.c:773
 msgid "Visibility"
 msgstr "Видимість"
 
-#: ../gtk/gtkentry.c:773
+#: ../gtk/gtkentry.c:774
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2515,31 +2515,31 @@ msgstr ""
 "Значення ХИБНІСТЬ(FALSE) вмикає показ \"невидимих символів\" замість "
 "справжнього тексту (режим паролю)"
 
-#: ../gtk/gtkentry.c:781
+#: ../gtk/gtkentry.c:782
 msgid "FALSE removes outside bevel from entry"
 msgstr "Значення ХИБНІСТЬ(FALSE) вилучає зовнішню фаску поля"
 
-#: ../gtk/gtkentry.c:789
+#: ../gtk/gtkentry.c:790
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "Бордюр між текстом та рамкою. Перевизначає властивість стилю внутрішнього "
 "бордюру"
 
-#: ../gtk/gtkentry.c:796 ../gtk/gtkentry.c:1377
+#: ../gtk/gtkentry.c:797 ../gtk/gtkentry.c:1393
 msgid "Invisible character"
 msgstr "Невидимий символ"
 
-#: ../gtk/gtkentry.c:797 ../gtk/gtkentry.c:1378
+#: ../gtk/gtkentry.c:798 ../gtk/gtkentry.c:1394
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Символ, що використовуватиметься для маскування вмісту поля (в режимі паролю)"
 
-#: ../gtk/gtkentry.c:804
+#: ../gtk/gtkentry.c:805
 msgid "Activates default"
 msgstr "Активує початковий елемент керування"
 
-#: ../gtk/gtkentry.c:805
+#: ../gtk/gtkentry.c:806
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2547,33 +2547,33 @@ msgstr ""
 "Чи активувати початковий активний віджет (наприклад, початкова активна "
 "кнопка в діалозі), коли натиснута клавіша Enter"
 
-#: ../gtk/gtkentry.c:811
+#: ../gtk/gtkentry.c:812
 msgid "Width in chars"
 msgstr "Ширина в символах"
 
-#: ../gtk/gtkentry.c:812
+#: ../gtk/gtkentry.c:813
 msgid "Number of characters to leave space for in the entry"
 msgstr "Кількість символів, для яких залишено місто в полі"
 
-#: ../gtk/gtkentry.c:821
+#: ../gtk/gtkentry.c:822
 msgid "Scroll offset"
 msgstr "Зміщення прокрутки"
 
-#: ../gtk/gtkentry.c:822
+#: ../gtk/gtkentry.c:823
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Кількість точок поля, що виходитимуть за ліву межу екрана під час "
 "прокручування"
 
-#: ../gtk/gtkentry.c:832
+#: ../gtk/gtkentry.c:833
 msgid "The contents of the entry"
 msgstr "Вміст поля"
 
-#: ../gtk/gtkentry.c:847 ../gtk/gtkmisc.c:81
+#: ../gtk/gtkentry.c:848 ../gtk/gtkmisc.c:81
 msgid "X align"
 msgstr "Вирівнювання за X"
 
-#: ../gtk/gtkentry.c:848 ../gtk/gtkmisc.c:82
+#: ../gtk/gtkentry.c:849 ../gtk/gtkmisc.c:82
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2581,65 +2581,65 @@ msgstr ""
 "Горизонтальне вирівнювання, від 0 (ліворуч) до 1 (праворуч). Інвертується "
 "для розташування RTL(справа-наліво)"
 
-#: ../gtk/gtkentry.c:864
+#: ../gtk/gtkentry.c:865
 msgid "Truncate multiline"
 msgstr "Обрізати багаторядні"
 
-#: ../gtk/gtkentry.c:865
+#: ../gtk/gtkentry.c:866
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Чи обрізати багаторядні вставки у один рядок."
 
-#: ../gtk/gtkentry.c:881
+#: ../gtk/gtkentry.c:882
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Тип тіні, що виводиться навколо поля з рамкою"
 
-#: ../gtk/gtkentry.c:896 ../gtk/gtktextview.c:764
+#: ../gtk/gtkentry.c:897 ../gtk/gtktextview.c:764
 msgid "Overwrite mode"
 msgstr "Режим заміщення"
 
-#: ../gtk/gtkentry.c:897
+#: ../gtk/gtkentry.c:898
 msgid "Whether new text overwrites existing text"
 msgstr "Чи текст, що вводиться заміщує наявний"
 
-#: ../gtk/gtkentry.c:911 ../gtk/gtkentrybuffer.c:367
+#: ../gtk/gtkentry.c:912 ../gtk/gtkentrybuffer.c:367
 msgid "Text length"
 msgstr "Довжина тексту"
 
-#: ../gtk/gtkentry.c:912
+#: ../gtk/gtkentry.c:913
 msgid "Length of the text currently in the entry"
 msgstr "Довжина поточного тексту у елементі"
 
-#: ../gtk/gtkentry.c:927
+#: ../gtk/gtkentry.c:928
 msgid "Invisible character set"
 msgstr "Вказати невидимих символів"
 
-#: ../gtk/gtkentry.c:928
+#: ../gtk/gtkentry.c:929
 msgid "Whether the invisible character has been set"
 msgstr "Чи невидимі символи вказано"
 
-#: ../gtk/gtkentry.c:946
+#: ../gtk/gtkentry.c:947
 msgid "Caps Lock warning"
 msgstr "Попередження про верхній регістр"
 
-#: ../gtk/gtkentry.c:947
+#: ../gtk/gtkentry.c:948
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 "Чи показувати попередження про введення у верхньому регістрі у діалозі вводу "
 "паролю"
 
-#: ../gtk/gtkentry.c:961
+#: ../gtk/gtkentry.c:962
 msgid "Progress Fraction"
 msgstr "Відсоток виконання"
 
-#: ../gtk/gtkentry.c:962
+#: ../gtk/gtkentry.c:963
 msgid "The current fraction of the task that's been completed"
 msgstr "Відсоток виконання поставленого завдання"
 
-#: ../gtk/gtkentry.c:979
+#: ../gtk/gtkentry.c:980
 msgid "Progress Pulse Step"
 msgstr "Крок пульсації"
 
-#: ../gtk/gtkentry.c:980
+#: ../gtk/gtkentry.c:981
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -2647,175 +2647,183 @@ msgstr ""
 "Частина загального обсягу робіт, при виконання якої відбувається приріст "
 "індикатора поступу при викликах gtk_entry_progress_pulse()"
 
-#: ../gtk/gtkentry.c:996
+#: ../gtk/gtkentry.c:997
 msgid "Placeholder text"
 msgstr "Заповнення тексту"
 
-#: ../gtk/gtkentry.c:997
+#: ../gtk/gtkentry.c:998
 msgid "Show text in the entry when it's empty and unfocused"
 msgstr "Показати текст у записі, коли він порожній і поза фокусом"
 
-#: ../gtk/gtkentry.c:1011
+#: ../gtk/gtkentry.c:1012
 msgid "Primary pixbuf"
 msgstr "Головний значок"
 
-#: ../gtk/gtkentry.c:1012
+#: ../gtk/gtkentry.c:1013
 msgid "Primary pixbuf for the entry"
 msgstr "Значок (Pixbuf) для відкритого розширюваного об'єкту"
 
-#: ../gtk/gtkentry.c:1026
+#: ../gtk/gtkentry.c:1027
 msgid "Secondary pixbuf"
 msgstr "Додатковий текст"
 
-#: ../gtk/gtkentry.c:1027
+#: ../gtk/gtkentry.c:1028
 msgid "Secondary pixbuf for the entry"
 msgstr "Додатковий значок для поля вводу"
 
-#: ../gtk/gtkentry.c:1041
+#: ../gtk/gtkentry.c:1042
 msgid "Primary stock ID"
 msgstr "Ідентифікатор головного значка"
 
-#: ../gtk/gtkentry.c:1042
+#: ../gtk/gtkentry.c:1043
 msgid "Stock ID for primary icon"
 msgstr "Головний ідентифікатор вбудованого значка"
 
-#: ../gtk/gtkentry.c:1056
+#: ../gtk/gtkentry.c:1057
 msgid "Secondary stock ID"
 msgstr "Ідентифікатор додаткового значка"
 
-#: ../gtk/gtkentry.c:1057
+#: ../gtk/gtkentry.c:1058
 msgid "Stock ID for secondary icon"
 msgstr "Додатковий ідентифікатор вбудованого значка"
 
-#: ../gtk/gtkentry.c:1071
+#: ../gtk/gtkentry.c:1072
 msgid "Primary icon name"
 msgstr "Назва головного значка"
 
-#: ../gtk/gtkentry.c:1072
+#: ../gtk/gtkentry.c:1073
 msgid "Icon name for primary icon"
 msgstr "Головна назва для значка"
 
-#: ../gtk/gtkentry.c:1086
+#: ../gtk/gtkentry.c:1087
 msgid "Secondary icon name"
 msgstr "Назва додаткового значка"
 
-#: ../gtk/gtkentry.c:1087
+#: ../gtk/gtkentry.c:1088
 msgid "Icon name for secondary icon"
 msgstr "Додаткова назва для значка"
 
-#: ../gtk/gtkentry.c:1101
+#: ../gtk/gtkentry.c:1102
 msgid "Primary GIcon"
 msgstr "Головний значок GIcon"
 
-#: ../gtk/gtkentry.c:1102
+#: ../gtk/gtkentry.c:1103
 msgid "GIcon for primary icon"
 msgstr "Головний значок GIcon"
 
-#: ../gtk/gtkentry.c:1116
+#: ../gtk/gtkentry.c:1117
 msgid "Secondary GIcon"
 msgstr "Додатковий GIcon"
 
-#: ../gtk/gtkentry.c:1117
+#: ../gtk/gtkentry.c:1118
 msgid "GIcon for secondary icon"
 msgstr "Додаткова піктограма для GIcon"
 
-#: ../gtk/gtkentry.c:1131
+#: ../gtk/gtkentry.c:1132
 msgid "Primary storage type"
 msgstr "Тип зберігання головної піктограми"
 
-#: ../gtk/gtkentry.c:1132
+#: ../gtk/gtkentry.c:1133
 msgid "The representation being used for primary icon"
 msgstr "Представлення, що використовується для головного значка"
 
-#: ../gtk/gtkentry.c:1147
+#: ../gtk/gtkentry.c:1148
 msgid "Secondary storage type"
 msgstr "Представлення додаткового значка"
 
-#: ../gtk/gtkentry.c:1148
+#: ../gtk/gtkentry.c:1149
 msgid "The representation being used for secondary icon"
 msgstr "Представлення, що використовується для додаткового значка"
 
-#: ../gtk/gtkentry.c:1169
+#: ../gtk/gtkentry.c:1170
 msgid "Primary icon activatable"
 msgstr "Головний значок активний"
 
-#: ../gtk/gtkentry.c:1170
+#: ../gtk/gtkentry.c:1171
 msgid "Whether the primary icon is activatable"
 msgstr "Чи активний головний значок"
 
-#: ../gtk/gtkentry.c:1190
+#: ../gtk/gtkentry.c:1191
 msgid "Secondary icon activatable"
 msgstr "Додатковий значок активний"
 
-#: ../gtk/gtkentry.c:1191
+#: ../gtk/gtkentry.c:1192
 msgid "Whether the secondary icon is activatable"
 msgstr "Чи активний додатковий значок"
 
-#: ../gtk/gtkentry.c:1213
+#: ../gtk/gtkentry.c:1214
 msgid "Primary icon sensitive"
 msgstr "Головний значок чутливий"
 
-#: ../gtk/gtkentry.c:1214
+#: ../gtk/gtkentry.c:1215
 msgid "Whether the primary icon is sensitive"
 msgstr "Чи чутливий головний значок"
 
-#: ../gtk/gtkentry.c:1235
+#: ../gtk/gtkentry.c:1236
 msgid "Secondary icon sensitive"
 msgstr "Додатковий значок чутливий"
 
-#: ../gtk/gtkentry.c:1236
+#: ../gtk/gtkentry.c:1237
 msgid "Whether the secondary icon is sensitive"
 msgstr "Чи чутливий додатковий значок"
 
-#: ../gtk/gtkentry.c:1252
+#: ../gtk/gtkentry.c:1253
 msgid "Primary icon tooltip text"
 msgstr "Текст контекстної підказки головного значка"
 
-#: ../gtk/gtkentry.c:1253 ../gtk/gtkentry.c:1289
+#: ../gtk/gtkentry.c:1254 ../gtk/gtkentry.c:1290
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Зміст контекстної підказки головного значка"
 
-#: ../gtk/gtkentry.c:1269
+#: ../gtk/gtkentry.c:1270
 msgid "Secondary icon tooltip text"
 msgstr "Текст контекстної підказки додаткового значка"
 
-#: ../gtk/gtkentry.c:1270 ../gtk/gtkentry.c:1308
+#: ../gtk/gtkentry.c:1271 ../gtk/gtkentry.c:1309
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Зміст контекстної підказки додаткового значка"
 
-#: ../gtk/gtkentry.c:1288
+#: ../gtk/gtkentry.c:1289
 msgid "Primary icon tooltip markup"
 msgstr "Розмітка контекстної підказки головного значка"
 
-#: ../gtk/gtkentry.c:1307
+#: ../gtk/gtkentry.c:1308
 msgid "Secondary icon tooltip markup"
 msgstr "Розмітка контекстної підказки додаткового значка"
 
-#: ../gtk/gtkentry.c:1327 ../gtk/gtktextview.c:792
+#: ../gtk/gtkentry.c:1328 ../gtk/gtktextview.c:792
 msgid "IM module"
 msgstr "Модуль вводу"
 
-#: ../gtk/gtkentry.c:1328 ../gtk/gtktextview.c:793
+#: ../gtk/gtkentry.c:1329 ../gtk/gtktextview.c:793
 msgid "Which IM module should be used"
 msgstr "Модуль вводу, що використовується"
 
-#: ../gtk/gtkentry.c:1342
+#: ../gtk/gtkentry.c:1343
+msgid "Completion"
+msgstr "Доповнення"
+
+#: ../gtk/gtkentry.c:1344
+msgid "The auxiliary completion object"
+msgstr "Об'єкт допоміжних доповнень"
+
+#: ../gtk/gtkentry.c:1358
 msgid "Icon Prelight"
 msgstr "Виділення кольором значка"
 
-#: ../gtk/gtkentry.c:1343
+#: ../gtk/gtkentry.c:1359
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Чи виділяти кольором активний значок при наведені вказівника миші"
 
-#: ../gtk/gtkentry.c:1356
+#: ../gtk/gtkentry.c:1372
 msgid "Progress Border"
 msgstr "Простір навколо індикатора поступу"
 
-#: ../gtk/gtkentry.c:1357
+#: ../gtk/gtkentry.c:1373
 msgid "Border around the progress bar"
 msgstr "Відступи навколо індикатора поступу"
 
-#: ../gtk/gtkentry.c:1849
+#: ../gtk/gtkentry.c:1865
 msgid "Border between text and frame."
 msgstr "Бордюр між текстом та рамкою."
 
@@ -3320,7 +3328,7 @@ msgstr ""
 "Двійкове значення, що показує, чи дочірній елемент handlebox приєднаний чи "
 "від'єднаний."
 
-#: ../gtk/gtkiconview.c:529
+#: ../gtk/gtkiconview.c:529 ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Режим виділення"
 
@@ -5839,7 +5847,7 @@ msgstr "Стиль стану методу вводу"
 msgid "How to draw the input method statusbar"
 msgstr "Як зображати панель стану методу вводу"
 
-#: ../gtk/gtksizegroup.c:301
+#: ../gtk/gtksizegroup.c:301 ../gtk/gtktreeselection.c:130
 msgid "Mode"
 msgstr "Режим"
 
@@ -6762,7 +6770,8 @@ msgstr "Розмір піктограми"
 
 #: ../gtk/gtktrayicon-x11.c:180
 msgid "The pixel size that icons should be forced to, or zero"
-msgstr "Розмір у пікселях, до якого потрібно змінити розмір піктограм, або нуль"
+msgstr ""
+"Розмір у пікселях, до якого потрібно змінити розмір піктограм, або нуль"
 
 #: ../gtk/gtktreemenu.c:287
 msgid "TreeMenu model"
