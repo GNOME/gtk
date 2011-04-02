@@ -153,25 +153,29 @@ select_application_func_cb (GtkTreeModel *model,
   SelectAppData *data = user_data;
   GAppInfo *app_to_match = data->info, *app = NULL;
   gboolean custom;
+  gboolean result;
 
   gtk_tree_model_get (model, iter,
                       COLUMN_APP_INFO, &app,
                       COLUMN_CUSTOM, &custom,
                       -1);
 
-  /* cutsom items are always after GAppInfos, so iterating further here
+  /* custom items are always after GAppInfos, so iterating further here
    * is just useless.
    */
   if (custom)
-    return TRUE;
-
-  if (g_app_info_equal (app, app_to_match))
+    result = TRUE;
+  else if (g_app_info_equal (app, app_to_match))
     {
       gtk_combo_box_set_active_iter (GTK_COMBO_BOX (data->self), iter);
-      return TRUE;
+      result = TRUE;
     }
+  else
+    result = FALSE;
 
-  return FALSE;
+  g_object_unref (app);
+
+  return result;
 }
 
 static void
