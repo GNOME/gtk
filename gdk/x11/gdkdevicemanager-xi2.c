@@ -938,12 +938,17 @@ gdk_x11_device_manager_xi2_translate_core_event (GdkEventTranslator *translator,
   gboolean keyboard = FALSE;
   GdkDevice *device;
 
-  if (xevent->type == KeyPress && xevent->xkey.keycode == 0)
+  if ((xevent->type == KeyPress || xevent->type == KeyRelease) &&
+      (xevent->xkey.keycode == 0 || xevent->xkey.serial == 0))
     {
       /* The X input methods (when triggered via XFilterEvent)
        * generate a core key press event with keycode 0 to signal the
        * end of a key sequence. We use the core translate_event
        * implementation to translate this event.
+       *
+       * Other less educated IM modules like to filter every keypress,
+       * only to have these replaced by their own homegrown events,
+       * these events oddly have serial=0, so we try to catch these.
        *
        * This is just a bandaid fix to keep xim working with a single
        * keyboard until XFilterEvent learns about XI2.
