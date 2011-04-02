@@ -29,13 +29,12 @@
 
 G_BEGIN_DECLS
 
-/* Cache as many ranges of height-for-width
- * (or width-for-height) as can be rational
- * for a said widget to have, if a label can
- * only wrap to 3 lines, only 3 caches will
- * ever be allocated for it.
+/* With GtkWidget, a widget may be requested
+ * its width for 2 or maximum 3 heights in one resize
+ * (Note this define is limited by the bitfield sizes
+ * defined on the SizeRequestCache structure).
  */
-#define GTK_SIZE_REQUEST_CACHED_SIZES   (5)
+#define GTK_SIZE_REQUEST_CACHED_SIZES   (2)
 
 typedef struct {
   gint minimum_size;
@@ -44,24 +43,26 @@ typedef struct {
 
 typedef struct
 {
-  gint       lower_for_size; /* The minimum for_size with the same result */
-  gint       upper_for_size; /* The maximum for_size with the same result */
+  /* the size this request is for */
+  gint       for_size;
   CachedSize cached_size;
 } SizeRequest;
 
 typedef struct {
-  SizeRequest **widths;
-  SizeRequest **heights;
+  SizeRequest widths[GTK_SIZE_REQUEST_CACHED_SIZES];
+  SizeRequest heights[GTK_SIZE_REQUEST_CACHED_SIZES];
 
-  CachedSize  cached_width;
-  CachedSize  cached_height;
+  guint       cached_widths      : 2;
+  guint       cached_heights     : 2;
+  guint       last_cached_width  : 2;
+  guint       last_cached_height : 2;
+} ContextualSizes;
 
-  guint       cached_widths      : 3;
-  guint       cached_heights     : 3;
-  guint       last_cached_width  : 3;
-  guint       last_cached_height : 3;
-  guint       cached_base_width  : 1;
-  guint       cached_base_height : 1;
+typedef struct {
+  ContextualSizes *sizes;
+
+  CachedSize cached_width;
+  CachedSize cached_height;
 } SizeRequestCache;
 
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
@@ -113,7 +114,6 @@ gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
                                                 GdkWindow      *window,
                                                 int            *x,
                                                 int            *y);
-void     _gtk_widget_free_cached_sizes (GtkWidget *widget);
 
 G_END_DECLS
 

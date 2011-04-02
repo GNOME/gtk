@@ -10647,7 +10647,8 @@ gtk_widget_finalize (GObject *object)
   if (priv->context)
     g_object_unref (priv->context);
 
-  _gtk_widget_free_cached_sizes (widget);
+  if (priv->requests.sizes)
+    g_slice_free (ContextualSizes, priv->requests.sizes);
 
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"

@@ -31,6 +31,168 @@
 #include "gtksizegroup-private.h"
 #include "gtkwidgetprivate.h"
 
+/* looks for a cached size request for this for_size. If not
+ * found, returns the oldest entry so it can be overwritten
+ *
+ * Note that this caching code was originally derived from
+ * the Clutter toolkit.
+ */
+
+
+/* This function checks if 'request_needed' flag is present
+ * and resets the cache state if a request is needed for
+ * a given orientation.
+ */
+static SizeRequestCache *
+init_cache (GtkWidget        *widget,
+	    GtkSizeGroupMode  orientation)
+{
+  GtkSizeRequestMode  mode;
+  SizeRequestCache   *cache;
+
+  cache = _gtk_widget_peek_request_cache (widget);
+
+  if (orientation == GTK_SIZE_GROUP_HORIZONTAL &&
+      _gtk_widget_get_width_request_needed (widget))
+    {
+      mode = gtk_widget_get_request_mode (widget);
+
+      if (mode == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+	{
+	  if (cache->sizes)
+	    {
+	      g_slice_free (ContextualSizes, cache->sizes);
+	      cache->sizes = NULL;
+	    }
+	}
+      else
+	{
+	  if (!cache->sizes)
+	    cache->sizes = g_slice_new0 (ContextualSizes);
+
+          memset (cache->sizes->widths, 0x0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
+          cache->sizes->cached_widths     = 0;
+          cache->sizes->last_cached_width = 0;
+	}
+
+      cache->cached_width.minimum_size = -1;
+      cache->cached_width.natural_size = -1;
+    }
+  else if (orientation == GTK_SIZE_GROUP_VERTICAL &&
+	   _gtk_widget_get_height_request_needed (widget))
+    {
+      mode = gtk_widget_get_request_mode (widget);
+
+      if (mode == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+	{
+	  if (cache->sizes)
+	    {
+	      g_slice_free (ContextualSizes, cache->sizes);
+	      cache->sizes = NULL;
+	    }
+	}
+      else
+	{
+	  if (!cache->sizes)
+	    cache->sizes = g_slice_new0 (ContextualSizes);
+
+          memset (cache->sizes->heights, 0x0, GTK_SIZE_REQUEST_CACHED_SIZES * sizeof (SizeRequest));
+          cache->sizes->cached_heights     = 0;
+          cache->sizes->last_cached_height = 0;
+	}
+
+      cache->cached_height.minimum_size = -1;
+      cache->cached_height.natural_size = -1;
+    }
+
+  return cache;
+}
+
+static gboolean
+get_cached_size (GtkWidget         *widget,
+		 GtkSizeGroupMode   orientation,
+		 gint               for_size,
+		 CachedSize       **result)
+{
+  SizeRequestCache *cache;
+  SizeRequest      *cached_sizes;
+  guint             i, n_sizes;
+
+  cache = init_cache (widget, orientation);
+
+  if (for_size < 0)
+    {
+      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+	*result = &cache->cached_width;
+      else
+	*result = &cache->cached_height;
+
+      if ((*result)->minimum_size < 0)
+	return FALSE;
+      else
+	return TRUE;
+    }
+
+  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+    {
+      cached_sizes = cache->sizes->widths;
+      n_sizes = cache->sizes->cached_widths;
+    }
+  else
+    {
+      cached_sizes = cache->sizes->heights;
+      n_sizes = cache->sizes->cached_widths;
+    }
+
+  /* Search for an already cached size */
+  for (i = 0; i < n_sizes; i++)
+    {
+      if (cached_sizes[i].for_size == for_size)
+	{
+	  *result = &cached_sizes[i].cached_size;
+	  return TRUE;
+	}
+    }
+
+  /* If not found, pull a new size from the cache, the returned size cache
+   * will immediately be used to cache the new computed size so we go ahead
+   * and increment the last_cached_width/height right away */
+  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+    {
+      if (cache->sizes->cached_widths < GTK_SIZE_REQUEST_CACHED_SIZES)
+	{
+	  cache->sizes->cached_widths++;
+	  cache->sizes->last_cached_width = cache->sizes->cached_widths - 1;
+	}
+      else
+	{
+	  if (++cache->sizes->last_cached_width == GTK_SIZE_REQUEST_CACHED_SIZES)
+	    cache->sizes->last_cached_width = 0;
+	}
+
+      cache->sizes->widths[cache->sizes->last_cached_width].for_size = for_size;
+      *result = &cache->sizes->widths[cache->sizes->last_cached_width].cached_size;
+    }
+  else /* GTK_SIZE_GROUP_VERTICAL */
+    {
+      if (cache->sizes->cached_heights < GTK_SIZE_REQUEST_CACHED_SIZES)
+	{
+	  cache->sizes->cached_heights++;
+	  cache->sizes->last_cached_height = cache->sizes->cached_heights - 1;
+	}
+      else
+	{
+	  if (++cache->sizes->last_cached_height == GTK_SIZE_REQUEST_CACHED_SIZES)
+	    cache->sizes->last_cached_height = 0;
+	}
+
+      cache->sizes->heights[cache->sizes->last_cached_height].for_size = for_size;
+      *result = &cache->sizes->heights[cache->sizes->last_cached_height].cached_size;
+    }
+
+  return FALSE;
+}
+
 
 #ifndef G_DISABLE_CHECKS
 static GQuark recursion_check_quark = 0;
@@ -83,239 +245,6 @@ pop_recursion_check (GtkWidget       *widget,
 #endif
 }
 
-
-static void
-clear_cache (SizeRequestCache   *cache,
-	     GtkSizeGroupMode    orientation)
-{
-  SizeRequest **sizes;
-  gint          i;
-
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      sizes = cache->widths;
-
-      cache->widths            = NULL;
-      cache->cached_widths     = 0;
-      cache->last_cached_width = 0;
-      cache->cached_base_width = FALSE;
-    }
-  else
-    {
-      sizes = cache->heights;
-
-      cache->heights            = NULL;
-      cache->cached_heights     = 0;
-      cache->last_cached_height = 0; 
-      cache->cached_base_height = FALSE;
-   }
-
-  if (sizes)
-    {
-      for (i = 0; sizes[i] != NULL; i++)
-	g_slice_free (SizeRequest, sizes[i]);
-      
-      g_slice_free1 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES, sizes);
-    }
-}
-
-void
-_gtk_widget_free_cached_sizes (GtkWidget *widget)
-{
-  SizeRequestCache   *cache;
-
-  cache = _gtk_widget_peek_request_cache (widget);
-
-  clear_cache (cache, GTK_SIZE_GROUP_HORIZONTAL);
-  clear_cache (cache, GTK_SIZE_GROUP_VERTICAL);
-}
-
-/* This function checks if 'request_needed' flag is present
- * and resets the cache state if a request is needed for
- * a given orientation.
- */
-static SizeRequestCache *
-init_cache (GtkWidget        *widget)
-{
-  SizeRequestCache *cache;
-
-  cache = _gtk_widget_peek_request_cache (widget);
-
-  if (_gtk_widget_get_width_request_needed (widget))
-    clear_cache (cache, GTK_SIZE_GROUP_HORIZONTAL);
-  else if (_gtk_widget_get_height_request_needed (widget))
-    clear_cache (cache, GTK_SIZE_GROUP_VERTICAL);
-
-  return cache;
-}
-
-/* looks for a cached size request for this for_size. If not
- * found, returns the oldest entry so it can be overwritten
- *
- * Note that this caching code was originally derived from
- * the Clutter toolkit but has evolved for other GTK+ requirements.
- */
-static gboolean
-get_cached_size (GtkWidget         *widget,
-		 GtkSizeGroupMode   orientation,
-		 gint               for_size,
-		 CachedSize       **result)
-{
-  SizeRequestCache  *cache;
-  SizeRequest      **cached_sizes;
-  guint              i, n_sizes;
-
-  cache = init_cache (widget);
-
-  if (for_size < 0)
-    {
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-	{
-	  *result = &cache->cached_width;
-	  return cache->cached_base_width;
-	}
-      else
-	{
-	  *result = &cache->cached_height;
-	  return cache->cached_base_height;
-	}
-    }
-
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      cached_sizes = cache->widths;
-      n_sizes      = cache->cached_widths;
-    }
-  else
-    {
-      cached_sizes = cache->heights;
-      n_sizes      = cache->cached_heights;
-    }
-
-  /* Search for an already cached size */
-  for (i = 0; i < n_sizes; i++)
-    {
-      if (cached_sizes[i]->lower_for_size <= for_size &&
-	  cached_sizes[i]->upper_for_size >= for_size)
-	{
-	  *result = &cached_sizes[i]->cached_size;
-	  return TRUE;
-	}
-    }
-
-  return FALSE;
-}
-
-static void
-commit_cached_size (GtkWidget         *widget,
-		    GtkSizeGroupMode   orientation,
-		    gint               for_size,
-		    gint               minimum_size,
-		    gint               natural_size)
-{
-  SizeRequestCache  *cache;
-  SizeRequest      **cached_sizes;
-  guint              i, n_sizes;
-
-  cache = _gtk_widget_peek_request_cache (widget);
-
-  /* First handle caching of the base requests */
-  if (for_size < 0)
-    {
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-	{
-	  cache->cached_width.minimum_size = minimum_size;
-	  cache->cached_width.natural_size = natural_size;
-	  cache->cached_base_width = TRUE;
-	}
-      else
-	{
-	  cache->cached_height.minimum_size = minimum_size;
-	  cache->cached_height.natural_size = natural_size;
-	  cache->cached_base_height = TRUE;
-	}
-      return;
-    }
-
-  /* Check if the minimum_size and natural_size is already
-   * in the cache and if this result can be used to extend
-   * that cache entry 
-   */
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      cached_sizes = cache->widths;
-      n_sizes = cache->cached_widths;
-    }
-  else
-    {
-      cached_sizes = cache->heights;
-      n_sizes = cache->cached_heights;
-    }
-
-  for (i = 0; i < n_sizes; i++)
-    {
-      if (cached_sizes[i]->cached_size.minimum_size == minimum_size &&
-	  cached_sizes[i]->cached_size.natural_size == natural_size)
-	{
-	  cached_sizes[i]->lower_for_size = MIN (cached_sizes[i]->lower_for_size, for_size);
-	  cached_sizes[i]->upper_for_size = MAX (cached_sizes[i]->upper_for_size, for_size);
-	  return;
-	}
-    }
-
-  /* If not found, pull a new size from the cache, the returned size cache
-   * will immediately be used to cache the new computed size so we go ahead
-   * and increment the last_cached_width/height right away */
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      if (cache->cached_widths < GTK_SIZE_REQUEST_CACHED_SIZES)
-	{
-	  cache->cached_widths++;
-	  cache->last_cached_width = cache->cached_widths - 1;
-	}
-      else
-	{
-	  if (++cache->last_cached_width == GTK_SIZE_REQUEST_CACHED_SIZES)
-	    cache->last_cached_width = 0;
-	}
-
-      if (!cache->widths)
-	cache->widths = g_slice_alloc0 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES);
-
-      if (!cache->widths[cache->last_cached_width])
-	cache->widths[cache->last_cached_width] = g_slice_new (SizeRequest);
-
-      cache->widths[cache->last_cached_width]->lower_for_size = for_size;
-      cache->widths[cache->last_cached_width]->upper_for_size = for_size;
-      cache->widths[cache->last_cached_width]->cached_size.minimum_size = minimum_size;
-      cache->widths[cache->last_cached_width]->cached_size.natural_size = natural_size;
-    }
-  else /* GTK_SIZE_GROUP_VERTICAL */
-    {
-      if (cache->cached_heights < GTK_SIZE_REQUEST_CACHED_SIZES)
-	{
-	  cache->cached_heights++;
-	  cache->last_cached_height = cache->cached_heights - 1;
-	}
-      else
-	{
-	  if (++cache->last_cached_height == GTK_SIZE_REQUEST_CACHED_SIZES)
-	    cache->last_cached_height = 0;
-	}
-
-      if (!cache->heights)
-	cache->heights = g_slice_alloc0 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES);
-
-      if (!cache->heights[cache->last_cached_height])
-	cache->heights[cache->last_cached_height] = g_slice_new (SizeRequest);
-
-      cache->heights[cache->last_cached_height]->lower_for_size = for_size;
-      cache->heights[cache->last_cached_height]->upper_for_size = for_size;
-      cache->heights[cache->last_cached_height]->cached_size.minimum_size = minimum_size;
-      cache->heights[cache->last_cached_height]->cached_size.natural_size = natural_size;
-    }
-}
-
 /* This is the main function that checks for a cached size and
  * possibly queries the widget class to compute the size if it's
  * not cached. If the for_size here is -1, then get_preferred_width()
@@ -330,14 +259,14 @@ compute_size_for_orientation (GtkWidget         *widget,
 {
   CachedSize       *cached_size;
   gboolean          found_in_cache = FALSE;
-  gint              min_size = 0;
-  gint              nat_size = 0;
+  gint              adjusted_min, adjusted_natural;
 
   found_in_cache = get_cached_size (widget, orientation, for_size, &cached_size);
 
   if (!found_in_cache)
     {
-      gint adjusted_min, adjusted_natural, adjusted_for_size = for_size;
+      gint min_size = 0;
+      gint nat_size = 0;
 
       gtk_widget_ensure_style (widget);
 
@@ -365,11 +294,11 @@ compute_size_for_orientation (GtkWidget         *widget,
                                                                      &minimum_height,
 								     &natural_height,
                                                                      &ignored_position,
-                                                                     &adjusted_for_size);
+                                                                     &for_size);
 
 	      push_recursion_check (widget, orientation, for_size);
               GTK_WIDGET_GET_CLASS (widget)->get_preferred_width_for_height (widget, 
-									     MAX (adjusted_for_size, minimum_height),
+									     MAX (for_size, minimum_height),
 									     &min_size, &nat_size);
 	      pop_recursion_check (widget, orientation);
             }
@@ -384,9 +313,9 @@ compute_size_for_orientation (GtkWidget         *widget,
             }
           else
             {
-              gint ignored_position = 0;
-              gint minimum_width;
-              gint natural_width;
+              int ignored_position = 0;
+              int minimum_width;
+              int natural_width;
 
 	      /* Pull the base natural width from the cache as it's needed to adjust
 	       * the proposed 'for_size' */
@@ -398,11 +327,11 @@ compute_size_for_orientation (GtkWidget         *widget,
 								     &minimum_width,
                                                                      &natural_width,
                                                                      &ignored_position,
-                                                                     &adjusted_for_size);
+                                                                     &for_size);
 
 	      push_recursion_check (widget, orientation, for_size);
               GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, 
-									     MAX (adjusted_for_size, minimum_width),
+									     MAX (for_size, minimum_width),
 									     &min_size, &nat_size);
 	      pop_recursion_check (widget, orientation);
             }
@@ -414,13 +343,16 @@ compute_size_for_orientation (GtkWidget         *widget,
                      G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size);
         }
 
+      cached_size->minimum_size = min_size;
+      cached_size->natural_size = nat_size;
+
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
           _gtk_widget_set_width_request_needed (widget, FALSE);
       else
           _gtk_widget_set_height_request_needed (widget, FALSE);
 
-      adjusted_min     = min_size;
-      adjusted_natural = nat_size;
+      adjusted_min = cached_size->minimum_size;
+      adjusted_natural = cached_size->natural_size;
       GTK_WIDGET_GET_CLASS (widget)->adjust_size_request (widget,
                                                           orientation == GTK_SIZE_GROUP_HORIZONTAL ?
                                                           GTK_ORIENTATION_HORIZONTAL :
@@ -428,14 +360,14 @@ compute_size_for_orientation (GtkWidget         *widget,
                                                           &adjusted_min,
                                                           &adjusted_natural);
 
-      if (adjusted_min < min_size ||
-          adjusted_natural < nat_size)
+      if (adjusted_min < cached_size->minimum_size ||
+          adjusted_natural < cached_size->natural_size)
         {
           g_warning ("%s %p adjusted size %s min %d natural %d must not decrease below min %d natural %d",
                      G_OBJECT_TYPE_NAME (widget), widget,
                      orientation == GTK_SIZE_GROUP_VERTICAL ? "vertical" : "horizontal",
                      adjusted_min, adjusted_natural,
-                     min_size, nat_size);
+                     cached_size->minimum_size, cached_size->natural_size);
           /* don't use the adjustment */
         }
       else if (adjusted_min > adjusted_natural)
@@ -444,14 +376,14 @@ compute_size_for_orientation (GtkWidget         *widget,
                      G_OBJECT_TYPE_NAME (widget), widget,
                      orientation == GTK_SIZE_GROUP_VERTICAL ? "vertical" : "horizontal",
                      adjusted_min, adjusted_natural,
-                     min_size, nat_size);
+                     cached_size->minimum_size, cached_size->natural_size);
           /* don't use the adjustment */
         }
       else
         {
           /* adjustment looks good */
-          min_size = adjusted_min;
-          nat_size = adjusted_natural;
+          cached_size->minimum_size = adjusted_min;
+          cached_size->natural_size = adjusted_natural;
         }
 
       /* Update size-groups with our request and update our cached requests
@@ -459,31 +391,26 @@ compute_size_for_orientation (GtkWidget         *widget,
        */
       _gtk_size_group_bump_requisition (widget,
 					orientation,
-					&min_size,
-					&nat_size);
-
-      commit_cached_size (widget, orientation, for_size, min_size, nat_size);
-    }
-  else
-    {
-      min_size = cached_size->minimum_size;
-      nat_size = cached_size->natural_size;
+					&cached_size->minimum_size,
+					&cached_size->natural_size);
     }
 
   if (minimum_size)
-    *minimum_size = min_size;
+    *minimum_size = cached_size->minimum_size;
 
   if (natural_size)
-    *natural_size = nat_size;
+    *natural_size = cached_size->natural_size;
 
-  g_assert (min_size <= nat_size);
+  g_assert (cached_size->minimum_size <= cached_size->natural_size);
 
   GTK_NOTE (SIZE_REQUEST,
             g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
                      widget, G_OBJECT_TYPE_NAME (widget),
                      orientation == GTK_SIZE_GROUP_HORIZONTAL ?
                      "width for height" : "height for width" ,
-                     for_size, min_size, nat_size,
+                     for_size,
+                     cached_size->minimum_size,
+                     cached_size->natural_size,
                      found_in_cache ? "yes" : "no"));
 
 }
