@@ -757,7 +757,7 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   GtkStateFlags state;
   GtkBorder padding;
   gint top_margin;
-  guint border_width;
+  gint border_width;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -792,9 +792,9 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 
   child_allocation->x = border_width + padding.left;
   child_allocation->y = border_width + top_margin;
-  child_allocation->width = MAX (1, (gint) allocation.width - (border_width * 2) -
+  child_allocation->width = MAX (1, allocation.width - (border_width * 2) -
                                  padding.left - padding.right);
-  child_allocation->height = MAX (1, ((gint) allocation.height - child_allocation->y -
+  child_allocation->height = MAX (1, (allocation.height - child_allocation->y -
                                       border_width - padding.bottom));
 
   child_allocation->x += allocation.x;
