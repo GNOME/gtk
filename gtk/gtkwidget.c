@@ -4796,6 +4796,16 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   old_allocation = priv->allocation;
   real_allocation = *allocation;
 
+  if (real_allocation.width < 0 || real_allocation.height < 0)
+    {
+      g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
+		 real_allocation.width,
+		 real_allocation.height);
+    }
+
+  real_allocation.width = MAX (real_allocation.width, 1);
+  real_allocation.height = MAX (real_allocation.height, 1);
+
   adjusted_allocation = real_allocation;
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     {
@@ -4848,16 +4858,6 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     {
       real_allocation = adjusted_allocation;
     }
-
-  if (real_allocation.width < 0 || real_allocation.height < 0)
-    {
-      g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
-		 real_allocation.width,
-		 real_allocation.height);
-    }
-
-  real_allocation.width = MAX (real_allocation.width, 1);
-  real_allocation.height = MAX (real_allocation.height, 1);
 
   size_changed = (old_allocation.width != real_allocation.width ||
 		  old_allocation.height != real_allocation.height);
