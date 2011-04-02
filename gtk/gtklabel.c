@@ -3381,12 +3381,10 @@ gtk_label_get_request_mode (GtkWidget *widget)
   GtkLabel *label = GTK_LABEL (widget);
   gdouble   angle = gtk_label_get_angle (label);
 
-  if (label->priv->wrap)
-    return (angle == 90 || angle == 270) ?
-      GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT : 
-      GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  if (angle == 90 || angle == 270)
+    return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
 
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
