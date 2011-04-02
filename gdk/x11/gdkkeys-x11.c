@@ -75,6 +75,7 @@ struct _GdkX11Keymap
   PangoDirection current_direction;
   guint sun_keypad      : 1;
   guint have_direction  : 1;
+  guint have_lock_state : 1;
   guint caps_lock_state : 1;
   guint num_lock_state : 1;
   guint current_serial;
@@ -118,6 +119,7 @@ gdk_x11_keymap_init (GdkX11Keymap *keymap)
   keymap->group_switch_mask = 0;
   keymap->lock_keysym = GDK_KEY_Caps_Lock;
   keymap->have_direction = FALSE;
+  keymap->have_lock_state = FALSE;
   keymap->current_serial = 0;
 
 #ifdef HAVE_XKB
@@ -482,7 +484,7 @@ get_effective_keymap (GdkKeymap  *keymap,
   return keymap;
 }
 
-#if HAVE_XKB
+#ifdef HAVE_XKB
 static PangoDirection
 get_direction (XkbDescRec *xkb,
                gint        group)
@@ -617,17 +619,25 @@ static gboolean
 update_lock_state (GdkX11Keymap *keymap_x11,
                    gint          locked_mods)
 {
+  XkbDescPtr xkb G_GNUC_UNUSED;
+  gboolean have_lock_state;
   gboolean caps_lock_state;
   gboolean num_lock_state;
 
+  /* ensure keymap_x11->num_lock_mask is initialized */
+  xkb = get_xkb (keymap_x11);
+
+  have_lock_state = keymap_x11->have_lock_state;
   caps_lock_state = keymap_x11->caps_lock_state;
   num_lock_state = keymap_x11->num_lock_state;
 
+  keymap_x11->have_lock_state = TRUE;
   keymap_x11->caps_lock_state = (locked_mods & GDK_LOCK_MASK) != 0;
   keymap_x11->num_lock_state = (locked_mods & keymap_x11->num_lock_mask) != 0;
 
-  return (caps_lock_state != keymap_x11->caps_lock_state)
-    || (num_lock_state != keymap_x11->num_lock_state);
+  return !have_lock_state
+         || (caps_lock_state != keymap_x11->caps_lock_state)
+         || (num_lock_state != keymap_x11->num_lock_state);
 }
 
 /* keep this in sync with the XkbSelectEventDetails()
@@ -654,6 +664,26 @@ _gdk_x11_keymap_state_changed (GdkDisplay *display,
 
 #endif /* HAVE_XKB */
 
+static void
+ensure_lock_state (GdkKeymap *keymap)
+{
+#ifdef HAVE_XKB
+  if (KEYMAP_USE_XKB (keymap))
+    {
+      GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
+
+      if (!keymap_x11->have_lock_state)
+        {
+          GdkDisplay *display = keymap->display;
+          XkbStateRec state_rec;
+
+          XkbGetState (GDK_DISPLAY_XDISPLAY (display), XkbUseCoreKbd, &state_rec);
+          update_lock_state (keymap_x11, state_rec.locked_mods);
+        }
+    }
+#endif /* HAVE_XKB */
+}
+
 void
 _gdk_x11_keymap_keys_changed (GdkDisplay *display)
 {
@@ -670,7 +700,7 @@ gdk_x11_keymap_get_direction (GdkKeymap *keymap)
 {
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
 
-#if HAVE_XKB
+#ifdef HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
     {
       GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
@@ -697,7 +727,7 @@ gdk_x11_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
 
-#if HAVE_XKB
+#ifdef HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
     {
       GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
@@ -728,6 +758,8 @@ gdk_x11_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
 
+  ensure_lock_state (keymap);
+
   return GDK_X11_KEYMAP (keymap)->caps_lock_state;
 }
 
@@ -735,6 +767,8 @@ static gboolean
 gdk_x11_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
+
+  ensure_lock_state (keymap);
 
   return GDK_X11_KEYMAP (keymap)->num_lock_state;
 }
