@@ -7168,7 +7168,7 @@ gtk_window_compute_hints (GtkWindow   *window,
       extra_width = requisition.width - TEMPORARY_SIZE;
       extra_height = requisition.height - TEMPORARY_SIZE;
 
-      if (extra_width < 0 || extra_width < 0)
+      if (extra_width < 0 || extra_height < 0)
 	{
 	  g_warning("Toplevel size doesn't seem to directly depend on the "
 		    "size of the geometry widget from gtk_window_set_geometry_hints(). "
