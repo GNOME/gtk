@@ -3105,7 +3105,12 @@ void
 gdk_x11_window_set_theme_variant_gtk_only (GdkWindow *window,
                                            char      *variant)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display;
+
+  if (!WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  display = gdk_window_get_display (window);
 
   if (variant != NULL)
     {
