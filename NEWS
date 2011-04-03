@@ -1,3 +1,31 @@
+Overview of Changes in GTK+ 3.0.8
+=================================
+
+* The size negotiation optimizations turned out to have
+  problematic side effects in some applications, and have
+  been reverted for now
+
+* Fix prelight of selected row expanders
+
+* Bugs fixed:
+ 645341 pre dialog set CAPSLOCK is ignored.
+ 646446 gtkprintunixdialog.c: set_cell_sensitivity_func leaks badly
+ 646462 in gtkappchooserbutton.c: select_application_func_cb
+ 646498 GTK+ 3.0.7 causes gdm greeter to crash at startup
+
+* Translation updates
+ Basque
+ Catalan
+ Danish
+ Galician
+ German
+ Greek
+ Romanian
+ Russian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.0.7
 =================================
 
