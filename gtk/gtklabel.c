@@ -3077,12 +3077,14 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
     }
 
   /* oftentimes we want to measure a width that is far wider than the current width,
-   * even though the layout is not wrapped. In that case, we can just return the
-   * current layout, because for measuring purposes, it will be identical.
+   * even though the layout would not change if we made it wider. In that case, we
+   * can just return the current layout, because for measuring purposes, it will be
+   * identical.
    */
   pango_layout_get_extents (priv->layout, NULL, &rect);
   if ((width == -1 || rect.width <= width) &&
-      !pango_layout_is_wrapped (priv->layout))
+      !pango_layout_is_wrapped (priv->layout) &&
+      !pango_layout_is_ellipsized (priv->layout))
     {
       g_object_ref (priv->layout);
       return priv->layout;
