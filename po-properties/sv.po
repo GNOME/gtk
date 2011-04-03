@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-11 21:41+0100\n"
-"PO-Revision-Date: 2011-03-11 21:54+0100\n"
+"POT-Creation-Date: 2011-04-03 10:41+0200\n"
+"PO-Revision-Date: 2011-04-03 11:36+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -340,14 +340,14 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "Standardikonen som visas i widgetar som representerar denna åtgärd."
 
 #: ../gtk/gtkaction.c:304
-#: ../gtk/gtkstatusicon.c:244
+#: ../gtk/gtkstatusicon.c:245
 msgid "GIcon"
 msgstr "GIcon"
 
 #: ../gtk/gtkaction.c:305
 #: ../gtk/gtkcellrendererpixbuf.c:215
 #: ../gtk/gtkimage.c:329
-#: ../gtk/gtkstatusicon.c:245
+#: ../gtk/gtkstatusicon.c:246
 msgid "The GIcon being displayed"
 msgstr "GIcon som visas"
 
@@ -355,15 +355,15 @@ msgstr "GIcon som visas"
 #: ../gtk/gtkcellrendererpixbuf.c:180
 #: ../gtk/gtkimage.c:311
 #: ../gtk/gtkprinter.c:174
-#: ../gtk/gtkstatusicon.c:228
-#: ../gtk/gtkwindow.c:718
+#: ../gtk/gtkstatusicon.c:229
+#: ../gtk/gtkwindow.c:722
 msgid "Icon Name"
 msgstr "Ikonnamn"
 
 #: ../gtk/gtkaction.c:326
 #: ../gtk/gtkcellrendererpixbuf.c:181
 #: ../gtk/gtkimage.c:312
-#: ../gtk/gtkstatusicon.c:229
+#: ../gtk/gtkstatusicon.c:230
 msgid "The name of the icon from the icon theme"
 msgstr "Namnet på ikonen från ikontemat"
 
@@ -415,7 +415,7 @@ msgstr "Då detta är SANT döljs tomma menyställföreträdare för denna åtg�
 #: ../gtk/gtkaction.c:381
 #: ../gtk/gtkactiongroup.c:235
 #: ../gtk/gtkcellrenderer.c:290
-#: ../gtk/gtkwidget.c:966
+#: ../gtk/gtkwidget.c:971
 msgid "Sensitive"
 msgstr "Känslig"
 
@@ -425,9 +425,9 @@ msgstr "Huruvida åtgärden är aktiverad."
 
 #: ../gtk/gtkaction.c:388
 #: ../gtk/gtkactiongroup.c:242
-#: ../gtk/gtkstatusicon.c:279
+#: ../gtk/gtkstatusicon.c:280
 #: ../gtk/gtktreeviewcolumn.c:246
-#: ../gtk/gtkwidget.c:959
+#: ../gtk/gtkwidget.c:964
 msgid "Visible"
 msgstr "Synlig"
 
@@ -598,21 +598,21 @@ msgstr "Högerutfyllnad"
 msgid "The padding to insert at the right of the widget."
 msgstr "Den utfyllnad som ska infogas till höger om widgeten."
 
-#: ../gtk/gtkappchooserbutton.c:551
+#: ../gtk/gtkappchooserbutton.c:555
 msgid "Include an 'Other...' item"
 msgstr "Inkludera ett \"Övrigt...\"-objekt"
 
-#: ../gtk/gtkappchooserbutton.c:552
+#: ../gtk/gtkappchooserbutton.c:556
 msgid "Whether the combobox should include an item that triggers a GtkAppChooserDialog"
-msgstr ""
+msgstr "Huruvida kombinationsrutan ska inkludera ett objekt som aktiverar en GtkAppChooserDialog"
 
-#: ../gtk/gtkappchooserbutton.c:564
-#: ../gtk/gtkappchooserdialog.c:714
+#: ../gtk/gtkappchooserbutton.c:568
+#: ../gtk/gtkappchooserdialog.c:722
 msgid "Heading"
 msgstr "Rubrik"
 
-#: ../gtk/gtkappchooserbutton.c:565
-#: ../gtk/gtkappchooserdialog.c:715
+#: ../gtk/gtkappchooserbutton.c:569
+#: ../gtk/gtkappchooserdialog.c:723
 msgid "The text to show at the top of the dialog"
 msgstr "Texten att visa överst i dialogrutan"
 
@@ -624,14 +624,13 @@ msgstr "Innehållstyp"
 msgid "The content type used by the open with object"
 msgstr "Innehållstypen som används av Öppna med-objektet"
 
-#: ../gtk/gtkappchooserdialog.c:700
+#: ../gtk/gtkappchooserdialog.c:708
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:701
-#, fuzzy
+#: ../gtk/gtkappchooserdialog.c:709
 msgid "The GFile used by the app chooser dialog"
-msgstr "Titeln på filväljardialogen."
+msgstr "GFile som används av programväljardialogen"
 
 #: ../gtk/gtkappchooserwidget.c:1015
 msgid "Show default app"
@@ -651,12 +650,11 @@ msgstr "Huruvida widgeten ska visa rekommenderade program"
 
 #: ../gtk/gtkappchooserwidget.c:1043
 msgid "Show fallback apps"
-msgstr ""
+msgstr "Visa program att falla tillbaka på"
 
 #: ../gtk/gtkappchooserwidget.c:1044
-#, fuzzy
 msgid "Whether the widget should show fallback applications"
-msgstr "Huruvida objektet ska fylla upp tillgängligt utrymme"
+msgstr "Huruvida widgeten ska visa program att falla tillbaka på"
 
 #: ../gtk/gtkappchooserwidget.c:1056
 msgid "Show other apps"
@@ -710,7 +708,7 @@ msgid "Amount of space used up by arrow"
 msgstr "Mängd utrymme som används av pil"
 
 #: ../gtk/gtkaspectframe.c:109
-#: ../gtk/gtkwidget.c:1154
+#: ../gtk/gtkwidget.c:1159
 msgid "Horizontal Alignment"
 msgstr "Horisontell justering"
 
@@ -719,7 +717,7 @@ msgid "X alignment of the child"
 msgstr "X-justering av barnet"
 
 #: ../gtk/gtkaspectframe.c:116
-#: ../gtk/gtkwidget.c:1170
+#: ../gtk/gtkwidget.c:1175
 msgid "Vertical Alignment"
 msgstr "Vertikal justering"
 
@@ -836,9 +834,8 @@ msgid "Layout style"
 msgstr "Utseendestil"
 
 #: ../gtk/gtkbbox.c:189
-#, fuzzy
 msgid "How to lay out the buttons in the box. Possible values are: spread, edge, start and end"
-msgstr "Hur knappar ska placeras ut i rutan. Möjliga värden är standard, spridd, kant, start och slut"
+msgstr "Hur knapparna ska placeras ut i rutan. Möjliga värden är: spread, edge, start och end"
 
 #: ../gtk/gtkbbox.c:197
 msgid "Secondary"
@@ -894,7 +891,7 @@ msgid "Whether extra space given to the child should be allocated to the child o
 msgstr "Huruvida extra utrymme som ges till barnet ska allokeras till barnet eller användas som utfyllnad"
 
 #: ../gtk/gtkbox.c:297
-#: ../gtk/gtktrayicon-x11.c:166
+#: ../gtk/gtktrayicon-x11.c:169
 msgid "Padding"
 msgstr "Utfyllnad"
 
@@ -1195,13 +1192,12 @@ msgid "Pack Type"
 msgstr "Packningstyp"
 
 #: ../gtk/gtkcellareabox.c:389
-#, fuzzy
 msgid "A GtkPackType indicating whether the cell is packed with reference to the start or end of the cell area"
-msgstr "En GtkPackType som indikerar huruvida barnet packas med avseende på början eller slutet på föräldern"
+msgstr "En GtkPackType som indikerar huruvida cellen packas med avseende på början eller slutet av cellytan"
 
 #: ../gtk/gtkcellarea.c:803
 msgid "Focus Cell"
-msgstr ""
+msgstr "Fokusera cell"
 
 #: ../gtk/gtkcellarea.c:804
 msgid "The cell which currently has focus"
@@ -1229,7 +1225,7 @@ msgstr "Område"
 
 #: ../gtk/gtkcellareacontext.c:128
 msgid "The Cell Area this context was created for"
-msgstr ""
+msgstr "Cellytan som denna kontext skapades för"
 
 #: ../gtk/gtkcellareacontext.c:144
 #: ../gtk/gtkcellareacontext.c:163
@@ -1401,9 +1397,8 @@ msgid "Cell background RGBA color"
 msgstr "RGBA-färg för cellbakgrund"
 
 #: ../gtk/gtkcellrenderer.c:398
-#, fuzzy
 msgid "Cell background color as a GdkRGBA"
-msgstr "Cellbakgrundsfärg som en GdkColor"
+msgstr "Cellbakgrundsfärg som en GdkRGBA"
 
 #: ../gtk/gtkcellrenderer.c:405
 msgid "Editing"
@@ -1475,7 +1470,7 @@ msgstr "Pixbuf för stängd expanderare"
 
 #: ../gtk/gtkcellrendererpixbuf.c:144
 #: ../gtk/gtkimage.c:253
-#: ../gtk/gtkstatusicon.c:220
+#: ../gtk/gtkstatusicon.c:221
 msgid "Stock ID"
 msgstr "Standard-ID"
 
@@ -1486,7 +1481,7 @@ msgstr "Standard-ID på standardikonen att rendera"
 #: ../gtk/gtkcellrendererpixbuf.c:152
 #: ../gtk/gtkcellrendererspinner.c:151
 #: ../gtk/gtkrecentmanager.c:309
-#: ../gtk/gtkstatusicon.c:261
+#: ../gtk/gtkstatusicon.c:262
 msgid "Size"
 msgstr "Storlek"
 
@@ -1512,7 +1507,7 @@ msgstr "Huruvida den renderade pixbufen ska färgsättas enligt tillståndet"
 
 #: ../gtk/gtkcellrendererpixbuf.c:214
 #: ../gtk/gtkimage.c:328
-#: ../gtk/gtkwindow.c:695
+#: ../gtk/gtkwindow.c:699
 msgid "Icon"
 msgstr "Ikon"
 
@@ -1579,9 +1574,8 @@ msgstr "Justering"
 
 #: ../gtk/gtkcellrendererspin.c:92
 #: ../gtk/gtkspinbutton.c:321
-#, fuzzy
 msgid "The adjustment that holds the value of the spin button"
-msgstr "Justeringen som håller värdet på snurrknappen"
+msgstr "Justeringen som innehåller värdet för snurrknappen"
 
 #: ../gtk/gtkcellrendererspin.c:107
 msgid "Climb rate"
@@ -1607,7 +1601,7 @@ msgstr "Antalet siffror att visas"
 #: ../gtk/gtkcheckmenuitem.c:106
 #: ../gtk/gtkmenu.c:586
 #: ../gtk/gtkspinner.c:118
-#: ../gtk/gtkswitch.c:765
+#: ../gtk/gtkswitch.c:801
 #: ../gtk/gtktoggleaction.c:133
 #: ../gtk/gtktogglebutton.c:125
 #: ../gtk/gtktoggletoolbutton.c:112
@@ -1699,7 +1693,7 @@ msgstr "Förgrundsfärg som en sträng"
 
 #: ../gtk/gtkcellrenderertext.c:326
 #: ../gtk/gtktexttag.c:228
-#: ../gtk/gtktrayicon-x11.c:134
+#: ../gtk/gtktrayicon-x11.c:137
 msgid "Foreground color"
 msgstr "Förgrundsfärg"
 
@@ -2127,15 +2121,15 @@ msgstr "Cellområde"
 #: ../gtk/gtktreemenu.c:330
 #: ../gtk/gtktreeviewcolumn.c:416
 msgid "The GtkCellArea used to layout cells"
-msgstr ""
+msgstr "GtkCellArea som används för att placera ut celler"
 
 #: ../gtk/gtkcellview.c:268
 msgid "Cell Area Context"
-msgstr ""
+msgstr "Kontext för cellyta"
 
 #: ../gtk/gtkcellview.c:269
 msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
-msgstr ""
+msgstr "GtkCellAreaContext som används för att beräkna geometrin för cellvyn"
 
 #: ../gtk/gtkcellview.c:286
 msgid "Draw Sensitive"
@@ -2146,13 +2140,12 @@ msgid "Whether to force cells to be drawn in a sensitive state"
 msgstr "Huruvida celler ska tvingas att ritas ut i ett känsligt tillstånd"
 
 #: ../gtk/gtkcellview.c:305
-#, fuzzy
 msgid "Fit Model"
-msgstr "Modell"
+msgstr "Anpassa modell"
 
 #: ../gtk/gtkcellview.c:306
 msgid "Whether to request enough space for every row in the model"
-msgstr ""
+msgstr "Huruvida tillräckligt utrymme för varje rad i modellen ska begäras"
 
 #: ../gtk/gtkcheckbutton.c:77
 #: ../gtk/gtkcheckmenuitem.c:129
@@ -2202,7 +2195,7 @@ msgstr "Huruvida färgen ska ges ett alfavärde"
 #: ../gtk/gtkfilechooserbutton.c:397
 #: ../gtk/gtkfontbutton.c:140
 #: ../gtk/gtkprintjob.c:141
-#: ../gtk/gtkstatusicon.c:407
+#: ../gtk/gtkstatusicon.c:408
 #: ../gtk/gtktreeviewcolumn.c:319
 msgid "Title"
 msgstr "Titel"
@@ -2390,18 +2383,16 @@ msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Huruvida rullgardinsknappen är känslig när modellen är tom"
 
 #: ../gtk/gtkcombobox.c:859
-#, fuzzy
 msgid "Whether combo box has an entry"
-msgstr "Huruvida kombinationsrutan ritar en ram runt barnet"
+msgstr "Huruvida kombinationsrutan har en inmatning"
 
 #: ../gtk/gtkcombobox.c:874
-#, fuzzy
 msgid "Entry Text Column"
-msgstr "Textkolumn"
+msgstr "Textinmatningskolumn"
 
 #: ../gtk/gtkcombobox.c:875
 msgid "The column in the combo box's model to associate with strings from the entry if the combo was created with #GtkComboBox:has-entry = %TRUE"
-msgstr ""
+msgstr "Kolumnen i kombinationsrutans modell att associera med strängar från inmatningen om kombinationsrutan skapades med #GtkComboBox:has-entry = %TRUE"
 
 #: ../gtk/gtkcombobox.c:892
 msgid "ID Column"
@@ -2409,25 +2400,23 @@ msgstr "Id-kolumn"
 
 #: ../gtk/gtkcombobox.c:893
 msgid "The column in the combo box's model that provides string IDs for the values in the model"
-msgstr ""
+msgstr "Kolumnen i kombinationsrutans modell som tillhandahåller sträng-id för värden i modellen"
 
 #: ../gtk/gtkcombobox.c:908
 msgid "Active id"
 msgstr "Aktivt id"
 
 #: ../gtk/gtkcombobox.c:909
-#, fuzzy
 msgid "The value of the id column for the active row"
-msgstr "Namnet på ikonen från ikontemat"
+msgstr "Värdet för id-kolumnen för den aktiva raden"
 
 #: ../gtk/gtkcombobox.c:924
-#, fuzzy
 msgid "Popup Fixed Width"
-msgstr "Fast bredd"
+msgstr "Fast bredd för popup"
 
 #: ../gtk/gtkcombobox.c:925
 msgid "Whether the popup's width should be a fixed width matching the allocated width of the combo box"
-msgstr ""
+msgstr "Huruvida popuprutans bredd ska vara en fast bredd som matchar den allokerade bredden för kombinationsrutan"
 
 #: ../gtk/gtkcombobox.c:951
 msgid "Appears as list"
@@ -2446,9 +2435,8 @@ msgid "The minimum size of the arrow in the combo box"
 msgstr "Minsta storleken för pilen i kombinationsrutan"
 
 #: ../gtk/gtkcombobox.c:986
-#, fuzzy
 msgid "The amount of space used by the arrow"
-msgstr "Mängd utrymme som används av pil"
+msgstr "Mängd utrymme som används av pilen"
 
 #: ../gtk/gtkcombobox.c:1001
 #: ../gtk/gtkentry.c:879
@@ -2662,12 +2650,10 @@ msgid "Length of the text currently in the entry"
 msgstr "Längden på aktuell text i posten "
 
 #: ../gtk/gtkentry.c:926
-#, fuzzy
 msgid "Invisible character set"
-msgstr "Osynligt tecken"
+msgstr "Osynligt tecken inställt"
 
 #: ../gtk/gtkentry.c:927
-#, fuzzy
 msgid "Whether the invisible character has been set"
 msgstr "Huruvida det osynliga tecknet har ställts in"
 
@@ -2994,9 +2980,8 @@ msgid "Label fill"
 msgstr "Etikettfyllning"
 
 #: ../gtk/gtkexpander.c:330
-#, fuzzy
 msgid "Whether the label widget should fill all available horizontal space"
-msgstr "Huruvida objektet ska fylla upp tillgängligt utrymme"
+msgstr "Huruvida etikettwidgeten ska fylla upp allt tillgängligt horisontellt utrymme"
 
 #: ../gtk/gtkexpander.c:336
 #: ../gtk/gtktoolitemgroup.c:1631
@@ -3286,7 +3271,6 @@ msgid "Top attachment"
 msgstr "Övre fäste"
 
 #: ../gtk/gtkgrid.c:1313
-#, fuzzy
 msgid "The row number to attach the top side of a child widget to"
 msgstr "Det radnummer som överkanten på en barnwidget ska fästas vid"
 
@@ -3297,9 +3281,8 @@ msgid "Width"
 msgstr "Bredd"
 
 #: ../gtk/gtkgrid.c:1320
-#, fuzzy
 msgid "The number of columns that a child spans"
-msgstr "Antalet kolumner i tabellen"
+msgstr "Antalet kolumner som ett barn spänner över"
 
 #: ../gtk/gtkgrid.c:1326
 #: ../gtk/gtklayout.c:669
@@ -3307,9 +3290,8 @@ msgid "Height"
 msgstr "Höjd"
 
 #: ../gtk/gtkgrid.c:1327
-#, fuzzy
 msgid "The number of rows that a child spans"
-msgstr "Antalet rader i tabellen"
+msgstr "Antalet rader som ett barn spänner över"
 
 #: ../gtk/gtkhandlebox.c:191
 msgid "Appearance of the shadow that surrounds the container"
@@ -3480,28 +3462,28 @@ msgid "Opacity of the selection box"
 msgstr "Opakhet för markeringsrutan"
 
 #: ../gtk/gtkimage.c:236
-#: ../gtk/gtkstatusicon.c:204
+#: ../gtk/gtkstatusicon.c:205
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
 #: ../gtk/gtkimage.c:237
-#: ../gtk/gtkstatusicon.c:205
+#: ../gtk/gtkstatusicon.c:206
 msgid "A GdkPixbuf to display"
 msgstr "En GdkPixbuf att visa"
 
 #: ../gtk/gtkimage.c:244
 #: ../gtk/gtkrecentmanager.c:294
-#: ../gtk/gtkstatusicon.c:212
+#: ../gtk/gtkstatusicon.c:213
 msgid "Filename"
 msgstr "Filnamn"
 
 #: ../gtk/gtkimage.c:245
-#: ../gtk/gtkstatusicon.c:213
+#: ../gtk/gtkstatusicon.c:214
 msgid "Filename to load and display"
 msgstr "Filnamn att läsa in och visa"
 
 #: ../gtk/gtkimage.c:254
-#: ../gtk/gtkstatusicon.c:221
+#: ../gtk/gtkstatusicon.c:222
 msgid "Stock ID for a stock image to display"
 msgstr "Standard-ID för en standardbild att visa"
 
@@ -3541,24 +3523,22 @@ msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation att visa"
 
 #: ../gtk/gtkimage.c:336
-#: ../gtk/gtkstatusicon.c:252
+#: ../gtk/gtkstatusicon.c:253
 msgid "Storage type"
 msgstr "Lagringstyp"
 
 #: ../gtk/gtkimage.c:337
-#: ../gtk/gtkstatusicon.c:253
+#: ../gtk/gtkstatusicon.c:254
 msgid "The representation being used for image data"
 msgstr "Representationen som används för bilddata"
 
 #: ../gtk/gtkimage.c:355
-#, fuzzy
 msgid "Use Fallback"
-msgstr "Använd alfa"
+msgstr "Använd fall tillbaka"
 
 #: ../gtk/gtkimage.c:356
-#, fuzzy
 msgid "Whether to use icon names fallback"
-msgstr "Varningsfärg för symboliska ikoner"
+msgstr "Huruvida fall tillbaka på ikonnamn ska användas"
 
 #: ../gtk/gtkimagemenuitem.c:150
 msgid "Child widget to appear next to the menu text"
@@ -3603,14 +3583,14 @@ msgstr "Bredd på kanten runt åtgärdsområdet"
 # "skärm"
 #: ../gtk/gtkinvisible.c:89
 #: ../gtk/gtkmountoperation.c:175
-#: ../gtk/gtkstatusicon.c:271
+#: ../gtk/gtkstatusicon.c:272
 #: ../gtk/gtkstylecontext.c:545
-#: ../gtk/gtkwindow.c:726
+#: ../gtk/gtkwindow.c:730
 msgid "Screen"
 msgstr "Skärm"
 
 #: ../gtk/gtkinvisible.c:90
-#: ../gtk/gtkwindow.c:727
+#: ../gtk/gtkwindow.c:731
 msgid "The screen where this window will be displayed"
 msgstr "Den skärm där detta fönster kommer att visas"
 
@@ -4108,9 +4088,8 @@ msgid "Group Name"
 msgstr "Gruppnamn"
 
 #: ../gtk/gtknotebook.c:739
-#, fuzzy
 msgid "Group name for tab drag and drop"
-msgstr "Grupp för flikarnas drag-och-släpp"
+msgstr "Gruppnamn för flikarnas dra-och-släpp"
 
 #: ../gtk/gtknotebook.c:746
 msgid "Tab label"
@@ -4222,14 +4201,6 @@ msgstr "Pilutrymme"
 msgid "Scroll arrow spacing"
 msgstr "Utrymme för rullningspil"
 
-#: ../gtk/gtknotebook.c:916
-msgid "Initial gap"
-msgstr "Initialt mellanrum"
-
-#: ../gtk/gtknotebook.c:917
-msgid "Initial gap before the first tab"
-msgstr "Initialt mellanrum före första fliken"
-
 #: ../gtk/gtknumerableicon.c:652
 msgid "Icon's count"
 msgstr "Ikonens antal"
@@ -4252,7 +4223,7 @@ msgstr "Ikonens stilsammanhang"
 
 #: ../gtk/gtknumerableicon.c:667
 msgid "The style context to theme the icon appearance"
-msgstr ""
+msgstr "Stilkontexten för att temalägga ikonens utseende"
 
 #: ../gtk/gtknumerableicon.c:673
 msgid "Background icon"
@@ -4268,13 +4239,12 @@ msgstr "Namn på bakgrundsikonen"
 
 # Osäker.
 #: ../gtk/gtknumerableicon.c:681
-#, fuzzy
 msgid "The icon name for the number emblem background"
-msgstr "Ikonnamnet att använda för skrivaren"
+msgstr "Ikonnamnet för sifferemblemets bakgrund"
 
 #: ../gtk/gtkorientable.c:63
-#: ../gtk/gtkstatusicon.c:311
-#: ../gtk/gtktrayicon-x11.c:125
+#: ../gtk/gtkstatusicon.c:312
+#: ../gtk/gtktrayicon-x11.c:128
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -4335,7 +4305,7 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Om SANT kan barnet göras mindre än dess begäran"
 
 #: ../gtk/gtkplug.c:201
-#: ../gtk/gtkstatusicon.c:295
+#: ../gtk/gtkstatusicon.c:296
 msgid "Embedded"
 msgstr "Inbäddad"
 
@@ -4700,7 +4670,6 @@ msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Extra utrymme tillämpas till höjden för en förloppsmätare."
 
 #: ../gtk/gtkprogressbar.c:245
-#, fuzzy
 msgid "Minimum horizontal bar width"
 msgstr "Minsta horisontella stapelbredd"
 
@@ -4709,7 +4678,6 @@ msgid "The minimum horizontal width of the progress bar"
 msgstr "Den minsta horisontella bredden för förloppsmätaren"
 
 #: ../gtk/gtkprogressbar.c:258
-#, fuzzy
 msgid "Minimum horizontal bar height"
 msgstr "Minsta horisontella stapelhöjd"
 
@@ -4718,7 +4686,6 @@ msgid "Minimum horizontal height of the progress bar"
 msgstr "Minsta horisontella höjden för förloppsmätaren"
 
 #: ../gtk/gtkprogressbar.c:271
-#, fuzzy
 msgid "Minimum vertical bar width"
 msgstr "Minsta vertikala stapelbredd"
 
@@ -4727,7 +4694,6 @@ msgid "The minimum vertical width of the progress bar"
 msgstr "Den minsta vertikala bredden för förloppsmätaren"
 
 #: ../gtk/gtkprogressbar.c:284
-#, fuzzy
 msgid "Minimum vertical bar height"
 msgstr "Minsta vertikala stapelhöjd"
 
@@ -4831,7 +4797,7 @@ msgid "The number of digits to round the value to."
 msgstr "Antalet siffror att runda av värdet till."
 
 #: ../gtk/gtkrange.c:519
-#: ../gtk/gtkswitch.c:800
+#: ../gtk/gtkswitch.c:836
 msgid "Slider Width"
 msgstr "Bredd på rullningslist"
 
@@ -4856,43 +4822,43 @@ msgstr "Stegarstorlek"
 msgid "Length of step buttons at ends"
 msgstr "Längd på stegknappar vid ändarna"
 
-#: ../gtk/gtkrange.c:551
+#: ../gtk/gtkrange.c:549
 msgid "Stepper Spacing"
 msgstr "Stegarutrymme"
 
-#: ../gtk/gtkrange.c:552
+#: ../gtk/gtkrange.c:550
 msgid "Spacing between step buttons and thumb"
 msgstr "Utrymme mellan stegknappar och steg"
 
-#: ../gtk/gtkrange.c:559
+#: ../gtk/gtkrange.c:557
 msgid "Arrow X Displacement"
 msgstr "X-förflyttning av pil"
 
-#: ../gtk/gtkrange.c:560
+#: ../gtk/gtkrange.c:558
 msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i x-riktingen pilen ska flyttas då knappen trycks ned"
 
-#: ../gtk/gtkrange.c:567
+#: ../gtk/gtkrange.c:565
 msgid "Arrow Y Displacement"
 msgstr "Y-förflyttning av pil"
 
-#: ../gtk/gtkrange.c:568
+#: ../gtk/gtkrange.c:566
 msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i y-riktningen pilen ska flyttas då knappen trycks ned"
 
-#: ../gtk/gtkrange.c:586
+#: ../gtk/gtkrange.c:582
 msgid "Trough Under Steppers"
 msgstr "Tråg under stegare"
 
-#: ../gtk/gtkrange.c:587
+#: ../gtk/gtkrange.c:583
 msgid "Whether to draw trough for full length of range or exclude the steppers and spacing"
 msgstr "Huruvida tråget ska ritas ut för hela längden eller undanta stegarna och mellanrum"
 
-#: ../gtk/gtkrange.c:600
+#: ../gtk/gtkrange.c:596
 msgid "Arrow scaling"
 msgstr "Pilskalning"
 
-#: ../gtk/gtkrange.c:601
+#: ../gtk/gtkrange.c:597
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Pilskalning med hänseende till storleken för rullningsknapp"
 
@@ -5048,7 +5014,7 @@ msgstr "Horisontell justering"
 
 #: ../gtk/gtkscrollable.c:87
 msgid "Horizontal adjustment that is shared between the scrollable widget and its controller"
-msgstr ""
+msgstr "Horisontell justering som delas mellan den rullningsbara widgeten och dess kontroller"
 
 #: ../gtk/gtkscrollable.c:103
 msgid "Vertical adjustment"
@@ -5056,12 +5022,11 @@ msgstr "Vertikal justering"
 
 #: ../gtk/gtkscrollable.c:104
 msgid "Vertical adjustment that is shared between the scrollable widget and its controller"
-msgstr ""
+msgstr "Vertikal justering som delas mellan den rullningsbara widgeten och dess kontroller"
 
 #: ../gtk/gtkscrollable.c:120
-#, fuzzy
 msgid "Horizontal Scrollable Policy"
-msgstr "Policy för horisontella rullningslister"
+msgstr "Policy för horisontell rullning"
 
 #: ../gtk/gtkscrollable.c:121
 #: ../gtk/gtkscrollable.c:137
@@ -5069,9 +5034,8 @@ msgid "How the size of the content should be determined"
 msgstr "Hur storleken av innehållet ska bestämmas"
 
 #: ../gtk/gtkscrollable.c:136
-#, fuzzy
 msgid "Vertical Scrollable Policy"
-msgstr "Policy för vertikal rullningslista"
+msgstr "Policy för vertikal rullning"
 
 #: ../gtk/gtkscrollbar.c:72
 msgid "Minimum Slider Length"
@@ -5170,22 +5134,20 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Antalet bildpunkter mellan rullningslisterna och det rullade fönstret"
 
 #: ../gtk/gtkscrolledwindow.c:391
-#, fuzzy
 msgid "Minimum Content Width"
-msgstr "Minsta bredd"
+msgstr "Minsta innehållsbredd"
 
 #: ../gtk/gtkscrolledwindow.c:392
 msgid "The minimum width that the scrolled window will allocate to its content"
-msgstr ""
+msgstr "Minsta bredden som rullningsbara fönster ska allokera till dess innehåll"
 
 #: ../gtk/gtkscrolledwindow.c:406
-#, fuzzy
 msgid "Minimum Content Height"
-msgstr "Minsta höjd på barn"
+msgstr "Minsta innehållshöjd"
 
 #: ../gtk/gtkscrolledwindow.c:407
 msgid "The minimum height that the scrolled window will allocate to its content"
-msgstr ""
+msgstr "Minsta höjden som rullningsbara fönster ska allokera till dess innehåll"
 
 #: ../gtk/gtkseparatortoolitem.c:143
 msgid "Draw"
@@ -5195,555 +5157,553 @@ msgstr "Rita"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Huruvida avgränsaren är ritad eller enbart tom"
 
-#: ../gtk/gtksettings.c:322
+#: ../gtk/gtksettings.c:318
 msgid "Double Click Time"
 msgstr "Tid för dubbelklick"
 
-#: ../gtk/gtksettings.c:323
+#: ../gtk/gtksettings.c:319
 msgid "Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"
 msgstr "Största tid som tillåts mellan två klick för att de ska betraktas som en dubbelklickning (i millisekunder)"
 
-#: ../gtk/gtksettings.c:330
+#: ../gtk/gtksettings.c:326
 msgid "Double Click Distance"
 msgstr "Avstånd för dubbelklick"
 
-#: ../gtk/gtksettings.c:331
+#: ../gtk/gtksettings.c:327
 msgid "Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"
 msgstr "Största avstånd som tillåts mellan två klick för att de ska betraktas som en dubbelklickning (i bildpunkter)"
 
-#: ../gtk/gtksettings.c:347
+#: ../gtk/gtksettings.c:343
 msgid "Cursor Blink"
 msgstr "Markörblinkning"
 
-#: ../gtk/gtksettings.c:348
+#: ../gtk/gtksettings.c:344
 msgid "Whether the cursor should blink"
 msgstr "Huruvida markören ska blinka"
 
-#: ../gtk/gtksettings.c:355
+#: ../gtk/gtksettings.c:351
 msgid "Cursor Blink Time"
 msgstr "Blinktid för markör"
 
-#: ../gtk/gtksettings.c:356
+#: ../gtk/gtksettings.c:352
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Längd på markörens blinkcykel, i millisekunder"
 
-#: ../gtk/gtksettings.c:375
+#: ../gtk/gtksettings.c:371
 msgid "Cursor Blink Timeout"
 msgstr "Tidsgräns för markörblinkning"
 
-#: ../gtk/gtksettings.c:376
+#: ../gtk/gtksettings.c:372
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Tid efter vilken markören slutar blinka, i sekunder"
 
-#: ../gtk/gtksettings.c:383
+#: ../gtk/gtksettings.c:379
 msgid "Split Cursor"
 msgstr "Delad markör"
 
-#: ../gtk/gtksettings.c:384
+#: ../gtk/gtksettings.c:380
 msgid "Whether two cursors should be displayed for mixed left-to-right and right-to-left text"
 msgstr "Huruvida två markörer ska visas för blandad vänster-till-höger- och höger-till-vänster-text"
 
-#: ../gtk/gtksettings.c:391
+#: ../gtk/gtksettings.c:387
 msgid "Theme Name"
 msgstr "Temanamn"
 
-#: ../gtk/gtksettings.c:392
-#, fuzzy
+#: ../gtk/gtksettings.c:388
 msgid "Name of theme to load"
-msgstr "Namn på den tema-RC-fil som ska läsas in"
+msgstr "Namn på temat att läsa in"
 
-#: ../gtk/gtksettings.c:400
+#: ../gtk/gtksettings.c:396
 msgid "Icon Theme Name"
 msgstr "Namn på ikontema"
 
-#: ../gtk/gtksettings.c:401
+#: ../gtk/gtksettings.c:397
 msgid "Name of icon theme to use"
 msgstr "Namn på ikontemat att använda"
 
-#: ../gtk/gtksettings.c:409
+#: ../gtk/gtksettings.c:405
 msgid "Fallback Icon Theme Name"
 msgstr "Ikontema att falla tillbaka på"
 
-#: ../gtk/gtksettings.c:410
+#: ../gtk/gtksettings.c:406
 msgid "Name of a icon theme to fall back to"
 msgstr "Namnet på ikontemat att falla tillbaka på"
 
-#: ../gtk/gtksettings.c:418
+#: ../gtk/gtksettings.c:414
 msgid "Key Theme Name"
 msgstr "Nyckeltemanamn"
 
-#: ../gtk/gtksettings.c:419
-#, fuzzy
+#: ../gtk/gtksettings.c:415
 msgid "Name of key theme to load"
-msgstr "Namn på den nyckeltema-RC-fil som ska läsas in"
+msgstr "Namn på nyckeltemat att läsa in"
 
-#: ../gtk/gtksettings.c:427
+#: ../gtk/gtksettings.c:423
 msgid "Menu bar accelerator"
 msgstr "Snabbtangent för menyrad"
 
-#: ../gtk/gtksettings.c:428
+#: ../gtk/gtksettings.c:424
 msgid "Keybinding to activate the menu bar"
 msgstr "Snabbtangent för att aktivera menyraden"
 
-#: ../gtk/gtksettings.c:436
+#: ../gtk/gtksettings.c:432
 msgid "Drag threshold"
 msgstr "Dragtröskel"
 
-#: ../gtk/gtksettings.c:437
+#: ../gtk/gtksettings.c:433
 msgid "Number of pixels the cursor can move before dragging"
-msgstr "Antalet bildpunkter markören kan flyttas innan drag"
+msgstr "Antalet bildpunkter markören kan flyttas innan dragning"
 
-#: ../gtk/gtksettings.c:445
+#: ../gtk/gtksettings.c:441
 msgid "Font Name"
 msgstr "Typsnittsnamn"
 
-#: ../gtk/gtksettings.c:446
+#: ../gtk/gtksettings.c:442
 msgid "Name of default font to use"
 msgstr "Namn på standardtypsnittet att använda"
 
-#: ../gtk/gtksettings.c:468
+#: ../gtk/gtksettings.c:464
 msgid "Icon Sizes"
 msgstr "Ikonstorlekar"
 
-#: ../gtk/gtksettings.c:469
+#: ../gtk/gtksettings.c:465
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Lista med ikonstorlekar (gtk-menu=16,16;gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:477
+#: ../gtk/gtksettings.c:473
 msgid "GTK Modules"
 msgstr "GTK-moduler"
 
-#: ../gtk/gtksettings.c:478
+#: ../gtk/gtksettings.c:474
 msgid "List of currently active GTK modules"
 msgstr "Lista med GTK-moduler som är aktiva för tillfället"
 
-#: ../gtk/gtksettings.c:486
+#: ../gtk/gtksettings.c:482
 msgid "Xft Antialias"
 msgstr "Xft-kantutjämning"
 
-#: ../gtk/gtksettings.c:487
+#: ../gtk/gtksettings.c:483
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Huruvida Xft-typsnitt ska kantutjämnas; 0=nej, 1=ja, -1=standardvärdet"
 
-#: ../gtk/gtksettings.c:496
+#: ../gtk/gtksettings.c:492
 msgid "Xft Hinting"
 msgstr "Xft-hintning"
 
-#: ../gtk/gtksettings.c:497
+#: ../gtk/gtksettings.c:493
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Huruvida Xft-typsnitt ska hintas; 0=nej, 1=ja, -1=standardvärdet"
 
-#: ../gtk/gtksettings.c:506
+#: ../gtk/gtksettings.c:502
 msgid "Xft Hint Style"
 msgstr "Xft-hintningsstil"
 
-#: ../gtk/gtksettings.c:507
+#: ../gtk/gtksettings.c:503
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "Vilken grad av hintning att använda; hintaingen, hintaliten, hintamellan, eller hintafullständig"
 
-#: ../gtk/gtksettings.c:516
+#: ../gtk/gtksettings.c:512
 msgid "Xft RGBA"
 msgstr "Xft-RGBA"
 
-#: ../gtk/gtksettings.c:517
+#: ../gtk/gtksettings.c:513
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Typ av underbildpunktskantutjämning; ingen, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:526
+#: ../gtk/gtksettings.c:522
 msgid "Xft DPI"
 msgstr "Xft-DPI"
 
-#: ../gtk/gtksettings.c:527
+#: ../gtk/gtksettings.c:523
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Upplösning för Xft, i 1024 × punkter/tum. -1 för att använda standardvärdet"
 
-#: ../gtk/gtksettings.c:536
+#: ../gtk/gtksettings.c:532
 msgid "Cursor theme name"
 msgstr "Namn på markörtema"
 
-#: ../gtk/gtksettings.c:537
+#: ../gtk/gtksettings.c:533
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "Namn på markörtemat att använda, eller NULL för att använda standardtemat"
 
-#: ../gtk/gtksettings.c:545
+#: ../gtk/gtksettings.c:541
 msgid "Cursor theme size"
 msgstr "Storlek på markörtema"
 
-#: ../gtk/gtksettings.c:546
+#: ../gtk/gtksettings.c:542
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Storlek att använda på markörer, eller 0 för att använda standardstorleken"
 
-#: ../gtk/gtksettings.c:555
+#: ../gtk/gtksettings.c:551
 msgid "Alternative button order"
 msgstr "Alternativ knappordning"
 
-#: ../gtk/gtksettings.c:556
+#: ../gtk/gtksettings.c:552
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Huruvida knappar i dialoger ska använda den alternativa knappordningen"
 
-#: ../gtk/gtksettings.c:573
+#: ../gtk/gtksettings.c:569
 msgid "Alternative sort indicator direction"
 msgstr "Alternativ riktning för sorteringsindikator"
 
-#: ../gtk/gtksettings.c:574
+#: ../gtk/gtksettings.c:570
 msgid "Whether the direction of the sort indicators in list and tree views is inverted compared to the default (where down means ascending)"
 msgstr "Huruvida riktningen på sorteringsindikatorerna i list- och trädvyer är inverterade jämfört med standarden (där ner betyder stigande)"
 
-#: ../gtk/gtksettings.c:582
+#: ../gtk/gtksettings.c:578
 msgid "Show the 'Input Methods' menu"
 msgstr "Visa \"Inmatningsmetoder\"-menyn"
 
-#: ../gtk/gtksettings.c:583
+#: ../gtk/gtksettings.c:579
 msgid "Whether the context menus of entries and text views should offer to change the input method"
 msgstr "Huruvida sammanhangsmenyer av poster och textvyer ska erbjuda ändring av inmatningsmetod"
 
-#: ../gtk/gtksettings.c:591
+#: ../gtk/gtksettings.c:587
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Visa \"Infoga Unicode-styrtecken\"-menyn"
 
-#: ../gtk/gtksettings.c:592
+#: ../gtk/gtksettings.c:588
 msgid "Whether the context menus of entries and text views should offer to insert control characters"
 msgstr "Huruvida sammanhangsmenyer av poster och textvyer ska erbjuda att infoga styrtecken"
 
-#: ../gtk/gtksettings.c:600
+#: ../gtk/gtksettings.c:596
 msgid "Start timeout"
 msgstr "Tidsgräns för start"
 
-#: ../gtk/gtksettings.c:601
+#: ../gtk/gtksettings.c:597
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Startvärde för tidsgränser, när knappen blir nedtryckt"
 
-#: ../gtk/gtksettings.c:610
+#: ../gtk/gtksettings.c:606
 msgid "Repeat timeout"
 msgstr "Tidsgräns för upprepning"
 
-#: ../gtk/gtksettings.c:611
+#: ../gtk/gtksettings.c:607
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Upprepningsvärde för tidsgränser, när knappen blir nedtryckt"
 
-#: ../gtk/gtksettings.c:620
+#: ../gtk/gtksettings.c:616
 msgid "Expand timeout"
 msgstr "Utöka tidsgräns"
 
-#: ../gtk/gtksettings.c:621
+#: ../gtk/gtksettings.c:617
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "Expandera värde för tidsgränser, när en widget expanderar en ny region"
 
-#: ../gtk/gtksettings.c:656
+#: ../gtk/gtksettings.c:652
 msgid "Color scheme"
 msgstr "Färgschema"
 
-#: ../gtk/gtksettings.c:657
+#: ../gtk/gtksettings.c:653
 msgid "A palette of named colors for use in themes"
 msgstr "En palett av namngivna färger att använda i teman"
 
-#: ../gtk/gtksettings.c:666
+#: ../gtk/gtksettings.c:662
 msgid "Enable Animations"
 msgstr "Aktivera animeringar"
 
-#: ../gtk/gtksettings.c:667
+#: ../gtk/gtksettings.c:663
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Huruvida verktygslådebreda animeringar ska aktiveras."
 
-#: ../gtk/gtksettings.c:685
+#: ../gtk/gtksettings.c:681
 msgid "Enable Touchscreen Mode"
 msgstr "Aktivera pekskärmsläge"
 
-#: ../gtk/gtksettings.c:686
+#: ../gtk/gtksettings.c:682
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "När TRUE kommer inga rörelsenotifieringshändelser att levereras på denna skärm"
 
-#: ../gtk/gtksettings.c:703
+#: ../gtk/gtksettings.c:699
 msgid "Tooltip timeout"
 msgstr "Tidsgräns för verktygstips"
 
-#: ../gtk/gtksettings.c:704
+#: ../gtk/gtksettings.c:700
 msgid "Timeout before tooltip is shown"
 msgstr "Tidsgräns innan verktygstips visas"
 
-#: ../gtk/gtksettings.c:729
+#: ../gtk/gtksettings.c:725
 msgid "Tooltip browse timeout"
 msgstr "Tidsgräns för bläddring i verktygstips"
 
-#: ../gtk/gtksettings.c:730
+#: ../gtk/gtksettings.c:726
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "Tidsgräns innan verktygstips visas när bläddringsläge är aktiverat"
 
-#: ../gtk/gtksettings.c:751
+#: ../gtk/gtksettings.c:747
 msgid "Tooltip browse mode timeout"
 msgstr "Tidsgräns för bläddringsläge för verktygstips"
 
-#: ../gtk/gtksettings.c:752
+#: ../gtk/gtksettings.c:748
 msgid "Timeout after which browse mode is disabled"
 msgstr "Tidsgräns efter vilken bläddringsläget inaktiveras"
 
-#: ../gtk/gtksettings.c:771
+#: ../gtk/gtksettings.c:767
 msgid "Keynav Cursor Only"
 msgstr "Tangentnavigeringsmarkör endast"
 
-#: ../gtk/gtksettings.c:772
+#: ../gtk/gtksettings.c:768
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "När TRUE finns det endast markörtangenter tillgängliga för att navigera bland widgetar"
 
-#: ../gtk/gtksettings.c:789
+#: ../gtk/gtksettings.c:785
 msgid "Keynav Wrap Around"
 msgstr "Radbrytning för tangentnavigering"
 
-#: ../gtk/gtksettings.c:790
+#: ../gtk/gtksettings.c:786
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Huruvida radbrytning ska ske vid tangentbordsnavigering bland widgetar "
 
-#: ../gtk/gtksettings.c:810
+#: ../gtk/gtksettings.c:806
 msgid "Error Bell"
 msgstr "Felklocka"
 
-#: ../gtk/gtksettings.c:811
+#: ../gtk/gtksettings.c:807
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "När TRUE kommer tangentbordsnavigering och andra fel att orsaka ett pip"
 
-#: ../gtk/gtksettings.c:828
+#: ../gtk/gtksettings.c:824
 msgid "Color Hash"
 msgstr "Färgrymd"
 
-#: ../gtk/gtksettings.c:829
+#: ../gtk/gtksettings.c:825
 msgid "A hash table representation of the color scheme."
 msgstr "En hashtabell som representerar färgschemat."
 
-#: ../gtk/gtksettings.c:837
+#: ../gtk/gtksettings.c:833
 msgid "Default file chooser backend"
 msgstr "Standardbakände för filväljare"
 
-#: ../gtk/gtksettings.c:838
+#: ../gtk/gtksettings.c:834
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Namn på den GtkFileChooser-bakände som ska användas som standard"
 
-#: ../gtk/gtksettings.c:855
+#: ../gtk/gtksettings.c:851
 msgid "Default print backend"
 msgstr "Standardbakände för utskrifter"
 
-#: ../gtk/gtksettings.c:856
+#: ../gtk/gtksettings.c:852
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Lista på de GtkPrintBackend-bakändor som ska användas som standard"
 
-#: ../gtk/gtksettings.c:879
+#: ../gtk/gtksettings.c:875
 msgid "Default command to run when displaying a print preview"
 msgstr "Standardkommando att köra vid förhandsvisning av utskrift "
 
-#: ../gtk/gtksettings.c:880
+#: ../gtk/gtksettings.c:876
 msgid "Command to run when displaying a print preview"
 msgstr "Kommando att köra vid visning av en utskriftförhandsvisning"
 
-#: ../gtk/gtksettings.c:896
+#: ../gtk/gtksettings.c:892
 msgid "Enable Mnemonics"
 msgstr "Aktivera snabbtangenter"
 
-#: ../gtk/gtksettings.c:897
+#: ../gtk/gtksettings.c:893
 msgid "Whether labels should have mnemonics"
 msgstr "Huruvida etiketter ska ha snabbtangenter"
 
-#: ../gtk/gtksettings.c:913
+#: ../gtk/gtksettings.c:909
 msgid "Enable Accelerators"
 msgstr "Aktivera snabbtangenter"
 
-#: ../gtk/gtksettings.c:914
+#: ../gtk/gtksettings.c:910
 msgid "Whether menu items should have accelerators"
 msgstr "Huruvida menyobjekt ska ha snabbtangenter"
 
-#: ../gtk/gtksettings.c:931
+#: ../gtk/gtksettings.c:927
 msgid "Recent Files Limit"
 msgstr "Gräns för Senaste filer"
 
-#: ../gtk/gtksettings.c:932
+#: ../gtk/gtksettings.c:928
 msgid "Number of recently used files"
 msgstr "Antal senast använda filer"
 
-#: ../gtk/gtksettings.c:950
+#: ../gtk/gtksettings.c:946
 msgid "Default IM module"
 msgstr "Standard-IM-modul"
 
-#: ../gtk/gtksettings.c:951
+#: ../gtk/gtksettings.c:947
 msgid "Which IM module should be used by default"
 msgstr "Vilken IM-modul som ska användas som standard"
 
-#: ../gtk/gtksettings.c:969
+#: ../gtk/gtksettings.c:965
 msgid "Recent Files Max Age"
 msgstr "Maximal ålder för Senaste filer"
 
-#: ../gtk/gtksettings.c:970
+#: ../gtk/gtksettings.c:966
 msgid "Maximum age of recently used files, in days"
 msgstr "Maximal ålder för senast använda filer, i dagar"
 
-#: ../gtk/gtksettings.c:979
+#: ../gtk/gtksettings.c:975
 msgid "Fontconfig configuration timestamp"
 msgstr "Fontconfig-konfigurationens tidsstämpel"
 
-#: ../gtk/gtksettings.c:980
+#: ../gtk/gtksettings.c:976
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Tidsstämpel för aktuell fontconfig-konfiguration"
 
-#: ../gtk/gtksettings.c:1002
+#: ../gtk/gtksettings.c:998
 msgid "Sound Theme Name"
 msgstr "Namn på ljudtema"
 
-#: ../gtk/gtksettings.c:1003
+#: ../gtk/gtksettings.c:999
 msgid "XDG sound theme name"
 msgstr "Namn på XDG-ljudtema"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: ../gtk/gtksettings.c:1025
+#: ../gtk/gtksettings.c:1021
 msgid "Audible Input Feedback"
 msgstr "Ljudåterkoppling för inmatning"
 
-#: ../gtk/gtksettings.c:1026
+#: ../gtk/gtksettings.c:1022
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Huruvida händelseljud som spelas upp som återkoppling till användarinmatning"
 
-#: ../gtk/gtksettings.c:1047
+#: ../gtk/gtksettings.c:1043
 msgid "Enable Event Sounds"
 msgstr "Aktivera händelseljud"
 
-#: ../gtk/gtksettings.c:1048
+#: ../gtk/gtksettings.c:1044
 msgid "Whether to play any event sounds at all"
 msgstr "Huruvida händelseljud ska spelas överhuvudtaget"
 
-#: ../gtk/gtksettings.c:1063
+#: ../gtk/gtksettings.c:1059
 msgid "Enable Tooltips"
 msgstr "Aktivera verktygstips"
 
-#: ../gtk/gtksettings.c:1064
+#: ../gtk/gtksettings.c:1060
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Huruvida verktygstips ska visas på widgetar"
 
-#: ../gtk/gtksettings.c:1077
+#: ../gtk/gtksettings.c:1073
 msgid "Toolbar style"
 msgstr "Stil på verktygsrad"
 
-#: ../gtk/gtksettings.c:1078
+#: ../gtk/gtksettings.c:1074
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "Huruvida standardverktygsrader endast har text, text och ikoner, endast ikoner, osv."
 
-#: ../gtk/gtksettings.c:1092
+#: ../gtk/gtksettings.c:1088
 msgid "Toolbar Icon Size"
 msgstr "Ikonstorlek på verktygsrad"
 
-#: ../gtk/gtksettings.c:1093
+#: ../gtk/gtksettings.c:1089
 msgid "The size of icons in default toolbars."
 msgstr "Storlek på ikoner i standardverktygsrader."
 
-#: ../gtk/gtksettings.c:1110
+#: ../gtk/gtksettings.c:1106
 msgid "Auto Mnemonics"
 msgstr "Automatiska snabbtangenter"
 
-#: ../gtk/gtksettings.c:1111
+#: ../gtk/gtksettings.c:1107
 msgid "Whether mnemonics should be automatically shown and hidden when the user presses the mnemonic activator."
 msgstr "Huruvida snabbtangenter ska visas och döljas automatiskt när användaren trycker på snabbtangentaktiveraren."
 
-#: ../gtk/gtksettings.c:1136
+#: ../gtk/gtksettings.c:1132
 msgid "Application prefers a dark theme"
 msgstr "Programmet föredrar ett mörk tema"
 
-#: ../gtk/gtksettings.c:1137
+#: ../gtk/gtksettings.c:1133
 msgid "Whether the application prefers to have a dark theme."
 msgstr "Huruvida programmet föredrar att ha ett mörkt tema."
 
-#: ../gtk/gtksettings.c:1152
+#: ../gtk/gtksettings.c:1148
 msgid "Show button images"
 msgstr "Visa knappbilder"
 
-#: ../gtk/gtksettings.c:1153
+#: ../gtk/gtksettings.c:1149
 msgid "Whether images should be shown on buttons"
 msgstr "Huruvida bilder ska visas på knappar"
 
-#: ../gtk/gtksettings.c:1161
-#: ../gtk/gtksettings.c:1255
+#: ../gtk/gtksettings.c:1157
+#: ../gtk/gtksettings.c:1251
 msgid "Select on focus"
 msgstr "Markera vid fokus"
 
-#: ../gtk/gtksettings.c:1162
+#: ../gtk/gtksettings.c:1158
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Huruvida ett fälts innehåll markeras då fältet får fokus"
 
-#: ../gtk/gtksettings.c:1179
+#: ../gtk/gtksettings.c:1175
 msgid "Password Hint Timeout"
 msgstr "Tidsgräns för lösenordstips"
 
-#: ../gtk/gtksettings.c:1180
+#: ../gtk/gtksettings.c:1176
 msgid "How long to show the last input character in hidden entries"
 msgstr "Hur länge det senaste inmatade tecknet i dolda objekt ska visas"
 
-#: ../gtk/gtksettings.c:1189
+#: ../gtk/gtksettings.c:1185
 msgid "Show menu images"
 msgstr "Visa menybilder"
 
-#: ../gtk/gtksettings.c:1190
+#: ../gtk/gtksettings.c:1186
 msgid "Whether images should be shown in menus"
 msgstr "Huruvida bilder ska visas i menyer"
 
-#: ../gtk/gtksettings.c:1198
+#: ../gtk/gtksettings.c:1194
 msgid "Delay before drop down menus appear"
 msgstr "Fördröjning innan utfällningsmenyer visas"
 
-#: ../gtk/gtksettings.c:1199
+#: ../gtk/gtksettings.c:1195
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Fördröjning innan undermenyer till en menyrad visas"
 
-#: ../gtk/gtksettings.c:1216
+#: ../gtk/gtksettings.c:1212
 msgid "Scrolled Window Placement"
 msgstr "Placering för rullade fönster"
 
-#: ../gtk/gtksettings.c:1217
+#: ../gtk/gtksettings.c:1213
 msgid "Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."
 msgstr "Där innehållet i rullade fönster placeras i förhållande till rullningslisterna, om inte åsidosatt av det rullade fönstrets egna placering."
 
-#: ../gtk/gtksettings.c:1226
+#: ../gtk/gtksettings.c:1222
 msgid "Can change accelerators"
 msgstr "Kan ändra snabbtangenter"
 
-#: ../gtk/gtksettings.c:1227
+#: ../gtk/gtksettings.c:1223
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "Huruvida menysnabbtangenter kan ändras genom att en tangent trycks ovanför menyobjektet"
 
-#: ../gtk/gtksettings.c:1235
+#: ../gtk/gtksettings.c:1231
 msgid "Delay before submenus appear"
 msgstr "Fördröjning innan undermenyer visas"
 
-#: ../gtk/gtksettings.c:1236
+#: ../gtk/gtksettings.c:1232
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "Minsta tid som pekaren måste stanna över ett menyobjekt innan undermenyn visas"
 
-#: ../gtk/gtksettings.c:1245
+#: ../gtk/gtksettings.c:1241
 msgid "Delay before hiding a submenu"
 msgstr "Fördröjning innan en undermeny döljs"
 
-#: ../gtk/gtksettings.c:1246
+#: ../gtk/gtksettings.c:1242
 msgid "The time before hiding a submenu when the pointer is moving towards the submenu"
 msgstr "Tiden innan en undermeny ska döljas när pekaren rör sig mot undermenyn"
 
-#: ../gtk/gtksettings.c:1256
+#: ../gtk/gtksettings.c:1252
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Huruvida innehållet av en valbar etikett väljs när den fokuseras"
 
-#: ../gtk/gtksettings.c:1264
+#: ../gtk/gtksettings.c:1260
 msgid "Custom palette"
 msgstr "Anpassad palett"
 
-#: ../gtk/gtksettings.c:1265
+#: ../gtk/gtksettings.c:1261
 msgid "Palette to use in the color selector"
 msgstr "Palett att använda i färgväljaren"
 
-#: ../gtk/gtksettings.c:1273
+#: ../gtk/gtksettings.c:1269
 msgid "IM Preedit style"
 msgstr "IM-förredigeringsstil"
 
-#: ../gtk/gtksettings.c:1274
+#: ../gtk/gtksettings.c:1270
 msgid "How to draw the input method preedit string"
 msgstr "Hur inmatningsmetodens förredigeringssträng ska ritas"
 
-#: ../gtk/gtksettings.c:1283
+#: ../gtk/gtksettings.c:1279
 msgid "IM Status style"
 msgstr "IM-statusstil"
 
-#: ../gtk/gtksettings.c:1284
+#: ../gtk/gtksettings.c:1280
 msgid "How to draw the input method statusbar"
 msgstr "Hur inmatningsmetodens statusrad ska ritas"
 
@@ -5815,57 +5775,57 @@ msgstr "Huruvida snurrväljaren är aktiv"
 msgid "Style of bevel around the statusbar text"
 msgstr "Stil på avfasningen runt statusradstexten"
 
-#: ../gtk/gtkstatusicon.c:262
+#: ../gtk/gtkstatusicon.c:263
 msgid "The size of the icon"
 msgstr "Storleken på ikonen"
 
-#: ../gtk/gtkstatusicon.c:272
+#: ../gtk/gtkstatusicon.c:273
 msgid "The screen where this status icon will be displayed"
 msgstr "Skärmen där denna statusikon kommer att visas"
 
-#: ../gtk/gtkstatusicon.c:280
+#: ../gtk/gtkstatusicon.c:281
 msgid "Whether the status icon is visible"
 msgstr "Huruvida statusikonen är synlig"
 
-#: ../gtk/gtkstatusicon.c:296
+#: ../gtk/gtkstatusicon.c:297
 msgid "Whether the status icon is embedded"
 msgstr "Huruvida statusikonen är inbäddad"
 
-#: ../gtk/gtkstatusicon.c:312
-#: ../gtk/gtktrayicon-x11.c:126
+#: ../gtk/gtkstatusicon.c:313
+#: ../gtk/gtktrayicon-x11.c:129
 msgid "The orientation of the tray"
 msgstr "Orienteringen för lådan"
 
-#: ../gtk/gtkstatusicon.c:339
-#: ../gtk/gtkwidget.c:1067
+#: ../gtk/gtkstatusicon.c:340
+#: ../gtk/gtkwidget.c:1072
 msgid "Has tooltip"
 msgstr "Har verktygstips"
 
-#: ../gtk/gtkstatusicon.c:340
+#: ../gtk/gtkstatusicon.c:341
 msgid "Whether this tray icon has a tooltip"
 msgstr "Huruvida denna brickikon har ett verktygstips"
 
-#: ../gtk/gtkstatusicon.c:365
-#: ../gtk/gtkwidget.c:1088
+#: ../gtk/gtkstatusicon.c:366
+#: ../gtk/gtkwidget.c:1093
 msgid "Tooltip Text"
 msgstr "Text för verktygstips"
 
-#: ../gtk/gtkstatusicon.c:366
-#: ../gtk/gtkwidget.c:1089
-#: ../gtk/gtkwidget.c:1110
+#: ../gtk/gtkstatusicon.c:367
+#: ../gtk/gtkwidget.c:1094
+#: ../gtk/gtkwidget.c:1115
 msgid "The contents of the tooltip for this widget"
 msgstr "Innehållet i verktygstipset för denna widget"
 
-#: ../gtk/gtkstatusicon.c:389
-#: ../gtk/gtkwidget.c:1109
+#: ../gtk/gtkstatusicon.c:390
+#: ../gtk/gtkwidget.c:1114
 msgid "Tooltip markup"
 msgstr "Verktygstips-markup"
 
-#: ../gtk/gtkstatusicon.c:390
+#: ../gtk/gtkstatusicon.c:391
 msgid "The contents of the tooltip for this tray icon"
 msgstr "Innehållet i verktygstipset för denna brickikon"
 
-#: ../gtk/gtkstatusicon.c:408
+#: ../gtk/gtkstatusicon.c:409
 msgid "The title of this tray icon"
 msgstr "Titeln för denna brickikon"
 
@@ -5890,15 +5850,13 @@ msgstr "Riktning"
 msgid "Text direction"
 msgstr "Textriktning"
 
-#: ../gtk/gtkswitch.c:766
-#, fuzzy
+#: ../gtk/gtkswitch.c:802
 msgid "Whether the switch is on or off"
-msgstr "Huruvida widgeten är dubbelbuffrad eller inte"
+msgstr "Huruvida strömbrytaren är på eller av"
 
-#: ../gtk/gtkswitch.c:801
-#, fuzzy
+#: ../gtk/gtkswitch.c:837
 msgid "The minimum width of the handle"
-msgstr "Minsta värdet på justeringen"
+msgstr "Minsta bredden för handtaget"
 
 #: ../gtk/gtktable.c:157
 msgid "Rows"
@@ -6518,7 +6476,6 @@ msgid "Collapsed"
 msgstr "Utfälld"
 
 #: ../gtk/gtktoolitemgroup.c:1611
-#, fuzzy
 msgid "Whether the group has been collapsed and items are hidden"
 msgstr "Huruvida gruppen har fällts ut och objekten är dolda"
 
@@ -6586,37 +6543,45 @@ msgstr "Huruvida objektgruppen ska vara den enda utfällda på angiven tid"
 msgid "Whether the item group should receive extra space when the palette grows"
 msgstr "Huruvida objektgruppen ska få extra utrymme när paletten växer"
 
-#: ../gtk/gtktrayicon-x11.c:135
+#: ../gtk/gtktrayicon-x11.c:138
 msgid "Foreground color for symbolic icons"
 msgstr "Förgrundsfärg för symboliska ikoner"
 
-#: ../gtk/gtktrayicon-x11.c:142
+#: ../gtk/gtktrayicon-x11.c:145
 msgid "Error color"
 msgstr "Felfärg"
 
-#: ../gtk/gtktrayicon-x11.c:143
+#: ../gtk/gtktrayicon-x11.c:146
 msgid "Error color for symbolic icons"
 msgstr "Felfärg för symboliska ikoner"
 
-#: ../gtk/gtktrayicon-x11.c:150
+#: ../gtk/gtktrayicon-x11.c:153
 msgid "Warning color"
 msgstr "Varningsfärg"
 
-#: ../gtk/gtktrayicon-x11.c:151
+#: ../gtk/gtktrayicon-x11.c:154
 msgid "Warning color for symbolic icons"
 msgstr "Varningsfärg för symboliska ikoner"
 
-#: ../gtk/gtktrayicon-x11.c:158
+#: ../gtk/gtktrayicon-x11.c:161
 msgid "Success color"
 msgstr "Lyckad färg"
 
-#: ../gtk/gtktrayicon-x11.c:159
+#: ../gtk/gtktrayicon-x11.c:162
 msgid "Success color for symbolic icons"
 msgstr "Lyckad färg för symboliska ikoner"
 
-#: ../gtk/gtktrayicon-x11.c:167
+#: ../gtk/gtktrayicon-x11.c:170
 msgid "Padding that should be put around icons in the tray"
 msgstr "Utfyllnad som ska läggas runt ikoner i lådan"
+
+#: ../gtk/gtktrayicon-x11.c:179
+msgid "Icon Size"
+msgstr "Ikonstorlek"
+
+#: ../gtk/gtktrayicon-x11.c:180
+msgid "The pixel size that icons should be forced to, or zero"
+msgstr "Bildpunktsstorlek som ikoner ska tvingas till, eller noll"
 
 #: ../gtk/gtktreemenu.c:287
 msgid "TreeMenu model"
@@ -6628,7 +6593,7 @@ msgstr "Modellen för trädmenyn"
 
 #: ../gtk/gtktreemenu.c:310
 msgid "TreeMenu root row"
-msgstr ""
+msgstr "Rotrad för TreeMenu"
 
 #: ../gtk/gtktreemenu.c:311
 msgid "The TreeMenu will display children of the specified root"
@@ -6867,7 +6832,7 @@ msgid "Whether to display the column"
 msgstr "Huruvida kolumnen ska visas"
 
 #: ../gtk/gtktreeviewcolumn.c:254
-#: ../gtk/gtkwindow.c:642
+#: ../gtk/gtkwindow.c:646
 msgid "Resizable"
 msgstr "Storleksändringsbar"
 
@@ -6987,605 +6952,598 @@ msgstr "Använd symboliska ikoner"
 msgid "Whether to use symbolic icons"
 msgstr "Huruvida symboliska ikoner ska användas"
 
-#: ../gtk/gtkwidget.c:926
+#: ../gtk/gtkwidget.c:931
 msgid "Widget name"
 msgstr "Widgetnamn"
 
-#: ../gtk/gtkwidget.c:927
+#: ../gtk/gtkwidget.c:932
 msgid "The name of the widget"
 msgstr "Namnen på widgeten"
 
-#: ../gtk/gtkwidget.c:933
+#: ../gtk/gtkwidget.c:938
 msgid "Parent widget"
 msgstr "Förälderwidget"
 
-#: ../gtk/gtkwidget.c:934
+#: ../gtk/gtkwidget.c:939
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Förälderwidgeten till denna widget. Måste vara en behållarwidget"
 
-#: ../gtk/gtkwidget.c:941
+#: ../gtk/gtkwidget.c:946
 msgid "Width request"
 msgstr "Breddbegäran"
 
-#: ../gtk/gtkwidget.c:942
+#: ../gtk/gtkwidget.c:947
 msgid "Override for width request of the widget, or -1 if natural request should be used"
 msgstr "Åsidosättande för breddbegäran av widgeten, eller -1 om naturlig begäran ska användas"
 
-#: ../gtk/gtkwidget.c:950
+#: ../gtk/gtkwidget.c:955
 msgid "Height request"
 msgstr "Höjdbegäran"
 
-#: ../gtk/gtkwidget.c:951
+#: ../gtk/gtkwidget.c:956
 msgid "Override for height request of the widget, or -1 if natural request should be used"
 msgstr "Åsidosättande för höjdbegäran av widgeten, eller -1 om naturlig begäran ska användas"
 
-#: ../gtk/gtkwidget.c:960
+#: ../gtk/gtkwidget.c:965
 msgid "Whether the widget is visible"
 msgstr "Huruvida widgeten är synlig"
 
-#: ../gtk/gtkwidget.c:967
+#: ../gtk/gtkwidget.c:972
 msgid "Whether the widget responds to input"
 msgstr "Huruvida widgeten svarar på inmatning"
 
-#: ../gtk/gtkwidget.c:973
+#: ../gtk/gtkwidget.c:978
 msgid "Application paintable"
 msgstr "Programmet kan rita"
 
-#: ../gtk/gtkwidget.c:974
+#: ../gtk/gtkwidget.c:979
 msgid "Whether the application will paint directly on the widget"
 msgstr "Huruvida programmet kan rita direkt på widgeten"
 
-#: ../gtk/gtkwidget.c:980
+#: ../gtk/gtkwidget.c:985
 msgid "Can focus"
 msgstr "Kan få fokus"
 
-#: ../gtk/gtkwidget.c:981
+#: ../gtk/gtkwidget.c:986
 msgid "Whether the widget can accept the input focus"
 msgstr "Huruvida widgeten kan acceptera inmatningsfokus"
 
-#: ../gtk/gtkwidget.c:987
+#: ../gtk/gtkwidget.c:992
 msgid "Has focus"
 msgstr "Har fokus"
 
-#: ../gtk/gtkwidget.c:988
+#: ../gtk/gtkwidget.c:993
 msgid "Whether the widget has the input focus"
 msgstr "Huruvida widgeten har inmatningsfokus"
 
-#: ../gtk/gtkwidget.c:994
+#: ../gtk/gtkwidget.c:999
 msgid "Is focus"
 msgstr "Är fokus"
 
-#: ../gtk/gtkwidget.c:995
+#: ../gtk/gtkwidget.c:1000
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Huruvida widgeten är fokuswidgeten på toppnivån"
 
-#: ../gtk/gtkwidget.c:1001
+#: ../gtk/gtkwidget.c:1006
 msgid "Can default"
 msgstr "Kan vara standard"
 
-#: ../gtk/gtkwidget.c:1002
+#: ../gtk/gtkwidget.c:1007
 msgid "Whether the widget can be the default widget"
 msgstr "Huruvida widgeten kan vara standardwidgeten"
 
-#: ../gtk/gtkwidget.c:1008
+#: ../gtk/gtkwidget.c:1013
 msgid "Has default"
 msgstr "Har standard"
 
-#: ../gtk/gtkwidget.c:1009
+#: ../gtk/gtkwidget.c:1014
 msgid "Whether the widget is the default widget"
 msgstr "Huruvida widgeten är standardwidgeten"
 
-#: ../gtk/gtkwidget.c:1015
+#: ../gtk/gtkwidget.c:1020
 msgid "Receives default"
 msgstr "Mottar standard"
 
-#: ../gtk/gtkwidget.c:1016
+#: ../gtk/gtkwidget.c:1021
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "Om SANT kommer widgeten att motta standardåtgärden då den har fokus"
 
-#: ../gtk/gtkwidget.c:1022
+#: ../gtk/gtkwidget.c:1027
 msgid "Composite child"
 msgstr "Sammansatt barn"
 
-#: ../gtk/gtkwidget.c:1023
+#: ../gtk/gtkwidget.c:1028
 msgid "Whether the widget is part of a composite widget"
 msgstr "Huruvida widgeten är en del av en sammansatt widget"
 
-#: ../gtk/gtkwidget.c:1029
+#: ../gtk/gtkwidget.c:1034
 msgid "Style"
 msgstr "Stil"
 
-#: ../gtk/gtkwidget.c:1030
+#: ../gtk/gtkwidget.c:1035
 msgid "The style of the widget, which contains information about how it will look (colors etc)"
 msgstr "Stilen på widgeten, som innehåller information om hur den kommer att se ut (färger osv)"
 
-#: ../gtk/gtkwidget.c:1036
+#: ../gtk/gtkwidget.c:1041
 msgid "Events"
 msgstr "Händelser"
 
-#: ../gtk/gtkwidget.c:1037
+#: ../gtk/gtkwidget.c:1042
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "Händelsemasken som avgör vilken typ av GdkEvent som denna widget får"
 
-#: ../gtk/gtkwidget.c:1044
+#: ../gtk/gtkwidget.c:1049
 msgid "No show all"
 msgstr "Visa inte alla"
 
-#: ../gtk/gtkwidget.c:1045
+#: ../gtk/gtkwidget.c:1050
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Huruvida gtk_widget_show_all() inte ska påverka denna widget"
 
-#: ../gtk/gtkwidget.c:1068
+#: ../gtk/gtkwidget.c:1073
 msgid "Whether this widget has a tooltip"
 msgstr "Huruvida denna widget har ett verktygstips"
 
-#: ../gtk/gtkwidget.c:1124
+#: ../gtk/gtkwidget.c:1129
 msgid "Window"
 msgstr "Fönster"
 
-#: ../gtk/gtkwidget.c:1125
+#: ../gtk/gtkwidget.c:1130
 msgid "The widget's window if it is realized"
 msgstr "Widgetens fönster om det finns"
 
-#: ../gtk/gtkwidget.c:1139
+#: ../gtk/gtkwidget.c:1144
 msgid "Double Buffered"
 msgstr "Dubbelbuffrad"
 
-#: ../gtk/gtkwidget.c:1140
+#: ../gtk/gtkwidget.c:1145
 msgid "Whether the widget is double buffered"
 msgstr "Huruvida widgeten är dubbelbuffrad"
 
-#: ../gtk/gtkwidget.c:1155
+#: ../gtk/gtkwidget.c:1160
 msgid "How to position in extra horizontal space"
 msgstr "Hur ska positionera i extra horisontellt utrymme"
 
-#: ../gtk/gtkwidget.c:1171
+#: ../gtk/gtkwidget.c:1176
 msgid "How to position in extra vertical space"
 msgstr "Hur ska positionera i extra vertikalt utrymme"
 
-#: ../gtk/gtkwidget.c:1190
+#: ../gtk/gtkwidget.c:1195
 msgid "Margin on Left"
 msgstr "Marginal på vänsterkanten"
 
-#: ../gtk/gtkwidget.c:1191
+#: ../gtk/gtkwidget.c:1196
 msgid "Pixels of extra space on the left side"
 msgstr "Bildpunkter av extra utrymme på vänster sida"
 
-#: ../gtk/gtkwidget.c:1211
+#: ../gtk/gtkwidget.c:1216
 msgid "Margin on Right"
 msgstr "Marginal på högerkanten"
 
-#: ../gtk/gtkwidget.c:1212
+#: ../gtk/gtkwidget.c:1217
 msgid "Pixels of extra space on the right side"
 msgstr "Bildpunkter med tomt utrymme på högra sidan"
 
-#: ../gtk/gtkwidget.c:1232
+#: ../gtk/gtkwidget.c:1237
 msgid "Margin on Top"
 msgstr "Marginal på överkanten"
 
-#: ../gtk/gtkwidget.c:1233
+#: ../gtk/gtkwidget.c:1238
 msgid "Pixels of extra space on the top side"
 msgstr "Bildpunkter med tomt utrymme på ovansidan"
 
-#: ../gtk/gtkwidget.c:1253
+#: ../gtk/gtkwidget.c:1258
 msgid "Margin on Bottom"
 msgstr "Marginal på nederkanten"
 
-#: ../gtk/gtkwidget.c:1254
+#: ../gtk/gtkwidget.c:1259
 msgid "Pixels of extra space on the bottom side"
 msgstr "Bildpunkter av extra utrymme i nederkant"
 
-#: ../gtk/gtkwidget.c:1271
+#: ../gtk/gtkwidget.c:1276
 msgid "All Margins"
 msgstr "Alla marginaler"
 
-#: ../gtk/gtkwidget.c:1272
+#: ../gtk/gtkwidget.c:1277
 msgid "Pixels of extra space on all four sides"
 msgstr "Bildpunkter av extra utrymme på alla fyra sidor"
 
-#: ../gtk/gtkwidget.c:1305
-#, fuzzy
+#: ../gtk/gtkwidget.c:1310
 msgid "Horizontal Expand"
-msgstr "Horisontell utfyllnad"
+msgstr "Horisontell expandering"
 
-#: ../gtk/gtkwidget.c:1306
+#: ../gtk/gtkwidget.c:1311
 msgid "Whether widget wants more horizontal space"
 msgstr "Huruvida widgeten vill ha mer horisontellt utrymme"
 
-#: ../gtk/gtkwidget.c:1320
-#, fuzzy
+#: ../gtk/gtkwidget.c:1325
 msgid "Horizontal Expand Set"
-msgstr "Horisontell justering"
+msgstr "Horisontell expandering inställd"
 
-#: ../gtk/gtkwidget.c:1321
-#, fuzzy
+#: ../gtk/gtkwidget.c:1326
 msgid "Whether to use the hexpand property"
-msgstr "Huruvida egenskaper för utseende av relaterade åtgärder ska användas"
+msgstr "Huruvida egenskapen hexpand ska användas"
 
-#: ../gtk/gtkwidget.c:1335
-#, fuzzy
+#: ../gtk/gtkwidget.c:1340
 msgid "Vertical Expand"
-msgstr "Vertikal utfyllnad"
+msgstr "Vertikal expandering"
 
-#: ../gtk/gtkwidget.c:1336
+#: ../gtk/gtkwidget.c:1341
 msgid "Whether widget wants more vertical space"
 msgstr "Huruvida widgeten vill ha mer vertikalt utrymme"
 
-#: ../gtk/gtkwidget.c:1350
-#, fuzzy
+#: ../gtk/gtkwidget.c:1355
 msgid "Vertical Expand Set"
-msgstr "Vertikal justering"
+msgstr "Vertikal expandering inställd"
 
-#: ../gtk/gtkwidget.c:1351
-#, fuzzy
+#: ../gtk/gtkwidget.c:1356
 msgid "Whether to use the vexpand property"
-msgstr "Huruvida egenskaper för utseende av relaterade åtgärder ska användas"
+msgstr "Huruvida egenskapen vexpand ska användas"
 
-#: ../gtk/gtkwidget.c:1365
-#, fuzzy
+#: ../gtk/gtkwidget.c:1370
 msgid "Expand Both"
-msgstr "Utöka tidsgräns"
+msgstr "Expandera båda"
 
-#: ../gtk/gtkwidget.c:1366
+#: ../gtk/gtkwidget.c:1371
 msgid "Whether widget wants to expand in both directions"
 msgstr "Huruvida widgeten vill expandera i båda riktningarna"
 
-#: ../gtk/gtkwidget.c:3003
+#: ../gtk/gtkwidget.c:3008
 msgid "Interior Focus"
 msgstr "Interiörfokus"
 
-#: ../gtk/gtkwidget.c:3004
+#: ../gtk/gtkwidget.c:3009
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Huruvida fokusindikatorn ritas inuti widgetar"
 
-#: ../gtk/gtkwidget.c:3010
+#: ../gtk/gtkwidget.c:3015
 msgid "Focus linewidth"
 msgstr "Fokuslinjebredd"
 
-#: ../gtk/gtkwidget.c:3011
+#: ../gtk/gtkwidget.c:3016
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Bredd, i bildpunkter, på fokusindikatorlinjen"
 
-#: ../gtk/gtkwidget.c:3017
+#: ../gtk/gtkwidget.c:3022
 msgid "Focus line dash pattern"
 msgstr "Punktmönster för fokuslinje"
 
-#: ../gtk/gtkwidget.c:3018
+#: ../gtk/gtkwidget.c:3023
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Punktmönster som används för att rita fokusindikatorn"
 
-#: ../gtk/gtkwidget.c:3023
+#: ../gtk/gtkwidget.c:3028
 msgid "Focus padding"
 msgstr "Fokusutfyllnad"
 
-#: ../gtk/gtkwidget.c:3024
+#: ../gtk/gtkwidget.c:3029
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Bredd, i bildpunkter, mellan fokusindikatorn och \"widgetrutan\""
 
-#: ../gtk/gtkwidget.c:3029
+#: ../gtk/gtkwidget.c:3034
 msgid "Cursor color"
 msgstr "Markörfärg"
 
-#: ../gtk/gtkwidget.c:3030
+#: ../gtk/gtkwidget.c:3035
 msgid "Color with which to draw insertion cursor"
 msgstr "Färg att rita insättningsmarkören med"
 
-#: ../gtk/gtkwidget.c:3035
+#: ../gtk/gtkwidget.c:3040
 msgid "Secondary cursor color"
 msgstr "Sekundär markörfärg"
 
-#: ../gtk/gtkwidget.c:3036
+#: ../gtk/gtkwidget.c:3041
 msgid "Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"
 msgstr "Färg med vilken den sekundära insättningspekaren vid redigering av blandad höger-till-vänster- och vänster-till-höger-text ritas"
 
-#: ../gtk/gtkwidget.c:3041
+#: ../gtk/gtkwidget.c:3046
 msgid "Cursor line aspect ratio"
 msgstr "Proportioner för markörrad"
 
-#: ../gtk/gtkwidget.c:3042
+#: ../gtk/gtkwidget.c:3047
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Proportioner att rita insättningsmarkören med"
 
-#: ../gtk/gtkwidget.c:3048
+#: ../gtk/gtkwidget.c:3053
 msgid "Window dragging"
 msgstr "Fönsterdragning"
 
-#: ../gtk/gtkwidget.c:3049
+#: ../gtk/gtkwidget.c:3054
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "Huruvida fönster kan dras genom att klicka på tomma ytor"
 
-#: ../gtk/gtkwidget.c:3062
+#: ../gtk/gtkwidget.c:3067
 msgid "Unvisited Link Color"
 msgstr "Inte besökt länkfärg"
 
-#: ../gtk/gtkwidget.c:3063
+#: ../gtk/gtkwidget.c:3068
 msgid "Color of unvisited links"
 msgstr "Färg på inte besökta länkar"
 
-#: ../gtk/gtkwidget.c:3076
+#: ../gtk/gtkwidget.c:3081
 msgid "Visited Link Color"
 msgstr "Besökt länkfärg"
 
-#: ../gtk/gtkwidget.c:3077
+#: ../gtk/gtkwidget.c:3082
 msgid "Color of visited links"
 msgstr "Färg på besökta länkar"
 
-#: ../gtk/gtkwidget.c:3091
+#: ../gtk/gtkwidget.c:3096
 msgid "Wide Separators"
 msgstr "Breda avgränsare"
 
-#: ../gtk/gtkwidget.c:3092
+#: ../gtk/gtkwidget.c:3097
 msgid "Whether separators have configurable width and should be drawn using a box instead of a line"
 msgstr "Huruvida avgränsare har konfigurerbar bredd och ska ritas ut med en ruta istället för en linje"
 
-#: ../gtk/gtkwidget.c:3106
+#: ../gtk/gtkwidget.c:3111
 msgid "Separator Width"
 msgstr "Avgränsarbredd"
 
-#: ../gtk/gtkwidget.c:3107
+#: ../gtk/gtkwidget.c:3112
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Bredden på avgränsare om wide-separators är TRUE"
 
-#: ../gtk/gtkwidget.c:3121
+#: ../gtk/gtkwidget.c:3126
 msgid "Separator Height"
 msgstr "Avgränsarhöjd"
 
-#: ../gtk/gtkwidget.c:3122
+#: ../gtk/gtkwidget.c:3127
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Höjden på avgränsare om \"wide-separators\" är TRUE"
 
-#: ../gtk/gtkwidget.c:3136
+#: ../gtk/gtkwidget.c:3141
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Längd på horisontell rullningspil"
 
-#: ../gtk/gtkwidget.c:3137
+#: ../gtk/gtkwidget.c:3142
 msgid "The length of horizontal scroll arrows"
 msgstr "Längden på horisonella rullningspilar"
 
-#: ../gtk/gtkwidget.c:3151
+#: ../gtk/gtkwidget.c:3156
 msgid "Vertical Scroll Arrow Length"
 msgstr "Längd på vertikal rullningspil"
 
-#: ../gtk/gtkwidget.c:3152
+#: ../gtk/gtkwidget.c:3157
 msgid "The length of vertical scroll arrows"
 msgstr "Längden på vertikala rullningspilar"
 
-#: ../gtk/gtkwindow.c:600
+#: ../gtk/gtkwindow.c:604
 msgid "Window Type"
 msgstr "Fönstertyp"
 
-#: ../gtk/gtkwindow.c:601
+#: ../gtk/gtkwindow.c:605
 msgid "The type of the window"
 msgstr "Typen av fönster"
 
-#: ../gtk/gtkwindow.c:609
+#: ../gtk/gtkwindow.c:613
 msgid "Window Title"
 msgstr "Fönstertitel"
 
-#: ../gtk/gtkwindow.c:610
+#: ../gtk/gtkwindow.c:614
 msgid "The title of the window"
 msgstr "Titeln på fönstret"
 
-#: ../gtk/gtkwindow.c:617
+#: ../gtk/gtkwindow.c:621
 msgid "Window Role"
 msgstr "Fönsterroll"
 
-#: ../gtk/gtkwindow.c:618
+#: ../gtk/gtkwindow.c:622
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Unik identifierare för fönstret som ska användas vid återställning av en session"
 
-#: ../gtk/gtkwindow.c:634
+#: ../gtk/gtkwindow.c:638
 msgid "Startup ID"
 msgstr "Uppstarts-id"
 
-#: ../gtk/gtkwindow.c:635
+#: ../gtk/gtkwindow.c:639
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Unik uppstartsidentifierare för fönstret som ska användas av startup-notification"
 
-#: ../gtk/gtkwindow.c:643
+#: ../gtk/gtkwindow.c:647
 msgid "If TRUE, users can resize the window"
 msgstr "Om SANT kan användare storleksändra fönstret"
 
-#: ../gtk/gtkwindow.c:650
+#: ../gtk/gtkwindow.c:654
 msgid "Modal"
 msgstr "Modalt"
 
-#: ../gtk/gtkwindow.c:651
+#: ../gtk/gtkwindow.c:655
 msgid "If TRUE, the window is modal (other windows are not usable while this one is up)"
 msgstr "Om SANT är fönstret modalt (andra fönster är inte användbara så länge detta fönster visas)"
 
-#: ../gtk/gtkwindow.c:658
+#: ../gtk/gtkwindow.c:662
 msgid "Window Position"
 msgstr "Fönsterposition"
 
-#: ../gtk/gtkwindow.c:659
+#: ../gtk/gtkwindow.c:663
 msgid "The initial position of the window"
 msgstr "Den första positionen på fönstret"
 
-#: ../gtk/gtkwindow.c:667
+#: ../gtk/gtkwindow.c:671
 msgid "Default Width"
 msgstr "Standardbredd"
 
-#: ../gtk/gtkwindow.c:668
+#: ../gtk/gtkwindow.c:672
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Standardbredden på fönstret, används då fönstret först visas"
 
-#: ../gtk/gtkwindow.c:677
+#: ../gtk/gtkwindow.c:681
 msgid "Default Height"
 msgstr "Standardhöjd"
 
-#: ../gtk/gtkwindow.c:678
+#: ../gtk/gtkwindow.c:682
 msgid "The default height of the window, used when initially showing the window"
 msgstr "Standardhöjden på fönstret, används då fönstret först visas"
 
-#: ../gtk/gtkwindow.c:687
+#: ../gtk/gtkwindow.c:691
 msgid "Destroy with Parent"
 msgstr "Förstör med förälder"
 
-#: ../gtk/gtkwindow.c:688
+#: ../gtk/gtkwindow.c:692
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Om detta fönster ska förstöras då dess förälder förstörs"
 
-#: ../gtk/gtkwindow.c:696
+#: ../gtk/gtkwindow.c:700
 msgid "Icon for this window"
 msgstr "Ikon för detta fönster"
 
-#: ../gtk/gtkwindow.c:702
+#: ../gtk/gtkwindow.c:706
 msgid "Mnemonics Visible"
 msgstr "Snabbtangenter synliga"
 
-#: ../gtk/gtkwindow.c:703
+#: ../gtk/gtkwindow.c:707
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Huruvida snabbtangenter visas för närvarande i detta fönster"
 
-#: ../gtk/gtkwindow.c:719
+#: ../gtk/gtkwindow.c:723
 msgid "Name of the themed icon for this window"
 msgstr "Namnet på den tematiserade ikonen för detta fönster"
 
-#: ../gtk/gtkwindow.c:734
+#: ../gtk/gtkwindow.c:738
 msgid "Is Active"
 msgstr "Är aktiv"
 
-#: ../gtk/gtkwindow.c:735
+#: ../gtk/gtkwindow.c:739
 msgid "Whether the toplevel is the current active window"
 msgstr "Huruvida toppnivån är det för tillfället aktiva fönstret"
 
-#: ../gtk/gtkwindow.c:742
+#: ../gtk/gtkwindow.c:746
 msgid "Focus in Toplevel"
 msgstr "Fokus i toppnivå"
 
-#: ../gtk/gtkwindow.c:743
+#: ../gtk/gtkwindow.c:747
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Huruvida inmatningsfokus är inom detta GtkWindow"
 
-#: ../gtk/gtkwindow.c:750
+#: ../gtk/gtkwindow.c:754
 msgid "Type hint"
 msgstr "Typtips"
 
-#: ../gtk/gtkwindow.c:751
+#: ../gtk/gtkwindow.c:755
 msgid "Hint to help the desktop environment understand what kind of window this is and how to treat it."
 msgstr "Tips för att hjälpa skrivbordmiljön förstå vad för typ av fönster detta är och hur det ska behandlas."
 
-#: ../gtk/gtkwindow.c:759
+#: ../gtk/gtkwindow.c:763
 msgid "Skip taskbar"
 msgstr "Hoppa över fönsterlista"
 
-#: ../gtk/gtkwindow.c:760
+#: ../gtk/gtkwindow.c:764
 msgid "TRUE if the window should not be in the task bar."
 msgstr "SANT om fönstret inte ska visas i fönsterlistan."
 
-#: ../gtk/gtkwindow.c:767
+#: ../gtk/gtkwindow.c:771
 msgid "Skip pager"
 msgstr "Hoppa över väljaren"
 
-#: ../gtk/gtkwindow.c:768
+#: ../gtk/gtkwindow.c:772
 msgid "TRUE if the window should not be in the pager."
 msgstr "SANT om fönstret inte ska vara i skrivbordsväljaren."
 
-#: ../gtk/gtkwindow.c:775
+#: ../gtk/gtkwindow.c:779
 msgid "Urgent"
 msgstr "Brådskande"
 
-#: ../gtk/gtkwindow.c:776
+#: ../gtk/gtkwindow.c:780
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "SANT om användaren ska göras uppmärksam på fönstret."
 
-#: ../gtk/gtkwindow.c:790
+#: ../gtk/gtkwindow.c:794
 msgid "Accept focus"
 msgstr "Acceptera fokus"
 
-#: ../gtk/gtkwindow.c:791
+#: ../gtk/gtkwindow.c:795
 msgid "TRUE if the window should receive the input focus."
 msgstr "SANT om fönstret ska få inmatningsfokus."
 
-#: ../gtk/gtkwindow.c:805
+#: ../gtk/gtkwindow.c:809
 msgid "Focus on map"
 msgstr "Fokusera vid mappning"
 
-#: ../gtk/gtkwindow.c:806
+#: ../gtk/gtkwindow.c:810
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "SANT om fönstret ska få inmatningsfokus då det mappas."
 
-#: ../gtk/gtkwindow.c:820
+#: ../gtk/gtkwindow.c:824
 msgid "Decorated"
 msgstr "Dekorerat"
 
-#: ../gtk/gtkwindow.c:821
+#: ../gtk/gtkwindow.c:825
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Huruvida fönstret ska vara dekorerat i fönsterhanteraren"
 
-#: ../gtk/gtkwindow.c:835
+#: ../gtk/gtkwindow.c:839
 msgid "Deletable"
 msgstr "Borttagningsbart"
 
-#: ../gtk/gtkwindow.c:836
+#: ../gtk/gtkwindow.c:840
 msgid "Whether the window frame should have a close button"
 msgstr "Huruvida fönsterramen ska ha en stängningsknapp"
 
-#: ../gtk/gtkwindow.c:855
-#, fuzzy
+#: ../gtk/gtkwindow.c:859
 msgid "Resize grip"
-msgstr "Har handtag för storleksändring"
+msgstr "Handtag för storleksändring"
 
-#: ../gtk/gtkwindow.c:856
-#, fuzzy
+#: ../gtk/gtkwindow.c:860
 msgid "Specifies whether the window should have a resize grip"
-msgstr "Huruvida fönsterramen ska ha en stängningsknapp"
+msgstr "Anger huruvida fönstret ska ha ett handtag för storleksändring"
 
-#: ../gtk/gtkwindow.c:870
+#: ../gtk/gtkwindow.c:874
 msgid "Resize grip is visible"
-msgstr ""
+msgstr "Handtag för storleksändring är synlig"
 
-#: ../gtk/gtkwindow.c:871
-#, fuzzy
+#: ../gtk/gtkwindow.c:875
 msgid "Specifies whether the window's resize grip is visible."
-msgstr "Huruvida åtgärdsgruppen är synlig."
+msgstr "Anger huruvida fönstrets handtag för storleksändring är synlig."
 
-#: ../gtk/gtkwindow.c:887
+#: ../gtk/gtkwindow.c:891
 msgid "Gravity"
 msgstr "Gravitet"
 
-#: ../gtk/gtkwindow.c:888
+#: ../gtk/gtkwindow.c:892
 msgid "The window gravity of the window"
 msgstr "Fönstrets fönstergravitet"
 
 # Bättre ord saknas
-#: ../gtk/gtkwindow.c:905
+#: ../gtk/gtkwindow.c:909
 msgid "Transient for Window"
 msgstr "Kortvarighet för fönster"
 
 # Bättre ord?
-#: ../gtk/gtkwindow.c:906
+#: ../gtk/gtkwindow.c:910
 msgid "The transient parent of the dialog"
 msgstr "Kortvarig förälder för dialogrutan"
 
-#: ../gtk/gtkwindow.c:921
+#: ../gtk/gtkwindow.c:925
 msgid "Opacity for Window"
 msgstr "Opakhet för fönster"
 
-#: ../gtk/gtkwindow.c:922
+#: ../gtk/gtkwindow.c:926
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Opakheten för fönstret, från 0 till 1"
 
-#: ../gtk/gtkwindow.c:932
-#: ../gtk/gtkwindow.c:933
+#: ../gtk/gtkwindow.c:936
+#: ../gtk/gtkwindow.c:937
 msgid "Width of resize grip"
-msgstr ""
+msgstr "Bredd på handtaget för storleksändring"
 
-#: ../gtk/gtkwindow.c:938
-#: ../gtk/gtkwindow.c:939
-#, fuzzy
+#: ../gtk/gtkwindow.c:942
+#: ../gtk/gtkwindow.c:943
 msgid "Height of resize grip"
-msgstr "Har handtag för storleksändring"
+msgstr "Höjd på handtaget för storleksändring"
 
-#: ../gtk/gtkwindow.c:961
+#: ../gtk/gtkwindow.c:965
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: ../gtk/gtkwindow.c:962
+#: ../gtk/gtkwindow.c:966
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication för fönstret"
 
+#~ msgid "Initial gap"
+#~ msgstr "Initialt mellanrum"
+#~ msgid "Initial gap before the first tab"
+#~ msgstr "Initialt mellanrum före första fliken"
 #~ msgid "Tab pack type"
 #~ msgstr "Flikpackningstyp"
 #~ msgid "Update policy"
