@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-30 11:27+0100\n"
-"PO-Revision-Date: 2011-01-29 12:10+0100\n"
+"PO-Revision-Date: 2011-04-04 21:20+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -792,7 +792,7 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"El color que heu escollit. Podeu arrossegar aquest color cap a una paleta i "
+"El color que heu triat. Podeu arrossegar aquest color cap a una paleta i "
 "desar-lo per utilitzar-lo més endavant."
 
 #: ../gtk/gtkcolorsel.c:1050
@@ -1164,7 +1164,7 @@ msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu elcontingut."
+"El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu el contingut."
 
 #: ../gtk/gtkfilechooserdefault.c:8068 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
@@ -2867,7 +2867,7 @@ msgstr "En_samblador d'amplada zero ZWJ"
 
 #: ../gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "_No-ensamblador d'amplada zero ZWNJ"
+msgstr "_No-assemblador d'amplada zero ZWNJ"
 
 #: ../gtk/gtkuimanager.c:1506
 #, c-format
