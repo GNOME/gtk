@@ -27,8 +27,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 01:06+0200\n"
-"PO-Revision-Date: 2011-04-03 12:14+0200\n"
+"POT-Creation-Date: 2011-04-04 21:49+0200\n"
+"PO-Revision-Date: 2011-04-04 21:29+0200\n"
 "Last-Translator: David Planella <david.planella@ubuntu.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -884,39 +884,39 @@ msgstr ""
 "Si és «TRUE» (cert), el fill apareixerà en un grup secundari de fills, "
 "adequat, p. ex., per als botons d'ajuda"
 
-#: ../gtk/gtkbox.c:239 ../gtk/gtkcellareabox.c:318 ../gtk/gtkexpander.c:311
+#: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:318 ../gtk/gtkexpander.c:311
 #: ../gtk/gtkiconview.c:645 ../gtk/gtktreeviewcolumn.c:271
 msgid "Spacing"
 msgstr "Espaiament"
 
-#: ../gtk/gtkbox.c:240
+#: ../gtk/gtkbox.c:242
 msgid "The amount of space between children"
 msgstr "La quantitat d'espai entre fills"
 
-#: ../gtk/gtkbox.c:249 ../gtk/gtktable.c:193 ../gtk/gtktoolbar.c:551
+#: ../gtk/gtkbox.c:251 ../gtk/gtktable.c:193 ../gtk/gtktoolbar.c:551
 #: ../gtk/gtktoolitemgroup.c:1649
 msgid "Homogeneous"
 msgstr "Homogeni"
 
-#: ../gtk/gtkbox.c:250
+#: ../gtk/gtkbox.c:252
 msgid "Whether the children should all be the same size"
 msgstr "Si tots els fills han de tenir la mateixa mida"
 
-#: ../gtk/gtkbox.c:270 ../gtk/gtkcellareabox.c:338 ../gtk/gtktoolbar.c:543
+#: ../gtk/gtkbox.c:272 ../gtk/gtkcellareabox.c:338 ../gtk/gtktoolbar.c:543
 #: ../gtk/gtktoolitemgroup.c:1656 ../gtk/gtktoolpalette.c:1101
 #: ../gtk/gtktreeviewcolumn.c:327
 msgid "Expand"
 msgstr "Expandeix"
 
-#: ../gtk/gtkbox.c:271
+#: ../gtk/gtkbox.c:273
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Si el fill ha de rebre espai addicional quan el pare creixi"
 
-#: ../gtk/gtkbox.c:287 ../gtk/gtktoolitemgroup.c:1663
+#: ../gtk/gtkbox.c:289 ../gtk/gtktoolitemgroup.c:1663
 msgid "Fill"
 msgstr "Omple"
 
-#: ../gtk/gtkbox.c:288
+#: ../gtk/gtkbox.c:290
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
@@ -924,19 +924,19 @@ msgstr ""
 "Si l'espai addicional del fill s'ha d'assignar al fill o s'ha d'utilitzar "
 "com a separació"
 
-#: ../gtk/gtkbox.c:295 ../gtk/gtktrayicon-x11.c:169
+#: ../gtk/gtkbox.c:297 ../gtk/gtktrayicon-x11.c:169
 msgid "Padding"
 msgstr "Separació"
 
-#: ../gtk/gtkbox.c:296
+#: ../gtk/gtkbox.c:298
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "Espai addicional per posar entre el fill i els seus veïns, en píxels"
 
-#: ../gtk/gtkbox.c:302
+#: ../gtk/gtkbox.c:304
 msgid "Pack type"
 msgstr "Tipus de paquet"
 
-#: ../gtk/gtkbox.c:303
+#: ../gtk/gtkbox.c:305
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -944,12 +944,12 @@ msgstr ""
 "Un GtkPackType que indica si el fill s'empaqueta en referència a l'inici o "
 "al final del pare"
 
-#: ../gtk/gtkbox.c:309 ../gtk/gtknotebook.c:760 ../gtk/gtkpaned.c:326
+#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:760 ../gtk/gtkpaned.c:326
 #: ../gtk/gtktoolitemgroup.c:1677
 msgid "Position"
 msgstr "Posició"
 
-#: ../gtk/gtkbox.c:310 ../gtk/gtknotebook.c:761
+#: ../gtk/gtkbox.c:312 ../gtk/gtknotebook.c:761
 msgid "The index of the child in the parent"
 msgstr "L'índex del fill en el pare"
 
@@ -989,8 +989,8 @@ msgstr "Utilitza els de recurs"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"Si s'habilita, l'etiqueta s'utilitza per escollir un element de recurs en "
-"lloc de ser mostrada"
+"Si s'habilita, l'etiqueta s'utilitza per triar un element de recurs en lloc "
+"de ser mostrada"
 
 #: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:791
 #: ../gtk/gtkfilechooserbutton.c:383
@@ -1684,22 +1684,22 @@ msgstr "Mode de paràgraf senzill"
 msgid "Whether to keep all text in a single paragraph"
 msgstr "Si s'ha de mantenir tot el text en un únic paràgraf"
 
-#: ../gtk/gtkcellrenderertext.c:288 ../gtk/gtkcellview.c:191
+#: ../gtk/gtkcellrenderertext.c:288 ../gtk/gtkcellview.c:189
 #: ../gtk/gtktexttag.c:196
 msgid "Background color name"
 msgstr "Nom del color de fons"
 
-#: ../gtk/gtkcellrenderertext.c:289 ../gtk/gtkcellview.c:192
+#: ../gtk/gtkcellrenderertext.c:289 ../gtk/gtkcellview.c:190
 #: ../gtk/gtktexttag.c:197
 msgid "Background color as a string"
 msgstr "Color de fons com a cadena"
 
-#: ../gtk/gtkcellrenderertext.c:296 ../gtk/gtkcellview.c:198
+#: ../gtk/gtkcellrenderertext.c:296 ../gtk/gtkcellview.c:196
 #: ../gtk/gtktexttag.c:204
 msgid "Background color"
 msgstr "Color de fons"
 
-#: ../gtk/gtkcellrenderertext.c:297 ../gtk/gtkcellview.c:199
+#: ../gtk/gtkcellrenderertext.c:297 ../gtk/gtkcellview.c:197
 msgid "Background color as a GdkColor"
 msgstr "Color de fons com a GdkColor"
 
@@ -1707,7 +1707,7 @@ msgstr "Color de fons com a GdkColor"
 msgid "Background color as RGBA"
 msgstr "Color RGBA de fons"
 
-#: ../gtk/gtkcellrenderertext.c:312 ../gtk/gtkcellview.c:213
+#: ../gtk/gtkcellrenderertext.c:312 ../gtk/gtkcellview.c:211
 msgid "Background color as a GdkRGBA"
 msgstr "Color de fons com a GdkRGBA"
 
@@ -1909,12 +1909,12 @@ msgstr "Alineació"
 msgid "How to align the lines"
 msgstr "Com alinear les línies"
 
-#: ../gtk/gtkcellrenderertext.c:618 ../gtk/gtkcellview.c:317
+#: ../gtk/gtkcellrenderertext.c:618 ../gtk/gtkcellview.c:315
 #: ../gtk/gtktexttag.c:558
 msgid "Background set"
 msgstr "Conjunt de fons"
 
-#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtkcellview.c:318
+#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtkcellview.c:316
 #: ../gtk/gtktexttag.c:559
 msgid "Whether this tag affects the background color"
 msgstr "Si aquest marcador afecta el color de fons"
@@ -2080,53 +2080,53 @@ msgstr "Mida de l'indicador"
 msgid "Size of check or radio indicator"
 msgstr "Mida de l'indicador de ràdio o de verificació"
 
-#: ../gtk/gtkcellview.c:212
+#: ../gtk/gtkcellview.c:210
 msgid "Background RGBA color"
 msgstr "Color RGBA de fons"
 
-#: ../gtk/gtkcellview.c:227
+#: ../gtk/gtkcellview.c:225
 msgid "CellView model"
 msgstr "Model CellView"
 
-#: ../gtk/gtkcellview.c:228
+#: ../gtk/gtkcellview.c:226
 msgid "The model for cell view"
 msgstr "El model per la vista de cel·les"
 
-#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:944
+#: ../gtk/gtkcellview.c:244 ../gtk/gtkcombobox.c:944
 #: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:770
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:415
 msgid "Cell Area"
 msgstr "Àrea de la cel·la"
 
-#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:945
+#: ../gtk/gtkcellview.c:245 ../gtk/gtkcombobox.c:945
 #: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:771
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:416
 msgid "The GtkCellArea used to layout cells"
 msgstr "La GtkCellArea utilitzada per disposar les cel·les"
 
-#: ../gtk/gtkcellview.c:270
+#: ../gtk/gtkcellview.c:268
 msgid "Cell Area Context"
 msgstr "El context de l'àrea de la cel·la"
 
-#: ../gtk/gtkcellview.c:271
+#: ../gtk/gtkcellview.c:269
 msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
 msgstr ""
 "El GtkCellAreaContext utilitzat per calcular la geometria de la "
 "visualització de la cel·la"
 
-#: ../gtk/gtkcellview.c:288
+#: ../gtk/gtkcellview.c:286
 msgid "Draw Sensitive"
 msgstr "Dibuixa en estat sensible"
 
-#: ../gtk/gtkcellview.c:289
+#: ../gtk/gtkcellview.c:287
 msgid "Whether to force cells to be drawn in a sensitive state"
 msgstr "Si s'ha de forçar les cel·les a dibuixar-se en l'estat sensible"
 
-#: ../gtk/gtkcellview.c:307
+#: ../gtk/gtkcellview.c:305
 msgid "Fit Model"
 msgstr "Model ajustat"
 
-#: ../gtk/gtkcellview.c:308
+#: ../gtk/gtkcellview.c:306
 msgid "Whether to request enough space for every row in the model"
 msgstr "Si s'ha de demanar l'espai necessari per a cada fila del model"
 
@@ -2437,27 +2437,27 @@ msgstr "Tipus d'ombra"
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "El tipus d'ombra que es dibuixarà al voltant del quadre combinat"
 
-#: ../gtk/gtkcontainer.c:456
+#: ../gtk/gtkcontainer.c:453
 msgid "Resize mode"
 msgstr "Mode de redimensiat"
 
-#: ../gtk/gtkcontainer.c:457
+#: ../gtk/gtkcontainer.c:454
 msgid "Specify how resize events are handled"
 msgstr "Especifiqueu com redimensionar les incidències gestionades"
 
-#: ../gtk/gtkcontainer.c:464
+#: ../gtk/gtkcontainer.c:461
 msgid "Border width"
 msgstr "Amplada del contorn"
 
-#: ../gtk/gtkcontainer.c:465
+#: ../gtk/gtkcontainer.c:462
 msgid "The width of the empty border outside the containers children"
 msgstr "L'amplada del contorn buit fora dels fills de l'element contenidor"
 
-#: ../gtk/gtkcontainer.c:473
+#: ../gtk/gtkcontainer.c:470
 msgid "Child"
 msgstr "Fill"
 
-#: ../gtk/gtkcontainer.c:474
+#: ../gtk/gtkcontainer.c:471
 msgid "Can be used to add a new child to the container"
 msgstr "Es pot utilitzar per afegir un nou fill a la caixa"
 
@@ -2743,7 +2743,7 @@ msgstr "GIcon per a la icona secundària"
 
 #: ../gtk/gtkentry.c:1115
 msgid "Primary storage type"
-msgstr "Tipus d'emmagatzemament primari"
+msgstr "Tipus d'emmagatzematge primari"
 
 #: ../gtk/gtkentry.c:1116
 msgid "The representation being used for primary icon"
@@ -2751,7 +2751,7 @@ msgstr "La representació utilitzada per a la icona primària"
 
 #: ../gtk/gtkentry.c:1131
 msgid "Secondary storage type"
-msgstr "Tipus d'emmagatzemament secundari"
+msgstr "Tipus d'emmagatzematge secundari"
 
 #: ../gtk/gtkentry.c:1132
 msgid "The representation being used for secondary icon"
@@ -3084,7 +3084,7 @@ msgstr "Selecció múltiple"
 
 #: ../gtk/gtkfilechooser.c:791
 msgid "Whether to allow multiple files to be selected"
-msgstr "Si s'ha permetre que fitxers múltiples siguin seleccionats"
+msgstr "Si es permet o no seleccionar diversos fitxers"
 
 #: ../gtk/gtkfilechooser.c:797
 msgid "Show Hidden"
@@ -3226,67 +3226,67 @@ msgstr "Aparença del contorn del marc"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Un giny a visualitzar en lloc del típic marc d'etiqueta"
 
-#: ../gtk/gtkgrid.c:1264 ../gtk/gtktable.c:175
+#: ../gtk/gtkgrid.c:1277 ../gtk/gtktable.c:175
 msgid "Row spacing"
 msgstr "Espaiat de files"
 
-#: ../gtk/gtkgrid.c:1265 ../gtk/gtktable.c:176
+#: ../gtk/gtkgrid.c:1278 ../gtk/gtktable.c:176
 msgid "The amount of space between two consecutive rows"
 msgstr "La quantitat d'espai entre dues files consecutives"
 
-#: ../gtk/gtkgrid.c:1271 ../gtk/gtktable.c:184
+#: ../gtk/gtkgrid.c:1284 ../gtk/gtktable.c:184
 msgid "Column spacing"
 msgstr "Espaiat de columnes"
 
-#: ../gtk/gtkgrid.c:1272 ../gtk/gtktable.c:185
+#: ../gtk/gtkgrid.c:1285 ../gtk/gtktable.c:185
 msgid "The amount of space between two consecutive columns"
 msgstr "La quantitat d'espai entre dues columnes consecutives"
 
-#: ../gtk/gtkgrid.c:1278
+#: ../gtk/gtkgrid.c:1291
 msgid "Row Homogeneous"
 msgstr "Files homogènies"
 
-#: ../gtk/gtkgrid.c:1279
+#: ../gtk/gtkgrid.c:1292
 msgid "If TRUE, the rows are all the same height"
 msgstr "Si és «TRUE» (cert) totes les files tindran la mateixa alçada"
 
-#: ../gtk/gtkgrid.c:1285
+#: ../gtk/gtkgrid.c:1298
 msgid "Column Homogeneous"
 msgstr "Columnes homogènies"
 
-#: ../gtk/gtkgrid.c:1286
+#: ../gtk/gtkgrid.c:1299
 msgid "If TRUE, the columns are all the same width"
 msgstr "Si és «TRUE» (cert) totes les columnes tindran la mateixa amplada"
 
-#: ../gtk/gtkgrid.c:1292 ../gtk/gtktable.c:201
+#: ../gtk/gtkgrid.c:1305 ../gtk/gtktable.c:201
 msgid "Left attachment"
 msgstr "Adjunt esquerre"
 
-#: ../gtk/gtkgrid.c:1293 ../gtk/gtkmenu.c:759 ../gtk/gtktable.c:202
+#: ../gtk/gtkgrid.c:1306 ../gtk/gtkmenu.c:759 ../gtk/gtktable.c:202
 msgid "The column number to attach the left side of the child to"
 msgstr "El número de columna on adjuntar la banda esquerra del fill"
 
-#: ../gtk/gtkgrid.c:1299 ../gtk/gtktable.c:215
+#: ../gtk/gtkgrid.c:1312 ../gtk/gtktable.c:215
 msgid "Top attachment"
 msgstr "Fitxer adjunt superior"
 
-#: ../gtk/gtkgrid.c:1300
+#: ../gtk/gtkgrid.c:1313
 msgid "The row number to attach the top side of a child widget to"
 msgstr "El número de la fila on adjuntar la part superior d'un giny fill"
 
-#: ../gtk/gtkgrid.c:1306 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:262
+#: ../gtk/gtkgrid.c:1319 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:262
 msgid "Width"
 msgstr "Amplada"
 
-#: ../gtk/gtkgrid.c:1307
+#: ../gtk/gtkgrid.c:1320
 msgid "The number of columns that a child spans"
 msgstr "El nombre de columnes sobre les quals s'expandeix el fill"
 
-#: ../gtk/gtkgrid.c:1313 ../gtk/gtklayout.c:669
+#: ../gtk/gtkgrid.c:1326 ../gtk/gtklayout.c:669
 msgid "Height"
 msgstr "Alçada"
 
-#: ../gtk/gtkgrid.c:1314
+#: ../gtk/gtkgrid.c:1327
 msgid "The number of rows that a child spans"
 msgstr "El nombre de files sobre les quals s'expandeix el fill"
 
@@ -3311,7 +3311,7 @@ msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
-"Costat del quadre de nanses que està alineat amb el punt per amarrar-lo"
+"Costat del quadre de nanses que està alineat amb el punt per acoblar-lo"
 
 #: ../gtk/gtkhandlebox.c:217
 msgid "Snap edge set"
@@ -4774,7 +4774,7 @@ msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
-"el valor que retorna gtk_radio_action_get_current_value() quan aquesta acció "
+"El valor que retorna gtk_radio_action_get_current_value() quan aquesta acció "
 "és l'acció activa del seu grup."
 
 #: ../gtk/gtkradioaction.c:135 ../gtk/gtkradiobutton.c:163
@@ -5001,7 +5001,7 @@ msgstr "Si s'han de mostrar els elements que apuntin a recursos no disponibles"
 
 #: ../gtk/gtkrecentchooser.c:204
 msgid "Whether to allow multiple items to be selected"
-msgstr "Si s'ha permetre que es puguin seleccionar diversos elements"
+msgstr "Si es permet o no seleccionar diversos elements"
 
 #: ../gtk/gtkrecentchooser.c:217
 msgid "Local only"
@@ -5861,7 +5861,7 @@ msgid ""
 "scrollbars, if not overridden by the scrolled window's own placement."
 msgstr ""
 "Si el contingut de les finestres amb desplaçament se situen respecte de les "
-"barra de desplaçament, si no és que se substitueix per la posició de la "
+"barres de desplaçament, si no és que se substitueix per la posició de la "
 "pròpia finestra."
 
 #: ../gtk/gtksettings.c:1222
@@ -6173,7 +6173,7 @@ msgstr "Taula de marcadors de text"
 
 #: ../gtk/gtktextbuffer.c:211
 msgid "Current text of the buffer"
-msgstr "El text actual de la memòria"
+msgstr "El text actual de la memòria intermèdia"
 
 #: ../gtk/gtktextbuffer.c:225
 msgid "Has selection"
@@ -6919,7 +6919,7 @@ msgstr "Capçaleres visibles"
 
 #: ../gtk/gtktreeview.c:999
 msgid "Show the column header buttons"
-msgstr "Mostra botons en els encapçalaments de columna"
+msgstr "Mostra els botons de la capçalera de columna"
 
 #: ../gtk/gtktreeview.c:1006
 msgid "Headers Clickable"
@@ -7017,7 +7017,7 @@ msgstr "Selecció per goma elàstica"
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr ""
-"Si s'ha permetre seleccionar diversos elements arrossegant el punter de "
+"Si es permet o no seleccionar diversos elements arrossegant el punter de "
 "ratolí"
 
 #: ../gtk/gtktreeview.c:1156
@@ -7147,7 +7147,7 @@ msgstr "Amplada actual de la columna"
 
 #: ../gtk/gtktreeviewcolumn.c:280
 msgid "Sizing"
-msgstr "Dimensionar"
+msgstr "Dimensionatge"
 
 #: ../gtk/gtktreeviewcolumn.c:281
 msgid "Resize mode of the column"
