@@ -28,8 +28,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-02 09:09+0200\n"
-"PO-Revision-Date: 2011-04-01 18:17+0200\n"
+"POT-Creation-Date: 2011-04-04 21:51+0200\n"
+"PO-Revision-Date: 2011-04-04 21:20+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -346,7 +346,7 @@ msgstr "Peça anterior"
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
-msgstr "Enregistre l'àudio"
+msgstr "Enregistra l'àudio"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
@@ -935,7 +935,7 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"El color que heu escollit. Podeu arrossegar aquest color cap a una paleta i "
+"El color que heu triat. Podeu arrossegar aquest color cap a una paleta i "
 "desar-lo per utilitzar-lo més endavant."
 
 #: ../gtk/gtkcolorsel.c:1050
@@ -1307,7 +1307,8 @@ msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu elcontingut."
+"El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu el "
+"contingut."
 
 #: ../gtk/gtkfilechooserdefault.c:8110 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
@@ -1495,12 +1496,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6247
+#: ../gtk/gtklabel.c:6245
 msgid "_Open Link"
 msgstr "Obre l'_enllaç"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6259
+#: ../gtk/gtklabel.c:6257
 msgid "Copy _Link Address"
 msgstr "Copia l'adreça de l'en_llaç"
 
@@ -3010,7 +3011,7 @@ msgstr "En_samblador d'amplada zero ZWJ"
 
 #: ../gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "_No-ensamblador d'amplada zero ZWNJ"
+msgstr "_No-assemblador d'amplada zero ZWNJ"
 
 #: ../gtk/gtkuimanager.c:1506
 #, c-format
