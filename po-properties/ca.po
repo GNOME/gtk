@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-04 01:06+0200\n"
-"PO-Revision-Date: 2011-04-03 12:14+0200\n"
+"PO-Revision-Date: 2011-04-04 21:29+0200\n"
 "Last-Translator: David Planella <david.planella@ubuntu.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -989,7 +989,7 @@ msgstr "Utilitza els de recurs"
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
-"Si s'habilita, l'etiqueta s'utilitza per escollir un element de recurs en "
+"Si s'habilita, l'etiqueta s'utilitza per triar un element de recurs en "
 "lloc de ser mostrada"
 
 #: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:791
@@ -2743,7 +2743,7 @@ msgstr "GIcon per a la icona secundària"
 
 #: ../gtk/gtkentry.c:1115
 msgid "Primary storage type"
-msgstr "Tipus d'emmagatzemament primari"
+msgstr "Tipus d'emmagatzematge primari"
 
 #: ../gtk/gtkentry.c:1116
 msgid "The representation being used for primary icon"
@@ -2751,7 +2751,7 @@ msgstr "La representació utilitzada per a la icona primària"
 
 #: ../gtk/gtkentry.c:1131
 msgid "Secondary storage type"
-msgstr "Tipus d'emmagatzemament secundari"
+msgstr "Tipus d'emmagatzematge secundari"
 
 #: ../gtk/gtkentry.c:1132
 msgid "The representation being used for secondary icon"
@@ -3084,7 +3084,7 @@ msgstr "Selecció múltiple"
 
 #: ../gtk/gtkfilechooser.c:791
 msgid "Whether to allow multiple files to be selected"
-msgstr "Si s'ha permetre que fitxers múltiples siguin seleccionats"
+msgstr "Si es permet o no seleccionar diversos fitxers"
 
 #: ../gtk/gtkfilechooser.c:797
 msgid "Show Hidden"
@@ -3311,7 +3311,7 @@ msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
-"Costat del quadre de nanses que està alineat amb el punt per amarrar-lo"
+"Costat del quadre de nanses que està alineat amb el punt per acoblar-lo"
 
 #: ../gtk/gtkhandlebox.c:217
 msgid "Snap edge set"
@@ -4774,7 +4774,7 @@ msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
-"el valor que retorna gtk_radio_action_get_current_value() quan aquesta acció "
+"El valor que retorna gtk_radio_action_get_current_value() quan aquesta acció "
 "és l'acció activa del seu grup."
 
 #: ../gtk/gtkradioaction.c:135 ../gtk/gtkradiobutton.c:163
@@ -5001,7 +5001,7 @@ msgstr "Si s'han de mostrar els elements que apuntin a recursos no disponibles"
 
 #: ../gtk/gtkrecentchooser.c:204
 msgid "Whether to allow multiple items to be selected"
-msgstr "Si s'ha permetre que es puguin seleccionar diversos elements"
+msgstr "Si es permet o no seleccionar diversos elements"
 
 #: ../gtk/gtkrecentchooser.c:217
 msgid "Local only"
@@ -5861,7 +5861,7 @@ msgid ""
 "scrollbars, if not overridden by the scrolled window's own placement."
 msgstr ""
 "Si el contingut de les finestres amb desplaçament se situen respecte de les "
-"barra de desplaçament, si no és que se substitueix per la posició de la "
+"barres de desplaçament, si no és que se substitueix per la posició de la "
 "pròpia finestra."
 
 #: ../gtk/gtksettings.c:1222
@@ -6173,7 +6173,7 @@ msgstr "Taula de marcadors de text"
 
 #: ../gtk/gtktextbuffer.c:211
 msgid "Current text of the buffer"
-msgstr "El text actual de la memòria"
+msgstr "El text actual de la memòria intermèdia"
 
 #: ../gtk/gtktextbuffer.c:225
 msgid "Has selection"
@@ -6919,7 +6919,7 @@ msgstr "Capçaleres visibles"
 
 #: ../gtk/gtktreeview.c:999
 msgid "Show the column header buttons"
-msgstr "Mostra botons en els encapçalaments de columna"
+msgstr "Mostra els botons de la capçalera de columna"
 
 #: ../gtk/gtktreeview.c:1006
 msgid "Headers Clickable"
@@ -7017,7 +7017,7 @@ msgstr "Selecció per goma elàstica"
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr ""
-"Si s'ha permetre seleccionar diversos elements arrossegant el punter de "
+"Si es permet o no seleccionar diversos elements arrossegant el punter de "
 "ratolí"
 
 #: ../gtk/gtktreeview.c:1156
@@ -7147,7 +7147,7 @@ msgstr "Amplada actual de la columna"
 
 #: ../gtk/gtktreeviewcolumn.c:280
 msgid "Sizing"
-msgstr "Dimensionar"
+msgstr "Dimensionatge"
 
 #: ../gtk/gtktreeviewcolumn.c:281
 msgid "Resize mode of the column"
