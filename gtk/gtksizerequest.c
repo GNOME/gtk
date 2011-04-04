@@ -143,7 +143,8 @@ init_cache (GtkWidget        *widget)
 
   if (_gtk_widget_get_width_request_needed (widget))
     clear_cache (cache, GTK_SIZE_GROUP_HORIZONTAL);
-  else if (_gtk_widget_get_height_request_needed (widget))
+  
+  if (_gtk_widget_get_height_request_needed (widget))
     clear_cache (cache, GTK_SIZE_GROUP_VERTICAL);
 
   return cache;
