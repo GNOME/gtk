@@ -92,7 +92,7 @@ var surfaces = {};
 var outstandingCommands = new Array();
 var inputSocket = null;
 
-function initContext(canvas, x, y, id)
+function initContext(canvas, x, y, id, isTemp)
 {
     canvas.surfaceId = id;
     canvas.style["position"] = "absolute";
@@ -103,6 +103,7 @@ function initContext(canvas, x, y, id)
     context.globalCompositeOperation = "source-over";
     document.body.appendChild(canvas);
     context.drawQueue = [];
+    context.isTemp = isTemp;
     context.transientParent = 0;
 
     return context;
@@ -223,10 +224,12 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    var h = base64_16(cmd, i);
 	    i = i + 3;
+	    var isTemp = cmd[i] == '1';
+	    i = i + 1;
 	    var surface = document.createElement("canvas");
 	    surface.width = w;
 	    surface.height = h;
-	    surfaces[id] = initContext(surface, x, y, id);
+	    surfaces[id] = initContext(surface, x, y, id, isTemp);
 	    break;
 
 	case 'S': // Show a surface

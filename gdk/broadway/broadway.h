@@ -18,7 +18,8 @@ void            broadway_output_new_surface     (BroadwayOutput *output,
 						 int             x,
 						 int             y,
 						 int             w,
-						 int             h);
+						 int             h,
+						 gboolean        is_temp);
 void            broadway_output_show_surface    (BroadwayOutput *output,
 						 int             id);
 void            broadway_output_hide_surface    (BroadwayOutput *output,

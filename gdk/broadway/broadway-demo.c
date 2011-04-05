@@ -146,7 +146,7 @@ demo2 (BroadwayOutput *output)
   double da = 0;
   int i;
 
-  broadway_output_new_surface(output,  0, 100, 100, 800, 600);
+  broadway_output_new_surface(output,  0, 100, 100, 800, 600, 0);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					800, 600);

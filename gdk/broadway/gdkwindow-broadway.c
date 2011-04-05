@@ -225,7 +225,8 @@ _gdk_broadway_resync_windows (void)
 				   window->x,
 				   window->y,
 				   window->width,
-				   window->height);
+				   window->height,
+				   window->window_type == GDK_WINDOW_TEMP);
       if (GDK_WINDOW_IS_MAPPED (window))
 	{
 	  broadway_output_show_surface (display->output, impl->id);
@@ -363,7 +364,8 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 				 window->x,
 				 window->y,
 				 window->width,
-				 window->height);
+				 window->height,
+				 window->window_type == GDK_WINDOW_TEMP);
 }
 
 static void

@@ -18,14 +18,12 @@
 static const char base64_alphabet[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-#if 0
 static void
 base64_uint8 (guint8 v, char *c)
 {
   c[0] = base64_alphabet[(v >> 0) & 0x3f];
   c[1] = base64_alphabet[(v >> 6) & 0x3];
 }
-#endif
 
 static void
 base64_uint16 (guint32 v, char *c)
@@ -685,9 +683,11 @@ broadway_output_ungrab_pointer (BroadwayOutput *output)
 }
 
 void
-broadway_output_new_surface(BroadwayOutput *output,  int id, int x, int y, int w, int h)
+broadway_output_new_surface(BroadwayOutput *output,
+			    int id, int x, int y, int w, int h,
+			    gboolean is_temp)
 {
-  char buf[HEADER_LEN + 15];
+  char buf[HEADER_LEN + 16];
   int p;
 
   p = write_header (output, buf, 's');
@@ -696,6 +696,7 @@ broadway_output_new_surface(BroadwayOutput *output,  int id, int x, int y, int w
   append_uint16 (y, buf, &p);
   append_uint16 (w, buf, &p);
   append_uint16 (h, buf, &p);
+  buf[p++] = is_temp ? '1' : '0';
 
   assert (p == sizeof (buf));
 
