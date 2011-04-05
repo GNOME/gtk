@@ -10873,13 +10873,18 @@ current_selection_unselect_all (GtkFileChooserDefault *impl)
 static void
 current_view_set_file_model (GtkFileChooserDefault *impl, GtkTreeModel *model)
 {
+  GtkWidget *view;
+
   impl->current_model = model;
+
   if (impl->view_mode == VIEW_MODE_LIST)
-    gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), model);
+    view = impl->browse_files_tree_view;
   else if (impl->view_mode == VIEW_MODE_ICON)
-    gtk_icon_view_set_model (GTK_ICON_VIEW (impl->browse_files_icon_view), model);
+    view = impl->browse_files_icon_view;
   else
     g_assert_not_reached ();
+
+  g_object_set (view, "model", impl->current_model, NULL);
 }
 
 static void
