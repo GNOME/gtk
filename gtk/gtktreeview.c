@@ -6631,6 +6631,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   GTimer *timer;
   gint i = 0;
 
+  gint y = -1;
   gint prev_height = -1;
   gboolean fixed_height = TRUE;
 
@@ -6652,6 +6653,8 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 
   do
     {
+      gboolean changed = FALSE;
+
       if (! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
 	{
 	  retval = FALSE;
@@ -6711,8 +6714,16 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	}
 
-      validated_area = validate_row (tree_view, tree, node, &iter, path) ||
-                       validated_area;
+      changed = validate_row (tree_view, tree, node, &iter, path);
+      validated_area = changed || validated_area;
+
+      if (changed)
+        {
+          gint offset = gtk_tree_view_get_row_y_offset (tree_view, tree, node);
+
+          if (y == -1 || y > offset)
+            y = offset;
+        }
 
       if (!tree_view->priv->fixed_height_check)
         {
@@ -6757,6 +6768,12 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
        * untill we've recieved an allocation (never update scroll adjustments from size-requests).
        */
       gtk_tree_view_size_request (GTK_WIDGET (tree_view), &requisition, FALSE);
+
+      /* If rows above the current position have changed height, this has
+       * affected the current view and thus needs a redraw.
+       */
+      if (y != -1 && y < gtk_adjustment_get_value (tree_view->priv->vadjustment))
+        gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
       gtk_adjustment_set_upper (tree_view->priv->hadjustment,
                                 MAX (gtk_adjustment_get_upper (tree_view->priv->hadjustment), requisition.width));
