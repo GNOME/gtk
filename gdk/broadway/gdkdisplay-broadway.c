@@ -375,6 +375,21 @@ _gdk_broadway_display_read_all_input_nonblocking (GdkDisplay *display)
   parse_input (input);
 }
 
+void
+_gdk_broadway_display_consume_all_input (GdkDisplay *display)
+{
+  GdkBroadwayDisplay *broadway_display;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  _gdk_broadway_display_read_all_input_nonblocking (display);
+
+  /* Since we're parsing input but not processing the resulting messages
+     we might not get a readable callback on the stream, so queue an idle to
+     process the messages */
+  queue_process_input_at_idle (broadway_display);
+}
+
+
 static gboolean
 input_data_cb (GObject  *stream,
 	       BroadwayInput *input)
