@@ -103,6 +103,7 @@ function initContext(canvas, x, y, id)
     context.globalCompositeOperation = "source-over";
     document.body.appendChild(canvas);
     context.drawQueue = [];
+    context.transientParent = 0;
 
     return context;
 }
@@ -239,6 +240,13 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    surfaces[id].canvas.style["display"] = "none";
 	    break;
+
+	case 'p': // Set transient parent
+	    var id = base64_16(cmd, i);
+	    i = i + 3;
+	    var parentId = base64_16(cmd, i);
+	    i = i + 3;
+	    surfaces[id].transientParent = parentId;
 
 	case 'd': // Delete surface
 	    var id = base64_16(cmd, i);

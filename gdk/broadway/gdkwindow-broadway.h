@@ -60,6 +60,8 @@ struct _GdkWindowImplBroadway
 
   int id;
 
+  int transient_for;
+
   gint8 toplevel_window_type;
   gboolean dirty;
   gboolean last_synced;

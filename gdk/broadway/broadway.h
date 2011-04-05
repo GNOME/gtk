@@ -33,6 +33,9 @@ void            broadway_output_resize_surface  (BroadwayOutput *output,
 						 int             id,
 						 int             w,
 						 int             h);
+void            broadway_output_set_transient_for (BroadwayOutput *output,
+						   int             id,
+						   int             parent_id);
 void            broadway_output_put_rgb         (BroadwayOutput *output,
 						 int             id,
 						 int             x,

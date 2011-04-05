@@ -779,6 +779,25 @@ broadway_output_resize_surface(BroadwayOutput *output,  int id, int w, int h)
 }
 
 void
+broadway_output_set_transient_for (BroadwayOutput *output,
+				   int             id,
+				   int             parent_id)
+{
+  char buf[HEADER_LEN + 6];
+  int p;
+
+  p = write_header (output, buf, 'p');
+
+  append_uint16 (id, buf, &p);
+  append_uint16 (parent_id, buf, &p);
+
+  assert (p == sizeof (buf));
+
+  broadway_output_write (output, buf, sizeof (buf));
+}
+
+
+void
 broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {

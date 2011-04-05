@@ -231,6 +231,10 @@ _gdk_broadway_resync_windows (void)
 	  broadway_output_show_surface (display->output, impl->id);
 	  window_data_send (display->output, impl);
 	}
+      if (impl->transient_for)
+	{
+	  broadway_output_set_transient_for (display->output, impl->id, impl->transient_for);
+	}
     }
 
   gdk_display_flush (GDK_DISPLAY (display));
@@ -764,6 +768,24 @@ static void
 gdk_broadway_window_set_transient_for (GdkWindow *window,
 				       GdkWindow *parent)
 {
+  GdkBroadwayDisplay *display;
+  GdkWindowImplBroadway *impl;
+  int parent_id;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+  parent_id = 0;
+  if (parent)
+    parent_id = GDK_WINDOW_IMPL_BROADWAY (parent->impl)->id;
+
+  impl->transient_for = parent_id;
+
+  display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (impl->wrapper));
+  if (display->output)
+    {
+      broadway_output_set_transient_for (display->output, impl->id, impl->transient_for);
+      gdk_display_flush (GDK_DISPLAY (display));
+    }
 }
 
 static void
