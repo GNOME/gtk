@@ -2489,63 +2489,6 @@ gtk_tree_view_calculate_width_before_expander (GtkTreeView *tree_view)
   return width;
 }
 
-static void
-invalidate_column (GtkTreeView       *tree_view,
-                   GtkTreeViewColumn *column)
-{
-  gint column_offset = 0;
-  GList *list;
-  GtkWidget *widget = GTK_WIDGET (tree_view);
-  gboolean rtl;
-
-  if (!gtk_widget_get_realized (widget))
-    return;
-
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
-  for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
-       list;
-       list = (rtl ? list->prev : list->next))
-    {
-      GtkTreeViewColumn *tmpcolumn = list->data;
-      if (tmpcolumn == column)
-	{
-          GtkAllocation allocation;
-	  GdkRectangle invalid_rect;
-
-          gtk_widget_get_allocation (widget, &allocation);
-	  invalid_rect.x = column_offset;
-	  invalid_rect.y = 0;
-	  invalid_rect.width = gtk_tree_view_column_get_width (column);
-	  invalid_rect.height = allocation.height;
-
-	  gdk_window_invalidate_rect (gtk_widget_get_window (widget), &invalid_rect, TRUE);
-	  break;
-	}
-
-      column_offset += gtk_tree_view_column_get_width (tmpcolumn);
-    }
-}
-
-static void
-invalidate_last_column (GtkTreeView *tree_view)
-{
-  GList *last_column;
-  gboolean rtl;
-
-  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
-
-  for (last_column = (rtl ? g_list_first (tree_view->priv->columns) : g_list_last (tree_view->priv->columns));
-       last_column;
-       last_column = (rtl ? last_column->next : last_column->prev))
-    {
-      if (gtk_tree_view_column_get_visible (GTK_TREE_VIEW_COLUMN (last_column->data)))
-        {
-          invalidate_column (tree_view, last_column->data);
-          return;
-        }
-    }
-}
-
 /* GtkWidget::size_allocate helper */
 static void
 gtk_tree_view_size_allocate_columns (GtkWidget *widget,
@@ -2559,7 +2502,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   gint extra, extra_per_column, extra_for_last;
   gint full_requested_width = 0;
   gint number_of_expand_columns = 0;
-  gboolean column_changed = FALSE;
   gboolean rtl;
   gboolean update_expand;
   
@@ -2694,20 +2636,18 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       _gtk_tree_view_column_allocate (column, width, column_width);
 
       width += column_width;
-
-      if (column_width > old_width)
-        column_changed = TRUE;
     }
 
   /* We change the width here.  The user might have been resizing columns,
-   * so the total width of the tree view changes.
+   * which changes the total width of the tree view.  This is of
+   * importance for getting the horizontal scroll bar right.
    */
-  tree_view->priv->width = width;
-  if (width_changed)
-    *width_changed = TRUE;
-
-  if (column_changed)
-    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+  if (tree_view->priv->width != width)
+    {
+      tree_view->priv->width = width;
+      if (width_changed)
+        *width_changed = TRUE;
+    }
 }
 
 
@@ -2874,16 +2814,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
           tree_view->priv->prev_width_before_expander = width_before_expander;
         }
-
-      /* This little hack only works if we have an LTR locale, and no column has the  */
-      if (width_changed)
-	{
-	  if (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_LTR &&
-	      ! has_expand_column)
-	    invalidate_last_column (tree_view);
-	  else
-	    gtk_widget_queue_draw (widget);
-	}
     }
 }
 

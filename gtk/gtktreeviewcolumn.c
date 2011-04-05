@@ -2110,6 +2110,9 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 
   priv = tree_column->priv;
 
+  if (priv->width != width)
+    gtk_widget_queue_draw (priv->tree_view);
+
   priv->width = width;
 
   gtk_cell_area_context_allocate (priv->cell_area_context, priv->width - priv->padding, -1);
