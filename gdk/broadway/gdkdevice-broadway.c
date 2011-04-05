@@ -155,10 +155,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
-  GdkWindowImplBroadway *impl;
-  guint32 serial;
   GdkScreen *screen;
-  BroadwayInputMsg *reply;
   gint device_root_x, device_root_y;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
@@ -178,32 +175,27 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 
   if (broadway_display->output)
     {
-      impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+      _gdk_broadway_display_consume_all_input (display);
 
-      serial = broadway_output_query_pointer (broadway_display->output, impl->id);
-
-      reply = _gdk_broadway_display_block_for_input (display, 'q', serial, TRUE);
-
-      if (reply != NULL)
+      if (root_x)
+	*root_x = broadway_display->future_root_x;
+      if (root_y)
+	*root_y = broadway_display->future_root_y;
+      /* TODO: Should really use future_x/y when we get configure events */
+      if (win_x)
+	*win_x = broadway_display->future_root_x - window->x;
+      if (win_y)
+	*win_y = broadway_display->future_root_y - window->y;
+      if (child_window)
 	{
-	  if (root_x)
-	    *root_x = reply->query_reply.root_x;
-	  if (root_y)
-	    *root_y = reply->query_reply.root_y;
-	  if (win_x)
-	    *win_x = reply->query_reply.win_x;
-	  if (win_y)
-	    *win_y = reply->query_reply.win_y;
-	  if (child_window)
-	    {
-	      if (gdk_window_get_window_type (window) == GDK_WINDOW_ROOT)
-		*child_window = g_hash_table_lookup (broadway_display->id_ht, GINT_TO_POINTER (reply->query_reply.window_with_mouse));
-	      else
-		*child_window = window; /* No native children */
-	    }
-	  g_free (reply);
-	  return TRUE;
+	  if (gdk_window_get_window_type (window) == GDK_WINDOW_ROOT)
+	    *child_window =
+	      g_hash_table_lookup (broadway_display->id_ht,
+				   GINT_TO_POINTER (broadway_display->future_mouse_in_toplevel));
+	  else
+	    *child_window = window; /* No native children */
 	}
+      return TRUE;
     }
 
   /* Fallback when unconnected */
