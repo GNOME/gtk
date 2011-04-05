@@ -7027,16 +7027,34 @@ file_system_model_set (GtkFileSystemModel *model,
     case MODEL_COL_ICON_PIXBUF:
       if (info)
         {
+          GtkTreeModel *tree_model;
+          GtkTreePath *path, *start, *end;
+          GtkTreeIter iter;
+	  gboolean file_visible;
+
           /* not loading icon view's icon in the list view */
           if (column == MODEL_COL_ICON_PIXBUF && impl->view_mode == VIEW_MODE_LIST)
             return FALSE;
 
-          GtkTreeModel *tree_model;
-          GtkTreePath *path, *start, *end;
-          GtkTreeIter iter;
-
           tree_model = impl->current_model;
           if (tree_model != GTK_TREE_MODEL (model))
+            return FALSE;
+
+          /* #1 use standard icon if it is loaded */
+          if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
+            {
+	      gint icon_size;
+
+              if (column == MODEL_COL_ICON_PIXBUF)
+                icon_size = impl->icon_icon_size;
+	      else
+		icon_size = impl->list_icon_size;
+
+              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), icon_size));
+              return TRUE;
+            }
+
+          if (!get_visible_range (&start, &end, impl))
             return FALSE;
 
           if (!_gtk_file_system_model_get_iter_for_file (model,
@@ -7044,21 +7062,10 @@ file_system_model_set (GtkFileSystemModel *model,
                                                          file))
             g_assert_not_reached ();
 
-          /* #1 use standard icon if it is loaded */
-          if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
-            {
-              gint icon_size = impl->list_icon_size;
-              if (column == MODEL_COL_ICON_PIXBUF)
-                icon_size = impl->icon_icon_size;
-              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), icon_size));
-              return TRUE;
-            }
-
-          if (!get_visible_range (&start, &end, impl))
-            return FALSE;
           path = gtk_tree_model_get_path (tree_model, &iter);
-          gboolean file_visible = (gtk_tree_path_compare (start, path) != 1 &&
-                                   gtk_tree_path_compare (path, end) != 1);
+          file_visible = (gtk_tree_path_compare (start, path) != 1 &&
+			  gtk_tree_path_compare (path, end) != 1);
+
           gtk_tree_path_free (path);
           gtk_tree_path_free (start);
           gtk_tree_path_free (end);
