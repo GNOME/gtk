@@ -4579,7 +4579,6 @@ gtk_combo_box_constructor (GType                  type,
   GObject            *object;
   GtkComboBox        *combo_box;
   GtkComboBoxPrivate *priv;
-  GtkStyleContext    *context;
 
   object = G_OBJECT_CLASS (gtk_combo_box_parent_class)->constructor
     (type, n_construct_properties, construct_properties);
@@ -4601,9 +4600,6 @@ gtk_combo_box_constructor (GType                  type,
   gtk_widget_show (priv->cell_view);
 
   gtk_combo_box_check_appearance (combo_box);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (combo_box));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
 
   if (priv->has_entry)
     {
