@@ -4877,12 +4877,14 @@ view_mode_combo_box_changed_cb (GtkComboBox *combo,
       create_browse_files_icon_view (impl);
       impl->browse_files_current_view = impl->browse_files_icon_view;
       old_view = impl->browse_files_tree_view;
+      impl->browse_files_tree_view = NULL;
     }
   else if (target == VIEW_MODE_LIST)
     {
       create_browse_files_tree_view (impl);
       impl->browse_files_current_view = impl->browse_files_tree_view;
       old_view = impl->browse_files_icon_view;
+      impl->browse_files_icon_view = NULL;
     }
   else
     g_assert_not_reached ();
@@ -6485,10 +6487,15 @@ load_set_model (GtkFileChooserDefault *impl)
 
   profile_msg ("    gtk_tree_view_set_model start", NULL);
   current_view_set_file_model (impl, GTK_TREE_MODEL (impl->browse_files_model));
-  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view),
-				   MODEL_COL_NAME);
-  file_list_set_sort_column_ids (impl);
+
+  if (impl->view_mode == VIEW_MODE_LIST)
+    {
+      gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
+      gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view),
+				       MODEL_COL_NAME);
+      file_list_set_sort_column_ids (impl);
+    }
+
   set_sort_column (impl);
   profile_msg ("    gtk_tree_view_set_model end", NULL);
   impl->list_sort_ascending = TRUE;
