@@ -1398,12 +1398,15 @@ gtk_button_get_props (GtkButton *button,
 		      GtkBorder *default_border,
 		      GtkBorder *default_outside_border,
                       GtkBorder *inner_border,
+                      GtkBorder *padding,
 		      gboolean  *interior_focus)
 {
   GtkStyleContext *context;
+  GtkStateFlags state;
   GtkBorder *tmp_border;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  state = gtk_style_context_get_state (context);
 
   if (default_border)
     {
@@ -1456,6 +1459,9 @@ gtk_button_get_props (GtkButton *button,
                                    "interior-focus", interior_focus,
                                    NULL);
     }
+
+  if (padding)
+    gtk_style_context_get_padding (context, state, padding);
 }
 
 static void
