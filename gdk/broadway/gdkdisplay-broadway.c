@@ -186,6 +186,14 @@ parse_pointer_data (char *p, BroadwayInputPointerMsg *data)
 }
 
 static void
+update_future_pointer_info (GdkBroadwayDisplay *broadway_display, BroadwayInputPointerMsg *data)
+{
+  broadway_display->future_root_x = data->root_x;
+  broadway_display->future_root_y = data->root_y;
+  broadway_display->future_mouse_in_toplevel = data->mouse_window_id;
+}
+
+static void
 parse_input_message (BroadwayInput *input, const char *message)
 {
   GdkBroadwayDisplay *broadway_display;
@@ -205,23 +213,27 @@ parse_input_message (BroadwayInput *input, const char *message)
   case 'e': /* Enter */
   case 'l': /* Leave */
     p = parse_pointer_data (p, &msg.pointer);
+    update_future_pointer_info (broadway_display, &msg.pointer);
     p++; /* Skip , */
     msg.crossing.mode = strtol(p, &p, 10);
     break;
 
   case 'm': /* Mouse move */
     p = parse_pointer_data (p, &msg.pointer);
+    update_future_pointer_info (broadway_display, &msg.pointer);
     break;
 
   case 'b':
   case 'B':
     p = parse_pointer_data (p, &msg.pointer);
+    update_future_pointer_info (broadway_display, &msg.pointer);
     p++; /* Skip , */
     msg.button.button = strtol(p, &p, 10);
     break;
 
   case 's':
     p = parse_pointer_data (p, &msg.pointer);
+    update_future_pointer_info (broadway_display, &msg.pointer);
     p++; /* Skip , */
     msg.scroll.dir = strtol(p, &p, 10);
     break;

@@ -155,6 +155,11 @@ struct _GdkBroadwayDisplay
   GdkWindow *pointer_grab_window;
   guint32 pointer_grab_time;
   gboolean pointer_grab_owner_events;
+
+  /* Future data, from the currently queued events */
+  int future_root_x;
+  int future_root_y;
+  int future_mouse_in_toplevel;
 };
 
 struct _GdkBroadwayDisplayClass
