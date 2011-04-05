@@ -348,15 +348,6 @@ function handleCommands(cmdObj)
 	    flushSurface(surfaces[id]);
 	    break;
 
-	case 'q': // Query pointer
-	    var id = base64_16(cmd, i);
-	    i = i + 3;
-
-	    var pos = getPositionsFromAbsCoord(lastX, lastY, id);
-
-	    sendInput ("q", [pos.rootX, pos.rootY, pos.winX, pos.winY, windowWithMouse]);
-	    break;
-
 	case 'g': // Grab
 	    var id = base64_16(cmd, i);
 	    i = i + 3;

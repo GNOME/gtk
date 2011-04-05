@@ -248,18 +248,6 @@ parse_input_message (BroadwayInput *input, const char *message)
     msg.grab_reply.res = strtol(p, &p, 10);
     break;
 
-  case 'q':
-    msg.query_reply.root_x = strtol(p, &p, 10);
-    p++; /* Skip , */
-    msg.query_reply.root_y = strtol(p, &p, 10);
-    p++; /* Skip , */
-    msg.query_reply.win_x = strtol(p, &p, 10);
-    p++; /* Skip , */
-    msg.query_reply.win_y = strtol(p, &p, 10);
-    p++; /* Skip , */
-    msg.query_reply.window_with_mouse = strtol(p, &p, 10);
-
-    break;
   default:
     g_printerr ("Unknown input command %s\n", message);
     break;
