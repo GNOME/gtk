@@ -304,12 +304,21 @@ parse_input (BroadwayInput *input)
 static gboolean
 process_input_idle_cb (GdkBroadwayDisplay *display)
 {
+  display->process_input_idle = 0;
   process_input_messages (display);
   return FALSE;
 }
 
 static void
-_gdk_broadway_display_read_all_input_nonblocking (GdkDisplay *display )
+queue_process_input_at_idle (GdkBroadwayDisplay *broadway_display)
+{
+  if (broadway_display->process_input_idle == 0)
+    broadway_display->process_input_idle =
+      g_idle_add_full (GDK_PRIORITY_EVENTS, (GSourceFunc)process_input_idle_cb, broadway_display, NULL);
+}
+
+static void
+_gdk_broadway_display_read_all_input_nonblocking (GdkDisplay *display)
 {
   GdkBroadwayDisplay *broadway_display;
   GInputStream *in;
@@ -375,14 +384,11 @@ _gdk_broadway_display_block_for_input (GdkDisplay *display, char op,
 {
   GdkBroadwayDisplay *broadway_display;
   BroadwayInputMsg *message;
-  gboolean queued_idle;
   gssize res;
   guint8 buffer[1024];
   BroadwayInput *input;
   GInputStream *in;
   GList *l;
-
-  queued_idle = FALSE;
 
   gdk_display_flush (display);
 
@@ -424,11 +430,7 @@ _gdk_broadway_display_block_for_input (GdkDisplay *display, char op,
     /* Since we're parsing input but not processing the resulting messages
        we might not get a readable callback on the stream, so queue an idle to
        process the messages */
-    if (!queued_idle)
-      {
-	queued_idle = TRUE;
-	g_idle_add_full (G_PRIORITY_DEFAULT, (GSourceFunc)process_input_idle_cb, display, NULL);
-      }
+    queue_process_input_at_idle (broadway_display);
   }
 }
 
