@@ -252,8 +252,8 @@ typedef enum {
 } ShortcutsIndex;
 
 /* Icon size for if we can't get it from the theme */
-#define FALLBACK_LIST_ICON_SIZE 16
-#define FALLBACK_ICON_ICON_SIZE 48
+#define FALLBACK_LIST_VIEW_ICON_SIZE 16
+#define FALLBACK_ICON_VIEW_ICON_SIZE 48
 
 #define THUMBNAIL_ICON_SIZE 100
 #define ICON_VIEW_ITEM_WIDTH 120
@@ -770,8 +770,8 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
   impl->show_size_column = TRUE;
-  impl->list_icon_size = FALLBACK_LIST_ICON_SIZE;
-  impl->icon_icon_size = FALLBACK_ICON_ICON_SIZE;
+  impl->list_icon_size = FALLBACK_LIST_VIEW_ICON_SIZE;
+  impl->icon_icon_size = FALLBACK_ICON_VIEW_ICON_SIZE;
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
   impl->pending_select_files = NULL;
@@ -6027,12 +6027,12 @@ change_icon_theme (GtkFileChooserDefault *impl)
   if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
     impl->list_icon_size = MAX (width, height);
   else
-    impl->list_icon_size = FALLBACK_LIST_ICON_SIZE;
+    impl->list_icon_size = FALLBACK_LIST_VIEW_ICON_SIZE;
 
   if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_DIALOG, &width, &height))
     impl->icon_icon_size = MAX (width, height);
   else
-    impl->icon_icon_size = FALLBACK_ICON_ICON_SIZE;
+    impl->icon_icon_size = FALLBACK_ICON_VIEW_ICON_SIZE;
 
   shortcuts_reload_icons (impl);
   /* the first cell in the first column is the icon column, and we have a fixed size there */
