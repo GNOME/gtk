@@ -1039,11 +1039,13 @@ selector_style_info_set_style (SelectorStyleInfo *info,
 }
 
 static GScanner *
-create_scanner (void)
+gtk_css_provider_create_scanner (GtkCssProvider *provider)
 {
   GScanner *scanner;
 
   scanner = g_scanner_new (NULL);
+
+  scanner->user_data = provider;
 
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "active", GUINT_TO_POINTER (GTK_STATE_ACTIVE));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "prelight", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
@@ -1079,7 +1081,7 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
                                                            GtkCssProviderPrivate);
 
   priv->selectors_info = g_ptr_array_new_with_free_func ((GDestroyNotify) selector_style_info_free);
-  priv->scanner = create_scanner ();
+  priv->scanner = gtk_css_provider_create_scanner (css_provider);
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
@@ -3284,7 +3286,7 @@ parse_rule (GtkCssProvider  *css_provider,
           scanner_backup = priv->scanner;
 
           priv->state = NULL;
-          priv->scanner = create_scanner ();
+          priv->scanner = gtk_css_provider_create_scanner (css_provider);
 
           /* FIXME: Avoid recursive importing */
           loaded = gtk_css_provider_load_from_path_internal (css_provider, path,
