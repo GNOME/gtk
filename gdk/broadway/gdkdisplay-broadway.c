@@ -168,7 +168,9 @@ process_input_messages (GdkBroadwayDisplay *broadway_display)
 static char *
 parse_pointer_data (char *p, BroadwayInputPointerMsg *data)
 {
-  data->id = strtol (p, &p, 10);
+  data->mouse_window_id = strtol (p, &p, 10);
+  p++; /* Skip , */
+  data->event_window_id = strtol (p, &p, 10);
   p++; /* Skip , */
   data->root_x = strtol (p, &p, 10);
   p++; /* Skip , */

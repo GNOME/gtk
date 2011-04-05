@@ -106,8 +106,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'e': /* Enter */
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->real_mouse_in_toplevel =
+      g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
 
     /* TODO: Unset when it dies */
     display_broadway->mouse_in_toplevel = window;
@@ -140,8 +142,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'l': /* Leave */
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->real_mouse_in_toplevel =
+      g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
 
     display_broadway->mouse_in_toplevel = NULL;
     if (window)
@@ -173,8 +177,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'm': /* Mouse move */
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->real_mouse_in_toplevel =
+      g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
       {
 	event = gdk_event_new (GDK_MOTION_NOTIFY);
@@ -196,8 +202,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'B':
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->real_mouse_in_toplevel =
+      g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
       {
 	event = gdk_event_new (message->base.type == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
@@ -219,8 +227,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 's':
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->real_mouse_in_toplevel =
+      g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
       {
 	event = gdk_event_new (GDK_SCROLL);

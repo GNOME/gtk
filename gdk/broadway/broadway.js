@@ -482,7 +482,7 @@ function onMouseMove (ev) {
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    sendInput ("m", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    sendInput ("m", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
 }
 
 function onMouseOver (ev) {
@@ -493,7 +493,7 @@ function onMouseOver (ev) {
     var pos = getPositionsFromEvent(ev, id);
     windowWithMouse = id;
     if (windowWithMouse != 0) {
-	sendInput ("e", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+	sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
 }
 
@@ -505,7 +505,7 @@ function onMouseOut (ev) {
     var pos = getPositionsFromEvent(ev, id);
 
     if (id != 0) {
-	sendInput ("l", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+	sendInput ("l", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
     realWindowWithMouse = 0;
     windowWithMouse = 0;
@@ -517,10 +517,10 @@ function doGrab(id, ownerEvents, time, implicit) {
     if (windowWithMouse != id) {
 	if (windowWithMouse != 0) {
 	    pos = getPositionsFromAbsCoord(lastX, lastY, windowWithMouse);
-	    sendInput ("l", [windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+	    sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
 	}
 	pos = getPositionsFromAbsCoord(lastX, lastY, id);
-	sendInput ("e", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+	sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
 	windowWithMouse = id;
     }
 
@@ -535,11 +535,11 @@ function doUngrab(time) {
     if (realWindowWithMouse != windowWithMouse) {
 	if (windowWithMouse != 0) {
 	    pos = getPositionsFromAbsCoord(lastX, lastY, windowWithMouse);
-	    sendInput ("l", [windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+	    sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
 	}
 	if (realWindowWithMouse != 0) {
 	    pos = getPositionsFromAbsCoord(lastX, lastY, realWindowWithMouse);
-	    sendInput ("e", [realWindowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+	    sendInput ("e", [realWindowWithMouse, realWindowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
 	}
 	windowWithMouse = realWindowWithMouse;
     }
@@ -555,7 +555,7 @@ function onMouseDown (ev) {
 	doGrab (id, false, ev.timeStamp, true);
     var button = ev.button + 1;
     lastState = lastState | getButtonMask (button);
-    sendInput ("b", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput ("b", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 }
 
 function onMouseUp (ev) {
@@ -565,7 +565,7 @@ function onMouseUp (ev) {
     var pos = getPositionsFromEvent(ev, id);
     var button = ev.button + 1;
     lastState = lastState & ~getButtonMask (button);
-    sendInput ("B", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput ("B", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
     if (grab.window != null && grab.implicit)
 	doUngrab(ev.timeStamp);
@@ -613,7 +613,7 @@ function onMouseWheel(ev)
     var dir = 0;
     if (offset > 0)
 	dir = 1;
-    sendInput ("s", [id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
+    sendInput ("s", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
 
     return cancelEvent(ev);
 }

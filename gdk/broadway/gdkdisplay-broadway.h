@@ -53,7 +53,8 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
-  guint32 id;
+  guint32 mouse_window_id; /* The real window, not taking grabs into account */
+  guint32 event_window_id;
   int root_x;
   int root_y;
   int win_x;
@@ -118,6 +119,7 @@ struct _GdkBroadwayDisplay
   GSource *event_source;
   GdkWindow *mouse_in_toplevel;
   int last_x, last_y; /* in root coords */
+  GdkWindow *real_mouse_in_toplevel; /* Not affected by grabs */
 
   /* Keyboard related information */
   GdkKeymap *keymap;
