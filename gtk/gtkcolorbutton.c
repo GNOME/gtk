@@ -664,6 +664,9 @@ gtk_color_button_clicked (GtkButton *button)
                         G_CALLBACK (dialog_cancel_clicked), color_button);
       g_signal_connect (color_dialog, "destroy",
                         G_CALLBACK (dialog_destroy), color_button);
+
+      g_object_unref (ok_button);
+      g_object_unref (cancel_button);
     }
 
   color_dialog = GTK_COLOR_SELECTION_DIALOG (color_button->priv->cs_dialog);
