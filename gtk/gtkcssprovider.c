@@ -1504,6 +1504,13 @@ property_value_free (GValue *value)
 }
 
 static void
+gtk_css_provider_invalid_token (GtkCssProvider *provider,
+                                const char     *expected)
+{
+  provider->priv->scanner->user_data = (gpointer) expected;
+}
+
+static void
 scanner_apply_scope (GScanner    *scanner,
                      ParserScope  scope)
 {
@@ -3213,7 +3220,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
             {
-              scanner->user_data = "Color name";
+              gtk_css_provider_invalid_token (css_provider, "Color name");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -3223,7 +3230,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
             {
-              scanner->user_data = "Color definition";
+              gtk_css_provider_invalid_token (css_provider, "Color definition");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -3232,7 +3239,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (!color)
             {
-              scanner->user_data = "Color definition";
+              gtk_css_provider_invalid_token (css_provider, "Color definition");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -3268,7 +3275,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (path == NULL)
             {
-              scanner->user_data = "File URL";
+              gtk_css_provider_invalid_token (css_provider, "File URL");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -3302,7 +3309,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (!loaded)
             {
-              scanner->user_data = "File URL";
+              gtk_css_provider_invalid_token (css_provider, "File URL");
               return G_TOKEN_IDENTIFIER;
             }
           else
@@ -3317,7 +3324,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
             {
-              scanner->user_data = "Binding name";
+              gtk_css_provider_invalid_token (css_provider, "Binding name");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -3344,7 +3351,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
               if (scanner->token != G_TOKEN_IDENTIFIER)
                 {
-                  scanner->user_data = "Binding definition";
+                  gtk_css_provider_invalid_token (css_provider, "Binding definition");
                   return G_TOKEN_IDENTIFIER;
                 }
 
@@ -3352,7 +3359,7 @@ parse_rule (GtkCssProvider  *css_provider,
                                                               scanner->value.v_identifier);
               if (ret != G_TOKEN_NONE)
                 {
-                  scanner->user_data = "Binding definition";
+                  gtk_css_provider_invalid_token (css_provider, "Binding definition");
                   return ret;
                 }
 
@@ -3372,7 +3379,7 @@ parse_rule (GtkCssProvider  *css_provider,
         }
       else
         {
-          scanner->user_data = "Directive";
+          gtk_css_provider_invalid_token (css_provider, "Directive");
           return G_TOKEN_IDENTIFIER;
         }
     }
@@ -3382,7 +3389,7 @@ parse_rule (GtkCssProvider  *css_provider,
   if (expected_token != G_TOKEN_NONE)
     {
       selector_path_unref (selector);
-      scanner->user_data = "Selector";
+      gtk_css_provider_invalid_token (css_provider, "Selector");
       return expected_token;
     }
 
@@ -3397,7 +3404,7 @@ parse_rule (GtkCssProvider  *css_provider,
       if (expected_token != G_TOKEN_NONE)
         {
           selector_path_unref (selector);
-          scanner->user_data = "Selector";
+          gtk_css_provider_invalid_token (css_provider, "Selector");
           return expected_token;
         }
 
@@ -3437,7 +3444,7 @@ parse_rule (GtkCssProvider  *css_provider,
       if (scanner->token != G_TOKEN_IDENTIFIER)
         {
           g_free (prop);
-          scanner->user_data = "Property value";
+          gtk_css_provider_invalid_token (css_provider, "Property value");
           return G_TOKEN_IDENTIFIER;
         }
 
@@ -3480,7 +3487,7 @@ parse_rule (GtkCssProvider  *css_provider,
               g_slice_free (GValue, val);
               g_free (prop);
 
-              scanner->user_data = "Property value";
+              gtk_css_provider_invalid_token (css_provider, "Property value");
               return G_TOKEN_IDENTIFIER;
             }
         }
