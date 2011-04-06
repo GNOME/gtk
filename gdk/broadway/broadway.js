@@ -94,21 +94,26 @@ var inputSocket = null;
 
 function createSurface(id, x, y, width, height, isTemp)
 {
+    var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
+    surface.drawQueue = [];
+    surface.transientParent = 0;
+
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    canvas.surfaceId = id;
+    canvas.surface = surface;
     canvas.style["position"] = "absolute";
     canvas.style["left"] = x + "px";
     canvas.style["top"] = y + "px";
     canvas.style["display"] = "none";
+    document.body.appendChild(canvas);
+    surface.canvas = canvas;
+
     var context = canvas.getContext("2d");
     context.globalCompositeOperation = "source-over";
-    document.body.appendChild(canvas);
-    context.drawQueue = [];
-    context.isTemp = isTemp;
-    context.transientParent = 0;
-    surfaces[id] = context;
+    surface.context = context;
+
+    surfaces[id] = surface;
 }
 
 var GDK_CROSSING_NORMAL = 0;
@@ -152,19 +157,17 @@ function flushSurface(surface)
 {
     var commands = surface.drawQueue;
     surface.queue = [];
+    var context = surface.context;
     var i = 0;
     for (i = 0; i < commands.length; i++) {
 	var cmd = commands[i];
-	var context = surfaces[cmd.id];
 	switch (cmd.op) {
-      /* put image data surface */
-	case 'i':
+	case 'i': // put image data surface
 	    context.globalCompositeOperation = "source-over";
 	    context.drawImage(cmd.img, cmd.x, cmd.y);
 	    break;
 
-      /* copy rects */
-	case 'b':
+	case 'b': // copy rects
 	    context.save();
 	    context.beginPath();
 
@@ -199,7 +202,7 @@ function flushSurface(surface)
 	    context.restore();
 	    break;
 
-      default:
+	default:
 	    alert("Unknown drawing op " + cmd.op);
 	}
     }
@@ -293,8 +296,8 @@ function handleCommands(cmdObj)
 	    surface.canvas.width = w;
 	    surface.canvas.height = h;
 
-	    surface.globalCompositeOperation = "copy";
-	    surface.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+	    surface.context.globalCompositeOperation = "copy";
+	    surface.context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
 
 	    break;
 
@@ -411,9 +414,9 @@ function handleLoad(event)
 }
 
 function getSurfaceId(ev) {
-    var id = ev.target.surfaceId;
-    if (id != undefined)
-	return id;
+    var surface = ev.target.surface;
+    if (surface != undefined)
+	return surface.id;
     return 0;
 }
 
