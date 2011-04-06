@@ -96,6 +96,11 @@ typedef struct {
   int height;
 } BroadwayInputConfigureNotify;
 
+typedef struct {
+  BroadwayInputBaseMsg base;
+  int id;
+} BroadwayInputDeleteNotify;
+
 typedef union {
   BroadwayInputBaseMsg base;
   BroadwayInputPointerMsg pointer;
@@ -105,6 +110,7 @@ typedef union {
   BroadwayInputKeyMsg key;
   BroadwayInputGrabReply grab_reply;
   BroadwayInputConfigureNotify configure_notify;
+  BroadwayInputDeleteNotify delete_notify;
 } BroadwayInputMsg;
 
 struct _GdkBroadwayDisplay

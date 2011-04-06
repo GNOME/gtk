@@ -258,7 +258,10 @@ parse_input_message (BroadwayInput *input, const char *message)
     msg.configure_notify.width = strtol (p, &p, 10);
     p++; /* Skip , */
     msg.configure_notify.height = strtol (p, &p, 10);
-    p++; /* Skip , */
+    break;
+
+  case 'W':
+    msg.delete_notify.id = strtol(p, &p, 10);
     break;
 
   default:

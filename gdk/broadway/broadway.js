@@ -275,8 +275,20 @@ function updateBrowserWindowGeometry(win) {
 	    }
 	}
     }
-
 }
+
+function browserWindowClosed(win) {
+    var surface = win.surface;
+
+    sendInput ("W", [surface.id]);
+    for (id in surfaces) {
+	if (surfaces[id].transientToplevel != null && surfaces[id].transientToplevel == surface) {
+	    var childSurface = surfaces[id];
+	    sendInput ("W", [childSurface.id]);
+	}
+    }
+}
+
 
 function registerWindow(win)
 {
@@ -284,6 +296,7 @@ function registerWindow(win)
     win.onresize = function(ev) { updateBrowserWindowGeometry(ev.target); };
     if (!windowGeometryTimeout)
 	windowGeometryTimeout = setInterval(function () { toplevelWindows.forEach(updateBrowserWindowGeometry); }, 2000);
+    win.onunload = function(ev) { browserWindowClosed(ev.target.defaultView); };
 }
 
 function unregisterWindow(win)

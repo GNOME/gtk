@@ -294,6 +294,18 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
       }
     break;
 
+  case 'W':
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->delete_notify.id));
+    if (window)
+      {
+	event = gdk_event_new (GDK_DELETE);
+	event->any.window = g_object_ref (window);
+
+	node = _gdk_event_queue_append (display, event);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
+      }
+    break;
+
   default:
     g_printerr ("Unknown input command %c\n", message->base.type);
     break;
