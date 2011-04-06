@@ -92,8 +92,11 @@ var surfaces = {};
 var outstandingCommands = new Array();
 var inputSocket = null;
 
-function initContext(canvas, x, y, id, isTemp)
+function createSurface(id, x, y, width, height, isTemp)
 {
+    var canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
     canvas.surfaceId = id;
     canvas.style["position"] = "absolute";
     canvas.style["left"] = x + "px";
@@ -105,8 +108,7 @@ function initContext(canvas, x, y, id, isTemp)
     context.drawQueue = [];
     context.isTemp = isTemp;
     context.transientParent = 0;
-
-    return context;
+    surfaces[id] = context;
 }
 
 var GDK_CROSSING_NORMAL = 0;
@@ -226,10 +228,7 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    var isTemp = cmd[i] == '1';
 	    i = i + 1;
-	    var surface = document.createElement("canvas");
-	    surface.width = w;
-	    surface.height = h;
-	    surfaces[id] = initContext(surface, x, y, id, isTemp);
+	    createSurface(id, x, y, w, h, isTemp);
 	    break;
 
 	case 'S': // Show a surface
