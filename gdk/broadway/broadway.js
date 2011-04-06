@@ -673,21 +673,6 @@ function sendInput(cmd, args)
     }
 }
 
-function getDocumentCoordinates(element)
-{
-    var res = new Object();
-    res.x = element.offsetLeft;
-    res.y = element.offsetTop;
-
-    var offsetParent = element.offsetParent;
-    while (offsetParent != null) {
-	res.x += offsetParent.offsetLeft;
-	res.y += offsetParent.offsetTop;
-	offsetParent = offsetParent.offsetParent;
-    }
-    return res;
-}
-
 function getPositionsFromAbsCoord(absX, absY, relativeId) {
     var res = Object();
 
@@ -696,16 +681,24 @@ function getPositionsFromAbsCoord(absX, absY, relativeId) {
     res.winX = absX;
     res.winY = absY;
     if (relativeId != 0) {
-	var pos = getDocumentCoordinates(surfaces[relativeId].canvas);
-	res.winX = res.winX - pos.x;
-	res.winY = res.winY - pos.y;
+	var surface = surfaces[relativeId];
+	res.winX = res.winX - surface.x;
+	res.winY = res.winY - surface.y;
     }
 
     return res;
 }
 
 function getPositionsFromEvent(ev, relativeId) {
-    var res = getPositionsFromAbsCoord(ev.pageX, ev.pageY, relativeId);
+    var absX, absY;
+    if (useToplevelWindows) {
+	absX = ev.screenX;
+	absY = ev.screenY;
+    } else {
+	absX = ev.pageX;
+	absY = ev.pageY;
+    }
+    var res = getPositionsFromAbsCoord(absX, absY, relativeId);
 
     lastX = res.rootX;
     lastY = res.rootY;
