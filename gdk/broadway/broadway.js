@@ -272,11 +272,7 @@ function cmdUngrabPointer()
 {
     sendInput ("u", []);
 
-    if (grab.window != null) {
-	if (grab.time == 0 || time == 0 ||
-	    grab.time < time)
-	    grab.window = null;
-    }
+    grab.window = null;
 }
 
 function handleCommands(cmdObj)
