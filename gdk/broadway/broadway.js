@@ -76,6 +76,19 @@ function createXHR()
     return null;
 }
 
+/* This resizes the window so the *inner* size is the specified size */
+function resizeBrowserWindow(window, w, h) {
+    var innerW = window.innerWidth;
+    var innerH = window.innerHeight;
+
+    var outerW = window.outerWidth;
+    var outerH = window.outerHeight;
+
+    window.resizeTo(w + outerW - innerW,
+		    h + outerH - innerH);
+}
+
+var useToplevelWindows = false;
 var grab = new Object();
 grab.window = null;
 grab.ownerEvents = false;
@@ -183,19 +196,50 @@ function flushSurface(surface)
     }
 }
 
+function ensureSurfaceInDocument(surface, doc)
+{
+    if (surface.document != doc) {
+	var oldCanvas = surface.canvas;
+	var canvas = doc.importNode(oldCanvas, false);
+	doc.body.appendChild(canvas);
+	canvas.surface = surface;
+	oldCanvas.parentNode.removeChild(oldCanvas);
+
+	surface.canvas = canvas;
+	surface.document = doc;
+
+	var context = canvas.getContext("2d");
+	context.globalCompositeOperation = "source-over";
+	surface.context = context;
+    }
+}
+
+function getTransientToplevel(surface)
+{
+    while (surface.transientParent != 0) {
+	surface = surfaces[surface.transientParent];
+	if (surface.window)
+	    return surface;
+    }
+    return null;
+}
+
 function cmdCreateSurface(id, x, y, width, height, isTemp)
 {
     var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
     surface.drawQueue = [];
     surface.transientParent = 0;
+    surface.visible = false;
+    surface.window = null;
+    surface.document = document;
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
     canvas.surface = surface;
     canvas.style["position"] = "absolute";
-    canvas.style["left"] = x + "px";
-    canvas.style["top"] = y + "px";
+    canvas.style["left"] = "0px";
+    canvas.style["top"] = "0px";
     canvas.style["display"] = "none";
     document.body.appendChild(canvas);
     surface.canvas = canvas;
@@ -209,17 +253,78 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 
 function cmdShowSurface(id)
 {
-    surfaces[id].canvas.style["display"] = "inline";
+    var surface = surfaces[id];
+
+    if (surface.visible)
+	return;
+    surface.visible = true;
+
+    var xOffset = surface.x;
+    var yOffset = surface.y;
+
+    if (useToplevelWindows) {
+	var doc = document;
+	if (!surface.isTemp) {
+	    var win = window.open('','_blank',
+				  'width='+surface.width+',height='+surface.height+
+				  ',left='+surface.x+',top='+surface.y+',screenX='+surface.x+',screenY='+surface.y+
+				  ',location=no,menubar=no,scrollbars=no,toolbar=no');
+	    doc = win.document;
+	    doc.open();
+	    doc.write("<body></body>");
+	    setupDocument(doc);
+
+	    surface.window = win;
+	    xOffset = 0;
+	    yOffset = 0;
+	} else {
+	    var transientToplevel = getTransientToplevel(surface);
+	    if (transientToplevel) {
+		doc = transientToplevel.window.document;
+		xOffset = surface.x - transientToplevel.x;
+		yOffset = surface.y - transientToplevel.y;
+	    }
+	}
+
+	ensureSurfaceInDocument(surface, doc);
+    }
+
+    surface.canvas.style["position"] = "absolute";
+    surface.canvas.style["left"] = xOffset + "px";
+    surface.canvas.style["top"] = yOffset + "px";
+    surface.canvas.style["display"] = "inline";
 }
 
 function cmdHideSurface(id)
 {
+    var surface = surfaces[id];
+
+    if (!surface.visible)
+	return;
+    surface.visible = false;
+
     surfaces[id].canvas.style["display"] = "none";
+
+    // Import the canvas into the main document
+    ensureSurfaceInDocument(surface, document);
+
+    if (surface.window) {
+	surface.window.close();
+	surface.window = null;
+    }
 }
 
 function cmdSetTransientFor(id, parentId)
 {
-    surfaces[id].transientParent = parentId;
+    var surface = surfaces[id];
+
+    if (surface.transientParent == parentId)
+	return;
+
+    surface.transientParent = parentId;
+    if (surface.visible && surface.isTemp) {
+	alert("TODO: move temps between transient parents when visible");
+    }
 }
 
 function cmdDeleteSurface(id)
@@ -231,19 +336,45 @@ function cmdDeleteSurface(id)
 
 function cmdMoveSurface(id, x, y)
 {
-    surfaces[id].canvas.style["left"] = x + "px";
-    surfaces[id].canvas.style["top"] = y + "px";
+    var surface = surfaces[id];
+    surface.x = x;
+    surface.y = y;
+
+    if (surface.visible) {
+	if (surface.window) {
+	    /* TODO: This moves the outer frame position, we really want the inner position.
+	     * However this isn't *strictly* invalid, as any WM could have done whatever it
+	     * wanted with the positioning of the window.
+	     */
+	    surface.window.moveTo(surface.x, surface.y);
+	} else {
+	    var xOffset = surface.x;
+	    var yOffset = surface.y;
+
+	    var transientToplevel = getTransientToplevel(surface);
+	    if (transientToplevel) {
+		xOffset = surface.x - transientToplevel.x;
+		yOffset = surface.y - transientToplevel.y;
+	    }
+
+	    surface.canvas.style["left"] = xOffset + "px";
+	    surface.canvas.style["top"] = yOffset + "px";
+	}
+    }
 }
 
 function cmdResizeSurface(id, w, h)
 {
     var surface = surfaces[id];
 
+    surface.width = w;
+    surface.height = h;
+
     /* Flush any outstanding draw ops before changing size */
     flushSurface(surface);
 
     /* Canvas resize clears the data, so we need to save it first */
-    var tmpCanvas = document.createElement("canvas");
+    var tmpCanvas = surface.document.createElement("canvas");
     tmpCanvas.width = surface.canvas.width;
     tmpCanvas.height = surface.canvas.height;
     var tmpContext = tmpCanvas.getContext("2d");
@@ -255,6 +386,10 @@ function cmdResizeSurface(id, w, h)
 
     surface.context.globalCompositeOperation = "copy";
     surface.context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+
+    if (surface.window) {
+	resizeBrowserWindow(surface.window, w, h);
+    }
 }
 
 function cmdFlushSurface(id)
