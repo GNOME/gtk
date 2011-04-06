@@ -46,6 +46,8 @@ GtkSymbolicColor * gtk_symbolic_color_new_mix     (GtkSymbolicColor   *color1,
 GtkSymbolicColor * gtk_symbolic_color_ref         (GtkSymbolicColor   *color);
 void               gtk_symbolic_color_unref       (GtkSymbolicColor   *color);
 
+char *             gtk_symbolic_color_to_string   (GtkSymbolicColor   *color);
+
 gboolean           gtk_symbolic_color_resolve     (GtkSymbolicColor   *color,
                                                    GtkStyleProperties *props,
                                                    GdkRGBA            *resolved_color);

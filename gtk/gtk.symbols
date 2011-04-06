@@ -2548,6 +2548,7 @@ gtk_symbolic_color_new_name
 gtk_symbolic_color_new_shade
 gtk_symbolic_color_ref
 gtk_symbolic_color_resolve
+gtk_symbolic_color_to_string
 gtk_symbolic_color_unref
 gtk_table_attach
 gtk_table_attach_defaults

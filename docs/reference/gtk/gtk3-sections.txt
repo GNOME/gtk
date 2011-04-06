@@ -5728,6 +5728,7 @@ gtk_symbolic_color_new_mix
 gtk_symbolic_color_ref
 gtk_symbolic_color_unref
 gtk_symbolic_color_resolve
+gtk_symbolic_color_to_string
 
 <SUBSECTION Standard>
 GTK_TYPE_SYMBOLIC_COLOR
