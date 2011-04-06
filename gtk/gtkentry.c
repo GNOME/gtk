@@ -6770,6 +6770,9 @@ gtk_entry_set_buffer (GtkEntry       *entry,
  *
  * See also gtk_entry_get_icon_window().
  *
+ * Note that GTK+ 3 does not have this function anymore; it has
+ * been replaced by gtk_entry_get_text_area().
+ *
  * Return value: (transfer none): the entry's text window.
  *
  * Since: 2.20
@@ -8309,6 +8312,9 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * to distinguish between the text window and entry's icon windows.
  *
  * See also gtk_entry_get_text_window().
+ *
+ * Note that GTK+ 3 does not have this function anymore; it has
+ * been replaced by gtk_entry_get_icon_area().
  *
  * Return value: (transfer none): the entry's icon window at @icon_pos.
  *
