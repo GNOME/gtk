@@ -969,6 +969,30 @@ typedef struct
   GtkWidget *placeholder;
 } MenuPopulateData;
 
+static MenuPopulateData *
+create_menu_populate_data (GtkRecentChooserMenu *menu)
+{
+  MenuPopulateData *pdata;
+
+  pdata = g_slice_new (MenuPopulateData);
+  pdata->items = NULL;
+  pdata->n_items = 0;
+  pdata->loaded_items = 0;
+  pdata->displayed_items = 0;
+  pdata->menu = menu;
+  pdata->placeholder = g_object_ref (menu->priv->placeholder);
+
+  return pdata;
+}
+
+static void
+free_menu_populate_data (MenuPopulateData *pdata)
+{
+  if (pdata->placeholder)
+    g_object_unref (pdata->placeholder);
+  g_slice_free (MenuPopulateData, pdata);
+}
+
 static gboolean
 idle_populate_func (gpointer data)
 {
@@ -1056,10 +1080,9 @@ idle_populate_clean_up (gpointer data)
        */
       if (!pdata->displayed_items)
         gtk_widget_show (pdata->placeholder);
-      g_object_unref (pdata->placeholder);
-
-      g_slice_free (MenuPopulateData, data);
     }
+
+  free_menu_populate_data (pdata);
 }
 
 static void
@@ -1068,20 +1091,14 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
   MenuPopulateData *pdata;
   GtkRecentChooserMenuPrivate *priv = menu->priv;
 
-  if (menu->priv->populate_id)
+  if (priv->populate_id)
     return;
 
-  pdata = g_slice_new (MenuPopulateData);
-  pdata->items = NULL;
-  pdata->n_items = 0;
-  pdata->loaded_items = 0;
-  pdata->displayed_items = 0;
-  pdata->menu = menu;
-  pdata->placeholder = g_object_ref (priv->placeholder);
+  pdata = create_menu_populate_data (menu);
 
   /* remove our menu items first */
   gtk_recent_chooser_menu_dispose_items (menu);
-  
+
   priv->populate_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
   					         idle_populate_func,
 					         pdata,
