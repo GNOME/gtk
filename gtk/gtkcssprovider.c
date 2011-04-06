@@ -4249,3 +4249,320 @@ gtk_css_provider_get_named (const gchar *name,
 
   return provider;
 }
+
+static void
+gtk_css_provider_print_value (const GValue *value,
+                              GString *     str)
+{
+  char *s;
+
+  if (G_VALUE_TYPE (value) == GTK_TYPE_BORDER)
+    {
+      const GtkBorder *border = g_value_get_boxed (value);
+
+      if (border == NULL)
+        g_string_append (str, "none");
+      else if (border->left != border->right)
+        g_string_append_printf (str, "%d %d %d %d", border->top, border->right, border->bottom, border->left);
+      else if (border->top != border->bottom)
+        g_string_append_printf (str, "%d %d %d", border->top, border->right, border->bottom);
+      else if (border->top != border->left)
+        g_string_append_printf (str, "%d %d", border->top, border->right);
+      else
+        g_string_append_printf (str, "%d", border->top);
+
+      return;
+    }
+  else if (G_VALUE_TYPE (value) == GDK_TYPE_RGBA)
+    {
+      const GdkRGBA *rgba = g_value_get_boxed (value);
+      if (rgba == NULL)
+        g_string_append (str, "none");
+      else
+        {
+          s = gdk_rgba_to_string (g_value_get_boxed (value));
+          g_string_append (str, s);
+          g_free (s);
+        }
+      return;
+    }
+  else if (G_VALUE_TYPE (value) == GTK_TYPE_SYMBOLIC_COLOR)
+    {
+      GtkSymbolicColor *color = g_value_get_boxed (value);
+
+      if (color == NULL)
+        g_string_append (str, "none");
+      else
+        {
+          s = gtk_symbolic_color_to_string (color);
+          g_string_append (str, s);
+          g_free (s);
+        }
+      return;
+    }
+  else if (G_VALUE_TYPE (value) == GTK_TYPE_ANIMATION_DESCRIPTION)
+    {
+      GtkAnimationDescription *desc = g_value_get_boxed (value);
+
+      if (desc == NULL)
+        g_string_append (str, "none");
+      else
+        {
+          s = _gtk_animation_description_to_string (desc);
+          g_string_append (str, s);
+          g_free (s);
+        }
+      return;
+    }
+  else if (G_VALUE_TYPE (value) == GTK_TYPE_GRADIENT)
+    {
+      GtkGradient *gradient = g_value_get_boxed (value);
+
+      if (gradient == NULL)
+        g_string_append (str, "none");
+      else
+        {
+          s = gtk_gradient_to_string (gradient);
+          g_string_append (str, s);
+          g_free (s);
+        }
+      return;
+    }
+  else if (G_VALUE_TYPE (value) == PANGO_TYPE_FONT_DESCRIPTION)
+    {
+      PangoFontDescription *desc = g_value_get_boxed (value);
+
+      if (desc == NULL)
+        g_string_append (str, "none");
+      else
+        {
+          s = pango_font_description_to_string (desc);
+          g_string_append (str, s);
+          g_free (s);
+        }
+      return;
+    }
+  
+  if (g_type_is_a (G_VALUE_TYPE (value), G_TYPE_ENUM))
+    {
+      GEnumClass *enum_class;
+      GEnumValue *enum_value;
+
+      enum_class = g_type_class_ref (G_VALUE_TYPE (value));
+      enum_value = g_enum_get_value (enum_class, g_value_get_enum (value));
+
+      g_string_append (str, enum_value->value_nick);
+
+      g_type_class_unref (enum_class);
+      return;
+    }
+  
+  /* fall back to boring strdup in the worst case */
+  s = g_strdup_value_contents (value);
+  g_string_append (str, s);
+  g_free (s);
+}
+
+static void
+selector_path_print (const SelectorPath *path,
+                     GString *           str)
+{
+  GSList *walk, *reverse;
+
+  reverse = g_slist_copy (path->elements);
+  reverse = g_slist_reverse (reverse);
+
+  for (walk = reverse; walk; walk = walk->next)
+    {
+      SelectorElement *elem = walk->data;
+
+      switch (elem->elem_type)
+        {
+        case SELECTOR_TYPE_NAME:
+        case SELECTOR_NAME:
+          g_string_append (str, g_quark_to_string (elem->name));
+          break;
+        case SELECTOR_GTYPE:
+          g_string_append (str, g_type_name (elem->type));
+          break;
+        case SELECTOR_REGION:
+          g_string_append (str, g_quark_to_string (elem->region.name));
+          if (elem->region.flags)
+            {
+              char * flag_names[] = {
+                "nth-child(even)",
+                "nth-child(odd)",
+                "first-child",
+                "last-child",
+                "sorted"
+              };
+              guint i;
+
+              for (i = 0; i < G_N_ELEMENTS (flag_names); i++)
+                {
+                  if (elem->region.flags & (1 << i))
+                    {
+                      g_string_append_c (str, ':');
+                      g_string_append (str, flag_names[i]);
+                    }
+                }
+            }
+          break;
+        case SELECTOR_CLASS:
+          g_string_append_c (str, '.');
+          g_string_append (str, g_quark_to_string (elem->name));
+          break;
+        case SELECTOR_GLOB:
+          if (walk->next == NULL ||
+              elem->combinator != COMBINATOR_CHILD ||
+              ((SelectorElement *) walk->next->data)->elem_type != SELECTOR_CLASS)
+            g_string_append (str, "*");
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+
+      if (walk->next)
+        {
+          switch (elem->combinator)
+            {
+            case COMBINATOR_DESCENDANT:
+              if (elem->elem_type != SELECTOR_CLASS ||
+                  ((SelectorElement *) walk->next->data)->elem_type != SELECTOR_CLASS)
+                g_string_append_c (str, ' ');
+              break;
+            case COMBINATOR_CHILD:
+              if (((SelectorElement *) walk->next->data)->elem_type != SELECTOR_CLASS)
+                g_string_append (str, " > ");
+              break;
+            default:
+              g_assert_not_reached ();
+            }
+        }
+        
+    }
+
+  if (path->state)
+    {
+      char * state_names[] = {
+        "active",
+        "hover",
+        "selected",
+        "insensitive",
+        "inconsistent",
+        "focus"
+      };
+      guint i;
+
+      for (i = 0; i < G_N_ELEMENTS (state_names); i++)
+        {
+          if (path->state & (1 << i))
+            {
+              g_string_append_c (str, ':');
+              g_string_append (str, state_names[i]);
+            }
+        }
+    }
+
+  g_slist_free (reverse);
+}
+
+static void
+selector_style_info_print (const SelectorStyleInfo *info,
+                           GString                 *str)
+{
+  GList *keys, *walk;
+
+  selector_path_print (info->path, str);
+
+  g_string_append (str, " {\n");
+
+  keys = g_hash_table_get_keys (info->style);
+  /* so the output is identical for identical selector styles */
+  keys = g_list_sort (keys, (GCompareFunc) strcmp);
+
+  for (walk = keys; walk; walk = walk->next)
+    {
+      const char *name = walk->data;
+      const GValue *value = g_hash_table_lookup (info->style, (gpointer) name);
+
+      g_string_append (str, "  ");
+      g_string_append (str, name);
+      g_string_append (str, ": ");
+      gtk_css_provider_print_value (value, str);
+      g_string_append (str, ";\n");
+    }
+
+  g_list_free (keys);
+
+  g_string_append (str, "}\n");
+}
+
+static void
+gtk_css_provider_print_colors (GHashTable *colors,
+                               GString    *str)
+{
+  GList *keys, *walk;
+  char *s;
+
+  keys = g_hash_table_get_keys (colors);
+  /* so the output is identical for identical styles */
+  keys = g_list_sort (keys, (GCompareFunc) strcmp);
+
+  for (walk = keys; walk; walk = walk->next)
+    {
+      const char *name = walk->data;
+      GtkSymbolicColor *symbolic = g_hash_table_lookup (colors, (gpointer) name);
+
+      g_string_append (str, "@define-color ");
+      g_string_append (str, name);
+      g_string_append (str, " ");
+      s = gtk_symbolic_color_to_string (symbolic);
+      g_string_append (str, s);
+      g_free (s);
+      g_string_append (str, ";\n");
+    }
+
+  g_list_free (keys);
+}
+
+/**
+ * gtk_css_provider_to_string:
+ * @provider: the provider to write to a string
+ *
+ * Convertes the @provider into a string representation in CSS
+ * format.
+ * 
+ * Using gtk_css_provider_load_from_data() with the return value
+ * from this function on a new provider created with
+ * gtk_css_provider_new() will basicallu create a duplicate of
+ * this @provider.
+ *
+ * Returns: a new string representing the @provider.
+ **/
+char *
+gtk_css_provider_to_string (GtkCssProvider *provider)
+{
+  GtkCssProviderPrivate *priv;
+  GString *str;
+  guint i;
+
+  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (provider), NULL);
+
+  priv = provider->priv;
+
+  str = g_string_new ("");
+
+  gtk_css_provider_print_colors (priv->symbolic_colors, str);
+
+  for (i = 0; i < priv->selectors_info->len; i++)
+    {
+      if (i > 0)
+        g_string_append (str, "\n");
+      selector_style_info_print (g_ptr_array_index (priv->selectors_info, i),
+                                 str);
+    }
+
+  return g_string_free (str, FALSE);
+}
+
