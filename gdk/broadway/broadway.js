@@ -660,6 +660,25 @@ function onMouseWheel(ev)
     return cancelEvent(ev);
 }
 
+function setupDocument(document)
+{
+    document.oncontextmenu = function () { return false; };
+    document.onmousemove = onMouseMove;
+    document.onmouseover = onMouseOver;
+    document.onmouseout = onMouseOut;
+    document.onmousedown = onMouseDown;
+    document.onmouseup = onMouseUp;
+    document.onkeydown = onKeyDown;
+    document.onkeyup = onKeyUp;
+
+    if (document.addEventListener) {
+      document.addEventListener('DOMMouseScroll', onMouseWheel, false);
+      document.addEventListener('mousewheel', onMouseWheel, false);
+    } else if (document.attachEvent) {
+      element.attachEvent("onmousewheel", onMouseWheel);
+    }
+}
+
 function connect()
 {
     var xhr = createXHR();
@@ -688,19 +707,5 @@ function connect()
     } else {
 	alert("WebSocket not supported, input will not work!");
     }
-    document.oncontextmenu = function () { return false; };
-    document.onmousemove = onMouseMove;
-    document.onmouseover = onMouseOver;
-    document.onmouseout = onMouseOut;
-    document.onmousedown = onMouseDown;
-    document.onmouseup = onMouseUp;
-    document.onkeydown = onKeyDown;
-    document.onkeyup = onKeyUp;
-
-    if (document.addEventListener) {
-	document.addEventListener('DOMMouseScroll', onMouseWheel, false);
-	document.addEventListener('mousewheel', onMouseWheel, false);
-    } else if (document.attachEvent) {
-	element.attachEvent("onmousewheel", onMouseWheel);
-    }
+    setupDocument(document);
 }
