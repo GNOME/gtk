@@ -732,7 +732,6 @@
  * </refsect2>
  */
 
-typedef struct GtkCssProviderPrivate GtkCssProviderPrivate;
 typedef struct SelectorElement SelectorElement;
 typedef struct SelectorPath SelectorPath;
 typedef struct SelectorStyleInfo SelectorStyleInfo;
@@ -786,7 +785,7 @@ struct SelectorStyleInfo
   GHashTable *style;
 };
 
-struct GtkCssProviderPrivate
+struct _GtkCssProviderPrivate
 {
   GScanner *scanner;
   gchar *filename;

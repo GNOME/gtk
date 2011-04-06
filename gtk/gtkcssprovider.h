@@ -42,11 +42,12 @@ GQuark gtk_css_provider_error_quark (void);
 
 typedef struct _GtkCssProvider GtkCssProvider;
 typedef struct _GtkCssProviderClass GtkCssProviderClass;
+typedef struct _GtkCssProviderPrivate GtkCssProviderPrivate;
 
 struct _GtkCssProvider
 {
   GObject parent_instance;
-  gpointer priv;
+  GtkCssProviderPrivate *priv;
 };
 
 struct _GtkCssProviderClass
