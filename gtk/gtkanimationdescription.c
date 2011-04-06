@@ -123,6 +123,49 @@ _gtk_animation_description_from_string (const gchar *str)
   return _gtk_animation_description_new ((gdouble) duration, progress_type, loop);
 }
 
+char *
+_gtk_animation_description_to_string (GtkAnimationDescription *desc)
+{
+  GString *str;
+  int duration;
+
+  g_return_val_if_fail (desc != NULL, NULL);
+
+  str = g_string_new ("");
+
+  duration = desc->duration;
+  if (duration % 1000 == 0)
+    g_string_append_printf (str, "%ds", (int) desc->duration / 1000);
+  else
+    g_string_append_printf (str, "%dms", (int) desc->duration);
+
+  switch (desc->progress_type)
+    {
+    case GTK_TIMELINE_PROGRESS_LINEAR:
+      g_string_append (str, " linear");
+      break;
+    case GTK_TIMELINE_PROGRESS_EASE:
+      g_string_append (str, " ease");
+      break;
+    case GTK_TIMELINE_PROGRESS_EASE_IN:
+      g_string_append (str, " ease-in");
+      break;
+    case GTK_TIMELINE_PROGRESS_EASE_OUT:
+      g_string_append (str, " ease-out");
+      break;
+    case GTK_TIMELINE_PROGRESS_EASE_IN_OUT:
+      g_string_append (str, " ease-in-out");
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  if (desc->loop)
+    g_string_append (str, " loop");
+
+  return g_string_free (str, FALSE);
+}
+
 GType
 _gtk_animation_description_get_type (void)
 {
