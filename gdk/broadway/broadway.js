@@ -79,7 +79,6 @@ function createXHR()
 var grab = new Object();
 grab.window = null;
 grab.ownerEvents = false;
-grab.time = 0;
 grab.implicit = false;
 var lastSerial = 0;
 var lastX = 0;
@@ -265,7 +264,7 @@ function cmdFlushSurface(id)
 
 function cmdGrabPointer(id, ownerEvents)
 {
-    doGrab(id, ownerEvents, time, false);
+    doGrab(id, ownerEvents, false);
     sendInput ("g", []);
 }
 
@@ -555,7 +554,7 @@ function onMouseOut (ev) {
     windowWithMouse = 0;
 }
 
-function doGrab(id, ownerEvents, time, implicit) {
+function doGrab(id, ownerEvents, implicit) {
     var pos;
 
     if (windowWithMouse != id) {
@@ -570,11 +569,10 @@ function doGrab(id, ownerEvents, time, implicit) {
 
     grab.window = id;
     grab.ownerEvents = ownerEvents;
-    grab.time = time;
     grab.implicit = implicit;
 }
 
-function doUngrab(time) {
+function doUngrab() {
     var pos;
     if (realWindowWithMouse != windowWithMouse) {
 	if (windowWithMouse != 0) {
@@ -596,7 +594,7 @@ function onMouseDown (ev) {
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
     if (grab.window != null)
-	doGrab (id, false, ev.timeStamp, true);
+	doGrab (id, false, true);
     var button = ev.button + 1;
     lastState = lastState | getButtonMask (button);
     sendInput ("b", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
