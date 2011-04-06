@@ -270,6 +270,30 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'u':
     _gdk_display_device_grab_update (display, display->core_pointer, NULL, message->base.serial);
     break;
+
+  case 'w':
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->configure_notify.id));
+    if (window)
+      {
+	window->x = message->configure_notify.x;
+	window->y = message->configure_notify.y;
+	window->width = message->configure_notify.width;
+	window->height = message->configure_notify.height;
+	_gdk_window_update_size (window);
+	_gdk_broadway_window_resize_surface (window);
+
+	event = gdk_event_new (GDK_CONFIGURE);
+	event->configure.window = g_object_ref (window);
+	event->configure.x = message->configure_notify.x;
+	event->configure.y = message->configure_notify.y;
+	event->configure.width = message->configure_notify.width;
+	event->configure.height = message->configure_notify.height;
+
+	node = _gdk_event_queue_append (display, event);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
+      }
+    break;
+
   default:
     g_printerr ("Unknown input command %c\n", message->base.type);
     break;

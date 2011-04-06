@@ -207,6 +207,7 @@ gboolean _gdk_broadway_window_simulate_button   (GdkWindow       *window,
 						 guint            button,
 						 GdkModifierType  modifiers,
 						 GdkEventType     button_pressrelease);
+void _gdk_broadway_window_resize_surface        (GdkWindow *window);
 
 void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);
 void _gdk_broadway_cursor_display_finalize (GdkDisplay *display);

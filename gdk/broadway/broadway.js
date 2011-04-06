@@ -88,7 +88,27 @@ function resizeBrowserWindow(window, w, h) {
 		    h + outerH - innerH);
 }
 
+function resizeCanvas(canvas, w, h)
+{
+    /* Canvas resize clears the data, so we need to save it first */
+    var tmpCanvas = canvas.ownerDocument.createElement("canvas");
+    tmpCanvas.width = canvas.width;
+    tmpCanvas.height = canvas.height;
+    var tmpContext = tmpCanvas.getContext("2d");
+    tmpContext.globalCompositeOperation = "copy";
+    tmpContext.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+
+    canvas.width = w;
+    canvas.height = h;
+
+    var context = canvas.getContext("2d");
+
+    context.globalCompositeOperation = "copy";
+    context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+}
+
 var useToplevelWindows = false;
+var toplevelWindows = [];
 var grab = new Object();
 grab.window = null;
 grab.ownerEvents = false;
@@ -103,6 +123,9 @@ var windowWithMouse = 0;
 var surfaces = {};
 var outstandingCommands = new Array();
 var inputSocket = null;
+var frameSizeX = -1;
+var frameSizeY = -1;
+
 
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
@@ -214,6 +237,67 @@ function ensureSurfaceInDocument(surface, doc)
     }
 }
 
+var windowGeometryTimeout = null;
+
+function updateBrowserWindowGeometry(win) {
+    if (win.closed)
+	return;
+
+    var surface = win.surface;
+
+    var innerW = win.innerWidth;
+    var innerH = win.innerHeight;
+
+    var x = surface.x;
+    var y = surface.y;
+    if (frameSizeX > 0) {
+	x = win.screenX + frameSizeX;
+	y = win.screenY + frameSizeY;
+    }
+
+    if (x != surface.x || y != surface.y ||
+       innerW != surface.width || innerH != surface.height) {
+	var oldX = surface.x;
+	var oldY = surface.y;
+	surface.x = x;
+	surface.y = y;
+	if (surface.width != innerW || surface.height != innerH)
+	    resizeCanvas(surface.canvas, innerW, innerH);
+	surface.width = innerW;
+	surface.height = innerH;
+	sendInput ("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
+	for (id in surfaces) {
+	    if (surfaces[id].transientToplevel != null && surfaces[id].transientToplevel == surface) {
+		var childSurface = surfaces[id];
+		childSurface.x += surface.x - oldX;
+		childSurface.y += surface.y - oldY;
+		sendInput ("w", [childSurface.id, childSurface.x, childSurface.y, childSurface.width, childSurface.height]);
+	    }
+	}
+    }
+
+}
+
+function registerWindow(win)
+{
+    toplevelWindows.push(win);
+    win.onresize = function(ev) { updateBrowserWindowGeometry(ev.target); };
+    if (!windowGeometryTimeout)
+	windowGeometryTimeout = setInterval(function () { toplevelWindows.forEach(updateBrowserWindowGeometry); }, 2000);
+}
+
+function unregisterWindow(win)
+{
+    var i = toplevelWindows.indexOf(win);
+    if (i >= 0)
+	toplevelWindows.splice(i, 1);
+
+    if (windowGeometryTimeout && toplevelWindows.length == 0) {
+	clearInterval(windowGeometryTimeout);
+	windowGeometryTimeout = null;
+    }
+}
+
 function getTransientToplevel(surface)
 {
     while (surface.transientParent != 0) {
@@ -232,6 +316,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.visible = false;
     surface.window = null;
     surface.document = document;
+    surface.transientToplevel = null;
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
@@ -269,6 +354,8 @@ function cmdShowSurface(id)
 				  'width='+surface.width+',height='+surface.height+
 				  ',left='+surface.x+',top='+surface.y+',screenX='+surface.x+',screenY='+surface.y+
 				  ',location=no,menubar=no,scrollbars=no,toolbar=no');
+	    win.surface = surface;
+	    registerWindow(win);
 	    doc = win.document;
 	    doc.open();
 	    doc.write("<body></body>");
@@ -278,11 +365,11 @@ function cmdShowSurface(id)
 	    xOffset = 0;
 	    yOffset = 0;
 	} else {
-	    var transientToplevel = getTransientToplevel(surface);
-	    if (transientToplevel) {
-		doc = transientToplevel.window.document;
-		xOffset = surface.x - transientToplevel.x;
-		yOffset = surface.y - transientToplevel.y;
+	    surface.transientToplevel = getTransientToplevel(surface);
+	    if (surface.transientToplevel) {
+		doc = surface.transientToplevel.window.document;
+		xOffset = surface.x - surface.transientToplevel.x;
+		yOffset = surface.y - surface.transientToplevel.y;
 	    }
 	}
 
@@ -303,12 +390,13 @@ function cmdHideSurface(id)
 	return;
     surface.visible = false;
 
-    surfaces[id].canvas.style["display"] = "none";
+    surface.canvas.style["display"] = "none";
 
     // Import the canvas into the main document
     ensureSurfaceInDocument(surface, document);
 
     if (surface.window) {
+	unregisterWindow(surface.window);
 	surface.window.close();
 	surface.window = null;
     }
@@ -346,7 +434,7 @@ function cmdMoveSurface(id, x, y)
 	     * However this isn't *strictly* invalid, as any WM could have done whatever it
 	     * wanted with the positioning of the window.
 	     */
-	    surface.window.moveTo(surface.x, surface.y);
+	    //surface.window.moveTo(surface.x, surface.y);
 	} else {
 	    var xOffset = surface.x;
 	    var yOffset = surface.y;
@@ -373,19 +461,7 @@ function cmdResizeSurface(id, w, h)
     /* Flush any outstanding draw ops before changing size */
     flushSurface(surface);
 
-    /* Canvas resize clears the data, so we need to save it first */
-    var tmpCanvas = surface.document.createElement("canvas");
-    tmpCanvas.width = surface.canvas.width;
-    tmpCanvas.height = surface.canvas.height;
-    var tmpContext = tmpCanvas.getContext("2d");
-    tmpContext.globalCompositeOperation = "copy";
-    tmpContext.drawImage(surface.canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-
-    surface.canvas.width = w;
-    surface.canvas.height = h;
-
-    surface.context.globalCompositeOperation = "copy";
-    surface.context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+    resizeCanvas(surface.canvas, w, h);
 
     if (surface.window) {
 	resizeBrowserWindow(surface.window, w, h);
@@ -649,6 +725,19 @@ function getEffectiveEventTarget (id) {
 
 function updateForEvent(ev) {
     lastTimeStamp = ev.timeStamp;
+    if (ev.target.surface && ev.target.surface.window) {
+	var win = ev.target.surface.window;
+	if (ev.screenX != undefined && ev.clientX != undefined) {
+	    var newFrameSizeX = ev.screenX - ev.clientX - win.screenX;
+	    var newFrameSizeY = ev.screenY - ev.clientY - win.screenY;
+	    if (newFrameSizeX != frameSizeX || newFrameSizeY != frameSizeY) {
+		frameSizeX = newFrameSizeX;
+		frameSizeY = newFrameSizeY;
+		toplevelWindows.forEach(updateBrowserWindowGeometry);
+	    }
+	}
+	updateBrowserWindowGeometry(win);
+    }
 }
 
 function onMouseMove (ev) {
@@ -839,4 +928,8 @@ function connect()
 	alert("WebSocket not supported, input will not work!");
     }
     setupDocument(document);
+    window.onunload = function (ev) {
+	for (var i = 0; i < toplevelWindows.length; i++)
+	    toplevelWindows[i].close();
+    };
 }

@@ -368,8 +368,8 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 				 window->window_type == GDK_WINDOW_TEMP);
 }
 
-static void
-resize_surface (GdkWindow *window)
+void
+_gdk_broadway_window_resize_surface (GdkWindow *window)
 {
   GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   cairo_surface_t *old, *last_old;
@@ -396,6 +396,8 @@ resize_surface (GdkWindow *window)
 				   NULL, NULL);
       impl->ref_surface = NULL;
     }
+
+  gdk_window_invalidate_rect (window, NULL, TRUE);
 }
 
 static void
@@ -641,8 +643,7 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 
 	  window->width = width;
 	  window->height = height;
-	  resize_surface (window);
-	  gdk_window_invalidate_rect (window, NULL, TRUE);
+	  _gdk_broadway_window_resize_surface (window);
 	}
     }
 

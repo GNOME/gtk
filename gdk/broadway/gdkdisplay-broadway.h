@@ -87,6 +87,15 @@ typedef struct {
   int res;
 } BroadwayInputGrabReply;
 
+typedef struct {
+  BroadwayInputBaseMsg base;
+  int id;
+  int x;
+  int y;
+  int width;
+  int height;
+} BroadwayInputConfigureNotify;
+
 typedef union {
   BroadwayInputBaseMsg base;
   BroadwayInputPointerMsg pointer;
@@ -95,6 +104,7 @@ typedef union {
   BroadwayInputScrollMsg scroll;
   BroadwayInputKeyMsg key;
   BroadwayInputGrabReply grab_reply;
+  BroadwayInputConfigureNotify configure_notify;
 } BroadwayInputMsg;
 
 struct _GdkBroadwayDisplay

@@ -248,6 +248,19 @@ parse_input_message (BroadwayInput *input, const char *message)
     msg.grab_reply.res = strtol(p, &p, 10);
     break;
 
+  case 'w':
+    msg.configure_notify.id = strtol(p, &p, 10);
+    p++; /* Skip , */
+    msg.configure_notify.x = strtol (p, &p, 10);
+    p++; /* Skip , */
+    msg.configure_notify.y = strtol (p, &p, 10);
+    p++; /* Skip , */
+    msg.configure_notify.width = strtol (p, &p, 10);
+    p++; /* Skip , */
+    msg.configure_notify.height = strtol (p, &p, 10);
+    p++; /* Skip , */
+    break;
+
   default:
     g_printerr ("Unknown input command %s\n", message);
     break;
