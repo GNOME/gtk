@@ -92,30 +92,6 @@ var surfaces = {};
 var outstandingCommands = new Array();
 var inputSocket = null;
 
-function createSurface(id, x, y, width, height, isTemp)
-{
-    var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
-    surface.drawQueue = [];
-    surface.transientParent = 0;
-
-    var canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    canvas.surface = surface;
-    canvas.style["position"] = "absolute";
-    canvas.style["left"] = x + "px";
-    canvas.style["top"] = y + "px";
-    canvas.style["display"] = "none";
-    document.body.appendChild(canvas);
-    surface.canvas = canvas;
-
-    var context = canvas.getContext("2d");
-    context.globalCompositeOperation = "source-over";
-    surface.context = context;
-
-    surfaces[id] = surface;
-}
-
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
 var GDK_CROSSING_UNGRAB = 2;
@@ -208,6 +184,102 @@ function flushSurface(surface)
     }
 }
 
+function cmdCreateSurface(id, x, y, width, height, isTemp)
+{
+    var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
+    surface.drawQueue = [];
+    surface.transientParent = 0;
+
+    var canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    canvas.surface = surface;
+    canvas.style["position"] = "absolute";
+    canvas.style["left"] = x + "px";
+    canvas.style["top"] = y + "px";
+    canvas.style["display"] = "none";
+    document.body.appendChild(canvas);
+    surface.canvas = canvas;
+
+    var context = canvas.getContext("2d");
+    context.globalCompositeOperation = "source-over";
+    surface.context = context;
+
+    surfaces[id] = surface;
+}
+
+function cmdShowSurface(id)
+{
+    surfaces[id].canvas.style["display"] = "inline";
+}
+
+function cmdHideSurface(id)
+{
+    surfaces[id].canvas.style["display"] = "none";
+}
+
+function cmdSetTransientFor(id, parentId)
+{
+    surfaces[id].transientParent = parentId;
+}
+
+function cmdDeleteSurface(id)
+{
+    var canvas = surfaces[id].canvas;
+    delete surfaces[id];
+    canvas.parentNode.removeChild(canvas);
+}
+
+function cmdMoveSurface(id, x, y)
+{
+    surfaces[id].canvas.style["left"] = x + "px";
+    surfaces[id].canvas.style["top"] = y + "px";
+}
+
+function cmdResizeSurface(id, w, h)
+{
+    var surface = surfaces[id];
+
+    /* Flush any outstanding draw ops before changing size */
+    flushSurface(surface);
+
+    /* Canvas resize clears the data, so we need to save it first */
+    var tmpCanvas = document.createElement("canvas");
+    tmpCanvas.width = surface.canvas.width;
+    tmpCanvas.height = surface.canvas.height;
+    var tmpContext = tmpCanvas.getContext("2d");
+    tmpContext.globalCompositeOperation = "copy";
+    tmpContext.drawImage(surface.canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+
+    surface.canvas.width = w;
+    surface.canvas.height = h;
+
+    surface.context.globalCompositeOperation = "copy";
+    surface.context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+}
+
+function cmdFlushSurface(id)
+{
+    flushSurface(surfaces[id]);
+}
+
+function cmdGrabPointer(id, ownerEvents)
+{
+    doGrab(id, ownerEvents, time, false);
+    sendInput ("g", []);
+}
+
+function cmdUngrabPointer()
+{
+    sendInput ("u", []);
+
+    if (grab.window != null) {
+	if (grab.time == 0 || time == 0 ||
+	    grab.time < time)
+	    grab.window = null;
+    }
+}
+
 function handleCommands(cmdObj)
 {
     var cmd = cmdObj.data;
@@ -231,19 +303,19 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    var isTemp = cmd[i] == '1';
 	    i = i + 1;
-	    createSurface(id, x, y, w, h, isTemp);
+	    cmdCreateSurface(id, x, y, w, h, isTemp);
 	    break;
 
 	case 'S': // Show a surface
 	    var id = base64_16(cmd, i);
 	    i = i + 3;
-	    surfaces[id].canvas.style["display"] = "inline";
+	    cmdShowSurface(id);
 	    break;
 
 	case 'H': // Hide a surface
 	    var id = base64_16(cmd, i);
 	    i = i + 3;
-	    surfaces[id].canvas.style["display"] = "none";
+	    cmdHideSurface(id);
 	    break;
 
 	case 'p': // Set transient parent
@@ -251,15 +323,13 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    var parentId = base64_16(cmd, i);
 	    i = i + 3;
-	    surfaces[id].transientParent = parentId;
+	    cmdSetTransientFor(id, parentId);
+	    break;
 
 	case 'd': // Delete surface
 	    var id = base64_16(cmd, i);
 	    i = i + 3;
-	    var canvas = surfaces[id].canvas;
-	    delete surfaces[id];
-	    canvas.parentNode.removeChild(canvas);
-
+	    cmdDeleteSurface(id);
 	    break;
 
 	case 'm': // Move a surface
@@ -269,8 +339,7 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    var y = base64_16(cmd, i);
 	    i = i + 3;
-	    surfaces[id].canvas.style["left"] = x + "px";
-	    surfaces[id].canvas.style["top"] = y + "px";
+	    cmdMoveSurface(id, x, y);
 	    break;
 
 	case 'r': // Resize a surface
@@ -280,25 +349,7 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    var h = base64_16(cmd, i);
 	    i = i + 3;
-	    var surface = surfaces[id];
-
-	    /* Flush any outstanding draw ops before changing size */
-	    flushSurface(surface);
-
-	    /* Canvas resize clears the data, so we need to save it first */
-	    var tmpCanvas = document.createElement("canvas");
-	    tmpCanvas.width = surface.canvas.width;
-	    tmpCanvas.height = surface.canvas.height;
-	    var tmpContext = tmpCanvas.getContext("2d");
-	    tmpContext.globalCompositeOperation = "copy";
-	    tmpContext.drawImage(surface.canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-
-	    surface.canvas.width = w;
-	    surface.canvas.height = h;
-
-	    surface.context.globalCompositeOperation = "copy";
-	    surface.context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-
+	    cmdResizeSurface(id, w, h);
 	    break;
 
 	case 'i': // Put image data surface
@@ -358,7 +409,7 @@ function handleCommands(cmdObj)
 	    var id = base64_16(cmd, i);
 	    i = i + 3;
 
-	    flushSurface(surfaces[id]);
+	    cmdFlushSurface(id);
 	    break;
 
 	case 'g': // Grab
@@ -366,22 +417,11 @@ function handleCommands(cmdObj)
 	    i = i + 3;
 	    var ownerEvents = cmd[i++] == '1';
 
-	    doGrab(id, ownerEvents, time, false);
-
-	    sendInput ("g", []);
+	    cmdGrabPointer(id, ownerEvents);
 	    break;
 
 	case 'u': // Ungrab
-	    var time = base64_32(cmd, i);
-	    i = i + 6;
-	    sendInput ("u", []);
-
-	    if (grab.window != null) {
-		if (grab.time == 0 || time == 0 ||
-		    grab.time < time)
-		    grab.window = null;
-	    }
-
+	    cmdUngrabPointer();
 	    break;
 	default:
 	    alert("Unknown op " + command);
