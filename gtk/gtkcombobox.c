@@ -2449,7 +2449,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gtk_widget_get_preferred_size (priv->arrow, &req, NULL);
           child.width = req.width;
           if (!is_rtl)
-            child.x += width - req.width;
+            child.x += width - req.width - button_padding.right;
           child.width = MAX (1, child.width);
           child.height = MAX (1, child.height);
           gtk_widget_size_allocate (priv->arrow, &child);
@@ -2467,7 +2467,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
             {
               child.x += req.width;
               child.width = allocation->x + allocation->width
-                - (border_width + button_border.right + focus_width + focus_pad)
+                - (border_width + focus_width + focus_pad)
                 - child.x;
             }
           else
