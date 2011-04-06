@@ -18,12 +18,14 @@
 static const char base64_alphabet[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
+#if 0 /* Unused for now */
 static void
 base64_uint8 (guint8 v, char *c)
 {
   c[0] = base64_alphabet[(v >> 0) & 0x3f];
   c[1] = base64_alphabet[(v >> 6) & 0x3];
 }
+#endif
 
 static void
 base64_uint16 (guint32 v, char *c)

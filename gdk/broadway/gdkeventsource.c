@@ -93,12 +93,9 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 				BroadwayInputMsg *message)
 {
   GdkBroadwayDisplay *display_broadway = GDK_BROADWAY_DISPLAY (display);
-  GdkScreen *screen;
   GdkWindow *window;
   GdkEvent *event = NULL;
   GList *node;
-
-  screen = gdk_display_get_default_screen (display);
 
   display_broadway->last_event_time = message->base.time;
 

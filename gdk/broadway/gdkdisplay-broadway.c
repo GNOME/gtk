@@ -759,6 +759,9 @@ got_request (HttpRequest *request)
     start_input (request);
   else
     send_error (request, 404, "File not found");
+
+  g_free (escaped);
+  g_free (version);
 }
 
 static void

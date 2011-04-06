@@ -237,11 +237,7 @@ _gdk_broadway_screen_setup (GdkScreen *screen)
 static gboolean
 gdk_broadway_screen_is_composited (GdkScreen *screen)
 {
-  GdkBroadwayScreen *broadway_screen;
-
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-
-  broadway_screen = GDK_BROADWAY_SCREEN (screen);
 
   return FALSE;
 }

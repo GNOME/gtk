@@ -329,12 +329,10 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 					  gint           attributes_mask)
 {
   GdkWindowImplBroadway *impl;
-  GdkBroadwayScreen *broadway_screen;
   GdkBroadwayDisplay *broadway_display;
   static int current_id = 1; /* 0 is the root window */
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
-  broadway_screen = GDK_BROADWAY_SCREEN (screen);
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
   window->impl = (GdkWindowImpl *)impl;
@@ -515,10 +513,6 @@ gdk_broadway_window_destroy_foreign (GdkWindow *window)
 static void
 gdk_broadway_window_destroy_notify (GdkWindow *window)
 {
-  GdkWindowImplBroadway *window_impl;
-
-  window_impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (GDK_WINDOW_TYPE(window) != GDK_WINDOW_FOREIGN)
@@ -1009,13 +1003,9 @@ static void
 gdk_broadway_window_set_icon_name (GdkWindow   *window,
 				   const gchar *name)
 {
-  GdkDisplay *display;
-
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
-
-  display = gdk_window_get_display (window);
 
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
 		      GUINT_TO_POINTER (name != NULL));
@@ -1235,21 +1225,16 @@ static void
 gdk_broadway_window_set_opacity (GdkWindow *window,
 				 gdouble    opacity)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
-  display = gdk_window_get_display (window);
-
   if (opacity < 0)
     opacity = 0;
   else if (opacity > 1)
     opacity = 1;
-
 }
 
 static void
