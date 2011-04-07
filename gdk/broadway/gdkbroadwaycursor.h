@@ -24,8 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#if !defined (__GDKX_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdkx.h> can be included directly."
+#if !defined (__GDKBROADWAY_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdkbroadway.h> can be included directly."
 #endif
 
 #ifndef __GDK_BROADWAY_CURSOR_H__
