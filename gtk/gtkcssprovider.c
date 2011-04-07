@@ -1623,6 +1623,9 @@ css_provider_commit (GtkCssProvider *css_provider)
   priv = css_provider->priv;
   l = priv->cur_selectors;
 
+  if (g_hash_table_size (priv->cur_properties) == 0)
+    return;
+
   while (l)
     {
       SelectorPath *path = l->data;
