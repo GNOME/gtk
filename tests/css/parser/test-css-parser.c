@@ -48,6 +48,27 @@ test_get_reference_file (const char *css_file)
 }
 
 static char *
+test_get_errors_file (const char *css_file)
+{
+  GString *file = g_string_new (NULL);
+
+  if (g_str_has_suffix (css_file, ".css"))
+    g_string_append_len (file, css_file, strlen (css_file) - 4);
+  else
+    g_string_append (file, css_file);
+  
+  g_string_append (file, ".errors");
+
+  if (!g_file_test (file->str, G_FILE_TEST_EXISTS))
+    {
+      g_string_free (file, TRUE);
+      return NULL;
+    }
+
+  return g_string_free (file, FALSE);
+}
+
+static char *
 diff_with_file (const char  *file1,
                 char        *text,
                 gssize       len,
@@ -96,16 +117,46 @@ done:
 }
 
 static void
+parsing_error_cb (GtkCssProvider *provider,
+                  const gchar     *path,
+                  guint            line,
+                  guint            position,
+                  const GError *   error,
+                  GString *        errors)
+{
+  char *basename;
+
+  g_assert (path);
+  g_assert (line > 0);
+
+  basename = g_path_get_basename (path);
+
+  g_string_append_printf (errors,
+                          "%s:%u: error: %s %u\n",
+                          basename, line,
+                          g_quark_to_string (error->domain),
+                          error->code);
+
+  g_free (basename);
+}
+
+static void
 test_css_file (GFile *file)
 {
   GtkCssProvider *provider;
   char *css, *diff;
-  char *css_file, *reference_file;
+  char *css_file, *reference_file, *errors_file;
+  GString *errors;
   GError *error = NULL;
 
   css_file = g_file_get_path (file);
+  errors = g_string_new ("");
 
   provider = gtk_css_provider_new ();
+  g_signal_connect (provider, 
+                    "parsing-error",
+                    G_CALLBACK (parsing_error_cb),
+                    errors);
   gtk_css_provider_load_from_path (provider,
                                    css_file,
                                    &error);
@@ -120,14 +171,36 @@ test_css_file (GFile *file)
   diff = diff_with_file (reference_file, css, -1, &error);
   g_assert_no_error (error);
 
-  g_free (css);
-  g_free (reference_file);
-
   if (diff && diff[0])
     {
       g_test_message ("%s", diff);
       g_assert_not_reached ();
     }
+
+  g_free (css);
+  g_free (reference_file);
+
+  errors_file = test_get_errors_file (css_file);
+
+  if (errors_file)
+    {
+      diff = diff_with_file (errors_file, errors->str, errors->len, &error);
+      g_assert_no_error (error);
+
+      if (diff && diff[0])
+        {
+          g_test_message ("%s", diff);
+          g_assert_not_reached ();
+        }
+    }
+  else if (errors->str[0])
+    {
+      g_test_message ("Unexpected errors:\n%s", errors->str);
+      g_assert_not_reached ();
+    }
+
+  g_free (errors_file);
+  g_string_free (errors, TRUE);
 
   g_free (diff);
   g_free (css_file);

@@ -26,8 +26,10 @@ clean-local:
 
 EXTRA_DIST += \
 	close-at-end-of-file.css \
+	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \
 	does-not-exist.css \
+	does-not-exist.errors \
 	does-not-exist.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
