@@ -3544,19 +3544,31 @@ parse_rule (GtkCssProvider  *css_provider,
     {
       gchar *value_str = NULL;
       GtkStylePropertyParser parse_func = NULL;
-      GParamSpec *pspec;
+      GParamSpec *pspec = NULL;;
       gchar *prop;
 
       prop = g_strdup (scanner->value.v_identifier);
+
+      if (!gtk_style_properties_lookup_property (prop, &parse_func, &pspec) &&
+          prop[0] != '-')
+        {
+          gtk_css_provider_error (css_provider,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_PROPERTY_NAME,
+                                  "'%s' is not a valid property name",
+                                  prop);
+          g_free (prop);
+          goto find_end_of_declaration;
+        }
+
       g_scanner_get_next_token (scanner);
 
       if (scanner->token != ':')
         {
           g_free (prop);
-          return ':';
+          gtk_css_provider_invalid_token (css_provider, "':'");
+          goto find_end_of_declaration;
         }
-
-      priv->value_pos = priv->scanner->text;
 
       css_provider_push_scope (css_provider, SCOPE_VALUE);
       g_scanner_get_next_token (scanner);
@@ -3572,7 +3584,7 @@ parse_rule (GtkCssProvider  *css_provider,
       SKIP_SPACES (value_str);
       g_strchomp (value_str);
 
-      if (gtk_style_properties_lookup_property (prop, &parse_func, &pspec))
+      if (pspec)
         {
           GValue *val;
 
@@ -3618,7 +3630,7 @@ parse_rule (GtkCssProvider  *css_provider,
               g_free (prop);
 
               gtk_css_provider_invalid_token (css_provider, "Property value");
-              return G_TOKEN_IDENTIFIER;
+              goto find_end_of_declaration;
             }
         }
       else if (prop[0] == '-')
@@ -3637,7 +3649,18 @@ parse_rule (GtkCssProvider  *css_provider,
       css_provider_pop_scope (css_provider);
       g_scanner_get_next_token (scanner);
 
-      if (scanner->token != ';')
+      if (scanner->token != ';' &&
+          scanner->token != G_TOKEN_RIGHT_CURLY)
+        {
+          gtk_css_provider_invalid_token (css_provider, "';'");
+        }
+
+find_end_of_declaration:
+      while (scanner->token != ';' &&
+             scanner->token != G_TOKEN_RIGHT_CURLY)
+        g_scanner_get_next_token (scanner);
+      
+      if (scanner->token == G_TOKEN_RIGHT_CURLY)
         break;
 
       g_scanner_get_next_token (scanner);
@@ -3650,6 +3673,20 @@ parse_rule (GtkCssProvider  *css_provider,
   css_provider_pop_scope (css_provider);
 
   return G_TOKEN_NONE;
+}
+
+static void
+gtk_css_provider_reset (GtkCssProvider *css_provider)
+{
+  GtkCssProviderPrivate *priv;
+
+  priv = css_provider->priv;
+
+  if (priv->selectors_info->len > 0)
+    g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
+
+  g_free (priv->filename);
+  priv->filename = NULL;
 }
 
 static gboolean
@@ -3738,8 +3775,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
   if (length < 0)
     length = strlen (data);
 
-  if (priv->selectors_info->len > 0)
-    g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
+  gtk_css_provider_reset (css_provider);
 
   priv->scanner->input_name = "-";
   priv->buffer = data;
@@ -3787,10 +3823,8 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
       return FALSE;
     }
 
-  if (priv->selectors_info->len > 0)
-    g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
+  gtk_css_provider_reset (css_provider);
 
-  g_free (priv->filename);
   priv->filename = g_file_get_path (file);
 
   priv->scanner->input_name = priv->filename;
@@ -3836,10 +3870,7 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
 
   if (reset)
     {
-      if (priv->selectors_info->len > 0)
-        g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
-
-      g_free (priv->filename);
+      gtk_css_provider_reset (css_provider);
       priv->filename = g_strdup (path);
     }
 
