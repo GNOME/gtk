@@ -819,7 +819,7 @@ function onMouseDown (ev) {
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    if (grab.window != null)
+    if (grab.window == null)
 	doGrab (id, false, true);
     var button = ev.button + 1;
     lastState = lastState | getButtonMask (button);
