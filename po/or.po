@@ -7,14 +7,14 @@
 #
 # Gora Mohanty <gora_mohanty@yahoo.co.in>, 2005.
 # Subhransu Behera <arya_subhransu@yahoo.co.in>, 2006.
-# Manoj Kumar Giri <mgiri@redhat.com>, 2008, 2009, 2010.
+# Manoj Kumar Giri <mgiri@redhat.com>, 2008, 2009, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&keywords=I18N+L10N&component=general\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
+"cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-04-06 05:02+0000\n"
-"PO-Revision-Date: 2010-02-17 21:22+0530\n"
+"PO-Revision-Date: 2011-04-07 13:23+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.1\n"
 
 #: ../gdk/gdk.c:135
 #, c-format
@@ -80,9 +80,8 @@ msgstr "ପ୍ରଦର୍ଶିକା"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:193
-#, fuzzy
 msgid "GDK debugging flags to set"
-msgstr "ବିନ୍ଯାସ ପାଇଁ GTK+ ତୃଟିମୁକ୍ତକରଣ ସୂଚକ"
+msgstr "ବିନ୍ଯାସ ପାଇଁ GDK ତୃଟିମୁକ୍ତକରଣ ସୂଚକ"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -94,9 +93,8 @@ msgstr "ସୂଚକ"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:196
-#, fuzzy
 msgid "GDK debugging flags to unset"
-msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତୃଟିମୁକ୍ତିକରଣ ସୂଚକ"
+msgstr "ଅବିନ୍ଯାସ ପାଇଁ GDK ତୃଟିମୁକ୍ତିକରଣ ସୂଚକ"
 
 #.
 #. * Translators, the strings in the 'keyboard label' context are
@@ -299,138 +297,136 @@ msgstr "ଅପସାରଣ କରନ୍ତୁ"
 #: ../gdk/keyname-table.h:3990
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
-msgstr ""
+msgstr "XF86MonBrightnessUp"
 
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
-msgstr ""
+msgstr "XF86MonBrightnessDown"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
-msgstr ""
+msgstr "XF86AudioMute"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
-msgstr ""
+msgstr "XF86AudioLowerVolume"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
-msgstr ""
+msgstr "XF86AudioRaiseVolume"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
-msgstr ""
+msgstr "XF86AudioPlay"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
-msgstr ""
+msgstr "XF86AudioStop"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
-msgstr ""
+msgstr "XF86AudioNext"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
-msgstr ""
+msgstr "XF86AudioPrev"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
-msgstr ""
+msgstr "XF86AudioRecord"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
-msgstr ""
+msgstr "XF86AudioPause"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
-msgstr ""
+msgstr "XF86AudioRewind"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
-msgstr ""
+msgstr "XF86AudioMedia"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
-msgstr ""
+msgstr "XF86ScreenSaver"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86Battery"
-msgstr ""
+msgstr "XF86Battery"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Launch1"
-msgstr ""
+msgstr "XF86Launch1"
 
 #: ../gdk/keyname-table.h:4006
-#, fuzzy
 #| msgctxt "Stock label, navigation"
 #| msgid "_Forward"
 msgctxt "keyboard label"
 msgid "XF86Forward"
-msgstr "ଆଗକୁ (_F)"
+msgstr "XF86Forward"
 
 #: ../gdk/keyname-table.h:4007
-#, fuzzy
 #| msgctxt "Stock label, navigation"
 #| msgid "_Back"
 msgctxt "keyboard label"
 msgid "XF86Back"
-msgstr "ପଛ (_B)"
+msgstr "XF86Back"
 
 #: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
 msgid "XF86Sleep"
-msgstr ""
+msgstr "XF86Sleep"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
 msgid "XF86Hibernate"
-msgstr ""
+msgstr "XF86Hibernate"
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86WLAN"
-msgstr ""
+msgstr "XF86WLAN"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
 msgid "XF86WebCam"
-msgstr ""
+msgstr "XF86WebCam"
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86Display"
-msgstr ""
+msgstr "XF86Display"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
-msgstr ""
+msgstr "XF86TouchpadToggle"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
-msgstr ""
+msgstr "XF86WakeUp"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86Suspend"
-msgstr ""
+msgstr "XF86Suspend"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
@@ -473,11 +469,11 @@ msgid "Opening %s"
 msgstr "%s କୁ ଖୋଲୁଅଛି"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:312
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] "%s କୁ ଖୋଲୁଅଛି"
-msgstr[1] "%s କୁ ଖୋଲୁଅଛି"
+msgstr[0] "%d ବସ୍ତୁକୁ ଖୋଲୁଅଛି"
+msgstr[1] "%d ବସ୍ତୁଗୁଡ଼ିକୁ ଖୋଲୁଅଛି"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -488,6 +484,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
 msgstr ""
+"ଏହି ପ୍ରଗ୍ରାମଟି ABSOLUTELY NO WARRANTY ସହିତ ଆସିଥାଏ; ବିସ୍ତୃତ ବିବରଣୀ ପାଇଁ, <a href="
+"\"%s\">%s</a> କୁ ପରିଦର୍ଶନ କରନ୍ତୁ"
 
 #: ../gtk/gtkaboutdialog.c:346
 msgid "License"
@@ -516,7 +514,7 @@ msgstr "ସଂଯୋଗକୁ ଦର୍ଶାଇପାରିଲା ନାହି�
 #| msgctxt "keyboard label"
 #| msgid "Home"
 msgid "Homepage"
-msgstr "Home"
+msgstr "ମୂଖ୍ଯ ପୃଷ୍ଠା"
 
 #: ../gtk/gtkaboutdialog.c:1048
 #, c-format
@@ -524,10 +522,9 @@ msgid "About %s"
 msgstr "%s ବିଷୟରେ"
 
 #: ../gtk/gtkaboutdialog.c:2374
-#, fuzzy
 #| msgid "C_reate"
 msgid "Created by"
-msgstr "ସୃଷ୍ଟି କରନ୍ତୁ (_r)"
+msgstr "ଦ୍ବାରା ସୃଷ୍ଟି"
 
 #: ../gtk/gtkaboutdialog.c:2377
 msgid "Documented by"
@@ -635,7 +632,7 @@ msgstr "ତାଲିକାକୁ ସଫା କରିହେଲା ନାହିଁ
 #, fuzzy, c-format
 #| msgid "Could not mount %s"
 msgid "Could not find '%s'"
-msgstr "%s ସ୍ଥାପନ କରିହେଲା ନାହିଁ"
+msgstr "\"%s\"କୁ ଖୋଜି ପାରୁନାହିଁ।"
 
 #: ../gtk/gtkappchooserdialog.c:237
 #, fuzzy
@@ -672,22 +669,20 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkappchooserdialog.c:450
-#, fuzzy
 #| msgid "Forget password _immediately"
 msgid "Forget association"
-msgstr "ଅତିଶିଘ୍ର ପ୍ରବେଶ ସଂକେତ ଭୁଲିଯାଆନ୍ତୁ (_i)"
+msgstr "ସଙ୍ଗଠନକୁ ଭୁଲିଯାଆନ୍ତୁ"
 
 #: ../gtk/gtkappchooserdialog.c:515
-#, fuzzy
 #| msgid "Show GTK+ Options"
 msgid "Show other applications"
-msgstr "ଜି.ଟି.କେ.+ ପସନ୍ଦ ଦେଖାନ୍ତୁ"
+msgstr "ଅନ୍ୟ ପ୍ରୟୋଗଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkappchooserdialog.c:533
 #, fuzzy
 #| msgid "_Selection: "
 msgid "_Select"
-msgstr "ଚୟନ (_S)"
+msgstr "ଚୟନ କରନ୍ତୁ (_S)"
 
 #: ../gtk/gtkappchooserwidget.c:591
 #, fuzzy
@@ -861,8 +856,7 @@ msgstr "ବାହାର ମଣ୍ଡଳରୁ ରଙ୍ଗ ବାଛନ୍ତୁ
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
-"ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
+msgstr "ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
 
 #: ../gtk/gtkcolorsel.c:451
 msgid "_Hue:"
@@ -1074,7 +1068,6 @@ msgstr "Caps Lock ଅନ ଅଛି"
 #. *  Private Macros  *
 #. * ****************
 #: ../gtk/gtkfilechooserbutton.c:62
-#, fuzzy
 #| msgid "Select A File"
 msgid "Select a File"
 msgstr "ଗୋଟିଏ ଫାଇଲ ବାଛନ୍ତୁ"
@@ -1321,8 +1314,7 @@ msgstr "\"%s\" ନାମର ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଆପ
 
 #: ../gtk/gtkfilechooserdefault.c:8105 ../gtk/gtkprintunixdialog.c:484
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ରେ ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଏହାକୁ ବଦଳାଇଲେ, ତାହାର ସୂଚୀ ନବଲିଖିତ ହୋଇଯିବ."
 
 #: ../gtk/gtkfilechooserdefault.c:8110 ../gtk/gtkprintunixdialog.c:491
@@ -1669,7 +1661,7 @@ msgstr "ପୃଷ୍ଠା %u"
 #| msgid "%d"
 msgctxt "Number format"
 msgid "%d"
-msgstr "%d"
+msgstr "3D"
 
 #: ../gtk/gtkpagesetup.c:648 ../gtk/gtkpapersize.c:849
 #: ../gtk/gtkpapersize.c:889
@@ -1740,9 +1732,8 @@ msgid "Not available"
 msgstr "ଅନୁପଲବ୍ଧ"
 
 #: ../gtk/gtkprinteroptionwidget.c:786
-#, fuzzy
 msgid "Select a folder"
-msgstr "ଗୋଟିଏ ଫାଇଲ ବାଛନ୍ତୁ"
+msgstr "ଗୋଟିଏ ଫୋଲଡର୍ କୁ ଚୟନ କରନ୍ତୁ"
 
 #: ../gtk/gtkprinteroptionwidget.c:805
 msgid "_Save in folder:"
@@ -2439,10 +2430,9 @@ msgid "_Edit"
 msgstr "ସମ୍ପାଦନ କରନ୍ତୁ (_E)"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
-msgstr "ଫାଇଲଗୁଡ଼ିକ (_F)"
+msgstr "ଫାଇଲ (_F)"
 
 #: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
@@ -2840,24 +2830,25 @@ msgstr "ସାନ କରନ୍ତୁ (_O)"
 #. * the state
 #.
 #: ../gtk/gtkswitch.c:338 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:605
+#, fuzzy
 msgctxt "switch"
 msgid "ON"
-msgstr ""
+msgstr "ଆରମ୍ଭ"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
 #: ../gtk/gtkswitch.c:346 ../gtk/gtkswitch.c:399 ../gtk/gtkswitch.c:634
+#, fuzzy
 msgctxt "switch"
 msgid "OFF"
-msgstr ""
+msgstr "ବନ୍ଦ"
 
 #: ../gtk/gtkswitch.c:1061
-#, fuzzy
 #| msgid "inch"
 msgctxt "light switch widget"
 msgid "Switch"
-msgstr "ଇଞ୍ଚ"
+msgstr "ସ୍ୱିଚ"
 
 #: ../gtk/gtkswitch.c:1062
 msgid "Switches between on and off states"
@@ -2935,8 +2926,7 @@ msgstr "\"%s\" ଟି ଗୋଟିଏ ବୈଧ ଗୁଣ ନାମ ନୁହେ
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" କୁ \"%s\" ପ୍ରକାରର ଗୋଟିଏ ମୂଲ୍ଯର \"%s\" ଗୁଣ ପାଇଁ ବଦଳା ଯାଇ ପାରିଲା ନାହିଁ"
 
 #: ../gtk/gtktextbufferserialize.c:1211
@@ -2973,10 +2963,8 @@ msgid "Serialized data is malformed"
 msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି"
 
 #: ../gtk/gtktextbufferserialize.c:1871
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -4499,8 +4487,7 @@ msgstr "'%s' ଫାଇଲକୁ ଖୋଲିବାରେ ଅସଫଳ: %s"
 
 #: ../tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ "
 "ଅଟେ"
