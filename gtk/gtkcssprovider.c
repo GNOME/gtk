@@ -1505,10 +1505,59 @@ property_value_free (GValue *value)
 }
 
 static void
+gtk_css_provider_error_literal (GtkCssProvider *provider,
+                                GQuark          domain,
+                                gint            code,
+                                const char     *message)
+{
+  GtkCssProviderPrivate *priv = provider->priv;
+
+  if (priv->error)
+    return;
+
+  g_set_error (&priv->error,
+               domain,
+               code,
+               "%s:%u:%u: %s",
+               priv->scanner->input_name ? priv->scanner->input_name : "<data>",
+               priv->scanner->line,
+               priv->scanner->position,
+               message);
+}
+
+static void
+gtk_css_provider_error (GtkCssProvider *provider,
+                        GQuark          domain,
+                        gint            code,
+                        const char     *format,
+                        ...)  G_GNUC_PRINTF (4, 5);
+static void
+gtk_css_provider_error (GtkCssProvider *provider,
+                        GQuark          domain,
+                        gint            code,
+                        const char     *format,
+                        ...)
+{
+  va_list args;
+  char *message;
+
+  va_start (args, format);
+  message = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  gtk_css_provider_error_literal (provider, domain, code, message);
+
+  g_free (message);
+}
+
+static void
 gtk_css_provider_invalid_token (GtkCssProvider *provider,
                                 const char     *expected)
 {
-  provider->priv->scanner->user_data = (gpointer) expected;
+  gtk_css_provider_error (provider,
+                          GTK_CSS_PROVIDER_ERROR,
+                          GTK_CSS_PROVIDER_ERROR_FAILED,
+                          "expected a valid %s", expected);
 }
 
 static void
@@ -1599,7 +1648,6 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
   priv->state = NULL;
 
   scanner_apply_scope (priv->scanner, SCOPE_SELECTOR);
-  priv->scanner->user_data = NULL;
   priv->value_pos = NULL;
 
   g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
