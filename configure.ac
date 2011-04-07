@@ -1650,6 +1650,8 @@ demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl
 examples/Makefile
 tests/Makefile
+tests/css/Makefile
+tests/css/parser/Makefile
 tests/reftests/Makefile
 docs/Makefile
 docs/reference/Makefile

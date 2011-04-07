@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/tests
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = reftests
+SUBDIRS = css reftests
 
 INCLUDES =				\
 	-I$(top_srcdir)			\
