@@ -2827,6 +2827,8 @@ gtk_calendar_draw (GtkWidget *widget,
       gtk_render_frame (context, cr, 0, 0,
                         gtk_widget_get_allocated_width (widget),
                         gtk_widget_get_allocated_height (widget));
+
+      gtk_style_context_restore (context);
     }
 
   calendar_paint_main (calendar, cr);
