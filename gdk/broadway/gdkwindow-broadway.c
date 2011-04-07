@@ -1341,6 +1341,16 @@ _gdk_broadway_window_translate (GdkWindow      *window,
     }
 }
 
+guint32
+gdk_broadway_get_last_seen_time (GdkWindow  *window)
+{
+  GdkDisplay *display;
+
+  display = gdk_window_get_display (window);
+  _gdk_broadway_display_consume_all_input (display);
+  return (guint32) GDK_BROADWAY_DISPLAY (display)->last_seen_time;
+}
+
 static void
 gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
 {

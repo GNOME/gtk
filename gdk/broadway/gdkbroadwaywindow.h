@@ -47,6 +47,8 @@ typedef struct _GdkBroadwayWindowClass GdkBroadwayWindowClass;
 
 GType    gdk_broadway_window_get_type          (void);
 
+guint32  gdk_broadway_get_last_seen_time (GdkWindow       *window);
+
 G_END_DECLS
 
 #endif /* __GDK_BROADWAY_WINDOW_H__ */
