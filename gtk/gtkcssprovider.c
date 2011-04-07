@@ -801,6 +801,7 @@ struct _GtkCssProviderPrivate
   GSList *state;
   GSList *cur_selectors;
   GHashTable *cur_properties;
+  GError *error;
 };
 
 enum ParserScope {
@@ -1612,6 +1613,10 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
                                                 g_str_equal,
                                                 (GDestroyNotify) g_free,
                                                 (GDestroyNotify) property_value_free);
+
+  if (priv->error)
+    g_error_free (priv->error);
+  priv->error = NULL;
 }
 
 static void
@@ -3540,10 +3545,9 @@ parse_stylesheet (GtkCssProvider  *css_provider,
   while (!g_scanner_eof (priv->scanner))
     {
       GTokenType expected_token;
-      GError *err = NULL;
 
       css_provider_reset_parser (css_provider);
-      expected_token = parse_rule (css_provider, priv->scanner, &err);
+      expected_token = parse_rule (css_provider, priv->scanner, &priv->error);
 
       if (expected_token != G_TOKEN_NONE)
         {
@@ -3553,8 +3557,8 @@ parse_stylesheet (GtkCssProvider  *css_provider,
           if (error != NULL)
             {
               result = FALSE;
-              if (err)
-                g_propagate_error (error, err);
+              if (priv->error)
+                g_propagate_error (error, priv->error);
               else
                 g_set_error_literal (error,
                                      GTK_CSS_PROVIDER_ERROR,
@@ -3564,8 +3568,9 @@ parse_stylesheet (GtkCssProvider  *css_provider,
             }
           else
             {
-              scanner_report_warning (css_provider, expected_token, err);
-              g_clear_error (&err);
+              scanner_report_warning (css_provider, expected_token, priv->error);
+              g_clear_error (&priv->error);
+              priv->error = NULL;
             }
 
           css_provider_reset_parser (css_provider);
