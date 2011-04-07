@@ -838,8 +838,7 @@ static void scanner_apply_scope (GScanner    *scanner,
 static void     css_provider_reset_parser (GtkCssProvider *css_provider);
 static gboolean css_provider_parse_value (GtkCssProvider  *css_provider,
                                           const gchar     *value_str,
-                                          GValue          *value,
-                                          GError         **error);
+                                          GValue          *value);
 static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
                                                           const gchar     *path,
                                                           gboolean         reset,
@@ -1437,7 +1436,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
           val_str = g_value_get_string (val);
           found = TRUE;
 
-          css_provider_parse_value (GTK_CSS_PROVIDER (provider), val_str, value, NULL);
+          css_provider_parse_value (GTK_CSS_PROVIDER (provider), val_str, value);
           break;
         }
     }
@@ -1548,6 +1547,14 @@ gtk_css_provider_error (GtkCssProvider *provider,
   gtk_css_provider_error_literal (provider, domain, code, message);
 
   g_free (message);
+}
+
+static void
+gtk_css_provider_take_error (GtkCssProvider *provider,
+                             GError         *error)
+{
+  gtk_css_provider_error_literal (provider, error->domain, error->code, error->message);
+  g_error_free (error);
 }
 
 static void
@@ -2277,8 +2284,7 @@ symbolic_color_parse_str (const gchar  *string,
 }
 
 static GtkSymbolicColor *
-symbolic_color_parse (const gchar  *str,
-                      GError      **error)
+symbolic_color_parse (const gchar  *str)
 {
   GtkSymbolicColor *color;
   gchar *end;
@@ -2287,11 +2293,6 @@ symbolic_color_parse (const gchar  *str,
 
   if (*end != '\0')
     {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_FAILED,
-                           "Could not parse symbolic color");
-
       if (color)
         {
           gtk_symbolic_color_unref (color);
@@ -2555,8 +2556,7 @@ gradient_parse_str (const gchar  *str,
 static gchar *
 path_parse_str (GtkCssProvider  *css_provider,
                 const gchar     *str,
-                gchar          **end_ptr,
-                GError         **error)
+                gchar          **end_ptr)
 {
   gchar *path, *chr;
   const gchar *start, *end;
@@ -2640,8 +2640,8 @@ path_parse_str (GtkCssProvider  *css_provider,
 
   if (!g_file_test (path, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
     {
-      g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_EXIST,
-                   "File doesn't exist: %s", path);
+      gtk_css_provider_error (css_provider, G_FILE_ERROR, G_FILE_ERROR_EXIST,
+                              "File doesn't exist: %s", path);
       g_free (path);
       path = NULL;
       *end_ptr = (gchar *)start;
@@ -2652,23 +2652,22 @@ path_parse_str (GtkCssProvider  *css_provider,
 
 static gchar *
 path_parse (GtkCssProvider  *css_provider,
-            const gchar     *str,
-            GError         **error)
+            const gchar     *str)
 {
   gchar *path;
   gchar *end;
 
-  path = path_parse_str (css_provider, str, &end, error);
+  path = path_parse_str (css_provider, str, &end);
 
   if (!path)
     return NULL;
 
   if (*end != '\0')
     {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_FAILED,
-                           "Error parsing path");
+      gtk_css_provider_error (css_provider,
+                              GTK_CSS_PROVIDER_ERROR,
+                              GTK_CSS_PROVIDER_ERROR_FAILED,
+                              "Error parsing path");
       g_free (path);
       path = NULL;
     }
@@ -2679,8 +2678,7 @@ path_parse (GtkCssProvider  *css_provider,
 static Gtk9Slice *
 slice_parse_str (GtkCssProvider  *css_provider,
                  const gchar     *str,
-                 gchar          **end_ptr,
-                 GError         **error)
+                 gchar          **end_ptr)
 {
   gdouble distance_top, distance_bottom;
   gdouble distance_left, distance_right;
@@ -2689,11 +2687,12 @@ slice_parse_str (GtkCssProvider  *css_provider,
   Gtk9Slice *slice;
   gchar *path;
   gint i = 0;
+  GError *error = NULL;
 
   SKIP_SPACES (str);
 
   /* Parse image url */
-  path = path_parse_str (css_provider, str, end_ptr, error);
+  path = path_parse_str (css_provider, str, end_ptr);
 
   if (!path)
       return NULL;
@@ -2759,11 +2758,12 @@ slice_parse_str (GtkCssProvider  *css_provider,
       mods[1] = mods[0];
     }
 
-  pixbuf = gdk_pixbuf_new_from_file (path, error);
+  pixbuf = gdk_pixbuf_new_from_file (path, &error);
   g_free (path);
 
   if (!pixbuf)
     {
+      gtk_css_provider_take_error (css_provider, error);
       *end_ptr = (gchar *) str;
       return NULL;
     }
@@ -2898,8 +2898,7 @@ resolve_binding_sets (const gchar *value_str,
 static gboolean
 css_provider_parse_value (GtkCssProvider  *css_provider,
                           const gchar     *value_str,
-                          GValue          *value,
-                          GError         **error)
+                          GValue          *value)
 {
   GtkCssProviderPrivate *priv;
   GType type;
@@ -3005,8 +3004,7 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
           gchar *path;
           GdkPixbuf *pixbuf;
 
-          g_clear_error (error);
-          path = path_parse_str (css_provider, value_str, &end, error);
+          path = path_parse_str (css_provider, value_str, &end);
 
           if (path)
             {
@@ -3056,11 +3054,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
       if (!enum_value)
         {
-          g_set_error (error,
-                       GTK_CSS_PROVIDER_ERROR,
-                       GTK_CSS_PROVIDER_ERROR_FAILED,
-                       "Unknown value '%s' for enum type '%s'",
-                       value_str, g_type_name (type));
+          gtk_css_provider_error (css_provider,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_FAILED,
+                                  "Unknown value '%s' for enum type '%s'",
+                                  value_str, g_type_name (type));
           parsed = FALSE;
         }
       else
@@ -3093,11 +3091,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
           if (!flag_value)
             {
-              g_set_error (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_FAILED,
-                           "Unknown flag '%s' for type '%s'",
-                           value_str, g_type_name (type));
+              gtk_css_provider_error (css_provider,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_FAILED,
+                                      "Unknown flag '%s' for type '%s'",
+                                      value_str, g_type_name (type));
               parsed = FALSE;
             }
           else
@@ -3112,11 +3110,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
       if (!flag_value)
         {
-          g_set_error (error,
-                       GTK_CSS_PROVIDER_ERROR,
-                       GTK_CSS_PROVIDER_ERROR_FAILED,
-                       "Unknown flag '%s' for type '%s'",
-                       value_str, g_type_name (type));
+          gtk_css_provider_error (css_provider,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_FAILED,
+                                  "Unknown flag '%s' for type '%s'",
+                                  value_str, g_type_name (type));
           parsed = FALSE;
         }
       else
@@ -3131,7 +3129,7 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
     {
       Gtk9Slice *slice;
 
-      slice = slice_parse_str (css_provider, value_str, &end, error);
+      slice = slice_parse_str (css_provider, value_str, &end);
 
       if (slice)
         g_value_take_boxed (value, slice);
@@ -3140,11 +3138,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
     }
   else
     {
-      g_set_error (error,
-                   GTK_CSS_PROVIDER_ERROR,
-                   GTK_CSS_PROVIDER_ERROR_FAILED,
-                   "Cannot parse string '%s' for type %s",
-                   value_str, g_type_name (type));
+      gtk_css_provider_error (css_provider,
+                              GTK_CSS_PROVIDER_ERROR,
+                              GTK_CSS_PROVIDER_ERROR_FAILED,
+                              "Cannot parse string '%s' for type %s",
+                              value_str, g_type_name (type));
       parsed = FALSE;
     }
 
@@ -3159,11 +3157,10 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
       priv->value_pos += (end - value_str);
       parsed = FALSE;
 
-      if (error && !*error)
-        g_set_error_literal (error,
-                             GTK_CSS_PROVIDER_ERROR,
-                             GTK_CSS_PROVIDER_ERROR_FAILED,
-                             "Failed to parse value");
+      gtk_css_provider_error_literal (css_provider,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_FAILED,
+                                      "Failed to parse value");
     }
 
   return parsed;
@@ -3247,8 +3244,7 @@ scanner_report_warning (GtkCssProvider *css_provider,
 
 static GTokenType
 parse_rule (GtkCssProvider  *css_provider,
-            GScanner        *scanner,
-            GError         **error)
+            GScanner        *scanner)
 {
   GtkCssProviderPrivate *priv;
   GTokenType expected_token;
@@ -3291,7 +3287,7 @@ parse_rule (GtkCssProvider  *css_provider,
             }
 
           color_str = g_strstrip (scanner->value.v_identifier);
-          color = symbolic_color_parse (color_str, error);
+          color = symbolic_color_parse (color_str);
 
           if (!color)
             {
@@ -3322,12 +3318,10 @@ parse_rule (GtkCssProvider  *css_provider,
           if (scanner->token == G_TOKEN_IDENTIFIER &&
               g_str_has_prefix (scanner->value.v_identifier, "url"))
             path = path_parse (css_provider,
-                               g_strstrip (scanner->value.v_identifier),
-                               error);
+                               g_strstrip (scanner->value.v_identifier));
           else if (scanner->token == G_TOKEN_STRING)
             path = path_parse (css_provider,
-                               g_strstrip (scanner->value.v_string),
-                               error);
+                               g_strstrip (scanner->value.v_string));
 
           if (path == NULL)
             {
@@ -3353,7 +3347,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           /* FIXME: Avoid recursive importing */
           loaded = gtk_css_provider_load_from_path_internal (css_provider, path,
-                                                             FALSE, error);
+                                                             FALSE, NULL);
 
           /* Restore previous state */
           css_provider_reset_parser (css_provider);
@@ -3534,9 +3528,19 @@ parse_rule (GtkCssProvider  *css_provider,
               g_value_set_string (val, value_str);
               g_hash_table_insert (priv->cur_properties, prop, val);
             }
-          else if ((parse_func && (parse_func) (value_str, val, error)) ||
-                   (!parse_func && css_provider_parse_value (css_provider, value_str, val, error)))
-            g_hash_table_insert (priv->cur_properties, prop, val);
+          else if (!parse_func && css_provider_parse_value (css_provider, value_str, val))
+            {
+              g_hash_table_insert (priv->cur_properties, prop, val);
+            }
+          else if (parse_func)
+            {
+              GError *error = NULL;
+              
+              if ((*parse_func) (value_str, val, &error))
+                g_hash_table_insert (priv->cur_properties, prop, val);
+              else
+                gtk_css_provider_take_error (css_provider, error);
+            }
           else
             {
               g_value_unset (val);
@@ -3595,7 +3599,7 @@ parse_stylesheet (GtkCssProvider  *css_provider,
       GTokenType expected_token;
 
       css_provider_reset_parser (css_provider);
-      expected_token = parse_rule (css_provider, priv->scanner, &priv->error);
+      expected_token = parse_rule (css_provider, priv->scanner);
 
       if (expected_token != G_TOKEN_NONE)
         {
