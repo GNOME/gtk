@@ -265,6 +265,12 @@ parse_input_message (BroadwayInput *input, const char *message)
     msg.delete_notify.id = strtol(p, &p, 10);
     break;
 
+  case 'd':
+    msg.screen_resize_notify.width = strtol (p, &p, 10);
+    p++; /* Skip , */
+    msg.screen_resize_notify.height = strtol (p, &p, 10);
+    break;
+
   default:
     g_printerr ("Unknown input command %s\n", message);
     break;

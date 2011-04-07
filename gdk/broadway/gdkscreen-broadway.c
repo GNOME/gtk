@@ -102,6 +102,23 @@ gdk_broadway_screen_get_root_window (GdkScreen *screen)
   return GDK_BROADWAY_SCREEN (screen)->root_window;
 }
 
+void
+_gdk_broadway_screen_size_changed (GdkScreen *screen, BroadwayInputScreenResizeNotify *msg)
+{
+  GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
+  gint width, height;
+
+  width = gdk_screen_get_width (screen);
+  height = gdk_screen_get_height (screen);
+
+  broadway_screen->width   = msg->width;
+  broadway_screen->height  = msg->height;
+
+  if (width != gdk_screen_get_width (screen) ||
+      height != gdk_screen_get_height (screen))
+    g_signal_emit_by_name (screen, "size-changed");
+}
+
 static void
 gdk_broadway_screen_dispose (GObject *object)
 {

@@ -119,6 +119,8 @@ void _gdk_broadway_screen_query_visual_types (GdkScreen * screen,
 					      GdkVisualType **visual_types,
 					      gint           *count);
 GList *_gdk_broadway_screen_list_visuals (GdkScreen *screen);
+void _gdk_broadway_screen_size_changed (GdkScreen *screen, 
+					BroadwayInputScreenResizeNotify *msg);
 
 void _gdk_broadway_events_got_input      (GdkDisplay *display,
 					  BroadwayInputMsg *message);

@@ -282,13 +282,13 @@ function browserWindowClosed(win) {
 
     sendInput ("W", [surface.id]);
     for (id in surfaces) {
-	if (surfaces[id].transientToplevel != null && surfaces[id].transientToplevel == surface) {
+	if (surfaces[id].transientToplevel != null && 
+	    surfaces[id].transientToplevel == surface) {
 	    var childSurface = surfaces[id];
 	    sendInput ("W", [childSurface.id]);
 	}
     }
 }
-
 
 function registerWindow(win)
 {
@@ -926,6 +926,22 @@ function connect()
 	var ws = new WebSocket(loc, "broadway");
 	ws.onopen = function() {
 	    inputSocket = ws;
+	    
+	    var w, h;
+	    if (useToplevelWindows) {
+		w = window.screen.width;
+		h = window.screen.height;
+	    } else {
+		w = window.innerWidth;
+		h = window.innerHeight;
+		win.onresize = function(ev) { 
+		    var w, h;
+		    w = window.innerWidth;
+		    h = window.innerHeight;
+		    sendInput ("d", [w, h]);
+		};
+	    }
+	    sendInput ("d", [w, h]);
 	};
 	ws.onclose = function() {
 	    inputSocket = null;

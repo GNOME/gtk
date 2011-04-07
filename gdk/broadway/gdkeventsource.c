@@ -93,6 +93,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 				BroadwayInputMsg *message)
 {
   GdkBroadwayDisplay *display_broadway = GDK_BROADWAY_DISPLAY (display);
+  GdkScreen *screen;
   GdkWindow *window;
   GdkEvent *event = NULL;
   GList *node;
@@ -306,6 +307,16 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	node = _gdk_event_queue_append (display, event);
 	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
+    break;
+
+  case 'd':
+    screen = gdk_display_get_default_screen (display);
+    window = gdk_screen_get_root_window (screen);
+    window->width = message->screen_resize_notify.width;
+    window->height = message->screen_resize_notify.height;
+
+    _gdk_window_update_size (window);
+    _gdk_broadway_screen_size_changed (screen, &message->screen_resize_notify);
     break;
 
   default:
