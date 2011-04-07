@@ -1540,8 +1540,6 @@ render_background_internal (GtkThemingEngine *engine,
   if (border_width > 1 &&
       border_style == GTK_BORDER_STYLE_NONE)
     {
-      cairo_set_line_width (cr, border_width);
-
       x += (gdouble) border_width / 2;
       y += (gdouble) border_width / 2;
       width -= border_width;
@@ -1559,6 +1557,7 @@ render_background_internal (GtkThemingEngine *engine,
     return;
 
   cairo_save (cr);
+  cairo_set_line_width (cr, border_width);
   cairo_translate (cr, x, y);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
