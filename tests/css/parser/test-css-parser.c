@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include <string.h>
-
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
 static char *
@@ -48,33 +48,49 @@ test_get_reference_file (const char *css_file)
 }
 
 static char *
-test_get_output_file (const char *css_file)
+diff_with_file (const char  *file1,
+                char        *text,
+                gssize       len,
+                GError     **error)
 {
-  GString *file = g_string_new (NULL);
+  const char *command[] = { "diff", "-u", file1, NULL, NULL };
+  char *diff, *tmpfile;
+  int fd;
 
-  if (g_str_has_suffix (css_file, ".css"))
-    g_string_append_len (file, css_file, strlen (css_file) - 4);
-  else
-    g_string_append (file, css_file);
+  diff = NULL;
+
+  if (len < 0)
+    len = strlen (text);
   
-  g_string_append (file, ".out.css");
+  /* write the text buffer to a temporary file */
+  fd = g_file_open_tmp (NULL, &tmpfile, error);
+  if (fd < 0)
+    return NULL;
 
-  return g_string_free (file, FALSE);
-}
-
-static char *
-diff_files (const char *file1,
-            const char *file2,
-            GError **   error)
-{
-  const char *command[] = { "diff", "-u", file1, file2, NULL };
-  char *diff;
+  if (write (fd, text, len) != (int) len)
+    {
+      close (fd);
+      g_set_error (error,
+                   G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                   "Could not write data to temporary file '%s'", tmpfile);
+      goto done;
+    }
+  close (fd);
+  command[3] = tmpfile;
 
   /* run diff command */
-  if (!g_spawn_sync (NULL, (char **) command, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL,
-	&diff, NULL, NULL, error)) {
-    return NULL;
-  }
+  g_spawn_sync (NULL, 
+                (char **) command,
+                NULL,
+                G_SPAWN_SEARCH_PATH,
+                NULL, NULL,
+	        &diff,
+                NULL, NULL,
+                error);
+
+done:
+  g_unlink (tmpfile);
+  g_free (tmpfile);
 
   return diff;
 }
@@ -84,7 +100,7 @@ test_css_file (GFile *file)
 {
   GtkCssProvider *provider;
   char *css, *diff;
-  char *css_file, *output_file, *reference_file;
+  char *css_file, *reference_file;
   GError *error = NULL;
 
   css_file = g_file_get_path (file);
@@ -96,20 +112,16 @@ test_css_file (GFile *file)
   g_assert_no_error (error);
 
   css = gtk_css_provider_to_string (provider);
-  output_file = test_get_output_file (css_file);
 
-  g_file_set_contents (output_file, css, -1, &error);
   g_assert_no_error (error);
-
-  g_free (css);
 
   reference_file = test_get_reference_file (css_file);
 
-  diff = diff_files (reference_file, output_file, &error);
+  diff = diff_with_file (reference_file, css, -1, &error);
   g_assert_no_error (error);
 
+  g_free (css);
   g_free (reference_file);
-  g_free (output_file);
 
   if (diff && diff[0])
     {
