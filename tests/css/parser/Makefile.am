@@ -25,6 +25,8 @@ clean-local:
 	rm $(builddir)/*.out.css || true
 
 EXTRA_DIST += \
+	close-at-end-of-file.css \
+	close-at-end-of-file.ref.css \
 	does-not-exist.css \
 	does-not-exist.ref.css \
 	no-semicolon.css \
