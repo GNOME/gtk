@@ -266,6 +266,8 @@ gtk_separator_draw (GtkWidget *widget,
                          (width - padding.left) / 2, height - 1);
     }
 
+  gtk_style_context_restore (context);
+
   return FALSE;
 }
 
