@@ -2,6 +2,7 @@
 include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
+libgdkbroadwayincludedir = $(includedir)/gtk-3.0/gdk/broadway
 
 INCLUDES =			\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
@@ -15,6 +16,15 @@ INCLUDES =			\
 LDADDS = $(GDK_DEP_LIBS)
 
 noinst_LTLIBRARIES = libbroadway.la libgdk-broadway.la
+
+libgdkinclude_HEADERS = 	\
+	gdkbroadway.h
+
+libgdkbroadwayinclude_HEADERS = 	\
+	gdkbroadwaydisplaymanager.h	\
+	gdkbroadwaywindow.h		\
+	gdkbroadwaycursor.h		\
+	gdkbroadwayvisual.h
 
 libbroadway_la_SOURCES =		\
 	broadway.h			\
@@ -36,7 +46,6 @@ broadway_built_sources =		\
 
 libgdk_broadway_la_SOURCES =		\
 	${broadway_built_private_headers}\
-	gdkbroadwaydisplaymanager.h	\
 	gdkcursor-broadway.c	\
 	gdkdevice-broadway.h	\
 	gdkdevice-broadway.c	\
