@@ -153,6 +153,8 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 				 gint             *win_y,
 				 GdkModifierType  *mask)
 {
+  GdkWindow *toplevel;
+  GdkWindowImplBroadway *impl;
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
   GdkScreen *screen;
@@ -163,6 +165,9 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 
   display = gdk_device_get_display (device);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+  toplevel = impl->wrapper;
 
   if (root_window)
     {
@@ -176,24 +181,23 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   if (broadway_display->output)
     {
       _gdk_broadway_display_consume_all_input (display);
-
       if (root_x)
 	*root_x = broadway_display->future_root_x;
       if (root_y)
 	*root_y = broadway_display->future_root_y;
       /* TODO: Should really use future_x/y when we get configure events */
       if (win_x)
-	*win_x = broadway_display->future_root_x - window->x;
+	*win_x = broadway_display->future_root_x - toplevel->x;
       if (win_y)
-	*win_y = broadway_display->future_root_y - window->y;
+	*win_y = broadway_display->future_root_y - toplevel->y;
       if (child_window)
 	{
-	  if (gdk_window_get_window_type (window) == GDK_WINDOW_ROOT)
+	  if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
 	    *child_window =
 	      g_hash_table_lookup (broadway_display->id_ht,
 				   GINT_TO_POINTER (broadway_display->future_mouse_in_toplevel));
 	  else
-	    *child_window = window; /* No native children */
+	    *child_window = toplevel; /* No native children */
 	}
       return TRUE;
     }
@@ -208,21 +212,21 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   if (root_y)
     *root_y = device_root_y;
   if (win_x)
-    *win_x = device_root_y - window->x;
+    *win_x = device_root_y - toplevel->x;
   if (win_y)
-    *win_y = device_root_y - window->y;
+    *win_y = device_root_y - toplevel->y;
   if (child_window)
     {
-      if (gdk_window_get_window_type (window) == GDK_WINDOW_ROOT)
+      if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
 	{
 	  *child_window = broadway_display->mouse_in_toplevel;
 	  if (*child_window == NULL)
-	    *child_window = window;
+	    *child_window = toplevel;
 	}
       else
 	{
 	  /* No native children */
-	  *child_window = window;
+	  *child_window = toplevel;
 	}
     }
 
