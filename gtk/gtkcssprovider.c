@@ -34,7 +34,9 @@
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkbindings.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 
 /**
  * SECTION:gtkcssprovider
@@ -830,6 +832,13 @@ enum ParserSymbol {
   SYMBOL_NTH_CHILD_LAST
 };
 
+enum {
+  PARSING_ERROR,
+  LAST_SIGNAL
+};
+
+static guint css_provider_signals[LAST_SIGNAL] = { 0 };
+
 static void gtk_css_provider_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
@@ -855,11 +864,61 @@ G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                                                gtk_css_style_provider_iface_init));
 
 static void
+gtk_css_provider_parsing_error (GtkCssProvider  *provider,
+                                const gchar     *path,
+                                guint            line,
+                                guint            position,
+                                const GError *   error)
+{
+  GtkCssProviderPrivate *priv = provider->priv;
+
+  if (!priv->error)
+    {
+      priv->error = g_error_copy (error);
+      g_prefix_error (&priv->error, "%s:%u:%u: ", path ? path : "<unknown>", line, position);
+    }
+}
+
+static void
 gtk_css_provider_class_init (GtkCssProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  /**
+   * GtkCssProvider::parsing-error:
+   * @provider: the provider that had a parsing error
+   * @path: path to the parsed file or %NULL if the file cannot be
+   *   identified or the data was not loaded from a file
+   * @line: line in the file or data or 0 if unknown
+   * @position: offset into the current line or 0 if unknown or the
+   *   whole line is affected
+   * @error: The parsing error
+   *
+   * Signals that a parsing error occured. the @path, @line and @position
+   * describe the actual location of the error as accurately as possible.
+   *
+   * Parsing errors are never fatal, so the parsing will resume after
+   * the error. Errors may however cause parts of the given
+   * data or even all of it to not be parsed at all. So it is a useful idea
+   * to check that the parsing succeeds by connecting to this signal.
+   *
+   * Note that this signal may be emitted at any time as the css provider
+   * may opt to defer parsing parts or all of the input to a later time
+   * than when a loading function was called.
+   */
+  css_provider_signals[PARSING_ERROR] =
+    g_signal_new (I_("parsing-error"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkCssProviderClass, parsing_error),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__STRING_UINT_UINT_BOXED,
+                  G_TYPE_NONE, 4,
+                  G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_ERROR);
+
   object_class->finalize = gtk_css_provider_finalize;
+
+  klass->parsing_error = gtk_css_provider_parsing_error;
 
   g_type_class_add_private (object_class, sizeof (GtkCssProviderPrivate));
 }
@@ -1504,24 +1563,45 @@ property_value_free (GValue *value)
 }
 
 static void
+gtk_css_provider_take_error (GtkCssProvider *provider,
+                             GError         *error)
+{
+  GtkCssProviderPrivate *priv;
+  const char *filename;
+  guint line, position;
+  
+  priv = provider->priv;
+
+  if (priv->scanner)
+    {
+      filename = priv->scanner->input_name;
+      line = priv->scanner->line;
+      position = priv->scanner->position;
+    }
+  else
+    {
+      filename = NULL;
+      line = 0;
+      position = 0;
+    }
+
+  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
+                 filename, line, position, error);
+
+  g_error_free (error);
+}
+
+static void
 gtk_css_provider_error_literal (GtkCssProvider *provider,
                                 GQuark          domain,
                                 gint            code,
                                 const char     *message)
 {
-  GtkCssProviderPrivate *priv = provider->priv;
+  GError *error;
 
-  if (priv->error)
-    return;
+  error = g_error_new_literal (domain, code, message);
 
-  g_set_error (&priv->error,
-               domain,
-               code,
-               "%s:%u:%u: %s",
-               priv->scanner->input_name ? priv->scanner->input_name : "<data>",
-               priv->scanner->line,
-               priv->scanner->position,
-               message);
+  gtk_css_provider_take_error (provider, error);
 }
 
 static void
@@ -1537,24 +1617,14 @@ gtk_css_provider_error (GtkCssProvider *provider,
                         const char     *format,
                         ...)
 {
+  GError *error;
   va_list args;
-  char *message;
 
   va_start (args, format);
-  message = g_strdup_vprintf (format, args);
+  error = g_error_new_valist (domain, code, format, args);
   va_end (args);
 
-  gtk_css_provider_error_literal (provider, domain, code, message);
-
-  g_free (message);
-}
-
-static void
-gtk_css_provider_take_error (GtkCssProvider *provider,
-                             GError         *error)
-{
-  gtk_css_provider_error_literal (provider, error->domain, error->code, error->message);
-  g_error_free (error);
+  gtk_css_provider_take_error (provider, error);
 }
 
 static void

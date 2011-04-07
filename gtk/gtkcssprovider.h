@@ -54,8 +54,13 @@ struct _GtkCssProviderClass
 {
   GObjectClass parent_class;
 
+  void (* parsing_error)                        (GtkCssProvider  *provider,
+                                                 const gchar     *path,
+                                                 guint            line,
+                                                 guint            position,
+                                                 const GError *   error);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
