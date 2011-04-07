@@ -107,7 +107,7 @@ function resizeCanvas(canvas, w, h)
     context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
 }
 
-var useToplevelWindows = false;
+var useToplevelWindows = true;
 var toplevelWindows = [];
 var grab = new Object();
 grab.window = null;
