@@ -190,6 +190,7 @@ update_future_pointer_info (GdkBroadwayDisplay *broadway_display, BroadwayInputP
 {
   broadway_display->future_root_x = data->root_x;
   broadway_display->future_root_y = data->root_y;
+  broadway_display->future_state = data->state;
   broadway_display->future_mouse_in_toplevel = data->mouse_window_id;
 }
 

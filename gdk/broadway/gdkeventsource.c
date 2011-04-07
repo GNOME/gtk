@@ -103,6 +103,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'e': /* Enter */
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->last_state = message->pointer.state;
     display_broadway->real_mouse_in_toplevel =
       g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
@@ -139,6 +140,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'l': /* Leave */
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->last_state = message->pointer.state;
     display_broadway->real_mouse_in_toplevel =
       g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
@@ -174,6 +176,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'm': /* Mouse move */
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->last_state = message->pointer.state;
     display_broadway->real_mouse_in_toplevel =
       g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
@@ -199,6 +202,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 'B':
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->last_state = message->pointer.state;
     display_broadway->real_mouse_in_toplevel =
       g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
@@ -224,6 +228,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   case 's':
     display_broadway->last_x = message->pointer.root_x;
     display_broadway->last_y = message->pointer.root_y;
+    display_broadway->last_state = message->pointer.state;
     display_broadway->real_mouse_in_toplevel =
       g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 

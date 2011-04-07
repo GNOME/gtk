@@ -125,6 +125,7 @@ struct _GdkBroadwayDisplay
   GSource *event_source;
   GdkWindow *mouse_in_toplevel;
   int last_x, last_y; /* in root coords */
+  guint32 last_state;
   GdkWindow *real_mouse_in_toplevel; /* Not affected by grabs */
 
   /* Keyboard related information */
@@ -165,6 +166,7 @@ struct _GdkBroadwayDisplay
   /* Future data, from the currently queued events */
   int future_root_x;
   int future_root_y;
+  GdkModifierType future_state;
   int future_mouse_in_toplevel;
 };
 

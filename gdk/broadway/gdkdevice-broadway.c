@@ -175,9 +175,6 @@ gdk_broadway_device_query_state (GdkDevice        *device,
       *root_window = gdk_screen_get_root_window (screen);
     }
 
-  if (mask)
-    *mask = 0; /* TODO */
-
   if (broadway_display->output)
     {
       _gdk_broadway_display_consume_all_input (display);
@@ -190,6 +187,8 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 	*win_x = broadway_display->future_root_x - toplevel->x;
       if (win_y)
 	*win_y = broadway_display->future_root_y - toplevel->y;
+      if (mask)
+	*mask = broadway_display->future_state;
       if (child_window)
 	{
 	  if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
@@ -215,6 +214,8 @@ gdk_broadway_device_query_state (GdkDevice        *device,
     *win_x = device_root_y - toplevel->x;
   if (win_y)
     *win_y = device_root_y - toplevel->y;
+  if (mask)
+    *mask = broadway_display->last_state;
   if (child_window)
     {
       if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
