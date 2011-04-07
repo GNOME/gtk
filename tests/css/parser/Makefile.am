@@ -27,4 +27,6 @@ clean-local:
 EXTRA_DIST += \
 	does-not-exist.css \
 	does-not-exist.ref.css \
+	no-semicolon.css \
+	no-semicolon.ref.css \
 	simple.css
