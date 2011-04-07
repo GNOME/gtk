@@ -150,20 +150,16 @@ struct _GdkBroadwayDisplay
   /* input GdkDevice list */
   GList *input_devices;
 
-  /* Time of most recent user interaction. */
-  gulong user_time;
-
   /* The offscreen window that has the pointer in it (if any) */
   GdkWindow *active_offscreen_window;
 
   GSocketService *service;
   BroadwayOutput *output;
   guint32 saved_serial;
+  guint64 last_seen_time;
   BroadwayInput *input;
   GList *input_messages;
   guint process_input_idle;
-
-  guint64 last_event_time;
 
   /* Explicit pointer grabs: */
   GdkWindow *pointer_grab_window;

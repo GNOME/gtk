@@ -62,6 +62,7 @@ gdk_event_init (GdkDisplay *display)
   broadway_display = GDK_BROADWAY_DISPLAY (display);
   broadway_display->event_source = _gdk_broadway_event_source_new (display);
   broadway_display->saved_serial = 1;
+  broadway_display->last_seen_time = 1;
 }
 
 static void
@@ -137,6 +138,8 @@ struct BroadwayInput {
   GSocketConnection *connection;
   GByteArray *buffer;
   GSource *source;
+  gboolean seen_time;
+  gint64 time_base;
 };
 
 static void
@@ -200,6 +203,7 @@ parse_input_message (BroadwayInput *input, const char *message)
   GdkBroadwayDisplay *broadway_display;
   BroadwayInputMsg msg;
   char *p;
+  gint64 time_;
 
   broadway_display = GDK_BROADWAY_DISPLAY (input->display);
 
@@ -207,8 +211,25 @@ parse_input_message (BroadwayInput *input, const char *message)
   msg.base.type = *p++;
   msg.base.serial = (guint32)strtol (p, &p, 10);
   p++; /* Skip , */
-  msg.base.time = strtol(p, &p, 10);
+  time_ = strtol(p, &p, 10);
   p++; /* Skip , */
+
+  if (time_ == 0) {
+    time_ = broadway_display->last_seen_time;
+  } else {
+    if (!input->seen_time) {
+      input->seen_time = TRUE;
+      /* Calculate time base so that any following times are normalized to start
+	 5 seconds after last_seen_time, to avoid issues that could appear when
+	 a long hiatus due to a reconnect seems to be instant */
+      input->time_base = time_ - (broadway_display->last_seen_time + 5000);
+    } 
+    time_ = time_ - input->time_base;
+  }
+
+  broadway_display->last_seen_time = time_;
+
+  msg.base.time = time_;
 
   switch (msg.base.type) {
   case 'e': /* Enter */

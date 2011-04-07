@@ -98,8 +98,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
   GdkEvent *event = NULL;
   GList *node;
 
-  display_broadway->last_event_time = message->base.time;
-
   switch (message->base.type) {
   case 'e': /* Enter */
     display_broadway->last_x = message->pointer.root_x;

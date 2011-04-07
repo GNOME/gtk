@@ -263,7 +263,7 @@ gdk_broadway_device_grab (GdkDevice    *device,
 	return GDK_GRAB_ALREADY_GRABBED;
 
       if (time_ == 0)
-	time_ = broadway_display->last_event_time;
+	time_ = broadway_display->last_seen_time;
 
       broadway_display->pointer_grab_window = window;
       broadway_display->pointer_grab_owner_events = owner_events;
