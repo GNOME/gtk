@@ -141,11 +141,6 @@ struct _GdkBroadwayDisplay
   /* drag and drop information */
   GdkDragContext *current_dest_drag;
 
-  /* Mapping to/from virtual atoms */
-
-  GHashTable *atom_from_virtual;
-  GHashTable *atom_to_virtual;
-
   /* Input device */
   /* input GdkDevice list */
   GList *input_devices;

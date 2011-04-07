@@ -1022,10 +1022,6 @@ gdk_broadway_display_finalize (GObject *object)
 
   _gdk_broadway_cursor_display_finalize (GDK_DISPLAY_OBJECT(broadway_display));
 
-  /* Atom Hashtable */
-  g_hash_table_destroy (broadway_display->atom_from_virtual);
-  g_hash_table_destroy (broadway_display->atom_to_virtual);
-
   /* input GdkDevice list */
   g_list_foreach (broadway_display->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (broadway_display->input_devices);
