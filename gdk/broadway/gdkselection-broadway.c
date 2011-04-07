@@ -76,13 +76,58 @@ _gdk_broadway_display_set_selection_owner (GdkDisplay *display,
 					   guint32     time,
 					   gboolean    send_event)
 {
-  return FALSE;
+  GSList *tmp_list;
+  OwnerInfo *info;
+
+  if (gdk_display_is_closed (display))
+    return FALSE;
+
+  tmp_list = owner_list;
+  while (tmp_list)
+    {
+      info = tmp_list->data;
+      if (info->selection == selection)
+        {
+          owner_list = g_slist_remove (owner_list, info);
+          g_free (info);
+          break;
+        }
+      tmp_list = tmp_list->next;
+    }
+
+  if (owner)
+    {
+      info = g_new (OwnerInfo, 1);
+      info->owner = owner;
+      info->serial = _gdk_display_get_next_serial (display);
+
+      info->selection = selection;
+
+      owner_list = g_slist_prepend (owner_list, info);
+    }
+
+  return TRUE;
 }
 
 GdkWindow *
 _gdk_broadway_display_get_selection_owner (GdkDisplay *display,
 					   GdkAtom     selection)
 {
+  GSList *tmp_list;
+  OwnerInfo *info;
+
+  if (gdk_display_is_closed (display))
+    return NULL;
+
+  tmp_list = owner_list;
+  while (tmp_list)
+    {
+      info = tmp_list->data;
+      if (info->selection == selection)
+	return info->owner;
+      tmp_list = tmp_list->next;
+    }
+
   return NULL;
 }
 
@@ -93,6 +138,7 @@ _gdk_broadway_display_convert_selection (GdkDisplay *display,
 					 GdkAtom    target,
 					 guint32    time)
 {
+  g_warning ("convert_selection not implemented\n");
 }
 
 gint
@@ -109,6 +155,8 @@ _gdk_broadway_display_get_selection_property (GdkDisplay *display,
   if (data)
     *data = NULL;
 
+  g_warning ("get_selection_property not implemented\n");
+
   return 0;
 }
 
@@ -121,6 +169,87 @@ _gdk_broadway_display_send_selection_notify (GdkDisplay      *display,
 					     guint32          time)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  g_warning ("send_selection_notify not implemented\n");
+}
+
+
+static gint
+make_list (const gchar  *text,
+           gint          length,
+           gboolean      latin1,
+           gchar      ***list)
+{
+  GSList *strings = NULL;
+  gint n_strings = 0;
+  gint i;
+  const gchar *p = text;
+  const gchar *q;
+  GSList *tmp_list;
+  GError *error = NULL;
+
+  while (p < text + length)
+    {
+      gchar *str;
+
+      q = p;
+      while (*q && q < text + length)
+        q++;
+
+      if (latin1)
+        {
+          str = g_convert (p, q - p,
+                           "UTF-8", "ISO-8859-1",
+                           NULL, NULL, &error);
+
+          if (!str)
+            {
+              g_warning ("Error converting selection from STRING: %s",
+                         error->message);
+              g_error_free (error);
+            }
+        }
+      else
+        {
+          str = g_strndup (p, q - p);
+          if (!g_utf8_validate (str, -1, NULL))
+            {
+              g_warning ("Error converting selection from UTF8_STRING");
+              g_free (str);
+              str = NULL;
+            }
+        }
+
+      if (str)
+        {
+          strings = g_slist_prepend (strings, str);
+          n_strings++;
+        }
+
+      p = q + 1;
+    }
+
+  if (list)
+    {
+      *list = g_new (gchar *, n_strings + 1);
+      (*list)[n_strings] = NULL;
+    }
+
+  i = n_strings;
+  tmp_list = strings;
+  while (tmp_list)
+    {
+      if (list)
+        (*list)[--i] = tmp_list->data;
+      else
+        g_free (tmp_list->data);
+
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (strings);
+
+  return n_strings;
 }
 
 gint 
@@ -135,6 +264,17 @@ _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
   g_return_val_if_fail (length >= 0, 0);
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
+  if (encoding == GDK_TARGET_STRING)
+    {
+      return make_list ((gchar *)text, length, TRUE, list);
+    }
+  else if (encoding == gdk_atom_intern_static_string ("UTF8_STRING"))
+    {
+      return make_list ((gchar *)text, length, FALSE, list);
+    }
+  
+  if (list)
+    *list = NULL;
   return 0;
 }
 
