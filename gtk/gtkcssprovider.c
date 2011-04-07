@@ -1633,7 +1633,7 @@ gtk_css_provider_invalid_token (GtkCssProvider *provider,
 {
   gtk_css_provider_error (provider,
                           GTK_CSS_PROVIDER_ERROR,
-                          GTK_CSS_PROVIDER_ERROR_FAILED,
+                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
                           "expected a valid %s", expected);
 }
 
@@ -3657,10 +3657,12 @@ parse_rule (GtkCssProvider  *css_provider,
 
 find_end_of_declaration:
       while (scanner->token != ';' &&
-             scanner->token != G_TOKEN_RIGHT_CURLY)
+             scanner->token != G_TOKEN_RIGHT_CURLY &&
+             scanner->token != G_TOKEN_EOF)
         g_scanner_get_next_token (scanner);
       
-      if (scanner->token == G_TOKEN_RIGHT_CURLY)
+      if (scanner->token == G_TOKEN_RIGHT_CURLY ||
+          scanner->token == G_TOKEN_EOF)
         break;
 
       g_scanner_get_next_token (scanner);
