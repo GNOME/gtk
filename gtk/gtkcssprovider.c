@@ -3516,7 +3516,8 @@ parse_rule (GtkCssProvider  *css_provider,
       g_scanner_get_next_token (scanner);
     }
 
-  if (scanner->token != G_TOKEN_RIGHT_CURLY)
+  if (scanner->token != G_TOKEN_RIGHT_CURLY &&
+      scanner->token != G_TOKEN_EOF)
     return G_TOKEN_RIGHT_CURLY;
 
   css_provider_pop_scope (css_provider);
