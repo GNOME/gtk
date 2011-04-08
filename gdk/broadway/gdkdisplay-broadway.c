@@ -750,7 +750,7 @@ send_data (HttpRequest *request,
 static void
 got_request (HttpRequest *request)
 {
-  char *start, *escaped, *tmp, *version;
+  char *start, *escaped, *tmp, *version, *query;
 
   if (!g_str_has_prefix (request->request->str, "GET "))
     {
@@ -776,6 +776,10 @@ got_request (HttpRequest *request)
 	;
       version = g_strndup (start, tmp - start);
     }
+
+  query = strchr (escaped, '?');
+  if (query)
+    *query = 0;
 
   if (strcmp (escaped, "/client.html") == 0 || strcmp (escaped, "/") == 0)
     send_data (request, "text/html", client_html, G_N_ELEMENTS(client_html) - 1);

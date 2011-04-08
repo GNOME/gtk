@@ -1078,6 +1078,13 @@ function setupDocument(document)
 
 function connect()
 {
+    var url = window.location.toString();
+    var query_string = url.split("?");
+    if (query_string.length > 1) {
+	var params = query_string[1].split("&");
+	if (params[0].indexOf("toplevel") != -1)
+	    useToplevelWindows = true;
+    }
     var xhr = createXHR();
     if (xhr) {
 	if (typeof xhr.multipart == 'undefined') {
