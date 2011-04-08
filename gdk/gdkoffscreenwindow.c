@@ -685,6 +685,18 @@ gdk_offscreen_window_set_boolean (GdkWindow *window,
 }
 
 static void
+gdk_offscreen_window_set_string (GdkWindow *window,
+				 const gchar *setting)
+{
+}
+
+static void
+gdk_offscreen_window_set_wmfunctions (GdkWindow	    *window,
+				      GdkWMFunction  functions)
+{
+}
+
+static void
 gdk_offscreen_window_set_transient_for (GdkWindow *window,
 					GdkWindow *another)
 {
@@ -740,17 +752,17 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_modal_hint = NULL;
   impl_class->set_skip_taskbar_hint = gdk_offscreen_window_set_boolean;
   impl_class->set_skip_pager_hint = gdk_offscreen_window_set_boolean;
-  impl_class->set_urgency_hint = NULL;
+  impl_class->set_urgency_hint = gdk_offscreen_window_set_boolean;
   impl_class->set_geometry_hints = NULL;
-  impl_class->set_title = NULL;
-  impl_class->set_role = NULL;
-  impl_class->set_startup_id = NULL;
+  impl_class->set_title = gdk_offscreen_window_set_string;
+  impl_class->set_role = gdk_offscreen_window_set_string;
+  impl_class->set_startup_id = gdk_offscreen_window_set_string;
   impl_class->set_transient_for = gdk_offscreen_window_set_transient_for;
   impl_class->get_root_origin = NULL;
   impl_class->get_frame_extents = NULL;
   impl_class->set_override_redirect = NULL;
   impl_class->set_accept_focus = NULL;
-  impl_class->set_focus_on_map = NULL;
+  impl_class->set_focus_on_map = gdk_offscreen_window_set_boolean;
   impl_class->set_icon_list = NULL;
   impl_class->set_icon_name = NULL;
   impl_class->iconify = gdk_offscreen_window_do_nothing;
@@ -767,8 +779,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_group = NULL;
   impl_class->set_decorations = NULL;
   impl_class->get_decorations = NULL;
-  impl_class->set_functions = NULL;
-  impl_class->set_functions = NULL;
+  impl_class->set_functions = gdk_offscreen_window_set_wmfunctions;
   impl_class->begin_resize_drag = NULL;
   impl_class->begin_move_drag = NULL;
   impl_class->enable_synchronized_configure = gdk_offscreen_window_do_nothing;
