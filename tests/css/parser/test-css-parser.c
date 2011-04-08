@@ -214,6 +214,97 @@ main (int argc, char **argv)
 
   gtk_test_init (&argc, &argv);
 
+  /* Add a bunch of properties so we can test that we parse them properly */
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boolean ("boolean-property",
+                                                                "boolean property",
+                                                                "test boolean properties",
+                                                                TRUE,
+                                                                G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("int-property",
+                                                            "int property",
+                                                            "test int properties",
+                                                            G_MININT, G_MAXINT, 0,
+                                                            G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_uint ("uint-property",
+                                                             "uint property",
+                                                             "test uint properties",
+                                                             0, G_MAXUINT, 0,
+                                                             G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_float ("float-property",
+                                                              "float property",
+                                                              "test float properties",
+                                                              -G_MAXFLOAT, G_MAXFLOAT, 0.0f,
+                                                              G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_double ("double-property",
+                                                               "double property",
+                                                               "test double properties",
+                                                               -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
+                                                               G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_string ("string-property",
+                                                               "string property",
+                                                               "test string properties",
+                                                               NULL,
+                                                               G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("rgba-property",
+                                                              "rgba property",
+                                                              "test rgba properties",
+                                                              GDK_TYPE_RGBA,
+                                                              G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("color-property",
+                                                              "color property",
+                                                              "test color properties",
+                                                              GDK_TYPE_COLOR,
+                                                              G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-property",
+                                                              "border property",
+                                                              "test border properties",
+                                                              GTK_TYPE_BORDER,
+                                                              G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("font-property",
+                                                              "font property",
+                                                              "test font properties",
+                                                              PANGO_TYPE_FONT_DESCRIPTION,
+                                                              G_PARAM_READABLE));
+#if 0
+  /* not public API, use transition instead */
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("animation-property",
+                                                              "animation property",
+                                                              "test animation properties",
+                                                              GTK_TYPE_ANIMATION_DESCRIPTION,
+                                                              G_PARAM_READABLE));
+#endif
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_object ("engine-property",
+                                                               "engine property",
+                                                               "test theming engine properties",
+                                                               GTK_TYPE_THEMING_ENGINE,
+                                                               G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_enum ("enum-property",
+                                                             "enum property",
+                                                             "test enum properties",
+                                                             GTK_TYPE_SHADOW_TYPE,
+                                                             0,
+                                                             G_PARAM_READABLE));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_flags ("flags-property",
+                                                              "flags property",
+                                                              "test flags properties",
+                                                              GTK_TYPE_STATE_FLAGS,
+                                                              GTK_STATE_FLAG_NORMAL,
+                                                              G_PARAM_READABLE));
+
   if (g_getenv ("srcdir"))
     basedir = g_getenv ("srcdir");
   else
