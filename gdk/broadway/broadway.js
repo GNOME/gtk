@@ -433,6 +433,7 @@ function cmdShowSurface(id)
 	}
 
 	ensureSurfaceInDocument(surface, doc);
+	element = surface.canvas;
     } else {
 	if (surface.frame) {
 	    element = surface.frame;
