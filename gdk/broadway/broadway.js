@@ -122,6 +122,7 @@ var lastTimeStamp = 0;
 var realWindowWithMouse = 0;
 var windowWithMouse = 0;
 var surfaces = {};
+var stackingOrder = [];
 var outstandingCommands = new Array();
 var inputSocket = null;
 var frameSizeX = -1;
@@ -343,6 +344,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.document = document;
     surface.transientToplevel = null;
     surface.frame = null;
+    stackingOrder.push(id);
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
@@ -488,11 +490,50 @@ function cmdSetTransientFor(id, parentId)
     }
 }
 
+function restackWindows() {
+    if (useToplevelWindows)
+	return;
+
+    for (var i = 0; i < stackingOrder.length; i++) {
+	var id = stackingOrder[i];
+	var surface = surfaces[id];
+	if (surface.frame)
+	    surface.frame.style.zIndex = i;
+	else
+	    surface.canvas.style.zIndex = i;
+    }
+}
+
+function moveToTopHelper(surface) {
+    var i = stackingOrder.indexOf(surface.id);
+    stackingOrder.splice(i, 1);
+    stackingOrder.push(surface.id);
+
+    for (var cid in surfaces) {
+	var child = surfaces[cid];
+	if (child.transientParent == surface.id)
+	    moveToTopHelper(child);
+    }
+}
+
+function moveToTop(surface) {
+    moveToTopHelper(surface);
+    restackWindows();
+}
+
+
 function cmdDeleteSurface(id)
 {
-    var canvas = surfaces[id].canvas;
-    delete surfaces[id];
+    var surface = surfaces[id];
+    var i = stackingOrder.indexOf(id);
+    if (i >= 0)
+	stackingOrder.splice(i, 1);
+    var canvas = surface.canvas;
     canvas.parentNode.removeChild(canvas);
+    var frame = surface.frame;
+    if (frame)
+	frame.parentNode.removeChild(frame);
+    delete surfaces[id];
 }
 
 function cmdMoveSurface(id, x, y)
@@ -912,6 +953,7 @@ function onMouseDown (ev) {
 	localGrab.frame = ev.target;
 	localGrab.lastX = ev.pageX;
 	localGrab.lastY = ev.pageY;
+	moveToTop(localGrab.frame.frameFor);
 	return;
     }
 
