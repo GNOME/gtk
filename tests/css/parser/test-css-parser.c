@@ -159,12 +159,9 @@ test_css_file (GFile *file)
                     errors);
   gtk_css_provider_load_from_path (provider,
                                    css_file,
-                                   &error);
-  g_assert_no_error (error);
+                                   NULL);
 
   css = gtk_css_provider_to_string (provider);
-
-  g_assert_no_error (error);
 
   reference_file = test_get_reference_file (css_file);
 
