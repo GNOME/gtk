@@ -3236,82 +3236,6 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
   return parsed;
 }
 
-static void
-scanner_report_warning (GtkCssProvider *css_provider,
-                        GTokenType      expected_token,
-                        GError         *error)
-{
-  GtkCssProviderPrivate *priv;
-  const gchar *line_end, *line_start;
-  const gchar *expected_str;
-  gchar buf[2], *line, *str;
-  guint pos;
-
-  priv = css_provider->priv;
-
-  if (error)
-    str = g_strdup (error->message);
-  else
-    {
-      if (priv->scanner->user_data)
-        expected_str = priv->scanner->user_data;
-      else
-        {
-          switch (expected_token)
-            {
-            case G_TOKEN_SYMBOL:
-              expected_str = "Symbol";
-            case G_TOKEN_IDENTIFIER:
-              expected_str = "Identifier";
-            default:
-              buf[0] = expected_token;
-              buf[1] = '\0';
-              expected_str = buf;
-            }
-        }
-
-      str = g_strdup_printf ("Parse error, expecting a %s '%s'",
-                             (expected_str != buf) ? "valid" : "",
-                             expected_str);
-    }
-
-  if (priv->value_pos)
-    line_start = priv->value_pos - 1;
-  else
-    line_start = priv->scanner->text - 1;
-
-  while (*line_start != '\n' &&
-         line_start != priv->buffer)
-    line_start--;
-
-  if (*line_start == '\n')
-    line_start++;
-
-  if (priv->value_pos)
-    pos = priv->value_pos - line_start + 1;
-  else
-    pos = priv->scanner->text - line_start - 1;
-
-  line_end = strchr (line_start, '\n');
-
-  if (line_end)
-    line = g_strndup (line_start, (line_end - line_start));
-  else
-    line = g_strdup (line_start);
-
-  g_message ("CSS: %s\n"
-             "%s, line %d, char %d:\n"
-             "%*c %s\n"
-             "%*c ^",
-             str, priv->scanner->input_name,
-             priv->scanner->line, priv->scanner->position,
-             3, ' ', line,
-             3 + pos, ' ');
-
-  g_free (line);
-  g_free (str);
-}
-
 static GTokenType
 parse_rule (GtkCssProvider  *css_provider,
             GScanner        *scanner)
@@ -3729,7 +3653,6 @@ parse_stylesheet (GtkCssProvider  *css_provider,
             }
           else
             {
-              scanner_report_warning (css_provider, expected_token, priv->error);
               g_clear_error (&priv->error);
               priv->error = NULL;
             }
