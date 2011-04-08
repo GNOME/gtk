@@ -613,7 +613,7 @@ _gdk_x11_device_xi_translate_axes (GdkDevice *device,
     {
       GdkAxisUse use;
 
-      use = _gdk_device_get_axis_use (device, i);
+      use = gdk_device_get_axis_use (device, i);
 
       switch (use)
         {

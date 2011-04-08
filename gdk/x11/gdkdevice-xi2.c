@@ -205,7 +205,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
             continue;
 
           value = ((XIValuatorClassInfo *) class_info)->value;
-          use = _gdk_device_get_axis_use (device, j);
+          use = gdk_device_get_axis_use (device, j);
 
           switch (use)
             {

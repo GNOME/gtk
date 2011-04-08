@@ -823,7 +823,7 @@ translate_axes (GdkDevice       *device,
       if (!XIMaskIsSet (valuators->mask, i))
         continue;
 
-      use = _gdk_device_get_axis_use (device, i);
+      use = gdk_device_get_axis_use (device, i);
       val = *vals++;
 
       switch (use)

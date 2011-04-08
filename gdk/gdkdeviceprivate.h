@@ -127,9 +127,6 @@ guint _gdk_device_add_axis   (GdkDevice   *device,
 void _gdk_device_set_keys    (GdkDevice   *device,
                               guint        num_keys);
 
-GdkAxisUse _gdk_device_get_axis_use (GdkDevice *device,
-                                     guint      index);
-
 gboolean   _gdk_device_translate_window_coord (GdkDevice *device,
                                                GdkWindow *window,
                                                guint      index,

@@ -1400,16 +1400,6 @@ find_axis_info (GArray     *array,
   return NULL;
 }
 
-GdkAxisUse
-_gdk_device_get_axis_use (GdkDevice *device,
-                          guint      index_)
-{
-  GdkAxisInfo info;
-
-  info = g_array_index (device->axes, GdkAxisInfo, index_);
-  return info.use;
-}
-
 gboolean
 _gdk_device_translate_window_coord (GdkDevice *device,
                                     GdkWindow *window,

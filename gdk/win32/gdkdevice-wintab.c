@@ -326,7 +326,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
     {
       GdkAxisUse use;
 
-      use = _gdk_device_get_axis_use (device, i);
+      use = gdk_device_get_axis_use (device, i);
 
       switch (use)
         {
