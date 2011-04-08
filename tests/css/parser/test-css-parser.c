@@ -117,6 +117,22 @@ done:
 }
 
 static void
+append_error_value (GString *string,
+                    GType    enum_type,
+                    guint    value)
+{
+  GEnumClass *enum_class;
+  GEnumValue *enum_value;
+
+  enum_class = g_type_class_ref (enum_type);
+  enum_value = g_enum_get_value (enum_class, value);
+
+  g_string_append (string, enum_value->value_name);
+
+  g_type_class_unref (enum_class);
+}
+
+static void
 parsing_error_cb (GtkCssProvider *provider,
                   const gchar     *path,
                   guint            line,
@@ -130,14 +146,20 @@ parsing_error_cb (GtkCssProvider *provider,
   g_assert (line > 0);
 
   basename = g_path_get_basename (path);
-
   g_string_append_printf (errors,
-                          "%s:%u: error: %s %u\n",
-                          basename, line,
-                          g_quark_to_string (error->domain),
-                          error->code);
-
+                          "%s:%u: error: ",
+                          basename, line);
   g_free (basename);
+                          
+  if (error->domain == GTK_CSS_PROVIDER_ERROR)
+      append_error_value (errors, GTK_TYPE_CSS_PROVIDER_ERROR, error->code);
+  else
+    g_string_append_printf (errors, 
+                            "%s %u\n",
+                            g_quark_to_string (error->domain),
+                            error->code);
+
+  g_string_append_c (errors, '\n');
 }
 
 static void
