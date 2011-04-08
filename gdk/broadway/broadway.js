@@ -107,12 +107,13 @@ function resizeCanvas(canvas, w, h)
     context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
 }
 
-var useToplevelWindows = true;
+var useToplevelWindows = false;
 var toplevelWindows = [];
 var grab = new Object();
 grab.window = null;
 grab.ownerEvents = false;
 grab.implicit = false;
+var localGrab = null;
 var lastSerial = 0;
 var lastX = 0;
 var lastY = 0;
@@ -125,7 +126,6 @@ var outstandingCommands = new Array();
 var inputSocket = null;
 var frameSizeX = -1;
 var frameSizeY = -1;
-
 
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
@@ -321,6 +321,18 @@ function getTransientToplevel(surface)
     return null;
 }
 
+function getFrameOffset(surface) {
+    var x = 1;
+    var y = 1;
+    var el = surface.canvas;
+    while (el != null && el != surface.frame) {
+	x += el.offsetLeft;
+	y += el.offsetTop;
+	el = el.offsetParent;
+    }
+    return {x: x, y: y};
+}
+
 function cmdCreateSurface(id, x, y, width, height, isTemp)
 {
     var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
@@ -330,17 +342,48 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.window = null;
     surface.document = document;
     surface.transientToplevel = null;
+    surface.frame = null;
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
     canvas.surface = surface;
-    canvas.style["position"] = "absolute";
-    canvas.style["left"] = "0px";
-    canvas.style["top"] = "0px";
-    canvas.style["display"] = "none";
-    document.body.appendChild(canvas);
     surface.canvas = canvas;
+
+    if (useToplevelWindows || isTemp) {
+	canvas.style["position"] = "absolute";
+	canvas.style["left"] = "0px";
+	canvas.style["top"] = "0px";
+	canvas.style["display"] = "none";
+	document.body.appendChild(canvas);
+    } else {
+	var frame = document.createElement("div");
+	frame.frameFor = surface;
+	frame.style["position"] = "absolute";
+	frame.style["left"] = "0px";
+	frame.style["top"] = "0px";
+	frame.style["display"] = "inline";
+	// We hide the frame with visibility rather than display none
+	// so getFrameOffset still works with hidden windows
+	frame.style["visibility"] = "hidden";
+	frame.className = "frame-window";
+
+	var button = document.createElement("center");
+	var X = document.createTextNode("X");
+	button.appendChild(X);
+	button.className = "frame-close";
+	frame.appendChild(button);
+
+	var contents = document.createElement("div");
+	contents.className = "frame-contents";
+	frame.appendChild(contents);
+
+	document.body.appendChild(frame);
+	contents.appendChild(canvas);
+	canvas.style["display"] = "block";
+
+	surface.frame = frame;
+    }
 
     var context = canvas.getContext("2d");
     context.globalCompositeOperation = "source-over";
@@ -357,6 +400,7 @@ function cmdShowSurface(id)
 	return;
     surface.visible = true;
 
+    var element = surface.canvas;
     var xOffset = surface.x;
     var yOffset = surface.y;
 
@@ -387,12 +431,21 @@ function cmdShowSurface(id)
 	}
 
 	ensureSurfaceInDocument(surface, doc);
+    } else {
+	if (surface.frame) {
+	    element = surface.frame;
+	    var offset = getFrameOffset(surface);
+	    xOffset -= offset.x;
+	    yOffset -= offset.y;
+	}
     }
 
-    surface.canvas.style["position"] = "absolute";
-    surface.canvas.style["left"] = xOffset + "px";
-    surface.canvas.style["top"] = yOffset + "px";
-    surface.canvas.style["display"] = "inline";
+    element.style["position"] = "absolute";
+    element.style["left"] = xOffset + "px";
+    element.style["top"] = yOffset + "px";
+    element.style["display"] = "inline";
+    if (surface.frame)
+	surface.frame.style["visibility"] = "visible";
 }
 
 function cmdHideSurface(id)
@@ -403,7 +456,14 @@ function cmdHideSurface(id)
 	return;
     surface.visible = false;
 
-    surface.canvas.style["display"] = "none";
+    var element = surface.canvas;
+    if (surface.frame)
+	element = surface.frame;
+
+    if (surface.frame)
+	surface.frame.style["visibility"] = "hidden";
+    else
+	element.style["display"] = "none";
 
     // Import the canvas into the main document
     ensureSurfaceInDocument(surface, document);
@@ -458,8 +518,16 @@ function cmdMoveSurface(id, x, y)
 		yOffset = surface.y - transientToplevel.y;
 	    }
 
-	    surface.canvas.style["left"] = xOffset + "px";
-	    surface.canvas.style["top"] = yOffset + "px";
+	    var element = surface.canvas;
+	    if (surface.frame) {
+		element = surface.frame;
+		var offset = getFrameOffset(surface);
+		xOffset -= offset.x;
+		yOffset -= offset.y;
+	    }
+
+	    element.style["left"] = xOffset + "px";
+	    element.style["top"] = yOffset + "px";
 	}
     }
 }
@@ -748,6 +816,20 @@ function updateForEvent(ev) {
 
 function onMouseMove (ev) {
     updateForEvent(ev);
+    if (localGrab) {
+	var dx = ev.pageX - localGrab.lastX;
+	var dy = ev.pageY - localGrab.lastY;
+	var surface = localGrab.frame.frameFor;
+	surface.x += dx;
+	surface.y += dy;
+	var offset = getFrameOffset(surface);
+	localGrab.frame.style["left"] = (surface.x - offset.x) + "px";
+	localGrab.frame.style["top"] = (surface.y - offset.y) + "px";
+	sendInput ("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
+	localGrab.lastX = ev.pageX;
+	localGrab.lastY = ev.pageY;
+	return;
+    }
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
@@ -756,6 +838,8 @@ function onMouseMove (ev) {
 
 function onMouseOver (ev) {
     updateForEvent(ev);
+    if (localGrab)
+	return;
     var id = getSurfaceId(ev);
     realWindowWithMouse = id;
     id = getEffectiveEventTarget (id);
@@ -768,6 +852,8 @@ function onMouseOver (ev) {
 
 function onMouseOut (ev) {
     updateForEvent(ev);
+    if (localGrab)
+	return;
     var id = getSurfaceId(ev);
     var origId = id;
     id = getEffectiveEventTarget (id);
@@ -816,23 +902,48 @@ function doUngrab() {
 
 function onMouseDown (ev) {
     updateForEvent(ev);
+    var button = ev.button + 1;
+    lastState = lastState | getButtonMask (button);
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
+
+    if (id == 0 && ev.target.frameFor) { /* mouse click on frame */
+	localGrab = new Object();
+	localGrab.frame = ev.target;
+	localGrab.lastX = ev.pageX;
+	localGrab.lastY = ev.pageY;
+	return;
+    }
+
     var pos = getPositionsFromEvent(ev, id);
     if (grab.window == null)
 	doGrab (id, false, true);
-    var button = ev.button + 1;
-    lastState = lastState | getButtonMask (button);
     sendInput ("b", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 }
 
 function onMouseUp (ev) {
     updateForEvent(ev);
-    var id = getSurfaceId(ev);
-    id = getEffectiveEventTarget (id);
-    var pos = getPositionsFromEvent(ev, id);
     var button = ev.button + 1;
     lastState = lastState & ~getButtonMask (button);
+    var evId = getSurfaceId(ev);
+    id = getEffectiveEventTarget (evId);
+    var pos = getPositionsFromEvent(ev, id);
+
+    if (localGrab) {
+	localGrab = null;
+	realWindowWithMouse = evId;
+	if (windowWithMouse != id) {
+	    if (windowWithMouse != 0) {
+		sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+	    }
+	    windowWithMouse = id;
+	    if (windowWithMouse != 0) {
+		sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+	    }
+	}
+	return;
+    }
+
     sendInput ("B", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
     if (grab.window != null && grab.implicit)
@@ -842,6 +953,8 @@ function onMouseUp (ev) {
 var lastKeyDown = 0;
 function onKeyDown (ev) {
     updateForEvent(ev);
+    if (localGrab)
+	return;
     var keyCode = ev.keyCode;
     if (keyCode != lastKeyDown) {
 	sendInput ("k", [keyCode]);
@@ -851,6 +964,8 @@ function onKeyDown (ev) {
 
 function onKeyUp (ev) {
     updateForEvent(ev);
+    if (localGrab)
+	return;
     var keyCode = ev.keyCode;
     sendInput ("K", [keyCode]);
     lastKeyDown = 0;
@@ -872,6 +987,8 @@ function cancelEvent(ev)
 function onMouseWheel(ev)
 {
     updateForEvent(ev);
+    if (localGrab)
+	return;
     ev = ev ? ev : window.event;
 
     var id = getSurfaceId(ev);

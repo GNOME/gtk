@@ -4,6 +4,66 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
 <title>broadway 2.0</title>
 <script type="text/javascript" src="broadway.js"></script>
+<style type="text/css">
+
+.frame-window {
+    background-color: rgba(179, 230, 255, 0.35);
+    background-image: -moz-linear-gradient(rgba(250, 253, 255, 0.1) 0px, rgba(250, 253, 255, 0.65) 40px, rgba(250, 253, 255, 0.75) 50px, rgba(250, 253, 255, 0) 54px);
+    background-image: -webkit-gradient(linear, left top, left 50, from(rgba(250, 253, 255, 0.9)), to(rgba(250, 253, 255, 0)), color-stop(88%, rgba(250, 253, 255, 0.75)));
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.65) inset, 0 0 0 1px rgba(0, 0, 0, 0.75), 0 1px 10px 2px rgba(0, 0, 0, 0.65);
+    -webkit-box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.65) inset, 0 0 0 1px rgba(0, 0, 0, 0.75), 0 1px 10px 2px rgba(0, 0, 0, 0.65);
+    padding: 0 7px 7px 7px;
+}
+
+.frame-contents {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+    -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.9) inset;
+    clear: both;
+    padding: 1px;
+    position: relative;
+}
+
+.frame-close {
+    margin: 0 2px 3px 2px;
+    background-color: #CC3333;
+    background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.5) 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.35)), to(rgba(255, 255, 255, 0.5)), color-stop(50%, rgba(255, 255, 255, 0.5)), color-stop(50%, rgba(255, 255, 255, 0)));
+    border-radius: 2px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    -moz-border-radius: 2px;
+    -moz-border-top-left-radius: 0;
+    -moz-border-top-right-radius: 0;
+    border: 1px solid #550000;
+    border-top: none;
+    float: right;
+    color: white;
+    width: 36px;
+    text-shadow: black -1px 0 0, black 1px 0 0, black 0 1px 0, black 0 -1px 0;
+    box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.5) inset;
+    -webkit-box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.5) inset;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.frame-close:focus {
+    left: 0;
+}
+
+.frame-close:hover {
+    background-color: #EE4A4A;
+}
+
+.frame-close:active {
+    background-color: #AA2020;
+}
+
+</style>
 </head>
 
 <body onload="connect()">
