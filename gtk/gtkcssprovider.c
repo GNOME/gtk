@@ -2386,8 +2386,12 @@ parse_rule (GtkCssProvider  *css_provider,
       if (scanner->token != G_TOKEN_IDENTIFIER)
         {
           g_free (prop);
-          gtk_css_provider_invalid_token (css_provider, "Property value");
-          return G_TOKEN_IDENTIFIER;
+          gtk_css_provider_error (css_provider,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE,
+                                  "Could not parse property value");
+          css_provider_pop_scope (css_provider);
+          goto find_end_of_declaration;
         }
 
       value_str = scanner->value.v_identifier;
