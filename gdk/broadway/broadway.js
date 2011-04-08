@@ -334,9 +334,11 @@ function getFrameOffset(surface) {
     return {x: x, y: y};
 }
 
+var positionIndex = 0;
 function cmdCreateSurface(id, x, y, width, height, isTemp)
 {
     var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
+    surface.positioned = isTemp;
     surface.drawQueue = [];
     surface.transientParent = 0;
     surface.visible = false;
@@ -385,6 +387,11 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 	canvas.style["display"] = "block";
 
 	surface.frame = frame;
+
+	surface.x = 100 + positionIndex * 10;
+	surface.y = 100 + positionIndex * 10;
+	positionIndex = (positionIndex + 1) % 20;
+	sendInput ("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
     }
 
     var context = canvas.getContext("2d");
@@ -409,10 +416,13 @@ function cmdShowSurface(id)
     if (useToplevelWindows) {
 	var doc = document;
 	if (!surface.isTemp) {
-	    var win = window.open('','_blank',
-				  'width='+surface.width+',height='+surface.height+
-				  ',left='+surface.x+',top='+surface.y+',screenX='+surface.x+',screenY='+surface.y+
-				  ',location=no,menubar=no,scrollbars=no,toolbar=no');
+	    var options =
+		'width='+surface.width+',height='+surface.height+
+		',location=no,menubar=no,scrollbars=no,toolbar=no';
+	    if (surface.positioned)
+		options = options +
+		',left='+surface.x+',top='+surface.y+',screenX='+surface.x+',screenY='+surface.y;
+	    var win = window.open('','_blank', options);
 	    win.surface = surface;
 	    registerWindow(win);
 	    doc = win.document;
@@ -540,6 +550,7 @@ function cmdDeleteSurface(id)
 function cmdMoveSurface(id, x, y)
 {
     var surface = surfaces[id];
+    surface.positioned = true;
     surface.x = x;
     surface.y = y;
 

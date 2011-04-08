@@ -348,14 +348,6 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 
   broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
 
-  /* Instead of window manager placement we have this mini hack
-     so that the main/first window is not covered in the demos. */
-  if (impl->id > 1 && window->window_type == GDK_WINDOW_TOPLEVEL)
-    {
-      window->x = 100;
-      window->y = 20;
-    }
-
   if (broadway_display->output)
     broadway_output_new_surface (broadway_display->output,
 				 impl->id,
