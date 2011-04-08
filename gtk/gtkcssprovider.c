@@ -790,10 +790,6 @@ struct SelectorStyleInfo
 struct _GtkCssProviderPrivate
 {
   GScanner *scanner;
-  gchar *filename;
-
-  const gchar *buffer;
-  const gchar *value_pos;
 
   GHashTable *symbolic_colors;
 
@@ -1525,7 +1521,6 @@ gtk_css_provider_finalize (GObject *object)
   css_provider_reset_parser (css_provider);
 
   g_scanner_destroy (priv->scanner);
-  g_free (priv->filename);
 
   g_ptr_array_free (priv->selectors_info, TRUE);
 
@@ -1725,7 +1720,6 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
   priv->state = NULL;
 
   scanner_apply_scope (priv->scanner, SCOPE_SELECTOR);
-  priv->value_pos = NULL;
 
   g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
   g_slist_free (priv->cur_selectors);
@@ -2696,8 +2690,8 @@ path_parse_str (GtkCssProvider  *css_provider,
       priv = css_provider->priv;
 
       /* Use relative path to the current CSS file path, if any */
-      if (priv->filename)
-        dirname = g_path_get_dirname (priv->filename);
+      if (priv->scanner->input_name)
+        dirname = g_path_get_dirname (priv->scanner->input_name);
       else
         dirname = g_get_current_dir ();
 
@@ -3221,10 +3215,6 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
   if (end && *end)
     {
-      /* Set error position in the scanner
-       * according to what we've parsed so far
-       */
-      priv->value_pos += (end - value_str);
       parsed = FALSE;
 
       gtk_css_provider_error_literal (css_provider,
@@ -3610,10 +3600,8 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
   if (priv->selectors_info->len > 0)
     g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
-
-  g_free (priv->filename);
-  priv->filename = NULL;
 }
+
 
 static gboolean
 parse_stylesheet (GtkCssProvider  *css_provider,
@@ -3702,13 +3690,8 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  priv->scanner->input_name = "-";
-  priv->buffer = data;
+  priv->scanner->input_name = NULL;
   g_scanner_input_text (priv->scanner, data, (guint) length);
-
-  g_free (priv->filename);
-  priv->filename = NULL;
-  priv->buffer = NULL;
 
   return parse_stylesheet (css_provider, error);
 }
@@ -3731,6 +3714,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 {
   GtkCssProviderPrivate *priv;
   GError *internal_error = NULL;
+  char *path;
   gchar *data;
   gsize length;
   gboolean ret;
@@ -3750,15 +3734,14 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  priv->filename = g_file_get_path (file);
-
-  priv->scanner->input_name = priv->filename;
-  priv->buffer = data;
+  path = g_file_get_path (file);
+  priv->scanner->input_name = path;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
   ret = parse_stylesheet (css_provider, error);
 
-  priv->buffer = NULL;
+  g_free (path);
+  priv->scanner->input_name = NULL;
   g_free (data);
 
   return ret;
@@ -3794,18 +3777,15 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
     data = "";
 
   if (reset)
-    {
-      gtk_css_provider_reset (css_provider);
-      priv->filename = g_strdup (path);
-    }
+    gtk_css_provider_reset (css_provider);
 
-  priv->scanner->input_name = priv->filename;
-  priv->buffer = data;
+  priv->scanner->input_name = path;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
   ret = parse_stylesheet (css_provider, error);
 
-  priv->buffer = NULL;
+  priv->scanner->input_name = NULL;
+
   g_mapped_file_unref (mapped_file);
 
   return ret;
