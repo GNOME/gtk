@@ -27,10 +27,8 @@
 
 #include "gtkcssproviderprivate.h"
 
-#include "gtkanimationdescription.h"
-#include "gtk9slice.h"
-#include "gtkgradient.h"
-#include "gtkthemingengine.h"
+#include "gtkcssstringfuncsprivate.h"
+#include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkbindings.h"
@@ -841,13 +839,12 @@ static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 static void scanner_apply_scope (GScanner    *scanner,
                                  ParserScope  scope);
 static void     css_provider_reset_parser (GtkCssProvider *css_provider);
-static gboolean css_provider_parse_value (GtkCssProvider  *css_provider,
-                                          const gchar     *value_str,
-                                          GValue          *value);
 static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
                                                           const gchar     *path,
                                                           gboolean         reset,
                                                           GError         **error);
+static void     gtk_css_provider_take_error (GtkCssProvider *provider,
+                                             GError         *error);
 
 GQuark
 gtk_css_provider_error_quark (void)
@@ -1486,13 +1483,17 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
            ((info->state & state) != 0 &&
             (info->state & ~(state)) == 0)))
         {
-          const gchar *val_str;
+          GError *error = NULL;
 
-          val_str = g_value_get_string (val);
-          found = TRUE;
+          found = _gtk_css_value_from_string (value,
+                                              NULL,
+                                              g_value_get_string (val),
+                                              &error);
 
-          css_provider_parse_value (GTK_CSS_PROVIDER (provider), val_str, value);
-          break;
+          if (found)
+            break;
+          
+          gtk_css_provider_take_error (GTK_CSS_PROVIDER (provider), error);
         }
     }
 
@@ -1584,19 +1585,6 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
                  filename, line, position, error);
 
   g_error_free (error);
-}
-
-static void
-gtk_css_provider_error_literal (GtkCssProvider *provider,
-                                GQuark          domain,
-                                gint            code,
-                                const char     *message)
-{
-  GError *error;
-
-  error = g_error_new_literal (domain, code, message);
-
-  gtk_css_provider_take_error (provider, error);
 }
 
 static void
@@ -2091,848 +2079,6 @@ parse_selector (GtkCssProvider  *css_provider,
   return G_TOKEN_NONE;
 }
 
-#define SKIP_SPACES(s) while (s[0] == ' ' || s[0] == '\t' || s[0] == '\n') s++;
-#define SKIP_SPACES_BACK(s) while (s[0] == ' ' || s[0] == '\t' || s[0] == '\n') s--;
-
-static GtkSymbolicColor *
-symbolic_color_parse_str (const gchar  *string,
-                          gchar       **end_ptr)
-{
-  GtkSymbolicColor *symbolic_color = NULL;
-  gchar *str;
-
-  str = (gchar *) string;
-  *end_ptr = str;
-
-  if (str[0] == '@')
-    {
-      const gchar *end;
-      gchar *name;
-
-      str++;
-      end = str;
-
-      while (*end == '-' || *end == '_' || g_ascii_isalnum (*end))
-        end++;
-
-      name = g_strndup (str, end - str);
-      symbolic_color = gtk_symbolic_color_new_name (name);
-      g_free (name);
-
-      *end_ptr = (gchar *) end;
-    }
-  else if (g_str_has_prefix (str, "lighter") ||
-           g_str_has_prefix (str, "darker"))
-    {
-      GtkSymbolicColor *param_color;
-      gboolean is_lighter = FALSE;
-
-      is_lighter = g_str_has_prefix (str, "lighter");
-
-      if (is_lighter)
-        str += strlen ("lighter");
-      else
-        str += strlen ("darker");
-
-      SKIP_SPACES (str);
-
-      if (*str != '(')
-        {
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      str++;
-      SKIP_SPACES (str);
-      param_color = symbolic_color_parse_str (str, end_ptr);
-
-      if (!param_color)
-        return NULL;
-
-      str = *end_ptr;
-      SKIP_SPACES (str);
-      *end_ptr = (gchar *) str;
-
-      if (*str != ')')
-        {
-          gtk_symbolic_color_unref (param_color);
-          return NULL;
-        }
-
-      if (is_lighter)
-        symbolic_color = gtk_symbolic_color_new_shade (param_color, 1.3);
-      else
-        symbolic_color = gtk_symbolic_color_new_shade (param_color, 0.7);
-
-      gtk_symbolic_color_unref (param_color);
-      (*end_ptr)++;
-    }
-  else if (g_str_has_prefix (str, "shade") ||
-           g_str_has_prefix (str, "alpha"))
-    {
-      GtkSymbolicColor *param_color;
-      gboolean is_shade = FALSE;
-      gdouble factor;
-
-      is_shade = g_str_has_prefix (str, "shade");
-
-      if (is_shade)
-        str += strlen ("shade");
-      else
-        str += strlen ("alpha");
-
-      SKIP_SPACES (str);
-
-      if (*str != '(')
-        {
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      str++;
-      SKIP_SPACES (str);
-      param_color = symbolic_color_parse_str (str, end_ptr);
-
-      if (!param_color)
-        return NULL;
-
-      str = *end_ptr;
-      SKIP_SPACES (str);
-
-      if (str[0] != ',')
-        {
-          gtk_symbolic_color_unref (param_color);
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      str++;
-      SKIP_SPACES (str);
-      factor = g_ascii_strtod (str, end_ptr);
-
-      str = *end_ptr;
-      SKIP_SPACES (str);
-      *end_ptr = (gchar *) str;
-
-      if (str[0] != ')')
-        {
-          gtk_symbolic_color_unref (param_color);
-          return NULL;
-        }
-
-      if (is_shade)
-        symbolic_color = gtk_symbolic_color_new_shade (param_color, factor);
-      else
-        symbolic_color = gtk_symbolic_color_new_alpha (param_color, factor);
-
-      gtk_symbolic_color_unref (param_color);
-      (*end_ptr)++;
-    }
-  else if (g_str_has_prefix (str, "mix"))
-    {
-      GtkSymbolicColor *color1, *color2;
-      gdouble factor;
-
-      str += strlen ("mix");
-      SKIP_SPACES (str);
-
-      if (*str != '(')
-        {
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      str++;
-      SKIP_SPACES (str);
-      color1 = symbolic_color_parse_str (str, end_ptr);
-
-      if (!color1)
-        return NULL;
-
-      str = *end_ptr;
-      SKIP_SPACES (str);
-
-      if (str[0] != ',')
-        {
-          gtk_symbolic_color_unref (color1);
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      str++;
-      SKIP_SPACES (str);
-      color2 = symbolic_color_parse_str (str, end_ptr);
-
-      if (!color2 || *end_ptr[0] != ',')
-        {
-          gtk_symbolic_color_unref (color1);
-          return NULL;
-        }
-
-      str = *end_ptr;
-      SKIP_SPACES (str);
-
-      if (str[0] != ',')
-        {
-          gtk_symbolic_color_unref (color1);
-          gtk_symbolic_color_unref (color2);
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      str++;
-      SKIP_SPACES (str);
-      factor = g_ascii_strtod (str, end_ptr);
-
-      str = *end_ptr;
-      SKIP_SPACES (str);
-      *end_ptr = (gchar *) str;
-
-      if (str[0] != ')')
-        {
-          gtk_symbolic_color_unref (color1);
-          gtk_symbolic_color_unref (color2);
-          return NULL;
-        }
-
-      symbolic_color = gtk_symbolic_color_new_mix (color1, color2, factor);
-      gtk_symbolic_color_unref (color1);
-      gtk_symbolic_color_unref (color2);
-      (*end_ptr)++;
-    }
-  else
-    {
-      GdkRGBA color;
-      gchar *color_str;
-      const gchar *end;
-
-      end = str + 1;
-
-      if (str[0] == '#')
-        {
-          /* Color in hex format */
-          while (g_ascii_isxdigit (*end))
-            end++;
-        }
-      else if (g_str_has_prefix (str, "rgb"))
-        {
-          /* color in rgb/rgba format */
-          while (*end != ')' && *end != '\0')
-            end++;
-
-          if (*end == ')')
-            end++;
-        }
-      else
-        {
-          /* Color name */
-          while (*end != '\0' &&
-                 (g_ascii_isalnum (*end) || *end == ' '))
-            end++;
-        }
-
-      color_str = g_strndup (str, end - str);
-      *end_ptr = (gchar *) end;
-
-      if (!gdk_rgba_parse (&color, color_str))
-        {
-          g_free (color_str);
-          return NULL;
-        }
-
-      symbolic_color = gtk_symbolic_color_new_literal (&color);
-      g_free (color_str);
-    }
-
-  return symbolic_color;
-}
-
-static GtkSymbolicColor *
-symbolic_color_parse (const gchar  *str)
-{
-  GtkSymbolicColor *color;
-  gchar *end;
-
-  color = symbolic_color_parse_str (str, &end);
-
-  if (*end != '\0')
-    {
-      if (color)
-        {
-          gtk_symbolic_color_unref (color);
-          color = NULL;
-        }
-    }
-
-  return color;
-}
-
-static GtkGradient *
-gradient_parse_str (const gchar  *str,
-                    gchar       **end_ptr)
-{
-  GtkGradient *gradient = NULL;
-  gdouble coords[6];
-  gchar *end;
-  guint i;
-
-  if (g_str_has_prefix (str, "-gtk-gradient"))
-    {
-      cairo_pattern_type_t type;
-
-      str += strlen ("-gtk-gradient");
-      SKIP_SPACES (str);
-
-      if (*str != '(')
-        {
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      str++;
-      SKIP_SPACES (str);
-
-      /* Parse gradient type */
-      if (g_str_has_prefix (str, "linear"))
-        {
-          type = CAIRO_PATTERN_TYPE_LINEAR;
-          str += strlen ("linear");
-        }
-      else if (g_str_has_prefix (str, "radial"))
-        {
-          type = CAIRO_PATTERN_TYPE_RADIAL;
-          str += strlen ("radial");
-        }
-      else
-        {
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      SKIP_SPACES (str);
-
-      /* Parse start/stop position parameters */
-      for (i = 0; i < 2; i++)
-        {
-          if (*str != ',')
-            {
-              *end_ptr = (gchar *) str;
-              return NULL;
-            }
-
-          str++;
-          SKIP_SPACES (str);
-
-          if (strncmp (str, "left", 4) == 0)
-            {
-              coords[i * 3] = 0;
-              str += strlen ("left");
-            }
-          else if (strncmp (str, "right", 5) == 0)
-            {
-              coords[i * 3] = 1;
-              str += strlen ("right");
-            }
-          else if (strncmp (str, "center", 6) == 0)
-            {
-              coords[i * 3] = 0.5;
-              str += strlen ("center");
-            }
-          else
-            {
-              coords[i * 3] = g_ascii_strtod (str, &end);
-
-              if (str == end)
-                {
-                  *end_ptr = (gchar *) str;
-                  return NULL;
-                }
-
-              str = end;
-            }
-
-          SKIP_SPACES (str);
-
-          if (strncmp (str, "top", 3) == 0)
-            {
-              coords[(i * 3) + 1] = 0;
-              str += strlen ("top");
-            }
-          else if (strncmp (str, "bottom", 6) == 0)
-            {
-              coords[(i * 3) + 1] = 1;
-              str += strlen ("bottom");
-            }
-          else if (strncmp (str, "center", 6) == 0)
-            {
-              coords[(i * 3) + 1] = 0.5;
-              str += strlen ("center");
-            }
-          else
-            {
-              coords[(i * 3) + 1] = g_ascii_strtod (str, &end);
-
-              if (str == end)
-                {
-                  *end_ptr = (gchar *) str;
-                  return NULL;
-                }
-
-              str = end;
-            }
-
-          SKIP_SPACES (str);
-
-          if (type == CAIRO_PATTERN_TYPE_RADIAL)
-            {
-              /* Parse radius */
-              if (*str != ',')
-                {
-                  *end_ptr = (gchar *) str;
-                  return NULL;
-                }
-
-              str++;
-              SKIP_SPACES (str);
-
-              coords[(i * 3) + 2] = g_ascii_strtod (str, &end);
-              str = end;
-
-              SKIP_SPACES (str);
-            }
-        }
-
-      if (type == CAIRO_PATTERN_TYPE_LINEAR)
-        gradient = gtk_gradient_new_linear (coords[0], coords[1], coords[3], coords[4]);
-      else
-        gradient = gtk_gradient_new_radial (coords[0], coords[1], coords[2],
-                                            coords[3], coords[4], coords[5]);
-
-      while (*str == ',')
-        {
-          GtkSymbolicColor *color;
-          gdouble position;
-
-          if (*str != ',')
-            {
-              *end_ptr = (gchar *) str;
-              return gradient;
-            }
-
-          str++;
-          SKIP_SPACES (str);
-
-          if (g_str_has_prefix (str, "from"))
-            {
-              position = 0;
-              str += strlen ("from");
-              SKIP_SPACES (str);
-
-              if (*str != '(')
-                {
-                  *end_ptr = (gchar *) str;
-                  return gradient;
-                }
-            }
-          else if (g_str_has_prefix (str, "to"))
-            {
-              position = 1;
-              str += strlen ("to");
-              SKIP_SPACES (str);
-
-              if (*str != '(')
-                {
-                  *end_ptr = (gchar *) str;
-                  return gradient;
-                }
-            }
-          else if (g_str_has_prefix (str, "color-stop"))
-            {
-              str += strlen ("color-stop");
-              SKIP_SPACES (str);
-
-              if (*str != '(')
-                {
-                  *end_ptr = (gchar *) str;
-                  return gradient;
-                }
-
-              str++;
-              SKIP_SPACES (str);
-
-              position = g_ascii_strtod (str, &end);
-
-              str = end;
-              SKIP_SPACES (str);
-
-              if (*str != ',')
-                {
-                  *end_ptr = (gchar *) str;
-                  return gradient;
-                }
-            }
-          else
-            {
-              *end_ptr = (gchar *) str;
-              return gradient;
-            }
-
-          str++;
-          SKIP_SPACES (str);
-
-          color = symbolic_color_parse_str (str, &end);
-
-          str = end;
-          SKIP_SPACES (str);
-
-          if (*str != ')')
-            {
-              if (color)
-                gtk_symbolic_color_unref (color);
-              *end_ptr = (gchar *) str;
-              return gradient;
-            }
-
-          str++;
-          SKIP_SPACES (str);
-
-          if (color)
-            {
-              gtk_gradient_add_color_stop (gradient, position, color);
-              gtk_symbolic_color_unref (color);
-            }
-        }
-
-      if (*str != ')')
-        {
-          *end_ptr = (gchar *) str;
-          return gradient;
-        }
-
-      str++;
-    }
-
-  *end_ptr = (gchar *) str;
-
-  return gradient;
-}
-
-static gchar *
-path_parse_str (GtkCssProvider  *css_provider,
-                const gchar     *str,
-                gchar          **end_ptr)
-{
-  gchar *path, *chr;
-  const gchar *start, *end;
-  start = str;
-
-  if (g_str_has_prefix (str, "url"))
-    {
-      str += strlen ("url");
-      SKIP_SPACES (str);
-
-      if (*str != '(')
-        {
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      chr = strchr (str, ')');
-      if (!chr)
-        {
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      end = chr + 1;
-
-      str++;
-      SKIP_SPACES (str);
-
-      if (*str == '"' || *str == '\'')
-        {
-          const gchar *p;
-          p = str;
-          str++;
-
-          chr--;
-          SKIP_SPACES_BACK (chr);
-
-          if (*chr != *p || chr == p)
-            {
-              *end_ptr = (gchar *)str;
-              return NULL;
-            }
-        }
-      else
-        {
-          *end_ptr = (gchar *)str;
-          return NULL;
-        }
-
-      path = g_strndup (str, chr - str);
-      g_strstrip (path);
-
-      *end_ptr = (gchar *)end;
-    }
-  else
-    {
-      path = g_strdup (str);
-      *end_ptr = (gchar *)str + strlen (str);
-    }
-
-  /* Always return an absolute path */
-  if (!g_path_is_absolute (path))
-    {
-      GtkCssProviderPrivate *priv;
-      gchar *dirname, *full_path;
-
-      priv = css_provider->priv;
-
-      /* Use relative path to the current CSS file path, if any */
-      if (priv->scanner->input_name)
-        dirname = g_path_get_dirname (priv->scanner->input_name);
-      else
-        dirname = g_get_current_dir ();
-
-      full_path = g_build_filename (dirname, path, NULL);
-      g_free (path);
-      g_free (dirname);
-
-      path = full_path;
-    }
-
-  if (!g_file_test (path, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
-    {
-      gtk_css_provider_error (css_provider, G_FILE_ERROR, G_FILE_ERROR_EXIST,
-                              "File doesn't exist: %s", path);
-      g_free (path);
-      path = NULL;
-      *end_ptr = (gchar *)start;
-    }
-
-  return path;
-}
-
-static gchar *
-path_parse (GtkCssProvider  *css_provider,
-            const gchar     *str)
-{
-  gchar *path;
-  gchar *end;
-
-  path = path_parse_str (css_provider, str, &end);
-
-  if (!path)
-    return NULL;
-
-  if (*end != '\0')
-    {
-      gtk_css_provider_error (css_provider,
-                              GTK_CSS_PROVIDER_ERROR,
-                              GTK_CSS_PROVIDER_ERROR_FAILED,
-                              "Error parsing path");
-      g_free (path);
-      path = NULL;
-    }
-
-  return path;
-}
-
-static Gtk9Slice *
-slice_parse_str (GtkCssProvider  *css_provider,
-                 const gchar     *str,
-                 gchar          **end_ptr)
-{
-  gdouble distance_top, distance_bottom;
-  gdouble distance_left, distance_right;
-  GtkSliceSideModifier mods[2];
-  GdkPixbuf *pixbuf;
-  Gtk9Slice *slice;
-  gchar *path;
-  gint i = 0;
-  GError *error = NULL;
-
-  SKIP_SPACES (str);
-
-  /* Parse image url */
-  path = path_parse_str (css_provider, str, end_ptr);
-
-  if (!path)
-      return NULL;
-
-  str = *end_ptr;
-  SKIP_SPACES (str);
-
-  /* Parse top/left/bottom/right distances */
-  distance_top = g_ascii_strtod (str, end_ptr);
-
-  str = *end_ptr;
-  SKIP_SPACES (str);
-
-  distance_right = g_ascii_strtod (str, end_ptr);
-
-  str = *end_ptr;
-  SKIP_SPACES (str);
-
-  distance_bottom = g_ascii_strtod (str, end_ptr);
-
-  str = *end_ptr;
-  SKIP_SPACES (str);
-
-  distance_left = g_ascii_strtod (str, end_ptr);
-
-  str = *end_ptr;
-  SKIP_SPACES (str);
-
-  while (*str && i < 2)
-    {
-      if (g_str_has_prefix (str, "stretch"))
-        {
-          str += strlen ("stretch");
-          mods[i] = GTK_SLICE_STRETCH;
-        }
-      else if (g_str_has_prefix (str, "repeat"))
-        {
-          str += strlen ("repeat");
-          mods[i] = GTK_SLICE_REPEAT;
-        }
-      else
-        {
-          g_free (path);
-          *end_ptr = (gchar *) str;
-          return NULL;
-        }
-
-      SKIP_SPACES (str);
-      i++;
-    }
-
-  *end_ptr = (gchar *) str;
-
-  if (*str != '\0')
-    {
-      g_free (path);
-      return NULL;
-    }
-
-  if (i != 2)
-    {
-      /* Fill in second modifier, same as the first */
-      mods[1] = mods[0];
-    }
-
-  pixbuf = gdk_pixbuf_new_from_file (path, &error);
-  g_free (path);
-
-  if (!pixbuf)
-    {
-      gtk_css_provider_take_error (css_provider, error);
-      *end_ptr = (gchar *) str;
-      return NULL;
-    }
-
-  slice = _gtk_9slice_new (pixbuf,
-                           distance_top, distance_bottom,
-                           distance_left, distance_right,
-                           mods[0], mods[1]);
-  g_object_unref (pixbuf);
-
-  return slice;
-}
-
-static gdouble
-unit_parse_str (const gchar     *str,
-                gchar          **end_str)
-{
-  gdouble unit;
-
-  SKIP_SPACES (str);
-  unit = g_ascii_strtod (str, end_str);
-  str = *end_str;
-
-  /* Now parse the unit type, if any. We
-   * don't admit spaces between these.
-   */
-  if (*str != ' ' && *str != '\0')
-    {
-      while (**end_str != ' ' && **end_str != '\0')
-        (*end_str)++;
-
-      /* Only handle pixels at the moment */
-      if (strncmp (str, "px", 2) != 0)
-        {
-          gchar *type;
-
-          type = g_strndup (str, *end_str - str);
-          g_warning ("Unknown unit '%s', only pixel units are "
-                     "currently supported in CSS style", type);
-          g_free (type);
-        }
-    }
-
-  return unit;
-}
-
-static GtkBorder *
-border_parse_str (const gchar  *str,
-                  gchar       **end_str)
-{
-  gdouble first, second, third, fourth;
-  GtkBorder *border;
-
-  border = gtk_border_new ();
-
-  SKIP_SPACES (str);
-  if (!g_ascii_isdigit (*str) && *str != '-')
-    return border;
-
-  first = unit_parse_str (str, end_str);
-  str = *end_str;
-  SKIP_SPACES (str);
-
-  if (!g_ascii_isdigit (*str) && *str != '-')
-    {
-      border->left = border->right = border->top = border->bottom = (gint) first;
-      *end_str = (gchar *) str;
-      return border;
-    }
-
-  second = unit_parse_str (str, end_str);
-  str = *end_str;
-  SKIP_SPACES (str);
-
-  if (!g_ascii_isdigit (*str) && *str != '-')
-    {
-      border->top = border->bottom = (gint) first;
-      border->left = border->right = (gint) second;
-      *end_str = (gchar *) str;
-      return border;
-    }
-
-  third = unit_parse_str (str, end_str);
-  str = *end_str;
-  SKIP_SPACES (str);
-
-  if (!g_ascii_isdigit (*str) && *str != '-')
-    {
-      border->top = (gint) first;
-      border->left = border->right = (gint) second;
-      border->bottom = (gint) third;
-      *end_str = (gchar *) str;
-      return border;
-    }
-
-  fourth = unit_parse_str (str, end_str);
-
-  border->top = (gint) first;
-  border->right = (gint) second;
-  border->bottom = (gint) third;
-  border->left = (gint) fourth;
-
-  return border;
-}
-
 static void
 resolve_binding_sets (const gchar *value_str,
                       GValue      *value)
@@ -2959,273 +2105,6 @@ resolve_binding_sets (const gchar *value_str,
   g_strfreev (bindings);
 }
 
-static gboolean
-css_provider_parse_value (GtkCssProvider  *css_provider,
-                          const gchar     *value_str,
-                          GValue          *value)
-{
-  GtkCssProviderPrivate *priv;
-  GType type;
-  gboolean parsed = TRUE;
-  gchar *end = NULL;
-
-  priv = css_provider->priv;
-  type = G_VALUE_TYPE (value);
-
-  if (type == GDK_TYPE_RGBA ||
-      type == GDK_TYPE_COLOR)
-    {
-      GdkRGBA rgba;
-      GdkColor color;
-
-      if (type == GDK_TYPE_RGBA &&
-          gdk_rgba_parse (&rgba, value_str))
-        g_value_set_boxed (value, &rgba);
-      else if (type == GDK_TYPE_COLOR &&
-               gdk_color_parse (value_str, &color))
-        g_value_set_boxed (value, &color);
-      else
-        {
-          GtkSymbolicColor *symbolic_color;
-
-          symbolic_color = symbolic_color_parse_str (value_str, &end);
-
-          if (symbolic_color)
-            {
-              g_value_unset (value);
-              g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
-              g_value_take_boxed (value, symbolic_color);
-            }
-          else
-            parsed = FALSE;
-        }
-    }
-  else if (type == PANGO_TYPE_FONT_DESCRIPTION)
-    {
-      PangoFontDescription *font_desc;
-
-      font_desc = pango_font_description_from_string (value_str);
-      g_value_take_boxed (value, font_desc);
-    }
-  else if (type == G_TYPE_BOOLEAN)
-    {
-      if (value_str[0] == '1' ||
-          g_ascii_strcasecmp (value_str, "true") == 0)
-        g_value_set_boolean (value, TRUE);
-      else
-        g_value_set_boolean (value, FALSE);
-    }
-  else if (type == G_TYPE_INT)
-    g_value_set_int (value, atoi (value_str));
-  else if (type == G_TYPE_UINT)
-    g_value_set_uint (value, (guint) atoi (value_str));
-  else if (type == G_TYPE_DOUBLE)
-    g_value_set_double (value, g_ascii_strtod (value_str, NULL));
-  else if (type == G_TYPE_FLOAT)
-    g_value_set_float (value, (gfloat) g_ascii_strtod (value_str, NULL));
-  else if (type == GTK_TYPE_THEMING_ENGINE)
-    {
-      GtkThemingEngine *engine;
-
-      engine = gtk_theming_engine_load (value_str);
-      if (engine)
-        g_value_set_object (value, engine);
-      else
-        parsed = FALSE;
-    }
-  else if (type == GTK_TYPE_ANIMATION_DESCRIPTION)
-    {
-      GtkAnimationDescription *desc;
-
-      desc = _gtk_animation_description_from_string (value_str);
-
-      if (desc)
-        g_value_take_boxed (value, desc);
-      else
-        parsed = FALSE;
-    }
-  else if (type == GTK_TYPE_BORDER)
-    {
-      GtkBorder *border;
-
-      border = border_parse_str (value_str, &end);
-      g_value_take_boxed (value, border);
-    }
-  else if (type == CAIRO_GOBJECT_TYPE_PATTERN)
-    {
-      GtkGradient *gradient;
-
-      gradient = gradient_parse_str (value_str, &end);
-
-      if (gradient)
-        {
-          g_value_unset (value);
-          g_value_init (value, GTK_TYPE_GRADIENT);
-          g_value_take_boxed (value, gradient);
-        }
-      else
-        {
-          gchar *path;
-          GdkPixbuf *pixbuf;
-
-          path = path_parse_str (css_provider, value_str, &end);
-
-          if (path)
-            {
-              pixbuf = gdk_pixbuf_new_from_file (path, NULL);
-              g_free (path);
-
-              if (pixbuf)
-                {
-                  cairo_surface_t *surface;
-                  cairo_pattern_t *pattern;
-                  cairo_t *cr;
-                  cairo_matrix_t matrix;
-
-                  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                        gdk_pixbuf_get_width (pixbuf),
-                                                        gdk_pixbuf_get_height (pixbuf));
-                  cr = cairo_create (surface);
-                  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-                  cairo_paint (cr);
-                  pattern = cairo_pattern_create_for_surface (surface);
-
-                  cairo_matrix_init_scale (&matrix,
-                                           gdk_pixbuf_get_width (pixbuf),
-                                           gdk_pixbuf_get_height (pixbuf));
-                  cairo_pattern_set_matrix (pattern, &matrix);
-
-                  cairo_surface_destroy (surface);
-                  cairo_destroy (cr);
-                  g_object_unref (pixbuf);
-
-                  g_value_take_boxed (value, pattern);
-                }
-              else
-                parsed = FALSE;
-            }
-          else
-            parsed = FALSE;
-        }
-    }
-  else if (G_TYPE_IS_ENUM (type))
-    {
-      GEnumClass *enum_class;
-      GEnumValue *enum_value;
-
-      enum_class = g_type_class_ref (type);
-      enum_value = g_enum_get_value_by_nick (enum_class, value_str);
-
-      if (!enum_value)
-        {
-          gtk_css_provider_error (css_provider,
-                                  GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_FAILED,
-                                  "Unknown value '%s' for enum type '%s'",
-                                  value_str, g_type_name (type));
-          parsed = FALSE;
-        }
-      else
-        g_value_set_enum (value, enum_value->value);
-
-      g_type_class_unref (enum_class);
-    }
-  else if (G_TYPE_IS_FLAGS (type))
-    {
-      GFlagsClass *flags_class;
-      GFlagsValue *flag_value;
-      guint flags = 0;
-      gchar *ptr;
-
-      flags_class = g_type_class_ref (type);
-
-      /* Parse comma separated values */
-      ptr = strchr (value_str, ',');
-
-      while (ptr && parsed)
-        {
-          gchar *flag_str;
-
-          *ptr = '\0';
-          ptr++;
-
-          flag_str = (gchar *) value_str;
-          flag_value = g_flags_get_value_by_nick (flags_class,
-                                                  g_strstrip (flag_str));
-
-          if (!flag_value)
-            {
-              gtk_css_provider_error (css_provider,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_FAILED,
-                                      "Unknown flag '%s' for type '%s'",
-                                      value_str, g_type_name (type));
-              parsed = FALSE;
-            }
-          else
-            flags |= flag_value->value;
-
-          value_str = ptr;
-          ptr = strchr (value_str, ',');
-        }
-
-      /* Store last/only value */
-      flag_value = g_flags_get_value_by_nick (flags_class, value_str);
-
-      if (!flag_value)
-        {
-          gtk_css_provider_error (css_provider,
-                                  GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_FAILED,
-                                  "Unknown flag '%s' for type '%s'",
-                                  value_str, g_type_name (type));
-          parsed = FALSE;
-        }
-      else
-        flags |= flag_value->value;
-
-      if (parsed)
-        g_value_set_enum (value, flags);
-
-      g_type_class_unref (flags_class);
-    }
-  else if (type == GTK_TYPE_9SLICE)
-    {
-      Gtk9Slice *slice;
-
-      slice = slice_parse_str (css_provider, value_str, &end);
-
-      if (slice)
-        g_value_take_boxed (value, slice);
-      else
-        parsed = FALSE;
-    }
-  else
-    {
-      gtk_css_provider_error (css_provider,
-                              GTK_CSS_PROVIDER_ERROR,
-                              GTK_CSS_PROVIDER_ERROR_FAILED,
-                              "Cannot parse string '%s' for type %s",
-                              value_str, g_type_name (type));
-      parsed = FALSE;
-    }
-
-  if (end)
-    SKIP_SPACES (end);
-
-  if (end && *end)
-    {
-      parsed = FALSE;
-
-      gtk_css_provider_error_literal (css_provider,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_FAILED,
-                                      "Failed to parse value");
-    }
-
-  return parsed;
-}
-
 static GTokenType
 parse_rule (GtkCssProvider  *css_provider,
             GScanner        *scanner)
@@ -3250,6 +2129,7 @@ parse_rule (GtkCssProvider  *css_provider,
         {
           GtkSymbolicColor *color;
           gchar *color_name, *color_str;
+          GError *error = NULL;
 
           /* Directive is a color mapping */
           g_scanner_get_next_token (scanner);
@@ -3271,11 +2151,10 @@ parse_rule (GtkCssProvider  *css_provider,
             }
 
           color_str = g_strstrip (scanner->value.v_identifier);
-          color = symbolic_color_parse (color_str);
-
+          color = _gtk_css_parse_symbolic_color (color_str, &error);
           if (!color)
             {
-              gtk_css_provider_invalid_token (css_provider, "Color definition");
+              gtk_css_provider_take_error (css_provider, error);
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -3295,21 +2174,38 @@ parse_rule (GtkCssProvider  *css_provider,
           GSList *state_backup;
           gboolean loaded;
           gchar *path = NULL;
+          GFile *base, *actual;
+          char *dirname;
+          GError *error = NULL;
 
           css_provider_push_scope (css_provider, SCOPE_VALUE);
           g_scanner_get_next_token (scanner);
 
           if (scanner->token == G_TOKEN_IDENTIFIER &&
               g_str_has_prefix (scanner->value.v_identifier, "url"))
-            path = path_parse (css_provider,
-                               g_strstrip (scanner->value.v_identifier));
+            path = g_strstrip (scanner->value.v_identifier);
           else if (scanner->token == G_TOKEN_STRING)
-            path = path_parse (css_provider,
-                               g_strstrip (scanner->value.v_string));
-
-          if (path == NULL)
+            path = g_strstrip (scanner->value.v_string);
+          else
             {
               gtk_css_provider_invalid_token (css_provider, "File URL");
+              return G_TOKEN_IDENTIFIER;
+            }
+
+          if (priv->scanner->input_name)
+            dirname = g_path_get_dirname (priv->scanner->input_name);
+          else
+            dirname = g_get_current_dir ();
+
+          base = g_file_new_for_path (dirname);
+          g_free (dirname);
+
+          actual = _gtk_css_parse_url (base, path, NULL, &error);
+          g_object_unref (base);
+
+          if (actual == NULL)
+            {
+              gtk_css_provider_take_error (css_provider, error);
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -3318,9 +2214,12 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (scanner->token != ';')
             {
-              g_free (path);
+              g_object_unref (actual);
               return ';';
             }
+
+          path = g_file_get_path (actual);
+          g_object_unref (actual);
 
           /* Snapshot current parser state and scanner in order to restore after importing */
           state_backup = priv->state;
@@ -3342,10 +2241,7 @@ parse_rule (GtkCssProvider  *css_provider,
           g_free (path);
 
           if (!loaded)
-            {
-              gtk_css_provider_invalid_token (css_provider, "File URL");
-              return G_TOKEN_IDENTIFIER;
-            }
+            return G_TOKEN_IDENTIFIER;
           else
             return G_TOKEN_NONE;
         }
@@ -3495,7 +2391,6 @@ parse_rule (GtkCssProvider  *css_provider,
         }
 
       value_str = scanner->value.v_identifier;
-      SKIP_SPACES (value_str);
       g_strchomp (value_str);
 
       if (pspec)
@@ -3524,10 +2419,6 @@ parse_rule (GtkCssProvider  *css_provider,
               g_value_set_string (val, value_str);
               g_hash_table_insert (priv->cur_properties, prop, val);
             }
-          else if (!parse_func && css_provider_parse_value (css_provider, value_str, val))
-            {
-              g_hash_table_insert (priv->cur_properties, prop, val);
-            }
           else if (parse_func)
             {
               GError *error = NULL;
@@ -3539,12 +2430,38 @@ parse_rule (GtkCssProvider  *css_provider,
             }
           else
             {
-              g_value_unset (val);
-              g_slice_free (GValue, val);
-              g_free (prop);
+              GError *error = NULL;
+              GFile *base;
+              char *dirname;
+              gboolean success;
 
-              gtk_css_provider_invalid_token (css_provider, "Property value");
-              goto find_end_of_declaration;
+              if (priv->scanner->input_name)
+                dirname = g_path_get_dirname (priv->scanner->input_name);
+              else
+                dirname = g_get_current_dir ();
+
+              base = g_file_new_for_path (dirname);
+              g_free (dirname);
+
+              success = _gtk_css_value_from_string (val,
+                                                    base,
+                                                    value_str,
+                                                    &error);
+
+              g_object_unref (base);
+
+              if (success)
+                {
+                  g_hash_table_insert (priv->cur_properties, prop, val);
+                }
+              else
+                {
+                  g_value_unset (val);
+                  g_slice_free (GValue, val);
+                  g_free (prop);
+
+                  gtk_css_provider_take_error (css_provider, error);
+                }
             }
         }
       else if (prop[0] == '-')
@@ -4318,119 +3235,6 @@ gtk_css_provider_get_named (const gchar *name,
 }
 
 static void
-gtk_css_provider_print_value (const GValue *value,
-                              GString *     str)
-{
-  char *s;
-
-  if (G_VALUE_TYPE (value) == GTK_TYPE_BORDER)
-    {
-      const GtkBorder *border = g_value_get_boxed (value);
-
-      if (border == NULL)
-        g_string_append (str, "none");
-      else if (border->left != border->right)
-        g_string_append_printf (str, "%d %d %d %d", border->top, border->right, border->bottom, border->left);
-      else if (border->top != border->bottom)
-        g_string_append_printf (str, "%d %d %d", border->top, border->right, border->bottom);
-      else if (border->top != border->left)
-        g_string_append_printf (str, "%d %d", border->top, border->right);
-      else
-        g_string_append_printf (str, "%d", border->top);
-
-      return;
-    }
-  else if (G_VALUE_TYPE (value) == GDK_TYPE_RGBA)
-    {
-      const GdkRGBA *rgba = g_value_get_boxed (value);
-      if (rgba == NULL)
-        g_string_append (str, "none");
-      else
-        {
-          s = gdk_rgba_to_string (g_value_get_boxed (value));
-          g_string_append (str, s);
-          g_free (s);
-        }
-      return;
-    }
-  else if (G_VALUE_TYPE (value) == GTK_TYPE_SYMBOLIC_COLOR)
-    {
-      GtkSymbolicColor *color = g_value_get_boxed (value);
-
-      if (color == NULL)
-        g_string_append (str, "none");
-      else
-        {
-          s = gtk_symbolic_color_to_string (color);
-          g_string_append (str, s);
-          g_free (s);
-        }
-      return;
-    }
-  else if (G_VALUE_TYPE (value) == GTK_TYPE_ANIMATION_DESCRIPTION)
-    {
-      GtkAnimationDescription *desc = g_value_get_boxed (value);
-
-      if (desc == NULL)
-        g_string_append (str, "none");
-      else
-        {
-          s = _gtk_animation_description_to_string (desc);
-          g_string_append (str, s);
-          g_free (s);
-        }
-      return;
-    }
-  else if (G_VALUE_TYPE (value) == GTK_TYPE_GRADIENT)
-    {
-      GtkGradient *gradient = g_value_get_boxed (value);
-
-      if (gradient == NULL)
-        g_string_append (str, "none");
-      else
-        {
-          s = gtk_gradient_to_string (gradient);
-          g_string_append (str, s);
-          g_free (s);
-        }
-      return;
-    }
-  else if (G_VALUE_TYPE (value) == PANGO_TYPE_FONT_DESCRIPTION)
-    {
-      PangoFontDescription *desc = g_value_get_boxed (value);
-
-      if (desc == NULL)
-        g_string_append (str, "none");
-      else
-        {
-          s = pango_font_description_to_string (desc);
-          g_string_append (str, s);
-          g_free (s);
-        }
-      return;
-    }
-  
-  if (g_type_is_a (G_VALUE_TYPE (value), G_TYPE_ENUM))
-    {
-      GEnumClass *enum_class;
-      GEnumValue *enum_value;
-
-      enum_class = g_type_class_ref (G_VALUE_TYPE (value));
-      enum_value = g_enum_get_value (enum_class, g_value_get_enum (value));
-
-      g_string_append (str, enum_value->value_nick);
-
-      g_type_class_unref (enum_class);
-      return;
-    }
-  
-  /* fall back to boring strdup in the worst case */
-  s = g_strdup_value_contents (value);
-  g_string_append (str, s);
-  g_free (s);
-}
-
-static void
 selector_path_print (const SelectorPath *path,
                      GString *           str)
 {
@@ -4539,6 +3343,7 @@ selector_style_info_print (const SelectorStyleInfo *info,
                            GString                 *str)
 {
   GList *keys, *walk;
+  char *s;
 
   selector_path_print (info->path, str);
 
@@ -4556,7 +3361,9 @@ selector_style_info_print (const SelectorStyleInfo *info,
       g_string_append (str, "  ");
       g_string_append (str, name);
       g_string_append (str, ": ");
-      gtk_css_provider_print_value (value, str);
+      s = _gtk_css_value_to_string (value);
+      g_string_append (str, s);
+      g_free (s);
       g_string_append (str, ";\n");
     }
 
