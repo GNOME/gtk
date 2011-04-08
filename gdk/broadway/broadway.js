@@ -447,7 +447,7 @@ function cmdMoveSurface(id, x, y)
 	     * However this isn't *strictly* invalid, as any WM could have done whatever it
 	     * wanted with the positioning of the window.
 	     */
-	    //surface.window.moveTo(surface.x, surface.y);
+	    surface.window.moveTo(surface.x, surface.y);
 	} else {
 	    var xOffset = surface.x;
 	    var yOffset = surface.y;
@@ -934,7 +934,7 @@ function connect()
 	    } else {
 		w = window.innerWidth;
 		h = window.innerHeight;
-		win.onresize = function(ev) { 
+		window.onresize = function(ev) { 
 		    var w, h;
 		    w = window.innerWidth;
 		    h = window.innerHeight;
