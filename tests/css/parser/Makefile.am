@@ -34,6 +34,9 @@ EXTRA_DIST += \
 	does-not-exist.css \
 	does-not-exist.errors \
 	does-not-exist.ref.css \
+	integer.css \
+	integer.errors \
+	integer.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
 	simple.css

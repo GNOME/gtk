@@ -1,0 +1,42 @@
+a {
+  int-property: 0;
+}
+b {
+  int-property: 1;
+}
+c {
+  int-property: -1;
+}
+d {
+  int-property: 2147483647;
+}
+e {
+  int-property: -2147483648;
+}
+f {
+  int-property: 1.0;
+}
+g {
+  int-property: 3px;
+}
+h {
+  int-property: 0xFF;
+}
+i {
+  int-property: 0377;
+}
+j {
+  int-property: nonumber;
+}
+k {
+  int-property: "42";
+}
+l {
+  int-property: +3;
+}
+m {
+  int-property: --5;
+}
+n {
+  int-property: - 10;
+}

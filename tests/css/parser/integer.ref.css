@@ -1,0 +1,23 @@
+a {
+  int-property: 0;
+}
+
+b {
+  int-property: 1;
+}
+
+c {
+  int-property: -1;
+}
+
+d {
+  int-property: 2147483647;
+}
+
+e {
+  int-property: -2147483648;
+}
+
+i {
+  int-property: 377;
+}
