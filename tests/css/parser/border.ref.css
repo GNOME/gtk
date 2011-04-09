@@ -1,0 +1,31 @@
+a {
+  border-property: 1 2 3 4;
+}
+
+b {
+  border-property: 1 2 3;
+}
+
+c {
+  border-property: 1 2;
+}
+
+d {
+  border-property: 1;
+}
+
+e {
+  border-property: 0;
+}
+
+f {
+  border-property: 1 2 3 4;
+}
+
+n {
+  border-property: 1 2;
+}
+
+o {
+  border-property: none;
+}

@@ -1,0 +1,59 @@
+a {
+  border-property: 1 2 3 4;
+}
+
+b {
+  border-property: 1 2 3;
+}
+
+c {
+  border-property: 1 2;
+}
+
+d {
+  border-property: 1;
+}
+
+e {
+  border-property: 0 0 0 0;
+}
+
+f {
+  border-property: 1px 2px 3 4px;
+}
+
+g {
+  border-property: 5 oops 6 7;
+}
+
+h {
+  border-property: true;
+}
+
+i {
+  border-property: -1;
+}
+
+j {
+  border-property: -5px;
+}
+
+k {
+  border-property: 3units;
+}
+
+l {
+  border-property: 1 2 3 4units;
+}
+
+m {
+  border-property: 1 2 3 4 5;
+}
+
+n {
+  border-property: 1 2 ; 4;
+}
+
+o {
+  border-property: none
+}

@@ -28,6 +28,9 @@ EXTRA_DIST += \
 	boolean.css \
 	boolean.errors \
 	boolean.ref.css \
+	border.css \
+	border.errors \
+	border.ref.css \
 	close-at-end-of-file.css \
 	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \
