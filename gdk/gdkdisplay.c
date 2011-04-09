@@ -134,7 +134,8 @@ gdk_display_class_init (GdkDisplayClass *class)
 static void
 free_pointer_info (GdkPointerWindowInfo *info)
 {
-  g_object_unref (info->toplevel_under_pointer);
+  if (info->toplevel_under_pointer)
+    g_object_unref (info->toplevel_under_pointer);
   g_slice_free (GdkPointerWindowInfo, info);
 }
 

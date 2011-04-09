@@ -77,7 +77,8 @@ gdk_x11_display_manager_set_default_display (GdkDisplayManager *manager,
 {
   GDK_X11_DISPLAY_MANAGER (manager)->default_display = display;
 
-  _gdk_x11_display_make_default (display);
+  if (display)
+    _gdk_x11_display_make_default (display);
 }
 
 static void
