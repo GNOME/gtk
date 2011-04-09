@@ -1,0 +1,48 @@
+a {
+  boolean-property: true;
+}
+b {
+  boolean-property: TRUE;
+}
+c {
+  boolean-property: tRuE;
+}
+d {
+  boolean-property: 1;
+}
+e {
+  boolean-property: false;
+}
+f {
+  boolean-property: FALSE;
+}
+g {
+  boolean-property: FAlsE;
+}
+h {
+  boolean-property: 0;
+}
+i {
+  boolean-property: trueest;
+}
+j {
+  boolean-property: T;
+}
+k {
+  boolean-property: tru;
+}
+l {
+  boolean-property: 0.0;
+}
+m {
+  boolean-property: 1.0;
+}
+n {
+  boolean-property: fals;
+}
+o {
+  boolean-property: f;
+}
+p {
+  boolean-property: FAL;
+}

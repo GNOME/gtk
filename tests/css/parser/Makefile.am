@@ -25,6 +25,9 @@ clean-local:
 	rm $(builddir)/*.out.css || true
 
 EXTRA_DIST += \
+	boolean.css \
+	boolean.errors \
+	boolean.ref.css \
 	close-at-end-of-file.css \
 	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \
