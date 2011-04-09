@@ -1347,7 +1347,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * to enable the #GDK_EXPOSURE_MASK mask.
    *
    * Note that the ::expose-event signal has been replaced by a ::draw
-   * signal in GTK+ 3. The the <link linkend="http://library.gnome.org/devel/gtk3/3.0/gtk-migrating-2-to-3.html">GTK+ 3 migration guide</link>
+   * signal in GTK+ 3. The <link linkend="http://library.gnome.org/devel/gtk3/3.0/gtk-migrating-2-to-3.html">GTK+ 3 migration guide</link>
    * for hints on how to port from ::expose-event to ::draw.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event.

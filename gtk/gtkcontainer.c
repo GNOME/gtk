@@ -2711,16 +2711,23 @@ gtk_container_unmap (GtkWidget *widget)
  * When a container receives an expose event, it must send synthetic
  * expose events to all children that don't have their own #GdkWindows.
  * This function provides a convenient way of doing this. A container,
- * when it receives an expose event, calls gtk_container_propagate_expose() 
+ * when it receives an expose event, calls gtk_container_propagate_expose()
  * once for each child, passing in the event the container received.
  *
  * gtk_container_propagate_expose() takes care of deciding whether
  * an expose event needs to be sent to the child, intersecting
  * the event's area with the child area, and sending the event.
- * 
+ *
  * In most cases, a container can simply either simply inherit the
- * #GtkWidget::expose implementation from #GtkContainer, or, do some drawing 
+ * #GtkWidget::expose implementation from #GtkContainer, or, do some drawing
  * and then chain to the ::expose implementation from #GtkContainer.
+ *
+ * Note that the ::expose-event signal has been replaced by a ::draw
+ * signal in GTK+ 3, and consequently, gtk_container_propagate_expose()
+ * has been replaced by gtk_container_propagate_draw().
+ * The <link linkend="http://library.gnome.org/devel/gtk3/3.0/gtk-migrating-2-to-3.html">GTK+ 3 migration guide</link>
+ * for hints on how to port from ::expose-event to ::draw.
+ *
  **/
 void
 gtk_container_propagate_expose (GtkContainer   *container,
