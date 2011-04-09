@@ -1,0 +1,28 @@
+d {
+  int-property: 42;
+}
+
+e {
+  int-property: 42;
+  uint-property: 42;
+}
+
+f {
+  int-property: 42;
+}
+
+g {
+  int-property: 42;
+}
+
+i {
+  uint-property: 42;
+}
+
+m {
+  uint-property: 42;
+}
+
+n {
+  uint-property: 42;
+}

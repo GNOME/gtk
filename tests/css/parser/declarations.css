@@ -1,0 +1,50 @@
+a { ;;; }
+
+b { }
+
+c {
+}
+
+d { ; int-property: 42; }
+
+e {
+  int-property: 42;
+  ;
+  ;
+  ;
+  uint-property: 42;
+}
+
+f {
+  int-property: 42
+}
+
+g { int-property: 42 }
+
+h { int-property }
+
+i { int-property; }
+
+j { int-property: }
+
+k { int-property : }
+
+l { int-property: ; }
+
+m { int-property:; }
+
+n { int-property: ; }
+
+h { int-property uint-property: 42; }
+
+i { int-property; uint-property: 42; }
+
+j { int-property: uint-property: 42; }
+
+k { int-property : uint-property: 42; }
+
+l { int-property: uint-property: 42; }
+
+m { int-property:; uint-property: 42; }
+
+n { int-property: ; uint-property: 42; }
