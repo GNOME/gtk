@@ -1588,6 +1588,16 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
 }
 
 static void
+gtk_css_provider_error_literal (GtkCssProvider *provider,
+                                GQuark          domain,
+                                gint            code,
+                                const char     *message)
+{
+  gtk_css_provider_take_error (provider,
+                               g_error_new_literal (domain, code, message));
+}
+
+static void
 gtk_css_provider_error (GtkCssProvider *provider,
                         GQuark          domain,
                         gint            code,
@@ -2348,14 +2358,31 @@ parse_rule (GtkCssProvider  *css_provider,
 
   /* Declarations parsing */
   css_provider_push_scope (css_provider, SCOPE_DECLARATION);
-  g_scanner_get_next_token (scanner);
 
-  while (scanner->token == G_TOKEN_IDENTIFIER)
+  g_scanner_get_next_token (scanner);
+    
+  while (scanner->token != G_TOKEN_RIGHT_CURLY &&
+         !g_scanner_eof (scanner))
     {
       gchar *value_str = NULL;
       GtkStylePropertyParser parse_func = NULL;
       GParamSpec *pspec = NULL;;
       gchar *prop;
+
+      if (scanner->token == ';')
+        {
+          g_scanner_get_next_token (scanner);
+          continue;
+        }
+
+      if (scanner->token != G_TOKEN_IDENTIFIER)
+        {
+          gtk_css_provider_error_literal (css_provider,
+                                          GTK_CSS_PROVIDER_ERROR,
+                                          GTK_CSS_PROVIDER_ERROR_PROPERTY_NAME,
+                                          "Expected a valid property name");
+          goto find_end_of_declaration;
+        }
 
       prop = g_strdup (scanner->value.v_identifier);
 
@@ -2491,21 +2518,10 @@ parse_rule (GtkCssProvider  *css_provider,
         }
 
 find_end_of_declaration:
-      while (scanner->token != ';' &&
-             scanner->token != G_TOKEN_RIGHT_CURLY &&
-             scanner->token != G_TOKEN_EOF)
+      while (scanner->token != G_TOKEN_RIGHT_CURLY &&
+             !g_scanner_eof (scanner))
         g_scanner_get_next_token (scanner);
-      
-      if (scanner->token == G_TOKEN_RIGHT_CURLY ||
-          scanner->token == G_TOKEN_EOF)
-        break;
-
-      g_scanner_get_next_token (scanner);
     }
-
-  if (scanner->token != G_TOKEN_RIGHT_CURLY &&
-      scanner->token != G_TOKEN_EOF)
-    return G_TOKEN_RIGHT_CURLY;
 
   css_provider_pop_scope (css_provider);
 
