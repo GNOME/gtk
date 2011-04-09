@@ -1895,7 +1895,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   priv->printer_capabilities = 0;
 
-  if (gtk_printer_is_accepting_jobs (printer))
+  if (printer != NULL && gtk_printer_is_accepting_jobs (printer))
     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
   priv->current_printer = printer;
 
