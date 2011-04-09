@@ -225,15 +225,57 @@ test_css_file (GFile *file)
   g_free (css_file);
 }
 
+static void
+add_test_for_file (GFile *file)
+{
+  g_test_add_vtable (g_file_get_path (file),
+                     0,
+                     g_object_ref (file),
+                     NULL,
+                     (GTestFixtureFunc) test_css_file,
+                     (GTestFixtureFunc) g_object_unref);
+}
+
+static void
+add_tests_for_files_in_directory (GFile *dir)
+{
+  GFileEnumerator *enumerator;
+  GFileInfo *info;
+  GError *error = NULL;
+
+  enumerator = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME, 0, NULL, &error);
+  g_assert_no_error (error);
+
+  while ((info = g_file_enumerator_next_file (enumerator, NULL, &error)))
+    {
+      GFile *file;
+      const char *filename;
+
+      filename = g_file_info_get_name (info);
+
+      if (!g_str_has_suffix (filename, ".css") ||
+          g_str_has_suffix (filename, ".out.css") ||
+          g_str_has_suffix (filename, ".ref.css"))
+        {
+          g_object_unref (info);
+          continue;
+        }
+
+      file = g_file_get_child (dir, filename);
+
+      add_test_for_file (file);
+
+      g_object_unref (file);
+      g_object_unref (info);
+    }
+  
+  g_assert_no_error (error);
+  g_object_unref (enumerator);
+}
+
 int
 main (int argc, char **argv)
 {
-  const char *basedir;
-  GError *error = NULL;
-  GFile *dir;
-  GFileEnumerator *enumerator;
-  GFileInfo *info;
-
   gtk_test_init (&argc, &argv);
 
   /* Add a bunch of properties so we can test that we parse them properly */
@@ -327,44 +369,35 @@ main (int argc, char **argv)
                                                               GTK_STATE_FLAG_NORMAL,
                                                               G_PARAM_READABLE));
 
-  if (g_getenv ("srcdir"))
-    basedir = g_getenv ("srcdir");
-  else
-    basedir = ".";
-    
-  dir = g_file_new_for_path (basedir);
-  enumerator = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME, 0, NULL, &error);
-  g_assert_no_error (error);
-
-  while ((info = g_file_enumerator_next_file (enumerator, NULL, &error)))
+  if (argc < 2)
     {
-      GFile *file;
-      const char *filename;
+      const char *basedir;
+      GFile *dir;
 
-      filename = g_file_info_get_name (info);
+      if (g_getenv ("srcdir"))
+        basedir = g_getenv ("srcdir");
+      else
+        basedir = ".";
+        
+      dir = g_file_new_for_path (basedir);
+      
+      add_tests_for_files_in_directory (dir);
 
-      if (!g_str_has_suffix (filename, ".css") ||
-          g_str_has_suffix (filename, ".out.css") ||
-          g_str_has_suffix (filename, ".ref.css"))
-        {
-          g_object_unref (info);
-          continue;
-        }
-
-      file = g_file_get_child (dir, filename);
-
-      g_test_add_vtable (g_file_get_path (file),
-                         0,
-                         file,
-                         NULL,
-                         (GTestFixtureFunc) test_css_file,
-                         (GTestFixtureFunc) g_object_unref);
-
-      g_object_unref (info);
+      g_object_unref (dir);
     }
-  
-  g_assert_no_error (error);
-  g_object_unref (enumerator);
+  else
+    {
+      guint i;
+
+      for (i = 1; i < argc; i++)
+        {
+          GFile *file = g_file_new_for_commandline_arg (argv[i]);
+
+          add_test_for_file (file);
+
+          g_object_unref (file);
+        }
+    }
 
   return g_test_run ();
 }
