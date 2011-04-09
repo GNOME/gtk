@@ -2413,16 +2413,32 @@ parse_rule (GtkCssProvider  *css_provider,
       if (scanner->token != G_TOKEN_IDENTIFIER)
         {
           g_free (prop);
+          /* the error value here is hacky. But strings should be used for
+           * strings really, so a string is not a syntax error but a broken
+           * value for everything that we support. */
           gtk_css_provider_error (css_provider,
                                   GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE,
-                                  "Could not parse property value");
+                                  scanner->token == G_TOKEN_STRING ? GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE
+                                                                   : GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                  "Not a property value");
           css_provider_pop_scope (css_provider);
           goto find_end_of_declaration;
         }
 
       value_str = scanner->value.v_identifier;
       g_strchomp (value_str);
+
+      css_provider_pop_scope (css_provider);
+      g_scanner_peek_next_token (scanner);
+
+      if (scanner->next_token != ';' &&
+          scanner->next_token != G_TOKEN_RIGHT_CURLY &&
+          scanner->next_token != G_TOKEN_EOF)
+        {
+          gtk_css_provider_invalid_token (css_provider, "';'");
+          g_free (prop);
+          goto find_end_of_declaration;
+        }
 
       if (pspec)
         {
@@ -2508,17 +2524,17 @@ parse_rule (GtkCssProvider  *css_provider,
       else
         g_free (prop);
 
-      css_provider_pop_scope (css_provider);
       g_scanner_get_next_token (scanner);
 
-      if (scanner->token != ';' &&
-          scanner->token != G_TOKEN_RIGHT_CURLY)
+      if (g_scanner_eof (scanner))
         {
-          gtk_css_provider_invalid_token (css_provider, "';'");
+          gtk_css_provider_invalid_token (css_provider, "}");
+          break;
         }
 
 find_end_of_declaration:
-      while (scanner->token != G_TOKEN_RIGHT_CURLY &&
+      while (scanner->token != ';' &&
+             scanner->token != G_TOKEN_RIGHT_CURLY &&
              !g_scanner_eof (scanner))
         g_scanner_get_next_token (scanner);
     }
