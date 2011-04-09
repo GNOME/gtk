@@ -138,6 +138,8 @@ void     _gdk_x11_window_translate         (GdkWindow *window,
                                             gint       dx,
                                             gint       dy);
 
+void     _gdk_x11_display_free_translate_queue (GdkDisplay *display);
+
 void     _gdk_x11_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_x11_selection_filter_clear_event (XSelectionClearEvent *event);
 

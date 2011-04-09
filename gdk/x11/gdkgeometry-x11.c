@@ -153,6 +153,19 @@ queue_item_free (GdkWindowQueueItem *item)
   g_free (item);
 }
 
+void
+_gdk_x11_display_free_translate_queue (GdkDisplay *display)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+  if (display_x11->translate_queue)
+    {
+      g_queue_foreach (display_x11->translate_queue, (GFunc)queue_item_free, NULL);
+      g_queue_free (display_x11->translate_queue);
+      display_x11->translate_queue = NULL;
+    }
+}
+
 static void
 gdk_window_queue (GdkWindow          *window,
 		  GdkWindowQueueItem *item)

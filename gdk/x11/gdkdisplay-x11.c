@@ -1729,6 +1729,9 @@ gdk_x11_display_finalize (GObject *object)
 
   _gdk_x11_cursor_display_finalize (GDK_DISPLAY (display_x11));
 
+  /* Empty the event queue */
+  _gdk_x11_display_free_translate_queue (GDK_DISPLAY (display_x11));
+
   /* Atom Hashtable */
   g_hash_table_destroy (display_x11->atom_from_virtual);
   g_hash_table_destroy (display_x11->atom_to_virtual);
