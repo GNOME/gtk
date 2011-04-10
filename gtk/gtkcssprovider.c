@@ -1090,6 +1090,12 @@ selector_style_info_set_style (SelectorStyleInfo *info,
     info->style = NULL;
 }
 
+static void
+gtk_css_scanner_destroy (GScanner *scanner)
+{
+  g_scanner_destroy (scanner);
+}
+
 static GScanner *
 gtk_css_provider_create_scanner (GtkCssProvider *provider)
 {
@@ -1519,7 +1525,7 @@ gtk_css_provider_finalize (GObject *object)
 
   css_provider_reset_parser (css_provider);
 
-  g_scanner_destroy (priv->scanner);
+  gtk_css_scanner_destroy (priv->scanner);
 
   g_ptr_array_free (priv->selectors_info, TRUE);
 
@@ -2243,7 +2249,7 @@ parse_rule (GtkCssProvider  *css_provider,
           /* Restore previous state */
           css_provider_reset_parser (css_provider);
           priv->state = state_backup;
-          g_scanner_destroy (priv->scanner);
+          gtk_css_scanner_destroy (priv->scanner);
           priv->scanner = scanner_backup;
 
           g_free (path);
