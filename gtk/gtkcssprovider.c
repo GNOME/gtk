@@ -735,6 +735,7 @@
 typedef struct SelectorElement SelectorElement;
 typedef struct SelectorPath SelectorPath;
 typedef struct SelectorStyleInfo SelectorStyleInfo;
+typedef struct _GtkCssScannerPrivate GtkCssScannerPrivate;
 typedef enum SelectorElementType SelectorElementType;
 typedef enum CombinatorType CombinatorType;
 typedef enum ParserScope ParserScope;
@@ -783,6 +784,11 @@ struct SelectorStyleInfo
 {
   SelectorPath *path;
   GHashTable *style;
+};
+
+struct _GtkCssScannerPrivate
+{
+  int unused;
 };
 
 struct _GtkCssProviderPrivate
@@ -1093,15 +1099,22 @@ selector_style_info_set_style (SelectorStyleInfo *info,
 static void
 gtk_css_scanner_destroy (GScanner *scanner)
 {
+  GtkCssScannerPrivate *priv = scanner->user_data;
+
+  g_slice_free (GtkCssScannerPrivate, priv);
+  
   g_scanner_destroy (scanner);
 }
 
 static GScanner *
 gtk_css_provider_create_scanner (GtkCssProvider *provider)
 {
+  GtkCssScannerPrivate *priv;
   GScanner *scanner;
 
   scanner = g_scanner_new (NULL);
+
+  priv = scanner->user_data = g_slice_new0 (GtkCssScannerPrivate);
 
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "active", GUINT_TO_POINTER (GTK_STATE_ACTIVE));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "prelight", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
