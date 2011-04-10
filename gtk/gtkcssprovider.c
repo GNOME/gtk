@@ -2272,7 +2272,6 @@ parse_rule (GtkCssProvider  *css_provider,
                                                              FALSE, NULL);
 
           /* Restore previous state */
-          css_provider_reset_parser (css_provider);
           gtk_css_scanner_destroy (new_scanner);
           css_provider->priv->scanner = scanner;
 
