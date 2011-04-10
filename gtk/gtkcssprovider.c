@@ -1697,30 +1697,30 @@ scanner_apply_scope (GScanner    *scanner,
 }
 
 static void
-css_provider_push_scope (GtkCssProvider *css_provider,
-                         ParserScope     scope)
+gtk_css_scanner_push_scope (GScanner    *scanner,
+                            ParserScope  scope)
 {
   GtkCssScannerPrivate *priv;
 
-  priv = css_provider->priv->scanner->user_data;
+  priv = scanner->user_data;
   priv->state = g_slist_prepend (priv->state, GUINT_TO_POINTER (scope));
 
-  scanner_apply_scope (css_provider->priv->scanner, scope);
+  scanner_apply_scope (scanner, scope);
 }
 
-static ParserScope
-css_provider_pop_scope (GtkCssProvider *css_provider)
+static void
+gtk_css_scanner_pop_scope (GScanner *scanner)
 {
   GtkCssScannerPrivate *priv;
   ParserScope scope = SCOPE_SELECTOR;
 
-  priv = css_provider->priv->scanner->user_data;
+  priv = scanner->user_data;
 
   if (!priv->state)
     {
       g_warning ("Push/pop calls to parser scope aren't paired");
-      scanner_apply_scope (css_provider->priv->scanner, SCOPE_SELECTOR);
-      return SCOPE_SELECTOR;
+      scanner_apply_scope (scanner, SCOPE_SELECTOR);
+      return;
     }
 
   priv->state = g_slist_delete_link (priv->state, priv->state);
@@ -1729,9 +1729,7 @@ css_provider_pop_scope (GtkCssProvider *css_provider)
   if (priv->state)
     scope = GPOINTER_TO_INT (priv->state->data);
 
-  scanner_apply_scope (css_provider->priv->scanner, scope);
-
-  return scope;
+  scanner_apply_scope (scanner, scope);
 }
 
 static void
@@ -1806,7 +1804,7 @@ parse_nth_child (GtkCssProvider *css_provider,
       if (scanner->token != G_TOKEN_LEFT_PAREN)
         return G_TOKEN_LEFT_PAREN;
 
-      css_provider_push_scope (css_provider, SCOPE_NTH_CHILD);
+      gtk_css_scanner_push_scope (scanner, SCOPE_NTH_CHILD);
       g_scanner_get_next_token (scanner);
 
       if (scanner->token != G_TOKEN_SYMBOL)
@@ -1837,7 +1835,7 @@ parse_nth_child (GtkCssProvider *css_provider,
       if (scanner->token != G_TOKEN_RIGHT_PAREN)
         return G_TOKEN_RIGHT_PAREN;
 
-      css_provider_pop_scope (css_provider);
+      gtk_css_scanner_pop_scope (scanner);
     }
   else if (symbol == SYMBOL_FIRST_CHILD)
     *flags = GTK_REGION_FIRST;
@@ -2041,7 +2039,7 @@ parse_selector (GtkCssProvider  *css_provider,
               ParserSymbol symbol;
 
               g_scanner_get_next_token (scanner);
-              css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
+              gtk_css_scanner_push_scope (scanner, SCOPE_PSEUDO_CLASS);
 
               /* Check for the next token being nth-child, parse in that
                * case, and fallback into common state parsing if not.
@@ -2061,11 +2059,11 @@ parse_selector (GtkCssProvider  *css_provider,
                   if ((token = parse_nth_child (css_provider, scanner, &flags)) != G_TOKEN_NONE)
                     return token;
 
-                  css_provider_pop_scope (css_provider);
+                  gtk_css_scanner_pop_scope (scanner);
                 }
               else
                 {
-                  css_provider_pop_scope (css_provider);
+                  gtk_css_scanner_pop_scope (scanner);
                   selector_path_prepend_region (path, region_name, 0);
                   g_free (region_name);
                   break;
@@ -2095,7 +2093,7 @@ parse_selector (GtkCssProvider  *css_provider,
       if (selector_path_depth (path) == 0)
         selector_path_prepend_glob (path);
 
-      css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
+      gtk_css_scanner_push_scope (scanner, SCOPE_PSEUDO_CLASS);
 
       while (scanner->token == ':')
         {
@@ -2107,7 +2105,7 @@ parse_selector (GtkCssProvider  *css_provider,
           g_scanner_get_next_token (scanner);
         }
 
-      css_provider_pop_scope (css_provider);
+      gtk_css_scanner_pop_scope (scanner);
     }
 
   return G_TOKEN_NONE;
@@ -2149,7 +2147,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
   priv = css_provider->priv;
 
-  css_provider_push_scope (css_provider, SCOPE_SELECTOR);
+  gtk_css_scanner_push_scope (scanner, SCOPE_SELECTOR);
 
   /* Handle directives */
   if (scanner->token == G_TOKEN_IDENTIFIER &&
@@ -2175,7 +2173,7 @@ parse_rule (GtkCssProvider  *css_provider,
             }
 
           color_name = g_strdup (scanner->value.v_identifier);
-          css_provider_push_scope (css_provider, SCOPE_VALUE);
+          gtk_css_scanner_push_scope (scanner, SCOPE_VALUE);
           g_scanner_get_next_token (scanner);
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
@@ -2194,7 +2192,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           g_hash_table_insert (priv->symbolic_colors, color_name, color);
 
-          css_provider_pop_scope (css_provider);
+          gtk_css_scanner_pop_scope (scanner);
           g_scanner_get_next_token (scanner);
 
           if (scanner->token != ';')
@@ -2211,7 +2209,7 @@ parse_rule (GtkCssProvider  *css_provider,
           char *dirname;
           GError *error = NULL;
 
-          css_provider_push_scope (css_provider, SCOPE_VALUE);
+          gtk_css_scanner_push_scope (scanner, SCOPE_VALUE);
           g_scanner_get_next_token (scanner);
 
           if (scanner->token == G_TOKEN_IDENTIFIER &&
@@ -2242,7 +2240,7 @@ parse_rule (GtkCssProvider  *css_provider,
               return G_TOKEN_IDENTIFIER;
             }
 
-          css_provider_pop_scope (css_provider);
+          gtk_css_scanner_pop_scope (scanner);
           g_scanner_get_next_token (scanner);
 
           if (scanner->token != ';')
@@ -2302,7 +2300,7 @@ parse_rule (GtkCssProvider  *css_provider,
           if (scanner->token != G_TOKEN_LEFT_CURLY)
             return G_TOKEN_LEFT_CURLY;
 
-          css_provider_push_scope (css_provider, SCOPE_BINDING_SET);
+          gtk_css_scanner_push_scope (scanner, SCOPE_BINDING_SET);
           g_scanner_get_next_token (scanner);
 
           do
@@ -2332,7 +2330,7 @@ parse_rule (GtkCssProvider  *css_provider,
             }
           while (scanner->token != G_TOKEN_RIGHT_CURLY);
 
-          css_provider_pop_scope (css_provider);
+          gtk_css_scanner_pop_scope (scanner);
           g_scanner_get_next_token (scanner);
 
           return G_TOKEN_NONE;
@@ -2371,13 +2369,13 @@ parse_rule (GtkCssProvider  *css_provider,
       priv->cur_selectors = g_slist_prepend (priv->cur_selectors, selector);
     }
 
-  css_provider_pop_scope (css_provider);
+  gtk_css_scanner_pop_scope (scanner);
 
   if (scanner->token != G_TOKEN_LEFT_CURLY)
     return G_TOKEN_LEFT_CURLY;
 
   /* Declarations parsing */
-  css_provider_push_scope (css_provider, SCOPE_DECLARATION);
+  gtk_css_scanner_push_scope (scanner, SCOPE_DECLARATION);
 
   g_scanner_get_next_token (scanner);
     
@@ -2427,7 +2425,7 @@ parse_rule (GtkCssProvider  *css_provider,
           goto find_end_of_declaration;
         }
 
-      css_provider_push_scope (css_provider, SCOPE_VALUE);
+      gtk_css_scanner_push_scope (scanner, SCOPE_VALUE);
       g_scanner_get_next_token (scanner);
 
       if (scanner->token != G_TOKEN_IDENTIFIER)
@@ -2441,14 +2439,14 @@ parse_rule (GtkCssProvider  *css_provider,
                                   scanner->token == G_TOKEN_STRING ? GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE
                                                                    : GTK_CSS_PROVIDER_ERROR_SYNTAX,
                                   "Not a property value");
-          css_provider_pop_scope (css_provider);
+          gtk_css_scanner_pop_scope (scanner);
           goto find_end_of_declaration;
         }
 
       value_str = scanner->value.v_identifier;
       g_strchomp (value_str);
 
-      css_provider_pop_scope (css_provider);
+      gtk_css_scanner_pop_scope (scanner);
       g_scanner_peek_next_token (scanner);
 
       if (scanner->next_token != ';' &&
@@ -2559,7 +2557,7 @@ find_end_of_declaration:
         g_scanner_get_next_token (scanner);
     }
 
-  css_provider_pop_scope (css_provider);
+  gtk_css_scanner_pop_scope (scanner);
 
   return G_TOKEN_NONE;
 }
