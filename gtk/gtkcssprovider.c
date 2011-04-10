@@ -2207,7 +2207,7 @@ parse_rule (GtkCssProvider  *css_provider,
         }
       else if (strcmp (directive, "import") == 0)
         {
-          GScanner *scanner_backup;
+          GScanner *new_scanner;
           gboolean loaded;
           gchar *path = NULL;
           GFile *base, *actual;
@@ -2228,8 +2228,8 @@ parse_rule (GtkCssProvider  *css_provider,
               return G_TOKEN_IDENTIFIER;
             }
 
-          if (priv->scanner->input_name)
-            dirname = g_path_get_dirname (priv->scanner->input_name);
+          if (scanner->input_name)
+            dirname = g_path_get_dirname (scanner->input_name);
           else
             dirname = g_get_current_dir ();
 
@@ -2257,10 +2257,8 @@ parse_rule (GtkCssProvider  *css_provider,
           path = g_file_get_path (actual);
           g_object_unref (actual);
 
-          /* Snapshot current parser state and scanner in order to restore after importing */
-          scanner_backup = priv->scanner;
-
-          priv->scanner = gtk_css_provider_create_scanner (css_provider);
+          new_scanner = gtk_css_provider_create_scanner (css_provider);
+          priv->scanner = new_scanner;
 
           /* FIXME: Avoid recursive importing */
           loaded = gtk_css_provider_load_from_path_internal (css_provider, path,
@@ -2268,8 +2266,8 @@ parse_rule (GtkCssProvider  *css_provider,
 
           /* Restore previous state */
           css_provider_reset_parser (css_provider);
-          gtk_css_scanner_destroy (priv->scanner);
-          priv->scanner = scanner_backup;
+          gtk_css_scanner_destroy (new_scanner);
+          priv->scanner = scanner;
 
           g_free (path);
 
@@ -2508,8 +2506,8 @@ parse_rule (GtkCssProvider  *css_provider,
               char *dirname;
               gboolean success;
 
-              if (priv->scanner->input_name)
-                dirname = g_path_get_dirname (priv->scanner->input_name);
+              if (scanner->input_name)
+                dirname = g_path_get_dirname (scanner->input_name);
               else
                 dirname = g_get_current_dir ();
 
