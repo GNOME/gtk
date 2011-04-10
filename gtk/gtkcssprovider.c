@@ -2556,6 +2556,7 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
 static gboolean
 parse_stylesheet (GtkCssProvider  *css_provider,
+                  GScanner        *scanner,
                   GError         **error)
 {
   GtkCssProviderPrivate *priv;
@@ -2564,14 +2565,14 @@ parse_stylesheet (GtkCssProvider  *css_provider,
   result = TRUE;
 
   priv = css_provider->priv;
-  g_scanner_get_next_token (priv->scanner);
+  g_scanner_get_next_token (scanner);
 
-  while (!g_scanner_eof (priv->scanner))
+  while (!g_scanner_eof (scanner))
     {
       GTokenType expected_token;
 
       css_provider_reset_parser (css_provider);
-      expected_token = parse_rule (css_provider, priv->scanner);
+      expected_token = parse_rule (css_provider, scanner);
 
       if (expected_token != G_TOKEN_NONE)
         {
@@ -2598,14 +2599,14 @@ parse_stylesheet (GtkCssProvider  *css_provider,
 
           css_provider_reset_parser (css_provider);
 
-          while (!g_scanner_eof (priv->scanner) &&
-                 priv->scanner->token != G_TOKEN_RIGHT_CURLY)
-            g_scanner_get_next_token (priv->scanner);
+          while (!g_scanner_eof (scanner) &&
+                 scanner->token != G_TOKEN_RIGHT_CURLY)
+            g_scanner_get_next_token (scanner);
         }
       else
         css_provider_commit (css_provider);
 
-      g_scanner_get_next_token (priv->scanner);
+      g_scanner_get_next_token (scanner);
     }
 
   return result;
@@ -2644,7 +2645,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
   priv->scanner->input_name = NULL;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
-  return parse_stylesheet (css_provider, error);
+  return parse_stylesheet (css_provider, priv->scanner, error);
 }
 
 /**
@@ -2689,7 +2690,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   priv->scanner->input_name = path;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
-  ret = parse_stylesheet (css_provider, error);
+  ret = parse_stylesheet (css_provider, priv->scanner, error);
 
   g_free (path);
   priv->scanner->input_name = NULL;
@@ -2733,7 +2734,7 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   priv->scanner->input_name = path;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
-  ret = parse_stylesheet (css_provider, error);
+  ret = parse_stylesheet (css_provider, priv->scanner, error);
 
   priv->scanner->input_name = NULL;
 
