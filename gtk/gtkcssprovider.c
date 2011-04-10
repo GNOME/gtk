@@ -849,6 +849,7 @@ static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_p
                                                           gboolean         reset,
                                                           GError         **error);
 static void     gtk_css_provider_take_error (GtkCssProvider *provider,
+                                             GScanner       *scanner,
                                              GError         *error);
 
 GQuark
@@ -1520,7 +1521,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
           if (found)
             break;
           
-          gtk_css_provider_take_error (GTK_CSS_PROVIDER (provider), error);
+          gtk_css_provider_take_error (GTK_CSS_PROVIDER (provider), NULL, error);
         }
     }
 
@@ -1587,19 +1588,17 @@ property_value_free (GValue *value)
 
 static void
 gtk_css_provider_take_error (GtkCssProvider *provider,
+                             GScanner       *scanner,
                              GError         *error)
 {
-  GtkCssProviderPrivate *priv;
   const char *filename;
   guint line, position;
-  
-  priv = provider->priv;
 
-  if (priv->scanner)
+  if (scanner)
     {
-      filename = priv->scanner->input_name;
-      line = priv->scanner->line;
-      position = priv->scanner->position;
+      filename = scanner->input_name;
+      line = scanner->line;
+      position = scanner->position;
     }
   else
     {
@@ -1616,22 +1615,26 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
 
 static void
 gtk_css_provider_error_literal (GtkCssProvider *provider,
+                                GScanner       *scanner,
                                 GQuark          domain,
                                 gint            code,
                                 const char     *message)
 {
   gtk_css_provider_take_error (provider,
+                               scanner,
                                g_error_new_literal (domain, code, message));
 }
 
 static void
 gtk_css_provider_error (GtkCssProvider *provider,
+                        GScanner       *scanner,
                         GQuark          domain,
                         gint            code,
                         const char     *format,
-                        ...)  G_GNUC_PRINTF (4, 5);
+                        ...)  G_GNUC_PRINTF (5, 6);
 static void
 gtk_css_provider_error (GtkCssProvider *provider,
+                        GScanner       *scanner,
                         GQuark          domain,
                         gint            code,
                         const char     *format,
@@ -1644,14 +1647,16 @@ gtk_css_provider_error (GtkCssProvider *provider,
   error = g_error_new_valist (domain, code, format, args);
   va_end (args);
 
-  gtk_css_provider_take_error (provider, error);
+  gtk_css_provider_take_error (provider, scanner, error);
 }
 
 static void
 gtk_css_provider_invalid_token (GtkCssProvider *provider,
+                                GScanner       *scanner,
                                 const char     *expected)
 {
   gtk_css_provider_error (provider,
+                          scanner,
                           GTK_CSS_PROVIDER_ERROR,
                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
                           "expected a valid %s", expected);
@@ -2168,7 +2173,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
             {
-              gtk_css_provider_invalid_token (css_provider, "Color name");
+              gtk_css_provider_invalid_token (css_provider, scanner, "Color name");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -2178,7 +2183,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
             {
-              gtk_css_provider_invalid_token (css_provider, "Color definition");
+              gtk_css_provider_invalid_token (css_provider, scanner, "Color definition");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -2186,7 +2191,7 @@ parse_rule (GtkCssProvider  *css_provider,
           color = _gtk_css_parse_symbolic_color (color_str, &error);
           if (!color)
             {
-              gtk_css_provider_take_error (css_provider, error);
+              gtk_css_provider_take_error (css_provider, scanner, error);
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -2219,7 +2224,7 @@ parse_rule (GtkCssProvider  *css_provider,
             path = g_strstrip (scanner->value.v_string);
           else
             {
-              gtk_css_provider_invalid_token (css_provider, "File URL");
+              gtk_css_provider_invalid_token (css_provider, scanner, "File URL");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -2236,7 +2241,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (actual == NULL)
             {
-              gtk_css_provider_take_error (css_provider, error);
+              gtk_css_provider_take_error (css_provider, scanner, error);
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -2282,7 +2287,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           if (scanner->token != G_TOKEN_IDENTIFIER)
             {
-              gtk_css_provider_invalid_token (css_provider, "Binding name");
+              gtk_css_provider_invalid_token (css_provider, scanner, "Binding name");
               return G_TOKEN_IDENTIFIER;
             }
 
@@ -2309,7 +2314,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
               if (scanner->token != G_TOKEN_IDENTIFIER)
                 {
-                  gtk_css_provider_invalid_token (css_provider, "Binding definition");
+                  gtk_css_provider_invalid_token (css_provider, scanner, "Binding definition");
                   return G_TOKEN_IDENTIFIER;
                 }
 
@@ -2317,7 +2322,7 @@ parse_rule (GtkCssProvider  *css_provider,
                                                               scanner->value.v_identifier);
               if (ret != G_TOKEN_NONE)
                 {
-                  gtk_css_provider_invalid_token (css_provider, "Binding definition");
+                  gtk_css_provider_invalid_token (css_provider, scanner, "Binding definition");
                   return ret;
                 }
 
@@ -2337,7 +2342,7 @@ parse_rule (GtkCssProvider  *css_provider,
         }
       else
         {
-          gtk_css_provider_invalid_token (css_provider, "Directive");
+          gtk_css_provider_invalid_token (css_provider, scanner, "Directive");
           return G_TOKEN_IDENTIFIER;
         }
     }
@@ -2347,7 +2352,7 @@ parse_rule (GtkCssProvider  *css_provider,
   if (expected_token != G_TOKEN_NONE)
     {
       selector_path_unref (selector);
-      gtk_css_provider_invalid_token (css_provider, "Selector");
+      gtk_css_provider_invalid_token (css_provider, scanner, "Selector");
       return expected_token;
     }
 
@@ -2362,7 +2367,7 @@ parse_rule (GtkCssProvider  *css_provider,
       if (expected_token != G_TOKEN_NONE)
         {
           selector_path_unref (selector);
-          gtk_css_provider_invalid_token (css_provider, "Selector");
+          gtk_css_provider_invalid_token (css_provider, scanner, "Selector");
           return expected_token;
         }
 
@@ -2396,6 +2401,7 @@ parse_rule (GtkCssProvider  *css_provider,
       if (scanner->token != G_TOKEN_IDENTIFIER)
         {
           gtk_css_provider_error_literal (css_provider,
+                                          scanner,
                                           GTK_CSS_PROVIDER_ERROR,
                                           GTK_CSS_PROVIDER_ERROR_PROPERTY_NAME,
                                           "Expected a valid property name");
@@ -2408,6 +2414,7 @@ parse_rule (GtkCssProvider  *css_provider,
           prop[0] != '-')
         {
           gtk_css_provider_error (css_provider,
+                                  scanner,
                                   GTK_CSS_PROVIDER_ERROR,
                                   GTK_CSS_PROVIDER_ERROR_PROPERTY_NAME,
                                   "'%s' is not a valid property name",
@@ -2421,7 +2428,7 @@ parse_rule (GtkCssProvider  *css_provider,
       if (scanner->token != ':')
         {
           g_free (prop);
-          gtk_css_provider_invalid_token (css_provider, "':'");
+          gtk_css_provider_invalid_token (css_provider, scanner, "':'");
           goto find_end_of_declaration;
         }
 
@@ -2435,6 +2442,7 @@ parse_rule (GtkCssProvider  *css_provider,
            * strings really, so a string is not a syntax error but a broken
            * value for everything that we support. */
           gtk_css_provider_error (css_provider,
+                                  scanner,
                                   GTK_CSS_PROVIDER_ERROR,
                                   scanner->token == G_TOKEN_STRING ? GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE
                                                                    : GTK_CSS_PROVIDER_ERROR_SYNTAX,
@@ -2453,7 +2461,7 @@ parse_rule (GtkCssProvider  *css_provider,
           scanner->next_token != G_TOKEN_RIGHT_CURLY &&
           scanner->next_token != G_TOKEN_EOF)
         {
-          gtk_css_provider_invalid_token (css_provider, "';'");
+          gtk_css_provider_invalid_token (css_provider, scanner, "';'");
           g_free (prop);
           goto find_end_of_declaration;
         }
@@ -2491,7 +2499,7 @@ parse_rule (GtkCssProvider  *css_provider,
               if ((*parse_func) (value_str, val, &error))
                 g_hash_table_insert (priv->cur_properties, prop, val);
               else
-                gtk_css_provider_take_error (css_provider, error);
+                gtk_css_provider_take_error (css_provider, scanner, error);
             }
           else
             {
@@ -2525,7 +2533,7 @@ parse_rule (GtkCssProvider  *css_provider,
                   g_slice_free (GValue, val);
                   g_free (prop);
 
-                  gtk_css_provider_take_error (css_provider, error);
+                  gtk_css_provider_take_error (css_provider, scanner, error);
                 }
             }
         }
@@ -2546,7 +2554,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
       if (g_scanner_eof (scanner))
         {
-          gtk_css_provider_invalid_token (css_provider, "}");
+          gtk_css_provider_invalid_token (css_provider, scanner, "}");
           break;
         }
 
