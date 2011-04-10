@@ -1097,8 +1097,6 @@ gtk_css_provider_create_scanner (GtkCssProvider *provider)
 
   scanner = g_scanner_new (NULL);
 
-  scanner->user_data = provider;
-
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "active", GUINT_TO_POINTER (GTK_STATE_ACTIVE));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "prelight", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "hover", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
