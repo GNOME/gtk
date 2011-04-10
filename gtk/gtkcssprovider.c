@@ -789,6 +789,8 @@ struct SelectorStyleInfo
 struct _GtkCssScannerPrivate
 {
   GSList *state;
+  GSList *cur_selectors;
+  GHashTable *cur_properties;
 };
 
 struct _GtkCssProviderPrivate
@@ -800,8 +802,6 @@ struct _GtkCssProviderPrivate
   GPtrArray *selectors_info;
 
   /* Current parser state */
-  GSList *cur_selectors;
-  GHashTable *cur_properties;
   GError *error;
 };
 
@@ -1097,12 +1097,33 @@ selector_style_info_set_style (SelectorStyleInfo *info,
 }
 
 static void
+property_value_free (GValue *value)
+{
+  if (G_IS_VALUE (value))
+    g_value_unset (value);
+
+  g_slice_free (GValue, value);
+}
+
+static void
 gtk_css_scanner_reset (GScanner *scanner)
 {
   GtkCssScannerPrivate *priv = scanner->user_data;
 
   g_slist_free (priv->state);
   priv->state = NULL;
+
+  g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
+  g_slist_free (priv->cur_selectors);
+  priv->cur_selectors = NULL;
+
+  if (priv->cur_properties)
+    g_hash_table_unref (priv->cur_properties);
+
+  priv->cur_properties = g_hash_table_new_full (g_str_hash,
+                                                g_str_equal,
+                                                (GDestroyNotify) g_free,
+                                                (GDestroyNotify) property_value_free);
 
   scanner_apply_scope (scanner, SCOPE_SELECTOR);
 }
@@ -1112,6 +1133,9 @@ gtk_css_scanner_destroy (GScanner *scanner)
 {
   GtkCssScannerPrivate *priv = scanner->user_data;
 
+  gtk_css_scanner_reset (scanner);
+
+  g_hash_table_destroy (priv->cur_properties);
   g_slice_free (GtkCssScannerPrivate, priv);
   
   g_scanner_destroy (scanner);
@@ -1126,6 +1150,11 @@ gtk_css_provider_create_scanner (GtkCssProvider *provider)
   scanner = g_scanner_new (NULL);
 
   priv = scanner->user_data = g_slice_new0 (GtkCssScannerPrivate);
+
+  priv->cur_properties = g_hash_table_new_full (g_str_hash,
+                                                g_str_equal,
+                                                (GDestroyNotify) g_free,
+                                                (GDestroyNotify) property_value_free);
 
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "active", GUINT_TO_POINTER (GTK_STATE_ACTIVE));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "prelight", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
@@ -1553,11 +1582,6 @@ gtk_css_provider_finalize (GObject *object)
 
   g_ptr_array_free (priv->selectors_info, TRUE);
 
-  g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
-  g_slist_free (priv->cur_selectors);
-
-  if (priv->cur_properties)
-    g_hash_table_unref (priv->cur_properties);
   if (priv->symbolic_colors)
     g_hash_table_destroy (priv->symbolic_colors);
 
@@ -1575,15 +1599,6 @@ GtkCssProvider *
 gtk_css_provider_new (void)
 {
   return g_object_new (GTK_TYPE_CSS_PROVIDER, NULL);
-}
-
-static void
-property_value_free (GValue *value)
-{
-  if (G_IS_VALUE (value))
-    g_value_unset (value);
-
-  g_slice_free (GValue, value);
 }
 
 static void
@@ -1746,33 +1761,25 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
 
   gtk_css_scanner_reset (priv->scanner);
 
-  g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
-  g_slist_free (priv->cur_selectors);
-  priv->cur_selectors = NULL;
-
-  if (priv->cur_properties)
-    g_hash_table_unref (priv->cur_properties);
-
-  priv->cur_properties = g_hash_table_new_full (g_str_hash,
-                                                g_str_equal,
-                                                (GDestroyNotify) g_free,
-                                                (GDestroyNotify) property_value_free);
-
   if (priv->error)
     g_error_free (priv->error);
   priv->error = NULL;
 }
 
 static void
-css_provider_commit (GtkCssProvider *css_provider)
+css_provider_commit (GtkCssProvider *css_provider,
+                     GScanner       *scanner)
 {
+  GtkCssScannerPrivate *scanner_priv;
   GtkCssProviderPrivate *priv;
   GSList *l;
 
   priv = css_provider->priv;
-  l = priv->cur_selectors;
+  scanner_priv = scanner->user_data;
 
-  if (g_hash_table_size (priv->cur_properties) == 0)
+  l = scanner_priv->cur_selectors;
+
+  if (g_hash_table_size (scanner_priv->cur_properties) == 0)
     return;
 
   while (l)
@@ -1781,7 +1788,7 @@ css_provider_commit (GtkCssProvider *css_provider)
       SelectorStyleInfo *info;
 
       info = selector_style_info_new (path);
-      selector_style_info_set_style (info, priv->cur_properties);
+      selector_style_info_set_style (info, scanner_priv->cur_properties);
 
       g_ptr_array_add (priv->selectors_info, info);
       l = l->next;
@@ -2146,11 +2153,11 @@ static GTokenType
 parse_rule (GtkCssProvider  *css_provider,
             GScanner        *scanner)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssScannerPrivate *priv;
   GTokenType expected_token;
   SelectorPath *selector;
 
-  priv = css_provider->priv;
+  priv = scanner->user_data;
 
   gtk_css_scanner_push_scope (scanner, SCOPE_SELECTOR);
 
@@ -2195,7 +2202,7 @@ parse_rule (GtkCssProvider  *css_provider,
               return G_TOKEN_IDENTIFIER;
             }
 
-          g_hash_table_insert (priv->symbolic_colors, color_name, color);
+          g_hash_table_insert (css_provider->priv->symbolic_colors, color_name, color);
 
           gtk_css_scanner_pop_scope (scanner);
           g_scanner_get_next_token (scanner);
@@ -2258,7 +2265,7 @@ parse_rule (GtkCssProvider  *css_provider,
           g_object_unref (actual);
 
           new_scanner = gtk_css_provider_create_scanner (css_provider);
-          priv->scanner = new_scanner;
+          css_provider->priv->scanner = new_scanner;
 
           /* FIXME: Avoid recursive importing */
           loaded = gtk_css_provider_load_from_path_internal (css_provider, path,
@@ -2267,7 +2274,7 @@ parse_rule (GtkCssProvider  *css_provider,
           /* Restore previous state */
           css_provider_reset_parser (css_provider);
           gtk_css_scanner_destroy (new_scanner);
-          priv->scanner = scanner;
+          css_provider->priv->scanner = scanner;
 
           g_free (path);
 
@@ -2630,7 +2637,7 @@ parse_stylesheet (GtkCssProvider  *css_provider,
             g_scanner_get_next_token (scanner);
         }
       else
-        css_provider_commit (css_provider);
+        css_provider_commit (css_provider, scanner);
 
       g_scanner_get_next_token (scanner);
     }
