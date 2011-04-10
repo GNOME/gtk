@@ -788,7 +788,7 @@ struct SelectorStyleInfo
 
 struct _GtkCssScannerPrivate
 {
-  int unused;
+  GSList *state;
 };
 
 struct _GtkCssProviderPrivate
@@ -800,7 +800,6 @@ struct _GtkCssProviderPrivate
   GPtrArray *selectors_info;
 
   /* Current parser state */
-  GSList *state;
   GSList *cur_selectors;
   GHashTable *cur_properties;
   GError *error;
@@ -1094,6 +1093,17 @@ selector_style_info_set_style (SelectorStyleInfo *info,
     info->style = g_hash_table_ref (style);
   else
     info->style = NULL;
+}
+
+static void
+gtk_css_scanner_reset (GScanner *scanner)
+{
+  GtkCssScannerPrivate *priv = scanner->user_data;
+
+  g_slist_free (priv->state);
+  priv->state = NULL;
+
+  scanner_apply_scope (scanner, SCOPE_SELECTOR);
 }
 
 static void
@@ -1690,26 +1700,26 @@ static void
 css_provider_push_scope (GtkCssProvider *css_provider,
                          ParserScope     scope)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssScannerPrivate *priv;
 
-  priv = css_provider->priv;
+  priv = css_provider->priv->scanner->user_data;
   priv->state = g_slist_prepend (priv->state, GUINT_TO_POINTER (scope));
 
-  scanner_apply_scope (priv->scanner, scope);
+  scanner_apply_scope (css_provider->priv->scanner, scope);
 }
 
 static ParserScope
 css_provider_pop_scope (GtkCssProvider *css_provider)
 {
-  GtkCssProviderPrivate *priv;
+  GtkCssScannerPrivate *priv;
   ParserScope scope = SCOPE_SELECTOR;
 
-  priv = css_provider->priv;
+  priv = css_provider->priv->scanner->user_data;
 
   if (!priv->state)
     {
       g_warning ("Push/pop calls to parser scope aren't paired");
-      scanner_apply_scope (priv->scanner, SCOPE_SELECTOR);
+      scanner_apply_scope (css_provider->priv->scanner, SCOPE_SELECTOR);
       return SCOPE_SELECTOR;
     }
 
@@ -1719,7 +1729,7 @@ css_provider_pop_scope (GtkCssProvider *css_provider)
   if (priv->state)
     scope = GPOINTER_TO_INT (priv->state->data);
 
-  scanner_apply_scope (priv->scanner, scope);
+  scanner_apply_scope (css_provider->priv->scanner, scope);
 
   return scope;
 }
@@ -1731,10 +1741,7 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
 
   priv = css_provider->priv;
 
-  g_slist_free (priv->state);
-  priv->state = NULL;
-
-  scanner_apply_scope (priv->scanner, SCOPE_SELECTOR);
+  gtk_css_scanner_reset (priv->scanner);
 
   g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
   g_slist_free (priv->cur_selectors);
@@ -2198,7 +2205,6 @@ parse_rule (GtkCssProvider  *css_provider,
       else if (strcmp (directive, "import") == 0)
         {
           GScanner *scanner_backup;
-          GSList *state_backup;
           gboolean loaded;
           gchar *path = NULL;
           GFile *base, *actual;
@@ -2249,10 +2255,8 @@ parse_rule (GtkCssProvider  *css_provider,
           g_object_unref (actual);
 
           /* Snapshot current parser state and scanner in order to restore after importing */
-          state_backup = priv->state;
           scanner_backup = priv->scanner;
 
-          priv->state = NULL;
           priv->scanner = gtk_css_provider_create_scanner (css_provider);
 
           /* FIXME: Avoid recursive importing */
@@ -2261,7 +2265,6 @@ parse_rule (GtkCssProvider  *css_provider,
 
           /* Restore previous state */
           css_provider_reset_parser (css_provider);
-          priv->state = state_backup;
           gtk_css_scanner_destroy (priv->scanner);
           priv->scanner = scanner_backup;
 
