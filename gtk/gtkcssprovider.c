@@ -876,6 +876,20 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
       priv->error = g_error_copy (error);
       g_prefix_error (&priv->error, "%s:%u:%u: ", path ? path : "<unknown>", line, position);
     }
+
+  /* Only emit a warning when we have no error handlers. This is our
+   * default handlers. And in this case erroneous CSS files are a bug
+   * and should be fixed.
+   * Note that these warnings can also be triggered by a broken theme
+   * that people installed from some weird location on the internets.
+   */
+  if (!g_signal_has_handler_pending (provider,
+                                     css_provider_signals[PARSING_ERROR],
+                                     0,
+                                     TRUE))
+    {
+      g_warning ("Theme parsing error: %s:%u:%u: %s", path ? path : "<unknown>", line, position, error->message);
+    }
 }
 
 static void
