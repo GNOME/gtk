@@ -712,6 +712,7 @@ gtk_gradient_new_linear
 gtk_gradient_new_radial
 gtk_gradient_ref
 gtk_gradient_resolve
+gtk_gradient_to_string
 gtk_gradient_unref
 gtk_dialog_add_action_widget
 gtk_dialog_add_button

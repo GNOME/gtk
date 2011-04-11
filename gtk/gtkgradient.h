@@ -56,6 +56,8 @@ gboolean      gtk_gradient_resolve        (GtkGradient         *gradient,
                                            GtkStyleProperties  *props,
                                            cairo_pattern_t    **resolved_gradient);
 
+char *        gtk_gradient_to_string      (GtkGradient         *gradient);
+
 G_END_DECLS
 
 #endif /* __GTK_GRADIENT_H__ */

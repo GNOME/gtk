@@ -280,3 +280,103 @@ gtk_gradient_resolve (GtkGradient         *gradient,
   *resolved_gradient = pattern;
   return TRUE;
 }
+
+static void
+append_number (GString    *str,
+               double      d,
+               const char *zero,
+               const char *half,
+               const char *one)
+{
+  if (zero && d == 0.0)
+    g_string_append (str, zero);
+  else if (half && d == 0.5)
+    g_string_append (str, half);
+  else if (one && d == 1.0)
+    g_string_append (str, one);
+  else
+    {
+      char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+      g_ascii_dtostr (buf, sizeof (buf), d);
+      g_string_append (str, buf);
+    }
+}
+
+/**
+ * gtk_gradient_to_string:
+ * @gradient: the gradient to print
+ *
+ * Creates a string representation for @gradient that is suitable
+ * for using in GTK CSS files.
+ *
+ * Returns: A string representation for @gradient
+ **/
+char *
+gtk_gradient_to_string (GtkGradient *gradient)
+{
+  GString *str;
+  guint i;
+
+  g_return_val_if_fail (gradient != NULL, NULL);
+
+  str = g_string_new ("-gtk-gradient (");
+
+  if (gradient->radius0 == 0 && gradient->radius1 == 0)
+    {
+      g_string_append (str, "linear, ");
+      append_number (str, gradient->x0, "left", "center", "right");
+      g_string_append_c (str, ' ');
+      append_number (str, gradient->y0, "top", "center", "bottom");
+      g_string_append (str, ", ");
+      append_number (str, gradient->x1, "left", "center", "right");
+      g_string_append_c (str, ' ');
+      append_number (str, gradient->y1, "top", "center", "bottom");
+    }
+  else
+    {
+      g_string_append (str, "radial, ");
+      append_number (str, gradient->x0, "left", "center", "right");
+      g_string_append_c (str, ' ');
+      append_number (str, gradient->y0, "top", "center", "bottom");
+      g_string_append (str, ", ");
+      append_number (str, gradient->radius0, NULL, NULL, NULL);
+      g_string_append (str, ", ");
+      append_number (str, gradient->x1, "left", "center", "right");
+      g_string_append_c (str, ' ');
+      append_number (str, gradient->y1, "top", "center", "bottom");
+      g_string_append (str, ", ");
+      append_number (str, gradient->radius1, NULL, NULL, NULL);
+    }
+  
+  for (i = 0; i < gradient->stops->len; i++)
+    {
+      ColorStop *stop;
+      char *s;
+
+      stop = &g_array_index (gradient->stops, ColorStop, i);
+
+      g_string_append (str, ", ");
+
+      if (stop->offset == 0.0)
+        g_string_append (str, "from (");
+      else if (stop->offset == 1.0)
+        g_string_append (str, "to (");
+      else
+        {
+          g_string_append (str, "color-stop (");
+          append_number (str, stop->offset, NULL, NULL, NULL);
+          g_string_append (str, ", ");
+        }
+
+      s = gtk_symbolic_color_to_string (stop->color);
+      g_string_append (str, s);
+      g_free (s);
+
+      g_string_append (str, ")");
+    }
+
+  g_string_append (str, ")");
+
+  return g_string_free (str, FALSE);
+}
