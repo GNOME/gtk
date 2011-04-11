@@ -2631,6 +2631,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 {
   GScanner *scanner;
   gulong error_handler;
+  char *free_data;
 
   if (error)
     error_handler = g_signal_connect (css_provider,
@@ -2640,11 +2641,35 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
   else
     error_handler = 0; /* silence gcc */
 
-  scanner = gtk_css_scanner_new (file, data, length);
+  if (data == NULL)
+    {
+      GError *load_error = NULL;
 
-  parse_stylesheet (css_provider, scanner);
+      if (g_file_load_contents (file, NULL,
+                                &free_data, &length,
+                                NULL, &load_error))
+        {
+          data = free_data;
+        }
+      else
+        {
+          gtk_css_provider_take_error_full (css_provider,
+                                            file,
+                                            0, 0,
+                                            load_error);
+        }
+    }
+  else
+    free_data = NULL;
 
-  gtk_css_scanner_destroy (scanner);
+  if (data)
+    {
+      scanner = gtk_css_scanner_new (file, data, length);
+
+      parse_stylesheet (css_provider, scanner);
+
+      gtk_css_scanner_destroy (scanner);
+    }
 
   if (error)
     {
@@ -2706,29 +2731,12 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                  GFile           *file,
                                  GError         **error)
 {
-  GError *internal_error = NULL;
-  gchar *data;
-  gsize length;
-  gboolean ret;
-
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
-  if (!g_file_load_contents (file, NULL,
-                             &data, &length,
-                             NULL, &internal_error))
-    {
-      g_propagate_error (error, internal_error);
-      return FALSE;
-    }
-
   gtk_css_provider_reset (css_provider);
 
-  ret = gtk_css_provider_load_internal (css_provider, file, data, length, error);
-
-  g_free (data);
-
-  return ret;
+  return gtk_css_provider_load_internal (css_provider, file, NULL, 0, error);
 }
 
 static gboolean
