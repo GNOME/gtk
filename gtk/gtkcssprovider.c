@@ -842,10 +842,12 @@ static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
 static void scanner_apply_scope (GScanner    *scanner,
                                  ParserScope  scope);
-static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
-                                                          const gchar     *path,
-                                                          gboolean         reset,
-                                                          GError         **error);
+static gboolean
+gtk_css_provider_load_internal (GtkCssProvider *css_provider,
+                                GFile          *file,
+                                const char     *data,
+                                gsize           length,
+                                GError        **error);
 
 GQuark
 gtk_css_provider_error_quark (void)
@@ -2276,15 +2278,13 @@ parse_rule (GtkCssProvider  *css_provider,
               return ';';
             }
 
-          path = g_file_get_path (actual);
-          g_object_unref (actual);
-
           /* FIXME: Avoid recursive importing */
-          loaded = gtk_css_provider_load_from_path_internal (css_provider, path,
-                                                             FALSE, NULL);
+          loaded = gtk_css_provider_load_internal (css_provider,
+                                                   actual,
+                                                   NULL, 0,
+                                                   NULL);
 
-          /* Restore previous state */
-          g_free (path);
+          g_object_unref (actual);
 
           if (!loaded)
             return G_TOKEN_IDENTIFIER;
