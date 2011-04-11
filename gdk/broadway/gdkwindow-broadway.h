@@ -60,6 +60,7 @@ struct _GdkWindowImplBroadway
 
   int id;
 
+  gboolean visible;
   int transient_for;
 
   gint8 toplevel_window_type;
