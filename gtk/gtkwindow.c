@@ -107,12 +107,11 @@ struct _GtkWindowPrivate
   GtkWindow             *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
   GtkWindowGroup        *group;
+  GdkScreen             *screen;
+  GtkApplication        *application;
 
   GdkModifierType        mnemonic_modifier;
-  GdkScreen             *screen;
   GdkWindowTypeHint      gdk_type_hint;
-
-  GtkApplication        *application;
 
   gdouble  opacity;
 
@@ -147,7 +146,6 @@ struct _GtkWindowPrivate
   guint    destroy_with_parent       : 1;
   guint    focus_on_map              : 1;
   guint    fullscreen_initially      : 1;
-  guint    gravity                   : 5; /* GdkGravity */
   guint    has_focus                 : 1;
   guint    has_user_ref_count        : 1;
   guint    has_toplevel_focus        : 1;
@@ -176,6 +174,7 @@ struct _GtkWindowPrivate
   guint    resize_grip_visible       : 1;  /* don't use, just for "resize-
                                             * grip-visible" notification
                                             */
+  guint    gravity                   : 5; /* GdkGravity */
 
 };
 
