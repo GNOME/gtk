@@ -267,8 +267,9 @@ function updateBrowserWindowGeometry(win) {
 	surface.height = innerH;
 	sendInput ("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
 	for (id in surfaces) {
-	    if (surfaces[id].transientToplevel != null && surfaces[id].transientToplevel == surface) {
-		var childSurface = surfaces[id];
+	    var childSurface = surfaces[id];
+	    var transientToplevel = getTransientToplevel(childSurface);
+	    if (transientToplevel != null && transientToplevel == surface) {
 		childSurface.x += surface.x - oldX;
 		childSurface.y += surface.y - oldY;
 		sendInput ("w", [childSurface.id, childSurface.x, childSurface.y, childSurface.width, childSurface.height]);
@@ -282,9 +283,9 @@ function browserWindowClosed(win) {
 
     sendInput ("W", [surface.id]);
     for (id in surfaces) {
-	if (surfaces[id].transientToplevel != null && 
-	    surfaces[id].transientToplevel == surface) {
-	    var childSurface = surfaces[id];
+	var childSurface = surfaces[id];
+	var transientToplevel = getTransientToplevel(childSurface);
+	if (transientToplevel != null && transientToplevel == surface) {
 	    sendInput ("W", [childSurface.id]);
 	}
     }
@@ -315,7 +316,7 @@ function getTransientToplevel(surface)
 {
     while (surface.transientParent != 0) {
 	surface = surfaces[surface.transientParent];
-	if (surface.window)
+	if (surface && surface.window)
 	    return surface;
     }
     return null;
@@ -372,7 +373,6 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.visible = false;
     surface.window = null;
     surface.document = document;
-    surface.transientToplevel = null;
     surface.frame = null;
 
     var canvas = document.createElement("canvas");
@@ -461,11 +461,11 @@ function cmdShowSurface(id)
 	    xOffset = 0;
 	    yOffset = 0;
 	} else {
-	    surface.transientToplevel = getTransientToplevel(surface);
-	    if (surface.transientToplevel) {
-		doc = surface.transientToplevel.window.document;
-		xOffset = surface.x - surface.transientToplevel.x;
-		yOffset = surface.y - surface.transientToplevel.y;
+	    var transientToplevel = getTransientToplevel(surface);
+	    if (transientToplevel) {
+		doc = transientToplevel.window.document;
+		xOffset = surface.x - transientToplevel.x;
+		yOffset = surface.y - transientToplevel.y;
 	    }
 	}
 
