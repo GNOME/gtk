@@ -42,6 +42,17 @@
 #include "gtkprivate.h"
 
 
+/**
+ * SECTION:gtkimagemenuitem
+ * @Short_description: A menu item with an icon
+ * @Title: GtkImageMenuItem
+ *
+ * A GtkImageMenuItem is a menu item which has an icon next to the text label.
+ *
+ * Note that the user can disable display of menu icons, so make sure to still
+ * fill in the text label.
+ */
+
 
 struct _GtkImageMenuItemPrivate
 {
