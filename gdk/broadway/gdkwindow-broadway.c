@@ -227,14 +227,12 @@ _gdk_broadway_resync_windows (void)
 				   window->width,
 				   window->height,
 				   window->window_type == GDK_WINDOW_TEMP);
+      if (impl->transient_for)
+	broadway_output_set_transient_for (display->output, impl->id, impl->transient_for);
       if (GDK_WINDOW_IS_MAPPED (window))
 	{
 	  broadway_output_show_surface (display->output, impl->id);
 	  window_data_send (display->output, impl);
-	}
-      if (impl->transient_for)
-	{
-	  broadway_output_set_transient_for (display->output, impl->id, impl->transient_for);
 	}
     }
 
