@@ -26,6 +26,26 @@
 #include "gtkprivate.h"
 
 
+/**
+ * SECTION:gtkcellrendererpixbuf
+ * @Short_description: Renders a pixbuf in a cell
+ * @Title: GtkCellRendererPixbuf
+ *
+ * A #GtkCellRendererPixbuf can be used to render an image in a cell. It allows
+ * to render either a given #GdkPixbuf (set via the
+ * #GtkCellRendererPixbuf:pixbuf property) or a stock icon (set via the
+ * #GtkCellRendererPixbuf:stock-id property).
+ *
+ * To support the tree view, #GtkCellRendererPixbuf also supports rendering two
+ * alternative pixbufs, when the #GtkCellRenderer:is-expander property is %TRUE.
+ * If the #GtkCellRenderer:is-expanded property is %TRUE and the
+ * #GtkCellRendererPixbuf:pixbuf-expander-open property is set to a pixbuf, it
+ * renders that pixbuf, if the #GtkCellRenderer:is-expanded property is %FALSE
+ * and the #GtkCellRendererPixbuf:pixbuf-expander-closed property is set to a
+ * pixbuf, it renders that one.
+ */
+
+
 static void gtk_cell_renderer_pixbuf_get_property  (GObject                    *object,
 						    guint                       param_id,
 						    GValue                     *value,

@@ -13,6 +13,7 @@ gtkcelllayout.sgml
 gtkcellrenderer.sgml
 gtkcellrendereraccel.sgml
 gtkcellrenderercombo.sgml
+gtkcellrendererpixbuf.sgml
 gtkcellrendererprogress.sgml
 gtkcellrendererspin.sgml
 gtkcellrenderertext.sgml
