@@ -322,15 +322,44 @@ function getTransientToplevel(surface)
     return null;
 }
 
+function getStyle(el, styleProp)
+{
+    if (el.currentStyle) {
+	return el.currentStyle[styleProp];
+    }  else if (window.getComputedStyle) {
+	var win = el.ownerDocument.defaultView;
+	return win.getComputedStyle(el, null).getPropertyValue(styleProp);
+    }
+    return undefined;
+}
+
+function parseOffset(value)
+{
+    var px = value.indexOf("px");
+    if (px > 0)
+	return parseInt(value.slice(0,px));
+    return 0;
+}
+
 function getFrameOffset(surface) {
-    var x = 1;
-    var y = 1;
+    var x = 0;
+    var y = 0;
     var el = surface.canvas;
     while (el != null && el != surface.frame) {
 	x += el.offsetLeft;
 	y += el.offsetTop;
+
+	/* For some reason the border is not includes in the offsets.. */
+	x += parseOffset(getStyle(el, "border-left-width"));
+	y += parseOffset(getStyle(el, "border-top-width"));
+
 	el = el.offsetParent;
     }
+
+    /* Also include frame border as per above */
+    x += parseOffset(getStyle(el, "border-left-width"));
+    y += parseOffset(getStyle(el, "border-top-width"));
+
     return {x: x, y: y};
 }
 
