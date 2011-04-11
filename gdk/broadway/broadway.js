@@ -483,6 +483,9 @@ function cmdShowSurface(id)
     surface.toplevelElement.style["visibility"] = "visible";
 
     restackWindows();
+
+    if (surface.window)
+	updateBrowserWindowGeometry(surface.window);
 }
 
 function cmdHideSurface(id)
