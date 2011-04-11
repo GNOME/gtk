@@ -488,6 +488,8 @@ function cmdShowSurface(id)
     element.style["display"] = "inline";
     if (surface.frame)
 	surface.frame.style["visibility"] = "visible";
+
+    restackWindows();
 }
 
 function cmdHideSurface(id)
