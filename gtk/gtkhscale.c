@@ -33,6 +33,19 @@
 #include "gtkorientable.h"
 
 
+/**
+ * SECTION:gtkhscale
+ * @Short_description: A horizontal slider widget for selecting a value from a range
+ * @Title: GtkHScale
+ *
+ * The #GtkHScale widget is used to allow the user to select a value using
+ * a horizontal slider. To create one, use gtk_hscale_new_with_range().
+ *
+ * The position to show the current value, and the number of decimal places
+ * shown can be set using the parent #GtkScale class's functions.
+ */
+
+
 G_DEFINE_TYPE (GtkHScale, gtk_hscale, GTK_TYPE_SCALE)
 
 static void
@@ -50,6 +63,14 @@ gtk_hscale_init (GtkHScale *hscale)
                                   GTK_ORIENTATION_HORIZONTAL);
 }
 
+/**
+ * gtk_hscale_new:
+ * @adjustment: the #GtkAdjustment which sets the range of the scale.
+ *
+ * Creates a new #GtkHScale.
+ *
+ * Returns: a new #GtkHScale.
+ */
 GtkWidget *
 gtk_hscale_new (GtkAdjustment *adjustment)
 {
