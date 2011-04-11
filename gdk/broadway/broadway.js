@@ -125,8 +125,6 @@ var surfaces = {};
 var stackingOrder = [];
 var outstandingCommands = new Array();
 var inputSocket = null;
-var frameSizeX = -1;
-var frameSizeY = -1;
 
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
@@ -250,9 +248,15 @@ function updateBrowserWindowGeometry(win) {
 
     var x = surface.x;
     var y = surface.y;
-    if (frameSizeX > 0) {
-	x = win.screenX + frameSizeX;
-	y = win.screenY + frameSizeY;
+
+    if (win.mozInnerScreenX != undefined) {
+	x = win.mozInnerScreenX;
+	y = win.mozInnerScreenY;
+    } else if (win.screenTop != undefined) {
+	x = win.screenTop;
+	y = win.screenLeft;
+    } else {
+	alert("No implementation to get window position");
     }
 
     if (x != surface.x || y != surface.y ||
@@ -869,15 +873,6 @@ function updateForEvent(ev) {
     lastTimeStamp = ev.timeStamp;
     if (ev.target.surface && ev.target.surface.window) {
 	var win = ev.target.surface.window;
-	if (ev.screenX != undefined && ev.clientX != undefined) {
-	    var newFrameSizeX = ev.screenX - ev.clientX - win.screenX;
-	    var newFrameSizeY = ev.screenY - ev.clientY - win.screenY;
-	    if (newFrameSizeX != frameSizeX || newFrameSizeY != frameSizeY) {
-		frameSizeX = newFrameSizeX;
-		frameSizeY = newFrameSizeY;
-		toplevelWindows.forEach(updateBrowserWindowGeometry);
-	    }
-	}
 	updateBrowserWindowGeometry(win);
     }
 }
