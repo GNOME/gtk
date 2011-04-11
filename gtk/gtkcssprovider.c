@@ -2739,49 +2739,6 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   return gtk_css_provider_load_internal (css_provider, file, NULL, 0, error);
 }
 
-static gboolean
-gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
-                                          const gchar     *path,
-                                          gboolean         reset,
-                                          GError         **error)
-{
-  GtkCssProviderPrivate *priv;
-  GError *internal_error = NULL;
-  GMappedFile *mapped_file;
-  const gchar *data;
-  gsize length;
-  GFile *file;
-  gboolean ret;
-
-  priv = css_provider->priv;
-
-  mapped_file = g_mapped_file_new (path, FALSE, &internal_error);
-
-  if (internal_error)
-    {
-      g_propagate_error (error, internal_error);
-      return FALSE;
-    }
-
-  length = g_mapped_file_get_length (mapped_file);
-  data = g_mapped_file_get_contents (mapped_file);
-
-  if (!data)
-    data = "";
-
-  if (reset)
-    gtk_css_provider_reset (css_provider);
-
-  file = g_file_new_for_path (path);
-
-  ret = gtk_css_provider_load_internal (css_provider, file, data, length, error);
-
-  g_object_unref (file);
-  g_mapped_file_unref (mapped_file);
-
-  return ret;
-}
-
 /**
  * gtk_css_provider_load_from_path:
  * @css_provider: a #GtkCssProvider
@@ -2798,11 +2755,19 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                  const gchar     *path,
                                  GError         **error)
 {
+  GFile *file;
+  gboolean result;
+
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  return gtk_css_provider_load_from_path_internal (css_provider, path,
-                                                   TRUE, error);
+  file = g_file_new_for_path (path);
+  
+  result = gtk_css_provider_load_from_file (css_provider, file, error);
+
+  g_object_unref (file);
+
+  return result;
 }
 
 /**
