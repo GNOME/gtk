@@ -30,6 +30,18 @@
 #include "gtkorientable.h"
 
 
+/**
+ * SECTION:gtkhpaned
+ * @Short_description: A container with two panes arranged horizontally
+ * @Title: GtkHPaned
+ *
+ * The HPaned widget is a container widget with two
+ * children arranged horizontally. The division between
+ * the two panes is adjustable by the user by dragging
+ * a handle. See #GtkPaned for details.
+ */
+
+
 G_DEFINE_TYPE (GtkHPaned, gtk_hpaned, GTK_TYPE_PANED)
 
 static void
@@ -44,6 +56,13 @@ gtk_hpaned_init (GtkHPaned *hpaned)
                                   GTK_ORIENTATION_HORIZONTAL);
 }
 
+/**
+ * gtk_hpaned_new:
+ *
+ * Create a new #GtkHPaned
+ *
+ * Returns: the new #GtkHPaned
+ */
 GtkWidget *
 gtk_hpaned_new (void)
 {
