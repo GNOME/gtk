@@ -30,6 +30,25 @@
 #include "gtkorientable.h"
 
 
+/**
+ * SECTION:gtkhseparator
+ * @Short_description: A horizontal separator
+ * @Title: GtkHSeparator
+ * @See_also: #GtkSeparator
+ *
+ * The #GtkHSeparator widget is a horizontal separator, used to group the
+ * widgets within a window. It displays a horizontal line with a shadow to
+ * make it appear sunken into the interface.
+ *
+ * <note>
+ * The #GtkHSeparator widget is not used as a separator within menus.
+ * To create a separator in a menu create an empty #GtkSeparatorMenuItem
+ * widget using gtk_separator_menu_item_new() and add it to the menu with
+ * gtk_menu_shell_append().
+ * </note>
+ */
+
+
 G_DEFINE_TYPE (GtkHSeparator, gtk_hseparator, GTK_TYPE_SEPARATOR)
 
 static void
@@ -44,6 +63,13 @@ gtk_hseparator_init (GtkHSeparator *hseparator)
                                   GTK_ORIENTATION_HORIZONTAL);
 }
 
+/**
+ * gtk_hseparator_new:
+ *
+ * Creates a new #GtkHSeparator.
+ *
+ * Returns: a new #GtkHSeparator.
+ */
 GtkWidget *
 gtk_hseparator_new (void)
 {
