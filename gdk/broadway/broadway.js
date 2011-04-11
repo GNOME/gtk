@@ -648,9 +648,9 @@ function handleCommands(cmdObj)
 	case 's': // create new surface
 	    var id = base64_16(cmd, i);
 	    i = i + 3;
-	    var x = base64_16(cmd, i);
+	    var x = base64_16s(cmd, i);
 	    i = i + 3;
-	    var y = base64_16(cmd, i);
+	    var y = base64_16s(cmd, i);
 	    i = i + 3;
 	    var w = base64_16(cmd, i);
 	    i = i + 3;
