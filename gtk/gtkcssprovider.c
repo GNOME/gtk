@@ -840,7 +840,6 @@ static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
 static void scanner_apply_scope (GScanner    *scanner,
                                  ParserScope  scope);
-static void     css_provider_reset_parser (GtkCssProvider *css_provider);
 static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
                                                           const gchar     *path,
                                                           gboolean         reset,
@@ -1579,8 +1578,6 @@ gtk_css_provider_finalize (GObject *object)
   css_provider = GTK_CSS_PROVIDER (object);
   priv = css_provider->priv;
 
-  css_provider_reset_parser (css_provider);
-
   gtk_css_scanner_destroy (priv->scanner);
 
   g_ptr_array_free (priv->selectors_info, TRUE);
@@ -1753,16 +1750,6 @@ gtk_css_scanner_pop_scope (GScanner *scanner)
     scope = GPOINTER_TO_INT (priv->state->data);
 
   scanner_apply_scope (scanner, scope);
-}
-
-static void
-css_provider_reset_parser (GtkCssProvider *css_provider)
-{
-  GtkCssProviderPrivate *priv;
-
-  priv = css_provider->priv;
-
-  gtk_css_scanner_reset (priv->scanner);
 }
 
 static void
@@ -2621,13 +2608,10 @@ parse_stylesheet (GtkCssProvider  *css_provider,
     {
       GTokenType expected_token;
 
-      css_provider_reset_parser (css_provider);
       expected_token = parse_rule (css_provider, scanner);
 
       if (expected_token != G_TOKEN_NONE)
         {
-          css_provider_reset_parser (css_provider);
-
           while (!g_scanner_eof (scanner) &&
                  scanner->token != G_TOKEN_RIGHT_CURLY)
             g_scanner_get_next_token (scanner);
@@ -2636,6 +2620,8 @@ parse_stylesheet (GtkCssProvider  *css_provider,
         css_provider_commit (css_provider, scanner);
 
       g_scanner_get_next_token (scanner);
+      
+      gtk_css_scanner_reset (scanner);
     }
 
   if (error)
