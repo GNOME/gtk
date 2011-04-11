@@ -846,9 +846,6 @@ static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_p
                                                           const gchar     *path,
                                                           gboolean         reset,
                                                           GError         **error);
-static void     gtk_css_provider_take_error (GtkCssProvider *provider,
-                                             GScanner       *scanner,
-                                             GError         *error);
 
 GQuark
 gtk_css_provider_error_quark (void)
@@ -924,6 +921,27 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   klass->parsing_error = gtk_css_provider_parsing_error;
 
   g_type_class_add_private (object_class, sizeof (GtkCssProviderPrivate));
+}
+
+static void
+gtk_css_provider_take_error_full (GtkCssProvider *provider,
+                                  GFile          *file,
+                                  guint           line,
+                                  guint           position,
+                                  GError         *error)
+{
+  char *filename;
+
+  if (file)
+    filename = g_file_get_path (file);
+  else
+    filename = NULL;
+
+  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
+                 filename, line, position, error);
+
+  g_free (filename);
+  g_error_free (error);
 }
 
 static SelectorPath *
@@ -1582,7 +1600,11 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
           if (found)
             break;
           
-          gtk_css_provider_take_error (GTK_CSS_PROVIDER (provider), NULL, error);
+          /* error location should be _way_ better */
+          gtk_css_provider_take_error_full (GTK_CSS_PROVIDER (provider),
+                                            NULL,
+                                            0, 0,
+                                            error);
         }
     }
 
@@ -1634,31 +1656,13 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
                              GScanner       *scanner,
                              GError         *error)
 {
-  char *filename;
-  guint line, position;
+  GtkCssScannerPrivate *priv = scanner->user_data;
 
-  if (scanner)
-    {
-      GtkCssScannerPrivate *priv = scanner->user_data;
-      if (priv->file)
-        filename = g_file_get_path (priv->file);
-      else
-        filename = NULL;
-      line = scanner->line;
-      position = scanner->position;
-    }
-  else
-    {
-      filename = NULL;
-      line = 0;
-      position = 0;
-    }
-
-  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
-                 filename, line, position, error);
-
-  g_free (filename);
-  g_error_free (error);
+  gtk_css_provider_take_error_full (provider,
+                                    priv->file,
+                                    scanner->line,
+                                    scanner->position,
+                                    error);
 }
 
 static void
