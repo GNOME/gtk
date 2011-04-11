@@ -28,6 +28,25 @@
 #include "gtkfilechooserembed.h"
 #include "gtkintl.h"
 
+
+/**
+ * SECTION:gtkfilechooserwidget
+ * @Short_description: File chooser widget that can be embedded in other widgets
+ * @Title: GtkFileChooserWidget
+ * @See_also: #GtkFileChooser, #GtkFileChooserDialog
+ *
+ * #GtkFileChooserWidget is a widget suitable for selecting files.
+ * It is the main building block of a #GtkFileChooserDialog.  Most
+ * applications will only need to use the latter; you can use
+ * #GtkFileChooserWidget as part of a larger window if you have
+ * special needs.
+ *
+ * Note that #GtkFileChooserWidget does not have any methods of its
+ * own.  Instead, you should use the functions that work on a
+ * #GtkFileChooser.
+ */
+
+
 #define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
 
 static void gtk_file_chooser_widget_finalize     (GObject                   *object);
