@@ -31,6 +31,20 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+
+/**
+ * SECTION:gtkinvisible
+ * @Short_description: A widget which is not displayed
+ * @Title: GtkInvisible
+ *
+ * The #GtkInvisible widget is used internally in GTK+, and is probably not
+ * very useful for application developers.
+ *
+ * It is used for reliable pointer grabs and selection handling in the code
+ * for drag-and-drop.
+ */
+
+
 struct _GtkInvisiblePrivate
 {
   GdkScreen    *screen;
