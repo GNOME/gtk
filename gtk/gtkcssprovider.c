@@ -788,6 +788,7 @@ struct SelectorStyleInfo
 
 struct _GtkCssScannerPrivate
 {
+  GFile *file;
   GSList *state;
   GSList *cur_selectors;
   GHashTable *cur_properties;
@@ -1137,6 +1138,8 @@ gtk_css_scanner_destroy (GScanner *scanner)
 
   gtk_css_scanner_reset (scanner);
 
+  if (priv->file)
+    g_object_unref (priv->file);
   g_hash_table_destroy (priv->cur_properties);
   g_slice_free (GtkCssScannerPrivate, priv);
   
@@ -1144,7 +1147,9 @@ gtk_css_scanner_destroy (GScanner *scanner)
 }
 
 static GScanner *
-gtk_css_scanner_new (void)
+gtk_css_scanner_new (GFile       *file,
+                     const gchar *data,
+                     gsize        length)
 {
   GtkCssScannerPrivate *priv;
   GScanner *scanner;
@@ -1152,6 +1157,9 @@ gtk_css_scanner_new (void)
   scanner = g_scanner_new (NULL);
 
   priv = scanner->user_data = g_slice_new0 (GtkCssScannerPrivate);
+
+  if (file)
+    priv->file = g_object_ref (file);
 
   priv->cur_properties = g_hash_table_new_full (g_str_hash,
                                                 g_str_equal,
@@ -1178,6 +1186,11 @@ gtk_css_scanner_new (void)
   g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "last", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_LAST));
 
   scanner_apply_scope (scanner, SCOPE_SELECTOR);
+
+  if (length > G_MAXUINT32)
+    g_warning ("CSS file too large, truncating");
+
+  g_scanner_input_text (scanner, data, length);
 
   return scanner;
 }
@@ -1603,12 +1616,16 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
                              GScanner       *scanner,
                              GError         *error)
 {
-  const char *filename;
+  char *filename;
   guint line, position;
 
   if (scanner)
     {
-      filename = scanner->input_name;
+      GtkCssScannerPrivate *priv = scanner->user_data;
+      if (priv->file)
+        filename = g_file_get_path (priv->file);
+      else
+        filename = NULL;
       line = scanner->line;
       position = scanner->position;
     }
@@ -1622,6 +1639,7 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
   g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
                  filename, line, position, error);
 
+  g_free (filename);
   g_error_free (error);
 }
 
@@ -2658,10 +2676,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  scanner = gtk_css_scanner_new ();
-
-  scanner->input_name = NULL;
-  g_scanner_input_text (scanner, data, (guint) length);
+  scanner = gtk_css_scanner_new (NULL, data, length);
 
   result = parse_stylesheet (css_provider, scanner, error);
 
@@ -2688,7 +2703,6 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 {
   GError *internal_error = NULL;
   GScanner *scanner;
-  char *path;
   gchar *data;
   gsize length;
   gboolean ret;
@@ -2706,15 +2720,10 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  scanner = gtk_css_scanner_new ();
-
-  path = g_file_get_path (file);
-  scanner->input_name = path;
-  g_scanner_input_text (scanner, data, (guint) length);
+  scanner = gtk_css_scanner_new (file, data, length);
 
   ret = parse_stylesheet (css_provider, scanner, error);
 
-  g_free (path);
   g_free (data);
   gtk_css_scanner_destroy (scanner);
 
@@ -2733,6 +2742,7 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   GScanner *scanner;
   const gchar *data;
   gsize length;
+  GFile *file;
   gboolean ret;
 
   priv = css_provider->priv;
@@ -2754,9 +2764,9 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   if (reset)
     gtk_css_provider_reset (css_provider);
 
-  scanner = gtk_css_scanner_new ();
-  scanner->input_name = path;
-  g_scanner_input_text (scanner, data, (guint) length);
+  file = g_file_new_for_path (path);
+  scanner = gtk_css_scanner_new (file, data, length);
+  g_object_unref (file);
 
   ret = parse_stylesheet (css_provider, scanner, error);
 
