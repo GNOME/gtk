@@ -2643,6 +2643,25 @@ parse_stylesheet (GtkCssProvider  *css_provider,
   return TRUE;
 }
 
+static gboolean
+gtk_css_provider_load_internal (GtkCssProvider *css_provider,
+                                GFile          *file,
+                                const char     *data,
+                                gsize           length,
+                                GError        **error)
+{
+  GScanner *scanner;
+  gboolean result;
+
+  scanner = gtk_css_scanner_new (file, data, length);
+
+  result = parse_stylesheet (css_provider, scanner, error);
+
+  gtk_css_scanner_destroy (scanner);
+
+  return result;
+}
+
 /**
  * gtk_css_provider_load_from_data:
  * @css_provider: a #GtkCssProvider
@@ -2661,9 +2680,6 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  gssize           length,
                                  GError         **error)
 {
-  GScanner *scanner;
-  gboolean result;
-
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (data != NULL, FALSE);
 
@@ -2672,13 +2688,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  scanner = gtk_css_scanner_new (NULL, data, length);
-
-  result = parse_stylesheet (css_provider, scanner, error);
-
-  gtk_css_scanner_destroy (scanner);
-
-  return result;
+  return gtk_css_provider_load_internal (css_provider, NULL, data, length, error);
 }
 
 /**
@@ -2698,7 +2708,6 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                  GError         **error)
 {
   GError *internal_error = NULL;
-  GScanner *scanner;
   gchar *data;
   gsize length;
   gboolean ret;
@@ -2716,12 +2725,9 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  scanner = gtk_css_scanner_new (file, data, length);
-
-  ret = parse_stylesheet (css_provider, scanner, error);
+  ret = gtk_css_provider_load_internal (css_provider, file, data, length, error);
 
   g_free (data);
-  gtk_css_scanner_destroy (scanner);
 
   return ret;
 }
@@ -2735,7 +2741,6 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   GtkCssProviderPrivate *priv;
   GError *internal_error = NULL;
   GMappedFile *mapped_file;
-  GScanner *scanner;
   const gchar *data;
   gsize length;
   GFile *file;
@@ -2761,13 +2766,10 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
     gtk_css_provider_reset (css_provider);
 
   file = g_file_new_for_path (path);
-  scanner = gtk_css_scanner_new (file, data, length);
+
+  ret = gtk_css_provider_load_internal (css_provider, file, data, length, error);
+
   g_object_unref (file);
-
-  ret = parse_stylesheet (css_provider, scanner, error);
-
-  gtk_css_scanner_destroy (scanner);
-
   g_mapped_file_unref (mapped_file);
 
   return ret;
