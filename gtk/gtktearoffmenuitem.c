@@ -31,6 +31,28 @@
 #include "gtktearoffmenuitem.h"
 #include "gtkintl.h"
 
+
+/**
+ * SECTION:gtktearoffmenuitem
+ * @Short_description: A menu item used to tear off and reattach its menu
+ * @Title: GtkTearoffMenuItem
+ * @See_also: #GtkMenu
+ *
+ * A #GtkTearoffMenuItem is a special #GtkMenuItem which is used to
+ * tear off and reattach its menu.
+ *
+ * When its menu is shown normally, the #GtkTearoffMenuItem is drawn as a
+ * dotted line indicating that the menu can be torn off.  Activating it
+ * causes its menu to be torn off and displayed in its own window
+ * as a tearoff menu.
+ *
+ * When its menu is shown as a tearoff menu, the #GtkTearoffMenuItem is drawn
+ * as a dotted line which has a left pointing arrow graphic indicating that
+ * the tearoff menu can be reattached.  Activating it will erase the tearoff
+ * menu window.
+ */
+
+
 #define ARROW_SIZE 10
 #define TEAR_LENGTH 5
 #define BORDER_SPACING  3
@@ -54,6 +76,13 @@ static void gtk_tearoff_menu_item_parent_set           (GtkWidget      *widget,
 
 G_DEFINE_TYPE (GtkTearoffMenuItem, gtk_tearoff_menu_item, GTK_TYPE_MENU_ITEM)
 
+/**
+ * gtk_tearoff_menu_item_new:
+ *
+ * Creates a new #GtkTearoffMenuItem.
+ *
+ * Returns: a new #GtkTearoffMenuItem.
+ */
 GtkWidget*
 gtk_tearoff_menu_item_new (void)
 {
