@@ -800,9 +800,6 @@ struct _GtkCssProviderPrivate
   GHashTable *symbolic_colors;
 
   GPtrArray *selectors_info;
-
-  /* Current parser state */
-  GError *error;
 };
 
 enum ParserScope {
@@ -869,14 +866,6 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
                                 guint            position,
                                 const GError *   error)
 {
-  GtkCssProviderPrivate *priv = provider->priv;
-
-  if (!priv->error)
-    {
-      priv->error = g_error_copy (error);
-      g_prefix_error (&priv->error, "%s:%u:%u: ", path ? path : "<unknown>", line, position);
-    }
-
   /* Only emit a warning when we have no error handlers. This is our
    * default handlers. And in this case erroneous CSS files are a bug
    * and should be fixed.
@@ -1774,10 +1763,6 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
   priv = css_provider->priv;
 
   gtk_css_scanner_reset (priv->scanner);
-
-  if (priv->error)
-    g_error_free (priv->error);
-  priv->error = NULL;
 }
 
 static void
@@ -2599,18 +2584,37 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
     g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
 }
 
+static void
+gtk_css_provider_propagate_error (GtkCssProvider  *provider,
+                                  const gchar     *path,
+                                  guint            line,
+                                  guint            position,
+                                  const GError    *error,
+                                  GError         **propagate_to)
+{
+  /* we already set an error. And we'd like to keep the first one */
+  if (*propagate_to)
+    return;
+
+  *propagate_to = g_error_copy (error);
+  g_prefix_error (propagate_to, "%s:%u:%u: ", path ? path : "<unknown>", line, position);
+}
 
 static gboolean
 parse_stylesheet (GtkCssProvider  *css_provider,
                   GScanner        *scanner,
                   GError         **error)
 {
-  GtkCssProviderPrivate *priv;
-  gboolean result;
+  gulong error_handler;
 
-  result = TRUE;
+  if (error)
+    error_handler = g_signal_connect (css_provider,
+                                      "parsing-error",
+                                      G_CALLBACK (gtk_css_provider_propagate_error),
+                                      error);
+  else
+    error_handler = 0; /* silence gcc */
 
-  priv = css_provider->priv;
   g_scanner_get_next_token (scanner);
 
   while (!g_scanner_eof (scanner))
@@ -2634,7 +2638,19 @@ parse_stylesheet (GtkCssProvider  *css_provider,
       g_scanner_get_next_token (scanner);
     }
 
-  return result;
+  if (error)
+    {
+      g_signal_handler_disconnect (css_provider, error_handler);
+      
+      if (*error)
+        {
+          /* We clear all contents from the provider for backwards compat reasons */
+          gtk_css_provider_reset (css_provider);
+          return FALSE;
+        }
+    }
+
+  return TRUE;
 }
 
 /**
