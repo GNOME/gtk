@@ -45,6 +45,18 @@
 #include <stdio.h>
 
 
+/**
+ * SECTION:gtkfontbutton
+ * @Short_description: A button to launch a font selection dialog
+ * @Title: GtkFontButton
+ * @See_also: #GtkFontSelectionDialog, #GtkColorButton.
+ *
+ * The #GtkFontButton is a button which displays the currently selected
+ * font an allows to open a font selection dialog to change the font.
+ * It is suitable widget for selecting a font in a preference dialog.
+ */
+
+
 struct _GtkFontButtonPrivate 
 {
   gchar         *title;
