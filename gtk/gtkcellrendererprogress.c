@@ -34,6 +34,18 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkcellrendererprogress
+ * @Short_description: Renders numbers as progress bars
+ * @Title: GtkCellRendererProgress
+ *
+ * #GtkCellRendererProgress renders a numeric value as a progress par in a cell.
+ * Additionally, it can display a text on top of the progress bar.
+ *
+ * The #GtkCellRendererProgress cell renderer was added in GTK+ 2.6.
+ */
+
+
 enum
 {
   PROP_0,

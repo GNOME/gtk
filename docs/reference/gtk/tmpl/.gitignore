@@ -11,6 +11,7 @@ gtkcalendar.sgml
 gtkcelleditable.sgml
 gtkcelllayout.sgml
 gtkcellrenderer.sgml
+gtkcellrendererprogress.sgml
 gtkcellrenderertext.sgml
 gtkcellview.sgml
 gtkcolorbutton.sgml
