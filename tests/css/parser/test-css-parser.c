@@ -236,19 +236,39 @@ add_test_for_file (GFile *file)
                      (GTestFixtureFunc) g_object_unref);
 }
 
+static int
+compare_files (gconstpointer a, gconstpointer b)
+{
+  GFile *file1 = G_FILE (a);
+  GFile *file2 = G_FILE (b);
+  char *path1, *path2;
+  int result;
+
+  path1 = g_file_get_path (file1);
+  path2 = g_file_get_path (file2);
+
+  result = strcmp (path1, path2);
+
+  g_free (path1);
+  g_free (path2);
+
+  return result;
+}
+
 static void
 add_tests_for_files_in_directory (GFile *dir)
 {
   GFileEnumerator *enumerator;
   GFileInfo *info;
+  GList *files;
   GError *error = NULL;
 
   enumerator = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME, 0, NULL, &error);
   g_assert_no_error (error);
+  files = NULL;
 
   while ((info = g_file_enumerator_next_file (enumerator, NULL, &error)))
     {
-      GFile *file;
       const char *filename;
 
       filename = g_file_info_get_name (info);
@@ -261,16 +281,17 @@ add_tests_for_files_in_directory (GFile *dir)
           continue;
         }
 
-      file = g_file_get_child (dir, filename);
+      files = g_list_prepend (files, g_file_get_child (dir, filename));
 
-      add_test_for_file (file);
-
-      g_object_unref (file);
       g_object_unref (info);
     }
   
   g_assert_no_error (error);
   g_object_unref (enumerator);
+
+  files = g_list_sort (files, compare_files);
+  g_list_foreach (files, (GFunc) add_test_for_file, NULL);
+  g_list_free_full (files, g_object_unref);
 }
 
 int
