@@ -12,6 +12,7 @@ gtkcelleditable.sgml
 gtkcelllayout.sgml
 gtkcellrenderer.sgml
 gtkcellrendereraccel.sgml
+gtkcellrenderercombo.sgml
 gtkcellrendererprogress.sgml
 gtkcellrendererspin.sgml
 gtkcellrenderertext.sgml

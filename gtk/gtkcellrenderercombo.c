@@ -30,6 +30,27 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
+
+/**
+ * SECTION:gtkcellrenderercombo
+ * @Short_description: Renders a combobox in a cell
+ * @Title: GtkCellRendererCombo
+ *
+ * #GtkCellRendererCombo renders text in a cell like #GtkCellRendererText from
+ * which it is derived. But while #GtkCellRendererText offers a simple entry to
+ * edit the text, #GtkCellRendererCombo offers a #GtkComboBox or #GtkComboBoxEntry
+ * widget to edit the text. The values to display in the combo box are taken from
+ * the tree model specified in the #GtkCellRendererCombo:model property.
+ *
+ * The combo cell renderer takes care of adding a text cell renderer to the combo
+ * box and sets it to display the column specified by its
+ * #GtkCellRendererCombo:text-column property. Further properties of the comnbo box
+ * can be set in a handler for the #GtkCellRenderer::editing-started signal.
+ *
+ * The #GtkCellRendererCombo cell renderer was added in GTK+ 2.6.
+ */
+
+
 struct _GtkCellRendererComboPrivate
 {
   GtkTreeModel *model;
