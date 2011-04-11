@@ -375,7 +375,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.document = document;
     surface.transientToplevel = null;
     surface.frame = null;
-    stackingOrder.push(id);
+    stackingOrder.push(surface);
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
@@ -535,8 +535,7 @@ function restackWindows() {
 	return;
 
     for (var i = 0; i < stackingOrder.length; i++) {
-	var id = stackingOrder[i];
-	var surface = surfaces[id];
+	var surface = stackingOrder[i];
 	if (surface.frame)
 	    surface.frame.style.zIndex = i;
 	else
@@ -545,9 +544,9 @@ function restackWindows() {
 }
 
 function moveToTopHelper(surface) {
-    var i = stackingOrder.indexOf(surface.id);
+    var i = stackingOrder.indexOf(surface);
     stackingOrder.splice(i, 1);
-    stackingOrder.push(surface.id);
+    stackingOrder.push(surface);
 
     for (var cid in surfaces) {
 	var child = surfaces[cid];
@@ -565,7 +564,7 @@ function moveToTop(surface) {
 function cmdDeleteSurface(id)
 {
     var surface = surfaces[id];
-    var i = stackingOrder.indexOf(id);
+    var i = stackingOrder.indexOf(surface);
     if (i >= 0)
 	stackingOrder.splice(i, 1);
     var canvas = surface.canvas;
