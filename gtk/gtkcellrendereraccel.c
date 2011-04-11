@@ -32,6 +32,21 @@
 #include "gtkprivate.h"
 
 
+/**
+ * SECTION:gtkcellrendereraccel
+ * @Short_description: Renders a keyboard accelerator in a cell
+ * @Title: GtkCellRendererAccel
+ *
+ * #GtkCellRendererAccel displays a keyboard accelerator (i.e. a
+ * key combination like <keycombo><keycap>Control</keycap><keycap>a</keycap></keycombo>.
+ * If the cell renderer is editable, the accelerator can be changed by
+ * simply typing the new combination.
+ *
+ * The #GtkCellRendererAccel cell renderer was added in GTK+ 2.10.
+ */
+
+
+
 static void gtk_cell_renderer_accel_get_property (GObject         *object,
                                                   guint            param_id,
                                                   GValue          *value,
