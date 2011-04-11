@@ -318,7 +318,7 @@ function unregisterWindow(win)
 
 function getTransientToplevel(surface)
 {
-    while (surface.transientParent != 0) {
+    while (surface && surface.transientParent != 0) {
 	surface = surfaces[surface.transientParent];
 	if (surface && surface.window)
 	    return surface;
@@ -522,8 +522,12 @@ function cmdSetTransientFor(id, parentId)
 	return;
 
     surface.transientParent = parentId;
-    if (surface.visible && surface.isTemp) {
-	alert("TODO: move temps between transient parents when visible");
+    if (parentId != 0 && surfaces[parentId]) {
+	moveToHelper(surface, stackingOrder.indexOf(surfaces[parentId])+1);
+    }
+
+    if (surface.visible) {
+	restackWindows();
     }
 }
 
@@ -534,20 +538,23 @@ function restackWindows() {
     }
 }
 
-function moveToTopHelper(surface) {
+function moveToHelper(surface, position) {
     var i = stackingOrder.indexOf(surface);
     stackingOrder.splice(i, 1);
-    stackingOrder.push(surface);
+    if (position != undefined)
+	stackingOrder.splice(position, 0, surface);
+    else
+	stackingOrder.push(surface);
 
     for (var cid in surfaces) {
 	var child = surfaces[cid];
 	if (child.transientParent == surface.id)
-	    moveToTopHelper(child);
+	    moveToHelper(child, stackingOrder.indexOf(surface) + 1);
     }
 }
 
 function moveToTop(surface) {
-    moveToTopHelper(surface);
+    moveToHelper(surface);
     restackWindows();
 }
 
