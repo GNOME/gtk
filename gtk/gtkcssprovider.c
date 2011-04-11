@@ -2591,21 +2591,10 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
   g_prefix_error (propagate_to, "%s:%u:%u: ", path ? path : "<unknown>", line, position);
 }
 
-static gboolean
+static void
 parse_stylesheet (GtkCssProvider  *css_provider,
-                  GScanner        *scanner,
-                  GError         **error)
+                  GScanner        *scanner)
 {
-  gulong error_handler;
-
-  if (error)
-    error_handler = g_signal_connect (css_provider,
-                                      "parsing-error",
-                                      G_CALLBACK (gtk_css_provider_propagate_error),
-                                      error);
-  else
-    error_handler = 0; /* silence gcc */
-
   g_scanner_get_next_token (scanner);
 
   while (!g_scanner_eof (scanner))
@@ -2627,6 +2616,31 @@ parse_stylesheet (GtkCssProvider  *css_provider,
       
       gtk_css_scanner_reset (scanner);
     }
+}
+
+static gboolean
+gtk_css_provider_load_internal (GtkCssProvider *css_provider,
+                                GFile          *file,
+                                const char     *data,
+                                gsize           length,
+                                GError        **error)
+{
+  GScanner *scanner;
+  gulong error_handler;
+
+  if (error)
+    error_handler = g_signal_connect (css_provider,
+                                      "parsing-error",
+                                      G_CALLBACK (gtk_css_provider_propagate_error),
+                                      error);
+  else
+    error_handler = 0; /* silence gcc */
+
+  scanner = gtk_css_scanner_new (file, data, length);
+
+  parse_stylesheet (css_provider, scanner);
+
+  gtk_css_scanner_destroy (scanner);
 
   if (error)
     {
@@ -2641,25 +2655,6 @@ parse_stylesheet (GtkCssProvider  *css_provider,
     }
 
   return TRUE;
-}
-
-static gboolean
-gtk_css_provider_load_internal (GtkCssProvider *css_provider,
-                                GFile          *file,
-                                const char     *data,
-                                gsize           length,
-                                GError        **error)
-{
-  GScanner *scanner;
-  gboolean result;
-
-  scanner = gtk_css_scanner_new (file, data, length);
-
-  result = parse_stylesheet (css_provider, scanner, error);
-
-  gtk_css_scanner_destroy (scanner);
-
-  return result;
 }
 
 /**
