@@ -26,6 +26,18 @@
 #include "gtktreeprivate.h"
 
 
+/**
+ * SECTION:gtkcellrenderertoggle
+ * @Short_description: Renders a toggle button in a cell
+ * @Title: GtkCellRendererToggle
+ *
+ * #GtkCellRendererToggle renders a toggle button in a cell. The
+ * button is drawn as a radio or a checkbutton, depending on the
+ * #GtkCellRendererToggle:radio property.
+ * When activated, it emits the #GtkCellRendererToggle::toggled signal.
+ */
+
+
 static void gtk_cell_renderer_toggle_get_property  (GObject                    *object,
 						    guint                       param_id,
 						    GValue                     *value,

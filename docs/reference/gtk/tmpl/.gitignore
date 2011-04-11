@@ -13,6 +13,7 @@ gtkcelllayout.sgml
 gtkcellrenderer.sgml
 gtkcellrendererprogress.sgml
 gtkcellrenderertext.sgml
+gtkcellrenderertoggle.sgml
 gtkcellview.sgml
 gtkcolorbutton.sgml
 gtkcolorsel.sgml
