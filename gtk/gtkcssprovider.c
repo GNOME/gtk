@@ -2622,27 +2622,6 @@ parse_stylesheet (GtkCssProvider  *css_provider,
 
       if (expected_token != G_TOKEN_NONE)
         {
-          /* If a GError was passed in, propagate the error and bail out,
-           * else report a warning and keep going
-           */
-          if (error != NULL)
-            {
-              result = FALSE;
-              if (priv->error)
-                g_propagate_error (error, priv->error);
-              else
-                g_set_error_literal (error,
-                                     GTK_CSS_PROVIDER_ERROR,
-                                     GTK_CSS_PROVIDER_ERROR_FAILED,
-                                     "Error parsing stylesheet");
-              break;
-            }
-          else
-            {
-              g_clear_error (&priv->error);
-              priv->error = NULL;
-            }
-
           css_provider_reset_parser (css_provider);
 
           while (!g_scanner_eof (scanner) &&
