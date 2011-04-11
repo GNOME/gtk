@@ -31,6 +31,30 @@
 #include "gtkprivate.h"
 
 
+/**
+ * SECTION:gtkmisc
+ * @Short_description: Base class for widgets with alignments and padding
+ * @Title: GtkMisc
+ *
+ * The #GtkMisc widget is an abstract widget which is not useful itself, but
+ * is used to derive subclasses which have alignment and padding attributes.
+ *
+ * The horizontal and vertical padding attributes allows extra space to be
+ * added around the widget.
+ *
+ * The horizontal and vertical alignment attributes enable the widget to be
+ * positioned within its allocated area. Note that if the widget is added to
+ * a container in such a way that it expands automatically to fill its
+ * allocated area, the alignment settings will not alter the widgets position.
+ *
+ * <note>
+ * Note that the desired effect can in most cases be achieved by using the
+ * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
+ * on the child widget, so GtkMisc should not be used in new code.
+ * </note>
+ */
+
+
 struct _GtkMiscPrivate
 {
   gfloat        xalign;
@@ -192,6 +216,14 @@ gtk_misc_get_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_misc_set_alignment:
+ * @misc: a #GtkMisc.
+ * @xalign: the horizontal alignment, from 0 (left) to 1 (right).
+ * @yalign: the vertical alignment, from 0 (top) to 1 (bottom).
+ *
+ * Sets the alignment of the widget.
+ */
 void
 gtk_misc_set_alignment (GtkMisc *misc,
 			gfloat   xalign,
@@ -262,6 +294,16 @@ gtk_misc_get_alignment (GtkMisc *misc,
     *yalign = priv->yalign;
 }
 
+/**
+ * gtk_misc_set_padding:
+ * @misc: a #GtkMisc.
+ * @xpad: the amount of space to add on the left and right of the widget,
+ *   in pixels.
+ * @ypad: the amount of space to add on the top and bottom of the widget,
+ *   in pixels.
+ *
+ * Sets the amount of space to add around the widget.
+ */
 void
 gtk_misc_set_padding (GtkMisc *misc,
 		      gint     xpad,
