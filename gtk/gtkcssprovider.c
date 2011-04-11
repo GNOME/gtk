@@ -2239,7 +2239,6 @@ parse_rule (GtkCssProvider  *css_provider,
         }
       else if (strcmp (directive, "import") == 0)
         {
-          gboolean loaded;
           gchar *path = NULL;
           GFile *actual;
           GError *error = NULL;
@@ -2279,17 +2278,14 @@ parse_rule (GtkCssProvider  *css_provider,
             }
 
           /* FIXME: Avoid recursive importing */
-          loaded = gtk_css_provider_load_internal (css_provider,
-                                                   actual,
-                                                   NULL, 0,
-                                                   NULL);
+          gtk_css_provider_load_internal (css_provider,
+                                          actual,
+                                          NULL, 0,
+                                          NULL);
 
           g_object_unref (actual);
 
-          if (!loaded)
-            return G_TOKEN_IDENTIFIER;
-          else
-            return G_TOKEN_NONE;
+          return G_TOKEN_NONE;
         }
       else if (strcmp (directive, "binding-set") == 0)
         {
