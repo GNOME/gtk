@@ -789,6 +789,7 @@ struct SelectorStyleInfo
 struct _GtkCssScannerPrivate
 {
   GFile *file;
+  GFile *base;
   GSList *state;
   GSList *cur_selectors;
   GHashTable *cur_properties;
@@ -1159,7 +1160,16 @@ gtk_css_scanner_new (GFile       *file,
   priv = scanner->user_data = g_slice_new0 (GtkCssScannerPrivate);
 
   if (file)
-    priv->file = g_object_ref (file);
+    {
+      priv->file = g_object_ref (file);
+      priv->base = g_file_get_parent (file);
+    }
+  else
+    {
+      char *dir = g_get_current_dir ();
+      priv->base = g_file_new_for_path (dir);
+      g_free (dir);
+    }
 
   priv->cur_properties = g_hash_table_new_full (g_str_hash,
                                                 g_str_equal,
@@ -1193,6 +1203,14 @@ gtk_css_scanner_new (GFile       *file,
   g_scanner_input_text (scanner, data, length);
 
   return scanner;
+}
+
+static GFile *
+gtk_css_scanner_get_base_url (GScanner *scanner)
+{
+  GtkCssScannerPrivate *priv = scanner->user_data;
+
+  return priv->base;
 }
 
 static void
@@ -2217,8 +2235,7 @@ parse_rule (GtkCssProvider  *css_provider,
         {
           gboolean loaded;
           gchar *path = NULL;
-          GFile *base, *actual;
-          char *dirname;
+          GFile *actual;
           GError *error = NULL;
 
           gtk_css_scanner_push_scope (scanner, SCOPE_VALUE);
@@ -2235,16 +2252,10 @@ parse_rule (GtkCssProvider  *css_provider,
               return G_TOKEN_IDENTIFIER;
             }
 
-          if (scanner->input_name)
-            dirname = g_path_get_dirname (scanner->input_name);
-          else
-            dirname = g_get_current_dir ();
-
-          base = g_file_new_for_path (dirname);
-          g_free (dirname);
-
-          actual = _gtk_css_parse_url (base, path, NULL, &error);
-          g_object_unref (base);
+          actual = _gtk_css_parse_url (gtk_css_scanner_get_base_url (scanner),
+                                       path,
+                                       NULL,
+                                       &error);
 
           if (actual == NULL)
             {
@@ -2502,26 +2513,11 @@ parse_rule (GtkCssProvider  *css_provider,
           else
             {
               GError *error = NULL;
-              GFile *base;
-              char *dirname;
-              gboolean success;
-
-              if (scanner->input_name)
-                dirname = g_path_get_dirname (scanner->input_name);
-              else
-                dirname = g_get_current_dir ();
-
-              base = g_file_new_for_path (dirname);
-              g_free (dirname);
-
-              success = _gtk_css_value_from_string (val,
-                                                    base,
-                                                    value_str,
-                                                    &error);
-
-              g_object_unref (base);
-
-              if (success)
+              
+              if (_gtk_css_value_from_string (val,
+                                              gtk_css_scanner_get_base_url (scanner),
+                                              value_str,
+                                              &error))
                 {
                   g_hash_table_insert (priv->cur_properties, prop, val);
                 }
