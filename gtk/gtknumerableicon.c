@@ -55,11 +55,12 @@
 
 struct _GtkNumerableIconPrivate {
   gint count;
+  gint icon_size;
+
   gchar *label;
 
   GIcon *background_icon;
   gchar *background_icon_name;
-  gint icon_size;
 
   GdkRGBA *background;
   GdkRGBA *foreground;
