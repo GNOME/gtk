@@ -61,11 +61,12 @@ struct _GtkAppChooserWidgetPrivate {
 
   gchar *content_type;
   gchar *default_text;
-  gboolean show_default;
-  gboolean show_recommended;
-  gboolean show_fallback;
-  gboolean show_other;
-  gboolean show_all;
+
+  guint show_default     : 1;
+  guint show_recommended : 1;
+  guint show_fallback    : 1;
+  guint show_other       : 1;
+  guint show_all         : 1;
 
   GtkWidget *program_list;
   GtkListStore *program_list_store;
