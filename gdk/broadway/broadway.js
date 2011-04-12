@@ -76,7 +76,7 @@ var base64Values = [
     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,255,255,255,255,255,
     255, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,255,255,255,255,255
-]
+];
 
 function base64_8(str, index) {
     var v =
@@ -726,20 +726,21 @@ function handleCommands(cmdObj)
     var i = cmdObj.pos;
 
     while (i < cmd.length) {
+	var id, x, y, w, h, q;
 	var command = cmd[i++];
 	lastSerial = base64_32(cmd, i);
 	i = i + 6;
 	switch (command) {
 	case 's': // create new surface
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
-	    var x = base64_16s(cmd, i);
+	    x = base64_16s(cmd, i);
 	    i = i + 3;
-	    var y = base64_16s(cmd, i);
+	    y = base64_16s(cmd, i);
 	    i = i + 3;
-	    var w = base64_16(cmd, i);
+	    w = base64_16(cmd, i);
 	    i = i + 3;
-	    var h = base64_16(cmd, i);
+	    h = base64_16(cmd, i);
 	    i = i + 3;
 	    var isTemp = cmd[i] == '1';
 	    i = i + 1;
@@ -747,19 +748,19 @@ function handleCommands(cmdObj)
 	    break;
 
 	case 'S': // Show a surface
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
 	    cmdShowSurface(id);
 	    break;
 
 	case 'H': // Hide a surface
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
 	    cmdHideSurface(id);
 	    break;
 
 	case 'p': // Set transient parent
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
 	    var parentId = base64_16(cmd, i);
 	    i = i + 3;
@@ -767,33 +768,33 @@ function handleCommands(cmdObj)
 	    break;
 
 	case 'd': // Delete surface
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
 	    cmdDeleteSurface(id);
 	    break;
 
 	case 'm': // Move a surface
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
-	    var x = base64_16(cmd, i);
+	    x = base64_16(cmd, i);
 	    i = i + 3;
-	    var y = base64_16(cmd, i);
+	    y = base64_16(cmd, i);
 	    i = i + 3;
 	    cmdMoveSurface(id, x, y);
 	    break;
 
 	case 'r': // Resize a surface
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
-	    var w = base64_16(cmd, i);
+	    w = base64_16(cmd, i);
 	    i = i + 3;
-	    var h = base64_16(cmd, i);
+	    h = base64_16(cmd, i);
 	    i = i + 3;
 	    cmdResizeSurface(id, w, h);
 	    break;
 
 	case 'i': // Put image data surface
-	    var q = new Object();
+	    q = new Object();
 	    q.op = 'i';
 	    q.id = base64_16(cmd, i);
 	    i = i + 3;
@@ -816,7 +817,7 @@ function handleCommands(cmdObj)
 	    break;
 
 	case 'b': // Copy rects
-	    var q = new Object();
+	    q = new Object();
 	    q.op = 'b';
 	    q.id = base64_16(cmd, i);
 	    i = i + 3;
@@ -846,14 +847,14 @@ function handleCommands(cmdObj)
 	    break;
 
 	case 'f': // Flush surface
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
 
 	    cmdFlushSurface(id);
 	    break;
 
 	case 'g': // Grab
-	    var id = base64_16(cmd, i);
+	    id = base64_16(cmd, i);
 	    i = i + 3;
 	    var ownerEvents = cmd[i++] == '1';
 
@@ -1133,7 +1134,7 @@ function onMouseWheel(ev)
 {
     updateForEvent(ev);
     if (localGrab)
-	return;
+	return false;
     ev = ev ? ev : window.event;
 
     var id = getSurfaceId(ev);
