@@ -35,10 +35,9 @@ struct _GdkScreen
 {
   GObject parent_instance;
 
-  guint closed : 1;
-
   cairo_font_options_t *font_options;
-  double resolution; /* pixels/points scale factor for fonts */
+  gdouble resolution; /* pixels/points scale factor for fonts */
+  guint closed : 1;
 };
 
 struct _GdkScreenClass
