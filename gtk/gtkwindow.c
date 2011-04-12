@@ -125,6 +125,8 @@ struct _GtkWindowPrivate
 
   guint    keys_changed_handler;
 
+  guint32  initial_timestamp;
+
   guint16  configure_request_count;
 
   /* The following flags are initially TRUE (before a window is mapped).
@@ -1104,6 +1106,7 @@ gtk_window_init (GtkWindow *window)
   priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   priv->opacity = 1.0;
   priv->startup_id = NULL;
+  priv->initial_timestamp = GDK_CURRENT_TIME;
   priv->has_resize_grip = TRUE;
   priv->mnemonics_visible = TRUE;
 
@@ -5006,10 +5009,18 @@ gtk_window_realize (GtkWidget *widget)
             gdk_x11_window_set_user_time (gdk_window, timestamp);
         }
 #endif
-      if (!startup_id_is_fake (priv->startup_id)) 
-	gdk_window_set_startup_id (gdk_window, priv->startup_id);
+      if (!startup_id_is_fake (priv->startup_id))
+        gdk_window_set_startup_id (gdk_window, priv->startup_id);
     }
-  
+
+#ifdef GDK_WINDOWING_X11
+  if (priv->initial_timestamp != GDK_CURRENT_TIME)
+    {
+      if (GDK_IS_X11_WINDOW (gdk_window))
+        gdk_x11_window_set_user_time (gdk_window, priv->initial_timestamp);
+    }
+#endif
+
   /* Icons */
   gtk_window_realize_icon (window);
   
@@ -7359,11 +7370,13 @@ void
 gtk_window_present_with_time (GtkWindow *window,
 			      guint32    timestamp)
 {
+  GtkWindowPrivate *priv;
   GtkWidget *widget;
   GdkWindow *gdk_window;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  priv = window->priv;
   widget = GTK_WIDGET (window);
 
   if (gtk_widget_get_visible (widget))
@@ -7382,7 +7395,7 @@ gtk_window_present_with_time (GtkWindow *window,
 	    {
 	      GdkDisplay *display;
 
-	      display = gtk_widget_get_display (GTK_WIDGET (window));
+	      display = gtk_widget_get_display (window);
 	      timestamp = gdk_x11_display_get_user_time (display);
 	    }
 	  else
@@ -7394,6 +7407,7 @@ gtk_window_present_with_time (GtkWindow *window,
     }
   else
     {
+      priv->initial_timestamp = timestamp;
       gtk_widget_show (widget);
     }
 }
