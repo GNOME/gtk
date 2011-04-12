@@ -72,24 +72,24 @@ typedef enum
 
 struct _GtkIconThemePrivate
 {
+  gchar *current_theme;
+  gchar *fallback_theme;
+  gchar **search_path;
+  gint search_path_len;
+
   guint custom_theme        : 1;
   guint is_screen_singleton : 1;
   guint pixbuf_supports_svg : 1;
   guint themes_valid        : 1;
   guint check_reload        : 1;
   guint loading_themes      : 1;
-  
-  char *current_theme;
-  char *fallback_theme;
-  char **search_path;
-  int search_path_len;
 
   /* A list of all the themes needed to look up icons.
    * In search order, without duplicates
    */
   GList *themes;
   GHashTable *unthemed_icons;
-  
+
   /* Note: The keys of this hashtable are owned by the
    * themedir and unthemed hashtables.
    */
@@ -98,9 +98,9 @@ struct _GtkIconThemePrivate
   /* GdkScreen for the icon theme (may be NULL)
    */
   GdkScreen *screen;
-  
+
   /* time when we last stat:ed for theme changes */
-  long last_stat_time;
+  glong last_stat_time;
   GList *dir_mtimes;
 
   gulong reset_styles_idle;
@@ -118,7 +118,7 @@ struct _GtkIconInfo
   GdkPixbuf *cache_pixbuf;
 
   GtkIconData *data;
-  
+
   /* Information about the directory where
    * the source was found
    */
@@ -131,6 +131,9 @@ struct _GtkIconInfo
   gint desired_size;
   guint raw_coordinates : 1;
   guint forced_size     : 1;
+  guint emblems_applied : 1;
+
+  guint ref_count;
 
   /* Cached information if we go ahead and try to load
    * the icon.
@@ -138,9 +141,6 @@ struct _GtkIconInfo
   GdkPixbuf *pixbuf;
   GError *load_error;
   gdouble scale;
-  gboolean emblems_applied;
-
-  guint ref_count;
 };
 
 typedef struct
