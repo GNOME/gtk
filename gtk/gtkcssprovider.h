@@ -20,7 +20,7 @@
 #ifndef __GTK_CSS_PROVIDER_H__
 #define __GTK_CSS_PROVIDER_H__
 
-#include <glib-object.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
