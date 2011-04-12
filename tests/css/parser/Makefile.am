@@ -40,6 +40,15 @@ EXTRA_DIST += \
 	does-not-exist.css \
 	does-not-exist.errors \
 	does-not-exist.ref.css \
+	import-cyclic-1.css \
+	import-cyclic-1.errors \
+	import-cyclic-1.ref.css \
+	import-cyclic-2.css \
+	import-cyclic-2.errors \
+	import-cyclic-2.ref.css \
+	import-cyclic-3.css \
+	import-cyclic-3.errors \
+	import-cyclic-3.ref.css \
 	import-recursive.css \
 	import-recursive.errors \
 	import-recursive.ref.css \

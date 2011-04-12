@@ -1,0 +1,5 @@
+@import url("import-cyclic-1.css");
+
+a {
+  int-property: 3
+}
