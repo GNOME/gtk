@@ -91,14 +91,14 @@ enum {
 
 struct _GtkCellRendererAccelPrivate
 {
-  GtkCellRendererAccelMode accel_mode;
-
   GtkWidget *edit_widget;
   GtkWidget *grab_widget;
   GtkWidget *sizing_label;
 
   GdkDevice *grab_keyboard;
   GdkDevice *grab_pointer;
+
+  GtkCellRendererAccelMode accel_mode;
 
   GdkModifierType accel_mods;
 
