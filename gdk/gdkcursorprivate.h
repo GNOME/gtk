@@ -41,9 +41,8 @@ struct _GdkCursor
 {
   GObject parent_instance;
 
-  /*< private >*/
-  GdkCursorType type;
   GdkDisplay *display;
+  GdkCursorType type;
 };
 
 struct _GdkCursorClass
