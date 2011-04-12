@@ -143,12 +143,13 @@
 
 struct _GtkSpinButtonPrivate
 {
-  GtkSpinButtonUpdatePolicy update_policy;
   GtkAdjustment *adjustment;
 
   GdkWindow     *panel;
 
   guint32        timer;
+
+  GtkSpinButtonUpdatePolicy update_policy;
 
   gdouble        climb_rate;
   gdouble        timer_step;
