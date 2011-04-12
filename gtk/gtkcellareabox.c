@@ -201,8 +201,6 @@ static GSList        *get_allocated_cells    (GtkCellAreaBox        *box,
 
 struct _GtkCellAreaBoxPrivate
 {
-  GtkOrientation   orientation;
-
   /* We hold on to the previously focused cell when navigating
    * up and down in a horizontal box (or left and right on a vertical one)
    * this way we always re-enter the last focused cell.
@@ -215,6 +213,7 @@ struct _GtkCellAreaBoxPrivate
 
   GSList          *contexts;
 
+  GtkOrientation   orientation;
   gint             spacing;
 
   /* We hold on to the rtl state from a widget we are requested for
