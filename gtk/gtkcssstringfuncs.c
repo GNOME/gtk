@@ -620,6 +620,156 @@ float_value_to_string (const GValue *value)
   return g_strdup (buf);
 }
 
+static char *
+gtk_css_string_unescape (const char  *string,
+                         GError     **error)
+{
+  GString *str;
+  char quote;
+  gsize len;
+
+  quote = string[0];
+  string++;
+  if (quote != '\'' && quote != '"')
+    {
+      g_set_error_literal (error,
+                           GTK_CSS_PROVIDER_ERROR,
+                           GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE,
+                           "String value not properly quoted.");
+      return NULL;
+    }
+
+  str = g_string_new (NULL);
+
+  while (TRUE)
+    {
+      len = strcspn (string, "\\'\"\n\r\f");
+
+      g_string_append_len (str, string, len);
+
+      string += len;
+
+      switch (string[0])
+        {
+        case '\\':
+          string++;
+          if (string[0] >= '0' && string[0] <= '9' &&
+              string[0] >= 'a' && string[0] <= 'f' &&
+              string[0] >= 'A' && string[0] <= 'F')
+            {
+              g_set_error_literal (error,
+                                   GTK_CSS_PROVIDER_ERROR,
+                                   GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE,
+                                   "FIXME: Implement unicode escape sequences.");
+              g_string_free (str, TRUE);
+              return NULL;
+            }
+          else if (string[0] == '\r' && string[1] == '\n')
+            string++;
+          else if (string[0] != '\r' && string[0] != '\n' && string[0] != '\f')
+            g_string_append_c (str, string[0]);
+          break;
+        case '"':
+        case '\'':
+          if (string[0] != quote)
+            {
+              g_string_append_c (str, string[0]);
+            }
+          else
+            {
+              if (string[1] == 0)
+                {
+                  return g_string_free (str, FALSE);
+                }
+              else
+                {
+                  g_set_error_literal (error,
+                                       GTK_CSS_PROVIDER_ERROR,
+                                       GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE,
+                                       "Junk after end of string.");
+                  g_string_free (str, TRUE);
+                  return NULL;
+                }
+            }
+          break;
+        case '\0':
+          g_set_error_literal (error,
+                               GTK_CSS_PROVIDER_ERROR,
+                               GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE,
+                               "Missing end quote in string.");
+          g_string_free (str, TRUE);
+          return NULL;
+        default:
+          g_set_error_literal (error,
+                               GTK_CSS_PROVIDER_ERROR,
+                               GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE,
+                               "Invalid character in string. Must be escaped.");
+          g_string_free (str, TRUE);
+          return NULL;
+        }
+
+      string++;
+    }
+
+  g_assert_not_reached ();
+  return NULL;
+}
+
+static gboolean 
+string_value_from_string (const char  *str,
+                          GFile       *base,
+                          GValue      *value,
+                          GError     **error)
+{
+  char *unescaped = gtk_css_string_unescape (str, error);
+
+  if (unescaped == NULL)
+    return FALSE;
+
+  g_value_take_string (value, unescaped);
+  return TRUE;
+}
+
+static char *
+string_value_to_string (const GValue *value)
+{
+  const char *string;
+  gsize len;
+  GString *str;
+
+  string = g_value_get_string (value);
+  str = g_string_new ("\"");
+
+  do {
+    len = strcspn (string, "\"\n\r\f");
+    g_string_append (str, string);
+    string += len;
+    switch (*string)
+      {
+      case '\0':
+        break;
+      case '\n':
+        g_string_append (str, "\\A ");
+        break;
+      case '\r':
+        g_string_append (str, "\\D ");
+        break;
+      case '\f':
+        g_string_append (str, "\\C ");
+        break;
+      case '\"':
+        g_string_append (str, "\\\"");
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+      }
+  } while (*string);
+
+  g_string_append_c (str, '"');
+  return g_string_free (str, FALSE);
+}
+
 static gboolean 
 theming_engine_value_from_string (const char  *str,
                                   GFile       *base,
@@ -1357,6 +1507,9 @@ css_string_funcs_init (void)
   register_conversion_function (G_TYPE_FLOAT,
                                 float_value_from_string,
                                 float_value_to_string);
+  register_conversion_function (G_TYPE_STRING,
+                                string_value_from_string,
+                                string_value_to_string);
   register_conversion_function (GTK_TYPE_THEMING_ENGINE,
                                 theming_engine_value_from_string,
                                 theming_engine_value_to_string);
