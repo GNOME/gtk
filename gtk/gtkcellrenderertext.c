@@ -161,17 +161,15 @@ struct _GtkCellRendererTextPrivate
 {
   GtkWidget *entry;
 
-  PangoAlignment        align;
   PangoAttrList        *extra_attrs;
   GdkRGBA               foreground;
   GdkRGBA               background;
+  PangoAlignment        align;
   PangoEllipsizeMode    ellipsize;
   PangoFontDescription *font;
   PangoLanguage        *language;
   PangoUnderline        underline_style;
   PangoWrapMode         wrap_mode;
-
-  gboolean in_entry_menu;
 
   gchar *text;
 
@@ -183,6 +181,7 @@ struct _GtkCellRendererTextPrivate
   gint max_width_chars;
   gint wrap_width;
 
+  guint in_entry_menu     : 1;
   guint strikethrough     : 1;
   guint editable          : 1;
   guint scale_set         : 1;
