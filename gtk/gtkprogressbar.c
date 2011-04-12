@@ -70,19 +70,16 @@
 
 struct _GtkProgressBarPrivate
 {
-  GtkOrientation orientation;
-
   gchar         *text;
 
   gdouble        fraction;
   gdouble        pulse_fraction;
 
-  guint          blocks;
-  gint           in_block;
-
   gint           activity_pos;
   guint          activity_blocks;
   guint          activity_step;
+
+  GtkOrientation orientation;
 
   guint          activity_dir  : 1;
   guint          activity_mode : 1;
@@ -299,8 +296,6 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
                                             GtkProgressBarPrivate);
   priv = pbar->priv;
 
-  priv->blocks = 10;
-  priv->in_block = -1;
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->inverted = FALSE;
   priv->pulse_fraction = 0.1;
