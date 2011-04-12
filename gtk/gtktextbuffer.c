@@ -49,10 +49,10 @@ struct _GtkTextBufferPrivate
 {
   GtkTargetList  *copy_target_list;
   GtkTargetEntry *copy_target_entries;
-  gint            n_copy_target_entries;
-
   GtkTargetList  *paste_target_list;
   GtkTargetEntry *paste_target_entries;
+
+  gint            n_copy_target_entries;
   gint            n_paste_target_entries;
 
   GtkTextTagTable *tag_table;
@@ -67,7 +67,6 @@ struct _GtkTextBufferPrivate
 
   /* Whether the buffer has been modified since last save */
   guint modified : 1;
-
   guint has_selection : 1;
 };
 
