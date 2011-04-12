@@ -788,6 +788,7 @@ struct SelectorStyleInfo
 
 struct _GtkCssScannerPrivate
 {
+  GScanner *parent;
   GFile *file;
   GFile *base;
   GSList *state;
@@ -844,6 +845,7 @@ static void scanner_apply_scope (GScanner    *scanner,
                                  ParserScope  scope);
 static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
+                                GScanner       *scanner,
                                 GFile          *file,
                                 const char     *data,
                                 gsize           length,
@@ -1168,7 +1170,8 @@ gtk_css_scanner_destroy (GScanner *scanner)
 }
 
 static GScanner *
-gtk_css_scanner_new (GFile       *file,
+gtk_css_scanner_new (GScanner    *parent,
+                     GFile       *file,
                      const gchar *data,
                      gsize        length)
 {
@@ -1178,6 +1181,8 @@ gtk_css_scanner_new (GFile       *file,
   scanner = g_scanner_new (NULL);
 
   priv = scanner->user_data = g_slice_new0 (GtkCssScannerPrivate);
+
+  priv->parent = parent;
 
   if (file)
     {
@@ -2279,6 +2284,7 @@ parse_rule (GtkCssProvider  *css_provider,
 
           /* FIXME: Avoid recursive importing */
           gtk_css_provider_load_internal (css_provider,
+                                          scanner,
                                           actual,
                                           NULL, 0,
                                           NULL);
@@ -2620,6 +2626,7 @@ parse_stylesheet (GtkCssProvider  *css_provider,
 
 static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
+                                GScanner       *parent,
                                 GFile          *file,
                                 const char     *data,
                                 gsize           length,
@@ -2649,10 +2656,23 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         }
       else
         {
-          gtk_css_provider_take_error_full (css_provider,
-                                            file,
-                                            0, 0,
-                                            load_error);
+          if (parent)
+            {
+              gtk_css_provider_error (css_provider,
+                                      parent,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_IMPORT,
+                                      "Failed to import: %s",
+                                      load_error->message);
+              g_error_free (load_error);
+            }
+          else
+            {
+              gtk_css_provider_take_error_full (css_provider,
+                                                file,
+                                                0, 0,
+                                                load_error);
+            }
         }
     }
   else
@@ -2660,7 +2680,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 
   if (data)
     {
-      scanner = gtk_css_scanner_new (file, data, length);
+      scanner = gtk_css_scanner_new (parent, file, data, length);
 
       parse_stylesheet (css_provider, scanner);
 
@@ -2708,7 +2728,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  return gtk_css_provider_load_internal (css_provider, NULL, data, length, error);
+  return gtk_css_provider_load_internal (css_provider, NULL, NULL, data, length, error);
 }
 
 /**
@@ -2732,7 +2752,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  return gtk_css_provider_load_internal (css_provider, file, NULL, 0, error);
+  return gtk_css_provider_load_internal (css_provider, NULL, file, NULL, 0, error);
 }
 
 /**
