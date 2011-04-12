@@ -24,19 +24,20 @@
 struct _GtkButtonPrivate
 {
   GtkAction             *action;
-  GtkPositionType        image_position;
   GtkWidget             *image;
 
   GdkDevice             *grab_keyboard;
   GdkWindow             *event_window;
 
-  gchar         *label_text;
+  gchar                 *label_text;
 
-  gfloat         xalign;
-  gfloat         yalign;
+  gfloat                 xalign;
+  gfloat                 yalign;
 
-  guint          activate_timeout;
-  guint32        grab_time;
+  guint                  activate_timeout;
+  guint32                grab_time;
+
+  GtkPositionType        image_position;
 
   guint          align_set             : 1;
   guint          button_down           : 1;
