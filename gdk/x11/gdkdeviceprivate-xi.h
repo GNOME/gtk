@@ -33,9 +33,10 @@ struct _GdkX11DeviceXI
 {
   GdkDevice parent_instance;
 
-  /*< private >*/
-  guint32 device_id;
   XDevice *xdevice;
+  gint *axis_data;
+
+  guint32 device_id;
 
   gint button_press_type;
   gint button_release_type;
@@ -46,9 +47,7 @@ struct _GdkX11DeviceXI
   gint proximity_out_type;
   gint state_notify_type;
 
-  /* minimum key code for device */
-  gint min_keycode;
-  gint *axis_data;
+  gint min_keycode; /* minimum key code for device */
   guint in_proximity : 1;
 };
 
