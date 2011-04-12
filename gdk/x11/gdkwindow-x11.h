@@ -71,11 +71,11 @@ struct _GdkWindowImplX11
   GHashTable *device_cursor;
 
   gint8 toplevel_window_type;
-  guint no_bg : 1;	        /* Set when the window background is temporarily
-				 * unset during resizing and scaling */
+  guint no_bg : 1;        /* Set when the window background is temporarily
+                           * unset during resizing and scaling */
   guint override_redirect : 1;
   guint use_synchronized_configure : 1;
-  
+
   cairo_surface_t *cairo_surface;
 
 #if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
