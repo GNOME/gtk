@@ -110,31 +110,30 @@ struct _FilterLevel
 
 struct _GtkTreeModelFilterPrivate
 {
+  GtkTreeModel *child_model;
   gpointer root;
+  GtkTreePath *virtual_root;
+
   gint stamp;
   guint child_flags;
-  GtkTreeModel *child_model;
   gint zero_ref_count;
-
-  GtkTreePath *virtual_root;
+  gint visible_column;
 
   GtkTreeModelFilterVisibleFunc visible_func;
   gpointer visible_data;
   GDestroyNotify visible_destroy;
 
-  gint modify_n_columns;
   GType *modify_types;
   GtkTreeModelFilterModifyFunc modify_func;
   gpointer modify_data;
   GDestroyNotify modify_destroy;
+  gint modify_n_columns;
 
-  gint visible_column;
+  guint visible_method_set   : 1;
+  guint modify_func_set      : 1;
 
-  gboolean visible_method_set;
-  gboolean modify_func_set;
-
-  gboolean in_row_deleted;
-  gboolean virtual_root_deleted;
+  guint in_row_deleted       : 1;
+  guint virtual_root_deleted : 1;
 
   /* signal ids */
   gulong changed_id;
