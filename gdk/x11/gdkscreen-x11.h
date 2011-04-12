@@ -38,18 +38,31 @@ typedef struct _GdkX11Monitor GdkX11Monitor;
 struct _GdkX11Screen
 {
   GdkScreen parent_instance;
-  
+
   GdkDisplay *display;
   Display *xdisplay;
   Screen *xscreen;
-  gint screen_num;
   Window xroot_window;
   GdkWindow *root_window;
+  gint screen_num;
+  /* Xinerama/RandR 1.2 */
+  gint  n_monitors;
+  GdkX11Monitor *monitors;
+  gint primary_monitor;
+
+  /* Xft resources for the display, used for default values for
+   * the Xft/ XSETTINGS
+   */
+  gint xft_hintstyle;
+  gint xft_rgba;
+  gint xft_dpi;
 
   /* Window manager */
+  GdkAtom cm_selection_atom;
   long last_wmspec_check_time;
   Window wmspec_check_window;
   char *window_manager_name;
+
   /* TRUE if wmspec_check_window has changed since last
    * fetch of _NET_SUPPORTED
    */
@@ -58,44 +71,30 @@ struct _GdkX11Screen
    * fetch of window manager name
    */
   guint need_refetch_wm_name : 1;
-  
+  guint xsettings_in_init : 1;
+  guint is_composited : 1;
+  guint xft_init : 1; /* Whether we've intialized these values yet */
+  guint xft_antialias : 1;
+  guint xft_hinting : 1;
+
   /* Visual Part */
-  GdkVisual *system_visual;
-  GdkVisual **visuals;
   gint nvisuals;
+  GdkVisual **visuals;
+  GdkVisual *system_visual;
   gint available_depths[7];
-  gint navailable_depths;
   GdkVisualType available_types[6];
-  gint navailable_types;
+  gint16 navailable_depths;
+  gint16 navailable_types;
   GHashTable *visual_hash;
   GdkVisual *rgba_visual;
-  
+
   /* X settings */
   XSettingsClient *xsettings_client;
-  guint xsettings_in_init : 1;
-  
-  /* Xinerama/RandR 1.2 */
-  gint		 n_monitors;
-  GdkX11Monitor	*monitors;
-  gint           primary_monitor;
 
   /* cache for window->translate vfunc */
   GC subwindow_gcs[32];
-
-  /* Xft resources for the display, used for default values for
-   * the Xft/ XSETTINGS
-   */
-  gboolean xft_init;		/* Whether we've intialized these values yet */
-  gboolean xft_antialias;
-  gboolean xft_hinting;
-  gint xft_hintstyle;
-  gint xft_rgba;
-  gint xft_dpi;
-
-  GdkAtom cm_selection_atom;
-  gboolean is_composited;
 };
-  
+
 struct _GdkX11ScreenClass
 {
   GdkScreenClass parent_class;

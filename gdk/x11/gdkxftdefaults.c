@@ -154,17 +154,20 @@ init_xft_settings (GdkScreen *screen)
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
   double dpi_double;
+  gboolean b;
 
   if (x11_screen->xft_init)
     return;
 
   x11_screen->xft_init = TRUE;
 
-  if (!get_boolean_default (xdisplay, "antialias", &x11_screen->xft_antialias))
-    x11_screen->xft_antialias = TRUE;
+  if (!get_boolean_default (xdisplay, "antialias", &b))
+    b = TRUE;
+  x11_screen->xft_antialias = b;
 
-  if (!get_boolean_default (xdisplay, "hinting", &x11_screen->xft_hinting))
-    x11_screen->xft_hinting = TRUE;
+  if (!get_boolean_default (xdisplay, "hinting", &b))
+    b = TRUE;
+  x11_screen->xft_hinting = b;
 
   if (!get_integer_default (xdisplay, "hintstyle", &x11_screen->xft_hintstyle))
     x11_screen->xft_hintstyle = FC_HINT_FULL;
