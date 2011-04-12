@@ -186,7 +186,7 @@ demo2 (BroadwayOutput *output)
 	  broadway_output_put_rgba (output, 0, 0, 0, 800, 600, 800*4,
 				    cairo_image_surface_get_data(old_surface));
 	}
-      broadway_output_move_surface (output, 0, 100 + i, 100 + i);
+      broadway_output_move_resize_surface (output, 0, 1, 100 + i, 100 + i, 0, 0, 0);
 
       rects[0].x = 500;
       rects[0].y = 0;

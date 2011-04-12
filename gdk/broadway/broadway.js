@@ -638,12 +638,21 @@ function cmdDeleteSurface(id)
     delete surfaces[id];
 }
 
-function cmdMoveSurface(id, x, y)
+function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 {
     var surface = surfaces[id];
-    surface.positioned = true;
-    surface.x = x;
-    surface.y = y;
+    if (has_pos) {
+	surface.positioned = true;
+	surface.x = x;
+	surface.y = y;
+    }
+    if (has_size) {
+	surface.width = w;
+	surface.height = h;
+    }
+
+    /* Flush any outstanding draw ops before (possibly) changing size */
+    flushSurface(surface);
 
     if (surface.visible) {
 	if (surface.window) {
@@ -651,51 +660,39 @@ function cmdMoveSurface(id, x, y)
 	     * However this isn't *strictly* invalid, as any WM could have done whatever it
 	     * wanted with the positioning of the window.
 	     */
-	    surface.window.moveTo(surface.x, surface.y);
+	    if (has_pos)
+		surface.window.moveTo(surface.x, surface.y);
+	    if (has_size)
+		resizeBrowserWindow(surface.window, w, h);
 	} else {
-	    var xOffset = surface.x;
-	    var yOffset = surface.y;
+	    if (has_size)
+		resizeCanvas(surface.canvas, w, h);
 
-	    var transientToplevel = getTransientToplevel(surface);
-	    if (transientToplevel) {
-		xOffset = surface.x - transientToplevel.x;
-		yOffset = surface.y - transientToplevel.y;
+	    if (has_pos) {
+		var xOffset = surface.x;
+		var yOffset = surface.y;
+
+		var transientToplevel = getTransientToplevel(surface);
+		if (transientToplevel) {
+		    xOffset = surface.x - transientToplevel.x;
+		    yOffset = surface.y - transientToplevel.y;
+		}
+
+		var element = surface.canvas;
+		if (surface.frame) {
+		    element = surface.frame;
+		    var offset = getFrameOffset(surface);
+		    xOffset -= offset.x;
+		    yOffset -= offset.y;
+		}
+
+		element.style["left"] = xOffset + "px";
+		element.style["top"] = yOffset + "px";
 	    }
-
-	    var element = surface.canvas;
-	    if (surface.frame) {
-		element = surface.frame;
-		var offset = getFrameOffset(surface);
-		xOffset -= offset.x;
-		yOffset -= offset.y;
-	    }
-
-	    element.style["left"] = xOffset + "px";
-	    element.style["top"] = yOffset + "px";
 	}
     }
 
     if (surface.window) {
-	updateBrowserWindowGeometry(surface.window, true);
-    } else {
-	sendConfigureNotify(surface);
-    }
-}
-
-function cmdResizeSurface(id, w, h)
-{
-    var surface = surfaces[id];
-
-    surface.width = w;
-    surface.height = h;
-
-    /* Flush any outstanding draw ops before changing size */
-    flushSurface(surface);
-
-    resizeCanvas(surface.canvas, w, h);
-
-    if (surface.window) {
-	resizeBrowserWindow(surface.window, w, h);
 	updateBrowserWindowGeometry(surface.window, true);
     } else {
 	sendConfigureNotify(surface);
@@ -776,21 +773,22 @@ function handleCommands(cmdObj)
 	case 'm': // Move a surface
 	    id = base64_16(cmd, i);
 	    i = i + 3;
-	    x = base64_16(cmd, i);
-	    i = i + 3;
-	    y = base64_16(cmd, i);
-	    i = i + 3;
-	    cmdMoveSurface(id, x, y);
-	    break;
-
-	case 'r': // Resize a surface
-	    id = base64_16(cmd, i);
-	    i = i + 3;
-	    w = base64_16(cmd, i);
-	    i = i + 3;
-	    h = base64_16(cmd, i);
-	    i = i + 3;
-	    cmdResizeSurface(id, w, h);
+	    var ops = cmd.charCodeAt(i++) - 48;
+	    var has_pos = ops & 1;
+	    if (has_pos) {
+		x = base64_16s(cmd, i);
+		i = i + 3;
+		y = base64_16s(cmd, i);
+		i = i + 3;
+	    }
+	    var has_size = ops & 2;
+	    if (has_size) {
+		w = base64_16(cmd, i);
+		i = i + 3;
+		h = base64_16(cmd, i);
+		i = i + 3;
+	    }
+	    cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
 	    break;
 
 	case 'i': // Put image data surface

@@ -747,38 +747,42 @@ broadway_output_destroy_surface(BroadwayOutput *output,  int id)
   broadway_output_write (output, buf, sizeof (buf));
 }
 
+
 void
-broadway_output_move_surface(BroadwayOutput *output,  int id, int x, int y)
+broadway_output_move_resize_surface (BroadwayOutput *output,
+				     int             id,
+				     gboolean        has_pos,
+				     int             x,
+				     int             y,
+				     gboolean        has_size,
+				     int             w,
+				     int             h)
 {
-  char buf[HEADER_LEN + 9];
+  char buf[HEADER_LEN+3+1+6+6];
   int p;
+  int val;
+
+  if (!has_pos && !has_size)
+    return;
 
   p = write_header (output, buf, 'm');
 
+  val = (!!has_pos) | ((!!has_size) << 1);
   append_uint16 (id, buf, &p);
-  append_uint16 (x, buf, &p);
-  append_uint16 (y, buf, &p);
+  buf[p++] = val + '0';
+  if (has_pos)
+    {
+      append_uint16 (x, buf, &p);
+      append_uint16 (y, buf, &p);
+    }
+  if (has_size)
+    {
+      append_uint16 (w, buf, &p);
+      append_uint16 (h, buf, &p);
+    }
+  assert (p <= sizeof (buf));
 
-  assert (p == sizeof (buf));
-
-  broadway_output_write (output, buf, sizeof (buf));
-}
-
-void
-broadway_output_resize_surface(BroadwayOutput *output,  int id, int w, int h)
-{
-  char buf[HEADER_LEN + 9];
-  int p;
-
-  p = write_header (output, buf, 'r');
-
-  append_uint16 (id, buf, &p);
-  append_uint16 (w, buf, &p);
-  append_uint16 (h, buf, &p);
-
-  assert (p == sizeof (buf));
-
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_write (output, buf, p);
 }
 
 void

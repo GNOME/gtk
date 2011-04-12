@@ -598,6 +598,7 @@ gdk_window_broadway_move_resize (GdkWindow *window,
   GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   GdkBroadwayDisplay *broadway_display;
   gboolean changed;
+  gboolean with_resize;
 
   changed = FALSE;
 
@@ -607,17 +608,12 @@ gdk_window_broadway_move_resize (GdkWindow *window,
       changed = TRUE;
       window->x = x;
       window->y = y;
-      if (broadway_display->output != NULL)
-	{
-	  broadway_output_move_surface (broadway_display->output,
-					impl->id, x, y);
-	  queue_dirty_flush (broadway_display);
-	}
     }
 
-
+  with_resize = FALSE;
   if (width > 0 || height > 0)
     {
+      with_resize = TRUE;
       if (width < 1)
 	width = 1;
 
@@ -633,13 +629,6 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 	  impl->dirty = TRUE;
 	  impl->last_synced = FALSE;
 
-	  if (broadway_display->output != NULL)
-	    {
-	      broadway_output_resize_surface (broadway_display->output,
-					      impl->id, width, height);
-	      queue_dirty_flush (broadway_display);
-	    }
-
 	  window->width = width;
 	  window->height = height;
 	  _gdk_broadway_window_resize_surface (window);
@@ -650,6 +639,15 @@ gdk_window_broadway_move_resize (GdkWindow *window,
     {
       GdkEvent *event;
       GList *node;
+
+      if (broadway_display->output != NULL)
+	{
+	  broadway_output_move_resize_surface (broadway_display->output,
+					       impl->id,
+					       with_move, window->x, window->y,
+					       with_resize, window->width, window->height);
+	  queue_dirty_flush (broadway_display);
+	}
 
       event = gdk_event_new (GDK_CONFIGURE);
       event->configure.window = g_object_ref (window);

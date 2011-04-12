@@ -26,14 +26,14 @@ void            broadway_output_hide_surface    (BroadwayOutput *output,
 						 int             id);
 void            broadway_output_destroy_surface (BroadwayOutput *output,
 						 int             id);
-void            broadway_output_move_surface    (BroadwayOutput *output,
-						 int             id,
-						 int             x,
-						 int             y);
-void            broadway_output_resize_surface  (BroadwayOutput *output,
-						 int             id,
-						 int             w,
-						 int             h);
+void            broadway_output_move_resize_surface (BroadwayOutput *output,
+						     int             id,
+						     gboolean        has_pos,
+						     int             x,
+						     int             y,
+						     gboolean        has_size,
+						     int             w,
+						     int             h);
 void            broadway_output_set_transient_for (BroadwayOutput *output,
 						   int             id,
 						   int             parent_id);
