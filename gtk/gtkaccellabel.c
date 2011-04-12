@@ -100,11 +100,11 @@ enum {
 
 struct _GtkAccelLabelPrivate
 {
-  guint          accel_padding;      /* should be style property? */
-  GtkWidget     *accel_widget;       /* done*/
+  GtkWidget     *accel_widget;       /* done */
   GClosure      *accel_closure;      /* has set function */
   GtkAccelGroup *accel_group;        /* set by set_accel_closure() */
   gchar         *accel_string;       /* has set function */
+  guint          accel_padding;      /* should be style property? */
   guint16        accel_string_width; /* seems to be private */
 };
 
