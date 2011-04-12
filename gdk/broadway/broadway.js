@@ -1098,21 +1098,23 @@ var lastKeyDown = 0;
 function onKeyDown (ev) {
     updateForEvent(ev);
     if (localGrab)
-	return;
+	return cancelEvent(ev);
     var keyCode = ev.keyCode;
     if (keyCode != lastKeyDown) {
 	sendInput ("k", [keyCode]);
 	lastKeyDown = keyCode;
     }
+    return cancelEvent(ev);
 }
 
 function onKeyUp (ev) {
     updateForEvent(ev);
     if (localGrab)
-	return;
+	return cancelEvent(ev);
     var keyCode = ev.keyCode;
     sendInput ("K", [keyCode]);
     lastKeyDown = 0;
+    return cancelEvent(ev);
 }
 
 function cancelEvent(ev)
