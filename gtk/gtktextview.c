@@ -133,7 +133,6 @@ struct _GtkTextViewPrivate
   GdkDevice *dnd_device;
 
   gulong selection_drag_handler;
-  guint scroll_timeout;
 
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
@@ -176,11 +175,15 @@ struct _GtkTextViewPrivate
   GtkTextMark *first_para_mark; /* Mark at the beginning of the first onscreen paragraph */
   gint first_para_pixels;       /* Offset of top of screen in the first onscreen paragraph */
 
-  GtkTextMark *dnd_mark;
   guint blink_timeout;
+  guint scroll_timeout;
 
   guint first_validate_idle;        /* Idle to revalidate onscreen portion, runs before resize */
   guint incremental_validate_idle;  /* Idle to revalidate offscreen portions, runs after redraw */
+
+  gint pending_place_cursor_button;
+
+  GtkTextMark *dnd_mark;
 
   GtkIMContext *im_context;
   GtkWidget *popup_menu;
@@ -191,8 +194,6 @@ struct _GtkTextViewPrivate
   GSList *children;
 
   GtkTextPendingScroll *pending_scroll;
-
-  gint pending_place_cursor_button;
 
   /* Default style settings */
   gint pixels_above_lines;
@@ -209,7 +210,7 @@ struct _GtkTextViewPrivate
   guint overwrite_mode : 1;
   guint cursor_visible : 1;
 
-  /* if we have reset the IM since the last character entered */  
+  /* if we have reset the IM since the last character entered */
   guint need_im_reset : 1;
 
   guint accepts_tab : 1;
