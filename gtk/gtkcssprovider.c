@@ -2539,11 +2539,6 @@ parse_rule (GtkCssProvider  *css_provider,
               resolve_binding_sets (value_str, val);
               g_hash_table_insert (priv->cur_properties, prop, val);
             }
-          else if (pspec->value_type == G_TYPE_STRING)
-            {
-              g_value_set_string (val, value_str);
-              g_hash_table_insert (priv->cur_properties, prop, val);
-            }
           else if (parse_func)
             {
               GError *error = NULL;
