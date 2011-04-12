@@ -29,6 +29,33 @@
 #include "gtkorientable.h"
 #include "gtkintl.h"
 
+
+/**
+ * SECTION:gtkhbbox
+ * @Short_description: A container for arranging buttons horizontally
+ * @Title: GtkHButtonBox
+ * @See_also: #GtkBox, #GtkButtonBox, #GtkVButtonBox
+ *
+ * A button box should be used to provide a consistent layout of buttons
+ * throughout your application. The layout/spacing can be altered by the
+ * programmer, or if desired, by the user to alter the 'feel' of a
+ * program to a small degree.
+ *
+ * A #GtkHButtonBox is created with gtk_hbutton_box_new(). Buttons are
+ * packed into a button box the same way widgets are added to any other
+ * container, using gtk_container_add(). You can also use
+ * gtk_box_pack_start() or gtk_box_pack_end(), but for button boxes both
+ * these functions work just like gtk_container_add(), ie., they pack the
+ * button in a way that depends on the current layout style and on
+ * whether the button has had gtk_button_box_set_child_secondary() called
+ * on it.
+ *
+ * The spacing between buttons can be set with gtk_box_set_spacing(). The
+ * arrangement and layout of the buttons can be changed with
+ * gtk_button_box_set_layout().
+ */
+
+
 G_DEFINE_TYPE (GtkHButtonBox, gtk_hbutton_box, GTK_TYPE_BUTTON_BOX)
 
 static void
@@ -43,6 +70,13 @@ gtk_hbutton_box_init (GtkHButtonBox *hbutton_box)
                                   GTK_ORIENTATION_HORIZONTAL);
 }
 
+/**
+ * gtk_hbutton_box_new:
+ *
+ * Creates a new horizontal button box.
+ *
+ * Returns: a new button box #GtkWidget.
+ */
 GtkWidget *
 gtk_hbutton_box_new (void)
 {
