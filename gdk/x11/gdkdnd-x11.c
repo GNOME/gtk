@@ -84,6 +84,9 @@ struct _GdkX11DragContext
   GdkDragAction old_action;    /* The last action we sent to the source */
   GdkDragAction old_actions;   /* The last actions we sent to the source */
   GdkDragAction xdnd_actions;  /* What is currently set in XdndActionList */
+  guint version;               /* Xdnd protocol version */
+
+  GSList *window_caches;
 
   Window dest_xid;             /* The last window we looked up */
   Window drop_xid;             /* The (non-proxied) window that is receiving drops */
@@ -92,11 +95,7 @@ struct _GdkX11DragContext
   guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
   guint motif_targets_set : 1; /* Whether we've already set motif initiator info */
   guint drag_status       : 4; /* current status of drag */
-
   guint drop_failed       : 1; /* Whether the drop was unsuccessful */
-  guint version;               /* Xdnd protocol version */
-
-  GSList *window_caches;
 };
 
 struct _GdkX11DragContextClass
