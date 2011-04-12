@@ -126,16 +126,16 @@ struct _GtkCellViewPrivate
   GtkCellArea         *area;
   GtkCellAreaContext  *context;
 
-  GtkOrientation       orientation;
-
   GdkRGBA              background;
-  gboolean             background_set;
 
   gulong               size_changed_id;
   gulong               row_changed_id;
 
-  guint32              draw_sensitive : 1;
-  guint32              fit_model      : 1;
+  GtkOrientation       orientation;
+
+  guint                background_set : 1;
+  guint                draw_sensitive : 1;
+  guint                fit_model      : 1;
 };
 
 static GtkBuildableIface *parent_buildable_iface;
