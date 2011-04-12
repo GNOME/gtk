@@ -50,14 +50,14 @@ typedef struct
   GdkWindow *native_window;
   gulong serial_start;
   gulong serial_end; /* exclusive, i.e. not active on serial_end */
-  gboolean owner_events;
   guint event_mask;
-  gboolean implicit;
   guint32 time;
   GdkGrabOwnership ownership;
 
   guint activated : 1;
   guint implicit_ungrab : 1;
+  guint owner_events : 1;
+  guint implicit : 1;
 } GdkDeviceGrabInfo;
 
 /* Tracks information about which window and position the pointer last was in.
@@ -103,15 +103,14 @@ struct _GdkDisplay
   guint closed             : 1;  /* Whether this display has been closed */
   guint ignore_core_events : 1;  /* Don't send core motion and button event */
 
-  guint double_click_distance;   /* Maximum distance between clicks in pixels */
-
   GHashTable *device_grabs;
   GHashTable *motion_hint_info;
+  GdkDeviceManager *device_manager;
 
   GHashTable *pointers_info;  /* GdkPointerWindowInfo for each device */
   guint32 last_event_time;    /* Last reported event time from server */
 
-  GdkDeviceManager *device_manager;
+  guint double_click_distance;   /* Maximum distance between clicks in pixels */
 };
 
 struct _GdkDisplayClass
