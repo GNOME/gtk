@@ -33,7 +33,12 @@ struct _GtkMenuItemPrivate
 
   guint16 toggle_size;
   guint16 accelerator_width;
+
+  guint timer;
+
   gchar  *accel_path;
+
+  GtkAction *action;
 
   guint show_submenu_indicator : 1;
   guint submenu_placement      : 1;
@@ -43,10 +48,6 @@ struct _GtkMenuItemPrivate
   guint from_menubar           : 1;
   guint use_action_appearance  : 1;
   guint reserve_indicator      : 1;
-
-  guint timer;
-
-  GtkAction *action;
 };
 
 void     _gtk_menu_item_refresh_accel_path   (GtkMenuItem   *menu_item,
