@@ -235,9 +235,14 @@ function ensureSurfaceInDocument(surface, doc)
     }
 }
 
+function sendConfigureNotify(surface)
+{
+    sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
+}
+
 var windowGeometryTimeout = null;
 
-function updateBrowserWindowGeometry(win) {
+function updateBrowserWindowGeometry(win, alwaysSendConfigure) {
     if (win.closed)
 	return;
 
@@ -259,7 +264,7 @@ function updateBrowserWindowGeometry(win) {
 	alert("No implementation to get window position");
     }
 
-    if (x != surface.x || y != surface.y ||
+    if (alwaysSendConfigure || x != surface.x || y != surface.y ||
        innerW != surface.width || innerH != surface.height) {
 	var oldX = surface.x;
 	var oldY = surface.y;
@@ -269,14 +274,14 @@ function updateBrowserWindowGeometry(win) {
 	    resizeCanvas(surface.canvas, innerW, innerH);
 	surface.width = innerW;
 	surface.height = innerH;
-	sendInput ("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
+	sendConfigureNotify(surface);
 	for (id in surfaces) {
 	    var childSurface = surfaces[id];
 	    var transientToplevel = getTransientToplevel(childSurface);
 	    if (transientToplevel != null && transientToplevel == surface) {
 		childSurface.x += surface.x - oldX;
 		childSurface.y += surface.y - oldY;
-		sendInput ("w", [childSurface.id, childSurface.x, childSurface.y, childSurface.width, childSurface.height]);
+		sendConfigureNotify(childSurface);
 	    }
 	}
     }
@@ -298,9 +303,12 @@ function browserWindowClosed(win) {
 function registerWindow(win)
 {
     toplevelWindows.push(win);
-    win.onresize = function(ev) { updateBrowserWindowGeometry(ev.target); };
+    win.onresize = function(ev) { updateBrowserWindowGeometry(ev.target, false); };
     if (!windowGeometryTimeout)
-	windowGeometryTimeout = setInterval(function () { toplevelWindows.forEach(updateBrowserWindowGeometry); }, 2000);
+	windowGeometryTimeout = setInterval(function () {
+						for (var i = 0; i < toplevelWindows.length; i++)
+						    toplevelWindows[i].updateBrowserWindowGeometry(toplevelWindows[i], false);
+					    }, 2000);
     win.onunload = function(ev) { browserWindowClosed(ev.target.defaultView); };
 }
 
@@ -414,7 +422,6 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 	surface.x = 100 + positionIndex * 10;
 	surface.y = 100 + positionIndex * 10;
 	positionIndex = (positionIndex + 1) % 20;
-	sendInput ("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
     }
 
     surface.toplevelElement = toplevelElement;
@@ -431,6 +438,8 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 
     surfaces[id] = surface;
     stackingOrder.push(surface);
+
+    sendConfigureNotify(surface);
 }
 
 function cmdShowSurface(id)
@@ -489,7 +498,7 @@ function cmdShowSurface(id)
     restackWindows();
 
     if (surface.window)
-	updateBrowserWindowGeometry(surface.window);
+	updateBrowserWindowGeometry(surface.window, false);
 }
 
 function cmdHideSurface(id)
@@ -609,6 +618,12 @@ function cmdMoveSurface(id, x, y)
 	    element.style["top"] = yOffset + "px";
 	}
     }
+
+    if (surface.window) {
+	updateBrowserWindowGeometry(surface.window, true);
+    } else {
+	sendConfigureNotify(surface);
+    }
 }
 
 function cmdResizeSurface(id, w, h)
@@ -625,6 +640,9 @@ function cmdResizeSurface(id, w, h)
 
     if (surface.window) {
 	resizeBrowserWindow(surface.window, w, h);
+	updateBrowserWindowGeometry(surface.window, true);
+    } else {
+	sendConfigureNotify(surface);
     }
 }
 
@@ -880,7 +898,7 @@ function updateForEvent(ev) {
     lastTimeStamp = ev.timeStamp;
     if (ev.target.surface && ev.target.surface.window) {
 	var win = ev.target.surface.window;
-	updateBrowserWindowGeometry(win);
+	updateBrowserWindowGeometry(win, false);
     }
 }
 
@@ -895,7 +913,7 @@ function onMouseMove (ev) {
 	var offset = getFrameOffset(surface);
 	localGrab.frame.style["left"] = (surface.x - offset.x) + "px";
 	localGrab.frame.style["top"] = (surface.y - offset.y) + "px";
-	sendInput ("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
+	sendConfigureNotify(surface);
 	localGrab.lastX = ev.pageX;
 	localGrab.lastY = ev.pageY;
 	return;
