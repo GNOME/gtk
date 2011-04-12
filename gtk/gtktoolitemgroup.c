@@ -81,12 +81,10 @@ struct _GtkToolItemGroupPrivate
 
   GList             *children;
 
-  gboolean           animation;
   gint64             animation_start;
   GSource           *animation_timeout;
   gint               expander_size;
   gint               header_spacing;
-  PangoEllipsizeMode ellipsize;
 
   gulong             focus_set_id;
   GtkWidget         *toplevel;
@@ -94,6 +92,9 @@ struct _GtkToolItemGroupPrivate
   GtkSettings       *settings;
   gulong             settings_connection;
 
+  PangoEllipsizeMode ellipsize;
+
+  guint              animation : 1;
   guint              collapsed : 1;
 };
 
