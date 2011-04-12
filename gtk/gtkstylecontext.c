@@ -483,12 +483,12 @@ struct _GtkStyleContextPrivate
   GSList *animation_regions;
   GSList *animations;
 
-  guint animations_invalidated : 1;
-  guint invalidating_context : 1;
-
   GtkThemingEngine *theming_engine;
 
   GtkTextDirection direction;
+
+  guint animations_invalidated : 1;
+  guint invalidating_context : 1;
 };
 
 enum {
