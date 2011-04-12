@@ -1204,7 +1204,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             break;
           }
 
-        set_user_time (event);
+        if (ev->evtype == XI_ButtonPress)
+	  set_user_time (event);
 
         break;
       }
