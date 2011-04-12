@@ -33,7 +33,6 @@
 
 struct _GtkListStorePrivate
 {
-  GtkSortType order;
   GtkTreeIterCompareFunc default_sort_func;
 
   GDestroyNotify default_sort_destroy;
@@ -44,6 +43,8 @@ struct _GtkListStorePrivate
   gint n_columns;
   gint sort_column_id;
   gint length;
+
+  GtkSortType order;
 
   guint columns_dirty : 1;
 
