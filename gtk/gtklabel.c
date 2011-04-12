@@ -81,30 +81,29 @@ struct _GtkLabelPrivate
   PangoAttrList *effective_attrs;
   PangoLayout   *layout;
 
-  gboolean mnemonics_visible;
-
   gchar   *label;
   gchar   *text;
 
-  guint    jtype            : 2;
-  guint    wrap             : 1;
-  guint    use_underline    : 1;
-  guint    use_markup       : 1;
-  guint    ellipsize        : 3;
-  guint    single_line_mode : 1;
-  guint    have_transform   : 1;
-  guint    in_click         : 1;
-  guint    wrap_mode        : 3;
-  guint    pattern_set      : 1;
-  guint    track_links      : 1;
+  gdouble  angle;
+
+  guint     mnemonics_visible : 1;
+  guint    jtype              : 2;
+  guint    wrap               : 1;
+  guint    use_underline      : 1;
+  guint    use_markup         : 1;
+  guint    ellipsize          : 3;
+  guint    single_line_mode   : 1;
+  guint    have_transform     : 1;
+  guint    in_click           : 1;
+  guint    wrap_mode          : 3;
+  guint    pattern_set        : 1;
+  guint    track_links        : 1;
 
   guint    mnemonic_keyval;
 
   gint     wrap_width;
   gint     width_chars;
   gint     max_width_chars;
-
-  gdouble  angle;
 };
 
 /* Notes about the handling of links:
