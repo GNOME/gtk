@@ -109,19 +109,19 @@ struct _GtkIconViewPrivate
 
   GtkSelectionMode selection_mode;
 
+  guint layout_idle_id;
+
   GdkWindow *bin_window;
 
   GList *children;
 
   GtkTreeModel *model;
-  
+
   GList *items;
-  
+
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 
-  guint layout_idle_id;
-  
   gint rubberband_x1, rubberband_y1;
   gint rubberband_x2, rubberband_y2;
   GdkDevice *rubberband_device;
@@ -148,11 +148,10 @@ struct _GtkIconViewPrivate
   gint text_column;
   gint markup_column;
   gint pixbuf_column;
+  gint tooltip_column;
 
   GtkCellRenderer *pixbuf_cell;
   GtkCellRenderer *text_cell;
-
-  gint tooltip_column;
 
   /* Drag-and-drop. */
   GdkModifierType start_button_mask;
