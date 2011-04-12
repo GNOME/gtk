@@ -145,7 +145,6 @@ struct _GtkImagePrivate
     GtkImageGIconData      gicon;
   } data;
 
-  gboolean              was_symbolic;
   gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
   gint                  last_rendered_state;  /* a GtkStateFlags, with -1 meaning an invalid state,
                                                * only used with GTK_IMAGE_GICON, GTK_IMAGE_ICON_NAME */
@@ -153,7 +152,8 @@ struct _GtkImagePrivate
   gint                  required_width;
   gint                  required_height;
   guint                 need_calc_size : 1;
-  guint                 use_fallback : 1;
+  guint                 use_fallback   : 1;
+  guint                 was_symbolic   : 1;
 };
 
 
