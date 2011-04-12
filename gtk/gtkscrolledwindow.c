@@ -121,20 +121,19 @@
 
 struct _GtkScrolledWindowPrivate
 {
-  GtkCornerType  real_window_placement;
   GtkWidget     *hscrollbar;
   GtkWidget     *vscrollbar;
 
-  gboolean window_placement_set;
-
+  GtkCornerType  real_window_placement;
   guint16  shadow_type;
 
+  guint    window_placement_set   : 1;
   guint    hscrollbar_policy      : 2;
   guint    vscrollbar_policy      : 2;
   guint    hscrollbar_visible     : 1;
   guint    vscrollbar_visible     : 1;
   guint    window_placement       : 2;
-  guint    focus_out              : 1;   /* Flag used by ::move-focus-out implementation */
+  guint    focus_out              : 1; /* Flag used by ::move-focus-out implementation */
 
   gint     min_content_width;
   gint     min_content_height;
