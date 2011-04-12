@@ -367,45 +367,43 @@ struct _GtkWidgetPrivate
   guint have_size_groups      : 1;
 
   /* The widget's name. If the widget does not have a name
-   *  (the name is NULL), then its name (as returned by
-   *  "gtk_widget_get_name") is its class's name.
+   * (the name is NULL), then its name (as returned by
+   * "gtk_widget_get_name") is its class's name.
    * Among other things, the widget name is used to determine
-   *  the style to use for a widget.
+   * the style to use for a widget.
    */
   gchar *name;
 
   /* The style for the widget. The style contains the
-   *  colors the widget should be drawn in for each state
-   *  along with graphics contexts used to draw with and
-   *  the font to use for text.
+   * colors the widget should be drawn in for each state
+   * along with graphics contexts used to draw with and
+   * the font to use for text.
    */
   GtkStyle *style;
   GtkStyleContext *context;
 
-  /* The widget's allocated size.
-   */
+  /* Widget's path for styling */
+  GtkWidgetPath *path;
+
+  /* The widget's allocated size */
   GtkAllocation allocation;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
   /* The widget's window or its parent window if it does
-   *  not have a window. (Which will be indicated by the
-   *  GTK_NO_WINDOW flag being set).
+   * not have a window. (Which will be indicated by the
+   * GTK_NO_WINDOW flag being set).
    */
   GdkWindow *window;
 
-  /* The widget's parent.
-   */
+  /* The widget's parent */
   GtkWidget *parent;
 
 #ifdef G_ENABLE_DEBUG
   /* Number of gtk_widget_push_verify_invariants () */
   guint verifying_invariants_count;
 #endif /* G_ENABLE_DEBUG */
-
-  /* Widget's path for styling */
-  GtkWidgetPath *path;
 };
 
 enum {
