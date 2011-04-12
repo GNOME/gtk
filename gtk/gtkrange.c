@@ -79,12 +79,10 @@ struct _GtkRangePrivate
   gint  mouse_x;
   gint  mouse_y;
   MouseLocation      grab_location;   /* "grabbed" mouse location, OUTSIDE for no grab */
-  guint              grab_button : 8; /* 0 if none */
 
   GtkRangeStepTimer *timer;
 
   GtkAdjustment     *adjustment;
-  GtkOrientation     orientation;
   GtkSensitivityType lower_sensitivity;
   GtkSensitivityType upper_sensitivity;
 
@@ -102,7 +100,7 @@ struct _GtkRangePrivate
   GQuark             slider_detail_quark;
   GQuark             stepper_detail_quark[4];
 
-  gboolean recalc_marks;
+  GtkOrientation     orientation;
 
   gdouble  fill_level;
   gdouble *marks;
@@ -129,6 +127,7 @@ struct _GtkRangePrivate
   guint flippable              : 1;
   guint inverted               : 1;
   guint need_recalc            : 1;
+  guint recalc_marks           : 1;
   guint slider_size_fixed      : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
 
@@ -139,6 +138,8 @@ struct _GtkRangePrivate
   /* Fill level */
   guint show_fill_level        : 1;
   guint restrict_to_fill_level : 1;
+
+  guint grab_button            : 8; /* 0 if none */
 };
 
 
