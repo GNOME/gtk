@@ -34,6 +34,43 @@
 #include "gtkbuildable.h"
 
 
+/**
+ * SECTION:gtkframe
+ * @Short_description: A bin with a decorative frame and optional label
+ * @Title: GtkFrame
+ *
+ * The frame widget is a Bin that surrounds its child
+ * with a decorative frame and an optional label.
+ * If present, the label is drawn in a gap in the
+ * top side of the frame. The position of the
+ * label can be controlled with gtk_frame_set_label_align().
+ *
+ * <refsect2 id="GtkFrame-BUILDER-UI">
+ * <title>GtkFrame as GtkBuildable</title>
+ * <para>
+ * The GtkFrame implementation of the GtkBuildable interface
+ * supports placing a child in the label position by specifying
+ * "label" as the "type" attribute of a &lt;child&gt; element.
+ * A normal content child can be specified without specifying
+ * a &lt;child&gt; type attribute.
+ * </para>
+ * <example>
+ * <title>A UI definition fragment with GtkFrame</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkFrame">
+ *   <child type="label">
+ *     <object class="GtkLabel" id="frame-label"/>
+ *   </child>
+ *   <child>
+ *     <object class="GtkEntry" id="frame-content"/>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
+
+
 #define LABEL_PAD 1
 #define LABEL_SIDE_PAD 2
 

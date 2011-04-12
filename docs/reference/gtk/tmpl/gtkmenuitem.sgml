@@ -324,3 +324,21 @@ Emits the "toggle_size_allocate" signal on the given item.
 @allocation: the allocation to use as signal data.
 
 
+<!-- ##### FUNCTION gtk_menu_item_get_reserve_indicator ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_reserve_indicator ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@reserve: 
+
+
