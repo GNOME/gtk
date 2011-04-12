@@ -111,10 +111,9 @@ enum {
 
 struct _GtkBoxPrivate
 {
-  GtkOrientation  orientation;
-
   GList          *children;
 
+  GtkOrientation  orientation;
   gint16          spacing;
 
   guint           default_expand : 1;
