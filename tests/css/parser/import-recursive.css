@@ -1,0 +1,5 @@
+@import url("import-recursive.css");
+
+a {
+  string-property: "Make sure this is parsed"
+}

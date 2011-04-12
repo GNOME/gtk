@@ -40,6 +40,9 @@ EXTRA_DIST += \
 	does-not-exist.css \
 	does-not-exist.errors \
 	does-not-exist.ref.css \
+	import-recursive.css \
+	import-recursive.errors \
+	import-recursive.ref.css \
 	integer.css \
 	integer.errors \
 	integer.ref.css \
