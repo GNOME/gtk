@@ -143,14 +143,14 @@ struct _GtkTextBTreeNode {
   int level;                            /* Level of this node in the B-tree.
                                          * 0 refers to the bottom of the tree
                                          * (children are lines, not nodes). */
+  int num_lines;                        /* Total number of lines (leaves) in
+                                         * the subtree rooted here. */
+  int num_chars;                        /* Number of chars below here */
+  int num_children;                     /* Number of children of this node. */
   union {                               /* First in linked list of children. */
     struct _GtkTextBTreeNode *node;         /* Used if level > 0. */
     GtkTextLine *line;         /* Used if level == 0. */
   } children;
-  int num_children;                     /* Number of children of this node. */
-  int num_lines;                        /* Total number of lines (leaves) in
-                                         * the subtree rooted here. */
-  int num_chars;                        /* Number of chars below here */
 
   NodeData *node_data;
 };
