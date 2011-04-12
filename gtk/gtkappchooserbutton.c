@@ -89,10 +89,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkAppChooserButton, gtk_app_chooser_button, GTK_TYPE_C
 struct _GtkAppChooserButtonPrivate {
   GtkListStore *store;
 
-  int last_active;
   gchar *content_type;
-  gboolean show_dialog_item;
   gchar *heading;
+  gint last_active;
+  gboolean show_dialog_item;
 
   GHashTable *custom_item_names;
 };
