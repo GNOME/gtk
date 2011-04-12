@@ -654,6 +654,9 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
     /* Flush any outstanding draw ops before (possibly) changing size */
     flushSurface(surface);
 
+    if (has_size)
+	resizeCanvas(surface.canvas, w, h);
+
     if (surface.visible) {
 	if (surface.window) {
 	    /* TODO: This moves the outer frame position, we really want the inner position.
@@ -665,9 +668,6 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 	    if (has_size)
 		resizeBrowserWindow(surface.window, w, h);
 	} else {
-	    if (has_size)
-		resizeCanvas(surface.canvas, w, h);
-
 	    if (has_pos) {
 		var xOffset = surface.x;
 		var yOffset = surface.y;
