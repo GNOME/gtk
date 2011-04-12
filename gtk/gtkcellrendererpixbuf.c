@@ -88,13 +88,13 @@ enum {
 
 struct _GtkCellRendererPixbufPrivate
 {
-  GtkIconSize stock_size;
-
   GdkPixbuf *pixbuf;
   GdkPixbuf *pixbuf_expander_open;
   GdkPixbuf *pixbuf_expander_closed;
 
   GIcon *gicon;
+
+  GtkIconSize stock_size;
 
   gboolean follow_state;
 
