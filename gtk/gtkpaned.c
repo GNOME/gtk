@@ -91,13 +91,13 @@
 
 struct _GtkPanedPrivate
 {
-  GtkOrientation  orientation;
   GtkPaned       *first_paned;
   GtkWidget      *child1;
   GtkWidget      *child2;
   GtkWidget      *last_child1_focus;
   GtkWidget      *last_child2_focus;
   GtkWidget      *saved_focus;
+  GtkOrientation  orientation;
 
   GdkCursorType  cursor_type;
   GdkDevice     *grab_device;
@@ -111,6 +111,8 @@ struct _GtkPanedPrivate
   gint          min_position;
   gint          original_position;
 
+  guint32       grab_time;
+
   guint         handle_prelit : 1;
   guint         in_drag       : 1;
   guint         in_recursion  : 1;
@@ -119,8 +121,6 @@ struct _GtkPanedPrivate
   guint         child2_resize : 1;
   guint         child2_shrink : 1;
   guint         position_set  : 1;
-
-  guint32       grab_time;
 };
 
 enum {
