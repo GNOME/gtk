@@ -69,13 +69,13 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 struct _GtkEntryBufferPrivate
 {
-  gint  max_length;
-
   /* Only valid if this class is not derived */
   gchar *normal_text;
   gsize  normal_text_size;
   gsize  normal_text_bytes;
   guint  normal_text_chars;
+
+  gint   max_length;
 };
 
 G_DEFINE_TYPE (GtkEntryBuffer, gtk_entry_buffer, G_TYPE_OBJECT);
