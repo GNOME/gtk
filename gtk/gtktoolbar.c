@@ -105,11 +105,12 @@ typedef struct _ToolbarContent ToolbarContent;
 
 struct _GtkToolbarPrivate
 {
-  GtkIconSize      icon_size;
   GtkMenu         *menu;
-  GtkOrientation   orientation;
   GtkSettings     *settings;
+
+  GtkIconSize      icon_size;
   GtkToolbarStyle  style;
+
   GtkToolItem     *highlight_tool_item;
   GtkWidget       *arrow;
   GtkWidget       *arrow_button;
@@ -121,13 +122,15 @@ struct _GtkToolbarPrivate
 
   GTimer          *timer;
 
+  gulong           settings_connection;
+
   gint             idle_id;
   gint             button_maxw;         /* maximum width of homogeneous children */
   gint             button_maxh;         /* maximum height of homogeneous children */
   gint             max_homogeneous_pixels;
   gint             num_children;
 
-  gulong           settings_connection;
+  GtkOrientation   orientation;
 
   guint            animation : 1;
   guint            icon_size_set : 1;
