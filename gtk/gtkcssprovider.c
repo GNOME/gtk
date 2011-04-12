@@ -1238,6 +1238,23 @@ gtk_css_scanner_get_base_url (GScanner *scanner)
   return priv->base;
 }
 
+static gboolean
+gtk_css_scanner_would_recurse (GScanner *scanner,
+                               GFile    *file)
+{
+  while (scanner)
+    {
+      GtkCssScannerPrivate *priv = scanner->user_data;
+
+      if (priv->file && g_file_equal (priv->file, file))
+        return TRUE;
+
+      scanner = priv->parent;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_css_provider_init (GtkCssProvider *css_provider)
 {
@@ -2282,12 +2299,25 @@ parse_rule (GtkCssProvider  *css_provider,
               return ';';
             }
 
-          /* FIXME: Avoid recursive importing */
-          gtk_css_provider_load_internal (css_provider,
-                                          scanner,
-                                          actual,
-                                          NULL, 0,
-                                          NULL);
+          if (gtk_css_scanner_would_recurse (scanner, actual))
+            {
+              char *path = g_file_get_path (actual);
+              gtk_css_provider_error (css_provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_IMPORT,
+                                      "Loading '%s' would recurse",
+                                      path);
+              g_free (path);
+            }
+          else
+            {
+              gtk_css_provider_load_internal (css_provider,
+                                              scanner,
+                                              actual,
+                                              NULL, 0,
+                                              NULL);
+            }
 
           g_object_unref (actual);
 
