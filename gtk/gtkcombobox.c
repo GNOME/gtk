@@ -2418,13 +2418,13 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gint width;
           guint border_width;
 
+          gtk_widget_size_allocate (priv->button, allocation);
+
           /* menu mode */
           allocation->x += padding.left;
           allocation->y += padding.top;
           allocation->width -= padding.left + padding.right;
           allocation->height -= padding.top + padding.bottom;
-
-          gtk_widget_size_allocate (priv->button, allocation);
 
           /* set some things ready */
           border_width = gtk_container_get_border_width (GTK_CONTAINER (priv->button));
