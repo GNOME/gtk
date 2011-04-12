@@ -301,6 +301,10 @@ AC_ARG_ENABLE(broadway-backend,
               [AC_HELP_STRING([--enable-broadway-backend],
                               [enable the broadway (HTML5) gdk backend])],
 			      [backend_set=yes])
+AC_ARG_ENABLE(wayland-backend,
+              [AC_HELP_STRING([--enable-wayland-backend],
+                              [enable the wayland gdk backend])],
+			      [backend_set=yes])
 
 if test -z "$backend_set"; then
   if test "$platform_win32" = yes; then
@@ -356,6 +360,7 @@ else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
 
+
 if test "x$enable_broadway_backend" == xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
@@ -365,6 +370,19 @@ if test "x$enable_broadway_backend" == xyes; then
   AM_CONDITIONAL(USE_BROADWAY, true)
 else
   AM_CONDITIONAL(USE_BROADWAY, false)
+fi
+
+if test "x$enable_wayland_backend" == "xyes"; then
+  # Wayland uses cairo-gl
+  cairo_backends="$cairo_backends cairo-gl"
+  GDK_BACKENDS="$GDK_BACKENDS wayland"
+  GIO_PACKAGE=gio-unix-2.0
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_WAYLAND"
+  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-egl"
+  AM_CONDITIONAL(USE_WAYLAND, true)
+else
+  AM_CONDITIONAL(USE_WAYLAND, false)
 fi
 
 # strip leading space
@@ -1223,7 +1241,7 @@ fi
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-GDK_PACKAGES="$PANGO_PACKAGES $GIO_PACKAGE $X_PACKAGES gdk-pixbuf-2.0 $cairo_backends cairo-gobject"
+GDK_PACKAGES="$PANGO_PACKAGES $GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES gdk-pixbuf-2.0 $cairo_backends cairo-gobject"
 
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES`"
 GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
@@ -1651,6 +1669,7 @@ gdk/win32/Makefile
 gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
+gdk/wayland/Makefile
 gdk/tests/Makefile
 gtk/Makefile
 gtk/makefile.msc

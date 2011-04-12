@@ -1707,7 +1707,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
       gdk_window = gtk_widget_get_window (widget);
 
 #ifdef GDK_WINDOWING_X11
-      if (timestamp != GDK_CURRENT_TIME)
+      if (timestamp != GDK_CURRENT_TIME && GDK_IS_X11_WINDOW(gdk_window))
 	gdk_x11_window_set_user_time (gdk_window, timestamp);
 #endif
 
@@ -4629,7 +4629,8 @@ gtk_window_show (GtkWidget *widget)
   /* Try to make sure that we have some focused widget
    */
 #ifdef GDK_WINDOWING_X11
-  is_plug = GTK_IS_PLUG (window);
+  is_plug = GDK_IS_X11_WINDOW (gtk_widget_get_window (widget)) &&
+    GTK_IS_PLUG (window);
 #else
   is_plug = FALSE;
 #endif
@@ -7377,13 +7378,16 @@ gtk_window_present_with_time (GtkWindow *window,
       if (timestamp == GDK_CURRENT_TIME)
         {
 #ifdef GDK_WINDOWING_X11
-          GdkDisplay *display;
+	  if (GDK_IS_X11_WINDOW(gdk_window))
+	    {
+	      GdkDisplay *display;
 
-          display = gtk_widget_get_display (GTK_WIDGET (window));
-          timestamp = gdk_x11_display_get_user_time (display);
-#else
-          timestamp = gtk_get_current_event_time ();
+	      display = gtk_widget_get_display (GTK_WIDGET (window));
+	      timestamp = gdk_x11_display_get_user_time (display);
+	    }
+	  else
 #endif
+	    timestamp = gtk_get_current_event_time ();
         }
 
       gdk_window_focus (gdk_window, timestamp);

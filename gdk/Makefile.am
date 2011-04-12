@@ -11,7 +11,7 @@ INTROSPECTION_COMPILER_ARGS = \
 
 SUBDIRS = $(GDK_BACKENDS) . tests
 
-DIST_SUBDIRS = win32 x11 quartz broadway tests
+DIST_SUBDIRS = win32 x11 quartz broadway wayland tests
 
 CLEANFILES =
 
@@ -176,6 +176,10 @@ endif # USE_WIN32
 if USE_BROADWAY
 libgdk_3_la_LIBADD += broadway/libgdk-broadway.la
 endif # USE_BROADWAY
+
+if USE_WAYLAND
+libgdk_3_la_LIBADD += wayland/libgdk-wayland.la
+endif
 
 if HAVE_INTROSPECTION
 

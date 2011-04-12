@@ -1,0 +1,40 @@
+## Process this file with automake to produce Makefile.in
+include $(top_srcdir)/Makefile.decl
+
+libgdkincludedir = $(includedir)/gtk-3.0/gdk
+
+INCLUDES =					\
+	-DG_LOG_DOMAIN=\"Gdk\"			\
+	-DGDK_COMPILATION			\
+	-I$(top_srcdir)				\
+	-I$(top_srcdir)/gdk			\
+	-I$(top_builddir)/gdk			\
+	$(GTK_DEBUG_FLAGS)			\
+	$(GDK_DEP_CFLAGS)
+
+LDADDS = $(GDK_DEP_LIBS)
+
+noinst_LTLIBRARIES =				\
+	libgdk-wayland.la
+
+libgdk_wayland_la_SOURCES =			\
+	gdkapplaunchcontext-wayland.c		\
+	gdkcursor-wayland.c			\
+	gdkdevice-wayland.c			\
+	gdkdisplay-wayland.c			\
+	gdkdisplay-wayland.h			\
+	gdkdisplaymanager-wayland.c		\
+	gdkdnd-wayland.c			\
+	gdkeventsource.c			\
+	gdkkeys-wayland.c			\
+	gdkscreen-wayland.c			\
+	gdkscreen-wayland.h			\
+	gdkselection-wayland.c			\
+	gdkwindow-wayland.c			\
+	gdkwayland.h				\
+	gdkprivate-wayland.h
+
+libgdkinclude_HEADERS =				\
+	gdkwayland.h
+
+-include $(top_srcdir)/git.mk
