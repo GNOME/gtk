@@ -169,8 +169,8 @@ struct _GdkWindow
 {
   GObject parent_instance;
 
-  GdkWindowImpl *impl; /* window-system-specific delegate object */  
-  
+  GdkWindowImpl *impl; /* window-system-specific delegate object */
+
   GdkWindow *parent;
   GdkVisual *visual;
 
@@ -178,53 +178,39 @@ struct _GdkWindow
 
   gint x;
   gint y;
-  
+
+  GdkEventMask event_mask;
   gint extension_events;
 
   GList *filters;
   GList *children;
 
   cairo_pattern_t *background;
-  
+
   GSList *paint_stack;
-  
+
   cairo_region_t *update_area;
   guint update_freeze_count;
-  
+
   guint8 window_type;
   guint8 depth;
   guint8 resize_count;
 
+  gint8 toplevel_window_type;
+
   GdkWindowState state;
-  
+
   guint guffaw_gravity : 1;
   guint input_only : 1;
   guint modal_hint : 1;
   guint composited : 1;
-  
+
   guint destroyed : 2;
 
   guint accept_focus : 1;
   guint focus_on_map : 1;
   guint shaped : 1;
   guint support_multidevice : 1;
-  
-  GdkEventMask event_mask;
-
-  guint update_and_descendants_freeze_count;
-
-  /* The GdkWindow that has the impl, ref:ed if another window.
-   * This ref is required to keep the wrapper of the impl window alive
-   * for as long as any GdkWindow references the impl. */
-  GdkWindow *impl_window; 
-  int abs_x, abs_y; /* Absolute offset in impl */
-  gint width, height;
-  guint32 clip_tag;
-  cairo_region_t *clip_region; /* Clip region (wrt toplevel) in window coords */
-  cairo_region_t *clip_region_with_children; /* Clip region in window coords */
-  GdkCursor *cursor;
-  GHashTable *device_cursor;
-  gint8 toplevel_window_type;
   guint synthesize_crossing_event_queued : 1;
   guint effective_visibility : 2;
   guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
@@ -232,14 +218,29 @@ struct _GdkWindow
   guint viewable : 1; /* mapped and all parents mapped */
   guint applied_shape : 1;
 
-  guint num_offscreen_children;
+  /* The GdkWindow that has the impl, ref:ed if another window.
+   * This ref is required to keep the wrapper of the impl window alive
+   * for as long as any GdkWindow references the impl. */
+  GdkWindow *impl_window;
+
+  guint update_and_descendants_freeze_count;
+
+  gint abs_x, abs_y; /* Absolute offset in impl */
+  gint width, height;
+  guint32 clip_tag;
+
+  cairo_region_t *clip_region; /* Clip region (wrt toplevel) in window coords */
+  cairo_region_t *clip_region_with_children; /* Clip region in window coords */
+  GdkCursor *cursor;
+  GHashTable *device_cursor;
+
   GdkWindowPaint *implicit_paint;
 
   GList *outstanding_moves;
 
   cairo_region_t *shape;
   cairo_region_t *input_shape;
-  
+
   cairo_surface_t *cairo_surface;
 
   GList *devices_inside;
@@ -248,6 +249,8 @@ struct _GdkWindow
   GHashTable *source_event_masks;
   gulong device_added_handler_id;
   gulong device_changed_handler_id;
+
+  guint num_offscreen_children;
 };
 
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
