@@ -49,6 +49,9 @@ EXTRA_DIST += \
 	import-cyclic-3.css \
 	import-cyclic-3.errors \
 	import-cyclic-3.ref.css \
+	import-nonexistant.css \
+	import-nonexistant.errors \
+	import-nonexistant.ref.css \
 	import-recursive.css \
 	import-recursive.errors \
 	import-recursive.ref.css \
