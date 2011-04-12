@@ -1746,21 +1746,27 @@ scanner_apply_scope (GScanner    *scanner,
 
   if (scope == SCOPE_VALUE)
     {
-      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
+      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_\"'";
       scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(),.%\t\n'/\"";
       scanner->config->scan_identifier_1char = TRUE;
+      scanner->config->scan_string_sq = FALSE;
+      scanner->config->scan_string_dq = FALSE;
     }
   else if (scope == SCOPE_BINDING_SET)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
       scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(){}<>,.%\t\n'/\"";
       scanner->config->scan_identifier_1char = TRUE;
+      scanner->config->scan_string_sq = TRUE;
+      scanner->config->scan_string_dq = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
       scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_#.";
       scanner->config->scan_identifier_1char = TRUE;
+      scanner->config->scan_string_sq = TRUE;
+      scanner->config->scan_string_dq = TRUE;
     }
   else if (scope == SCOPE_PSEUDO_CLASS ||
            scope == SCOPE_NTH_CHILD ||
@@ -1769,6 +1775,8 @@ scanner_apply_scope (GScanner    *scanner,
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "-_";
       scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_";
       scanner->config->scan_identifier_1char = FALSE;
+      scanner->config->scan_string_sq = TRUE;
+      scanner->config->scan_string_dq = TRUE;
     }
   else
     g_assert_not_reached ();
@@ -2489,8 +2497,7 @@ parse_rule (GtkCssProvider  *css_provider,
           gtk_css_provider_error (css_provider,
                                   scanner,
                                   GTK_CSS_PROVIDER_ERROR,
-                                  scanner->token == G_TOKEN_STRING ? GTK_CSS_PROVIDER_ERROR_PROPERTY_VALUE
-                                                                   : GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
                                   "Not a property value");
           gtk_css_scanner_pop_scope (scanner);
           goto find_end_of_declaration;
