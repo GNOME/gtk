@@ -363,7 +363,7 @@ function registerWindow(win)
     if (!windowGeometryTimeout)
 	windowGeometryTimeout = setInterval(function () {
 						for (var i = 0; i < toplevelWindows.length; i++)
-						    toplevelWindows[i].updateBrowserWindowGeometry(toplevelWindows[i], false);
+						    updateBrowserWindowGeometry(toplevelWindows[i], false);
 					    }, 2000);
     win.onunload = function(ev) { browserWindowClosed(ev.target.defaultView); };
 }
