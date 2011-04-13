@@ -5928,11 +5928,43 @@ do_focus_change (GtkWidget *widget,
   g_object_unref (widget);
 }
 
+static void
+maybe_set_mnemonics_visible (GtkWindow *window)
+{
+  GList *devices, *d;
+  GdkDeviceManager *device_manager;
+
+  device_manager = gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (window)));
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+  for (d = devices; d; d = d->next)
+    {
+      GdkDevice *dev = d->data;
+
+      if (gdk_device_get_source (dev) == GDK_SOURCE_MOUSE)
+        {
+          GdkModifierType mask;
+
+          gdk_device_get_state (dev, gtk_widget_get_window (GTK_WIDGET (window)),
+                                NULL, &mask);
+
+          if (window->priv->mnemonic_modifier & mask)
+            {
+              gtk_window_set_mnemonics_visible (window, TRUE);
+              break;
+            }
+        }
+    }
+
+  g_list_free (devices);
+}
+
 static gint
 gtk_window_focus_in_event (GtkWidget     *widget,
 			   GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  gboolean auto_mnemonics;
 
   /* It appears spurious focus in events can occur when
    *  the window is hidden. So we'll just check to see if
@@ -5943,6 +5975,11 @@ gtk_window_focus_in_event (GtkWidget     *widget,
     {
       _gtk_window_set_has_toplevel_focus (window, TRUE);
       _gtk_window_set_is_active (window, TRUE);
+
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-auto-mnemonics", &auto_mnemonics, NULL);
+      if (auto_mnemonics)
+        maybe_set_mnemonics_visible (window);
     }
       
   return FALSE;
