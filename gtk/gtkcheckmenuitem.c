@@ -34,6 +34,22 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+
+/**
+ * SECTION:gtkcheckmenuitem
+ * @Short_description: A menu item with a check box
+ * @Title: GtkCheckMenuItem
+ *
+ * A #GtkCheckMenuItem is a menu item that maintains the state of a boolean
+ * value in addition to a #GtkMenuItem usual role in activating application
+ * code.
+ *
+ * A check box indicating the state of the boolean value is displayed
+ * at the left side of the #GtkMenuItem.  Activating the #GtkMenuItem
+ * toggles the value.
+ */
+
+
 #define INDICATOR_SIZE 16
 
 struct _GtkCheckMenuItemPrivate
@@ -142,6 +158,15 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   klass->toggled = NULL;
   klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
 
+  /**
+   * GtkCheckMenuItem::toggled:
+   * @checkmenuitem: the object which received the signal.
+   *
+   * This signal is emitted when the state of the check box is changed.
+   *
+   * A signal handler can use gtk_check_menu_item_get_active()
+   * to discover the new state.
+   */
   check_menu_item_signals[TOGGLED] =
     g_signal_new (I_("toggled"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
@@ -212,12 +237,27 @@ gtk_check_menu_item_sync_action_properties (GtkActivatable *activatable,
                                          gtk_toggle_action_get_draw_as_radio (GTK_TOGGLE_ACTION (action)));
 }
 
+/**
+ * gtk_check_menu_item_new:
+ *
+ * Creates a new #GtkCheckMenuItem.
+ *
+ * Returns: a new #GtkCheckMenuItem.
+ */
 GtkWidget*
 gtk_check_menu_item_new (void)
 {
   return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, NULL);
 }
 
+/**
+ * gtk_check_menu_item_new_with_label:
+ * @label: the string to use for the label.
+ *
+ * Creates a new #GtkCheckMenuItem with a label.
+ *
+ * Returns: a new #GtkCheckMenuItem.
+ */
 GtkWidget*
 gtk_check_menu_item_new_with_label (const gchar *label)
 {
@@ -246,6 +286,13 @@ gtk_check_menu_item_new_with_mnemonic (const gchar *label)
                        NULL);
 }
 
+/**
+ * gtk_check_menu_item_set_active:
+ * @check_menu_item: a #GtkCheckMenuItem.
+ * @is_active: boolean value indicating whether the check box is active.
+ *
+ * Sets the active state of the menu item's check box.
+ */
 void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
                                 gboolean          is_active)
@@ -296,6 +343,12 @@ gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
   *requisition = indicator_size + toggle_spacing;
 }
 
+/**
+ * gtk_check_menu_item_toggled:
+ * @check_menu_item: a #GtkCheckMenuItem.
+ *
+ * Emits the #GtkCheckMenuItem::toggled signal.
+ */
 void
 gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
 {
