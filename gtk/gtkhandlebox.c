@@ -39,6 +39,34 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkhandlebox
+ * @Short_description: a widget for detachable window portions
+ * @Title: GtkHandleBox
+ *
+ * The #GtkHandleBox widget allows a portion of a window to be "torn
+ * off". It is a bin widget which displays its child and a handle that
+ * the user can drag to tear off a separate window (the <firstterm>float
+ * window</firstterm>) containing the child widget. A thin
+ * <firstterm>ghost</firstterm> is drawn in the original location of the
+ * handlebox. By dragging the separate window back to its original
+ * location, it can be reattached.
+ *
+ * When reattaching, the ghost and float window, must be aligned
+ * along one of the edges, the <firstterm>snap edge</firstterm>.
+ * This either can be specified by the application programmer
+ * explicitely, or GTK+ will pick a reasonable default based
+ * on the handle position.
+ *
+ * To make detaching and reattaching the handlebox as minimally confusing
+ * as possible to the user, it is important to set the snap edge so that
+ * the snap edge does not move when the handlebox is deattached. For
+ * instance, if the handlebox is packed at the bottom of a VBox, then
+ * when the handlebox is detached, the bottom edge of the handlebox's
+ * allocation will remain fixed as the height of the handlebox shrinks,
+ * so the snap edge should be set to %GTK_POS_BOTTOM.
+ */
+
 
 struct _GtkHandleBoxPrivate
 {
@@ -245,6 +273,16 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   class->child_attached = NULL;
   class->child_detached = NULL;
 
+  /**
+   * GtkHandleBox::child-attached:
+   * @handlebox: the object which received the signal.
+   * @widget: the child widget of the handlebox.
+   *   (this argument provides no extra information
+   *   and is here only for backwards-compatibility)
+   *
+   * This signal is emitted when the contents of the
+   * handlebox are reattached to the main window.
+   */
   handle_box_signals[SIGNAL_CHILD_ATTACHED] =
     g_signal_new (I_("child-attached"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -254,6 +292,17 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+
+  /**
+   * GtkHandleBox::child-detached:
+   * @handlebox: the object which received the signal.
+   * @widget: the child widget of the handlebox.
+   *   (this argument provides no extra information
+   *   and is here only for backwards-compatibility)
+   *
+   * This signal is emitted when the contents of the
+   * handlebox are detached from the main window.
+   */
   handle_box_signals[SIGNAL_CHILD_DETACHED] =
     g_signal_new (I_("child-detached"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -356,7 +405,14 @@ gtk_handle_box_get_property (GObject         *object,
       break;
     }
 }
- 
+
+/**
+ * gtk_handle_box_new:
+ *
+ * Create a new handle box.
+ *
+ * Returns: a new #GtkHandleBox.
+ */
 GtkWidget*
 gtk_handle_box_new (void)
 {
@@ -833,6 +889,14 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
   gtk_style_context_restore (context);
 }
 
+/**
+ * gtk_handle_box_set_shadow_type:
+ * @handle_box: a #GtkHandleBox
+ * @type: the shadow type.
+ *
+ * Sets the type of shadow to be drawn around the border
+ * of the handle box.
+ */
 void
 gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
 				GtkShadowType  type)
@@ -854,7 +918,7 @@ gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
 /**
  * gtk_handle_box_get_shadow_type:
  * @handle_box: a #GtkHandleBox
- * 
+ *
  * Gets the type of shadow drawn around the handle box. See
  * gtk_handle_box_set_shadow_type().
  *
@@ -868,6 +932,13 @@ gtk_handle_box_get_shadow_type (GtkHandleBox *handle_box)
   return handle_box->priv->shadow_type;
 }
 
+/**
+ * gtk_handle_box_set_handle_position:
+ * @handle_box: a #GtkHandleBox
+ * @position: the side of the handlebox where the handle should be drawn.
+ *
+ * Sets the side of the handlebox where the handle is drawn.
+ */
 void        
 gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
 				     GtkPositionType  position)
@@ -903,7 +974,28 @@ gtk_handle_box_get_handle_position (GtkHandleBox *handle_box)
   return handle_box->priv->handle_position;
 }
 
-void        
+/**
+ * gtk_handle_box_set_snap_edge:
+ * @handle_box: a #GtkHandleBox
+ * @edge: the snap edge, or -1 to unset the value; in which
+ *   case GTK+ will try to guess an appropriate value
+ *   in the future.
+ *
+ * Sets the snap edge of a handlebox. The snap edge is
+ * the edge of the detached child that must be aligned
+ * with the corresponding edge of the "ghost" left
+ * behind when the child was detached to reattach
+ * the torn-off window. Usually, the snap edge should
+ * be chosen so that it stays in the same place on
+ * the screen when the handlebox is torn off.
+ *
+ * If the snap edge is not set, then an appropriate value
+ * will be guessed from the handle position. If the
+ * handle position is %GTK_POS_RIGHT or %GTK_POS_LEFT,
+ * then the snap edge will be %GTK_POS_TOP, otherwise
+ * it will be %GTK_POS_LEFT.
+ */
+void
 gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
 				     GtkPositionType  edge)
 {
@@ -927,12 +1019,13 @@ gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
 /**
  * gtk_handle_box_get_snap_edge:
  * @handle_box: a #GtkHandleBox
- * 
- * Gets the edge used for determining reattachment of the handle box. See
- * gtk_handle_box_set_snap_edge().
  *
- * Return value: the edge used for determining reattachment, or (GtkPositionType)-1 if this
- *               is determined (as per default) from the handle position. 
+ * Gets the edge used for determining reattachment of the handle box.
+ * See gtk_handle_box_set_snap_edge().
+ *
+ * Return value: the edge used for determining reattachment, or
+ *   (GtkPositionType)-1 if this is determined (as per default)
+ *   from the handle position.
  **/
 GtkPositionType
 gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
