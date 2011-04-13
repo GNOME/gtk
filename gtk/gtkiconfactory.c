@@ -42,6 +42,107 @@
 #include "gtkbuilderprivate.h"
 #include "gtktypebuiltins.h"
 
+
+/**
+ * SECTION:gtkiconfactory
+ * @Short_description: Manipulating stock icons
+ * @Title: Themeable Stock Images
+ *
+ * Browse the available stock icons in the list of stock IDs found <link
+ * linkend="gtk-Stock-Items">here</link>. You can also use
+ * the <application>gtk-demo</application> application for this purpose.
+ *
+ * An icon factory manages a collection of #GtkIconSet; a #GtkIconSet manages a
+ * set of variants of a particular icon (i.e. a #GtkIconSet contains variants for
+ * different sizes and widget states). Icons in an icon factory are named by a
+ * stock ID, which is a simple string identifying the icon. Each #GtkStyle has a
+ * list of #GtkIconFactory derived from the current theme; those icon factories
+ * are consulted first when searching for an icon. If the theme doesn't set a
+ * particular icon, GTK+ looks for the icon in a list of default icon factories,
+ * maintained by gtk_icon_factory_add_default() and
+ * gtk_icon_factory_remove_default(). Applications with icons should add a default
+ * icon factory with their icons, which will allow themes to override the icons
+ * for the application.
+ *
+ * To display an icon, always use gtk_style_lookup_icon_set() on the widget that
+ * will display the icon, or the convenience function
+ * gtk_widget_render_icon(). These functions take the theme into account when
+ * looking up the icon to use for a given stock ID.
+ *
+ * <refsect2 id="GtkIconFactory-BUILDER-UI">
+ * <title>GtkIconFactory as GtkBuildable</title>
+ * <para>
+ * GtkIconFactory supports a custom &lt;sources&gt; element, which can contain
+ * multiple &lt;source&gt; elements.
+ * The following attributes are allowed:
+ * <variablelist>
+ * <varlistentry>
+ * <term>stock-id</term>
+ * <listitem><para>
+ * The stock id of the source, a string.
+ * This attribute is mandatory
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>filename</term>
+ * <listitem><para>
+ * The filename of the source, a string.
+ * This attribute is optional
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>icon-name</term>
+ * <listitem><para>
+ * The icon name for the source, a string.
+ * This attribute is optional.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>size</term>
+ * <listitem><para>
+ * Size of the icon, a #GtkIconSize enum value.
+ * This attribute is optional.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>direction</term>
+ * <listitem><para>
+ * Direction of the source, a #GtkTextDirection enum value.
+ * This attribute is optional.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>state</term>
+ * <listitem><para>
+ * State of the source, a #GtkStateType enum value.
+ * This attribute is optional.
+ * </para></listitem>
+ * </varlistentry>
+ * </variablelist>
+ * <example>
+ * <title>A #GtkIconFactory UI definition fragment.</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkIconFactory" id="iconfactory1">
+ *   <sources>
+ *     <source stock-id="apple-red" filename="apple-red.png"/>
+ *   </sources>
+ * </object>
+ * <object class="GtkWindow" id="window1">
+ *   <child>
+ *     <object class="GtkButton" id="apple_button">
+ *       <property name="label">apple-red</property>
+ *       <property name="use-stock">True</property>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]]>
+ * </programlisting>
+ * </example>
+ * </para>
+ * </refsect2>
+ */
+
+
 static GSList *all_icon_factories = NULL;
 
 struct _GtkIconFactoryPrivate
