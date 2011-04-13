@@ -55,6 +55,47 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
+
+/**
+ * SECTION:gtkfilechooserbutton
+ * @Short_description: A button to launch a file selection dialog
+ * @Title: GtkFileChooserButton
+ * @See_also:#GtkFileChooserDialog
+ *
+ * The #GtkFileChooserButton is a widget that lets the user select a
+ * file.  It implements the #GtkFileChooser interface.  Visually, it is a
+ * file name with a button to bring up a #GtkFileChooserDialog.
+ * The user can then use that dialog to change the file associated with
+ * that button.  This widget does not support setting the
+ * #GtkFileChooser:select-multiple property to %TRUE.
+ *
+ * <example>
+ * <title>Create a button to let the user select a file in /etc</title>
+ * <programlisting>
+ * {
+ *   GtkWidget *button;
+ *
+ *   button = gtk_file_chooser_button_new (_("Select a file"),
+ *                                         GTK_FILE_CHOOSER_ACTION_OPEN);
+ *   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button),
+ *                                        "/etc");
+ * }
+ * </programlisting>
+ * </example>
+ *
+ * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s
+ * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
+ *
+ * <important>
+ * The #GtkFileChooserButton will ellipsize the label,
+ * and thus will thus request little horizontal space.  To give the button
+ * more space, you should call gtk_widget_get_preferred_size(),
+ * gtk_file_chooser_button_set_width_chars(), or pack the button in
+ * such a way that other interface elements give space to the widget.
+ * </important>
+ */
+
+
 /* **************** *
  *  Private Macros  *
  * **************** */
