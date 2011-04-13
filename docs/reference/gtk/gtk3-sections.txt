@@ -5755,7 +5755,7 @@ gtk_style_new
 gtk_style_copy
 gtk_style_attach
 gtk_style_detach
-gtk_style_get_context
+gtk_style_has_context
 gtk_style_set_background
 gtk_style_apply_default_background
 gtk_style_lookup_color
