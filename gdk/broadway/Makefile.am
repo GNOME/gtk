@@ -33,8 +33,12 @@ libbroadway_la_SOURCES =		\
 clienthtml.h: client.html
 	$(PERL) ./toarray.pl client.html client_html > $@
 
+EXTRA_DIST += client.html
+
 broadwayjs.h: broadway.js
 	$(PERL) ./toarray.pl broadway.js broadway_js > $@
+
+EXTRA_DIST += broadway.js
 
 # built headers that don't get installed
 broadway_built_private_headers =	\
