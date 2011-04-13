@@ -1190,7 +1190,6 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
 
   if (priv->active)
     {
-
       priv->button = 0;
       priv->active = FALSE;
       priv->activate_time = 0;
@@ -1312,6 +1311,8 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
       _gtk_menu_shell_update_mnemonics (menu_shell);
       return;
     }
+
+  _gtk_menu_shell_activate (menu_shell);
 
   priv->active_menu_item = menu_item;
   if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)
