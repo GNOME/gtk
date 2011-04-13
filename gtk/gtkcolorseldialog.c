@@ -35,6 +35,31 @@
 #include "gtkbuildable.h"
 
 
+/**
+ * SECTION:gtkcolorseldlg
+ * @Short_description: A standard dialog box for selecting a color
+ * @Title: GtkColorSelectionDialog
+ *
+ * The #GtkColorSelectionDialog provides a standard dialog which
+ * allows the user to select a color much like the #GtkFileSelection
+ * provides a standard dialog for file selection.
+ *
+ * Use gtk_color_selection_dialog_get_color_selection() to get the
+ * #GtkColorSelection widget contained within the dialog. Use this widget
+ * and its gtk_color_selection_get_current_color()
+ * function to gain access to the selected color.  Connect a handler
+ * for this widget's #GtkColorSelection::color-changed signal to be notified
+ * when the color changes.
+ *
+ * <refsect2 id="GtkColorSelectionDialog-BUILDER-UI">
+ * <title>GtkColorSelectionDialog as GtkBuildable</title>
+ * The GtkColorSelectionDialog implementation of the GtkBuildable interface
+ * exposes the embedded #GtkColorSelection as internal child with the
+ * name "color_selection". It also exposes the buttons with the names
+ * "ok_button", "cancel_button" and "help_button".
+ * </refsect2>
+ */
+
 
 struct _GtkColorSelectionDialogPrivate
 {
@@ -189,6 +214,14 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
                         _("Color Selection"));
 }
 
+/**
+ * gtk_color_selection_dialog_new:
+ * @title: a string containing the title text for the dialog.
+ *
+ * Creates a new #GtkColorSelectionDialog.
+ *
+ * Returns: a #GtkColorSelectionDialog.
+ */
 GtkWidget*
 gtk_color_selection_dialog_new (const gchar *title)
 {
