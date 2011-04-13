@@ -28,7 +28,6 @@ libgdk_wayland_la_SOURCES =			\
 	gdkeventsource.c			\
 	gdkkeys-wayland.c			\
 	gdkscreen-wayland.c			\
-	gdkscreen-wayland.h			\
 	gdkselection-wayland.c			\
 	gdkwindow-wayland.c			\
 	gdkwayland.h				\
