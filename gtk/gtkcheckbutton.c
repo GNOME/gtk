@@ -35,6 +35,21 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkcheckbutton
+ * @Short_description: Create widgets with a discrete toggle button
+ * @Title: GtkCheckButton
+ * @See_also: #GtkCheckMenuItem, #GtkButton, #GtkToggleButton, #GtkRadioButton
+ *
+ * A #GtkCheckButton places a discrete #GtkToggleButton next to a widget,
+ * (usually a #GtkLabel). See the section on #GtkToggleButton widgets for
+ * more information about toggle/check buttons.
+ *
+ * The important signal ( #GtkToggleButton::toggled ) is also inherited from
+ * #GtkToggleButton.
+ */
+
+
 #define INDICATOR_SIZE     16
 #define INDICATOR_SPACING  2
 
@@ -99,6 +114,13 @@ gtk_check_button_init (GtkCheckButton *check_button)
   gtk_button_set_alignment (GTK_BUTTON (check_button), 0.0, 0.5);
 }
 
+/**
+ * gtk_check_button_new:
+ *
+ * Creates a new #GtkCheckButton.
+ *
+ * Returns: a #GtkWidget.
+ */
 GtkWidget*
 gtk_check_button_new (void)
 {
@@ -106,6 +128,14 @@ gtk_check_button_new (void)
 }
 
 
+/**
+ * gtk_check_button_new_with_label:
+ * @label: the text for the check button.
+ *
+ * Creates a new #GtkCheckButton with a #GtkLabel to the right of it.
+ *
+ * Returns: a #GtkWidget.
+ */
 GtkWidget*
 gtk_check_button_new_with_label (const gchar *label)
 {
@@ -115,7 +145,7 @@ gtk_check_button_new_with_label (const gchar *label)
 /**
  * gtk_check_button_new_with_mnemonic:
  * @label: The text of the button, with an underscore in front of the
- *         mnemonic character
+ *   mnemonic character
  * @returns: a new #GtkCheckButton
  *
  * Creates a new #GtkCheckButton containing a label. The label
