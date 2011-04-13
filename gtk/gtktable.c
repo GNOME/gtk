@@ -33,6 +33,40 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktable
+ * @Short_description: Pack widgets in regular patterns
+ * @Title: GtkTable
+ * @See_also: #GtkGrid
+ *
+ * The #GtkTable functions allow the programmer to arrange widgets in rows and
+ * columns, making it easy to align many widgets next to each other,
+ * horizontally and vertically.
+ *
+ * Tables are created with a call to gtk_table_new(), the size of which can
+ * later be changed with gtk_table_resize().
+ *
+ * Widgets can be added to a table using gtk_table_attach() or the more
+ * convenient (but slightly less flexible) gtk_table_attach_defaults().
+ *
+ * To alter the space next to a specific row, use gtk_table_set_row_spacing(),
+ * and for a column, gtk_table_set_col_spacing().
+ * The gaps between <emphasis>all</emphasis> rows or columns can be changed by
+ * calling gtk_table_set_row_spacings() or gtk_table_set_col_spacings()
+ * respectively. Note that spacing is added <emphasis>between</emphasis> the
+ * children, while padding added by gtk_table_attach() is added <emphasis>on
+ * either side</emphasis> of the widget it belongs to.
+ *
+ * gtk_table_set_homogeneous(), can be used to set whether all cells in the
+ * table will resize themselves to the size of the largest widget in the table.
+ *
+ * <note>
+ * Note that #GtkGrid provides the same capabilities as GtkTable for arranging
+ * widgets in a rectangular grid, and additionally supports height-for-width
+ * geometry management.
+ * </note>
+ */
+
 
 struct _GtkTablePrivate
 {
@@ -552,6 +586,21 @@ gtk_table_init (GtkTable *table)
   gtk_table_resize (table, 1, 1);
 }
 
+/**
+ * gtk_table_new:
+ * @rows: The number of rows the new table should have.
+ * @columns: The number of columns the new table should have.
+ * @homogeneous: If set to %TRUE, all table cells are resized to the size of
+ *   the cell containing the largest widget.
+ *
+ * Used to create a new table widget. An initial size must be given by
+ * specifying how many rows and columns the table should have, although
+ * this can be changed later with gtk_table_resize().  @rows and @columns
+ * must both be in the range 1 .. 65535. For historical reasons, 0 is accepted
+ * as well and is silently interpreted as 1.
+ *
+ * Returns: A pointer to the the newly created table widget.
+ */
 GtkWidget*
 gtk_table_new (guint	rows,
 	       guint	columns,
@@ -575,6 +624,15 @@ gtk_table_new (guint	rows,
   return GTK_WIDGET (table);
 }
 
+/**
+ * gtk_table_resize:
+ * @table: The #GtkTable you wish to change the size of.
+ * @rows: The new number of rows.
+ * @columns: The new number of columns.
+ *
+ * If you need to change a table's size <emphasis>after</emphasis>
+ * it has been created, this function allows you to do so.
+ */
 void
 gtk_table_resize (GtkTable *table,
 		  guint     n_rows,
@@ -652,6 +710,34 @@ gtk_table_resize (GtkTable *table,
     }
 }
 
+/**
+ * gtk_table_attach:
+ * @table: The #GtkTable to add a new widget to.
+ * @child: The widget to add.
+ * @left_attach: the column number to attach the left side of a child widget to.
+ * @right_attach: the column number to attach the right side of a child widget to.
+ * @top_attach: the row number to attach the top of a child widget to.
+ * @bottom_attach: the row number to attach the bottom of a child widget to.
+ * @xoptions: Used to specify the properties of the child widget when the table is resized.
+ * @yoptions: The same as xoptions, except this field determines behaviour of vertical resizing.
+ * @xpadding: An integer value specifying the padding on the left and right of the widget being added to the table.
+ * @ypadding: The amount of padding above and below the child widget.
+ *
+ * Adds a widget to a table. The number of 'cells' that a widget will occupy is
+ * specified by @left_attach, @right_attach, @top_attach and @bottom_attach.
+ * These each represent the leftmost, rightmost, uppermost and lowest column
+ * and row numbers of the table. (Columns and rows are indexed from zero).
+ *
+ * To make a button occupy the lower right cell of a 2x2 table, use
+ * <informalexample><programlisting>
+ * gtk_table_attach (table, button,
+ *                   1, 2, // left, right attach
+ *                   1, 2, // top, bottom attach
+ *                   xoptions, yoptions,
+ *                   xpadding, ypadding);
+ * </programlisting></informalexample>
+ * If you want to make the button span the entire bottom row, use @left_attach == 0 and @right_attach = 2 instead.
+ */
 void
 gtk_table_attach (GtkTable	  *table,
 		  GtkWidget	  *child,
@@ -704,6 +790,20 @@ gtk_table_attach (GtkTable	  *table,
   gtk_widget_set_parent (child, GTK_WIDGET (table));
 }
 
+/**
+ * gtk_table_attach_defaults:
+ * @table: The table to add a new child widget to.
+ * @widget: The child widget to add.
+ * @left_attach: The column number to attach the left side of the child widget to.
+ * @right_attach: The column number to attach the right side of the child widget to.
+ * @top_attach: The row number to attach the top of the child widget to.
+ * @bottom_attach: The row number to attach the bottom of the child widget to.
+ *
+ * As there are many options associated with gtk_table_attach(), this convenience
+ * function provides the programmer with a means to add children to a table with
+ * identical padding and expansion options. The values used for the #GtkAttachOptions
+ * are <literal>GTK_EXPAND | GTK_FILL</literal>, and the padding is set to 0.
+ */
 void
 gtk_table_attach_defaults (GtkTable  *table,
 			   GtkWidget *widget,
@@ -720,6 +820,14 @@ gtk_table_attach_defaults (GtkTable  *table,
 		    0, 0);
 }
 
+/**
+ * gtk_table_set_row_spacing:
+ * @table: a #GtkTable containing the row whose properties you wish to change.
+ * @row: row number whose spacing will be changed.
+ * @spacing: number of pixels that the spacing should take up.
+ *
+ * Changes the space between a given table row and the subsequent row.
+ */
 void
 gtk_table_set_row_spacing (GtkTable *table,
 			   guint     row,
@@ -767,6 +875,15 @@ gtk_table_get_row_spacing (GtkTable *table,
   return priv->rows[row].spacing;
 }
 
+/**
+ * gtk_table_set_col_spacing:
+ * @table: a #GtkTable.
+ * @column: the column whose spacing should be changed.
+ * @spacing: number of pixels that the spacing should take up.
+ *
+ * Alters the amount of space between a given table column and the following
+ * column.
+ */
 void
 gtk_table_set_col_spacing (GtkTable *table,
 			   guint     column,
@@ -814,6 +931,13 @@ gtk_table_get_col_spacing (GtkTable *table,
   return priv->cols[column].spacing;
 }
 
+/**
+ * gtk_table_set_row_spacings:
+ * @table: a #GtkTable.
+ * @spacing: the number of pixels of space to place between every row in the table.
+ *
+ * Sets the space between every row in @table equal to @spacing.
+ */
 void
 gtk_table_set_row_spacings (GtkTable *table,
 			    guint     spacing)
@@ -853,6 +977,14 @@ gtk_table_get_default_row_spacing (GtkTable *table)
   return table->priv->row_spacing;
 }
 
+/**
+ * gtk_table_set_col_spacings:
+ * @table: a #GtkTable.
+ * @spacing: the number of pixels of space to place between every column
+ *   in the table.
+ *
+ * Sets the space between every column in @table equal to @spacing.
+ */
 void
 gtk_table_set_col_spacings (GtkTable *table,
 			    guint     spacing)
@@ -892,6 +1024,15 @@ gtk_table_get_default_col_spacing (GtkTable *table)
   return table->priv->column_spacing;
 }
 
+/**
+ * gtk_table_set_homogeneous:
+ * @table: The #GtkTable you wish to set the homogeneous properties of.
+ * @homogeneous: Set to %TRUE to ensure all table cells are the same size. Set
+ *   to %FALSE if this is not your desired behaviour.
+ *
+ * Changes the homogenous property of table cells, ie. whether all cells are
+ * an equal size or not.
+ */
 void
 gtk_table_set_homogeneous (GtkTable *table,
 			   gboolean  homogeneous)
