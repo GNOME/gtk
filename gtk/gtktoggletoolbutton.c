@@ -32,6 +32,21 @@
 #include "gtkprivate.h"
 
 
+/**
+ * SECTION:gtktoggletoolbutton
+ * @Short_description: A GtkToolItem containing a toggle button
+ * @Title: GtkToggleToolButton
+ * @See_also: #GtkToolbar, #GtkToolButton, #GtkSeparatorToolItem
+ *
+ * A #GtkToggleToolButton is a #GtkToolItem that contains a toggle
+ * button.
+ *
+ * Use gtk_toggle_tool_button_new() to create a new
+ * #GtkToggleToolButton. Use gtk_toggle_tool_button_new_from_stock() to
+ * create a new #GtkToggleToolButton containing a stock item.
+ */
+
+
 #define MENU_ID "gtk-toggle-tool-button-menu-id"
 
 enum {
