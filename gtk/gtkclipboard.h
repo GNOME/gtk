@@ -34,23 +34,73 @@ G_BEGIN_DECLS
 #define GTK_CLIPBOARD(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CLIPBOARD, GtkClipboard))
 #define GTK_IS_CLIPBOARD(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLIPBOARD))
 
+/**
+ * GtkClipboardReceivedFunc:
+ * @clipboard: the #GtkClipboard
+ * @selection_data: a #GtkSelectionData containing the data was received.
+ *   If retrieving the data failed, then then length field
+ *   of @selection_data will be negative.
+ * @data: the @user_data supplied to gtk_clipboard_request_contents().
+ *
+ * A function to be called when the results of gtk_clipboard_request_contents()
+ * are received, or when the request fails.
+ */
 typedef void (* GtkClipboardReceivedFunc)         (GtkClipboard     *clipboard,
 					           GtkSelectionData *selection_data,
 					           gpointer          data);
+
+/**
+ * GtkClipboardTextReceivedFunc:
+ * @clipboard: the #GtkClipboard
+ * @text: the text received, as a UTF-8 encoded string, or %NULL
+ *   if retrieving the data failed.
+ * @data: the @user_data supplied to gtk_clipboard_request_text().
+ *
+ * A function to be called when the results of gtk_clipboard_request_text()
+ * are received, or when the request fails.
+ */
 typedef void (* GtkClipboardTextReceivedFunc)     (GtkClipboard     *clipboard,
 					           const gchar      *text,
 					           gpointer          data);
+
 typedef void (* GtkClipboardRichTextReceivedFunc) (GtkClipboard     *clipboard,
                                                    GdkAtom           format,
 					           const guint8     *text,
                                                    gsize             length,
 					           gpointer          data);
+
+/**
+ * GtkClipboardImageReceivedFunc:
+ * @clipboard: the #GtkClipboard
+ * @pixbuf: the received image
+ * @data: the @user_data supplied to gtk_clipboard_request_image().
+ *
+ * A function to be called when the results of gtk_clipboard_request_image()
+ * are received, or when the request fails.
+ *
+ * Since: 2.6
+ */
 typedef void (* GtkClipboardImageReceivedFunc)    (GtkClipboard     *clipboard,
 						   GdkPixbuf        *pixbuf,
 						   gpointer          data);
+
 typedef void (* GtkClipboardURIReceivedFunc)      (GtkClipboard     *clipboard,
 						   gchar           **uris,
 						   gpointer          data);
+
+/**
+ * GtkClipboardTargetsReceivedFunc:
+ * @clipboard: the #GtkClipboard
+ * @atoms: the supported targets, as array of #GdkAtom, or %NULL
+ *   if retrieving the data failed.
+ * @n_atoms: the length of the @atoms array.
+ * @data: the @user_data supplied to gtk_clipboard_request_targets().
+ *
+ * A function to be called when the results of gtk_clipboard_request_targets()
+ * are received, or when the request fails.
+ *
+ * Since: 2.4
+ */
 typedef void (* GtkClipboardTargetsReceivedFunc)  (GtkClipboard     *clipboard,
 					           GdkAtom          *atoms,
 						   gint              n_atoms,
@@ -60,10 +110,42 @@ typedef void (* GtkClipboardTargetsReceivedFunc)  (GtkClipboard     *clipboard,
  * right now for ClearFunc, you may have trouble determining _which_ clipboard
  * was cleared, if you reuse your ClearFunc for multiple clipboards.
  */
+/**
+ * GtkClipboardGetFunc:
+ * @clipboard: the #GtkClipboard
+ * @selection_data: a #GtkSelectionData argument in which the requested
+ *   data should be stored.
+ * @info: the info field corresponding to the requested target from the
+ *   #GtkTargetEntry array passed to gtk_clipboard_set_with_data() or
+ *   gtk_clipboard_set_with_owner().
+ * @user_data_or_owner: the @user_data argument passed to
+ *   gtk_clipboard_set_with_data(), or the @owner argument passed to
+ *   gtk_clipboard_set_with_owner()
+ *
+ * A function that will be called to provide the contents of the selection.
+ * If multiple types of data were advertised, the requested type can
+ * be determined from the @info parameter or by checking the target field
+ * of @selection_data. If the data could successfully be converted into
+ * then it should be stored into the @selection_data object by
+ * calling gtk_selection_data_set() (or related functions such
+ * as gtk_selection_data_set_text()). If no data is set, the requestor
+ * will be informed that the attempt to get the data failed.
+ */
 typedef void (* GtkClipboardGetFunc)          (GtkClipboard     *clipboard,
 					       GtkSelectionData *selection_data,
 					       guint             info,
 					       gpointer          user_data_or_owner);
+
+/**
+ * GtkClipboardClearFunc:
+ * @clipboard: the #GtkClipboard
+ * @user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(),
+ *   or the @owner argument passed to gtk_clipboard_set_with_owner()
+ *
+ * A function that will be called when the contents of the clipboard are changed
+ * or cleared. Once this has called, the @user_data_or_owner argument
+ * will not be used again.
+ */
 typedef void (* GtkClipboardClearFunc)        (GtkClipboard     *clipboard,
 					       gpointer          user_data_or_owner);
 

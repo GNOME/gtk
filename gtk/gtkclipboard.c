@@ -42,6 +42,73 @@
 #include "win32/gdkwin32.h"
 #endif
 
+
+/**
+ * SECTION:gtkclipboard
+ * @Short_description: Storing data on clipboards
+ * @Title: Clipboards
+ * @See_also: #GtkSelection
+ *
+ * The #GtkClipboard object represents a clipboard of data shared
+ * between different processes or between different widgets in
+ * the same process. Each clipboard is identified by a name encoded as a
+ * #GdkAtom. (Conversion to and from strings can be done with
+ * gdk_atom_intern() and gdk_atom_name().) The default clipboard
+ * corresponds to the "CLIPBOARD" atom; another commonly used clipboard
+ * is the "PRIMARY" clipboard, which, in X, traditionally contains
+ * the currently selected text.
+ *
+ * To support having a number of different formats on the clipboard
+ * at the same time, the clipboard mechanism allows providing
+ * callbacks instead of the actual data.  When you set the contents
+ * of the clipboard, you can either supply the data directly (via
+ * functions like gtk_clipboard_set_text()), or you can supply a
+ * callback to be called at a later time when the data is needed (via
+ * gtk_clipboard_set_with_data() or gtk_clipboard_set_with_owner().)
+ * Providing a callback also avoids having to make copies of the data
+ * when it is not needed.
+ *
+ * gtk_clipboard_set_with_data() and gtk_clipboard_set_with_owner()
+ * are quite similar; the choice between the two depends mostly on
+ * which is more convenient in a particular situation.
+ * The former is most useful when you want to have a blob of data
+ * with callbacks to convert it into the various data types that you
+ * advertise. When the @clear_func you provided is called, you
+ * simply free the data blob. The latter is more useful when the
+ * contents of clipboard reflect the internal state of a #GObject
+ * (As an example, for the PRIMARY clipboard, when an entry widget
+ * provides the clipboard's contents the contents are simply the
+ * text within the selected region.) If the contents change, the
+ * entry widget can call gtk_clipboard_set_with_owner() to update
+ * the timestamp for clipboard ownership, without having to worry
+ * about @clear_func being called.
+ *
+ * Requesting the data from the clipboard is essentially
+ * asynchronous. If the contents of the clipboard are provided within
+ * the same process, then a direct function call will be made to
+ * retrieve the data, but if they are provided by another process,
+ * then the data needs to be retrieved from the other process, which
+ * may take some time. To avoid blocking the user interface, the call
+ * to request the selection, gtk_clipboard_request_contents() takes a
+ * callback that will be called when the contents are received (or
+ * when the request fails.) If you don't want to deal with providing
+ * a separate callback, you can also use gtk_clipboard_wait_for_contents().
+ * What this does is run the GLib main loop recursively waiting for
+ * the contents. This can simplify the code flow, but you still have
+ * to be aware that other callbacks in your program can be called
+ * while this recursive mainloop is running.
+ *
+ * Along with the functions to get the clipboard contents as an
+ * arbitrary data chunk, there are also functions to retrieve
+ * it as text, gtk_clipboard_request_text() and
+ * gtk_clipboard_wait_for_text(). These functions take care of
+ * determining which formats are advertised by the clipboard
+ * provider, asking for the clipboard in the best available format
+ * and converting the results into the UTF-8 encoding. (The standard
+ * form for representing strings in GTK+.)
+ */
+
+
 enum {
   OWNER_CHANGE,
   LAST_SIGNAL
@@ -180,14 +247,14 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
   /**
    * GtkClipboard::owner-change:
    * @clipboard: the #GtkClipboard on which the signal is emitted
-   * @event: (type Gdk.EventOwnerChange): the @GdkEventOwnerChange event 
+   * @event: (type Gdk.EventOwnerChange): the @GdkEventOwnerChange event
    *
    * The ::owner-change signal is emitted when GTK+ receives an
-   * event that indicates that the ownership of the selection 
+   * event that indicates that the ownership of the selection
    * associated with @clipboard has changed.
    *
    * Since: 2.6
-   */ 
+   */
   clipboard_signals[OWNER_CHANGE] =
     g_signal_new (I_("owner-change"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -237,7 +304,7 @@ gtk_clipboard_finalize (GObject *object)
 
   if (clipboard->notify_signal_id != 0)
     g_signal_handler_disconnect (clipboard_widget, clipboard->notify_signal_id);
-  
+
   g_free (clipboard->storable_targets);
   g_free (clipboard->cached_targets);
 
@@ -261,9 +328,8 @@ clipboard_display_closed (GdkDisplay   *display,
 /**
  * gtk_clipboard_get_for_display:
  * @display: the display for which the clipboard is to be retrieved or created
- * @selection: a #GdkAtom which identifies the clipboard
- *             to use.
- * 
+ * @selection: a #GdkAtom which identifies the clipboard to use.
+ *
  * Returns the clipboard object for the given selection.
  * Cut/copy/paste menu items and keyboard shortcuts should use
  * the default clipboard, returned by passing %GDK_SELECTION_CLIPBOARD for @selection.
@@ -289,13 +355,11 @@ clipboard_display_closed (GdkDisplay   *display,
  * underscore-prefixed), and namespace it as well. For example,
  * if your application called "Foo" has a special-purpose
  * clipboard, you might call it "_FOO_SPECIAL_CLIPBOARD".
- * 
+ *
  * Return value: (transfer none): the appropriate clipboard object. If no
- *             clipboard already exists, a new one will
- *             be created. Once a clipboard object has
- *             been created, it is persistent and, since
- *             it is owned by GTK+, must not be freed or
- *             unrefd.
+ *   clipboard already exists, a new one will be created. Once a clipboard
+ *   object has been created, it is persistent and, since it is owned by
+ *   GTK+, must not be freed or unrefd.
  *
  * Since: 2.2
  **/
