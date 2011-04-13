@@ -1,3 +1,129 @@
+Overview of Changes in GTK+ 3.1.2
+=================================
+
+* Theming fixes and enhancements
+ - GtkNotebook has an initial-gap style property
+ - GtkNotebook tab drawing fixes
+ - Fix problems with transparent backgrounds in panel applets
+ - Style classes for 'inline' and 'primary' toolbars and sidebars
+ - Dark theme information is made available to window managers via
+   the _GTK_THEME_VARIANT property
+ - Improved rendering of insensitive text
+ - Support non-uniform border withs in the default engine
+ - Fix prelight on treeview expanders
+ - Make it possible to give combo boxes, buttons, entries a
+   uniform height
+
+* GtkEntry supports 'hinting'
+
+* GtkExpander can resize toplevel windows when expanding
+
+* GtkGrid supports RTL flipping
+
+* GtkStatusIcon reads the _NET_SYSTEM_TRAY_ICON_SIZE property
+  to get information about the preferred icon size
+
+* To help with debugging of rendering problems, GDK consults
+  the GDK_RENDERING environment variable. Possible values include
+  'similar', 'image' and 'recording'
+
+* Fix some problems with XI2 and input methods
+
+* New, experimental GDK backends:
+ - broadway, which targets HTML5
+ - wayland, which targets the wayland display server
+ To build these backends, use the --enable-broadway-backend
+ and --enable-wayland-backend configure options.
+ To use them at runtime, set the GDK_BACKEND environment variable
+ to 'broadway' or 'wayland'. Other backend-specific setup may
+ still be required, such as running a wayland server.
+
+* Bugs fixed:
+ 440963 Add hinting to GtkEntry
+ 635254 Check whether a resolution is set in GtkPrintSettings...
+ 639584 initial emission of GtkWidget:style-set is not happening
+ 640692 GtkNotebook has wrong background colour when border and...
+ 642712 improve the file chooser design
+ 642918 Sensitivity of buttons sometimes screws up
+ 643805 Allow GtkExpander to resize the toplevel upon expanding...
+ 643841 Make initial gap before the first tab of the notebook...
+ 644276 paned: don't set the "pane-separator" style class...
+ 644348 notebook: make GtkNotebook respect the focus-padding...
+ 644353 Missing annotations in Gtk/Gdk Window...
+ 644355 credits toggle inconsintency
+ 644570 handles with a background image don't work
+ 644777 range: allow stepper-spacing > 0 and trough-under-...
+ 644836 gdk_keyval_to_unicode returns incorrect value...
+ 644847 GdkDeviceManagerXI2: process send_event core events
+ 644925 widget: reset widget style after applying style classes...
+ 644975 styleproperties: make sure to merge the font...
+ 644976 Fix "backspace", "enter", "escape" input.
+ 645057 ./configure fails on gtk+3.0 git head
+ 645134 switch: fix boundaries for the switch motion
+ 645172 radiobutton: don't forget to set the insensitive state...
+ 645176 Closing display causes segfault
+ 645232 symbolic status icons are the wrong size
+ 645234 Leaky calls to gdk_device_manager_list_devices()
+ 645235 Free the motion hint infos in GdkDisplay
+ 645236 Don't leak translate queue in GdkDisplay
+ 645341 pre dialog set CAPSLOCK is ignored.
+ 645354 window: Export theme variant to X11
+ 645405 themingengine: don't hardcode white to draw insensitive...
+ 645458 styleproperties: don't replace when merging...
+ 645937 Drawing model docs are outdated
+ 645960 GtkTreeSelection has no property to set mode
+ 646338 gdk_x_io_error() should call _exit(), not exit()
+ 646446 gtkprintunixdialog.c: set_cell_sensitivity_func leaks badly
+ 646457 Leak in gtkfilechooserdefault.c: search_selected_foreach...
+ 646458 Leak in gtkfilechooserdefault.c: list_row_activated
+ 646460 Weirdness in gtkfilechooserbutton.c: set_info_get_info_cb
+ 646461 Leak in gtkfilechooserbutton.c: model_free_row_data
+ 646462 Leak in gtkappchooserbutton.c: select_application_func_cb
+ 646500 GTK+ 3.1 causes terminals to start up with 0 height
+ 646815 Ref leak in gtk_color_button_clicked
+ 646882 Theming fixes for GtkButton and GtkCombobox
+ 646886 Do not leak list when drawing notebook.
+ 647086 Mismatched style_context_[save/restore] calls
+ 647152 Assertion `GTK_IS_PRINTER (printer)' failed...
+ 647244 Toggling the 'Deletable' option under the general...
+ 647275 Opening messages in Evolution and Empathy...
+ 647278 Small cleanup in statusbar
+ 647594 README link to mailing list is broken
+
+Updated translations:
+ Afrikaans
+ Assamese
+ Bengali
+ Brazilian Portuguese
+ British English
+ Bulgarian
+ Catalan
+ Czech
+ Danish
+ Dutch
+ French
+ Galician
+ German
+ Greek
+ Hindi
+ Hungarian
+ Indonesian
+ Japanese
+ Korean
+ Kurdish
+ Portuguese
+ Romanian
+ Russian
+ Serbian
+ Simplified Chinese
+ Slovenian
+ Spanish
+ Swedish
+ Traditional Chinese
+ Uighur
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.0.2
 =================================
 
