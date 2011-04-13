@@ -34,6 +34,134 @@
 
 #include <stdarg.h>
 
+
+/**
+ * SECTION:gtkfilechooserdialog
+ * @Short_description: A file chooser dialog, suitable for "File/Open" or "File/Save" commands
+ * @Title: GtkFileChooserDialog
+ * @See_also: #GtkFileChooser, #GtkDialog
+ *
+ * #GtkFileChooserDialog is a dialog box suitable for use with
+ * "File/Open" or "File/Save as" commands.  This widget works by
+ * putting a #GtkFileChooserWidget inside a #GtkDialog.  It exposes
+ * the #GtkFileChooserIface interface, so you can use all of the
+ * #GtkFileChooser functions on the file chooser dialog as well as
+ * those for #GtkDialog.
+ *
+ * Note that #GtkFileChooserDialog does not have any methods of its
+ * own.  Instead, you should use the functions that work on a
+ * #GtkFileChooser.
+ *
+ * <example id="gtkfilechooser-typical-usage">
+ * <title>Typical usage</title>
+ * In the simplest of cases, you can the following code to use
+ * #GtkFileChooserDialog to select a file for opening:
+ * <para>
+ * <informalexample><programlisting>
+ * GtkWidget *dialog;
+ *
+ * dialog = gtk_file_chooser_dialog_new ("Open File",
+ *                                       parent_window,
+ *                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+ *                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+ *                                       GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+ *                                       NULL);
+ *
+ * if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+ *   {
+ *     char *filename;
+ *
+ *     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+ *     open_file (filename);
+ *     g_free (filename);
+ *   }
+ *
+ * gtk_widget_destroy (dialog);
+ * </programlisting></informalexample>
+ * </para>
+ * To use a dialog for saving, you can use this:
+ * <para>
+ * <informalexample><programlisting>
+ * GtkWidget *dialog;
+ *
+ * dialog = gtk_file_chooser_dialog_new ("Save File",
+ *                                       parent_window,
+ *                                       GTK_FILE_CHOOSER_ACTION_SAVE,
+ *                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+ *                                       GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+ *                                       NULL);
+ * gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+ *
+ * if (user_edited_a_new_document)
+ *   {
+ *     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), default_folder_for_saving);
+ *     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled document");
+ *   }
+ * else
+ *   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
+ *
+ * if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+ *   {
+ *     char *filename;
+ *
+ *     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+ *     save_to_file (filename);
+ *     g_free (filename);
+ *   }
+ *
+ * gtk_widget_destroy (dialog);
+ * </programlisting></informalexample>
+ * </para>
+ * </example>
+ * <section id="gtkfilechooserdialog-response-codes">
+ * <title>Response Codes</title>
+ * #GtkFileChooserDialog inherits from #GtkDialog, so buttons that
+ * go in its action area have response codes such as
+ * #GTK_RESPONSE_ACCEPT and #GTK_RESPONSE_CANCEL.  For example, you
+ * could call gtk_file_chooser_dialog_new() as follows:
+ * <para>
+ * <informalexample><programlisting>
+ * GtkWidget *dialog;
+ *
+ * dialog = gtk_file_chooser_dialog_new ("Open File",
+ *                                       parent_window,
+ *                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+ *                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+ *                                       GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+ *                                       NULL);
+ * </programlisting></informalexample>
+ * </para>
+ * This will create buttons for "Cancel" and "Open" that use stock
+ * response identifiers from #GtkResponseType.  For most dialog
+ * boxes you can use your own custom response codes rather than the
+ * ones in #GtkResponseType, but #GtkFileChooserDialog assumes that
+ * its "accept"-type action, e.g. an "Open" or "Save" button,
+ * <emphasis>will</emphasis> have one of the following response
+ * codes:
+ * <para>
+ * <simplelist id="gtkfilechooserdialog-responses">
+ * <member>#GTK_RESPONSE_ACCEPT</member>
+ * <member>#GTK_RESPONSE_OK</member>
+ * <member>#GTK_RESPONSE_YES</member>
+ * <member>#GTK_RESPONSE_APPLY</member>
+ * </simplelist>
+ * </para>
+ * This is because #GtkFileChooserDialog must intercept responses
+ * and switch to folders if appropriate, rather than letting the
+ * dialog terminate &mdash; the implementation uses these known
+ * response codes to know which responses can be blocked if
+ * appropriate.
+ * <para>
+ * <note>
+ * To summarize, make sure you use a
+ * <link linkend="gtkfilechooserdialog-responses">stock response code</link>
+ * when you use #GtkFileChooserDialog to ensure proper operation.
+ * </note>
+ * </para>
+ * </section>
+ */
+
+
 #define GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_DIALOG (o)->priv)
 
 static void gtk_file_chooser_dialog_finalize   (GObject                   *object);
