@@ -1197,6 +1197,8 @@ gtk_expander_set_label_widget
 gtk_expander_get_label_widget
 gtk_expander_set_label_fill
 gtk_expander_get_label_fill
+gtk_expander_set_resize_toplevel
+gtk_expander_get_resize_toplevel
 <SUBSECTION Standard>
 GTK_TYPE_EXPANDER
 GTK_EXPANDER_CLASS
