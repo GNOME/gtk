@@ -263,6 +263,8 @@ parse_input_message (BroadwayInput *input, const char *message)
   case 'k':
   case 'K':
     msg.key.key = strtol(p, &p, 10);
+    p++; /* Skip , */
+    msg.key.state = strtol(p, &p, 10);
     break;
 
   case 'g':

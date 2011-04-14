@@ -79,6 +79,7 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
+  guint32 state;
   int key;
 } BroadwayInputKeyMsg;
 

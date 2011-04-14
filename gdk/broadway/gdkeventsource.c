@@ -259,9 +259,12 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->key.window = g_object_ref (window);
 	event->key.time = message->base.time;
 	event->key.keyval = message->key.key;
+	event->key.state = message->key.state;
 	event->key.hardware_keycode = message->key.key;
 	event->key.length = 0;
 	gdk_event_set_device (event, display->core_pointer);
+
+	display_broadway->last_state = message->key.state;
 
 	node = _gdk_event_queue_append (display, event);
 	_gdk_windowing_got_event (display, node, event, message->base.serial);

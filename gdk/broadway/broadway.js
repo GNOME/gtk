@@ -951,6 +951,14 @@ function getEffectiveEventTarget (id) {
 }
 
 function updateForEvent(ev) {
+    lastState &= ~(GDK_SHIFT_MASK|GDK_CONTROL_MASK|GDK_MOD1_MASK);
+    if (ev.shiftKey)
+	lastState |= GDK_SHIFT_MASK;
+    if (ev.ctrlKey)
+	lastState |= GDK_CONTROL_MASK;
+    if (ev.altKey)
+	lastState |= GDK_MOD1_MASK;
+
     lastTimeStamp = ev.timeStamp;
     if (ev.target.surface && ev.target.surface.window) {
 	var win = ev.target.surface.window;
@@ -2555,7 +2563,7 @@ function handleKeyDown(e) {
 	// browser behaviors or it has no corresponding keyPress
 	// event, then send it immediately
 	if (!ignoreKeyEvent(ev))
-	    sendInput("k", [keysym]);
+	    sendInput("k", [keysym, lastState]);
 	suppress = true;
     }
 
@@ -2600,7 +2608,7 @@ function handleKeyPress(e) {
 
     // Send the translated keysym
     if (keysym > 0)
-	sendInput ("k", [keysym]);
+	sendInput ("k", [keysym, lastState]);
 
     // Stop keypress events just in case
     return cancelEvent(ev);
@@ -2619,7 +2627,7 @@ function handleKeyUp(e) {
     }
 
     if (keysym > 0)
-	sendInput ("K", [keysym]);
+	sendInput ("K", [keysym, lastState]);
     return cancelEvent(ev);
 }
 
