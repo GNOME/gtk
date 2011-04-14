@@ -37,6 +37,9 @@ EXTRA_DIST += \
 	css-21-malformed-declarations.css \
 	css-21-malformed-declarations.errors \
 	css-21-malformed-declarations.ref.css \
+	css-21-malformed-statements.css \
+	css-21-malformed-statements.errors \
+	css-21-malformed-statements.ref.css \
 	declarations.css \
 	declarations.errors \
 	declarations.ref.css \
