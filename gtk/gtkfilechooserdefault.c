@@ -250,6 +250,7 @@ typedef enum {
 #define NUM_LINES 45
 #define NUM_CHARS 60
 
+#define SETTINGS_KEY_LAST_FOLDER_URI     "last-folder-uri"
 #define SETTINGS_KEY_LOCATION_MODE       "location-mode"
 #define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
 #define SETTINGS_KEY_EXPAND_FOLDERS      "expand-folders"
@@ -5876,7 +5877,23 @@ save_dialog_geometry (GtkFileChooserDefault *impl)
 static void
 settings_save (GtkFileChooserDefault *impl)
 {
+  char *current_folder_uri;
+
   settings_ensure (impl);
+
+  /* Current folder */
+
+  if (impl->current_folder)
+    current_folder_uri = g_file_get_uri (impl->current_folder);
+  else
+    current_folder_uri = "";
+
+  g_settings_set_string (impl->settings, SETTINGS_KEY_LAST_FOLDER_URI, current_folder_uri);
+
+  if (impl->current_folder)
+    g_free (current_folder_uri);
+
+  /* All the other state */
 
   g_settings_set_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
   g_settings_set_boolean (impl->settings, SETTINGS_KEY_EXPAND_FOLDERS, impl->expand_folders);
@@ -5908,12 +5925,34 @@ gtk_file_chooser_default_realize (GtkWidget *widget)
   emit_default_size_changed (impl);
 }
 
+static GFile *
+get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
+{
+  char *last_folder_uri;
+  GFile *file;
+
+  settings_ensure (impl);
+
+  last_folder_uri = g_settings_get_string (impl->settings, SETTINGS_KEY_LAST_FOLDER_URI);
+
+  /* If no last folder is set, we use the user's home directory, since
+   * this is the starting point for most documents.
+   */
+  if (last_folder_uri[0] == '\0')
+    file = g_file_new_for_path (g_get_home_dir ());
+  else
+    file = g_file_new_for_uri (last_folder_uri);
+
+  g_free (last_folder_uri);
+
+  return file;
+}
+
 /* GtkWidget::map method */
 static void
 gtk_file_chooser_default_map (GtkWidget *widget)
 {
   GtkFileChooserDefault *impl;
-  char *current_working_dir;
 
   profile_start ("start", NULL);
 
@@ -5923,16 +5962,17 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     {
+      GFile *folder;
+
       switch (impl->reload_state)
         {
         case RELOAD_EMPTY:
-          /* The user didn't explicitly give us a folder to
-           * display, so we'll use the cwd
+          /* The user didn't explicitly give us a folder to display, so we'll
+           * use the saved one from the last invocation of the file chooser
            */
-          current_working_dir = g_get_current_dir ();
-          gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl),
-                                               current_working_dir);
-          g_free (current_working_dir);
+	  folder = get_file_for_last_folder_opened (impl);
+          gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), folder, NULL);
+	  g_object_unref (folder);
           break;
         
         case RELOAD_HAS_FOLDER:
@@ -7180,17 +7220,12 @@ gtk_file_chooser_default_get_current_folder (GtkFileChooser *chooser)
  
   if (impl->reload_state == RELOAD_EMPTY)
     {
-      char *current_working_dir;
-      GFile *file;
-
-      /* We are unmapped, or we had an error while loading the last folder.  We'll return
-       * the $cwd since once we get (re)mapped, we'll load $cwd anyway unless the caller
-       * explicitly calls set_current_folder() on us.
+      /* We are unmapped, or we had an error while loading the last folder.
+       * We'll return the folder used by the last invocation of the file chooser
+       * since once we get (re)mapped, we'll load *that* folder anyway unless
+       * the caller explicitly calls set_current_folder() on us.
        */
-      current_working_dir = g_get_current_dir ();
-      file = g_file_new_for_path (current_working_dir);
-      g_free (current_working_dir);
-      return file;
+      return get_file_for_last_folder_opened (impl);
     }
 
   if (impl->current_folder)
