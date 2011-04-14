@@ -40,11 +40,28 @@ G_BEGIN_DECLS
 #define GTK_IS_ICON_THEME_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_THEME))
 #define GTK_ICON_THEME_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_THEME, GtkIconThemeClass))
 
+/**
+ * GtkIconInfo:
+ *
+ * Contains information found when looking up an icon in
+ * an icon theme.
+ */
 typedef struct _GtkIconInfo         GtkIconInfo;
 typedef struct _GtkIconTheme        GtkIconTheme;
 typedef struct _GtkIconThemeClass   GtkIconThemeClass;
 typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
 
+/**
+ * GtkIconTheme:
+ *
+ * Acts as a database of information about an icon theme.
+ * Normally, you retrieve the icon theme for a particular
+ * screen using gtk_icon_theme_get_for_screen() and it
+ * will contain information about current icon theme for
+ * that screen, but you can also create a new #GtkIconTheme
+ * object and set the icon theme name explicitely using
+ * gtk_icon_theme_set_custom_theme().
+ */
 struct _GtkIconTheme
 {
   /*< private >*/
@@ -94,6 +111,11 @@ typedef enum
   GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 4
 } GtkIconLookupFlags;
 
+/**
+ * GTK_ICON_THEME_ERROR:
+ *
+ * The #GQuark used for #GtkIconThemeError errors.
+ */
 #define GTK_ICON_THEME_ERROR gtk_icon_theme_error_quark ()
 
 /**
