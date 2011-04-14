@@ -37,6 +37,37 @@
 
 #include <string.h>
 
+
+/**
+ * SECTION:gtktoolbutton
+ * @Short_description: A GtkToolItem subclass that displays buttons
+ * @Title: GtkToolButton
+ * @See_also: #GtkToolbar, #GtkMenuToolButton, #GtkToggleToolButton,
+ *   #GtkRadioToolButton, #GtkSeparatorToolItem
+ *
+ * #GtkToolButton<!-- -->s are #GtkToolItems containing buttons.
+ *
+ * Use gtk_tool_button_new() to create a new #GtkToolButton. Use
+ * gtk_tool_button_new_with_stock() to create a #GtkToolButton
+ * containing a stock item.
+ *
+ * The label of a #GtkToolButton is determined by the properties
+ * #GtkToolButton:label-widget, #GtkToolButton:label, and
+ * #GtkToolButton:stock-id. If #GtkToolButton:label-widget is
+ * non-%NULL, then that widget is used as the label. Otherwise, if
+ * #GtkToolButton:label is non-%NULL, that string is used as the label.
+ * Otherwise, if #GtkToolButton:stock-id is non-%NULL, the label is
+ * determined by the stock item. Otherwise, the button does not have a label.
+ *
+ * The icon of a #GtkToolButton is determined by the properties
+ * #GtkToolButton:icon-widget and #GtkToolButton:stock-id. If
+ * #GtkToolButton:icon-widget is non-%NULL, then
+ * that widget is used as the icon. Otherwise, if #GtkToolButton:stock-id is
+ * non-%NULL, the icon is determined by the stock item. Otherwise,
+ * the button does not have a icon.
+ */
+
+
 #define MENU_ID "gtk-tool-button-menu-id"
 
 enum {
