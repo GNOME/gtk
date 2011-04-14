@@ -30,9 +30,6 @@ gboolean                _gtk_css_value_from_string        (GValue        *value,
                                                            GError       **error);
 char *                  _gtk_css_value_to_string          (const GValue  *value);
 
-GtkSymbolicColor *      _gtk_css_parse_symbolic_color     (const char    *str,
-                                                           GError       **error);
-
 GFile *                 _gtk_css_parse_url                (GFile         *base,
                                                            const char    *str,
                                                            char         **end,

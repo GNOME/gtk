@@ -27,6 +27,7 @@
 
 #include "gtkcssproviderprivate.h"
 
+#include "gtkcssparserprivate.h"
 #include "gtkcssstringfuncsprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
@@ -735,7 +736,7 @@
 typedef struct SelectorElement SelectorElement;
 typedef struct SelectorPath SelectorPath;
 typedef struct SelectorStyleInfo SelectorStyleInfo;
-typedef struct _GtkCssScannerPrivate GtkCssScannerPrivate;
+typedef struct _GtkCssScanner GtkCssScanner;
 typedef enum SelectorElementType SelectorElementType;
 typedef enum CombinatorType CombinatorType;
 typedef enum ParserScope ParserScope;
@@ -786,9 +787,11 @@ struct SelectorStyleInfo
   GHashTable *style;
 };
 
-struct _GtkCssScannerPrivate
+struct _GtkCssScanner
 {
-  GScanner *parent;
+  GtkCssProvider *provider;
+  GtkCssParser *parser;
+  GtkCssScanner *parent;
   GFile *file;
   GFile *base;
   GSList *state;
@@ -841,11 +844,9 @@ static guint css_provider_signals[LAST_SIGNAL] = { 0 };
 static void gtk_css_provider_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
-static void scanner_apply_scope (GScanner    *scanner,
-                                 ParserScope  scope);
 static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
-                                GScanner       *scanner,
+                                GtkCssScanner  *scanner,
                                 GFile          *file,
                                 const char     *data,
                                 gsize           length,
@@ -1080,12 +1081,6 @@ selector_path_prepend_combinator (SelectorPath   *path,
   elem->combinator = combinator;
 }
 
-static gint
-selector_path_depth (SelectorPath *path)
-{
-  return g_slist_length (path->elements);
-}
-
 static SelectorStyleInfo *
 selector_style_info_new (SelectorPath *path)
 {
@@ -1132,124 +1127,110 @@ property_value_free (GValue *value)
 }
 
 static void
-gtk_css_scanner_reset (GScanner *scanner)
+gtk_css_scanner_reset (GtkCssScanner *scanner)
 {
-  GtkCssScannerPrivate *priv = scanner->user_data;
+  g_slist_free (scanner->state);
+  scanner->state = NULL;
 
-  g_slist_free (priv->state);
-  priv->state = NULL;
+  g_slist_foreach (scanner->cur_selectors, (GFunc) selector_path_unref, NULL);
+  g_slist_free (scanner->cur_selectors);
+  scanner->cur_selectors = NULL;
 
-  g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
-  g_slist_free (priv->cur_selectors);
-  priv->cur_selectors = NULL;
+  if (scanner->cur_properties)
+    g_hash_table_unref (scanner->cur_properties);
 
-  if (priv->cur_properties)
-    g_hash_table_unref (priv->cur_properties);
-
-  priv->cur_properties = g_hash_table_new_full (g_str_hash,
-                                                g_str_equal,
-                                                (GDestroyNotify) g_free,
-                                                (GDestroyNotify) property_value_free);
-
-  scanner_apply_scope (scanner, SCOPE_SELECTOR);
+  scanner ->cur_properties = g_hash_table_new_full (g_str_hash,
+                                                    g_str_equal,
+                                                    (GDestroyNotify) g_free,
+                                                    (GDestroyNotify) property_value_free);
 }
 
 static void
-gtk_css_scanner_destroy (GScanner *scanner)
+gtk_css_scanner_destroy (GtkCssScanner *scanner)
 {
-  GtkCssScannerPrivate *priv = scanner->user_data;
-
   gtk_css_scanner_reset (scanner);
 
-  if (priv->file)
-    g_object_unref (priv->file);
-  g_hash_table_destroy (priv->cur_properties);
-  g_slice_free (GtkCssScannerPrivate, priv);
-  
-  g_scanner_destroy (scanner);
+  g_object_unref (scanner->provider);
+  if (scanner->file)
+    g_object_unref (scanner->file);
+  g_object_unref (scanner->base);
+  g_hash_table_destroy (scanner->cur_properties);
+  _gtk_css_parser_free (scanner->parser);
+
+  g_slice_free (GtkCssScanner, scanner);
 }
 
-static GScanner *
-gtk_css_scanner_new (GScanner    *parent,
-                     GFile       *file,
-                     const gchar *data,
-                     gsize        length)
+static void
+gtk_css_scanner_parser_error (GtkCssParser *parser,
+                              const GError *error,
+                              gpointer      user_data)
 {
-  GtkCssScannerPrivate *priv;
-  GScanner *scanner;
+  GtkCssScanner *scanner = user_data;
 
-  scanner = g_scanner_new (NULL);
+  gtk_css_provider_take_error_full (scanner->provider,
+                                    scanner->file,
+                                    _gtk_css_parser_get_line (scanner->parser),
+                                    _gtk_css_parser_get_position (scanner->parser),
+                                    g_error_copy (error));
+}
 
-  priv = scanner->user_data = g_slice_new0 (GtkCssScannerPrivate);
+static GtkCssScanner *
+gtk_css_scanner_new (GtkCssProvider *provider,
+                     GtkCssScanner  *parent,
+                     GFile          *file,
+                     const gchar    *data,
+                     gsize           length)
+{
+  GtkCssScanner *scanner;
 
-  priv->parent = parent;
+  g_assert (data[length] == 0);
+
+  scanner = g_slice_new0 (GtkCssScanner);
+
+  g_object_ref (provider);
+  scanner->provider = provider;
+  scanner->parent = parent;
 
   if (file)
     {
-      priv->file = g_object_ref (file);
-      priv->base = g_file_get_parent (file);
+      scanner->file = g_object_ref (file);
+      scanner->base = g_file_get_parent (file);
     }
   else
     {
       char *dir = g_get_current_dir ();
-      priv->base = g_file_new_for_path (dir);
+      scanner->base = g_file_new_for_path (dir);
       g_free (dir);
     }
 
-  priv->cur_properties = g_hash_table_new_full (g_str_hash,
-                                                g_str_equal,
-                                                (GDestroyNotify) g_free,
-                                                (GDestroyNotify) property_value_free);
+  scanner->cur_properties = g_hash_table_new_full (g_str_hash,
+                                                   g_str_equal,
+                                                   (GDestroyNotify) g_free,
+                                                   (GDestroyNotify) property_value_free);
 
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "active", GUINT_TO_POINTER (GTK_STATE_ACTIVE));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "prelight", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "hover", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "selected", GUINT_TO_POINTER (GTK_STATE_SELECTED));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "insensitive", GUINT_TO_POINTER (GTK_STATE_INSENSITIVE));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "inconsistent", GUINT_TO_POINTER (GTK_STATE_INCONSISTENT));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "focused", GUINT_TO_POINTER (GTK_STATE_FOCUSED));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "focus", GUINT_TO_POINTER (GTK_STATE_FOCUSED));
-
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "nth-child", GUINT_TO_POINTER (SYMBOL_NTH_CHILD));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "first-child", GUINT_TO_POINTER (SYMBOL_FIRST_CHILD));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "last-child", GUINT_TO_POINTER (SYMBOL_LAST_CHILD));
-  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "sorted", GUINT_TO_POINTER (SYMBOL_SORTED_CHILD));
-
-  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "even", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_EVEN));
-  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "odd", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_ODD));
-  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "first", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_FIRST));
-  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "last", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_LAST));
-
-  scanner_apply_scope (scanner, SCOPE_SELECTOR);
-
-  if (length > G_MAXUINT32)
-    g_warning ("CSS file too large, truncating");
-
-  g_scanner_input_text (scanner, data, length);
+  scanner->parser = _gtk_css_parser_new (data,
+                                         gtk_css_scanner_parser_error,
+                                         scanner);
 
   return scanner;
 }
 
 static GFile *
-gtk_css_scanner_get_base_url (GScanner *scanner)
+gtk_css_scanner_get_base_url (GtkCssScanner *scanner)
 {
-  GtkCssScannerPrivate *priv = scanner->user_data;
-
-  return priv->base;
+  return scanner->base;
 }
 
 static gboolean
-gtk_css_scanner_would_recurse (GScanner *scanner,
-                               GFile    *file)
+gtk_css_scanner_would_recurse (GtkCssScanner *scanner,
+                               GFile         *file)
 {
   while (scanner)
     {
-      GtkCssScannerPrivate *priv = scanner->user_data;
-
-      if (priv->file && g_file_equal (priv->file, file))
+      if (scanner->file && g_file_equal (scanner->file, file))
         return TRUE;
 
-      scanner = priv->parent;
+      scanner = scanner->parent;
     }
 
   return FALSE;
@@ -1677,21 +1658,19 @@ gtk_css_provider_new (void)
 
 static void
 gtk_css_provider_take_error (GtkCssProvider *provider,
-                             GScanner       *scanner,
+                             GtkCssScanner  *scanner,
                              GError         *error)
 {
-  GtkCssScannerPrivate *priv = scanner->user_data;
-
   gtk_css_provider_take_error_full (provider,
-                                    priv->file,
-                                    scanner->line,
-                                    scanner->position,
+                                    scanner->file,
+                                    _gtk_css_parser_get_line (scanner->parser),
+                                    _gtk_css_parser_get_position (scanner->parser),
                                     error);
 }
 
 static void
 gtk_css_provider_error_literal (GtkCssProvider *provider,
-                                GScanner       *scanner,
+                                GtkCssScanner  *scanner,
                                 GQuark          domain,
                                 gint            code,
                                 const char     *message)
@@ -1703,14 +1682,14 @@ gtk_css_provider_error_literal (GtkCssProvider *provider,
 
 static void
 gtk_css_provider_error (GtkCssProvider *provider,
-                        GScanner       *scanner,
+                        GtkCssScanner  *scanner,
                         GQuark          domain,
                         gint            code,
                         const char     *format,
                         ...)  G_GNUC_PRINTF (5, 6);
 static void
 gtk_css_provider_error (GtkCssProvider *provider,
-                        GScanner       *scanner,
+                        GtkCssScanner  *scanner,
                         GQuark          domain,
                         gint            code,
                         const char     *format,
@@ -1728,7 +1707,7 @@ gtk_css_provider_error (GtkCssProvider *provider,
 
 static void
 gtk_css_provider_invalid_token (GtkCssProvider *provider,
-                                GScanner       *scanner,
+                                GtkCssScanner  *scanner,
                                 const char     *expected)
 {
   gtk_css_provider_error (provider,
@@ -1738,118 +1717,32 @@ gtk_css_provider_invalid_token (GtkCssProvider *provider,
                           "expected a valid %s", expected);
 }
 
-static void
-scanner_apply_scope (GScanner    *scanner,
-                     ParserScope  scope)
-{
-  g_scanner_set_scope (scanner, scope);
-
-  if (scope == SCOPE_VALUE)
-    {
-      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_\"'";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(),.%\t\n'/\"";
-      scanner->config->scan_identifier_1char = TRUE;
-      scanner->config->scan_string_sq = FALSE;
-      scanner->config->scan_string_dq = FALSE;
-    }
-  else if (scope == SCOPE_BINDING_SET)
-    {
-      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(){}<>,.%\t\n'/\"";
-      scanner->config->scan_identifier_1char = TRUE;
-      scanner->config->scan_string_sq = TRUE;
-      scanner->config->scan_string_dq = TRUE;
-    }
-  else if (scope == SCOPE_SELECTOR)
-    {
-      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_#.";
-      scanner->config->scan_identifier_1char = TRUE;
-      scanner->config->scan_string_sq = TRUE;
-      scanner->config->scan_string_dq = TRUE;
-    }
-  else if (scope == SCOPE_PSEUDO_CLASS ||
-           scope == SCOPE_NTH_CHILD ||
-           scope == SCOPE_DECLARATION)
-    {
-      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "-_";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_";
-      scanner->config->scan_identifier_1char = FALSE;
-      scanner->config->scan_string_sq = TRUE;
-      scanner->config->scan_string_dq = TRUE;
-    }
-  else
-    g_assert_not_reached ();
-
-  scanner->config->scan_float = FALSE;
-  scanner->config->cpair_comment_single = NULL;
-}
-
-static void
-gtk_css_scanner_push_scope (GScanner    *scanner,
-                            ParserScope  scope)
-{
-  GtkCssScannerPrivate *priv;
-
-  priv = scanner->user_data;
-  priv->state = g_slist_prepend (priv->state, GUINT_TO_POINTER (scope));
-
-  scanner_apply_scope (scanner, scope);
-}
-
-static void
-gtk_css_scanner_pop_scope (GScanner *scanner)
-{
-  GtkCssScannerPrivate *priv;
-  ParserScope scope = SCOPE_SELECTOR;
-
-  priv = scanner->user_data;
-
-  if (!priv->state)
-    {
-      g_warning ("Push/pop calls to parser scope aren't paired");
-      scanner_apply_scope (scanner, SCOPE_SELECTOR);
-      return;
-    }
-
-  priv->state = g_slist_delete_link (priv->state, priv->state);
-
-  /* Fetch new scope */
-  if (priv->state)
-    scope = GPOINTER_TO_INT (priv->state->data);
-
-  scanner_apply_scope (scanner, scope);
-}
-
-static void
+static void 
 css_provider_commit (GtkCssProvider *css_provider,
-                     GScanner       *scanner)
+                     GSList         *selectors,
+                     GHashTable     *properties)
 {
-  GtkCssScannerPrivate *scanner_priv;
   GtkCssProviderPrivate *priv;
   GSList *l;
 
   priv = css_provider->priv;
-  scanner_priv = scanner->user_data;
 
-  l = scanner_priv->cur_selectors;
-
-  if (g_hash_table_size (scanner_priv->cur_properties) == 0)
+  if (g_hash_table_size (properties) == 0)
     return;
 
-  while (l)
+  for (l = selectors; l; l = l->next)
     {
       SelectorPath *path = l->data;
       SelectorStyleInfo *info;
 
       info = selector_style_info_new (path);
-      selector_style_info_set_style (info, scanner_priv->cur_properties);
+      selector_style_info_set_style (info, properties);
 
       g_ptr_array_add (priv->selectors_info, info);
-      l = l->next;
     }
 }
 
+#if 0
 static GTokenType
 parse_nth_child (GtkCssProvider *css_provider,
                  GScanner       *scanner,
@@ -2084,6 +1977,7 @@ parse_selector (GtkCssProvider  *css_provider,
                   if ((pos = strchr (name, '.')) != NULL)
                     *pos = '\0';
 
+              selector_path_prepend_combinator (path, COMBINATOR_CHILD);
                   selector_path_prepend_name (path, name);
 
                   /* Parse any remaining classes */
@@ -2177,6 +2071,7 @@ parse_selector (GtkCssProvider  *css_provider,
 
   return G_TOKEN_NONE;
 }
+#endif
 
 static void
 resolve_binding_sets (const gchar *value_str,
@@ -2202,404 +2097,6 @@ resolve_binding_sets (const gchar *value_str,
 
   g_value_take_boxed (value, array);
   g_strfreev (bindings);
-}
-
-static GTokenType
-parse_rule (GtkCssProvider  *css_provider,
-            GScanner        *scanner)
-{
-  GtkCssScannerPrivate *priv;
-  GTokenType expected_token;
-  SelectorPath *selector;
-
-  priv = scanner->user_data;
-
-  gtk_css_scanner_push_scope (scanner, SCOPE_SELECTOR);
-
-  /* Handle directives */
-  if (scanner->token == G_TOKEN_IDENTIFIER &&
-      scanner->value.v_identifier[0] == '@')
-    {
-      gchar *directive;
-
-      directive = &scanner->value.v_identifier[1];
-
-      if (strcmp (directive, "define-color") == 0)
-        {
-          GtkSymbolicColor *color;
-          gchar *color_name, *color_str;
-          GError *error = NULL;
-
-          /* Directive is a color mapping */
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token != G_TOKEN_IDENTIFIER)
-            {
-              gtk_css_provider_invalid_token (css_provider, scanner, "Color name");
-              return G_TOKEN_IDENTIFIER;
-            }
-
-          color_name = g_strdup (scanner->value.v_identifier);
-          gtk_css_scanner_push_scope (scanner, SCOPE_VALUE);
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token != G_TOKEN_IDENTIFIER)
-            {
-              gtk_css_provider_invalid_token (css_provider, scanner, "Color definition");
-              return G_TOKEN_IDENTIFIER;
-            }
-
-          color_str = g_strstrip (scanner->value.v_identifier);
-          color = _gtk_css_parse_symbolic_color (color_str, &error);
-          if (!color)
-            {
-              gtk_css_provider_take_error (css_provider, scanner, error);
-              return G_TOKEN_IDENTIFIER;
-            }
-
-          g_hash_table_insert (css_provider->priv->symbolic_colors, color_name, color);
-
-          gtk_css_scanner_pop_scope (scanner);
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token != ';')
-            return ';';
-
-          return G_TOKEN_NONE;
-        }
-      else if (strcmp (directive, "import") == 0)
-        {
-          gchar *path = NULL;
-          GFile *actual;
-          GError *error = NULL;
-
-          gtk_css_scanner_push_scope (scanner, SCOPE_VALUE);
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token == G_TOKEN_IDENTIFIER &&
-              g_str_has_prefix (scanner->value.v_identifier, "url"))
-            path = g_strstrip (scanner->value.v_identifier);
-          else if (scanner->token == G_TOKEN_STRING)
-            path = g_strstrip (scanner->value.v_string);
-          else
-            {
-              gtk_css_provider_invalid_token (css_provider, scanner, "File URL");
-              return G_TOKEN_IDENTIFIER;
-            }
-
-          actual = _gtk_css_parse_url (gtk_css_scanner_get_base_url (scanner),
-                                       path,
-                                       NULL,
-                                       &error);
-
-          if (actual == NULL)
-            {
-              gtk_css_provider_take_error (css_provider, scanner, error);
-              return G_TOKEN_IDENTIFIER;
-            }
-
-          gtk_css_scanner_pop_scope (scanner);
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token != ';')
-            {
-              g_object_unref (actual);
-              return ';';
-            }
-
-          if (gtk_css_scanner_would_recurse (scanner, actual))
-            {
-              char *path = g_file_get_path (actual);
-              gtk_css_provider_error (css_provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_IMPORT,
-                                      "Loading '%s' would recurse",
-                                      path);
-              g_free (path);
-            }
-          else
-            {
-              gtk_css_provider_load_internal (css_provider,
-                                              scanner,
-                                              actual,
-                                              NULL, 0,
-                                              NULL);
-            }
-
-          g_object_unref (actual);
-
-          return G_TOKEN_NONE;
-        }
-      else if (strcmp (directive, "binding-set") == 0)
-        {
-          GtkBindingSet *binding_set;
-          gchar *binding_set_name;
-
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token != G_TOKEN_IDENTIFIER)
-            {
-              gtk_css_provider_invalid_token (css_provider, scanner, "Binding name");
-              return G_TOKEN_IDENTIFIER;
-            }
-
-          binding_set_name = scanner->value.v_identifier;
-          binding_set = gtk_binding_set_find (binding_set_name);
-
-          if (!binding_set)
-            {
-              binding_set = gtk_binding_set_new (binding_set_name);
-              binding_set->parsed = TRUE;
-            }
-
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token != G_TOKEN_LEFT_CURLY)
-            return G_TOKEN_LEFT_CURLY;
-
-          gtk_css_scanner_push_scope (scanner, SCOPE_BINDING_SET);
-          g_scanner_get_next_token (scanner);
-
-          do
-            {
-              GTokenType ret;
-
-              if (scanner->token != G_TOKEN_IDENTIFIER)
-                {
-                  gtk_css_provider_invalid_token (css_provider, scanner, "Binding definition");
-                  return G_TOKEN_IDENTIFIER;
-                }
-
-              ret = gtk_binding_entry_add_signal_from_string (binding_set,
-                                                              scanner->value.v_identifier);
-              if (ret != G_TOKEN_NONE)
-                {
-                  gtk_css_provider_invalid_token (css_provider, scanner, "Binding definition");
-                  return ret;
-                }
-
-              g_scanner_get_next_token (scanner);
-
-              if (scanner->token != ';')
-                return ';';
-
-              g_scanner_get_next_token (scanner);
-            }
-          while (scanner->token != G_TOKEN_RIGHT_CURLY);
-
-          gtk_css_scanner_pop_scope (scanner);
-          g_scanner_get_next_token (scanner);
-
-          return G_TOKEN_NONE;
-        }
-      else
-        {
-          gtk_css_provider_invalid_token (css_provider, scanner, "Directive");
-          return G_TOKEN_IDENTIFIER;
-        }
-    }
-
-  expected_token = parse_selector (css_provider, scanner, &selector);
-
-  if (expected_token != G_TOKEN_NONE)
-    {
-      selector_path_unref (selector);
-      gtk_css_provider_invalid_token (css_provider, scanner, "Selector");
-      return expected_token;
-    }
-
-  priv->cur_selectors = g_slist_prepend (priv->cur_selectors, selector);
-
-  while (scanner->token == ',')
-    {
-      g_scanner_get_next_token (scanner);
-
-      expected_token = parse_selector (css_provider, scanner, &selector);
-
-      if (expected_token != G_TOKEN_NONE)
-        {
-          selector_path_unref (selector);
-          gtk_css_provider_invalid_token (css_provider, scanner, "Selector");
-          return expected_token;
-        }
-
-      priv->cur_selectors = g_slist_prepend (priv->cur_selectors, selector);
-    }
-
-  gtk_css_scanner_pop_scope (scanner);
-
-  if (scanner->token != G_TOKEN_LEFT_CURLY)
-    return G_TOKEN_LEFT_CURLY;
-
-  /* Declarations parsing */
-  gtk_css_scanner_push_scope (scanner, SCOPE_DECLARATION);
-
-  g_scanner_get_next_token (scanner);
-    
-  while (scanner->token != G_TOKEN_RIGHT_CURLY &&
-         !g_scanner_eof (scanner))
-    {
-      gchar *value_str = NULL;
-      GtkStylePropertyParser parse_func = NULL;
-      GParamSpec *pspec = NULL;;
-      gchar *prop;
-
-      if (scanner->token == ';')
-        {
-          g_scanner_get_next_token (scanner);
-          continue;
-        }
-
-      if (scanner->token != G_TOKEN_IDENTIFIER)
-        {
-          gtk_css_provider_error_literal (css_provider,
-                                          scanner,
-                                          GTK_CSS_PROVIDER_ERROR,
-                                          GTK_CSS_PROVIDER_ERROR_PROPERTY_NAME,
-                                          "Expected a valid property name");
-          goto find_end_of_declaration;
-        }
-
-      prop = g_strdup (scanner->value.v_identifier);
-
-      if (!gtk_style_properties_lookup_property (prop, &parse_func, &pspec) &&
-          prop[0] != '-')
-        {
-          gtk_css_provider_error (css_provider,
-                                  scanner,
-                                  GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_PROPERTY_NAME,
-                                  "'%s' is not a valid property name",
-                                  prop);
-          g_free (prop);
-          goto find_end_of_declaration;
-        }
-
-      g_scanner_get_next_token (scanner);
-
-      if (scanner->token != ':')
-        {
-          g_free (prop);
-          gtk_css_provider_invalid_token (css_provider, scanner, "':'");
-          goto find_end_of_declaration;
-        }
-
-      gtk_css_scanner_push_scope (scanner, SCOPE_VALUE);
-      g_scanner_get_next_token (scanner);
-
-      if (scanner->token != G_TOKEN_IDENTIFIER)
-        {
-          g_free (prop);
-          /* the error value here is hacky. But strings should be used for
-           * strings really, so a string is not a syntax error but a broken
-           * value for everything that we support. */
-          gtk_css_provider_error (css_provider,
-                                  scanner,
-                                  GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                  "Not a property value");
-          gtk_css_scanner_pop_scope (scanner);
-          goto find_end_of_declaration;
-        }
-
-      value_str = scanner->value.v_identifier;
-      g_strchomp (value_str);
-
-      gtk_css_scanner_pop_scope (scanner);
-      g_scanner_peek_next_token (scanner);
-
-      if (scanner->next_token != ';' &&
-          scanner->next_token != G_TOKEN_RIGHT_CURLY &&
-          scanner->next_token != G_TOKEN_EOF)
-        {
-          gtk_css_provider_invalid_token (css_provider, scanner, "';'");
-          g_free (prop);
-          goto find_end_of_declaration;
-        }
-
-      if (pspec)
-        {
-          GValue *val;
-
-          val = g_slice_new0 (GValue);
-          g_value_init (val, pspec->value_type);
-
-          if (strcmp (value_str, "none") == 0)
-            {
-              /* Insert the default value, so it has an opportunity
-               * to override other style providers when merged
-               */
-              g_param_value_set_default (pspec, val);
-              g_hash_table_insert (priv->cur_properties, prop, val);
-            }
-          else if (strcmp (prop, "gtk-key-bindings") == 0)
-            {
-              /* Private property holding the binding sets */
-              resolve_binding_sets (value_str, val);
-              g_hash_table_insert (priv->cur_properties, prop, val);
-            }
-          else if (parse_func)
-            {
-              GError *error = NULL;
-              
-              if ((*parse_func) (value_str, val, &error))
-                g_hash_table_insert (priv->cur_properties, prop, val);
-              else
-                gtk_css_provider_take_error (css_provider, scanner, error);
-            }
-          else
-            {
-              GError *error = NULL;
-              
-              if (_gtk_css_value_from_string (val,
-                                              gtk_css_scanner_get_base_url (scanner),
-                                              value_str,
-                                              &error))
-                {
-                  g_hash_table_insert (priv->cur_properties, prop, val);
-                }
-              else
-                {
-                  g_value_unset (val);
-                  g_slice_free (GValue, val);
-                  g_free (prop);
-
-                  gtk_css_provider_take_error (css_provider, scanner, error);
-                }
-            }
-        }
-      else if (prop[0] == '-')
-        {
-          GValue *val;
-
-          val = g_slice_new0 (GValue);
-          g_value_init (val, G_TYPE_STRING);
-          g_value_set_string (val, value_str);
-
-          g_hash_table_insert (priv->cur_properties, prop, val);
-        }
-      else
-        g_free (prop);
-
-      g_scanner_get_next_token (scanner);
-
-      if (g_scanner_eof (scanner))
-        {
-          gtk_css_provider_invalid_token (css_provider, scanner, "}");
-          break;
-        }
-
-find_end_of_declaration:
-      while (scanner->token != ';' &&
-             scanner->token != G_TOKEN_RIGHT_CURLY &&
-             !g_scanner_eof (scanner))
-        g_scanner_get_next_token (scanner);
-    }
-
-  gtk_css_scanner_pop_scope (scanner);
-
-  return G_TOKEN_NONE;
 }
 
 static void
@@ -2630,41 +2127,686 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
 }
 
 static void
-parse_stylesheet (GtkCssProvider  *css_provider,
-                  GScanner        *scanner)
+parse_import (GtkCssScanner *scanner)
 {
-  g_scanner_get_next_token (scanner);
+  GFile *file;
+  char *uri;
 
-  while (!g_scanner_eof (scanner))
+  uri = _gtk_css_parser_read_uri (scanner->parser);
+  if (uri == NULL)
     {
-      GTokenType expected_token;
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      return;
+    }
 
-      expected_token = parse_rule (css_provider, scanner);
+  file = g_file_resolve_relative_path (gtk_css_scanner_get_base_url (scanner), uri);
+  g_free (uri);
 
-      if (expected_token != G_TOKEN_NONE)
+  if (gtk_css_scanner_would_recurse (scanner, file))
+    {
+       char *path = g_file_get_path (file);
+       gtk_css_provider_error (scanner->provider,
+                               scanner,
+                               GTK_CSS_PROVIDER_ERROR,
+                               GTK_CSS_PROVIDER_ERROR_IMPORT,
+                               "Loading '%s' would recurse",
+                               path);
+       g_free (path);
+    }
+  else
+    {
+      gtk_css_provider_load_internal (scanner->provider,
+                                      scanner,
+                                      file,
+                                      NULL, 0,
+                                      NULL);
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
+    {
+      g_object_unref (file);
+      gtk_css_provider_invalid_token (scanner->provider, scanner, "semicolon");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      return;
+    }
+
+  g_object_unref (file);
+}
+
+static void
+parse_color_definition (GtkCssScanner *scanner)
+{
+  GtkSymbolicColor *symbolic;
+  char *name;
+
+  name = _gtk_css_parser_try_name (scanner->parser, TRUE);
+  if (name == NULL)
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Not a valid color name");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      return;
+    }
+
+  symbolic = _gtk_css_parser_read_symbolic_color (scanner->parser);
+  if (symbolic == NULL)
+    {
+      g_free (name);
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      return;
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
+    {
+      g_free (name);
+      gtk_symbolic_color_unref (symbolic);
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Missing semicolon at end of color definition");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      return;
+    }
+
+  g_hash_table_insert (scanner->provider->priv->symbolic_colors, name, symbolic);
+}
+
+static void
+parse_binding_set (GtkCssScanner *scanner)
+{
+  GtkBindingSet *binding_set;
+  char *name;
+
+  name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
+  if (name == NULL)
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected name for binding set");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      goto skip_semicolon;
+    }
+
+  binding_set = gtk_binding_set_find (name);
+  if (!binding_set)
+    {
+      binding_set = gtk_binding_set_new (name);
+      binding_set->parsed = TRUE;
+    }
+  g_free (name);
+
+  if (!_gtk_css_parser_try (scanner->parser, "{", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected '{' for binding set");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      goto skip_semicolon;
+    }
+
+  while (!_gtk_css_parser_is_eof (scanner->parser) &&
+         !_gtk_css_parser_begins_with (scanner->parser, '}'))
+    {
+      name = _gtk_css_parser_read_value (scanner->parser);
+      if (name == NULL)
         {
-          while (!g_scanner_eof (scanner) &&
-                 scanner->token != G_TOKEN_RIGHT_CURLY)
-            g_scanner_get_next_token (scanner);
+          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+          continue;
+        }
+
+      gtk_binding_entry_add_signal_from_string (binding_set, name);
+      g_free (name);
+
+      if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
+        {
+          if (!_gtk_css_parser_begins_with (scanner->parser, '}') &&
+              !_gtk_css_parser_is_eof (scanner->parser))
+            {
+              gtk_css_provider_error_literal (scanner->provider,
+                                              scanner,
+                                              GTK_CSS_PROVIDER_ERROR,
+                                              GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                              "Expected semicolon");
+              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+            }
+        }
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, "}", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "expected '}' after declarations");
+      if (!_gtk_css_parser_is_eof (scanner->parser))
+        _gtk_css_parser_resync (scanner->parser, FALSE, 0);
+    }
+
+skip_semicolon:
+  if (_gtk_css_parser_try (scanner->parser, ";", TRUE))
+    gtk_css_provider_error_literal (scanner->provider,
+                                    scanner,
+                                    GTK_CSS_PROVIDER_ERROR,
+                                    GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                    "Nonstandard semicolon at end of binding set");
+}
+
+static void
+parse_at_keyword (GtkCssScanner *scanner)
+{
+  if (_gtk_css_parser_try (scanner->parser, "@import", TRUE))
+    parse_import (scanner);
+  else if (_gtk_css_parser_try (scanner->parser, "@define-color", TRUE))
+    parse_color_definition (scanner);
+  else if (_gtk_css_parser_try (scanner->parser, "@binding-set", TRUE))
+    parse_binding_set (scanner);
+  else
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "unknown @ rule");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+    }
+}
+
+static gboolean
+parse_selector_pseudo_class (GtkCssScanner *scanner, SelectorPath *path)
+{
+  struct {
+    const char *name;
+    GtkStateFlags flag;
+  } classes[] = {
+    { "active", GTK_STATE_FLAG_ACTIVE },
+    { "prelight", GTK_STATE_FLAG_PRELIGHT },
+    { "hover", GTK_STATE_FLAG_PRELIGHT },
+    { "selected", GTK_STATE_FLAG_SELECTED },
+    { "insensitive", GTK_STATE_FLAG_INSENSITIVE },
+    { "inconsistent", GTK_STATE_FLAG_INCONSISTENT },
+    { "focused", GTK_STATE_FLAG_FOCUSED },
+    { "focus", GTK_STATE_FLAG_FOCUSED }
+  };
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (classes); i++)
+    {
+      if (_gtk_css_parser_try (scanner->parser, classes[i].name, FALSE))
+        {
+          path->state |= classes[i].flag;
+          return TRUE;
+        }
+    }
+
+  gtk_css_provider_error_literal (scanner->provider,
+                                  scanner,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                  "Expected a valid state name");
+  return FALSE;
+}
+
+static gboolean
+parse_selector_class (GtkCssScanner *scanner, SelectorPath *path)
+{
+  char *name = _gtk_css_parser_try_name (scanner->parser, FALSE);
+
+  if (name == NULL)
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected a valid name");
+      return FALSE;
+    }
+
+  selector_path_prepend_combinator (path, COMBINATOR_CHILD);
+  selector_path_prepend_class (path, name);
+  return TRUE;
+}
+
+static gboolean
+parse_selector_name (GtkCssScanner *scanner, SelectorPath *path)
+{
+  char *name = _gtk_css_parser_try_name (scanner->parser, FALSE);
+
+  if (name == NULL)
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected a valid name");
+      return FALSE;
+    }
+
+  selector_path_prepend_combinator (path, COMBINATOR_CHILD);
+  selector_path_prepend_name (path, name);
+  return TRUE;
+}
+
+static gboolean
+parse_selector_pseudo_class_for_region (GtkCssScanner  *scanner,
+                                        SelectorPath   *path,
+                                        GtkRegionFlags *flags_to_modify)
+{
+  struct {
+    const char *name;
+    GtkRegionFlags flag;
+  } classes[] = {
+    { "first", GTK_REGION_FIRST },
+    { "last", GTK_REGION_LAST },
+    { "sorted", GTK_REGION_SORTED }
+  }, nth_child[] = {
+    { "first", GTK_REGION_FIRST },
+    { "last", GTK_REGION_LAST },
+    { "even", GTK_REGION_EVEN },
+    { "odd", GTK_REGION_ODD }
+  };
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (classes); i++)
+    {
+      if (_gtk_css_parser_try (scanner->parser, classes[i].name, FALSE))
+        {
+          *flags_to_modify |=classes[i].flag;
+          return TRUE;
+        }
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, "nth-child(", TRUE))
+    return parse_selector_pseudo_class (scanner, path);
+
+  for (i = 0; i < G_N_ELEMENTS (nth_child); i++)
+    {
+      if (_gtk_css_parser_try (scanner->parser, nth_child[i].name, TRUE))
+        {
+          *flags_to_modify |= nth_child[i].flag;
+          break;
+        }
+    }
+
+  if (i == G_N_ELEMENTS (nth_child))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Not a valid value for nth-child");
+      return FALSE;
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, ")", FALSE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Missing closing bracket");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+parse_simple_selector (GtkCssScanner *scanner, SelectorPath *path)
+{
+  char *name;
+  gboolean parsed_something;
+  
+  name = _gtk_css_parser_try_ident (scanner->parser, FALSE);
+  if (name)
+    {
+      if (_gtk_style_context_check_region_name (name))
+        {
+          GtkRegionFlags flags;
+          
+          flags = 0;
+
+          while (_gtk_css_parser_try (scanner->parser, ":", FALSE))
+            {
+              if (!parse_selector_pseudo_class_for_region (scanner, path, &flags))
+                {
+                  g_free (name);
+                  return FALSE;
+                }
+            }
+
+          selector_path_prepend_region (path, name, flags);
+          g_free (name);
+          _gtk_css_parser_skip_whitespace (scanner->parser);
+          return TRUE;
         }
       else
-        css_provider_commit (css_provider, scanner);
+        {
+          selector_path_prepend_type (path, name);
+          parsed_something = TRUE;
+        }
+    }
+  else
+    {
+      parsed_something = _gtk_css_parser_try (scanner->parser, "*", FALSE);
+      selector_path_prepend_glob (path);
+    }
 
-      g_scanner_get_next_token (scanner);
-      
-      gtk_css_scanner_reset (scanner);
+  do {
+      if (_gtk_css_parser_try (scanner->parser, "#", FALSE))
+        {
+          if (!parse_selector_name (scanner, path))
+            return FALSE;
+        }
+      else if (_gtk_css_parser_try (scanner->parser, ".", FALSE))
+        {
+          if (!parse_selector_class (scanner, path))
+            return FALSE;
+        }
+      else if (_gtk_css_parser_try (scanner->parser, ":", FALSE))
+        {
+          if (!parse_selector_pseudo_class (scanner, path))
+            return FALSE;
+        }
+      else if (!parsed_something)
+        {
+          gtk_css_provider_error_literal (scanner->provider,
+                                          scanner,
+                                          GTK_CSS_PROVIDER_ERROR,
+                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                          "Expected a valid selector");
+          return FALSE;
+        }
+      else
+        break;
+
+      parsed_something = TRUE;
+    }
+  while (!_gtk_css_parser_is_eof (scanner->parser));
+
+  _gtk_css_parser_skip_whitespace (scanner->parser);
+  return TRUE;
+}
+
+static SelectorPath *
+parse_selector (GtkCssScanner *scanner)
+{
+  SelectorPath *path;
+
+  path = selector_path_new ();
+
+  do {
+      if (!parse_simple_selector (scanner, path))
+        {
+          selector_path_unref (path);
+          return NULL;
+        }
+
+      if (_gtk_css_parser_try (scanner->parser, ">", TRUE))
+        selector_path_prepend_combinator (path, COMBINATOR_CHILD);
+    }
+  while (path->state == 0 &&
+         !_gtk_css_parser_is_eof (scanner->parser) &&
+         !_gtk_css_parser_begins_with (scanner->parser, ',') &&
+         !_gtk_css_parser_begins_with (scanner->parser, '{'));
+
+  return path;
+}
+
+static GSList *
+parse_selector_list (GtkCssScanner *scanner)
+{
+  GSList *selectors = NULL;
+
+  do {
+      SelectorPath *path = parse_selector (scanner);
+
+      if (path == NULL)
+        {
+          g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+          _gtk_css_parser_resync (scanner->parser, FALSE, 0);
+          return NULL;
+        }
+
+      selectors = g_slist_prepend (selectors, path);
+    }
+  while (_gtk_css_parser_try (scanner->parser, ",", TRUE));
+
+  return selectors;
+}
+
+static void
+parse_declaration (GtkCssScanner *scanner, GHashTable *properties)
+{
+  GtkStylePropertyParser parse_func = NULL;
+  GParamSpec *pspec = NULL;
+  char *name, *value_str;
+
+  name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
+  if (name == NULL)
+    goto check_for_semicolon;
+
+  if (!gtk_style_properties_lookup_property (name, &parse_func, &pspec) &&
+      name[0] != '-')
+    {
+      gtk_css_provider_error (scanner->provider,
+                              scanner,
+                              GTK_CSS_PROVIDER_ERROR,
+                              GTK_CSS_PROVIDER_ERROR_NAME,
+                              "'%s' is not a valid property name",
+                              name);
+      _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+      g_free (name);
+      return;
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, ":", TRUE))
+    {
+      gtk_css_provider_invalid_token (scanner->provider, scanner, "':'");
+      _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+      g_free (name);
+      return;
+    }
+
+  value_str = _gtk_css_parser_read_value (scanner->parser);
+  if (value_str == NULL)
+    {
+      _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+      g_free (name);
+      return;
+    }
+  
+  if (pspec)
+    {
+      GValue *val;
+
+      val = g_slice_new0 (GValue);
+      g_value_init (val, pspec->value_type);
+
+      if (strcmp (value_str, "none") == 0)
+        {
+          /* Insert the default value, so it has an opportunity
+           * to override other style providers when merged
+           */
+          g_param_value_set_default (pspec, val);
+          g_hash_table_insert (properties, name, val);
+        }
+      else if (strcmp (name, "gtk-key-bindings") == 0)
+        {
+          /* Private property holding the binding sets */
+          resolve_binding_sets (value_str, val);
+          g_hash_table_insert (properties, name, val);
+        }
+      else if (parse_func)
+        {
+          GError *error = NULL;
+          
+          if ((*parse_func) (value_str, val, &error))
+            g_hash_table_insert (properties, name, val);
+          else
+            gtk_css_provider_take_error (scanner->provider, scanner, error);
+        }
+      else
+        {
+          GError *error = NULL;
+          
+          if (_gtk_css_value_from_string (val,
+                                          gtk_css_scanner_get_base_url (scanner),
+                                          value_str,
+                                          &error))
+            {
+              g_hash_table_insert (properties, name, val);
+            }
+          else
+            {
+              g_value_unset (val);
+              g_slice_free (GValue, val);
+              g_free (name);
+
+              gtk_css_provider_take_error (scanner->provider, scanner, error);
+            }
+        }
+    }
+  else if (name[0] == '-')
+    {
+      GValue *val;
+
+      val = g_slice_new0 (GValue);
+      g_value_init (val, G_TYPE_STRING);
+      g_value_set_string (val, value_str);
+
+      g_hash_table_insert (properties, name, val);
+    }
+  else
+    g_free (name);
+
+  g_free (value_str);
+
+check_for_semicolon:
+  if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
+    {
+      if (!_gtk_css_parser_begins_with (scanner->parser, '}') &&
+          !_gtk_css_parser_is_eof (scanner->parser))
+        {
+          gtk_css_provider_error_literal (scanner->provider,
+                                          scanner,
+                                          GTK_CSS_PROVIDER_ERROR,
+                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                          "Expected semicolon");
+          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+        }
+    }
+}
+
+static GHashTable *
+parse_declarations (GtkCssScanner *scanner)
+{
+  GHashTable *properties;
+
+  properties = g_hash_table_new_full (g_str_hash,
+                                      g_str_equal,
+                                      (GDestroyNotify) g_free,
+                                      (GDestroyNotify) property_value_free);
+
+  while (!_gtk_css_parser_is_eof (scanner->parser) &&
+         !_gtk_css_parser_begins_with (scanner->parser, '}'))
+    {
+      parse_declaration (scanner, properties);
+    }
+
+  return properties;
+}
+
+static void
+parse_ruleset (GtkCssScanner *scanner)
+{
+  GSList *selectors;
+  GHashTable *properties;
+
+  selectors = parse_selector_list (scanner);
+  if (selectors == NULL)
+    return;
+
+  if (!_gtk_css_parser_try (scanner->parser, "{", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "expected '{' after selectors");
+      _gtk_css_parser_resync (scanner->parser, FALSE, 0);
+      g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+      return;
+    }
+
+  properties = parse_declarations (scanner);
+
+  if (!_gtk_css_parser_try (scanner->parser, "}", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "expected '}' after declarations");
+      if (!_gtk_css_parser_is_eof (scanner->parser))
+        {
+          _gtk_css_parser_resync (scanner->parser, FALSE, 0);
+          g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+          if (properties)
+            g_hash_table_unref (properties);
+          return;
+        }
+    }
+
+  if (properties)
+    {
+      css_provider_commit (scanner->provider, selectors, properties);
+      g_hash_table_unref (properties);
+    }
+  g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+}
+
+static void
+parse_statement (GtkCssScanner *scanner)
+{
+  if (_gtk_css_parser_begins_with (scanner->parser, '@'))
+    parse_at_keyword (scanner);
+  else
+    parse_ruleset (scanner);
+}
+
+static void
+parse_stylesheet (GtkCssScanner   *scanner)
+{
+  _gtk_css_parser_skip_whitespace (scanner->parser);
+
+  while (!_gtk_css_parser_is_eof (scanner->parser))
+    {
+      if (_gtk_css_parser_try (scanner->parser, "<!--", TRUE) ||
+          _gtk_css_parser_try (scanner->parser, "-->", TRUE))
+        continue;
+
+      parse_statement (scanner);
     }
 }
 
 static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
-                                GScanner       *parent,
+                                GtkCssScanner  *parent,
                                 GFile          *file,
                                 const char     *data,
                                 gsize           length,
                                 GError        **error)
 {
-  GScanner *scanner;
+  GtkCssScanner *scanner;
   gulong error_handler;
   char *free_data;
 
@@ -2712,9 +2854,9 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 
   if (data)
     {
-      scanner = gtk_css_scanner_new (parent, file, data, length);
+      scanner = gtk_css_scanner_new (css_provider, parent, file, data, length);
 
-      parse_stylesheet (css_provider, scanner);
+      parse_stylesheet (scanner);
 
       gtk_css_scanner_destroy (scanner);
     }

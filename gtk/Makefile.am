@@ -386,6 +386,7 @@ gtk_private_h_sources =		\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
+	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
 	gtkcssstringfuncsprivate.h	\
 	gtkcustompaperunixdialog.h \
@@ -512,6 +513,7 @@ gtk_base_c_sources = 		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
+	gtkcssparser.c		\
 	gtkcssprovider.c	\
 	gtkcssstringfuncs.c	\
 	gtkdialog.c		\
