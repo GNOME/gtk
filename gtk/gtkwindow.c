@@ -7395,7 +7395,7 @@ gtk_window_present_with_time (GtkWindow *window,
 	    {
 	      GdkDisplay *display;
 
-	      display = gtk_widget_get_display (window);
+	      display = gtk_widget_get_display (GTK_WIDGET (window));
 	      timestamp = gdk_x11_display_get_user_time (display);
 	    }
 	  else
