@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.0.9
+=================================
+
+* Fix some interference between XI2 and input methods, XEmbed
+  and user-time tracking
+
+* Theming improvements
+ - Make it possible to give combo boxes, buttons, entries a
+   uniform height
+
+* GtkGrid now does RTL flipping like other containers
+
+* Translation updates:
+ Assamese
+ Bengali
+ Catalan
+ Czech
+ Japanese
+ Oriya
+ Traditional Chinese
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.0.8
 =================================
 
