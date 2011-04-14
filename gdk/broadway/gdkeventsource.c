@@ -259,6 +259,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 	event->key.window = g_object_ref (window);
 	event->key.time = message->base.time;
 	event->key.keyval = message->key.key;
+	event->key.hardware_keycode = message->key.key;
 	event->key.length = 0;
 	gdk_event_set_device (event, display->core_pointer);
 

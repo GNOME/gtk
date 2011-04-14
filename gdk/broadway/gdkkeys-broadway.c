@@ -119,8 +119,15 @@ gdk_broadway_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 					    GdkKeymapKey **keys,
 					    gint          *n_keys)
 {
-  *n_keys = 0;
-  return FALSE;
+  if (n_keys)
+    *n_keys = 1;
+  if (keys)
+    {
+      *keys = g_new0 (GdkKeymapKey, 1);
+      (*keys)->keycode = keyval;
+    }
+
+  return TRUE;
 }
 
 static gboolean
@@ -130,15 +137,26 @@ gdk_broadway_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 					     guint        **keyvals,
 					     gint          *n_entries)
 {
-  *n_entries = 0;
-  return FALSE;
+  if (n_entries)
+    *n_entries = 1;
+  if (keys)
+    {
+      *keys = g_new0 (GdkKeymapKey, 1);
+      (*keys)->keycode = hardware_keycode;
+    }
+  if (keyvals)
+    {
+      *keyvals = g_new0 (guint, 1);
+      (*keyvals)[0] = hardware_keycode;
+    }
+  return TRUE;
 }
 
 static guint
 gdk_broadway_keymap_lookup_key (GdkKeymap          *keymap,
 				const GdkKeymapKey *key)
 {
-  return 0;
+  return key->keycode;
 }
 
 
@@ -152,7 +170,13 @@ gdk_broadway_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					      gint            *level,
 					      GdkModifierType *consumed_modifiers)
 {
-  return FALSE;
+  if (keyval)
+    *keyval = hardware_keycode;
+  if (effective_group)
+    *effective_group = 0;
+  if (level)
+    *level = 0;
+  return TRUE;
 }
 
 static void
@@ -165,7 +189,7 @@ static gboolean
 gdk_broadway_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 					   GdkModifierType *state)
 {
-  return FALSE;
+  return TRUE;
 }
 
 static void
