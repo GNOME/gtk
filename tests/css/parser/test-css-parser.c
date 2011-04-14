@@ -193,7 +193,7 @@ test_css_file (GFile *file)
   if (diff && diff[0])
     {
       g_test_message ("%s", diff);
-      g_assert_not_reached ();
+      g_test_fail ();
     }
 
   g_free (css);
@@ -209,13 +209,13 @@ test_css_file (GFile *file)
       if (diff && diff[0])
         {
           g_test_message ("%s", diff);
-          g_assert_not_reached ();
+          g_test_fail ();
         }
     }
   else if (errors->str[0])
     {
       g_test_message ("Unexpected errors:\n%s", errors->str);
-      g_assert_not_reached ();
+      g_test_fail ();
     }
 
   g_free (errors_file);
