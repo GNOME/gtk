@@ -75,6 +75,8 @@ void       _gtk_menu_shell_set_keyboard_mode (GtkMenuShell *menu_shell,
                                               gboolean      keyboard_mode);
 gboolean   _gtk_menu_shell_get_keyboard_mode (GtkMenuShell *menu_shell);
 
+void       _gtk_menu_shell_activate          (GtkMenuShell *menu_shell);
+
 
 G_END_DECLS
 
