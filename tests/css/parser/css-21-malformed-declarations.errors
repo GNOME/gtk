@@ -1,0 +1,6 @@
+css-21-malformed-declarations.css:2: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+css-21-malformed-declarations.css:3: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+css-21-malformed-declarations.css:4: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+css-21-malformed-declarations.css:5: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+css-21-malformed-declarations.css:6: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+css-21-malformed-declarations.css:7: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
