@@ -340,7 +340,13 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
   if ((priv->direction == GTK_TIMELINE_DIRECTION_FORWARD && progress == 1.0) ||
       (priv->direction == GTK_TIMELINE_DIRECTION_BACKWARD && progress == 0.0))
     {
-      if (!priv->loop)
+      gboolean loop;
+
+      loop = priv->loop && priv->animations_enabled;
+
+      if (loop)
+        _gtk_timeline_rewind (timeline);
+      else
         {
           if (priv->source_id)
             {
@@ -351,8 +357,6 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
           g_signal_emit (timeline, signals [FINISHED], 0);
           return FALSE;
         }
-      else
-        _gtk_timeline_rewind (timeline);
     }
 
   return TRUE;
@@ -417,7 +421,7 @@ _gtk_timeline_start (GtkTimeline *timeline)
           g_object_get (settings, "gtk-enable-animations", &enable_animations, NULL);
         }
 
-      priv->animations_enabled = (enable_animations == TRUE);
+      priv->animations_enabled = enable_animations;
 
       g_signal_emit (timeline, signals [STARTED], 0);
 
