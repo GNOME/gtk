@@ -1,0 +1,59 @@
+a {
+  rgba-property: red;
+}
+
+b {
+  rgba-property: rgba(255,0,0,1.0);
+}
+
+c {
+  rgba-property: rgb(255,0,0);
+}
+
+d {
+  rgba-property: rgba(100%,0%,0%,1);
+}
+
+e {
+  rgba-property: rgb(100%,0,0);
+}
+
+f {
+  rgba-property: #f00;
+}
+
+g {
+  rgba-property: #ff0000;
+}
+
+h {
+  rgba-property: #F00;
+}
+
+i {
+  rgba-property: #fF0000;
+}
+
+j {
+  rgba-property: rgba( 255 , 0 , 0 , 1 ) ;
+}
+
+k {
+  rgba-property: rgb( 255 , 0 , 0 ) ;
+}
+
+l {
+  rgba-property:/*x*/rgba(/*x*/255/*x*/,/*x*/0/*x*/,/*x*/0/*x*/,/*x*/1/*x*/)/*x*/;
+}
+
+m {
+  rgba-property:/*x*/rgb(/*x*/255/*x*/,/*x*/0/*x*/,/*x*/0/*x*/)/*x*/;
+}
+
+n {
+  rgba-property: /*x*/ rgba( /*x*/ 255 /*x*/ , /*x*/ 0 /*x*/ , /*x*/ 0 /*x*/ , /*x*/ 1 /*x*/ ) /*x*/ ;
+}
+
+o {
+  rgba-property: /*x*/ rgb( /*x*/ 255 /*x*/ , /*x*/ 0 /*x*/ , /*x*/ 0 /*x*/ ) /*x*/ ;
+}
