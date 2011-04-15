@@ -85,7 +85,7 @@ struct _GtkFontSelectionPrivate
   GtkWidget *search_entry;
   GtkWidget *family_face_list;
   GtkWidget *size_slider;
-  GtkWidget *size_spinner;
+  GtkWidget *size_spin;
 
   gint             size;
   PangoFontFace   *face;
@@ -299,6 +299,23 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                GtkFontSelectionPrivate);
   priv = fontsel->priv;
   gtk_widget_push_composite_child ();
+
+  priv->search_entry = gtk_entry_new ();
+  priv->family_face_list = gtk_tree_view_new ();
+  priv->size_slider = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
+                                                font_sizes[0],
+                                                font_sizes[(sizeof (font_sizes) /
+                                                            sizeof (guint16)) - 1],
+                                                1);
+  priv->size_spin = gtk_spin_button_new_with_range (font_sizes[0],
+                                                font_sizes[(sizeof (font_sizes) /
+                                                            sizeof (guint16)) - 1],
+                                                1);
+
+  priv->size = 12 * PANGO_SCALE;
+  priv->face = NULL;
+  priv->family = NULL;
+
   gtk_widget_pop_composite_child();
 }
 
