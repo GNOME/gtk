@@ -168,6 +168,24 @@ G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_menu_item_activatable_interface_init))
 
+static void
+_gtk_menu_shell_activate (GtkMenuShell *menu_shell)
+{
+  GtkMenuShellPrivate *priv = menu_shell->priv;
+
+  if (!priv->active)
+    {
+      GdkDevice *device;
+
+      device = gtk_get_current_event_device ();
+
+      _gtk_menu_shell_set_grab_device (menu_shell, device);
+      gtk_device_grab_add (GTK_WIDGET (menu_shell), device, TRUE);
+
+      priv->have_grab = TRUE;
+      priv->active = TRUE;
+    }
+}
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
