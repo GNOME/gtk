@@ -321,6 +321,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_alignment_set_padding (alignment, 6, 0, 0, 0);
 
   preview_and_size = gtk_vbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (preview_and_size), priv->preview, FALSE, TRUE, 0);
+  size_controls = gtk_hbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
 
   /* Packing everything in the selection */
