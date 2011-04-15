@@ -312,9 +312,14 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                             sizeof (guint16)) - 1],
                                                 1);
 
+  gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
+
   priv->size = 12 * PANGO_SCALE;
   priv->face = NULL;
   priv->family = NULL;
+
+  gtk_widget_show_all (GTK_WIDGET (fontsel));
+  gtk_widget_hide (GTK_WIDGET (fontsel));
 
   gtk_widget_pop_composite_child();
 }
