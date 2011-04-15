@@ -27,6 +27,26 @@
 #include "gtkprivate.h"
 
 
+/**
+ * SECTION:gtkradiotoolbutton
+ * @Short_description: A toolbar item that contains a radio button
+ * @Title: GtkRadioToolButton
+ * @See_also: #GtkToolbar, #GtkToolButton
+ *
+ * A #GtkRadioToolButton is a #GtkToolItem that contains a radio button,
+ * that is, a button that is part of a group of toggle buttons where only
+ * one button can be active at a time.
+ *
+ * Use gtk_radio_tool_button_new() to create a new
+ * #GtkRadioToolButton. Use gtk_radio_tool_button_new_from_widget() to
+ * create a new #GtkRadioToolButton that is part of the same group as an
+ * existing #GtkRadioToolButton. Use
+ * gtk_radio_tool_button_new_from_stock() or
+ * gtk_radio_tool_button_new_with_stock_from_widget() create a new
+ * #GtkRadioToolButton containing a stock item.
+ */
+
+
 enum {
   PROP_0,
   PROP_GROUP
