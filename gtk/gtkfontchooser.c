@@ -59,6 +59,7 @@
 #include "gtkprivate.h"
 #include "gtkalignment.h"
 #include "gtkscale.h"
+#include "gtkbox.h"
 
 
 /**
@@ -309,6 +310,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                 (gdouble) font_sizes[0],
                                                 (gdouble) font_sizes[FONT_SIZES_LENGTH - 1],
                                                 1.0);
+
   priv->size_spin = gtk_spin_button_new (NULL, 1.0, 0);
 
   /* Main font family/face view */
@@ -320,6 +322,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_alignment_set_padding (alignment, PREVIEW_TOP_PADDING, 0, 0, 0);
 
   preview_and_size = gtk_vbox_new (TRUE, 0);
+  gtk_box_set_homogeneous (GTK_BOX (preview_and_size), FALSE);
   gtk_box_pack_start (GTK_BOX (preview_and_size), priv->preview, FALSE, TRUE, 0);
   gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT);
 
@@ -329,7 +332,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (size_controls), priv->size_slider, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (size_controls), priv->size_spin, FALSE, TRUE, 0);
 
-  gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
 
   /* Packing everything in the selection */
