@@ -57,6 +57,8 @@
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
 #include "gtkprivate.h"
+#include "gtkalignment.h"
+#include "gtkscale.h"
 
 
 /**
@@ -131,6 +133,7 @@ struct _GtkFontSelectionDialogPrivate
 
 /* These are what we use as the standard font sizes, for the size list.
  */
+#define FONT_SIZES_LENGTH 25
 static const guint16 font_sizes[] = {
   6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28,
   32, 36, 40, 48, 56, 64, 72
@@ -304,14 +307,12 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv->family_face_list = gtk_tree_view_new ();
   priv->preview = gtk_entry_new ();
   priv->size_slider = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
-                                                font_sizes[0],
-                                                font_sizes[(sizeof (font_sizes) /
-                                                            sizeof (guint16)) - 1],
-                                                1);
-  priv->size_spin = gtk_spin_button_new_with_range (font_sizes[0],
-                                                    font_sizes[(sizeof (font_sizes) /
-                                                                sizeof (guint16)) - 1],
-                                                    1);
+                                                (gdouble) font_sizes[0],
+                                                (gdouble) font_sizes[FONT_SIZES_LENGTH - 1],
+                                                1.0);
+  priv->size_spin = gtk_spin_button_new_with_range ((gdouble) font_sizes[0],
+                                                    (gdouble) font_sizes[FONT_SIZES_LENGTH -1],
+                                                    1.0);
   /* Main font family/face view */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
@@ -322,7 +323,13 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   preview_and_size = gtk_vbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (preview_and_size), priv->preview, FALSE, TRUE, 0);
-  size_controls = gtk_hbox_new (TRUE, 0);
+
+  /* Packing the slider and the spin in a hbox */
+  size_controls = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_scale_set_draw_value (GTK_SCALE (priv->size_slider), FALSE);
+  gtk_box_pack_start (GTK_BOX (size_controls), priv->size_slider, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (size_controls), priv->size_spin, TRUE, FALSE, 0);
+
   gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
 
