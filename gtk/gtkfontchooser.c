@@ -285,12 +285,6 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv;
   GtkWidget *scrolled_win;
-  GtkWidget *text_box;
-  GtkWidget *table, *label;
-  GtkWidget *font_label, *style_label;
-  GtkWidget *vbox;
-  GtkListStore *model;
-  GtkTreeViewColumn *column;
   GList *focus_chain = NULL;
   AtkObject *atk_obj;
 
@@ -312,7 +306,12 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                             sizeof (guint16)) - 1],
                                                 1);
 
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
+
   gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
+  
 
   priv->size = 12 * PANGO_SCALE;
   priv->face = NULL;
