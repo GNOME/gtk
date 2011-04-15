@@ -560,6 +560,9 @@ function cmdShowSurface(id)
 
 function cmdHideSurface(id)
 {
+    if (grab.window == id)
+	doUngrab();
+
     var surface = surfaces[id];
 
     if (!surface.visible)
@@ -627,6 +630,9 @@ function moveToTop(surface) {
 
 function cmdDeleteSurface(id)
 {
+    if (grab.window == id)
+	doUngrab();
+
     var surface = surfaces[id];
     var i = stackingOrder.indexOf(surface);
     if (i >= 0)
@@ -714,8 +720,8 @@ function cmdGrabPointer(id, ownerEvents)
 function cmdUngrabPointer()
 {
     sendInput ("u", []);
-
-    grab.window = null;
+    if (grab.window)
+	doUngrab();
 }
 
 function handleCommands(cmdObj)
@@ -1100,7 +1106,7 @@ function onMouseUp (ev) {
     sendInput ("B", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
     if (grab.window != null && grab.implicit)
-	doUngrab(ev.timeStamp);
+	doUngrab();
 }
 
 /* Some of the keyboard handling code is from noVNC and
