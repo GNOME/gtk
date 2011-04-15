@@ -192,7 +192,7 @@ test_css_file (GFile *file)
 
   if (diff && diff[0])
     {
-      g_test_message ("%s", diff);
+      g_test_message ("Resulting CSS doesn't match reference:\n%s", diff);
       g_test_fail ();
     }
 
@@ -208,7 +208,7 @@ test_css_file (GFile *file)
 
       if (diff && diff[0])
         {
-          g_test_message ("%s", diff);
+          g_test_message ("Errors don't match expected errors:\n%s", diff);
           g_test_fail ();
         }
     }
