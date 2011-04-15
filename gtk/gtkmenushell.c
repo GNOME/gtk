@@ -1860,8 +1860,11 @@ gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
                                   event->group);
 
   if (entries)
-    result = _gtk_mnemonic_hash_activate (mnemonic_hash,
-                                          GPOINTER_TO_UINT (entries->data));
+    {
+      result = _gtk_mnemonic_hash_activate (mnemonic_hash,
+                                            GPOINTER_TO_UINT (entries->data));
+      g_slist_free (entries);
+    }
 
   return result;
 }

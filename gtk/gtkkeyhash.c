@@ -372,8 +372,9 @@ keyval_in_group (GdkKeymap  *keymap,
  * This means that fuzzy matches won't be considered if their keyval is 
  * present in the current group.
  * 
- * Return value: A #GSList of matching entries.
- **/
+ * Return value: A newly-allocated #GSList of matching entries.
+ *     Free with g_slist_free() when no longer needed.
+ */
 GSList *
 _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 		      guint16          hardware_keycode,
