@@ -120,10 +120,9 @@ struct _GtkFontSelectionDialogPrivate
 
 #define DEFAULT_FONT_NAME "Sans 10"
 
-/* This is the initial and maximum height of the preview entry (it expands
-   when large font sizes are selected). Initial height is also the minimum. */
-#define INITIAL_PREVIEW_HEIGHT 44
-#define MAX_PREVIEW_HEIGHT 300
+/* This is the initial fixed height and the top padding of the preview entry */
+#define PREVIEW_HEIGHT 100
+#define PREVIEW_TOP_PADDING 6
 
 /* These are the sizes of the font, style & size lists. */
 #define FONT_LIST_HEIGHT	136
@@ -310,25 +309,25 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                 (gdouble) font_sizes[0],
                                                 (gdouble) font_sizes[FONT_SIZES_LENGTH - 1],
                                                 1.0);
-  priv->size_spin = gtk_spin_button_new_with_range ((gdouble) font_sizes[0],
-                                                    (gdouble) font_sizes[FONT_SIZES_LENGTH -1],
-                                                    1.0);
+  priv->size_spin = gtk_spin_button_new (NULL, 1.0, 0);
+
   /* Main font family/face view */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
 
   /* Alignment for the preview and size controls */
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  gtk_alignment_set_padding (alignment, 6, 0, 0, 0);
+  gtk_alignment_set_padding (alignment, PREVIEW_TOP_PADDING, 0, 0, 0);
 
   preview_and_size = gtk_vbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (preview_and_size), priv->preview, FALSE, TRUE, 0);
+  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT);
 
   /* Packing the slider and the spin in a hbox */
   size_controls = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_scale_set_draw_value (GTK_SCALE (priv->size_slider), FALSE);
   gtk_box_pack_start (GTK_BOX (size_controls), priv->size_slider, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (size_controls), priv->size_spin, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (size_controls), priv->size_spin, FALSE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, TRUE, 0);
   gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
@@ -336,7 +335,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /* Packing everything in the selection */
   gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(alignment), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(alignment), FALSE, TRUE, 0);
 
   priv->size = 12 * PANGO_SCALE;
   priv->face = NULL;
