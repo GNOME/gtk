@@ -82,20 +82,14 @@
 
 struct _GtkFontSelectionPrivate
 {
-  GtkWidget *font_entry;        /* Used _get_family_entry() for consistency, -mr */
-  GtkWidget *font_style_entry;  /* Used _get_face_entry() for consistency, -mr */
+  GtkWidget *search_entry;
+  GtkWidget *family_face_list;
+  GtkWidget *size_slider;
+  GtkWidget *size_spinner;
 
-  GtkWidget *size_entry;
-  GtkWidget *preview_entry;
-
-  GtkWidget *family_list;
-  GtkWidget *face_list;
-  GtkWidget *size_list;
-
-  PangoFontFamily *family;      /* Current family */
-  PangoFontFace *face;          /* Current face */
-
-  gint size;
+  gint             size;
+  PangoFontFace   *face;
+  PangoFontFamily *family;
 };
 
 
@@ -175,40 +169,6 @@ static void    gtk_font_selection_screen_changed     (GtkWidget	      *widget,
 						      GdkScreen       *previous_screen);
 static void    gtk_font_selection_style_updated      (GtkWidget      *widget);
 
-/* These are the callbacks & related functions. */
-static void     gtk_font_selection_show_available_fonts  (GtkFontSelection *fs);
-
-static void     gtk_font_selection_show_available_styles (GtkFontSelection *fs);
-static void     gtk_font_selection_select_best_style     (GtkFontSelection *fs,
-							  gboolean          use_first);
-static void     gtk_font_selection_select_style          (GtkTreeSelection *selection,
-							  gpointer          data);
-
-static void     gtk_font_selection_select_best_size      (GtkFontSelection *fs);
-static void     gtk_font_selection_show_available_sizes  (GtkFontSelection *fs,
-							  gboolean          first_time);
-static void     gtk_font_selection_size_activate         (GtkWidget        *w,
-							  gpointer          data);
-static gboolean gtk_font_selection_size_focus_out        (GtkWidget        *w,
-							  GdkEventFocus    *event,
-							  gpointer          data);
-static void     gtk_font_selection_select_size           (GtkTreeSelection *selection,
-							  gpointer          data);
-
-static void     gtk_font_selection_preview_changed       (GtkWidget        *entry,
-							  GtkFontSelection *fontsel);
-static void     gtk_font_selection_scroll_to_selection   (GtkFontSelection *fontsel);
-
-
-/* Misc. utility functions. */
-static void    gtk_font_selection_load_font          (GtkFontSelection *fs);
-
-static PangoFontDescription *gtk_font_selection_get_font_description (GtkFontSelection *fontsel);
-static gboolean gtk_font_selection_select_font_desc  (GtkFontSelection      *fontsel,
-						      PangoFontDescription  *new_desc,
-						      PangoFontFamily      **pfamily,
-						      PangoFontFace        **pface);
-static void     gtk_font_selection_reload_fonts          (GtkFontSelection *fontsel);
 static void     gtk_font_selection_ref_family            (GtkFontSelection *fontsel,
 							  PangoFontFamily  *family);
 static void     gtk_font_selection_ref_face              (GtkFontSelection *fontsel,
@@ -338,103 +298,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                GTK_TYPE_FONT_SELECTION,
                                                GtkFontSelectionPrivate);
   priv = fontsel->priv;
-
   gtk_widget_push_composite_child ();
-
-  gtk_box_set_spacing (GTK_BOX (fontsel), 12);
-  priv->size = 12 * PANGO_SCALE;
-  priv->size_entry = gtk_entry_new ();
-    
-  /* Create the lists  */
-
-  model = gtk_list_store_new (2,
-			      G_TYPE_OBJECT,  /* FAMILY_COLUMN */
-			      G_TYPE_STRING); /* FAMILY_NAME_COLUMN */
-  priv->family_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-  g_object_unref (model);
-
-  g_signal_connect (priv->family_list, "row-activated",
-		    G_CALLBACK (list_row_activated), fontsel);
-
-  column = gtk_tree_view_column_new_with_attributes ("Family",
-						     gtk_cell_renderer_text_new (),
-						     "text", FAMILY_NAME_COLUMN,
-						     NULL);
-  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->family_list), column);
-
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->family_list), FALSE);
-  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->family_list)),
-			       GTK_SELECTION_BROWSE);
-  
-  gtk_label_set_mnemonic_widget (GTK_LABEL (font_label), priv->family_list);
-
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win), GTK_SHADOW_IN);
-  gtk_widget_set_size_request (scrolled_win,
-			       FONT_LIST_WIDTH, FONT_LIST_HEIGHT);
-  gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_list);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_widget_show (priv->family_list);
-  gtk_widget_show (scrolled_win);
-
-  gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
-
-  model = gtk_list_store_new (2,
-			      G_TYPE_OBJECT,  /* FACE_COLUMN */
-			      G_TYPE_STRING); /* FACE_NAME_COLUMN */
-  priv->face_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-  g_object_unref (model);
-  g_signal_connect (priv->face_list, "row-activated",
-		    G_CALLBACK (list_row_activated), fontsel);
-
-  model = gtk_list_store_new (1, G_TYPE_INT);
-  priv->size_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-  g_object_unref (model);
-  g_signal_connect (priv->size_list, "row-activated",
-		    G_CALLBACK (list_row_activated), fontsel);
-  
-  atk_obj = gtk_widget_get_accessible (priv->size_list);
-  if (GTK_IS_ACCESSIBLE (atk_obj))
-    {
-      /* Accessibility support is enabled.
-       * Make the label ATK_RELATON_LABEL_FOR for the size list as well.
-       */
-      AtkObject *atk_label;
-      AtkRelationSet *relation_set;
-      AtkRelation *relation;
-      AtkObject *obj_array[1];
-
-      atk_label = gtk_widget_get_accessible (label);
-      relation_set = atk_object_ref_relation_set (atk_obj);
-      relation = atk_relation_set_get_relation_by_type (relation_set, ATK_RELATION_LABELLED_BY);
-      if (relation)
-        {
-          atk_relation_add_target (relation, atk_label);
-        }
-      else 
-        {
-          obj_array[0] = atk_label;
-          relation = atk_relation_new (obj_array, 1, ATK_RELATION_LABELLED_BY);
-          atk_relation_set_add (relation_set, relation);
-        }
-      g_object_unref (relation_set);
-
-      relation_set = atk_object_ref_relation_set (atk_label);
-      relation = atk_relation_set_get_relation_by_type (relation_set, ATK_RELATION_LABEL_FOR);
-      if (relation)
-        {
-          atk_relation_add_target (relation, atk_obj);
-        }
-      else 
-        {
-          obj_array[0] = atk_obj;
-          relation = atk_relation_new (obj_array, 1, ATK_RELATION_LABEL_FOR);
-          atk_relation_set_add (relation_set, relation);
-        }
-      g_object_unref (relation_set);
-    }
   gtk_widget_pop_composite_child();
 }
 
@@ -486,12 +350,13 @@ gtk_font_selection_ref_family (GtkFontSelection *fontsel,
                               PangoFontFamily  *family)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
-
+#if 0
   if (family)
     family = g_object_ref (family);
   if (priv->family)
     g_object_unref (priv->family);
   priv->family = family;
+#endif
 }
 
 static void
@@ -499,12 +364,13 @@ gtk_font_selection_ref_face (GtkFontSelection *fontsel,
                                         PangoFontFace    *face)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
-
+#if 0
   if (face)
     face = g_object_ref (face);
   if (priv->face)
     g_object_unref (priv->face);
   priv->face = face;
+#endif
 }
 
 /*****************************************************************************
