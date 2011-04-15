@@ -86,6 +86,7 @@ struct _GtkFontSelectionPrivate
   GtkWidget *family_face_list;
   GtkWidget *size_slider;
   GtkWidget *size_spin;
+  GtkWidget *preview;
 
   gint             size;
   PangoFontFace   *face;
@@ -284,8 +285,10 @@ static void
 gtk_font_selection_init (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv;
-  GtkWidget *scrolled_win;
-  GList *focus_chain = NULL;
+
+  GtkWidget               *scrolled_win;
+  GtkWidget               *alignment;
+  GList                   *focus_chain = NULL;
   AtkObject *atk_obj;
 
   fontsel->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontsel,
@@ -294,24 +297,33 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv = fontsel->priv;
   gtk_widget_push_composite_child ();
 
+  /* Creating fundamental widgets for the private struct */
   priv->search_entry = gtk_entry_new ();
   priv->family_face_list = gtk_tree_view_new ();
+  priv->preview = gtk_entry_new ();
   priv->size_slider = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
                                                 font_sizes[0],
                                                 font_sizes[(sizeof (font_sizes) /
                                                             sizeof (guint16)) - 1],
                                                 1);
   priv->size_spin = gtk_spin_button_new_with_range (font_sizes[0],
-                                                font_sizes[(sizeof (font_sizes) /
-                                                            sizeof (guint16)) - 1],
-                                                1);
-
+                                                    font_sizes[(sizeof (font_sizes) /
+                                                                sizeof (guint16)) - 1],
+                                                    1);
+  /* Main font family/face view */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
 
+  /* Alignment for the preview and size controls */
+  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+  gtk_alignment_set_padding (alignment, 6, 0, 0, 0);
+
+  
+  
+
+  /* Packing everything in the selection */
   gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
-  
 
   priv->size = 12 * PANGO_SCALE;
   priv->face = NULL;
