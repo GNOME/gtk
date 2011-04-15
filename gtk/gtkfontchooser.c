@@ -148,16 +148,8 @@ enum {
 
 enum {
   FAMILY_COLUMN,
-  FAMILY_NAME_COLUMN
-};
-
-enum {
   FACE_COLUMN,
-  FACE_NAME_COLUMN
-};
-
-enum {
-  SIZE_COLUMN
+  FACE_TEXT_COLUMN
 };
 
 static void    gtk_font_selection_set_property       (GObject         *object,
@@ -177,6 +169,7 @@ static void     gtk_font_selection_ref_family            (GtkFontSelection *font
 							  PangoFontFamily  *family);
 static void     gtk_font_selection_ref_face              (GtkFontSelection *fontsel,
 							  PangoFontFace    *face);
+static void gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview);
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
 
@@ -347,6 +340,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_widget_show_all (GTK_WIDGET (fontsel));
   gtk_widget_hide (GTK_WIDGET (fontsel));
 
+  gtk_font_selection_bootstrap_fontlist (priv->family_face_list);
+
   gtk_widget_pop_composite_child();
 }
 
@@ -366,6 +361,27 @@ gtk_font_selection_new (void)
   
   return GTK_WIDGET (fontsel);
 }
+
+
+static void 
+gtk_font_selection_populate_model (GtkTreeModel *model)
+{
+}
+
+static void
+gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview)
+{
+  GtkTreeModel *fonts_model;
+  
+  fonts_model = gtk_list_store_new (3,
+                                    PANGO_TYPE_FONT_FAMILY,
+                                    PANGO_TYPE_FONT_FACE,
+                                    G_TYPE_STRING);
+  gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fonts_model));
+
+  gtk_font_selection_populate_model (GTK_TREE_MODEL (fonts_model));  
+}
+
 
 static void
 gtk_font_selection_finalize (GObject *object)
