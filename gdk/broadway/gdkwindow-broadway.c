@@ -273,6 +273,8 @@ gdk_window_impl_broadway_finalize (GObject *object)
 
   wrapper = impl->wrapper;
 
+  _gdk_broadway_window_grab_check_destroy (wrapper);
+
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (impl->wrapper));
 
   if (broadway_display->mouse_in_toplevel == GDK_WINDOW (wrapper))
@@ -472,6 +474,7 @@ _gdk_broadway_window_destroy (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   _gdk_broadway_selection_window_destroyed (window);
+  _gdk_broadway_window_grab_check_destroy (window);
 
   if (impl->ref_surface)
     {

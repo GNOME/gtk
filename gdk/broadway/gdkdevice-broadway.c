@@ -234,6 +234,41 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   return TRUE;
 }
 
+void
+_gdk_broadway_window_grab_check_destroy (GdkWindow *window)
+{
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkBroadwayDisplay *broadway_display;
+  GdkDeviceManager *device_manager;
+  GdkDeviceGrabInfo *grab;
+  GList *devices, *d;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  device_manager = gdk_display_get_device_manager (display);
+
+  /* Get all devices */
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+  for (d = devices; d; d = d->next)
+    {
+      /* Make sure there is no lasting grab in this native window */
+      grab = _gdk_display_get_last_device_grab (display, d->data);
+
+      if (grab && grab->native_window == window)
+	{
+	  grab->serial_end = grab->serial_start;
+	  grab->implicit_ungrab = TRUE;
+
+	  broadway_display->pointer_grab_window = NULL;
+	}
+
+    }
+
+  g_list_free (devices);
+}
+
+
 static GdkGrabStatus
 gdk_broadway_device_grab (GdkDevice    *device,
 			  GdkWindow    *window,
