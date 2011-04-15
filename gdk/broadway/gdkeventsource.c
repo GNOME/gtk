@@ -179,6 +179,9 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     display_broadway->real_mouse_in_toplevel =
       g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
 
+    if (_gdk_broadway_moveresize_handle_event (display, message))
+      break;
+
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
       {
@@ -204,6 +207,10 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     display_broadway->last_state = message->pointer.state;
     display_broadway->real_mouse_in_toplevel =
       g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.mouse_window_id));
+
+    if (message->base.type != 'b' &&
+	_gdk_broadway_moveresize_handle_event (display, message))
+      break;
 
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
@@ -296,6 +303,14 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 
 	node = _gdk_event_queue_append (display, event);
 	_gdk_windowing_got_event (display, node, event, message->base.serial);
+
+	if (window->resize_count >= 1)
+	  {
+	    window->resize_count -= 1;
+
+	    if (window->resize_count == 0)
+	      _gdk_broadway_moveresize_configure_done (display, window);
+	  }
       }
     break;
 

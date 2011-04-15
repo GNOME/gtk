@@ -86,6 +86,10 @@ void _gdk_broadway_window_change_property (GdkWindow    *window,
 					   gint          nelements);
 void _gdk_broadway_window_delete_property (GdkWindow *window,
 					   GdkAtom    property);
+gboolean _gdk_broadway_moveresize_handle_event   (GdkDisplay *display,
+						  BroadwayInputMsg *msg);
+gboolean _gdk_broadway_moveresize_configure_done (GdkDisplay *display,
+						  GdkWindow  *window);
 
 
 void     _gdk_broadway_selection_window_destroyed (GdkWindow *window);

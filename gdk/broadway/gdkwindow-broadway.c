@@ -602,10 +602,10 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 {
   GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   GdkBroadwayDisplay *broadway_display;
-  gboolean changed;
+  gboolean changed, size_changed;;
   gboolean with_resize;
 
-  changed = FALSE;
+  size_changed = changed = FALSE;
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
   if (with_move)
@@ -629,6 +629,7 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 	  height != window->height)
 	{
 	  changed = TRUE;
+	  size_changed = TRUE;
 
 	  /* Resize clears the content */
 	  impl->dirty = TRUE;
@@ -652,6 +653,8 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 					       with_move, window->x, window->y,
 					       with_resize, window->width, window->height);
 	  queue_dirty_flush (broadway_display);
+	  if (size_changed)
+	    window->resize_count++;
 	}
 
       event = gdk_event_new (GDK_CONFIGURE);
@@ -1182,6 +1185,285 @@ gdk_window_broadway_set_static_gravities (GdkWindow *window,
   return TRUE;
 }
 
+typedef struct _MoveResizeData MoveResizeData;
+
+struct _MoveResizeData
+{
+  GdkDisplay *display;
+
+  GdkWindow *moveresize_window;
+  GdkWindow *moveresize_emulation_window;
+  gboolean is_resize;
+  GdkWindowEdge resize_edge;
+  gint moveresize_button;
+  gint moveresize_x;
+  gint moveresize_y;
+  gint moveresize_orig_x;
+  gint moveresize_orig_y;
+  gint moveresize_orig_width;
+  gint moveresize_orig_height;
+  long moveresize_process_time;
+  BroadwayInputMsg *moveresize_pending_event;
+};
+
+static MoveResizeData *
+get_move_resize_data (GdkDisplay *display,
+		      gboolean    create)
+{
+  MoveResizeData *mv_resize;
+  static GQuark move_resize_quark = 0;
+
+  if (!move_resize_quark)
+    move_resize_quark = g_quark_from_static_string ("gdk-window-moveresize");
+
+  mv_resize = g_object_get_qdata (G_OBJECT (display), move_resize_quark);
+
+  if (!mv_resize && create)
+    {
+      mv_resize = g_new0 (MoveResizeData, 1);
+      mv_resize->display = display;
+
+      g_object_set_qdata (G_OBJECT (display), move_resize_quark, mv_resize);
+    }
+
+  return mv_resize;
+}
+
+static void
+update_pos (MoveResizeData *mv_resize,
+	    gint            new_root_x,
+	    gint            new_root_y)
+{
+  gint dx, dy;
+
+  dx = new_root_x - mv_resize->moveresize_x;
+  dy = new_root_y - mv_resize->moveresize_y;
+
+  if (mv_resize->is_resize)
+    {
+      gint x, y, w, h;
+
+      x = mv_resize->moveresize_orig_x;
+      y = mv_resize->moveresize_orig_y;
+
+      w = mv_resize->moveresize_orig_width;
+      h = mv_resize->moveresize_orig_height;
+
+      switch (mv_resize->resize_edge)
+	{
+	case GDK_WINDOW_EDGE_NORTH_WEST:
+	  x += dx;
+	  y += dy;
+	  w -= dx;
+	  h -= dy;
+	  break;
+	case GDK_WINDOW_EDGE_NORTH:
+	  y += dy;
+	  h -= dy;
+	  break;
+	case GDK_WINDOW_EDGE_NORTH_EAST:
+	  y += dy;
+	  h -= dy;
+	  w += dx;
+	  break;
+	case GDK_WINDOW_EDGE_SOUTH_WEST:
+	  h += dy;
+	  x += dx;
+	  w -= dx;
+	  break;
+	case GDK_WINDOW_EDGE_SOUTH_EAST:
+	  w += dx;
+	  h += dy;
+	  break;
+	case GDK_WINDOW_EDGE_SOUTH:
+	  h += dy;
+	  break;
+	case GDK_WINDOW_EDGE_EAST:
+	  w += dx;
+	  break;
+	case GDK_WINDOW_EDGE_WEST:
+	  x += dx;
+	  w -= dx;
+	  break;
+	}
+
+      x = MAX (x, 0);
+      y = MAX (y, 0);
+      w = MAX (w, 1);
+      h = MAX (h, 1);
+
+      gdk_window_move_resize (mv_resize->moveresize_window, x, y, w, h);
+    }
+  else
+    {
+      gint x, y;
+
+      x = mv_resize->moveresize_orig_x + dx;
+      y = mv_resize->moveresize_orig_y + dy;
+
+      gdk_window_move (mv_resize->moveresize_window, x, y);
+    }
+}
+
+static void
+finish_drag (MoveResizeData *mv_resize)
+{
+  gdk_window_destroy (mv_resize->moveresize_emulation_window);
+  mv_resize->moveresize_emulation_window = NULL;
+  g_object_unref (mv_resize->moveresize_window);
+  mv_resize->moveresize_window = NULL;
+
+  if (mv_resize->moveresize_pending_event)
+    {
+      g_free (mv_resize->moveresize_pending_event);
+      mv_resize->moveresize_pending_event = NULL;
+    }
+}
+
+static gboolean
+moveresize_lookahead (GdkDisplay *display,
+		      MoveResizeData *mv_resize,
+		      BroadwayInputMsg *event)
+{
+  GdkBroadwayDisplay *broadway_display;
+  BroadwayInputMsg *message;
+  GList *l;
+
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  for (l = broadway_display->input_messages; l != NULL; l = l->next)
+    {
+      message = l->data;
+      if (message->base.type == 'm')
+	return FALSE;
+      if (message->base.type == 'b')
+	return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+_gdk_broadway_moveresize_handle_event (GdkDisplay *display,
+				       BroadwayInputMsg *event)
+{
+  guint button_mask = 0;
+  MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
+
+  if (!mv_resize || !mv_resize->moveresize_window)
+    return FALSE;
+
+  button_mask = GDK_BUTTON1_MASK << (mv_resize->moveresize_button - 1);
+
+  switch (event->base.type)
+    {
+    case 'm':
+      if (mv_resize->moveresize_window->resize_count > 0)
+	{
+	  if (mv_resize->moveresize_pending_event)
+	    *mv_resize->moveresize_pending_event = *event;
+	  else
+	    mv_resize->moveresize_pending_event =
+	      g_memdup (event, sizeof (BroadwayInputMsg));
+
+	  break;
+	}
+      if (!moveresize_lookahead (display, mv_resize, event))
+	break;
+
+      update_pos (mv_resize,
+		  event->pointer.root_x,
+		  event->pointer.root_y);
+
+      /* This should never be triggered in normal cases, but in the
+       * case where the drag started without an implicit grab being
+       * in effect, we could miss the release if it occurs before
+       * we grab the pointer; this ensures that we will never
+       * get a permanently stuck grab.
+       */
+      if ((event->pointer.state & button_mask) == 0)
+	finish_drag (mv_resize);
+      break;
+
+    case 'B':
+      update_pos (mv_resize,
+		  event->pointer.root_x,
+		  event->pointer.root_y);
+
+      if (event->button.button == mv_resize->moveresize_button)
+	finish_drag (mv_resize);
+      break;
+    }
+  return TRUE;
+}
+
+gboolean
+_gdk_broadway_moveresize_configure_done (GdkDisplay *display,
+					 GdkWindow  *window)
+{
+  BroadwayInputMsg *tmp_event;
+  MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
+
+  if (!mv_resize || window != mv_resize->moveresize_window)
+    return FALSE;
+
+  if (mv_resize->moveresize_pending_event)
+    {
+      tmp_event = mv_resize->moveresize_pending_event;
+      mv_resize->moveresize_pending_event = NULL;
+      _gdk_broadway_moveresize_handle_event (display, tmp_event);
+      g_free (tmp_event);
+    }
+
+  return TRUE;
+}
+
+static void
+create_moveresize_window (MoveResizeData *mv_resize,
+			  guint32         timestamp)
+{
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+  GdkGrabStatus status;
+
+  g_assert (mv_resize->moveresize_emulation_window == NULL);
+
+  attributes.x = -100;
+  attributes.y = -100;
+  attributes.width = 10;
+  attributes.height = 10;
+  attributes.window_type = GDK_WINDOW_TEMP;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.override_redirect = TRUE;
+  attributes.event_mask = 0;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
+
+  mv_resize->moveresize_emulation_window =
+    gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (mv_resize->display)),
+		    &attributes,
+		    attributes_mask);
+
+  gdk_window_show (mv_resize->moveresize_emulation_window);
+
+  status = gdk_pointer_grab (mv_resize->moveresize_emulation_window,
+			     FALSE,
+			     GDK_BUTTON_RELEASE_MASK |
+			     GDK_POINTER_MOTION_MASK,
+			     NULL,
+			     NULL,
+			     timestamp);
+
+  if (status != GDK_GRAB_SUCCESS)
+    {
+      /* If this fails, some other client has grabbed the window
+       * already.
+       */
+      finish_drag (mv_resize);
+    }
+
+  mv_resize->moveresize_process_time = 0;
+}
+
 static void
 gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
 				       GdkWindowEdge  edge,
@@ -1190,10 +1472,34 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
 				       gint           root_y,
 				       guint32        timestamp)
 {
+  GdkBroadwayDisplay *broadway_display;
+  MoveResizeData *mv_resize;
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
+  /* We need a connection to be able to get mouse events, if not, punt */
+  broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
+  if (!broadway_display->output)
+    return;
+
+  mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
+
+  mv_resize->is_resize = TRUE;
+  mv_resize->moveresize_button = button;
+  mv_resize->resize_edge = edge;
+  mv_resize->moveresize_x = root_x;
+  mv_resize->moveresize_y = root_y;
+  mv_resize->moveresize_window = g_object_ref (window);
+
+  gdk_window_get_origin (mv_resize->moveresize_window,
+			 &mv_resize->moveresize_orig_x,
+			 &mv_resize->moveresize_orig_y);
+  mv_resize->moveresize_orig_width = gdk_window_get_width (window);
+  mv_resize->moveresize_orig_height = gdk_window_get_height (window);
+
+  create_moveresize_window (mv_resize, timestamp);
 }
 
 static void
