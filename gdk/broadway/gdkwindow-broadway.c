@@ -492,6 +492,8 @@ _gdk_broadway_window_destroy (GdkWindow *window,
     }
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
+  g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER(impl->id));
+
   if (broadway_display->output)
     broadway_output_destroy_surface (broadway_display->output,
 				     impl->id);
