@@ -288,6 +288,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   GtkWidget               *scrolled_win;
   GtkWidget               *alignment;
+  GtkWidget               *preview_and_size;
+  GtkWidget               *size_controls;
   GList                   *focus_chain = NULL;
   AtkObject *atk_obj;
 
@@ -318,12 +320,13 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_alignment_set_padding (alignment, 6, 0, 0, 0);
 
-  
-  
+  preview_and_size = gtk_vbox_new (TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
 
   /* Packing everything in the selection */
   gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(alignment), FALSE, FALSE, 0);
 
   priv->size = 12 * PANGO_SCALE;
   priv->face = NULL;
