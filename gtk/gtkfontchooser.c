@@ -283,6 +283,18 @@ inserted_text_cb (GtkEntryBuffer *buffer,
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
 
+void
+slider_change_cb (GtkAdjustment *adjustment, gpointer data)
+{
+  
+}
+
+void
+spin_change_cb (GtkAdjustment *adjustment, gpointer data)
+{
+
+}
+
 static void
 gtk_font_selection_init (GtkFontSelection *fontsel)
 {
@@ -349,6 +361,12 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv->size = pango_font_description_get_size (font_desc);
   priv->face = NULL;
   priv->family = NULL;
+  
+  gtk_adjustment_set_value (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
+                            (gdouble)(priv->size / PANGO_SCALE));
+  gtk_adjustment_set_value (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
+                            (gdouble)(priv->size / PANGO_SCALE));
+
 
   gtk_widget_show_all (GTK_WIDGET (fontsel));
   gtk_widget_hide (GTK_WIDGET (fontsel));
@@ -373,6 +391,12 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
                     "inserted-text", G_CALLBACK (inserted_text_cb), (gpointer)priv);
 
+  /* Size controls callbacks */
+  g_signal_connect (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider))),
+                    "value-changed", G_CALLBACK (slider_change_cb), (gpointer)priv);
+  g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
+                    "value-changed", G_CALLBACK (spin_change_cb), (gpointer)priv);
+                    
   gtk_widget_pop_composite_child();
 }
 
