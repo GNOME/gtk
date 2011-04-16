@@ -8164,10 +8164,11 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
 /**
  * gtk_entry_get_icon_at_pos:
  * @entry: a #GtkEntry
- * @x: the x coordinate of the position to find
+ * @x: the x coordinate of the position to fine
  * @y: the y coordinate of the position to find
  *
- * Finds the icon at the given position and return its index.
+ * Finds the icon at the given position and return its index. The
+ * position's coordinates are relative to the @entry's top left corner.
  * If @x, @y doesn't lie inside an icon, -1 is returned.
  * This function is intended for use in a #GtkWidget::query-tooltip
  * signal handler.
@@ -8187,7 +8188,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), -1);
 
-  get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
+  get_frame_size (entry, FALSE, &frame_x, &frame_y, NULL, NULL);
   x -= frame_x;
   y -= frame_y;
 
