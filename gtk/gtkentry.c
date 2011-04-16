@@ -563,6 +563,7 @@ static void         get_text_area_size                 (GtkEntry       *entry,
 							gint           *width,
 							gint           *height);
 static void         get_frame_size                     (GtkEntry       *entry,
+                                                        gboolean        relative_to_window,
 							gint           *x,
 							gint           *y,
 							gint           *width,
@@ -2894,7 +2895,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
 
-  get_frame_size (entry, &frame_x, &frame_y, NULL, NULL);
+  get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
   attributes.x += frame_x;
   attributes.y += frame_y;
 
@@ -3115,7 +3116,7 @@ place_windows (GtkEntry *entry)
   GtkAllocation secondary;
   EntryIconInfo *icon_info = NULL;
 
-  get_frame_size (entry, &frame_x, &frame_y, NULL, NULL);
+  get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
   get_text_area_size (entry, &x, &y, &width, &height);
   get_icon_allocations (entry, &primary, &secondary);
 
@@ -3167,7 +3168,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
   if (gtk_widget_get_realized (widget))
-    get_frame_size (entry, NULL, NULL, NULL, &frame_height);
+    get_frame_size (entry, TRUE, NULL, NULL, NULL, &frame_height);
   else
     frame_height = requisition.height;
 
@@ -3207,6 +3208,7 @@ get_text_area_size (GtkEntry *entry,
 
 static void
 get_frame_size (GtkEntry *entry,
+                gboolean  relative_to_window,
                 gint     *x,
                 gint     *y,
                 gint     *width,
@@ -3221,14 +3223,17 @@ get_frame_size (GtkEntry *entry,
   gtk_widget_get_allocation (widget, &allocation);
 
   if (x)
-    *x = allocation.x;
+    *x = relative_to_window ? allocation.x : 0;
 
   if (y)
     {
       if (priv->is_cell_renderer)
-	*y = allocation.y;
+	*y = 0;
       else
-	*y = allocation.y + (allocation.height - requisition.height) / 2;
+	*y = (allocation.height - requisition.height) / 2;
+
+      if (relative_to_window)
+        *y += allocation.y;
     }
 
   if (width)
@@ -3400,7 +3405,7 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 
   cairo_save (cr);
 
-  get_frame_size (GTK_ENTRY (widget), &frame_x, &frame_y, &width, &height);
+  get_frame_size (GTK_ENTRY (widget), TRUE, &frame_x, &frame_y, &width, &height);
   gtk_widget_get_allocation (widget, &allocation);
 
   cairo_translate (cr, frame_x - allocation.x, frame_y - allocation.y);
@@ -8287,7 +8292,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), -1);
 
-  get_frame_size (entry, &frame_x, &frame_y, NULL, NULL);
+  get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
   x -= frame_x;
   y -= frame_y;
 
