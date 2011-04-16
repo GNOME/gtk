@@ -258,30 +258,23 @@ static void gtk_font_selection_get_property (GObject         *object,
     }
 }
 
-/* Handles key press events on the lists, so that we can trap Enter to
- * activate the default button on our own.
- */
-static gboolean
-list_row_activated (GtkWidget *widget)
+void
+deleted_text_cb (GtkEntryBuffer *buffer,
+                 guint           position,
+                 guint           n_chars,
+                 gpointer        user_data)
 {
-  GtkWidget *default_widget, *focus_widget;
-  GtkWindow *window;
-  
-  window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
-  if (!gtk_widget_is_toplevel (GTK_WIDGET (window)))
-    window = NULL;
+  g_debug( "deleted text");
+}
 
-  if (window)
-    {
-      default_widget = gtk_window_get_default_widget (window);
-      focus_widget = gtk_window_get_focus (window);
-
-      if (widget != default_widget &&
-          !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
-        gtk_window_activate_default (window);
-    }
-
-  return TRUE;
+void
+inserted_text_cb (GtkEntryBuffer *buffer,
+                  guint           position,
+                  gchar          *chars,
+                  guint           n_chars,
+                  gpointer        user_data) 
+{
+  g_debug ("inserted text");
 }
 
 static void
@@ -360,6 +353,13 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /* Set default preview text */
   gtk_entry_set_text (GTK_ENTRY (priv->preview),
                       pango_language_get_sample_string (NULL));
+  
+  /** Callback connections **/
+  /* Connect to callback for the live search text entry */
+  g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
+                    "deleted-text", G_CALLBACK (deleted_text_cb), (gpointer)priv);
+  g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
+                    "inserted-text", G_CALLBACK (inserted_text_cb), (gpointer)priv);
 
   gtk_widget_pop_composite_child();
 }
@@ -754,7 +754,7 @@ gtk_font_selection_get_size (GtkFontSelection *fontsel)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), -1);
 
-  return NULL;
+  return fontsel->priv->size;
 }
 
 /**
