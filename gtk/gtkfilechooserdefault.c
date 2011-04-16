@@ -4871,14 +4871,12 @@ view_mode_combo_box_changed_cb (GtkComboBox *combo,
       create_browse_files_icon_view (impl);
       impl->browse_files_current_view = impl->browse_files_icon_view;
       old_view = impl->browse_files_tree_view;
-      impl->browse_files_tree_view = NULL;
     }
   else if (target == VIEW_MODE_LIST)
     {
       create_browse_files_tree_view (impl);
       impl->browse_files_current_view = impl->browse_files_tree_view;
       old_view = impl->browse_files_icon_view;
-      impl->browse_files_icon_view = NULL;
     }
   else
     g_assert_not_reached ();
@@ -4889,6 +4887,13 @@ view_mode_combo_box_changed_cb (GtkComboBox *combo,
   copy_old_selection_to_current_view (impl, old_view_mode);
 
   /* Destroy the old view */
+  if (target == VIEW_MODE_ICON)
+    impl->browse_files_tree_view = NULL;
+  else if (target == VIEW_MODE_LIST)
+    impl->browse_files_icon_view = NULL;
+  else
+    g_assert_not_reached ();
+
   if (impl->browse_shortcuts_popup_menu)
     gtk_menu_detach (GTK_MENU (impl->browse_shortcuts_popup_menu));
 
