@@ -195,7 +195,11 @@ void	     gtk_container_child_set_property		(GtkContainer	   *container,
 void	     gtk_container_child_get_property		(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *property_name,
-							 GValue		   *value);
+	                                                 GValue		   *value);
+
+void gtk_container_child_notify (GtkContainer *container,
+                                 GtkWidget    *child,
+                                 const gchar  *property_name);
 
 /**
  * GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID:

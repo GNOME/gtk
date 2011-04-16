@@ -3587,37 +3587,17 @@ gtk_widget_freeze_child_notify (GtkWidget *widget)
  * on @widget.
  *
  * This is the analogue of g_object_notify() for child properties.
- **/
+ *
+ * Also see gtk_container_child_notify().
+ */
 void
 gtk_widget_child_notify (GtkWidget    *widget,
-			 const gchar  *child_property)
+                         const gchar  *child_property)
 {
-  GtkWidgetPrivate *priv = widget->priv;
-  GParamSpec *pspec;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (child_property != NULL);
-  if (!G_OBJECT (widget)->ref_count || !priv->parent)
+  if (widget->priv->parent == NULL)
     return;
 
-  g_object_ref (widget);
-  pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
-				    child_property,
-				    G_OBJECT_TYPE (priv->parent),
-				    TRUE);
-  if (!pspec)
-    g_warning ("%s: container class `%s' has no child property named `%s'",
-	       G_STRLOC,
-	       G_OBJECT_TYPE_NAME (priv->parent),
-	       child_property);
-  else
-    {
-      GObjectNotifyQueue *nqueue = g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
-
-      g_object_notify_queue_add (G_OBJECT (widget), nqueue, pspec);
-      g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
-    }
-  g_object_unref (widget);
+  gtk_container_child_notify (GTK_CONTAINER (widget->priv->parent), widget, child_property);
 }
 
 /**

@@ -764,6 +764,68 @@ gtk_container_child_type (GtkContainer *container)
 }
 
 /* --- GtkContainer child property mechanism --- */
+
+/**
+ * gtk_container_child_notify:
+ * @container: the #GtkContainer
+ * @widget: the child widget
+ * @child_property: the name of a chld property installed on
+ *     the class of @container
+ *
+ * Emits a #GtkWidget::child-notify signal for the
+ * <link linkend="child-properties">child property</link>
+ * @child_property on widget.
+ *
+ * This is an analogue of g_object_notify() for child properties.
+ *
+ * Also see gtk_widget_child_notify().
+ *
+ * Since: 3.2
+ */
+void
+gtk_container_child_notify (GtkContainer *container,
+                            GtkWidget    *widget,
+                            const gchar  *child_property)
+{
+  GObject *obj;
+  GParamSpec *pspec;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (child_property != NULL);
+
+  obj = G_OBJECT (widget);
+
+  if (obj->ref_count == 0)
+    return;
+
+  g_object_ref (obj);
+
+  pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
+                                    child_property,
+                                    G_OBJECT_TYPE (container),
+                                    TRUE);
+
+  if (pspec == NULL)
+    {
+      g_warning ("%s: container class `%s' has no child property named `%s'",
+                 G_STRLOC,
+                 G_OBJECT_TYPE_NAME (container),
+                 child_property);
+    }
+  else
+    {
+      GObjectNotifyQueue *nqueue;
+
+      nqueue = g_object_notify_queue_freeze (obj, _gtk_widget_child_property_notify_context);
+
+      g_object_notify_queue_add (obj, nqueue, pspec);
+      g_object_notify_queue_thaw (obj, nqueue);
+    }
+
+  g_object_unref (obj);
+}
+
 static inline void
 container_get_child_property (GtkContainer *container,
                               GtkWidget    *child,
