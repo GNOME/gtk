@@ -264,7 +264,10 @@ deleted_text_cb (GtkEntryBuffer *buffer,
                  guint           n_chars,
                  gpointer        user_data)
 {
-  g_debug( "deleted text");
+  GtkFontSelectionPrivate *priv  = (GtkFontSelectionPrivate*)user_data;
+  GtkWidget               *entry = priv->search_entry;
+  
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
 
 void
@@ -274,7 +277,10 @@ inserted_text_cb (GtkEntryBuffer *buffer,
                   guint           n_chars,
                   gpointer        user_data) 
 {
-  g_debug ("inserted text");
+  GtkFontSelectionPrivate *priv  = (GtkFontSelectionPrivate*)user_data;
+  GtkWidget               *entry = priv->search_entry;
+  
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
 
 static void
@@ -353,6 +359,12 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /* Set default preview text */
   gtk_entry_set_text (GTK_ENTRY (priv->preview),
                       pango_language_get_sample_string (NULL));
+  
+  /* Set search icon and place holder text */
+  gtk_entry_set_icon_from_stock (GTK_ENTRY (priv->search_entry),
+                                 GTK_ENTRY_ICON_SECONDARY,
+                                 GTK_STOCK_FIND);
+  gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), N_("Search font name"));
   
   /** Callback connections **/
   /* Connect to callback for the live search text entry */
@@ -492,6 +504,7 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
 gboolean
 visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 {
+  gboolean result = FALSE;
   GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*) data;
 
   const gchar *search_text = (const gchar*)gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
@@ -511,11 +524,14 @@ visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
   
   font_name_casefold = g_utf8_casefold (font_name, -1);
   search_text_casefold = g_utf8_casefold (search_text, -1);
+  
+  if (g_strrstr (font_name_casefold, search_text_casefold))
+    result = TRUE;
 
   g_free (search_text_casefold);
   g_free (font_name_casefold);
   g_free (font_name);
-  return FALSE;
+  return result;
 }
 
 static void
@@ -529,9 +545,15 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
                                              PANGO_TYPE_FONT_FACE,
                                              G_TYPE_STRING,
                                              G_TYPE_STRING);
+
   fontsel->priv->filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fontsel->priv->model),
                                                      NULL);
-  
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (fontsel->priv->filter),
+                                          visible_func,
+                                          (gpointer)fontsel->priv,
+                                          NULL);
+                                          
+
   gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fontsel->priv->filter));
   
   gtk_tree_view_set_rules_hint      (treeview, TRUE);
