@@ -29,6 +29,7 @@ apply_changes_gradually (gpointer data)
     {
       /* Close automatically once changes are fully applied. */
       gtk_widget_destroy (assistant);
+      assistant = NULL;
       return FALSE;
     }
 }
