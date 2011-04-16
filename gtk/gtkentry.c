@@ -3352,15 +3352,13 @@ gtk_entry_draw_frame (GtkWidget       *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   gint x = 0, y = 0, width, height;
-  GtkAllocation allocation;
   gint frame_x, frame_y;
 
   cairo_save (cr);
 
-  get_frame_size (GTK_ENTRY (widget), TRUE, &frame_x, &frame_y, &width, &height);
-  gtk_widget_get_allocation (widget, &allocation);
+  get_frame_size (GTK_ENTRY (widget), FALSE, &frame_x, &frame_y, &width, &height);
 
-  cairo_translate (cr, frame_x - allocation.x, frame_y - allocation.y);
+  cairo_translate (cr, frame_x, frame_y);
 
   /* Fix a problem with some themes which assume that entry->text_area's
    * width equals widget->window's width
