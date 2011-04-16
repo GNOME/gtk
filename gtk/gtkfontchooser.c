@@ -304,8 +304,6 @@ icon_press_cb (GtkEntry             *entry,
                GdkEvent             *event,
                gpointer              user_data)
 {
-  GtkFontSelectionPrivate *priv  = (GtkFontSelectionPrivate*)user_data;
-
   gtk_entry_buffer_delete_text (gtk_entry_get_buffer (entry), 0, -1);
 }
 
@@ -322,7 +320,17 @@ void
 spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
   GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
+
+  gdouble size = gtk_adjustment_get_value (adjustment);
   
+  GtkAdjustment *slider_adj = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
+
+  if (size >= gtk_adjustment_get_lower (slider_adj) ||
+      size <= gtk_adjustment_get_upper (slider_adj))
+    {
+      gtk_adjustment_set_value (slider_adj, size);
+    }
+
   priv->size = ((gint)gtk_adjustment_get_value (adjustment)) * PANGO_SCALE;
 }
 
@@ -573,8 +581,8 @@ visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
                       -1);
 
   /* Covering some corner cases to speed up the result */
-  if ((font_name == NULL) ||
-      (strlen (search_text) > strlen (font_name)))
+  if (font_name == NULL ||
+      strlen (search_text) > strlen (font_name))
     {
       g_free (font_name);
       return FALSE;
