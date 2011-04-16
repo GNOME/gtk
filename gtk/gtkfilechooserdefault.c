@@ -4344,9 +4344,12 @@ list_button_press_event_cb (GtkWidget             *widget,
 static void
 file_list_set_sort_column_ids (GtkFileChooserDefault *impl)
 {
-  gtk_tree_view_column_set_sort_column_id (impl->list_name_column, MODEL_COL_NAME);
-  gtk_tree_view_column_set_sort_column_id (impl->list_mtime_column, MODEL_COL_MTIME);
-  gtk_tree_view_column_set_sort_column_id (impl->list_size_column, MODEL_COL_SIZE);
+  if (impl->view_mode == VIEW_MODE_LIST)
+    {
+      gtk_tree_view_column_set_sort_column_id (impl->list_name_column, MODEL_COL_NAME);
+      gtk_tree_view_column_set_sort_column_id (impl->list_mtime_column, MODEL_COL_MTIME);
+      gtk_tree_view_column_set_sort_column_id (impl->list_size_column, MODEL_COL_SIZE);
+    }
 }
 
 static gboolean
@@ -4892,7 +4895,13 @@ view_mode_combo_box_changed_cb (GtkComboBox *combo,
 
   /* Destroy the old view */
   if (target == VIEW_MODE_ICON)
-    impl->browse_files_tree_view = NULL;
+    {
+      impl->browse_files_tree_view = NULL;
+      impl->list_name_renderer = NULL;
+      impl->list_name_column = NULL;
+      impl->list_mtime_column = NULL;
+      impl->list_size_column = NULL;
+    }
   else if (target == VIEW_MODE_LIST)
     impl->browse_files_icon_view = NULL;
   else
@@ -6204,7 +6213,8 @@ settings_load (GtkFileChooserDefault *impl)
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
 
   impl->show_size_column = show_size_column;
-  gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
+  if (impl->list_size_column)
+    gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
 
   impl->sort_column = sort_column;
   impl->sort_order = sort_order;
