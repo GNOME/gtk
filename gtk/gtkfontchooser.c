@@ -123,7 +123,7 @@ struct _GtkFontSelectionDialogPrivate
 #define DEFAULT_FONT_NAME "Sans 10"
 
 /* This is the initial fixed height and the top padding of the preview entry */
-#define PREVIEW_HEIGHT 100
+#define PREVIEW_HEIGHT 84
 #define PREVIEW_TOP_PADDING 6
 
 /* These are the sizes of the font, style & size lists. */
@@ -132,7 +132,7 @@ struct _GtkFontSelectionDialogPrivate
 #define FONT_STYLE_LIST_WIDTH	170
 #define FONT_SIZE_LIST_WIDTH	60
 
-#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s %s</span>\n<span font_desc=\"%s\">%s</span>"
+#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s %s</span>\n<span size=\"large\" font_desc=\"%s\">%s</span>"
 
 /* These are what we use as the standard font sizes, for the size list.
  */
@@ -285,7 +285,7 @@ static void
 gtk_font_selection_init (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv;
-
+  PangoFontDescription    *font_desc;
   GtkWidget               *scrolled_win;
   GtkWidget               *alignment;
   GtkWidget               *preview_and_size;
@@ -312,6 +312,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   priv->size_spin = gtk_spin_button_new (NULL, 1.0, 0);
 
+
+  /** Bootstrapping widget layout **/
   /* Main font family/face view */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
@@ -340,14 +342,20 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(alignment), FALSE, TRUE, 0);
 
-  priv->size = 12 * PANGO_SCALE;
+  /* Getting the default size */
+  font_desc  = pango_context_get_font_description (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)));
+  priv->size = pango_font_description_get_size (font_desc);
   priv->face = NULL;
   priv->family = NULL;
 
   gtk_widget_show_all (GTK_WIDGET (fontsel));
   gtk_widget_hide (GTK_WIDGET (fontsel));
 
+  /* Treeview column and model bootstrapping */
   gtk_font_selection_bootstrap_fontlist (fontsel);
+  
+  /* Set default preview text */
+  gtk_entry_set_text (GTK_ENTRY (priv->preview), pango_language_get_sample_string (NULL));
 
   gtk_widget_pop_composite_child();
 }
