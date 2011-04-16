@@ -98,6 +98,8 @@ struct _GtkFontSelectionPrivate
   gint             size;
   PangoFontFace   *face;
   PangoFontFamily *family;
+  
+  gboolean         ignore_slider;
 };
 
 
@@ -312,6 +314,13 @@ slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
   GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
 
+  /* If we set the silder value manually, we ignore this callback */
+  if (priv->ignore_slider)
+    {
+      priv->ignore_slider = FALSE;
+      return;
+    }
+
   gtk_adjustment_set_value (gtk_spin_button_get_adjustment( GTK_SPIN_BUTTON(priv->size_spin)),
                             gtk_adjustment_get_value (adjustment));
 }
@@ -325,10 +334,16 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   
   GtkAdjustment *slider_adj = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
 
-  if (size >= gtk_adjustment_get_lower (slider_adj) ||
-      size <= gtk_adjustment_get_upper (slider_adj))
+  /* We ignore the slider value change callback for both of this set_value call */
+  if (size < gtk_adjustment_get_lower (slider_adj))
     {
-      gtk_adjustment_set_value (slider_adj, size);
+      priv->ignore_slider = TRUE;
+      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
+    }
+  else if (size > gtk_adjustment_get_upper (slider_adj))
+    {
+      priv->ignore_slider = TRUE;
+      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
     }
 
   priv->size = ((gint)gtk_adjustment_get_value (adjustment)) * PANGO_SCALE;
@@ -436,6 +451,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                     "value-changed", G_CALLBACK (slider_change_cb), (gpointer)priv);
   g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
                     "value-changed", G_CALLBACK (spin_change_cb), (gpointer)priv);
+  priv->ignore_slider = FALSE;
                     
   gtk_widget_pop_composite_child();
 }
