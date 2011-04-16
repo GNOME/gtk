@@ -92,6 +92,9 @@ struct _GtkFontSelectionPrivate
   GtkWidget *size_spin;
   GtkWidget *preview;
 
+  GtkListStore *model;  
+  GtkTreeModel *filter;
+
   gint             size;
   PangoFontFace   *face;
   PangoFontFamily *family;
@@ -132,7 +135,7 @@ struct _GtkFontSelectionDialogPrivate
 #define FONT_STYLE_LIST_WIDTH	170
 #define FONT_SIZE_LIST_WIDTH	60
 
-#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s %s</span>\n<span size=\"large\" font_desc=\"%s\">%s</span>"
+#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s <i>%s</i></span>\n<span size=\"large\" font_desc=\"%s\">%s</span>"
 
 /* These are what we use as the standard font sizes, for the size list.
  */
@@ -355,7 +358,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_font_selection_bootstrap_fontlist (fontsel);
   
   /* Set default preview text */
-  gtk_entry_set_text (GTK_ENTRY (priv->preview), pango_language_get_sample_string (NULL));
+  gtk_entry_set_text (GTK_ENTRY (priv->preview),
+                      pango_language_get_sample_string (NULL));
 
   gtk_widget_pop_composite_child();
 }
@@ -399,22 +403,19 @@ set_cursor_to_iter (GtkTreeView *view,
 }
 
 static void 
-populate_list (GtkTreeView *treeview)
+populate_list (GtkTreeView* treeview, GtkListStore* model)
 {
   GtkStyleContext *style_context;
   GdkRGBA          g_color;
   PangoColor       p_color;
   gchar            *color_string;
 
-  GtkListStore    *model;
-  GtkTreeIter      match_row;
+  GtkTreeIter   match_row;
 
   gint n_families, i;  
   PangoFontFamily **families;
 
   GString     *tmp = g_string_new (NULL);
-
-  model = GTK_LIST_STORE (gtk_tree_view_get_model (treeview));
 
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
                                &families,
@@ -488,21 +489,50 @@ populate_list (GtkTreeView *treeview)
   g_free (families);
 }
 
+gboolean
+visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+  GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*) data;
+
+  const gchar *search_text = (const gchar*)gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  gchar       *font_name;
+  gchar       *font_name_casefold;
+  gchar       *search_text_casefold;
+
+  gtk_tree_model_get (model, iter,
+                      FAMILY_NAME_COLUMN, &font_name,
+                      -1);
+
+  if (font_name == NULL)
+    {
+      g_free (font_name);
+      return FALSE;
+    }
+  
+  font_name_casefold = g_utf8_casefold (font_name, -1);
+  search_text_casefold = g_utf8_casefold (search_text, -1);
+
+  g_free (search_text_casefold);
+  g_free (font_name_casefold);
+  g_free (font_name);
+  return FALSE;
+}
+
 static void
 gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
 {
-  GtkListStore      *fonts_model;
   GtkTreeView       *treeview = GTK_TREE_VIEW (fontsel->priv->family_face_list);
   GtkTreeViewColumn *col;
 
-
-
-  fonts_model = gtk_list_store_new (4,
-                                    PANGO_TYPE_FONT_FAMILY,
-                                    PANGO_TYPE_FONT_FACE,
-                                    G_TYPE_STRING,
-                                    G_TYPE_STRING);
-  gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fonts_model));
+  fontsel->priv->model = gtk_list_store_new (4,
+                                             PANGO_TYPE_FONT_FAMILY,
+                                             PANGO_TYPE_FONT_FACE,
+                                             G_TYPE_STRING,
+                                             G_TYPE_STRING);
+  fontsel->priv->filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fontsel->priv->model),
+                                                     NULL);
+  
+  gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fontsel->priv->filter));
   
   gtk_tree_view_set_rules_hint      (treeview, TRUE);
   gtk_tree_view_set_headers_visible (treeview, FALSE);
@@ -513,7 +543,7 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
                                                    NULL);
   gtk_tree_view_append_column (treeview, col);
 
-  populate_list (treeview);  
+  populate_list (treeview, fontsel->priv->model);
 }
 
 
