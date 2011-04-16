@@ -2244,6 +2244,11 @@ new_folder_button_clicked (GtkButton             *button,
   GtkTreeIter iter;
   GtkTreePath *path;
 
+  /* icon view available only in the GTK_FILE_CHOOSER_ACTION_OPEN where
+   * new folder button is not visible
+   */
+  g_assert (impl->view_mode == VIEW_MODE_LIST);
+
   if (!impl->browse_files_model)
     return; /* FIXME: this sucks.  Disable the New Folder button or something. */
 
@@ -2262,7 +2267,6 @@ new_folder_button_clicked (GtkButton             *button,
 			    path,
 			    impl->list_name_column,
 			    TRUE);
-  /* icon view ignored because there's no possibility to create new folder */
 
   gtk_tree_path_free (path);
 }
