@@ -2851,9 +2851,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget::query-tooltip:
    * @widget: the object which received the signal
    * @x: the x coordinate of the cursor position where the request has
-   *     been emitted, relative to @widget->window
+   *     been emitted, relative to @widget's left side
    * @y: the y coordinate of the cursor position where the request has
-   *     been emitted, relative to @widget->window
+   *     been emitted, relative to @widget's top
    * @keyboard_mode: %TRUE if the tooltip was trigged using the keyboard
    * @tooltip: a #GtkTooltip
    *
