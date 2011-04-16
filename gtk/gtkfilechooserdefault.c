@@ -6041,17 +6041,20 @@ change_icon_theme (GtkFileChooserDefault *impl)
 
   shortcuts_reload_icons (impl);
   /* the first cell in the first column is the icon column, and we have a fixed size there */
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (
-        gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 0)));
-  renderer = GTK_CELL_RENDERER (cells->data);
-  set_icon_cell_renderer_fixed_size (impl, renderer);
-  g_list_free (cells);
+  if (impl->view_mode == VIEW_MODE_LIST)
+    {
+      cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (
+            gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 0)));
+      renderer = GTK_CELL_RENDERER (cells->data);
+      set_icon_cell_renderer_fixed_size (impl, renderer);
+      g_list_free (cells);
+    }
   if (impl->browse_files_model)
     {
       _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_LIST_PIXBUF);
       _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_ICON_PIXBUF);
     }
-  gtk_widget_queue_resize (impl->browse_files_tree_view);
+  gtk_widget_queue_resize (impl->browse_files_current_view);
 
   profile_end ("end", NULL);
 }
