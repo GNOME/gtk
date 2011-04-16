@@ -131,6 +131,8 @@ struct _GtkFontSelectionDialogPrivate
 #define FONT_STYLE_LIST_WIDTH	170
 #define FONT_SIZE_LIST_WIDTH	60
 
+#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s %s</span>\n<span>%s</span>"
+
 /* These are what we use as the standard font sizes, for the size list.
  */
 #define FONT_SIZES_LENGTH 25
@@ -149,6 +151,7 @@ enum {
 enum {
   FAMILY_COLUMN,
   FACE_COLUMN,
+  FAMILY_NAME_COLUMN,
   TEXT_COLUMN
 };
 
@@ -390,10 +393,12 @@ gtk_font_selection_populate_list (GtkTreeView *treeview)
   GtkListStore *model;
   PangoFontFamily *match_family;
   PangoFontFamily **families;
-  gint n_families, i;
+  gint n_families, n_faces, i, j;
   GtkTreeIter match_row;
+  GString *tmp = g_string_new (NULL);
+  const gchar* row_format = ROW_FORMAT_STRING;
   
-  model = GTK_LIST_STORE(gtk_tree_view_get_model (treeview));
+  model = GTK_LIST_STORE (gtk_tree_view_get_model (treeview));
 
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
                                &families,
@@ -407,11 +412,20 @@ gtk_font_selection_populate_list (GtkTreeView *treeview)
     {
       const gchar *name = pango_font_family_get_name (families[i]);
       GtkTreeIter iter;
+      
+      /* foreground_color, default family, face, family, desc, sample string */
+      g_string_printf (tmp, ROW_FORMAT_STRING,
+                            "darkgrey",
+                            "sans", /* FIXME: This has to be the global font */
+                            "Regular",
+                            PREVIEW_TEXT);
+                            
 
       gtk_list_store_append (model, &iter);
       gtk_list_store_set (model, &iter,
                           FAMILY_COLUMN, families[i],
-                          TEXT_COLUMN, name,
+                          FAMILY_NAME_COLUMN, name,
+                          TEXT_COLUMN, tmp->str,
                           -1);
 
       if (i == 0 || !g_ascii_strcasecmp (name, "sans"))
@@ -423,6 +437,7 @@ gtk_font_selection_populate_list (GtkTreeView *treeview)
 
   set_cursor_to_iter (treeview, &match_row);
 
+  g_string_free (tmp, TRUE);
   g_free (families);
 }
 
@@ -432,9 +447,10 @@ gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview)
   GtkTreeViewColumn *col;
   GtkListStore      *fonts_model;
 
-  fonts_model = gtk_list_store_new (3,
+  fonts_model = gtk_list_store_new (4,
                                     PANGO_TYPE_FONT_FAMILY,
                                     PANGO_TYPE_FONT_FACE,
+                                    G_TYPE_STRING,
                                     G_TYPE_STRING);
   gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fonts_model));
   
@@ -444,6 +460,7 @@ gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview)
   col = gtk_tree_view_column_new_with_attributes ("Family",
                                                    gtk_cell_renderer_text_new (),
                                                    "markup", TEXT_COLUMN,
+                                                   "font",   FAMILY_NAME_COLUMN,
                                                    NULL);
   gtk_tree_view_append_column (treeview, col);
 
