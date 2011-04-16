@@ -414,8 +414,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (preview_and_size), scrolled_win, FALSE, FALSE, 0);
   
   /* Setting the size requests for various widgets */
-  gtk_widget_set_size_request (priv->family_face_list, -1, 360);
-  gtk_widget_set_size_request (scrolled_win, -1, PREVIEW_HEIGHT);
+  gtk_widget_set_size_request (fontsel,       -1, 460);
+  gtk_widget_set_size_request (scrolled_win,  -1, PREVIEW_HEIGHT);
   gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
 
   /* Unset the frame on the preview entry and set a shadow in the scrolled window */
