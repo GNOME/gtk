@@ -312,7 +312,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   /* Alignment for the preview and size controls */
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  gtk_alignment_set_padding (alignment, PREVIEW_TOP_PADDING, 0, 0, 0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
+                             PREVIEW_TOP_PADDING, 0, 0, 0);
 
   preview_and_size = gtk_vbox_new (TRUE, 0);
   gtk_box_set_homogeneous (GTK_BOX (preview_and_size), FALSE);
@@ -340,7 +341,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_widget_show_all (GTK_WIDGET (fontsel));
   gtk_widget_hide (GTK_WIDGET (fontsel));
 
-  gtk_font_selection_bootstrap_fontlist (priv->family_face_list);
+  gtk_font_selection_bootstrap_fontlist (GTK_TREE_VIEW (priv->family_face_list));
 
   gtk_widget_pop_composite_child();
 }
@@ -362,18 +363,71 @@ gtk_font_selection_new (void)
   return GTK_WIDGET (fontsel);
 }
 
+static int
+cmp_families (const void *a, const void *b)
+{
+  const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
+  const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
+
+  return g_utf8_collate (a_name, b_name);
+}
+
+static void
+set_cursor_to_iter (GtkTreeView *view,
+                    GtkTreeIter *iter)
+{
+  GtkTreeModel *model = gtk_tree_view_get_model (view);
+  GtkTreePath *path = gtk_tree_model_get_path (model, iter);
+
+  gtk_tree_view_set_cursor (view, path, NULL, FALSE);
+
+  gtk_tree_path_free (path);
+}
 
 static void 
-gtk_font_selection_populate_model (GtkTreeModel *model)
+gtk_font_selection_populate_model (GtkTreeView *treeview, GtkListStore *model)
 {
-  
+  PangoFontFamily *match_family;
+  PangoFontFamily **families;
+  gint n_families, i;
+  GtkTreeIter match_row;
+
+  pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
+                               &families,
+                               &n_families);
+
+  qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
+
+  gtk_list_store_clear (model);
+
+  for (i=0; i<n_families; i++)
+    {
+      const gchar *name = pango_font_family_get_name (families[i]);
+      GtkTreeIter iter;
+
+      gtk_list_store_append (model, &iter);
+      gtk_list_store_set (model, &iter,
+                          FAMILY_COLUMN, families[i],
+                          TEXT_COLUMN, name,
+                          -1);
+
+      if (i == 0 || !g_ascii_strcasecmp (name, "sans"))
+        {
+          match_family = families[i];
+          match_row = iter;
+        }
+    }
+
+  set_cursor_to_iter (treeview, &match_row);
+
+  g_free (families);
 }
 
 static void
 gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview)
 {
   GtkTreeViewColumn *col;
-  GtkTreeModel *fonts_model;
+  GtkListStore      *fonts_model;
 
   fonts_model = gtk_list_store_new (3,
                                     PANGO_TYPE_FONT_FAMILY,
@@ -391,7 +445,7 @@ gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview)
   
   gtk_tree_view_append_column (treeview, col);
 
-  gtk_font_selection_populate_model (GTK_TREE_MODEL (fonts_model));  
+  gtk_font_selection_populate_model (treeview, fonts_model);  
 }
 
 
@@ -423,30 +477,28 @@ gtk_font_selection_style_updated (GtkWidget *widget)
 
 static void
 gtk_font_selection_ref_family (GtkFontSelection *fontsel,
-                              PangoFontFamily  *family)
+                               PangoFontFamily  *family)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
-#if 0
+
   if (family)
     family = g_object_ref (family);
   if (priv->family)
     g_object_unref (priv->family);
   priv->family = family;
-#endif
 }
 
 static void
 gtk_font_selection_ref_face (GtkFontSelection *fontsel,
-                                        PangoFontFace    *face)
+                             PangoFontFace    *face)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
-#if 0
+
   if (face)
     face = g_object_ref (face);
   if (priv->face)
     g_object_unref (priv->face);
   priv->face = face;
-#endif
 }
 
 /*****************************************************************************
