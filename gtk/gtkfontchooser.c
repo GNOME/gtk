@@ -351,9 +351,72 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 
   desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
   pango_font_description_set_size (desc, priv->size);
-  gtk_widget_modify_font (priv->preview, desc);
+  gtk_widget_override_font (priv->preview, desc);
   
   gtk_widget_queue_draw (priv->preview);
+}
+
+void
+set_range_marks (GtkWidget* size_slider, gint* sizes, gint length)
+{
+  gint i;
+  
+  gtk_scale_clear_marks (GTK_SCALE (size_slider));
+  
+  for (i=0; i<length; i++)
+    gtk_scale_add_mark (GTK_SCALE (size_slider),
+                        (gdouble) sizes[i],
+                        GTK_POS_BOTTOM, NULL);
+}
+
+void
+cursor_changed_cb (GtkTreeView *treeview, gpointer data)
+{
+  gchar                *family_name;
+  PangoFontFace        *face;
+  PangoFontDescription *desc;
+
+  GtkTreeIter iter;
+  GtkTreePath *path = gtk_tree_path_new ();
+
+  GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
+  
+  gtk_tree_view_get_cursor (treeview, &path, NULL);
+  
+  if (!path)
+    return;
+
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->model), &iter, path))
+    return;
+  
+  gtk_tree_model_get (GTK_TREE_MODEL (priv->model), &iter,
+                      FACE_COLUMN, &face,
+                      FAMILY_NAME_COLUMN, &family_name,
+                      -1);
+
+  if (!face && !family_name)
+    return;
+  if (!face)
+    {
+      g_free (family_name);
+      return;
+    }
+  if (!family_name)
+    {
+      g_object_unref ((gpointer)face);
+      return;
+    }
+
+  desc = pango_font_face_describe (face);
+  pango_font_description_set_size (desc, priv->size);
+  gtk_widget_override_font (priv->preview, desc);
+
+
+  /* Free resources */
+  g_free (family_name);
+  g_object_unref ((gpointer)face);
+  pango_font_description_free(desc);
+  gtk_tree_path_free (path);
 }
 
 static void
@@ -414,7 +477,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (preview_and_size), scrolled_win, FALSE, FALSE, 0);
   
   /* Setting the size requests for various widgets */
-  gtk_widget_set_size_request (fontsel,       -1, 460);
+  gtk_widget_set_size_request (GTK_WIDGET (fontsel), -1, 460);
   gtk_widget_set_size_request (scrolled_win,  -1, PREVIEW_HEIGHT);
   gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
 
@@ -476,6 +539,10 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
                     "value-changed", G_CALLBACK (spin_change_cb), (gpointer)priv);
   priv->ignore_slider = FALSE;
+  
+  /* Font selection callbacks */
+  g_signal_connect (G_OBJECT (priv->family_face_list), "cursor-changed",
+                    G_CALLBACK (cursor_changed_cb),    (gpointer)priv);
                     
   gtk_widget_pop_composite_child();
 }
