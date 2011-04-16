@@ -2826,6 +2826,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   
   if (gtk_widget_get_realized (widget))
     {
+      gboolean has_expand_column = FALSE;
+
       gdk_window_move_resize (gtk_widget_get_window (widget),
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
@@ -2842,11 +2844,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
       if (tree_view->priv->tree == NULL)
         invalidate_empty_focus (tree_view);
-    }
 
-  if (gtk_widget_get_realized (widget))
-    {
-      gboolean has_expand_column = FALSE;
       for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
 	{
 	  if (gtk_tree_view_column_get_expand (GTK_TREE_VIEW_COLUMN (tmp_list->data)))
