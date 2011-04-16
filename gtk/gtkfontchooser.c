@@ -61,7 +61,7 @@
 #include "gtkscale.h"
 #include "gtkbox.h"
 #include "gtkspinbutton.h"
-
+#include "gtkwidget.h"
 
 /**
  * SECTION:gtkfontsel
@@ -387,20 +387,41 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   priv->size_spin = gtk_spin_button_new_with_range (0.0, (gdouble)(G_MAXINT / PANGO_SCALE), 1.0);
 
-  /** Bootstrapping widget layout **/
+  /** Bootstrapping widget layout **/  
+  gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
+
   /* Main font family/face view */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
 
   /* Alignment for the preview and size controls */
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
                              PREVIEW_TOP_PADDING, 0, 0, 0);
+  gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
 
   preview_and_size = gtk_vbox_new (TRUE, 0);
   gtk_box_set_homogeneous (GTK_BOX (preview_and_size), FALSE);
-  gtk_box_pack_start (GTK_BOX (preview_and_size), priv->preview, FALSE, TRUE, 0);
-  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT);
+  
+  /* The preview entry needs a scrolled window to make sure we have a */
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win),
+                                         priv->preview);
+  gtk_box_pack_start (GTK_BOX (preview_and_size), scrolled_win, FALSE, FALSE, 0);
+  
+  /* Setting the size requests for various widgets */
+  gtk_widget_set_size_request (priv->family_face_list, -1, 360);
+  gtk_widget_set_size_request (scrolled_win, -1, PREVIEW_HEIGHT);
+  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
+
+  /* Unset the frame on the preview entry and set a shadow in the scrolled window */
+  gtk_entry_set_has_frame (GTK_ENTRY (priv->preview), FALSE);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
+                                       GTK_SHADOW_ETCHED_IN);
 
   /* Packing the slider and the spin in a hbox */
   size_controls = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -411,9 +432,6 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
 
-  /* Packing everything in the selection */
-  gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(alignment), FALSE, TRUE, 0);
 
   /* Getting the default size */
@@ -426,7 +444,6 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                             (gdouble)(priv->size / PANGO_SCALE));
   gtk_adjustment_set_value (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
                             (gdouble)(priv->size / PANGO_SCALE));
-
 
   gtk_widget_show_all (GTK_WIDGET (fontsel));
   gtk_widget_hide (GTK_WIDGET (fontsel));
