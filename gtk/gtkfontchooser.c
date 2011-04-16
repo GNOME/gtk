@@ -299,6 +299,17 @@ inserted_text_cb (GtkEntryBuffer *buffer,
 }
 
 void
+icon_press_cb (GtkEntry             *entry,
+               GtkEntryIconPosition  pos,
+               GdkEvent             *event,
+               gpointer              user_data)
+{
+  GtkFontSelectionPrivate *priv  = (GtkFontSelectionPrivate*)user_data;
+
+  gtk_entry_buffer_delete_text (gtk_entry_get_buffer (entry), 0, -1);
+}
+
+void
 slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
   GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
@@ -310,6 +321,9 @@ slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 void
 spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
+  GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
+  
+  priv->size = ((gint)gtk_adjustment_get_value (adjustment)) * PANGO_SCALE;
 }
 
 static void
@@ -406,6 +420,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                     "deleted-text", G_CALLBACK (deleted_text_cb), (gpointer)priv);
   g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
                     "inserted-text", G_CALLBACK (inserted_text_cb), (gpointer)priv);
+  g_signal_connect (G_OBJECT (priv->search_entry),
+                    "icon-press", G_CALLBACK (icon_press_cb), (gpointer)priv);
 
   /* Size controls callbacks */
   g_signal_connect (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider))),
@@ -556,10 +572,17 @@ visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
                       FAMILY_NAME_COLUMN, &font_name,
                       -1);
 
-  if (font_name == NULL)
+  /* Covering some corner cases to speed up the result */
+  if ((font_name == NULL) ||
+      (strlen (search_text) > strlen (font_name)))
     {
       g_free (font_name);
       return FALSE;
+    }  
+  if (strlen (search_text) == 0)
+    {
+      g_free (font_name);
+      return TRUE;
     }
   
   font_name_casefold = g_utf8_casefold (font_name, -1);
