@@ -385,12 +385,15 @@ set_cursor_to_iter (GtkTreeView *view,
 }
 
 static void 
-gtk_font_selection_populate_model (GtkTreeView *treeview, GtkListStore *model)
+gtk_font_selection_populate_list (GtkTreeView *treeview)
 {
+  GtkListStore *model;
   PangoFontFamily *match_family;
   PangoFontFamily **families;
   gint n_families, i;
   GtkTreeIter match_row;
+  
+  model = GTK_LIST_STORE(gtk_tree_view_get_model (treeview));
 
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
                                &families,
@@ -434,18 +437,17 @@ gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview)
                                     PANGO_TYPE_FONT_FACE,
                                     G_TYPE_STRING);
   gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fonts_model));
-
-
-  gtk_tree_view_set_headers_visible   (treeview, FALSE);
+  
+  gtk_tree_view_set_rules_hint      (treeview, TRUE);
+  gtk_tree_view_set_headers_visible (treeview, FALSE);
 
   col = gtk_tree_view_column_new_with_attributes ("Family",
                                                    gtk_cell_renderer_text_new (),
                                                    "markup", TEXT_COLUMN,
                                                    NULL);
-  
   gtk_tree_view_append_column (treeview, col);
 
-  gtk_font_selection_populate_model (treeview, fonts_model);  
+  gtk_font_selection_populate_list (treeview);  
 }
 
 
