@@ -10419,6 +10419,10 @@ update_cell_renderer_attributes (GtkFileChooserDefault *impl)
   GtkCellRenderer *renderer;
   GList *walk, *list;
 
+  /* only applicable in the tree view (i.e. list view) */
+  if (!impl->browse_files_tree_view)
+    return;
+
   /* Keep the following column numbers in sync with create_file_list() */
 
   /* name */
