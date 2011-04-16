@@ -124,6 +124,7 @@ struct _GtkFontSelectionDialogPrivate
 #define PREVIEW_TEXT N_("abcdefghijk ABCDEFGHIJK")
 
 #define DEFAULT_FONT_NAME "Sans 10"
+#define MAX_FONT_SIZE 999
 
 /* This is the initial fixed height and the top padding of the preview entry */
 #define PREVIEW_HEIGHT 84
@@ -267,6 +268,13 @@ deleted_text_cb (GtkEntryBuffer *buffer,
   GtkFontSelectionPrivate *priv  = (GtkFontSelectionPrivate*)user_data;
   GtkWidget               *entry = priv->search_entry;
   
+  if (gtk_entry_buffer_get_length (buffer) == 0)
+    {
+      gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     GTK_STOCK_FIND);
+    }
+
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
 
@@ -279,20 +287,29 @@ inserted_text_cb (GtkEntryBuffer *buffer,
 {
   GtkFontSelectionPrivate *priv  = (GtkFontSelectionPrivate*)user_data;
   GtkWidget               *entry = priv->search_entry;
-  
+
+  if (g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
+                 GTK_STOCK_CLEAR))
+    gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+                                   GTK_ENTRY_ICON_SECONDARY,
+                                   GTK_STOCK_CLEAR);
+
+
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
 
 void
 slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
-  
+  GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
+
+  gtk_adjustment_set_value (gtk_spin_button_get_adjustment( GTK_SPIN_BUTTON(priv->size_spin)),
+                            gtk_adjustment_get_value (adjustment));
 }
 
 void
 spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
-
 }
 
 static void
@@ -324,8 +341,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                 (gdouble) font_sizes[FONT_SIZES_LENGTH - 1],
                                                 1.0);
 
-  priv->size_spin = gtk_spin_button_new (NULL, 1.0, 0);
-
+  priv->size_spin = gtk_spin_button_new_with_range (0.0, (gdouble)(G_MAXINT / PANGO_SCALE), 1.0);
 
   /** Bootstrapping widget layout **/
   /* Main font family/face view */
@@ -382,7 +398,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_entry_set_icon_from_stock (GTK_ENTRY (priv->search_entry),
                                  GTK_ENTRY_ICON_SECONDARY,
                                  GTK_STOCK_FIND);
-  gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), N_("Search font name"));
+  gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), _("Search font name"));
   
   /** Callback connections **/
   /* Connect to callback for the live search text entry */
