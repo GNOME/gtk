@@ -149,7 +149,7 @@ enum {
 enum {
   FAMILY_COLUMN,
   FACE_COLUMN,
-  FACE_TEXT_COLUMN
+  TEXT_COLUMN
 };
 
 static void    gtk_font_selection_set_property       (GObject         *object,
@@ -366,18 +366,30 @@ gtk_font_selection_new (void)
 static void 
 gtk_font_selection_populate_model (GtkTreeModel *model)
 {
+  
 }
 
 static void
 gtk_font_selection_bootstrap_fontlist (GtkTreeView* treeview)
 {
+  GtkTreeViewColumn *col;
   GtkTreeModel *fonts_model;
-  
+
   fonts_model = gtk_list_store_new (3,
                                     PANGO_TYPE_FONT_FAMILY,
                                     PANGO_TYPE_FONT_FACE,
                                     G_TYPE_STRING);
   gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fonts_model));
+
+
+  gtk_tree_view_set_headers_visible   (treeview, FALSE);
+
+  col = gtk_tree_view_column_new_with_attributes ("Family",
+                                                   gtk_cell_renderer_text_new (),
+                                                   "markup", TEXT_COLUMN,
+                                                   NULL);
+  
+  gtk_tree_view_append_column (treeview, col);
 
   gtk_font_selection_populate_model (GTK_TREE_MODEL (fonts_model));  
 }
