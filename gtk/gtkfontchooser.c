@@ -328,6 +328,7 @@ slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 void
 spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
+  PangoFontDescription *desc;
   GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
 
   gdouble size = gtk_adjustment_get_value (adjustment);
@@ -347,6 +348,12 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
     }
 
   priv->size = ((gint)gtk_adjustment_get_value (adjustment)) * PANGO_SCALE;
+
+  desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
+  pango_font_description_set_size (desc, priv->size);
+  gtk_widget_modify_font (priv->preview, desc);
+  
+  gtk_widget_queue_draw (priv->preview);
 }
 
 static void
