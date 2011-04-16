@@ -2839,10 +2839,10 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 			      gtk_tree_view_get_effective_header_height (tree_view),
 			      MAX (tree_view->priv->width, allocation->width),
 			      allocation->height - gtk_tree_view_get_effective_header_height (tree_view));
-    }
 
-  if (tree_view->priv->tree == NULL)
-    invalidate_empty_focus (tree_view);
+      if (tree_view->priv->tree == NULL)
+        invalidate_empty_focus (tree_view);
+    }
 
   if (gtk_widget_get_realized (widget))
     {
