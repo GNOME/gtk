@@ -142,10 +142,9 @@ struct _GtkFontSelectionDialogPrivate
 
 /* These are what we use as the standard font sizes, for the size list.
  */
-#define FONT_SIZES_LENGTH 25
+#define FONT_SIZES_LENGTH 14
 static const gint font_sizes[] = {
-  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28,
-  32, 36, 40, 48, 56, 64, 72
+  6, 8, 9, 10, 11, 12, 13, 14, 16, 20, 24, 36, 48, 72
 };
 
 enum {
@@ -720,6 +719,7 @@ static void
 gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
 {
   GtkTreeView       *treeview = GTK_TREE_VIEW (fontsel->priv->family_face_list);
+  GtkCellRenderer   *cell;
   GtkTreeViewColumn *col;
 
   fontsel->priv->model = gtk_list_store_new (4,
@@ -744,10 +744,15 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
   gtk_tree_view_set_rules_hint      (treeview, TRUE);
   gtk_tree_view_set_headers_visible (treeview, FALSE);
 
+  cell = gtk_cell_renderer_text_new ();
   col = gtk_tree_view_column_new_with_attributes ("Family",
-                                                   gtk_cell_renderer_text_new (),
-                                                   "markup", TEXT_COLUMN,
-                                                   NULL);
+                                                  cell,
+                                                  "markup", TEXT_COLUMN,
+                                                  NULL);
+                                                  
+
+  g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  
   gtk_tree_view_append_column (treeview, col);
 
   populate_list (treeview, fontsel->priv->model);
