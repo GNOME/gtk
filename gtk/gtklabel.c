@@ -3554,6 +3554,12 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
    *    - minimum size should be MAX (width-chars, 0)
    *    - natural size should be MIN (max-width-chars, strlen (priv->text))
    *
+   *    For ellipsizing labels; if max-width-chars is specified: either it is used as 
+   *    a minimum size or the label text as a minimum size (natural size still overflows).
+   *
+   *    For wrapping labels; A reasonable minimum size is useful to naturally layout
+   *    interfaces automatically. In this case if no "width-chars" is specified, the minimum
+   *    width will default to the wrap guess that gtk_label_ensure_layout() does.
    */
 
   layout = gtk_label_get_measuring_layout (label, NULL, -1);
@@ -3569,25 +3575,6 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
 
   /* Fetch the length of the complete unwrapped text */
   text_width = required->width;
-
-  /* "width-chars" Hard-coded minimum width: 
-   *    - minimum size should be MAX (width-chars, strlen ("..."));
-   *    - natural size should be MAX (width-chars, strlen (priv->text));
-   *
-   * "max-width-chars" User specified maximum size requisition
-   *    - minimum size should be MAX (width-chars, 0)
-   *    - natural size should be MIN (max-width-chars, strlen (priv->text))
-   *
-   *    For ellipsizing labels; if max-width-chars is specified: either it is used as 
-   *    a minimum size or the label text as a minimum size (natural size still overflows).
-   *
-   *    For wrapping labels; A reasonable minimum size is useful to naturally layout
-   *    interfaces automatically. In this case if no "width-chars" is specified, the minimum
-   *    width will default to the wrap guess that gtk_label_ensure_layout() does.
-   *
-   *    In *any* case the minimum width is completely overridden if an explicit width 
-   *    request was provided.
-   */
 
   if (priv->ellipsize || priv->wrap)
     {
