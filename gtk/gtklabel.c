@@ -3685,7 +3685,7 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
   GtkLabelPrivate *priv = label->priv;
   PangoLayout *layout;
   PangoRectangle rect;
-  gint text_width, ellipsize_chars, guess_width;
+  gint text_width, guess_width;
 
   /* "width-chars" Hard-coded minimum width:
    *    - minimum size should be MAX (width-chars, strlen ("..."));
@@ -3718,12 +3718,6 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
   pango_layout_get_extents (layout, NULL, &rect);
   text_width = rect.width;
 
-  /* enforce minimum width for ellipsized labels at ~3 chars */
-  if (priv->ellipsize)
-    ellipsize_chars = 3;
-  else
-    ellipsize_chars = 0;
-
   /* "width-chars" Hard-coded minimum width: 
    *    - minimum size should be MAX (width-chars, strlen ("..."));
    *    - natural size should be MAX (width-chars, strlen (priv->text));
@@ -3745,9 +3739,12 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
 
   if (priv->ellipsize || priv->wrap)
     {
-      gint char_pixels;
+      gint char_pixels, ellipsize_chars;
 
       char_pixels = get_char_pixels (GTK_WIDGET (label), layout);
+
+      /* enforce minimum width for ellipsized labels at ~3 chars */
+      ellipsize_chars = priv->ellipsize ? 3 : 0;
 
       required->width = char_pixels * MAX (priv->width_chars, ellipsize_chars);
 
