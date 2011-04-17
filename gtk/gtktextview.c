@@ -307,6 +307,7 @@ static void gtk_text_view_size_allocate        (GtkWidget        *widget,
                                                 GtkAllocation    *allocation);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
+static void gtk_text_view_unmap                (GtkWidget        *widget);
 static void gtk_text_view_style_updated        (GtkWidget        *widget);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
@@ -602,6 +603,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->destroy = gtk_text_view_destroy;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
+  widget_class->unmap = gtk_text_view_unmap;
   widget_class->style_updated = gtk_text_view_style_updated;
   widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->grab_notify = gtk_text_view_grab_notify;
@@ -4065,7 +4067,8 @@ gtk_text_view_unrealize (GtkWidget *widget)
       gtk_text_buffer_remove_selection_clipboard (priv->buffer, clipboard);
     }
 
-  gtk_text_view_remove_validate_idles (text_view);
+  /* the idles have been removed in unmap */
+  g_assert (priv->first_validate_idle == 0 && priv->incremental_validate_idle == 0);
 
   if (priv->popup_menu)
     {
@@ -4090,6 +4093,18 @@ gtk_text_view_unrealize (GtkWidget *widget)
   gtk_text_view_destroy_layout (text_view);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_text_view_unmap (GtkWidget *widget)
+{
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (widget);
+
+  gtk_text_view_remove_validate_idles (text_view);
+
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unmap (widget);
 }
 
 static void
