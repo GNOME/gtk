@@ -138,7 +138,7 @@ struct _GtkFontSelectionDialogPrivate
 #define FONT_STYLE_LIST_WIDTH	170
 #define FONT_SIZE_LIST_WIDTH	60
 
-#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s <i>%s</i></span>\n<span size=\"large\" font_desc=\"%s\">%s</span>"
+#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s %s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
 
 /* These are what we use as the standard font sizes, for the size list.
  */
@@ -161,23 +161,24 @@ enum {
   TEXT_COLUMN
 };
 
-static void    gtk_font_selection_set_property       (GObject         *object,
-						      guint            prop_id,
-						      const GValue    *value,
-						      GParamSpec      *pspec);
-static void    gtk_font_selection_get_property       (GObject         *object,
-						      guint            prop_id,
-						      GValue          *value,
-						      GParamSpec      *pspec);
-static void    gtk_font_selection_finalize	     (GObject         *object);
-static void    gtk_font_selection_screen_changed     (GtkWidget	      *widget,
-						      GdkScreen       *previous_screen);
-static void    gtk_font_selection_style_updated      (GtkWidget      *widget);
+static void  gtk_font_selection_set_property       (GObject         *object,
+			                                              guint            prop_id,
+			                                              const GValue    *value,
+			                                              GParamSpec      *pspec);
+static void  gtk_font_selection_get_property       (GObject         *object,
+					                                          guint            prop_id,
+					                                          GValue          *value,
+					                                          GParamSpec      *pspec);
+static void  gtk_font_selection_finalize	         (GObject         *object);
+static void  gtk_font_selection_screen_changed     (GtkWidget	      *widget,
+                                                    GdkScreen       *previous_screen);
+static void  gtk_font_selection_style_updated      (GtkWidget      *widget);
 
-static void     gtk_font_selection_ref_family            (GtkFontSelection *fontsel,
-							  PangoFontFamily  *family);
-static void     gtk_font_selection_ref_face              (GtkFontSelection *fontsel,
-							  PangoFontFace    *face);
+static void  gtk_font_selection_ref_family        (GtkFontSelection *fontsel,
+                                                   PangoFontFamily  *family);
+static void  gtk_font_selection_ref_face          (GtkFontSelection *fontsel,
+                                                   PangoFontFace    *face);
+
 static void gtk_font_selection_bootstrap_fontlist (GtkFontSelection *fontsel);
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
@@ -484,7 +485,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (preview_and_size), scrolled_win, FALSE, FALSE, 0);
   
   /* Setting the size requests for various widgets */
-  gtk_widget_set_size_request (GTK_WIDGET (fontsel), -1, 460);
+  gtk_widget_set_size_request (GTK_WIDGET (fontsel), 462, 462);
   gtk_widget_set_size_request (scrolled_win,  -1, PREVIEW_HEIGHT);
   gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
 
@@ -536,26 +537,30 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /** Callback connections **/
   /* Connect to callback for the live search text entry */
   g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
-                    "deleted-text", G_CALLBACK (deleted_text_cb), (gpointer)priv);
+                    "deleted-text", G_CALLBACK (deleted_text_cb), priv);
   g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
-                    "inserted-text", G_CALLBACK (inserted_text_cb), (gpointer)priv);
+                    "inserted-text", G_CALLBACK (inserted_text_cb), priv);
   g_signal_connect (G_OBJECT (priv->search_entry),
-                    "icon-press", G_CALLBACK (icon_press_cb), (gpointer)priv);
+                    "icon-press", G_CALLBACK (icon_press_cb), priv);
 
   /* Size controls callbacks */
   g_signal_connect (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider))),
-                    "value-changed", G_CALLBACK (slider_change_cb), (gpointer)priv);
+                    "value-changed", G_CALLBACK (slider_change_cb), priv);
   g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
-                    "value-changed", G_CALLBACK (spin_change_cb), (gpointer)priv);
+                    "value-changed", G_CALLBACK (spin_change_cb), priv);
   priv->ignore_slider = FALSE;
   
-  /* Font selection callbacks */
+  /* Font selection callback */
   g_signal_connect (G_OBJECT (priv->family_face_list), "cursor-changed",
-                    G_CALLBACK (cursor_changed_cb),    (gpointer)fontsel);
-                    
+                    G_CALLBACK (cursor_changed_cb),    fontsel);
+
+  /* Zoom on preview scroll*/
+  g_signal_connect (G_OBJECT (scrolled_win),      "scroll-event",
+                    G_CALLBACK (zoom_preview_cb), priv);
                     
   set_range_marks (priv->size_slider, (gint*)font_sizes, FONT_SIZES_LENGTH);
                     
+  /* Set default focus */
   gtk_widget_pop_composite_child();
 }
 
@@ -564,7 +569,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
  *
  * Creates a new #GtkFontSelection.
  *
- * Return value: a n ew #GtkFontSelection
+ * Return value: a new #GtkFontSelection
  */
 GtkWidget *
 gtk_font_selection_new (void)
@@ -982,13 +987,17 @@ gtk_font_selection_get_size (GtkFontSelection *fontsel)
  * "Helvetica Bold Italic 12". Use pango_font_description_equal()
  * if you want to compare two font descriptions.
  * 
- * Return value: A string with the name of the current font, or %NULL if 
- *     no font is selected. You must free this string with g_free().
+ * Return value: (transfer full) (allow-none): A string with the name of the
+ *     current font, or %NULL if  no font is selected. You must free this
+ *     string with g_free().
  */
 gchar *
 gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
 {
-  return NULL;
+  if (!fontsel->family)
+    return NULL;
+
+  return g_strdup (pango_font_family_get_name (fontsel->family));
 }
 
 /* This sets the current font, then selecting the appropriate list rows. */
