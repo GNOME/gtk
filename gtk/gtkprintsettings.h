@@ -137,7 +137,21 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 #define GTK_PRINT_SETTINGS_RESOLUTION_Y     "resolution-y"
 #define GTK_PRINT_SETTINGS_PRINTER_LPI      "printer-lpi"
 
+/**
+ * GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT:
+ *
+ * The key used by the "Print to file" printer to store the format
+ * of the output. The supported values are "PS" and "PDF".
+ */
 #define GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT  "output-file-format"
+
+/**
+ * GTK_PRINT_SETTINGS_OUTPUT_URI:
+ *
+ * The key used by the "Print to file" printer to store the URI
+ * to which the output should be written. GTK+ itself supports
+ * only "file://" URIs.
+ */
 #define GTK_PRINT_SETTINGS_OUTPUT_URI          "output-uri"
 
 #define GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION "win32-driver-version"

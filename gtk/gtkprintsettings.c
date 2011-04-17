@@ -31,6 +31,28 @@
 #include "gtkwidget.h"
 
 
+/**
+ * SECTION:gtkprintsettings
+ * @Short_description: Stores print settings
+ * @Title: GtkPrintSettings
+ *
+ * A GtkPrintSettings object represents the settings of a print dialog in
+ * a system-independent way. The main use for this object is that once
+ * you've printed you can get a settings object that represents the settings
+ * the user chose, and the next time you print you can pass that object in so
+ * that the user doesn't have to re-set all his settings.
+ *
+ * Its also possible to enumerate the settings so that you can easily save
+ * the settings for the next time your app runs, or even store them in a
+ * document. The predefined keys try to use shared values as much as possible
+ * so that moving such a document between systems still works.
+ *
+ * <!-- TODO example of getting, storing and setting settings -->
+ *
+ * Printing support was added in GTK+ 2.10.
+ */
+
+
 typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;
 
 #define GTK_IS_PRINT_SETTINGS_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_SETTINGS))
@@ -40,7 +62,7 @@ typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;
 struct _GtkPrintSettings
 {
   GObject parent_instance;
-  
+
   GHashTable *hash;
 };
 
