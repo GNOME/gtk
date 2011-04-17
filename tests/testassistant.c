@@ -194,6 +194,48 @@ create_simple_assistant (GtkWidget *widget)
 }
 
 static void
+create_anonymous_assistant (GtkWidget *widget)
+{
+  static GtkWidget *assistant = NULL;
+
+  if (!assistant)
+    {
+      GtkWidget *page;
+
+      assistant = gtk_assistant_new ();
+      gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
+
+      g_signal_connect (G_OBJECT (assistant), "cancel",
+			G_CALLBACK (cancel_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "close",
+			G_CALLBACK (close_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "apply",
+			G_CALLBACK (apply_callback), NULL);
+      g_signal_connect (G_OBJECT (assistant), "prepare",
+			G_CALLBACK (prepare_callback), NULL);
+
+      page = get_test_page ("Page 1");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+
+      page = get_test_page ("Page 2");
+      gtk_widget_show (page);
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_CONFIRM);
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+    }
+
+  if (!gtk_widget_get_visible (assistant))
+    gtk_widget_show (assistant);
+  else
+    {
+      gtk_widget_destroy (assistant);
+      assistant = NULL;
+    }
+}
+
+static void
 visible_cb (GtkWidget *check, 
 	    gpointer   data)
 {
@@ -357,13 +399,13 @@ create_nonlinear_assistant (GtkWidget *widget)
       page = get_test_page ("Page 2A");
       gtk_widget_show (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2A");
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
       page = get_test_page ("Page 2B");
       gtk_widget_show (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2B");
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
       page = get_test_page ("Confirmation");
@@ -481,6 +523,16 @@ create_looping_assistant (GtkWidget *widget)
 }
 
 static void
+toggle_invisible (GtkButton *button, GtkAssistant *assistant)
+{
+  GtkWidget *page;
+
+  page = gtk_assistant_get_nth_page (assistant, 1);
+
+  gtk_widget_set_visible (page, !gtk_widget_get_visible (page));
+}
+
+static void
 create_full_featured_assistant (GtkWidget *widget)
 {
   static GtkWidget *assistant = NULL;
@@ -496,6 +548,8 @@ create_full_featured_assistant (GtkWidget *widget)
 	 button = gtk_button_new_from_stock (GTK_STOCK_STOP);
 	 gtk_widget_show (button);
 	 gtk_assistant_add_action_widget (GTK_ASSISTANT (assistant), button);
+         g_signal_connect (button, "clicked",
+                           G_CALLBACK (toggle_invisible), assistant);
 
       g_signal_connect (G_OBJECT (assistant), "cancel",
 			G_CALLBACK (cancel_callback), NULL);
@@ -522,6 +576,8 @@ create_full_featured_assistant (GtkWidget *widget)
 
       page = get_test_page ("Invisible page");
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
       page = get_test_page ("Page 3");
       gtk_widget_show (page);
@@ -550,6 +606,7 @@ struct {
 } buttons[] =
   {
     { "simple assistant",        create_simple_assistant },
+    { "anonymous assistant",        create_anonymous_assistant },
     { "generous assistant",      create_generous_assistant },
     { "nonlinear assistant",     create_nonlinear_assistant },
     { "looping assistant",       create_looping_assistant },
