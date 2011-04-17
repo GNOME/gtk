@@ -3387,7 +3387,6 @@ gtk_label_update_layout_width (GtkLabel *label)
       else
         width = allocation.width  - xpad * 2;
 
-      pango_layout_set_wrap (priv->layout, priv->wrap_mode);
       pango_layout_set_width (priv->layout, MAX (width, 1) * PANGO_SCALE);
     }
   else /* !priv->wrap */
@@ -3460,6 +3459,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 
       pango_layout_set_alignment (priv->layout, align);
       pango_layout_set_ellipsize (priv->layout, priv->ellipsize);
+      pango_layout_set_wrap (priv->layout, priv->wrap_mode);
       pango_layout_set_single_paragraph_mode (priv->layout, priv->single_line_mode);
 
       gtk_label_update_layout_width (label);
