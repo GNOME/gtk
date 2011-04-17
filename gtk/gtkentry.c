@@ -8267,7 +8267,7 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
 /**
  * gtk_entry_get_icon_at_pos:
  * @entry: a #GtkEntry
- * @x: the x coordinate of the position to fine
+ * @x: the x coordinate of the position to find
  * @y: the y coordinate of the position to find
  *
  * Finds the icon at the given position and return its index. The
