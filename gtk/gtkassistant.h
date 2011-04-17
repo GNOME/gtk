@@ -128,50 +128,54 @@ void                  gtk_assistant_next_page             (GtkAssistant         
 void                  gtk_assistant_previous_page         (GtkAssistant         *assistant);
 gint                  gtk_assistant_get_current_page      (GtkAssistant         *assistant);
 void                  gtk_assistant_set_current_page      (GtkAssistant         *assistant,
-							   gint                  page_num);
+                                                           gint                  page_num);
 gint                  gtk_assistant_get_n_pages           (GtkAssistant         *assistant);
 GtkWidget            *gtk_assistant_get_nth_page          (GtkAssistant         *assistant,
-							   gint                  page_num);
+                                                           gint                  page_num);
 gint                  gtk_assistant_prepend_page          (GtkAssistant         *assistant,
-							   GtkWidget            *page);
+                                                           GtkWidget            *page);
 gint                  gtk_assistant_append_page           (GtkAssistant         *assistant,
-							   GtkWidget            *page);
+                                                           GtkWidget            *page);
 gint                  gtk_assistant_insert_page           (GtkAssistant         *assistant,
-							   GtkWidget            *page,
-							   gint                  position);
+                                                           GtkWidget            *page,
+                                                           gint                  position);
 void                  gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
-							   GtkAssistantPageFunc  page_func,
-							   gpointer              data,
-							   GDestroyNotify        destroy);
+                                                           GtkAssistantPageFunc  page_func,
+                                                           gpointer              data,
+                                                           GDestroyNotify        destroy);
 void                  gtk_assistant_set_page_type         (GtkAssistant         *assistant,
-							   GtkWidget            *page,
-							   GtkAssistantPageType  type);
+                                                           GtkWidget            *page,
+                                                           GtkAssistantPageType  type);
 GtkAssistantPageType  gtk_assistant_get_page_type         (GtkAssistant         *assistant,
-							   GtkWidget            *page);
+                                                           GtkWidget            *page);
 void                  gtk_assistant_set_page_title        (GtkAssistant         *assistant,
-							   GtkWidget            *page,
-							   const gchar          *title);
+                                                           GtkWidget            *page,
+                                                           const gchar          *title);
 G_CONST_RETURN gchar *gtk_assistant_get_page_title        (GtkAssistant         *assistant,
-							   GtkWidget            *page);
+                                                           GtkWidget            *page);
+
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 void                  gtk_assistant_set_page_header_image (GtkAssistant         *assistant,
-							   GtkWidget            *page,
-							   GdkPixbuf            *pixbuf);
+                                                           GtkWidget            *page,
+                                                           GdkPixbuf            *pixbuf);
 GdkPixbuf            *gtk_assistant_get_page_header_image (GtkAssistant         *assistant,
-							   GtkWidget            *page);
+                                                           GtkWidget            *page);
 void                  gtk_assistant_set_page_side_image   (GtkAssistant         *assistant,
-							   GtkWidget            *page,
-							   GdkPixbuf            *pixbuf);
+                                                           GtkWidget            *page,
+                                                           GdkPixbuf            *pixbuf);
 GdkPixbuf            *gtk_assistant_get_page_side_image   (GtkAssistant         *assistant,
-							   GtkWidget            *page);
+                                                           GtkWidget            *page);
+#endif
+
 void                  gtk_assistant_set_page_complete     (GtkAssistant         *assistant,
-							   GtkWidget            *page,
-							   gboolean              complete);
+                                                           GtkWidget            *page,
+                                                           gboolean              complete);
 gboolean              gtk_assistant_get_page_complete     (GtkAssistant         *assistant,
-							   GtkWidget            *page);
+                                                           GtkWidget            *page);
 void                  gtk_assistant_add_action_widget     (GtkAssistant         *assistant,
-							   GtkWidget            *child);
+                                                           GtkWidget            *child);
 void                  gtk_assistant_remove_action_widget  (GtkAssistant         *assistant,
-							   GtkWidget            *child);
+                                                           GtkWidget            *child);
 
 void                  gtk_assistant_update_buttons_state  (GtkAssistant *assistant);
 void                  gtk_assistant_commit                (GtkAssistant *assistant);
