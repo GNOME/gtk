@@ -42,7 +42,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
+				AdditionalDependencies="atk-2.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gtk.def"
@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
+				AdditionalDependencies="atk-2.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gtk.def"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
+				AdditionalDependencies="atk-2.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gtk.def"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
+				AdditionalDependencies="atk-2.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gtk.def"

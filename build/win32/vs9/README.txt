@@ -7,7 +7,7 @@ the files needed, like config.h.win32.in into config.h.win32 and the
 .vcprojin files here into corresponding actual .vcproj files.
 
 You will need the parts from below in the GTK+ stack: GDK-Pixbuf, Pango,
-ATK and GLib.  External dependencies are at least Cairo
+ATK (2.x) and GLib.  External dependencies are at least Cairo
 (with Cairo-GObject support, meaning Cairo 1.10.x or later), zlib, libpng,
 gettext-runtime, fontconfig*, freetype*, expat*.  See the 
 build/win32/vs9/README.txt file in glib for details where to unpack them.
