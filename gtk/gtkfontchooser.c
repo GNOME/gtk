@@ -143,7 +143,7 @@ struct _GtkFontSelectionDialogPrivate
 /* These are what we use as the standard font sizes, for the size list.
  */
 #define FONT_SIZES_LENGTH 25
-static const guint16 font_sizes[] = {
+static const gint font_sizes[] = {
   6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28,
   32, 36, 40, 48, 56, 64, 72
 };
@@ -375,6 +375,9 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   gchar                *family_name;
   PangoFontFace        *face;
   PangoFontDescription *desc;
+  
+  gint *sizes;
+  gint  n_sizes;
 
   GtkTreeIter iter;
   GtkTreePath *path = gtk_tree_path_new ();
@@ -411,6 +414,9 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
 
+  pango_font_face_list_sizes (face, &sizes, &n_sizes);
+  /* It seems not many fonts actually have a sane set of sizes */
+  /* set_range_marks (priv->size_slider, sizes, n_sizes); */
 
   /* Free resources */
   g_free (family_name);
@@ -450,7 +456,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   priv->size_spin = gtk_spin_button_new_with_range (0.0, (gdouble)(G_MAXINT / PANGO_SCALE), 1.0);
 
-  /** Bootstrapping widget layout **/  
+  /** Bootstrapping widget layout **/
+  gtk_box_set_spacing (GTK_BOX (fontsel), 6);
   gtk_box_pack_start (GTK_BOX (fontsel), priv->search_entry, FALSE, TRUE, 0);
 
   /* Main font family/face view */
@@ -484,13 +491,15 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /* Unset the frame on the preview entry and set a shadow in the scrolled window */
   gtk_entry_set_has_frame (GTK_ENTRY (priv->preview), FALSE);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
-                                       GTK_SHADOW_ETCHED_IN);
+                                       GTK_SHADOW_OUT);
 
   /* Packing the slider and the spin in a hbox */
   size_controls = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_scale_set_draw_value (GTK_SCALE (priv->size_slider), FALSE);
   gtk_box_pack_start (GTK_BOX (size_controls), priv->size_slider, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (size_controls), priv->size_spin, FALSE, TRUE, 0);
+  
+  gtk_widget_set_valign (priv->size_spin, GTK_ALIGN_START);
 
   gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
@@ -544,6 +553,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   g_signal_connect (G_OBJECT (priv->family_face_list), "cursor-changed",
                     G_CALLBACK (cursor_changed_cb),    (gpointer)priv);
                     
+                    
+  set_range_marks (priv->size_slider, (gint*)font_sizes, FONT_SIZES_LENGTH);
+                    
   gtk_widget_pop_composite_child();
 }
 
@@ -573,18 +585,6 @@ cmp_families (const void *a, const void *b)
   return g_utf8_collate (a_name, b_name);
 }
 
-static void
-set_cursor_to_iter (GtkTreeView *view,
-                    GtkTreeIter *iter)
-{
-  GtkTreeModel *model = gtk_tree_view_get_model (view);
-  GtkTreePath *path = gtk_tree_model_get_path (model, iter);
-
-  gtk_tree_view_set_cursor (view, path, NULL, FALSE);
-
-  gtk_tree_path_free (path);
-}
-
 static void 
 populate_list (GtkTreeView* treeview, GtkListStore* model)
 {
@@ -594,6 +594,7 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
   gchar            *color_string;
 
   GtkTreeIter   match_row;
+  GtkTreePath  *path;
 
   gint n_families, i;  
   PangoFontFamily **families;
@@ -665,8 +666,10 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
       g_free (faces);
     }
 
-  set_cursor_to_iter (treeview, &match_row);
-
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &match_row);
+  gtk_tree_view_set_cursor (treeview, path, NULL, FALSE);
+  
+  gtk_tree_path_free(path);
   g_string_free (tmp, TRUE);
   g_free (color_string);
   g_free (families);
@@ -726,6 +729,8 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
 
   fontsel->priv->filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fontsel->priv->model),
                                                      NULL);
+  g_object_unref (fontsel->priv->model);
+
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (fontsel->priv->filter),
                                           visible_func,
                                           (gpointer)fontsel->priv,
@@ -733,6 +738,7 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
                                           
 
   gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (fontsel->priv->filter));
+  g_object_unref (fontsel->priv->filter);
   
   gtk_tree_view_set_rules_hint      (treeview, TRUE);
   gtk_tree_view_set_headers_visible (treeview, FALSE);
