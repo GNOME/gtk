@@ -13115,6 +13115,8 @@ gtk_widget_set_valign (GtkWidget *widget,
  * Gets the value of the #GtkWidget:margin-left property.
  *
  * Returns: The left margin of @widget
+ *
+ * Since: 3.0
  */
 gint
 gtk_widget_get_margin_left (GtkWidget *widget)
@@ -13131,6 +13133,8 @@ gtk_widget_get_margin_left (GtkWidget *widget)
  *
  * Sets the left margin of @widget.
  * See the #GtkWidget:margin-left property.
+ *
+ * Since: 3.0
  */
 void
 gtk_widget_set_margin_left (GtkWidget *widget,
@@ -13157,7 +13161,9 @@ gtk_widget_set_margin_left (GtkWidget *widget,
  *
  * Gets the value of the #GtkWidget:margin-right property.
  *
- * Returns: The left margin of @widget
+ * Returns: The right margin of @widget
+ *
+ * Since: 3.0
  */
 gint
 gtk_widget_get_margin_right (GtkWidget *widget)
@@ -13174,6 +13180,8 @@ gtk_widget_get_margin_right (GtkWidget *widget)
  *
  * Sets the right margin of @widget.
  * See the #GtkWidget:margin-right property.
+ *
+ * Since: 3.0
  */
 void
 gtk_widget_set_margin_right (GtkWidget *widget,
@@ -13201,6 +13209,8 @@ gtk_widget_set_margin_right (GtkWidget *widget,
  * Gets the value of the #GtkWidget:margin-top property.
  *
  * Returns: The top margin of @widget
+ *
+ * Since: 3.0
  */
 gint
 gtk_widget_get_margin_top (GtkWidget *widget)
@@ -13217,6 +13227,8 @@ gtk_widget_get_margin_top (GtkWidget *widget)
  *
  * Sets the top margin of @widget.
  * See the #GtkWidget:margin-top property.
+ *
+ * Since: 3.0
  */
 void
 gtk_widget_set_margin_top (GtkWidget *widget,
@@ -13244,6 +13256,8 @@ gtk_widget_set_margin_top (GtkWidget *widget,
  * Gets the value of the #GtkWidget:margin-bottom property.
  *
  * Returns: The bottom margin of @widget
+ *
+ * Since: 3.0
  */
 gint
 gtk_widget_get_margin_bottom (GtkWidget *widget)
@@ -13260,6 +13274,8 @@ gtk_widget_get_margin_bottom (GtkWidget *widget)
  *
  * Sets the bottom margin of @widget.
  * See the #GtkWidget:margin-bottom property.
+ *
+ * Since: 3.0
  */
 void
 gtk_widget_set_margin_bottom (GtkWidget *widget,
