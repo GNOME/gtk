@@ -85,6 +85,7 @@ gtkprinter.sgml
 gtkprintjob.sgml
 gtkprintoperation.sgml
 gtkprintsettings.sgml
+gtkprintunixdialog.sgml
 gtkprogressbar.sgml
 gtkradioaction.sgml
 gtkradiobutton.sgml

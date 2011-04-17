@@ -61,6 +61,77 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 
+
+/**
+ * SECTION:gtkprintunixdialog
+ * @Short_description: A print dialog
+ * @Title: GtkPrintUnixDialog
+ * @See_also: #GtkPageSetupUnixDialog, #GtkPrinter, #GtkPrintJob
+ *
+ * GtkPrintUnixDialog implements a print dialog for platforms
+ * which don't provide a native print dialog, like Unix. It can
+ * be used very much like any other GTK+ dialog, at the cost of
+ * the portability offered by the
+ * <link linkend="gtk-High-level-Printing-API">high-level printing API</link>
+ *
+ * In order to print something with #GtkPrintUnixDialog, you need
+ * to use gtk_print_unix_dialog_get_selected_printer() to obtain
+ * a #GtkPrinter object and use it to construct a #GtkPrintJob using
+ * gtk_print_job_new().
+ *
+ * #GtkPrintUnixDialog uses the following response values:
+ * <variablelist>
+ *   <varlistentry><term>%GTK_RESPONSE_OK</term>
+ *     <listitem><para>for the "Print" button</para></listitem>
+ *   </varlistentry>
+ *   <varlistentry><term>%GTK_RESPONSE_APPLY</term>
+ *     <listitem><para>for the "Preview" button</para></listitem>
+ *   </varlistentry>
+ *   <varlistentry><term>%GTK_RESPONSE_CANCEL</term>
+ *     <listitem><para>for the "Cancel" button</para></listitem>
+ *   </varlistentry>
+ * </variablelist>
+ *
+ * <!-- FIXME example here -->
+ *
+ * Printing support was added in GTK+ 2.10.
+ *
+ * <refsect2 id="GtkPrintUnixDialog-BUILDER-UI">
+ * <title>GtkPrintUnixDialog as GtkBuildable</title>
+ * <para>
+ * The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
+ * @notebook internal children with the name "notebook".
+ *
+ * <example>
+ * <title>A <structname>GtkPrintUnixDialog</structname> UI definition fragment.</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkPrintUnixDialog" id="dialog1">
+ *   <child internal-child="notebook">
+ *     <object class="GtkNotebook" id="notebook">
+ *       <child>
+ *         <object class="GtkLabel" id="tabcontent">
+ *         <property name="label">Content on notebook tab</property>
+ *         </object>
+ *       </child>
+ *       <child type="tab">
+ *         <object class="GtkLabel" id="tablabel">
+ *           <property name="label">Tab label</property>
+ *         </object>
+ *         <packing>
+ *           <property name="tab_expand">False</property>
+ *           <property name="tab_fill">False</property>
+ *         </packing>
+ *       </child>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </para>
+ * </refsect2>
+ */
+
+
 #define EXAMPLE_PAGE_AREA_SIZE 110
 #define RULER_DISTANCE 7.5
 #define RULER_RADIUS 2

@@ -34,6 +34,28 @@ G_BEGIN_DECLS
 /* Note, this type is manually registered with GObject in gtkprinter.c
  * If you add any flags, update the registration as well!
  */
+/**
+ * GtkPrintCapabilities:
+ * @GTK_PRINT_CAPABILITY_PAGE_SET: Print dialog will offer printing even/odd pages.
+ * @GTK_PRINT_CAPABILITY_COPIES: Print dialog will allow to print multiple copies.
+ * @GTK_PRINT_CAPABILITY_COLLATE: Print dialog will allow to collate multiple copies.
+ * @GTK_PRINT_CAPABILITY_REVERSE: Print dialog will allow to print pages in reverse order.
+ * @GTK_PRINT_CAPABILITY_SCALE: Print dialog will allow to scale the output.
+ * @GTK_PRINT_CAPABILITY_GENERATE_PDF: The program will send the document to
+ *   the printer in PDF format
+ * @GTK_PRINT_CAPABILITY_GENERATE_PS: The program will send the document to
+ *   the printer in Postscript format
+ * @GTK_PRINT_CAPABILITY_PREVIEW: Print dialog will offer a preview
+ * @GTK_PRINT_CAPABILITY_NUMBER_UP: Print dialog will offer printing multiple
+ *   pages per sheet. Since 2.12
+ * @GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT: Print dialog will allow to rearrange
+ *   pages when printing multiple pages per sheet. Since 2.14
+ *
+ * An enum for specifying which features the print dialog should offer.
+ * If neither %GTK_PRINT_CAPABILITY_GENERATE_PDF nor
+ * %GTK_PRINT_CAPABILITY_GENERATE_PS is specified, GTK+ assumes that all
+ * formats are supported.
+ */
 typedef enum
 {
   GTK_PRINT_CAPABILITY_PAGE_SET         = 1 << 0,
