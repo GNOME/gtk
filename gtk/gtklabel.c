@@ -3544,7 +3544,6 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
 {
   GtkLabelPrivate *priv = label->priv;
   PangoLayout *layout;
-  gint text_width;
 
   /* "width-chars" Hard-coded minimum width:
    *    - minimum size should be MAX (width-chars, strlen ("..."));
@@ -3562,63 +3561,41 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
    *    width will default to the wrap guess that gtk_label_ensure_layout() does.
    */
 
+  /* Start off with the pixel extents of an as-wide-as-possible layout */
   layout = gtk_label_get_measuring_layout (label, NULL, -1);
 
-  /* Start off with the pixel extents of the rendered layout */
-  pango_layout_get_extents (layout, NULL, required);
-  required->x = required->y = 0;
+  pango_layout_get_extents (layout, NULL, natural);
+  natural->x = natural->y = 0;
 
   if (priv->single_line_mode || priv->wrap)
-    required->height = get_single_line_height (GTK_WIDGET (label), layout);
-
-  *natural = *required;
-
-  /* Fetch the length of the complete unwrapped text */
-  text_width = required->width;
+    natural->height = get_single_line_height (GTK_WIDGET (label), layout);
 
   if (priv->ellipsize || priv->wrap)
     {
-      gint char_pixels, ellipsize_chars;
+      /* a layout with widdth 0 will be as small as humanly possible */
+      layout = gtk_label_get_measuring_layout (label, layout, 0);
 
-      char_pixels = get_char_pixels (GTK_WIDGET (label), layout);
-
-      /* enforce minimum width for ellipsized labels at ~3 chars */
-      ellipsize_chars = priv->ellipsize ? 3 : 0;
-
-      required->width = char_pixels * MAX (priv->width_chars, ellipsize_chars);
-
-      /* Default to the minimum width regularly guessed by GTK+ if no minimum
-       * width was specified, only allow unwrapping of these labels.
-       *
-       * Note that when specifying a small width_chars for a long text;
-       * an accordingly large size will be required for the label height.
-       */
-      if (priv->wrap && priv->width_chars <= 0)
-	required->width = text_width;
-
-      if (priv->max_width_chars < 0)
-	{
-	  natural->width = MAX (required->width, text_width);
-	}
-      else
-	{
-	  gint max_char_width = char_pixels * priv->max_width_chars;
-	  gint max_width      = MIN (text_width, max_char_width);
-
-	  /* With max-char-width specified, we let the minimum widths of 
-	   * ellipsized text crawl up to the max-char-width
-	   * (note that we dont want to limit the minimum width for wrapping text).
-	   */
-	  if (priv->ellipsize)
-	    required->width = MIN (text_width, max_width);
-
-	  natural->width = MAX (required->width, max_width);
-	}
+      pango_layout_get_extents (layout, NULL, required);
+      required->x = required->y = 0;
+      required->height = natural->height;
     }
   else
     {
-      required->width = text_width;
-      natural->width = required->width;
+      *required = *natural;
+    }
+
+  if (priv->width_chars > -1 || priv->max_width_chars > -1)
+    {
+      gint char_pixels;
+
+      char_pixels = get_char_pixels (GTK_WIDGET (label), layout);
+      
+      if (priv->width_chars > -1)
+        required->width = MAX (required->width, char_pixels * priv->width_chars);
+
+      if (priv->max_width_chars > -1)
+        natural->width = MIN (natural->width, priv->max_width_chars * char_pixels);
+      natural->width = MAX (natural->width, required->width);
     }
 
   g_object_unref (layout);
