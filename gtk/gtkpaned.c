@@ -982,7 +982,6 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
-  GtkAllocation widget_allocation;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -1004,27 +1003,25 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       old_handle_pos = priv->handle_pos;
 
-      gtk_widget_get_allocation (widget, &widget_allocation);
-
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           gtk_paned_calc_position (paned,
-                                   MAX (1, widget_allocation.width - handle_size),
+                                   MAX (1, allocation->width - handle_size),
                                    child1_requisition.width,
                                    child2_requisition.width);
 
-          priv->handle_pos.x = widget_allocation.x + priv->child1_size;
-          priv->handle_pos.y = widget_allocation.y;
+          priv->handle_pos.x = allocation->x + priv->child1_size;
+          priv->handle_pos.y = allocation->y;
           priv->handle_pos.width = handle_size;
-          priv->handle_pos.height = widget_allocation.height;
+          priv->handle_pos.height = allocation->height;
 
           child1_allocation.height = child2_allocation.height = allocation->height;
           child1_allocation.width = MAX (1, priv->child1_size);
-          child1_allocation.x = widget_allocation.x;
-          child1_allocation.y = child2_allocation.y = widget_allocation.y;
+          child1_allocation.x = allocation->x;
+          child1_allocation.y = child2_allocation.y = allocation->y;
 
           child2_allocation.x = child1_allocation.x + priv->child1_size + priv->handle_pos.width;
-          child2_allocation.width = MAX (1, widget_allocation.x + widget_allocation.width - child2_allocation.x);
+          child2_allocation.width = MAX (1, allocation->x + allocation->width - child2_allocation.x);
 
           if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL)
             {
@@ -1036,22 +1033,22 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       else
         {
           gtk_paned_calc_position (paned,
-                                   MAX (1, widget_allocation.height - handle_size),
+                                   MAX (1, allocation->height - handle_size),
                                    child1_requisition.height,
                                    child2_requisition.height);
 
-          priv->handle_pos.x = widget_allocation.x;
-          priv->handle_pos.y = widget_allocation.y + priv->child1_size;
-          priv->handle_pos.width = widget_allocation.width;
+          priv->handle_pos.x = allocation->x;
+          priv->handle_pos.y = allocation->y + priv->child1_size;
+          priv->handle_pos.width = allocation->width;
           priv->handle_pos.height = handle_size;
 
           child1_allocation.width = child2_allocation.width = allocation->width;
           child1_allocation.height = MAX (1, priv->child1_size);
-          child1_allocation.x = child2_allocation.x = widget_allocation.x;
-          child1_allocation.y = widget_allocation.y;
+          child1_allocation.x = child2_allocation.x = allocation->x;
+          child1_allocation.y = allocation->y;
 
           child2_allocation.y = child1_allocation.y + priv->child1_size + priv->handle_pos.height;
-          child2_allocation.height = MAX (1, widget_allocation.y + widget_allocation.height - child2_allocation.y);
+          child2_allocation.height = MAX (1, allocation->y + allocation->height - child2_allocation.y);
         }
 
       if (gtk_widget_get_mapped (widget) &&
@@ -1122,10 +1119,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       if (priv->child2)
 	gtk_widget_set_child_visible (priv->child2, TRUE);
 
-      gtk_widget_get_allocation (widget, &widget_allocation);
-
-      child_allocation.x = widget_allocation.x;
-      child_allocation.y = widget_allocation.y;
+      child_allocation.x = allocation->x;
+      child_allocation.y = allocation->y;
       child_allocation.width = allocation->width;
       child_allocation.height = allocation->height;
 
