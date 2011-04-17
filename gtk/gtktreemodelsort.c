@@ -49,6 +49,113 @@
 #include "gtktreednd.h"
 
 
+/**
+ * SECTION:gtktreemodelsort
+ * @Short_description: A GtkTreeModel which makes an underlying tree model sortable
+ * @Title: GtkTreeModelSort
+ * @See_also: #GtkTreeModel, #GtkListStore, #GtkTreeStore, #GtkTreeSortable, #GtkTreeModelFilter
+ *
+ * The #GtkTreeModelSort is a model which implements the #GtkTreeSortable
+ * interface.  It does not hold any data itself, but rather is created with
+ * a child model and proxies its data.  It has identical column types to
+ * this child model, and the changes in the child are propagated.  The
+ * primary purpose of this model is to provide a way to sort a different
+ * model without modifying it. Note that the sort function used by
+ * #GtkTreeModelSort is not guaranteed to be stable.
+ *
+ * The use of this is best demonstrated through an example.  In the
+ * following sample code we create two #GtkTreeView widgets each with a
+ * view of the same data.  As the model is wrapped here by a
+ * #GtkTreeModelSort, the two #GtkTreeView<!-- -->s can each sort their
+ * view of the data without affecting the other.  By contrast, if we
+ * simply put the same model in each widget, then sorting the first would
+ * sort the second.
+ *
+ * <example>
+ * <title>Using a <structname>GtkTreeModelSort</structname></title>
+ * <programlisting>
+ * {
+ *   GtkTreeView *tree_view1;
+ *   GtkTreeView *tree_view2;
+ *   GtkTreeModel *sort_model1;
+ *   GtkTreeModel *sort_model2;
+ *   GtkTreeModel *child_model;
+ *
+ *   // get the child model
+ *   child_model = get_my_model ();
+ *
+ *   // Create the first tree
+ *   sort_model1 = gtk_tree_model_sort_new_with_model (child_model);
+ *   tree_view1 = gtk_tree_view_new_with_model (sort_model1);
+ *
+ *   // Create the second tree
+ *   sort_model2 = gtk_tree_model_sort_new_with_model (child_model);
+ *   tree_view2 = gtk_tree_view_new_with_model (sort_model2);
+ *
+ *   // Now we can sort the two models independently
+ *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model1),
+ *                                         COLUMN_1, GTK_SORT_ASCENDING);
+ *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model2),
+ *                                         COLUMN_1, GTK_SORT_DESCENDING);
+ * }
+ * </programlisting>
+ * </example>
+ *
+ * To demonstrate how to access the underlying child model from the sort
+ * model, the next example will be a callback for the #GtkTreeSelection
+ * #GtkTreeSelection::changed signal.  In this callback, we get a string
+ * from COLUMN_1 of the model.  We then modify the string, find the same
+ * selected row on the child model, and change the row there.
+ *
+ * <example>
+ * <title>Accessing the child model of in a selection changed callback</title>
+ * <programlisting>
+ * void
+ * selection_changed (GtkTreeSelection *selection, gpointer data)
+ * {
+ *   GtkTreeModel *sort_model = NULL;
+ *   GtkTreeModel *child_model;
+ *   GtkTreeIter sort_iter;
+ *   GtkTreeIter child_iter;
+ *   char *some_data = NULL;
+ *   char *modified_data;
+ *
+ *   // Get the current selected row and the model.
+ *   if (! gtk_tree_selection_get_selected (selection,
+ *                                          &sort_model,
+ *                                          &sort_iter))
+ *     return;
+ *
+ *   /<!---->* Look up the current value on the selected row and get a new value
+ *    * to change it to.
+ *    *<!---->/
+ *   gtk_tree_model_get (GTK_TREE_MODEL (sort_model), &sort_iter,
+ *                       COLUMN_1, &some_data,
+ *                       -1);
+ *
+ *   modified_data = change_the_data (some_data);
+ *   g_free (some_data);
+ *
+ *   // Get an iterator on the child model, instead of the sort model.
+ *   gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (sort_model),
+ *                                                   &child_iter,
+ *                                                   &sort_iter);
+ *
+ *   /<!---->* Get the child model and change the value of the row.  In this
+ *    * example, the child model is a GtkListStore.  It could be any other
+ *    * type of model, though.
+ *    *<!---->/
+ *   child_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (sort_model));
+ *   gtk_list_store_set (GTK_LIST_STORE (child_model), &child_iter,
+ *                       COLUMN_1, &modified_data,
+ *                       -1);
+ *   g_free (modified_data);
+ * }
+ * </programlisting>
+ * </example>
+ */
+
+
 typedef struct _SortElt SortElt;
 typedef struct _SortLevel SortLevel;
 typedef struct _SortData SortData;
