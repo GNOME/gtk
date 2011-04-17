@@ -373,6 +373,7 @@ void
 cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 {
   gchar                *family_name;
+  PangoFontFamily      *family;
   PangoFontFace        *face;
   PangoFontDescription *desc;
   
@@ -381,48 +382,48 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 
   GtkTreeIter iter;
   GtkTreePath *path = gtk_tree_path_new ();
-
-  GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
+  
+  GtkFontSelection        *fontsel = (GtkFontSelection*)data;
   
   gtk_tree_view_get_cursor (treeview, &path, NULL);
   
   if (!path)
     return;
 
-  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->model), &iter, path))
+  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (fontsel->priv->model), &iter, path))
     return;
   
-  gtk_tree_model_get (GTK_TREE_MODEL (priv->model), &iter,
+  gtk_tree_model_get (GTK_TREE_MODEL (fontsel->priv->model), &iter,
                       FACE_COLUMN, &face,
+                      FAMILY_COLUMN, &family,
                       FAMILY_NAME_COLUMN, &family_name,
                       -1);
-
-  if (!face && !family_name)
-    return;
-  if (!face)
+  gtk_tree_path_free (path);
+  path = NULL;
+  
+  if (!face || !family_name || !family)
     {
       g_free (family_name);
-      return;
-    }
-  if (!family_name)
-    {
-      g_object_unref ((gpointer)face);
+      g_object_unref (face);
+      g_object_unref (family);
       return;
     }
 
   desc = pango_font_face_describe (face);
-  pango_font_description_set_size (desc, priv->size);
-  gtk_widget_override_font (priv->preview, desc);
+  pango_font_description_set_size (desc, fontsel->priv->size);
+  gtk_widget_override_font (fontsel->priv->preview, desc);
 
   pango_font_face_list_sizes (face, &sizes, &n_sizes);
   /* It seems not many fonts actually have a sane set of sizes */
   /* set_range_marks (priv->size_slider, sizes, n_sizes); */
 
+  gtk_font_selection_ref_family (fontsel, family);
+  gtk_font_selection_ref_face  (fontsel,   face);
+
   /* Free resources */
   g_free (family_name);
   g_object_unref ((gpointer)face);
   pango_font_description_free(desc);
-  gtk_tree_path_free (path);
 }
 
 static void
@@ -551,7 +552,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   
   /* Font selection callbacks */
   g_signal_connect (G_OBJECT (priv->family_face_list), "cursor-changed",
-                    G_CALLBACK (cursor_changed_cb),    (gpointer)priv);
+                    G_CALLBACK (cursor_changed_cb),    (gpointer)fontsel);
                     
                     
   set_range_marks (priv->size_slider, (gint*)font_sizes, FONT_SIZES_LENGTH);
