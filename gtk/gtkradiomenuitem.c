@@ -33,6 +33,40 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkradiomenuitem
+ * @Short_description: A choice from multiple check menu items
+ * @Title: GtkRadioMenuItem
+ * @See_also: #GtkMenuItem, #GtkCheckMenuItem
+ *
+ * A radio menu item is a check menu item that belongs to a group. At each
+ * instant exactly one of the radio menu items from a group is selected.
+ *
+ * The group list does not need to be freed, as each #GtkRadioMenuItem will
+ * remove itself and its list item when it is destroyed.
+ *
+ * The correct way to create a group of radio menu items is approximatively
+ * this:
+ *
+ * <example>
+ * <title>How to create a group of radio menu items.</title>
+ * <programlisting>
+ * GSList *group = NULL;
+ * GtkWidget *item;
+ * gint i;
+ *
+ * for (i = 0; i < 5; i++)
+ * {
+ *   item = gtk_radio_menu_item_new_with_label (group, "This is an example");
+ *   group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (item));
+ *   if (i == 1)
+ *     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
+ * }
+ * </programlisting>
+ * </example>
+ */
+
+
 struct _GtkRadioMenuItemPrivate
 {
   GSList *group;
@@ -59,6 +93,14 @@ static guint group_changed_signal = 0;
 
 G_DEFINE_TYPE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
+/**
+ * gtk_radio_menu_item_new:
+ * @group: the group to which the radio menu item is to be attached
+ *
+ * Creates a new #GtkRadioMenuItem.
+ *
+ * Returns: a new #GtkRadioMenuItem
+ */
 GtkWidget*
 gtk_radio_menu_item_new (GSList *group)
 {
@@ -112,6 +154,13 @@ gtk_radio_menu_item_get_property (GObject    *object,
     }
 }
 
+/**
+ * gtk_radio_menu_item_set_group:
+ * @radio_menu_item: a #GtkRadioMenuItem.
+ * @group: the new group.
+ *
+ * Sets the group of a radio menu item, or changes it.
+ */
 void
 gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 			       GSList           *group)
