@@ -953,8 +953,6 @@ void              _gtk_widget_set_is_toplevel             (GtkWidget    *widget,
 void              _gtk_widget_grab_notify                 (GtkWidget    *widget,
 						           gboolean	was_grabbed);
 
-GtkWidgetAuxInfo *_gtk_widget_get_aux_info                (GtkWidget    *widget,
-							   gboolean      create);
 void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 							   GtkWidget    *previous_toplevel);
 void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
