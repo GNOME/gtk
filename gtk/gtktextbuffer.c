@@ -43,6 +43,18 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktextbuffer
+ * @Short_description: Stores attributed text for display in a GtkTextView
+ * @Title: GtkTextBuffer
+ * @See_also: #GtkTextView, #GtkTextIter, #GtkTextMark
+ *
+ * You may wish to begin by reading the <link linkend="TextWidget">text widget
+ * conceptual overview</link> which gives an overview of all the objects and data
+ * types related to the text widget and how they work together.
+ */
+
+
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
 
 struct _GtkTextBufferPrivate

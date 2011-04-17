@@ -30,12 +30,44 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GtkTextBufferSerializeFunc:
+ * @register_buffer: the #GtkTextBuffer for which the format is registered
+ * @content_buffer: the #GtkTextBuffer to serialize
+ * @start: start of the block of text to serialize
+ * @end: end of the block of text to serialize
+ * @length: Return location for the length of the serialized data
+ * @user_data: user data that was specified when registering the format
+ *
+ * A function that is called to serialize the content of a text buffer.
+ * It must return the serialized form of the content.
+ *
+ * Returns: a newly-allocated array of guint8 which contains the serialized
+ *   data, or %NULL if an error occurred
+ */
 typedef guint8 * (* GtkTextBufferSerializeFunc)   (GtkTextBuffer     *register_buffer,
                                                    GtkTextBuffer     *content_buffer,
                                                    const GtkTextIter *start,
                                                    const GtkTextIter *end,
                                                    gsize             *length,
                                                    gpointer           user_data);
+
+/**
+ * GtkTextBufferDeserializeFunc:
+ * @register_buffer: the #GtkTextBuffer the format is registered with
+ * @content_buffer: the #GtkTextBuffer to deserialize into
+ * @iter: insertion point for the deserialized text
+ * @data: data to deserialize
+ * @length: length of %data
+ * @create_tags: %TRUE if deserializing may create tags
+ * @user_data: user data that was specified when registering the format
+ * @error: return location for a #GError
+ *
+ * A function that is called to deserialize rich text that has been
+ * serialized with gtk_text_buffer_serialize(), and insert it at @iter.
+ *
+ * Returns: %TRUE on success, %FALSE otherwise
+ */
 typedef gboolean (* GtkTextBufferDeserializeFunc) (GtkTextBuffer     *register_buffer,
                                                    GtkTextBuffer     *content_buffer,
                                                    GtkTextIter       *iter,
