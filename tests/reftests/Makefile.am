@@ -25,5 +25,8 @@ clean-local:
 	rm -rf output/ || true
 
 EXTRA_DIST += \
+	label-sizing.css \
+	label-sizing.ref.ui \
+	label-sizing.ui \
 	simpe.ref.png \
 	simple.ui
