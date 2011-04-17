@@ -336,16 +336,13 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   GtkAdjustment *slider_adj = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
 
   /* We ignore the slider value change callback for both of this set_value call */
+  priv->ignore_slider = TRUE;
   if (size < gtk_adjustment_get_lower (slider_adj))
-    {
-      priv->ignore_slider = TRUE;
-      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
-    }
+    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
   else if (size > gtk_adjustment_get_upper (slider_adj))
-    {
-      priv->ignore_slider = TRUE;
-      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
-    }
+    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
+  else
+    gtk_adjustment_set_value (slider_adj, size);
 
   priv->size = ((gint)gtk_adjustment_get_value (adjustment)) * PANGO_SCALE;
 
@@ -426,6 +423,24 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   pango_font_description_free(desc);
 }
 
+gboolean
+zoom_preview_cb (GtkWidget *scrolled_window, GdkEventScroll *event, gpointer data)
+{
+  GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
+
+  GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
+
+  if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_RIGHT)
+    gtk_adjustment_set_value (adj,
+                              gtk_adjustment_get_value (adj) +
+                              gtk_adjustment_get_step_increment (adj));
+  else if (event->direction == GDK_SCROLL_DOWN || event->direction == GDK_SCROLL_LEFT)
+    gtk_adjustment_set_value (adj,
+                              gtk_adjustment_get_value (adj) -
+                              gtk_adjustment_get_step_increment (adj));
+  return TRUE;
+}
+
 static void
 gtk_font_selection_init (GtkFontSelection *fontsel)
 {
@@ -487,12 +502,10 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /* Setting the size requests for various widgets */
   gtk_widget_set_size_request (GTK_WIDGET (fontsel), 462, 462);
   gtk_widget_set_size_request (scrolled_win,  -1, PREVIEW_HEIGHT);
-  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
+  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT);
 
-  /* Unset the frame on the preview entry and set a shadow in the scrolled window */
+  /* Unset the frame on the preview entry */
   gtk_entry_set_has_frame (GTK_ENTRY (priv->preview), FALSE);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
-                                       GTK_SHADOW_OUT);
 
   /* Packing the slider and the spin in a hbox */
   size_controls = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -556,6 +569,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   /* Zoom on preview scroll*/
   g_signal_connect (G_OBJECT (scrolled_win),      "scroll-event",
+                    G_CALLBACK (zoom_preview_cb), priv);
+ 
+  g_signal_connect (G_OBJECT (priv->size_slider), "scroll-event",
                     G_CALLBACK (zoom_preview_cb), priv);
                     
   set_range_marks (priv->size_slider, (gint*)font_sizes, FONT_SIZES_LENGTH);
@@ -994,10 +1010,10 @@ gtk_font_selection_get_size (GtkFontSelection *fontsel)
 gchar *
 gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
 {
-  if (!fontsel->family)
+  if (!fontsel->priv->family)
     return NULL;
 
-  return g_strdup (pango_font_family_get_name (fontsel->family));
+  return g_strdup (pango_font_family_get_name (fontsel->priv->family));
 }
 
 /* This sets the current font, then selecting the appropriate list rows. */
