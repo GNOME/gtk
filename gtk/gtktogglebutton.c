@@ -38,6 +38,58 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktogglebutton
+ * @Short_description: Create buttons which retain their state
+ * @Title: GtkToggleButton
+ * @See_also: #GtkButton, #GtkCheckButton, #GtkCheckMenuItem
+ *
+ * A #GtkToggleButton is a #GtkButton which will remain 'pressed-in' when
+ * clicked. Clicking again will cause the toggle button to return to its
+ * normal state.
+ *
+ * A toggle button is created by calling either gtk_toggle_button_new() or
+ * gtk_toggle_button_new_with_label(). If using the former, it is advisable to
+ * pack a widget, (such as a #GtkLabel and/or a #GtkPixmap), into the toggle
+ * button's container. (See #GtkButton for more information).
+ *
+ * The state of a #GtkToggleButton can be set specifically using
+ * gtk_toggle_button_set_active(), and retrieved using
+ * gtk_toggle_button_get_active().
+ *
+ * To simply switch the state of a toggle button, use gtk_toggle_button_toggled().
+ *
+ * <example>
+ * <title>Creating two #GtkToggleButton widgets.</title>
+ * <programlisting>
+ * void make_toggles (void) {
+ *    GtkWidget *dialog, *toggle1, *toggle2;
+ *
+ *    dialog = gtk_dialog_new (<!-- -->);
+ *    toggle1 = gtk_toggle_button_new_with_label ("Hi, i'm a toggle button.");
+ *
+ *    // Makes this toggle button invisible
+ *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle1), TRUE);
+ *
+ *    g_signal_connect (toggle1, "toggled",
+ *                      G_CALLBACK (output_state), NULL);
+ *    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+ *                        toggle1, FALSE, FALSE, 2);
+ *
+ *    toggle2 = gtk_toggle_button_new_with_label ("Hi, i'm another toggle button.");
+ *    gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (toggle2), FALSE);
+ *    g_signal_connect (toggle2, "toggled",
+ *                      G_CALLBACK (output_state), NULL);
+ *    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+ *                        toggle2, FALSE, FALSE, 2);
+ *
+ *    gtk_widget_show_all (dialog);
+ * }
+ * </programlisting>
+ * </example>
+ */
+
+
 #define DEFAULT_LEFT_POS  4
 #define DEFAULT_TOP_POS   4
 #define DEFAULT_SPACING   7
@@ -143,6 +195,13 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkToggleButton::toggled:
+   * @togglebutton: the object which received the signal.
+   *
+   * Should be connected if you wish to perform an action whenever the
+   * #GtkToggleButton's state is changed.
+   */
   toggle_button_signals[TOGGLED] =
     g_signal_new (I_("toggled"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -216,13 +275,27 @@ gtk_toggle_button_sync_action_properties (GtkActivatable *activatable,
   gtk_action_unblock_activate (action);
 }
 
-
+/**
+ * gtk_toggle_button_new:
+ *
+ * Creates a new toggle button. A widget should be packed into the button, as in gtk_button_new().
+ *
+ * Returns: a new toggle button.
+ */
 GtkWidget*
 gtk_toggle_button_new (void)
 {
   return g_object_new (GTK_TYPE_TOGGLE_BUTTON, NULL);
 }
 
+/**
+ * gtk_toggle_button_new_with_label:
+ * @label: a string containing the message to be placed in the toggle button.
+ *
+ * Creates a new toggle button with a text label.
+ *
+ * Returns: a new toggle button.
+ */
 GtkWidget*
 gtk_toggle_button_new_with_label (const gchar *label)
 {
@@ -369,6 +442,15 @@ gtk_toggle_button_get_mode (GtkToggleButton *toggle_button)
   return toggle_button->priv->draw_indicator;
 }
 
+/**
+ * gtk_toggle_button_set_active:
+ * @toggle_button: a #GtkToggleButton.
+ * @is_active: %TRUE or %FALSE.
+ *
+ * Sets the status of the toggle button. Set to %TRUE if you want the
+ * GtkToggleButton to be 'pressed in', and %FALSE to raise it.
+ * This action causes the toggled signal to be emitted.
+ */
 void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 			      gboolean         is_active)
@@ -392,6 +474,15 @@ _gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
   toggle_button->priv->active = is_active;
 }
 
+/**
+ * gtk_toggle_button_get_active:
+ * @toggle_button: a #GtkToggleButton.
+ *
+ * Queries a #GtkToggleButton and returns its current state. Returns %TRUE if
+ * the toggle button is pressed in and %FALSE if it is raised.
+ *
+ * Returns: a #gboolean value.
+ */
 gboolean
 gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
 {
@@ -400,7 +491,14 @@ gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
   return toggle_button->priv->active;
 }
 
-
+/**
+ * gtk_toggle_button_toggled:
+ * @toggle_button: a #GtkToggleButton.
+ *
+ * Emits the #GtkToggleButton::toggled signal on the
+ * #GtkToggleButton. There is no good reason for an
+ * application ever to call this function.
+ */
 void
 gtk_toggle_button_toggled (GtkToggleButton *toggle_button)
 {
