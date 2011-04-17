@@ -3305,14 +3305,13 @@ gtk_label_update_layout_width (GtkLabel *label)
   if (priv->ellipsize)
     {
       PangoRectangle logical;
-      PangoRectangle bounds;
       gint xpad, ypad;
+      gint width, height;
 
       gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
-      bounds.x = bounds.y = 0;
-      bounds.width = allocation.width - xpad * 2;
-      bounds.height = allocation.height - ypad * 2;
+      width = allocation.width - xpad * 2;
+      height = allocation.height - ypad * 2;
 
       pango_layout_set_width (priv->layout, -1);
       pango_layout_get_pixel_extents (priv->layout, NULL, &logical);
@@ -3326,13 +3325,13 @@ gtk_label_update_layout_width (GtkLabel *label)
           const gdouble dy = matrix->xy; /* sin (M_PI * angle / 180) */
           if (fabs (dy) < 0.01)
             {
-              if (logical.width > bounds.width)
-                pango_layout_set_width (priv->layout, bounds.width * PANGO_SCALE);
+              if (logical.width > width)
+                pango_layout_set_width (priv->layout, width * PANGO_SCALE);
             }
           else if (fabs (dx) < 0.01)
             {
-              if (logical.width > bounds.height)
-                pango_layout_set_width (priv->layout, bounds.height * PANGO_SCALE);
+              if (logical.width > height)
+                pango_layout_set_width (priv->layout, height * PANGO_SCALE);
             }
           else
             {
@@ -3340,13 +3339,13 @@ gtk_label_update_layout_width (GtkLabel *label)
               gboolean vertical;
               gint cy;
 
-              x0 = bounds.width / 2;
+              x0 = width / 2;
               y0 = dx ? x0 * dy / dx : G_MAXDOUBLE;
-              vertical = fabs (y0) > bounds.height / 2;
+              vertical = fabs (y0) > height / 2;
 
               if (vertical)
                 {
-                  y0 = bounds.height/2;
+                  y0 = height/2;
                   x0 = dy ? y0 * dx / dy : G_MAXDOUBLE;
                 }
 
@@ -3359,12 +3358,12 @@ gtk_label_update_layout_width (GtkLabel *label)
 
               if (vertical)
                 {
-                  y0 = bounds.height/2 + y1 - y0;
+                  y0 = height/2 + y1 - y0;
                   x0 = -y0 * dx/dy;
                 }
               else
                 {
-                  x0 = bounds.width/2 + x1 - x0;
+                  x0 = width/2 + x1 - x0;
                   y0 = -x0 * dy/dx;
                 }
 
@@ -3372,8 +3371,8 @@ gtk_label_update_layout_width (GtkLabel *label)
               pango_layout_set_width (priv->layout, rint (length * PANGO_SCALE));
             }
         }
-      else if (logical.width > bounds.width)
-        pango_layout_set_width (priv->layout, bounds.width * PANGO_SCALE);
+      else if (logical.width > width)
+        pango_layout_set_width (priv->layout, width * PANGO_SCALE);
     }
   else if (priv->wrap)
     {
