@@ -3296,13 +3296,10 @@ gtk_label_update_layout_width (GtkLabel *label)
 {
   GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkAllocation allocation;
 
   g_assert (priv->layout);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
-  if (priv->ellipsize)
+  if (priv->ellipsize || priv->wrap)
     {
       PangoRectangle logical;
       gint xpad, ypad;
@@ -3310,19 +3307,19 @@ gtk_label_update_layout_width (GtkLabel *label)
 
       gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
 
-      width = allocation.width - xpad * 2;
-      height = allocation.height - ypad * 2;
-
-      pango_layout_set_width (priv->layout, -1);
-      pango_layout_get_pixel_extents (priv->layout, NULL, &logical);
+      width = gtk_widget_get_allocated_width (GTK_WIDGET (label)) - xpad * 2;
+      height = gtk_widget_get_allocated_height (GTK_WIDGET (label)) - ypad * 2;
 
       if (priv->have_transform)
         {
           PangoContext *context = gtk_widget_get_pango_context (widget);
           const PangoMatrix *matrix = pango_context_get_matrix (context);
-
           const gdouble dx = matrix->xx; /* cos (M_PI * angle / 180) */
           const gdouble dy = matrix->xy; /* sin (M_PI * angle / 180) */
+
+          pango_layout_set_width (priv->layout, -1);
+          pango_layout_get_pixel_extents (priv->layout, NULL, &logical);
+
           if (fabs (dy) < 0.01)
             {
               if (logical.width > width)
@@ -3371,25 +3368,17 @@ gtk_label_update_layout_width (GtkLabel *label)
               pango_layout_set_width (priv->layout, rint (length * PANGO_SCALE));
             }
         }
-      else if (logical.width > width)
-        pango_layout_set_width (priv->layout, width * PANGO_SCALE);
-    }
-  else if (priv->wrap)
-    {
-      gdouble angle = gtk_label_get_angle (label);
-      gint width;
-      gint xpad, ypad;
-      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
-
-      if (angle == 90 || angle == 270)
-        width = allocation.height - ypad * 2;
       else
-        width = allocation.width  - xpad * 2;
-
-      pango_layout_set_width (priv->layout, MAX (width, 1) * PANGO_SCALE);
+        {
+          pango_layout_set_width (priv->layout, width * PANGO_SCALE);
+          pango_layout_set_height (priv->layout, height * PANGO_SCALE);
+        }
     }
-  else /* !priv->wrap */
-    pango_layout_set_width (priv->layout, -1);
+  else
+    {
+      pango_layout_set_width (priv->layout, -1);
+      pango_layout_set_height (priv->layout, -1);
+    }
 }
 
 static void
