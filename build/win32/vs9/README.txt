@@ -7,7 +7,7 @@ the files needed, like config.h.win32.in into config.h.win32 and the
 .vcprojin files here into corresponding actual .vcproj files.
 
 You will need the parts from below in the GTK+ stack: GDK-Pixbuf, Pango,
-ATK (2.x) and GLib.  External dependencies are at least Cairo
+ATK (2.x)** and GLib.  External dependencies are at least Cairo
 (with Cairo-GObject support, meaning Cairo 1.10.x or later), zlib, libpng,
 gettext-runtime, fontconfig*, freetype*, expat*.  See the 
 build/win32/vs9/README.txt file in glib for details where to unpack them.
@@ -19,8 +19,8 @@ to different CRTs can be kept at a minimum.  zlib, libpng, and Cairo
 do contain support for compiling under VS9 using VS
 project files and/or makefiles at this time of writing, For the
 GTK+ stack, VS9 project files are either available under
-$(srcroot)/build/vs9 in the case of GLib (stable/unstable), ATK
-(unstable) and GDK-Pixbuf (unstable), and should be in the next
+$(srcroot)/build/vs9 in the case of GLib (stable/unstable), ATK**
+(2.x stable/unstable) and GDK-Pixbuf (unstable), and should be in the next
 unstable version of Pango.  There is no known official VS9 build
 support for fontconfig (along with freetype and expat) and
 gettext-runtime, so please use the binaries from: 
@@ -40,7 +40,7 @@ The recommended build order for these dependencies:
   build PCRE is recommended-see build/win32/vs9/README.txt of GLib)
 -GLib
 -Cairo (inclusive of Cairo-GObject)
--ATK
+-ATK-2.x**
 -Pango
 -GDK-Pixbuf
 (note the last 3 dependencies are not interdependent, so the last 3
@@ -60,6 +60,17 @@ from a specific GLib source tree.
  building and running GTK+ itself, but note that they are needed for
  people running and building GIMP.  They are referred to by components
  in Cairo and Pango mainly.
+
+**Regarding ATK-2.x: prior to compiling ATK-2.x, please open atkprops
+  in VS under "Properties Manager" view (it is under any one of the
+  build configurations, right-click on atkprops and select "Properties").
+  Navigate to "User Macros", and edit the following fields:
+  AtkApiVersion -> 2.0
+  AtkLibToolCompatibleDllSuffix -> -2.0-0
+  AtkSeperateVS9DLLSuffix -> -2-vs9
+  Sorry this change did not make it upstream prior to ATK-2.0.0 release-
+  this will be in the subsequent releases of ATK-2.x and was committed
+  upstream.
 
 --Tor Lillqvist <tml@iki.fi>
 --Updated by Chun-wei Fan <fanc999@yahoo.com.tw>
