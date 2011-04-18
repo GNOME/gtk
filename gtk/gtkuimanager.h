@@ -92,6 +92,24 @@ struct _GtkUIManagerClass {
   void (*_gtk_reserved4) (void);
 };
 
+/**
+ * GtkUIManagerItemType:
+ * @GTK_UI_MANAGER_AUTO: Pick the type of the UI element according to context.
+ * @GTK_UI_MANAGER_MENUBAR: Create a menubar.
+ * @GTK_UI_MANAGER_MENU: Create a menu.
+ * @GTK_UI_MANAGER_TOOLBAR: Create a toolbar.
+ * @GTK_UI_MANAGER_PLACEHOLDER: Insert a placeholder.
+ * @GTK_UI_MANAGER_POPUP: Create a popup menu.
+ * @GTK_UI_MANAGER_MENUITEM: Create a menuitem.
+ * @GTK_UI_MANAGER_TOOLITEM: Create a toolitem.
+ * @GTK_UI_MANAGER_SEPARATOR: Create a separator.
+ * @GTK_UI_MANAGER_ACCELERATOR: Install an accelerator.
+ * @GTK_UI_MANAGER_POPUP_WITH_ACCELS: Same as %GTK_UI_MANAGER_POPUP, but the
+ *   actions' accelerators are shown.
+ *
+ * These enumeration values are used by gtk_ui_manager_add_ui() to determine
+ * what UI element to create.
+ */
 typedef enum {
   GTK_UI_MANAGER_AUTO              = 0,
   GTK_UI_MANAGER_MENUBAR           = 1 << 0,

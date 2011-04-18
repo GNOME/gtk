@@ -49,6 +49,260 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 
+
+/**
+ * SECTION:gtkuimanager
+ * @Short_description: Constructing menus and toolbars from an XML description
+ * @Title: GtkUIManager
+ * @See_also:#GtkBuilder
+ *
+ * A #GtkUIManager constructs a user interface (menus and toolbars) from
+ * one or more UI definitions, which reference actions from one or more
+ * action groups.
+ *
+ * <refsect2 id="XML-UI">
+ * <title>UI Definitions</title>
+ * <para>
+ * The UI definitions are specified in an XML format which can be
+ * roughly described by the following DTD.
+ *
+ * <note><para>
+ * Do not confuse the GtkUIManager UI Definitions described here with
+ * the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
+ * Definitions</link>.
+ * </para></note>
+ *
+ * <programlisting>
+ * <![CDATA[
+ * <!ELEMENT ui          (menubar|toolbar|popup|accelerator)* >
+ * <!ELEMENT menubar     (menuitem|separator|placeholder|menu)* >
+ * <!ELEMENT menu        (menuitem|separator|placeholder|menu)* >
+ * <!ELEMENT popup       (menuitem|separator|placeholder|menu)* >
+ * <!ELEMENT toolbar     (toolitem|separator|placeholder)* >
+ * <!ELEMENT placeholder (menuitem|toolitem|separator|placeholder|menu)* >
+ * <!ELEMENT menuitem     EMPTY >
+ * <!ELEMENT toolitem     (menu?) >
+ * <!ELEMENT separator    EMPTY >
+ * <!ELEMENT accelerator  EMPTY >
+ * <!ATTLIST menubar      name                      #IMPLIED
+ *                        action                    #IMPLIED >
+ * <!ATTLIST toolbar      name                      #IMPLIED
+ *                        action                    #IMPLIED >
+ * <!ATTLIST popup        name                      #IMPLIED
+ *                        action                    #IMPLIED
+ *                        accelerators (true|false) #IMPLIED >
+ * <!ATTLIST placeholder  name                      #IMPLIED
+ *                        action                    #IMPLIED >
+ * <!ATTLIST separator    name                      #IMPLIED
+ *                        action                    #IMPLIED
+ *                        expand       (true|false) #IMPLIED >
+ * <!ATTLIST menu         name                      #IMPLIED
+ *                        action                    #REQUIRED
+ *                        position     (top|bot)    #IMPLIED >
+ * <!ATTLIST menuitem     name                      #IMPLIED
+ *                        action                    #REQUIRED
+ *                        position     (top|bot)    #IMPLIED
+ *                        always-show-image (true|false) #IMPLIED >
+ * <!ATTLIST toolitem     name                      #IMPLIED
+ *                        action                    #REQUIRED
+ *                        position     (top|bot)    #IMPLIED >
+ * <!ATTLIST accelerator  name                      #IMPLIED
+ *                        action                    #REQUIRED >
+ * ]]>
+ * </programlisting>
+ * There are some additional restrictions beyond those specified in the
+ * DTD, e.g. every toolitem must have a toolbar in its anchestry and
+ * every menuitem must have a menubar or popup in its anchestry. Since
+ * a #GMarkup parser is used to parse the UI description, it must not only
+ * be valid XML, but valid #GMarkup.
+ *
+ * If a name is not specified, it defaults to the action. If an action is
+ * not specified either, the element name is used. The name and action
+ * attributes must not contain '/' characters after parsing (since that
+ * would mess up path lookup) and must be usable as XML attributes when
+ * enclosed in doublequotes, thus they must not '"' characters or references
+ * to the &quot; entity.
+ *
+ * <example>
+ * <title>A UI definition</title>
+ * <programlisting>
+ * <ui>
+ *   <menubar>
+ *     <menu name="FileMenu" action="FileMenuAction">
+ *       <menuitem name="New" action="New2Action" />
+ *       <placeholder name="FileMenuAdditions" />
+ *     </menu>
+ *     <menu name="JustifyMenu" action="JustifyMenuAction">
+ *       <menuitem name="Left" action="justify-left"/>
+ *       <menuitem name="Centre" action="justify-center"/>
+ *       <menuitem name="Right" action="justify-right"/>
+ *       <menuitem name="Fill" action="justify-fill"/>
+ *     </menu>
+ *   </menubar>
+ *   <toolbar action="toolbar1">
+ *     <placeholder name="JustifyToolItems">
+ *       <separator/>
+ *       <toolitem name="Left" action="justify-left"/>
+ *       <toolitem name="Centre" action="justify-center"/>
+ *       <toolitem name="Right" action="justify-right"/>
+ *       <toolitem name="Fill" action="justify-fill"/>
+ *       <separator/>
+ *     </placeholder>
+ *   </toolbar>
+ * </ui>
+ * </programlisting>
+ * </example>
+ *
+ * The constructed widget hierarchy is very similar to the element tree
+ * of the XML, with the exception that placeholders are merged into their
+ * parents. The correspondence of XML elements to widgets should be
+ * almost obvious:
+ * <variablelist>
+ * <varlistentry>
+ * <term>menubar</term>
+ * <listitem><para>a #GtkMenuBar</para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>toolbar</term>
+ * <listitem><para>a #GtkToolbar</para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>popup</term>
+ * <listitem><para>a toplevel #GtkMenu</para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>menu</term>
+ * <listitem><para>a #GtkMenu attached to a menuitem</para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>menuitem</term>
+ * <listitem><para>a #GtkMenuItem subclass, the exact type depends on the
+ * action</para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>toolitem</term>
+ * <listitem><para>a #GtkToolItem subclass, the exact type depends on the
+ * action. Note that toolitem elements may contain a menu element, but only
+ * if their associated action specifies a #GtkMenuToolButton as proxy.</para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>separator</term>
+ * <listitem><para>a #GtkSeparatorMenuItem or
+ * #GtkSeparatorToolItem</para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>accelerator</term>
+ * <listitem><para>a keyboard accelerator</para></listitem>
+ * </varlistentry>
+ * </variablelist>
+ *
+ * The "position" attribute determines where a constructed widget is positioned
+ * wrt. to its siblings in the partially constructed tree. If it is
+ * "top", the widget is prepended, otherwise it is appended.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="UI-Merging">
+ * <title>UI Merging</title>
+ * <para>
+ * The most remarkable feature of #GtkUIManager is that it can overlay a set
+ * of menuitems and toolitems over another one, and demerge them later.
+ *
+ * Merging is done based on the names of the XML elements. Each element is
+ * identified by a path which consists of the names of its anchestors, separated
+ * by slashes. For example, the menuitem named "Left" in the example above
+ * has the path <literal>/ui/menubar/JustifyMenu/Left</literal> and the
+ * toolitem with the same name has path
+ * <literal>/ui/toolbar1/JustifyToolItems/Left</literal>.
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Accelerators</title>
+ * <para>
+ * Every action has an accelerator path. Accelerators are installed together with
+ * menuitem proxies, but they can also be explicitly added with &lt;accelerator&gt;
+ * elements in the UI definition. This makes it possible to have accelerators for
+ * actions even if they have no visible proxies.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="Smart-Separators">
+ * <title>Smart Separators</title>
+ * <para>
+ * The separators created by #GtkUIManager are "smart", i.e. they do not show up
+ * in the UI unless they end up between two visible menu or tool items. Separators
+ * which are located at the very beginning or end of the menu or toolbar
+ * containing them, or multiple separators next to each other, are hidden. This
+ * is a useful feature, since the merging of UI elements from multiple sources
+ * can make it hard or impossible to determine in advance whether a separator
+ * will end up in such an unfortunate position.
+ *
+ * For separators in toolbars, you can set <literal>expand="true"</literal> to
+ * turn them from a small, visible separator to an expanding, invisible one.
+ * Toolitems following an expanding separator are effectively right-aligned.
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Empty Menus</title>
+ * <para>
+ * Submenus pose similar problems to separators inconnection with merging. It is
+ * impossible to know in advance whether they will end up empty after merging.
+ * #GtkUIManager offers two ways to treat empty submenus:
+ * <itemizedlist>
+ * <listitem>
+ * <para>make them disappear by hiding the menu item they're attached to</para>
+ * </listitem>
+ * <listitem>
+ * <para>add an insensitive "Empty" item</para>
+ * </listitem>
+ * </itemizedlist>
+ * The behaviour is chosen based on the "hide_if_empty" property of the action
+ * to which the submenu is associated.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="GtkUIManager-BUILDER-UI">
+ * <title>GtkUIManager as GtkBuildable</title>
+ * <para>
+ * The GtkUIManager implementation of the GtkBuildable interface accepts
+ * GtkActionGroup objects as &lt;child&gt; elements in UI definitions.
+ *
+ * A GtkUIManager UI definition as described above can be embedded in
+ * an GtkUIManager &lt;object&gt; element in a GtkBuilder UI definition.
+ *
+ * The widgets that are constructed by a GtkUIManager can be embedded in
+ * other parts of the constructed user interface with the help of the
+ * "constructor" attribute. See the example below.
+ *
+ * <example>
+ * <title>An embedded GtkUIManager UI definition</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkUIManager" id="uiman">
+ *   <child>
+ *     <object class="GtkActionGroup" id="actiongroup">
+ *       <child>
+ *         <object class="GtkAction" id="file">
+ *           <property name="label">_File</property>
+ *         </object>
+ *       </child>
+ *     </object>
+ *   </child>
+ *   <ui>
+ *     <menubar name="menubar1">
+ *       <menu action="file">
+ *       </menu>
+ *     </menubar>
+ *   </ui>
+ * </object>
+ * <object class="GtkWindow" id="main-window">
+ *   <child>
+ *     <object class="GtkMenuBar" id="menubar1" constructor="uiman"/>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </para>
+ * </refsect2>
+ */
+
+
 #undef DEBUG_UI_MANAGER
 
 typedef enum
