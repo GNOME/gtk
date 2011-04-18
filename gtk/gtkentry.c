@@ -5774,8 +5774,6 @@ gtk_entry_draw_text (GtkEntry *entry,
 
       cairo_save (cr);
 
-      cairo_save (cr);
-
       cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
       cairo_rectangle (cr, 0, 0, width, height);
 
@@ -5790,6 +5788,8 @@ gtk_entry_draw_text (GtkEntry *entry,
   
       draw_text_with_color (entry, cr, &text_color);
       cairo_restore (cr);
+
+      cairo_save (cr);
 
       cairo_rectangle (cr, progress_x, progress_y,
                        progress_width, progress_height);
