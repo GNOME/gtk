@@ -3487,6 +3487,7 @@ get_size_for_allocation (GtkLabel        *label,
                          gint            *minimum_size,
                          gint            *natural_size)
 {
+  GtkLabelPrivate *priv = label->priv;
   PangoLayout *layout;
   gint text_height;
 
@@ -3498,7 +3499,15 @@ get_size_for_allocation (GtkLabel        *label,
     *minimum_size = text_height;
 
   if (natural_size)
-    *natural_size = text_height;
+    {
+      if (priv->ellipsize && priv->wrap)
+        {
+          layout = gtk_label_get_measuring_layout (label, layout, allocation * PANGO_SCALE, G_MAXINT);
+          pango_layout_get_pixel_size (layout, NULL, &text_height);
+        }
+
+      *natural_size = text_height;
+    }
 
   g_object_unref (layout);
 }
