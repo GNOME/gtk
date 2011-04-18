@@ -2658,7 +2658,7 @@ function handleKeyPress(e) {
     if (kdlen > 0) {
 	keyDownList[kdlen-1].keysym = keysym;
     } else {
-	log("keyDownList empty when keyPress triggered");
+	//log("keyDownList empty when keyPress triggered");
     }
 
     // Send the translated keysym
@@ -2677,7 +2677,7 @@ function handleKeyUp(e) {
     if (fev)
 	keysym = fev.keysym;
     else {
-	log("Key event (keyCode = " + ev.keyCode + ") not found on keyDownList");
+	//log("Key event (keyCode = " + ev.keyCode + ") not found on keyDownList");
 	keysym = 0;
     }
 
