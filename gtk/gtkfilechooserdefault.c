@@ -252,8 +252,8 @@ typedef enum {
 } ShortcutsIndex;
 
 /* Icon size for if we can't get it from the theme */
-#define FALLBACK_LIST_VIEW_ICON_SIZE 16
-#define FALLBACK_ICON_VIEW_ICON_SIZE 48
+#define FALLBACK_ICON_SIZE_FOR_LIST_VIEW 16
+#define FALLBACK_ICON_SIZE_FOR_ICON_VIEW 48
 
 #define THUMBNAIL_ICON_SIZE 100
 #define ICON_VIEW_ITEM_WIDTH 120
@@ -770,8 +770,8 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
   impl->show_size_column = TRUE;
-  impl->list_icon_size = FALLBACK_LIST_VIEW_ICON_SIZE;
-  impl->icon_icon_size = FALLBACK_ICON_VIEW_ICON_SIZE;
+  impl->icon_size_for_list_view = FALLBACK_ICON_SIZE_FOR_LIST_VIEW;
+  impl->icon_size_for_icon_view = FALLBACK_ICON_SIZE_FOR_ICON_VIEW;
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
   impl->pending_select_files = NULL;
@@ -1212,7 +1212,7 @@ render_recent_icon (GtkFileChooserDefault *impl)
     theme = gtk_icon_theme_get_default ();
 
   retval = gtk_icon_theme_load_icon (theme, "document-open-recent",
-                                     impl->list_icon_size, 0,
+                                     impl->icon_size_for_list_view, 0,
                                      NULL);
 
   /* fallback */
@@ -1250,7 +1250,7 @@ shortcuts_reload_icons_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->list_icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->icon_size_for_list_view);
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
   if (path)
@@ -1314,7 +1314,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 
 	      volume = data;
 	      pixbuf = _gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
-						 	    impl->list_icon_size, NULL);
+						 	    impl->icon_size_for_list_view, NULL);
 	    }
 	  else if (shortcut_type == SHORTCUT_TYPE_FILE)
             {
@@ -1350,7 +1350,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	           */
 	          icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 	          pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
-						     impl->list_icon_size, 0, NULL);
+						     impl->icon_size_for_list_view, 0, NULL);
 	        }
             }
 	  else if (shortcut_type == SHORTCUT_TYPE_SEARCH)
@@ -1553,7 +1553,7 @@ get_file_info_finished (GCancellable *cancellable,
   if (!request->label_copy)
     request->label_copy = g_strdup (g_file_info_get_display_name (info));
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
-				       request->impl->list_icon_size);
+				       request->impl->icon_size_for_list_view);
 
   gtk_list_store_set (request->impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
@@ -1662,7 +1662,7 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
       data = volume;
       label_copy = _gtk_file_system_volume_get_display_name (volume);
       pixbuf = _gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
-				 		    impl->list_icon_size, NULL);
+				 		    impl->icon_size_for_list_view, NULL);
     }
   else if (shortcut_type == SHORTCUT_TYPE_FILE)
     {
@@ -1721,7 +1721,7 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
            */
           icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
           pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
-					     impl->list_icon_size, 0, NULL);
+					     impl->icon_size_for_list_view, 0, NULL);
         }
     }
    else
@@ -4407,8 +4407,8 @@ set_icon_cell_renderer_fixed_size (GtkFileChooserDefault *impl, GtkCellRenderer 
 
   gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
   gtk_cell_renderer_set_fixed_size (renderer, 
-                                    xpad * 2 + impl->list_icon_size,
-                                    ypad * 2 + impl->list_icon_size);
+                                    xpad * 2 + impl->icon_size_for_list_view,
+                                    ypad * 2 + impl->icon_size_for_list_view);
 }
 
 /* Creates list view */
@@ -6039,14 +6039,14 @@ change_icon_theme (GtkFileChooserDefault *impl)
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 
   if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
-    impl->list_icon_size = MAX (width, height);
+    impl->icon_size_for_list_view = MAX (width, height);
   else
-    impl->list_icon_size = FALLBACK_LIST_VIEW_ICON_SIZE;
+    impl->icon_size_for_list_view = FALLBACK_ICON_SIZE_FOR_LIST_VIEW;
 
   if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_DIALOG, &width, &height))
-    impl->icon_icon_size = MAX (width, height);
+    impl->icon_size_for_icon_view = MAX (width, height);
   else
-    impl->icon_icon_size = FALLBACK_ICON_VIEW_ICON_SIZE;
+    impl->icon_size_for_icon_view = FALLBACK_ICON_SIZE_FOR_ICON_VIEW;
 
   shortcuts_reload_icons (impl);
   /* the first cell in the first column is the icon column, and we have a fixed size there */
@@ -7068,9 +7068,9 @@ file_system_model_set (GtkFileSystemModel *model,
 	      gint icon_size;
 
               if (column == MODEL_COL_ICON_PIXBUF)
-                icon_size = impl->icon_icon_size;
+                icon_size = impl->icon_size_for_icon_view;
 	      else
-		icon_size = impl->list_icon_size;
+		icon_size = impl->icon_size_for_list_view;
 
               g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), icon_size));
               return TRUE;

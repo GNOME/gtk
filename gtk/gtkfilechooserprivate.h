@@ -282,8 +282,8 @@ struct _GtkFileChooserDefault
   char *edited_new_text;
 
   gulong settings_signal_id;
-  int list_icon_size;
-  int icon_icon_size;
+  int icon_size_for_list_view;
+  int icon_size_for_icon_view;
 
   GSource *focus_entry_idle;
 
