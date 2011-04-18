@@ -126,7 +126,7 @@ struct _GtkFontSelectionDialogPrivate
 #define FONT_STYLE_LIST_WIDTH	170
 #define FONT_SIZE_LIST_WIDTH	60
 
-#define ROW_FORMAT_STRING "<span size=\"small\" foreground=\"%s\">%s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
+#define ROW_FORMAT_STRING "<span weight=\"bold\" size=\"small\" foreground=\"%s\">%s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
 
 /* These are what we use as the standard font sizes, for the size list.
  */
@@ -536,6 +536,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
+                                       GTK_SHADOW_ETCHED_IN);
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
 
   /* Alignment for the preview and size controls */
@@ -551,6 +553,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
+                                       GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win),
                                          priv->preview);
   gtk_box_pack_start (GTK_BOX (preview_and_size), scrolled_win, FALSE, FALSE, 0);
@@ -558,7 +562,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /* Setting the size requests for various widgets */
   gtk_widget_set_size_request (GTK_WIDGET (fontsel), 462, 462);
   gtk_widget_set_size_request (scrolled_win,  -1, PREVIEW_HEIGHT);
-  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT);
+  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
 
   /* Unset the frame on the preview entry */
   gtk_entry_set_has_frame (GTK_ENTRY (priv->preview), FALSE);
@@ -726,7 +730,6 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
                                 font_desc,
                                 pango_language_get_sample_string (NULL));
 
-          g_debug ("asdad");
           gtk_list_store_append (model, &iter);
           gtk_list_store_set (model, &iter,
                               FAMILY_COLUMN, families[i],
