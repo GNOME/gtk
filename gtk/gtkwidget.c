@@ -5628,7 +5628,8 @@ gtk_cairo_set_event (cairo_t        *cr,
 /**
  * gtk_cairo_should_draw_window:
  * @cr: a cairo context
- * @window: the window to check
+ * @window: the window to check. @window may not be an input-only
+ *          window.
  *
  * This function is supposed to be called in #GtkWidget::draw
  * implementations for widgets that support multiple windows.
