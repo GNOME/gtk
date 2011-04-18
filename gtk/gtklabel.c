@@ -3559,7 +3559,7 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
   pango_layout_get_extents (layout, NULL, natural);
   natural->x = natural->y = 0;
 
-  if (priv->single_line_mode || priv->wrap)
+  if (priv->wrap)
     natural->height = get_single_line_height (GTK_WIDGET (label), layout);
 
   if (priv->ellipsize || priv->wrap)
