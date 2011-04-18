@@ -1597,9 +1597,31 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
   gtk_entry_set_text (GTK_ENTRY (priv->preview_entry), text);
 }
 
-/*****************************************************************************
- * GtkFontSelectionDialog
- *****************************************************************************/
+
+/**
+ * SECTION:gtkfontseldlg
+ * @Short_description: A dialog box for selecting fonts
+ * @Title: GtkFontSelectionDialog
+ * @See_also: #GtkFontSelection, #GtkDialog
+ *
+ * The #GtkFontSelectionDialog widget is a dialog box for selecting a font.
+ *
+ * To set the font which is initially selected, use
+ * gtk_font_selection_dialog_set_font_name().
+ *
+ * To get the selected font use gtk_font_selection_dialog_get_font_name().
+ *
+ * To change the text which is shown in the preview area, use
+ * gtk_font_selection_dialog_set_preview_text().
+ *
+ * <refsect2 id="GtkFontSelectionDialog-BUILDER-UI">
+ * <title>GtkFontSelectionDialog as GtkBuildable</title>
+ * The GtkFontSelectionDialog implementation of the GtkBuildable interface
+ * exposes the embedded #GtkFontSelection as internal child with the
+ * name "font_selection". It also exposes the buttons with the names
+ * "ok_button", "cancel_button" and "apply_button".
+ * </refsect2>
+ */
 
 static void gtk_font_selection_dialog_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject * gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
