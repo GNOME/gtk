@@ -8169,6 +8169,21 @@ gtk_window_has_toplevel_focus (GtkWindow *window)
   return window->priv->has_toplevel_focus;
 }
 
+
+/**
+ * SECTION:gtkwindowgroup
+ * @Short_description: Limit the effect of grabs
+ * @Title: GtkWindowGroup
+ *
+ * #GtkWindowGroup objects are referenced by each window in the group,
+ * so once you have added all windows to a #GtkWindowGroup, you can drop
+ * the initial reference to the window group with g_object_unref(). If the
+ * windows in the window group are subsequently destroyed, then they will
+ * be removed from the window group and drop their references on the window
+ * group; when all window have been removed, the window group will be
+ * freed.
+ */
+
 G_DEFINE_TYPE (GtkWindowGroup, gtk_window_group, G_TYPE_OBJECT)
 
 static void
