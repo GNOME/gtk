@@ -1848,8 +1848,6 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
         gtk_menu_shell_activate_item (menu_shell, widget, TRUE);
       else
         {
-          _gtk_menu_shell_activate (menu_shell);
-
           gtk_menu_shell_select_item (menu_shell, widget);
           _gtk_menu_item_popup_submenu (widget, FALSE);
 
