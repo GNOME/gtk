@@ -279,7 +279,6 @@ struct _GtkLabelPrivate
 
   guint    mnemonic_keyval;
 
-  gint     wrap_width;
   gint     width_chars;
   gint     max_width_chars;
 };
@@ -461,7 +460,6 @@ static void gtk_label_clear_select_info   (GtkLabel *label);
 static void gtk_label_update_cursor       (GtkLabel *label);
 static void gtk_label_clear_layout        (GtkLabel *label);
 static void gtk_label_ensure_layout       (GtkLabel *label);
-static void gtk_label_invalidate_wrap_width (GtkLabel *label);
 static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
@@ -1260,7 +1258,6 @@ gtk_label_init (GtkLabel *label)
 
   priv->width_chars = -1;
   priv->max_width_chars = -1;
-  priv->wrap_width = -1;
   priv->label = NULL;
 
   priv->jtype = GTK_JUSTIFY_LEFT;
@@ -2970,7 +2967,6 @@ gtk_label_set_width_chars (GtkLabel *label,
     {
       priv->width_chars = n_chars;
       g_object_notify (G_OBJECT (label), "width-chars");
-      gtk_label_invalidate_wrap_width (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -3018,7 +3014,6 @@ gtk_label_set_max_width_chars (GtkLabel *label,
       priv->max_width_chars = n_chars;
 
       g_object_notify (G_OBJECT (label), "max-width-chars");
-      gtk_label_invalidate_wrap_width (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -3281,14 +3276,6 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
   copy = pango_layout_copy (priv->layout);
   pango_layout_set_width (copy, width);
   return copy;
-}
-
-static void
-gtk_label_invalidate_wrap_width (GtkLabel *label)
-{
-  GtkLabelPrivate *priv = label->priv;
-
-  priv->wrap_width = -1;
 }
 
 static void
@@ -3872,7 +3859,6 @@ gtk_label_style_updated (GtkWidget *widget)
 
   /* We have to clear the layout, fonts etc. may have changed */
   gtk_label_clear_layout (label);
-  gtk_label_invalidate_wrap_width (label);
 }
 
 static void 
