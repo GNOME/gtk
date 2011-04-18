@@ -52,6 +52,26 @@
 #include "gtkdndcursors.h"
 #include "gtkselectionprivate.h"
 
+
+/**
+ * SECTION:gtkdnd
+ * @Short_description: Functions for controlling drag and drop handling
+ * @Title: Drag and Drop
+ *
+ * GTK+ has a rich set of functions for doing inter-process
+ * communication via the drag-and-drop metaphor. GTK+
+ * can do drag-and-drop (DND) via multiple protocols.
+ * The currently supported protocols are the Xdnd and
+ * Motif protocols.
+ *
+ * As well as the functions listed here, applications
+ * may need to use some facilities provided for
+ * <link linkend="gtk-Selections">Selections</link>.
+ * Also, the Drag and Drop API makes use of signals
+ * in the #GtkWidget class.
+ */
+
+
 static GSList *source_widgets = NULL;
 
 typedef struct _GtkDragSourceSite GtkDragSourceSite;
@@ -958,13 +978,23 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
  ********************/
 
 /**
- * gtk_drag_get_data: (method)
- * @widget: a #GtkWidget
- * @context: drag context
- * @target: format to retrieve the data in.
- * @time_: timestamp of triggering event.
+ * gtk_drag_get_data:
+ * @widget: the widget that will receive the
+ *   #GtkWidget::drag-data-received signal.
+ * @context: the drag context
+ * @target: the target (form of the data) to retrieve.
+ * @time_: a timestamp for retrieving the data. This will
+ *   generally be the time received in a #GtkWidget::drag-motion"
+ *   or #GtkWidget::drag-drop" signal.
  *
- * Get the data for a drag or drop
+ * Gets the data associated with a drag. When the data
+ * is received or the retrieval fails, GTK+ will emit a
+ * #GtkWidget::drag-data-received signal. Failure of the retrieval
+ * is indicated by the length field of the @selection_data
+ * signal parameter being negative. However, when gtk_drag_get_data()
+ * is called implicitely because the %GTK_DEST_DEFAULT_DROP was set,
+ * then the widget will not receive notification of failed
+ * drops.
  */
 void
 gtk_drag_get_data (GtkWidget      *widget,
@@ -1030,17 +1060,17 @@ gtk_drag_get_source_widget (GdkDragContext *context)
   return NULL;
 }
 
-/*************************************************************
+/**
  * gtk_drag_finish:
- *     Notify the drag source that the transfer of data
- *     is complete.
- *   arguments:
- *     context: The drag context for this drag
- *     success: Was the data successfully transferred?
- *     time:    The timestamp to use when notifying the destination.
- *   results:
- *************************************************************/
-
+ * @context: the drag context.
+ * @success: a flag indicating whether the drop was successful
+ * @del: a flag indicating whether the source should delete the
+ *   original data. (This should be %TRUE for a move)
+ * @time_: the timestamp from the #GtkWidget::drag-drop signal.
+ *
+ * Informs the drag source that the drop is finished, and
+ * that the data of the drag will no longer be required.
+ */
 void 
 gtk_drag_finish (GdkDragContext *context,
 		 gboolean        success,
@@ -1121,11 +1151,14 @@ gtk_drag_highlight_draw (GtkWidget *widget,
   return FALSE;
 }
 
- /**
- * gtk_drag_highlight: (method)
- * @widget: a #GtkWidget
+/**
+ * gtk_drag_highlight:
+ * @widget: a widget to highlight
  *
- * Highlight the given widget in the default manner.
+ * Draws a highlight around a widget. This will attach
+ * handlers to #GtkWidget::draw, so the highlight
+ * will continue to be displayed until gtk_drag_unhighlight()
+ * is called.
  */
 void 
 gtk_drag_highlight (GtkWidget  *widget)
@@ -1139,11 +1172,12 @@ gtk_drag_highlight (GtkWidget  *widget)
   gtk_widget_queue_draw (widget);
 }
 
- /**
- * gtk_drag_unhighlight: (method)
- * @widget: a #GtkWidget
+/**
+ * gtk_drag_unhighlight:
+ * @widget: a widget to remove the highlight from.
  *
- * Refresh the given widget to remove the highlight.
+ * Removes a highlight set by gtk_drag_highlight() from
+ * a widget.
  */
 void 
 gtk_drag_unhighlight (GtkWidget *widget)
@@ -1206,22 +1240,22 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  *
  * The default behaviors listed in @flags have an effect similar
  * to installing default handlers for the widget's drag-and-drop signals
- * (#GtkWidget:drag-motion, #GtkWidget:drag-drop, ...). They all exist
+ * (#GtkWidget::drag-motion, #GtkWidget::drag-drop, ...). They all exist
  * for convenience. When passing #GTK_DEST_DEFAULT_ALL for instance it is
  * sufficient to connect to the widget's #GtkWidget::drag-data-received
  * signal to get primitive, but consistent drag-and-drop support.
  *
  * Things become more complicated when you try to preview the dragged data,
- * as described in the documentation for #GtkWidget:drag-motion. The default
+ * as described in the documentation for #GtkWidget::drag-motion. The default
  * behaviors described by @flags make some assumptions, that can conflict
  * with your own signal handlers. For instance #GTK_DEST_DEFAULT_DROP causes
- * invokations of gdk_drag_status() in the context of #GtkWidget:drag-motion,
- * and invokations of gtk_drag_finish() in #GtkWidget:drag-data-received.
- * Especially the later is dramatic, when your own #GtkWidget:drag-motion
+ * invokations of gdk_drag_status() in the context of #GtkWidget::drag-motion,
+ * and invokations of gtk_drag_finish() in #GtkWidget::drag-data-received.
+ * Especially the later is dramatic, when your own #GtkWidget::drag-motion
  * handler calls gtk_drag_get_data() to inspect the dragged data.
  *
  * There's no way to set a default action here, you can use the
- * #GtkWidget:drag-motion callback for that. Here's an example which selects
+ * #GtkWidget::drag-motion callback for that. Here's an example which selects
  * the action to use depending on whether the control key is pressed or not:
  * |[
  * static void
@@ -1270,15 +1304,16 @@ gtk_drag_dest_set (GtkWidget            *widget,
 }
 
 /**
- * gtk_drag_dest_set_proxy: (method)
+ * gtk_drag_dest_set_proxy:
  * @widget: a #GtkWidget
- * @proxy_window:    window to which forward drag events
- * @protocol:        Drag protocol which the dest widget accepts
- * @use_coordinates: If true, send the same coordinates to the
- *                   destination, because it is a embedded
- *                   subwindow.
+ * @proxy_window: the window to which to forward drag events
+ * @protocol: the drag protocol which the @proxy_window accepts
+ *   (You can use gdk_drag_get_protocol() to determine this)
+ * @use_coordinates: If %TRUE, send the same coordinates to the
+ *   destination, because it is an embedded
+ *   subwindow.
  *
- * Set up this widget to proxy drags elsewhere.
+ * Sets this widget as a proxy for drops to another window.
  */
 void 
 gtk_drag_dest_set_proxy (GtkWidget      *widget,
@@ -1308,11 +1343,13 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   gtk_drag_dest_set_internal (widget, site);
 }
 
- /**
- * gtk_drag_dest_unset: (method)
+/**
+ * gtk_drag_dest_unset:
  * @widget: a #GtkWidget
  *
- * Unregister this widget as a drag target.
+ * Clears information about a drop destination set with
+ * gtk_drag_dest_set(). The widget will no longer receive
+ * notification of drags.
  */
 void 
 gtk_drag_dest_unset (GtkWidget *widget)
@@ -1477,10 +1514,10 @@ gtk_drag_dest_add_uri_targets (GtkWidget *widget)
  * gtk_drag_dest_set_track_motion: (method)
  * @widget: a #GtkWidget that's a drag destination
  * @track_motion: whether to accept all targets
- * 
- * Tells the widget to emit ::drag-motion and ::drag-leave
- * events regardless of the targets and the %GTK_DEST_DEFAULT_MOTION
- * flag. 
+ *
+ * Tells the widget to emit #GtkWidget::drag-motion and
+ * #GtkWidget::drag-leave events regardless of the targets and the
+ * %GTK_DEST_DEFAULT_MOTION flag.
  *
  * This may be used when a widget wants to do generic
  * actions regardless of the targets that the source offers.
@@ -1505,11 +1542,12 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
 /**
  * gtk_drag_dest_get_track_motion: (method)
  * @widget: a #GtkWidget that's a drag destination
- * 
+ *
  * Returns whether the widget has been configured to always
- * emit ::drag-motion signals.
- * 
- * Return Value: %TRUE if the widget always emits ::drag-motion events
+ * emit #GtkWidget::drag-motion signals.
+ *
+ * Return Value: %TRUE if the widget always emits
+ *   #GtkWidget::drag-motion events
  *
  * Since: 2.10
  **/
@@ -2513,18 +2551,18 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * grab the pointer.  If @event is #NULL, then GDK_CURRENT_TIME will be used.
  * However, you should try to pass a real event in all cases, since that can be
  * used by GTK+ to get information about the start position of the drag, for
- * example if the @event is a GDK_MOTION_NOTIFY.
+ * example if the @event is a %GDK_MOTION_NOTIFY.
  *
  * Generally there are three cases when you want to start a drag by hand by
  * calling this function:
  *
- * 1. During a button-press-event handler, if you want to start a drag
+ * 1. During a #GtkWidget::button-press-event handler, if you want to start a drag
  * immediately when the user presses the mouse button.  Pass the @event
- * that you have in your button-press-event handler.
+ * that you have in your #GtkWidget::button-press-event handler.
  *
- * 2. During a motion-notify-event handler, if you want to start a drag
+ * 2. During a #GtkWidget::motion-notify-event handler, if you want to start a drag
  * when the mouse moves past a certain threshold distance after a button-press.
- * Pass the @event that you have in your motion-notify-event handler.
+ * Pass the @event that you have in your #GtkWidget::motion-notify-event handler.
  *
  * 3. During a timeout handler, if you want to start a drag after the mouse
  * button is held down for some time.  Try to save the last event that you got
@@ -2613,10 +2651,10 @@ gtk_drag_source_set (GtkWidget            *widget,
 }
 
 /**
- * gtk_drag_source_unset: (method)
+ * gtk_drag_source_unset:
  * @widget: a #GtkWidget
  *
- * Unregister this widget as a drag source.
+ * Undoes the effects of gtk_drag_source_set().
  */
 void 
 gtk_drag_source_unset (GtkWidget *widget)
