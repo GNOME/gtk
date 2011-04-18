@@ -461,6 +461,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 	surface.frame = frame;
 
 	var button = document.createElement("center");
+	button.closeFor = surface;
 	var X = document.createTextNode("X");
 	button.appendChild(X);
 	button.className = "frame-close";
@@ -975,17 +976,19 @@ function updateForEvent(ev) {
 function onMouseMove (ev) {
     updateForEvent(ev);
     if (localGrab) {
-	var dx = ev.pageX - localGrab.lastX;
-	var dy = ev.pageY - localGrab.lastY;
-	var surface = localGrab.frame.frameFor;
-	surface.x += dx;
-	surface.y += dy;
-	var offset = getFrameOffset(surface);
-	localGrab.frame.style["left"] = (surface.x - offset.x) + "px";
-	localGrab.frame.style["top"] = (surface.y - offset.y) + "px";
-	sendConfigureNotify(surface);
-	localGrab.lastX = ev.pageX;
-	localGrab.lastY = ev.pageY;
+	if (localGrab.type == "move") {
+	    var dx = ev.pageX - localGrab.lastX;
+	    var dy = ev.pageY - localGrab.lastY;
+	    var surface = localGrab.surface;
+	    surface.x += dx;
+	    surface.y += dy;
+	    var offset = getFrameOffset(surface);
+	    localGrab.frame.style["left"] = (surface.x - offset.x) + "px";
+	    localGrab.frame.style["top"] = (surface.y - offset.y) + "px";
+	    sendConfigureNotify(surface);
+	    localGrab.lastX = ev.pageX;
+	    localGrab.lastY = ev.pageY;
+	}
 	return;
     }
     var id = getSurfaceId(ev);
@@ -996,6 +999,13 @@ function onMouseMove (ev) {
 
 function onMouseOver (ev) {
     updateForEvent(ev);
+
+    if (!grab.window && ev.target.closeFor) {
+	ev.target.className = ev.target.className + " frame-hover";
+	if (ev.target.isDown)
+	    ev.target.className = ev.target.className + " frame-active";
+    }
+
     if (localGrab)
 	return;
     var id = getSurfaceId(ev);
@@ -1010,6 +1020,11 @@ function onMouseOver (ev) {
 
 function onMouseOut (ev) {
     updateForEvent(ev);
+    if (ev.target.closeFor) {
+	ev.target.className = ev.target.className.replace(" frame-hover", "");
+	if (ev.target.isDown)
+	    ev.target.className = ev.target.className.replace(" frame-active", "");
+    }
     if (localGrab)
 	return;
     var id = getSurfaceId(ev);
@@ -1067,10 +1082,24 @@ function onMouseDown (ev) {
 
     if (id == 0 && ev.target.frameFor) { /* mouse click on frame */
 	localGrab = new Object();
+	localGrab.surface = ev.target.frameFor;
+	localGrab.type = "move";
 	localGrab.frame = ev.target;
 	localGrab.lastX = ev.pageX;
 	localGrab.lastY = ev.pageY;
 	moveToTop(localGrab.frame.frameFor);
+	return;
+    }
+
+    if (id == 0 && ev.target.closeFor) { /* mouse click on frame */
+	ev.target.isDown = true;
+	ev.target.className = ev.target.className + " frame-active";
+	localGrab = new Object();
+	localGrab.surface = ev.target.closeFor;
+	localGrab.type = "close";
+	localGrab.button = ev.target;
+	localGrab.lastX = ev.pageX;
+	localGrab.lastY = ev.pageY;
 	return;
     }
 
@@ -1089,7 +1118,6 @@ function onMouseUp (ev) {
     var pos = getPositionsFromEvent(ev, id);
 
     if (localGrab) {
-	localGrab = null;
 	realWindowWithMouse = evId;
 	if (windowWithMouse != id) {
 	    if (windowWithMouse != 0) {
@@ -1100,6 +1128,14 @@ function onMouseUp (ev) {
 		sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
 	    }
 	}
+
+	if (localGrab.type == "close") {
+	    localGrab.button.isDown = false;
+	    localGrab.button.className = localGrab.button.className.replace( " frame-active", "");
+	    if (ev.target == localGrab.button)
+		sendInput ("W", [localGrab.surface.id]);
+	}
+	localGrab = null;
 	return;
     }
 
