@@ -4,10 +4,6 @@
 #include <assert.h>
 #include <errno.h>
 #include <zlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
 
 #include "broadway.h"
 
@@ -450,115 +446,42 @@ to_png_a (int w, int h, int byte_stride, guint8 *data)
  ************************************************************************/
 
 struct BroadwayOutput {
-  int fd;
-  gzFile *zfd;
+  GOutputStream *out;
   int error;
   guint32 serial;
 };
 
 static void
-broadway_output_write_raw (BroadwayOutput *output,
-			   const void *buf, gsize count)
+broadway_output_write_header (BroadwayOutput *output)
 {
-  gssize res;
-  int errsave;
-  const char *ptr = (const char *)buf;
-
-  if (output->error)
-    return;
-
-  while (count > 0)
-    {
-      res = write(output->fd, ptr, count);
-      if (res == -1)
-	{
-	  errsave = errno;
-	  if (errsave == EINTR)
-	    continue;
-	  output->error = TRUE;
-	  return;
-	}
-      if (res == 0)
-	{
-	  output->error = TRUE;
-	  return;
-	}
-      count -= res;
-      ptr += res;
-    }
+  g_output_stream_write (output->out, "\0", 1, NULL, NULL);
 }
 
 static void
 broadway_output_write (BroadwayOutput *output,
 		       const void *buf, gsize count)
 {
-  gssize res;
-  const char *ptr = (const char *)buf;
-
-  if (output->error)
-    return;
-
-  while (count > 0)
-    {
-      res = gzwrite(output->zfd, ptr, count);
-      if (res == -1)
-	{
-	  output->error = TRUE;
-	  return;
-	}
-      if (res == 0)
-	{
-	  output->error = TRUE;
-	  return;
-	}
-      count -= res;
-      ptr += res;
-    }
-}
-
-static void
-broadway_output_write_header (BroadwayOutput *output)
-{
-  char *header;
-
-  header =
-    "HTTP/1.1 200 OK\r\n"
-    "Content-type: multipart/x-mixed-replace;boundary=x\r\n"
-    "Content-Encoding: gzip\r\n"
-    "\r\n";
-  broadway_output_write_raw (output,
-			     header, strlen (header));
+  g_output_stream_write_all (output->out, buf, count, NULL, NULL, NULL);
 }
 
 static void
 send_boundary (BroadwayOutput *output)
 {
-  char *boundary =
-    "--x\r\n"
-    "\r\n";
-
-  broadway_output_write (output, boundary, strlen (boundary));
+  broadway_output_write (output, "\xff", 1);
+  broadway_output_write (output, "\0", 1);
 }
 
 BroadwayOutput *
-broadway_output_new(int fd, guint32 serial)
+broadway_output_new(GOutputStream *out, guint32 serial)
 {
   BroadwayOutput *output;
-  int flag = 1;
 
   output = g_new0 (BroadwayOutput, 1);
 
-  output->fd = fd;
+  output->out = g_object_ref (out);
   output->serial = serial;
 
-  setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
-
   broadway_output_write_header (output);
-
-  output->zfd = gzdopen(fd, "wb");
-
-  /* Need an initial multipart boundary */
-  send_boundary (output);
 
   return output;
 }
@@ -566,10 +489,7 @@ broadway_output_new(int fd, guint32 serial)
 void
 broadway_output_free (BroadwayOutput *output)
 {
-  if (output->zfd)
-    gzclose (output->zfd);
-  else
-    close (output->fd);
+  g_object_unref (output->out);
   free (output);
 }
 
@@ -583,7 +503,6 @@ int
 broadway_output_flush (BroadwayOutput *output)
 {
   send_boundary (output);
-  gzflush (output->zfd, Z_SYNC_FLUSH);
   return !output->error;
 }
 

@@ -40,6 +40,10 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 
 static void   gdk_broadway_display_dispose            (GObject            *object);
 static void   gdk_broadway_display_finalize           (GObject            *object);
@@ -123,6 +127,8 @@ typedef struct HttpRequest {
   GDataInputStream *data;
   GString *request;
 }  HttpRequest;
+
+static void start_output (HttpRequest *request);
 
 static void
 http_request_free (HttpRequest *request)
@@ -495,21 +501,6 @@ _gdk_broadway_display_block_for_input (GdkDisplay *display, char op,
   }
 }
 
-#include <unistd.h>
-#include <fcntl.h>
-static void
-set_fd_blocking (int fd)
-{
-  glong arg;
-
-  if ((arg = fcntl (fd, F_GETFL, NULL)) < 0)
-    arg = 0;
-
-  arg = arg & ~O_NONBLOCK;
-
-  fcntl (fd, F_SETFL, arg);
-}
-
 static char *
 parse_line (char *line, char *key)
 {
@@ -657,7 +648,7 @@ start_input (HttpRequest *request)
 			 "Upgrade: WebSocket\r\n"
 			 "Connection: Upgrade\r\n"
 			 "Sec-WebSocket-Origin: %s\r\n"
-			 "Sec-WebSocket-Location: ws://%s/input\r\n"
+			 "Sec-WebSocket-Location: ws://%s/socket\r\n"
 			 "Sec-WebSocket-Protocol: broadway\r\n"
 			 "\r\n",
 			 origin, host);
@@ -679,6 +670,8 @@ start_input (HttpRequest *request)
 
   broadway_display->input = input;
 
+  start_output (request);
+
   /* This will free and close the data input stream, but we got all the buffered content already */
   http_request_free (request);
 
@@ -699,14 +692,13 @@ start_output (HttpRequest *request)
 {
   GSocket *socket;
   GdkBroadwayDisplay *broadway_display;
-  int fd;
+  int flag = 1;
 
   socket = g_socket_connection_get_socket (request->connection);
+  setsockopt(g_socket_get_fd (socket), IPPROTO_TCP,
+	     TCP_NODELAY, (char *) &flag, sizeof(int));
 
   broadway_display = GDK_BROADWAY_DISPLAY (request->display);
-  fd = g_socket_get_fd (socket);
-  set_fd_blocking (fd);
-  /* We dup this because otherwise it'll be closed with the request SocketConnection */
 
   if (broadway_display->output)
     {
@@ -714,15 +706,16 @@ start_output (HttpRequest *request)
       broadway_output_free (broadway_display->output);
     }
 
-  broadway_display->output = broadway_output_new (dup(fd), broadway_display->saved_serial);
+  broadway_display->output =
+    broadway_output_new (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+			 broadway_display->saved_serial);
+
   _gdk_broadway_resync_windows ();
 
   if (broadway_display->pointer_grab_window)
     broadway_output_grab_pointer (broadway_display->output,
 				  GDK_WINDOW_IMPL_BROADWAY (broadway_display->pointer_grab_window->impl)->id,
 				  broadway_display->pointer_grab_owner_events);
-
-  http_request_free (request);
 }
 
 static void
@@ -787,9 +780,7 @@ got_request (HttpRequest *request)
     send_data (request, "text/html", client_html, G_N_ELEMENTS(client_html) - 1);
   else if (strcmp (escaped, "/broadway.js") == 0)
     send_data (request, "text/javascript", broadway_js, G_N_ELEMENTS(broadway_js) - 1);
-  else if (strcmp (escaped, "/output") == 0)
-    start_output (request);
-  else if (strcmp (escaped, "/input") == 0)
+  else if (strcmp (escaped, "/socket") == 0)
     start_input (request);
   else
     send_error (request, 404, "File not found");

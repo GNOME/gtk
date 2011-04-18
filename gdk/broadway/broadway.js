@@ -888,10 +888,10 @@ function handleOutstanding()
     }
 }
 
-function handleLoad(event)
+function handleMessage(message)
 {
     var cmdObj = {};
-    cmdObj.data = event.target.responseText;
+    cmdObj.data = message;
     cmdObj.pos = 0;
 
     outstandingCommands.push(cmdObj);
@@ -2768,22 +2768,10 @@ function connect()
 	if (params[0].indexOf("toplevel") != -1)
 	    useToplevelWindows = true;
     }
-    var xhr = createXHR();
-    if (xhr) {
-	if (typeof xhr.multipart == 'undefined') {
-	    alert("Sorry, this example only works in browsers that support multipart.");
-	    return;
-	}
-
-	xhr.multipart = true;
-	xhr.open("GET", "/output", true);
-	xhr.onload = handleLoad;
-	xhr.send(null);
-    }
 
     if ("WebSocket" in window) {
 	var loc = window.location.toString().replace("http:", "ws:");
-	loc = loc.substr(0, loc.lastIndexOf('/')) + "/input";
+	loc = loc.substr(0, loc.lastIndexOf('/')) + "/socket";
 	var ws = new WebSocket(loc, "broadway");
 	ws.onopen = function() {
 	    inputSocket = ws;
@@ -2805,6 +2793,9 @@ function connect()
 	};
 	ws.onclose = function() {
 	    inputSocket = null;
+	};
+	ws.onmessage = function(event) {
+	    handleMessage(event.data);
 	};
     } else {
 	alert("WebSocket not supported, input will not work!");

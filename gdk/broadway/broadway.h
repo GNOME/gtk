@@ -1,4 +1,5 @@
 #include <glib.h>
+#include <gio/gio.h>
 
 typedef struct BroadwayOutput BroadwayOutput;
 
@@ -7,7 +8,7 @@ typedef struct  {
     int width, height;
 } BroadwayRect;
 
-BroadwayOutput *broadway_output_new             (int             fd,
+BroadwayOutput *broadway_output_new             (GOutputStream  *out,
 						 guint32         serial);
 void            broadway_output_free            (BroadwayOutput *output);
 int             broadway_output_flush           (BroadwayOutput *output);
