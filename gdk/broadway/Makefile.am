@@ -82,7 +82,4 @@ EXTRA_DIST += $(broadway_built_sources)
 
 BUILT_SOURCES = $(broadway_built_sources)
 
-noinst_PROGRAMS = broadway-demo
-broadway_demo_LDADD = -lz -lcairo libbroadway.la -lglib-2.0
-
 -include $(top_srcdir)/git.mk
