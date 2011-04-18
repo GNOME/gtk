@@ -2376,10 +2376,17 @@ var unicodeTable = {
     0x28ff: 0x10028ff
 };
 
+var ON_KEYDOWN = 1 << 0; /* Report on keydown, otherwise wait until keypress  */
+
+
 var specialKeyTable = {
-    8: 0xFF08, // BACKSPACE
-    13: 0xFF0D, // ENTER
-    9: 0xFF09, // TAB
+    // These generate a keyDown and keyPress in Firefox and Opera
+    8: [0xFF08, ON_KEYDOWN], // BACKSPACE
+    13: [0xFF0D, ON_KEYDOWN], // ENTER
+
+    // This generates a keyDown and keyPress in Opera
+    9: [0xFF09, ON_KEYDOWN], // TAB
+
     27: 0xFF1B, // ESCAPE
     46: 0xFFFF, // DELETE
     36: 0xFF50, // HOME
@@ -2420,10 +2427,16 @@ function getEventKeySym(ev) {
 // with the key. The rest we pass on to keypress so we can get the
 // translated keysym.
 function getKeysymSpecial(ev) {
-    // These are simple and risky to pass on to browser, handle directly
-   if ((ev.keyCode in specialKeyTable))
-       return specialKeyTable[ev.keyCode];
-
+    if (ev.keyCode in specialKeyTable) {
+	var r = specialKeyTable[ev.keyCode];
+	var flags = 0;
+	if (typeof r != 'number') {
+	    flags = r[1];
+	    r = r[0];
+	}
+	if (ev.type === 'keydown' || flags & ON_KEYDOWN)
+	    return r;
+    }
     // If we don't hold alt or ctrl, then we should be safe to pass
     // on to keypressed and look at the translated data
     if (!ev.ctrlKey && !ev.altKey)
