@@ -3212,6 +3212,7 @@ get_font_metrics (PangoContext *context, GtkWidget *widget)
  * @label: the label
  * @existing_layout: %NULL or an existing layout already in use.
  * @width: the width to measure with in pango units, or -1 for infinite
+ * @height: the height to measure with in pango units, or -1 for infinite
  *
  * Gets a layout that can be used for measuring sizes. The returned
  * layout will be identical to the label's layout except for the
@@ -3223,7 +3224,8 @@ get_font_metrics (PangoContext *context, GtkWidget *widget)
 static PangoLayout *
 gtk_label_get_measuring_layout (GtkLabel *   label,
                                 PangoLayout *existing_layout,
-                                int          width)
+                                int          width,
+                                int          height)
 {
   GtkLabelPrivate *priv = label->priv;
   PangoRectangle rect;
@@ -3234,6 +3236,7 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
       if (existing_layout != priv->layout)
         {
           pango_layout_set_width (existing_layout, width);
+          pango_layout_set_height (existing_layout, height);
           return existing_layout;
         }
 
@@ -3242,7 +3245,8 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
 
   gtk_label_ensure_layout (label);
 
-  if (pango_layout_get_width (priv->layout) == width)
+  if (pango_layout_get_width (priv->layout) == width &&
+      pango_layout_get_height (priv->layout) == height)
     {
       g_object_ref (priv->layout);
       return priv->layout;
@@ -3256,6 +3260,7 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
     {
       g_object_ref (priv->layout);
       pango_layout_set_width (priv->layout, width);
+      pango_layout_set_height (priv->layout, height);
       return priv->layout;
     }
 
@@ -3266,6 +3271,7 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
    */
   pango_layout_get_extents (priv->layout, NULL, &rect);
   if ((width == -1 || rect.width <= width) &&
+      (height == -1 || rect.height <= height) &&
       !pango_layout_is_wrapped (priv->layout) &&
       !pango_layout_is_ellipsized (priv->layout))
     {
@@ -3275,6 +3281,7 @@ gtk_label_get_measuring_layout (GtkLabel *   label,
 
   copy = pango_layout_copy (priv->layout);
   pango_layout_set_width (copy, width);
+  pango_layout_set_height (copy, height);
   return copy;
 }
 
@@ -3305,6 +3312,7 @@ gtk_label_update_layout_width (GtkLabel *label)
           const gdouble dy = matrix->xy; /* sin (M_PI * angle / 180) */
 
           pango_layout_set_width (priv->layout, -1);
+          pango_layout_set_height (priv->layout, -1);
           pango_layout_get_pixel_extents (priv->layout, NULL, &logical);
 
           if (fabs (dy) < 0.01)
@@ -3358,7 +3366,7 @@ gtk_label_update_layout_width (GtkLabel *label)
       else
         {
           pango_layout_set_width (priv->layout, width * PANGO_SCALE);
-          pango_layout_set_height (priv->layout, height * PANGO_SCALE);
+          pango_layout_set_height (priv->layout, priv->ellipsize ? height * PANGO_SCALE : -1);
         }
     }
   else
@@ -3482,7 +3490,7 @@ get_size_for_allocation (GtkLabel        *label,
   PangoLayout *layout;
   gint text_height;
 
-  layout = gtk_label_get_measuring_layout (label, NULL, allocation * PANGO_SCALE);
+  layout = gtk_label_get_measuring_layout (label, NULL, allocation * PANGO_SCALE, -1);
 
   pango_layout_get_pixel_size (layout, NULL, &text_height);
 
@@ -3537,7 +3545,7 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
    */
 
   /* Start off with the pixel extents of an as-wide-as-possible layout */
-  layout = gtk_label_get_measuring_layout (label, NULL, -1);
+  layout = gtk_label_get_measuring_layout (label, NULL, -1, -1);
 
   pango_layout_get_extents (layout, NULL, natural);
   natural->x = natural->y = 0;
@@ -3547,8 +3555,8 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
 
   if (priv->ellipsize || priv->wrap)
     {
-      /* a layout with widdth 0 will be as small as humanly possible */
-      layout = gtk_label_get_measuring_layout (label, layout, 0);
+      /* a layout with width 0 will be as small as humanly possible */
+      layout = gtk_label_get_measuring_layout (label, layout, 0, -1);
 
       pango_layout_get_extents (layout, NULL, required);
       required->x = required->y = 0;
