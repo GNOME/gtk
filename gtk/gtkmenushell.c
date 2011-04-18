@@ -628,8 +628,8 @@ gtk_menu_shell_realize (GtkWidget *widget)
   gtk_style_context_set_background (context, window);
 }
 
-void
-_gtk_menu_shell_activate (GtkMenuShell *menu_shell)
+static void
+gtk_menu_shell_activate (GtkMenuShell *menu_shell)
 {
   GtkMenuShellPrivate *priv = menu_shell->priv;
 
@@ -697,7 +697,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
               gtk_widget_get_parent (menu_item) == widget &&
               menu_item != priv->active_menu_item)
             {
-              _gtk_menu_shell_activate (menu_shell);
+              gtk_menu_shell_activate (menu_shell);
               priv->button = event->button;
 
               if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
@@ -1312,7 +1312,7 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
       return;
     }
 
-  _gtk_menu_shell_activate (menu_shell);
+  gtk_menu_shell_activate (menu_shell);
 
   priv->active_menu_item = menu_item;
   if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)
