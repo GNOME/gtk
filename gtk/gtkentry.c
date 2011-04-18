@@ -5753,6 +5753,8 @@ gtk_entry_draw_text (GtkEntry *entry,
                      &progress_x, &progress_y,
                      &progress_width, &progress_height);
 
+  cairo_save (cr);
+
   clip_width = gdk_window_get_width (priv->text_area);
   clip_height = gdk_window_get_height (priv->text_area);
   cairo_rectangle (cr, 0, 0, clip_width, clip_height);
@@ -5799,6 +5801,8 @@ gtk_entry_draw_text (GtkEntry *entry,
 
       cairo_restore (cr);
     }
+
+  cairo_restore (cr);
 }
 
 static void
