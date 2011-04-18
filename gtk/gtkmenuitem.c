@@ -44,6 +44,38 @@
 #include "gtktypebuiltins.h"
 
 
+/**
+ * SECTION:gtkmenuitem
+ * @Short_description: The widget used for item in menus
+ * @Title: GtkMenuItem
+ * @See_also: #GtkBin, #GtkItem, #GtkMenuShell
+ *
+ * The #GtkMenuItem widget and the derived widgets are the only valid
+ * childs for menus. Their function is to correctly handle highlighting,
+ * alignment, events and submenus.
+ *
+ * As it derives from #GtkBin it can hold any valid child widget, altough
+ * only a few are really useful.
+ *
+ * <refsect2 id="GtkMenuItem-BUILDER-UI">
+ * <title>GtkMenuItem as GtkBuildable</title>
+ * The GtkMenuItem implementation of the GtkBuildable interface
+ * supports adding a submenu by specifying "submenu" as the "type"
+ * attribute of a &lt;child&gt; element.
+ * <example>
+ * <title>A UI definition fragment with submenus</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkMenuItem">
+ *   <child type="submenu">
+ *     <object class="GtkMenu"/>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
+
+
 enum {
   ACTIVATE,
   ACTIVATE_ITEM,
@@ -210,6 +242,12 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   klass->hide_on_activate = TRUE;
 
+  /**
+   * GtkMenuItem::activate:
+   * @menuitem: the object which received the signal.
+   *
+   * Emitted when the item is activated.
+   */
   menu_item_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
@@ -220,6 +258,14 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = menu_item_signals[ACTIVATE];
 
+  /**
+   * GtkMenuItem::activate-item:
+   * @menuitem: the object which received the signal.
+   *
+   * Emitted when the item is activated, but also if the menu item has a
+   * submenu. For normal applications, the relevant signal is
+   * #GtkMenuItem::activate.
+   */
   menu_item_signals[ACTIVATE_ITEM] =
     g_signal_new (I_("activate-item"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
@@ -443,12 +489,27 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUITEM);
 }
 
+/**
+ * gtk_menu_item_new:
+ *
+ * Creates a new #GtkMenuItem.
+ *
+ * Returns: the newly created #GtkMenuItem
+ */
 GtkWidget*
 gtk_menu_item_new (void)
 {
   return g_object_new (GTK_TYPE_MENU_ITEM, NULL);
 }
 
+/**
+ * gtk_menu_item_new_with_label:
+ * @label: the text for the label
+ *
+ * Creates a new #GtkMenuItem whose child is a #GtkLabel.
+ *
+ * Returns: the newly created #GtkMenuItem
+ */
 GtkWidget*
 gtk_menu_item_new_with_label (const gchar *label)
 {
@@ -1301,6 +1362,13 @@ gtk_menu_item_select (GtkMenuItem *menu_item)
     }
 }
 
+/**
+ * gtk_menu_item_deselect:
+ * @menu_item: the menu item
+ *
+ * Emits the #GtkMenuItem::deselect signal on the given item. Behaves
+ * exactly like #gtk_item_deselect.
+ */
 void
 gtk_menu_item_deselect (GtkMenuItem *menu_item)
 {
@@ -1323,6 +1391,12 @@ gtk_menu_item_deselect (GtkMenuItem *menu_item)
     }
 }
 
+/**
+ * gtk_menu_item_activate:
+ * @menu_item: the menu item
+ *
+ * Emits the #GtkMenuItem::activate signal on the given item
+ */
 void
 gtk_menu_item_activate (GtkMenuItem *menu_item)
 {
@@ -1331,6 +1405,13 @@ gtk_menu_item_activate (GtkMenuItem *menu_item)
   g_signal_emit (menu_item, menu_item_signals[ACTIVATE], 0);
 }
 
+/**
+ * gtk_menu_item_toggle_size_request:
+ * @menu_item: the menu item
+ * @requisition: the requisition to use as signal data.
+ *
+ * Emits the #GtkMenuItem::toggle-size-request signal on the given item.
+ */
 void
 gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item,
                                    gint        *requisition)
@@ -1340,6 +1421,13 @@ gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item,
   g_signal_emit (menu_item, menu_item_signals[TOGGLE_SIZE_REQUEST], 0, requisition);
 }
 
+/**
+ * gtk_menu_item_toggle_size_allocate:
+ * @menu_item: the menu item.
+ * @allocation: the allocation to use as signal data.
+ *
+ * Emits the #GtkMenuItem::toggle-size-allocate signal on the given item.
+ */
 void
 gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
                                     gint         allocation)
@@ -1666,6 +1754,13 @@ gtk_menu_item_draw (GtkWidget *widget,
   return FALSE;
 }
 
+/**
+ * gtk_menu_item_select:
+ * @menu_item: the menu item
+ *
+ * Emits the #GtkMenuItem::select signal on the given item. Behaves
+ * exactly like #gtk_item_select.
+ */
 static void
 gtk_real_menu_item_select (GtkMenuItem *menu_item)
 {

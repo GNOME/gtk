@@ -71,6 +71,7 @@ gtkliststore.sgml
 gtkmain.sgml
 gtkmenu.sgml
 gtkmenubar.sgml
+gtkmenuitem.sgml
 gtkmenushell.sgml
 gtkmenutoolbutton.sgml
 gtkmessagedialog.sgml
