@@ -4357,6 +4357,8 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
       gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
     }
   
+  gtk_entry_update_cached_style_values (entry);
+
   gtk_widget_queue_draw (widget);
 }
 
