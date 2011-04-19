@@ -59,6 +59,668 @@
 #include <io.h>
 #endif
 
+
+/**
+ * SECTION:gtkrc
+ * @Short_description: Deprecated routines for handling resource files
+ * @Title: Resource Files
+ *
+ * GTK+ provides resource file mechanism for configuring
+ * various aspects of the operation of a GTK+ program
+ * at runtime.
+ *
+ * <warning>
+ * In GTK+ 3.0, resource files have been deprecated and replaced
+ * by CSS-like style sheets, which are understood by #GtkCssProvider.
+ * </warning>
+ *
+ * <refsect2>
+ * <title>Default files</title>
+ * <para>
+ * An application can cause GTK+ to parse a specific RC
+ * file by calling gtk_rc_parse(). In addition to this,
+ * certain files will be read at the end of gtk_init().
+ * Unless modified, the files looked for will be
+ * <filename>&lt;SYSCONFDIR&gt;/gtk-2.0/gtkrc</filename>
+ * and <filename>.gtkrc-3.0</filename> in the users home directory.
+ * (<filename>&lt;SYSCONFDIR&gt;</filename> defaults to
+ * <filename>/usr/local/etc</filename>. It can be changed with the
+ * <option>--prefix</option> or <option>--sysconfdir</option> options when
+ * configuring GTK+.)
+ *
+ * The set of these <firstterm>default</firstterm> files
+ * can be retrieved with gtk_rc_get_default_files()
+ * and modified with gtk_rc_add_default_file() and
+ * gtk_rc_set_default_files().
+ * Additionally, the <envar>GTK2_RC_FILES</envar> environment variable
+ * can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
+ * in order to overwrite the set of default files at runtime.
+ * <para><anchor id="locale-specific-rc"/>
+ * For each RC file, in addition to the file itself, GTK+ will look for
+ * a locale-specific file that will be parsed after the main file.
+ * For instance, if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
+ * when loading the default file <filename>~/.gtkrc</filename> then GTK+ looks
+ * for <filename>~/.gtkrc.ja_JP</filename> and <filename>~/.gtkrc.ja</filename>,
+ * and parses the first of those that exists.</para>
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Pathnames and patterns</title>
+ * <anchor id="gtkrc-pathnames-and-patterns"/>
+ * <para>
+ * A resource file defines a number of styles and key bindings and
+ * attaches them to particular widgets. The attachment is done
+ * by the <literal>widget</literal>, <literal>widget_class</literal>,
+ * and <literal>class</literal> declarations. As an example
+ * of such a statement:
+ *
+ * <informalexample><programlisting>
+ * widget "mywindow.*.GtkEntry" style "my-entry-class"
+ * </programlisting></informalexample>
+ *
+ * attaches the style <literal>"my-entry-class"</literal> to all
+ * widgets  whose <firstterm>widget path</firstterm> matches the
+ * <firstterm>pattern</firstterm> <literal>"mywindow.*.GtkEntry"</literal>.
+ * That is, all #GtkEntry widgets which are part of a #GtkWindow named
+ * <literal>"mywindow"</literal>.
+ *
+ * The patterns here are given in the standard shell glob syntax.
+ * The <literal>"?"</literal> wildcard matches any character, while
+ * <literal>"*"</literal> matches zero or more of any character.
+ * The three types of matching are against the widget path, the
+ * <firstterm>class path</firstterm> and the class hierarchy. Both the
+ * widget path and the class path consist of a <literal>"."</literal>
+ * separated list of all the parents of the widget and the widget itself
+ * from outermost to innermost. The difference is that in the widget path,
+ * the name assigned by gtk_widget_set_name() is used if present, otherwise
+ * the class name of the widget, while for the class path, the class name is
+ * always used.
+ *
+ * Since GTK+ 2.10, <literal>widget_class</literal> paths can also contain
+ * <literal>&lt;classname&gt;</literal> substrings, which are matching
+ * the class with the given name and any derived classes. For instance,
+ * <informalexample><programlisting>
+ * widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
+ * </programlisting></informalexample>
+ * will match #GtkLabel widgets which are contained in any kind of menu item.
+ *
+ * So, if you have a #GtkEntry named <literal>"myentry"</literal>, inside of a
+ * horizontal box in a window named <literal>"mywindow"</literal>, then the
+ * widget path is: <literal>"mywindow.GtkHBox.myentry"</literal>
+ * while the class path is: <literal>"GtkWindow.GtkHBox.GtkEntry"</literal>.
+ *
+ * Matching against class is a little different. The pattern match is done
+ * against all class names in the widgets class hierarchy (not the layout
+ * hierarchy) in sequence, so the pattern:
+ * <informalexample><programlisting>
+ * class "GtkButton" style "my-style"
+ * </programlisting></informalexample>
+ * will match not just #GtkButton widgets, but also #GtkToggleButton and
+ * #GtkCheckButton widgets, since those classes derive from #GtkButton.
+ *
+ * Additionally, a priority can be specified for each pattern, and styles
+ * override other styles first by priority, then by pattern type and then
+ * by order of specification (later overrides earlier). The priorities
+ * that can be specified are (highest to lowest):
+ * <simplelist>
+ * <member><literal>highest</literal></member>
+ * <member><literal>rc</literal></member>
+ * <member><literal>theme</literal></member>
+ * <member><literal>application</literal></member>
+ * <member><literal>gtk</literal></member>
+ * <member><literal>lowest</literal></member>
+ * </simplelist>
+ * <literal>rc</literal> is the default for styles
+ * read from an RC file, <literal>theme</literal>
+ * is the default for styles read from theme RC files,
+ * <literal>application</literal>
+ * should be used for styles an application sets
+ * up, and <literal>gtk</literal> is used for styles
+ * that GTK+ creates internally.
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Theme gtkrc files</title>
+ * <anchor id="theme-gtkrc-files"/>
+ * <para>
+ * Theme RC files are loaded first from under the <filename>~/.themes/</filename>,
+ * then from the directory from gtk_rc_get_theme_dir(). The files looked at will
+ * be <filename>gtk-3.0/gtkrc</filename>.
+ *
+ * When the application prefers dark themes
+ * (see the #GtkSettings:gtk-application-prefer-dark-theme property for details),
+ * <filename>gtk-3.0/gtkrc-dark</filename> will be loaded first, and if not present
+ * <filename>gtk-3.0/gtkrc</filename> will be loaded.
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Optimizing RC Style Matches</title>
+ * <anchor id="optimizing-rc-style-matches"/>
+ * <para>
+ * Everytime a widget is created and added to the layout hierarchy of a #GtkWindow
+ * ("anchored" to be exact), a list of matching RC styles out of all RC styles read
+ * in so far is composed.
+ * For this, every RC style is matched against the widgets class path,
+ * the widgets name path and widgets inheritance hierarchy.
+ * As a consequence, significant slowdown can be caused by utilization of many
+ * RC styles and by using RC style patterns that are slow or complicated to match
+ * against a given widget.
+ * The following ordered list provides a number of advices (prioritized by
+ * effectiveness) to reduce the performance overhead associated with RC style
+ * matches:
+ *
+ * <orderedlist>
+ *   <listitem><para>
+ *   Move RC styles for specific applications into RC files dedicated to those
+ *   applications and parse application specific RC files only from
+ *   applications that are affected by them.
+ *   This reduces the overall amount of RC styles that have to be considered
+ *   for a match across a group of applications.
+ *   </para></listitem>
+ *   <listitem><para>
+ *   Merge multiple styles which use the same matching rule, for instance:
+ *   <informalexample><programlisting>
+ *      style "Foo" { foo_content }
+ *      class "X" style "Foo"
+ *      style "Bar" { bar_content }
+ *      class "X" style "Bar"
+ *   </programlisting></informalexample>
+ *   is faster to match as:
+ *   <informalexample><programlisting>
+ *      style "FooBar" { foo_content bar_content }
+ *      class "X" style "FooBar"
+ *   </programlisting></informalexample>
+ *   </para></listitem>
+ *   <listitem><para>
+ *   Use of wildcards should be avoided, this can reduce the individual RC style
+ *   match to a single integer comparison in most cases.
+ *   </para></listitem>
+ *   <listitem><para>
+ *   To avoid complex recursive matching, specification of full class names
+ *   (for <literal>class</literal> matches) or full path names (for
+ *   <literal>widget</literal> and <literal>widget_class</literal> matches)
+ *   is to be preferred over shortened names
+ *   containing <literal>"*"</literal> or <literal>"?"</literal>.
+ *   </para></listitem>
+ *   <listitem><para>
+ *   If at all necessary, wildcards should only be used at the tail or head
+ *   of a pattern. This reduces the match complexity to a string comparison
+ *   per RC style.
+ *   </para></listitem>
+ *   <listitem><para>
+ *   When using wildcards, use of <literal>"?"</literal> should be preferred
+ *   over <literal>"*"</literal>. This can reduce the matching complexity from
+ *   O(n^2) to O(n). For example <literal>"Gtk*Box"</literal> can be turned into
+ *   <literal>"Gtk?Box"</literal> and will still match #GtkHBox and #GtkVBox.
+ *   </para></listitem>
+ *  <listitem><para>
+ *   The use of <literal>"*"</literal> wildcards should be restricted as much
+ *   as possible, because matching <literal>"A*B*C*RestString"</literal> can
+ *   result in matching complexities of O(n^2) worst case.
+ *   </para></listitem>
+ * </orderedlist>
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Toplevel declarations</title>
+ * <para>
+ * An RC file is a text file which is composed of a sequence
+ * of declarations. <literal>'#'</literal> characters delimit comments and
+ * the portion of a line after a <literal>'#'</literal> is ignored when parsing
+ * an RC file.
+ *
+ * The possible toplevel declarations are:
+ *
+ * <variablelist>
+ *   <varlistentry>
+ *     <term><literal>binding <replaceable>name</replaceable>
+ *      { ... }</literal></term>
+ *     <listitem>
+ *       <para>Declares a binding set.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>class <replaceable>pattern</replaceable>
+ *           [ style | binding ][ : <replaceable>priority</replaceable> ]
+ *           <replaceable>name</replaceable></literal></term>
+ *     <listitem>
+ *      <para>Specifies a style or binding set for a particular
+ *      branch of the inheritance hierarchy.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>include <replaceable>filename</replaceable></literal></term>
+ *     <listitem>
+ *       <para>Parses another file at this point. If
+ *         <replaceable>filename</replaceable> is not an absolute filename,
+ *         it is searched in the directories of the currently open RC files.</para>
+ *       <para>GTK+ also tries to load a
+ *         <link linkend="locale-specific-rc">locale-specific variant</link> of
+ *         the included file.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>module_path <replaceable>path</replaceable></literal></term>
+ *     <listitem>
+ *       <para>Sets a path (a list of directories separated
+ *       by colons) that will be searched for theme engines referenced in
+ *       RC files.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>pixmap_path <replaceable>path</replaceable></literal></term>
+ *     <listitem>
+ *       <para>Sets a path (a list of directories separated
+ *       by colons) that will be searched for pixmaps referenced in
+ *       RC files.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>im_module_file <replaceable>pathname</replaceable></literal></term>
+ *     <listitem>
+ *       <para>Sets the pathname for the IM modules file. Setting this from RC files
+ *       is deprecated; you should use the environment variable <envar>GTK_IM_MODULE_FILE</envar>
+ *       instead.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>style <replaceable>name</replaceable> [ =
+ *     <replaceable>parent</replaceable> ] { ... }</literal></term>
+ *     <listitem>
+ *       <para>Declares a style.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>widget <replaceable>pattern</replaceable>
+ *           [ style | binding ][ : <replaceable>priority</replaceable> ]
+ *           <replaceable>name</replaceable></literal></term>
+ *     <listitem>
+ *      <para>Specifies a style or binding set for a particular
+ *      group of widgets by matching on the widget pathname.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>widget_class <replaceable>pattern</replaceable>
+ *           [ style | binding ][ : <replaceable>priority</replaceable> ]
+ *           <replaceable>name</replaceable></literal></term>
+ *     <listitem>
+ *      <para>Specifies a style or binding set for a particular
+ *      group of widgets by matching on the class pathname.</para>
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><replaceable>setting</replaceable> = <replaceable>value</replaceable></term>
+ *     <listitem>
+ *       <para>Specifies a value for a <link linkend="GtkSettings">setting</link>.
+ *         Note that settings in RC files are overwritten by system-wide settings
+ *         (which are managed by an XSettings manager on X11).</para>
+ *     </listitem>
+ *   </varlistentry>
+ * </variablelist>
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Styles</title>
+ * <para>
+ * A RC style is specified by a <literal>style</literal>
+ * declaration in a RC file, and then bound to widgets
+ * with a <literal>widget</literal>, <literal>widget_class</literal>,
+ * or <literal>class</literal> declaration. All styles
+ * applying to a particular widget are composited together
+ * with <literal>widget</literal> declarations overriding
+ * <literal>widget_class</literal> declarations which, in
+ * turn, override <literal>class</literal> declarations.
+ * Within each type of declaration, later declarations override
+ * earlier ones.
+ *
+ * Within a <literal>style</literal> declaration, the possible
+ * elements are:
+ *
+ * <variablelist>
+ *   <varlistentry>
+ *     <term><literal>bg[<replaceable>state</replaceable>] =
+ *       <replaceable>color</replaceable></literal></term>
+ *      <listitem>
+ *          Sets the color used for the background of most widgets.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>fg[<replaceable>state</replaceable>] =
+ *       <replaceable>color</replaceable></literal></term>
+ *      <listitem>
+ *          Sets the color used for the foreground of most widgets.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>base[<replaceable>state</replaceable>] =
+ *       <replaceable>color</replaceable></literal></term>
+ *      <listitem>
+ *          Sets the color used for the background of widgets displaying
+ *          editable text. This color is used for the background
+ *          of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkCList.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>text[<replaceable>state</replaceable>] =
+ *       <replaceable>color</replaceable></literal></term>
+ *      <listitem>
+ *          Sets the color used for foreground of widgets using
+ *          <literal>base</literal> for the background color.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>xthickness =
+ *       <replaceable>number</replaceable></literal></term>
+ *      <listitem>
+ *          Sets the xthickness, which is used for various horizontal padding
+ *          values in GTK+.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>ythickness =
+ *       <replaceable>number</replaceable></literal></term>
+ *      <listitem>
+ *          Sets the ythickness, which is used for various vertical padding
+ *          values in GTK+.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>bg_pixmap[<replaceable>state</replaceable>] =
+ *       <replaceable>pixmap</replaceable></literal></term>
+ *      <listitem>
+ *          Sets a background pixmap to be used in place of
+ *          the <literal>bg</literal> color (or for #GtkText,
+ *          in place of the <literal>base</literal> color. The special
+ *          value <literal>"&lt;parent&gt;"</literal> may be used to indicate that the widget should
+ *          use the same background pixmap as its parent. The special value
+ *          <literal>"&lt;none&gt;"</literal> may be used to indicate no background pixmap.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>font = <replaceable>font</replaceable></literal></term>
+ *      <listitem>
+ *          Starting with GTK+ 2.0, the "font" and "fontset"
+ *          declarations are ignored; use "font_name" declarations instead.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>fontset = <replaceable>font</replaceable></literal></term>
+ *      <listitem>
+ *          Starting with GTK+ 2.0, the "font" and "fontset"
+ *          declarations are ignored; use "font_name" declarations instead.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>font_name = <replaceable>font</replaceable></literal></term>
+ *      <listitem>
+ *          Sets the font for a widget. <replaceable>font</replaceable> must be
+ *          a Pango font name, e.g. <literal>"Sans Italic 10"</literal>.
+ *          For details about Pango font names, see
+ *          pango_font_description_from_string().
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }</literal></term>
+ *      <listitem>
+ *         Defines the icon for a stock item.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>color[<replaceable>"color-name"</replaceable>] = <replaceable>color specification</replaceable></literal></term>
+ *      <listitem>
+ *         Since 2.10, this element can be used to defines symbolic colors. See below for
+ *         the syntax of color specifications.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
+ * settings</replaceable> }</literal></term>
+ *      <listitem>
+ *         Defines the engine to be used when drawing with this style.
+ *      </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal><replaceable>class</replaceable>::<replaceable>property</replaceable> = <replaceable>value</replaceable></literal></term>
+ *      <listitem>
+ *         Sets a <link linkend="style-properties">style property</link> for a widget class.
+ *      </listitem>
+ *   </varlistentry>
+ * </variablelist>
+ *
+ * The colors and background pixmaps are specified as a function of the
+ * state of the widget. The states are:
+ *
+ * <variablelist>
+ *   <varlistentry>
+ *     <term><literal>NORMAL</literal></term>
+ *     <listitem>
+ *         A color used for a widget in its normal state.
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>ACTIVE</literal></term>
+ *     <listitem>
+ *         A variant of the <literal>NORMAL</literal> color used when the
+ *         widget is in the %GTK_STATE_ACTIVE state, and also for
+ *         the trough of a ScrollBar, tabs of a NoteBook
+ *         other than the current tab and similar areas.
+ *         Frequently, this should be a darker variant
+ *         of the <literal>NORMAL</literal> color.
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>PRELIGHT</literal></term>
+ *     <listitem>
+ *         A color used for widgets in the %GTK_STATE_PRELIGHT state. This
+ *         state is the used for Buttons and MenuItems
+ *         that have the mouse cursor over them, and for
+ *         their children.
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>SELECTED</literal></term>
+ *     <listitem>
+ *         A color used to highlight data selected by the user.
+ *         for instance, the selected items in a list widget, and the
+ *         selection in an editable widget.
+ *     </listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term><literal>INSENSITIVE</literal></term>
+ *     <listitem>
+ *         A color used for the background of widgets that have
+ *         been set insensitive with gtk_widget_set_sensitive().
+ *     </listitem>
+ *   </varlistentry>
+ * </variablelist>
+ *
+ * <anchor id="color-format"/>
+ * Colors can be specified as a string containing a color name (GTK+ knows
+ * all names from the X color database <filename>/usr/lib/X11/rgb.txt</filename>),
+ * in one of the hexadecimal forms <literal>#rrrrggggbbbb</literal>,
+ * <literal>#rrrgggbbb</literal>, <literal>#rrggbb</literal>,
+ * or <literal>#rgb</literal>, where <literal>r</literal>,
+ * <literal>g</literal> and <literal>b</literal> are
+ * hex digits, or they can be specified as a triplet
+ * <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
+ * <replaceable>b</replaceable>}</literal>, where <literal>r</literal>,
+ * <literal>g</literal> and <literal>b</literal> are either integers in
+ * the range 0-65535 or floats in the range 0.0-1.0.
+ *
+ * Since 2.10, colors can also be specified by refering to a symbolic color, as
+ * follows: <literal>@<!-- -->color-name</literal>, or by using expressions to combine
+ * colors. The following expressions are currently supported:
+ *   <variablelist>
+ *     <varlistentry>
+ *       <term>mix (<replaceable>factor</replaceable>, <replaceable>color1</replaceable>, <replaceable>color2</replaceable>)</term>
+ *       <listitem><para>
+ *         Computes a new color by mixing <replaceable>color1</replaceable> and
+ *         <replaceable>color2</replaceable>. The <replaceable>factor</replaceable>
+ *         determines how close the new color is to <replaceable>color1</replaceable>.
+ *         A factor of 1.0 gives pure <replaceable>color1</replaceable>, a factor of
+ *         0.0 gives pure <replaceable>color2</replaceable>.
+ *       </para></listitem>
+ *     </varlistentry>
+ *     <varlistentry>
+ *       <term>shade (<replaceable>factor</replaceable>, <replaceable>color</replaceable>)</term>
+ *       <listitem><para>
+ *         Computes a lighter or darker variant of <replaceable>color</replaceable>.
+ *         A <replaceable>factor</replaceable> of 1.0 leaves the color unchanged, smaller
+ *         factors yield darker colors, larger factors yield lighter colors.
+ *       </para></listitem>
+ *     </varlistentry>
+ *     <varlistentry>
+ *       <term>lighter (<replaceable>color</replaceable>)</term>
+ *       <listitem><para>
+ *         This is an abbreviation for
+ *         <literal>shade (1.3, <replaceable>color</replaceable>)</literal>.
+ *       </para></listitem>
+ *     </varlistentry>
+ *     <varlistentry>
+ *       <term>darker (<replaceable>color</replaceable>)</term>
+ *       <listitem><para>
+ *         This is an abbreviation for
+ *         <literal>shade (0.7, <replaceable>color</replaceable>)</literal>.
+ *       </para></listitem>
+ *     </varlistentry>
+ *   </variablelist>
+ *
+ * Here are some examples of color expressions:
+ *
+ * <informalexample><programlisting>
+ *  mix (0.5, "red", "blue")
+ *  shade (1.5, mix (0.3, "#0abbc0", { 0.3, 0.5, 0.9 }))
+ *  lighter (@<!-- -->foreground)
+ * </programlisting></informalexample>
+ *
+ * In a <literal>stock</literal> definition, icon sources are specified as a
+ * 4-tuple of image filename or icon name, text direction, widget state, and size, in that
+ * order.  Each icon source specifies an image filename or icon name to use with a given
+ * direction, state, and size. Filenames are specified as a string such
+ * as <literal>"itemltr.png"</literal>, while icon names (looked up
+ * in the current icon theme), are specified with a leading
+ * <literal>@</literal>, such as <literal>@"item-ltr"</literal>.
+ * The <literal>*</literal> character can be used as a
+ * wildcard, and if direction/state/size are omitted they default to
+ * <literal>*</literal>. So for example, the following specifies different icons to
+ * use for left-to-right and right-to-left languages:
+ *
+ * <informalexample><programlisting>
+ * stock["my-stock-item"] =
+ * {
+ *   { "itemltr.png", LTR, *, * },
+ *   { "itemrtl.png", RTL, *, * }
+ * }
+ * </programlisting></informalexample>
+ *
+ * This could be abbreviated as follows:
+ *
+ * <informalexample><programlisting>
+ * stock["my-stock-item"] =
+ * {
+ *   { "itemltr.png", LTR },
+ *   { "itemrtl.png", RTL }
+ * }
+ * </programlisting></informalexample>
+ *
+ * You can specify custom icons for specific sizes, as follows:
+ *
+ * <informalexample><programlisting>
+ * stock["my-stock-item"] =
+ * {
+ *   { "itemmenusize.png", *, *, "gtk-menu" },
+ *   { "itemtoolbarsize.png", *, *, "gtk-large-toolbar" }
+ *   { "itemgeneric.png" } // implicit *, *, * as a fallback
+ * }
+ * </programlisting></informalexample>
+ *
+ * The sizes that come with GTK+ itself are <literal>"gtk-menu"</literal>,
+ * <literal>"gtk-small-toolbar"</literal>, <literal>"gtk-large-toolbar"</literal>,
+ * <literal>"gtk-button"</literal>, <literal>"gtk-dialog"</literal>. Applications
+ * can define other sizes.
+ *
+ * It's also possible to use custom icons for a given state, for example:
+ *
+ * <informalexample><programlisting>
+ * stock["my-stock-item"] =
+ * {
+ *   { "itemprelight.png", *, PRELIGHT },
+ *   { "iteminsensitive.png", *, INSENSITIVE },
+ *   { "itemgeneric.png" } // implicit *, *, * as a fallback
+ * }
+ * </programlisting></informalexample>
+ *
+ * When selecting an icon source to use, GTK+ will consider text direction most
+ * important, state second, and size third. It will select the best match based on
+ * those criteria. If an attribute matches exactly (e.g. you specified
+ * <literal>PRELIGHT</literal> or specified the size), GTK+ won't modify the image;
+ * if the attribute matches with a wildcard, GTK+ will scale or modify the image to
+ * match the state and size the user requested.
+ * </para>
+ * </refsect2>
+ * <refsect2>
+ * <title>Key bindings</title>
+ * <para>
+ * Key bindings allow the user to specify actions to be
+ * taken on particular key presses. The form of a binding
+ * set declaration is:
+ *
+ * <informalexample><programlisting>
+ * binding <replaceable>name</replaceable> {
+ *   bind <replaceable>key</replaceable> {
+ *     <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
+ *     ...
+ *   }
+ *   ...
+ * }
+ * </programlisting></informalexample>
+ *
+ * <replaceable>key</replaceable> is a string consisting of a
+ * series of modifiers followed by the name of a key. The
+ * modifiers can be:
+ * <simplelist>
+ * <member><literal>&lt;alt&gt;</literal></member>
+ * <member><literal>&lt;ctl&gt;</literal></member>
+ * <member><literal>&lt;control&gt;</literal></member>
+ * <member><literal>&lt;meta&gt;</literal></member>
+ * <member><literal>&lt;hyper&gt;</literal></member>
+ * <member><literal>&lt;super&gt;</literal></member>
+ * <member><literal>&lt;mod1&gt;</literal></member>
+ * <member><literal>&lt;mod2&gt;</literal></member>
+ * <member><literal>&lt;mod3&gt;</literal></member>
+ * <member><literal>&lt;mod4&gt;</literal></member>
+ * <member><literal>&lt;mod5&gt;</literal></member>
+ * <member><literal>&lt;release&gt;</literal></member>
+ * <member><literal>&lt;shft&gt;</literal></member>
+ * <member><literal>&lt;shift&gt;</literal></member>
+ * </simplelist>
+ * <literal>&lt;shft&gt;</literal> is an alias for
+ * <literal>&lt;shift&gt;</literal>,
+ * <literal>&lt;ctl&gt;</literal> is an alias for
+ * <literal>&lt;control&gt;</literal>,
+ *  and
+ * <literal>&lt;alt&gt;</literal> is an alias for
+ * <literal>&lt;mod1&gt;</literal>.
+ *
+ * The action that is bound to the key is a sequence
+ * of signal names (strings) followed by parameters for
+ * each signal. The signals must be action signals.
+ * (See g_signal_new()). Each parameter can be
+ * a float, integer, string, or unquoted string
+ * representing an enumeration value. The types of
+ * the parameters specified must match the types of the
+ * parameters of the signal.
+ *
+ * Binding sets are connected to widgets in the same manner as styles,
+ * with one difference: Binding sets override other binding sets first
+ * by pattern type, then by priority and then by order of specification.
+ * The priorities that can be specified and their default values are the
+ * same as for styles.
+ * </para>
+ * </refsect2>
+ */
+
+
 enum 
 {
   PATH_ELT_PSPEC,
@@ -258,6 +920,8 @@ gtk_rc_make_default_dir (const gchar *type)
  * environment variable for more details about looking up modules. This
  * function is useful solely for utilities supplied with GTK+ and should
  * not be used by applications under normal circumstances.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  */
 gchar *
 gtk_rc_get_im_module_path (void)
@@ -277,6 +941,8 @@ gtk_rc_get_im_module_path (void)
  * Obtains the path to the IM modules file. See the documentation
  * of the <link linkend="im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link>
  * environment variable for more details.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  */
 gchar *
 gtk_rc_get_im_module_file (void)
@@ -298,6 +964,17 @@ gtk_rc_get_im_module_file (void)
   return result;
 }
 
+/**
+ * gtk_rc_get_theme_dir:
+ *
+ * Returns the standard directory in which themes should
+ * be installed. (GTK+ does not actually use this directory
+ * itself.)
+ *
+ * Returns: The directory (must be freed with g_free()).
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
+ */
 gchar *
 gtk_rc_get_theme_dir (void)
 {
@@ -316,13 +993,15 @@ gtk_rc_get_theme_dir (void)
 
 /**
  * gtk_rc_get_module_dir:
- * 
+ *
  * Returns a directory in which GTK+ looks for theme engines.
  * For full information about the search for theme engines,
  * see the docs for <envar>GTK_PATH</envar> in
  * <xref linkend="gtk-running"/>.
- * 
+ *
  * return value: (type filename): the directory. (Must be freed with g_free())
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
 gchar *
 gtk_rc_get_module_dir (void)
@@ -379,12 +1058,29 @@ gtk_rc_get_default_files (void)
   return gtk_rc_default_files;
 }
 
+/**
+ * gtk_rc_parse_string:
+ * @rc_string: a string to parse.
+ *
+ * Parses resource information directly from a string.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
+ */
 void
 gtk_rc_parse_string (const gchar *rc_string)
 {
   g_return_if_fail (rc_string != NULL);
 }
 
+/**
+ * gtk_rc_parse:
+ * @filename: the filename of a file to parse. If @filename is not absolute, it
+ *  is searched in the current directory.
+ *
+ * Parses a given resource file.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
+ */
 void
 gtk_rc_parse (const gchar *filename)
 {
@@ -429,7 +1125,7 @@ static void
 gtk_rc_style_class_init (GtkRcStyleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
+
   object_class->finalize = gtk_rc_style_finalize;
 
   klass->parse = NULL;
@@ -454,10 +1150,10 @@ gtk_rc_style_finalize (GObject *object)
   g_free (rc_style->name);
   if (rc_style->font_desc)
     pango_font_description_free (rc_style->font_desc);
-      
+
   for (i = 0; i < 5; i++)
     g_free (rc_style->bg_pixmap_name[i]);
-  
+
   /* Now remove all references to this rc_style from
    * realized_style_ht
    */
@@ -515,13 +1211,23 @@ gtk_rc_style_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_rc_style_parent_class)->finalize (object);
 }
 
+/**
+ * gtk_rc_style_new:
+ *
+ * Creates a new #GtkRcStyle with no fields set and
+ * a reference count of 1.
+ *
+ * Returns: the newly-created #GtkRcStyle
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
+ */
 GtkRcStyle *
 gtk_rc_style_new (void)
 {
   GtkRcStyle *style;
-  
+
   style = g_object_new (GTK_TYPE_RC_STYLE, NULL);
-  
+
   return style;
 }
 
@@ -534,6 +1240,8 @@ gtk_rc_style_new (void)
  * derived from #GtkRcStyle.
  *
  * Return value: (transfer full): the resulting #GtkRcStyle
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
 GtkRcStyle *
 gtk_rc_style_copy (GtkRcStyle *orig)
@@ -689,7 +1397,7 @@ gtk_rc_style_real_create_style (GtkRcStyle *rc_style)
 /**
  * gtk_rc_reset_styles:
  * @settings: a #GtkSettings
- * 
+ *
  * This function recomputes the styles for all widgets that use a
  * particular #GtkSettings object. (There is one #GtkSettings object
  * per #GdkScreen, see gtk_settings_get_for_screen()); It is useful
@@ -702,6 +1410,8 @@ gtk_rc_style_real_create_style (GtkRcStyle *rc_style)
  * with gtk_widget_set_style().
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
 void
 gtk_rc_reset_styles (GtkSettings *settings)
@@ -713,12 +1423,14 @@ gtk_rc_reset_styles (GtkSettings *settings)
  * gtk_rc_reparse_all_for_settings:
  * @settings: a #GtkSettings
  * @force_load: load whether or not anything changed
- * 
+ *
  * If the modification time on any previously read file
  * for the given #GtkSettings has changed, discard all style information
  * and then reread all previously read RC files.
- * 
+ *
  * Return value: %TRUE if the files were reread.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
 gboolean
 gtk_rc_reparse_all_for_settings (GtkSettings *settings,
@@ -729,12 +1441,14 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 
 /**
  * gtk_rc_reparse_all:
- * 
+ *
  * If the modification time on any previously read file for the
  * default #GtkSettings has changed, discard all style information
  * and then reread all previously read RC files.
- * 
+ *
  * Return value:  %TRUE if the files were reread.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
 gboolean
 gtk_rc_reparse_all (void)
@@ -933,12 +1647,14 @@ lookup_color (GtkRcStyle *style,
  * @scanner: Scanner used to get line number information for the
  *   warning message, or %NULL
  * @pixmap_file: name of the pixmap file to locate.
- * 
+ *
  * Looks up a file in pixmap path for the specified #GtkSettings.
  * If the file is not found, it outputs a warning message using
  * g_warning() and returns %NULL.
  *
- * Return value: (type filename): the filename. 
+ * Return value: (type filename): the filename.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
 gchar*
 gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
@@ -953,12 +1669,14 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
 /**
  * gtk_rc_find_module_in_path:
  * @module_file: name of a theme engine
- * 
+ *
  * Searches for a theme engine in the GTK+ search path. This function
  * is not useful for applications and should not be used.
- * 
+ *
  * Return value: (type filename): The filename, if found (must be
  *   freed with g_free()), otherwise %NULL.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
  **/
 gchar*
 gtk_rc_find_module_in_path (const gchar *module_file)
@@ -968,10 +1686,17 @@ gtk_rc_find_module_in_path (const gchar *module_file)
 
 /**
  * gtk_rc_parse_state:
- * @scanner:
- * @state: (out):
+ * @scanner: a #GtkScanner (must be initialized for parsing an RC file)
+ * @state: (out): A pointer to a #GtkStateType variable in which to
+ *  store the result.
  *
- * Deprecated:3.0: Use #GtkCssProvider instead
+ * Parses a #GtkStateType variable from the format expected
+ * in a RC file.
+ *
+ * Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
+ *   that was expected but not found.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead
  */
 guint
 gtk_rc_parse_state (GScanner	 *scanner,
@@ -1026,8 +1751,15 @@ gtk_rc_parse_state (GScanner	 *scanner,
 
 /**
  * gtk_rc_parse_priority:
- * @scanner:
- * @priority: (out):
+ * @scanner: a #GtkScanner (must be initialized for parsing an RC file)
+ * @priority: A pointer to #GtkPathPriorityType variable in which
+ *  to store the result.
+ *
+ * Parses a #GtkPathPriorityType variable from the format expected
+ * in a RC file.
+ *
+ * Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
+ *   that was expected but not found.
  *
  * Deprecated:3.0: Use #GtkCssProvider instead
  */
@@ -1088,9 +1820,9 @@ gtk_rc_parse_priority (GScanner	           *scanner,
  *     the result
  *
  * Parses a color in the <link linkend="color=format">format</link> expected
- * in a RC file. 
+ * in a RC file.
  *
- * Note that theme engines should use gtk_rc_parse_color_full() in 
+ * Note that theme engines should use gtk_rc_parse_color_full() in
  * order to support symbolic colors.
  *
  * Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token

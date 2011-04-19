@@ -57,6 +57,24 @@ typedef enum
   GTK_RC_BASE		= 1 << 3
 } GtkRcFlags;
 
+/**
+ * GtkRcStyle:
+ * @name:
+ * @bg_pixmap_name:
+ * @font_desc:
+ * @color_flags:
+ * @fg:
+ * @bg:
+ * @text:
+ * @base:
+ * @xthickness:
+ * @ythickness:
+ *
+ * The #GtkRcStyle structure is used to represent a set
+ * of information about the appearance of a widget.
+ * This can later be composited together with other
+ * #GtkRcStyle structures to form a #GtkStyle.
+ */
 struct _GtkRcStyle
 {
   GObject parent_instance;
@@ -164,6 +182,57 @@ gchar*		gtk_rc_get_im_module_path	(void);
 gchar*		gtk_rc_get_im_module_file	(void);
 
 /* private functions/definitions */
+
+/**
+ * GtkRcTokenType:
+ * @GTK_RC_TOKEN_INVALID:
+ * @GTK_RC_TOKEN_INCLUDE:
+ * @GTK_RC_TOKEN_NORMAL:
+ * @GTK_RC_TOKEN_ACTIVE:
+ * @GTK_RC_TOKEN_PRELIGHT:
+ * @GTK_RC_TOKEN_SELECTED:
+ * @GTK_RC_TOKEN_INSENSITIVE:
+ * @GTK_RC_TOKEN_FG:
+ * @GTK_RC_TOKEN_BG:
+ * @GTK_RC_TOKEN_TEXT:
+ * @GTK_RC_TOKEN_BASE:
+ * @GTK_RC_TOKEN_XTHICKNESS:
+ * @GTK_RC_TOKEN_YTHICKNESS:
+ * @GTK_RC_TOKEN_FONT:
+ * @GTK_RC_TOKEN_FONTSET:
+ * @GTK_RC_TOKEN_FONT_NAME:
+ * @GTK_RC_TOKEN_BG_PIXMAP:
+ * @GTK_RC_TOKEN_PIXMAP_PATH:
+ * @GTK_RC_TOKEN_STYLE:
+ * @GTK_RC_TOKEN_BINDING:
+ * @GTK_RC_TOKEN_BIND:
+ * @GTK_RC_TOKEN_WIDGET:
+ * @GTK_RC_TOKEN_WIDGET_CLASS:
+ * @GTK_RC_TOKEN_CLASS:
+ * @GTK_RC_TOKEN_LOWEST:
+ * @GTK_RC_TOKEN_GTK:
+ * @GTK_RC_TOKEN_APPLICATION:
+ * @GTK_RC_TOKEN_THEME:
+ * @GTK_RC_TOKEN_RC:
+ * @GTK_RC_TOKEN_HIGHEST:
+ * @GTK_RC_TOKEN_ENGINE:
+ * @GTK_RC_TOKEN_MODULE_PATH:
+ * @GTK_RC_TOKEN_IM_MODULE_PATH:
+ * @GTK_RC_TOKEN_IM_MODULE_FILE:
+ * @GTK_RC_TOKEN_STOCK:
+ * @GTK_RC_TOKEN_LTR:
+ * @GTK_RC_TOKEN_RTL:
+ * @GTK_RC_TOKEN_COLOR:
+ * @GTK_RC_TOKEN_UNBIND:
+ * @GTK_RC_TOKEN_LAST:
+ *
+ * The #GtkRcTokenType enumeration represents the tokens
+ * in the RC file. It is exposed so that theme engines
+ * can reuse these tokens when parsing the theme-engine
+ * specific portions of a RC file.
+ *
+ * Deprecated: 3.0: Use #GtkCssProvider instead.
+ */
 typedef enum {
   GTK_RC_TOKEN_INVALID = G_TOKEN_LAST,
   GTK_RC_TOKEN_INCLUDE,
