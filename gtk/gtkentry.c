@@ -4358,8 +4358,6 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
     }
   
   gtk_entry_update_cached_style_values (entry);
-
-  gtk_widget_queue_draw (widget);
 }
 
 static void
