@@ -4539,7 +4539,15 @@ gtk_entry_update_cached_style_values (GtkEntry *entry)
   priv->interior_focus = interior_focus;
 
   if (!priv->invisible_char_set)
-    priv->invisible_char = find_invisible_char (GTK_WIDGET (entry));
+    {
+      gunichar ch = find_invisible_char (GTK_WIDGET (entry));
+
+      if (priv->invisible_char != ch)
+        {
+          priv->invisible_char = ch;
+          g_object_notify (G_OBJECT (entry), "invisible-char");
+        }
+    }
 }
 
 static void 
