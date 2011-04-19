@@ -462,7 +462,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 
 	var button = document.createElement("center");
 	button.closeFor = surface;
-	var X = document.createTextNode("X");
+	var X = document.createTextNode("\u00d7");
 	button.appendChild(X);
 	button.className = "frame-close";
 	frame.appendChild(button);
