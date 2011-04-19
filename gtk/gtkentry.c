@@ -5744,7 +5744,6 @@ gtk_entry_draw_text (GtkEntry *entry,
   GtkStateFlags state = 0;
   GdkRGBA text_color, bar_text_color;
   GtkStyleContext *context;
-  gint pos_x, pos_y;
   gint width, height;
   gint progress_x, progress_y, progress_width, progress_height;
   gint clip_width, clip_height;
@@ -5784,6 +5783,8 @@ gtk_entry_draw_text (GtkEntry *entry,
     }
   else
     {
+      int frame_x, frame_y, area_x, area_y;
+
       width = gdk_window_get_width (priv->text_area);
       height = gdk_window_get_height (priv->text_area);
 
@@ -5792,9 +5793,12 @@ gtk_entry_draw_text (GtkEntry *entry,
       cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
       cairo_rectangle (cr, 0, 0, width, height);
 
-      gdk_window_get_position (priv->text_area, &pos_x, &pos_y);
-      progress_x -= pos_x;
-      progress_y -= pos_y;
+      /* progres area is frame-relative, we need it text-area window
+       * relative */
+      get_frame_size (entry, TRUE, &frame_x, &frame_y, NULL, NULL);
+      gdk_window_get_position (priv->text_area, &area_x, &area_y);
+      progress_x += frame_x - area_x;
+      progress_y += frame_y - area_y;
 
       cairo_rectangle (cr, progress_x, progress_y,
                        progress_width, progress_height);
