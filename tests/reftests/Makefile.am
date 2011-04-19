@@ -25,6 +25,9 @@ clean-local:
 	rm -rf output/ || true
 
 EXTRA_DIST += \
+	entry-progress-coloring.css \
+	entry-progress-coloring.ref.ui \
+	entry-progress-coloring.ui \
 	label-sizing.css \
 	label-sizing.ref.ui \
 	label-sizing.ui \
