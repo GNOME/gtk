@@ -4524,26 +4524,32 @@ icon_margin_changed (GtkEntry *entry)
   priv->icon_margin = border.left;
 }
 
-static void 
-gtk_entry_style_updated (GtkWidget *widget)
+static void
+gtk_entry_update_cached_style_values (GtkEntry *entry)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   gint focus_width;
   gboolean interior_focus;
 
-  GTK_WIDGET_CLASS (gtk_entry_parent_class)->style_updated (widget);
-
-  gtk_widget_style_get (widget,
+  gtk_widget_style_get (GTK_WIDGET (entry),
 			"focus-line-width", &focus_width,
 			"interior-focus", &interior_focus,
 			NULL);
-
   priv->focus_width = focus_width;
   priv->interior_focus = interior_focus;
 
   if (!priv->invisible_char_set)
     priv->invisible_char = find_invisible_char (GTK_WIDGET (entry));
+}
+
+static void 
+gtk_entry_style_updated (GtkWidget *widget)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->style_updated (widget);
+
+  gtk_entry_update_cached_style_values (entry);
 
   gtk_entry_recompute (entry);
 
