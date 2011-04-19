@@ -571,7 +571,7 @@ static void         get_frame_size                     (GtkEntry       *entry,
 static void         gtk_entry_move_adjustments         (GtkEntry             *entry);
 static void         gtk_entry_ensure_pixbuf            (GtkEntry             *entry,
                                                         GtkEntryIconPosition  icon_pos);
-
+static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 
 /* Completion */
 static gint         gtk_entry_completion_timeout       (gpointer            data);
@@ -2409,7 +2409,6 @@ gtk_entry_init (GtkEntry *entry)
 
   priv->editable = TRUE;
   priv->visible = TRUE;
-  priv->invisible_char = find_invisible_char (GTK_WIDGET (entry));
   priv->dnd_position = -1;
   priv->width_chars = -1;
   priv->is_cell_renderer = FALSE;
@@ -2445,6 +2444,8 @@ gtk_entry_init (GtkEntry *entry)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
+
+  gtk_entry_update_cached_style_values (entry);
 }
 
 static gint
