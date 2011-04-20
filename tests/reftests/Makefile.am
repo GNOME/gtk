@@ -28,6 +28,9 @@ EXTRA_DIST += \
 	entry-progress-coloring.css \
 	entry-progress-coloring.ref.ui \
 	entry-progress-coloring.ui \
+	grid-homogeneous.css \
+	grid-homogeneous.ref.ui \
+	grid-homogeneous.ui \
 	label-sizing.css \
 	label-sizing.ref.ui \
 	label-sizing.ui \
