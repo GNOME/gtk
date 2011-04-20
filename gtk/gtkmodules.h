@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 /**
  * GtkModuleInitFunc:
  * @argc: GTK+ always passes %NULL for this argument
- * @argv: GTK+ always passes %NULL for this argument
+ * @argv: (array length=argc): GTK+ always passes %NULL for this argument
  *
  * Each GTK+ module must have a function gtk_module_init()
  * with this prototype. This function is called after loading
