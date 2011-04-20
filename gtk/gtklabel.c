@@ -3081,7 +3081,7 @@ get_label_width (GtkLabel *label,
    *    request was provided.
    */
 
-  if (priv->ellipsize || priv->wrap)
+  if (priv->ellipsize || priv->wrap || priv->width_chars > 0 || priv->max_width_chars > 0)
     {
       *minimum = char_pixels * MAX (priv->width_chars, ellipsize_chars);
 
