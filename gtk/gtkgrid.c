@@ -171,11 +171,11 @@ gtk_grid_get_property (GObject    *object,
       break;
 
     case PROP_ROW_HOMOGENEOUS:
-      g_value_set_boolean (value, ROWS (priv)->homogeneous);
+      g_value_set_boolean (value, COLUMNS (priv)->homogeneous);
       break;
 
     case PROP_COLUMN_HOMOGENEOUS:
-      g_value_set_boolean (value, COLUMNS (priv)->homogeneous);
+      g_value_set_boolean (value, ROWS (priv)->homogeneous);
       break;
 
     default:
@@ -1465,9 +1465,10 @@ gtk_grid_set_row_homogeneous (GtkGrid  *grid,
 
   priv = grid->priv;
 
-  if (ROWS (priv)->homogeneous != homogeneous)
+  /* Yes, homogeneous rows means all the columns have the same size */
+  if (COLUMNS (priv)->homogeneous != homogeneous)
     {
-      ROWS (priv)->homogeneous = homogeneous;
+      COLUMNS (priv)->homogeneous = homogeneous;
 
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
@@ -1492,7 +1493,7 @@ gtk_grid_get_row_homogeneous (GtkGrid *grid)
 
   priv = grid->priv;
 
-  return ROWS (priv)->homogeneous;
+  return COLUMNS (priv)->homogeneous;
 }
 
 /**
@@ -1511,9 +1512,10 @@ gtk_grid_set_column_homogeneous (GtkGrid  *grid,
 
   priv = grid->priv;
 
-  if (COLUMNS (priv)->homogeneous != homogeneous)
+  /* Yes, homogeneous columns means all the rows have the same size */
+  if (ROWS (priv)->homogeneous != homogeneous)
     {
-      COLUMNS (priv)->homogeneous = homogeneous;
+      ROWS (priv)->homogeneous = homogeneous;
 
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
@@ -1538,7 +1540,7 @@ gtk_grid_get_column_homogeneous (GtkGrid *grid)
 
   priv = grid->priv;
 
-  return COLUMNS (priv)->homogeneous;
+  return ROWS (priv)->homogeneous;
 }
 
 /**
