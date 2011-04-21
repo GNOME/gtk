@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -120,9 +120,9 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
   /**
    * GdkKeymap::direction-changed:
    * @keymap: the object on which the signal is emitted
-   * 
+   *
    * The ::direction-changed signal gets emitted when the direction of
-   * the keymap changes. 
+   * the keymap changes.
    *
    * Since: 2.0
    */
@@ -171,7 +171,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
                   G_STRUCT_OFFSET (GdkKeymapClass, state_changed),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 
+                  G_TYPE_NONE,
                   0);
 }
 
@@ -215,7 +215,7 @@ guint
 gdk_keyval_to_upper (guint keyval)
 {
   guint result;
-  
+
   gdk_keyval_convert_case (keyval, NULL, &result);
 
   return result;
@@ -234,7 +234,7 @@ guint
 gdk_keyval_to_lower (guint keyval)
 {
   guint result;
-  
+
   gdk_keyval_convert_case (keyval, &result, NULL);
 
   return result;
@@ -255,7 +255,7 @@ gdk_keyval_is_upper (guint keyval)
   if (keyval)
     {
       guint upper_val = 0;
-      
+
       gdk_keyval_convert_case (keyval, NULL, &upper_val);
       return upper_val == keyval;
     }
@@ -277,7 +277,7 @@ gdk_keyval_is_lower (guint keyval)
   if (keyval)
     {
       guint lower_val = 0;
-      
+
       gdk_keyval_convert_case (keyval, &lower_val, NULL);
       return lower_val == keyval;
     }
@@ -310,7 +310,9 @@ gdk_keymap_get_default (void)
 PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->get_direction (keymap);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), PANGO_DIRECTION_LTR);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_direction (keymap);
 }
 
 /**
@@ -327,7 +329,9 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
 gboolean
 gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->have_bidi_layouts (keymap);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->have_bidi_layouts (keymap);
 }
 
 /**
@@ -343,7 +347,9 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
 gboolean
 gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->get_caps_lock_state (keymap);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_caps_lock_state (keymap);
 }
 
 /**
@@ -359,7 +365,9 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
 gboolean
 gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->get_num_lock_state (keymap);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_num_lock_state (keymap);
 }
 
 /**
@@ -390,7 +398,10 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    GdkKeymapKey **keys,
                                    gint          *n_keys)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->get_entries_for_keyval (keymap, keyval, keys, n_keys);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keyval (keymap, keyval,
+                                                                keys, n_keys);
 }
 
 /**
@@ -419,7 +430,10 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     guint        **keyvals,
                                     gint          *n_entries)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->get_entries_for_keycode (keymap, hardware_keycode, keys, keyvals, n_entries);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keycode (keymap, hardware_keycode,
+                                                                 keys, keyvals, n_entries);
 }
 
 /**
@@ -439,7 +453,9 @@ guint
 gdk_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->lookup_key (keymap, key);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->lookup_key (keymap, key);
 }
 
 /**
@@ -521,7 +537,9 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      gint            *level,
                                      GdkModifierType *consumed_modifiers)
 {
-  return GDK_KEYMAP_GET_CLASS(keymap)->translate_keyboard_state (keymap,
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->translate_keyboard_state (keymap,
 								  hardware_keycode,
 								  state,
 								  group,
@@ -554,7 +572,9 @@ void
 gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 			          GdkModifierType *state)
 {
-  GDK_KEYMAP_GET_CLASS(keymap)->add_virtual_modifiers (keymap, state);
+  g_return_if_fail (GDK_IS_KEYMAP (keymap));
+
+  GDK_KEYMAP_GET_CLASS (keymap)->add_virtual_modifiers (keymap, state);
 }
 
 /**
@@ -580,6 +600,8 @@ gboolean
 gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
                                   GdkModifierType *state)
 {
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
   return GDK_KEYMAP_GET_CLASS(keymap)->map_virtual_modifiers (keymap, state);
 }
 
@@ -597,12 +619,13 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
  *     or %NULL if @keyval is not a valid key. The string should not be
  *     modified.
  */
-gchar*
+gchar *
 gdk_keyval_name (guint keyval)
 {
   GdkDisplayManager *manager = gdk_display_manager_get ();
 
-  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_keyval_name (manager, keyval);
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_keyval_name (manager,
+                                                                   keyval);
 }
 
 /**
@@ -623,5 +646,6 @@ gdk_keyval_from_name (const gchar *keyval_name)
 {
   GdkDisplayManager *manager = gdk_display_manager_get ();
 
-  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->lookup_keyval (manager, keyval_name);
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->lookup_keyval (manager,
+                                                                 keyval_name);
 }
