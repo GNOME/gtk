@@ -247,7 +247,7 @@ main (gint argc, gchar **argv)
   gtk_window_set_title (GTK_WINDOW (window), "GtkTreeView editing sample");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_widget_show (vbox);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
@@ -352,12 +352,12 @@ main (gint argc, gchar **argv)
   gtk_window_set_default_size (GTK_WINDOW (window),
 			       800, 250);
 
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   /* Alignment controls */
-  cntl_vbox = gtk_vbox_new (FALSE, 2);
+  cntl_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (cntl_vbox);
   gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
 
@@ -367,7 +367,7 @@ main (gint argc, gchar **argv)
   create_control (cntl_vbox, 4, CNTL_ALIGN, &callback[3]);
 
   /* Expand controls */
-  cntl_vbox = gtk_vbox_new (FALSE, 2);
+  cntl_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (cntl_vbox);
   gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
 
@@ -377,7 +377,7 @@ main (gint argc, gchar **argv)
   create_control (cntl_vbox, 4, CNTL_EXPAND, &callback[3]);
 
   /* Fixed controls */
-  cntl_vbox = gtk_vbox_new (FALSE, 2);
+  cntl_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (cntl_vbox);
   gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
 

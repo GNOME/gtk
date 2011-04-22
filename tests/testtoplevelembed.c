@@ -15,7 +15,7 @@ remove_notebook_page (GtkWidget *button,
 GtkWidget *
 create_tab_label (GtkWidget *toplevel)
 {
-  GtkWidget *box = gtk_hbox_new (FALSE, 2);
+  GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   GtkWidget *label = gtk_label_new (G_OBJECT_TYPE_NAME (toplevel));
   GtkWidget *button = gtk_button_new ();
   GtkWidget *image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);

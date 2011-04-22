@@ -2632,7 +2632,8 @@ create_saved_position (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
       vbox =
-	g_object_new (gtk_vbox_get_type (),
+	g_object_new (GTK_TYPE_BOX,
+                      "GtkOrientable::orientation", GTK_ORIENTATION_VERTICAL,
 			"GtkBox::homogeneous", FALSE,
 			"GtkBox::spacing", 5,
 			"GtkContainer::border_width", 10,
@@ -2835,7 +2836,8 @@ create_tooltips (GtkWidget *widget)
       gtk_widget_set_tooltip_text (toggle, "Toggle TipsQuery view.");
 
       box3 =
-	g_object_new (gtk_vbox_get_type (),
+	g_object_new (GTK_TYPE_BOX,
+                      "GtkOrientable::orientation", GTK_ORIENTATION_VERTICAL,
 			"homogeneous", FALSE,
 			"spacing", 5,
 			"border_width", 5,
@@ -4960,7 +4962,8 @@ create_cursors (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
       vbox =
-	g_object_new (gtk_vbox_get_type (),
+	g_object_new (GTK_TYPE_BOX,
+                      "GtkOrientable::orientation", GTK_ORIENTATION_VERTICAL,
 			"GtkBox::homogeneous", FALSE,
 			"GtkBox::spacing", 5,
 			"GtkContainer::border_width", 10,

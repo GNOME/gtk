@@ -187,7 +187,7 @@ simple_cell_area (void)
 
   scaffold = simple_scaffold ();
 
-  hbox  = gtk_hbox_new (FALSE, 4);
+  hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   frame = gtk_frame_new (NULL);
   gtk_widget_show (hbox);
   gtk_widget_show (frame);
@@ -200,7 +200,7 @@ simple_cell_area (void)
   gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
 
   /* Now add some controls */
-  vbox  = gtk_vbox_new (FALSE, 4);
+  vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (vbox);
   gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
 
@@ -426,7 +426,7 @@ focus_cell_area (void)
   GtkWidget *scaffold, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  hbox  = gtk_hbox_new (FALSE, 4);
+  hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (hbox);
 
   gtk_window_set_title (GTK_WINDOW (window), "Focus and editable cells");
@@ -444,7 +444,7 @@ focus_cell_area (void)
   gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
 
   /* Now add some controls */
-  vbox  = gtk_vbox_new (FALSE, 4);
+  vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (vbox);
   gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
 
@@ -517,8 +517,8 @@ background_area (void)
   GtkWidget *scaffold, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  hbox  = gtk_hbox_new (FALSE, 4);
-  main_vbox  = gtk_vbox_new (FALSE, 4);
+  hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  main_vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (hbox);
   gtk_widget_show (main_vbox);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
@@ -546,7 +546,7 @@ background_area (void)
   gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
 
   /* Now add some controls */
-  vbox  = gtk_vbox_new (FALSE, 4);
+  vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (vbox);
   gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
@@ -563,7 +563,7 @@ background_area (void)
 
   widget = gtk_spin_button_new_with_range (0, 10, 1);
   label = gtk_label_new ("Cell spacing");
-  hbox = gtk_hbox_new (FALSE, 4);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (hbox);
   gtk_widget_show (label);
   gtk_widget_show (widget);
@@ -577,7 +577,7 @@ background_area (void)
 
   widget = gtk_spin_button_new_with_range (0, 10, 1);
   label = gtk_label_new ("Row spacing");
-  hbox = gtk_hbox_new (FALSE, 4);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (hbox);
   gtk_widget_show (label);
   gtk_widget_show (widget);
@@ -590,7 +590,7 @@ background_area (void)
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
   label = gtk_label_new ("Intentation");
-  hbox = gtk_hbox_new (FALSE, 4);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (hbox);
   gtk_widget_show (label);
   gtk_widget_show (widget);

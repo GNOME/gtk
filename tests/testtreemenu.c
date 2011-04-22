@@ -433,7 +433,7 @@ tree_menu (void)
 
   gtk_window_set_title (GTK_WINDOW (window), "GtkTreeMenu");
 
-  vbox  = gtk_vbox_new (FALSE, 4);
+  vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (vbox);
 
   menubar = gtk_menu_bar_new ();
