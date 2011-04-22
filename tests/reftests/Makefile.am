@@ -34,5 +34,7 @@ EXTRA_DIST += \
 	label-sizing.css \
 	label-sizing.ref.ui \
 	label-sizing.ui \
+	label-small-ellipsized.ref.ui \
+	label-small-ellipsized.ui \
 	simpe.ref.png \
 	simple.ui
