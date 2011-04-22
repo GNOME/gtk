@@ -3568,6 +3568,11 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
       layout = gtk_label_get_measuring_layout (label, layout, 0, -1);
 
       pango_layout_get_extents (layout, NULL, required);
+
+      /* can happen when Pango decides to ellipsize text */
+      if (required->width > natural->width)
+        required->width = natural->width;
+
       required->x = required->y = 0;
       required->height = natural->height;
     }
