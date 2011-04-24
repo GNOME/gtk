@@ -1346,8 +1346,16 @@ attribute_from_text (GtkBuilder   *builder,
 	attribute = pango_attr_stretch_new (g_value_get_enum (&val));
       break;
     case PANGO_ATTR_UNDERLINE:
-      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
-	attribute = pango_attr_underline_new (g_value_get_boolean (&val));
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_UNDERLINE, value, &val, NULL))
+	attribute = pango_attr_underline_new (g_value_get_enum (&val));
+      else
+        {
+          /* XXX: allow boolean for backwards compat, so ignore error */
+          /* Deprecate this somehow */
+          g_value_unset (&val);
+          if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+            attribute = pango_attr_underline_new (g_value_get_boolean (&val));
+        }
       break;
     case PANGO_ATTR_STRIKETHROUGH:	
       if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
