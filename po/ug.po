@@ -7,9 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-03-24 16:47+0000\n"
-"PO-Revision-Date: 2010-12-29 11:40+0600\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-04-19 11:59+0000\n"
+"PO-Revision-Date: 2011-04-20 11:30+0600\n"
 "Last-Translator: Sahran <sahran.ug@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -131,7 +132,7 @@ msgstr "Multikey(_K)"
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "باش بەت"
+msgstr "Home، باش بەت"
 
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
@@ -176,7 +177,7 @@ msgstr "باشلا"
 #: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "Print"
-msgstr "بېسىپ چىقار"
+msgstr "باس"
 
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
@@ -459,7 +460,9 @@ msgstr[0] "%d تۈرنى ئېچىۋاتىدۇ"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
-msgstr "بۇ پروگرامما ھېچقانداق كاپالەت بەرمەيدۇ؛ تەپسىلاتىنى <a href=\"%s\">%s</a> زىيارەت قىلىڭ"
+msgstr ""
+"بۇ پروگرامما ھېچقانداق كاپالەت بەرمەيدۇ؛ تەپسىلاتىنى <a href=\"%s\">%s</a> "
+"زىيارەت قىلىڭ"
 
 #: ../gtk/gtkaboutdialog.c:346
 msgid "License"
@@ -578,68 +581,70 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "تەتۈر يانتۇ سىزىقBackslash"
 
-#: ../gtk/gtkappchooserbutton.c:264
+#: ../gtk/gtkappchooserbutton.c:268
 msgid "Other application..."
 msgstr "باشقا پروگراممىلار..."
 
-#: ../gtk/gtkappchooserdialog.c:128
+#: ../gtk/gtkappchooserdialog.c:130
 msgid "Failed to look for applications online"
 msgstr "تودىن پروگرامما ئىزدەش مەغلۇپ بولدى"
 
-#: ../gtk/gtkappchooserdialog.c:165
+#: ../gtk/gtkappchooserdialog.c:171
 msgid "Find applications online"
 msgstr "تودىن پروگرامما ئىزدەش"
 
-#: ../gtk/gtkappchooserdialog.c:213
+#: ../gtk/gtkappchooserdialog.c:221
 msgid "Could not run application"
 msgstr "پروگراممىنى ئىجرا قىلالمىدى"
 
-#: ../gtk/gtkappchooserdialog.c:226
+#: ../gtk/gtkappchooserdialog.c:234
 #, c-format
 msgid "Could not find '%s'"
 msgstr "'%s' تاپالمىدى"
 
-#: ../gtk/gtkappchooserdialog.c:229
+#: ../gtk/gtkappchooserdialog.c:237
 msgid "Could not find application"
 msgstr "پروگراممىنى تاپالمىدى"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:347
+#: ../gtk/gtkappchooserdialog.c:355
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\" نى ئاچىدىغان پروگراممىنى تاللاڭ"
 
-#: ../gtk/gtkappchooserdialog.c:348 ../gtk/gtkappchooserwidget.c:642
+#: ../gtk/gtkappchooserdialog.c:356 ../gtk/gtkappchooserwidget.c:642
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\" نى ئاچىدىغان پروگرامما يوق"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:354
+#: ../gtk/gtkappchooserdialog.c:362
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "\"%s\" ھۆججەتلەر ئۈچۈن پروگرامما تاللاڭ."
 
-#: ../gtk/gtkappchooserdialog.c:356
+#: ../gtk/gtkappchooserdialog.c:364
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "\"%s\" ھۆججەتلەر ئاچىدىغان پروگرامما يوق"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:380
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"تەپسىلاتى ئۈچۈن «باشقا پىروگراممىنى كۆرسەت»نى چېكىڭ ياكى «پىروگراممىنى توردىن "
+"ئىزدە» دىن يېڭى پىروگراممىنى ئورنىتىڭ"
 
-#: ../gtk/gtkappchooserdialog.c:442
+#: ../gtk/gtkappchooserdialog.c:450
 msgid "Forget association"
 msgstr "ھەمكارلىقىنى ئۇنتۇ"
 
-#: ../gtk/gtkappchooserdialog.c:507
+#: ../gtk/gtkappchooserdialog.c:515
 msgid "Show other applications"
 msgstr "باشقا پروگراممىلارنى كۆرسەت"
 
-#: ../gtk/gtkappchooserdialog.c:525
+#: ../gtk/gtkappchooserdialog.c:533
 msgid "_Select"
 msgstr "تاللا(_S)"
 
@@ -677,7 +682,7 @@ msgstr "ئىناۋەتسىز غول ئېلېمېنت: '%s'"
 #: ../gtk/gtkbuilderparser.c:897
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr "بىر تەرەپ قىلىنمىغان tag: '%s'"
+msgstr "بىر تەرەپ قىلىنمىغان بەلگە: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -801,7 +806,9 @@ msgstr "ئىناۋەتسىز رەڭ سانلىق-مەلۇماتى تاپشۇرۇ
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
-msgstr "سىرتقى ئايلانمىدىن سىزگە لازىملىق رەڭنى تاللاڭ .ئىچكى ئۈچ بۇلۇڭدىن رەڭنىڭ كۈچلۈكلۈكىنى تاللاڭ."
+msgstr ""
+"سىرتقى ئايلانمىدىن سىزگە لازىملىق رەڭنى تاللاڭ .ئىچكى ئۈچ بۇلۇڭدىن رەڭنىڭ "
+"كۈچلۈكلۈكىنى تاللاڭ."
 
 #: ../gtk/gtkcolorsel.c:441
 msgid ""
@@ -873,7 +880,9 @@ msgstr "رەڭ ئاتى(_N):"
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr "سىز بۇ جايغا HTML ئۇسلۇبىدىكى 16 لىك سىستېما رەت نومۇرى ياكى “orange” گە ئوخشاش رەڭ ئاتلىرىنى كىرگۈزسىڭىز بولىدۇ."
+msgstr ""
+"سىز بۇ جايغا HTML ئۇسلۇبىدىكى 16 لىك سىستېما رەت نومۇرى ياكى “orange” گە "
+"ئوخشاش رەڭ ئاتلىرىنى كىرگۈزسىڭىز بولىدۇ."
 
 #: ../gtk/gtkcolorsel.c:536
 msgid "_Palette:"
@@ -888,13 +897,17 @@ msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
-msgstr "ئىلگىرى تاللانغان رەڭ، سىزنىڭ ھازىر تاللىغىنىڭىزغا قارىتىلغان. سىز بۇ رەڭنى رەڭ تاللاش تاختىسىغا سۆرەپ ياكى بۇ رەڭنى كېيىنكى رەڭ كاتەكچىسىگە سۆرەپ نۆۋەتتىكى رەڭ قىلىپ بەلگىلىسىڭىز بولىدۇ."
+msgstr ""
+"ئىلگىرى تاللانغان رەڭ، سىزنىڭ ھازىر تاللىغىنىڭىزغا قارىتىلغان. سىز بۇ رەڭنى "
+"رەڭ تاللاش تاختىسىغا سۆرەپ ياكى بۇ رەڭنى كېيىنكى رەڭ كاتەكچىسىگە سۆرەپ "
+"نۆۋەتتىكى رەڭ قىلىپ بەلگىلىسىڭىز بولىدۇ."
 
 #: ../gtk/gtkcolorsel.c:1044
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "سىز تاللىغان رەڭ .سىز بۇ رەڭنى تاللاپ ساقلاپ قويۇپ كىيىن ئىشلەتسىڭىز بولىدۇ."
+msgstr ""
+"سىز تاللىغان رەڭ .سىز بۇ رەڭنى تاللاپ ساقلاپ قويۇپ كىيىن ئىشلەتسىڭىز بولىدۇ."
 
 #: ../gtk/gtkcolorsel.c:1050
 msgid ""
@@ -914,7 +927,10 @@ msgstr "رەڭنى بۇ جايغا ساقلا(_S)"
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "رەڭ تاختىسىدىكى رەڭنى تاق چەكسىڭىز نۆۋەتتىكى رەڭ بولۇپ تاللىنىدۇ. بۇ تۈرنى ئۆزگەرتىشتە، رەڭنى بۇ جايغا سۆرەڭ ياكى چاشقىنەك ئوڭ توپچىسىنى چەككەندىن كېيىن بۇ جايدا «رەڭنى بۇ جايغا ساقلا»نى تاللاڭ."
+msgstr ""
+"رەڭ تاختىسىدىكى رەڭنى تاق چەكسىڭىز نۆۋەتتىكى رەڭ بولۇپ تاللىنىدۇ. بۇ تۈرنى "
+"ئۆزگەرتىشتە، رەڭنى بۇ جايغا سۆرەڭ ياكى چاشقىنەك ئوڭ توپچىسىنى چەككەندىن "
+"كېيىن بۇ جايدا «رەڭنى بۇ جايغا ساقلا»نى تاللاڭ."
 
 #: ../gtk/gtkcolorseldialog.c:189
 msgid "Color Selection"
@@ -931,7 +947,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:372 ../gtk/gtkprintunixdialog.c:3255
+#: ../gtk/gtkcustompaperunixdialog.c:372 ../gtk/gtkprintunixdialog.c:3253
 msgid "Manage Custom Sizes"
 msgstr "ئىختىيارى چوڭلۇقنى باشقۇر"
 
@@ -984,23 +1000,23 @@ msgstr "ئوڭ(_R):"
 msgid "Paper Margins"
 msgstr "قەغەز يان ئارىلىقى"
 
-#: ../gtk/gtkentry.c:8757 ../gtk/gtktextview.c:8272
+#: ../gtk/gtkentry.c:8761 ../gtk/gtktextview.c:8272
 msgid "Input _Methods"
 msgstr "كىرگۈزگۈچ(_M)"
 
-#: ../gtk/gtkentry.c:8771 ../gtk/gtktextview.c:8286
+#: ../gtk/gtkentry.c:8775 ../gtk/gtktextview.c:8286
 msgid "_Insert Unicode Control Character"
 msgstr "يۇنىكودلۇق كونترول بەلگىسى قىستۇر(_I)"
 
-#: ../gtk/gtkentry.c:10179
+#: ../gtk/gtkentry.c:10183
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock ۋە Num Lock ئوچۇق"
 
-#: ../gtk/gtkentry.c:10181
+#: ../gtk/gtkentry.c:10185
 msgid "Num Lock is on"
 msgstr "Num Lock ئوچۇق"
 
-#: ../gtk/gtkentry.c:10183
+#: ../gtk/gtkentry.c:10187
 msgid "Caps Lock is on"
 msgstr "Caps Lock ئوچۇق"
 
@@ -1009,7 +1025,7 @@ msgstr "Caps Lock ئوچۇق"
 #. * ****************
 #: ../gtk/gtkfilechooserbutton.c:62
 msgid "Select a File"
-msgstr "ھۆججەت تاللاڭ"
+msgstr "بىر ھۆججەت تاللاڭ"
 
 #: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1865
 msgid "Desktop"
@@ -1047,7 +1063,9 @@ msgstr "قىسقۇچ قۇرالمايدۇ"
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
-msgstr "قىسقۇچ قۇرالمايدۇ، چۈنكى ئوخشاش ئاتلىق قىسقۇچ مەۋجۇت. باشقا ئات ئىشلىتىپ سىناڭ ياكى ھۆججەت ئاتىنى ئۆزگەرتىڭ."
+msgstr ""
+"قىسقۇچ قۇرالمايدۇ، چۈنكى ئوخشاش ئاتلىق قىسقۇچ مەۋجۇت. باشقا ئات ئىشلىتىپ "
+"سىناڭ ياكى ھۆججەت ئاتىنى ئۆزگەرتىڭ."
 
 #: ../gtk/gtkfilechooserdefault.c:1020
 msgid "You need to choose a valid filename."
@@ -1062,7 +1080,9 @@ msgstr "%s قىسقۇچ بولمىغاچقا، ئۇنىڭ ئاستىغا ھۆج�
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
-msgstr "سىز قىسقۇچلا تاللىيالايسىز. سىز تاللىغان تۈر قىسقۇچ ئېمە؛ باشقا تۈرنى ئىشلىتىپ سىناڭ."
+msgstr ""
+"سىز قىسقۇچلا تاللىيالايسىز. سىز تاللىغان تۈر قىسقۇچ ئېمە؛ باشقا تۈرنى "
+"ئىشلىتىپ سىناڭ."
 
 #: ../gtk/gtkfilechooserdefault.c:1045
 msgid "Invalid file name"
@@ -1085,7 +1105,7 @@ msgstr "%2$s ئۈستىدىكى %1$s"
 msgid "Search"
 msgstr "ئىزدە"
 
-#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9487
+#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9494
 msgid "Recently Used"
 msgstr "يېقىندا ئىشلەتكەن"
 
@@ -1174,7 +1194,7 @@ msgstr "چوڭلۇقى"
 
 #: ../gtk/gtkfilechooserdefault.c:4441
 msgid "Modified"
-msgstr "ئۆزگەرتىلدى"
+msgstr "ئۆزگەرتكەن"
 
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:4696 ../gtk/gtkprinteroptionwidget.c:793
@@ -1216,7 +1236,7 @@ msgid "Could not read the contents of the folder"
 msgstr "قىسقۇچنىڭ مەزمۇنىنى ئوقۇيالمىدى"
 
 #: ../gtk/gtkfilechooserdefault.c:6449 ../gtk/gtkfilechooserdefault.c:6517
-#: ../gtk/gtkfilechooserdefault.c:6662
+#: ../gtk/gtkfilechooserdefault.c:6669
 msgid "Unknown"
 msgstr "نامەلۇم"
 
@@ -1228,54 +1248,57 @@ msgstr "%H:%M"
 msgid "Yesterday at %H:%M"
 msgstr "ئەتە %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7128
+#: ../gtk/gtkfilechooserdefault.c:7135
 msgid "Cannot change to folder because it is not local"
 msgstr "قىسقۇچقا ئۆزگەرتەلمەيدۇ چۈنكى ئۇ يەرلىك قىسقۇچ ئەمەس"
 
-#: ../gtk/gtkfilechooserdefault.c:7725 ../gtk/gtkfilechooserdefault.c:7746
+#: ../gtk/gtkfilechooserdefault.c:7732 ../gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s قىسقا يول مەۋجۇت"
 
-#: ../gtk/gtkfilechooserdefault.c:7836
+#: ../gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s قىسقا يول مەۋجۇت ئەمەس"
 
-#: ../gtk/gtkfilechooserdefault.c:8095 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8102 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" ئاتلىق ھۆججەت مەۋجۇت. ئۇنى ئالماشتۇرۇۋېتەمسىز؟"
 
-#: ../gtk/gtkfilechooserdefault.c:8098 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8105 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "ئىچىدە مەۋجۇت . ھۆججەتنى ئالماشتۇرسا ئىچىدىكى مەزمۇنلار قاپلىنىدۇ “%s”ھۆججەت ئاللىبۇرۇن"
+msgstr ""
+"ئىچىدە مەۋجۇت . ھۆججەتنى ئالماشتۇرسا ئىچىدىكى مەزمۇنلار قاپلىنىدۇ “%s”ھۆججەت "
+"ئاللىبۇرۇن"
 
-#: ../gtk/gtkfilechooserdefault.c:8103 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8110 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "ئالماشتۇر(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:8829
+#: ../gtk/gtkfilechooserdefault.c:8836
 msgid "Could not start the search process"
-msgstr "ئىزدەشنى قوزغىتالمىدى"
+msgstr "ئىزدىگۈچنى قوزغىتالمىدى"
 
-#: ../gtk/gtkfilechooserdefault.c:8830
+#: ../gtk/gtkfilechooserdefault.c:8837
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
-msgstr "indexer daemon غا باغلىنالمىدى. indexer daemon نىڭ ئىجرا ھالىتىنى جەزملەڭ"
+msgstr ""
+"indexer daemon غا باغلىنالمىدى. indexer daemon نىڭ ئىجرا ھالىتىنى جەزملەڭ"
 
-#: ../gtk/gtkfilechooserdefault.c:8844
+#: ../gtk/gtkfilechooserdefault.c:8851
 msgid "Could not send the search request"
 msgstr "ئىزدەش ئىلتىماسىنى يوللىيالمىدى"
 
-#: ../gtk/gtkfilechooserdefault.c:9063
+#: ../gtk/gtkfilechooserdefault.c:9070
 msgid "Search:"
 msgstr "ئىزدە:"
 
-#: ../gtk/gtkfilechooserdefault.c:9671
+#: ../gtk/gtkfilechooserdefault.c:9678
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s نى ئېگەرلىگىلى بولمىدى"
@@ -1353,7 +1376,7 @@ msgstr "خەت نۇسخا تاللا"
 #. Initialize fields
 #: ../gtk/gtkfontbutton.c:260
 msgid "Sans 12"
-msgstr "UKIJ Tuz Tom 12"
+msgstr "UKIJ Tuz Tom 10"
 
 #: ../gtk/gtkfontbutton.c:785
 msgid "Font"
@@ -1401,7 +1424,9 @@ msgid ""
 "was not found either, perhaps you need to install it.\n"
 "You can get a copy from:\n"
 "\t%s"
-msgstr "'%s' سىنبەلگىنى تاپالمىدى. '%s' باش تېمىنىمۇ تاپالمىدى، ئۇنى ئورنىتىشىڭىز زۆرۈردەك قىلىدۇ. ئۇنىڭ كۆچۈرۈلمە نۇسخىسىنى تۆۋەندىكى ئادرېستىن تاپالايسىز:\n"
+msgstr ""
+"'%s' سىنبەلگىنى تاپالمىدى. '%s' باش تېمىنىمۇ تاپالمىدى، ئۇنى ئورنىتىشىڭىز "
+"زۆرۈردەك قىلىدۇ. ئۇنىڭ كۆچۈرۈلمە نۇسخىسىنى تۆۋەندىكى ئادرېستىن تاپالايسىز:\n"
 "%s"
 
 #: ../gtk/gtkicontheme.c:1518
@@ -1541,16 +1566,16 @@ msgstr "نامەلۇم پروگرامما (PID %d)"
 
 #: ../gtk/gtkmountoperation.c:1066
 msgid "Unable to end process"
-msgstr "ئىجرانى ئاخىرلاشتۇرالمايدۇ"
+msgstr "جەرياننى ئاخىرلاشتۇرالمايدۇ"
 
 #: ../gtk/gtkmountoperation.c:1103
 msgid "_End Process"
-msgstr "ئىجرانى ئاخىرلاشتۇرۇش(_E)"
+msgstr "مەشغۇلاتنى ئاخىرلاشتۇر(_E)"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr "PID %d ئىجرانى توختىتالمايدۇ. مەشغۇلاتنى ئىجرا قىلغىلى بولمايدۇ."
+msgstr "PID %d جەرياننى توختىتالمايدۇ. مەشغۇلاتنى ئىجرا قىلغىلى بولمايدۇ."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:859
@@ -1576,9 +1601,9 @@ msgstr "Z Shell"
 #: ../gtk/gtkmountoperation-x11.c:960
 #, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr "PID %d ئىجرانى ئاخىرلاشتۇرالمايدۇ: %s"
+msgstr "PID %d جەرياننى ئاخىرلاشتۇرالمايدۇ: %s"
 
-#: ../gtk/gtknotebook.c:4805 ../gtk/gtknotebook.c:7449
+#: ../gtk/gtknotebook.c:4805 ../gtk/gtknotebook.c:7459
 #, c-format
 msgid "Page %u"
 msgstr "%u-بەت"
@@ -1613,13 +1638,14 @@ msgid ""
 " Right: %s %s\n"
 " Top: %s %s\n"
 " Bottom: %s %s"
-msgstr "يان ئارىلىقى:\n"
+msgstr ""
+"يان ئارىلىقى:\n"
 "سول: %s %s\n"
 "ئوڭ: %s %s\n"
 " ئۈستى: %s %s\n"
 " ئاستى: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:856 ../gtk/gtkprintunixdialog.c:3306
+#: ../gtk/gtkpagesetupunixdialog.c:856 ../gtk/gtkprintunixdialog.c:3304
 msgid "Manage Custom Sizes..."
 msgstr "ئىختىيارى چوڭلۇق باشقۇر…"
 
@@ -1627,7 +1653,7 @@ msgstr "ئىختىيارى چوڭلۇق باشقۇر…"
 msgid "_Format for:"
 msgstr "فورمات(_F):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:929 ../gtk/gtkprintunixdialog.c:3478
+#: ../gtk/gtkpagesetupunixdialog.c:929 ../gtk/gtkprintunixdialog.c:3476
 msgid "_Paper size:"
 msgstr "قەغەز چوڭلۇقى(_P):"
 
@@ -1635,7 +1661,7 @@ msgstr "قەغەز چوڭلۇقى(_P):"
 msgid "_Orientation:"
 msgstr "يۆنىلىش(_O):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1024 ../gtk/gtkprintunixdialog.c:3540
+#: ../gtk/gtkpagesetupunixdialog.c:1024 ../gtk/gtkprintunixdialog.c:3538
 msgid "Page Setup"
 msgstr "بەت تەڭشەك"
 
@@ -1699,7 +1725,7 @@ msgstr "ئۇچۇر يوللاۋاتىدۇ"
 #: ../gtk/gtkprintoperation.c:1772
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "كۈتۈۋاتىدۇ"
+msgstr "ساقلاۋاتىدۇ"
 
 #: ../gtk/gtkprintoperation.c:1773
 msgctxt "print operation status"
@@ -1741,7 +1767,8 @@ msgstr "بېسىشنى ئالدىن كۆزىتىش قۇرۇشتا خاتالىق
 
 #: ../gtk/gtkprintoperation.c:3008
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr "مۇمكىنچىلىكى يۇقىرى سەۋەب ۋاقىتلىق ھۆججەت قۇرغىلى بولماسلىق بولۇشى مۇمكىن."
+msgstr ""
+"مۇمكىنچىلىكى يۇقىرى سەۋەب ۋاقىتلىق ھۆججەت قۇرغىلى بولماسلىق بولۇشى مۇمكىن."
 
 #: ../gtk/gtkprintoperation-unix.c:304
 msgid "Error launching preview"
@@ -1810,73 +1837,74 @@ msgstr "ئېنىقسىز خاتالىق"
 msgid "Getting printer information failed"
 msgstr "پرىنتېر ئۇچۇرىغا ئېرىشەلمىدى"
 
-#: ../gtk/gtkprintunixdialog.c:1873
+#: ../gtk/gtkprintunixdialog.c:1871
 msgid "Getting printer information..."
 msgstr "پرىنتېر ئۇچۇرىغا ئېرىشىۋاتىدۇ…"
 
-#: ../gtk/gtkprintunixdialog.c:2147
+#: ../gtk/gtkprintunixdialog.c:2145
 msgid "Printer"
-msgstr "پرىنتېر"
+msgstr "پىرىنتېر"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2157
+#: ../gtk/gtkprintunixdialog.c:2155
 msgid "Location"
 msgstr "ئورنى"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2168
+#: ../gtk/gtkprintunixdialog.c:2166
 msgid "Status"
-msgstr "ھالەت"
+msgstr "ھالىتى"
 
-#: ../gtk/gtkprintunixdialog.c:2194
+#: ../gtk/gtkprintunixdialog.c:2192
 msgid "Range"
 msgstr "دائىرىسى"
 
-#: ../gtk/gtkprintunixdialog.c:2198
+#: ../gtk/gtkprintunixdialog.c:2196
 msgid "_All Pages"
 msgstr "ھەممە بەت(_A)"
 
-#: ../gtk/gtkprintunixdialog.c:2205
+#: ../gtk/gtkprintunixdialog.c:2203
 msgid "C_urrent Page"
 msgstr "نۆۋەتتىكى بەت(_U)"
 
-#: ../gtk/gtkprintunixdialog.c:2215
+#: ../gtk/gtkprintunixdialog.c:2213
 msgid "Se_lection"
 msgstr "تاللا(_L)"
 
-#: ../gtk/gtkprintunixdialog.c:2224
+#: ../gtk/gtkprintunixdialog.c:2222
 msgid "Pag_es:"
 msgstr "بەتلەر(_E):"
 
-#: ../gtk/gtkprintunixdialog.c:2225
+#: ../gtk/gtkprintunixdialog.c:2223
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
-msgstr "بىر ياكى كۆپ بەت دائىرە بەلگىلەڭ،\n"
+msgstr ""
+"بىر ياكى كۆپ بەت دائىرە بەلگىلەڭ،\n"
 "مەسىلەن: 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2235
+#: ../gtk/gtkprintunixdialog.c:2233
 msgid "Pages"
 msgstr "بەتلەر"
 
-#: ../gtk/gtkprintunixdialog.c:2248
+#: ../gtk/gtkprintunixdialog.c:2246
 msgid "Copies"
 msgstr "نۇسخا"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2253
+#: ../gtk/gtkprintunixdialog.c:2251
 msgid "Copie_s:"
 msgstr "نۇسخا سانى(_S):"
 
-#: ../gtk/gtkprintunixdialog.c:2271
+#: ../gtk/gtkprintunixdialog.c:2269
 msgid "C_ollate"
 msgstr "رەت بويىچە(_O)"
 
-#: ../gtk/gtkprintunixdialog.c:2279
+#: ../gtk/gtkprintunixdialog.c:2277
 msgid "_Reverse"
 msgstr "ئەكسىچە(_R)"
 
-#: ../gtk/gtkprintunixdialog.c:2299
+#: ../gtk/gtkprintunixdialog.c:2297
 msgid "General"
 msgstr "ئادەتتىكى"
 
@@ -1886,42 +1914,42 @@ msgstr "ئادەتتىكى"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3039
+#: ../gtk/gtkprintunixdialog.c:3037
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3535
 msgid "Left to right, top to bottom"
 msgstr "سولدىن ئوڭغا، ئۈستىدىن ئاستىغا"
 
-#: ../gtk/gtkprintunixdialog.c:3039
+#: ../gtk/gtkprintunixdialog.c:3037
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3535
 msgid "Left to right, bottom to top"
 msgstr "سولدىن ئوڭغا، ئاستىدىن ئۈستىگە"
 
-#: ../gtk/gtkprintunixdialog.c:3040
+#: ../gtk/gtkprintunixdialog.c:3038
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3536
 msgid "Right to left, top to bottom"
 msgstr "ئوڭدىن سولغا، ئۈستىدىن ئاستىغا"
 
-#: ../gtk/gtkprintunixdialog.c:3040
+#: ../gtk/gtkprintunixdialog.c:3038
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3536
 msgid "Right to left, bottom to top"
 msgstr "ئوڭدىن سولغا، ئاستىدىن ئۈستىگە"
 
-#: ../gtk/gtkprintunixdialog.c:3041
+#: ../gtk/gtkprintunixdialog.c:3039
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3537
 msgid "Top to bottom, left to right"
 msgstr "ئۈستىدىن ئاستىغا، سولدىن ئوڭغا"
 
-#: ../gtk/gtkprintunixdialog.c:3041
+#: ../gtk/gtkprintunixdialog.c:3039
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3537
 msgid "Top to bottom, right to left"
 msgstr "ئۈستىدىن ئاستىغا، ئوڭدىن سولغا"
 
-#: ../gtk/gtkprintunixdialog.c:3042
+#: ../gtk/gtkprintunixdialog.c:3040
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Bottom to top, left to right"
 msgstr "ئاستىدىن ئۈستىگە، سولدىن ئوڭغا"
 
-#: ../gtk/gtkprintunixdialog.c:3042
+#: ../gtk/gtkprintunixdialog.c:3040
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Bottom to top, right to left"
 msgstr "ئاستىدىن ئۈستىگە، ئوڭدىن سولغا"
@@ -1929,125 +1957,125 @@ msgstr "ئاستىدىن ئۈستىگە، ئوڭدىن سولغا"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3046 ../gtk/gtkprintunixdialog.c:3059
+#: ../gtk/gtkprintunixdialog.c:3044 ../gtk/gtkprintunixdialog.c:3057
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3570
 msgid "Page Ordering"
 msgstr "بەت تەرتىپى"
 
-#: ../gtk/gtkprintunixdialog.c:3075
+#: ../gtk/gtkprintunixdialog.c:3073
 msgid "Left to right"
 msgstr "سولدىن ئوڭغا"
 
-#: ../gtk/gtkprintunixdialog.c:3076
+#: ../gtk/gtkprintunixdialog.c:3074
 msgid "Right to left"
 msgstr "ئوڭدىن سولغا"
 
-#: ../gtk/gtkprintunixdialog.c:3088
+#: ../gtk/gtkprintunixdialog.c:3086
 msgid "Top to bottom"
 msgstr "ئۈستىدىن ئاستىغا"
 
-#: ../gtk/gtkprintunixdialog.c:3089
+#: ../gtk/gtkprintunixdialog.c:3087
 msgid "Bottom to top"
 msgstr "ئاستىدىن ئۈستىگە"
 
-#: ../gtk/gtkprintunixdialog.c:3329
+#: ../gtk/gtkprintunixdialog.c:3327
 msgid "Layout"
 msgstr "ئۇسلۇب"
 
-#: ../gtk/gtkprintunixdialog.c:3333
+#: ../gtk/gtkprintunixdialog.c:3331
 msgid "T_wo-sided:"
 msgstr "قوش يۈزلۈك(_W):"
 
-#: ../gtk/gtkprintunixdialog.c:3348
+#: ../gtk/gtkprintunixdialog.c:3346
 msgid "Pages per _side:"
 msgstr "ھەربىر يۈزىنىڭ بەت سانى(_S):"
 
-#: ../gtk/gtkprintunixdialog.c:3365
+#: ../gtk/gtkprintunixdialog.c:3363
 msgid "Page or_dering:"
 msgstr "بەت تەرتىپى(_D):"
 
-#: ../gtk/gtkprintunixdialog.c:3381
+#: ../gtk/gtkprintunixdialog.c:3379
 msgid "_Only print:"
 msgstr "بېسىشلا(_O):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3396
+#: ../gtk/gtkprintunixdialog.c:3394
 msgid "All sheets"
 msgstr "ھەممە ۋاراقلار"
 
-#: ../gtk/gtkprintunixdialog.c:3397
+#: ../gtk/gtkprintunixdialog.c:3395
 msgid "Even sheets"
 msgstr "تاق ۋاراقلار"
 
-#: ../gtk/gtkprintunixdialog.c:3398
+#: ../gtk/gtkprintunixdialog.c:3396
 msgid "Odd sheets"
 msgstr "جۈپ ۋاراقلار"
 
-#: ../gtk/gtkprintunixdialog.c:3401
+#: ../gtk/gtkprintunixdialog.c:3399
 msgid "Sc_ale:"
 msgstr "نىسبەت(_A):"
 
-#: ../gtk/gtkprintunixdialog.c:3428
+#: ../gtk/gtkprintunixdialog.c:3426
 msgid "Paper"
 msgstr "قەغەز"
 
-#: ../gtk/gtkprintunixdialog.c:3432
+#: ../gtk/gtkprintunixdialog.c:3430
 msgid "Paper _type:"
 msgstr "قەغەز تىپى(_T):"
 
-#: ../gtk/gtkprintunixdialog.c:3447
+#: ../gtk/gtkprintunixdialog.c:3445
 msgid "Paper _source:"
 msgstr "قەغەز مەنبەسى(_S):"
 
-#: ../gtk/gtkprintunixdialog.c:3462
+#: ../gtk/gtkprintunixdialog.c:3460
 msgid "Output t_ray:"
 msgstr "قەغەز قۇتىسى(_R):"
 
-#: ../gtk/gtkprintunixdialog.c:3502
+#: ../gtk/gtkprintunixdialog.c:3500
 msgid "Or_ientation:"
 msgstr "يۆنىلىش(_I):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3517
+#: ../gtk/gtkprintunixdialog.c:3515
 msgid "Portrait"
 msgstr "بوي يۆنىلىش"
 
-#: ../gtk/gtkprintunixdialog.c:3518
+#: ../gtk/gtkprintunixdialog.c:3516
 msgid "Landscape"
 msgstr "توغرا يۆنىلىش"
 
-#: ../gtk/gtkprintunixdialog.c:3519
+#: ../gtk/gtkprintunixdialog.c:3517
 msgid "Reverse portrait"
 msgstr "تەتۈر بوي يۆنىلىش"
 
-#: ../gtk/gtkprintunixdialog.c:3520
+#: ../gtk/gtkprintunixdialog.c:3518
 msgid "Reverse landscape"
 msgstr "تەتۈر توغرا يۆنىلىش"
 
-#: ../gtk/gtkprintunixdialog.c:3565
+#: ../gtk/gtkprintunixdialog.c:3563
 msgid "Job Details"
 msgstr "ۋەزىپە تەپسىلاتى"
 
-#: ../gtk/gtkprintunixdialog.c:3571
+#: ../gtk/gtkprintunixdialog.c:3569
 msgid "Pri_ority:"
 msgstr "ئالدىنلىق(_O):"
 
-#: ../gtk/gtkprintunixdialog.c:3586
+#: ../gtk/gtkprintunixdialog.c:3584
 msgid "_Billing info:"
 msgstr "ھەق ھېسابلاش ئۇچۇرى(_B):"
 
-#: ../gtk/gtkprintunixdialog.c:3604
+#: ../gtk/gtkprintunixdialog.c:3602
 msgid "Print Document"
 msgstr "پۈتۈك باس"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3613
+#: ../gtk/gtkprintunixdialog.c:3611
 msgid "_Now"
 msgstr "دەرھال(_N)"
 
-#: ../gtk/gtkprintunixdialog.c:3624
+#: ../gtk/gtkprintunixdialog.c:3622
 msgid "A_t:"
 msgstr "دە(_T):"
 
@@ -2055,77 +2083,78 @@ msgstr "دە(_T):"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3630
+#: ../gtk/gtkprintunixdialog.c:3628
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-msgstr "بېسىش ۋاقتى بەلگىلىنىدۇ،\n"
+msgstr ""
+"بېسىش ۋاقتى بەلگىلىنىدۇ،\n"
 " مەسىلەن: 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: ../gtk/gtkprintunixdialog.c:3640
+#: ../gtk/gtkprintunixdialog.c:3638
 msgid "Time of print"
 msgstr "بېسىش ۋاقتى"
 
-#: ../gtk/gtkprintunixdialog.c:3656
+#: ../gtk/gtkprintunixdialog.c:3654
 msgid "On _hold"
 msgstr "كۈت(_H)"
 
-#: ../gtk/gtkprintunixdialog.c:3657
+#: ../gtk/gtkprintunixdialog.c:3655
 msgid "Hold the job until it is explicitly released"
 msgstr "ۋەزىپىنى ئېنىق ئاجرىتىلغانغا قەدەر داۋاملاشتۇر"
 
-#: ../gtk/gtkprintunixdialog.c:3677
+#: ../gtk/gtkprintunixdialog.c:3675
 msgid "Add Cover Page"
 msgstr "مۇقاۋا بەت قوش"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3686
+#: ../gtk/gtkprintunixdialog.c:3684
 msgid "Be_fore:"
 msgstr "ئالدى(_F):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3704
+#: ../gtk/gtkprintunixdialog.c:3702
 msgid "_After:"
 msgstr "كەينى(_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3722
+#: ../gtk/gtkprintunixdialog.c:3720
 msgid "Job"
 msgstr "ۋەزىپە"
 
-#: ../gtk/gtkprintunixdialog.c:3788
+#: ../gtk/gtkprintunixdialog.c:3786
 msgid "Advanced"
 msgstr "ئالىي"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3826
+#: ../gtk/gtkprintunixdialog.c:3824
 msgid "Image Quality"
 msgstr "سۈرەت سۈپىتى"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3830
+#: ../gtk/gtkprintunixdialog.c:3828
 msgid "Color"
 msgstr "رەڭ"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3835
+#: ../gtk/gtkprintunixdialog.c:3833
 msgid "Finishing"
 msgstr "تامام"
 
-#: ../gtk/gtkprintunixdialog.c:3845
+#: ../gtk/gtkprintunixdialog.c:3843
 msgid "Some of the settings in the dialog conflict"
 msgstr "سۆزلەشكۈ رامكىسىدىكى بەزى بەلگىلەشتە توقۇنۇش بار"
 
-#: ../gtk/gtkprintunixdialog.c:3868
+#: ../gtk/gtkprintunixdialog.c:3866
 msgid "Print"
-msgstr "بېسىپ چىقار"
+msgstr "باس"
 
 #: ../gtk/gtkrc.c:948
 #, c-format
@@ -2136,7 +2165,7 @@ msgstr "پىكسېل رەسىم يولىدىن رەسىم ھۆججىتى تېپ�
 #: ../gtk/gtkrecentchoosermenu.c:608 ../gtk/gtkrecentchoosermenu.c:616
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr "فۇنكسىيە «%s» تۈردىكى ۋىجېت ئەمەلگە ئاشۇرۇلمىغان"
+msgstr "فۇنكسىيە “%s” تۈردىكى تۇلۇقتا ئەمەلگە ئاشمايدۇ"
 
 #: ../gtk/gtkrecentchooserdefault.c:483
 msgid "Select which type of documents are shown"
@@ -2223,15 +2252,15 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1000 ../gtk/gtkrecentmanager.c:1013
-#: ../gtk/gtkrecentmanager.c:1150 ../gtk/gtkrecentmanager.c:1160
-#: ../gtk/gtkrecentmanager.c:1212 ../gtk/gtkrecentmanager.c:1221
-#: ../gtk/gtkrecentmanager.c:1236
+#: ../gtk/gtkrecentmanager.c:1006 ../gtk/gtkrecentmanager.c:1019
+#: ../gtk/gtkrecentmanager.c:1156 ../gtk/gtkrecentmanager.c:1166
+#: ../gtk/gtkrecentmanager.c:1218 ../gtk/gtkrecentmanager.c:1227
+#: ../gtk/gtkrecentmanager.c:1242
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' تۈر تېپىلمىدى"
 
-#: ../gtk/gtkrecentmanager.c:2436
+#: ../gtk/gtkrecentmanager.c:2442
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "تۈرنىڭ '%s' ئاتلىق خەتلەتكەن پروگراممىسىنىڭ URI '%s' تېپىلمىدى"
@@ -2239,7 +2268,7 @@ msgstr "تۈرنىڭ '%s' ئاتلىق خەتلەتكەن پروگراممىسى
 #: ../gtk/gtkspinner.c:287
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Spinner"
+msgstr "مىكرو تەڭشەك"
 
 #: ../gtk/gtkspinner.c:288
 msgid "Provides visual indication of progress"
@@ -2424,7 +2453,7 @@ msgstr "ئاستىغا(_D)"
 #: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "ئالدىنقى(_F)"
+msgstr "جاۋاب يوللا(_F)"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:359
@@ -2505,13 +2534,13 @@ msgstr "ئوڭ(_R)"
 #: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
-msgstr "ئالدىنقى(_F)"
+msgstr "جاۋاب يوللا(_F)"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:381
 msgctxt "Stock label, media"
 msgid "_Next"
-msgstr "كېيىنكىسى(_N)"
+msgstr "كېيىنكى(_N)"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:383
@@ -2626,7 +2655,7 @@ msgstr "بېسىشنى ئالدىن كۆزەت(_V)"
 #: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Properties"
-msgstr "خاسلىق(_P)"
+msgstr "خاسلىقلار(_P)"
 
 #: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
@@ -2646,7 +2675,7 @@ msgstr "يېڭىلا(_R)"
 #: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Remove"
-msgstr "ئۆچۈر(_R)"
+msgstr "چىقىرىۋەت(_R)"
 
 #: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
@@ -2849,7 +2878,9 @@ msgstr "\"%s\" ئىناۋەتلىك خاسلىق ئاتى ئەمەس"
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "\"%s\"نى \"%s\" تىپلىق قىممەتكە ئالماشتۇرالمايدۇ، بۇ قىممەت  \"%s\" خاسلىققا ئىشلىتىلىدۇ"
+msgstr ""
+"\"%s\"نى \"%s\" تىپلىق قىممەتكە ئالماشتۇرالمايدۇ، بۇ قىممەت  \"%s\" خاسلىققا "
+"ئىشلىتىلىدۇ"
 
 #: ../gtk/gtktextbufferserialize.c:1211
 #, c-format
@@ -2869,7 +2900,8 @@ msgstr "بەلگە \"%s\" نىڭ ئالدىنلىقى \"%s\" ئىناۋەتسى�
 #: ../gtk/gtktextbufferserialize.c:1362
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "تېكىستنىڭ ئەڭ سىرتىدىكى ئېلېمېنت <text_view_markup> بولىدۇ،  <%s> بولمايدۇ"
+msgstr ""
+"تېكىستنىڭ ئەڭ سىرتىدىكى ئېلېمېنت <text_view_markup> بولىدۇ،  <%s> بولمايدۇ"
 
 #: ../gtk/gtktextbufferserialize.c:1371 ../gtk/gtktextbufferserialize.c:1387
 #, c-format
@@ -2887,7 +2919,9 @@ msgstr "تەرتىپلەشكەن سانلىق مەلۇمات فورماتى خا
 #: ../gtk/gtktextbufferserialize.c:1871
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "تەرتىپلەشكەن سانلىق مەلۇمات فورماتى خاتا. بىرىنچى بۆلىكى GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"تەرتىپلەشكەن سانلىق مەلۇمات فورماتى خاتا. بىرىنچى بۆلىكى "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -3914,8 +3948,10 @@ msgstr "باش تېما ئىندېكس ھۆججىتى يوق.\n"
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr "“%s دا باش تېما ئىندېكس ھۆججىتى يوق.\n"
-"ئەگەر بۇ جايغا راستىنىلا سىنبەلگە غەملەك قۇرماقچى بولسىڭىز --ignore-theme-index ئىشلىتىڭ\n"
+msgstr ""
+"“%s دا باش تېما ئىندېكس ھۆججىتى يوق.\n"
+"ئەگەر بۇ جايغا راستىنىلا سىنبەلگە غەملەك قۇرماقچى بولسىڭىز --ignore-theme-"
+"index ئىشلىتىڭ\n"
 
 #. ID
 #: ../modules/input/imam-et.c:454
@@ -3965,7 +4001,7 @@ msgstr "تىگرىگنا-ئېفىئوپىيە(EZ+)"
 #. ID
 #: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr "ۋىيېتنامچە(VIQR)"
+msgstr "ۋيېتنامچە(VIQR)"
 
 #. ID
 #: ../modules/input/imxim.c:28
@@ -4410,853 +4446,6 @@ msgstr "ھۆججەت «%s» نى ئاچالمىدى: %s"
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "'%s' سۈرەتنى يۈكلىيەلمىدى. سەۋەبى  ئېنىق ئەمەس بۇ ھۆججەت بۇزۇلۇپ كەتكەن بولۇشى مۇمكىن"
-
-#~| msgctxt "Stock label"
-#~| msgid "_Open"
-#~ msgid "_Open"
-#~ msgstr "ئاچ(_O)"
-
-#~ msgid "_Add"
-#~ msgstr "قوش(_A)"
-
-#~ msgid "_Remove"
-#~ msgstr "چىقىرىۋەت(_R)"
-
-#~ msgid "Unable to locate theme engine in module_path: \"%s\","
-#~ msgstr "بۆلەك يولىدا باش تېما ماتورى تېپىلمىدى: “%s”،"
-
-#~ msgid "X screen to use"
-#~ msgstr "ئىشلەتكەن X ئېكران "
-
-#~ msgid "SCREEN"
-#~ msgstr "ئېكران"
-
-#~ msgid "Gdk debugging flags to set"
-#~ msgstr "Gdk سازلاش تەڭشەك بەلگىسى"
-
-#~ msgid "Gdk debugging flags to unset"
-#~ msgstr "قالدۇرماقچى بولغان Gdk سازلاش بەلگىسى"
-
-#~ msgid "Make X calls synchronous"
-#~ msgstr "X نى قەدەمداش قىلىپ ئىشلەت"
-
-#~ msgid "Credits"
-#~ msgstr "تەشەككۈر"
-
-#~ msgid "Written by"
-#~ msgstr "يازغۇچى"
-
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "قىسقۇچ قۇرغاندا خاتالىق كۆرۈلدى'%s' : %s"
-
-#~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "ئىچىدىكى ھۆججەتنى تاپالمىدى:\"%s\""
-
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "'%s' سۈرەت ھۆججەتتە ھېچقانداق سانلىق مەلۇمات يوق"
-
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "'%s' جانلاندۇرۇمنى يۈكلىيەلمىدى: سەۋەبى ئېنىق ئەمەس ياكى جانلاندۇرۇم "
-#~ "ھۆججەت بۇزۇلۇپ كەتكەن بولۇشى مۇمكىن"
-
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "سۈرەت يۈكلەش بۆلىكىنى يۈكلىيەلمىدى: %s : %s"
-
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "%s سۈرەت يۈكلەش بۆلىكى توغرا ئېغىزنى چىقىرالمىدى: ئۇ باشقا بىر GTK "
-#~ "نەشرىگە تەۋەمۇ؟"
-
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "بۇ '%s' خىلدىكى سۈرەت تىپىنى قوللىمايدۇ"
-
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "'%s' نىڭ سۈرەت فورماتىنى پەرقلەندۈرەلمىدى"
-
-#~ msgid "Unrecognized image file format"
-#~ msgstr "پەرقلەندۈرگىلى بولمايدىغان سۈرەت ھۆججەت فورماتى"
-
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "'%s' سۈرەت يۈكلىيەلمىدى: %s"
-
-#~ msgid "Error writing to image file: %s"
-#~ msgstr "سۈرەت ھۆججەت يېزىش خاتالىقى: %s"
-
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr "بۇ gdk-pixbuf ساقلايدىغان بۇ خىل ھۆججەت شەكلىنى قوللىمايدۇ ：%s"
-
-#~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "بۇ سۈرەتنى ساقلاشقا يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Failed to open temporary file"
-#~ msgstr "ۋاقىتلىق ھۆججەتنى ئاچالمىدى"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "ۋاقىتلىق ھۆججەتتىن ئوقۇيالمىدى"
-
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "'%s' نى ئېچىپ يازالمىدى: %s"
-
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr ""
-#~ "سۈرەتكە يازغاندا '%s' نى ياپالمىدى، ھەممە سانلىق مەلۇمات ساقلانمىغان "
-#~ "بولۇشى مۇمكىن: %s"
-
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "بۇ سۈرەتنى يىغلەككە ساقلاشقا ئەسلەك يېتىشمەيدۇ"
-
-#~ msgid "Error writing to image stream"
-#~ msgstr "سۈرەت ئاقمىسى ساقلاۋاتقاندا خاتالىق كۆرۈلدى"
-
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "ئىچكى خاتالىق: سۈرەت يۈكلەش بۆلىكى '%s' مەلۇم مەشغۇلاتنى تاماملىيالمىدى، "
-#~ "لېكىن ھېچقانداق خاتالىق سەۋەبى بېرىلمىدى"
-
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "'%s' سۈرەت تىپى تەدرىجىي يۈكلەشنى قوللىمايدۇ"
-
-#~ msgid "Image header corrupt"
-#~ msgstr "سۈرەت بېشى بۇزۇلغان"
-
-#~ msgid "Image format unknown"
-#~ msgstr "نامەلۇم سۈرەت شەكلى"
-
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "سۈرەت پىكسېل سانلىق مەلۇماتى بۇزۇلغان"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "%u بايتلىق سۈرەت يىغلەكنى  تەقسىملىيەلمىدى"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "جانلاندۇرۇمدا ئېنىقلانمىغان بۆلەك بار"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "قوللىمايدىغان جانلاندۇرۇم تىپى"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "جانلاندۇرۇم بېشى ئىناۋەتسىز"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "جانلاندۇرۇم يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "جانلاندۇرۇمدىكى بۆلەكنىڭ شەكلى خاتا"
-
-#~ msgid "The ANI image format"
-#~ msgstr "ANI سۈرەت فورماتى"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "BMP سۈرەتتە يالغان سۈرەت بېشى سانلىق مەلۇماتى بار "
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "بىتلىق تەسۋىر يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "قوللىمايدىغان BMP سۈرەت بېشى چوڭ كىچىكلىكى "
-
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "يۇقىرىدىن تۆۋەنگە يېزىلغان BMP سۈرەت شەكلىنى پرېسلىيالمايدۇ"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "ھۆججەت بۇرۇن ئاخىرلاشقان"
-
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "BMP ھۆججەتنى ساقلاشقا ئەسلەك تەقسىملىيەلمىدى"
-
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "BMP ھۆججەتكە يازالمىدى"
-
-#~ msgid "The BMP image format"
-#~ msgstr "BMP سۈرەت فورماتى"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "GIF ھۆججەتنى ئوقۇيالمىدى:%s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "GIF ھۆججەتتە بەزى سانلىق مەلۇماتلار كەم(ھۆججەت كېسىپ قىسقارتىلغان بولۇشى "
-#~ "مۇمكىن)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "GIF يۈكلىگۈچتە ئىچكى خاتالىق كۆرۈلدى(%s)"
-
-#~ msgid "Stack overflow"
-#~ msgstr "تۇرادىن ھالقىدى"
-
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "GIF ھۆججەت يۈكلەش بۆلىكى بۇ سۈرەتنى تەھلىل قىلالمىدى"
-
-#~ msgid "Bad code encountered"
-#~ msgstr "خاتا كود كۆرۈلدى"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "GIF سۈرەتتىكى جەدۋەل تۈرى دەۋرىيلىكى"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "GIF ھۆججەتنى يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "GIF ھۆججەتتىكى بىر كاندۇكنى ھاسىل قىلىشقا يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "GIF سۈرەت بۇزۇلغان(ناتوغرا LZW پرېس شەكلى)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "ھۆججەت GIF ھۆججەت ئەمەستەك تۇرىدۇ"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "قوللىمايدىغان %s نەشرىدىكى GIF سۈرەت ھۆججەت فورماتى"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "GIF سۈرەتنىڭ ئومۇمىيەت رەڭ خەرىتىسى يوق، ئۇنىڭ ئىچىدىكى بىر بۆلەكنىڭمۇ "
-#~ "رەڭ خەرىتىسى يوق"
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "GIF سۈرەت كېسىپ قىسقارتىلغان ياكى كەمتۈك"
-
-#~ msgid "The GIF image format"
-#~ msgstr "GIF سۈرەت فورماتى"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "سىنبەلگە بېشى ئىناۋەتسىز"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "سىنبەلگە يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "سىنبەلگە كەڭلىكى نۆل"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "سىنبەلگە ئېگىزلىكى نۆل"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "پرېسلانغان سىنبەلگىنى قوللىمايدۇ"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "قوللىمايدىغان رەسىم بەلگە تۈرى"
-
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "ICO ھۆججىتىنى يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "سۈرەت بەك چوڭ،  ICO شەكلىدە ساقلىغىلى بولمايدۇ."
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "نۇر بەلگە ئورنى سۈرەت سىرتىدا"
-
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "قوللىمايدىغان ICO ھۆججەت چوڭقۇرلۇقى: %d"
-
-#~ msgid "The ICO image format"
-#~ msgstr "ICO سۈرەت فورماتى"
-
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "ICNS سۈرەت ھۆججەت ئوقۇغاندا خاتالىق كۆرۈلدى: %s"
-
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "ICNS ھۆججەت كودىنى يېشەلمىدى"
-
-#~ msgid "The ICNS image format"
-#~ msgstr "ICNS سۈرەت فورماتى"
-
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "ئېقىمغا ئەسلەك تەقسىملىيەلمىدى"
-
-#~ msgid "Couldn't decode image"
-#~ msgstr "سۈرەت كودىنى يېشەلمىدى"
-
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "ئايلاندۇرۇلغان JPEG2000 نىڭ كەڭلىكى ياكى ئۇزۇنلۇقى نۆل"
-
-#~ msgid "Image type currently not supported"
-#~ msgstr "نۆۋەتتە بۇ خىل سۈرەت فورماتىنى قوللىمايدۇ"
-
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "رەڭ سەپلىمىسىگە ئەسلەك تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "JPEG 2000 ھۆججەتنى ئېچىشقا يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "يىغلەك سۈرەت سانلىق مەلۇماتىغا ئەسلەك تەقسىملىيەلمەيدۇ"
-
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "JPEG 2000 سۈرەت فورماتى"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "JPEG سۈرەتنى تەھلىل قىلغاندا خاتالىق كۆرۈلدى (%s)"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "سۈرەت يۈكلەشكە ئەسلەك يېتىشمەيدۇ، بەزى قوللىنىشچان پروگراممىلارنى يېپىپ "
-#~ "ئەسلەكنى بىكارلاپ سىناپ بېقىڭ"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "قوللىمايدىغان JPEG رەڭ بوشلۇقى  (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "JPEG ھۆججەتنى يۈكلەشكە ئەسلەك تەقسىملىيەلمىدى"
-
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "ئۆزگەرتىلگەن JPEG نىڭ كەڭلىكى ياكى ئۇزۇنلۇقى نۆل"
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "JPEG نىڭ سۈپىتى چوقۇم 0 دىن 100 گىچە بولۇشى كېرەك. '%s' قىممەتنى تەھلىل "
-#~ "قىلالمىدى"
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "JPEG نىڭ سۈپىتى چوقۇم 0 دىن 100 گىچە بولۇشى كېرەك. '%d' قىممەتنى "
-#~ "ئىشلىتىشكە يول قويۇلمايدۇ."
-
-#~ msgid "The JPEG image format"
-#~ msgstr "JPEG سۈرەت فورماتى"
-
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "ھۆججەت بېشىغا ئەسلەك تەقسىملىيەلمىدى"
-
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "كونتېكىست يىغلەككە ئەسلەك تەقسىملىيەلمىدى"
-
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "سۈرەتنىڭ كەڭلىكى ۋە ياكى ئۇزۇنلۇقى ئىناۋەتسىز"
-
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "رەسىمدە قوللىمايدىغان bpp بار"
-
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "سۈرەتتە قوللىمايدىغان %d بىتلىق رەڭ تەخسىسى بار  "
-
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "يېڭى پىكسېل يىغلەك قۇرالمايدۇ"
-
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "سىزىقلىق سانلىق مەلۇماتقا ئەسلەك تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "رەڭ تەڭشەش تاختىسى سانلىق مەلۇمات ئۈچۈن  ئەسلەك  تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "PCX سۈرەتنىڭ بارلىق سىزىقلىق مەلۇماتلىرىغا ئېرىشەلمىدى"
-
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "PCX سانلىق مەلۇماتىنىڭ ئاخىرىدا رەڭ تەڭشىگۈچ بايقالمىدى"
-
-#~ msgid "The PCX image format"
-#~ msgstr "PCX سۈرەت فورماتى "
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "PNG سۈرەتنىڭ ھەر بىر قانىلىنىڭ بىت سانى ئىناۋەتسىز ."
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "ئۆزگىرىشچان PNG نىڭ كەڭلىكى ياكى ئېگىزلىكى نۆل."
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "ئۆزگىرىشچان PNG نىڭ بىت سانى 8 ئەمەس"
-
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "ئۆزگىرىشچان PNG بولسا  RGB ياكى RGBA ئەمەس."
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "ئۆزگىرىشچان PNG قوللىمايدىغان قانال سانىنى ئۆز ئىچىگە ئالغان. چوقۇم 3 "
-#~ "ياكى 4 بولۇشى لازىم"
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "PNG سۈرەت ھۆججەتتە ئېغىر خاتالىق كۆرۈلدى: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "PNG يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "چوڭلۇقى %ld x %ld بولغان سۈرەتنى يۈكلەشكە يېتەرلىك ئەسلەك يوق؛ باشقا "
-#~ "قوللىنىشچان پروگراممىلارنى يېپىپ ئەسلەك ئىشلىتىش مىقدارىنى ئازايتىڭ."
-
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "PNG سۈرەتنى ئوقۇغاندا ئېغىر خاتالىق كۆرۈلدى"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "PNG سۈرەتنى ئوقۇغاندا ئېغىر خاتالىق كۆرۈلدى: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "PNG يېزىق رامكىسىنىڭ ھالقىلىق سۆزى 1-79 غىچە بولۇشى كېرەك "
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "PNG يېزىق رامكىسىنىڭ ھالقىلىق سۆزى ASCII چوقۇم بولۇشى كېرەك"
-
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "رەڭ سەپلىمە ھۆججىتىنىڭ ئۇزۇنلۇقى %d ئىناۋەتسىز."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "PNG پرېسلاش دەرىجىسى چوقۇم 9-0 گىچە بولۇشى كېرەك؛  ئانالىز قىلىنمايدىغان "
-#~ "قىممەت %s ."
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "PNG نىڭ پرېسلاش دەرىجىسى چوقۇم 9-0 گىچە بولۇشى كېرەك . '%d' قىممەتنى "
-#~ "ئىشلىتىشكە يول قويۇلمايدۇ."
-
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr "PNG تېكىست رامكىسى %s نى ISO-8859-1 غا ئايلاندۇرۇشقا بولمايدۇ"
-
-#~ msgid "The PNG image format"
-#~ msgstr "PNG سۈرەت فورماتى"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "PNM يۈكلەش بۆلەك پۈتۈن سان تاپالمىدى "
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "PNM ھۆججەتنىڭ باش بېتى خاتا"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr ""
-#~ "PNG ھۆججەت پەرقلەندۈرگىلى بولىدىغان PNM قوشۇمچە فورماتتا ساقلانمىغان"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "PNM ھۆججەتنىڭ سۈرەت كەڭلىكى 0"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "PNM ھۆججەتنىڭ سۈرەت ئېگىزلىكى 0 "
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "PNM ھۆججەتتە ئىشلەتكىلى بولىدىغان ئەڭ كۆپ رەڭ سانى 0"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "PNM ھۆججەتتە ئىشلەتكىلى بولىدىغان ئەڭ كۆپ رەڭ سانى بەك چوڭ"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "ئەسلىدىكى PNM سۈرەتنىڭ تىپى ئىناۋەتسىز"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "PNM يۈكلەش پروگراممىسى بۇ خىل  PNM تارماق فورماتنى قوللىمايدۇ"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr ""
-#~ "ئەسلىدىكى PNM فورماتى نۇسخىلاشتىن بۇرۇن بىر بوشلۇق ئورنىغا ئېھتىياجلىق"
-
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "ئەسلەك تەقسىملەپ PNM سۈرەتنى يۈكلىيەلمەيدۇ"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "PNM نىڭ تىل مۇھىت بۆلىكىنى يۈكلەشكە ئەسلەك يېتىشمەيدۇ "
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "PNM سۈرەت سانلىق مەلۇماتى بالدۇر ئاخىرلاشقان"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "PNM نى يۈكلەشكە ئەسلەك يېتىشمەيدۇ "
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "PNM/PBM/PGM/PPM سۈرەت ھۆججەت تۈرى"
-
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "كىرگۈزگەن ھۆججەت چۈشەندۈرۈشى NULL."
-
-#~ msgid "Failed to read QTIF header"
-#~ msgstr " QTIF بېشىنى ئوقۇيالمىدى"
-
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "QTIF ئاتوم چوڭلۇقى بەك چوڭ (%d بايت)"
-
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "%d بايتلىق ھۆججەت ئوقۇش يىغلەكنى تەقسىملىيەلمىدى"
-
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr " QTIF ئاتوم ئوقۇشتىكى ھۆججەت خاتالىقى: %s"
-
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "كېيىنكى %d بايت seek() تىن ئاتلىيالمىدى."
-
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "QTIF تىل مۇھىت قۇرۇلمىسىنى تەقسىملىيەلمىدى."
-
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "GdkPixbufLoader ئوبيېكت قۇرالمىدى."
-
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "سۈرەت سانلىق مەلۇمات ئاتومىنى تاپالمىدى."
-
-#~ msgid "The QTIF image format"
-#~ msgstr "QTIF سۈرەت فورماتى"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "RAS سۈرەتتە يالغان باش سانلىق مەلۇماتى بار"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "RAS سۈرەتنىڭ تىپى نامەلۇم"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "قوللىمايدىغان RAS سۈرەت شالغۇتى"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "RAS سۈرەتنى يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Sun ئوپتىك پەنجىرىلىك سۈرەت فورماتى"
-
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "IOBuffer ئەسلەك تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "IOBuffer سانلىق مەلۇماتى ئۈچۈن ئەسلەك تەقسىملىيەلمەيدۇ "
-
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "IOBuffer ئۈچۈن قايتىدىن ئەسلەك تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "IOBuffer ئۈچۈن ۋاقىتلىق ئەسلەك تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "يېڭى پىكسېللىق يىغلەكنى تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "سۈرەت بۇزۇلغان ياكى كېسىلگەن"
-
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "رەڭ جەدۋەل قۇرۇلمىسىنى تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "رەڭ جەدۋەل تۈرىنى تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "ئېنىقسىز رەڭلىك جەدۋەل بىت چوڭقۇرلۇقى"
-
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "TGA باش ئەسلەكنى تەقسىملىيەلمەيدۇ"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "TGA سۈرەت ئۆلچىمى ئىناۋەتسىز"
-
-#~ msgid "TGA image type not supported"
-#~ msgstr "TGA سۈرەت تىپىنى قوللىمايدۇ"
-
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "TGA نىڭ تىل مۇھىت تۈزۈلۈشى ئۈچۈن ئەسلەك تەقسىملىيەلمەيدۇ "
-
-#~ msgid "Excess data in file"
-#~ msgstr "ھۆججەتتىكى سانلىق مەلۇمات نورمىدىن ھالقىپ كەتكەن"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Targa سۈرەت فورماتى"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "سۈرەت كەڭلىكىگە ئېرىشەلمىدى (TIFF ھۆججەت بۇزۇلغان)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "سۈرەت ئېگىزلىكىگە ئېرىشەلمىدى (TIFF ھۆججەت بۇزۇلغان)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "TIFF سۈرەتنىڭ كەڭلىك ياكى ئېگىزلىكى 0"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "TIFF سۈرەت ئۆلچىمى بەك چوڭ "
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "TIFFھۆججەتنى ئىچىشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "TIFF ھۆججەتتىكى RGB سانلىق مەلۇماتلارنى يۈكلىيەلمىدى"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "TIFF سۈرەتنى ئاچالمىدى"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "TIFFClose مەشغۇلات مەغلۇپ بولدى"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "TIFF سۈرەتنى يۈكلىيەلمىدى"
-
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "TIFF سۈرەتنى ساقلىيالمىدى"
-
-#~ msgid "TIFF compression doesn't refer to a valid codec."
-#~ msgstr "TIFF پرېسلاش ئىناۋەتلىك كودلاشتىن پايدىلىنالمىدى."
-
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "TIFF سانلىق مەلۇماتقا يازالمىدى"
-
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "TIFF ھۆججەتكە يازالمىدى"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "TIFF سۈرەت فورماتى"
-
-#~ msgid "Image has zero width"
-#~ msgstr "سۈرەت كەڭلىكى 0"
-
-#~ msgid "Image has zero height"
-#~ msgstr "سۈرەت ئېگىزلىكى 0"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "سۈرەت يۈكلەشكە يېتەرلىك ئەسلەك يوق"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "قالغان قىسمىنى ساقلىيالمايدۇ"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "WBMP سۈرەت فورماتى"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "XBMھۆججەت ئىناۋەتسىز"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "XBM ھۆججەت يۈكلەشكە ئەسلەك يېتىشمەيدۇ"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "XBM سۈرەت يۈكلەۋاتقاندا ۋاقىتلىق ھۆججەتكە يازالمىدى"
-
-#~ msgid "The XBM image format"
-#~ msgstr "XBM سۈرەت فورماتى"
-
-#~ msgid "No XPM header found"
-#~ msgstr "XPM بېشى تېپىلمىدى"
-
-#~ msgid "Invalid XPM header"
-#~ msgstr "XBM باش ئىناۋەتسىز"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "XPM ھۆججەت سۈرەت كەڭلىكى <= 0"
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "XPM ھۆججەت سۈرەت ئېگىزلىكى <= 0"
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM ھەربىر پىكسېل ئىگىلىگەن بىت سانى ئىناۋەتسىز"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "XPM ھۆججەت رەسىم رەڭ سانى توغرا ئەمەس"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "XPM سۈرەت يۈكلەشكە ئەسلەك تەقسىملىيەلمەيدۇ"
-
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "XPM رەڭ جەدۋەلنى ئوقۇيالمىدى"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "XPM يۈكلىگەندە ۋاقىتلىق ھۆججەتكە يازالمىدى"
-
-#~ msgid "The XPM image format"
-#~ msgstr "XPM سۈرەت فورماتى"
-
-#~ msgid "The EMF image format"
-#~ msgstr "EMF سۈرەت فورماتى"
-
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "ئەسلەك تەقسىملىيەلمەيدۇ: %s"
-
-#~ msgid "Could not create stream: %s"
-#~ msgstr "ئېقىم قۇرالمايدۇ: %s"
-
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "ئېقىمنى ئىزدىيەلمەيدۇ: %s"
-
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "ئېقىمدىن ئوقۇيالمايدۇ: %s"
-
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "سۈرەتنى يۈكلىيەلمىدى"
-
-#~ msgid "Couldn't load metafile"
-#~ msgstr "مېتا ھۆججەتنى يۈكلىيەلمىدى"
-
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "GDI+ بۇ سۈرەت فورماتىنى تونۇمايدۇ"
-
-#~ msgid "Couldn't save"
-#~ msgstr "ساقلىيالمىدى"
-
-#~ msgid "The WMF image format"
-#~ msgstr "WMF سۈرەت فورماتى"
-
-#~ msgid "\"Deepness\" of the color."
-#~ msgstr "رەڭ چوڭقۇرلۇقى."
-
-#~ msgid "Folders"
-#~ msgstr "قىسقۇچ"
-
-#~ msgid "Fol_ders"
-#~ msgstr "قىسقۇچ(_D)"
-
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "قىسقۇچنى ئوقۇغىلى بولمىدى: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "ھۆججەت \"%s\" باشقا بىر (%s ئاتلىق)مۇلازىمېتىردا، مەزكۇر پروگرامما "
-#~ "زىيارەت قىلالماسلىقى مۇمكىن. \n"
-#~ "ئۇنى راستىنىلا تاللامسىز؟"
-
-#~ msgid "_New Folder"
-#~ msgstr "يېڭى قىسقۇچ(_N)"
-
-#~ msgid "De_lete File"
-#~ msgstr "ھۆججەت ئۆچۈر(_L)"
-
-#~ msgid "_Rename File"
-#~ msgstr "ھۆججەت ئاتىنى ئۆزگەرت"
-
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "\"%s\" قىسقۇچ ئاتىدا ھۆججەت ئاتىدا مەۋجۇت بولۇشقا يول قويۇلمايدىغان بەلگە "
-#~ "بار"
-
-#~ msgid "New Folder"
-#~ msgstr "يېڭى قىسقۇچ"
-
-#~ msgid "_Folder name:"
-#~ msgstr "قىسقۇچ ئاتى(_F):"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "\"%s\" ھۆججەت ئاتىدا مەۋجۇت بولۇشقا يول قويۇلمايدىغان بەلگە بار"
-
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "'%s' ھۆججەتنى ئۆچۈرگەندە خاتالىق كۆرۈلدى:%s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "\"%s\" ھۆججەتنى راستلا ئۆچۈرەمسىز؟"
-
-#~ msgid "Delete File"
-#~ msgstr "ھۆججەت ئۆچۈر"
-
-#~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr "ھۆججەت ئاتىنى \"%s\"  غا ئۆزگەرتكەندە خاتالىق كۆرۈلدى: %s"
-
-#~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr "ھۆججەت \"%s\" ئاتىنى ئۆزگەرتكەندە خاتالىق كۆرۈلدى: %s "
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "\"%s\" ھۆججەت ئاتىنى \"%s\" غا ئۆزگەرتكەندە خاتالىق كۆرۈلدى: %s"
-
-#~ msgid "Rename File"
-#~ msgstr "ھۆججەت ئاتىنى ئۆزگەرت"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "\"%s\" ھۆججەت ئاتىنى ئۆزگەرت:"
-
-#~ msgid "_Rename"
-#~ msgstr "ئات ئۆزگەرت(_R)"
-
-#~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-#~ "environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr ""
-#~ "\"%s\" ھۆججەت ئاتىنى UTF-8 گە ئۆزگەرتەلمىدى.(G_FILENAME_ENCODING مۇھىت "
-#~ "ئۆزگەرگۈچى مىقدار تەڭشەشنى سىناڭ): %s"
-
-#~ msgid "Invalid UTF-8"
-#~ msgstr "ئىناۋەتسىز  UTF-8"
-
-#~ msgid "Name too long"
-#~ msgstr "ئات بەك ئۇزۇن"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "ئاتنى ئالماشتۇرالمىدى"
-
-#~ msgid "Gamma"
-#~ msgstr "گامما"
-
-#~ msgid "_Gamma value"
-#~ msgstr "گامما قىممەت(_G)"
-
-#~ msgid "Input"
-#~ msgstr "كىرگۈز"
-
-#~ msgid "No extended input devices"
-#~ msgstr "كېڭەيتىلگەن كىرگۈزگۈچ يوق"
-
-#~ msgid "_Device:"
-#~ msgstr "ئۈسكۈنە(_D):"
-
-#~ msgid "Disabled"
-#~ msgstr "چەكلەنگەن"
-
-#~ msgid "Screen"
-#~ msgstr "ئېكران"
-
-#~ msgid "Window"
-#~ msgstr "كۆزنەك"
-
-#~ msgid "_Mode:"
-#~ msgstr "ھالەت(_M):"
-
-#~ msgid "Axes"
-#~ msgstr "ئوق"
-
-#~ msgid "Keys"
-#~ msgstr "كۇنۇپكا"
-
-#~ msgid "_X:"
-#~ msgstr "_X:"
-
-#~ msgid "_Y:"
-#~ msgstr "_Y:"
-
-#~ msgid "_Pressure:"
-#~ msgstr "كۈچى(_P):"
-
-#~ msgid "X _tilt:"
-#~ msgstr "X قىيپاش(_T):"
-
-#~ msgid "Y t_ilt:"
-#~ msgstr "Y قىيپاش(_I):"
-
-#~ msgid "_Wheel:"
-#~ msgstr "چەمبىرەك(_W):"
-
-#~ msgid "none"
-#~ msgstr "يوق"
-
-#~ msgid "(disabled)"
-#~ msgstr "(چەكلەنگەن)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(نامەلۇم)"
-
-#~ msgid "Cl_ear"
-#~ msgstr "تازىلا(_E)"
-
-#~ msgid "Error printing"
-#~ msgstr "بېسىشتا خاتالىق كۆرۈلدى"
-
-#~ msgid "--- No Tip ---"
-#~ msgstr "--- ئەسكەرتىش يوق---"
-
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "'%s' پرىنتېر باغلىنالماسلىقى مۇمكىن."
+msgstr ""
+"'%s' سۈرەتنى يۈكلىيەلمىدى. سەۋەبى  ئېنىق ئەمەس بۇ ھۆججەت بۇزۇلۇپ كەتكەن "
+"بولۇشى مۇمكىن"
