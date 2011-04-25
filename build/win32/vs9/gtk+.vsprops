@@ -319,6 +319,11 @@ copy ..\..\..\gtk\gtkwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#
 copy ..\..\..\gdk\gdkconfig.h $(OutDir)\include\gtk-3.0\gdk&#x0D;&#x0A;
 
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\lib&#x0D;&#x0A;
+
+mkdir $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
+copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
+echo &quot;Compiling gsettings XML File(s)...&quot;&#x0D;&#x0A;
+$(OutDir)\bin\glib-compile-schemas.exe $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 "
 	/>
 	<UserMacro
