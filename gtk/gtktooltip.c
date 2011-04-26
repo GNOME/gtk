@@ -34,6 +34,7 @@
 #include "gtkhbox.h"
 #include "gtkalignment.h"
 #include "gtksizerequest.h"
+#include "gtkwindowprivate.h"
 
 
 /**
@@ -1004,22 +1005,23 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 		      GdkDisplay *display,
 		      GtkWidget  *new_tooltip_widget)
 {
-  gint x, y;
+  gint x, y, width, height;
   GdkScreen *screen;
   gint monitor_num;
   GdkRectangle monitor;
-  GtkRequisition requisition;
   guint cursor_size;
   GdkRectangle bounds;
 
 #define MAX_DISTANCE 32
 
+  gtk_widget_realize (GTK_WIDGET (tooltip->current_window));
+
   tooltip->tooltip_widget = new_tooltip_widget;
 
   screen = gtk_widget_get_screen (new_tooltip_widget);
 
-  gtk_widget_get_preferred_size (GTK_WIDGET (tooltip->current_window),
-                                 &requisition, NULL);
+  width = gtk_widget_get_allocated_width (GTK_WIDGET (tooltip->current_window));
+  height = gtk_widget_get_allocated_height (GTK_WIDGET (tooltip->current_window));
 
   monitor_num = gdk_screen_get_monitor_at_point (screen,
                                                  tooltip->last_x,
@@ -1033,10 +1035,10 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   cursor_size = gdk_display_get_default_cursor_size (display);
 
   /* Try below */
-  x = bounds.x + bounds.width / 2 - requisition.width / 2;
+  x = bounds.x + bounds.width / 2 - width / 2;
   y = bounds.y + bounds.height + 4;
 
-  if (y + requisition.height <= monitor.y + monitor.height)
+  if (y + height <= monitor.y + monitor.height)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
@@ -1045,28 +1047,28 @@ gtk_tooltip_position (GtkTooltip *tooltip,
         {
           if (tooltip->last_x + cursor_size + MAX_DISTANCE < x)
             x = tooltip->last_x + cursor_size + MAX_DISTANCE;
-          else if (x + requisition.width < tooltip->last_x - MAX_DISTANCE)
-            x = tooltip->last_x - MAX_DISTANCE - requisition.width;
+          else if (x + width < tooltip->last_x - MAX_DISTANCE)
+            x = tooltip->last_x - MAX_DISTANCE - width;
 
           goto found;
         }
    }
 
   /* Try above */
-  x = bounds.x + bounds.width / 2 - requisition.width / 2;
-  y = bounds.y - requisition.height - 4;
+  x = bounds.x + bounds.width / 2 - width / 2;
+  y = bounds.y - height - 4;
 
   if (y >= monitor.y)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
 
-      if (y + requisition.height >= tooltip->last_y - MAX_DISTANCE)
+      if (y + height >= tooltip->last_y - MAX_DISTANCE)
         {
           if (tooltip->last_x + cursor_size + MAX_DISTANCE < x)
             x = tooltip->last_x + cursor_size + MAX_DISTANCE;
-          else if (x + requisition.width < tooltip->last_x - MAX_DISTANCE)
-            x = tooltip->last_x - MAX_DISTANCE - requisition.width;
+          else if (x + width < tooltip->last_x - MAX_DISTANCE)
+            x = tooltip->last_x - MAX_DISTANCE - width;
 
           goto found;
         }
@@ -1074,9 +1076,9 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
   /* Try right FIXME: flip on rtl ? */
   x = bounds.x + bounds.width + 4;
-  y = bounds.y + bounds.height / 2 - requisition.height / 2;
+  y = bounds.y + bounds.height / 2 - height / 2;
 
-  if (x + requisition.width <= monitor.x + monitor.width)
+  if (x + width <= monitor.x + monitor.width)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
@@ -1085,28 +1087,28 @@ gtk_tooltip_position (GtkTooltip *tooltip,
         {
           if (tooltip->last_y + cursor_size + MAX_DISTANCE < y)
             y = tooltip->last_y + cursor_size + MAX_DISTANCE;
-          else if (y + requisition.height < tooltip->last_y - MAX_DISTANCE)
-            y = tooltip->last_y - MAX_DISTANCE - requisition.height;
+          else if (y + height < tooltip->last_y - MAX_DISTANCE)
+            y = tooltip->last_y - MAX_DISTANCE - height;
 
           goto found;
         }
     }
 
   /* Try left FIXME: flip on rtl ? */
-  x = bounds.x - requisition.width - 4;
-  y = bounds.y + bounds.height / 2 - requisition.height / 2;
+  x = bounds.x - width - 4;
+  y = bounds.y + bounds.height / 2 - height / 2;
 
   if (x >= monitor.x)
     {
       if (tooltip->keyboard_mode_enabled)
         goto found;
 
-      if (x + requisition.width >= tooltip->last_x - MAX_DISTANCE)
+      if (x + width >= tooltip->last_x - MAX_DISTANCE)
         {
           if (tooltip->last_y + cursor_size + MAX_DISTANCE < y)
             y = tooltip->last_y + cursor_size + MAX_DISTANCE;
-          else if (y + requisition.height < tooltip->last_y - MAX_DISTANCE)
-            y = tooltip->last_y - MAX_DISTANCE - requisition.height;
+          else if (y + height < tooltip->last_y - MAX_DISTANCE)
+            y = tooltip->last_y - MAX_DISTANCE - height;
 
           goto found;
         }
@@ -1115,7 +1117,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
    /* Fallback */
   if (tooltip->keyboard_mode_enabled)
     {
-      x = bounds.x + bounds.width / 2 - requisition.width / 2;
+      x = bounds.x + bounds.width / 2 - width / 2;
       y = bounds.y + bounds.height + 4;
     }
   else
@@ -1129,22 +1131,22 @@ found:
   /* Show it */
   if (tooltip->current_window)
     {
-      if (x + requisition.width > monitor.x + monitor.width)
-        x -= x - (monitor.x + monitor.width) + requisition.width;
+      if (x + width > monitor.x + monitor.width)
+        x -= x - (monitor.x + monitor.width) + width;
       else if (x < monitor.x)
         x = monitor.x;
 
-      if (y + requisition.height > monitor.y + monitor.height)
-        y -= y - (monitor.y + monitor.height) + requisition.height;
+      if (y + height > monitor.y + monitor.height)
+        y -= y - (monitor.y + monitor.height) + height;
       else if (y < monitor.y)
         y = monitor.y;
 
       if (!tooltip->keyboard_mode_enabled)
         {
           /* don't pop up under the pointer */
-          if (x <= tooltip->last_x && tooltip->last_x < x + requisition.width &&
-              y <= tooltip->last_y && tooltip->last_y < y + requisition.height)
-            y = tooltip->last_y - requisition.height - 2;
+          if (x <= tooltip->last_x && tooltip->last_x < x + width &&
+              y <= tooltip->last_y && tooltip->last_y < y + height)
+            y = tooltip->last_y - height - 2;
         }
 
       gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
