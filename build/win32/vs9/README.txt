@@ -33,9 +33,10 @@ The recommended build order for these dependencies:
  as described in the README.txt file in the build/win32/vs9 folder)
 -zlib
 -libpng
--(optional for GDK-Pixbuf) IJG JPEG
--(optional for GDK-Pixbuf) requires zlib and IJG JPEG)libtiff
--(optional for GDK-Pixbuf) jasper [jpeg-2000 library])
+-(for GDK-Pixbuf, if not using GDI+) IJG JPEG
+-(for GDK-Pixbuf, if not using GDI+) libtiff
+ [libtiff requires zlib and IJG JPEG]
+-(for GDK-Pixbuf, if not using GDI+) jasper [jpeg-2000 library])
 -(optional for GLib) PCRE (version 8.12 or later, use of CMake to
   build PCRE is recommended-see build/win32/vs9/README.txt of GLib)
 -GLib

@@ -19,8 +19,8 @@ to different CRTs can be kept at a minimum.  zlib, libpng, and Cairo
 do contain support for compiling under VS10 using VS
 project files and/or makefiles at this time of writing, For the
 GTK+ stack, VS10 project files are either available under
-$(srcroot)/build/vs10 in the case of GLib (stable/unstable), ATK
-(unstable) and GDK-Pixbuf (unstable), and should be in the next
+$(srcroot)/build/vs10 in the case of GLib (stable/unstable), ATK**
+(2.x stable/unstable) and GDK-Pixbuf (unstable), and should be in the next
 unstable version of Pango.  There is no known official VS10 build
 support for fontconfig (along with freetype and expat) and
 gettext-runtime, so please use the binaries from: 
@@ -41,7 +41,7 @@ The recommended build order for these dependencies:
   build PCRE is recommended-see build/win32/vs10/README.txt of GLib)
 -GLib
 -Cairo (inclusive of Cairo-GObject)
--ATK
+-ATK-2.x**
 -Pango
 -GDK-Pixbuf
 (note the last 3 dependencies are not interdependent, so the last 3
@@ -60,7 +60,18 @@ from a specific GLib source tree.
  dependencies optional, as those are not compulsory components for
  building and running GTK+ itself, but note that they are needed for
  people running and building GIMP. They are referred to by components
- in Cairo and Pango mainly. 
+ in Cairo and Pango mainly.
+ 
+**Regarding ATK-2.x: prior to compiling ATK-2.x, please open atkprops
+  in VS under "Properties Manager" view (it is under any one of the
+  build configurations, right-click on atkprops and select "Properties").
+  Navigate to "User Macros", and edit the following fields:
+  AtkApiVersion -> 2.0
+  AtkLibToolCompatibleDllSuffix -> -2.0-0
+  AtkSeperateVS10DLLSuffix -> -2-vs10
+  Sorry this change did not make it upstream prior to ATK-2.0.0 release-
+  this will be in the subsequent releases of ATK-2.x and was committed
+  upstream.
 
 --Tor Lillqvist <tml@iki.fi>
 --Updated by Chun-wei Fan <fanc999@yahoo.com.tw>
