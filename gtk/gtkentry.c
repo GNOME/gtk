@@ -2446,6 +2446,7 @@ gtk_entry_dispose (GObject *object)
 {
   GtkEntry *entry = GTK_ENTRY (object);
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+  GdkKeymap *keymap;
 
   gtk_entry_set_icon_from_pixbuf (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
@@ -2459,6 +2460,10 @@ gtk_entry_dispose (GObject *object)
       g_object_unref (priv->buffer);
       priv->buffer = NULL;
     }
+
+  keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (object)));
+  g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
+  g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
@@ -4174,16 +4179,16 @@ gtk_entry_focus_out (GtkWidget     *widget,
   completion = gtk_entry_get_completion (entry);
   if (completion)
     _gtk_entry_completion_popdown (completion);
-  
+
   return FALSE;
 }
 
 static void
-gtk_entry_grab_focus (GtkWidget        *widget)
+gtk_entry_grab_focus (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   gboolean select_on_focus;
-  
+
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (widget);
 
   if (entry->editable && !entry->in_click)
@@ -4192,20 +4197,20 @@ gtk_entry_grab_focus (GtkWidget        *widget)
                     "gtk-entry-select-on-focus",
                     &select_on_focus,
                     NULL);
-  
+
       if (select_on_focus)
         gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
     }
 }
 
-static void 
+static void
 gtk_entry_direction_changed (GtkWidget        *widget,
-			     GtkTextDirection  previous_dir)
+                             GtkTextDirection  previous_dir)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
   gtk_entry_recompute (entry);
-      
+
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->direction_changed (widget, previous_dir);
 }
 
@@ -4217,12 +4222,12 @@ gtk_entry_state_changed (GtkWidget      *widget,
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
   GdkCursor *cursor;
   gint i;
-  
+
   if (gtk_widget_get_realized (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
-      for (i = 0; i < MAX_ICONS; i++) 
+      for (i = 0; i < MAX_ICONS; i++)
         {
           EntryIconInfo *icon_info = priv->icons[i];
           if (icon_info && icon_info->window)
@@ -4231,9 +4236,9 @@ gtk_entry_state_changed (GtkWidget      *widget,
 
       if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
-      else 
+      else
         cursor = NULL;
-      
+
       gdk_window_set_cursor (entry->text_area, cursor);
 
       if (cursor)
@@ -4247,9 +4252,9 @@ gtk_entry_state_changed (GtkWidget      *widget,
   if (!gtk_widget_is_sensitive (widget))
     {
       /* Clear any selection */
-      gtk_editable_select_region (GTK_EDITABLE (entry), entry->current_pos, entry->current_pos);      
+      gtk_editable_select_region (GTK_EDITABLE (entry), entry->current_pos, entry->current_pos);
     }
-  
+
   gtk_widget_queue_draw (widget);
 }
 
