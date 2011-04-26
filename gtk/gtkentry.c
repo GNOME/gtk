@@ -2579,6 +2579,7 @@ gtk_entry_dispose (GObject *object)
 {
   GtkEntry *entry = GTK_ENTRY (object);
   GtkEntryPrivate *priv = entry->priv;
+  GdkKeymap *keymap;
 
   gtk_entry_set_icon_from_pixbuf (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
@@ -2592,6 +2593,9 @@ gtk_entry_dispose (GObject *object)
       priv->buffer = NULL;
     }
 
+  keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (object)));
+  g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
+  g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
 
@@ -4290,17 +4294,17 @@ gtk_entry_focus_out (GtkWidget     *widget,
   completion = gtk_entry_get_completion (entry);
   if (completion)
     _gtk_entry_completion_popdown (completion);
-  
+
   return FALSE;
 }
 
 static void
-gtk_entry_grab_focus (GtkWidget        *widget)
+gtk_entry_grab_focus (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   gboolean select_on_focus;
-  
+
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (widget);
 
   if (priv->editable && !priv->in_click)
@@ -4309,20 +4313,20 @@ gtk_entry_grab_focus (GtkWidget        *widget)
                     "gtk-entry-select-on-focus",
                     &select_on_focus,
                     NULL);
-  
+
       if (select_on_focus)
         gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
     }
 }
 
-static void 
+static void
 gtk_entry_direction_changed (GtkWidget        *widget,
-			     GtkTextDirection  previous_dir)
+                             GtkTextDirection  previous_dir)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
   gtk_entry_recompute (entry);
-      
+
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->direction_changed (widget, previous_dir);
 }
 
@@ -4333,12 +4337,12 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   GdkCursor *cursor;
-  
+
   if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
-      else 
+      else
         cursor = NULL;
 
       gdk_window_set_cursor (priv->text_area, cursor);
@@ -4356,7 +4360,7 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
       /* Clear any selection */
       gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
     }
-  
+
   gtk_entry_update_cached_style_values (entry);
 }
 
