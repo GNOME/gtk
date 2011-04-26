@@ -6196,8 +6196,8 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 static void
 geometry_size_to_pixels (GdkGeometry *geometry,
 			 guint        flags,
-			 guint       *width,
-			 guint       *height)
+			 gint        *width,
+			 gint        *height)
 {
   gint base_width = 0;
   gint base_height = 0;
@@ -6233,8 +6233,8 @@ static void
 gtk_window_compute_configure_request_size (GtkWindow   *window,
                                            GdkGeometry *geometry,
                                            guint        flags,
-                                           guint       *width,
-                                           guint       *height)
+                                           gint        *width,
+                                           gint        *height)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkRequisition requisition;
@@ -6453,7 +6453,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
   gtk_window_compute_configure_request_size (window,
                                              &new_geometry, new_flags,
-                                             (guint *)&w, (guint *)&h);
+                                             &w, &h);
 
   gtk_window_constrain_size (window,
                              &new_geometry, new_flags,
