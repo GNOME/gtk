@@ -24,8 +24,11 @@
  */
 
 #include "config.h"
-#include <gmodule.h>
+
 #include "gtksearchenginetracker.h"
+
+#include <gmodule.h>
+#include <gdk/gdk.h>
 
 /* we dlopen() libtracker at runtime */
 
