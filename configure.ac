@@ -1629,6 +1629,7 @@ docs/tools/Makefile
 build/Makefile
 build/win32/Makefile
 build/win32/vs9/Makefile
+build/win32/vs10/Makefile
 gdk/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile
