@@ -4833,18 +4833,71 @@ gtk_window_unmap (GtkWidget *widget)
     gtk_widget_unmap (child);
 }
 
+/* (Note: Replace "size" with "width" or "height". Also, the request
+ * mode is honoured.)
+ * For selecting the default window size, the following conditions
+ * should hold (in order of importance):
+ * - the size is not below the minimum size
+ *   Windows cannot be resized below their minimum size, so we must
+ *   ensure we don't do that either.
+ * - the size is not above the natural size
+ *   It seems weird to allocate more than this in an initial guess.
+ * - the size does not exceed that of a maximized window
+ *   We want to see the whole window after all.
+ *   (Note that this may not be possible to achieve due to imperfect
+ *    information from the windowing system.)
+ */
+
+/* We use these for now to not make windows too big by accident. Note
+ * that we still clamp these numbers by screen size. Also note that
+ * minimum size still overrides this. So keep your windows small! :)
+ */
+#define MAX_DEFAULT_WINDOW_WIDTH 640
+#define MAX_DEFAULT_WINDOW_HEIGHT 480
+
 static void
 gtk_window_guess_default_size (GtkWindow *window,
                                gint      *width,
                                gint      *height)
 {
   GtkWidget *widget = GTK_WIDGET (window);
-  GtkRequisition requisition;
+  GdkScreen *screen;
+  int minimum, natural;
 
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
+  screen = gtk_widget_get_screen (widget);
 
-  *width = requisition.width;
-  *height = requisition.height;
+  *width = gdk_screen_get_width (screen);
+  *height = gdk_screen_get_height (screen);
+
+  if (*width < *height)
+    {
+      /* landscape */
+      *width = MIN (*width, MAX_DEFAULT_WINDOW_WIDTH);
+      *height = MIN (*height, MAX_DEFAULT_WINDOW_HEIGHT);
+    }
+  else
+    {
+      /* portrait */
+      *width = MIN (*width, MAX_DEFAULT_WINDOW_HEIGHT);
+      *height = MIN (*height, MAX_DEFAULT_WINDOW_WIDTH);
+    }
+
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+    {
+      gtk_widget_get_preferred_height (widget, &minimum, &natural);
+      *height = MAX (minimum, MIN (*height, natural));
+
+      gtk_widget_get_preferred_width_for_height (widget, *height, &minimum, &natural);
+      *width = MAX (minimum, MIN (*width, natural));
+    }
+  else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
+    {
+      gtk_widget_get_preferred_width (widget, &minimum, &natural);
+      *width = MAX (minimum, MIN (*width, natural));
+
+      gtk_widget_get_preferred_height_for_width (widget, *width, &minimum, &natural);
+      *height = MAX (minimum, MIN (*height, natural));
+    }
 }
 
 static void
