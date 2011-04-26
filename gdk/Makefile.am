@@ -349,7 +349,7 @@ stamp-gc-h: $(top_builddir)/config.status
 	$(AM_V_at) cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h
 	echo timestamp > stamp-gc-h
 
-dist-hook: ../build/win32/vs9/gdk.vcproj
+dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../build/win32/vs10/gdk.vcxproj.filters
 
 ../build/win32/vs9/gdk.vcproj: ../build/win32/vs9/gdk.vcprojin
 	for F in $(libgdk_3_la_SOURCES); do \
@@ -360,6 +360,26 @@ dist-hook: ../build/win32/vs9/gdk.vcproj
 	done >libgdk.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gdk.vcprojin >$@
 	rm libgdk.sourcefiles
+	
+../build/win32/vs10/gdk.vcxproj: ../build/win32/vs10/gdk.vcxprojin
+	for F in $(libgdk_3_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gdk\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgdk.vs10.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gdk.vcxprojin >$@
+	rm libgdk.vs10.sourcefiles
+
+../build/win32/vs10/gdk.vcxproj.filters: ../build/win32/vs10/gdk.vcxproj.filtersin
+	for F in $(libgdk_3_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gdk\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
+		     ;; \
+		esac; \
+	done >libgdk.vs10.sourcefiles.filters
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gdk.vcxproj.filtersin >$@
+	rm libgdk.vs10.sourcefiles.filters
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 

@@ -918,7 +918,7 @@ install-mac-key-theme:
 uninstall-mac-key-theme:
 endif
 
-dist-hook: ../build/win32/vs9/gtk.vcproj
+dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../build/win32/vs10/gtk.vcxproj.filters
 
 ../build/win32/vs9/gtk.vcproj: ../build/win32/vs9/gtk.vcprojin
 	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
@@ -929,6 +929,26 @@ dist-hook: ../build/win32/vs9/gtk.vcproj
 	done >libgtk.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtk.vcprojin >$@
 	rm libgtk.sourcefiles
+	
+../build/win32/vs10/gtk.vcxproj: ../build/win32/vs10/gtk.vcxprojin
+	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgtk.vs10.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk.vcxprojin >$@
+	rm libgtk.vs10.sourcefiles
+	
+../build/win32/vs10/gtk.vcxproj.filters: ../build/win32/vs10/gtk.vcxproj.filtersin
+	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
+		     ;; \
+		esac; \
+	done >libgtk.vs10.sourcefiles.filters
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk.vcxproj.filtersin >$@
+	rm libgtk.vs10.sourcefiles.filters
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
