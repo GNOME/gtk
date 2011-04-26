@@ -117,8 +117,12 @@ struct _GtkFontSelectionDialogPrivate
 #define MAX_FONT_SIZE 999
 
 /* This is the initial fixed height and the top padding of the preview entry */
-#define PREVIEW_HEIGHT 84
+#define PREVIEW_HEIGHT 72
 #define PREVIEW_TOP_PADDING 6
+
+/* Widget default geometry */
+#define FONTSEL_WIDTH           540
+#define FONTSEL_HEIGHT          408
 
 /* These are the sizes of the font, style & size lists. */
 #define FONT_LIST_HEIGHT	136
@@ -541,14 +545,15 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
 
   /* Alignment for the preview and size controls */
-  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+/*  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-                             PREVIEW_TOP_PADDING, 0, 0, 0);
+                             PREVIEW_TOP_PADDING, 0, 0, 0);*/
   gtk_box_pack_start (GTK_BOX (fontsel), scrolled_win, TRUE, TRUE, 0);
 
   preview_and_size = gtk_vbox_new (TRUE, 0);
   gtk_box_set_homogeneous (GTK_BOX (preview_and_size), FALSE);
-  
+  gtk_box_set_spacing (GTK_BOX (preview_and_size), 6);
+
   /* The preview entry needs a scrolled window to make sure we have a */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
@@ -560,7 +565,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (preview_and_size), scrolled_win, FALSE, FALSE, 0);
   
   /* Setting the size requests for various widgets */
-  gtk_widget_set_size_request (GTK_WIDGET (fontsel), 462, 462);
+  gtk_widget_set_size_request (GTK_WIDGET (fontsel), FONTSEL_WIDTH, FONTSEL_HEIGHT);
   gtk_widget_set_size_request (scrolled_win,  -1, PREVIEW_HEIGHT);
   gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
 
@@ -570,15 +575,16 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   /* Packing the slider and the spin in a hbox */
   size_controls = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_scale_set_draw_value (GTK_SCALE (priv->size_slider), FALSE);
-  gtk_box_pack_start (GTK_BOX (size_controls), priv->size_slider, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (size_controls), priv->size_spin, FALSE, TRUE, 0);
+  gtk_box_set_spacing (GTK_BOX (size_controls), 6);
+  gtk_box_pack_start  (GTK_BOX (size_controls), priv->size_slider, TRUE, TRUE, 0);
+  gtk_box_pack_start  (GTK_BOX (size_controls), priv->size_spin, FALSE, TRUE, 0);
   
   gtk_widget_set_valign (priv->size_spin, GTK_ALIGN_START);
 
   gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
+//  gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
 
-  gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(alignment), FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(preview_and_size), FALSE, TRUE, 0);
 
   /* Getting the default size */
   font_desc  = pango_context_get_font_description (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)));
