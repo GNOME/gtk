@@ -789,7 +789,7 @@ visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
   gchar       *search_text_casefold;
 
   gtk_tree_model_get (model, iter,
-                      FAMILY_NAME_COLUMN, &font_name,
+                      PREVIEW_TITLE_COLUMN, &font_name,
                       -1);
 
   /* Covering some corner cases to speed up the result */
