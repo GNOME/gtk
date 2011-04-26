@@ -5594,15 +5594,16 @@ gtk_combo_box_get_id_column (GtkComboBox *combo_box)
  * @combo_box: a #GtkComboBox
  *
  * Returns the ID of the active row of @combo_box.  This value is taken
- * from the active row and the column specified by the 'id-column'
+ * from the active row and the column specified by the #GtkComboBox:id-column
  * property of @combo_box (see gtk_combo_box_set_id_column()).
  *
  * The returned value is an interned string which means that you can
  * compare the pointer by value to other interned strings and that you
  * must not free it.
  *
- * If the 'id-column' property of @combo_box is not set or if no row is
- * selected then %NULL is returned.
+ * If the #GtkComboBox:id-column property of @combo_box is not set, or if
+ * no row is active, or if the active row has a %NULL ID value, then %NULL
+ * is returned.
  *
  * Return value: the ID of the active row, or %NULL
  *
@@ -5644,41 +5645,54 @@ gtk_combo_box_get_active_id (GtkComboBox *combo_box)
 /**
  * gtk_combo_box_set_active_id:
  * @combo_box: a #GtkComboBox
- * @active_id: the ID of the row to select
+ * @active_id: (allow-none): the ID of the row to select, or %NULL
  *
- * Changes the active row of @combo_box to the one that has an ID equal to @id.
+ * Changes the active row of @combo_box to the one that has an ID equal to
+ * @active_id, or unsets the active row if @active_id is %NULL.  Rows having
+ * a %NULL ID string cannot be made active by this function.
  *
- * If the 'id-column' property of @combo_box is unset or if no row has
- * the given ID then nothing happens.
+ * If the #GtkComboBox:id-column property of @combo_box is unset or if no
+ * row has the given ID then the function does nothing and returns %FALSE.
+ *
+ * Returns: %TRUE if a row with a matching ID was found.  If a %NULL
+ *          @active_id was given to unset the active row, the function
+ *          always returns %TRUE.
  *
  * Since: 3.0
  **/
-void
+gboolean
 gtk_combo_box_set_active_id (GtkComboBox *combo_box,
                              const gchar *active_id)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
+  gboolean match = FALSE;
   gint column;
 
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
+
+  if (active_id == NULL)
+    {
+      gtk_combo_box_set_active (combo_box, -1);
+      return TRUE;  /* active row was successfully unset */
+    }
 
   column = combo_box->priv->id_column;
 
   if (column < 0)
-    return;
+    return FALSE;
 
   model = gtk_combo_box_get_model (combo_box);
-  g_return_if_fail (gtk_tree_model_get_column_type (model, column) ==
-                    G_TYPE_STRING);
+  g_return_val_if_fail (gtk_tree_model_get_column_type (model, column) ==
+                        G_TYPE_STRING, FALSE);
 
   if (gtk_tree_model_get_iter_first (model, &iter))
     do {
-      gboolean match;
       gchar *id;
 
       gtk_tree_model_get (model, &iter, column, &id, -1);
-      match = strcmp (id, active_id) == 0;
+      if (id != NULL)
+        match = strcmp (id, active_id) == 0;
       g_free (id);
 
       if (match)
@@ -5687,4 +5701,6 @@ gtk_combo_box_set_active_id (GtkComboBox *combo_box,
           break;
         }
     } while (gtk_tree_model_iter_next (model, &iter));
+
+    return match;
 }
