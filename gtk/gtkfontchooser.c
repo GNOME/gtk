@@ -100,6 +100,15 @@ struct _GtkFontSelectionPrivate
   PangoFontFamily *family;
   
   gboolean         ignore_slider;
+
+  /*FIXME: Remove these widgets after deprecation removal */
+  GtkWidget *size_list;
+  GtkWidget *font_list;
+  GtkWidget *face_list;
+
+  GtkListStore *_size_model;
+  GtkListStore *_font_model;
+  GtkListStore *_face_model;
 };
 
 
@@ -510,15 +519,20 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   GtkWidget               *alignment;
   GtkWidget               *preview_and_size;
   GtkWidget               *size_controls;
-#if 0
-  GList                   *focus_chain = NULL;
-  AtkObject *atk_obj;
-#endif
 
   fontsel->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontsel,
                                                GTK_TYPE_FONT_SELECTION,
                                                GtkFontSelectionPrivate);
+
   priv = fontsel->priv;
+  priv->size_list = NULL;
+  priv->font_list = NULL;
+  priv->face_list = NULL;
+
+  priv->_size_model = NULL;
+  priv->_font_model = NULL;
+  priv->_face_model = NULL;
+
   gtk_widget_push_composite_child ();
 
   /* Creating fundamental widgets for the private struct */
