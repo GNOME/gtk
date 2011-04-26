@@ -5660,6 +5660,20 @@ gtk_cairo_should_draw_window (cairo_t *cr,
          event->window == window;
 }
 
+static gboolean
+gtk_widget_get_clip_draw (GtkWidget *widget)
+{
+  /* labels are not clipped, because clipping them would cause
+   * mnemonics to not appear on characters that go beyond the
+   * baseline.
+   * https://bugzilla.gnome.org/show_bug.cgi?id=648570
+   */
+  if (GTK_IS_LABEL (widget))
+    return FALSE;
+
+  return TRUE;
+}
+
 /* code shared by gtk_container_propagate_draw() and
  * gtk_widget_draw()
  */
@@ -5672,6 +5686,8 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 
   if (!gtk_widget_is_drawable (widget))
     return;
+
+  clip_to_size &= gtk_widget_get_clip_draw (widget);
 
   if (clip_to_size)
     {
