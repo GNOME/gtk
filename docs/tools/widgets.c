@@ -649,23 +649,23 @@ create_colorsel (void)
   GtkWidget *widget;
   GtkColorSelection *colorsel;
   GtkColorSelectionDialog *selection_dialog;
-  GdkColor color;
+  GdkRGBA rgba;
 
   widget = gtk_color_selection_dialog_new ("Color Selection Dialog");
   selection_dialog = GTK_COLOR_SELECTION_DIALOG (widget);
   colorsel = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (selection_dialog));
 
-  color.red   = 0x7979;
-  color.green = 0xdbdb;
-  color.blue  = 0x9595;
+  rgba.red   = 0.4745;
+  rgba.green = 0.8588;
+  rgba.blue  = 0.5843;
 
-  gtk_color_selection_set_previous_color (colorsel, &color);
-  
-  color.red   = 0x7d7d;
-  color.green = 0x9393;
-  color.blue  = 0xc3c3;
-  
-  gtk_color_selection_set_current_color (colorsel, &color);
+  gtk_color_selection_set_previous_rgba (colorsel, &rgba);
+
+  rgba.red   = 0.4902;
+  rgba.green = 0.5764;
+  rgba.blue  = 0.7647;
+
+  gtk_color_selection_set_current_rgba (colorsel, &rgba);
 
   info = new_widget_info ("colorsel", widget, ASIS);
   info->include_decorations = TRUE;
