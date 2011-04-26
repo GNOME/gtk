@@ -4869,7 +4869,7 @@ gtk_window_guess_default_size (GtkWindow *window,
   *width = gdk_screen_get_width (screen);
   *height = gdk_screen_get_height (screen);
 
-  if (*width < *height)
+  if (*width >= *height)
     {
       /* landscape */
       *width = MIN (*width, MAX_DEFAULT_WINDOW_WIDTH);
