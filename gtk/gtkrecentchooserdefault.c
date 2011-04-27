@@ -929,6 +929,7 @@ reload_recent_items (GtkRecentChooserDefault *impl)
 static void
 set_default_size (GtkRecentChooserDefault *impl)
 {
+  GtkScrolledWindow *scrollw;
   GtkWidget *widget;
   gint width, height;
   gint font_size;
@@ -966,7 +967,9 @@ set_default_size (GtkRecentChooserDefault *impl)
   height = MIN (height, monitor.height * 3 / 4);
 
   /* Set size */
-  gtk_widget_set_size_request (impl->recent_view, width, height);
+  scrollw = GTK_SCROLLED_WINDOW (gtk_widget_get_parent (impl->recent_view));
+  gtk_scrolled_window_set_min_content_width (scrollw, width);
+  gtk_scrolled_window_set_min_content_height (scrollw, height);
 }
 
 static void
