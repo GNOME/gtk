@@ -134,10 +134,10 @@ struct _GtkFontSelectionDialogPrivate
 #define FONTSEL_HEIGHT          408
 
 /* These are the sizes of the font, style & size lists. */
-#define FONT_LIST_HEIGHT	136
-#define FONT_LIST_WIDTH		190
-#define FONT_STYLE_LIST_WIDTH	170
-#define FONT_SIZE_LIST_WIDTH	60
+#define FONT_LIST_HEIGHT  136
+#define FONT_LIST_WIDTH   190
+#define FONT_STYLE_LIST_WIDTH 170
+#define FONT_SIZE_LIST_WIDTH  60
 
 #define ROW_FORMAT_STRING "<span weight=\"bold\" size=\"small\" foreground=\"%s\">%s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
 
@@ -166,17 +166,17 @@ enum {
 };
 
 static void  gtk_font_selection_set_property       (GObject         *object,
-			                                              guint            prop_id,
-			                                              const GValue    *value,
-			                                              GParamSpec      *pspec);
+                                                    guint            prop_id,
+                                                    const GValue    *value,
+                                                    GParamSpec      *pspec);
 static void  gtk_font_selection_get_property       (GObject         *object,
-					                                          guint            prop_id,
-					                                          GValue          *value,
-					                                          GParamSpec      *pspec);
-static void  gtk_font_selection_finalize	         (GObject         *object);
+                                                    guint            prop_id,
+                                                    GValue          *value,
+                                                    GParamSpec      *pspec);
+static void  gtk_font_selection_finalize           (GObject         *object);
 
 #if 0
-static void  gtk_font_selection_screen_changed     (GtkWidget	      *widget,
+static void  gtk_font_selection_screen_changed     (GtkWidget       *widget,
                                                     GdkScreen       *previous_screen);
 static void  gtk_font_selection_style_updated      (GtkWidget      *widget);
 #endif
@@ -225,9 +225,9 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
 
 static void 
 gtk_font_selection_set_property (GObject         *object,
-			                           guint            prop_id,
-			                           const GValue    *value,
-			                           GParamSpec      *pspec)
+                                 guint            prop_id,
+                                 const GValue    *value,
+                                 GParamSpec      *pspec)
 {
   GtkFontSelection *fontsel;
 
@@ -249,9 +249,9 @@ gtk_font_selection_set_property (GObject         *object,
 
 static void
 gtk_font_selection_get_property (GObject         *object,
-			                           guint            prop_id,
-			                           GValue          *value,
-			                           GParamSpec      *pspec)
+                                 guint            prop_id,
+                                 GValue          *value,
+                                 GParamSpec      *pspec)
 {
   GtkFontSelection *fontsel;
 
@@ -422,11 +422,38 @@ set_range_marks (GtkFontSelectionPrivate *priv,
       priv->ignore_slider = TRUE; 
     }
   
-  for (i=0; i<length; i++)
-    gtk_scale_add_mark (GTK_SCALE (size_slider),
-                        (gdouble) sizes[i],
-                        GTK_POS_BOTTOM, NULL);
-                        
+
+  /* FIXME: Ought to be removed for 4.0 to just populate the marks */
+  if (priv->_size_model)
+    {
+      GString *size_str = g_string_new (NULL);
+      gtk_list_store_clear (priv->_size_model);
+      
+      for (i=0; i<length; i++)
+        {
+          GtkTreeIter iter;
+
+          g_string_printf ("%d", sizes[i]);
+
+          gtk_scale_add_mark (GTK_SCALE (size_slider),
+                              (gdouble) sizes[i],
+                              GTK_POS_BOTTOM, NULL);
+
+          gtk_list_store_append (priv->_size_model, &iter);
+          gtk_list_store_set (priv->_size_model, &iter,
+                              0, sizes[i],
+                              1, size_str->str,
+                              -1);
+       }
+       g_string_free (size_str, TRUE);
+   }
+ else
+   {
+           for (i=0; i<length; i++)
+             gtk_scale_add_mark (GTK_SCALE (size_slider),
+                                (gdouble) sizes[i],
+                                 GTK_POS_BOTTOM, NULL);
+   }
 }
 
 void
@@ -1191,7 +1218,7 @@ gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
  */
 gboolean
 gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
-				  const gchar      *fontname)
+          const gchar      *fontname)
 {
 #if 0
   PangoFontFamily *family = NULL;
@@ -1231,7 +1258,7 @@ gtk_font_selection_get_preview_text (GtkFontSelection *fontsel)
  */
 void
 gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
-				      const gchar      *text)
+              const gchar      *text)
 {
 #if 0
   GtkFontSelectionPrivate *priv;
@@ -1271,13 +1298,13 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
 
 static void gtk_font_selection_dialog_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject * gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
-									  GtkBuilder   *builder,
-									  const gchar  *childname);
+                    GtkBuilder   *builder,
+                    const gchar  *childname);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontSelectionDialog, gtk_font_selection_dialog,
-			 GTK_TYPE_DIALOG,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_font_selection_dialog_buildable_interface_init))
+       GTK_TYPE_DIALOG,
+       G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+            gtk_font_selection_dialog_buildable_interface_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -1316,7 +1343,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   gtk_container_set_border_width (GTK_CONTAINER (priv->fontsel), 5);
   gtk_widget_show (priv->fontsel);
   gtk_box_pack_start (GTK_BOX (content_area),
-		      priv->fontsel, TRUE, TRUE, 0);
+          priv->fontsel, TRUE, TRUE, 0);
 
   /* Create the action area */
   priv->cancel_button = gtk_dialog_add_button (dialog,
@@ -1334,10 +1361,10 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   gtk_widget_grab_default (priv->ok_button);
 
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontseldiag),
-					   GTK_RESPONSE_OK,
-					   GTK_RESPONSE_APPLY,
-					   GTK_RESPONSE_CANCEL,
-					   -1);
+             GTK_RESPONSE_OK,
+             GTK_RESPONSE_APPLY,
+             GTK_RESPONSE_CANCEL,
+             -1);
 
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
                         _("Font Selection"));
@@ -1432,8 +1459,8 @@ gtk_font_selection_dialog_buildable_interface_init (GtkBuildableIface *iface)
 
 static GObject *
 gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
-							GtkBuilder   *builder,
-							const gchar  *childname)
+              GtkBuilder   *builder,
+              const gchar  *childname)
 {
   GtkFontSelectionDialogPrivate *priv;
 
@@ -1491,7 +1518,7 @@ gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
  */
 gboolean
 gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
-					 const gchar	        *fontname)
+           const gchar          *fontname)
 {
   GtkFontSelectionDialogPrivate *priv;
 
@@ -1534,7 +1561,7 @@ gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
  */
 void
 gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
-					    const gchar	           *text)
+              const gchar            *text)
 {
   GtkFontSelectionDialogPrivate *priv;
 
