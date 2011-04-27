@@ -1228,6 +1228,9 @@ gtk_notebook_buildable_add_child (GtkBuildable  *buildable,
       /* To set the tab label widget, we must have already a child
        * inside the tab container. */
       g_assert (page != NULL);
+      /* warn when Glade tries to overwrite label */
+      if (gtk_notebook_get_tab_label (notebook, page))
+        g_warning ("Overriding tab label for notebook");
       gtk_notebook_set_tab_label (notebook, page, GTK_WIDGET (child));
     }
   else if (type && strcmp (type, "action-start") == 0)
