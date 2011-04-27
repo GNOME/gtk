@@ -160,7 +160,7 @@ enum {
   FACE_COLUMN,
   PREVIEW_TEXT_COLUMN,
   PREVIEW_TITLE_COLUMN,
-  /*FIXME: Remove two strings after deprecation removal */
+  /*FIXME: Remove these two strings for 4.0 */
   FAMILY_NAME_COLUMN,
   FACE_NAME_COLUMN
 };
@@ -194,9 +194,9 @@ static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 #if 0
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   widget_class->screen_changed = gtk_font_selection_screen_changed;
   widget_class->style_updated = gtk_font_selection_style_updated;
 #endif
@@ -422,10 +422,19 @@ set_range_marks (GtkFontSelectionPrivate *priv,
       priv->ignore_slider = TRUE; 
     }
   
-
-  /* FIXME: Ought to be removed for 4.0 to just populate the marks */
-  if (priv->_size_model)
+  if (!priv->_size_model)
     {
+      for (i=0; i<length; i++)
+        gtk_scale_add_mark (GTK_SCALE (size_slider),
+                            (gdouble) sizes[i],
+                            GTK_POS_BOTTOM, NULL);
+    }
+  else
+    {
+      /* FIXME: This populates the size list for the
+       *        deprecated size list tree view.
+       *        Should be removed for 4.0
+       */
       GString *size_str = g_string_new (NULL);
       gtk_list_store_clear (priv->_size_model);
       
@@ -444,16 +453,9 @@ set_range_marks (GtkFontSelectionPrivate *priv,
                               0, sizes[i],
                               1, size_str->str,
                               -1);
-       }
-       g_string_free (size_str, TRUE);
-   }
- else
-   {
-           for (i=0; i<length; i++)
-             gtk_scale_add_mark (GTK_SCALE (size_slider),
-                                (gdouble) sizes[i],
-                                 GTK_POS_BOTTOM, NULL);
-   }
+        }
+      g_string_free (size_str, TRUE);
+    }
 }
 
 void
