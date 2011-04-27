@@ -930,6 +930,59 @@ gtk_font_selection_ref_face (GtkFontSelection *fontsel,
   priv->face = face;
 }
 
+/* These functions populate the deprecated widgets to maintain API compatibility */
+static void
+populate_font_model (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+}
+
+static void
+update_font_model_selection (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+}
+
+static void
+update_face_model (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+}
+
+static void
+update_size_model (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+}
+
+static void
+initialize_deprecated_widgets (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+
+  priv->_size_model = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_STRING);
+  priv->_font_model = gtk_list_store_new (2, PANGO_TYPE_FONT_FAMILY, G_TYPE_STRING);
+  priv->_face_model = gtk_list_store_new (2, PANGO_TYPE_FONT_FACE,   G_TYPE_STRING);
+
+  priv->size_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_size_model));
+  priv->font_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_font_model));
+  priv->face_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_size_model));
+
+  g_object_unref (priv->_size_model);
+  g_object_unref (priv->_font_model);
+  g_object_unref (priv->_face_model);
+}
+
+static void
+destroy_deprecated_widgets (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+
+  g_object_unref (priv->size_list);
+  g_object_unref (priv->font_list);
+  g_object_unref (priv->face_list);
+}
+
 /*****************************************************************************
  * These functions are the main public interface for getting/setting the font.
  *****************************************************************************/
@@ -948,6 +1001,7 @@ gtk_font_selection_ref_face (GtkFontSelection *fontsel,
 GtkWidget *
 gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
 {
+  GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
 
   return NULL;
@@ -967,6 +1021,7 @@ gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
 GtkWidget *
 gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
 {
+  GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
 
   return NULL;
@@ -986,9 +1041,10 @@ gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
 GtkWidget *
 gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
 {
+  GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
 
-  return NULL;
+  return priv->size_spin;
 }
 
 /**
@@ -1004,6 +1060,7 @@ gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
 GtkWidget *
 gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
 {
+  GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
 
   return NULL;
@@ -1022,9 +1079,10 @@ gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
 GtkWidget *
 gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
 {
+  GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
 
-  return NULL;
+  return priv->preview;
 }
 
 /**
