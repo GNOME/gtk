@@ -2520,7 +2520,14 @@ rc_parse_token_or_compound (GScanner   *scanner,
       g_string_append_printf (gstring, " 0x%lx", scanner->value.v_int);
       break;
     case G_TOKEN_FLOAT:
-      g_string_append_printf (gstring, " %f", scanner->value.v_float);
+      {
+	gchar    fbuf[G_ASCII_DTOSTR_BUF_SIZE];
+	g_ascii_formatd (fbuf,
+			 sizeof (fbuf),
+			 "%f",
+			 scanner->value.v_float);
+	g_string_append_printf (gstring, " %s", (char*)fbuf);
+      }
       break;
     case G_TOKEN_STRING:
       string = g_strescape (scanner->value.v_string, NULL);
