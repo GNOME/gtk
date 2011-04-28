@@ -442,7 +442,7 @@ set_range_marks (GtkFontSelectionPrivate *priv,
         {
           GtkTreeIter iter;
 
-          g_string_printf ("%d", sizes[i]);
+          g_string_printf (size_str, "%d", sizes[i]);
 
           gtk_scale_add_mark (GTK_SCALE (size_slider),
                               (gdouble) sizes[i],
@@ -471,7 +471,7 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   GtkTreeIter iter;
   GtkTreePath *path = gtk_tree_path_new ();
   
-  GtkFontSelection        *fontsel = (GtkFontSelection*)data;
+  GtkFontSelection *fontsel = (GtkFontSelection*)data;
   
   gtk_tree_view_get_cursor (treeview, &path, NULL);
   
@@ -1032,8 +1032,10 @@ gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  if (!priv->font_list)
+    initialize_deprecated_widgets (fontsel);
 
-  return NULL;
+  return priv->font_list;
 }
 
 /**
@@ -1052,8 +1054,10 @@ gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  if (!priv->face_list)
+    initialize_deprecated_widgets (fontsel);
 
-  return NULL;
+  return priv->face_list;
 }
 
 /**
@@ -1091,8 +1095,10 @@ gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  if (!priv->size_list)
+    initialize_deprecated_widgets (fontsel);
 
-  return NULL;
+  return priv->size_list;
 }
 
 /**
@@ -1132,7 +1138,7 @@ gtk_font_selection_get_family (GtkFontSelection *fontsel)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
 
-  return NULL;
+  return fontsel->priv->family;
 }
 
 /**
@@ -1153,7 +1159,7 @@ gtk_font_selection_get_face (GtkFontSelection *fontsel)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
 
-  return NULL;
+  return fontsel->priv->face;
 }
 
 /**

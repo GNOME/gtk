@@ -35,13 +35,14 @@ main (int argc, char *argv[])
   dialog = gtk_font_selection_dialog_new (NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_size_request (window, 300, 300);
   vbox = gtk_vbox_new (TRUE, 6);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   fontsel = gtk_font_selection_dialog_get_font_selection (GTK_FONT_SELECTION_DIALOG (dialog));
-  gtk_container_add (GTK_CONTAINER (window), gtk_font_selection_get_size_list (GTK_FONT_SELECTION (fontsel)));
-  gtk_container_add (GTK_CONTAINER (window), gtk_font_selection_get_family_list (GTK_FONT_SELECTION (fontsel)));
-  gtk_container_add (GTK_CONTAINER (window), gtk_font_selection_get_face_list (GTK_FONT_SELECTION (fontsel)));
+  gtk_container_add (GTK_CONTAINER (vbox), gtk_font_selection_get_size_list (GTK_FONT_SELECTION (fontsel)));
+  gtk_container_add (GTK_CONTAINER (vbox), gtk_font_selection_get_family_list (GTK_FONT_SELECTION (fontsel)));
+  gtk_container_add (GTK_CONTAINER (vbox), gtk_font_selection_get_face_list (GTK_FONT_SELECTION (fontsel)));
 
   gtk_widget_show_all (window);
 
