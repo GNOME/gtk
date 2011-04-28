@@ -1241,8 +1241,7 @@ gtk_paned_draw (GtkWidget *widget,
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
 
-  if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget) &&
-      priv->child1 && gtk_widget_get_visible (priv->child1) &&
+  if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
       GtkStyleContext *context;
