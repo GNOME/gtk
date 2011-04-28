@@ -53,7 +53,7 @@
  * application writer to call gtk_tree_model_row_changed() to emit the
  * #GtkTreeModel::row_changed signal.  This most commonly affects lists with
  * #GdkPixbuf<!-- -->s stored.
- * <para>
+ *
  * <example>
  * <title>Creating a simple list store.</title>
  * <programlisting>
@@ -107,7 +107,7 @@
  * }
  * </programlisting>
  * </example>
- * </para>
+ *
  * <refsect2>
  * <title>Performance Considerations</title>
  * Internally, the #GtkListStore was implemented with a linked list with a
