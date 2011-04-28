@@ -4817,8 +4817,9 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 
   if (min_width > real_allocation.width || min_height > real_allocation.height)
-    g_warning ("gtk_widget_size_allocate(): attempt to underallocate %s %p. "
+    g_warning ("gtk_widget_size_allocate(): attempt to underallocate %s%s %s %p. "
                "Allocation is %dx%d, but minimum required size is %dx%d.",
+               priv->parent ? G_OBJECT_TYPE_NAME (priv->parent) : "", priv->parent ? "'s child" : "toplevel",
                G_OBJECT_TYPE_NAME (widget), widget,
                real_allocation.width, real_allocation.height,
                min_width, min_height);
