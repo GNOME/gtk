@@ -995,12 +995,26 @@ static void
 update_face_model (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
-}
+  PangoFontFace **faces;
+  int             i, n_faces;
 
-static void
-update_size_model (GtkFontSelection *fontsel)
-{
-  GtkFontSelectionPrivate *priv = fontsel->priv;
+  pango_font_family_list_faces (priv->family, &faces, &n_faces);
+  pango_font_family_get_name   (priv->family);
+
+  gtk_list_store_clear (priv->_face_model);
+
+  for (i=0; i<n_faces; i++)
+    {
+      GtkTreeIter  iter;
+
+      gtk_list_store_append (priv->_face_model, &iter);
+      gtk_list_store_set (priv->_face_model, &iter,
+                          0, faces[i],
+                          1, pango_font_face_get_face_name (faces[i]),
+                          -1);
+    }
+
+  g_free (faces);
 }
 
 static void
@@ -1041,6 +1055,7 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
   gtk_tree_view_append_column (GTK_TREE_VIEW (priv->face_list), col);
 
   populate_font_model (fontsel);
+  cursor_changed_cb (priv->family_face_list, priv);
 }
 
 static void
