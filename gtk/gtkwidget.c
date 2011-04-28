@@ -4804,7 +4804,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
        * when aligning implicitly.
        */
       gtk_widget_get_preferred_width (widget, &min_width, &natural_width);
-      gtk_widget_get_preferred_height_for_width (widget, real_allocation.width, &dummy, &natural_height);
+      gtk_widget_get_preferred_height_for_width (widget, real_allocation.width, &min_height, &natural_height);
     }
   else
     {
@@ -4813,9 +4813,15 @@ gtk_widget_size_allocate (GtkWidget	*widget,
        * when aligning implicitly.
        */
       gtk_widget_get_preferred_height (widget, &min_height, &natural_height);
-      gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, &dummy, &natural_width);
+      gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, &min_width, &natural_width);
     }
 
+  if (min_width > real_allocation.width || min_height > real_allocation.height)
+    g_warning ("gtk_widget_size_allocate(): attempt to underallocate %s %p. "
+               "Allocation is %dx%d, but minimum required size is %dx%d.",
+               G_OBJECT_TYPE_NAME (widget), widget,
+               real_allocation.width, real_allocation.height,
+               min_width, min_height);
   /* Now that we have the right natural height and width, go ahead and remove any margins from the
    * allocated sizes and possibly limit them to the natural sizes */
   GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
