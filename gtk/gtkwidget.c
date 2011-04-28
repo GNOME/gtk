@@ -4816,7 +4816,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
       gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, &min_width, &natural_width);
     }
 
-  if (min_width > real_allocation.width || min_height > real_allocation.height)
+  if ((min_width > real_allocation.width || min_height > real_allocation.height) &&
+      !GTK_IS_SCROLLABLE (widget))
     g_warning ("gtk_widget_size_allocate(): attempt to underallocate %s%s %s %p. "
                "Allocation is %dx%d, but minimum required size is %dx%d.",
                priv->parent ? G_OBJECT_TYPE_NAME (priv->parent) : "", priv->parent ? "'s child" : "toplevel",
