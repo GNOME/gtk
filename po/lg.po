@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
 "POT-Creation-Date: 2011-01-05 17:26+0000\n"
-"PO-Revision-Date: 2011-01-25 23:45+0000\n"
+"PO-Revision-Date: 2011-04-28 20:28+0000\n"
 "Last-Translator: Kizito Birabwa <kbirabwa@yahoo.co.uk>\n"
 "Language-Team: Luganda <kbirabwa@yahoo.co.uk>\n"
 "Language: \n"
@@ -446,7 +446,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserdialog.c:152
 msgid "Find applications online"
-msgstr ""
+msgstr "Zuula puloguramu ku yintaneti"
 
 #: ../gtk/gtkappchooserdialog.c:196
 msgid "Could not run application"
@@ -464,23 +464,23 @@ msgstr "Nnemedwa okuzuula puloguramu"
 #: ../gtk/gtkappchooserdialog.c:322
 #, c-format
 msgid "Select an application to open \"%s\""
-msgstr ""
+msgstr "Londa puloguramu ey'okubikkula \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:323 ../gtk/gtkappchooserwidget.c:633
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr ""
+msgstr "Tewali puloguramu eziyinza okubikkula \"%s\""
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:329
 #, c-format
 msgid "Select an application for \"%s\" files"
-msgstr ""
+msgstr "Londa puloguramu enaakolanga ku fayiro ez'ekika kya \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:332
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr ""
+msgstr "Tewali puloguramu eziyinza okubikkula fayiro ez'ekika kya \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:346
 msgid ""
