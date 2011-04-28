@@ -101,7 +101,7 @@ struct _GtkFontSelectionPrivate
   
   gboolean         ignore_slider;
 
-  /*FIXME: Remove these widgets after deprecation removal */
+#ifndef GTK_DISABLE_DEPRECATED
   GtkWidget *size_list;
   GtkWidget *font_list;
   GtkWidget *face_list;
@@ -109,6 +109,7 @@ struct _GtkFontSelectionPrivate
   GtkListStore *_size_model;
   GtkListStore *_font_model;
   GtkListStore *_face_model;
+#endif
 };
 
 
@@ -185,8 +186,9 @@ static void  gtk_font_selection_ref_face          (GtkFontSelection *fontsel,
 
 static void gtk_font_selection_bootstrap_fontlist (GtkFontSelection *fontsel);
 
-/* FIXME: Remove for 4.0 */
+#ifndef GTK_DISABLE_DEPRECATED
 static void update_face_model                     (GtkFontSelection *fontsel);
+#endif
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
 
@@ -422,6 +424,7 @@ set_range_marks (GtkFontSelectionPrivate *priv,
       priv->ignore_slider = TRUE; 
     }
   
+#ifndef GTK_DISABLE_DEPRECATED
   if (!priv->_size_model)
     {
       for (i=0; i<length; i++)
@@ -431,10 +434,6 @@ set_range_marks (GtkFontSelectionPrivate *priv,
     }
   else
     {
-      /* FIXME: This populates the size list for the
-       *        deprecated size list tree view.
-       *        Should be removed for 4.0
-       */
       GString *size_str = g_string_new (NULL);
       gtk_list_store_clear (priv->_size_model);
       
@@ -456,6 +455,12 @@ set_range_marks (GtkFontSelectionPrivate *priv,
         }
       g_string_free (size_str, TRUE);
     }
+#else
+  for (i=0; i<length; i++)
+    gtk_scale_add_mark (GTK_SCALE (size_slider),
+                        (gdouble) sizes[i],
+                        GTK_POS_BOTTOM, NULL);
+#endif
 }
 
 void
@@ -516,9 +521,10 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   gtk_font_selection_ref_family (fontsel, family);
   gtk_font_selection_ref_face  (fontsel,   face);
 
-  /* FIXME: Remove this for 4.0 */
+#ifndef GTK_DISABLE_DEPRECATED
   if (fontsel->priv->_face_model)
     update_face_model (fontsel);
+#endif
 
   /* Free resources */
   g_object_unref ((gpointer)face);
@@ -558,6 +564,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                GtkFontSelectionPrivate);
 
   priv = fontsel->priv;
+
+#ifndef GTK_DISABLE_DEPRECATED
   priv->size_list = NULL;
   priv->font_list = NULL;
   priv->face_list = NULL;
@@ -565,6 +573,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv->_size_model = NULL;
   priv->_font_model = NULL;
   priv->_face_model = NULL;
+#endif /* GTK_DISABLE_DEPRECATED */
 
   gtk_widget_push_composite_child ();
 
@@ -908,13 +917,15 @@ gtk_font_selection_finalize (GObject *object)
   gtk_font_selection_ref_family (fontsel, NULL);
   gtk_font_selection_ref_face (fontsel, NULL);
 
-  /* FIXME: Remove this for 4.0 */
+#ifndef GTK_DISABLE_DEPRECATED
   if (fontsel->priv->size_list)
     {
       g_object_unref (fontsel->priv->size_list);
       g_object_unref (fontsel->priv->font_list);
       g_object_unref (fontsel->priv->face_list);
     }
+#endif
+
 
   G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
 }
@@ -961,10 +972,7 @@ gtk_font_selection_ref_face (GtkFontSelection *fontsel,
   priv->face = face;
 }
 
-/* FIXME: These functions populate the deprecated widgets to maintain API compatibility
- *        To be removed for 4.0
- */
-
+#ifndef GTK_DISABLE_DEPRECATED
 static void
 populate_font_model (GtkFontSelection *fontsel)
 {
@@ -1079,113 +1087,11 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
   cursor_changed_cb (priv->family_face_list, priv);
 }
 
+#endif /* GTK_DISABLE_DEPRECATED */
+
 /*****************************************************************************
  * These functions are the main public interface for getting/setting the font.
  *****************************************************************************/
-
-/**
- * gtk_font_selection_get_family_list:
- * @fontsel: a #GtkFontSelection
- *
- * This returns the #GtkTreeView that lists font families, for
- * example, 'Sans', 'Serif', etc.
- *
- * Return value: (transfer none): A #GtkWidget that is part of @fontsel
- *
- * Deprecated: 3.2
- */
-GtkWidget *
-gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
-{
-  GtkFontSelectionPrivate *priv = fontsel->priv;
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-  if (!priv->font_list)
-    initialize_deprecated_widgets (fontsel);
-
-  return priv->font_list;
-}
-
-/**
- * gtk_font_selection_get_face_list:
- * @fontsel: a #GtkFontSelection
- *
- * This returns the #GtkTreeView which lists all styles available for
- * the selected font. For example, 'Regular', 'Bold', etc.
- * 
- * Return value: (transfer none): A #GtkWidget that is part of @fontsel
- *
- * Deprecated: 3.2
- */
-GtkWidget *
-gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
-{
-  GtkFontSelectionPrivate *priv = fontsel->priv;
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-  if (!priv->face_list)
-    initialize_deprecated_widgets (fontsel);
-
-  return priv->face_list;
-}
-
-/**
- * gtk_font_selection_get_size_entry:
- * @fontsel: a #GtkFontSelection
- *
- * This returns the #GtkEntry used to allow the user to edit the font
- * number manually instead of selecting it from the list of font sizes.
- *
- * Return value: (transfer none): A #GtkWidget that is part of @fontsel
- *
- * Deprecated: 3.2
- */
-GtkWidget *
-gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
-{
-  GtkFontSelectionPrivate *priv = fontsel->priv;
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-
-  return priv->size_spin;
-}
-
-/**
- * gtk_font_selection_get_size_list:
- * @fontsel: a #GtkFontSelection
- *
- * This returns the #GtkTreeeView used to list font sizes.
- *
- * Return value: (transfer none): A #GtkWidget that is part of @fontsel
- *
- * Deprecated: 3.2
- */
-GtkWidget *
-gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
-{
-  GtkFontSelectionPrivate *priv = fontsel->priv;
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-  if (!priv->size_list)
-    initialize_deprecated_widgets (fontsel);
-
-  return priv->size_list;
-}
-
-/**
- * gtk_font_selection_get_preview_entry:
- * @fontsel: a #GtkFontSelection
- *
- * This returns the #GtkEntry used to display the font as a preview.
- *
- * Return value: (transfer none): A #GtkWidget that is part of @fontsel
- *
- * Deprecated: 3.2
- */
-GtkWidget *
-gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
-{
-  GtkFontSelectionPrivate *priv = fontsel->priv;
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-
-  return priv->preview;
-}
 
 /**
  * gtk_font_selection_get_family:
@@ -1345,6 +1251,113 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
 #endif
 }
 
+#ifndef GTK_DISABLE_DEPRECATED
+
+/**
+ * gtk_font_selection_get_family_list:
+ * @fontsel: a #GtkFontSelection
+ *
+ * This returns the #GtkTreeView that lists font families, for
+ * example, 'Sans', 'Serif', etc.
+ *
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
+ *
+ * Deprecated: 3.2
+ */
+GtkWidget *
+gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  if (!priv->font_list)
+    initialize_deprecated_widgets (fontsel);
+
+  return priv->font_list;
+}
+
+/**
+ * gtk_font_selection_get_face_list:
+ * @fontsel: a #GtkFontSelection
+ *
+ * This returns the #GtkTreeView which lists all styles available for
+ * the selected font. For example, 'Regular', 'Bold', etc.
+ * 
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
+ *
+ * Deprecated: 3.2
+ */
+GtkWidget *
+gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  if (!priv->face_list)
+    initialize_deprecated_widgets (fontsel);
+
+  return priv->face_list;
+}
+
+/**
+ * gtk_font_selection_get_size_entry:
+ * @fontsel: a #GtkFontSelection
+ *
+ * This returns the #GtkEntry used to allow the user to edit the font
+ * number manually instead of selecting it from the list of font sizes.
+ *
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
+ *
+ * Deprecated: 3.2
+ */
+GtkWidget *
+gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+
+  return priv->size_spin;
+}
+
+/**
+ * gtk_font_selection_get_size_list:
+ * @fontsel: a #GtkFontSelection
+ *
+ * This returns the #GtkTreeeView used to list font sizes.
+ *
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
+ *
+ * Deprecated: 3.2
+ */
+GtkWidget *
+gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  if (!priv->size_list)
+    initialize_deprecated_widgets (fontsel);
+
+  return priv->size_list;
+}
+
+/**
+ * gtk_font_selection_get_preview_entry:
+ * @fontsel: a #GtkFontSelection
+ *
+ * This returns the #GtkEntry used to display the font as a preview.
+ *
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
+ *
+ * Deprecated: 3.2
+ */
+GtkWidget *
+gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+
+  return priv->preview;
+}
+
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /**
  * SECTION:gtkfontseldlg
