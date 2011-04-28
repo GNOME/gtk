@@ -908,6 +908,14 @@ gtk_font_selection_finalize (GObject *object)
   gtk_font_selection_ref_family (fontsel, NULL);
   gtk_font_selection_ref_face (fontsel, NULL);
 
+  /* FIXME: Remove this for 4.0 */
+  if (fontsel->priv->size_list)
+    {
+      g_object_unref (fontsel->priv->size_list);
+      g_object_unref (fontsel->priv->font_list);
+      g_object_unref (fontsel->priv->face_list);
+    }
+
   G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
 }
 
@@ -1069,16 +1077,6 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
 
   populate_font_model (fontsel);
   cursor_changed_cb (priv->family_face_list, priv);
-}
-
-static void
-destroy_deprecated_widgets (GtkFontSelection *fontsel)
-{
-  GtkFontSelectionPrivate *priv = fontsel->priv;
-
-  g_object_unref (priv->size_list);
-  g_object_unref (priv->font_list);
-  g_object_unref (priv->face_list);
 }
 
 /*****************************************************************************
