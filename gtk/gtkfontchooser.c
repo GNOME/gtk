@@ -159,10 +159,7 @@ enum {
   FAMILY_COLUMN,
   FACE_COLUMN,
   PREVIEW_TEXT_COLUMN,
-  PREVIEW_TITLE_COLUMN,
-  /*FIXME: Remove these two strings for 4.0 */
-  FAMILY_NAME_COLUMN,
-  FACE_NAME_COLUMN
+  PREVIEW_TITLE_COLUMN
 };
 
 static void  gtk_font_selection_set_property       (GObject         *object,
@@ -187,6 +184,9 @@ static void  gtk_font_selection_ref_face          (GtkFontSelection *fontsel,
                                                    PangoFontFace    *face);
 
 static void gtk_font_selection_bootstrap_fontlist (GtkFontSelection *fontsel);
+
+/* FIXME: Remove for 4.0 */
+static void update_face_model                     (GtkFontSelection *fontsel);
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
 
@@ -516,6 +516,10 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   gtk_font_selection_ref_family (fontsel, family);
   gtk_font_selection_ref_face  (fontsel,   face);
 
+  /* FIXME: Remove this for 4.0 */
+  if (fontsel->priv->_face_model)
+    update_face_model (fontsel);
+
   /* Free resources */
   g_object_unref ((gpointer)face);
   pango_font_description_free(desc);
@@ -785,18 +789,11 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
                               FACE_COLUMN, faces[j],
                               PREVIEW_TITLE_COLUMN, family_and_face->str,
                               PREVIEW_TEXT_COLUMN, tmp->str,
-                              /** FIXME: FAMILY_NAME_COLUMN and FACE_NAME_COLUMN
-                                  are needed only until we remove the deprecated
-                                  API **/
-                              FAMILY_NAME_COLUMN, fam_name,
-                              FACE_NAME_COLUMN, face_name,
                               -1);
 
           if ((i == 0 && j == 0) ||
               (!g_ascii_strcasecmp (face_name, "sans") && j == 0))
-            {
-              match_row = iter;
-            }
+            match_row = iter;
 
           pango_font_description_free(pango_desc);
           g_free (font_desc);
@@ -867,12 +864,9 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
   GtkCellRenderer   *cell;
   GtkTreeViewColumn *col;
 
-  fontsel->priv->model = gtk_list_store_new (6,
+  fontsel->priv->model = gtk_list_store_new (4,
                                              PANGO_TYPE_FONT_FAMILY,
                                              PANGO_TYPE_FONT_FACE,
-                                             G_TYPE_STRING,
-                                             G_TYPE_STRING,
-                                             /*FIXME: Remove two strings after deprecation removal */
                                              G_TYPE_STRING,
                                              G_TYPE_STRING);
 
@@ -959,21 +953,36 @@ gtk_font_selection_ref_face (GtkFontSelection *fontsel,
   priv->face = face;
 }
 
-/* These functions populate the deprecated widgets to maintain API compatibility */
+/* FIXME: These functions populate the deprecated widgets to maintain API compatibility
+ *        To be removed for 4.0
+ */
+
 static void
 populate_font_model (GtkFontSelection *fontsel)
 {
-/*  gint n_families, i;
+  gint n_families, i;
   PangoFontFamily **families;
   GtkFontSelectionPrivate *priv = fontsel->priv;
 
-  pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
+  pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)),
                                &families,
                                &n_families);
 
   qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
-  gtk_list_store_clear (model);*/
+  gtk_list_store_clear (priv->_font_model);
+  
+  for (i=0; i<n_families; i++)
+    {
+      GtkTreeIter  iter;
+
+      gtk_list_store_append (priv->_font_model, &iter);
+      gtk_list_store_set (priv->_font_model, &iter,
+                          0, families[i],
+                          1, pango_font_family_get_name (families[i]),
+                          -1);
+    }
+  g_free (families);
 }
 
 static void
@@ -1030,6 +1039,8 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
                                                   "text", 1,
                                                   NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (priv->face_list), col);
+
+  populate_font_model (fontsel);
 }
 
 static void
