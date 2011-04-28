@@ -1185,10 +1185,6 @@ gtk_paned_realize (GtkWidget *widget)
   gdk_window_set_user_data (priv->handle, paned);
   if (attributes_mask & GDK_WA_CURSOR)
     g_object_unref (attributes.cursor);
-
-  if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
-      priv->child2 && gtk_widget_get_visible (priv->child2))
-    gdk_window_show (priv->handle);
 }
 
 static void
@@ -1218,7 +1214,9 @@ gtk_paned_map (GtkWidget *widget)
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
 
-  gdk_window_show (priv->handle);
+  if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
+      priv->child2 && gtk_widget_get_visible (priv->child2))
+    gdk_window_show (priv->handle);
 
   GTK_WIDGET_CLASS (gtk_paned_parent_class)->map (widget);
 }
