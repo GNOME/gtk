@@ -1021,16 +1021,20 @@ static void
 initialize_deprecated_widgets (GtkFontSelection *fontsel)
 {
   GtkTreeViewColumn       *col;
-  GtkCellRenderer   *cell;
+  GtkCellRenderer         *cell;
   GtkFontSelectionPrivate *priv = fontsel->priv;
+
+  GtkWidget *size_list;
+  GtkWidget *font_list;
+  GtkWidget *face_list;
 
   priv->_size_model = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_STRING);
   priv->_font_model = gtk_list_store_new (2, PANGO_TYPE_FONT_FAMILY, G_TYPE_STRING);
   priv->_face_model = gtk_list_store_new (2, PANGO_TYPE_FONT_FACE,   G_TYPE_STRING);
 
-  priv->size_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_size_model));
-  priv->font_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_font_model));
-  priv->face_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_face_model));
+  size_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_size_model));
+  font_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_font_model));
+  face_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_face_model));
 
   g_object_unref (priv->_size_model);
   g_object_unref (priv->_font_model);
@@ -1040,19 +1044,28 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
                                                   gtk_cell_renderer_text_new (),
                                                   "text", 1,
                                                   NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->size_list), col);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (size_list), col);
 
   col = gtk_tree_view_column_new_with_attributes ("Family",
                                                   gtk_cell_renderer_text_new (),
                                                   "text", 1,
                                                   NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->font_list), col);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (font_list), col);
 
   col = gtk_tree_view_column_new_with_attributes ("Face",
                                                   gtk_cell_renderer_text_new (),
                                                   "text", 1,
                                                   NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->face_list), col);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (face_list), col);
+
+
+  priv->font_list = gtk_scrolled_window_new (NULL, NULL);
+  priv->face_list = gtk_scrolled_window_new (NULL, NULL);
+  priv->size_list = gtk_scrolled_window_new (NULL, NULL);
+
+  gtk_container_add (GTK_CONTAINER (priv->font_list), font_list);
+  gtk_container_add (GTK_CONTAINER (priv->face_list), face_list);
+  gtk_container_add (GTK_CONTAINER (priv->size_list), size_list);
 
   populate_font_model (fontsel);
   cursor_changed_cb (priv->family_face_list, priv);
