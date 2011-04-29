@@ -6202,8 +6202,9 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       if (tab_pos == GTK_POS_LEFT)
         child_allocation.x += tab_padding.left + focus_width + focus_padding;
 
-      child_allocation.width = MAX (1, (page->allocation.width - tab_padding.right -
-                                        2 * (priv->tab_hborder + focus_width + focus_padding)));
+      child_allocation.width = MAX (1, (page->allocation.width -
+                                         tab_padding.left - tab_padding.right -
+                                         2 * (priv->tab_hborder + focus_width + focus_padding)));
       break;
     }
 
