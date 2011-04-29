@@ -5910,15 +5910,17 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
             {
             case GTK_POS_TOP:
               page->allocation.y += padding.top;
-              /* fall through */
-            case GTK_POS_BOTTOM:
               page->allocation.height = MAX (1, page->allocation.height - padding.top);
+              break;
+            case GTK_POS_BOTTOM:
+              page->allocation.height = MAX (1, page->allocation.height - padding.bottom);
               break;
             case GTK_POS_LEFT:
               page->allocation.x += padding.left;
-              /* fall through */
-            case GTK_POS_RIGHT:
               page->allocation.width = MAX (1, page->allocation.width - padding.left);
+              break;
+            case GTK_POS_RIGHT:
+              page->allocation.width = MAX (1, page->allocation.width - padding.right);
               break;
             }
         }
