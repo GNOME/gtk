@@ -731,10 +731,11 @@ cmp_families (const void *a, const void *b)
 static void 
 populate_list (GtkTreeView* treeview, GtkListStore* model)
 {
-  GtkStyleContext *style_context;
-  GdkRGBA          g_color;
-  PangoColor       p_color;
-  gchar            *color_string;
+  GtkStyleContext      *style_context;
+  GdkRGBA               g_color;
+  PangoColor            p_color;
+  gchar                *color_string;
+  PangoFontDescription *default_font;
 
   GtkTreeIter   match_row;
   GtkTreePath  *path;
@@ -756,13 +757,16 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
   /* Get row header font color */
   style_context = gtk_widget_get_style_context (GTK_WIDGET (treeview));
   gtk_style_context_get_color (style_context,
-                               GTK_STATE_FLAG_NORMAL |GTK_STATE_FLAG_INSENSITIVE,
+                               GTK_STATE_FLAG_NORMAL | GTK_STATE_FLAG_INSENSITIVE,
                                &g_color);
 
   p_color.red   = (guint16)((gdouble)G_MAXUINT16 * g_color.red);
   p_color.green = (guint16)((gdouble)G_MAXUINT16 * g_color.green);
   p_color.blue  = (guint16)((gdouble)G_MAXUINT16 * g_color.blue);
   color_string  = pango_color_to_string (&p_color);
+
+  /* Get theme font */
+  default_font  = gtk_style_context_get_font (style_context, GTK_STATE_NORMAL);
 
   /* Iterate over families and faces */
   for (i=0; i<n_families; i++)
@@ -801,7 +805,7 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
                               -1);
 
           if ((i == 0 && j == 0) ||
-              (!g_ascii_strcasecmp (face_name, "sans") && j == 0))
+              (!strcmp (fam_name, pango_font_description_get_family (default_font)) && j == 0))
             match_row = iter;
 
           pango_font_description_free(pango_desc);
@@ -974,9 +978,10 @@ gtk_font_selection_ref_face (GtkFontSelection *fontsel,
 static void
 populate_font_model (GtkFontSelection *fontsel)
 {
-  gint n_families, i;
-  PangoFontFamily **families;
-  GtkFontSelectionPrivate *priv = fontsel->priv;
+  gint                      n_families, i;
+  PangoFontFamily         **families;
+  GtkFontSelectionPrivate  *priv = fontsel->priv;
+  GtkTreePath              *path;
 
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)),
                                &families,
@@ -995,7 +1000,23 @@ populate_font_model (GtkFontSelection *fontsel)
                           0, families[i],
                           1, pango_font_family_get_name (families[i]),
                           -1);
+      if (priv->family &&
+          !strcmp (pango_font_family_get_name (families[i]),
+                   pango_font_family_get_name (priv->family)))
+        {
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->_face_model),
+                                          &iter);
+          if (path)
+            {
+              gtk_tree_view_set_cursor (gtk_bin_get_child (GTK_BIN (priv->font_list)),
+                                        path,
+                                        NULL,
+                                        FALSE);
+              gtk_tree_path_free (path);
+            }
+        }
     }
+
   g_free (families);
 }
 
