@@ -1419,10 +1419,10 @@ choose_icon (GtkIconTheme       *icon_theme,
 
 	  if (!found)
 	    {
-	      g_warning (_("Could not find the icon '%s'. The '%s' theme\n"
-			   "was not found either, perhaps you need to install it.\n"
-			   "You can get a copy from:\n"
-			   "\t%s"),
+	      g_warning ("Could not find the icon '%s'. The '%s' theme\n"
+			 "was not found either, perhaps you need to install it.\n"
+			 "You can get a copy from:\n"
+			 "\t%s",
 			 icon_names[0], DEFAULT_THEME_NAME, "http://icon-theme.freedesktop.org/releases");
 	    }
 	}

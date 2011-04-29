@@ -369,7 +369,7 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
    */
   if (length != 8)
     {
-      g_warning (_("Received invalid color data\n"));
+      g_warning ("%s: Received invalid color data", G_GNUC_FUNCTION);
       return;
     }
 

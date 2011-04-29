@@ -605,16 +605,16 @@ gtk_recent_chooser_menu_unselect_uri (GtkRecentChooser *chooser,
 static void
 gtk_recent_chooser_menu_select_all (GtkRecentChooser *chooser)
 {
-  g_warning (_("This function is not implemented for "
-               "widgets of class '%s'"),
+  g_warning ("This function is not implemented for "
+	     "widgets of class '%s'",
              g_type_name (G_OBJECT_TYPE (chooser)));
 }
 
 static void
 gtk_recent_chooser_menu_unselect_all (GtkRecentChooser *chooser)
 {
-  g_warning (_("This function is not implemented for "
-               "widgets of class '%s'"),
+  g_warning ("This function is not implemented for "
+	     "widgets of class '%s'",
              g_type_name (G_OBJECT_TYPE (chooser)));
 }
 

@@ -1661,7 +1661,7 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
 			    GScanner     *scanner,
 			    const gchar  *pixmap_file)
 {
-  g_warning (_("Unable to locate image file in pixmap_path: \"%s\""),
+  g_warning ("Unable to locate image file in pixmap_path: \"%s\"",
              pixmap_file);
   return NULL;
 }

@@ -1456,7 +1456,7 @@ ensure_filename_pixbuf (GtkIconSet    *icon_set,
 	  /* Remove this icon source so we don't keep trying to
 	   * load it.
 	   */
-	  g_warning (_("Error loading icon: %s"), error->message);
+	  g_warning ("Error loading icon: %s", error->message);
 	  g_error_free (error);
 
 	  icon_set->sources = g_slist_remove (icon_set->sources, source);
