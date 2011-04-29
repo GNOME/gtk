@@ -57,12 +57,12 @@ marshalers.h: stamp-marshalers.h
 	@true
 
 stamp-marshalers.h: @REBUILD@ marshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/marshalers.list --header >> xgen-gmlh \
+	$(GLIB_GENMARSHAL) --prefix=_testperf_marshal $(srcdir)/marshalers.list --header >> xgen-gmlh \
 	&& (cmp -s xgen-gmlh marshalers.h || cp xgen-gmlh marshalers.h) \
 	&& rm -f xgen-gmlh \
 	&& echo timestamp > $(@F)
 marshalers.c: @REBUILD@ marshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/marshalers.list --body >> xgen-gmlc \
+	$(GLIB_GENMARSHAL) --prefix=_testperf_marshal $(srcdir)/marshalers.list --body >> xgen-gmlc \
 	&& cp xgen-gmlc marshalers.c \
 	&& rm -f xgen-gmlc
 

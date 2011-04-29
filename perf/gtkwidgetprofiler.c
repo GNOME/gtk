@@ -53,7 +53,7 @@ gtk_widget_profiler_class_init (GtkWidgetProfilerClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetProfilerClass, create_widget),
 		  NULL, NULL,
-		  _gtk_marshal_OBJECT__VOID,
+		  _testperf_marshal_OBJECT__VOID,
 		  G_TYPE_OBJECT, 0);
 
   signals[REPORT] =
@@ -62,7 +62,7 @@ gtk_widget_profiler_class_init (GtkWidgetProfilerClass *class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetProfilerClass, report),
 		  NULL, NULL,
-		  _gtk_marshal_VOID__ENUM_OBJECT_DOUBLE,
+		  _testperf_marshal_VOID__ENUM_OBJECT_DOUBLE,
 		  G_TYPE_NONE, 3,
 		  GTK_TYPE_WIDGET_PROFILER_REPORT,
 		  G_TYPE_OBJECT,
