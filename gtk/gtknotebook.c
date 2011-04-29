@@ -6177,11 +6177,16 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
            */
           if (page != priv->cur_page && tab_overlap > tab_curvature)
             {
-              child_allocation.height -= tab_overlap - tab_curvature;
-
               if (gtk_notebook_page_num (notebook, page->child) >
                   gtk_notebook_page_num (notebook, priv->cur_page->child))
-                child_allocation.y += tab_overlap - tab_curvature;
+                {
+                  child_allocation.y += tab_overlap - tab_curvature - tab_padding.top;
+                  child_allocation.height -= tab_overlap - tab_curvature - tab_padding.top;
+                }
+              else
+                {
+                  child_allocation.height -= tab_overlap - tab_curvature - tab_padding.bottom;
+                }
             }
         }
       else
