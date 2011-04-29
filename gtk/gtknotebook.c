@@ -6202,6 +6202,27 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       break;
     }
 
+  if (page != priv->cur_page)
+    {
+      switch (tab_pos)
+        {
+        case GTK_POS_TOP:
+          child_allocation.y -= tab_padding.top;
+          child_allocation.height += tab_padding.top;
+          break;
+        case GTK_POS_BOTTOM:
+          child_allocation.height += tab_padding.bottom;
+          break;
+        case GTK_POS_LEFT:
+          child_allocation.x -= tab_padding.left;
+          child_allocation.width += tab_padding.left;
+          break;
+        case GTK_POS_RIGHT:
+          child_allocation.width += tab_padding.right;
+          break;
+        }
+    }
+
   gtk_widget_get_allocation (page->tab_label, &label_allocation);
   tab_allocation_changed = (child_allocation.x != label_allocation.x ||
                             child_allocation.y != label_allocation.y ||
