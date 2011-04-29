@@ -900,7 +900,6 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
                                                   "markup", PREVIEW_TEXT_COLUMN,
                                                   NULL);
                                                   
-
   g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
   gtk_tree_view_append_column (treeview, col);
@@ -925,7 +924,6 @@ gtk_font_selection_finalize (GObject *object)
       g_object_unref (fontsel->priv->face_list);
     }
 #endif
-
 
   G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
 }
@@ -1034,6 +1032,23 @@ update_face_model (GtkFontSelection *fontsel)
 }
 
 static void
+size_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
+{
+
+}
+
+static void
+family_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
+{
+
+}
+
+face_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
+{
+
+}
+
+static void
 initialize_deprecated_widgets (GtkFontSelection *fontsel)
 {
   GtkTreeViewColumn       *col;
@@ -1082,6 +1097,15 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
   gtk_container_add (GTK_CONTAINER (priv->font_list), font_list);
   gtk_container_add (GTK_CONTAINER (priv->face_list), face_list);
   gtk_container_add (GTK_CONTAINER (priv->size_list), size_list);
+
+  g_signal_connect (G_OBJECT (font_list), "cursor-changed",
+                    G_CALLBACK (family_list_cursor_changed_cb), fontsel);
+
+  g_signal_connect (G_OBJECT (face_list), "cursor-changed",
+                    G_CALLBACK (face_list_cursor_changed_cb), fontsel);
+
+  g_signal_connect (G_OBJECT (size_list), "cursor-changed",
+                    G_CALLBACK (size_list_cursor_changed_cb), fontsel);
 
   populate_font_model (fontsel);
   cursor_changed_cb (priv->family_face_list, priv);
