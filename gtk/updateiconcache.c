@@ -489,7 +489,7 @@ maybe_cache_image_data (Image       *image,
 	  idata2 = g_hash_table_lookup (image_data_hash, path2);
 
 	  if (idata && idata2 && idata != idata2)
-	    g_error (_("different idatas found for symlinked '%s' and '%s'\n"),
+	    g_error ("different idatas found for symlinked '%s' and '%s'\n",
 		     path, path2);
 
 	  if (idata && !idata2)
@@ -549,7 +549,7 @@ maybe_cache_icon_data (Image       *image,
 	  idata2 = g_hash_table_lookup (icon_data_hash, path2);
 
 	  if (idata && idata2 && idata != idata2)
-	    g_error (_("different idatas found for symlinked '%s' and '%s'\n"),
+	    g_error ("different idatas found for symlinked '%s' and '%s'\n",
 		     path, path2);
 
 	  if (idata && !idata2)
