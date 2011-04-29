@@ -4960,7 +4960,7 @@ gtk_window_realize (GtkWidget *widget)
       allocation.y = 0;
 
       gtk_window_guess_default_size (window, &allocation.width, &allocation.height);
-      if (allocation.width || allocation.height)
+      if (allocation.width == 0 || allocation.height == 0)
 	{
 	  /* non-empty window */
 	  allocation.width = 200;
