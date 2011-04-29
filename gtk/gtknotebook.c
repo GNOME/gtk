@@ -6175,7 +6175,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
            * coordinate of the allocation too, to position it after
            * the end of the overlap.
            */
-          if (page != priv->cur_page && tab_overlap > tab_curvature)
+          if (page != priv->cur_page && tab_overlap > tab_curvature + MIN (tab_padding.top, tab_padding.bottom))
             {
               if (gtk_notebook_page_num (notebook, page->child) >
                   gtk_notebook_page_num (notebook, priv->cur_page->child))
