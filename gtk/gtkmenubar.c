@@ -305,6 +305,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GtkRequisition requisition;
   gint ipadding;
   guint border_width;
+  gboolean use_toggle_size;
 
   requisition.width = 0;
   requisition.height = 0;
@@ -315,6 +316,12 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
   children = menu_shell->priv->children;
 
+  if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
+      priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
+    use_toggle_size = (orientation == GTK_ORIENTATION_HORIZONTAL);
+  else
+    use_toggle_size = (orientation == GTK_ORIENTATION_VERTICAL);
+
   while (children)
     {
       child = children->data;
@@ -322,17 +329,18 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          gint toggle_size;
-
           gtk_widget_get_preferred_size (child, &child_requisition, NULL);
-          gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
-                                             &toggle_size);
 
-          if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
-              priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
-            child_requisition.width += toggle_size;
-          else
-            child_requisition.height += toggle_size;
+          if (use_toggle_size)
+            {
+              gint toggle_size;
+
+              gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
+                                                 &toggle_size);
+
+              child_requisition.width += toggle_size;
+              child_requisition.height += toggle_size;
+            }
 
           if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
               priv->pack_direction == GTK_PACK_DIRECTION_RTL)
