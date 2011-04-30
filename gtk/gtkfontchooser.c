@@ -196,9 +196,9 @@ static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 #if 0
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   widget_class->screen_changed = gtk_font_selection_screen_changed;
   widget_class->style_updated = gtk_font_selection_style_updated;
 #endif
@@ -575,6 +575,12 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv->_face_model = NULL;
 #endif /* GTK_DISABLE_DEPRECATED */
 
+  /* Getting the default size */
+  font_desc  = pango_context_get_font_description (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)));
+  priv->size = pango_font_description_get_size (font_desc);
+  priv->face = NULL;
+  priv->family = NULL;
+
   gtk_widget_push_composite_child ();
 
   /* Creating fundamental widgets for the private struct */
@@ -638,15 +644,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_widget_set_valign (priv->size_spin, GTK_ALIGN_START);
 
   gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, FALSE, 0);
-//  gtk_container_add (GTK_CONTAINER (alignment), preview_and_size);
 
   gtk_box_pack_start (GTK_BOX (fontsel), GTK_WIDGET(preview_and_size), FALSE, TRUE, 0);
-
-  /* Getting the default size */
-  font_desc  = pango_context_get_font_description (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)));
-  priv->size = pango_font_description_get_size (font_desc);
-  priv->face = NULL;
-  priv->family = NULL;
   
   gtk_adjustment_set_value (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
                             (gdouble)(priv->size / PANGO_SCALE));
