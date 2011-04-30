@@ -323,7 +323,10 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   gint ipadding;
   guint border_width;
   gboolean use_toggle_size, use_maximize;
-  gint child_size, size = 0;
+  gint child_minimum, child_natural;
+
+  *minimum = 0;
+  *natural = 0;
 
   menu_bar = GTK_MENU_BAR (widget);
   menu_shell = GTK_MENU_SHELL (widget);
@@ -350,7 +353,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          get_preferred_size_for_size (child, orientation, -1, &child_size, NULL);
+          get_preferred_size_for_size (child, orientation, -1, &child_minimum, &child_natural);
 
           if (use_toggle_size)
             {
@@ -359,20 +362,27 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
               gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
                                                  &toggle_size);
 
-              child_size += toggle_size;
+              child_minimum += toggle_size;
+              child_natural += toggle_size;
             }
 
           if (use_maximize)
-            size = MAX (size, child_size);
+            {
+              *minimum = MAX (*minimum, child_minimum);
+              *natural = MAX (*natural, child_natural);
+            }
           else
-            size += child_size;
+            {
+              *minimum += child_minimum;
+              *natural += child_natural;
+            }
         }
     }
 
   gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
-
   border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
-  size += (border_width + ipadding + BORDER_SPACING) * 2;
+  *minimum += (border_width + ipadding + BORDER_SPACING) * 2;
+  *natural += (border_width + ipadding + BORDER_SPACING) * 2;
 
   if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
     {
@@ -386,13 +396,17 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
                              NULL);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        size += border->left + border->right;
+        {
+          *minimum += border->left + border->right;
+          *natural += border->left + border->right;
+        }
       else
-        size += border->top + border->bottom;
+        {
+          *minimum += border->top + border->bottom;
+          *natural += border->top + border->bottom;
+        }
       gtk_border_free (border);
     }
-
-  *minimum = *natural = size;
 }
 
 static void
