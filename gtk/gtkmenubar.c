@@ -301,7 +301,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GtkMenuShell *menu_shell;
   GtkWidget *child;
   GList *children;
-  gint nchildren;
   GtkRequisition child_requisition;
   gint ipadding;
   guint border_width;
@@ -316,7 +315,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   menu_shell = GTK_MENU_SHELL (widget);
   priv = menu_bar->priv;
 
-  nchildren = 0;
   children = menu_shell->priv->children;
 
   while (children)
@@ -349,7 +347,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
               requisition->width = MAX (requisition->width, child_requisition.width);
               requisition->height += child_requisition.height;
             }
-          nchildren += 1;
         }
     }
 
