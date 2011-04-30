@@ -302,14 +302,11 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GtkWidget *child;
   GList *children;
   GtkRequisition child_requisition;
-  GtkRequisition requisition;
   gint ipadding;
   guint border_width;
   gboolean use_toggle_size;
+  gint size = 0;
 
-  requisition.width = 0;
-  requisition.height = 0;
-  
   menu_bar = GTK_MENU_BAR (widget);
   menu_shell = GTK_MENU_SHELL (widget);
   priv = menu_bar->priv;
@@ -345,13 +342,17 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
           if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
               priv->pack_direction == GTK_PACK_DIRECTION_RTL)
             {
-              requisition.width += child_requisition.width;
-              requisition.height = MAX (requisition.height, child_requisition.height);
+              if (orientation == GTK_ORIENTATION_HORIZONTAL)
+                size += child_requisition.width;
+              else
+                size = MAX (size, child_requisition.height);
             }
           else
             {
-              requisition.width = MAX (requisition.width, child_requisition.width);
-              requisition.height += child_requisition.height;
+              if (orientation == GTK_ORIENTATION_HORIZONTAL)
+                size = MAX (size, child_requisition.width);
+              else
+                size += child_requisition.height;
             }
         }
     }
@@ -359,12 +360,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
-  requisition.width += (border_width +
-                        ipadding + 
-                        BORDER_SPACING) * 2;
-  requisition.height += (border_width +
-                         ipadding +
-                         BORDER_SPACING) * 2;
+  size += (border_width + ipadding + BORDER_SPACING) * 2;
 
   if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
     {
@@ -377,15 +373,14 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
                              "border-width", &border,
                              NULL);
 
-      requisition.width += border->left + border->right;
-      requisition.height += border->top + border->bottom;
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        size += border->left + border->right;
+      else
+        size += border->top + border->bottom;
       gtk_border_free (border);
     }
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *minimum = *natural = requisition.width;
-  else
-    *minimum = *natural = requisition.height;
+  *minimum = *natural = size;
 }
 
 static void
