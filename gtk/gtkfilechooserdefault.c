@@ -2244,11 +2244,6 @@ new_folder_button_clicked (GtkButton             *button,
   GtkTreeIter iter;
   GtkTreePath *path;
 
-  /* icon view available only in the GTK_FILE_CHOOSER_ACTION_OPEN where
-   * new folder button is not visible
-   */
-  g_assert (impl->view_mode == VIEW_MODE_LIST);
-
   if (!impl->browse_files_model)
     return; /* FIXME: this sucks.  Disable the New Folder button or something. */
 
@@ -2258,15 +2253,34 @@ new_folder_button_clicked (GtkButton             *button,
   _gtk_file_system_model_add_editable (impl->browse_files_model, &iter);
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->browse_files_model), &iter);
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->browse_files_tree_view),
-				path, impl->list_name_column,
-				FALSE, 0.0, 0.0);
+  if (impl->view_mode == VIEW_MODE_LIST)
+    {
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                                    path, impl->list_name_column,
+                                    FALSE, 0.0, 0.0);
 
-  g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
-  gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view),
-			    path,
-			    impl->list_name_column,
-			    TRUE);
+      g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
+      gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                                path,
+                                impl->list_name_column,
+                                TRUE);
+    }
+  else if (impl->view_mode == VIEW_MODE_ICON)
+    {
+      gtk_icon_view_scroll_to_path (GTK_ICON_VIEW (impl->browse_files_icon_view),
+                                    path,
+                                    TRUE,
+                                    0.5,
+                                    0.0);
+
+      g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
+      gtk_icon_view_set_cursor (GTK_ICON_VIEW (impl->browse_files_icon_view),
+                                path,
+                                impl->list_name_renderer,
+                                TRUE);
+    }
+  else
+    g_assert_not_reached ();
 
   gtk_tree_path_free (path);
 }
@@ -4564,6 +4578,18 @@ create_browse_files_icon_view (GtkFileChooserDefault *impl)
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_source_add_uri_targets (impl->browse_files_icon_view);
 
+  impl->list_name_renderer = gtk_cell_renderer_text_new ();
+  g_object_set (impl->list_name_renderer,
+                "ellipsize", PANGO_ELLIPSIZE_END,
+                NULL);
+  g_signal_connect (impl->list_name_renderer, "edited",
+                    G_CALLBACK (renderer_edited_cb), impl);
+  g_signal_connect (impl->list_name_renderer, "editing-canceled",
+                    G_CALLBACK (renderer_editing_canceled_cb), impl);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (impl->browse_files_icon_view),
+                              impl->list_name_renderer,
+                              TRUE);
+
   return impl->browse_files_icon_view;
 }
 
@@ -4897,7 +4923,6 @@ view_mode_combo_box_changed_cb (GtkComboBox *combo,
   if (target == VIEW_MODE_ICON)
     {
       impl->browse_files_tree_view = NULL;
-      impl->list_name_renderer = NULL;
       impl->list_name_column = NULL;
       impl->list_mtime_column = NULL;
       impl->list_size_column = NULL;
@@ -5666,7 +5691,8 @@ update_appearance (GtkFileChooserDefault *impl)
       location_mode_set (impl, impl->location_mode, TRUE);
     }
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     gtk_widget_show (impl->view_mode_combo_box);
   else
     gtk_widget_hide (impl->view_mode_combo_box);
