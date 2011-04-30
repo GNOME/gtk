@@ -126,6 +126,7 @@
 #include <gtk/gtklayout.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtkliststore.h>
+#include <gtk/gtklockbutton.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>

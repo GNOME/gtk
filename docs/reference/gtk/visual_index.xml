@@ -51,6 +51,9 @@
   <link linkend="GtkLinkButton">
     <inlinegraphic fileref="link-button.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkLockButton">
+    <inlinegraphic fileref="lockbutton.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkMenuBar">
     <inlinegraphic fileref="menubar.png" format="PNG"></inlinegraphic>
   </link>

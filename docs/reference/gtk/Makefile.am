@@ -296,6 +296,9 @@ HTML_IMAGES = \
 	$(srcdir)/images/label.png					\
 	$(srcdir)/images/link-button.png				\
 	$(srcdir)/images/list-and-tree.png				\
+	$(srcdir)/images/lockbutton-locked.png				\
+	$(srcdir)/images/lockbutton-unlocked.png			\
+	$(srcdir)/images/lockbutton-sorry.png				\
 	$(srcdir)/images/menubar.png					\
 	$(srcdir)/images/messagedialog.png				\
 	$(srcdir)/images/multiline-text.png				\

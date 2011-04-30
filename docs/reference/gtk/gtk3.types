@@ -92,6 +92,7 @@ gtk_label_get_type
 gtk_layout_get_type
 gtk_link_button_get_type
 gtk_list_store_get_type
+gtk_lock_button_get_type
 gtk_menu_bar_get_type
 gtk_menu_get_type
 gtk_menu_item_get_type

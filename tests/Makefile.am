@@ -59,6 +59,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testicontheme			\
 	testimage			\
 	testinput			\
+	testlockbutton			\
 	testmenubars			\
 	testmountoperation		\
 	testmultidisplay		\
@@ -158,6 +159,7 @@ testgrid_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
+testlockbutton_DEPENDENCIES = $(TEST_DEPS)
 testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
@@ -241,6 +243,7 @@ testiconview_LDADD = $(LDADDS)
 testiconview_keynav_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
+testlockbutton_LDADD = $(LDADDS)
 testmenubars_LDADD = $(LDADDS)
 testmountoperation_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)

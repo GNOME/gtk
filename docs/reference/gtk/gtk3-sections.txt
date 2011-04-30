@@ -7048,3 +7048,25 @@ GTK_APP_CHOOSER_WIDGET_GET_CLASS
 GtkAppChooserWidgetPrivate
 gtk_app_chooser_widget_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtklockbutton</FILE>
+<TITLE>GtkLockButton</TITLE>
+GtkLockButton
+
+gtk_lock_button_new
+gtk_lock_button_get_permission
+gtk_lock_button_set_permission
+
+<SUBSECTION Standard>
+GtkLockButtonClass
+GTK_TYPE_LOCK_BUTTON
+GTK_LOCK_BUTTON
+GTK_IS_LOCK_BUTTON
+GTK_LOCK_BUTTON_CLASS
+GTK_IS_LOCK_BUTTON_CLASS
+GTK_LOCK_BUTTON_GET_CLASS
+<SUBSECTION Private>
+gtk_lock_button_get_type
+GtkLockButtonPrivate
+</SECTION>

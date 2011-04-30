@@ -241,6 +241,7 @@ gtk_public_h_sources = 		\
 	gtklayout.h		\
 	gtklinkbutton.h		\
 	gtkliststore.h		\
+	gtklockbutton.h		\
 	gtkmain.h		\
 	gtkmenu.h		\
 	gtkmenubar.h		\
@@ -562,6 +563,7 @@ gtk_base_c_sources = 		\
 	gtklayout.c		\
 	gtklinkbutton.c		\
 	gtkliststore.c		\
+	gtklockbutton.c		\
 	gtkmain.c		\
 	gtkmarshalers.c		\
 	gtkmenu.c		\

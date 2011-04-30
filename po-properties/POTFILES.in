@@ -118,6 +118,7 @@ gtk/gtklabel.c
 gtk/gtklayout.c
 gtk/gtklinkbutton.c
 gtk/gtkliststore.c
+gtk/gtklockbutton.c
 gtk/gtkmain.c
 gtk/gtkmenubar.c
 gtk/gtkmenu.c

@@ -221,6 +221,54 @@ create_link_button (void)
   return new_widget_info ("link-button", align, SMALL);
 }
 
+#define G_TYPE_TEST_PERMISSION      (g_test_permission_get_type ())
+#define G_TEST_PERMISSION(inst)     (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
+                                     G_TYPE_TEST_PERMISSION,             \
+                                     GTestPermission))
+#define G_IS_TEST_PERMISSION(inst)  (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
+                                     G_TYPE_TEST_PERMISSION))
+
+typedef struct _GTestPermission GTestPermission;
+typedef struct _GTestPermissionClass GTestPermissionClass;
+
+struct _GTestPermission
+{
+  GPermission parent;
+
+  gboolean success;
+};
+
+struct _GTestPermissionClass
+{
+  GPermissionClass parent_class;
+};
+
+G_DEFINE_TYPE (GTestPermission, g_test_permission, G_TYPE_PERMISSION)
+
+static void
+g_test_permission_init (GTestPermission *test)
+{
+  g_permission_impl_update (G_PERMISSION (test), FALSE, TRUE, TRUE);
+}
+
+static void
+g_test_permission_class_init (GTestPermissionClass *class)
+{
+}
+
+static WidgetInfo *
+create_lockbutton (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+
+  widget = gtk_lock_button_new (g_object_new (G_TYPE_TEST_PERMISSION, NULL));
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return new_widget_info ("lock-button", align, SMALL);
+}
+
 static WidgetInfo *
 create_entry (void)
 {
@@ -1152,6 +1200,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_switch ());
   retval = g_list_prepend (retval, create_appchooserbutton ());
   retval = g_list_prepend (retval, create_appchooserdialog ());
+  retval = g_list_prepend (retval, create_lockbutton ());
 
   return retval;
 }
