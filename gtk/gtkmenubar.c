@@ -77,8 +77,6 @@ static void gtk_menu_bar_get_property      (GObject             *object,
 					    guint                prop_id,
 					    GValue              *value,
 					    GParamSpec          *pspec);
-static void gtk_menu_bar_size_request      (GtkWidget       *widget,
-					    GtkRequisition  *requisition);
 static void gtk_menu_bar_get_preferred_width (GtkWidget     *widget,
 					      gint          *minimum,
 					      gint          *natural);
