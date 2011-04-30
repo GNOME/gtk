@@ -439,7 +439,6 @@ gtk_image_menu_item_get_preferred_width (GtkWidget        *widget,
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
   GtkImageMenuItemPrivate *priv = image_menu_item->priv;
-  gint child_width = 0;
   GtkPackDirection pack_dir;
   GtkWidget *parent;
 
@@ -450,21 +449,18 @@ gtk_image_menu_item_get_preferred_width (GtkWidget        *widget,
   else
     pack_dir = GTK_PACK_DIRECTION_LTR;
 
-  if (priv->image && gtk_widget_get_visible (priv->image))
-    {
-      GtkRequisition child_requisition;
-
-      gtk_widget_get_preferred_size (priv->image, &child_requisition, NULL);
-
-      child_width = child_requisition.width;
-    }
-
   GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->get_preferred_width (widget, minimum, natural);
 
-  if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)
+  if ((pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT) &&
+      priv->image &&
+      gtk_widget_get_visible (priv->image))
     {
-      *minimum = MAX (*minimum, child_width);
-      *natural = MAX (*natural, child_width);
+      gint child_minimum, child_natural;
+
+      gtk_widget_get_preferred_width (priv->image, &child_minimum, &child_natural);
+
+      *minimum = MAX (*minimum, child_minimum);
+      *natural = MAX (*natural, child_natural);
     }
 }
 
