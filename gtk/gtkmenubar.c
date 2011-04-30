@@ -292,7 +292,9 @@ gtk_menu_bar_get_property (GObject    *object,
 
 static void
 gtk_menu_bar_size_request (GtkWidget      *widget,
-			   GtkRequisition *requisition)
+                           GtkOrientation  orientation,
+                           gint           *minimum,
+                           gint           *natural)
 {
   GtkMenuBar *menu_bar;
   GtkMenuBarPrivate *priv;
@@ -300,11 +302,12 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GtkWidget *child;
   GList *children;
   GtkRequisition child_requisition;
+  GtkRequisition requisition;
   gint ipadding;
   guint border_width;
 
-  requisition->width = 0;
-  requisition->height = 0;
+  requisition.width = 0;
+  requisition.height = 0;
   
   menu_bar = GTK_MENU_BAR (widget);
   menu_shell = GTK_MENU_SHELL (widget);
@@ -334,13 +337,13 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
           if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
               priv->pack_direction == GTK_PACK_DIRECTION_RTL)
             {
-              requisition->width += child_requisition.width;
-              requisition->height = MAX (requisition->height, child_requisition.height);
+              requisition.width += child_requisition.width;
+              requisition.height = MAX (requisition.height, child_requisition.height);
             }
           else
             {
-              requisition->width = MAX (requisition->width, child_requisition.width);
-              requisition->height += child_requisition.height;
+              requisition.width = MAX (requisition.width, child_requisition.width);
+              requisition.height += child_requisition.height;
             }
         }
     }
@@ -348,12 +351,12 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
-  requisition->width += (border_width +
-                         ipadding + 
+  requisition.width += (border_width +
+                        ipadding + 
+                        BORDER_SPACING) * 2;
+  requisition.height += (border_width +
+                         ipadding +
                          BORDER_SPACING) * 2;
-  requisition->height += (border_width +
-                          ipadding +
-                          BORDER_SPACING) * 2;
 
   if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
     {
@@ -366,10 +369,15 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
                              "border-width", &border,
                              NULL);
 
-      requisition->width += border->left + border->right;
-      requisition->height += border->top + border->bottom;
+      requisition.width += border->left + border->right;
+      requisition.height += border->top + border->bottom;
       gtk_border_free (border);
     }
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    *minimum = *natural = requisition.width;
+  else
+    *minimum = *natural = requisition.height;
 }
 
 static void
@@ -377,11 +385,7 @@ gtk_menu_bar_get_preferred_width (GtkWidget *widget,
 				  gint      *minimum,
 				  gint      *natural)
 {
-  GtkRequisition requisition;
-
-  gtk_menu_bar_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.width;
+  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
 }
 
 static void
@@ -389,11 +393,7 @@ gtk_menu_bar_get_preferred_height (GtkWidget *widget,
 				   gint      *minimum,
 				   gint      *natural)
 {
-  GtkRequisition requisition;
-
-  gtk_menu_bar_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
+  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_VERTICAL, minimum, natural);
 }
 
 static void
