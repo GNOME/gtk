@@ -312,74 +312,71 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   requisition->width = 0;
   requisition->height = 0;
   
-  if (gtk_widget_get_visible (widget))
+  menu_bar = GTK_MENU_BAR (widget);
+  menu_shell = GTK_MENU_SHELL (widget);
+  priv = menu_bar->priv;
+
+  nchildren = 0;
+  children = menu_shell->priv->children;
+
+  while (children)
     {
-      menu_bar = GTK_MENU_BAR (widget);
-      menu_shell = GTK_MENU_SHELL (widget);
-      priv = menu_bar->priv;
+      child = children->data;
+      children = children->next;
 
-      nchildren = 0;
-      children = menu_shell->priv->children;
+      if (gtk_widget_get_visible (child))
+        {
+          gint toggle_size;
 
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
+          gtk_widget_get_preferred_size (child, &child_requisition, NULL);
+          gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
+                                             &toggle_size);
 
-	  if (gtk_widget_get_visible (child))
-	    {
-              gint toggle_size;
+          if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
+              priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
+            child_requisition.width += toggle_size;
+          else
+            child_requisition.height += toggle_size;
 
-              gtk_widget_get_preferred_size (child, &child_requisition, NULL);
-              gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
-                                                 &toggle_size);
+          if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
+              priv->pack_direction == GTK_PACK_DIRECTION_RTL)
+            {
+              requisition->width += child_requisition.width;
+              requisition->height = MAX (requisition->height, child_requisition.height);
+            }
+          else
+            {
+              requisition->width = MAX (requisition->width, child_requisition.width);
+              requisition->height += child_requisition.height;
+            }
+          nchildren += 1;
+        }
+    }
 
-	      if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
-		  priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
-		child_requisition.width += toggle_size;
-	      else
-		child_requisition.height += toggle_size;
+  gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
 
-              if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
-		  priv->pack_direction == GTK_PACK_DIRECTION_RTL)
-		{
-		  requisition->width += child_requisition.width;
-		  requisition->height = MAX (requisition->height, child_requisition.height);
-		}
-	      else
-		{
-		  requisition->width = MAX (requisition->width, child_requisition.width);
-		  requisition->height += child_requisition.height;
-		}
-	      nchildren += 1;
-	    }
-	}
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
+  requisition->width += (border_width +
+                         ipadding + 
+                         BORDER_SPACING) * 2;
+  requisition->height += (border_width +
+                          ipadding +
+                          BORDER_SPACING) * 2;
 
-      gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
+  if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
+    {
+      GtkStyleContext *context;
+      GtkBorder *border;
 
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
-      requisition->width += (border_width +
-                             ipadding + 
-			     BORDER_SPACING) * 2;
-      requisition->height += (border_width +
-                              ipadding +
-			      BORDER_SPACING) * 2;
+      context = gtk_widget_get_style_context (widget);
 
-      if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
-	{
-          GtkStyleContext *context;
-          GtkBorder *border;
+      gtk_style_context_get (context, 0,
+                             "border-width", &border,
+                             NULL);
 
-          context = gtk_widget_get_style_context (widget);
-
-          gtk_style_context_get (context, 0,
-                                 "border-width", &border,
-                                 NULL);
-
-	  requisition->width += border->left + border->right;
-	  requisition->height += border->top + border->bottom;
-          gtk_border_free (border);
-	}
+      requisition->width += border->left + border->right;
+      requisition->height += border->top + border->bottom;
+      gtk_border_free (border);
     }
 }
 
