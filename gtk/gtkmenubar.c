@@ -83,6 +83,14 @@ static void gtk_menu_bar_get_preferred_width (GtkWidget     *widget,
 static void gtk_menu_bar_get_preferred_height (GtkWidget    *widget,
 					       gint         *minimum,
 					       gint         *natural);
+static void gtk_menu_bar_get_preferred_width_for_height (GtkWidget    *widget,
+                                                         gint          height,
+                                                         gint         *minimum,
+                                                         gint         *natural);
+static void gtk_menu_bar_get_preferred_height_for_width (GtkWidget    *widget,
+                                                         gint          width,
+                                                         gint         *minimum,
+                                                         gint         *natural);
 static void gtk_menu_bar_size_allocate     (GtkWidget       *widget,
 					    GtkAllocation   *allocation);
 static gint gtk_menu_bar_draw              (GtkWidget       *widget,
@@ -115,6 +123,8 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   widget_class->get_preferred_width = gtk_menu_bar_get_preferred_width;
   widget_class->get_preferred_height = gtk_menu_bar_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_menu_bar_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_menu_bar_get_preferred_height_for_width;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
   widget_class->draw = gtk_menu_bar_draw;
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
@@ -312,6 +322,7 @@ get_preferred_size_for_size (GtkWidget      *widget,
 static void
 gtk_menu_bar_size_request (GtkWidget      *widget,
                            GtkOrientation  orientation,
+                           gint            size,
                            gint           *minimum,
                            gint           *natural)
 {
@@ -353,7 +364,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          get_preferred_size_for_size (child, orientation, -1, &child_minimum, &child_natural);
+          get_preferred_size_for_size (child, orientation, size, &child_minimum, &child_natural);
 
           if (use_toggle_size)
             {
@@ -414,7 +425,7 @@ gtk_menu_bar_get_preferred_width (GtkWidget *widget,
 				  gint      *minimum,
 				  gint      *natural)
 {
-  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
+  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum, natural);
 }
 
 static void
@@ -422,7 +433,25 @@ gtk_menu_bar_get_preferred_height (GtkWidget *widget,
 				   gint      *minimum,
 				   gint      *natural)
 {
-  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_VERTICAL, minimum, natural);
+  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_VERTICAL, -1, minimum, natural);
+}
+
+static void
+gtk_menu_bar_get_preferred_width_for_height (GtkWidget *widget,
+                                             gint       height,
+                                             gint      *minimum,
+                                             gint      *natural)
+{
+  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_HORIZONTAL, height, minimum, natural);
+}
+
+static void
+gtk_menu_bar_get_preferred_height_for_width (GtkWidget *widget,
+                                             gint       width,
+                                             gint      *minimum,
+                                             gint      *natural)
+{
+  gtk_menu_bar_size_request (widget, GTK_ORIENTATION_VERTICAL, width, minimum, natural);
 }
 
 static void
