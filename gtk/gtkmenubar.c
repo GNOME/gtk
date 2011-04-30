@@ -303,9 +303,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   gint ipadding;
   guint border_width;
 
-  g_return_if_fail (GTK_IS_MENU_BAR (widget));
-  g_return_if_fail (requisition != NULL);
-
   requisition->width = 0;
   requisition->height = 0;
   
