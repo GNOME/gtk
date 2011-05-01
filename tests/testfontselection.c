@@ -21,6 +21,12 @@
 
 #include <gtk/gtk.h>
 
+static void
+notify_font_name_cb (GObject *fontsel, GParamSpec *pspec, gpointer data)
+{
+  g_debug ("Changed font name %s", gtk_font_selection_get_font_name (GTK_FONT_SELECTION (fontsel)));
+}
+
 
 int
 main (int argc, char *argv[])
@@ -48,6 +54,9 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (hbox), fontsel);
 
   gtk_widget_show_all (window);
+
+  g_signal_connect (G_OBJECT (window), "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (fontsel), "notify::font-name", G_CALLBACK(notify_font_name_cb), NULL);
 
   gtk_main ();
 
