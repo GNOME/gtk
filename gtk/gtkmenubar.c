@@ -487,10 +487,10 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
 
-  gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
-  
   if (menu_shell->priv->children)
     {
+      gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
+  
       border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
       child_allocation.x = (border_width +
 			    ipadding + 
