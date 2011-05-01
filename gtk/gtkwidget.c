@@ -7603,19 +7603,19 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 
   sensitive = (sensitive != FALSE);
 
-  if (widget->priv->sensitive == sensitive)
+  if (priv->sensitive == sensitive)
     return;
 
   data.flags = GTK_STATE_FLAG_INSENSITIVE;
 
   if (sensitive)
     {
-      widget->priv->sensitive = TRUE;
+      priv->sensitive = TRUE;
       data.operation = STATE_CHANGE_UNSET;
     }
   else
     {
-      widget->priv->sensitive = FALSE;
+      priv->sensitive = FALSE;
       data.operation = STATE_CHANGE_SET;
     }
 
