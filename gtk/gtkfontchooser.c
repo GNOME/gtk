@@ -371,8 +371,9 @@ slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 void
 spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
-  PangoFontDescription *desc;
-  GtkFontSelectionPrivate *priv = (GtkFontSelectionPrivate*)data;
+  PangoFontDescription    *desc;
+  GtkFontSelection        *fontsel = (GtkFontSelection*)data;
+  GtkFontSelectionPrivate *priv    = fontsel->priv;
 
   gdouble size = gtk_adjustment_get_value (adjustment);
   
@@ -392,6 +393,9 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
+
+  priv->ignore_size = TRUE;
+  update_size_list_selection (fontsel);
   
   gtk_widget_queue_draw (priv->preview);
 }
@@ -689,7 +693,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   g_signal_connect (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider))),
                     "value-changed", G_CALLBACK (slider_change_cb), priv);
   g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
-                    "value-changed", G_CALLBACK (spin_change_cb), priv);
+                    "value-changed", G_CALLBACK (spin_change_cb), fontsel);
   priv->ignore_slider = FALSE;
   
   /* Font selection callback */
@@ -1132,6 +1136,9 @@ update_size_list_selection (GtkFontSelection *fontsel)
   gboolean                 valid;
   GtkFontSelectionPrivate *priv = fontsel->priv;
   gchar                   *family_name;
+  GtkWidget               *tv = gtk_bin_get_child (GTK_BIN (priv->size_list));
+
+  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (tv));
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->_size_model), &iter);
   while (valid)
@@ -1144,13 +1151,13 @@ update_size_list_selection (GtkFontSelection *fontsel)
       if (size * PANGO_SCALE == priv->size)
         {
           GtkTreePath *path;
-          GtkWidget *tv;
+
 
           path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->_size_model), &iter);
           if (!path)
             break;
 
-          tv = gtk_bin_get_child (GTK_BIN (priv->size_list));
+ 
           priv->ignore_size = TRUE;
           gtk_tree_view_set_cursor (GTK_TREE_VIEW (tv), path, NULL, FALSE);
 
