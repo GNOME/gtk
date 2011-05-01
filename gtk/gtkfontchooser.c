@@ -1346,6 +1346,10 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
   font_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_font_model));
   face_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->_face_model));
 
+  gtk_tree_view_set_headers_visible (size_list, FALSE);
+  gtk_tree_view_set_headers_visible (font_list, FALSE);
+  gtk_tree_view_set_headers_visible (face_list, FALSE);
+
   g_object_unref (priv->_size_model);
   g_object_unref (priv->_font_model);
   g_object_unref (priv->_face_model);
@@ -1373,6 +1377,10 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
   priv->face_list = gtk_scrolled_window_new (NULL, NULL);
   priv->size_list = gtk_scrolled_window_new (NULL, NULL);
 
+  gtk_scrolled_window_set_policy (priv->font_list, GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_policy (priv->face_list, GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_policy (priv->size_list, GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+
   gtk_container_add (GTK_CONTAINER (priv->font_list), font_list);
   gtk_container_add (GTK_CONTAINER (priv->face_list), face_list);
   gtk_container_add (GTK_CONTAINER (priv->size_list), size_list);
@@ -1387,7 +1395,7 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
                     G_CALLBACK (size_list_cursor_changed_cb), fontsel);
 
   populate_font_model (fontsel);
-  cursor_changed_cb (priv->family_face_list, priv);
+  cursor_changed_cb (priv->family_face_list, fontsel);
 }
 
 #endif /* GTK_DISABLE_DEPRECATED */
