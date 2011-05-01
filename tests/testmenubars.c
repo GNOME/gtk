@@ -72,6 +72,7 @@ create_menubar (GtkPackDirection pack_dir,
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   child = gtk_bin_get_child (GTK_BIN (menuitem));
   gtk_label_set_angle (GTK_LABEL (child), angle);
+  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_START);
   menu = create_menu (2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
 
@@ -79,6 +80,7 @@ create_menubar (GtkPackDirection pack_dir,
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   child = gtk_bin_get_child (GTK_BIN (menuitem));
   gtk_label_set_angle (GTK_LABEL (child), angle);
+  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_MIDDLE);
   menu = create_menu (2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
 
@@ -86,6 +88,7 @@ create_menubar (GtkPackDirection pack_dir,
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   child = gtk_bin_get_child (GTK_BIN (menuitem));
   gtk_label_set_angle (GTK_LABEL (child), angle);
+  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
   menu = create_menu (2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
 
