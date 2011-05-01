@@ -110,7 +110,9 @@ struct _GtkFontSelectionPrivate
   GtkListStore *_font_model;
   GtkListStore *_face_model;
 
-  gboolean      ignore_update;
+  gboolean      ignore_size;
+  gboolean      ignore_face;
+  gboolean      ignore_font;
 #endif
 };
 
@@ -578,7 +580,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv->_font_model = NULL;
   priv->_face_model = NULL;
 
-  priv->ignore_update = FALSE;
+  priv->ignore_size = FALSE;
+  priv->ignore_face = FALSE;
+  priv->ignore_font = FALSE;
 #endif /* GTK_DISABLE_DEPRECATED */
 
   /* Getting the default size */
@@ -1059,9 +1063,9 @@ update_font_list_selection (GtkFontSelection *fontsel)
 
       tv = gtk_bin_get_child (GTK_BIN (priv->font_list));
 
+      priv->ignore_font = TRUE;
       gtk_tree_view_set_cursor (GTK_TREE_VIEW (tv), path, NULL, FALSE);
       gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (tv), path, NULL, FALSE, 0.0, 0.0);
-
 
       /* Free resources */
       gtk_tree_path_free (path);
@@ -1080,7 +1084,6 @@ update_face_model (GtkFontSelection *fontsel)
   int                       i, n_faces;
 
   pango_font_family_list_faces (priv->family, &faces, &n_faces);
-  pango_font_family_get_name   (priv->family);
 
   gtk_list_store_clear (priv->_face_model);
 
@@ -1105,7 +1108,7 @@ update_face_model (GtkFontSelection *fontsel)
             continue;
 
           tv = gtk_bin_get_child (GTK_BIN (priv->face_list));
-
+          priv->ignore_face = TRUE;
           gtk_tree_view_set_cursor (GTK_TREE_VIEW (tv), path, NULL, FALSE);
 
           gtk_tree_path_free (path);
@@ -1141,6 +1144,7 @@ update_size_list_selection (GtkFontSelection *fontsel)
             break;
 
           tv = gtk_bin_get_child (GTK_BIN (priv->size_list));
+          priv->ignore_size = TRUE;
           gtk_tree_view_set_cursor (GTK_TREE_VIEW (tv), path, NULL, FALSE);
 
           gtk_tree_path_free (path);
@@ -1155,18 +1159,38 @@ size_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 {
   GtkFontSelection *fontsel = (GtkFontSelection*)data;
 
+  if (fontsel->priv->ignore_size)
+    {
+      fontsel->priv->ignore_size = FALSE;
+      return;
+    }
+  g_debug ("size");
 }
 
 static void
 family_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 {
   GtkFontSelection *fontsel = (GtkFontSelection*)data;
-  
+
+
+  if (fontsel->priv->ignore_font)
+    {
+      fontsel->priv->ignore_font = FALSE;
+      return;
+    }
+  g_debug ("family");    
 }
 
 face_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 {
   GtkFontSelection *fontsel = (GtkFontSelection*)data;
+
+  if (fontsel->priv->ignore_face)
+    {
+      fontsel->priv->ignore_face = FALSE;
+      return;
+    }
+  g_debug ("face");
 }
 
 static void
