@@ -33,12 +33,20 @@
     <value nick='descending' value='1'/>
   </enum>
 
+  <enum id='org.gtk.Settings.FileChooser.ViewMode'>
+    <value nick='list-view' value='0'/>
+    <value nick='icon-view' value='1'/>
+  </enum>
+
   <schema id='org.gtk.Settings.FileChooser'>
     <key name='last-folder-uri' type='s'>
       <default>""</default>
     </key>
     <key name='location-mode' enum='org.gtk.Settings.FileChooser.LocationMode'>
       <default>'path-bar'</default>
+    </key>
+    <key name='view-mode' enum='org.gtk.Settings.FileChooser.ViewMode'>
+      <default>'list-view'</default>
     </key>
     <key name='show-hidden' type='b'>
       <default>false</default>

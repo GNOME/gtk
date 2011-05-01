@@ -264,6 +264,7 @@ typedef enum {
 
 #define SETTINGS_KEY_LAST_FOLDER_URI     "last-folder-uri"
 #define SETTINGS_KEY_LOCATION_MODE       "location-mode"
+#define SETTINGS_KEY_VIEW_MODE           "view-mode"
 #define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
 #define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
 #define SETTINGS_KEY_SORT_COLUMN         "sort-column"
@@ -419,6 +420,7 @@ static void update_cell_renderer_attributes (GtkFileChooserDefault *impl);
 static void load_remove_timer (GtkFileChooserDefault *impl);
 static void browse_files_center_selected_row (GtkFileChooserDefault *impl);
 
+static void view_mode_set (GtkFileChooserDefault *impl, ViewMode view_mode);
 static void view_mode_combo_box_changed_cb (GtkComboBox           *combo,
                                             GtkFileChooserDefault *impl);
 static void location_button_toggled_cb (GtkToggleButton *toggle,
@@ -4885,27 +4887,25 @@ location_toggle_popup_handler (GtkFileChooserDefault *impl)
     }
 }
 
-/* Callback used when view mode combo box active item is changed */
 static void
-view_mode_combo_box_changed_cb (GtkComboBox *combo,
-                                GtkFileChooserDefault *impl)
+view_mode_set (GtkFileChooserDefault *impl, ViewMode view_mode)
 {
   GtkWidget *old_view = NULL;
   ViewMode old_view_mode = impl->view_mode;
-  ViewMode target = gtk_combo_box_get_active (combo);
-  if (old_view_mode == target)
+
+  if (old_view_mode == view_mode)
     return;
 
-  impl->view_mode = target;
+  impl->view_mode = view_mode;
 
   /* Creating the target view */
-  if (target == VIEW_MODE_ICON)
+  if (view_mode == VIEW_MODE_ICON)
     {
       create_browse_files_icon_view (impl);
       impl->browse_files_current_view = impl->browse_files_icon_view;
       old_view = impl->browse_files_tree_view;
     }
-  else if (target == VIEW_MODE_LIST)
+  else if (view_mode == VIEW_MODE_LIST)
     {
       create_browse_files_tree_view (impl);
       impl->browse_files_current_view = impl->browse_files_tree_view;
@@ -4920,14 +4920,14 @@ view_mode_combo_box_changed_cb (GtkComboBox *combo,
   copy_old_selection_to_current_view (impl, old_view_mode);
 
   /* Destroy the old view */
-  if (target == VIEW_MODE_ICON)
+  if (view_mode == VIEW_MODE_ICON)
     {
       impl->browse_files_tree_view = NULL;
       impl->list_name_column = NULL;
       impl->list_mtime_column = NULL;
       impl->list_size_column = NULL;
     }
-  else if (target == VIEW_MODE_LIST)
+  else if (view_mode == VIEW_MODE_LIST)
     impl->browse_files_icon_view = NULL;
   else
     g_assert_not_reached ();
@@ -4941,6 +4941,16 @@ view_mode_combo_box_changed_cb (GtkComboBox *combo,
   gtk_container_add (GTK_CONTAINER (impl->browse_files_scrolled_window),
                                     impl->browse_files_current_view);
   gtk_widget_show (impl->browse_files_current_view);
+}
+
+/* Callback used when view mode combo box active item is changed */
+static void
+view_mode_combo_box_changed_cb (GtkComboBox *combo,
+                                GtkFileChooserDefault *impl)
+{
+  ViewMode target = gtk_combo_box_get_active (combo);
+
+  view_mode_set (impl, target);
 }
 
 /* Callback used when one of the location mode buttons is toggled */
@@ -6221,6 +6231,7 @@ static void
 settings_load (GtkFileChooserDefault *impl)
 {
   LocationMode location_mode;
+  ViewMode view_mode;
   gboolean show_hidden;
   gboolean show_size_column;
   gint sort_column;
@@ -6229,12 +6240,14 @@ settings_load (GtkFileChooserDefault *impl)
   settings_ensure (impl);
 
   location_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE);
+  view_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_VIEW_MODE);
   show_hidden = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN);
   show_size_column = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
   sort_column = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN);
   sort_order = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_ORDER);
 
   location_mode_set (impl, location_mode, TRUE);
+  view_mode_set (impl, view_mode);
 
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
 
@@ -6290,6 +6303,7 @@ settings_save (GtkFileChooserDefault *impl)
   /* All the other state */
 
   g_settings_set_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
+  g_settings_set_enum (impl->settings, SETTINGS_KEY_VIEW_MODE, impl->view_mode);
   g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN,
                           gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
   g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
