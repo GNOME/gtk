@@ -7279,6 +7279,10 @@ gtk_window_compute_hints (GtkWindow   *window,
 	}
     }
 
+  /* Please use a good size for unresizable widgets, not the minimum one. */
+  if (!priv->resizable)
+    gtk_window_guess_default_size (window, &requisition.width, &requisition.height);
+
   if (*new_flags & GDK_HINT_MIN_SIZE)
     {
       if (new_geometry->min_width < 0)
