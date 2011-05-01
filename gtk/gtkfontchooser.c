@@ -193,7 +193,8 @@ static void gtk_font_selection_bootstrap_fontlist (GtkFontSelection *fontsel);
 #ifndef GTK_DISABLE_DEPRECATED
 static void update_font_list_selection            (GtkFontSelection *fontsel);
 static void update_size_list_selection            (GtkFontSelection *fontsel);
-static void update_face_model                     (GtkFontSelection *fontsel);
+static void update_face_model                     (GtkFontSelection *fontsel,
+                                                   gboolean          first);
 #endif
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
@@ -525,7 +526,7 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   set_range_marks (fontsel->priv, fontsel->priv->size_slider, sizes, n_sizes);
 
   gtk_font_selection_ref_family (fontsel, family);
-  gtk_font_selection_ref_face  (fontsel,   face);
+  gtk_font_selection_ref_face   (fontsel, face);
 
 #ifndef GTK_DISABLE_DEPRECATED
   if (fontsel->priv->_font_model)
@@ -1073,11 +1074,11 @@ update_font_list_selection (GtkFontSelection *fontsel)
       break;
     }
 
-  update_face_model (fontsel);
+  update_face_model (fontsel, FALSE);
 }
 
 static void
-update_face_model (GtkFontSelection *fontsel)
+update_face_model (GtkFontSelection *fontsel, gboolean first)
 {
   GtkFontSelectionPrivate  *priv = fontsel->priv;
   PangoFontFace           **faces;
@@ -1097,8 +1098,8 @@ update_face_model (GtkFontSelection *fontsel)
                           1, pango_font_face_get_face_name (faces[i]),
                           -1);
 
-      if (!strcmp (pango_font_face_get_face_name (faces[i]),
-                   pango_font_face_get_face_name (priv->face)))
+      if (!first && faces[i] == priv->face ||
+          first && i == 0)
         {
           GtkTreePath *path;
           GtkWidget *tv;
@@ -1108,10 +1109,16 @@ update_face_model (GtkFontSelection *fontsel)
             continue;
 
           tv = gtk_bin_get_child (GTK_BIN (priv->face_list));
-          priv->ignore_face = TRUE;
+
+          if (!first)
+            priv->ignore_face = TRUE;
+
           gtk_tree_view_set_cursor (GTK_TREE_VIEW (tv), path, NULL, FALSE);
 
           gtk_tree_path_free (path);
+
+          if (first)
+            gtk_font_selection_ref_face (fontsel, faces[i]);
         }
     }
   update_size_list_selection (fontsel);
@@ -1156,9 +1163,61 @@ update_size_list_selection (GtkFontSelection *fontsel)
 
 
 static void
+select_family_and_face (GtkFontSelection *fontsel)
+{
+  GtkTreeIter              iter;
+  gboolean                 valid;
+  GtkFontSelectionPrivate *priv = fontsel->priv;
+  PangoFontFace           *face;
+  PangoFontFamily         *family;
+
+  gtk_entry_set_text (priv->search_entry, "");
+
+  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->filter), &iter);
+  while (valid)
+    {
+      gint         size;
+      gtk_tree_model_get (GTK_TREE_MODEL (priv->filter), &iter,
+                          FACE_COLUMN,   &face,
+                          FAMILY_COLUMN, &family, 
+                          -1);
+
+      if (face == priv->face && family == priv->family)
+        {
+          GtkTreePath *path;
+
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->filter), &iter);
+          if (!path)
+          {
+            g_object_unref (face);
+            g_object_unref (family);
+            break;
+          }
+
+          priv->ignore_size = TRUE;
+          gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->family_face_list), path, NULL, FALSE);
+
+          gtk_tree_path_free (path);
+          g_object_unref (face);
+          g_object_unref (family);
+          break;
+        }
+
+      g_object_unref (face);
+      g_object_unref (family);
+      valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->filter), &iter);
+    }
+}
+
+
+static void
 family_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 {
+  GtkWidget        *tv;
+  GtkTreeIter       iter;
+  GtkTreePath      *path;
   GtkFontSelection *fontsel = (GtkFontSelection*)data;
+  PangoFontFamily  *font;
 
   if (fontsel->priv->ignore_font)
     {
@@ -1166,17 +1225,66 @@ family_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
       return;
     }
 
+  tv = gtk_bin_get_child (GTK_BIN (fontsel->priv->font_list));
+  gtk_tree_view_get_cursor (GTK_TREE_VIEW (tv), &path, NULL);
+
+  if (!path)
+    return;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fontsel->priv->_font_model),
+                           &iter,
+                           path);
+  
+  gtk_tree_model_get (GTK_TREE_MODEL (fontsel->priv->_font_model), &iter,
+                      0, &font,
+                      -1);
+
+  gtk_font_selection_ref_family (fontsel, font);
+  update_face_model (fontsel, TRUE);
+
+  fontsel->priv->ignore_font = TRUE;
+  select_family_and_face (fontsel);
+
+  gtk_tree_path_free (path);
+  g_object_unref (font);
 }
 
+static void
 face_list_cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 {
+  GtkWidget        *tv;
+  GtkTreeIter       iter;
+  GtkTreePath      *path;
   GtkFontSelection *fontsel = (GtkFontSelection*)data;
+  PangoFontFace    *face;
 
   if (fontsel->priv->ignore_face)
     {
       fontsel->priv->ignore_face = FALSE;
       return;
     }
+
+  tv = gtk_bin_get_child (GTK_BIN (fontsel->priv->face_list));
+  gtk_tree_view_get_cursor (GTK_TREE_VIEW (tv), &path, NULL);
+
+  if (!path)
+    return;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fontsel->priv->_face_model),
+                           &iter,
+                           path);
+  
+  gtk_tree_model_get (GTK_TREE_MODEL (fontsel->priv->_face_model), &iter,
+                      0, &face,
+                      -1);
+
+  gtk_font_selection_ref_face (fontsel, face);
+
+  fontsel->priv->ignore_face = TRUE;
+  select_family_and_face (fontsel);
+
+  gtk_tree_path_free (path);
+  g_object_unref (face);
 }
 
 static void
