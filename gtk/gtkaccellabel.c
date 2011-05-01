@@ -386,9 +386,9 @@ gtk_accel_label_draw (GtkWidget *widget,
   direction = gtk_widget_get_direction (widget);
   ac_width = gtk_accel_label_get_accel_width (accel_label);
   gtk_widget_get_allocation (widget, &allocation);
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
+  gtk_widget_get_preferred_size (widget, NULL, &requisition);
 
-  if (allocation.width >= requisition.width + ac_width)
+  if (allocation.width >= requisition.width + ac_width && FALSE)
     {
       GtkStyleContext *context;
       PangoLayout *label_layout;
