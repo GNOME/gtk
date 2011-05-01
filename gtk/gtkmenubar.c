@@ -463,13 +463,12 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   GtkMenuBarPrivate *priv;
   GtkWidget *child;
   GList *children;
-  GtkAllocation child_allocation;
-  GtkRequisition child_requisition;
-  guint offset;
-  GtkTextDirection direction;
-  gint ltr_x, ltr_y;
+  GtkAllocation remaining_space;
   gint ipadding;
   guint border_width;
+  GArray *requested_sizes;
+  gint toggle_size;
+  guint i;
 
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (allocation != NULL);
@@ -477,8 +476,6 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   menu_bar = GTK_MENU_BAR (widget);
   menu_shell = GTK_MENU_SHELL (widget);
   priv = menu_bar->priv;
-
-  direction = gtk_widget_get_direction (widget);
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -492,13 +489,17 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
   
       border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
-      child_allocation.x = (border_width +
+      remaining_space.x = (border_width +
 			    ipadding + 
 			    BORDER_SPACING);
-      child_allocation.y = (border_width +
+      remaining_space.y = (border_width +
                             ipadding +
 			    BORDER_SPACING);
-      
+      remaining_space.width = allocation->width -
+                               2 * (border_width + ipadding + BORDER_SPACING);
+      remaining_space.height = allocation->height -
+                                2 * (border_width + ipadding + BORDER_SPACING);
+    
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
           GtkStyleContext *context;
@@ -509,115 +510,127 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
                                  "border-width", &border,
                                  NULL);
 
-          child_allocation.x += border->left;
-          child_allocation.y += border->top;
+          remaining_space.x += border->left;
+          remaining_space.y += border->top;
+          remaining_space.width -= border->left + border->right;
+          remaining_space.height -= border->top + border->bottom;
 
           gtk_border_free (border);
 	}
       
+      requested_sizes = g_array_new (FALSE, FALSE, sizeof (GtkRequestedSize));
+
       if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
 	  priv->pack_direction == GTK_PACK_DIRECTION_RTL)
 	{
-	  child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
+          int size = remaining_space.width;
+          gboolean ltr = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) == (priv->pack_direction == GTK_PACK_DIRECTION_LTR);
 
-          offset = child_allocation.x; 	/* Window edge to menubar start */
-          ltr_x = child_allocation.x;
-
-          children = menu_shell->priv->children;
-          while (children)
+          for (children = menu_shell->priv->children; children; children = children->next)
             {
-              gint toggle_size;
-
+              GtkRequestedSize request;
 	      child = children->data;
-	      children = children->next;
-	      
+
+	      if (!gtk_widget_get_visible (child))
+                continue;
+
+              request.data = child;
+              gtk_widget_get_preferred_width_for_height (child, 
+                                                         remaining_space.height,
+                                                         &request.minimum_size, 
+                                                         &request.natural_size);
 	      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
 						 &toggle_size);
-              gtk_widget_get_preferred_size (child, &child_requisition, NULL);
+              request.minimum_size += toggle_size;
+              request.natural_size += toggle_size;
 
-	      if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
-		  priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
-		child_requisition.width += toggle_size;
-	      else
-		child_requisition.height += toggle_size;
+	      gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
 
-	      /* Support for the right justified help menu */
-	      if (children == NULL &&
-                  GTK_IS_MENU_ITEM (child) &&
-                  GTK_MENU_ITEM (child)->priv->right_justify)
-		{
-		  ltr_x = allocation->width -
-		    child_requisition.width - offset;
-		}
-	      if (gtk_widget_get_visible (child))
-		{
-		  if ((direction == GTK_TEXT_DIR_LTR) == (priv->pack_direction == GTK_PACK_DIRECTION_LTR))
-		    child_allocation.x = ltr_x;
-		  else
-		    child_allocation.x = allocation->width -
-		      child_requisition.width - ltr_x; 
-		  
-		  child_allocation.width = child_requisition.width;
-		  
-		  gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
-						      toggle_size);
-		  gtk_widget_size_allocate (child, &child_allocation);
-		  
-		  ltr_x += child_allocation.width;
-		}
-	    }
+              g_array_append_val (requested_sizes, request);
+
+              size -= request.minimum_size;
+            }
+
+          size = gtk_distribute_natural_allocation (size,
+                                                    requested_sizes->len,
+                                                    (GtkRequestedSize *) requested_sizes->data);
+
+          for (i = 0; i < requested_sizes->len; i++)
+            {
+              GtkAllocation child_allocation = remaining_space;
+              GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
+
+              child_allocation.width = request->minimum_size;
+              remaining_space.width -= request->minimum_size;
+
+	      if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
+                  gtk_menu_item_get_right_justified (request->data))
+                ltr = !ltr;
+
+              if (ltr)
+                remaining_space.x += request->minimum_size;
+              else
+                child_allocation.x += remaining_space.width;
+
+              gtk_widget_size_allocate (request->data, &child_allocation);
+            }
 	}
       else
 	{
-	  child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
+          int size = remaining_space.height;
+          gboolean ttb = (priv->pack_direction == GTK_PACK_DIRECTION_TTB);
 
-          offset = child_allocation.y; 	/* Window edge to menubar start */
-          ltr_y = child_allocation.y;
-
-          children = menu_shell->priv->children;
-          while (children)
+          for (children = menu_shell->priv->children; children; children = children->next)
             {
-              gint toggle_size;
-
+              GtkRequestedSize request;
 	      child = children->data;
-	      children = children->next;
-	      
+
+	      if (!gtk_widget_get_visible (child))
+                continue;
+
+              request.data = child;
+              gtk_widget_get_preferred_height_for_width (child, 
+                                                         remaining_space.width,
+                                                         &request.minimum_size, 
+                                                         &request.natural_size);
 	      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
 						 &toggle_size);
-              gtk_widget_get_preferred_size (child, &child_requisition, NULL);
+              request.minimum_size += toggle_size;
+              request.natural_size += toggle_size;
 
-	      if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
-		  priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
-		child_requisition.width += toggle_size;
-	      else
-		child_requisition.height += toggle_size;
+	      gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
 
-              /* Support for the right justified help menu */
-              if (children == NULL &&
-                  GTK_IS_MENU_ITEM (child) &&
-                  GTK_MENU_ITEM (child)->priv->right_justify)
-                {
-		  ltr_y = allocation->height -
-		    child_requisition.height - offset;
-		}
-	      if (gtk_widget_get_visible (child))
-		{
-		  if ((direction == GTK_TEXT_DIR_LTR) ==
-		      (priv->pack_direction == GTK_PACK_DIRECTION_TTB))
-		    child_allocation.y = ltr_y;
-		  else
-		    child_allocation.y = allocation->height -
-		      child_requisition.height - ltr_y; 
-		  child_allocation.height = child_requisition.height;
-		  
-		  gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
-						      toggle_size);
-		  gtk_widget_size_allocate (child, &child_allocation);
-		  
-		  ltr_y += child_allocation.height;
-		}
-	    }
+              g_array_append_val (requested_sizes, request);
+
+              size -= request.minimum_size;
+            }
+
+          size = gtk_distribute_natural_allocation (size,
+                                                    requested_sizes->len,
+                                                    (GtkRequestedSize *) requested_sizes->data);
+
+          for (i = 0; i < requested_sizes->len; i++)
+            {
+              GtkAllocation child_allocation = remaining_space;
+              GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
+
+              child_allocation.height = request->minimum_size;
+              remaining_space.height -= request->minimum_size;
+
+	      if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
+                  gtk_menu_item_get_right_justified (request->data))
+                ttb = !ttb;
+
+              if (ttb)
+                remaining_space.y += request->minimum_size;
+              else
+                child_allocation.y += remaining_space.height;
+
+              gtk_widget_size_allocate (request->data, &child_allocation);
+            }
 	}
+
+      g_array_free (requested_sizes, TRUE);
     }
 }
 
