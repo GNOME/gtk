@@ -1573,13 +1573,13 @@ _gtk_tooltip_handle_event (GdkEvent *event)
       case GDK_KEY_PRESS:
       case GDK_DRAG_ENTER:
       case GDK_GRAB_BROKEN:
+      case GDK_SCROLL:
 	gtk_tooltip_hide_tooltip (current_tooltip);
 	break;
 
       case GDK_MOTION_NOTIFY:
       case GDK_ENTER_NOTIFY:
       case GDK_LEAVE_NOTIFY:
-      case GDK_SCROLL:
 	if (current_tooltip)
 	  {
 	    gboolean tip_area_set;
