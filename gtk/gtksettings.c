@@ -1631,6 +1631,9 @@ gtk_settings_notify (GObject    *object,
       settings_update_color_scheme (settings);
       gtk_style_context_reset_widgets (priv->screen);
       break;
+    case PROP_FONT_NAME:
+      gtk_style_context_reset_widgets (priv->screen);
+      break;
     case PROP_KEY_THEME_NAME:
       settings_update_key_theme (settings);
       break;
