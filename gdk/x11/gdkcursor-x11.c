@@ -673,8 +673,8 @@ static GdkCursor*
 gdk_cursor_new_from_pixmap (GdkDisplay     *display,
                             Pixmap          source_pixmap,
                             Pixmap          mask_pixmap,
-                            const GdkColor *fg,
-                            const GdkColor *bg,
+                            const GdkRGBA  *fg,
+                            const GdkRGBA  *bg,
                             gint            x,
                             gint            y)
 {
@@ -685,15 +685,14 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
 
-  xfg.pixel = fg->pixel;
-  xfg.red = fg->red;
-  xfg.blue = fg->blue;
-  xfg.green = fg->green;
-  xbg.pixel = bg->pixel;
-  xbg.red = bg->red;
-  xbg.blue = bg->blue;
-  xbg.green = bg->green;
-  
+  xfg.red = fg->red * 65535;
+  xfg.blue = fg->blue * 65535;
+  xfg.green = fg->green * 65535;
+
+  xbg.red = bg->red * 65535;
+  xbg.blue = bg->blue * 65535;
+  xbg.green = bg->green * 65535;
+
   if (gdk_display_is_closed (display))
     xcursor = None;
   else
@@ -720,8 +719,8 @@ _gdk_x11_display_get_cursor_for_pixbuf (GdkDisplay *display,
   cairo_surface_t *pixmap, *mask;
   guint width, height, n_channels, rowstride, data_stride, i, j;
   guint8 *data, *mask_data, *pixels;
-  GdkColor fg = { 0, 0, 0, 0 };
-  GdkColor bg = { 0, 0xffff, 0xffff, 0xffff };
+  GdkRGBBA fg = { 0, 0, 0, 1 };
+  GdkRGBA bg = { 1, 1, 1, 1 };
   GdkScreen *screen;
   cairo_surface_t *image;
   cairo_t *cr;
