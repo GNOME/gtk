@@ -142,7 +142,6 @@ do_menus (GtkWidget *do_widget)
 
       menuitem = gtk_menu_item_new_with_label ("bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));
-      gtk_menu_item_set_right_justified (GTK_MENU_ITEM (menuitem), TRUE);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
