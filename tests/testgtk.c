@@ -2633,7 +2633,7 @@ create_saved_position (GtkWidget *widget)
 
       vbox =
 	g_object_new (GTK_TYPE_BOX,
-                      "GtkOrientable::orientation", GTK_ORIENTATION_VERTICAL,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
 			"GtkBox::homogeneous", FALSE,
 			"GtkBox::spacing", 5,
 			"GtkContainer::border_width", 10,
@@ -2837,7 +2837,7 @@ create_tooltips (GtkWidget *widget)
 
       box3 =
 	g_object_new (GTK_TYPE_BOX,
-                      "GtkOrientable::orientation", GTK_ORIENTATION_VERTICAL,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
 			"homogeneous", FALSE,
 			"spacing", 5,
 			"border_width", 5,
@@ -4964,7 +4964,7 @@ create_cursors (GtkWidget *widget)
 
       vbox =
 	g_object_new (GTK_TYPE_BOX,
-                      "GtkOrientable::orientation", GTK_ORIENTATION_VERTICAL,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
 			"GtkBox::homogeneous", FALSE,
 			"GtkBox::spacing", 5,
 			"GtkContainer::border_width", 10,
