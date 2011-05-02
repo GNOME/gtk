@@ -2266,7 +2266,7 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
           g_warning ("Cannot connect attribute `%s' for cell renderer class `%s' "
                      "since `%s' is already attributed to column %d",
                      attribute,
-                     g_type_name (G_TYPE_FROM_INSTANCE (area)),
+                     G_OBJECT_TYPE_NAME (renderer),
                      attribute, cell_attribute->column);
           return;
         }
@@ -2279,7 +2279,7 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
       g_warning ("Cannot connect attribute `%s' for cell renderer class `%s' "
                  "since attribute does not exist",
                  attribute,
-                 g_type_name (G_TYPE_FROM_INSTANCE (area)));
+                 G_OBJECT_TYPE_NAME (renderer));
       return;
     }
 
