@@ -388,7 +388,7 @@ gtk_accel_label_draw (GtkWidget *widget,
   gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_preferred_size (widget, NULL, &requisition);
 
-  if (allocation.width >= requisition.width + ac_width && FALSE)
+  if (allocation.width >= requisition.width + ac_width)
     {
       GtkStyleContext *context;
       PangoLayout *label_layout;
