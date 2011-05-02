@@ -3271,7 +3271,8 @@ create_menus (GtkWidget *widget)
       menuitem = gtk_image_menu_item_new_with_label ("Help");
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (screen, 4, 5, TRUE));
-      gtk_menu_item_set_right_justified (GTK_MENU_ITEM (menuitem), TRUE);
+      gtk_widget_set_hexpand (menuitem, TRUE);
+      gtk_widget_set_halign (menuitem, GTK_ALIGN_END);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
       
