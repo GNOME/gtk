@@ -1354,7 +1354,7 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * initialised beforehand.
  *
  * This function can handle char, uchar, boolean, int, uint, long,
- * ulong, enum, flags, float, double, string, #GdkColor and
+ * ulong, enum, flags, float, double, string, #GdkColor, #GdkRGBA and
  * #GtkAdjustment type values. Support for #GtkWidget type values is
  * still to come.
  *
