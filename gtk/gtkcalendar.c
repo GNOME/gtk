@@ -249,7 +249,6 @@ struct _GtkCalendarPrivate
 {
   GtkCalendarDisplayOptions display_flags;
 
-  GdkColor marked_date_color[31];
   GdkWindow *main_win;
   GdkWindow *arrow_win[4];
 
