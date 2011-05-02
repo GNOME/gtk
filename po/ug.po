@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-04-19 11:59+0000\n"
-"PO-Revision-Date: 2011-04-20 11:30+0600\n"
+"POT-Creation-Date: 2011-04-25 06:58+0000\n"
+"PO-Revision-Date: 2011-04-26 10:56+0600\n"
 "Last-Translator: Sahran <sahran.ug@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -132,7 +132,7 @@ msgstr "Multikey(_K)"
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "Home، باش بەت"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
@@ -470,7 +470,7 @@ msgstr "ئىجازەتنامە"
 
 #: ../gtk/gtkaboutdialog.c:347
 msgid "The license of the program"
-msgstr "پروگراممىنىڭ ئىجازەت كېلىشىمى"
+msgstr "پروگراممىنىڭ ئىجازەتنامىسى"
 
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:739
@@ -519,7 +519,7 @@ msgstr "گۈزەل سەنئەت تەھرىرى"
 #: ../gtk/gtkaccellabel.c:158
 msgctxt "keyboard label"
 msgid "Shift"
-msgstr "Shift كۇنۇپكىسى"
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -579,7 +579,7 @@ msgstr "بوشلۇق"
 #: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr "تەتۈر يانتۇ سىزىقBackslash"
+msgstr "تەتۈر يانتۇ سىزىق(Backslash)"
 
 #: ../gtk/gtkappchooserbutton.c:268
 msgid "Other application..."
@@ -633,8 +633,8 @@ msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
-"تەپسىلاتى ئۈچۈن «باشقا پىروگراممىنى كۆرسەت»نى چېكىڭ ياكى «پىروگراممىنى توردىن "
-"ئىزدە» دىن يېڭى پىروگراممىنى ئورنىتىڭ"
+"تەپسىلاتى ئۈچۈن «باشقا پروگراممىنى كۆرسەت»نى چېكىڭ ياكى «پروگراممىنى توردىن "
+"ئىزدە» دىن يېڭى پروگراممىنى ئورنىتىڭ"
 
 #: ../gtk/gtkappchooserdialog.c:450
 msgid "Forget association"
@@ -1466,7 +1466,7 @@ msgstr "ئۇلانما ئاچ(_O)"
 #. Copy Link Address
 #: ../gtk/gtklabel.c:6257
 msgid "Copy _Link Address"
-msgstr "ئۇلانما مەنزىل كۆچۈر(_L)"
+msgstr "ئۇلانما ئادرېسىنى كۆچۈر(_L)"
 
 #: ../gtk/gtklinkbutton.c:482
 msgid "Copy URL"
@@ -1566,16 +1566,16 @@ msgstr "نامەلۇم پروگرامما (PID %d)"
 
 #: ../gtk/gtkmountoperation.c:1066
 msgid "Unable to end process"
-msgstr "جەرياننى ئاخىرلاشتۇرالمايدۇ"
+msgstr "ئىجرانى ئاخىرلاشتۇرالمايدۇ"
 
 #: ../gtk/gtkmountoperation.c:1103
 msgid "_End Process"
-msgstr "مەشغۇلاتنى ئاخىرلاشتۇر(_E)"
+msgstr "ئىجرانى ئاخىرلاشتۇر(_E)"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr "PID %d جەرياننى توختىتالمايدۇ. مەشغۇلاتنى ئىجرا قىلغىلى بولمايدۇ."
+msgstr "PID %d ئىجرانى يوقىتالمايدۇ. مەشغۇلاتنى ئىجرا قىلغىلى بولمايدۇ."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:859
@@ -1601,7 +1601,7 @@ msgstr "Z Shell"
 #: ../gtk/gtkmountoperation-x11.c:960
 #, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr "PID %d جەرياننى ئاخىرلاشتۇرالمايدۇ: %s"
+msgstr "PID %d ئىجرانى ئاخىرلاشتۇرالمايدۇ: %s"
 
 #: ../gtk/gtknotebook.c:4805 ../gtk/gtknotebook.c:7459
 #, c-format
@@ -1843,7 +1843,7 @@ msgstr "پرىنتېر ئۇچۇرىغا ئېرىشىۋاتىدۇ…"
 
 #: ../gtk/gtkprintunixdialog.c:2145
 msgid "Printer"
-msgstr "پىرىنتېر"
+msgstr "پرىنتېر"
 
 #. Translators: this is the header for the location column in the print dialog
 #: ../gtk/gtkprintunixdialog.c:2155
@@ -2150,7 +2150,7 @@ msgstr "تامام"
 
 #: ../gtk/gtkprintunixdialog.c:3843
 msgid "Some of the settings in the dialog conflict"
-msgstr "سۆزلەشكۈ رامكىسىدىكى بەزى بەلگىلەشتە توقۇنۇش بار"
+msgstr "سۆزلەشكۈ رامكىسىدىكى بەزى تەڭشەكلەردە توقۇنۇش بار"
 
 #: ../gtk/gtkprintunixdialog.c:3866
 msgid "Print"
@@ -2186,7 +2186,7 @@ msgstr "تۈرنى چىقىرىۋېتەلمەيدۇ"
 
 #: ../gtk/gtkrecentchooserdefault.c:1698
 msgid "Could not clear list"
-msgstr "تىزىملىكنى تازىلىيالمايدۇ"
+msgstr "تىزىمنى تازىلىيالمايدۇ"
 
 #: ../gtk/gtkrecentchooserdefault.c:1782
 msgid "Copy _Location"
@@ -2194,11 +2194,11 @@ msgstr "ئورۇن كۆچۈر(_L)"
 
 #: ../gtk/gtkrecentchooserdefault.c:1795
 msgid "_Remove From List"
-msgstr "تىزىملىكتىن چىقىرىۋەت(_R)"
+msgstr "تىزىمدىن چىقىرىۋەت(_R)"
 
 #: ../gtk/gtkrecentchooserdefault.c:1804
 msgid "_Clear List"
-msgstr "تىزىملىكنى تازىلا(_C)"
+msgstr "تىزىمنى تازىلا(_C)"
 
 #: ../gtk/gtkrecentchooserdefault.c:1818
 msgid "Show _Private Resources"
@@ -2321,7 +2321,7 @@ msgstr "توم(_B)"
 #: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr "قالدۇرماق(_C)"
+msgstr "ئەمەلدىن قالدۇر(_C)"
 
 #: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
@@ -2411,7 +2411,7 @@ msgstr "تولۇق ئېكران( _F)"
 #: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
-msgstr "پۈتۈن ئېكراندىن ئايرىل(_L)"
+msgstr "تولۇق ئېكراندىن ئايرىل(_L)"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:345
@@ -2453,7 +2453,7 @@ msgstr "ئاستىغا(_D)"
 #: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "جاۋاب يوللا(_F)"
+msgstr "ئالدى(_F)"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:359
@@ -2534,7 +2534,7 @@ msgstr "ئوڭ(_R)"
 #: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
-msgstr "جاۋاب يوللا(_F)"
+msgstr "ئالدى(_F)"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:381
