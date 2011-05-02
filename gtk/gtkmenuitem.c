@@ -189,6 +189,12 @@ static void gtk_menu_item_set_related_action         (GtkMenuItem          *menu
 static void gtk_menu_item_set_use_action_appearance  (GtkMenuItem          *menu_item, 
                                                       gboolean              use_appearance);
 
+/* Declare deprecated function that need a declaration */
+#ifdef GTK_DISABLE_DEPRECATED
+void       gtk_menu_item_set_right_justified         (GtkMenuItem          *menu_item,
+                                                      gboolean              right_justified);
+gboolean   gtk_menu_item_get_right_justified         (GtkMenuItem          *menu_item);
+#endif  /* GTK_DISABLE_DEPRECATED */
 
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
@@ -327,7 +333,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                          P_("Right Justified"),
                                                          P_("Sets whether the menu item appears justified at the right side of a menu bar"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkMenuItem:submenu:
@@ -2289,6 +2295,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
  * menu items, but is now considered a bad idea. (If the widget
  * layout is reversed for a right-to-left language like Hebrew
  * or Arabic, right-justified-menu-items appear at the left.)
+ *
+ * Deprecated: 3.2: If you insist on using it, use
+ *   gtk_widget_set_hexpand() and gtk_widget_set_halign().
  **/
 void
 gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
@@ -2316,6 +2325,8 @@ gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
  *
  * Return value: %TRUE if the menu item will appear at the
  *   far right if added to a menu bar.
+ *
+ * Deprecated: 3.2: See gtk_menu_item_set_right_justified()
  **/
 gboolean
 gtk_menu_item_get_right_justified (GtkMenuItem *menu_item)

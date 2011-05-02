@@ -564,7 +564,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
               remaining_space.width -= request->minimum_size;
 
 	      if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
-                  gtk_menu_item_get_right_justified (request->data))
+                  GTK_MENU_ITEM (request->data)->priv->right_justify)
                 ltr = !ltr;
 
               if (ltr)
@@ -618,7 +618,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
               remaining_space.height -= request->minimum_size;
 
 	      if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
-                  gtk_menu_item_get_right_justified (request->data))
+                  GTK_MENU_ITEM (request->data)->priv->right_justify)
                 ttb = !ttb;
 
               if (ttb)
