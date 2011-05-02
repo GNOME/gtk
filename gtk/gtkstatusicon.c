@@ -1717,11 +1717,13 @@ static void
 gtk_status_icon_fg_changed (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
-  GdkColor *color;
+  GdkRGBA *rgba;
 
-  g_object_get (priv->tray_icon, "fg-color", &color, NULL);
-  gtk_widget_modify_fg (priv->image, GTK_STATE_NORMAL, color);
-  gdk_color_free (color);
+  g_object_get (priv->tray_icon, "fg-color", &rgba, NULL);
+
+  gtk_widget_override_color (priv->image, GTK_STATE_FLAG_NORMAL, rgba);
+
+  gdk_rgba_free (rgba);
 }
 
 static void
@@ -1731,7 +1733,6 @@ gtk_status_icon_color_changed (GtkTrayIcon   *tray,
 {
   GtkStatusIconPrivate *priv = status_icon->priv;
   const gchar *name;
-  GdkColor *color;
 
   switch (pspec->name[0])
     {
@@ -1753,13 +1754,9 @@ gtk_status_icon_color_changed (GtkTrayIcon   *tray,
     {
       GdkRGBA rgba;
 
-      g_object_get (priv->tray_icon, pspec->name, &color, NULL);
+      g_object_get (priv->tray_icon, pspec->name, &rgba, NULL);
 
-      rgba.red = color->red / 65535.;
-      rgba.green = color->green / 65535.;
-      rgba.blue = color->blue / 65535.;
       rgba.alpha = 1;
-      gdk_color_free (color);
 
       gtk_widget_override_symbolic_color (priv->image, name, &rgba);
     }

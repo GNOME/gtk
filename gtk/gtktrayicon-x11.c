@@ -73,10 +73,10 @@ struct _GtkTrayIconPrivate
   gboolean manager_visual_rgba;
 
   GtkOrientation orientation;
-  GdkColor fg_color;
-  GdkColor error_color;
-  GdkColor warning_color;
-  GdkColor success_color;
+  GdkRGBA fg_color;
+  GdkRGBA error_color;
+  GdkRGBA warning_color;
+  GdkRGBA success_color;
   gint padding;
   gint icon_size;
 };
@@ -136,7 +136,7 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
                                    g_param_spec_boxed ("fg-color",
                                                        P_("Foreground color"),
                                                        P_("Foreground color for symbolic icons"),
-                                                       GDK_TYPE_COLOR,
+                                                       GDK_TYPE_RGBA,
                                                        GTK_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
@@ -144,7 +144,7 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
                                    g_param_spec_boxed ("error-color",
                                                        P_("Error color"),
                                                        P_("Error color for symbolic icons"),
-                                                       GDK_TYPE_COLOR,
+                                                       GDK_TYPE_RGBA,
                                                        GTK_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
@@ -152,7 +152,7 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
                                    g_param_spec_boxed ("warning-color",
                                                        P_("Warning color"),
                                                        P_("Warning color for symbolic icons"),
-                                                       GDK_TYPE_COLOR,
+                                                       GDK_TYPE_RGBA,
                                                        GTK_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
@@ -160,7 +160,7 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
                                    g_param_spec_boxed ("success-color",
                                                        P_("Success color"),
                                                        P_("Success color for symbolic icons"),
-                                                       GDK_TYPE_COLOR,
+                                                       GDK_TYPE_RGBA,
                                                        GTK_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
@@ -194,18 +194,22 @@ gtk_tray_icon_init (GtkTrayIcon *icon)
 
   icon->priv->stamp = 1;
   icon->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-  icon->priv->fg_color.red        = 0x0000;
-  icon->priv->fg_color.green      = 0x0000;
-  icon->priv->fg_color.blue       = 0x0000;
-  icon->priv->error_color.red     = 0xcc00;
-  icon->priv->error_color.green   = 0x0000;
-  icon->priv->error_color.blue    = 0x0000;
-  icon->priv->warning_color.red   = 0xf500;
-  icon->priv->warning_color.green = 0x7900;
-  icon->priv->warning_color.blue  = 0x3e00;
-  icon->priv->success_color.red   = 0x4e00;
-  icon->priv->success_color.green = 0x9a00;
-  icon->priv->success_color.blue  = 0x0600;
+  icon->priv->fg_color.red        = 0.0;
+  icon->priv->fg_color.green      = 0.0;
+  icon->priv->fg_color.blue       = 0.0;
+  icon->priv->fg_color.alpha      = 1.0;
+  icon->priv->error_color.red     = 0.7968;
+  icon->priv->error_color.green   = 0.0;
+  icon->priv->error_color.blue    = 0.0;
+  icon->priv->error_color.alpha   = 1.0;
+  icon->priv->warning_color.red   = 0.9570;
+  icon->priv->warning_color.green = 0.4726;
+  icon->priv->warning_color.blue  = 0.2421;
+  icon->priv->warning_color.alpha = 1.0;
+  icon->priv->success_color.red   = 0.3047;
+  icon->priv->success_color.green = 0.6016;
+  icon->priv->success_color.blue  = 0.0234;
+  icon->priv->success_color.alpha = 1.0;
   icon->priv->padding = 0;
   icon->priv->icon_size = 0;
 
@@ -552,48 +556,48 @@ gtk_tray_icon_get_colors_property (GtkTrayIcon *icon)
 
   if (type == XA_CARDINAL && nitems == 12 && format == 32)
     {
-      GdkColor color;
+      GdkRGBA color;
 
       g_object_freeze_notify (G_OBJECT (icon));
 
-      color.red = prop.prop[0];
-      color.green = prop.prop[1];
-      color.blue = prop.prop[2];
+      color.red = prop.prop[0] / 65535.0;
+      color.green = prop.prop[1] / 65535.0;
+      color.blue = prop.prop[2] / 65535.0;
 
-      if (!gdk_color_equal (&icon->priv->fg_color, &color))
+      if (!gdk_rgba_equal (&icon->priv->fg_color, &color))
         {
           icon->priv->fg_color = color;
 
           g_object_notify (G_OBJECT (icon), "fg-color");
         }
 
-      color.red = prop.prop[3];
-      color.green = prop.prop[4];
-      color.blue = prop.prop[5];
+      color.red = prop.prop[3] / 65535.0;
+      color.green = prop.prop[4] / 65535.0;
+      color.blue = prop.prop[5] / 65535.0;
 
-      if (!gdk_color_equal (&icon->priv->error_color, &color))
+      if (!gdk_rgba_equal (&icon->priv->error_color, &color))
         {
           icon->priv->error_color = color;
 
           g_object_notify (G_OBJECT (icon), "error-color");
         }
 
-      color.red = prop.prop[6];
-      color.green = prop.prop[7];
-      color.blue = prop.prop[8];
+      color.red = prop.prop[6] / 65535.0;
+      color.green = prop.prop[7] / 65535.0;
+      color.blue = prop.prop[8] / 65535.0;
 
-      if (!gdk_color_equal (&icon->priv->warning_color, &color))
+      if (!gdk_rgba_equal (&icon->priv->warning_color, &color))
         {
           icon->priv->warning_color = color;
 
           g_object_notify (G_OBJECT (icon), "warning-color");
         }
 
-      color.red = prop.prop[9];
-      color.green = prop.prop[10];
-      color.blue = prop.prop[11];
+      color.red = prop.prop[9] / 65535.0;
+      color.green = prop.prop[10] /  65535.0;
+      color.blue = prop.prop[11] / 65535.0;
 
-      if (!gdk_color_equal (&icon->priv->success_color, &color))
+      if (!gdk_rgba_equal (&icon->priv->success_color, &color))
         {
           icon->priv->success_color = color;
 
