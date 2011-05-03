@@ -1535,6 +1535,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   gboolean              found = FALSE;
   
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
+  g_return_val_if_fail (fontname != NULL, FALSE);
 
   if (!gtk_widget_has_screen (GTK_WIDGET (fontsel)))
     return FALSE;
