@@ -36,5 +36,7 @@ EXTRA_DIST += \
 	label-sizing.ui \
 	label-small-ellipsized.ref.ui \
 	label-small-ellipsized.ui \
+	nonresizable-size.ref.ui \
+	nonresizable-size.ui \
 	simpe.ref.png \
 	simple.ui
