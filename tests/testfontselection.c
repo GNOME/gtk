@@ -49,13 +49,13 @@ main (int argc, char *argv[])
   hbox = gtk_hbox_new (FALSE, 6);
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
-//  g_object_ref (gtk_font_selection_get_size_list (GTK_FONT_SELECTION (fontsel)));
-//  g_object_ref (gtk_font_selection_get_family_list (GTK_FONT_SELECTION (fontsel)));
-//  g_object_ref (gtk_font_selection_get_face_list (GTK_FONT_SELECTION (fontsel)));
+  g_object_ref (gtk_font_selection_get_size_list (GTK_FONT_SELECTION (fontsel)));
+  g_object_ref (gtk_font_selection_get_family_list (GTK_FONT_SELECTION (fontsel)));
+  g_object_ref (gtk_font_selection_get_face_list (GTK_FONT_SELECTION (fontsel)));
 
-//  gtk_container_add (GTK_CONTAINER (hbox), gtk_font_selection_get_size_list (GTK_FONT_SELECTION (fontsel)));
-//  gtk_container_add (GTK_CONTAINER (hbox), gtk_font_selection_get_family_list (GTK_FONT_SELECTION (fontsel)));
-//  gtk_container_add (GTK_CONTAINER (hbox), gtk_font_selection_get_face_list (GTK_FONT_SELECTION (fontsel)));
+  gtk_container_add (GTK_CONTAINER (hbox), gtk_font_selection_get_size_list (GTK_FONT_SELECTION (fontsel)));
+  gtk_container_add (GTK_CONTAINER (hbox), gtk_font_selection_get_family_list (GTK_FONT_SELECTION (fontsel)));
+  gtk_container_add (GTK_CONTAINER (hbox), gtk_font_selection_get_face_list (GTK_FONT_SELECTION (fontsel)));
   gtk_container_add (GTK_CONTAINER (hbox), fontsel);
 
   gtk_widget_show_all (window);
