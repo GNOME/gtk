@@ -38,5 +38,7 @@ EXTRA_DIST += \
 	label-small-ellipsized.ui \
 	nonresizable-size.ref.ui \
 	nonresizable-size.ui \
+	quit-mnemonic.ref.ui \
+	quit-mnemonic.ui \
 	simpe.ref.png \
 	simple.ui
