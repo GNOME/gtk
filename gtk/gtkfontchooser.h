@@ -114,11 +114,6 @@ struct _GtkFontSelectionDialogClass
 
 GType	     gtk_font_selection_get_type	  (void) G_GNUC_CONST;
 GtkWidget *  gtk_font_selection_new               (void);
-GtkWidget *  gtk_font_selection_get_family_list   (GtkFontSelection *fontsel);
-GtkWidget *  gtk_font_selection_get_face_list     (GtkFontSelection *fontsel);
-GtkWidget *  gtk_font_selection_get_size_entry    (GtkFontSelection *fontsel);
-GtkWidget *  gtk_font_selection_get_size_list     (GtkFontSelection *fontsel);
-GtkWidget *  gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel);
 PangoFontFamily *
              gtk_font_selection_get_family        (GtkFontSelection *fontsel);
 PangoFontFace *
@@ -131,6 +126,14 @@ gboolean     gtk_font_selection_set_font_name     (GtkFontSelection *fontsel,
 const gchar* gtk_font_selection_get_preview_text  (GtkFontSelection *fontsel);
 void         gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
                                                    const gchar      *text);
+/* Deprecated GtkFontSelection methods */
+#ifndef GTK_DISABLE_DEPRECATED
+GtkWidget *  gtk_font_selection_get_family_list   (GtkFontSelection *fontsel);
+GtkWidget *  gtk_font_selection_get_face_list     (GtkFontSelection *fontsel);
+GtkWidget *  gtk_font_selection_get_size_entry    (GtkFontSelection *fontsel);
+GtkWidget *  gtk_font_selection_get_size_list     (GtkFontSelection *fontsel);
+GtkWidget *  gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel);
+#endif
 
 /*****************************************************************************
  * GtkFontSelectionDialog functions.
@@ -141,7 +144,7 @@ void         gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
 GType	   gtk_font_selection_dialog_get_type	       (void) G_GNUC_CONST;
 GtkWidget *gtk_font_selection_dialog_new	       (const gchar            *title);
 
-GtkWidget *gtk_font_selection_dialog_get_ok_button     (GtkFontSelectionDialog *fsd);
+
 GtkWidget *gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd);
 GtkWidget *gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd);
 
@@ -169,6 +172,10 @@ G_CONST_RETURN gchar*
 void	  gtk_font_selection_dialog_set_preview_text   (GtkFontSelectionDialog *fsd,
                                                         const gchar	       *text);
 
+/* Deprecated GtkFontSelectionDialog methods */
+#ifndef GTK_DISABLE_DEPRECATED
+GtkWidget *gtk_font_selection_dialog_get_ok_button     (GtkFontSelectionDialog *fsd);
+#endif
 
 G_END_DECLS
 
