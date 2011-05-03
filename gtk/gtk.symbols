@@ -749,6 +749,7 @@ gtk_drag_get_source_widget
 gtk_drag_highlight
 gtk_drag_result_get_type G_GNUC_CONST
 gtk_drag_set_icon_default
+gtk_drag_set_icon_gicon
 gtk_drag_set_icon_name
 gtk_drag_set_icon_pixbuf
 gtk_drag_set_icon_stock
@@ -759,6 +760,7 @@ gtk_drag_source_add_text_targets
 gtk_drag_source_add_uri_targets
 gtk_drag_source_get_target_list
 gtk_drag_source_set
+gtk_drag_source_set_icon_gicon
 gtk_drag_source_set_icon_name
 gtk_drag_source_set_icon_pixbuf
 gtk_drag_source_set_icon_stock

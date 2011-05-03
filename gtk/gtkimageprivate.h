@@ -75,6 +75,7 @@ struct _GtkImageGIconData
   GdkPixbuf *pixbuf;
 };
 
+void _gtk_image_gicon_data_clear (GtkImageGIconData *data);
 
 G_END_DECLS
 

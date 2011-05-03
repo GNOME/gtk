@@ -155,6 +155,8 @@ void gtk_drag_source_set_icon_stock   (GtkWidget       *widget,
 				       const gchar     *stock_id);
 void gtk_drag_source_set_icon_name    (GtkWidget       *widget,
 				       const gchar     *icon_name);
+void gtk_drag_source_set_icon_gicon   (GtkWidget       *widget,
+				       GIcon           *icon);
 
 /* There probably should be functions for setting the targets
  * as a GtkTargetList
@@ -184,6 +186,10 @@ void gtk_drag_set_icon_surface(GdkDragContext *context,
 			       cairo_surface_t *surface);
 void gtk_drag_set_icon_name   (GdkDragContext *context,
 			       const gchar    *icon_name,
+			       gint            hot_x,
+			       gint            hot_y);
+void gtk_drag_set_icon_gicon  (GdkDragContext *context,
+			       GIcon          *icon,
 			       gint            hot_x,
 			       gint            hot_y);
 
