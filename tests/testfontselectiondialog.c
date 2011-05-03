@@ -24,10 +24,19 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *dialog;
+  GtkWidget *ok;
+  GtkWidget *select;
 
   gtk_init (&argc, &argv);
 
   dialog = gtk_font_selection_dialog_new (NULL);
+
+#ifndef GTK_DISABLE_DEPRECATED
+  ok = gtk_font_selection_dialog_get_ok_button (GTK_FONT_SELECTION_DIALOG (dialog));
+  select = gtk_font_selection_dialog_get_select_button (GTK_FONT_SELECTION_DIALOG (dialog));
+
+  g_assert (ok == select);
+#endif
 
   gtk_dialog_run (GTK_DIALOG (dialog));
 
