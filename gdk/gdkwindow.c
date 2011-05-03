@@ -1758,7 +1758,7 @@ gdk_window_ensure_native (GdkWindow *window)
 
 /**
  * _gdk_event_filter_unref:
- * @window: A #GdkWindow, or %NULL to be the global window
+ * @window: (allow-none): A #GdkWindow, or %NULL to be the global window
  * @filter: A window filter
  *
  * Release a reference to @filter.  Note this function may
@@ -2043,7 +2043,7 @@ gdk_window_destroy (GdkWindow *window)
 /**
  * gdk_window_set_user_data:
  * @window: a #GdkWindow
- * @user_data: user data
+ * @user_data: (allow-none): user data
  *
  * For most purposes this function is deprecated in favor of
  * g_object_set_data(). However, for historical reasons GTK+ stores
@@ -2398,7 +2398,7 @@ gdk_window_peek_children (GdkWindow *window)
 
 /**
  * gdk_window_add_filter: (skip)
- * @window: a #GdkWindow
+ * @window: (allow-none): a #GdkWindow
  * @function: filter callback
  * @data: data to pass to filter callback
  *
@@ -4418,8 +4418,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  * gdk_window_invalidate_maybe_recurse:
  * @window: a #GdkWindow
  * @region: a #cairo_region_t
- * @child_func: (scope call): function to use to decide if to recurse
- *     to a child, %NULL means never recurse.
+ * @child_func: (scope call) (allow-none): function to use to decide if to
+ *     recurse to a child, %NULL means never recurse.
  * @user_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the
@@ -7048,7 +7048,7 @@ gdk_window_coords_from_parent (GdkWindow *window,
 /**
  * gdk_window_shape_combine_region:
  * @window: a #GdkWindow
- * @shape_region: region of window to be non-transparent
+ * @shape_region: (allow-none): region of window to be non-transparent
  * @offset_x: X position of @shape_region in @window coordinates
  * @offset_y: Y position of @shape_region in @window coordinates
  *
@@ -8571,11 +8571,11 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
  * @event_mask: specifies the event mask, which is used in accordance with
  *              @owner_events. Note that only pointer events (i.e. button and motion events)
  *              may be selected.
- * @confine_to: If non-%NULL, the pointer will be confined to this
+ * @confine_to: (allow-none): If non-%NULL, the pointer will be confined to this
  *              window during the grab. If the pointer is outside @confine_to, it will
  *              automatically be moved to the closest edge of @confine_to and enter
  *              and leave events will be generated as necessary.
- * @cursor: the cursor to display while the grab is active. If this is %NULL then
+ * @cursor: (allow-none): the cursor to display while the grab is active. If this is %NULL then
  *          the normal cursors are used for @window and its descendants, and the cursor
  *          for @window is used for all other windows.
  * @time_: the timestamp of the event which led to this pointer grab. This usually
@@ -10115,7 +10115,7 @@ gdk_window_set_icon_list (GdkWindow *window,
 /**
  * gdk_window_set_icon_name:
  * @window: a toplevel #GdkWindow
- * @name: name of window while iconified (minimized)
+ * @name: (allow-none): name of window while iconified (minimized)
  *
  * Windows may have a name used while minimized, distinct from the
  * name they display in their titlebar. Most of the time this is a bad
@@ -10365,7 +10365,7 @@ gdk_window_get_group (GdkWindow *window)
 /**
  * gdk_window_set_group:
  * @window: a toplevel #GdkWindow
- * @leader: group leader window, or %NULL to restore the default group leader window
+ * @leader: (allow-none): group leader window, or %NULL to restore the default group leader window
  *
  * Sets the group leader window for @window. By default,
  * GDK sets the group leader for all toplevel windows
