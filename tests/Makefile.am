@@ -50,7 +50,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testentryicons			\
 	testfilechooser			\
 	testfilechooserbutton		\
-	testfontselection               \
+	testfontselection       \
+	testfontselectiondialog \
 	testframe			\
 	testgeometry			\
 	testgiconpixbuf			\
@@ -163,6 +164,7 @@ testerrors_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testfontselection_DEPENDENCIES = $(TEST_DEPS)
+testfontselectiondialog_DEPENDENCIES = $(TEST_DEPS)
 testframe_DEPENDENCIES = $(TEST_DEPS)
 testgeometry_DEPENDENCIES = $(TEST_DEPS)
 testgiconpixbuf = $(TEST_DEPS)
@@ -252,6 +254,7 @@ testerrors_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
 testfilechooserbutton_LDADD = $(LDADDS)
 testfontselection_LDADD = $(LDADDS)
+testfontselectiondialog_LDADD = $(LDADDS)
 testframe_LDADD = $(LDADDS)
 testgeometry_LDADD = $(LDADDS)
 testgiconpixbuf_LDADD = $(LDADDS)
@@ -347,6 +350,9 @@ testfilechooserbutton_SOURCES =	\
 
 testfontselection_SOURCES = \
 	testfontselection.c
+
+testfontselectiondialog_SOURCES = \
+	testfontselectiondialog.c
 
 testgrid_SOURCES =	\
 	testgrid.c
