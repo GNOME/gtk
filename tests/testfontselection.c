@@ -68,7 +68,7 @@ main (int argc, char *argv[])
   g_signal_connect (G_OBJECT (fontsel), "notify::preview-text", G_CALLBACK(notify_preview_text_cb), NULL);
 
   gtk_font_selection_set_font_name (GTK_FONT_SELECTION (fontsel), "Bitstream Vera Sans 45");
-  gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (fontsel), "Siete caballos vienen de bonanza");
+  gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (fontsel), "[user@host ~]$ ");
 
   gtk_main ();
 
