@@ -73,7 +73,6 @@ struct _GtkImageGIconData
 {
   GIcon *icon;
   GdkPixbuf *pixbuf;
-  guint theme_change_id;
 };
 
 
