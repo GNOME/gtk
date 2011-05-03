@@ -92,14 +92,16 @@ struct _GtkFontSelectionPrivate
   GtkWidget *size_spin;
   GtkWidget *preview;
 
+  gboolean         ignore_slider;
+
   GtkListStore *model;  
   GtkTreeModel *filter;
 
   gint             size;
   PangoFontFace   *face;
   PangoFontFamily *family;
-  
-  gboolean         ignore_slider;
+
+  gchar           *preview_text;
 
 #ifndef GTK_DISABLE_DEPRECATED
   GtkWidget    *size_list;
@@ -597,6 +599,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv->ignore_font = FALSE;
 #endif /* GTK_DISABLE_DEPRECATED */
 
+  /* Default preview string  */
+  priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
+
   /* Getting the default size */
   font_desc  = pango_context_get_font_description (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)));
   priv->size = pango_font_description_get_size (font_desc);
@@ -747,7 +752,7 @@ cmp_families (const void *a, const void *b)
 }
 
 static void 
-populate_list (GtkTreeView* treeview, GtkListStore* model)
+populate_list (GtkFontSelection *fontsel, GtkTreeView* treeview, GtkListStore* model)
 {
   GtkStyleContext      *style_context;
   GdkRGBA               g_color;
@@ -813,7 +818,7 @@ populate_list (GtkTreeView* treeview, GtkListStore* model)
                                 color_string,
                                 family_and_face->str,
                                 font_desc,
-                                pango_language_get_sample_string (NULL));
+                                fontsel->priv->preview_text);
 
           gtk_list_store_append (model, &iter);
           gtk_list_store_set (model, &iter,
@@ -928,7 +933,7 @@ gtk_font_selection_bootstrap_fontlist (GtkFontSelection* fontsel)
 
   gtk_tree_view_append_column (treeview, col);
 
-  populate_list (treeview, fontsel->priv->model);
+  populate_list (fontsel, treeview, fontsel->priv->model);
 }
 
 
@@ -1626,37 +1631,43 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
  *
  * Gets the text displayed in the preview area.
  * 
- * Return value: the text displayed in the preview area. 
- *     This string is owned by the widget and should not be 
- *     modified or freed 
+ * Return value: (transfer none): the text displayed in the
+ *     preview area. This string is owned by the widget and
+ *     should not be modified or freed 
  */
 G_CONST_RETURN gchar*
 gtk_font_selection_get_preview_text (GtkFontSelection *fontsel)
 {
-  return NULL;
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  return (const gchar*)fontsel->priv->preview_text;
 }
 
 
 /**
  * gtk_font_selection_set_preview_text:
  * @fontsel: a #GtkFontSelection
- * @text: the text to display in the preview area 
+ * @text: (transfer none): the text to display in the preview area 
  *
  * Sets the text displayed in the preview area.
  * The @text is used to show how the selected font looks.
  */
 void
 gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
-              const gchar      *text)
+                                      const gchar      *text)
 {
-#if 0
-  GtkFontSelectionPrivate *priv;
-
   g_return_if_fail (GTK_IS_FONT_SELECTION (fontsel));
   g_return_if_fail (text != NULL);
 
-  priv = fontsel->priv;
-#endif
+  g_free (fontsel->priv->preview_text);
+  fontsel->priv->preview_text = g_strdup (text);
+
+  populate_list (fontsel,
+                 GTK_TREE_VIEW (fontsel->priv->family_face_list),
+                 fontsel->priv->model);
+
+  gtk_entry_set_text (GTK_ENTRY (fontsel->priv->preview), text);
+
+  g_object_notify (G_OBJECT (fontsel), "preview-text");
 }
 
 #ifndef GTK_DISABLE_DEPRECATED
