@@ -1,6 +1,8 @@
 /* GTK - The GIMP Toolkit
+ * Copyright (C) 2011 Alberto Ruiz <aruiz@gnome.org>
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
+ * Massively updated to rework the user interface by Alberto Ruiz, 2011
  * Massively updated for Pango by Owen Taylor, May 2000
  * GtkFontSelection widget for Gtk+, by Damon Chaplin, May 1998.
  * Based on the GnomeFontSelector widget, by Elliot Lee, but major changes.
@@ -123,9 +125,11 @@ struct _GtkFontSelectionDialogPrivate
 {
   GtkWidget *fontsel;
 
-  GtkWidget *ok_button;
-  GtkWidget *apply_button;
+  GtkWidget *select_button;
   GtkWidget *cancel_button;
+#ifndef GTK_DISABLE_DEPRECATED
+  GtkWidget *apply_button;
+#endif
 };
 
 
@@ -1799,7 +1803,8 @@ gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
  * The GtkFontSelectionDialog implementation of the GtkBuildable interface
  * exposes the embedded #GtkFontSelection as internal child with the
  * name "font_selection". It also exposes the buttons with the names
- * "ok_button", "cancel_button" and "apply_button".
+ * "select_button" and "cancel_button. The buttons with the names 
+ * "ok_button" and "apply_button" are exposed but deprecated.
  * </refsect2>
  */
 
@@ -1850,26 +1855,29 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   gtk_container_set_border_width (GTK_CONTAINER (priv->fontsel), 5);
   gtk_widget_show (priv->fontsel);
   gtk_box_pack_start (GTK_BOX (content_area),
-          priv->fontsel, TRUE, TRUE, 0);
+                      priv->fontsel, TRUE, TRUE, 0);
 
   /* Create the action area */
   priv->cancel_button = gtk_dialog_add_button (dialog,
                                                GTK_STOCK_CANCEL,
                                                GTK_RESPONSE_CANCEL);
-
+#ifndef GTK_DISABLE_DEPRECATED
   priv->apply_button = gtk_dialog_add_button (dialog,
                                               GTK_STOCK_APPLY,
                                               GTK_RESPONSE_APPLY);
   gtk_widget_hide (priv->apply_button);
+#endif
 
-  priv->ok_button = gtk_dialog_add_button (dialog,
-                                           GTK_STOCK_OK,
-                                           GTK_RESPONSE_OK);
-  gtk_widget_grab_default (priv->ok_button);
+  priv->select_button = gtk_dialog_add_button (dialog,
+                                               _("Select"),
+                                               GTK_RESPONSE_OK);
+  gtk_widget_grab_default (priv->select_button);
 
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontseldiag),
              GTK_RESPONSE_OK,
+#ifndef GTK_DISABLE_DEPRECATED
              GTK_RESPONSE_APPLY,
+#endif
              GTK_RESPONSE_CANCEL,
              -1);
 
@@ -1881,7 +1889,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 
 /**
  * gtk_font_selection_dialog_new:
- * @title: the title of the dialog window 
+ * @title: (allow-none): the title of the dialog window 
  *
  * Creates a new #GtkFontSelectionDialog.
  *
@@ -1920,22 +1928,22 @@ gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd)
 
 
 /**
- * gtk_font_selection_dialog_get_ok_button:
+ * gtk_font_selection_dialog_get_select_button:
  * @fsd: a #GtkFontSelectionDialog
  *
- * Gets the 'OK' button.
+ * Gets the 'Select' button.
  *
  * Return value: (transfer none): the #GtkWidget used in the dialog
- *     for the 'OK' button.
+ *     for the 'Select' button.
  *
- * Since: 2.14
+ * Since: 3.2
  */
 GtkWidget *
-gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
+gtk_font_selection_dialog_get_select_button (GtkFontSelectionDialog *fsd)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
-  return fsd->priv->ok_button;
+  return fsd->priv->select_button;
 }
 
 /**
@@ -1973,14 +1981,18 @@ gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
 
   priv = GTK_FONT_SELECTION_DIALOG (buildable)->priv;
 
-  if (g_strcmp0 (childname, "ok_button") == 0)
-    return G_OBJECT (priv->ok_button);
+  if (g_strcmp0 (childname, "select_button") == 0)
+    return G_OBJECT (priv->select_button);
   else if (g_strcmp0 (childname, "cancel_button") == 0)
     return G_OBJECT (priv->cancel_button);
-  else if (g_strcmp0 (childname, "apply_button") == 0)
-    return G_OBJECT (priv->apply_button);
   else if (g_strcmp0 (childname, "font_selection") == 0)
     return G_OBJECT (priv->fontsel);
+#ifndef GTK_DISABLE_DEPRECATED    
+  else if (g_strcmp0 (childname, "ok_button") == 0)
+    return G_OBJECT (priv->select_button);
+  else if (g_strcmp0 (childname, "apply_button") == 0)
+    return G_OBJECT (priv->apply_button);
+#endif
 
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
@@ -2079,3 +2091,24 @@ gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
 
   gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (priv->fontsel), text);
 }
+
+#ifndef GTK_DISABLE_DEPRECATED
+/**
+ * gtk_font_selection_dialog_get_ok_button:
+ * @fsd: a #GtkFontSelectionDialog
+ *
+ * Gets the 'OK' button.
+ *
+ * Return value: (transfer none): the #GtkWidget used in the dialog
+ *     for the 'OK' button.
+ *
+ * Since: 3.2: Use gtk_font_selection_dialog_get_select_button instead.
+ */
+GtkWidget *
+gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
+{
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
+
+  return fsd->priv->select_button;
+}
+#endif /* GTK_DISABLE_DEPRECATED */
