@@ -55,6 +55,8 @@ main (int argc, char *argv[])
 
   gtk_widget_show_all (window);
 
+  gtk_font_selection_set_font_name (GTK_FONT_SELECTION (fontsel), "Bitstream Vera Sans 45");
+
   g_signal_connect (G_OBJECT (window), "delete-event", G_CALLBACK (gtk_main_quit), NULL);
   g_signal_connect (G_OBJECT (fontsel), "notify::font-name", G_CALLBACK(notify_font_name_cb), NULL);
 
