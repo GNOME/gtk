@@ -29,6 +29,7 @@
 #include "gtkprivate.h"
 #include "gtk9slice.h"
 #include "gtkpango.h"
+#include "gtkshadowprivate.h"
 
 /**
  * SECTION:gtkthemingengine
@@ -2360,14 +2361,50 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
 }
 
 static void
+prepare_context_for_layout (cairo_t *cr,
+                            gdouble x,
+                            gdouble y,
+                            PangoLayout *layout)
+{
+  const PangoMatrix *matrix;
+
+  matrix = pango_context_get_matrix (pango_layout_get_context (layout));
+
+  if (matrix)
+    {
+      cairo_matrix_t cairo_matrix;
+      PangoRectangle rect;
+
+      cairo_matrix_init (&cairo_matrix,
+                         matrix->xx, matrix->yx,
+                         matrix->xy, matrix->yy,
+                         matrix->x0, matrix->y0);
+
+      pango_layout_get_extents (layout, NULL, &rect);
+      pango_matrix_transform_rectangle (matrix, &rect);
+      pango_extents_to_pixels (&rect, NULL);
+
+      cairo_matrix.x0 += x - rect.x;
+      cairo_matrix.y0 += y - rect.y;
+
+      cairo_set_matrix (cr, &cairo_matrix);
+      cairo_move_to (cr, 0, 0);
+    }
+  else
+    {
+      cairo_move_to (cr, x, y);
+    }
+}
+
+static void
 gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                                   cairo_t          *cr,
                                   gdouble           x,
                                   gdouble           y,
                                   PangoLayout      *layout)
 {
-  const PangoMatrix *matrix;
   GdkRGBA fg_color;
+  GtkShadow *text_shadow = NULL;
   GtkStateFlags flags;
   gdouble progress;
   gboolean running;
@@ -2375,8 +2412,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get_color (engine, flags, &fg_color);
-
-  matrix = pango_context_get_matrix (pango_layout_get_context (layout));
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
 
@@ -2401,44 +2436,17 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       fg_color.alpha = CLAMP (fg_color.alpha + ((other_fg.alpha - fg_color.alpha) * progress), 0, 1);
     }
 
-  if (matrix)
+  gtk_theming_engine_get (engine, flags,
+                          "text-shadow", &text_shadow,
+                          NULL);
+
+  if (text_shadow != NULL)
     {
-      cairo_matrix_t cairo_matrix;
-      PangoRectangle rect;
-
-      cairo_matrix_init (&cairo_matrix,
-                         matrix->xx, matrix->yx,
-                         matrix->xy, matrix->yy,
-                         matrix->x0, matrix->y0);
-
-      pango_layout_get_extents (layout, NULL, &rect);
-      pango_matrix_transform_rectangle (matrix, &rect);
-      pango_extents_to_pixels (&rect, NULL);
-
-      cairo_matrix.x0 += x - rect.x;
-      cairo_matrix.y0 += y - rect.y;
-
-      cairo_set_matrix (cr, &cairo_matrix);
-      cairo_move_to (cr, 0, 0);
-    }
-  else
-    cairo_move_to (cr, x, y);
-
-  if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    {
-      GdkRGBA bg;
-
-      gtk_theming_engine_get_background_color (engine, flags, &bg);
-
-      cairo_save (cr);
-
-      gdk_cairo_set_source_rgba (cr, &bg);
-
-      cairo_move_to (cr, x + 1, y + 1);
-      _gtk_pango_fill_layout (cr, layout);
-      cairo_restore (cr);
+      _gtk_text_shadow_paint_layout (text_shadow, cr, x, y, layout);
+      _gtk_shadow_unref (text_shadow);
     }
 
+  prepare_context_for_layout (cr, x, y, layout);
   gdk_cairo_set_source_rgba (cr, &fg_color);
   pango_cairo_show_layout (cr, layout);
 
