@@ -313,6 +313,9 @@ gdk_window_init (GdkWindow *window)
   window->visibility = GDK_VISIBILITY_FULLY_OBSCURED;
   /* Default to unobscured since some backends don't send visibility events */
   window->native_visibility = GDK_VISIBILITY_UNOBSCURED;
+
+  window->device_cursor = g_hash_table_new_full (NULL, NULL,
+                                                 NULL, g_object_unref);
 }
 
 /* Stop and return on the first non-NULL parent */
@@ -1366,9 +1369,6 @@ gdk_window_new (GdkWindow     *parent,
 
   if (window->parent)
     window->parent->children = g_list_prepend (window->parent->children, window);
-
-  window->device_cursor = g_hash_table_new_full (NULL, NULL,
-                                                 NULL, g_object_unref);
 
   native = FALSE;
   if (window->parent->window_type == GDK_WINDOW_ROOT)
@@ -6566,18 +6566,27 @@ gdk_window_get_background_pattern (GdkWindow *window)
 }
 
 static void
-update_cursor_foreach (GdkDisplay           *display,
-                       GdkDevice            *device,
-                       GdkPointerWindowInfo *pointer_info,
-                       gpointer              user_data)
+gdk_window_set_cursor_internal (GdkWindow *window,
+                                GdkDevice *device,
+                                GdkCursor *cursor)
 {
-  GdkWindow *window = user_data;
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
 
   if (window->window_type == GDK_WINDOW_ROOT ||
       window->window_type == GDK_WINDOW_FOREIGN)
-    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_device_cursor (window, device, window->cursor);
-  else if (_gdk_window_event_parent_of (window, pointer_info->window_under_pointer))
-    update_cursor (display, device);
+    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_device_cursor (window, device, cursor);
+  else
+    {
+      GdkPointerWindowInfo *pointer_info;
+      GdkDisplay *display;
+
+      display = gdk_window_get_display (window);
+      pointer_info = _gdk_display_get_pointer_info (display, device);
+
+      if (_gdk_window_event_parent_of (window, pointer_info->window_under_pointer))
+        update_cursor (display, device);
+    }
 }
 
 /**
@@ -6633,13 +6642,29 @@ gdk_window_set_cursor (GdkWindow *window,
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
+      GdkDeviceManager *device_manager;
+      GList *devices, *d;
+      GdkDevice *device;
+
       if (cursor)
 	window->cursor = g_object_ref (cursor);
 
-      _gdk_display_pointer_info_foreach (display,
-                                         update_cursor_foreach,
-                                         window);
+      device_manager = gdk_display_get_device_manager (display);
+      devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
+      for (d = devices; d; d = d->next)
+        {
+          GdkDevice *device;
+
+          device = d->data;
+
+          if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+            continue;
+
+          gdk_window_set_cursor_internal (window, device, window->cursor);
+        }
+
+      g_list_free (devices);
       g_object_notify (G_OBJECT (window), "cursor");
     }
 }
@@ -6693,29 +6718,17 @@ gdk_window_set_device_cursor (GdkWindow *window,
                               GdkDevice *device,
                               GdkCursor *cursor)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
-
-  display = gdk_window_get_display (window);
 
   if (!cursor)
     g_hash_table_remove (window->device_cursor, device);
   else
     g_hash_table_replace (window->device_cursor, device, g_object_ref (cursor));
 
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      GdkPointerWindowInfo *pointer_info;
-
-      pointer_info = _gdk_display_get_pointer_info (display, device);
-
-      if (_gdk_window_event_parent_of (window, pointer_info->window_under_pointer))
-        update_cursor (display, device);
-    }
+  gdk_window_set_cursor_internal (window, device, cursor);
 }
 
 /**
