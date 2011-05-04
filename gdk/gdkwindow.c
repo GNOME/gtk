@@ -6644,7 +6644,6 @@ gdk_window_set_cursor (GdkWindow *window,
     {
       GdkDeviceManager *device_manager;
       GList *devices, *d;
-      GdkDevice *device;
 
       if (cursor)
 	window->cursor = g_object_ref (cursor);
