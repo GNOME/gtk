@@ -185,16 +185,14 @@ static void  gtk_font_selection_get_property       (GObject         *object,
                                                     GParamSpec      *pspec);
 static void  gtk_font_selection_finalize           (GObject         *object);
 
-#if 0
 static void  gtk_font_selection_screen_changed     (GtkWidget       *widget,
                                                     GdkScreen       *previous_screen);
 static void  gtk_font_selection_style_updated      (GtkWidget      *widget);
-#endif
 
-static void  gtk_font_selection_ref_family        (GtkFontSelection *fontsel,
-                                                   PangoFontFamily  *family);
-static void  gtk_font_selection_ref_face          (GtkFontSelection *fontsel,
-                                                   PangoFontFace    *face);
+static void  gtk_font_selection_ref_family         (GtkFontSelection *fontsel,
+                                                    PangoFontFamily  *family);
+static void  gtk_font_selection_ref_face           (GtkFontSelection *fontsel,
+                                                    PangoFontFace    *face);
 
 static void gtk_font_selection_bootstrap_fontlist (GtkFontSelection *fontsel);
 
@@ -211,12 +209,10 @@ static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-#if 0
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
   widget_class->screen_changed = gtk_font_selection_screen_changed;
   widget_class->style_updated = gtk_font_selection_style_updated;
-#endif
 
   gobject_class->finalize = gtk_font_selection_finalize;
   gobject_class->set_property = gtk_font_selection_set_property;
@@ -977,21 +973,31 @@ gtk_font_selection_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
 }
 
-#if 0
+
 static void
 gtk_font_selection_screen_changed (GtkWidget *widget,
                                    GdkScreen *previous_screen)
 {
+  GtkFontSelection *fontsel = GTK_FONT_SELECTION (widget);
+
+  populate_list (fontsel,
+                 GTK_TREE_VIEW (fontsel->priv->family_face_list),
+                 fontsel->priv->model);
   return;
 }
 
 static void
 gtk_font_selection_style_updated (GtkWidget *widget)
 {
-  /*GTK_WIDGET_CLASS (gtk_font_selection_parent_class)->style_updated (widget);*/
+  GtkFontSelection *fontsel = GTK_FONT_SELECTION (widget);
+
+  GTK_WIDGET_CLASS (gtk_font_selection_parent_class)->style_updated (widget);
+
+  populate_list (fontsel,
+                 GTK_TREE_VIEW (fontsel->priv->family_face_list),
+                 fontsel->priv->model);
   return;
 }
-#endif 
 
 static void
 gtk_font_selection_ref_family (GtkFontSelection *fontsel,
