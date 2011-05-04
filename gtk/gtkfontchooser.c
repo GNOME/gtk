@@ -412,8 +412,11 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 
 
 #ifndef GTK_DISABLE_DEPRECATED
-  priv->ignore_size = TRUE;
-  update_size_list_selection (fontsel);
+  if (priv->size_list)
+    {
+      priv->ignore_size = TRUE;
+      update_size_list_selection (fontsel);
+    }
 #endif /* GTK_DISABLE_DEPRECATED */
 
   gtk_widget_queue_draw (priv->preview);
