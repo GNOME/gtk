@@ -88,22 +88,23 @@
 
 struct _GtkFontSelectionPrivate
 {
-  GtkWidget *search_entry;
-  GtkWidget *family_face_list;
-  GtkWidget *size_slider;
-  GtkWidget *size_spin;
-  GtkWidget *preview;
-
-  gboolean         ignore_slider;
-
+  GtkWidget    *search_entry;
+  GtkWidget    *family_face_list;
   GtkListStore *model;  
   GtkTreeModel *filter;
+
+  GtkWidget       *preview;
+  GtkWidget       *preview_scrolled_window;
+  gchar           *preview_text;
+  gboolean         show_preview_entry;
+
+  GtkWidget *size_spin;
+  GtkWidget *size_slider;
+  gboolean   ignore_slider;
 
   gint             size;
   PangoFontFace   *face;
   PangoFontFamily *family;
-
-  gchar           *preview_text;
 
 #ifndef GTK_DISABLE_DEPRECATED
   GtkWidget    *size_list;
@@ -162,7 +163,8 @@ static const gint font_sizes[] = {
 enum {
    PROP_0,
    PROP_FONT_NAME,
-   PROP_PREVIEW_TEXT
+   PROP_PREVIEW_TEXT,
+   PROP_SHOW_PREVIEW_ENTRY
 };
 
 
@@ -235,6 +237,14 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
                                                         pango_language_get_sample_string (NULL),
                                                         GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHOW_PREVIEW_ENTRY,
+                                   g_param_spec_boolean ("show-preview-entry",
+                                                        P_("Show preview text entry"),
+                                                        P_("Whether the preview text entry is shown or not"),
+                                                        TRUE,
+                                                        GTK_PARAM_READWRITE));
+
   g_type_class_add_private (klass, sizeof (GtkFontSelectionPrivate));
 }
 
@@ -256,6 +266,8 @@ gtk_font_selection_set_property (GObject         *object,
     case PROP_PREVIEW_TEXT:
       gtk_font_selection_set_preview_text (fontsel, g_value_get_string (value));
       break;
+    case PROP_SHOW_PREVIEW_ENTRY:
+      gtk_font_selection_set_show_preview_entry (fontsel, g_value_get_boolean (value));
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -280,6 +292,8 @@ gtk_font_selection_get_property (GObject         *object,
     case PROP_PREVIEW_TEXT:
       g_value_set_string (value, gtk_font_selection_get_preview_text (fontsel));
       break;
+    case PROP_SHOW_PREVIEW_ENTRY:
+      g_value_set_boolean (value, gtk_font_selection_get_show_preview_entry (fontsel));
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -605,6 +619,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   /* Default preview string  */
   priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
+  priv->show_preview_entry = TRUE;
 
   /* Getting the default size */
   font_desc  = pango_context_get_font_description (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)));
@@ -646,6 +661,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   /* The preview entry needs a scrolled window to make sure we have a */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  priv->preview_scrolled_window = scrolled_win;
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
@@ -1672,6 +1688,45 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
   gtk_entry_set_text (GTK_ENTRY (fontsel->priv->preview), text);
 
   g_object_notify (G_OBJECT (fontsel), "preview-text");
+}
+
+/**
+ * gtk_font_selection_get_show_preview_entry:
+ * @fontsel: a #GtkFontSelection
+ *
+ * Return value: %TRUE if the preview entry is shown or %FALSE if
+ *               it is hidden.
+ * Since: 3.2
+ */
+gboolean
+gtk_font_selection_get_show_preview_entry (GtkFontSelection *fontsel)
+{
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
+
+  return fontsel->priv->show_preview_entry;
+}
+
+/**
+ * gtk_font_selection_set_show_preview_entry:
+ * @fontsel: a #GtkFontSelection
+ * @show_preview_entry: whether to show the editable preview entry or not
+ *
+ * Shows or hides the editable preview entry.
+ * Since: 3.2
+ */
+void
+gtk_font_selection_set_show_preview_entry (GtkFontSelection *fontsel,
+                                           gboolean          show_preview_entry)
+{
+  g_return_if_fail (GTK_IS_FONT_SELECTION (fontsel));
+
+  if (show_preview_entry)
+    gtk_widget_show (fontsel->priv->preview_scrolled_window);
+  else
+    gtk_widget_hide (fontsel->priv->preview_scrolled_window);
+
+  fontsel->priv->show_preview_entry = show_preview_entry;
+  g_object_notify (G_OBJECT (fontsel), "show-preview-entry");
 }
 
 #ifndef GTK_DISABLE_DEPRECATED
