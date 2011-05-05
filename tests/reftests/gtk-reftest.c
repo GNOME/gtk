@@ -201,6 +201,18 @@ quit_when_idle (gpointer loop)
   return FALSE;
 }
 
+static void
+check_for_draw (GdkEvent *event, gpointer loop)
+{
+  if (event->type == GDK_EXPOSE)
+    {
+      g_idle_add (quit_when_idle, loop);
+      gdk_event_handler_set ((GdkEventFunc) gtk_main_do_event, NULL, NULL);
+    }
+
+  gtk_main_do_event (event);
+}
+
 static cairo_surface_t *
 snapshot_widget (GtkWidget *widget, SnapshotMode mode)
 {
@@ -217,7 +229,12 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
                                                gtk_widget_get_allocated_height (widget));
 
   loop = g_main_loop_new (NULL, FALSE);
-  g_idle_add (quit_when_idle, loop);
+  /* We wait until the widget is drawn for the first time.
+   * We can not wait for a GtkWidget::draw event, because that might not
+   * happen if the window is fully obscured by windowed child widgets.
+   * Alternatively, we could wait for an expose event on widget's window.
+   * Both of these are rather hairy, not sure what's best. */
+  gdk_event_handler_set (check_for_draw, loop, NULL);
   g_main_loop_run (loop);
 
   cr = cairo_create (surface);
