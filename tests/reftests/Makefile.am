@@ -46,7 +46,7 @@ EXTRA_DIST += \
 	nonresizable-size.ui \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
-	simpe.ref.png \
+	simple.ref.ui \
 	simple.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui
