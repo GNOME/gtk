@@ -42,6 +42,10 @@
  * 'outliers' to keep their own larger size. To force all children to be
  * strictly the same size without exceptions, you can set the
  * #GtkButtonBox::homogeneous property to %TRUE.
+ *
+ * To excempt individual children from homogeneous sizing regardless of their
+ * 'outlier' status, you can set the #GtkButtonBox::non-homogeneous child
+ * property.
  */
 
 #include "config.h"
@@ -68,10 +72,12 @@ enum {
 
 enum {
   CHILD_PROP_0,
-  CHILD_PROP_SECONDARY
+  CHILD_PROP_SECONDARY,
+  CHILD_PROP_NONHOMOGENEOUS
 };
 
 #define GTK_BOX_SECONDARY_CHILD "gtk-box-secondary-child"
+#define GTK_BOX_NON_HOMOGENEOUS "gtk-box-non-homogeneous"
 
 static void gtk_button_box_set_property       (GObject           *object,
                                                guint              prop_id,
@@ -199,6 +205,14 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                                     FALSE,
                                                                     GTK_PARAM_READWRITE));
 
+  gtk_container_class_install_child_property (container_class,
+                                              CHILD_PROP_NONHOMOGENEOUS,
+                                              g_param_spec_boolean ("non-homogeneous",
+                                                                    P_("Non-Homogeneous"),
+                                                                    P_("If TRUE, the child will not be subject to homogeneous sizing"),
+                                                                    FALSE,
+                                                                    GTK_PARAM_READWRITE));
+
   g_type_class_add_private (class, sizeof (GtkButtonBoxPrivate));
 }
 
@@ -266,6 +280,10 @@ gtk_button_box_set_child_property (GtkContainer *container,
       gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (container), child,
                                           g_value_get_boolean (value));
       break;
+    case CHILD_PROP_NONHOMOGENEOUS:
+      gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (container), child,
+                                                g_value_get_boolean (value));
+      break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
@@ -286,6 +304,11 @@ gtk_button_box_get_child_property (GtkContainer *container,
                            gtk_button_box_get_child_secondary (GTK_BUTTON_BOX (container),
                                                                child));
       break;
+    case CHILD_PROP_NONHOMOGENEOUS:
+      g_value_set_boolean (value,
+                           gtk_button_box_get_child_non_homogeneous (GTK_BUTTON_BOX (container),
+                                                                     child));
+      break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
@@ -296,12 +319,11 @@ static void
 gtk_button_box_remove (GtkContainer *container,
                        GtkWidget    *widget)
 {
-  /* clear is_secondary flag in case the widget
+  /* clear is_secondary and nonhomogeneous flag in case the widget
    * is added to another container
    */
-  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (container),
-                                      widget,
-                                      FALSE);
+  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (container), widget, FALSE);
+  gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (container), widget, FALSE);
 
   GTK_CONTAINER_CLASS (gtk_button_box_parent_class)->remove (container, widget);
 }
@@ -485,6 +507,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
     {
       GtkWidget *child;
       gboolean is_secondary;
+      gboolean non_homogeneous;
 
       child = children->data;
       children = children->next;
@@ -492,12 +515,15 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
       if (gtk_widget_get_visible (child))
         {
           is_secondary = gtk_button_box_get_child_secondary (bbox, child);
+          non_homogeneous = gtk_button_box_get_child_non_homogeneous (bbox, child);
+
           if (is_secondary)
             nsecondaries++;
 
           gtk_widget_get_preferred_size (child, &child_requisition, NULL);
 
-          if (homogeneous || (child_requisition.width + ipad_w < avg_w * 1.5))
+          if (homogeneous ||
+              (!non_homogeneous && (child_requisition.width + ipad_w < avg_w * 1.5)))
             {
               (*widths)[i] = -1;
               if (child_requisition.width + ipad_w > needed_width)
@@ -508,7 +534,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
               (*widths)[i] = child_requisition.width + ipad_w;
             }
 
-          if (homogeneous || (child_requisition.height + ipad_h < avg_h * 1.5))
+          if (homogeneous ||
+              (!non_homogeneous && (child_requisition.height + ipad_h < avg_h * 1.5)))
             {
               (*heights)[i] = -1;
               if (child_requisition.height + ipad_h > needed_height)
@@ -952,4 +979,55 @@ gtk_button_box_new (GtkOrientation orientation)
   return g_object_new (GTK_TYPE_BUTTON_BOX,
                        "orientation", orientation,
                        NULL);
+}
+
+/**
+ * gtk_button_box_get_child_non_homogeneous:
+ * @widget: a #GtkButtonBox
+ * @child: a child of @widget
+ *
+ * Returns whether the child is exempted from homogenous
+ * sizing.
+ *
+ * Returns: %TRUE if the child is not subject to homogenous sizing
+ *
+ * Since: 3.2
+ */
+gboolean
+gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
+                                          GtkWidget    *child)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
+
+  return (g_object_get_data (G_OBJECT (child), GTK_BOX_NON_HOMOGENEOUS) != NULL);
+}
+
+/**
+ * gtk_button_box_set_child_non_homogeneous:
+ * @widget: a #GtkButtonBox
+ * @child: a child of @widget
+ * @non_homogeneous: the new value
+ *
+ * Sets whether the child is exempted from homogeous sizing.
+ *
+ * Since: 3.2
+ */
+void
+gtk_button_box_set_child_non_homogeneous (GtkButtonBox *widget,
+                                          GtkWidget    *child,
+                                          gboolean      non_homogeneous)
+{
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (widget));
+
+  g_object_set_data (G_OBJECT (child),
+                     GTK_BOX_NON_HOMOGENEOUS,
+                     non_homogeneous ? GINT_TO_POINTER (1) : NULL);
+  gtk_widget_child_notify (child, "non-homogeneous");
+
+  if (gtk_widget_get_visible (GTK_WIDGET (widget)) &&
+      gtk_widget_get_visible (child))
+    gtk_widget_queue_resize (child);
 }
