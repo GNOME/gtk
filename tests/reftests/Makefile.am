@@ -25,6 +25,9 @@ clean-local:
 	rm -rf output/ || true
 
 EXTRA_DIST += \
+	box-packing.css \
+	box-packing.ref.ui \
+	box-packing.ui \
 	entry-progress-coloring.css \
 	entry-progress-coloring.ref.ui \
 	entry-progress-coloring.ui \
@@ -45,6 +48,5 @@ EXTRA_DIST += \
 	quit-mnemonic.ui \
 	simpe.ref.png \
 	simple.ui \
-	box-packing.css \
-	box-packing.ref.ui \
-	box-packing.ui
+	toplevel-vs-popup.ref.ui \
+	toplevel-vs-popup.ui
