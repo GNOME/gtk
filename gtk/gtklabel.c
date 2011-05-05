@@ -3949,12 +3949,7 @@ get_layout_location (GtkLabel  *label,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  x = floor (allocation.x + xpad + xalign * (allocation.width - req_width));
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    x = MAX (x, allocation.x + xpad);
-  else
-    x = MIN (x, allocation.x + allocation.width - xpad);
+  x = floor (allocation.x + xpad + xalign * (allocation.width - req_width) - logical.x);
 
 
   /* bgo#315462 - For single-line labels, *do* align the requisition with
