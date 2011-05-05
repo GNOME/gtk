@@ -1215,9 +1215,10 @@ load_themes (GtkIconTheme *icon_theme)
 		  else
 		    unthemed_icon->no_svg_filename = abs_file;
 
-		  g_hash_table_insert (priv->unthemed_icons,
-				       base_name,
-				       unthemed_icon);
+		  /* takes ownership of base_name */
+		  g_hash_table_replace (priv->unthemed_icons,
+					base_name,
+					unthemed_icon);
 		  g_hash_table_insert (priv->all_icons,
 				       base_name, NULL);
 		}
@@ -2412,6 +2413,7 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
       base_name = strip_suffix (name);
       
       data = g_slice_new0 (GtkIconData);
+      /* takes ownership of base_name */
       g_hash_table_replace (dir->icon_data, base_name, data);
       
       ivalues = g_key_file_get_integer_list (icon_file, 
@@ -2510,6 +2512,7 @@ scan_directory (GtkIconThemePrivate *icon_theme,
 
       hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
       g_hash_table_replace (icon_theme->all_icons, base_name, NULL);
+      /* takes ownership of base_name */
       g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix| suffix));
     }
   
