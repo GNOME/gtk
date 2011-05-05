@@ -41,4 +41,7 @@ EXTRA_DIST += \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
 	simpe.ref.png \
-	simple.ui
+	simple.ui \
+	box-packing.css \
+	box-packing.ref.ui \
+	box-packing.ui
