@@ -225,8 +225,21 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   switch (mode)
     {
     case SNAPSHOT_WINDOW:
-      gdk_cairo_set_source_window (cr, gtk_widget_get_window (widget), 0, 0);
-      cairo_paint (cr);
+      {
+        GdkWindow *window = gtk_widget_get_window (widget);
+        if (gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL ||
+            gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
+          {
+            /* give the WM/server some time to sync. They need it.
+             * Also, do use popups instead of toplevls in your tests
+             * whenever you can. */
+            gdk_display_sync (gdk_window_get_display (window));
+            g_timeout_add (500, quit_when_idle, loop);
+            g_main_loop_run (loop);
+          }
+        gdk_cairo_set_source_window (cr, window, 0, 0);
+        cairo_paint (cr);
+      }
       break;
     case SNAPSHOT_DRAW:
       bg = gdk_window_get_background_pattern (gtk_widget_get_window (widget));
