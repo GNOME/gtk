@@ -42,6 +42,8 @@ EXTRA_DIST += \
 	label-sizing.ui \
 	label-small-ellipsized.ref.ui \
 	label-small-ellipsized.ui \
+	label-wrap-justify.ref.ui \
+	label-wrap-justify.ui \
 	nonresizable-size.ref.ui \
 	nonresizable-size.ui \
 	quit-mnemonic.ref.ui \
