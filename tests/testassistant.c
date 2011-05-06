@@ -540,16 +540,15 @@ create_full_featured_assistant (GtkWidget *widget)
   if (!assistant)
     {
       GtkWidget *page, *button;
-	 GdkPixbuf *pixbuf;
 
       assistant = gtk_assistant_new ();
       gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
 
-	 button = gtk_button_new_from_stock (GTK_STOCK_STOP);
-	 gtk_widget_show (button);
-	 gtk_assistant_add_action_widget (GTK_ASSISTANT (assistant), button);
-         g_signal_connect (button, "clicked",
-                           G_CALLBACK (toggle_invisible), assistant);
+      button = gtk_button_new_from_stock (GTK_STOCK_STOP);
+      gtk_widget_show (button);
+      gtk_assistant_add_action_widget (GTK_ASSISTANT (assistant), button);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (toggle_invisible), assistant);
 
       g_signal_connect (G_OBJECT (assistant), "cancel",
 			G_CALLBACK (cancel_callback), NULL);
@@ -566,14 +565,6 @@ create_full_featured_assistant (GtkWidget *widget)
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 1");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
-	 /* set a side image */
-	 pixbuf = gtk_widget_render_icon_pixbuf (page, GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
-	 gtk_assistant_set_page_side_image (GTK_ASSISTANT (assistant), page, pixbuf);
-
-	 /* set a header image */
-	 pixbuf = gtk_widget_render_icon_pixbuf (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
-	 gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
-
       page = get_test_page ("Invisible page");
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 2");
@@ -585,10 +576,6 @@ create_full_featured_assistant (GtkWidget *widget)
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Page 3");
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_CONFIRM);
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
-
-	 /* set a header image */
-	 pixbuf = gtk_widget_render_icon_pixbuf (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
-	 gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
     }
 
   if (!gtk_widget_get_visible (assistant))
