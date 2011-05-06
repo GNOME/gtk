@@ -52,8 +52,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#define MINIMUM_ARROW_SIZE  5
-#define NATURAL_ARROW_SIZE  15
+#define MIN_ARROW_SIZE  15
 
 struct _GtkArrowPrivate
 {
@@ -209,10 +208,10 @@ gtk_arrow_get_preferred_width (GtkWidget *widget,
   gtk_misc_get_padding (GTK_MISC (widget), &xpad, NULL);
 
   if (minimum_size)
-    *minimum_size = MINIMUM_ARROW_SIZE + xpad * 2;
+    *minimum_size = MIN_ARROW_SIZE + xpad * 2;
 
   if (natural_size)
-    *natural_size = NATURAL_ARROW_SIZE + xpad * 2;
+    *natural_size = MIN_ARROW_SIZE + xpad * 2;
 }
 
 static void
@@ -225,10 +224,10 @@ gtk_arrow_get_preferred_height (GtkWidget *widget,
   gtk_misc_get_padding (GTK_MISC (widget), NULL, &ypad);
 
   if (minimum_size)
-    *minimum_size = MINIMUM_ARROW_SIZE + ypad * 2;
+    *minimum_size = MIN_ARROW_SIZE + ypad * 2;
 
   if (natural_size)
-    *natural_size = NATURAL_ARROW_SIZE + ypad * 2;
+    *natural_size = MIN_ARROW_SIZE + ypad * 2;
 }
 
 
