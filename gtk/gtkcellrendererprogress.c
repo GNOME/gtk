@@ -548,7 +548,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   GtkCellRendererProgressPrivate *priv= cellprogress->priv;
   GtkStyleContext *context;
-  GtkBorder padding, border;
+  GtkBorder padding;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
@@ -571,13 +571,12 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
   gtk_render_background (context, cr, x, y, w, h);
   gtk_render_frame (context, cr, x, y, w, h);
 
-  gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
   gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &padding);
 
-  x += border.left + padding.left;
-  y += border.top + padding.top;
-  w -= border.left + border.right + padding.left + padding.right;
-  h -= border.top + border.bottom + padding.top + padding.bottom;
+  x += padding.left;
+  y += padding.top;
+  w -= padding.left + padding.right;
+  h -= padding.top + padding.bottom;
 
   gtk_style_context_restore (context);
 
