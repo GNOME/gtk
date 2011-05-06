@@ -61,8 +61,9 @@
  * Creates a #GtkTextAttributes, which describes
  * a set of properties on some text.
  * 
- * Return value: a new #GtkTextAttributes
- **/
+ * Return value: a new #GtkTextAttributes,
+ *     free with gtk_text_attributes_unref().
+ */
 GtkTextAttributes*
 gtk_text_attributes_new (void)
 {
@@ -78,18 +79,19 @@ gtk_text_attributes_new (void)
   values->font_scale = 1.0;
 
   values->editable = TRUE;
-      
+
   return values;
 }
 
 /**
  * gtk_text_attributes_copy:
  * @src: a #GtkTextAttributes to be copied
- * 
+ *
  * Copies @src and returns a new #GtkTextAttributes.
- * 
- * Return value: a copy of @src
- **/
+ *
+ * Return value: a copy of @src,
+ *     free with gtk_text_attributes_unref()
+ */
 GtkTextAttributes*
 gtk_text_attributes_copy (GtkTextAttributes *src)
 {
@@ -109,10 +111,10 @@ G_DEFINE_BOXED_TYPE (GtkTextAttributes, gtk_text_attributes,
  * gtk_text_attributes_copy_values:
  * @src: a #GtkTextAttributes
  * @dest: another #GtkTextAttributes
- * 
- * Copies the values from @src to @dest so that @dest has the same values
- * as @src. Frees existing values in @dest.
- **/
+ *
+ * Copies the values from @src to @dest so that @dest has
+ * the same values as @src. Frees existing values in @dest.
+ */
 void
 gtk_text_attributes_copy_values (GtkTextAttributes *src,
                                  GtkTextAttributes *dest)
@@ -137,7 +139,7 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 
   if (dest->appearance.rgba[0])
     gdk_rgba_free (dest->appearance.rgba[0]);
-  
+
   if (dest->appearance.rgba[1])
     gdk_rgba_free (dest->appearance.rgba[1]);
 
@@ -151,9 +153,9 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 
   dest->language = src->language;
 
-  if (dest->font)
+  if (src->font)
     dest->font = pango_font_description_copy (src->font);
-  
+
   if (src->pg_bg_color)
     dest->pg_bg_color = gdk_color_copy (src->pg_bg_color);
 
