@@ -1,6 +1,6 @@
 /* Assistant
  *
- * Demonstrates a sample multistep assistant. Assistants are used to divide
+ * Demonstrates a sample multi-step assistant. Assistants are used to divide
  * an operation into several simpler sequential steps, and to guide the user
  * through these steps.
  */
@@ -93,7 +93,6 @@ static void
 create_page1 (GtkWidget *assistant)
 {
   GtkWidget *box, *label, *entry;
-  GdkPixbuf *pixbuf;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (box), 12);
@@ -104,46 +103,36 @@ create_page1 (GtkWidget *assistant)
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (entry), "changed",
-		    G_CALLBACK (on_entry_changed), assistant);
+                    G_CALLBACK (on_entry_changed), assistant);
 
   gtk_widget_show_all (box);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), box);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), box, "Page 1");
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), box, GTK_ASSISTANT_PAGE_INTRO);
-
-  pixbuf = gtk_widget_render_icon_pixbuf (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
-  gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), box, pixbuf);
-  g_object_unref (pixbuf);
 }
 
 static void
 create_page2 (GtkWidget *assistant)
 {
   GtkWidget *box, *checkbutton;
-  GdkPixbuf *pixbuf;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (box), 12);
 
   checkbutton = gtk_check_button_new_with_label ("This is optional data, you may continue "
-						 "even if you do not check this");
+                                                 "even if you do not check this");
   gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE, FALSE, 0);
 
   gtk_widget_show_all (box);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), box);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), box, TRUE);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), box, "Page 2");
-
-  pixbuf = gtk_widget_render_icon_pixbuf (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
-  gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), box, pixbuf);
-  g_object_unref (pixbuf);
 }
 
 static void
 create_page3 (GtkWidget *assistant)
 {
   GtkWidget *label;
-  GdkPixbuf *pixbuf;
 
   label = gtk_label_new ("This is a confirmation page, press 'Apply' to apply changes");
 
@@ -152,10 +141,6 @@ create_page3 (GtkWidget *assistant)
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), label, GTK_ASSISTANT_PAGE_CONFIRM);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), label, TRUE);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), label, "Confirmation");
-
-  pixbuf = gtk_widget_render_icon_pixbuf (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
-  gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), label, pixbuf);
-  g_object_unref (pixbuf);
 }
 
 static void
@@ -174,7 +159,8 @@ create_page4 (GtkWidget *assistant)
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Applying changes");
 
   /* This prevents the assistant window from being
-   * closed while we're "busy" applying changes. */
+   * closed while we're "busy" applying changes.
+   */
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, FALSE);
 }
 
@@ -185,10 +171,10 @@ do_assistant (GtkWidget *do_widget)
     {
       assistant = gtk_assistant_new ();
 
-	 gtk_window_set_default_size (GTK_WINDOW (assistant), -1, 300);
+         gtk_window_set_default_size (GTK_WINDOW (assistant), -1, 300);
 
       gtk_window_set_screen (GTK_WINDOW (assistant),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
 
       create_page1 (assistant);
       create_page2 (assistant);
@@ -196,13 +182,13 @@ do_assistant (GtkWidget *do_widget)
       create_page4 (assistant);
 
       g_signal_connect (G_OBJECT (assistant), "cancel",
-			G_CALLBACK (on_assistant_close_cancel), &assistant);
+                        G_CALLBACK (on_assistant_close_cancel), &assistant);
       g_signal_connect (G_OBJECT (assistant), "close",
-			G_CALLBACK (on_assistant_close_cancel), &assistant);
+                        G_CALLBACK (on_assistant_close_cancel), &assistant);
       g_signal_connect (G_OBJECT (assistant), "apply",
-			G_CALLBACK (on_assistant_apply), NULL);
+                        G_CALLBACK (on_assistant_apply), NULL);
       g_signal_connect (G_OBJECT (assistant), "prepare",
-			G_CALLBACK (on_assistant_prepare), NULL);
+                        G_CALLBACK (on_assistant_prepare), NULL);
     }
 
   if (!gtk_widget_get_visible (assistant))
