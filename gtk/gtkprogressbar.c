@@ -965,6 +965,7 @@ gtk_progress_bar_draw (GtkWidget      *widget,
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_get_padding (context, state, &padding);
 
   orientation = priv->orientation;
   inverted = priv->inverted;
@@ -981,8 +982,6 @@ gtk_progress_bar_draw (GtkWidget      *widget,
 
   gtk_render_background (context, cr, 0, 0, width, height);
   gtk_render_frame (context, cr, 0, 0, width, height);
-
-  gtk_style_context_get_padding (context, state, &padding);
 
   gtk_style_context_restore (context);
 
