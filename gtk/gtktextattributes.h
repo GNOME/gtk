@@ -104,8 +104,10 @@ struct _GtkTextAppearance
 
   GdkRGBA *rgba[2];
 
-  /*< private >*/
+#if __SIZEOF_INT__ == __SIZEOF_POINTER__
+  /* unusable, just for ABI compat */
   guint padding[2];
+#endif
 };
 
 struct _GtkTextAttributes
