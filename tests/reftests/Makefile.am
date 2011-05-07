@@ -49,6 +49,4 @@ EXTRA_DIST += \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
 	simple.ref.ui \
-	simple.ui \
-	toplevel-vs-popup.ref.ui \
-	toplevel-vs-popup.ui
+	simple.ui
