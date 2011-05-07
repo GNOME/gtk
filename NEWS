@@ -1,3 +1,66 @@
+Overview of Changes in GTK+ 3.1.4
+=================================
+
+* GtkAssistant has received a visual refresh; as a side-effect,
+  the various image properties are no longer used
+
+* GtkTextView can now handle RGBA colors
+
+* GtkFileChooser now remembers the last opened directory
+
+* GtkLockButton is a new widget to control dialogs with
+  PolicyKit (or other) permissions
+
+* Size allocation changes:
+ - GtkPaned and GtkMenuBar now do height-for-width
+ - GtkAccelLabel is smarter about hiding the accel if too small
+ - GTK+ now warns if widgets are under-allocated; this
+   may cause considerable noise, it will be turned off
+   before the next stable release
+ - Label size allocation has been reworked, check your labels
+ - No longer try to guess the size of labels; this makes
+   it more important to give windows reasonable default
+   sizes or set width-chars/max-width-chars on labels
+ - The computation of initial window size has been reworked,
+   check your windows
+
+* A test framework for mozilla-style reftests has been added
+
+* GDK Broadway backend changes:
+ - Improved key event handling
+ - Make resize grips work
+ - Make window close buttons work
+ - Stream data over websocket
+
+* Bugs fixed:
+ 618815  mnemonics aren't displayed when Alt is already pressed...
+ 626457  Add a lock button widget
+ 626503  Critical warning in GtkTreeView
+ 642214  GTK+ 3.0 fails to compile caused by linking with libuuid...
+ 644426  GNOME-wide default to remember last folder
+ 646517  "Sending message (completed)" ellipsized in French
+ 646876  Free MenuPopulateData struct in all the cases.
+ 647284  GtkLabel does not honor width-chars anymore.
+ 647790  GtkMenuShell: don't leak a GSList
+ 647806  gtk_combo_box_set_active_id() nit picks
+ 647962  Desensitize "Select All" when GtkEntry is empty
+ 648136  design refresh for gtkassistant
+ 648419  crash in remove_capslock_feedback at gtkentry.c...
+ 648570  Mnemonics don't show under some letters
+ 648943  Drop the last remaining translated g_warning/g_error calls
+ 649295  gtkdnd: Add API that takes GIcon
+ 649313  gdk_window_set_cursor() sets cursor for random set of devices
+ 649457  probable leak in icon theme
+ 649593  GtkProgressBar theming fixes
+
+* Translation updates:
+ Galician
+ Greek
+ Luganda
+ Spanish
+ Uighur
+
+
 Overview of Changes in GTK+ 3.1.2
 =================================
 
