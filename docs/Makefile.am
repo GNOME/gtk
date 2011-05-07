@@ -16,7 +16,6 @@ EXTRA_DIST += \
 	sizing-test.txt			\
 	styles.txt			\
 	text_widget_internals.txt	\
-	text_widget.txt 		\
 	tree-column-sizing.png		\
 	tree-column-sizing.txt		\
 	widget_geometry.txt		\
