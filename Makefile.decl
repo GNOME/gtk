@@ -1,6 +1,6 @@
 # GTK+ - The GIMP Toolkit
 
-GTESTER        = gtester		# in $PATH for non-GLIB packages
+GTESTER        = gtester -k		# in $PATH for non-GLIB packages
 GTESTER_REPORT = gtester-report		# in $PATH for non-GLIB packages
 
 # initialize variables for unconditional += appending
