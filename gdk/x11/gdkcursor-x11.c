@@ -719,7 +719,7 @@ _gdk_x11_display_get_cursor_for_pixbuf (GdkDisplay *display,
   cairo_surface_t *pixmap, *mask;
   guint width, height, n_channels, rowstride, data_stride, i, j;
   guint8 *data, *mask_data, *pixels;
-  GdkRGBBA fg = { 0, 0, 0, 1 };
+  GdkRGBA fg = { 0, 0, 0, 1 };
   GdkRGBA bg = { 1, 1, 1, 1 };
   GdkScreen *screen;
   cairo_surface_t *image;
