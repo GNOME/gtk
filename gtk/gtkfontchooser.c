@@ -106,7 +106,7 @@ struct _GtkFontSelectionPrivate
   PangoFontFace   *face;
   PangoFontFamily *family;
 
-#ifndef GTK_DISABLE_DEPRECATED
+  /* Deprecated */
   GtkWidget    *size_list;
   GtkWidget    *font_list;
   GtkWidget    *face_list;
@@ -118,7 +118,6 @@ struct _GtkFontSelectionPrivate
   gboolean      ignore_size;
   gboolean      ignore_face;
   gboolean      ignore_font;
-#endif
 };
 
 
@@ -128,9 +127,9 @@ struct _GtkFontSelectionDialogPrivate
 
   GtkWidget *select_button;
   GtkWidget *cancel_button;
-#ifndef GTK_DISABLE_DEPRECATED
+
+  /* Deprecated */
   GtkWidget *apply_button;
-#endif
 };
 
 
@@ -196,12 +195,11 @@ static void  gtk_font_selection_ref_face           (GtkFontSelection *fontsel,
 
 static void gtk_font_selection_bootstrap_fontlist (GtkFontSelection *fontsel);
 
-#ifndef GTK_DISABLE_DEPRECATED
+/* Deprecated */
 static void update_font_list_selection            (GtkFontSelection *fontsel);
 static void update_size_list_selection            (GtkFontSelection *fontsel);
 static void update_face_model                     (GtkFontSelection *fontsel,
                                                    gboolean          first);
-#endif
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
 
@@ -411,17 +409,16 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   gtk_widget_override_font (priv->preview, desc);
 
 
-#ifndef GTK_DISABLE_DEPRECATED
+  /* Deprecated */
   if (priv->size_list)
     {
       priv->ignore_size = TRUE;
       update_size_list_selection (fontsel);
     }
-#endif /* GTK_DISABLE_DEPRECATED */
+  
+  g_object_notify (G_OBJECT (fontsel), "font-name");
 
   gtk_widget_queue_draw (priv->preview);
-
-  g_object_notify (G_OBJECT (fontsel), "font-name");
 }
 
 void
@@ -459,7 +456,7 @@ set_range_marks (GtkFontSelectionPrivate *priv,
       priv->ignore_slider = TRUE; 
     }
   
-#ifndef GTK_DISABLE_DEPRECATED
+  /* Deprecated: just populate the marks in the scale after removal */
   if (!priv->_size_model)
     {
       for (i=0; i<length; i++)
@@ -490,12 +487,6 @@ set_range_marks (GtkFontSelectionPrivate *priv,
         }
       g_string_free (size_str, TRUE);
     }
-#else
-  for (i=0; i<length; i++)
-    gtk_scale_add_mark (GTK_SCALE (size_slider),
-                        (gdouble) sizes[i],
-                        GTK_POS_BOTTOM, NULL);
-#endif
 }
 
 void
@@ -556,10 +547,9 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   gtk_font_selection_ref_family (fontsel, family);
   gtk_font_selection_ref_face   (fontsel, face);
 
-#ifndef GTK_DISABLE_DEPRECATED
+  /* Deprecated: Remove if clause after removal */
   if (fontsel->priv->_font_model)
     update_font_list_selection (fontsel);
-#endif
 
   /* Free resources */
   g_object_unref ((gpointer)family);
@@ -602,7 +592,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   priv = fontsel->priv;
 
-#ifndef GTK_DISABLE_DEPRECATED
+  /* Deprecated: These members will not exist after removal */
   priv->size_list = NULL;
   priv->font_list = NULL;
   priv->face_list = NULL;
@@ -614,7 +604,6 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   priv->ignore_size = FALSE;
   priv->ignore_face = FALSE;
   priv->ignore_font = FALSE;
-#endif /* GTK_DISABLE_DEPRECATED */
 
   /* Default preview string  */
   priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
@@ -964,14 +953,13 @@ gtk_font_selection_finalize (GObject *object)
   gtk_font_selection_ref_family (fontsel, NULL);
   gtk_font_selection_ref_face (fontsel, NULL);
 
-#ifndef GTK_DISABLE_DEPRECATED
+  /* Deprecated: Remove if clause after removal */
   if (fontsel->priv->size_list)
     {
       g_object_unref (fontsel->priv->size_list);
       g_object_unref (fontsel->priv->font_list);
       g_object_unref (fontsel->priv->face_list);
     }
-#endif
 
   G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
 }
@@ -1028,7 +1016,7 @@ gtk_font_selection_ref_face (GtkFontSelection *fontsel,
   priv->face = face;
 }
 
-#ifndef GTK_DISABLE_DEPRECATED
+/* Deprecated: All these functions aid deprecated functionality */
 static void
 populate_font_model (GtkFontSelection *fontsel)
 {
@@ -1441,8 +1429,6 @@ initialize_deprecated_widgets (GtkFontSelection *fontsel)
   cursor_changed_cb (GTK_TREE_VIEW (priv->family_face_list), fontsel);
 }
 
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /*****************************************************************************
  * These functions are the main public interface for getting/setting the font.
  *****************************************************************************/
@@ -1738,8 +1724,6 @@ gtk_font_selection_set_show_preview_entry (GtkFontSelection *fontsel,
   g_object_notify (G_OBJECT (fontsel), "show-preview-entry");
 }
 
-#ifndef GTK_DISABLE_DEPRECATED
-
 /**
  * gtk_font_selection_get_family_list:
  * @fontsel: a #GtkFontSelection
@@ -1844,8 +1828,6 @@ gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
   return priv->preview;
 }
 
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /**
  * SECTION:gtkfontseldlg
  * @Short_description: A dialog box for selecting fonts
@@ -1925,12 +1907,11 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   priv->cancel_button = gtk_dialog_add_button (dialog,
                                                GTK_STOCK_CANCEL,
                                                GTK_RESPONSE_CANCEL);
-#ifndef GTK_DISABLE_DEPRECATED
+  /* Deprecated: Apply button is not used anymore */
   priv->apply_button = gtk_dialog_add_button (dialog,
                                               GTK_STOCK_APPLY,
                                               GTK_RESPONSE_APPLY);
   gtk_widget_hide (priv->apply_button);
-#endif
 
   priv->select_button = gtk_dialog_add_button (dialog,
                                                _("Select"),
@@ -1939,9 +1920,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontseldiag),
              GTK_RESPONSE_OK,
-#ifndef GTK_DISABLE_DEPRECATED
-             GTK_RESPONSE_APPLY,
-#endif
+             GTK_RESPONSE_APPLY, /* Deprecated */
              GTK_RESPONSE_CANCEL,
              -1);
 
@@ -1990,45 +1969,6 @@ gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd)
   return fsd->priv->fontsel;
 }
 
-
-/**
- * gtk_font_selection_dialog_get_select_button:
- * @fsd: a #GtkFontSelectionDialog
- *
- * Gets the 'Select' button.
- *
- * Return value: (transfer none): the #GtkWidget used in the dialog
- *     for the 'Select' button.
- *
- * Since: 3.2
- */
-GtkWidget *
-gtk_font_selection_dialog_get_select_button (GtkFontSelectionDialog *fsd)
-{
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
-
-  return fsd->priv->select_button;
-}
-
-/**
- * gtk_font_selection_dialog_get_cancel_button:
- * @fsd: a #GtkFontSelectionDialog
- *
- * Gets the 'Cancel' button.
- *
- * Return value: (transfer none): the #GtkWidget used in the dialog
- *     for the 'Cancel' button.
- *
- * Since: 2.14
- */
-GtkWidget *
-gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd)
-{
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
-
-  return fsd->priv->cancel_button;
-}
-
 static void
 gtk_font_selection_dialog_buildable_interface_init (GtkBuildableIface *iface)
 {
@@ -2051,12 +1991,12 @@ gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
     return G_OBJECT (priv->cancel_button);
   else if (g_strcmp0 (childname, "font_selection") == 0)
     return G_OBJECT (priv->fontsel);
-#ifndef GTK_DISABLE_DEPRECATED    
+
+  /* Deprecated */
   else if (g_strcmp0 (childname, "ok_button") == 0)
     return G_OBJECT (priv->select_button);
   else if (g_strcmp0 (childname, "apply_button") == 0)
     return G_OBJECT (priv->apply_button);
-#endif
 
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
@@ -2156,7 +2096,6 @@ gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
   gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (priv->fontsel), text);
 }
 
-#ifndef GTK_DISABLE_DEPRECATED
 /**
  * gtk_font_selection_dialog_get_ok_button:
  * @fsd: a #GtkFontSelectionDialog
@@ -2166,7 +2105,7 @@ gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
  * Return value: (transfer none): the #GtkWidget used in the dialog
  *     for the 'OK' button.
  *
- * Since: 3.2: Use gtk_font_selection_dialog_get_select_button instead.
+ * Deprecated: 3.2
  */
 GtkWidget *
 gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
@@ -2175,4 +2114,22 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
 
   return fsd->priv->select_button;
 }
-#endif /* GTK_DISABLE_DEPRECATED */
+
+/**
+ * gtk_font_selection_dialog_get_cancel_button:
+ * @fsd: a #GtkFontSelectionDialog
+ *
+ * Gets the 'Cancel' button.
+ *
+ * Return value: (transfer none): the #GtkWidget used in the dialog
+ *     for the 'Cancel' button.
+ *
+ * Deprecated: 3.2
+ */
+GtkWidget *
+gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd)
+{
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
+
+  return fsd->priv->cancel_button;
+}
