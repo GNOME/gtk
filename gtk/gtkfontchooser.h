@@ -1,4 +1,5 @@
 /* GTK - The GIMP Toolkit
+ * Copyright (C) 2011      Alberto Ruiz <aruiz@gnome.org>
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * GtkFontSelection widget for Gtk+, by Damon Chaplin, May 1998.
@@ -112,7 +113,7 @@ struct _GtkFontSelectionDialogClass
  *   see the comments in the GtkFontSelectionDialog functions.
  *****************************************************************************/
 
-GType	       gtk_font_selection_get_type                 (void) G_GNUC_CONST;
+GType        gtk_font_selection_get_type                 (void) G_GNUC_CONST;
 GtkWidget*   gtk_font_selection_new                      (void);
 PangoFontFamily*
              gtk_font_selection_get_family               (GtkFontSelection *fontsel);
@@ -144,11 +145,9 @@ GtkWidget*  gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel);
  *   GtkFontSelection.
  *****************************************************************************/
 
-GType	     gtk_font_selection_dialog_get_typei   (void) G_GNUC_CONST;
-GtkWidget* gtk_font_selection_dialog_new	       (const gchar            *title);
+GType	   gtk_font_selection_dialog_get_type           (void) G_GNUC_CONST;
+GtkWidget* gtk_font_selection_dialog_new	            (const gchar            *title);
 
-
-GtkWidget* gtk_font_selection_dialog_get_cancel_button  (GtkFontSelectionDialog *fsd);
 GtkWidget* gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font
@@ -156,14 +155,14 @@ GtkWidget* gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog 
    have been loaded OK. You should call gtk_font_selection_dialog_get_font()
    to see if it has been loaded OK.
    You should g_free() the returned font name after you're done with it. */
-gchar*	   gtk_font_selection_dialog_get_font_name     (GtkFontSelectionDialog *fsd);
+gchar*     gtk_font_selection_dialog_get_font_name     (GtkFontSelectionDialog *fsd);
 
 /* This sets the currently displayed font. It should be a valid X Logical
    Font Description font name (anything else will be ignored), e.g.
    "-adobe-courier-bold-o-normal--25-*-*-*-*-*-*-*" 
    It returns TRUE on success. */
 gboolean   gtk_font_selection_dialog_set_font_name     (GtkFontSelectionDialog *fsd,
-                                                        const gchar	       *fontname);
+                                                        const gchar	           *fontname);
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
@@ -173,11 +172,12 @@ G_CONST_RETURN gchar*
 /* This sets the text in the preview entry. It will be copied by the entry,
    so there's no need to g_strdup() it first. */
 void	  gtk_font_selection_dialog_set_preview_text   (GtkFontSelectionDialog *fsd,
-                                                        const gchar	       *text);
+                                                        const gchar	           *text);
 
 /* Deprecated GtkFontSelectionDialog methods */
 #ifndef GTK_DISABLE_DEPRECATED
-GtkWidget *gtk_font_selection_dialog_get_ok_button     (GtkFontSelectionDialog *fsd);
+GtkWidget* gtk_font_selection_dialog_get_cancel_button  (GtkFontSelectionDialog *fsd);
+GtkWidget* gtk_font_selection_dialog_get_ok_button      (GtkFontSelectionDialog *fsd);
 #endif
 
 G_END_DECLS
