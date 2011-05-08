@@ -306,8 +306,6 @@ typedef struct _GdkWaylandCairoSurfaceData {
 static void
 gdk_wayland_window_attach_image (GdkWindow *window)
 {
-  GdkDisplayWayland *display =
-    GDK_DISPLAY_WAYLAND (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandCairoSurfaceData *data;
   int32_t server_width, server_height, dx, dy;
@@ -337,7 +335,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 				      &gdk_wayland_cairo_key);
   if (!data->buffer)
     data->buffer =
-      wl_egl_pixmap_create_buffer(display->native_display, data->pixmap);
+      wl_egl_pixmap_create_buffer(data->pixmap);
 
   if (impl->resize_edges & WL_SHELL_RESIZE_LEFT)
     dx = server_width - data->width;
@@ -397,8 +395,7 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
   visual = wl_display_get_premultiplied_argb_visual(display->wl_display);
   data->width = width;
   data->height = height;
-  data->pixmap =
-    wl_egl_pixmap_create(display->native_display, width, height, visual, 0);
+  data->pixmap = wl_egl_pixmap_create(width, height, visual, 0);
   data->image =
     display->create_image(display->egl_display, NULL, EGL_NATIVE_PIXMAP_KHR,
 			  (EGLClientBuffer) data->pixmap, NULL);

@@ -71,7 +71,6 @@ struct _GdkDisplayWayland
 
   /* Wayland fields below */
   struct wl_display *wl_display;
-  struct wl_egl_display *native_display;
   struct wl_compositor *compositor;
   struct wl_shm *shm;
   struct wl_shell *shell;

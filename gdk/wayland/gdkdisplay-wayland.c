@@ -145,20 +145,20 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
   GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (data);
   struct wl_input_device *input;
 
-  if (strcmp(interface, "compositor") == 0) {
-    display_wayland->compositor = wl_compositor_create(display, id);
-  } else if (strcmp(interface, "shm") == 0) {
-    display_wayland->shm = wl_shm_create(display, id);
-  } else if (strcmp(interface, "shell") == 0) {
-    display_wayland->shell = wl_shell_create(display, id);
+  if (strcmp(interface, "wl_compositor") == 0) {
+    display_wayland->compositor = wl_compositor_create(display, id, 1);
+  } else if (strcmp(interface, "wl_shm") == 0) {
+    display_wayland->shm = wl_shm_create(display, id, 1);
+  } else if (strcmp(interface, "wl_shell") == 0) {
+    display_wayland->shell = wl_shell_create(display, id, 1);
     wl_shell_add_listener(display_wayland->shell,
 			  &shell_listener, display_wayland);
-  } else if (strcmp(interface, "output") == 0) {
-    display_wayland->output = wl_output_create(display, id);
+  } else if (strcmp(interface, "wl_output") == 0) {
+    display_wayland->output = wl_output_create(display, id, 1);
     wl_output_add_listener(display_wayland->output,
 			   &output_listener, display_wayland);
-  } else if (strcmp(interface, "input_device") == 0) {
-    input = wl_input_device_create(display, id);
+  } else if (strcmp(interface, "wl_input_device") == 0) {
+    input = wl_input_device_create(display, id, 1);
     _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
 					    input);
   }
@@ -179,7 +179,7 @@ gdk_display_init_egl(GdkDisplay *display)
   };
 
   display_wayland->egl_display =
-    eglGetDisplay(display_wayland->native_display);
+    eglGetDisplay(display_wayland->wl_display);
   if (!eglInitialize(display_wayland->egl_display, &major, &minor)) {
     fprintf(stderr, "failed to initialize display\n");
     return FALSE;
@@ -236,12 +236,6 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   display_wayland->wl_display = wl_display;
 
-  display_wayland->native_display = wl_egl_display_create(wl_display);
-  if (display_wayland->native_display == NULL) {
-    wl_display_destroy(wl_display);
-    return NULL;
-  }
-
   display_wayland->screen = _gdk_wayland_screen_new (display);
 
   display->device_manager = _gdk_wayland_device_manager_new (display);
@@ -252,7 +246,8 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   gdk_display_init_egl(display);
 
-  display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
+  display_wayland->event_source =
+    _gdk_wayland_display_event_source_new (display);
 
   gdk_input_init (display);
 
@@ -282,7 +277,6 @@ gdk_wayland_display_dispose (GObject *object)
     }
 
   eglTerminate(display_wayland->egl_display);
-  wl_egl_display_destroy(display_wayland->native_display);
 
   G_OBJECT_CLASS (_gdk_display_wayland_parent_class)->dispose (object);
 }
