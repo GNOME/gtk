@@ -10,23 +10,23 @@
 # Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
-# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2010, 2011.
+# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-05-08 15:31+0000\n"
-"PO-Revision-Date: 2011-05-08 17:33+0200\n"
-"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-05-08 15:34+0000\n"
+"PO-Revision-Date: 2011-05-08 17:46+0200\n"
+"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:136
@@ -336,7 +336,7 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:267
 msgid "Tooltip"
-msgstr "Consejo"
+msgstr "Sugerencia"
 
 #: ../gtk/gtkaction.c:268
 msgid "A tooltip for this action."
@@ -1490,8 +1490,7 @@ msgstr "Tiene entrada"
 
 #: ../gtk/gtkcellrenderercombo.c:172
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
+msgstr "Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
 
 #: ../gtk/gtkcellrendererpixbuf.c:140
 msgid "Pixbuf Object"
@@ -1760,8 +1759,7 @@ msgstr "Tipografía"
 
 #: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtktexttag.c:295
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
-"Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
+msgstr "Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
 
 #: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtktexttag.c:303
 msgid "Font description as a PangoFontDescription struct"
@@ -2809,27 +2807,27 @@ msgstr "Indica si el icono secundario es sensible"
 
 #: ../gtk/gtkentry.c:1254
 msgid "Primary icon tooltip text"
-msgstr "Texto del consejo del icono primario"
+msgstr "Texto de la sugerencia del icono primario"
 
 #: ../gtk/gtkentry.c:1255 ../gtk/gtkentry.c:1291
 msgid "The contents of the tooltip on the primary icon"
-msgstr "El contenido del consejo para el icono primario"
+msgstr "El contenido de la consejo para el icono primario"
 
 #: ../gtk/gtkentry.c:1271
 msgid "Secondary icon tooltip text"
-msgstr "Texto del consejo del icono secundario"
+msgstr "Texto de la sugerencia del icono secundario"
 
 #: ../gtk/gtkentry.c:1272 ../gtk/gtkentry.c:1310
 msgid "The contents of the tooltip on the secondary icon"
-msgstr "El contenido del consejo para el icono secundario"
+msgstr "El contenido de la sugerencia para el icono secundario"
 
 #: ../gtk/gtkentry.c:1290
 msgid "Primary icon tooltip markup"
-msgstr "Marcado del consejo del icono primario"
+msgstr "Marcado de la sugerencia del icono primario"
 
 #: ../gtk/gtkentry.c:1309
 msgid "Secondary icon tooltip markup"
-msgstr "Marcado del consejo del icono secundario"
+msgstr "Marcado de la sugerencia del icono secundario"
 
 #: ../gtk/gtkentry.c:1329 ../gtk/gtktextview.c:795
 msgid "IM module"
@@ -3477,12 +3475,13 @@ msgstr "La vista es reordenable"
 
 #: ../gtk/gtkiconview.c:733 ../gtk/gtktreeview.c:1173
 msgid "Tooltip Column"
-msgstr "Columna de consejo"
+msgstr "Columna de sugerencia"
 
 #: ../gtk/gtkiconview.c:734
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr ""
-"La columna del modelo que contiene los textos de consejo para los elementos"
+"La columna del modelo que contiene los textos de sugerencia para los "
+"elementos"
 
 #: ../gtk/gtkiconview.c:751
 msgid "Item Padding"
@@ -3775,60 +3774,57 @@ msgid "The GPermission object controlling this button"
 msgstr "El objeto GPermission que controla este botón"
 
 #: ../gtk/gtklockbutton.c:356
-#| msgid "Text"
 msgid "Lock Text"
 msgstr "Bloquear texto"
 
 #: ../gtk/gtklockbutton.c:357
-#, fuzzy
-#| msgid "The text to display in order to demonstrate the selected font"
 msgid "The text to display when prompting the user to lock"
-msgstr "El texto que mostrar como demostración de la tipografía seleccionada"
+msgstr "El texto que mostrar al preguntar al usuario para bloquear"
 
 #: ../gtk/gtklockbutton.c:365
 msgid "Unlock Text"
 msgstr "Desbloquear texto"
 
 #: ../gtk/gtklockbutton.c:366
-#, fuzzy
-#| msgid "The text to display in order to demonstrate the selected font"
 msgid "The text to display when prompting the user to unlock"
-msgstr "El texto que mostrar como demostración de la tipografía seleccionada"
+msgstr "El texto que mostrar al preguntar al usuario para desbloquear"
 
 #: ../gtk/gtklockbutton.c:374
 msgid "Not Authorized Text"
-msgstr ""
+msgstr "Texto de no autorizado"
 
 #: ../gtk/gtklockbutton.c:375
 msgid "The text to display when prompting the user cannot obtain authorization"
 msgstr ""
+"El texto que mostrar al mostrar al usuario que no se pudo obtener una "
+"autorización"
 
 #: ../gtk/gtklockbutton.c:383
-#| msgid "Tooltip"
 msgid "Lock Tooltip"
-msgstr "Bloquear consejo"
+msgstr "Bloquear sugerencia"
 
 #: ../gtk/gtklockbutton.c:384
 msgid "The tooltip to display when prompting the user to lock"
-msgstr ""
+msgstr "La sugerencia que mostrar al preguntar al usuario para bloquear"
 
 #: ../gtk/gtklockbutton.c:392
-#| msgid "Enable Tooltips"
 msgid "Unlock Tooltip"
-msgstr "Desbloquear consejo"
+msgstr "Desbloquear sugerencia"
 
 #: ../gtk/gtklockbutton.c:393
 msgid "The tooltip to display when prompting the user to unlock"
-msgstr ""
+msgstr "La sugerencia que mostrar al preguntar al usuario para desbloquear"
 
 #: ../gtk/gtklockbutton.c:401
 msgid "Not Authorized Tooltip"
-msgstr ""
+msgstr "Sugerencia de no autorizado"
 
 #: ../gtk/gtklockbutton.c:402
 msgid ""
 "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr ""
+"La sugerencia que mostrar al mostrar al usuario que no se pudo obtener una "
+"autorización"
 
 #: ../gtk/gtkmenubar.c:189
 msgid "Pack direction"
@@ -5086,11 +5082,11 @@ msgstr "Indica si deben mostrarse los elementos privados"
 
 #: ../gtk/gtkrecentchooser.c:161
 msgid "Show Tooltips"
-msgstr "Mostrar consejos"
+msgstr "Mostrar sugerencias"
 
 #: ../gtk/gtkrecentchooser.c:162
 msgid "Whether there should be a tooltip on the item"
-msgstr "Indica si debe haber un consejo en el elemento"
+msgstr "Indica si debe haber una sugerencia en el elemento"
 
 #: ../gtk/gtkrecentchooser.c:174
 msgid "Show Icons"
@@ -5523,8 +5519,8 @@ msgstr "Suavizado Xft"
 #: ../gtk/gtksettings.c:487
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, "
-"-1=predeterminado"
+"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, -"
+"1=predeterminado"
 
 #: ../gtk/gtksettings.c:496
 msgid "Xft Hinting"
@@ -5684,25 +5680,25 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:703
 msgid "Tooltip timeout"
-msgstr "Tiempo de expiración del consejo"
+msgstr "Tiempo de expiración de la sugerencia"
 
 #: ../gtk/gtksettings.c:704
 msgid "Timeout before tooltip is shown"
-msgstr "Tiempo de expiración antes de que se muestre el consejo"
+msgstr "Tiempo de expiración antes de que se muestre la sugerencia"
 
 #: ../gtk/gtksettings.c:729
 msgid "Tooltip browse timeout"
-msgstr "Tiempo de los consejos de navegación"
+msgstr "Tiempo de las sugerencias de navegación"
 
 #: ../gtk/gtksettings.c:730
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
-"Tiempo de expiración antes de que se muestre el consejo cuando el modo de "
+"Tiempo de expiración antes de que se muestre la sugerencia cuando el modo de "
 "navegación está activado"
 
 #: ../gtk/gtksettings.c:751
 msgid "Tooltip browse mode timeout"
-msgstr "Tiempo de los consejos en modo navegación"
+msgstr "Tiempo de las sugerencias en modo navegación"
 
 #: ../gtk/gtksettings.c:752
 msgid "Timeout after which browse mode is disabled"
@@ -5848,11 +5844,11 @@ msgstr "Indica si se debe reproducir cualquier evento de sonido"
 
 #: ../gtk/gtksettings.c:1063
 msgid "Enable Tooltips"
-msgstr "Activar consejos"
+msgstr "Activar sugerencias"
 
 #: ../gtk/gtksettings.c:1064
 msgid "Whether tooltips should be shown on widgets"
-msgstr "Indica si se deben mostrar los consejos en los widgets"
+msgstr "Indica si se deben mostrar las sugerencias en los widgets"
 
 #: ../gtk/gtksettings.c:1077
 msgid "Toolbar style"
@@ -6127,19 +6123,19 @@ msgstr "Indica si el icono de la bandeja tiene un consejo"
 
 #: ../gtk/gtkstatusicon.c:396 ../gtk/gtkwidget.c:1093
 msgid "Tooltip Text"
-msgstr "Texto del consejo"
+msgstr "Texto de la sugerencia"
 
 #: ../gtk/gtkstatusicon.c:397 ../gtk/gtkwidget.c:1094 ../gtk/gtkwidget.c:1115
 msgid "The contents of the tooltip for this widget"
-msgstr "El contenido de los consejos para este widget"
+msgstr "El contenido de las sugerencias para este widget"
 
 #: ../gtk/gtkstatusicon.c:420 ../gtk/gtkwidget.c:1114
 msgid "Tooltip markup"
-msgstr "Marcado de consejos"
+msgstr "Marcado de sugerencias"
 
 #: ../gtk/gtkstatusicon.c:421
 msgid "The contents of the tooltip for this tray icon"
-msgstr "El contenido de los consejos para este icono de la bandeja"
+msgstr "El contenido de las sugerencias para este icono de la bandeja"
 
 #: ../gtk/gtkstatusicon.c:439
 msgid "The title of this tray icon"
@@ -6328,10 +6324,8 @@ msgstr ""
 "anónimas"
 
 #: ../gtk/gtktexttag.c:222
-#, fuzzy
-#| msgid "Background color"
 msgid "Background rgba"
-msgstr "Color de fondo"
+msgstr "RGBA de fondo"
 
 #: ../gtk/gtktexttag.c:230
 msgid "Background full height"
@@ -6346,10 +6340,8 @@ msgstr ""
 "ancho de los caracteres etiquetados"
 
 #: ../gtk/gtktexttag.c:261
-#, fuzzy
-#| msgid "Foreground color"
 msgid "Foreground rgba"
-msgstr "Color de primer plano"
+msgstr "RGBA de primer plano"
 
 #: ../gtk/gtktexttag.c:270
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -6502,22 +6494,16 @@ msgid "Paragraph background color"
 msgstr "Color de fondo del parágrafo"
 
 #: ../gtk/gtktexttag.c:562
-#, fuzzy
-#| msgid "Paragraph background color as a string"
 msgid "Paragraph background color as a GdkColor"
-msgstr "Nombre del color de fondo del parágrafo como una cadena"
+msgstr "Color de fondo del párrafo como un GdkColor"
 
 #: ../gtk/gtktexttag.c:576
-#, fuzzy
-#| msgid "Paragraph background color"
 msgid "Paragraph background rgba"
-msgstr "Color de fondo del parágrafo"
+msgstr "RGBA de fondo del párrafo"
 
 #: ../gtk/gtktexttag.c:577
-#, fuzzy
-#| msgid "Paragraph background color as a string"
 msgid "Paragraph background rgba as a GdkRGBA"
-msgstr "Nombre del color de fondo del parágrafo como una cadena"
+msgstr "Color de fondo del párrafo como un GdkRGBA"
 
 #: ../gtk/gtktexttag.c:595
 msgid "Margin Accumulates"
@@ -7054,7 +7040,7 @@ msgstr "Define la columna para la columna expansora"
 
 #: ../gtk/gtktreeview.c:1030
 msgid "Rules Hint"
-msgstr "Consejo de las reglas"
+msgstr "Sugerencia de las reglas"
 
 #: ../gtk/gtktreeview.c:1031
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
