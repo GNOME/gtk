@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-05-03 14:05+0000\n"
-"PO-Revision-Date: 2011-05-04 22:34+0200\n"
+"POT-Creation-Date: 2011-05-05 17:35+0000\n"
+"PO-Revision-Date: 2011-05-08 17:28+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -135,7 +135,7 @@ msgstr "Resolución de la tipografía"
 msgid "The resolution for fonts on the screen"
 msgstr "La resolución para las tipografías en la pantalla"
 
-#: ../gdk/gdkwindow.c:373 ../gdk/gdkwindow.c:374
+#: ../gdk/gdkwindow.c:376 ../gdk/gdkwindow.c:377
 msgid "Cursor"
 msgstr "Cursor"
 
@@ -826,44 +826,44 @@ msgstr "Página completa"
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Indica si todos los campos requeridos en la página se han rellenado"
 
-#: ../gtk/gtkbbox.c:152
+#: ../gtk/gtkbbox.c:158
 msgid "Minimum child width"
 msgstr "Anchura mínima del hijo"
 
-#: ../gtk/gtkbbox.c:153
+#: ../gtk/gtkbbox.c:159
 msgid "Minimum width of buttons inside the box"
 msgstr "Anchura mínima de los botones dentro de la caja"
 
-#: ../gtk/gtkbbox.c:161
+#: ../gtk/gtkbbox.c:167
 msgid "Minimum child height"
 msgstr "Altura mínima del hijo"
 
-#: ../gtk/gtkbbox.c:162
+#: ../gtk/gtkbbox.c:168
 msgid "Minimum height of buttons inside the box"
 msgstr "Altura mínima de los botones dentro de la caja"
 
-#: ../gtk/gtkbbox.c:170
+#: ../gtk/gtkbbox.c:176
 msgid "Child internal width padding"
 msgstr "Anchura interna de relleno del hijo"
 
-#: ../gtk/gtkbbox.c:171
+#: ../gtk/gtkbbox.c:177
 msgid "Amount to increase child's size on either side"
 msgstr "Cantidad en la que se incrementa el tamaño del hijo por cada lado"
 
-#: ../gtk/gtkbbox.c:179
+#: ../gtk/gtkbbox.c:185
 msgid "Child internal height padding"
 msgstr "Altura interna de relleno del hijo"
 
-#: ../gtk/gtkbbox.c:180
+#: ../gtk/gtkbbox.c:186
 msgid "Amount to increase child's size on the top and bottom"
 msgstr ""
 "Cantidad en la que se incrementa el tamaño del hijo por arriba y por abajo"
 
-#: ../gtk/gtkbbox.c:188
+#: ../gtk/gtkbbox.c:194
 msgid "Layout style"
 msgstr "Estilo de la distribución"
 
-#: ../gtk/gtkbbox.c:189
+#: ../gtk/gtkbbox.c:195
 msgid ""
 "How to lay out the buttons in the box. Possible values are: spread, edge, "
 "start and end"
@@ -871,17 +871,27 @@ msgstr ""
 "Como disponer los botones en la caja. Los valores posibles son: esparcidos, "
 "esquinas, inicio y final"
 
-#: ../gtk/gtkbbox.c:197
+#: ../gtk/gtkbbox.c:203
 msgid "Secondary"
 msgstr "Secundario"
 
-#: ../gtk/gtkbbox.c:198
+#: ../gtk/gtkbbox.c:204
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
 "Si es TRUE, el hijo aparece en un grupo secundario de hijos, apropiado para, "
 "por ejemplo, botones de ayuda"
+
+#: ../gtk/gtkbbox.c:211
+#| msgid "Homogeneous"
+msgid "Non-Homogeneous"
+msgstr "No homogéneo"
+
+#: ../gtk/gtkbbox.c:212
+#| msgid "If TRUE, the child can be made smaller than its requisition"
+msgid "If TRUE, the child will not be subject to homogeneous sizing"
+msgstr "Si es TRUE, el hijo no será objeto de tamaño homogéneo"
 
 #: ../gtk/gtkbox.c:238 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:313
 #: ../gtk/gtkiconview.c:644 ../gtk/gtktreeviewcolumn.c:271
@@ -2678,9 +2688,8 @@ msgstr ""
 "progreso para cada llamada a gtk_entry_progress_pulse()"
 
 #: ../gtk/gtkentry.c:998
-#, fuzzy
 msgid "Placeholder text"
-msgstr "Texto variable"
+msgstr "Escribir aquí"
 
 #: ../gtk/gtkentry.c:999
 msgid "Show text in the entry when it's empty and unfocused"
@@ -2831,7 +2840,6 @@ msgid "Which IM module should be used"
 msgstr "Qué módulo de ME se debe usar"
 
 #: ../gtk/gtkentry.c:1344
-#| msgid "Completion Model"
 msgid "Completion"
 msgstr "Completado"
 
@@ -3002,7 +3010,6 @@ msgstr ""
 "disponible"
 
 #: ../gtk/gtkexpander.c:347
-#| msgid "Resize mode"
 msgid "Resize tolevel"
 msgstr "Redimensionar nivel superior"
 
@@ -6885,7 +6892,6 @@ msgid "Padding that should be put around icons in the tray"
 msgstr "Separación que poner alrededor de los iconos en la bandeja"
 
 #: ../gtk/gtktrayicon-x11.c:179
-#| msgid "Icon Sizes"
 msgid "Icon Size"
 msgstr "Tamaño del icono"
 
