@@ -1856,6 +1856,86 @@ gtk_tree_model_filter_adjust_virtual_root (GtkTreeModelFilter *filter,
 }
 
 static void
+gtk_tree_model_filter_row_deleted_invisible_node (GtkTreeModelFilter *filter,
+                                                  GtkTreePath        *c_path)
+{
+  int i;
+  int offset;
+  GtkTreePath *real_path;
+  FilterLevel *level;
+  FilterElt *elt;
+
+  /* The node deleted in the child model is not visible in the
+   * filter model.  We will not emit a signal, just fixup the offsets
+   * of the other nodes.
+   */
+
+  if (!filter->priv->root)
+    return;
+
+  level = FILTER_LEVEL (filter->priv->root);
+
+  /* subtract vroot if necessary */
+  if (filter->priv->virtual_root)
+    {
+      real_path = gtk_tree_model_filter_remove_root (c_path,
+                                                     filter->priv->virtual_root);
+      /* we don't handle this */
+      if (!real_path)
+        return;
+    }
+  else
+    real_path = gtk_tree_path_copy (c_path);
+
+  i = 0;
+  if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
+    {
+      /* find the level where the deletion occurred */
+      while (i < gtk_tree_path_get_depth (real_path) - 1)
+        {
+          gint j;
+
+          if (!level)
+            {
+              /* we don't cover this */
+              gtk_tree_path_free (real_path);
+              return;
+            }
+
+          elt = bsearch_elt_with_offset (level->array,
+                                         gtk_tree_path_get_indices (real_path)[i],
+                                         &j);
+
+          if (!elt || !elt->children)
+            {
+              /* parent is filtered out, so no level */
+              gtk_tree_path_free (real_path);
+              return;
+            }
+
+          level = elt->children;
+          i++;
+        }
+    }
+
+  offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
+  gtk_tree_path_free (real_path);
+
+  if (!level)
+    return;
+
+  /* decrease offset of all nodes following the deleted node */
+  for (i = 0; i < level->array->len; i++)
+    {
+      elt = &g_array_index (level->array, FilterElt, i);
+      if (elt->offset > offset)
+        elt->offset--;
+      if (elt->children)
+        elt->children->parent_elt_index = i;
+    }
+}
+
+static void
 gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
                                    GtkTreePath  *c_path,
                                    gpointer      data)
@@ -1895,76 +1975,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
 
   if (!path)
     {
-      /* The node deleted in the child model is not visible in the
-       * filter model.  We will not emit a signal, just fixup the offsets
-       * of the other nodes.
-       */
-      GtkTreePath *real_path;
-
-      if (!filter->priv->root)
-        return;
-
-      level = FILTER_LEVEL (filter->priv->root);
-
-      /* subtract vroot if necessary */
-      if (filter->priv->virtual_root)
-        {
-          real_path = gtk_tree_model_filter_remove_root (c_path,
-                                                         filter->priv->virtual_root);
-          /* we don't handle this */
-          if (!real_path)
-            return;
-        }
-      else
-        real_path = gtk_tree_path_copy (c_path);
-
-      i = 0;
-      if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
-        {
-          /* find the level where the deletion occurred */
-          while (i < gtk_tree_path_get_depth (real_path) - 1)
-            {
-              gint j;
-
-              if (!level)
-                {
-                  /* we don't cover this */
-                  gtk_tree_path_free (real_path);
-                  return;
-                }
-
-              elt = bsearch_elt_with_offset (level->array,
-                                             gtk_tree_path_get_indices (real_path)[i],
-                                             &j);
-
-              if (!elt || !elt->children)
-                {
-                  /* parent is filtered out, so no level */
-                  gtk_tree_path_free (real_path);
-                  return;
-                }
-
-              level = elt->children;
-              i++;
-            }
-        }
-
-      offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
-      gtk_tree_path_free (real_path);
-
-      if (!level)
-        return;
-
-      /* decrease offset of all nodes following the deleted node */
-      for (i = 0; i < level->array->len; i++)
-        {
-          elt = &g_array_index (level->array, FilterElt, i);
-          if (elt->offset > offset)
-            elt->offset--;
-          if (elt->children)
-            elt->children->parent_elt_index = i;
-        }
-
+      gtk_tree_model_filter_row_deleted_invisible_node (filter, c_path);
       return;
     }
 
