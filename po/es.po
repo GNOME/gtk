@@ -9,24 +9,24 @@
 # Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002, 2003.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
-# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2011.
+# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-05-07 02:47+0000\n"
-"PO-Revision-Date: 2011-05-07 12:13+0200\n"
-"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-05-09 11:25+0000\n"
+"PO-Revision-Date: 2011-05-09 15:36+0200\n"
+"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: ../gdk/gdk.c:135
 #, c-format
@@ -1513,8 +1513,6 @@ msgid "Invalid URI"
 msgstr "URI inválida"
 
 #: ../gtk/gtklockbutton.c:358
-#| msgctxt "keyboard label"
-#| msgid "Num_Lock"
 msgid "Lock"
 msgstr "Bloquear"
 
@@ -2204,7 +2202,7 @@ msgstr "Tarea"
 
 #: ../gtk/gtkprintunixdialog.c:3857
 msgid "Advanced"
-msgstr "Avanzado"
+msgstr "Avanzadas"
 
 #. Translators: this will appear as tab label in print dialog.
 #: ../gtk/gtkprintunixdialog.c:3895
@@ -4541,8 +4539,8 @@ msgstr ""
 
 #~ msgid "different idatas found for symlinked '%s' and '%s'\n"
 #~ msgstr ""
-#~ "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y "
-#~ "«%s»\n"
+#~ "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y «%"
+#~ "s»\n"
 
 #~ msgid "_Add"
 #~ msgstr "_Añadir"
@@ -4654,8 +4652,8 @@ msgstr ""
 #~ "Internal error: Image loader module '%s' failed to complete an operation, "
 #~ "but didn't give a reason for the failure"
 #~ msgstr ""
-#~ "Error interno: El módulo de carga de imágenes «%s» ha fallado al "
-#~ "completar una operación, pero no ha dado ninguna razón del fallo"
+#~ "Error interno: El módulo de carga de imágenes «%s» ha fallado al completar "
+#~ "una operación, pero no ha dado ninguna razón del fallo"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr ""
@@ -4858,8 +4856,8 @@ msgstr ""
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 #~ "parsed."
 #~ msgstr ""
-#~ "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no "
-#~ "se puede interpretar."
+#~ "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no se "
+#~ "puede interpretar."
 
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -4956,15 +4954,15 @@ msgstr ""
 #~ "PNG compression level must be a value between 0 and 9; value '%s' could "
 #~ "not be parsed."
 #~ msgstr ""
-#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» "
-#~ "no se puede interpretar."
+#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no "
+#~ "se puede interpretar."
 
 #~ msgid ""
 #~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
 #~ "allowed."
 #~ msgstr ""
-#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%d» "
-#~ "no está permitido."
+#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%d» no "
+#~ "está permitido."
 
 #~ msgid ""
 #~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
