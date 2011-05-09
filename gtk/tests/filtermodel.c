@@ -2826,97 +2826,97 @@ specific_bug_549287 (void)
 void
 register_filter_model_tests (void)
 {
-  g_test_add ("/FilterModel/self/verify-test-suite",
+  g_test_add ("/TreeModelFilter/self/verify-test-suite",
               FilterTest, NULL,
               filter_test_setup,
               verify_test_suite,
               filter_test_teardown);
 
-  g_test_add ("/FilterModel/self/verify-test-suite/vroot/depth-1",
+  g_test_add ("/TreeModelFilter/self/verify-test-suite/vroot/depth-1",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup,
               verify_test_suite_vroot,
               filter_test_teardown);
-  g_test_add ("/FilterModel/self/verify-test-suite/vroot/depth-2",
+  g_test_add ("/TreeModelFilter/self/verify-test-suite/vroot/depth-2",
               FilterTest, gtk_tree_path_new_from_indices (2, 3, -1),
               filter_test_setup,
               verify_test_suite_vroot,
               filter_test_teardown);
 
 
-  g_test_add ("/FilterModel/filled/hide-root-level",
+  g_test_add ("/TreeModelFilter/filled/hide-root-level",
               FilterTest, NULL,
               filter_test_setup,
               filled_hide_root_level,
               filter_test_teardown);
-  g_test_add ("/FilterModel/filled/hide-child-levels",
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels",
               FilterTest, NULL,
               filter_test_setup,
               filled_hide_child_levels,
               filter_test_teardown);
 
-  g_test_add ("/FilterModel/filled/hide-root-level/vroot",
+  g_test_add ("/TreeModelFilter/filled/hide-root-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup,
               filled_vroot_hide_root_level,
               filter_test_teardown);
-  g_test_add ("/FilterModel/filled/hide-child-levels/vroot",
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup,
               filled_vroot_hide_child_levels,
               filter_test_teardown);
 
 
-  g_test_add ("/FilterModel/empty/show-nodes",
+  g_test_add ("/TreeModelFilter/empty/show-nodes",
               FilterTest, NULL,
               filter_test_setup_empty,
               empty_show_nodes,
               filter_test_teardown);
-  g_test_add ("/FilterModel/empty/show-multiple-nodes",
+  g_test_add ("/TreeModelFilter/empty/show-multiple-nodes",
               FilterTest, NULL,
               filter_test_setup_empty,
               empty_show_multiple_nodes,
               filter_test_teardown);
 
-  g_test_add ("/FilterModel/empty/show-nodes/vroot",
+  g_test_add ("/TreeModelFilter/empty/show-nodes/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty,
               empty_vroot_show_nodes,
               filter_test_teardown);
-  g_test_add ("/FilterModel/empty/show-multiple-nodes/vroot",
+  g_test_add ("/TreeModelFilter/empty/show-multiple-nodes/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty,
               empty_vroot_show_multiple_nodes,
               filter_test_teardown);
 
 
-  g_test_add ("/FilterModel/unfiltered/hide-single",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-child",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-multi-level",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single_multi_level,
               filter_test_teardown);
 
-  g_test_add ("/FilterModel/unfiltered/hide-single/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-child/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-multi-level/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single_multi_level,
@@ -2924,72 +2924,72 @@ register_filter_model_tests (void)
 
 
 
-  g_test_add ("/FilterModel/unfiltered/show-single",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single",
               FilterTest, NULL,
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-child",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child",
               FilterTest, NULL,
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-multi-level",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level",
               FilterTest, NULL,
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single_multi_level,
               filter_test_teardown);
 
-  g_test_add ("/FilterModel/unfiltered/show-single/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-child/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-multi-level/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single_multi_level,
               filter_test_teardown);
 
 
-  g_test_add_func ("/FilterModel/specific/path-dependent-filter",
+  g_test_add_func ("/TreeModelFilter/specific/path-dependent-filter",
                    specific_path_dependent_filter);
-  g_test_add_func ("/FilterModel/specific/append-after-collapse",
+  g_test_add_func ("/TreeModelFilter/specific/append-after-collapse",
                    specific_append_after_collapse);
-  g_test_add_func ("/FilterModel/specific/sort-filter-remove-node",
+  g_test_add_func ("/TreeModelFilter/specific/sort-filter-remove-node",
                    specific_sort_filter_remove_node);
-  g_test_add_func ("/FilterModel/specific/sort-filter-remove-root",
+  g_test_add_func ("/TreeModelFilter/specific/sort-filter-remove-root",
                    specific_sort_filter_remove_root);
-  g_test_add_func ("/FilterModel/specific/root-mixed-visibility",
+  g_test_add_func ("/TreeModelFilter/specific/root-mixed-visibility",
                    specific_root_mixed_visibility);
-  g_test_add_func ("/FilterModel/specific/has-child-filter",
+  g_test_add_func ("/TreeModelFilter/specific/has-child-filter",
                    specific_has_child_filter);
-  g_test_add_func ("/FilterModel/specific/root-has-child-filter",
+  g_test_add_func ("/TreeModelFilter/specific/root-has-child-filter",
                    specific_root_has_child_filter);
-  g_test_add_func ("/FilterModel/specific/filter-add-child",
+  g_test_add_func ("/TreeModelFilter/specific/filter-add-child",
                    specific_filter_add_child);
-  g_test_add_func ("/FilterModel/specific/list-store-clear",
+  g_test_add_func ("/TreeModelFilter/specific/list-store-clear",
                    specific_list_store_clear);
 
-  g_test_add_func ("/FilterModel/specific/bug-300089",
+  g_test_add_func ("/TreeModelFilter/specific/bug-300089",
                    specific_bug_300089);
-  g_test_add_func ("/FilterModel/specific/bug-301558",
+  g_test_add_func ("/TreeModelFilter/specific/bug-301558",
                    specific_bug_301558);
-  g_test_add_func ("/FilterModel/specific/bug-311955",
+  g_test_add_func ("/TreeModelFilter/specific/bug-311955",
                    specific_bug_311955);
-  g_test_add_func ("/FilterModel/specific/bug-346800",
+  g_test_add_func ("/TreeModelFilter/specific/bug-346800",
                    specific_bug_346800);
-  g_test_add_func ("/FilterModel/specific/bug-364946",
+  g_test_add_func ("/TreeModelFilter/specific/bug-364946",
                    specific_bug_364946);
-  g_test_add_func ("/FilterModel/specific/bug-464173",
+  g_test_add_func ("/TreeModelFilter/specific/bug-464173",
                    specific_bug_464173);
-  g_test_add_func ("/FilterModel/specific/bug-540201",
+  g_test_add_func ("/TreeModelFilter/specific/bug-540201",
                    specific_bug_540201);
-  g_test_add_func ("/FilterModel/specific/bug-549287",
+  g_test_add_func ("/TreeModelFilter/specific/bug-549287",
                    specific_bug_549287);
 }
