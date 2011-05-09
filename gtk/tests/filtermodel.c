@@ -1814,6 +1814,99 @@ unfiltered_vroot_show_single_multi_level (FilterTest    *fixture,
 }
 
 
+static void
+specific_remove_node (void)
+{
+  GtkTreeIter iter, iter1, iter2, iter3;
+  GtkListStore *list;
+  GtkTreeModel *filter;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  list = gtk_list_store_new (1, G_TYPE_INT);
+  gtk_list_store_insert_with_values (list, &iter, 0, 0, 1, -1);
+  gtk_list_store_insert_with_values (list, &iter, 1, 0, 2, -1);
+  gtk_list_store_insert_with_values (list, &iter1, 2, 0, 3, -1);
+  gtk_list_store_insert_with_values (list, &iter, 3, 0, 4, -1);
+  gtk_list_store_insert_with_values (list, &iter, 4, 0, 5, -1);
+  gtk_list_store_insert_with_values (list, &iter2, 5, 0, 6, -1);
+  gtk_list_store_insert_with_values (list, &iter3, 6, 0, 7, -1);
+  gtk_list_store_insert_with_values (list, &iter, 7, 0, 8, -1);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (list), NULL);
+  view = gtk_tree_view_new_with_model (filter);
+
+  gtk_list_store_remove (list, &iter1);
+  gtk_list_store_remove (list, &iter2);
+  gtk_list_store_remove (list, &iter3);
+}
+
+static void
+specific_remove_node_vroot (void)
+{
+  GtkTreeIter parent, root;
+  GtkTreeIter iter, iter1, iter2, iter3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &parent, NULL, 0, 0, 0, -1);
+  gtk_tree_store_insert_with_values (tree, &root, &parent, 0, 0, 0, -1);
+
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter1, &root, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 3, 0, 4, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 4, 0, 5, -1);
+  gtk_tree_store_insert_with_values (tree, &iter2, &root, 5, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &iter3, &root, 6, 0, 7, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 7, 0, 8, -1);
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
+  gtk_tree_path_free (path);
+
+  view = gtk_tree_view_new_with_model (filter);
+
+  gtk_tree_store_remove (tree, &iter1);
+  gtk_tree_store_remove (tree, &iter2);
+  gtk_tree_store_remove (tree, &iter3);
+}
+
+static void
+specific_remove_vroot_ancestor (void)
+{
+  GtkTreeIter parent, root;
+  GtkTreeIter iter, iter1, iter2, iter3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &parent, NULL, 0, 0, 0, -1);
+  gtk_tree_store_insert_with_values (tree, &root, &parent, 0, 0, 0, -1);
+
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter1, &root, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 3, 0, 4, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 4, 0, 5, -1);
+  gtk_tree_store_insert_with_values (tree, &iter2, &root, 5, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &iter3, &root, 6, 0, 7, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 7, 0, 8, -1);
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
+  gtk_tree_path_free (path);
+
+  view = gtk_tree_view_new_with_model (filter);
+
+  gtk_tree_store_remove (tree, &parent);
+}
+
+
 static gboolean
 specific_path_dependent_filter_func (GtkTreeModel *model,
                                      GtkTreeIter  *iter,
@@ -2888,6 +2981,12 @@ register_filter_model_tests (void)
               unfiltered_vroot_show_single_multi_level,
               filter_test_teardown);
 
+  g_test_add_func ("/TreeModelFilter/specific/remove-node",
+                   specific_remove_node);
+  g_test_add_func ("/TreeModelFilter/specific/remove-node-vroot",
+                   specific_remove_node_vroot);
+  g_test_add_func ("/TreeModelFilter/specific/remove-vroot-ancestor",
+                   specific_remove_vroot_ancestor);
 
   g_test_add_func ("/TreeModelFilter/specific/path-dependent-filter",
                    specific_path_dependent_filter);
