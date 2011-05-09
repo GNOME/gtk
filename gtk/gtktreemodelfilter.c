@@ -260,7 +260,8 @@ static void        gtk_tree_model_filter_build_level                      (GtkTr
                                                                            gboolean                emit_inserted);
 
 static void        gtk_tree_model_filter_free_level                       (GtkTreeModelFilter     *filter,
-                                                                           FilterLevel            *filter_level);
+                                                                           FilterLevel            *filter_level,
+                                                                           gboolean                unref);
 
 static GtkTreePath *gtk_tree_model_filter_elt_get_path                    (FilterLevel            *level,
                                                                            FilterElt              *elt,
@@ -295,7 +296,8 @@ static void         gtk_tree_model_filter_set_model                       (GtkTr
 static void         gtk_tree_model_filter_ref_path                        (GtkTreeModelFilter     *filter,
                                                                            GtkTreePath            *path);
 static void         gtk_tree_model_filter_unref_path                      (GtkTreeModelFilter     *filter,
-                                                                           GtkTreePath            *path);
+                                                                           GtkTreePath            *path,
+                                                                           int                     depth);
 static void         gtk_tree_model_filter_set_root                        (GtkTreeModelFilter     *filter,
                                                                            GtkTreePath            *root);
 
@@ -421,7 +423,8 @@ gtk_tree_model_filter_finalize (GObject *object)
 
   if (filter->priv->virtual_root && !filter->priv->virtual_root_deleted)
     {
-      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
+      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root,
+                                        -1);
       filter->priv->virtual_root_deleted = TRUE;
     }
 
@@ -431,7 +434,7 @@ gtk_tree_model_filter_finalize (GObject *object)
     gtk_tree_path_free (filter->priv->virtual_root);
 
   if (filter->priv->root)
-    gtk_tree_model_filter_free_level (filter, filter->priv->root);
+    gtk_tree_model_filter_free_level (filter, filter->priv->root, TRUE);
 
   g_free (filter->priv->modify_types);
   
@@ -659,12 +662,13 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
       gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
     }
   else if (new_level->array->len == 0)
-    gtk_tree_model_filter_free_level (filter, new_level);
+    gtk_tree_model_filter_free_level (filter, new_level, TRUE);
 }
 
 static void
 gtk_tree_model_filter_free_level (GtkTreeModelFilter *filter,
-                                  FilterLevel        *filter_level)
+                                  FilterLevel        *filter_level,
+                                  gboolean            unref)
 {
   gint i;
 
@@ -674,9 +678,11 @@ gtk_tree_model_filter_free_level (GtkTreeModelFilter *filter,
     {
       if (g_array_index (filter_level->array, FilterElt, i).children)
         gtk_tree_model_filter_free_level (filter,
-                                          FILTER_LEVEL (g_array_index (filter_level->array, FilterElt, i).children));
+                                          FILTER_LEVEL (g_array_index (filter_level->array, FilterElt, i).children),
+                                          unref);
 
-      if (filter_level->parent_level || filter->priv->virtual_root)
+      if (unref &&
+          (filter_level->parent_level || filter->priv->virtual_root))
         {
           GtkTreeIter f_iter;
 
@@ -865,7 +871,7 @@ gtk_tree_model_filter_clear_cache_helper (GtkTreeModelFilter *filter,
 
   if (level->ref_count == 0 && level != filter->priv->root)
     {
-      gtk_tree_model_filter_free_level (filter, level);
+      gtk_tree_model_filter_free_level (filter, level, TRUE);
       return;
     }
 }
@@ -1095,7 +1101,7 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
        */
 
       if (elt->children)
-        gtk_tree_model_filter_free_level (filter, elt->children);
+        gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
 
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), iter);
       elt->visible = FALSE;
@@ -1144,7 +1150,7 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
 
       if (elt->children)
         {
-          gtk_tree_model_filter_free_level (filter, elt->children);
+          gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
           elt->children = NULL;
         }
 
@@ -1171,7 +1177,7 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
                                                iter, FALSE);
 
-      gtk_tree_model_filter_free_level (filter, level);
+      gtk_tree_model_filter_free_level (filter, level, TRUE);
     }
 
   if (emit_child_toggled)
@@ -1784,23 +1790,30 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
 }
 
 static void
-gtk_tree_model_filter_virtual_root_deleted (GtkTreeModelFilter *filter)
+gtk_tree_model_filter_virtual_root_deleted (GtkTreeModelFilter *filter,
+                                            GtkTreePath        *c_path)
 {
   gint i;
   GtkTreePath *path;
   FilterLevel *level = FILTER_LEVEL (filter->priv->root);
 
-  gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
+  /* The virtual root (or one of its ancestors) has been deleted.  This
+   * means that all content for our model is now gone.  We deal with
+   * this by removing everything in the filter model: we just iterate
+   * over the root level and emit a row-deleted for each FilterElt.
+   * (FIXME: Should we emit row-deleted for child nodes as well? This
+   * has never been fully clear in TreeModel).
+   */
+
+  /* We unref the path of the virtual root, up to and not including the
+   * deleted node which can no longer be unreffed.
+   */
+  gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root,
+                                    gtk_tree_path_get_depth (c_path) - 1);
   filter->priv->virtual_root_deleted = TRUE;
 
   if (!level)
     return;
-
-  /* remove everything in the filter model
-   *
-   * For now, we just iterate over the root level and emit a
-   * row_deleted for each FilterElt. Not sure if this is correct.
-   */
 
   gtk_tree_model_filter_increment_stamp (filter);
   path = gtk_tree_path_new ();
@@ -1810,7 +1823,12 @@ gtk_tree_model_filter_virtual_root_deleted (GtkTreeModelFilter *filter)
     gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
 
   gtk_tree_path_free (path);
-  gtk_tree_model_filter_free_level (filter, filter->priv->root);
+
+  /* We should not propagate the unref here.  An unref for any of these
+   * nodes will fail, since the respective nodes in the child model are
+   * no longer there.
+   */
+  gtk_tree_model_filter_free_level (filter, filter->priv->root, FALSE);
 }
 
 static void
@@ -1860,7 +1878,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       (gtk_tree_path_is_ancestor (c_path, filter->priv->virtual_root) ||
        !gtk_tree_path_compare (c_path, filter->priv->virtual_root)))
     {
-      gtk_tree_model_filter_virtual_root_deleted (filter);
+      gtk_tree_model_filter_virtual_root_deleted (filter, c_path);
       return;
     }
 
@@ -1975,27 +1993,22 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       emit_row_deleted = TRUE;
     }
 
-  /* The filter model's reference on the child node is released
-   * below.
+  /* Release the references on this node, without propagation because
+   * the node does not exist anymore in the child model.  The filter
+   * model's references on the node in case of level->parent or use
+   * of a virtual root are automatically destroyed by the child model.
    */
-  while (elt->ref_count > 1)
+  while (elt->ref_count > 0)
     gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter, FALSE);
 
   if (level->array->len == 1)
     {
       /* kill level */
-      gtk_tree_model_filter_free_level (filter, level);
+      gtk_tree_model_filter_free_level (filter, level, FALSE);
     }
   else
     {
       FilterElt *tmp;
-
-      /* release the filter model's reference on the node */
-      if (level->parent_level || filter->priv->virtual_root)
-        gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), &iter);
-      else if (elt->ref_count > 0)
-        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter,
-                                               FALSE);
 
       /* remove the row */
       tmp = bsearch_elt_with_offset (level->array, elt->offset, &i);
@@ -2979,7 +2992,7 @@ gtk_tree_model_filter_set_model (GtkTreeModelFilter *filter,
 
       /* reset our state */
       if (filter->priv->root)
-        gtk_tree_model_filter_free_level (filter, filter->priv->root);
+        gtk_tree_model_filter_free_level (filter, filter->priv->root, TRUE);
 
       filter->priv->root = NULL;
       g_object_unref (filter->priv->child_model);
@@ -3042,12 +3055,17 @@ gtk_tree_model_filter_ref_path (GtkTreeModelFilter *filter,
 
 static void
 gtk_tree_model_filter_unref_path (GtkTreeModelFilter *filter,
-                                  GtkTreePath        *path)
+                                  GtkTreePath        *path,
+                                  int                 depth)
 {
   int len;
   GtkTreePath *p;
 
-  len = gtk_tree_path_get_depth (path);
+  if (depth != -1)
+    len = depth;
+  else
+    len = gtk_tree_path_get_depth (path);
+
   p = gtk_tree_path_copy (path);
   while (len--)
     {
