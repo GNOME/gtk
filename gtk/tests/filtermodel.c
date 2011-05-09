@@ -2457,6 +2457,154 @@ specific_list_store_clear (void)
   gtk_list_store_clear (list);
 }
 
+static void
+specific_sort_ref_leaf_and_remove_ancestor (void)
+{
+  GtkTreeIter iter, child, child2, child3;
+  GtkTreeStore *tree;
+  GtkTreeModel *sort;
+  GtkTreePath *path;
+  GtkTreeRowReference *rowref;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 3, 0, 4, -1);
+
+  gtk_tree_store_insert_with_values (tree, &child, &iter, 0, 0, 50, -1);
+  gtk_tree_store_insert_with_values (tree, &child2, &child, 0, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &child3, &child2, 0, 0, 7, -1);
+
+  sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (tree));
+  view = gtk_tree_view_new_with_model (sort);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
+
+  /* Deleting a parent */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree), &iter, path);
+  gtk_tree_store_remove (tree, &iter);
+  gtk_tree_path_free (path);
+
+  gtk_tree_row_reference_free (rowref);
+}
+
+static void
+specific_ref_leaf_and_remove_ancestor (void)
+{
+  GtkTreeIter iter, child, child2, child3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkTreeRowReference *rowref;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 3, 0, 4, -1);
+
+  gtk_tree_store_insert_with_values (tree, &child, &iter, 0, 0, 50, -1);
+  gtk_tree_store_insert_with_values (tree, &child2, &child, 0, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &child3, &child2, 0, 0, 7, -1);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), NULL);
+  view = gtk_tree_view_new_with_model (filter);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  /* Deleting a parent */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree), &iter, path);
+  gtk_tree_store_remove (tree, &iter);
+  gtk_tree_path_free (path);
+
+  gtk_tree_row_reference_free (rowref);
+}
+
+static void
+specific_virtual_ref_leaf_and_remove_ancestor (void)
+{
+  GtkTreeIter iter, child, child2, child3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkTreeRowReference *rowref;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 3, 0, 4, -1);
+
+  gtk_tree_store_insert_with_values (tree, &child, &iter, 0, 0, 50, -1);
+  gtk_tree_store_insert_with_values (tree, &child2, &child, 0, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &child3, &child2, 0, 0, 7, -1);
+
+  /* Set a virtual root of 3:0 */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
+  gtk_tree_path_free (path);
+
+  view = gtk_tree_view_new_with_model (filter);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  /* Deleting the virtual root */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree), &iter, path);
+  gtk_tree_store_remove (tree, &iter);
+  gtk_tree_path_free (path);
+
+  gtk_tree_row_reference_free (rowref);
+}
+
+
 static int
 specific_bug_301558_sort_func (GtkTreeModel *model,
                                GtkTreeIter  *a,
@@ -3006,6 +3154,12 @@ register_filter_model_tests (void)
                    specific_filter_add_child);
   g_test_add_func ("/TreeModelFilter/specific/list-store-clear",
                    specific_list_store_clear);
+  g_test_add_func ("/TreeModelFilter/specific/sort-ref-leaf-and-remove-ancestor",
+                   specific_sort_ref_leaf_and_remove_ancestor);
+  g_test_add_func ("/TreeModelFilter/specific/ref-leaf-and-remove-ancestor",
+                   specific_ref_leaf_and_remove_ancestor);
+  g_test_add_func ("/TreeModelFilter/specific/virtual-ref-leaf-and-remove-ancestor",
+                   specific_virtual_ref_leaf_and_remove_ancestor);
 
   g_test_add_func ("/TreeModelFilter/specific/bug-301558",
                    specific_bug_301558);
