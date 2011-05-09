@@ -345,8 +345,8 @@ gtk_arrow_draw (GtkWidget *widget,
         effective_arrow_type = GTK_ARROW_LEFT;
     }
 
-  x = xpad + ((width - 2 * xpad - extent) * xalign);
-  y = ypad + ((height - 2 * ypad - extent) * yalign);
+  x = xpad + ((width - extent) * xalign);
+  y = ypad + ((height - extent) * yalign);
 
   switch (effective_arrow_type)
     {
