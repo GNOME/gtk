@@ -998,6 +998,38 @@ tree_store_test_iter_parent_invalid (TreeStore     *fixture,
   g_assert (iter.stamp == 0);
 }
 
+/* specific bugs */
+static void
+specific_bug_77977 (void)
+{
+  GtkTreeStore *tree_store;
+  GtkTreeIter iter1, iter2, iter3;
+  GtkTreePath *path;
+  GtkTreeRowReference *row_ref;
+
+  /* Stripped down version of test case for bug 77977 by Damon Chaplin */
+
+  g_test_bug ("77977");
+
+  tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
+
+  gtk_tree_store_append (tree_store, &iter1, NULL);
+  gtk_tree_store_set (tree_store, &iter1, 0, "Window1", -1);
+
+  gtk_tree_store_append (tree_store, &iter2, &iter1);
+  gtk_tree_store_set (tree_store, &iter2, 0, "Table1", -1);
+
+  gtk_tree_store_append (tree_store, &iter3, &iter2);
+  gtk_tree_store_set (tree_store, &iter3, 0, "Button1", -1);
+
+  path = gtk_tree_path_new_from_indices (0, 0, 0, -1);
+  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (tree_store), path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_remove (tree_store, &iter1);
+
+  g_object_unref (tree_store);
+}
 
 /* main */
 
@@ -1120,4 +1152,7 @@ register_tree_store_tests (void)
   g_test_add ("/TreeStore/iter-parent-invalid", TreeStore, NULL,
               tree_store_setup, tree_store_test_iter_parent_invalid,
               tree_store_teardown);
+
+  /* specific bugs */
+  g_test_add_func ("/TreeStore/bug-77977", specific_bug_77977);
 }
