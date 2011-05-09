@@ -27,6 +27,8 @@ main (int    argc,
 {
   gtk_test_init (&argc, &argv, NULL);
 
+  g_test_bug_base ("http://bugzilla.gnome.org/");
+
   register_list_store_tests ();
   register_tree_store_tests ();
   register_sort_model_tests ();

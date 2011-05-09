@@ -31,6 +31,8 @@ specific_bug_300089 (void)
   GtkTreePath *path;
   GtkTreeIter iter, iter2, sort_iter;
 
+  g_test_bug ("300089");
+
   child_model = GTK_TREE_MODEL (gtk_tree_store_new (1, G_TYPE_STRING));
 
   gtk_tree_store_append (GTK_TREE_STORE (child_model), &iter, NULL);
@@ -70,6 +72,8 @@ specific_bug_364946 (void)
   GtkTreeStore *store;
   GtkTreeIter a, aa, aaa, aab, iter;
   GtkTreeModel *s_model;
+
+  g_test_bug ("364946");
 
   store = gtk_tree_store_new (1, G_TYPE_STRING);
 
