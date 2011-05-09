@@ -1823,21 +1823,21 @@ specific_remove_node (void)
   GtkWidget *view G_GNUC_UNUSED;
 
   list = gtk_list_store_new (1, G_TYPE_INT);
-  gtk_list_store_insert_with_values (list, &iter, 0, 0, 1, -1);
+  gtk_list_store_insert_with_values (list, &iter1, 0, 0, 1, -1);
   gtk_list_store_insert_with_values (list, &iter, 1, 0, 2, -1);
-  gtk_list_store_insert_with_values (list, &iter1, 2, 0, 3, -1);
+  gtk_list_store_insert_with_values (list, &iter, 2, 0, 3, -1);
   gtk_list_store_insert_with_values (list, &iter, 3, 0, 4, -1);
   gtk_list_store_insert_with_values (list, &iter, 4, 0, 5, -1);
-  gtk_list_store_insert_with_values (list, &iter2, 5, 0, 6, -1);
-  gtk_list_store_insert_with_values (list, &iter3, 6, 0, 7, -1);
-  gtk_list_store_insert_with_values (list, &iter, 7, 0, 8, -1);
+  gtk_list_store_insert_with_values (list, &iter, 5, 0, 6, -1);
+  gtk_list_store_insert_with_values (list, &iter2, 6, 0, 7, -1);
+  gtk_list_store_insert_with_values (list, &iter3, 7, 0, 8, -1);
 
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (list), NULL);
   view = gtk_tree_view_new_with_model (filter);
 
   gtk_list_store_remove (list, &iter1);
-  gtk_list_store_remove (list, &iter2);
   gtk_list_store_remove (list, &iter3);
+  gtk_list_store_remove (list, &iter2);
 }
 
 static void
@@ -1854,14 +1854,14 @@ specific_remove_node_vroot (void)
   gtk_tree_store_insert_with_values (tree, &parent, NULL, 0, 0, 0, -1);
   gtk_tree_store_insert_with_values (tree, &root, &parent, 0, 0, 0, -1);
 
-  gtk_tree_store_insert_with_values (tree, &iter, &root, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter1, &root, 0, 0, 1, -1);
   gtk_tree_store_insert_with_values (tree, &iter, &root, 1, 0, 2, -1);
-  gtk_tree_store_insert_with_values (tree, &iter1, &root, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 2, 0, 3, -1);
   gtk_tree_store_insert_with_values (tree, &iter, &root, 3, 0, 4, -1);
   gtk_tree_store_insert_with_values (tree, &iter, &root, 4, 0, 5, -1);
-  gtk_tree_store_insert_with_values (tree, &iter2, &root, 5, 0, 6, -1);
-  gtk_tree_store_insert_with_values (tree, &iter3, &root, 6, 0, 7, -1);
-  gtk_tree_store_insert_with_values (tree, &iter, &root, 7, 0, 8, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 5, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &iter2, &root, 6, 0, 7, -1);
+  gtk_tree_store_insert_with_values (tree, &iter3, &root, 7, 0, 8, -1);
 
   path = gtk_tree_path_new_from_indices (0, 0, -1);
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
@@ -1870,8 +1870,8 @@ specific_remove_node_vroot (void)
   view = gtk_tree_view_new_with_model (filter);
 
   gtk_tree_store_remove (tree, &iter1);
-  gtk_tree_store_remove (tree, &iter2);
   gtk_tree_store_remove (tree, &iter3);
+  gtk_tree_store_remove (tree, &iter2);
 }
 
 static void
@@ -1888,14 +1888,14 @@ specific_remove_vroot_ancestor (void)
   gtk_tree_store_insert_with_values (tree, &parent, NULL, 0, 0, 0, -1);
   gtk_tree_store_insert_with_values (tree, &root, &parent, 0, 0, 0, -1);
 
-  gtk_tree_store_insert_with_values (tree, &iter, &root, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter1, &root, 0, 0, 1, -1);
   gtk_tree_store_insert_with_values (tree, &iter, &root, 1, 0, 2, -1);
-  gtk_tree_store_insert_with_values (tree, &iter1, &root, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 2, 0, 3, -1);
   gtk_tree_store_insert_with_values (tree, &iter, &root, 3, 0, 4, -1);
   gtk_tree_store_insert_with_values (tree, &iter, &root, 4, 0, 5, -1);
-  gtk_tree_store_insert_with_values (tree, &iter2, &root, 5, 0, 6, -1);
-  gtk_tree_store_insert_with_values (tree, &iter3, &root, 6, 0, 7, -1);
-  gtk_tree_store_insert_with_values (tree, &iter, &root, 7, 0, 8, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 5, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &iter2, &root, 6, 0, 7, -1);
+  gtk_tree_store_insert_with_values (tree, &iter3, &root, 7, 0, 8, -1);
 
   path = gtk_tree_path_new_from_indices (0, 0, -1);
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
