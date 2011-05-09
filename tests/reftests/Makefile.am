@@ -49,6 +49,9 @@ EXTRA_DIST += \
 	misc-alignment.ref.ui \
 	nonresizable-size.ref.ui \
 	nonresizable-size.ui \
+	paned-undersized.css \
+	paned-undersized.ref.ui \
+	paned-undersized.ui \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
 	simple.ref.ui \
