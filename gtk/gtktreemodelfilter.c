@@ -1775,6 +1775,60 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
 }
 
 static void
+gtk_tree_model_filter_virtual_root_deleted (GtkTreeModelFilter *filter)
+{
+  gint i;
+  GtkTreePath *path;
+  FilterLevel *level = FILTER_LEVEL (filter->priv->root);
+
+  gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
+  filter->priv->virtual_root_deleted = TRUE;
+
+  if (!level)
+    return;
+
+  /* remove everything in the filter model
+   *
+   * For now, we just iterate over the root level and emit a
+   * row_deleted for each FilterElt. Not sure if this is correct.
+   */
+
+  gtk_tree_model_filter_increment_stamp (filter);
+  path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (path, 0);
+
+  for (i = 0; i < level->visible_nodes; i++)
+    gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
+
+  gtk_tree_path_free (path);
+  gtk_tree_model_filter_free_level (filter, filter->priv->root);
+}
+
+static void
+gtk_tree_model_filter_adjust_virtual_root (GtkTreeModelFilter *filter,
+                                           GtkTreePath        *c_path)
+{
+  gint i;
+  gint level;
+  gint *v_indices, *c_indices;
+  gboolean common_prefix = TRUE;
+
+  level = gtk_tree_path_get_depth (c_path) - 1;
+  v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root);
+  c_indices = gtk_tree_path_get_indices (c_path);
+
+  for (i = 0; i < level; i++)
+    if (v_indices[i] != c_indices[i])
+      {
+        common_prefix = FALSE;
+        break;
+      }
+
+  if (common_prefix && v_indices[level] > c_indices[level])
+    (v_indices[level])--;
+}
+
+static void
 gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
                                    GtkTreePath  *c_path,
                                    gpointer      data)
@@ -1797,60 +1851,15 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       (gtk_tree_path_is_ancestor (c_path, filter->priv->virtual_root) ||
        !gtk_tree_path_compare (c_path, filter->priv->virtual_root)))
     {
-      gint i;
-      GtkTreePath *path2;
-      FilterLevel *level2 = FILTER_LEVEL (filter->priv->root);
-
-      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
-      filter->priv->virtual_root_deleted = TRUE;
-
-      if (!level2)
-        return;
-
-      /* remove everything in the filter model
-       *
-       * For now, we just iterate over the root level and emit a
-       * row_deleted for each FilterElt. Not sure if this is correct.
-       */
-
-      gtk_tree_model_filter_increment_stamp (filter);
-      path2 = gtk_tree_path_new ();
-      gtk_tree_path_append_index (path2, 0);
-
-      for (i = 0; i < level2->visible_nodes; i++)
-        gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path2);
-
-      gtk_tree_path_free (path2);
-      gtk_tree_model_filter_free_level (filter, filter->priv->root);
-
+      gtk_tree_model_filter_virtual_root_deleted (filter);
       return;
     }
 
-  /* fixup virtual root */
-  if (filter->priv->virtual_root)
-    {
-      if (gtk_tree_path_get_depth (filter->priv->virtual_root) >=
-          gtk_tree_path_get_depth (c_path))
-        {
-          gint level2;
-          gint *v_indices, *c_indices;
-          gboolean common_prefix = TRUE;
-
-          level2 = gtk_tree_path_get_depth (c_path) - 1;
-          v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root);
-          c_indices = gtk_tree_path_get_indices (c_path);
-
-          for (i = 0; i < level2; i++)
-            if (v_indices[i] != c_indices[i])
-              {
-                common_prefix = FALSE;
-                break;
-              }
-
-          if (common_prefix && v_indices[level2] > c_indices[level2])
-            (v_indices[level2])--;
-        }
-    }
+  /* adjust the virtual root for the deleted row */
+  if (filter->priv->virtual_root &&
+      gtk_tree_path_get_depth (filter->priv->virtual_root) >=
+      gtk_tree_path_get_depth (c_path))
+    gtk_tree_model_filter_adjust_virtual_root (filter, c_path);
 
   path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
                                                                 c_path,
