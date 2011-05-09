@@ -1186,7 +1186,8 @@ gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
  * @iter: (out): the uninitialized #GtkTreeIter
  * @path: the #GtkTreePath
  *
- * Sets @iter to a valid iterator pointing to @path.
+ * Sets @iter to a valid iterator pointing to @path.  If @path does
+ * not exist, * @iter is set to an invalid iterator and %FALSE is returned.
  *
  * Return value: %TRUE, if @iter was set
  */

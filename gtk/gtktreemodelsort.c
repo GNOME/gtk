@@ -1092,13 +1092,19 @@ gtk_tree_model_sort_get_iter (GtkTreeModel *tree_model,
 
   depth = gtk_tree_path_get_depth (path);
   if (depth == 0)
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 
   for (i = 0; i < depth - 1; i++)
     {
       if ((level == NULL) ||
 	  (indices[i] >= level->array->len))
-	return FALSE;
+        {
+          iter->stamp = 0;
+          return FALSE;
+        }
 
       if (g_array_index (level->array, SortElt, indices[i]).children == NULL)
 	gtk_tree_model_sort_build_level (tree_model_sort, level, indices[i]);

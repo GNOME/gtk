@@ -2318,6 +2318,7 @@ gtk_tree_model_filter_get_iter_full (GtkTreeModel *model,
     {
       if (!level || indices[i] >= level->array->len)
         {
+          iter->stamp = 0;
           return FALSE;
         }
 
@@ -2375,6 +2376,7 @@ gtk_tree_model_filter_get_iter (GtkTreeModel *model,
     {
       if (!level || indices[i] >= level->visible_nodes)
         {
+          iter->stamp = 0;
           return FALSE;
         }
 
