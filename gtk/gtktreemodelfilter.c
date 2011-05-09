@@ -151,8 +151,17 @@ enum
   PROP_VIRTUAL_ROOT
 };
 
-#define GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS(filter) \
+/* Set this to 0 to disable caching of child iterators.  This
+ * allows for more stringent testing.  It is recommended to set this
+ * to one when refactoring this code and running the unit tests to
+ * catch more errors.
+ */
+#if 1
+#  define GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS(filter) \
         (((GtkTreeModelFilter *)filter)->priv->child_flags & GTK_TREE_MODEL_ITERS_PERSIST)
+#else
+#  define GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS(filter) (FALSE)
+#endif
 
 #define FILTER_ELT(filter_elt) ((FilterElt *)filter_elt)
 #define FILTER_LEVEL(filter_level) ((FilterLevel *)filter_level)
@@ -3330,12 +3339,16 @@ gtk_tree_model_filter_convert_iter_to_child_iter (GtkTreeModelFilter *filter,
   else
     {
       GtkTreePath *path;
+      gboolean valid = FALSE;
 
       path = gtk_tree_model_filter_elt_get_path (filter_iter->user_data,
                                                  filter_iter->user_data2,
                                                  filter->priv->virtual_root);
-      gtk_tree_model_get_iter (filter->priv->child_model, child_iter, path);
+      valid = gtk_tree_model_get_iter (filter->priv->child_model, child_iter,
+                                       path);
       gtk_tree_path_free (path);
+
+      g_return_if_fail (valid == TRUE);
     }
 }
 

@@ -228,9 +228,18 @@ struct _GtkTreeModelSortPrivate
   gulong reordered_id;
 };
 
-
-#define GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS(tree_model_sort) \
+/* Set this to 0 to disable caching of child iterators.  This
+ * allows for more stringent testing.  It is recommended to set this
+ * to one when refactoring this code and running the unit tests to
+ * catch more errors.
+ */
+#if 1
+#  define GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS(tree_model_sort) \
 	(((GtkTreeModelSort *)tree_model_sort)->priv->child_flags&GTK_TREE_MODEL_ITERS_PERSIST)
+#else
+#  define GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS(tree_model_sort) (FALSE)
+#endif
+
 #define SORT_ELT(sort_elt) ((SortElt *)sort_elt)
 #define SORT_LEVEL(sort_level) ((SortLevel *)sort_level)
 
@@ -2422,11 +2431,14 @@ gtk_tree_model_sort_convert_iter_to_child_iter (GtkTreeModelSort *tree_model_sor
   else
     {
       GtkTreePath *path;
+      gboolean valid = FALSE;
 
       path = gtk_tree_model_sort_elt_get_path (sorted_iter->user_data,
 					       sorted_iter->user_data2);
-      gtk_tree_model_get_iter (priv->child_model, child_iter, path);
+      valid = gtk_tree_model_get_iter (priv->child_model, child_iter, path);
       gtk_tree_path_free (path);
+
+      g_return_if_fail (valid == TRUE);
     }
 }
 
