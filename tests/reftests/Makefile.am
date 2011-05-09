@@ -44,6 +44,7 @@ EXTRA_DIST += \
 	label-small-ellipsized.ui \
 	label-wrap-justify.ref.ui \
 	label-wrap-justify.ui \
+	misc-alignment.css \
 	misc-alignment.ui \
 	misc-alignment.ref.ui \
 	nonresizable-size.ref.ui \
