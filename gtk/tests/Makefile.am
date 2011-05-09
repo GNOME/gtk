@@ -27,13 +27,9 @@ TEST_PROGS			+= testing
 testing_SOURCES			 = testing.c
 testing_LDADD			 = $(progs_ldadd)
 
-TEST_PROGS			+= liststore
-liststore_SOURCES		 = liststore.c
-liststore_LDADD			 = $(progs_ldadd)
-
-TEST_PROGS			+= treestore
-treestore_SOURCES		 = treestore.c
-treestore_LDADD			 = $(progs_ldadd)
+TEST_PROGS			+= treemodel
+treemodel_SOURCES		 = treemodel.c liststore.c treestore.c filtermodel.c
+treemodel_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= treeview
 treeview_SOURCES		 = treeview.c
@@ -85,10 +81,6 @@ textbuffer_LDADD		 = $(progs_ldadd)
 TEST_PROGS			+= textiter
 textiter_SOURCES		 = textiter.c
 textiter_LDADD			 = $(progs_ldadd)
-
-TEST_PROGS			+= filtermodel
-filtermodel_SOURCES		 = filtermodel.c
-filtermodel_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= expander
 expander_SOURCES		 = expander.c

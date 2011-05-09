@@ -27,6 +27,8 @@
 
 #include <gtk/gtk.h>
 
+#include "treemodel.h"
+
 static inline gboolean
 iters_equal (GtkTreeIter *a,
 	     GtkTreeIter *b)
@@ -998,12 +1000,9 @@ list_store_test_iter_parent_invalid (ListStore     *fixture,
 
 /* main */
 
-int
-main (int    argc,
-      char **argv)
+void
+register_list_store_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   /* insertion */
   g_test_add_func ("/list-store/insert-high-values",
 	           list_store_test_insert_high_values);
@@ -1120,6 +1119,4 @@ main (int    argc,
   g_test_add ("/list-store/iter-parent-invalid", ListStore, NULL,
               list_store_setup, list_store_test_iter_parent_invalid,
               list_store_teardown);
-
-  return g_test_run ();
 }

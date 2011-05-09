@@ -1001,12 +1001,9 @@ tree_store_test_iter_parent_invalid (TreeStore     *fixture,
 
 /* main */
 
-int
-main (int    argc,
-      char **argv)
+void
+register_tree_store_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   /* insertion */
   g_test_add_func ("/tree-store/insert-high-values",
 	           tree_store_test_insert_high_values);
@@ -1123,6 +1120,4 @@ main (int    argc,
   g_test_add ("/tree-store/iter-parent-invalid", TreeStore, NULL,
               tree_store_setup, tree_store_test_iter_parent_invalid,
               tree_store_teardown);
-
-  return g_test_run ();
 }

@@ -2823,12 +2823,9 @@ specific_bug_549287 (void)
 
 /* main */
 
-int
-main (int    argc,
-      char **argv)
+void
+register_filter_model_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   g_test_add ("/FilterModel/self/verify-test-suite",
               FilterTest, NULL,
               filter_test_setup,
@@ -2995,6 +2992,4 @@ main (int    argc,
                    specific_bug_540201);
   g_test_add_func ("/FilterModel/specific/bug-549287",
                    specific_bug_549287);
-
-  return g_test_run ();
 }
