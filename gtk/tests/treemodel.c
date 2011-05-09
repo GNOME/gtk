@@ -29,6 +29,7 @@ main (int    argc,
 
   register_list_store_tests ();
   register_tree_store_tests ();
+  register_sort_model_tests ();
   register_filter_model_tests ();
 
   return g_test_run ();

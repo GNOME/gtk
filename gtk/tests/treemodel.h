@@ -19,4 +19,5 @@
 
 void register_list_store_tests ();
 void register_tree_store_tests ();
+void register_sort_model_tests ();
 void register_filter_model_tests ();

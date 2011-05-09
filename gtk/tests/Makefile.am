@@ -28,7 +28,7 @@ testing_SOURCES			 = testing.c
 testing_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= treemodel
-treemodel_SOURCES		 = treemodel.c liststore.c treestore.c filtermodel.c
+treemodel_SOURCES		 = treemodel.c liststore.c treestore.c filtermodel.c sortmodel.c
 treemodel_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= treeview
