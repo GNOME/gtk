@@ -901,12 +901,6 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
   elt = SORT_ELT (iter.user_data2);
   offset = elt->offset;
 
-  /* we _need_ to emit ::row_deleted before we start unreffing the node
-   * itself. This is because of the row refs, which start unreffing nodes
-   * when we emit ::row_deleted
-   */
-  gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
-
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
 
   while (elt->ref_count > 0)
@@ -919,7 +913,9 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
        * Careful, root level is not cleaned up in increment stamp.
        */
       gtk_tree_model_sort_increment_stamp (tree_model_sort);
+      gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
       gtk_tree_path_free (path);
+
       if (level == tree_model_sort->priv->root)
 	{
 	  gtk_tree_model_sort_free_level (tree_model_sort, 
@@ -928,8 +924,6 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
 	}
       return;
     }
-
-  gtk_tree_model_sort_increment_stamp (tree_model_sort);
 
   /* Remove the row */
   for (i = 0; i < level->array->len; i++)
@@ -947,6 +941,9 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
       if (elt->children)
 	elt->children->parent_elt_index = i;
     }
+
+  gtk_tree_model_sort_increment_stamp (tree_model_sort);
+  gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
 
   gtk_tree_path_free (path);
 }
