@@ -8076,7 +8076,7 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  * gtk_widget_override_color:
  * @widget: a #GtkWidget
  * @state: the state for which to set the color
- * @color: the color to assign, or %NULL to undo the effect
+ * @color: (allow-none): the color to assign, or %NULL to undo the effect
  *     of previous calls to gtk_widget_override_color()
  *
  * Sets the color to use for a widget.
@@ -8123,7 +8123,7 @@ gtk_widget_override_color (GtkWidget     *widget,
  * gtk_widget_override_background_color:
  * @widget: a #GtkWidget
  * @state: the state for which to set the background color
- * @color: the color to assign, or %NULL to undo the effect
+ * @color: (allow-none): the color to assign, or %NULL to undo the effect
  *     of previous calls to gtk_widget_override_background_color()
  *
  * Sets the background color to use for a widget.
@@ -8149,7 +8149,7 @@ gtk_widget_override_background_color (GtkWidget     *widget,
 /**
  * gtk_widget_override_font:
  * @widget: a #GtkWidget
- * @font_desc: the font descriptiong to use, or %NULL to undo
+ * @font_desc: (allow-none): the font descriptiong to use, or %NULL to undo
  *     the effect of previous calls to gtk_widget_override_font()
  *
  * Sets the font to use for a widget. All other style values are
@@ -8201,10 +8201,10 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
 /**
  * gtk_widget_override_cursor:
  * @widget: a #GtkWidget
- * @cursor: the color to use for primary cursor (does not need to be
+ * @cursor: (allow-none): the color to use for primary cursor (does not need to be
  *     allocated), or %NULL to undo the effect of previous calls to
  *     of gtk_widget_override_cursor().
- * @secondary_cursor: the color to use for secondary cursor (does not
+ * @secondary_cursor: (allow-none): the color to use for secondary cursor (does not
  *     need to be allocated), or %NULL to undo the effect of previous
  *     calls to of gtk_widget_override_cursor().
  *
