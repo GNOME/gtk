@@ -883,7 +883,7 @@ gtk_assistant_init (GtkAssistant *assistant)
   gtk_container_add (GTK_CONTAINER (side_box), priv->sidebar);
   gtk_box_pack_start (GTK_BOX (main_box), side_box, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (main_box), content_box, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (content_box), priv->content, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_box), priv->content, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (content_box), priv->action_area, FALSE, TRUE, 0);
   gtk_widget_set_halign (priv->action_area, GTK_ALIGN_END);
 
