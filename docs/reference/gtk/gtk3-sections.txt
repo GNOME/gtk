@@ -4566,6 +4566,7 @@ gtk_cell_renderer_set_alignment
 gtk_cell_renderer_get_padding
 gtk_cell_renderer_set_padding
 gtk_cell_renderer_get_state
+gtk_cell_renderer_apply_style
 gtk_cell_renderer_is_activatable
 
 <SUBSECTION Width-for-height>

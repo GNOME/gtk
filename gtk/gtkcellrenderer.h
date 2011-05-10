@@ -151,11 +151,12 @@ struct _GtkCellRendererClass
 			     const gchar     *path);
 
   GtkStateFlags (* get_current_state)                    (GtkCellRenderer      *cell);
+  void          (* apply_style)                          (GtkCellRenderer      *cell,
+                                                          GtkStyleContext      *style_context);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
 };
 
 GType              gtk_cell_renderer_get_type       (void) G_GNUC_CONST;
@@ -266,6 +267,8 @@ void            _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
 GtkStateFlags   gtk_cell_renderer_get_state       (GtkCellRenderer      *cell,
                                                    GtkWidget            *widget,
                                                    GtkCellRendererState  cell_state);
+void            gtk_cell_renderer_apply_style     (GtkCellRenderer      *cell,
+                                                   GtkStyleContext      *style_context);
 
 G_END_DECLS
 

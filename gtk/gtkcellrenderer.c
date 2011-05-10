@@ -1734,3 +1734,25 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
 
   return state;
 }
+
+/**
+ * gtk_cell_renderer_apply_style:
+ * @cell: a #GtkCellRenderer
+ * @style_context: a #GtkStyleContext
+ *
+ * Applies into @style_context the style properties affecting
+ * @cell. This should be called between a
+ * gtk_style_context_save()/gtk_style_context_restore() pair.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_cell_renderer_apply_style (GtkCellRenderer *cell,
+                               GtkStyleContext *style_context)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (style_context));
+
+  if (GTK_CELL_RENDERER_GET_CLASS (cell)->apply_style)
+    GTK_CELL_RENDERER_GET_CLASS (cell)->apply_style (cell, style_context);
+}
