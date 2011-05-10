@@ -998,7 +998,7 @@ msgstr "_Hoogte:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1081
 msgid "Paper Size"
-msgstr "papiergrootte"
+msgstr "Papiergrootte"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1090
 msgid "_Top:"
@@ -1914,7 +1914,7 @@ msgstr "Kopieë"
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:2253
 msgid "Copie_s:"
-msgstr "Kopi_eë"
+msgstr "Kopi_eë:"
 
 #: ../gtk/gtkprintunixdialog.c:2271
 msgid "C_ollate"
