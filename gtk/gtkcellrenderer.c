@@ -104,6 +104,7 @@ static void gtk_cell_renderer_real_get_aligned_area              (GtkCellRendere
 								  GtkCellRendererState     flags,
 								  const GdkRectangle      *cell_area,
 								  GdkRectangle            *aligned_area);
+static GtkStateFlags gtk_cell_renderer_real_get_current_state    (GtkCellRenderer         *cell);
 
 
 struct _GtkCellRendererPrivate
@@ -200,6 +201,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   class->get_preferred_width_for_height = gtk_cell_renderer_real_get_preferred_width_for_height;
   class->get_preferred_height_for_width = gtk_cell_renderer_real_get_preferred_height_for_width;
   class->get_aligned_area               = gtk_cell_renderer_real_get_aligned_area;
+  class->get_current_state              = gtk_cell_renderer_real_get_current_state;
 
   /**
    * GtkCellRenderer::editing-canceled:
@@ -1324,6 +1326,11 @@ gtk_cell_renderer_real_get_aligned_area (GtkCellRenderer         *cell,
   aligned_area->y += y_offset;
 }
 
+static GtkStateFlags
+gtk_cell_renderer_real_get_current_state (GtkCellRenderer *cell)
+{
+  return GTK_STATE_FLAG_NORMAL;
+}
 
 /* An internal convenience function for some containers to peek at the
  * cell alignment in a target allocation (used to draw focus and align
@@ -1700,13 +1707,19 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   g_return_val_if_fail (!cell || GTK_IS_CELL_RENDERER (cell), 0);
   g_return_val_if_fail (!widget || GTK_IS_WIDGET (widget), 0);
 
-  if ((widget && !gtk_widget_is_sensitive (widget)) ||
-      (cell && !gtk_cell_renderer_get_sensitive (cell)) ||
-      (cell_state & GTK_CELL_RENDERER_INSENSITIVE) != 0)
+  if (cell)
     {
-      state |= GTK_STATE_FLAG_INSENSITIVE;
+      state = GTK_CELL_RENDERER_GET_CLASS (cell)->get_current_state (cell);
+
+      if (!gtk_cell_renderer_get_sensitive (cell))
+        state |= GTK_STATE_FLAG_INSENSITIVE;
     }
-  else
+
+  if ((widget && !gtk_widget_is_sensitive (widget)) ||
+      (cell_state & GTK_CELL_RENDERER_INSENSITIVE) != 0)
+    state |= GTK_STATE_FLAG_INSENSITIVE;
+
+  if ((state & GTK_STATE_FLAG_INSENSITIVE) == 0)
     {
       if ((widget && gtk_widget_has_focus (widget)) &&
           (cell_state & GTK_CELL_RENDERER_FOCUSED) != 0)
