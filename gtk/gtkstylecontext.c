@@ -3155,6 +3155,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
 					     GtkWidget       *widget)
 {
   GtkStyleContextPrivate *priv;
+  gboolean validate = TRUE;
   GSList *l;
 
   priv = context->priv;
@@ -3178,7 +3179,10 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
         continue;
 
       if (info->rectangles->len == 0)
-        continue;
+        {
+          validate = FALSE;
+          continue;
+        }
 
       info->invalidation_region = cairo_region_create ();
 
@@ -3193,7 +3197,8 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
       g_array_remove_range (info->rectangles, 0, info->rectangles->len);
     }
 
-  priv->animations_invalidated = FALSE;
+  if (validate)
+    priv->animations_invalidated = FALSE;
 }
 
 static void
