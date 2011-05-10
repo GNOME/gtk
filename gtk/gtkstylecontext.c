@@ -3167,7 +3167,6 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
   while (l)
     {
       AnimationInfo *info;
-      gint rel_x, rel_y;
       GSList *cur;
       guint i;
 
@@ -3182,20 +3181,12 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
         continue;
 
       info->invalidation_region = cairo_region_create ();
-      _gtk_widget_get_translation_to_window (widget, info->window, &rel_x, &rel_y);
 
       for (i = 0; i < info->rectangles->len; i++)
         {
           cairo_rectangle_int_t *rect;
 
           rect = &g_array_index (info->rectangles, cairo_rectangle_int_t, i);
-
-	  /* These are widget relative coordinates,
-	   * so have them inverted to be window relative
-	   */
-          rect->x -= rel_x;
-          rect->y -= rel_y;
-
           cairo_region_union_rectangle (info->invalidation_region, rect);
         }
 
@@ -3207,6 +3198,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
 
 static void
 store_animation_region (GtkStyleContext *context,
+                        cairo_t         *cr,
                         gdouble          x,
                         gdouble          y,
                         gdouble          width,
@@ -3235,6 +3227,12 @@ store_animation_region (GtkStyleContext *context,
       if (context_has_animatable_region (context, info->region_id))
         {
           cairo_rectangle_int_t rect;
+
+          /* store device coordinates so the coordinates
+           * can be used right away in window invalidation
+           */
+          cairo_user_to_device (cr, &x, &y);
+          cairo_user_to_device_distance (cr, &width, &height);
 
           rect.x = (gint) x;
           rect.y = (gint) y;
@@ -3711,7 +3709,7 @@ gtk_render_check (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_check (priv->theming_engine, cr,
@@ -3762,7 +3760,7 @@ gtk_render_option (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_option (priv->theming_engine, cr,
@@ -3811,7 +3809,7 @@ gtk_render_arrow (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, size, size);
+  store_animation_region (context, cr, x, y, size, size);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_arrow (priv->theming_engine, cr,
@@ -3863,7 +3861,7 @@ gtk_render_background (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_background (priv->theming_engine, cr, x, y, width, height);
@@ -3916,7 +3914,7 @@ gtk_render_frame (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_frame (priv->theming_engine, cr, x, y, width, height);
@@ -3966,7 +3964,7 @@ gtk_render_expander (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_expander (priv->theming_engine, cr, x, y, width, height);
@@ -4013,7 +4011,7 @@ gtk_render_focus (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_focus (priv->theming_engine, cr, x, y, width, height);
@@ -4055,7 +4053,7 @@ gtk_render_layout (GtkStyleContext *context,
 
   pango_layout_get_extents (layout, &extents, NULL);
 
-  store_animation_region (context,
+  store_animation_region (context, cr,
                           x + extents.x,
                           y + extents.y,
                           extents.width,
@@ -4149,7 +4147,7 @@ gtk_render_slider (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_slider (priv->theming_engine, cr, x, y, width, height, orientation);
@@ -4214,7 +4212,7 @@ gtk_render_frame_gap (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_frame_gap (priv->theming_engine, cr,
@@ -4268,7 +4266,7 @@ gtk_render_extension (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_extension (priv->theming_engine, cr, x, y, width, height, gap_side);
@@ -4318,7 +4316,7 @@ gtk_render_handle (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_handle (priv->theming_engine, cr, x, y, width, height);
@@ -4363,7 +4361,7 @@ gtk_render_activity (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  store_animation_region (context, x, y, width, height);
+  store_animation_region (context, cr, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_activity (priv->theming_engine, cr, x, y, width, height);
