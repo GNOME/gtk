@@ -2962,11 +2962,14 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   cell_area.width  = item->cell_area.width;
   cell_area.height = item->cell_area.height;
 
+  gtk_cell_area_set_animation_id (priv->cell_area, item);
+
   context = g_ptr_array_index (priv->row_contexts, item->row);
   gtk_cell_area_render (priv->cell_area, context,
                         widget, cr, &cell_area, &cell_area, flags,
                         draw_focus);
 
+  gtk_cell_area_set_animation_id (priv->cell_area, NULL);
   gtk_style_context_restore (style_context);
 }
 
@@ -3355,7 +3358,11 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
   item = list->data;
 
   if (icon_view->priv->cell_area)
-    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+    {
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+      gtk_cell_area_forget_animation_id (icon_view->priv->cell_area,
+                                         GTK_WIDGET (data), item);
+    }
 
   if (item == icon_view->priv->anchor_item)
     icon_view->priv->anchor_item = NULL;
