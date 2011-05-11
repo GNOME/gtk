@@ -300,9 +300,11 @@ deleted_text_cb (GtkEntryBuffer *buffer,
   
   if (gtk_entry_buffer_get_length (buffer) == 0)
     {
-      gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+      GIcon *icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
+      gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
                                      GTK_ENTRY_ICON_SECONDARY,
-                                     GTK_STOCK_FIND);
+                                     icon);
+      g_object_unref (icon);
     }
 
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
@@ -319,11 +321,16 @@ inserted_text_cb (GtkEntryBuffer *buffer,
   GtkWidget             *entry = priv->search_entry;
 
   if (g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
+                 "edit-clear-symbolic") ||
+      g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
                  GTK_STOCK_CLEAR))
-    gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-                                   GTK_ENTRY_ICON_SECONDARY,
-                                   GTK_STOCK_CLEAR);
-
+    {
+      GIcon *icon = g_themed_icon_new_with_default_fallbacks ("edit-clear-symbolic");
+      gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     icon);
+      g_object_unref (icon);
+    }
 
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
@@ -512,6 +519,7 @@ zoom_preview_cb (GtkWidget *scrolled_window, GdkEventScroll *event, gpointer dat
 static void
 gtk_font_chooser_init (GtkFontChooser *fontchooser)
 {
+  GIcon                   *icon;
   GtkFontChooserPrivate   *priv;
   PangoFontDescription    *font_desc;
   GtkWidget               *scrolled_win;
@@ -614,9 +622,12 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
                       pango_language_get_sample_string (NULL));
   
   /* Set search icon and place holder text */
-  gtk_entry_set_icon_from_stock (GTK_ENTRY (priv->search_entry),
+  icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
+  gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->search_entry),
                                  GTK_ENTRY_ICON_SECONDARY,
-                                 GTK_STOCK_FIND);
+                                 icon);
+  g_object_unref (icon);
+
   gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), _("Search font name"));
   
   /** Callback connections **/
