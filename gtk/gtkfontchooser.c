@@ -785,40 +785,49 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
 gboolean
 visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 {
-  gboolean               result = FALSE;
+  gboolean result = TRUE;
   GtkFontChooserPrivate *priv = (GtkFontChooserPrivate*) data;
 
   const gchar *search_text = (const gchar*)gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
   gchar       *font_name;
-  gchar       *font_name_casefold;
-  gchar       *search_text_casefold;
+  gchar       *term;
+  gchar      **split_terms;
+  gint         n_terms = 0;
+
+  /* If there's no filter string we show the item */
+  if (strlen (search_text) == 0)
+    return TRUE;
 
   gtk_tree_model_get (model, iter,
                       PREVIEW_TITLE_COLUMN, &font_name,
                       -1);
 
-  /* Covering some corner cases to speed up the result */
-  if (font_name == NULL ||
-      strlen (search_text) > strlen (font_name))
-    {
-      g_free (font_name);
-      return FALSE;
-    }  
-  if (strlen (search_text) == 0)
-    {
-      g_free (font_name);
-      return TRUE;
-    }
-  
-  font_name_casefold = g_utf8_casefold (font_name, -1);
-  search_text_casefold = g_utf8_casefold (search_text, -1);
-  
-  if (g_strrstr (font_name_casefold, search_text_casefold))
-    result = TRUE;
+  if (font_name == NULL)
+       return FALSE;
 
-  g_free (search_text_casefold);
-  g_free (font_name_casefold);
+  split_terms = g_strsplit (search_text, " ", 0);
+  term = split_terms[0];
+
+  while (term && result)
+  {
+    gchar* font_name_casefold = g_utf8_casefold (font_name, -1);
+    gchar* term_casefold = g_utf8_casefold (term, -1);
+
+    if (g_strrstr (font_name_casefold, term_casefold))
+      result = result && TRUE;
+    else
+      result = FALSE;
+
+    n_terms++;
+    term = split_terms[n_terms];
+
+    g_free (term_casefold);
+    g_free (font_name_casefold);
+  }
+
   g_free (font_name);
+  g_strfreev (split_terms);
+
   return result;
 }
 
@@ -830,13 +839,13 @@ gtk_font_chooser_bootstrap_fontlist (GtkFontChooser* fontchooser)
   GtkTreeViewColumn *col;
 
   fontchooser->priv->model = gtk_list_store_new (4,
-                                             PANGO_TYPE_FONT_FAMILY,
-                                             PANGO_TYPE_FONT_FACE,
-                                             G_TYPE_STRING,
-                                             G_TYPE_STRING);
+                                                 PANGO_TYPE_FONT_FAMILY,
+                                                 PANGO_TYPE_FONT_FACE,
+                                                 G_TYPE_STRING,
+                                                 G_TYPE_STRING);
 
   fontchooser->priv->filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fontchooser->priv->model),
-                                                     NULL);
+                                                         NULL);
   g_object_unref (fontchooser->priv->model);
 
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (fontchooser->priv->filter),
