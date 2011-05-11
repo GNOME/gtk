@@ -285,7 +285,7 @@ refilter_and_focus (GtkFontChooserPrivate *priv)
       return;
     }
 
-  gtk_tree_view_scroll_to_cell (treeview, path, NULL, TRUE, 0.5, 0.5);
+  gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0.5, 0.5);
   gtk_tree_path_free (path);
 }
 
@@ -457,7 +457,7 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
                       FAMILY_COLUMN, &family,
                       -1);
 
-  gtk_tree_view_scroll_to_cell (treeview, path, NULL, TRUE, 0.5, 0.5);
+  gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0.5, 0.5);
 
   gtk_tree_path_free (path);
   path = NULL;
@@ -772,7 +772,7 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
   if (path)
     {
       gtk_tree_view_set_cursor (treeview, path, NULL, FALSE);
-      gtk_tree_view_scroll_to_cell (treeview, path, NULL, TRUE, 0.5, 0.5);
+      gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0.5, 0.5);
       gtk_tree_path_free(path);
     }
 
@@ -1121,7 +1121,7 @@ gtk_font_chooser_set_font_name (GtkFontChooser *fontchooser,
               gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->family_face_list),
                                             path,
                                             NULL,
-                                            TRUE,
+                                            FALSE,
                                             0.5,
                                             0.5);
               gtk_tree_path_free (path);
