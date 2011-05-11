@@ -182,7 +182,13 @@ signal_monitor_generic_handler (SignalMonitor *m,
 
   if (g_queue_is_empty (m->queue))
     {
-      g_error ("Signal queue empty\n");
+      gchar *path_str;
+
+      path_str = gtk_tree_path_to_string (path);
+      g_error ("Signal queue empty, got signal %s path %s\n",
+               signal_name_to_string (signal), path_str);
+      g_free (path_str);
+
       g_assert_not_reached ();
     }
 
@@ -197,7 +203,8 @@ signal_monitor_generic_handler (SignalMonitor *m,
 
 #if 0
   /* For debugging: output signals that are coming in.  Leaks memory. */
-  g_print ("signal=%d  path=%s\n", signal, gtk_tree_path_to_string (path));
+  g_print ("signal=%s path=%s\n", signal_name_to_string (signal),
+           gtk_tree_path_to_string (path));
 #endif
 
   if (s->signal != signal
