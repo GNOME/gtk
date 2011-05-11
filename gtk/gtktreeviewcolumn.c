@@ -2891,11 +2891,12 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
  **/
 void
 _gtk_tree_view_column_cell_render (GtkTreeViewColumn  *tree_column,
-				   cairo_t            *cr,
-				   const GdkRectangle *background_area,
-				   const GdkRectangle *cell_area,
-				   guint               flags,
-                                   gboolean            draw_focus)
+                                   cairo_t            *cr,
+                                   const GdkRectangle *background_area,
+                                   const GdkRectangle *cell_area,
+                                   guint               flags,
+                                   gboolean            draw_focus,
+                                   gpointer            anim_id)
 {
   GtkTreeViewColumnPrivate *priv;
 
@@ -2907,13 +2908,30 @@ _gtk_tree_view_column_cell_render (GtkTreeViewColumn  *tree_column,
   priv = tree_column->priv;
 
   cairo_save (cr);
+  gtk_cell_area_set_animation_id (priv->cell_area, anim_id);
 
   gtk_cell_area_render (priv->cell_area, priv->cell_area_context,
                         priv->tree_view, cr,
                         background_area, cell_area, flags,
                         draw_focus);
 
+  gtk_cell_area_set_animation_id (priv->cell_area, NULL);
   cairo_restore (cr);
+}
+
+void
+_gtk_tree_view_column_cancel_animations (GtkTreeViewColumn *tree_column,
+                                         gpointer           anim_id)
+{
+  GtkTreeViewColumnPrivate *priv;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  priv = tree_column->priv;
+
+  gtk_cell_area_forget_animation_id (priv->cell_area,
+                                     priv->tree_view,
+                                     anim_id);
 }
 
 gboolean

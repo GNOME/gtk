@@ -133,11 +133,15 @@ gboolean          _gtk_tree_view_column_is_blank_at_pos  (GtkTreeViewColumn  *co
                                                           gint                y);
 
 void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
-							  cairo_t            *cr,
-							  const GdkRectangle *background_area,
-							  const GdkRectangle *cell_area,
-							  guint               flags,
-                                                          gboolean            draw_focus);
+                                                          cairo_t            *cr,
+                                                          const GdkRectangle *background_area,
+                                                          const GdkRectangle *cell_area,
+                                                          guint               flags,
+                                                          gboolean            draw_focus,
+                                                          gpointer            anim_id);
+void              _gtk_tree_view_column_cancel_animations (GtkTreeViewColumn *tree_column,
+                                                           gpointer           anim_id);
+
 void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
 							  gboolean            install_handler);
 gboolean          _gtk_tree_view_column_cell_get_dirty   (GtkTreeViewColumn  *tree_column);
