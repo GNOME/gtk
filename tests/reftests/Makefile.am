@@ -61,4 +61,7 @@ EXTRA_DIST += \
 	grid-spacing1.ref.ui \
 	grid-spacing1.ui \
 	grid-spacing2.ref.ui \
-	grid-spacing2.ui
+	grid-spacing2.ui \
+	grid-spacing3.ref.ui \
+	grid-spacing3.ui \
+	grid-spacing3.css
