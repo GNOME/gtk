@@ -4475,6 +4475,8 @@ gtk_cell_area_activate_cell
 gtk_cell_area_stop_editing
 gtk_cell_area_inner_cell_area
 gtk_cell_area_request_renderer
+gtk_cell_area_set_animation_id
+gtk_cell_area_forget_animation_id
 <SUBSECTION Standard>
 GTK_CELL_AREA
 GTK_IS_CELL_AREA

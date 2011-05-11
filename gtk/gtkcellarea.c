@@ -365,6 +365,7 @@
 #include "gtkcellarea.h"
 #include "gtkcellareacontext.h"
 #include "gtkmarshalers.h"
+#include "gtkanimationdescription.h"
 #include "gtkprivate.h"
 
 #include <gobject/gvaluecollector.h>
@@ -531,6 +532,17 @@ typedef struct {
   GtkCellLayout         *proxy;
 } CellInfo;
 
+typedef struct {
+  GtkCellRenderer *renderer;
+  gpointer anim_id;
+  guint rendered : 1;
+} AnimationKey;
+
+typedef struct {
+  GtkStyleContext *context;
+  gpointer anim_id;
+} ForgetAnimationData;
+
 static CellInfo       *cell_info_new       (GtkCellLayoutDataFunc  func,
                                             gpointer               data,
                                             GDestroyNotify         destroy);
@@ -541,6 +553,11 @@ static CellAttribute  *cell_attribute_new  (GtkCellRenderer       *renderer,
 static void            cell_attribute_free (CellAttribute         *attribute);
 static gint            cell_attribute_find (CellAttribute         *cell_attribute,
                                             const gchar           *attribute);
+
+static void            animation_key_free  (AnimationKey *key);
+static guint           animation_key_hash  (gconstpointer p);
+static gboolean        animation_key_equal (gconstpointer p1,
+                                            gconstpointer p2);
 
 /* Internal functions/signal emissions */
 static void            gtk_cell_area_add_editable     (GtkCellArea        *area,
@@ -591,6 +608,10 @@ struct _GtkCellAreaPrivate
 
   /* Tracking which cells are focus siblings of focusable cells */
   GHashTable      *focus_siblings;
+
+  /* GtkStateFlags tracking for transitions */
+  gpointer         parent_anim_id;
+  GHashTable      *cell_states;
 };
 
 enum {
@@ -643,6 +664,10 @@ gtk_cell_area_init (GtkCellArea *area)
                                                 NULL,
                                                 (GDestroyNotify)g_list_free);
 
+  priv->cell_states = g_hash_table_new_full (animation_key_hash,
+                                             animation_key_equal,
+                                             (GDestroyNotify) animation_key_free,
+                                             NULL);
   priv->focus_cell         = NULL;
   priv->edited_cell        = NULL;
   priv->edit_widget        = NULL;
@@ -933,6 +958,7 @@ gtk_cell_area_finalize (GObject *object)
    */
   g_hash_table_destroy (priv->cell_info);
   g_hash_table_destroy (priv->focus_siblings);
+  g_hash_table_destroy (priv->cell_states);
 
   g_free (priv->current_path);
 
@@ -1124,6 +1150,192 @@ gtk_cell_area_real_event (GtkCellArea          *area,
   return retval;
 }
 
+static AnimationKey *
+animation_key_new (GtkCellRenderer *renderer,
+                   gpointer         anim_id)
+{
+  AnimationKey *key;
+
+  key = g_slice_new (AnimationKey);
+  key->renderer = renderer;
+  key->anim_id = anim_id;
+  key->rendered = FALSE;
+
+  return key;
+}
+
+static void
+animation_key_free (AnimationKey *key)
+{
+  g_slice_free (AnimationKey, key);
+}
+
+static guint
+animation_key_hash (gconstpointer p)
+{
+  const AnimationKey *key = p;
+  guint h;
+
+  h = GPOINTER_TO_UINT (key->anim_id) < 16;
+  h |= GPOINTER_TO_UINT (key->renderer) & 0xFFFF;
+
+  return h;
+}
+
+static gboolean
+animation_key_equal (gconstpointer p1,
+                     gconstpointer p2)
+{
+  const AnimationKey *key1, *key2;
+
+  key1 = p1;
+  key2 = p2;
+
+  return (key1->renderer == key2->renderer &&
+          key1->anim_id == key2->anim_id);
+}
+
+static void
+_gtk_cell_area_set_state (GtkCellArea     *area,
+                          GtkCellRenderer *renderer,
+                          gpointer         anim_id,
+                          GtkStateFlags    flags)
+{
+  GtkCellAreaPrivate *priv;
+  AnimationKey *key;
+
+  priv = area->priv;
+  key = animation_key_new (renderer, anim_id);
+
+  g_hash_table_insert (priv->cell_states, key, GUINT_TO_POINTER (flags));
+}
+
+static AnimationKey *
+_gtk_cell_area_lookup_state (GtkCellArea     *area,
+                             GtkCellRenderer *renderer,
+                             gpointer         anim_id,
+                             GtkStateFlags   *flags)
+{
+  GtkCellAreaPrivate *priv;
+  gpointer orig_key, value;
+  AnimationKey key;
+
+  priv = area->priv;
+
+  key.renderer = renderer;
+  key.anim_id = anim_id;
+
+  if (!g_hash_table_lookup_extended (priv->cell_states, &key, &orig_key, &value))
+    return NULL;
+
+  if (flags)
+    *flags = GPOINTER_TO_UINT (value);
+
+  return orig_key;
+}
+
+static AnimationKey *
+apply_renderer_transition (GtkCellArea          *area,
+                           GdkWindow            *window,
+                           GtkWidget            *widget,
+                           GtkCellRendererState  cell_state,
+                           GtkCellRenderer      *renderer)
+{
+  GtkCellAreaPrivate *priv;
+  GtkStateFlags state, old_state, flag;
+  GtkStyleContext *style_context;
+  AnimationKey *anim_key;
+  gboolean is_cached;
+
+  priv = area->priv;
+
+  if (!priv->parent_anim_id)
+    return NULL;
+
+  state = gtk_cell_renderer_get_state (renderer, widget, cell_state);
+  anim_key = _gtk_cell_area_lookup_state (area, renderer, priv->parent_anim_id, &old_state);
+  is_cached = (anim_key != NULL);
+
+  if (is_cached && state == old_state)
+    return anim_key;
+  else
+    {
+      _gtk_cell_area_set_state (area, renderer, priv->parent_anim_id, state);
+
+      /* Fetch the just created anim ID if needed */
+      if (!anim_key)
+        anim_key = _gtk_cell_area_lookup_state (area, renderer, priv->parent_anim_id, NULL);
+    }
+
+  style_context = gtk_widget_get_style_context (widget);
+  flag = GTK_STATE_FLAG_FOCUSED;
+
+  while (flag)
+    {
+      GtkAnimationDescription *animation_desc;
+
+      if (is_cached && ((state & flag) == (old_state & flag)))
+        {
+          /* Flag didn't change since it was last cached */
+          flag >>= 1;
+          continue;
+        }
+
+      gtk_style_context_get (style_context, flag,
+                             "transition", &animation_desc,
+                             NULL);
+
+      if (animation_desc)
+        {
+          /* Only notify state transition on changes over previously cached
+           * states (Which means a viewable renderer has changed) and those
+           * with a looping animation.
+           */
+          if (is_cached ||
+              ((state & flag) != 0 &&
+	       _gtk_animation_description_get_loop (animation_desc)))
+            {
+              GtkStateType anim_state;
+
+              switch (flag)
+                {
+                case GTK_STATE_FLAG_ACTIVE:
+                  anim_state = GTK_STATE_ACTIVE;
+                  break;
+                case GTK_STATE_FLAG_PRELIGHT:
+                  anim_state = GTK_STATE_PRELIGHT;
+                  break;
+                case GTK_STATE_FLAG_SELECTED:
+                  anim_state = GTK_STATE_SELECTED;
+                  break;
+                case GTK_STATE_FLAG_INSENSITIVE:
+                  anim_state = GTK_STATE_INSENSITIVE;
+                  break;
+                case GTK_STATE_FLAG_INCONSISTENT:
+                  anim_state = GTK_STATE_INCONSISTENT;
+                  break;
+                case GTK_STATE_FLAG_FOCUSED:
+                  anim_state = GTK_STATE_FOCUSED;
+                  break;
+                default:
+                  g_assert_not_reached ();
+                  break;
+                }
+
+              gtk_style_context_notify_state_change (style_context, window,
+                                                     anim_key, anim_state,
+                                                     (state & flag) != 0);
+            }
+
+          _gtk_animation_description_unref (animation_desc);
+        }
+
+      flag >>= 1;
+    }
+
+  return anim_key;
+}
+
 static gboolean
 render_cell (GtkCellRenderer        *renderer,
              const GdkRectangle     *cell_area,
@@ -1133,9 +1345,32 @@ render_cell (GtkCellRenderer        *renderer,
   GtkCellRenderer      *focus_cell;
   GtkCellRendererState  flags;
   GdkRectangle          inner_area;
+  GtkStyleContext      *style_context;
+  GdkEventExpose       *expose;
+  AnimationKey         *anim_key = NULL;
 
   focus_cell = gtk_cell_area_get_focus_cell (data->area);
   flags      = data->render_flags;
+
+  expose = _gtk_cairo_get_event (data->cr);
+  style_context = gtk_widget_get_style_context (data->widget);
+
+  gtk_style_context_save (style_context);
+  gtk_cell_renderer_apply_style (renderer, style_context);
+
+  if (expose)
+    anim_key = apply_renderer_transition (data->area, expose->window, data->widget,
+                                          flags, renderer);
+
+  if (anim_key)
+    {
+      /* Mark this animation as rendered, this is so we can keep
+       * track after rendering of stale states, due to removed or
+       * hidden cell renderers.
+       */
+      anim_key->rendered = TRUE;
+      gtk_style_context_push_animatable_region (style_context, anim_key);
+    }
 
   gtk_cell_area_inner_cell_area (data->area, data->widget, cell_area, &inner_area);
 
@@ -1174,7 +1409,44 @@ render_cell (GtkCellRenderer        *renderer,
   gtk_cell_renderer_render (renderer, data->cr, data->widget,
                             cell_background, &inner_area, flags);
 
+  if (anim_key)
+    gtk_style_context_pop_animatable_region (style_context);
+
+  gtk_style_context_restore (style_context);
+
   return FALSE;
+}
+
+static gboolean
+maybe_dispose_animation_foreach (gpointer key,
+                                 gpointer value,
+                                 gpointer user_data)
+{
+  AnimationKey *anim_key = key;
+  CellRenderData *render_data = user_data;
+  GtkCellAreaPrivate *priv = render_data->area->priv;
+
+  if (anim_key->anim_id != priv->parent_anim_id)
+    return FALSE;
+
+  /* Stop tracking all animations that weren't rendered
+   * this time, this usually means the cell renderer has
+   * been hidden or removed.
+   */
+  if (!anim_key->rendered)
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (render_data->widget);
+      gtk_style_context_cancel_animations (context, anim_key);
+
+      return TRUE;
+    }
+  else
+    {
+      anim_key->rendered = FALSE;
+      return FALSE;
+    }
 }
 
 static void
@@ -1187,6 +1459,8 @@ gtk_cell_area_real_render (GtkCellArea          *area,
                            GtkCellRendererState  flags,
                            gboolean              paint_focus)
 {
+  GtkCellAreaPrivate *priv;
+  GtkStyleContext *style_context;
   CellRenderData render_data =
     {
       area,
@@ -1210,8 +1484,16 @@ gtk_cell_area_real_render (GtkCellArea          *area,
       !gtk_cell_area_is_activatable (area))
     render_data.focus_all = TRUE;
 
+  priv = area->priv;
+  style_context = gtk_widget_get_style_context (widget);
+
+  if (priv->parent_anim_id)
+    gtk_style_context_push_animatable_region (style_context, priv->parent_anim_id);
+
   gtk_cell_area_foreach_alloc (area, context, widget, cell_area, background_area,
                                (GtkCellAllocCallback)render_cell, &render_data);
+
+  g_hash_table_foreach_remove (priv->cell_states, maybe_dispose_animation_foreach, &render_data);
 
   if (render_data.paint_focus &&
       render_data.focus_rect.width != 0 &&
@@ -1238,6 +1520,9 @@ gtk_cell_area_real_render (GtkCellArea          *area,
       gtk_style_context_restore (style_context);
       cairo_restore (cr);
     }
+
+  if (priv->parent_anim_id)
+    gtk_style_context_pop_animatable_region (style_context);
 }
 
 static void
@@ -3659,4 +3944,86 @@ _gtk_cell_area_set_cell_data_func_with_proxy (GtkCellArea           *area,
 
       g_hash_table_insert (priv->cell_info, cell, info);
     }
+}
+
+/**
+ * gtk_cell_area_set_animation_id:
+ * @area: a #GtkCellArea
+ * @anim_id: identifier for the animatable region, or %NULL.
+ *           See gtk_style_context_notify_state_change().
+ *
+ * Sets the identifier for the animatable region affecting the
+ * subsequent gtk_cell_area_render() call. @area will compose
+ * internal identificators for each contained cell renderer
+ * using this information.
+ *
+ * Widgets caring about state transitions in #GtkCellArea
+ * managed rendering should set a different animation
+ * identificator for each row rendered.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_cell_area_set_animation_id (GtkCellArea *area,
+                                gpointer     anim_id)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+  priv->parent_anim_id = anim_id;
+}
+
+static gboolean
+forget_animation_foreach (gpointer key,
+                          gpointer value,
+                          gpointer user_data)
+{
+  AnimationKey *anim_key = key;
+  ForgetAnimationData *data = user_data;
+
+  if (!data->anim_id ||
+      anim_key->anim_id == data->anim_id)
+    {
+      gtk_style_context_cancel_animations (data->context,
+                                           anim_key->anim_id);
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+/**
+ * gtk_cell_area_forget_animation_id:
+ * @area: a #GtkCellArea
+ * @widget: the renderer #GtkWidget
+ * @anim_id: identifier for the animatable region, or %NULL.
+ *
+ * Drops any cached data on an animatable region identifier
+ * passed through gtk_cell_area_set_animation_id(), and
+ * cancels any ongoing animation there. A %NULL @anim_id
+ * will drop every cached state.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_cell_area_forget_animation_id (GtkCellArea *area,
+                                   GtkWidget   *widget,
+                                   gpointer     anim_id)
+{
+  GtkCellAreaPrivate *priv;
+  GtkStyleContext *context;
+  ForgetAnimationData data;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = area->priv;
+  data.context = gtk_widget_get_style_context (widget);
+  data.anim_id = anim_id;
+
+  g_hash_table_foreach_remove (priv->cell_states,
+                               forget_animation_foreach,
+                               &data);
 }

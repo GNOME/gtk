@@ -370,6 +370,14 @@ void                  gtk_cell_area_attribute_disconnect           (GtkCellArea 
                                                                     GtkCellRenderer    *renderer,
                                                                     const gchar        *attribute);
 
+/* State tracking */
+void                  gtk_cell_area_set_animation_id               (GtkCellArea          *area,
+                                                                    gpointer              anim_id);
+
+void                  gtk_cell_area_forget_animation_id            (GtkCellArea          *area,
+                                                                    GtkWidget            *widget,
+								    gpointer              anim_id);
+
 /* Cell Properties */
 void                  gtk_cell_area_class_install_cell_property    (GtkCellAreaClass   *aclass,
                                                                     guint               property_id,
