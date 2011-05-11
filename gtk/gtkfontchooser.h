@@ -2,7 +2,7 @@
  * Copyright (C) 2011      Alberto Ruiz <aruiz@gnome.org>
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
- * GtkFontSelection widget for Gtk+, by Damon Chaplin, May 1998.
+ * GtkFontChooser widget for Gtk+, by Damon Chaplin, May 1998.
  * Based on the GnomeFontSelector widget, by Elliot Lee, but major changes.
  * The GnomeFontSelector was derived from app/text_tool.c in the GIMP.
  *
@@ -22,19 +22,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
- */
-
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_FONTSEL_H__
-#define __GTK_FONTSEL_H__
+#ifndef __GTK_FONT_CHOOSER_H__
+#define __GTK_FONT_CHOOSER_H__
 
 
 #include <gtk/gtkdialog.h>
@@ -43,39 +36,39 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_FONT_SELECTION              (gtk_font_selection_get_type ())
-#define GTK_FONT_SELECTION(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelection))
-#define GTK_FONT_SELECTION_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
-#define GTK_IS_FONT_SELECTION(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_SELECTION))
-#define GTK_IS_FONT_SELECTION_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION))
-#define GTK_FONT_SELECTION_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION, GtkFontSelectionClass))
+#define GTK_TYPE_FONT_CHOOSER              (gtk_font_chooser_get_type ())
+#define GTK_FONT_CHOOSER(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_CHOOSER, GtkFontChooser))
+#define GTK_FONT_CHOOSER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_CHOOSER, GtkFontChooserClass))
+#define GTK_IS_FONT_CHOOSER(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_CHOOSER))
+#define GTK_IS_FONT_CHOOSER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_CHOOSER))
+#define GTK_FONT_CHOOSER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_CHOOSER, GtkFontChooserClass))
 
 
-#define GTK_TYPE_FONT_SELECTION_DIALOG              (gtk_font_selection_dialog_get_type ())
-#define GTK_FONT_SELECTION_DIALOG(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialog))
-#define GTK_FONT_SELECTION_DIALOG_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
-#define GTK_IS_FONT_SELECTION_DIALOG(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_SELECTION_DIALOG))
-#define GTK_IS_FONT_SELECTION_DIALOG_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_SELECTION_DIALOG))
-#define GTK_FONT_SELECTION_DIALOG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_SELECTION_DIALOG, GtkFontSelectionDialogClass))
+#define GTK_TYPE_FONT_CHOOSER_DIALOG              (gtk_font_chooser_dialog_get_type ())
+#define GTK_FONT_CHOOSER_DIALOG(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialog))
+#define GTK_FONT_CHOOSER_DIALOG_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialogClass))
+#define GTK_IS_FONT_CHOOSER_DIALOG(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG))
+#define GTK_IS_FONT_CHOOSER_DIALOG_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_CHOOSER_DIALOG))
+#define GTK_FONT_CHOOSER_DIALOG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialogClass))
 
 
-typedef struct _GtkFontSelection              GtkFontSelection;
-typedef struct _GtkFontSelectionPrivate       GtkFontSelectionPrivate;
-typedef struct _GtkFontSelectionClass         GtkFontSelectionClass;
+typedef struct _GtkFontChooser              GtkFontChooser;
+typedef struct _GtkFontChooserPrivate       GtkFontChooserPrivate;
+typedef struct _GtkFontChooserClass         GtkFontChooserClass;
 
-typedef struct _GtkFontSelectionDialog              GtkFontSelectionDialog;
-typedef struct _GtkFontSelectionDialogPrivate       GtkFontSelectionDialogPrivate;
-typedef struct _GtkFontSelectionDialogClass         GtkFontSelectionDialogClass;
+typedef struct _GtkFontChooserDialog              GtkFontChooserDialog;
+typedef struct _GtkFontChooserDialogPrivate       GtkFontChooserDialogPrivate;
+typedef struct _GtkFontChooserDialogClass         GtkFontChooserDialogClass;
 
-struct _GtkFontSelection
+struct _GtkFontChooser
 {
   GtkVBox parent_instance;
 
   /*< private >*/
-  GtkFontSelectionPrivate *priv;
+  GtkFontChooserPrivate *priv;
 };
 
-struct _GtkFontSelectionClass
+struct _GtkFontChooserClass
 {
   GtkVBoxClass parent_class;
 
@@ -87,15 +80,15 @@ struct _GtkFontSelectionClass
 };
 
 
-struct _GtkFontSelectionDialog
+struct _GtkFontChooserDialog
 {
   GtkDialog parent_instance;
 
   /*< private >*/
-  GtkFontSelectionDialogPrivate *priv;
+  GtkFontChooserDialogPrivate *priv;
 };
 
-struct _GtkFontSelectionDialogClass
+struct _GtkFontChooserDialogClass
 {
   GtkDialogClass parent_class;
 
@@ -109,76 +102,61 @@ struct _GtkFontSelectionDialogClass
 
 
 /*****************************************************************************
- * GtkFontSelection functions.
- *   see the comments in the GtkFontSelectionDialog functions.
+ * GtkFontChooser functions.
+ *   see the comments in the GtkFontChooserDialog functions.
  *****************************************************************************/
 
-GType        gtk_font_selection_get_type                 (void) G_GNUC_CONST;
-GtkWidget*   gtk_font_selection_new                      (void);
+GType        gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
+GtkWidget*   gtk_font_chooser_new                      (void);
 PangoFontFamily*
-             gtk_font_selection_get_family               (GtkFontSelection *fontsel);
+             gtk_font_chooser_get_family               (GtkFontChooser *fontchooser);
 PangoFontFace*
-             gtk_font_selection_get_face                 (GtkFontSelection *fontsel);
-gint         gtk_font_selection_get_size                 (GtkFontSelection *fontsel);
-gchar*       gtk_font_selection_get_font_name            (GtkFontSelection *fontsel);
+             gtk_font_chooser_get_face                 (GtkFontChooser *fontchooser);
+gint         gtk_font_chooser_get_size                 (GtkFontChooser *fontchooser);
+gchar*       gtk_font_chooser_get_font_name            (GtkFontChooser *fontchooser);
 
-gboolean     gtk_font_selection_set_font_name            (GtkFontSelection *fontsel,
-                                                          const gchar      *fontname);
-const gchar* gtk_font_selection_get_preview_text         (GtkFontSelection *fontsel);
-void         gtk_font_selection_set_preview_text         (GtkFontSelection *fontsel,
-                                                          const gchar      *text);
-gboolean     gtk_font_selection_get_show_preview_entry   (GtkFontSelection *fontsel);
-void         gtk_font_selection_set_show_preview_entry   (GtkFontSelection *fontsel,
-                                                          gboolean          show_preview_entry);
-/* Deprecated GtkFontSelection methods */
-#ifndef GTK_DISABLE_DEPRECATED
-GtkWidget*  gtk_font_selection_get_family_list   (GtkFontSelection *fontsel);
-GtkWidget*  gtk_font_selection_get_face_list     (GtkFontSelection *fontsel);
-GtkWidget*  gtk_font_selection_get_size_entry    (GtkFontSelection *fontsel);
-GtkWidget*  gtk_font_selection_get_size_list     (GtkFontSelection *fontsel);
-GtkWidget*  gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel);
-#endif
-
+gboolean     gtk_font_chooser_set_font_name            (GtkFontChooser *fontchooser,
+                                                        const gchar    *fontname);
+const gchar* gtk_font_chooser_get_preview_text         (GtkFontChooser *fontchooser);
+void         gtk_font_chooser_set_preview_text         (GtkFontChooser *fontchooser,
+                                                        const gchar    *text);
+gboolean     gtk_font_chooser_get_show_preview_entry   (GtkFontChooser *fontchooser);
+void         gtk_font_chooser_set_show_preview_entry   (GtkFontChooser *fontchooser,
+                                                        gboolean        show_preview_entry);
 /*****************************************************************************
- * GtkFontSelectionDialog functions.
+ * GtkFontChooserDialog functions.
  *   most of these functions simply call the corresponding function in the
- *   GtkFontSelection.
+ *   GtkFontChooser.
  *****************************************************************************/
 
-GType	   gtk_font_selection_dialog_get_type           (void) G_GNUC_CONST;
-GtkWidget* gtk_font_selection_dialog_new	            (const gchar            *title);
+GType	     gtk_font_chooser_dialog_get_type         (void) G_GNUC_CONST;
+GtkWidget* gtk_font_chooser_dialog_new	            (const gchar            *title);
 
-GtkWidget* gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd);
+GtkWidget* gtk_font_chooser_dialog_get_font_selection (GtkFontChooserDialog *fcd);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font
    is selected. Note that there is a slight possibility that the font might not
-   have been loaded OK. You should call gtk_font_selection_dialog_get_font()
+   have been loaded OK. You should call gtk_font_chooser_dialog_get_font()
    to see if it has been loaded OK.
    You should g_free() the returned font name after you're done with it. */
-gchar*     gtk_font_selection_dialog_get_font_name     (GtkFontSelectionDialog *fsd);
+gchar*     gtk_font_chooser_dialog_get_font_name     (GtkFontChooserDialog *fcd);
 
 /* This sets the currently displayed font. It should be a valid X Logical
    Font Description font name (anything else will be ignored), e.g.
    "-adobe-courier-bold-o-normal--25-*-*-*-*-*-*-*" 
    It returns TRUE on success. */
-gboolean   gtk_font_selection_dialog_set_font_name     (GtkFontSelectionDialog *fsd,
-                                                        const gchar	           *fontname);
+gboolean   gtk_font_chooser_dialog_set_font_name     (GtkFontChooserDialog *fcd,
+                                                      const gchar          *fontname);
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
 G_CONST_RETURN gchar* 
-          gtk_font_selection_dialog_get_preview_text   (GtkFontSelectionDialog *fsd);
+          gtk_font_chooser_dialog_get_preview_text   (GtkFontChooserDialog *fcd);
 
 /* This sets the text in the preview entry. It will be copied by the entry,
    so there's no need to g_strdup() it first. */
-void	  gtk_font_selection_dialog_set_preview_text   (GtkFontSelectionDialog *fsd,
-                                                        const gchar	           *text);
-
-/* Deprecated GtkFontSelectionDialog methods */
-#ifndef GTK_DISABLE_DEPRECATED
-GtkWidget* gtk_font_selection_dialog_get_cancel_button  (GtkFontSelectionDialog *fsd);
-GtkWidget* gtk_font_selection_dialog_get_ok_button      (GtkFontSelectionDialog *fsd);
-#endif
+void	  gtk_font_chooser_dialog_set_preview_text   (GtkFontChooserDialog *fcd,
+                                                    const gchar	         *text);
 
 G_END_DECLS
 
