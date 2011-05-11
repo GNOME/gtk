@@ -73,6 +73,8 @@
  *
  * To change the text which is shown in the preview area, use
  * gtk_font_chooser_set_preview_text().
+ *
+ * Since: 3.2
  */
 
 
@@ -656,6 +658,8 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
  * Creates a new #GtkFontChooser.
  *
  * Return value: a new #GtkFontChooser
+ *
+ * Since: 3.2
  */
 GtkWidget *
 gtk_font_chooser_new (void)
