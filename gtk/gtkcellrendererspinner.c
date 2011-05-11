@@ -92,6 +92,10 @@ static void gtk_cell_renderer_spinner_render       (GtkCellRenderer      *cell,
                                                     const GdkRectangle   *background_area,
                                                     const GdkRectangle   *cell_area,
                                                     GtkCellRendererState  flags);
+static GtkStateFlags gtk_cell_renderer_spinner_get_current_state (GtkCellRenderer *cell);
+static void          gtk_cell_renderer_spinner_apply_style       (GtkCellRenderer *cell,
+                                                                  GtkStyleContext *context);
+
 
 G_DEFINE_TYPE (GtkCellRendererSpinner, gtk_cell_renderer_spinner, GTK_TYPE_CELL_RENDERER)
 
@@ -106,6 +110,8 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
 
   cell_class->get_size = gtk_cell_renderer_spinner_get_size;
   cell_class->render = gtk_cell_renderer_spinner_render;
+  cell_class->get_current_state = gtk_cell_renderer_spinner_get_current_state;
+  cell_class->apply_style = gtk_cell_renderer_spinner_apply_style;
 
   /* GtkCellRendererSpinner:active:
    *
@@ -130,6 +136,9 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    * consisting of 12 frames, in 750 milliseconds.
    *
    * Since: 2.20
+   *
+   * Deprecated: 3.2. The ::active property is sufficient, animation
+   *             details are handled by theming.
    */
   g_object_class_install_property (object_class,
                                    PROP_PULSE,
@@ -325,7 +334,8 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
-  GtkStateType state;
+  GtkStyleContext *context;
+  GtkStateFlags state;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gint xpad, ypad;
@@ -349,38 +359,45 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     return;
 
-  state = GTK_STATE_NORMAL;
-  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
-      !gtk_cell_renderer_get_sensitive (cellr))
-    {
-      state = GTK_STATE_INSENSITIVE;
-    }
-  else
-    {
-      if ((flags & GTK_CELL_RENDERER_SELECTED) != 0)
-        {
-          if (gtk_widget_has_focus (widget))
-            state = GTK_STATE_SELECTED;
-          else
-            state = GTK_STATE_ACTIVE;
-        }
-      else
-        state = GTK_STATE_PRELIGHT;
-    }
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  gtk_cell_renderer_apply_style (cellr, context);
+
+  state = gtk_cell_renderer_get_state (cellr, widget, flags);
+  gtk_style_context_set_state (context, state);
 
   cairo_save (cr);
 
   gdk_cairo_rectangle (cr, cell_area);
   cairo_clip (cr);
 
-  gtk_paint_spinner (gtk_widget_get_style (widget),
-                           cr,
-                           state,
-                           widget,
-                           "cell",
-                           priv->pulse,
-                           draw_rect.x, draw_rect.y,
-                           draw_rect.width, draw_rect.height);
+  gtk_render_activity (context, cr,
+                       draw_rect.x,
+                       draw_rect.y,
+                       draw_rect.width,
+                       draw_rect.height);
 
+  gtk_style_context_restore (context);
   cairo_restore (cr);
+}
+
+static GtkStateFlags
+gtk_cell_renderer_spinner_get_current_state (GtkCellRenderer *cellr)
+{
+  GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
+  GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkStateFlags state = 0;
+
+  if (priv->active)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  return state;
+}
+
+static void
+gtk_cell_renderer_spinner_apply_style (GtkCellRenderer *cell,
+                                       GtkStyleContext *context)
+{
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SPINNER);
 }
