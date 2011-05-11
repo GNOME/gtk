@@ -72,6 +72,8 @@ struct _GtkFontChooserDialogPrivate
  * name "font_chooser". It also exposes the buttons with the names
  * "select_button" and "cancel_button.
  * </refsect2>
+ *
+ * Since: 3.2
  */
 
 static void gtk_font_chooser_dialog_buildable_interface_init     (GtkBuildableIface *iface);
@@ -150,6 +152,8 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
  * Creates a new #GtkFontChooserDialog.
  *
  * Return value: a new #GtkFontChooserDialog
+ *
+ * Since: 3.2
  */
 GtkWidget*
 gtk_font_chooser_dialog_new (const gchar *title)
