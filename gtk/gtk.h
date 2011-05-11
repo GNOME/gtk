@@ -102,6 +102,7 @@
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkfontchooser.h>
+#include <gtk/gtkfontchooserdialog.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkgradient.h>
 #include <gtk/gtkgrid.h>
