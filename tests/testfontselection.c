@@ -33,13 +33,6 @@ notify_preview_text_cb (GObject *fontsel, GParamSpec *pspec, gpointer data)
   g_debug ("Changed preview text %s", gtk_font_selection_get_preview_text (GTK_FONT_SELECTION (fontsel)));
 }
 
-static void
-notify_show_preview_entry_cb (GObject *fontsel, GParamSpec *pspec, gpointer data)
-{
-  g_debug ("Changed show preview_entry %d",
-           gtk_font_selection_get_show_preview_entry (GTK_FONT_SELECTION (fontsel)));
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -73,13 +66,9 @@ main (int argc, char *argv[])
   g_signal_connect (G_OBJECT (window), "delete-event",          G_CALLBACK(gtk_main_quit), NULL);
   g_signal_connect (G_OBJECT (fontsel), "notify::font-name",    G_CALLBACK(notify_font_name_cb), NULL);
   g_signal_connect (G_OBJECT (fontsel), "notify::preview-text", G_CALLBACK(notify_preview_text_cb), NULL);
-  g_signal_connect (G_OBJECT (fontsel), "notify::show-preview-entry",
-                    G_CALLBACK(notify_show_preview_entry_cb), NULL);
 
   gtk_font_selection_set_font_name (GTK_FONT_SELECTION (fontsel), "Bitstream Vera Sans 45");
   gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (fontsel), "[user@host ~]$ ");
-
-  gtk_font_selection_set_show_preview_entry (GTK_FONT_SELECTION (fontsel), FALSE);
 
   gtk_main ();
 
