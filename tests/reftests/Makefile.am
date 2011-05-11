@@ -57,4 +57,8 @@ EXTRA_DIST += \
 	simple.ref.ui \
 	simple.ui \
 	toplevel-vs-popup.ref.ui \
-	toplevel-vs-popup.ui
+	toplevel-vs-popup.ui \
+	grid-spacing1.ref.ui \
+	grid-spacing1.ui \
+	grid-spacing2.ref.ui \
+	grid-spacing2.ui
