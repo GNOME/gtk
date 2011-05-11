@@ -67,6 +67,10 @@ static gboolean gtk_cell_renderer_toggle_activate  (GtkCellRenderer            *
 						    const GdkRectangle         *cell_area,
 						    GtkCellRendererState        flags);
 
+static GtkStateFlags gtk_cell_renderer_toggle_get_current_state (GtkCellRenderer *cell);
+static void          gtk_cell_renderer_toggle_apply_style       (GtkCellRenderer *cell,
+                                                                 GtkStyleContext *context);
+
 
 enum {
   TOGGLED,
@@ -133,7 +137,9 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
   cell_class->get_size = gtk_cell_renderer_toggle_get_size;
   cell_class->render = gtk_cell_renderer_toggle_render;
   cell_class->activate = gtk_cell_renderer_toggle_activate;
-  
+  cell_class->get_current_state = gtk_cell_renderer_toggle_get_current_state;
+  cell_class->apply_style = gtk_cell_renderer_toggle_apply_style;
+
   g_object_class_install_property (object_class,
 				   PROP_ACTIVE,
 				   g_param_spec_boolean ("active",
@@ -421,6 +427,36 @@ gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
     }
 
   return FALSE;
+}
+
+static GtkStateFlags
+gtk_cell_renderer_toggle_get_current_state (GtkCellRenderer *cell)
+{
+  GtkCellRendererTogglePrivate *priv;
+  GtkStateFlags state = 0;
+
+  priv = GTK_CELL_RENDERER_TOGGLE (cell)->priv;
+
+  if (priv->inconsistent)
+    state |= GTK_STATE_FLAG_INCONSISTENT;
+  else if (priv->active)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  return state;
+}
+
+static void
+gtk_cell_renderer_toggle_apply_style (GtkCellRenderer *cell,
+                                      GtkStyleContext *context)
+{
+  GtkCellRendererTogglePrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TOGGLE (cell)->priv;
+
+  if (priv->radio)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
+  else
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
 }
 
 /**
