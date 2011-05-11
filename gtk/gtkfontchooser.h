@@ -29,10 +29,7 @@
 #ifndef __GTK_FONT_CHOOSER_H__
 #define __GTK_FONT_CHOOSER_H__
 
-
-#include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
-
 
 G_BEGIN_DECLS
 
@@ -43,22 +40,9 @@ G_BEGIN_DECLS
 #define GTK_IS_FONT_CHOOSER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_CHOOSER))
 #define GTK_FONT_CHOOSER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_CHOOSER, GtkFontChooserClass))
 
-
-#define GTK_TYPE_FONT_CHOOSER_DIALOG              (gtk_font_chooser_dialog_get_type ())
-#define GTK_FONT_CHOOSER_DIALOG(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialog))
-#define GTK_FONT_CHOOSER_DIALOG_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialogClass))
-#define GTK_IS_FONT_CHOOSER_DIALOG(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG))
-#define GTK_IS_FONT_CHOOSER_DIALOG_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_CHOOSER_DIALOG))
-#define GTK_FONT_CHOOSER_DIALOG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialogClass))
-
-
 typedef struct _GtkFontChooser              GtkFontChooser;
 typedef struct _GtkFontChooserPrivate       GtkFontChooserPrivate;
 typedef struct _GtkFontChooserClass         GtkFontChooserClass;
-
-typedef struct _GtkFontChooserDialog              GtkFontChooserDialog;
-typedef struct _GtkFontChooserDialogPrivate       GtkFontChooserDialogPrivate;
-typedef struct _GtkFontChooserDialogClass         GtkFontChooserDialogClass;
 
 struct _GtkFontChooser
 {
@@ -78,28 +62,6 @@ struct _GtkFontChooserClass
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
 };
-
-
-struct _GtkFontChooserDialog
-{
-  GtkDialog parent_instance;
-
-  /*< private >*/
-  GtkFontChooserDialogPrivate *priv;
-};
-
-struct _GtkFontChooserDialogClass
-{
-  GtkDialogClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
-
 
 /*****************************************************************************
  * GtkFontChooser functions.
@@ -123,42 +85,5 @@ void         gtk_font_chooser_set_preview_text         (GtkFontChooser *fontchoo
 gboolean     gtk_font_chooser_get_show_preview_entry   (GtkFontChooser *fontchooser);
 void         gtk_font_chooser_set_show_preview_entry   (GtkFontChooser *fontchooser,
                                                         gboolean        show_preview_entry);
-/*****************************************************************************
- * GtkFontChooserDialog functions.
- *   most of these functions simply call the corresponding function in the
- *   GtkFontChooser.
- *****************************************************************************/
 
-GType	     gtk_font_chooser_dialog_get_type         (void) G_GNUC_CONST;
-GtkWidget* gtk_font_chooser_dialog_new	            (const gchar            *title);
-
-GtkWidget* gtk_font_chooser_dialog_get_font_selection (GtkFontChooserDialog *fcd);
-
-/* This returns the X Logical Font Description fontname, or NULL if no font
-   is selected. Note that there is a slight possibility that the font might not
-   have been loaded OK. You should call gtk_font_chooser_dialog_get_font()
-   to see if it has been loaded OK.
-   You should g_free() the returned font name after you're done with it. */
-gchar*     gtk_font_chooser_dialog_get_font_name     (GtkFontChooserDialog *fcd);
-
-/* This sets the currently displayed font. It should be a valid X Logical
-   Font Description font name (anything else will be ignored), e.g.
-   "-adobe-courier-bold-o-normal--25-*-*-*-*-*-*-*" 
-   It returns TRUE on success. */
-gboolean   gtk_font_chooser_dialog_set_font_name     (GtkFontChooserDialog *fcd,
-                                                      const gchar          *fontname);
-
-/* This returns the text in the preview entry. You should copy the returned
-   text if you need it. */
-G_CONST_RETURN gchar* 
-          gtk_font_chooser_dialog_get_preview_text   (GtkFontChooserDialog *fcd);
-
-/* This sets the text in the preview entry. It will be copied by the entry,
-   so there's no need to g_strdup() it first. */
-void	  gtk_font_chooser_dialog_set_preview_text   (GtkFontChooserDialog *fcd,
-                                                    const gchar	         *text);
-
-G_END_DECLS
-
-
-#endif /* __GTK_FONTSEL_H__ */
+#endif /* __GTK_FONT_CHOOSER_H__ */
