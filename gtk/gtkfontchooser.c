@@ -54,6 +54,7 @@
 #include "gtkbox.h"
 #include "gtkspinbutton.h"
 #include "gtkwidget.h"
+#include "gtkgrid.h"
 
 /**
  * SECTION:gtkfontchooser
@@ -512,8 +513,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   GtkFontChooserPrivate   *priv;
   PangoFontDescription    *font_desc;
   GtkWidget               *scrolled_win;
-  GtkWidget               *preview_and_size;
-  GtkWidget               *size_controls;
+  GtkWidget               *grid;
 
   fontchooser->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontchooser,
                                                    GTK_TYPE_FONT_CHOOSER,
@@ -546,7 +546,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /** Bootstrapping widget layout **/
   gtk_box_set_spacing (GTK_BOX (fontchooser), 6);
-  gtk_box_pack_start (GTK_BOX (fontchooser), priv->search_entry, FALSE, TRUE, 0);
+  
 
   /* Main font family/face view */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
@@ -556,45 +556,17 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
                                        GTK_SHADOW_ETCHED_IN);
   gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
 
-  /* Alignment for the preview and size controls */
-  gtk_box_pack_start (GTK_BOX (fontchooser), scrolled_win, TRUE, TRUE, 0);
-
-  preview_and_size = gtk_vbox_new (TRUE, 0);
-  gtk_box_set_homogeneous (GTK_BOX (preview_and_size), FALSE);
-  gtk_box_set_spacing (GTK_BOX (preview_and_size), 6);
-
-  /* The preview entry needs a scrolled window to make sure we have a */
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-  priv->preview_scrolled_window = scrolled_win;
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
-                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
-                                       GTK_SHADOW_ETCHED_IN);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win),
-                                         priv->preview);
-  gtk_box_pack_start (GTK_BOX (preview_and_size), scrolled_win, FALSE, FALSE, 0);
+  /* Basic layout */
+  grid = gtk_grid_new ();
   
-  /* Setting the size requests for various widgets */
-  gtk_widget_set_size_request (GTK_WIDGET (fontchooser), FONT_CHOOSER_WIDTH, FONT_CHOOSER_HEIGHT);
-  gtk_widget_set_size_request (scrolled_win,  -1, PREVIEW_HEIGHT);
-  gtk_widget_set_size_request (priv->preview, -1, PREVIEW_HEIGHT - 6);
+  gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 3, 1);
+  gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 3, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->size_slider,  0, 2, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->size_spin,    2, 2, 1, 1);
 
-  /* Unset the frame on the preview entry */
-  gtk_entry_set_has_frame (GTK_ENTRY (priv->preview), FALSE);
+  gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, TRUE, 0);
 
-  /* Packing the slider and the spin in a hbox */
-  size_controls = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_scale_set_draw_value (GTK_SCALE (priv->size_slider), FALSE);
-  gtk_box_set_spacing (GTK_BOX (size_controls), 6);
-  gtk_box_pack_start  (GTK_BOX (size_controls), priv->size_slider, TRUE, TRUE, 0);
-  gtk_box_pack_start  (GTK_BOX (size_controls), priv->size_spin, FALSE, TRUE, 0);
-  
-  gtk_widget_set_valign (priv->size_spin, GTK_ALIGN_START);
-
-  gtk_box_pack_start (GTK_BOX (preview_and_size), size_controls, FALSE, FALSE, 0);
-
-  gtk_box_pack_start (GTK_BOX (fontchooser), GTK_WIDGET(preview_and_size), FALSE, TRUE, 0);
-  
+  /* Setting the adjustment values for the size slider */
   gtk_adjustment_set_value (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
                             (gdouble)(priv->size / PANGO_SCALE));
   gtk_adjustment_set_value (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
