@@ -9,14 +9,14 @@
   <para>
     #GtkGrid is an attempt to write a comprehensive, legacy-free,
     box-layout container that is flexible enough to replace #GtkBox,
-    #GtkTable, #GtkAlignment and the like.
+    #GtkTable and the like.
   </para>
 
   <para>
     The layout model of GtkGrid is to arrange its children in rows and
-    columns (children can span multiple rows or columns, too). This is
-    done by assigning positions (and sizes) on a two-dimentions grid that
-    stretches arbitrarily far in all directions.
+    columns. This is done by assigning positions on a two-dimentions
+    grid that stretches arbitrarily far in all directions.
+    Children can span multiple rows or columns, too.
  </para>
 
   <section>
@@ -52,6 +52,12 @@
       And similarly for gtk_box_pack_end(). In that case, you
       would use #GTK_POS_LEFT to place the grid children from
       left to right.
+    </para>
+    <para>
+      If you only need to pack children from the start, using
+      gtk_container_add() is an even simpler alternative. GtkGrid
+      places children added with gtk_container_add() in a single
+      row or column according to its #GtkOrientable:orientation.
     </para>
   </example>
 
@@ -170,12 +176,52 @@
     </para>
   </section>
 
-<!--
   <section>
     <title>GtkBox versus GtkGrid: spacing</title>
-    cover here: spacing, padding, margins
+
+    <para>
+      With GtkBox, you have to specify the #GtkBox:spacing when
+      you construct it. This property specifies the space that
+      separates the children from each other. Additionally, you
+      can specify extra space to put around each child individually,
+      using the #GtkBox:padding child property.
+    </para>
+
+    <para>
+      GtkGrid is very similar when it comes to spacing between the
+      children, except that it has two separate properties,
+      #GtkGrid:row-spacing and #GtkGrid:column-spacing, for the
+      space to leave between rows and columns. Note that row-spacing
+      is the space <emphasis>between</emphasis> rows, not inside
+      a row. So, if you doing a horizontal layout, you need to set
+      #GtkGrid:column-spacing.
+    </para>
+    <para>
+      GtkGrid doesn't have any custom child properties to specify
+      per-child padding; instead you can use the #GtkWidget:margin
+      property. You can also set different padding on each side with
+      the  #GtkWidget:margin-left, #GtkWidget:margin-right,
+      #GtkWidget:margin-top and #GtkWidget:margin-bottom properties.
+    </para>
+
+    <example>
+      <title>Spacing in boxes</title>
+
+      <programlisting>
+         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+         gtk_box_pack_start (GTK_BOX (box), child, FALSE, FALSE, 12);
+      </programlisting>
+      <para>This can be done with #GtkGrid as follows:</para>
+      <programlisting>
+         grid = gtk_grid_new ();
+         gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+         g_object_set (child, "margin", 12, NULL);
+         gtk_grid_attach (GTK_GRID (box), child, 0, 0, 1, 1);
+      </programlisting>
+    </example>
   </section>
 
+<!--
   <section>
     <title>GtkTable versus GtkGrid</title>
     cover here: spanning, attachment points, grid size, attach options vs expand/align
