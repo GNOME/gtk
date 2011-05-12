@@ -546,7 +546,6 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /** Bootstrapping widget layout **/
   gtk_box_set_spacing (GTK_BOX (fontchooser), 6);
-  
 
   /* Main font family/face view */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
@@ -558,13 +557,14 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /* Basic layout */
   grid = gtk_grid_new ();
-  
+
   gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 3, 1);
   gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 3, 1);
-  gtk_grid_attach (GTK_GRID (grid), priv->size_slider,  0, 2, 2, 1);
-  gtk_grid_attach (GTK_GRID (grid), priv->size_spin,    2, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->preview,      0, 2, 3, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->size_slider,  0, 3, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->size_spin,    2, 3, 1, 1);
 
-  gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, FALSE, 0);
 
   /* Setting the adjustment values for the size slider */
   gtk_adjustment_set_value (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
@@ -577,11 +577,11 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /* Treeview column and model bootstrapping */
   gtk_font_chooser_bootstrap_fontlist (fontchooser);
-  
+
   /* Set default preview text */
   gtk_entry_set_text (GTK_ENTRY (priv->preview),
                       pango_language_get_sample_string (NULL));
-  
+
   /* Set search icon and place holder text */
   icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
   gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->search_entry),
@@ -590,7 +590,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   g_object_unref (icon);
 
   gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), _("Search font name"));
-  
+
   /** Callback connections **/
   /* Connect to callback for the live search text entry */
   g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
