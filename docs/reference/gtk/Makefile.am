@@ -124,6 +124,7 @@ content_files =					\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
 	migrating-GtkApplication.xml		\
+	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
@@ -146,6 +147,7 @@ expand_content_files = 				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
 	migrating-GtkApplication.xml		\
+	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
 	question_index.sgml			\
 	text_widget.sgml			\
@@ -277,6 +279,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/appchooserbutton.png				\
 	$(srcdir)/images/appchooserdialog.png				\
 	$(srcdir)/images/assistant.png					\
+	$(srcdir)/images/box-packing.png				\
+	$(srcdir)/images/box-expand.png				\
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
 	$(srcdir)/images/color-button.png				\
@@ -296,6 +300,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/label.png					\
 	$(srcdir)/images/link-button.png				\
 	$(srcdir)/images/list-and-tree.png				\
+	$(srcdir)/images/lockbutton.png				\
 	$(srcdir)/images/lockbutton-locked.png				\
 	$(srcdir)/images/lockbutton-unlocked.png			\
 	$(srcdir)/images/lockbutton-sorry.png				\
@@ -329,6 +334,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-rltb.png				\
 	$(srcdir)/images/layout-tblr.png				\
 	$(srcdir)/images/layout-tbrl.png				\
+	$(srcdir)/images/widget-hvalign.png				\
 	$(srcdir)/images/window-default.png				\
 	$(srcdir)/images/hello-world.png				\
 	$(srcdir)/images/grid-packing.png				\
