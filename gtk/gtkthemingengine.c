@@ -2419,6 +2419,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       cairo_matrix.y0 += y - rect.y;
 
       cairo_set_matrix (cr, &cairo_matrix);
+      cairo_move_to (cr, 0, 0);
     }
   else
     cairo_move_to (cr, x, y);
