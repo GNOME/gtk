@@ -25,6 +25,7 @@ clean-local:
 	rm -rf output/ || true
 
 EXTRA_DIST += \
+	align-expand.sh \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \
