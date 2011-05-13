@@ -1048,6 +1048,15 @@ gtk_grid_get_size (GtkGrid        *grid,
   GtkGridRequest request;
   GtkGridLines *lines;
 
+  if (minimum)
+    *minimum = 0;
+
+  if (natural)
+    *natural = 0;
+
+  if (grid->priv->children == NULL)
+    return;
+
   request.grid = grid;
   gtk_grid_request_count_lines (&request);
   lines = &request.lines[orientation];
@@ -1068,6 +1077,15 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
   GtkGridRequest request;
   GtkGridLines *lines;
   gint min_size;
+
+  if (minimum)
+    *minimum = 0;
+
+  if (natural)
+    *natural = 0;
+
+  if (grid->priv->children == NULL)
+    return;
 
   request.grid = grid;
   gtk_grid_request_count_lines (&request);
@@ -1213,6 +1231,12 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   GtkGridPrivate *priv = grid->priv;
   GtkGridRequest request;
   GtkGridLines *lines;
+
+  if (priv->children == NULL)
+    {
+      gtk_widget_set_allocation (widget, allocation);
+      return;
+    }
 
   request.grid = grid;
 
