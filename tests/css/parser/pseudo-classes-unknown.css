@@ -1,0 +1,23 @@
+:nobody-knows-me {
+  int-property: 42;
+}
+
+:nobody-knows-me(really) {
+  int-property: 42;
+}
+
+:a:lot:of:unkwnown:pseudo:classes(some):of(them):with:functions( spaces ) {
+  int-property: 42;
+}
+
+:nth-child {
+  int-property: 42;
+}
+
+:nth-child() {
+  int-property: 42;
+}
+
+x, :unknown-pseudo-classes-invalidate-selectors, y {
+  int-property: 42;
+}
