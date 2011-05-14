@@ -1457,7 +1457,7 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
   gtk_tree_model_filter_increment_stamp (filter);
 
-  /* We need to allow to build new levels, because we are then pulling
+  /* We need to disallow to build new levels, because we are then pulling
    * in a child in an invisible level.  We only want to find path if it
    * is in a visible level (and thus has a parent that is visible).
    */
