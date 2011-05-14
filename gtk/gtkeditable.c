@@ -51,7 +51,6 @@
  *                      gint        &ast;position,
  *                      gpointer     data)
  * {
- *   int i;
  *   gchar &ast;result = g_utf8_strup (text, length);
  *
  *   g_signal_handlers_block_by_func (editable,
