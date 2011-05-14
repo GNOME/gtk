@@ -1,0 +1,11 @@
+GtkContainer {
+  engine: none;
+  background-image: none;
+  background-color: green;
+  border-radius: 0;
+  border-style: none;
+}
+
+NotGtkContainer {
+  background-color: red;
+}
