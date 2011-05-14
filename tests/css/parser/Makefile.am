@@ -68,4 +68,6 @@ EXTRA_DIST += \
 	integer.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
+	selector.css \
+	selector.ref.css \
 	simple.css

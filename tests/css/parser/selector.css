@@ -1,0 +1,280 @@
+* {
+  int-property: 42;
+}
+
+* * {
+  int-property: 42;
+}
+
+* > * {
+  int-property: 42;
+}
+
+* b {
+  int-property: 42;
+}
+
+* > b {
+  int-property: 42;
+}
+
+*.b {
+  int-property: 42;
+}
+
+* .b {
+  int-property: 42;
+}
+
+* > .b {
+  int-property: 42;
+}
+
+*:hover {
+  int-property: 42;
+}
+
+* :hover {
+  int-property: 42;
+}
+
+* > :hover {
+  int-property: 42;
+}
+
+*#b {
+  int-property: 42;
+}
+
+* #b {
+  int-property: 42;
+}
+
+* > #b {
+  int-property: 42;
+}
+
+a {
+  int-property: 42;
+}
+
+a * {
+  int-property: 42;
+}
+
+a > * {
+  int-property: 42;
+}
+
+a b {
+  int-property: 42;
+}
+
+a > b {
+  int-property: 42;
+}
+
+a.b {
+  int-property: 42;
+}
+
+a .b {
+  int-property: 42;
+}
+
+a > .b {
+  int-property: 42;
+}
+
+a:hover {
+  int-property: 42;
+}
+
+a :hover {
+  int-property: 42;
+}
+
+a > :hover {
+  int-property: 42;
+}
+
+a#b {
+  int-property: 42;
+}
+
+a #b {
+  int-property: 42;
+}
+
+a > #b {
+  int-property: 42;
+}
+
+.a {
+  int-property: 42;
+}
+
+.a * {
+  int-property: 42;
+}
+
+.a > * {
+  int-property: 42;
+}
+
+.a b {
+  int-property: 42;
+}
+
+.a > b {
+  int-property: 42;
+}
+
+.a.b {
+  int-property: 42;
+}
+
+.a .b {
+  int-property: 42;
+}
+
+.a > .b {
+  int-property: 42;
+}
+
+.a:hover {
+  int-property: 42;
+}
+
+.a :hover {
+  int-property: 42;
+}
+
+.a > :hover {
+  int-property: 42;
+}
+
+.a#b {
+  int-property: 42;
+}
+
+.a #b {
+  int-property: 42;
+}
+
+.a > #b {
+  int-property: 42;
+}
+
+:hover {
+  int-property: 42;
+}
+
+:hover * {
+  int-property: 42;
+}
+
+:hover > * {
+  int-property: 42;
+}
+
+:hover b {
+  int-property: 42;
+}
+
+:hover > b {
+  int-property: 42;
+}
+
+:hover.b {
+  int-property: 42;
+}
+
+:hover .b {
+  int-property: 42;
+}
+
+:hover > .b {
+  int-property: 42;
+}
+
+:hover:hover {
+  int-property: 42;
+}
+
+:hover :hover {
+  int-property: 42;
+}
+
+:hover > :hover {
+  int-property: 42;
+}
+
+:hover#b {
+  int-property: 42;
+}
+
+:hover #b {
+  int-property: 42;
+}
+
+:hover > #b {
+  int-property: 42;
+}
+
+#a {
+  int-property: 42;
+}
+
+#a * {
+  int-property: 42;
+}
+
+#a > * {
+  int-property: 42;
+}
+
+#a b {
+  int-property: 42;
+}
+
+#a > b {
+  int-property: 42;
+}
+
+#a.b {
+  int-property: 42;
+}
+
+#a .b {
+  int-property: 42;
+}
+
+#a > .b {
+  int-property: 42;
+}
+
+#a:hover {
+  int-property: 42;
+}
+
+#a :hover {
+  int-property: 42;
+}
+
+#a > :hover {
+  int-property: 42;
+}
+
+#a#b {
+  int-property: 42;
+}
+
+#a #b {
+  int-property: 42;
+}
+
+#a > #b {
+  int-property: 42;
+}
+
