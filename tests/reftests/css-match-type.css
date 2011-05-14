@@ -1,0 +1,11 @@
+GtkWindow {
+  engine: none;
+  background-image: none;
+  background-color: green;
+  border-radius: 0;
+  border-style: none;
+}
+
+NotGtkWindow {
+  background-color: red;
+}

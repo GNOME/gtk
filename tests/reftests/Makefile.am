@@ -29,9 +29,13 @@ EXTRA_DIST += \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \
+	css-match-type.css \
+	css-match-type.ref.ui \
+	css-match-type.ui \
 	entry-progress-coloring.css \
 	entry-progress-coloring.ref.ui \
 	entry-progress-coloring.ui \
+	green-20x20.png \
 	grid-expand.css \
 	grid-expand.ref.ui \
 	grid-expand.ui \
