@@ -1616,50 +1616,6 @@ parse_at_keyword (GtkCssScanner *scanner)
 }
 
 static gboolean
-parse_selector_pseudo_class (GtkCssScanner *scanner,
-                             GtkStateFlags *flags_to_modify)
-{
-  struct {
-    const char *name;
-    GtkStateFlags flag;
-  } classes[] = {
-    { "active", GTK_STATE_FLAG_ACTIVE },
-    { "prelight", GTK_STATE_FLAG_PRELIGHT },
-    { "hover", GTK_STATE_FLAG_PRELIGHT },
-    { "selected", GTK_STATE_FLAG_SELECTED },
-    { "insensitive", GTK_STATE_FLAG_INSENSITIVE },
-    { "inconsistent", GTK_STATE_FLAG_INCONSISTENT },
-    { "focused", GTK_STATE_FLAG_FOCUSED },
-    { "focus", GTK_STATE_FLAG_FOCUSED }
-  };
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (classes); i++)
-    {
-      if (_gtk_css_parser_try (scanner->parser, classes[i].name, FALSE))
-        {
-          if (*flags_to_modify & classes[i].flag)
-            {
-              gtk_css_provider_error (scanner->provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "Duplicate pseudo-class %s in selector", classes[i].name);
-            }
-          *flags_to_modify |= classes[i].flag;
-          return TRUE;
-        }
-    }
-
-  gtk_css_provider_error_literal (scanner->provider,
-                                  scanner,
-                                  GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                  "Expected a valid state name");
-  return FALSE;
-}
-
-static gboolean
 parse_selector_class (GtkCssScanner *scanner, GArray *classes)
 {
   GQuark qname;
@@ -1708,67 +1664,134 @@ parse_selector_name (GtkCssScanner *scanner, GArray *names)
 }
 
 static gboolean
-parse_selector_pseudo_class_for_region (GtkCssScanner  *scanner,
-                                        GtkRegionFlags *flags_to_modify,
-                                        GtkStateFlags  *state_to_modify)
+parse_selector_pseudo_class (GtkCssScanner  *scanner,
+                             GtkRegionFlags *region_to_modify,
+                             GtkStateFlags  *state_to_modify)
 {
   struct {
     const char *name;
-    GtkRegionFlags flag;
-  } classes[] = {
-    { "first", GTK_REGION_FIRST },
-    { "last", GTK_REGION_LAST },
-    { "sorted", GTK_REGION_SORTED }
-  }, nth_child[] = {
-    { "first", GTK_REGION_FIRST },
-    { "last", GTK_REGION_LAST },
-    { "even", GTK_REGION_EVEN },
-    { "odd", GTK_REGION_ODD }
-  };
+    GtkRegionFlags region_flag;
+    GtkStateFlags state_flag;
+  } pseudo_classes[] = {
+    { "first",        GTK_REGION_FIRST, 0 },
+    { "last",         GTK_REGION_LAST, 0 },
+    { "sorted",       GTK_REGION_SORTED, 0 },
+    { "active",       0, GTK_STATE_FLAG_ACTIVE },
+    { "prelight",     0, GTK_STATE_FLAG_PRELIGHT },
+    { "hover",        0, GTK_STATE_FLAG_PRELIGHT },
+    { "selected",     0, GTK_STATE_FLAG_SELECTED },
+    { "insensitive",  0, GTK_STATE_FLAG_INSENSITIVE },
+    { "inconsistent", 0, GTK_STATE_FLAG_INCONSISTENT },
+    { "focused",      0, GTK_STATE_FLAG_FOCUSED },
+    { "focus",        0, GTK_STATE_FLAG_FOCUSED },
+    { NULL, }
+  }, nth_child_classes[] = {
+    { "first",        GTK_REGION_FIRST, 0 },
+    { "last",         GTK_REGION_LAST, 0 },
+    { "even",         GTK_REGION_EVEN, 0 },
+    { "odd",          GTK_REGION_ODD, 0 },
+    { NULL, }
+  }, *classes;
   guint i;
+  char *name;
 
-  for (i = 0; i < G_N_ELEMENTS (classes); i++)
+  name = _gtk_css_parser_try_ident (scanner->parser, FALSE);
+  if (name == NULL)
     {
-      if (_gtk_css_parser_try (scanner->parser, classes[i].name, FALSE))
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Missing name of pseudo-class");
+      return FALSE;
+    }
+
+  if (_gtk_css_parser_try (scanner->parser, "(", TRUE))
+    {
+      char *function = name;
+
+      name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
+      if (!_gtk_css_parser_try (scanner->parser, ")", FALSE))
         {
-          *flags_to_modify |=classes[i].flag;
+          gtk_css_provider_error_literal (scanner->provider,
+                                          scanner,
+                                          GTK_CSS_PROVIDER_ERROR,
+                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                          "Missing closing bracket for pseudo-class");
+          return FALSE;
+        }
+
+      if (g_ascii_strcasecmp (function, "nth-child") != 0)
+        {
+          gtk_css_provider_error (scanner->provider,
+                                  scanner,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                                  "Unknown pseudo-class '%s(%s)'", function, name ? name : "");
+          g_free (function);
+          g_free (name);
+          return FALSE;
+        }
+      
+      g_free (function);
+    
+      if (name == NULL)
+        {
+          gtk_css_provider_error (scanner->provider,
+                                  scanner,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                                  "nth-child() requires an argument");
+          return FALSE;
+        }
+
+      classes = nth_child_classes;
+    }
+  else
+    classes = pseudo_classes;
+
+  for (i = 0; classes[i].name != NULL; i++)
+    {
+      if (g_ascii_strcasecmp (name, classes[i].name) == 0)
+        {
+          if ((*region_to_modify & classes[i].region_flag) ||
+              (*state_to_modify & classes[i].state_flag))
+            {
+              if (classes == nth_child_classes)
+                gtk_css_provider_error (scanner->provider,
+                                        scanner,
+                                        GTK_CSS_PROVIDER_ERROR,
+                                        GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                        "Duplicate pseudo-class 'nth-child(%s)'", name);
+              else
+                gtk_css_provider_error (scanner->provider,
+                                        scanner,
+                                        GTK_CSS_PROVIDER_ERROR,
+                                        GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                        "Duplicate pseudo-class '%s'", name);
+            }
+          *region_to_modify |= classes[i].region_flag;
+          *state_to_modify |= classes[i].state_flag;
+
+          g_free (name);
           return TRUE;
         }
     }
 
-  if (!_gtk_css_parser_try (scanner->parser, "nth-child(", TRUE))
-    return parse_selector_pseudo_class (scanner, state_to_modify);
-
-  for (i = 0; i < G_N_ELEMENTS (nth_child); i++)
-    {
-      if (_gtk_css_parser_try (scanner->parser, nth_child[i].name, TRUE))
-        {
-          *flags_to_modify |= nth_child[i].flag;
-          break;
-        }
-    }
-
-  if (i == G_N_ELEMENTS (nth_child))
-    {
-      gtk_css_provider_error_literal (scanner->provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "Not a valid value for nth-child");
-      return FALSE;
-    }
-
-  if (!_gtk_css_parser_try (scanner->parser, ")", FALSE))
-    {
-      gtk_css_provider_error_literal (scanner->provider,
-                                      scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "Missing closing bracket");
-      return FALSE;
-    }
-
-  return TRUE;
+  if (classes == nth_child_classes)
+    gtk_css_provider_error (scanner->provider,
+                            scanner,
+                            GTK_CSS_PROVIDER_ERROR,
+                            GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                            "Unknown pseudo-class 'nth-child(%s)'", name);
+  else
+    gtk_css_provider_error (scanner->provider,
+                            scanner,
+                            GTK_CSS_PROVIDER_ERROR,
+                            GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                            "Unknown pseudo-class '%s'", name);
+  g_free (name);
+  return FALSE;
 }
 
 static gboolean
@@ -1783,28 +1806,9 @@ parse_simple_selector (GtkCssScanner *scanner,
   
   *name = _gtk_css_parser_try_ident (scanner->parser, FALSE);
   if (*name)
-    {
-      if (_gtk_style_context_check_region_name (*name))
-        {
-          while (_gtk_css_parser_try (scanner->parser, ":", FALSE))
-            {
-              if (!parse_selector_pseudo_class_for_region (scanner, pseudo_classes, state))
-                {
-                  g_free (name);
-                  return FALSE;
-                }
-            }
-
-          _gtk_css_parser_skip_whitespace (scanner->parser);
-          return TRUE;
-        }
-      
-      parsed_something = TRUE;
-    }
+    parsed_something = TRUE;
   else
-    {
-      parsed_something = _gtk_css_parser_try (scanner->parser, "*", FALSE);
-    }
+    parsed_something = _gtk_css_parser_try (scanner->parser, "*", FALSE);
 
   do {
       if (_gtk_css_parser_try (scanner->parser, "#", FALSE))
@@ -1819,7 +1823,7 @@ parse_simple_selector (GtkCssScanner *scanner,
         }
       else if (_gtk_css_parser_try (scanner->parser, ":", FALSE))
         {
-          if (!parse_selector_pseudo_class (scanner, state))
+          if (!parse_selector_pseudo_class (scanner, pseudo_classes, state))
             return FALSE;
         }
       else if (!parsed_something)
