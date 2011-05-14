@@ -1344,6 +1344,93 @@ find_elt_with_offset (GtkTreeModelFilter *filter,
 
 /* TreeModel signals */
 static void
+gtk_tree_model_filter_emit_row_inserted_for_path (GtkTreeModelFilter *filter,
+                                                  GtkTreeModel       *c_model,
+                                                  GtkTreePath        *c_path,
+                                                  GtkTreeIter        *c_iter)
+{
+  FilterLevel *level;
+  FilterElt *elt;
+  GtkTreePath *path;
+  GtkTreeIter iter, children;
+  gboolean signals_emitted = FALSE;
+
+  if (!filter->priv->root)
+    {
+      gtk_tree_model_filter_build_level (filter, NULL, -1, TRUE);
+
+      /* We will only proceed below if the item is found.  If the item
+       * is found, we can be sure row-inserted has just been emitted
+       * for it.
+       */
+      if (filter->priv->root &&
+          FILTER_LEVEL (filter->priv->root)->visible_nodes)
+        signals_emitted = TRUE;
+    }
+
+  /* We need to disallow to build new levels, because we are then pulling
+   * in a child in an invisible level.  We only want to find path if it
+   * is in a visible level (and thus has a parent that is visible).
+   */
+  path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
+                                                                c_path,
+                                                                FALSE,
+                                                                TRUE);
+
+  if (!path)
+    /* parent is probably being filtered out */
+    return;
+
+  gtk_tree_model_filter_increment_stamp (filter);
+
+  gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (filter), &iter, path);
+
+  level = FILTER_LEVEL (iter.user_data);
+  elt = FILTER_ELT (iter.user_data2);
+
+  /* Make sure elt is visible.  elt can already be visible in case
+   * it was pulled in above, so avoid increasing level->visible_nodes twice.
+   */
+  if (!elt->visible)
+    {
+      elt->visible = TRUE;
+      level->visible_nodes++;
+    }
+
+  /* Check whether the node and all of its parents are visible */
+  if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
+    {
+      /* visibility changed -- reget path */
+      gtk_tree_path_free (path);
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
+
+      if (!signals_emitted)
+        gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
+
+      if (level->parent_level && level->visible_nodes == 1)
+        {
+          /* We know that this is the first visible node in this level, so
+           * we need to emit row-has-child-toggled on the parent.  This
+           * does not apply to the root level.
+           */
+
+          gtk_tree_path_up (path);
+          gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
+
+          gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                path,
+                                                &iter);
+        }
+
+      if (!signals_emitted
+          && gtk_tree_model_iter_children (c_model, &children, c_iter))
+        gtk_tree_model_filter_update_children (filter, level, elt);
+    }
+
+  gtk_tree_path_free (path);
+}
+
+static void
 gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
                                    GtkTreePath  *c_path,
                                    GtkTreeIter  *c_iter,
@@ -1361,7 +1448,6 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   gboolean requested_state;
   gboolean current_state;
   gboolean free_c_path = FALSE;
-  gboolean signals_emitted = FALSE;
 
   g_return_if_fail (c_path != NULL || c_iter != NULL);
 
@@ -1443,74 +1529,8 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
    */
   g_return_if_fail (current_state == FALSE && requested_state == TRUE);
 
-  /* make sure the new item has been pulled in */
-  if (!filter->priv->root)
-    {
-      gtk_tree_model_filter_build_level (filter, NULL, -1, TRUE);
-
-      /* We will only proceed below if the item is found.  If the item
-       * is found, we can be sure row-inserted has just been emitted
-       * for it.
-       */
-      signals_emitted = TRUE;
-    }
-
-  gtk_tree_model_filter_increment_stamp (filter);
-
-  /* We need to disallow to build new levels, because we are then pulling
-   * in a child in an invisible level.  We only want to find path if it
-   * is in a visible level (and thus has a parent that is visible).
-   */
-  if (!path)
-    path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
-                                                                  c_path,
-                                                                  FALSE,
-                                                                  TRUE);
-
-  if (!path)
-    /* parent is probably being filtered out */
-    goto done;
-
-  gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (filter), &iter, path);
-
-  level = FILTER_LEVEL (iter.user_data);
-  elt = FILTER_ELT (iter.user_data2);
-
-  /* elt->visible can be TRUE at this point if it was pulled in above */
-  if (!elt->visible)
-    {
-      elt->visible = TRUE;
-      level->visible_nodes++;
-    }
-
-  if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
-    {
-      /* visibility changed -- reget path */
-      gtk_tree_path_free (path);
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
-
-      if (!signals_emitted)
-        gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
-
-      if (level->parent_level && level->visible_nodes == 1)
-        {
-          /* We know that this is the first visible node in this level, so
-           * we need to emit row-has-child-toggled on the parent.  This
-           * does not apply to the root level.
-           */
-
-          gtk_tree_path_up (path);
-          gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
-
-          gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
-                                                path,
-                                                &iter);
-        }
-
-      if (!signals_emitted
-          && gtk_tree_model_iter_children (c_model, &children, c_iter))
-        gtk_tree_model_filter_update_children (filter, level, elt);
-    }
+  gtk_tree_model_filter_emit_row_inserted_for_path (filter, c_model,
+                                                    c_path, c_iter);
 
 done:
   if (path)
@@ -1527,9 +1547,7 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
                                     gpointer      data)
 {
   GtkTreeModelFilter *filter = GTK_TREE_MODEL_FILTER (data);
-  GtkTreePath *path = NULL;
   GtkTreePath *real_path = NULL;
-  GtkTreeIter iter;
 
   GtkTreeIter real_c_iter;
 
@@ -1540,6 +1558,7 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
   gint i = 0, offset;
 
   gboolean free_c_path = FALSE;
+  gboolean emit_row_inserted = FALSE;
 
   g_return_if_fail (c_path != NULL || c_iter != NULL);
 
@@ -1594,9 +1613,9 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
 
       if (filter->priv->root
           && FILTER_LEVEL (filter->priv->root)->visible_nodes)
-        goto done_and_emit;
-      else
-        goto done;
+        emit_row_inserted = TRUE;
+
+      goto done;
     }
 
   /* subtract virtual root if necessary */
@@ -1685,36 +1704,15 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
       /* insert_elt_in_level defaults to FALSE */
       felt->visible = TRUE;
       level->visible_nodes++;
+
+      emit_row_inserted = TRUE;
     }
 
-  /* don't emit the signal if we aren't visible */
-  if (!gtk_tree_model_filter_visible (filter, &real_c_iter))
-    goto done;
-
-done_and_emit:
-  /* NOTE: pass c_path here and NOT real_path. This function does
-   * root subtraction itself
-   */
-  path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
-                                                                c_path,
-                                                                FALSE, TRUE);
-
-  if (!path)
-    goto done;
-
-  gtk_tree_model_filter_increment_stamp (filter);
-
-  gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (data), &iter, path);
-
-  /* get a path taking only visible nodes into account */
-  gtk_tree_path_free (path);
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
-
-  gtk_tree_model_row_inserted (GTK_TREE_MODEL (data), path, &iter);
-
-  gtk_tree_path_free (path);
-
 done:
+  if (emit_row_inserted)
+    gtk_tree_model_filter_emit_row_inserted_for_path (filter, c_model,
+                                                      c_path, c_iter);
+
   if (real_path)
     gtk_tree_path_free (real_path);
 
