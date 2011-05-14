@@ -28,6 +28,7 @@
 #include "gtkcssproviderprivate.h"
 
 #include "gtkcssparserprivate.h"
+#include "gtkcssselectorprivate.h"
 #include "gtkcssstringfuncsprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
@@ -733,57 +734,14 @@
  * </refsect2>
  */
 
-typedef struct SelectorElement SelectorElement;
-typedef struct SelectorPath SelectorPath;
 typedef struct SelectorStyleInfo SelectorStyleInfo;
 typedef struct _GtkCssScanner GtkCssScanner;
-typedef enum SelectorElementType SelectorElementType;
-typedef enum CombinatorType CombinatorType;
 typedef enum ParserScope ParserScope;
 typedef enum ParserSymbol ParserSymbol;
 
-enum SelectorElementType {
-  SELECTOR_TYPE_NAME,
-  SELECTOR_NAME,
-  SELECTOR_GTYPE,
-  SELECTOR_REGION,
-  SELECTOR_CLASS,
-  SELECTOR_GLOB
-};
-
-enum CombinatorType {
-  COMBINATOR_DESCENDANT, /* No direct relation needed */
-  COMBINATOR_CHILD       /* Direct child */
-};
-
-struct SelectorElement
-{
-  SelectorElementType elem_type;
-  CombinatorType combinator;
-
-  union
-  {
-    GQuark name;
-    GType type;
-
-    struct
-    {
-      GQuark name;
-      GtkRegionFlags flags;
-    } region;
-  };
-};
-
-struct SelectorPath
-{
-  GSList *elements;
-  GtkStateFlags state;
-  guint ref_count;
-};
-
 struct SelectorStyleInfo
 {
-  SelectorPath *path;
+  GtkCssSelector *selector;
   GHashTable *style;
 };
 
@@ -949,145 +907,13 @@ gtk_css_provider_take_error_full (GtkCssProvider *provider,
   g_error_free (error);
 }
 
-static SelectorPath *
-selector_path_new (void)
-{
-  SelectorPath *path;
-
-  path = g_slice_new0 (SelectorPath);
-  path->ref_count = 1;
-
-  return path;
-}
-
-static SelectorPath *
-selector_path_ref (SelectorPath *path)
-{
-  path->ref_count++;
-  return path;
-}
-
-static void
-selector_path_unref (SelectorPath *path)
-{
-  path->ref_count--;
-
-  if (path->ref_count > 0)
-    return;
-
-  while (path->elements)
-    {
-      g_slice_free (SelectorElement, path->elements->data);
-      path->elements = g_slist_delete_link (path->elements, path->elements);
-    }
-
-  g_slice_free (SelectorPath, path);
-}
-
-static void
-selector_path_prepend_type (SelectorPath *path,
-                            const gchar  *type_name)
-{
-  SelectorElement *elem;
-  GType type;
-
-  elem = g_slice_new (SelectorElement);
-  elem->combinator = COMBINATOR_DESCENDANT;
-  type = g_type_from_name (type_name);
-
-  if (type == G_TYPE_INVALID)
-    {
-      elem->elem_type = SELECTOR_TYPE_NAME;
-      elem->name = g_quark_from_string (type_name);
-    }
-  else
-    {
-      elem->elem_type = SELECTOR_GTYPE;
-      elem->type = type;
-    }
-
-  path->elements = g_slist_prepend (path->elements, elem);
-}
-
-static void
-selector_path_prepend_glob (SelectorPath *path)
-{
-  SelectorElement *elem;
-
-  elem = g_slice_new (SelectorElement);
-  elem->elem_type = SELECTOR_GLOB;
-  elem->combinator = COMBINATOR_DESCENDANT;
-
-  path->elements = g_slist_prepend (path->elements, elem);
-}
-
-static void
-selector_path_prepend_region (SelectorPath   *path,
-                              const gchar    *name,
-                              GtkRegionFlags  flags)
-{
-  SelectorElement *elem;
-
-  elem = g_slice_new (SelectorElement);
-  elem->combinator = COMBINATOR_DESCENDANT;
-  elem->elem_type = SELECTOR_REGION;
-
-  elem->region.name = g_quark_from_string (name);
-  elem->region.flags = flags;
-
-  path->elements = g_slist_prepend (path->elements, elem);
-}
-
-static void
-selector_path_prepend_name (SelectorPath *path,
-                            const gchar  *name)
-{
-  SelectorElement *elem;
-
-  elem = g_slice_new (SelectorElement);
-  elem->combinator = COMBINATOR_DESCENDANT;
-  elem->elem_type = SELECTOR_NAME;
-
-  elem->name = g_quark_from_string (name);
-
-  path->elements = g_slist_prepend (path->elements, elem);
-}
-
-static void
-selector_path_prepend_class (SelectorPath *path,
-                             const gchar  *name)
-{
-  SelectorElement *elem;
-
-  elem = g_slice_new (SelectorElement);
-  elem->combinator = COMBINATOR_DESCENDANT;
-  elem->elem_type = SELECTOR_CLASS;
-
-  elem->name = g_quark_from_string (name);
-
-  path->elements = g_slist_prepend (path->elements, elem);
-}
-
-static void
-selector_path_prepend_combinator (SelectorPath   *path,
-                                  CombinatorType  combinator)
-{
-  SelectorElement *elem;
-
-  g_assert (path->elements != NULL);
-
-  /* It is actually stored in the last element */
-  elem = path->elements->data;
-  elem->combinator = combinator;
-}
-
 static SelectorStyleInfo *
-selector_style_info_new (SelectorPath *path)
+selector_style_info_new (GtkCssSelector *selector)
 {
   SelectorStyleInfo *info;
 
   info = g_slice_new0 (SelectorStyleInfo);
-  info->path = selector_path_ref (path);
+  info->selector = selector;
 
   return info;
 }
@@ -1098,8 +924,8 @@ selector_style_info_free (SelectorStyleInfo *info)
   if (info->style)
     g_hash_table_unref (info->style);
 
-  if (info->path)
-    selector_path_unref (info->path);
+  if (info->selector)
+    _gtk_css_selector_free (info->selector);
 
   g_slice_free (SelectorStyleInfo, info);
 }
@@ -1132,8 +958,7 @@ gtk_css_scanner_reset (GtkCssScanner *scanner)
   g_slist_free (scanner->state);
   scanner->state = NULL;
 
-  g_slist_foreach (scanner->cur_selectors, (GFunc) selector_path_unref, NULL);
-  g_slist_free (scanner->cur_selectors);
+  g_slist_free_full (scanner->cur_selectors, (GDestroyNotify) _gtk_css_selector_free);
   scanner->cur_selectors = NULL;
 
   if (scanner->cur_properties)
@@ -1252,196 +1077,10 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
                                                  (GDestroyNotify) gtk_symbolic_color_unref);
 }
 
-typedef struct ComparePathData ComparePathData;
-
-struct ComparePathData
-{
-  guint64 score;
-  SelectorPath *path;
-  GSList *iter;
-};
-
-static gboolean
-compare_selector_element (GtkWidgetPath   *path,
-                          guint            index,
-                          SelectorElement *elem,
-                          guint8          *score)
-{
-  *score = 0;
-
-  if (elem->elem_type == SELECTOR_TYPE_NAME)
-    {
-      const gchar *type_name;
-      GType resolved_type;
-
-      /* Resolve the type name */
-      type_name = g_quark_to_string (elem->name);
-      resolved_type = g_type_from_name (type_name);
-
-      if (resolved_type == G_TYPE_INVALID)
-        {
-          /* Type couldn't be resolved, so the selector
-           * clearly doesn't affect the given widget path
-           */
-          return FALSE;
-        }
-
-      elem->elem_type = SELECTOR_GTYPE;
-      elem->type = resolved_type;
-    }
-
-  if (elem->elem_type == SELECTOR_GTYPE)
-    {
-      GType type;
-
-      type = gtk_widget_path_iter_get_object_type (path, index);
-
-      if (!g_type_is_a (type, elem->type))
-        return FALSE;
-
-      if (type == elem->type)
-        *score |= 0xF;
-      else
-        {
-          guint diff = g_type_depth (type) - g_type_depth (elem->type);
-
-          if (G_UNLIKELY (diff > 0xE))
-            {
-              g_warning ("Hierarchy is higher than expected.");
-              diff = 0xE;
-            }
-          
-          *score = 0XF - diff;
-        }
-
-      return TRUE;
-    }
-  else if (elem->elem_type == SELECTOR_REGION)
-    {
-      GtkRegionFlags flags;
-
-      if (!gtk_widget_path_iter_has_qregion (path, index,
-                                             elem->region.name,
-                                             &flags))
-        return FALSE;
-
-      if (elem->region.flags != 0 &&
-          (flags & elem->region.flags) == 0)
-        return FALSE;
-
-      *score = 0xF;
-      return TRUE;
-    }
-  else if (elem->elem_type == SELECTOR_GLOB)
-    {
-      /* Treat as lowest matching type */
-      *score = 1;
-      return TRUE;
-    }
-  else if (elem->elem_type == SELECTOR_NAME)
-    {
-      if (!gtk_widget_path_iter_has_qname (path, index, elem->name))
-        return FALSE;
-
-      *score = 0xF;
-      return TRUE;
-    }
-  else if (elem->elem_type == SELECTOR_CLASS)
-    {
-      if (!gtk_widget_path_iter_has_qclass (path, index, elem->name))
-        return FALSE;
-
-      *score = 0xF;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static guint64
-compare_selector (GtkWidgetPath *path,
-                  SelectorPath  *selector)
-{
-  GSList *elements = selector->elements;
-  gboolean match = TRUE, first = TRUE, first_match = FALSE;
-  guint64 score = 0;
-  gint i;
-
-  i = gtk_widget_path_length (path) - 1;
-
-  while (elements && match && i >= 0)
-    {
-      SelectorElement *elem;
-      guint8 elem_score;
-
-      elem = elements->data;
-
-      match = compare_selector_element (path, i, elem, &elem_score);
-
-      if (match && first)
-        first_match = TRUE;
-
-      /* Only move on to the next index if there is no match
-       * with the current element (whether to continue or not
-       * handled right after in the combinator check), or a
-       * GType or glob has just been matched.
-       *
-       * Region and widget names do not trigger this because
-       * the next element in the selector path could also be
-       * related to the same index.
-       */
-      if (!match ||
-          (elem->elem_type == SELECTOR_GTYPE ||
-           elem->elem_type == SELECTOR_GLOB))
-        i--;
-
-      if (!match &&
-          elem->elem_type != SELECTOR_TYPE_NAME &&
-          elem->combinator == COMBINATOR_DESCENDANT)
-        {
-          /* With descendant combinators there may
-           * be intermediate chidren in the hierarchy
-           */
-          match = TRUE;
-        }
-      else if (match)
-        elements = elements->next;
-
-      if (match)
-        {
-          /* Only 4 bits are actually used */
-          score <<= 4;
-          score |= elem_score;
-        }
-
-      first = FALSE;
-    }
-
-  /* If there are pending selector
-   * elements to compare, it's not
-   * a match.
-   */
-  if (elements)
-    match = FALSE;
-
-  if (!match)
-    score = 0;
-  else if (first_match)
-    {
-      /* Assign more weight to these selectors
-       * that matched right from the first element.
-       */
-      score <<= 4;
-    }
-
-  return score;
-}
-
 typedef struct StylePriorityInfo StylePriorityInfo;
 
 struct StylePriorityInfo
 {
-  guint64 score;
   GHashTable *style;
   GtkStateFlags state;
 };
@@ -1452,7 +1091,7 @@ css_provider_get_selectors (GtkCssProvider *css_provider,
 {
   GtkCssProviderPrivate *priv;
   GArray *priority_info;
-  guint i, j;
+  guint i;
 
   priv = css_provider->priv;
   priority_info = g_array_new (FALSE, FALSE, sizeof (StylePriorityInfo));
@@ -1461,35 +1100,16 @@ css_provider_get_selectors (GtkCssProvider *css_provider,
     {
       SelectorStyleInfo *info;
       StylePriorityInfo new;
-      gboolean added = FALSE;
-      guint64 score;
 
       info = g_ptr_array_index (priv->selectors_info, i);
-      score = compare_selector (path, info->path);
 
-      if (score <= 0)
-        continue;
-
-      new.score = score;
-      new.style = info->style;
-      new.state = info->path->state;
-
-      for (j = 0; j < priority_info->len; j++)
+      if (_gtk_css_selector_matches (info->selector, path))
         {
-          StylePriorityInfo *cur;
+          new.style = info->style;
+          new.state = _gtk_css_selector_get_state_flags (info->selector);
 
-          cur = &g_array_index (priority_info, StylePriorityInfo, j);
-
-          if (cur->score > new.score)
-            {
-              g_array_insert_val (priority_info, j, new);
-              added = TRUE;
-              break;
-            }
+          g_array_append_val (priority_info, new);
         }
-
-      if (!added)
-        g_array_append_val (priority_info, new);
     }
 
   return priority_info;
@@ -1728,18 +1348,24 @@ css_provider_commit (GtkCssProvider *css_provider,
   priv = css_provider->priv;
 
   if (g_hash_table_size (properties) == 0)
-    return;
+    {
+      g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
+      g_hash_table_unref (properties);
+      return;
+    }
 
   for (l = selectors; l; l = l->next)
     {
-      SelectorPath *path = l->data;
+      GtkCssSelector *selector = l->data;
       SelectorStyleInfo *info;
 
-      info = selector_style_info_new (path);
+      info = selector_style_info_new (selector);
       selector_style_info_set_style (info, properties);
 
       g_ptr_array_add (priv->selectors_info, info);
     }
+
+  g_hash_table_unref (properties);
 }
 
 static void
@@ -1990,7 +1616,8 @@ parse_at_keyword (GtkCssScanner *scanner)
 }
 
 static gboolean
-parse_selector_pseudo_class (GtkCssScanner *scanner, SelectorPath *path)
+parse_selector_pseudo_class (GtkCssScanner *scanner,
+                             GtkStateFlags *flags_to_modify)
 {
   struct {
     const char *name;
@@ -2011,7 +1638,15 @@ parse_selector_pseudo_class (GtkCssScanner *scanner, SelectorPath *path)
     {
       if (_gtk_css_parser_try (scanner->parser, classes[i].name, FALSE))
         {
-          path->state |= classes[i].flag;
+          if (*flags_to_modify & classes[i].flag)
+            {
+              gtk_css_provider_error (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Duplicate pseudo-class %s in selector", classes[i].name);
+            }
+          *flags_to_modify |= classes[i].flag;
           return TRUE;
         }
     }
@@ -2025,9 +1660,12 @@ parse_selector_pseudo_class (GtkCssScanner *scanner, SelectorPath *path)
 }
 
 static gboolean
-parse_selector_class (GtkCssScanner *scanner, SelectorPath *path)
+parse_selector_class (GtkCssScanner *scanner, GArray *classes)
 {
-  char *name = _gtk_css_parser_try_name (scanner->parser, FALSE);
+  GQuark qname;
+  char *name;
+    
+  name = _gtk_css_parser_try_name (scanner->parser, FALSE);
 
   if (name == NULL)
     {
@@ -2035,19 +1673,23 @@ parse_selector_class (GtkCssScanner *scanner, SelectorPath *path)
                                       scanner,
                                       GTK_CSS_PROVIDER_ERROR,
                                       GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "Expected a valid name");
+                                      "Expected a valid name for class");
       return FALSE;
     }
 
-  selector_path_prepend_combinator (path, COMBINATOR_CHILD);
-  selector_path_prepend_class (path, name);
+  qname = g_quark_from_string (name);
+  g_array_append_val (classes, qname);
+  g_free (name);
   return TRUE;
 }
 
 static gboolean
-parse_selector_name (GtkCssScanner *scanner, SelectorPath *path)
+parse_selector_name (GtkCssScanner *scanner, GArray *names)
 {
-  char *name = _gtk_css_parser_try_name (scanner->parser, FALSE);
+  GQuark qname;
+  char *name;
+    
+  name = _gtk_css_parser_try_name (scanner->parser, FALSE);
 
   if (name == NULL)
     {
@@ -2055,19 +1697,20 @@ parse_selector_name (GtkCssScanner *scanner, SelectorPath *path)
                                       scanner,
                                       GTK_CSS_PROVIDER_ERROR,
                                       GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                      "Expected a valid name");
+                                      "Expected a valid name for id");
       return FALSE;
     }
 
-  selector_path_prepend_combinator (path, COMBINATOR_CHILD);
-  selector_path_prepend_name (path, name);
+  qname = g_quark_from_string (name);
+  g_array_append_val (names, qname);
+  g_free (name);
   return TRUE;
 }
 
 static gboolean
 parse_selector_pseudo_class_for_region (GtkCssScanner  *scanner,
-                                        SelectorPath   *path,
-                                        GtkRegionFlags *flags_to_modify)
+                                        GtkRegionFlags *flags_to_modify,
+                                        GtkStateFlags  *state_to_modify)
 {
   struct {
     const char *name;
@@ -2094,7 +1737,7 @@ parse_selector_pseudo_class_for_region (GtkCssScanner  *scanner,
     }
 
   if (!_gtk_css_parser_try (scanner->parser, "nth-child(", TRUE))
-    return parse_selector_pseudo_class (scanner, path);
+    return parse_selector_pseudo_class (scanner, state_to_modify);
 
   for (i = 0; i < G_N_ELEMENTS (nth_child); i++)
     {
@@ -2129,60 +1772,54 @@ parse_selector_pseudo_class_for_region (GtkCssScanner  *scanner,
 }
 
 static gboolean
-parse_simple_selector (GtkCssScanner *scanner, SelectorPath *path)
+parse_simple_selector (GtkCssScanner *scanner,
+                       char **name,
+                       GArray *ids,
+                       GArray *classes,
+                       GtkRegionFlags *pseudo_classes,
+                       GtkStateFlags *state)
 {
-  char *name;
   gboolean parsed_something;
   
-  name = _gtk_css_parser_try_ident (scanner->parser, FALSE);
-  if (name)
+  *name = _gtk_css_parser_try_ident (scanner->parser, FALSE);
+  if (*name)
     {
-      if (_gtk_style_context_check_region_name (name))
+      if (_gtk_style_context_check_region_name (*name))
         {
-          GtkRegionFlags flags;
-          
-          flags = 0;
-
           while (_gtk_css_parser_try (scanner->parser, ":", FALSE))
             {
-              if (!parse_selector_pseudo_class_for_region (scanner, path, &flags))
+              if (!parse_selector_pseudo_class_for_region (scanner, pseudo_classes, state))
                 {
                   g_free (name);
                   return FALSE;
                 }
             }
 
-          selector_path_prepend_region (path, name, flags);
-          g_free (name);
           _gtk_css_parser_skip_whitespace (scanner->parser);
           return TRUE;
         }
-      else
-        {
-          selector_path_prepend_type (path, name);
-          parsed_something = TRUE;
-        }
+      
+      parsed_something = TRUE;
     }
   else
     {
       parsed_something = _gtk_css_parser_try (scanner->parser, "*", FALSE);
-      selector_path_prepend_glob (path);
     }
 
   do {
       if (_gtk_css_parser_try (scanner->parser, "#", FALSE))
         {
-          if (!parse_selector_name (scanner, path))
+          if (!parse_selector_name (scanner, ids))
             return FALSE;
         }
       else if (_gtk_css_parser_try (scanner->parser, ".", FALSE))
         {
-          if (!parse_selector_class (scanner, path))
+          if (!parse_selector_class (scanner, classes))
             return FALSE;
         }
       else if (_gtk_css_parser_try (scanner->parser, ":", FALSE))
         {
-          if (!parse_selector_pseudo_class (scanner, path))
+          if (!parse_selector_pseudo_class (scanner, state))
             return FALSE;
         }
       else if (!parsed_something)
@@ -2205,29 +1842,48 @@ parse_simple_selector (GtkCssScanner *scanner, SelectorPath *path)
   return TRUE;
 }
 
-static SelectorPath *
+static GtkCssSelector *
 parse_selector (GtkCssScanner *scanner)
 {
-  SelectorPath *path;
-
-  path = selector_path_new ();
+  GtkCssSelector *selector = NULL;
 
   do {
-      if (!parse_simple_selector (scanner, path))
+      char *name = NULL;
+      GArray *ids = g_array_new (TRUE, FALSE, sizeof (GQuark));
+      GArray *classes = g_array_new (TRUE, FALSE, sizeof (GQuark));
+      GtkRegionFlags pseudo_classes = 0;
+      GtkStateFlags state = 0;
+      GtkCssCombinator combine = GTK_CSS_COMBINE_DESCANDANT;
+
+      if (selector)
         {
-          selector_path_unref (path);
+          if (_gtk_css_parser_try (scanner->parser, ">", TRUE))
+            combine = GTK_CSS_COMBINE_CHILD;
+        }
+
+      if (!parse_simple_selector (scanner, &name, ids, classes, &pseudo_classes, &state))
+        {
+          g_array_free (ids, TRUE);
+          g_array_free (classes, TRUE);
+          if (selector)
+            _gtk_css_selector_free (selector);
           return NULL;
         }
 
-      if (_gtk_css_parser_try (scanner->parser, ">", TRUE))
-        selector_path_prepend_combinator (path, COMBINATOR_CHILD);
+      selector = _gtk_css_selector_new (selector,
+                                        combine,
+                                        name,
+                                        (GQuark *) g_array_free (ids, ids->len == 0),
+                                        (GQuark *) g_array_free (classes, classes->len == 0),
+                                        pseudo_classes,
+                                        state);
+      g_free (name);
     }
-  while (path->state == 0 &&
-         !_gtk_css_parser_is_eof (scanner->parser) &&
+  while (!_gtk_css_parser_is_eof (scanner->parser) &&
          !_gtk_css_parser_begins_with (scanner->parser, ',') &&
          !_gtk_css_parser_begins_with (scanner->parser, '{'));
 
-  return path;
+  return selector;
 }
 
 static GSList *
@@ -2236,16 +1892,16 @@ parse_selector_list (GtkCssScanner *scanner)
   GSList *selectors = NULL;
 
   do {
-      SelectorPath *path = parse_selector (scanner);
+      GtkCssSelector *select = parse_selector (scanner);
 
-      if (path == NULL)
+      if (select == NULL)
         {
-          g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+          g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
           _gtk_css_parser_resync (scanner->parser, FALSE, 0);
           return NULL;
         }
 
-      selectors = g_slist_prepend (selectors, path);
+      selectors = g_slist_prepend (selectors, select);
     }
   while (_gtk_css_parser_try (scanner->parser, ",", TRUE));
 
@@ -2412,7 +2068,7 @@ parse_ruleset (GtkCssScanner *scanner)
                                       GTK_CSS_PROVIDER_ERROR_SYNTAX,
                                       "expected '{' after selectors");
       _gtk_css_parser_resync (scanner->parser, FALSE, 0);
-      g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+      g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
       return;
     }
 
@@ -2428,7 +2084,7 @@ parse_ruleset (GtkCssScanner *scanner)
       if (!_gtk_css_parser_is_eof (scanner->parser))
         {
           _gtk_css_parser_resync (scanner->parser, FALSE, 0);
-          g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+          g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
           if (properties)
             g_hash_table_unref (properties);
           return;
@@ -2436,11 +2092,9 @@ parse_ruleset (GtkCssScanner *scanner)
     }
 
   if (properties)
-    {
-      css_provider_commit (scanner->provider, selectors, properties);
-      g_hash_table_unref (properties);
-    }
-  g_slist_free_full (selectors, (GDestroyNotify) selector_path_unref);
+    css_provider_commit (scanner->provider, selectors, properties);
+  else
+    g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
 }
 
 static void
@@ -2453,7 +2107,7 @@ parse_statement (GtkCssScanner *scanner)
 }
 
 static void
-parse_stylesheet (GtkCssScanner   *scanner)
+parse_stylesheet (GtkCssScanner *scanner)
 {
   _gtk_css_parser_skip_whitespace (scanner->parser);
 
@@ -2465,6 +2119,36 @@ parse_stylesheet (GtkCssScanner   *scanner)
 
       parse_statement (scanner);
     }
+}
+
+static int
+gtk_css_provider_compare_rule (gconstpointer a_,
+                               gconstpointer b_)
+{
+  const SelectorStyleInfo *a = *(const SelectorStyleInfo **) a_;
+  const SelectorStyleInfo *b = *(const SelectorStyleInfo **) b_;
+  int compare;
+
+  compare = _gtk_css_selector_compare (a->selector, b->selector);
+  if (compare != 0)
+    return compare;
+
+  /* compare pointers in array to ensure a stable sort */
+  if (a_ < b_)
+    return -1;
+
+  if (a_ > b_)
+    return 1;
+
+  return 0;
+}
+
+static void
+gtk_css_provider_postprocess (GtkCssProvider *css_provider)
+{
+  GtkCssProviderPrivate *priv = css_provider->priv;
+
+  g_ptr_array_sort (priv->selectors_info, gtk_css_provider_compare_rule);
 }
 
 static gboolean
@@ -2528,6 +2212,9 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
       parse_stylesheet (scanner);
 
       gtk_css_scanner_destroy (scanner);
+
+      if (parent == NULL)
+        gtk_css_provider_postprocess (css_provider);
     }
 
   if (error)
@@ -3133,117 +2820,13 @@ gtk_css_provider_get_named (const gchar *name,
 }
 
 static void
-selector_path_print (const SelectorPath *path,
-                     GString *           str)
-{
-  GSList *walk, *reverse;
-
-  reverse = g_slist_copy (path->elements);
-  reverse = g_slist_reverse (reverse);
-
-  for (walk = reverse; walk; walk = walk->next)
-    {
-      SelectorElement *elem = walk->data;
-
-      switch (elem->elem_type)
-        {
-        case SELECTOR_TYPE_NAME:
-        case SELECTOR_NAME:
-          g_string_append (str, g_quark_to_string (elem->name));
-          break;
-        case SELECTOR_GTYPE:
-          g_string_append (str, g_type_name (elem->type));
-          break;
-        case SELECTOR_REGION:
-          g_string_append (str, g_quark_to_string (elem->region.name));
-          if (elem->region.flags)
-            {
-              char * flag_names[] = {
-                "nth-child(even)",
-                "nth-child(odd)",
-                "first-child",
-                "last-child",
-                "sorted"
-              };
-              guint i;
-
-              for (i = 0; i < G_N_ELEMENTS (flag_names); i++)
-                {
-                  if (elem->region.flags & (1 << i))
-                    {
-                      g_string_append_c (str, ':');
-                      g_string_append (str, flag_names[i]);
-                    }
-                }
-            }
-          break;
-        case SELECTOR_CLASS:
-          g_string_append_c (str, '.');
-          g_string_append (str, g_quark_to_string (elem->name));
-          break;
-        case SELECTOR_GLOB:
-          if (walk->next == NULL ||
-              elem->combinator != COMBINATOR_CHILD ||
-              ((SelectorElement *) walk->next->data)->elem_type != SELECTOR_CLASS)
-            g_string_append (str, "*");
-          break;
-        default:
-          g_assert_not_reached ();
-        }
-
-      if (walk->next)
-        {
-          switch (elem->combinator)
-            {
-            case COMBINATOR_DESCENDANT:
-              if (elem->elem_type != SELECTOR_CLASS ||
-                  ((SelectorElement *) walk->next->data)->elem_type != SELECTOR_CLASS)
-                g_string_append_c (str, ' ');
-              break;
-            case COMBINATOR_CHILD:
-              if (((SelectorElement *) walk->next->data)->elem_type != SELECTOR_CLASS)
-                g_string_append (str, " > ");
-              break;
-            default:
-              g_assert_not_reached ();
-            }
-        }
-        
-    }
-
-  if (path->state)
-    {
-      char * state_names[] = {
-        "active",
-        "hover",
-        "selected",
-        "insensitive",
-        "inconsistent",
-        "focus"
-      };
-      guint i;
-
-      for (i = 0; i < G_N_ELEMENTS (state_names); i++)
-        {
-          if (path->state & (1 << i))
-            {
-              g_string_append_c (str, ':');
-              g_string_append (str, state_names[i]);
-            }
-        }
-    }
-
-  g_slist_free (reverse);
-}
-
-static void
 selector_style_info_print (const SelectorStyleInfo *info,
                            GString                 *str)
 {
   GList *keys, *walk;
   char *s;
 
-  selector_path_print (info->path, str);
+  _gtk_css_selector_print (info->selector, str);
 
   g_string_append (str, " {\n");
 

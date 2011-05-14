@@ -388,6 +388,7 @@ gtk_private_h_sources =		\
 	gtkcellareaboxcontextprivate.h	\
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
+	gtkcssselectorprivate.h	\
 	gtkcssstringfuncsprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdndcursors.h		\
@@ -515,6 +516,7 @@ gtk_base_c_sources = 		\
 	gtkcontainer.c		\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\
+	gtkcssselector.c	\
 	gtkcssstringfuncs.c	\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
