@@ -1298,6 +1298,50 @@ bsearch_elt_with_offset (GArray *array,
   return NULL;
 }
 
+/* Path is relative to the child model (this is on search on elt offset)
+ * but with the virtual root already removed if necesssary.
+ */
+static gboolean
+find_elt_with_offset (GtkTreeModelFilter *filter,
+                      GtkTreePath        *path,
+                      FilterLevel       **level_,
+                      FilterElt         **elt_)
+{
+  int i = 0;
+  FilterLevel *level;
+  FilterLevel *parent_level = NULL;
+  FilterElt *elt = NULL;
+
+  level = FILTER_LEVEL (filter->priv->root);
+
+  while (i < gtk_tree_path_get_depth (path))
+    {
+      int j;
+
+      if (!level)
+        return FALSE;
+
+      elt = bsearch_elt_with_offset (level->array,
+                                     gtk_tree_path_get_indices (path)[i],
+                                     &j);
+
+      if (!elt)
+        return FALSE;
+
+      parent_level = level;
+      level = elt->children;
+      i++;
+    }
+
+  if (level_)
+    *level_ = parent_level;
+
+  if (elt_)
+    *elt_ = elt;
+
+  return TRUE;
+}
+
 /* TreeModel signals */
 static void
 gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
@@ -1489,9 +1533,9 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
 
   GtkTreeIter real_c_iter;
 
-  FilterElt *elt;
-  FilterLevel *level;
-  FilterLevel *parent_level;
+  FilterElt *elt = NULL;
+  FilterLevel *level = NULL;
+  FilterLevel *parent_level = NULL;
 
   gint i = 0, offset;
 
@@ -1555,8 +1599,6 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
         goto done;
     }
 
-  parent_level = level = FILTER_LEVEL (filter->priv->root);
-
   /* subtract virtual root if necessary */
   if (filter->priv->virtual_root)
     {
@@ -1571,54 +1613,50 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
 
   if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
     {
-      /* find the parent level */
-      while (i < gtk_tree_path_get_depth (real_path) - 1)
-        {
-          gint j;
+      gboolean found = FALSE;
+      GtkTreePath *parent = gtk_tree_path_copy (real_path);
+      gtk_tree_path_up (parent);
 
-          if (!level)
-            /* we don't cover this signal */
-            goto done;
+      found = find_elt_with_offset (filter, parent, &parent_level, &elt);
 
-          elt = bsearch_elt_with_offset (level->array,
-                                         gtk_tree_path_get_indices (real_path)[i],
-                                         &j);
+      gtk_tree_path_free (parent);
 
-          if (!elt)
-            /* parent is probably being filtered out */
-            goto done;
+      if (!found)
+        /* Parent is not in the cache and probably being filtered out */
+        goto done;
 
-          if (!elt->children)
-            {
-              GtkTreePath *tmppath;
-              GtkTreeIter  tmpiter;
-
-              tmpiter.stamp = filter->priv->stamp;
-              tmpiter.user_data = level;
-              tmpiter.user_data2 = elt;
-
-              tmppath = gtk_tree_model_get_path (GTK_TREE_MODEL (data),
-                                                 &tmpiter);
-
-              if (tmppath)
-                {
-                  gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (data),
-                                                        tmppath, &tmpiter);
-                  gtk_tree_path_free (tmppath);
-                }
-
-              /* not covering this signal */
-              goto done;
-            }
-
-          level = elt->children;
-          parent_level = level;
-          i++;
-        }
+      level = elt->children;
     }
+  else
+    level = FILTER_LEVEL (filter->priv->root);
 
-  if (!parent_level)
-    goto done;
+  if (!level)
+    {
+      if (elt && elt->visible)
+        {
+          /* The level in which the new node should be inserted does not
+           * exist, but the parent, elt, does.  If elt is visible, emit
+           * row-has-child-toggled.
+           */
+          GtkTreePath *tmppath;
+          GtkTreeIter  tmpiter;
+
+          tmpiter.stamp = filter->priv->stamp;
+          tmpiter.user_data = parent_level;
+          tmpiter.user_data2 = elt;
+
+          tmppath = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
+                                             &tmpiter);
+
+          if (tmppath)
+            {
+              gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                    tmppath, &tmpiter);
+              gtk_tree_path_free (tmppath);
+            }
+        }
+      goto done;
+    }
 
   /* let's try to insert the value */
   offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
@@ -1881,35 +1919,24 @@ gtk_tree_model_filter_row_deleted_invisible_node (GtkTreeModelFilter *filter,
   else
     real_path = gtk_tree_path_copy (c_path);
 
-  i = 0;
   if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
     {
-      /* find the level where the deletion occurred */
-      while (i < gtk_tree_path_get_depth (real_path) - 1)
+      gboolean found = FALSE;
+      GtkTreePath *parent = gtk_tree_path_copy (real_path);
+      gtk_tree_path_up (parent);
+
+      found = find_elt_with_offset (filter, parent, &level, &elt);
+
+      gtk_tree_path_free (parent);
+
+      if (!found)
         {
-          gint j;
-
-          if (!level)
-            {
-              /* we don't cover this */
-              gtk_tree_path_free (real_path);
-              return;
-            }
-
-          elt = bsearch_elt_with_offset (level->array,
-                                         gtk_tree_path_get_indices (real_path)[i],
-                                         &j);
-
-          if (!elt || !elt->children)
-            {
-              /* parent is filtered out, so no level */
-              gtk_tree_path_free (real_path);
-              return;
-            }
-
-          level = elt->children;
-          i++;
+          /* parent is filtered out, so no level */
+          gtk_tree_path_free (real_path);
+          return;
         }
+
+      level = elt->children;
     }
 
   offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
