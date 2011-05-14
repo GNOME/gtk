@@ -315,6 +315,11 @@ static FilterElt   *gtk_tree_model_filter_get_nth_visible                 (GtkTr
                                                                            FilterLevel            *level,
                                                                            int                     n);
 
+static FilterElt   *gtk_tree_model_filter_insert_elt_in_level             (GtkTreeModelFilter     *filter,
+                                                                           GtkTreeIter            *c_iter,
+                                                                           FilterLevel            *level,
+                                                                           gint                    offset,
+                                                                           gint                   *index);
 static FilterElt   *gtk_tree_model_filter_fetch_child                     (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level,
                                                                            gint                    offset,
@@ -942,19 +947,85 @@ gtk_tree_model_filter_get_nth_visible (GtkTreeModelFilter *filter,
 }
 
 static FilterElt *
+gtk_tree_model_filter_insert_elt_in_level (GtkTreeModelFilter *filter,
+                                           GtkTreeIter        *c_iter,
+                                           FilterLevel        *level,
+                                           gint                offset,
+                                           gint               *index)
+{
+  gint i = 0;
+  gint start, middle, end;
+  FilterElt elt;
+
+  if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
+    elt.iter = *c_iter;
+
+  elt.offset = offset;
+  elt.zero_ref_count = 0;
+  elt.ref_count = 0;
+  elt.children = NULL;
+  /* visibility should be FALSE as we don't emit row_inserted */
+  elt.visible = FALSE;
+
+  /* find index (binary search on offset) */
+  start = 0;
+  end = level->array->len;
+
+  if (start != end)
+    {
+      while (start != end)
+        {
+          middle = (start + end) / 2;
+
+          if (g_array_index (level->array, FilterElt, middle).offset <= offset)
+            start = middle + 1;
+          else
+            end = middle;
+        }
+
+      if (g_array_index (level->array, FilterElt, middle).offset <= offset)
+        i = middle + 1;
+      else
+        i = middle;
+    }
+  else
+    i = 0;
+
+  g_array_insert_val (level->array, i, elt);
+  *index = i;
+
+  for (i = 0; i < level->array->len; i++)
+    {
+      FilterElt *e = &(g_array_index (level->array, FilterElt, i));
+      if (e->children)
+        e->children->parent_elt_index = i;
+    }
+
+  if (level->parent_level || filter->priv->virtual_root)
+    {
+      GtkTreeIter f_iter;
+
+      f_iter.stamp = filter->priv->stamp;
+      f_iter.user_data = level;
+      f_iter.user_data2 = &g_array_index (level->array, FilterElt, *index);
+
+      gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
+    }
+
+  return &g_array_index (level->array, FilterElt, *index);
+}
+
+static FilterElt *
 gtk_tree_model_filter_fetch_child (GtkTreeModelFilter *filter,
                                    FilterLevel        *level,
                                    gint                offset,
                                    gint               *index)
 {
-  gint i = 0;
-  gint start, middle, end;
   gint len;
   GtkTreePath *c_path = NULL;
   GtkTreeIter c_iter;
   GtkTreePath *c_parent_path = NULL;
   GtkTreeIter c_parent_iter;
-  FilterElt elt;
 
   /* check if child exists and is visible */
   if (level->parent_elt_index >= 0)
@@ -998,59 +1069,9 @@ gtk_tree_model_filter_fetch_child (GtkTreeModelFilter *filter,
   if (offset >= len || !gtk_tree_model_filter_visible (filter, &c_iter))
     return NULL;
 
-  /* add child */
-  elt.offset = offset;
-  elt.zero_ref_count = 0;
-  elt.ref_count = 0;
-  elt.children = NULL;
-  /* visibility should be FALSE as we don't emit row_inserted */
-  elt.visible = FALSE;
-
-  if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
-    elt.iter = c_iter;
-
-  /* find index (binary search on offset) */
-  start = 0;
-  end = level->array->len;
-
-  if (start != end)
-    {
-      while (start != end)
-        {
-          middle = (start + end) / 2;
-
-          if (g_array_index (level->array, FilterElt, middle).offset <= offset)
-            start = middle + 1;
-          else
-            end = middle;
-        }
-
-      if (g_array_index (level->array, FilterElt, middle).offset <= offset)
-        i = middle + 1;
-      else
-        i = middle;
-    }
-  else
-    i = 0;
-
-  g_array_insert_val (level->array, i, elt);
-  *index = i;
-
-  for (i = 0; i < level->array->len; i++)
-    {
-      FilterElt *e = &(g_array_index (level->array, FilterElt, i));
-      if (e->children)
-        e->children->parent_elt_index = i;
-    }
-
-  c_iter.stamp = filter->priv->stamp;
-  c_iter.user_data = level;
-  c_iter.user_data2 = &g_array_index (level->array, FilterElt, *index);
-
-  if (level->parent_level || filter->priv->virtual_root)
-    gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &c_iter);
-
-  return &g_array_index (level->array, FilterElt, *index);
+  return gtk_tree_model_filter_insert_elt_in_level (filter, &c_iter,
+                                                    level, offset,
+                                                    index);
 }
 
 static void
@@ -1616,43 +1637,16 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
   /* only insert when visible */
   if (gtk_tree_model_filter_visible (filter, &real_c_iter))
     {
-      FilterElt felt;
+      FilterElt *felt;
 
-      if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
-        felt.iter = real_c_iter;
+      felt = gtk_tree_model_filter_insert_elt_in_level (filter,
+                                                        &real_c_iter,
+                                                        level, offset,
+                                                        &i);
 
-      felt.offset = offset;
-      felt.zero_ref_count = 0;
-      felt.ref_count = 0;
-      felt.visible = TRUE;
-      felt.children = NULL;
-
-      for (i = 0; i < level->array->len; i++)
-        if (g_array_index (level->array, FilterElt, i).offset > offset)
-          break;
-
+      /* insert_elt_in_level defaults to FALSE */
+      felt->visible = TRUE;
       level->visible_nodes++;
-
-      g_array_insert_val (level->array, i, felt);
-
-      if (level->parent_level || filter->priv->virtual_root)
-        {
-          GtkTreeIter f_iter;
-
-          f_iter.stamp = filter->priv->stamp;
-          f_iter.user_data = level;
-          f_iter.user_data2 = &g_array_index (level->array, FilterElt, i);
-
-          gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
-        }
-    }
-
-  /* another iteration to update the references of children to parents. */
-  for (i = 0; i < level->array->len; i++)
-    {
-      FilterElt *e = &g_array_index (level->array, FilterElt, i);
-      if (e->children)
-        e->children->parent_elt_index = i;
     }
 
   /* don't emit the signal if we aren't visible */
