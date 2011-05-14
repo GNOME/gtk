@@ -48,6 +48,9 @@ EXTRA_DIST += \
 	does-not-exist.css \
 	does-not-exist.errors \
 	does-not-exist.ref.css \
+	enum.css \
+	enum.errors \
+	enum.ref.css \
 	import-cyclic-1.css \
 	import-cyclic-1.errors \
 	import-cyclic-1.ref.css \

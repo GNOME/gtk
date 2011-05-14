@@ -1,0 +1,32 @@
+a {
+  enum-property: in;
+}
+
+b {
+  enum-property: none;
+}
+
+c {
+  enum-property: 2;
+}
+
+d {
+  enum-property: "in";
+}
+
+e {
+  enum-property: non-existing;
+}
+
+f {
+  enum-property: "non-existing";
+}
+
+g {
+  enum-property: 34;
+}
+
+h {
+  enum-property: 12e;
+}
+
