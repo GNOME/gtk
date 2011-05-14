@@ -1,0 +1,15 @@
+#window {
+  engine: none;
+  background-image: none;
+  background-color: green;
+  border-radius: 0;
+  border-style: none;
+}
+
+#nowindow {
+  background-color: red;
+}
+
+#window#nowindow {
+  background-color: blue;
+}
