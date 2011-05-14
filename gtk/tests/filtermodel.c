@@ -1968,7 +1968,7 @@ insert_child (void)
 
 
 static void
-specific_remove_node (void)
+remove_node (void)
 {
   GtkTreeIter iter, iter1, iter2, iter3;
   GtkListStore *list;
@@ -1994,7 +1994,7 @@ specific_remove_node (void)
 }
 
 static void
-specific_remove_node_vroot (void)
+remove_node_vroot (void)
 {
   GtkTreeIter parent, root;
   GtkTreeIter iter, iter1, iter2, iter3;
@@ -2028,7 +2028,7 @@ specific_remove_node_vroot (void)
 }
 
 static void
-specific_remove_vroot_ancestor (void)
+remove_vroot_ancestor (void)
 {
   GtkTreeIter parent, root;
   GtkTreeIter iter, iter1, iter2, iter3;
@@ -3288,12 +3288,14 @@ register_filter_model_tests (void)
   g_test_add_func ("/TreeModelFilter/insert/child",
                    insert_child);
 
-  g_test_add_func ("/TreeModelFilter/specific/remove-node",
-                   specific_remove_node);
-  g_test_add_func ("/TreeModelFilter/specific/remove-node-vroot",
-                   specific_remove_node_vroot);
-  g_test_add_func ("/TreeModelFilter/specific/remove-vroot-ancestor",
-                   specific_remove_vroot_ancestor);
+  /* Removals from child model after creating of filter model */
+  g_test_add_func ("/TreeModelFilter/remove/node",
+                   remove_node);
+  g_test_add_func ("/TreeModelFilter/remove/node-vroot",
+                   remove_node_vroot);
+  g_test_add_func ("/TreeModelFilter/remove/vroot-ancestor",
+                   remove_vroot_ancestor);
+
 
   g_test_add_func ("/TreeModelFilter/specific/path-dependent-filter",
                    specific_path_dependent_filter);
