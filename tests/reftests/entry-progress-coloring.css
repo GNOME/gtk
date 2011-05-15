@@ -13,6 +13,7 @@ GtkEntry #padded {
 
 .progressbar {
   background-color: rgba(0,0,0,0);
+  background-image: none;
   border-color: rgba(0,0,0,0);
   color: red;
 }
