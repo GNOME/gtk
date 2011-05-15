@@ -1120,7 +1120,7 @@ enum_value_from_string (const char  *str,
     {
       g_set_error (error,
                    GTK_CSS_PROVIDER_ERROR,
-                   GTK_CSS_PROVIDER_ERROR_FAILED,
+                   GTK_CSS_PROVIDER_ERROR_SYNTAX,
                    "Unknown value '%s' for enum type '%s'",
                    str, g_type_name (G_VALUE_TYPE (value)));
       g_type_class_unref (enum_class);
