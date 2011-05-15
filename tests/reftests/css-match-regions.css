@@ -1,0 +1,19 @@
+* {
+  color: blue;
+}
+
+.notebook tab GtkLabel {
+  color: blue
+}
+.notebook tab tab GtkLabel {
+  color: red
+}
+
+/* for reference */
+#blue {
+  color: blue
+}
+
+#red {
+  color: red
+}
