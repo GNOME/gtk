@@ -32,6 +32,9 @@ EXTRA_DIST += \
 	css-match-class.css \
 	css-match-class.ref.ui \
 	css-match-class.ui \
+	css-match-descendant-later.css \
+	css-match-descendant-later.ref.ui \
+	css-match-descendant-later.ui \
 	css-match-name.css \
 	css-match-name.ref.ui \
 	css-match-name.ui \
