@@ -35,6 +35,9 @@ EXTRA_DIST += \
 	css-match-descendant-later.css \
 	css-match-descendant-later.ref.ui \
 	css-match-descendant-later.ui \
+	css-match-exact.css \
+	css-match-exact.ref.ui \
+	css-match-exact.ui \
 	css-match-name.css \
 	css-match-name.ref.ui \
 	css-match-name.ui \
