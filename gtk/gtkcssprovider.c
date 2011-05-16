@@ -1077,44 +1077,6 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
                                                  (GDestroyNotify) gtk_symbolic_color_unref);
 }
 
-typedef struct StylePriorityInfo StylePriorityInfo;
-
-struct StylePriorityInfo
-{
-  GHashTable *style;
-  GtkStateFlags state;
-};
-
-static GArray *
-css_provider_get_selectors (GtkCssProvider *css_provider,
-                            GtkWidgetPath  *path)
-{
-  GtkCssProviderPrivate *priv;
-  GArray *priority_info;
-  guint i;
-
-  priv = css_provider->priv;
-  priority_info = g_array_new (FALSE, FALSE, sizeof (StylePriorityInfo));
-
-  for (i = 0; i < priv->selectors_info->len; i++)
-    {
-      SelectorStyleInfo *info;
-      StylePriorityInfo new;
-
-      info = g_ptr_array_index (priv->selectors_info, i);
-
-      if (_gtk_css_selector_matches (info->selector, path))
-        {
-          new.style = info->style;
-          new.state = _gtk_css_selector_get_state_flags (info->selector);
-
-          g_array_append_val (priority_info, new);
-        }
-    }
-
-  return priority_info;
-}
-
 static void
 css_provider_dump_symbolic_colors (GtkCssProvider     *css_provider,
                                    GtkStyleProperties *props)
@@ -1143,23 +1105,27 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
                             GtkWidgetPath    *path)
 {
   GtkCssProvider *css_provider;
+  GtkCssProviderPrivate *priv;
   GtkStyleProperties *props;
-  GArray *priority_info;
   guint i;
 
   css_provider = GTK_CSS_PROVIDER (provider);
+  priv = css_provider->priv;
   props = gtk_style_properties_new ();
 
   css_provider_dump_symbolic_colors (css_provider, props);
-  priority_info = css_provider_get_selectors (css_provider, path);
 
-  for (i = 0; i < priority_info->len; i++)
+  for (i = 0; i < priv->selectors_info->len; i++)
     {
-      StylePriorityInfo *info;
+      SelectorStyleInfo *info;
       GHashTableIter iter;
       gpointer key, value;
 
-      info = &g_array_index (priority_info, StylePriorityInfo, i);
+      info = g_ptr_array_index (priv->selectors_info, i);
+
+      if (!_gtk_css_selector_matches (info->selector, path))
+        continue;
+
       g_hash_table_iter_init (&iter, info->style);
 
       while (g_hash_table_iter_next (&iter, &key, &value))
@@ -1174,11 +1140,12 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
               !gtk_style_properties_lookup_property (prop, NULL, NULL))
             continue;
 
-          gtk_style_properties_set_property (props, key, info->state, value);
+          gtk_style_properties_set_property (props,
+                                             key,
+                                             _gtk_css_selector_get_state_flags (info->selector),
+                                             value);
         }
     }
-
-  g_array_free (priority_info, TRUE);
 
   return props;
 }
