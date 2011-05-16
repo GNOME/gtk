@@ -298,11 +298,11 @@ AC_ARG_ENABLE(quartz-backend,
                               [enable the quartz gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(broadway-backend,
-              [AC_HELP_STRING([--enable-broadway-backend],
+              [AS_HELP_STRING([--enable-broadway-backend],
                               [enable the broadway (HTML5) gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(wayland-backend,
-              [AC_HELP_STRING([--enable-wayland-backend],
+              [AS_HELP_STRING([--enable-wayland-backend],
                               [enable the wayland gdk backend])],
 			      [backend_set=yes])
 
