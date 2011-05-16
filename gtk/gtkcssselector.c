@@ -21,6 +21,8 @@
 
 #include "gtkcssselectorprivate.h"
 
+#include "gtkstylecontextprivate.h"
+
 struct _GtkCssSelector
 {
   GtkCssSelector *  previous;        /* link to next element in selector or NULL if last */
@@ -48,7 +50,7 @@ _gtk_css_selector_new (GtkCssSelector         *previous,
   selector->previous = previous;
   selector->combine = combine;
   selector->name = name ? g_quark_to_string (g_quark_from_string (name)) : NULL;
-  selector->type = G_TYPE_INVALID;
+  selector->type = !name || _gtk_style_context_check_region_name (name) ? G_TYPE_NONE : G_TYPE_INVALID;
   selector->ids = ids;
   selector->classes = classes;
   selector->pseudo_classes = pseudo_classes;
@@ -188,6 +190,9 @@ gtk_css_selector_matches_type (const GtkCssSelector      *selector,
     return TRUE;
 
   if (selector->pseudo_classes)
+    return FALSE;
+
+  if (selector->type == G_TYPE_NONE)
     return FALSE;
 
   /* ugh, assigning to a const variable */
