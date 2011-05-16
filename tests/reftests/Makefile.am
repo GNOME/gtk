@@ -47,6 +47,9 @@ EXTRA_DIST += \
 	css-match-regions.css \
 	css-match-regions.ref.ui \
 	css-match-regions.ui \
+	css-match-style-property-order.css \
+	css-match-style-property-order.ref.ui \
+	css-match-style-property-order.ui \
 	css-match-subtype.css \
 	css-match-subtype.ref.ui \
 	css-match-subtype.ui \

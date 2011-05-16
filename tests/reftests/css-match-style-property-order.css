@@ -1,0 +1,12 @@
+* {
+  -GtkWidget-focus-line-width: 0;
+  padding: 0
+}
+
+#test {
+  -GtkWidget-focus-line-width: 20
+}
+
+#reference {
+  padding: 20
+}
