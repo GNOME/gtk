@@ -98,26 +98,30 @@ static void
 gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GParamSpec *pspec;
 
   object_class->finalize = gtk_style_properties_finalize;
 
   /* Initialize default property set */
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("color",
-                                                              "Foreground color",
-                                                              "Foreground color",
-                                                              GDK_TYPE_RGBA, 0));
+  pspec = g_param_spec_boxed ("color",
+                              "Foreground color",
+                              "Foreground color",
+                              GDK_TYPE_RGBA, 0);
+  gtk_style_param_set_inherit (pspec, TRUE);
+  gtk_style_properties_register_property (NULL, pspec);
+
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("background-color",
                                                               "Background color",
                                                               "Background color",
                                                               GDK_TYPE_RGBA, 0));
 
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("font",
-                                                              "Font Description",
-                                                              "Font Description",
-                                                              PANGO_TYPE_FONT_DESCRIPTION, 0));
+  pspec = g_param_spec_boxed ("font",
+                              "Font Description",
+                              "Font Description",
+                              PANGO_TYPE_FONT_DESCRIPTION, 0);
+  gtk_style_param_set_inherit (pspec, TRUE);
+  gtk_style_properties_register_property (NULL, pspec);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("margin",
