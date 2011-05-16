@@ -112,6 +112,7 @@ static AtkAttributeSet* gail_menu_item_get_run_attributes (AtkText    *text,
                                                            gint       *end_offset);
 static AtkAttributeSet* gail_menu_item_get_default_attributes (AtkText *text);
 static GtkWidget*       get_label_from_container   (GtkWidget    *container);
+static gchar *          get_text_from_label_widget (GtkWidget    *widget);
 
 
 G_DEFINE_TYPE_WITH_CODE (GailMenuItem, gail_menu_item, GAIL_TYPE_CONTAINER,
@@ -148,16 +149,13 @@ gail_menu_item_real_initialize (AtkObject *obj,
   item->text = NULL;
 
   label = get_label_from_container (GTK_WIDGET (data));
-  if (GTK_IS_LABEL (label))
-    {
-      if (gtk_widget_get_mapped (label))
-        gail_menu_item_init_textutil (item, label);
-      else
-        g_signal_connect (label,
-                          "map",
-                          G_CALLBACK (gail_menu_item_label_map_gtk),
-                          item);
-    }
+  if (gtk_widget_get_mapped (label))
+    gail_menu_item_init_textutil (item, label);
+  else
+    g_signal_connect (label,
+                      "map",
+                      G_CALLBACK (gail_menu_item_label_map_gtk),
+                      item);
 
   g_signal_connect (data,
                     "select",
@@ -258,7 +256,7 @@ gail_menu_item_init_textutil (GailMenuItem  *item,
                         (GCallback) gail_menu_item_notify_label_gtk,
                         item);     
     }
-  label_text = gtk_label_get_text (GTK_LABEL (label));
+  label_text = get_text_from_label_widget (label);
   gail_text_util_text_setup (item->textutil, label_text);
 }
 
@@ -296,22 +294,17 @@ gail_menu_item_get_text (AtkText *text,
 
   label = get_label_from_container (widget);
 
-  if (!GTK_IS_LABEL (label))
-    return NULL;
-
   item = GAIL_MENU_ITEM (text);
-  if (!item->textutil) 
+  if (!item->textutil)
     gail_menu_item_init_textutil (item, label);
 
-  label_text = gtk_label_get_text (GTK_LABEL (label));
+  label_text = get_text_from_label_widget (label);
 
   if (label_text == NULL)
     return NULL;
   else
-  {
-    return gail_text_util_get_substring (item->textutil, 
+    return gail_text_util_get_substring (item->textutil,
                                          start_pos, end_pos);
-  }
 }
 
 static gchar*
@@ -334,15 +327,12 @@ gail_menu_item_get_text_before_offset (AtkText         *text,
   /* Get label */
   label = get_label_from_container (widget);
 
-  if (!GTK_IS_LABEL(label))
-    return NULL;
-
   item = GAIL_MENU_ITEM (text);
   if (!item->textutil)
     gail_menu_item_init_textutil (item, label);
 
   return gail_text_util_get_text (item->textutil,
-                           gtk_label_get_layout (GTK_LABEL (label)), GAIL_BEFORE_OFFSET, 
+                           NULL, GAIL_BEFORE_OFFSET, 
                            boundary_type, offset, start_offset, end_offset); 
 }
 
@@ -366,15 +356,12 @@ gail_menu_item_get_text_at_offset (AtkText         *text,
   /* Get label */
   label = get_label_from_container (widget);
 
-  if (!GTK_IS_LABEL(label))
-    return NULL;
-
   item = GAIL_MENU_ITEM (text);
   if (!item->textutil)
     gail_menu_item_init_textutil (item, label);
 
   return gail_text_util_get_text (item->textutil,
-                              gtk_label_get_layout (GTK_LABEL (label)), GAIL_AT_OFFSET, 
+                              NULL, GAIL_AT_OFFSET, 
                               boundary_type, offset, start_offset, end_offset);
 }
 
@@ -400,35 +387,31 @@ gail_menu_item_get_text_after_offset (AtkText         *text,
   /* Get label */
   label = get_label_from_container (widget);
 
-  if (!GTK_IS_LABEL(label))
-    return NULL;
-
   item = GAIL_MENU_ITEM (text);
   if (!item->textutil)
     gail_menu_item_init_textutil (item, label);
 
   return gail_text_util_get_text (item->textutil,
-                           gtk_label_get_layout (GTK_LABEL (label)), GAIL_AFTER_OFFSET, 
+                           NULL, GAIL_AFTER_OFFSET, 
                            boundary_type, offset, start_offset, end_offset);
 }
 
 static gint
-gail_menu_item_get_character_count (AtkText *text)
+gail_menu_item_get_character_count (AtkText *atk_text)
 {
-  GtkWidget *widget;
-  GtkWidget *label;
+  gchar *text;
+  gint len;
 
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
-  if (widget == NULL)
-    /* State is defunct */
-    return 0;
+  text = gail_menu_item_get_text (atk_text, 0, -1);
+  if (text)
+    {
+      len = g_utf8_strlen (text, -1);
+      g_free (text);
+    }
+  else
+    len = 0;
 
-  label = get_label_from_container (widget);
-
-  if (!GTK_IS_LABEL(label))
-    return 0;
-
-  return g_utf8_strlen (gtk_label_get_text (GTK_LABEL (label)), -1);
+  return len;
 }
 
 static void
@@ -456,15 +439,15 @@ gail_menu_item_get_character_extents (AtkText      *text,
 
   if (!GTK_IS_LABEL(label))
     return;
-  
+
   gtk_label_get_layout_offsets (GTK_LABEL (label), &x_layout, &y_layout);
   label_text = gtk_label_get_text (GTK_LABEL (label));
   index = g_utf8_offset_to_pointer (label_text, offset) - label_text;
   pango_layout_index_to_pos (gtk_label_get_layout (GTK_LABEL (label)), index, &char_rect);
-  
-  gail_misc_get_extents_from_pango_rectangle (label, &char_rect, 
+
+  gail_misc_get_extents_from_pango_rectangle (label, &char_rect,
                     x_layout, y_layout, x, y, width, height, coords);
-} 
+}
 
 static gint 
 gail_menu_item_get_offset_at_point (AtkText      *text,
@@ -578,26 +561,23 @@ static gunichar
 gail_menu_item_get_character_at_offset (AtkText *text,
                                    gint   offset)
 {
-  GtkWidget *widget;
-  GtkWidget *label;
-  const gchar *string;
+  gchar *string;
   gchar *index;
+  gunichar ch;
 
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
-  if (widget == NULL)
-    /* State is defunct */
-    return '\0';
+  string = gail_menu_item_get_text (text, 0, -1);
 
-  label = get_label_from_container (widget);
+  if (string == NULL || offset >= g_utf8_strlen (string, -1))
+    ch = '\0';
+  else
+    {
+      index = g_utf8_offset_to_pointer (string, offset);
+      ch = g_utf8_get_char (index);
+    }
 
-  if (!GTK_IS_LABEL(label))
-    return '\0';
-  string = gtk_label_get_text (GTK_LABEL (label));
-  if (offset >= g_utf8_strlen (string, -1))
-    return '\0';
-  index = g_utf8_offset_to_pointer (string, offset);
+  g_free (string);
 
-  return g_utf8_get_char (index);
+  return ch;
 }
 
 static GtkWidget*
@@ -616,8 +596,13 @@ get_label_from_container (GtkWidget *container)
     {
       if (GTK_IS_LABEL (tmp_list->data))
         {
-           label = tmp_list->data;
-           break;
+          label = tmp_list->data;
+          break;
+        }
+      else if (GTK_IS_CELL_VIEW (tmp_list->data))
+        {
+          label = tmp_list->data;
+          break;
         }
       /*
  *        * Get label from menu item in desktop background preferences
@@ -625,14 +610,57 @@ get_label_from_container (GtkWidget *container)
  *                      */
       else if (GTK_IS_BOX (tmp_list->data))
         {
-           label = get_label_from_container (GTK_WIDGET (tmp_list->data));
-           if (label)
-             break;
+          label = get_label_from_container (GTK_WIDGET (tmp_list->data));
+          if (label)
+            break;
         }
     }
   g_list_free (children);
 
   return label;
+}
+
+static gchar *
+get_text_from_label_widget (GtkWidget *label)
+{
+  if (GTK_IS_LABEL (label))
+    return g_strdup (gtk_label_get_text (GTK_LABEL (label)));
+  else if (GTK_IS_CELL_VIEW (label))
+    {
+      GList *cells, *l;
+      GtkTreeModel *model;
+      GtkTreeIter iter;
+      GtkTreePath *path;
+      GtkCellArea *area;
+      gchar *text;
+
+      model = gtk_cell_view_get_model (GTK_CELL_VIEW (label));
+      path = gtk_cell_view_get_displayed_row (GTK_CELL_VIEW (label));
+      gtk_tree_model_get_iter (model, &iter, path);
+      gtk_tree_path_free (path);
+
+      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (label));
+
+      gtk_cell_area_apply_attributes (area, model, &iter, FALSE, FALSE);
+
+      cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (label));
+      for (l = cells; l; l = l->next)
+        {
+          GtkCellRenderer *cell = l->data;
+
+          if (GTK_IS_CELL_RENDERER_TEXT (cell))
+            {
+              g_object_get (cell, "text", &text, NULL);
+              break;
+            }
+        }
+
+      g_list_free (cells);
+
+      return text;
+    }
+
+  return NULL;
 }
 
 AtkObject*
