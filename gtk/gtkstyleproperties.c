@@ -708,15 +708,12 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
     g_return_if_fail (node->pspec->value_type == value_type);
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties,
-                              GINT_TO_POINTER (node->property_quark));
+  prop = g_hash_table_lookup (priv->properties, node->pspec);
 
   if (!prop)
     {
       prop = property_data_new ();
-      g_hash_table_insert (priv->properties,
-                           GINT_TO_POINTER (node->property_quark),
-                           prop);
+      g_hash_table_insert (priv->properties, node->pspec, prop);
     }
 
   val = property_data_get_value (prop, state);
@@ -772,15 +769,12 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
           break;
         }
 
-      prop = g_hash_table_lookup (priv->properties,
-                                  GINT_TO_POINTER (node->property_quark));
+      prop = g_hash_table_lookup (priv->properties, node->pspec);
 
       if (!prop)
         {
           prop = property_data_new ();
-          g_hash_table_insert (priv->properties,
-                               GINT_TO_POINTER (node->property_quark),
-                               prop);
+          g_hash_table_insert (priv->properties, node->pspec, prop);
         }
 
       val = property_data_get_value (prop, state);
@@ -957,8 +951,7 @@ _gtk_style_properties_peek_property (GtkStyleProperties *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties,
-                              GINT_TO_POINTER (node->property_quark));
+  prop = g_hash_table_lookup (priv->properties, node->pspec);
 
   if (!prop)
     return NULL;
@@ -1010,8 +1003,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties,
-                              GINT_TO_POINTER (node->property_quark));
+  prop = g_hash_table_lookup (priv->properties, node->pspec);
 
   if (!prop)
     return FALSE;
@@ -1072,8 +1064,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
           break;
         }
 
-      prop = g_hash_table_lookup (priv->properties,
-                                  GINT_TO_POINTER (node->property_quark));
+      prop = g_hash_table_lookup (priv->properties, node->pspec);
 
       if (prop)
         val = property_data_match_state (prop, state);
@@ -1165,8 +1156,7 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties,
-                              GINT_TO_POINTER (node->property_quark));
+  prop = g_hash_table_lookup (priv->properties, node->pspec);
 
   if (!prop)
     return;
