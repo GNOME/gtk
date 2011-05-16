@@ -490,7 +490,6 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
   GtkStylePropertiesClass *klass;
   gboolean found = FALSE;
   GQuark quark;
-  gint i;
 
   g_return_val_if_fail (property_name != NULL, FALSE);
 
@@ -503,23 +502,17 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
       return FALSE;
     }
 
-  for (i = 0; i < properties->len; i++)
+  node = property_node_lookup (quark);
+
+  if (node)
     {
-      node = &g_array_index (properties, PropertyNode, i);
+      if (pspec)
+        *pspec = node->pspec;
 
-      if (node->property_quark == quark)
-        {
-          if (pspec)
-            *pspec = node->pspec;
+      if (parse_func)
+        *parse_func = node->parse_func;
 
-          if (parse_func)
-            *parse_func = node->parse_func;
-
-          found = TRUE;
-          break;
-        }
-      else if (node->property_quark > quark)
-        break;
+      found = TRUE;
     }
 
   g_type_class_unref (klass);
