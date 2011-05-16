@@ -1190,7 +1190,9 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                      GParamSpec       *pspec,
                                      GValue           *value)
 {
-  GArray *priority_info;
+  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
+  GtkCssProviderPrivate *priv = css_provider->priv;
+  const GValue *val;
   gboolean found = FALSE;
   gchar *prop_name;
   gint i;
@@ -1199,21 +1201,24 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                g_type_name (pspec->owner_type),
                                pspec->name);
 
-  priority_info = css_provider_get_selectors (GTK_CSS_PROVIDER (provider), path);
-
-  for (i = priority_info->len - 1; i >= 0; i--)
+  for (i = priv->selectors_info->len - 1; i >= 0; i--)
     {
-      StylePriorityInfo *info;
-      GValue *val;
+      SelectorStyleInfo *info;
+      GtkStateFlags selector_state;
 
-      info = &g_array_index (priority_info, StylePriorityInfo, i);
+      info = g_ptr_array_index (priv->selectors_info, i);
+
+      if (!_gtk_css_selector_matches (info->selector, path))
+        continue;
+
+      selector_state = _gtk_css_selector_get_state_flags (info->selector);
       val = g_hash_table_lookup (info->style, prop_name);
 
       if (val &&
-          (info->state == 0 ||
-           info->state == state ||
-           ((info->state & state) != 0 &&
-            (info->state & ~(state)) == 0)))
+          (selector_state == 0 ||
+           selector_state == state ||
+           ((selector_state & state) != 0 &&
+            (selector_state & ~(state)) == 0)))
         {
           GError *error = NULL;
 
@@ -1233,7 +1238,6 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
         }
     }
 
-  g_array_free (priority_info, TRUE);
   g_free (prop_name);
 
   return found;
