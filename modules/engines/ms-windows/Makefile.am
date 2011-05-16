@@ -4,7 +4,7 @@ SUBDIRS=Theme
 
 EXTRA_DIST += Makefile.msc
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) 		\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\

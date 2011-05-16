@@ -2,7 +2,7 @@ if OS_WIN32
 no_undefined = -no-undefined
 endif
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gtk				\
 	-I$(top_builddir)/gtk				\

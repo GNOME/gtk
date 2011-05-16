@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-DINSIDE_GDK_WIN32	\
 	-I$(top_srcdir)		\

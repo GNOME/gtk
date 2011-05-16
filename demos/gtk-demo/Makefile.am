@@ -46,7 +46,7 @@ demos =						\
 	tree_store.c				\
 	ui_manager.c
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-DDEMOCODEDIR="\"$(democodedir)\""	\
 	-I$(top_srcdir) 			\
 	-I$(top_builddir)/gdk			\

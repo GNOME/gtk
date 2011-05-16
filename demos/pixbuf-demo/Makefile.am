@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/demos
 include $(top_srcdir)/Makefile.decl
 
-INCLUDES = 				\
+AM_CPPFLAGS = 				\
 	-I$(top_srcdir) 		\
 	-I$(top_builddir)/gdk		\
 	-DGDK_DISABLE_DEPRECATED	\
