@@ -1123,7 +1123,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
       info = g_ptr_array_index (priv->selectors_info, i);
 
-      if (!_gtk_css_selector_matches (info->selector, path))
+      if (!_gtk_css_selector_matches (info->selector, path, gtk_widget_path_length (path)))
         continue;
 
       g_hash_table_iter_init (&iter, info->style);
@@ -1175,7 +1175,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 
       info = g_ptr_array_index (priv->selectors_info, i);
 
-      if (!_gtk_css_selector_matches (info->selector, path))
+      if (!_gtk_css_selector_matches (info->selector, path, gtk_widget_path_length (path)))
         continue;
 
       selector_state = _gtk_css_selector_get_state_flags (info->selector);

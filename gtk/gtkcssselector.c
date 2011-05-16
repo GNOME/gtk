@@ -353,18 +353,32 @@ gtk_css_selector_matches_previous (const GtkCssSelector      *selector,
   return FALSE;
 }
 
+/**
+ * _gtk_css_selector_matches:
+ * @selector: the selector
+ * @path: the path to check
+ * @length: How many elements of the path are to be used
+ *
+ * Checks if the @selector matches the given @path. If @length is
+ * smaller than the number of elements in @path, it is assumed that
+ * only the first @length element of @path are valid and the rest
+ * does not exist. This is useful for doing parent matches for the
+ * 'inherit' keyword.
+ *
+ * Returns: %TRUE if the selector matches @path
+ **/
 gboolean
 _gtk_css_selector_matches (const GtkCssSelector      *selector,
-                           /* const */ GtkWidgetPath *path)
+                           /* const */ GtkWidgetPath *path,
+                           guint                      length)
 {
   GSList *list;
-  guint length;
   gboolean match;
 
   g_return_val_if_fail (selector != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (length <= gtk_widget_path_length (path), FALSE);
 
-  length = gtk_widget_path_length (path);
   if (length == 0)
     return FALSE;
 
