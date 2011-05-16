@@ -33,6 +33,7 @@
 #include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkstylepropertiesprivate.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -1130,20 +1131,15 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
       while (g_hash_table_iter_next (&iter, &key, &value))
         {
-          gchar *prop = key;
+          GParamSpec *pspec;
 
-          /* Properties starting with '-' may be both widget style properties
-           * or custom properties from the theming engine, so check whether
-           * the type is registered or not.
-           */
-          if (prop[0] == '-' &&
-              !gtk_style_properties_lookup_property (prop, NULL, NULL))
+          if (!gtk_style_properties_lookup_property (key, NULL, &pspec))
             continue;
 
-          gtk_style_properties_set_property (props,
-                                             key,
-                                             _gtk_css_selector_get_state_flags (info->selector),
-                                             value);
+          _gtk_style_properties_set_property_by_pspec (props,
+                                                       pspec,
+                                                       _gtk_css_selector_get_state_flags (info->selector),
+                                                       value);
         }
     }
 
