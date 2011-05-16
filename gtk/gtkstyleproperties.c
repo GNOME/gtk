@@ -62,7 +62,6 @@ typedef struct ValueData ValueData;
 
 struct PropertyNode
 {
-  GQuark property_quark;
   GParamSpec *pspec;
   GtkStylePropertyParser parse_func;
 };
@@ -84,7 +83,7 @@ struct GtkStylePropertiesPrivate
   GHashTable *properties;
 };
 
-static GArray *properties = NULL;
+static GHashTable *properties = NULL;
 
 static void gtk_style_properties_provider_init (GtkStyleProviderIface *iface);
 static void gtk_style_properties_finalize      (GObject      *object);
@@ -382,36 +381,13 @@ gtk_style_properties_provider_init (GtkStyleProviderIface *iface)
   iface->get_style = gtk_style_properties_get_style;
 }
 
-static int
-compare_property (gconstpointer p1,
-                  gconstpointer p2)
-{
-  PropertyNode *key = (PropertyNode *) p1;
-  PropertyNode *node = (PropertyNode *) p2;
-
-  if (key->property_quark > node->property_quark)
-    return 1;
-  else if (key->property_quark < node->property_quark)
-    return -1;
-
-  return 0;
-}
-
 static PropertyNode *
-property_node_lookup (GQuark quark)
+property_node_lookup (const char *name)
 {
-  PropertyNode key = { 0 };
-
-  if (!quark)
-    return NULL;
-
   if (!properties)
     return NULL;
 
-  key.property_quark = quark;
-
-  return bsearch (&key, properties->data, properties->len,
-                  sizeof (PropertyNode), compare_property);
+  return g_hash_table_lookup (properties, name);
 }
 
 /* Property registration functions */
@@ -432,39 +408,26 @@ void
 gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                         GParamSpec             *pspec)
 {
-  PropertyNode *node, new = { 0 };
-  GQuark quark;
-  gint i;
+  PropertyNode *node;
 
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
+  /* stuff is never freed, so no need for free functions */
   if (G_UNLIKELY (!properties))
-    properties = g_array_new (FALSE, TRUE, sizeof (PropertyNode));
+    properties = g_hash_table_new (g_str_hash, g_str_equal);
 
-  quark = g_quark_from_string (pspec->name);
-
-  if ((node = property_node_lookup (quark)) != NULL)
+  if ((node = property_node_lookup (pspec->name)) != NULL)
     {
       g_warning ("Property \"%s\" was already registered with type %s",
                  pspec->name, g_type_name (node->pspec->value_type));
       return;
     }
 
-  new.property_quark = quark;
-  new.pspec = pspec;
+  node = g_slice_new0 (PropertyNode);
+  node->pspec = pspec;
+  node->parse_func = parse_func;
 
-  if (parse_func)
-    new.parse_func = parse_func;
-
-  for (i = 0; i < properties->len; i++)
-    {
-      node = &g_array_index (properties, PropertyNode, i);
-
-      if (node->property_quark > quark)
-        break;
-    }
-
-  g_array_insert_val (properties, i, new);
+  g_hash_table_insert (properties, pspec->name, node);
 }
 
 /**
@@ -489,20 +452,12 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
   PropertyNode *node;
   GtkStylePropertiesClass *klass;
   gboolean found = FALSE;
-  GQuark quark;
 
   g_return_val_if_fail (property_name != NULL, FALSE);
 
   klass = g_type_class_ref (GTK_TYPE_STYLE_PROPERTIES);
-  quark = g_quark_try_string (property_name);
 
-  if (quark == 0)
-    {
-      g_type_class_unref (klass);
-      return FALSE;
-    }
-
-  node = property_node_lookup (quark);
+  node = property_node_lookup (property_name);
 
   if (node)
     {
@@ -675,7 +630,7 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
   g_return_if_fail (value != NULL);
 
   value_type = G_VALUE_TYPE (value);
-  node = property_node_lookup (g_quark_try_string (property));
+  node = property_node_lookup (property);
 
   if (!node)
     {
@@ -754,7 +709,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
       gchar *error = NULL;
       GValue *val;
 
-      node = property_node_lookup (g_quark_try_string (property_name));
+      node = property_node_lookup (property_name);
 
       if (!node)
         {
@@ -935,7 +890,7 @@ _gtk_style_properties_peek_property (GtkStyleProperties *props,
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), NULL);
   g_return_val_if_fail (prop_name != NULL, NULL);
 
-  node = property_node_lookup (g_quark_try_string (prop_name));
+  node = property_node_lookup (prop_name);
 
   if (!node)
     {
@@ -987,7 +942,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
   g_return_val_if_fail (property != NULL, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
-  node = property_node_lookup (g_quark_try_string (property));
+  node = property_node_lookup (property);
 
   if (!node)
     {
@@ -1049,7 +1004,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
       gchar *error = NULL;
       GValue *val = NULL;
 
-      node = property_node_lookup (g_quark_try_string (property_name));
+      node = property_node_lookup (property_name);
 
       if (!node)
         {
@@ -1140,7 +1095,7 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (property != NULL);
 
-  node = property_node_lookup (g_quark_try_string (property));
+  node = property_node_lookup (property);
 
   if (!node)
     {
