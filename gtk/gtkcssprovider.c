@@ -735,12 +735,12 @@
  * </refsect2>
  */
 
-typedef struct SelectorStyleInfo SelectorStyleInfo;
+typedef struct GtkCssRuleset GtkCssRuleset;
 typedef struct _GtkCssScanner GtkCssScanner;
 typedef enum ParserScope ParserScope;
 typedef enum ParserSymbol ParserSymbol;
 
-struct SelectorStyleInfo
+struct GtkCssRuleset
 {
   GtkCssSelector *selector;
   GHashTable *style;
@@ -764,7 +764,7 @@ struct _GtkCssProviderPrivate
 
   GHashTable *symbolic_colors;
 
-  GPtrArray *selectors_info;
+  GPtrArray *rulesets;
 };
 
 enum ParserScope {
@@ -908,40 +908,40 @@ gtk_css_provider_take_error_full (GtkCssProvider *provider,
   g_error_free (error);
 }
 
-static SelectorStyleInfo *
-selector_style_info_new (GtkCssSelector *selector)
+static GtkCssRuleset *
+gtk_css_ruleset_new (GtkCssSelector *selector)
 {
-  SelectorStyleInfo *info;
+  GtkCssRuleset *ruleset;
 
-  info = g_slice_new0 (SelectorStyleInfo);
-  info->selector = selector;
+  ruleset = g_slice_new0 (GtkCssRuleset);
+  ruleset->selector = selector;
 
-  return info;
+  return ruleset;
 }
 
 static void
-selector_style_info_free (SelectorStyleInfo *info)
+gtk_css_ruleset_free (GtkCssRuleset *ruleset)
 {
-  if (info->style)
-    g_hash_table_unref (info->style);
+  if (ruleset->style)
+    g_hash_table_unref (ruleset->style);
 
-  if (info->selector)
-    _gtk_css_selector_free (info->selector);
+  if (ruleset->selector)
+    _gtk_css_selector_free (ruleset->selector);
 
-  g_slice_free (SelectorStyleInfo, info);
+  g_slice_free (GtkCssRuleset, ruleset);
 }
 
 static void
-selector_style_info_set_style (SelectorStyleInfo *info,
-                               GHashTable        *style)
+gtk_css_ruleset_set_style (GtkCssRuleset *ruleset,
+                           GHashTable    *style)
 {
-  if (info->style)
-    g_hash_table_unref (info->style);
+  if (ruleset->style)
+    g_hash_table_unref (ruleset->style);
 
   if (style)
-    info->style = g_hash_table_ref (style);
+    ruleset->style = g_hash_table_ref (style);
   else
-    info->style = NULL;
+    ruleset->style = NULL;
 }
 
 static void
@@ -1071,7 +1071,7 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
                                                            GTK_TYPE_CSS_PROVIDER,
                                                            GtkCssProviderPrivate);
 
-  priv->selectors_info = g_ptr_array_new_with_free_func ((GDestroyNotify) selector_style_info_free);
+  priv->rulesets = g_ptr_array_new_with_free_func ((GDestroyNotify) gtk_css_ruleset_free);
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
@@ -1119,21 +1119,21 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
   for (l = 1; l <= length; l++)
     {
-      for (i = 0; i < priv->selectors_info->len; i++)
+      for (i = 0; i < priv->rulesets->len; i++)
         {
-          SelectorStyleInfo *info;
+          GtkCssRuleset *ruleset;
           GHashTableIter iter;
           gpointer key, value;
 
-          info = g_ptr_array_index (priv->selectors_info, i);
+          ruleset = g_ptr_array_index (priv->rulesets, i);
 
-          if (l < length && _gtk_css_selector_get_state_flags (info->selector))
+          if (l < length && _gtk_css_selector_get_state_flags (ruleset->selector))
             continue;
 
-          if (!_gtk_css_selector_matches (info->selector, path, l))
+          if (!_gtk_css_selector_matches (ruleset->selector, path, l))
             continue;
 
-          g_hash_table_iter_init (&iter, info->style);
+          g_hash_table_iter_init (&iter, ruleset->style);
 
           while (g_hash_table_iter_next (&iter, &key, &value))
             {
@@ -1147,7 +1147,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
               _gtk_style_properties_set_property_by_pspec (props,
                                                            pspec,
-                                                           _gtk_css_selector_get_state_flags (info->selector),
+                                                           _gtk_css_selector_get_state_flags (ruleset->selector),
                                                            value);
             }
         }
@@ -1174,18 +1174,18 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                g_type_name (pspec->owner_type),
                                pspec->name);
 
-  for (i = priv->selectors_info->len - 1; i >= 0; i--)
+  for (i = priv->rulesets->len - 1; i >= 0; i--)
     {
-      SelectorStyleInfo *info;
+      GtkCssRuleset *ruleset;
       GtkStateFlags selector_state;
 
-      info = g_ptr_array_index (priv->selectors_info, i);
+      ruleset = g_ptr_array_index (priv->rulesets, i);
 
-      if (!_gtk_css_selector_matches (info->selector, path, gtk_widget_path_length (path)))
+      if (!_gtk_css_selector_matches (ruleset->selector, path, gtk_widget_path_length (path)))
         continue;
 
-      selector_state = _gtk_css_selector_get_state_flags (info->selector);
-      val = g_hash_table_lookup (info->style, prop_name);
+      selector_state = _gtk_css_selector_get_state_flags (ruleset->selector);
+      val = g_hash_table_lookup (ruleset->style, prop_name);
 
       if (val &&
           (selector_state == 0 ||
@@ -1232,7 +1232,7 @@ gtk_css_provider_finalize (GObject *object)
   css_provider = GTK_CSS_PROVIDER (object);
   priv = css_provider->priv;
 
-  g_ptr_array_free (priv->selectors_info, TRUE);
+  g_ptr_array_free (priv->rulesets, TRUE);
 
   if (priv->symbolic_colors)
     g_hash_table_destroy (priv->symbolic_colors);
@@ -1334,12 +1334,12 @@ css_provider_commit (GtkCssProvider *css_provider,
   for (l = selectors; l; l = l->next)
     {
       GtkCssSelector *selector = l->data;
-      SelectorStyleInfo *info;
+      GtkCssRuleset *ruleset;
 
-      info = selector_style_info_new (selector);
-      selector_style_info_set_style (info, properties);
+      ruleset = gtk_css_ruleset_new (selector);
+      gtk_css_ruleset_set_style (ruleset, properties);
 
-      g_ptr_array_add (priv->selectors_info, info);
+      g_ptr_array_add (priv->rulesets, ruleset);
     }
 
   g_hash_table_unref (properties);
@@ -1378,8 +1378,8 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
   priv = css_provider->priv;
 
-  if (priv->selectors_info->len > 0)
-    g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
+  if (priv->rulesets->len > 0)
+    g_ptr_array_remove_range (priv->rulesets, 0, priv->rulesets->len);
 }
 
 static void
@@ -2106,8 +2106,8 @@ static int
 gtk_css_provider_compare_rule (gconstpointer a_,
                                gconstpointer b_)
 {
-  const SelectorStyleInfo *a = *(const SelectorStyleInfo **) a_;
-  const SelectorStyleInfo *b = *(const SelectorStyleInfo **) b_;
+  const GtkCssRuleset *a = *(const GtkCssRuleset **) a_;
+  const GtkCssRuleset *b = *(const GtkCssRuleset **) b_;
   int compare;
 
   compare = _gtk_css_selector_compare (a->selector, b->selector);
@@ -2129,7 +2129,7 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv = css_provider->priv;
 
-  g_ptr_array_sort (priv->selectors_info, gtk_css_provider_compare_rule);
+  g_ptr_array_sort (priv->rulesets, gtk_css_provider_compare_rule);
 }
 
 static gboolean
@@ -2801,24 +2801,24 @@ gtk_css_provider_get_named (const gchar *name,
 }
 
 static void
-selector_style_info_print (const SelectorStyleInfo *info,
-                           GString                 *str)
+gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
+                       GString             *str)
 {
   GList *keys, *walk;
   char *s;
 
-  _gtk_css_selector_print (info->selector, str);
+  _gtk_css_selector_print (ruleset->selector, str);
 
   g_string_append (str, " {\n");
 
-  keys = g_hash_table_get_keys (info->style);
+  keys = g_hash_table_get_keys (ruleset->style);
   /* so the output is identical for identical selector styles */
   keys = g_list_sort (keys, (GCompareFunc) strcmp);
 
   for (walk = keys; walk; walk = walk->next)
     {
       const char *name = walk->data;
-      const GValue *value = g_hash_table_lookup (info->style, (gpointer) name);
+      const GValue *value = g_hash_table_lookup (ruleset->style, (gpointer) name);
 
       g_string_append (str, "  ");
       g_string_append (str, name);
@@ -2891,12 +2891,11 @@ gtk_css_provider_to_string (GtkCssProvider *provider)
 
   gtk_css_provider_print_colors (priv->symbolic_colors, str);
 
-  for (i = 0; i < priv->selectors_info->len; i++)
+  for (i = 0; i < priv->rulesets->len; i++)
     {
       if (i > 0)
         g_string_append (str, "\n");
-      selector_style_info_print (g_ptr_array_index (priv->selectors_info, i),
-                                 str);
+      gtk_css_ruleset_print (g_ptr_array_index (priv->rulesets, i), str);
     }
 
   return g_string_free (str, FALSE);
