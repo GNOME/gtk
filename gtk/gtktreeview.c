@@ -4997,6 +4997,13 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
                                  background_area.width,
                                  background_area.height);
 
+          /* Draw frame */
+          gtk_render_frame (context, cr,
+                            background_area.x,
+                            background_area.y,
+                            background_area.width,
+                            background_area.height);
+
 	  if (gtk_tree_view_is_expander_column (tree_view, column))
 	    {
 	      if (!rtl)
