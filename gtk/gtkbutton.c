@@ -1871,7 +1871,7 @@ gtk_real_button_activate (GtkButton *button)
 	{
 	  if (gdk_device_grab (device, priv->event_window,
 			       GDK_OWNERSHIP_WINDOW, TRUE,
-			       GDK_KEY_PRESS | GDK_KEY_RELEASE,
+			       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
 			       NULL, time) == GDK_GRAB_SUCCESS)
 	    {
 	      gtk_device_grab_add (widget, device, TRUE);
