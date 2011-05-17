@@ -1108,38 +1108,48 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
   GtkStyleProperties *props;
-  guint i;
+  guint i, l, length;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   priv = css_provider->priv;
+  length = gtk_widget_path_length (path);
   props = gtk_style_properties_new ();
 
   css_provider_dump_symbolic_colors (css_provider, props);
 
-  for (i = 0; i < priv->selectors_info->len; i++)
+  for (l = 1; l <= length; l++)
     {
-      SelectorStyleInfo *info;
-      GHashTableIter iter;
-      gpointer key, value;
-
-      info = g_ptr_array_index (priv->selectors_info, i);
-
-      if (!_gtk_css_selector_matches (info->selector, path, gtk_widget_path_length (path)))
-        continue;
-
-      g_hash_table_iter_init (&iter, info->style);
-
-      while (g_hash_table_iter_next (&iter, &key, &value))
+      for (i = 0; i < priv->selectors_info->len; i++)
         {
-          GParamSpec *pspec;
+          SelectorStyleInfo *info;
+          GHashTableIter iter;
+          gpointer key, value;
 
-          if (!gtk_style_properties_lookup_property (key, NULL, &pspec))
+          info = g_ptr_array_index (priv->selectors_info, i);
+
+          if (l < length && _gtk_css_selector_get_state_flags (info->selector))
             continue;
 
-          _gtk_style_properties_set_property_by_pspec (props,
-                                                       pspec,
-                                                       _gtk_css_selector_get_state_flags (info->selector),
-                                                       value);
+          if (!_gtk_css_selector_matches (info->selector, path, l))
+            continue;
+
+          g_hash_table_iter_init (&iter, info->style);
+
+          while (g_hash_table_iter_next (&iter, &key, &value))
+            {
+              GParamSpec *pspec;
+
+              if (!gtk_style_properties_lookup_property (key, NULL, &pspec))
+                continue;
+
+              if (l != length && !gtk_style_param_get_inherit (pspec))
+                continue;
+
+              _gtk_style_properties_set_property_by_pspec (props,
+                                                           pspec,
+                                                           _gtk_css_selector_get_state_flags (info->selector),
+                                                           value);
+            }
         }
     }
 
