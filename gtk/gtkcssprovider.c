@@ -944,6 +944,14 @@ gtk_css_ruleset_set_style (GtkCssRuleset *ruleset,
     ruleset->style = NULL;
 }
 
+static gboolean
+gtk_css_ruleset_matches (GtkCssRuleset *ruleset,
+                         GtkWidgetPath *path,
+                         guint          length)
+{
+  return _gtk_css_selector_matches (ruleset->selector, path, length);
+}
+
 static void
 property_value_free (GValue *value)
 {
@@ -1130,7 +1138,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
           if (l < length && _gtk_css_selector_get_state_flags (ruleset->selector))
             continue;
 
-          if (!_gtk_css_selector_matches (ruleset->selector, path, l))
+          if (!gtk_css_ruleset_matches (ruleset, path, l))
             continue;
 
           g_hash_table_iter_init (&iter, ruleset->style);
@@ -1181,7 +1189,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 
       ruleset = g_ptr_array_index (priv->rulesets, i);
 
-      if (!_gtk_css_selector_matches (ruleset->selector, path, gtk_widget_path_length (path)))
+      if (!gtk_css_ruleset_matches (ruleset, path, gtk_widget_path_length (path)))
         continue;
 
       selector_state = _gtk_css_selector_get_state_flags (ruleset->selector);
