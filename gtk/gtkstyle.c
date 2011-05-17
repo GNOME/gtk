@@ -685,7 +685,7 @@ gtk_style_update_from_context (GtkStyle *style)
 {
   GtkStylePrivate *priv;
   GtkStateType state;
-  GtkBorder *padding;
+  GtkBorder padding;
   gint i;
 
   priv = GTK_STYLE_GET_PRIVATE (style);
@@ -721,16 +721,11 @@ gtk_style_update_from_context (GtkStyle *style)
 
   gtk_style_context_get (priv->context, 0,
                          "font", &style->font_desc,
-                         "padding", &padding,
                          NULL);
+  gtk_style_context_get_padding (priv->context, 0, &padding);
 
-  if (padding)
-    {
-      style->xthickness = padding->left;
-      style->ythickness = padding->top;
-
-      gtk_border_free (padding);
-    }
+  style->xthickness = padding.left;
+  style->ythickness = padding.top;
 
   for (i = 0; i < 5; i++)
     {

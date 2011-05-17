@@ -4144,7 +4144,7 @@ gtk_label_draw (GtkWidget *widget,
 
   if (priv->text && (*priv->text != '\0'))
     {
-      GdkRGBA *bg_color, *fg_color;
+      GdkRGBA bg_color, fg_color;
 
       get_layout_location (label, &x, &y);
 
@@ -4192,23 +4192,18 @@ gtk_label_draw (GtkWidget *widget,
           if (gtk_widget_has_focus (widget))
             state |= GTK_STATE_FLAG_FOCUSED;
 
-          gtk_style_context_get (context, state,
-                                 "background-color", &bg_color,
-                                 "color", &fg_color,
-                                 NULL);
+          gtk_style_context_get_color (context, state, &fg_color);
+          gtk_style_context_get_background_color (context, state, &bg_color);
 
-          gdk_cairo_set_source_rgba (cr, bg_color);
+          gdk_cairo_set_source_rgba (cr, &bg_color);
           cairo_paint (cr);
 
-          gdk_cairo_set_source_rgba (cr, fg_color);
+          gdk_cairo_set_source_rgba (cr, &fg_color);
           cairo_move_to (cr, x, y);
           _gtk_pango_fill_layout (cr, priv->layout);
 
           cairo_restore (cr);
           cairo_region_destroy (clip);
-
-          gdk_rgba_free (bg_color);
-          gdk_rgba_free (fg_color);
         }
       else if (info)
         {
@@ -4230,7 +4225,7 @@ gtk_label_draw (GtkWidget *widget,
 
           if (active_link)
             {
-              GdkRGBA *bg_color;
+              GdkRGBA bg_color;
 
               range[0] = active_link->start;
               range[1] = active_link->end;
@@ -4256,11 +4251,9 @@ gtk_label_draw (GtkWidget *widget,
               else
                 state = GTK_STATE_FLAG_PRELIGHT;
 
-              gtk_style_context_get (context, state,
-                                     "background-color", &bg_color,
-                                     NULL);
+              gtk_style_context_get_background_color (context, state, &bg_color);
 
-              gdk_cairo_set_source_rgba (cr, bg_color);
+              gdk_cairo_set_source_rgba (cr, &bg_color);
               cairo_paint (cr);
 
               gdk_cairo_set_source_color (cr, text_color);
@@ -4269,7 +4262,6 @@ gtk_label_draw (GtkWidget *widget,
 
               gdk_color_free (link_color);
               gdk_color_free (visited_link_color);
-              gdk_rgba_free (bg_color);
 
               cairo_restore (cr);
             }

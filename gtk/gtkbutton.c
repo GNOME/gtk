@@ -1627,24 +1627,21 @@ _gtk_button_paint (GtkButton          *button,
       gint child_displacement_x;
       gint child_displacement_y;
       gboolean displace_focus;
-      GtkBorder *border;
+      GtkBorder border;
 
       gtk_style_context_get_style (context,
                                    "child-displacement-y", &child_displacement_y,
                                    "child-displacement-x", &child_displacement_x,
                                    "displace-focus", &displace_focus,
                                    NULL);
-
-      gtk_style_context_get (context, state,
-                             "border-width", &border,
-                             NULL);
+      gtk_style_context_get_border (context, state, &border);
 
       if (interior_focus)
         {
-          x += border->left + focus_pad;
-          y += border->top + focus_pad;
-          width -= (2 * focus_pad) + border->left + border->right;
-          height -=  (2 * focus_pad) + border->top + border->bottom;
+          x += border.left + focus_pad;
+          y += border.top + focus_pad;
+          width -= (2 * focus_pad) + border.left + border.right;
+          height -=  (2 * focus_pad) + border.top + border.bottom;
         }
       else
         {
@@ -1662,8 +1659,6 @@ _gtk_button_paint (GtkButton          *button,
 
       gtk_render_focus (context, cr,
 			x, y, width, height);
-
-      gtk_border_free (border);
     }
 
   gtk_style_context_restore (context);

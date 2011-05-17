@@ -398,25 +398,22 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
     {
       GtkStyleContext *context;
-      GtkBorder *border;
+      GtkBorder border;
 
       context = gtk_widget_get_style_context (widget);
-
-      gtk_style_context_get (context, 0,
-                             "border-width", &border,
-                             NULL);
+      gtk_style_context_get_border (context, gtk_widget_get_state_flags (widget),
+                                    &border);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          *minimum += border->left + border->right;
-          *natural += border->left + border->right;
+          *minimum += border.left + border.right;
+          *natural += border.left + border.right;
         }
       else
         {
-          *minimum += border->top + border->bottom;
-          *natural += border->top + border->bottom;
+          *minimum += border.top + border.bottom;
+          *natural += border.top + border.bottom;
         }
-      gtk_border_free (border);
     }
 }
 
@@ -503,19 +500,16 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
           GtkStyleContext *context;
-          GtkBorder *border;
+          GtkBorder border;
 
           context = gtk_widget_get_style_context (widget);
-          gtk_style_context_get (context, 0,
-                                 "border-width", &border,
-                                 NULL);
+          gtk_style_context_get_border (context, gtk_widget_get_state_flags (widget),
+                                        &border);
 
-          remaining_space.x += border->left;
-          remaining_space.y += border->top;
-          remaining_space.width -= border->left + border->right;
-          remaining_space.height -= border->top + border->bottom;
-
-          gtk_border_free (border);
+          remaining_space.x += border.left;
+          remaining_space.y += border.top;
+          remaining_space.width -= border.left + border.right;
+          remaining_space.height -= border.top + border.bottom;
 	}
       
       requested_sizes = g_array_new (FALSE, FALSE, sizeof (GtkRequestedSize));

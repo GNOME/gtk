@@ -1282,17 +1282,13 @@ gtk_combo_box_state_flags_changed (GtkWidget     *widget,
         {
           GtkStyleContext *context;
           GtkStateFlags state;
-          GdkRGBA *color;
+          GdkRGBA color;
 
           context  = gtk_widget_get_style_context (widget);
           state = gtk_widget_get_state_flags (widget);
+          gtk_style_context_get_background_color (context, state, &color);
 
-          gtk_style_context_get (context, state,
-                                 "background-color", &color,
-                                 NULL);
-
-          gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), color);
-          gdk_rgba_free (color);
+          gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), &color);
         }
     }
 
@@ -1374,17 +1370,14 @@ gtk_combo_box_style_updated (GtkWidget *widget)
   if (priv->tree_view && priv->cell_view)
     {
       GtkStyleContext *context;
-      GdkRGBA *color;
+      GtkStateFlags state;
+      GdkRGBA color;
 
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_get (context, 0,
-                             "background-color", &color,
-                             NULL);
+      context  = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+      gtk_style_context_get_background_color (context, state, &color);
 
-      gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view),
-                                         color);
-
-      gdk_rgba_free (color);
+      gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), &color);
     }
 
   child = gtk_bin_get_child (GTK_BIN (combo_box));
@@ -3292,17 +3285,13 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
     {
       GtkStyleContext *context;
       GtkStateFlags state;
-      GdkRGBA *color;
+      GdkRGBA color;
 
-      context = gtk_widget_get_style_context (widget);
+      context  = gtk_widget_get_style_context (widget);
       state = gtk_widget_get_state_flags (widget);
+      gtk_style_context_get_background_color (context, state, &color);
 
-      gtk_style_context_get (context, state,
-                             "background-color", &color,
-                             NULL);
-
-      gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), color);
-      gdk_rgba_free (color);
+      gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), &color);
 
       priv->box = gtk_event_box_new ();
       gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->box),
