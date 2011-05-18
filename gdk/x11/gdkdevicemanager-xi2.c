@@ -91,7 +91,8 @@ static GdkEventMask gdk_x11_device_manager_xi2_get_handled_events   (GdkEventTra
 static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
                                                                      Window              window,
                                                                      GdkEventMask        event_mask);
-
+static GdkWindow *  gdk_x11_device_manager_xi2_get_window           (GdkEventTranslator *translator,
+                                                                     XEvent             *xevent);
 
 enum {
   PROP_0,
@@ -561,6 +562,7 @@ gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface
   iface->translate_event = gdk_x11_device_manager_xi2_translate_event;
   iface->get_handled_events = gdk_x11_device_manager_xi2_get_handled_events;
   iface->select_window_events = gdk_x11_device_manager_xi2_select_window_events;
+  iface->get_window = gdk_x11_device_manager_xi2_get_window;
 }
 
 static void
@@ -1346,6 +1348,24 @@ gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
 
   _gdk_x11_device_manager_xi2_select_events (device_manager, window, &event_mask);
   g_free (event_mask.mask);
+}
+
+static GdkWindow *
+gdk_x11_device_manager_xi2_get_window (GdkEventTranslator *translator,
+                                       XEvent             *xevent)
+{
+  GdkX11DeviceManagerXI2 *device_manager;
+  XIEvent *ev;
+
+  device_manager = (GdkX11DeviceManagerXI2 *) translator;
+
+  if (xevent->type != GenericEvent ||
+      xevent->xcookie.extension != device_manager->opcode)
+    return NULL;
+
+  ev = (XIEvent *) xevent->xcookie.data;
+
+  return get_event_window (translator, ev);
 }
 
 #else /* XINPUT_2 */
