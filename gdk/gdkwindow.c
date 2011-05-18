@@ -2410,6 +2410,10 @@ gdk_window_peek_children (GdkWindow *window)
  *
  * See gdk_display_add_client_message_filter() if you are interested
  * in X ClientMessage events.
+ *
+ * If you are interested in X GenericEvents, bear in mind that
+ * XGetEventData() has been already called on the event, and
+ * XFreeEventData() must not be called within @function.
  **/
 void
 gdk_window_add_filter (GdkWindow     *window,
