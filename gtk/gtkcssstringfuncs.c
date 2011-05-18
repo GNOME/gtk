@@ -114,19 +114,21 @@ rgba_value_from_string (const char  *str,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  if (gdk_rgba_parse (&rgba, str))
-    {
-      g_value_set_boxed (value, &rgba);
-      return TRUE;
-    }
-
   symbolic = _gtk_css_parse_symbolic_color (str, error);
   if (symbolic == NULL)
     return FALSE;
 
-  g_value_unset (value);
-  g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
-  g_value_take_boxed (value, symbolic);
+  if (gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
+    {
+      g_value_set_boxed (value, &rgba);
+    }
+  else
+    {
+      g_value_unset (value);
+      g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
+      g_value_take_boxed (value, symbolic);
+    }
+
   return TRUE;
 }
 
@@ -148,21 +150,29 @@ color_value_from_string (const char  *str,
                          GError     **error)
 {
   GtkSymbolicColor *symbolic;
-  GdkColor color;
-
-  if (gdk_color_parse (str, &color))
-    {
-      g_value_set_boxed (value, &color);
-      return TRUE;
-    }
+  GdkRGBA rgba;
 
   symbolic = _gtk_css_parse_symbolic_color (str, error);
   if (symbolic == NULL)
     return FALSE;
 
-  g_value_unset (value);
-  g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
-  g_value_take_boxed (value, symbolic);
+  if (gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
+    {
+      GdkColor color;
+
+      color.red = rgba.red * 65535. + 0.5;
+      color.green = rgba.green * 65535. + 0.5;
+      color.blue = rgba.blue * 65535. + 0.5;
+
+      g_value_set_boxed (value, &color);
+    }
+  else
+    {
+      g_value_unset (value);
+      g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
+      g_value_take_boxed (value, symbolic);
+    }
+
   return TRUE;
 }
 
