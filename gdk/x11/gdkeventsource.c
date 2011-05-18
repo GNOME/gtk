@@ -97,10 +97,29 @@ gdk_event_apply_filters (XEvent    *xevent,
 }
 
 static GdkWindow *
-gdk_event_source_get_filter_window (GdkEventSource *event_source,
-                                    XEvent         *xevent)
+gdk_event_source_get_filter_window (GdkEventSource      *event_source,
+                                    XEvent              *xevent,
+                                    GdkEventTranslator **event_translator)
 {
+  GList *list = event_source->translators;
   GdkWindow *window;
+
+  *event_translator = NULL;
+
+  while (list)
+    {
+      GdkEventTranslator *translator = list->data;
+
+      list = list->next;
+      window = _gdk_x11_event_translator_get_window (translator,
+                                                     event_source->display,
+                                                     xevent);
+      if (window)
+        {
+          *event_translator = translator;
+          return window;
+        }
+    }
 
   window = gdk_x11_window_lookup_for_display (event_source->display,
                                               xevent->xany.window);
@@ -151,8 +170,8 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
                                   XEvent         *xevent)
 {
   GdkEvent *event = gdk_event_new (GDK_NOTHING);
-  GList *list = event_source->translators;
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
+  GdkEventTranslator *event_translator;
   GdkWindow *filter_window;
   Display *dpy;
 
@@ -164,7 +183,8 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   if (xevent->type == GenericEvent)
     XGetEventData (dpy, &xevent->xcookie);
 
-  filter_window = gdk_event_source_get_filter_window (event_source, xevent);
+  filter_window = gdk_event_source_get_filter_window (event_source, xevent,
+                                                      &event_translator);
   if (filter_window)
     event->any.window = g_object_ref (filter_window);
 
@@ -199,14 +219,26 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   gdk_event_free (event);
   event = NULL;
 
-  while (list && !event)
+  if (event_translator)
     {
-      GdkEventTranslator *translator = list->data;
-
-      list = list->next;
-      event = _gdk_x11_event_translator_translate (translator,
+      /* Event translator was gotten before in get_filter_window() */
+      event = _gdk_x11_event_translator_translate (event_translator,
                                                    event_source->display,
                                                    xevent);
+    }
+  else
+    {
+      GList *list = event_source->translators;
+
+      while (list && !event)
+        {
+          GdkEventTranslator *translator = list->data;
+
+          list = list->next;
+          event = _gdk_x11_event_translator_translate (translator,
+                                                       event_source->display,
+                                                       xevent);
+        }
     }
 
   if (event &&

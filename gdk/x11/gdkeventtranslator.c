@@ -20,7 +20,7 @@
 #include "config.h"
 
 #include "gdkeventtranslator.h"
-
+#include "gdkwindow-x11.h"
 
 typedef GdkEventTranslatorIface GdkEventTranslatorInterface;
 G_DEFINE_INTERFACE (GdkEventTranslator, _gdk_x11_event_translator, G_TYPE_OBJECT);
@@ -86,4 +86,25 @@ _gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
 
   if (iface->select_window_events)
     iface->select_window_events (translator, window, event_mask);
+}
+
+GdkWindow *
+_gdk_x11_event_translator_get_window (GdkEventTranslator *translator,
+                                      GdkDisplay         *display,
+                                      XEvent             *xevent)
+{
+  GdkEventTranslatorIface *iface;
+  GdkWindow *window = NULL;
+
+  g_return_val_if_fail (GDK_IS_EVENT_TRANSLATOR (translator), NULL);
+
+  iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
+
+  if (iface->get_window)
+    window = iface->get_window (translator, xevent);
+
+  if (!window)
+    window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
+
+  return window;
 }
