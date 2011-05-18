@@ -65,7 +65,7 @@
 #include "gtkaccessibleprivate.h"
 #include "gtkbutton.h"
 #include "gtkbox.h"
-#include "gtkeventbox.h"
+#include "gtkframe.h"
 #include "gtknotebook.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -846,6 +846,23 @@ alternative_button_order (GtkAssistant *assistant)
   return result;
 }
 
+static gboolean
+assistant_sidebar_draw_cb (GtkWidget *widget,
+                           cairo_t *cr,
+                           gpointer user_data)
+{
+  gint width, height;
+  GtkStyleContext *context;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_render_background (context, cr, 0, 0, width, height);
+
+  return FALSE;
+}
+
 static void
 gtk_assistant_init (GtkAssistant *assistant)
 {
@@ -853,7 +870,7 @@ gtk_assistant_init (GtkAssistant *assistant)
   GtkStyleContext *context;
   GtkWidget *main_box;
   GtkWidget *content_box;
-  GtkWidget *side_box;
+  GtkWidget *sidebar_frame;
 
   assistant->priv = G_TYPE_INSTANCE_GET_PRIVATE (assistant,
                                                  GTK_TYPE_ASSISTANT,
@@ -867,11 +884,16 @@ gtk_assistant_init (GtkAssistant *assistant)
 
   main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   priv->sidebar = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_set_border_width (GTK_CONTAINER (priv->sidebar), 12);
-  /* Add an event box so we can set the background */
-  side_box = gtk_event_box_new ();
-  context = gtk_widget_get_style_context (side_box);
+
+  /* use a frame for the sidebar, and manually render a background
+   * in it. GtkFrame also gives us padding support for free.
+   */
+  sidebar_frame = gtk_frame_new (NULL);
+  context = gtk_widget_get_style_context (sidebar_frame);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SIDEBAR);
+
+  g_signal_connect (sidebar_frame, "draw",
+                    G_CALLBACK (assistant_sidebar_draw_cb), assistant);
 
   content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (content_box), 12);
@@ -880,8 +902,8 @@ gtk_assistant_init (GtkAssistant *assistant)
   gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->content), FALSE);
   priv->action_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
-  gtk_container_add (GTK_CONTAINER (side_box), priv->sidebar);
-  gtk_box_pack_start (GTK_BOX (main_box), side_box, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (sidebar_frame), priv->sidebar);
+  gtk_box_pack_start (GTK_BOX (main_box), sidebar_frame, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (main_box), content_box, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (content_box), priv->content, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (content_box), priv->action_area, FALSE, TRUE, 0);
