@@ -1574,7 +1574,6 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 
   context = gtk_widget_get_style_context (page_info->current_title);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
-  gtk_widget_reset_style (page_info->current_title);
 
   gtk_size_group_add_widget (priv->title_size_group, page_info->regular_title);
   gtk_size_group_add_widget (priv->title_size_group, page_info->current_title);
