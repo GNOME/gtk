@@ -1410,6 +1410,13 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
                                   const GError    *error,
                                   GError         **propagate_to)
 {
+  /* don't fail for deprecations */
+  if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
+    {
+      g_warning ("Theme parsing error: %s:%u:%u: %s", path ? path : "<unknown>", line, position, error->message);
+      return;
+    }
+
   /* we already set an error. And we'd like to keep the first one */
   if (*propagate_to)
     return;
