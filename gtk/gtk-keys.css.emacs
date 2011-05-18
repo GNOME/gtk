@@ -69,7 +69,7 @@
 
   bind "<ctrl>h" { "delete-from-cursor" (chars, -1) };
   bind "<ctrl>w" { "delete-from-cursor" (word-ends, -1) };
-};
+}
 
 /*
  * Bindings for GtkTextView
@@ -83,7 +83,7 @@
 
   bind "<ctrl>space" { "set-anchor" () };
   bind "<ctrl>KP_Space" { "set-anchor" () };
-};
+}
 
 /*
  * Bindings for GtkTreeView
@@ -93,7 +93,7 @@
   bind "<ctrl>s" { "start-interactive-search" () };
   bind "<ctrl>f" { "move-cursor" (logical-positions, 1) };
   bind "<ctrl>b" { "move-cursor" (logical-positions, -1) };
-};
+}
 
 /*
  * Bindings for menus
@@ -104,7 +104,7 @@
   bind "<ctrl>p" { "move-current" (prev) };
   bind "<ctrl>f" { "move-current" (child) };
   bind "<ctrl>b" { "move-current" (parent) };
-};
+}
 
 GtkEntry {
   gtk-key-bindings: gtk-emacs-text-entry;
