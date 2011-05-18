@@ -15,9 +15,10 @@ build/win32/vs9/README.txt file in glib for details where to unpack them.
 It is recommended that one builds the dependencies with VS9 as far as
 possible, especially those from and using the GTK+ stack (i.e. GLib,
 Cairo, ATK, Pango, GDK-Pixbuf), so that crashes caused by mixing calls
-to different CRTs can be kept at a minimum.  zlib, libpng, and Cairo
-do contain support for compiling under VS9 using VS
-project files and/or makefiles at this time of writing, For the
+to different CRTs can be kept at a minimum.  
+
+zlib, libpng, and Cairo do contain support for compiling under VS9
+using VS project files and/or makefiles at this time of writing, For the
 GTK+ stack, VS9 project files are either available under
 $(srcroot)/build/vs9 in the case of GLib (stable/unstable), ATK**
 (2.x stable/unstable) and GDK-Pixbuf (unstable), and should be in the next
@@ -27,6 +28,14 @@ gettext-runtime, so please use the binaries from:
 
 ftp://ftp.gnome.org/pub/GNOME/binaries/win32/dependencies/ (32 bit)
 ftp://ftp.gnome.org/pub/GNOME/binaries/win64/dependencies/ (64 bit)
+
+Unzip the binaries obtained from ftp.gnome.org in <root>\vs9\<PlatformName>,
+and build the following, if not already done so: 
+
+Note: put the resulting zlib, libpng, pcre and Cairo files as follows:
+ .dll files: <root>\vs9\<PlatformName>\bin
+ .lib files: <root>\vs9\<PlatformName>\lib
+ .h files: <root>\vs9\<PlatformName>\include
 
 The recommended build order for these dependencies:
 (first unzip any dependent binaries downloaded from the ftp.gnome.org
@@ -39,11 +48,11 @@ The recommended build order for these dependencies:
 -(for GDK-Pixbuf, if not using GDI+) jasper [jpeg-2000 library])
 -(optional for GLib) PCRE (version 8.12 or later, use of CMake to
   build PCRE is recommended-see build/win32/vs9/README.txt of GLib)
--GLib
+-GLib ***
 -Cairo (inclusive of Cairo-GObject)
--ATK-2.x**
--Pango
--GDK-Pixbuf
+-ATK-2.x** ***
+-Pango***
+-GDK-Pixbuf***
 (note the last 3 dependencies are not interdependent, so the last 3
  dependencies can be built in any order)
 
@@ -55,12 +64,13 @@ built DLLs go into <root>\vs9\<PlatformName>\bin, built LIBs into
 project files higher in the stack are supposed to look for them, not
 from a specific GLib source tree.
 
-*About the dependencies marked with *: I will see whether it is possible
- to reduce the depepdencies on building and running GTK+ by making these
- dependencies optional, as those are not compulsory components for
- building and running GTK+ itself, but note that they are needed for
- people running and building GIMP.  They are referred to by components
- in Cairo and Pango mainly.
+*About the dependencies marked with *: These dependencies are optional
+ as those are not compulsory components for building and running GTK+
+ itself, but note that they are needed for people running and building
+ GIMP or those who need complex script support via fontconfig.  They
+ are referred to by components in Cairo and Pango mainly.
+ Decide whether you need fontconfig support prior to building Cairo
+ and Pango.
 
 **Regarding ATK-2.x: prior to compiling ATK-2.x, please open atkprops
   in VS under "Properties Manager" view (it is under any one of the
@@ -72,6 +82,9 @@ from a specific GLib source tree.
   Sorry this change did not make it upstream prior to ATK-2.0.0 release-
   this will be in the subsequent releases of ATK-2.x and was committed
   upstream.
+
+***:Put the sources of the packages marked with *** in <root>\<package-
+    source-tree>, and build with VS9 from there.
 
 --Tor Lillqvist <tml@iki.fi>
 --Updated by Chun-wei Fan <fanc999@yahoo.com.tw>
