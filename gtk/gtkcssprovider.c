@@ -745,6 +745,8 @@ struct GtkCssRuleset
   GtkCssSelector *selector;
   GHashTable *widget_style;
   GHashTable *style;
+
+  guint has_inherit :1;
 };
 
 struct _GtkCssScanner
@@ -970,6 +972,7 @@ gtk_css_ruleset_add (GtkCssRuleset *ruleset,
                                             NULL,
                                             (GDestroyNotify) property_value_free);
 
+  ruleset->has_inherit |= gtk_style_param_get_inherit (pspec);
   g_hash_table_insert (ruleset->style, pspec, value);
 }
 
@@ -1158,7 +1161,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
           if (ruleset->style == NULL)
             continue;
 
-          if (l < length && _gtk_css_selector_get_state_flags (ruleset->selector))
+          if (l < length && (!ruleset->has_inherit || _gtk_css_selector_get_state_flags (ruleset->selector)))
             continue;
 
           if (!gtk_css_ruleset_matches (ruleset, path, l))
