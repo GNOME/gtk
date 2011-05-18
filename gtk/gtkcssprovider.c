@@ -955,6 +955,14 @@ gtk_css_ruleset_add_style (GtkCssRuleset *ruleset,
   g_hash_table_insert (ruleset->style, name, value);
 }
 
+static void
+gtk_css_ruleset_add (GtkCssRuleset *ruleset,
+                     GParamSpec    *pspec,
+                     GValue        *value)
+{
+  gtk_css_ruleset_add_style (ruleset, g_strdup (pspec->name), value);
+}
+
 static gboolean
 gtk_css_ruleset_matches (GtkCssRuleset *ruleset,
                          GtkWidgetPath *path,
@@ -1944,6 +1952,8 @@ parse_declaration (GtkCssScanner *scanner,
     {
       GValue *val;
 
+      g_free (name);
+
       val = g_slice_new0 (GValue);
       g_value_init (val, pspec->value_type);
 
@@ -1953,20 +1963,20 @@ parse_declaration (GtkCssScanner *scanner,
            * to override other style providers when merged
            */
           g_param_value_set_default (pspec, val);
-          gtk_css_ruleset_add_style (ruleset, name, val);
+          gtk_css_ruleset_add (ruleset, pspec, val);
         }
-      else if (strcmp (name, "gtk-key-bindings") == 0)
+      else if (strcmp (pspec->name, "gtk-key-bindings") == 0)
         {
           /* Private property holding the binding sets */
           resolve_binding_sets (value_str, val);
-          gtk_css_ruleset_add_style (ruleset, name, val);
+          gtk_css_ruleset_add (ruleset, pspec, val);
         }
       else if (parse_func)
         {
           GError *error = NULL;
           
           if ((*parse_func) (value_str, val, &error))
-            gtk_css_ruleset_add_style (ruleset, name, val);
+            gtk_css_ruleset_add (ruleset, pspec, val);
           else
             gtk_css_provider_take_error (scanner->provider, scanner, error);
         }
@@ -1979,13 +1989,12 @@ parse_declaration (GtkCssScanner *scanner,
                                           value_str,
                                           &error))
             {
-              gtk_css_ruleset_add_style (ruleset, name, val);
+              gtk_css_ruleset_add (ruleset, pspec, val);
             }
           else
             {
               g_value_unset (val);
               g_slice_free (GValue, val);
-              g_free (name);
 
               gtk_css_provider_take_error (scanner->provider, scanner, error);
             }
