@@ -74,7 +74,7 @@
   bind "<meta>a" { "select-all" () };
   bind "<shift><meta>a" { "unselect-all" () };
   bind "<meta>f" { "start-interactive-search" () };
-  bind "<meta>F" { "start-interactive-search" () }
+  bind "<meta>F" { "start-interactive-search" () };
   unbind "<ctrl>a";
   unbind "<shift><ctrl>a";
   unbind "<ctrl>f";
