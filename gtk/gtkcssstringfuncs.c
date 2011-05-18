@@ -33,6 +33,7 @@
 
 /* the actual parsers we have */
 #include "gtkanimationdescription.h"
+#include "gtkbindings.h"
 #include "gtk9slice.h"
 #include "gtkgradient.h"
 #include "gtkthemingengine.h"
@@ -1231,6 +1232,58 @@ flags_value_to_string (const GValue *value)
   return g_string_free (string, FALSE);
 }
 
+static gboolean 
+bindings_value_from_string (const char  *str,
+                            GFile       *base,
+                            GValue      *value,
+                            GError     **error)
+{
+  GPtrArray *array;
+  gchar **bindings, **name;
+
+  bindings = g_strsplit (str, ",", -1);
+  array = g_ptr_array_new ();
+
+  for (name = bindings; *name; name++)
+    {
+      GtkBindingSet *binding_set;
+
+      binding_set = gtk_binding_set_find (g_strstrip (*name));
+
+      if (!binding_set)
+        continue;
+
+      g_ptr_array_add (array, binding_set);
+    }
+
+  g_value_take_boxed (value, array);
+  g_strfreev (bindings);
+
+  return TRUE;
+}
+
+static char *
+bindings_value_to_string (const GValue *value)
+{
+  GPtrArray *array;
+  GString *str;
+  guint i;
+
+  array = g_value_get_boxed (value);
+  str = g_string_new (NULL);
+
+  for (i = 0; i < array->len; i++)
+    {
+      GtkBindingSet *binding_set = g_ptr_array_index (array, i);
+
+      if (i > 0)
+        g_string_append (str, ", ");
+      g_string_append (str, binding_set->set_name);
+    }
+
+  return g_string_free (str, FALSE);
+}
+
 /*** API ***/
 
 static void
@@ -1296,6 +1349,9 @@ css_string_funcs_init (void)
   register_conversion_function (G_TYPE_FLAGS,
                                 flags_value_from_string,
                                 flags_value_to_string);
+  register_conversion_function (G_TYPE_PTR_ARRAY,
+                                bindings_value_from_string,
+                                bindings_value_to_string);
 }
 
 gboolean

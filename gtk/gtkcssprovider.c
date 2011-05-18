@@ -1377,32 +1377,6 @@ css_provider_commit (GtkCssProvider *css_provider,
 }
 
 static void
-resolve_binding_sets (const gchar *value_str,
-                      GValue      *value)
-{
-  GPtrArray *array;
-  gchar **bindings, **str;
-
-  bindings = g_strsplit (value_str, ",", -1);
-  array = g_ptr_array_new ();
-
-  for (str = bindings; *str; str++)
-    {
-      GtkBindingSet *binding_set;
-
-      binding_set = gtk_binding_set_find (g_strstrip (*str));
-
-      if (!binding_set)
-        continue;
-
-      g_ptr_array_add (array, binding_set);
-    }
-
-  g_value_take_boxed (value, array);
-  g_strfreev (bindings);
-}
-
-static void
 gtk_css_provider_reset (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv;
@@ -1979,12 +1953,6 @@ parse_declaration (GtkCssScanner *scanner,
            * to override other style providers when merged
            */
           g_param_value_set_default (pspec, val);
-          gtk_css_ruleset_add (ruleset, pspec, val);
-        }
-      else if (strcmp (pspec->name, "gtk-key-bindings") == 0)
-        {
-          /* Private property holding the binding sets */
-          resolve_binding_sets (value_str, val);
           gtk_css_ruleset_add (ruleset, pspec, val);
         }
       else if (parse_func)
