@@ -38,6 +38,9 @@ EXTRA_DIST += \
 	css-match-exact.css \
 	css-match-exact.ref.ui \
 	css-match-exact.ui \
+	css-match-inherit.css \
+	css-match-inherit.ref.ui \
+	css-match-inherit.ui \
 	css-match-name.css \
 	css-match-name.ref.ui \
 	css-match-name.ui \
