@@ -2812,15 +2812,10 @@ gtk_css_provider_get_named (const gchar *name,
 
       if (path)
         {
-          GError *error;
-
           provider = gtk_css_provider_new ();
-          error = NULL;
-          if (!gtk_css_provider_load_from_path (provider, path, &error))
-            {
-              g_warning ("Could not load named theme \"%s\": %s", name, error->message);
-              g_error_free (error);
 
+          if (!gtk_css_provider_load_from_path (provider, path, NULL))
+            {
               g_object_unref (provider);
               provider = NULL;
             }
