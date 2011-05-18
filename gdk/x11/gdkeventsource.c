@@ -152,8 +152,17 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
 {
   GdkEvent *event = gdk_event_new (GDK_NOTHING);
   GList *list = event_source->translators;
-  GdkFilterReturn result;
+  GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkWindow *filter_window;
+  Display *dpy;
+
+  dpy = GDK_DISPLAY_XDISPLAY (event_source->display);
+
+  /* Get cookie data here so it's available
+   * to every event translator and event filter.
+   */
+  if (xevent->type == GenericEvent)
+    XGetEventData (dpy, &xevent->xcookie);
 
   filter_window = gdk_event_source_get_filter_window (event_source, xevent);
   if (filter_window)
@@ -163,36 +172,28 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   if (_gdk_default_filters)
     {
       /* Apply global filters */
-
       result = gdk_event_apply_filters (xevent, event, NULL);
+    }
+
+  if (result == GDK_FILTER_CONTINUE &&
+      filter_window && filter_window->filters)
+    {
+      /* Apply per-window filters */
+      result = gdk_event_apply_filters (xevent, event, filter_window);
+    }
+
+  if (result != GDK_FILTER_CONTINUE)
+    {
+      if (xevent->type == GenericEvent)
+        XFreeEventData (dpy, &xevent->xcookie);
 
       if (result == GDK_FILTER_REMOVE)
         {
           gdk_event_free (event);
           return NULL;
         }
-      else if (result == GDK_FILTER_TRANSLATE)
+      else /* GDK_FILTER_TRANSLATE */
         return event;
-    }
-
-  if (filter_window)
-    {
-      /* Apply per-window filters */
-      GdkFilterReturn result;
-
-      if (filter_window->filters)
-	{
-	  result = gdk_event_apply_filters (xevent, event,
-					    filter_window);
-
-          if (result == GDK_FILTER_REMOVE)
-            {
-              gdk_event_free (event);
-              return NULL;
-            }
-          else if (result == GDK_FILTER_TRANSLATE)
-            return event;
-        }
     }
 
   gdk_event_free (event);
@@ -216,6 +217,9 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
       /* Handle focusing (in the case where no window manager is running */
       handle_focus_change (&event->crossing);
     }
+
+  if (xevent->type == GenericEvent)
+    XFreeEventData (dpy, &xevent->xcookie);
 
   return event;
 }

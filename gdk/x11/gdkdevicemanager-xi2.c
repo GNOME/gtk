@@ -1007,43 +1007,27 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   gboolean return_val = TRUE;
   GdkWindow *window;
   XIEvent *ev;
-  Display *dpy;
 
-  dpy = GDK_DISPLAY_XDISPLAY (display);
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
   cookie = &xevent->xcookie;
 
   if (xevent->type != GenericEvent)
     return gdk_x11_device_manager_xi2_translate_core_event (translator, display, event, xevent);
-
-  if (!XGetEventData (dpy, cookie))
+  else if (cookie->extension != device_manager->opcode)
     return FALSE;
-
-  if (cookie->type != GenericEvent ||
-      cookie->extension != device_manager->opcode)
-    {
-      XFreeEventData (dpy, cookie);
-      return FALSE;
-    }
 
   ev = (XIEvent *) cookie->data;
 
   window = get_event_window (translator, ev);
 
   if (window && GDK_WINDOW_DESTROYED (window))
-    {
-      XFreeEventData (dpy, cookie);
-      return FALSE;
-    }
+    return FALSE;
 
   if (ev->evtype == XI_Motion ||
       ev->evtype == XI_ButtonRelease)
     {
       if (_gdk_x11_moveresize_handle_event (xevent))
-        {
-          XFreeEventData (dpy, cookie);
-          return FALSE;
-        }
+        return FALSE;
     }
 
   switch (ev->evtype)
@@ -1324,8 +1308,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       event->any.window = NULL;
       event->any.type = GDK_NOTHING;
     }
-
-  XFreeEventData (dpy, cookie);
 
   return return_val;
 }
