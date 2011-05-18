@@ -743,6 +743,7 @@ typedef enum ParserSymbol ParserSymbol;
 struct GtkCssRuleset
 {
   GtkCssSelector *selector;
+  GHashTable *widget_style;
   GHashTable *style;
 };
 
@@ -916,6 +917,8 @@ gtk_css_ruleset_init_copy (GtkCssRuleset       *new,
   memcpy (new, ruleset, sizeof (GtkCssRuleset));
 
   new->selector = selector;
+  if (new->widget_style)
+    g_hash_table_ref (new->widget_style);
   if (new->style)
     g_hash_table_ref (new->style);
 }
@@ -925,7 +928,8 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
 {
   if (ruleset->style)
     g_hash_table_unref (ruleset->style);
-
+  if (ruleset->widget_style)
+    g_hash_table_unref (ruleset->widget_style);
   if (ruleset->selector)
     _gtk_css_selector_free (ruleset->selector);
 
@@ -946,13 +950,13 @@ gtk_css_ruleset_add_style (GtkCssRuleset *ruleset,
                            char          *name,
                            GValue        *value)
 {
-  if (ruleset->style == NULL)
-    ruleset->style = g_hash_table_new_full (g_str_hash,
-                                            g_str_equal,
-                                            (GDestroyNotify) g_free,
-                                            (GDestroyNotify) property_value_free);
+  if (ruleset->widget_style == NULL)
+    ruleset->widget_style = g_hash_table_new_full (g_str_hash,
+                                                   g_str_equal,
+                                                   (GDestroyNotify) g_free,
+                                                   (GDestroyNotify) property_value_free);
 
-  g_hash_table_insert (ruleset->style, name, value);
+  g_hash_table_insert (ruleset->widget_style, name, value);
 }
 
 static void
@@ -960,7 +964,13 @@ gtk_css_ruleset_add (GtkCssRuleset *ruleset,
                      GParamSpec    *pspec,
                      GValue        *value)
 {
-  gtk_css_ruleset_add_style (ruleset, g_strdup (pspec->name), value);
+  if (ruleset->style == NULL)
+    ruleset->style = g_hash_table_new_full (g_direct_hash,
+                                            g_direct_equal,
+                                            NULL,
+                                            (GDestroyNotify) property_value_free);
+
+  g_hash_table_insert (ruleset->style, pspec, value);
 }
 
 static gboolean
@@ -1145,6 +1155,9 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
           ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
+          if (ruleset->style == NULL)
+            continue;
+
           if (l < length && _gtk_css_selector_get_state_flags (ruleset->selector))
             continue;
 
@@ -1155,10 +1168,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
           while (g_hash_table_iter_next (&iter, &key, &value))
             {
-              GParamSpec *pspec;
-
-              if (!gtk_style_properties_lookup_property (key, NULL, &pspec))
-                continue;
+              GParamSpec *pspec = key;
 
               if (l != length && !gtk_style_param_get_inherit (pspec))
                 continue;
@@ -1199,11 +1209,14 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 
       ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
+      if (ruleset->widget_style == NULL)
+        continue;
+
       if (!gtk_css_ruleset_matches (ruleset, path, gtk_widget_path_length (path)))
         continue;
 
       selector_state = _gtk_css_selector_get_state_flags (ruleset->selector);
-      val = g_hash_table_lookup (ruleset->style, prop_name);
+      val = g_hash_table_lookup (ruleset->widget_style, prop_name);
 
       if (val &&
           (selector_state == 0 ||
@@ -1342,7 +1355,7 @@ css_provider_commit (GtkCssProvider *css_provider,
 
   priv = css_provider->priv;
 
-  if (ruleset->style == NULL)
+  if (ruleset->style == NULL && ruleset->widget_style == NULL)
     {
       g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
       return;
@@ -2808,6 +2821,12 @@ gtk_css_provider_get_named (const gchar *name,
   return provider;
 }
 
+static int
+compare_pspecs (gconstpointer a, gconstpointer b)
+{
+  return strcmp (((const GParamSpec *) a)->name, ((const GParamSpec *) b)->name);
+}
+
 static void
 gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
                        GString             *str)
@@ -2819,25 +2838,51 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
 
   g_string_append (str, " {\n");
 
-  keys = g_hash_table_get_keys (ruleset->style);
-  /* so the output is identical for identical selector styles */
-  keys = g_list_sort (keys, (GCompareFunc) strcmp);
-
-  for (walk = keys; walk; walk = walk->next)
+  if (ruleset->style)
     {
-      const char *name = walk->data;
-      const GValue *value = g_hash_table_lookup (ruleset->style, (gpointer) name);
+      keys = g_hash_table_get_keys (ruleset->style);
+      /* so the output is identical for identical selector styles */
+      keys = g_list_sort (keys, compare_pspecs);
 
-      g_string_append (str, "  ");
-      g_string_append (str, name);
-      g_string_append (str, ": ");
-      s = _gtk_css_value_to_string (value);
-      g_string_append (str, s);
-      g_free (s);
-      g_string_append (str, ";\n");
+      for (walk = keys; walk; walk = walk->next)
+        {
+          GParamSpec *pspec = walk->data;
+          const GValue *value = g_hash_table_lookup (ruleset->style, pspec);
+
+          g_string_append (str, "  ");
+          g_string_append (str, pspec->name);
+          g_string_append (str, ": ");
+          s = _gtk_css_value_to_string (value);
+          g_string_append (str, s);
+          g_free (s);
+          g_string_append (str, ";\n");
+        }
+
+      g_list_free (keys);
     }
 
-  g_list_free (keys);
+  if (ruleset->widget_style)
+    {
+      keys = g_hash_table_get_keys (ruleset->widget_style);
+      /* so the output is identical for identical selector styles */
+      keys = g_list_sort (keys, (GCompareFunc) strcmp);
+
+      for (walk = keys; walk; walk = walk->next)
+        {
+          const char *name = walk->data;
+          const GValue *value = g_hash_table_lookup (ruleset->style, (gpointer) name);
+
+          g_string_append (str, "  ");
+          g_string_append (str, name);
+          g_string_append (str, ": ");
+          s = _gtk_css_value_to_string (value);
+          g_string_append (str, s);
+          g_free (s);
+          g_string_append (str, ";\n");
+        }
+
+      g_list_free (keys);
+    }
 
   g_string_append (str, "}\n");
 }
