@@ -474,8 +474,9 @@ _shade_color (GdkRGBA *color,
  * if @color can't be resolved, it is due to it being defined on
  * top of a named color that doesn't exist in @props.
  *
- * @props must be non-%NULL if @color was created using
- * gtk_symbolic_color_named_new(), but can be omitted in other cases.
+ * When @props is %NULL, resolving of named colors will fail, so if
+ * your @color is or references such a color, this function will
+ * return %FALSE.
  *
  * Returns: %TRUE if the color has been resolved
  *
@@ -488,6 +489,7 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
 {
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (resolved_color != NULL, FALSE);
+  g_return_val_if_fail (props == NULL || GTK_IS_STYLE_PROPERTIES (props), FALSE);
 
   switch (color->type)
     {
@@ -498,7 +500,8 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
       {
         GtkSymbolicColor *named_color;
 
-        g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
+        if (props == NULL)
+          return FALSE;
 
         named_color = gtk_style_properties_lookup_color (props, color->name);
 
