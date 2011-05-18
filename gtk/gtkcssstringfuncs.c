@@ -38,84 +38,36 @@
 #include "gtkgradient.h"
 #include "gtkthemingengine.h"
 
-typedef gboolean (* FromStringFunc)   (const char    *str,
+typedef gboolean (* ParseFunc)        (GtkCssParser  *parser,
                                        GFile         *base,
-                                       GValue        *value,
-                                       GError       **error);
+                                       GValue        *value);
 typedef char *   (* ToStringFunc)     (const GValue  *value);
 
-static GHashTable *from_string_funcs = NULL;
+static GHashTable *parse_funcs = NULL;
 static GHashTable *to_string_funcs = NULL;
 
 static void
 register_conversion_function (GType          type,
-                              FromStringFunc from_string,
+                              ParseFunc      parse,
                               ToStringFunc   to_string)
 {
-  if (from_string)
-    g_hash_table_insert (from_string_funcs, GSIZE_TO_POINTER (type), from_string);
+  if (parse)
+    g_hash_table_insert (parse_funcs, GSIZE_TO_POINTER (type), parse);
   if (to_string)
     g_hash_table_insert (to_string_funcs, GSIZE_TO_POINTER (type), to_string);
 }
 
-static gboolean
-set_default_error (GError **error,
-                   GType    type)
-{
-  g_set_error (error,
-               GTK_CSS_PROVIDER_ERROR,
-               GTK_CSS_PROVIDER_ERROR_SYNTAX,
-               "Could not convert property value to type '%s'",
-               g_type_name (type));
-  return FALSE;
-}
-
 /*** IMPLEMENTATIONS ***/
 
-#define SKIP_SPACES(s) while (g_ascii_isspace (*(s))) (s)++
-#define SKIP_SPACES_BACK(s) while (g_ascii_isspace (*(s))) (s)--
-
-static void
-propagate_parser_error (GtkCssParser *parser,
-                        const GError *error,
-                        gpointer      user_data)
-{
-  GError **propagate_here = user_data;
-
-  if (propagate_here == NULL)
-    return;
-
-  /* only copy the first error */
-  if (*propagate_here == NULL)
-    *propagate_here = g_error_copy (error);
-}
-
-static GtkSymbolicColor *
-_gtk_css_parse_symbolic_color (const char  *str,
-                               GError     **error)
-{
-  GtkSymbolicColor *symbolic;
-  GtkCssParser *parser;
-
-  parser = _gtk_css_parser_new (str,
-                                propagate_parser_error,
-                                error);
-  symbolic = _gtk_css_parser_read_symbolic_color (parser);
-  _gtk_css_parser_free (parser);
-
-  return symbolic;
-}
-
 static gboolean 
-rgba_value_from_string (const char  *str,
-                        GFile       *base,
-                        GValue      *value,
-                        GError     **error)
+rgba_value_parse (GtkCssParser *parser,
+                  GFile        *base,
+                  GValue       *value)
 {
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_css_parse_symbolic_color (str, error);
+  symbolic = _gtk_css_parser_read_symbolic_color (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -145,15 +97,14 @@ rgba_value_to_string (const GValue *value)
 }
 
 static gboolean 
-color_value_from_string (const char  *str,
-                         GFile       *base,
-                         GValue      *value,
-                         GError     **error)
+color_value_parse (GtkCssParser *parser,
+                   GFile        *base,
+                   GValue       *value)
 {
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_css_parse_symbolic_color (str, error);
+  symbolic = _gtk_css_parser_read_symbolic_color (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -188,15 +139,14 @@ color_value_to_string (const GValue *value)
   return gdk_color_to_string (color);
 }
 
-static gboolean 
-symbolic_color_value_from_string (const char  *str,
-                                  GFile       *base,
-                                  GValue      *value,
-                                  GError     **error)
+static gboolean
+symbolic_color_value_parse (GtkCssParser *parser,
+                            GFile        *base,
+                            GValue       *value)
 {
   GtkSymbolicColor *symbolic;
 
-  symbolic = _gtk_css_parse_symbolic_color (str, error);
+  symbolic = _gtk_css_parser_read_symbolic_color (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -216,14 +166,19 @@ symbolic_color_value_to_string (const GValue *value)
 }
 
 static gboolean 
-font_description_value_from_string (const char  *str,
-                                    GFile       *base,
-                                    GValue      *value,
-                                    GError     **error)
+font_description_value_parse (GtkCssParser *parser,
+                              GFile        *base,
+                              GValue       *value)
 {
   PangoFontDescription *font_desc;
+  char *str;
+
+  str = _gtk_css_parser_read_value (parser);
+  if (str == NULL)
+    return FALSE;
 
   font_desc = pango_font_description_from_string (str);
+  g_free (str);
   g_value_take_boxed (value, font_desc);
   return TRUE;
 }
@@ -240,25 +195,27 @@ font_description_value_to_string (const GValue *value)
 }
 
 static gboolean 
-boolean_value_from_string (const char  *str,
-                           GFile       *base,
-                           GValue      *value,
-                           GError     **error)
+boolean_value_parse (GtkCssParser *parser,
+                     GFile        *base,
+                     GValue       *value)
 {
-  if (g_ascii_strcasecmp (str, "true") == 0 ||
-      g_ascii_strcasecmp (str, "1") == 0)
+  if (_gtk_css_parser_try (parser, "true", TRUE) ||
+      _gtk_css_parser_try (parser, "1", TRUE))
     {
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
-  else if (g_ascii_strcasecmp (str, "false") == 0 ||
-           g_ascii_strcasecmp (str, "0") == 0)
+  else if (_gtk_css_parser_try (parser, "false", TRUE) ||
+           _gtk_css_parser_try (parser, "0", TRUE))
     {
       g_value_set_boolean (value, FALSE);
       return TRUE;
     }
-
-  return set_default_error (error, G_VALUE_TYPE (value));
+  else
+    {
+      _gtk_css_parser_error (parser, "Expected a boolean value");
+      return FALSE;
+    }
 }
 
 static char *
@@ -271,28 +228,15 @@ boolean_value_to_string (const GValue *value)
 }
 
 static gboolean 
-int_value_from_string (const char  *str,
-                       GFile       *base,
-                       GValue      *value,
-                       GError     **error)
+int_value_parse (GtkCssParser *parser,
+                 GFile        *base,
+                 GValue       *value)
 {
-  gint64 i;
-  char *end;
+  gint i;
 
-  if (*str == '+')
-    return set_default_error (error, G_VALUE_TYPE (value));
-
-  i = g_ascii_strtoll (str, &end, 10);
-
-  if (*end != '\0')
-    return set_default_error (error, G_VALUE_TYPE (value));
-
-  if (i > G_MAXINT || i < G_MININT)
+  if (!_gtk_css_parser_try_int (parser, &i))
     {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "Number too big");
+      _gtk_css_parser_error (parser, "Expected a valid integer value");
       return FALSE;
     }
 
@@ -307,28 +251,15 @@ int_value_to_string (const GValue *value)
 }
 
 static gboolean 
-uint_value_from_string (const char  *str,
-                        GFile       *base,
-                        GValue      *value,
-                        GError     **error)
+uint_value_parse (GtkCssParser *parser,
+                  GFile        *base,
+                  GValue       *value)
 {
-  guint64 u;
-  char *end;
+  guint u;
 
-  if (*str == '+')
-    return set_default_error (error, G_VALUE_TYPE (value));
-
-  u = g_ascii_strtoull (str, &end, 10);
-
-  if (*end != '\0')
-    return set_default_error (error, G_VALUE_TYPE (value));
-
-  if (u > G_MAXUINT)
+  if (!_gtk_css_parser_try_uint (parser, &u))
     {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "Number too big");
+      _gtk_css_parser_error (parser, "Expected a valid unsigned value");
       return FALSE;
     }
 
@@ -343,25 +274,15 @@ uint_value_to_string (const GValue *value)
 }
 
 static gboolean 
-double_value_from_string (const char  *str,
-                          GFile       *base,
-                          GValue      *value,
-                          GError     **error)
+double_value_parse (GtkCssParser *parser,
+                    GFile        *base,
+                    GValue       *value)
 {
-  double d;
-  char *end;
+  gdouble d;
 
-  d = g_ascii_strtod (str, &end);
-
-  if (*end != '\0')
-    return set_default_error (error, G_VALUE_TYPE (value));
-
-  if (errno == ERANGE)
+  if (!_gtk_css_parser_try_double (parser, &d))
     {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "Number not representable");
+      _gtk_css_parser_error (parser, "Expected a number");
       return FALSE;
     }
 
@@ -380,25 +301,15 @@ double_value_to_string (const GValue *value)
 }
 
 static gboolean 
-float_value_from_string (const char  *str,
-                         GFile       *base,
-                         GValue      *value,
-                         GError     **error)
+float_value_parse (GtkCssParser *parser,
+                   GFile        *base,
+                   GValue       *value)
 {
-  double d;
-  char *end;
+  gdouble d;
 
-  d = g_ascii_strtod (str, &end);
-
-  if (*end != '\0')
-    return set_default_error (error, G_VALUE_TYPE (value));
-
-  if (errno == ERANGE)
+  if (!_gtk_css_parser_try_double (parser, &d))
     {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "Number not representable");
+      _gtk_css_parser_error (parser, "Expected a number");
       return FALSE;
     }
 
@@ -416,113 +327,17 @@ float_value_to_string (const GValue *value)
   return g_strdup (buf);
 }
 
-static char *
-gtk_css_string_unescape (const char  *string,
-                         GError     **error)
-{
-  GString *str;
-  char quote;
-  gsize len;
-
-  quote = string[0];
-  string++;
-  if (quote != '\'' && quote != '"')
-    {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "String value not properly quoted.");
-      return NULL;
-    }
-
-  str = g_string_new (NULL);
-
-  while (TRUE)
-    {
-      len = strcspn (string, "\\'\"\n\r\f");
-
-      g_string_append_len (str, string, len);
-
-      string += len;
-
-      switch (string[0])
-        {
-        case '\\':
-          string++;
-          if (string[0] >= '0' && string[0] <= '9' &&
-              string[0] >= 'a' && string[0] <= 'f' &&
-              string[0] >= 'A' && string[0] <= 'F')
-            {
-              g_set_error_literal (error,
-                                   GTK_CSS_PROVIDER_ERROR,
-                                   GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                   "FIXME: Implement unicode escape sequences.");
-              g_string_free (str, TRUE);
-              return NULL;
-            }
-          else if (string[0] == '\r' && string[1] == '\n')
-            string++;
-          else if (string[0] != '\r' && string[0] != '\n' && string[0] != '\f')
-            g_string_append_c (str, string[0]);
-          break;
-        case '"':
-        case '\'':
-          if (string[0] != quote)
-            {
-              g_string_append_c (str, string[0]);
-            }
-          else
-            {
-              if (string[1] == 0)
-                {
-                  return g_string_free (str, FALSE);
-                }
-              else
-                {
-                  g_set_error_literal (error,
-                                       GTK_CSS_PROVIDER_ERROR,
-                                       GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                       "Junk after end of string.");
-                  g_string_free (str, TRUE);
-                  return NULL;
-                }
-            }
-          break;
-        case '\0':
-          g_set_error_literal (error,
-                               GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                               "Missing end quote in string.");
-          g_string_free (str, TRUE);
-          return NULL;
-        default:
-          g_set_error_literal (error,
-                               GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                               "Invalid character in string. Must be escaped.");
-          g_string_free (str, TRUE);
-          return NULL;
-        }
-
-      string++;
-    }
-
-  g_assert_not_reached ();
-  return NULL;
-}
-
 static gboolean 
-string_value_from_string (const char  *str,
-                          GFile       *base,
-                          GValue      *value,
-                          GError     **error)
+string_value_parse (GtkCssParser *parser,
+                    GFile        *base,
+                    GValue       *value)
 {
-  char *unescaped = gtk_css_string_unescape (str, error);
+  char *str = _gtk_css_parser_read_string (parser);
 
-  if (unescaped == NULL)
+  if (str == NULL)
     return FALSE;
 
-  g_value_take_string (value, unescaped);
+  g_value_take_string (value, str);
   return TRUE;
 }
 
@@ -567,24 +382,30 @@ string_value_to_string (const GValue *value)
 }
 
 static gboolean 
-theming_engine_value_from_string (const char  *str,
-                                  GFile       *base,
-                                  GValue      *value,
-                                  GError     **error)
+theming_engine_value_parse (GtkCssParser *parser,
+                            GFile        *base,
+                            GValue       *value)
 {
   GtkThemingEngine *engine;
+  char *str;
+
+  str = _gtk_css_parser_try_ident (parser, TRUE);
+  if (str == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected a valid theme name");
+      return FALSE;
+    }
 
   engine = gtk_theming_engine_load (str);
   if (engine == NULL)
     {
-      g_set_error (error,
-                   GTK_CSS_PROVIDER_ERROR,
-                   GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                   "Themeing engine '%s' not found", str);
+      _gtk_css_parser_error (parser, "Themeing engine '%s' not found", str);
+      g_free (str);
       return FALSE;
     }
 
   g_value_set_object (value, engine);
+  g_free (str);
   return TRUE;
 }
 
@@ -605,17 +426,25 @@ theming_engine_value_to_string (const GValue *value)
 }
 
 static gboolean 
-animation_description_value_from_string (const char  *str,
-                                         GFile       *base,
-                                         GValue      *value,
-                                         GError     **error)
+animation_description_value_parse (GtkCssParser *parser,
+                                   GFile        *base,
+                                   GValue       *value)
 {
   GtkAnimationDescription *desc;
+  char *str;
+
+  str = _gtk_css_parser_read_value (parser);
+  if (str == NULL)
+    return FALSE;
 
   desc = _gtk_animation_description_from_string (str);
+  g_free (str);
 
   if (desc == NULL)
-    return set_default_error (error, G_VALUE_TYPE (value));
+    {
+      _gtk_css_parser_error (parser, "Invalid animation description");
+      return FALSE;
+    }
   
   g_value_take_boxed (value, desc);
   return TRUE;
@@ -632,97 +461,44 @@ animation_description_value_to_string (const GValue *value)
   return _gtk_animation_description_to_string (desc);
 }
 
-static gboolean
-parse_border_value (const char  *str,
-                    gint16      *value,
-                    const char **end,
-                    GError     **error)
-{
-  gint64 d;
-
-  d = g_ascii_strtoll (str, (char **) end, 10);
-
-  if (d > G_MAXINT16 || d < 0)
-    {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "Number out of range for border");
-      return FALSE;
-    }
-
-  if (str == *end)
-    {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "No number given for border value");
-      return FALSE;
-    }
-
-  /* Skip optional unit type.
-   * We only handle pixels at the moment.
-   */
-  if (strncmp (*end, "px", 2) == 0)
-    *end += 2;
-
-  if (**end != '\0' &&
-      !g_ascii_isspace (**end))
-    {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "Junk at end of border value");
-      return FALSE;
-    }
-
-  SKIP_SPACES (*end);
-
-  *value = d;
-  return TRUE;
-}
-
 static gboolean 
-border_value_from_string (const char  *str,
-                          GFile       *base,
-                          GValue      *value,
-                          GError     **error)
+border_value_parse (GtkCssParser *parser,
+                    GFile        *base,
+                    GValue       *value)
 {
-  GtkBorder *border;
+  GtkBorder border = { 0, };
+  guint i, numbers[4];
 
-  border = gtk_border_new ();
-
-  if (!parse_border_value (str, &border->top, &str, error))
-    return FALSE;
-
-  if (*str == '\0')
-    border->right = border->top;
-  else
-    if (!parse_border_value (str, &border->right, &str, error))
-      return FALSE;
-
-  if (*str == '\0')
-    border->bottom = border->top;
-  else
-    if (!parse_border_value (str, &border->bottom, &str, error))
-      return FALSE;
-
-  if (*str == '\0')
-    border->left = border->right;
-  else
-    if (!parse_border_value (str, &border->left, &str, error))
-      return FALSE;
-
-  if (*str != '\0')
+  for (i = 0; i < G_N_ELEMENTS (numbers); i++)
     {
-      g_set_error_literal (error,
-                           GTK_CSS_PROVIDER_ERROR,
-                           GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                           "Junk at end of border value");
+      if (!_gtk_css_parser_try_uint (parser, &numbers[i]))
+        break;
+
+      /* XXX: shouldn't allow spaces here? */
+      _gtk_css_parser_try (parser, "px", TRUE);
+    }
+
+  if (i == 0)
+    {
+      _gtk_css_parser_error (parser, "Expected valid border");
       return FALSE;
     }
 
-  g_value_take_boxed (value, border);
+  border.top = numbers[0];
+  if (i > 1)
+    border.right = numbers[1];
+  else
+    border.right = border.top;
+  if (i > 2)
+    border.bottom = numbers[2];
+  else
+    border.bottom = border.top;
+  if (i > 3)
+    border.left = numbers[3];
+  else
+    border.left = border.right;
+
+  g_value_set_boxed (value, &border);
   return TRUE;
 }
 
@@ -743,8 +519,10 @@ border_value_to_string (const GValue *value)
     return g_strdup_printf ("%d", border->top);
 }
 
-static GtkGradient *
-_gtk_css_parse_gradient (GtkCssParser  *parser)
+static gboolean 
+gradient_value_parse (GtkCssParser *parser,
+                      GFile        *base,
+                      GValue       *value)
 {
   GtkGradient *gradient;
   cairo_pattern_type_t type;
@@ -755,14 +533,14 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
     {
       _gtk_css_parser_error (parser,
                              "Expected '-gtk-gradient'");
-      return NULL;
+      return FALSE;
     }
 
   if (!_gtk_css_parser_try (parser, "(", TRUE))
     {
       _gtk_css_parser_error (parser,
                              "Expected '(' after '-gtk-gradient'");
-      return NULL;
+      return FALSE;
     }
 
   /* Parse gradient type */
@@ -774,7 +552,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
     {
       _gtk_css_parser_error (parser,
                              "Gradient type must be 'radial' or 'linear'");
-      return NULL;
+      return FALSE;
     }
 
   /* Parse start/stop position parameters */
@@ -784,7 +562,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
         {
           _gtk_css_parser_error (parser,
                                  "Expected ','");
-          return NULL;
+          return FALSE;
         }
 
       if (_gtk_css_parser_try (parser, "left", TRUE))
@@ -797,7 +575,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
         {
           _gtk_css_parser_error (parser,
                                  "Expected a valid X coordinate");
-          return NULL;
+          return FALSE;
         }
 
       if (_gtk_css_parser_try (parser, "top", TRUE))
@@ -810,7 +588,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
         {
           _gtk_css_parser_error (parser,
                                  "Expected a valid Y coordinate");
-          return NULL;
+          return FALSE;
         }
 
       if (type == CAIRO_PATTERN_TYPE_RADIAL)
@@ -820,14 +598,14 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
             {
               _gtk_css_parser_error (parser,
                                      "Expected ','");
-              return NULL;
+              return FALSE;
             }
 
           if (! _gtk_css_parser_try_double (parser, &coords[(i * 3) + 2]))
             {
               _gtk_css_parser_error (parser,
                                      "Expected a numer for the radius");
-              return NULL;
+              return FALSE;
             }
         }
     }
@@ -852,7 +630,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
               gtk_gradient_unref (gradient);
               _gtk_css_parser_error (parser,
                                      "Expected '('");
-              return NULL;
+              return FALSE;
             }
 
         }
@@ -865,7 +643,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
               gtk_gradient_unref (gradient);
               _gtk_css_parser_error (parser,
                                      "Expected '('");
-              return NULL;
+              return FALSE;
             }
 
         }
@@ -876,7 +654,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
               gtk_gradient_unref (gradient);
               _gtk_css_parser_error (parser,
                                      "Expected '('");
-              return NULL;
+              return FALSE;
             }
 
           if (!_gtk_css_parser_try_double (parser, &position))
@@ -884,7 +662,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
               gtk_gradient_unref (gradient);
               _gtk_css_parser_error (parser,
                                      "Expected a valid number");
-              return NULL;
+              return FALSE;
             }
 
           if (!_gtk_css_parser_try (parser, ",", TRUE))
@@ -892,7 +670,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
               gtk_gradient_unref (gradient);
               _gtk_css_parser_error (parser,
                                      "Expected a comma");
-              return NULL;
+              return FALSE;
             }
         }
       else
@@ -900,14 +678,14 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
           gtk_gradient_unref (gradient);
           _gtk_css_parser_error (parser,
                                  "Not a valid color-stop definition");
-          return NULL;
+          return FALSE;
         }
 
       color = _gtk_css_parser_read_symbolic_color (parser);
       if (color == NULL)
         {
           gtk_gradient_unref (gradient);
-          return NULL;
+          return FALSE;
         }
 
       gtk_gradient_add_color_stop (gradient, position, color);
@@ -918,7 +696,7 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
           gtk_gradient_unref (gradient);
           _gtk_css_parser_error (parser,
                                  "Expected ')'");
-          return NULL;
+          return FALSE;
         }
     }
 
@@ -927,29 +705,8 @@ _gtk_css_parse_gradient (GtkCssParser  *parser)
       gtk_gradient_unref (gradient);
       _gtk_css_parser_error (parser,
                              "Expected ')'");
-      return NULL;
+      return FALSE;
     }
-
-  return gradient;
-}
-
-static gboolean 
-gradient_value_from_string (const char  *str,
-                            GFile       *base,
-                            GValue      *value,
-                            GError     **error)
-{
-  GtkGradient *gradient;
-  GtkCssParser *parser;
-
-  parser = _gtk_css_parser_new (str,
-                                propagate_parser_error,
-                                error);
-  gradient = _gtk_css_parse_gradient (parser);
-  _gtk_css_parser_free (parser);
-
-  if (gradient == NULL)
-    return FALSE;
 
   g_value_set_boxed (value, gradient);
   return TRUE;
@@ -967,39 +724,41 @@ gradient_value_to_string (const GValue *value)
 }
 
 static gboolean 
-pattern_value_from_string (const char  *str,
-                           GFile       *base,
-                           GValue      *value,
-                           GError     **error)
+pattern_value_parse (GtkCssParser *parser,
+                     GFile        *base,
+                     GValue       *value)
 {
-  if (g_str_has_prefix (str, "-gtk-gradient"))
+  if (_gtk_css_parser_begins_with (parser, '-'))
     {
       g_value_unset (value);
       g_value_init (value, GTK_TYPE_GRADIENT);
-      return gradient_value_from_string (str, base, value, error);
+      return gradient_value_parse (parser, base, value);
     }
   else
     {
+      GError *error = NULL;
       gchar *path;
       GdkPixbuf *pixbuf;
       GFile *file;
+      cairo_surface_t *surface;
+      cairo_pattern_t *pattern;
+      cairo_t *cr;
+      cairo_matrix_t matrix;
 
-      file = _gtk_css_parse_url (base, str, NULL, error);
+      file = _gtk_css_parse_url (parser, base);
       if (file == NULL)
         return FALSE;
 
       path = g_file_get_path (file);
       g_object_unref (file);
 
-      pixbuf = gdk_pixbuf_new_from_file (path, error);
+      pixbuf = gdk_pixbuf_new_from_file (path, &error);
       g_free (path);
       if (pixbuf == NULL)
-        return FALSE;
-
-      cairo_surface_t *surface;
-      cairo_pattern_t *pattern;
-      cairo_t *cr;
-      cairo_matrix_t matrix;
+        {
+          _gtk_css_parser_take_error (parser, error);
+          return FALSE;
+        }
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                             gdk_pixbuf_get_width (pixbuf),
@@ -1025,10 +784,9 @@ pattern_value_from_string (const char  *str,
 }
 
 static gboolean 
-slice_value_from_string (const char  *str,
-                         GFile       *base,
-                         GValue      *value,
-                         GError     **error)
+slice_value_parse (GtkCssParser *parser,
+                   GFile        *base,
+                   GValue       *value)
 {
   gdouble distance_top, distance_bottom;
   gdouble distance_left, distance_right;
@@ -1036,74 +794,49 @@ slice_value_from_string (const char  *str,
   GdkPixbuf *pixbuf;
   Gtk9Slice *slice;
   GFile *file;
-  gint i = 0;
+  GError *error = NULL;
+  gint i;
   char *path;
 
-  SKIP_SPACES (str);
-
   /* Parse image url */
-  file = _gtk_css_parse_url (base, str, (char **) &str, error);
+  file = _gtk_css_parse_url (parser, base);
   if (!file)
       return FALSE;
 
-  SKIP_SPACES (str);
-
-  /* Parse top/left/bottom/right distances */
-  distance_top = g_ascii_strtod (str, (char **) &str);
-
-  SKIP_SPACES (str);
-
-  distance_right = g_ascii_strtod (str, (char **) &str);
-
-  SKIP_SPACES (str);
-
-  distance_bottom = g_ascii_strtod (str, (char **) &str);
-
-  SKIP_SPACES (str);
-
-  distance_left = g_ascii_strtod (str, (char **) &str);
-
-  SKIP_SPACES (str);
-
-  while (*str && i < 2)
+  if (!_gtk_css_parser_try_double (parser, &distance_top) ||
+      !_gtk_css_parser_try_double (parser, &distance_right) ||
+      !_gtk_css_parser_try_double (parser, &distance_bottom) ||
+      !_gtk_css_parser_try_double (parser, &distance_left))
     {
-      if (g_str_has_prefix (str, "stretch"))
+      _gtk_css_parser_error (parser, "Expected a number");
+      g_object_unref (file);
+      return FALSE;
+    }
+
+  for (i = 0; i < 2; i++)
+    {
+      if (_gtk_css_parser_try (parser, "stretch", TRUE))
+        mods[i] = GTK_SLICE_STRETCH;
+      else if (_gtk_css_parser_try (parser, "repeat", TRUE))
+        mods[i] = GTK_SLICE_REPEAT;
+      else if (i == 0)
         {
-          str += strlen ("stretch");
-          mods[i] = GTK_SLICE_STRETCH;
-        }
-      else if (g_str_has_prefix (str, "repeat"))
-        {
-          str += strlen ("repeat");
-          mods[i] = GTK_SLICE_REPEAT;
+          mods[1] = mods[0] = GTK_SLICE_STRETCH;
+          break;
         }
       else
-        {
-          g_object_unref (file);
-          return set_default_error (error, G_VALUE_TYPE (value));
-        }
-
-      SKIP_SPACES (str);
-      i++;
-    }
-
-  if (*str != '\0')
-    {
-      g_object_unref (file);
-      return set_default_error (error, G_VALUE_TYPE (value));
-    }
-
-  if (i != 2)
-    {
-      /* Fill in second modifier, same as the first */
-      mods[1] = mods[0];
+        mods[i] = mods[0];
     }
 
   path = g_file_get_path (file);
-  pixbuf = gdk_pixbuf_new_from_file (path, error);
+  g_object_unref (file);
+  pixbuf = gdk_pixbuf_new_from_file (path, &error);
   g_free (path);
   if (!pixbuf)
-    return FALSE;
+    {
+      _gtk_css_parser_take_error (parser, error);
+      return FALSE;
+    }
 
   slice = _gtk_9slice_new (pixbuf,
                            distance_top, distance_bottom,
@@ -1116,31 +849,35 @@ slice_value_from_string (const char  *str,
 }
 
 static gboolean 
-enum_value_from_string (const char  *str,
-                        GFile       *base,
-                        GValue      *value,
-                        GError     **error)
+enum_value_parse (GtkCssParser *parser,
+                  GFile        *base,
+                  GValue       *value)
 {
   GEnumClass *enum_class;
   GEnumValue *enum_value;
+  char *str;
+
+  str = _gtk_css_parser_try_ident (parser, TRUE);
+  if (str == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected an identifier");
+      return FALSE;
+    }
 
   enum_class = g_type_class_ref (G_VALUE_TYPE (value));
   enum_value = g_enum_get_value_by_nick (enum_class, str);
 
-  if (!enum_value)
-    {
-      g_set_error (error,
-                   GTK_CSS_PROVIDER_ERROR,
-                   GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                   "Unknown value '%s' for enum type '%s'",
-                   str, g_type_name (G_VALUE_TYPE (value)));
-      g_type_class_unref (enum_class);
-      return FALSE;
-    }
+  if (enum_value)
+    g_value_set_enum (value, enum_value->value);
+  else
+    _gtk_css_parser_error (parser,
+                           "Unknown value '%s' for enum type '%s'",
+                           str, g_type_name (G_VALUE_TYPE (value)));
   
-  g_value_set_enum (value, enum_value->value);
   g_type_class_unref (enum_class);
-  return TRUE;
+  g_free (str);
+
+  return enum_value != NULL;
 }
 
 static char *
@@ -1161,41 +898,44 @@ enum_value_to_string (const GValue *value)
 }
 
 static gboolean 
-flags_value_from_string (const char  *str,
-                         GFile       *base,
-                         GValue      *value,
-                         GError     **error)
+flags_value_parse (GtkCssParser *parser,
+                   GFile        *base,
+                   GValue       *value)
 {
   GFlagsClass *flags_class;
   GFlagsValue *flag_value;
   guint flags = 0;
-  char **strv;
-  guint i;
-
-  strv = g_strsplit (str, ",", -1);
+  char *str;
 
   flags_class = g_type_class_ref (G_VALUE_TYPE (value));
 
-  for (i = 0; strv[i]; i++)
-    {
-      strv[i] = g_strstrip (strv[i]);
+  do {
+    str = _gtk_css_parser_try_ident (parser, TRUE);
+    if (str == NULL)
+      {
+        _gtk_css_parser_error (parser, "Expected an identifier");
+        g_type_class_unref (flags_class);
+        return FALSE;
+      }
 
-      flag_value = g_flags_get_value_by_nick (flags_class, strv[i]);
+      flag_value = g_flags_get_value_by_nick (flags_class, str);
       if (!flag_value)
         {
-          g_set_error (error,
-                       GTK_CSS_PROVIDER_ERROR,
-                       GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                       "Unknown flag value '%s' for type '%s'",
-                       strv[i], g_type_name (G_VALUE_TYPE (value)));
+          _gtk_css_parser_error (parser,
+                                 "Unknown flag value '%s' for type '%s'",
+                                 str, g_type_name (G_VALUE_TYPE (value)));
+          /* XXX Do we want to return FALSE here? We can get
+           * forward-compatibility for new values this way
+           */
+          g_free (str);
           g_type_class_unref (flags_class);
           return FALSE;
         }
-      
-      flags |= flag_value->value;
-    }
 
-  g_strfreev (strv);
+      g_free (str);
+    }
+  while (_gtk_css_parser_try (parser, ",", FALSE));
+
   g_type_class_unref (flags_class);
 
   g_value_set_enum (value, flags);
@@ -1233,31 +973,40 @@ flags_value_to_string (const GValue *value)
 }
 
 static gboolean 
-bindings_value_from_string (const char  *str,
-                            GFile       *base,
-                            GValue      *value,
-                            GError     **error)
+bindings_value_parse (GtkCssParser *parser,
+                      GFile        *base,
+                      GValue       *value)
 {
   GPtrArray *array;
-  gchar **bindings, **name;
+  GtkBindingSet *binding_set;
+  char *name;
 
-  bindings = g_strsplit (str, ",", -1);
   array = g_ptr_array_new ();
 
-  for (name = bindings; *name; name++)
-    {
-      GtkBindingSet *binding_set;
+  do {
+      name = _gtk_css_parser_try_ident (parser, TRUE);
+      if (name == NULL)
+        {
+          _gtk_css_parser_error (parser, "Not a valid binding name");
+          g_ptr_array_free (array, TRUE);
+          return FALSE;
+        }
 
-      binding_set = gtk_binding_set_find (g_strstrip (*name));
+      binding_set = gtk_binding_set_find (name);
 
       if (!binding_set)
-        continue;
+        {
+          _gtk_css_parser_error (parser, "No binding set named '%s'", name);
+          g_free (name);
+          continue;
+        }
 
       g_ptr_array_add (array, binding_set);
+      g_free (name);
     }
+  while (_gtk_css_parser_try (parser, ",", TRUE));
 
   g_value_take_boxed (value, array);
-  g_strfreev (bindings);
 
   return TRUE;
 }
@@ -1289,101 +1038,98 @@ bindings_value_to_string (const GValue *value)
 static void
 css_string_funcs_init (void)
 {
-  if (G_LIKELY (from_string_funcs != NULL))
+  if (G_LIKELY (parse_funcs != NULL))
     return;
 
-  from_string_funcs = g_hash_table_new (NULL, NULL);
+  parse_funcs = g_hash_table_new (NULL, NULL);
   to_string_funcs = g_hash_table_new (NULL, NULL);
 
   register_conversion_function (GDK_TYPE_RGBA,
-                                rgba_value_from_string,
+                                rgba_value_parse,
                                 rgba_value_to_string);
   register_conversion_function (GDK_TYPE_COLOR,
-                                color_value_from_string,
+                                color_value_parse,
                                 color_value_to_string);
   register_conversion_function (GTK_TYPE_SYMBOLIC_COLOR,
-                                symbolic_color_value_from_string,
+                                symbolic_color_value_parse,
                                 symbolic_color_value_to_string);
   register_conversion_function (PANGO_TYPE_FONT_DESCRIPTION,
-                                font_description_value_from_string,
+                                font_description_value_parse,
                                 font_description_value_to_string);
   register_conversion_function (G_TYPE_BOOLEAN,
-                                boolean_value_from_string,
+                                boolean_value_parse,
                                 boolean_value_to_string);
   register_conversion_function (G_TYPE_INT,
-                                int_value_from_string,
+                                int_value_parse,
                                 int_value_to_string);
   register_conversion_function (G_TYPE_UINT,
-                                uint_value_from_string,
+                                uint_value_parse,
                                 uint_value_to_string);
   register_conversion_function (G_TYPE_DOUBLE,
-                                double_value_from_string,
+                                double_value_parse,
                                 double_value_to_string);
   register_conversion_function (G_TYPE_FLOAT,
-                                float_value_from_string,
+                                float_value_parse,
                                 float_value_to_string);
   register_conversion_function (G_TYPE_STRING,
-                                string_value_from_string,
+                                string_value_parse,
                                 string_value_to_string);
   register_conversion_function (GTK_TYPE_THEMING_ENGINE,
-                                theming_engine_value_from_string,
+                                theming_engine_value_parse,
                                 theming_engine_value_to_string);
   register_conversion_function (GTK_TYPE_ANIMATION_DESCRIPTION,
-                                animation_description_value_from_string,
+                                animation_description_value_parse,
                                 animation_description_value_to_string);
   register_conversion_function (GTK_TYPE_BORDER,
-                                border_value_from_string,
+                                border_value_parse,
                                 border_value_to_string);
   register_conversion_function (GTK_TYPE_GRADIENT,
-                                gradient_value_from_string,
+                                gradient_value_parse,
                                 gradient_value_to_string);
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
-                                pattern_value_from_string,
+                                pattern_value_parse,
                                 NULL);
   register_conversion_function (GTK_TYPE_9SLICE,
-                                slice_value_from_string,
+                                slice_value_parse,
                                 NULL);
   register_conversion_function (G_TYPE_ENUM,
-                                enum_value_from_string,
+                                enum_value_parse,
                                 enum_value_to_string);
   register_conversion_function (G_TYPE_FLAGS,
-                                flags_value_from_string,
+                                flags_value_parse,
                                 flags_value_to_string);
   register_conversion_function (G_TYPE_PTR_ARRAY,
-                                bindings_value_from_string,
+                                bindings_value_parse,
                                 bindings_value_to_string);
 }
 
 gboolean
-_gtk_css_value_from_string (GValue        *value,
-                            GFile         *base,
-                            const char    *string,
-                            GError       **error)
+_gtk_css_value_parse (GValue       *value,
+                      GtkCssParser *parser,
+                      GFile        *base)
 {
-  FromStringFunc func;
+  ParseFunc func;
 
-  g_return_val_if_fail (string != NULL, FALSE);
-  g_return_val_if_fail (string[0] != 0, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
+  g_return_val_if_fail (parser != NULL, FALSE);
 
   css_string_funcs_init ();
 
-  func = g_hash_table_lookup (from_string_funcs,
+  func = g_hash_table_lookup (parse_funcs,
                               GSIZE_TO_POINTER (G_VALUE_TYPE (value)));
   if (func == NULL)
-    func = g_hash_table_lookup (from_string_funcs,
+    func = g_hash_table_lookup (parse_funcs,
                                 GSIZE_TO_POINTER (g_type_fundamental (G_VALUE_TYPE (value))));
 
   if (func == NULL)
     {
-      g_set_error (error,
-                   GTK_CSS_PROVIDER_ERROR,
-                   GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                   "Cannot convert to type '%s'",
-                   g_type_name (G_VALUE_TYPE (value)));
+      _gtk_css_parser_error (parser,
+                             "Cannot convert to type '%s'",
+                             g_type_name (G_VALUE_TYPE (value)));
       return FALSE;
     }
 
-  return (*func) (string, base, value, error);
+  return (*func) (parser, base, value);
 }
 
 char *
@@ -1406,79 +1152,53 @@ _gtk_css_value_to_string (const GValue *value)
 }
 
 GFile *
-_gtk_css_parse_url (GFile       *base,
-                    const char  *str,
-                    char       **end,
-                    GError     **error)
+_gtk_css_parse_url (GtkCssParser *parser,
+                    GFile        *base)
 {
-  gchar *path, *chr;
+  gchar *path;
   GFile *file;
 
-  if (g_str_has_prefix (str, "url"))
+  if (_gtk_css_parser_try (parser, "url", FALSE))
     {
-      str += strlen ("url");
-      SKIP_SPACES (str);
-
-      if (*str != '(')
+      if (!_gtk_css_parser_try (parser, "(", TRUE))
         {
-          g_set_error_literal (error,
-                               GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                               "Expected '(' after 'url'");
-          return NULL;
-        }
-
-      chr = strchr (str, ')');
-      if (!chr)
-        {
-          g_set_error_literal (error,
-                               GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                               "No closing ')' found for 'url'");
-          return NULL;
-        }
-
-      if (end)
-        *end = chr + 1;
-
-      str++;
-      SKIP_SPACES (str);
-
-      if (*str == '"' || *str == '\'')
-        {
-          const gchar *p;
-          p = str;
-
-          str++;
-          chr--;
-          SKIP_SPACES_BACK (chr);
-
-          if (*chr != *p || chr == p)
+          _gtk_css_parser_skip_whitespace (parser);
+          if (_gtk_css_parser_try (parser, "(", TRUE))
             {
-              g_set_error_literal (error,
-                                   GTK_CSS_PROVIDER_ERROR,
-                                   GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                   "Did not find closing quote for url");
+              GError *error;
+              
+              error = g_error_new_literal (GTK_CSS_PROVIDER_ERROR,
+                                           GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                           "Whitespace between 'url' and '(' is not allowed");
+                             
+              _gtk_css_parser_take_error (parser, error);
+            }
+          else
+            {
+              _gtk_css_parser_error (parser, "Expected '(' after 'url'");
               return NULL;
             }
         }
-      else
+
+      path = _gtk_css_parser_read_string (parser);
+      if (path == NULL)
+        return NULL;
+
+      if (!_gtk_css_parser_try (parser, ")", TRUE))
         {
-          g_set_error_literal (error,
-                               GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                               "url not properly escaped");
+          _gtk_css_parser_error (parser, "No closing ')' found for 'url'");
+          g_free (path);
           return NULL;
         }
-
-      path = g_strndup (str, chr - str);
-      g_strstrip (path);
     }
   else
     {
-      path = g_strdup (str);
-      if (end)
-        *end = (gchar *) str + strlen (str);
+      path = _gtk_css_parser_try_name (parser, TRUE);
+      if (path == NULL)
+        {
+          _gtk_css_parser_error (parser, "Not a valid url");
+          return NULL;
+        }
     }
 
   file = g_file_resolve_relative_path (base, path);

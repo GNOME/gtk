@@ -1187,6 +1187,20 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
   return props;
 }
 
+static void
+gtk_css_provider_parser_error (GtkCssParser *parser,
+                               const GError *error,
+                               gpointer      user_data)
+{
+  GtkCssProvider *provider = user_data;
+
+  gtk_css_provider_take_error_full (provider,
+                                    NULL,
+                                    _gtk_css_parser_get_line (parser),
+                                    _gtk_css_parser_get_position (parser),
+                                    g_error_copy (error));
+}
+
 static gboolean
 gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                      GtkWidgetPath    *path,
@@ -1227,21 +1241,20 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
            ((selector_state & state) != 0 &&
             (selector_state & ~(state)) == 0)))
         {
-          GError *error = NULL;
+          GtkCssParser *parser;
 
-          found = _gtk_css_value_from_string (value,
-                                              NULL,
-                                              g_value_get_string (val),
-                                              &error);
+          parser = _gtk_css_parser_new (g_value_get_string (val),
+                                        gtk_css_provider_parser_error,
+                                        provider);
+
+          found = _gtk_css_value_parse (value,
+                                        parser,
+                                        NULL);
+
+          _gtk_css_parser_free (parser);
 
           if (found)
             break;
-          
-          /* error location should be _way_ better */
-          gtk_css_provider_take_error_full (GTK_CSS_PROVIDER (provider),
-                                            NULL,
-                                            0, 0,
-                                            error);
         }
     }
 
@@ -1902,7 +1915,7 @@ parse_declaration (GtkCssScanner *scanner,
 {
   GtkStylePropertyParser parse_func = NULL;
   GParamSpec *pspec = NULL;
-  char *name, *value_str;
+  char *name;
 
   name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
   if (name == NULL)
@@ -1930,14 +1943,6 @@ parse_declaration (GtkCssScanner *scanner,
       return;
     }
 
-  value_str = _gtk_css_parser_read_value (scanner->parser);
-  if (value_str == NULL)
-    {
-      _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-      g_free (name);
-      return;
-    }
-  
   if (pspec)
     {
       GValue *val;
@@ -1947,7 +1952,7 @@ parse_declaration (GtkCssScanner *scanner,
       val = g_slice_new0 (GValue);
       g_value_init (val, pspec->value_type);
 
-      if (strcmp (value_str, "none") == 0)
+      if (_gtk_css_parser_try (scanner->parser, "none", TRUE))
         {
           /* Insert the default value, so it has an opportunity
            * to override other style providers when merged
@@ -1958,46 +1963,79 @@ parse_declaration (GtkCssScanner *scanner,
       else if (parse_func)
         {
           GError *error = NULL;
+          char *value_str;
+          
+          value_str = _gtk_css_parser_read_value (scanner->parser);
+          if (value_str == NULL)
+            {
+              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+              return;
+            }
           
           if ((*parse_func) (value_str, val, &error))
             gtk_css_ruleset_add (ruleset, pspec, val);
           else
             gtk_css_provider_take_error (scanner->provider, scanner, error);
+
+          g_free (value_str);
         }
       else
         {
-          GError *error = NULL;
-          
-          if (_gtk_css_value_from_string (val,
-                                          gtk_css_scanner_get_base_url (scanner),
-                                          value_str,
-                                          &error))
+          if (_gtk_css_value_parse (val,
+                                    scanner->parser,
+                                    gtk_css_scanner_get_base_url (scanner)))
             {
-              gtk_css_ruleset_add (ruleset, pspec, val);
+              if (_gtk_css_parser_begins_with (scanner->parser, ';') ||
+                  _gtk_css_parser_begins_with (scanner->parser, '}') ||
+                  _gtk_css_parser_is_eof (scanner->parser))
+                {
+                  gtk_css_ruleset_add (ruleset, pspec, val);
+                }
+              else
+                {
+                  gtk_css_provider_error_literal (scanner->provider,
+                                                  scanner,
+                                                  GTK_CSS_PROVIDER_ERROR,
+                                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                                  "Junk at end of value");
+                  _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+                  g_value_unset (val);
+                  g_slice_free (GValue, val);
+                  return;
+                }
             }
           else
             {
               g_value_unset (val);
               g_slice_free (GValue, val);
-
-              gtk_css_provider_take_error (scanner->provider, scanner, error);
+              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+              return;
             }
         }
     }
   else if (name[0] == '-')
     {
-      GValue *val;
+      char *value_str;
 
-      val = g_slice_new0 (GValue);
-      g_value_init (val, G_TYPE_STRING);
-      g_value_set_string (val, value_str);
+      value_str = _gtk_css_parser_read_value (scanner->parser);
+      if (value_str)
+        {
+          GValue *val;
 
-      gtk_css_ruleset_add_style (ruleset, name, val);
+          val = g_slice_new0 (GValue);
+          g_value_init (val, G_TYPE_STRING);
+          g_value_take_string (val, value_str);
+
+          gtk_css_ruleset_add_style (ruleset, name, val);
+        }
+      else
+        {
+          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+          return;
+        }
     }
   else
     g_free (name);
-
-  g_free (value_str);
 
 check_for_semicolon:
   if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))

@@ -20,20 +20,17 @@
 #ifndef __GTK_CSS_STRINGFUNCS_PRIVATE_H__
 #define __GTK_CSS_STRINGFUNCS_PRIVATE_H__
 
-#include <gtk/gtksymboliccolor.h>
+#include "gtkcssparserprivate.h"
 
 G_BEGIN_DECLS
 
-gboolean                _gtk_css_value_from_string        (GValue        *value,
-                                                           GFile         *base,
-                                                           const char    *string,
-                                                           GError       **error);
+gboolean                _gtk_css_value_parse              (GValue        *value,
+                                                           GtkCssParser  *parser,
+                                                           GFile         *base);
 char *                  _gtk_css_value_to_string          (const GValue  *value);
 
-GFile *                 _gtk_css_parse_url                (GFile         *base,
-                                                           const char    *str,
-                                                           char         **end,
-                                                           GError       **error);
+GFile *                 _gtk_css_parse_url                (GtkCssParser *parser,
+                                                           GFile        *base);
 
 G_END_DECLS
 

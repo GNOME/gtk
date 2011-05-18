@@ -108,6 +108,15 @@ _gtk_css_parser_get_position (GtkCssParser *parser)
 }
 
 void
+_gtk_css_parser_take_error (GtkCssParser *parser,
+                            GError       *error)
+{
+  parser->error_func (parser, error, parser->user_data);
+
+  g_error_free (error);
+}
+
+void
 _gtk_css_parser_error (GtkCssParser *parser,
                        const char   *format,
                        ...)
@@ -122,9 +131,7 @@ _gtk_css_parser_error (GtkCssParser *parser,
                               format, args);
   va_end (args);
 
-  parser->error_func (parser, error, parser->user_data);
-
-  g_error_free (error);
+  _gtk_css_parser_take_error (parser, error);
 }
 
 static gboolean

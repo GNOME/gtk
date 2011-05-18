@@ -35,6 +35,8 @@ GtkCssParser *  _gtk_css_parser_new               (const char            *data,
                                                    gpointer               user_data);
 void            _gtk_css_parser_free              (GtkCssParser          *parser);
 
+void            _gtk_css_parser_take_error        (GtkCssParser          *parser,
+                                                   GError                *error);
 void            _gtk_css_parser_error             (GtkCssParser          *parser,
                                                    const char            *format,
                                                     ...) G_GNUC_PRINTF (2, 3);
