@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkstyleproperties.h"
+#include "gtkstylepropertiesprivate.h"
 
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
@@ -58,14 +58,7 @@
 
 typedef struct GtkStylePropertiesPrivate GtkStylePropertiesPrivate;
 typedef struct PropertyData PropertyData;
-typedef struct _GtkStyleProperty GtkStyleProperty;
 typedef struct ValueData ValueData;
-
-struct _GtkStyleProperty
-{
-  GParamSpec *pspec;
-  GtkStylePropertyParser parse_func;
-};
 
 struct ValueData
 {
@@ -403,7 +396,7 @@ gtk_style_property_init (void)
 }
 
 const GtkStyleProperty *
-gtk_style_property_lookup (const char *name)
+_gtk_style_property_lookup (const char *name)
 {
   gtk_style_property_init ();
 
@@ -435,7 +428,7 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
 
   gtk_style_property_init ();
 
-  existing = gtk_style_property_lookup (pspec->name);
+  existing = _gtk_style_property_lookup (pspec->name);
   if (existing != NULL)
     {
       g_warning ("Property \"%s\" was already registered with type %s",
@@ -474,7 +467,7 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
 
   g_return_val_if_fail (property_name != NULL, FALSE);
 
-  node = gtk_style_property_lookup (property_name);
+  node = _gtk_style_property_lookup (property_name);
 
   if (node)
     {
@@ -694,7 +687,7 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
   g_return_if_fail (property != NULL);
   g_return_if_fail (value != NULL);
 
-  node = gtk_style_property_lookup (property);
+  node = _gtk_style_property_lookup (property);
 
   if (!node)
     {
@@ -738,7 +731,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
       gchar *error = NULL;
       GValue *val;
 
-      node = gtk_style_property_lookup (property_name);
+      node = _gtk_style_property_lookup (property_name);
 
       if (!node)
         {
@@ -947,7 +940,7 @@ _gtk_style_properties_peek_property (GtkStyleProperties *props,
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), NULL);
   g_return_val_if_fail (prop_name != NULL, NULL);
 
-  node = gtk_style_property_lookup (prop_name);
+  node = _gtk_style_property_lookup (prop_name);
 
   if (!node)
     {
@@ -999,7 +992,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
   g_return_val_if_fail (property != NULL, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
-  node = gtk_style_property_lookup (property);
+  node = _gtk_style_property_lookup (property);
 
   if (!node)
     {
@@ -1061,7 +1054,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
       gchar *error = NULL;
       GValue *val = NULL;
 
-      node = gtk_style_property_lookup (property_name);
+      node = _gtk_style_property_lookup (property_name);
 
       if (!node)
         {
@@ -1152,7 +1145,7 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (property != NULL);
 
-  node = gtk_style_property_lookup (property);
+  node = _gtk_style_property_lookup (property);
 
   if (!node)
     {
