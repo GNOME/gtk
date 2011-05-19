@@ -1678,6 +1678,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   /* Compute the size of the toplevel and realize it so we
    * can scroll correctly.
    */
+  if (!gtk_widget_get_realized (GTK_WIDGET (menu)))
   {
     GtkRequisition tmp_request;
     GtkAllocation tmp_allocation = { 0, };
