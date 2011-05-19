@@ -30,6 +30,7 @@ demos =						\
 	menus.c					\
 	offscreen_window.c			\
 	offscreen_window2.c			\
+	overlay.c				\
 	panes.c					\
 	pickers.c				\
 	pixbufs.c				\

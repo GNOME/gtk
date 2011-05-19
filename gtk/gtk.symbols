@@ -1625,6 +1625,9 @@ gtk_orientable_get_orientation
 gtk_orientable_get_type
 gtk_orientable_set_orientation
 gtk_orientation_get_type
+gtk_overlay_add_overlay
+gtk_overlay_get_type
+gtk_overlay_new
 gtk_pack_direction_get_type
 gtk_pack_type_get_type
 gtk_page_orientation_get_type

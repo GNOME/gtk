@@ -141,6 +141,7 @@
 #include <gtk/gtknumerableicon.h>
 #include <gtk/gtkoffscreenwindow.h>
 #include <gtk/gtkorientable.h>
+#include <gtk/gtkoverlay.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>

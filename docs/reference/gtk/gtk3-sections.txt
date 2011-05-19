@@ -7079,3 +7079,29 @@ GTK_LOCK_BUTTON_GET_CLASS
 gtk_lock_button_get_type
 GtkLockButtonPrivate
 </SECTION>
+
+<SECTION>
+<FILE>gtkoverlay</FILE>
+<TITLE>GtkOverlay</TITLE>
+GtkOverlay
+
+gtk_overlay_new
+gtk_overlay_set_relative_widget
+gtk_overlay_get_relative_widget
+gtk_overlay_add
+gtk_overlay_set_offset
+gtk_overlay_get_offset
+
+<SUBSECTION Standard>
+GTK_TYPE_OVERLAY
+GTK_OVERLAY
+GTK_OVERLAY_CLASS
+GTK_IS_OVERLAY
+GTK_IS_OVERLAY_CLASS
+GTK_OVERLAY_GET_CLASS
+GtkOverlayClass
+
+<SUBSECTION Private>
+gtk_overlay_get_type
+GtkOverlayPrivate
+</SECTION>
