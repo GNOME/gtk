@@ -36,6 +36,7 @@
 #include "gtkbindings.h"
 #include "gtk9slice.h"
 #include "gtkgradient.h"
+#include "gtkshadowprivate.h"
 #include "gtkthemingengine.h"
 
 typedef gboolean (* ParseFunc)        (GtkCssParser  *parser,
@@ -783,6 +784,74 @@ pattern_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
+static gboolean
+shadow_value_parse (GtkCssParser *parser,
+                    GFile *base,
+                    GValue *value)
+{
+  gboolean inset;
+  gdouble hoffset, voffset, blur, spread;
+  GtkSymbolicColor *color;
+  GtkShadow *shadow;
+
+  shadow = _gtk_shadow_new ();
+
+  do
+    {
+      inset = _gtk_css_parser_try (parser, "inset", TRUE);
+
+      if (!_gtk_css_parser_try_double (parser, &hoffset) ||
+          !_gtk_css_parser_try_double (parser, &voffset))
+        {
+          _gtk_css_parser_error (parser, "Horizontal and vertical offsets are required");
+          _gtk_shadow_unref (shadow);
+          return FALSE;
+        }
+
+      if (!_gtk_css_parser_try_double (parser, &blur))
+        blur = 0;
+
+      if (!_gtk_css_parser_try_double (parser, &spread))
+        spread = 0;
+
+      /* XXX: the color is optional and UA-defined if it's missing,
+       * but it doesn't really make sense for us...
+       */
+      color = _gtk_css_parser_read_symbolic_color (parser);
+
+      if (color == NULL)
+        {
+          _gtk_shadow_unref (shadow);
+          return FALSE;
+        }
+
+      _gtk_shadow_append (shadow,
+                          hoffset, voffset,
+                          blur, spread,
+                          inset, color);
+
+      gtk_symbolic_color_unref (color);
+
+    }
+  while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  g_value_take_boxed (value, shadow);
+  return TRUE;
+}
+
+static gchar *
+shadow_value_to_string (const GValue *value)
+{
+  GtkShadow *shadow;
+
+  shadow = g_value_get_boxed (value);
+
+  if (shadow == NULL)
+    return g_strdup ("none");
+
+  return _gtk_shadow_to_string (shadow);
+}
+
 static gboolean 
 slice_value_parse (GtkCssParser *parser,
                    GFile        *base,
@@ -1092,6 +1161,9 @@ css_string_funcs_init (void)
   register_conversion_function (GTK_TYPE_9SLICE,
                                 slice_value_parse,
                                 NULL);
+  register_conversion_function (GTK_TYPE_SHADOW,
+                                shadow_value_parse,
+                                shadow_value_to_string);
   register_conversion_function (G_TYPE_ENUM,
                                 enum_value_parse,
                                 enum_value_to_string);
