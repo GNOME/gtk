@@ -1948,16 +1948,15 @@ static void
 parse_declaration (GtkCssScanner *scanner,
                    GtkCssRuleset *ruleset)
 {
-  GtkStylePropertyParser parse_func = NULL;
-  GParamSpec *pspec = NULL;
+  const GtkStyleProperty *property;
   char *name;
 
   name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
   if (name == NULL)
     goto check_for_semicolon;
 
-  if (!gtk_style_properties_lookup_property (name, &parse_func, &pspec) &&
-      name[0] != '-')
+  property = _gtk_style_property_lookup (name);
+  if (property == NULL && name[0] != '-')
     {
       gtk_css_provider_error (scanner->provider,
                               scanner,
@@ -1978,24 +1977,24 @@ parse_declaration (GtkCssScanner *scanner,
       return;
     }
 
-  if (pspec)
+  if (property)
     {
       GValue *val;
 
       g_free (name);
 
       val = g_slice_new0 (GValue);
-      g_value_init (val, pspec->value_type);
+      g_value_init (val, property->pspec->value_type);
 
       if (_gtk_css_parser_try (scanner->parser, "none", TRUE))
         {
           /* Insert the default value, so it has an opportunity
            * to override other style providers when merged
            */
-          g_param_value_set_default (pspec, val);
-          gtk_css_ruleset_add (ruleset, pspec, val);
+          g_param_value_set_default (property->pspec, val);
+          gtk_css_ruleset_add (ruleset, property->pspec, val);
         }
-      else if (parse_func)
+      else if (property->parse_func)
         {
           GError *error = NULL;
           char *value_str;
@@ -2007,8 +2006,8 @@ parse_declaration (GtkCssScanner *scanner,
               return;
             }
           
-          if ((*parse_func) (value_str, val, &error))
-            gtk_css_ruleset_add (ruleset, pspec, val);
+          if ((*property->parse_func) (value_str, val, &error))
+            gtk_css_ruleset_add (ruleset, property->pspec, val);
           else
             gtk_css_provider_take_error (scanner->provider, scanner, error);
 
@@ -2024,7 +2023,7 @@ parse_declaration (GtkCssScanner *scanner,
                   _gtk_css_parser_begins_with (scanner->parser, '}') ||
                   _gtk_css_parser_is_eof (scanner->parser))
                 {
-                  gtk_css_ruleset_add (ruleset, pspec, val);
+                  gtk_css_ruleset_add (ruleset, property->pspec, val);
                 }
               else
                 {
