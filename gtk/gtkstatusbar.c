@@ -217,7 +217,8 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 
   priv->label = gtk_label_new ("");
   gtk_label_set_single_line_mode (GTK_LABEL (priv->label), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (priv->label), 0.0, 0.5);
+  gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->label, GTK_ALIGN_CENTER);
   gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
   gtk_container_add (GTK_CONTAINER (message_area), priv->label);
   gtk_widget_show (priv->label);
