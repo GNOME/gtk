@@ -1096,6 +1096,10 @@ if test "x$enable_x11_backend" = xyes; then
     fi
   fi
 
+  # Check for XGetEventData for GenericEvents
+  AC_CHECK_FUNC(XGetEventData,
+                AC_DEFINE(HAVE_XGENERICEVENTS, 1, [Have XGenericEvent]))
+
   # set up things for XInput
   if test "x$enable_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
     have_xinput=yes
