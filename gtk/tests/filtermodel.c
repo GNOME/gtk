@@ -2448,6 +2448,7 @@ specific_has_child_filter (void)
   /* When the child comes in, this node will become visible */
   signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1");
   signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
   signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1");
   signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
 
@@ -2592,6 +2593,7 @@ specific_root_has_child_filter (void)
   /* Adding a child node which also makes parent at path 1 visible. */
   signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1");
   signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
 
   gtk_tree_store_append (fixture.store, &iter, &root);
   check_level_length (fixture.filter, NULL, 2);
@@ -2621,10 +2623,11 @@ specific_root_has_child_filter (void)
   check_level_length (fixture.filter, "1", 2);
   signal_monitor_assert_is_empty (fixture.monitor);
 
-  /* Set a child node to invisible */
-  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0:0");
-  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
-  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0");
+  /* Set a child node to invisible.  This should not yield any
+   * change, because filtering is only done on whether the root
+   * node has a child, which it still has.
+   */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0:0");
 
   set_path_visibility (&fixture, "0:0", FALSE);
   signal_monitor_assert_is_empty (fixture.monitor);
