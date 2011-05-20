@@ -11,11 +11,11 @@
 
 static GtkWidget *window = NULL;
 static GtkTreeModel *model = NULL;
-static guint timeout = 0;
 
 typedef struct
 {
   const gboolean  fixed;
+  const gboolean  active;
   const guint     number;
   const gchar    *severity;
   const gchar    *description;
@@ -28,7 +28,6 @@ enum
   COLUMN_NUMBER,
   COLUMN_SEVERITY,
   COLUMN_DESCRIPTION,
-  COLUMN_PULSE,
   COLUMN_ICON,
   COLUMN_ACTIVE,
   COLUMN_SENSITIVE,
@@ -37,48 +36,21 @@ enum
 
 static Bug data[] =
 {
-  { FALSE, 60482, "Normal",     "scrollable notebooks and hidden tabs" },
-  { FALSE, 60620, "Critical",   "gdk_window_clear_area (gdkwindow-win32.c) is not thread-safe" },
-  { FALSE, 50214, "Major",      "Xft support does not clean up correctly" },
-  { TRUE,  52877, "Major",      "GtkFileSelection needs a refresh method. " },
-  { FALSE, 56070, "Normal",     "Can't click button after setting in sensitive" },
-  { TRUE,  56355, "Normal",     "GtkLabel - Not all changes propagate correctly" },
-  { FALSE, 50055, "Normal",     "Rework width/height computations for TreeView" },
-  { FALSE, 58278, "Normal",     "gtk_dialog_set_response_sensitive () doesn't work" },
-  { FALSE, 55767, "Normal",     "Getters for all setters" },
-  { FALSE, 56925, "Normal",     "Gtkcalender size" },
-  { FALSE, 56221, "Normal",     "Selectable label needs right-click copy menu" },
-  { TRUE,  50939, "Normal",     "Add shift clicking to GtkTextView" },
-  { FALSE, 6112,  "Enhancement","netscape-like collapsable toolbars" },
-  { FALSE, 1,     "Normal",     "First bug :=)" },
+  { FALSE, TRUE,  60482, "Normal",     "scrollable notebooks and hidden tabs" },
+  { FALSE, FALSE, 60620, "Critical",   "gdk_window_clear_area (gdkwindow-win32.c) is not thread-safe" },
+  { FALSE, FALSE, 50214, "Major",      "Xft support does not clean up correctly" },
+  { TRUE,  FALSE, 52877, "Major",      "GtkFileSelection needs a refresh method. " },
+  { FALSE, TRUE,  56070, "Normal",     "Can't click button after setting in sensitive" },
+  { TRUE,  FALSE, 56355, "Normal",     "GtkLabel - Not all changes propagate correctly" },
+  { FALSE, FALSE, 50055, "Normal",     "Rework width/height computations for TreeView" },
+  { FALSE, TRUE,  58278, "Normal",     "gtk_dialog_set_response_sensitive () doesn't work" },
+  { FALSE, FALSE, 55767, "Normal",     "Getters for all setters" },
+  { FALSE, TRUE,  56925, "Normal",     "Gtkcalender size" },
+  { FALSE, TRUE,  56221, "Normal",     "Selectable label needs right-click copy menu" },
+  { TRUE,  FALSE, 50939, "Normal",     "Add shift clicking to GtkTextView" },
+  { FALSE, FALSE, 6112,  "Enhancement","netscape-like collapsable toolbars" },
+  { FALSE, FALSE, 1,     "Normal",     "First bug :=)" },
 };
-
-static gboolean
-spinner_timeout (gpointer data)
-{
-  GtkTreeIter iter;
-  guint pulse;
-
-  if (model == NULL)
-    return FALSE;
-
-  gtk_tree_model_get_iter_first (model, &iter);
-  gtk_tree_model_get (model, &iter,
-                      COLUMN_PULSE, &pulse,
-                      -1);
-  if (pulse == G_MAXUINT)
-    pulse = 0;
-  else
-    pulse++;
-
-  gtk_list_store_set (GTK_LIST_STORE (model),
-                      &iter,
-                      COLUMN_PULSE, pulse,
-                      COLUMN_ACTIVE, TRUE,
-                      -1);
-
-  return TRUE;
-}
 
 static GtkTreeModel *
 create_model (void)
@@ -93,7 +65,6 @@ create_model (void)
                               G_TYPE_UINT,
                               G_TYPE_STRING,
                               G_TYPE_STRING,
-                              G_TYPE_UINT,
                               G_TYPE_STRING,
                               G_TYPE_BOOLEAN,
                               G_TYPE_BOOLEAN);
@@ -118,9 +89,8 @@ create_model (void)
                           COLUMN_NUMBER, data[i].number,
                           COLUMN_SEVERITY, data[i].severity,
                           COLUMN_DESCRIPTION, data[i].description,
-                          COLUMN_PULSE, 0,
                           COLUMN_ICON, icon_name,
-                          COLUMN_ACTIVE, FALSE,
+                          COLUMN_ACTIVE, data[i].active,
                           COLUMN_SENSITIVE, sensitive,
                           -1);
     }
@@ -209,12 +179,10 @@ add_columns (GtkTreeView *treeview)
   renderer = gtk_cell_renderer_spinner_new ();
   column = gtk_tree_view_column_new_with_attributes ("Spinning",
                                                      renderer,
-                                                     "pulse",
-                                                     COLUMN_PULSE,
                                                      "active",
                                                      COLUMN_ACTIVE,
                                                      NULL);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_PULSE);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_ACTIVE);
   gtk_tree_view_append_column (treeview, column);
 
   /* column for symbolic icon */
@@ -238,11 +206,7 @@ window_closed (GtkWidget *widget,
 {
   model = NULL;
   window = NULL;
-  if (timeout != 0)
-    {
-      g_source_remove (timeout);
-      timeout = 0;
-    }
+
   return FALSE;
 }
 
@@ -303,22 +267,11 @@ do_list_store (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show_all (window);
-      if (timeout == 0) {
-        /* FIXME this should use the animation-duration instead */
-        timeout = g_timeout_add (80, spinner_timeout, NULL);
-      }
-    }
+    gtk_widget_show_all (window);
   else
     {
       gtk_widget_destroy (window);
       window = NULL;
-      if (timeout != 0)
-        {
-          g_source_remove (timeout);
-          timeout = 0;
-        }
     }
 
   return window;
