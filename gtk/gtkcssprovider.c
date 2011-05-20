@@ -505,6 +505,28 @@
  *                color-stop (1, &commat;green))</literallayout></para>
  * </example>
  * </refsect2>
+ * <refsect2 id="gtkcssprovider-shadows">
+ * <title>Text shadow</title>
+ * <para>
+ * A shadow list can be applied to text or symbolic icons, using the CSS3
+ * text-shadow syntax, as defined in
+ * <ulink url="http://www.w3.org/TR/css3-text/#text-shadow">the CSS3 specification</ulink>.
+ * </para>
+ * <para>
+ * A text shadow is specified using the syntax
+ * <literallayout>text-shadow: @horizontal_offset @vertical_offset [ @blur_radius ] @color</literallayout>
+ * The offset of the shadow is specified with the @horizontal_offset and @vertical_offset
+ * parameters. The optional blur radius is parsed, but it is currently not rendered by
+ * the GTK+ theming engine.
+ * </para>
+ * <para>
+ * To set multiple shadows on an element, you can specify a comma-separated list
+ * of shadow elements in the text-shadow property. Shadows are always rendered
+ * front-back, i.e. the first shadow specified is on top of the others. Shadows
+ * can thus overlay each other, but they can never overlay the text itself,
+ * which is always rendered on top of the shadow layer.
+ * </para>
+ * </refsect2>
  * <refsect2 id="gtkcssprovider-slices">
  * <title>Border images</title>
  * <para>
@@ -692,6 +714,11 @@
  *         <entry><literallayout>border-image: url("/path/to/image.png") 3 4 3 4 stretch;
  * border-image: url("/path/to/image.png") 3 4 4 3 repeat stretch;</literallayout>
  *         </entry>
+ *       </row>
+ *         <entry>text-shadow</entry>
+ *         <entry>shadow list (see above)</entry>
+ *         <entry>#GtkTextShadow</entry>
+ *         <entry><literallayout>text-shadow: 1 1 0 blue, -4 -4 red;</literallayout></entry>
  *       </row>
  *       <row>
  *         <entry>transition</entry>

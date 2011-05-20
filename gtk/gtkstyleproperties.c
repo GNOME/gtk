@@ -34,6 +34,7 @@
 #include "gtkborder.h"
 #include "gtkgradient.h"
 #include "gtk9slice.h"
+#include "gtkshadowprivate.h"
 #include "gtkintl.h"
 
 /**
@@ -109,16 +110,17 @@ gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
   gtk_style_param_set_inherit (pspec, TRUE);
   gtk_style_properties_register_property (NULL, pspec);
 
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("background-color",
-                                                              "Background color",
-                                                              "Background color",
-                                                              GDK_TYPE_RGBA, 0));
-
   pspec = g_param_spec_boxed ("font",
                               "Font Description",
                               "Font Description",
                               PANGO_TYPE_FONT_DESCRIPTION, 0);
+  gtk_style_param_set_inherit (pspec, TRUE);
+  gtk_style_properties_register_property (NULL, pspec);
+
+  pspec = g_param_spec_boxed ("text-shadow",
+                              "Text shadow",
+                              "Text shadow",
+                              GTK_TYPE_SHADOW, 0);
   gtk_style_param_set_inherit (pspec, TRUE);
   gtk_style_properties_register_property (NULL, pspec);
 
@@ -152,6 +154,11 @@ gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
                                           g_param_spec_boxed ("border-color",
                                                               "Border color",
                                                               "Border color",
+                                                              GDK_TYPE_RGBA, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("background-color",
+                                                              "Background color",
+                                                              "Background color",
                                                               GDK_TYPE_RGBA, 0));
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("background-image",
