@@ -846,6 +846,29 @@ resolve_gradient (GtkStyleProperties *props,
 }
 
 static gboolean
+resolve_shadow (GtkStyleProperties *props,
+                GValue *value)
+{
+  GtkShadow *resolved, *base;
+
+  base = g_value_get_boxed (value);
+
+  if (base == NULL)
+    return TRUE;
+  
+  if (_gtk_shadow_get_resolved (base))
+    return TRUE;
+
+  resolved = _gtk_shadow_resolve (base, props);
+  if (resolved == NULL)
+    return FALSE;
+
+  g_value_take_boxed (value, resolved);
+
+  return TRUE;
+}
+
+static gboolean
 style_properties_resolve_type (GtkStyleProperties *props,
                                PropertyNode       *node,
                                GValue             *val)
@@ -870,6 +893,11 @@ style_properties_resolve_type (GtkStyleProperties *props,
       g_return_val_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
 
       if (!resolve_gradient (props, val))
+        return FALSE;
+    }
+  else if (val && G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
+    {
+      if (!resolve_shadow (props, val))
         return FALSE;
     }
 
