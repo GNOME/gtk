@@ -1100,6 +1100,10 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
 
   length = level->array->len;
 
+  /* first register the node to be invisible */
+  level->visible_nodes--;
+  elt->visible = FALSE;
+
   /* we distinguish a couple of cases:
    *  - root level, length > 1: emit row-deleted and remove.
    *  - root level, length == 1: emit row-deleted and keep in cache.
@@ -1129,7 +1133,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
         gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
 
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
-      elt->visible = FALSE;
       gtk_tree_model_filter_increment_stamp (filter);
       iter.stamp = filter->priv->stamp;
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
@@ -1180,7 +1183,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
         }
 
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
-      elt->visible = FALSE;
       gtk_tree_model_filter_increment_stamp (filter);
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
       gtk_tree_path_free (path);
@@ -1192,7 +1194,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
       /* Blow level away, including any child levels */
 
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
-      elt->visible = FALSE;
       gtk_tree_model_filter_increment_stamp (filter);
       iter.stamp = filter->priv->stamp;
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
@@ -1496,10 +1497,6 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
   if (current_state == TRUE && requested_state == FALSE)
     {
-      /* get rid of this node */
-      level = FILTER_LEVEL (iter.user_data);
-      level->visible_nodes--;
-
       gtk_tree_model_filter_remove_elt_from_level (filter, level,
                                                    FILTER_ELT (iter.user_data2));
 
@@ -1783,8 +1780,6 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
        * _remove_elt_from_level() takes care of emitting row-has-child-toggled
        * when required.
        */
-      level->visible_nodes--;
-
       gtk_tree_model_filter_remove_elt_from_level (filter, level, elt);
 
       return;
