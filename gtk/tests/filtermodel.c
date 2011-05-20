@@ -3250,6 +3250,263 @@ specific_bug_549287 (void)
     }
 }
 
+static gboolean
+specific_bug_621076_visible_func (GtkTreeModel *model,
+                                  GtkTreeIter  *iter,
+                                  gpointer      data)
+{
+  gboolean visible = FALSE;
+  gchar *str;
+
+  gtk_tree_model_get (model, iter, 0, &str, -1);
+  if (str != NULL && g_str_has_prefix (str, "visible"))
+    {
+      visible = TRUE;
+    }
+  else
+    {
+      GtkTreeIter child_iter;
+      gboolean valid;
+
+      /* Recursively check if we have a visible child */
+      for (valid = gtk_tree_model_iter_children (model, &child_iter, iter);
+           valid; valid = gtk_tree_model_iter_next (model, &child_iter))
+        {
+          gtk_tree_model_get (model, &child_iter, 0, &str, -1);
+          if (specific_bug_621076_visible_func (model, &child_iter, data))
+            {
+              visible = TRUE;
+              break;
+            }
+        }
+    }
+
+  return visible;
+}
+
+static void
+specific_bug_621076 (void)
+{
+  /* Test case for GNOME Bugzilla bug 621076, provided by Xavier Claessens */
+
+  /* This test case differs from has-child-filter and root-has-child-filter
+   * in that the visible function both filters on content and model
+   * structure.  Also, it is recursive.
+   */
+
+  GtkTreeStore *store;
+  GtkTreeModel *filter;
+  GtkWidget *view;
+  GtkTreeIter group_iter;
+  GtkTreeIter item_iter;
+  SignalMonitor *monitor;
+
+  g_test_bug ("621076");
+
+  store = gtk_tree_store_new (1, G_TYPE_STRING);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                          specific_bug_621076_visible_func,
+                                          NULL, NULL);
+
+  view = gtk_tree_view_new_with_model (filter);
+  g_object_ref_sink (view);
+
+  monitor = signal_monitor_new (filter);
+
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "0");
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "visible-group-0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* visible-group-0 is not expanded, so ROW_INSERTED should not be emitted
+   * for its children. However, ROW_HAS_CHILD_TOGGLED should be emitted on
+   * visible-group-0 to tell the view that row can be expanded. */
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "visible-0:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "1");
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "visible-group-1",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* We are adding an hidden item inside visible-group-1, so
+   * ROW_HAS_CHILD_TOGGLED should not be emitted.  It is emitted though,
+   * because the signal originating at TreeStore will be propagated,
+   * as well a generated signal because the state of the parent *could*
+   * change by a change in the model.
+   */
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "group-1:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* This group is invisible and its parent too. Nothing should be emitted */
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "group-1:0:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Adding a visible item in this group hierarchy will make all nodes
+   * in this path visible.  The first level should simply tell the view
+   * that it now has a child, and the view will load the tree if needed
+   * (depends on the expanded state).
+   */
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "visible-1:0:0:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "1", 1);
+
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "group-2",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Parent is invisible, and adding this invisible item won't change that,
+   * so no signal should be emitted. */
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "invisible-2:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* This makes group-2 visible, so it gets inserted and tells it has
+   * children.
+   */
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "2");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "visible-2:1",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* group-2 is already visible, so this time it is a normal insertion */
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "2:1");
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "visible-2:2",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "group-3",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Parent is invisible, and adding this invisible item won't change that,
+   * so no signal should be emitted. */
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "invisible-3:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "invisible-3:1",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* This will make group 3 visible. */
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "3");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "3");
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "3:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "3");
+  gtk_tree_store_set (store, &item_iter, 0, "visible-3:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Make sure all groups are expanded, so the filter has the tree cached */
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+
+  /* Should only yield a row-changed */
+  signal_monitor_append_signal (monitor, ROW_CHANGED, "3:0");
+  gtk_tree_store_set (store, &item_iter, 0, "visible-3:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Now remove/hide some items. If a group loses its last item, the group
+   * should be deleted instead of the item.
+   */
+
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter, "2:2");
+  gtk_tree_store_remove (store, &item_iter);
+  signal_monitor_assert_is_empty (monitor);
+
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter, "2:1");
+  gtk_tree_store_set (store, &item_iter, 0, "invisible-2:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  signal_monitor_append_signal (monitor, ROW_DELETED, "1:0:0:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1:0:0");
+  signal_monitor_append_signal (monitor, ROW_DELETED, "1:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter, "1:0:0:0");
+  gtk_tree_store_remove (store, &item_iter);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Hide a group using row-changed instead of row-deleted */
+  /* Caution: group 2 is gone, so offsets of the signals have moved. */
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter,
+                                       "3:1");
+  gtk_tree_store_set (store, &item_iter, 0, "invisible-3:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+#if 0
+  {
+    GtkWidget *window;
+    GtkTreeViewColumn *col;
+
+    gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+
+    col = gtk_tree_view_column_new_with_attributes ("foo",
+        gtk_cell_renderer_text_new (),
+        "text", 0, NULL);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (view), col);
+
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    g_signal_connect (window, "delete-event",
+        G_CALLBACK (gtk_widget_destroy), NULL);
+    g_signal_connect (window, "destroy",
+        G_CALLBACK (gtk_main_quit), NULL);
+
+    gtk_container_add (GTK_CONTAINER (window), view);
+
+    gtk_widget_show (view);
+    gtk_widget_show (window);
+
+    gtk_main ();
+  }
+#endif
+
+  /* Cleanup */
+  signal_monitor_free (monitor);
+  g_object_unref (view);
+  g_object_unref (store);
+  g_object_unref (filter);
+}
+
 /* main */
 
 void
@@ -3437,4 +3694,6 @@ register_filter_model_tests (void)
                    specific_bug_540201);
   g_test_add_func ("/TreeModelFilter/specific/bug-549287",
                    specific_bug_549287);
+  g_test_add_func ("/TreeModelFilter/specific/bug-621076",
+                   specific_bug_621076);
 }
