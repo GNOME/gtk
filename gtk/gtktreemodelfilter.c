@@ -1084,12 +1084,15 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
   FilterLevel *parent_level;
   gint i, length, parent_elt_index;
   GtkTreeIter iter;
+  GtkTreePath *path = NULL;
 
   gboolean emit_child_toggled = FALSE;
 
   iter.stamp = filter->priv->stamp;
   iter.user_data = level;
   iter.user_data2 = elt;
+
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
 
   parent_elt_index = level->parent_elt_index;
   if (parent_elt_index >= 0)
@@ -1122,7 +1125,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
 
   if (length > 1)
     {
-      GtkTreePath *path;
       FilterElt *tmp;
 
       /* We emit row-deleted, and remove the node from the cache.
@@ -1132,11 +1134,9 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
       if (elt->children)
         gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
       gtk_tree_model_filter_increment_stamp (filter);
       iter.stamp = filter->priv->stamp;
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-      gtk_tree_path_free (path);
 
       while (elt->ref_count > 1)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
@@ -1170,8 +1170,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
   else if ((length == 1 && parent && parent->ref_count > 1)
            || (length == 1 && level == filter->priv->root))
     {
-      GtkTreePath *path;
-
       /* We emit row-deleted, but keep the node in the cache and
        * referenced.  Its children will be removed.
        */
@@ -1182,22 +1180,16 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
           elt->children = NULL;
         }
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
       gtk_tree_model_filter_increment_stamp (filter);
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-      gtk_tree_path_free (path);
     }
   else
     {
-      GtkTreePath *path;
-
       /* Blow level away, including any child levels */
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
       gtk_tree_model_filter_increment_stamp (filter);
       iter.stamp = filter->priv->stamp;
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-      gtk_tree_path_free (path);
 
       while (elt->ref_count > 1)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
@@ -1205,6 +1197,8 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
 
       gtk_tree_model_filter_free_level (filter, level, TRUE);
     }
+
+  gtk_tree_path_free (path);
 
   if (emit_child_toggled)
     {
