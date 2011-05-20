@@ -2384,13 +2384,15 @@ specific_has_child_filter (void)
 {
   GtkTreeModel *filter;
   GtkTreeIter iter, root;
-  /* A bit nasty, apologies */
-  FilterTest fixture;
+  FilterTest fixture; /* This is not how it should be done */
+  GtkWidget *tree_view;
 
   fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture.store), NULL);
   fixture.filter = GTK_TREE_MODEL_FILTER (filter);
-  fixture.monitor = NULL;
+  fixture.monitor = signal_monitor_new (filter);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
 
   /* We will filter on parent state using a filter function.  We will
    * manually keep the boolean column in sync, so that we can use
@@ -2404,11 +2406,20 @@ specific_has_child_filter (void)
                                           specific_has_child_filter_filter_func,
                                           NULL, NULL);
 
+  /* The first node will be initially invisible: no signals */
   gtk_tree_store_append (fixture.store, &root, NULL);
   create_tree_store_set_values (fixture.store, &root, FALSE);
 
   /* check_filter_model (&fixture); */
   check_level_length (fixture.filter, NULL, 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert a child node. This will cause the parent to become visible
+   * since there is a child now.
+   */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
 
   gtk_tree_store_append (fixture.store, &iter, &root);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
@@ -2419,12 +2430,26 @@ specific_has_child_filter (void)
    */
   check_level_length (fixture.filter, NULL, 1);
   check_level_length (fixture.filter, "0", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* This should propagate row-changed */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
 
   set_path_visibility (&fixture, "0", TRUE);
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 
+  /* New root node, no child, so no signal */
   gtk_tree_store_append (fixture.store, &root, NULL);
   check_level_length (fixture.filter, NULL, 1);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* When the child comes in, this node will become visible */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
 
   gtk_tree_store_append (fixture.store, &iter, &root);
   check_level_length (fixture.filter, NULL, 2);
@@ -2434,14 +2459,19 @@ specific_has_child_filter (void)
   create_tree_store_set_values (fixture.store, &iter, TRUE);
 
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 
+  /* Add another child for 1 */
   gtk_tree_store_append (fixture.store, &iter, &root);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
   check_level_length (fixture.filter, NULL, 2);
   check_level_length (fixture.filter, "0", 0);
   check_level_length (fixture.filter, "1", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
 
   /* Now remove one of the remaining child rows */
+  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0");
+
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture.store),
                                        &iter, "0:0");
   gtk_tree_store_remove (fixture.store, &iter);
@@ -2451,6 +2481,7 @@ specific_has_child_filter (void)
 
   set_path_visibility (&fixture, "0", FALSE);
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 }
 
 
