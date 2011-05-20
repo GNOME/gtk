@@ -324,7 +324,7 @@ static FilterElt   *gtk_tree_model_filter_fetch_child                     (GtkTr
                                                                            FilterLevel            *level,
                                                                            gint                    offset,
                                                                            gint                   *index);
-static void         gtk_tree_model_filter_remove_node                     (GtkTreeModelFilter     *filter,
+static void         gtk_tree_model_filter_remove_elt_from_level           (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level,
                                                                            FilterElt              *elt);
 static void         gtk_tree_model_filter_update_children                 (GtkTreeModelFilter     *filter,
@@ -1076,9 +1076,9 @@ gtk_tree_model_filter_fetch_child (GtkTreeModelFilter *filter,
 }
 
 static void
-gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
-                                   FilterLevel        *level,
-                                   FilterElt          *elt)
+gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
+                                             FilterLevel        *level,
+                                             FilterElt          *elt)
 {
   FilterElt *parent;
   FilterLevel *parent_level;
@@ -1500,8 +1500,8 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
       level = FILTER_LEVEL (iter.user_data);
       level->visible_nodes--;
 
-      gtk_tree_model_filter_remove_node (filter, level,
-                                         FILTER_ELT (iter.user_data2));
+      gtk_tree_model_filter_remove_elt_from_level (filter, level,
+                                                   FILTER_ELT (iter.user_data2));
 
       goto done;
     }
@@ -1780,12 +1780,12 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
   else if (elt->visible && !requested_state)
     {
       /* The node is no longer visible, so it has to be removed.
-       * _remove_node() takes care of emitting row-has-child-toggled
+       * _remove_elt_from_level() takes care of emitting row-has-child-toggled
        * when required.
        */
       level->visible_nodes--;
 
-      gtk_tree_model_filter_remove_node (filter, level, elt);
+      gtk_tree_model_filter_remove_elt_from_level (filter, level, elt);
 
       return;
     }
