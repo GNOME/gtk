@@ -25,6 +25,7 @@
 #include <glib-object.h>
 #include <gtk/gtkstyleproperties.h>
 #include <gtk/gtksymboliccolor.h>
+#include <gtk/gtkicontheme.h>
 
 G_BEGIN_DECLS
 
@@ -51,6 +52,12 @@ gchar     *_gtk_shadow_to_string      (GtkShadow          *shadow);
 GtkShadow *_gtk_shadow_resolve        (GtkShadow          *shadow,
                                        GtkStyleProperties *props);
 gboolean   _gtk_shadow_get_resolved   (GtkShadow          *shadow);
+
+void       _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
+                                          cairo_t         *cr,
+                                          gdouble          x,
+                                          gdouble          y,
+                                          PangoLayout     *layout);
 
 G_END_DECLS
 

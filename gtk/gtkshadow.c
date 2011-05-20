@@ -23,6 +23,7 @@
 
 #include "gtkshadowprivate.h"
 #include "gtkstylecontext.h"
+#include "gtkpango.h"
 
 typedef struct _GtkShadowElement GtkShadowElement;
 
@@ -253,3 +254,31 @@ _gtk_shadow_to_string (GtkShadow *shadow)
 
   return g_string_free (str, FALSE);
 }
+
+void
+_gtk_text_shadow_paint_layout (GtkShadow       *shadow,
+                               cairo_t         *cr,
+                               gdouble          x,
+                               gdouble          y,
+                               PangoLayout     *layout)
+{
+  GList *l;
+  GtkShadowElement *element;
+
+  /* render shadows starting from the last one,
+   * and the others on top.
+   */
+  for (l = g_list_last (shadow->elements); l != NULL; l = l->prev)
+    {
+      element = l->data;
+
+      cairo_save (cr);
+
+      cairo_move_to (cr, x + element->hoffset, y + element->voffset);
+      gdk_cairo_set_source_rgba (cr, &element->color);
+      _gtk_pango_fill_layout (cr, layout);
+
+      cairo_restore (cr);
+  }
+}
+
