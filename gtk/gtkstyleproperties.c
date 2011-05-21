@@ -600,9 +600,8 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
   while (property_name)
     {
       const GtkStyleProperty *node;
-      PropertyData *prop;
       gchar *error = NULL;
-      GValue *val;
+      GValue val;
 
       node = _gtk_style_property_lookup (property_name);
 
@@ -612,29 +611,18 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
           break;
         }
 
-      prop = g_hash_table_lookup (priv->properties, node->pspec);
-
-      if (!prop)
-        {
-          prop = property_data_new ();
-          g_hash_table_insert (priv->properties, node->pspec, prop);
-        }
-
-      val = property_data_get_value (prop, state);
-
-      if (G_IS_VALUE (val))
-        g_value_unset (val);
-
-      G_VALUE_COLLECT_INIT (val, node->pspec->value_type,
+      G_VALUE_COLLECT_INIT (&val, node->pspec->value_type,
                             args, 0, &error);
-      g_param_value_validate (node->pspec, val);
       if (error)
         {
           g_warning ("Could not set style property \"%s\": %s", property_name, error);
-          g_value_unset (val);
+          g_value_unset (&val);
           g_free (error);
           break;
         }
+
+      _gtk_style_properties_set_property_by_property (props, node, state, &val);
+      g_value_unset (&val);
 
       property_name = va_arg (args, const gchar *);
     }
