@@ -37,7 +37,6 @@
 #include "gtklabel.h"
 #include "gtkvbox.h"
 #include "gtkmessagedialog.h"
-#include "gtkmisc.h"
 #include "gtkmountoperation.h"
 #include "gtkprivate.h"
 #include "gtkradiobutton.h"
@@ -417,7 +416,8 @@ table_add_entry (GtkWidget  *table,
   GtkWidget *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
 
@@ -503,7 +503,8 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION,
                                    GTK_ICON_SIZE_DIALOG);
 
-  gtk_misc_set_alignment (GTK_MISC (icon), 0.5, 0.0);
+  gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (icon, GTK_ALIGN_START);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
@@ -520,7 +521,8 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
       message_label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (message_label), s);
-      gtk_misc_set_alignment (GTK_MISC (message_label), 0.0, 0.5);
+      gtk_widget_set_halign (message_label, GTK_ALIGN_START);
+      gtk_widget_set_valign (message_label, GTK_ALIGN_CENTER);
       gtk_label_set_line_wrap (GTK_LABEL (message_label), TRUE);
       gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label),
                           FALSE, TRUE, 0);
@@ -531,7 +533,8 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   else
     {
       message_label = gtk_label_new (message);
-      gtk_misc_set_alignment (GTK_MISC (message_label), 0.0, 0.5);
+      gtk_widget_set_halign (message_label, GTK_ALIGN_START);
+      gtk_widget_set_valign (message_label, GTK_ALIGN_CENTER);
       gtk_label_set_line_wrap (GTK_LABEL (message_label), TRUE);
       gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label),
                           FALSE, FALSE, 0);
