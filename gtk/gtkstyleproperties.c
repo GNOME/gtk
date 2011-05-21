@@ -908,26 +908,12 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
   while (property_name)
     {
       const GtkStyleProperty *node;
-      PropertyData *prop;
       gchar *error = NULL;
-      GValue *val = NULL;
+      const GValue *val;
 
-      node = _gtk_style_property_lookup (property_name);
-
+      val = _gtk_style_properties_peek_property (props, property_name, state, &node);
       if (!node)
-        {
-          g_warning ("Style property \"%s\" is not registered", property_name);
-          break;
-        }
-
-      prop = g_hash_table_lookup (priv->properties, node->pspec);
-
-      if (prop)
-        val = property_data_match_state (prop, state);
-
-      if (val &&
-          !style_properties_resolve_type (props, node, val))
-        val = NULL;
+        break;
 
       if (val)
         {
