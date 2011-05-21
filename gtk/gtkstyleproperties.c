@@ -470,12 +470,9 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
                                       GParamSpec             **pspec)
 {
   const GtkStyleProperty *node;
-  GtkStylePropertiesClass *klass;
   gboolean found = FALSE;
 
   g_return_val_if_fail (property_name != NULL, FALSE);
-
-  klass = g_type_class_ref (GTK_TYPE_STYLE_PROPERTIES);
 
   node = gtk_style_property_lookup (property_name);
 
@@ -489,8 +486,6 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
 
       found = TRUE;
     }
-
-  g_type_class_unref (klass);
 
   return found;
 }
