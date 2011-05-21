@@ -26,16 +26,35 @@ G_BEGIN_DECLS
 
 typedef struct _GtkStyleProperty GtkStyleProperty;
 
+typedef GParameter *     (* GtkStyleUnpackFunc)            (const GValue           *value,
+                                                            guint                  *n_params);
+typedef void             (* GtkStylePackFunc)              (GValue                 *value,
+                                                            GtkStyleProperties     *props,
+                                                            GtkStateFlags           flags);
+
 struct _GtkStyleProperty
 {
   GParamSpec             *pspec;
   GtkStylePropertyParser  parse_func;
+  GtkStyleUnpackFunc      unpack_func;
+  GtkStylePackFunc        pack_func;
 };
 
-const GtkStyleProperty * _gtk_style_property_lookup        (const char         *name);
+const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
 
 void                     _gtk_style_property_register      (GParamSpec             *pspec,
-                                                            GtkStylePropertyParser  parse_func);
+                                                            GtkStylePropertyParser  parse_func,
+                                                            GtkStyleUnpackFunc      unpack_func,
+                                                            GtkStylePackFunc        pack_func);
+
+gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
+GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,
+                                                            const GValue           *value,
+                                                            guint                  *n_params);
+void                     _gtk_style_property_pack          (const GtkStyleProperty *property,
+                                                            GtkStyleProperties     *props,
+                                                            GtkStateFlags           state,
+                                                            GValue                 *value);
 
 gboolean                _gtk_css_value_parse              (GValue        *value,
                                                            GtkCssParser  *parser,

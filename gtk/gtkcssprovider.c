@@ -1000,6 +1000,26 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
                                             NULL,
                                             (GDestroyNotify) property_value_free);
 
+  if (_gtk_style_property_is_shorthand (prop))
+    {
+      GParameter *parameters;
+      guint i, n_parameters;
+
+      parameters = _gtk_style_property_unpack (prop, value, &n_parameters);
+
+      for (i = 0; i < n_parameters; i++)
+        {
+          const GtkStyleProperty *child;
+          GValue *value;
+          
+          child = _gtk_style_property_lookup (parameters[i].name);
+          value = g_memdup (&parameters[i].value, sizeof (GValue));
+          gtk_css_ruleset_add (ruleset, child, value);
+        }
+      g_free (parameters);
+      return;
+    }
+
   ruleset->has_inherit |= gtk_style_param_get_inherit (prop->pspec);
   g_hash_table_insert (ruleset->style, (gpointer) prop, value);
 }

@@ -311,7 +311,9 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   _gtk_style_property_register (pspec,
-                                parse_func);
+                                parse_func,
+                                NULL,
+                                NULL);
 }
 
 /**
@@ -510,6 +512,25 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
     }
   else
     g_return_if_fail (style_prop->pspec->value_type == value_type);
+
+  if (_gtk_style_property_is_shorthand (style_prop))
+    {
+      GParameter *parameters;
+      guint i, n_parameters;
+
+      parameters = _gtk_style_property_unpack (style_prop, value, &n_parameters);
+
+      for (i = 0; i < n_parameters; i++)
+        {
+          gtk_style_properties_set_property (props,
+                                             parameters[i].name,
+                                             state,
+                                             &parameters[i].value);
+          g_value_unset (&parameters[i].value);
+        }
+      g_free (parameters);
+      return;
+    }
 
   priv = props->priv;
   prop = g_hash_table_lookup (priv->properties, style_prop->pspec);
@@ -789,6 +810,7 @@ lookup_default_value (const GtkStyleProperty *node,
     g_param_value_set_default (node->pspec, value);
 }
 
+/* NB: Will return NULL for shorthands */
 const GValue *
 _gtk_style_properties_peek_property (GtkStyleProperties      *props,
                                      const gchar             *prop_name,
@@ -864,6 +886,8 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
 
   if (val)
     g_value_copy (val, value);
+  else if (_gtk_style_property_is_shorthand (node))
+    _gtk_style_property_pack (node, props, state, value);
   else
     lookup_default_value (node, value);
 
@@ -906,6 +930,15 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
       if (val)
         {
           G_VALUE_LCOPY (val, args, 0, &error);
+        }
+      else if (_gtk_style_property_is_shorthand (node))
+        {
+          GValue packed = { 0 };
+
+          g_value_init (&packed, node->pspec->value_type);
+          _gtk_style_property_pack (node, props, state, &packed);
+          G_VALUE_LCOPY (&packed, args, 0, &error);
+          g_value_unset (&packed);
         }
       else
         {

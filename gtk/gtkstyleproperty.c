@@ -1281,6 +1281,41 @@ _gtk_css_value_to_string (const GValue *value)
   return g_strdup_value_contents (value);
 }
 
+gboolean
+_gtk_style_property_is_shorthand  (const GtkStyleProperty *property)
+{
+  g_return_val_if_fail (property != NULL, FALSE);
+
+  return property->pack_func != NULL;
+}
+
+GParameter *
+_gtk_style_property_unpack (const GtkStyleProperty *property,
+                            const GValue           *value,
+                            guint                  *n_params)
+{
+  g_return_val_if_fail (property != NULL, NULL);
+  g_return_val_if_fail (property->unpack_func != NULL, NULL);
+  g_return_val_if_fail (value != NULL, NULL);
+  g_return_val_if_fail (n_params != NULL, NULL);
+
+  return property->unpack_func (value, n_params);
+}
+
+void
+_gtk_style_property_pack (const GtkStyleProperty *property,
+                          GtkStyleProperties     *props,
+                          GtkStateFlags           state,
+                          GValue                 *value)
+{
+  g_return_if_fail (property != NULL);
+  g_return_if_fail (property->pack_func != NULL);
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
+  g_return_if_fail (G_IS_VALUE (value));
+
+  property->pack_func (value, props, state);
+}
+
 static void
 gtk_style_property_init (void)
 {
@@ -1392,10 +1427,14 @@ _gtk_style_property_lookup (const char *name)
 
 void
 _gtk_style_property_register (GParamSpec             *pspec,
-                              GtkStylePropertyParser  parse_func)
+                              GtkStylePropertyParser  parse_func,
+                              GtkStyleUnpackFunc      unpack_func,
+                              GtkStylePackFunc        pack_func)
 {
   const GtkStyleProperty *existing;
   GtkStyleProperty *node;
+
+  g_return_if_fail ((pack_func == NULL) == (unpack_func == NULL));
 
   gtk_style_property_init ();
 
@@ -1410,6 +1449,8 @@ _gtk_style_property_register (GParamSpec             *pspec,
   node = g_slice_new0 (GtkStyleProperty);
   node->pspec = pspec;
   node->parse_func = parse_func;
+  node->pack_func = pack_func;
+  node->unpack_func = unpack_func;
 
   g_hash_table_insert (properties, pspec->name, node);
 }
