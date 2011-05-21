@@ -934,7 +934,8 @@ wrap_in_frame (const gchar *label,
   gchar *bold_text;
 
   label_widget = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+  gtk_widget_set_halign (label_widget, GTK_ALIGN_START);
+  gtk_widget_set_valign (label_widget, GTK_ALIGN_CENTER);
   gtk_widget_show (label_widget);
 
   bold_text = g_markup_printf_escaped ("<b>%s</b>", label);
@@ -1055,7 +1056,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Width:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1, GTK_FILL, 0, 0, 0);
@@ -1067,7 +1069,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Height:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 1, 2, GTK_FILL, 0, 0, 0);
@@ -1088,7 +1091,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Top:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
@@ -1100,7 +1104,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Bottom:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1 , 1, 2, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
@@ -1112,7 +1117,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Left:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 2, 3, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
@@ -1124,7 +1130,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Right:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 3, 4, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
