@@ -990,9 +990,9 @@ gtk_css_ruleset_add_style (GtkCssRuleset *ruleset,
 }
 
 static void
-gtk_css_ruleset_add (GtkCssRuleset *ruleset,
-                     GParamSpec    *pspec,
-                     GValue        *value)
+gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
+                     const GtkStyleProperty *prop,
+                     GValue                 *value)
 {
   if (ruleset->style == NULL)
     ruleset->style = g_hash_table_new_full (g_direct_hash,
@@ -1000,8 +1000,8 @@ gtk_css_ruleset_add (GtkCssRuleset *ruleset,
                                             NULL,
                                             (GDestroyNotify) property_value_free);
 
-  ruleset->has_inherit |= gtk_style_param_get_inherit (pspec);
-  g_hash_table_insert (ruleset->style, pspec, value);
+  ruleset->has_inherit |= gtk_style_param_get_inherit (prop->pspec);
+  g_hash_table_insert (ruleset->style, (gpointer) prop, value);
 }
 
 static gboolean
@@ -1199,15 +1199,15 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
           while (g_hash_table_iter_next (&iter, &key, &value))
             {
-              GParamSpec *pspec = key;
+              GtkStyleProperty *prop = key;
 
-              if (l != length && !gtk_style_param_get_inherit (pspec))
+              if (l != length && !gtk_style_param_get_inherit (prop->pspec))
                 continue;
 
-              _gtk_style_properties_set_property_by_pspec (props,
-                                                           pspec,
-                                                           _gtk_css_selector_get_state_flags (ruleset->selector),
-                                                           value);
+              _gtk_style_properties_set_property_by_property (props,
+                                                              prop,
+                                                              _gtk_css_selector_get_state_flags (ruleset->selector),
+                                                              value);
             }
         }
     }
@@ -1992,7 +1992,7 @@ parse_declaration (GtkCssScanner *scanner,
            * to override other style providers when merged
            */
           g_param_value_set_default (property->pspec, val);
-          gtk_css_ruleset_add (ruleset, property->pspec, val);
+          gtk_css_ruleset_add (ruleset, property, val);
         }
       else if (property->parse_func)
         {
@@ -2007,7 +2007,7 @@ parse_declaration (GtkCssScanner *scanner,
             }
           
           if ((*property->parse_func) (value_str, val, &error))
-            gtk_css_ruleset_add (ruleset, property->pspec, val);
+            gtk_css_ruleset_add (ruleset, property, val);
           else
             gtk_css_provider_take_error (scanner->provider, scanner, error);
 
@@ -2023,7 +2023,7 @@ parse_declaration (GtkCssScanner *scanner,
                   _gtk_css_parser_begins_with (scanner->parser, '}') ||
                   _gtk_css_parser_is_eof (scanner->parser))
                 {
-                  gtk_css_ruleset_add (ruleset, property->pspec, val);
+                  gtk_css_ruleset_add (ruleset, property, val);
                 }
               else
                 {
@@ -2860,9 +2860,10 @@ gtk_css_provider_get_named (const gchar *name,
 }
 
 static int
-compare_pspecs (gconstpointer a, gconstpointer b)
+compare_properties (gconstpointer a, gconstpointer b)
 {
-  return strcmp (((const GParamSpec *) a)->name, ((const GParamSpec *) b)->name);
+  return strcmp (((const GtkStyleProperty *) a)->pspec->name,
+                 ((const GtkStyleProperty *) b)->pspec->name);
 }
 
 static void
@@ -2880,15 +2881,15 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
     {
       keys = g_hash_table_get_keys (ruleset->style);
       /* so the output is identical for identical selector styles */
-      keys = g_list_sort (keys, compare_pspecs);
+      keys = g_list_sort (keys, compare_properties);
 
       for (walk = keys; walk; walk = walk->next)
         {
-          GParamSpec *pspec = walk->data;
-          const GValue *value = g_hash_table_lookup (ruleset->style, pspec);
+          GtkStyleProperty *prop = walk->data;
+          const GValue *value = g_hash_table_lookup (ruleset->style, prop);
 
           g_string_append (str, "  ");
-          g_string_append (str, pspec->name);
+          g_string_append (str, prop->pspec->name);
           g_string_append (str, ": ");
           s = _gtk_css_value_to_string (value);
           g_string_append (str, s);
