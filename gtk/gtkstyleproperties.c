@@ -745,7 +745,7 @@ style_properties_resolve_type (GtkStyleProperties     *props,
                                const GtkStyleProperty *node,
                                GValue                 *val)
 {
-  if (val && G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
+  if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
     {
       if (node->pspec->value_type == GDK_TYPE_RGBA)
         {
@@ -760,14 +760,14 @@ style_properties_resolve_type (GtkStyleProperties     *props,
       else
         return FALSE;
     }
-  else if (val && G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
+  else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
     {
       g_return_val_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
 
       if (!resolve_gradient (props, val))
         return FALSE;
     }
-  else if (val && G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
+  else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
     {
       if (!resolve_shadow (props, val))
         return FALSE;
