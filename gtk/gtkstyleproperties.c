@@ -857,40 +857,24 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
                                    GtkStateFlags       state,
                                    GValue             *value)
 {
-  GtkStylePropertiesPrivate *priv;
   const GtkStyleProperty *node;
-  PropertyData *prop;
-  GValue *val;
+  const GValue *val;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
-  node = _gtk_style_property_lookup (property);
+  val = _gtk_style_properties_peek_property (props, property, state, &node);
 
   if (!node)
-    {
-      g_warning ("Style property \"%s\" is not registered", property);
-      return FALSE;
-    }
-
-  priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, node->pspec);
-
-  if (!prop)
     return FALSE;
 
   g_value_init (value, node->pspec->value_type);
-  val = property_data_match_state (prop, state);
-
-  if (val &&
-      !style_properties_resolve_type (props, node, val))
-    return FALSE;
 
   if (val)
     {
-      g_param_value_validate (node->pspec, val);
       g_value_copy (val, value);
+      g_param_value_validate (node->pspec, value);
     }
   else
     lookup_default_value (node, value);
