@@ -724,6 +724,62 @@ gradient_value_to_string (const GValue *value)
   return gtk_gradient_to_string (gradient);
 }
 
+static GFile *
+gtk_css_parse_url (GtkCssParser *parser,
+                   GFile        *base)
+{
+  gchar *path;
+  GFile *file;
+
+  if (_gtk_css_parser_try (parser, "url", FALSE))
+    {
+      if (!_gtk_css_parser_try (parser, "(", TRUE))
+        {
+          _gtk_css_parser_skip_whitespace (parser);
+          if (_gtk_css_parser_try (parser, "(", TRUE))
+            {
+              GError *error;
+              
+              error = g_error_new_literal (GTK_CSS_PROVIDER_ERROR,
+                                           GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                           "Whitespace between 'url' and '(' is not allowed");
+                             
+              _gtk_css_parser_take_error (parser, error);
+            }
+          else
+            {
+              _gtk_css_parser_error (parser, "Expected '(' after 'url'");
+              return NULL;
+            }
+        }
+
+      path = _gtk_css_parser_read_string (parser);
+      if (path == NULL)
+        return NULL;
+
+      if (!_gtk_css_parser_try (parser, ")", TRUE))
+        {
+          _gtk_css_parser_error (parser, "No closing ')' found for 'url'");
+          g_free (path);
+          return NULL;
+        }
+    }
+  else
+    {
+      path = _gtk_css_parser_try_name (parser, TRUE);
+      if (path == NULL)
+        {
+          _gtk_css_parser_error (parser, "Not a valid url");
+          return NULL;
+        }
+    }
+
+  file = g_file_resolve_relative_path (base, path);
+  g_free (path);
+
+  return file;
+}
+
 static gboolean 
 pattern_value_parse (GtkCssParser *parser,
                      GFile        *base,
@@ -746,7 +802,7 @@ pattern_value_parse (GtkCssParser *parser,
       cairo_t *cr;
       cairo_matrix_t matrix;
 
-      file = _gtk_css_parse_url (parser, base);
+      file = gtk_css_parse_url (parser, base);
       if (file == NULL)
         return FALSE;
 
@@ -868,7 +924,7 @@ slice_value_parse (GtkCssParser *parser,
   char *path;
 
   /* Parse image url */
-  file = _gtk_css_parse_url (parser, base);
+  file = gtk_css_parse_url (parser, base);
   if (!file)
       return FALSE;
 
@@ -1221,60 +1277,4 @@ _gtk_css_value_to_string (const GValue *value)
     return func (value);
 
   return g_strdup_value_contents (value);
-}
-
-GFile *
-_gtk_css_parse_url (GtkCssParser *parser,
-                    GFile        *base)
-{
-  gchar *path;
-  GFile *file;
-
-  if (_gtk_css_parser_try (parser, "url", FALSE))
-    {
-      if (!_gtk_css_parser_try (parser, "(", TRUE))
-        {
-          _gtk_css_parser_skip_whitespace (parser);
-          if (_gtk_css_parser_try (parser, "(", TRUE))
-            {
-              GError *error;
-              
-              error = g_error_new_literal (GTK_CSS_PROVIDER_ERROR,
-                                           GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                           "Whitespace between 'url' and '(' is not allowed");
-                             
-              _gtk_css_parser_take_error (parser, error);
-            }
-          else
-            {
-              _gtk_css_parser_error (parser, "Expected '(' after 'url'");
-              return NULL;
-            }
-        }
-
-      path = _gtk_css_parser_read_string (parser);
-      if (path == NULL)
-        return NULL;
-
-      if (!_gtk_css_parser_try (parser, ")", TRUE))
-        {
-          _gtk_css_parser_error (parser, "No closing ')' found for 'url'");
-          g_free (path);
-          return NULL;
-        }
-    }
-  else
-    {
-      path = _gtk_css_parser_try_name (parser, TRUE);
-      if (path == NULL)
-        {
-          _gtk_css_parser_error (parser, "Not a valid url");
-          return NULL;
-        }
-    }
-
-  file = g_file_resolve_relative_path (base, path);
-  g_free (path);
-
-  return file;
 }

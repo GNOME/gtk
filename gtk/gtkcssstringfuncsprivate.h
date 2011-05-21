@@ -29,9 +29,6 @@ gboolean                _gtk_css_value_parse              (GValue        *value,
                                                            GFile         *base);
 char *                  _gtk_css_value_to_string          (const GValue  *value);
 
-GFile *                 _gtk_css_parse_url                (GtkCssParser *parser,
-                                                           GFile        *base);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_STRINGFUNCS_PRIVATE_H__ */
