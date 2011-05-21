@@ -715,6 +715,7 @@
  * border-image: url("/path/to/image.png") 3 4 4 3 repeat stretch;</literallayout>
  *         </entry>
  *       </row>
+ *       <row>
  *         <entry>text-shadow</entry>
  *         <entry>shadow list (see above)</entry>
  *         <entry>#GtkTextShadow</entry>
