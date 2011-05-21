@@ -338,15 +338,18 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
   priv->label = gtk_label_new (NULL);
   priv->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
-  gtk_misc_set_alignment (GTK_MISC (priv->image), 0.5, 0.0);
-  
+  gtk_widget_set_halign (priv->image, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (priv->image, GTK_ALIGN_START);
+
   gtk_label_set_line_wrap  (GTK_LABEL (priv->label), TRUE);
   gtk_label_set_selectable (GTK_LABEL (priv->label), TRUE);
-  gtk_misc_set_alignment   (GTK_MISC  (priv->label), 0.0, 0.0);
-  
+  gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->label, GTK_ALIGN_START);
+
   gtk_label_set_line_wrap  (GTK_LABEL (priv->secondary_label), TRUE);
   gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), TRUE);
-  gtk_misc_set_alignment   (GTK_MISC  (priv->secondary_label), 0.0, 0.0);
+  gtk_widget_set_halign (priv->secondary_label, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->secondary_label, GTK_ALIGN_START);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   priv->message_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
@@ -725,7 +728,8 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
   if (image == NULL)
     {
       image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
-      gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+      gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (image, GTK_ALIGN_START);
     }
 
   priv->message_type = GTK_MESSAGE_OTHER;
