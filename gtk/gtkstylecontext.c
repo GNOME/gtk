@@ -3363,7 +3363,9 @@ gtk_style_context_get_color (GtkStyleContext *context,
 
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
-                                               "color", state);
+                                               "color",
+                                               state,
+                                               NULL);
 
   if (value)
     {
@@ -3402,7 +3404,9 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
 
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
-                                               "background-color", state);
+                                               "background-color",
+                                               state,
+                                               NULL);
 
   if (value)
     {
@@ -3441,7 +3445,9 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
 
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
-                                               "border-color", state);
+                                               "border-color",
+                                               state,
+                                               NULL);
 
   if (value)
     {
@@ -3481,7 +3487,9 @@ gtk_style_context_get_border (GtkStyleContext *context,
 
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
-                                               "border-width", state);
+                                               "border-width",
+                                               state,
+                                               NULL);
 
   if (value)
     {
@@ -3521,7 +3529,9 @@ gtk_style_context_get_padding (GtkStyleContext *context,
 
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
-                                               "padding", state);
+                                               "padding",
+                                               state,
+                                               NULL);
 
   if (value)
     {
@@ -3561,7 +3571,9 @@ gtk_style_context_get_margin (GtkStyleContext *context,
 
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
-                                               "margin", state);
+                                               "margin",
+                                               state,
+                                               NULL);
 
   if (value)
     {
@@ -3599,7 +3611,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
   g_return_val_if_fail (priv->widget_path != NULL, NULL);
 
   data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store, "font", state);
+  value = _gtk_style_properties_peek_property (data->store, "font", state, NULL);
 
   if (value)
     return g_value_get_boxed (value);

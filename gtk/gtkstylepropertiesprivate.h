@@ -21,17 +21,19 @@
 #define __GTK_STYLE_PROPERTIES_PRIVATE_H__
 
 #include "gtkstyleproperties.h"
+#include "gtkstylepropertyprivate.h"
 
 G_BEGIN_DECLS
 
-const GValue * _gtk_style_properties_peek_property         (GtkStyleProperties *props,
-                                                            const gchar        *prop_name,
-                                                            GtkStateFlags       state);
+const GValue * _gtk_style_properties_peek_property         (GtkStyleProperties      *props,
+                                                            const gchar             *prop_name,
+                                                            GtkStateFlags            state,
+                                                            const GtkStyleProperty **property);
 
-void           _gtk_style_properties_set_property_by_pspec (GtkStyleProperties *props,
-                                                            GParamSpec         *pspec,
-                                                            GtkStateFlags       state,
-                                                            const GValue       *value);
+void           _gtk_style_properties_set_property_by_pspec (GtkStyleProperties      *props,
+                                                            GParamSpec              *pspec,
+                                                            GtkStateFlags            state,
+                                                            const GValue            *value);
 
 G_END_DECLS
 

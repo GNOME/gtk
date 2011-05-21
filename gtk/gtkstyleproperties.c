@@ -799,9 +799,10 @@ lookup_default_value (const GtkStyleProperty *node,
 }
 
 const GValue *
-_gtk_style_properties_peek_property (GtkStyleProperties *props,
-                                     const gchar        *prop_name,
-                                     GtkStateFlags       state)
+_gtk_style_properties_peek_property (GtkStyleProperties      *props,
+                                     const gchar             *prop_name,
+                                     GtkStateFlags            state,
+                                     const GtkStyleProperty **property)
 {
   GtkStylePropertiesPrivate *priv;
   const GtkStyleProperty *node;
@@ -812,6 +813,8 @@ _gtk_style_properties_peek_property (GtkStyleProperties *props,
   g_return_val_if_fail (prop_name != NULL, NULL);
 
   node = _gtk_style_property_lookup (prop_name);
+  if (property)
+    *property = node;
 
   if (!node)
     {
