@@ -255,7 +255,8 @@ gtk_radio_menu_item_new_with_label (GSList *group,
 
   radio_menu_item = gtk_radio_menu_item_new (group);
   accel_label = gtk_accel_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+  gtk_widget_set_halign (accel_label, GTK_ALIGN_START);
+  gtk_widget_set_valign (accel_label, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (radio_menu_item), accel_label);
   gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), radio_menu_item);
   gtk_widget_show (accel_label);
@@ -285,7 +286,8 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
   radio_menu_item = gtk_radio_menu_item_new (group);
   accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
   gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
-  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+  gtk_widget_set_halign (accel_label, GTK_ALIGN_START);
+  gtk_widget_set_valign (accel_label, GTK_ALIGN_CENTER);
 
   gtk_container_add (GTK_CONTAINER (radio_menu_item), accel_label);
   gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), radio_menu_item);
