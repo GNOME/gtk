@@ -58,6 +58,9 @@ void       _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
                                           cairo_t         *cr,
                                           PangoLayout     *layout);
 
+void       _gtk_icon_shadow_paint        (GtkShadow *shadow,
+					  cairo_t *cr);
+
 G_END_DECLS
 
 #endif /* __GTK_SHADOW_H__ */

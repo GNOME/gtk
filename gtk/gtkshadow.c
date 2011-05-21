@@ -275,3 +275,26 @@ _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
   }
 }
 
+void
+_gtk_icon_shadow_paint (GtkShadow *shadow,
+			cairo_t *cr)
+{
+  GList *l;
+  GtkShadowElement *element;
+  cairo_pattern_t *pattern;
+
+  for (l = g_list_last (shadow->elements); l != NULL; l = l->prev)
+    {
+      element = l->data;
+
+      cairo_save (cr);
+      pattern = cairo_pattern_reference (cairo_get_source (cr));
+      gdk_cairo_set_source_rgba (cr, &element->color);
+
+      cairo_translate (cr, element->hoffset, element->voffset);
+      cairo_mask (cr, pattern);
+
+      cairo_restore (cr);
+      cairo_pattern_destroy (pattern);
+    }
+}
