@@ -2038,6 +2038,18 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL);
 
+  _gtk_style_property_register           (g_param_spec_boxed ("icon-shadow",
+                                                              "Icon shadow",
+                                                              "Icon shadow",
+                                                              GTK_TYPE_SHADOW, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("margin-top",
                                                             "margin top",
