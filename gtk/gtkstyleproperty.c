@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkcssstringfuncsprivate.h"
+#include "gtkstylepropertyprivate.h"
 
 #include <errno.h>
 #include <stdlib.h>

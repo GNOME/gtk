@@ -29,11 +29,11 @@
 
 #include "gtkcssparserprivate.h"
 #include "gtkcssselectorprivate.h"
-#include "gtkcssstringfuncsprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertiesprivate.h"
+#include "gtkstylepropertyprivate.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"

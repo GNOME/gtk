@@ -17,8 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_CSS_STRINGFUNCS_PRIVATE_H__
-#define __GTK_CSS_STRINGFUNCS_PRIVATE_H__
+#ifndef __GTK_STYLEPROPERTY_PRIVATE_H__
+#define __GTK_STYLEPROPERTY_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
 
@@ -31,4 +31,4 @@ char *                  _gtk_css_value_to_string          (const GValue  *value)
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_STRINGFUNCS_PRIVATE_H__ */
+#endif /* __GTK_CSS_STYLEPROPERTY_PRIVATE_H__ */
