@@ -3474,28 +3474,27 @@ gtk_style_context_get_border (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  const GValue *value;
-  GtkBorder *b;
+  int top, left, bottom, right;
 
   g_return_if_fail (border != NULL);
-  *border = fallback_border;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
   data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "border-width",
-                                               state,
-                                               NULL);
+  gtk_style_properties_get (data->store,
+                            state,
+                            "border-top-width", &top,
+                            "border-left-width", &left,
+                            "border-bottom-width", &bottom,
+                            "border-right-width", &right,
+                            NULL);
 
-  if (value)
-    {
-      b = g_value_get_boxed (value);
-      *border = *b;
-    }
+  border->top = top;
+  border->left = left;
+  border->bottom = bottom;
+  border->right = right;
 }
 
 /**

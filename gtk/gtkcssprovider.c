@@ -690,10 +690,37 @@
  *         </entry>
  *       </row>
  *       <row>
- *         <entry>border-width</entry>
+ *         <entry>border-top-width</entry>
  *         <entry>integer</entry>
  *         <entry>#gint</entry>
- *         <entry>border-width: 5;</entry>
+ *         <entry>border-top-width: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-left-width</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>border-left-width: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-bottom-width</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>border-bottom-width: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-right-width</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>border-right-width: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-width</entry>
+ *         <entry morerows="1">#GtkBorder</entry>
+ *         <entry morerows="1"><literallayout>border-width: 1;
+ * border-width: 1 2;
+ * border-width: 1 2 3;
+ * border-width: 1 2 3 5;</literallayout>
+ *         </entry>
  *       </row>
  *       <row>
  *         <entry>border-radius</entry>

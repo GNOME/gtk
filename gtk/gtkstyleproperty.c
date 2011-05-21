@@ -1160,6 +1160,83 @@ bindings_value_to_string (const GValue *value)
   return g_string_free (str, FALSE);
 }
 
+/*** PACKING ***/
+
+static GParameter *
+unpack_border (const GValue *value,
+               guint        *n_params,
+               const char   *top,
+               const char   *left,
+               const char   *bottom,
+               const char   *right)
+{
+  GParameter *parameter = g_new0 (GParameter, 4);
+  GtkBorder *border = g_value_get_boxed (value);
+
+  parameter[0].name = top;
+  g_value_init (&parameter[0].value, G_TYPE_INT);
+  g_value_set_int (&parameter[0].value, border->top);
+  parameter[1].name = left;
+  g_value_init (&parameter[1].value, G_TYPE_INT);
+  g_value_set_int (&parameter[1].value, border->left);
+  parameter[2].name = bottom;
+  g_value_init (&parameter[2].value, G_TYPE_INT);
+  g_value_set_int (&parameter[2].value, border->bottom);
+  parameter[3].name = right;
+  g_value_init (&parameter[3].value, G_TYPE_INT);
+  g_value_set_int (&parameter[3].value, border->right);
+
+  *n_params = 4;
+  return parameter;
+}
+
+static void
+pack_border (GValue             *value,
+             GtkStyleProperties *props,
+             GtkStateFlags       state,
+             const char         *top,
+             const char         *left,
+             const char         *bottom,
+             const char         *right)
+{
+  GtkBorder border;
+  int t, l, b, r;
+
+  gtk_style_properties_get (props,
+                            state,
+                            top, &t,
+                            left, &l,
+                            bottom, &b,
+                            right, &r,
+                            NULL);
+
+  border.top = t;
+  border.left = l;
+  border.bottom = b;
+  border.right = r;
+
+  g_value_set_boxed (value, &border);
+}
+
+static GParameter *
+unpack_border_width (const GValue *value,
+                     guint        *n_params)
+{
+  return unpack_border (value, n_params,
+                        "border-top-width", "border-left-width",
+                        "border-bottom-width", "border-right-width");
+}
+
+static void
+pack_border_width (GValue             *value,
+                   GtkStyleProperties *props,
+                   GtkStateFlags       state)
+{
+  pack_border (value, props, state,
+               "border-top-width", "border-left-width",
+               "border-bottom-width", "border-right-width");
+}
+
 /*** API ***/
 
 static void
@@ -1368,10 +1445,32 @@ gtk_style_property_init (void)
                                                               "Padding",
                                                               GTK_TYPE_BORDER, 0));
   gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-width",
+                                          g_param_spec_int ("border-top-width",
+                                                            "border top width",
+                                                            "Border width at top",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("border-left-width",
+                                                            "border left width",
+                                                            "Border width at left",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("border-bottom-width",
+                                                            "border bottom width",
+                                                            "Border width at bottom",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("border-right-width",
+                                                            "border right width",
+                                                            "Border width at right",
+                                                            0, G_MAXINT, 0, 0));
+  _gtk_style_property_register           (g_param_spec_boxed ("border-width",
                                                               "Border width",
                                                               "Border width, in pixels",
-                                                              GTK_TYPE_BORDER, 0));
+                                                              GTK_TYPE_BORDER, 0),
+                                          NULL,
+                                          unpack_border_width,
+                                          pack_border_width);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("border-radius",
                                                             "Border radius",

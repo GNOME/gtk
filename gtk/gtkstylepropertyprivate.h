@@ -30,7 +30,7 @@ typedef GParameter *     (* GtkStyleUnpackFunc)            (const GValue        
                                                             guint                  *n_params);
 typedef void             (* GtkStylePackFunc)              (GValue                 *value,
                                                             GtkStyleProperties     *props,
-                                                            GtkStateFlags           flags);
+                                                            GtkStateFlags           state);
 
 struct _GtkStyleProperty
 {
