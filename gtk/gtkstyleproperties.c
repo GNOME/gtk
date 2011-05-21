@@ -533,6 +533,8 @@ _gtk_style_properties_set_property_by_pspec (GtkStyleProperties *props,
     }
 
   g_value_copy (value, val);
+  if (pspec->value_type == value_type)
+    g_param_value_validate (pspec, val);
 }
 
 /**
@@ -625,6 +627,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
 
       G_VALUE_COLLECT_INIT (val, node->pspec->value_type,
                             args, 0, &error);
+      g_param_value_validate (node->pspec, val);
       if (error)
         {
           g_warning ("Could not set style property \"%s\": %s", property_name, error);
@@ -872,10 +875,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
   g_value_init (value, node->pspec->value_type);
 
   if (val)
-    {
-      g_value_copy (val, value);
-      g_param_value_validate (node->pspec, value);
-    }
+    g_value_copy (val, value);
   else
     lookup_default_value (node, value);
 
@@ -931,7 +931,6 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
 
       if (val)
         {
-          g_param_value_validate (node->pspec, val);
           G_VALUE_LCOPY (val, args, 0, &error);
         }
       else
