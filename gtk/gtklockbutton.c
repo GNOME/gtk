@@ -660,7 +660,7 @@ gtk_lock_button_get_permission (GtkLockButton *button)
 /**
  * gtk_lock_button_set_permission:
  * @button: a #GtkLockButton
- * @permission: a #GPermission object
+ * @permission: (allow-none): a #GPermission object, or %NULL
  *
  * Sets the #GPermission object that controls @button.
  *
@@ -673,7 +673,7 @@ gtk_lock_button_set_permission (GtkLockButton *button,
   GtkLockButtonPrivate *priv;
 
   g_return_if_fail (GTK_IS_LOCK_BUTTON (button));
-  g_return_if_fail (G_IS_PERMISSION (permission));
+  g_return_if_fail (permission == NULL || G_IS_PERMISSION (permission));
 
   priv = button->priv;
 
