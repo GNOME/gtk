@@ -38,6 +38,7 @@
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
 #include "gtkthemingengine.h"
+#include "gtktypebuiltins.h"
 
 typedef gboolean (* ParseFunc)        (GtkCssParser  *parser,
                                        GFile         *base,
@@ -46,6 +47,7 @@ typedef char *   (* ToStringFunc)     (const GValue  *value);
 
 static GHashTable *parse_funcs = NULL;
 static GHashTable *to_string_funcs = NULL;
+static GHashTable *properties = NULL;
 
 static void
 register_conversion_function (GType          type,
@@ -1277,4 +1279,137 @@ _gtk_css_value_to_string (const GValue *value)
     return func (value);
 
   return g_strdup_value_contents (value);
+}
+
+static void
+gtk_style_property_init (void)
+{
+  GParamSpec *pspec;
+
+  if (G_LIKELY (properties))
+    return;
+
+  /* stuff is never freed, so no need for free functions */
+  properties = g_hash_table_new (g_str_hash, g_str_equal);
+
+  /* note that gtk_style_properties_register_property() calls this function,
+   * so make sure we're sanely inited to avoid infloops */
+
+  pspec = g_param_spec_boxed ("color",
+                              "Foreground color",
+                              "Foreground color",
+                              GDK_TYPE_RGBA, 0);
+  gtk_style_param_set_inherit (pspec, TRUE);
+  gtk_style_properties_register_property (NULL, pspec);
+
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("background-color",
+                                                              "Background color",
+                                                              "Background color",
+                                                              GDK_TYPE_RGBA, 0));
+
+  pspec = g_param_spec_boxed ("font",
+                              "Font Description",
+                              "Font Description",
+                              PANGO_TYPE_FONT_DESCRIPTION, 0);
+  gtk_style_param_set_inherit (pspec, TRUE);
+  gtk_style_properties_register_property (NULL, pspec);
+
+  pspec = g_param_spec_boxed ("text-shadow",
+                              "Text shadow",
+                              "Text shadow",
+                              GTK_TYPE_SHADOW, 0);
+  gtk_style_param_set_inherit (pspec, TRUE);
+  gtk_style_properties_register_property (NULL, pspec);
+
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("margin",
+                                                              "Margin",
+                                                              "Margin",
+                                                              GTK_TYPE_BORDER, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("padding",
+                                                              "Padding",
+                                                              "Padding",
+                                                              GTK_TYPE_BORDER, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-width",
+                                                              "Border width",
+                                                              "Border width, in pixels",
+                                                              GTK_TYPE_BORDER, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("border-radius",
+                                                            "Border radius",
+                                                            "Border radius, in pixels",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_enum ("border-style",
+                                                             "Border style",
+                                                             "Border style",
+                                                             GTK_TYPE_BORDER_STYLE,
+                                                             GTK_BORDER_STYLE_NONE, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-color",
+                                                              "Border color",
+                                                              "Border color",
+                                                              GDK_TYPE_RGBA, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("background-image",
+                                                              "Background Image",
+                                                              "Background Image",
+                                                              CAIRO_GOBJECT_TYPE_PATTERN, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-image",
+                                                              "Border Image",
+                                                              "Border Image",
+                                                              GTK_TYPE_9SLICE, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_object ("engine",
+                                                               "Theming Engine",
+                                                               "Theming Engine",
+                                                               GTK_TYPE_THEMING_ENGINE, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("transition",
+                                                              "Transition animation description",
+                                                              "Transition animation description",
+                                                              GTK_TYPE_ANIMATION_DESCRIPTION, 0));
+
+  /* Private property holding the binding sets */
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("gtk-key-bindings",
+                                                              "Key bindings",
+                                                              "Key bindings",
+                                                              G_TYPE_PTR_ARRAY, 0));
+}
+
+const GtkStyleProperty *
+_gtk_style_property_lookup (const char *name)
+{
+  gtk_style_property_init ();
+
+  return g_hash_table_lookup (properties, name);
+}
+
+void
+_gtk_style_property_register (GParamSpec             *pspec,
+                              GtkStylePropertyParser  parse_func)
+{
+  const GtkStyleProperty *existing;
+  GtkStyleProperty *node;
+
+  gtk_style_property_init ();
+
+  existing = _gtk_style_property_lookup (pspec->name);
+  if (existing != NULL)
+    {
+      g_warning ("Property \"%s\" was already registered with type %s",
+                 pspec->name, g_type_name (existing->pspec->value_type));
+      return;
+    }
+
+  node = g_slice_new0 (GtkStyleProperty);
+  node->pspec = pspec;
+  node->parse_func = parse_func;
+
+  g_hash_table_insert (properties, pspec->name, node);
 }

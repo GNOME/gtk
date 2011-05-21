@@ -24,6 +24,19 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkStyleProperty GtkStyleProperty;
+
+struct _GtkStyleProperty
+{
+  GParamSpec             *pspec;
+  GtkStylePropertyParser  parse_func;
+};
+
+const GtkStyleProperty * _gtk_style_property_lookup        (const char         *name);
+
+void                     _gtk_style_property_register      (GParamSpec             *pspec,
+                                                            GtkStylePropertyParser  parse_func);
+
 gboolean                _gtk_css_value_parse              (GValue        *value,
                                                            GtkCssParser  *parser,
                                                            GFile         *base);
