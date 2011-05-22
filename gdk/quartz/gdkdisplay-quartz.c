@@ -94,7 +94,7 @@ gdk_quartz_display_init_input (GdkDisplay *display)
 
   for (l = list; l; l = l->next)
     {
-      GdkDevice *device = list->data;
+      GdkDevice *device = l->data;
 
       if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
         continue;
