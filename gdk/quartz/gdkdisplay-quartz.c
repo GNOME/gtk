@@ -321,6 +321,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
 
   object_class->finalize = gdk_quartz_display_finalize;
+  object_class->dispose = gdk_quartz_display_dispose;
 
   display_class->window_type = GDK_TYPE_QUARTZ_WINDOW;
 
