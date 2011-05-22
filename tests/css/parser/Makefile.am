@@ -76,4 +76,6 @@ EXTRA_DIST += \
 	pseudo-classes-unknown.ref.css \
 	selector.css \
 	selector.ref.css \
+	shorthand.css \
+	shorthand.ref.css \
 	simple.css
