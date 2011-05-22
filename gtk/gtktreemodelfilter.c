@@ -1230,6 +1230,12 @@ gtk_tree_model_filter_fetch_child (GtkTreeModelFilter *filter,
                                                     index);
 }
 
+/* Note that this function is never called from the row-deleted handler.
+ * This means that this function is only used for removing elements
+ * which are still present in the child model.  As a result, we must
+ * take care to properly release the references the filter model has
+ * on the child model nodes.
+ */
 static void
 gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
                                              FilterLevel        *level,
@@ -1297,6 +1303,9 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
                                                &iter, FALSE);
 
+      /* We must account for the filter model's reference, because the
+       * node is still present in the child model.
+       */
       if (parent_level || filter->priv->virtual_root)
         gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), &iter);
       else if (elt->ref_count > 0)
@@ -1346,6 +1355,10 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
       iter.stamp = filter->priv->stamp;
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
 
+      /* We must account for the filter model's reference (released
+       * in gtk_tree_model_filter_free_level), because the node is
+       * still present in the child model.
+       */
       while (elt->ref_count > 1)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
                                                &iter, FALSE);
