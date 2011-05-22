@@ -258,12 +258,13 @@ _gtk_shadow_to_string (GtkShadow *shadow)
 void
 _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
                                cairo_t         *cr,
-                               gdouble          x,
-                               gdouble          y,
                                PangoLayout     *layout)
 {
   GList *l;
   GtkShadowElement *element;
+
+  if (!cairo_has_current_point (cr))
+    cairo_move_to (cr, 0, 0);
 
   /* render shadows starting from the last one,
    * and the others on top.
@@ -274,10 +275,11 @@ _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
 
       cairo_save (cr);
 
-      cairo_move_to (cr, x + element->hoffset, y + element->voffset);
+      cairo_rel_move_to (cr, element->hoffset, element->voffset);
       gdk_cairo_set_source_rgba (cr, &element->color);
       _gtk_pango_fill_layout (cr, layout);
 
+      cairo_rel_move_to (cr, -element->hoffset, -element->voffset);
       cairo_restore (cr);
   }
 }

@@ -2429,13 +2429,14 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                           "text-shadow", &text_shadow,
                           NULL);
 
+  prepare_context_for_layout (cr, x, y, layout);
+
   if (text_shadow != NULL)
     {
-      _gtk_text_shadow_paint_layout (text_shadow, cr, x, y, layout);
+      _gtk_text_shadow_paint_layout (text_shadow, cr, layout);
       _gtk_shadow_unref (text_shadow);
     }
 
-  prepare_context_for_layout (cr, x, y, layout);
   gdk_cairo_set_source_rgba (cr, &fg_color);
   pango_cairo_show_layout (cr, layout);
 

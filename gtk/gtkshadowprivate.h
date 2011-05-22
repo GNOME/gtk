@@ -55,8 +55,6 @@ gboolean   _gtk_shadow_get_resolved   (GtkShadow          *shadow);
 
 void       _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
                                           cairo_t         *cr,
-                                          gdouble          x,
-                                          gdouble          y,
                                           PangoLayout     *layout);
 
 G_END_DECLS
