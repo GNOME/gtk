@@ -667,6 +667,30 @@
  *         </entry>
  *       </row>
  *       <row>
+ *         <entry>padding-top</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>padding-top: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>padding-left</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>padding-left: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>padding-bottom</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>padding-bottom: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>padding-right</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>padding-right: 5;</entry>
+ *       </row>
+ *       <row>
  *         <entry>padding</entry>
  *       </row>
  *       <row>

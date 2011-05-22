@@ -1237,6 +1237,25 @@ pack_border_width (GValue             *value,
                "border-bottom-width", "border-right-width");
 }
 
+static GParameter *
+unpack_padding (const GValue *value,
+                guint        *n_params)
+{
+  return unpack_border (value, n_params,
+                        "padding-top", "padding-left",
+                        "padding-bottom", "padding-right");
+}
+
+static void
+pack_padding (GValue             *value,
+              GtkStyleProperties *props,
+              GtkStateFlags       state)
+{
+  pack_border (value, props, state,
+               "padding-top", "padding-left",
+               "padding-bottom", "padding-right");
+}
+
 /*** API ***/
 
 static void
@@ -1440,10 +1459,32 @@ gtk_style_property_init (void)
                                                               "Margin",
                                                               GTK_TYPE_BORDER, 0));
   gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("padding",
+                                          g_param_spec_int ("padding-top",
+                                                            "padding top",
+                                                            "Padding at top",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("padding-left",
+                                                            "padding left",
+                                                            "Padding at left",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("padding-bottom",
+                                                            "padding bottom",
+                                                            "Padding at bottom",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("padding-right",
+                                                            "padding right",
+                                                            "Padding at right",
+                                                            0, G_MAXINT, 0, 0));
+  _gtk_style_property_register           (g_param_spec_boxed ("padding",
                                                               "Padding",
                                                               "Padding",
-                                                              GTK_TYPE_BORDER, 0));
+                                                              GTK_TYPE_BORDER, 0),
+                                          NULL,
+                                          unpack_padding,
+                                          pack_padding);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("border-top-width",
                                                             "border top width",

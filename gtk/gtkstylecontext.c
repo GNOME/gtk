@@ -3515,28 +3515,27 @@ gtk_style_context_get_padding (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  const GValue *value;
-  GtkBorder *b;
+  int top, left, bottom, right;
 
   g_return_if_fail (padding != NULL);
-  *padding = fallback_border;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
   data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "padding",
-                                               state,
-                                               NULL);
+  gtk_style_properties_get (data->store,
+                            state,
+                            "padding-top", &top,
+                            "padding-left", &left,
+                            "padding-bottom", &bottom,
+                            "padding-right", &right,
+                            NULL);
 
-  if (value)
-    {
-      b = g_value_get_boxed (value);
-      *padding = *b;
-    }
+  padding->top = top;
+  padding->left = left;
+  padding->bottom = bottom;
+  padding->right = right;
 }
 
 /**
