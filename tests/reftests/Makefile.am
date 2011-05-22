@@ -69,6 +69,13 @@ EXTRA_DIST += \
 	grid-homogeneous.css \
 	grid-homogeneous.ref.ui \
 	grid-homogeneous.ui \
+	grid-spacing1.ref.ui \
+	grid-spacing1.ui \
+	grid-spacing2.ref.ui \
+	grid-spacing2.ui \
+	grid-spacing3.css \
+	grid-spacing3.ref.ui \
+	grid-spacing3.ui \
 	label-shadows.css \
 	label-shadows.ref.ui \
 	label-shadows.ui \
@@ -97,11 +104,4 @@ EXTRA_DIST += \
 	simple.ref.ui \
 	simple.ui \
 	toplevel-vs-popup.ref.ui \
-	toplevel-vs-popup.ui \
-	grid-spacing1.ref.ui \
-	grid-spacing1.ui \
-	grid-spacing2.ref.ui \
-	grid-spacing2.ui \
-	grid-spacing3.ref.ui \
-	grid-spacing3.ui \
-	grid-spacing3.css
+	toplevel-vs-popup.ui
