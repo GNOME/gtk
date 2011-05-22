@@ -91,6 +91,9 @@ EXTRA_DIST += \
 	quit-mnemonic.ui \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
+	shorthand-entry-border.css \
+	shorthand-entry-border.ref.ui \
+	shorthand-entry-border.ui \
 	simple.ref.ui \
 	simple.ui \
 	toplevel-vs-popup.ref.ui \

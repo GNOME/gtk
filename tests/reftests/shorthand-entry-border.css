@@ -1,0 +1,21 @@
+* {
+  engine: none;
+  border-radius: 0;
+}
+
+GtkWidget {
+  border-right-width: 5;
+}
+
+GtkEntry {
+  border-width: 10 20;
+}
+
+.entry {
+  border-left-width: 10;
+  border-right-width: 10;
+}
+
+#reference {
+  border-width: 10;
+}
