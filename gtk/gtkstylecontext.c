@@ -506,7 +506,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GQuark provider_list_quark = 0;
 static GdkRGBA fallback_color = { 1.0, 0.75, 0.75, 1.0 };
-static GtkBorder fallback_border = { 0 };
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -3556,28 +3555,27 @@ gtk_style_context_get_margin (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  const GValue *value;
-  GtkBorder *b;
+  int top, left, bottom, right;
 
   g_return_if_fail (margin != NULL);
-  *margin = fallback_border;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
   data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "margin",
-                                               state,
-                                               NULL);
+  gtk_style_properties_get (data->store,
+                            state,
+                            "margin-top", &top,
+                            "margin-left", &left,
+                            "margin-bottom", &bottom,
+                            "margin-right", &right,
+                            NULL);
 
-  if (value)
-    {
-      b = g_value_get_boxed (value);
-      *margin = *b;
-    }
+  margin->top = top;
+  margin->left = left;
+  margin->bottom = bottom;
+  margin->right = right;
 }
 
 /**

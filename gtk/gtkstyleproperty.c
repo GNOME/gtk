@@ -1256,6 +1256,25 @@ pack_padding (GValue             *value,
                "padding-bottom", "padding-right");
 }
 
+static GParameter *
+unpack_margin (const GValue *value,
+               guint        *n_params)
+{
+  return unpack_border (value, n_params,
+                        "margin-top", "margin-left",
+                        "margin-bottom", "margin-right");
+}
+
+static void
+pack_margin (GValue             *value,
+             GtkStyleProperties *props,
+             GtkStateFlags       state)
+{
+  pack_border (value, props, state,
+               "margin-top", "margin-left",
+               "margin-bottom", "margin-right");
+}
+
 /*** API ***/
 
 static void
@@ -1454,10 +1473,32 @@ gtk_style_property_init (void)
   gtk_style_properties_register_property (NULL, pspec);
 
   gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("margin",
+                                          g_param_spec_int ("margin-top",
+                                                            "margin top",
+                                                            "Margin at top",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("margin-left",
+                                                            "margin left",
+                                                            "Margin at left",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("margin-bottom",
+                                                            "margin bottom",
+                                                            "Margin at bottom",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("margin-right",
+                                                            "margin right",
+                                                            "Margin at right",
+                                                            0, G_MAXINT, 0, 0));
+  _gtk_style_property_register           (g_param_spec_boxed ("margin",
                                                               "Margin",
                                                               "Margin",
-                                                              GTK_TYPE_BORDER, 0));
+                                                              GTK_TYPE_BORDER, 0),
+                                          NULL,
+                                          unpack_margin,
+                                          pack_margin);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("padding-top",
                                                             "padding top",

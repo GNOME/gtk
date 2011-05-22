@@ -653,6 +653,30 @@
  *         <entry>font: Sans 15;</entry>
  *       </row>
  *       <row>
+ *         <entry>margin-top</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>margin-top: 0;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>margin-left</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>margin-left: 1;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>margin-bottom</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>margin-bottom: 2;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>margin-right</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>margin-right: 4;</entry>
+ *       </row>
+ *       <row>
  *         <entry>margin</entry>
  *         <entry morerows="1"><literallayout>@width
  * @vertical_width @horizontal_width
