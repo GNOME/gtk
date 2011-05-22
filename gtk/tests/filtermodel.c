@@ -667,6 +667,8 @@ filter_test_teardown (FilterTest    *fixture,
 {
   signal_monitor_free (fixture->monitor);
 
+  gtk_widget_destroy (fixture->tree_view);
+
   g_object_unref (fixture->filter);
   g_object_unref (fixture->store);
 }
@@ -740,6 +742,9 @@ check_filter_model_recurse (FilterTest  *fixture,
                                           gtk_tree_path_copy (store_parent_path),
                                           tmp);
             }
+          else
+            /* Only when we do not recurse we need to free tmp */
+            gtk_tree_path_free (tmp);
 
           gtk_tree_path_next (filter_parent_path);
           filter_has_next = gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->filter), &filter_iter);
@@ -1991,6 +1996,10 @@ remove_node (void)
   gtk_list_store_remove (list, &iter1);
   gtk_list_store_remove (list, &iter3);
   gtk_list_store_remove (list, &iter2);
+
+  gtk_widget_destroy (view);
+  g_object_unref (filter);
+  g_object_unref (list);
 }
 
 static void
@@ -2025,6 +2034,10 @@ remove_node_vroot (void)
   gtk_tree_store_remove (tree, &iter1);
   gtk_tree_store_remove (tree, &iter3);
   gtk_tree_store_remove (tree, &iter2);
+
+  gtk_widget_destroy (view);
+  g_object_unref (filter);
+  g_object_unref (tree);
 }
 
 static void
@@ -2057,6 +2070,10 @@ remove_vroot_ancestor (void)
   view = gtk_tree_view_new_with_model (filter);
 
   gtk_tree_store_remove (tree, &parent);
+
+  gtk_widget_destroy (view);
+  g_object_unref (filter);
+  g_object_unref (tree);
 }
 
 
@@ -2112,6 +2129,10 @@ specific_path_dependent_filter (void)
                                          NULL, 2))
         gtk_list_store_remove (list, &iter);
     }
+
+  g_object_unref (filter);
+  g_object_unref (sort);
+  g_object_unref (list);
 }
 
 
@@ -2323,6 +2344,8 @@ specific_sort_filter_remove_root (void)
 
   sort = gtk_tree_model_sort_new_with_model (model);
   filter = gtk_tree_model_filter_new (sort, path);
+
+  gtk_tree_path_free (path);
 
   gtk_tree_store_remove (GTK_TREE_STORE (model), &root);
 
@@ -3256,7 +3279,7 @@ specific_bug_621076_visible_func (GtkTreeModel *model,
                                   gpointer      data)
 {
   gboolean visible = FALSE;
-  gchar *str;
+  gchar *str = NULL;
 
   gtk_tree_model_get (model, iter, 0, &str, -1);
   if (str != NULL && g_str_has_prefix (str, "visible"))
@@ -3272,7 +3295,6 @@ specific_bug_621076_visible_func (GtkTreeModel *model,
       for (valid = gtk_tree_model_iter_children (model, &child_iter, iter);
            valid; valid = gtk_tree_model_iter_next (model, &child_iter))
         {
-          gtk_tree_model_get (model, &child_iter, 0, &str, -1);
           if (specific_bug_621076_visible_func (model, &child_iter, data))
             {
               visible = TRUE;
@@ -3280,6 +3302,9 @@ specific_bug_621076_visible_func (GtkTreeModel *model,
             }
         }
     }
+
+  if (str)
+    g_free (str);
 
   return visible;
 }
