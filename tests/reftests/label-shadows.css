@@ -1,0 +1,8 @@
+GtkLabel {
+  engine: none;
+  text-shadow: 1 1 red;
+}
+
+.no-shadow {
+  text-shadow: none
+}

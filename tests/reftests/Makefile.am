@@ -69,6 +69,9 @@ EXTRA_DIST += \
 	grid-homogeneous.css \
 	grid-homogeneous.ref.ui \
 	grid-homogeneous.ui \
+	label-shadows.css \
+	label-shadows.ref.ui \
+	label-shadows.ui \
 	label-sizing.css \
 	label-sizing.ref.ui \
 	label-sizing.ui \
