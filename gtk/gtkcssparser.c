@@ -515,7 +515,7 @@ _gtk_css_parser_try_int (GtkCssParser *parser,
 
 gboolean
 _gtk_css_parser_try_uint (GtkCssParser *parser,
-                          uint         *value)
+                          guint        *value)
 {
   guint64 result;
   char *end;

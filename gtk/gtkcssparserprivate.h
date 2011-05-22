@@ -67,7 +67,7 @@ char *          _gtk_css_parser_try_name          (GtkCssParser          *parser
 gboolean        _gtk_css_parser_try_int           (GtkCssParser          *parser,
                                                    int                   *value);
 gboolean        _gtk_css_parser_try_uint          (GtkCssParser          *parser,
-                                                   uint                  *value);
+                                                   guint                 *value);
 gboolean        _gtk_css_parser_try_double        (GtkCssParser          *parser,
                                                    gdouble               *value);
 
