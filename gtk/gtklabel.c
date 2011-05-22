@@ -3966,9 +3966,9 @@ get_layout_location (GtkLabel  *label,
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (allocation.y + ypad + (allocation.height - req_height) * yalign);
+    y = floor (allocation.y + ypad + (allocation.height - req_height) * yalign) - logical.y;
   else
-    y = floor (allocation.y + ypad + MAX ((allocation.height - req_height) * yalign, 0));
+    y = floor (allocation.y + ypad + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y;
 
   if (xp)
     *xp = x;
