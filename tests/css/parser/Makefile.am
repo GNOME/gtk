@@ -78,4 +78,5 @@ EXTRA_DIST += \
 	selector.ref.css \
 	shorthand.css \
 	shorthand.ref.css \
-	simple.css
+	simple.css \
+	widget-style-property.css
