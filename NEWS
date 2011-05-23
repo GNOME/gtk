@@ -1,3 +1,19 @@
+Overview of Changes in GTK+ 3.0.10
+==================================
+
+* Bugs fixed:
+ 649880 GtkEntry icon tooltip is never appearing
+ 647284 GtkLabel does not honor width-chars anymore
+ 648570 Mnemonics don't show under some letters
+ 649779 Add missing gtk_widget_override_* annotations
+ 650382 GtkButton uses wrong values in grab
+
+* Translation updates:
+ Greek
+ Lithuanian
+ Uighur
+
+
 Overview of Changes in GTK+ 3.0.9
 =================================
 
