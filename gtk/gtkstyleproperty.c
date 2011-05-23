@@ -1403,8 +1403,10 @@ _gtk_css_value_parse (GValue       *value,
   return (*func) (parser, base, value);
 }
 
-char *
-_gtk_css_value_to_string (const GValue *value)
+void
+_gtk_style_property_print_value (const GtkStyleProperty *property,
+                                 const GValue           *value,
+                                 GString                *string)
 {
   PrintFunc func;
 
@@ -1416,14 +1418,15 @@ _gtk_css_value_to_string (const GValue *value)
     func = g_hash_table_lookup (print_funcs,
                                 GSIZE_TO_POINTER (g_type_fundamental (G_VALUE_TYPE (value))));
 
-  if (func)
+  if (func == NULL)
     {
-      GString *string = g_string_new (NULL);
-      func (value, string);
-      return g_string_free (string, FALSE);
+      char *s = g_strdup_value_contents (value);
+      g_string_append (string, s);
+      g_free (s);
+      return;
     }
-
-  return g_strdup_value_contents (value);
+  
+  func (value, string);
 }
 
 gboolean

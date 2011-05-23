@@ -2976,7 +2976,6 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
                        GString             *str)
 {
   GList *keys, *walk;
-  char *s;
 
   _gtk_css_selector_print (ruleset->selector, str);
 
@@ -2996,9 +2995,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           g_string_append (str, "  ");
           g_string_append (str, prop->pspec->name);
           g_string_append (str, ": ");
-          s = _gtk_css_value_to_string (value);
-          g_string_append (str, s);
-          g_free (s);
+          _gtk_style_property_print_value (prop, value, str);
           g_string_append (str, ";\n");
         }
 

@@ -59,7 +59,9 @@ void                     _gtk_style_property_pack          (const GtkStyleProper
 gboolean                _gtk_css_value_parse              (GValue        *value,
                                                            GtkCssParser  *parser,
                                                            GFile         *base);
-char *                  _gtk_css_value_to_string          (const GValue  *value);
+void                     _gtk_style_property_print_value   (const GtkStyleProperty *property,
+                                                            const GValue           *value,
+                                                            GString                *string);
 
 G_END_DECLS
 
