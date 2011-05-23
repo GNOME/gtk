@@ -3009,9 +3009,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           g_string_append (str, "  ");
           g_string_append (str, name);
           g_string_append (str, ": ");
-          s = _gtk_css_value_to_string (value);
-          g_string_append (str, s);
-          g_free (s);
+          g_string_append (str, g_value_get_string (value));
           g_string_append (str, ";\n");
         }
 
