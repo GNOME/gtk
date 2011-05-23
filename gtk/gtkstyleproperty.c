@@ -43,21 +43,22 @@
 typedef gboolean (* ParseFunc)        (GtkCssParser  *parser,
                                        GFile         *base,
                                        GValue        *value);
-typedef char *   (* ToStringFunc)     (const GValue  *value);
+typedef void     (* PrintFunc)        (const GValue  *value,
+                                       GString       *string);
 
 static GHashTable *parse_funcs = NULL;
-static GHashTable *to_string_funcs = NULL;
+static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
 
 static void
 register_conversion_function (GType          type,
                               ParseFunc      parse,
-                              ToStringFunc   to_string)
+                              PrintFunc      print)
 {
   if (parse)
     g_hash_table_insert (parse_funcs, GSIZE_TO_POINTER (type), parse);
-  if (to_string)
-    g_hash_table_insert (to_string_funcs, GSIZE_TO_POINTER (type), to_string);
+  if (print)
+    g_hash_table_insert (print_funcs, GSIZE_TO_POINTER (type), print);
 }
 
 /*** IMPLEMENTATIONS ***/
@@ -89,15 +90,20 @@ rgba_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-rgba_value_to_string (const GValue *value)
+static void
+rgba_value_print (const GValue *value,
+                  GString      *string)
 {
   const GdkRGBA *rgba = g_value_get_boxed (value);
 
   if (rgba == NULL)
-    return g_strdup ("none");
-
-  return gdk_rgba_to_string (rgba);
+    g_string_append (string, "none");
+  else
+    {
+      char *s = gdk_rgba_to_string (rgba);
+      g_string_append (string, s);
+      g_free (s);
+    }
 }
 
 static gboolean 
@@ -132,15 +138,20 @@ color_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-color_value_to_string (const GValue *value)
+static void
+color_value_print (const GValue *value,
+                   GString      *string)
 {
   const GdkColor *color = g_value_get_boxed (value);
 
   if (color == NULL)
-    return g_strdup ("none");
-
-  return gdk_color_to_string (color);
+    g_string_append (string, "none");
+  else
+    {
+      char *s = gdk_color_to_string (color);
+      g_string_append (string, s);
+      g_free (s);
+    }
 }
 
 static gboolean
@@ -158,15 +169,20 @@ symbolic_color_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-symbolic_color_value_to_string (const GValue *value)
+static void
+symbolic_color_value_print (const GValue *value,
+                            GString      *string)
 {
   GtkSymbolicColor *symbolic = g_value_get_boxed (value);
 
   if (symbolic == NULL)
-    return g_strdup ("none");
-
-  return gtk_symbolic_color_to_string (symbolic);
+    g_string_append (string, "none");
+  else
+    {
+      char *s = gtk_symbolic_color_to_string (symbolic);
+      g_string_append (string, s);
+      g_free (s);
+    }
 }
 
 static gboolean 
@@ -187,15 +203,20 @@ font_description_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-font_description_value_to_string (const GValue *value)
+static void
+font_description_value_print (const GValue *value,
+                              GString      *string)
 {
   const PangoFontDescription *desc = g_value_get_boxed (value);
 
   if (desc == NULL)
-    return g_strdup ("none");
-
-  return pango_font_description_to_string (desc);
+    g_string_append (string, "none");
+  else
+    {
+      char *s = pango_font_description_to_string (desc);
+      g_string_append (string, s);
+      g_free (s);
+    }
 }
 
 static gboolean 
@@ -222,13 +243,14 @@ boolean_value_parse (GtkCssParser *parser,
     }
 }
 
-static char *
-boolean_value_to_string (const GValue *value)
+static void
+boolean_value_print (const GValue *value,
+                     GString      *string)
 {
   if (g_value_get_boolean (value))
-    return g_strdup ("true");
+    g_string_append (string, "true");
   else
-    return g_strdup ("false");
+    g_string_append (string, "false");
 }
 
 static gboolean 
@@ -248,10 +270,11 @@ int_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-int_value_to_string (const GValue *value)
+static void
+int_value_print (const GValue *value,
+                 GString      *string)
 {
-  return g_strdup_printf ("%d", g_value_get_int (value));
+  g_string_append_printf (string, "%d", g_value_get_int (value));
 }
 
 static gboolean 
@@ -271,10 +294,11 @@ uint_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-uint_value_to_string (const GValue *value)
+static void
+uint_value_print (const GValue *value,
+                  GString      *string)
 {
-  return g_strdup_printf ("%u", g_value_get_uint (value));
+  g_string_append_printf (string, "%u", g_value_get_uint (value));
 }
 
 static gboolean 
@@ -294,14 +318,14 @@ double_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-double_value_to_string (const GValue *value)
+static void
+double_value_print (const GValue *value,
+                    GString      *string)
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
   g_ascii_dtostr (buf, sizeof (buf), g_value_get_double (value));
-
-  return g_strdup (buf);
+  g_string_append (string, buf);
 }
 
 static gboolean 
@@ -321,14 +345,14 @@ float_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-float_value_to_string (const GValue *value)
+static void
+float_value_print (const GValue *value,
+                   GString      *string)
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
   g_ascii_dtostr (buf, sizeof (buf), g_value_get_float (value));
-
-  return g_strdup (buf);
+  g_string_append (string, buf);
 }
 
 static gboolean 
@@ -345,15 +369,15 @@ string_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-string_value_to_string (const GValue *value)
+static void
+string_value_print (const GValue *value,
+                    GString      *str)
 {
   const char *string;
   gsize len;
-  GString *str;
 
   string = g_value_get_string (value);
-  str = g_string_new ("\"");
+  g_string_append_c (str, '"');
 
   do {
     len = strcspn (string, "\"\n\r\f");
@@ -382,7 +406,6 @@ string_value_to_string (const GValue *value)
   } while (*string);
 
   g_string_append_c (str, '"');
-  return g_string_free (str, FALSE);
 }
 
 static gboolean 
@@ -413,20 +436,23 @@ theming_engine_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-theming_engine_value_to_string (const GValue *value)
+static void
+theming_engine_value_print (const GValue *value,
+                            GString      *string)
 {
   GtkThemingEngine *engine;
   char *name;
 
   engine = g_value_get_object (value);
   if (engine == NULL)
-    return g_strdup ("none");
-
-  /* XXX: gtk_theming_engine_get_name()? */
-  g_object_get (engine, "name", &name, NULL);
-
-  return name;
+    g_string_append (string, "none");
+  else
+    {
+      /* XXX: gtk_theming_engine_get_name()? */
+      g_object_get (engine, "name", &name, NULL);
+      g_string_append (string, name);
+      g_free (name);
+    }
 }
 
 static gboolean 
@@ -454,15 +480,16 @@ animation_description_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-animation_description_value_to_string (const GValue *value)
+static void
+animation_description_value_print (const GValue *value,
+                                   GString      *string)
 {
   GtkAnimationDescription *desc = g_value_get_boxed (value);
 
   if (desc == NULL)
-    return g_strdup ("none");
-
-  return _gtk_animation_description_to_string (desc);
+    g_string_append (string, "none");
+  else
+    _gtk_animation_description_print (desc, string);
 }
 
 static gboolean 
@@ -506,21 +533,21 @@ border_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-border_value_to_string (const GValue *value)
+static void
+border_value_print (const GValue *value, GString *string)
 {
   const GtkBorder *border = g_value_get_boxed (value);
 
   if (border == NULL)
-    return g_strdup ("none");
+    g_string_append (string, "none");
   else if (border->left != border->right)
-    return g_strdup_printf ("%d %d %d %d", border->top, border->right, border->bottom, border->left);
+    g_string_append_printf (string, "%d %d %d %d", border->top, border->right, border->bottom, border->left);
   else if (border->top != border->bottom)
-    return g_strdup_printf ("%d %d %d", border->top, border->right, border->bottom);
+    g_string_append_printf (string, "%d %d %d", border->top, border->right, border->bottom);
   else if (border->top != border->left)
-    return g_strdup_printf ("%d %d", border->top, border->right);
+    g_string_append_printf (string, "%d %d", border->top, border->right);
   else
-    return g_strdup_printf ("%d", border->top);
+    g_string_append_printf (string, "%d", border->top);
 }
 
 static gboolean 
@@ -716,15 +743,20 @@ gradient_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-gradient_value_to_string (const GValue *value)
+static void
+gradient_value_print (const GValue *value,
+                      GString      *string)
 {
   GtkGradient *gradient = g_value_get_boxed (value);
 
   if (gradient == NULL)
-    return g_strdup ("none");
-
-  return gtk_gradient_to_string (gradient);
+    g_string_append (string, "none");
+  else
+    {
+      char *s = gtk_gradient_to_string (gradient);
+      g_string_append (string, s);
+      g_free (s);
+    }
 }
 
 static GFile *
@@ -898,17 +930,18 @@ shadow_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static gchar *
-shadow_value_to_string (const GValue *value)
+static void
+shadow_value_print (const GValue *value,
+                    GString      *string)
 {
   GtkShadow *shadow;
 
   shadow = g_value_get_boxed (value);
 
   if (shadow == NULL)
-    return g_strdup ("none");
-
-  return _gtk_shadow_to_string (shadow);
+    g_string_append (string, "none");
+  else
+    _gtk_shadow_print (shadow, string);
 }
 
 static gboolean 
@@ -1008,21 +1041,19 @@ enum_value_parse (GtkCssParser *parser,
   return enum_value != NULL;
 }
 
-static char *
-enum_value_to_string (const GValue *value)
+static void
+enum_value_print (const GValue *value,
+                  GString      *string)
 {
   GEnumClass *enum_class;
   GEnumValue *enum_value;
-  char *s;
 
   enum_class = g_type_class_ref (G_VALUE_TYPE (value));
   enum_value = g_enum_get_value (enum_class, g_value_get_enum (value));
 
-  s = g_strdup (enum_value->value_nick);
+  g_string_append (string, enum_value->value_nick);
 
   g_type_class_unref (enum_class);
-
-  return s;
 }
 
 static gboolean 
@@ -1071,16 +1102,15 @@ flags_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-flags_value_to_string (const GValue *value)
+static void
+flags_value_print (const GValue *value,
+                   GString      *string)
 {
   GFlagsClass *flags_class;
-  GString *string;
   guint i, flags;
 
   flags_class = g_type_class_ref (G_VALUE_TYPE (value));
   flags = g_value_get_flags (value);
-  string = g_string_new (NULL);
 
   for (i = 0; i < flags_class->n_values; i++)
     {
@@ -1096,8 +1126,6 @@ flags_value_to_string (const GValue *value)
     }
 
   g_type_class_unref (flags_class);
-
-  return g_string_free (string, FALSE);
 }
 
 static gboolean 
@@ -1139,26 +1167,23 @@ bindings_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static char *
-bindings_value_to_string (const GValue *value)
+static void
+bindings_value_print (const GValue *value,
+                      GString      *string)
 {
   GPtrArray *array;
-  GString *str;
   guint i;
 
   array = g_value_get_boxed (value);
-  str = g_string_new (NULL);
 
   for (i = 0; i < array->len; i++)
     {
       GtkBindingSet *binding_set = g_ptr_array_index (array, i);
 
       if (i > 0)
-        g_string_append (str, ", ");
-      g_string_append (str, binding_set->set_name);
+        g_string_append (string, ", ");
+      g_string_append (string, binding_set->set_name);
     }
-
-  return g_string_free (str, FALSE);
 }
 
 /*** PACKING ***/
@@ -1285,50 +1310,50 @@ css_string_funcs_init (void)
     return;
 
   parse_funcs = g_hash_table_new (NULL, NULL);
-  to_string_funcs = g_hash_table_new (NULL, NULL);
+  print_funcs = g_hash_table_new (NULL, NULL);
 
   register_conversion_function (GDK_TYPE_RGBA,
                                 rgba_value_parse,
-                                rgba_value_to_string);
+                                rgba_value_print);
   register_conversion_function (GDK_TYPE_COLOR,
                                 color_value_parse,
-                                color_value_to_string);
+                                color_value_print);
   register_conversion_function (GTK_TYPE_SYMBOLIC_COLOR,
                                 symbolic_color_value_parse,
-                                symbolic_color_value_to_string);
+                                symbolic_color_value_print);
   register_conversion_function (PANGO_TYPE_FONT_DESCRIPTION,
                                 font_description_value_parse,
-                                font_description_value_to_string);
+                                font_description_value_print);
   register_conversion_function (G_TYPE_BOOLEAN,
                                 boolean_value_parse,
-                                boolean_value_to_string);
+                                boolean_value_print);
   register_conversion_function (G_TYPE_INT,
                                 int_value_parse,
-                                int_value_to_string);
+                                int_value_print);
   register_conversion_function (G_TYPE_UINT,
                                 uint_value_parse,
-                                uint_value_to_string);
+                                uint_value_print);
   register_conversion_function (G_TYPE_DOUBLE,
                                 double_value_parse,
-                                double_value_to_string);
+                                double_value_print);
   register_conversion_function (G_TYPE_FLOAT,
                                 float_value_parse,
-                                float_value_to_string);
+                                float_value_print);
   register_conversion_function (G_TYPE_STRING,
                                 string_value_parse,
-                                string_value_to_string);
+                                string_value_print);
   register_conversion_function (GTK_TYPE_THEMING_ENGINE,
                                 theming_engine_value_parse,
-                                theming_engine_value_to_string);
+                                theming_engine_value_print);
   register_conversion_function (GTK_TYPE_ANIMATION_DESCRIPTION,
                                 animation_description_value_parse,
-                                animation_description_value_to_string);
+                                animation_description_value_print);
   register_conversion_function (GTK_TYPE_BORDER,
                                 border_value_parse,
-                                border_value_to_string);
+                                border_value_print);
   register_conversion_function (GTK_TYPE_GRADIENT,
                                 gradient_value_parse,
-                                gradient_value_to_string);
+                                gradient_value_print);
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
                                 NULL);
@@ -1337,16 +1362,16 @@ css_string_funcs_init (void)
                                 NULL);
   register_conversion_function (GTK_TYPE_SHADOW,
                                 shadow_value_parse,
-                                shadow_value_to_string);
+                                shadow_value_print);
   register_conversion_function (G_TYPE_ENUM,
                                 enum_value_parse,
-                                enum_value_to_string);
+                                enum_value_print);
   register_conversion_function (G_TYPE_FLAGS,
                                 flags_value_parse,
-                                flags_value_to_string);
+                                flags_value_print);
   register_conversion_function (G_TYPE_PTR_ARRAY,
                                 bindings_value_parse,
-                                bindings_value_to_string);
+                                bindings_value_print);
 }
 
 gboolean
@@ -1381,18 +1406,22 @@ _gtk_css_value_parse (GValue       *value,
 char *
 _gtk_css_value_to_string (const GValue *value)
 {
-  ToStringFunc func;
+  PrintFunc func;
 
   css_string_funcs_init ();
 
-  func = g_hash_table_lookup (to_string_funcs,
+  func = g_hash_table_lookup (print_funcs,
                               GSIZE_TO_POINTER (G_VALUE_TYPE (value)));
   if (func == NULL)
-    func = g_hash_table_lookup (to_string_funcs,
+    func = g_hash_table_lookup (print_funcs,
                                 GSIZE_TO_POINTER (g_type_fundamental (G_VALUE_TYPE (value))));
 
   if (func)
-    return func (value);
+    {
+      GString *string = g_string_new (NULL);
+      func (value, string);
+      return g_string_free (string, FALSE);
+    }
 
   return g_strdup_value_contents (value);
 }

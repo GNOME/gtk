@@ -39,13 +39,11 @@ struct _GtkShadowElement {
   GtkSymbolicColor *symbolic_color;
 };
 
-static gchar *
-shadow_element_to_string (GtkShadowElement *element)
+static void
+shadow_element_print (GtkShadowElement *element,
+                      GString          *str)
 {
   gchar *color_str;
-  GString *str;
-
-  str = g_string_new (NULL);
 
   if (element->inset)
     g_string_append (str, "inset ");
@@ -67,8 +65,6 @@ shadow_element_to_string (GtkShadowElement *element)
 
   g_string_append (str, color_str);
   g_free (color_str);
-
-  return g_string_free (str, FALSE);
 }
 
 static void
@@ -226,33 +222,28 @@ _gtk_shadow_resolve (GtkShadow          *shadow,
   return resolved_shadow;
 }
 
-gchar *
-_gtk_shadow_to_string (GtkShadow *shadow)
+void
+_gtk_shadow_print (GtkShadow *shadow,
+                   GString   *str)
 {
-  GString *str;
   gint length;
   GList *l;
 
   length = g_list_length (shadow->elements);
 
   if (length == 0)
-    return NULL;
+    return;
 
-  str = g_string_new (NULL);
-
-  g_string_append (str,
-                   shadow_element_to_string (shadow->elements->data));
+  shadow_element_print (shadow->elements->data, str);
 
   if (length == 1)
-    return g_string_free (str, FALSE);
+    return;
 
   for (l = g_list_next (shadow->elements); l != NULL; l = l->next)
     {
       g_string_append (str, ", ");
-      g_string_append (str, shadow_element_to_string (l->data));
+      shadow_element_print (l->data, str);
     }
-
-  return g_string_free (str, FALSE);
 }
 
 void

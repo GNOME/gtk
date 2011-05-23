@@ -47,7 +47,8 @@ void       _gtk_shadow_append         (GtkShadow          *shadow,
                                        gboolean            inset,
                                        GtkSymbolicColor   *color);
 
-gchar     *_gtk_shadow_to_string      (GtkShadow          *shadow);
+void       _gtk_shadow_print          (GtkShadow          *shadow,
+                                       GString            *string);
 
 GtkShadow *_gtk_shadow_resolve        (GtkShadow          *shadow,
                                        GtkStyleProperties *props);
