@@ -31,12 +31,6 @@
  * iter->user_data2 = SortElt
  */
 
-/* WARNING: this code is dangerous, can cause sleepless nights,
- * can cause your dog to die among other bad things
- *
- * we warned you and we're not liable for any head injuries.
- */
-
 #include "config.h"
 #include <string.h>
 
