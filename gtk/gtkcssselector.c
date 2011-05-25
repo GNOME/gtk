@@ -181,16 +181,45 @@ _gtk_css_selector_to_string (const GtkCssSelector *selector)
   return g_string_free (string, FALSE);
 }
 
+static GtkRegionFlags
+compute_region_flags_for_index (const GtkWidgetPath *path,
+                                guint                id)
+{
+  const GtkWidgetPath *siblings;
+  guint sibling_id, n_siblings;
+  GtkRegionFlags flags;
+  
+  siblings = gtk_widget_path_iter_get_siblings (path, id);
+  if (siblings == NULL)
+    return 0;
+
+  sibling_id = gtk_widget_path_iter_get_sibling_index (path, id);
+  n_siblings = gtk_widget_path_length (siblings);
+
+  flags = (sibling_id % 2) ? GTK_REGION_EVEN : GTK_REGION_ODD;
+  if (sibling_id == 0)
+    flags |= GTK_REGION_FIRST;
+  if (sibling_id + 1 == n_siblings)
+    flags |= GTK_REGION_LAST;
+
+  return flags;
+}
+
 static gboolean
 gtk_css_selector_matches_type (const GtkCssSelector      *selector,
                                const GtkWidgetPath       *path,
                                guint                      id)
 {
+  if (selector->pseudo_classes)
+    {
+      GtkRegionFlags flags = compute_region_flags_for_index (path, id);
+
+      if ((selector->pseudo_classes & flags) != selector->pseudo_classes)
+        return FALSE;
+    }
+
   if (selector->name == NULL)
     return TRUE;
-
-  if (selector->pseudo_classes)
-    return FALSE;
 
   if (selector->type == G_TYPE_NONE)
     return FALSE;
