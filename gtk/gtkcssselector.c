@@ -183,7 +183,7 @@ _gtk_css_selector_to_string (const GtkCssSelector *selector)
 
 static gboolean
 gtk_css_selector_matches_type (const GtkCssSelector      *selector,
-                               /* const */ GtkWidgetPath *path,
+                               const GtkWidgetPath       *path,
                                guint                      id)
 {
   if (selector->name == NULL)
@@ -207,7 +207,7 @@ gtk_css_selector_matches_type (const GtkCssSelector      *selector,
 
 static gboolean
 gtk_css_selector_matches_region (const GtkCssSelector      *selector,
-                                 /* const */ GtkWidgetPath *path,
+                                 const GtkWidgetPath       *path,
                                  guint                      id,
                                  const char *               region)
 {
@@ -230,7 +230,7 @@ gtk_css_selector_matches_region (const GtkCssSelector      *selector,
 
 static gboolean
 gtk_css_selector_matches_rest (const GtkCssSelector      *selector,
-                               /* const */ GtkWidgetPath *path,
+                               const GtkWidgetPath       *path,
                                guint                      id)
 {
   if (selector->ids)
@@ -260,13 +260,13 @@ gtk_css_selector_matches_rest (const GtkCssSelector      *selector,
 
 static gboolean
 gtk_css_selector_matches_previous (const GtkCssSelector      *selector,
-                                   /* const */ GtkWidgetPath *path,
+                                   const GtkWidgetPath       *path,
                                    guint                      id,
                                    GSList                    *regions);
 
 static gboolean
 gtk_css_selector_matches_from (const GtkCssSelector      *selector,
-                               /* const */ GtkWidgetPath *path,
+                               const GtkWidgetPath       *path,
                                guint                      id,
                                GSList                    *regions)
 {
@@ -318,7 +318,7 @@ gtk_css_selector_matches_from (const GtkCssSelector      *selector,
 
 static gboolean
 gtk_css_selector_matches_previous (const GtkCssSelector      *selector,
-                                   /* const */ GtkWidgetPath *path,
+                                   const GtkWidgetPath       *path,
                                    guint                      id,
                                    GSList                    *regions)
 {
@@ -369,7 +369,7 @@ gtk_css_selector_matches_previous (const GtkCssSelector      *selector,
  **/
 gboolean
 _gtk_css_selector_matches (const GtkCssSelector      *selector,
-                           /* const */ GtkWidgetPath *path,
+                           const GtkWidgetPath       *path,
                            guint                      length)
 {
   GSList *list;

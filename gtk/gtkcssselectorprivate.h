@@ -48,7 +48,7 @@ void              _gtk_css_selector_print           (const GtkCssSelector   *sel
 GtkStateFlags     _gtk_css_selector_get_state_flags (GtkCssSelector         *selector);
 
 gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *selector,
-                                                     /* const */ GtkWidgetPath *path,
+                                                     const GtkWidgetPath    *path,
                                                      guint                   length);
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
