@@ -1363,9 +1363,6 @@ css_string_funcs_init (void)
   register_conversion_function (G_TYPE_FLAGS,
                                 flags_value_parse,
                                 flags_value_print);
-  register_conversion_function (G_TYPE_PTR_ARRAY,
-                                bindings_value_parse,
-                                bindings_value_print);
 }
 
 gboolean
@@ -1664,11 +1661,15 @@ gtk_style_property_init (void)
                                                               GTK_TYPE_ANIMATION_DESCRIPTION, 0));
 
   /* Private property holding the binding sets */
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("gtk-key-bindings",
+  _gtk_style_property_register           (g_param_spec_boxed ("gtk-key-bindings",
                                                               "Key bindings",
                                                               "Key bindings",
-                                                              G_TYPE_PTR_ARRAY, 0));
+                                                              G_TYPE_PTR_ARRAY, 0),
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          bindings_value_parse,
+                                          bindings_value_print);
 }
 
 const GtkStyleProperty *
