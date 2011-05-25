@@ -31,6 +31,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkWidgetPath GtkWidgetPath;
 
+/* We make this forward declaration here, since gtkwidget.h includes us.
+ */
+typedef struct _GtkWidget      GtkWidget;
+
 #define GTK_TYPE_WIDGET_PATH (gtk_widget_path_get_type ())
 
 GType           gtk_widget_path_get_type            (void) G_GNUC_CONST;
@@ -46,6 +50,9 @@ gint            gtk_widget_path_append_type         (GtkWidgetPath       *path,
                                                      GType                type);
 void            gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
                                                      GType                type);
+/* gtk_widget_path_append_for_widget() is declared in gtkwidget.c */
+gint            gtk_widget_path_append_for_widget   (GtkWidgetPath       *path,
+                                                     GtkWidget           *widget);
 
 GType               gtk_widget_path_iter_get_object_type (const GtkWidgetPath *path,
                                                           gint                 pos);

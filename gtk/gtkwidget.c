@@ -14224,6 +14224,52 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
 }
 
 /**
+ * gtk_widget_path_append_for_widget:
+ * @path: a widget path
+ * @widget: the widget to append to the widget path
+ *
+ * Appends the data from @widget to the widget hierarchy represented
+ * by @path. This function is a shortcut for adding information from
+ * @widget to the given @path. This includes setting the name or
+ * adding the style classes from @widget.
+ *
+ * Returns: the position where the data was inserted
+ *
+ * Since: 3.2
+ **/
+gint
+gtk_widget_path_append_for_widget (GtkWidgetPath *path,
+                                   GtkWidget     *widget)
+{
+  gint pos;
+
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  pos = gtk_widget_path_append_type (path, G_OBJECT_TYPE (widget));
+
+  if (widget->priv->name)
+    gtk_widget_path_iter_set_name (path, pos, widget->priv->name);
+
+  if (widget->priv->context)
+    {
+      GList *classes, *l;
+
+      /* Also add any persistent classes in
+       * the style context the widget path
+       */
+      classes = gtk_style_context_list_classes (widget->priv->context);
+
+      for (l = classes; l; l = l->next)
+        gtk_widget_path_iter_add_class (path, pos, l->data);
+
+      g_list_free (classes);
+    }
+
+  return pos;
+}
+
+/**
  * gtk_widget_get_path:
  * @widget: a #GtkWidget
  *
@@ -14253,7 +14299,6 @@ gtk_widget_get_path (GtkWidget *widget)
   if (!widget->priv->path)
     {
       GtkWidget *parent;
-      guint pos;
 
       parent = widget->priv->parent;
 
@@ -14269,28 +14314,11 @@ gtk_widget_get_path (GtkWidget *widget)
           widget->priv->path = gtk_widget_path_new ();
         }
 
-      pos = gtk_widget_path_append_type (widget->priv->path, G_OBJECT_TYPE (widget));
-
-      if (widget->priv->name)
-        gtk_widget_path_iter_set_name (widget->priv->path, pos, widget->priv->name);
+      gtk_widget_path_append_for_widget (widget->priv->path, widget);
 
       if (widget->priv->context)
-        {
-          GList *classes, *l;
-
-          /* Also add any persistent classes in
-           * the style context the widget path
-           */
-          classes = gtk_style_context_list_classes (widget->priv->context);
-
-          for (l = classes; l; l = l->next)
-            gtk_widget_path_iter_add_class (widget->priv->path, pos, l->data);
-
-          gtk_style_context_set_path (widget->priv->context,
-                                      widget->priv->path);
-
-          g_list_free (classes);
-        }
+        gtk_style_context_set_path (widget->priv->context,
+                                    widget->priv->path);
     }
 
   return widget->priv->path;
