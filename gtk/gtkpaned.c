@@ -983,18 +983,6 @@ flip_child (GtkWidget     *widget,
   child_pos->x = 2 * x + width - child_pos->x - child_pos->width;
 }
 
-static gboolean
-gtk_paned_get_child_visible (GtkPaned  *paned,
-                             guint      id)
-{
-  GtkPanedPrivate *priv = paned->priv;
-  GtkWidget *child;
-
-  child = id == CHILD1 ? priv->child1 : priv->child2;
-
-  return (child != NULL && gtk_widget_get_child_visible (child));
-}
-
 static void
 gtk_paned_set_child_visible (GtkPaned  *paned,
                              guint      id,
@@ -1002,16 +990,10 @@ gtk_paned_set_child_visible (GtkPaned  *paned,
 {
   GtkPanedPrivate *priv = paned->priv;
   GtkWidget *child;
-  gboolean was_visible;
-
-  was_visible = gtk_paned_get_child_visible (paned, id);
 
   child = id == CHILD1 ? priv->child1 : priv->child2;
 
   if (child == NULL)
-    return;
-
-  if (was_visible == visible)
     return;
 
   gtk_widget_set_child_visible (child, visible);
@@ -1020,10 +1002,13 @@ gtk_paned_set_child_visible (GtkPaned  *paned,
     {
       GdkWindow *window = id == CHILD1 ? priv->child1_window : priv->child2_window;
 
-      if (visible)
-        gdk_window_show (window);
-      else
-        gdk_window_hide (window);
+      if (visible != gdk_window_is_visible (window))
+        {
+          if (visible)
+            gdk_window_show (window);
+          else
+            gdk_window_hide (window);
+        }
     }
 }
 
