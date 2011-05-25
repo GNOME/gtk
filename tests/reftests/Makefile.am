@@ -29,6 +29,9 @@ EXTRA_DIST += \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \
+	box-pseudo-classes.css \
+	box-pseudo-classes.ref.ui \
+	box-pseudo-classes.ui \
 	css-match-class.css \
 	css-match-class.ref.ui \
 	css-match-class.ui \
