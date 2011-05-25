@@ -2121,7 +2121,6 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   GtkAllocation allocation;
   GtkWidget *widget;
   GtkMenuItem *parent_menu_item;
-  GtkRequisition requisition;
   GtkWidget *parent;
   GdkScreen *screen;
   gint twidth, theight;
