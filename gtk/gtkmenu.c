@@ -1695,7 +1695,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
 
     gtk_widget_size_allocate (priv->toplevel, &tmp_allocation);
 
-    gtk_widget_realize (GTK_WIDGET (menu));
+    gtk_widget_realize (priv->toplevel);
   }
 
   gtk_menu_scroll_to (menu, priv->scroll_offset);
@@ -4656,10 +4656,12 @@ gtk_menu_position (GtkMenu  *menu,
   pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
   gdk_device_get_position (pointer, &pointer_screen, &x, &y);
 
-  /* Get the minimum height for minimum width to figure out
+  /* Realize so we have the proper width and heigh to figure out
    * the right place to popup the menu.
    */
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
+  gtk_widget_realize (priv->toplevel);
+  requisition.width = gtk_widget_get_allocated_width (widget);
+  requisition.height = gtk_widget_get_allocated_height (widget);
 
   if (pointer_screen != screen)
     {
