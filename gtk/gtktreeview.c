@@ -8540,6 +8540,8 @@ gtk_tree_view_get_path_for_child (GtkContainer *container,
       break;
     }
 
+  gtk_widget_path_append_for_widget (path, child);
+
   return path;
 }
 

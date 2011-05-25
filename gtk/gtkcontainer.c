@@ -2334,6 +2334,8 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
       g_list_free_1 (cur);
     }
 
+  gtk_widget_path_append_for_widget (path, child);
+
   return path;
 }
 
@@ -3362,7 +3364,7 @@ _gtk_container_get_reallocate_redraws (GtkContainer *container)
  * @child: a child of @container
  *
  * Returns a newly created widget path representing all the widget hierarchy
- * from the toplevel down to @child (this one not being included).
+ * from the toplevel down to and including @child.
  *
  * Returns: A newly created #GtkWidgetPath
  **/

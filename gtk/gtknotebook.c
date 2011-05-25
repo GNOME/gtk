@@ -4454,7 +4454,6 @@ gtk_notebook_get_path_for_child (GtkContainer *container,
   GtkNotebook *notebook;
   GtkNotebookPage *page;
   GtkWidgetPath *path;
-  GtkRegionFlags flags;
   GList *c;
 
   path = GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->get_path_for_child (container, widget);
@@ -4474,8 +4473,10 @@ gtk_notebook_get_path_for_child (GtkContainer *container,
   if (!c)
     return path;
 
-  flags = _gtk_notebook_get_tab_flags (notebook, page);
-  gtk_widget_path_iter_add_region (path, -1, GTK_STYLE_REGION_TAB, flags);
+  gtk_widget_path_iter_add_region (path, 
+                                   gtk_widget_path_length (path) - 2,
+                                   GTK_STYLE_REGION_TAB,
+                                   _gtk_notebook_get_tab_flags (notebook, page));
 
   return path;
 }

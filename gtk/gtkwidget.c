@@ -14312,9 +14312,9 @@ gtk_widget_get_path (GtkWidget *widget)
            * situation.
            */
           widget->priv->path = gtk_widget_path_new ();
+    
+          gtk_widget_path_append_for_widget (widget->priv->path, widget);
         }
-
-      gtk_widget_path_append_for_widget (widget->priv->path, widget);
 
       if (widget->priv->context)
         gtk_style_context_set_path (widget->priv->context,

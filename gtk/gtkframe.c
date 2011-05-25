@@ -384,7 +384,9 @@ gtk_frame_get_path_for_child (GtkContainer *container,
   path = GTK_CONTAINER_CLASS (gtk_frame_parent_class)->get_path_for_child (container, child);
 
   if (child == priv->label_widget)
-    gtk_widget_path_iter_add_class (path, -1, GTK_STYLE_CLASS_FRAME);
+    gtk_widget_path_iter_add_class (path,
+                                    gtk_widget_path_length (path) - 2,
+                                    GTK_STYLE_CLASS_FRAME);
 
   return path;
 }
