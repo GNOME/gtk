@@ -40,12 +40,6 @@
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 
-typedef gboolean (* GtkStyleParseFunc)        (GtkCssParser  *parser,
-                                               GFile         *base,
-                                               GValue        *value);
-typedef void     (* GtkStylePrintFunc)        (const GValue  *value,
-                                               GString       *string);
-
 static GHashTable *parse_funcs = NULL;
 static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
@@ -1413,10 +1407,15 @@ _gtk_style_property_parse_value (const GtkStyleProperty *property,
 
           return success;
         }
-    }
 
-  func = g_hash_table_lookup (parse_funcs,
-                              GSIZE_TO_POINTER (G_VALUE_TYPE (value)));
+      func = property->parse_func;
+    }
+  else
+    func = NULL;
+
+  if (func == NULL)
+    func = g_hash_table_lookup (parse_funcs,
+                                GSIZE_TO_POINTER (G_VALUE_TYPE (value)));
   if (func == NULL)
     func = g_hash_table_lookup (parse_funcs,
                                 GSIZE_TO_POINTER (g_type_fundamental (G_VALUE_TYPE (value))));
@@ -1441,8 +1440,14 @@ _gtk_style_property_print_value (const GtkStyleProperty *property,
 
   css_string_funcs_init ();
 
-  func = g_hash_table_lookup (print_funcs,
-                              GSIZE_TO_POINTER (G_VALUE_TYPE (value)));
+  if (property)
+    func = property->print_func;
+  else
+    func = NULL;
+
+  if (func == NULL)
+    func = g_hash_table_lookup (print_funcs,
+                                GSIZE_TO_POINTER (G_VALUE_TYPE (value)));
   if (func == NULL)
     func = g_hash_table_lookup (print_funcs,
                                 GSIZE_TO_POINTER (g_type_fundamental (G_VALUE_TYPE (value))));
@@ -1560,7 +1565,9 @@ gtk_style_property_init (void)
                                                               GTK_TYPE_BORDER, 0),
                                           NULL,
                                           unpack_margin,
-                                          pack_margin);
+                                          pack_margin,
+                                          NULL,
+                                          NULL);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("padding-top",
                                                             "padding top",
@@ -1587,7 +1594,9 @@ gtk_style_property_init (void)
                                                               GTK_TYPE_BORDER, 0),
                                           NULL,
                                           unpack_padding,
-                                          pack_padding);
+                                          pack_padding,
+                                          NULL,
+                                          NULL);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("border-top-width",
                                                             "border top width",
@@ -1614,7 +1623,9 @@ gtk_style_property_init (void)
                                                               GTK_TYPE_BORDER, 0),
                                           NULL,
                                           unpack_border_width,
-                                          pack_border_width);
+                                          pack_border_width,
+                                          NULL,
+                                          NULL);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("border-radius",
                                                             "Border radius",
@@ -1672,7 +1683,9 @@ void
 _gtk_style_property_register (GParamSpec             *pspec,
                               GtkStylePropertyParser  property_parse_func,
                               GtkStyleUnpackFunc      unpack_func,
-                              GtkStylePackFunc        pack_func)
+                              GtkStylePackFunc        pack_func,
+                              GtkStyleParseFunc       parse_func,
+                              GtkStylePrintFunc       print_func)
 {
   const GtkStyleProperty *existing;
   GtkStyleProperty *node;
@@ -1694,6 +1707,8 @@ _gtk_style_property_register (GParamSpec             *pspec,
   node->property_parse_func = property_parse_func;
   node->pack_func = pack_func;
   node->unpack_func = unpack_func;
+  node->parse_func = parse_func;
+  node->print_func = print_func;
 
   g_hash_table_insert (properties, pspec->name, node);
 }
