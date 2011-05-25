@@ -3350,6 +3350,8 @@ draw_icon (GtkWidget            *widget,
   width = gdk_window_get_width (icon_info->window);
   height = gdk_window_get_height (icon_info->window);
 
+  context = gtk_widget_get_style_context (widget);
+
   /* size_allocate hasn't been called yet. These are the default values.
    */
   if (width == 1 || height == 1)
@@ -3387,7 +3389,6 @@ draw_icon (GtkWidget            *widget,
       else if (icon_info->prelight)
         state |= GTK_STATE_FLAG_PRELIGHT;
 
-      context = gtk_widget_get_style_context (widget);
       gtk_style_context_save (context);
       gtk_style_context_set_state (context, state);
       temp_pixbuf = gtk_render_icon_pixbuf (context, icon_source, (GtkIconSize)-1);
@@ -6719,7 +6720,7 @@ create_normal_pixbuf (GtkStyleContext *context,
   gtk_style_context_save (context);
 
   /* Unset any state */
-  gtk_style_context_set_state (context, 0);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
 
   icon_set = gtk_style_context_lookup_icon_set (context, stock_id);
   pixbuf = gtk_icon_set_render_icon_pixbuf (icon_set, context, icon_size);
@@ -6748,6 +6749,9 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
 
   widget = GTK_WIDGET (entry);
   context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
 
   switch (icon_info->storage_type)
     {
@@ -6832,7 +6836,9 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
       g_assert_not_reached ();
       break;
     }
-    
+
+  gtk_style_context_restore (context);
+
   if (icon_info->pixbuf != NULL && icon_info->window != NULL)
     gdk_window_show_unraised (icon_info->window);
 }
