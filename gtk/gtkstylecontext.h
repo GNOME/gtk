@@ -745,6 +745,11 @@ void        gtk_render_activity    (GtkStyleContext     *context,
 GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
                                     const GtkIconSource *source,
                                     GtkIconSize          size);
+void        gtk_render_icon        (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+				    GdkPixbuf           *pixbuf,
+                                    gdouble              x,
+                                    gdouble              y);
 
 G_END_DECLS
 

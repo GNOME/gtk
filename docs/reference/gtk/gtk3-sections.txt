@@ -5642,6 +5642,7 @@ gtk_render_option
 gtk_render_slider
 gtk_render_activity
 gtk_render_icon_pixbuf
+gtk_render_icon
 
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_CONTEXT

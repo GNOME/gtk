@@ -4366,3 +4366,44 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   return engine_class->render_icon_pixbuf (priv->theming_engine, source, size);
 }
+
+/**
+ * gtk_render_icon:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @pixbuf: a #GdkPixbuf containing the icon to draw
+ * @x: X position for the @pixbuf
+ * @y: Y position for the @pixbuf
+ *
+ * Renders the icon in @pixbuf at the specified @x and @y coordinates.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_render_icon (GtkStyleContext *context,
+                 cairo_t         *cr,
+		 GdkPixbuf       *pixbuf,
+                 gdouble          x,
+                 gdouble          y)
+{
+  GtkStyleContextPrivate *priv;
+  GtkThemingEngineClass *engine_class;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+
+  priv = context->priv;
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
+
+  store_animation_region (context,
+                          x, y,
+                          gdk_pixbuf_get_width (pixbuf),
+                          gdk_pixbuf_get_height (pixbuf));
+
+  _gtk_theming_engine_set_context (priv->theming_engine, context);
+  engine_class->render_icon (priv->theming_engine, cr, pixbuf, x, y);
+
+  cairo_restore (cr);  
+}

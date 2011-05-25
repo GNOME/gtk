@@ -2230,6 +2230,7 @@ gtk_render_focus
 gtk_render_frame
 gtk_render_frame_gap
 gtk_render_handle
+gtk_render_icon
 gtk_render_icon_pixbuf
 gtk_render_layout
 gtk_render_line
