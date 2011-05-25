@@ -65,9 +65,10 @@
  * </para>
  * <programlisting><![CDATA[
  * <!ELEMENT interface (requires|object)* >
- * <!ELEMENT object    (property|signal|child|ANY)* >
+ * <!ELEMENT object    (property|signal|child|binding|ANY)* >
  * <!ELEMENT property  PCDATA >
  * <!ELEMENT signal    EMPTY >
+ * <!ELEMENT binding   EMPTY >
  * <!ELEMENT requires  EMPTY >
  * <!ELEMENT child     (object|ANY*) >
  *
@@ -90,6 +91,9 @@
  *                      last_modification_time #IMPLIED >
  * <!ATTLIST child      type           	    #IMPLIED
  *                      internal-child 	    #IMPLIED >
+ * <!ATTLIST binding    to                  #REQUIRED
+ *                      from                #REQUIRED
+ *                      source              #REQUIRED >
  * ]]></programlisting>
  * <para>
  * The toplevel element is &lt;interface&gt;. It optionally takes a "domain"
@@ -154,6 +158,13 @@
  * constructed before it can be referred to. The exception to this rule is that
  * an object has to be constructed before it can be used as the value of a
  * construct-only property.
+ *
+ * It is also possible to define the value of a property by binding it to
+ * another property with the &lt;binding&gt; element. This causes the value
+ * of the property specified with the "to" attribute to be whatever the
+ * property "from" of object "source" is set to, even if that property
+ * is later set to another value. See the documentation of GLib's GBinding
+ * documentation for more details about the property binding mechanism.
  *
  * Signal handlers are set up with the &lt;signal&gt; element. The "name"
  * attribute specifies the name of the signal, and the "handler" attribute
@@ -285,6 +296,7 @@ struct _GtkBuilderPrivate
   GHashTable *objects;
   GSList *delayed_properties;
   GSList *signals;
+  GSList *bindings;
   gchar *filename;
 };
 
@@ -782,15 +794,59 @@ _gtk_builder_add_signals (GtkBuilder *builder,
                                            g_slist_copy (signals));
 }
 
+void
+_gtk_builder_add_bindings (GtkBuilder *builder,
+			   GSList     *bindings)
+{
+  builder->priv->bindings = g_slist_concat (builder->priv->bindings,
+					    g_slist_copy (bindings));
+}
+
+static GObject *
+gtk_builder_lookup_object (GtkBuilder *builder,
+			   gchar      *object_name)
+{
+  GObject *object;
+
+  object = g_hash_table_lookup (builder->priv->objects, object_name);
+  if (!object)
+    g_warning ("No object called: %s", object_name);
+  
+  return object;
+}
+
+static GParamSpec *
+gtk_builder_lookup_property (GtkBuilder *builder,
+			     GObject    *object,
+			     gchar      *property_name)
+{
+  GType object_type;
+  GObjectClass *oclass;
+  GParamSpec *pspec;
+  
+  object_type = G_OBJECT_TYPE (object);
+  g_assert (object_type != G_TYPE_INVALID);
+
+  oclass = g_type_class_ref (object_type);
+  g_assert (oclass != NULL);
+
+  pspec = g_object_class_find_property (G_OBJECT_CLASS (oclass),
+					property_name);
+  if (!pspec)
+    g_warning ("Unknown property: %s.%s",
+	       g_type_name (object_type),
+	       property_name);
+  
+  g_type_class_unref (oclass);
+  return pspec;
+}
+
 static void
 gtk_builder_apply_delayed_properties (GtkBuilder *builder)
 {
   GSList *l, *props;
   DelayedProperty *property;
   GObject *object;
-  GType object_type;
-  GObjectClass *oclass;
-  GParamSpec *pspec;
 
   /* take the list over from the builder->priv.
    *
@@ -803,43 +859,57 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
   for (l = props; l; l = l->next)
     {
       property = (DelayedProperty*)l->data;
-      object = g_hash_table_lookup (builder->priv->objects, property->object);
+      object = gtk_builder_lookup_object (builder, property->object);
       g_assert (object != NULL);
 
-      object_type = G_OBJECT_TYPE (object);
-      g_assert (object_type != G_TYPE_INVALID);
-
-      oclass = g_type_class_ref (object_type);
-      g_assert (oclass != NULL);
-
-      pspec = g_object_class_find_property (G_OBJECT_CLASS (oclass),
-                                            property->name);
-      if (!pspec)
-        g_warning ("Unknown property: %s.%s", g_type_name (object_type),
-                   property->name);
-      else
+      if (gtk_builder_lookup_property (builder, object, property->name))
         {
           GObject *obj;
 
-          obj = g_hash_table_lookup (builder->priv->objects, property->value);
-          if (!obj)
-            g_warning ("No object called: %s", property->value);
-          else
+          obj = gtk_builder_lookup_object (builder, property->value);
+          if (obj)
             g_object_set (object, property->name, obj, NULL);
         }
+      
       g_free (property->value);
       g_free (property->object);
       g_free (property->name);
       g_slice_free (DelayedProperty, property);
-      g_type_class_unref (oclass);
     }
   g_slist_free (props);
+}
+
+static void
+gtk_builder_create_bindings (GtkBuilder *builder)
+{
+  GSList *l;
+
+  for (l = builder->priv->bindings; l; l = l->next)
+    {
+      BindingInfo *binding = (BindingInfo*)l->data;
+      GObject *target, *source;
+
+      target = gtk_builder_lookup_object (builder, binding->object_name);
+      g_assert (target != NULL);
+
+      source = gtk_builder_lookup_object (builder, binding->source);
+      if (source)
+	{
+	  g_object_bind_property (source, binding->from,
+				  target, binding->to,
+				  G_BINDING_SYNC_CREATE);
+	}
+    }
+
+  g_slist_free (builder->priv->bindings);
+  builder->priv->bindings = NULL;
 }
 
 void
 _gtk_builder_finish (GtkBuilder *builder)
 {
   gtk_builder_apply_delayed_properties (builder);
+  gtk_builder_create_bindings (builder);
 }
 
 /**

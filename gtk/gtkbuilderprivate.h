@@ -38,6 +38,7 @@ typedef struct {
   gchar *constructor;
   GSList *properties;
   GSList *signals;
+  GSList *bindings;
   GObject *object;
   CommonInfo *parent;
 } ObjectInfo;
@@ -60,6 +61,14 @@ typedef struct {
   gboolean translatable;
   gchar *context;
 } PropertyInfo;
+
+typedef struct {
+  TagInfo tag;
+  gchar *object_name;
+  gchar *to;
+  gchar *from;
+  gchar *source;
+} BindingInfo;
 
 typedef struct {
   TagInfo tag;
@@ -121,6 +130,8 @@ void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
 void      _gtk_builder_add_signals (GtkBuilder *builder,
 				    GSList     *signals);
+void      _gtk_builder_add_bindings (GtkBuilder  *builder,
+				     GSList      *bindings);
 void      _gtk_builder_finish (GtkBuilder *builder);
 void _free_signal_info (SignalInfo *info,
                         gpointer user_data);

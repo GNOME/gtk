@@ -534,6 +534,67 @@ parse_property (ParserData   *data,
 }
 
 static void
+parse_binding (ParserData   *data,
+               const gchar  *element_name,
+               const gchar **names,
+               const gchar **values,
+               GError      **error)
+{
+  BindingInfo *info;
+  gchar *to = NULL;
+  gchar *from = NULL;
+  gchar *source = NULL;
+  ObjectInfo *object_info;
+  int i;
+  
+  object_info = state_peek_info (data, ObjectInfo);
+  if (!object_info || strcmp (object_info->tag.name, "object") != 0)
+    {
+      error_invalid_tag (data, element_name, NULL, error);
+      return;
+    }
+
+  for (i = 0; names[i] != NULL; i++)
+    {
+      if (strcmp (names[i], "to") == 0)
+	to = g_strdup (values[i]);
+      else if (strcmp (names[i], "from") == 0)
+	from = g_strdup (values[i]);
+      else if (strcmp (names[i], "source") == 0)
+	source = g_strdup (values[i]);
+      else
+	{
+	  error_invalid_attribute (data, element_name, names[i], error);
+	  return;
+	}
+    }
+
+  if (!to)
+    {
+      error_missing_attribute (data, element_name, "to", error);
+      return;
+    }
+  if (!from)
+    {
+      error_missing_attribute (data, element_name, "from", error);
+      return;
+    }
+  if (!source)
+    {
+      error_missing_attribute (data, element_name, "source", error);
+      return;
+    }
+
+  info = g_slice_new0 (BindingInfo);
+  info->to = to;
+  info->from = from;
+  info->source = source;
+  state_push (data, info);
+
+  info->tag.name = element_name;
+}
+
+static void
 free_property_info (PropertyInfo *info)
 {
   g_free (info->data);
@@ -879,6 +940,8 @@ start_element (GMarkupParseContext *context,
     parse_child (data, element_name, names, values, error);
   else if (strcmp (element_name, "property") == 0)
     parse_property (data, element_name, names, values, error);
+  else if (strcmp (element_name, "binding") == 0)
+    parse_binding (data, element_name, names, values, error);
   else if (strcmp (element_name, "signal") == 0)
     parse_signal (data, element_name, names, values, error);
   else if (strcmp (element_name, "interface") == 0)
@@ -990,6 +1053,7 @@ end_element (GMarkupParseContext *context,
           GTK_BUILDABLE_GET_IFACE (object_info->object)->parser_finished)
         data->finalizers = g_slist_prepend (data->finalizers, object_info->object);
       _gtk_builder_add_signals (data->builder, object_info->signals);
+      _gtk_builder_add_bindings (data->builder, object_info->bindings);
 
       free_object_info (object_info);
     }
@@ -1037,6 +1101,29 @@ end_element (GMarkupParseContext *context,
       signal_info->object_name = g_strdup (object_info->id);
       object_info->signals =
         g_slist_prepend (object_info->signals, signal_info);
+    }
+  else if (strcmp (element_name, "binding") == 0)
+    {
+      BindingInfo *binding_info = state_pop_info (data, BindingInfo);
+      ObjectInfo *object_info = (ObjectInfo*)state_peek_info (data, CommonInfo);
+      GSList *l;
+      
+      for (l = object_info->bindings; l; l = l->next)
+        {
+          BindingInfo *b = (BindingInfo*)l->data;
+          if (strcmp (b->to, binding_info->to) != 0)
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Duplicate binding for property: `%s'",
+                           b->to);
+            }
+        }
+      
+      binding_info->object_name = g_strdup (object_info->id);
+      object_info->bindings =
+        g_slist_prepend (object_info->bindings, binding_info);
     }
   else if (strcmp (element_name, "placeholder") == 0)
     {
