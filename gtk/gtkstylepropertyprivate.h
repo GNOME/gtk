@@ -56,9 +56,10 @@ void                     _gtk_style_property_pack          (const GtkStyleProper
                                                             GtkStateFlags           state,
                                                             GValue                 *value);
 
-gboolean                _gtk_css_value_parse              (GValue        *value,
-                                                           GtkCssParser  *parser,
-                                                           GFile         *base);
+gboolean                 _gtk_style_property_parse_value   (const GtkStyleProperty *property,
+                                                            GValue                 *value,
+                                                            GtkCssParser           *parser,
+                                                            GFile                  *base);
 void                     _gtk_style_property_print_value   (const GtkStyleProperty *property,
                                                             const GValue           *value,
                                                             GString                *string);

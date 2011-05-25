@@ -1375,9 +1375,10 @@ css_string_funcs_init (void)
 }
 
 gboolean
-_gtk_css_value_parse (GValue       *value,
-                      GtkCssParser *parser,
-                      GFile        *base)
+_gtk_style_property_parse_value (const GtkStyleProperty *property,
+                                 GValue                 *value,
+                                 GtkCssParser           *parser,
+                                 GFile                  *base)
 {
   ParseFunc func;
 

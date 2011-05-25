@@ -1371,9 +1371,10 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                         gtk_css_provider_parser_error,
                                         provider);
 
-          found = _gtk_css_value_parse (value,
-                                        parser,
-                                        NULL);
+          found = _gtk_style_property_parse_value (NULL,
+                                                   value,
+                                                   parser,
+                                                   NULL);
 
           _gtk_css_parser_free (parser);
 
@@ -2122,9 +2123,10 @@ parse_declaration (GtkCssScanner *scanner,
         }
       else
         {
-          if (_gtk_css_value_parse (val,
-                                    scanner->parser,
-                                    gtk_css_scanner_get_base_url (scanner)))
+          if (_gtk_style_property_parse_value (property,
+                                               val,
+                                               scanner->parser,
+                                               gtk_css_scanner_get_base_url (scanner)))
             {
               if (_gtk_css_parser_begins_with (scanner->parser, ';') ||
                   _gtk_css_parser_begins_with (scanner->parser, '}') ||
