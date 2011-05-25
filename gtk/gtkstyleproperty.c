@@ -40,20 +40,20 @@
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 
-typedef gboolean (* ParseFunc)        (GtkCssParser  *parser,
-                                       GFile         *base,
-                                       GValue        *value);
-typedef void     (* PrintFunc)        (const GValue  *value,
-                                       GString       *string);
+typedef gboolean (* GtkStyleParseFunc)        (GtkCssParser  *parser,
+                                               GFile         *base,
+                                               GValue        *value);
+typedef void     (* GtkStylePrintFunc)        (const GValue  *value,
+                                               GString       *string);
 
 static GHashTable *parse_funcs = NULL;
 static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
 
 static void
-register_conversion_function (GType          type,
-                              ParseFunc      parse,
-                              PrintFunc      print)
+register_conversion_function (GType             type,
+                              GtkStyleParseFunc parse,
+                              GtkStylePrintFunc print)
 {
   if (parse)
     g_hash_table_insert (parse_funcs, GSIZE_TO_POINTER (type), parse);
@@ -1380,7 +1380,7 @@ _gtk_style_property_parse_value (const GtkStyleProperty *property,
                                  GtkCssParser           *parser,
                                  GFile                  *base)
 {
-  ParseFunc func;
+  GtkStyleParseFunc func;
 
   g_return_val_if_fail (value != NULL, FALSE);
   g_return_val_if_fail (parser != NULL, FALSE);
@@ -1437,7 +1437,7 @@ _gtk_style_property_print_value (const GtkStyleProperty *property,
                                  const GValue           *value,
                                  GString                *string)
 {
-  PrintFunc func;
+  GtkStylePrintFunc func;
 
   css_string_funcs_init ();
 
