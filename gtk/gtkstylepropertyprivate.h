@@ -35,7 +35,7 @@ typedef void             (* GtkStylePackFunc)              (GValue              
 struct _GtkStyleProperty
 {
   GParamSpec             *pspec;
-  GtkStylePropertyParser  parse_func;
+  GtkStylePropertyParser  property_parse_func;
   GtkStyleUnpackFunc      unpack_func;
   GtkStylePackFunc        pack_func;
 };
@@ -43,7 +43,7 @@ struct _GtkStyleProperty
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
 
 void                     _gtk_style_property_register      (GParamSpec             *pspec,
-                                                            GtkStylePropertyParser  parse_func,
+                                                            GtkStylePropertyParser  property_parse_func,
                                                             GtkStyleUnpackFunc      unpack_func,
                                                             GtkStylePackFunc        pack_func);
 

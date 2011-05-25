@@ -2094,7 +2094,7 @@ parse_declaration (GtkCssScanner *scanner,
           g_param_value_set_default (property->pspec, val);
           gtk_css_ruleset_add (ruleset, property, val);
         }
-      else if (property->parse_func)
+      else if (property->property_parse_func)
         {
           GError *error = NULL;
           char *value_str;
@@ -2106,9 +2106,11 @@ parse_declaration (GtkCssScanner *scanner,
               g_slice_free (GValue, val);
               return;
             }
-
-          if ((*property->parse_func) (value_str, val, &error))
-            gtk_css_ruleset_add (ruleset, property, val);
+          
+          if ((*property->property_parse_func) (value_str, val, &error))
+            {
+              gtk_css_ruleset_add (ruleset, property, val);
+            }
           else
             {
               gtk_css_provider_take_error (scanner->provider, scanner, error);

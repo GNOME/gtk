@@ -348,7 +348,7 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
         *pspec = node->pspec;
 
       if (parse_func)
-        *parse_func = node->parse_func;
+        *parse_func = node->property_parse_func;
 
       found = TRUE;
     }

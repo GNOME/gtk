@@ -1641,7 +1641,7 @@ _gtk_style_property_lookup (const char *name)
 
 void
 _gtk_style_property_register (GParamSpec             *pspec,
-                              GtkStylePropertyParser  parse_func,
+                              GtkStylePropertyParser  property_parse_func,
                               GtkStyleUnpackFunc      unpack_func,
                               GtkStylePackFunc        pack_func)
 {
@@ -1662,7 +1662,7 @@ _gtk_style_property_register (GParamSpec             *pspec,
 
   node = g_slice_new0 (GtkStyleProperty);
   node->pspec = pspec;
-  node->parse_func = parse_func;
+  node->property_parse_func = property_parse_func;
   node->pack_func = pack_func;
   node->unpack_func = unpack_func;
 
