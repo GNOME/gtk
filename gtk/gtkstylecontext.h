@@ -401,6 +401,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_SIDEBAR "sidebar"
 
 /**
+ * GTK_STYLE_CLASS_IMAGE:
+ *
+ * A widget class defining an image, such as the icon in an entry.
+ */
+#define GTK_STYLE_CLASS_IMAGE "image"
+
+/**
  * GTK_STYLE_CLASS_HIGHLIGHT:
  *
  * A CSS class defining a highlighted area, such as headings in
