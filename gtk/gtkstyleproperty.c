@@ -1387,6 +1387,34 @@ _gtk_style_property_parse_value (const GtkStyleProperty *property,
 
   css_string_funcs_init ();
 
+  if (property)
+    {
+      if (_gtk_css_parser_try (parser, "none", TRUE))
+        {
+          /* Insert the default value, so it has an opportunity
+           * to override other style providers when merged
+           */
+          g_param_value_set_default (property->pspec, value);
+          return TRUE;
+        }
+      else if (property->property_parse_func)
+        {
+          GError *error = NULL;
+          char *value_str;
+          gboolean success;
+          
+          value_str = _gtk_css_parser_read_value (parser);
+          if (value_str == NULL)
+            return FALSE;
+          
+          success = (*property->property_parse_func) (value_str, value, &error);
+
+          g_free (value_str);
+
+          return success;
+        }
+    }
+
   func = g_hash_table_lookup (parse_funcs,
                               GSIZE_TO_POINTER (G_VALUE_TYPE (value)));
   if (func == NULL)

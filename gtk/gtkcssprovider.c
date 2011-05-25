@@ -2087,73 +2087,36 @@ parse_declaration (GtkCssScanner *scanner,
       val = g_slice_new0 (GValue);
       g_value_init (val, property->pspec->value_type);
 
-      if (_gtk_css_parser_try (scanner->parser, "none", TRUE))
+      if (_gtk_style_property_parse_value (property,
+                                           val,
+                                           scanner->parser,
+                                           gtk_css_scanner_get_base_url (scanner)))
         {
-          /* Insert the default value, so it has an opportunity
-           * to override other style providers when merged
-           */
-          g_param_value_set_default (property->pspec, val);
-          gtk_css_ruleset_add (ruleset, property, val);
-        }
-      else if (property->property_parse_func)
-        {
-          GError *error = NULL;
-          char *value_str;
-
-          value_str = _gtk_css_parser_read_value (scanner->parser);
-          if (value_str == NULL)
-            {
-              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-              g_slice_free (GValue, val);
-              return;
-            }
-          
-          if ((*property->property_parse_func) (value_str, val, &error))
+          if (_gtk_css_parser_begins_with (scanner->parser, ';') ||
+              _gtk_css_parser_begins_with (scanner->parser, '}') ||
+              _gtk_css_parser_is_eof (scanner->parser))
             {
               gtk_css_ruleset_add (ruleset, property, val);
             }
           else
             {
-              gtk_css_provider_take_error (scanner->provider, scanner, error);
+              gtk_css_provider_error_literal (scanner->provider,
+                                              scanner,
+                                              GTK_CSS_PROVIDER_ERROR,
+                                              GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                              "Junk at end of value");
+              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
               g_value_unset (val);
               g_slice_free (GValue, val);
+              return;
             }
-
-          g_free (value_str);
         }
       else
         {
-          if (_gtk_style_property_parse_value (property,
-                                               val,
-                                               scanner->parser,
-                                               gtk_css_scanner_get_base_url (scanner)))
-            {
-              if (_gtk_css_parser_begins_with (scanner->parser, ';') ||
-                  _gtk_css_parser_begins_with (scanner->parser, '}') ||
-                  _gtk_css_parser_is_eof (scanner->parser))
-                {
-                  gtk_css_ruleset_add (ruleset, property, val);
-                }
-              else
-                {
-                  gtk_css_provider_error_literal (scanner->provider,
-                                                  scanner,
-                                                  GTK_CSS_PROVIDER_ERROR,
-                                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                                  "Junk at end of value");
-                  _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-                  g_value_unset (val);
-                  g_slice_free (GValue, val);
-                  return;
-                }
-            }
-          else
-            {
-              g_value_unset (val);
-              g_slice_free (GValue, val);
-              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-              return;
-            }
+          g_value_unset (val);
+          g_slice_free (GValue, val);
+          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+          return;
         }
     }
   else if (name[0] == '-')
