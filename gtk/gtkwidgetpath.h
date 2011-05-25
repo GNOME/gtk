@@ -25,7 +25,7 @@
 #define __GTK_WIDGET_PATH_H__
 
 #include <glib-object.h>
-#include "gtkenums.h"
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
