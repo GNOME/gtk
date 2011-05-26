@@ -31,6 +31,7 @@
 #include "gtkanimationdescription.h"
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
+#include "gtkcsstypesprivate.h"
 
 #include "gtkstylepropertyprivate.h"
 #include "gtkintl.h"
@@ -511,6 +512,11 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
       /* Allow GtkGradient as a substitute */
       g_return_if_fail (value_type == CAIRO_GOBJECT_TYPE_PATTERN ||
                         value_type == GTK_TYPE_GRADIENT);
+    }
+  else if (style_prop->pspec->value_type == G_TYPE_INT)
+    {
+      g_return_if_fail (value_type == G_TYPE_INT ||
+                        value_type == GTK_TYPE_CSS_BORDER_RADIUS);
     }
   else
     g_return_if_fail (style_prop->pspec->value_type == value_type);

@@ -389,6 +389,7 @@ gtk_private_h_sources =		\
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
 	gtkcssselectorprivate.h	\
+	gtkcsstypesprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
@@ -518,6 +519,7 @@ gtk_base_c_sources = 		\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\
 	gtkcssselector.c	\
+	gtkcsstypes.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
