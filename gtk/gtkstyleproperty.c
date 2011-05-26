@@ -1186,6 +1186,8 @@ unpack_border (const GValue *value,
   g_value_init (&parameter[3].value, G_TYPE_INT);
   g_value_set_int (&parameter[3].value, border->right);
 
+  gtk_border_free (border);
+
   *n_params = 4;
   return parameter;
 }
