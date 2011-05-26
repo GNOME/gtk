@@ -313,13 +313,20 @@ double_value_parse (GtkCssParser *parser,
 }
 
 static void
-double_value_print (const GValue *value,
-                    GString      *string)
+string_append_double (GString *string,
+                      double   d)
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_ascii_dtostr (buf, sizeof (buf), g_value_get_double (value));
+  g_ascii_dtostr (buf, sizeof (buf), d);
   g_string_append (string, buf);
+}
+
+static void
+double_value_print (const GValue *value,
+                    GString      *string)
+{
+  string_append_double (string, g_value_get_double (value));
 }
 
 static gboolean 
@@ -343,10 +350,7 @@ static void
 float_value_print (const GValue *value,
                    GString      *string)
 {
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-  g_ascii_dtostr (buf, sizeof (buf), g_value_get_float (value));
-  g_string_append (string, buf);
+  string_append_double (string, g_value_get_float (value));
 }
 
 static gboolean 
