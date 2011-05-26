@@ -58,8 +58,6 @@ draw_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
   return TRUE;
 }
 
-extern void pixbuf_init();
-
 int
 main(int argc, char **argv)
 {
@@ -71,8 +69,6 @@ main(int argc, char **argv)
 	GtkRequisition scratch_requisition;
         const gchar *creator;
         GError *error;
-        
-	pixbuf_init ();
 
 	gtk_init (&argc, &argv);
 

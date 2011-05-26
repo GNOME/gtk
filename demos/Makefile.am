@@ -41,9 +41,9 @@ pixbuf_demo_LDADD = $(LDADDS)
 
 testpixbuf_save_SOURCES = testpixbuf-save.c
 testpixbuf_color_SOURCES = testpixbuf-color.c
-testpixbuf_scale_SOURCES = testpixbuf-scale.c pixbuf-init.c
-testanimation_SOURCES = testanimation.c pixbuf-init.c
-pixbuf_demo_SOURCES = pixbuf-demo.c pixbuf-init.c
+testpixbuf_scale_SOURCES = testpixbuf-scale.c
+testanimation_SOURCES = testanimation.c
+pixbuf_demo_SOURCES = pixbuf-demo.c
 
 EXTRA_DIST +=			\
 	apple-red.png		\

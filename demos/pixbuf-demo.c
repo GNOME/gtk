@@ -181,14 +181,11 @@ destroy_cb (GObject *object, gpointer data)
 	gtk_main_quit ();
 }
 
-extern void pixbuf_init();
-
 int
 main (int argc, char **argv)
 {
 	GtkWidget *window;
 
-	pixbuf_init ();
 	gtk_init (&argc, &argv);
 
 	if (!load_pixbufs ()) {
