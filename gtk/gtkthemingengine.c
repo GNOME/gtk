@@ -27,7 +27,7 @@
 #include <gtk/gtkintl.h>
 
 #include "gtkprivate.h"
-#include "gtk9slice.h"
+#include "gtkborderimageprivate.h"
 #include "gtkpango.h"
 #include "gtkshadowprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -2148,22 +2148,25 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
                                  gdouble           height)
 {
   GtkStateFlags flags;
-  Gtk9Slice *slice;
   GtkBorderStyle border_style;
   GtkJunctionSides junction;
+  GtkBorderImage *border_image;
+  GtkBorder border;
 
   flags = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
+  gtk_theming_engine_get_border (engine, flags, &border);
 
   gtk_theming_engine_get (engine, flags,
-                          "border-image", &slice,
+                          "border-image", &border_image,
                           "border-style", &border_style,
                           NULL);
 
-  if (slice)
+  if (border_image != NULL)
     {
-      _gtk_9slice_render (slice, cr, x, y, width, height);
-      _gtk_9slice_unref (slice);
+      _gtk_border_image_render (border_image, &border,
+                                cr, x, y, width, height);
+      _gtk_border_image_unref (border_image);
     }
   else if (border_style != GTK_BORDER_STYLE_NONE)
     render_frame_internal (engine, cr,

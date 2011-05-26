@@ -375,7 +375,6 @@ endif
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
-	gtk9slice.h		\
 	gtkaccelgroupprivate.h	\
 	gtkaccessibleprivate.h	\
 	gtkanimationdescription.h \
@@ -383,6 +382,7 @@ gtk_private_h_sources =		\
 	gtkappchoosermodule.h	\
 	gtkappchooseronline.h	\
 	gtkbindingsprivate.h	\
+	gtkborderimageprivate.h \
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
@@ -457,7 +457,6 @@ gtk_private_h_sources =		\
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources = 		\
-	gtk9slice.c		\
 	gtkquery.c		\
 	gtksearchengine.c	\
 	gtksearchenginesimple.c	\
@@ -487,6 +486,7 @@ gtk_base_c_sources = 		\
 	gtkbin.c		\
 	gtkbindings.c		\
 	gtkborder.c		\
+	gtkborderimage.c        \
 	gtkbox.c		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\

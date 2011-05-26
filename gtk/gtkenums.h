@@ -916,6 +916,13 @@ typedef enum {
   GTK_BORDER_STYLE_OUTSET
 } GtkBorderStyle;
 
+typedef enum {
+  GTK_REPEAT_STYLE_NONE,
+  GTK_REPEAT_STYLE_REPEAT,
+  GTK_REPEAT_STYLE_ROUND,
+  GTK_REPEAT_STYLE_SPACE
+} GtkRepeatStyle;
+
 G_END_DECLS
 
 
