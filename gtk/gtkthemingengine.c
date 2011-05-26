@@ -30,6 +30,7 @@
 #include "gtk9slice.h"
 #include "gtkpango.h"
 #include "gtkshadowprivate.h"
+#include "gtkcsstypesprivate.h"
 
 /**
  * SECTION:gtkthemingengine
@@ -1364,117 +1365,168 @@ color_shade (const GdkRGBA *color,
 }
 
 static void
-_cairo_round_rectangle_sides (cairo_t          *cr,
-                              gdouble           radius,
-                              gdouble           x,
-                              gdouble           y,
-                              gdouble           width,
-                              gdouble           height,
-                              guint             sides,
-                              GtkJunctionSides  junction)
+_cairo_ellipsis (cairo_t *cr,
+	         double xc, double yc,
+	         double xradius, double yradius,
+	         double angle1, double angle2)
 {
-  radius = CLAMP (radius, 0, MIN (width / 2, height / 2));
+  if (xradius <= 0.0 || yradius <= 0.0)
+    {
+      /* stolen from cairo sources */
+      cairo_line_to (cr, xc, yc); /* might become a move_to */
+      cairo_line_to (cr, xc, yc);
+      return;
+    }
 
+  cairo_save (cr);
+  cairo_translate (cr, xc, yc);
+  cairo_scale (cr, xradius, yradius);
+  cairo_arc (cr, 0, 0, 1.0, angle1, angle2);
+  cairo_restore (cr);
+}
+
+static void
+_cairo_round_rectangle_sides (cairo_t                  *cr,
+                              const GtkCssBorderRadius *border_radius,
+                              gdouble                   x,
+                              gdouble                   y,
+                              gdouble                   width,
+                              gdouble                   height,
+                              guint                     sides,
+                              GtkJunctionSides          junction)
+{
   if (sides & SIDE_RIGHT)
     {
-      if (radius == 0 ||
-          (junction & GTK_JUNCTION_CORNER_TOPRIGHT))
+      if (junction & GTK_JUNCTION_CORNER_TOPRIGHT)
         cairo_move_to (cr, x + width, y);
       else
         {
           cairo_new_sub_path (cr);
-          cairo_arc (cr, x + width - radius, y + radius, radius, - G_PI / 4, 0);
+          _cairo_ellipsis (cr, 
+                           x + width - border_radius->top_right.horizontal,
+                           y + border_radius->top_right.vertical,
+                           border_radius->top_right.horizontal,
+                           border_radius->top_right.vertical,
+                           - G_PI / 4, 0);
         }
 
-      if (radius == 0 ||
-          (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT))
+      if ((junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT))
         cairo_line_to (cr, x + width, y + height);
       else
-        cairo_arc (cr, x + width - radius, y + height - radius, radius, 0, G_PI / 4);
+        _cairo_ellipsis (cr,
+                         x + width - border_radius->bottom_right.horizontal,
+                         y + height - border_radius->bottom_right.vertical,
+                         border_radius->bottom_right.horizontal,
+                         border_radius->bottom_right.vertical,
+                         0, G_PI / 4);
     }
 
   if (sides & SIDE_BOTTOM)
     {
-      if (radius != 0 &&
-          ! (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT))
+      if (! (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT))
         {
           if ((sides & SIDE_RIGHT) == 0)
             cairo_new_sub_path (cr);
 
-          cairo_arc (cr, x + width - radius, y + height - radius, radius, G_PI / 4, G_PI / 2);
+          _cairo_ellipsis (cr,
+                           x + width - border_radius->bottom_right.horizontal,
+                           y + height - border_radius->bottom_right.vertical,
+                           border_radius->bottom_right.horizontal,
+                           border_radius->bottom_right.vertical,
+                           G_PI / 4, G_PI / 2);
         }
       else if ((sides & SIDE_RIGHT) == 0)
         cairo_move_to (cr, x + width, y + height);
 
-      if (radius == 0 ||
-          (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT))
+      if ((junction & GTK_JUNCTION_CORNER_BOTTOMLEFT))
         cairo_line_to (cr, x, y + height);
       else
-        cairo_arc (cr, x + radius, y + height - radius, radius, G_PI / 2, 3 * (G_PI / 4));
+        _cairo_ellipsis (cr,
+                         x + border_radius->bottom_left.horizontal,
+                         y + height - border_radius->bottom_left.vertical,
+                         border_radius->bottom_left.horizontal,
+                         border_radius->bottom_left.vertical,
+                         G_PI / 2, 3 * (G_PI / 4));
     }
   else
     cairo_move_to (cr, x, y + height);
 
   if (sides & SIDE_LEFT)
     {
-      if (radius != 0 &&
-          ! (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT))
+      if (! (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT))
         {
           if ((sides & SIDE_BOTTOM) == 0)
             cairo_new_sub_path (cr);
 
-          cairo_arc (cr, x + radius, y + height - radius, radius, 3 * (G_PI / 4), G_PI);
+          _cairo_ellipsis (cr,
+                           x + border_radius->bottom_left.horizontal,
+                           y + height - border_radius->bottom_left.vertical,
+                           border_radius->bottom_left.horizontal,
+                           border_radius->bottom_left.vertical,
+                           3 * (G_PI / 4), G_PI);
         }
       else if ((sides & SIDE_BOTTOM) == 0)
         cairo_move_to (cr, x, y + height);
 
-      if (radius == 0 ||
-          (junction & GTK_JUNCTION_CORNER_TOPLEFT))
+      if ((junction & GTK_JUNCTION_CORNER_TOPLEFT))
         cairo_line_to (cr, x, y);
       else
-        cairo_arc (cr, x + radius, y + radius, radius, G_PI, G_PI + G_PI / 4);
+        _cairo_ellipsis (cr,
+                         x + border_radius->top_left.horizontal,
+                         y + border_radius->top_left.vertical,
+                         border_radius->top_left.horizontal,
+                         border_radius->top_left.vertical,
+                         G_PI, G_PI + G_PI / 4);
     }
 
   if (sides & SIDE_TOP)
     {
-      if (radius != 0 &&
-          ! (junction & GTK_JUNCTION_CORNER_TOPLEFT))
+      if (! (junction & GTK_JUNCTION_CORNER_TOPLEFT))
         {
           if ((sides & SIDE_LEFT) == 0)
             cairo_new_sub_path (cr);
 
-          cairo_arc (cr, x + radius, y + radius, radius, 5 * (G_PI / 4), 3 * (G_PI / 2));
+          _cairo_ellipsis (cr,
+                           x + border_radius->top_left.horizontal,
+                           y + border_radius->top_left.vertical,
+                           border_radius->top_left.horizontal,
+                           border_radius->top_left.vertical,
+                           5 * (G_PI / 4), 3 * (G_PI / 2));
         }
       else if ((sides & SIDE_LEFT) == 0)
         cairo_move_to (cr, x, y);
 
-      if (radius == 0 ||
-          (junction & GTK_JUNCTION_CORNER_TOPRIGHT))
+      if ((junction & GTK_JUNCTION_CORNER_TOPRIGHT))
         cairo_line_to (cr, x + width, y);
       else
-        cairo_arc (cr, x + width - radius, y + radius, radius, 3 * (G_PI / 2), - G_PI / 4);
-    }
+        _cairo_ellipsis (cr,
+                         x + width - border_radius->top_right.horizontal,
+                         y + border_radius->top_right.vertical,
+                         border_radius->top_right.horizontal,
+                         border_radius->top_right.vertical,
+                         3 * (G_PI / 2), - G_PI / 4);
+  }
 }
 
 static void
-_cairo_uneven_frame (cairo_t          *cr,
-                     gdouble           radius,
-                     gdouble           x,
-                     gdouble           y,
-                     gdouble           width,
-                     gdouble           height,
-                     GtkBorder        *border,
-                     GtkJunctionSides  junction)
+_cairo_uneven_frame (cairo_t                  *cr,
+                     const GtkCssBorderRadius *border_radius,
+                     gdouble                   x,
+                     gdouble                   y,
+                     gdouble                   width,
+                     gdouble                   height,
+                     GtkBorder                *border,
+                     GtkJunctionSides          junction)
 {
   cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
   cairo_set_line_width (cr, 1);
 
-  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+  _cairo_round_rectangle_sides (cr, border_radius,
                                 x, y,
                                 width, height,
                                 SIDE_ALL, junction);
 
-  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+  _cairo_round_rectangle_sides (cr, border_radius,
                                 x + border->left,
                                 y + border->top,
                                 width - border->left - border->right,
@@ -1523,7 +1575,10 @@ render_background_internal (GtkThemingEngine *engine,
   gboolean running;
   gdouble progress, alpha = 1;
   GtkBorder border;
-  gint radius, border_width;
+  GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
+  GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
+  GtkCssBorderRadius border_radius = { { 0, },  };
+  gint border_width;
   GtkBorderStyle border_style;
   gdouble mat_w, mat_h;
   cairo_matrix_t identity;
@@ -1541,9 +1596,27 @@ render_background_internal (GtkThemingEngine *engine,
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
-                          "border-radius", &radius,
+                          /* Can't use border-radius as it's an int for
+                           * backwards compat */
+                          "border-top-left-radius", &top_left_radius,
+                          "border-top-right-radius", &top_right_radius,
+                          "border-bottom-right-radius", &bottom_right_radius,
+                          "border-bottom-left-radius", &bottom_left_radius,
                           "border-style", &border_style,
                           NULL);
+
+  if (top_left_radius)
+    border_radius.top_left = *top_left_radius;
+  g_free (top_left_radius);
+  if (top_right_radius)
+    border_radius.top_right = *top_right_radius;
+  g_free (top_right_radius);
+  if (bottom_right_radius)
+    border_radius.bottom_right = *bottom_right_radius;
+  g_free (bottom_right_radius);
+  if (bottom_left_radius)
+    border_radius.bottom_left = *bottom_left_radius;
+  g_free (bottom_left_radius);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -1670,7 +1743,7 @@ render_background_internal (GtkThemingEngine *engine,
               /* Different pattern types, or different color
                * stop counts, alpha blend both patterns.
                */
-              _cairo_round_rectangle_sides (cr, (gdouble) radius,
+              _cairo_round_rectangle_sides (cr, &border_radius,
                                             0, 0, width, height,
                                             SIDE_ALL, junction);
 
@@ -1755,7 +1828,7 @@ render_background_internal (GtkThemingEngine *engine,
         cairo_pattern_destroy (other_pattern);
     }
 
-  _cairo_round_rectangle_sides (cr, (gdouble) radius,
+  _cairo_round_rectangle_sides (cr, &border_radius,
                                 0, 0, width, height,
                                 SIDE_ALL, junction);
   if (pattern)
@@ -1786,7 +1859,7 @@ render_background_internal (GtkThemingEngine *engine,
   else
     {
       cairo_save (cr);
-      _cairo_round_rectangle_sides (cr, (gdouble) radius,
+      _cairo_round_rectangle_sides (cr, &border_radius,
                                     0, 0, width, height,
                                     SIDE_ALL, junction);
       cairo_clip (cr);
@@ -1858,7 +1931,10 @@ render_frame_internal (GtkThemingEngine *engine,
   GdkRGBA lighter;
   GdkRGBA border_color;
   GtkBorderStyle border_style;
-  gint border_width, radius;
+  gint border_width;
+  GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
+  GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
+  GtkCssBorderRadius border_radius = { { 0, },  };
   gdouble progress, d1, d2, m;
   gboolean running;
   GtkBorder border;
@@ -1871,8 +1947,26 @@ render_frame_internal (GtkThemingEngine *engine,
 
   gtk_theming_engine_get (engine, state,
                           "border-style", &border_style,
-                          "border-radius", &radius,
+                          /* Can't use border-radius as it's an int for
+                           * backwards compat */
+                          "border-top-left-radius", &top_left_radius,
+                          "border-top-right-radius", &top_right_radius,
+                          "border-bottom-right-radius", &bottom_right_radius,
+                          "border-bottom-left-radius", &bottom_left_radius,
                           NULL);
+
+  if (top_left_radius)
+    border_radius.top_left = *top_left_radius;
+  g_free (top_left_radius);
+  if (top_right_radius)
+    border_radius.top_right = *top_right_radius;
+  g_free (top_right_radius);
+  if (bottom_right_radius)
+    border_radius.bottom_right = *bottom_right_radius;
+  g_free (bottom_right_radius);
+  if (bottom_left_radius)
+    border_radius.bottom_left = *bottom_left_radius;
+  g_free (bottom_left_radius);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
   border_width = MIN (MIN (border.top, border.bottom),
@@ -1933,7 +2027,7 @@ render_frame_internal (GtkThemingEngine *engine,
               height -= 1;
             }
 
-          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+          _cairo_round_rectangle_sides (cr, &border_radius,
                                         x, y, width, height,
                                         SIDE_ALL & ~(hidden_side),
                                         junction);
@@ -1942,7 +2036,7 @@ render_frame_internal (GtkThemingEngine *engine,
       else
         {
           cairo_save (cr);
-          _cairo_uneven_frame (cr, (gdouble) radius,
+          _cairo_uneven_frame (cr, &border_radius,
                                x, y, width, height,
                                &border, junction);
           cairo_fill (cr);
@@ -1953,11 +2047,7 @@ render_frame_internal (GtkThemingEngine *engine,
     case GTK_BORDER_STYLE_INSET:
     case GTK_BORDER_STYLE_OUTSET:
       cairo_set_line_width (cr, border_width);
-
-      if (radius == 0)
-        cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
-      else
-        cairo_set_line_cap (cr, CAIRO_LINE_CAP_BUTT);
+      cairo_set_line_cap (cr, CAIRO_LINE_CAP_BUTT);
 
       if (border_width > 1)
         {
@@ -1982,7 +2072,7 @@ render_frame_internal (GtkThemingEngine *engine,
           else
             gdk_cairo_set_source_rgba (cr, &border_color);
 
-          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+          _cairo_round_rectangle_sides (cr, &border_radius,
                                         x + d1, y + d1,
                                         width - d2, height - d2,
                                         (SIDE_BOTTOM | SIDE_RIGHT) & ~(hidden_side),
@@ -1994,7 +2084,7 @@ render_frame_internal (GtkThemingEngine *engine,
           else
             gdk_cairo_set_source_rgba (cr, &lighter);
 
-          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+          _cairo_round_rectangle_sides (cr, &border_radius,
                                         x + d1, y + d1,
                                         width - d2, height - d2,
                                         (SIDE_TOP | SIDE_LEFT) & ~(hidden_side),
@@ -2011,7 +2101,7 @@ render_frame_internal (GtkThemingEngine *engine,
           else
             gdk_cairo_set_source_rgba (cr, &border_color);
 
-          _cairo_uneven_frame (cr, (gdouble) radius,
+          _cairo_uneven_frame (cr, &border_radius,
                                x, y, width, height,
                                &border, junction);
           cairo_fill (cr);
@@ -2019,9 +2109,15 @@ render_frame_internal (GtkThemingEngine *engine,
           /* Top/left */
           cairo_move_to (cr, x, y);
           cairo_line_to (cr, x + width, y);
-          cairo_line_to (cr, x + width - border.right - radius / 2, y + border.top + radius / 2);
-          cairo_line_to (cr, x + width - border.right - radius / 2, y + height - border.bottom - radius / 2);
-          cairo_line_to (cr, x + border.left + radius / 2, y + height - border.bottom - radius / 2);
+          cairo_line_to (cr, 
+                         x + width - border.right - border_radius.top_right.horizontal / 2,
+                         y + border.top + border_radius.top_right.vertical / 2);
+          cairo_line_to (cr, 
+                         x + width - border.right - border_radius.bottom_right.horizontal / 2,
+                         y + height - border.bottom - border_radius.bottom_right.vertical / 2);
+          cairo_line_to (cr, 
+                         x + border.left + border_radius.bottom_left.horizontal / 2,
+                         y + height - border.bottom - border_radius.bottom_left.vertical / 2);
           cairo_line_to (cr, x, y + height);
           cairo_close_path (cr);
 
@@ -2032,7 +2128,7 @@ render_frame_internal (GtkThemingEngine *engine,
           else
             gdk_cairo_set_source_rgba (cr, &lighter);
 
-          _cairo_uneven_frame (cr, (gdouble) radius,
+          _cairo_uneven_frame (cr, &border_radius,
                                x, y, width, height,
                                &border, junction);
           cairo_fill (cr);
@@ -2054,14 +2150,12 @@ render_frame_internal (GtkThemingEngine *engine,
 
           cairo_set_line_width (cr, 1);
 
-          if (radius == 0 ||
-              (junction & GTK_JUNCTION_CORNER_TOPRIGHT) != 0)
+          if ((junction & GTK_JUNCTION_CORNER_TOPRIGHT) != 0)
             _cairo_corner_triangle (cr,
                                     x + width - border_width, y,
                                     border_width);
 
-          if (radius == 0 ||
-              (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT) != 0)
+          if ((junction & GTK_JUNCTION_CORNER_BOTTOMLEFT) != 0)
             _cairo_corner_triangle (cr,
                                     x, y + height - border_width,
                                     border_width);
@@ -2493,7 +2587,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
 {
   GtkJunctionSides junction;
   GtkStateFlags state;
-  gint border_width, radius;
+  gint border_width;
+  GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
+  GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
+  GtkCssBorderRadius border_radius = { { 0, },  };
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
   GtkBorder border;
 
@@ -2503,8 +2600,26 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
 
   gtk_theming_engine_get_border (engine, state, &border);
   gtk_theming_engine_get (engine, state,
-                          "border-radius", &radius,
+                          /* Can't use border-radius as it's an int for
+                           * backwards compat */
+                          "border-top-left-radius", &top_left_radius,
+                          "border-top-right-radius", &top_right_radius,
+                          "border-bottom-right-radius", &bottom_right_radius,
+                          "border-bottom-left-radius", &bottom_left_radius,
                           NULL);
+
+  if (top_left_radius)
+    border_radius.top_left = *top_left_radius;
+  g_free (top_left_radius);
+  if (top_right_radius)
+    border_radius.top_right = *top_right_radius;
+  g_free (top_right_radius);
+  if (bottom_right_radius)
+    border_radius.bottom_right = *bottom_right_radius;
+  g_free (bottom_right_radius);
+  if (bottom_left_radius)
+    border_radius.bottom_left = *bottom_left_radius;
+  g_free (bottom_left_radius);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -2519,10 +2634,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < radius)
+      if (xy0_gap < border_radius.top_left.horizontal)
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > width - radius)
+      if (xy1_gap > width - border_radius.top_right.horizontal)
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
       break;
     case GTK_POS_BOTTOM:
@@ -2531,10 +2646,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < radius)
+      if (xy0_gap < border_radius.bottom_left.horizontal)
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
-      if (xy1_gap > width - radius)
+      if (xy1_gap > width - border_radius.bottom_right.horizontal)
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;
@@ -2544,10 +2659,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < radius)
+      if (xy0_gap < border_radius.top_left.vertical)
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > height - radius)
+      if (xy1_gap > height - border_radius.bottom_left.vertical)
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
       break;
@@ -2557,10 +2672,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < radius)
+      if (xy0_gap < border_radius.top_right.vertical)
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
 
-      if (xy1_gap > height - radius)
+      if (xy1_gap > height - border_radius.bottom_right.vertical)
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;
