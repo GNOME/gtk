@@ -21,12 +21,10 @@
 #include "config.h"
 
 #include "gtklockbutton.h"
-
-#include "gtkbutton.h"
 #include "gtkbox.h"
-#include "gtkeventbox.h"
+#include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtknotebook.h"
+#include "gtksizegroup.h"
 #include "gtkintl.h"
 
 /**
@@ -56,30 +54,27 @@
  *
  * The text (and tooltips) that are shown in the various cases can be adjusted
  * with the #GtkLockButton:text-lock, #GtkLockButton:text-unlock,
- * #GtkLockButton:text-not-authorized, #GtkLockButton:tooltip-lock,
- * #GtkLockButton:tooltip-unlock and #GtkLockButton:tooltip-not-authorized
- * properties.
+ * #GtkLockButton:tooltip-lock, #GtkLockButton:tooltip-unlock and
+ * #GtkLockButton:tooltip-not-authorized properties.
  */
 
 struct _GtkLockButtonPrivate
 {
   GPermission *permission;
+  GCancellable *cancellable;
 
   gchar *tooltip_lock;
   gchar *tooltip_unlock;
   gchar *tooltip_not_authorized;
+  GIcon *icon_lock;
+  GIcon *icon_unlock;
 
   GtkWidget *box;
-  GtkWidget *eventbox;
   GtkWidget *image;
-  GtkWidget *button;
-  GtkWidget *notebook;
-
   GtkWidget *label_lock;
   GtkWidget *label_unlock;
-  GtkWidget *label_not_authorized;
 
-  GCancellable *cancellable;
+  GtkSizeGroup *label_group;
 };
 
 enum
@@ -88,27 +83,19 @@ enum
   PROP_PERMISSION,
   PROP_TEXT_LOCK,
   PROP_TEXT_UNLOCK,
-  PROP_TEXT_NOT_AUTHORIZED,
   PROP_TOOLTIP_LOCK,
   PROP_TOOLTIP_UNLOCK,
   PROP_TOOLTIP_NOT_AUTHORIZED
 };
 
-static void update_state   (GtkLockButton *button);
-static void update_tooltip (GtkLockButton *button);
+static void update_state (GtkLockButton *button);
+static void gtk_lock_button_clicked (GtkButton *button);
 
 static void on_permission_changed (GPermission *permission,
                                    GParamSpec  *pspec,
                                    gpointer     user_data);
 
-static void on_clicked (GtkButton *button,
-                        gpointer   user_data);
-
-static void on_button_press (GtkWidget      *widget,
-                             GdkEventButton *event,
-                             gpointer        user_data);
-
-G_DEFINE_TYPE (GtkLockButton, gtk_lock_button, GTK_TYPE_BIN);
+G_DEFINE_TYPE (GtkLockButton, gtk_lock_button, GTK_TYPE_BUTTON);
 
 static void
 gtk_lock_button_finalize (GObject *object)
@@ -119,6 +106,10 @@ gtk_lock_button_finalize (GObject *object)
   g_free (priv->tooltip_lock);
   g_free (priv->tooltip_unlock);
   g_free (priv->tooltip_not_authorized);
+
+  g_object_unref (priv->icon_lock);
+  g_object_unref (priv->icon_unlock);
+  g_object_unref (priv->label_group);
 
   if (priv->cancellable != NULL)
     {
@@ -153,18 +144,11 @@ gtk_lock_button_get_property (GObject    *object,
       break;
 
     case PROP_TEXT_LOCK:
-      g_value_set_string (value,
-                          gtk_label_get_text (GTK_LABEL (priv->label_lock)));
+      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->label_lock)));
       break;
 
     case PROP_TEXT_UNLOCK:
-      g_value_set_string (value,
-                          gtk_label_get_text (GTK_LABEL (priv->label_unlock)));
-      break;
-
-    case PROP_TEXT_NOT_AUTHORIZED:
-      g_value_set_string (value,
-                          gtk_label_get_text (GTK_LABEL (priv->label_not_authorized)));
+      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->label_unlock)));
       break;
 
     case PROP_TOOLTIP_LOCK:
@@ -208,138 +192,84 @@ gtk_lock_button_set_property (GObject      *object,
       gtk_label_set_text (GTK_LABEL (priv->label_unlock), g_value_get_string (value));
       break;
 
-    case PROP_TEXT_NOT_AUTHORIZED:
-      gtk_label_set_text (GTK_LABEL (priv->label_not_authorized), g_value_get_string (value));
-      break;
-
     case PROP_TOOLTIP_LOCK:
       g_free (priv->tooltip_lock);
       priv->tooltip_lock = g_value_dup_string (value);
-      update_tooltip (button);
       break;
 
     case PROP_TOOLTIP_UNLOCK:
       g_free (priv->tooltip_unlock);
       priv->tooltip_unlock = g_value_dup_string (value);
-      update_tooltip (button);
       break;
 
     case PROP_TOOLTIP_NOT_AUTHORIZED:
       g_free (priv->tooltip_not_authorized);
       priv->tooltip_not_authorized = g_value_dup_string (value);
-      update_tooltip (button);
       break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
+
+  update_state (button);
 }
 
 static void
 gtk_lock_button_init (GtkLockButton *button)
 {
   GtkLockButtonPrivate *priv;
+  gchar *names[3];
 
   button->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
                                                      GTK_TYPE_LOCK_BUTTON,
                                                      GtkLockButtonPrivate);
 
+  priv->label_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_halign (priv->box, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (priv->box, GTK_ALIGN_CENTER);
+  gtk_widget_show (priv->box);
   gtk_container_add (GTK_CONTAINER (button), priv->box);
-
-  priv->eventbox = gtk_event_box_new ();
-  gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->eventbox), FALSE);
-  gtk_container_add (GTK_CONTAINER (priv->box), priv->eventbox);
-  gtk_widget_show (priv->eventbox);
   priv->image = gtk_image_new ();
-  gtk_container_add (GTK_CONTAINER (priv->eventbox), priv->image);
+  gtk_box_pack_start (GTK_BOX (priv->box), priv->image, FALSE, FALSE, 0);
   gtk_widget_show (priv->image);
-
-  priv->notebook = gtk_notebook_new ();
-  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->notebook), FALSE);
-  gtk_notebook_set_show_border (GTK_NOTEBOOK (priv->notebook), FALSE);
-  gtk_widget_show (priv->notebook);
-
-  priv->button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (priv->button), priv->notebook);
-  gtk_widget_show (priv->button);
-
   priv->label_lock = gtk_label_new ("");
-  gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), priv->label_lock, NULL);
+  gtk_misc_set_alignment (GTK_MISC (priv->label_lock), 0, 0.5);
+  gtk_widget_set_no_show_all (priv->label_lock, TRUE);
   gtk_widget_show (priv->label_lock);
-
+  gtk_box_pack_start (GTK_BOX (priv->box), priv->label_lock, FALSE, FALSE, 0);
+  gtk_size_group_add_widget (priv->label_group, priv->label_lock);
   priv->label_unlock = gtk_label_new ("");
-  gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), priv->label_unlock, NULL);
-  gtk_widget_show (priv->label_unlock);
+  gtk_misc_set_alignment (GTK_MISC (priv->label_unlock), 0, 0.5);
+  gtk_widget_set_no_show_all (priv->label_unlock, TRUE);
+  gtk_box_pack_start (GTK_BOX (priv->box), priv->label_unlock, FALSE, FALSE, 0);
+  gtk_size_group_add_widget (priv->label_group, priv->label_unlock);
 
-  priv->label_not_authorized = gtk_label_new ("");
-  gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), priv->label_not_authorized, NULL);
-  gtk_widget_show (priv->label_not_authorized);
+  names[0] = "changes-allow-symbolic";
+  names[1] = "changes-allow";
+  names[2] = NULL;
+  priv->icon_unlock = g_themed_icon_new_from_names (names, -1);
 
-  gtk_box_pack_start (GTK_BOX (priv->box), priv->button, FALSE, FALSE, 0);
-  gtk_widget_show (priv->button);
-
-  g_signal_connect (priv->eventbox, "button-press-event",
-                    G_CALLBACK (on_button_press), button);
-  g_signal_connect (priv->button, "clicked",
-                    G_CALLBACK (on_clicked), button);
-
-  gtk_widget_set_no_show_all (priv->box, TRUE);
+  names[0] = "changes-prevent-symbolic";
+  names[1] = "changes-prevent";
+  names[2] = NULL;
+  priv->icon_lock = g_themed_icon_new_from_names (names, -1);
 
   update_state (button);
-}
-
-static void
-gtk_lock_button_get_preferred_width (GtkWidget *widget,
-                                     gint      *minimum,
-                                     gint      *natural)
-{
-  GtkLockButtonPrivate *priv = GTK_LOCK_BUTTON (widget)->priv;
-
-  gtk_widget_get_preferred_width (priv->box, minimum, natural);
-}
-
-static void
-gtk_lock_button_get_preferred_height (GtkWidget *widget,
-                                      gint      *minimum,
-                                      gint      *natural)
-{
-  GtkLockButtonPrivate *priv = GTK_LOCK_BUTTON (widget)->priv;
-
-  gtk_widget_get_preferred_height (priv->box, minimum, natural);
-}
-
-static void
-gtk_lock_button_size_allocate (GtkWidget     *widget,
-                               GtkAllocation *allocation)
-{
-  GtkLockButtonPrivate *priv = GTK_LOCK_BUTTON (widget)->priv;
-  GtkRequisition requisition;
-  GtkAllocation child_allocation;
-
-  gtk_widget_set_allocation (widget, allocation);
-  gtk_widget_get_preferred_size (priv->box, &requisition, NULL);
-  child_allocation.x = allocation->x;
-  child_allocation.y = allocation->y;
-  child_allocation.width = requisition.width;
-  child_allocation.height = requisition.height;
-  gtk_widget_size_allocate (priv->box, &child_allocation);
 }
 
 static void
 gtk_lock_button_class_init (GtkLockButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
 
   gobject_class->finalize     = gtk_lock_button_finalize;
   gobject_class->get_property = gtk_lock_button_get_property;
   gobject_class->set_property = gtk_lock_button_set_property;
 
-  widget_class->get_preferred_width  = gtk_lock_button_get_preferred_width;
-  widget_class->get_preferred_height = gtk_lock_button_get_preferred_height;
-  widget_class->size_allocate        = gtk_lock_button_size_allocate;
+  button_class->clicked = gtk_lock_button_clicked;
 
   g_type_class_add_private (klass, sizeof (GtkLockButtonPrivate));
 
@@ -365,15 +295,6 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          P_("Unlock Text"),
                          P_("The text to display when prompting the user to unlock"),
                          _("Unlock"),
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT |
-                         G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_property (gobject_class, PROP_TEXT_NOT_AUTHORIZED,
-    g_param_spec_string ("text-not-authorized",
-                         P_("Not Authorized Text"),
-                         P_("The text to display when prompting the user cannot obtain authorization"),
-                         _("Locked"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
                          G_PARAM_STATIC_STRINGS));
@@ -407,41 +328,16 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
 }
 
 static void
-update_tooltip (GtkLockButton *button)
-{
-  GtkLockButtonPrivate *priv = button->priv;
-  const gchar *tooltip;
-
-  switch (gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook)))
-    {
-      case 0:
-        tooltip = priv->tooltip_lock;
-        break;
-      case 1:
-        tooltip = priv->tooltip_unlock;
-        break;
-      case 2:
-        tooltip = priv->tooltip_not_authorized;
-        break;
-      default:
-        tooltip = "";
-        break;
-    }
-
-  gtk_widget_set_tooltip_markup (priv->box, tooltip);
-}
-
-static void
 update_state (GtkLockButton *button)
 {
   GtkLockButtonPrivate *priv = button->priv;
   gboolean allowed;
   gboolean can_acquire;
   gboolean can_release;
-  gint page;
   gboolean sensitive;
   gboolean visible;
   GIcon *icon;
+  const gchar *tooltip;
 
   if (priv->permission)
     {
@@ -451,68 +347,50 @@ update_state (GtkLockButton *button)
     }
   else
     {
-      allowed = FALSE;
+      allowed = TRUE;
       can_acquire = FALSE;
       can_release = FALSE;
     }
 
-  visible = TRUE;
-  sensitive = TRUE;
-
-  if (allowed)
+  if (allowed && can_release)
     {
-      if (can_release)
-        {
-          page = 0;
-          sensitive = TRUE;
-        }
-      else
-        {
-          page = 0;
-          visible = FALSE;
-        }
+      visible = TRUE;
+      sensitive = TRUE;
+      icon = priv->icon_lock;
+      tooltip = priv->tooltip_lock;
+    }
+  else if (allowed && !can_release)
+    {
+      visible = FALSE;
+      sensitive = TRUE;
+      icon = priv->icon_lock;
+      tooltip = priv->tooltip_lock;
+    }
+  else if (!allowed && can_acquire)
+    {
+      visible = TRUE;
+      sensitive = TRUE;
+      icon = priv->icon_unlock;
+      tooltip = priv->tooltip_unlock;
+    }
+  else if (!allowed && !can_acquire)
+    {
+      visible = TRUE;
+      sensitive = FALSE;
+      icon = priv->icon_unlock;
+      tooltip = priv->tooltip_not_authorized;
     }
   else
     {
-      if (can_acquire)
-        {
-          page = 1;
-          sensitive = TRUE;
-        }
-      else
-        {
-          page = 2;
-          sensitive = FALSE;
-        }
-    }
-
-  if (allowed)
-    {
-      gchar *names[3];
-
-      names[0] = "changes-allow-symbolic";
-      names[1] = "changes-allow";
-      names[2] = NULL;
-      icon = g_themed_icon_new_from_names (names, -1);
-    }
-  else
-    {
-      gchar *names[3];
-
-      names[0] = "changes-prevent-symbolic";
-      names[1] = "changes-prevent";
-      names[2] = NULL;
-      icon = g_themed_icon_new_from_names (names, -1);
+      g_assert_not_reached ();
     }
 
   gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_BUTTON);
-  g_object_unref (icon);
-
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), page);
-  gtk_widget_set_sensitive (priv->box, sensitive);
-  gtk_widget_set_visible (priv->box, visible);
-
-  update_tooltip (button);
+  gtk_widget_set_visible (priv->label_lock, allowed);
+  gtk_widget_set_visible (priv->label_unlock, !allowed);
+  gtk_widget_set_tooltip_markup (GTK_WIDGET (button), tooltip);
+  gtk_widget_set_sensitive (GTK_WIDGET (button), sensitive);
+  gtk_widget_set_visible (GTK_WIDGET (button), visible);
 }
 
 static void
@@ -570,9 +448,9 @@ release_cb (GObject      *source,
 }
 
 static void
-handle_click (GtkLockButton *button)
+gtk_lock_button_clicked (GtkButton *button)
 {
-  GtkLockButtonPrivate *priv = button->priv;
+  GtkLockButtonPrivate *priv = GTK_LOCK_BUTTON (button)->priv;
 
   /* if we already have a pending interactive check, then do nothing */
   if (priv->cancellable != NULL)
@@ -603,23 +481,6 @@ handle_click (GtkLockButton *button)
         }
     }
 }
-
-static void
-on_clicked (GtkButton *button,
-            gpointer   user_data)
-
-{
-  handle_click (GTK_LOCK_BUTTON (user_data));
-}
-
-static void
-on_button_press (GtkWidget      *widget,
-                 GdkEventButton *event,
-                 gpointer        user_data)
-{
-  handle_click (GTK_LOCK_BUTTON (user_data));
-}
-
 
 /**
  * gtk_lock_button_new:
