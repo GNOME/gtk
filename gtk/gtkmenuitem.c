@@ -2148,7 +2148,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   direction = gtk_widget_get_direction (widget);
 
   twidth = gtk_widget_get_allocated_width (GTK_WIDGET (menu));
-  theight = gtk_widget_get_allocated_width (GTK_WIDGET (menu));
+  theight = gtk_widget_get_allocated_height (GTK_WIDGET (menu));
 
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
   monitor_num = gdk_screen_get_monitor_at_window (screen, priv->event_window);
