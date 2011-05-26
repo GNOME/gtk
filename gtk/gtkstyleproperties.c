@@ -32,6 +32,7 @@
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkborderimageprivate.h"
 
 #include "gtkstylepropertyprivate.h"
 #include "gtkintl.h"

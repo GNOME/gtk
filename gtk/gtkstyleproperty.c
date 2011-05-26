@@ -35,7 +35,7 @@
 /* the actual parsers we have */
 #include "gtkanimationdescription.h"
 #include "gtkbindings.h"
-#include "gtk9slice.h"
+#include "gtkborderimageprivate.h"
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
 #include "gtkthemingengine.h"
@@ -948,69 +948,135 @@ shadow_value_print (const GValue *value,
     _gtk_shadow_print (shadow, string);
 }
 
-static gboolean 
-slice_value_parse (GtkCssParser *parser,
-                   GFile        *base,
-                   GValue       *value)
+static gboolean
+border_image_repeat_value_parse (GtkCssParser *parser,
+                                 GFile *file,
+                                 GValue *value)
 {
-  gdouble distance_top, distance_bottom;
-  gdouble distance_left, distance_right;
-  GtkSliceSideModifier mods[2];
-  GdkPixbuf *pixbuf;
-  Gtk9Slice *slice;
-  GFile *file;
-  GError *error = NULL;
+  GtkBorderImageRepeat image_repeat;
+  GtkRepeatStyle styles[2];
   gint i;
-  char *path;
-
-  /* Parse image url */
-  file = gtk_css_parse_url (parser, base);
-  if (!file)
-      return FALSE;
-
-  if (!_gtk_css_parser_try_double (parser, &distance_top) ||
-      !_gtk_css_parser_try_double (parser, &distance_right) ||
-      !_gtk_css_parser_try_double (parser, &distance_bottom) ||
-      !_gtk_css_parser_try_double (parser, &distance_left))
-    {
-      _gtk_css_parser_error (parser, "Expected a number");
-      g_object_unref (file);
-      return FALSE;
-    }
 
   for (i = 0; i < 2; i++)
     {
       if (_gtk_css_parser_try (parser, "stretch", TRUE))
-        mods[i] = GTK_SLICE_STRETCH;
+        styles[i] = GTK_REPEAT_STYLE_NONE;
       else if (_gtk_css_parser_try (parser, "repeat", TRUE))
-        mods[i] = GTK_SLICE_REPEAT;
+        styles[i] = GTK_REPEAT_STYLE_REPEAT;
+      else if (_gtk_css_parser_try (parser, "round", TRUE))
+        styles[i] = GTK_REPEAT_STYLE_ROUND;
+      else if (_gtk_css_parser_try (parser, "space", TRUE))
+        styles[i] = GTK_REPEAT_STYLE_SPACE;
       else if (i == 0)
         {
-          mods[1] = mods[0] = GTK_SLICE_STRETCH;
+          styles[1] = styles[0] = GTK_REPEAT_STYLE_NONE;
           break;
         }
       else
-        mods[i] = mods[0];
+        styles[i] = styles[0];
     }
 
-  path = g_file_get_path (file);
-  g_object_unref (file);
-  pixbuf = gdk_pixbuf_new_from_file (path, &error);
-  g_free (path);
-  if (!pixbuf)
-    {
-      _gtk_css_parser_take_error (parser, error);
-      return FALSE;
-    }
+  image_repeat.vrepeat = styles[0];
+  image_repeat.hrepeat = styles[1];
 
-  slice = _gtk_9slice_new (pixbuf,
-                           distance_top, distance_bottom,
-                           distance_left, distance_right,
-                           mods[0], mods[1]);
-  g_object_unref (pixbuf);
+  g_value_set_boxed (value, &image_repeat);
 
-  g_value_take_boxed (value, slice);
   return TRUE;
+}
+
+static const gchar *
+border_image_repeat_style_to_string (GtkRepeatStyle repeat)
+{
+  switch (repeat)
+    {
+    case GTK_REPEAT_STYLE_NONE:
+      return "stretch";
+    case GTK_REPEAT_STYLE_REPEAT:
+      return "repeat";
+    case GTK_REPEAT_STYLE_ROUND:
+      return "round";
+    case GTK_REPEAT_STYLE_SPACE:
+      return "space";
+    default:
+      return NULL;
+    }
+}
+
+static void
+border_image_repeat_value_print (const GValue *value,
+                                 GString      *string)
+{
+  GtkBorderImageRepeat *image_repeat;
+
+  image_repeat = g_value_get_boxed (value);
+
+  g_string_append_printf (string, "%s %s",
+                          border_image_repeat_style_to_string (image_repeat->vrepeat),
+                          border_image_repeat_style_to_string (image_repeat->hrepeat));
+}
+
+static gboolean
+border_image_value_parse (GtkCssParser *parser,
+                          GFile *base,
+                          GValue *value)
+{
+  GValue temp = { 0, };
+  cairo_pattern_t *pattern = NULL;
+  GtkGradient *gradient = NULL;
+  GtkBorder border, *parsed_border;
+  GtkBorderImageRepeat repeat, *parsed_repeat;
+  gboolean retval = FALSE;
+  GtkBorderImage *image = NULL;
+
+  g_value_init (&temp, CAIRO_GOBJECT_TYPE_PATTERN);
+
+  if (!pattern_value_parse (parser, base, &temp))
+    return FALSE;
+
+  if (G_VALUE_TYPE (&temp) == GTK_TYPE_GRADIENT)
+    gradient = g_value_dup_boxed (&temp);
+  else
+    pattern = g_value_dup_boxed (&temp);
+
+  g_value_unset (&temp);
+  g_value_init (&temp, GTK_TYPE_BORDER);
+
+  if (!border_value_parse (parser, base, &temp))
+    goto out;
+
+  parsed_border = g_value_get_boxed (&temp);
+  border = *parsed_border;
+
+  g_value_unset (&temp);
+  g_value_init (&temp, GTK_TYPE_BORDER_IMAGE_REPEAT);
+
+  if (!border_image_repeat_value_parse (parser, base, &temp))
+    goto out;
+
+  parsed_repeat = g_value_get_boxed (&temp);
+  repeat = *parsed_repeat;
+
+  g_value_unset (&temp);
+
+  if (gradient != NULL)
+    image = _gtk_border_image_new_for_gradient (gradient, &border, &repeat);
+  else if (pattern != NULL)
+    image = _gtk_border_image_new (pattern, &border, &repeat);
+
+  if (image != NULL)
+    {
+      retval = TRUE;
+      g_value_take_boxed (value, image);
+    }
+
+ out:
+  if (pattern != NULL)
+    cairo_pattern_destroy (pattern);
+
+  if (gradient != NULL)
+    gtk_gradient_unref (gradient);
+
+  return retval;
 }
 
 static gboolean 
@@ -1625,9 +1691,12 @@ css_string_funcs_init (void)
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
                                 NULL);
-  register_conversion_function (GTK_TYPE_9SLICE,
-                                slice_value_parse,
+  register_conversion_function (GTK_TYPE_BORDER_IMAGE,
+                                border_image_value_parse,
                                 NULL);
+  register_conversion_function (GTK_TYPE_BORDER_IMAGE_REPEAT,
+                                border_image_repeat_value_parse,
+                                border_image_repeat_value_print);
   register_conversion_function (GTK_TYPE_SHADOW,
                                 shadow_value_parse,
                                 shadow_value_print);
@@ -1846,6 +1915,29 @@ resolve_shadow (GtkStyleProperties *props,
   return TRUE;
 }
 
+static gboolean
+resolve_border_image (GtkStyleProperties *props,
+                      GValue *value)
+{
+  GtkBorderImage *resolved, *base;
+
+  base = g_value_get_boxed (value);
+
+  if (base == NULL)
+    return FALSE;
+
+  if (_gtk_border_image_get_resolved (base))
+    return TRUE;
+
+  resolved = _gtk_border_image_resolve (base, props);
+  if (resolved == NULL)
+    return FALSE;
+
+  g_value_take_boxed (value, resolved);
+
+  return TRUE;
+}
+
 void
 _gtk_style_property_resolve (const GtkStyleProperty *property,
                              GtkStyleProperties     *props,
@@ -1876,6 +1968,11 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
   else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
     {
       if (!resolve_shadow (props, val))
+        _gtk_style_property_resolve (property, props, val);
+    }
+  else if (G_VALUE_TYPE (val) == GTK_TYPE_BORDER_IMAGE)
+    {
+      if (!resolve_border_image (props, val))
         _gtk_style_property_resolve (property, props, val);
     }
 }
@@ -2136,10 +2233,31 @@ gtk_style_property_init (void)
                                                               "Background Image",
                                                               CAIRO_GOBJECT_TYPE_PATTERN, 0));
   gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-image",
+                                          g_param_spec_boxed ("border-image-source",
+                                                              "Border image source",
+                                                              "Border image source",
+                                                              CAIRO_GOBJECT_TYPE_PATTERN, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-image-repeat",
+                                                              "Border image repeat",
+                                                              "Border image repeat",
+                                                              GTK_TYPE_BORDER_IMAGE_REPEAT, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-image-slice",
+                                                              "Border image slice",
+                                                              "Border image slice",
+                                                              GTK_TYPE_BORDER, 0));
+  _gtk_style_property_register           (g_param_spec_boxed ("border-image",
                                                               "Border Image",
                                                               "Border Image",
-                                                              GTK_TYPE_9SLICE, 0));
+                                                              GTK_TYPE_BORDER_IMAGE, 0),
+                                          0,
+                                          NULL,
+                                          _gtk_border_image_unpack,
+                                          _gtk_border_image_pack,
+                                          NULL,
+                                          NULL,
+                                          NULL);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_object ("engine",
                                                                "Theming Engine",
