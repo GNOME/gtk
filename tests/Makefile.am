@@ -89,7 +89,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtreecolumns			\
 	testtreecolumnsizing		\
 	testtreesort			\
-	testverticalcells			\
+	testverticalcells		\
 	treestoretest			\
 	testxinerama			\
 	testwindows			\
@@ -110,7 +110,11 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testnoscreen			\
 	testtreepos			\
 	testsensitive			\
-	testtextview
+	testtextview			\
+	testanimation			\
+	testpixbuf-save			\
+	testpixbuf-color		\
+	testpixbuf-scale
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -211,6 +215,10 @@ testnoscreen_DEPENDENCIES = $(TEST_DEPS)
 testtreepos_DEPENDENCIES = $(TEST_DEPS)
 testsensitive_DEPENDENCIES = $(TEST_DEPS)
 testtextview_DEPENDENCIES = $(TEST_DEPS)
+testanimation_DEPENDENCIES = $(TEST_DEPS)
+testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
+testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
+testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -297,6 +305,10 @@ testnoscreen_LDADD = $(LDADDS)
 testtreepos_LDADD = $(LDADDS)
 testsensitive_LDADD = $(LDADDS)
 testtextview_LDADD = $(LDADDS)
+testanimation_LDADD = $(LDADDS)
+testpixbuf_save_LDADD = $(LDADDS)
+testpixbuf_color_LDADD = $(LDADDS)
+testpixbuf_scale_LDADD = $(LDADDS)
 
 
 testentrycompletion_SOURCES = 	\
@@ -443,6 +455,14 @@ styleexamples_SOURCES = styleexamples.c
 testtoplevelembed_SOURCES = testtoplevelembed.c
 
 testtextview_SOURCES = testtextview.c
+
+testanimation_SOURCES = testanimation.c
+
+testpixbuf_scale_SOURCES = testpixbuf-scale.c
+
+testpixbuf_color_SOURCES = testpixbuf-color.c
+
+testpixbuf_save_SOURCES = testpixbuf-save.c
 
 
 EXTRA_DIST += 			\
