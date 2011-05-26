@@ -26,6 +26,12 @@ clean-local:
 
 EXTRA_DIST += \
 	align-expand.sh \
+	border-image-gradient.css \
+	border-image-gradient.ref.ui \
+	border-image-gradient.ui \
+	border-image-url.css \
+	border-image-url.ref.ui \
+	border-image-url.ui \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \
