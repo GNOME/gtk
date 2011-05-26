@@ -341,7 +341,7 @@ gtk_combo_box_entry_new (void)
  *
  * Since: 2.4
  *
- * Deprecated: 2.24: Use gtk_combo_box_new_with_entry() instead
+ * Deprecated: 2.24: Use gtk_combo_box_new_with_model_and_entry() instead
  */
 GtkWidget *
 gtk_combo_box_entry_new_with_model (GtkTreeModel *model,
