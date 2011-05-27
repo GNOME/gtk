@@ -931,7 +931,6 @@ main (int argc, char **argv)
   GtkWidget *notebook;
   GtkWidget *hbox;
   GtkWidget *tree;
-  GtkTextTag *tag;
 
   /* Most code in gtk-demo is intended to be exemplary, but not
    * these few lines, which are just a hack so gtk-demo will work
@@ -967,38 +966,38 @@ main (int argc, char **argv)
 			    create_text (&info_buffer, FALSE),
 			    gtk_label_new_with_mnemonic ("_Info"));
 
-  tag = gtk_text_buffer_create_tag (info_buffer, "title",
-                                    "font", "Sans 18",
-                                    NULL);
-   g_object_unref (info_buffer);
+  gtk_text_buffer_create_tag (info_buffer, "title",
+                              "font", "Sans 18",
+                              NULL);
+  g_object_unref (info_buffer);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
 			    create_text (&source_buffer, TRUE),
 			    gtk_label_new_with_mnemonic ("_Source"));
 
 
-  tag = gtk_text_buffer_create_tag (source_buffer, "comment",
-				    "foreground", "DodgerBlue",
-                                    NULL);
-  tag = gtk_text_buffer_create_tag (source_buffer, "type",
-				    "foreground", "ForestGreen",
-                                    NULL);
-  tag = gtk_text_buffer_create_tag (source_buffer, "string",
-				    "foreground", "RosyBrown",
-				    "weight", PANGO_WEIGHT_BOLD,
-                                    NULL);
-  tag = gtk_text_buffer_create_tag (source_buffer, "control",
-				    "foreground", "purple",
-                                    NULL);
-  tag = gtk_text_buffer_create_tag (source_buffer, "preprocessor",
-				    "style", PANGO_STYLE_OBLIQUE,
- 				    "foreground", "burlywood4",
-                                    NULL);
-  tag = gtk_text_buffer_create_tag (source_buffer, "function",
-				    "weight", PANGO_WEIGHT_BOLD,
- 				    "foreground", "DarkGoldenrod4",
-                                    NULL);
-   g_object_unref (source_buffer);
+  gtk_text_buffer_create_tag (source_buffer, "comment",
+                              "foreground", "DodgerBlue",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "type",
+                              "foreground", "ForestGreen",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "string",
+                              "foreground", "RosyBrown",
+                              "weight", PANGO_WEIGHT_BOLD,
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "control",
+                              "foreground", "purple",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "preprocessor",
+                              "style", PANGO_STYLE_OBLIQUE,
+                              "foreground", "burlywood4",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "function",
+                              "weight", PANGO_WEIGHT_BOLD,
+                              "foreground", "DarkGoldenrod4",
+                              NULL);
+  g_object_unref (source_buffer);
   
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
