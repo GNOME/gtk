@@ -1612,11 +1612,13 @@ gtk_box_set_child_packing (GtkBox      *box,
       gtk_widget_child_notify (child, "fill");
       child_info->padding = padding;
       gtk_widget_child_notify (child, "padding");
-      if (pack_type == GTK_PACK_END)
-	child_info->pack = GTK_PACK_END;
-      else
-	child_info->pack = GTK_PACK_START;
-      gtk_widget_child_notify (child, "pack-type");
+      if (pack_type != GTK_PACK_END)
+        pack_type = GTK_PACK_START;
+      if (child_info->pack_type != pack_type)
+        {
+	  child_info->pack = GTK_PACK_END;
+          gtk_widget_child_notify (child, "pack-type");
+        }
 
       if (gtk_widget_get_visible (child)
           && gtk_widget_get_visible (GTK_WIDGET (box)))
