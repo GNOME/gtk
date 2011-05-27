@@ -36,6 +36,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testappchooserbutton		\
 	testassistant			\
 	testbbox			\
+	testboxcss                      \
 	testbuttons			\
 	testcairo			\
 	testcalendar			\
@@ -227,6 +228,7 @@ testaccel_LDADD = $(LDADDS)
 testadjustsize_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
+testboxcss_LDADD = $(LDADDS)
 testbuttons_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
@@ -310,6 +312,10 @@ testpixbuf_save_LDADD = $(LDADDS)
 testpixbuf_color_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
 
+
+testboxcss_SOURCES =	\
+	testboxcss.c	\
+	prop-editor.c
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
