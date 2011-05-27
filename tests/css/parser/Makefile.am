@@ -79,4 +79,7 @@ EXTRA_DIST += \
 	shorthand.css \
 	shorthand.ref.css \
 	simple.css \
+	single-slash.css \
+	single-slash.errors\
+	single-slash.ref.css \
 	widget-style-property.css
