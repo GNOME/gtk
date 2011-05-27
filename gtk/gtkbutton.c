@@ -1472,7 +1472,6 @@ gtk_button_size_allocate (GtkWidget     *widget,
   GtkButtonPrivate *priv = button->priv;
   GtkAllocation child_allocation;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkWidget *child;
   GtkBorder default_border;
   GtkBorder inner_border;
@@ -1481,7 +1480,6 @@ gtk_button_size_allocate (GtkWidget     *widget,
   gint focus_pad;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_button_get_props (button, &default_border, NULL, &inner_border, &padding, NULL);
   gtk_style_context_get_style (context,
@@ -1919,7 +1917,6 @@ gtk_button_get_size (GtkWidget      *widget,
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkWidget *child;
   GtkBorder default_border;
   GtkBorder inner_border;
@@ -1929,7 +1926,6 @@ gtk_button_get_size (GtkWidget      *widget,
   gint minimum, natural;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_button_get_props (button, &default_border, NULL, &inner_border, &padding, NULL);
   gtk_style_context_get_style (context,
