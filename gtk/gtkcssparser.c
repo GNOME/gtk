@@ -851,7 +851,7 @@ _gtk_css_parser_resync_internal (GtkCssParser *parser,
 
     switch (*parser->data)
       {
-      case '/':
+      case '\\':
         {
           GString *ignore = g_string_new (NULL);
           _gtk_css_parser_unescape (parser, ignore);
