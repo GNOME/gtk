@@ -2578,10 +2578,9 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        list != (rtl ? first_column->prev : last_column->next);
        list = (rtl ? list->prev : list->next)) 
     {
-      gint old_width, column_width;
+      gint column_width;
 
       column = list->data;
-      old_width = gtk_tree_view_column_get_width (column);
 
       if (!gtk_tree_view_column_get_visible (column))
 	continue;
@@ -2766,8 +2765,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   
   if (gtk_widget_get_realized (widget))
     {
-      gboolean has_expand_column = FALSE;
-
       gdk_window_move_resize (gtk_widget_get_window (widget),
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
@@ -2784,15 +2781,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
       if (tree_view->priv->tree == NULL)
         invalidate_empty_focus (tree_view);
-
-      for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-	{
-	  if (gtk_tree_view_column_get_expand (GTK_TREE_VIEW_COLUMN (tmp_list->data)))
-	    {
-	      has_expand_column = TRUE;
-	      break;
-	    }
-	}
 
       if (width_changed && tree_view->priv->expander_column)
         {
