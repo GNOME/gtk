@@ -1526,6 +1526,8 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
   priv = css_provider->priv;
 
+  g_hash_table_remove_all (priv->symbolic_colors);
+
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
   g_array_set_size (priv->rulesets, 0);
