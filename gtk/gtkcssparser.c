@@ -898,7 +898,9 @@ _gtk_css_parser_resync_internal (GtkCssParser *parser,
           }
         parser->data++;
         continue;
+      case '/':
       default:
+        parser->data++;
         break;
       }
   } while (*parser->data);
