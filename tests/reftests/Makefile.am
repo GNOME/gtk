@@ -92,6 +92,9 @@ EXTRA_DIST += \
 	misc-alignment.css \
 	misc-alignment.ui \
 	misc-alignment.ref.ui \
+	no-colors.css \
+	no-colors.ref.ui \
+	no-colors.ui \
 	nonresizable-size.ref.ui \
 	nonresizable-size.ui \
 	paned-undersized.css \
