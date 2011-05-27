@@ -389,7 +389,7 @@ gtk_widget_path_prepend_type (GtkWidgetPath *path,
  * @path: a #GtkWidgetPath
  * @type: widget type to append
  *
- * Appends a widget type to the widget hierachy represented by @path.
+ * Appends a widget type to the widget hierarchy represented by @path.
  *
  * Returns: the position where the element was inserted
  *
