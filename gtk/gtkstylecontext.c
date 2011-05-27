@@ -3369,7 +3369,10 @@ gtk_style_context_get_color (GtkStyleContext *context,
   if (value)
     {
       c = g_value_get_boxed (value);
-      *color = *c;
+      if (c)
+        *color = *c;
+      else
+        gdk_rgba_parse (color, "pink");
     }
 }
 
@@ -3410,7 +3413,10 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
   if (value)
     {
       c = g_value_get_boxed (value);
-      *color = *c;
+      if (c)
+        *color = *c;
+      else
+        gdk_rgba_parse (color, "pink");
     }
 }
 
@@ -3451,7 +3457,10 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
   if (value)
     {
       c = g_value_get_boxed (value);
-      *color = *c;
+      if (c)
+        *color = *c;
+      else
+        gdk_rgba_parse (color, "pink");
     }
 }
 
