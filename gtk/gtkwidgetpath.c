@@ -97,6 +97,8 @@ struct GtkPathElement
 
 struct _GtkWidgetPath
 {
+  volatile guint ref_count;
+
   GArray *elems; /* First element contains the described widget */
 };
 
@@ -116,6 +118,7 @@ gtk_widget_path_new (void)
 
   path = g_slice_new0 (GtkWidgetPath);
   path->elems = g_array_new (FALSE, TRUE, sizeof (GtkPathElement));
+  path->ref_count = 1;
 
   return path;
 }
@@ -174,19 +177,43 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
 }
 
 /**
- * gtk_widget_path_free:
+ * gtk_widget_path_ref:
  * @path: a #GtkWidgetPath
  *
- * Frees a #GtkWidgetPath.
+ * Increments the reference count on @path.
  *
- * Since: 3.0
+ * Returns: @path itself.
+ *
+ * Since: 3.2
+ **/
+GtkWidgetPath *
+gtk_widget_path_ref (GtkWidgetPath *path)
+{
+  g_return_val_if_fail (path != NULL, path);
+
+  g_atomic_int_add (&path->ref_count, 1);
+
+  return path;
+}
+
+/**
+ * gtk_widget_path_unref:
+ * @path: a #GtkWidgetPath
+ *
+ * Decrements the reference count on @path, freeing the structure
+ * if the reference count reaches 0.
+ *
+ * Since: 3.2
  **/
 void
-gtk_widget_path_free (GtkWidgetPath *path)
+gtk_widget_path_unref (GtkWidgetPath *path)
 {
   guint i;
 
   g_return_if_fail (path != NULL);
+
+  if (!g_atomic_int_dec_and_test (&path->ref_count))
+    return;
 
   for (i = 0; i < path->elems->len; i++)
     {
@@ -203,6 +230,23 @@ gtk_widget_path_free (GtkWidgetPath *path)
 
   g_array_free (path->elems, TRUE);
   g_slice_free (GtkWidgetPath, path);
+}
+
+/**
+ * gtk_widget_path_free:
+ * @path: a #GtkWidgetPath
+ *
+ * Decrements the reference count on @path, freeing the structure
+ * if the reference count reaches 0.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_path_free (GtkWidgetPath *path)
+{
+  g_return_if_fail (path != NULL);
+
+  gtk_widget_path_unref (path);
 }
 
 /**

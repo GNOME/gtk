@@ -41,6 +41,8 @@ GType           gtk_widget_path_get_type            (void) G_GNUC_CONST;
 GtkWidgetPath * gtk_widget_path_new                 (void);
 
 GtkWidgetPath * gtk_widget_path_copy                (const GtkWidgetPath *path);
+GtkWidgetPath * gtk_widget_path_ref                 (GtkWidgetPath       *path);
+void            gtk_widget_path_unref               (GtkWidgetPath       *path);
 void            gtk_widget_path_free                (GtkWidgetPath       *path);
 
 char *          gtk_widget_path_to_string           (const GtkWidgetPath *path);
