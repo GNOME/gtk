@@ -610,12 +610,10 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
                                  GtkStateFlags       state,
                                  va_list             args)
 {
-  GtkStylePropertiesPrivate *priv;
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  priv = props->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
@@ -909,12 +907,10 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
                                  GtkStateFlags       state,
                                  va_list             args)
 {
-  GtkStylePropertiesPrivate *priv;
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  priv = props->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
