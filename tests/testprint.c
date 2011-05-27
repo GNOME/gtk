@@ -98,7 +98,6 @@ int
 main (int argc, char **argv)
 {
   GtkPrintOperation *print;
-  GtkPrintOperationResult res;
   TestPrintFileOperation *print_file;
 
   gtk_init (&argc, &argv);
@@ -110,13 +109,13 @@ main (int argc, char **argv)
   gtk_print_operation_set_export_filename (print, "test.pdf");
   g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), NULL);
   g_signal_connect (print, "request_page_setup", G_CALLBACK (request_page_setup), NULL);
-  res = gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_EXPORT, NULL, NULL);
+  gtk_print_operation_run (print, GTK_PRINT_OPERATION_ACTION_EXPORT, NULL, NULL);
 
   /* Test subclassing of GtkPrintOperation */
   print_file = test_print_file_operation_new ("testprint.c");
   test_print_file_operation_set_font_size (print_file, 12.0);
   gtk_print_operation_set_export_filename (GTK_PRINT_OPERATION (print_file), "test2.pdf");
-  res = gtk_print_operation_run (GTK_PRINT_OPERATION (print_file), GTK_PRINT_OPERATION_ACTION_EXPORT, NULL, NULL);
+  gtk_print_operation_run (GTK_PRINT_OPERATION (print_file), GTK_PRINT_OPERATION_ACTION_EXPORT, NULL, NULL);
   
   return 0;
 }
