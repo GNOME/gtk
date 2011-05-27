@@ -207,8 +207,6 @@ struct _GtkListStorePrivate
 };
 
 #define GTK_LIST_STORE_IS_SORTED(list) (((GtkListStore*)(list))->priv->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
-#define VALID_ITER(iter, list_store) ((iter)!= NULL && (iter)->user_data != NULL && list_store->priv->stamp == (iter)->stamp && !g_sequence_iter_is_end ((iter)->user_data) && g_sequence_iter_get_sequence ((iter)->user_data) == list_store->priv->seq)
-
 static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
 static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
@@ -400,6 +398,17 @@ gtk_list_store_init (GtkListStore *list_store)
   priv->sort_column_id = GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID;
   priv->columns_dirty = FALSE;
   priv->length = 0;
+}
+
+static gboolean
+iter_is_valid (GtkTreeIter  *iter,
+               GtkListStore *list_store)
+{
+  return iter != NULL && 
+         iter->user_data != NULL &&
+         list_store->priv->stamp == iter->stamp &&
+         !g_sequence_iter_is_end (iter->user_data) &&
+         g_sequence_iter_get_sequence (iter->user_data) == list_store->priv->seq;
 }
 
 /**
@@ -675,7 +684,7 @@ gtk_list_store_get_value (GtkTreeModel *tree_model,
   gint tmp_column = column;
 
   g_return_if_fail (column < priv->n_columns);
-  g_return_if_fail (VALID_ITER (iter, list_store));
+  g_return_if_fail (iter_is_valid (iter, list_store));
 		    
   list = g_sequence_get (iter->user_data);
 
@@ -931,7 +940,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
   GtkListStorePrivate *priv = list_store->priv;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (VALID_ITER (iter, list_store));
+  g_return_if_fail (iter_is_valid (iter, list_store));
   g_return_if_fail (G_IS_VALUE (value));
   priv = list_store->priv;
   g_return_if_fail (column >= 0 && column < priv->n_columns);
@@ -1090,7 +1099,7 @@ gtk_list_store_set_valuesv (GtkListStore *list_store,
   gboolean maybe_need_sort = FALSE;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (VALID_ITER (iter, list_store));
+  g_return_if_fail (iter_is_valid (iter, list_store));
 
   priv = list_store->priv;
 
@@ -1132,7 +1141,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
   gboolean maybe_need_sort = FALSE;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (VALID_ITER (iter, list_store));
+  g_return_if_fail (iter_is_valid (iter, list_store));
 
   priv = list_store->priv;
 
@@ -1202,7 +1211,7 @@ gtk_list_store_remove (GtkListStore *list_store,
   GSequenceIter *ptr, *next;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
-  g_return_val_if_fail (VALID_ITER (iter, list_store), FALSE);
+  g_return_val_if_fail (iter_is_valid (iter, list_store), FALSE);
 
   priv = list_store->priv;
 
@@ -1276,7 +1285,7 @@ gtk_list_store_insert (GtkListStore *list_store,
   iter->stamp = priv->stamp;
   iter->user_data = ptr;
 
-  g_assert (VALID_ITER (iter, list_store));
+  g_assert (iter_is_valid (iter, list_store));
 
   priv->length++;
   
@@ -1312,7 +1321,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   priv = list_store->priv;
 
   if (sibling)
-    g_return_if_fail (VALID_ITER (sibling, list_store));
+    g_return_if_fail (iter_is_valid (sibling, list_store));
 
   if (!sibling)
     after = g_sequence_get_end_iter (priv->seq);
@@ -1348,7 +1357,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   priv = list_store->priv;
 
   if (sibling)
-    g_return_if_fail (VALID_ITER (sibling, list_store));
+    g_return_if_fail (iter_is_valid (sibling, list_store));
 
   if (!sibling)
     after = g_sequence_get_begin_iter (priv->seq);
@@ -1459,20 +1468,10 @@ gboolean
 gtk_list_store_iter_is_valid (GtkListStore *list_store,
                               GtkTreeIter  *iter)
 {
-  GtkListStorePrivate *priv;
-
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  priv = list_store->priv;
-
-  if (!VALID_ITER (iter, list_store))
-    return FALSE;
-
-  if (g_sequence_iter_get_sequence (iter->user_data) != priv->seq)
-    return FALSE;
-
-  return TRUE;
+  return iter_is_valid (iter, list_store);
 }
 
 static gboolean real_gtk_list_store_row_draggable (GtkTreeDragSource *drag_source,
@@ -1805,8 +1804,8 @@ gtk_list_store_swap (GtkListStore *store,
 
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
-  g_return_if_fail (VALID_ITER (a, store));
-  g_return_if_fail (VALID_ITER (b, store));
+  g_return_if_fail (iter_is_valid (a, store));
+  g_return_if_fail (iter_is_valid (b, store));
 
   priv = store->priv;
 
@@ -1871,9 +1870,9 @@ gtk_list_store_move_before (GtkListStore *store,
   
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
-  g_return_if_fail (VALID_ITER (iter, store));
+  g_return_if_fail (iter_is_valid (iter, store));
   if (position)
-    g_return_if_fail (VALID_ITER (position, store));
+    g_return_if_fail (iter_is_valid (position, store));
 
   if (position)
     pos = g_sequence_iter_get_position (position->user_data);
@@ -1904,9 +1903,9 @@ gtk_list_store_move_after (GtkListStore *store,
   
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
-  g_return_if_fail (VALID_ITER (iter, store));
+  g_return_if_fail (iter_is_valid (iter, store));
   if (position)
-    g_return_if_fail (VALID_ITER (position, store));
+    g_return_if_fail (iter_is_valid (position, store));
 
   if (position)
     pos = g_sequence_iter_get_position (position->user_data) + 1;
@@ -1954,8 +1953,8 @@ gtk_list_store_compare_func (GSequenceIter *a,
   iter_b.stamp = priv->stamp;
   iter_b.user_data = (gpointer)b;
 
-  g_assert (VALID_ITER (&iter_a, list_store));
-  g_assert (VALID_ITER (&iter_b, list_store));
+  g_assert (iter_is_valid (&iter_a, list_store));
+  g_assert (iter_is_valid (&iter_b, list_store));
 
   retval = (* func) (GTK_TREE_MODEL (list_store), &iter_a, &iter_b, data);
 
@@ -2229,7 +2228,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
   iter->stamp = priv->stamp;
   iter->user_data = ptr;
 
-  g_assert (VALID_ITER (iter, list_store));
+  g_assert (iter_is_valid (iter, list_store));
 
   priv->length++;
 
@@ -2309,7 +2308,7 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   iter->stamp = priv->stamp;
   iter->user_data = ptr;
 
-  g_assert (VALID_ITER (iter, list_store));
+  g_assert (iter_is_valid (iter, list_store));
 
   priv->length++;  
 
