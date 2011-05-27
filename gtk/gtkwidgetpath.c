@@ -123,6 +123,34 @@ gtk_widget_path_new (void)
   return path;
 }
 
+static void
+gtk_path_element_copy (GtkPathElement       *dest,
+                       const GtkPathElement *src)
+{
+  memset (dest, 0, sizeof (GtkPathElement));
+
+  dest->type = src->type;
+  dest->name = src->name;
+
+  if (src->regions)
+    {
+      GHashTableIter iter;
+      gpointer key, value;
+
+      g_hash_table_iter_init (&iter, src->regions);
+      dest->regions = g_hash_table_new (NULL, NULL);
+
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        g_hash_table_insert (dest->regions, key, value);
+    }
+
+  if (src->classes)
+    {
+      dest->classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
+      g_array_append_vals (dest->classes, src->classes->data, src->classes->len);
+    }
+}
+
 /**
  * gtk_widget_path_copy:
  * @path: a #GtkWidgetPath
@@ -145,30 +173,11 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
 
   for (i = 0; i < path->elems->len; i++)
     {
-      GtkPathElement *elem, new = { 0 };
+      GtkPathElement *elem, new;
 
       elem = &g_array_index (path->elems, GtkPathElement, i);
 
-      new.type = elem->type;
-      new.name = elem->name;
-
-      if (elem->regions)
-        {
-          GHashTableIter iter;
-          gpointer key, value;
-
-          g_hash_table_iter_init (&iter, elem->regions);
-          new.regions = g_hash_table_new (NULL, NULL);
-
-          while (g_hash_table_iter_next (&iter, &key, &value))
-            g_hash_table_insert (new.regions, key, value);
-        }
-
-      if (elem->classes)
-        {
-          new.classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
-          g_array_append_vals (new.classes, elem->classes->data, elem->classes->len);
-        }
+      gtk_path_element_copy (&new, elem);
 
       g_array_append_val (new_path->elems, new);
     }
