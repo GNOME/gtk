@@ -121,17 +121,13 @@ take_window_shot (Window   child,
 		  gboolean include_decoration)
 {
   GdkWindow *window;
-  Display *disp;
-  Window w, xid;
+  Window xid;
   gint x_orig, y_orig;
   gint x = 0, y = 0;
   gint width, height;
 
   GdkPixbuf *tmp, *tmp2;
   GdkPixbuf *retval;
-
-  disp = GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
-  w = GDK_ROOT_WINDOW ();
 
   if (include_decoration)
     xid = find_toplevel_window (child);
