@@ -82,7 +82,7 @@
  **/
 
 G_DEFINE_BOXED_TYPE (GtkWidgetPath, gtk_widget_path,
-		     gtk_widget_path_copy, gtk_widget_path_free)
+		     gtk_widget_path_ref, gtk_widget_path_unref)
 
 
 typedef struct GtkPathElement GtkPathElement;
