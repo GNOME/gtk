@@ -93,6 +93,8 @@ struct GtkPathElement
   GQuark name;
   GHashTable *regions;
   GArray *classes;
+  GtkWidgetPath *siblings;
+  guint sibling_index;
 };
 
 struct _GtkWidgetPath
@@ -131,6 +133,9 @@ gtk_path_element_copy (GtkPathElement       *dest,
 
   dest->type = src->type;
   dest->name = src->name;
+  if (src->siblings)
+    dest->siblings = gtk_widget_path_ref (src->siblings);
+  dest->sibling_index = src->sibling_index;
 
   if (src->regions)
     {
@@ -235,6 +240,9 @@ gtk_widget_path_unref (GtkWidgetPath *path)
 
       if (elem->classes)
         g_array_free (elem->classes, TRUE);
+
+      if (elem->siblings)
+        gtk_widget_path_unref (elem->siblings);
     }
 
   g_array_free (path->elems, TRUE);
@@ -407,6 +415,100 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
   g_array_append_val (path->elems, new);
 
   return path->elems->len - 1;
+}
+
+/**
+ * gtk_widget_path_append_with_siblings:
+ * @path: the widget path to append to
+ * @siblings: a widget path describing a list of siblings. This path
+ *   may not contain any siblings itself and it must not be modified
+ *   afterwards.
+ * @sibling_index: index into @siblings for where the added element is
+ *   positioned.
+ *
+ * Appends a widget type with all its siblings to the widget hierarchy
+ * represented by @path. Using this function instead of
+ * gtk_widget_path_append_type() will allow the CSS theming to use
+ * sibling matches in selectors and apply :nth-child() pseudo classes.
+ * In turn, it requires a lot more care in widget implementations as
+ * widgets need to make sure to call gtk_widget_reset_style() on all
+ * involved widgets when the @siblings path changes.
+ *
+ * Returns: the position where the element was inserted.
+ *
+ * Since: 3.2
+ **/
+gint
+gtk_widget_path_append_with_siblings (GtkWidgetPath *path,
+                                      GtkWidgetPath *siblings,
+                                      guint          sibling_index)
+{
+  GtkPathElement new;
+
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (siblings != NULL, 0);
+  g_return_val_if_fail (sibling_index < gtk_widget_path_length (siblings), 0);
+
+  gtk_path_element_copy (&new, &g_array_index (siblings->elems, GtkPathElement, sibling_index));
+  new.siblings = gtk_widget_path_ref (siblings);
+  new.sibling_index = sibling_index;
+  g_array_append_val (path->elems, new);
+
+  return path->elems->len - 1;
+}
+
+/**
+ * gtk_widget_path_iter_get_siblings:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the siblings for, -1 for the path head
+ *
+ * Returns the list of siblings for the element at @pos. If the element
+ * was not added with siblings, %NULL is returned.
+ *
+ * Returns: %NULL or the list of siblings for the element at @pos.
+ **/
+const GtkWidgetPath *
+gtk_widget_path_iter_get_siblings (const GtkWidgetPath *path,
+                                   gint                 pos)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (path->elems->len != 0, G_TYPE_INVALID);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return elem->siblings;
+}
+
+/**
+ * gtk_widget_path_iter_get_sibling_index:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the sibling index for, -1 for the path head
+ *
+ * Returns the index into the list of siblings for the element at @pos as
+ * returned by gtk_widget_path_iter_get_siblings(). If that function would
+ * return %NULL because the element at @pos has no siblings, this function
+ * will return 0.
+ *
+ * Returns: 0 or the index into the list of siblings for the element at @pos.
+ **/
+guint
+gtk_widget_path_iter_get_sibling_index (const GtkWidgetPath *path,
+                                        gint                 pos)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (path->elems->len != 0, G_TYPE_INVALID);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return elem->sibling_index;
 }
 
 /**

@@ -5416,6 +5416,7 @@ GTK_CHECK_VERSION
 <TITLE>GtkWidgetPath</TITLE>
 GtkWidgetPath
 gtk_widget_path_append_type
+gtk_widget_path_append_with_siblings
 gtk_widget_path_copy
 gtk_widget_path_ref
 gtk_widget_path_unref
@@ -5429,6 +5430,8 @@ gtk_widget_path_iter_clear_classes
 gtk_widget_path_iter_clear_regions
 gtk_widget_path_iter_get_name
 gtk_widget_path_iter_get_object_type
+gtk_widget_path_iter_get_siblings
+gtk_widget_path_iter_get_sibling_index
 gtk_widget_path_iter_has_class
 gtk_widget_path_iter_has_name
 gtk_widget_path_iter_has_qclass
