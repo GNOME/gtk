@@ -282,7 +282,10 @@ _gtk_border_image_resolve (GtkBorderImage     *image,
   if (image->resolved)
     return _gtk_border_image_ref (image);
 
-  if (!gtk_gradient_resolve (image->source_gradient, props, &pattern))
+  image->resolved =
+    gtk_gradient_resolve (image->source_gradient, props, &pattern);
+
+  if (!image->resolved)
     return NULL;
 
   resolved_image = _gtk_border_image_new (pattern, &image->slice, &image->repeat);
