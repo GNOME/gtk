@@ -33,6 +33,7 @@ main (int    argc,
   register_tree_store_tests ();
   register_sort_model_tests ();
   register_filter_model_tests ();
+  register_model_ref_count_tests ();
 
   return g_test_run ();
 }
