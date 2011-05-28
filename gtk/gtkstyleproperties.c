@@ -541,12 +541,12 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, style_prop->pspec);
+  prop = g_hash_table_lookup (priv->properties, style_prop);
 
   if (!prop)
     {
       prop = property_data_new ();
-      g_hash_table_insert (priv->properties, style_prop->pspec, prop);
+      g_hash_table_insert (priv->properties, (gpointer) style_prop, prop);
     }
 
   val = property_data_get_value (prop, state);
@@ -842,7 +842,7 @@ _gtk_style_properties_peek_property (GtkStyleProperties      *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, node->pspec);
+  prop = g_hash_table_lookup (priv->properties, node);
 
   if (!prop)
     return NULL;
@@ -1022,7 +1022,7 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, node->pspec);
+  prop = g_hash_table_lookup (priv->properties, node);
 
   if (!prop)
     return;
