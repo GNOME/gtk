@@ -1,0 +1,117 @@
+a {
+  border-radius: 1;
+}
+
+b {
+  border-radius: 1 2;
+}
+
+c {
+  border-radius: 1 2 3;
+}
+
+d {
+  border-radius: 1 2 3 4;
+}
+
+e {
+  border-radius: 1 2 3 4 / 5;
+}
+
+f {
+  border-radius: 1 2 3 4 / 5 6;
+}
+
+g {
+  border-radius: 1 2 3 4 / 5 6 7;
+}
+
+h {
+  border-radius: 1 2 3 4 / 5 6 7 8;
+}
+
+i {
+  border-radius: none;
+}
+
+j {
+  border-radius: 1.125 / 5.5;
+}
+
+k {
+  border-radius: 1 2.25 / 5;
+}
+
+l {
+  border-radius: 1 2 3.5 / 5.5 6.75;
+}
+
+m {
+  border-radius: 0 / 0;
+}
+
+n {
+  border-radius: 0;
+}
+
+o {
+  border-radius: 0 / 1;
+}
+
+p {
+  border-radius: 1 / 0;
+}
+
+/* errors go here */
+
+ea {
+  border-radius: -1 1 1 1 / 1 1 1 1;
+}
+
+eb {
+  border-radius: 1 -1 1 1 / 1 1 1 1;
+}
+
+ec {
+  border-radius: 1 1 -1 1 / 1 1 1 1;
+}
+
+ed {
+  border-radius: 1 1 1 -1 / 1 1 1 1;
+}
+
+ee {
+  border-radius: 1 1 1 1 / -1 1 1 1;
+}
+
+ef {
+  border-radius: 1 1 1 1 / 1 -1 1 1;
+}
+
+eg {
+  border-radius: 1 1 1 1 / 1 1 -1 1;
+}
+
+eh {
+  border-radius: 1 1 1 1 / 1 1 1 -1;
+}
+
+ei {
+  border-radius: /;
+}
+
+ej {
+  border-radius: ;
+}
+
+ek {
+  border-radius: 1 /;
+}
+
+el {
+  border-radius: 1 2 3 4 5;
+}
+
+em {
+  border-radius: 1 2 / 1 2 3 4 5;
+}
