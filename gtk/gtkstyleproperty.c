@@ -1729,6 +1729,31 @@ _gtk_style_property_print_value (const GtkStyleProperty *property,
   func (value, string);
 }
 
+void
+_gtk_style_property_default_value (const GtkStyleProperty *property,
+                                   GtkStyleProperties     *properties,
+                                   GValue                 *value)
+{
+  if (property->default_value_func)
+    property->default_value_func (properties, value);
+  else if (property->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
+    g_value_set_object (value, gtk_theming_engine_load (NULL));
+  else if (property->pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
+    g_value_take_boxed (value, pango_font_description_from_string ("Sans 10"));
+  else if (property->pspec->value_type == GDK_TYPE_RGBA)
+    {
+      GdkRGBA color;
+      gdk_rgba_parse (&color, "pink");
+      g_value_set_boxed (value, &color);
+    }
+  else if (property->pspec->value_type == GTK_TYPE_BORDER)
+    {
+      g_value_take_boxed (value, gtk_border_new ());
+    }
+  else
+    g_param_value_set_default (property->pspec, value);
+}
+
 gboolean
 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property)
 {
@@ -1833,6 +1858,7 @@ gtk_style_property_init (void)
                                           unpack_margin,
                                           pack_margin,
                                           NULL,
+                                          NULL,
                                           NULL);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("padding-top",
@@ -1861,6 +1887,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           unpack_padding,
                                           pack_padding,
+                                          NULL,
                                           NULL,
                                           NULL);
   gtk_style_properties_register_property (NULL,
@@ -1891,6 +1918,7 @@ gtk_style_property_init (void)
                                           unpack_border_width,
                                           pack_border_width,
                                           NULL,
+                                          NULL,
                                           NULL);
 
   _gtk_style_property_register           (g_param_spec_boxed ("border-top-left-radius",
@@ -1901,7 +1929,8 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print);
+                                          border_corner_radius_value_print,
+                                          NULL);
   _gtk_style_property_register           (g_param_spec_boxed ("border-top-right-radius",
                                                               "Border top right radius",
                                                               "Border radius of top right corner, in pixels",
@@ -1910,7 +1939,8 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print);
+                                          border_corner_radius_value_print,
+                                          NULL);
   _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-right-radius",
                                                               "Border bottom right radius",
                                                               "Border radius of bottom right corner, in pixels",
@@ -1919,7 +1949,8 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print);
+                                          border_corner_radius_value_print,
+                                          NULL);
   _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-left-radius",
                                                               "Border bottom left radius",
                                                               "Border radius of bottom left corner, in pixels",
@@ -1928,7 +1959,8 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print);
+                                          border_corner_radius_value_print,
+                                          NULL);
   _gtk_style_property_register           (g_param_spec_int ("border-radius",
                                                             "Border radius",
                                                             "Border radius, in pixels",
@@ -1937,7 +1969,8 @@ gtk_style_property_init (void)
                                           unpack_border_radius,
                                           pack_border_radius,
                                           border_radius_value_parse,
-                                          border_radius_value_print);
+                                          border_radius_value_print,
+                                          NULL);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_enum ("border-style",
@@ -1980,7 +2013,8 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           bindings_value_parse,
-                                          bindings_value_print);
+                                          bindings_value_print,
+                                          NULL);
 }
 
 const GtkStyleProperty *
@@ -1992,12 +2026,13 @@ _gtk_style_property_lookup (const char *name)
 }
 
 void
-_gtk_style_property_register (GParamSpec             *pspec,
-                              GtkStylePropertyParser  property_parse_func,
-                              GtkStyleUnpackFunc      unpack_func,
-                              GtkStylePackFunc        pack_func,
-                              GtkStyleParseFunc       parse_func,
-                              GtkStylePrintFunc       print_func)
+_gtk_style_property_register (GParamSpec               *pspec,
+                              GtkStylePropertyParser    property_parse_func,
+                              GtkStyleUnpackFunc        unpack_func,
+                              GtkStylePackFunc          pack_func,
+                              GtkStyleParseFunc         parse_func,
+                              GtkStylePrintFunc         print_func,
+                              GtkStyleDefaultValueFunc  default_value_func)
 {
   const GtkStyleProperty *existing;
   GtkStyleProperty *node;
@@ -2021,6 +2056,7 @@ _gtk_style_property_register (GParamSpec             *pspec,
   node->unpack_func = unpack_func;
   node->parse_func = parse_func;
   node->print_func = print_func;
+  node->default_value_func = default_value_func;
 
   g_hash_table_insert (properties, pspec->name, node);
 }

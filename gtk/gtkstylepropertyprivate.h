@@ -36,16 +36,19 @@ typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser        
                                                             GValue                 *value);
 typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
                                                             GString                *string);
+typedef void             (* GtkStyleDefaultValueFunc)      (GtkStyleProperties     *props,
+                                                            GValue                 *value);
 
 
 struct _GtkStyleProperty
 {
-  GParamSpec             *pspec;
-  GtkStylePropertyParser  property_parse_func;
-  GtkStyleUnpackFunc      unpack_func;
-  GtkStylePackFunc        pack_func;
-  GtkStyleParseFunc       parse_func;
-  GtkStylePrintFunc       print_func;
+  GParamSpec               *pspec;
+  GtkStylePropertyParser    property_parse_func;
+  GtkStyleUnpackFunc        unpack_func;
+  GtkStylePackFunc          pack_func;
+  GtkStyleParseFunc         parse_func;
+  GtkStylePrintFunc         print_func;
+  GtkStyleDefaultValueFunc  default_value_func;
 };
 
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
@@ -55,7 +58,12 @@ void                     _gtk_style_property_register      (GParamSpec          
                                                             GtkStyleUnpackFunc      unpack_func,
                                                             GtkStylePackFunc        pack_func,
                                                             GtkStyleParseFunc       parse_func,
-                                                            GtkStylePrintFunc       print_func);
+                                                            GtkStylePrintFunc       print_func,
+                                                            GtkStyleDefaultValueFunc default_value_func);
+
+void                     _gtk_style_property_default_value (const GtkStyleProperty *property,
+                                                            GtkStyleProperties     *properties,
+                                                            GValue                 *value);
 
 gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
 GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,

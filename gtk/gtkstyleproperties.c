@@ -316,6 +316,7 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                 NULL,
                                 NULL,
                                 NULL,
+                                NULL,
                                 NULL);
 }
 
@@ -794,28 +795,6 @@ style_properties_resolve_type (GtkStyleProperties     *props,
   return TRUE;
 }
 
-static void
-lookup_default_value (const GtkStyleProperty *node,
-                      GValue                 *value)
-{
-  if (node->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
-    g_value_set_object (value, gtk_theming_engine_load (NULL));
-  else if (node->pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
-    g_value_take_boxed (value, pango_font_description_from_string ("Sans 10"));
-  else if (node->pspec->value_type == GDK_TYPE_RGBA)
-    {
-      GdkRGBA color;
-      gdk_rgba_parse (&color, "pink");
-      g_value_set_boxed (value, &color);
-    }
-  else if (node->pspec->value_type == GTK_TYPE_BORDER)
-    {
-      g_value_take_boxed (value, gtk_border_new ());
-    }
-  else
-    g_param_value_set_default (node->pspec, value);
-}
-
 /* NB: Will return NULL for shorthands */
 const GValue *
 _gtk_style_properties_peek_property (GtkStyleProperties      *props,
@@ -895,7 +874,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
   else if (_gtk_style_property_is_shorthand (node))
     _gtk_style_property_pack (node, props, state, value);
   else
-    lookup_default_value (node, value);
+    _gtk_style_property_default_value (node, props, value);
 
   return TRUE;
 }
@@ -949,7 +928,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
           GValue default_value = { 0 };
 
           g_value_init (&default_value, node->pspec->value_type);
-          lookup_default_value (node, &default_value);
+          _gtk_style_property_default_value (node, props, &default_value);
           G_VALUE_LCOPY (&default_value, args, 0, &error);
           g_value_unset (&default_value);
         }
