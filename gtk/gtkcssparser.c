@@ -386,7 +386,10 @@ _gtk_css_parser_read_string (GtkCssParser *parser)
   quote = *parser->data;
   
   if (quote != '"' && quote != '\'')
-    return NULL;
+    {
+      _gtk_css_parser_error (parser, "Expected a string.");
+      return NULL;
+    }
   
   parser->data++;
   str = g_string_new (NULL);
