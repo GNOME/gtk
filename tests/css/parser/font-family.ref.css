@@ -1,0 +1,27 @@
+a {
+  font-family: none;
+}
+
+b {
+  font-family: "Sans Serif";
+}
+
+c {
+  font-family: "A Font with a lot of text, spaces and special characters™";
+}
+
+d {
+  font-family: "A Font with a lot of text, spaces and special characters™";
+}
+
+e {
+  font-family: "A", "Lot", "Of", "Fonts";
+}
+
+f {
+  font-family: "A", "Lot", "Of", "Fonts";
+}
+
+g {
+  font-family: "A Lot", "Of", "Fonts";
+}

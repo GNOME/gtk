@@ -1,0 +1,65 @@
+a {
+  font-family: none;
+}
+
+b {
+  font-family: Sans Serif;
+}
+
+c {
+  font-family: A Font with a lot of text\2C       spaces        and special characters\2122;
+}
+
+d {
+  font-family: "A Font with a lot of text, spaces and special characters™" ;
+}
+
+e {
+  font-family: A, Lot, Of, Fonts;
+}
+
+f {
+  font-family: "A", "Lot", "Of", "Fonts";
+}
+
+g {
+  font-family: "A Lot", Of, "Fonts";
+}
+
+/* errors straight from the CSS 2.1 spec */
+
+cssa {
+  font-family: Red/Black, sans-serif;
+}
+
+cssb {
+  font-family: "Lucida" Grande, sans-serif;
+}
+
+cssc {
+  font-family: Ahem!, sans-serif;
+}
+
+cssd {
+  font-family: test@foo, sans-serif;
+}
+
+csse {
+  font-family: #POUND, sans-serif;
+}
+
+cssf {
+  font-family: Hawaii 5-0, sans-serif;
+}
+
+/* errors */
+
+ea {
+  font-family: ;
+}
+
+eb {
+  font-family: No comma at the end, please, ;
+}
+
+
