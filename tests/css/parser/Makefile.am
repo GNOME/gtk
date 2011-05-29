@@ -57,6 +57,9 @@ EXTRA_DIST += \
 	enum.css \
 	enum.errors \
 	enum.ref.css \
+	font-family.css \
+	font-family.errors \
+	font-family.ref.css \
 	import-cyclic-1.css \
 	import-cyclic-1.errors \
 	import-cyclic-1.ref.css \
