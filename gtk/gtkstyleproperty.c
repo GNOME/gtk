@@ -56,6 +56,53 @@ register_conversion_function (GType             type,
     g_hash_table_insert (print_funcs, GSIZE_TO_POINTER (type), print);
 }
 
+static void
+string_append_double (GString *string,
+                      double   d)
+{
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+  g_ascii_dtostr (buf, sizeof (buf), d);
+  g_string_append (string, buf);
+}
+
+static void
+string_append_string (GString    *str,
+                      const char *string)
+{
+  gsize len;
+
+  g_string_append_c (str, '"');
+
+  do {
+    len = strcspn (string, "\"\n\r\f");
+    g_string_append (str, string);
+    string += len;
+    switch (*string)
+      {
+      case '\0':
+        break;
+      case '\n':
+        g_string_append (str, "\\A ");
+        break;
+      case '\r':
+        g_string_append (str, "\\D ");
+        break;
+      case '\f':
+        g_string_append (str, "\\C ");
+        break;
+      case '\"':
+        g_string_append (str, "\\\"");
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+      }
+  } while (*string);
+
+  g_string_append_c (str, '"');
+}
+
 /*** IMPLEMENTATIONS ***/
 
 static gboolean 
@@ -314,16 +361,6 @@ double_value_parse (GtkCssParser *parser,
 }
 
 static void
-string_append_double (GString *string,
-                      double   d)
-{
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-  g_ascii_dtostr (buf, sizeof (buf), d);
-  g_string_append (string, buf);
-}
-
-static void
 double_value_print (const GValue *value,
                     GString      *string)
 {
@@ -372,39 +409,7 @@ static void
 string_value_print (const GValue *value,
                     GString      *str)
 {
-  const char *string;
-  gsize len;
-
-  string = g_value_get_string (value);
-  g_string_append_c (str, '"');
-
-  do {
-    len = strcspn (string, "\"\n\r\f");
-    g_string_append (str, string);
-    string += len;
-    switch (*string)
-      {
-      case '\0':
-        break;
-      case '\n':
-        g_string_append (str, "\\A ");
-        break;
-      case '\r':
-        g_string_append (str, "\\D ");
-        break;
-      case '\f':
-        g_string_append (str, "\\C ");
-        break;
-      case '\"':
-        g_string_append (str, "\\\"");
-        break;
-      default:
-        g_assert_not_reached ();
-        break;
-      }
-  } while (*string);
-
-  g_string_append_c (str, '"');
+  string_append_string (str, g_value_get_string (value));
 }
 
 static gboolean 
