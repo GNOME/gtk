@@ -725,6 +725,36 @@
  *         <entry>[transparent|color]{1,4}</entry>
  *       </row>
  *       <row>
+ *         <entry>font-family</entry>
+ *         <entry>@family [, @family]*</entry>
+ *         <entry>#gchararray</entry>
+ *         <entry>font-family: Sans, Arial;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-style</entry>
+ *         <entry>[normal|oblique|italic]</entry>
+ *         <entry>#PANGO_TYPE_STYLE</entry>
+ *         <entry>font-style: italic;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-variant</entry>
+ *         <entry>[normal|small-caps]</entry>
+ *         <entry>#PANGO_TYPE_VARIANT</entry>
+ *         <entry>font-variant: normal;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-weight</entry>
+ *         <entry>[normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900]</entry>
+ *         <entry>#PANGO_TYPE_WEIGHT</entry>
+ *         <entry>font-weight: bold;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-size</entry>
+ *         <entry>Font size in point</entry>
+ *         <entry>#gint</entry>
+ *         <entry>font-size: 13;</entry>
+ *       </row>
+ *       <row>
  *         <entry>font</entry>
  *         <entry>@family [@style] [@size]</entry>
  *         <entry>#PangoFontDescription</entry>

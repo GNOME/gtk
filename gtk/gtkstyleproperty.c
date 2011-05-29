@@ -22,6 +22,7 @@
 #include "gtkstylepropertyprivate.h"
 
 #include <errno.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -224,6 +225,74 @@ symbolic_color_value_print (const GValue *value,
       char *s = gtk_symbolic_color_to_string (symbolic);
       g_string_append (string, s);
       g_free (s);
+    }
+}
+
+static gboolean
+font_family_parse (GtkCssParser *parser,
+                   GFile        *base,
+                   GValue       *value)
+{
+  GPtrArray *names;
+  char *name;
+
+  /* We don't special case generic families. Pango should do
+   * that for us */
+
+  names = g_ptr_array_new ();
+
+  do {
+    name = _gtk_css_parser_try_ident (parser, TRUE);
+    if (name)
+      {
+        GString *string = g_string_new (name);
+        g_free (name);
+        while ((name = _gtk_css_parser_try_ident (parser, TRUE)))
+          {
+            g_string_append_c (string, ' ');
+            g_string_append (string, name);
+            g_free (name);
+          }
+        name = g_string_free (string, FALSE);
+      }
+    else 
+      {
+        name = _gtk_css_parser_read_string (parser);
+        if (name == NULL)
+          {
+            g_ptr_array_free (names, TRUE);
+            return FALSE;
+          }
+      }
+
+    g_ptr_array_add (names, name);
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  /* NULL-terminate array */
+  g_ptr_array_add (names, NULL);
+  g_value_set_boxed (value, g_ptr_array_free (names, FALSE));
+  return TRUE;
+}
+
+static void
+font_family_value_print (const GValue *value,
+                         GString      *string)
+{
+  const char **names = g_value_get_boxed (value);
+
+  if (names == NULL || *names == NULL)
+    {
+      g_string_append (string, "none");
+      return;
+    }
+
+  string_append_string (string, *names);
+  names++;
+  while (*names)
+    {
+      g_string_append (string, ", ");
+      string_append_string (string, *names);
+      names++;
     }
 }
 
@@ -1755,6 +1824,119 @@ pack_border_radius (GValue             *value,
 }
 
 static GParameter *
+unpack_font_description (const GValue *value,
+                         guint        *n_params)
+{
+  GParameter *parameter = g_new0 (GParameter, 5);
+  PangoFontDescription *description;
+  PangoFontMask mask;
+  guint n;
+  
+  /* For backwards compat, we only unpack values that are indeed set.
+   * For strict CSS conformance we need to unpack all of them.
+   * Note that we do set all of them in the parse function, so it
+   * will not have effects when parsing CSS files. It will though
+   * for custom style providers.
+   */
+
+  description = g_value_get_boxed (value);
+  n = 0;
+
+  if (description)
+    mask = pango_font_description_get_set_fields (description);
+  else
+    mask = 0;
+
+  if (mask & PANGO_FONT_MASK_FAMILY)
+    {
+      GPtrArray *strv = g_ptr_array_new ();
+
+      g_ptr_array_add (strv, g_strdup (pango_font_description_get_family (description)));
+      g_ptr_array_add (strv, NULL);
+      parameter[n].name = "font-family";
+      g_value_init (&parameter[n].value, G_TYPE_STRV);
+      g_value_take_boxed (&parameter[n].value,
+                          g_ptr_array_free (strv, FALSE));
+      n++;
+    }
+
+  if (mask & PANGO_FONT_MASK_STYLE)
+    {
+      parameter[n].name = "font-style";
+      g_value_init (&parameter[n].value, PANGO_TYPE_STYLE);
+      g_value_set_enum (&parameter[n].value,
+                        pango_font_description_get_style (description));
+      n++;
+    }
+
+  if (mask & PANGO_FONT_MASK_VARIANT)
+    {
+      parameter[n].name = "font-variant";
+      g_value_init (&parameter[n].value, PANGO_TYPE_VARIANT);
+      g_value_set_enum (&parameter[n].value,
+                        pango_font_description_get_variant (description));
+      n++;
+    }
+
+  if (mask & PANGO_FONT_MASK_WEIGHT)
+    {
+      parameter[n].name = "font-weight";
+      g_value_init (&parameter[n].value, PANGO_TYPE_WEIGHT);
+      g_value_set_enum (&parameter[n].value,
+                        pango_font_description_get_weight (description));
+      n++;
+    }
+
+  if (mask & PANGO_FONT_MASK_SIZE)
+    {
+      parameter[n].name = "font-size";
+      g_value_init (&parameter[n].value, G_TYPE_DOUBLE);
+      g_value_set_double (&parameter[n].value,
+                          (double) pango_font_description_get_size (description) / PANGO_SCALE);
+      n++;
+    }
+
+  *n_params = n;
+
+  return parameter;
+}
+
+static void
+pack_font_description (GValue             *value,
+                       GtkStyleProperties *props,
+                       GtkStateFlags       state)
+{
+  PangoFontDescription *description;
+  char **families;
+  PangoStyle style;
+  PangoVariant variant;
+  PangoWeight weight;
+  double size;
+
+  gtk_style_properties_get (props,
+                            state,
+                            "font-family", &families,
+                            "font-style", &style,
+                            "font-variant", &variant,
+                            "font-weight", &weight,
+                            "font-size", &size,
+                            NULL);
+
+  description = pango_font_description_new ();
+  /* xxx: Can we set all the families here somehow? */
+  if (families)
+    pango_font_description_set_family (description, families[0]);
+  pango_font_description_set_size (description, round (size * PANGO_SCALE));
+  pango_font_description_set_style (description, style);
+  pango_font_description_set_variant (description, variant);
+  pango_font_description_set_weight (description, weight);
+
+  g_free (families);
+
+  g_value_take_boxed (value, description);
+}
+
+static GParameter *
 unpack_border_color (const GValue *value,
                      guint        *n_params)
 {
@@ -2220,14 +2402,73 @@ gtk_style_property_init (void)
                                                               "Background color",
                                                               GDK_TYPE_RGBA, 0));
 
+  _gtk_style_property_register           (g_param_spec_boxed ("font-family",
+                                                              "Font family",
+                                                              "Font family",
+                                                              G_TYPE_STRV, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          font_family_parse,
+                                          font_family_value_print,
+                                          NULL);
+  _gtk_style_property_register           (g_param_spec_enum ("font-style",
+                                                             "Font style",
+                                                             "Font style",
+                                                             PANGO_TYPE_STYLE,
+                                                             PANGO_STYLE_NORMAL, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  _gtk_style_property_register           (g_param_spec_enum ("font-variant",
+                                                             "Font variant",
+                                                             "Font variant",
+                                                             PANGO_TYPE_VARIANT,
+                                                             PANGO_VARIANT_NORMAL, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  /* xxx: need to parse this properly, ie parse the numbers */
+  _gtk_style_property_register           (g_param_spec_enum ("font-weight",
+                                                             "Font weight",
+                                                             "Font weight",
+                                                             PANGO_TYPE_WEIGHT,
+                                                             PANGO_WEIGHT_NORMAL, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  _gtk_style_property_register           (g_param_spec_double ("font-size",
+                                                               "Font size",
+                                                               "Font size",
+                                                               0, G_MAXDOUBLE, 0, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
   _gtk_style_property_register           (g_param_spec_boxed ("font",
                                                               "Font Description",
                                                               "Font Description",
                                                               PANGO_TYPE_FONT_DESCRIPTION, 0),
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
-                                          NULL,
-                                          NULL,
+                                          unpack_font_description,
+                                          pack_font_description,
                                           font_description_value_parse,
                                           font_description_value_print,
                                           NULL);

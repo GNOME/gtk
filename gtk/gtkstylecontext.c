@@ -3562,7 +3562,8 @@ gtk_style_context_get_font (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  const GValue *value;
+  GHashTable *font_cache;
+  PangoFontDescription *description;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
@@ -3570,12 +3571,31 @@ gtk_style_context_get_font (GtkStyleContext *context,
   g_return_val_if_fail (priv->widget_path != NULL, NULL);
 
   data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store, "font", state, NULL);
 
-  if (value)
-    return g_value_get_boxed (value);
+  /* Yuck, fonts are created on-demand but we don't return a ref.
+   * Do bad things to achieve this requirement */
+  font_cache = g_object_get_data (G_OBJECT (data->store), "font-cache-for-get_font");
+  if (font_cache)
+    {
+      description = g_hash_table_lookup (font_cache, GUINT_TO_POINTER (state));
+    }
+  else
+    {
+      font_cache = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) pango_font_description_free);
+      g_object_set_data_full (G_OBJECT (data->store),
+                              "font-cache-for-get_font",
+                              font_cache,
+                              (GDestroyNotify) g_hash_table_unref);
+      description = NULL;
+    }
 
-  return NULL;
+  if (description == NULL)
+    {
+      gtk_style_properties_get (data->store, state, "font", &description, NULL);
+      g_hash_table_insert (font_cache, GUINT_TO_POINTER (state), description);
+    }
+
+  return description;
 }
 
 static void
