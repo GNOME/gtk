@@ -20,13 +20,12 @@ draw_callback (GtkWidget *widget,
                gpointer   data)
 {
   GtkStyleContext *context;
-  GdkRGBA *bg;
+  GdkRGBA rgba;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (context, 0, "background-color", &bg, NULL);
-  gdk_cairo_set_source_rgba (cr, bg);
+  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &rgba);
+  gdk_cairo_set_source_rgba (cr, &rgba);
   cairo_paint (cr);
-  gdk_rgba_free (bg);
 
   return TRUE;
 }

@@ -356,7 +356,7 @@ test_match (void)
   GtkCssProvider *provider;
   GError *error;
   const gchar *data;
-  GdkRGBA *color;
+  GdkRGBA color;
   GdkRGBA expected;
 
   error = NULL;
@@ -383,18 +383,16 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "GtkButton { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "GtkButton { color: #fff }\n"
@@ -402,18 +400,16 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          ".button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "GtkButton { color: #000 }\n"
@@ -421,9 +417,8 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "GtkButton { color: #000 }\n"
@@ -431,9 +426,8 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          ".button { color: #000 }\n"
@@ -441,9 +435,8 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "* .button { color: #000 }\n"
@@ -451,9 +444,8 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "GtkWindow .button { color: #000 }\n"
@@ -461,9 +453,8 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
          "GtkWindow .button { color: #fff }\n"
@@ -471,9 +462,8 @@ test_match (void)
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
-  gtk_style_context_get (context, 0, "color", &color, NULL);
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   g_object_unref (provider);
   g_object_unref (context);
@@ -488,7 +478,7 @@ test_style_property (void)
   GError *error;
   const gchar *data;
   gint x;
-  GdkRGBA *color;
+  GdkRGBA color;
   GdkRGBA expected;
 
   error = NULL;
@@ -524,10 +514,9 @@ test_style_property (void)
 
   gtk_style_context_invalidate (context);
 
-  gtk_style_context_get (context, GTK_STATE_FLAG_PRELIGHT, "color", &color, NULL);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_PRELIGHT, &color);
   gdk_rgba_parse (&expected, "#003");
-  g_assert (gdk_rgba_equal (color, &expected));
-  gdk_rgba_free (color);
+  g_assert (gdk_rgba_equal (&color, &expected));
 
   gtk_style_context_get_style (context, "child-displacement-x", &x, NULL);
 

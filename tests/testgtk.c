@@ -4832,7 +4832,7 @@ cursor_draw (GtkWidget *widget,
 {
   int width, height;
   GtkStyleContext *context;
-  GdkRGBA *bg;
+  GdkRGBA bg;
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -4846,9 +4846,8 @@ cursor_draw (GtkWidget *widget,
   cairo_fill (cr);
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (context, 0, "background-color", &bg, NULL);
-  gdk_cairo_set_source_rgba (cr, bg);
-  gdk_rgba_free (bg);
+  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+  gdk_cairo_set_source_rgba (cr, &bg);
   cairo_rectangle (cr, width / 3, height / 3, width / 3, height / 3);
   cairo_fill (cr);
 

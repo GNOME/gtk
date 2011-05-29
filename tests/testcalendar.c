@@ -477,10 +477,9 @@ create_calendar(void)
   size = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   context = gtk_widget_get_style_context (calendar);
-  gtk_style_context_get (context, 0, "font", &font_desc, NULL);
+  font_desc = gtk_style_context_get_font (context, GTK_STATE_FLAG_NORMAL);
   font = pango_font_description_to_string (font_desc);
   button = gtk_font_button_new_with_font (font);
-  pango_font_description_free (font_desc);
   g_free (font);
 
   g_signal_connect (button, "font-set",
