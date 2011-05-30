@@ -1092,6 +1092,7 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
           gtk_css_ruleset_add (ruleset, child, value);
         }
       g_free (parameters);
+      property_value_free (value);
       return;
     }
 
