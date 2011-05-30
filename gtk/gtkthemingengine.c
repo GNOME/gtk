@@ -1392,120 +1392,77 @@ _cairo_round_rectangle_sides (cairo_t                  *cr,
                               gdouble                   y,
                               gdouble                   width,
                               gdouble                   height,
-                              guint                     sides,
-                              GtkJunctionSides          junction)
+                              guint                     sides)
 {
+  cairo_new_sub_path (cr);
+
   if (sides & SIDE_RIGHT)
     {
-      if (junction & GTK_JUNCTION_CORNER_TOPRIGHT)
-        cairo_move_to (cr, x + width, y);
-      else
-        {
-          cairo_new_sub_path (cr);
-          _cairo_ellipsis (cr, 
-                           x + width - border_radius->top_right.horizontal,
-                           y + border_radius->top_right.vertical,
-                           border_radius->top_right.horizontal,
-                           border_radius->top_right.vertical,
-                           - G_PI / 4, 0);
-        }
-
-      if ((junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT))
-        cairo_line_to (cr, x + width, y + height);
-      else
-        _cairo_ellipsis (cr,
-                         x + width - border_radius->bottom_right.horizontal,
-                         y + height - border_radius->bottom_right.vertical,
-                         border_radius->bottom_right.horizontal,
-                         border_radius->bottom_right.vertical,
-                         0, G_PI / 4);
+      _cairo_ellipsis (cr, 
+                       x + width - border_radius->top_right.horizontal,
+                       y + border_radius->top_right.vertical,
+                       border_radius->top_right.horizontal,
+                       border_radius->top_right.vertical,
+                       - G_PI / 4, 0);
+      _cairo_ellipsis (cr,
+                       x + width - border_radius->bottom_right.horizontal,
+                       y + height - border_radius->bottom_right.vertical,
+                       border_radius->bottom_right.horizontal,
+                       border_radius->bottom_right.vertical,
+                       0, G_PI / 4);
     }
 
   if (sides & SIDE_BOTTOM)
     {
-      if (! (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT))
-        {
-          if ((sides & SIDE_RIGHT) == 0)
-            cairo_new_sub_path (cr);
-
-          _cairo_ellipsis (cr,
-                           x + width - border_radius->bottom_right.horizontal,
-                           y + height - border_radius->bottom_right.vertical,
-                           border_radius->bottom_right.horizontal,
-                           border_radius->bottom_right.vertical,
-                           G_PI / 4, G_PI / 2);
-        }
-      else if ((sides & SIDE_RIGHT) == 0)
-        cairo_move_to (cr, x + width, y + height);
-
-      if ((junction & GTK_JUNCTION_CORNER_BOTTOMLEFT))
-        cairo_line_to (cr, x, y + height);
-      else
-        _cairo_ellipsis (cr,
-                         x + border_radius->bottom_left.horizontal,
-                         y + height - border_radius->bottom_left.vertical,
-                         border_radius->bottom_left.horizontal,
-                         border_radius->bottom_left.vertical,
-                         G_PI / 2, 3 * (G_PI / 4));
+      _cairo_ellipsis (cr,
+                       x + width - border_radius->bottom_right.horizontal,
+                       y + height - border_radius->bottom_right.vertical,
+                       border_radius->bottom_right.horizontal,
+                       border_radius->bottom_right.vertical,
+                       G_PI / 4, G_PI / 2);
+      _cairo_ellipsis (cr,
+                       x + border_radius->bottom_left.horizontal,
+                       y + height - border_radius->bottom_left.vertical,
+                       border_radius->bottom_left.horizontal,
+                       border_radius->bottom_left.vertical,
+                       G_PI / 2, 3 * (G_PI / 4));
     }
   else
     cairo_move_to (cr, x, y + height);
 
   if (sides & SIDE_LEFT)
     {
-      if (! (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT))
-        {
-          if ((sides & SIDE_BOTTOM) == 0)
-            cairo_new_sub_path (cr);
-
-          _cairo_ellipsis (cr,
-                           x + border_radius->bottom_left.horizontal,
-                           y + height - border_radius->bottom_left.vertical,
-                           border_radius->bottom_left.horizontal,
-                           border_radius->bottom_left.vertical,
-                           3 * (G_PI / 4), G_PI);
-        }
-      else if ((sides & SIDE_BOTTOM) == 0)
-        cairo_move_to (cr, x, y + height);
-
-      if ((junction & GTK_JUNCTION_CORNER_TOPLEFT))
-        cairo_line_to (cr, x, y);
-      else
-        _cairo_ellipsis (cr,
-                         x + border_radius->top_left.horizontal,
-                         y + border_radius->top_left.vertical,
-                         border_radius->top_left.horizontal,
-                         border_radius->top_left.vertical,
-                         G_PI, G_PI + G_PI / 4);
+      _cairo_ellipsis (cr,
+                       x + border_radius->bottom_left.horizontal,
+                       y + height - border_radius->bottom_left.vertical,
+                       border_radius->bottom_left.horizontal,
+                       border_radius->bottom_left.vertical,
+                       3 * (G_PI / 4), G_PI);
+      _cairo_ellipsis (cr,
+                       x + border_radius->top_left.horizontal,
+                       y + border_radius->top_left.vertical,
+                       border_radius->top_left.horizontal,
+                       border_radius->top_left.vertical,
+                       G_PI, G_PI + G_PI / 4);
     }
+  else
+    cairo_move_to (cr, x, y);
 
   if (sides & SIDE_TOP)
     {
-      if (! (junction & GTK_JUNCTION_CORNER_TOPLEFT))
-        {
-          if ((sides & SIDE_LEFT) == 0)
-            cairo_new_sub_path (cr);
-
-          _cairo_ellipsis (cr,
-                           x + border_radius->top_left.horizontal,
-                           y + border_radius->top_left.vertical,
-                           border_radius->top_left.horizontal,
-                           border_radius->top_left.vertical,
-                           5 * (G_PI / 4), 3 * (G_PI / 2));
-        }
-      else if ((sides & SIDE_LEFT) == 0)
-        cairo_move_to (cr, x, y);
-
-      if ((junction & GTK_JUNCTION_CORNER_TOPRIGHT))
-        cairo_line_to (cr, x + width, y);
-      else
-        _cairo_ellipsis (cr,
-                         x + width - border_radius->top_right.horizontal,
-                         y + border_radius->top_right.vertical,
-                         border_radius->top_right.horizontal,
-                         border_radius->top_right.vertical,
-                         3 * (G_PI / 2), - G_PI / 4);
-  }
+      _cairo_ellipsis (cr,
+                       x + border_radius->top_left.horizontal,
+                       y + border_radius->top_left.vertical,
+                       border_radius->top_left.horizontal,
+                       border_radius->top_left.vertical,
+                       5 * (G_PI / 4), 3 * (G_PI / 2));
+      _cairo_ellipsis (cr,
+                       x + width - border_radius->top_right.horizontal,
+                       y + border_radius->top_right.vertical,
+                       border_radius->top_right.horizontal,
+                       border_radius->top_right.vertical,
+                       3 * (G_PI / 2), - G_PI / 4);
+    }
 }
 
 static void
@@ -1515,8 +1472,7 @@ _cairo_uneven_frame (cairo_t                  *cr,
                      gdouble                   y,
                      gdouble                   width,
                      gdouble                   height,
-                     GtkBorder                *border,
-                     GtkJunctionSides          junction)
+                     GtkBorder                *border)
 {
   cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
   cairo_set_line_width (cr, 1);
@@ -1524,14 +1480,14 @@ _cairo_uneven_frame (cairo_t                  *cr,
   _cairo_round_rectangle_sides (cr, border_radius,
                                 x, y,
                                 width, height,
-                                SIDE_ALL, junction);
+                                SIDE_ALL);
 
   _cairo_round_rectangle_sides (cr, border_radius,
                                 x + border->left,
                                 y + border->top,
                                 width - border->left - border->right,
                                 height - border->top - border->bottom,
-                                SIDE_ALL, junction);
+                                SIDE_ALL);
 }
 
 /* Set the appropriate matrix for
@@ -1745,7 +1701,7 @@ render_background_internal (GtkThemingEngine *engine,
                */
               _cairo_round_rectangle_sides (cr, &border_radius,
                                             0, 0, width, height,
-                                            SIDE_ALL, junction);
+                                            SIDE_ALL);
 
               style_pattern_set_matrix (other_pattern, mat_w, mat_h);
               cairo_set_source (cr, other_pattern);
@@ -1830,7 +1786,7 @@ render_background_internal (GtkThemingEngine *engine,
 
   _cairo_round_rectangle_sides (cr, &border_radius,
                                 0, 0, width, height,
-                                SIDE_ALL, junction);
+                                SIDE_ALL);
   if (pattern)
     {
       style_pattern_set_matrix (pattern, mat_w, mat_h);
@@ -1861,7 +1817,7 @@ render_background_internal (GtkThemingEngine *engine,
       cairo_save (cr);
       _cairo_round_rectangle_sides (cr, &border_radius,
                                     0, 0, width, height,
-                                    SIDE_ALL, junction);
+                                    SIDE_ALL);
       cairo_clip (cr);
 
       cairo_paint_with_alpha (cr, alpha);
@@ -1918,6 +1874,20 @@ _cairo_corner_triangle (cairo_t *cr,
 }
 
 static void
+gtk_themeing_engine_apply_junction_to_radius (GtkCssBorderRadius *border_radius,
+                                              GtkJunctionSides    junction)
+{
+  if (junction & GTK_JUNCTION_CORNER_TOPLEFT)
+    border_radius->top_left.horizontal = border_radius->top_left.vertical = 0;
+  if (junction & GTK_JUNCTION_CORNER_TOPRIGHT)
+    border_radius->top_right.horizontal = border_radius->top_right.vertical = 0;
+  if (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT)
+    border_radius->bottom_right.horizontal = border_radius->bottom_right.vertical = 0;
+  if (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT)
+    border_radius->bottom_left.horizontal = border_radius->bottom_left.vertical = 0;
+}
+
+static void
 render_frame_internal (GtkThemingEngine *engine,
                        cairo_t          *cr,
                        gdouble           x,
@@ -1967,6 +1937,8 @@ render_frame_internal (GtkThemingEngine *engine,
   if (bottom_left_radius)
     border_radius.bottom_left = *bottom_left_radius;
   g_free (bottom_left_radius);
+
+  gtk_themeing_engine_apply_junction_to_radius (&border_radius, junction);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
   border_width = MIN (MIN (border.top, border.bottom),
@@ -2029,8 +2001,7 @@ render_frame_internal (GtkThemingEngine *engine,
 
           _cairo_round_rectangle_sides (cr, &border_radius,
                                         x, y, width, height,
-                                        SIDE_ALL & ~(hidden_side),
-                                        junction);
+                                        SIDE_ALL & ~(hidden_side));
           cairo_stroke (cr);
         }
       else
@@ -2038,7 +2009,7 @@ render_frame_internal (GtkThemingEngine *engine,
           cairo_save (cr);
           _cairo_uneven_frame (cr, &border_radius,
                                x, y, width, height,
-                               &border, junction);
+                               &border);
           cairo_fill (cr);
           cairo_restore (cr);
         }
@@ -2075,8 +2046,7 @@ render_frame_internal (GtkThemingEngine *engine,
           _cairo_round_rectangle_sides (cr, &border_radius,
                                         x + d1, y + d1,
                                         width - d2, height - d2,
-                                        (SIDE_BOTTOM | SIDE_RIGHT) & ~(hidden_side),
-                                        junction);
+                                        (SIDE_BOTTOM | SIDE_RIGHT) & ~(hidden_side));
           cairo_stroke (cr);
 
           if (border_style == GTK_BORDER_STYLE_INSET)
@@ -2087,8 +2057,7 @@ render_frame_internal (GtkThemingEngine *engine,
           _cairo_round_rectangle_sides (cr, &border_radius,
                                         x + d1, y + d1,
                                         width - d2, height - d2,
-                                        (SIDE_TOP | SIDE_LEFT) & ~(hidden_side),
-                                        junction);
+                                        (SIDE_TOP | SIDE_LEFT) & ~(hidden_side));
           cairo_stroke (cr);
         }
       else
@@ -2103,7 +2072,7 @@ render_frame_internal (GtkThemingEngine *engine,
 
           _cairo_uneven_frame (cr, &border_radius,
                                x, y, width, height,
-                               &border, junction);
+                               &border);
           cairo_fill (cr);
 
           /* Top/left */
@@ -2130,7 +2099,7 @@ render_frame_internal (GtkThemingEngine *engine,
 
           _cairo_uneven_frame (cr, &border_radius,
                                x, y, width, height,
-                               &border, junction);
+                               &border);
           cairo_fill (cr);
           cairo_restore (cr);
         }
