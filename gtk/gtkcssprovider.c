@@ -1398,9 +1398,13 @@ gtk_css_provider_finalize (GObject *object)
 {
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
+  guint i;
 
   css_provider = GTK_CSS_PROVIDER (object);
   priv = css_provider->priv;
+
+  for (i = 0; i < priv->rulesets->len; i++)
+    gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
 
   g_array_free (priv->rulesets, TRUE);
 
@@ -2093,18 +2097,23 @@ parse_declaration (GtkCssScanner *scanner,
         {
           GError *error = NULL;
           char *value_str;
-          
+
           value_str = _gtk_css_parser_read_value (scanner->parser);
           if (value_str == NULL)
             {
               _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+              g_slice_free (GValue, val);
               return;
             }
-          
+
           if ((*property->parse_func) (value_str, val, &error))
             gtk_css_ruleset_add (ruleset, property, val);
           else
-            gtk_css_provider_take_error (scanner->provider, scanner, error);
+            {
+              gtk_css_provider_take_error (scanner->provider, scanner, error);
+              g_value_unset (val);
+              g_slice_free (GValue, val);
+            }
 
           g_free (value_str);
         }
@@ -2301,7 +2310,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 {
   GtkCssScanner *scanner;
   gulong error_handler;
-  char *free_data;
+  char *free_data = NULL;
 
   if (error)
     error_handler = g_signal_connect (css_provider,
@@ -2342,8 +2351,6 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
             }
         }
     }
-  else
-    free_data = NULL;
 
   if (data)
     {
@@ -2357,10 +2364,12 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         gtk_css_provider_postprocess (css_provider);
     }
 
+  g_free (free_data);
+
   if (error)
     {
       g_signal_handler_disconnect (css_provider, error_handler);
-      
+
       if (*error)
         {
           /* We clear all contents from the provider for backwards compat reasons */
