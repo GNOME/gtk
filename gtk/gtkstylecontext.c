@@ -505,7 +505,6 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static GQuark provider_list_quark = 0;
-static GdkRGBA fallback_color = { 1.0, 0.75, 0.75, 1.0 };
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -3347,33 +3346,18 @@ gtk_style_context_get_color (GtkStyleContext *context,
                              GtkStateFlags    state,
                              GdkRGBA         *color)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
-  const GValue *value;
   GdkRGBA *c;
 
   g_return_if_fail (color != NULL);
-  *color = fallback_color;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "color", &c,
+                         NULL);
 
-  data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "color",
-                                               state,
-                                               NULL);
-
-  if (value)
-    {
-      c = g_value_get_boxed (value);
-      if (c)
-        *color = *c;
-      else
-        gdk_rgba_parse (color, "pink");
-    }
+  *color = *c;
+  gdk_rgba_free (c);
 }
 
 /**
@@ -3391,33 +3375,18 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
                                         GtkStateFlags    state,
                                         GdkRGBA         *color)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
-  const GValue *value;
   GdkRGBA *c;
 
   g_return_if_fail (color != NULL);
-  *color = fallback_color;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "background-color", &c,
+                         NULL);
 
-  data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "background-color",
-                                               state,
-                                               NULL);
-
-  if (value)
-    {
-      c = g_value_get_boxed (value);
-      if (c)
-        *color = *c;
-      else
-        gdk_rgba_parse (color, "pink");
-    }
+  *color = *c;
+  gdk_rgba_free (c);
 }
 
 /**
@@ -3435,33 +3404,18 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
                                     GtkStateFlags    state,
                                     GdkRGBA         *color)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
-  const GValue *value;
   GdkRGBA *c;
 
   g_return_if_fail (color != NULL);
-  *color = fallback_color;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "border-color", &c,
+                         NULL);
 
-  data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "border-color",
-                                               state,
-                                               NULL);
-
-  if (value)
-    {
-      c = g_value_get_boxed (value);
-      if (c)
-        *color = *c;
-      else
-        gdk_rgba_parse (color, "pink");
-    }
+  *color = *c;
+  gdk_rgba_free (c);
 }
 
 /**
