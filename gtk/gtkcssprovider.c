@@ -1086,9 +1086,9 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
         {
           const GtkStyleProperty *child;
           GValue *value;
-          
+
           child = _gtk_style_property_lookup (parameters[i].name);
-          value = g_memdup (&parameters[i].value, sizeof (GValue));
+          value = g_slice_dup (GValue, &parameters[i].value);
           gtk_css_ruleset_add (ruleset, child, value);
         }
       g_free (parameters);
