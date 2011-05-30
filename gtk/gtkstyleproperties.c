@@ -620,7 +620,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
     {
       const GtkStyleProperty *node;
       gchar *error = NULL;
-      GValue val;
+      GValue val = { 0 };
 
       node = _gtk_style_property_lookup (property_name);
 
