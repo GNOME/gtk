@@ -61,6 +61,8 @@ void                     _gtk_style_property_register      (GParamSpec          
                                                             GtkStylePrintFunc       print_func,
                                                             GtkStyleDefaultValueFunc default_value_func);
 
+gboolean                 _gtk_style_property_is_inherit    (const GtkStyleProperty *property);
+
 void                     _gtk_style_property_default_value (const GtkStyleProperty *property,
                                                             GtkStyleProperties     *properties,
                                                             GValue                 *value);

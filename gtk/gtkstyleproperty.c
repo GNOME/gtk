@@ -1942,6 +1942,14 @@ _gtk_style_property_default_value (const GtkStyleProperty *property,
 }
 
 gboolean
+_gtk_style_property_is_inherit (const GtkStyleProperty *property)
+{
+  g_return_val_if_fail (property != NULL, FALSE);
+
+  return gtk_style_param_get_inherit (property->pspec);
+}
+
+gboolean
 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property)
 {
   g_return_val_if_fail (property != NULL, FALSE);

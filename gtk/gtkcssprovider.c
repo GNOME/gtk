@@ -1126,7 +1126,7 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
       return;
     }
 
-  ruleset->has_inherit |= gtk_style_param_get_inherit (prop->pspec);
+  ruleset->has_inherit |= _gtk_style_property_is_inherit (prop);
   g_hash_table_insert (ruleset->style, (gpointer) prop, value);
 }
 
@@ -1327,7 +1327,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
             {
               GtkStyleProperty *prop = key;
 
-              if (l != length && !gtk_style_param_get_inherit (prop->pspec))
+              if (l != length && !_gtk_style_property_is_inherit (prop))
                 continue;
 
               _gtk_style_properties_set_property_by_property (props,
