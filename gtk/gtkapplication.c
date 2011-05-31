@@ -60,6 +60,14 @@
  * </example>
  */
 
+enum {
+  WINDOW_ADDED,
+  WINDOW_REMOVED,
+  LAST_SIGNAL
+};
+
+static guint gtk_application_signals[LAST_SIGNAL];
+
 G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
 struct _GtkApplicationPrivate
@@ -158,6 +166,36 @@ gtk_application_init (GtkApplication *application)
 }
 
 static void
+gtk_application_window_added (GtkApplication *application,
+                              GtkWindow      *window)
+{
+  GtkApplicationPrivate *priv = application->priv;
+
+  priv->windows = g_list_prepend (priv->windows, window);
+  gtk_window_set_application (window, application);
+  g_application_hold (G_APPLICATION (application));
+
+  g_signal_connect (window, "focus-in-event",
+                    G_CALLBACK (gtk_application_focus_in_event_cb),
+                    application);
+}
+
+static void
+gtk_application_window_removed (GtkApplication *application,
+                                GtkWindow      *window)
+{
+  GtkApplicationPrivate *priv = application->priv;
+
+  g_signal_handlers_disconnect_by_func (window,
+                                        gtk_application_focus_in_event_cb,
+                                        application);
+
+  g_application_release (G_APPLICATION (application));
+  gtk_window_set_application (window, NULL);
+  priv->windows = g_list_remove (priv->windows, window);
+}
+
+static void
 gtk_application_class_init (GtkApplicationClass *class)
 {
   GApplicationClass *application_class = G_APPLICATION_CLASS (class);
@@ -170,7 +208,45 @@ gtk_application_class_init (GtkApplicationClass *class)
   application_class->quit_mainloop = gtk_application_quit_mainloop;
   application_class->run_mainloop = gtk_application_run_mainloop;
 
+  class->window_added = gtk_application_window_added;
+  class->window_removed = gtk_application_window_removed;
+
   g_type_class_add_private (class, sizeof (GtkApplicationPrivate));
+
+  /**
+   * GtkApplication::window-added:
+   * @application: the #GtkApplication which emitted the signal
+   * @window: the newly-added #GtkWindow
+   *
+   * Emitted when a #GtkWindow is added to @application through
+   * gtk_application_add_wi!ndow().
+   *
+   * Since: 3.2
+   */
+  gtk_application_signals[WINDOW_ADDED] =
+    g_signal_new ("window-added", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkApplicationClass, window_added),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
+
+  /**
+   * GtkApplication::window-removed:
+   * @application: the #GtkApplication which emitted the signal
+   * @window: the #GtkWindow that is being removed
+   *
+   * Emitted when a #GtkWindow is removed from @application,
+   * either as a side-effect of being destroyed or explicitly
+   * through gtk_application_remove_window().
+   *
+   * Since: 3.2
+   */
+  gtk_application_signals[WINDOW_REMOVED] =
+    g_signal_new ("window-removed", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkApplicationClass, window_removed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
 }
 
 /**
@@ -224,22 +300,11 @@ void
 gtk_application_add_window (GtkApplication *application,
                             GtkWindow      *window)
 {
-  GtkApplicationPrivate *priv;
-
   g_return_if_fail (GTK_IS_APPLICATION (application));
 
-  priv = application->priv;
-
-  if (!g_list_find (priv->windows, window))
-    {
-      priv->windows = g_list_prepend (priv->windows, window);
-      gtk_window_set_application (window, application);
-      g_application_hold (G_APPLICATION (application));
-
-      g_signal_connect (window, "focus-in-event",
-                        G_CALLBACK (gtk_application_focus_in_event_cb),
-                        application);
-    }
+  if (!g_list_find (application->priv->windows, window))
+    g_signal_emit (application,
+                   gtk_application_signals[WINDOW_ADDED], 0, window);
 }
 
 /**
@@ -262,22 +327,11 @@ void
 gtk_application_remove_window (GtkApplication *application,
                                GtkWindow      *window)
 {
-  GtkApplicationPrivate *priv;
-  GList *link;
-
   g_return_if_fail (GTK_IS_APPLICATION (application));
 
-  priv = application->priv;
-  link = g_list_find (priv->windows, window);
-  if (link)
-    {
-      g_signal_handlers_disconnect_by_func (window,
-                                            gtk_application_focus_in_event_cb,
-                                            application);
-      priv->windows = g_list_remove_link (priv->windows, link);
-      g_application_release (G_APPLICATION (application));
-      gtk_window_set_application (window, NULL);
-    }
+  if (g_list_find (application->priv->windows, window))
+    g_signal_emit (application,
+                   gtk_application_signals[WINDOW_REMOVED], 0, window);
 }
 
 /**
