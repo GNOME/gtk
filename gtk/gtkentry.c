@@ -230,6 +230,8 @@ struct _EntryIconInfo
   gchar        *icon_name;
   GIcon        *gicon;
 
+  gboolean      symbolic;
+
   GtkTargetList *target_list;
   GdkDragAction actions;
 };
@@ -3371,26 +3373,33 @@ draw_icon (GtkWidget            *widget,
   x = (width  - gdk_pixbuf_get_width (pixbuf)) / 2;
   y = (height - gdk_pixbuf_get_height (pixbuf)) / 2;
 
-  icon_source = gtk_icon_source_new ();
-  gtk_icon_source_set_pixbuf (icon_source, pixbuf);
-  gtk_icon_source_set_state_wildcarded (icon_source, TRUE);
+  if (!icon_info->symbolic)
+    {
+      GdkPixbuf *temp_pixbuf;
 
-  state = 0;
-  if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
-    state |= GTK_STATE_FLAG_INSENSITIVE;
-  else if (icon_info->prelight)
-    state |= GTK_STATE_FLAG_PRELIGHT;
+      icon_source = gtk_icon_source_new ();
+      gtk_icon_source_set_pixbuf (icon_source, pixbuf);
+      gtk_icon_source_set_state_wildcarded (icon_source, TRUE);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-  pixbuf = gtk_render_icon_pixbuf (context, icon_source, (GtkIconSize)-1);
-  gtk_style_context_restore (context);
+      state = 0;
+      if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
+        state |= GTK_STATE_FLAG_INSENSITIVE;
+      else if (icon_info->prelight)
+        state |= GTK_STATE_FLAG_PRELIGHT;
 
-  gtk_icon_source_free (icon_source);
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+      temp_pixbuf = gtk_render_icon_pixbuf (context, icon_source, (GtkIconSize)-1);
+      gtk_style_context_restore (context);
 
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
-  cairo_paint (cr);
+      gtk_icon_source_free (icon_source);
+      
+      g_object_unref (pixbuf);
+      pixbuf = temp_pixbuf;
+    }
+
+  gtk_render_icon (context, cr, pixbuf, x, y);
 
   g_object_unref (pixbuf);
 }
@@ -6766,10 +6775,19 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
                                              GTK_ICON_SIZE_MENU,
                                              &width, &height);
 
-          icon_info->pixbuf = gtk_icon_theme_load_icon (icon_theme,
-                                                        icon_info->icon_name,
-                                                        MIN (width, height),
-                                                        0, NULL);
+          info = gtk_icon_theme_lookup_icon (icon_theme,
+                                             icon_info->icon_name,
+                                             MIN (width, height), 
+                                             0);
+          if (info)
+            {
+              icon_info->pixbuf = 
+                gtk_icon_info_load_symbolic_for_context (info,
+                                                         context,
+                                                         &icon_info->symbolic,
+                                                         NULL);
+              gtk_icon_info_free (info);
+            }
 
           if (icon_info->pixbuf == NULL)
             icon_info->pixbuf = create_normal_pixbuf (context,
@@ -6795,7 +6813,11 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
                                                  GTK_ICON_LOOKUP_USE_BUILTIN);
           if (info)
             {
-              icon_info->pixbuf = gtk_icon_info_load_icon (info, NULL);
+              icon_info->pixbuf = 
+                gtk_icon_info_load_symbolic_for_context (info,
+                                                         context,
+                                                         &icon_info->symbolic,
+                                                         NULL);
               gtk_icon_info_free (info);
             }
 
