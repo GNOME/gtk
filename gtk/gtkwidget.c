@@ -9008,22 +9008,18 @@ static void
 update_pango_context (GtkWidget    *widget,
 		      PangoContext *context)
 {
-  PangoFontDescription *font_desc;
+  const PangoFontDescription *font_desc;
   GtkStyleContext *style_context;
 
   style_context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_get (style_context,
-			 gtk_widget_get_state_flags (widget),
-			 "font", &font_desc,
-			 NULL);
+  font_desc = gtk_style_context_get_font (style_context,
+                                          gtk_widget_get_state_flags (widget));
 
   pango_context_set_font_description (context, font_desc);
   pango_context_set_base_dir (context,
 			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
-
-  pango_font_description_free (font_desc);
 }
 
 static void
