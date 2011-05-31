@@ -1988,8 +1988,6 @@ _gtk_style_property_pack (const GtkStyleProperty *property,
 static void
 gtk_style_property_init (void)
 {
-  GParamSpec *pspec;
-
   if (G_LIKELY (properties))
     return;
 
@@ -1999,12 +1997,17 @@ gtk_style_property_init (void)
   /* note that gtk_style_properties_register_property() calls this function,
    * so make sure we're sanely inited to avoid infloops */
 
-  pspec = g_param_spec_boxed ("color",
-                              "Foreground color",
-                              "Foreground color",
-                              GDK_TYPE_RGBA, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  gtk_style_properties_register_property (NULL, pspec);
+  _gtk_style_property_register           (g_param_spec_boxed ("color",
+                                          "Foreground color",
+                                          "Foreground color",
+                                          GDK_TYPE_RGBA, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("background-color",
@@ -2012,54 +2015,70 @@ gtk_style_property_init (void)
                                                               "Background color",
                                                               GDK_TYPE_RGBA, 0));
 
-  pspec = g_param_spec_boxed ("font-family",
-                              "Font family",
-                              "Font family",
-                              G_TYPE_STRV, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  _gtk_style_property_register           (pspec,
-                                          0,
+  _gtk_style_property_register           (g_param_spec_boxed ("font-family",
+                                                              "Font family",
+                                                              "Font family",
+                                                              G_TYPE_STRV, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           NULL,
                                           NULL,
                                           font_family_parse,
                                           font_family_value_print,
                                           NULL);
-  pspec = g_param_spec_enum ("font-style",
-                             "Font style",
-                             "Font style",
-                             PANGO_TYPE_STYLE,
-                             PANGO_STYLE_NORMAL, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  gtk_style_properties_register_property (NULL, pspec);
-  pspec = g_param_spec_enum ("font-variant",
-                             "Font variant",
-                             "Font variant",
-                             PANGO_TYPE_VARIANT,
-                             PANGO_VARIANT_NORMAL, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  gtk_style_properties_register_property (NULL, pspec);
+  _gtk_style_property_register           (g_param_spec_enum ("font-style",
+                                                             "Font style",
+                                                             "Font style",
+                                                             PANGO_TYPE_STYLE,
+                                                             PANGO_STYLE_NORMAL, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  _gtk_style_property_register           (g_param_spec_enum ("font-variant",
+                                                             "Font variant",
+                                                             "Font variant",
+                                                             PANGO_TYPE_VARIANT,
+                                                             PANGO_VARIANT_NORMAL, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
   /* xxx: need to parse this properly, ie parse the numbers */
-  pspec = g_param_spec_enum ("font-weight",
-                             "Font weight",
-                             "Font weight",
-                             PANGO_TYPE_WEIGHT,
-                             PANGO_WEIGHT_NORMAL, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  gtk_style_properties_register_property (NULL, pspec);
-  pspec = g_param_spec_double ("font-size",
-                               "Font size",
-                               "Font size",
-                               0, G_MAXDOUBLE, 0, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  gtk_style_properties_register_property (NULL, pspec);
-  pspec = g_param_spec_boxed ("font",
-                              "Font Description",
-                              "Font Description",
-                              PANGO_TYPE_FONT_DESCRIPTION, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  _gtk_style_property_register           (pspec,
-                                          0,
+  _gtk_style_property_register           (g_param_spec_enum ("font-weight",
+                                                             "Font weight",
+                                                             "Font weight",
+                                                             PANGO_TYPE_WEIGHT,
+                                                             PANGO_WEIGHT_NORMAL, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  _gtk_style_property_register           (g_param_spec_double ("font-size",
+                                                               "Font size",
+                                                               "Font size",
+                                                               0, G_MAXDOUBLE, 0, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  _gtk_style_property_register           (g_param_spec_boxed ("font",
+                                                              "Font Description",
+                                                              "Font Description",
+                                                              PANGO_TYPE_FONT_DESCRIPTION, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           unpack_font_description,
                                           pack_font_description,
@@ -2067,12 +2086,17 @@ gtk_style_property_init (void)
                                           font_description_value_print,
                                           NULL);
 
-  pspec = g_param_spec_boxed ("text-shadow",
-                              "Text shadow",
-                              "Text shadow",
-                              GTK_TYPE_SHADOW, 0);
-  gtk_style_param_set_inherit (pspec, TRUE);
-  gtk_style_properties_register_property (NULL, pspec);
+  _gtk_style_property_register           (g_param_spec_boxed ("text-shadow",
+                                                              "Text shadow",
+                                                              "Text shadow",
+                                                              GTK_TYPE_SHADOW, 0),
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("margin-top",
