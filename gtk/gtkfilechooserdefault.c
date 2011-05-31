@@ -7190,7 +7190,19 @@ file_system_model_set (GtkFileSystemModel *model,
           return FALSE;
         }
       else
-        g_value_set_object (value, NULL);
+	{
+	  if (column == MODEL_COL_ICON_PIXBUF)
+	    {
+	      g_value_take_object (value,
+				   gtk_icon_theme_load_icon (gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl))),
+							     "inode-directory",
+							     impl->icon_size_for_icon_view,
+							     0,
+							     NULL));
+	    }
+	  else
+	    g_value_set_object (value, NULL);
+	}
       break;
     case MODEL_COL_SIZE:
       g_value_set_int64 (value, info ? g_file_info_get_size (info) : 0);
