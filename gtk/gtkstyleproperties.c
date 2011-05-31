@@ -312,6 +312,7 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   _gtk_style_property_register (pspec,
+                                0,
                                 parse_func,
                                 NULL,
                                 NULL,

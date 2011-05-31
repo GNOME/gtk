@@ -1946,7 +1946,8 @@ _gtk_style_property_is_inherit (const GtkStyleProperty *property)
 {
   g_return_val_if_fail (property != NULL, FALSE);
 
-  return gtk_style_param_get_inherit (property->pspec);
+  return property->flags & GTK_STYLE_PROPERTY_INHERIT ||
+    gtk_style_param_get_inherit (property->pspec);
 }
 
 gboolean
@@ -2017,6 +2018,7 @@ gtk_style_property_init (void)
                               G_TYPE_STRV, 0);
   gtk_style_param_set_inherit (pspec, TRUE);
   _gtk_style_property_register           (pspec,
+                                          0,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -2057,6 +2059,7 @@ gtk_style_property_init (void)
                               PANGO_TYPE_FONT_DESCRIPTION, 0);
   gtk_style_param_set_inherit (pspec, TRUE);
   _gtk_style_property_register           (pspec,
+                                          0,
                                           NULL,
                                           unpack_font_description,
                                           pack_font_description,
@@ -2095,6 +2098,7 @@ gtk_style_property_init (void)
                                                               "Margin",
                                                               "Margin",
                                                               GTK_TYPE_BORDER, 0),
+                                          0,
                                           NULL,
                                           unpack_margin,
                                           pack_margin,
@@ -2125,6 +2129,7 @@ gtk_style_property_init (void)
                                                               "Padding",
                                                               "Padding",
                                                               GTK_TYPE_BORDER, 0),
+                                          0,
                                           NULL,
                                           unpack_padding,
                                           pack_padding,
@@ -2155,6 +2160,7 @@ gtk_style_property_init (void)
                                                               "Border width",
                                                               "Border width, in pixels",
                                                               GTK_TYPE_BORDER, 0),
+                                          0,
                                           NULL,
                                           unpack_border_width,
                                           pack_border_width,
@@ -2166,6 +2172,7 @@ gtk_style_property_init (void)
                                                               "Border top left radius",
                                                               "Border radius of top left corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
+                                          0,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -2176,6 +2183,7 @@ gtk_style_property_init (void)
                                                               "Border top right radius",
                                                               "Border radius of top right corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
+                                          0,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -2186,6 +2194,7 @@ gtk_style_property_init (void)
                                                               "Border bottom right radius",
                                                               "Border radius of bottom right corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
+                                          0,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -2196,6 +2205,7 @@ gtk_style_property_init (void)
                                                               "Border bottom left radius",
                                                               "Border radius of bottom left corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
+                                          0,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -2206,6 +2216,7 @@ gtk_style_property_init (void)
                                                             "Border radius",
                                                             "Border radius, in pixels",
                                                             0, G_MAXINT, 0, 0),
+                                          0,
                                           NULL,
                                           unpack_border_radius,
                                           pack_border_radius,
@@ -2250,6 +2261,7 @@ gtk_style_property_init (void)
                                                               "Key bindings",
                                                               "Key bindings",
                                                               G_TYPE_PTR_ARRAY, 0),
+                                          0,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -2268,6 +2280,7 @@ _gtk_style_property_lookup (const char *name)
 
 void
 _gtk_style_property_register (GParamSpec               *pspec,
+                              GtkStylePropertyFlags     flags,
                               GtkStylePropertyParser    property_parse_func,
                               GtkStyleUnpackFunc        unpack_func,
                               GtkStylePackFunc          pack_func,
@@ -2291,6 +2304,7 @@ _gtk_style_property_register (GParamSpec               *pspec,
     }
 
   node = g_slice_new0 (GtkStyleProperty);
+  node->flags = flags;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;
   node->pack_func = pack_func;

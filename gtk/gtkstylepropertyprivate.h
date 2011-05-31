@@ -25,6 +25,9 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkStyleProperty GtkStyleProperty;
+typedef enum {
+  GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
+} GtkStylePropertyFlags;
 
 typedef GParameter *     (* GtkStyleUnpackFunc)            (const GValue           *value,
                                                             guint                  *n_params);
@@ -43,6 +46,8 @@ typedef void             (* GtkStyleDefaultValueFunc)      (GtkStyleProperties  
 struct _GtkStyleProperty
 {
   GParamSpec               *pspec;
+  GtkStylePropertyFlags     flags;
+
   GtkStylePropertyParser    property_parse_func;
   GtkStyleUnpackFunc        unpack_func;
   GtkStylePackFunc          pack_func;
@@ -54,6 +59,7 @@ struct _GtkStyleProperty
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
 
 void                     _gtk_style_property_register      (GParamSpec             *pspec,
+                                                            GtkStylePropertyFlags   flags,
                                                             GtkStylePropertyParser  property_parse_func,
                                                             GtkStyleUnpackFunc      unpack_func,
                                                             GtkStylePackFunc        pack_func,
