@@ -363,7 +363,7 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
 /* GParamSpec functionality */
 
 enum {
-  GTK_STYLE_PROPERTY_INHERIT = 1 << G_PARAM_USER_SHIFT
+  GTK_STYLE_PARAM_INHERIT = 1 << G_PARAM_USER_SHIFT
 };
 
 /**
@@ -387,9 +387,9 @@ gtk_style_param_set_inherit (GParamSpec *pspec,
                              gboolean    inherit)
 {
   if (inherit)
-    pspec->flags |= GTK_STYLE_PROPERTY_INHERIT;
+    pspec->flags |= GTK_STYLE_PARAM_INHERIT;
   else
-    pspec->flags &= ~GTK_STYLE_PROPERTY_INHERIT;
+    pspec->flags &= ~GTK_STYLE_PARAM_INHERIT;
 }
 
 /**
@@ -405,7 +405,7 @@ gtk_style_param_set_inherit (GParamSpec *pspec,
 gboolean
 gtk_style_param_get_inherit (GParamSpec *pspec)
 {
-  return (pspec->flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE;
+  return (pspec->flags & GTK_STYLE_PARAM_INHERIT) ? TRUE : FALSE;
 }
 
 /* GtkStyleProperties methods */
