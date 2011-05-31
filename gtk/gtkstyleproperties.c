@@ -361,54 +361,6 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
   return found;
 }
 
-/* GParamSpec functionality */
-
-enum {
-  GTK_STYLE_PARAM_INHERIT = 1 << G_PARAM_USER_SHIFT
-};
-
-/**
- * gtk_style_param_set_inherit:
- * @pspec: A style param
- * @inherit: whether the @pspec value should be inherited
- *
- * Sets whether a param spec installed with function such as
- * gtk_style_properties_register_property() or
- * gtk_widget_class_install_style_property() should inherit their
- * value from the parent widget if it is not set instead of using
- * the default value of @pspec. See the
- * <ulink url="http://www.w3.org/TR/CSS21/cascade.html#inheritance">
- * CSS specification's description of inheritance</ulink> for a
- * longer description of this concept.
- *
- * By default, param specs do not inherit their value.
- **/
-void
-gtk_style_param_set_inherit (GParamSpec *pspec,
-                             gboolean    inherit)
-{
-  if (inherit)
-    pspec->flags |= GTK_STYLE_PARAM_INHERIT;
-  else
-    pspec->flags &= ~GTK_STYLE_PARAM_INHERIT;
-}
-
-/**
- * gtk_style_param_get_inherit:
- * @pspec: a style param
- *
- * Checks if the value of this param should be inherited from the parent
- * #GtkWidget instead of using the default value when it has not been
- * specified. See gtk_style_param_set_inherit() for more details.
- *
- * Returns: %TRUE if the param should inherit its value
- **/
-gboolean
-gtk_style_param_get_inherit (GParamSpec *pspec)
-{
-  return (pspec->flags & GTK_STYLE_PARAM_INHERIT) ? TRUE : FALSE;
-}
-
 /* GtkStyleProperties methods */
 
 /**

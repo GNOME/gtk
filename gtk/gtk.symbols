@@ -2520,8 +2520,6 @@ gtk_style_has_context
 gtk_style_lookup_color
 gtk_style_lookup_icon_set
 gtk_style_new
-gtk_style_param_get_inherit
-gtk_style_param_set_inherit
 gtk_style_properties_clear
 gtk_style_properties_get
 gtk_style_properties_get_property
