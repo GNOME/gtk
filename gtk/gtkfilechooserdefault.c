@@ -469,6 +469,8 @@ static void     current_view_set_cursor               (GtkFileChooserDefault *im
 static void     current_view_set_select_multiple      (GtkFileChooserDefault *impl,
                                                        gboolean select_multiple);
 
+static GSource *add_idle_while_impl_is_alive (GtkFileChooserDefault *impl, GCallback callback);
+
 
 
 /* Drag and drop interface declarations */
@@ -2238,6 +2240,51 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
 					  NULL);
 }
 
+static gboolean
+start_editing_icon_view_idle_cb (GtkFileChooserDefault *impl)
+{
+  GDK_THREADS_ENTER ();
+
+  g_source_destroy (impl->start_editing_icon_view_idle);
+  impl->start_editing_icon_view_idle = NULL;
+
+  gtk_icon_view_scroll_to_path (GTK_ICON_VIEW (impl->browse_files_icon_view),
+				impl->start_editing_icon_view_path,
+				TRUE,
+				0.5,
+				0.0);
+
+  g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
+  gtk_icon_view_set_cursor (GTK_ICON_VIEW (impl->browse_files_icon_view),
+			    impl->start_editing_icon_view_path,
+			    impl->list_name_renderer,
+			    TRUE);
+
+  gtk_tree_path_free (impl->start_editing_icon_view_path);
+  impl->start_editing_icon_view_path = NULL;
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
+add_idle_to_edit_icon_view (GtkFileChooserDefault *impl, GtkTreePath *path)
+{
+  /* Normally we would run the code in the start_editing_icon_view_idle_cb() synchronously,
+   * but GtkIconView doesn't like to start editing itself immediately after getting an item
+   * added - it wants to run its layout loop first.  So, we add the editable item first, and
+   * only start editing it until an idle handler.
+   */
+
+  g_assert (impl->start_editing_icon_view_idle == NULL);
+  g_assert (impl->start_editing_icon_view_path == NULL);
+
+  impl->start_editing_icon_view_path = path;
+  impl->start_editing_icon_view_idle = add_idle_while_impl_is_alive (impl,
+								     G_CALLBACK (start_editing_icon_view_idle_cb));
+}
+
 /* Callback used when the "New Folder" button is clicked */
 static void
 new_folder_button_clicked (GtkButton             *button,
@@ -2266,25 +2313,15 @@ new_folder_button_clicked (GtkButton             *button,
                                 path,
                                 impl->list_name_column,
                                 TRUE);
+      gtk_tree_path_free (path);
     }
   else if (impl->view_mode == VIEW_MODE_ICON)
     {
-      gtk_icon_view_scroll_to_path (GTK_ICON_VIEW (impl->browse_files_icon_view),
-                                    path,
-                                    TRUE,
-                                    0.5,
-                                    0.0);
-
-      g_object_set (impl->list_name_renderer, "editable", TRUE, NULL);
-      gtk_icon_view_set_cursor (GTK_ICON_VIEW (impl->browse_files_icon_view),
-                                path,
-                                impl->list_name_renderer,
-                                TRUE);
+      add_idle_to_edit_icon_view (impl, path);
     }
   else
     g_assert_not_reached ();
 
-  gtk_tree_path_free (path);
 }
 
 static GSource *

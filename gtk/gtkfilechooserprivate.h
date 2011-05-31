@@ -287,6 +287,9 @@ struct _GtkFileChooserDefault
 
   GSource *focus_entry_idle;
 
+  GSource *start_editing_icon_view_idle;
+  GtkTreePath *start_editing_icon_view_path;
+
   gulong toplevel_set_focus_id;
   GtkWidget *toplevel_last_focus_widget;
 
