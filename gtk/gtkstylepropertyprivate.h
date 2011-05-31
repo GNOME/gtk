@@ -73,6 +73,10 @@ void                     _gtk_style_property_default_value (const GtkStyleProper
                                                             GtkStyleProperties     *properties,
                                                             GValue                 *value);
 
+void                     _gtk_style_property_resolve       (const GtkStyleProperty *property,
+                                                            GtkStyleProperties     *properties,
+                                                            GValue                 *value);
+
 gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
 GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,
                                                             const GValue           *value,

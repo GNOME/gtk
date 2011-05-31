@@ -633,121 +633,6 @@ gtk_style_properties_set (GtkStyleProperties *props,
   va_end (args);
 }
 
-static gboolean
-resolve_color (GtkStyleProperties *props,
-	       GValue             *value)
-{
-  GdkRGBA color;
-
-  /* Resolve symbolic color to GdkRGBA */
-  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &color))
-    return FALSE;
-
-  /* Store it back, this is where GdkRGBA caching happens */
-  g_value_unset (value);
-  g_value_init (value, GDK_TYPE_RGBA);
-  g_value_set_boxed (value, &color);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_color_rgb (GtkStyleProperties *props,
-                   GValue             *value)
-{
-  GdkColor color = { 0 };
-  GdkRGBA rgba;
-
-  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &rgba))
-    return FALSE;
-
-  color.red = rgba.red * 65535. + 0.5;
-  color.green = rgba.green * 65535. + 0.5;
-  color.blue = rgba.blue * 65535. + 0.5;
-
-  g_value_unset (value);
-  g_value_init (value, GDK_TYPE_COLOR);
-  g_value_set_boxed (value, &color);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_gradient (GtkStyleProperties *props,
-                  GValue             *value)
-{
-  cairo_pattern_t *gradient;
-
-  if (!gtk_gradient_resolve (g_value_get_boxed (value), props, &gradient))
-    return FALSE;
-
-  /* Store it back, this is where cairo_pattern_t caching happens */
-  g_value_unset (value);
-  g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
-  g_value_take_boxed (value, gradient);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_shadow (GtkStyleProperties *props,
-                GValue *value)
-{
-  GtkShadow *resolved, *base;
-
-  base = g_value_get_boxed (value);
-
-  if (base == NULL)
-    return TRUE;
-  
-  if (_gtk_shadow_get_resolved (base))
-    return TRUE;
-
-  resolved = _gtk_shadow_resolve (base, props);
-  if (resolved == NULL)
-    return FALSE;
-
-  g_value_take_boxed (value, resolved);
-
-  return TRUE;
-}
-
-static gboolean
-style_properties_resolve_type (GtkStyleProperties     *props,
-                               const GtkStyleProperty *node,
-                               GValue                 *val)
-{
-  if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
-    {
-      if (node->pspec->value_type == GDK_TYPE_RGBA)
-        {
-          if (!resolve_color (props, val))
-            return FALSE;
-        }
-      else if (node->pspec->value_type == GDK_TYPE_COLOR)
-        {
-          if (!resolve_color_rgb (props, val))
-            return FALSE;
-        }
-      else
-        return FALSE;
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
-    {
-      g_return_val_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
-
-      if (!resolve_gradient (props, val))
-        return FALSE;
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
-    {
-      if (!resolve_shadow (props, val))
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
 /* NB: Will return NULL for shorthands */
 const GValue *
 _gtk_style_properties_peek_property (GtkStyleProperties      *props,
@@ -780,10 +665,10 @@ _gtk_style_properties_peek_property (GtkStyleProperties      *props,
     return NULL;
 
   val = property_data_match_state (prop, state);
-
-  if (val &&
-      !style_properties_resolve_type (props, node, val))
+  if (val == NULL)
     return NULL;
+  
+  _gtk_style_property_resolve (node, props, val);
 
   return val;
 }
