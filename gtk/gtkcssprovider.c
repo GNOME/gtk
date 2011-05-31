@@ -527,21 +527,51 @@
  * which is always rendered on top of the shadow layer.
  * </para>
  * </refsect2>
- * <refsect2 id="gtkcssprovider-slices">
+ * <refsect2 id="gtkcssprovider-border-image">
  * <title>Border images</title>
  * <para>
- * Images can be used in 'slices' for the purpose of creating scalable
- * borders.
+ * Images and gradients can also be used in slices for the purpose of creating
+ * scalable borders.
+ * For more information, see the CSS3 documentation for the border-image property,
+ * which can be found <ulink url="http://www.w3.org/TR/css3-background/#border-images">here</ulink>.
  * </para>
  * <inlinegraphic fileref="slices.png" format="PNG"/>
  * <para>
- * The syntax for specifying border images of this kind is:
- * <literallayout>url(@path) @top @right @bottom @left [repeat|stretch]? [repeat|stretch]?</literallayout>
- * The sizes of the 'cut off' portions are specified
- * with the @top, @right, @bottom and @left parameters.
- * The 'middle' sections can be repeated or stretched to create
- * the desired effect, by adding the 'repeat' or 'stretch' options after
- * the dimensions. If two options are specified, the first one affects
+ * The parameters of the slicing process are controlled by
+ * three separate properties. Note that you can use the
+ * <literallayout>border-image</literallayout> shorthand property
+ * to set values for the three properties at the same time.
+ * </para>
+ * <para>
+ * <literallayout>border-image-source: url(@path)
+ * (or border-image-source: -gtk-gradient(...))</literallayout>:
+ * Specifies the source of the border image, and it can either
+ * be an URL or a gradient (see above).
+ * </para>
+ * <para>
+ * <literallayout>border-image-slice: @top @right @bottom @left</literallayout>
+ * The sizes specified by the @top, @right, @bottom and @left parameters
+ * are the offsets, in pixels, from the relevant edge where the image
+ * should be "cut off" to build the slices used for the rendering
+ * of the border.
+ * </para>
+ * <para>
+ * <literallayout>border-image-repeat: [stretch|repeat|round|space] ? 
+ * [stretch|repeat|round|space]</literallayout>
+ * Specifies how the image slices should be rendered in the area
+ * outlined by border-width.
+ * The default (stretch) is to resize the slice to fill in the whole 
+ * allocated area.
+ * If the value of this property is 'repeat', the image slice
+ * will be tiled to fill the area.
+ * If the value of this property is 'round', the image slice will
+ * be tiled to fill the area, and scaled to fit it exactly
+ * a whole number of times.
+ * If the value of this property is 'space', the image slice will
+ * be tiled to fill the area, and if it doesn't fit it exactly a whole
+ * number of times, the extra space is distributed as padding around 
+ * the slices.
+ * If two options are specified, the first one affects
  * the horizontal behaviour and the second one the vertical behaviour.
  * If only one option is specified, it affects both.
  * </para>
