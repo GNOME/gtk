@@ -87,7 +87,7 @@
  *      GtkAccelLabel is automatically set up to display the GtkMenuItem
  *      accelerators. We just need to make sure we use GTK_ACCEL_VISIBLE here. *<!---->/
  *   gtk_widget_add_accelerator (save_item, "activate", accel_group,
- *                               GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+ *                               GDK_KEY_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
  * </programlisting>
  * </example>
  */
