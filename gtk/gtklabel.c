@@ -4763,24 +4763,24 @@ gtk_label_button_press (GtkWidget      *widget,
   if (event->button == 1)
     {
       if (!gtk_widget_has_focus (widget))
-	{
-	  priv->in_click = TRUE;
-	  gtk_widget_grab_focus (widget);
-	  priv->in_click = FALSE;
-	}
+        {
+          priv->in_click = TRUE;
+          gtk_widget_grab_focus (widget);
+          priv->in_click = FALSE;
+        }
 
       if (event->type == GDK_3BUTTON_PRESS)
-	{
-	  gtk_label_select_region_index (label, 0, strlen (priv->text));
-	  return TRUE;
-	}
+        {
+          gtk_label_select_region_index (label, 0, strlen (priv->text));
+          return TRUE;
+        }
 
       if (event->type == GDK_2BUTTON_PRESS)
-	{
+        {
           info->select_words = TRUE;
-	  gtk_label_select_word (label);
-	  return TRUE;
-	}
+          gtk_label_select_word (label);
+          return TRUE;
+        }
 
       get_layout_index (label, event->x, event->y, &index);
 
@@ -4788,38 +4788,49 @@ gtk_label_button_press (GtkWidget      *widget,
       max = MAX (info->selection_anchor, info->selection_end);
 
       if ((info->selection_anchor != info->selection_end) &&
-	  (event->state & GDK_SHIFT_MASK))
-	{
-	  /* extend (same as motion) */
-	  min = MIN (min, index);
-	  max = MAX (max, index);
+          (event->state & GDK_SHIFT_MASK))
+        {
+          if (index > min && index < max)
+            {
+              /* truncate selection, but keep it as big as possible */
+              if (index - min > max - index)
+                max = index;
+              else
+                min = index;
+            }
+          else
+            {
+              /* extend (same as motion) */
+              min = MIN (min, index);
+              max = MAX (max, index);
+            }
 
-	  /* ensure the anchor is opposite index */
-	  if (index == min)
-	    {
-	      gint tmp = min;
-	      min = max;
-	      max = tmp;
-	    }
+          /* ensure the anchor is opposite index */
+          if (index == min)
+            {
+              gint tmp = min;
+              min = max;
+              max = tmp;
+            }
 
-	  gtk_label_select_region_index (label, min, max);
-	}
+          gtk_label_select_region_index (label, min, max);
+        }
       else
-	{
-	  if (event->type == GDK_3BUTTON_PRESS)
-	    gtk_label_select_region_index (label, 0, strlen (priv->text));
-	  else if (event->type == GDK_2BUTTON_PRESS)
-	    gtk_label_select_word (label);
-	  else if (min < max && min <= index && index <= max)
-	    {
-	      info->in_drag = TRUE;
-	      info->drag_start_x = event->x;
-	      info->drag_start_y = event->y;
-	    }
-	  else
-	    /* start a replacement */
-	    gtk_label_select_region_index (label, index, index);
-	}
+        {
+          if (event->type == GDK_3BUTTON_PRESS)
+            gtk_label_select_region_index (label, 0, strlen (priv->text));
+          else if (event->type == GDK_2BUTTON_PRESS)
+            gtk_label_select_word (label);
+          else if (min < max && min <= index && index <= max)
+            {
+              info->in_drag = TRUE;
+              info->drag_start_x = event->x;
+              info->drag_start_y = event->y;
+            }
+          else
+            /* start a replacement */
+            gtk_label_select_region_index (label, index, index);
+        }
 
       return TRUE;
     }
@@ -5964,9 +5975,9 @@ gtk_label_move_backward_word (GtkLabel *label,
 
 static void
 gtk_label_move_cursor (GtkLabel       *label,
-		       GtkMovementStep step,
-		       gint            count,
-		       gboolean        extend_selection)
+                       GtkMovementStep step,
+                       gint            count,
+                       gboolean        extend_selection)
 {
   GtkLabelPrivate *priv = label->priv;
   gint old_pos;
@@ -5984,53 +5995,53 @@ gtk_label_move_cursor (GtkLabel       *label,
        * start/or end of the selection as appropriate
        */
       switch (step)
-	{
-	case GTK_MOVEMENT_VISUAL_POSITIONS:
-	  {
-	    gint end_x, end_y;
-	    gint anchor_x, anchor_y;
-	    gboolean end_is_left;
+        {
+        case GTK_MOVEMENT_VISUAL_POSITIONS:
+          {
+            gint end_x, end_y;
+            gint anchor_x, anchor_y;
+            gboolean end_is_left;
 
-	    get_better_cursor (label, priv->select_info->selection_end, &end_x, &end_y);
-	    get_better_cursor (label, priv->select_info->selection_anchor, &anchor_x, &anchor_y);
+            get_better_cursor (label, priv->select_info->selection_end, &end_x, &end_y);
+            get_better_cursor (label, priv->select_info->selection_anchor, &anchor_x, &anchor_y);
 
-	    end_is_left = (end_y < anchor_y) || (end_y == anchor_y && end_x < anchor_x);
-	    
-	    if (count < 0)
-	      new_pos = end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
-	    else
-	      new_pos = !end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
-	    break;
-	  }
-	case GTK_MOVEMENT_LOGICAL_POSITIONS:
-	case GTK_MOVEMENT_WORDS:
-	  if (count < 0)
-	    new_pos = MIN (priv->select_info->selection_end, priv->select_info->selection_anchor);
-	  else
-	    new_pos = MAX (priv->select_info->selection_end, priv->select_info->selection_anchor);
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
-	case GTK_MOVEMENT_PARAGRAPH_ENDS:
-	case GTK_MOVEMENT_BUFFER_ENDS:
-	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (priv->text);
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINES:
-	case GTK_MOVEMENT_PARAGRAPHS:
-	case GTK_MOVEMENT_PAGES:
-	case GTK_MOVEMENT_HORIZONTAL_PAGES:
-	  break;
-	}
+            end_is_left = (end_y < anchor_y) || (end_y == anchor_y && end_x < anchor_x);
+
+            if (count < 0)
+              new_pos = end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
+            else
+              new_pos = !end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
+            break;
+          }
+        case GTK_MOVEMENT_LOGICAL_POSITIONS:
+        case GTK_MOVEMENT_WORDS:
+          if (count < 0)
+            new_pos = MIN (priv->select_info->selection_end, priv->select_info->selection_anchor);
+          else
+            new_pos = MAX (priv->select_info->selection_end, priv->select_info->selection_anchor);
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+        case GTK_MOVEMENT_PARAGRAPH_ENDS:
+        case GTK_MOVEMENT_BUFFER_ENDS:
+          /* FIXME: Can do better here */
+          new_pos = count < 0 ? 0 : strlen (priv->text);
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINES:
+        case GTK_MOVEMENT_PARAGRAPHS:
+        case GTK_MOVEMENT_PAGES:
+        case GTK_MOVEMENT_HORIZONTAL_PAGES:
+          break;
+        }
     }
   else
     {
       switch (step)
-	{
-	case GTK_MOVEMENT_LOGICAL_POSITIONS:
-	  new_pos = gtk_label_move_logically (label, new_pos, count);
-	  break;
-	case GTK_MOVEMENT_VISUAL_POSITIONS:
-	  new_pos = gtk_label_move_visually (label, new_pos, count);
+        {
+        case GTK_MOVEMENT_LOGICAL_POSITIONS:
+          new_pos = gtk_label_move_logically (label, new_pos, count);
+          break;
+        case GTK_MOVEMENT_VISUAL_POSITIONS:
+          new_pos = gtk_label_move_visually (label, new_pos, count);
           if (new_pos == old_pos)
             {
               if (!extend_selection)
@@ -6052,41 +6063,41 @@ gtk_label_move_cursor (GtkLabel       *label,
                   gtk_widget_error_bell (GTK_WIDGET (label));
                 }
             }
-	  break;
-	case GTK_MOVEMENT_WORDS:
-	  while (count > 0)
-	    {
-	      new_pos = gtk_label_move_forward_word (label, new_pos);
-	      count--;
-	    }
-	  while (count < 0)
-	    {
-	      new_pos = gtk_label_move_backward_word (label, new_pos);
-	      count++;
-	    }
+          break;
+        case GTK_MOVEMENT_WORDS:
+          while (count > 0)
+            {
+              new_pos = gtk_label_move_forward_word (label, new_pos);
+              count--;
+            }
+          while (count < 0)
+            {
+              new_pos = gtk_label_move_backward_word (label, new_pos);
+              count++;
+            }
           if (new_pos == old_pos)
             gtk_widget_error_bell (GTK_WIDGET (label));
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
-	case GTK_MOVEMENT_PARAGRAPH_ENDS:
-	case GTK_MOVEMENT_BUFFER_ENDS:
-	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (priv->text);
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+        case GTK_MOVEMENT_PARAGRAPH_ENDS:
+        case GTK_MOVEMENT_BUFFER_ENDS:
+          /* FIXME: Can do better here */
+          new_pos = count < 0 ? 0 : strlen (priv->text);
           if (new_pos == old_pos)
             gtk_widget_error_bell (GTK_WIDGET (label));
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINES:
-	case GTK_MOVEMENT_PARAGRAPHS:
-	case GTK_MOVEMENT_PAGES:
-	case GTK_MOVEMENT_HORIZONTAL_PAGES:
-	  break;
-	}
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINES:
+        case GTK_MOVEMENT_PARAGRAPHS:
+        case GTK_MOVEMENT_PAGES:
+        case GTK_MOVEMENT_HORIZONTAL_PAGES:
+          break;
+        }
     }
 
   if (extend_selection)
     gtk_label_select_region_index (label,
-				   priv->select_info->selection_anchor,
-				   new_pos);
+                                   priv->select_info->selection_anchor,
+                                   new_pos);
   else
     gtk_label_select_region_index (label, new_pos, new_pos);
 }
