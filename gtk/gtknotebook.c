@@ -2113,8 +2113,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
                   if (tab_height == 0)
                     break;
 
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->width < tab_width)
+                  if (priv->scrollable)
                     tab_height = MAX (tab_height, scroll_arrow_hlength);
 
                   tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_START].height);
@@ -2160,10 +2159,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
                   if (tab_width == 0)
                     break;
 
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->height < tab_height)
-                    tab_width = MAX (tab_width,
-                                     arrow_spacing + 2 * scroll_arrow_vlength);
+                  if (priv->scrollable)
+                    tab_width = MAX (tab_width, arrow_spacing + 2 * scroll_arrow_vlength);
 
                   tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_START].width);
                   tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_END].width);
