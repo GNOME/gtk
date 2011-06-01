@@ -1263,6 +1263,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
   gchar *tmp;
 
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
+  g_return_if_fail (GTK_IS_ENTRY (completion->priv->entry));
 
   if (!completion->priv->filter_model)
     return;
