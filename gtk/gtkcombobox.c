@@ -5602,7 +5602,7 @@ gtk_combo_box_get_active_id (GtkComboBox *combo_box)
   GtkTreeIter iter;
   gint column;
 
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), 0);
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
 
   column = combo_box->priv->id_column;
 
