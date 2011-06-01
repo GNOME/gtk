@@ -2385,7 +2385,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 /**
  * gtk_css_provider_load_from_data:
  * @css_provider: a #GtkCssProvider
- * @data: CSS data loaded in memory
+ * @data: (array length=length) (element-type guint8): CSS data loaded in memory
  * @length: the length of @data in bytes, or -1 for NUL terminated strings
  * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
