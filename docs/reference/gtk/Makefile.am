@@ -371,6 +371,7 @@ HTML_IMAGES = \
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib \
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gio \
 	--extra-dir=$(ATK_PREFIX)/share/gtk-doc/html/atk \
 	--extra-dir=$(PANGO_PREFIX)/share/gtk-doc/html/pango \
 	--extra-dir=$(CAIRO_PREFIX)/share/gtk-doc/html/cairo
