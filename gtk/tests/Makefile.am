@@ -109,6 +109,10 @@ TEST_PROGS			+= cellarea
 cellarea_SOURCES		 = cellarea.c
 cellarea_LDADD			 = $(progs_ldadd)
 
+TEST_PROGS			+= treepath
+treepath_SOURCES		 = treepath.c
+treepath_LDADD			 = $(progs_ldadd)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
