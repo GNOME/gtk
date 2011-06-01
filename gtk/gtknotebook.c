@@ -2160,20 +2160,42 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
 }
 
 static void
+get_preferred_size_for_size (GtkWidget      *widget,
+                             GtkOrientation  orientation,
+                             gint            size,
+                             gint           *minimum,
+                             gint           *natural)
+{
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    if (size < 0)
+      gtk_widget_get_preferred_width (widget, minimum, natural);
+    else
+      gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
+  else
+    if (size < 0)
+      gtk_widget_get_preferred_height (widget, minimum, natural);
+    else
+      gtk_widget_get_preferred_height_for_width (widget, size, minimum, natural);
+}
+
+static void
 gtk_notebook_size_request (GtkWidget      *widget,
-                           GtkRequisition *requisition)
+                           GtkOrientation  orientation,
+                           gint            size,
+                           gint           *minimum,
+                           gint           *natural)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   GList *children;
-  GtkRequisition child_requisition;
+  gint child_minimum, child_natural;
   gboolean switch_page = FALSE;
   gint vis_pages;
   guint border_width;
 
-  requisition->width = 0;
-  requisition->height = 0;
+  *minimum = 0;
+  *natural = 0;
 
   for (children = priv->children, vis_pages = 0; children;
        children = children->next)
@@ -2184,13 +2206,14 @@ gtk_notebook_size_request (GtkWidget      *widget,
       if (gtk_widget_get_visible (page->child))
         {
           vis_pages++;
-          gtk_widget_get_preferred_size (page->child,
-                                         &child_requisition, NULL);
+          get_preferred_size_for_size (page->child,
+                                       orientation,
+                                       size, 
+                                       &child_minimum,
+                                       &child_natural);
 
-          requisition->width = MAX (requisition->width,
-                                           child_requisition.width);
-          requisition->height = MAX (requisition->height,
-                                            child_requisition.height);
+          *minimum = MAX (*minimum, child_minimum);
+          *natural = MAX (*natural, child_natural);
 
           if (priv->menu && page->menu_label)
             {
@@ -2221,16 +2244,48 @@ gtk_notebook_size_request (GtkWidget      *widget,
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_get_padding (context, 0, &notebook_padding);
 
-      requisition->width += notebook_padding.left + notebook_padding.right;
-      requisition->height += notebook_padding.top + notebook_padding.bottom;
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          *minimum += notebook_padding.left + notebook_padding.right;
+          *natural += notebook_padding.left + notebook_padding.right;
+        }
+      else
+        {
+          *minimum += notebook_padding.top + notebook_padding.bottom;
+          *natural += notebook_padding.top + notebook_padding.bottom;
+        }
 
       if (priv->show_tabs)
         {
           GtkRequisition tabs_requisition;
 
           gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
-          requisition->width += tabs_requisition.width;
-          requisition->height += tabs_requisition.height;
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
+                {
+                  *minimum = MAX (*minimum, tabs_requisition.width);
+                  *natural = MAX (*minimum, *natural);
+                }
+              else
+                {
+                  *minimum += tabs_requisition.width;
+                  *natural += tabs_requisition.width;
+                }
+            }
+          else
+            {
+              if (priv->tab_pos == GTK_POS_LEFT || priv->tab_pos == GTK_POS_RIGHT)
+                {
+                  *minimum = MAX (*minimum, tabs_requisition.height);
+                  *natural = MAX (*minimum, *natural);
+                }
+              else
+                {
+                  *minimum += tabs_requisition.height;
+                  *natural += tabs_requisition.height;
+                }
+            }
         }
       else
         {
@@ -2247,8 +2302,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  requisition->width += border_width * 2;
-  requisition->height += border_width * 2;
+  *minimum += border_width * 2;
+  *natural += border_width * 2;
 
   if (switch_page)
     {
@@ -2267,8 +2322,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
         }
       else if (gtk_widget_get_visible (widget))
         {
-          requisition->width  = border_width * 2;
-          requisition->height = border_width * 2;
+          *minimum = border_width * 2;
         }
     }
   if (vis_pages && !priv->cur_page)
@@ -2288,11 +2342,7 @@ gtk_notebook_get_preferred_width (GtkWidget *widget,
                                   gint      *minimum,
                                   gint      *natural)
 {
-  GtkRequisition requisition;
-
-  gtk_notebook_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.width;
+  gtk_notebook_size_request (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum, natural);
 }
 
 static void
@@ -2300,11 +2350,7 @@ gtk_notebook_get_preferred_height (GtkWidget *widget,
                                    gint      *minimum,
                                    gint      *natural)
 {
-  GtkRequisition requisition;
-
-  gtk_notebook_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
+  gtk_notebook_size_request (widget, GTK_ORIENTATION_VERTICAL, -1, minimum, natural);
 }
 
 static void
