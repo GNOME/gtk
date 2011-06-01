@@ -397,7 +397,7 @@ create_calendar(void)
 
   GtkSizeGroup *size;
   GtkStyleContext *context;
-  PangoFontDescription *font_desc;
+  const PangoFontDescription *font_desc;
   gchar *font;
   gint i;
   
