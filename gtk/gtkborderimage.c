@@ -76,147 +76,7 @@ struct _GtkBorderImage {
 
   gint ref_count;
   gboolean resolved;
-
-  cairo_surface_t *surfaces[BORDER_LAST][BORDER_LAST];
 };
-
-static void
-_gtk_border_image_ensure_slices (GtkBorderImage *image,
-                                 gdouble         width,
-                                 gdouble         height)
-{
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  if (image->surfaces[0][0] != NULL)
-    return;
-
-  if (cairo_pattern_get_type (image->source) != CAIRO_PATTERN_TYPE_SURFACE)
-    {
-      cairo_matrix_t matrix;
-
-      cairo_matrix_init_scale (&matrix, 1 / width, 1 / height);
-      cairo_pattern_set_matrix (image->source, &matrix);
-
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-      cr = cairo_create (surface);
-      cairo_set_source (cr, image->source);
-      cairo_paint (cr);
-
-      cairo_destroy (cr);
-    }
-  else
-    {
-      cairo_pattern_get_surface (image->source, &surface);
-      cairo_surface_reference (surface);
-
-      width = cairo_image_surface_get_width (surface);
-      height = cairo_image_surface_get_height (surface);
-    }
-
-  /* Top /left corner */
-  image->surfaces[BORDER_LEFT][BORDER_TOP] =
-    cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
-                                  image->slice.left, image->slice.top);
-  cr = cairo_create (image->surfaces[BORDER_LEFT][BORDER_TOP]);
-  cairo_set_source_surface (cr, surface, 0, 0);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-
-  /* Top/right corner */
-  image->surfaces[BORDER_RIGHT][BORDER_TOP] =
-    cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
-                                  image->slice.right, image->slice.top);
-  cr = cairo_create (image->surfaces[BORDER_RIGHT][BORDER_TOP]);
-  cairo_set_source_surface (cr, surface,
-                            - width + image->slice.right,
-                            0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-
-  /* Bottom/left corner */
-  image->surfaces[BORDER_LEFT][BORDER_BOTTOM] =
-    cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
-                                  image->slice.left, image->slice.bottom);
-  cr = cairo_create (image->surfaces[BORDER_LEFT][BORDER_BOTTOM]);
-  cairo_set_source_surface (cr, surface,
-                            0,
-                            - height + image->slice.bottom);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-
-  /* Bottom/right corner */
-  image->surfaces[BORDER_RIGHT][BORDER_BOTTOM] =
-    cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
-                                  image->slice.right, image->slice.bottom);
-  cr = cairo_create (image->surfaces[BORDER_RIGHT][BORDER_BOTTOM]);
-  cairo_set_source_surface (cr, surface,
-                            - width + image->slice.right,
-                            - height + image->slice.bottom);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-
-  if ((image->slice.left + image->slice.right) < width)
-    {
-      /* Top side */
-      image->surfaces[BORDER_MIDDLE][BORDER_TOP] =
-        cairo_surface_create_similar (surface,
-                                      CAIRO_CONTENT_COLOR_ALPHA,
-                                      width - image->slice.left - image->slice.right,
-                                      image->slice.top);
-      cr = cairo_create (image->surfaces[BORDER_MIDDLE][BORDER_TOP]);
-      cairo_set_source_surface (cr, surface,
-                                - image->slice.left,
-                                0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-
-      /* Bottom side */
-      image->surfaces[BORDER_MIDDLE][BORDER_BOTTOM] =
-        cairo_surface_create_similar (surface,
-                                      CAIRO_CONTENT_COLOR_ALPHA,
-                                      width - image->slice.left - image->slice.right,
-                                      image->slice.bottom);
-      cr = cairo_create (image->surfaces[BORDER_MIDDLE][BORDER_BOTTOM]);
-      cairo_set_source_surface (cr, surface,
-                                - image->slice.left,
-                                - height + image->slice.bottom);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-    }
-
-  if ((image->slice.top + image->slice.bottom) < height)
-    {
-      /* Left side */
-      image->surfaces[BORDER_LEFT][BORDER_MIDDLE] =
-        cairo_surface_create_similar (surface,
-                                      CAIRO_CONTENT_COLOR_ALPHA,
-                                      image->slice.left,
-                                      height - image->slice.top - image->slice.bottom);
-      cr = cairo_create (image->surfaces[BORDER_LEFT][BORDER_MIDDLE]);
-      cairo_set_source_surface (cr, surface,
-                                0,
-                                - image->slice.top);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-
-      /* Right side */
-      image->surfaces[BORDER_RIGHT][BORDER_MIDDLE] =
-        cairo_surface_create_similar (surface,
-                                      CAIRO_CONTENT_COLOR_ALPHA,
-                                      image->slice.right,
-                                      height - image->slice.top - image->slice.bottom);
-      cr = cairo_create (image->surfaces[BORDER_RIGHT][BORDER_MIDDLE]);
-      cairo_set_source_surface (cr, surface,
-                                - width + image->slice.right,
-                                - image->slice.top);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-    }
-
-  cairo_surface_destroy (surface);
-}
 
 GtkBorderImage *
 _gtk_border_image_new (cairo_pattern_t      *pattern,
@@ -382,26 +242,23 @@ _gtk_border_image_pack (GValue             *value,
 
 static void
 render_corner (cairo_t         *cr,
+               gdouble          corner_x,
+               gdouble          corner_y,
+               gdouble          corner_width,
+               gdouble          corner_height,
                cairo_surface_t *surface,
-               gdouble          x,
-               gdouble          y,
-               gdouble          width,
-               gdouble          height)
+               gdouble          image_width,
+               gdouble          image_height)
 {
-  gint image_width, image_height;
-
-  if (width == 0 || height == 0)
+  if (corner_width == 0 || corner_height == 0)
     return;
 
   cairo_save (cr);
 
-  image_width = cairo_image_surface_get_width (surface);
-  image_height = cairo_image_surface_get_height (surface);
-
-  cairo_translate (cr, x, y);
+  cairo_translate (cr, corner_x, corner_y);
   cairo_scale (cr,
-               width / image_width,
-               height / image_height);
+               corner_width / image_width,
+               corner_height / image_height);
   cairo_set_source_surface (cr, surface, 0, 0);
 
   /* use the nearest filter for scaling, to avoid color blending */
@@ -414,18 +271,16 @@ render_corner (cairo_t         *cr,
 
 static cairo_surface_t *
 create_spaced_surface (cairo_surface_t *tile,
+                       gdouble          tile_width,
+                       gdouble          tile_height,
                        gdouble          width,
                        gdouble          height,
                        GtkOrientation   orientation)
 {
   gint n_repeats, idx;
-  gint tile_width, tile_height;
   gdouble avail_space, step;
   cairo_surface_t *retval;
   cairo_t *cr;
-
-  tile_width = cairo_image_surface_get_width (tile);
-  tile_height = cairo_image_surface_get_height (tile);
 
   n_repeats = (orientation == GTK_ORIENTATION_HORIZONTAL) ?
     (gint) floor (width / tile_width) :
@@ -465,16 +320,17 @@ create_spaced_surface (cairo_surface_t *tile,
 
 static void
 render_border (cairo_t              *cr,
-               cairo_surface_t      *surface,
                gdouble               total_width,
                gdouble               total_height,
+               cairo_surface_t      *surface,
+               gdouble               surface_width,
+               gdouble               surface_height,
                guint                 side,
                GtkBorder            *border_area,
                GtkBorderImageRepeat *repeat)
 {
   gdouble target_x, target_y;
   gdouble target_width, target_height;
-  gint original_width, original_height;
   GdkRectangle image_area;
   cairo_pattern_t *pattern;
   gboolean repeat_pattern;
@@ -485,18 +341,15 @@ render_border (cairo_t              *cr,
   cairo_surface_reference (surface);
   repeat_pattern = FALSE;
 
-  original_width = cairo_image_surface_get_width (surface);
-  original_height = cairo_image_surface_get_height (surface);
-
   if (side == SIDE_TOP || side == SIDE_BOTTOM)
     {
       target_height = (side == SIDE_TOP) ? (border_area->top) : (border_area->bottom);
-      target_width = original_width * (target_height / original_height);
+      target_width = surface_width * (target_height / surface_height);
     }
   else
     {
       target_width = (side == SIDE_LEFT) ? (border_area->left) : (border_area->right);
-      target_height = original_height * (target_width / original_width);
+      target_height = surface_height * (target_width / surface_width);
     }
 
   if (side == SIDE_TOP || side == SIDE_BOTTOM)
@@ -526,7 +379,7 @@ render_border (cairo_t              *cr,
 
           repeat_pattern = TRUE;
 
-          n_repeats = (gint) floor (image_area.width / original_width);
+          n_repeats = (gint) floor (image_area.width / surface_width);
           target_width = image_area.width / n_repeats;
         }
       else if (repeat->vrepeat == GTK_REPEAT_STYLE_SPACE)
@@ -534,13 +387,14 @@ render_border (cairo_t              *cr,
           cairo_surface_t *spaced_surface;
 
           spaced_surface = create_spaced_surface (surface,
-                                                  image_area.width, original_height,
+                                                  surface_width, surface_height,
+                                                  image_area.width, surface_height,
                                                   GTK_ORIENTATION_HORIZONTAL);
           cairo_surface_destroy (surface);
           surface = spaced_surface;
 
           /* short-circuit hscaling */
-          target_width = original_width = cairo_image_surface_get_width (surface);
+          target_width = surface_width = cairo_image_surface_get_width (spaced_surface);
         }
     }
   else
@@ -571,7 +425,7 @@ render_border (cairo_t              *cr,
 
           repeat_pattern = TRUE;
 
-          n_repeats = (gint) floor (image_area.height / original_height);
+          n_repeats = (gint) floor (image_area.height / surface_height);
           target_height = image_area.height / n_repeats;
         }
       else if (repeat->hrepeat == GTK_REPEAT_STYLE_SPACE)
@@ -579,13 +433,14 @@ render_border (cairo_t              *cr,
           cairo_surface_t *spaced_surface;
 
           spaced_surface = create_spaced_surface (surface,
-                                                  original_width, image_area.height,
+                                                  surface_width, surface_height,
+                                                  surface_width, image_area.height,
                                                   GTK_ORIENTATION_VERTICAL);
           cairo_surface_destroy (surface);
           surface = spaced_surface;
 
           /* short-circuit vscaling */
-          target_height = original_height = cairo_image_surface_get_height (surface);
+          target_height = surface_height = cairo_image_surface_get_height (spaced_surface);
         }
     }
 
@@ -609,8 +464,8 @@ render_border (cairo_t              *cr,
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
   cairo_scale (cr,
-               target_width / original_width,
-               target_height / original_height);
+               target_width / surface_width,
+               target_height / surface_height);
 
   cairo_set_source (cr, pattern);
   cairo_paint (cr);
@@ -618,6 +473,7 @@ render_border (cairo_t              *cr,
   cairo_restore (cr);
 
   cairo_pattern_destroy (pattern);
+  cairo_surface_destroy (surface);
 }
 
 void
@@ -629,60 +485,177 @@ _gtk_border_image_render (GtkBorderImage   *image,
                           gdouble           width,
                           gdouble           height)
 {
-  cairo_surface_t *surface;
-  
-  _gtk_border_image_ensure_slices (image, width, height);
+  cairo_surface_t *surface, *slice;
+  gdouble slice_width, slice_height, surface_width, surface_height;
+
+  if (cairo_pattern_get_type (image->source) != CAIRO_PATTERN_TYPE_SURFACE)
+    {
+      cairo_matrix_t matrix;
+      cairo_t *surface_cr;
+
+      surface_width = width;
+      surface_height = height;
+
+      cairo_matrix_init_scale (&matrix, 1 / width, 1 / height);
+      cairo_pattern_set_matrix (image->source, &matrix);
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+      surface_cr = cairo_create (surface);
+      cairo_set_source (surface_cr, image->source);
+      cairo_paint (surface_cr);
+
+      cairo_destroy (surface_cr);
+    }
+  else
+    {
+      cairo_pattern_get_surface (image->source, &surface);
+      cairo_surface_reference (surface);
+
+      surface_width = cairo_image_surface_get_width (surface);
+      surface_height = cairo_image_surface_get_height (surface);
+    }
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
 
-  /* Top side */
-  surface = image->surfaces[BORDER_MIDDLE][BORDER_TOP];
-  render_border (cr, surface,
-                 width, height, SIDE_TOP,
-                 border_width, &image->repeat);
+  if ((image->slice.left + image->slice.right) < surface_width)
+    {
+      /* Top side */
+      slice_width = surface_width - image->slice.left - image->slice.right;
+      slice_height = image->slice.top;
+      slice = cairo_surface_create_for_rectangle
+        (surface,
+         image->slice.left, 0,
+         slice_width, slice_height);
 
-  /* Bottom side */
-  surface = image->surfaces[BORDER_MIDDLE][BORDER_BOTTOM];
-  render_border (cr, surface,
-                 width, height, SIDE_BOTTOM,
-                 border_width, &image->repeat);
+      render_border (cr,
+                     width, height,
+                     slice,
+                     slice_width, slice_height,
+                     SIDE_TOP,
+                     border_width,
+                     &image->repeat);
 
-  /* Left side */
-  surface = image->surfaces[BORDER_LEFT][BORDER_MIDDLE];
-  render_border (cr, surface,
-                 width, height, SIDE_LEFT,
-                 border_width, &image->repeat);
+      cairo_surface_destroy (slice);
 
-  /* Right side */
-  surface = image->surfaces[BORDER_RIGHT][BORDER_MIDDLE];
-  render_border (cr, surface,
-                 width, height, SIDE_RIGHT,
-                 border_width, &image->repeat);
+      /* Bottom side */
+      slice_height = image->slice.bottom;
+      slice = cairo_surface_create_for_rectangle
+        (surface,
+         image->slice.left, surface_height - image->slice.bottom,
+         slice_width, slice_height);
 
-  /* Top/Left corner */
-  surface = image->surfaces[BORDER_LEFT][BORDER_TOP];
-  render_corner (cr, surface,
+      render_border (cr,
+                     width, height,
+                     slice,
+                     slice_width, slice_height,
+                     SIDE_BOTTOM,
+                     border_width,
+                     &image->repeat);
+
+      cairo_surface_destroy (slice);
+    }
+
+  if ((image->slice.top + image->slice.bottom) < surface_height)
+    {
+      /* Left side */
+      slice_width = image->slice.left;
+      slice_height = surface_height - image->slice.top - image->slice.bottom;
+      slice = cairo_surface_create_for_rectangle
+        (surface,
+         0, image->slice.top,
+         slice_width, slice_height);
+
+      render_border (cr,
+                     width, height,
+                     slice,
+                     slice_width, slice_height,
+                     SIDE_LEFT,
+                     border_width,
+                     &image->repeat);
+
+      cairo_surface_destroy (slice);
+
+      /* Right side */
+      slice_width = image->slice.right;
+      slice = cairo_surface_create_for_rectangle
+        (surface, 
+         surface_width - image->slice.right, image->slice.top,
+         slice_width, slice_height);
+
+      render_border (cr,
+                     width, height,
+                     slice,
+                     slice_width, slice_height,
+                     SIDE_RIGHT,
+                     border_width,
+                     &image->repeat);
+
+      cairo_surface_destroy (slice);
+    }
+
+  /* Top/left corner */
+  slice_width = image->slice.left;
+  slice_height = image->slice.top;
+  slice = cairo_surface_create_for_rectangle
+    (surface, 
+     0, 0,
+     slice_width, slice_height);
+
+  render_corner (cr,
                  0, 0,
-                 border_width->left, border_width->top);
+                 border_width->left, border_width->top,
+                 slice,
+                 slice_width, slice_height);
+
+  cairo_surface_destroy (slice);
 
   /* Top/right corner */
-  surface = image->surfaces[BORDER_RIGHT][BORDER_TOP];
-  render_corner (cr, surface,
+  slice_width = image->slice.right;
+  slice = cairo_surface_create_for_rectangle
+    (surface,
+     surface_width - image->slice.right, 0,
+     slice_width, slice_height);
+
+  render_corner (cr,
                  width - border_width->right, 0,
-                 border_width->right, border_width->top);
+                 border_width->right, border_width->top,
+                 slice,
+                 slice_width, slice_height);
+
+  cairo_surface_destroy (slice);
 
   /* Bottom/left corner */
-  surface = image->surfaces[BORDER_LEFT][BORDER_BOTTOM];
-  render_corner (cr, surface,
+  slice_width = image->slice.left;
+  slice_height = image->slice.bottom;
+  slice = cairo_surface_create_for_rectangle
+    (surface,
+     0, surface_height - image->slice.bottom,
+     slice_width, slice_height);
+
+  render_corner (cr,
                  0, height - border_width->bottom,
-                 border_width->left, border_width->bottom);
+                 border_width->left, border_width->bottom,
+                 slice,
+                 slice_width, slice_height);
+
+  cairo_surface_destroy (slice);
 
   /* Bottom/right corner */
-  surface = image->surfaces[BORDER_RIGHT][BORDER_BOTTOM];
-  render_corner (cr, surface,
+  slice_width = image->slice.right;
+  slice = cairo_surface_create_for_rectangle
+    (surface,
+     surface_width - image->slice.right,
+     surface_height - image->slice.bottom,
+     slice_width, slice_height);
+
+  render_corner (cr,
                  width - border_width->right, height - border_width->bottom,
-                 border_width->right, border_width->bottom);
+                 border_width->right, border_width->bottom,
+                 slice,
+                 slice_width, slice_height);
+
+  cairo_surface_destroy (slice);
 
   cairo_restore (cr);
 }
