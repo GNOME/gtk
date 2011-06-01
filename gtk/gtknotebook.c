@@ -326,8 +326,6 @@ static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static void gtk_notebook_realize             (GtkWidget        *widget);
 static void gtk_notebook_unrealize           (GtkWidget        *widget);
-static void gtk_notebook_size_request        (GtkWidget        *widget,
-                                              GtkRequisition   *requisition);
 static void gtk_notebook_get_preferred_width (GtkWidget        *widget,
                                               gint             *minimum,
                                               gint             *natural);
