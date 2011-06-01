@@ -304,7 +304,10 @@ static void
 gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 {
   GtkSearchEngineTracker *tracker;
-  gchar	*search_text, *location_uri;
+  gchar *search_text;
+#ifdef FTS_MATCHING
+  gchar *location_uri;
+#endif
   GString *sparql;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (engine);
@@ -322,9 +325,9 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 	  }
 
   search_text = _gtk_query_get_text (tracker->priv->query);
-  location_uri = _gtk_query_get_location (tracker->priv->query);
 
 #ifdef FTS_MATCHING
+  location_uri = _gtk_query_get_location (tracker->priv->query);
   /* Using FTS: */
   sparql = g_string_new ("SELECT nie:url(?urn) "
                          "WHERE {"
