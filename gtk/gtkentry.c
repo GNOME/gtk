@@ -9799,6 +9799,12 @@ gtk_entry_set_completion (GtkEntry           *entry,
           old->priv->completion_timeout = 0;
         }
 
+      if (old->priv->check_completion_idle)
+        {
+          g_source_destroy (old->priv->check_completion_idle);
+          old->priv->check_completion_idle = NULL;
+        }
+
       if (gtk_widget_get_mapped (old->priv->popup_window))
         _gtk_entry_completion_popdown (old);
 
