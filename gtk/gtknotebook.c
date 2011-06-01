@@ -1949,17 +1949,24 @@ _gtk_notebook_get_tab_flags (GtkNotebook     *notebook,
 }
 
 static void
-gtk_notebook_size_request (GtkWidget      *widget,
-                           GtkRequisition *requisition)
+gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
+                                      GtkRequisition *requisition)
 {
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-  GtkNotebookPage *page;
+  GtkNotebookPrivate *priv;
+  GtkWidget *widget;
+  gint tab_width = 0;
+  gint tab_height = 0;
+  gint tab_max = 0;
+  gint padding;
+  gint i;
+  gint action_width = 0;
+  gint action_height = 0;
+  guint vis_pages = 0;
   GList *children;
-  GtkRequisition child_requisition;
+  GtkNotebookPage *page;
   GtkRequisition action_widget_requisition[2] = { { 0 }, { 0 } };
-  gboolean switch_page = FALSE;
-  gint vis_pages;
+  GtkRequisition child_requisition;
+  GtkStyleContext *context;
   gint focus_width;
   gint focus_pad;
   gint tab_overlap;
@@ -1967,8 +1974,10 @@ gtk_notebook_size_request (GtkWidget      *widget,
   gint arrow_spacing;
   gint scroll_arrow_hlength;
   gint scroll_arrow_vlength;
-  guint border_width;
 
+  priv = notebook->priv;
+  widget = GTK_WIDGET (notebook);
+  context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
                         "focus-padding", &focus_pad,
@@ -1978,6 +1987,190 @@ gtk_notebook_size_request (GtkWidget      *widget,
                         "scroll-arrow-hlength", &scroll_arrow_hlength,
                         "scroll-arrow-vlength", &scroll_arrow_vlength,
                         NULL);
+
+  for (children = priv->children; children;
+       children = children->next)
+    {
+      page = children->data;
+
+      if (gtk_widget_get_visible (page->child))
+        {
+          GtkBorder tab_padding;
+
+          vis_pages++;
+
+          if (!gtk_widget_get_visible (page->tab_label))
+            gtk_widget_show (page->tab_label);
+
+          gtk_widget_get_preferred_size (page->tab_label,
+                                         &child_requisition, NULL);
+
+          /* Get border/padding for tab */
+          gtk_style_context_save (context);
+          gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
+                                        _gtk_notebook_get_tab_flags (notebook, page));
+          gtk_style_context_get_padding (context, 0, &tab_padding);
+          gtk_style_context_restore (context);
+
+          page->requisition.width = child_requisition.width +
+            tab_padding.left + tab_padding.right + 2 * (focus_width + focus_pad);
+
+          page->requisition.height = child_requisition.height +
+            tab_padding.top + tab_padding.bottom + 2 * (focus_width + focus_pad);
+
+          switch (priv->tab_pos)
+            {
+            case GTK_POS_TOP:
+            case GTK_POS_BOTTOM:
+              page->requisition.height += 2 * priv->tab_vborder;
+              tab_height = MAX (tab_height, page->requisition.height);
+              tab_max = MAX (tab_max, page->requisition.width);
+              break;
+            case GTK_POS_LEFT:
+            case GTK_POS_RIGHT:
+              page->requisition.width += 2 * priv->tab_hborder;
+              tab_width = MAX (tab_width, page->requisition.width);
+              tab_max = MAX (tab_max, page->requisition.height);
+              break;
+            }
+        }
+      else if (gtk_widget_get_visible (page->tab_label))
+        gtk_widget_hide (page->tab_label);
+    }
+
+  children = priv->children;
+
+  if (vis_pages)
+    {
+      for (i = 0; i < N_ACTION_WIDGETS; i++)
+        {
+          if (priv->action_widget[i])
+            {
+              gtk_widget_get_preferred_size (priv->action_widget[i],
+                                             &action_widget_requisition[i], NULL);
+            }
+        }
+
+      switch (priv->tab_pos)
+        {
+        case GTK_POS_TOP:
+        case GTK_POS_BOTTOM:
+          if (tab_height == 0)
+            break;
+
+          if (priv->scrollable)
+            tab_height = MAX (tab_height, scroll_arrow_hlength);
+
+          tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_START].height);
+          tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_END].height);
+
+          padding = 2 * (tab_curvature + priv->tab_hborder) - tab_overlap;
+          tab_max += padding;
+          while (children)
+            {
+              page = children->data;
+              children = children->next;
+
+              if (!gtk_widget_get_visible (page->child))
+                continue;
+
+              if (priv->homogeneous)
+                page->requisition.width = tab_max;
+              else
+                page->requisition.width += padding;
+
+              tab_width += page->requisition.width;
+              page->requisition.height = tab_height;
+            }
+
+          if (priv->scrollable)
+            tab_width = MIN (tab_width,
+                             tab_max + 2 * (scroll_arrow_hlength + arrow_spacing));
+
+          action_width += action_widget_requisition[ACTION_WIDGET_START].width;
+          action_width += action_widget_requisition[ACTION_WIDGET_END].width;
+          if (priv->homogeneous && !priv->scrollable)
+            requisition->width = vis_pages * tab_max + tab_overlap + action_width;
+          else
+            requisition->width = tab_width + tab_overlap + action_width;
+
+          requisition->height = tab_height;
+          break;
+        case GTK_POS_LEFT:
+        case GTK_POS_RIGHT:
+          if (tab_width == 0)
+            break;
+
+          if (priv->scrollable)
+            tab_width = MAX (tab_width, arrow_spacing + 2 * scroll_arrow_vlength);
+
+          tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_START].width);
+          tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_END].width);
+
+          padding = 2 * (tab_curvature + priv->tab_vborder) - tab_overlap;
+          tab_max += padding;
+
+          while (children)
+            {
+              page = children->data;
+              children = children->next;
+
+              if (!gtk_widget_get_visible (page->child))
+                continue;
+
+              page->requisition.width = tab_width;
+
+              if (priv->homogeneous)
+                page->requisition.height = tab_max;
+              else
+                page->requisition.height += padding;
+
+              tab_height += page->requisition.height;
+            }
+
+          if (priv->scrollable)
+            tab_height = MIN (tab_height,
+                              tab_max + (2 * scroll_arrow_vlength + arrow_spacing));
+          action_height += action_widget_requisition[ACTION_WIDGET_START].height;
+          action_height += action_widget_requisition[ACTION_WIDGET_END].height;
+
+          if (priv->homogeneous && !priv->scrollable)
+            requisition->height = vis_pages * tab_max + tab_overlap + action_height;
+          else
+            requisition->height = tab_height + tab_overlap + action_height;
+
+          if (!priv->homogeneous || priv->scrollable)
+            vis_pages = 1;
+          requisition->height = MAX (requisition->height,
+                                     vis_pages * tab_max + tab_overlap);
+
+          requisition->width = tab_width;
+          break;
+        default:
+          g_assert_not_reached ();
+          requisition->width = 0;
+          requisition->height = 0;
+        }
+    }
+  else
+    {
+      requisition->width = 0;
+      requisition->height = 0;
+    }
+}
+
+static void
+gtk_notebook_size_request (GtkWidget      *widget,
+                           GtkRequisition *requisition)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = notebook->priv;
+  GtkNotebookPage *page;
+  GList *children;
+  GtkRequisition child_requisition;
+  gboolean switch_page = FALSE;
+  gint vis_pages;
+  guint border_width;
 
   requisition->width = 0;
   requisition->height = 0;
@@ -2033,181 +2226,11 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
       if (priv->show_tabs)
         {
-          gint tab_width = 0;
-          gint tab_height = 0;
-          gint tab_max = 0;
-          gint padding;
-          gint i;
-          gint action_width = 0;
-          gint action_height = 0;
+          GtkRequisition tabs_requisition;
 
-          for (children = priv->children; children;
-               children = children->next)
-            {
-              page = children->data;
-
-              if (gtk_widget_get_visible (page->child))
-                {
-                  GtkBorder tab_padding;
-
-                  if (!gtk_widget_get_visible (page->tab_label))
-                    gtk_widget_show (page->tab_label);
-
-                  gtk_widget_get_preferred_size (page->tab_label,
-                                                 &child_requisition, NULL);
-
-                  /* Get border/padding for tab */
-                  gtk_style_context_save (context);
-                  gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
-                                                _gtk_notebook_get_tab_flags (notebook, page));
-                  gtk_style_context_get_padding (context, 0, &tab_padding);
-                  gtk_style_context_restore (context);
-
-                  page->requisition.width = child_requisition.width +
-                    tab_padding.left + tab_padding.right + 2 * (focus_width + focus_pad);
-
-                  page->requisition.height = child_requisition.height +
-                    tab_padding.top + tab_padding.bottom + 2 * (focus_width + focus_pad);
-
-                  switch (priv->tab_pos)
-                    {
-                    case GTK_POS_TOP:
-                    case GTK_POS_BOTTOM:
-                      page->requisition.height += 2 * priv->tab_vborder;
-                      tab_height = MAX (tab_height, page->requisition.height);
-                      tab_max = MAX (tab_max, page->requisition.width);
-                      break;
-                    case GTK_POS_LEFT:
-                    case GTK_POS_RIGHT:
-                      page->requisition.width += 2 * priv->tab_hborder;
-                      tab_width = MAX (tab_width, page->requisition.width);
-                      tab_max = MAX (tab_max, page->requisition.height);
-                      break;
-                    }
-                }
-              else if (gtk_widget_get_visible (page->tab_label))
-                gtk_widget_hide (page->tab_label);
-            }
-
-          children = priv->children;
-
-          if (vis_pages)
-            {
-              for (i = 0; i < N_ACTION_WIDGETS; i++)
-                {
-                  if (priv->action_widget[i])
-                    {
-                      gtk_widget_get_preferred_size (priv->action_widget[i],
-                                                     &action_widget_requisition[i], NULL);
-                      action_widget_requisition[i].width += notebook_padding.left;
-                      action_widget_requisition[i].height += notebook_padding.top;
-                    }
-                }
-
-              switch (priv->tab_pos)
-                {
-                case GTK_POS_TOP:
-                case GTK_POS_BOTTOM:
-                  if (tab_height == 0)
-                    break;
-
-                  if (priv->scrollable)
-                    tab_height = MAX (tab_height, scroll_arrow_hlength);
-
-                  tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_START].height);
-                  tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_END].height);
-
-                  padding = 2 * (tab_curvature + priv->tab_hborder) - tab_overlap;
-                  tab_max += padding;
-                  while (children)
-                    {
-                      page = children->data;
-                      children = children->next;
-
-                      if (!gtk_widget_get_visible (page->child))
-                        continue;
-
-                      if (priv->homogeneous)
-                        page->requisition.width = tab_max;
-                      else
-                        page->requisition.width += padding;
-
-                      tab_width += page->requisition.width;
-                      page->requisition.height = tab_height;
-                    }
-
-                  if (priv->scrollable)
-                    tab_width = MIN (tab_width,
-                                     tab_max + 2 * (scroll_arrow_hlength + arrow_spacing));
-
-                  action_width += action_widget_requisition[ACTION_WIDGET_START].width;
-                  action_width += action_widget_requisition[ACTION_WIDGET_END].width;
-                  if (priv->homogeneous && !priv->scrollable)
-                    requisition->width = MAX (requisition->width,
-                                                     vis_pages * tab_max +
-                                                     tab_overlap + action_width);
-                  else
-                    requisition->width = MAX (requisition->width,
-                                                     tab_width + tab_overlap + action_width);
-
-                  requisition->height += tab_height;
-                  break;
-                case GTK_POS_LEFT:
-                case GTK_POS_RIGHT:
-                  if (tab_width == 0)
-                    break;
-
-                  if (priv->scrollable)
-                    tab_width = MAX (tab_width, arrow_spacing + 2 * scroll_arrow_vlength);
-
-                  tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_START].width);
-                  tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_END].width);
-
-                  padding = 2 * (tab_curvature + priv->tab_vborder) - tab_overlap;
-                  tab_max += padding;
-
-                  while (children)
-                    {
-                      page = children->data;
-                      children = children->next;
-
-                      if (!gtk_widget_get_visible (page->child))
-                        continue;
-
-                      page->requisition.width = tab_width;
-
-                      if (priv->homogeneous)
-                        page->requisition.height = tab_max;
-                      else
-                        page->requisition.height += padding;
-
-                      tab_height += page->requisition.height;
-                    }
-
-                  if (priv->scrollable)
-                    tab_height = MIN (tab_height,
-                                      tab_max + (2 * scroll_arrow_vlength + arrow_spacing));
-                  action_height += action_widget_requisition[ACTION_WIDGET_START].height;
-                  action_height += action_widget_requisition[ACTION_WIDGET_END].height;
-
-                  if (priv->homogeneous && !priv->scrollable)
-                    requisition->height =
-                      MAX (requisition->height,
-                           vis_pages * tab_max + tab_overlap + action_height);
-                  else
-                    requisition->height =
-                      MAX (requisition->height,
-                           tab_height + tab_overlap + action_height);
-
-                  if (!priv->homogeneous || priv->scrollable)
-                    vis_pages = 1;
-                  requisition->height = MAX (requisition->height,
-                                             vis_pages * tab_max + tab_overlap);
-
-                  requisition->width += tab_width;
-                  break;
-                }
-            }
+          gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
+          requisition->width += tabs_requisition.width;
+          requisition->height += tabs_requisition.height;
         }
       else
         {
