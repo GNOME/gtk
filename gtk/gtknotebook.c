@@ -2136,9 +2136,9 @@ gtk_notebook_size_request (GtkWidget      *widget,
                       page->requisition.height = tab_height;
                     }
 
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->width < tab_width)
-                    tab_width = tab_max + 2 * (scroll_arrow_hlength + arrow_spacing);
+                  if (priv->scrollable)
+                    tab_width = MIN (tab_width,
+                                     tab_max + 2 * (scroll_arrow_hlength + arrow_spacing));
 
                   action_width += action_widget_requisition[ACTION_WIDGET_START].width;
                   action_width += action_widget_requisition[ACTION_WIDGET_END].width;
@@ -2184,9 +2184,9 @@ gtk_notebook_size_request (GtkWidget      *widget,
                       tab_height += page->requisition.height;
                     }
 
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->height < tab_height)
-                    tab_height = tab_max + (2 * scroll_arrow_vlength + arrow_spacing);
+                  if (priv->scrollable)
+                    tab_height = MIN (tab_height,
+                                      tab_max + (2 * scroll_arrow_vlength + arrow_spacing));
                   action_height += action_widget_requisition[ACTION_WIDGET_START].height;
                   action_height += action_widget_requisition[ACTION_WIDGET_END].height;
 
