@@ -141,12 +141,12 @@
  *
  * /&ast; Theme any widget within a GtkBin &ast;/
  * GtkBin * {
- *     font-name: Sans 20
+ *     font: Sans 20
  * }
  *
  * /&ast; Theme a label named title-label &ast;/
  * GtkLabel&num;title-label {
- *     font-name: Sans 15
+ *     font: Sans 15
  * }
  *
  * /&ast; Theme any widget named main-entry &ast;/
