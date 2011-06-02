@@ -115,6 +115,48 @@ gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
                                                 int            *y);
 void     _gtk_widget_free_cached_sizes (GtkWidget *widget);
 
+const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
+                                                            gboolean  *locked);
+
+GdkEventExpose *  _gtk_cairo_get_event                     (cairo_t *cr);
+
+void              _gtk_widget_draw_internal                (GtkWidget *widget,
+                                                            cairo_t   *cr,
+                                                            gboolean   clip_to_size);
+void              _gtk_widget_set_has_default              (GtkWidget *widget,
+                                                            gboolean   has_default);
+void              _gtk_widget_set_has_grab                 (GtkWidget *widget,
+                                                            gboolean   has_grab);
+void              _gtk_widget_set_is_toplevel              (GtkWidget *widget,
+                                                            gboolean   is_toplevel);
+
+void              _gtk_widget_grab_notify                  (GtkWidget *widget,
+                                                            gboolean   was_grabbed);
+
+void              _gtk_widget_propagate_hierarchy_changed  (GtkWidget *widget,
+                                                            GtkWidget *previous_toplevel);
+void              _gtk_widget_propagate_screen_changed     (GtkWidget *widget,
+                                                            GdkScreen *previous_screen);
+void              _gtk_widget_propagate_composited_changed (GtkWidget *widget);
+
+void              _gtk_widget_set_device_window            (GtkWidget *widget,
+                                                            GdkDevice *device,
+                                                            GdkWindow *pointer_window);
+GdkWindow *       _gtk_widget_get_device_window            (GtkWidget *widget,
+                                                            GdkDevice *device);
+GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
+
+void              _gtk_widget_synthesize_crossing          (GtkWidget       *from,
+                                                            GtkWidget       *to,
+                                                            GdkDevice       *device,
+                                                            GdkCrossingMode  mode);
+
+gpointer          _gtk_widget_peek_request_cache           (GtkWidget *widget);
+
+void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
+                                                            GtkWidget *toplevel,
+                                                            gpointer   user_data);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

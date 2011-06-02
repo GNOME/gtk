@@ -110,6 +110,7 @@
 #include "gtkvscrollbar.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 

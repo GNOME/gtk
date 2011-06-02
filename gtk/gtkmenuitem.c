@@ -40,6 +40,7 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtkactivatable.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
