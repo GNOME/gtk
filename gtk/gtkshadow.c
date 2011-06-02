@@ -23,6 +23,8 @@
 
 #include "gtkshadowprivate.h"
 #include "gtkstylecontext.h"
+#include "gtkthemingengineprivate.h"
+#include "gtkthemingengine.h"
 #include "gtkpango.h"
 #include "gtkthemingengineprivate.h"
 
@@ -322,4 +324,45 @@ _gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
 
       cairo_restore (cr);
     }
+}
+
+void
+_gtk_box_shadow_render (GtkShadow           *shadow,
+                        cairo_t             *cr,
+                        const GtkRoundedBox *padding_box)
+{
+  GtkShadowElement *element;
+  GtkRoundedBox box;
+  GList *l;
+
+  cairo_save (cr);
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+
+  _gtk_rounded_box_path (padding_box, cr);
+  cairo_clip (cr);
+
+  /* render shadows starting from the last one,
+   * and the others on top.
+   */
+  for (l = g_list_last (shadow->elements); l != NULL; l = l->prev)
+    {
+      element = l->data;
+
+      if (!element->inset)
+        continue;
+
+      box = *padding_box;
+      _gtk_rounded_box_move (&box, element->hoffset, element->voffset);
+      _gtk_rounded_box_shrink (&box,
+                               element->spread, element->spread,
+                               element->spread, element->spread);
+
+      _gtk_rounded_box_path (&box, cr);
+      _gtk_rounded_box_path (padding_box, cr);
+
+      gdk_cairo_set_source_rgba (cr, &element->color);
+      cairo_fill (cr);
+  }
+
+  cairo_restore (cr);
 }

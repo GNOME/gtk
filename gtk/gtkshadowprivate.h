@@ -23,9 +23,12 @@
 #define __GTK_SHADOW_H__
 
 #include <glib-object.h>
-#include <gtk/gtkstyleproperties.h>
-#include <gtk/gtksymboliccolor.h>
-#include <gtk/gtkicontheme.h>
+
+#include "gtkstyleproperties.h"
+#include "gtksymboliccolor.h"
+#include "gtkicontheme.h"
+#include "gtkcsstypesprivate.h"
+#include "gtkroundedboxprivate.h"
 
 G_BEGIN_DECLS
 
@@ -65,6 +68,9 @@ void       _gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
                                            cairo_t   *cr,
                                            gdouble    radius,
                                            gdouble    progress);
+void       _gtk_box_shadow_render         (GtkShadow           *shadow,
+                                           cairo_t             *cr,
+                                           const GtkRoundedBox *padding_box);
 
 G_END_DECLS
 
