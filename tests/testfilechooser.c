@@ -604,11 +604,11 @@ main (int argc, char **argv)
 
   preview_label = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (preview_vbox), preview_label, TRUE, TRUE, 0);
-  gtk_misc_set_padding (GTK_MISC (preview_label), 6, 6);
+  g_object_set (preview_label, "margin", 6, NULL);
 
   preview_image = gtk_image_new ();
   gtk_box_pack_start (GTK_BOX (preview_vbox), preview_image, TRUE, TRUE, 0);
-  gtk_misc_set_padding (GTK_MISC (preview_image), 6, 6);
+  g_object_set (preview_image, "margin", 6, NULL);
 
   update_preview_cb (GTK_FILE_CHOOSER (dialog));
   g_signal_connect (dialog, "update-preview",

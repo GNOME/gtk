@@ -758,8 +758,7 @@ request_password (GtkPrintBackend  *backend,
   /* Left */
   icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
   gtk_misc_set_alignment (GTK_MISC (icon), 0.5, 0.0);
-  gtk_misc_set_padding (GTK_MISC (icon), 6, 6);
-
+  g_object_set (icon, "margin", 6, NULL);
 
   /* Right */
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

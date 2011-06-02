@@ -5499,7 +5499,7 @@ label_toggle (GtkWidget  *widget,
 			"destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			label);
-      gtk_misc_set_padding (GTK_MISC (*label), 10, 10);
+      g_object_set (*label, "margin", 10, NULL);
       gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog_window))),
 			  *label, TRUE, TRUE, 0);
       gtk_widget_show (*label);
@@ -6121,7 +6121,10 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       g_object_set_data (G_OBJECT (child), "tab_pixmap", pixwid);
 			   
       gtk_box_pack_start (GTK_BOX (label_box), pixwid, FALSE, TRUE, 0);
-      gtk_misc_set_padding (GTK_MISC (pixwid), 3, 1);
+      gtk_widget_set_margin_left (pixwid, 3);
+      gtk_widget_set_margin_right (pixwid, 3);
+      gtk_widget_set_margin_bottom (pixwid, 1);
+      gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new_with_mnemonic (accel_buffer);
       gtk_box_pack_start (GTK_BOX (label_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (label_box);
@@ -6132,7 +6135,10 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       g_object_set_data (G_OBJECT (child), "menu_pixmap", pixwid);
       
       gtk_box_pack_start (GTK_BOX (menu_box), pixwid, FALSE, TRUE, 0);
-      gtk_misc_set_padding (GTK_MISC (pixwid), 3, 1);
+      gtk_widget_set_margin_left (pixwid, 3);
+      gtk_widget_set_margin_right (pixwid, 3);
+      gtk_widget_set_margin_bottom (pixwid, 1);
+      gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new (buffer);
       gtk_box_pack_start (GTK_BOX (menu_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (menu_box);
@@ -9348,7 +9354,7 @@ create_timeout_test (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       label = gtk_label_new ("count: 0");
-      gtk_misc_set_padding (GTK_MISC (label), 10, 10);
+      g_object_set (label, "margin", 10, NULL);
       gtk_box_pack_start (GTK_BOX (content_area), label, TRUE, TRUE, 0);
       gtk_widget_show (label);
 
@@ -9470,7 +9476,7 @@ create_idle_test (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       label = gtk_label_new ("count: 0");
-      gtk_misc_set_padding (GTK_MISC (label), 10, 10);
+      g_object_set (label, "margin", 10, NULL);
       gtk_widget_show (label);
       
       container =
@@ -9667,7 +9673,7 @@ create_mainloop (GtkWidget *widget)
       action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       label = gtk_label_new ("In recursive main loop...");
-      gtk_misc_set_padding (GTK_MISC(label), 20, 20);
+      g_object_set (label, "margin", 20, NULL);
 
       gtk_box_pack_start (GTK_BOX (content_area), label, TRUE, TRUE, 0);
       gtk_widget_show (label);

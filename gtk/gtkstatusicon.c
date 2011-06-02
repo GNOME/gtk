@@ -1679,9 +1679,15 @@ gtk_status_icon_padding_changed (GtkStatusIcon *status_icon)
   padding = _gtk_tray_icon_get_padding (GTK_TRAY_ICON (priv->tray_icon));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_misc_set_padding (GTK_MISC (priv->image), padding, 0);
+    {
+      gtk_widget_set_margin_left (priv->image, padding);
+      gtk_widget_set_margin_right (priv->image, padding);
+    }
   else
-    gtk_misc_set_padding (GTK_MISC (priv->image), 0, padding);
+    {
+      gtk_widget_set_margin_bottom (priv->image, padding);
+      gtk_widget_set_margin_top (priv->image, padding);
+    }
 }
 
 static void

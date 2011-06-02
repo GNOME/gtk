@@ -1793,7 +1793,7 @@ status_window_make_window (StatusWindow *status_window)
   gtk_widget_set_app_paintable (window, TRUE);
 
   status_label = gtk_label_new ("");
-  gtk_misc_set_padding (GTK_MISC (status_label), 1, 1);
+  g_object_set (status_label, "margin", 1, NULL);
   gtk_widget_show (status_label);
   
   gtk_container_add (GTK_CONTAINER (window), status_label);
