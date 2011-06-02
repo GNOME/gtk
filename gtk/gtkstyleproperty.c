@@ -2065,6 +2065,11 @@ gtk_style_property_init (void)
                                           NULL);
 
   gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("box-shadow",
+                                                              "Box shadow",
+                                                              "Box shadow",
+                                                              GTK_TYPE_SHADOW, 0));
+  gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("margin-top",
                                                             "margin top",
                                                             "Margin at top",
