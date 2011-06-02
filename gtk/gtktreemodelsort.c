@@ -1373,9 +1373,8 @@ gtk_tree_model_sort_ref_node (GtkTreeModel *tree_model,
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
   GtkTreeIter child_iter;
-  SortLevel *level, *parent_level;
+  SortLevel *level;
   SortElt *elt;
-  gint parent_elt_index;
 
   g_return_if_fail (priv->child_model != NULL);
   g_return_if_fail (VALID_ITER (iter, tree_model_sort));
@@ -1391,24 +1390,6 @@ gtk_tree_model_sort_ref_node (GtkTreeModel *tree_model,
 
   elt->ref_count++;
   level->ref_count++;
-
-  /* Increase the reference count of all parent elements */
-  parent_level = level->parent_level;
-  parent_elt_index = level->parent_elt_index;
-
-  while (parent_level)
-    {
-      GtkTreeIter tmp_iter;
-
-      tmp_iter.stamp = priv->stamp;
-      tmp_iter.user_data = parent_level;
-      tmp_iter.user_data2 = &g_array_index (parent_level->array, SortElt, parent_elt_index);
-
-      gtk_tree_model_sort_ref_node (tree_model, &tmp_iter);
-
-      parent_elt_index = parent_level->parent_elt_index;
-      parent_level = parent_level->parent_level;
-    }
 
   if (level->ref_count == 1)
     {
@@ -1436,9 +1417,8 @@ gtk_tree_model_sort_real_unref_node (GtkTreeModel *tree_model,
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
-  SortLevel *level, *parent_level;
+  SortLevel *level;
   SortElt *elt;
-  gint parent_elt_index;
 
   g_return_if_fail (priv->child_model != NULL);
   g_return_if_fail (VALID_ITER (iter, tree_model_sort));
@@ -1458,24 +1438,6 @@ gtk_tree_model_sort_real_unref_node (GtkTreeModel *tree_model,
 
   elt->ref_count--;
   level->ref_count--;
-
-  /* Decrease the reference count of all parent elements */
-  parent_level = level->parent_level;
-  parent_elt_index = level->parent_elt_index;
-
-  while (parent_level)
-    {
-      GtkTreeIter tmp_iter;
-
-      tmp_iter.stamp = priv->stamp;
-      tmp_iter.user_data = parent_level;
-      tmp_iter.user_data2 = &g_array_index (parent_level->array, SortElt, parent_elt_index);
-
-      gtk_tree_model_sort_real_unref_node (tree_model, &tmp_iter, FALSE);
-
-      parent_elt_index = parent_level->parent_elt_index;
-      parent_level = parent_level->parent_level;
-    }
 
   if (level->ref_count == 0)
     {
@@ -2478,6 +2440,9 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 						      &parent_iter);
 
       length = gtk_tree_model_iter_n_children (priv->child_model, &child_parent_iter);
+
+      gtk_tree_model_sort_ref_node (GTK_TREE_MODEL (tree_model_sort),
+                                    &parent_iter);
     }
 
   g_return_if_fail (length > 0);
@@ -2588,7 +2553,18 @@ gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
     }
 
   if (sort_level->parent_elt_index >= 0)
-    SORT_LEVEL_PARENT_ELT (sort_level)->children = NULL;
+    {
+      GtkTreeIter parent_iter;
+
+      parent_iter.stamp = tree_model_sort->priv->stamp;
+      parent_iter.user_data = sort_level->parent_level;
+      parent_iter.user_data2 = SORT_LEVEL_PARENT_ELT (sort_level);
+
+      gtk_tree_model_sort_unref_node (GTK_TREE_MODEL (tree_model_sort),
+                                      &parent_iter);
+
+      SORT_LEVEL_PARENT_ELT (sort_level)->children = NULL;
+    }
   else
     priv->root = NULL;
 
