@@ -22,8 +22,6 @@
 #define __GTK_ACCEL_GROUP_PRIVATE_H__
 
 
-#define GTK_ACCEL_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_GROUP, GtkAccelGroupPrivate))
-
 struct _GtkAccelGroupPrivate
 {
   guint               lock_count;

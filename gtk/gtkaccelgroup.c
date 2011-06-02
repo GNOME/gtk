@@ -62,8 +62,6 @@
  * and mnemonics, of course.
  */
 
-#define GTK_ACCEL_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_GROUP, GtkAccelGroupPrivate))
-
 /* --- prototypes --- */
 static void gtk_accel_group_finalize     (GObject    *object);
 static void gtk_accel_group_get_property (GObject    *object,
@@ -228,15 +226,18 @@ gtk_accel_group_get_property (GObject    *object,
 static void
 gtk_accel_group_init (GtkAccelGroup *accel_group)
 {
-  GtkAccelGroupPrivate *priv = GTK_ACCEL_GROUP_GET_PRIVATE (accel_group);
+  GtkAccelGroupPrivate *priv;
+
+  accel_group->priv = G_TYPE_INSTANCE_GET_PRIVATE (accel_group,
+                                                   GTK_TYPE_ACCEL_GROUP,
+                                                   GtkAccelGroupPrivate);
+  priv = accel_group->priv;
 
   priv->lock_count = 0;
   priv->modifier_mask = gtk_accelerator_get_default_mod_mask ();
   priv->acceleratables = NULL;
   priv->n_accels = 0;
   priv->priv_accels = NULL;
-
-  accel_group->priv = priv;
 }
 
 /**
