@@ -3562,7 +3562,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  PangoFontDescription *description;
+  const GValue *value;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
@@ -3570,15 +3570,12 @@ gtk_style_context_get_font (GtkStyleContext *context,
   g_return_val_if_fail (priv->widget_path != NULL, NULL);
 
   data = style_data_lookup (context);
-  gtk_style_properties_get (data->store, state, "font", &description, NULL);
-  /* Yuck, fonts are created on-demand but we don't return a ref.
-   * Do bad things to achieve this requirement */
-  g_object_set_data_full (G_OBJECT (data->store),
-                          "last-gotten-font",
-                          description,
-                          (GDestroyNotify) pango_font_description_free);
+  value = _gtk_style_properties_peek_property (data->store, "font", state, NULL);
 
-  return description;
+  if (value)
+    return g_value_get_boxed (value);
+
+  return NULL;
 }
 
 static void
