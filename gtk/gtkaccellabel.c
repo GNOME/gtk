@@ -127,8 +127,6 @@ static void         gtk_accel_label_get_preferred_width (GtkWidget           *wi
                                                          gint                *min_width,
                                                          gint                *nat_width);
 
-#define GTK_ACCEL_LABEL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_LABEL, GtkAccelLabelPrivate))
-
 
 G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL)
 
@@ -250,15 +248,18 @@ gtk_accel_label_get_property (GObject    *object,
 static void
 gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
-  GtkAccelLabelPrivate *priv = GTK_ACCEL_LABEL_GET_PRIVATE (accel_label);
+  GtkAccelLabelPrivate *priv;
+
+  accel_label->priv = G_TYPE_INSTANCE_GET_PRIVATE (accel_label,
+                                                   GTK_TYPE_ACCEL_LABEL,
+                                                   GtkAccelLabelPrivate);
+  priv = accel_label->priv;
 
   priv->accel_padding = 3;
   priv->accel_widget = NULL;
   priv->accel_closure = NULL;
   priv->accel_group = NULL;
   priv->accel_string = NULL;
-
-  accel_label->priv = priv;
 }
 
 /**
