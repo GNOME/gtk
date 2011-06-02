@@ -385,7 +385,7 @@ update_state (GtkLockButton *button)
       g_assert_not_reached ();
     }
 
-  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_BUTTON);
+  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_MENU);
   gtk_widget_set_visible (priv->label_lock, allowed);
   gtk_widget_set_visible (priv->label_unlock, !allowed);
   gtk_widget_set_tooltip_markup (GTK_WIDGET (button), tooltip);
