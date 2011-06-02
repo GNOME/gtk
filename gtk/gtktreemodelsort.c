@@ -355,7 +355,8 @@ static void         gtk_tree_model_sort_build_level       (GtkTreeModelSort *tre
 							   SortLevel        *parent_level,
 							   gint              parent_elt_index);
 static void         gtk_tree_model_sort_free_level        (GtkTreeModelSort *tree_model_sort,
-							   SortLevel        *sort_level);
+							   SortLevel        *sort_level,
+                                                           gboolean          unref);
 static void         gtk_tree_model_sort_increment_stamp   (GtkTreeModelSort *tree_model_sort);
 static void         gtk_tree_model_sort_sort_level        (GtkTreeModelSort *tree_model_sort,
 							   SortLevel        *level,
@@ -497,7 +498,7 @@ gtk_tree_model_sort_finalize (GObject *object)
   gtk_tree_model_sort_set_model (tree_model_sort, NULL);
 
   if (priv->root)
-    gtk_tree_model_sort_free_level (tree_model_sort, priv->root);
+    gtk_tree_model_sort_free_level (tree_model_sort, priv->root, TRUE);
 
   if (priv->sort_list)
     {
@@ -817,7 +818,7 @@ gtk_tree_model_sort_row_inserted (GtkTreeModel          *s_model,
 
   if (level->ref_count == 0 && level != priv->root)
     {
-      gtk_tree_model_sort_free_level (tree_model_sort, level);
+      gtk_tree_model_sort_free_level (tree_model_sort, level, TRUE);
       goto done;
     }
 
@@ -900,20 +901,25 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
   while (elt->ref_count > 0)
     gtk_tree_model_sort_real_unref_node (GTK_TREE_MODEL (data), &iter, FALSE);
 
+  /* If this node has children, we free the level (recursively) here
+   * and specify that unref may not be used, because parent and its
+   * children have been removed by now.
+   */
+  if (elt->children)
+    gtk_tree_model_sort_free_level (tree_model_sort,
+                                    elt->children, FALSE);
+
   if (level->ref_count == 0)
     {
-      /* This will prune the level, so I can just emit the signal and 
-       * not worry about cleaning this level up. 
-       * Careful, root level is not cleaned up in increment stamp.
-       */
       gtk_tree_model_sort_increment_stamp (tree_model_sort);
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
       gtk_tree_path_free (path);
 
       if (level == tree_model_sort->priv->root)
 	{
-	  gtk_tree_model_sort_free_level (tree_model_sort, 
-					  tree_model_sort->priv->root);
+	  gtk_tree_model_sort_free_level (tree_model_sort,
+					  tree_model_sort->priv->root,
+                                          TRUE);
 	  tree_model_sort->priv->root = NULL;
 	}
       return;
@@ -2096,7 +2102,7 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 
       /* reset our state */
       if (priv->root)
-	gtk_tree_model_sort_free_level (tree_model_sort, priv->root);
+	gtk_tree_model_sort_free_level (tree_model_sort, priv->root, TRUE);
       priv->root = NULL;
       _gtk_tree_data_list_header_free (priv->sort_list);
       priv->sort_list = NULL;
@@ -2521,7 +2527,8 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
 
 static void
 gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
-				SortLevel        *sort_level)
+				SortLevel        *sort_level,
+                                gboolean          unref)
 {
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
   gint i;
@@ -2532,7 +2539,7 @@ gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
     {
       if (g_array_index (sort_level->array, SortElt, i).children)
 	gtk_tree_model_sort_free_level (tree_model_sort,
-					SORT_LEVEL (g_array_index (sort_level->array, SortElt, i).children));
+					SORT_LEVEL (g_array_index (sort_level->array, SortElt, i).children), unref);
     }
 
   if (sort_level->ref_count == 0)
@@ -2554,14 +2561,17 @@ gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
 
   if (sort_level->parent_elt_index >= 0)
     {
-      GtkTreeIter parent_iter;
+      if (unref)
+        {
+          GtkTreeIter parent_iter;
 
-      parent_iter.stamp = tree_model_sort->priv->stamp;
-      parent_iter.user_data = sort_level->parent_level;
-      parent_iter.user_data2 = SORT_LEVEL_PARENT_ELT (sort_level);
+          parent_iter.stamp = tree_model_sort->priv->stamp;
+          parent_iter.user_data = sort_level->parent_level;
+          parent_iter.user_data2 = SORT_LEVEL_PARENT_ELT (sort_level);
 
-      gtk_tree_model_sort_unref_node (GTK_TREE_MODEL (tree_model_sort),
-                                      &parent_iter);
+          gtk_tree_model_sort_unref_node (GTK_TREE_MODEL (tree_model_sort),
+                                          &parent_iter);
+        }
 
       SORT_LEVEL_PARENT_ELT (sort_level)->children = NULL;
     }
@@ -2604,7 +2614,7 @@ gtk_tree_model_sort_clear_cache_helper (GtkTreeModelSort *tree_model_sort,
     }
 
   if (level->ref_count == 0 && level != tree_model_sort->priv->root)
-    gtk_tree_model_sort_free_level (tree_model_sort, level);
+    gtk_tree_model_sort_free_level (tree_model_sort, level, TRUE);
 }
 
 /**
