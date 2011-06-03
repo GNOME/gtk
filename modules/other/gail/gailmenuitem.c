@@ -44,6 +44,7 @@ static void                  gail_menu_item_init_textutil  (GailMenuItem  *item,
 static void                  gail_menu_item_notify_label_gtk (GObject       *obj,
                                                               GParamSpec    *pspec,
                                                               gpointer      data);
+static const gchar *         gail_menu_item_get_name         (AtkObject    *object);
 
 
 static void                  atk_action_interface_init     (AtkActionIface *iface);
@@ -53,8 +54,8 @@ static gboolean              idle_do_action                (gpointer       data)
 static gint                  gail_menu_item_get_n_actions  (AtkAction      *action);
 static G_CONST_RETURN gchar* gail_menu_item_get_description(AtkAction      *action,
                                                             gint           i);
-static G_CONST_RETURN gchar* gail_menu_item_get_name       (AtkAction      *action,
-                                                            gint           i);
+static G_CONST_RETURN gchar* gail_menu_item_action_get_name (AtkAction      *action,
+                                                             gint           i);
 static G_CONST_RETURN gchar* gail_menu_item_get_keybinding (AtkAction      *action,
                                                             gint           i);
 static gboolean              gail_menu_item_set_description(AtkAction      *action,
@@ -129,6 +130,7 @@ gail_menu_item_class_init (GailMenuItemClass *klass)
   class->ref_child = gail_menu_item_ref_child;
   class->ref_state_set = gail_menu_item_ref_state_set;
   class->initialize = gail_menu_item_real_initialize;
+  class->get_name = gail_menu_item_get_name;
 }
 
 static void
@@ -777,7 +779,7 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->do_action = gail_menu_item_do_action;
   iface->get_n_actions = gail_menu_item_get_n_actions;
   iface->get_description = gail_menu_item_get_description;
-  iface->get_name = gail_menu_item_get_name;
+  iface->get_name = gail_menu_item_action_get_name;
   iface->get_keybinding = gail_menu_item_get_keybinding;
   iface->set_description = gail_menu_item_set_description;
 }
@@ -891,8 +893,8 @@ gail_menu_item_get_description (AtkAction *action,
 }
 
 static G_CONST_RETURN gchar*
-gail_menu_item_get_name (AtkAction *action,
-                         gint      i)
+gail_menu_item_action_get_name (AtkAction *action,
+                                gint      i)
 {
   if (i == 0)
     return "click";
@@ -1132,6 +1134,29 @@ gail_menu_item_finalize (GObject *object)
     }
 
   G_OBJECT_CLASS (gail_menu_item_parent_class)->finalize (object);
+}
+
+static const gchar *
+gail_menu_item_get_name (AtkObject *obj)
+{
+  const gchar* name;
+  GtkWidget *widget;
+  GtkWidget *label;
+
+  name = ATK_OBJECT_CLASS (gail_menu_item_parent_class)->get_name (obj);
+
+  if (name)
+    return name;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  if (widget == NULL)
+    return NULL;
+
+  label = get_label_from_container (widget);
+  if (GTK_IS_LABEL (label))
+    return gtk_label_get_text (GTK_LABEL(label));
+
+  return NULL;
 }
 
 static void
