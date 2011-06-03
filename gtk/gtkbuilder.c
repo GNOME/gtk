@@ -503,7 +503,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (pspec) != GDK_TYPE_PIXBUF))
         {
-          if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+          if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
             {
               GObject *object;
               object = gtk_builder_get_object (builder, prop->data);
@@ -540,7 +540,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
           continue;
         }
 
-      if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+      if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
         g_array_append_val (*construct_parameters, parameter);
       else
         g_array_append_val (*parameters, parameter);
