@@ -26,6 +26,11 @@
 #include "gtkcupsutils.h"
 
 #include <gtk/gtkunixprint.h>
+#include <gtk/gtkprinter-private.h>
+
+#ifdef HAVE_COLORD
+#include <colord.h>
+#endif
 
 G_BEGIN_DECLS
 
@@ -62,6 +67,14 @@ struct _GtkPrinterCups
   guint get_remote_ppd_poll;
   gint  get_remote_ppd_attempts;
   GtkCupsConnectionTest *remote_cups_connection_test;
+#ifdef HAVE_COLORD
+  CdClient     *colord_client;
+  CdDevice     *colord_device;
+  CdProfile    *colord_profile;
+  GCancellable *colord_cancellable;
+  gchar        *colord_title;
+  gchar        *colord_qualifier;
+#endif
 };
 
 struct _GtkPrinterCupsClass
@@ -72,10 +85,18 @@ struct _GtkPrinterCupsClass
 
 GType                    gtk_printer_cups_get_type      (void) G_GNUC_CONST;
 void                     gtk_printer_cups_register_type (GTypeModule     *module);
+
 GtkPrinterCups          *gtk_printer_cups_new           (const char      *name,
-							 GtkPrintBackend *backend);
+                                                         GtkPrintBackend *backend,
+                                                         gpointer         colord_client);
 ppd_file_t 		*gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
 const gchar		*gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
+
+#ifdef HAVE_COLORD
+void                     gtk_printer_cups_update_settings (GtkPrinterCups *printer,
+                                                         GtkPrintSettings *settings,
+                                                         GtkPrinterOptionSet *set);
+#endif
 
 G_END_DECLS
 

@@ -54,6 +54,9 @@
 
 #include "gtkcupsutils.h"
 
+#ifdef HAVE_COLORD
+#include <colord.h>
+#endif
 
 typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 
@@ -125,6 +128,9 @@ struct _GtkPrintBackendCups
   GHashTable *auth;
   gchar      *username;
   gboolean    authentication_lock;
+#ifdef HAVE_COLORD
+  CdClient   *colord_client;
+#endif
 };
 
 static GObjectClass *backend_parent_class;
@@ -607,6 +613,10 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
 
   backend_cups->username = NULL;
 
+#ifdef HAVE_COLORD
+  backend_cups->colord_client = cd_client_new ();
+#endif
+
   cups_get_local_default_printer (backend_cups);
 }
 
@@ -632,6 +642,10 @@ gtk_print_backend_cups_finalize (GObject *object)
   g_hash_table_destroy (backend_cups->auth);
 
   g_free (backend_cups->username);
+
+#ifdef HAVE_COLORD
+  g_object_unref (backend_cups->colord_client);
+#endif
 
   backend_parent_class->finalize (object);
 }
@@ -1882,7 +1896,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 	  char *cups_server;            /* CUPS server */
 	  
           list_has_changed = TRUE;
-	  cups_printer = gtk_printer_cups_new (printer_name, backend);
+#ifdef HAVE_COLORD
+          cups_printer = gtk_printer_cups_new (printer_name,
+                                               backend,
+                                               cups_backend->colord_client);
+#else
+          cups_printer = gtk_printer_cups_new (printer_name, backend, NULL);
+#endif
 
 	  cups_printer->device_uri = g_strdup_printf ("/printers/%s", printer_name);
 
@@ -3511,6 +3531,23 @@ handle_group (GtkPrinterOptionSet *set,
 
 }
 
+#ifdef HAVE_COLORD
+
+typedef struct {
+        GtkPrintSettings     *settings;
+        GtkPrinter           *printer;
+} GtkPrintBackendCupsColordHelper;
+
+static void
+colord_printer_option_set_changed_cb (GtkPrinterOptionSet *set,
+                                      GtkPrintBackendCupsColordHelper *helper)
+{
+  gtk_printer_cups_update_settings (GTK_PRINTER_CUPS (helper->printer),
+                                    helper->settings,
+                                    set);
+}
+#endif
+
 static GtkPrinterOptionSet *
 cups_printer_get_options (GtkPrinter           *printer,
 			  GtkPrintSettings     *settings,
@@ -3542,7 +3579,9 @@ cups_printer_get_options (GtkPrinter           *printer,
   GtkPrintBackendCups *backend;
   GtkTextDirection text_direction;
   GtkPrinterCups *cups_printer = NULL;
-
+#ifdef HAVE_COLORD
+  GtkPrintBackendCupsColordHelper *helper;
+#endif
 
   set = gtk_printer_option_set_new ();
 
@@ -3807,6 +3846,38 @@ cups_printer_get_options (GtkPrinter           *printer,
     }
 
   cupsFreeOptions (num_opts, opts);
+
+#ifdef HAVE_COLORD
+  /* TRANSLATORS: this this the ICC color profile to use for this job */
+  option = gtk_printer_option_new ("colord-profile",
+                                   _("Printer Profile"),
+                                   GTK_PRINTER_OPTION_TYPE_INFO);
+
+  /* assign it to the color page */
+  option->group = g_strdup ("ColorPage");
+
+  /* TRANSLATORS: this is when color profile information is unavailable */
+  gtk_printer_option_set (option, _("Unavailable"));
+  gtk_printer_option_set_add (set, option);
+
+  /* watch to see if the user changed the options */
+  helper = g_new (GtkPrintBackendCupsColordHelper, 1);
+  helper->printer = printer;
+  helper->settings = settings;
+  g_signal_connect_data (set, "changed",
+                         G_CALLBACK (colord_printer_option_set_changed_cb),
+                         helper,
+                         (GClosureNotify) g_free,
+                         0);
+
+  /* initial coldplug */
+  gtk_printer_cups_update_settings (GTK_PRINTER_CUPS (printer),
+                                    settings, set);
+  g_object_bind_property (printer, "profile-title",
+                          option, "value",
+                          G_BINDING_DEFAULT);
+
+#endif
 
   return set;
 }

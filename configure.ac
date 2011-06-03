@@ -1533,6 +1533,27 @@ fi
 AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$build_packagekit" = "xyes")
 
 ##################################################
+# colord module
+#################################################
+
+AC_ARG_ENABLE(colord,
+              [AS_HELP_STRING([--disable-colord],
+                              [build colord support code])])
+
+have_colord=no
+if test "x$enable_colord" != "xno"; then
+        if test "os_win32" != "yes"; then
+                PKG_CHECK_MODULES(COLORD, colord >= 0.1.9)
+                have_colord=yes
+                AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
+        else
+                AC_MSG_ERROR([colord support is not available on win32])
+        fi
+fi
+
+AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
+
+##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
 
@@ -1723,6 +1744,7 @@ echo "        Print backends:       $PRINT_BACKENDS"
 echo "        Dynamic modules:      $build_dynamic_modules"
 echo "        Included immodules:   $included_immodules"
 echo "        PackageKit support:   $build_packagekit"
+echo "        colord support:       $have_colord"
 echo "        Introspection:        $found_introspection"
 echo "        Debugging:            $enable_debug"
 echo "        Documentation:        $enable_gtk_doc"

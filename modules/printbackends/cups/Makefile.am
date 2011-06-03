@@ -11,12 +11,14 @@ INCLUDES = \
 	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
 	$(CUPS_CFLAGS)					\
+	$(COLORD_CFLAGS)				\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEP_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)
 
 LDADDS = \
 	$(top_builddir)/gtk/libgtk-3.la	\
+	$(COLORD_LIBS)			\
 	$(GTK_DEP_LIBS)
 
 backenddir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/printbackends
