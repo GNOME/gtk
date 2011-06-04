@@ -6495,6 +6495,8 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
+  gtk_widget_update_pango_context (widget);
+
   if (priv->style != NULL &&
       priv->style != gtk_widget_get_default_style ())
     {
@@ -14329,8 +14331,6 @@ style_context_changed (GtkStyleContext *context,
                        gpointer         user_data)
 {
   GtkWidget *widget = user_data;
-
-  gtk_widget_update_pango_context (widget);
 
   if (gtk_widget_get_realized (widget))
     g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
