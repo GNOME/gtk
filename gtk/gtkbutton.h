@@ -121,13 +121,6 @@ GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
 
 GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
 
-void _gtk_button_set_depressed             (GtkButton          *button,
-					    gboolean            depressed);
-void _gtk_button_paint                     (GtkButton          *button,
-                                            cairo_t            *cr,
-                                            int                 width,
-                                            int                 height,
-					    GtkStateFlags       state);
 
 G_END_DECLS
 

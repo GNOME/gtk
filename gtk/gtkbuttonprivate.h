@@ -21,6 +21,9 @@
 
 #include "gtkaction.h"
 
+G_BEGIN_DECLS
+
+
 struct _GtkButtonPrivate
 {
   GtkAction             *action;
@@ -52,5 +55,16 @@ struct _GtkButtonPrivate
   guint          use_stock             : 1;
   guint          use_underline         : 1;
 };
+
+void _gtk_button_set_depressed             (GtkButton          *button,
+                                            gboolean            depressed);
+void _gtk_button_paint                     (GtkButton          *button,
+                                            cairo_t            *cr,
+                                            int                 width,
+                                            int                 height,
+                                            GtkStateFlags       state);
+
+
+G_END_DECLS
 
 #endif /* __GTK_BUTTON_PRIVATE_H__ */
