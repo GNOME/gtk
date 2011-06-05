@@ -24,22 +24,13 @@
 #ifndef __GTK_BORDER_IMAGE_H__
 #define __GTK_BORDER_IMAGE_H__
 
-#include <gtk/gtkborder.h>
-#include <gtk/gtkenums.h>
-#include <gtk/gtkgradient.h>
-#include <gtk/gtkstyleproperties.h>
-#include <gtk/gtkthemingengine.h>
+#include "gtkborder.h"
+#include "gtkgradient.h"
+#include "gtkstyleproperties.h"
+#include "gtkthemingengine.h"
+#include "gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
-
-#define GTK_TYPE_BORDER_IMAGE_REPEAT (_gtk_border_image_repeat_get_type ())
-
-GType             _gtk_border_image_repeat_get_type (void) G_GNUC_CONST;
-
-typedef struct {
-  GtkRepeatStyle vrepeat;
-  GtkRepeatStyle hrepeat;
-} GtkBorderImageRepeat;
 
 typedef struct _GtkBorderImage GtkBorderImage;
 
@@ -49,10 +40,10 @@ GType             _gtk_border_image_get_type         (void) G_GNUC_CONST;
 
 GtkBorderImage *  _gtk_border_image_new              (cairo_pattern_t      *source,
                                                       GtkBorder            *slice,
-                                                      GtkBorderImageRepeat *repeat);
+                                                      GtkCssBorderImageRepeat *repeat);
 GtkBorderImage *  _gtk_border_image_new_for_gradient (GtkGradient          *gradient,
                                                       GtkBorder            *slice,
-                                                      GtkBorderImageRepeat *repeat);
+                                                      GtkCssBorderImageRepeat *repeat);
 
 GtkBorderImage *  _gtk_border_image_resolve          (GtkBorderImage       *image,
                                                       GtkStyleProperties   *props);

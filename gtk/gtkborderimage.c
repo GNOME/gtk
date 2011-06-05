@@ -28,26 +28,6 @@
 
 #include "gtkborderimageprivate.h"
 
-static GtkBorderImageRepeat *
-_gtk_border_image_repeat_copy (const GtkBorderImageRepeat *repeat)
-{
-  GtkBorderImageRepeat *retval;
-
-  retval = g_slice_new0 (GtkBorderImageRepeat);
-  *retval = *repeat;
-
-  return retval;
-}
-
-static void
-_gtk_border_image_repeat_free (GtkBorderImageRepeat *repeat)
-{
-  g_slice_free (GtkBorderImageRepeat, repeat);
-}
-
-G_DEFINE_BOXED_TYPE (GtkBorderImageRepeat, _gtk_border_image_repeat,
-                     _gtk_border_image_repeat_copy, _gtk_border_image_repeat_free)
-
 G_DEFINE_BOXED_TYPE (GtkBorderImage, _gtk_border_image,
                      _gtk_border_image_ref, _gtk_border_image_unref)
 
@@ -72,7 +52,7 @@ struct _GtkBorderImage {
   GtkGradient *source_gradient;
 
   GtkBorder slice;
-  GtkBorderImageRepeat repeat;
+  GtkCssBorderImageRepeat repeat;
 
   gint ref_count;
   gboolean resolved;
@@ -81,7 +61,7 @@ struct _GtkBorderImage {
 GtkBorderImage *
 _gtk_border_image_new (cairo_pattern_t      *pattern,
                        GtkBorder            *slice,
-                       GtkBorderImageRepeat *repeat)
+                       GtkCssBorderImageRepeat *repeat)
 {
   GtkBorderImage *image;
 
@@ -105,7 +85,7 @@ _gtk_border_image_new (cairo_pattern_t      *pattern,
 GtkBorderImage *
 _gtk_border_image_new_for_gradient (GtkGradient          *gradient,
                                     GtkBorder            *slice,
-                                    GtkBorderImageRepeat *repeat)
+                                    GtkCssBorderImageRepeat *repeat)
 {
   GtkBorderImage *image;
 
@@ -198,7 +178,7 @@ _gtk_border_image_unpack (const GValue *value,
   g_value_set_boxed (&parameter[1].value, &image->slice);
 
   parameter[2].name = "border-image-repeat";
-  g_value_init (&parameter[2].value, GTK_TYPE_BORDER_IMAGE_REPEAT);
+  g_value_init (&parameter[2].value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
   g_value_set_boxed (&parameter[2].value, &image->repeat);
 
   *n_params = 3;
@@ -213,7 +193,7 @@ _gtk_border_image_pack (GValue             *value,
   GtkBorderImage *image;
   cairo_pattern_t *source;
   GtkBorder *slice;
-  GtkBorderImageRepeat *repeat;
+  GtkCssBorderImageRepeat *repeat;
 
   gtk_style_properties_get (props, state,
                             "border-image-source", &source,
@@ -237,7 +217,7 @@ _gtk_border_image_pack (GValue             *value,
     gtk_border_free (slice);
 
   if (repeat != NULL)
-    _gtk_border_image_repeat_free (repeat);
+    g_free (repeat);
 }
 
 static void
@@ -327,7 +307,7 @@ render_border (cairo_t              *cr,
                gdouble               surface_height,
                guint                 side,
                GtkBorder            *border_area,
-               GtkBorderImageRepeat *repeat)
+               GtkCssBorderImageRepeat *repeat)
 {
   gdouble target_x, target_y;
   gdouble target_width, target_height;
@@ -362,18 +342,18 @@ render_border (cairo_t              *cr,
       target_x = border_area->left;
       target_y = (side == SIDE_TOP) ? 0 : (total_height - border_area->bottom);
 
-      if (repeat->vrepeat == GTK_REPEAT_STYLE_NONE)
+      if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_NONE)
         {
           target_width = image_area.width;
         }
-      else if (repeat->vrepeat == GTK_REPEAT_STYLE_REPEAT)
+      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_REPEAT)
         {
           repeat_pattern = TRUE;
 
           target_x = border_area->left + (total_width - border_area->left - border_area->right) / 2;
           target_y = ((side == SIDE_TOP) ? 0 : (total_height - border_area->bottom)) / 2;
         }
-      else if (repeat->vrepeat == GTK_REPEAT_STYLE_ROUND)
+      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
         {
           gint n_repeats;
 
@@ -382,7 +362,7 @@ render_border (cairo_t              *cr,
           n_repeats = (gint) floor (image_area.width / surface_width);
           target_width = image_area.width / n_repeats;
         }
-      else if (repeat->vrepeat == GTK_REPEAT_STYLE_SPACE)
+      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
         {
           cairo_surface_t *spaced_surface;
 
@@ -407,11 +387,11 @@ render_border (cairo_t              *cr,
       target_x = (side == SIDE_LEFT) ? 0 : (total_width - border_area->right);
       target_y = border_area->top;
 
-      if (repeat->hrepeat == GTK_REPEAT_STYLE_NONE)
+      if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_NONE)
         {
           target_height = total_height - border_area->top - border_area->bottom;
         }
-      else if (repeat->hrepeat == GTK_REPEAT_STYLE_REPEAT)
+      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_REPEAT)
         {
           repeat_pattern = TRUE;
 
@@ -419,7 +399,7 @@ render_border (cairo_t              *cr,
           target_x = (side == SIDE_LEFT) ? 0 : (total_width - border_area->right) / 2;
           target_y = border_area->top + (total_height - border_area->top - border_area->bottom) / 2;
         }
-      else if (repeat->hrepeat == GTK_REPEAT_STYLE_ROUND)
+      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
         {
           gint n_repeats;
 
@@ -428,7 +408,7 @@ render_border (cairo_t              *cr,
           n_repeats = (gint) floor (image_area.height / surface_height);
           target_height = image_area.height / n_repeats;
         }
-      else if (repeat->hrepeat == GTK_REPEAT_STYLE_SPACE)
+      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
         {
           cairo_surface_t *spaced_surface;
 

@@ -953,23 +953,23 @@ border_image_repeat_value_parse (GtkCssParser *parser,
                                  GFile *file,
                                  GValue *value)
 {
-  GtkBorderImageRepeat image_repeat;
-  GtkRepeatStyle styles[2];
+  GtkCssBorderImageRepeat image_repeat;
+  GtkCssRepeatStyle styles[2];
   gint i;
 
   for (i = 0; i < 2; i++)
     {
       if (_gtk_css_parser_try (parser, "stretch", TRUE))
-        styles[i] = GTK_REPEAT_STYLE_NONE;
+        styles[i] = GTK_CSS_REPEAT_STYLE_NONE;
       else if (_gtk_css_parser_try (parser, "repeat", TRUE))
-        styles[i] = GTK_REPEAT_STYLE_REPEAT;
+        styles[i] = GTK_CSS_REPEAT_STYLE_REPEAT;
       else if (_gtk_css_parser_try (parser, "round", TRUE))
-        styles[i] = GTK_REPEAT_STYLE_ROUND;
+        styles[i] = GTK_CSS_REPEAT_STYLE_ROUND;
       else if (_gtk_css_parser_try (parser, "space", TRUE))
-        styles[i] = GTK_REPEAT_STYLE_SPACE;
+        styles[i] = GTK_CSS_REPEAT_STYLE_SPACE;
       else if (i == 0)
         {
-          styles[1] = styles[0] = GTK_REPEAT_STYLE_NONE;
+          styles[1] = styles[0] = GTK_CSS_REPEAT_STYLE_NONE;
           break;
         }
       else
@@ -985,17 +985,17 @@ border_image_repeat_value_parse (GtkCssParser *parser,
 }
 
 static const gchar *
-border_image_repeat_style_to_string (GtkRepeatStyle repeat)
+border_image_repeat_style_to_string (GtkCssRepeatStyle repeat)
 {
   switch (repeat)
     {
-    case GTK_REPEAT_STYLE_NONE:
+    case GTK_CSS_REPEAT_STYLE_NONE:
       return "stretch";
-    case GTK_REPEAT_STYLE_REPEAT:
+    case GTK_CSS_REPEAT_STYLE_REPEAT:
       return "repeat";
-    case GTK_REPEAT_STYLE_ROUND:
+    case GTK_CSS_REPEAT_STYLE_ROUND:
       return "round";
-    case GTK_REPEAT_STYLE_SPACE:
+    case GTK_CSS_REPEAT_STYLE_SPACE:
       return "space";
     default:
       return NULL;
@@ -1006,7 +1006,7 @@ static void
 border_image_repeat_value_print (const GValue *value,
                                  GString      *string)
 {
-  GtkBorderImageRepeat *image_repeat;
+  GtkCssBorderImageRepeat *image_repeat;
 
   image_repeat = g_value_get_boxed (value);
 
@@ -1024,7 +1024,7 @@ border_image_value_parse (GtkCssParser *parser,
   cairo_pattern_t *pattern = NULL;
   GtkGradient *gradient = NULL;
   GtkBorder border, *parsed_border;
-  GtkBorderImageRepeat repeat, *parsed_repeat;
+  GtkCssBorderImageRepeat repeat, *parsed_repeat;
   gboolean retval = FALSE;
   GtkBorderImage *image = NULL;
 
@@ -1048,7 +1048,7 @@ border_image_value_parse (GtkCssParser *parser,
   border = *parsed_border;
 
   g_value_unset (&temp);
-  g_value_init (&temp, GTK_TYPE_BORDER_IMAGE_REPEAT);
+  g_value_init (&temp, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
 
   if (!border_image_repeat_value_parse (parser, base, &temp))
     goto out;
@@ -1694,7 +1694,7 @@ css_string_funcs_init (void)
   register_conversion_function (GTK_TYPE_BORDER_IMAGE,
                                 border_image_value_parse,
                                 NULL);
-  register_conversion_function (GTK_TYPE_BORDER_IMAGE_REPEAT,
+  register_conversion_function (GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                 border_image_repeat_value_parse,
                                 border_image_repeat_value_print);
   register_conversion_function (GTK_TYPE_SHADOW,
@@ -2241,7 +2241,7 @@ gtk_style_property_init (void)
                                           g_param_spec_boxed ("border-image-repeat",
                                                               "Border image repeat",
                                                               "Border image repeat",
-                                                              GTK_TYPE_BORDER_IMAGE_REPEAT, 0));
+                                                              GTK_TYPE_CSS_BORDER_IMAGE_REPEAT, 0));
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("border-image-slice",
                                                               "Border image slice",
