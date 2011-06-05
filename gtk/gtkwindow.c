@@ -48,6 +48,7 @@
 #include "gtkplug.h"
 #include "gtkbuildable.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 

@@ -28,6 +28,7 @@
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 
 
 /**

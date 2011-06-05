@@ -22,6 +22,7 @@
 
 #include "gtkoffscreenwindow.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkprivate.h"
 
 /**

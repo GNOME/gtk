@@ -221,22 +221,6 @@ void    gtk_container_forall		     (GtkContainer *container,
 
 void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
 
-/* Non-public methods */
-void	_gtk_container_queue_resize	     (GtkContainer *container);
-void	_gtk_container_resize_invalidate     (GtkContainer *container);
-void    _gtk_container_clear_resize_widgets   (GtkContainer *container);
-gchar*	_gtk_container_child_composite_name   (GtkContainer *container,
-					      GtkWidget	   *child);
-void   _gtk_container_dequeue_resize_handler (GtkContainer *container);
-GList *_gtk_container_focus_sort             (GtkContainer     *container,
-					      GList            *children,
-					      GtkDirectionType  direction,
-					      GtkWidget        *old_focus);
-gboolean _gtk_container_get_need_resize      (GtkContainer     *container);
-void     _gtk_container_set_need_resize      (GtkContainer     *container,
-                                              gboolean          need_resize);
-gboolean _gtk_container_get_reallocate_redraws (GtkContainer   *container);
-
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
                                                   GtkWidget         *child);
 

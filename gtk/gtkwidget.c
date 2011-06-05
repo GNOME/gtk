@@ -48,6 +48,7 @@
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkaccessible.h"

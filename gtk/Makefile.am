@@ -386,6 +386,7 @@ gtk_private_h_sources =		\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
+	gtkcontainerprivate.h   \
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
 	gtkcssselectorprivate.h	\

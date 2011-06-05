@@ -48,6 +48,7 @@
 #include "gtksettings.h"
 #include "gtksizerequest.h"
 #include "gtkwindow.h"
+#include "gtkcontainerprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"

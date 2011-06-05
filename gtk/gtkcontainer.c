@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkcontainer.h"
+#include "gtkcontainerprivate.h"
 
 #include <stdarg.h>
 #include <string.h>
