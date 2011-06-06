@@ -696,38 +696,6 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
     }
 }
 
-static gboolean
-gtk_tool_palette_draw (GtkWidget      *widget,
-                       cairo_t        *cr)
-{
-  GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
-  GdkDisplay *display;
-  GdkWindow *window;
-  guint i;
-
-  window = gtk_widget_get_window (widget);
-
-  display = gdk_window_get_display (window);
-
-  if (!gdk_display_supports_composite (display))
-    return FALSE;
-
-  cairo_push_group (cr);
-
-  for (i = 0; i < palette->priv->groups->len; ++i)
-  {
-    GtkToolItemGroupInfo *info = g_ptr_array_index (palette->priv->groups, i);
-    if (info->widget)
-      _gtk_tool_item_group_paint (info->widget, cr);
-  }
-
-  cairo_pop_group_to_source (cr);
-
-  cairo_paint (cr);
-
-  return FALSE;
-}
-
 static void
 gtk_tool_palette_realize (GtkWidget *widget)
 {
@@ -999,7 +967,6 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
   wclass->get_preferred_width = gtk_tool_palette_get_preferred_width;
   wclass->get_preferred_height= gtk_tool_palette_get_preferred_height;
   wclass->size_allocate       = gtk_tool_palette_size_allocate;
-  wclass->draw                = gtk_tool_palette_draw;
   wclass->realize             = gtk_tool_palette_realize;
 
   cclass->add                 = gtk_tool_palette_add;
