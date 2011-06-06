@@ -438,7 +438,7 @@ gtk_font_button_set_title (GtkFontButton *font_button,
  *
  * Since: 2.4
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_button_get_title (GtkFontButton *font_button)
 {
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);
@@ -650,7 +650,7 @@ gtk_font_button_set_show_size (GtkFontButton *font_button,
  *
  * Since: 2.4
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_font_button_get_font_name (GtkFontButton *font_button)
 {
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);

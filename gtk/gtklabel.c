@@ -2265,7 +2265,7 @@ gtk_label_set_label (GtkLabel    *label,
  * Return value: the text of the label widget. This string is
  *   owned by the widget and must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_label_get_label (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
@@ -2730,7 +2730,7 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
  * Return value: the text in the label widget. This is the internal
  *   string used by the label, and must not be modified.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_label_get_text (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
@@ -6531,7 +6531,7 @@ gtk_label_get_current_link (GtkLabel *label)
  *
  * Since: 2.18
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_label_get_current_uri (GtkLabel *label)
 {
   GtkLabelLink *link;

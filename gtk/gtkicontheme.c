@@ -2765,7 +2765,7 @@ gtk_icon_info_get_base_size (GtkIconInfo *icon_info)
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
@@ -3641,7 +3641,7 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);

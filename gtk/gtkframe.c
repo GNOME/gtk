@@ -432,7 +432,7 @@ gtk_frame_set_label (GtkFrame *frame,
  *               a #GtkLabel. This string is owned by GTK+ and
  *               must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_frame_get_label (GtkFrame *frame)
 {
   GtkFramePrivate *priv;

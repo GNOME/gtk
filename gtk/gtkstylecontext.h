@@ -563,7 +563,7 @@ gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
 
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
-G_CONST_RETURN GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
+const GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
 
 GList *  gtk_style_context_list_classes (GtkStyleContext *context);
 

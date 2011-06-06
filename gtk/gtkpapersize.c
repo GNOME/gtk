@@ -516,7 +516,7 @@ gtk_paper_size_get_paper_sizes (gboolean include_custom)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_paper_size_get_name (GtkPaperSize *size)
 {
   if (size->name)
@@ -535,7 +535,7 @@ gtk_paper_size_get_name (GtkPaperSize *size)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_paper_size_get_display_name (GtkPaperSize *size)
 {
   const gchar *display_name;
@@ -560,7 +560,7 @@ gtk_paper_size_get_display_name (GtkPaperSize *size)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_paper_size_get_ppd_name (GtkPaperSize *size)
 {
   if (size->ppd_name)
@@ -660,7 +660,7 @@ gtk_paper_size_set_size (GtkPaperSize *size,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_paper_size_get_default (void)
 {
   char *locale, *freeme = NULL;

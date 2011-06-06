@@ -1695,7 +1695,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
  *
  * Since: 3.0
  **/
-G_CONST_RETURN GtkWidgetPath *
+const GtkWidgetPath *
 gtk_style_context_get_path (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;

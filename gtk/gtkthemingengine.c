@@ -638,7 +638,7 @@ gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
  *
  * Since: 3.0
  **/
-G_CONST_RETURN GtkWidgetPath *
+const GtkWidgetPath *
 gtk_theming_engine_get_path (GtkThemingEngine *engine)
 {
   GtkThemingEnginePrivate *priv;

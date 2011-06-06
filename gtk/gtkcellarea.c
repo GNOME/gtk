@@ -2376,7 +2376,7 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
  *
  * Since: 3.0
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_cell_area_get_current_path_string (GtkCellArea *area)
 {
   GtkCellAreaPrivate *priv;

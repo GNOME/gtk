@@ -1584,7 +1584,7 @@ gtk_window_set_title (GtkWindow   *window,
  *    been set explicitely. The returned string is owned by the widget
  *    and must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_window_get_title (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
@@ -1746,7 +1746,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
  *   returned is owned by the widget and must not be modified
  *   or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_window_get_role (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);

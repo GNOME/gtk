@@ -578,7 +578,7 @@ gboolean   gtk_widget_device_is_shadowed  (GtkWidget           *widget,
 
 void                  gtk_widget_set_name               (GtkWidget    *widget,
 							 const gchar  *name);
-G_CONST_RETURN gchar* gtk_widget_get_name               (GtkWidget    *widget);
+const gchar *         gtk_widget_get_name               (GtkWidget    *widget);
 
 void                  gtk_widget_set_state              (GtkWidget    *widget,
 							 GtkStateType  state);

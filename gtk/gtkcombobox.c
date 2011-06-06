@@ -4835,7 +4835,7 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_combo_box_get_title (GtkComboBox *combo_box)
 {
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);

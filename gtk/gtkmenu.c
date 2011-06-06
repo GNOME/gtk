@@ -2408,7 +2408,7 @@ gtk_menu_set_title (GtkMenu     *menu,
  *     has no title set on it. This string is owned by GTK+
  *     and should not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_menu_get_title (GtkMenu *menu)
 {
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);

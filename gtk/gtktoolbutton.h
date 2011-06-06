@@ -73,16 +73,16 @@ GtkToolItem *gtk_tool_button_new_from_stock (const gchar *stock_id);
 
 void                  gtk_tool_button_set_label         (GtkToolButton *button,
 							 const gchar   *label);
-G_CONST_RETURN gchar *gtk_tool_button_get_label         (GtkToolButton *button);
+const gchar *         gtk_tool_button_get_label         (GtkToolButton *button);
 void                  gtk_tool_button_set_use_underline (GtkToolButton *button,
 							 gboolean       use_underline);
 gboolean              gtk_tool_button_get_use_underline (GtkToolButton *button);
 void                  gtk_tool_button_set_stock_id      (GtkToolButton *button,
 							 const gchar   *stock_id);
-G_CONST_RETURN gchar *gtk_tool_button_get_stock_id      (GtkToolButton *button);
+const gchar *         gtk_tool_button_get_stock_id      (GtkToolButton *button);
 void                  gtk_tool_button_set_icon_name     (GtkToolButton *button,
 							 const gchar   *icon_name);
-G_CONST_RETURN gchar *gtk_tool_button_get_icon_name     (GtkToolButton *button);
+const gchar *         gtk_tool_button_get_icon_name     (GtkToolButton *button);
 void                  gtk_tool_button_set_icon_widget   (GtkToolButton *button,
 							 GtkWidget     *icon_widget);
 GtkWidget *           gtk_tool_button_get_icon_widget   (GtkToolButton *button);

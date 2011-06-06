@@ -93,7 +93,7 @@ static void gtk_image_menu_item_toggle_size_request  (GtkMenuItem      *menu_ite
                                                       gint             *requisition);
 static void gtk_image_menu_item_set_label            (GtkMenuItem      *menu_item,
                                                       const gchar      *label);
-static G_CONST_RETURN gchar *gtk_image_menu_item_get_label (GtkMenuItem *menu_item);
+static const gchar * gtk_image_menu_item_get_label   (GtkMenuItem *menu_item);
 
 static void gtk_image_menu_item_forall               (GtkContainer    *container,
                                                       gboolean         include_internals,
@@ -424,7 +424,7 @@ gtk_image_menu_item_set_label (GtkMenuItem      *menu_item,
     }
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gtk_image_menu_item_get_label (GtkMenuItem *menu_item)
 {
   GtkImageMenuItemPrivate *priv = GTK_IMAGE_MENU_ITEM (menu_item)->priv;

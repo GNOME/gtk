@@ -578,7 +578,7 @@ gtk_widget_path_iter_set_object_type (GtkWidgetPath *path,
  *
  * Returns: The widget name, or %NULL if none was set.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
                                gint                 pos)
 {

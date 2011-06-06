@@ -1881,7 +1881,7 @@ _gtk_tool_palette_child_set_drag_source (GtkWidget *child,
  *
  * Since: 2.20
  */
-G_CONST_RETURN GtkTargetEntry*
+const GtkTargetEntry*
 gtk_tool_palette_get_drag_target_item (void)
 {
   return &dnd_targets[0];
@@ -1896,7 +1896,7 @@ gtk_tool_palette_get_drag_target_item (void)
  *
  * Since: 2.20
  */
-G_CONST_RETURN GtkTargetEntry*
+const GtkTargetEntry*
 gtk_tool_palette_get_drag_target_group (void)
 {
   return &dnd_targets[1];

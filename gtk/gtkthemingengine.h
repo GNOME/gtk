@@ -211,7 +211,7 @@ gboolean gtk_theming_engine_lookup_color (GtkThemingEngine *engine,
                                           const gchar      *color_name,
                                           GdkRGBA          *color);
 
-G_CONST_RETURN GtkWidgetPath * gtk_theming_engine_get_path (GtkThemingEngine *engine);
+const GtkWidgetPath * gtk_theming_engine_get_path (GtkThemingEngine *engine);
 
 gboolean gtk_theming_engine_has_class  (GtkThemingEngine *engine,
                                         const gchar      *style_class);

@@ -1563,7 +1563,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
  *     This string is owned by the widget and should not be 
  *     modified or freed 
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_selection_get_preview_text (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv;
@@ -1868,7 +1868,7 @@ gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
  *     This string is owned by the widget and should not be 
  *     modified or freed 
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 {
   GtkFontSelectionDialogPrivate *priv;
