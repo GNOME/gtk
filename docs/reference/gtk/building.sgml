@@ -205,6 +205,9 @@ How to compile GTK+ itself
           language bindings.
         </para>
       </listitem>
+    </itemizedlist>
+    <itemizedlist>
+      <title>External dependencies</title>
       <listitem>
         <para>
           The <ulink url="http://www.gnu.org/software/libiconv/">GNU
