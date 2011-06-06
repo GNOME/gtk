@@ -47,10 +47,10 @@ static void         _gail_cell_destroy_action_info
 
 static gint         gail_cell_action_get_n_actions 
                                                   (AtkAction           *action);
-static G_CONST_RETURN gchar*
+static const gchar*
                     gail_cell_action_get_name     (AtkAction           *action,
 			                           gint                index);
-static G_CONST_RETURN gchar *
+static const gchar *
                     gail_cell_action_get_description 
                                                   (AtkAction           *action,
 				                   gint                index);
@@ -58,7 +58,7 @@ static gboolean     gail_cell_action_set_description
                                                   (AtkAction           *action,
 				                   gint                index,
 				                   const gchar         *desc);
-static G_CONST_RETURN gchar *
+static const gchar *
                     gail_cell_action_get_keybinding 
                                                   (AtkAction           *action,
 				                   gint                index);
@@ -402,7 +402,7 @@ gail_cell_action_get_n_actions (AtkAction *action)
     return 0;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_cell_action_get_name (AtkAction *action,
 			   gint      index)
 {
@@ -414,7 +414,7 @@ gail_cell_action_get_name (AtkAction *action,
   return info->name;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_cell_action_get_description (AtkAction *action,
 				  gint      index)
 {
@@ -441,7 +441,7 @@ gail_cell_action_set_description (AtkAction   *action,
   return TRUE;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_cell_action_get_keybinding (AtkAction *action,
 				 gint      index)
 {

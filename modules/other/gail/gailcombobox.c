@@ -30,7 +30,7 @@ static void         gail_combo_box_real_initialize         (AtkObject      *obj,
 
 static void         gail_combo_box_changed_gtk             (GtkWidget      *widget);
 
-static G_CONST_RETURN gchar* gail_combo_box_get_name       (AtkObject      *obj);
+static const gchar* gail_combo_box_get_name       (AtkObject      *obj);
 static gint         gail_combo_box_get_n_children          (AtkObject      *obj);
 static AtkObject*   gail_combo_box_ref_child               (AtkObject      *obj,
                                                             gint           i);
@@ -41,11 +41,11 @@ static gboolean     gail_combo_box_do_action               (AtkAction      *acti
                                                             gint           i);
 static gboolean     idle_do_action                         (gpointer       data);
 static gint         gail_combo_box_get_n_actions           (AtkAction      *action);
-static G_CONST_RETURN gchar* gail_combo_box_get_description(AtkAction      *action,
+static const gchar* gail_combo_box_get_description(AtkAction      *action,
                                                             gint           i);
-static G_CONST_RETURN gchar* gail_combo_box_get_keybinding   (AtkAction       *action,
+static const gchar* gail_combo_box_get_keybinding   (AtkAction       *action,
 		                                             gint            i);
-static G_CONST_RETURN gchar* gail_combo_box_action_get_name(AtkAction      *action,
+static const gchar* gail_combo_box_action_get_name(AtkAction      *action,
                                                             gint           i);
 static gboolean              gail_combo_box_set_description(AtkAction      *action,
                                                             gint           i,
@@ -143,14 +143,14 @@ gail_combo_box_changed_gtk (GtkWidget *widget)
     }
 }
 
-static G_CONST_RETURN gchar* 
+static const gchar*
 gail_combo_box_get_name (AtkObject *obj)
 {
   GtkWidget *widget;
   GtkComboBox *combo_box;
   GailComboBox *gail_combo_box;
   GtkTreeIter iter;
-  G_CONST_RETURN gchar *name;
+  const gchar *name;
   GtkTreeModel *model;
   gint n_columns;
   gint i;
@@ -340,7 +340,7 @@ gail_combo_box_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_box_get_description (AtkAction *action,
                            gint      i)
 {
@@ -355,7 +355,7 @@ gail_combo_box_get_description (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_box_get_keybinding (AtkAction *action,
 		                    gint      i)
 {
@@ -406,7 +406,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 }
 
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_box_action_get_name (AtkAction *action,
                                 gint      i)
 {

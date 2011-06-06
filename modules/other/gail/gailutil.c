@@ -38,8 +38,8 @@ static guint		gail_util_add_key_event_listener	(AtkKeySnoopFunc	listener,
 								 gpointer               data);
 static void 		gail_util_remove_key_event_listener	(guint			remove_listener);
 static AtkObject*	gail_util_get_root			(void);
-static G_CONST_RETURN gchar *gail_util_get_toolkit_name		(void);
-static G_CONST_RETURN gchar *gail_util_get_toolkit_version      (void);
+static const gchar *gail_util_get_toolkit_name		(void);
+static const gchar *gail_util_get_toolkit_version      (void);
 
 /* gailmisc/AtkMisc */
 static void		gail_misc_class_init			(GailMiscClass		*klass);
@@ -333,13 +333,13 @@ gail_util_get_root (void)
   return root;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_util_get_toolkit_name (void)
 {
   return "GAIL";
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_util_get_toolkit_version (void)
 {
  /*

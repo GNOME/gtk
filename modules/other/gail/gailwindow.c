@@ -48,7 +48,7 @@ static void                  gail_window_real_initialize (AtkObject    *obj,
                                                           gpointer     data);
 static void                  gail_window_finalize        (GObject      *object);
 
-static G_CONST_RETURN gchar* gail_window_get_name       (AtkObject     *accessible);
+static const gchar* gail_window_get_name       (AtkObject     *accessible);
 
 static AtkObject*            gail_window_get_parent     (AtkObject     *accessible);
 static gint                  gail_window_get_index_in_parent (AtkObject *accessible);
@@ -263,10 +263,10 @@ gail_window_finalize (GObject *object)
   G_OBJECT_CLASS (gail_window_parent_class)->finalize (object);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_window_get_name (AtkObject *accessible)
 {
-  G_CONST_RETURN gchar* name;
+  const gchar* name;
 
   name = ATK_OBJECT_CLASS (gail_window_parent_class)->get_name (accessible);
   if (name == NULL)

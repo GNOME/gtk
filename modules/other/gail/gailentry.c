@@ -151,11 +151,11 @@ static gboolean              gail_entry_do_action               (AtkAction      
                                                                  gint            i);
 static gboolean              idle_do_action                     (gpointer        data);
 static gint                  gail_entry_get_n_actions           (AtkAction       *action);
-static G_CONST_RETURN gchar* gail_entry_action_get_description  (AtkAction       *action,
+static const gchar* gail_entry_action_get_description  (AtkAction       *action,
                                                                  gint            i);
-static G_CONST_RETURN gchar* gail_entry_get_keybinding          (AtkAction       *action,
+static const gchar* gail_entry_get_keybinding          (AtkAction       *action,
                                                                  gint            i);
-static G_CONST_RETURN gchar* gail_entry_action_get_name         (AtkAction       *action,
+static const gchar* gail_entry_action_get_name         (AtkAction       *action,
                                                                  gint            i);
 static gboolean              gail_entry_action_set_description  (AtkAction       *action,
                                                                  gint            i,
@@ -1309,12 +1309,12 @@ gail_entry_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_entry_action_get_description (AtkAction *action,
                                    gint      i)
 {
   GailEntry *entry;
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   entry = GAIL_ENTRY (action);
   switch (i)
@@ -1329,7 +1329,7 @@ gail_entry_action_get_description (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_entry_get_keybinding (AtkAction *action,
                            gint      i)
 {
@@ -1393,11 +1393,11 @@ gail_entry_get_keybinding (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_entry_action_get_name (AtkAction *action,
                             gint      i)
 {
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   switch (i)
     {

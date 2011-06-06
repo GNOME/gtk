@@ -133,7 +133,7 @@ static void       gail_text_view_paste_received        (GtkClipboard     *clipbo
 /* AtkStreamableContent */
 static void       atk_streamable_content_interface_init    (AtkStreamableContentIface *iface);
 static gint       gail_streamable_content_get_n_mime_types (AtkStreamableContent *streamable);
-static G_CONST_RETURN gchar* gail_streamable_content_get_mime_type (AtkStreamableContent *streamable,
+static const gchar* gail_streamable_content_get_mime_type (AtkStreamableContent *streamable,
 								    gint i);
 static GIOChannel* gail_streamable_content_get_stream       (AtkStreamableContent *streamable,
 							     const gchar *mime_type);
@@ -1662,7 +1662,7 @@ static gint       gail_streamable_content_get_n_mime_types (AtkStreamableContent
     return n_mime_types;
 }
 
-static G_CONST_RETURN gchar*       
+static const gchar*
 gail_streamable_content_get_mime_type (AtkStreamableContent *streamable, gint i)
 {
     if (GAIL_IS_TEXT_VIEW (streamable) && GAIL_TEXT_VIEW (streamable)->textutil)

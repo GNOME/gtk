@@ -27,12 +27,12 @@ static void      gail_image_class_init         (GailImageClass *klass);
 static void      gail_image_init               (GailImage      *image);
 static void      gail_image_initialize         (AtkObject       *accessible,
                                                 gpointer        data);
-static G_CONST_RETURN gchar* gail_image_get_name  (AtkObject     *accessible);
+static const gchar* gail_image_get_name  (AtkObject     *accessible);
 
 
 static void      atk_image_interface_init      (AtkImageIface  *iface);
 
-static G_CONST_RETURN gchar *
+static const gchar *
                  gail_image_get_image_description (AtkImage     *image);
 static void	 gail_image_get_image_position    (AtkImage     *image,
                                                    gint         *x,
@@ -118,7 +118,7 @@ elide_underscores (const gchar *original)
   return result;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_image_get_name (AtkObject *accessible)
 {
   GtkWidget* widget;
@@ -169,7 +169,7 @@ atk_image_interface_init (AtkImageIface *iface)
   iface->set_image_description = gail_image_set_image_description;
 }
 
-static G_CONST_RETURN gchar * 
+static const gchar *
 gail_image_get_image_description (AtkImage     *image)
 {
   GailImage* aimage = GAIL_IMAGE (image);

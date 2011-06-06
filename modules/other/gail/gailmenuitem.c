@@ -52,11 +52,11 @@ static gboolean              gail_menu_item_do_action      (AtkAction      *acti
                                                             gint           i);
 static gboolean              idle_do_action                (gpointer       data);
 static gint                  gail_menu_item_get_n_actions  (AtkAction      *action);
-static G_CONST_RETURN gchar* gail_menu_item_get_description(AtkAction      *action,
+static const gchar* gail_menu_item_get_description(AtkAction      *action,
                                                             gint           i);
-static G_CONST_RETURN gchar* gail_menu_item_action_get_name (AtkAction      *action,
+static const gchar* gail_menu_item_action_get_name (AtkAction      *action,
                                                              gint           i);
-static G_CONST_RETURN gchar* gail_menu_item_get_keybinding (AtkAction      *action,
+static const gchar* gail_menu_item_get_keybinding (AtkAction      *action,
                                                             gint           i);
 static gboolean              gail_menu_item_set_description(AtkAction      *action,
                                                             gint           i,
@@ -905,7 +905,7 @@ gail_menu_item_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_menu_item_get_description (AtkAction *action,
                                 gint      i)
 {
@@ -920,7 +920,7 @@ gail_menu_item_get_description (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_menu_item_action_get_name (AtkAction *action,
                                 gint      i)
 {
@@ -930,7 +930,7 @@ gail_menu_item_action_get_name (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_menu_item_get_keybinding (AtkAction *action,
                                gint      i)
 {
