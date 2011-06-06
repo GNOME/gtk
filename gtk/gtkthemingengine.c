@@ -3130,53 +3130,24 @@ lookup_icon_size (GtkThemingEngine *engine,
   return gtk_icon_size_lookup_for_settings (settings, size, width, height);
 }
 
-/* Kudos to the gnome-panel guys. */
 static void
-colorshift_pixbuf (GdkPixbuf *src,
-                   GdkPixbuf *dest,
-                   gint       shift)
+colorshift_source (cairo_t *cr,
+		   gdouble shift)
 {
-  gint i, j;
-  gint width, height, has_alpha, src_rowstride, dest_rowstride;
-  guchar *target_pixels;
-  guchar *original_pixels;
-  guchar *pix_src;
-  guchar *pix_dest;
-  int val;
-  guchar r, g, b;
+  cairo_pattern_t *source;
 
-  has_alpha       = gdk_pixbuf_get_has_alpha (src);
-  width           = gdk_pixbuf_get_width (src);
-  height          = gdk_pixbuf_get_height (src);
-  src_rowstride   = gdk_pixbuf_get_rowstride (src);
-  dest_rowstride  = gdk_pixbuf_get_rowstride (dest);
-  original_pixels = gdk_pixbuf_get_pixels (src);
-  target_pixels   = gdk_pixbuf_get_pixels (dest);
+  cairo_save (cr);
+  cairo_paint (cr);
 
-  for (i = 0; i < height; i++)
-    {
-      pix_dest = target_pixels   + i * dest_rowstride;
-      pix_src  = original_pixels + i * src_rowstride;
+  source = cairo_pattern_reference (cairo_get_source (cr));
 
-      for (j = 0; j < width; j++)
-        {
-          r = *(pix_src++);
-          g = *(pix_src++);
-          b = *(pix_src++);
+  cairo_set_source_rgb (cr, shift, shift, shift);
+  cairo_set_operator (cr, CAIRO_OPERATOR_COLOR_DODGE);
 
-          val = r + shift;
-          *(pix_dest++) = CLAMP (val, 0, 255);
+  cairo_mask (cr, source);
 
-          val = g + shift;
-          *(pix_dest++) = CLAMP (val, 0, 255);
-
-          val = b + shift;
-          *(pix_dest++) = CLAMP (val, 0, 255);
-
-          if (has_alpha)
-            *(pix_dest++) = *(pix_src++);
-        }
-    }
+  cairo_pattern_destroy (source);
+  cairo_restore (cr);
 }
 
 static GdkPixbuf *
@@ -3190,6 +3161,8 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
   GtkStateFlags state;
   gint width = 1;
   gint height = 1;
+  cairo_t *cr;
+  cairo_surface_t *surface;
 
   base_pixbuf = gtk_icon_source_get_pixbuf (source);
   state = gtk_theming_engine_get_state (engine);
@@ -3217,16 +3190,36 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
     {
       if (state & GTK_STATE_FLAG_INSENSITIVE)
         {
-          stated = gdk_pixbuf_copy (scaled);
-          gdk_pixbuf_saturate_and_pixelate (scaled, stated,
-                                            0.8, TRUE);
-          g_object_unref (scaled);
+	  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+						gdk_pixbuf_get_width (scaled),
+						gdk_pixbuf_get_height (scaled));
+	  cr = cairo_create (surface);
+	  gdk_cairo_set_source_pixbuf (cr, scaled, 0, 0);
+	  cairo_paint_with_alpha (cr, 0.5);
+
+	  cairo_destroy (cr);
+
+	  g_object_unref (scaled);
+	  stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
+						cairo_image_surface_get_width (surface),
+						cairo_image_surface_get_height (surface));
         }
       else if (state & GTK_STATE_FLAG_PRELIGHT)
         {
-          stated = gdk_pixbuf_copy (scaled);
-          colorshift_pixbuf (scaled, stated, 30);
-          g_object_unref (scaled);
+	  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+						gdk_pixbuf_get_width (scaled),
+						gdk_pixbuf_get_height (scaled));
+
+	  cr = cairo_create (surface);
+	  gdk_cairo_set_source_pixbuf (cr, scaled, 0, 0);
+	  colorshift_source (cr, 0.10);
+
+	  cairo_destroy (cr);
+
+	  g_object_unref (scaled);
+	  stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
+						cairo_image_surface_get_width (surface),
+						cairo_image_surface_get_height (surface));
         }
       else
         stated = scaled;
