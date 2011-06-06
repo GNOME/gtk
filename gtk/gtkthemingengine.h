@@ -69,6 +69,7 @@ struct _GtkThemingEngine
  * @render_activity: Renders an area displaying activity, such as in #GtkSpinner,
  *                   or #GtkProgressBar.
  * @render_icon_pixbuf: Renders an icon as a #GdkPixbuf.
+ * @render_icon: Renders an icon given as a #GdkPixbuf.
  *
  * Base class for theming engines.
  */
@@ -168,9 +169,14 @@ struct _GtkThemingEngineClass
   GdkPixbuf * (* render_icon_pixbuf) (GtkThemingEngine    *engine,
                                       const GtkIconSource *source,
                                       GtkIconSize          size);
+  void (* render_icon) (GtkThemingEngine *engine,
+                        cairo_t          *cr,
+			GdkPixbuf        *pixbuf,
+                        gdouble           x,
+                        gdouble           y);
 
   /*< private >*/
-  gpointer padding[16];
+  gpointer padding[15];
 };
 
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;

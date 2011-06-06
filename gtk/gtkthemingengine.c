@@ -177,6 +177,11 @@ static void gtk_theming_engine_render_activity  (GtkThemingEngine *engine,
 static GdkPixbuf * gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
                                                           const GtkIconSource *source,
                                                           GtkIconSize          size);
+static void gtk_theming_engine_render_icon (GtkThemingEngine *engine,
+                                            cairo_t *cr,
+					    GdkPixbuf *pixbuf,
+                                            gdouble x,
+                                            gdouble y);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -215,6 +220,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   object_class->set_property = gtk_theming_engine_impl_set_property;
   object_class->get_property = gtk_theming_engine_impl_get_property;
 
+  klass->render_icon = gtk_theming_engine_render_icon;
   klass->render_check = gtk_theming_engine_render_check;
   klass->render_option = gtk_theming_engine_render_option;
   klass->render_arrow = gtk_theming_engine_render_arrow;
@@ -3230,3 +3236,35 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
 
   return stated;
 }
+
+static void
+gtk_theming_engine_render_icon (GtkThemingEngine *engine,
+                                cairo_t *cr,
+				GdkPixbuf *pixbuf,
+                                gdouble x,
+                                gdouble y)
+{
+  GtkStateFlags state;
+  GtkShadow *icon_shadow;
+
+  state = gtk_theming_engine_get_state (engine);
+
+  cairo_save (cr);
+
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
+
+  gtk_theming_engine_get (engine, state,
+                          "icon-shadow", &icon_shadow,
+                          NULL);
+
+  if (icon_shadow != NULL)
+    {
+      _gtk_icon_shadow_paint (icon_shadow, cr);
+      _gtk_shadow_unref (icon_shadow);
+    }
+
+  cairo_paint (cr);
+
+  cairo_restore (cr);
+}
+
