@@ -720,12 +720,15 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
       g_object_get (tag, "foreground-set", &val_set, NULL);
       if (val_set)
         {
-          GdkColor *c;
+          GdkRGBA *rgba;
           gchar *value;
 
-          g_object_get (tag, "foreground-gdk", &c, NULL);
-          value = g_strdup_printf ("%u,%u,%u", c->red, c->green, c->blue);
-          gdk_color_free (c);
+          g_object_get (tag, "foreground-rgba", &rgba, NULL);
+          value = g_strdup_printf ("%u,%u,%u",
+                                   (guint) rgba->red * 65535,
+                                   (guint) rgba->green * 65535,
+                                   (guint) rgba->blue * 65535);
+          gdk_rgba_free (rgba);
           attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FG_COLOR, value);
         }
       temp_tags = temp_tags->next;
@@ -740,12 +743,15 @@ gail_misc_buffer_get_run_attributes (GtkTextBuffer *buffer,
       g_object_get (tag, "background-set", &val_set, NULL);
       if (val_set)
         {
-          GdkColor *c;
+          GdkRGBA *rgba;
           gchar *value;
 
-          g_object_get (tag, "background-gdk", &c, NULL);
-          value = g_strdup_printf ("%u,%u,%u", c->red, c->green, c->blue);
-          gdk_color_free (c);
+          g_object_get (tag, "background-rgba", &rgba, NULL);
+          value = g_strdup_printf ("%u,%u,%u",
+                                   (guint) rgba->red * 65535,
+                                   (guint) rgba->green * 65535,
+                                   (guint) rgba->blue * 65535);
+          gdk_rgba_free (rgba);
           attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_COLOR, value);
         }
       temp_tags = temp_tags->next;

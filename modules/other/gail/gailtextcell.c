@@ -451,7 +451,7 @@ static PangoLayout*
 create_pango_layout(GtkCellRendererText *gtk_renderer,
                     GtkWidget           *widget)
 {
-  GdkColor *foreground_gdk;
+  GdkRGBA *foreground_rgba;
   PangoAttrList *attr_list, *attributes;
   PangoLayout *layout;
   PangoUnderline uline, underline;
@@ -467,7 +467,7 @@ create_pango_layout(GtkCellRendererText *gtk_renderer,
                 "text", &renderer_text,
                 "attributes", &attributes,
                 "foreground-set", &foreground_set,
-                "foreground-gdk", &foreground_gdk,
+                "foreground-gdk", &foreground_rgba,
                 "strikethrough-set", &strikethrough_set,
                 "strikethrough", &strikethrough,
                 "font-desc", &font_desc,
@@ -488,9 +488,9 @@ create_pango_layout(GtkCellRendererText *gtk_renderer,
 
   if (foreground_set)
     {
-      add_attr (attr_list, pango_attr_foreground_new (foreground_gdk->red,
-                                                      foreground_gdk->green,
-                                                      foreground_gdk->blue));
+      add_attr (attr_list, pango_attr_foreground_new (foreground_rgba->red * 65535,
+                                                      foreground_rgba->green * 65535,
+                                                      foreground_rgba->blue * 65535));
     }
 
   if (strikethrough_set)
@@ -540,7 +540,7 @@ create_pango_layout(GtkCellRendererText *gtk_renderer,
   pango_font_description_free (font_desc);
   pango_attr_list_unref (attributes);
   g_free (renderer_text);
-  gdk_color_free (foreground_gdk);
+  gdk_rgba_free (foreground_rgba);
 
   return layout;
 }
