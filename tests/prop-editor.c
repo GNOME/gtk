@@ -664,9 +664,9 @@ static void
 color_modified (GtkColorButton *cb, gpointer data)
 {
   ObjectProperty *p = data;
-  GdkColor color;
+  GdkRGBA rgba;
 
-  gtk_color_button_get_color (cb, &color);
+  gtk_color_button_get_rgba (cb, &rgba);
 
   if (is_child_property (p->spec))
     {
@@ -674,10 +674,10 @@ color_modified (GtkColorButton *cb, gpointer data)
       GtkWidget *parent = gtk_widget_get_parent (widget);
 
       gtk_container_child_set (GTK_CONTAINER (parent),
-			       widget, p->spec->name, &color, NULL);
+			       widget, p->spec->name, &rgba, NULL);
     }
   else
-    g_object_set (p->obj, p->spec->name, &color, NULL);
+    g_object_set (p->obj, p->spec->name, &rgba, NULL);
 }
 
 static void
@@ -685,19 +685,19 @@ color_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkColorButton *cb = GTK_COLOR_BUTTON (data);
   GValue val = { 0, };
-  GdkColor *color;
-  GdkColor cb_color;
+  GdkRGBA *color;
+  GdkRGBA cb_color;
 
-  g_value_init (&val, GDK_TYPE_COLOR);
+  g_value_init (&val, GDK_TYPE_RGBA);
   get_property_value (object, pspec, &val);
 
   color = g_value_get_boxed (&val);
-  gtk_color_button_get_color (cb, &cb_color);
+  gtk_color_button_get_rgba (cb, &cb_color);
 
-  if (color != NULL && !gdk_color_equal (color, &cb_color))
+  if (color != NULL && !gdk_rgba_equal (color, &cb_color))
     {
       block_controller (G_OBJECT (cb));
-      gtk_color_button_set_color (cb, color);
+      gtk_color_button_set_rgba (cb, color);
       unblock_controller (G_OBJECT (cb));
     }
 
