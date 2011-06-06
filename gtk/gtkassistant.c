@@ -2089,7 +2089,7 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_assistant_get_page_title (GtkAssistant *assistant,
                               GtkWidget    *page)
 {

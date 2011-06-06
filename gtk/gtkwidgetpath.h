@@ -52,7 +52,7 @@ void                gtk_widget_path_iter_set_object_type (GtkWidgetPath       *p
                                                           gint                 pos,
                                                           GType                type);
 
-G_CONST_RETURN gchar * gtk_widget_path_iter_get_name  (const GtkWidgetPath *path,
+const gchar *          gtk_widget_path_iter_get_name  (const GtkWidgetPath *path,
                                                        gint                 pos);
 void                   gtk_widget_path_iter_set_name  (GtkWidgetPath       *path,
                                                        gint                 pos,

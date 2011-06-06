@@ -7516,7 +7516,7 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
  *     tab label widget is not a #GtkLabel. The string is owned
  *     by the widget and must not be freed.
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
                                  GtkWidget   *child)
 {
@@ -7653,7 +7653,7 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
  *     menu label, or the menu label widget is not a #GtkLabel.
  *     The string is owned by the widget and must not be freed.
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
                                   GtkWidget *child)
 {

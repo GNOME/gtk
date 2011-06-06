@@ -2102,7 +2102,7 @@ gtk_status_icon_get_pixbuf (GtkStatusIcon *status_icon)
  *
  * Since: 2.10
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_status_icon_get_stock (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv;
@@ -2134,7 +2134,7 @@ gtk_status_icon_get_stock (GtkStatusIcon *status_icon)
  *
  * Since: 2.10
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv;
@@ -2887,7 +2887,7 @@ gtk_status_icon_set_title (GtkStatusIcon *status_icon,
  *
  * Since: 2.18
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_status_icon_get_title (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv;

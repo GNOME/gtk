@@ -93,7 +93,7 @@ void       gtk_color_button_get_rgba       (GtkColorButton *color_button,
                                             GdkRGBA        *rgba);
 void       gtk_color_button_set_title      (GtkColorButton *color_button,
                                             const gchar    *title);
-G_CONST_RETURN gchar *gtk_color_button_get_title (GtkColorButton *color_button);
+const gchar *gtk_color_button_get_title    (GtkColorButton *color_button);
 
 
 G_END_DECLS

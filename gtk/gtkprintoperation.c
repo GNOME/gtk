@@ -1833,7 +1833,7 @@ gtk_print_operation_get_status (GtkPrintOperation *op)
  *
  * Since: 2.10
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_operation_get_status_string (GtkPrintOperation *op)
 {
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), "");

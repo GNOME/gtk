@@ -212,20 +212,20 @@ GtkWidget * gtk_notebook_get_tab_label    (GtkNotebook *notebook,
 void gtk_notebook_set_tab_label           (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   GtkWidget   *tab_label);
-void gtk_notebook_set_tab_label_text      (GtkNotebook *notebook,
-					   GtkWidget   *child,
-					   const gchar *tab_text);
-G_CONST_RETURN gchar *gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
-						       GtkWidget   *child);
+void          gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
+                                               GtkWidget   *child,
+                                               const gchar *tab_text);
+const gchar * gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
+                                               GtkWidget   *child);
 GtkWidget * gtk_notebook_get_menu_label   (GtkNotebook *notebook,
 					   GtkWidget   *child);
 void gtk_notebook_set_menu_label          (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   GtkWidget   *menu_label);
-void gtk_notebook_set_menu_label_text     (GtkNotebook *notebook,
-					   GtkWidget   *child,
-					   const gchar *menu_text);
-G_CONST_RETURN gchar *gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
+void          gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
+                                                GtkWidget   *child,
+                                                const gchar *menu_text);
+const gchar * gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
 							GtkWidget   *child);
 void gtk_notebook_reorder_child           (GtkNotebook *notebook,
 					   GtkWidget   *child,

@@ -1025,7 +1025,7 @@ gtk_about_dialog_show (GtkWidget *widget)
  *
  * Since: 2.12
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_program_name (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1105,7 +1105,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_version (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1153,7 +1153,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_copyright (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1212,7 +1212,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_comments (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1269,7 +1269,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_license (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1380,7 +1380,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_website (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1432,7 +1432,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_website_label (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1486,7 +1486,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar * G_CONST_RETURN *
+const gchar * const *
 gtk_about_dialog_get_authors (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1541,7 +1541,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar * G_CONST_RETURN *
+const gchar * const *
 gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1596,7 +1596,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar * G_CONST_RETURN *
+const gchar * const *
 gtk_about_dialog_get_artists (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1650,7 +1650,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1806,7 +1806,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
