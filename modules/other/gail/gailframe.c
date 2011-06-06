@@ -27,7 +27,7 @@ static void                  gail_frame_class_init       (GailFrameClass  *klass
 static void                  gail_frame_init             (GailFrame       *frame);
 static void                  gail_frame_initialize       (AtkObject       *accessible,
                                                           gpointer         data);
-static G_CONST_RETURN gchar* gail_frame_get_name         (AtkObject       *obj);
+static const gchar*          gail_frame_get_name         (AtkObject       *obj);
 
 G_DEFINE_TYPE (GailFrame, gail_frame, GAIL_TYPE_CONTAINER)
 
@@ -54,10 +54,10 @@ gail_frame_initialize (AtkObject *accessible,
   accessible->role = ATK_ROLE_PANEL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_frame_get_name (AtkObject *obj)
 {
-  G_CONST_RETURN gchar *name;
+  const gchar *name;
   g_return_val_if_fail (GAIL_IS_FRAME (obj), NULL);
 
   name = ATK_OBJECT_CLASS (gail_frame_parent_class)->get_name (obj);
