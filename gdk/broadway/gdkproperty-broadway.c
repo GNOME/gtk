@@ -52,7 +52,7 @@ _gdk_broadway_display_manager_atom_intern_static_string (GdkDisplayManager *mana
   return _GDK_MAKE_ATOM (g_quark_from_static_string (atom_name));
 }
 
-static G_CONST_RETURN char *
+static const char *
 get_atom_name (GdkAtom atom)
 {
   return g_quark_to_string (GPOINTER_TO_UINT(atom));

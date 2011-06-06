@@ -1337,7 +1337,7 @@ gdk_display_get_device_manager (GdkDisplay *display)
  *
  * Since: 2.2
  */
-G_CONST_RETURN gchar *
+const gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);

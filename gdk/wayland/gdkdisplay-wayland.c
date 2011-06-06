@@ -301,7 +301,7 @@ gdk_wayland_display_finalize (GObject *object)
   G_OBJECT_CLASS (_gdk_display_wayland_parent_class)->finalize (object);
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gdk_wayland_display_get_name (GdkDisplay *display)
 {
   return "Wayland";

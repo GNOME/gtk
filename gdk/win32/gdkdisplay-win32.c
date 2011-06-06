@@ -236,7 +236,7 @@ struct _GdkWin32DisplayClass
 
 G_DEFINE_TYPE (GdkWin32Display, gdk_win32_display, GDK_TYPE_DISPLAY)
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gdk_win32_display_get_name (GdkDisplay *display)
 {
   HDESK hdesk = GetThreadDesktop (GetCurrentThreadId ());
