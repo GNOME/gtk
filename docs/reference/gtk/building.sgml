@@ -162,8 +162,8 @@ How to compile GTK+ itself
     </itemizedlist>
     <para>
       Some of the libraries that GTK+ depends on are maintained by
-      by the GTK+ team: GLib, GdkPixbuf, Pango, and ATK. Other libraries
-      are maintained separately.
+      by the GTK+ team: GLib, GdkPixbuf, Pango, ATK and GObject Introspection.
+      Other libraries are maintained separately.
     </para>
     <itemizedlist>
       <listitem>
@@ -173,6 +173,12 @@ How to compile GTK+ itself
           an object and type system to C programs. It is available
           from the <ulink url="ftp://ftp.gtk.org/pub/glib/">GTK+
           FTP site</ulink>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <ulink url="http://git.gnome.org/browse/gdk-pixbuf/">GdkPixbuf library</ulink>
+          provides facilities for loading images in a variety of file formats.
         </para>
       </listitem>
       <listitem>
@@ -190,6 +196,13 @@ How to compile GTK+ itself
           screen readers to interact with a graphical user interface.
           It is available from the <ulink
           url="ftp://ftp.gtk.org/pub/atk/">GTK+ FTP site</ulink>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <ulink url="http://live.gnome.org/GObjectIntrospection">Gobject Introspection</ulink>
+          is a framework for making introspection data available to
+          language bindings.
         </para>
       </listitem>
       <listitem>
@@ -233,19 +246,6 @@ How to compile GTK+ itself
           is a graphics library that supports vector graphics and image
           compositing. Both Pango and GTK+ use cairo for all of their
           drawing.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The GdkPixbuf library provides facilities for loading
-          images in a variety of file formats.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <ulink url="http://live.gnome.org/GObjectIntrospection">gobject-introspection</ulink>
-          is a framework for making introspection data available to
-          language bindings.
         </para>
       </listitem>
       <listitem>
