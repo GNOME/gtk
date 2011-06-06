@@ -60,7 +60,7 @@ Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
-G_CONST_RETURN gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
+const gchar * gdk_x11_display_get_startup_notification_id         (GdkDisplay *display);
 void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *display,
                                                                    const gchar *startup_id);
 

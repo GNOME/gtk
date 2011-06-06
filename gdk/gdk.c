@@ -306,7 +306,7 @@ gdk_parse_args (int    *argc,
  *
  * Since: 2.2
  */
-G_CONST_RETURN gchar *
+const gchar *
 gdk_get_display_arg_name (void)
 {
   if (!_gdk_display_arg_name)
@@ -1039,7 +1039,7 @@ gdk_threads_add_timeout_seconds (guint       interval,
  *
  * Returns: the program class.
  */
-G_CONST_RETURN char *
+const char *
 gdk_get_program_class (void)
 {
   return gdk_progclass;

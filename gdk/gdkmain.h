@@ -50,7 +50,7 @@ gboolean              gdk_init_check                      (gint           *argc,
 void                  gdk_add_option_entries_libgtk_only  (GOptionGroup   *group);
 void                  gdk_pre_parse_libgtk_only           (void);
 
-G_CONST_RETURN gchar *gdk_get_program_class               (void);
+const gchar *         gdk_get_program_class               (void);
 void                  gdk_set_program_class               (const gchar    *program_class);
 
 void                  gdk_notify_startup_complete         (void);
@@ -64,7 +64,7 @@ G_GNUC_WARN_UNUSED_RESULT gint gdk_error_trap_pop         (void);
 void                           gdk_error_trap_pop_ignored (void);
 
 
-G_CONST_RETURN gchar *gdk_get_display_arg_name (void);
+const gchar *         gdk_get_display_arg_name (void);
 
 /**
  * gdk_get_display:
