@@ -173,7 +173,7 @@ How to compile GTK+ itself
           an object and type system to C programs. It is available
           from the <ulink url="http://ftp.gtk.org/pub/glib/">GTK+
           FTP site</ulink> or
-          <ulink url="http://download.gnome.org/pub/gnome/sources/glib/">here</ulink>.
+          <ulink url="http://download.gnome.org/sources/glib/">here</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -181,14 +181,14 @@ How to compile GTK+ itself
           The <ulink url="http://git.gnome.org/browse/gdk-pixbuf/">GdkPixbuf library</ulink>
           provides facilities for loading images in a variety of file formats.
           It is available
-          <ulink url="http://download.gnome.org/pub/gnome/sources/gdk-pixbuf/">here</ulink>.
+          <ulink url="http://download.gnome.org/sources/gdk-pixbuf/">here</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
           <ulink url="http://www.pango.org">Pango</ulink> is a library
           for internationalized text handling. It is available
-          <ulink url="http://download.gnome.org/pub/gnome/sources/pango/">here</ulink>.
+          <ulink url="http://download.gnome.org/sources/pango/">here</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -197,7 +197,7 @@ How to compile GTK+ itself
           interfaces allowing accessibility technologies such as
           screen readers to interact with a graphical user interface.
           It is available
-          <ulink url="http://download.gnome.org/pub/gnome/sources/atk/">here</ulink>.
+          <ulink url="http://download.gnome.org/sources/atk/">here</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -205,7 +205,7 @@ How to compile GTK+ itself
           <ulink url="http://live.gnome.org/GObjectIntrospection">Gobject Introspection</ulink>
           is a framework for making introspection data available to
           language bindings. It is available
-          <ulink url="http://download.gnome.org/pub/gnome/sources/gobject-introspection/">here</ulink>.
+          <ulink url="http://download.gnome.org/sources/gobject-introspection/">here</ulink>.
         </para>
       </listitem>
     </itemizedlist>
