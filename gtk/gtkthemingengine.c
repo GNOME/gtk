@@ -31,6 +31,7 @@
 #include "gtkpango.h"
 #include "gtkshadowprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkthemingengineprivate.h"
 
 /**
  * SECTION:gtkthemingengine
@@ -3031,6 +3032,103 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   cairo_restore (cr);
 }
 
+void
+_gtk_theming_engine_paint_spinner (cairo_t *cr,
+                                   gdouble  radius,
+                                   gdouble  progress,
+                                   GdkRGBA *color)
+{
+  guint num_steps, step;
+  gdouble half;
+  gint i;
+
+  num_steps = 12;
+
+  if (progress >= 0)
+    step = (guint) (progress * num_steps);
+  else
+    step = 0;
+
+  cairo_save (cr);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+  cairo_set_line_width (cr, 2.0);
+
+  half = num_steps / 2;
+
+  for (i = 0; i < num_steps; i++)
+    {
+      gint inset = 0.7 * radius;
+
+      /* transparency is a function of time and intial value */
+      gdouble t = 1.0 - (gdouble) ((i + step) % num_steps) / num_steps;
+      gdouble xscale = - sin (i * G_PI / half);
+      gdouble yscale = - cos (i * G_PI / half);
+
+      cairo_set_source_rgba (cr,
+                             color->red,
+                             color->green,
+                             color->blue,
+                             color->alpha * t);
+
+      cairo_move_to (cr,
+                     (radius - inset) * xscale,
+                     (radius - inset) * yscale);
+      cairo_line_to (cr,
+                     radius * xscale,
+                     radius * yscale);
+
+      cairo_stroke (cr);
+    }
+
+  cairo_restore (cr);
+}
+
+static void
+render_spinner (GtkThemingEngine *engine,
+                cairo_t          *cr,
+                gdouble           x,
+                gdouble           y,
+                gdouble           width,
+                gdouble           height)
+{
+  GtkStateFlags state;
+  GtkShadow *shadow;
+  GdkRGBA color;
+  gdouble progress;
+  gdouble radius;
+
+  state = gtk_theming_engine_get_state (engine);
+
+  if (!gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress))
+    progress = -1;
+
+  radius = MIN (width / 2, height / 2);
+
+  gtk_theming_engine_get_color (engine, state, &color);
+  gtk_theming_engine_get (engine, state,
+                          "icon-shadow", &shadow,
+                          NULL);
+
+  cairo_save (cr);
+  cairo_translate (cr, x + width / 2, y + height / 2);
+
+  if (shadow != NULL)
+    {
+      _gtk_icon_shadow_paint_spinner (shadow, cr,
+                                      radius,
+                                      progress);
+      _gtk_shadow_unref (shadow);
+    }
+
+  _gtk_theming_engine_paint_spinner (cr,
+                                     radius,
+                                     progress,
+                                     &color);
+
+  cairo_restore (cr);
+}
+
 static void
 gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     cairo_t          *cr,
@@ -3041,58 +3139,7 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
 {
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER))
     {
-      GtkStateFlags state;
-      guint num_steps, step;
-      GdkRGBA color;
-      gdouble progress;
-      gdouble radius;
-      gdouble half;
-      gint i;
-
-      num_steps = 12;
-
-      state = gtk_theming_engine_get_state (engine);
-      gtk_theming_engine_get_color (engine, state, &color);
-
-      if (gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress))
-        step = (guint) (progress * num_steps);
-      else
-        step = 0;
-
-      cairo_save (cr);
-
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_set_line_width (cr, 2.0);
-      cairo_translate (cr, x + width / 2, y + height / 2);
-
-      radius = MIN (width / 2, height / 2);
-      half = num_steps / 2;
-
-      for (i = 0; i < num_steps; i++)
-        {
-          gint inset = 0.7 * radius;
-
-          /* transparency is a function of time and intial value */
-          gdouble t = 1.0 - (gdouble) ((i + step) % num_steps) / num_steps;
-          gdouble xscale = - sin (i * G_PI / half);
-          gdouble yscale = - cos (i * G_PI / half);
-
-          cairo_set_source_rgba (cr,
-                                 color.red,
-                                 color.green,
-                                 color.blue,
-                                 color.alpha * t);
-
-          cairo_move_to (cr,
-                         (radius - inset) * xscale,
-                         (radius - inset) * yscale);
-          cairo_line_to (cr,
-                         radius * xscale,
-                         radius * yscale);
-          cairo_stroke (cr);
-        }
-
-      cairo_restore (cr);
+      render_spinner (engine, cr, x, y, width, height);
     }
   else
     {

@@ -61,6 +61,11 @@ void       _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
 void       _gtk_icon_shadow_paint        (GtkShadow *shadow,
 					  cairo_t *cr);
 
+void       _gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
+                                           cairo_t   *cr,
+                                           gdouble    radius,
+                                           gdouble    progress);
+
 G_END_DECLS
 
 #endif /* __GTK_SHADOW_H__ */

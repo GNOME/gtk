@@ -24,6 +24,7 @@
 #include "gtkshadowprivate.h"
 #include "gtkstylecontext.h"
 #include "gtkpango.h"
+#include "gtkthemingengineprivate.h"
 
 typedef struct _GtkShadowElement GtkShadowElement;
 
@@ -296,5 +297,29 @@ _gtk_icon_shadow_paint (GtkShadow *shadow,
 
       cairo_restore (cr);
       cairo_pattern_destroy (pattern);
+    }
+}
+
+void
+_gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
+                                cairo_t   *cr,
+                                gdouble    radius,
+                                gdouble    progress)
+{
+  GtkShadowElement *element;
+  GList *l;
+
+  for (l = g_list_last (shadow->elements); l != NULL; l = l->prev)
+    {
+      element = l->data;
+
+      cairo_save (cr);
+
+      cairo_translate (cr, element->hoffset, element->voffset);
+      _gtk_theming_engine_paint_spinner (cr,
+                                         radius, progress,
+                                         &element->color);
+
+      cairo_restore (cr);
     }
 }
