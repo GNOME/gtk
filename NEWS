@@ -1,3 +1,23 @@
+Overview of Changes in GTK+ 3.0.11
+==================================
+
+* Modernize custom paper size dialog look
+
+* Add an app chooser to the gtk-demo 'Pickers' example
+
+* Bugs fixed:
+ 642773 Make file search non-case sensitive
+ 576492 GtkBuilder does not respect G_PARAM_CONSTRUCT properties
+ 642929 Don't infinite-loop in GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+        Only draw the resize grip if its window exists
+        Make menuitems show up with name in a11y tools again
+        Add some level of a11y support for combo boxes back
+
+* Updated translations:
+ Catalan (Valencian)
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.0.10
 ==================================
 
