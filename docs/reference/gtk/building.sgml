@@ -49,12 +49,12 @@ How to compile GTK+ itself
       of the tools are already included in the source packages. But
       it's useful to know a bit about how packages that use these
       tools work. A source package is distributed as a
-      <literal>tar.gz</literal> or <literal>tar.bz2</literal> file
+      <literal>tar.bz2</literal> or <literal>tar.xz</literal> file
       which you unpack into a directory full of the source files as follows:
     </para>
     <programlisting>
-      tar xvfz gtk+-3.0.0.tar.gz
-      tar xvfj gtk+-3.0.0.tar.bz2
+      tar xvfj gtk+-3.2.0.tar.bz2
+      tar xvfJ gtk+-3.2.0.tar.xz
     </programlisting>
     <para>
       In the toplevel directory that is created, there will be
