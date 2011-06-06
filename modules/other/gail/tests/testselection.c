@@ -49,8 +49,8 @@ _find_object (AtkObject *obj,
 
 static void _print_type (AtkObject *obj)
 {
-  G_CONST_RETURN gchar * typename = NULL;
-  G_CONST_RETURN gchar * name = NULL;
+  const gchar * typename = NULL;
+  const gchar * name = NULL;
   AtkRole role;
 
   if (GTK_IS_ACCESSIBLE (obj))

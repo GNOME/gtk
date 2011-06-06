@@ -51,8 +51,8 @@ _find_object (AtkObject *obj,
 static void _property_change_handler (AtkObject   *obj,
                                       AtkPropertyValues   *values)
 {
-  G_CONST_RETURN gchar *type_name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
-  G_CONST_RETURN gchar *name = atk_object_get_name (obj);
+  const gchar *type_name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
+  const gchar *name = atk_object_get_name (obj);
 
   g_print ("_property_change_handler: Accessible Type: %s\n",
            type_name ? type_name : "NULL");
@@ -100,7 +100,7 @@ static void
 _notify_handler (GObject *obj, GParamSpec *pspec)
 {
   AtkObject *atk_obj = ATK_OBJECT (obj);
-  G_CONST_RETURN gchar *name;
+  const gchar *name;
 
   g_print ("_notify_handler: property: %s\n", pspec->name);
   if (strcmp (pspec->name, "accessible-name") == 0)

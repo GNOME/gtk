@@ -66,8 +66,8 @@ static void
 _property_change_handler (AtkObject   *obj,
                           AtkPropertyValues   *values)
 {
-  G_CONST_RETURN gchar *type_name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
-  G_CONST_RETURN gchar *name = atk_object_get_name (obj);
+  const gchar *type_name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
+  const gchar *name = atk_object_get_name (obj);
 
   g_print ("_property_change_handler: Accessible Type: %s\n",
            type_name ? type_name : "NULL");
