@@ -25,6 +25,7 @@
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"
 #include "gtkbuildable.h"
+#include "gtkdebug.h"
 #include "gtkintl.h"
 
 
