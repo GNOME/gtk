@@ -51,7 +51,6 @@
 #include "gtkvbox.h"
 #include "gtktable.h"
 #include "gtkframe.h"
-#include "gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkbuildable.h"
