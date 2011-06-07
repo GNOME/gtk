@@ -55,7 +55,6 @@ struct _GtkBorderImage {
   GtkCssBorderImageRepeat repeat;
 
   gint ref_count;
-  gboolean resolved;
 };
 
 GtkBorderImage *
@@ -76,8 +75,6 @@ _gtk_border_image_new (cairo_pattern_t      *pattern,
 
   if (repeat != NULL)
     image->repeat = *repeat;
-
-  image->resolved = TRUE;
 
   return image;
 }
@@ -101,36 +98,7 @@ _gtk_border_image_new_for_gradient (GtkGradient          *gradient,
   if (repeat != NULL)
     image->repeat = *repeat;
 
-  image->resolved = FALSE;
-
   return image;  
-}
-
-gboolean
-_gtk_border_image_get_resolved (GtkBorderImage *image)
-{
-  return image->resolved;
-}
-
-GtkBorderImage *
-_gtk_border_image_resolve (GtkBorderImage     *image,
-                           GtkStyleProperties *props)
-{
-  GtkBorderImage *resolved_image;
-  cairo_pattern_t *pattern;
-
-  if (image->resolved)
-    return _gtk_border_image_ref (image);
-
-  image->resolved =
-    gtk_gradient_resolve (image->source_gradient, props, &pattern);
-
-  if (!image->resolved)
-    return NULL;
-
-  resolved_image = _gtk_border_image_new (pattern, &image->slice, &image->repeat);
-
-  return resolved_image;
 }
 
 GtkBorderImage *

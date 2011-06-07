@@ -45,10 +45,6 @@ GtkBorderImage *  _gtk_border_image_new_for_gradient (GtkGradient          *grad
                                                       GtkBorder            *slice,
                                                       GtkCssBorderImageRepeat *repeat);
 
-GtkBorderImage *  _gtk_border_image_resolve          (GtkBorderImage       *image,
-                                                      GtkStyleProperties   *props);
-gboolean          _gtk_border_image_get_resolved     (GtkBorderImage       *image);
-
 GtkBorderImage *  _gtk_border_image_ref              (GtkBorderImage       *image);
 void              _gtk_border_image_unref            (GtkBorderImage       *image);
 

@@ -1915,29 +1915,6 @@ resolve_shadow (GtkStyleProperties *props,
   return TRUE;
 }
 
-static gboolean
-resolve_border_image (GtkStyleProperties *props,
-                      GValue *value)
-{
-  GtkBorderImage *resolved, *base;
-
-  base = g_value_get_boxed (value);
-
-  if (base == NULL)
-    return FALSE;
-
-  if (_gtk_border_image_get_resolved (base))
-    return TRUE;
-
-  resolved = _gtk_border_image_resolve (base, props);
-  if (resolved == NULL)
-    return FALSE;
-
-  g_value_take_boxed (value, resolved);
-
-  return TRUE;
-}
-
 void
 _gtk_style_property_resolve (const GtkStyleProperty *property,
                              GtkStyleProperties     *props,
@@ -1968,11 +1945,6 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
   else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
     {
       if (!resolve_shadow (props, val))
-        _gtk_style_property_resolve (property, props, val);
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_BORDER_IMAGE)
-    {
-      if (!resolve_border_image (props, val))
         _gtk_style_property_resolve (property, props, val);
     }
 }
