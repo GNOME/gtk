@@ -590,7 +590,7 @@ gtk_test_display_button_window (const gchar *window_title,
 {
   va_list var_args;
   GtkWidget *window = gtk_test_create_widget (GTK_TYPE_WINDOW, "title", window_title, NULL);
-  GtkWidget *vbox = gtk_test_create_widget (GTK_TYPE_VBOX, "parent", window, NULL);
+  GtkWidget *vbox = gtk_test_create_widget (GTK_TYPE_BOX, "parent", window, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
   const char *arg1;
   gtk_test_create_widget (GTK_TYPE_LABEL, "label", dialog_text, "parent", vbox, NULL);
   g_signal_connect (window, "destroy", G_CALLBACK (try_main_quit), NULL);
@@ -630,7 +630,7 @@ gtk_test_create_simple_window (const gchar *window_title,
                                const gchar *dialog_text)
 {
   GtkWidget *window = gtk_test_create_widget (GTK_TYPE_WINDOW, "title", window_title, NULL);
-  GtkWidget *vbox = gtk_test_create_widget (GTK_TYPE_VBOX, "parent", window, NULL);
+  GtkWidget *vbox = gtk_test_create_widget (GTK_TYPE_BOX, "parent", window, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
   gtk_test_create_widget (GTK_TYPE_LABEL, "label", dialog_text, "parent", vbox, NULL);
   g_signal_connect (window, "destroy", G_CALLBACK (try_main_quit), NULL);
   gtk_widget_show_all (vbox);
