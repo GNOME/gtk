@@ -69,6 +69,8 @@ EXTRA_DIST += \
 	grid-expand.css \
 	grid-expand.ref.ui \
 	grid-expand.ui \
+	grid-wfh.ui \
+	grid-wfh.ref.ui \
 	grid-homogeneous.css \
 	grid-homogeneous.ref.ui \
 	grid-homogeneous.ui \
