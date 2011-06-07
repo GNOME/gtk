@@ -26,7 +26,7 @@
 #define __GTK_FILE_CHOOSER_WIDGET_H__
 
 #include <gtk/gtkfilechooser.h>
-#include <gtk/gtkvbox.h>
+#include <gtk/gtkbox.h>
 
 G_BEGIN_DECLS
 
@@ -43,14 +43,14 @@ typedef struct _GtkFileChooserWidgetClass   GtkFileChooserWidgetClass;
 
 struct _GtkFileChooserWidget
 {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   GtkFileChooserWidgetPrivate *priv;
 };
 
 struct _GtkFileChooserWidgetClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
