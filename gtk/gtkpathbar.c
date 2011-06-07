@@ -25,7 +25,6 @@
 #include <string.h>
 
 #include "gtktogglebutton.h"
-#include "gtkalignment.h"
 #include "gtkarrow.h"
 #include "gtkdnd.h"
 #include "gtkimage.h"
@@ -1392,7 +1391,7 @@ get_dir_name (ButtonData *button_data)
  * or not the contents are bold
  */
 static void
-set_label_size_request (GtkWidget  *alignment,
+set_label_size_request (GtkWidget  *widget,
 			ButtonData *button_data)
 {
   const gchar *dir_name = get_dir_name (button_data);
@@ -1408,7 +1407,7 @@ set_label_size_request (GtkWidget  *alignment,
 
   pango_layout_get_pixel_size (layout, &bold_width, &bold_height);
 
-  gtk_widget_set_size_request (alignment,
+  gtk_widget_set_size_request (widget,
 			       MAX (width, bold_width),
 			       MAX (height, bold_height));
   g_object_unref (layout);
@@ -1497,7 +1496,6 @@ make_directory_button (GtkPathBar  *path_bar,
 {
   AtkObject *atk_obj;
   GtkWidget *child = NULL;
-  GtkWidget *label_alignment = NULL;
   ButtonData *button_data;
 
   file_is_hidden = !! file_is_hidden;
@@ -1521,19 +1519,15 @@ make_directory_button (GtkPathBar  *path_bar,
     case DESKTOP_BUTTON:
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
-      label_alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-      gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
       gtk_box_pack_start (GTK_BOX (child), button_data->image, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (child), label_alignment, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (child), button_data->label, FALSE, FALSE, 0);
       break;
     case NORMAL_BUTTON:
     default:
       button_data->label = gtk_label_new (NULL);
       gtk_label_set_ellipsize (GTK_LABEL (button_data->label), PANGO_ELLIPSIZE_END);
-      label_alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-      gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
-      child = label_alignment;
+      child = button_data->label;
       button_data->image = NULL;
     }
 
@@ -1541,14 +1535,12 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data->file = g_object_ref (file);
   button_data->file_is_hidden = file_is_hidden;
 
-  /* FIXME: Maybe we dont need this alignment at all and we can
-   * use GtkMisc aligments or even GtkWidget:halign/valign center.
-   *
+  /*
    * The following function ensures that the alignment will always
    * request the same size whether the button's text is bold or not.
    */
-  if (label_alignment)
-    set_label_size_request (label_alignment, button_data);
+  if (button_data->label)
+    set_label_size_request (button_data->label, button_data);
 
   gtk_container_add (GTK_CONTAINER (button_data->button), child);
   gtk_widget_show_all (button_data->button);
