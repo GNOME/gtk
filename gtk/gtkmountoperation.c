@@ -30,7 +30,6 @@
 #include <string.h>
 
 #include "gtkmountoperationprivate.h"
-#include "gtkalignment.h"
 #include "gtkbox.h"
 #include "gtkentry.h"
 #include "gtkhbox.h"
@@ -453,7 +452,6 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   GtkWidget *widget;
   GtkDialog *dialog;
   GtkWindow *window;
-  GtkWidget *entry_container;
   GtkWidget *hbox, *main_vbox, *vbox, *icon;
   GtkWidget *table;
   GtkWidget *message_label;
@@ -584,19 +582,15 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
     rows++;
 
   /* The table that holds the entries */
-  entry_container = gtk_alignment_new (0.0, 0.0, 1.0, 1.0);
-
-  gtk_alignment_set_padding (GTK_ALIGNMENT (entry_container),
-                             0, 0, can_anonymous ? 12 : 0, 0);
-
-  gtk_box_pack_start (GTK_BOX (vbox), entry_container,
-                      FALSE, FALSE, 0);
-  priv->entry_container = entry_container;
-
   table = gtk_table_new (rows, 2, FALSE);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_container_add (GTK_CONTAINER (entry_container), table);
+
+  if (can_anonymous)
+    gtk_widget_set_margin_left (table, 12);
+
+  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  priv->entry_container = table;
 
   rows = 0;
 
