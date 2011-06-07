@@ -35,7 +35,7 @@
 #ifndef __GTK_INFO_BAR_H__
 #define __GTK_INFO_BAR_H__
 
-#include <gtk/gtkhbox.h>
+#include <gtk/gtkbox.h>
 #include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
@@ -58,7 +58,7 @@ typedef struct _GtkInfoBar GtkInfoBar;
 
 struct _GtkInfoBar
 {
-  GtkHBox parent;
+  GtkBox parent;
 
   /*< private > */
   GtkInfoBarPrivate *priv;
@@ -67,7 +67,7 @@ struct _GtkInfoBar
 
 struct _GtkInfoBarClass
 {
-  GtkHBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   /* Signals */
   void (* response) (GtkInfoBar *info_bar, gint response_id);
