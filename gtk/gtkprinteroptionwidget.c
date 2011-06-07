@@ -37,6 +37,7 @@
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtktogglebutton.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 
 #include "gtkprinteroptionwidget.h"
@@ -76,7 +77,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkPrinterOptionWidget, gtk_printer_option_widget, GTK_TYPE_HBOX)
+G_DEFINE_TYPE (GtkPrinterOptionWidget, gtk_printer_option_widget, GTK_TYPE_BOX)
 
 static void gtk_printer_option_widget_set_property (GObject      *object,
 						    guint         prop_id,
@@ -104,7 +105,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
 
   widget_class->mnemonic_activate = gtk_printer_option_widget_mnemonic_activate;
 
-  g_type_class_add_private (class, sizeof (GtkPrinterOptionWidgetPrivate));  
+  g_type_class_add_private (class, sizeof (GtkPrinterOptionWidgetPrivate));
 
   signals[CHANGED] =
     g_signal_new ("changed",
