@@ -79,7 +79,7 @@ typedef struct
   ValueType type;
   gboolean  active;
 
-  GtkHBox *column1, *column2, *hbox;
+  GtkBox *column1, *column2, *hbox;
   GtkLabel *label;
 
   GtkButton *button;
@@ -1969,9 +1969,9 @@ _get_name_value(GroupInfo *group, const gchar *label,
     if (!found)
       {
         name_value = (NameValue *)g_new0(NameValue, 1);
-        name_value->column1 = GTK_HBOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10));
-        name_value->column2 = GTK_HBOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10));
-        name_value->hbox = GTK_HBOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5));
+        name_value->column1 = GTK_BOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10));
+        name_value->column2 = GTK_BOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10));
+        name_value->hbox = GTK_BOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5));
         name_value->label = GTK_LABEL(gtk_label_new(label));
         name_value->string = gtk_label_new (NULL);
         name_value->boolean = gtk_check_button_new ();
