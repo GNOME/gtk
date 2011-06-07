@@ -1750,7 +1750,7 @@ create_handle_box (GtkWidget *widget)
 		      "detached");
     gtk_widget_show (handle_box2);
 
-    hbox = g_object_new (GTK_TYPE_HBOX, "visible", 1, "parent", handle_box2, NULL);
+    hbox = g_object_new (GTK_TYPE_BOX, "visible", 1, "parent", handle_box2, NULL);
     label = gtk_label_new ("Fooo!");
     gtk_container_add (GTK_CONTAINER (hbox), label);
     gtk_widget_show (label);
@@ -9480,7 +9480,7 @@ create_idle_test (GtkWidget *widget)
       gtk_widget_show (label);
       
       container =
-	g_object_new (GTK_TYPE_HBOX,
+	g_object_new (GTK_TYPE_BOX,
 			"visible", TRUE,
 			/* "GtkContainer::child", g_object_new (GTK_TYPE_HBOX,
 			 * "GtkWidget::visible", TRUE,
