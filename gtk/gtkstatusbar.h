@@ -32,7 +32,7 @@
 #ifndef __GTK_STATUSBAR_H__
 #define __GTK_STATUSBAR_H__
 
-#include <gtk/gtkhbox.h>
+#include <gtk/gtkbox.h>
 
 G_BEGIN_DECLS
 
@@ -50,7 +50,7 @@ typedef struct _GtkStatusbarClass         GtkStatusbarClass;
 
 struct _GtkStatusbar
 {
-  GtkHBox parent_widget;
+  GtkBox parent_widget;
 
   /*< private >*/
   GtkStatusbarPrivate *priv;
@@ -58,7 +58,7 @@ struct _GtkStatusbar
 
 struct _GtkStatusbarClass
 {
-  GtkHBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   gpointer reserved;
 
