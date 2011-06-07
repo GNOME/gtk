@@ -25,7 +25,7 @@
 #ifndef __GTK_FILE_CHOOSER_BUTTON_H__
 #define __GTK_FILE_CHOOSER_BUTTON_H__
 
-#include <gtk/gtkhbox.h>
+#include <gtk/gtkbox.h>
 #include <gtk/gtkfilechooser.h>
 
 G_BEGIN_DECLS
@@ -43,7 +43,7 @@ typedef struct _GtkFileChooserButtonClass   GtkFileChooserButtonClass;
 
 struct _GtkFileChooserButton
 {
-  GtkHBox parent;
+  GtkBox parent;
 
   /*< private >*/
   GtkFileChooserButtonPrivate *priv;
@@ -52,7 +52,7 @@ struct _GtkFileChooserButton
 struct _GtkFileChooserButtonClass
 {
   /*< private >*/
-  GtkHBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   void (* file_set) (GtkFileChooserButton *fc);
 
