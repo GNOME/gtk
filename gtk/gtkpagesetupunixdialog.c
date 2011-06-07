@@ -44,7 +44,6 @@
 #include "gtktable.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
-#include "gtkalignment.h"
 #include "gtkspinbutton.h"
 #include "gtkbbox.h"
 #include "gtkhbbox.h"
