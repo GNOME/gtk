@@ -58,7 +58,7 @@ typedef struct
   GroupId       group_id;
   GtkFrame      *scroll_outer_frame;
   GtkWidget     *frame;
-  GtkVBox       *group_vbox;
+  GtkBox        *group_vbox;
   GtkAdjustment *adj;
   GList         *name_value;
   gchar         *name;
@@ -1873,7 +1873,7 @@ _get_group(TabInfo *tab, GroupId group_id, const gchar *groupname)
        gtk_container_set_border_width(GTK_CONTAINER(group->frame), 10);
 
        group->name = g_strdup(groupname);
-       group->group_vbox = GTK_VBOX(gtk_box_new (GTK_ORIENTATION_VERTICAL, 10));
+       group->group_vbox = GTK_BOX(gtk_box_new (GTK_ORIENTATION_VERTICAL, 10));
 
        if (group->is_scrolled)
          {
