@@ -33,7 +33,7 @@
 #define __GTK_COLOR_SELECTION_H__
 
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkvbox.h>
+#include <gtk/gtkbox.h>
 
 G_BEGIN_DECLS
 
@@ -66,7 +66,7 @@ typedef void (* GtkColorSelectionChangePaletteWithScreenFunc) (GdkScreen        
 
 struct _GtkColorSelection
 {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   /* < private_data > */
   GtkColorSelectionPrivate *private_data;
@@ -74,7 +74,7 @@ struct _GtkColorSelection
 
 struct _GtkColorSelectionClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   void (*color_changed)	(GtkColorSelection *color_selection);
 
