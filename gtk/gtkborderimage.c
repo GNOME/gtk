@@ -203,16 +203,17 @@ render_corner (cairo_t         *cr,
 
   cairo_save (cr);
 
+  cairo_rectangle (cr, corner_x, corner_y, corner_width, corner_height);
+
   cairo_translate (cr, corner_x, corner_y);
   cairo_scale (cr,
                corner_width / image_width,
                corner_height / image_height);
+
   cairo_set_source_surface (cr, surface, 0, 0);
+  cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
 
-  /* use the nearest filter for scaling, to avoid color blending */
-  cairo_pattern_set_filter (cairo_get_source (cr), CAIRO_FILTER_NEAREST);
-
-  cairo_paint (cr);
+  cairo_fill (cr);
 
   cairo_restore (cr);
 }
@@ -405,11 +406,10 @@ render_border (cairo_t              *cr,
   cairo_translate (cr,
                    target_x, target_y);
 
-  /* use the nearest filter for scaling, to avoid color blending */
-  cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
-  
   if (repeat_pattern)
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+  else
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
   cairo_scale (cr,
                target_width / surface_width,
