@@ -33,7 +33,6 @@
 #include <math.h>
 #include <string.h>
 
-#include "gtkalignment.h"
 #include "gtkbindings.h"
 #include "gtkcelleditable.h"
 #include "gtkclipboard.h"
