@@ -1027,6 +1027,7 @@ GtkComboBoxTextPrivate
 gtk_combo_box_text_get_type
 </SECTION>
 
+<SECTION>
 <FILE>gtkcontainer</FILE>
 <TITLE>GtkContainer</TITLE>
 GtkContainer
