@@ -9498,9 +9498,10 @@ create_idle_test (GtkWidget *widget)
 			"parent", content_area,
 			NULL);
       box =
-	g_object_new (GTK_TYPE_VBOX,
+	g_object_new (GTK_TYPE_BOX,
 			"visible", TRUE,
 			"parent", frame,
+                        "orientation", GTK_ORIENTATION_VERTICAL,
 			NULL);
       button =
 	g_object_connect (g_object_new (GTK_TYPE_RADIO_BUTTON,

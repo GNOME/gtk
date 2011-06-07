@@ -77,8 +77,9 @@ make_selection_dialog (GdkScreen * screen,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
-  vbox = g_object_new (GTK_TYPE_VBOX,
+  vbox = g_object_new (GTK_TYPE_BOX,
 			 "border_width", 5,
+                         "orientation", GTK_ORIENTATION_VERTICAL,
 			 NULL);
   gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE, 0);
 
