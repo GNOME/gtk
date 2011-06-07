@@ -51,11 +51,11 @@
 #include "gtktable.h"
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
-#include "gtkvbox.h"
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 
 
@@ -220,7 +220,7 @@ static void     gtk_font_selection_ref_family            (GtkFontSelection *font
 static void     gtk_font_selection_ref_face              (GtkFontSelection *fontsel,
 							  PangoFontFace    *face);
 
-G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
+G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_BOX)
 
 static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)
@@ -344,6 +344,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
                                                GTK_TYPE_FONT_SELECTION,
                                                GtkFontSelectionPrivate);
   priv = fontsel->priv;
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (fontsel),
+                                  GTK_ORIENTATION_VERTICAL);
 
   gtk_widget_push_composite_child ();
 

@@ -37,7 +37,7 @@
 
 
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkvbox.h>
+#include <gtk/gtkbox.h>
 
 
 G_BEGIN_DECLS
@@ -68,7 +68,7 @@ typedef struct _GtkFontSelectionDialogClass         GtkFontSelectionDialogClass;
 
 struct _GtkFontSelection
 {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   /*< private >*/
   GtkFontSelectionPrivate *priv;
@@ -76,7 +76,7 @@ struct _GtkFontSelection
 
 struct _GtkFontSelectionClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
