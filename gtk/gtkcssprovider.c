@@ -527,6 +527,32 @@
  * which is always rendered on top of the shadow layer.
  * </para>
  * </refsect2>
+ * <refsect2>
+ * <title>Box shadow</title>
+ * <para>
+ * Themes can apply shadows on framed elements using the CSS3 box-shadow syntax,
+ * as defined in 
+ * <ulink url="http://www.w3.org/TR/css3-background/#the-box-shadow">the CSS3 specification</ulink>.
+ * </para>
+ * <para>
+ * A box shadow is specified using the syntax
+ * <literallayout>box-shadow: [ @inset ] @horizontal_offset @vertical_offset [ @blur_radius ] [ @spread ] @color</literallayout>
+ * A positive offset will draw a shadow that is offset to the right (down) of the box,
+ * a negative offset to the left (top). The optional spread parameter defines an additional
+ * distance to expand the shadow shape in all directions, by the specified radius.
+ * The optional blur radius parameter is parsed, but it is currently not rendered by
+ * the GTK+ theming engine.
+ * The inset parameter defines whether the drop shadow should be rendered inside or outside
+ * the box canvas. Only inset box-shadows are currently supported by the GTK+ theming engine,
+ * non-inset elements are currently ignored.
+ * </para>
+ * <para>
+ * To set multiple box-shadows on an element, you can specify a comma-separated list
+ * of shadow elements in the box-shadow property. Shadows are always rendered
+ * front-back, i.e. the first shadow specified is on top of the others, so they may
+ * overlap other boxes or other shadows.
+ * </para>
+ * </refsect2>
  * <refsect2 id="gtkcssprovider-border-image">
  * <title>Border images</title>
  * <para>
