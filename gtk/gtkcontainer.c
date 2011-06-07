@@ -769,8 +769,8 @@ gtk_container_child_type (GtkContainer *container)
 /**
  * gtk_container_child_notify:
  * @container: the #GtkContainer
- * @widget: the child widget
- * @child_property: the name of a chld property installed on
+ * @child: the child widget
+ * @child_property: the name of a child property installed on
  *     the class of @container
  *
  * Emits a #GtkWidget::child-notify signal for the
@@ -785,17 +785,17 @@ gtk_container_child_type (GtkContainer *container)
  */
 void
 gtk_container_child_notify (GtkContainer *container,
-                            GtkWidget    *widget,
+                            GtkWidget    *child,
                             const gchar  *child_property)
 {
   GObject *obj;
   GParamSpec *pspec;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child_property != NULL);
 
-  obj = G_OBJECT (widget);
+  obj = G_OBJECT (child);
 
   if (obj->ref_count == 0)
     return;
