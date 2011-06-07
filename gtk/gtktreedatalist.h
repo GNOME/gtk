@@ -20,7 +20,8 @@
 #ifndef __GTK_TREE_DATA_LIST_H__
 #define __GTK_TREE_DATA_LIST_H__
 
-#include <gtk/gtk.h>
+#include <gtk/gtktreemodel.h>
+#include <gtk/gtktreesortable.h>
 
 typedef struct _GtkTreeDataList GtkTreeDataList;
 struct _GtkTreeDataList
