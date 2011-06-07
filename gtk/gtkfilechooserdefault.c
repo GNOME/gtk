@@ -69,7 +69,8 @@
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
 #include "gtktreeselection.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
+#include "gtkorientable.h"
 #include "gtkintl.h"
 
 #include <errno.h>
@@ -149,7 +150,7 @@ typedef struct _GtkFileChooserDefaultClass GtkFileChooserDefaultClass;
 
 struct _GtkFileChooserDefaultClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 };
 
 /* Signal IDs */
@@ -460,7 +461,7 @@ static GtkTreeModel *shortcuts_pane_model_filter_new (GtkFileChooserDefault *imp
 
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_TYPE_VBOX,
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_TYPE_BOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
 						gtk_file_chooser_default_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
@@ -741,6 +742,8 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->recent_manager = gtk_recent_manager_get_default ();
   impl->create_folders = TRUE;
 
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (impl),
+                                  GTK_ORIENTATION_VERTICAL);
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
   set_file_system_backend (impl);

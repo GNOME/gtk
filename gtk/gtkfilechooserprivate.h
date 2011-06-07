@@ -32,7 +32,7 @@
 #include "gtktreemodelsort.h"
 #include "gtktreestore.h"
 #include "gtktreeview.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
 
 G_BEGIN_DECLS
 
@@ -154,7 +154,7 @@ typedef enum {
 
 struct _GtkFileChooserDefault
 {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   GtkFileChooserAction action;
 
