@@ -33,7 +33,6 @@
 #include <string.h>
 
 #include "gtkaboutdialog.h"
-#include "gtkalignment.h"
 #include "gtkbutton.h"
 #include "gtkbbox.h"
 #include "gtkdialog.h"
@@ -2346,7 +2345,6 @@ create_credits_page (GtkAboutDialog *about)
   GtkWidget *page_vbox;
   GtkWidget *sw;
   GtkWidget *grid;
-  GtkWidget *alignment;
   gint row;
 
   page_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
@@ -2360,15 +2358,14 @@ create_credits_page (GtkAboutDialog *about)
                                   GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (page_vbox), sw, TRUE, TRUE, 0);
 
-  alignment = gtk_alignment_new (0.5, 0, 0, 0);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), alignment);
-
   grid = gtk_grid_new ();
   gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
-  gtk_container_add (GTK_CONTAINER (alignment), grid);
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (grid, GTK_ALIGN_START);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), grid);
 
   if (priv->authors != NULL)
     add_credits_section (about, GTK_GRID (grid), &row, _("Created by"), priv->authors);
