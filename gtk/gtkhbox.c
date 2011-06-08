@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkhbox.h"
 #include "gtkorientable.h"
 
@@ -42,6 +43,8 @@
  * spacing, width, and alignment of #GtkHBox children.
  *
  * All children are allocated the same height.
+ *
+ * GtkHBox has been deprecated, use #GtkBox instead.
  */
 
 
@@ -69,6 +72,8 @@ gtk_hbox_init (GtkHBox *hbox)
  * Creates a new #GtkHBox.
  *
  * Returns: a new #GtkHBox.
+ *
+ * Deprecated: 3.2: Use gtk_box_new() with %GTK_ORIENTATION_HORIZONTAL instead
  */
 GtkWidget *
 gtk_hbox_new (gboolean homogeneous,

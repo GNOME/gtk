@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkorientable.h"
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkvbox.h"
 
 
@@ -42,6 +43,8 @@
  * spacing, height, and alignment of #GtkVBox children.
  *
  * All children are allocated the same width.
+ *
+ * GtkVBox has been deprecated, use #GtkBox instead.
  */
 
 G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
@@ -68,6 +71,8 @@ gtk_vbox_init (GtkVBox *vbox)
  * Creates a new #GtkVBox.
  *
  * Returns: a new #GtkVBox.
+ *
+ * Deprecated: 3.2: Use gtk_box_new() with %GTK_ORIENTATION_VERTICAL instead
  */
 GtkWidget *
 gtk_vbox_new (gboolean homogeneous,
