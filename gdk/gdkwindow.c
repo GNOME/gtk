@@ -6548,6 +6548,8 @@ gdk_window_set_background_pattern (GdkWindow *window,
       GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
       impl_class->set_background (window, pattern);
     }
+  else
+    gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
 }
 
 /**
