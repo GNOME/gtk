@@ -6534,14 +6534,16 @@ gdk_window_set_background_pattern (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (window->input_only)
+    return;
+
   if (pattern)
     cairo_pattern_reference (pattern);
   if (window->background)
     cairo_pattern_destroy (window->background);
   window->background = pattern;
 
-  if (gdk_window_has_impl (window) &&
-      !window->input_only)
+  if (gdk_window_has_impl (window))
     {
       GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
       impl_class->set_background (window, pattern);
