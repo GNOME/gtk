@@ -52,7 +52,6 @@
 #include "gtkhscale.h"
 #include "gtkentry.h"
 #include "gtkbutton.h"
-#include "gtkhseparator.h"
 #include "gtkinvisible.h"
 #include "gtkmenuitem.h"
 #include "gtkmain.h"

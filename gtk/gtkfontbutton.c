@@ -34,7 +34,6 @@
 #include "gtkalignment.h"
 #include "gtkhbox.h"
 #include "gtklabel.h"
-#include "gtkvseparator.h"
 #include "gtkfontsel.h"
 #include "gtkimage.h"
 #include "gtkmarshalers.h"

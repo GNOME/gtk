@@ -32,8 +32,6 @@
 #define __GTK_SCROLLED_WINDOW_H__
 
 
-#include <gtk/gtkhscrollbar.h>
-#include <gtk/gtkvscrollbar.h>
 #include <gtk/gtkviewport.h>
 
 

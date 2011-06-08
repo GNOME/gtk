@@ -31,6 +31,7 @@
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkscrollable.h"
+#include "gtkscrollbar.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"

@@ -38,7 +38,7 @@
 #include "gtktearoffmenuitem.h"
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
-#include "gtkvseparator.h"
+#include "gtkseparator.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
