@@ -32,7 +32,6 @@
 #include "gtkmarshalers.h"
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
-#include "gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
 #include "gtkvbox.h"

@@ -24,7 +24,6 @@
 #include <ctype.h>
 
 #include "gtkintl.h"
-#include "gtkalignment.h"
 #include "gtkcheckbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"

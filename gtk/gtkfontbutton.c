@@ -31,12 +31,12 @@
 #include "gtkfontbutton.h"
 
 #include "gtkmain.h"
-#include "gtkalignment.h"
 #include "gtkhbox.h"
 #include "gtklabel.h"
 #include "gtkfontsel.h"
 #include "gtkimage.h"
 #include "gtkmarshalers.h"
+#include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
