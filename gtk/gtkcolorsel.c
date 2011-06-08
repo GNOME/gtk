@@ -49,7 +49,7 @@
 #include "gtkimage.h"
 #include "gtkspinbutton.h"
 #include "gtkrange.h"
-#include "gtkhscale.h"
+#include "gtkscale.h"
 #include "gtkentry.h"
 #include "gtkbutton.h"
 #include "gtkinvisible.h"
@@ -59,6 +59,7 @@
 #include "gtkstock.h"
 #include "gtkaccessible.h"
 #include "gtksizerequest.h"
+#include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
