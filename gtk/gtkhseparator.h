@@ -31,6 +31,7 @@
 #ifndef __GTK_HSEPARATOR_H__
 #define __GTK_HSEPARATOR_H__
 
+#ifndef GTK_DISABLE_DEPRECATED
 
 #include <gtk/gtkseparator.h>
 
@@ -65,4 +66,5 @@ GtkWidget* gtk_hseparator_new      (void);
 
 G_END_DECLS
 
+#endif
 #endif /* __GTK_HSEPARATOR_H__ */

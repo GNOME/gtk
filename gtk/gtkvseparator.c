@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkorientable.h"
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkvseparator.h"
 
 
@@ -39,6 +40,8 @@
  * The #GtkVSeparator widget is a vertical separator, used to group the
  * widgets within a window. It displays a vertical line with a shadow to
  * make it appear sunken into the interface.
+ *
+ * GtkVSeparator has been deprecated, use #GtkSeparator instead.
  */
 
 G_DEFINE_TYPE (GtkVSeparator, gtk_vseparator, GTK_TYPE_SEPARATOR)
@@ -61,6 +64,8 @@ gtk_vseparator_init (GtkVSeparator *vseparator)
  * Creates a new #GtkVSeparator.
  *
  * Returns: a new #GtkVSeparator.
+ *
+ * Deprecated: 3.2: Use gtk_separator_new() with %GTK_ORIENTATION_VERTICAL instead
  */
 GtkWidget *
 gtk_vseparator_new (void)
