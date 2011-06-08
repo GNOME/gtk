@@ -679,7 +679,6 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   char *text;
   int i;
   GSList *group;
-  GtkWidget *hbox;
 
   source = priv->source;
   
@@ -833,10 +832,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_INFO:
       priv->info_label = gtk_label_new (NULL);
       gtk_label_set_selectable (GTK_LABEL (priv->info_label), TRUE);
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), priv->info_label, FALSE, TRUE, 0);
-      gtk_widget_show_all (hbox);
-      gtk_box_pack_start (GTK_BOX (widget), hbox, TRUE, TRUE, 0);
+      gtk_widget_show (priv->info_label);
+      gtk_box_pack_start (GTK_BOX (widget), priv->info_label, FALSE, TRUE, 0);
 
       text = g_strdup_printf ("%s:", source->display_text);
       priv->label = gtk_label_new_with_mnemonic (text);
