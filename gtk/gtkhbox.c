@@ -44,7 +44,10 @@
  *
  * All children are allocated the same height.
  *
- * GtkHBox has been deprecated, use #GtkBox instead.
+ * GtkHBox has been deprecated, you can use #GtkBox instead, which is a very
+ * quick and easy change. But the recommendation is to switch to #GtkGrid, since
+ * #GtkBox is going to go away eventually.
+ * See <xref linkend="gtk-migrating-GtkGrid"/>
  */
 
 
@@ -73,7 +76,10 @@ gtk_hbox_init (GtkHBox *hbox)
  *
  * Returns: a new #GtkHBox.
  *
- * Deprecated: 3.2: Use gtk_box_new() with %GTK_ORIENTATION_HORIZONTAL instead
+ * Deprecated: 3.2: You can use gtk_box_new() with %GTK_ORIENTATION_HORIZONTAL instead,
+ *   wich is a very quick and easy change. But the recommendation is to switch to
+ *   #GtkGrid, since #GtkBox is going to go away eventually.
+ *   See <xref linkend="gtk-migrating-GtkGrid"/>.
  */
 GtkWidget *
 gtk_hbox_new (gboolean homogeneous,

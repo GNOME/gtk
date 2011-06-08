@@ -44,7 +44,10 @@
  *
  * All children are allocated the same width.
  *
- * GtkVBox has been deprecated, use #GtkBox instead.
+ * GtkVBox has been deprecated, you can use #GtkBox instead, which is a very
+ * quick and easy change. But the recommendation is to switch to #GtkGrid, since
+ * #GtkBox is going to go away eventually.
+ * See <xref linkend="gtk-migrating-GtkGrid"/>
  */
 
 G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
@@ -72,7 +75,10 @@ gtk_vbox_init (GtkVBox *vbox)
  *
  * Returns: a new #GtkVBox.
  *
- * Deprecated: 3.2: Use gtk_box_new() with %GTK_ORIENTATION_VERTICAL instead
+ * Deprecated: 3.2: You can use gtk_box_new() with %GTK_ORIENTATION_VERTICAL instead,
+ *   wich is a very quick and easy change. But the recommendation is to switch to
+ *   #GtkGrid, since #GtkBox is going to go away eventually.
+ *   See <xref linkend="gtk-migrating-GtkGrid"/>.
  */
 GtkWidget *
 gtk_vbox_new (gboolean homogeneous,
