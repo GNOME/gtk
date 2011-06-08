@@ -44,6 +44,7 @@
 #include "gtkliststore.h"
 #include "gtkstock.h"
 #include "gtktreemodelfilter.h"
+#include "gtkseparator.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserutils.h"

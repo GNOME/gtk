@@ -107,7 +107,7 @@
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 #include "gtkhbox.h"
-#include "gtkvscrollbar.h"
+#include "gtkscrollbar.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
