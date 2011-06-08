@@ -4539,6 +4539,7 @@ location_switch_to_filename_entry (GtkFileChooserDefault *impl)
   /* Configure the entry */
 
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->current_folder);
+  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
 
   /* Done */
 
