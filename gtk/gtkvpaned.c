@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkorientable.h"
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkvpaned.h"
 
 
@@ -39,6 +40,8 @@
  * children arranged vertically. The division between
  * the two panes is adjustable by the user by dragging
  * a handle. See #GtkPaned for details.
+ *
+ * GtkVPaned has been deprecated, use #GtkPaned instead.
  */
 
 G_DEFINE_TYPE (GtkVPaned, gtk_vpaned, GTK_TYPE_PANED)
@@ -61,6 +64,8 @@ gtk_vpaned_init (GtkVPaned *vpaned)
  * Create a new #GtkVPaned
  *
  * Returns: the new #GtkVPaned
+ *
+ * Deprecated: 3.2: Use gtk_paned_new() with %GTK_ORIENTATION_VERTICAL instead
  */
 GtkWidget *
 gtk_vpaned_new (void)
