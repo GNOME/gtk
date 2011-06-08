@@ -23,7 +23,6 @@
 
 #include "gtkfilechooserdefault.h"
 
-#include "gtkalignment.h"
 #include "gtkbindings.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
@@ -4684,7 +4683,6 @@ save_widgets_create (GtkFileChooserDefault *impl)
   GtkWidget *vbox;
   GtkWidget *table;
   GtkWidget *widget;
-  GtkWidget *alignment;
 
   if (impl->save_widgets != NULL)
     return;
@@ -4741,15 +4739,15 @@ save_widgets_create (GtkFileChooserDefault *impl)
   gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->save_folder_combo);
 
   /* Expander */
-  alignment = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
-  gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
 
   impl->save_expander = gtk_expander_new_with_mnemonic (_("_Browse for other folders"));
-  gtk_container_add (GTK_CONTAINER (alignment), impl->save_expander);
+  gtk_widget_set_halign (impl->save_expander, GTK_ALIGN_START);
+  gtk_widget_set_valign (impl->save_expander, GTK_ALIGN_CENTER);
+  gtk_box_pack_start (GTK_BOX (vbox), impl->save_expander, FALSE, FALSE, 0);
   g_signal_connect (impl->save_expander, "notify::expanded",
 		    G_CALLBACK (expander_changed_cb),
 		    impl);
-  gtk_widget_show_all (alignment);
+  gtk_widget_show (impl->save_expander);
 
   impl->save_widgets = vbox;
   gtk_box_pack_start (GTK_BOX (impl), impl->save_widgets, FALSE, FALSE, 0);
@@ -5114,7 +5112,9 @@ gtk_file_chooser_default_constructor (GType                  type,
   gtk_box_pack_start (GTK_BOX (impl), impl->browse_widgets, TRUE, TRUE, 0);
 
   /* Alignment to hold extra widget */
-  impl->extra_align = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
+  impl->extra_align = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_halign (impl->extra_align, GTK_ALIGN_START);
+  gtk_widget_set_valign (impl->extra_align, GTK_ALIGN_CENTER);
   gtk_box_pack_start (GTK_BOX (impl), impl->extra_align, FALSE, FALSE, 0);
 
   gtk_widget_pop_composite_child ();
@@ -8007,8 +8007,7 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
       if (impl->extra_widget &&
 	  gtk_widget_get_visible (impl->extra_widget))
 	{
-          gtk_widget_get_preferred_size (impl->extra_align,
-                                         &req, NULL);
+          gtk_widget_get_preferred_size (impl->extra_align, &req, NULL);
 	  *default_height += gtk_box_get_spacing (GTK_BOX (chooser_embed)) + req.height;
 	}
     }
