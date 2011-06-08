@@ -311,18 +311,18 @@ render_border (cairo_t              *cr,
       target_x = border_area->left;
       target_y = (side == SIDE_TOP) ? 0 : (total_height - border_area->bottom);
 
-      if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_NONE)
+      if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_NONE)
         {
           target_width = image_area.width;
         }
-      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_REPEAT)
+      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_REPEAT)
         {
           repeat_pattern = TRUE;
 
           target_x = border_area->left + (total_width - border_area->left - border_area->right) / 2;
           target_y = ((side == SIDE_TOP) ? 0 : (total_height - border_area->bottom)) / 2;
         }
-      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
+      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
         {
           gint n_repeats;
 
@@ -331,7 +331,7 @@ render_border (cairo_t              *cr,
           n_repeats = (gint) floor (image_area.width / surface_width);
           target_width = image_area.width / n_repeats;
         }
-      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
+      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
         {
           cairo_surface_t *spaced_surface;
 
@@ -356,11 +356,11 @@ render_border (cairo_t              *cr,
       target_x = (side == SIDE_LEFT) ? 0 : (total_width - border_area->right);
       target_y = border_area->top;
 
-      if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_NONE)
+      if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_NONE)
         {
           target_height = total_height - border_area->top - border_area->bottom;
         }
-      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_REPEAT)
+      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_REPEAT)
         {
           repeat_pattern = TRUE;
 
@@ -368,7 +368,7 @@ render_border (cairo_t              *cr,
           target_x = (side == SIDE_LEFT) ? 0 : (total_width - border_area->right) / 2;
           target_y = border_area->top + (total_height - border_area->top - border_area->bottom) / 2;
         }
-      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
+      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
         {
           gint n_repeats;
 
@@ -377,7 +377,7 @@ render_border (cairo_t              *cr,
           n_repeats = (gint) floor (image_area.height / surface_height);
           target_height = image_area.height / n_repeats;
         }
-      else if (repeat->hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
+      else if (repeat->vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
         {
           cairo_surface_t *spaced_surface;
 

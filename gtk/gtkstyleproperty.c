@@ -976,8 +976,8 @@ border_image_repeat_value_parse (GtkCssParser *parser,
         styles[i] = styles[0];
     }
 
-  image_repeat.vrepeat = styles[0];
-  image_repeat.hrepeat = styles[1];
+  image_repeat.hrepeat = styles[0];
+  image_repeat.vrepeat = styles[1];
 
   g_value_set_boxed (value, &image_repeat);
 
@@ -1011,8 +1011,8 @@ border_image_repeat_value_print (const GValue *value,
   image_repeat = g_value_get_boxed (value);
 
   g_string_append_printf (string, "%s %s",
-                          border_image_repeat_style_to_string (image_repeat->vrepeat),
-                          border_image_repeat_style_to_string (image_repeat->hrepeat));
+                          border_image_repeat_style_to_string (image_repeat->hrepeat),
+                          border_image_repeat_style_to_string (image_repeat->vrepeat));
 }
 
 static gboolean
