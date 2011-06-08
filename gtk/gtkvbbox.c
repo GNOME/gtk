@@ -25,6 +25,7 @@
  */
 
 #include "config.h"
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkvbbox.h"
 #include "gtkorientable.h"
 #include "gtkintl.h"
@@ -53,6 +54,8 @@
  * The spacing between buttons can be set with gtk_box_set_spacing(). The
  * arrangement and layout of the buttons can be changed with
  * gtk_button_box_set_layout().
+ *
+ * GtkVButtonBox has been deprecated, use #GtkButtonBox instead.
  */
 
 G_DEFINE_TYPE (GtkVButtonBox, gtk_vbutton_box, GTK_TYPE_BUTTON_BOX)
@@ -75,6 +78,8 @@ gtk_vbutton_box_init (GtkVButtonBox *vbutton_box)
  * Creates a new vertical button box.
  *
  * Returns: a new button box #GtkWidget.
+ *
+ * Deprecated: 3.2: Use gtk_button_box_new() with %GTK_ORIENTATION_VERTICAL instead
  */
 GtkWidget *
 gtk_vbutton_box_new (void)
