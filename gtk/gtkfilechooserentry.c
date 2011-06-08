@@ -24,7 +24,6 @@
 
 #include <string.h>
 
-#include "gtkalignment.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
@@ -932,42 +931,37 @@ static void
 create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 {
   /* Stolen from gtk_tooltip_init() */
-
+  GtkWidget *window, *label;
   GtkStyleContext *context;
-  GtkWidget *alignment;
-  GtkBorder padding, border;
 
-  chooser_entry->completion_feedback_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_type_hint (GTK_WINDOW (chooser_entry->completion_feedback_window),
-			    GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_widget_set_app_paintable (chooser_entry->completion_feedback_window, TRUE);
-  gtk_window_set_resizable (GTK_WINDOW (chooser_entry->completion_feedback_window), FALSE);
-  gtk_widget_set_name (chooser_entry->completion_feedback_window, "gtk-tooltip");
+  window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_TOOLTIP);
+  gtk_widget_set_app_paintable (window, TRUE);
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+  gtk_widget_set_name (window, "gtk-tooltip");
 
-  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  context = gtk_widget_get_style_context (chooser_entry->completion_feedback_window);
+  context = gtk_widget_get_style_context (window);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
 
-  gtk_style_context_get_padding (context, 0, &padding);
-  gtk_style_context_get_border (context, 0, &border);
-
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-                             border.top + padding.top,
-                             border.bottom + padding.bottom,
-                             border.left + padding.left,
-                             border.right + padding.right);
-  gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), alignment);
-  gtk_widget_show (alignment);
-
-  g_signal_connect (chooser_entry->completion_feedback_window, "draw",
-		    G_CALLBACK (completion_feedback_window_draw_cb), chooser_entry);
-  g_signal_connect (chooser_entry->completion_feedback_window, "realize",
-		    G_CALLBACK (completion_feedback_window_realize_cb), chooser_entry);
+  g_signal_connect (window, "draw",
+                    G_CALLBACK (completion_feedback_window_draw_cb), chooser_entry);
+  g_signal_connect (window, "realize",
+                    G_CALLBACK (completion_feedback_window_realize_cb), chooser_entry);
   /* FIXME: connect to motion-notify-event, and *show* the cursor when the mouse moves */
 
-  chooser_entry->completion_feedback_label = gtk_label_new (NULL);
-  gtk_container_add (GTK_CONTAINER (alignment), chooser_entry->completion_feedback_label);
-  gtk_widget_show (chooser_entry->completion_feedback_label);
+  label = gtk_label_new (NULL);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  /* FIXME: don't hardcode this */
+  gtk_widget_set_margin_left (label, 6);
+  gtk_widget_set_margin_right (label, 6);
+  gtk_widget_set_margin_top (label, 6);
+  gtk_widget_set_margin_bottom (label, 6);
+  gtk_container_add (GTK_CONTAINER (window), label);
+  gtk_widget_show (label);
+
+  chooser_entry->completion_feedback_window = window;
+  chooser_entry->completion_feedback_label = label;
 }
 
 static gboolean
