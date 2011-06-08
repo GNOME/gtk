@@ -28,6 +28,8 @@
 #include "config.h"
 
 #include "gtkorientable.h"
+#include "gtkscrollbar.h"
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkvscrollbar.h"
 #include "gtkintl.h"
 
@@ -44,6 +46,8 @@
  * adjustment of the scrollbar or it may be left %NULL in which case one
  * will be created for you. See #GtkScrollbar for a description of what the
  * fields in an adjustment represent for a scrollbar.
+ *
+ * GtkVScrollbar has been deprecated, use #GtkScrollbar instead.
  */
 
 G_DEFINE_TYPE (GtkVScrollbar, gtk_vscrollbar, GTK_TYPE_SCROLLBAR)
@@ -68,6 +72,8 @@ gtk_vscrollbar_init (GtkVScrollbar *vscrollbar)
  * Creates a new vertical scrollbar.
  *
  * Returns: the new #GtkVScrollbar
+ *
+ * Deprecated: 3.2: Use gtk_scrollbar_new() with %GTK_ORIENTATION_VERTICAL instead
  */
 GtkWidget *
 gtk_vscrollbar_new (GtkAdjustment *adjustment)

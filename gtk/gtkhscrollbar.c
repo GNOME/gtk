@@ -27,6 +27,8 @@
 
 #include "config.h"
 
+#include "gtkscrollbar.h"
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkhscrollbar.h"
 #include "gtkorientable.h"
 #include "gtkintl.h"
@@ -44,6 +46,8 @@
  * adjustment of the scrollbar or it may be left %NULL in which case one
  * will be created for you. See #GtkScrollbar for a description of what the
  * fields in an adjustment represent for a scrollbar.
+ *
+ * GtkHScrollbar has been deprecated, use #GtkScrollbar instead.
  */
 
 
@@ -69,6 +73,8 @@ gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
  * Creates a new horizontal scrollbar.
  *
  * Returns: the new #GtkHScrollbar
+ *
+ * Deprecated: 3.2: Use gtk_scrollbar_new() with %GTK_ORIENTATION_HORIZONTAL instead
  */
 GtkWidget *
 gtk_hscrollbar_new (GtkAdjustment *adjustment)
