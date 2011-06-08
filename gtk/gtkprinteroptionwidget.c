@@ -60,6 +60,7 @@ struct GtkPrinterOptionWidgetPrivate
   GtkWidget *entry;
   GtkWidget *image;
   GtkWidget *label;
+  GtkWidget *info_label;
   GtkWidget *filechooser;
   GtkWidget *box;
 };
@@ -424,6 +425,11 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
       gtk_widget_destroy (priv->label);
       priv->label = NULL;
     }
+  if (priv->info_label)
+    {
+      gtk_widget_destroy (priv->info_label);
+      priv->info_label = NULL;
+    }
 }
 
 static void
@@ -673,6 +679,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   char *text;
   int i;
   GSList *group;
+  GtkWidget *hbox;
 
   source = priv->source;
   
@@ -822,6 +829,22 @@ construct_widgets (GtkPrinterOptionWidget *widget)
         g_signal_connect (priv->combo, "selection-changed", G_CALLBACK (filesave_changed_cb), widget);
       }
       break;
+
+    case GTK_PRINTER_OPTION_TYPE_INFO:
+      priv->info_label = gtk_label_new (NULL);
+      gtk_label_set_selectable (GTK_LABEL (priv->info_label), TRUE);
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), priv->info_label, FALSE, TRUE, 0);
+      gtk_widget_show_all (hbox);
+      gtk_box_pack_start (GTK_BOX (widget), hbox, TRUE, TRUE, 0);
+
+      text = g_strdup_printf ("%s:", source->display_text);
+      priv->label = gtk_label_new_with_mnemonic (text);
+      g_free (text);
+      gtk_widget_show (priv->label);
+
+      break;
+
     default:
       break;
     }
@@ -886,6 +909,9 @@ update_widgets (GtkPrinterOptionWidget *widget)
 	  gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);
 	break;
       }
+    case GTK_PRINTER_OPTION_TYPE_INFO:
+      gtk_label_set_text (GTK_LABEL (priv->info_label), source->value);
+      break;
     default:
       break;
     }
