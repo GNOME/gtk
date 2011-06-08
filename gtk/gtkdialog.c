@@ -31,7 +31,7 @@
 
 #include "gtkbutton.h"
 #include "gtkdialog.h"
-#include "gtkhbbox.h"
+#include "gtkbbox.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkvbox.h"

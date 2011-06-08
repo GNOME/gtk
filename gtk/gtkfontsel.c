@@ -42,8 +42,6 @@
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
 #include "gtkframe.h"
-#include "gtkhbbox.h"
-#include "gtkhbox.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
 #include "gtkrc.h"

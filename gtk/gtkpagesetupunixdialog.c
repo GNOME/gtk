@@ -33,8 +33,6 @@
 #include "gtktreemodel.h"
 #include "gtkbutton.h"
 #include "gtkscrolledwindow.h"
-#include "gtkvbox.h"
-#include "gtkhbox.h"
 #include "gtkframe.h"
 #include "gtkeventbox.h"
 #include "gtkcombobox.h"
@@ -45,8 +43,6 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkspinbutton.h"
-#include "gtkbbox.h"
-#include "gtkhbbox.h"
 
 #include "gtkpagesetupunixdialog.h"
 #include "gtkcustompaperunixdialog.h"
