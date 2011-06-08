@@ -2673,7 +2673,7 @@ create_saved_position (GtkWidget *widget)
       g_object_set_data (G_OBJECT (window), "y", y_label);
 
       any =
-	g_object_new (gtk_hseparator_get_type (),
+	g_object_new (gtk_separator_get_type (),
 			"GtkWidget::visible", TRUE,
 			NULL);
       gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
