@@ -7973,7 +7973,7 @@ gdk_window_move_region (GdkWindow       *window,
  * The @color must be allocated; gdk_rgb_find_color() is the best way
  * to allocate a color.
  *
- * See also gdk_window_set_background_pixmap().
+ * See also gdk_window_set_back_pixmap().
  */
 void
 gdk_window_set_background (GdkWindow      *window,
