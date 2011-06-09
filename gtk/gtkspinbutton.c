@@ -939,11 +939,6 @@ gtk_spin_button_draw (GtkWidget      *widget,
 
   gtk_cairo_transform_to_window (cr, widget, priv->panel);
 
-  if (gtk_entry_get_has_frame (GTK_ENTRY (widget)))
-    gtk_render_background (context, cr, 0, 0,
-                           gdk_window_get_width (priv->panel),
-                           gdk_window_get_height (priv->panel));
-
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_UP);
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_DOWN);
 
