@@ -139,15 +139,19 @@ _gtk_border_image_unpack (const GValue *value,
 
   parameter[0].name = "border-image-source";
   g_value_init (&parameter[0].value, CAIRO_GOBJECT_TYPE_PATTERN);
-  g_value_set_boxed (&parameter[0].value, image->source);
 
   parameter[1].name = "border-image-slice";
   g_value_init (&parameter[1].value, GTK_TYPE_BORDER);
-  g_value_set_boxed (&parameter[1].value, &image->slice);
 
   parameter[2].name = "border-image-repeat";
   g_value_init (&parameter[2].value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
-  g_value_set_boxed (&parameter[2].value, &image->repeat);
+
+  if (image != NULL)
+    {
+      g_value_set_boxed (&parameter[0].value, image->source);
+      g_value_set_boxed (&parameter[1].value, &image->slice);
+      g_value_set_boxed (&parameter[2].value, &image->repeat);
+    }
 
   *n_params = 3;
   return parameter;
