@@ -94,7 +94,6 @@ static gboolean gdk_event_dispatch (GSource     *source,
 				    GSourceFunc  callback,
 				    gpointer     user_data);
 
-static void append_event (GdkEvent *event);
 static gboolean is_modally_blocked (GdkWindow   *window);
 
 /* Private variable declarations
@@ -194,7 +193,7 @@ generate_focus_event (GdkWindow *window,
   event->focus_change.window = window;
   event->focus_change.in = in;
 
-  append_event (event);
+  _gdk_win32_append_event (event);
 }
 
 static void
@@ -210,7 +209,7 @@ generate_grab_broken_event (GdkWindow *window,
   event->grab_broken.implicit = FALSE;
   event->grab_broken.grab_window = grab_window;
 	  
-  append_event (event);
+  _gdk_win32_append_event (event);
 }
 
 static LRESULT 
@@ -984,8 +983,8 @@ fixup_event (GdkEvent *event)
   event->any.send_event = InSendMessage (); 
 }
 
-static void
-append_event (GdkEvent *event)
+void
+_gdk_win32_append_event (GdkEvent *event)
 {
   GList *link;
   
@@ -1231,7 +1230,7 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   event->crossing.focus = TRUE; /* FIXME: Set correctly */
   event->crossing.state = 0;	/* FIXME: Set correctly */
 
-  append_event (event);
+  _gdk_win32_append_event (event);
   
   if (type == GDK_ENTER_NOTIFY &&
       ((GdkWindowObject *) window)->extension_events != 0)
@@ -1276,7 +1275,7 @@ synthesize_expose_events (GdkWindow *window)
 	  event->expose.region = gdk_region_rectangle (&(event->expose.area));
 	  event->expose.count = 0;
   
-	  append_event (event);
+	  _gdk_win32_append_event (event);
 	}
       GDI_CALL (ReleaseDC, (impl->handle, hdc));
     }
@@ -1495,7 +1494,7 @@ handle_configure_event (MSG       *msg,
       event->configure.x = point.x;
       event->configure.y = point.y;
 
-      append_event (event);
+      _gdk_win32_append_event (event);
     }
 }
 
@@ -1713,7 +1712,7 @@ generate_button_event (GdkEventType type,
   event->button.button = button;
   event->button.device = _gdk_display->core_pointer;
 
-  append_event (event);
+  _gdk_win32_append_event (event);
 
   if (type == GDK_BUTTON_PRESS)
     _gdk_event_button_generate (_gdk_display, event);
@@ -2148,7 +2147,7 @@ gdk_event_translate (MSG  *msg,
       if (msg->wParam == VK_MENU)
 	event->key.state &= ~GDK_MOD1_MASK;
 
-      append_event (event);
+      _gdk_win32_append_event (event);
 
       return_val = TRUE;
       break;
@@ -2221,7 +2220,7 @@ gdk_event_translate (MSG  *msg,
 	      event->key.window = window;
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
-	      append_event (event);
+	      _gdk_win32_append_event (event);
 	    }
 	  
 	  if (((GdkWindowObject *) window)->event_mask & GDK_KEY_RELEASE_MASK)
@@ -2231,7 +2230,7 @@ gdk_event_translate (MSG  *msg,
 	      event->key.window = window;
 	      build_wm_ime_composition_event (event, msg, wbuf[i], key_state);
 
-	      append_event (event);
+	      _gdk_win32_append_event (event);
 	    }
 	}
       return_val = TRUE;
@@ -2356,7 +2355,7 @@ gdk_event_translate (MSG  *msg,
       event->motion.is_hint = FALSE;
       event->motion.device = _gdk_display->core_pointer;
 
-      append_event (event);
+      _gdk_win32_append_event (event);
 
       return_val = TRUE;
       break;
@@ -2427,7 +2426,7 @@ gdk_event_translate (MSG  *msg,
       event->scroll.state = build_pointer_event_state (msg);
       event->scroll.device = _gdk_display->core_pointer;
 
-      append_event (event);
+      _gdk_win32_append_event (event);
       
       return_val = TRUE;
       break;
@@ -2627,7 +2626,7 @@ gdk_event_translate (MSG  *msg,
       event = gdk_event_new (msg->wParam ? GDK_MAP : GDK_UNMAP);
       event->any.window = window;
 
-      append_event (event);
+      _gdk_win32_append_event (event);
 
       if (event->any.type == GDK_UNMAP)
 	{
@@ -3097,7 +3096,7 @@ gdk_event_translate (MSG  *msg,
       event = gdk_event_new (GDK_DELETE);
       event->any.window = window;
 
-      append_event (event);
+      _gdk_win32_append_event (event);
 
       impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
 
@@ -3129,7 +3128,7 @@ gdk_event_translate (MSG  *msg,
       event = gdk_event_new (GDK_DESTROY);
       event->any.window = window;
 
-      append_event (event);
+      _gdk_win32_append_event (event);
 
       return_val = TRUE;
       break;
@@ -3145,7 +3144,7 @@ gdk_event_translate (MSG  *msg,
 	  event->selection.window = window;
 	  event->selection.selection = GDK_SELECTION_CLIPBOARD;
 	  event->selection.time = _gdk_win32_get_next_tick (msg->time);
-          append_event (event);
+          _gdk_win32_append_event (event);
 	}
       else
 	{
@@ -3165,7 +3164,7 @@ gdk_event_translate (MSG  *msg,
 	}
 
       /* We need to render to clipboard immediately, don't call
-       * append_event()
+       * _gdk_win32_append_event()
        */
       if (_gdk_event_func)
 	{
@@ -3281,7 +3280,7 @@ gdk_event_translate (MSG  *msg,
       g_object_ref (window);
 
       if (_gdk_input_other_event (event, msg, window))
-	append_event (event);
+	_gdk_win32_append_event (event);
       else
 	gdk_event_free (event);
 

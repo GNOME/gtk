@@ -490,6 +490,9 @@ HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 				    gint       y_hotspot);
 gboolean _gdk_win32_pixbuf_to_hicon_supports_alpha (void);
 
+void _gdk_win32_append_event (GdkEvent *event);
+
+
 /* Initialization */
 void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_root_window_size_init (void);
