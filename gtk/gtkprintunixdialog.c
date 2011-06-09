@@ -1253,7 +1253,8 @@ add_option_to_extension_point (GtkPrinterOption *option,
 
       label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
       gtk_widget_show (label);
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
@@ -1291,7 +1292,8 @@ add_option_to_table (GtkPrinterOption *option,
       label = gtk_printer_option_widget_get_external_label (GTK_PRINTER_OPTION_WIDGET (widget));
       gtk_widget_show (label);
 
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
       gtk_table_attach (table, label,
@@ -2318,7 +2320,8 @@ create_main_page (GtkPrintUnixDialog *dialog)
 
   /* FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns */
   label = gtk_label_new_with_mnemonic (_("Copie_s:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 0, 1,  GTK_FILL, 0,
@@ -3398,7 +3401,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("T_wo-sided:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 0, 1,  GTK_FILL, 0,
@@ -3413,7 +3417,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   label = gtk_label_new_with_mnemonic (_("Pages per _side:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 1, 2,  GTK_FILL, 0,
@@ -3430,7 +3435,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   label = gtk_label_new_with_mnemonic (_("Page or_dering:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 2, 3,  GTK_FILL, 0,
@@ -3446,7 +3452,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   label = gtk_label_new_with_mnemonic (_("_Only print:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 3, 4,  GTK_FILL, 0,
@@ -3466,7 +3473,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   label = gtk_label_new_with_mnemonic (_("Sc_ale:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 4, 5,  GTK_FILL, 0,
@@ -3497,7 +3505,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("Paper _type:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 0, 1,  GTK_FILL, 0,
@@ -3512,7 +3521,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   label = gtk_label_new_with_mnemonic (_("Paper _source:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 1, 2,  GTK_FILL, 0,
@@ -3527,7 +3537,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   label = gtk_label_new_with_mnemonic (_("Output t_ray:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 2, 3,  GTK_FILL, 0,
@@ -3544,7 +3555,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 
   label = gtk_label_new_with_mnemonic (_("_Paper size:"));
   priv->paper_size_combo_label = GTK_WIDGET (label);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 3, 4,  GTK_FILL, 0,
@@ -3568,7 +3580,8 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 
   label = gtk_label_new_with_mnemonic (_("Or_ientation:"));
   priv->orientation_combo_label = GTK_WIDGET (label);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 4, 5,
@@ -3636,7 +3649,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("Pri_ority:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 0, 1,  GTK_FILL, 0,
@@ -3651,7 +3665,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   label = gtk_label_new_with_mnemonic (_("_Billing info:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 1, 2,  GTK_FILL, 0,
@@ -3751,7 +3766,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
    * dialog that controls the front cover page.
    */
   label = gtk_label_new_with_mnemonic (_("Be_fore:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 0, 1,  GTK_FILL, 0,
@@ -3769,7 +3785,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
    * dialog that controls the back cover page.
    */
   label = gtk_label_new_with_mnemonic (_("_After:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 1, 2,  GTK_FILL, 0,
