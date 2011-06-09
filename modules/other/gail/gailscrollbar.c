@@ -59,9 +59,9 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
 {
   GtkWidget *widget;
   GtkWidget *parent;
+  GtkWidget *child;
   GtkScrolledWindow *scrolled_window;
-  gint n_children;
-  GList *children;
+  gint id;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
@@ -79,31 +79,28 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
     return ATK_OBJECT_CLASS (gail_scrollbar_parent_class)->get_index_in_parent (accessible);
 
   scrolled_window = GTK_SCROLLED_WINDOW (parent);
-  children = gtk_container_get_children (GTK_CONTAINER (scrolled_window));
-  n_children = g_list_length (children);
-  g_list_free (children);
+  id = 0;
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
+  if (child)
+    {
+      if (widget == child)
+        return id;
+      id++;
+    }
 
-  if (GTK_IS_HSCROLLBAR (widget))
-  {
-    if (!gtk_scrolled_window_get_hscrollbar (scrolled_window))
+  child = gtk_scrolled_window_get_hscrollbar (scrolled_window);
+  if (child)
     {
-      n_children = -1;
+      if (widget == child)
+        return id;
+      id++;
     }
-  }
-  else if (GTK_IS_VSCROLLBAR (widget))
-  {
-    if (!gtk_scrolled_window_get_vscrollbar (scrolled_window))
+  child = gtk_scrolled_window_get_vscrollbar (scrolled_window);
+  if (child)
     {
-      n_children = -1;
+      if (widget == child)
+        return id;
     }
-    else if (gtk_scrolled_window_get_hscrollbar (scrolled_window))
-    {
-      n_children++;
-    }
-  }
-  else
-  {
-    n_children = -1;
-  }
-  return n_children;
+
+  return -1;
 } 
