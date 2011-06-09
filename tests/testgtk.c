@@ -5046,10 +5046,7 @@ create_cursors (GtkWidget *widget)
 			       NULL);
       g_object_set_data (G_OBJECT (spinner), "user_data", label);
 
-      any =
-	g_object_new (gtk_hseparator_get_type (),
-			"GtkWidget::visible", TRUE,
-			NULL);
+      any = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
   
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
