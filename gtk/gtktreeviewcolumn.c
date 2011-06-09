@@ -2117,12 +2117,15 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 
   gtk_cell_area_context_allocate (priv->cell_area_context, priv->width - priv->padding, -1);
 
-  allocation.x      = x_offset;
-  allocation.y      = 0;
-  allocation.width  = width;
-  allocation.height = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (priv->tree_view));
+  if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
+    {
+      allocation.x      = x_offset;
+      allocation.y      = 0;
+      allocation.width  = width;
+      allocation.height = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (priv->tree_view));
 
-  gtk_widget_size_allocate (priv->button, &allocation);
+      gtk_widget_size_allocate (priv->button, &allocation);
+    }
 
   if (priv->window)
     {
