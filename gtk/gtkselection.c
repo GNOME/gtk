@@ -1328,6 +1328,11 @@ selection_set_compound_text (GtkSelectionData *selection_data,
       result = TRUE;
     }
   g_free (tmp);
+#elif defined GDK_WINDOWING_WIN32
+  result = FALSE; /* not needed on Win32 */
+#else
+  g_warning ("%s is not implemented", G_STRFUNC);
+  result = FALSE;
 #endif
 
   return result;
@@ -2280,7 +2285,12 @@ _gtk_selection_request (GtkWidget *widget,
   /* Create GdkWindow structure for the requestor */
 #ifdef GDK_WINDOWING_X11
   info->requestor = gdk_x11_window_foreign_new_for_display (display, event->requestor);
+#elif defined GDK_WINDOWING_WIN32
+  info->requestor = gdk_win32_window_lookup_for_display (display, event->requestor);
+  if (!info->requestor)
+    info->requestor = gdk_win32_window_foreign_new_for_display (display, event->requestor);
 #else
+  g_warning ("%s is not implemented", G_STRFUNC);
   info->requestor = NULL;
 #endif
 
