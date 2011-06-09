@@ -32,6 +32,9 @@ EXTRA_DIST += \
 	border-image-balls.png \
 	border-image-3-balls-green.png \
 	border-image-3-balls-yellow.png \
+	border-image-excess-size.css \
+	border-image-excess-size.ref.ui \
+	border-image-excess-size.ui \
 	border-image-gradient.css \
 	border-image-gradient.ref.ui \
 	border-image-gradient.ui \
