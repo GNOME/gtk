@@ -26,12 +26,13 @@
 
 /**
  * SECTION:gtkbbox
- * @Short_description: Base class for GtkHButtonBox and GtkVButtonBox
+ * @Short_description: A container for arranging buttons
  * @Title: GtkButtonBox
- * @See_also: #GtkVButtonBox, #GtkHButtonBox
  *
- * The primary purpose of this class is to keep track of the various
- * properties of #GtkHButtonBox and #GtkVButtonBox widgets.
+ * A button box should be used to provide a consistent layout of buttons
+ * throughout your application. The layout/spacing can be altered by the
+ * programmer, or if desired, by the user to alter the 'feel' of a
+ * program to a small degree.
  *
  * gtk_button_box_get_layout() and gtk_button_box_set_layout() retrieve and
  * alter the method used to spread the buttons in a button box across the

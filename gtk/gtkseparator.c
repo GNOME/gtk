@@ -33,12 +33,13 @@
 
 /**
  * SECTION:gtkseparator
- * @Short_description: Base class for GtkHSeparator and GtkVSeparator
+ * @Short_description: A separator widget
  * @Title: GtkSeparator
  *
- * The GtkSeparator widget is the base class for #GtkHSeparator and
- * #GtkVSeparator. It can be used in the same way as these, by setting
- * the "orientation" property suitably.
+ * GtkSeparator is a horizontal or vertical separator widget, depending on the 
+ * value of the "orientation" property, used to group the widgets within a 
+ * window. It displays a line with a shadow to make it appear sunken into the 
+ * interface.
  */
 
 

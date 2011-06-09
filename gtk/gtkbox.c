@@ -26,18 +26,15 @@
 
 /**
  * SECTION:gtkbox
- * @Short_description: Base class for box containers
+ * @Short_description: A container box
  * @Title: GtkBox
- * @See_also: #GtkHBox, #GtkVBox, #GtkFrame, #GtkTable, #GtkLayout
+ * @See_also: #GtkFrame, #GtkTable, #GtkLayout
  *
- * GtkBox is an widget which encapsulates functionality for a
- * particular kind of container, one that organizes a variable number of
- * widgets into a rectangular area.  GtkBox has a number of derived
- * classes, e.g. #GtkHBox and #GtkVBox.
+ * The GtkBox widget organizes child widgets into a rectangular area.
  *
  * The rectangular area of a GtkBox is organized into either a single row
- * or a single column of child widgets depending upon whether the box is
- * of type #GtkHBox or #GtkVBox, respectively.  Thus, all children of a
+ * or a single column of child widgets depending upon the orientation.
+ * Thus, all children of a
  * GtkBox are allocated one dimension in common, which is the height of a
  * row, or the width of a column.
  *
@@ -45,8 +42,8 @@
  * refers to adding widgets with reference to a particular position in a
  * #GtkContainer.  For a GtkBox, there are two reference positions: the
  * <emphasis>start</emphasis> and the <emphasis>end</emphasis> of the box.
- * For a #GtkVBox, the start is defined as the top of the box and the end is
- * defined as the bottom.  For a #GtkHBox the start is defined as the
+ * For a vertical #GtkBox, the start is defined as the top of the box and the end is
+ * defined as the bottom.  For a horizontal #GtkBox the start is defined as the
  * left side and the end is defined as the right side.
  *
  * Use repeated calls to gtk_box_pack_start() to pack widgets into a
@@ -1386,8 +1383,8 @@ gtk_box_new (GtkOrientation orientation,
  * @fill: %TRUE if space given to @child by the @expand option is
  *     actually allocated to @child, rather than just padding it.  This
  *     parameter has no effect if @expand is set to %FALSE.  A child is
- *     always allocated the full height of a #GtkHBox and the full width
- *     of a #GtkVBox. This option affects the other dimension
+ *     always allocated the full height of a horizontal #GtkBox and the full width
+ *     of a vertical #GtkBox. This option affects the other dimension
  * @padding: extra space in pixels to put between this child and its
  *   neighbors, over and above the global amount specified by
  *   #GtkBox:spacing property.  If @child is a widget at one of the
@@ -1418,8 +1415,8 @@ gtk_box_pack_start (GtkBox    *box,
  * @fill: %TRUE if space given to @child by the @expand option is
  *   actually allocated to @child, rather than just padding it.  This
  *   parameter has no effect if @expand is set to %FALSE.  A child is
- *   always allocated the full height of a #GtkHBox and the full width
- *   of a #GtkVBox.  This option affects the other dimension
+ *   always allocated the full height of a horizontal #GtkBox and the full width
+ *   of a vertical #GtkBox.  This option affects the other dimension
  * @padding: extra space in pixels to put between this child and its
  *   neighbors, over and above the global amount specified by
  *   #GtkBox:spacing property.  If @child is a widget at one of the

@@ -45,10 +45,10 @@
 
 /**
  * SECTION:gtkscale
- * @Short_description: Base class for GtkHScale and GtkVScale
+ * @Short_description: A slider widget for selecting a value from a range
  * @Title: GtkScale
  *
- * A GtkScale is a slider control used to select a numeric value.
+ * A GtkScale is a slider control used to select a numeric value. 
  * To use it, you'll probably want to investigate the methods on
  * its base class, #GtkRange, in addition to the methods for GtkScale itself.
  * To set the value of a scale, you would normally use gtk_range_set_value().
