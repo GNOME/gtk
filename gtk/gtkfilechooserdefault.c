@@ -4700,7 +4700,8 @@ save_widgets_create (GtkFileChooserDefault *impl)
   /* Label */
 
   widget = gtk_label_new_with_mnemonic (_("_Name:"));
-  gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
+  gtk_widget_set_halign (widget, GTK_ALIGN_START);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), widget,
 		    0, 1, 0, 1,
 		    GTK_FILL, GTK_FILL,
@@ -4724,7 +4725,8 @@ save_widgets_create (GtkFileChooserDefault *impl)
 
   /* Folder combo */
   impl->save_folder_label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (impl->save_folder_label), 0.0, 0.5);
+  gtk_widget_set_halign (impl->save_folder_label, GTK_ALIGN_START);
+  gtk_widget_set_valign (impl->save_folder_label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), impl->save_folder_label,
 		    0, 1, 1, 2,
 		    GTK_FILL, GTK_FILL,
