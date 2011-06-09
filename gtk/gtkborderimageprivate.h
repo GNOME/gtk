@@ -40,9 +40,11 @@ GType             _gtk_border_image_get_type         (void) G_GNUC_CONST;
 
 GtkBorderImage *  _gtk_border_image_new              (cairo_pattern_t      *source,
                                                       GtkBorder            *slice,
+                                                      GtkBorder            *width,
                                                       GtkCssBorderImageRepeat *repeat);
 GtkBorderImage *  _gtk_border_image_new_for_gradient (GtkGradient          *gradient,
                                                       GtkBorder            *slice,
+                                                      GtkBorder            *width,
                                                       GtkCssBorderImageRepeat *repeat);
 
 GtkBorderImage *  _gtk_border_image_ref              (GtkBorderImage       *image);

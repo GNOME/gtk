@@ -538,7 +538,7 @@
  * <inlinegraphic fileref="slices.png" format="PNG"/>
  * <para>
  * The parameters of the slicing process are controlled by
- * three separate properties. Note that you can use the
+ * four separate properties. Note that you can use the
  * <literallayout>border-image</literallayout> shorthand property
  * to set values for the three properties at the same time.
  * </para>
@@ -554,6 +554,14 @@
  * are the offsets, in pixels, from the relevant edge where the image
  * should be "cut off" to build the slices used for the rendering
  * of the border.
+ * </para>
+ * <para>
+ * <literallayout>border-image-width: @top @right @bottom @left</literallayout>
+ * The sizes specified by the @top, @right, @bottom and @left parameters
+ * are inward distances from the border box edge, used to specify the
+ * rendered size of each slice determined by border-image-slice.
+ * If this property is not specified, the values of border-width will
+ * be used as a fallback.
  * </para>
  * <para>
  * <literallayout>border-image-repeat: [stretch|repeat|round|space] ? 

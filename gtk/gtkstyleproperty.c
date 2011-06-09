@@ -1023,7 +1023,7 @@ border_image_value_parse (GtkCssParser *parser,
   GValue temp = { 0, };
   cairo_pattern_t *pattern = NULL;
   GtkGradient *gradient = NULL;
-  GtkBorder border, *parsed_border;
+  GtkBorder slice, *width = NULL, *parsed_slice;
   GtkCssBorderImageRepeat repeat, *parsed_repeat;
   gboolean retval = FALSE;
   GtkBorderImage *image = NULL;
@@ -1044,8 +1044,19 @@ border_image_value_parse (GtkCssParser *parser,
   if (!border_value_parse (parser, base, &temp))
     goto out;
 
-  parsed_border = g_value_get_boxed (&temp);
-  border = *parsed_border;
+  parsed_slice = g_value_get_boxed (&temp);
+  slice = *parsed_slice;
+
+  if (_gtk_css_parser_try (parser, "/", TRUE))
+    {
+      g_value_unset (&temp);
+      g_value_init (&temp, GTK_TYPE_BORDER);
+
+      if (!border_value_parse (parser, base, &temp))
+        goto out;
+
+      width = g_value_dup_boxed (&temp);
+    }
 
   g_value_unset (&temp);
   g_value_init (&temp, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
@@ -1059,9 +1070,9 @@ border_image_value_parse (GtkCssParser *parser,
   g_value_unset (&temp);
 
   if (gradient != NULL)
-    image = _gtk_border_image_new_for_gradient (gradient, &border, &repeat);
+    image = _gtk_border_image_new_for_gradient (gradient, &slice, width, &repeat);
   else if (pattern != NULL)
-    image = _gtk_border_image_new (pattern, &border, &repeat);
+    image = _gtk_border_image_new (pattern, &slice, width, &repeat);
 
   if (image != NULL)
     {
@@ -1075,6 +1086,9 @@ border_image_value_parse (GtkCssParser *parser,
 
   if (gradient != NULL)
     gtk_gradient_unref (gradient);
+
+  if (width != NULL)
+    gtk_border_free (width);
 
   return retval;
 }
@@ -2231,6 +2245,11 @@ gtk_style_property_init (void)
                                                               "Border image slice",
                                                               "Border image slice",
                                                               GTK_TYPE_BORDER, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-image-width",
+                                                              "Border image width",
+                                                              "Border image width",
+                                                              GTK_TYPE_BORDER, 0));  
   _gtk_style_property_register           (g_param_spec_boxed ("border-image",
                                                               "Border Image",
                                                               "Border Image",
