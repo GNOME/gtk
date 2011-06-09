@@ -425,7 +425,7 @@ _gtk_border_image_render (GtkBorderImage   *image,
       for (h = 0; h < 3; h++)
         {
           if (horizontal_slice[h].size == 0 ||
-              horizontal_border[v].size == 0)
+              horizontal_border[h].size == 0)
             continue;
 
           if (h == 1 && v == 1)
