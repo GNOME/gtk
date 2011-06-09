@@ -484,37 +484,6 @@ gail_label_ref_relation_set (AtkObject *obj)
                     }
                   g_list_free (list);
                 }
-            /*
-             * Handle the case where a GnomeIconEntry is specified as the 
-             * mnemonic widget. use the button which is a grandchild of the
-             * GnomeIconEntry as the mnemonic widget. See bug #133967.
-             */
-              else if (GTK_IS_BOX (mnemonic_widget))
-                {
-                  GList *list;
-
-                  list = gtk_container_get_children (GTK_CONTAINER (mnemonic_widget));
-                  if (g_list_length (list) == 1)
-                    {
-                      if (GTK_IS_ALIGNMENT (list->data))
-                        {
-                          GtkWidget *temp_widget;
-
-                          temp_widget = gtk_bin_get_child (GTK_BIN (list->data));
-                          if (GTK_IS_BUTTON (temp_widget))
-                            mnemonic_widget = temp_widget;
-                        }
-                      else if (GTK_IS_HBOX (list->data))
-                        {
-                          GtkWidget *temp_widget;
-
-                          temp_widget = GTK_WIDGET (list->data);
-                          g_list_free (list);
-                          list = gtk_container_get_children (GTK_CONTAINER (temp_widget));
-                        }
-                    }
-                  g_list_free (list);
-                }
             }
           accessible_array[0] = gtk_widget_get_accessible (mnemonic_widget);
           relation = atk_relation_new (accessible_array, 1,
