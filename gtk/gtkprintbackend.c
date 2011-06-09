@@ -757,7 +757,8 @@ request_password (GtkPrintBackend  *backend,
 
   /* Left */
   icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
-  gtk_misc_set_alignment (GTK_MISC (icon), 0.5, 0.0);
+  gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (icon, GTK_ALIGN_START);
   g_object_set (icon, "margin", 6, NULL);
 
   /* Right */
@@ -792,7 +793,8 @@ request_password (GtkPrintBackend  *backend,
           gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
 
           label = gtk_label_new (ai_display[i]);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_widget_set_halign (label, GTK_ALIGN_START);
+          gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
           entry = gtk_entry_new ();
           focus = entry;
