@@ -428,7 +428,7 @@ gail_widget_ref_relation_set (AtkObject *obj)
               GtkWidget *temp_widget;
 
               temp_widget = gtk_widget_get_parent (widget);
-              if (GTK_IS_HBOX (temp_widget))
+              if (GTK_IS_BOX (temp_widget))
                 {
                   label = find_label (temp_widget);
                 }
