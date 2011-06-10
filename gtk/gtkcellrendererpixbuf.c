@@ -748,15 +748,19 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GdkRectangle draw_rect;
   gboolean is_expander;
   gint xpad, ypad;
-  gint x, y;
   GtkStateFlags state;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
-				     &x, &y, NULL, NULL);
+				     &pix_rect.x, 
+                                     &pix_rect.y,
+                                     &pix_rect.width,
+                                     &pix_rect.height);
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
-  x += cell_area->x + xpad;
-  y += cell_area->y + ypad;
+  pix_rect.x += cell_area->x + xpad;
+  pix_rect.y += cell_area->y + ypad;
+  pix_rect.width -= xpad * 2;
+  pix_rect.height -= ypad * 2;
 
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     return;
@@ -807,7 +811,8 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
       pixbuf = stated;
     }
 
-  gtk_render_icon (context, cr, pixbuf, x, y);
+  gtk_render_icon (context, cr, pixbuf,
+                   pix_rect.x, pix_rect.y);
 
   gtk_style_context_restore (context);
   g_object_unref (pixbuf);
