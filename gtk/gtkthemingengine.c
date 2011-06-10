@@ -1957,37 +1957,12 @@ render_frame_internal (GtkThemingEngine *engine,
 
       gdk_cairo_set_source_rgba (cr, &border_color);
 
-      if (uniform_border)
-        {
-          if (border_width > 1)
-            {
-              x += (gdouble) border_width / 2;
-              y += (gdouble) border_width / 2;
-              width -= border_width;
-              height -= border_width;
-            }
-          else if (border_width == 1)
-            {
-              x += 0.5;
-              y += 0.5;
-              width -= 1;
-              height -= 1;
-            }
-
-          _cairo_round_rectangle_sides (cr, &border_radius,
-                                        x, y, width, height,
-                                        SIDE_ALL & ~(hidden_side));
-          cairo_stroke (cr);
-        }
-      else
-        {
-          cairo_save (cr);
-          _cairo_uneven_frame (cr, &border_radius,
-                               x, y, width, height,
-                               &border);
-          cairo_fill (cr);
-          cairo_restore (cr);
-        }
+      cairo_save (cr);
+      _cairo_uneven_frame (cr, &border_radius,
+                           x, y, width, height,
+                           &border);
+      cairo_fill (cr);
+      cairo_restore (cr);
 
       break;
     case GTK_BORDER_STYLE_INSET:
