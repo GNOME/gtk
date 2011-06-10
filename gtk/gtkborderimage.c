@@ -150,7 +150,12 @@ _gtk_border_image_unpack (const GValue *value,
   GtkBorderImage *image = g_value_get_boxed (value);
 
   parameter[0].name = "border-image-source";
-  g_value_init (&parameter[0].value, CAIRO_GOBJECT_TYPE_PATTERN);
+
+  if ((image != NULL) && 
+      (image->source_gradient != NULL))
+    g_value_init (&parameter[0].value, GTK_TYPE_GRADIENT);
+  else
+    g_value_init (&parameter[0].value, CAIRO_GOBJECT_TYPE_PATTERN);
 
   parameter[1].name = "border-image-slice";
   g_value_init (&parameter[1].value, GTK_TYPE_BORDER);
@@ -163,7 +168,11 @@ _gtk_border_image_unpack (const GValue *value,
 
   if (image != NULL)
     {
-      g_value_set_boxed (&parameter[0].value, image->source);
+      if (image->source_gradient != NULL)
+        g_value_set_boxed (&parameter[0].value, image->source_gradient);
+      else
+        g_value_set_boxed (&parameter[0].value, image->source);
+
       g_value_set_boxed (&parameter[1].value, &image->slice);
       g_value_set_boxed (&parameter[2].value, &image->repeat);
       g_value_set_boxed (&parameter[3].value, image->width);
