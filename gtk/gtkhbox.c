@@ -44,10 +44,16 @@
  *
  * All children are allocated the same height.
  *
- * GtkHBox has been deprecated, you can use #GtkBox instead, which is a very
- * quick and easy change. But the recommendation is to switch to #GtkGrid, since
- * #GtkBox is going to go away eventually.
- * See <xref linkend="gtk-migrating-GtkGrid"/>
+ * GtkHBox has been deprecated. You can use #GtkBox instead, which is a
+ * very quick and easy change. If you have derived your own classes from
+ * GtkHBox, you can simply change the inheritance to derive directly
+ * from #GtkBox. No further changes are needed, since the default
+ * value of the #GtkOrientable::orientation property is
+ * %GTK_ORIENTATION_HORIZONTAL.
+ * If you want your code to be future-proof, the recommendation is to
+ * switch to #GtkGrid, since #GtkBox is going to be deprecated in favor
+ * of the more flexible grid widget eventually. For more information
+ * about migrating to #GtkGrid, see <xref linkend="gtk-migrating-GtkGrid"/>
  */
 
 

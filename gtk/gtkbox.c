@@ -34,27 +34,26 @@
  *
  * The rectangular area of a GtkBox is organized into either a single row
  * or a single column of child widgets depending upon the orientation.
- * Thus, all children of a
- * GtkBox are allocated one dimension in common, which is the height of a
- * row, or the width of a column.
+ * Thus, all children of a GtkBox are allocated one dimension in common,
+ * which is the height of a row, or the width of a column.
  *
- * GtkBox uses a notion of <emphasis>packing</emphasis>.  Packing
- * refers to adding widgets with reference to a particular position in a
- * #GtkContainer.  For a GtkBox, there are two reference positions: the
+ * GtkBox uses a notion of <emphasis>packing</emphasis>. Packing refers
+ * to adding widgets with reference to a particular position in a
+ * #GtkContainer. For a GtkBox, there are two reference positions: the
  * <emphasis>start</emphasis> and the <emphasis>end</emphasis> of the box.
- * For a vertical #GtkBox, the start is defined as the top of the box and the end is
- * defined as the bottom.  For a horizontal #GtkBox the start is defined as the
- * left side and the end is defined as the right side.
+ * For a vertical #GtkBox, the start is defined as the top of the box and
+ * the end is defined as the bottom. For a horizontal #GtkBox the start
+ * is defined as the left side and the end is defined as the right side.
  *
  * Use repeated calls to gtk_box_pack_start() to pack widgets into a
- * GtkBox from start to end.  Use gtk_box_pack_end() to add widgets from
- * end to start.  You may intersperse these calls and add widgets from
+ * GtkBox from start to end. Use gtk_box_pack_end() to add widgets from
+ * end to start. You may intersperse these calls and add widgets from
  * both ends of the same GtkBox.
  *
- * Because GtkBox is a #GtkContainer, you may also use
- * gtk_container_add() to insert widgets into the box, and they will be
- * packed with the default values for #GtkBox:expand and #GtkBox:fill.
- * Use gtk_container_remove() to remove widgets from the GtkBox.
+ * Because GtkBox is a #GtkContainer, you may also use gtk_container_add()
+ * to insert widgets into the box, and they will be packed with the default
+ * values for #GtkBox:expand and #GtkBox:fill. Use gtk_container_remove()
+ * to remove widgets from the GtkBox.
  *
  * Use gtk_box_set_homogeneous() to specify whether or not all children
  * of the GtkBox are forced to get the same amount of space.
@@ -72,12 +71,10 @@
  * #GtkBox:fill and #GtkBox:padding child properties.
  * Use gtk_box_query_child_packing() to query these fields.
  *
- * <note>
- * <para>
- * Note that a single-row or single-column #GtkGrid provides exactly the
- * same functionality as #GtkBox.
- * </para>
- * </note>
+ * <note><para>
+ * Note that a single-row or single-column #GtkGrid provides exactly
+ * the same functionality as #GtkBox.
+ * </para></note>
  */
 
 #include "config.h"
