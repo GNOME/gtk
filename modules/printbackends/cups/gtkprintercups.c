@@ -179,7 +179,9 @@ gtk_printer_cups_get_property (GObject    *object,
                                GValue     *value,
                                GParamSpec *pspec)
 {
+#ifdef HAVE_COLORD
   GtkPrinterCups *printer = GTK_PRINTER_CUPS (object);
+#endif
 
   switch (prop_id)
     {
