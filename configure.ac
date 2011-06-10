@@ -1519,16 +1519,29 @@ GOBJECT_INTROSPECTION_CHECK(introspection_required_version)
 #################################################
 
 AC_ARG_ENABLE(packagekit,
-              [AS_HELP_STRING([--disable-packagekit],
-                              [build packagekit open-with module])])
-
-build_packagekit=no
-if test "os_win32" != "yes"; then
-        if test "x$enable_packagekit" != "xno"; then
-                build_packagekit=yes
-                AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
-        fi
+              [AS_HELP_STRING([--enable-packagekit=@<:@yes/no/auto@:>@],
+                              [build packagekit open-with module [default=auto]])],
+              [enable_packagekit="$enableval"],
+              [enable_packagekit=auto])
+if test "$enable_packagekit" = "auto"; then
+  if test "$os_win32" = "yes"; then
+    enable_packagekit=no
+  else
+    enable_packagekit=yes
+  fi
 fi
+
+AC_MSG_CHECKING([Whether to use PackageKit])
+build_packagekit=no
+if test "x$enable_packagekit" != "xno"; then
+  if test "$os_win32" != "yes"; then
+    build_packagekit=yes
+    AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
+  else
+    AC_MSG_ERROR([packagekit support is not available on win32])
+  fi
+fi
+AC_MSG_RESULT([$build_packagekit])
 
 AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$build_packagekit" = "xyes")
 
@@ -1537,12 +1550,22 @@ AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$build_packagekit" = "xyes")
 #################################################
 
 AC_ARG_ENABLE(colord,
-              [AS_HELP_STRING([--disable-colord],
-                              [build colord support code])])
+              [AS_HELP_STRING([--enable-colord=@<:@yes/no/auto@:>@],
+                              [build colord support code [default=auto]])],
+              [enable_colord="$enableval"],
+              [enable_colord=auto])
+if test "$enable_colord" = "auto"; then
+  if test "$os_win32" = "yes"; then
+    enable_colord=no
+  else
+    enable_colord=yes
+  fi
+fi
 
+AC_MSG_CHECKING([Whether to use colord])
 have_colord=no
 if test "x$enable_colord" != "xno"; then
-        if test "os_win32" != "yes"; then
+        if test "$os_win32" != "yes"; then
                 PKG_CHECK_MODULES(COLORD, colord >= 0.1.9,
                                   have_colord=yes, have_colord=no)
                 if test "enable_colord" = "yes"; then
@@ -1554,6 +1577,7 @@ if test "x$enable_colord" != "xno"; then
                 AC_MSG_ERROR([colord support is not available on win32])
         fi
 fi
+AC_MSG_RESULT([$have_colord])
 
 if test "have_colord" = "yes"; then
         AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
