@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-10 08:11+0300\n"
-"PO-Revision-Date: 2011-06-10 08:16+0300\n"
+"POT-Creation-Date: 2011-06-10 12:55+0300\n"
+"PO-Revision-Date: 2011-06-10 12:55+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer (Hebrew)\n"
 "Language: he\n"
@@ -802,43 +802,43 @@ msgstr "Page complete"
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Whether all required fields on the page have been filled out"
 
-#: ../gtk/gtkbbox.c:158
+#: ../gtk/gtkbbox.c:159
 msgid "Minimum child width"
 msgstr "Minimum child width"
 
-#: ../gtk/gtkbbox.c:159
+#: ../gtk/gtkbbox.c:160
 msgid "Minimum width of buttons inside the box"
 msgstr "Minimum width of buttons inside the box"
 
-#: ../gtk/gtkbbox.c:167
+#: ../gtk/gtkbbox.c:168
 msgid "Minimum child height"
 msgstr "Minimum child height"
 
-#: ../gtk/gtkbbox.c:168
+#: ../gtk/gtkbbox.c:169
 msgid "Minimum height of buttons inside the box"
 msgstr "Minimum height of buttons inside the box"
 
-#: ../gtk/gtkbbox.c:176
+#: ../gtk/gtkbbox.c:177
 msgid "Child internal width padding"
 msgstr "Child internal width padding"
 
-#: ../gtk/gtkbbox.c:177
+#: ../gtk/gtkbbox.c:178
 msgid "Amount to increase child's size on either side"
 msgstr "Amount to increase child's size on either side"
 
-#: ../gtk/gtkbbox.c:185
+#: ../gtk/gtkbbox.c:186
 msgid "Child internal height padding"
 msgstr "Child internal height padding"
 
-#: ../gtk/gtkbbox.c:186
+#: ../gtk/gtkbbox.c:187
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "Amount to increase child's size on the top and bottom"
 
-#: ../gtk/gtkbbox.c:194
+#: ../gtk/gtkbbox.c:195
 msgid "Layout style"
 msgstr "Layout style"
 
-#: ../gtk/gtkbbox.c:195
+#: ../gtk/gtkbbox.c:196
 msgid ""
 "How to lay out the buttons in the box. Possible values are: spread, edge, "
 "start and end"
@@ -846,11 +846,11 @@ msgstr ""
 "How to lay out the buttons in the box. Possible values are: spread, edge, "
 "start and end"
 
-#: ../gtk/gtkbbox.c:203
+#: ../gtk/gtkbbox.c:204
 msgid "Secondary"
 msgstr "Secondary"
 
-#: ../gtk/gtkbbox.c:204
+#: ../gtk/gtkbbox.c:205
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -858,47 +858,47 @@ msgstr ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 
-#: ../gtk/gtkbbox.c:211
+#: ../gtk/gtkbbox.c:212
 msgid "Non-Homogeneous"
 msgstr "Non-Homogeneous"
 
-#: ../gtk/gtkbbox.c:212
+#: ../gtk/gtkbbox.c:213
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "If TRUE, the child will not be subject to homogeneous sizing"
 
-#: ../gtk/gtkbox.c:246 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:313
+#: ../gtk/gtkbox.c:243 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:313
 #: ../gtk/gtkiconview.c:644 ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "Spacing"
 
-#: ../gtk/gtkbox.c:247
+#: ../gtk/gtkbox.c:244
 msgid "The amount of space between children"
 msgstr "The amount of space between children"
 
-#: ../gtk/gtkbox.c:256 ../gtk/gtktable.c:227 ../gtk/gtktoolbar.c:554
+#: ../gtk/gtkbox.c:253 ../gtk/gtktable.c:227 ../gtk/gtktoolbar.c:554
 #: ../gtk/gtktoolitemgroup.c:1644
 msgid "Homogeneous"
 msgstr "Homogeneous"
 
-#: ../gtk/gtkbox.c:257
+#: ../gtk/gtkbox.c:254
 msgid "Whether the children should all be the same size"
 msgstr "Whether the children should all be the same size"
 
-#: ../gtk/gtkbox.c:277 ../gtk/gtkcellareabox.c:337 ../gtk/gtktoolbar.c:546
+#: ../gtk/gtkbox.c:274 ../gtk/gtkcellareabox.c:337 ../gtk/gtktoolbar.c:546
 #: ../gtk/gtktoolitemgroup.c:1651 ../gtk/gtktoolpalette.c:1068
 #: ../gtk/gtktreeviewcolumn.c:339
 msgid "Expand"
 msgstr "Expand"
 
-#: ../gtk/gtkbox.c:278
+#: ../gtk/gtkbox.c:275
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Whether the child should receive extra space when the parent grows"
 
-#: ../gtk/gtkbox.c:294 ../gtk/gtktoolitemgroup.c:1658
+#: ../gtk/gtkbox.c:291 ../gtk/gtktoolitemgroup.c:1658
 msgid "Fill"
 msgstr "Fill"
 
-#: ../gtk/gtkbox.c:295
+#: ../gtk/gtkbox.c:292
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
@@ -906,19 +906,19 @@ msgstr ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 
-#: ../gtk/gtkbox.c:302 ../gtk/gtktrayicon-x11.c:169
+#: ../gtk/gtkbox.c:299 ../gtk/gtktrayicon-x11.c:169
 msgid "Padding"
 msgstr "Padding"
 
-#: ../gtk/gtkbox.c:303
+#: ../gtk/gtkbox.c:300
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "Extra space to put between the child and its neighbors, in pixels"
 
-#: ../gtk/gtkbox.c:309
+#: ../gtk/gtkbox.c:306
 msgid "Pack type"
 msgstr "Pack type"
 
-#: ../gtk/gtkbox.c:310
+#: ../gtk/gtkbox.c:307
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -926,12 +926,12 @@ msgstr ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 
-#: ../gtk/gtkbox.c:316 ../gtk/gtknotebook.c:770 ../gtk/gtkpaned.c:345
+#: ../gtk/gtkbox.c:313 ../gtk/gtknotebook.c:770 ../gtk/gtkpaned.c:349
 #: ../gtk/gtktoolitemgroup.c:1672
 msgid "Position"
 msgstr "Position"
 
-#: ../gtk/gtkbox.c:317 ../gtk/gtknotebook.c:771
+#: ../gtk/gtkbox.c:314 ../gtk/gtknotebook.c:771
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
 
@@ -4189,7 +4189,7 @@ msgstr "Tab detachable"
 msgid "Whether the tab is detachable"
 msgstr "Whether the tab is detachable"
 
-#: ../gtk/gtknotebook.c:815 ../gtk/gtkscrollbar.c:102
+#: ../gtk/gtknotebook.c:815 ../gtk/gtkscrollbar.c:100
 msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
@@ -4199,7 +4199,7 @@ msgid ""
 msgstr ""
 "Display a second backward arrow button on the opposite end of the tab area"
 
-#: ../gtk/gtknotebook.c:831 ../gtk/gtkscrollbar.c:109
+#: ../gtk/gtknotebook.c:831 ../gtk/gtkscrollbar.c:107
 msgid "Secondary forward stepper"
 msgstr "Secondary forward stepper"
 
@@ -4209,19 +4209,19 @@ msgid ""
 msgstr ""
 "Display a second forward arrow button on the opposite end of the tab area"
 
-#: ../gtk/gtknotebook.c:846 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:846 ../gtk/gtkscrollbar.c:86
 msgid "Backward stepper"
 msgstr "Backward stepper"
 
-#: ../gtk/gtknotebook.c:847 ../gtk/gtkscrollbar.c:89
+#: ../gtk/gtknotebook.c:847 ../gtk/gtkscrollbar.c:87
 msgid "Display the standard backward arrow button"
 msgstr "Display the standard backward arrow button"
 
-#: ../gtk/gtknotebook.c:861 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:861 ../gtk/gtkscrollbar.c:93
 msgid "Forward stepper"
 msgstr "Forward stepper"
 
-#: ../gtk/gtknotebook.c:862 ../gtk/gtkscrollbar.c:96
+#: ../gtk/gtknotebook.c:862 ../gtk/gtkscrollbar.c:94
 msgid "Display the standard forward arrow button"
 msgstr "Display the standard forward arrow button"
 
@@ -4306,57 +4306,57 @@ msgstr "Orientation"
 msgid "The orientation of the orientable"
 msgstr "The orientation of the orientable"
 
-#: ../gtk/gtkpaned.c:346
+#: ../gtk/gtkpaned.c:350
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 
-#: ../gtk/gtkpaned.c:355
+#: ../gtk/gtkpaned.c:359
 msgid "Position Set"
 msgstr "Position Set"
 
-#: ../gtk/gtkpaned.c:356
+#: ../gtk/gtkpaned.c:360
 msgid "TRUE if the Position property should be used"
 msgstr "TRUE if the Position property should be used"
 
-#: ../gtk/gtkpaned.c:362
+#: ../gtk/gtkpaned.c:366
 msgid "Handle Size"
 msgstr "Handle Size"
 
-#: ../gtk/gtkpaned.c:363
+#: ../gtk/gtkpaned.c:367
 msgid "Width of handle"
 msgstr "Width of handle"
 
-#: ../gtk/gtkpaned.c:379
+#: ../gtk/gtkpaned.c:383
 msgid "Minimal Position"
 msgstr "Minimal Position"
 
-#: ../gtk/gtkpaned.c:380
+#: ../gtk/gtkpaned.c:384
 msgid "Smallest possible value for the \"position\" property"
 msgstr "Smallest possible value for the \"position\" property"
 
-#: ../gtk/gtkpaned.c:397
+#: ../gtk/gtkpaned.c:401
 msgid "Maximal Position"
 msgstr "Maximal Position"
 
-#: ../gtk/gtkpaned.c:398
+#: ../gtk/gtkpaned.c:402
 msgid "Largest possible value for the \"position\" property"
 msgstr "Largest possible value for the \"position\" property"
 
-#: ../gtk/gtkpaned.c:415
+#: ../gtk/gtkpaned.c:419
 msgid "Resize"
 msgstr "Resize"
 
-#: ../gtk/gtkpaned.c:416
+#: ../gtk/gtkpaned.c:420
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "If TRUE, the child expands and shrinks along with the paned widget"
 
-#: ../gtk/gtkpaned.c:431
+#: ../gtk/gtkpaned.c:435
 msgid "Shrink"
 msgstr "Shrink"
 
-#: ../gtk/gtkpaned.c:432
+#: ../gtk/gtkpaned.c:436
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "If TRUE, the child can be made smaller than its requisition"
 
@@ -5125,29 +5125,29 @@ msgstr "How the size of the content should be determined"
 msgid "Vertical Scrollable Policy"
 msgstr "Vertical Scrollable Policy"
 
-#: ../gtk/gtkscrollbar.c:72
+#: ../gtk/gtkscrollbar.c:70
 msgid "Minimum Slider Length"
 msgstr "Minimum Slider Length"
 
-#: ../gtk/gtkscrollbar.c:73
+#: ../gtk/gtkscrollbar.c:71
 msgid "Minimum length of scrollbar slider"
 msgstr "Minimum length of scrollbar slider"
 
-#: ../gtk/gtkscrollbar.c:81
+#: ../gtk/gtkscrollbar.c:79
 msgid "Fixed slider size"
 msgstr "Fixed slider size"
 
-#: ../gtk/gtkscrollbar.c:82
+#: ../gtk/gtkscrollbar.c:80
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "Don't change slider size, just lock it to the minimum length"
 
-#: ../gtk/gtkscrollbar.c:103
+#: ../gtk/gtkscrollbar.c:101
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 
-#: ../gtk/gtkscrollbar.c:110
+#: ../gtk/gtkscrollbar.c:108
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr ""
@@ -7037,7 +7037,6 @@ msgid "Column is user-resizable"
 msgstr "Column is user-resizable"
 
 #: ../gtk/gtktreeviewcolumn.c:265
-#, fuzzy
 msgid "Current X position of the column"
 msgstr "Current X position of the column"
 
