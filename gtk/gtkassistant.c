@@ -1588,10 +1588,12 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info->regular_title = gtk_label_new (NULL);
   page_info->current_title = gtk_label_new (NULL);
 
-  gtk_misc_set_alignment (GTK_MISC (page_info->regular_title), 0.,0.5);
+  gtk_widget_set_halign (page_info->regular_title, GTK_ALIGN_START);
+  gtk_widget_set_valign (page_info->regular_title, GTK_ALIGN_CENTER);
   gtk_widget_show (page_info->regular_title);
 
-  gtk_misc_set_alignment (GTK_MISC (page_info->current_title), 0.,0.5);
+  gtk_widget_set_halign (page_info->current_title, GTK_ALIGN_START);
+  gtk_widget_set_valign (page_info->current_title, GTK_ALIGN_CENTER);
   gtk_widget_hide (page_info->current_title);
 
   context = gtk_widget_get_style_context (page_info->current_title);
