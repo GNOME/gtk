@@ -1543,14 +1543,21 @@ AC_ARG_ENABLE(colord,
 have_colord=no
 if test "x$enable_colord" != "xno"; then
         if test "os_win32" != "yes"; then
-                PKG_CHECK_MODULES(COLORD, colord >= 0.1.9)
-                have_colord=yes
-                AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
+                PKG_CHECK_MODULES(COLORD, colord >= 0.1.9,
+                                  have_colord=yes, have_colord=no)
+                if test "enable_colord" = "yes"; then
+                        if test "have_colord" = "no"; then
+                                AC_MSG_ERROR([--enable-colord specified, but not available])
+                        fi
+                fi
         else
                 AC_MSG_ERROR([colord support is not available on win32])
         fi
 fi
 
+if test "have_colord" = "yes"; then
+        AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
+fi
 AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
 
 ##################################################
