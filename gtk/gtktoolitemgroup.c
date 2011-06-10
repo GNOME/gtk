@@ -393,7 +393,8 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   priv->expander_size = DEFAULT_EXPANDER_SIZE;
 
   priv->label_widget = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (priv->label_widget), 0.0, 0.5);
+  gtk_widget_set_halign (priv->label_widget, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->label_widget, GTK_ALIGN_CENTER);
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_container_add (GTK_CONTAINER (alignment), priv->label_widget);
   gtk_widget_show_all (alignment);
