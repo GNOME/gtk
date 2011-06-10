@@ -376,7 +376,7 @@ _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
                          "transient-for", parent,
                          "modal", parent != NULL,
                          "destroy-with-parent", TRUE,
-                         //"resizable", FALSE,
+                         "resizable", FALSE,
                          NULL);
 
   return result;
@@ -1214,6 +1214,5 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
     }
 
   gtk_window_present (GTK_WINDOW (dialog));
-
   load_print_backends (dialog);
 }
