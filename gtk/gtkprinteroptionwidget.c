@@ -797,7 +797,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                                          gtk_printer_option_get_activates_default (source));
 
         label = gtk_label_new_with_mnemonic (_("_Name:"));
-        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_widget_set_halign (label, GTK_ALIGN_START);
+        gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
         gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->entry);
 
         gtk_table_attach (GTK_TABLE (priv->filechooser), label,
@@ -809,7 +810,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                           0, 0);
 
         label = gtk_label_new_with_mnemonic (_("_Save in folder:"));
-        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_widget_set_halign (label, GTK_ALIGN_START);
+        gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
         gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->combo);
 
         gtk_table_attach (GTK_TABLE (priv->filechooser), label,
