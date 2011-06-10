@@ -56,8 +56,8 @@
  * ]|
  * If you want your code to be future-proof, the recommendation is to
  * switch to #GtkGrid, since #GtkBox is going to be deprecated in favor
- * of the more flexible #GtkGrid widget eventually.
- * See <xref linkend="gtk-migrating-GtkGrid"/>.
+ * of the more flexible grid widget eventually. For more information
+ * about migrating to #GtkGrid, see <xref linkend="gtk-migrating-GtkGrid"/>.
  */
 
 G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
