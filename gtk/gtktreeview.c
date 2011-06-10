@@ -2367,22 +2367,17 @@ gtk_tree_view_size_request_columns (GtkTreeView *tree_view)
 
   tree_view->priv->header_height = 0;
 
-  if (tree_view->priv->model)
+  for (list = tree_view->priv->columns; list; list = list->next)
     {
-      for (list = tree_view->priv->columns; list; list = list->next)
-        {
-          GtkRequisition     requisition;
-          GtkTreeViewColumn *column = list->data;
-	  GtkWidget         *button = gtk_tree_view_column_get_button (column);
+      GtkRequisition     requisition;
+      GtkTreeViewColumn *column = list->data;
+      GtkWidget         *button = gtk_tree_view_column_get_button (column);
 
-	  if (button == NULL)
-	    continue;
+      if (button == NULL)
+        continue;
 
-          column = list->data;
-
-          gtk_widget_get_preferred_size (button, &requisition, NULL);
-          tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
-        }
+      gtk_widget_get_preferred_size (button, &requisition, NULL);
+      tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
     }
 }
 
