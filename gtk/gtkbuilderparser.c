@@ -1111,7 +1111,7 @@ end_element (GMarkupParseContext *context,
       for (l = object_info->bindings; l; l = l->next)
         {
           BindingInfo *b = (BindingInfo*)l->data;
-          if (strcmp (b->to, binding_info->to) != 0)
+          if (!strcmp (b->to, binding_info->to))
             {
               g_set_error (error,
                            GTK_BUILDER_ERROR,
