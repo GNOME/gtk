@@ -2666,7 +2666,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Menus", test_menus);
   g_test_add_func ("/Builder/MessageArea", test_message_area);
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
-  g_test_add_func ("/Builder/Property Bindings", test_property_binding);
+  g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
 
   return g_test_run();
 }
