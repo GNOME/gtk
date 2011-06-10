@@ -3180,8 +3180,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  gtk_tree_view_column_get_resizable (column) &&
 	  _gtk_tree_view_column_get_window (column))
 	{
-	  GtkWidget *button;
-          GtkAllocation button_allocation;
 	  gpointer drag_data;
 
 	  if (event->type == GDK_2BUTTON_PRESS &&
@@ -3217,10 +3215,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 					     0, 0, NULL, NULL,
 					     drag_data);
 
-	  button = gtk_tree_view_column_get_button (column);
-          gtk_widget_get_allocation (button, &button_allocation);
 	  tree_view->priv->drag_pos = i;
-	  tree_view->priv->x_drag = button_allocation.x + (rtl ? 0 : button_allocation.width);
+	  tree_view->priv->x_drag = gtk_tree_view_column_get_x_offset (column) + (rtl ? 0 : gtk_tree_view_column_get_width (column));
 
 	  if (!gtk_widget_has_focus (widget))
 	    gtk_widget_grab_focus (widget);
@@ -13516,7 +13512,6 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
                              GtkTreeViewColumn  *column,
                              GdkRectangle       *rect)
 {
-  GtkAllocation allocation;
   GtkRBTree *tree = NULL;
   GtkRBNode *node = NULL;
   gint vertical_separator;
@@ -13540,9 +13535,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 
   if (column)
     {
-      gtk_widget_get_allocation (gtk_tree_view_column_get_button (column), &allocation);
-      rect->x = allocation.x + horizontal_separator/2;
-      rect->width = allocation.width - horizontal_separator;
+      rect->x = gtk_tree_view_column_get_x_offset (column) + horizontal_separator/2;
+      rect->width = gtk_tree_view_column_get_width (column) - horizontal_separator;
     }
 
   if (path)
