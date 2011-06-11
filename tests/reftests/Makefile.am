@@ -137,4 +137,7 @@ EXTRA_DIST += \
 	simple.ref.ui \
 	simple.ui \
 	toplevel-vs-popup.ref.ui \
-	toplevel-vs-popup.ui
+	toplevel-vs-popup.ui \
+	unresolvable.css \
+	unresolvable.ref.ui \
+	unresolvable.ui

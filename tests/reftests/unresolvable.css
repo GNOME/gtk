@@ -1,0 +1,16 @@
+GtkWindow {
+  engine: none;
+  background-image: none;
+  background-color: @doesntexist;
+  box-shadow: @nonexistant 5 5;
+  border-image: -gtk-gradient(linear,
+                              left top, left bottom,
+                              from(@notaavailable),
+                              to(@whatever)) 2;
+}
+
+#reference {
+  background-color: pink;
+  box-shadow: none;
+  border-image: none;
+}
