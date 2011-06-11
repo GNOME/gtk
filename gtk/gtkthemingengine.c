@@ -1689,7 +1689,7 @@ render_frame_internal (GtkThemingEngine *engine,
 
   cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
 
-  _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
+  _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
   _gtk_rounded_box_apply_border_radius (&border_box, engine, state, junction);
   padding_box = border_box;
   _gtk_rounded_box_shrink (&padding_box, border.top, border.right, border.bottom, border.left);
