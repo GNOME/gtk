@@ -32,6 +32,7 @@
 #include "gtkshadowprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
+#include "gtkroundedboxprivate.h"
 
 /**
  * SECTION:gtkthemingengine
@@ -1511,9 +1512,7 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress;
-  GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
-  GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
-  GtkCssBorderRadius border_radius = { { 0, },  };
+  GtkRoundedBox border_box;
 
   flags = gtk_theming_engine_get_state (engine);
 
@@ -1521,26 +1520,7 @@ render_background_internal (GtkThemingEngine *engine,
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
-                          /* Can't use border-radius as it's an int for
-                           * backwards compat */
-                          "border-top-left-radius", &top_left_radius,
-                          "border-top-right-radius", &top_right_radius,
-                          "border-bottom-right-radius", &bottom_right_radius,
-                          "border-bottom-left-radius", &bottom_left_radius,
                           NULL);
-
-  if (top_left_radius)
-    border_radius.top_left = *top_left_radius;
-  g_free (top_left_radius);
-  if (top_right_radius)
-    border_radius.top_right = *top_right_radius;
-  g_free (top_right_radius);
-  if (bottom_right_radius)
-    border_radius.bottom_right = *bottom_right_radius;
-  g_free (bottom_right_radius);
-  if (bottom_left_radius)
-    border_radius.bottom_left = *bottom_left_radius;
-  g_free (bottom_left_radius);
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
@@ -1728,9 +1708,10 @@ render_background_internal (GtkThemingEngine *engine,
         cairo_pattern_destroy (other_pattern);
     }
 
-  _cairo_round_rectangle_sides (cr, &border_radius,
-                                0, 0, width, height,
-                                SIDE_ALL);
+  _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
+  _gtk_rounded_box_apply_border_radius (&border_box, engine, flags, junction);
+  _gtk_rounded_box_path (&border_box, cr);
+
   if (pattern)
     {
       cairo_scale (cr, width, height);
