@@ -1510,7 +1510,7 @@ render_background_internal (GtkThemingEngine *engine,
   cairo_pattern_t *pattern;
   GtkStateFlags flags;
   gboolean running;
-  gdouble progress, alpha = 1;
+  gdouble progress;
   GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   GtkCssBorderRadius border_radius = { { 0, },  };
@@ -1641,22 +1641,22 @@ render_background_internal (GtkThemingEngine *engine,
             }
           else
             {
-              /* Different pattern types, or different color
-               * stop counts, alpha blend both patterns.
-               */
-              _cairo_round_rectangle_sides (cr, &border_radius,
-                                            0, 0, width, height,
-                                            SIDE_ALL);
+              cairo_save (cr);
+
+              cairo_rectangle (cr, 0, 0, width, height);
+              cairo_clip (cr);
+
+              cairo_push_group (cr);
 
               cairo_scale (cr, width, height);
               cairo_set_source (cr, other_pattern);
-              cairo_scale (cr, 1.0 / width, 1.0 / height);
-              cairo_fill_preserve (cr);
+              cairo_paint_with_alpha (cr, progress);
+              cairo_set_source (cr, pattern);
+              cairo_paint_with_alpha (cr, 1.0 - progress);
 
-              /* Set alpha for posterior drawing
-               * of the target pattern
-               */
-              alpha = 1 - progress;
+              new_pattern = cairo_pop_group (cr);
+
+              cairo_restore (cr);
             }
         }
       else if (pattern || other_pattern)
@@ -1740,17 +1740,7 @@ render_background_internal (GtkThemingEngine *engine,
   else
     gdk_cairo_set_source_rgba (cr, &bg_color);
 
-  if (alpha == 1)
-    {
-      cairo_fill (cr);
-    }
-  else
-    {
-      cairo_save (cr);
-      cairo_clip (cr);
-      cairo_paint_with_alpha (cr, alpha);
-      cairo_restore (cr);
-    }
+  cairo_fill (cr);
 
   if (pattern)
     cairo_pattern_destroy (pattern);
