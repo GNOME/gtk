@@ -1976,28 +1976,34 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
     {
       if (property->pspec->value_type == GDK_TYPE_RGBA)
         {
-          if (!resolve_color (props, val))
-            _gtk_style_property_resolve (property, props, val);
+          if (resolve_color (props, val))
+            return;
         }
       else if (property->pspec->value_type == GDK_TYPE_COLOR)
         {
-          if (!resolve_color_rgb (props, val))
-            _gtk_style_property_resolve (property, props, val);
+          if (resolve_color_rgb (props, val))
+            return;
         }
-      else
-        _gtk_style_property_resolve (property, props, val);
+      
+      g_value_unset (val);
+      g_value_init (val, property->pspec->value_type);
+      _gtk_style_property_default_value (property, props, val);
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
     {
       g_return_if_fail (property->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN);
 
       if (!resolve_gradient (props, val))
-        _gtk_style_property_resolve (property, props, val);
+        {
+          g_value_unset (val);
+          g_value_init (val, CAIRO_GOBJECT_TYPE_PATTERN);
+          _gtk_style_property_default_value (property, props, val);
+        }
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
     {
       if (!resolve_shadow (props, val))
-        _gtk_style_property_resolve (property, props, val);
+        _gtk_style_property_default_value (property, props, val);
     }
 }
 
