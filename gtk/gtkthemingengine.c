@@ -1834,7 +1834,7 @@ render_frame_internal (GtkThemingEngine *engine,
   GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   GtkCssBorderRadius border_radius = { { 0, },  };
-  gdouble progress, d1, d2, m;
+  gdouble progress, d1, d2;
   gboolean running;
   GtkBorder border;
   gboolean uniform_border;
@@ -1936,9 +1936,6 @@ render_frame_internal (GtkThemingEngine *engine,
         }
 
       cairo_save (cr);
-
-      m = MIN (width, height);
-      m /= 2;
 
       if (uniform_border)
         {
