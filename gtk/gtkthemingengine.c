@@ -1514,11 +1514,6 @@ render_background_internal (GtkThemingEngine *engine,
   GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   GtkCssBorderRadius border_radius = { { 0, },  };
-  gdouble mat_w, mat_h;
-
-  /* Use unmodified size for pattern scaling */
-  mat_w = width;
-  mat_h = height;
 
   flags = gtk_theming_engine_get_state (engine);
 
@@ -1653,9 +1648,9 @@ render_background_internal (GtkThemingEngine *engine,
                                             0, 0, width, height,
                                             SIDE_ALL);
 
-              cairo_scale (cr, mat_w, mat_h);
+              cairo_scale (cr, width, height);
               cairo_set_source (cr, other_pattern);
-              cairo_scale (cr, 1.0 / mat_w, 1.0 / mat_h);
+              cairo_scale (cr, 1.0 / width, 1.0 / height);
               cairo_fill_preserve (cr);
 
               /* Set alpha for posterior drawing
@@ -1738,9 +1733,9 @@ render_background_internal (GtkThemingEngine *engine,
                                 SIDE_ALL);
   if (pattern)
     {
-      cairo_scale (cr, mat_w, mat_h);
+      cairo_scale (cr, width, height);
       cairo_set_source (cr, pattern);
-      cairo_scale (cr, 1.0 / mat_w, 1.0 / mat_h);
+      cairo_scale (cr, 1.0 / width, 1.0 / height);
     }
   else
     gdk_cairo_set_source_rgba (cr, &bg_color);
