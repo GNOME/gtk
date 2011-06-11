@@ -1511,12 +1511,9 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
-  GtkBorder border;
   GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   GtkCssBorderRadius border_radius = { { 0, },  };
-  gint border_width;
-  GtkBorderStyle border_style;
   gdouble mat_w, mat_h;
 
   /* Use unmodified size for pattern scaling */
@@ -1526,7 +1523,6 @@ render_background_internal (GtkThemingEngine *engine,
   flags = gtk_theming_engine_get_state (engine);
 
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
-  gtk_theming_engine_get_border (engine, flags, &border);
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
@@ -1536,7 +1532,6 @@ render_background_internal (GtkThemingEngine *engine,
                           "border-top-right-radius", &top_right_radius,
                           "border-bottom-right-radius", &bottom_right_radius,
                           "border-bottom-left-radius", &bottom_left_radius,
-                          "border-style", &border_style,
                           NULL);
 
   if (top_left_radius)
@@ -1552,30 +1547,7 @@ render_background_internal (GtkThemingEngine *engine,
     border_radius.bottom_left = *bottom_left_radius;
   g_free (bottom_left_radius);
 
-  border_width = MIN (MIN (border.top, border.bottom),
-                      MIN (border.left, border.right));
-
-  if (border_width > 1 &&
-      border_style == GTK_BORDER_STYLE_NONE)
-    {
-      x += (gdouble) border_width / 2;
-      y += (gdouble) border_width / 2;
-      width -= border_width;
-      height -= border_width;
-    }
-  else
-    {
-      x += border.left;
-      y += border.top;
-      width -= border.left + border.right;
-      height -= border.top + border.bottom;
-    }
-
-  if (width <= 0 || height <= 0)
-    return;
-
   cairo_save (cr);
-  cairo_set_line_width (cr, border_width);
   cairo_translate (cr, x, y);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
@@ -1775,31 +1747,13 @@ render_background_internal (GtkThemingEngine *engine,
 
   if (alpha == 1)
     {
-      if (border_width > 1 &&
-          border_style != GTK_BORDER_STYLE_NONE)
-        {
-          /* stroke with the same source, so the background
-           * has exactly the shape than the frame, this
-           * is important so gtk_render_background() and
-           * gtk_render_frame() fit perfectly with round
-           * borders.
-           */
-          cairo_fill_preserve (cr);
-          cairo_stroke (cr);
-        }
-      else
-        cairo_fill (cr);
+      cairo_fill (cr);
     }
   else
     {
       cairo_save (cr);
-      _cairo_round_rectangle_sides (cr, &border_radius,
-                                    0, 0, width, height,
-                                    SIDE_ALL);
       cairo_clip (cr);
-
       cairo_paint_with_alpha (cr, alpha);
-
       cairo_restore (cr);
     }
 
