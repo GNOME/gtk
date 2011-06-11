@@ -54,6 +54,9 @@ EXTRA_DIST += \
 	box-pseudo-classes.css \
 	box-pseudo-classes.ref.ui \
 	box-pseudo-classes.ui \
+	box-shadow-spec-inset.css \
+	box-shadow-spec-inset.ref.ui \
+	box-shadow-spec-inset.ui \
 	css-match-class.css \
 	css-match-class.ref.ui \
 	css-match-class.ui \
