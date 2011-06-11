@@ -26,6 +26,9 @@ clean-local:
 
 EXTRA_DIST += \
 	align-expand.sh \
+	background-area.css \
+	background-area.ref.ui \
+	background-area.ui \
 	border-image-ball-green.png \
 	border-image-ball-red.png \
 	border-image-ball-yellow.png \
