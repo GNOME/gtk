@@ -884,38 +884,68 @@ shadow_value_parse (GtkCssParser *parser,
                     GFile *base,
                     GValue *value)
 {
-  gboolean inset;
+  gboolean have_inset, have_color, have_lengths;
   gdouble hoffset, voffset, blur, spread;
   GtkSymbolicColor *color;
   GtkShadow *shadow;
+  guint i;
 
   shadow = _gtk_shadow_new ();
 
   do
     {
-      inset = _gtk_css_parser_try (parser, "inset", TRUE);
+      have_inset = have_lengths = have_color = FALSE;
 
-      if (!_gtk_css_parser_try_double (parser, &hoffset) ||
-          !_gtk_css_parser_try_double (parser, &voffset))
+      for (i = 0; i < 3; i++)
         {
-          _gtk_css_parser_error (parser, "Horizontal and vertical offsets are required");
-          _gtk_shadow_unref (shadow);
-          return FALSE;
+          if (!have_inset && 
+              _gtk_css_parser_try (parser, "inset", TRUE))
+            {
+              have_inset = TRUE;
+              continue;
+            }
+            
+          if (!have_lengths &&
+              _gtk_css_parser_try_double (parser, &hoffset))
+            {
+              have_lengths = TRUE;
+
+              if (!_gtk_css_parser_try_double (parser, &voffset))
+                {
+                  _gtk_css_parser_error (parser, "Horizontal and vertical offsets are required");
+                  _gtk_shadow_unref (shadow);
+                  return FALSE;
+                }
+
+              if (!_gtk_css_parser_try_double (parser, &blur))
+                blur = 0;
+
+              if (!_gtk_css_parser_try_double (parser, &spread))
+                spread = 0;
+
+              continue;
+            }
+
+          if (!have_color)
+            {
+              have_color = TRUE;
+
+              /* XXX: the color is optional and UA-defined if it's missing,
+               * but it doesn't really make sense for us...
+               */
+              color = _gtk_css_parser_read_symbolic_color (parser);
+
+              if (color == NULL)
+                {
+                  _gtk_shadow_unref (shadow);
+                  return FALSE;
+                }
+            }
         }
 
-      if (!_gtk_css_parser_try_double (parser, &blur))
-        blur = 0;
-
-      if (!_gtk_css_parser_try_double (parser, &spread))
-        spread = 0;
-
-      /* XXX: the color is optional and UA-defined if it's missing,
-       * but it doesn't really make sense for us...
-       */
-      color = _gtk_css_parser_read_symbolic_color (parser);
-
-      if (color == NULL)
+      if (!have_color || !have_lengths)
         {
+          _gtk_css_parser_error (parser, "Must specify at least color and offsets");
           _gtk_shadow_unref (shadow);
           return FALSE;
         }
@@ -923,7 +953,7 @@ shadow_value_parse (GtkCssParser *parser,
       _gtk_shadow_append (shadow,
                           hoffset, voffset,
                           blur, spread,
-                          inset, color);
+                          have_inset, color);
 
       gtk_symbolic_color_unref (color);
 
