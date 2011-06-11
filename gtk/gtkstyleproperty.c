@@ -1679,6 +1679,14 @@ pack_border_radius (GValue             *value,
   g_free (top_left);
 }
 
+/*** default values ***/
+
+static void
+border_image_width_default_value (GtkStyleProperties *props,
+                                  GValue             *value)
+{
+}
+
 /*** API ***/
 
 static void
@@ -2280,11 +2288,17 @@ gtk_style_property_init (void)
                                                               "Border image slice",
                                                               "Border image slice",
                                                               GTK_TYPE_BORDER, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-image-width",
+  _gtk_style_property_register           (g_param_spec_boxed ("border-image-width",
                                                               "Border image width",
                                                               "Border image width",
-                                                              GTK_TYPE_BORDER, 0));  
+                                                              GTK_TYPE_BORDER, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          border_image_width_default_value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-image",
                                                               "Border Image",
                                                               "Border Image",
