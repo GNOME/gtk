@@ -1387,6 +1387,7 @@ render_background_internal (GtkThemingEngine *engine,
   gboolean running;
   gdouble progress;
   GtkRoundedBox border_box;
+  GtkShadow *box_shadow;
 
   flags = gtk_theming_engine_get_state (engine);
 
@@ -1394,6 +1395,7 @@ render_background_internal (GtkThemingEngine *engine,
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
+                          "box-shadow", &box_shadow,
                           NULL);
 
   cairo_save (cr);
@@ -1599,6 +1601,17 @@ render_background_internal (GtkThemingEngine *engine,
 
   if (pattern)
     cairo_pattern_destroy (pattern);
+
+  if (box_shadow != NULL)
+    {
+      GtkBorder border;
+      gtk_theming_engine_get_border (engine, flags, &border);
+      _gtk_rounded_box_shrink (&border_box,
+                               border.top, border.right,
+                               border.bottom, border.left);
+      _gtk_box_shadow_render (box_shadow, cr, &border_box);
+      _gtk_shadow_unref (box_shadow);
+    }
 
   cairo_restore (cr);
 }

@@ -358,7 +358,7 @@ _gtk_box_shadow_render (GtkShadow           *shadow,
                                element->spread, element->spread);
 
       _gtk_rounded_box_path (&box, cr);
-      _gtk_rounded_box_path (padding_box, cr);
+      _gtk_rounded_box_clip_path (padding_box, cr);
 
       gdk_cairo_set_source_rgba (cr, &element->color);
       cairo_fill (cr);
