@@ -1683,6 +1683,7 @@ pack_border_radius (GValue             *value,
 
 static void
 border_image_width_default_value (GtkStyleProperties *props,
+                                  GtkStateFlags       state,
                                   GValue             *value)
 {
 }
@@ -1858,10 +1859,11 @@ _gtk_style_property_print_value (const GtkStyleProperty *property,
 void
 _gtk_style_property_default_value (const GtkStyleProperty *property,
                                    GtkStyleProperties     *properties,
+                                   GtkStateFlags           state,
                                    GValue                 *value)
 {
   if (property->default_value_func)
-    property->default_value_func (properties, value);
+    property->default_value_func (properties, state, value);
   else if (property->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
     g_value_set_object (value, gtk_theming_engine_load (NULL));
   else if (property->pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
@@ -1970,6 +1972,7 @@ resolve_shadow (GtkStyleProperties *props,
 void
 _gtk_style_property_resolve (const GtkStyleProperty *property,
                              GtkStyleProperties     *props,
+                             GtkStateFlags           state,
                              GValue                 *val)
 {
   if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
@@ -1987,12 +1990,12 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
       
       g_value_unset (val);
       g_value_init (val, property->pspec->value_type);
-      _gtk_style_property_default_value (property, props, val);
+      _gtk_style_property_default_value (property, props, state, val);
     }
   else if (G_VALUE_TYPE (val) == GDK_TYPE_RGBA)
     {
       if (g_value_get_boxed (val) == NULL)
-        _gtk_style_property_default_value (property, props, val);
+        _gtk_style_property_default_value (property, props, state, val);
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
     {
@@ -2002,13 +2005,13 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
         {
           g_value_unset (val);
           g_value_init (val, CAIRO_GOBJECT_TYPE_PATTERN);
-          _gtk_style_property_default_value (property, props, val);
+          _gtk_style_property_default_value (property, props, state, val);
         }
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
     {
       if (!resolve_shadow (props, val))
-        _gtk_style_property_default_value (property, props, val);
+        _gtk_style_property_default_value (property, props, state, val);
     }
 }
 

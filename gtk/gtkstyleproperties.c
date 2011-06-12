@@ -669,7 +669,7 @@ _gtk_style_properties_peek_property (GtkStyleProperties      *props,
   if (val == NULL)
     return NULL;
   
-  _gtk_style_property_resolve (node, props, val);
+  _gtk_style_property_resolve (node, props, state, val);
 
   return val;
 }
@@ -713,7 +713,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
   else if (_gtk_style_property_is_shorthand (node))
     _gtk_style_property_pack (node, props, state, value);
   else
-    _gtk_style_property_default_value (node, props, value);
+    _gtk_style_property_default_value (node, props, state, value);
 
   return TRUE;
 }
@@ -767,7 +767,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
           GValue default_value = { 0 };
 
           g_value_init (&default_value, node->pspec->value_type);
-          _gtk_style_property_default_value (node, props, &default_value);
+          _gtk_style_property_default_value (node, props, state, &default_value);
           G_VALUE_LCOPY (&default_value, args, 0, &error);
           g_value_unset (&default_value);
         }

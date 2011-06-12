@@ -40,6 +40,7 @@ typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser        
 typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
                                                             GString                *string);
 typedef void             (* GtkStyleDefaultValueFunc)      (GtkStyleProperties     *props,
+                                                            GtkStateFlags           state,
                                                             GValue                 *value);
 
 
@@ -71,10 +72,12 @@ gboolean                 _gtk_style_property_is_inherit    (const GtkStyleProper
 
 void                     _gtk_style_property_default_value (const GtkStyleProperty *property,
                                                             GtkStyleProperties     *properties,
+                                                            GtkStateFlags           state,
                                                             GValue                 *value);
 
 void                     _gtk_style_property_resolve       (const GtkStyleProperty *property,
                                                             GtkStyleProperties     *properties,
+                                                            GtkStateFlags           state,
                                                             GValue                 *value);
 
 gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
