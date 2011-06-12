@@ -110,12 +110,11 @@ do_colorsel (GtkWidget *do_widget)
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
-      alignment = gtk_alignment_new (1.0, 0.5, 0.0, 0.0);
-
       button = gtk_button_new_with_mnemonic ("_Change the above color");
-      gtk_container_add (GTK_CONTAINER (alignment), button);
+      gtk_widget_set_halign (button, GTK_ALIGN_END);
+      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
 
-      gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       g_signal_connect (button, "clicked",
                         G_CALLBACK (change_color_callback), NULL);
