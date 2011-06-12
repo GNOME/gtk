@@ -1634,6 +1634,20 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 }
 
 static void
+gtk_theming_engine_hide_border_sides (GtkBorder *border,
+                                      guint      hidden_side)
+{
+  if (hidden_side & SIDE_TOP)
+    border->top = 0;
+  if (hidden_side & SIDE_RIGHT)
+    border->right = 0;
+  if (hidden_side & SIDE_BOTTOM)
+    border->bottom = 0;
+  if (hidden_side & SIDE_LEFT)
+    border->left = 0;
+}
+
+static void
 render_frame_internal (GtkThemingEngine *engine,
                        cairo_t          *cr,
                        gdouble           x,
@@ -1657,6 +1671,7 @@ render_frame_internal (GtkThemingEngine *engine,
 
   gtk_theming_engine_get_border_color (engine, state, &border_color);
   gtk_theming_engine_get_border (engine, state, &border);
+  gtk_theming_engine_hide_border_sides (&border, hidden_side);
 
   gtk_theming_engine_get (engine, state,
                           "border-style", &border_style,
