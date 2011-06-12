@@ -397,7 +397,8 @@ left_align_button_new (const char *label)
   GtkWidget *button = gtk_button_new_with_mnemonic (label);
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (button));
 
-  gtk_misc_set_alignment (GTK_MISC (child), 0., 0.5);
+  gtk_widget_set_halign (child, GTK_ALIGN_START);
+  gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
 
   return button;
 }
