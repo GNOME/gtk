@@ -1732,26 +1732,34 @@ render_frame_internal (GtkThemingEngine *engine,
       _gtk_rounded_box_path (&padding_box, cr);
       cairo_clip (cr);
 
-      if (border_style == GTK_BORDER_STYLE_INSET)
-        gdk_cairo_set_source_rgba (cr, &border_color);
-      else
-        gdk_cairo_set_source_rgba (cr, &lighter);
+      /* Now that we've clipped the border, we split the rectangle like this:
+       * +----------------------+
+       * |                   · /|
+       * |                   ·/ |
+       * |··+----------------+··|
+       * | /·                   |
+       * |/ ·                   |
+       * +----------------------+
+       * The dots mark how we adapt the area when sides are hidden to not get
+       * artifacts at the corners.
+       */
       cairo_move_to (cr, x, y);
-      cairo_line_to (cr, x, y + height);
-      cairo_line_to (cr, x + min_size, y + height - min_size);
-      cairo_line_to (cr, x + width - min_size, y + min_size);
-      cairo_line_to (cr, x + width, y);
-      cairo_fill (cr);
+      cairo_line_to (cr, x, y + height - ((hidden_side & SIDE_LEFT) ? min_size : 0));
+      cairo_line_to (cr, x + min_size, y + height - ((hidden_side & SIDE_BOTTOM) ? 0 : min_size));
+      cairo_line_to (cr, x + width - ((hidden_side & SIDE_RIGHT) ? 0 : min_size), y + min_size);
+      cairo_line_to (cr, x + width, y + ((hidden_side & SIDE_TOP) ? min_size : 0));
 
-      if (border_style == GTK_BORDER_STYLE_INSET)
-        gdk_cairo_set_source_rgba (cr, &lighter);
-      else
-        gdk_cairo_set_source_rgba (cr, &border_color);
-      cairo_move_to (cr, x + width, y + height);
-      cairo_line_to (cr, x, y + height);
-      cairo_line_to (cr, x + min_size, y + height - min_size);
-      cairo_line_to (cr, x + width - min_size, y + min_size);
-      cairo_line_to (cr, x + width, y);
+      /* Now we (ab)use the fact that with the EVEN_ODD fill rule one can
+       * "invert" the filled area by adding it to the path again.
+       */
+      if (border_style == GTK_BORDER_STYLE_OUTSET)
+        cairo_rectangle (cr, x, y, width, height);
+
+      gdk_cairo_set_source_rgba (cr, &border_color);
+      cairo_fill_preserve (cr);
+
+      cairo_rectangle (cr, x, y, width, height);
+      gdk_cairo_set_source_rgba (cr, &lighter);
       cairo_fill (cr);
 
       cairo_restore (cr);
