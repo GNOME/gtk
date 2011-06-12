@@ -1688,6 +1688,15 @@ border_image_width_default_value (GtkStyleProperties *props,
 {
 }
 
+static void
+border_color_default_value (GtkStyleProperties *props,
+                            GtkStateFlags       state,
+                            GValue             *value)
+{
+  g_value_unset (value);
+  gtk_style_properties_get_property (props, "color", state, value);
+}
+
 /*** API ***/
 
 static void
@@ -2277,11 +2286,18 @@ gtk_style_property_init (void)
                                                              "Border style",
                                                              GTK_TYPE_BORDER_STYLE,
                                                              GTK_BORDER_STYLE_NONE, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-color",
+  _gtk_style_property_register           (g_param_spec_boxed ("border-color",
                                                               "Border color",
                                                               "Border color",
-                                                              GDK_TYPE_RGBA, 0));
+                                                              GDK_TYPE_RGBA, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          border_color_default_value);
+
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("background-image",
                                                               "Background Image",
