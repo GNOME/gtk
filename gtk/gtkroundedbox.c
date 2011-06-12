@@ -88,13 +88,27 @@ _gtk_rounded_box_grow (GtkRoundedBox *box,
                        double         bottom,
                        double         left)
 {
+  if (box->box.width + left + right < 0)
+    {
+      box->box.x -= left * box->box.width / (left + right);
+      box->box.width = 0;
+    }
+  else
+    {
+      box->box.x -= left;
+      box->box.width += left + right;
+    }
 
-  box->box.x -= left;
-  box->box.width += left + right;
-  g_warn_if_fail (box->box.width > 0);
-  box->box.y -= top;
-  box->box.height += top + bottom;
-  g_warn_if_fail (box->box.height > 0);
+  if (box->box.height + bottom + right < 0)
+    {
+      box->box.y -= top * box->box.height / (top + bottom);
+      box->box.height = 0;
+    }
+  else
+    {
+      box->box.y -= top;
+      box->box.height += top + bottom;
+    }
 
   if (box->border_radius.top_left.horizontal)
     box->border_radius.top_left.horizontal = MAX (0, box->border_radius.top_left.horizontal + left);
