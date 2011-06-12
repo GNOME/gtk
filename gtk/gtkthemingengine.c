@@ -1721,22 +1721,22 @@ render_frame_internal (GtkThemingEngine *engine,
         gdk_cairo_set_source_rgba (cr, &border_color);
       else
         gdk_cairo_set_source_rgba (cr, &lighter);
-      cairo_move_to (cr, 0, 0);
-      cairo_line_to (cr, 0, height);
-      cairo_line_to (cr, min_size, height - min_size);
-      cairo_line_to (cr, width - min_size, min_size);
-      cairo_line_to (cr, width, 0);
+      cairo_move_to (cr, x, y);
+      cairo_line_to (cr, x, y + height);
+      cairo_line_to (cr, x + min_size, y + height - min_size);
+      cairo_line_to (cr, x + width - min_size, y + min_size);
+      cairo_line_to (cr, x + width, y);
       cairo_fill (cr);
 
       if (border_style == GTK_BORDER_STYLE_INSET)
         gdk_cairo_set_source_rgba (cr, &lighter);
       else
         gdk_cairo_set_source_rgba (cr, &border_color);
-      cairo_move_to (cr, width, height);
-      cairo_line_to (cr, 0, height);
-      cairo_line_to (cr, min_size, height - min_size);
-      cairo_line_to (cr, width - min_size, min_size);
-      cairo_line_to (cr, width, 0);
+      cairo_move_to (cr, x + width, y + height);
+      cairo_line_to (cr, x, y + height);
+      cairo_line_to (cr, x + min_size, y + height - min_size);
+      cairo_line_to (cr, x + width - min_size, y + min_size);
+      cairo_line_to (cr, x + width, y);
       cairo_fill (cr);
 
       cairo_restore (cr);
