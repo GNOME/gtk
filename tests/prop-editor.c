@@ -936,7 +936,8 @@ property_widget (GObject    *object,
                              g_type_name (G_PARAM_SPEC_TYPE (spec)));
       prop_edit = gtk_label_new (msg);
       g_free (msg);
-      gtk_misc_set_alignment (GTK_MISC (prop_edit), 0.0, 0.5);
+      gtk_widget_set_halign (prop_edit, GTK_ALIGN_START);
+      gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
     }
 
   if (!can_modify)
@@ -1007,7 +1008,8 @@ properties_from_type (GObject *object,
         }
 
       label = gtk_label_new (g_param_spec_get_nick (spec));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
 
       prop_edit = property_widget (object, spec, can_modify);
@@ -1080,7 +1082,8 @@ child_properties_from_object (GObject *object)
         }
 
       label = gtk_label_new (g_param_spec_get_nick (spec));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
 
       mark_child_property (spec);
@@ -1136,7 +1139,8 @@ children_from_object (GObject *object)
       object = c->data;
 
       label = gtk_label_new ("Child");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
 
       prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
@@ -1191,7 +1195,8 @@ cells_from_object (GObject *object)
       object = c->data;
 
       label = gtk_label_new ("Cell");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
 
       prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
