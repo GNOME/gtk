@@ -2734,7 +2734,7 @@ gtk_css_provider_get_default (void)
         "  background-color: @selected_bg_color;\n"
         "}\n"
         "\n"
-        ".menu.check, .menu.radio {\n"
+        ".menuitem.check, .menuitem.radio {\n"
         "  color: @fg_color;\n"
         "  border-style: none;\n"
         "  border-width: 0;\n"
