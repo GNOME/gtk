@@ -475,6 +475,8 @@ grab_dnd_keys (GtkWidget *widget,
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
       keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (window), grab_keys[i].keysym);
+      if (keycode == NoSymbol)
+        continue;
       XGrabKey (GDK_WINDOW_XDISPLAY (window),
    	        keycode, grab_keys[i].modifiers,
 	        GDK_WINDOW_XID (root),
@@ -508,6 +510,8 @@ ungrab_dnd_keys (GtkWidget *widget,
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
       keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (window), grab_keys[i].keysym);
+      if (keycode == NoSymbol)
+        continue;
       XUngrabKey (GDK_WINDOW_XDISPLAY (window),
       	          keycode, grab_keys[i].modifiers,
                   GDK_WINDOW_XID (root));
