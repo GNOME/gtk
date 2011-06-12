@@ -3576,6 +3576,7 @@ gtk_widget_override_cursor
 gtk_widget_override_font
 gtk_widget_override_symbolic_color
 gtk_widget_path
+gtk_widget_path_append_for_widget
 gtk_widget_path_append_type
 gtk_widget_path_append_with_siblings
 gtk_widget_path_copy
