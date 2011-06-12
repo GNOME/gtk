@@ -29,6 +29,9 @@ EXTRA_DIST += \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
+	border-color-default.css \
+	border-color-default.ref.ui \
+	border-color-default.ui \
 	border-image-ball-green.png \
 	border-image-ball-red.png \
 	border-image-ball-yellow.png \
