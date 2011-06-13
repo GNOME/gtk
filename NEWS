@@ -1,3 +1,84 @@
+Overview of Changes in GTK+ 3.1.6
+=================================
+
+* GtkOverlay is a new container that allows to place one or more
+  'overlay' widgets on top of another widget. This can be used
+  for 'floating statusbars' and similar interfaces.
+
+* GtkLockButton has been simplified in appearance to look like
+  a normal button
+
+* GtkNotebook now supports height-for-width layout
+
+* Accessibility for menuitems and combo boxes has been restored
+
+* The horizontal and vertical subclasses of GtkBox, GtkPaned,
+  GtkSeparator, GtkScrollbar, GtkScale and GtkButtonBox have
+  been deprecated
+
+* The print dialog can now display color profile information
+
+* Many enhancements and fixes to CSS theming
+ - The CSS parser has been rewritten with the goal of better
+   CSS compliance and improved error handling
+ - A testsuite for the parser has been added
+ - Attributes can be inherited from parent widgets
+ - Shorthand properties are supported
+ - Color and font attributes are now inherited
+ - Borders and padding are now handled much more consistently,
+   and border-radius support is more complete
+ - text-shadow, box-shadow and icon-shadow attributes are now
+   supported
+ - nth-child works for boxes
+
+* Bug fixes:
+ 353712 allow reducing selection in GtkLabel
+ 576492 GtkBuilder does not respect G_PARAM_CONSTRUCT properties
+ 624539 Keep track of last focused window
+ 634491 gtk_tree_path_append_index() is linear in the number of indices
+ 634994 Explicitly declare internal reserved bits in GdkModifierType
+ 641087 Wish: GtkApplication::window-added signal
+ 642768 Make tracker search backend a bit less verbose
+ 642773 Make file search non-case sensitive
+ 642929 GtkFileChooserDialog with GTK_FILE_CHOOSER_ACTION_CREATE_...
+ 644906 gtkimcontextime.c: NULL pointer reference
+ 646859 GtkCssProvider.load_from_data introspection
+ 649314 Add support for the text-shadow property
+ 649779 Add missing gtk_widget_override_* annotations
+ 649972 Crash when loading an ui file with an empty GtkGrid
+ 649979 Argument count TypeError from Gtk.TreeView.enable_model_drag_...
+ 650012 GtkAppChooser* documentation does not document the content_type
+ 650110 Add sanity check in GtkEntryCompletion
+ 650114 gtk_entry_set_completion does not destroy idle source
+ 650167 Unused variable in GtkEditable example code
+ 650202 Optimization in theme_subdir_load (gtkicontheme.c)
+ 650302 Combo box menu items should expose their displayed text
+ 650382 GtkButton uses wrong values in grab
+ 650418 menu: don't use the border as a padding value
+ 650420 all: avoid boxed structs copying where possible
+ 650424 treeview: theming-related fixes
+ 650530 GtkAssistant beautification patches
+ 650664 gtkstatusbar: gtk_misc_set_alignment () function replacement
+ 651194 Should support border-image as a shorthand property
+ 651706 gdk: Update keysyms list from latest X.org headers
+ 651707 Move private functions to private headers
+ 651734 GtkLockButton: symbolic icon is fuzzy
+ 651979 compose-parse.py can not work with the newest gdkkeysyms.h...
+ 652045 file open dialog refuses to open or complete non-local files
+ 652102 Issues when redrawing multiple GdkWindows
+ 652103 Add a GtkPrinterOptionWidget type of label to just show info...
+ 652282 build: fix win32 configure checks
+
+ * Updated translations
+ Catalan (Valencian)
+ Esperanto
+ Galician
+ Hebrew
+ Norwegian bokmål
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.1.4
 =================================
 
