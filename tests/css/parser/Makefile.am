@@ -37,6 +37,9 @@ EXTRA_DIST += \
 	close-at-end-of-file.css \
 	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \
+	colors-errors.css \
+	colors-errors.errors \
+	colors-errors.ref.css \
 	colors-red.css \
 	colors-red.ref.css \
 	css-21-malformed-declarations.css \

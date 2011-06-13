@@ -1,0 +1,31 @@
+a {
+  rgba-property: #1;
+}
+
+b {
+  rgba-property: #12;
+}
+
+c {
+  rgba-property: #1234;
+}
+
+d {
+  rgba-property: #12345;
+}
+
+e {
+  rgba-property: #1234567;
+}
+
+f {
+  rgba-property: notacolorname;
+}
+
+g {
+  rgba-property: rgb(1,2,3,4);
+}
+
+h {
+  rgba-property: rgba(1,2,3,4,5);
+}
