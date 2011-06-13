@@ -716,6 +716,7 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser *parser,
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
     {
+      _gtk_css_parser_error (parser, "Expected ')' in color definition");
       gtk_symbolic_color_unref (symbolic);
       return NULL;
     }
