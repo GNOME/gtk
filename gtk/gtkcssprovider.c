@@ -697,8 +697,8 @@
  *       <row>
  *         <entry>background-color</entry>
  *         <entry morerows="2">color (see above)</entry>
- *         <entry morerows="2">#GdkRGBA</entry>
- *         <entry morerows="2"><literallayout>background-color: &num;fff;
+ *         <entry morerows="7">#GdkRGBA</entry>
+ *         <entry morerows="7"><literallayout>background-color: &num;fff;
  * color: &amp;color1;
  * background-color: shade (&amp;color1, 0.5);
  * color: mix (&amp;color1, &num;f0f, 0.8);</literallayout>
@@ -708,7 +708,21 @@
  *         <entry>color</entry>
  *       </row>
  *       <row>
+ *         <entry>border-top-color</entry>
+ *         <entry morerows="4">transparent|color (see above)</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-right-color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-bottom-color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-left-color</entry>
+ *       </row>
+ *       <row>
  *         <entry>border-color</entry>
+ *         <entry>[transparent|color]{1,4}</entry>
  *       </row>
  *       <row>
  *         <entry>font</entry>

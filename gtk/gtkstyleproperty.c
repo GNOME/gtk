@@ -1510,6 +1510,81 @@ border_radius_value_print (const GValue *value,
     }
 }
 
+static gboolean 
+border_color_value_parse (GtkCssParser *parser,
+                          GFile        *base,
+                          GValue       *value)
+{
+  if (_gtk_css_parser_try (parser, "transparent", TRUE))
+    {
+      GdkRGBA transparent = { 0, 0, 0, 0 };
+          
+      g_value_set_boxed (value, &transparent);
+
+      return TRUE;
+    }
+
+  return rgba_value_parse (parser, base, value);
+}
+
+static gboolean 
+border_color_shorthand_value_parse (GtkCssParser *parser,
+                                    GFile        *base,
+                                    GValue       *value)
+{
+  GtkSymbolicColor *symbolic;
+  GPtrArray *array;
+
+  array = g_ptr_array_new_with_free_func ((GDestroyNotify) gtk_symbolic_color_unref);
+
+  do
+    {
+      if (_gtk_css_parser_try (parser, "transparent", TRUE))
+        {
+          GdkRGBA transparent = { 0, 0, 0, 0 };
+          
+          symbolic = gtk_symbolic_color_new_literal (&transparent);
+        }
+      else
+        {
+          symbolic = _gtk_css_parser_read_symbolic_color (parser);
+      
+          if (symbolic == NULL)
+            return FALSE;
+        }
+      
+      g_ptr_array_add (array, symbolic);
+    }
+  while (array->len < 4 && 
+         !_gtk_css_parser_is_eof (parser) &&
+         !_gtk_css_parser_begins_with (parser, ';') &&
+         !_gtk_css_parser_begins_with (parser, '}'));
+
+  switch (array->len)
+    {
+      default:
+        g_assert_not_reached ();
+        break;
+      case 1:
+        g_ptr_array_add (array, gtk_symbolic_color_ref (g_ptr_array_index (array, 0)));
+        /* fall through */
+      case 2:
+        g_ptr_array_add (array, gtk_symbolic_color_ref (g_ptr_array_index (array, 0)));
+        /* fall through */
+      case 3:
+        g_ptr_array_add (array, gtk_symbolic_color_ref (g_ptr_array_index (array, 1)));
+        /* fall through */
+      case 4:
+        break;
+    }
+
+  g_value_unset (value);
+  g_value_init (value, G_TYPE_PTR_ARRAY);
+  g_value_set_boxed (value, array);
+
+  return TRUE;
+}
+
 /*** PACKING ***/
 
 static GParameter *
@@ -1677,6 +1752,62 @@ pack_border_radius (GValue             *value,
     g_value_set_int (value, top_left->horizontal);
 
   g_free (top_left);
+}
+
+static GParameter *
+unpack_border_color (const GValue *value,
+                     guint        *n_params)
+{
+  GParameter *parameter = g_new0 (GParameter, 4);
+  GType type;
+  
+  type = G_VALUE_TYPE (value);
+  if (type == G_TYPE_PTR_ARRAY)
+    type = GTK_TYPE_SYMBOLIC_COLOR;
+
+  parameter[0].name = "border-top-color";
+  g_value_init (&parameter[0].value, type);
+  parameter[1].name = "border-right-color";
+  g_value_init (&parameter[1].value, type);
+  parameter[2].name = "border-bottom-color";
+  g_value_init (&parameter[2].value, type);
+  parameter[3].name = "border-left-color";
+  g_value_init (&parameter[3].value, type);
+
+  if (G_VALUE_TYPE (value) == G_TYPE_PTR_ARRAY)
+    {
+      GPtrArray *array = g_value_get_boxed (value);
+      guint i;
+
+      for (i = 0; i < 4; i++)
+        g_value_set_boxed (&parameter[i].value, g_ptr_array_index (array, i));
+    }
+  else
+    {
+      /* can be RGBA or symbolic color */
+      gpointer p = g_value_get_boxed (value);
+
+      g_value_set_boxed (&parameter[0].value, p);
+      g_value_set_boxed (&parameter[1].value, p);
+      g_value_set_boxed (&parameter[2].value, p);
+      g_value_set_boxed (&parameter[3].value, p);
+    }
+
+  *n_params = 4;
+  return parameter;
+}
+
+static void
+pack_border_color (GValue             *value,
+                   GtkStyleProperties *props,
+                   GtkStateFlags       state)
+{
+  /* NB: We are a color property, so we have to resolve to a color here.
+   * So we just resolve to a color. We pick one and stick to it.
+   * Lesson learned: Don't query border-color shorthand, query the 
+   * real properties instead. */
+  g_value_unset (value);
+  gtk_style_properties_get_property (props, "border-top-color", state, value);
 }
 
 /*** default values ***/
@@ -2286,17 +2417,61 @@ gtk_style_property_init (void)
                                                              "Border style",
                                                              GTK_TYPE_BORDER_STYLE,
                                                              GTK_BORDER_STYLE_NONE, 0));
+  _gtk_style_property_register           (g_param_spec_boxed ("border-top-color",
+                                                              "Border top color",
+                                                              "Border top color",
+                                                              GDK_TYPE_RGBA, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          border_color_value_parse,
+                                          NULL,
+                                          border_color_default_value);
+  _gtk_style_property_register           (g_param_spec_boxed ("border-right-color",
+                                                              "Border right color",
+                                                              "Border right color",
+                                                              GDK_TYPE_RGBA, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          border_color_value_parse,
+                                          NULL,
+                                          border_color_default_value);
+  _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-color",
+                                                              "Border bottom color",
+                                                              "Border bottom color",
+                                                              GDK_TYPE_RGBA, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          border_color_value_parse,
+                                          NULL,
+                                          border_color_default_value);
+  _gtk_style_property_register           (g_param_spec_boxed ("border-left-color",
+                                                              "Border left color",
+                                                              "Border left color",
+                                                              GDK_TYPE_RGBA, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          border_color_value_parse,
+                                          NULL,
+                                          border_color_default_value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-color",
                                                               "Border color",
                                                               "Border color",
                                                               GDK_TYPE_RGBA, 0),
                                           0,
                                           NULL,
+                                          unpack_border_color,
+                                          pack_border_color,
+                                          border_color_shorthand_value_parse,
                                           NULL,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          border_color_default_value);
+                                          NULL);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("background-image",
