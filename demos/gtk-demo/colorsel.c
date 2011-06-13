@@ -67,7 +67,6 @@ do_colorsel (GtkWidget *do_widget)
 {
   GtkWidget *vbox;
   GtkWidget *button;
-  GtkWidget *alignment;
 
   if (!window)
     {
