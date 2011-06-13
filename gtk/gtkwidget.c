@@ -1669,6 +1669,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * context passed as @cr in any way they like and don't need to
    * restore it. The signal emission takes care of calling cairo_save()
    * before and cairo_restore() after invoking the handler.
+   *
+   * Since: 3.0
    */
   widget_signals[DRAW] =
     g_signal_new (I_("draw"),
