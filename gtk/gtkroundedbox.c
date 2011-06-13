@@ -168,6 +168,25 @@ _cairo_ellipsis (cairo_t *cr,
   cairo_restore (cr);
 }
 
+static void
+_cairo_ellipsis_negative (cairo_t *cr,
+                          double xc, double yc,
+                          double xradius, double yradius,
+                          double angle1, double angle2)
+{
+  if (xradius <= 0.0 || yradius <= 0.0)
+    {
+      cairo_line_to (cr, xc, yc);
+      return;
+    }
+
+  cairo_save (cr);
+  cairo_translate (cr, xc, yc);
+  cairo_scale (cr, xradius, yradius);
+  cairo_arc_negative (cr, 0, 0, 1.0, angle1, angle2);
+  cairo_restore (cr);
+}
+
 void
 _gtk_rounded_box_path (const GtkRoundedBox *box,
                        cairo_t             *cr)
@@ -198,6 +217,150 @@ _gtk_rounded_box_path (const GtkRoundedBox *box,
                    box->border_radius.bottom_left.horizontal,
                    box->border_radius.bottom_left.vertical,
                    G_PI / 2, G_PI);
+}
+
+void
+_gtk_rounded_box_path_top (const GtkRoundedBox *outer,
+                           const GtkRoundedBox *inner,
+                           cairo_t             *cr)
+{
+  cairo_new_sub_path (cr);
+
+  _cairo_ellipsis (cr,
+                   outer->box.x + outer->border_radius.top_left.horizontal,
+                   outer->box.y + outer->border_radius.top_left.vertical,
+                   outer->border_radius.top_left.horizontal,
+                   outer->border_radius.top_left.vertical,
+                   5 * G_PI / 4, 3 * G_PI / 2);
+  _cairo_ellipsis (cr, 
+                   outer->box.x + outer->box.width - outer->border_radius.top_right.horizontal,
+                   outer->box.y + outer->border_radius.top_right.vertical,
+                   outer->border_radius.top_right.horizontal,
+                   outer->border_radius.top_right.vertical,
+                   - G_PI / 2, -G_PI / 4);
+
+  _cairo_ellipsis_negative (cr, 
+                            inner->box.x + inner->box.width - inner->border_radius.top_right.horizontal,
+                            inner->box.y + inner->border_radius.top_right.vertical,
+                            inner->border_radius.top_right.horizontal,
+                            inner->border_radius.top_right.vertical,
+                            -G_PI / 4, - G_PI / 2);
+  _cairo_ellipsis_negative (cr,
+                            inner->box.x + inner->border_radius.top_left.horizontal,
+                            inner->box.y + inner->border_radius.top_left.vertical,
+                            inner->border_radius.top_left.horizontal,
+                            inner->border_radius.top_left.vertical,
+                            3 * G_PI / 2, 5 * G_PI / 4);
+
+  cairo_close_path (cr);
+}
+
+void
+_gtk_rounded_box_path_right (const GtkRoundedBox *outer,
+                             const GtkRoundedBox *inner,
+                             cairo_t             *cr)
+{
+  cairo_new_sub_path (cr);
+
+  _cairo_ellipsis (cr, 
+                   outer->box.x + outer->box.width - outer->border_radius.top_right.horizontal,
+                   outer->box.y + outer->border_radius.top_right.vertical,
+                   outer->border_radius.top_right.horizontal,
+                   outer->border_radius.top_right.vertical,
+                   - G_PI / 4, 0);
+  _cairo_ellipsis (cr,
+                   outer->box.x + outer->box.width - outer->border_radius.bottom_right.horizontal,
+                   outer->box.y + outer->box.height - outer->border_radius.bottom_right.vertical,
+                   outer->border_radius.bottom_right.horizontal,
+                   outer->border_radius.bottom_right.vertical,
+                   0, G_PI / 4);
+
+  _cairo_ellipsis_negative (cr,
+                            inner->box.x + inner->box.width - inner->border_radius.bottom_right.horizontal,
+                            inner->box.y + inner->box.height - inner->border_radius.bottom_right.vertical,
+                            inner->border_radius.bottom_right.horizontal,
+                            inner->border_radius.bottom_right.vertical,
+                            G_PI / 4, 0);
+  _cairo_ellipsis_negative (cr, 
+                            inner->box.x + inner->box.width - inner->border_radius.top_right.horizontal,
+                            inner->box.y + inner->border_radius.top_right.vertical,
+                            inner->border_radius.top_right.horizontal,
+                            inner->border_radius.top_right.vertical,
+                            0, - G_PI / 4);
+
+  cairo_close_path (cr);
+}
+
+void
+_gtk_rounded_box_path_bottom (const GtkRoundedBox *outer,
+                              const GtkRoundedBox *inner,
+                              cairo_t             *cr)
+{
+  cairo_new_sub_path (cr);
+
+  _cairo_ellipsis (cr,
+                   outer->box.x + outer->box.width - outer->border_radius.bottom_right.horizontal,
+                   outer->box.y + outer->box.height - outer->border_radius.bottom_right.vertical,
+                   outer->border_radius.bottom_right.horizontal,
+                   outer->border_radius.bottom_right.vertical,
+                   G_PI / 4, G_PI / 2);
+  _cairo_ellipsis (cr,
+                   outer->box.x + outer->border_radius.bottom_left.horizontal,
+                   outer->box.y + outer->box.height - outer->border_radius.bottom_left.vertical,
+                   outer->border_radius.bottom_left.horizontal,
+                   outer->border_radius.bottom_left.vertical,
+                   G_PI / 2, 3 * G_PI / 4);
+
+  _cairo_ellipsis_negative (cr,
+                            inner->box.x + inner->border_radius.bottom_left.horizontal,
+                            inner->box.y + inner->box.height - inner->border_radius.bottom_left.vertical,
+                            inner->border_radius.bottom_left.horizontal,
+                            inner->border_radius.bottom_left.vertical,
+                            3 * G_PI / 4, G_PI / 2);
+  _cairo_ellipsis_negative (cr,
+                            inner->box.x + inner->box.width - inner->border_radius.bottom_right.horizontal,
+                            inner->box.y + inner->box.height - inner->border_radius.bottom_right.vertical,
+                            inner->border_radius.bottom_right.horizontal,
+                            inner->border_radius.bottom_right.vertical,
+                            G_PI / 2, G_PI / 4);
+
+  cairo_close_path (cr);
+}
+
+void
+_gtk_rounded_box_path_left (const GtkRoundedBox *outer,
+                            const GtkRoundedBox *inner,
+                            cairo_t             *cr)
+{
+  cairo_new_sub_path (cr);
+
+  _cairo_ellipsis (cr,
+                   outer->box.x + outer->border_radius.bottom_left.horizontal,
+                   outer->box.y + outer->box.height - outer->border_radius.bottom_left.vertical,
+                   outer->border_radius.bottom_left.horizontal,
+                   outer->border_radius.bottom_left.vertical,
+                   3 * G_PI / 4, G_PI);
+  _cairo_ellipsis (cr,
+                   outer->box.x + outer->border_radius.top_left.horizontal,
+                   outer->box.y + outer->border_radius.top_left.vertical,
+                   outer->border_radius.top_left.horizontal,
+                   outer->border_radius.top_left.vertical,
+                   G_PI, 5 * G_PI / 4);
+
+  _cairo_ellipsis_negative (cr,
+                            inner->box.x + inner->border_radius.top_left.horizontal,
+                            inner->box.y + inner->border_radius.top_left.vertical,
+                            inner->border_radius.top_left.horizontal,
+                            inner->border_radius.top_left.vertical,
+                            5 * G_PI / 4, G_PI);
+  _cairo_ellipsis_negative (cr,
+                            inner->box.x + inner->border_radius.bottom_left.horizontal,
+                            inner->box.y + inner->box.height - inner->border_radius.bottom_left.vertical,
+                            inner->border_radius.bottom_left.horizontal,
+                            inner->border_radius.bottom_left.vertical,
+                            G_PI, 3 * G_PI / 4);
+
+  cairo_close_path (cr);
 }
 
 void

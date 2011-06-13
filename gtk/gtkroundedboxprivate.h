@@ -58,6 +58,18 @@ void            _gtk_rounded_box_move                           (GtkRoundedBox  
 
 void            _gtk_rounded_box_path                           (const GtkRoundedBox *box,
                                                                  cairo_t             *cr);
+void            _gtk_rounded_box_path_top                       (const GtkRoundedBox *outer,
+                                                                 const GtkRoundedBox *inner,
+                                                                 cairo_t             *cr);
+void            _gtk_rounded_box_path_right                     (const GtkRoundedBox *outer,
+                                                                 const GtkRoundedBox *inner,
+                                                                 cairo_t             *cr);
+void            _gtk_rounded_box_path_bottom                    (const GtkRoundedBox *outer,
+                                                                 const GtkRoundedBox *inner,
+                                                                 cairo_t             *cr);
+void            _gtk_rounded_box_path_left                      (const GtkRoundedBox *outer,
+                                                                 const GtkRoundedBox *inner,
+                                                                 cairo_t             *cr);
 void            _gtk_rounded_box_clip_path                      (const GtkRoundedBox *box,
                                                                  cairo_t             *cr);
 
