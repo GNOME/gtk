@@ -1161,18 +1161,18 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 	}
       break;
     case XSETTINGS_TYPE_COLOR:
-      if (!check_transform (xsettings_name, GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
+      if (!check_transform (xsettings_name, GDK_TYPE_RGBA, G_VALUE_TYPE (value)))
 	{
-	  GdkColor color;
+	  GdkRGBA rgba;
 
-	  g_value_init (&tmp_val, GDK_TYPE_COLOR);
+	  g_value_init (&tmp_val, GDK_TYPE_RGBA);
 
-	  color.pixel = 0;
-	  color.red = setting->data.v_color.red;
-	  color.green = setting->data.v_color.green;
-	  color.blue = setting->data.v_color.blue;
+	  rgba.red = setting->data.v_color.red / 65535.0;
+	  rgba.green = setting->data.v_color.green / 65535.0;
+	  rgba.blue = setting->data.v_color.blue / 65535.0;
+	  rgba.alpha = setting->data.v_color.alpha / 65535.0;
 
-	  g_value_set_boxed (&tmp_val, &color);
+	  g_value_set_boxed (&tmp_val, &rgba);
 
 	  g_value_transform (&tmp_val, value);
 
