@@ -1665,7 +1665,7 @@ render_frame_internal (GtkThemingEngine *engine,
   GtkBorder border;
   static const guint current_side[4] = { SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM, SIDE_LEFT };
   GdkRGBA *colors[4];
-  guint i;
+  guint i, j;
 
   state = gtk_theming_engine_get_state (engine);
 
@@ -1763,16 +1763,33 @@ render_frame_internal (GtkThemingEngine *engine,
               if (hidden_side & current_side[i])
                 continue;
 
-              gdk_cairo_set_source_rgba (cr, colors[i]);
+              for (j = 0; j < 4; j++)
+                { 
+                  if (hidden_side & current_side[j])
+                    continue;
 
-              if (i == 0)
-                _gtk_rounded_box_path_top (&border_box, &padding_box, cr);
-              else if (i == 1)
-                _gtk_rounded_box_path_right (&border_box, &padding_box, cr);
-              else if (i == 2)
-                _gtk_rounded_box_path_bottom (&border_box, &padding_box, cr);
-              else if (i == 3)
-                _gtk_rounded_box_path_left (&border_box, &padding_box, cr);
+                  if (i == j || 
+                      gdk_rgba_equal (colors[i], colors[j]))
+                    {
+                      /* We were already painted when i == j */
+                      if (i > j)
+                        break;
+
+                      if (j == 0)
+                        _gtk_rounded_box_path_top (&border_box, &padding_box, cr);
+                      else if (j == 1)
+                        _gtk_rounded_box_path_right (&border_box, &padding_box, cr);
+                      else if (j == 2)
+                        _gtk_rounded_box_path_bottom (&border_box, &padding_box, cr);
+                      else if (j == 3)
+                        _gtk_rounded_box_path_left (&border_box, &padding_box, cr);
+                    }
+                }
+              /* We were already painted when i == j */
+              if (i > j)
+                continue;
+
+              gdk_cairo_set_source_rgba (cr, colors[i]);
 
               cairo_fill (cr);
             }
