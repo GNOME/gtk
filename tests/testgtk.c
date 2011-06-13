@@ -2655,7 +2655,8 @@ create_saved_position (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
 
       label = gtk_label_new ("X Origin : ");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
       x_label = gtk_label_new ("");
@@ -2667,7 +2668,8 @@ create_saved_position (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
 
       label = gtk_label_new ("Y Origin : ");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
       y_label = gtk_label_new ("");
@@ -4654,7 +4656,8 @@ create_spins (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
       
       label = gtk_label_new ("Time :");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
       adjustment = gtk_adjustment_new (0, 0, 1410, 30, 60, 0);
@@ -4672,7 +4675,8 @@ create_spins (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
       
       label = gtk_label_new ("Month :");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
       adjustment = gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
@@ -4696,7 +4700,8 @@ create_spins (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
 
       label = gtk_label_new ("Hex :");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
       adjustment = gtk_adjustment_new (0, 0, 255, 1, 16, 0);
@@ -4728,7 +4733,8 @@ create_spins (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 5);
       
       label = gtk_label_new ("Value :");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
       adjustment = gtk_adjustment_new (0.0, -10000.0, 10000.0,
@@ -4741,7 +4747,8 @@ create_spins (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 5);
 
       label = gtk_label_new ("Digits :");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
       adjustment = gtk_adjustment_new (2, 1, 15, 1, 1, 0);
@@ -4979,7 +4986,8 @@ create_cursors (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
 
       label = gtk_label_new ("Cursor Theme : ");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
       entry = gtk_entry_new ();
@@ -5001,7 +5009,8 @@ create_cursors (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
 
       label = gtk_label_new ("Cursor Value : ");
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
       adjustment = gtk_adjustment_new (0,
@@ -8411,7 +8420,8 @@ create_progress_bar (GtkWidget *widget)
       gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
       pdata->omenu1 = build_option_menu (items1, 4, 0,
 					 progressbar_toggle_orientation,
@@ -8458,7 +8468,8 @@ create_progress_bar (GtkWidget *widget)
       gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 10, 11,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       pdata->elmenu = build_option_menu (ellipsize_items,
                                          sizeof (ellipsize_items) / sizeof (ellipsize_items[0]),
                                          2, // PANGO_ELLIPSIZE_MIDDLE
@@ -9860,7 +9871,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE, 0);
       
       label = gtk_label_new ("Font:");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       font_desc = pango_font_description_from_string ("Helvetica,Sans Oblique 18");
@@ -9870,7 +9882,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Foreground:");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Some Text");
@@ -9878,7 +9891,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Background:");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Some Text");
@@ -9886,7 +9900,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Text:");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       entry = gtk_entry_new ();
@@ -9895,7 +9910,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Base:");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       entry = gtk_entry_new ();
@@ -9904,7 +9920,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Cursor:");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       entry = gtk_entry_new ();
@@ -9913,7 +9930,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Multiple:");
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Some Text");
