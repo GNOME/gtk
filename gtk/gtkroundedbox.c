@@ -81,6 +81,20 @@ _gtk_rounded_box_apply_border_radius (GtkRoundedBox    *box,
   g_free (bottom_left_radius);
 }
 
+static void
+gtk_css_border_radius_grow (GtkCssBorderCornerRadius *corner,
+                            double                    horizontal,
+                            double                    vertical)
+{
+  corner->horizontal += horizontal;
+  corner->vertical += vertical;
+
+  if (corner->horizontal <= 0 || corner->vertical <= 0)
+    {
+      corner->horizontal = 0;
+      corner->vertical = 0;
+    }
+}
 void
 _gtk_rounded_box_grow (GtkRoundedBox *box,
                        double         top,
@@ -110,22 +124,10 @@ _gtk_rounded_box_grow (GtkRoundedBox *box,
       box->box.height += top + bottom;
     }
 
-  if (box->border_radius.top_left.horizontal)
-    box->border_radius.top_left.horizontal = MAX (0, box->border_radius.top_left.horizontal + left);
-  if (box->border_radius.top_left.vertical)
-    box->border_radius.top_left.vertical = MAX (0, box->border_radius.top_left.vertical + top);
-  if (box->border_radius.top_right.horizontal)
-    box->border_radius.top_right.horizontal = MAX (0, box->border_radius.top_right.horizontal + right);
-  if (box->border_radius.top_right.vertical)
-    box->border_radius.top_right.vertical = MAX (0, box->border_radius.top_right.vertical + top);
-  if (box->border_radius.bottom_right.horizontal)
-    box->border_radius.bottom_right.horizontal = MAX (0, box->border_radius.bottom_right.horizontal + right);
-  if (box->border_radius.bottom_right.vertical)
-    box->border_radius.bottom_right.vertical = MAX (0, box->border_radius.bottom_right.vertical + bottom);
-  if (box->border_radius.bottom_left.horizontal)
-    box->border_radius.bottom_left.horizontal = MAX (0, box->border_radius.bottom_left.horizontal + left);
-  if (box->border_radius.bottom_left.vertical)
-    box->border_radius.bottom_left.vertical = MAX (0, box->border_radius.bottom_left.vertical + bottom);
+  gtk_css_border_radius_grow (&box->border_radius.top_left, left, top);
+  gtk_css_border_radius_grow (&box->border_radius.top_right, right, bottom);
+  gtk_css_border_radius_grow (&box->border_radius.bottom_right, right, top);
+  gtk_css_border_radius_grow (&box->border_radius.bottom_left, left, bottom);
 }
 
 void
