@@ -21,7 +21,7 @@
 #define __GAIL_BUTTON_H__
 
 #include "gailcontainer.h"
-#include <libgail-util/gailtextutil.h>
+#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 

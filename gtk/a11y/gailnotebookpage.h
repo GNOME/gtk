@@ -21,7 +21,7 @@
 #define __GAIL_NOTEBOOK_PAGE_H__
 
 #include "gailnotebook.h"
-#include <libgail-util/gailtextutil.h>
+#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 

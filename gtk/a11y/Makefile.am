@@ -32,6 +32,7 @@ gail_c_sources =			\
 	gailimagecell.c			\
 	gaillabel.c			\
 	gaillinkbutton.c		\
+	gailmisc.c			\
 	gailmenu.c			\
 	gailmenushell.c			\
 	gailmenuitem.c			\
@@ -53,6 +54,7 @@ gail_c_sources =			\
 	gailsubmenuitem.c		\
 	gailstatusbar.c			\
 	gailtextcell.c			\
+	gailtextutil.c			\
 	gailtextview.c			\
 	gailtogglebutton.c		\
 	gailtoplevel.c			\
@@ -86,6 +88,7 @@ gail_private_h_sources =		\
 	gailimagecell.h			\
 	gaillabel.h			\
 	gaillinkbutton.h		\
+	gailmisc.h			\
 	gailmenu.h			\
 	gailmenushell.h			\
 	gailmenuitem.h			\
@@ -107,6 +110,7 @@ gail_private_h_sources =		\
 	gailsubmenuitem.h		\
 	gailstatusbar.h			\
 	gailtextcell.h			\
+	gailtextutil.h			\
 	gailtextview.h			\
 	gailtogglebutton.h		\
 	gailtoplevel.h			\
@@ -143,8 +147,7 @@ libgail_la_CFLAGS = \
 
 libgail_la_LIBADD =  \
 	$(top_builddir)/gtk/libgtk-3.la				\
-	$(top_builddir)/gtk/a11y/libgail-util/libgailutil-3.la	\
-	$(GTK_DEP_LIBS)							\
+	$(GTK_DEP_LIBS)						\
 	$(INTLLIBS)
 
 libgail_la_LDFLAGS =    \

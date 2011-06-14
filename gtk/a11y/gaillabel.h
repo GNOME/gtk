@@ -21,7 +21,7 @@
 #define __GAIL_LABEL_H__
 
 #include "gailwidget.h"
-#include <libgail-util/gailtextutil.h>
+#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 

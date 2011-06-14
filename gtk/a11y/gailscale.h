@@ -21,7 +21,7 @@
 #define __GAIL_SCALE_H__
 
 #include "gailrange.h"
-#include <libgail-util/gailtextutil.h>
+#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
