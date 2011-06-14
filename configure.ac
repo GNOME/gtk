@@ -1738,8 +1738,8 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/a11y/Makefile
-gtk/a11y/tests/Makefile
 gtk/tests/Makefile
+gtk/tests/a11y/Makefile
 libgail-util/Makefile
 modules/Makefile
 modules/engines/Makefile

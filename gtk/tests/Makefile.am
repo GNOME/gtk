@@ -1,5 +1,7 @@
 include $(top_srcdir)/Makefile.decl
 
+SUBDIRS = a11y
+
 INCLUDES = \
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
