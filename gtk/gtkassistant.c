@@ -916,10 +916,16 @@ gtk_assistant_init (GtkAssistant *assistant)
 
   priv->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   priv->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-  priv->forward = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-  priv->back    = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
+  priv->forward = gtk_button_new_with_mnemonic (_("C_ontinue"));
+  gtk_button_set_image (GTK_BUTTON (priv->forward),
+      gtk_image_new_from_stock (GTK_STOCK_GO_FORWARD, GTK_ICON_SIZE_BUTTON));
+  priv->back    = gtk_button_new_with_mnemonic (_("Go _Back"));
+  gtk_button_set_image (GTK_BUTTON (priv->forward),
+      gtk_image_new_from_stock (GTK_STOCK_GO_BACK, GTK_ICON_SIZE_BUTTON));
   priv->cancel  = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  priv->last    = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
+  priv->last    = gtk_button_new_with_mnemonic (_("_Finish"));
+  gtk_button_set_image (GTK_BUTTON (priv->forward),
+      gtk_image_new_from_stock (GTK_STOCK_GOTO_LAST, GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_can_default (priv->close, TRUE);
   gtk_widget_set_can_default (priv->apply, TRUE);
   gtk_widget_set_can_default (priv->forward, TRUE);
