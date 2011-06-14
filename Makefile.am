@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 include $(top_srcdir)/Makefile.decl
 
-SRC_SUBDIRS = gdk gtk modules demos tests perf examples
+SRC_SUBDIRS = gdk gtk libgail-util modules demos tests perf examples
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}

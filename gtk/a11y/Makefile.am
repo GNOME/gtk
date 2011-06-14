@@ -1,6 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = libgail-util tests
+SUBDIRS = tests
 
 if PLATFORM_WIN32
 no_undefined = -no-undefined
