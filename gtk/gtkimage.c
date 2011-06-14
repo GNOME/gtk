@@ -1499,7 +1499,7 @@ ensure_stated_icon_from_info (GtkImage *image,
 {
   GtkImagePrivate *priv = image->priv;
   GtkStyleContext *context;
-  GdkPixbuf *destination;
+  GdkPixbuf *destination = NULL;
   gboolean symbolic;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (image));
