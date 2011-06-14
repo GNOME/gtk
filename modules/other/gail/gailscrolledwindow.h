@@ -20,7 +20,7 @@
 #ifndef __GAIL_SCROLLED_WINDOW_H__
 #define __GAIL_SCROLLED_WINDOW_H__
 
-#include <gail/gailcontainer.h>
+#include "gailcontainer.h"
 
 G_BEGIN_DECLS
 

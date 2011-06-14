@@ -21,8 +21,8 @@
 #define __GAIL_TREE_VIEW_H__
 
 #include <gtk/gtk.h>
-#include <gail/gailcontainer.h>
-#include <gail/gailcell.h>
+#include "gailcontainer.h"
+#include "gailcell.h"
 
 G_BEGIN_DECLS
 

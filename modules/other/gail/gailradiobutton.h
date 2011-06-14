@@ -20,7 +20,7 @@
 #ifndef __GAIL_RADIO_BUTTON_H__
 #define __GAIL_RADIO_BUTTON_H__
 
-#include <gail/gailtogglebutton.h>
+#include "gailtogglebutton.h"
 
 G_BEGIN_DECLS
 

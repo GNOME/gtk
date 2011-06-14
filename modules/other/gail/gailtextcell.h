@@ -21,7 +21,7 @@
 #define __GAIL_TEXT_CELL_H__
 
 #include <atk/atk.h>
-#include <gail/gailrenderercell.h>
+#include "gailrenderercell.h"
 #include <libgail-util/gailtextutil.h>
 
 G_BEGIN_DECLS

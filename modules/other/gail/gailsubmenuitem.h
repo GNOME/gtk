@@ -20,7 +20,7 @@
 #ifndef __GAIL_SUB_MENU_ITEM_H__
 #define __GAIL_SUB_MENU_ITEM_H__
 
-#include <gail/gailmenuitem.h>
+#include "gailmenuitem.h"
 
 G_BEGIN_DECLS
 

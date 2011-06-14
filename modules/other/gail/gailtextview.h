@@ -20,7 +20,7 @@
 #ifndef __GAIL_TEXT_VIEW_H__
 #define __GAIL_TEXT_VIEW_H__
 
-#include <gail/gailcontainer.h>
+#include "gailcontainer.h"
 #include <libgail-util/gailtextutil.h>
 
 G_BEGIN_DECLS

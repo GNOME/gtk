@@ -20,7 +20,7 @@
 #ifndef __GAIL_NOTEBOOK_PAGE_H__
 #define __GAIL_NOTEBOOK_PAGE_H__
 
-#include <gail/gailnotebook.h>
+#include "gailnotebook.h"
 #include <libgail-util/gailtextutil.h>
 
 G_BEGIN_DECLS

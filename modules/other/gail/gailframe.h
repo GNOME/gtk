@@ -20,7 +20,7 @@
 #ifndef __GAIL_FRAME_H__
 #define __GAIL_FRAME_H__
 
-#include <gail/gailcontainer.h>
+#include "gailcontainer.h"
 
 G_BEGIN_DECLS
 

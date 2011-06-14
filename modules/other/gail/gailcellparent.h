@@ -22,7 +22,7 @@
 #define __GAIL_CELL_PARENT_H__
 
 #include <atk/atk.h>
-#include <gail/gailcell.h>
+#include "gailcell.h"
 
 G_BEGIN_DECLS
 

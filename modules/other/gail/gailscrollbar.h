@@ -20,7 +20,7 @@
 #ifndef __GAIL_SCROLLBAR_H__
 #define __GAIL_SCROLLBAR_H__
 
-#include <gail/gailrange.h>
+#include "gailrange.h"
 
 G_BEGIN_DECLS
 

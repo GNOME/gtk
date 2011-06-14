@@ -20,7 +20,7 @@
 #ifndef __GAIL_COMBO_BOX_H__
 #define __GAIL_COMBO_BOX_H__
 
-#include <gail/gailcontainer.h>
+#include "gailcontainer.h"
 
 G_BEGIN_DECLS
 

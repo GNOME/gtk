@@ -21,7 +21,7 @@
 #define __GAIL_SCALE_BUTTON_H__
 
 #include <gtk/gtk.h>
-#include <gail/gailbutton.h>
+#include "gailbutton.h"
 
 G_BEGIN_DECLS
 

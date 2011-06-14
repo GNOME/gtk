@@ -20,7 +20,7 @@
 #ifndef __GAIL_SPIN_BUTTON_H__
 #define __GAIL_SPIN_BUTTON_H__
 
-#include <gail/gailentry.h>
+#include "gailentry.h"
 
 G_BEGIN_DECLS
 

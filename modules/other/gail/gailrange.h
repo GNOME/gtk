@@ -20,7 +20,7 @@
 #ifndef __GAIL_RANGE_H__
 #define __GAIL_RANGE_H__
 
-#include <gail/gailwidget.h>
+#include "gailwidget.h"
 
 G_BEGIN_DECLS
 

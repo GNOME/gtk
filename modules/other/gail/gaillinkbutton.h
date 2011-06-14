@@ -20,7 +20,7 @@
 #ifndef __GAIL_LINK_BUTTON_H__
 #define __GAIL_LINK_BUTTON_H__
 
-#include <gail/gailbutton.h>
+#include "gailbutton.h"
 
 G_BEGIN_DECLS
 

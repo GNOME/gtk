@@ -21,7 +21,7 @@
 #define __GAIL_IMAGE_CELL_H__
 
 #include <atk/atk.h>
-#include <gail/gailrenderercell.h>
+#include "gailrenderercell.h"
 
 G_BEGIN_DECLS
 

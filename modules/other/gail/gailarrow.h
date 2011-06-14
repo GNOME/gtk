@@ -20,7 +20,7 @@
 #ifndef __GAIL_ARROW_H__
 #define __GAIL_ARROW_H__
 
-#include <gail/gailwidget.h>
+#include "gailwidget.h"
 
 G_BEGIN_DECLS
 

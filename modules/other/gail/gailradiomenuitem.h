@@ -20,7 +20,7 @@
 #ifndef __GAIL_RADIO_MENU_ITEM_H__
 #define __GAIL_RADIO_MENU_ITEM_H__
 
-#include <gail/gailcheckmenuitem.h>
+#include "gailcheckmenuitem.h"
 
 G_BEGIN_DECLS
 
