@@ -143,7 +143,7 @@ libgail_la_CFLAGS = \
 
 libgail_la_LIBADD =  \
 	$(top_builddir)/gtk/libgtk-3.la				\
-	$(top_builddir)/modules/other/gail/libgail-util/libgailutil-3.la	\
+	$(top_builddir)/gtk/a11y/libgail-util/libgailutil-3.la	\
 	$(GTK_DEP_LIBS)							\
 	$(INTLLIBS)
 
