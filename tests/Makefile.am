@@ -40,6 +40,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testbuttons			\
 	testcairo			\
 	testcalendar			\
+	testclipboard			\
 	testcombo			\
 	testcombochange			\
 	testcellrenderertext		\
@@ -148,6 +149,7 @@ testbbox_DEPENDENCIES = $(TEST_DEPS)
 testbuttons_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
+testclipboard_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testcellrenderertext_DEPENDENCIES = $(TEST_DEPS)
@@ -234,6 +236,7 @@ testboxcss_LDADD = $(LDADDS)
 testbuttons_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
+testclipboard_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testcombochange_LDADD = $(LDADDS)
 testcellrenderertext_LDADD = $(LDADDS)
