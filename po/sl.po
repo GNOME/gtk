@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-06-10 22:36+0000\n"
-"PO-Revision-Date: 2011-06-11 09:11+0100\n"
+"POT-Creation-Date: 2011-06-14 02:37+0000\n"
+"PO-Revision-Date: 2011-06-14 08:48+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -667,6 +667,18 @@ msgstr "Sorodni programi"
 msgid "Other Applications"
 msgstr "Drugi programi"
 
+#: ../gtk/gtkassistant.c:919
+msgid "C_ontinue"
+msgstr "_Nadaljuj"
+
+#: ../gtk/gtkassistant.c:922
+msgid "Go _Back"
+msgstr "Vrni _nazaj"
+
+#: ../gtk/gtkassistant.c:926
+msgid "_Finish"
+msgstr "_Končaj"
+
 #: ../gtk/gtkbuilderparser.c:342
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
@@ -983,12 +995,12 @@ msgid "Paper Margins"
 msgstr "Robovi papirja"
 
 #: ../gtk/gtkentry.c:8928
-#: ../gtk/gtktextview.c:8290
+#: ../gtk/gtktextview.c:8272
 msgid "Input _Methods"
 msgstr "Načini _vnosa"
 
 #: ../gtk/gtkentry.c:8942
-#: ../gtk/gtktextview.c:8304
+#: ../gtk/gtktextview.c:8286
 msgid "_Insert Unicode Control Character"
 msgstr "_Vstavi nadzorni znak Unicode"
 
