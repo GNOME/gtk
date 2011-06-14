@@ -127,7 +127,6 @@ libgailinclude_HEADERS =		\
 
 libgail_la_CPPFLAGS = \
 	-I$(top_srcdir)			\
-	-I$(top_srcdir)/modules/other	\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gtk		\
