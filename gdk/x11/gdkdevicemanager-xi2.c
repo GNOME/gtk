@@ -168,7 +168,7 @@ translate_valuator_class (GdkDisplay          *display,
       initialized = TRUE;
     }
 
-  for (i = GDK_AXIS_IGNORE; i <= GDK_AXIS_LAST; i++)
+  for (i = GDK_AXIS_IGNORE; i < GDK_AXIS_LAST; i++)
     {
       if (label_atoms[i] == info->label)
         {
