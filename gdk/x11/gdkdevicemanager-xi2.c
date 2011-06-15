@@ -1292,6 +1292,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         return_val = FALSE;
       }
+      break;
     default:
       return_val = FALSE;
       break;
