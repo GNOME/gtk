@@ -2939,6 +2939,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
 	  stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
 						cairo_image_surface_get_width (surface),
 						cairo_image_surface_get_height (surface));
+	  cairo_surface_destroy (surface);
         }
       else if (state & GTK_STATE_FLAG_PRELIGHT)
         {
@@ -2956,6 +2957,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
 	  stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
 						cairo_image_surface_get_width (surface),
 						cairo_image_surface_get_height (surface));
+	  cairo_surface_destroy (surface);
         }
       else
         stated = scaled;
