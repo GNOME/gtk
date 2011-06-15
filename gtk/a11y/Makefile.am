@@ -1,11 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-if PLATFORM_WIN32
-no_undefined = -no-undefined
-endif
-
-moduledir = $(libdir)/gtk-3.0/modules
-module_LTLIBRARIES = libgail.la
+noinst_LTLIBRARIES = libgail.la
 
 gail_c_sources =			\
 	gail-private-macros.h		\
@@ -144,13 +139,10 @@ libgail_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 libgail_la_LIBADD =  \
-	$(top_builddir)/gtk/libgtk-3.la				\
 	$(GTK_DEP_LIBS)						\
 	$(INTLLIBS)
 
 libgail_la_LDFLAGS =    \
-	-rpath $(moduledir) -module -avoid-version \
-	$(no_undefined) \
         $(LDFLAGS)
 
 -include $(top_srcdir)/git.mk

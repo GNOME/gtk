@@ -16,7 +16,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = . a11y tests
+SUBDIRS = a11y . tests
 
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
@@ -109,6 +109,7 @@ endif
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
+	$(top_builddir)/gtk/a11y/libgail.la \
 	$(GTK_DEP_LIBS)
 deps =
 
