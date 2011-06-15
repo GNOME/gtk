@@ -193,7 +193,7 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   _gdk_display = GDK_DISPLAY_DFB (display);
 }
 
-G_CONST_RETURN gchar *
+const gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
   return gdk_get_display_arg_name ();
