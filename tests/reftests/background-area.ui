@@ -7,7 +7,7 @@
     <child>
       <object class="GtkButton" id="button1">
         <property name="label" translatable="yes">Make sure that the background
-area contains the border.</property>
+area doesn't contain the border.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>

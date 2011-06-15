@@ -5,6 +5,7 @@ GtkButton {
   border-image: none;
   border-style: none;
   background-color: rgba(0, 0, 0, 0);
+  border-width: 0;
 }
 
 .row1, .row2, .row3 {
