@@ -151,7 +151,7 @@ void		gtk_item_factory_add_foreign        (GtkWidget	    *accel_widget,
 						     GdkModifierType modifiers);
      
 GtkItemFactory*       gtk_item_factory_from_widget      (GtkWidget *widget);
-G_CONST_RETURN gchar* gtk_item_factory_path_from_widget (GtkWidget *widget);
+const gchar *         gtk_item_factory_path_from_widget (GtkWidget *widget);
 
 GtkWidget*	gtk_item_factory_get_item	      (GtkItemFactory *ifactory,
 						       const gchar    *path);

@@ -1147,7 +1147,7 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
  * 
  * Return value: currently-selected filename in the on-disk encoding.
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static const gchar nothing[2] = "";
@@ -3945,7 +3945,7 @@ cmpl_strerror (gint err)
 
 #undef gtk_file_selection_get_filename
 
-G_CONST_RETURN gchar*
+const gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static gchar retval[MAXPATHLEN*2+1];

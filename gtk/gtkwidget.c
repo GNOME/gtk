@@ -5809,7 +5809,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * Return value: name of the widget. This string is owned by GTK+ and
  * should not be modified or freed
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);

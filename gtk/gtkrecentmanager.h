@@ -176,10 +176,10 @@ GType	              gtk_recent_info_get_type             (void) G_GNUC_CONST;
 GtkRecentInfo *       gtk_recent_info_ref                  (GtkRecentInfo  *info);
 void                  gtk_recent_info_unref                (GtkRecentInfo  *info);
 
-G_CONST_RETURN gchar *gtk_recent_info_get_uri              (GtkRecentInfo  *info);
-G_CONST_RETURN gchar *gtk_recent_info_get_display_name     (GtkRecentInfo  *info);
-G_CONST_RETURN gchar *gtk_recent_info_get_description      (GtkRecentInfo  *info);
-G_CONST_RETURN gchar *gtk_recent_info_get_mime_type        (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_uri              (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_display_name     (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_description      (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_mime_type        (GtkRecentInfo  *info);
 time_t                gtk_recent_info_get_added            (GtkRecentInfo  *info);
 time_t                gtk_recent_info_get_modified         (GtkRecentInfo  *info);
 time_t                gtk_recent_info_get_visited          (GtkRecentInfo  *info);

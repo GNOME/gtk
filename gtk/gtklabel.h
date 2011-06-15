@@ -111,13 +111,13 @@ GtkWidget*            gtk_label_new               (const gchar   *str);
 GtkWidget*            gtk_label_new_with_mnemonic (const gchar   *str);
 void                  gtk_label_set_text          (GtkLabel      *label,
 						   const gchar   *str);
-G_CONST_RETURN gchar* gtk_label_get_text          (GtkLabel      *label);
+const gchar *         gtk_label_get_text          (GtkLabel      *label);
 void                  gtk_label_set_attributes    (GtkLabel      *label,
 						   PangoAttrList *attrs);
 PangoAttrList        *gtk_label_get_attributes    (GtkLabel      *label);
 void                  gtk_label_set_label         (GtkLabel      *label,
 						   const gchar   *str);
-G_CONST_RETURN gchar *gtk_label_get_label         (GtkLabel      *label);
+const gchar *         gtk_label_get_label         (GtkLabel      *label);
 void                  gtk_label_set_markup        (GtkLabel      *label,
 						   const gchar   *str);
 void                  gtk_label_set_use_markup    (GtkLabel      *label,
@@ -177,7 +177,7 @@ void         gtk_label_set_single_line_mode  (GtkLabel *label,
                                               gboolean single_line_mode);
 gboolean     gtk_label_get_single_line_mode  (GtkLabel *label);
 
-G_CONST_RETURN gchar *gtk_label_get_current_uri (GtkLabel *label);
+const gchar *gtk_label_get_current_uri          (GtkLabel *label);
 void         gtk_label_set_track_visited_links  (GtkLabel *label,
                                                  gboolean  track_links);
 gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);

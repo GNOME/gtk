@@ -1930,7 +1930,7 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
  *
  * Since: 2.20
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_tool_item_group_get_label (GtkToolItemGroup *group)
 {
   GtkToolItemGroupPrivate *priv;

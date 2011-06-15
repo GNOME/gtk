@@ -72,7 +72,7 @@ void                  gtk_tool_item_group_set_ellipsize     (GtkToolItemGroup   
 void                  gtk_tool_item_group_set_header_relief (GtkToolItemGroup   *group,
                                                              GtkReliefStyle      style);
 
-G_CONST_RETURN gchar* gtk_tool_item_group_get_label         (GtkToolItemGroup   *group);
+const gchar *         gtk_tool_item_group_get_label         (GtkToolItemGroup   *group);
 GtkWidget            *gtk_tool_item_group_get_label_widget  (GtkToolItemGroup   *group);
 gboolean              gtk_tool_item_group_get_collapsed     (GtkToolItemGroup   *group);
 PangoEllipsizeMode    gtk_tool_item_group_get_ellipsize     (GtkToolItemGroup   *group);

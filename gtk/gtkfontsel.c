@@ -1551,7 +1551,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
  *     This string is owned by the widget and should not be 
  *     modified or freed 
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_selection_get_preview_text (GtkFontSelection *fontsel)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
@@ -1847,7 +1847,7 @@ gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
  *     This string is owned by the widget and should not be 
  *     modified or freed 
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);

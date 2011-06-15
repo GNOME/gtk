@@ -182,7 +182,7 @@ void                    gtk_tree_view_column_clicked             (GtkTreeViewCol
  */
 void                    gtk_tree_view_column_set_title           (GtkTreeViewColumn       *tree_column,
 								  const gchar             *title);
-G_CONST_RETURN gchar   *gtk_tree_view_column_get_title           (GtkTreeViewColumn       *tree_column);
+const gchar *           gtk_tree_view_column_get_title           (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_set_expand          (GtkTreeViewColumn       *tree_column,
 								  gboolean                 expand);
 gboolean                gtk_tree_view_column_get_expand          (GtkTreeViewColumn       *tree_column);

@@ -75,7 +75,7 @@ GType                 gtk_font_button_get_type       (void) G_GNUC_CONST;
 GtkWidget            *gtk_font_button_new            (void);
 GtkWidget            *gtk_font_button_new_with_font  (const gchar   *fontname);
 
-G_CONST_RETURN gchar *gtk_font_button_get_title      (GtkFontButton *font_button);
+const gchar *         gtk_font_button_get_title      (GtkFontButton *font_button);
 void                  gtk_font_button_set_title      (GtkFontButton *font_button,
                                                       const gchar   *title);
 gboolean              gtk_font_button_get_use_font   (GtkFontButton *font_button);
@@ -84,7 +84,7 @@ void                  gtk_font_button_set_use_font   (GtkFontButton *font_button
 gboolean              gtk_font_button_get_use_size   (GtkFontButton *font_button);
 void                  gtk_font_button_set_use_size   (GtkFontButton *font_button,
                                                       gboolean       use_size);
-G_CONST_RETURN gchar* gtk_font_button_get_font_name  (GtkFontButton *font_button);
+const gchar *         gtk_font_button_get_font_name  (GtkFontButton *font_button);
 gboolean              gtk_font_button_set_font_name  (GtkFontButton *font_button,
                                                       const gchar   *fontname);
 gboolean              gtk_font_button_get_show_style (GtkFontButton *font_button);

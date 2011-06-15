@@ -76,7 +76,7 @@ gint                  gtk_expander_get_spacing       (GtkExpander *expander);
 
 void                  gtk_expander_set_label         (GtkExpander *expander,
 						      const gchar *label);
-G_CONST_RETURN gchar *gtk_expander_get_label         (GtkExpander *expander);
+const gchar *         gtk_expander_get_label         (GtkExpander *expander);
 
 void                  gtk_expander_set_use_underline (GtkExpander *expander,
 						      gboolean     use_underline);

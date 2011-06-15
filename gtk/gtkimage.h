@@ -251,7 +251,7 @@ void       gtk_image_get_icon_set (GtkImage         *image,
                                    GtkIconSize      *size);
 GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image);
 void       gtk_image_get_icon_name (GtkImage              *image,
-				    G_CONST_RETURN gchar **icon_name,
+				    const gchar          **icon_name,
 				    GtkIconSize           *size);
 void       gtk_image_get_gicon     (GtkImage              *image,
 				    GIcon                **gicon,

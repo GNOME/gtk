@@ -560,7 +560,7 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
  *
  * Deprecated: 2.4: Use #GtkUIManager instead.
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_item_factory_path_from_widget (GtkWidget	    *widget)
 {
   gchar* path;

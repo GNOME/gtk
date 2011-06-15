@@ -99,7 +99,7 @@ gsize                     gtk_entry_buffer_get_bytes              (GtkEntryBuffe
 
 guint                     gtk_entry_buffer_get_length             (GtkEntryBuffer  *buffer);
 
-G_CONST_RETURN gchar*     gtk_entry_buffer_get_text               (GtkEntryBuffer  *buffer);
+const gchar*              gtk_entry_buffer_get_text               (GtkEntryBuffer  *buffer);
 
 void                      gtk_entry_buffer_set_text               (GtkEntryBuffer  *buffer,
                                                                    const gchar     *chars,

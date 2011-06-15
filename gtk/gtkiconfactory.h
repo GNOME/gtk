@@ -112,7 +112,7 @@ GtkIconSize           gtk_icon_size_register       (const gchar *name,
 void                  gtk_icon_size_register_alias (const gchar *alias,
                                                     GtkIconSize  target);
 GtkIconSize           gtk_icon_size_from_name      (const gchar *name);
-G_CONST_RETURN gchar* gtk_icon_size_get_name       (GtkIconSize  size);
+const gchar *         gtk_icon_size_get_name       (GtkIconSize  size);
 
 /* Icon sets */
 
@@ -155,8 +155,8 @@ void           gtk_icon_source_set_icon_name            (GtkIconSource       *so
 void           gtk_icon_source_set_pixbuf               (GtkIconSource       *source,
                                                          GdkPixbuf           *pixbuf);
 
-G_CONST_RETURN gchar* gtk_icon_source_get_filename  (const GtkIconSource *source);
-G_CONST_RETURN gchar* gtk_icon_source_get_icon_name (const GtkIconSource *source);
+const gchar* gtk_icon_source_get_filename  (const GtkIconSource *source);
+const gchar* gtk_icon_source_get_icon_name (const GtkIconSource *source);
 GdkPixbuf*            gtk_icon_source_get_pixbuf    (const GtkIconSource *source);
 
 void             gtk_icon_source_set_direction_wildcarded (GtkIconSource       *source,

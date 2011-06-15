@@ -124,7 +124,7 @@ static gboolean gtk_menu_item_can_activate_accel (GtkWidget *widget,
 
 static void gtk_real_menu_item_set_label (GtkMenuItem     *menu_item,
 					  const gchar     *label);
-static G_CONST_RETURN gchar * gtk_real_menu_item_get_label (GtkMenuItem *menu_item);
+static const gchar * gtk_real_menu_item_get_label (GtkMenuItem *menu_item);
 
 
 static void gtk_menu_item_buildable_interface_init (GtkBuildableIface   *iface);
@@ -1475,7 +1475,7 @@ gtk_real_menu_item_set_label (GtkMenuItem *menu_item,
     }
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gtk_real_menu_item_get_label (GtkMenuItem *menu_item)
 {
   gtk_menu_item_ensure_label (menu_item);
@@ -2079,7 +2079,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
  *
  * Since: 2.14
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)
 {
   g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);
@@ -2163,7 +2163,7 @@ gtk_menu_item_set_label (GtkMenuItem *menu_item,
  *
  * Since: 2.16
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_menu_item_get_label (GtkMenuItem *menu_item)
 {
   g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);

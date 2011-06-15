@@ -520,7 +520,7 @@ gtk_entry_buffer_get_bytes (GtkEntryBuffer *buffer)
  *
  * Since: 2.18
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_entry_buffer_get_text (GtkEntryBuffer *buffer)
 {
   GtkEntryBufferClass *klass;

@@ -135,8 +135,8 @@ void                           gtk_tool_palette_add_drag_dest         (GtkToolPa
 GtkAdjustment*                 gtk_tool_palette_get_hadjustment       (GtkToolPalette            *palette);
 GtkAdjustment*                 gtk_tool_palette_get_vadjustment       (GtkToolPalette            *palette);
 
-G_CONST_RETURN GtkTargetEntry* gtk_tool_palette_get_drag_target_item  (void) G_GNUC_CONST;
-G_CONST_RETURN GtkTargetEntry* gtk_tool_palette_get_drag_target_group (void) G_GNUC_CONST;
+const GtkTargetEntry *         gtk_tool_palette_get_drag_target_item  (void) G_GNUC_CONST;
+const GtkTargetEntry *         gtk_tool_palette_get_drag_target_group (void) G_GNUC_CONST;
 
 
 G_END_DECLS

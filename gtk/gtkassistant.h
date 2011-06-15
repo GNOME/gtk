@@ -146,7 +146,7 @@ GtkAssistantPageType  gtk_assistant_get_page_type         (GtkAssistant         
 void                  gtk_assistant_set_page_title        (GtkAssistant         *assistant,
 							   GtkWidget            *page,
 							   const gchar          *title);
-G_CONST_RETURN gchar *gtk_assistant_get_page_title        (GtkAssistant         *assistant,
+const gchar *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
 							   GtkWidget            *page);
 void                  gtk_assistant_set_page_header_image (GtkAssistant         *assistant,
 							   GtkWidget            *page,

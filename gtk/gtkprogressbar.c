@@ -1253,7 +1253,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
  * Return value: text, or %NULL; this string is owned by the widget
  * and should not be modified or freed.
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_progress_bar_get_text (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), NULL);

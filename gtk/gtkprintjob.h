@@ -93,7 +93,7 @@ GtkPrintJob             *gtk_print_job_new                    (const gchar      
 							       GtkPageSetup             *page_setup);
 GtkPrintSettings        *gtk_print_job_get_settings           (GtkPrintJob              *job);
 GtkPrinter              *gtk_print_job_get_printer            (GtkPrintJob              *job);
-G_CONST_RETURN gchar    *gtk_print_job_get_title              (GtkPrintJob              *job);
+const gchar *            gtk_print_job_get_title              (GtkPrintJob              *job);
 GtkPrintStatus           gtk_print_job_get_status             (GtkPrintJob              *job);
 gboolean                 gtk_print_job_set_source_file        (GtkPrintJob              *job,
 							       const gchar              *filename,

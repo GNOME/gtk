@@ -2827,7 +2827,7 @@ gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
  * 
  * Since: 2.6
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), NULL);

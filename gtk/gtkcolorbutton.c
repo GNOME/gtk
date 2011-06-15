@@ -801,7 +801,7 @@ gtk_color_button_set_title (GtkColorButton *color_button,
  *
  * Since: 2.4
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_color_button_get_title (GtkColorButton *color_button)
 {
   g_return_val_if_fail (GTK_IS_COLOR_BUTTON (color_button), NULL);

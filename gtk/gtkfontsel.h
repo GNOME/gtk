@@ -205,7 +205,7 @@ gboolean   gtk_font_selection_dialog_set_font_name     (GtkFontSelectionDialog *
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
-G_CONST_RETURN gchar* 
+const gchar*
           gtk_font_selection_dialog_get_preview_text   (GtkFontSelectionDialog *fsd);
 
 /* This sets the text in the preview entry. It will be copied by the entry,

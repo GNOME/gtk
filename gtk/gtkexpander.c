@@ -1575,7 +1575,7 @@ gtk_expander_set_label (GtkExpander *expander,
  *
  * Since: 2.4
  **/
-G_CONST_RETURN char *
+const char *
 gtk_expander_get_label (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv;

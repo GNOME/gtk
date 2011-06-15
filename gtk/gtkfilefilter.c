@@ -188,7 +188,7 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
  * 
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_file_filter_get_name (GtkFileFilter *filter)
 {
   g_return_val_if_fail (GTK_IS_FILE_FILTER (filter), NULL);

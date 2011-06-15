@@ -175,7 +175,7 @@ GtkIconInfo *         gtk_icon_info_new_for_pixbuf     (GtkIconTheme  *icon_them
                                                         GdkPixbuf     *pixbuf);
 
 gint                  gtk_icon_info_get_base_size      (GtkIconInfo   *icon_info);
-G_CONST_RETURN gchar *gtk_icon_info_get_filename       (GtkIconInfo   *icon_info);
+const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info);
 GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info);
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
@@ -187,7 +187,7 @@ gboolean              gtk_icon_info_get_embedded_rect (GtkIconInfo    *icon_info
 gboolean              gtk_icon_info_get_attach_points (GtkIconInfo    *icon_info,
 						       GdkPoint      **points,
 						       gint           *n_points);
-G_CONST_RETURN gchar *gtk_icon_info_get_display_name  (GtkIconInfo    *icon_info);
+const gchar *         gtk_icon_info_get_display_name  (GtkIconInfo    *icon_info);
 
 /* Non-public methods */
 void _gtk_icon_theme_check_reload                     (GdkDisplay *display);

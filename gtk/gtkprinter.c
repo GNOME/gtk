@@ -420,7 +420,7 @@ gtk_printer_get_backend (GtkPrinter *printer)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -438,7 +438,7 @@ gtk_printer_get_name (GtkPrinter *printer)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_description (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -476,7 +476,7 @@ gtk_printer_set_description (GtkPrinter  *printer,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_state_message (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -514,7 +514,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_location (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -552,7 +552,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar * 
+const gchar *
 gtk_printer_get_icon_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);

@@ -71,7 +71,7 @@ GtkWidget *           gtk_link_button_new               (const gchar   *uri);
 GtkWidget *           gtk_link_button_new_with_label    (const gchar   *uri,
 						         const gchar   *label);
 
-G_CONST_RETURN gchar *gtk_link_button_get_uri           (GtkLinkButton *link_button);
+const gchar *         gtk_link_button_get_uri           (GtkLinkButton *link_button);
 void                  gtk_link_button_set_uri           (GtkLinkButton *link_button,
 						         const gchar   *uri);
 

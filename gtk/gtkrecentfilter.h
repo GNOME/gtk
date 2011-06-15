@@ -66,7 +66,7 @@ GType                 gtk_recent_filter_get_type (void) G_GNUC_CONST;
 GtkRecentFilter *     gtk_recent_filter_new      (void);
 void                  gtk_recent_filter_set_name (GtkRecentFilter *filter,
 						  const gchar     *name);
-G_CONST_RETURN gchar *gtk_recent_filter_get_name (GtkRecentFilter *filter);
+const gchar *         gtk_recent_filter_get_name (GtkRecentFilter *filter);
 
 void gtk_recent_filter_add_mime_type      (GtkRecentFilter      *filter,
 					   const gchar          *mime_type);

@@ -71,7 +71,7 @@ void              gtk_print_settings_to_key_file             (GtkPrintSettings  
 							      const gchar          *group_name);
 gboolean          gtk_print_settings_has_key                 (GtkPrintSettings     *settings,
 							      const gchar          *key);
-G_CONST_RETURN gchar *gtk_print_settings_get                 (GtkPrintSettings     *settings,
+const gchar *     gtk_print_settings_get                 (GtkPrintSettings     *settings,
 							      const gchar          *key);
 void              gtk_print_settings_set                     (GtkPrintSettings     *settings,
 							      const gchar          *key,
@@ -145,7 +145,7 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 
 /* Helpers: */
 
-G_CONST_RETURN gchar *gtk_print_settings_get_printer           (GtkPrintSettings   *settings);
+const gchar *gtk_print_settings_get_printer           (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_printer           (GtkPrintSettings   *settings,
 								const gchar        *printer);
 GtkPageOrientation    gtk_print_settings_get_orientation       (GtkPrintSettings   *settings);
@@ -213,19 +213,19 @@ void                  gtk_print_settings_set_page_ranges       (GtkPrintSettings
 GtkPageSet            gtk_print_settings_get_page_set          (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_page_set          (GtkPrintSettings   *settings,
 								GtkPageSet          page_set);
-G_CONST_RETURN gchar *gtk_print_settings_get_default_source    (GtkPrintSettings   *settings);
+const gchar *         gtk_print_settings_get_default_source    (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_default_source    (GtkPrintSettings   *settings,
 								const gchar        *default_source);
-G_CONST_RETURN gchar *gtk_print_settings_get_media_type        (GtkPrintSettings   *settings);
+const gchar *         gtk_print_settings_get_media_type        (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_media_type        (GtkPrintSettings   *settings,
 								const gchar        *media_type);
-G_CONST_RETURN gchar *gtk_print_settings_get_dither            (GtkPrintSettings   *settings);
+const gchar *         gtk_print_settings_get_dither            (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_dither            (GtkPrintSettings   *settings,
 								const gchar        *dither);
-G_CONST_RETURN gchar *gtk_print_settings_get_finishings        (GtkPrintSettings   *settings);
+const gchar *         gtk_print_settings_get_finishings        (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_finishings        (GtkPrintSettings   *settings,
 								const gchar        *finishings);
-G_CONST_RETURN gchar *gtk_print_settings_get_output_bin        (GtkPrintSettings   *settings);
+const gchar *         gtk_print_settings_get_output_bin        (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_output_bin        (GtkPrintSettings   *settings,
 								const gchar        *output_bin);
 

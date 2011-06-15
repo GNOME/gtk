@@ -1009,7 +1009,7 @@ gtk_tool_button_set_label (GtkToolButton *button,
  * 
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_tool_button_get_label (GtkToolButton *button)
 {
   g_return_val_if_fail (GTK_IS_TOOL_BUTTON (button), NULL);
@@ -1110,7 +1110,7 @@ gtk_tool_button_set_stock_id (GtkToolButton *button,
  * 
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_tool_button_get_stock_id (GtkToolButton *button)
 {
   g_return_val_if_fail (GTK_IS_TOOL_BUTTON (button), NULL);
@@ -1161,7 +1161,7 @@ gtk_tool_button_set_icon_name (GtkToolButton *button,
  * 
  * Since: 2.8
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_tool_button_get_icon_name (GtkToolButton *button)
 {
   g_return_val_if_fail (GTK_IS_TOOL_BUTTON (button), NULL);

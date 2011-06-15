@@ -1068,7 +1068,7 @@ gtk_widget_get_action (GtkWidget *widget)
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_get_name (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1365,7 +1365,7 @@ gtk_action_set_label (GtkAction	  *action,
  *
  * Since: 2.16
  */
-G_CONST_RETURN gchar * 
+const gchar *
 gtk_action_get_label (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1411,7 +1411,7 @@ gtk_action_set_short_label (GtkAction   *action,
  *
  * Since: 2.16
  */
-G_CONST_RETURN gchar * 
+const gchar *
 gtk_action_get_short_label (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1428,7 +1428,7 @@ gtk_action_get_short_label (GtkAction *action)
  *
  * Since: 2.16
  */
-void 
+void
 gtk_action_set_visible_horizontal (GtkAction *action,
 				   gboolean   visible_horizontal)
 {
@@ -1543,7 +1543,7 @@ gtk_action_set_tooltip (GtkAction   *action,
  *
  * Since: 2.16
  */
-G_CONST_RETURN gchar * 
+const gchar *
 gtk_action_get_tooltip (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1601,7 +1601,7 @@ gtk_action_set_stock_id (GtkAction   *action,
  *
  * Since: 2.16
  */
-G_CONST_RETURN gchar * 
+const gchar *
 gtk_action_get_stock_id (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1643,7 +1643,7 @@ gtk_action_set_icon_name (GtkAction   *action,
  *
  * Since: 2.16
  */
-G_CONST_RETURN gchar * 
+const gchar *
 gtk_action_get_icon_name (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1816,7 +1816,7 @@ gtk_action_set_accel_path (GtkAction   *action,
  *   if none is set. The returned string is owned by GTK+ 
  *   and must not be freed or modified.
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_get_accel_path (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);

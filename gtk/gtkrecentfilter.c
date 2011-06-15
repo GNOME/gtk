@@ -212,7 +212,7 @@ gtk_recent_filter_set_name (GtkRecentFilter *filter,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_recent_filter_get_name (GtkRecentFilter *filter)
 {
   g_return_val_if_fail (GTK_IS_RECENT_FILTER (filter), NULL);

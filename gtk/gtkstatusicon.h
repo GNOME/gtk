@@ -100,8 +100,8 @@ void                  gtk_status_icon_set_from_gicon     (GtkStatusIcon      *st
 GtkImageType          gtk_status_icon_get_storage_type   (GtkStatusIcon      *status_icon);
 
 GdkPixbuf            *gtk_status_icon_get_pixbuf         (GtkStatusIcon      *status_icon);
-G_CONST_RETURN gchar *gtk_status_icon_get_stock          (GtkStatusIcon      *status_icon);
-G_CONST_RETURN gchar *gtk_status_icon_get_icon_name      (GtkStatusIcon      *status_icon);
+const gchar *         gtk_status_icon_get_stock          (GtkStatusIcon      *status_icon);
+const gchar *         gtk_status_icon_get_icon_name      (GtkStatusIcon      *status_icon);
 GIcon                *gtk_status_icon_get_gicon          (GtkStatusIcon      *status_icon);
 
 gint                  gtk_status_icon_get_size           (GtkStatusIcon      *status_icon);
@@ -122,7 +122,7 @@ void                  gtk_status_icon_set_tooltip_markup (GtkStatusIcon      *st
                                                           const gchar        *markup);
 void                  gtk_status_icon_set_title          (GtkStatusIcon      *status_icon,
                                                           const gchar        *title);
-G_CONST_RETURN gchar *gtk_status_icon_get_title          (GtkStatusIcon      *status_icon);
+const gchar *         gtk_status_icon_get_title          (GtkStatusIcon      *status_icon);
 void                  gtk_status_icon_set_name           (GtkStatusIcon      *status_icon,
                                                           const gchar        *name);
 void                  gtk_status_icon_set_visible        (GtkStatusIcon      *status_icon,

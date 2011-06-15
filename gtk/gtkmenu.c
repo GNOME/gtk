@@ -2201,7 +2201,7 @@ gtk_menu_set_title (GtkMenu     *menu,
  * title set on it. This string is owned by the widget and should
  * not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_menu_get_title (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;

@@ -583,7 +583,7 @@ gtk_action_group_real_get_action (GtkActionGroup *self,
  * 
  * Since: 2.4
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_group_get_name (GtkActionGroup *action_group)
 {
   GtkActionGroupPrivate *private;
@@ -1380,7 +1380,7 @@ gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
  *
  * Since: 2.6
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_group_translate_string (GtkActionGroup *action_group,
 				   const gchar    *string)
 {

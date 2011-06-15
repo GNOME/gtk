@@ -63,7 +63,7 @@ typedef enum
 static gboolean (*beagle_client_send_request_async) (BeagleClient   *client,
 						     BeagleRequest  *request,
 						     GError        **err) = NULL;
-static G_CONST_RETURN char *(*beagle_hit_get_uri) (BeagleHit *hit) = NULL;
+static const char *(*beagle_hit_get_uri) (BeagleHit *hit) = NULL;
 static GSList *(*beagle_hits_added_response_get_hits) (BeagleHitsAddedResponse *response) = NULL;
 static GSList *(*beagle_hits_subtracted_response_get_uris) (BeagleHitsSubtractedResponse *response) = NULL;
 static BeagleQuery *(*beagle_query_new) (void) = NULL;

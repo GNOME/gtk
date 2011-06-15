@@ -77,23 +77,23 @@ void                   gtk_show_about_dialog                   (GtkWindow       
 								...) G_GNUC_NULL_TERMINATED;
 
 #ifndef GTK_DISABLE_DEPRECATED
-G_CONST_RETURN gchar  *gtk_about_dialog_get_name               (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_name               (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_name               (GtkAboutDialog  *about,
 								const gchar     *name);
 #endif /* GTK_DISABLE_DEPRECATED */
-G_CONST_RETURN gchar  *gtk_about_dialog_get_program_name       (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_program_name       (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_program_name       (GtkAboutDialog  *about,
 								const gchar     *name);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_version            (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_version            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_version            (GtkAboutDialog  *about,
 								const gchar     *version);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_copyright          (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_copyright          (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_copyright          (GtkAboutDialog  *about,
 								const gchar     *copyright);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_comments           (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_comments           (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_comments           (GtkAboutDialog  *about,
 								const gchar     *comments);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_license            (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_license            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_license            (GtkAboutDialog  *about,
 								const gchar     *license);
 
@@ -101,28 +101,28 @@ gboolean               gtk_about_dialog_get_wrap_license       (GtkAboutDialog  
 void                   gtk_about_dialog_set_wrap_license       (GtkAboutDialog  *about,
                                                                 gboolean         wrap_license);
 
-G_CONST_RETURN gchar  *gtk_about_dialog_get_website            (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_website            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_website            (GtkAboutDialog  *about,
 								const gchar     *website);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_website_label      (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_website_label      (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_website_label      (GtkAboutDialog  *about,
 								const gchar     *website_label);
-G_CONST_RETURN gchar* G_CONST_RETURN * gtk_about_dialog_get_authors            (GtkAboutDialog  *about);
+const gchar* const *   gtk_about_dialog_get_authors            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_authors            (GtkAboutDialog  *about,
 								const gchar    **authors);
-G_CONST_RETURN gchar* G_CONST_RETURN * gtk_about_dialog_get_documenters        (GtkAboutDialog  *about);
+const gchar* const *   gtk_about_dialog_get_documenters        (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_documenters        (GtkAboutDialog  *about,
 								const gchar    **documenters);
-G_CONST_RETURN gchar* G_CONST_RETURN * gtk_about_dialog_get_artists            (GtkAboutDialog  *about);
+const gchar* const *   gtk_about_dialog_get_artists            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_artists            (GtkAboutDialog  *about,
 								const gchar    **artists);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_translator_credits (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_translator_credits (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_translator_credits (GtkAboutDialog  *about,
 								const gchar     *translator_credits);
 GdkPixbuf             *gtk_about_dialog_get_logo               (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_logo               (GtkAboutDialog  *about,
 								GdkPixbuf       *logo);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_logo_icon_name     (GtkAboutDialog  *about,
 								const gchar     *icon_name);
 

@@ -693,7 +693,7 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_link_button_get_uri (GtkLinkButton *link_button)
 {
   g_return_val_if_fail (GTK_IS_LINK_BUTTON (link_button), NULL);

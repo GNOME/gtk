@@ -88,7 +88,7 @@ gboolean      gtk_combo_box_get_add_tearoffs       (GtkComboBox *combo_box);
 void          gtk_combo_box_set_add_tearoffs       (GtkComboBox *combo_box,
 						    gboolean     add_tearoffs);
 
-G_CONST_RETURN gchar *gtk_combo_box_get_title      (GtkComboBox *combo_box);
+const gchar * gtk_combo_box_get_title              (GtkComboBox *combo_box);
 void                  gtk_combo_box_set_title      (GtkComboBox *combo_box,
 					            const gchar *title);
 

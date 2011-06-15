@@ -188,7 +188,7 @@ gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 
 void       gtk_entry_set_inner_border                (GtkEntry        *entry,
                                                       const GtkBorder *border);
-G_CONST_RETURN GtkBorder* gtk_entry_get_inner_border (GtkEntry        *entry);
+const GtkBorder* gtk_entry_get_inner_border          (GtkEntry        *entry);
 
 void       gtk_entry_set_overwrite_mode         (GtkEntry      *entry,
                                                  gboolean       overwrite);
@@ -213,7 +213,7 @@ gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
 void       gtk_entry_set_text                   (GtkEntry      *entry,
                                                  const gchar   *text);
 /* returns a reference to the text */
-G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
+const gchar* gtk_entry_get_text                 (GtkEntry      *entry);
 
 PangoLayout* gtk_entry_get_layout               (GtkEntry      *entry);
 void         gtk_entry_get_layout_offsets       (GtkEntry      *entry,

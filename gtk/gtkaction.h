@@ -90,7 +90,7 @@ GtkAction   *gtk_action_new                    (const gchar *name,
 						const gchar *label,
 						const gchar *tooltip,
 						const gchar *stock_id);
-G_CONST_RETURN gchar* gtk_action_get_name      (GtkAction     *action);
+const gchar* gtk_action_get_name               (GtkAction     *action);
 gboolean     gtk_action_is_sensitive           (GtkAction     *action);
 gboolean     gtk_action_get_sensitive          (GtkAction     *action);
 void         gtk_action_set_sensitive          (GtkAction     *action,
@@ -108,7 +108,7 @@ GtkWidget *  gtk_action_create_menu            (GtkAction     *action);
 GSList *     gtk_action_get_proxies            (GtkAction     *action);
 void         gtk_action_connect_accelerator    (GtkAction     *action);
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
-G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
+const gchar *gtk_action_get_accel_path         (GtkAction     *action);
 GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
 
 #ifndef GTK_DISABLE_DEPRECATED
@@ -145,22 +145,22 @@ void         _gtk_action_sync_menu_visible     (GtkAction     *action,
 
 void                  gtk_action_set_label              (GtkAction   *action,
                                                          const gchar *label);
-G_CONST_RETURN gchar *gtk_action_get_label              (GtkAction   *action);
+const gchar *         gtk_action_get_label              (GtkAction   *action);
 void                  gtk_action_set_short_label        (GtkAction   *action,
                                                          const gchar *short_label);
-G_CONST_RETURN gchar *gtk_action_get_short_label        (GtkAction   *action);
+const gchar *         gtk_action_get_short_label        (GtkAction   *action);
 void                  gtk_action_set_tooltip            (GtkAction   *action,
                                                          const gchar *tooltip);
-G_CONST_RETURN gchar *gtk_action_get_tooltip            (GtkAction   *action);
+const gchar *         gtk_action_get_tooltip            (GtkAction   *action);
 void                  gtk_action_set_stock_id           (GtkAction   *action,
                                                          const gchar *stock_id);
-G_CONST_RETURN gchar *gtk_action_get_stock_id           (GtkAction   *action);
+const gchar *         gtk_action_get_stock_id           (GtkAction   *action);
 void                  gtk_action_set_gicon              (GtkAction   *action,
                                                          GIcon       *icon);
 GIcon                *gtk_action_get_gicon              (GtkAction   *action);
 void                  gtk_action_set_icon_name          (GtkAction   *action,
                                                          const gchar *icon_name);
-G_CONST_RETURN gchar *gtk_action_get_icon_name          (GtkAction   *action);
+const gchar *         gtk_action_get_icon_name          (GtkAction   *action);
 void                  gtk_action_set_visible_horizontal (GtkAction   *action,
                                                          gboolean     visible_horizontal);
 gboolean              gtk_action_get_visible_horizontal (GtkAction   *action);

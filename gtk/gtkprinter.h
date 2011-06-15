@@ -93,11 +93,11 @@ GtkPrinter              *gtk_printer_new                   (const gchar     *nam
 							    GtkPrintBackend *backend,
 							    gboolean         virtual_);
 GtkPrintBackend         *gtk_printer_get_backend           (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_name              (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_state_message     (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_description       (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_location          (GtkPrinter      *printer);
-G_CONST_RETURN gchar    *gtk_printer_get_icon_name         (GtkPrinter      *printer);
+const gchar *            gtk_printer_get_name              (GtkPrinter      *printer);
+const gchar *            gtk_printer_get_state_message     (GtkPrinter      *printer);
+const gchar *            gtk_printer_get_description       (GtkPrinter      *printer);
+const gchar *            gtk_printer_get_location          (GtkPrinter      *printer);
+const gchar *            gtk_printer_get_icon_name         (GtkPrinter      *printer);
 gint                     gtk_printer_get_job_count         (GtkPrinter      *printer);
 gboolean                 gtk_printer_is_active             (GtkPrinter      *printer);
 gboolean                 gtk_printer_is_paused             (GtkPrinter      *printer);

@@ -7118,7 +7118,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  *      storage in the widget and must not be freed, modified or
  *      stored.
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_entry_get_text (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
@@ -7389,7 +7389,7 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
  *
  * Since: 2.10
  **/
-G_CONST_RETURN GtkBorder *
+const GtkBorder *
 gtk_entry_get_inner_border (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);

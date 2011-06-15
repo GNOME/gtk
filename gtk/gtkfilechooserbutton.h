@@ -77,7 +77,7 @@ GtkWidget *           gtk_file_chooser_button_new_with_backend (const gchar     
 #endif /* GTK_DISABLE_DEPRECATED */
 
 GtkWidget *           gtk_file_chooser_button_new_with_dialog  (GtkWidget            *dialog);
-G_CONST_RETURN gchar *gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
+const gchar *         gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
 void                  gtk_file_chooser_button_set_title        (GtkFileChooserButton *button,
 								const gchar          *title);
 gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);

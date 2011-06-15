@@ -182,7 +182,7 @@ gboolean   gtk_menu_get_tearoff_state     (GtkMenu             *menu);
  */
 void       gtk_menu_set_title             (GtkMenu             *menu,
 					   const gchar         *title);
-G_CONST_RETURN gchar *gtk_menu_get_title  (GtkMenu             *menu);
+const gchar *gtk_menu_get_title           (GtkMenu             *menu);
 
 void       gtk_menu_reorder_child         (GtkMenu             *menu,
                                            GtkWidget           *child,

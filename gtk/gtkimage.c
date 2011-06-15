@@ -1458,7 +1458,7 @@ gtk_image_get_animation (GtkImage *image)
  **/
 void
 gtk_image_get_icon_name  (GtkImage              *image,
-			  G_CONST_RETURN gchar **icon_name,
+			  const gchar          **icon_name,
 			  GtkIconSize           *size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));

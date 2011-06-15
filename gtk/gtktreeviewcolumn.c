@@ -2137,7 +2137,7 @@ gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
  * Return value: the title of the column. This string should not be
  * modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
