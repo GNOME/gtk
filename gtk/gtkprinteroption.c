@@ -178,8 +178,7 @@ gtk_printer_option_set (GtkPrinterOption *option,
     return;
 
   if ((option->type == GTK_PRINTER_OPTION_TYPE_PICKONE ||
-       option->type == GTK_PRINTER_OPTION_TYPE_ALTERNATIVE) &&
-      value != NULL)
+       option->type == GTK_PRINTER_OPTION_TYPE_ALTERNATIVE))
     {
       int i;
       
@@ -195,7 +194,7 @@ gtk_printer_option_set (GtkPrinterOption *option,
       if (i == option->num_choices)
 	return; /* Not found in available choices */
     }
-  
+          
   g_free (option->value);
   option->value = g_strdup (value);
   
