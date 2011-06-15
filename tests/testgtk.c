@@ -1446,13 +1446,15 @@ make_toolbar (GtkWidget *window)
       if (make_toolbar_items[i].label == NULL)
         {
           toolitem = gtk_separator_tool_item_new ();
-          continue;
         }
-      icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window));
-      toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
-      gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
-      if (make_toolbar_items[i].callback != NULL)
-        g_signal_connect (toolitem, "clicked",  make_toolbar_items[i].callback, toolbar);
+      else
+        {
+          icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window));
+          toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
+          gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
+          if (make_toolbar_items[i].callback != NULL)
+            g_signal_connect (toolitem, "clicked",  make_toolbar_items[i].callback, toolbar);
+        }
       gtk_toolbar_insert (GTK_TOOLBAR (toolbar), toolitem, -1);
     }
 
