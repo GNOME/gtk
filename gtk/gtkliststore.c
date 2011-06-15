@@ -445,11 +445,13 @@ gtk_list_store_new (gint n_columns,
     {
       GType type = va_arg (args, GType);
       if (! _gtk_tree_data_list_check_type (type))
-	{
-	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
-	  g_object_unref (retval);
-	  return NULL;
-	}
+        {
+          g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
+          g_object_unref (retval);
+          va_end (args);
+
+          return NULL;
+        }
 
       gtk_list_store_set_column_type (retval, i, type);
     }
