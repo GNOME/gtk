@@ -7518,6 +7518,8 @@ adjust_allocation_recurse (GtkWidget *widget,
    * into widget->allocation if the widget is not realized.
    * FIXME someone figure out why this was.
    */
+  gtk_widget_get_allocation (widget, &allocation);
+
   if (!gtk_widget_get_realized (widget))
     {
       if (gtk_widget_get_visible (widget))
@@ -7564,7 +7566,7 @@ adjust_allocation (GtkWidget *widget,
   
   adjust_allocation_recurse (widget, &scroll_data);
 }
-            
+
 static void
 gtk_text_view_value_changed (GtkAdjustment *adjustment,
                              GtkTextView   *text_view)
