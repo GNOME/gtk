@@ -3253,6 +3253,7 @@ struct _ToolbarContent
   ItemState      state;
 
   GtkToolItem   *item;
+  GtkAllocation  allocation;
   GtkAllocation  start_allocation;
   GtkAllocation  goal_allocation;
   guint          is_placeholder : 1;
@@ -3466,7 +3467,7 @@ static void
 toolbar_content_get_allocation (ToolbarContent *content,
 				GtkAllocation  *allocation)
 {
-  gtk_widget_get_allocation (GTK_WIDGET (content->item), allocation);
+  *allocation = content->allocation;
 }
 
 static void
@@ -3513,20 +3514,9 @@ static void
 toolbar_content_size_allocate (ToolbarContent *content,
 			       GtkAllocation  *allocation)
 {
-  GtkAllocation goal;
-
+  content->allocation = *allocation;
   gtk_widget_size_allocate (GTK_WIDGET (content->item),
                             allocation);
-
-  toolbar_content_get_goal_allocation (content, &goal);
-  if (goal.x == allocation->x && 
-      goal.y == allocation->y && 
-      goal.width == allocation->width && 
-      goal.height == allocation->height)
-    {
-      gtk_widget_get_allocation (GTK_WIDGET (content->item), &goal);
-      toolbar_content_set_goal_allocation (content, &goal);
-    }
 }
 
 static void
