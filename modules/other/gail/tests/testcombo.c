@@ -49,7 +49,7 @@ static void _check_children (AtkObject *obj)
   n_children = atk_object_get_n_accessible_children (child);
   for (i = 0; i < n_children; i++)
   {
-    G_CONST_RETURN gchar *name;
+    const gchar *name;
 
     grand_child = atk_object_ref_accessible_child (child, i);
     name = atk_object_get_name (grand_child);

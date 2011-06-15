@@ -14,9 +14,9 @@ static gint _remove_page (gpointer data);
 
 static void _print_type (AtkObject *obj)
 {
-  G_CONST_RETURN gchar *typename = NULL;
-  G_CONST_RETURN gchar *name = NULL;
-  G_CONST_RETURN gchar *description = NULL;
+  const gchar *typename = NULL;
+  const gchar *name = NULL;
+  const gchar *description = NULL;
   AtkRole role;
 
   if (GTK_IS_ACCESSIBLE (obj))

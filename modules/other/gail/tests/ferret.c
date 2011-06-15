@@ -617,14 +617,14 @@ ferret_get_name_from_container (AtkObject *aobject)
 static gint
 _print_object (AtkObject *aobject)
 {
-    G_CONST_RETURN gchar * parent_name = NULL;
-    G_CONST_RETURN gchar * name = NULL;
-    G_CONST_RETURN gchar * description = NULL;
-    G_CONST_RETURN gchar * typename = NULL;
-    G_CONST_RETURN gchar * parent_typename = NULL;
-    G_CONST_RETURN gchar * role_name = NULL;
-    G_CONST_RETURN gchar * accel_name = NULL;
-    G_CONST_RETURN gchar * text = NULL;
+    const gchar * parent_name = NULL;
+    const gchar * name = NULL;
+    const gchar * description = NULL;
+    const gchar * typename = NULL;
+    const gchar * parent_typename = NULL;
+    const gchar * role_name = NULL;
+    const gchar * accel_name = NULL;
+    const gchar * text = NULL;
     AtkRole role;
     AtkObject *parent = NULL;
     static AtkObject *prev_aobject = NULL;
@@ -814,8 +814,8 @@ _print_relation (AtkObject *aobject)
     if (relation_set)
       {
         AtkRelation * relation;
-        G_CONST_RETURN gchar * relation_name = NULL;
-        G_CONST_RETURN gchar * relation_obj_name = NULL;
+        const gchar * relation_name = NULL;
+        const gchar * relation_obj_name = NULL;
         AtkRelationType relation_type;
         AtkObject *relation_obj;
         GPtrArray * relation_arry;
@@ -904,7 +904,7 @@ _print_state (AtkObject *aobject)
       {
         gboolean boolean_value;
         AtkStateType one_state;
-        G_CONST_RETURN gchar *name;
+        const gchar *name;
         gint i;
 
         for (i=0; i < sizeof(states_to_track)/sizeof(AtkStateType); i++)
@@ -929,9 +929,9 @@ _print_state (AtkObject *aobject)
 static gint
 _print_action (AtkAction *aobject)
 {
-    G_CONST_RETURN gchar *action_name;
-    G_CONST_RETURN gchar *action_description;
-    G_CONST_RETURN gchar *action_keybinding;
+    const gchar *action_name;
+    const gchar *action_description;
+    const gchar *action_keybinding;
     gchar *label_str, *output_str;
     gint group_num;
     gint num_actions, j;
@@ -1028,7 +1028,7 @@ _print_component (AtkComponent *aobject)
 static gint
 _print_image (AtkImage *aobject)
 {
-    G_CONST_RETURN gchar *image_desc;
+    const gchar *image_desc;
     gchar *output_str;
     gint x = 0;
     gint y = 0;
@@ -1106,7 +1106,7 @@ _print_selection (AtkSelection *aobject)
 
     for (j = 0; j < n_selected; j++)
     {
-      G_CONST_RETURN gchar *selected_name;
+      const gchar *selected_name;
       AtkObject *selected_object;
 
       selected_object = atk_selection_ref_selection (aobject, j);
@@ -1128,7 +1128,7 @@ static gint
 _print_table (AtkTable *aobject)
 {
     gchar *label_str, *output_str;
-    G_CONST_RETURN gchar *col_desc;
+    const gchar *col_desc;
     AtkObject *caption;
     gint n_cols, n_rows;
     gint i;
@@ -1153,7 +1153,7 @@ _print_table (AtkTable *aobject)
     caption = atk_table_get_caption(aobject);
     if (caption)
       {
-        G_CONST_RETURN gchar* caption_name;
+        const gchar* caption_name;
 
         caption_name = atk_object_get_name (caption);
         if (caption_name)
