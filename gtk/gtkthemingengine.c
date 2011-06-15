@@ -1388,6 +1388,7 @@ render_background_internal (GtkThemingEngine *engine,
   gdouble progress;
   GtkRoundedBox border_box;
   GtkShadow *box_shadow;
+  GtkBorder border;
 
   flags = gtk_theming_engine_get_state (engine);
 
@@ -1584,8 +1585,21 @@ render_background_internal (GtkThemingEngine *engine,
         cairo_pattern_destroy (other_pattern);
     }
 
+  gtk_theming_engine_get_border (engine, flags, &border);
+
+  /* In the CSS box model, by default the background positioning area is
+   * the padding-box, i.e. all the border-box minus the borders themselves,
+   * which determines also its default size, see
+   * http://dev.w3.org/csswg/css3-background/#background-origin
+   *
+   * In the future we might want to support different origins or clips, but
+   * right now we just shrink to the default.
+   */
   _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
   _gtk_rounded_box_apply_border_radius (&border_box, engine, flags, junction);
+  _gtk_rounded_box_shrink (&border_box,
+                           border.top, border.right,
+                           border.bottom, border.left);
   _gtk_rounded_box_path (&border_box, cr);
 
   if (pattern)
@@ -1604,11 +1618,6 @@ render_background_internal (GtkThemingEngine *engine,
 
   if (box_shadow != NULL)
     {
-      GtkBorder border;
-      gtk_theming_engine_get_border (engine, flags, &border);
-      _gtk_rounded_box_shrink (&border_box,
-                               border.top, border.right,
-                               border.bottom, border.left);
       _gtk_box_shadow_render (box_shadow, cr, &border_box);
       _gtk_shadow_unref (box_shadow);
     }
