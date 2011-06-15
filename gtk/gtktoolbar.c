@@ -3669,7 +3669,6 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 			       GtkToolbar          *toolbar,
                                cairo_t             *cr)
 {
-  GtkToolbarPrivate *priv = toolbar->priv;
   GtkOrientation orientation;
   GtkStyleContext *context;
   GtkStateFlags state;
@@ -3680,7 +3679,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  orientation = toolbar ? priv->orientation : GTK_ORIENTATION_HORIZONTAL;
+  orientation = toolbar ? toolbar->priv->orientation : GTK_ORIENTATION_HORIZONTAL;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
