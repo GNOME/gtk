@@ -1,3 +1,29 @@
+Overview of Changes from GTK+ 2.24.3 to 2.24.5
+==============================================
+
+* Annotation fixes
+
+* Update some deprecation notes and porting hints
+
+* Bugs fixed:
+ 576492 GtkBuilder does not respect G_PARAM_CONSTRUCT properties
+ 637304 Name Contains Entry is not exposing accessibility
+ 647908 gtkrc does not handle "shade()" in a locale safe manor
+ 648931 Gdk clipboard doesn't work correctly
+ 652102 Issues when redrawing multiple GdkWindows
+ 652239 resurect Windows clipboard selection notification
+ 652402 gtkdnd unbinds all key grabs
+        Ensure we always grab the lock in async callbacks
+        Use an existing mimetype for the GTK_FILE stock icon
+        Fix missing icons in the builtin icon theme
+        Fix the build without XSHM
+        Fix the build against recent GLib
+
+* Translation updates:
+ Dutch
+ Norwegian bokmål
+
+
 Overview of Changes from GTK+ 2.24.2 to 2.24.3
 ==============================================
 
