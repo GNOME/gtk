@@ -42,11 +42,11 @@ static void                  atk_action_interface_init        (AtkActionIface *i
 static gboolean              gail_scale_button_do_action      (AtkAction      *action,
                                                                gint           i);
 static gint                  gail_scale_button_get_n_actions  (AtkAction      *action);
-static G_CONST_RETURN gchar* gail_scale_button_get_description(AtkAction      *action,
+static const gchar*          gail_scale_button_get_description(AtkAction      *action,
                                                                gint           i);
-static G_CONST_RETURN gchar* gail_scale_button_action_get_name(AtkAction      *action,
+static const gchar*          gail_scale_button_action_get_name(AtkAction      *action,
                                                                gint           i);
-static G_CONST_RETURN gchar* gail_scale_button_get_keybinding (AtkAction      *action,
+static const gchar*          gail_scale_button_get_keybinding (AtkAction      *action,
                                                                gint           i);
 static gboolean              gail_scale_button_set_description(AtkAction      *action,
                                                                gint           i,
@@ -136,14 +136,14 @@ gail_scale_button_get_n_actions (AtkAction *action)
   return 2;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_scale_button_get_description (AtkAction *action,
                                    gint       i)
 {
   return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_scale_button_action_get_name (AtkAction *action,
                                    gint       i)
 {
@@ -157,7 +157,7 @@ gail_scale_button_action_get_name (AtkAction *action,
   }
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_scale_button_get_keybinding (AtkAction *action,
                                   gint       i)
 {

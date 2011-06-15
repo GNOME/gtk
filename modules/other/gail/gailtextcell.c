@@ -30,7 +30,7 @@ static void      gail_text_cell_class_init		(GailTextCellClass *klass);
 static void      gail_text_cell_init			(GailTextCell	*text_cell);
 static void      gail_text_cell_finalize		(GObject	*object);
 
-static G_CONST_RETURN gchar* gail_text_cell_get_name    (AtkObject      *atk_obj);
+static const gchar* gail_text_cell_get_name    (AtkObject      *atk_obj);
 
 static void      atk_text_interface_init		(AtkTextIface	*iface);
 
@@ -190,7 +190,7 @@ gail_text_cell_finalize (GObject            *object)
   G_OBJECT_CLASS (gail_text_cell_parent_class)->finalize (object);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_text_cell_get_name (AtkObject *atk_obj)
 {
   if (atk_obj->name)

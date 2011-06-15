@@ -26,7 +26,7 @@
 
 static void         gail_statusbar_class_init          (GailStatusbarClass *klass);
 static void         gail_statusbar_init                (GailStatusbar      *bar);
-static G_CONST_RETURN gchar* gail_statusbar_get_name   (AtkObject          *obj);
+static const gchar* gail_statusbar_get_name            (AtkObject          *obj);
 static gint         gail_statusbar_get_n_children      (AtkObject          *obj);
 static AtkObject*   gail_statusbar_ref_child           (AtkObject          *obj,
                                                         gint               i);
@@ -119,10 +119,10 @@ gail_statusbar_init (GailStatusbar *bar)
 {
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_statusbar_get_name (AtkObject *obj)
 {
-  G_CONST_RETURN gchar* name;
+  const gchar* name;
 
   g_return_val_if_fail (GAIL_IS_STATUSBAR (obj), NULL);
 

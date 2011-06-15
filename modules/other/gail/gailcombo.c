@@ -43,9 +43,9 @@ static gboolean     gail_combo_do_action               (AtkAction      *action,
 static gboolean     idle_do_action                     (gpointer       data);
 static gint         gail_combo_get_n_actions           (AtkAction      *action)
 ;
-static G_CONST_RETURN gchar* gail_combo_get_description(AtkAction      *action,
+static const gchar* gail_combo_get_description         (AtkAction      *action,
                                                         gint           i);
-static G_CONST_RETURN gchar* gail_combo_get_name       (AtkAction      *action,
+static const gchar* gail_combo_get_name                (AtkAction      *action,
                                                         gint           i);
 static gboolean              gail_combo_set_description(AtkAction      *action,
                                                         gint           i,
@@ -353,7 +353,7 @@ gail_combo_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_get_description (AtkAction *action,
                            gint      i)
 {
@@ -368,7 +368,7 @@ gail_combo_get_description (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_get_name (AtkAction *action,
                      gint      i)
 {

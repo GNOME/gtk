@@ -50,9 +50,9 @@ static gboolean              gail_option_menu_do_action        (AtkAction       
                                                                 gint            i);
 static gboolean              idle_do_action                    (gpointer        data);
 static gint                  gail_option_menu_get_n_actions    (AtkAction       *action);
-static G_CONST_RETURN gchar* gail_option_menu_get_description  (AtkAction       *action,
+static const gchar*          gail_option_menu_get_description  (AtkAction       *action,
                                                                 gint            i);
-static G_CONST_RETURN gchar* gail_option_menu_action_get_name  (AtkAction       *action,
+static const gchar*          gail_option_menu_action_get_name  (AtkAction       *action,
                                                                 gint            i);
 static gboolean              gail_option_menu_set_description  (AtkAction       *action,
                                                                 gint            i,
@@ -272,12 +272,12 @@ gail_option_menu_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_option_menu_get_description (AtkAction *action,
                                   gint      i)
 {
   GailButton *button;
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   button = GAIL_BUTTON (action);
 
@@ -293,11 +293,11 @@ gail_option_menu_get_description (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_option_menu_action_get_name (AtkAction *action,
                                   gint      i)
 {
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   switch (i)
     {

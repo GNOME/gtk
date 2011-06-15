@@ -30,7 +30,7 @@
 static void                  gail_button_class_init       (GailButtonClass *klass);
 static void                  gail_button_init             (GailButton      *button);
 
-static G_CONST_RETURN gchar* gail_button_get_name         (AtkObject       *obj);
+static const gchar*          gail_button_get_name         (AtkObject       *obj);
 static gint                  gail_button_get_n_children   (AtkObject       *obj);
 static AtkObject*            gail_button_ref_child        (AtkObject       *obj,
                                                            gint            i);
@@ -59,11 +59,11 @@ static gboolean              gail_button_do_action      (AtkAction      *action,
                                                          gint           i);
 static gboolean              idle_do_action             (gpointer       data);
 static gint                  gail_button_get_n_actions  (AtkAction      *action);
-static G_CONST_RETURN gchar* gail_button_get_description(AtkAction      *action,
+static const gchar*          gail_button_get_description(AtkAction      *action,
                                                          gint           i);
-static G_CONST_RETURN gchar* gail_button_get_keybinding (AtkAction      *action,
+static const gchar*          gail_button_get_keybinding (AtkAction      *action,
                                                          gint           i);
-static G_CONST_RETURN gchar* gail_button_action_get_name(AtkAction      *action,
+static const gchar*          gail_button_action_get_name(AtkAction      *action,
                                                          gint           i);
 static gboolean              gail_button_set_description(AtkAction      *action,
                                                          gint           i,
@@ -76,7 +76,7 @@ static void                  gail_button_notify_weak_ref       (gpointer data,
 
 /* AtkImage.h */
 static void                  atk_image_interface_init   (AtkImageIface  *iface);
-static G_CONST_RETURN gchar* gail_button_get_image_description 
+static const gchar*          gail_button_get_image_description
                                                         (AtkImage       *image);
 static void	             gail_button_get_image_position
                                                         (AtkImage       *image,
@@ -182,10 +182,10 @@ gail_button_init (GailButton *button)
   button->textutil = NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_button_get_name (AtkObject *obj)
 {
-  G_CONST_RETURN gchar* name = NULL;
+  const gchar* name = NULL;
 
   g_return_val_if_fail (GAIL_IS_BUTTON (obj), NULL);
 
@@ -585,12 +585,12 @@ gail_button_get_n_actions (AtkAction *action)
   return 3;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_button_get_description (AtkAction *action,
                              gint      i)
 {
   GailButton *button;
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   button = GAIL_BUTTON (action);
 
@@ -619,7 +619,7 @@ gail_button_get_description (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_button_get_keybinding (AtkAction *action,
                             gint      i)
 {
@@ -703,11 +703,11 @@ gail_button_get_keybinding (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_button_action_get_name (AtkAction *action,
                              gint      i)
 {
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
   GailButton *button;
 
   button = GAIL_BUTTON (action);
@@ -966,7 +966,7 @@ get_image_from_button (GtkWidget *button)
   return image;
 }
 
-static G_CONST_RETURN gchar* 
+static const gchar*
 gail_button_get_image_description (AtkImage *image) {
 
   GtkWidget *widget;

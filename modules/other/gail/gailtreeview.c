@@ -116,16 +116,14 @@ static void             gail_tree_view_set_caption      (AtkTable               
 static AtkObject*       gail_tree_view_get_summary      (AtkTable               *table);
 static void             gail_tree_view_set_summary      (AtkTable               *table,
                                                          AtkObject              *accessible);
-static G_CONST_RETURN gchar*
-                        gail_tree_view_get_row_description 
+static const gchar*     gail_tree_view_get_row_description
                                                         (AtkTable               *table,
                                                          gint                   row);
 static void             gail_tree_view_set_row_description 
                                                         (AtkTable               *table,
                                                          gint                   row,
                                                          const gchar            *description);
-static G_CONST_RETURN gchar*
-                        gail_tree_view_get_column_description
+static const gchar*     gail_tree_view_get_column_description
                                                         (AtkTable               *table,
                                                          gint                   column);
 static void             gail_tree_view_set_column_description
@@ -1609,7 +1607,7 @@ gail_tree_view_set_caption (AtkTable	*table,
     g_object_unref (old_caption);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_tree_view_get_column_description (AtkTable	  *table,
                                        gint       in_col)
 {
@@ -1674,7 +1672,7 @@ gail_tree_view_set_column_description (AtkTable	   *table,
                          &values, NULL);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_tree_view_get_row_description (AtkTable    *table,
                                     gint        row)
 {

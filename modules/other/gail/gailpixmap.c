@@ -32,7 +32,7 @@ static void      gail_pixmap_initialize         (AtkObject       *accessible,
 
 /* AtkImage */
 static void  atk_image_interface_init   (AtkImageIface  *iface);
-static G_CONST_RETURN gchar* gail_pixmap_get_image_description 
+static const gchar* gail_pixmap_get_image_description
                                         (AtkImage       *obj);
 static void  gail_pixmap_get_image_position    
                                         (AtkImage       *obj,
@@ -85,7 +85,7 @@ atk_image_interface_init (AtkImageIface *iface)
   iface->set_image_description = gail_pixmap_set_image_description;
 }
 
-static G_CONST_RETURN gchar* 
+static const gchar*
 gail_pixmap_get_image_description (AtkImage       *obj)
 {
   GailPixmap* pixmap;

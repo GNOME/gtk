@@ -151,13 +151,13 @@ static AtkObject*
 static gint       gail_clist_get_n_columns         (AtkTable      *table);
 static gint       gail_clist_get_n_actual_columns  (GtkCList      *clist);
 
-static G_CONST_RETURN gchar*
+static const gchar*
                   gail_clist_get_column_description(AtkTable      *table,
                                                     gint          column);
 static AtkObject*  gail_clist_get_column_header     (AtkTable      *table,
                                                     gint          column);
 static gint       gail_clist_get_n_rows            (AtkTable      *table);
-static G_CONST_RETURN gchar*
+static const gchar*
                   gail_clist_get_row_description   (AtkTable      *table,
                                                     gint          row);
 static AtkObject*  gail_clist_get_row_header        (AtkTable      *table,
@@ -779,7 +779,7 @@ gail_clist_get_n_actual_columns (GtkCList *clist)
   return clist->columns;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_clist_get_column_description (AtkTable      *table,
                                    gint          column)
 {
@@ -848,7 +848,7 @@ gail_clist_get_n_rows (AtkTable      *table)
   return clist->rows;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_clist_get_row_description (AtkTable      *table,
                                 gint          row)
 {

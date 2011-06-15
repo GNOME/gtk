@@ -39,7 +39,7 @@ static void gail_widget_connect_widget_destroyed (GtkAccessible    *accessible);
 static void gail_widget_destroyed                (GtkWidget        *widget,
                                                   GtkAccessible    *accessible);
 
-static G_CONST_RETURN gchar* gail_widget_get_description (AtkObject *accessible);
+static const gchar* gail_widget_get_description (AtkObject *accessible);
 static AtkObject* gail_widget_get_parent (AtkObject *accessible);
 static AtkStateSet* gail_widget_ref_state_set (AtkObject *accessible);
 static AtkRelationSet* gail_widget_ref_relation_set (AtkObject *accessible);
@@ -234,7 +234,7 @@ gail_widget_destroyed (GtkWidget     *widget,
                                   TRUE);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_widget_get_description (AtkObject *accessible)
 {
   if (accessible->description)

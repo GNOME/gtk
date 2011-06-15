@@ -27,7 +27,7 @@
 static void	 gail_clist_cell_class_init        (GailCListCellClass *klass);
 static void	 gail_clist_cell_init              (GailCListCell      *cell);
 
-static G_CONST_RETURN gchar* gail_clist_cell_get_name (AtkObject *accessible);
+static const gchar* gail_clist_cell_get_name (AtkObject *accessible);
 
 G_DEFINE_TYPE (GailCListCell, gail_clist_cell, GAIL_TYPE_CELL)
 
@@ -62,7 +62,7 @@ gail_clist_cell_new (void)
   return atk_object;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_clist_cell_get_name (AtkObject *accessible)
 {
   if (accessible->name)

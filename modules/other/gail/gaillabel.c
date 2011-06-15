@@ -44,7 +44,7 @@ static void       atk_text_interface_init          (AtkTextIface      *iface);
 
 /* atkobject.h */
 
-static G_CONST_RETURN gchar* gail_label_get_name         (AtkObject         *accessible);
+static const gchar*          gail_label_get_name         (AtkObject         *accessible);
 static AtkStateSet*          gail_label_ref_state_set	 (AtkObject	    *accessible);
 static AtkRelationSet*       gail_label_ref_relation_set (AtkObject         *accessible);
 
@@ -535,10 +535,10 @@ gail_label_ref_relation_set (AtkObject *obj)
   return relation_set;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_label_get_name (AtkObject *accessible)
 {
-  G_CONST_RETURN gchar *name;
+  const gchar *name;
 
   g_return_val_if_fail (GAIL_IS_LABEL (accessible), NULL);
 

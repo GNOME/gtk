@@ -28,7 +28,7 @@
 static void                  gail_expander_class_init       (GailExpanderClass *klass);
 static void                  gail_expander_init             (GailExpander      *expander);
 
-static G_CONST_RETURN gchar* gail_expander_get_name         (AtkObject         *obj);
+static const gchar*          gail_expander_get_name         (AtkObject         *obj);
 static gint                  gail_expander_get_n_children   (AtkObject         *obj)
 ;
 static AtkObject*            gail_expander_ref_child        (AtkObject         *obj,
@@ -45,20 +45,20 @@ static void                  gail_expander_real_initialize  (AtkObject         *
 static void                  gail_expander_finalize         (GObject           *object);
 static void                  gail_expander_init_textutil    (GailExpander      *expander,
                                                              GtkExpander       *widget);
-static G_CONST_RETURN gchar* gail_expander_get_full_text    (GtkExpander       *widget);
+static const gchar*          gail_expander_get_full_text    (GtkExpander       *widget);
 
 static void                  atk_action_interface_init  (AtkActionIface *iface);
 static gboolean              gail_expander_do_action    (AtkAction      *action,
                                                          gint           i);
 static gboolean              idle_do_action             (gpointer       data);
 static gint                  gail_expander_get_n_actions(AtkAction      *action);
-static G_CONST_RETURN gchar* gail_expander_get_description
+static const gchar*          gail_expander_get_description
                                                         (AtkAction      *action,
                                                          gint           i);
-static G_CONST_RETURN gchar* gail_expander_get_keybinding 
+static const gchar*          gail_expander_get_keybinding
                                                         (AtkAction      *action,
                                                          gint           i);
-static G_CONST_RETURN gchar* gail_expander_action_get_name
+static const gchar*          gail_expander_action_get_name
                                                         (AtkAction      *action,
                                                          gint           i);
 static gboolean              gail_expander_set_description
@@ -145,10 +145,10 @@ gail_expander_init (GailExpander *expander)
   expander->textutil = NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_expander_get_name (AtkObject *obj)
 {
-  G_CONST_RETURN gchar *name;
+  const gchar *name;
   g_return_val_if_fail (GAIL_IS_EXPANDER (obj), NULL);
 
   name = ATK_OBJECT_CLASS (gail_expander_parent_class)->get_name (obj);
@@ -324,7 +324,7 @@ gail_expander_real_notify_gtk (GObject    *obj,
     GAIL_WIDGET_CLASS (gail_expander_parent_class)->notify_gtk (obj, pspec);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_expander_get_full_text (GtkExpander *widget)
 {
   GtkWidget *label_widget;
@@ -418,12 +418,12 @@ gail_expander_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_expander_get_description (AtkAction *action,
                                gint      i)
 {
   GailExpander *expander;
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   expander = GAIL_EXPANDER (action);
 
@@ -439,7 +439,7 @@ gail_expander_get_description (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_expander_get_keybinding (AtkAction *action,
                               gint      i)
 {
@@ -485,11 +485,11 @@ gail_expander_get_keybinding (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_expander_action_get_name (AtkAction *action,
                                gint      i)
 {
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   switch (i)
     {
