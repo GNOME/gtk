@@ -483,4 +483,6 @@ _gtk_border_image_render (GtkBorderImage   *image,
           cairo_surface_destroy (slice);
         }
     }
+
+  cairo_surface_destroy (surface);
 }
