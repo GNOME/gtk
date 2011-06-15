@@ -148,7 +148,7 @@ gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
-G_CONST_RETURN gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
+const gchar * gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
 
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 						const gchar *theme,
@@ -184,13 +184,13 @@ GdkAtom		      gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
 							 Atom	      xatom);
 Atom		      gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 							     const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
+const gchar *         gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
 							  Atom         xatom);
 #ifndef GDK_MULTIHEAD_SAFE
 Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
 GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
 Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
+const gchar *         gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
 
 void	    gdk_x11_display_grab	      (GdkDisplay *display);
@@ -211,7 +211,7 @@ gpointer             gdk_x11_font_get_xfont    (GdkFont *font);
 #ifndef GDK_DISABLE_DEPRECATED
 
 Display *            gdk_x11_font_get_xdisplay (GdkFont *font);
-G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
+const char *         gdk_x11_font_get_name     (GdkFont *font);
 
 #define GDK_FONT_XDISPLAY(font)       (gdk_x11_font_get_xdisplay (font))
 

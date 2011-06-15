@@ -71,7 +71,7 @@ gdk_display_open (const gchar *display_name)
   return _gdk_display;
 }
 
-G_CONST_RETURN gchar *
+const gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
   static gchar *display_name = NULL;

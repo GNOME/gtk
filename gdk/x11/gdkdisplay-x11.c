@@ -502,7 +502,7 @@ gdk_internal_connection_watch (Display  *display,
  * 
  * Since: 2.2
  */
-G_CONST_RETURN gchar *
+const gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -1450,7 +1450,7 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
  *
  * Since: 2.12
  */
-G_CONST_RETURN gchar *
+const gchar *
 gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->startup_notification_id;

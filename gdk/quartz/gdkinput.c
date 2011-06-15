@@ -116,7 +116,7 @@ gdk_display_list_devices (GdkDisplay *dpy)
   return _gdk_input_devices;
 }
 
-G_CONST_RETURN gchar *
+const gchar *
 gdk_device_get_name (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);

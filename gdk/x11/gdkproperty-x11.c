@@ -425,7 +425,7 @@ gdk_atom_intern_static_string (const gchar *atom_name)
   return intern_atom (atom_name, FALSE);
 }
 
-static G_CONST_RETURN char *
+static const char *
 get_atom_name (GdkAtom atom)
 {
   virtual_atom_check_init ();
@@ -496,7 +496,7 @@ gdk_x11_get_xatom_by_name (const gchar *atom_name)
  *
  * Since: 2.2
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
 				    Atom        xatom)
 {
@@ -518,7 +518,7 @@ gdk_x11_get_xatom_name_for_display (GdkDisplay *display,
  * Return value: name of the X atom; this string is owned by GTK+,
  *   so it shouldn't be modifed or freed. 
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gdk_x11_get_xatom_name (Atom xatom)
 {
   return get_atom_name (gdk_x11_xatom_to_atom (xatom));
