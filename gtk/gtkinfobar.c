@@ -541,6 +541,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   info_bar->priv->action_area = action_area;
 
   gtk_widget_pop_composite_child ();
+  gtk_info_bar_style_updated (info_bar);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
