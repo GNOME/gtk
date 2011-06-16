@@ -396,13 +396,16 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
         GDK_NOTE (DND, g_print (" drawclipboard owner: %p", hwndOwner));
 
+#ifdef G_ENABLE_DEBUG
         if (_gdk_debug_flags & GDK_DEBUG_DND)
           {
             while ((nFormat = EnumClipboardFormats (nFormat)) != 0)
               g_print ("%s ", _gdk_win32_cf_to_string (nFormat));
           }
+#endif
 
         GDK_NOTE (DND, g_print (" \n"));
+
 
         event = gdk_event_new (GDK_OWNER_CHANGE);
         event->owner_change.window = _gdk_root;
