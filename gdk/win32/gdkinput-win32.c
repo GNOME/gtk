@@ -679,7 +679,7 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
   double device_width, device_height;
   double x_offset, y_offset, x_scale, y_scale;
 
-  window_object = GDK_WINDOW_OBJECT (input_window);
+  window_object = GDK_WINDOW_OBJECT (input_window->window);
 
   for (i=0; i<gdkdev->info.num_axes; i++)
     {
