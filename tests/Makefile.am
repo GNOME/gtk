@@ -117,7 +117,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testanimation			\
 	testpixbuf-save			\
 	testpixbuf-color		\
-	testpixbuf-scale
+	testpixbuf-scale		\
+	widget-factory
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -224,6 +225,7 @@ testanimation_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
+widget_factory_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -317,6 +319,7 @@ testanimation_LDADD = $(LDADDS)
 testpixbuf_save_LDADD = $(LDADDS)
 testpixbuf_color_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
+widget_factory_LDADD = $(LDADDS)
 
 
 testboxcss_SOURCES =	\
@@ -479,6 +482,8 @@ testpixbuf_color_SOURCES = testpixbuf-color.c
 
 testpixbuf_save_SOURCES = testpixbuf-save.c
 
+widget_factory_SOURCES = widget-factory.c
+
 
 EXTRA_DIST += 			\
 	gradient1.png		\
@@ -500,7 +505,8 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
-	makefile.msc
+	makefile.msc		\
+	widget-factory.ui
 
 
 -include $(top_srcdir)/git.mk
