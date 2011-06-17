@@ -120,7 +120,6 @@
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmodules.h"
-#include "gtkrc.h"
 #include "gtkrecentmanager.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"

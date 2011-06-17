@@ -34,7 +34,6 @@
 #include <limits.h>
 
 #include "gtkprivate.h"
-#include "gtkrc.h"
 #include "gtkwindowprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkbindings.h"

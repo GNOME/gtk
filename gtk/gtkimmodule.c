@@ -36,7 +36,6 @@
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
 #include "gtkmainprivate.h"
-#include "gtkrc.h"
 #include "gtkintl.h"
 
 /* Do *not* include "gtkprivate.h" in this file. If you do, the

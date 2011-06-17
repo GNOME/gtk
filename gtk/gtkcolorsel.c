@@ -39,7 +39,6 @@
 #include "gtkselection.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
-#include "gtkrc.h"
 #include "gtkframe.h"
 #include "gtktable.h"
 #include "gtklabel.h"

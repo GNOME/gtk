@@ -44,7 +44,6 @@
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
-#include "gtkrc.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtktreeselection.h"

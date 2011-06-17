@@ -34,7 +34,6 @@
 #include "gtkbindingsprivate.h"
 #include "gtkkeyhash.h"
 #include "gtkwidget.h"
-#include "gtkrc.h"
 #include "gtkintl.h"
 
 /**
