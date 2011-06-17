@@ -965,7 +965,7 @@ struct _GtkCssScanner
 {
   GtkCssProvider *provider;
   GtkCssParser *parser;
-  GSList *sections;
+  GtkCssSection *section;
   GtkCssScanner *parent;
   GFile *file;
   GFile *base;
@@ -1219,8 +1219,6 @@ gtk_css_ruleset_matches (GtkCssRuleset *ruleset,
 static void
 gtk_css_scanner_destroy (GtkCssScanner *scanner)
 {
-  g_assert (scanner->sections == NULL);
-
   g_object_unref (scanner->provider);
   if (scanner->file)
     g_object_unref (scanner->file);
@@ -1247,6 +1245,7 @@ gtk_css_scanner_parser_error (GtkCssParser *parser,
 static GtkCssScanner *
 gtk_css_scanner_new (GtkCssProvider *provider,
                      GtkCssScanner  *parent,
+                     GtkCssSection  *section,
                      GFile          *file,
                      const gchar    *data,
                      gsize           length)
@@ -1260,6 +1259,8 @@ gtk_css_scanner_new (GtkCssProvider *provider,
   g_object_ref (provider);
   scanner->provider = provider;
   scanner->parent = parent;
+  if (section)
+    scanner->section = gtk_css_section_ref (section);
 
   if (file)
     {
@@ -1305,34 +1306,33 @@ static void
 gtk_css_scanner_push_section (GtkCssScanner     *scanner,
                               GtkCssSectionType  section_type)
 {
-  GtkCssSection *parent, *section;
+  GtkCssSection *section;
 
-  if (scanner->sections)
-    parent = scanner->sections->data;
-  else if (scanner->parent)
-    parent = scanner->parent->sections->data;
-  else
-    parent = NULL;
-
-  section = _gtk_css_section_new (parent,
+  section = _gtk_css_section_new (scanner->section,
                                   section_type,
                                   scanner->parser,
                                   scanner->file);
-  scanner->sections = g_slist_prepend (scanner->sections, section);
+
+  gtk_css_section_unref (scanner->section);
+  scanner->section = section;
 }
 
 static void
 gtk_css_scanner_pop_section (GtkCssScanner *scanner,
                              GtkCssSectionType check_type)
 {
-  GtkCssSection *section = scanner->sections->data;
+  GtkCssSection *parent;
   
-  g_assert (check_type == gtk_css_section_get_section_type (section));
+  g_assert (gtk_css_section_get_section_type (scanner->section) == check_type);
 
-  scanner->sections = g_slist_delete_link (scanner->sections, scanner->sections);
+  parent = gtk_css_section_get_parent (scanner->section);
+  if (parent)
+    gtk_css_section_ref (parent);
 
-  _gtk_css_section_end (section);
-  gtk_css_section_unref (section);
+  _gtk_css_section_end (scanner->section);
+  gtk_css_section_unref (scanner->section);
+
+  scanner->section = parent;
 }
 
 static void
@@ -2520,7 +2520,12 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 
   if (data)
     {
-      scanner = gtk_css_scanner_new (css_provider, parent, file, data, length);
+      scanner = gtk_css_scanner_new (css_provider,
+                                     parent,
+                                     parent ? parent->section : NULL,
+                                     file,
+                                     data,
+                                     length);
 
       parse_stylesheet (scanner);
 
