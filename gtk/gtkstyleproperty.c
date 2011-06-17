@@ -863,7 +863,7 @@ gtk_css_parse_url (GtkCssParser *parser,
               
               error = g_error_new_literal (GTK_CSS_PROVIDER_ERROR,
                                            GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                           "Whitespace between 'url' and '(' is not allowed");
+                                           "Whitespace between 'url' and '(' is deprecated");
                              
               _gtk_css_parser_take_error (parser, error);
             }
