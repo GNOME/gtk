@@ -516,6 +516,7 @@ gtk_info_bar_style_updated (GtkWidget *widget)
 static void
 gtk_info_bar_init (GtkInfoBar *info_bar)
 {
+  GtkWidget *widget = GTK_WIDGET (info_bar);
   GtkWidget *content_area;
   GtkWidget *action_area;
 
@@ -534,14 +535,15 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_button_box_set_layout (GTK_BUTTON_BOX (action_area), GTK_BUTTONBOX_END);
   gtk_box_pack_start (GTK_BOX (info_bar), action_area, FALSE, TRUE, 0);
 
-  gtk_widget_set_app_paintable (GTK_WIDGET (info_bar), TRUE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (info_bar), TRUE);
+  gtk_widget_set_app_paintable (widget, TRUE);
+  gtk_widget_set_redraw_on_allocate (widget, TRUE);
 
   info_bar->priv->content_area = content_area;
   info_bar->priv->action_area = action_area;
 
   gtk_widget_pop_composite_child ();
-  gtk_info_bar_style_updated (info_bar);
+
+  gtk_info_bar_style_updated (widget);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
