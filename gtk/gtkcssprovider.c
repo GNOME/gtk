@@ -1022,7 +1022,6 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 GtkCssScanner  *scanner,
                                 GFile          *file,
                                 const char     *data,
-                                gsize           length,
                                 GError        **error);
 
 GQuark
@@ -1247,12 +1246,9 @@ gtk_css_scanner_new (GtkCssProvider *provider,
                      GtkCssScanner  *parent,
                      GtkCssSection  *section,
                      GFile          *file,
-                     const gchar    *data,
-                     gsize           length)
+                     const gchar    *text)
 {
   GtkCssScanner *scanner;
-
-  g_assert (data[length] == 0);
 
   scanner = g_slice_new0 (GtkCssScanner);
 
@@ -1274,7 +1270,7 @@ gtk_css_scanner_new (GtkCssProvider *provider,
       g_free (dir);
     }
 
-  scanner->parser = _gtk_css_parser_new (data,
+  scanner->parser = _gtk_css_parser_new (text,
                                          gtk_css_scanner_parser_error,
                                          scanner);
 
@@ -1313,7 +1309,8 @@ gtk_css_scanner_push_section (GtkCssScanner     *scanner,
                                   scanner->parser,
                                   scanner->file);
 
-  gtk_css_section_unref (scanner->section);
+  if (scanner->section)
+    gtk_css_section_unref (scanner->section);
   scanner->section = section;
 }
 
@@ -1719,7 +1716,7 @@ parse_import (GtkCssScanner *scanner)
       gtk_css_provider_load_internal (scanner->provider,
                                       scanner,
                                       file,
-                                      NULL, 0,
+                                      NULL,
                                       NULL);
     }
 
@@ -2470,8 +2467,7 @@ static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 GtkCssScanner  *parent,
                                 GFile          *file,
-                                const char     *data,
-                                gsize           length,
+                                const char     *text,
                                 GError        **error)
 {
   GtkCssScanner *scanner;
@@ -2486,15 +2482,15 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
   else
     error_handler = 0; /* silence gcc */
 
-  if (data == NULL)
+  if (text == NULL)
     {
       GError *load_error = NULL;
 
       if (g_file_load_contents (file, NULL,
-                                &free_data, &length,
+                                &free_data, NULL,
                                 NULL, &load_error))
         {
-          data = free_data;
+          text = free_data;
         }
       else
         {
@@ -2518,14 +2514,13 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         }
     }
 
-  if (data)
+  if (text)
     {
       scanner = gtk_css_scanner_new (css_provider,
                                      parent,
                                      parent ? parent->section : NULL,
                                      file,
-                                     data,
-                                     length);
+                                     text);
 
       parse_stylesheet (scanner);
 
@@ -2556,7 +2551,9 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
  * gtk_css_provider_load_from_data:
  * @css_provider: a #GtkCssProvider
  * @data: (array length=length) (element-type guint8): CSS data loaded in memory
- * @length: the length of @data in bytes, or -1 for NUL terminated strings
+ * @length: the length of @data in bytes, or -1 for NUL terminated strings. If
+ *   @length is not -1, the code will assume it is not NUL terminated and will
+ *   potentially do a copy.
  * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
  * Loads @data into @css_provider, making it clear any previously loaded
@@ -2570,15 +2567,30 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                  gssize           length,
                                  GError         **error)
 {
+  char *free_data;
+  gboolean ret;
+
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (data != NULL, FALSE);
 
   if (length < 0)
-    length = strlen (data);
+    {
+      length = strlen (data);
+      free_data = NULL;
+    }
+  else
+    {
+      free_data = g_strndup (data, length);
+      data = free_data;
+    }
 
   gtk_css_provider_reset (css_provider);
 
-  return gtk_css_provider_load_internal (css_provider, NULL, NULL, data, length, error);
+  ret = gtk_css_provider_load_internal (css_provider, NULL, NULL, data, error);
+
+  g_free (free_data);
+
+  return ret;
 }
 
 /**
@@ -2602,7 +2614,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
-  return gtk_css_provider_load_internal (css_provider, NULL, file, NULL, 0, error);
+  return gtk_css_provider_load_internal (css_provider, NULL, file, NULL, error);
 }
 
 /**
