@@ -970,8 +970,6 @@ struct _GtkCssScanner
   GFile *file;
   GFile *base;
   GSList *state;
-  GSList *cur_selectors;
-  GHashTable *cur_properties;
 };
 
 struct _GtkCssProviderPrivate
@@ -1219,35 +1217,14 @@ gtk_css_ruleset_matches (GtkCssRuleset *ruleset,
 }
 
 static void
-gtk_css_scanner_reset (GtkCssScanner *scanner)
-{
-  g_slist_free (scanner->state);
-  scanner->state = NULL;
-
-  g_slist_free_full (scanner->cur_selectors, (GDestroyNotify) _gtk_css_selector_free);
-  scanner->cur_selectors = NULL;
-
-  if (scanner->cur_properties)
-    g_hash_table_unref (scanner->cur_properties);
-
-  scanner ->cur_properties = g_hash_table_new_full (g_str_hash,
-                                                    g_str_equal,
-                                                    (GDestroyNotify) g_free,
-                                                    (GDestroyNotify) property_value_free);
-}
-
-static void
 gtk_css_scanner_destroy (GtkCssScanner *scanner)
 {
   g_assert (scanner->sections == NULL);
-
-  gtk_css_scanner_reset (scanner);
 
   g_object_unref (scanner->provider);
   if (scanner->file)
     g_object_unref (scanner->file);
   g_object_unref (scanner->base);
-  g_hash_table_destroy (scanner->cur_properties);
   _gtk_css_parser_free (scanner->parser);
 
   g_slice_free (GtkCssScanner, scanner);
@@ -1295,11 +1272,6 @@ gtk_css_scanner_new (GtkCssProvider *provider,
       scanner->base = g_file_new_for_path (dir);
       g_free (dir);
     }
-
-  scanner->cur_properties = g_hash_table_new_full (g_str_hash,
-                                                   g_str_equal,
-                                                   (GDestroyNotify) g_free,
-                                                   (GDestroyNotify) property_value_free);
 
   scanner->parser = _gtk_css_parser_new (data,
                                          gtk_css_scanner_parser_error,
