@@ -43,7 +43,6 @@
 #include "gtkaccessibleprivate.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
-#include "gtkstyle.h"
 #include "gtkprivate.h"
 #include "gtktoggleaction.h"
 #include "gtkwidget.h"

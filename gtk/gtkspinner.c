@@ -35,7 +35,6 @@
 #include "gtkaccessible.h"
 #include "gtkimage.h"
 #include "gtkspinner.h"
-#include "gtkstyle.h"
 
 
 /**
