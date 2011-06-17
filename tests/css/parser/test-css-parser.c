@@ -148,7 +148,7 @@ parsing_error_cb (GtkCssProvider *provider,
   basename = g_path_get_basename (path);
   g_string_append_printf (errors,
                           "%s:%u: error: ",
-                          basename, line);
+                          basename, line + 1);
   g_free (basename);
                           
   if (error->domain == GTK_CSS_PROVIDER_ERROR)

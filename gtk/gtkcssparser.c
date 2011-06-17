@@ -61,7 +61,7 @@ _gtk_css_parser_new (const char            *data,
   parser->user_data = user_data;
 
   parser->line_start = data;
-  parser->line = 1;
+  parser->line = 0;
 
   return parser;
 }
