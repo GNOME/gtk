@@ -875,17 +875,20 @@ _gtk_css_parser_resync_internal (GtkCssParser *parser,
       case '(':
         parser->data++;
         _gtk_css_parser_resync (parser, FALSE, ')');
-        parser->data++;
+        if (*parser->data)
+          parser->data++;
         break;
       case '[':
         parser->data++;
         _gtk_css_parser_resync (parser, FALSE, ']');
-        parser->data++;
+        if (*parser->data)
+          parser->data++;
         break;
       case '{':
         parser->data++;
         _gtk_css_parser_resync (parser, FALSE, '}');
-        parser->data++;
+        if (*parser->data)
+          parser->data++;
         if (sync_at_semicolon || !terminator)
           {
             _gtk_css_parser_skip_whitespace (parser);
@@ -902,6 +905,8 @@ _gtk_css_parser_resync_internal (GtkCssParser *parser,
           }
         parser->data++;
         continue;
+      case '\0':
+        break;
       case '/':
       default:
         parser->data++;
