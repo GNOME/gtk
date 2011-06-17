@@ -5739,6 +5739,19 @@ gtk_css_provider_new
 gtk_css_provider_to_string
 GTK_CSS_PROVIDER_ERROR
 GtkCssProviderError
+<SUBSECTION>
+GtkCssSection
+GtkCssSectionType
+gtk_css_section_get_end_line
+gtk_css_section_get_end_position
+gtk_css_section_get_file
+gtk_css_section_get_parent
+gtk_css_section_get_section_type
+gtk_css_section_get_start_line
+gtk_css_section_get_start_position
+gtk_css_section_get_type
+gtk_css_section_ref
+gtk_css_section_unref
 <SUBSECTION Standard>
 GTK_TYPE_CSS_PROVIDER
 GTK_CSS_PROVIDER
@@ -5749,6 +5762,7 @@ GTK_IS_CSS_PROVIDER_CLASS
 <SUBSECTION Private>
 gtk_css_provider_get_type
 gtk_css_provider_error_quark
+gtk_css_section_get_type
 </SECTION>
 
 <SECTION>
