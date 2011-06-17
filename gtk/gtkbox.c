@@ -935,11 +935,11 @@ gtk_box_invalidate_order (GtkBox *box)
     {
       gtk_widget_path_unref (private->sibling_path);
       private->sibling_path = NULL;
-    }
 
-  gtk_container_foreach (GTK_CONTAINER (box),
-                         (GtkCallback) gtk_widget_reset_style,
-                         NULL);
+      gtk_container_foreach (GTK_CONTAINER (box),
+                             (GtkCallback) gtk_widget_reset_style,
+                             NULL);
+    }
 }
 
 static void
@@ -948,6 +948,7 @@ gtk_box_direction_changed (GtkWidget        *widget,
 {
   gtk_box_invalidate_order (GTK_BOX (widget));
 }
+
 static void
 gtk_box_pack (GtkBox      *box,
               GtkWidget   *child,
