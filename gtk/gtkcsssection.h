@@ -40,6 +40,7 @@ G_BEGIN_DECLS
  * @GTK_CSS_SECTION_SELECTOR: The section defines a CSS selector.
  * @GTK_CSS_SECTION_DECLARATION: The section defines the declaration of
  *   a CSS variable.
+ * @GTK_CSS_SECTION_VALUE: The section defines the value of a CSS declaration.
  *
  * The different types of sections indicate parts of a CSS document as
  * parsed by GTK's CSS parser. They are oriented towards the CSS grammar
@@ -60,6 +61,7 @@ typedef enum
   GTK_CSS_SECTION_RULESET,
   GTK_CSS_SECTION_SELECTOR,
   GTK_CSS_SECTION_DECLARATION,
+  GTK_CSS_SECTION_VALUE
 } GtkCssSectionType;
 
 typedef struct _GtkCssSection GtkCssSection;
