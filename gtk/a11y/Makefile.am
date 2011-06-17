@@ -59,7 +59,6 @@ gail_c_sources =			\
 libgailincludedir=$(includedir)/gail-3.0/gail
 
 gail_private_h_sources =		\
-	gail.h				\
 	gailadjustment.h		\
 	gailarrow.h			\
 	gailbooleancell.h		\
