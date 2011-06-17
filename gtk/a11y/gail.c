@@ -27,7 +27,6 @@
 #include "gailfactory.h"
 
 #define GNOME_ACCESSIBILITY_ENV "GNOME_ACCESSIBILITY"
-#define NO_GAIL_ENV "NO_GAIL"
 
 static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
                                          guint                  n_param_values,
@@ -863,7 +862,7 @@ gail_accessibility_module_init (void)
     }
   gail_initialized = TRUE;
   quark_focus_object = g_quark_from_static_string ("gail-focus-object");
-  
+
   env_a_t_support = g_getenv (GNOME_ACCESSIBILITY_ENV);
 
   if (env_a_t_support)
