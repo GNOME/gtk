@@ -261,22 +261,20 @@
  * You can change these defaults to something else.  For
  * example, to add a <keycap>Shift</keycap> modifier to a few
  * of the default bindings, you can include the following
- * fragment in your <filename>.gtkrc-3.0</filename> file:
+ * fragment in your <filename>.config/gtk-3.0/gtk.css</filename> file:
  * </para>
  * <programlisting>
- * binding "my-own-gtkfilechooser-bindings" {
- * 	bind "&lt;Alt&gt;&lt;Shift&gt;Up" {
- * 		"up-folder" ()
- * 	}
- * 	bind "&lt;Alt&gt;&lt;Shift&gt;Down" {
- * 		"down-folder" ()
- * 	}
- * 	bind "&lt;Alt&gt;&lt;Shift&gt;Home" {
- * 		"home-folder" ()
- * 	}
+ * @binding-set MyOwnFilechooserBindings
+ * {
+ *   bind "&lt;Alt&gt;&lt;Shift&gt;Up" { "up-folder" () }
+ *   bind "&lt;Alt&gt;&lt;Shift&gt;Down" { "down-folder" () }
+ *   bind "&lt;Alt&gt;&lt;Shift&gt;Home" { "home-folder" () }
  * }
  *
- * class "GtkFileChooserDefault" binding "my-own-gtkfilechooser-bindings"
+ * GtkFileChooserDefault
+ * {
+ *    gtk-key-bindings: MyOwnFilechooserBindings
+ * }
  * </programlisting>
  * </example>
  * <refsect3 id="GtkFileChooserDefault-location-popup">
@@ -336,15 +334,17 @@
  *    frequently.  You could then create an <keycombo>
  *    <keycap>Alt</keycap> <keycap>M</keycap> </keycombo>
  *    shortcut by including the following in your
- *    <filename>.gtkrc-3.0</filename>:
+ *    <filename>.config/gtk-3.0/gtk.css</filename>:
  *    <programlisting>
- *    binding "misc-shortcut" {
- *       bind "&lt;Alt&gt;M" {
- *          "location-popup" ("/home/username/misc")
- * 	 }
+ *    @binding-set MiscShortcut
+ *    {
+ *      bind "&lt;Alt&gt;M" { "location-popup" ("/home/username/misc") }
  *    }
  *
- *    class "GtkFileChooserDefault" binding "misc-shortcut"
+ *    GtkFileChooserDefault
+ *    {
+ *      gtk-key-bindings: MiscShortcut
+ *    }
  *    </programlisting>
  * </note>
  * </refsect3>
