@@ -812,7 +812,7 @@ gettext_initialization (void)
 }
 
 /* XXX: Remove me after getting rid of gail */
-extern void gnome_accessibility_module_init     (void);
+extern void gail_accessibility_module_init (void);
 
 static void
 do_post_parse_initialization (int    *argc,
@@ -872,7 +872,7 @@ do_post_parse_initialization (int    *argc,
       _gtk_modules_init (argc, argv, NULL);
     }
 
-  gnome_accessibility_module_init ();
+  gail_accessibility_module_init ();
 }
 
 

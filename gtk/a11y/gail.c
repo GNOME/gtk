@@ -849,16 +849,9 @@ gail_set_focus_object (AtkObject *focus_obj,
     }
 }
 
-/*
- *   These exported symbols are hooked by gnome-program
- * to provide automatic module initialization and shutdown.
- */
-extern void gnome_accessibility_module_init     (void);
-extern void gnome_accessibility_module_shutdown (void);
-
 static int gail_initialized = FALSE;
 
-static void
+void
 gail_accessibility_module_init (void)
 {
   const char *env_a_t_support;
@@ -924,65 +917,3 @@ gail_accessibility_module_init (void)
   g_type_class_unref (g_type_class_ref (GAIL_TYPE_UTIL));
   g_type_class_unref (g_type_class_ref (GAIL_TYPE_MISC));
 }
-
-/**
- * gnome_accessibility_module_init:
- * @void: 
- * 
- *   This method is invoked by name from libgnome's
- * gnome-program.c to activate accessibility support.
- **/
-void
-gnome_accessibility_module_init (void)
-{
-  gail_accessibility_module_init ();
-}
-
-/**
- * gnome_accessibility_module_shutdown:
- * @void: 
- * 
- *   This method is invoked by name from libgnome's
- * gnome-program.c to de-activate accessibility support.
- **/
-void
-gnome_accessibility_module_shutdown (void)
-{
-  if (!gail_initialized)
-    {
-      return;
-    }
-  gail_initialized = FALSE;
-  atk_remove_focus_tracker (focus_tracker_id);
-
-  fprintf (stderr, "GTK Accessibility Module shutdown\n");
-
-  /* FIXME: de-register the factory types so we can unload ? */
-}
-
-int
-gtk_module_init (gint *argc, char** argv[])
-{
-  const char* env_no_gail;
-  gboolean no_gail = FALSE;
-
-  env_no_gail = g_getenv (NO_GAIL_ENV);
-  if (env_no_gail)
-      no_gail = atoi (env_no_gail);
-
-  if (no_gail)
-      return 0;
-
-  gail_accessibility_module_init ();
-
-  return 0;
-}
-
-const char *
-g_module_check_init (GModule *module)
-{
-  g_module_make_resident (module);
-
-  return NULL;
-}
- 
