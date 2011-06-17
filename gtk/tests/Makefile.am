@@ -1,6 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = a11y
+SUBDIRS =
 
 INCLUDES = \
 	-I$(top_srcdir)			\
