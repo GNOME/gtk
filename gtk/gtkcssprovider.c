@@ -1036,10 +1036,8 @@ G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
 
 static void
 gtk_css_provider_parsing_error (GtkCssProvider  *provider,
-                                const gchar     *path,
-                                guint            line,
-                                guint            position,
-                                const GError *   error)
+                                GtkCssSection   *section,
+                                const GError    *error)
 {
   /* Only emit a warning when we have no error handlers. This is our
    * default handlers. And in this case erroneous CSS files are a bug
@@ -1052,7 +1050,34 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
                                      0,
                                      TRUE))
     {
-      g_warning ("Theme parsing error: %s:%u:%u: %s", path ? path : "<unknown>", line, position, error->message);
+      GFileInfo *info;
+      GFile *file;
+      const char *path;
+
+      file = gtk_css_section_get_file (section);
+      if (file)
+        {
+          GFileInfo *info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
+
+          if (info)
+            path = g_file_info_get_display_name (info);
+          else
+            path = "<broken file>";
+        }
+      else
+        {
+          info = NULL;
+          path = "<data>";
+        }
+
+      g_warning ("Theme parsing error: %s:%u:%u: %s",
+                 path,
+                 gtk_css_section_get_end_line (section) + 1,
+                 gtk_css_section_get_end_position (section),
+                 error->message);
+
+      if (info)
+        g_object_unref (info);
     }
 }
 
@@ -1064,11 +1089,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   /**
    * GtkCssProvider::parsing-error:
    * @provider: the provider that had a parsing error
-   * @path: path to the parsed file or %NULL if the file cannot be
-   *   identified or the data was not loaded from a file
-   * @line: line in the file or data or 0 if unknown
-   * @position: offset into the current line or 0 if unknown or the
-   *   whole line is affected
+   * @section: section the error happened in
    * @error: The parsing error
    *
    * Signals that a parsing error occured. the @path, @line and @position
@@ -1089,36 +1110,14 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkCssProviderClass, parsing_error),
                   NULL, NULL,
-                  _gtk_marshal_VOID__STRING_UINT_UINT_BOXED,
-                  G_TYPE_NONE, 4,
-                  G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_ERROR);
+                  _gtk_marshal_VOID__BOXED_BOXED,
+                  G_TYPE_NONE, 2, GTK_TYPE_CSS_SECTION, G_TYPE_ERROR);
 
   object_class->finalize = gtk_css_provider_finalize;
 
   klass->parsing_error = gtk_css_provider_parsing_error;
 
   g_type_class_add_private (object_class, sizeof (GtkCssProviderPrivate));
-}
-
-static void
-gtk_css_provider_take_error_full (GtkCssProvider *provider,
-                                  GFile          *file,
-                                  guint           line,
-                                  guint           position,
-                                  GError         *error)
-{
-  char *filename;
-
-  if (file)
-    filename = g_file_get_path (file);
-  else
-    filename = NULL;
-
-  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
-                 filename, line, position, error);
-
-  g_free (filename);
-  g_error_free (error);
 }
 
 static void
@@ -1249,17 +1248,24 @@ gtk_css_scanner_destroy (GtkCssScanner *scanner)
 }
 
 static void
+gtk_css_provider_emit_error (GtkCssProvider *provider,
+                             GtkCssScanner  *scanner,
+                             const GError   *error)
+{
+  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
+                 scanner->section, error);
+}
+
+static void
 gtk_css_scanner_parser_error (GtkCssParser *parser,
                               const GError *error,
                               gpointer      user_data)
 {
   GtkCssScanner *scanner = user_data;
 
-  gtk_css_provider_take_error_full (scanner->provider,
-                                    scanner->file,
-                                    _gtk_css_parser_get_line (scanner->parser),
-                                    _gtk_css_parser_get_position (scanner->parser),
-                                    g_error_copy (error));
+  gtk_css_provider_emit_error (scanner->provider,
+                               scanner,
+                               error);
 }
 
 static GtkCssScanner *
@@ -1559,11 +1565,11 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
                              GtkCssScanner  *scanner,
                              GError         *error)
 {
-  gtk_css_provider_take_error_full (provider,
-                                    scanner->file,
-                                    _gtk_css_parser_get_line (scanner->parser),
-                                    _gtk_css_parser_get_position (scanner->parser),
-                                    error);
+  gtk_css_provider_emit_error (scanner->provider,
+                               scanner,
+                               error);
+
+  g_error_free (error);
 }
 
 static void
@@ -2512,23 +2518,21 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         }
       else
         {
+          GtkCssSection *section;
+          
           if (parent)
-            {
-              gtk_css_provider_error (css_provider,
-                                      parent,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_IMPORT,
-                                      "Failed to import: %s",
-                                      load_error->message);
-              g_error_free (load_error);
-            }
+            section = gtk_css_section_ref (parent->section);
           else
-            {
-              gtk_css_provider_take_error_full (css_provider,
-                                                file,
-                                                0, 0,
-                                                load_error);
-            }
+            section = _gtk_css_section_new_for_file (GTK_CSS_SECTION_DOCUMENT, file);
+
+          gtk_css_provider_error (css_provider,
+                                  parent,
+                                  GTK_CSS_PROVIDER_ERROR,
+                                  GTK_CSS_PROVIDER_ERROR_IMPORT,
+                                  "Failed to import: %s",
+                                  load_error->message);
+
+          gtk_css_section_unref (section);
         }
     }
 

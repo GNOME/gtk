@@ -30,6 +30,8 @@ GtkCssSection *    _gtk_css_section_new                (GtkCssSection        *pa
                                                         GtkCssSectionType     type,
                                                         GtkCssParser         *parser,
                                                         GFile                *file);
+GtkCssSection *    _gtk_css_section_new_for_file       (GtkCssSectionType     type,
+                                                        GFile                *file);
 
 void               _gtk_css_section_end                (GtkCssSection        *section);
 

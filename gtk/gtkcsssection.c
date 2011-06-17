@@ -74,6 +74,23 @@ _gtk_css_section_new (GtkCssSection     *parent,
   return section;
 }
 
+GtkCssSection *
+_gtk_css_section_new_for_file (GtkCssSectionType  type,
+                               GFile             *file)
+{
+  GtkCssSection *section;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  section = g_slice_new0 (GtkCssSection);
+
+  section->ref_count = 1;
+  section->section_type = type;
+  section->file = g_object_ref (file);
+
+  return section;
+}
+
 void
 _gtk_css_section_end (GtkCssSection *section)
 {
