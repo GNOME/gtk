@@ -408,7 +408,7 @@ struct _GtkWidgetPrivate
 
 struct _GtkWidgetClassPrivate
 {
-  int dummy;
+  GType accessible_type;
 };
 
 enum {
@@ -938,6 +938,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->show_help = gtk_widget_real_show_help;
 
   /* Accessibility support */
+  klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->adjust_size_request = gtk_widget_real_adjust_size_request;
@@ -11917,6 +11918,33 @@ G_DEFINE_BOXED_TYPE (GtkRequisition, gtk_requisition,
                      gtk_requisition_free)
 
 /**
+ * gtk_widget_class_set_accessible_type:
+ * @widget_class: class to set the accessible type for
+ * @type: The object type that implements the accessible for @widget_class
+ *
+ * Sets the type to be used for creating accessibles for widgets of
+ * @widget_class. The given @type must be a subtype of the type used for
+ * accessibles of the parent class.
+ *
+ * This function should only be called from class init functions of widgets.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_widget_class_set_accessible_type (GtkWidgetClass *widget_class,
+                                      GType           type)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (g_type_is_a (type, widget_class->priv->accessible_type));
+
+  priv = widget_class->priv;
+
+  priv->accessible_type = type;
+}
+
+/**
  * gtk_widget_get_accessible:
  * @widget: a #GtkWidget
  *
@@ -11959,15 +11987,27 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
                                    quark_accessible_object);
   if (!accessible)
   {
+    GtkWidgetClass *widget_class;
     AtkObjectFactory *factory;
     AtkRegistry *default_registry;
 
-    default_registry = atk_get_default_registry ();
-    factory = atk_registry_get_factory (default_registry,
-                                        G_TYPE_FROM_INSTANCE (widget));
-    accessible =
-      atk_object_factory_create_accessible (factory,
-					    G_OBJECT (widget));
+    widget_class = GTK_WIDGET_GET_CLASS (widget);
+
+    if (widget_class->priv->accessible_type == GTK_TYPE_ACCESSIBLE)
+      {
+        default_registry = atk_get_default_registry ();
+        factory = atk_registry_get_factory (default_registry,
+                                            G_TYPE_FROM_INSTANCE (widget));
+        accessible =
+          atk_object_factory_create_accessible (factory,
+                                                G_OBJECT (widget));
+      }
+    else
+      {
+        accessible = g_object_new (widget_class->priv->accessible_type, NULL);
+        atk_object_initialize (accessible, widget);
+      }
+
     g_object_set_qdata (G_OBJECT (widget),
                         quark_accessible_object,
                         accessible);

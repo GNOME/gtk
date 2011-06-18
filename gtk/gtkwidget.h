@@ -722,6 +722,8 @@ void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
                                                      gboolean        support_multidevice);
 
 /* Accessibility support */
+void             gtk_widget_class_set_accessible_type    (GtkWidgetClass     *widget_class,
+                                                          GType               type);
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
 
 
