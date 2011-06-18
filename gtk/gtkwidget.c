@@ -406,6 +406,11 @@ struct _GtkWidgetPrivate
 #endif /* G_ENABLE_DEBUG */
 };
 
+struct _GtkWidgetClassPrivate
+{
+  int dummy;
+};
+
 enum {
   DESTROY,
   SHOW,
@@ -532,6 +537,7 @@ struct _GtkStateData
 };
 
 /* --- prototypes --- */
+static void	gtk_widget_base_class_init	(gpointer            g_class);
 static void	gtk_widget_class_init		(GtkWidgetClass     *klass);
 static void	gtk_widget_base_class_finalize	(GtkWidgetClass     *klass);
 static void	gtk_widget_init			(GtkWidget          *widget);
@@ -738,7 +744,7 @@ gtk_widget_get_type (void)
       const GTypeInfo widget_info =
       {
 	sizeof (GtkWidgetClass),
-	NULL,		/* base_init */
+	gtk_widget_base_class_init,
 	(GBaseFinalizeFunc) gtk_widget_base_class_finalize,
 	(GClassInitFunc) gtk_widget_class_init,
 	NULL,		/* class_finalize */
@@ -773,6 +779,18 @@ gtk_widget_get_type (void)
     }
 
   return widget_type;
+}
+
+static void
+gtk_widget_base_class_init (gpointer g_class)
+{
+  GtkWidgetClass *klass = g_class;
+
+  if (GTK_IS_WIDGET_CLASS (g_type_class_peek_parent (klass)))
+    klass->priv = g_slice_dup (GtkWidgetClassPrivate,
+                               GTK_WIDGET_CLASS (g_type_class_peek_parent (klass))->priv);
+  else
+    klass->priv = g_slice_new0 (GtkWidgetClassPrivate);
 }
 
 static void
@@ -3177,6 +3195,8 @@ gtk_widget_base_class_finalize (GtkWidgetClass *klass)
       g_param_spec_unref (pspec);
     }
   g_list_free (list);
+  
+  g_slice_free (GtkWidgetClassPrivate, klass->priv);
 }
 
 static void

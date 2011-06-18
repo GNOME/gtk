@@ -64,14 +64,15 @@ typedef enum
 
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
-typedef struct _GtkRequisition	   GtkRequisition;
-typedef struct _GtkSelectionData   GtkSelectionData;
-typedef struct _GtkWidgetPrivate   GtkWidgetPrivate;
-typedef struct _GtkWidgetClass	   GtkWidgetClass;
-typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
-typedef struct _GtkClipboard	   GtkClipboard;
-typedef struct _GtkTooltip         GtkTooltip;
-typedef struct _GtkWindow          GtkWindow;
+typedef struct _GtkRequisition	       GtkRequisition;
+typedef struct _GtkSelectionData       GtkSelectionData;
+typedef struct _GtkWidgetPrivate       GtkWidgetPrivate;
+typedef struct _GtkWidgetClass	       GtkWidgetClass;
+typedef struct _GtkWidgetClassPrivate  GtkWidgetClassPrivate;
+typedef struct _GtkWidgetAuxInfo       GtkWidgetAuxInfo;
+typedef struct _GtkClipboard	       GtkClipboard;
+typedef struct _GtkTooltip             GtkTooltip;
+typedef struct _GtkWindow              GtkWindow;
 
 
 /**
@@ -428,8 +429,9 @@ struct _GtkWidgetClass
 
   /*< private >*/
 
+  GtkWidgetClassPrivate *priv;
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
