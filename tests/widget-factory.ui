@@ -461,8 +461,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_homogeneous">True</property>
-                    <property name="n_rows">4</property>
-                    <property name="n_columns">2</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton1">
                         <property name="label" translatable="yes">checkbutton</property>
