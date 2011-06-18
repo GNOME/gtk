@@ -117,7 +117,6 @@ struct _GtkToolbarPrivate
 
   GdkWindow       *event_window;
 
-  GList           *children;
   GList           *content;
 
   GTimer          *timer;
@@ -3138,7 +3137,6 @@ gtk_toolbar_finalize (GObject *object)
     }
   
   g_list_free (priv->content);
-  g_list_free (priv->children);
   
   g_timer_destroy (priv->timer);
   
