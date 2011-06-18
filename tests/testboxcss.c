@@ -30,11 +30,13 @@
   "  background-image: none;\n" \
   "  background-color: red;\n" \
   "  border-color: black;\n" \
+  "  color: red;\n" \
   "  border-radius: 0;\n" \
   "}\n" \
   "\n" \
   ".play:nth-child(even) {\n" \
-  "  background-color: yellow\n" \
+  "  background-color: yellow;\n" \
+  "  color: green;\n" \
   "}\n" \
   "\n" \
   ".play:nth-child(first) {\n" \
@@ -96,14 +98,14 @@ remove_widget (GtkWidget *widget)
 }
 
 static void
-add_widget (GtkBox *box)
+add_widget (GtkToolbar *box)
 {
   static int count = 0;
   GtkWidget* button;
   char *text;
 
   text = g_strdup_printf ("Remove %d", ++count);
-  button = gtk_button_new_from_stock (text);
+  button = (GtkWidget *)gtk_tool_button_new (NULL, text);
   g_free (text);
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "play");
   g_signal_connect_swapped (button,
@@ -112,6 +114,7 @@ add_widget (GtkBox *box)
                             button);
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (box), button);
+  g_print ("path:  %s\n", gtk_widget_path_to_string (gtk_widget_get_path (button)));
 }
 
 static void
@@ -152,7 +155,8 @@ main (gint argc, gchar **argv)
   main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), main_box);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box = gtk_toolbar_new ();
+  gtk_toolbar_set_style (GTK_TOOLBAR (box), GTK_TOOLBAR_TEXT);
   gtk_box_pack_start (GTK_BOX (main_box), box, FALSE, TRUE, 0);
 
   container = gtk_scrolled_window_new (NULL, NULL);
@@ -191,10 +195,10 @@ main (gint argc, gchar **argv)
                             box);
   gtk_box_pack_end (GTK_BOX (container), child, FALSE, FALSE, 0);
 
-  add_widget (GTK_BOX (box));
-  add_widget (GTK_BOX (box));
-  add_widget (GTK_BOX (box));
-  add_widget (GTK_BOX (box));
+  add_widget (GTK_TOOLBAR (box));
+  add_widget (GTK_TOOLBAR (box));
+  add_widget (GTK_TOOLBAR (box));
+  add_widget (GTK_TOOLBAR (box));
 
   gtk_widget_show_all (window);
 
