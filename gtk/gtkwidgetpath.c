@@ -328,6 +328,12 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
           g_string_append_c (string, ')');
         }
 
+
+      if (elem->siblings)
+        g_string_append_printf (string, "[%d/%d]",
+                                elem->sibling_index,
+                                gtk_widget_path_length (elem->siblings));
+
       if (elem->classes)
         {
           for (j = 0; j < elem->classes->len; j++)
