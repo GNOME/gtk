@@ -2113,8 +2113,8 @@ _gtk_style_context_check_region_name (const gchar *str)
  * Pseudo-classes are used for matching @flags, so the two
  * following rules:
  * <programlisting>
- * GtkTreeView row:nth-child (even) { ... }
- * GtkTreeView row:nth-child (odd) { ... }
+ * GtkTreeView row:nth-child(even) { ... }
+ * GtkTreeView row:nth-child(odd) { ... }
  * </programlisting>
  *
  * would apply to even and odd rows, respectively.
