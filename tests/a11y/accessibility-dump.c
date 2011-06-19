@@ -285,6 +285,19 @@ dump_atk_text (AtkText *atk_text,
 }
 
 static void
+dump_atk_image (AtkImage *atk_image,
+                guint     depth,
+                GString  *string)
+{
+  gint width, height;
+
+  atk_image_get_image_size (atk_image, &width, &height);
+  g_string_append_printf (string, "%*simage size: %d x %d\n", depth, "", width, height);
+
+  g_string_append_printf (string, "%*simage description: %s\n", depth, "", atk_image_get_image_description (atk_image));
+}
+
+static void
 dump_accessible (AtkObject     *accessible,
                  guint          depth,
                  GString       *string)
@@ -308,6 +321,8 @@ dump_accessible (AtkObject     *accessible,
   dump_attribute_set (string, depth, atk_object_get_attributes (accessible));
   if (ATK_IS_TEXT (accessible))
     dump_atk_text (ATK_TEXT (accessible), depth, string);
+  if (ATK_IS_IMAGE (accessible))
+    dump_atk_image (ATK_IMAGE (accessible), depth, string);
 
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
