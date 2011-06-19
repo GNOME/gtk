@@ -17,6 +17,8 @@ window1
       label-for: entry1
       state: enabled multi-line sensitive visible
       toolkit: gail
+      text: Entry:
+      caret offset: 0
     entry1
       "text"
       parent: box1
@@ -24,3 +26,5 @@ window1
       labelled-by: label1
       state: editable enabled focusable sensitive single-line visible
       toolkit: gail
+      text: text
+      caret offset: 0

@@ -10,3 +10,5 @@ window1
     name: Accessible name
     state: enabled focusable sensitive showing visible
     toolkit: gail
+    text: Hello World!
+    caret offset: 0

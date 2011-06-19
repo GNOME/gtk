@@ -222,6 +222,29 @@ dump_attribute_set (GString         *string,
 }
 
 static void
+dump_atk_text (AtkText *atk_text,
+               guint    depth,
+               GString *string)
+{
+  gchar *text;
+  gint i, start, end;
+
+  text = atk_text_get_text (atk_text, 0, -1);
+  g_string_append_printf (string, "%*stext: %s\n", depth, "", text);
+  g_free (text);
+
+  g_string_append_printf (string, "%*scaret offset: %d\n", depth, "", atk_text_get_caret_offset (atk_text));
+
+  for (i = 0; i < atk_text_get_n_selections (atk_text); i++)
+    {
+      text = atk_text_get_selection (atk_text, i, &start, &end);
+      if (text)
+        g_string_append_printf (string, "%*sselection %d: (%d, %d) %s\n", depth, "", i, start, end, text);
+      g_free (text);
+    }
+}
+
+static void
 dump_accessible (AtkObject     *accessible,
                  guint          depth,
                  GString       *string)
@@ -243,6 +266,8 @@ dump_accessible (AtkObject     *accessible,
   dump_relation_set (string, depth, atk_object_ref_relation_set (accessible));
   dump_state_set (string, depth, atk_object_ref_state_set (accessible));
   dump_attribute_set (string, depth, atk_object_get_attributes (accessible));
+  if (ATK_IS_TEXT (accessible))
+    dump_atk_text (ATK_TEXT (accessible), depth, string);
 
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
