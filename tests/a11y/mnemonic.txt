@@ -1,11 +1,27 @@
 window1
   "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
   box1
     "filler"
+    parent: window1
+    index: 0
+    state: enabled horizontal sensitive
+    toolkit: gail
     label1
       "label"
+      parent: box1
+      index: 0
       name: Entry:
       label-for: entry1
+      state: enabled multi-line sensitive visible
+      toolkit: gail
     entry1
       "text"
+      parent: box1
+      index: 1
       labelled-by: label1
+      state: editable enabled focusable sensitive single-line visible
+      toolkit: gail
+)

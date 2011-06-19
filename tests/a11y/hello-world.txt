@@ -1,5 +1,12 @@
 window1
   "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
   button1
     "push button"
+    parent: window1
+    index: 0
     name: Hello World!
+    state: enabled focusable sensitive showing visible
+    toolkit: gail

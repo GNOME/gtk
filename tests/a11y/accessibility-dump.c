@@ -174,6 +174,54 @@ dump_relation_set (GString        *string,
 }
 
 static void
+dump_state_set (GString     *string,
+                guint        depth,
+                AtkStateSet *set)
+{
+  guint i;
+
+  if (set == NULL)
+    return;
+
+  if (atk_state_set_is_empty (set))
+    return;
+
+  g_string_append_printf (string, "%*sstate:", depth, "");
+  for (i = 0; i < ATK_STATE_LAST_DEFINED; i++)
+    {
+      if (atk_state_set_contains_state (set, i))
+        g_string_append_printf (string, " %s", atk_state_type_get_name (i));
+    }
+  g_string_append_c (string, '\n');
+
+  g_object_unref (set);
+}
+
+static void
+dump_attribute (GString      *string,
+                guint         depth,
+                AtkAttribute *attribute)
+{
+  g_string_append_printf (string, "%*s%s: %s\n", depth, "", attribute->name, attribute->value);
+}
+
+static void
+dump_attribute_set (GString         *string,
+                    guint            depth,
+                    AtkAttributeSet *set)
+{
+  GSList *l;
+  AtkAttribute *attribute;
+
+  for (l = set; l; l = l->next)
+    {
+      attribute = l->data;
+
+      dump_attribute (string, depth, attribute);
+    }
+}
+
+static void
 dump_accessible (AtkObject     *accessible,
                  guint          depth,
                  GString       *string)
@@ -184,12 +232,18 @@ dump_accessible (AtkObject     *accessible,
   depth += DEPTH_INCREMENT;
 
   g_string_append_printf (string, "%*s\"%s\"\n", depth, "", atk_role_get_name (atk_object_get_role (accessible)));
+  if (atk_object_get_parent (accessible))
+    g_string_append_printf (string, "%*sparent: %s\n", depth, "", get_name (atk_object_get_parent (accessible)));
+  if (atk_object_get_index_in_parent (accessible) != -1)
+    g_string_append_printf (string, "%*sindex: %d\n", depth, "", atk_object_get_index_in_parent (accessible));
   if (atk_object_get_name (accessible))
     g_string_append_printf (string, "%*sname: %s\n", depth, "", atk_object_get_name (accessible));
   if (atk_object_get_description (accessible))
     g_string_append_printf (string, "%*sdescription: %s\n", depth, "", atk_object_get_description (accessible));
   dump_relation_set (string, depth, atk_object_ref_relation_set (accessible));
-  
+  dump_state_set (string, depth, atk_object_ref_state_set (accessible));
+  dump_attribute_set (string, depth, atk_object_get_attributes (accessible));
+
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
       AtkObject *child = atk_object_ref_accessible_child (accessible, i);
