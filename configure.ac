@@ -1708,6 +1708,7 @@ demos/gtk-demo/geninclude.pl
 demos/pixbuf-demo/Makefile
 examples/Makefile
 tests/Makefile
+tests/a11y/Makefile
 tests/css/Makefile
 tests/css/parser/Makefile
 tests/reftests/Makefile
