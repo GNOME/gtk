@@ -298,6 +298,24 @@ dump_atk_image (AtkImage *atk_image,
 }
 
 static void
+dump_atk_action (AtkAction *atk_action,
+                 guint      depth,
+                 GString   *string)
+{
+  gint i;
+
+  for (i = 0; i < atk_action_get_n_actions (atk_action); i++)
+    {
+      if (atk_action_get_name (atk_action, i))
+        g_string_append_printf (string, "%*saction %d name: %s\n", depth, "", i, atk_action_get_name (atk_action, i));
+      if (atk_action_get_description (atk_action, i))
+        g_string_append_printf (string, "%*saction %d description: %s\n", depth, "", i, atk_action_get_description (atk_action, i));
+      if (atk_action_get_keybinding (atk_action, i))
+        g_string_append_printf (string, "%*saction %d keybinding: %s\n", depth, "", i, atk_action_get_keybinding (atk_action, i));
+    }
+}
+
+static void
 dump_accessible (AtkObject     *accessible,
                  guint          depth,
                  GString       *string)
@@ -323,6 +341,8 @@ dump_accessible (AtkObject     *accessible,
     dump_atk_text (ATK_TEXT (accessible), depth, string);
   if (ATK_IS_IMAGE (accessible))
     dump_atk_image (ATK_IMAGE (accessible), depth, string);
+  if (ATK_IS_ACTION (accessible))
+    dump_atk_action (ATK_ACTION (accessible), depth, string);
 
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
