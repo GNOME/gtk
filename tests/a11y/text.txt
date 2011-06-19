@@ -3,12 +3,18 @@ window1
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gail
+  <AtkComponent>
+  layer: window
+  alpha: 1
   text1
     "text"
     parent: window1
     index: 0
     state: editable enabled focusable multi-line sensitive showing visible
     toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
     <AtkText>
     text: Twas brillig, and the slithy toves
 Did gyre and gimple in the wabe

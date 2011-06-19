@@ -264,6 +264,36 @@ dump_text_attributes (GString         *string,
   atk_attribute_set_free (attributes);
 }
 
+extern GType atk_layer_get_type (void);
+
+static const gchar *
+layer_name (AtkLayer layer)
+{
+  GEnumClass *class;
+  GEnumValue *value;
+
+  class = g_type_class_ref (atk_layer_get_type ());
+  value = g_enum_get_value (class, layer);
+  g_type_class_unref (class);
+
+  return value->value_nick;
+}
+
+static void
+dump_atk_component (AtkComponent *atk_component,
+                    guint         depth,
+                    GString      *string)
+{
+  AtkLayer layer;
+
+  g_string_append_printf (string, "%*s<AtkComponent>\n", depth, "");
+
+  layer = atk_component_get_layer (atk_component);
+  g_string_append_printf (string, "%*slayer: %s\n", depth, "", layer_name (layer));
+
+  g_string_append_printf (string, "%*salpha: %g\n", depth, "", atk_component_get_alpha (atk_component));
+}
+
 static void
 dump_atk_text (AtkText *atk_text,
                guint    depth,
@@ -434,6 +464,9 @@ dump_accessible (AtkObject     *accessible,
   dump_relation_set (string, depth, atk_object_ref_relation_set (accessible));
   dump_state_set (string, depth, atk_object_ref_state_set (accessible));
   dump_attribute_set (string, depth, atk_object_get_attributes (accessible));
+
+  if (ATK_IS_COMPONENT (accessible))
+    dump_atk_component (ATK_COMPONENT (accessible), depth, string);
 
   if (ATK_IS_TEXT (accessible))
     dump_atk_text (ATK_TEXT (accessible), depth, string);

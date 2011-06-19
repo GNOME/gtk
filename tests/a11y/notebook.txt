@@ -3,12 +3,18 @@ window1
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gail
+  <AtkComponent>
+  layer: window
+  alpha: 1
   notebook1
     "page tab list"
     parent: window1
     index: 0
     state: enabled focusable sensitive showing visible
     toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
     <AtkSelection>
     selection count: 1
     selected children: 0
@@ -18,6 +24,9 @@ window1
       index: 0
       name: Tab 1
       state: enabled multi-line selectable selected sensitive showing visible
+      <AtkComponent>
+      layer: widget
+      alpha: 1
       <AtkText>
       text: Tab 1
       character count: 5
@@ -29,6 +38,9 @@ window1
         name: Yes
         state: enabled focusable sensitive showing visible
         toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
         <AtkText>
         text: Yes
         character count: 3
@@ -48,6 +60,9 @@ window1
       index: 1
       name: Tab 2
       state: enabled multi-line selectable sensitive showing visible
+      <AtkComponent>
+      layer: widget
+      alpha: 1
       <AtkText>
       text: Tab 2
       character count: 5
@@ -59,6 +74,9 @@ window1
         name: No
         state: enabled focusable sensitive visible
         toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
         <AtkText>
         text: No
         character count: 2
