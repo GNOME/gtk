@@ -115,8 +115,15 @@ get_name (AtkObject *accessible)
       
       name = g_strdup (gtk_buildable_get_name (GTK_BUILDABLE (widget)));
     }
+  else if (ATK_IS_TEXT (accessible))
+    {
+      name = atk_text_get_text (ATK_TEXT (accessible), 0, -1);
+    }
   else
-    name = NULL;
+    {
+      g_warning ("get_name called on a %s\n", g_type_name_from_instance ((GTypeInstance *)accessible));
+      name = NULL;
+    }
 
   if (name == NULL)
     {
@@ -316,6 +323,27 @@ dump_atk_action (AtkAction *atk_action,
 }
 
 static void
+dump_atk_selection (AtkSelection *atk_selection,
+                    guint         depth,
+                    GString      *string)
+{
+  gint i;
+
+  g_string_append_printf (string, "%*sselection count: %d\n", depth, "", atk_selection_get_selection_count (atk_selection));
+
+  if (atk_selection_get_selection_count (atk_selection) > 0)
+    {
+      g_string_append_printf (string, "%*sselected children:", depth, "");
+      for (i = 0; i < atk_object_get_n_accessible_children (ATK_OBJECT (atk_selection)); i++)
+        {
+          if (atk_selection_is_child_selected (atk_selection, i))
+            g_string_append_printf (string, " %d", i);
+        }
+      g_string_append_c (string, '\n');
+    }
+}
+
+static void
 dump_accessible (AtkObject     *accessible,
                  guint          depth,
                  GString       *string)
@@ -337,12 +365,18 @@ dump_accessible (AtkObject     *accessible,
   dump_relation_set (string, depth, atk_object_ref_relation_set (accessible));
   dump_state_set (string, depth, atk_object_ref_state_set (accessible));
   dump_attribute_set (string, depth, atk_object_get_attributes (accessible));
+
   if (ATK_IS_TEXT (accessible))
     dump_atk_text (ATK_TEXT (accessible), depth, string);
+
   if (ATK_IS_IMAGE (accessible))
     dump_atk_image (ATK_IMAGE (accessible), depth, string);
+
   if (ATK_IS_ACTION (accessible))
     dump_atk_action (ATK_ACTION (accessible), depth, string);
+
+  if (ATK_IS_SELECTION (accessible))
+    dump_atk_selection (ATK_SELECTION (accessible), depth, string);
 
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
