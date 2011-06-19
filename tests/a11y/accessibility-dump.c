@@ -222,6 +222,42 @@ dump_attribute_set (GString         *string,
 }
 
 static void
+dump_text_attributes (GString         *string,
+                      gint             depth,
+                      const gchar     *name,
+                      AtkAttributeSet *attributes)
+{
+  GSList *l;
+  AtkAttribute *attr;
+  const gchar *value;
+
+  if (attributes == NULL)
+    return;
+
+  g_string_append_printf (string, "%*s%s:", depth, "", name);
+  for (l = attributes; l; l = l->next)
+    {
+      attr = l->data;
+      /* don't dump values that depend on the environment */
+      if (strcmp (attr->name, "family-name") == 0 ||
+          strcmp (attr->name, "size") == 0 ||
+          strcmp (attr->name, "weight") == 0 ||
+          strcmp (attr->name, "stretch") == 0 ||
+          strcmp (attr->name, "variant") == 0 ||
+          strcmp (attr->name, "style") == 0 ||
+          strcmp (attr->name, "language") == 0 ||
+          strcmp (attr->name, "direction") == 0)
+        value = "<omitted>";
+      else
+        value = attr->value;
+      g_string_append_printf (string, " %s:%s", attr->name, value);
+    }
+  g_string_append_c (string, '\n');
+
+  atk_attribute_set_free (attributes);
+}
+
+static void
 dump_atk_text (AtkText *atk_text,
                guint    depth,
                GString *string)
@@ -233,6 +269,8 @@ dump_atk_text (AtkText *atk_text,
   g_string_append_printf (string, "%*stext: %s\n", depth, "", text);
   g_free (text);
 
+  g_string_append_printf (string, "%*scharacter count: %d\n", depth, "", atk_text_get_character_count (atk_text));
+
   g_string_append_printf (string, "%*scaret offset: %d\n", depth, "", atk_text_get_caret_offset (atk_text));
 
   for (i = 0; i < atk_text_get_n_selections (atk_text); i++)
@@ -242,6 +280,8 @@ dump_atk_text (AtkText *atk_text,
         g_string_append_printf (string, "%*sselection %d: (%d, %d) %s\n", depth, "", i, start, end, text);
       g_free (text);
     }
+
+  dump_text_attributes (string, depth, "default attributes", atk_text_get_default_attributes (atk_text));
 }
 
 static void
