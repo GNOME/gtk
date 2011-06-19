@@ -183,16 +183,16 @@ dump_state_set (GString     *string,
   if (set == NULL)
     return;
 
-  if (atk_state_set_is_empty (set))
-    return;
-
-  g_string_append_printf (string, "%*sstate:", depth, "");
-  for (i = 0; i < ATK_STATE_LAST_DEFINED; i++)
+  if (!atk_state_set_is_empty (set))
     {
-      if (atk_state_set_contains_state (set, i))
-        g_string_append_printf (string, " %s", atk_state_type_get_name (i));
+      g_string_append_printf (string, "%*sstate:", depth, "");
+      for (i = 0; i < ATK_STATE_LAST_DEFINED; i++)
+        {
+          if (atk_state_set_contains_state (set, i))
+            g_string_append_printf (string, " %s", atk_state_type_get_name (i));
+        }
+      g_string_append_c (string, '\n');
     }
-  g_string_append_c (string, '\n');
 
   g_object_unref (set);
 }
