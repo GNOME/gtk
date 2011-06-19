@@ -26,4 +26,6 @@ EXTRA_DIST += \
 	mnemonic.ui mnemonic.txt \
 	accessible-name.ui accessible-name.txt \
 	notebook.ui notebook.txt \
-	range.ui range.txt
+	range.ui range.txt \
+	link.ui link.txt \
+	text.ui text.txt
