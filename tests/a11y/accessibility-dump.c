@@ -272,6 +272,8 @@ dump_atk_text (AtkText *atk_text,
   gchar *text;
   gint i, start, end;
 
+  g_string_append_printf (string, "%*s<AtkText>\n", depth, "");
+
   text = atk_text_get_text (atk_text, 0, -1);
   g_string_append_printf (string, "%*stext: %s\n", depth, "", text);
   g_free (text);
@@ -298,6 +300,8 @@ dump_atk_image (AtkImage *atk_image,
 {
   gint width, height;
 
+  g_string_append_printf (string, "%*s<AtkImage>\n", depth, "");
+
   atk_image_get_image_size (atk_image, &width, &height);
   g_string_append_printf (string, "%*simage size: %d x %d\n", depth, "", width, height);
 
@@ -310,6 +314,8 @@ dump_atk_action (AtkAction *atk_action,
                  GString   *string)
 {
   gint i;
+
+  g_string_append_printf (string, "%*s<AtkAction>\n", depth, "");
 
   for (i = 0; i < atk_action_get_n_actions (atk_action); i++)
     {
@@ -328,6 +334,8 @@ dump_atk_selection (AtkSelection *atk_selection,
                     GString      *string)
 {
   gint i;
+
+  g_string_append_printf (string, "%*s<AtkSelection>\n", depth, "");
 
   g_string_append_printf (string, "%*sselection count: %d\n", depth, "", atk_selection_get_selection_count (atk_selection));
 
@@ -350,6 +358,8 @@ dump_atk_value (AtkValue *atk_value,
 {
   GValue value = { 0, };
 
+  g_string_append_printf (string, "%*s<AtkValue>\n", depth, "");
+
   atk_value_get_minimum_value (atk_value, &value);
   g_string_append_printf (string, "%*sminimum value: %g\n", depth, "", g_value_get_double (&value));
   atk_value_get_maximum_value (atk_value, &value);
@@ -367,6 +377,8 @@ dump_atk_hyperlink_impl (AtkHyperlinkImpl *impl,
 {
   AtkHyperlink *atk_link;
   gint i;
+
+  g_string_append_printf (string, "%*s<AtkHyperlinkImpl>\n", depth, "");
 
   atk_link = atk_hyperlink_impl_get_hyperlink (impl);
 
@@ -391,6 +403,8 @@ dump_atk_streamable_content (AtkStreamableContent *content,
                              GString              *string)
 {
   gint i;
+
+  g_string_append_printf (string, "%*s<AtkStreamableContent>\n", depth, "");
 
   g_string_append_printf (string, "%*smime types:", depth, "");
   for (i = 0; i < atk_streamable_content_get_n_mime_types (content); i++)

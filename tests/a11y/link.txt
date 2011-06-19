@@ -10,13 +10,17 @@ window1
     name: Hello World!
     state: enabled focusable sensitive showing visible
     toolkit: gail
+    <AtkText>
     text: Hello World!
     character count: 12
     caret offset: 0
     default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+    <AtkImage>
     image size: -1 x -1
     image description: (null)
+    <AtkAction>
     action 0 name: click
     action 1 name: press
     action 2 name: release
+    <AtkHyperlinkImpl>
     anchors: http://www.gtk.org
