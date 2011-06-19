@@ -1,0 +1,11 @@
+window1
+  "window"
+  box1
+    "filler"
+    label1
+      "label"
+      name: Entry:
+      label-for: entry1
+    entry1
+      "text"
+      labelled-by: label1
