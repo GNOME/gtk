@@ -19,5 +19,4 @@ window1
     action 0 name: click
     action 1 name: press
     action 2 name: release
-    anchors: 1
-    uri 0: http://www.gtk.org
+    anchors: http://www.gtk.org

@@ -370,18 +370,32 @@ dump_atk_hyperlink_impl (AtkHyperlinkImpl *impl,
 
   atk_link = atk_hyperlink_impl_get_hyperlink (impl);
 
-  g_string_append_printf (string, "%*sanchors: %d\n", depth, "", atk_hyperlink_get_n_anchors (atk_link));
+  g_string_append_printf (string, "%*sanchors:", depth, "");
 
   for (i = 0; i < atk_hyperlink_get_n_anchors (atk_link); i++)
     {
       gchar *uri;
 
       uri = atk_hyperlink_get_uri (atk_link, i);
-      g_string_append_printf (string, "%*suri %d: %s\n", depth, "", i, uri);
+      g_string_append_printf (string, " %s", uri);
       g_free (uri);
     }
+  g_string_append_c (string, '\n');
 
   g_object_unref (atk_link);
+}
+
+static void
+dump_atk_streamable_content (AtkStreamableContent *content,
+                             guint                 depth,
+                             GString              *string)
+{
+  gint i;
+
+  g_string_append_printf (string, "%*smime types:", depth, "");
+  for (i = 0; i < atk_streamable_content_get_n_mime_types (content); i++)
+    g_string_append_printf (string, " %s", atk_streamable_content_get_mime_type (content, i));
+  g_string_append_c (string, '\n');
 }
 
 static void
@@ -424,6 +438,9 @@ dump_accessible (AtkObject     *accessible,
 
   if (ATK_IS_HYPERLINK_IMPL (accessible))
     dump_atk_hyperlink_impl (ATK_HYPERLINK_IMPL (accessible), depth, string);
+
+  if (ATK_IS_STREAMABLE_CONTENT (accessible))
+    dump_atk_streamable_content (ATK_STREAMABLE_CONTENT (accessible), depth, string);
 
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
