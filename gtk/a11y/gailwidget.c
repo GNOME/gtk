@@ -536,9 +536,7 @@ gail_widget_get_index_in_parent (AtkObject *accessible)
   GtkWidget *parent_widget;
   gint index;
   GList *children;
-  GType type;
 
-  type = g_type_from_name ("GailCanvasWidget");
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
@@ -553,8 +551,7 @@ gail_widget_get_index_in_parent (AtkObject *accessible)
 
       parent = accessible->accessible_parent;
 
-      if (GAIL_IS_NOTEBOOK_PAGE (parent) ||
-          G_TYPE_CHECK_INSTANCE_TYPE ((parent), type))
+      if (GAIL_IS_NOTEBOOK_PAGE (parent))
         return 0;
       else
         {

@@ -33,7 +33,7 @@
  * #AtkText functions which get text for accessible objects which implement
  * #AtkText.
  *
- * In GAIL it is used by the accsesible objects for #GnomeCanvasText, #GtkEntry,
+ * In GAIL it is used by the accessible objects for #GtkEntry,
  * #GtkLabel, #GtkCellRendererText and #GtkTextView.
  */
 

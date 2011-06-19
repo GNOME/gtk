@@ -157,9 +157,6 @@ gail_get_accessible_for_widget (GtkWidget *widget,
                                 gboolean  *transient)
 {
   AtkObject *obj = NULL;
-  GType gnome_canvas;
-
-  gnome_canvas = g_type_from_name ("GnomeCanvas");
 
   *transient = FALSE;
   if (!widget)
@@ -179,25 +176,6 @@ gail_get_accessible_for_widget (GtkWidget *widget,
           obj = gtk_widget_get_accessible (widget);
           obj = atk_object_ref_accessible_child (obj, page_num);
           g_object_unref (obj);
-        }
-    }
-  else if (G_TYPE_CHECK_INSTANCE_TYPE ((widget), gnome_canvas))
-    {
-      GObject *focused_item;
-      GValue value = {0, };
-
-      g_value_init (&value, G_TYPE_OBJECT);
-      g_object_get_property (G_OBJECT (widget), "focused_item", &value);
-      focused_item = g_value_get_object (&value);
-
-      if (focused_item)
-        {
-          AtkObject *tmp;
-
-          obj = atk_gobject_accessible_for_object (G_OBJECT (focused_item));
-          tmp = g_object_get_qdata (G_OBJECT (obj), quark_focus_object);
-          if (tmp != NULL)
-            obj = tmp;
         }
     }
   else if (GTK_IS_TOGGLE_BUTTON (widget))
