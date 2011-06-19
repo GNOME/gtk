@@ -1,0 +1,5 @@
+window1
+  "window"
+  button1
+    "push button"
+    name: Accessible name
