@@ -22,5 +22,6 @@ accessibility_dump_SOURCES = \
 	accessibility-dump.c
 
 EXTRA_DIST += \
-	hello-world.ui \
-	hello-world.txt
+	hello-world.ui hello-world.txt \
+	mnemonic.ui mnemonic.txt \
+	accessible-name.ui accessible-name.txt
