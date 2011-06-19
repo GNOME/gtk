@@ -232,7 +232,7 @@ dump_accessible (AtkObject     *accessible,
   depth += DEPTH_INCREMENT;
 
   g_string_append_printf (string, "%*s\"%s\"\n", depth, "", atk_role_get_name (atk_object_get_role (accessible)));
-  if (atk_object_get_parent (accessible))
+  if (GTK_IS_ACCESSIBLE (atk_object_get_parent (accessible)))
     g_string_append_printf (string, "%*sparent: %s\n", depth, "", get_name (atk_object_get_parent (accessible)));
   if (atk_object_get_index_in_parent (accessible) != -1)
     g_string_append_printf (string, "%*sindex: %d\n", depth, "", atk_object_get_index_in_parent (accessible));
