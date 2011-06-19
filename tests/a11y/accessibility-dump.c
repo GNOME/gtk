@@ -344,6 +344,24 @@ dump_atk_selection (AtkSelection *atk_selection,
 }
 
 static void
+dump_atk_value (AtkValue *atk_value,
+                guint     depth,
+                GString  *string)
+{
+  GValue value = { 0, };
+
+  atk_value_get_minimum_value (atk_value, &value);
+  g_string_append_printf (string, "%*sminimum value: %g\n", depth, "", g_value_get_double (&value));
+  atk_value_get_maximum_value (atk_value, &value);
+  g_string_append_printf (string, "%*smaximum value: %g\n", depth, "", g_value_get_double (&value));
+  atk_value_get_current_value (atk_value, &value);
+  g_string_append_printf (string, "%*scurrent value: %g\n", depth, "", g_value_get_double (&value));
+  atk_value_get_minimum_increment (atk_value, &value);
+  g_string_append_printf (string, "%*sminimum increment: %g\n", depth, "", g_value_get_double (&value));
+
+}
+
+static void
 dump_accessible (AtkObject     *accessible,
                  guint          depth,
                  GString       *string)
@@ -377,6 +395,9 @@ dump_accessible (AtkObject     *accessible,
 
   if (ATK_IS_SELECTION (accessible))
     dump_atk_selection (ATK_SELECTION (accessible), depth, string);
+
+  if (ATK_IS_VALUE (accessible))
+    dump_atk_value (ATK_VALUE (accessible), depth, string);
 
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
