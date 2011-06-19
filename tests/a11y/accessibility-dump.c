@@ -296,6 +296,22 @@ dump_ui_file (const char *ui_file,
 }
 
 static void
+dump_to_stdout (GFile *file)
+{
+  char *ui_file;
+  GString *dump;
+
+  ui_file = g_file_get_path (file);
+  dump = g_string_new ("");
+
+  dump_ui_file (ui_file, dump);
+  g_print ("%s", dump->str);
+
+  g_string_free (dump, TRUE);
+  g_free (ui_file);
+}
+
+static void
 test_ui_file (GFile *file)
 {
   char *diff;
@@ -419,6 +435,16 @@ main (int argc, char **argv)
       add_tests_for_files_in_directory (dir);
 
       g_object_unref (dir);
+    }
+  else if (argc == 3 && strcmp (argv[1], "--generate") == 0)
+    {
+      GFile *file = g_file_new_for_commandline_arg (argv[2]);
+
+      dump_to_stdout (file);
+
+      g_object_unref (file);
+
+      return 0;
     }
   else
     {
