@@ -29,4 +29,5 @@ EXTRA_DIST += \
 	range.ui range.txt \
 	link.ui link.txt \
 	text.ui text.txt \
-	tree.ui tree.txt
+	tree.ui tree.txt \
+	buttons.ui buttions.txt

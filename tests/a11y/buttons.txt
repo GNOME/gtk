@@ -1,0 +1,124 @@
+switch action description inited to: (null)
+switch action description: (null)
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  grid1
+    "panel"
+    parent: window1
+    index: 0
+    state: enabled horizontal sensitive showing visible
+    toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    button5
+      "toggle button"
+      parent: grid1
+      index: 0
+      name: Switch
+      description: Switches between on and off states
+      state: checked enabled focusable sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: toggle
+    button4
+      "radio button"
+      parent: grid1
+      index: 1
+      name: Hello World!
+      member-of: button4
+                 button3
+      state: enabled focusable sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Hello World!
+      character count: 12
+      caret offset: 0
+      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 1 name: press
+      action 2 name: release
+    button3
+      "radio button"
+      parent: grid1
+      index: 2
+      name: Hello World!
+      member-of: button4
+                 button3
+      state: armed checked enabled focusable sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Hello World!
+      character count: 12
+      caret offset: 0
+      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 1 name: press
+      action 2 name: release
+    button2
+      "check box"
+      parent: grid1
+      index: 3
+      name: Hello World!
+      state: enabled focusable sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Hello World!
+      character count: 12
+      caret offset: 0
+      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 1 name: press
+      action 2 name: release
+    button1
+      "toggle button"
+      parent: grid1
+      index: 4
+      name: Hello World!
+      state: armed checked enabled focusable sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Hello World!
+      character count: 12
+      caret offset: 0
+      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 1 name: press
+      action 2 name: release

@@ -1087,7 +1087,6 @@ _gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
   self->description = NULL;
   self->action_idle = 0;
-g_print ("switch action description inited to: %s\n", self->description);
 }
 
 /* accessibility: action interface */
@@ -1111,7 +1110,6 @@ gtk_switch_action_get_description (AtkAction *action,
 {
   GtkSwitchAccessible *accessible = (GtkSwitchAccessible *)action;
 
-g_print ("switch action description: %s\n", accessible->description);
   return accessible->description;
 }
 
@@ -1122,7 +1120,6 @@ gtk_switch_action_set_description (AtkAction   *action,
 {
   GtkSwitchAccessible *accessible = (GtkSwitchAccessible*)action;
 
-g_print ("switch action set description: %s\n", description);
   g_free (accessible->description);
   accessible->description = g_strdup (description);
 
