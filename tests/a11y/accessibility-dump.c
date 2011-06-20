@@ -112,21 +112,18 @@ get_name (AtkObject *accessible)
   if (GTK_IS_ACCESSIBLE (accessible))
     {
       GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-      
+
       name = g_strdup (gtk_buildable_get_name (GTK_BUILDABLE (widget)));
     }
-  else if (ATK_IS_TEXT (accessible))
+
+  if (name == NULL && ATK_IS_TEXT (accessible))
     {
       name = atk_text_get_text (ATK_TEXT (accessible), 0, -1);
-    }
-  else
-    {
-      g_warning ("get_name called on a %s\n", g_type_name_from_instance ((GTypeInstance *)accessible));
-      name = NULL;
     }
 
   if (name == NULL)
     {
+      g_warning ("get_name called on a %s\n", g_type_name_from_instance ((GTypeInstance *)accessible));
       /* XXX: Generate a unique, repeatable name */
       g_assert_not_reached ();
     }
@@ -442,6 +439,90 @@ dump_atk_streamable_content (AtkStreamableContent *content,
   g_string_append_c (string, '\n');
 }
 
+static void dump_accessible (AtkObject *accessible,
+                             guint      depth,
+                             GString   *string);
+
+static void
+dump_atk_table (AtkTable *table,
+                guint     depth,
+                GString  *string)
+{
+  gint *selected;
+  gint n_selected;
+  gint i;
+  AtkObject *obj;
+  const gchar *desc;
+
+  g_string_append_printf (string, "%*s<AtkTable>\n", depth, "");
+
+  obj = atk_table_get_summary (table);
+  if (obj)
+    {
+      g_string_append_printf (string, "%*s<summary>\n", depth, "");
+      dump_accessible (obj, depth, string);
+    }
+
+  obj = atk_table_get_caption (table);
+  if (obj)
+    {
+      g_string_append_printf (string, "%*s<caption>\n", depth, "");
+      dump_accessible (obj, depth, string);
+    }
+
+  g_string_append_printf (string, "%*srows: %d\n", depth, "", atk_table_get_n_rows (table));
+  g_string_append_printf (string, "%*scolumns: %d\n", depth, "", atk_table_get_n_columns (table));
+
+  selected = NULL;
+  n_selected = atk_table_get_selected_rows (table, &selected);
+  if (n_selected > 0)
+    {
+      g_string_append_printf (string, "%*sselected rows:", depth, "");
+      for (i = 0; i < n_selected; i++)
+        g_string_append_printf (string, " %d", selected[i]);
+      g_string_append_c (string, '\n');
+    }
+  g_free (selected);
+
+  selected = NULL;
+  n_selected = atk_table_get_selected_columns (table, &selected);
+  if (n_selected > 0)
+    {
+      g_string_append_printf (string, "%*sselected columns:", depth, "");
+      for (i = 0; i < n_selected; i++)
+        g_string_append_printf (string, " %d", selected[i]);
+      g_string_append_c (string, '\n');
+    }
+  g_free (selected);
+
+  
+  for (i = 0; i < atk_table_get_n_columns (table); i++)
+    {
+      desc = atk_table_get_column_description (table, i);
+      if (desc)
+        g_string_append_printf (string, "%*scolumn %d description: %s\n", depth, "", i, desc);
+      obj = atk_table_get_column_header (table, i);
+      if (obj)
+        {
+          g_string_append_printf (string, "%*s<column %d header>\n", depth, "", i);
+          dump_accessible (obj, depth, string);
+        }
+    }
+
+  for (i = 0; i < atk_table_get_n_rows (table); i++)
+    {
+      desc = atk_table_get_row_description (table, i);
+      if (desc)
+        g_string_append_printf (string, "%*srow %d description: %s\n", depth, "", i, desc);
+      obj = atk_table_get_row_header (table, i);
+      if (obj)
+        {
+          g_string_append_printf (string, "%*s<row %d header>\n", depth, "", i);
+          dump_accessible (obj, depth, string);
+        }
+    }
+}
+
 static void
 dump_accessible (AtkObject     *accessible,
                  guint          depth,
@@ -488,6 +569,9 @@ dump_accessible (AtkObject     *accessible,
 
   if (ATK_IS_STREAMABLE_CONTENT (accessible))
     dump_atk_streamable_content (ATK_STREAMABLE_CONTENT (accessible), depth, string);
+
+  if (ATK_IS_TABLE (accessible))
+    dump_atk_table (ATK_TABLE (accessible), depth, string);
 
   for (i = 0; i < atk_object_get_n_accessible_children (accessible); i++)
     {
