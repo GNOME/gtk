@@ -8004,15 +8004,11 @@ gdk_window_set_background (GdkWindow      *window,
     }
 
   if (!GDK_WINDOW_DESTROYED (window) &&
+      gdk_window_has_impl (private) &&
       !private->input_only)
     {
-      if (gdk_window_has_impl (private))
-        {
-          impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
-          impl_iface->set_background (window, &private->bg_color);
-        }
-      else
-        gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
+      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
+      impl_iface->set_background (window, &private->bg_color);
     }
 }
 
@@ -8081,15 +8077,11 @@ gdk_window_set_back_pixmap (GdkWindow *window,
     private->bg_pixmap = GDK_NO_BG;
 
   if (!GDK_WINDOW_DESTROYED (window) &&
+      gdk_window_has_impl (private) &&
       !private->input_only)
     {
-      if (gdk_window_has_impl (private))
-        {
-          impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
-          impl_iface->set_back_pixmap (window, private->bg_pixmap);
-        }
-      else
-        gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
+      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
+      impl_iface->set_back_pixmap (window, private->bg_pixmap);
     }
 }
 
