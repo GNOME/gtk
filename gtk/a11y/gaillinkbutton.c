@@ -43,7 +43,7 @@ static void atk_action_interface_init (AtkActionIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GailLinkButtonLink, gail_link_button_link, ATK_TYPE_HYPERLINK,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
-static GailLinkButtonLink *
+static AtkHyperlink *
 gail_link_button_link_new (GailLinkButton *button)
 {
   GailLinkButtonLink *link;
@@ -51,7 +51,7 @@ gail_link_button_link_new (GailLinkButton *button)
   link = g_object_new (gail_link_button_link_get_type (), NULL);
   link->button = button;
 
-  return link;
+  return ATK_HYPERLINK (link);
 }
 
 static gchar *
