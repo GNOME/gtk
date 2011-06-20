@@ -62,13 +62,13 @@ AC_SUBST(INTROSPECTION_REQUIRED_VERSION)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-AM_INIT_AUTOMAKE([1.10 no-define -Wno-portability dist-bzip2])
+AM_INIT_AUTOMAKE([1.11 no-define -Wno-portability tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE([enable])
 
-# Support silent build rules, requires at least automake-1.11. Disable
+# Support silent build rules. Disable
 # by either passing --disable-silent-rules to configure or passing V=1
 # to make
-m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AM_SILENT_RULES([yes])
 
 #
 # For each of the libraries we build, we define the following
