@@ -772,6 +772,8 @@ gtk_widget_get_type (void)
       widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, "GtkWidget",
                                             &widget_info, G_TYPE_FLAG_ABSTRACT);
 
+      g_type_add_class_private (widget_type, sizeof (GtkWidgetClassPrivate));
+
       g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
                                    &accessibility_info) ;
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
@@ -786,11 +788,7 @@ gtk_widget_base_class_init (gpointer g_class)
 {
   GtkWidgetClass *klass = g_class;
 
-  if (GTK_IS_WIDGET_CLASS (g_type_class_peek_parent (klass)))
-    klass->priv = g_slice_dup (GtkWidgetClassPrivate,
-                               GTK_WIDGET_CLASS (g_type_class_peek_parent (klass))->priv);
-  else
-    klass->priv = g_slice_new0 (GtkWidgetClassPrivate);
+  klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
 }
 
 static void
@@ -3196,8 +3194,6 @@ gtk_widget_base_class_finalize (GtkWidgetClass *klass)
       g_param_spec_unref (pspec);
     }
   g_list_free (list);
-  
-  g_slice_free (GtkWidgetClassPrivate, klass->priv);
 }
 
 static void
