@@ -34,8 +34,8 @@ window1
                         strikethrough: false
                         bg-stipple: false
                         fg-stipple: false
-                        fg-color: 0,0,0
-                        bg-color: 56540,56026,54741
+                        fg-color: <omitted>
+                        bg-color: <omitted>
                         wrap-mode: word
                         justification: left
                         size: <omitted>

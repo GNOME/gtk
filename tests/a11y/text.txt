@@ -29,8 +29,8 @@ Did gyre and gimple in the wabe
                         rise: 0
                         language: <omitted>
                         scale: 1
-                        fg-color: 0,0,0
-                        bg-color: 65535,65535,65535
+                        fg-color: <omitted>
+                        bg-color: <omitted>
                         invalid: none
                         invalid: false
                         invalid: false

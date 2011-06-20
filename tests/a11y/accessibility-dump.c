@@ -249,6 +249,8 @@ dump_text_attributes (GString         *string,
           strcmp (attr->name, "variant") == 0 ||
           strcmp (attr->name, "style") == 0 ||
           strcmp (attr->name, "language") == 0 ||
+          strcmp (attr->name, "fg-color") == 0 ||
+          strcmp (attr->name, "bg-color") == 0 ||
           strcmp (attr->name, "direction") == 0)
         value = "<omitted>";
       else
