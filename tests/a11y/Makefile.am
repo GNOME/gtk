@@ -28,4 +28,5 @@ EXTRA_DIST += \
 	notebook.ui notebook.txt \
 	range.ui range.txt \
 	link.ui link.txt \
-	text.ui text.txt
+	text.ui text.txt \
+	tree.ui tree.txt
