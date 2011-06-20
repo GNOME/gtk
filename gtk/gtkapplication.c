@@ -191,8 +191,8 @@ gtk_application_window_removed (GtkApplication *application,
                                         application);
 
   g_application_release (G_APPLICATION (application));
-  gtk_window_set_application (window, NULL);
   priv->windows = g_list_remove (priv->windows, window);
+  gtk_window_set_application (window, NULL);
 }
 
 static void
