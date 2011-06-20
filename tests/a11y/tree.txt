@@ -38,7 +38,33 @@ window1
       text: Column 1
       character count: 8
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkImage>
       image size: -1 x -1
       image description: (null)
@@ -62,7 +88,33 @@ window1
       text: Column 2
       character count: 8
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkImage>
       image size: -1 x -1
       image description: (null)
@@ -84,7 +136,33 @@ window1
       text: Column 1
       character count: 8
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkImage>
       image size: -1 x -1
       image description: (null)
@@ -106,7 +184,33 @@ window1
       text: Column 2
       character count: 8
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkImage>
       image size: -1 x -1
       image description: (null)
@@ -127,7 +231,33 @@ window1
       text: One
       character count: 3
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell
@@ -144,7 +274,33 @@ window1
       text: Two
       character count: 3
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell
@@ -161,7 +317,33 @@ window1
       text: Three
       character count: 5
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell
@@ -178,7 +360,33 @@ window1
       text: Four
       character count: 4
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell
@@ -195,7 +403,33 @@ window1
       text: Five
       character count: 4
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell
@@ -212,7 +446,33 @@ window1
       text: Six
       character count: 3
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell
@@ -229,7 +489,33 @@ window1
       text: Seven
       character count: 5
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell
@@ -246,7 +532,33 @@ window1
       text: Eight
       character count: 5
       caret offset: 0
-      default attributes: left-margin:0 right-margin:0 indent:0 invisible:false editable:false pixels-above-lines:0 pixels-below-lines:0 pixels-inside-wrap:0 bg-full-height:0 scale:1 rise:0 underline:none strikethrough:false bg-stipple:false fg-stipple:false fg-color:0,0,0 bg-color:56540,56026,54741 wrap-mode:word justification:left size:<omitted> weight:<omitted> family-name:<omitted> stretch:<omitted> variant:<omitted> style:<omitted> language:<omitted> direction:<omitted>
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: 0,0,0
+                          bg-color: 56540,56026,54741
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
       <AtkAction>
       action 0 name: activate
       action 0 description: activate the cell

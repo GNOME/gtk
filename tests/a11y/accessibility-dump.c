@@ -238,7 +238,6 @@ dump_text_attributes (GString         *string,
   if (attributes == NULL)
     return;
 
-  g_string_append_printf (string, "%*s%s:", depth, "", name);
   for (l = attributes; l; l = l->next)
     {
       attr = l->data;
@@ -254,9 +253,20 @@ dump_text_attributes (GString         *string,
         value = "<omitted>";
       else
         value = attr->value;
-      g_string_append_printf (string, " %s:%s", attr->name, value);
+
+      if (name)
+        {
+          /* first time this loop is run */
+          g_string_append_printf (string, "%*s%s: %s: %s\n", depth, "", name, attr->name, value);
+          depth += strlen (name) + 2;
+          name = NULL;
+        }
+      else
+        {
+          /* every other time */
+          g_string_append_printf (string, "%*s%s: %s\n", depth, "", attr->name, value);
+        }
     }
-  g_string_append_c (string, '\n');
 
   atk_attribute_set_free (attributes);
 }
