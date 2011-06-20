@@ -1014,10 +1014,19 @@ struct _GtkSwitchAccessible
   guint  action_idle;
 };
 
+/* FIXME: We really want to use GailWidgetClass here */
+struct _GtkSwitchAccessibleClass
+{
+  GtkAccessibleClass parent_class;
+
+  gpointer f1;
+  gpointer f2;
+};
+
 static void atk_action_interface_init (AtkActionIface *iface);
 
-ATK_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_SWITCH,
-                           G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
+G_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, _gtk_switch_accessible, g_type_from_name ("GailWidget"),
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static AtkStateSet *
 gtk_switch_accessible_ref_state_set (AtkObject *accessible)
@@ -1078,6 +1087,7 @@ _gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
   self->description = NULL;
   self->action_idle = 0;
+g_print ("switch action description inited to: %s\n", self->description);
 }
 
 /* accessibility: action interface */
@@ -1099,8 +1109,9 @@ static const gchar *
 gtk_switch_action_get_description (AtkAction *action,
                                    gint       i)
 {
-  GtkSwitchAccessible *accessible = (GtkSwitchAccessible*)action;
+  GtkSwitchAccessible *accessible = (GtkSwitchAccessible *)action;
 
+g_print ("switch action description: %s\n", accessible->description);
   return accessible->description;
 }
 
@@ -1111,6 +1122,7 @@ gtk_switch_action_set_description (AtkAction   *action,
 {
   GtkSwitchAccessible *accessible = (GtkSwitchAccessible*)action;
 
+g_print ("switch action set description: %s\n", description);
   g_free (accessible->description);
   accessible->description = g_strdup (description);
 
