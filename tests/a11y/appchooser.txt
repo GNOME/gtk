@@ -1,0 +1,587 @@
+window1
+  "dialog"
+  index: 0
+  name: 
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  unnamed-GailBox-0
+    "filler"
+    parent: window1
+    index: 0
+    state: enabled sensitive showing vertical visible
+    toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    unnamed-GailBox-1
+      "filler"
+      parent: unnamed-GailBox-0
+      index: 0
+      state: enabled sensitive showing vertical visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GailBox-2
+        "filler"
+        parent: unnamed-GailBox-1
+        index: 0
+        state: enabled sensitive showing vertical visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        Select an application for "(null)" files
+          "label"
+          parent: unnamed-GailBox-2
+          index: 0
+          name: Select an application for "(null)" files
+          state: enabled multi-line sensitive showing visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Select an application for "(null)" files
+          character count: 40
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+        unnamed-GailBox-3
+          "filler"
+          parent: unnamed-GailBox-2
+          index: 1
+          state: enabled sensitive showing vertical visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          unnamed-GailScrolledWindow-4
+            "scroll pane"
+            parent: unnamed-GailBox-3
+            index: 0
+            state: enabled focusable sensitive showing visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailTreeView-5
+              "table"
+              parent: unnamed-GailScrolledWindow-4
+              index: 0
+              state: enabled focusable sensitive showing visible manages-descendants
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkSelection>
+              selection count: 0
+              <AtkTable>
+              rows: 1
+              columns: 1
+              column 0 description: 
+              <column 0 header>
+              
+                "table column header"
+                parent: unnamed-GailTreeView-5
+                index: 0
+                name: 
+                state: enabled focusable selectable sensitive
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: 
+                character count: 0
+                caret offset: 0
+                default attributes: left-margin: 0
+                                    right-margin: 0
+                                    indent: 0
+                                    invisible: false
+                                    editable: false
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    bg-full-height: 0
+                                    scale: 1
+                                    rise: 0
+                                    underline: none
+                                    strikethrough: false
+                                    bg-stipple: false
+                                    fg-stipple: false
+                                    fg-color: <omitted>
+                                    bg-color: <omitted>
+                                    wrap-mode: word
+                                    justification: left
+                                    size: <omitted>
+                                    weight: <omitted>
+                                    family-name: <omitted>
+                                    stretch: <omitted>
+                                    variant: <omitted>
+                                    style: <omitted>
+                                    language: <omitted>
+                                    direction: <omitted>
+                <AtkImage>
+                image size: -1 x -1
+                image description: (null)
+                <AtkAction>
+                action 0 name: click
+                action 1 name: press
+                action 2 name: release
+              
+                "table column header"
+                parent: unnamed-GailTreeView-5
+                index: 0
+                name: 
+                state: enabled focusable selectable sensitive
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: 
+                character count: 0
+                caret offset: 0
+                default attributes: left-margin: 0
+                                    right-margin: 0
+                                    indent: 0
+                                    invisible: false
+                                    editable: false
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    bg-full-height: 0
+                                    scale: 1
+                                    rise: 0
+                                    underline: none
+                                    strikethrough: false
+                                    bg-stipple: false
+                                    fg-stipple: false
+                                    fg-color: <omitted>
+                                    bg-color: <omitted>
+                                    wrap-mode: word
+                                    justification: left
+                                    size: <omitted>
+                                    weight: <omitted>
+                                    family-name: <omitted>
+                                    stretch: <omitted>
+                                    variant: <omitted>
+                                    style: <omitted>
+                                    language: <omitted>
+                                    direction: <omitted>
+                <AtkImage>
+                image size: -1 x -1
+                image description: (null)
+                <AtkAction>
+                action 0 name: click
+                action 1 name: press
+                action 2 name: release
+              unnamed-GailContainerCell-6
+                "table cell"
+                parent: unnamed-GailTreeView-5
+                index: 1
+                state: enabled focusable focused selectable sensitive transient visible
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkAction>
+                
+                  "table cell"
+                  index: 0
+                  name: 
+                  state: enabled focusable focused selectable sensitive single-line transient visible
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: 
+                  character count: 0
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: activate the cell
+                No applications available to open "(null)" files
+Click "Show other applications", for more options, or "Find applications online" to install a new application
+                  "table cell"
+                  index: 1
+                  name: No applications available to open "(null)" files
+Click "Show other applications", for more options, or "Find applications online" to install a new application
+                  state: enabled focusable focused selectable sensitive single-line transient visible
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: No applications available to open "(null)" files
+Click "Show other applications", for more options, or "Find applications online" to install a new application
+                  character count: 158
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: activate the cell
+                
+                  "table cell"
+                  index: 2
+                  name: 
+                  state: enabled focusable focused selectable sensitive single-line transient visible
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: 
+                  character count: 0
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: activate the cell
+                unnamed-GailImageCell-7
+                  "table cell"
+                  index: 3
+                  state: enabled focusable focused selectable sensitive transient visible
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkImage>
+                  image size: 0 x 0
+                  image description: (null)
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: activate the cell
+                
+                  "table cell"
+                  index: 4
+                  name: 
+                  state: enabled focusable focused selectable sensitive single-line transient visible
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: 
+                  character count: 0
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkAction>
+                  action 0 name: activate
+                  action 0 description: activate the cell
+            unnamed-GailScrollbar-8
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-4
+              index: 1
+              state: enabled horizontal sensitive
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 0.000000
+              current value: 0.000000
+              minimum increment: 39.800000
+            unnamed-GailScrollbar-9
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-4
+              index: 2
+              state: enabled sensitive vertical
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 0.000000
+              current value: 0.000000
+              minimum increment: 29.800000
+          Show other applications
+            "push button"
+            parent: unnamed-GailBox-3
+            index: 1
+            name: Show other applications
+            state: enabled focusable sensitive showing visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkText>
+            text: Show other applications
+            character count: 23
+            caret offset: 0
+            default attributes: left-margin: 0
+                                right-margin: 0
+                                indent: 0
+                                invisible: false
+                                editable: false
+                                pixels-above-lines: 0
+                                pixels-below-lines: 0
+                                pixels-inside-wrap: 0
+                                bg-full-height: 0
+                                scale: 1
+                                rise: 0
+                                underline: none
+                                strikethrough: false
+                                bg-stipple: false
+                                fg-stipple: false
+                                fg-color: <omitted>
+                                bg-color: <omitted>
+                                wrap-mode: word
+                                justification: left
+                                size: <omitted>
+                                weight: <omitted>
+                                family-name: <omitted>
+                                stretch: <omitted>
+                                variant: <omitted>
+                                style: <omitted>
+                                language: <omitted>
+                                direction: <omitted>
+            <AtkImage>
+            image size: 20 x 20
+            image description: (null)
+            <AtkAction>
+            action 0 name: click
+            action 1 name: press
+            action 2 name: release
+    unnamed-GailBox-10
+      "filler"
+      parent: unnamed-GailBox-0
+      index: 1
+      state: enabled horizontal sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      Select
+        "push button"
+        parent: unnamed-GailBox-10
+        index: 0
+        name: Select
+        state: enabled focusable sensitive showing visible default
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: Select
+        character count: 6
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>s
+        action 1 name: press
+        action 2 name: release
+      Cancel
+        "push button"
+        parent: unnamed-GailBox-10
+        index: 1
+        name: Cancel
+        state: enabled focusable sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: Cancel
+        character count: 6
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>c
+        action 1 name: press
+        action 2 name: release

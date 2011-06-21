@@ -33,4 +33,5 @@ EXTRA_DIST += \
 	buttons.ui buttions.txt \
 	filechooser.ui filechooser.txt \
 	colorchooser.ui colorchooser.txt \
-	about.ui about.txt
+	about.ui about.txt \
+	appchooser.ui appchooser.txt
