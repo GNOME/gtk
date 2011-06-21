@@ -1,0 +1,18 @@
+accessibility-dump is a test runner that can do tests of static
+accessibility information. Run it like this:
+
+./accessibility-dump [OPTIONS] TESTFILE [TESTFILES...]
+
+where TESTFILE is a GtkBuilder .ui file. accessibility-dump creates
+a textual dump of the accessibility information for the created
+widget hierarchy and compares it to a preexisting .txt file.
+
+To create an initial dump, you can use the --generate option with
+a single .ui file. You should carefully inspect the output before
+blessing it as the official .txt to compare against.
+
+To find out details about a failure, you can use the --verbose
+option to see differences between expected and actual output.
+
+When run without any arguments, all the .ui files in the current
+directory are tested.
