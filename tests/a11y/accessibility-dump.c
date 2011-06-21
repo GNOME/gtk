@@ -688,7 +688,6 @@ dump_to_stdout (GFile *file)
 static void
 test_ui_file (GFile *file)
 {
-  char *diff;
   char *ui_file, *a11y_file;
   GString *dump;
   GError *error = NULL;
@@ -701,13 +700,14 @@ test_ui_file (GFile *file)
 
   if (a11y_file)
     {
-      diff = diff_with_file (a11y_file, dump->str, dump->len, &error);
+      char *diff = diff_with_file (a11y_file, dump->str, dump->len, &error);
       g_assert_no_error (error);
 
       if (diff && diff[0])
         {
           g_test_message ("Contents don't match expected contents:\n%s", diff);
           g_test_fail ();
+          g_free (diff);
         }
     }
   else if (dump->str[0])
@@ -717,7 +717,6 @@ test_ui_file (GFile *file)
     }
 
   g_string_free (dump, TRUE);
-  g_free (diff);
   g_free (a11y_file);
   g_free (ui_file);
 }
