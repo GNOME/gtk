@@ -16,7 +16,7 @@ window1
     layer: widget
     alpha: 1
     <AtkText>
-    text: ‎45.5
+    text: ?45.5
     character count: 5
     caret offset: 0
     default attributes: left-margin: 0
@@ -49,7 +49,7 @@ window1
     <AtkAction>
     action 0 name: activate
     <AtkValue>
-    minimum value: 0.5
-    maximum value: 99.5
-    current value: 45.5
-    minimum increment: 0.5
+    minimum value: 0.500000
+    maximum value: 99.500000
+    current value: 45.500000
+    minimum increment: 0.500000

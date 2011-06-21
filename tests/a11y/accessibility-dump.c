@@ -396,17 +396,48 @@ dump_atk_value (AtkValue *atk_value,
                 GString  *string)
 {
   GValue value = { 0, };
+  GValue svalue = { 0, };
 
   g_string_append_printf (string, "%*s<AtkValue>\n", depth, "");
 
+  g_value_init (&value, G_TYPE_DOUBLE);
+  g_value_init (&svalue, G_TYPE_STRING);
+
   atk_value_get_minimum_value (atk_value, &value);
-  g_string_append_printf (string, "%*sminimum value: %g\n", depth, "", g_value_get_double (&value));
+  if (g_value_transform (&value, &svalue))
+    g_string_append_printf (string, "%*sminimum value: %s\n", depth, "", g_value_get_string (&svalue));
+  else
+    g_string_append_printf (string, "%*sminimum value: <%s>\n", depth, "", G_VALUE_TYPE_NAME (&value));
+
+  g_value_reset (&value);
+  g_value_reset (&svalue);
+
   atk_value_get_maximum_value (atk_value, &value);
-  g_string_append_printf (string, "%*smaximum value: %g\n", depth, "", g_value_get_double (&value));
+  if (g_value_transform (&value, &svalue))
+    g_string_append_printf (string, "%*smaximum value: %s\n", depth, "", g_value_get_string (&svalue));
+  else
+    g_string_append_printf (string, "%*smaximum value: <%s>\n", depth, "", G_VALUE_TYPE_NAME (&value));
+
+  g_value_reset (&value);
+  g_value_reset (&svalue);
+
   atk_value_get_current_value (atk_value, &value);
-  g_string_append_printf (string, "%*scurrent value: %g\n", depth, "", g_value_get_double (&value));
+  if (g_value_transform (&value, &svalue))
+    g_string_append_printf (string, "%*scurrent value: %s\n", depth, "", g_value_get_string (&svalue));
+  else
+    g_string_append_printf (string, "%*scurrent value: %s\n", depth, "", G_VALUE_TYPE_NAME (&value));
+
+  g_value_reset (&value);
+  g_value_reset (&svalue);
+
   atk_value_get_minimum_increment (atk_value, &value);
-  g_string_append_printf (string, "%*sminimum increment: %g\n", depth, "", g_value_get_double (&value));
+  if (g_value_transform (&value, &svalue))
+    g_string_append_printf (string, "%*sminimum increment: %s\n", depth, "", g_value_get_string (&svalue));
+  else
+    g_string_append_printf (string, "%*sminimum increment: %s\n", depth, "", G_VALUE_TYPE_NAME (&value));
+
+  g_value_reset (&value);
+  g_value_reset (&svalue);
 }
 
 static void
