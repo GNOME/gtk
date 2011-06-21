@@ -1,0 +1,1502 @@
+window1
+  "color chooser"
+  index: 0
+  name: Color Selection
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  unnamed-GailBox-0
+    "filler"
+    parent: window1
+    index: 0
+    state: enabled sensitive showing vertical visible
+    toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    unnamed-GailBox-1
+      "color chooser"
+      parent: unnamed-GailBox-0
+      index: 0
+      state: enabled sensitive showing vertical visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GailBox-2
+        "filler"
+        parent: unnamed-GailBox-1
+        index: 0
+        state: enabled horizontal sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        unnamed-GailBox-3
+          "filler"
+          parent: unnamed-GailBox-2
+          index: 0
+          state: enabled sensitive showing vertical visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          unnamed-GailWidget-4
+            "unknown"
+            parent: unnamed-GailBox-3
+            index: 0
+            name: Color Wheel
+            description: Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle.
+            controlled-by: 0
+            state: enabled focusable sensitive showing visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+          unnamed-GailBox-5
+            "filler"
+            parent: unnamed-GailBox-3
+            index: 1
+            state: enabled horizontal sensitive showing visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailFrame-6
+              "panel"
+              parent: unnamed-GailBox-5
+              index: 0
+              state: enabled sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailBox-7
+                "filler"
+                parent: unnamed-GailFrame-6
+                index: 0
+                state: enabled horizontal sensitive showing visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-8
+                  "unknown"
+                  parent: unnamed-GailBox-7
+                  index: 0
+                  description: The previously-selected color, for comparison to the color you're selecting now.
+                  state: enabled sensitive showing visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                unnamed-GailWidget-9
+                  "unknown"
+                  parent: unnamed-GailBox-7
+                  index: 1
+                  description: The color you've chosen.
+                  state: enabled sensitive showing visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+            unnamed-GailButton-10
+              "push button"
+              parent: unnamed-GailBox-5
+              index: 1
+              description: Click the eyedropper, then click a color anywhere on your screen to select that color.
+              state: enabled focusable sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: (null)
+              character count: 0
+              caret offset: 0
+              <AtkImage>
+              image size: 20 x 20
+              image description: (null)
+              <AtkAction>
+              action 0 name: click
+              action 1 name: press
+              action 2 name: release
+        unnamed-GailBox-11
+          "filler"
+          parent: unnamed-GailBox-2
+          index: 1
+          state: enabled sensitive showing vertical visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          unnamed-GailContainer-12
+            "panel"
+            parent: unnamed-GailBox-11
+            index: 0
+            state: enabled sensitive showing visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            #FFFFFF
+              "text"
+              parent: unnamed-GailContainer-12
+              index: 0
+              description: You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry.
+              labelled-by: Color name:
+              state: editable enabled focusable sensitive showing single-line visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: #FFFFFF
+              character count: 7
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>n
+            Color name:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 1
+              name: Color name:
+              label-for: #FFFFFF
+              state: enabled multi-line sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Color name:
+              character count: 11
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            255
+              "text"
+              parent: unnamed-GailContainer-12
+              index: 2
+              description: Transparency of the color.
+              state: editable enabled focusable sensitive single-line
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 255
+              character count: 3
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+            unnamed-GailScale-13
+              "slider"
+              parent: unnamed-GailContainer-12
+              index: 3
+              description: Transparency of the color.
+              labelled-by: Opacity:
+              state: enabled focusable horizontal sensitive
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: (null)
+              character count: 0
+              caret offset: 0
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>a
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 255.000000
+              current value: 255.000000
+              minimum increment: 1.000000
+            Opacity:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 4
+              name: Opacity:
+              label-for: unnamed-GailScale-13
+              state: enabled multi-line sensitive
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Opacity:
+              character count: 8
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            unnamed-GailSeparator-14
+              "separator"
+              parent: unnamed-GailContainer-12
+              index: 5
+              state: enabled horizontal sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+            255
+              "spin button"
+              parent: unnamed-GailContainer-12
+              index: 6
+              description: Amount of blue light in the color.
+              controller-for: unnamed-GailWidget-4
+              labelled-by: Blue:
+              state: editable enabled focusable sensitive showing single-line visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 255
+              character count: 3
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>b
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 255.000000
+              current value: 255.000000
+              minimum increment: 1.000000
+            Blue:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 7
+              name: Blue:
+              label-for: 255
+              state: enabled multi-line sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Blue:
+              character count: 5
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            255
+              "spin button"
+              parent: unnamed-GailContainer-12
+              index: 8
+              description: Amount of green light in the color.
+              controller-for: unnamed-GailWidget-4
+              labelled-by: Green:
+              state: editable enabled focusable sensitive showing single-line visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 255
+              character count: 3
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>g
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 255.000000
+              current value: 255.000000
+              minimum increment: 1.000000
+            Green:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 9
+              name: Green:
+              label-for: 255
+              state: enabled multi-line sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Green:
+              character count: 6
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            255
+              "spin button"
+              parent: unnamed-GailContainer-12
+              index: 10
+              description: Amount of red light in the color.
+              controller-for: unnamed-GailWidget-4
+              labelled-by: Red:
+              state: editable enabled focusable sensitive showing single-line visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 255
+              character count: 3
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>r
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 255.000000
+              current value: 255.000000
+              minimum increment: 1.000000
+            Red:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 11
+              name: Red:
+              label-for: 255
+              state: enabled multi-line sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Red:
+              character count: 4
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            100
+              "spin button"
+              parent: unnamed-GailContainer-12
+              index: 12
+              description: Brightness of the color.
+              controller-for: unnamed-GailWidget-4
+              labelled-by: Value:
+              state: editable enabled focusable sensitive showing single-line visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 100
+              character count: 3
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>v
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 100.000000
+              current value: 100.000000
+              minimum increment: 1.000000
+            Value:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 13
+              name: Value:
+              label-for: 100
+              state: enabled multi-line sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Value:
+              character count: 6
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            0
+              "spin button"
+              parent: unnamed-GailContainer-12
+              index: 14
+              description: Intensity of the color.
+              controller-for: unnamed-GailWidget-4
+              labelled-by: Saturation:
+              state: editable enabled focusable sensitive showing single-line visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 0
+              character count: 1
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>s
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 100.000000
+              current value: 0.000000
+              minimum increment: 1.000000
+            Saturation:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 15
+              name: Saturation:
+              label-for: 0
+              state: enabled multi-line sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Saturation:
+              character count: 11
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            0
+              "spin button"
+              parent: unnamed-GailContainer-12
+              index: 16
+              description: Position on the color wheel.
+              controller-for: unnamed-GailWidget-4
+              labelled-by: Hue:
+              state: editable enabled focusable sensitive showing single-line visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 0
+              character count: 1
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+              <AtkAction>
+              action 0 name: activate
+              action 0 keybinding: <Alt>h
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 360.000000
+              current value: 0.000000
+              minimum increment: 1.000000
+            Hue:
+              "label"
+              parent: unnamed-GailContainer-12
+              index: 17
+              name: Hue:
+              label-for: 0
+              state: enabled multi-line sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Hue:
+              character count: 4
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+          unnamed-GailBox-15
+            "filler"
+            parent: unnamed-GailBox-11
+            index: 1
+            state: enabled sensitive vertical
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            Palette:
+              "label"
+              parent: unnamed-GailBox-15
+              index: 0
+              name: Palette:
+              label-for: unnamed-GailWidget-16
+              state: enabled multi-line sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: Palette:
+              character count: 8
+              caret offset: 0
+              default attributes: left-margin: 0
+                                  right-margin: 0
+                                  indent: 0
+                                  invisible: false
+                                  editable: false
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  bg-full-height: 0
+                                  scale: 1
+                                  rise: 0
+                                  underline: none
+                                  strikethrough: false
+                                  bg-stipple: false
+                                  fg-stipple: false
+                                  fg-color: <omitted>
+                                  bg-color: <omitted>
+                                  wrap-mode: word
+                                  justification: left
+                                  size: <omitted>
+                                  weight: <omitted>
+                                  family-name: <omitted>
+                                  stretch: <omitted>
+                                  variant: <omitted>
+                                  style: <omitted>
+                                  language: <omitted>
+                                  direction: <omitted>
+            unnamed-GailContainer-17
+              "panel"
+              parent: unnamed-GailBox-15
+              index: 1
+              state: enabled sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailFrame-18
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 0
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-19
+                  "unknown"
+                  parent: unnamed-GailFrame-18
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-20
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 1
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-21
+                  "unknown"
+                  parent: unnamed-GailFrame-20
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-22
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 2
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-23
+                  "unknown"
+                  parent: unnamed-GailFrame-22
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-24
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 3
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-25
+                  "unknown"
+                  parent: unnamed-GailFrame-24
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-26
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 4
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-27
+                  "unknown"
+                  parent: unnamed-GailFrame-26
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-28
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 5
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-29
+                  "unknown"
+                  parent: unnamed-GailFrame-28
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-30
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 6
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-31
+                  "unknown"
+                  parent: unnamed-GailFrame-30
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-32
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 7
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-33
+                  "unknown"
+                  parent: unnamed-GailFrame-32
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-34
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 8
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-35
+                  "unknown"
+                  parent: unnamed-GailFrame-34
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-36
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 9
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-37
+                  "unknown"
+                  parent: unnamed-GailFrame-36
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-38
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 10
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-39
+                  "unknown"
+                  parent: unnamed-GailFrame-38
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-40
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 11
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-41
+                  "unknown"
+                  parent: unnamed-GailFrame-40
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-42
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 12
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-43
+                  "unknown"
+                  parent: unnamed-GailFrame-42
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-44
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 13
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-45
+                  "unknown"
+                  parent: unnamed-GailFrame-44
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-46
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 14
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-47
+                  "unknown"
+                  parent: unnamed-GailFrame-46
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-48
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 15
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-49
+                  "unknown"
+                  parent: unnamed-GailFrame-48
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-50
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 16
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-51
+                  "unknown"
+                  parent: unnamed-GailFrame-50
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-52
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 17
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-53
+                  "unknown"
+                  parent: unnamed-GailFrame-52
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-54
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 18
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-55
+                  "unknown"
+                  parent: unnamed-GailFrame-54
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GailFrame-56
+                "panel"
+                parent: unnamed-GailContainer-17
+                index: 19
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailWidget-16
+                  "unknown"
+                  parent: unnamed-GailFrame-56
+                  index: 0
+                  description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
+                  labelled-by: Palette:
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+    unnamed-GailBox-57
+      "filler"
+      parent: unnamed-GailBox-0
+      index: 1
+      state: enabled horizontal sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      Help
+        "push button"
+        parent: unnamed-GailBox-57
+        index: 0
+        name: Help
+        state: enabled focusable sensitive
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: Help
+        character count: 4
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>h
+        action 1 name: press
+        action 2 name: release
+      OK
+        "push button"
+        parent: unnamed-GailBox-57
+        index: 1
+        name: OK
+        state: enabled focusable sensitive showing visible default
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: OK
+        character count: 2
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>o
+        action 1 name: press
+        action 2 name: release
+      Cancel
+        "push button"
+        parent: unnamed-GailBox-57
+        index: 2
+        name: Cancel
+        state: enabled focusable sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: Cancel
+        character count: 6
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>c
+        action 1 name: press
+        action 2 name: release
