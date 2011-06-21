@@ -2408,9 +2408,6 @@ gdk_window_peek_children (GdkWindow *window)
  * doing. Pass %NULL for @window to get all events for all windows,
  * instead of events for a specific window.
  *
- * See gdk_display_add_client_message_filter() if you are interested
- * in X ClientMessage events.
- *
  * If you are interested in X GenericEvents, bear in mind that
  * XGetEventData() has been already called on the event, and
  * XFreeEventData() must not be called within @function.
