@@ -227,41 +227,6 @@ gail_button_get_name (AtkObject *obj)
   return name;
 }
 
-/*
- * A DownArrow in a GtkToggltButton whose parent is not a ColorCombo
- * has press as default action.
- */
-static gboolean
-gail_button_is_default_press (GtkWidget *widget)
-{
-  GtkArrowType arrow_type;
-  GtkWidget  *child;
-  GtkWidget  *parent;
-  gboolean ret = FALSE;
-  const gchar *parent_type_name;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (GTK_IS_ARROW (child))
-    {
-      g_object_get (child,
-                    "arrow_type", &arrow_type,
-                    NULL);
-
-      if (arrow_type == GTK_ARROW_DOWN)
-        {
-          parent = gtk_widget_get_parent (widget);
-          if (parent)
-            {
-              parent_type_name = g_type_name (G_OBJECT_TYPE (parent));
-              if (g_strcmp0 (parent_type_name, "ColorCombo"))
-                return TRUE;
-            }
-        }
-    }
-
-  return ret;
-}
-
 static void
 gail_button_real_initialize (AtkObject *obj,
                              gpointer   data)
@@ -304,7 +269,6 @@ gail_button_real_initialize (AtkObject *obj,
                           G_CALLBACK (gail_button_label_map_gtk),
                           button);
     }
-  button->default_is_press = gail_button_is_default_press (widget);
     
   set_role_for_button (obj, data);
 }
@@ -527,13 +491,6 @@ idle_do_action (gpointer data)
   while (!g_queue_is_empty (gail_button->action_queue)) 
     {
       gint action_number = GPOINTER_TO_INT(g_queue_pop_head (gail_button->action_queue));
-      if (gail_button->default_is_press)
-        {
-          if (action_number == 0)
-            action_number = 1;
-          else if (action_number == 1)
-            action_number = 0;
-        }
       switch (action_number)
 	{
 	case 0:
@@ -612,13 +569,6 @@ gail_button_get_description (AtkAction *action,
 
   button = GAIL_BUTTON (action);
 
-  if (button->default_is_press)
-    {
-      if (i == 0)
-        i = 1;
-      else if (i == 1)
-        i = 0;
-    }
   switch (i)
     {
     case 0:
@@ -645,13 +595,6 @@ gail_button_get_keybinding (AtkAction *action,
   gchar *return_value = NULL;
 
   button = GAIL_BUTTON (action);
-  if (button->default_is_press)
-    {
-      if (i == 0)
-        i = 1;
-      else if (i == 1)
-        i = 0;
-    }
   switch (i)
     {
     case 0:
@@ -723,17 +666,7 @@ gail_button_action_get_name (AtkAction *action,
                              gint      i)
 {
   const gchar *return_value;
-  GailButton *button;
 
-  button = GAIL_BUTTON (action);
-
-  if (button->default_is_press)
-    {
-      if (i == 0)
-        i = 1;
-      else if (i == 1)
-        i = 0;
-    }
   switch (i)
     {
     case 0:
@@ -777,13 +710,6 @@ gail_button_set_description (AtkAction      *action,
 
   button = GAIL_BUTTON (action);
 
-  if (button->default_is_press)
-    {
-      if (i == 0)
-        i = 1;
-      else if (i == 1)
-        i = 0;
-    }
   switch (i)
     {
     case 0:

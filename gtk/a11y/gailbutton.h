@@ -52,8 +52,6 @@ struct _GailButton
   GQueue        *action_queue;
 
   GailTextUtil	 *textutil;
-
-  gboolean     default_is_press;
 };
 
 GType gail_button_get_type (void);
