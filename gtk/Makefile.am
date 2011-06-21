@@ -111,7 +111,9 @@ libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
 	$(top_builddir)/gtk/a11y/libgail.la \
 	$(GTK_DEP_LIBS)
-deps =
+deps = \
+	$(top_builddir)/gdk/libgdk-3.la	\
+	$(top_builddir)/gtk/a11y/libgail.la
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
