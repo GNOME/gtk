@@ -1271,7 +1271,9 @@ gail_tree_view_get_n_rows (AtkTable *table)
   tree_view = GTK_TREE_VIEW (widget);
   tree_model = gtk_tree_view_get_model (tree_view);
 
-  if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
+  if (!tree_model)
+    n_rows = 0;
+  else if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
    /* 
     * If working with a LIST store, then this is a faster way
     * to get the number of rows.
