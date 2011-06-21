@@ -84,7 +84,7 @@ diff_with_file (const char  *file1,
   command[3] = tmpfile;
 
   /* run diff command */
-  g_spawn_sync (NULL, 
+  g_spawn_sync (NULL,
                 (char **) command,
                 NULL,
                 G_SPAWN_SEARCH_PATH,
@@ -99,6 +99,8 @@ done:
 
   return diff;
 }
+
+static int unnamed_object_count = 0;
 
 static const char *
 get_name (AtkObject *accessible)
@@ -123,9 +125,9 @@ get_name (AtkObject *accessible)
 
   if (name == NULL)
     {
-      g_warning ("get_name called on a %s\n", g_type_name_from_instance ((GTypeInstance *)accessible));
-      /* XXX: Generate a unique, repeatable name */
-      g_assert_not_reached ();
+      g_test_message ("get_name called on a unnamed %s\n", g_type_name_from_instance ((GTypeInstance *)accessible));
+      /* Generate a unique, repeatable name */
+      name = g_strdup_printf ("unnamed-%s-%d", g_type_name_from_instance ((GTypeInstance*)accessible), unnamed_object_count++);
     }
 
   g_object_set_data_full (G_OBJECT (accessible), "gtk-accessibility-dump-name", name, g_free);
