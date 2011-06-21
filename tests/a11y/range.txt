@@ -6,50 +6,75 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  scale1
-    "slider"
+  grid1
+    "panel"
     parent: window1
     index: 0
-    state: enabled focusable horizontal sensitive showing visible
+    state: enabled horizontal sensitive showing visible
     toolkit: gail
     <AtkComponent>
     layer: widget
     alpha: 1
-    <AtkText>
-    text: ?45.5
-    character count: 5
-    caret offset: 0
-    default attributes: left-margin: 0
-                        right-margin: 0
-                        indent: 0
-                        invisible: false
-                        editable: false
-                        pixels-above-lines: 0
-                        pixels-below-lines: 0
-                        pixels-inside-wrap: 0
-                        bg-full-height: 0
-                        scale: 1
-                        rise: 0
-                        underline: none
-                        strikethrough: false
-                        bg-stipple: false
-                        fg-stipple: false
-                        fg-color: <omitted>
-                        bg-color: <omitted>
-                        wrap-mode: word
-                        justification: left
-                        size: <omitted>
-                        weight: <omitted>
-                        family-name: <omitted>
-                        stretch: <omitted>
-                        variant: <omitted>
-                        style: <omitted>
-                        language: <omitted>
-                        direction: <omitted>
-    <AtkAction>
-    action 0 name: activate
-    <AtkValue>
-    minimum value: 0.500000
-    maximum value: 99.500000
-    current value: 45.500000
-    minimum increment: 0.500000
+    scrollbar1
+      "scroll bar"
+      parent: grid1
+      index: 0
+      state: enabled focusable horizontal sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: activate
+      <AtkValue>
+      minimum value: 0.500000
+      maximum value: 99.500000
+      current value: 45.500000
+      minimum increment: 0.500000
+    scale1
+      "slider"
+      parent: grid1
+      index: 1
+      state: enabled focusable horizontal sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: ‎45.5
+      character count: 5
+      caret offset: 0
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: <omitted>
+                          bg-color: <omitted>
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
+      <AtkAction>
+      action 0 name: activate
+      <AtkValue>
+      minimum value: 0.500000
+      maximum value: 99.500000
+      current value: 45.500000
+      minimum increment: 0.500000
