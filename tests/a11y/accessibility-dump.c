@@ -100,7 +100,13 @@ done:
   return diff;
 }
 
-static int unnamed_object_count = 0;
+static int unnamed_object_count;
+
+static void
+setup_test (void)
+{
+  unnamed_object_count = 0;
+}
 
 static const char *
 get_name (AtkObject *accessible)
@@ -727,7 +733,7 @@ add_test_for_file (GFile *file)
   g_test_add_vtable (g_file_get_path (file),
                      0,
                      g_object_ref (file),
-                     NULL,
+                     (GTestFixtureFunc) setup_test,
                      (GTestFixtureFunc) test_ui_file,
                      (GTestFixtureFunc) g_object_unref);
 }
