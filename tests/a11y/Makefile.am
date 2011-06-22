@@ -40,4 +40,5 @@ EXTRA_DIST += \
 	pickers.ui pickers.txt \
 	lockbutton.ui lockbutton.txt \
 	spinner.ui spinner.txt \
-	progress.ui progress.txt
+	progress.ui progress.txt \
+	infobar.ui infobar.txt
