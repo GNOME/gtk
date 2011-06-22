@@ -5,21 +5,40 @@ TEST_PROGS += accessibility-dump
 check_PROGRAMS = $(TEST_PROGS)
 
 accessibility_dump_CFLAGS = \
-       	-I$(top_srcdir)                 \
-       	-I$(top_builddir)/gdk           \
-       	-I$(top_srcdir)/gdk             \
-       	-DGDK_DISABLE_DEPRECATED        \
-       	-DGTK_DISABLE_DEPRECATED        \
-       	$(GTK_DEBUG_FLAGS)              \
-       	$(GTK_DEP_CFLAGS)
+	-I$(top_srcdir)                 \
+	-I$(top_builddir)/gdk           \
+	-I$(top_srcdir)/gdk             \
+	-DGDK_DISABLE_DEPRECATED        \
+	-DGTK_DISABLE_DEPRECATED        \
+	$(GTK_DEBUG_FLAGS)              \
+	$(GTK_DEP_CFLAGS)
 
 accessibility_dump_LDADD = \
-       	$(top_builddir)/gdk/libgdk-3.la \
-      	$(top_builddir)/gtk/libgtk-3.la \
+	$(top_builddir)/gdk/libgdk-3.la \
+	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
 
 accessibility_dump_SOURCES = \
 	accessibility-dump.c
+
+TEST_PROGS += tree-performance
+
+tree_performance_CFLAGS = \
+	-I$(top_srcdir)                 \
+	-I$(top_builddir)/gdk           \
+	-I$(top_srcdir)/gdk             \
+	-DGDK_DISABLE_DEPRECATED        \
+	-DGTK_DISABLE_DEPRECATED        \
+	$(GTK_DEBUG_FLAGS)              \
+	$(GTK_DEP_CFLAGS)
+
+tree_performance_LDADD = \
+	$(top_builddir)/gdk/libgdk-3.la \
+	$(top_builddir)/gtk/libgtk-3.la \
+	$(GTK_DEP_LIBS)
+
+tree_performance_SOURCES = \
+	tree-performance.c
 
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
