@@ -131,9 +131,8 @@ get_name (AtkObject *accessible)
 
   if (name == NULL)
     {
-      g_test_message ("get_name called on a unnamed %s\n", g_type_name_from_instance ((GTypeInstance *)accessible));
       /* Generate a unique, repeatable name */
-      name = g_strdup_printf ("unnamed-%s-%d", g_type_name_from_instance ((GTypeInstance*)accessible), unnamed_object_count++);
+      name = g_strdup_printf ("unnamed-%s-%d", G_OBJECT_TYPE_NAME (accessible), unnamed_object_count++);
     }
 
   g_object_set_data_full (G_OBJECT (accessible), "gtk-accessibility-dump-name", name, g_free);
