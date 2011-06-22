@@ -37,4 +37,5 @@ EXTRA_DIST += \
 	messagedialog.ui messagedialog.txt \
 	expander.ui expander.txt \
 	assistant.ui assistant.txt \
-	pickers.ui pickers.txt
+	pickers.ui pickers.txt \
+	lockbutton.ui lockbutton.txt
