@@ -1,0 +1,4098 @@
+window1
+  "dialog"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  unnamed-GailBox-0
+    "filler"
+    parent: window1
+    index: 0
+    state: enabled sensitive showing vertical visible
+    toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    unnamed-GailBox-1
+      "filler"
+      parent: unnamed-GailBox-0
+      index: 0
+      state: enabled sensitive showing vertical visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GailNotebook-2
+        "page tab list"
+        parent: unnamed-GailBox-1
+        index: 0
+        state: enabled focusable sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkSelection>
+        selection count: 1
+        selected children: 0
+        General
+          "page tab"
+          parent: unnamed-GailNotebook-2
+          index: 0
+          name: General
+          state: enabled multi-line selectable selected sensitive showing visible
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: General
+          character count: 7
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+          unnamed-GailBox-3
+            "filler"
+            index: 0
+            state: enabled sensitive showing vertical visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailBox-4
+              "filler"
+              parent: unnamed-GailBox-3
+              index: 0
+              state: enabled sensitive showing vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailScrolledWindow-5
+                "scroll pane"
+                parent: unnamed-GailBox-4
+                index: 0
+                state: enabled focusable sensitive showing visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailTreeView-6
+                  "table"
+                  parent: unnamed-GailScrolledWindow-5
+                  index: 0
+                  state: enabled focusable sensitive showing visible manages-descendants
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkSelection>
+                  selection count: 0
+                  <AtkTable>
+                  rows: 0
+                  columns: 4
+                  column 0 description: 
+                  <column 0 header>
+                  
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 0
+                    name: 
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: 
+                    character count: 0
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                  column 1 description: Printer
+                  <column 1 header>
+                  Printer
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 1
+                    name: Printer
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Printer
+                    character count: 7
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                  column 2 description: Location
+                  <column 2 header>
+                  Location
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 2
+                    name: Location
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Location
+                    character count: 8
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                  column 3 description: Status
+                  <column 3 header>
+                  Status
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 3
+                    name: Status
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Status
+                    character count: 6
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                  
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 0
+                    name: 
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: 
+                    character count: 0
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                  Printer
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 1
+                    name: Printer
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Printer
+                    character count: 7
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                  Location
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 2
+                    name: Location
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Location
+                    character count: 8
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                  Status
+                    "table column header"
+                    parent: unnamed-GailTreeView-6
+                    index: 3
+                    name: Status
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Status
+                    character count: 6
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 1 name: press
+                    action 2 name: release
+                unnamed-GailScrollbar-7
+                  "scroll bar"
+                  parent: unnamed-GailScrolledWindow-5
+                  index: 1
+                  state: enabled horizontal sensitive
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkAction>
+                  action 0 name: activate
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 0.000000
+                  current value: 0.000000
+                  minimum increment: 59.100000
+                unnamed-GailScrollbar-8
+                  "scroll bar"
+                  parent: unnamed-GailScrolledWindow-5
+                  index: 2
+                  state: enabled sensitive vertical
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkAction>
+                  action 0 name: activate
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 0.000000
+                  current value: 0.000000
+                  minimum increment: 24.900000
+              unnamed-GailBox-9
+                "filler"
+                parent: unnamed-GailBox-4
+                index: 1
+                state: enabled horizontal sensitive showing visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+            unnamed-GailBox-10
+              "filler"
+              parent: unnamed-GailBox-3
+              index: 1
+              state: enabled horizontal sensitive showing visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailBox-11
+                "filler"
+                parent: unnamed-GailBox-10
+                index: 0
+                state: enabled sensitive showing vertical visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                Range
+                  "label"
+                  parent: unnamed-GailBox-11
+                  index: 0
+                  name: Range
+                  state: enabled multi-line sensitive showing visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Range
+                  character count: 5
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                unnamed-GailContainer-12
+                  "panel"
+                  parent: unnamed-GailBox-11
+                  index: 1
+                  state: enabled sensitive showing visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  
+                    "text"
+                    parent: unnamed-GailContainer-12
+                    index: 0
+                    name: Pages
+                    description: Specify one or more page ranges,
+ e.g. 1-3,7,11
+                    state: editable focusable showing single-line visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: 
+                    character count: 0
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkAction>
+                    action 0 name: activate
+                  Pages:
+                    "radio button"
+                    parent: unnamed-GailContainer-12
+                    index: 1
+                    name: Pages:
+                    description: Specify one or more page ranges,
+ e.g. 1-3,7,11
+                    member-of: Pages:
+                               Selection
+                               Current Page
+                               All Pages
+                    state: enabled focusable sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Pages:
+                    character count: 6
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 0 keybinding: <Alt>e
+                    action 1 name: press
+                    action 2 name: release
+                  Selection
+                    "radio button"
+                    parent: unnamed-GailContainer-12
+                    index: 2
+                    name: Selection
+                    member-of: Pages:
+                               Selection
+                               Current Page
+                               All Pages
+                    state: focusable
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Selection
+                    character count: 9
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 0 keybinding: <Alt>l
+                    action 1 name: press
+                    action 2 name: release
+                  Current Page
+                    "radio button"
+                    parent: unnamed-GailContainer-12
+                    index: 3
+                    name: Current Page
+                    member-of: Pages:
+                               Selection
+                               Current Page
+                               All Pages
+                    state: focusable showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Current Page
+                    character count: 12
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 0 keybinding: <Alt>u
+                    action 1 name: press
+                    action 2 name: release
+                  All Pages
+                    "radio button"
+                    parent: unnamed-GailContainer-12
+                    index: 4
+                    name: All Pages
+                    member-of: Pages:
+                               Selection
+                               Current Page
+                               All Pages
+                    state: armed checked enabled focusable sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: All Pages
+                    character count: 9
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 0 keybinding: <Alt>a
+                    action 1 name: press
+                    action 2 name: release
+              unnamed-GailBox-13
+                "filler"
+                parent: unnamed-GailBox-10
+                index: 1
+                state: enabled sensitive showing vertical visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                Copies
+                  "label"
+                  parent: unnamed-GailBox-13
+                  index: 0
+                  name: Copies
+                  state: enabled multi-line sensitive showing visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Copies
+                  character count: 6
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                unnamed-GailContainer-14
+                  "panel"
+                  parent: unnamed-GailBox-13
+                  index: 1
+                  state: enabled sensitive showing visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  unnamed-GailWidget-15
+                    "unknown"
+                    parent: unnamed-GailContainer-14
+                    index: 0
+                    state: enabled sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                  Reverse
+                    "check box"
+                    parent: unnamed-GailContainer-14
+                    index: 1
+                    name: Reverse
+                    state: enabled focusable sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Reverse
+                    character count: 7
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 0 keybinding: <Alt>r
+                    action 1 name: press
+                    action 2 name: release
+                  Collate
+                    "check box"
+                    parent: unnamed-GailContainer-14
+                    index: 2
+                    name: Collate
+                    state: enabled focusable sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Collate
+                    character count: 7
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkImage>
+                    image size: -1 x -1
+                    image description: (null)
+                    <AtkAction>
+                    action 0 name: click
+                    action 0 keybinding: <Alt>o
+                    action 1 name: press
+                    action 2 name: release
+                  1
+                    "spin button"
+                    parent: unnamed-GailContainer-14
+                    index: 3
+                    labelled-by: Copies:
+                    state: editable enabled focusable sensitive showing single-line visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: 1
+                    character count: 1
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                    <AtkAction>
+                    action 0 name: activate
+                    action 0 keybinding: <Alt>s
+                    <AtkValue>
+                    minimum value: 1.000000
+                    maximum value: 100.000000
+                    current value: 1.000000
+                    minimum increment: 1.000000
+                  Copies:
+                    "label"
+                    parent: unnamed-GailContainer-14
+                    index: 4
+                    name: Copies:
+                    label-for: 1
+                    state: enabled multi-line sensitive showing visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Copies:
+                    character count: 7
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+        Page Setup
+          "page tab"
+          parent: unnamed-GailNotebook-2
+          index: 1
+          name: Page Setup
+          state: enabled multi-line selectable sensitive showing visible
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Page Setup
+          character count: 10
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+          unnamed-GailBox-16
+            "filler"
+            index: 1
+            state: enabled sensitive vertical visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailBox-17
+              "filler"
+              parent: unnamed-GailBox-16
+              index: 0
+              state: enabled horizontal sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailBox-18
+                "filler"
+                parent: unnamed-GailBox-17
+                index: 0
+                state: enabled sensitive vertical visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                Layout
+                  "label"
+                  parent: unnamed-GailBox-18
+                  index: 0
+                  name: Layout
+                  state: enabled multi-line sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Layout
+                  character count: 6
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                unnamed-GailContainer-19
+                  "panel"
+                  parent: unnamed-GailBox-18
+                  index: 1
+                  state: enabled sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  unnamed-GailBox-20
+                    "filler"
+                    parent: unnamed-GailContainer-19
+                    index: 0
+                    state: enabled horizontal sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    100.0
+                      "spin button"
+                      parent: unnamed-GailBox-20
+                      index: 0
+                      labelled-by: Scale:
+                      state: editable enabled focusable sensitive single-line visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkText>
+                      text: 100.0
+                      character count: 5
+                      caret offset: 0
+                      default attributes: left-margin: 0
+                                          right-margin: 0
+                                          indent: 0
+                                          invisible: false
+                                          editable: false
+                                          pixels-above-lines: 0
+                                          pixels-below-lines: 0
+                                          pixels-inside-wrap: 0
+                                          bg-full-height: 0
+                                          scale: 1
+                                          rise: 0
+                                          underline: none
+                                          strikethrough: false
+                                          bg-stipple: false
+                                          fg-stipple: false
+                                          fg-color: <omitted>
+                                          bg-color: <omitted>
+                                          wrap-mode: word
+                                          justification: left
+                                          size: <omitted>
+                                          weight: <omitted>
+                                          family-name: <omitted>
+                                          stretch: <omitted>
+                                          variant: <omitted>
+                                          style: <omitted>
+                                          language: <omitted>
+                                          direction: <omitted>
+                      <AtkAction>
+                      action 0 name: activate
+                      action 0 keybinding: <Alt>a
+                      <AtkValue>
+                      minimum value: 1.000000
+                      maximum value: 1000.000000
+                      current value: 100.000000
+                      minimum increment: 1.000000
+                    %
+                      "label"
+                      parent: unnamed-GailBox-20
+                      index: 1
+                      name: %
+                      state: enabled multi-line sensitive visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkText>
+                      text: %
+                      character count: 1
+                      caret offset: 0
+                      default attributes: left-margin: 0
+                                          right-margin: 0
+                                          indent: 0
+                                          invisible: false
+                                          editable: false
+                                          pixels-above-lines: 0
+                                          pixels-below-lines: 0
+                                          pixels-inside-wrap: 0
+                                          bg-full-height: 0
+                                          scale: 1
+                                          rise: 0
+                                          underline: none
+                                          strikethrough: false
+                                          bg-stipple: false
+                                          fg-stipple: false
+                                          fg-color: <omitted>
+                                          bg-color: <omitted>
+                                          wrap-mode: word
+                                          justification: left
+                                          size: <omitted>
+                                          weight: <omitted>
+                                          family-name: <omitted>
+                                          stretch: <omitted>
+                                          variant: <omitted>
+                                          style: <omitted>
+                                          language: <omitted>
+                                          direction: <omitted>
+                  Scale:
+                    "label"
+                    parent: unnamed-GailContainer-19
+                    index: 1
+                    name: Scale:
+                    label-for: 100.0
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Scale:
+                    character count: 6
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailComboBox-21
+                    "combo box"
+                    parent: unnamed-GailContainer-19
+                    index: 2
+                    name: All sheets
+                    labelled-by: Only print:
+                    state: enabled sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkAction>
+                    action 0 name: press
+                    <AtkSelection>
+                    selection count: 1
+                    selected children: 0
+                    unnamed-GailMenu-22
+                      "menu"
+                      parent: unnamed-GailComboBox-21
+                      index: 0
+                      state: enabled selectable selected sensitive
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: popup
+                      alpha: 1
+                      <AtkSelection>
+                      selection count: 0
+                      All sheets
+                        "menu item"
+                        parent: unnamed-GailMenu-22
+                        index: 0
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: All sheets
+                        character count: 10
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      Even sheets
+                        "menu item"
+                        parent: unnamed-GailMenu-22
+                        index: 1
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Even sheets
+                        character count: 11
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      Odd sheets
+                        "menu item"
+                        parent: unnamed-GailMenu-22
+                        index: 2
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Odd sheets
+                        character count: 10
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                  Only print:
+                    "label"
+                    parent: unnamed-GailContainer-19
+                    index: 3
+                    name: Only print:
+                    label-for: unnamed-GailComboBox-21
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Only print:
+                    character count: 11
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailBox-23
+                    "filler"
+                    parent: unnamed-GailContainer-19
+                    index: 4
+                    state: horizontal visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    unnamed-GailComboBox-24
+                      "combo box"
+                      parent: unnamed-GailBox-23
+                      index: 0
+                      name: Not available
+                      labelled-by: Page ordering:
+                      state: visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkAction>
+                      action 0 name: press
+                      <AtkSelection>
+                      selection count: 1
+                      selected children: 0
+                      unnamed-GailMenu-25
+                        "menu"
+                        parent: unnamed-GailComboBox-24
+                        index: 0
+                        state: enabled selectable selected sensitive
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkSelection>
+                        selection count: 0
+                        Not available
+                          "menu item"
+                          parent: unnamed-GailMenu-25
+                          index: 0
+                          state: enabled selectable sensitive visible
+                          toolkit: gail
+                          <AtkComponent>
+                          layer: popup
+                          alpha: 1
+                          <AtkText>
+                          text: Not available
+                          character count: 13
+                          caret offset: 0
+                          <AtkAction>
+                          action 0 name: click
+                    unnamed-GailImage-26
+                      "icon"
+                      parent: unnamed-GailBox-23
+                      index: 1
+                      name: Warning
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkImage>
+                      image size: 16 x 16
+                      image description: (null)
+                  Page ordering:
+                    "label"
+                    parent: unnamed-GailContainer-19
+                    index: 5
+                    name: Page ordering:
+                    label-for: unnamed-GailBox-23
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Page ordering:
+                    character count: 14
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailBox-27
+                    "filler"
+                    parent: unnamed-GailContainer-19
+                    index: 6
+                    state: horizontal visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    unnamed-GailComboBox-28
+                      "combo box"
+                      parent: unnamed-GailBox-27
+                      index: 0
+                      name: Not available
+                      labelled-by: Pages per side:
+                      state: visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkAction>
+                      action 0 name: press
+                      <AtkSelection>
+                      selection count: 1
+                      selected children: 0
+                      unnamed-GailMenu-29
+                        "menu"
+                        parent: unnamed-GailComboBox-28
+                        index: 0
+                        state: enabled selectable selected sensitive
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkSelection>
+                        selection count: 0
+                        Not available
+                          "menu item"
+                          parent: unnamed-GailMenu-29
+                          index: 0
+                          state: enabled selectable sensitive visible
+                          toolkit: gail
+                          <AtkComponent>
+                          layer: popup
+                          alpha: 1
+                          <AtkText>
+                          text: Not available
+                          character count: 13
+                          caret offset: 0
+                          <AtkAction>
+                          action 0 name: click
+                    unnamed-GailImage-30
+                      "icon"
+                      parent: unnamed-GailBox-27
+                      index: 1
+                      name: Warning
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkImage>
+                      image size: 16 x 16
+                      image description: (null)
+                  Pages per side:
+                    "label"
+                    parent: unnamed-GailContainer-19
+                    index: 7
+                    name: Pages per side:
+                    label-for: unnamed-GailBox-27
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Pages per side:
+                    character count: 15
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailBox-31
+                    "filler"
+                    parent: unnamed-GailContainer-19
+                    index: 8
+                    state: horizontal visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    unnamed-GailComboBox-32
+                      "combo box"
+                      parent: unnamed-GailBox-31
+                      index: 0
+                      name: Not available
+                      labelled-by: Two-sided:
+                      state: visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkAction>
+                      action 0 name: press
+                      <AtkSelection>
+                      selection count: 1
+                      selected children: 0
+                      unnamed-GailMenu-33
+                        "menu"
+                        parent: unnamed-GailComboBox-32
+                        index: 0
+                        state: enabled selectable selected sensitive
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkSelection>
+                        selection count: 0
+                        Not available
+                          "menu item"
+                          parent: unnamed-GailMenu-33
+                          index: 0
+                          state: enabled selectable sensitive visible
+                          toolkit: gail
+                          <AtkComponent>
+                          layer: popup
+                          alpha: 1
+                          <AtkText>
+                          text: Not available
+                          character count: 13
+                          caret offset: 0
+                          <AtkAction>
+                          action 0 name: click
+                    unnamed-GailImage-34
+                      "icon"
+                      parent: unnamed-GailBox-31
+                      index: 1
+                      name: Warning
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkImage>
+                      image size: 16 x 16
+                      image description: (null)
+                  Two-sided:
+                    "label"
+                    parent: unnamed-GailContainer-19
+                    index: 9
+                    name: Two-sided:
+                    label-for: unnamed-GailBox-31
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Two-sided:
+                    character count: 10
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+              unnamed-GailBox-35
+                "filler"
+                parent: unnamed-GailBox-17
+                index: 1
+                state: enabled sensitive vertical visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                Paper
+                  "label"
+                  parent: unnamed-GailBox-35
+                  index: 0
+                  name: Paper
+                  state: enabled multi-line sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Paper
+                  character count: 5
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                unnamed-GailContainer-36
+                  "panel"
+                  parent: unnamed-GailBox-35
+                  index: 1
+                  state: enabled sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  unnamed-GailComboBox-37
+                    "combo box"
+                    parent: unnamed-GailContainer-36
+                    index: 0
+                    name: Portrait
+                    labelled-by: Orientation:
+                    state: enabled sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkAction>
+                    action 0 name: press
+                    <AtkSelection>
+                    selection count: 1
+                    selected children: 0
+                    unnamed-GailMenu-38
+                      "menu"
+                      parent: unnamed-GailComboBox-37
+                      index: 0
+                      state: enabled selectable selected sensitive
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: popup
+                      alpha: 1
+                      <AtkSelection>
+                      selection count: 0
+                      Portrait
+                        "menu item"
+                        parent: unnamed-GailMenu-38
+                        index: 0
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Portrait
+                        character count: 8
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      Landscape
+                        "menu item"
+                        parent: unnamed-GailMenu-38
+                        index: 1
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Landscape
+                        character count: 9
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      Reverse portrait
+                        "menu item"
+                        parent: unnamed-GailMenu-38
+                        index: 2
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Reverse portrait
+                        character count: 16
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      Reverse landscape
+                        "menu item"
+                        parent: unnamed-GailMenu-38
+                        index: 3
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Reverse landscape
+                        character count: 17
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                  Orientation:
+                    "label"
+                    parent: unnamed-GailContainer-36
+                    index: 1
+                    name: Orientation:
+                    label-for: unnamed-GailComboBox-37
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Orientation:
+                    character count: 12
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailComboBox-39
+                    "combo box"
+                    parent: unnamed-GailContainer-36
+                    index: 2
+                    labelled-by: Paper size:
+                    state: enabled sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkAction>
+                    action 0 name: press
+                    <AtkSelection>
+                    selection count: 1
+                    selected children:
+                    unnamed-GailMenu-40
+                      "menu"
+                      parent: unnamed-GailComboBox-39
+                      index: 0
+                      state: enabled selectable sensitive
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: popup
+                      alpha: 1
+                      <AtkSelection>
+                      selection count: 0
+                      US Letter
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 0
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: US Letter
+                        character count: 9
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      US Legal
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 1
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: US Legal
+                        character count: 8
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      A4
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 2
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: A4
+                        character count: 2
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      A5
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 3
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: A5
+                        character count: 2
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      ROC 16k
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 4
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: ROC 16k
+                        character count: 7
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      B5
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 5
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: B5
+                        character count: 2
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      JB5
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 6
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: JB5
+                        character count: 3
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      #10 Envelope
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 7
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: #10 Envelope
+                        character count: 12
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      DL Envelope
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 8
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: DL Envelope
+                        character count: 11
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      Choukei 3 Envelope
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 9
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Choukei 3 Envelope
+                        character count: 18
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      Tabloid
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 10
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Tabloid
+                        character count: 7
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      A3
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 11
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: A3
+                        character count: 2
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      unnamed-GtkSeparatorMenuItemAccessible-41
+                        "separator"
+                        parent: unnamed-GailMenu-40
+                        index: 12
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: widget
+                        alpha: 1
+                      Custom Size 2
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 13
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Custom Size 2
+                        character count: 13
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                      unnamed-GtkSeparatorMenuItemAccessible-42
+                        "separator"
+                        parent: unnamed-GailMenu-40
+                        index: 14
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: widget
+                        alpha: 1
+                      Manage Custom Sizes...
+                        "menu item"
+                        parent: unnamed-GailMenu-40
+                        index: 15
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Manage Custom Sizes...
+                        character count: 22
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                  Paper size:
+                    "label"
+                    parent: unnamed-GailContainer-36
+                    index: 3
+                    name: Paper size:
+                    label-for: unnamed-GailComboBox-39
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Paper size:
+                    character count: 11
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailBox-43
+                    "filler"
+                    parent: unnamed-GailContainer-36
+                    index: 4
+                    state: horizontal visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    unnamed-GailComboBox-44
+                      "combo box"
+                      parent: unnamed-GailBox-43
+                      index: 0
+                      name: Not available
+                      labelled-by: Output tray:
+                      state: visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkAction>
+                      action 0 name: press
+                      <AtkSelection>
+                      selection count: 1
+                      selected children: 0
+                      unnamed-GailMenu-45
+                        "menu"
+                        parent: unnamed-GailComboBox-44
+                        index: 0
+                        state: enabled selectable selected sensitive
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkSelection>
+                        selection count: 0
+                        Not available
+                          "menu item"
+                          parent: unnamed-GailMenu-45
+                          index: 0
+                          state: enabled selectable sensitive visible
+                          toolkit: gail
+                          <AtkComponent>
+                          layer: popup
+                          alpha: 1
+                          <AtkText>
+                          text: Not available
+                          character count: 13
+                          caret offset: 0
+                          <AtkAction>
+                          action 0 name: click
+                    unnamed-GailImage-46
+                      "icon"
+                      parent: unnamed-GailBox-43
+                      index: 1
+                      name: Warning
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkImage>
+                      image size: 16 x 16
+                      image description: (null)
+                  Output tray:
+                    "label"
+                    parent: unnamed-GailContainer-36
+                    index: 5
+                    name: Output tray:
+                    label-for: unnamed-GailBox-43
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Output tray:
+                    character count: 12
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailBox-47
+                    "filler"
+                    parent: unnamed-GailContainer-36
+                    index: 6
+                    state: horizontal visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    unnamed-GailComboBox-48
+                      "combo box"
+                      parent: unnamed-GailBox-47
+                      index: 0
+                      name: Not available
+                      labelled-by: Paper source:
+                      state: visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkAction>
+                      action 0 name: press
+                      <AtkSelection>
+                      selection count: 1
+                      selected children: 0
+                      unnamed-GailMenu-49
+                        "menu"
+                        parent: unnamed-GailComboBox-48
+                        index: 0
+                        state: enabled selectable selected sensitive
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkSelection>
+                        selection count: 0
+                        Not available
+                          "menu item"
+                          parent: unnamed-GailMenu-49
+                          index: 0
+                          state: enabled selectable sensitive visible
+                          toolkit: gail
+                          <AtkComponent>
+                          layer: popup
+                          alpha: 1
+                          <AtkText>
+                          text: Not available
+                          character count: 13
+                          caret offset: 0
+                          <AtkAction>
+                          action 0 name: click
+                    unnamed-GailImage-50
+                      "icon"
+                      parent: unnamed-GailBox-47
+                      index: 1
+                      name: Warning
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkImage>
+                      image size: 16 x 16
+                      image description: (null)
+                  Paper source:
+                    "label"
+                    parent: unnamed-GailContainer-36
+                    index: 7
+                    name: Paper source:
+                    label-for: unnamed-GailBox-47
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Paper source:
+                    character count: 13
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+                  unnamed-GailBox-51
+                    "filler"
+                    parent: unnamed-GailContainer-36
+                    index: 8
+                    state: horizontal visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    unnamed-GailComboBox-52
+                      "combo box"
+                      parent: unnamed-GailBox-51
+                      index: 0
+                      name: Not available
+                      labelled-by: Paper type:
+                      state: visible
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkAction>
+                      action 0 name: press
+                      <AtkSelection>
+                      selection count: 1
+                      selected children: 0
+                      unnamed-GailMenu-53
+                        "menu"
+                        parent: unnamed-GailComboBox-52
+                        index: 0
+                        state: enabled selectable selected sensitive
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkSelection>
+                        selection count: 0
+                        Not available
+                          "menu item"
+                          parent: unnamed-GailMenu-53
+                          index: 0
+                          state: enabled selectable sensitive visible
+                          toolkit: gail
+                          <AtkComponent>
+                          layer: popup
+                          alpha: 1
+                          <AtkText>
+                          text: Not available
+                          character count: 13
+                          caret offset: 0
+                          <AtkAction>
+                          action 0 name: click
+                    unnamed-GailImage-54
+                      "icon"
+                      parent: unnamed-GailBox-51
+                      index: 1
+                      name: Warning
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: widget
+                      alpha: 1
+                      <AtkImage>
+                      image size: 16 x 16
+                      image description: (null)
+                  Paper type:
+                    "label"
+                    parent: unnamed-GailContainer-36
+                    index: 9
+                    name: Paper type:
+                    label-for: unnamed-GailBox-51
+                    state: enabled multi-line sensitive visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkText>
+                    text: Paper type:
+                    character count: 11
+                    caret offset: 0
+                    default attributes: left-margin: 0
+                                        right-margin: 0
+                                        indent: 0
+                                        invisible: false
+                                        editable: false
+                                        pixels-above-lines: 0
+                                        pixels-below-lines: 0
+                                        pixels-inside-wrap: 0
+                                        bg-full-height: 0
+                                        scale: 1
+                                        rise: 0
+                                        underline: none
+                                        strikethrough: false
+                                        bg-stipple: false
+                                        fg-stipple: false
+                                        fg-color: <omitted>
+                                        bg-color: <omitted>
+                                        wrap-mode: word
+                                        justification: left
+                                        size: <omitted>
+                                        weight: <omitted>
+                                        family-name: <omitted>
+                                        stretch: <omitted>
+                                        variant: <omitted>
+                                        style: <omitted>
+                                        language: <omitted>
+                                        direction: <omitted>
+            unnamed-GailBox-55
+              "filler"
+              parent: unnamed-GailBox-16
+              index: 1
+              state: enabled horizontal sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailWidget-56
+                "unknown"
+                parent: unnamed-GailBox-55
+                index: 0
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+        Job
+          "page tab"
+          parent: unnamed-GailNotebook-2
+          index: 2
+          name: Job
+          state: enabled multi-line selectable sensitive
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Job
+          character count: 3
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+          unnamed-GailContainer-57
+            "panel"
+            index: 2
+            state: enabled sensitive
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailBox-58
+              "filler"
+              parent: unnamed-GailContainer-57
+              index: 0
+              state: enabled sensitive vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              Add Cover Page
+                "label"
+                parent: unnamed-GailBox-58
+                index: 0
+                name: Add Cover Page
+                state: enabled multi-line sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: Add Cover Page
+                character count: 14
+                caret offset: 0
+                default attributes: left-margin: 0
+                                    right-margin: 0
+                                    indent: 0
+                                    invisible: false
+                                    editable: false
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    bg-full-height: 0
+                                    scale: 1
+                                    rise: 0
+                                    underline: none
+                                    strikethrough: false
+                                    bg-stipple: false
+                                    fg-stipple: false
+                                    fg-color: <omitted>
+                                    bg-color: <omitted>
+                                    wrap-mode: word
+                                    justification: left
+                                    size: <omitted>
+                                    weight: <omitted>
+                                    family-name: <omitted>
+                                    stretch: <omitted>
+                                    variant: <omitted>
+                                    style: <omitted>
+                                    language: <omitted>
+                                    direction: <omitted>
+              unnamed-GailContainer-59
+                "panel"
+                parent: unnamed-GailBox-58
+                index: 1
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailBox-60
+                  "filler"
+                  parent: unnamed-GailContainer-59
+                  index: 0
+                  state: horizontal visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  unnamed-GailComboBox-61
+                    "combo box"
+                    parent: unnamed-GailBox-60
+                    index: 0
+                    name: Not available
+                    labelled-by: After:
+                    state: visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkAction>
+                    action 0 name: press
+                    <AtkSelection>
+                    selection count: 1
+                    selected children: 0
+                    unnamed-GailMenu-62
+                      "menu"
+                      parent: unnamed-GailComboBox-61
+                      index: 0
+                      state: enabled selectable selected sensitive
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: popup
+                      alpha: 1
+                      <AtkSelection>
+                      selection count: 0
+                      Not available
+                        "menu item"
+                        parent: unnamed-GailMenu-62
+                        index: 0
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Not available
+                        character count: 13
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                  unnamed-GailImage-63
+                    "icon"
+                    parent: unnamed-GailBox-60
+                    index: 1
+                    name: Warning
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkImage>
+                    image size: 16 x 16
+                    image description: (null)
+                After:
+                  "label"
+                  parent: unnamed-GailContainer-59
+                  index: 1
+                  name: After:
+                  label-for: unnamed-GailBox-60
+                  state: enabled multi-line sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: After:
+                  character count: 6
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                unnamed-GailBox-64
+                  "filler"
+                  parent: unnamed-GailContainer-59
+                  index: 2
+                  state: horizontal visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  unnamed-GailComboBox-65
+                    "combo box"
+                    parent: unnamed-GailBox-64
+                    index: 0
+                    name: Not available
+                    labelled-by: Before:
+                    state: visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkAction>
+                    action 0 name: press
+                    <AtkSelection>
+                    selection count: 1
+                    selected children: 0
+                    unnamed-GailMenu-66
+                      "menu"
+                      parent: unnamed-GailComboBox-65
+                      index: 0
+                      state: enabled selectable selected sensitive
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: popup
+                      alpha: 1
+                      <AtkSelection>
+                      selection count: 0
+                      Not available
+                        "menu item"
+                        parent: unnamed-GailMenu-66
+                        index: 0
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Not available
+                        character count: 13
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                  unnamed-GailImage-67
+                    "icon"
+                    parent: unnamed-GailBox-64
+                    index: 1
+                    name: Warning
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkImage>
+                    image size: 16 x 16
+                    image description: (null)
+                Before:
+                  "label"
+                  parent: unnamed-GailContainer-59
+                  index: 3
+                  name: Before:
+                  label-for: unnamed-GailBox-64
+                  state: enabled multi-line sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Before:
+                  character count: 7
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+            unnamed-GailBox-68
+              "filler"
+              parent: unnamed-GailContainer-57
+              index: 1
+              state: enabled sensitive vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              Print Document
+                "label"
+                parent: unnamed-GailBox-68
+                index: 0
+                name: Print Document
+                state: enabled multi-line sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: Print Document
+                character count: 14
+                caret offset: 0
+                default attributes: left-margin: 0
+                                    right-margin: 0
+                                    indent: 0
+                                    invisible: false
+                                    editable: false
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    bg-full-height: 0
+                                    scale: 1
+                                    rise: 0
+                                    underline: none
+                                    strikethrough: false
+                                    bg-stipple: false
+                                    fg-stipple: false
+                                    fg-color: <omitted>
+                                    bg-color: <omitted>
+                                    wrap-mode: word
+                                    justification: left
+                                    size: <omitted>
+                                    weight: <omitted>
+                                    family-name: <omitted>
+                                    stretch: <omitted>
+                                    variant: <omitted>
+                                    style: <omitted>
+                                    language: <omitted>
+                                    direction: <omitted>
+              unnamed-GailContainer-69
+                "panel"
+                parent: unnamed-GailBox-68
+                index: 1
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                On hold
+                  "radio button"
+                  parent: unnamed-GailContainer-69
+                  index: 0
+                  name: On hold
+                  description: Hold the job until it is explicitly released
+                  member-of: On hold
+                             At:
+                             Now
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: On hold
+                  character count: 7
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkImage>
+                  image size: -1 x -1
+                  image description: (null)
+                  <AtkAction>
+                  action 0 name: click
+                  action 0 keybinding: <Alt>h
+                  action 1 name: press
+                  action 2 name: release
+                
+                  "text"
+                  parent: unnamed-GailContainer-69
+                  index: 1
+                  name: Time of print
+                  description: Specify the time of print,
+ e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm
+                  state: editable focusable single-line visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: 
+                  character count: 0
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkAction>
+                  action 0 name: activate
+                At:
+                  "radio button"
+                  parent: unnamed-GailContainer-69
+                  index: 2
+                  name: At:
+                  description: Specify the time of print,
+ e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm
+                  member-of: On hold
+                             At:
+                             Now
+                  state: enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: At:
+                  character count: 3
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkImage>
+                  image size: -1 x -1
+                  image description: (null)
+                  <AtkAction>
+                  action 0 name: click
+                  action 0 keybinding: <Alt>t
+                  action 1 name: press
+                  action 2 name: release
+                Now
+                  "radio button"
+                  parent: unnamed-GailContainer-69
+                  index: 3
+                  name: Now
+                  member-of: On hold
+                             At:
+                             Now
+                  state: armed checked enabled focusable sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Now
+                  character count: 3
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                  <AtkImage>
+                  image size: -1 x -1
+                  image description: (null)
+                  <AtkAction>
+                  action 0 name: click
+                  action 0 keybinding: <Alt>n
+                  action 1 name: press
+                  action 2 name: release
+            unnamed-GailBox-70
+              "filler"
+              parent: unnamed-GailContainer-57
+              index: 2
+              state: enabled sensitive vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              Job Details
+                "label"
+                parent: unnamed-GailBox-70
+                index: 0
+                name: Job Details
+                state: enabled multi-line sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: Job Details
+                character count: 11
+                caret offset: 0
+                default attributes: left-margin: 0
+                                    right-margin: 0
+                                    indent: 0
+                                    invisible: false
+                                    editable: false
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    bg-full-height: 0
+                                    scale: 1
+                                    rise: 0
+                                    underline: none
+                                    strikethrough: false
+                                    bg-stipple: false
+                                    fg-stipple: false
+                                    fg-color: <omitted>
+                                    bg-color: <omitted>
+                                    wrap-mode: word
+                                    justification: left
+                                    size: <omitted>
+                                    weight: <omitted>
+                                    family-name: <omitted>
+                                    stretch: <omitted>
+                                    variant: <omitted>
+                                    style: <omitted>
+                                    language: <omitted>
+                                    direction: <omitted>
+              unnamed-GailContainer-71
+                "panel"
+                parent: unnamed-GailBox-70
+                index: 1
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                unnamed-GailBox-72
+                  "filler"
+                  parent: unnamed-GailContainer-71
+                  index: 0
+                  state: horizontal visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  unnamed-GailComboBox-73
+                    "combo box"
+                    parent: unnamed-GailBox-72
+                    index: 0
+                    name: Not available
+                    labelled-by: Billing info:
+                    state: visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkAction>
+                    action 0 name: press
+                    <AtkSelection>
+                    selection count: 1
+                    selected children: 0
+                    unnamed-GailMenu-74
+                      "menu"
+                      parent: unnamed-GailComboBox-73
+                      index: 0
+                      state: enabled selectable selected sensitive
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: popup
+                      alpha: 1
+                      <AtkSelection>
+                      selection count: 0
+                      Not available
+                        "menu item"
+                        parent: unnamed-GailMenu-74
+                        index: 0
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Not available
+                        character count: 13
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                  unnamed-GailImage-75
+                    "icon"
+                    parent: unnamed-GailBox-72
+                    index: 1
+                    name: Warning
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkImage>
+                    image size: 16 x 16
+                    image description: (null)
+                Billing info:
+                  "label"
+                  parent: unnamed-GailContainer-71
+                  index: 1
+                  name: Billing info:
+                  label-for: unnamed-GailBox-72
+                  state: enabled multi-line sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Billing info:
+                  character count: 13
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+                unnamed-GailBox-76
+                  "filler"
+                  parent: unnamed-GailContainer-71
+                  index: 2
+                  state: horizontal visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  unnamed-GailComboBox-77
+                    "combo box"
+                    parent: unnamed-GailBox-76
+                    index: 0
+                    name: Not available
+                    labelled-by: Priority:
+                    state: visible
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkAction>
+                    action 0 name: press
+                    <AtkSelection>
+                    selection count: 1
+                    selected children: 0
+                    unnamed-GailMenu-78
+                      "menu"
+                      parent: unnamed-GailComboBox-77
+                      index: 0
+                      state: enabled selectable selected sensitive
+                      toolkit: gail
+                      <AtkComponent>
+                      layer: popup
+                      alpha: 1
+                      <AtkSelection>
+                      selection count: 0
+                      Not available
+                        "menu item"
+                        parent: unnamed-GailMenu-78
+                        index: 0
+                        state: enabled selectable sensitive visible
+                        toolkit: gail
+                        <AtkComponent>
+                        layer: popup
+                        alpha: 1
+                        <AtkText>
+                        text: Not available
+                        character count: 13
+                        caret offset: 0
+                        <AtkAction>
+                        action 0 name: click
+                  unnamed-GailImage-79
+                    "icon"
+                    parent: unnamed-GailBox-76
+                    index: 1
+                    name: Warning
+                    toolkit: gail
+                    <AtkComponent>
+                    layer: widget
+                    alpha: 1
+                    <AtkImage>
+                    image size: 16 x 16
+                    image description: (null)
+                Priority:
+                  "label"
+                  parent: unnamed-GailContainer-71
+                  index: 3
+                  name: Priority:
+                  label-for: unnamed-GailBox-76
+                  state: enabled multi-line sensitive visible
+                  toolkit: gail
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: Priority:
+                  character count: 9
+                  caret offset: 0
+                  default attributes: left-margin: 0
+                                      right-margin: 0
+                                      indent: 0
+                                      invisible: false
+                                      editable: false
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      bg-full-height: 0
+                                      scale: 1
+                                      rise: 0
+                                      underline: none
+                                      strikethrough: false
+                                      bg-stipple: false
+                                      fg-stipple: false
+                                      fg-color: <omitted>
+                                      bg-color: <omitted>
+                                      wrap-mode: word
+                                      justification: left
+                                      size: <omitted>
+                                      weight: <omitted>
+                                      family-name: <omitted>
+                                      stretch: <omitted>
+                                      variant: <omitted>
+                                      style: <omitted>
+                                      language: <omitted>
+                                      direction: <omitted>
+        Image Quality
+          "page tab"
+          parent: unnamed-GailNotebook-2
+          index: 3
+          name: Image Quality
+          state: enabled multi-line selectable sensitive
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Image Quality
+          character count: 13
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+          unnamed-GailScrolledWindow-80
+            "scroll pane"
+            index: 3
+            state: enabled focusable sensitive
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailContainer-81
+              "viewport"
+              parent: unnamed-GailScrolledWindow-80
+              index: 0
+              state: enabled sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailContainer-82
+                "panel"
+                parent: unnamed-GailContainer-81
+                index: 0
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+            unnamed-GailScrollbar-83
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-80
+              index: 1
+              state: enabled horizontal sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 39.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+            unnamed-GailScrollbar-84
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-80
+              index: 2
+              state: enabled sensitive vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 27.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+        Color
+          "page tab"
+          parent: unnamed-GailNotebook-2
+          index: 4
+          name: Color
+          state: enabled multi-line selectable sensitive
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Color
+          character count: 5
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+          unnamed-GailScrolledWindow-85
+            "scroll pane"
+            index: 4
+            state: enabled focusable sensitive
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailContainer-86
+              "viewport"
+              parent: unnamed-GailScrolledWindow-85
+              index: 0
+              state: enabled sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailContainer-87
+                "panel"
+                parent: unnamed-GailContainer-86
+                index: 0
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+            unnamed-GailScrollbar-88
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-85
+              index: 1
+              state: enabled horizontal sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 39.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+            unnamed-GailScrollbar-89
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-85
+              index: 2
+              state: enabled sensitive vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 27.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+        Finishing
+          "page tab"
+          parent: unnamed-GailNotebook-2
+          index: 5
+          name: Finishing
+          state: enabled multi-line selectable sensitive
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Finishing
+          character count: 9
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+          unnamed-GailScrolledWindow-90
+            "scroll pane"
+            index: 5
+            state: enabled focusable sensitive
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailContainer-91
+              "viewport"
+              parent: unnamed-GailScrolledWindow-90
+              index: 0
+              state: enabled sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailContainer-92
+                "panel"
+                parent: unnamed-GailContainer-91
+                index: 0
+                state: enabled sensitive visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+            unnamed-GailScrollbar-93
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-90
+              index: 1
+              state: enabled horizontal sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 39.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+            unnamed-GailScrollbar-94
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-90
+              index: 2
+              state: enabled sensitive vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 27.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+        Advanced
+          "page tab"
+          parent: unnamed-GailNotebook-2
+          index: 6
+          name: Advanced
+          state: enabled multi-line selectable sensitive
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Advanced
+          character count: 8
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+          unnamed-GailScrolledWindow-95
+            "scroll pane"
+            index: 6
+            state: enabled focusable sensitive
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            unnamed-GailContainer-96
+              "viewport"
+              parent: unnamed-GailScrolledWindow-95
+              index: 0
+              state: enabled sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              unnamed-GailBox-97
+                "filler"
+                parent: unnamed-GailContainer-96
+                index: 0
+                state: enabled sensitive vertical visible
+                toolkit: gail
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+            unnamed-GailScrollbar-98
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-95
+              index: 1
+              state: enabled horizontal sensitive visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 27.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+            unnamed-GailScrollbar-99
+              "scroll bar"
+              parent: unnamed-GailScrolledWindow-95
+              index: 2
+              state: enabled sensitive vertical visible
+              toolkit: gail
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkAction>
+              action 0 name: activate
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 27.000000
+              current value: 0.000000
+              minimum increment: -0.300000
+      unnamed-GailBox-100
+        "filler"
+        parent: unnamed-GailBox-1
+        index: 1
+        state: enabled horizontal sensitive
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        unnamed-GailImage-101
+          "icon"
+          parent: unnamed-GailBox-100
+          index: 0
+          name: Warning
+          state: enabled sensitive visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: 16 x 16
+          image description: (null)
+        Some of the settings in the dialog conflict
+          "label"
+          parent: unnamed-GailBox-100
+          index: 1
+          name: Some of the settings in the dialog conflict
+          state: enabled multi-line sensitive visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Some of the settings in the dialog conflict
+          character count: 43
+          caret offset: 0
+          default attributes: left-margin: 0
+                              right-margin: 0
+                              indent: 0
+                              invisible: false
+                              editable: false
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              bg-full-height: 0
+                              scale: 1
+                              rise: 0
+                              underline: none
+                              strikethrough: false
+                              bg-stipple: false
+                              fg-stipple: false
+                              fg-color: <omitted>
+                              bg-color: <omitted>
+                              wrap-mode: word
+                              justification: left
+                              size: <omitted>
+                              weight: <omitted>
+                              family-name: <omitted>
+                              stretch: <omitted>
+                              variant: <omitted>
+                              style: <omitted>
+                              language: <omitted>
+                              direction: <omitted>
+    unnamed-GailBox-102
+      "filler"
+      parent: unnamed-GailBox-0
+      index: 1
+      state: enabled horizontal sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      Print
+        "push button"
+        parent: unnamed-GailBox-102
+        index: 0
+        name: Print
+        state: focusable showing visible default
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: Print
+        character count: 5
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>p
+        action 1 name: press
+        action 2 name: release
+      Cancel
+        "push button"
+        parent: unnamed-GailBox-102
+        index: 1
+        name: Cancel
+        state: enabled focusable sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: Cancel
+        character count: 6
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>c
+        action 1 name: press
+        action 2 name: release
+      Print Preview
+        "push button"
+        parent: unnamed-GailBox-102
+        index: 2
+        name: Print Preview
+        state: enabled focusable sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: Print Preview
+        character count: 13
+        caret offset: 0
+        default attributes: left-margin: 0
+                            right-margin: 0
+                            indent: 0
+                            invisible: false
+                            editable: false
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            bg-full-height: 0
+                            scale: 1
+                            rise: 0
+                            underline: none
+                            strikethrough: false
+                            bg-stipple: false
+                            fg-stipple: false
+                            fg-color: <omitted>
+                            bg-color: <omitted>
+                            wrap-mode: word
+                            justification: left
+                            size: <omitted>
+                            weight: <omitted>
+                            family-name: <omitted>
+                            stretch: <omitted>
+                            variant: <omitted>
+                            style: <omitted>
+                            language: <omitted>
+                            direction: <omitted>
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>v
+        action 1 name: press
+        action 2 name: release
