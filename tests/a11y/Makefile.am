@@ -39,4 +39,5 @@ EXTRA_DIST += \
 	assistant.ui assistant.txt \
 	pickers.ui pickers.txt \
 	lockbutton.ui lockbutton.txt \
-	spinner.ui spinner.txt
+	spinner.ui spinner.txt \
+	progress.ui progress.txt
