@@ -41,4 +41,5 @@ EXTRA_DIST += \
 	lockbutton.ui lockbutton.txt \
 	spinner.ui spinner.txt \
 	progress.ui progress.txt \
-	infobar.ui infobar.txt
+	infobar.ui infobar.txt \
+	calendar.ui calendar.txt

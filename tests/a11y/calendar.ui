@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkCalendar" id="calendar1">
+        <property name="visible">True</property>
+        <property name="day">1</property>
+        <property name="month">2</property>
+        <property name="year">1970</property>
+      </object>
+    </child>
+  </object>
+</interface>
