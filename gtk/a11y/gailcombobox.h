@@ -39,7 +39,6 @@ struct _GailComboBox
   GailContainer parent;
 
   gchar         *press_keybinding;
-  gchar         *press_description;
   guint         action_idle_handler;
 
   gchar         *name;

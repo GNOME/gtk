@@ -39,7 +39,6 @@ struct _GailExpander
 {
   GailContainer parent;
 
-  gchar         *activate_description;
   gchar         *activate_keybinding;
   guint         action_idle_handler;
 

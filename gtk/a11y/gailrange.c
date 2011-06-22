@@ -57,15 +57,10 @@ static gboolean     gail_range_do_action        (AtkAction       *action,
                                                 gint            i);
 static gboolean     idle_do_action              (gpointer        data);
 static gint         gail_range_get_n_actions    (AtkAction       *action);
-static const gchar* gail_range_get_description  (AtkAction    *action,
-                                                 gint          i);
 static const gchar* gail_range_get_keybinding   (AtkAction     *action,
                                                  gint           i);
 static const gchar* gail_range_action_get_name  (AtkAction    *action,
                                                  gint          i);
-static gboolean   gail_range_set_description  (AtkAction       *action,
-                                              gint            i,
-                                              const gchar     *desc);
 
 G_DEFINE_TYPE_WITH_CODE (GailRange, gail_range, GAIL_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
@@ -119,7 +114,6 @@ gail_range_real_initialize (AtkObject *obj,
   else
     range->adjustment = NULL;
   range->activate_keybinding=NULL;
-  range->activate_description=NULL;
   /*
    * Assumed to GtkScale (either GtkHScale or GtkVScale)
    */
@@ -269,7 +263,6 @@ gail_range_finalize (GObject            *object)
       range->adjustment = NULL;
     }
   range->activate_keybinding=NULL;
-  range->activate_description=NULL;
   if (range->action_idle_handler)
    {
     g_source_remove (range->action_idle_handler);
@@ -333,10 +326,8 @@ atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_range_do_action;
   iface->get_n_actions = gail_range_get_n_actions;
-  iface->get_description = gail_range_get_description;
   iface->get_keybinding = gail_range_get_keybinding;
   iface->get_name = gail_range_action_get_name;
-  iface->set_description = gail_range_set_description;
 }
 
 static gboolean
@@ -390,21 +381,6 @@ static gint
 gail_range_get_n_actions (AtkAction *action)
 {
     return 1;
-}
-
-static const gchar*
-gail_range_get_description (AtkAction *action,
-                              gint      i)
-{
-  GailRange *range;
-  const gchar *return_value;
-
-  range = GAIL_RANGE (action);
-  if (i==0)
-   return_value = range->activate_description;
-  else
-   return_value = NULL;
-  return return_value;
 }
 
 static const gchar*
@@ -466,30 +442,4 @@ gail_range_action_get_name (AtkAction *action,
 
   return return_value;
 }
-
-static gboolean
-gail_range_set_description (AtkAction      *action,
-                           gint           i,
-                           const gchar    *desc)
-{
-  GailRange *range;
-  gchar **value;
-
-  range = GAIL_RANGE (action);
-  
-  if (i==0)
-   value = &range->activate_description;
-  else
-   value = NULL;
-
-  if (value)
-   {
-    g_free (*value);
-    *value = g_strdup (desc);
-    return TRUE;
-   }
-  else
-   return FALSE;
-}
-
 

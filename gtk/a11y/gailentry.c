@@ -151,15 +151,10 @@ static gboolean              gail_entry_do_action               (AtkAction      
                                                                  gint            i);
 static gboolean              idle_do_action                     (gpointer        data);
 static gint                  gail_entry_get_n_actions           (AtkAction       *action);
-static const gchar* gail_entry_action_get_description  (AtkAction       *action,
-                                                                 gint            i);
 static const gchar* gail_entry_get_keybinding          (AtkAction       *action,
                                                                  gint            i);
 static const gchar* gail_entry_action_get_name         (AtkAction       *action,
                                                                  gint            i);
-static gboolean              gail_entry_action_set_description  (AtkAction       *action,
-                                                                 gint            i,
-                                                                 const gchar     *desc);
 
 typedef struct _GailEntryPaste			GailEntryPaste;
 
@@ -201,7 +196,6 @@ gail_entry_init (GailEntry *entry)
   entry->signal_name_delete = NULL;
   entry->cursor_position = 0;
   entry->selection_bound = 0;
-  entry->activate_description = NULL;
   entry->activate_keybinding = NULL;
 }
 
@@ -350,7 +344,6 @@ gail_entry_finalize (GObject            *object)
   GailEntry *entry = GAIL_ENTRY (object);
 
   g_object_unref (entry->textutil);
-  g_free (entry->activate_description);
   g_free (entry->activate_keybinding);
   if (entry->action_idle_handler)
     {
@@ -1245,10 +1238,8 @@ atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_entry_do_action;
   iface->get_n_actions = gail_entry_get_n_actions;
-  iface->get_description = gail_entry_action_get_description;
   iface->get_keybinding = gail_entry_get_keybinding;
   iface->get_name = gail_entry_action_get_name;
-  iface->set_description = gail_entry_action_set_description;
 }
 
 static gboolean
@@ -1307,26 +1298,6 @@ static gint
 gail_entry_get_n_actions (AtkAction *action)
 {
   return 1;
-}
-
-static const gchar*
-gail_entry_action_get_description (AtkAction *action,
-                                   gint      i)
-{
-  GailEntry *entry;
-  const gchar *return_value;
-
-  entry = GAIL_ENTRY (action);
-  switch (i)
-    {
-    case 0:
-      return_value = entry->activate_description;
-      break;
-    default:
-      return_value = NULL;
-      break;
-    }
-  return return_value; 
 }
 
 static const gchar*
@@ -1409,33 +1380,4 @@ gail_entry_action_get_name (AtkAction *action,
       break;
   }
   return return_value; 
-}
-
-static gboolean
-gail_entry_action_set_description (AtkAction      *action,
-                                   gint           i,
-                                   const gchar    *desc)
-{
-  GailEntry *entry;
-  gchar **value;
-
-  entry = GAIL_ENTRY (action);
-  switch (i)
-    {
-    case 0:
-      value = &entry->activate_description;
-      break;
-    default:
-      value = NULL;
-      break;
-    }
-
-  if (value)
-    {
-      g_free (*value);
-      *value = g_strdup (desc);
-      return TRUE;
-    }
-  else
-    return FALSE;
 }

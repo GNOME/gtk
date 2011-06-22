@@ -41,15 +41,10 @@ static gboolean     gail_combo_box_do_action               (AtkAction      *acti
                                                             gint           i);
 static gboolean     idle_do_action                         (gpointer       data);
 static gint         gail_combo_box_get_n_actions           (AtkAction      *action);
-static const gchar* gail_combo_box_get_description(AtkAction      *action,
-                                                            gint           i);
 static const gchar* gail_combo_box_get_keybinding   (AtkAction       *action,
 		                                             gint            i);
 static const gchar* gail_combo_box_action_get_name(AtkAction      *action,
                                                             gint           i);
-static gboolean              gail_combo_box_set_description(AtkAction      *action,
-                                                            gint           i,
-                                                            const gchar    *desc);
 static void         atk_selection_interface_init           (AtkSelectionIface *iface);
 static gboolean     gail_combo_box_add_selection           (AtkSelection   *selection,
                                                             gint           i);
@@ -83,7 +78,6 @@ gail_combo_box_class_init (GailComboBoxClass *klass)
 static void
 gail_combo_box_init (GailComboBox      *combo_box)
 {
-  combo_box->press_description = NULL;
   combo_box->press_keybinding = NULL;
   combo_box->old_selection = -1;
   combo_box->name = NULL;
@@ -265,10 +259,8 @@ atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_combo_box_do_action;
   iface->get_n_actions = gail_combo_box_get_n_actions;
-  iface->get_description = gail_combo_box_get_description;
   iface->get_keybinding = gail_combo_box_get_keybinding;
   iface->get_name = gail_combo_box_action_get_name;
-  iface->set_description = gail_combo_box_set_description;
 }
 
 static gboolean
@@ -341,21 +333,6 @@ gail_combo_box_get_n_actions (AtkAction *action)
 }
 
 static const gchar*
-gail_combo_box_get_description (AtkAction *action,
-                           gint      i)
-{
-  if (i == 0)
-    {
-      GailComboBox *combo_box;
-
-      combo_box = GAIL_COMBO_BOX (action);
-      return combo_box->press_description;
-    }
-  else
-    return NULL;
-}
-
-static const gchar*
 gail_combo_box_get_keybinding (AtkAction *action,
 		                    gint      i)
 {
@@ -414,24 +391,6 @@ gail_combo_box_action_get_name (AtkAction *action,
     return "press";
   else
     return NULL;
-}
-
-static gboolean
-gail_combo_box_set_description (AtkAction   *action,
-                                gint        i,
-                                const gchar *desc)
-{
-  if (i == 0)
-    {
-      GailComboBox *combo_box;
-
-      combo_box = GAIL_COMBO_BOX (action);
-      g_free (combo_box->press_description);
-      combo_box->press_description = g_strdup (desc);
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 static void
@@ -577,7 +536,6 @@ gail_combo_box_finalize (GObject *object)
 {
   GailComboBox *combo_box = GAIL_COMBO_BOX (object);
 
-  g_free (combo_box->press_description);
   g_free (combo_box->press_keybinding);
   g_free (combo_box->name);
   if (combo_box->action_idle_handler)

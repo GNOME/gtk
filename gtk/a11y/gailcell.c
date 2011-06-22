@@ -54,10 +54,6 @@ static const gchar *
                     gail_cell_action_get_description 
                                                   (AtkAction           *action,
 				                   gint                index);
-static gboolean     gail_cell_action_set_description 
-                                                  (AtkAction           *action,
-				                   gint                index,
-				                   const gchar         *desc);
 static const gchar *
                     gail_cell_action_get_keybinding 
                                                   (AtkAction           *action,
@@ -292,7 +288,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->do_action = gail_cell_action_do_action;
   iface->get_name = gail_cell_action_get_name;
   iface->get_description = gail_cell_action_get_description;
-  iface->set_description = gail_cell_action_set_description;
   iface->get_keybinding = gail_cell_action_get_keybinding;
 }
 
@@ -424,21 +419,6 @@ gail_cell_action_get_description (AtkAction *action,
   if (info == NULL)
     return NULL;
   return info->description;
-}
-
-static gboolean
-gail_cell_action_set_description (AtkAction   *action,
-				  gint        index,
-				  const gchar *desc)
-{
-  GailCell *cell = GAIL_CELL(action);
-  ActionInfo *info = _gail_cell_get_action_info (cell, index);
-
-  if (info == NULL)
-    return FALSE;
-  g_free (info->description);
-  info->description = g_strdup (desc);
-  return TRUE;
 }
 
 static const gchar *

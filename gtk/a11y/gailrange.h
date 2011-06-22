@@ -39,7 +39,6 @@ struct _GailRange
   GailWidget parent;
 
   AtkObject *adjustment;
-  gchar     *activate_description;
   gchar     *activate_keybinding;
   guint     action_idle_handler;
 

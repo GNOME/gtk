@@ -59,15 +59,10 @@ static gboolean              gail_button_do_action      (AtkAction      *action,
                                                          gint           i);
 static gboolean              idle_do_action             (gpointer       data);
 static gint                  gail_button_get_n_actions  (AtkAction      *action);
-static const gchar* gail_button_get_description(AtkAction      *action,
-                                                         gint           i);
 static const gchar* gail_button_get_keybinding (AtkAction      *action,
                                                          gint           i);
 static const gchar* gail_button_action_get_name(AtkAction      *action,
                                                          gint           i);
-static gboolean              gail_button_set_description(AtkAction      *action,
-                                                         gint           i,
-                                                         const gchar    *desc);
 static void                  gail_button_notify_label_weak_ref (gpointer data,
                                                                 GObject  *obj);
 static void                  gail_button_notify_weak_ref       (gpointer data,
@@ -173,9 +168,6 @@ gail_button_class_init (GailButtonClass *klass)
 static void
 gail_button_init (GailButton *button)
 {
-  button->click_description = NULL;
-  button->press_description = NULL;
-  button->release_description = NULL;
   button->click_keybinding = NULL;
   button->action_queue = NULL;
   button->action_idle_handler = 0;
@@ -409,10 +401,8 @@ atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_button_do_action;
   iface->get_n_actions = gail_button_get_n_actions;
-  iface->get_description = gail_button_get_description;
   iface->get_keybinding = gail_button_get_keybinding;
   iface->get_name = gail_button_action_get_name;
-  iface->set_description = gail_button_set_description;
 }
 
 static gboolean
@@ -561,33 +551,6 @@ gail_button_get_n_actions (AtkAction *action)
 }
 
 static const gchar*
-gail_button_get_description (AtkAction *action,
-                             gint      i)
-{
-  GailButton *button;
-  const gchar *return_value;
-
-  button = GAIL_BUTTON (action);
-
-  switch (i)
-    {
-    case 0:
-      return_value = button->click_description;
-      break;
-    case 1:
-      return_value = button->press_description;
-      break;
-    case 2:
-      return_value = button->release_description;
-      break;
-    default:
-      return_value = NULL;
-      break;
-    }
-  return return_value; 
-}
-
-static const gchar*
 gail_button_get_keybinding (AtkAction *action,
                             gint      i)
 {
@@ -698,41 +661,6 @@ gail_button_action_get_name (AtkAction *action,
       break;
     }
   return return_value; 
-}
-
-static gboolean
-gail_button_set_description (AtkAction      *action,
-                             gint           i,
-                             const gchar    *desc)
-{
-  GailButton *button;
-  gchar **value;
-
-  button = GAIL_BUTTON (action);
-
-  switch (i)
-    {
-    case 0:
-      value = &button->click_description;
-      break;
-    case 1:
-      value = &button->press_description;
-      break;
-    case 2:
-      value = &button->release_description;
-      break;
-    default:
-      value = NULL;
-      break;
-    }
-  if (value)
-    {
-      g_free (*value);
-      *value = g_strdup (desc);
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 static gint
@@ -1379,9 +1307,6 @@ gail_button_finalize (GObject            *object)
 {
   GailButton *button = GAIL_BUTTON (object);
 
-  g_free (button->click_description);
-  g_free (button->press_description);
-  g_free (button->release_description);
   g_free (button->click_keybinding);
   if (button->action_idle_handler)
     {

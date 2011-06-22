@@ -52,15 +52,10 @@ static gboolean              gail_menu_item_do_action      (AtkAction      *acti
                                                             gint           i);
 static gboolean              idle_do_action                (gpointer       data);
 static gint                  gail_menu_item_get_n_actions  (AtkAction      *action);
-static const gchar* gail_menu_item_get_description(AtkAction      *action,
-                                                            gint           i);
 static const gchar* gail_menu_item_action_get_name (AtkAction      *action,
                                                              gint           i);
 static const gchar* gail_menu_item_get_keybinding (AtkAction      *action,
                                                             gint           i);
-static gboolean              gail_menu_item_set_description(AtkAction      *action,
-                                                            gint           i,
-                                                            const gchar    *desc);
 static void                  menu_item_select              (GtkMenuItem        *item);
 static void                  menu_item_deselect            (GtkMenuItem        *item);
 static void                  menu_item_selection           (GtkMenuItem        *item,
@@ -195,7 +190,6 @@ static void
 gail_menu_item_init (GailMenuItem *menu_item)
 {
   menu_item->click_keybinding = NULL;
-  menu_item->click_description = NULL;
 }
 
 static void
@@ -806,10 +800,8 @@ atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_menu_item_do_action;
   iface->get_n_actions = gail_menu_item_get_n_actions;
-  iface->get_description = gail_menu_item_get_description;
   iface->get_name = gail_menu_item_action_get_name;
   iface->get_keybinding = gail_menu_item_get_keybinding;
-  iface->set_description = gail_menu_item_set_description;
 }
 
 static gboolean
@@ -903,21 +895,6 @@ gail_menu_item_get_n_actions (AtkAction *action)
    * Menu item has 1 action
    */
   return 1;
-}
-
-static const gchar*
-gail_menu_item_get_description (AtkAction *action,
-                                gint      i)
-{
-  if (i == 0)
-    {
-      GailMenuItem *item;
-
-      item = GAIL_MENU_ITEM (action);
-      return item->click_description;
-    }
-  else
-    return NULL;
 }
 
 static const gchar*
@@ -1120,31 +1097,12 @@ gail_menu_item_get_keybinding (AtkAction *action,
   return keybinding;
 }
 
-static gboolean
-gail_menu_item_set_description (AtkAction      *action,
-                                gint           i,
-                                const gchar    *desc)
-{
-  if (i == 0)
-    {
-      GailMenuItem *item;
-
-      item = GAIL_MENU_ITEM (action);
-      g_free (item->click_description);
-      item->click_description = g_strdup (desc);
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
 static void
 gail_menu_item_finalize (GObject *object)
 {
   GailMenuItem *menu_item = GAIL_MENU_ITEM (object);
 
   g_free (menu_item->click_keybinding);
-  g_free (menu_item->click_description);
   if (menu_item->action_idle_handler)
     {
       g_source_remove (menu_item->action_idle_handler);

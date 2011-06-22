@@ -52,7 +52,6 @@ struct _GailEntry
   gint           cursor_position;
   gint           selection_bound;
 
-  gchar          *activate_description;
   gchar          *activate_keybinding;
   guint          action_idle_handler;
   guint          insert_idle_handler;

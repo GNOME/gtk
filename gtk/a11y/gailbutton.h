@@ -44,9 +44,6 @@ struct _GailButton
    */
   gint8         state;
 
-  gchar         *click_description;
-  gchar         *press_description;
-  gchar         *release_description;
   gchar         *click_keybinding;
   guint         action_idle_handler;
   GQueue        *action_queue;

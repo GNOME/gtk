@@ -30,7 +30,6 @@ struct _GailLinkButtonLink
   AtkHyperlink parent;
 
   GailLinkButton *button;
-  gchar *description;
 };
 
 struct _GailLinkButtonLinkClass
@@ -106,26 +105,12 @@ gail_link_button_link_get_end_index (AtkHyperlink *link)
 static void
 gail_link_button_link_init (GailLinkButtonLink *link)
 {
-  link->description = NULL;
-}
-
-static void
-gail_link_button_link_finalize (GObject *obj)
-{
-  GailLinkButtonLink *link = (GailLinkButtonLink *)obj;
-
-  g_free (link->description);
-
-  G_OBJECT_CLASS (gail_link_button_link_parent_class)->finalize (obj);
 }
 
 static void
 gail_link_button_link_class_init (GailLinkButtonLinkClass *class)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
   AtkHyperlinkClass *hyperlink_class = ATK_HYPERLINK_CLASS (class);
-
-  object_class->finalize = gail_link_button_link_finalize;
 
   hyperlink_class->get_uri = gail_link_button_link_get_uri;
   hyperlink_class->get_n_anchors = gail_link_button_link_get_n_anchors;
@@ -172,41 +157,12 @@ gail_link_button_link_get_name (AtkAction *action,
   return "activate";
 }
 
-static const gchar *
-gail_link_button_link_get_description (AtkAction *action,
-                                       gint       i)
-{
-  GailLinkButtonLink *link = (GailLinkButtonLink *)action;
-
-  g_return_val_if_fail (i == 0, NULL);
-
-  return link->description;
-}
-
-static gboolean
-gail_link_button_link_set_description (AtkAction   *action,
-                                       gint         i,
-                                       const gchar *description)
-{
-  GailLinkButtonLink *link = (GailLinkButtonLink *)action;
-
-  g_return_val_if_fail (i == 0, FALSE);
-
-  g_free (link->description);
-  link->description = g_strdup (description);
-
-  return TRUE;
-}
-
-
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_link_button_link_do_action;
   iface->get_n_actions = gail_link_button_link_get_n_actions;
   iface->get_name = gail_link_button_link_get_name;
-  iface->get_description = gail_link_button_link_get_description;
-  iface->set_description = gail_link_button_link_set_description;
 }
 
 static gboolean

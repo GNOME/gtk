@@ -52,19 +52,12 @@ static gboolean              gail_expander_do_action    (AtkAction      *action,
                                                          gint           i);
 static gboolean              idle_do_action             (gpointer       data);
 static gint                  gail_expander_get_n_actions(AtkAction      *action);
-static const gchar* gail_expander_get_description
-                                                        (AtkAction      *action,
-                                                         gint           i);
 static const gchar* gail_expander_get_keybinding
                                                         (AtkAction      *action,
                                                          gint           i);
 static const gchar* gail_expander_action_get_name
                                                         (AtkAction      *action,
                                                          gint           i);
-static gboolean              gail_expander_set_description
-                                                        (AtkAction      *action,
-                                                         gint           i,
-                                                         const gchar    *desc);
 
 /* atktext.h */ 
 static void	  atk_text_interface_init	   (AtkTextIface	*iface);
@@ -139,7 +132,6 @@ gail_expander_class_init (GailExpanderClass *klass)
 static void
 gail_expander_init (GailExpander *expander)
 {
-  expander->activate_description = NULL;
   expander->activate_keybinding = NULL;
   expander->action_idle_handler = 0;
   expander->textutil = NULL;
@@ -352,10 +344,8 @@ atk_action_interface_init (AtkActionIface *iface)
 {
   iface->do_action = gail_expander_do_action;
   iface->get_n_actions = gail_expander_get_n_actions;
-  iface->get_description = gail_expander_get_description;
   iface->get_keybinding = gail_expander_get_keybinding;
   iface->get_name = gail_expander_action_get_name;
-  iface->set_description = gail_expander_set_description;
 }
 
 static gboolean
@@ -415,27 +405,6 @@ static gint
 gail_expander_get_n_actions (AtkAction *action)
 {
   return 1;
-}
-
-static const gchar*
-gail_expander_get_description (AtkAction *action,
-                               gint      i)
-{
-  GailExpander *expander;
-  const gchar *return_value;
-
-  expander = GAIL_EXPANDER (action);
-
-  switch (i)
-    {
-    case 0:
-      return_value = expander->activate_description;
-      break;
-    default:
-      return_value = NULL;
-      break;
-    }
-  return return_value; 
 }
 
 static const gchar*
@@ -500,35 +469,6 @@ gail_expander_action_get_name (AtkAction *action,
       break;
     }
   return return_value; 
-}
-
-static gboolean
-gail_expander_set_description (AtkAction      *action,
-                               gint           i,
-                               const gchar    *desc)
-{
-  GailExpander *expander;
-  gchar **value;
-
-  expander = GAIL_EXPANDER (action);
-
-  switch (i)
-    {
-    case 0:
-      value = &expander->activate_description;
-      break;
-    default:
-      value = NULL;
-      break;
-    }
-  if (value)
-    {
-      g_free (*value);
-      *value = g_strdup (desc);
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 static AtkStateSet*
@@ -876,7 +816,6 @@ gail_expander_finalize (GObject *object)
 {
   GailExpander *expander = GAIL_EXPANDER (object);
 
-  g_free (expander->activate_description);
   g_free (expander->activate_keybinding);
   if (expander->action_idle_handler)
     {
