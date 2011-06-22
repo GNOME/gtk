@@ -37,4 +37,5 @@ EXTRA_DIST += \
 	appchooser.ui appchooser.txt \
 	fontchooser.ui fontchooser.txt \
 	messagedialog.ui messagedialog.txt \
-	printdialog.ui printdialog.txt
+	printdialog.ui printdialog.txt \
+	expander.ui expander.txt
