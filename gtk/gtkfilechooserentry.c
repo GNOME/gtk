@@ -369,7 +369,7 @@ completion_match_func (GtkEntryCompletion *comp,
 		       gpointer            data)
 {
   GtkFileChooserEntry *chooser_entry;
-  char *name;
+  char *name = NULL;
   gboolean result;
   char *norm_file_part;
   char *norm_name;
