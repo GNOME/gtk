@@ -38,4 +38,5 @@ EXTRA_DIST += \
 	expander.ui expander.txt \
 	assistant.ui assistant.txt \
 	pickers.ui pickers.txt \
-	lockbutton.ui lockbutton.txt
+	lockbutton.ui lockbutton.txt \
+	spinner.ui spinner.txt
