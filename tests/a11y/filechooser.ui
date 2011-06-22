@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkFileChooserDialog" id="window1">
-    <property name="action">open</property>
-  </object>
-</interface>
