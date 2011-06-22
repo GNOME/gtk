@@ -240,7 +240,7 @@ static void
 gail_menu_item_init_textutil (GailMenuItem  *item,
                               GtkWidget *label)
 {
-  const gchar *label_text;
+  gchar *label_text;
 
   if (item->textutil == NULL)
     {
@@ -251,7 +251,8 @@ gail_menu_item_init_textutil (GailMenuItem  *item,
                         item);     
     }
   label_text = get_text_from_label_widget (label);
-  gail_text_util_text_setup (item->textutil, label_text);
+  gail_text_util_text_setup (item->textutil, label_text ? label_text : "");
+  g_free (label_text);
 }
 
 /* atktext.h */
@@ -279,7 +280,7 @@ gail_menu_item_get_text (AtkText *text,
   GtkWidget *widget;
   GtkWidget *label;
   GailMenuItem *item;
-  const gchar *label_text;
+  gchar *label_text;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -297,8 +298,12 @@ gail_menu_item_get_text (AtkText *text,
   if (label_text == NULL)
     return NULL;
   else
-    return gail_text_util_get_substring (item->textutil,
-                                         start_pos, end_pos);
+    {
+      g_free (label_text);
+
+      return gail_text_util_get_substring (item->textutil,
+                                           start_pos, end_pos);
+    }
 }
 
 static gchar*
