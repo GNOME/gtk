@@ -1,0 +1,405 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  button1
+    "push button"
+    index: 0
+    name: Page 1
+    state: enabled focusable sensitive showing visible
+    toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkText>
+    text: Button 1
+    character count: 8
+    caret offset: 0
+    default attributes: left-margin: 0
+                        right-margin: 0
+                        indent: 0
+                        invisible: false
+                        editable: false
+                        pixels-above-lines: 0
+                        pixels-below-lines: 0
+                        pixels-inside-wrap: 0
+                        bg-full-height: 0
+                        scale: 1
+                        rise: 0
+                        underline: none
+                        strikethrough: false
+                        bg-stipple: false
+                        fg-stipple: false
+                        fg-color: <omitted>
+                        bg-color: <omitted>
+                        wrap-mode: word
+                        justification: left
+                        size: <omitted>
+                        weight: <omitted>
+                        family-name: <omitted>
+                        stretch: <omitted>
+                        variant: <omitted>
+                        style: <omitted>
+                        language: <omitted>
+                        direction: <omitted>
+    <AtkImage>
+    image size: -1 x -1
+    image description: (null)
+    <AtkAction>
+    action 0 name: click
+    action 1 name: press
+    action 2 name: release
+  button2
+    "push button"
+    index: 1
+    name: Page 2
+    state: enabled focusable sensitive visible
+    toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkText>
+    text: Button 2
+    character count: 8
+    caret offset: 0
+    default attributes: left-margin: 0
+                        right-margin: 0
+                        indent: 0
+                        invisible: false
+                        editable: false
+                        pixels-above-lines: 0
+                        pixels-below-lines: 0
+                        pixels-inside-wrap: 0
+                        bg-full-height: 0
+                        scale: 1
+                        rise: 0
+                        underline: none
+                        strikethrough: false
+                        bg-stipple: false
+                        fg-stipple: false
+                        fg-color: <omitted>
+                        bg-color: <omitted>
+                        wrap-mode: word
+                        justification: left
+                        size: <omitted>
+                        weight: <omitted>
+                        family-name: <omitted>
+                        stretch: <omitted>
+                        variant: <omitted>
+                        style: <omitted>
+                        language: <omitted>
+                        direction: <omitted>
+    <AtkImage>
+    image size: -1 x -1
+    image description: (null)
+    <AtkAction>
+    action 0 name: click
+    action 1 name: press
+    action 2 name: release
+  unnamed-GailBox-0
+    "filler"
+    parent: unnamed-GailBox-1
+    index: 1
+    state: enabled horizontal sensitive showing visible
+    toolkit: gail
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    Close
+      "push button"
+      parent: unnamed-GailBox-0
+      index: 0
+      name: Close
+      state: enabled focusable sensitive
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Close
+      character count: 5
+      caret offset: 0
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: <omitted>
+                          bg-color: <omitted>
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>c
+      action 1 name: press
+      action 2 name: release
+    Cancel
+      "push button"
+      parent: unnamed-GailBox-0
+      index: 1
+      name: Cancel
+      state: enabled focusable sensitive showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Cancel
+      character count: 6
+      caret offset: 0
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: <omitted>
+                          bg-color: <omitted>
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>c
+      action 1 name: press
+      action 2 name: release
+    Finish
+      "push button"
+      parent: unnamed-GailBox-0
+      index: 2
+      name: Finish
+      state: focusable
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Finish
+      character count: 6
+      caret offset: 0
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: <omitted>
+                          bg-color: <omitted>
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>f
+      action 1 name: press
+      action 2 name: release
+    Go Back
+      "push button"
+      parent: unnamed-GailBox-0
+      index: 3
+      name: Go Back
+      state: enabled focusable sensitive
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Go Back
+      character count: 7
+      caret offset: 0
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: <omitted>
+                          bg-color: <omitted>
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>b
+      action 1 name: press
+      action 2 name: release
+    Continue
+      "push button"
+      parent: unnamed-GailBox-0
+      index: 4
+      name: Continue
+      state: focusable showing visible
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Continue
+      character count: 8
+      caret offset: 0
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: <omitted>
+                          bg-color: <omitted>
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>o
+      action 1 name: press
+      action 2 name: release
+    Apply
+      "push button"
+      parent: unnamed-GailBox-0
+      index: 5
+      name: Apply
+      state: enabled focusable sensitive
+      toolkit: gail
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Apply
+      character count: 5
+      caret offset: 0
+      default attributes: left-margin: 0
+                          right-margin: 0
+                          indent: 0
+                          invisible: false
+                          editable: false
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          bg-full-height: 0
+                          scale: 1
+                          rise: 0
+                          underline: none
+                          strikethrough: false
+                          bg-stipple: false
+                          fg-stipple: false
+                          fg-color: <omitted>
+                          bg-color: <omitted>
+                          wrap-mode: word
+                          justification: left
+                          size: <omitted>
+                          weight: <omitted>
+                          family-name: <omitted>
+                          stretch: <omitted>
+                          variant: <omitted>
+                          style: <omitted>
+                          language: <omitted>
+                          direction: <omitted>
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>a
+      action 1 name: press
+      action 2 name: release
