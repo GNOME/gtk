@@ -43,9 +43,11 @@ struct _GailTreeView
   AtkObject*	caption;
   AtkObject*	summary;
   gint          n_children_deleted;
+  gint          n_rows;
+  gint          n_cols;
   GArray*       col_data;
   GArray*	row_data;
-  GList*        cell_data;
+  GHashTable    *cell_info_by_index;
   GtkTreeModel  *tree_model;
   AtkObject     *focus_cell;
   GtkAdjustment *old_hadj;
