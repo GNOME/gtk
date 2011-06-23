@@ -5661,8 +5661,12 @@ gtk_label_set_use_markup (GtkLabel *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  g_object_freeze_notify (G_OBJECT (label));
+
   gtk_label_set_use_markup_internal (label, setting);
   gtk_label_recalculate (label);
+
+  g_object_thaw_notify (G_OBJECT (label));
 }
 
 /**
@@ -5697,8 +5701,12 @@ gtk_label_set_use_underline (GtkLabel *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  g_object_freeze_notify (G_OBJECT (label));
+
   gtk_label_set_use_underline_internal (label, setting);
   gtk_label_recalculate (label);
+
+  g_object_thaw_notify (G_OBJECT (label));
 }
 
 /**
