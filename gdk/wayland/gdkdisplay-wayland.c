@@ -124,17 +124,53 @@ static const struct wl_shell_listener shell_listener = {
 
 static void
 output_handle_geometry(void *data,
-		       struct wl_output *output,
-		       int32_t x, int32_t y, int32_t width, int32_t height)
+		       struct wl_output *wl_output,
+		       int x, int y, int physical_width, int physical_height,
+		       int subpixel, const char *make, const char *model)
 {
   /*
     g_signal_emit_by_name (screen, "monitors-changed");
     g_signal_emit_by_name (screen, "size-changed");
   */
 }
+static void
+display_handle_mode(void *data,
+                   struct wl_output *wl_output,
+                   uint32_t flags,
+                   int width,
+                   int height,
+                   int refresh)
+{
+}
+
+static void
+compositor_handle_visual(void *data,
+			 struct wl_compositor *compositor,
+			 uint32_t id, uint32_t token)
+{
+	GdkDisplayWayland *d = data;
+
+	switch (token) {
+	case WL_COMPOSITOR_VISUAL_ARGB32:
+		d->argb_visual = wl_visual_create(d->wl_display, id, 1);
+		break;
+	case WL_COMPOSITOR_VISUAL_PREMULTIPLIED_ARGB32:
+		d->premultiplied_argb_visual =
+			wl_visual_create(d->wl_display, id, 1);
+		break;
+	case WL_COMPOSITOR_VISUAL_XRGB32:
+		d->rgb_visual = wl_visual_create(d->wl_display, id, 1);
+		break;
+	}
+}
+
+static const struct wl_compositor_listener compositor_listener = {
+	compositor_handle_visual,
+};
 
 static const struct wl_output_listener output_listener = {
 	output_handle_geometry,
+	display_handle_mode
 };
 
 static void
@@ -147,6 +183,8 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
 
   if (strcmp(interface, "wl_compositor") == 0) {
     display_wayland->compositor = wl_compositor_create(display, id, 1);
+    wl_compositor_add_listener(display_wayland->compositor,
+					   &compositor_listener, display_wayland);
   } else if (strcmp(interface, "wl_shm") == 0) {
     display_wayland->shm = wl_shm_create(display, id, 1);
   } else if (strcmp(interface, "wl_shell") == 0) {

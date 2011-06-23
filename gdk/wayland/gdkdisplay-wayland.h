@@ -71,6 +71,7 @@ struct _GdkDisplayWayland
 
   /* Wayland fields below */
   struct wl_display *wl_display;
+  struct wl_visual *argb_visual, *premultiplied_argb_visual, *rgb_visual;
   struct wl_compositor *compositor;
   struct wl_shm *shm;
   struct wl_shell *shell;

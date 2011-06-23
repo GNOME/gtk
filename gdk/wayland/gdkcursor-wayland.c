@@ -224,7 +224,7 @@ create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
   else
     memset (cursor->map, 0, 4);
 
-  visual = wl_display_get_premultiplied_argb_visual(display->wl_display);
+  visual = display->premultiplied_argb_visual;
   cursor->buffer = wl_shm_create_buffer(display->shm,
 					fd,
 					cursor->width,
