@@ -44,7 +44,7 @@ window1
           layer: widget
           alpha: 1
           unnamed-GailWidget-4
-            "unknown"
+            "color chooser"
             parent: unnamed-GailBox-3
             index: 0
             name: Color Wheel
