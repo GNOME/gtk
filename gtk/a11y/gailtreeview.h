@@ -46,7 +46,6 @@ struct _GailTreeView
   gint          n_rows;
   gint          n_cols;
   GArray*       col_data;
-  GArray*	row_data;
   GHashTable    *cell_info_by_index;
   GtkTreeModel  *tree_model;
   AtkObject     *focus_cell;

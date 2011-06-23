@@ -32,7 +32,6 @@
 #include "gailcellparent.h"
 #include "gail-private-macros.h"
 
-typedef struct _GailTreeViewRowInfo    GailTreeViewRowInfo;
 typedef struct _GailTreeViewCellInfo   GailTreeViewCellInfo;
 
 static void             gail_tree_view_class_init       (GailTreeViewClass      *klass);
@@ -96,14 +95,9 @@ static gboolean         gail_tree_view_add_row_selection
 static gboolean         gail_tree_view_remove_row_selection 
                                                         (AtkTable               *table, 
                                                          gint                   row);
-static AtkObject*       gail_tree_view_get_row_header   (AtkTable               *table,
-                                                         gint                   row);
 static AtkObject*       gail_tree_view_get_column_header 
                                                         (AtkTable               *table,
                                                          gint                   column);
-static void             gail_tree_view_set_row_header   (AtkTable               *table,
-                                                         gint                   row,
-                                                         AtkObject              *header);
 static void             gail_tree_view_set_column_header 
                                                         (AtkTable               *table,
                                                          gint                   column,
@@ -116,14 +110,6 @@ static AtkObject*       gail_tree_view_get_summary      (AtkTable               
 static void             gail_tree_view_set_summary      (AtkTable               *table,
                                                          AtkObject              *accessible);
 static const gchar*
-                        gail_tree_view_get_row_description 
-                                                        (AtkTable               *table,
-                                                         gint                   row);
-static void             gail_tree_view_set_row_description 
-                                                        (AtkTable               *table,
-                                                         gint                   row,
-                                                         const gchar            *description);
-static const gchar*
                         gail_tree_view_get_column_description
                                                         (AtkTable               *table,
                                                          gint                   column);
@@ -131,15 +117,6 @@ static void             gail_tree_view_set_column_description
                                                         (AtkTable               *table,
                                                          gint                   column,
                                                          const gchar            *description);
-
-static void             set_row_data                    (AtkTable               *table,
-                                                         gint                   row,
-                                                         AtkObject              *header,
-                                                         const gchar            *description,
-                                                         gboolean               is_header);
-static GailTreeViewRowInfo* 
-                        get_row_info                    (AtkTable               *table,
-                                                         gint                   row);
 
 /* atkselection.h */
 
@@ -241,9 +218,6 @@ static GtkTreeIter*     return_iter_nth_row             (GtkTreeView            
                                                          GtkTreeIter            *iter,
                                                          gint                   increment,
                                                          gint                   row);
-static void             free_row_info                   (GArray                 *array,
-                                                         gint                   array_idx,
-                                                         gboolean               shift);
 static void             clean_rows                      (GailTreeView           *tree_view);
 static void             clean_cols                      (GailTreeView           *tree_view,
                                                          GtkTreeViewColumn      *tv_col);
@@ -452,7 +426,6 @@ gail_tree_view_real_initialize (AtkObject *obj,
   view = GAIL_TREE_VIEW (obj);
   view->caption = NULL;
   view->summary = NULL;
-  view->row_data = NULL;
   view->col_data = NULL;
   view->focus_cell = NULL;
   view->old_hadj = NULL;
@@ -1129,16 +1102,12 @@ atk_table_interface_init (AtkTableIface *iface)
   iface->remove_row_selection = gail_tree_view_remove_row_selection;
   iface->get_column_extent_at = NULL;
   iface->get_row_extent_at = NULL;
-  iface->get_row_header = gail_tree_view_get_row_header;
-  iface->set_row_header = gail_tree_view_set_row_header;
   iface->get_column_header = gail_tree_view_get_column_header;
   iface->set_column_header = gail_tree_view_set_column_header;
   iface->get_caption = gail_tree_view_get_caption;
   iface->set_caption = gail_tree_view_set_caption;
   iface->get_summary = gail_tree_view_get_summary;
   iface->set_summary = gail_tree_view_set_summary;
-  iface->get_row_description = gail_tree_view_get_row_description;
-  iface->set_row_description = gail_tree_view_set_row_description;
   iface->get_column_description = gail_tree_view_get_column_description;
   iface->set_column_description = gail_tree_view_set_column_description;
 }
@@ -1483,27 +1452,6 @@ gail_tree_view_remove_row_selection (AtkTable *table,
 }
 
 static AtkObject* 
-gail_tree_view_get_row_header (AtkTable *table, 
-                               gint     row)
-{
-  GailTreeViewRowInfo *row_info;
-
-  row_info = get_row_info (table, row);
-  if (row_info)
-    return row_info->header;
-  else
-    return NULL;
-}
-
-static void
-gail_tree_view_set_row_header (AtkTable  *table, 
-                               gint      row, 
-                               AtkObject *header)
-{
-  set_row_data (table, row, header, NULL, TRUE);
-}
-
-static AtkObject* 
 gail_tree_view_get_column_header (AtkTable *table, 
                                   gint     in_col)
 {
@@ -1655,27 +1603,6 @@ gail_tree_view_set_column_description (AtkTable	   *table,
                          &values, NULL);
 }
 
-static const gchar*
-gail_tree_view_get_row_description (AtkTable    *table,
-                                    gint        row)
-{
-  GailTreeViewRowInfo *row_info;
-
-  row_info = get_row_info (table, row);
-  if (row_info)
-    return row_info->description;
-  else
-    return NULL;
-}
-
-static void
-gail_tree_view_set_row_description (AtkTable    *table,
-                                    gint        row,
-                                    const gchar *description)
-{
-  set_row_data (table, row, NULL, description, FALSE);
-}
-
 static AtkObject*
 gail_tree_view_get_summary (AtkTable	*table)
 {
@@ -1709,168 +1636,6 @@ gail_tree_view_set_summary (AtkTable    *table,
     g_object_unref (old_summary);
 }
 
-static void
-set_row_data (AtkTable    *table, 
-              gint        row, 
-              AtkObject   *header,
-              const gchar *description,
-              gboolean    is_header)
-{
-  GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeModel *tree_model;
-  GailTreeView* obj = GAIL_TREE_VIEW (table);
-  GailTreeViewRowInfo* row_info;
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GArray *array;
-  gboolean found = FALSE;
-  gint i;
-  AtkPropertyValues values = { NULL };
-  gchar *signal_name;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
-  if (widget == NULL)
-    /* State is defunct */
-    return;
-
-  tree_view = GTK_TREE_VIEW (widget);
-  tree_model = gtk_tree_view_get_model (tree_view);
-
-  set_iter_nth_row (tree_view, &iter, row);
-  path = gtk_tree_model_get_path (tree_model, &iter);
-
-  if (obj->row_data == NULL)
-    obj->row_data = g_array_sized_new (FALSE, TRUE,
-                                       sizeof(GailTreeViewRowInfo *), 0);
-
-  array = obj->row_data;
-
-  for (i = 0; i < array->len; i++)
-    {
-      GtkTreePath *row_path;
-
-      row_info = g_array_index (array, GailTreeViewRowInfo*, i);
-      row_path = gtk_tree_row_reference_get_path (row_info->row_ref);
-
-      if (row_path != NULL)
-        {
-          if (path && gtk_tree_path_compare (row_path, path) == 0)
-            found = TRUE;
-
-          gtk_tree_path_free (row_path);
-
-          if (found)
-            {
-              if (is_header)
-                {
-                  if (row_info->header)
-                    g_object_unref (row_info->header);
-                  row_info->header = header;
-                  if (row_info->header)
-                    g_object_ref (row_info->header);
-                }
-              else
-                {
-                  g_free (row_info->description);
-                  row_info->description = g_strdup (description);
-                }
-              break;
-            }
-        }
-    }
-
-  if (!found)
-    {
-      /* if not found */
-      row_info = g_malloc (sizeof(GailTreeViewRowInfo));
-      row_info->row_ref = gtk_tree_row_reference_new (tree_model, path);
-      if (is_header)
-        {
-          row_info->header = header;
-          if (row_info->header)
-            g_object_ref (row_info->header);
-          row_info->description = NULL;
-        }
-      else
-        {
-          row_info->header = NULL;
-          row_info->description = g_strdup (description);
-        }
-      g_array_append_val (array, row_info);
-    }
-  g_value_init (&values.new_value, G_TYPE_INT);
-  g_value_set_int (&values.new_value, row);
-
-  if (is_header)
-    {
-      values.property_name = "accessible-table-row-header";
-      signal_name = "property_change::accessible-table-row-header";
-    }
-  else
-    {
-      values.property_name = "accessible-table-row-description";
-      signal_name = "property-change::accessible-table-row-description";
-    }
-  g_signal_emit_by_name (table, 
-                         signal_name,
-                         &values, NULL);
-
-  gtk_tree_path_free (path);
-}
-
-
-static GailTreeViewRowInfo*
-get_row_info (AtkTable    *table,
-              gint        row)
-{
-  GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeModel *tree_model;
-  GailTreeView* obj = GAIL_TREE_VIEW (table);
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GArray *array;
-  GailTreeViewRowInfo *rc = NULL;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
-  if (widget == NULL)
-    /* State is defunct */
-    return NULL;
-
-  tree_view = GTK_TREE_VIEW (widget);
-  tree_model = gtk_tree_view_get_model (tree_view);
-
-  set_iter_nth_row (tree_view, &iter, row);
-  path = gtk_tree_model_get_path (tree_model, &iter);
-  array = obj->row_data;
-
-  if (array != NULL)
-    {
-      GailTreeViewRowInfo *row_info;
-      GtkTreePath *row_path;
-      gint i;
-
-      for (i = 0; i < array->len; i++)
-        {
-          row_info = g_array_index (array, GailTreeViewRowInfo*, i);
-          row_path = gtk_tree_row_reference_get_path (row_info->row_ref);
-          if (row_path != NULL)
-            {
-              if (path && gtk_tree_path_compare (row_path, path) == 0)
-                rc = row_info;
-
-              gtk_tree_path_free (row_path);
-
-              if (rc != NULL)
-                break;
-            }
-        }
-    }
-
-  gtk_tree_path_free (path);
-  return rc;
-}
 /* atkselection.h */
 
 static void atk_selection_interface_init (AtkSelectionIface *iface)
@@ -3472,35 +3237,8 @@ clean_cell_info (GailTreeView *gailview,
 static void 
 clean_rows (GailTreeView *gailview)
 {
-  GArray *array;
   GailTreeViewCellInfo *cell_info;
   GHashTableIter iter;
-
-  /* Clean GailTreeViewRowInfo data */
-
-  array = gailview->row_data;
-  if (array != NULL)
-    {
-      GailTreeViewRowInfo *row_info;
-      GtkTreePath *row_path;
-      gint i;
-
-     /*
-      * Loop backwards so that calls to free_row_info
-      * do not affect the index numbers 
-      */
-      for (i = (array->len - 1); i >= 0; i  --)
-        {
-          row_info = g_array_index (array, GailTreeViewRowInfo*, i);
-          row_path = gtk_tree_row_reference_get_path (row_info->row_ref);
-
-          /* Remove any rows that have become invalid */
-          if (row_path == NULL)
-            free_row_info (array, i, TRUE);
-          else
-            gtk_tree_path_free (row_path);
-        }
-    }
 
   /* Clean GailTreeViewCellInfo data */
   g_hash_table_iter_init (&iter, gailview->cell_info_by_index);
@@ -3677,26 +3415,6 @@ traverse_cells (GailTreeView *tree_view,
     }
 
   g_signal_emit_by_name (tree_view, "visible-data-changed");
-}
-
-static void
-free_row_info (GArray   *array,
-               gint     array_idx,
-               gboolean shift)
-{
-  GailTreeViewRowInfo* obj;
-
-  obj = g_array_index (array, GailTreeViewRowInfo*, array_idx);
-
-  g_free (obj->description);
-  if (obj->row_ref != NULL)
-    gtk_tree_row_reference_free (obj->row_ref);
-  if (obj->header)
-    g_object_unref (obj->header);
-  g_free (obj);
-
-  if (shift)
-    g_array_remove_index (array, array_idx);
 }
 
 /*
@@ -4110,23 +3828,6 @@ clear_cached_data (GailTreeView  *view)
 {
   GailTreeViewCellInfo *cell_info;
   GHashTableIter iter;
-
-  if (view->row_data)
-    {
-      GArray *array = view->row_data;
-      gint i;
-
-     /*
-      * Since the third argument to free_row_info is FALSE, we don't remove
-      * the element.  Therefore it is safe to loop forward.
-      */
-      for (i = 0; i < array->len; i++)
-        free_row_info (array, i, FALSE);
-
-      g_array_free (array, TRUE);
-
-      view->row_data = NULL;
-    }
 
   /* Must loop through them all */
   g_hash_table_iter_init (&iter, view->cell_info_by_index);
