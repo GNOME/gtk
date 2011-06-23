@@ -17,25 +17,25 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GAIL_LABEL_H__
-#define __GAIL_LABEL_H__
+#ifndef __GTK_LABEL_ACCESSIBLE_H__
+#define __GTK_LABEL_ACCESSIBLE_H__
 
 #include "gailwidget.h"
 #include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_LABEL                      (gail_label_get_type ())
-#define GAIL_LABEL(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_LABEL, GailLabel))
-#define GAIL_LABEL_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_LABEL, GailLabelClass))
-#define GAIL_IS_LABEL(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_LABEL))
-#define GAIL_IS_LABEL_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_LABEL))
-#define GAIL_LABEL_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_LABEL, GailLabelClass))
+#define GTK_TYPE_LABEL_ACCESSIBLE            (gtk_label_accessible_get_type ())
+#define GTK_LABEL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LABEL_ACCESSIBLE, GtkLabelAccessible))
+#define GTK_LABEL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL_ACCESSIBLE, GtkLabelAccessibleClass))
+#define GTK_IS_LABEL_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LABEL_ACCESSIBLE))
+#define GTK_IS_LABEL_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL_ACCESSIBLE))
+#define GTK_LABEL_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LABEL_ACCESSIBLE, GtkLabelAccessibleClass))
 
-typedef struct _GailLabel              GailLabel;
-typedef struct _GailLabelClass         GailLabelClass;
+typedef struct _GtkLabelAccessible      GtkLabelAccessible;
+typedef struct _GtkLabelAccessibleClass GtkLabelAccessibleClass;
 
-struct _GailLabel
+struct _GtkLabelAccessible
 {
   GailWidget parent;
 
@@ -47,13 +47,13 @@ struct _GailLabel
   gboolean       has_top_level;
 };
 
-GType gail_label_get_type (void);
-
-struct _GailLabelClass
+struct _GtkLabelAccessibleClass
 {
   GailWidgetClass parent_class;
 };
 
+GType gtk_label_accessible_get_type (void);
+
 G_END_DECLS
 
-#endif /* __GAIL_LABEL_H__ */
+#endif /* __GTK_LABEL_ACCESSIBLE_H__ */

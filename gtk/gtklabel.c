@@ -52,6 +52,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 
+#include "a11y/gtklabelaccessible.h"
 
 /**
  * SECTION:gtklabel
@@ -1093,6 +1094,8 @@ gtk_label_class_init (GtkLabelClass *class)
 				"activate-current-link", 0);
 
   g_type_class_add_private (class, sizeof (GtkLabelPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
 }
 
 static void 
