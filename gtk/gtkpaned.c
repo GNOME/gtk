@@ -46,7 +46,7 @@
  * #GtkPaned has two panes, arranged either
  * horizontally or vertically. The division between
  * the two panes is adjustable by the user by dragging
- * a handle. See #GtkPaned for details.
+ * a handle.
  *
  * Child widgets are
  * added to the panes of the widget with gtk_paned_pack1() and
