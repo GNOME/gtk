@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkPaned" id="paned1">
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="label" translatable="yes">Left</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="label" translatable="yes">Right</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
