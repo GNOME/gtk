@@ -1,10 +1,8 @@
 include $(top_srcdir)/Makefile.decl
 
-TEST_PROGS += accessibility-dump
-
 check_PROGRAMS = $(TEST_PROGS)
 
-accessibility_dump_CFLAGS = \
+CFLAGS = \
 	-I$(top_srcdir)                 \
 	-I$(top_builddir)/gdk           \
 	-I$(top_srcdir)/gdk             \
@@ -13,32 +11,25 @@ accessibility_dump_CFLAGS = \
 	$(GTK_DEBUG_FLAGS)              \
 	$(GTK_DEP_CFLAGS)
 
-accessibility_dump_LDADD = \
+LDADD = \
 	$(top_builddir)/gdk/libgdk-3.la \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
+
+TEST_PROGS += accessibility-dump
 
 accessibility_dump_SOURCES = \
 	accessibility-dump.c
 
 TEST_PROGS += tree-performance
 
-tree_performance_CFLAGS = \
-	-I$(top_srcdir)                 \
-	-I$(top_builddir)/gdk           \
-	-I$(top_srcdir)/gdk             \
-	-DGDK_DISABLE_DEPRECATED        \
-	-DGTK_DISABLE_DEPRECATED        \
-	$(GTK_DEBUG_FLAGS)              \
-	$(GTK_DEP_CFLAGS)
-
-tree_performance_LDADD = \
-	$(top_builddir)/gdk/libgdk-3.la \
-	$(top_builddir)/gtk/libgtk-3.la \
-	$(GTK_DEP_LIBS)
-
 tree_performance_SOURCES = \
 	tree-performance.c
+
+TEST_PROGS += text
+
+text_SOURCES = \
+	text.c
 
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
