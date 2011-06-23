@@ -7,7 +7,7 @@ window1
   layer: window
   alpha: 1
   spinner1
-    "unknown"
+    "animation"
     parent: window1
     index: 0
     name: Spinner

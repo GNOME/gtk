@@ -285,6 +285,7 @@ gtk_spinner_accessible_initialize (AtkObject *accessible,
 
   atk_object_set_name (accessible, C_("throbbing progress animation widget", "Spinner"));
   atk_object_set_description (accessible, _("Provides visual indication of progress"));
+  atk_object_set_role (accessible, ATK_ROLE_ANIMATION);
 }
 
 static void
