@@ -98,18 +98,10 @@ static gboolean         gail_tree_view_remove_row_selection
 static AtkObject*       gail_tree_view_get_column_header 
                                                         (AtkTable               *table,
                                                          gint                   column);
-static void             gail_tree_view_set_column_header 
-                                                        (AtkTable               *table,
-                                                         gint                   column,
-                                                         AtkObject              *header);
 static const gchar*
                         gail_tree_view_get_column_description
                                                         (AtkTable               *table,
                                                          gint                   column);
-static void             gail_tree_view_set_column_description
-                                                        (AtkTable               *table,
-                                                         gint                   column,
-                                                         const gchar            *description);
 
 /* atkselection.h */
 
@@ -303,8 +295,6 @@ static AtkObject *       get_header_from_column         (GtkTreeViewColumn      
 static gboolean          idle_garbage_collect_cell_data (gpointer data);
 static gboolean          garbage_collect_cell_data      (gpointer data);
 
-static GQuark quark_column_desc_object = 0;
-static GQuark quark_column_header_object = 0;
 static gboolean editing = FALSE;
 
 struct _GailTreeViewCellInfo
@@ -353,9 +343,6 @@ gail_tree_view_class_init (GailTreeViewClass *klass)
   container_class->remove_gtk = NULL;
 
   gobject_class->finalize = gail_tree_view_finalize;
-
-  quark_column_desc_object = g_quark_from_static_string ("gtk-column-object");
-  quark_column_header_object = g_quark_from_static_string ("gtk-header-object");
 }
 
 static void
@@ -1082,9 +1069,7 @@ atk_table_interface_init (AtkTableIface *iface)
   iface->get_column_extent_at = NULL;
   iface->get_row_extent_at = NULL;
   iface->get_column_header = gail_tree_view_get_column_header;
-  iface->set_column_header = gail_tree_view_set_column_header;
   iface->get_column_description = gail_tree_view_get_column_description;
-  iface->set_column_description = gail_tree_view_set_column_description;
 }
 
 static gint
@@ -1444,41 +1429,6 @@ gail_tree_view_get_column_header (AtkTable *table,
   return get_header_from_column (tv_col);
 }
 
-static void
-gail_tree_view_set_column_header (AtkTable  *table, 
-                                  gint      in_col,
-                                  AtkObject *header)
-{
-  GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeViewColumn *tv_col;
-  AtkPropertyValues values = { NULL };
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
-  if (widget == NULL)
-    /* State is defunct */
-    return;
-
-  tree_view = GTK_TREE_VIEW (widget);
-  tv_col = get_column (tree_view, in_col);
-  if (tv_col == NULL)
-     return;
-
-  g_object_set_qdata_full (G_OBJECT (tv_col),
-                           quark_column_header_object,
-                           header,
-                           g_object_unref);
-  if (header)
-    g_object_ref (header);
-  g_value_init (&values.new_value, G_TYPE_INT);
-  g_value_set_int (&values.new_value, in_col);
-
-  values.property_name = "accessible-table-column-header";
-  g_signal_emit_by_name (table, 
-                         "property_change::accessible-table-column-header",
-                         &values, NULL);
-}
-
 static const gchar*
 gail_tree_view_get_column_description (AtkTable	  *table,
                                        gint       in_col)
@@ -1486,7 +1436,7 @@ gail_tree_view_get_column_description (AtkTable	  *table,
   GtkWidget *widget;
   GtkTreeView *tree_view;
   GtkTreeViewColumn *tv_col;
-  gchar *rc;
+  gchar *title_text;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
@@ -1498,51 +1448,8 @@ gail_tree_view_get_column_description (AtkTable	  *table,
   if (tv_col == NULL)
      return NULL;
 
-  rc = g_object_get_qdata (G_OBJECT (tv_col),
-                           quark_column_desc_object);
-
-  if (rc != NULL)
-    return rc;
-  else
-    {
-      gchar *title_text;
-
-      g_object_get (tv_col, "title", &title_text, NULL);
-      return title_text;
-    }
-}
-
-static void
-gail_tree_view_set_column_description (AtkTable	   *table,
-                                       gint        in_col,
-                                       const gchar *description)
-{
-  GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeViewColumn *tv_col;
-  AtkPropertyValues values = { NULL };
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
-  if (widget == NULL)
-    /* State is defunct */
-    return;
-
-  tree_view = GTK_TREE_VIEW (widget);
-  tv_col = get_column (tree_view, in_col);
-  if (tv_col == NULL)
-     return;
-
-  g_object_set_qdata_full (G_OBJECT (tv_col),
-                           quark_column_desc_object,
-                           g_strdup (description),
-                           g_free);
-  g_value_init (&values.new_value, G_TYPE_INT);
-  g_value_set_int (&values.new_value, in_col);
-
-  values.property_name = "accessible-table-column-description";
-  g_signal_emit_by_name (table, 
-                         "property_change::accessible-table-column-description",
-                         &values, NULL);
+  g_object_get (tv_col, "title", &title_text, NULL);
+  return title_text;
 }
 
 /* atkselection.h */
@@ -4121,23 +4028,12 @@ get_header_from_column (GtkTreeViewColumn *tv_col)
   if (tv_col == NULL)
     return NULL;
 
-  /* If the user has set a header object, use that */
+  header_widget = gtk_tree_view_column_get_button (tv_col);
 
-  rc = g_object_get_qdata (G_OBJECT (tv_col), quark_column_header_object);
+  if (header_widget)
+    rc = gtk_widget_get_accessible (header_widget);
+  else
+    rc = NULL;
 
-  if (rc == NULL)
-    {
-      /* If the user has not set a header object, grab the column */
-      /* header object defined by the GtkTreeView */
-
-      header_widget = gtk_tree_view_column_get_button (tv_col);
-
-      if (header_widget)
-        {
-          rc = gtk_widget_get_accessible (header_widget);
-        }
-      else
-        rc = NULL;
-    }
   return rc;
 }
