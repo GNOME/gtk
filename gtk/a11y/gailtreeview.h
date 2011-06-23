@@ -40,8 +40,6 @@ struct _GailTreeView
 {
   GailContainer parent;
 
-  AtkObject*	caption;
-  AtkObject*	summary;
   gint          n_children_deleted;
   gint          n_rows;
   gint          n_cols;

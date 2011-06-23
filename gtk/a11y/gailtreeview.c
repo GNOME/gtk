@@ -102,13 +102,6 @@ static void             gail_tree_view_set_column_header
                                                         (AtkTable               *table,
                                                          gint                   column,
                                                          AtkObject              *header);
-static AtkObject*
-                        gail_tree_view_get_caption      (AtkTable               *table);
-static void             gail_tree_view_set_caption      (AtkTable               *table,
-                                                         AtkObject              *caption);
-static AtkObject*       gail_tree_view_get_summary      (AtkTable               *table);
-static void             gail_tree_view_set_summary      (AtkTable               *table,
-                                                         AtkObject              *accessible);
 static const gchar*
                         gail_tree_view_get_column_description
                                                         (AtkTable               *table,
@@ -314,13 +307,6 @@ static GQuark quark_column_desc_object = 0;
 static GQuark quark_column_header_object = 0;
 static gboolean editing = FALSE;
 
-struct _GailTreeViewRowInfo
-{
-  GtkTreeRowReference *row_ref;
-  gchar *description;
-  AtkObject *header;
-};
-
 struct _GailTreeViewCellInfo
 {
   GailCell *cell;
@@ -424,8 +410,6 @@ gail_tree_view_real_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gail_tree_view_parent_class)->initialize (obj, data);
 
   view = GAIL_TREE_VIEW (obj);
-  view->caption = NULL;
-  view->summary = NULL;
   view->col_data = NULL;
   view->focus_cell = NULL;
   view->old_hadj = NULL;
@@ -616,11 +600,6 @@ gail_tree_view_finalize (GObject	    *object)
     g_source_remove (view->idle_cursor_changed_id);
   if (view->idle_expand_id)
     g_source_remove (view->idle_expand_id);
-
-  if (view->caption)
-    g_object_unref (view->caption);
-  if (view->summary)
-    g_object_unref (view->summary);
 
   if (view->tree_model)
     disconnect_model_signals (view);
@@ -1104,10 +1083,6 @@ atk_table_interface_init (AtkTableIface *iface)
   iface->get_row_extent_at = NULL;
   iface->get_column_header = gail_tree_view_get_column_header;
   iface->set_column_header = gail_tree_view_set_column_header;
-  iface->get_caption = gail_tree_view_get_caption;
-  iface->set_caption = gail_tree_view_set_caption;
-  iface->get_summary = gail_tree_view_get_summary;
-  iface->set_summary = gail_tree_view_set_summary;
   iface->get_column_description = gail_tree_view_get_column_description;
   iface->set_column_description = gail_tree_view_set_column_description;
 }
@@ -1504,39 +1479,6 @@ gail_tree_view_set_column_header (AtkTable  *table,
                          &values, NULL);
 }
 
-static AtkObject*
-gail_tree_view_get_caption (AtkTable	*table)
-{
-  GailTreeView* obj = GAIL_TREE_VIEW (table);
-
-  return obj->caption;
-}
-
-static void
-gail_tree_view_set_caption (AtkTable	*table,
-                            AtkObject   *caption)
-{
-  GailTreeView* obj = GAIL_TREE_VIEW (table);
-  AtkPropertyValues values = { NULL };
-  AtkObject *old_caption;
-
-  old_caption = obj->caption;
-  obj->caption = caption;
-  if (obj->caption)
-    g_object_ref (obj->caption);
-  g_value_init (&values.old_value, G_TYPE_POINTER);
-  g_value_set_pointer (&values.old_value, old_caption);
-  g_value_init (&values.new_value, G_TYPE_POINTER);
-  g_value_set_pointer (&values.new_value, obj->caption);
-
-  values.property_name = "accessible-table-caption-object";
-  g_signal_emit_by_name (table, 
-                         "property_change::accessible-table-caption-object", 
-                         &values, NULL);
-  if (old_caption)
-    g_object_unref (old_caption);
-}
-
 static const gchar*
 gail_tree_view_get_column_description (AtkTable	  *table,
                                        gint       in_col)
@@ -1601,39 +1543,6 @@ gail_tree_view_set_column_description (AtkTable	   *table,
   g_signal_emit_by_name (table, 
                          "property_change::accessible-table-column-description",
                          &values, NULL);
-}
-
-static AtkObject*
-gail_tree_view_get_summary (AtkTable	*table)
-{
-  GailTreeView* obj = GAIL_TREE_VIEW (table);
-
-  return obj->summary;
-}
-
-static void
-gail_tree_view_set_summary (AtkTable    *table,
-                            AtkObject   *accessible)
-{
-  GailTreeView* obj = GAIL_TREE_VIEW (table);
-  AtkPropertyValues values = { NULL };
-  AtkObject *old_summary;
-
-  old_summary = obj->summary;
-  obj->summary = accessible;
-  if (obj->summary)
-    g_object_ref (obj->summary);
-  g_value_init (&values.old_value, G_TYPE_POINTER);
-  g_value_set_pointer (&values.old_value, old_summary);
-  g_value_init (&values.new_value, G_TYPE_POINTER);
-  g_value_set_pointer (&values.new_value, obj->summary);
-
-  values.property_name = "accessible-table-summary";
-  g_signal_emit_by_name (table, 
-                         "property_change::accessible-table-ummary",
-                         &values, NULL);
-  if (old_summary)
-    g_object_unref (old_summary);
 }
 
 /* atkselection.h */
