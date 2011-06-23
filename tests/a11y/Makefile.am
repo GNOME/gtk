@@ -61,4 +61,5 @@ EXTRA_DIST += \
 	spinner.ui spinner.txt \
 	progress.ui progress.txt \
 	infobar.ui infobar.txt \
-	calendar.ui calendar.txt
+	calendar.ui calendar.txt \
+	statusbar.ui statusbar.txt
