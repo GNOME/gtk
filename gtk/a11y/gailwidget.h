@@ -58,8 +58,6 @@ struct _GailWidgetClass
 
 };
 
-AtkObject*     gail_widget_new         (GtkWidget       *widget);
-
 G_END_DECLS
 
 #endif /* __GAIL_WIDGET_H__ */

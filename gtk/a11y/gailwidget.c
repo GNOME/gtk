@@ -188,22 +188,6 @@ gail_widget_real_initialize (AtkObject *obj,
   obj->role = ATK_ROLE_UNKNOWN;
 }
 
-AtkObject* 
-gail_widget_new (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_WIDGET, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 /*
  * This function specifies the function to be called when the widget
  * is destroyed
