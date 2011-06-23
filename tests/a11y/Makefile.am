@@ -63,4 +63,5 @@ EXTRA_DIST += \
 	infobar.ui infobar.txt \
 	calendar.ui calendar.txt \
 	statusbar.ui statusbar.txt \
-	paned.ui paned.txt
+	paned.ui paned.txt \
+	iconview.ui iconview.txt
