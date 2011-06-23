@@ -82,7 +82,6 @@ static AtkObject*       gail_tree_view_table_ref_at     (AtkTable               
                                                          gint                   column);
 static gint             gail_tree_view_get_n_rows       (AtkTable               *table);
 static gint             gail_tree_view_get_n_columns    (AtkTable               *table);
-static gint             get_n_actual_columns            (GtkTreeView            *tree_view);
 static gboolean         gail_tree_view_is_row_selected  (AtkTable               *table,
                                                          gint                   row);
 static gboolean         gail_tree_view_is_selected      (AtkTable               *table,
@@ -245,8 +244,6 @@ static GtkTreeIter*     return_iter_nth_row             (GtkTreeView            
 static void             free_row_info                   (GArray                 *array,
                                                          gint                   array_idx,
                                                          gboolean               shift);
-static void             clean_cell_info                 (GailTreeView           *tree_view,
-                                                         GList                  *list); 
 static void             clean_rows                      (GailTreeView           *tree_view);
 static void             clean_cols                      (GailTreeView           *tree_view,
                                                          GtkTreeViewColumn      *tv_col);
@@ -326,7 +323,6 @@ static gboolean         get_next_node_with_child        (GtkTreeModel           
 static gboolean         get_tree_path_from_row_index    (GtkTreeModel           *model,
                                                          gint                   row_index,
                                                          GtkTreePath            **tree_path);
-static gint             get_row_count                   (GtkTreeModel           *model);
 static gboolean         get_path_column_from_index      (GtkTreeView            *tree_view,
                                                          gint                   index,
                                                          GtkTreePath            **path,
@@ -335,7 +331,6 @@ static void             set_cell_expandable             (GailCell               
 
 static GailTreeViewCellInfo* find_cell_info             (GailTreeView           *view,
                                                          GailCell               *cell,
-                                                          GList**                list,
 							 gboolean                live_only);
 static AtkObject *       get_header_from_column         (GtkTreeViewColumn      *tv_col);
 static gboolean          idle_garbage_collect_cell_data (gpointer data);
@@ -459,7 +454,6 @@ gail_tree_view_real_initialize (AtkObject *obj,
   view->summary = NULL;
   view->row_data = NULL;
   view->col_data = NULL;
-  view->cell_data = NULL;
   view->focus_cell = NULL;
   view->old_hadj = NULL;
   view->old_vadj = NULL;
@@ -467,6 +461,8 @@ gail_tree_view_real_initialize (AtkObject *obj,
   view->idle_expand_path = NULL;
 
   view->n_children_deleted = 0;
+
+  view->cell_info_by_index = g_hash_table_new (g_int_hash, g_int_equal);
 
   widget = GTK_WIDGET (data);
   g_signal_connect_after (widget,
@@ -502,9 +498,12 @@ gail_tree_view_real_initialize (AtkObject *obj,
     (GCallback) focus_out, NULL, NULL, 0);
 
   view->tree_model = tree_model;
+  view->n_rows = 0;
+  view->n_cols = 0;
   if (tree_model)
     {
       g_object_add_weak_pointer (G_OBJECT (view->tree_model), (gpointer *)&view->tree_model);
+      count_rows (tree_model, NULL, NULL, &view->n_rows, 0, G_MAXINT);
       connect_model_signals (tree_view, view);
 
       if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
@@ -537,6 +536,7 @@ gail_tree_view_real_initialize (AtkObject *obj,
 
   for (tmp_list = tv_cols; tmp_list; tmp_list = tmp_list->next)
     {
+      view->n_cols++;
       g_signal_connect_data (tmp_list->data, "notify::visible",
        (GCallback)column_visibility_changed, 
         tree_view, NULL, FALSE);
@@ -574,12 +574,14 @@ gail_tree_view_real_notify_gtk (GObject             *obj,
         disconnect_model_signals (gailview);
       clear_cached_data (gailview);
       gailview->tree_model = tree_model;
+      gailview->n_rows = 0;
       /*
        * if there is no model the GtkTreeView is probably being destroyed
        */
       if (tree_model)
         {
           g_object_add_weak_pointer (G_OBJECT (gailview->tree_model), (gpointer *)&gailview->tree_model);
+          count_rows (tree_model, NULL, NULL, &gailview->n_rows, 0, G_MAXINT);
           connect_model_signals (tree_view, gailview);
 
           if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
@@ -649,6 +651,9 @@ gail_tree_view_finalize (GObject	    *object)
 
   if (view->tree_model)
     disconnect_model_signals (view);
+
+  if (view->cell_info_by_index)
+    g_hash_table_destroy (view->cell_info_by_index);
 
   if (view->col_data)
     {
@@ -768,31 +773,14 @@ static gint
 gail_tree_view_get_n_children (AtkObject *obj)
 {
   GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeModel *tree_model;
-  gint n_rows, n_cols;
 
   gail_return_val_if_fail (GAIL_IS_TREE_VIEW (obj), 0);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return 0;
 
-  tree_view = GTK_TREE_VIEW (widget);
-  tree_model = gtk_tree_view_get_model (tree_view);
-
-  /*
-   * We get the total number of rows including those which are collapsed
-   */
-  n_rows = get_row_count (tree_model);
-  /*
-   * We get the total number of columns including those which are not visible
-   */
-  n_cols = get_n_actual_columns (tree_view);
-  return (n_rows * n_cols);
+  return (GAIL_TREE_VIEW (obj)->n_rows + 1) * GAIL_TREE_VIEW (obj)->n_cols;
 }
 
 static AtkObject*
@@ -835,8 +823,9 @@ gail_tree_view_ref_child (AtkObject *obj,
   if (i >= gail_tree_view_get_n_children (obj))
     return NULL;
 
+  gailview = GAIL_TREE_VIEW (obj);
   tree_view = GTK_TREE_VIEW (widget);
-  if (i < get_n_actual_columns (tree_view))
+  if (i < gailview->n_cols)
     {
       tv_col = gtk_tree_view_get_column (tree_view, i);
       child = get_header_from_column (tv_col);
@@ -845,7 +834,6 @@ gail_tree_view_ref_child (AtkObject *obj,
       return child;
     }
 
-  gailview = GAIL_TREE_VIEW (obj);
   /*
    * Check whether the child is cached
    */
@@ -1034,10 +1022,8 @@ gail_tree_view_ref_child (AtkObject *obj,
       else
         {
           gint parent_index;
-          gint n_columns;
 
-          n_columns = get_n_actual_columns (tree_view);
-          parent_index = get_index (tree_view, path, i % n_columns);
+          parent_index = get_index (tree_view, path, i % gailview->n_cols);
           parent_node = atk_object_ref_accessible_child (obj, parent_index);
         }
       accessible_array[0] = parent_node;
@@ -1208,7 +1194,7 @@ gail_tree_view_get_column_at_index (AtkTable *table,
     return -1;
 
   tree_view = GTK_TREE_VIEW (widget);
-  n_columns = get_n_actual_columns (tree_view);
+  n_columns = GAIL_TREE_VIEW (table)->n_cols;
 
   if (n_columns == 0)
     return 0;
@@ -1274,11 +1260,10 @@ gail_tree_view_get_n_rows (AtkTable *table)
   if (!tree_model)
     n_rows = 0;
   else if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
-   /* 
-    * If working with a LIST store, then this is a faster way
-    * to get the number of rows.
+   /*
+    * If working with a LIST store, then no rows are collapsed
     */
-    n_rows = gtk_tree_model_iter_n_children (tree_model, NULL);
+    n_rows = GAIL_TREE_VIEW (table)->n_rows;
   else
     {
       GtkTreePath *root_tree;
@@ -1293,23 +1278,7 @@ gail_tree_view_get_n_rows (AtkTable *table)
   return n_rows;
 }
 
-/*
- * The function get_n_actual_columns returns the number of columns in the 
- * GtkTreeView. i.e. it include both visible and non-visible columns.
- */
-static gint 
-get_n_actual_columns (GtkTreeView *tree_view)
-{
-  GList *columns;
-  gint n_cols;
-
-  columns = gtk_tree_view_get_columns (tree_view);
-  n_cols = g_list_length (columns);
-  g_list_free (columns);
-  return n_cols;
-}
-
-static gint 
+static gint
 gail_tree_view_get_n_columns (AtkTable *table)
 {
   GtkWidget *widget;
@@ -2094,7 +2063,7 @@ gail_tree_view_get_cell_area (GailCellParent *parent,
     {
       top_cell = cell;
     }
-  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), top_cell, NULL, TRUE);
+  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), top_cell, TRUE);
   gail_return_if_fail (cell_info);
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
@@ -2178,7 +2147,7 @@ gail_tree_view_grab_cell_focus  (GailCellParent *parent,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
+  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, TRUE);
   gail_return_val_if_fail (cell_info, FALSE);
   gail_return_val_if_fail (cell_info->cell_col_ref, FALSE);
   gail_return_val_if_fail (cell_info->cell_row_ref, FALSE);
@@ -2384,14 +2353,12 @@ gail_tree_view_changed_gtk (GtkTreeSelection *selection,
   GailTreeView *gailview;
   GtkTreeView *tree_view;
   GtkWidget *widget;
-  GList *cell_list;
-  GList *l;
   GailTreeViewCellInfo *info;
   GtkTreeSelection *tree_selection;
   GtkTreePath *path;
+  GHashTableIter iter;
 
   gailview = GAIL_TREE_VIEW (data);
-  cell_list = gailview->cell_data;
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gailview));
   if (widget == NULL)
     /*
@@ -2404,10 +2371,10 @@ gail_tree_view_changed_gtk (GtkTreeSelection *selection,
 
   clean_rows (gailview);
 
-  for (l = cell_list; l; l = l->next)
+  /* FIXME: clean rows iterates through all cells too */
+  g_hash_table_iter_init (&iter, gailview->cell_info_by_index);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&info))
     {
-      info = (GailTreeViewCellInfo *) (l->data);
-
       if (info->in_use)
       {
 	  gail_cell_remove_state (info->cell, ATK_STATE_SELECTED, TRUE); 
@@ -2440,6 +2407,7 @@ columns_changed (GtkTreeView *tree_view)
   * gailview->col_data
   */
   tv_cols = gtk_tree_view_get_columns (tree_view);
+  gailview->n_cols = g_list_length (tv_cols);
 
   /* check for adds or moves */
   for (tmp_list = tv_cols; tmp_list; tmp_list = tmp_list->next)
@@ -2480,7 +2448,7 @@ columns_changed (GtkTreeView *tree_view)
       */
       if (!column_found)
         {
-          gint n_cols, n_rows, row;
+          gint row;
 
           if (!stale_set)
             {
@@ -2493,15 +2461,13 @@ columns_changed (GtkTreeView *tree_view)
           g_signal_emit_by_name (atk_obj, "column_inserted", column_count, 1);
 
           /* Generate children-changed signals */
-          n_rows = get_row_count (gtk_tree_view_get_model (tree_view));
-          n_cols = get_n_actual_columns (tree_view);
-          for (row = 0; row < n_rows; row++)
+          for (row = 0; row < gailview->n_rows; row++)
             {
              /*
               * Pass NULL as the child object, i.e. 4th argument.
               */
               g_signal_emit_by_name (atk_obj, "children_changed::add",
-                                    ((row * n_cols) + column_count), NULL, NULL);
+                                    ((row * gailview->n_cols) + column_count), NULL, NULL);
             }
         }
 
@@ -2530,7 +2496,7 @@ columns_changed (GtkTreeView *tree_view)
         */
       if (!column_found)
         {
-          gint n_rows, n_cols, row;
+          gint row;
 
           clean_cols (gailview,
                       (GtkTreeViewColumn *)g_array_index (gailview->col_data,
@@ -2547,15 +2513,13 @@ columns_changed (GtkTreeView *tree_view)
           g_signal_emit_by_name (atk_obj, "column_deleted", i, 1);
 
           /* Generate children-changed signals */
-          n_rows = get_row_count (gtk_tree_view_get_model (tree_view));
-          n_cols = get_n_actual_columns (tree_view);
-          for (row = 0; row < n_rows; row++)
+          for (row = 0; row < gailview->n_rows; row++)
             {
              /*
               * Pass NULL as the child object, 4th argument.
               */
               g_signal_emit_by_name (atk_obj, "children_changed::remove",
-                                    ((row * n_cols) + column_count), NULL, NULL);
+                                    ((row * gailview->n_cols) + column_count), NULL, NULL);
             }
         }
     }
@@ -2696,17 +2660,17 @@ model_row_changed (GtkTreeModel *tree_model,
   GtkTreeView *tree_view = GTK_TREE_VIEW(user_data);
   GailTreeView *gailview;
   GtkTreePath *cell_path;
-  GList *l;
   GailTreeViewCellInfo *cell_info;
- 
+  GHashTableIter hash_iter;
+
   gailview = GAIL_TREE_VIEW (gtk_widget_get_accessible (GTK_WIDGET (tree_view)));
 
   /* Loop through our cached cells */
   /* Must loop through them all */
-  for (l = gailview->cell_data; l; l = l->next)
+  g_hash_table_iter_init (&hash_iter, gailview->cell_info_by_index);
+  while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *)&cell_info))
     {
-      cell_info = (GailTreeViewCellInfo *) l->data;
-      if (cell_info->in_use) 
+      if (cell_info->in_use)
       {
 	  cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
 
@@ -2741,19 +2705,19 @@ column_visibility_changed (GObject    *object,
        */ 
       GtkTreeView *tree_view = (GtkTreeView *)user_data;
       GailTreeView *gailview;
-      GList *l;
       GailTreeViewCellInfo *cell_info;
       GtkTreeViewColumn *this_col = GTK_TREE_VIEW_COLUMN (object);
       GtkTreeViewColumn *tv_col;
+      GHashTableIter iter;
 
       gailview = GAIL_TREE_VIEW (gtk_widget_get_accessible (GTK_WIDGET (tree_view))
 );
       g_signal_emit_by_name (gailview, "model_changed");
 
-      for (l = gailview->cell_data; l; l = l->next)
+      g_hash_table_iter_init (&iter, gailview->cell_info_by_index);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
         {
-          cell_info = (GailTreeViewCellInfo *) l->data;
-	  if (cell_info->in_use) 
+	  if (cell_info->in_use)
 	  {
 	      tv_col = cell_info->cell_col_ref;
 	      if (tv_col == this_col)
@@ -2792,6 +2756,8 @@ model_row_inserted (GtkTreeModel *tree_model,
   AtkObject *atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
   GailTreeView *gailview = GAIL_TREE_VIEW (atk_obj);
   gint row, n_inserted, child_row;
+
+  gailview->n_rows++;
 
   if (gailview->idle_expand_id)
     {
@@ -2882,11 +2848,14 @@ model_row_deleted (GtkTreeModel *tree_model,
   GtkTreePath *path_copy;
   AtkObject *atk_obj;
   GailTreeView *gailview;
-  gint row, col, n_cols;
+  gint row, col;
 
   tree_view = (GtkTreeView *)user_data;
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
   gailview = GAIL_TREE_VIEW (atk_obj);
+
+  gailview->n_rows--;
+  g_assert (gailview->n_rows >= 0);
 
   if (gailview->idle_expand_id)
     {
@@ -2923,14 +2892,13 @@ model_row_deleted (GtkTreeModel *tree_model,
   gailview->n_children_deleted = 0;
 
   /* Generate children-changed signals */
-  n_cols = get_n_actual_columns (tree_view);
-  for (col = 0; col < n_cols; col++)
+  for (col = 0; col < gailview->n_cols; col++)
   {
     /*
      * Pass NULL as the child object, 4th argument.
      */
     g_signal_emit_by_name (atk_obj, "children_changed::remove",
-                           ((row * n_cols) + col), NULL, NULL);
+                           ((row * gailview->n_cols) + col), NULL, NULL);
   }
 }
 
@@ -3104,7 +3072,7 @@ update_cell_value (GailRendererCell *renderer_cell,
   prop_list = gail_renderer_cell_class->property_list;
 
   cell = GAIL_CELL (renderer_cell);
-  cell_info = find_cell_info (gailview, cell, NULL, TRUE);
+  cell_info = find_cell_info (gailview, cell, TRUE);
   gail_return_val_if_fail (cell_info, FALSE);
   gail_return_val_if_fail (cell_info->cell_col_ref, FALSE);
   gail_return_val_if_fail (cell_info->cell_row_ref, FALSE);
@@ -3480,14 +3448,11 @@ iterate_thru_children(GtkTreeView  *tree_view,
 
 static void
 clean_cell_info (GailTreeView *gailview,
-                 GList        *list) 
+                 GailTreeViewCellInfo *cell_info)
 {
-  GailTreeViewCellInfo *cell_info;
   GObject *obj;
 
   g_assert (GAIL_IS_TREE_VIEW (gailview));
-
-  cell_info = list->data;
 
   if (cell_info->in_use) {
       obj = G_OBJECT (cell_info->cell);
@@ -3508,6 +3473,8 @@ static void
 clean_rows (GailTreeView *gailview)
 {
   GArray *array;
+  GailTreeViewCellInfo *cell_info;
+  GHashTableIter iter;
 
   /* Clean GailTreeViewRowInfo data */
 
@@ -3536,70 +3503,48 @@ clean_rows (GailTreeView *gailview)
     }
 
   /* Clean GailTreeViewCellInfo data */
-
-  if (gailview->cell_data != NULL)
+  g_hash_table_iter_init (&iter, gailview->cell_info_by_index);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
     {
-      GailTreeViewCellInfo *cell_info;
       GtkTreePath *row_path;
-      GList *cur_list;
-      GList *temp_list;
 
-      temp_list = gailview->cell_data;
-
-      /* Must loop through them all */
-      while (temp_list != NULL)
+      row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      /*
+       * If the cell has become invalid because the row has been removed,
+       * then set the cell's state to ATK_STATE_DEFUNCT and schedule
+       * its removal.  If row_path is NULL then the row has
+       * been removed.
+       */
+      if (row_path == NULL)
         {
-          cur_list = temp_list;
-          cell_info = temp_list->data;
-          temp_list = temp_list->next;
-          row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-
-         /*
-          * If the cell has become invalid because the row has been removed, 
-          * then set the cell's state to ATK_STATE_DEFUNCT and remove the cell
-          * from gailview->cell_data.  If row_path is NULL then the row has
-          * been removed.
-          */
-          if (row_path == NULL)
-            {
-              clean_cell_info (gailview, cur_list);
-            }
-          else
-            {
-              gtk_tree_path_free (row_path);
-            }
+          clean_cell_info (gailview, cell_info);
+        }
+      else
+        {
+          gtk_tree_path_free (row_path);
         }
     }
 }
 
-static void 
+static void
 clean_cols (GailTreeView      *gailview,
             GtkTreeViewColumn *tv_col)
 {
+  GailTreeViewCellInfo *cell_info;
+  GHashTableIter iter;
+
   /* Clean GailTreeViewCellInfo data */
-
-  if (gailview->cell_data != NULL)
+  g_hash_table_iter_init (&iter, gailview->cell_info_by_index);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
     {
-      GailTreeViewCellInfo *cell_info;
-      GList *cur_list, *temp_list;
-
-      temp_list = gailview->cell_data;
-
-      while (temp_list != NULL)
+      /*
+       * If the cell has become invalid because the column tv_col
+       * has been removed, then set the cell's state to ATK_STATE_DEFUNCT
+       * and remove the cell from gailview->cell_data.
+       */
+      if (cell_info->cell_col_ref == tv_col)
         {
-          cur_list = temp_list;
-          cell_info = temp_list->data;
-          temp_list = temp_list->next;
-
-         /*
-          * If the cell has become invalid because the column tv_col
-          * has been removed, then set the cell's state to ATK_STATE_DEFUNCT
-          * and remove the cell from gailview->cell_data. 
-          */
-          if (cell_info->cell_col_ref == tv_col)
-            {
-              clean_cell_info (gailview, cur_list);
-            }
+          clean_cell_info (gailview, cell_info);
         }
     }
 }
@@ -3631,12 +3576,11 @@ static gboolean
 garbage_collect_cell_data (gpointer data)
 {
       GailTreeView *tree_view;
-      GList *temp_list, *list;
       GailTreeViewCellInfo *cell_info;
+      GHashTableIter iter;
 
       g_assert (GAIL_IS_TREE_VIEW (data));
       tree_view = (GailTreeView *)data;
-      list = g_list_copy (tree_view->cell_data);
 
       tree_view->garbage_collection_pending = FALSE;
       if (tree_view->idle_garbage_collect_id != 0) 
@@ -3646,22 +3590,18 @@ garbage_collect_cell_data (gpointer data)
       }
 
       /* Must loop through them all */
-      temp_list = list;
-      while (temp_list != NULL)
+      g_hash_table_iter_init (&iter, tree_view->cell_info_by_index);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
       {
-          cell_info = temp_list->data;
 	  if (!cell_info->in_use)
 	  {
 	      /* g_object_unref (cell_info->cell); */
-	      tree_view->cell_data = g_list_remove (tree_view->cell_data, 
-						    cell_info);
 	      if (cell_info->cell_row_ref)
 		  gtk_tree_row_reference_free (cell_info->cell_row_ref);
 	      g_free (cell_info);
+              g_hash_table_iter_remove (&iter);
 	  }
-          temp_list = temp_list->next;
       }
-      g_list_free (list);
 
       return tree_view->garbage_collection_pending;
 }
@@ -3684,63 +3624,58 @@ traverse_cells (GailTreeView *tree_view,
                 gboolean     set_stale,
                 gboolean     inc_row)
 {
-  if (tree_view->cell_data != NULL)
+  GailTreeViewCellInfo *cell_info;
+  GtkTreeView *gtk_tree_view;
+  GtkWidget *widget;
+  GHashTableIter iter;
+
+  g_assert (GTK_IS_ACCESSIBLE (tree_view));
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (tree_view));
+  if (!widget)
+    /* Widget is being deleted */
+    return;
+
+  gtk_tree_view = GTK_TREE_VIEW (widget);
+
+  /* Must loop through them all */
+  g_hash_table_iter_init (&iter, tree_view->cell_info_by_index);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
     {
-      GailTreeViewCellInfo *cell_info;
-      GtkTreeView *gtk_tree_view;
-      GList *temp_list;
-      GtkWidget *widget;
+      GtkTreePath *row_path;
+      gboolean act_on_cell;
 
-      g_assert (GTK_IS_ACCESSIBLE (tree_view));
-
-      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (tree_view));
-      if (!widget)
-        /* Widget is being deleted */
-        return;
-
-      gtk_tree_view = GTK_TREE_VIEW (widget);
-      temp_list = tree_view->cell_data;
-
-      /* Must loop through them all */
-      while (temp_list != NULL)
+      if (cell_info->in_use)
         {
-          GtkTreePath *row_path;
-          gboolean act_on_cell;
+          row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+          g_return_if_fail (row_path != NULL);
+          if (tree_path == NULL)
+            act_on_cell = TRUE;
+          else
+            {
+              gint comparison;
 
-          cell_info = temp_list->data;
-          temp_list = temp_list->next;
-
-	  if (cell_info->in_use)
-	  {
-	      row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-	      g_return_if_fail (row_path != NULL);
-	      if (tree_path == NULL)
-		  act_on_cell = TRUE;
-	      else 
-	      {
-		  gint comparison;
-		  
-		  comparison =  gtk_tree_path_compare (row_path, tree_path);
-		  if ((comparison > 0) ||
-		      (comparison == 0 && inc_row))
-		      act_on_cell = TRUE;
-		  else
-		      act_on_cell = FALSE;
-	      }
-	      if (!cell_info->in_use) g_warning ("warning: cell info destroyed during traversal");
-	      if (act_on_cell && cell_info->in_use)
-	      {
-		  if (set_stale)
-		      gail_cell_add_state (cell_info->cell, ATK_STATE_STALE, TRUE);
-		  set_cell_visibility (gtk_tree_view,
-				       cell_info->cell,
-				       cell_info->cell_col_ref,
-				       row_path, TRUE);
-	      }
-	      gtk_tree_path_free (row_path);
-	  }
-	}
+              comparison =  gtk_tree_path_compare (row_path, tree_path);
+              if ((comparison > 0) ||
+                  (comparison == 0 && inc_row))
+                act_on_cell = TRUE;
+              else
+                act_on_cell = FALSE;
+            }
+          if (!cell_info->in_use) g_warning ("warning: cell info destroyed during traversal");
+          if (act_on_cell && cell_info->in_use)
+            {
+              if (set_stale)
+                gail_cell_add_state (cell_info->cell, ATK_STATE_STALE, TRUE);
+              set_cell_visibility (gtk_tree_view,
+                                   cell_info->cell,
+                                   cell_info->cell_col_ref,
+                                   row_path, TRUE);
+            }
+          gtk_tree_path_free (row_path);
+        }
     }
+
   g_signal_emit_by_name (tree_view, "visible-data-changed");
 }
 
@@ -3783,95 +3718,85 @@ set_expand_state (GtkTreeView  *tree_view,
                   GtkTreePath  *tree_path,
                   gboolean     set_on_ancestor)
 {
-  if (gailview->cell_data != NULL)
+  GtkTreeViewColumn *expander_tv;
+  GailTreeViewCellInfo *cell_info;
+  GtkTreePath *cell_path;
+  GtkTreeIter iter;
+  gboolean found;
+  GHashTableIter hash_iter;
+
+  g_hash_table_iter_init (&hash_iter, gailview->cell_info_by_index);
+  while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *) &cell_info))
     {
-      GtkTreeViewColumn *expander_tv;
-      GailTreeViewCellInfo *cell_info;
-      GList *temp_list;
-      GtkTreePath *cell_path;
-      GtkTreeIter iter;
-      gboolean found;
-
-      temp_list = gailview->cell_data;
-
-      while (temp_list != NULL)
+      if (cell_info->in_use)
         {
-          cell_info = temp_list->data;
-          temp_list = temp_list->next;
-	  if (cell_info->in_use)
-	  {
-	      cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-	      found = FALSE;
-	      
-	      if (cell_path != NULL)
-	      {
-		  GailCell *cell  = GAIL_CELL (cell_info->cell);
-		  
-		  expander_tv = gtk_tree_view_get_expander_column (tree_view);
-		  
-		  /*
-		   * Only set state for the cell that is in the column with the
-		   * expander toggle
-		   */
-		  if (expander_tv == cell_info->cell_col_ref)
-		  {
-		      if (tree_path && gtk_tree_path_compare (cell_path, tree_path) == 0)
-			  found = TRUE;
-		      else if (set_on_ancestor &&
-			       gtk_tree_path_get_depth (cell_path) <
-			       gtk_tree_path_get_depth (tree_path) && 
-			       gtk_tree_path_is_ancestor (cell_path, tree_path) == 1)
-			  /* Only set if set_on_ancestor was passed in as TRUE */
-			  found = TRUE;
-		  }
-		  
-		  /*
-		   * Set ATK_STATE_EXPANDABLE and ATK_STATE_EXPANDED
-		   * for ancestors and found cells.
-		   */
-		  if (found)
-		  {
-		      /*
-		       * Must check against cell_path since cell_path
-		       * can be equal to or an ancestor of tree_path.
-		       */
-		      gtk_tree_model_get_iter (tree_model, &iter, cell_path);
-		      
-		      /* Set or unset ATK_STATE_EXPANDABLE as appropriate */
-		      if (gtk_tree_model_iter_has_child (tree_model, &iter)) 
-		      {
-			  set_cell_expandable (cell);
-			  
-			  if (gtk_tree_view_row_expanded (tree_view, cell_path))
-			      gail_cell_add_state (cell, ATK_STATE_EXPANDED, TRUE);
-			  else
-			      gail_cell_remove_state (cell, 
-						      ATK_STATE_EXPANDED, TRUE);
-		      }
-		      else
-		      {
-			  gail_cell_remove_state (cell, 
-						  ATK_STATE_EXPANDED, TRUE);
-			  if (gail_cell_remove_state (cell,
-						      ATK_STATE_EXPANDABLE, TRUE))
-			      /* The state may have been propagated to the container cell */
-			      if (!GAIL_IS_CONTAINER_CELL (cell))
-				  gail_cell_remove_action_by_name (cell,
-								   "expand or contract");
-		      }
-		      
-		      /*
-		       * We assume that each cell in the cache once and
-		       * a container cell is before its child cells so we are 
-		       * finished if set_on_ancestor is not set to TRUE.
-		       */
-		      if (!set_on_ancestor)
-			  break;
-		  }
-	      }
-	      gtk_tree_path_free (cell_path);
-	  }
-	}
+          cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+          found = FALSE;
+
+          if (cell_path != NULL)
+            {
+              GailCell *cell  = GAIL_CELL (cell_info->cell);
+
+              expander_tv = gtk_tree_view_get_expander_column (tree_view);
+
+              /* Only set state for the cell that is in the column with the
+               * expander toggle
+               */
+              if (expander_tv == cell_info->cell_col_ref)
+                {
+                  if (tree_path && gtk_tree_path_compare (cell_path, tree_path) == 0)
+                    found = TRUE;
+                  else if (set_on_ancestor &&
+                          gtk_tree_path_get_depth (cell_path) <
+                          gtk_tree_path_get_depth (tree_path) &&
+                          gtk_tree_path_is_ancestor (cell_path, tree_path) == 1)
+                    /* Only set if set_on_ancestor was passed in as TRUE */
+                    found = TRUE;
+                }
+
+              /* Set ATK_STATE_EXPANDABLE and ATK_STATE_EXPANDED
+               * for ancestors and found cells.
+               */
+              if (found)
+                {
+                  /* Must check against cell_path since cell_path
+                   * can be equal to or an ancestor of tree_path.
+                   */
+                  gtk_tree_model_get_iter (tree_model, &iter, cell_path);
+
+                  /* Set or unset ATK_STATE_EXPANDABLE as appropriate */
+                  if (gtk_tree_model_iter_has_child (tree_model, &iter))
+                    {
+                      set_cell_expandable (cell);
+
+                      if (gtk_tree_view_row_expanded (tree_view, cell_path))
+                        gail_cell_add_state (cell, ATK_STATE_EXPANDED, TRUE);
+                      else
+                        gail_cell_remove_state (cell,
+                                                ATK_STATE_EXPANDED, TRUE);
+                    }
+                  else
+                    {
+                      gail_cell_remove_state (cell,
+                                              ATK_STATE_EXPANDED, TRUE);
+                      if (gail_cell_remove_state (cell,
+                                                  ATK_STATE_EXPANDABLE, TRUE))
+                      /* The state may have been propagated to the container cell */
+                      if (!GAIL_IS_CONTAINER_CELL (cell))
+                        gail_cell_remove_action_by_name (cell,
+                                                         "expand or contract");
+                    }
+
+                  /* We assume that each cell in the cache once and
+                   * a container cell is before its child cells so we are
+                   * finished if set_on_ancestor is not set to TRUE.
+                   */
+                  if (!set_on_ancestor)
+                    break;
+                }
+            }
+          gtk_tree_path_free (cell_path);
+        }
     }
 }
 
@@ -3912,7 +3837,7 @@ toggle_cell_expanded (GailCell *cell)
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
 
-  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
+  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, TRUE);
   gail_return_if_fail (cell_info);
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
@@ -3948,7 +3873,7 @@ toggle_cell_toggled (GailCell *cell)
       parent = atk_object_get_parent (parent);
     }
 
-  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
+  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, TRUE);
   gail_return_if_fail (cell_info);
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
@@ -3996,7 +3921,7 @@ edit_cell (GailCell *cell)
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
 
-  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
+  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, TRUE);
   gail_return_if_fail (cell_info);
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
@@ -4022,7 +3947,7 @@ activate_cell (GailCell *cell)
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
 
-  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
+  cell_info = find_cell_info (GAIL_TREE_VIEW (parent), cell, TRUE);
   gail_return_if_fail (cell_info);
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
@@ -4053,24 +3978,6 @@ cell_destroyed (gpointer data)
   }
 }
 
-#if 0
-static void
-cell_info_remove (GailTreeView *tree_view, 
-                  GailCell     *cell)
-{
-  GailTreeViewCellInfo *info;
-  GList *temp_list;
-
-  info = find_cell_info (tree_view, cell, &temp_list, FALSE);
-  if (info)
-    {
-      info->in_use = FALSE;
-      return;
-    }
-  g_warning ("No cell removed in cell_info_remove\n");
-}
-#endif
-
 static void
 cell_info_get_index (GtkTreeView            *tree_view, 
                      GailTreeViewCellInfo   *info,
@@ -4088,8 +3995,8 @@ cell_info_get_index (GtkTreeView            *tree_view,
 }
 
 static void
-cell_info_new (GailTreeView      *gailview, 
-               GtkTreeModel      *tree_model, 
+cell_info_new (GailTreeView      *gailview,
+               GtkTreeModel      *tree_model,
                GtkTreePath       *path,
                GtkTreeViewColumn *tv_col,
                GailCell          *cell )
@@ -4105,8 +4012,8 @@ cell_info_new (GailTreeView      *gailview,
   cell_info->cell = cell;
   cell_info->in_use = TRUE; /* if we've created it, assume it's in use */
   cell_info->view = gailview;
-  gailview->cell_data = g_list_append (gailview->cell_data, cell_info);
-      
+  g_hash_table_insert (gailview->cell_info_by_index, &cell->index, cell_info);
+
   /* Setup weak reference notification */
 
   g_object_weak_ref (G_OBJECT (cell),
@@ -4119,35 +4026,11 @@ find_cell (GailTreeView *gailview,
            gint         index)
 {
   GailTreeViewCellInfo *info;
-  GtkTreeView *tree_view;
-  GList *cell_list;
-  GList *l;
-  gint real_index;
-  gboolean needs_cleaning = FALSE;
   GailCell *retval = NULL;
 
-  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (gailview)));
-  cell_list = gailview->cell_data;
-
-  for (l = cell_list; l; l = l->next)
-    {
-      info = (GailTreeViewCellInfo *) (l->data);
-      if (info->in_use)
-      {
-	  cell_info_get_index (tree_view, info, &real_index);
-	  if (index == real_index)
-	  {
-	      retval =  info->cell;
-	      break;
-	  }
-      }
-      else
-      {
-	  needs_cleaning = TRUE;
-      }
-    }
-  if (needs_cleaning)
-     garbage_collect_cell_data (gailview);
+  info = g_hash_table_lookup (gailview->cell_info_by_index, &index);
+  if (info != NULL)
+    retval = info->cell;
 
   return retval;
 }
@@ -4158,20 +4041,23 @@ refresh_cell_index (GailCell *cell)
   GailTreeViewCellInfo *info;
   AtkObject *parent;
   GtkTreeView *tree_view;
+  GailTreeView *gailview;
   gint index;
 
   parent = atk_object_get_parent (ATK_OBJECT (cell));
   gail_return_if_fail (GAIL_IS_TREE_VIEW (parent));
+  gailview = GAIL_TREE_VIEW (parent);
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
 
   /* Find this cell in the GailTreeView's cache */
 
-  info = find_cell_info (GAIL_TREE_VIEW (parent), cell, NULL, TRUE);
+  info = find_cell_info (gailview, cell, TRUE);
   gail_return_if_fail (info);
   
   cell_info_get_index (tree_view, info, &index); 
   cell->index = index;
+  g_hash_table_insert (gailview->cell_info_by_index, &index, info);
 }
 
 static void
@@ -4206,7 +4092,7 @@ connect_model_signals (GtkTreeView  *view,
 }
 
 static void
-disconnect_model_signals (GailTreeView *view) 
+disconnect_model_signals (GailTreeView *view)
 {
   GObject *obj;
   GtkWidget *widget;
@@ -4222,7 +4108,8 @@ disconnect_model_signals (GailTreeView *view)
 static void
 clear_cached_data (GailTreeView  *view)
 {
-  GList *temp_list;
+  GailTreeViewCellInfo *cell_info;
+  GHashTableIter iter;
 
   if (view->row_data)
     {
@@ -4230,7 +4117,7 @@ clear_cached_data (GailTreeView  *view)
       gint i;
 
      /*
-      * Since the third argument to free_row_info is FALSE, we don't remove 
+      * Since the third argument to free_row_info is FALSE, we don't remove
       * the element.  Therefore it is safe to loop forward.
       */
       for (i = 0; i < array->len; i++)
@@ -4241,19 +4128,15 @@ clear_cached_data (GailTreeView  *view)
       view->row_data = NULL;
     }
 
-  if (view->cell_data)
+  /* Must loop through them all */
+  g_hash_table_iter_init (&iter, view->cell_info_by_index);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
     {
-      /* Must loop through them all */
-      for (temp_list = view->cell_data; temp_list; temp_list = temp_list->next)
-        {
-	    clean_cell_info (view, temp_list);
-        }
+      clean_cell_info (view, cell_info);
     }
+
+  /* FIXME: seems pretty inefficient to loop again here */
   garbage_collect_cell_data (view);
-  if (view->cell_data)
-      g_list_free (view->cell_data);
-  
-  view->cell_data = NULL;
 }
 
 /*
@@ -4269,37 +4152,45 @@ get_column_number (GtkTreeView       *tree_view,
                    GtkTreeViewColumn *column,
                    gboolean          visible)
 {
-  GList *temp_list, *column_list;
   GtkTreeViewColumn *tv_column;
   gint ret_val;
+  gint i;
+  AtkObject *atk_obj;
+  GailTreeView *gailview;
 
-  column_list = gtk_tree_view_get_columns (tree_view);
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
+  gailview = GAIL_TREE_VIEW (atk_obj);
+
   ret_val = 0;
-  for (temp_list = column_list; temp_list; temp_list = temp_list->next)
+  for (i = 0; i < gailview->col_data->len; i++)
     {
-      tv_column = GTK_TREE_VIEW_COLUMN (temp_list->data);
+      tv_column = g_array_index (gailview->col_data, GtkTreeViewColumn *, i);
       if (tv_column == column)
         break;
       if (!visible || gtk_tree_view_column_get_visible (tv_column))
         ret_val++;
     }
-  if (temp_list == NULL)
+  if (i == gailview->col_data->len)
     {
       ret_val = -1;
     }
-  g_list_free (column_list);
+
   return ret_val;
-} 
+}
 
 static gint
-get_index (GtkTreeView       *tree_view,
-           GtkTreePath       *path,
-           gint              actual_column)
+get_index (GtkTreeView *tree_view,
+           GtkTreePath *path,
+           gint         actual_column)
 {
+  AtkObject *atk_obj;
+  GailTreeView *gailview;
   gint depth = 0;
   gint index = 1;
   gint *indices = NULL;
 
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
+  gailview = GAIL_TREE_VIEW (atk_obj);
 
   if (path)
     {
@@ -4321,7 +4212,7 @@ get_index (GtkTreeView       *tree_view,
 
   if (path)
     index += indices[depth-1];
-  index *= get_n_actual_columns (tree_view);
+  index *= gailview->n_cols;
   index +=  actual_column;
   return index;
 }
@@ -4355,6 +4246,9 @@ count_rows (GtkTreeModel *model,
     g_print ("path: %s\n",
             gtk_tree_path_to_string (gtk_tree_model_get_path (model, iter)));
 #endif
+
+  if (gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY)
+    return;
 
   if (level >= depth)
     return;
@@ -4527,20 +4421,7 @@ get_tree_path_from_row_index (GtkTreeModel *model,
            *tree_path = NULL;
           return FALSE;
         }
-    }  
-}
-
-/*
- * This function returns the number of rows, including those which are collapsed
- */
-static gint
-get_row_count (GtkTreeModel *model)
-{
-  gint n_rows = 1;
-
-  count_rows (model, NULL, NULL, &n_rows, 0, G_MAXINT);
-
-  return n_rows;
+    }
 }
 
 static gboolean
@@ -4550,14 +4431,17 @@ get_path_column_from_index (GtkTreeView       *tree_view,
                             GtkTreeViewColumn **column)
 {
   GtkTreeModel *tree_model;
-  gint n_columns;
+  AtkObject *atk_obj;
+  GailTreeView *gailview;
+
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
+  gailview = GAIL_TREE_VIEW (atk_obj);
 
   tree_model = gtk_tree_view_get_model (tree_view);
-  n_columns = get_n_actual_columns (tree_view);
-  if (n_columns == 0)
+  if (gailview->n_cols == 0)
     return FALSE;
   /* First row is the column headers */
-  index -= n_columns;
+  index -= gailview->n_cols;
   if (index < 0)
     return FALSE;
 
@@ -4566,7 +4450,7 @@ get_path_column_from_index (GtkTreeView       *tree_view,
       gint row_index;
       gboolean retval;
 
-      row_index = index / n_columns;
+      row_index = index / gailview->n_cols;
       retval = get_tree_path_from_row_index (tree_model, row_index, path);
       gail_return_val_if_fail (retval, FALSE);
       if (*path == NULL)
@@ -4575,7 +4459,7 @@ get_path_column_from_index (GtkTreeView       *tree_view,
 
   if (column)
     {
-      *column = gtk_tree_view_get_column (tree_view, index % n_columns);
+      *column = gtk_tree_view_get_column (tree_view, index % gailview->n_cols);
       if (*column == NULL)
         {
 	  if (path)
@@ -4603,21 +4487,17 @@ set_cell_expandable (GailCell *cell)
 static GailTreeViewCellInfo*
 find_cell_info (GailTreeView *view,
                 GailCell     *cell,
-                GList**      list,
-		gboolean     live_only)
+                gboolean      live_only)
 {
-  GList *temp_list;
   GailTreeViewCellInfo *cell_info;
+  GHashTableIter iter;
 
-  for (temp_list = view->cell_data; temp_list; temp_list = temp_list->next)
+  /* Clean GailTreeViewCellInfo data */
+  g_hash_table_iter_init (&iter, view->cell_info_by_index);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
     {
-      cell_info = (GailTreeViewCellInfo *) temp_list->data;
       if (cell_info->cell == cell && (!live_only || cell_info->in_use))
-        {
-          if (list)
-            *list = temp_list;
-          return cell_info;
-        }
+        return cell_info;
     }
   return NULL;
 }
