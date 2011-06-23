@@ -1866,10 +1866,41 @@ add_text_tests (GtkWidget *widget)
   g_object_unref (widget);
 }
 
+static void
+test_bold_label (void)
+{
+  GtkWidget *label;
+  AtkObject *atk_obj;
+  gchar *text;
+
+  g_test_bug ("126797");
+
+  label = gtk_label_new ("<b>Bold?</b>");
+  g_object_ref_sink (label);
+
+  atk_obj = gtk_widget_get_accessible (label);
+
+  text = atk_text_get_text (ATK_TEXT (atk_obj), 0, -1);
+  g_assert_cmpstr (text, ==, "<b>Bold?</b>");
+  g_free (text);
+
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+
+  text = atk_text_get_text (ATK_TEXT (atk_obj), 0, -1);
+  g_assert_cmpstr (text, ==, "Bold?");
+  g_free (text);
+
+  g_object_unref (label);
+}
+
 int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
+
+  g_test_bug_base ("http://bugzilla.gnome.org/");
+
+  g_test_add_func ("/text/bold/GtkLabel", test_bold_label);
 
   add_text_tests (gtk_text_view_new ());
   add_text_tests (gtk_label_new (""));
