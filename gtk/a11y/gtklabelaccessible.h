@@ -43,8 +43,6 @@ struct _GtkLabelAccessible
   gint           cursor_position;
   gint           selection_bound;
   gint           label_length;
-  gulong         window_create_handler;
-  gboolean       has_top_level;
 };
 
 struct _GtkLabelAccessibleClass

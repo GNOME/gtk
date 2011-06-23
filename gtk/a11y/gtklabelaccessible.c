@@ -23,7 +23,6 @@
 
 #include <gtk/gtk.h>
 #include "gtklabelaccessible.h"
-#include "gailwindow.h"
 #include <libgail-util/gailmisc.h>
 
 static void       gtk_label_accessible_class_init            (GtkLabelAccessibleClass    *klass);
@@ -32,8 +31,6 @@ static void	  gtk_label_accessible_real_initialize	   (AtkObject 	      *obj,
                                                     gpointer	      data);
 static void	  gtk_label_accessible_real_notify_gtk	   (GObject	      *obj,
                                                     GParamSpec	      *pspec);
-static void       gtk_label_accessible_map_gtk               (GtkWidget         *widget,
-                                                    gpointer          data);
 static void       gtk_label_accessible_init_text_util        (GtkLabelAccessible         *gail_label,
                                                     GtkWidget         *widget);
 static void       gtk_label_accessible_finalize              (GObject           *object);
@@ -142,8 +139,6 @@ gtk_label_accessible_real_initialize (AtkObject *obj,
   
   accessible = GTK_LABEL_ACCESSIBLE (obj);
 
-  accessible->window_create_handler = 0;
-  accessible->has_top_level = FALSE;
   accessible->cursor_position = 0;
   accessible->selection_bound = 0;
   accessible->textutil = NULL;
@@ -151,12 +146,7 @@ gtk_label_accessible_real_initialize (AtkObject *obj,
   
   widget = GTK_WIDGET (data);
 
-  if (gtk_widget_get_mapped (widget))
-    gtk_label_accessible_init_text_util (accessible, widget);
-  else
-    g_signal_connect (widget, "map",
-                      G_CALLBACK (gtk_label_accessible_map_gtk),
-                      accessible);
+  gtk_label_accessible_init_text_util (accessible, widget);
 
   /*
    * Check whether ancestor of GtkLabel is a GtkButton and if so
@@ -176,16 +166,6 @@ gtk_label_accessible_real_initialize (AtkObject *obj,
     obj->role = ATK_ROLE_ACCEL_LABEL;
   else
     obj->role = ATK_ROLE_LABEL;
-}
-
-static void
-gtk_label_accessible_map_gtk (GtkWidget *widget,
-                    gpointer data)
-{
-  GtkLabelAccessible *accessible;
-
-  accessible = GTK_LABEL_ACCESSIBLE (data);
-  gtk_label_accessible_init_text_util (accessible, widget);
 }
 
 static void
@@ -271,15 +251,6 @@ notify_name_change (AtkObject *atk_obj)
 }
 
 static void
-window_created (GObject *obj,
-                gpointer data)
-{
-  g_return_if_fail (GTK_LABEL_ACCESSIBLE (data));
-
-  notify_name_change (ATK_OBJECT (data)); 
-}
-
-static void
 gtk_label_accessible_real_notify_gtk (GObject           *obj,
                                 GParamSpec        *pspec)
 {
@@ -288,40 +259,14 @@ gtk_label_accessible_real_notify_gtk (GObject           *obj,
   GtkLabel *label;
   GtkLabelAccessible *accessible;
   GObject *gail_obj;
-  AtkObject *top_level;
-  AtkObject *temp_obj;
 
   accessible = GTK_LABEL_ACCESSIBLE (atk_obj);
 
-  if (strcmp (pspec->name, "label") == 0)
+  if (strcmp (pspec->name, "label") == 0 ||
+      strcmp (pspec->name, "use-underline") == 0 ||
+      strcmp (pspec->name, "use-markup") == 0)
     {
-     /* 
-      * We may get a label change for a label which is not attached to an
-      * application. We wait until the toplevel window is created before
-      * emitting the notification.
-      *
-      * This happens when [Ctrl+]Alt+Tab is pressed in metacity
-      */
-      if (!accessible->has_top_level)
-        {
-          temp_obj = atk_obj;
-          top_level = NULL;
-          while (temp_obj)
-            {
-              top_level = temp_obj;
-              temp_obj = atk_object_get_parent (top_level);
-            }
-          if (atk_object_get_role (top_level) != ATK_ROLE_APPLICATION)
-            {
-              if (accessible->window_create_handler == 0 && 
-                  GAIL_IS_WINDOW (top_level))
-                accessible->window_create_handler = g_signal_connect_after (top_level, "create", G_CALLBACK (window_created), atk_obj);
-            }
-          else
-            accessible->has_top_level = TRUE;
-        }
-      if (accessible->has_top_level)
-        notify_name_change (atk_obj);
+      notify_name_change (atk_obj);
     }
   else if (strcmp (pspec->name, "cursor-position") == 0)
     {
