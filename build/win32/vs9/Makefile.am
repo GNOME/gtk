@@ -9,5 +9,5 @@ EXTRA_DIST += \
 	gdk.vcprojin \
 	gtk.vcproj \
 	gtk.vcprojin \
-	gtk-demo.vcproj \
+	gtk3-demo.vcproj \
 	install.vcproj
