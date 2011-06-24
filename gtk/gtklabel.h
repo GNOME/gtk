@@ -169,6 +169,8 @@ gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);
 
 void _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
                                                      gboolean   mnemonics_visible);
+gint _gtk_label_get_cursor_position (GtkLabel *label);
+gint _gtk_label_get_selection_bound (GtkLabel *label);
 
 G_END_DECLS
 

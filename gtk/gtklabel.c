@@ -465,6 +465,7 @@ static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
 
+
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
@@ -1204,24 +1205,10 @@ gtk_label_get_property (GObject     *object,
       g_value_set_object (value, (GObject*) priv->mnemonic_widget);
       break;
     case PROP_CURSOR_POSITION:
-      if (priv->select_info && priv->select_info->selectable)
-	{
-	  gint offset = g_utf8_pointer_to_offset (priv->text,
-						  priv->text + priv->select_info->selection_end);
-	  g_value_set_int (value, offset);
-	}
-      else
-	g_value_set_int (value, 0);
+      g_value_set_int (value, _gtk_label_get_cursor_position (label));
       break;
     case PROP_SELECTION_BOUND:
-      if (priv->select_info && priv->select_info->selectable)
-	{
-	  gint offset = g_utf8_pointer_to_offset (priv->text,
-						  priv->text + priv->select_info->selection_anchor);
-	  g_value_set_int (value, offset);
-	}
-      else
-	g_value_set_int (value, 0);
+      g_value_set_int (value, _gtk_label_get_selection_bound (label));
       break;
     case PROP_ELLIPSIZE:
       g_value_set_enum (value, priv->ellipsize);
@@ -6657,4 +6644,28 @@ gtk_label_query_tooltip (GtkWidget  *widget,
                                                                    x, y,
                                                                    keyboard_tip,
                                                                    tooltip);
+}
+
+gint
+_gtk_label_get_cursor_position (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+
+  if (priv->select_info && priv->select_info->selectable)
+    return g_utf8_pointer_to_offset (priv->text,
+                                     priv->text + priv->select_info->selection_end);
+
+  return 0;
+}
+
+gint
+_gtk_label_get_selection_bound (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+
+  if (priv->select_info && priv->select_info->selectable)
+    return g_utf8_pointer_to_offset (priv->text,
+                                     priv->text + priv->select_info->selection_anchor);
+
+  return 0;
 }
