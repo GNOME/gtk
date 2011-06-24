@@ -4,7 +4,7 @@
 	Version="8.00"
 	Name="gtk+props"
 	OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin"
-	IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj"
+	IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj\$(ProjectName)\"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
@@ -14,7 +14,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="gdk_pixbuf-2.0.lib pangocairo-1.0.lib pango-1.0.lib cairo.lib cairo-gobject.lib gio-2.0.lib gmodule-2.0.lib gobject-2.0.lib glib-2.0.lib intl.lib"
+		AdditionalDependencies="gdk_pixbuf-2.0.lib pangocairo-1.0.lib pango-1.0.lib cairo-gobject.lib cairo.lib gio-2.0.lib gmodule-2.0.lib gobject-2.0.lib glib-2.0.lib intl.lib"
 		AdditionalLibraryDirectories="$(GlibEtcInstallRoot)\lib"
 	/>
 	<Tool
@@ -205,6 +205,7 @@ copy ..\..\..\gtk\gtklabel.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x
 copy ..\..\..\gtk\gtklayout.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtklinkbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkliststore.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtklockbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmain.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmenu.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmenubar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -219,6 +220,7 @@ copy ..\..\..\gtk\gtknotebook.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;
 copy ..\..\..\gtk\gtknumerableicon.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkoffscreenwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkorientable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkoverlay.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpagesetup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpaned.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpapersize.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;

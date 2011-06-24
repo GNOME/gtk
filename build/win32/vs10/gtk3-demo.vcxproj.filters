@@ -86,6 +86,9 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\offscreen_window2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\overlay.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\panes.c">
       <Filter>Source Files</Filter>
     </ClCompile>

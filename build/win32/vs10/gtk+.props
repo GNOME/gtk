@@ -302,6 +302,8 @@ copy ..\..\..\gtk\gtklinkbutton.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkliststore.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
+copy ..\..\..\gtk\gtklockbutton.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
+
 copy ..\..\..\gtk\gtkmain.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkmenu.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
@@ -329,6 +331,8 @@ copy ..\..\..\gtk\gtknumerableicon.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 copy ..\..\..\gtk\gtkoffscreenwindow.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkorientable.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkoverlay.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkpagesetup.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
