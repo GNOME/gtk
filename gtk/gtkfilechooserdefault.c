@@ -4646,7 +4646,7 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
 				       GTK_SHADOW_IN);
 
-  /* Using list view by default */
+  /* Initially VIEW_MODE_LIST is used, settings_load may change this later. */
   create_browse_files_tree_view (impl);
   impl->browse_files_current_view = impl->browse_files_tree_view;
   gtk_container_add (GTK_CONTAINER (swin), impl->browse_files_tree_view);
@@ -4934,6 +4934,8 @@ view_mode_set (GtkFileChooserDefault *impl, ViewMode view_mode)
     return;
 
   impl->view_mode = view_mode;
+  gtk_combo_box_set_active (GTK_COMBO_BOX (impl->view_mode_combo_box),
+                            view_mode);
 
   /* Creating the target view */
   if (view_mode == VIEW_MODE_ICON)
