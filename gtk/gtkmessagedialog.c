@@ -376,6 +376,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
   gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
+  gtk_message_dialog_style_updated (GTK_WIDGET (dialog));
+
   gtk_widget_show_all (hbox);
 }
 
