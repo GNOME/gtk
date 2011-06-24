@@ -32,6 +32,8 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 
 
 static void            gtk_win32_embed_widget_realize               (GtkWidget        *widget);
