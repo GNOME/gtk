@@ -19,33 +19,33 @@ window1
     text: Button 1
     character count: 8
     caret offset: 0
-    default attributes: left-margin: 0
-                        right-margin: 0
+    default attributes: bg-color: <omitted>
+                        bg-full-height: 0
+                        bg-stipple: false
+                        direction: <omitted>
+                        editable: false
+                        family-name: <omitted>
+                        fg-color: <omitted>
+                        fg-stipple: false
                         indent: 0
                         invisible: false
-                        editable: false
+                        justification: left
+                        language: <omitted>
+                        left-margin: 0
                         pixels-above-lines: 0
                         pixels-below-lines: 0
                         pixels-inside-wrap: 0
-                        bg-full-height: 0
-                        scale: 1
+                        right-margin: 0
                         rise: 0
-                        underline: none
-                        strikethrough: false
-                        bg-stipple: false
-                        fg-stipple: false
-                        fg-color: <omitted>
-                        bg-color: <omitted>
-                        wrap-mode: word
-                        justification: left
+                        scale: 1
                         size: <omitted>
-                        weight: <omitted>
-                        family-name: <omitted>
                         stretch: <omitted>
-                        variant: <omitted>
+                        strikethrough: false
                         style: <omitted>
-                        language: <omitted>
-                        direction: <omitted>
+                        underline: none
+                        variant: <omitted>
+                        weight: <omitted>
+                        wrap-mode: word
     <AtkImage>
     image size: -1 x -1
     image description: (null)
@@ -66,33 +66,33 @@ window1
     text: Button 2
     character count: 8
     caret offset: 0
-    default attributes: left-margin: 0
-                        right-margin: 0
+    default attributes: bg-color: <omitted>
+                        bg-full-height: 0
+                        bg-stipple: false
+                        direction: <omitted>
+                        editable: false
+                        family-name: <omitted>
+                        fg-color: <omitted>
+                        fg-stipple: false
                         indent: 0
                         invisible: false
-                        editable: false
+                        justification: left
+                        language: <omitted>
+                        left-margin: 0
                         pixels-above-lines: 0
                         pixels-below-lines: 0
                         pixels-inside-wrap: 0
-                        bg-full-height: 0
-                        scale: 1
+                        right-margin: 0
                         rise: 0
-                        underline: none
-                        strikethrough: false
-                        bg-stipple: false
-                        fg-stipple: false
-                        fg-color: <omitted>
-                        bg-color: <omitted>
-                        wrap-mode: word
-                        justification: left
+                        scale: 1
                         size: <omitted>
-                        weight: <omitted>
-                        family-name: <omitted>
                         stretch: <omitted>
-                        variant: <omitted>
+                        strikethrough: false
                         style: <omitted>
-                        language: <omitted>
-                        direction: <omitted>
+                        underline: none
+                        variant: <omitted>
+                        weight: <omitted>
+                        wrap-mode: word
     <AtkImage>
     image size: -1 x -1
     image description: (null)
@@ -123,33 +123,33 @@ window1
       text: Close
       character count: 5
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)
@@ -172,33 +172,33 @@ window1
       text: Cancel
       character count: 6
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)
@@ -221,33 +221,33 @@ window1
       text: Finish
       character count: 6
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
       <AtkImage>
       image size: -1 x -1
       image description: (null)
@@ -270,33 +270,33 @@ window1
       text: Go Back
       character count: 7
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
       <AtkImage>
       image size: -1 x -1
       image description: (null)
@@ -319,33 +319,33 @@ window1
       text: Continue
       character count: 8
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)
@@ -368,33 +368,33 @@ window1
       text: Apply
       character count: 5
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)

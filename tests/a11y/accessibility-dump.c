@@ -232,6 +232,15 @@ dump_attribute_set (GString         *string,
     }
 }
 
+static gint
+compare_attr (gconstpointer a, gconstpointer b)
+{
+  AtkAttribute *aattr = a;
+  AtkAttribute *battr = b;
+
+  return strcmp (aattr->name, battr->name);
+}
+
 static void
 dump_text_attributes (GString         *string,
                       gint             depth,
@@ -244,6 +253,8 @@ dump_text_attributes (GString         *string,
 
   if (attributes == NULL)
     return;
+
+  attributes = g_slist_sort (attributes, compare_attr);
 
   for (l = attributes; l; l = l->next)
     {

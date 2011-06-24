@@ -42,33 +42,33 @@ Click to prevent further changes
       text: Lock
       character count: 4
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
     Unlock
       "label"
       parent: button1
@@ -83,30 +83,30 @@ Click to prevent further changes
       text: Unlock
       character count: 6
       caret offset: 0
-      default attributes: left-margin: 0
-                          right-margin: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          bg-stipple: false
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          fg-stipple: false
                           indent: 0
                           invisible: false
-                          editable: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
                           pixels-above-lines: 0
                           pixels-below-lines: 0
                           pixels-inside-wrap: 0
-                          bg-full-height: 0
-                          scale: 1
+                          right-margin: 0
                           rise: 0
-                          underline: none
-                          strikethrough: false
-                          bg-stipple: false
-                          fg-stipple: false
-                          fg-color: <omitted>
-                          bg-color: <omitted>
-                          wrap-mode: word
-                          justification: left
+                          scale: 1
                           size: <omitted>
-                          weight: <omitted>
-                          family-name: <omitted>
                           stretch: <omitted>
-                          variant: <omitted>
+                          strikethrough: false
                           style: <omitted>
-                          language: <omitted>
-                          direction: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
