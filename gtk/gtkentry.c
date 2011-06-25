@@ -4581,12 +4581,18 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
                       GtkEntry       *entry)
 {
   guint password_hint_timeout;
+  guint current_pos;
+  gint selection_bound;
 
-  if (entry->current_pos > position)
-    entry->current_pos += n_chars;
+  current_pos = entry->current_pos;
+  if (current_pos > position)
+    current_pos += n_chars;
 
-  if (entry->selection_bound > position)
-    entry->selection_bound += n_chars;
+  selection_bound = entry->selection_bound;
+  if (selection_bound > position)
+    selection_bound += n_chars;
+
+  gtk_entry_set_positions (entry, current_pos, selection_bound);
 
   /* Calculate the password hint if it needs to be displayed. */
   if (n_chars == 1 && !entry->visible)
