@@ -39,7 +39,6 @@ struct _GtkEntryAccessible
 {
   GailWidget parent;
 
-  GailTextUtil *textutil;
   /*
    * These fields store information about text changed
    */
