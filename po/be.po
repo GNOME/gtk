@@ -408,7 +408,7 @@ msgstr "Не пакетаваць разам GDI-запыты"
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:57
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Не ўжываць Wintab API для падтрымкі таблічных камп'ютараў"
+msgstr "Не ўжываць Wintab API для падтрымкі планшэтных камп'ютараў"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:59
@@ -444,9 +444,9 @@ msgstr "Адкрыццё %s"
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] "Адкрыццё %d складніка"
-msgstr[1] "Адкрыццё %d складнікаў"
-msgstr[2] "Адкрыццё %d складнікаў"
+msgstr[0] "Адкрыццё %d элемента"
+msgstr[1] "Адкрыццё %d элементаў"
+msgstr[2] "Адкрыццё %d элементаў"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -1122,7 +1122,7 @@ msgstr "Не ўдалося стварыць файл у %s, бо гэта не 
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
-msgstr "Можна выбіраць толькі папкі. Паспрабуйце выбраць іншы складнік."
+msgstr "Можна выбіраць толькі папкі. Паспрабуйце выбраць іншы элемент."
 
 #: ../gtk/gtkfilechooserdefault.c:1050
 msgid "Invalid file name"
@@ -2223,7 +2223,7 @@ msgstr "Фільтр без назвы"
 
 #: ../gtk/gtkrecentchooserdefault.c:1659
 msgid "Could not remove item"
-msgstr "Не ўдалося выдаліць складнік"
+msgstr "Не ўдалося выдаліць элемент"
 
 #: ../gtk/gtkrecentchooserdefault.c:1703
 msgid "Could not clear list"
@@ -2272,7 +2272,7 @@ msgstr "Адкрыць \"%s\""
 
 #: ../gtk/gtkrecentchoosermenu.c:824
 msgid "Unknown item"
-msgstr "Невядомы складнік"
+msgstr "Невядомы элемент"
 
 #. This is the label format that is used for the first 10 items
 #. * in a recent files menu. The %d is the number of the item,
@@ -2300,13 +2300,13 @@ msgstr "%d. %s"
 #: ../gtk/gtkrecentmanager.c:1242
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Не ўдалося адшукаць складнік меню для URI-адрасу \"%s\""
+msgstr "Не ўдалося адшукаць элемент меню для URI-адрасу \"%s\""
 
 #: ../gtk/gtkrecentmanager.c:2442
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
-"Для складніка меню з URI-адрасам \"%2$s\" не знойдзена зарэгістраванай "
+"Для элемента меню з URI-адрасам \"%2$s\" не знойдзена зарэгістраванай "
 "праграмы з назвай \"%1$s\""
 
 #: ../gtk/gtkspinner.c:286
@@ -2861,12 +2861,12 @@ msgstr "Для фармату \"%s\" не знойдзена функцыя дэ
 #: ../gtk/gtktextbufferserialize.c:800 ../gtk/gtktextbufferserialize.c:826
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr "Для складніка <%s> былі знойдзеныя атрыбуты: і \"id\", і \"name\""
+msgstr "Для элемента <%s> былі знойдзеныя атрыбуты: і \"id\", і \"name\""
 
 #: ../gtk/gtktextbufferserialize.c:810 ../gtk/gtktextbufferserialize.c:836
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "Для складніка <%2$s> атрыбут \"%1$s\" быў знойдзены двойчы"
+msgstr "Для элемента <%2$s> атрыбут \"%1$s\" быў знойдзены двойчы"
 
 #: ../gtk/gtktextbufferserialize.c:852
 #, c-format
@@ -4504,30 +4504,3 @@ msgstr ""
 "Не ўдалося загрузіць выяву \"%s\": прычына невядомая, магчыма, файл выявы "
 "пашкоджаны"
 
-#~ msgid ""
-#~ "Could not find the icon '%s'. The '%s' theme\n"
-#~ "was not found either, perhaps you need to install it.\n"
-#~ "You can get a copy from:\n"
-#~ "\t%s"
-#~ msgstr ""
-#~ "Не ўдалося адшукаць значок \"%s\". Матыў аздаблення \"%s\"\n"
-#~ "таксама не знойдзены. Мабыць, яго трэба ўсталяваць.\n"
-#~ "Яго копію можна ўзяць тут:\n"
-#~ "\t%s"
-
-#~ msgid "different idatas found for symlinked '%s' and '%s'\n"
-#~ msgstr ""
-#~ "для аб'ектаў \"%s\" і \"%s\", злучаных сімвальнымі спасылкамі, знойдзеныя "
-#~ "розныя idata-складнікі\n"
-
-#~ msgid "Error loading icon: %s"
-#~ msgstr "Не ўдалося загрузіць значок: %s"
-
-#~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "Гэтая функцыя адсутнічае для віджэтаў класа \"%s\""
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\""
-#~ msgstr "Не ўдалося адшукаць файл выявы ў pixmap_path: \"%s\""
-
-#~ msgid "Received invalid color data\n"
-#~ msgstr "Атрымалі хібныя колерныя даныя\n"
