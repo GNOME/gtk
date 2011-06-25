@@ -17,25 +17,25 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GAIL_ENTRY_H__
-#define __GAIL_ENTRY_H__
+#ifndef __GTK_ENTRY_ACCESSIBLE_H__
+#define __GTK_ENTRY_ACCESSIBLE_H__
 
 #include "gailwidget.h"
 #include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_ENTRY                      (gail_entry_get_type ())
-#define GAIL_ENTRY(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_ENTRY, GailEntry))
-#define GAIL_ENTRY_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_ENTRY, GailEntryClass))
-#define GAIL_IS_ENTRY(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_ENTRY))
-#define GAIL_IS_ENTRY_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_ENTRY))
-#define GAIL_ENTRY_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_ENTRY, GailEntryClass))
+#define GTK_TYPE_ENTRY_ACCESSIBLE                      (gtk_entry_accessible_get_type ())
+#define GTK_ENTRY_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_ACCESSIBLE, GtkEntryAccessible))
+#define GTK_ENTRY_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ENTRY_ACCESSIBLE, GtkEntryAccessibleClass))
+#define GTK_IS_ENTRY_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ENTRY_ACCESSIBLE))
+#define GTK_IS_ENTRY_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY_ACCESSIBLE))
+#define GTK_ENTRY_ACCESSIBLE_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ENTRY_ACCESSIBLE, GtkEntryAccessibleClass))
 
-typedef struct _GailEntry              GailEntry;
-typedef struct _GailEntryClass         GailEntryClass;
+typedef struct _GtkEntryAccessible              GtkEntryAccessible;
+typedef struct _GtkEntryAccessibleClass         GtkEntryAccessibleClass;
 
-struct _GailEntry
+struct _GtkEntryAccessible
 {
   GailWidget parent;
 
@@ -57,13 +57,13 @@ struct _GailEntry
   guint          insert_idle_handler;
 };
 
-GType gail_entry_get_type (void);
+GType gtk_entry_accessible_get_type (void);
 
-struct _GailEntryClass
+struct _GtkEntryAccessibleClass
 {
   GailWidgetClass parent_class;
 };
 
 G_END_DECLS
 
-#endif /* __GAIL_ENTRY_H__ */
+#endif /* __GTK_ENTRY_ACCESSIBLE_H__ */

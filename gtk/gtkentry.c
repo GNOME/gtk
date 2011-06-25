@@ -67,6 +67,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 
+#include "a11y/gtkentryaccessible.h"
+
 /**
  * SECTION:gtkentry
  * @Short_description: A single line text entry field
@@ -1870,6 +1872,8 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                GTK_PARAM_READABLE)); 
 
   g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
 }
 
 static void

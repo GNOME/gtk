@@ -45,6 +45,8 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
+#include "a11y/gtkspinbuttonaccessible.h"
+
 #define MIN_SPIN_BUTTON_WIDTH 30
 #define MAX_TIMER_CALLS       5
 #define EPSILON               1e-10
@@ -507,6 +509,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
   g_type_class_add_private (class, sizeof (GtkSpinButtonPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPIN_BUTTON_ACCESSIBLE);
 }
 
 static void

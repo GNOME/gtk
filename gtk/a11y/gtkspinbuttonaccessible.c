@@ -21,39 +21,38 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
-#include "gailspinbutton.h"
+#include "gtkspinbuttonaccessible.h"
 #include "gailadjustment.h"
-#include "gail-private-macros.h"
 
-static void      gail_spin_button_class_init        (GailSpinButtonClass *klass);
-static void      gail_spin_button_init              (GailSpinButton *button);
-static void      gail_spin_button_real_initialize   (AtkObject      *obj,
+static void      gtk_spin_button_accessible_class_init        (GtkSpinButtonAccessibleClass *klass);
+static void      gtk_spin_button_accessible_init              (GtkSpinButtonAccessible *button);
+static void      gtk_spin_button_accessible_real_initialize   (AtkObject      *obj,
                                                      gpointer       data);
-static void      gail_spin_button_finalize          (GObject        *object);
+static void      gtk_spin_button_accessible_finalize          (GObject        *object);
 
 static void      atk_value_interface_init           (AtkValueIface  *iface);
 
-static void      gail_spin_button_real_notify_gtk   (GObject        *obj,
+static void      gtk_spin_button_accessible_real_notify_gtk   (GObject        *obj,
                                                      GParamSpec     *pspec);
 
-static void      gail_spin_button_get_current_value (AtkValue       *obj,
+static void      gtk_spin_button_accessible_get_current_value (AtkValue       *obj,
                                                      GValue         *value);
-static void      gail_spin_button_get_maximum_value (AtkValue       *obj,
+static void      gtk_spin_button_accessible_get_maximum_value (AtkValue       *obj,
                                                      GValue         *value);
-static void      gail_spin_button_get_minimum_value (AtkValue       *obj,
+static void      gtk_spin_button_accessible_get_minimum_value (AtkValue       *obj,
                                                      GValue         *value);
-static void      gail_spin_button_get_minimum_increment (AtkValue       *obj,
+static void      gtk_spin_button_accessible_get_minimum_increment (AtkValue       *obj,
                                                          GValue         *value);
-static gboolean  gail_spin_button_set_current_value (AtkValue       *obj,
+static gboolean  gtk_spin_button_accessible_set_current_value (AtkValue       *obj,
                                                      const GValue   *value);
-static void      gail_spin_button_value_changed     (GtkAdjustment  *adjustment,
+static void      gtk_spin_button_accessible_value_changed     (GtkAdjustment  *adjustment,
                                                      gpointer       data);
         
-G_DEFINE_TYPE_WITH_CODE (GailSpinButton, gail_spin_button, GAIL_TYPE_ENTRY,
+G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, gtk_spin_button_accessible, GTK_TYPE_ENTRY_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
-gail_spin_button_class_init (GailSpinButtonClass *klass)
+gtk_spin_button_accessible_class_init (GtkSpinButtonAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
@@ -61,27 +60,27 @@ gail_spin_button_class_init (GailSpinButtonClass *klass)
 
   widget_class = (GailWidgetClass*)klass;
 
-  widget_class->notify_gtk = gail_spin_button_real_notify_gtk;
+  widget_class->notify_gtk = gtk_spin_button_accessible_real_notify_gtk;
 
-  class->initialize = gail_spin_button_real_initialize;
+  class->initialize = gtk_spin_button_accessible_real_initialize;
 
-  gobject_class->finalize = gail_spin_button_finalize;
+  gobject_class->finalize = gtk_spin_button_accessible_finalize;
 }
 
 static void
-gail_spin_button_init (GailSpinButton *button)
+gtk_spin_button_accessible_init (GtkSpinButtonAccessible *button)
 {
 }
 
 static void
-gail_spin_button_real_initialize (AtkObject *obj,
+gtk_spin_button_accessible_real_initialize (AtkObject *obj,
                                   gpointer  data)
 {
   GtkAdjustment *adjustment;
-  GailSpinButton *spin_button = GAIL_SPIN_BUTTON (obj);
+  GtkSpinButtonAccessible *spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (obj);
   GtkSpinButton *gtk_spin_button;
 
-  ATK_OBJECT_CLASS (gail_spin_button_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_spin_button_accessible_parent_class)->initialize (obj, data);
 
   gtk_spin_button = GTK_SPIN_BUTTON (data); 
   /*
@@ -94,7 +93,7 @@ gail_spin_button_real_initialize (AtkObject *obj,
       spin_button->adjustment = gail_adjustment_new (adjustment);
       g_signal_connect (adjustment,
                         "value-changed",
-                        G_CALLBACK (gail_spin_button_value_changed),
+                        G_CALLBACK (gtk_spin_button_accessible_value_changed),
                         obj);
     }
   else
@@ -107,22 +106,20 @@ gail_spin_button_real_initialize (AtkObject *obj,
 static void
 atk_value_interface_init (AtkValueIface *iface)
 {
-  iface->get_current_value = gail_spin_button_get_current_value;
-  iface->get_maximum_value = gail_spin_button_get_maximum_value;
-  iface->get_minimum_value = gail_spin_button_get_minimum_value;
-  iface->get_minimum_increment = gail_spin_button_get_minimum_increment;
-  iface->set_current_value = gail_spin_button_set_current_value;
+  iface->get_current_value = gtk_spin_button_accessible_get_current_value;
+  iface->get_maximum_value = gtk_spin_button_accessible_get_maximum_value;
+  iface->get_minimum_value = gtk_spin_button_accessible_get_minimum_value;
+  iface->get_minimum_increment = gtk_spin_button_accessible_get_minimum_increment;
+  iface->set_current_value = gtk_spin_button_accessible_set_current_value;
 }
 
 static void
-gail_spin_button_get_current_value (AtkValue       *obj,
+gtk_spin_button_accessible_get_current_value (AtkValue       *obj,
                                     GValue         *value)
 {
-  GailSpinButton *spin_button;
+  GtkSpinButtonAccessible *spin_button;
 
-  g_return_if_fail (GAIL_IS_SPIN_BUTTON (obj));
-
-  spin_button = GAIL_SPIN_BUTTON (obj);
+  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (obj);
   if (spin_button->adjustment == NULL)
     /*
      * Adjustment has not been specified
@@ -133,14 +130,12 @@ gail_spin_button_get_current_value (AtkValue       *obj,
 }
 
 static void      
-gail_spin_button_get_maximum_value (AtkValue       *obj,
+gtk_spin_button_accessible_get_maximum_value (AtkValue       *obj,
                                     GValue         *value)
 {
-  GailSpinButton *spin_button;
+  GtkSpinButtonAccessible *spin_button;
 
-  g_return_if_fail (GAIL_IS_SPIN_BUTTON (obj));
-
-  spin_button = GAIL_SPIN_BUTTON (obj);
+  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (obj);
   if (spin_button->adjustment == NULL)
     /*
      * Adjustment has not been specified
@@ -151,14 +146,12 @@ gail_spin_button_get_maximum_value (AtkValue       *obj,
 }
 
 static void 
-gail_spin_button_get_minimum_value (AtkValue       *obj,
+gtk_spin_button_accessible_get_minimum_value (AtkValue       *obj,
                                     GValue         *value)
 {
- GailSpinButton *spin_button;
+ GtkSpinButtonAccessible *spin_button;
 
-  g_return_if_fail (GAIL_IS_SPIN_BUTTON (obj));
-
-  spin_button = GAIL_SPIN_BUTTON (obj);
+  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (obj);
   if (spin_button->adjustment == NULL)
     /*
      * Adjustment has not been specified
@@ -169,13 +162,11 @@ gail_spin_button_get_minimum_value (AtkValue       *obj,
 }
 
 static void
-gail_spin_button_get_minimum_increment (AtkValue *obj, GValue *value)
+gtk_spin_button_accessible_get_minimum_increment (AtkValue *obj, GValue *value)
 {
- GailSpinButton *spin_button;
+ GtkSpinButtonAccessible *spin_button;
 
-  g_return_if_fail (GAIL_IS_SPIN_BUTTON (obj));
-
-  spin_button = GAIL_SPIN_BUTTON (obj);
+  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (obj);
   if (spin_button->adjustment == NULL)
     /*
      * Adjustment has not been specified
@@ -186,14 +177,12 @@ gail_spin_button_get_minimum_increment (AtkValue *obj, GValue *value)
 }
 
 static gboolean  
-gail_spin_button_set_current_value (AtkValue       *obj,
+gtk_spin_button_accessible_set_current_value (AtkValue       *obj,
                                     const GValue   *value)
 {
- GailSpinButton *spin_button;
+ GtkSpinButtonAccessible *spin_button;
 
-  g_return_val_if_fail (GAIL_IS_SPIN_BUTTON (obj), FALSE);
-
-  spin_button = GAIL_SPIN_BUTTON (obj);
+  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (obj);
   if (spin_button->adjustment == NULL)
     /*
      * Adjustment has not been specified
@@ -204,25 +193,25 @@ gail_spin_button_set_current_value (AtkValue       *obj,
 }
 
 static void
-gail_spin_button_finalize (GObject            *object)
+gtk_spin_button_accessible_finalize (GObject            *object)
 {
-  GailSpinButton *spin_button = GAIL_SPIN_BUTTON (object);
+  GtkSpinButtonAccessible *spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (object);
 
   if (spin_button->adjustment)
     {
       g_object_unref (spin_button->adjustment);
       spin_button->adjustment = NULL;
     }
-  G_OBJECT_CLASS (gail_spin_button_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_spin_button_accessible_parent_class)->finalize (object);
 }
 
 
 static void
-gail_spin_button_real_notify_gtk (GObject    *obj,
+gtk_spin_button_accessible_real_notify_gtk (GObject    *obj,
                                   GParamSpec *pspec)
 {
   GtkWidget *widget = GTK_WIDGET (obj);
-  GailSpinButton *spin_button = GAIL_SPIN_BUTTON (gtk_widget_get_accessible (widget));
+  GtkSpinButtonAccessible *spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (gtk_widget_get_accessible (widget));
 
   if (strcmp (pspec->name, "adjustment") == 0)
     {
@@ -247,24 +236,24 @@ gail_spin_button_real_notify_gtk (GObject    *obj,
       spin_button->adjustment = gail_adjustment_new (adjustment);
       g_signal_connect (adjustment,
                         "value-changed",
-                        G_CALLBACK (gail_spin_button_value_changed),
+                        G_CALLBACK (gtk_spin_button_accessible_value_changed),
                         spin_button);
     }
   else
-    GAIL_WIDGET_CLASS (gail_spin_button_parent_class)->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gtk_spin_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 
 static void
-gail_spin_button_value_changed (GtkAdjustment    *adjustment,
+gtk_spin_button_accessible_value_changed (GtkAdjustment    *adjustment,
                                 gpointer         data)
 {
-  GailSpinButton *spin_button;
+  GtkSpinButtonAccessible *spin_button;
 
-  gail_return_if_fail (adjustment != NULL);
-  gail_return_if_fail (data != NULL);
+  if (adjustment == NULL || data == NULL)
+    return;
 
-  spin_button = GAIL_SPIN_BUTTON (data);
+  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (data);
 
   g_object_notify (G_OBJECT (spin_button), "accessible-value");
 }

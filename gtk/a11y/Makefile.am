@@ -18,7 +18,7 @@ gail_c_sources =			\
 	gailcombobox.c			\
 	gailcontainer.c			\
 	gailcontainercell.c		\
-	gailentry.c			\
+	gtkentryaccessible.c		\
 	gailexpander.c			\
 	gailframe.c			\
 	gailimage.c			\
@@ -43,7 +43,7 @@ gail_c_sources =			\
 	gailscrollbar.c			\
 	gailscrolledwindow.c		\
 	gailseparator.c			\
-	gailspinbutton.c		\
+	gtkspinbuttonaccessible.c	\
 	gailsubmenuitem.c		\
 	gailstatusbar.c			\
 	gailtextcell.c			\
@@ -72,7 +72,7 @@ gail_private_h_sources =		\
 	gailcombobox.h			\
 	gailcontainercell.h		\
 	gailcontainer.h			\
-	gailentry.h			\
+	gtkentryaccessible.h		\
 	gailexpander.h			\
 	gailfactory.h			\
 	gailframe.h			\
@@ -98,7 +98,7 @@ gail_private_h_sources =		\
 	gailscrollbar.h			\
 	gailscrolledwindow.h		\
 	gailseparator.h			\
-	gailspinbutton.h		\
+	gtkspinbuttonaccessible.h	\
 	gailsubmenuitem.h		\
 	gailstatusbar.h			\
 	gailtextcell.h			\

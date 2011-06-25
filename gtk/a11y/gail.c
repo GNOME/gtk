@@ -34,7 +34,6 @@
 #include "gailcombobox.h"
 #include "gailcontainer.h"
 #include "gailcontainercell.h"
-#include "gailentry.h"
 #include "gailexpander.h"
 #include "gailframe.h"
 #include "gailimage.h"
@@ -55,7 +54,6 @@
 #include "gailscrollbar.h"
 #include "gailscrolledwindow.h"
 #include "gailseparator.h"
-#include "gailspinbutton.h"
 #include "gailstatusbar.h"
 #include "gailtextcell.h"
 #include "gailtextview.h"
@@ -121,7 +119,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TOGGLE_BUTTON, GailToggleButton, gail_toggle_b
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_IMAGE, GailImage, gail_image, GTK_TYPE_IMAGE)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TEXT_VIEW, GailTextView, gail_text_view, GTK_TYPE_TEXT_VIEW)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_COMBO_BOX, GailComboBox, gail_combo_box, GTK_TYPE_COMBO_BOX)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_ENTRY, GailEntry, gail_entry, GTK_TYPE_ENTRY)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU_SHELL, GailMenuShell, gail_menu_shell, GTK_TYPE_MENU_SHELL)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU, GailMenu, gail_menu, GTK_TYPE_MENU)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WINDOW, GailWindow, gail_window, GTK_TYPE_BIN)
@@ -132,7 +129,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_STATUSBAR, GailStatusbar, gail_statusbar, GTK_
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_NOTEBOOK, GailNotebook, gail_notebook, GTK_TYPE_NOTEBOOK)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CALENDAR, GailCalendar, gail_calendar, GTK_TYPE_CALENDAR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_PROGRESS_BAR, GailProgressBar, gail_progress_bar, GTK_TYPE_PROGRESS_BAR)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SPIN_BUTTON, GailSpinButton, gail_spin_button, GTK_TYPE_SPIN_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TREE_VIEW, GailTreeView, gail_tree_view, GTK_TYPE_TREE_VIEW)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_FRAME, GailFrame, gail_frame, GTK_TYPE_FRAME)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_RADIO_BUTTON, GailRadioButton, gail_radio_button, GTK_TYPE_RADIO_BUTTON)
@@ -898,7 +894,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_IMAGE, gail_image);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TEXT_VIEW, gail_text_view);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_COMBO_BOX, gail_combo_box);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_ENTRY, gail_entry);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_BAR, gail_menu_shell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU, gail_menu);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WINDOW, gail_window);
@@ -909,7 +904,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_NOTEBOOK, gail_notebook);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CALENDAR, gail_calendar);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_PROGRESS_BAR, gail_progress_bar);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SPIN_BUTTON, gail_spin_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TREE_VIEW, gail_tree_view);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_FRAME, gail_frame);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TEXT, gail_text_cell);

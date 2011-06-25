@@ -22,155 +22,155 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include "gailentry.h"
+#include "gtkentryaccessible.h"
 #include "gailcombobox.h"
 #include <libgail-util/gailmisc.h>
 
-static void       gail_entry_class_init            (GailEntryClass       *klass);
-static void       gail_entry_init                  (GailEntry            *entry);
-static void	  gail_entry_real_initialize       (AtkObject            *obj,
+static void       gtk_entry_accessible_class_init            (GtkEntryAccessibleClass       *klass);
+static void       gtk_entry_accessible_init                  (GtkEntryAccessible            *entry);
+static void	  gtk_entry_accessible_real_initialize       (AtkObject            *obj,
                                                     gpointer             data);
-static void       text_setup                       (GailEntry            *entry,
+static void       text_setup                       (GtkEntryAccessible            *entry,
                                                     GtkEntry             *gtk_entry);
-static void	  gail_entry_real_notify_gtk	   (GObject		 *obj,
+static void	  gtk_entry_accessible_real_notify_gtk	   (GObject		 *obj,
                                                     GParamSpec		 *pspec);
-static void       gail_entry_finalize              (GObject              *object);
+static void       gtk_entry_accessible_finalize              (GObject              *object);
 
-static gint       gail_entry_get_index_in_parent   (AtkObject            *accessible);
+static gint       gtk_entry_accessible_get_index_in_parent   (AtkObject            *accessible);
 
 /* atkobject.h */
 
-static AtkStateSet*     gail_entry_ref_state_set   (AtkObject            *accessible);
-static AtkAttributeSet* gail_entry_get_attributes  (AtkObject            *accessible);
+static AtkStateSet*     gtk_entry_accessible_ref_state_set   (AtkObject            *accessible);
+static AtkAttributeSet* gtk_entry_accessible_get_attributes  (AtkObject            *accessible);
 
 /* atktext.h */
 
 static void       atk_text_interface_init          (AtkTextIface         *iface);
 
-static gchar*     gail_entry_get_text              (AtkText              *text,
+static gchar*     gtk_entry_accessible_get_text              (AtkText              *text,
                                                     gint                 start_pos,
                                                     gint                 end_pos);
-static gunichar	  gail_entry_get_character_at_offset
+static gunichar	  gtk_entry_accessible_get_character_at_offset
 						   (AtkText		 *text,
 						    gint		 offset);
-static gchar*	  gail_entry_get_text_before_offset(AtkText		 *text,
+static gchar*	  gtk_entry_accessible_get_text_before_offset(AtkText		 *text,
 						    gint		 offset,
 						    AtkTextBoundary	 boundary_type,
 						    gint		 *start_offset,
 						    gint		 *end_offset);
-static gchar*	  gail_entry_get_text_at_offset	   (AtkText		 *text,
+static gchar*	  gtk_entry_accessible_get_text_at_offset	   (AtkText		 *text,
 						    gint		 offset,
 						    AtkTextBoundary	 boundary_type,
 						    gint		 *start_offset,
 						    gint		 *end_offset);
-static gchar*	  gail_entry_get_text_after_offset (AtkText		 *text,
+static gchar*	  gtk_entry_accessible_get_text_after_offset (AtkText		 *text,
 						    gint		 offset,
 						    AtkTextBoundary	 boundary_type,
 						    gint		 *start_offset,
 						    gint		 *end_offset);
-static gint       gail_entry_get_caret_offset      (AtkText              *text);
-static gboolean   gail_entry_set_caret_offset      (AtkText              *text,
+static gint       gtk_entry_accessible_get_caret_offset      (AtkText              *text);
+static gboolean   gtk_entry_accessible_set_caret_offset      (AtkText              *text,
 						    gint                 offset);
-static gint	  gail_entry_get_n_selections	   (AtkText		 *text);
-static gchar*	  gail_entry_get_selection	   (AtkText		 *text,
+static gint	  gtk_entry_accessible_get_n_selections	   (AtkText		 *text);
+static gchar*	  gtk_entry_accessible_get_selection	   (AtkText		 *text,
 						    gint		 selection_num,
 						    gint		 *start_offset,
 						    gint		 *end_offset);
-static gboolean	  gail_entry_add_selection	   (AtkText		 *text,
+static gboolean	  gtk_entry_accessible_add_selection	   (AtkText		 *text,
 						    gint		 start_offset,
 						    gint		 end_offset);
-static gboolean	  gail_entry_remove_selection	   (AtkText		 *text,
+static gboolean	  gtk_entry_accessible_remove_selection	   (AtkText		 *text,
 						    gint		 selection_num);
-static gboolean	  gail_entry_set_selection	   (AtkText		 *text,
+static gboolean	  gtk_entry_accessible_set_selection	   (AtkText		 *text,
 						    gint		 selection_num,
 						    gint		 start_offset,
 						    gint		 end_offset);
-static gint	  gail_entry_get_character_count   (AtkText		 *text);
-static AtkAttributeSet *  gail_entry_get_run_attributes 
+static gint	  gtk_entry_accessible_get_character_count   (AtkText		 *text);
+static AtkAttributeSet *  gtk_entry_accessible_get_run_attributes 
                                                    (AtkText              *text,
 						    gint		 offset,
         					    gint		 *start_offset,
 					       	    gint 		 *end_offset);
-static AtkAttributeSet *  gail_entry_get_default_attributes 
+static AtkAttributeSet *  gtk_entry_accessible_get_default_attributes 
                                                    (AtkText              *text);
-static void gail_entry_get_character_extents       (AtkText	         *text,
+static void gtk_entry_accessible_get_character_extents       (AtkText	         *text,
 						    gint 	         offset,
 		                                    gint 	         *x,
                     		   	            gint 	         *y,
                                 		    gint 	         *width,
                                      		    gint 	         *height,
 			        		    AtkCoordType         coords);
-static gint gail_entry_get_offset_at_point         (AtkText              *text,
+static gint gtk_entry_accessible_get_offset_at_point         (AtkText              *text,
                                                     gint                 x,
                                                     gint                 y,
 			                            AtkCoordType         coords);
 /* atkeditabletext.h */
 
 static void       atk_editable_text_interface_init (AtkEditableTextIface *iface);
-static void       gail_entry_set_text_contents     (AtkEditableText      *text,
+static void       gtk_entry_accessible_set_text_contents     (AtkEditableText      *text,
                                                     const gchar          *string);
-static void       gail_entry_insert_text           (AtkEditableText      *text,
+static void       gtk_entry_accessible_insert_text           (AtkEditableText      *text,
                                                     const gchar          *string,
                                                     gint                 length,
                                                     gint                 *position);
-static void       gail_entry_copy_text             (AtkEditableText      *text,
+static void       gtk_entry_accessible_copy_text             (AtkEditableText      *text,
                                                     gint                 start_pos,
                                                     gint                 end_pos);
-static void       gail_entry_cut_text              (AtkEditableText      *text,
+static void       gtk_entry_accessible_cut_text              (AtkEditableText      *text,
                                                     gint                 start_pos,
                                                     gint                 end_pos);
-static void       gail_entry_delete_text           (AtkEditableText      *text,
+static void       gtk_entry_accessible_delete_text           (AtkEditableText      *text,
                                                     gint                 start_pos,
                                                     gint                 end_pos);
-static void       gail_entry_paste_text            (AtkEditableText      *text,
+static void       gtk_entry_accessible_paste_text            (AtkEditableText      *text,
                                                     gint                 position);
-static void       gail_entry_paste_received	   (GtkClipboard *clipboard,
+static void       gtk_entry_accessible_paste_received	   (GtkClipboard *clipboard,
 						    const gchar  *text,
 						    gpointer     data);
 
 
 /* Callbacks */
 
-static gboolean   gail_entry_idle_notify_insert    (gpointer data);
-static void       gail_entry_notify_insert         (GailEntry            *entry);
-static void       gail_entry_notify_delete         (GailEntry            *entry);
-static void	  _gail_entry_insert_text_cb	   (GtkEntry     	 *entry,
+static gboolean   gtk_entry_accessible_idle_notify_insert    (gpointer data);
+static void       gtk_entry_accessible_notify_insert         (GtkEntryAccessible            *entry);
+static void       gtk_entry_accessible_notify_delete         (GtkEntryAccessible            *entry);
+static void	  _gtk_entry_accessible_insert_text_cb	   (GtkEntry     	 *entry,
                                                     gchar		 *arg1,
                                                     gint		 arg2,
                                                     gpointer		 arg3);
-static void	  _gail_entry_delete_text_cb	   (GtkEntry		 *entry,
+static void	  _gtk_entry_accessible_delete_text_cb	   (GtkEntry		 *entry,
                                                     gint		 arg1,
                                                     gint		 arg2);
-static void	  _gail_entry_changed_cb           (GtkEntry		 *entry);
-static gboolean   check_for_selection_change       (GailEntry            *entry,
+static void	  _gtk_entry_accessible_changed_cb           (GtkEntry		 *entry);
+static gboolean   check_for_selection_change       (GtkEntryAccessible            *entry,
                                                     GtkEntry             *gtk_entry);
 
 static void                  atk_action_interface_init          (AtkActionIface  *iface);
 
-static gboolean              gail_entry_do_action               (AtkAction       *action,
+static gboolean              gtk_entry_accessible_do_action               (AtkAction       *action,
                                                                  gint            i);
 static gboolean              idle_do_action                     (gpointer        data);
-static gint                  gail_entry_get_n_actions           (AtkAction       *action);
-static const gchar* gail_entry_get_keybinding          (AtkAction       *action,
+static gint                  gtk_entry_accessible_get_n_actions           (AtkAction       *action);
+static const gchar* gtk_entry_accessible_get_keybinding          (AtkAction       *action,
                                                                  gint            i);
-static const gchar* gail_entry_action_get_name         (AtkAction       *action,
+static const gchar* gtk_entry_accessible_action_get_name         (AtkAction       *action,
                                                                  gint            i);
 
-typedef struct _GailEntryPaste			GailEntryPaste;
+typedef struct _GtkEntryAccessiblePaste			GtkEntryAccessiblePaste;
 
-struct _GailEntryPaste
+struct _GtkEntryAccessiblePaste
 {
   GtkEntry* entry;
   gint position;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GailEntry, gail_entry, GAIL_TYPE_WIDGET,
+G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GAIL_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
-gail_entry_class_init (GailEntryClass *klass)
+gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
@@ -178,18 +178,18 @@ gail_entry_class_init (GailEntryClass *klass)
 
   widget_class = (GailWidgetClass*)klass;
 
-  gobject_class->finalize = gail_entry_finalize;
+  gobject_class->finalize = gtk_entry_accessible_finalize;
 
-  class->ref_state_set = gail_entry_ref_state_set;
-  class->get_index_in_parent = gail_entry_get_index_in_parent;
-  class->initialize = gail_entry_real_initialize;
-  class->get_attributes = gail_entry_get_attributes;
+  class->ref_state_set = gtk_entry_accessible_ref_state_set;
+  class->get_index_in_parent = gtk_entry_accessible_get_index_in_parent;
+  class->initialize = gtk_entry_accessible_real_initialize;
+  class->get_attributes = gtk_entry_accessible_get_attributes;
 
-  widget_class->notify_gtk = gail_entry_real_notify_gtk;
+  widget_class->notify_gtk = gtk_entry_accessible_real_notify_gtk;
 }
 
 static void
-gail_entry_init (GailEntry *entry)
+gtk_entry_accessible_init (GtkEntryAccessible *entry)
 {
   entry->textutil = NULL;
   entry->signal_name_insert = NULL;
@@ -200,34 +200,34 @@ gail_entry_init (GailEntry *entry)
 }
 
 static void
-gail_entry_real_initialize (AtkObject *obj, 
+gtk_entry_accessible_real_initialize (AtkObject *obj, 
                             gpointer  data)
 {
   GtkEntry *entry;
-  GailEntry *gail_entry;
+  GtkEntryAccessible *gtk_entry_accessible;
   gint start_pos, end_pos;
 
-  ATK_OBJECT_CLASS (gail_entry_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->initialize (obj, data);
 
-  gail_entry = GAIL_ENTRY (obj);
-  gail_entry->textutil = gail_text_util_new ();
+  gtk_entry_accessible = GTK_ENTRY_ACCESSIBLE (obj);
+  gtk_entry_accessible->textutil = gail_text_util_new ();
   
   g_assert (GTK_IS_ENTRY (data));
 
   entry = GTK_ENTRY (data);
-  text_setup (gail_entry, entry);
+  text_setup (gtk_entry_accessible, entry);
   gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
                                      &start_pos, &end_pos);
-  gail_entry->cursor_position = end_pos;
-  gail_entry->selection_bound = start_pos;
+  gtk_entry_accessible->cursor_position = end_pos;
+  gtk_entry_accessible->selection_bound = start_pos;
 
   /* Set up signal callbacks */
   g_signal_connect (data, "insert-text",
-	G_CALLBACK (_gail_entry_insert_text_cb), NULL);
+	G_CALLBACK (_gtk_entry_accessible_insert_text_cb), NULL);
   g_signal_connect (data, "delete-text",
-	G_CALLBACK (_gail_entry_delete_text_cb), NULL);
+	G_CALLBACK (_gtk_entry_accessible_delete_text_cb), NULL);
   g_signal_connect (data, "changed",
-	G_CALLBACK (_gail_entry_changed_cb), NULL);
+	G_CALLBACK (_gtk_entry_accessible_changed_cb), NULL);
 
   if (gtk_entry_get_visibility (entry))
     obj->role = ATK_ROLE_TEXT;
@@ -236,23 +236,23 @@ gail_entry_real_initialize (AtkObject *obj,
 }
 
 static void
-gail_entry_real_notify_gtk (GObject		*obj,
+gtk_entry_accessible_real_notify_gtk (GObject		*obj,
                             GParamSpec		*pspec)
 {
   GtkWidget *widget;
   AtkObject* atk_obj;
   GtkEntry* gtk_entry;
-  GailEntry* entry;
+  GtkEntryAccessible* entry;
 
   widget = GTK_WIDGET (obj);
   atk_obj = gtk_widget_get_accessible (widget);
   gtk_entry = GTK_ENTRY (widget);
-  entry = GAIL_ENTRY (atk_obj);
+  entry = GTK_ENTRY_ACCESSIBLE (atk_obj);
 
   if (strcmp (pspec->name, "cursor-position") == 0)
     {
       if (entry->insert_idle_handler == 0)
-        entry->insert_idle_handler = gdk_threads_add_idle (gail_entry_idle_notify_insert, entry);
+        entry->insert_idle_handler = gdk_threads_add_idle (gtk_entry_accessible_idle_notify_insert, entry);
 
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
@@ -265,7 +265,7 @@ gail_entry_real_notify_gtk (GObject		*obj,
   else if (strcmp (pspec->name, "selection-bound") == 0)
     {
       if (entry->insert_idle_handler == 0)
-        entry->insert_idle_handler = gdk_threads_add_idle (gail_entry_idle_notify_insert, entry);
+        entry->insert_idle_handler = gdk_threads_add_idle (gtk_entry_accessible_idle_notify_insert, entry);
 
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
@@ -301,11 +301,11 @@ gail_entry_real_notify_gtk (GObject		*obj,
         }
     }
   else
-    GAIL_WIDGET_CLASS (gail_entry_parent_class)->notify_gtk (obj, pspec);
+    GAIL_WIDGET_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
-text_setup (GailEntry *entry,
+text_setup (GtkEntryAccessible *entry,
             GtkEntry  *gtk_entry)
 {
   if (gtk_entry_get_visibility (gtk_entry))
@@ -339,9 +339,9 @@ text_setup (GailEntry *entry,
 }
 
 static void
-gail_entry_finalize (GObject            *object)
+gtk_entry_accessible_finalize (GObject            *object)
 {
-  GailEntry *entry = GAIL_ENTRY (object);
+  GtkEntryAccessible *entry = GTK_ENTRY_ACCESSIBLE (object);
 
   g_object_unref (entry->textutil);
   g_free (entry->activate_keybinding);
@@ -355,11 +355,11 @@ gail_entry_finalize (GObject            *object)
       g_source_remove (entry->insert_idle_handler);
       entry->insert_idle_handler = 0;
     }
-  G_OBJECT_CLASS (gail_entry_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_entry_accessible_parent_class)->finalize (object);
 }
 
 static gint
-gail_entry_get_index_in_parent (AtkObject *accessible)
+gtk_entry_accessible_get_index_in_parent (AtkObject *accessible)
 {
   /*
    * If the parent widget is a combo box then the index is 1
@@ -369,20 +369,20 @@ gail_entry_get_index_in_parent (AtkObject *accessible)
     if (GAIL_IS_COMBO_BOX (accessible->accessible_parent))
       return 1;
 
-  return ATK_OBJECT_CLASS (gail_entry_parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->get_index_in_parent (accessible);
 }
 
 /* atkobject.h */
 
 static AtkStateSet*
-gail_entry_ref_state_set (AtkObject *accessible)
+gtk_entry_accessible_ref_state_set (AtkObject *accessible)
 {
   AtkStateSet *state_set;
   GtkEntry *entry;
   gboolean value;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (gail_entry_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->ref_state_set (accessible);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
@@ -399,14 +399,14 @@ gail_entry_ref_state_set (AtkObject *accessible)
 }
 
 static AtkAttributeSet *
-gail_entry_get_attributes (AtkObject *accessible)
+gtk_entry_accessible_get_attributes (AtkObject *accessible)
 {
   GtkWidget *widget;
   AtkAttributeSet *attributes;
   AtkAttribute *placeholder_text;
   const gchar *text;
 
-  attributes = ATK_OBJECT_CLASS (gail_entry_parent_class)->get_attributes (accessible);
+  attributes = ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->get_attributes (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -430,27 +430,27 @@ gail_entry_get_attributes (AtkObject *accessible)
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
-  iface->get_text = gail_entry_get_text;
-  iface->get_character_at_offset = gail_entry_get_character_at_offset;
-  iface->get_text_before_offset = gail_entry_get_text_before_offset;
-  iface->get_text_at_offset = gail_entry_get_text_at_offset;
-  iface->get_text_after_offset = gail_entry_get_text_after_offset;
-  iface->get_caret_offset = gail_entry_get_caret_offset;
-  iface->set_caret_offset = gail_entry_set_caret_offset;
-  iface->get_character_count = gail_entry_get_character_count;
-  iface->get_n_selections = gail_entry_get_n_selections;
-  iface->get_selection = gail_entry_get_selection;
-  iface->add_selection = gail_entry_add_selection;
-  iface->remove_selection = gail_entry_remove_selection;
-  iface->set_selection = gail_entry_set_selection;
-  iface->get_run_attributes = gail_entry_get_run_attributes;
-  iface->get_default_attributes = gail_entry_get_default_attributes;
-  iface->get_character_extents = gail_entry_get_character_extents;
-  iface->get_offset_at_point = gail_entry_get_offset_at_point;
+  iface->get_text = gtk_entry_accessible_get_text;
+  iface->get_character_at_offset = gtk_entry_accessible_get_character_at_offset;
+  iface->get_text_before_offset = gtk_entry_accessible_get_text_before_offset;
+  iface->get_text_at_offset = gtk_entry_accessible_get_text_at_offset;
+  iface->get_text_after_offset = gtk_entry_accessible_get_text_after_offset;
+  iface->get_caret_offset = gtk_entry_accessible_get_caret_offset;
+  iface->set_caret_offset = gtk_entry_accessible_set_caret_offset;
+  iface->get_character_count = gtk_entry_accessible_get_character_count;
+  iface->get_n_selections = gtk_entry_accessible_get_n_selections;
+  iface->get_selection = gtk_entry_accessible_get_selection;
+  iface->add_selection = gtk_entry_accessible_add_selection;
+  iface->remove_selection = gtk_entry_accessible_remove_selection;
+  iface->set_selection = gtk_entry_accessible_set_selection;
+  iface->get_run_attributes = gtk_entry_accessible_get_run_attributes;
+  iface->get_default_attributes = gtk_entry_accessible_get_default_attributes;
+  iface->get_character_extents = gtk_entry_accessible_get_character_extents;
+  iface->get_offset_at_point = gtk_entry_accessible_get_offset_at_point;
 }
 
 static gchar*
-gail_entry_get_text (AtkText *text,
+gtk_entry_accessible_get_text (AtkText *text,
                      gint    start_pos,
                      gint    end_pos)
 {
@@ -461,11 +461,11 @@ gail_entry_get_text (AtkText *text,
     /* State is defunct */
     return NULL;
 
-  return gail_text_util_get_substring (GAIL_ENTRY (text)->textutil, start_pos, end_pos);
+  return gail_text_util_get_substring (GTK_ENTRY_ACCESSIBLE (text)->textutil, start_pos, end_pos);
 }
 
 static gchar*
-gail_entry_get_text_before_offset (AtkText	    *text,
+gtk_entry_accessible_get_text_before_offset (AtkText	    *text,
 				   gint		    offset,
 				   AtkTextBoundary  boundary_type,
 				   gint		    *start_offset,
@@ -482,13 +482,13 @@ gail_entry_get_text_before_offset (AtkText	    *text,
   /* Get Entry */
   entry = GTK_ENTRY (widget);
 
-  return gail_text_util_get_text (GAIL_ENTRY (text)->textutil,
+  return gail_text_util_get_text (GTK_ENTRY_ACCESSIBLE (text)->textutil,
                           gtk_entry_get_layout (entry), GAIL_BEFORE_OFFSET, 
                           boundary_type, offset, start_offset, end_offset);
 }
 
 static gchar*
-gail_entry_get_text_at_offset (AtkText          *text,
+gtk_entry_accessible_get_text_at_offset (AtkText          *text,
                                gint             offset,
                                AtkTextBoundary  boundary_type,
                                gint             *start_offset,
@@ -505,13 +505,13 @@ gail_entry_get_text_at_offset (AtkText          *text,
   /* Get Entry */
   entry = GTK_ENTRY (widget);
 
-  return gail_text_util_get_text (GAIL_ENTRY (text)->textutil,
+  return gail_text_util_get_text (GTK_ENTRY_ACCESSIBLE (text)->textutil,
                             gtk_entry_get_layout (entry), GAIL_AT_OFFSET, 
                             boundary_type, offset, start_offset, end_offset);
 }
 
 static gchar*
-gail_entry_get_text_after_offset  (AtkText	    *text,
+gtk_entry_accessible_get_text_after_offset  (AtkText	    *text,
 				   gint		    offset,
 				   AtkTextBoundary  boundary_type,
 				   gint		    *start_offset,
@@ -528,13 +528,13 @@ gail_entry_get_text_after_offset  (AtkText	    *text,
   /* Get Entry */
   entry = GTK_ENTRY (widget);
 
-  return gail_text_util_get_text (GAIL_ENTRY (text)->textutil,
+  return gail_text_util_get_text (GTK_ENTRY_ACCESSIBLE (text)->textutil,
                            gtk_entry_get_layout (entry), GAIL_AFTER_OFFSET, 
                            boundary_type, offset, start_offset, end_offset);
 }
 
 static gint
-gail_entry_get_character_count (AtkText *text)
+gtk_entry_accessible_get_character_count (AtkText *text)
 {
   GtkEntry *entry;
   GtkWidget *widget;
@@ -549,7 +549,7 @@ gail_entry_get_character_count (AtkText *text)
 }
 
 static gint
-gail_entry_get_caret_offset (AtkText *text)
+gtk_entry_accessible_get_caret_offset (AtkText *text)
 {
   GtkEntry *entry;
   GtkWidget *widget;
@@ -565,7 +565,7 @@ gail_entry_get_caret_offset (AtkText *text)
 }
 
 static gboolean
-gail_entry_set_caret_offset (AtkText *text, gint offset)
+gtk_entry_accessible_set_caret_offset (AtkText *text, gint offset)
 {
   GtkEntry *entry;
   GtkWidget *widget;
@@ -582,7 +582,7 @@ gail_entry_set_caret_offset (AtkText *text, gint offset)
 }
 
 static AtkAttributeSet*
-gail_entry_get_run_attributes (AtkText *text,
+gtk_entry_accessible_get_run_attributes (AtkText *text,
 			       gint    offset,
                                gint    *start_offset,
                                gint    *end_offset)
@@ -617,7 +617,7 @@ gail_entry_get_run_attributes (AtkText *text,
 }
 
 static AtkAttributeSet*
-gail_entry_get_default_attributes (AtkText *text)
+gtk_entry_accessible_get_default_attributes (AtkText *text)
 {
   GtkWidget *widget;
   GtkEntry *entry;
@@ -637,7 +637,7 @@ gail_entry_get_default_attributes (AtkText *text)
 }
   
 static void
-gail_entry_get_character_extents (AtkText *text,
+gtk_entry_accessible_get_character_extents (AtkText *text,
 				  gint    offset,
 		                  gint    *x,
                     		  gint 	  *y,
@@ -678,7 +678,7 @@ gail_entry_get_character_extents (AtkText *text,
 } 
 
 static gint 
-gail_entry_get_offset_at_point (AtkText *text,
+gtk_entry_accessible_get_offset_at_point (AtkText *text,
                                 gint x,
                                 gint y,
 			        AtkCoordType coords)
@@ -728,7 +728,7 @@ gail_entry_get_offset_at_point (AtkText *text,
 }
 
 static gint
-gail_entry_get_n_selections (AtkText              *text)
+gtk_entry_accessible_get_n_selections (AtkText              *text)
 {
   GtkEntry *entry;
   GtkWidget *widget;
@@ -751,7 +751,7 @@ gail_entry_get_n_selections (AtkText              *text)
 }
 
 static gchar*
-gail_entry_get_selection (AtkText *text,
+gtk_entry_accessible_get_selection (AtkText *text,
 			  gint    selection_num,
                           gint    *start_pos,
                           gint    *end_pos)
@@ -780,7 +780,7 @@ gail_entry_get_selection (AtkText *text,
 }
 
 static gboolean
-gail_entry_add_selection (AtkText *text,
+gtk_entry_accessible_add_selection (AtkText *text,
                           gint    start_pos,
                           gint    end_pos)
 {
@@ -811,7 +811,7 @@ gail_entry_add_selection (AtkText *text,
 }
 
 static gboolean
-gail_entry_remove_selection (AtkText *text,
+gtk_entry_accessible_remove_selection (AtkText *text,
                              gint    selection_num)
 {
   GtkEntry *entry;
@@ -844,7 +844,7 @@ gail_entry_remove_selection (AtkText *text,
 }
 
 static gboolean
-gail_entry_set_selection (AtkText *text,
+gtk_entry_accessible_set_selection (AtkText *text,
 			  gint	  selection_num,
                           gint    start_pos,
                           gint    end_pos)
@@ -881,17 +881,17 @@ gail_entry_set_selection (AtkText *text,
 static void
 atk_editable_text_interface_init (AtkEditableTextIface *iface)
 {
-  iface->set_text_contents = gail_entry_set_text_contents;
-  iface->insert_text = gail_entry_insert_text;
-  iface->copy_text = gail_entry_copy_text;
-  iface->cut_text = gail_entry_cut_text;
-  iface->delete_text = gail_entry_delete_text;
-  iface->paste_text = gail_entry_paste_text;
+  iface->set_text_contents = gtk_entry_accessible_set_text_contents;
+  iface->insert_text = gtk_entry_accessible_insert_text;
+  iface->copy_text = gtk_entry_accessible_copy_text;
+  iface->cut_text = gtk_entry_accessible_cut_text;
+  iface->delete_text = gtk_entry_accessible_delete_text;
+  iface->paste_text = gtk_entry_accessible_paste_text;
   iface->set_run_attributes = NULL;
 }
 
 static void
-gail_entry_set_text_contents (AtkEditableText *text,
+gtk_entry_accessible_set_text_contents (AtkEditableText *text,
                               const gchar     *string)
 {
   GtkEntry *entry;
@@ -912,7 +912,7 @@ gail_entry_set_text_contents (AtkEditableText *text,
 }
 
 static void
-gail_entry_insert_text (AtkEditableText *text,
+gtk_entry_accessible_insert_text (AtkEditableText *text,
                         const gchar     *string,
                         gint            length,
                         gint            *position)
@@ -936,7 +936,7 @@ gail_entry_insert_text (AtkEditableText *text,
 }
 
 static void
-gail_entry_copy_text   (AtkEditableText *text,
+gtk_entry_accessible_copy_text   (AtkEditableText *text,
                         gint            start_pos,
                         gint            end_pos)
 {
@@ -960,7 +960,7 @@ gail_entry_copy_text   (AtkEditableText *text,
 }
 
 static void
-gail_entry_cut_text (AtkEditableText *text,
+gtk_entry_accessible_cut_text (AtkEditableText *text,
                      gint            start_pos,
                      gint            end_pos)
 {
@@ -987,7 +987,7 @@ gail_entry_cut_text (AtkEditableText *text,
 }
 
 static void
-gail_entry_delete_text (AtkEditableText *text,
+gtk_entry_accessible_delete_text (AtkEditableText *text,
                         gint            start_pos,
                         gint            end_pos)
 {
@@ -1009,12 +1009,12 @@ gail_entry_delete_text (AtkEditableText *text,
 }
 
 static void
-gail_entry_paste_text (AtkEditableText *text,
+gtk_entry_accessible_paste_text (AtkEditableText *text,
                        gint            position)
 {
   GtkWidget *widget;
   GtkEditable *editable;
-  GailEntryPaste paste_struct;
+  GtkEntryAccessiblePaste paste_struct;
   GtkClipboard *clipboard;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -1032,15 +1032,15 @@ gail_entry_paste_text (AtkEditableText *text,
   clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
                                              GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_text (clipboard,
-    gail_entry_paste_received, &paste_struct);
+    gtk_entry_accessible_paste_received, &paste_struct);
 }
 
 static void
-gail_entry_paste_received (GtkClipboard *clipboard,
+gtk_entry_accessible_paste_received (GtkClipboard *clipboard,
 		const gchar  *text,
 		gpointer     data)
 {
-  GailEntryPaste* paste_struct = (GailEntryPaste *)data;
+  GtkEntryAccessiblePaste* paste_struct = (GtkEntryAccessiblePaste *)data;
 
   if (text)
     gtk_editable_insert_text (GTK_EDITABLE (paste_struct->entry), text, -1,
@@ -1052,19 +1052,19 @@ gail_entry_paste_received (GtkClipboard *clipboard,
 /* Callbacks */
 
 static gboolean
-gail_entry_idle_notify_insert (gpointer data)
+gtk_entry_accessible_idle_notify_insert (gpointer data)
 {
-  GailEntry *entry;
+  GtkEntryAccessible *entry;
 
-  entry = GAIL_ENTRY (data);
+  entry = GTK_ENTRY_ACCESSIBLE (data);
   entry->insert_idle_handler = 0;
-  gail_entry_notify_insert (entry);
+  gtk_entry_accessible_notify_insert (entry);
 
   return FALSE;
 }
 
 static void
-gail_entry_notify_insert (GailEntry *entry)
+gtk_entry_accessible_notify_insert (GtkEntryAccessible *entry)
 {
   GtkWidget *widget;
 
@@ -1086,40 +1086,40 @@ gail_entry_notify_insert (GailEntry *entry)
  * arg2 returns the number of characters inserted.
  */
 static void 
-_gail_entry_insert_text_cb (GtkEntry *entry, 
+_gtk_entry_accessible_insert_text_cb (GtkEntry *entry, 
                             gchar    *arg1, 
                             gint     arg2,
                             gpointer arg3)
 {
   AtkObject *accessible;
-  GailEntry *gail_entry;
+  GtkEntryAccessible *entry_accessible;
   gint *position = (gint *) arg3;
 
   if (arg2 == 0)
     return;
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (entry));
-  gail_entry = GAIL_ENTRY (accessible);
-  if (!gail_entry->signal_name_insert)
+  entry_accessible = GTK_ENTRY_ACCESSIBLE (accessible);
+  if (!entry_accessible->signal_name_insert)
     {
-      gail_entry->signal_name_insert = "text_changed::insert";
-      gail_entry->position_insert = *position;
-      gail_entry->length_insert = g_utf8_strlen(arg1, arg2);
+      entry_accessible->signal_name_insert = "text_changed::insert";
+      entry_accessible->position_insert = *position;
+      entry_accessible->length_insert = g_utf8_strlen(arg1, arg2);
     }
   /*
    * The signal will be emitted when the cursor position is updated.
    * or in an idle handler if it not updated.
    */
-   if (gail_entry->insert_idle_handler == 0)
-     gail_entry->insert_idle_handler = gdk_threads_add_idle (gail_entry_idle_notify_insert, gail_entry);
+   if (entry_accessible->insert_idle_handler == 0)
+     entry_accessible->insert_idle_handler = gdk_threads_add_idle (gtk_entry_accessible_idle_notify_insert, entry_accessible);
 }
 
 static gunichar 
-gail_entry_get_character_at_offset (AtkText *text,
+gtk_entry_accessible_get_character_at_offset (AtkText *text,
                                     gint     offset)
 {
   GtkWidget *widget;
-  GailEntry *entry;
+  GtkEntryAccessible *entry;
   gchar *string;
   gchar *index;
   gunichar unichar;
@@ -1129,7 +1129,7 @@ gail_entry_get_character_at_offset (AtkText *text,
     /* State is defunct */
     return '\0';
 
-  entry = GAIL_ENTRY (text);
+  entry = GTK_ENTRY_ACCESSIBLE (text);
   string = gail_text_util_get_substring (entry->textutil, 0, -1);
   if (offset >= g_utf8_strlen (string, -1))
     {
@@ -1147,7 +1147,7 @@ gail_entry_get_character_at_offset (AtkText *text,
 }
 
 static void
-gail_entry_notify_delete (GailEntry *entry)
+gtk_entry_accessible_notify_delete (GtkEntryAccessible *entry)
 {
   if (entry->signal_name_delete)
     {
@@ -1163,12 +1163,12 @@ gail_entry_notify_delete (GailEntry *entry)
  * end of the delete range if multiple characters are deleted.	
  */
 static void 
-_gail_entry_delete_text_cb (GtkEntry *entry, 
+_gtk_entry_accessible_delete_text_cb (GtkEntry *entry, 
                             gint      arg1, 
                             gint      arg2)
 {
   AtkObject *accessible;
-  GailEntry *gail_entry;
+  GtkEntryAccessible *entry_accessible;
 
   /*
    * Zero length text deleted so ignore
@@ -1177,31 +1177,31 @@ _gail_entry_delete_text_cb (GtkEntry *entry,
     return;
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (entry));
-  gail_entry = GAIL_ENTRY (accessible);
-  if (!gail_entry->signal_name_delete)
+  entry_accessible = GTK_ENTRY_ACCESSIBLE (accessible);
+  if (!entry_accessible->signal_name_delete)
     {
-      gail_entry->signal_name_delete = "text_changed::delete";
-      gail_entry->position_delete = arg1;
-      gail_entry->length_delete = arg2 - arg1;
+      entry_accessible->signal_name_delete = "text_changed::delete";
+      entry_accessible->position_delete = arg1;
+      entry_accessible->length_delete = arg2 - arg1;
     }
-  gail_entry_notify_delete (gail_entry);
+  gtk_entry_accessible_notify_delete (entry_accessible);
 }
 
 static void
-_gail_entry_changed_cb (GtkEntry *entry)
+_gtk_entry_accessible_changed_cb (GtkEntry *entry)
 {
   AtkObject *accessible;
-  GailEntry *gail_entry;
+  GtkEntryAccessible *gtk_entry_accessible;
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (entry));
 
-  gail_entry = GAIL_ENTRY (accessible);
+  gtk_entry_accessible = GTK_ENTRY_ACCESSIBLE (accessible);
 
-  text_setup (gail_entry, entry);
+  text_setup (gtk_entry_accessible, entry);
 }
 
 static gboolean 
-check_for_selection_change (GailEntry   *entry,
+check_for_selection_change (GtkEntryAccessible   *entry,
                             GtkEntry    *gtk_entry)
 {
   gboolean selected, ret_val = FALSE;
@@ -1236,21 +1236,21 @@ check_for_selection_change (GailEntry   *entry,
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
-  iface->do_action = gail_entry_do_action;
-  iface->get_n_actions = gail_entry_get_n_actions;
-  iface->get_keybinding = gail_entry_get_keybinding;
-  iface->get_name = gail_entry_action_get_name;
+  iface->do_action = gtk_entry_accessible_do_action;
+  iface->get_n_actions = gtk_entry_accessible_get_n_actions;
+  iface->get_keybinding = gtk_entry_accessible_get_keybinding;
+  iface->get_name = gtk_entry_accessible_action_get_name;
 }
 
 static gboolean
-gail_entry_do_action (AtkAction *action,
+gtk_entry_accessible_do_action (AtkAction *action,
                       gint      i)
 {
-  GailEntry *entry;
+  GtkEntryAccessible *entry;
   GtkWidget *widget;
   gboolean return_value = TRUE;
 
-  entry = GAIL_ENTRY (action);
+  entry = GTK_ENTRY_ACCESSIBLE (action);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
     /*
@@ -1279,10 +1279,10 @@ gail_entry_do_action (AtkAction *action,
 static gboolean
 idle_do_action (gpointer data)
 {
-  GailEntry *entry;
+  GtkEntryAccessible *entry;
   GtkWidget *widget;
 
-  entry = GAIL_ENTRY (data);
+  entry = GTK_ENTRY_ACCESSIBLE (data);
   entry->action_idle_handler = 0;
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
   if (widget == NULL /* State is defunct */ ||
@@ -1295,19 +1295,19 @@ idle_do_action (gpointer data)
 }
 
 static gint
-gail_entry_get_n_actions (AtkAction *action)
+gtk_entry_accessible_get_n_actions (AtkAction *action)
 {
   return 1;
 }
 
 static const gchar*
-gail_entry_get_keybinding (AtkAction *action,
+gtk_entry_accessible_get_keybinding (AtkAction *action,
                            gint      i)
 {
-  GailEntry *entry;
+  GtkEntryAccessible *entry;
   gchar *return_value = NULL;
 
-  entry = GAIL_ENTRY (action);
+  entry = GTK_ENTRY_ACCESSIBLE (action);
   switch (i)
     {
     case 0:
@@ -1323,7 +1323,7 @@ gail_entry_get_keybinding (AtkAction *action,
         gpointer target_object;
         guint key_val; 
 
-        entry = GAIL_ENTRY (action);
+        entry = GTK_ENTRY_ACCESSIBLE (action);
         widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
         if (widget == NULL)
           /*
@@ -1365,7 +1365,7 @@ gail_entry_get_keybinding (AtkAction *action,
 }
 
 static const gchar*
-gail_entry_action_get_name (AtkAction *action,
+gtk_entry_accessible_action_get_name (AtkAction *action,
                             gint      i)
 {
   const gchar *return_value;
