@@ -28,6 +28,7 @@
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkborder.h>
+#include <atk/atk.h>
 
 G_BEGIN_DECLS
 
@@ -857,6 +858,11 @@ void        gtk_render_icon        (GtkStyleContext     *context,
 				    GdkPixbuf           *pixbuf,
                                     gdouble              x,
                                     gdouble              y);
+
+/* Accessibility support */
+AtkAttributeSet *_gtk_style_context_get_attributes (AtkAttributeSet *attributes,
+                                                    GtkStyleContext *context,
+                                                    GtkStateFlags    flags);
 
 G_END_DECLS
 
