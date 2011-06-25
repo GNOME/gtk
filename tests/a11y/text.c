@@ -512,13 +512,6 @@ test_words (GtkWidget *widget)
             break;
         }
 
-      if (g_strcmp0 (word, expected[i].word) != 0 ||
-          start != expected[i].start ||
-          end != expected[i].end)
-        {
-          g_print ("%d: %s %s %d : ", i, boundary(expected[i].boundary), gravity(expected[i].gravity), expected[i].offset);
-          g_print ("\"%s\" != \"%s\"\n", word, expected[i].word);
-        }
       g_assert_cmpstr (word, ==, expected[i].word);
       g_assert_cmpint (start, ==, expected[i].start);
       g_assert_cmpint (end, ==, expected[i].end);
