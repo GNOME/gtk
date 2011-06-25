@@ -555,6 +555,51 @@ test_words (GtkWidget *widget)
 }
 
 static void
+select_region (GtkWidget *widget,
+               gint       start,
+               gint       end)
+{
+  if (GTK_IS_EDITABLE (widget))
+    gtk_editable_select_region (GTK_EDITABLE (widget), start, end);
+  else if (GTK_IS_LABEL (widget))
+    gtk_label_select_region (GTK_LABEL (widget), start, end);
+}
+
+static void
+test_selection (GtkWidget *widget)
+{
+  AtkText *atk_text;
+  const gchar *text = "Bla bla";
+  gint n;
+  gchar *ret;
+  gint start, end;
+
+  if (GTK_IS_LABEL (widget))
+    gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
+
+  atk_text = ATK_TEXT (gtk_widget_get_accessible (widget));
+  set_text (widget, text);
+
+  n = atk_text_get_n_selections (atk_text);
+  g_assert_cmpint (n, ==, 0);
+
+  select_region (widget, 4, 7);
+
+  n = atk_text_get_n_selections (atk_text);
+  g_assert_cmpint (n, ==, 1);
+
+  ret = atk_text_get_selection (atk_text, 0, &start, &end);
+  g_assert_cmpstr (ret, ==, "bla");
+  g_assert_cmpint (start, ==, 4);
+  g_assert_cmpint (end, ==, 7);
+  g_free (ret);
+
+  atk_text_remove_selection (atk_text, 0);
+  n = atk_text_get_n_selections (atk_text);
+  g_assert_cmpint (n, ==, 0);
+}
+
+static void
 setup_test (GtkWidget *widget)
 {
   set_text (widget, "");
@@ -584,6 +629,7 @@ add_text_tests (GtkWidget *widget)
   add_text_test ("/text/basic", (GTestFixtureFunc) test_basic, widget);
   add_text_test ("/text/words", (GTestFixtureFunc) test_words, widget);
   add_text_test ("/text/changed", (GTestFixtureFunc) test_text_changed, widget);
+  add_text_test ("/text/selection", (GTestFixtureFunc) test_selection, widget);
   g_object_unref (widget);
 }
 
