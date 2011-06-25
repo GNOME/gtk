@@ -63,6 +63,7 @@ test_text_changed (GtkWidget *widget)
 {
   AtkText *atk_text;
   const gchar *text = "Text goes here";
+  const gchar *text2 = "Text again";
   SignalData delete_data;
   SignalData insert_data;
 
@@ -78,13 +79,29 @@ test_text_changed (GtkWidget *widget)
 
   set_text (widget, text);
 
-  g_assert_cmpint (delete_data.count, >, 0);
-  g_assert_cmpint (delete_data.position, ==, 0);
-  g_assert_cmpint (delete_data.length, ==, -1);
+  g_assert_cmpint (delete_data.count, ==, 0);
 
-  g_assert_cmpint (insert_data.count, >, 0);
+  g_assert_cmpint (insert_data.count, ==, 1);
   g_assert_cmpint (insert_data.position, ==, 0);
-  g_assert_cmpint (insert_data.length, ==, -1);
+  g_assert_cmpint (insert_data.length, ==, g_utf8_strlen (text, -1));
+
+  set_text (widget, text2);
+
+  g_assert_cmpint (delete_data.count, ==, 1);
+  g_assert_cmpint (delete_data.position, ==, 0);
+  g_assert_cmpint (delete_data.length, ==, g_utf8_strlen (text, -1));
+
+  g_assert_cmpint (insert_data.count, ==, 2);
+  g_assert_cmpint (insert_data.position, ==, 0);
+  g_assert_cmpint (insert_data.length, ==, g_utf8_strlen (text2, -1));
+
+  set_text (widget, "");
+
+  g_assert_cmpint (delete_data.count, ==, 2);
+  g_assert_cmpint (delete_data.position, ==, 0);
+  g_assert_cmpint (delete_data.length, ==, g_utf8_strlen (text2, -1));
+
+  g_assert_cmpint (insert_data.count, ==, 2);
 
   g_signal_handlers_disconnect_by_func (atk_text, G_CALLBACK (text_deleted), &delete_data);
   g_signal_handlers_disconnect_by_func (atk_text, G_CALLBACK (text_inserted), &insert_data);
