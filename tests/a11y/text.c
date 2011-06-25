@@ -21,6 +21,55 @@
  */
 
 #include <gtk/gtk.h>
+#include <string.h>
+
+static void
+set_text (GtkWidget   *widget,
+          const gchar *text)
+{
+  if (GTK_IS_LABEL (widget))
+    gtk_label_set_text (GTK_LABEL (widget), text);
+  else if (GTK_IS_ENTRY (widget))
+    gtk_entry_set_text (GTK_ENTRY (widget), text);
+  else if (GTK_IS_TEXT_VIEW (widget))
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget)), text, -1);
+  else
+    g_assert_not_reached ();
+}
+
+static void
+test_basic (GtkWidget *widget)
+{
+  AtkText *atk_text;
+  const gchar *text = "Text goes here";
+  gchar *ret;
+  gint count;
+  gunichar c;
+
+  atk_text = ATK_TEXT (gtk_widget_get_accessible (widget));
+
+  set_text (widget, text);
+  ret = atk_text_get_text (atk_text, 5, 9);
+  g_assert_cmpstr (ret, ==, "goes");
+  g_free (ret);
+
+  ret = atk_text_get_text (atk_text, 0, 14);
+  g_assert_cmpstr (ret, ==, text);
+  g_free (ret);
+
+  ret = atk_text_get_text (atk_text, 0, -1);
+  g_assert_cmpstr (ret, ==, text);
+  g_free (ret);
+
+  count = atk_text_get_character_count (atk_text);
+  g_assert_cmpint (count, ==, g_utf8_strlen (text, -1));
+
+  c = atk_text_get_character_at_offset (atk_text, 0);
+  g_assert_cmpint (c, ==, 'T');
+
+  c = atk_text_get_character_at_offset (atk_text, 13);
+  g_assert_cmpint (c, ==, 'e');
+}
 
 typedef struct {
   gint count;
@@ -42,20 +91,6 @@ text_inserted (AtkText *atk_text, gint position, gint length, SignalData *data)
   data->count++;
   data->position = position;
   data->length = length;
-}
-
-static void
-set_text (GtkWidget   *widget,
-          const gchar *text)
-{
-  if (GTK_IS_LABEL (widget))
-    gtk_label_set_text (GTK_LABEL (widget), text);
-  else if (GTK_IS_ENTRY (widget))
-    gtk_entry_set_text (GTK_ENTRY (widget), text);
-  else if (GTK_IS_TEXT_VIEW (widget))
-    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget)), text, -1);
-  else
-    g_assert_not_reached ();
 }
 
 static void
@@ -546,6 +581,7 @@ static void
 add_text_tests (GtkWidget *widget)
 {
   g_object_ref_sink (widget);
+  add_text_test ("/text/basic", (GTestFixtureFunc) test_basic, widget);
   add_text_test ("/text/words", (GTestFixtureFunc) test_words, widget);
   add_text_test ("/text/changed", (GTestFixtureFunc) test_text_changed, widget);
   g_object_unref (widget);
