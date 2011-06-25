@@ -5428,14 +5428,17 @@ gtk_label_select_region_index (GtkLabel *label,
       GtkClipboard *clipboard;
 
       if (priv->select_info->selection_anchor == anchor_index &&
-	  priv->select_info->selection_end == end_index)
-	return;
+          priv->select_info->selection_end == end_index)
+        return;
 
       priv->select_info->selection_anchor = anchor_index;
       priv->select_info->selection_end = end_index;
 
-      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
-					    GDK_SELECTION_PRIMARY);
+      if (gtk_widget_has_screen (GTK_WIDGET (label)))
+        clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
+                                              GDK_SELECTION_PRIMARY);
+      else
+        clipboard = NULL;
 
       if (anchor_index != end_index)
         {
@@ -5447,18 +5450,20 @@ gtk_label_select_region_index (GtkLabel *label,
           gtk_target_list_add_text_targets (list, 0);
           targets = gtk_target_table_new_from_list (list, &n_targets);
 
-          gtk_clipboard_set_with_owner (clipboard,
-                                        targets, n_targets,
-                                        get_text_callback,
-                                        clear_text_callback,
-                                        G_OBJECT (label));
+          if (clipboard)
+            gtk_clipboard_set_with_owner (clipboard,
+                                          targets, n_targets,
+                                          get_text_callback,
+                                          clear_text_callback,
+                                          G_OBJECT (label));
 
           gtk_target_table_free (targets, n_targets);
           gtk_target_list_unref (list);
         }
       else
         {
-          if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (label))
+          if (clipboard &&
+              gtk_clipboard_get_owner (clipboard) == G_OBJECT (label))
             gtk_clipboard_clear (clipboard);
         }
 
