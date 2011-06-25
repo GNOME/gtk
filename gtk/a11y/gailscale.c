@@ -30,6 +30,7 @@ static void         gail_scale_init              (GailScale      *scale);
 
 static void         gail_scale_real_initialize   (AtkObject      *obj,
                                                   gpointer      data);
+static const char * gail_scale_get_description   (AtkObject     *object);
 static void         gail_scale_notify            (GObject       *obj,
                                                   GParamSpec    *pspec);
 static void         gail_scale_finalize          (GObject        *object);
@@ -91,6 +92,7 @@ gail_scale_class_init (GailScaleClass *klass)
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   class->initialize = gail_scale_real_initialize;
+  class->get_description = gail_scale_get_description;
 
   gobject_class->finalize = gail_scale_finalize;
   gobject_class->notify = gail_scale_notify;
@@ -99,6 +101,24 @@ gail_scale_class_init (GailScaleClass *klass)
 static void
 gail_scale_init (GailScale      *scale)
 {
+}
+
+static const char *
+gail_scale_get_description (AtkObject *object)
+{
+  GtkWidget *widget;
+  PangoLayout *layout;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
+  if (widget == NULL)
+    /* State is defunct */
+    return NULL;
+
+  layout = gtk_scale_get_layout (GTK_SCALE (widget));
+  if (layout)
+    return pango_layout_get_text (layout);
+
+  return ATK_OBJECT_CLASS (gail_scale_parent_class)->get_description (object);
 }
 
 static void
