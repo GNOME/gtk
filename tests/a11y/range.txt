@@ -41,7 +41,7 @@ window1
       layer: widget
       alpha: 1
       <AtkText>
-      text: ?45.5
+      text: ‎45.5
       character count: 5
       caret offset: 0
       default attributes: bg-color: <omitted>

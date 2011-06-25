@@ -203,12 +203,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -311,12 +309,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -413,12 +409,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -506,12 +500,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -599,12 +591,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -692,12 +682,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -785,12 +773,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -878,12 +864,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
@@ -929,12 +913,10 @@ window1
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
-                                  bg-stipple: false
                                   direction: <omitted>
                                   editable: false
                                   family-name: <omitted>
                                   fg-color: <omitted>
-                                  fg-stipple: false
                                   indent: 0
                                   invisible: false
                                   justification: left
