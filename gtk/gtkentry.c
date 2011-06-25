@@ -4648,7 +4648,13 @@ gtk_entry_real_insert_text (GtkEditable *editable,
    * following signal handlers: buffer_inserted_text(), buffer_notify_display_text(),
    * buffer_notify_text(), buffer_notify_length()
    */
+  begin_change (GTK_ENTRY (editable));
+  g_object_freeze_notify (G_OBJECT (editable));
+
   n_inserted = gtk_entry_buffer_insert_text (get_buffer (GTK_ENTRY (editable)), *position, new_text, n_chars);
+
+  g_object_thaw_notify (G_OBJECT (editable));
+  end_change (GTK_ENTRY (editable));
 
   if (n_inserted != n_chars)
       gtk_widget_error_bell (GTK_WIDGET (editable));
@@ -4667,7 +4673,11 @@ gtk_entry_real_delete_text (GtkEditable *editable,
    * buffer_notify_text(), buffer_notify_length()
    */
 
+  begin_change (GTK_ENTRY (editable));
+  g_object_freeze_notify (G_OBJECT (editable));
   gtk_entry_buffer_delete_text (get_buffer (GTK_ENTRY (editable)), start_pos, end_pos - start_pos);
+  g_object_thaw_notify (G_OBJECT (editable));
+  end_change (GTK_ENTRY (editable));
 }
 
 /* GtkEntryBuffer signal handlers
@@ -4681,12 +4691,18 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
 {
   GtkEntryPrivate *priv = entry->priv;
   guint password_hint_timeout;
+  guint current_pos;
+  gint selection_bound;
 
-  if (priv->current_pos > position)
-    priv->current_pos += n_chars;
+  current_pos = priv->current_pos;
+  if (current_pos > position)
+    current_pos += n_chars;
 
-  if (priv->selection_bound > position)
-    priv->selection_bound += n_chars;
+  selection_bound = priv->selection_bound;
+  if (selection_bound > position)
+    selection_bound += n_chars;
+
+  gtk_entry_set_positions (entry, current_pos, selection_bound);
 
   /* Calculate the password hint if it needs to be displayed. */
   if (n_chars == 1 && !priv->visible)
