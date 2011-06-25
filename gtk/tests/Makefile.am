@@ -119,6 +119,10 @@ TEST_PROGS			+= accessible
 accessible_SOURCES		 = accessible.c
 accessible_LDADD		 = $(progs_ldadd)
 
+TEST_PROGS			+= entry
+entry_SOURCES			 = entry.c
+entry_LDADD			 = $(progs_ldadd)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
