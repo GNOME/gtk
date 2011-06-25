@@ -39,10 +39,7 @@ struct _GtkLabelAccessible
 {
   GailWidget parent;
 
-  GailTextUtil   *textutil;
-  gint           cursor_position;
-  gint           selection_bound;
-  gint           label_length;
+  gchar *text;
 };
 
 struct _GtkLabelAccessibleClass
