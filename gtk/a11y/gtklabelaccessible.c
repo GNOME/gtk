@@ -658,7 +658,7 @@ gtk_label_accessible_get_run_attributes (AtkText *text,
                                               start_offset,
                                               end_offset);
 
- return attributes;
+  return attributes;
 }
 
 static AtkAttributeSet *
