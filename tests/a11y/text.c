@@ -575,6 +575,27 @@ select_region (GtkWidget *widget,
     gtk_label_select_region (GTK_LABEL (widget), start, end);
 }
 
+typedef struct {
+  gint count;
+  gint position;
+  gint bound;
+} SelectionData;
+
+static void
+caret_moved_cb (AtkText *text, gint position, SelectionData *data)
+{
+  data->count++;
+  data->position = position;
+}
+
+static void
+selection_changed_cb (AtkText *text, SelectionData *data)
+{
+  data->count++;
+
+  atk_text_get_selection (text, 0, &data->bound, &data->position);
+}
+
 static void
 test_selection (GtkWidget *widget)
 {
@@ -583,17 +604,36 @@ test_selection (GtkWidget *widget)
   gint n;
   gchar *ret;
   gint start, end;
+  SelectionData data1;
+  SelectionData data2;
 
   if (GTK_IS_LABEL (widget))
     gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
 
   atk_text = ATK_TEXT (gtk_widget_get_accessible (widget));
+
+  data1.count = 0;
+  data2.count = 0;
+  g_signal_connect (atk_text, "text_caret_moved",
+                    G_CALLBACK (caret_moved_cb), &data1);
+  g_signal_connect (atk_text, "text_selection_changed",
+                    G_CALLBACK (selection_changed_cb), &data2);
+
   set_text (widget, text);
 
   n = atk_text_get_n_selections (atk_text);
   g_assert_cmpint (n, ==, 0);
 
+  g_assert_cmpint (data1.count, ==, 0);
+  g_assert_cmpint (data2.count, ==, 0);
+
   select_region (widget, 4, 7);
+
+  g_assert_cmpint (data1.count, ==, 1);
+  g_assert_cmpint (data1.position, ==, 7);
+  g_assert_cmpint (data2.count, >=, 1);
+  g_assert_cmpint (data2.bound, ==, 4);
+  g_assert_cmpint (data2.position, ==, 7);
 
   n = atk_text_get_n_selections (atk_text);
   g_assert_cmpint (n, ==, 1);
@@ -607,6 +647,11 @@ test_selection (GtkWidget *widget)
   atk_text_remove_selection (atk_text, 0);
   n = atk_text_get_n_selections (atk_text);
   g_assert_cmpint (n, ==, 0);
+
+  g_assert_cmpint (data1.count, ==, 1);
+  g_assert_cmpint (data2.count, >=, 2);
+  g_assert_cmpint (data2.position, ==, 7);
+  g_assert_cmpint (data2.bound, ==, 7);
 }
 
 static void
