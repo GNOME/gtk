@@ -1295,10 +1295,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
       if (elt->children)
         gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
 
-      gtk_tree_model_filter_increment_stamp (filter);
-      iter.stamp = filter->priv->stamp;
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-
       while (elt->ref_count > 1)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
                                                &iter, FALSE);
@@ -1330,6 +1326,9 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
                 elt->children->parent_elt_index = i;
             }
         }
+
+      gtk_tree_model_filter_increment_stamp (filter);
+      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
     }
   else if ((length == 1 && parent && parent->ref_count > 1)
            || (length == 1 && level == filter->priv->root))
@@ -1349,12 +1348,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
     }
   else
     {
-      /* Blow level away, including any child levels */
-
-      gtk_tree_model_filter_increment_stamp (filter);
-      iter.stamp = filter->priv->stamp;
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-
       /* We must account for the filter model's reference (released
        * in gtk_tree_model_filter_free_level), because the node is
        * still present in the child model.
@@ -1363,7 +1356,11 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
                                                &iter, FALSE);
 
+      /* Blow level away, including any child levels */
       gtk_tree_model_filter_free_level (filter, level, TRUE);
+
+      gtk_tree_model_filter_increment_stamp (filter);
+      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
     }
 
   gtk_tree_path_free (path);
@@ -2022,7 +2019,7 @@ static void
 gtk_tree_model_filter_virtual_root_deleted (GtkTreeModelFilter *filter,
                                             GtkTreePath        *c_path)
 {
-  gint i;
+  gint i, nodes;
   GtkTreePath *path;
   FilterLevel *level = FILTER_LEVEL (filter->priv->root);
 
@@ -2044,20 +2041,23 @@ gtk_tree_model_filter_virtual_root_deleted (GtkTreeModelFilter *filter,
   if (!level)
     return;
 
-  gtk_tree_model_filter_increment_stamp (filter);
-  path = gtk_tree_path_new ();
-  gtk_tree_path_append_index (path, 0);
-
-  for (i = 0; i < level->visible_nodes; i++)
-    gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-
-  gtk_tree_path_free (path);
+  nodes = level->visible_nodes;
 
   /* We should not propagate the unref here.  An unref for any of these
    * nodes will fail, since the respective nodes in the child model are
    * no longer there.
    */
   gtk_tree_model_filter_free_level (filter, filter->priv->root, FALSE);
+
+  gtk_tree_model_filter_increment_stamp (filter);
+
+  path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (path, 0);
+
+  for (i = 0; i < nodes; i++)
+    gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
+
+  gtk_tree_path_free (path);
 }
 
 static void
@@ -2261,7 +2261,6 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       /* emit row_deleted */
       gtk_tree_model_filter_increment_stamp (filter);
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
-      iter.stamp = filter->priv->stamp;
     }
 
   if (emit_child_toggled && parent_level)
