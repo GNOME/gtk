@@ -276,10 +276,6 @@ window1
               <AtkComponent>
               layer: widget
               alpha: 1
-              <AtkText>
-              text: (null)
-              character count: 0
-              caret offset: 0
               <AtkAction>
               action 0 name: activate
               action 0 keybinding: <Alt>a
