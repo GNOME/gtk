@@ -391,13 +391,12 @@ static gint
 gtk_label_accessible_get_n_selections (AtkText *text)
 {
   GtkWidget *widget;
-  gint start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     return 0;
 
-  if (gtk_label_get_selection_bounds (GTK_LABEL (widget), &start, &end))
+  if (gtk_label_get_selection_bounds (GTK_LABEL (widget), NULL, NULL))
     return 1;
 
   return 0;
@@ -416,10 +415,10 @@ gtk_label_accessible_get_selection (AtkText *text,
   if (widget == NULL)
     return NULL;
 
-  label = GTK_LABEL (widget);
-
   if (selection_num != 0)
     return NULL;
+
+  label = GTK_LABEL (widget);
 
   if (gtk_label_get_selection_bounds (label, start_pos, end_pos))
     {
