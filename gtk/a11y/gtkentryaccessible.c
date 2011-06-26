@@ -598,7 +598,7 @@ gtk_entry_accessible_remove_selection (AtkText *text,
                                        gint     selection_num)
 {
   GtkWidget *widget;
-  gint start, end, caret_pos;
+  gint start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -609,8 +609,7 @@ gtk_entry_accessible_remove_selection (AtkText *text,
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), &start, &end))
     {
-      caret_pos = gtk_editable_get_position (GTK_EDITABLE (widget));
-      gtk_editable_select_region (GTK_EDITABLE (widget), caret_pos, caret_pos);
+      gtk_editable_select_region (GTK_EDITABLE (widget), end, end);
       return TRUE;
     }
   else
