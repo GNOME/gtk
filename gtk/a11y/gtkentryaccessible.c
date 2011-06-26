@@ -28,16 +28,13 @@
 
 /* Callbacks */
 
-static gboolean   gtk_entry_accessible_idle_notify_insert (gpointer data);
-static void       gtk_entry_accessible_notify_insert      (GtkEntryAccessible *entry);
-static void       gtk_entry_accessible_notify_delete      (GtkEntryAccessible *entry);
 static void       gtk_entry_accessible_insert_text_cb     (GtkEntry *entry,
-                                                           gchar    *arg1,
-                                                           gint      arg2,
-                                                           gpointer  arg3);
+                                                           gchar    *new_text,
+                                                           gint      new_text_length,
+                                                           gint     *position);
 static void       gtk_entry_accessible_delete_text_cb     (GtkEntry *entry,
-                                                           gint      arg1,
-                                                           gint      arg2);
+                                                           gint      start,
+                                                           gint      end);
 static void       gtk_entry_accessible_changed_cb         (GtkEntry *entry);
 static gboolean   check_for_selection_change              (GtkEntryAccessible *entry,
                                                            GtkEntry           *gtk_entry);
@@ -184,9 +181,6 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
 
   if (strcmp (pspec->name, "cursor-position") == 0)
     {
-      if (entry->insert_idle_handler == 0)
-        entry->insert_idle_handler = gdk_threads_add_idle (gtk_entry_accessible_idle_notify_insert, entry);
-
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
       /*
@@ -197,9 +191,6 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
     }
   else if (strcmp (pspec->name, "selection-bound") == 0)
     {
-      if (entry->insert_idle_handler == 0)
-        entry->insert_idle_handler = gdk_threads_add_idle (gtk_entry_accessible_idle_notify_insert, entry);
-
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
     }
@@ -268,8 +259,8 @@ gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 static void
 gtk_entry_accessible_init (GtkEntryAccessible *entry)
 {
-  entry->signal_name_insert = NULL;
-  entry->signal_name_delete = NULL;
+  entry->length_insert = 0;
+  entry->length_delete = 0;
   entry->cursor_position = 0;
   entry->selection_bound = 0;
   entry->activate_keybinding = NULL;
@@ -897,114 +888,89 @@ atk_editable_text_interface_init (AtkEditableTextIface *iface)
 
 /* Callbacks */
 
-static gboolean
-gtk_entry_accessible_idle_notify_insert (gpointer data)
-{
-  GtkEntryAccessible *entry;
-
-  entry = GTK_ENTRY_ACCESSIBLE (data);
-  entry->insert_idle_handler = 0;
-  gtk_entry_accessible_notify_insert (entry);
-
-  return FALSE;
-}
-
-static void
-gtk_entry_accessible_notify_insert (GtkEntryAccessible *entry)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
-  if (gtk_entry_get_text_length (GTK_ENTRY (widget)) == 0)
-    return;
-
-  if (entry->signal_name_insert)
-    {
-      g_signal_emit_by_name (entry,
-                             entry->signal_name_insert,
-                             entry->position_insert,
-                             entry->length_insert);
-      entry->signal_name_insert = NULL;
-    }
-}
-
-/* Note arg1 returns the character at the start of the insert.
- * arg2 returns the number of characters inserted.
+/* We connect to GtkEditable::insert-text, since it carries
+ * the information we need. But we delay emitting our own
+ * text_changed::insert signal until the entry has update
+ * all its internal state and emits GtkEntry::changed.
  */
 static void
 gtk_entry_accessible_insert_text_cb (GtkEntry *entry,
-                                     gchar    *arg1,
-                                     gint      arg2,
-                                     gpointer  arg3)
+                                     gchar    *new_text,
+                                     gint      new_text_length,
+                                     gint     *position)
 {
-  AtkObject *accessible;
-  GtkEntryAccessible *entry_accessible;
-  gint *position = (gint *) arg3;
+  GtkEntryAccessible *accessible;
 
-  if (arg2 == 0)
+  if (new_text_length == 0)
     return;
 
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (entry));
-  entry_accessible = GTK_ENTRY_ACCESSIBLE (accessible);
-  if (!entry_accessible->signal_name_insert)
+  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (entry)));
+  if (accessible->length_insert == 0)
     {
-      entry_accessible->signal_name_insert = "text_changed::insert";
-      entry_accessible->position_insert = *position;
-      entry_accessible->length_insert = g_utf8_strlen(arg1, arg2);
-    }
-  /*
-   * The signal will be emitted when the cursor position is updated.
-   * or in an idle handler if it not updated.
-   */
-   if (entry_accessible->insert_idle_handler == 0)
-     entry_accessible->insert_idle_handler = gdk_threads_add_idle (gtk_entry_accessible_idle_notify_insert, entry_accessible);
-}
-
-static void
-gtk_entry_accessible_notify_delete (GtkEntryAccessible *entry)
-{
-  if (entry->signal_name_delete)
-    {
-      g_signal_emit_by_name (entry,
-                             entry->signal_name_delete,
-                             entry->position_delete,
-                             entry->length_delete);
-      entry->signal_name_delete = NULL;
+      accessible->position_insert = *position;
+      accessible->length_insert = g_utf8_strlen (new_text, new_text_length);
     }
 }
 
-/* Note arg1 returns the start of the delete range, arg2 returns the
- * end of the delete range if multiple characters are deleted.  
+/* We connect to GtkEditable::delete-text, since it carries
+ * the information we need. But we delay emitting our own
+ * text_changed::delete signal until the entry has update
+ * all its internal state and emits GtkEntry::changed.
  */
 static void
 gtk_entry_accessible_delete_text_cb (GtkEntry *entry,
-                                     gint      arg1,
-                                     gint      arg2)
+                                     gint      start,
+                                     gint      end)
 {
-  AtkObject *accessible;
-  GtkEntryAccessible *entry_accessible;
+  GtkEntryAccessible *accessible;
 
-  /*
-   * Zero length text deleted so ignore
-   */
-  if (arg2 - arg1 == 0)
+  if (end < 0)
+    {
+      const gchar *text;
+
+      text = gtk_entry_get_text (entry);
+      end = g_utf8_strlen (text, -1);
+    }
+
+  if (end == start)
     return;
 
-  accessible = gtk_widget_get_accessible (GTK_WIDGET (entry));
-  entry_accessible = GTK_ENTRY_ACCESSIBLE (accessible);
-  if (!entry_accessible->signal_name_delete)
+  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (entry)));
+  if (accessible->length_delete == 0)
     {
-      entry_accessible->signal_name_delete = "text_changed::delete";
-      entry_accessible->position_delete = arg1;
-      entry_accessible->length_delete = arg2 - arg1;
+      accessible->position_delete = start;
+      accessible->length_delete = end - start;
     }
-  gtk_entry_accessible_notify_delete (entry_accessible);
 }
 
+/* Note the assumption here: A single ::changed emission
+ * will only collect a single deletion/insertion, and there
+ * won't be multiple insertions or deletions in a single
+ * change.
+ */
 static void
 gtk_entry_accessible_changed_cb (GtkEntry *entry)
 {
-  /* FIXME */
+  GtkEntryAccessible *accessible;
+
+  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (entry)));
+
+  if (accessible->length_delete > 0)
+    {
+      g_signal_emit_by_name (accessible,
+                             "text_changed::delete",
+                             accessible->position_delete,
+                             accessible->length_delete);
+      accessible->length_delete = 0;
+    }
+  if (accessible->length_insert > 0)
+    {
+      g_signal_emit_by_name (accessible,
+                             "text_changed::insert",
+                             accessible->position_insert,
+                             accessible->length_insert);
+      accessible->length_insert = 0;
+    }
 }
 
 static gboolean

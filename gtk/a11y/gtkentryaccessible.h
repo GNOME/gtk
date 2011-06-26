@@ -39,11 +39,6 @@ struct _GtkEntryAccessible
 {
   GailWidget parent;
 
-  /*
-   * These fields store information about text changed
-   */
-  gchar          *signal_name_insert;
-  gchar          *signal_name_delete;
   gint           position_insert;
   gint           position_delete;
   gint           length_insert;
