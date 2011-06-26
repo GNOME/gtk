@@ -204,9 +204,6 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
       new_role = visibility ? ATK_ROLE_TEXT : ATK_ROLE_PASSWORD_TEXT;
       atk_object_set_role (atk_obj, new_role);
     }
-  else if (strcmp (pspec->name, "invisible-char") == 0)
-    {
-    }
   else
     GAIL_WIDGET_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
 }
