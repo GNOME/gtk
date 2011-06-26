@@ -56,7 +56,6 @@
 #include "gailseparator.h"
 #include "gailstatusbar.h"
 #include "gailtextcell.h"
-#include "gailtextview.h"
 #include "gailtogglebutton.h"
 #include "gailtoplevel.h"
 #include "gailtreeview.h"
@@ -117,7 +116,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_LINK_BUTTON, GailLinkButton, gail_link_button,
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_MENU_ITEM, GailMenuItem, gail_menu_item, gail_menu_item_new)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TOGGLE_BUTTON, GailToggleButton, gail_toggle_button, GTK_TYPE_TOGGLE_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_IMAGE, GailImage, gail_image, GTK_TYPE_IMAGE)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TEXT_VIEW, GailTextView, gail_text_view, GTK_TYPE_TEXT_VIEW)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_COMBO_BOX, GailComboBox, gail_combo_box, GTK_TYPE_COMBO_BOX)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU_SHELL, GailMenuShell, gail_menu_shell, GTK_TYPE_MENU_SHELL)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU, GailMenu, gail_menu, GTK_TYPE_MENU)
@@ -892,7 +890,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_ITEM, gail_menu_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TOGGLE_BUTTON, gail_toggle_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_IMAGE, gail_image);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TEXT_VIEW, gail_text_view);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_COMBO_BOX, gail_combo_box);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_BAR, gail_menu_shell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU, gail_menu);

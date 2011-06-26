@@ -53,6 +53,7 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 
+#include "a11y/gtktextviewaccessible.h"
 
 /**
  * SECTION:gtktextview
@@ -1351,6 +1352,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
   g_type_class_add_private (gobject_class, sizeof (GtkTextViewPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
 }
 
 static void

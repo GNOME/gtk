@@ -17,25 +17,25 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GAIL_TEXT_VIEW_H__
-#define __GAIL_TEXT_VIEW_H__
+#ifndef __GTK_TEXT_VIEW_ACCESSIBLE_H__
+#define __GTK_TEXT_VIEW_ACCESSIBLE_H__
 
 #include "gailcontainer.h"
 #include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_TEXT_VIEW                  (gail_text_view_get_type ())
-#define GAIL_TEXT_VIEW(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_TEXT_VIEW, GailTextView))
-#define GAIL_TEXT_VIEW_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_TEXT_VIEW, GailTextViewClass))
-#define GAIL_IS_TEXT_VIEW(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_TEXT_VIEW))
-#define GAIL_IS_TEXT_VIEW_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_TEXT_VIEW))
-#define GAIL_TEXT_VIEW_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_TEXT_VIEW, GailTextViewClass))
+#define GTK_TYPE_TEXT_VIEW_ACCESSIBLE                  (gtk_text_view_accessible_get_type ())
+#define GTK_TEXT_VIEW_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessible))
+#define GTK_TEXT_VIEW_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessibleClass))
+#define GTK_IS_TEXT_VIEW_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE))
+#define GTK_IS_TEXT_VIEW_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_VIEW_ACCESSIBLE))
+#define GTK_TEXT_VIEW_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessibleClass))
 
-typedef struct _GailTextView              GailTextView;
-typedef struct _GailTextViewClass         GailTextViewClass;
+typedef struct _GtkTextViewAccessible              GtkTextViewAccessible;
+typedef struct _GtkTextViewAccessibleClass         GtkTextViewAccessibleClass;
 
-struct _GailTextView
+struct _GtkTextViewAccessible
 {
   GailContainer  parent;
 
@@ -52,13 +52,13 @@ struct _GailTextView
   guint          insert_notify_handler;
 };
 
-GType gail_text_view_get_type (void);
-
-struct _GailTextViewClass
+struct _GtkTextViewAccessibleClass
 {
   GailContainerClass parent_class;
 };
 
+GType gtk_text_view_accessible_get_type (void);
+
 G_END_DECLS
 
-#endif /* __GAIL_TEXT_VIEW_H__ */
+#endif /* __GTK_TEXT_VIEW_ACCESSIBLE_H__ */

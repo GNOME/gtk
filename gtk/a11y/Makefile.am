@@ -48,7 +48,7 @@ gail_c_sources =			\
 	gailstatusbar.c			\
 	gailtextcell.c			\
 	gailtextutil.c			\
-	gailtextview.c			\
+	gtktextviewaccessible.c		\
 	gailtogglebutton.c		\
 	gailtoplevel.c			\
 	gailtreeview.c			\
@@ -103,7 +103,7 @@ gail_private_h_sources =		\
 	gailstatusbar.h			\
 	gailtextcell.h			\
 	gailtextutil.h			\
-	gailtextview.h			\
+	gtktextviewaccessible.h		\
 	gailtogglebutton.h		\
 	gailtoplevel.h			\
 	gailtreeview.h			\
