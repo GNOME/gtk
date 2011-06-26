@@ -93,6 +93,7 @@ struct _FilterElt
   FilterLevel *children;
   gint offset;
   gint ref_count;
+  gint ext_ref_count;
   gint zero_ref_count;
   gboolean visible;
 };
@@ -101,6 +102,7 @@ struct _FilterLevel
 {
   GArray *array;
   gint ref_count;
+  gint ext_ref_count;
   gint visible_nodes;
 
   gint parent_elt_index;
@@ -287,8 +289,12 @@ static gboolean     gtk_tree_model_filter_visible                         (GtkTr
 static void         gtk_tree_model_filter_clear_cache_helper              (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level);
 
+static void         gtk_tree_model_filter_real_ref_node                   (GtkTreeModel           *model,
+                                                                           GtkTreeIter            *iter,
+                                                                           gboolean                external);
 static void         gtk_tree_model_filter_real_unref_node                 (GtkTreeModel           *model,
                                                                            GtkTreeIter            *iter,
+                                                                           gboolean                external,
                                                                            gboolean                propagate_unref);
 
 static void         gtk_tree_model_filter_set_model                       (GtkTreeModelFilter     *filter,
@@ -572,6 +578,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
                                         sizeof (FilterElt),
                                         length);
   new_level->ref_count = 0;
+  new_level->ext_ref_count = 0;
   new_level->visible_nodes = 0;
   new_level->parent_elt_index = parent_elt_index;
   new_level->parent_level = parent_level;
@@ -606,6 +613,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
           filter_elt.offset = i;
           filter_elt.zero_ref_count = 0;
           filter_elt.ref_count = 0;
+          filter_elt.ext_ref_count = 0;
           filter_elt.children = NULL;
           filter_elt.visible = TRUE;
 
@@ -620,7 +628,8 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
           f_iter.user_data2 = &(g_array_index (new_level->array, FilterElt, new_level->array->len - 1));
 
           if (new_level->parent_level || filter->priv->virtual_root)
-            gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
+            gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter),
+                                                 &f_iter, FALSE);
 
           if (emit_inserted)
             {
@@ -657,6 +666,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
       filter_elt.offset = 0;
       filter_elt.zero_ref_count = 0;
       filter_elt.ref_count = 0;
+      filter_elt.ext_ref_count = 0;
       filter_elt.children = NULL;
       filter_elt.visible = FALSE;
 
@@ -669,7 +679,8 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
       f_iter.user_data = new_level;
       f_iter.user_data2 = &(g_array_index (new_level->array, FilterElt, new_level->array->len - 1));
 
-      gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
+      gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter), &f_iter,
+                                           FALSE);
     }
   else if (new_level->array->len == 0)
     gtk_tree_model_filter_free_level (filter, new_level, TRUE);
@@ -700,11 +711,12 @@ gtk_tree_model_filter_free_level (GtkTreeModelFilter *filter,
           f_iter.user_data = filter_level;
           f_iter.user_data2 = &(g_array_index (filter_level->array, FilterElt, i));
 
-          gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), &f_iter);
+          gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                                 &f_iter, FALSE, TRUE);
         }
     }
 
-  if (filter_level->ref_count == 0)
+  if (filter_level->ext_ref_count == 0)
     {
       FilterLevel *parent_level = filter_level->parent_level;
       gint parent_elt_index = filter_level->parent_elt_index;
@@ -879,7 +891,8 @@ gtk_tree_model_filter_clear_cache_helper (GtkTreeModelFilter *filter,
         gtk_tree_model_filter_clear_cache_helper (filter, g_array_index (level->array, FilterElt, i).children);
      }
 
-  if (level->ref_count == 0 && level != filter->priv->root)
+  if (level->ext_ref_count == 0 && level != filter->priv->root &&
+      level->parent_level->ext_ref_count == 0)
     {
       gtk_tree_model_filter_free_level (filter, level, TRUE);
       return;
@@ -1119,6 +1132,7 @@ gtk_tree_model_filter_insert_elt_in_level (GtkTreeModelFilter *filter,
   elt.offset = offset;
   elt.zero_ref_count = 0;
   elt.ref_count = 0;
+  elt.ext_ref_count = 0;
   elt.children = NULL;
   /* visibility should be FALSE as we don't emit row_inserted */
   elt.visible = FALSE;
@@ -1165,7 +1179,8 @@ gtk_tree_model_filter_insert_elt_in_level (GtkTreeModelFilter *filter,
       f_iter.user_data = level;
       f_iter.user_data2 = &g_array_index (level->array, FilterElt, *index);
 
-      gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
+      gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter), &f_iter,
+                                           FALSE);
     }
 
   return &g_array_index (level->array, FilterElt, *index);
@@ -1271,7 +1286,8 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
   /* we distinguish a couple of cases:
    *  - root level, length > 1: emit row-deleted and remove.
    *  - root level, length == 1: emit row-deleted and keep in cache.
-   *  - level, length == 1: parent->ref_count > 1: emit row-deleted and keep.
+   *  - level, length == 1: parent->ext_ref_count > 0: emit row-deleted
+   *                        and keep.
    *  - level, length > 1: emit row-deleted and remove.
    *  - else, remove level.
    *
@@ -1295,18 +1311,22 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
       if (elt->children)
         gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
 
+      while (elt->ext_ref_count > 0)
+        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                               &iter, TRUE, FALSE);
       while (elt->ref_count > 1)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
-                                               &iter, FALSE);
+                                               &iter, FALSE, FALSE);
 
       /* We must account for the filter model's reference, because the
        * node is still present in the child model.
        */
       if (parent_level || filter->priv->virtual_root)
-        gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), &iter);
+        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter), &iter,
+                                               FALSE, TRUE);
       else if (elt->ref_count > 0)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
-                                               &iter, FALSE);
+                                               &iter, FALSE, FALSE);
 
       /* remove the node */
       tmp = bsearch_elt_with_offset (level->array, elt->offset, &i);
@@ -1328,9 +1348,14 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
         }
 
       gtk_tree_model_filter_increment_stamp (filter);
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
+
+      /* Only if the node is in the root level (parent == NULL) or
+       * the parent is visible, a row-deleted signal is necessary.
+       */
+      if (!parent || parent->ext_ref_count > 0)
+        gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
     }
-  else if ((length == 1 && parent && parent->ref_count > 1)
+  else if ((length == 1 && parent && parent->ext_ref_count > 0)
            || (length == 1 && level == filter->priv->root))
     {
       /* We emit row-deleted, but keep the node in the cache and
@@ -1352,9 +1377,12 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
        * in gtk_tree_model_filter_free_level), because the node is
        * still present in the child model.
        */
+      while (elt->ext_ref_count > 0)
+        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                               &iter, TRUE, FALSE);
       while (elt->ref_count > 1)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
-                                               &iter, FALSE);
+                                               &iter, FALSE, FALSE);
 
       /* Blow level away, including any child levels */
       gtk_tree_model_filter_free_level (filter, level, TRUE);
@@ -1535,6 +1563,8 @@ gtk_tree_model_filter_emit_row_inserted_for_path (GtkTreeModelFilter *filter,
         signals_emitted = TRUE;
     }
 
+  gtk_tree_model_filter_increment_stamp (filter);
+
   /* We need to disallow to build new levels, because we are then pulling
    * in a child in an invisible level.  We only want to find path if it
    * is in a visible level (and thus has a parent that is visible).
@@ -1547,8 +1577,6 @@ gtk_tree_model_filter_emit_row_inserted_for_path (GtkTreeModelFilter *filter,
   if (!path)
     /* parent is probably being filtered out */
     return;
-
-  gtk_tree_model_filter_increment_stamp (filter);
 
   gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (filter), &iter, path);
 
@@ -2227,8 +2255,12 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
    * model's references on the node in case of level->parent or use
    * of a virtual root are automatically destroyed by the child model.
    */
+  while (elt->ext_ref_count > 0)
+    gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter,
+                                           TRUE, FALSE);
   while (elt->ref_count > 0)
-    gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter, FALSE);
+    gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter,
+                                           FALSE, FALSE);
 
   if (level->array->len == 1)
     {
@@ -3067,6 +3099,14 @@ static void
 gtk_tree_model_filter_ref_node (GtkTreeModel *model,
                                 GtkTreeIter  *iter)
 {
+  gtk_tree_model_filter_real_ref_node (model, iter, TRUE);
+}
+
+static void
+gtk_tree_model_filter_real_ref_node (GtkTreeModel *model,
+                                     GtkTreeIter  *iter,
+                                     gboolean      external)
+{
   GtkTreeModelFilter *filter = (GtkTreeModelFilter *)model;
   GtkTreeIter child_iter;
   FilterLevel *level;
@@ -3085,22 +3125,29 @@ gtk_tree_model_filter_ref_node (GtkTreeModel *model,
 
   elt->ref_count++;
   level->ref_count++;
-  if (level->ref_count == 1)
+
+  if (external)
     {
-      FilterLevel *parent_level = level->parent_level;
-      gint parent_elt_index = level->parent_elt_index;
+      elt->ext_ref_count++;
+      level->ext_ref_count++;
 
-      /* we were at zero -- time to decrease the zero_ref_count val */
-      while (parent_level)
+      if (level->ext_ref_count == 1)
         {
-          g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count--;
+          FilterLevel *parent_level = level->parent_level;
+          gint parent_elt_index = level->parent_elt_index;
 
-          parent_elt_index = parent_level->parent_elt_index;
-	  parent_level = parent_level->parent_level;
+          /* we were at zero -- time to decrease the zero_ref_count val */
+          while (parent_level)
+            {
+              g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count--;
+
+              parent_elt_index = parent_level->parent_elt_index;
+              parent_level = parent_level->parent_level;
+            }
+
+          if (filter->priv->root != level)
+            filter->priv->zero_ref_count--;
         }
-
-      if (filter->priv->root != level)
-	filter->priv->zero_ref_count--;
     }
 }
 
@@ -3108,12 +3155,13 @@ static void
 gtk_tree_model_filter_unref_node (GtkTreeModel *model,
                                   GtkTreeIter  *iter)
 {
-  gtk_tree_model_filter_real_unref_node (model, iter, TRUE);
+  gtk_tree_model_filter_real_unref_node (model, iter, TRUE, TRUE);
 }
 
 static void
 gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
                                        GtkTreeIter  *iter,
+                                       gboolean      external,
                                        gboolean      propagate_unref)
 {
   GtkTreeModelFilter *filter = (GtkTreeModelFilter *)model;
@@ -3138,22 +3186,29 @@ gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
 
   elt->ref_count--;
   level->ref_count--;
-  if (level->ref_count == 0)
+
+  if (external)
     {
-      FilterLevel *parent_level = level->parent_level;
-      gint parent_elt_index = level->parent_elt_index;
+      elt->ext_ref_count--;
+      level->ext_ref_count--;
 
-      /* we are at zero -- time to increase the zero_ref_count val */
-      while (parent_level)
+      if (level->ext_ref_count == 0)
         {
-          g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count++;
+          FilterLevel *parent_level = level->parent_level;
+          gint parent_elt_index = level->parent_elt_index;
 
-          parent_elt_index = parent_level->parent_elt_index;
-          parent_level = parent_level->parent_level;
+          /* we are at zero -- time to increase the zero_ref_count val */
+          while (parent_level)
+            {
+              g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count++;
+
+              parent_elt_index = parent_level->parent_elt_index;
+              parent_level = parent_level->parent_level;
+            }
+
+          if (filter->priv->root != level)
+            filter->priv->zero_ref_count++;
         }
-
-      if (filter->priv->root != level)
-	filter->priv->zero_ref_count++;
     }
 }
 
