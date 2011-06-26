@@ -4528,8 +4528,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   if (!tab_label)
     {
       page->default_tab = TRUE;
-      if (priv->show_tabs)
-        tab_label = gtk_label_new (NULL);
     }
   page->tab_label = tab_label;
   page->menu_label = menu_label;
