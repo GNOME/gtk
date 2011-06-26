@@ -5431,6 +5431,13 @@ gtk_label_select_region_index (GtkLabel *label,
           priv->select_info->selection_end == end_index)
         return;
 
+      g_object_freeze_notify (G_OBJECT (label));
+
+      if (priv->select_info->selection_anchor != anchor_index)
+        g_object_notify (G_OBJECT (label), "selection-bound");
+      if (priv->select_info->selection_end != end_index)
+        g_object_notify (G_OBJECT (label), "cursor-position");
+
       priv->select_info->selection_anchor = anchor_index;
       priv->select_info->selection_end = end_index;
 
@@ -5469,9 +5476,6 @@ gtk_label_select_region_index (GtkLabel *label,
 
       gtk_widget_queue_draw (GTK_WIDGET (label));
 
-      g_object_freeze_notify (G_OBJECT (label));
-      g_object_notify (G_OBJECT (label), "cursor-position");
-      g_object_notify (G_OBJECT (label), "selection-bound");
       g_object_thaw_notify (G_OBJECT (label));
     }
 }
