@@ -77,11 +77,6 @@ gtk_entry_accessible_finalize (GObject *object)
       g_source_remove (entry->action_idle_handler);
       entry->action_idle_handler = 0;
     }
-  if (entry->insert_idle_handler)
-    {
-      g_source_remove (entry->insert_idle_handler);
-      entry->insert_idle_handler = 0;
-    }
   G_OBJECT_CLASS (gtk_entry_accessible_parent_class)->finalize (object);
 }
 
@@ -212,14 +207,6 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
     }
   else if (strcmp (pspec->name, "invisible-char") == 0)
     {
-    }
-  else if (strcmp (pspec->name, "editing-canceled") == 0)
-    {
-      if (entry->insert_idle_handler)
-        {
-          g_source_remove (entry->insert_idle_handler);
-          entry->insert_idle_handler = 0;
-        }
     }
   else
     GAIL_WIDGET_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);

@@ -48,7 +48,6 @@ struct _GtkEntryAccessible
 
   gchar          *activate_keybinding;
   guint          action_idle_handler;
-  guint          insert_idle_handler;
 };
 
 GType gtk_entry_accessible_get_type (void);
