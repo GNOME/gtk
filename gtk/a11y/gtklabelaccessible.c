@@ -115,6 +115,10 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
                              _gtk_label_get_cursor_position (GTK_LABEL (widget)));
       g_signal_emit_by_name (atk_obj, "text_selection_changed");
     }
+  else if (strcmp (pspec->name, "selection-bound") == 0)
+    {
+      g_signal_emit_by_name (atk_obj, "text_selection_changed");
+    }
   else
     GAIL_WIDGET_CLASS (gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);
 }
@@ -479,7 +483,7 @@ gtk_label_accessible_remove_selection (AtkText *text,
 
   if (gtk_label_get_selection_bounds (label, &start, &end))
     {
-      gtk_label_select_region (label, 0, 0);
+      gtk_label_select_region (label, end, end);
       return TRUE;
     }
   else
