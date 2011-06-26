@@ -28,43 +28,29 @@
 
 /* Callbacks */
 
-static void       gtk_entry_accessible_insert_text_cb     (GtkEntry *entry,
-                                                           gchar    *new_text,
-                                                           gint      new_text_length,
-                                                           gint     *position);
-static void       gtk_entry_accessible_delete_text_cb     (GtkEntry *entry,
-                                                           gint      start,
-                                                           gint      end);
-static void       gtk_entry_accessible_changed_cb         (GtkEntry *entry);
-static gboolean   check_for_selection_change              (GtkEntryAccessible *entry,
-                                                           GtkEntry           *gtk_entry);
+static void     insert_text_cb             (GtkEditable        *editable,
+                                            gchar              *new_text,
+                                            gint                new_text_length,
+                                            gint               *position);
+static void     delete_text_cb             (GtkEditable        *editable,
+                                            gint                start,
+                                            gint                end);
+static void     changed_cb                 (GtkEditable        *editable);
 
+static gboolean check_for_selection_change (GtkEntryAccessible *entry,
+                                            GtkEntry           *gtk_entry);
 
-static gboolean     gtk_entry_accessible_do_action               (AtkAction       *action,
-                                                                 gint            i);
-static gboolean     idle_do_action                              (gpointer        data);
-static gint         gtk_entry_accessible_get_n_actions           (AtkAction       *action);
-static const gchar* gtk_entry_accessible_get_keybinding          (AtkAction       *action,
-                                                                 gint            i);
-static const gchar* gtk_entry_accessible_action_get_name         (AtkAction       *action,
-                                                                 gint            i);
-
-typedef struct _GtkEntryAccessiblePaste GtkEntryAccessiblePaste;
-
-struct _GtkEntryAccessiblePaste
-{
-  GtkEntry* entry;
-  gint position;
-};
 
 static void atk_editable_text_interface_init (AtkEditableTextIface *iface);
 static void atk_text_interface_init          (AtkTextIface         *iface);
 static void atk_action_interface_init        (AtkActionIface       *iface);
 
+
 G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GAIL_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
+
 
 static void
 gtk_entry_accessible_finalize (GObject *object)
@@ -146,12 +132,9 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   gtk_entry_accessible->selection_bound = start_pos;
 
   /* Set up signal callbacks */
-  g_signal_connect (entry, "insert-text",
-        G_CALLBACK (gtk_entry_accessible_insert_text_cb), NULL);
-  g_signal_connect (entry, "delete-text",
-        G_CALLBACK (gtk_entry_accessible_delete_text_cb), NULL);
-  g_signal_connect (entry, "changed",
-        G_CALLBACK (gtk_entry_accessible_changed_cb), NULL);
+  g_signal_connect (entry, "insert-text", G_CALLBACK (insert_text_cb), NULL);
+  g_signal_connect (entry, "delete-text", G_CALLBACK (delete_text_cb), NULL);
+  g_signal_connect (entry, "changed", G_CALLBACK (changed_cb), NULL);
 
   if (gtk_entry_get_visibility (entry))
     obj->role = ATK_ROLE_TEXT;
@@ -812,12 +795,18 @@ gtk_entry_accessible_delete_text (AtkEditableText *text,
   gtk_editable_delete_text (editable, start_pos, end_pos);
 }
 
-static void
-gtk_entry_accessible_paste_received (GtkClipboard *clipboard,
-                                     const gchar  *text,
-                                     gpointer      data)
+typedef struct
 {
-  GtkEntryAccessiblePaste* paste = (GtkEntryAccessiblePaste *)data;
+  GtkEntry* entry;
+  gint position;
+} PasteData;
+
+static void
+paste_received_cb (GtkClipboard *clipboard,
+                   const gchar  *text,
+                   gpointer      data)
+{
+  PasteData *paste = data;
 
   if (text)
     gtk_editable_insert_text (GTK_EDITABLE (paste->entry), text, -1,
@@ -833,7 +822,7 @@ gtk_entry_accessible_paste_text (AtkEditableText *text,
 {
   GtkWidget *widget;
   GtkEditable *editable;
-  GtkEntryAccessiblePaste *paste;
+  PasteData *paste;
   GtkClipboard *clipboard;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -847,13 +836,13 @@ gtk_entry_accessible_paste_text (AtkEditableText *text,
   if (!gtk_editable_get_editable (editable))
     return;
 
-  paste = g_new0 (GtkEntryAccessiblePaste, 1);
+  paste = g_new0 (PasteData, 1);
   paste->entry = GTK_ENTRY (widget);
   paste->position = position;
 
   g_object_ref (paste->entry);
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_request_text (clipboard, gtk_entry_accessible_paste_received, paste);
+  gtk_clipboard_request_text (clipboard, paste_received_cb, paste);
 }
 
 static void
@@ -868,25 +857,23 @@ atk_editable_text_interface_init (AtkEditableTextIface *iface)
   iface->set_run_attributes = NULL;
 }
 
-/* Callbacks */
-
 /* We connect to GtkEditable::insert-text, since it carries
  * the information we need. But we delay emitting our own
  * text_changed::insert signal until the entry has update
  * all its internal state and emits GtkEntry::changed.
  */
 static void
-gtk_entry_accessible_insert_text_cb (GtkEntry *entry,
-                                     gchar    *new_text,
-                                     gint      new_text_length,
-                                     gint     *position)
+insert_text_cb (GtkEditable *editable,
+                gchar       *new_text,
+                gint         new_text_length,
+                gint        *position)
 {
   GtkEntryAccessible *accessible;
 
   if (new_text_length == 0)
     return;
 
-  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (entry)));
+  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
   if (accessible->length_insert == 0)
     {
       accessible->position_insert = *position;
@@ -900,9 +887,9 @@ gtk_entry_accessible_insert_text_cb (GtkEntry *entry,
  * all its internal state and emits GtkEntry::changed.
  */
 static void
-gtk_entry_accessible_delete_text_cb (GtkEntry *entry,
-                                     gint      start,
-                                     gint      end)
+delete_text_cb (GtkEditable *editable,
+                gint         start,
+                gint         end)
 {
   GtkEntryAccessible *accessible;
 
@@ -910,14 +897,14 @@ gtk_entry_accessible_delete_text_cb (GtkEntry *entry,
     {
       const gchar *text;
 
-      text = gtk_entry_get_text (entry);
+      text = gtk_entry_get_text (GTK_ENTRY (editable));
       end = g_utf8_strlen (text, -1);
     }
 
   if (end == start)
     return;
 
-  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (entry)));
+  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
   if (accessible->length_delete == 0)
     {
       accessible->position_delete = start;
@@ -931,11 +918,11 @@ gtk_entry_accessible_delete_text_cb (GtkEntry *entry,
  * change.
  */
 static void
-gtk_entry_accessible_changed_cb (GtkEntry *entry)
+changed_cb (GtkEditable *editable)
 {
   GtkEntryAccessible *accessible;
 
-  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (entry)));
+  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
 
   if (accessible->length_delete > 0)
     {
@@ -956,18 +943,16 @@ gtk_entry_accessible_changed_cb (GtkEntry *entry)
 }
 
 static gboolean
-check_for_selection_change (GtkEntryAccessible   *entry,
-                            GtkEntry    *gtk_entry)
+check_for_selection_change (GtkEntryAccessible *accessible,
+                            GtkEntry           *entry)
 {
-  gboolean selected, ret_val = FALSE;
-  gint start_pos, end_pos;
+  gboolean ret_val = FALSE;
+  gint start, end;
 
-  selected = gtk_editable_get_selection_bounds (GTK_EDITABLE (gtk_entry),
-                                                &start_pos, &end_pos);
-  if (selected)
+  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
-      if (end_pos != entry->cursor_position ||
-          start_pos != entry->selection_bound)
+      if (end != accessible->cursor_position ||
+          start != accessible->selection_bound)
         /*
          * This check is here as this function can be called
          * for notification of selection_bound and current_pos.
@@ -980,12 +965,31 @@ check_for_selection_change (GtkEntryAccessible   *entry,
   else
     {
       /* We had a selection */
-      ret_val = (entry->cursor_position != entry->selection_bound);
+      ret_val = (accessible->cursor_position != accessible->selection_bound);
     }
-  entry->cursor_position = end_pos;
-  entry->selection_bound = start_pos;
+
+  accessible->cursor_position = end;
+  accessible->selection_bound = start;
 
   return ret_val;
+}
+
+static gboolean
+idle_do_action (gpointer data)
+{
+  GtkEntryAccessible *entry;
+  GtkWidget *widget;
+
+  entry = GTK_ENTRY_ACCESSIBLE (data);
+  entry->action_idle_handler = 0;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
+  if (widget == NULL /* State is defunct */ ||
+      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
+    return FALSE;
+
+  gtk_widget_activate (widget);
+
+  return FALSE;
 }
 
 static gboolean
@@ -1012,24 +1016,6 @@ gtk_entry_accessible_do_action (AtkAction *action,
   entry->action_idle_handler = gdk_threads_add_idle (idle_do_action, entry);
 
   return TRUE;
-}
-
-static gboolean
-idle_do_action (gpointer data)
-{
-  GtkEntryAccessible *entry;
-  GtkWidget *widget;
-
-  entry = GTK_ENTRY_ACCESSIBLE (data);
-  entry->action_idle_handler = 0;
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
-  if (widget == NULL /* State is defunct */ ||
-      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
-    return FALSE;
-
-  gtk_widget_activate (widget);
-
-  return FALSE;
 }
 
 static gint
