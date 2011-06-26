@@ -4560,6 +4560,10 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
     gtk_notebook_menu_item_create (notebook,
                                    g_list_find (priv->children, page));
 
+  /* child visible will be turned on by switch_page below */
+  if (priv->cur_page != page)
+    gtk_widget_set_child_visible (child, FALSE);
+
   gtk_widget_set_parent (child, GTK_WIDGET (notebook));
   if (tab_label)
     gtk_widget_set_parent (tab_label, GTK_WIDGET (notebook));
@@ -4568,10 +4572,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   if (!priv->first_tab)
     priv->first_tab = priv->children;
-
-  /* child visible will be turned on by switch_page below */
-  if (priv->cur_page != page)
-    gtk_widget_set_child_visible (child, FALSE);
 
   if (tab_label)
     {
