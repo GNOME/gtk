@@ -46,7 +46,6 @@ struct _GtkEntryAccessible
   gint           cursor_position;
   gint           selection_bound;
 
-  gchar          *activate_keybinding;
   guint          action_idle_handler;
 };
 

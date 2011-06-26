@@ -42,7 +42,7 @@ static gboolean   check_for_selection_change              (GtkEntryAccessible *e
 
 static gboolean     gtk_entry_accessible_do_action               (AtkAction       *action,
                                                                  gint            i);
-static gboolean     idle_do_action                     (gpointer        data);
+static gboolean     idle_do_action                              (gpointer        data);
 static gint         gtk_entry_accessible_get_n_actions           (AtkAction       *action);
 static const gchar* gtk_entry_accessible_get_keybinding          (AtkAction       *action,
                                                                  gint            i);
@@ -71,7 +71,6 @@ gtk_entry_accessible_finalize (GObject *object)
 {
   GtkEntryAccessible *entry = GTK_ENTRY_ACCESSIBLE (object);
 
-  g_free (entry->activate_keybinding);
   if (entry->action_idle_handler)
     {
       g_source_remove (entry->action_idle_handler);
@@ -250,7 +249,6 @@ gtk_entry_accessible_init (GtkEntryAccessible *entry)
   entry->length_delete = 0;
   entry->cursor_position = 0;
   entry->selection_bound = 0;
-  entry->activate_keybinding = NULL;
 }
 
 static gchar *
@@ -993,47 +991,30 @@ check_for_selection_change (GtkEntryAccessible   *entry,
   return ret_val;
 }
 
-static void
-atk_action_interface_init (AtkActionIface *iface)
-{
-  iface->do_action = gtk_entry_accessible_do_action;
-  iface->get_n_actions = gtk_entry_accessible_get_n_actions;
-  iface->get_keybinding = gtk_entry_accessible_get_keybinding;
-  iface->get_name = gtk_entry_accessible_action_get_name;
-}
-
 static gboolean
 gtk_entry_accessible_do_action (AtkAction *action,
-                      gint      i)
+                                gint       i)
 {
   GtkEntryAccessible *entry;
   GtkWidget *widget;
-  gboolean return_value = TRUE;
 
   entry = GTK_ENTRY_ACCESSIBLE (action);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return FALSE;
 
   if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
-  switch (i)
-    {
-    case 0:
-      if (entry->action_idle_handler)
-        return_value = FALSE;
-      else
-        entry->action_idle_handler = gdk_threads_add_idle (idle_do_action, entry);
-      break;
-    default:
-      return_value = FALSE;
-      break;
-    }
-  return return_value;
+  if (i != 0)
+    return FALSE;
+
+  if (entry->action_idle_handler)
+    return FALSE;
+
+  entry->action_idle_handler = gdk_threads_add_idle (idle_do_action, entry);
+
+  return TRUE;
 }
 
 static gboolean
@@ -1060,84 +1041,66 @@ gtk_entry_accessible_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static const gchar*
+static const gchar *
 gtk_entry_accessible_get_keybinding (AtkAction *action,
-                           gint      i)
+                                     gint       i)
 {
-  GtkEntryAccessible *entry;
-  gchar *return_value = NULL;
+  GtkWidget *widget;
+  GtkWidget *label;
+  AtkRelationSet *set;
+  AtkRelation *relation;
+  GPtrArray *target;
+  gpointer target_object;
+  guint key_val;
 
-  entry = GTK_ENTRY_ACCESSIBLE (action);
-  switch (i)
+  if (i != 0)
+    return NULL;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
+  if (widget == NULL)
+    return NULL;
+
+  set = atk_object_ref_relation_set (ATK_OBJECT (action));
+  if (!set)
+    return NULL;
+
+  label = NULL;
+  relation = atk_relation_set_get_relation_by_type (set, ATK_RELATION_LABELLED_BY);
+  if (relation)
     {
-    case 0:
-      {
-        /*
-         * We look for a mnemonic on the label
-         */
-        GtkWidget *widget;
-        GtkWidget *label;
-        AtkRelationSet *set;
-        AtkRelation *relation;
-        GPtrArray *target;
-        gpointer target_object;
-        guint key_val;
+      target = atk_relation_get_target (relation);
 
-        entry = GTK_ENTRY_ACCESSIBLE (action);
-        widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
-        if (widget == NULL)
-          /*
-           * State is defunct
-           */
-          return NULL;
-
-        /* Find labelled-by relation */
-
-        set = atk_object_ref_relation_set (ATK_OBJECT (action));
-        if (!set)
-          return NULL;
-        label = NULL;
-        relation = atk_relation_set_get_relation_by_type (set, ATK_RELATION_LABELLED_BY);
-        if (relation)
-          {
-            target = atk_relation_get_target (relation);
-
-            target_object = g_ptr_array_index (target, 0);
-            label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
-          }
-
-        g_object_unref (set);
-
-        if (GTK_IS_LABEL (label))
-          {
-            key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (label));
-            if (key_val != GDK_KEY_VoidSymbol)
-              return_value = gtk_accelerator_name (key_val, GDK_MOD1_MASK);
-          }
-        g_free (entry->activate_keybinding);
-        entry->activate_keybinding = return_value;
-        break;
-      }
-    default:
-      break;
+      target_object = g_ptr_array_index (target, 0);
+      label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
     }
-  return return_value;
+
+  g_object_unref (set);
+
+  if (GTK_IS_LABEL (label))
+    {
+      key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (label));
+      if (key_val != GDK_KEY_VoidSymbol)
+        return gtk_accelerator_name (key_val, GDK_MOD1_MASK);
+    }
+
+  return NULL;
 }
 
 static const gchar*
 gtk_entry_accessible_action_get_name (AtkAction *action,
-                            gint      i)
+                                      gint       i)
 {
-  const gchar *return_value;
+  if (i != 0)
+    return NULL;
 
-  switch (i)
-    {
-    case 0:
-      return_value = "activate";
-      break;
-    default:
-      return_value = NULL;
-      break;
-  }
-  return return_value;
+  return "activate";
+}
+
+static void
+atk_action_interface_init (AtkActionIface *iface)
+{
+  iface->do_action = gtk_entry_accessible_do_action;
+  iface->get_n_actions = gtk_entry_accessible_get_n_actions;
+  iface->get_keybinding = gtk_entry_accessible_get_keybinding;
+  iface->get_name = gtk_entry_accessible_action_get_name;
 }
