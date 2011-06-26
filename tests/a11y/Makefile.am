@@ -56,4 +56,5 @@ EXTRA_DIST += \
 	statusbar.ui statusbar.txt \
 	paned.ui paned.txt \
 	iconview.ui iconview.txt \
-	entries.ui entries.txt
+	entries.ui entries.txt \
+	scale-drawvalue.ui scale-drawvalue.txt

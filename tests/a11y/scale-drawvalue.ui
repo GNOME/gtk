@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">-100</property>
+    <property name="upper">100</property>
+    <property name="value">-42</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkScale" id="scale1">
+        <property name="width-request">100</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="adjustment">adjustment1</property>
+        <property name="round_digits">1</property>
+      </object>
+    </child>
+  </object>
+</interface>
