@@ -493,6 +493,8 @@ test_words (GtkWidget *widget)
 #if 0
   if (GTK_IS_LABEL (widget))
     show_text_attributes (gtk_label_get_layout (GTK_LABEL (widget)));
+  else if (GTK_IS_ENTRY (widget))
+    show_text_attributes (gtk_entry_get_layout (GTK_ENTRY (widget)));
 #endif
 
 #if 0
@@ -516,12 +518,20 @@ test_words (GtkWidget *widget)
             break;
         }
        printf ("    { %2d, %2d, %s %2d, %2d, \"%s\" },\n", i, k, boundary(j), start, end, escape (word));
-       g_free (word); 
+       g_free (word);
      }
 #endif
 
   for (i = 0; expected[i].offset != -1; i++)
     {
+      if (GTK_IS_ENTRY (widget))
+        {
+          /* GtkEntry sets single-paragraph mode on its pango layout */
+          if (expected[i].boundary == ATK_TEXT_BOUNDARY_LINE_START ||
+              expected[i].boundary == ATK_TEXT_BOUNDARY_LINE_END)
+            continue;
+        }
+
       switch (expected[i].gravity)
         {
           case -1:
@@ -670,8 +680,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/text/bold/GtkLabel", test_bold_label);
 
   add_text_tests (gtk_label_new (""));
-  add_text_tests (gtk_text_view_new ());
   add_text_tests (gtk_entry_new ());
+  add_text_tests (gtk_text_view_new ());
 
   return g_test_run ();
 }
