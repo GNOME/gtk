@@ -4448,3 +4448,302 @@ _gtk_text_buffer_spew (GtkTextBuffer *buffer)
 {
   _gtk_text_btree_spew (get_btree (buffer));
 }
+
+void
+_gtk_text_buffer_get_text_before (GtkTextBuffer   *buffer,
+                                  AtkTextBoundary  boundary_type,
+                                  GtkTextIter     *position,
+                                  GtkTextIter     *start,
+                                  GtkTextIter     *end)
+{
+  gint line_number;
+
+  *start = *position;
+  *end = *start;
+
+  switch (boundary_type)
+    {
+    case ATK_TEXT_BOUNDARY_CHAR:
+      gtk_text_iter_backward_char (start);
+      break;
+
+    case ATK_TEXT_BOUNDARY_WORD_START:
+      if (!gtk_text_iter_starts_word (start))
+        gtk_text_iter_backward_word_start (start);
+      *end = *start;
+      gtk_text_iter_backward_word_start (start);
+      break;
+
+    case ATK_TEXT_BOUNDARY_WORD_END:
+      if (gtk_text_iter_inside_word (start) &&
+          !gtk_text_iter_starts_word (start))
+        gtk_text_iter_backward_word_start (start);
+      while (!gtk_text_iter_ends_word (start))
+        {
+          if (!gtk_text_iter_backward_char (start))
+            break;
+        }
+      *end = *start;
+      gtk_text_iter_backward_word_start (start);
+      while (!gtk_text_iter_ends_word (start))
+        {
+          if (!gtk_text_iter_backward_char (start))
+            break;
+        }
+      break;
+
+    case ATK_TEXT_BOUNDARY_SENTENCE_START:
+      if (!gtk_text_iter_starts_sentence (start))
+        gtk_text_iter_backward_sentence_start (start);
+      *end = *start;
+      gtk_text_iter_backward_sentence_start (start);
+      break;
+
+    case ATK_TEXT_BOUNDARY_SENTENCE_END:
+      if (gtk_text_iter_inside_sentence (start) &&
+          !gtk_text_iter_starts_sentence (start))
+        gtk_text_iter_backward_sentence_start (start);
+      while (!gtk_text_iter_ends_sentence (start))
+        {
+          if (!gtk_text_iter_backward_char (start))
+            break;
+        }
+      *end = *start;
+      gtk_text_iter_backward_sentence_start (start);
+      while (!gtk_text_iter_ends_sentence (start))
+        {
+          if (!gtk_text_iter_backward_char (start))
+            break;
+        }
+      break;
+
+    case ATK_TEXT_BOUNDARY_LINE_START:
+      line_number = gtk_text_iter_get_line (start);
+      if (line_number == 0)
+        {
+          gtk_text_buffer_get_iter_at_offset (buffer, start, 0);
+        }
+      else
+        {
+          gtk_text_iter_backward_line (start);
+          gtk_text_iter_forward_line (start);
+        }
+      *end = *start;
+      gtk_text_iter_backward_line (start);
+      break;
+
+    case ATK_TEXT_BOUNDARY_LINE_END:
+      line_number = gtk_text_iter_get_line (start);
+      if (line_number == 0)
+        {
+          gtk_text_buffer_get_iter_at_offset (buffer, start, 0);
+          *end = *start;
+        }
+      else
+        {
+          gtk_text_iter_backward_line (start);
+          *end = *start;
+          while (!gtk_text_iter_ends_line (start))
+            {
+              if (!gtk_text_iter_backward_char (start))
+                break;
+            }
+          gtk_text_iter_forward_to_line_end (end);
+        }
+      break;
+    }
+}
+
+void
+_gtk_text_buffer_get_text_at (GtkTextBuffer   *buffer,
+                              AtkTextBoundary  boundary_type,
+                              GtkTextIter     *position,
+                              GtkTextIter     *start,
+                              GtkTextIter     *end)
+{
+  gint line_number;
+
+  *start = *position;
+  *end = *start;
+
+  switch (boundary_type)
+    {
+    case ATK_TEXT_BOUNDARY_CHAR:
+      gtk_text_iter_forward_char (end);
+      break;
+
+    case ATK_TEXT_BOUNDARY_WORD_START:
+      if (!gtk_text_iter_starts_word (start))
+        gtk_text_iter_backward_word_start (start);
+      if (gtk_text_iter_inside_word (end))
+        gtk_text_iter_forward_word_end (end);
+      while (!gtk_text_iter_starts_word (end))
+        {
+          if (!gtk_text_iter_forward_char (end))
+            break;
+        }
+      break;
+
+    case ATK_TEXT_BOUNDARY_WORD_END:
+      if (gtk_text_iter_inside_word (start) &&
+          !gtk_text_iter_starts_word (start))
+        gtk_text_iter_backward_word_start (start);
+      while (!gtk_text_iter_ends_word (start))
+        {
+          if (!gtk_text_iter_backward_char (start))
+            break;
+        }
+      gtk_text_iter_forward_word_end (end);
+      break;
+
+    case ATK_TEXT_BOUNDARY_SENTENCE_START:
+      if (!gtk_text_iter_starts_sentence (start))
+        gtk_text_iter_backward_sentence_start (start);
+      if (gtk_text_iter_inside_sentence (end))
+        gtk_text_iter_forward_sentence_end (end);
+      while (!gtk_text_iter_starts_sentence (end))
+        {
+          if (!gtk_text_iter_forward_char (end))
+            break;
+        }
+      break;
+
+    case ATK_TEXT_BOUNDARY_SENTENCE_END:
+      if (gtk_text_iter_inside_sentence (start) &&
+          !gtk_text_iter_starts_sentence (start))
+        gtk_text_iter_backward_sentence_start (start);
+      while (!gtk_text_iter_ends_sentence (start))
+        {
+          if (!gtk_text_iter_backward_char (start))
+            break;
+        }
+      gtk_text_iter_forward_sentence_end (end);
+      break;
+
+    case ATK_TEXT_BOUNDARY_LINE_START:
+      line_number = gtk_text_iter_get_line (start);
+      if (line_number == 0)
+        {
+          gtk_text_buffer_get_iter_at_offset (buffer, start, 0);
+        }
+      else
+        {
+          gtk_text_iter_backward_line (start);
+          gtk_text_iter_forward_line (start);
+        }
+      gtk_text_iter_forward_line (end);
+      break;
+
+    case ATK_TEXT_BOUNDARY_LINE_END:
+      line_number = gtk_text_iter_get_line (start);
+      if (line_number == 0)
+        {
+          gtk_text_buffer_get_iter_at_offset (buffer, start, 0);
+        }
+      else
+        {
+          gtk_text_iter_backward_line (start);
+          gtk_text_iter_forward_line (start);
+        }
+      while (!gtk_text_iter_ends_line (start))
+        {
+          if (!gtk_text_iter_backward_char (start))
+            break;
+        }
+      gtk_text_iter_forward_to_line_end (end);
+      break;
+   }
+}
+
+void
+_gtk_text_buffer_get_text_after (GtkTextBuffer   *buffer,
+                                 AtkTextBoundary  boundary_type,
+                                 GtkTextIter     *position,
+                                 GtkTextIter     *start,
+                                 GtkTextIter     *end)
+{
+  *start = *position;
+  *end = *start;
+
+  switch (boundary_type)
+    {
+    case ATK_TEXT_BOUNDARY_CHAR:
+      gtk_text_iter_forward_char (start);
+      gtk_text_iter_forward_chars (end, 2);
+      break;
+
+    case ATK_TEXT_BOUNDARY_WORD_START:
+      if (gtk_text_iter_inside_word (end))
+        gtk_text_iter_forward_word_end (end);
+      while (!gtk_text_iter_starts_word (end))
+        {
+          if (!gtk_text_iter_forward_char (end))
+            break;
+        }
+      *start = *end;
+      if (!gtk_text_iter_is_end (end))
+        {
+          gtk_text_iter_forward_word_end (end);
+          while (!gtk_text_iter_starts_word (end))
+            {
+              if (!gtk_text_iter_forward_char (end))
+                break;
+            }
+        }
+      break;
+
+    case ATK_TEXT_BOUNDARY_WORD_END:
+      gtk_text_iter_forward_word_end (end);
+      *start = *end;
+      if (!gtk_text_iter_is_end (end))
+        gtk_text_iter_forward_word_end (end);
+      break;
+
+    case ATK_TEXT_BOUNDARY_SENTENCE_START:
+      if (gtk_text_iter_inside_sentence (end))
+        gtk_text_iter_forward_sentence_end (end);
+      while (!gtk_text_iter_starts_sentence (end))
+        {
+          if (!gtk_text_iter_forward_char (end))
+            break;
+        }
+      *start = *end;
+      if (!gtk_text_iter_is_end (end))
+        {
+          gtk_text_iter_forward_sentence_end (end);
+          while (!gtk_text_iter_starts_sentence (end))
+            {
+              if (!gtk_text_iter_forward_char (end))
+                break;
+            }
+        }
+      break;
+
+    case ATK_TEXT_BOUNDARY_SENTENCE_END:
+      gtk_text_iter_forward_sentence_end (end);
+      *start = *end;
+      if (!gtk_text_iter_is_end (end))
+        gtk_text_iter_forward_sentence_end (end);
+      break;
+
+    case ATK_TEXT_BOUNDARY_LINE_START:
+      gtk_text_iter_forward_line (end);
+      *start = *end;
+      gtk_text_iter_forward_line (end);
+      break;
+
+    case ATK_TEXT_BOUNDARY_LINE_END:
+      gtk_text_iter_forward_line (start);
+      *end = *start;
+      if (!gtk_text_iter_is_end (start))
+        {
+          while (!gtk_text_iter_ends_line (start))
+            {
+              if (!gtk_text_iter_backward_char (start))
+                break;
+            }
+          gtk_text_iter_forward_to_line_end (end);
+        }
+      break;
+    }
+}
