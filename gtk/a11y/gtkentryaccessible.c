@@ -367,15 +367,15 @@ gtk_entry_accessible_set_caret_offset (AtkText *text,
 }
 
 static AtkAttributeSet *
-add_attribute (AtkAttributeSet  *attributes,
-               AtkTextAttribute  attr,
-               const gchar      *value)
+add_text_attribute (AtkAttributeSet  *attributes,
+                    AtkTextAttribute  attr,
+                    gint              i)
 {
   AtkAttribute *at;
 
   at = g_new (AtkAttribute, 1);
   at->name = g_strdup (atk_text_attribute_get_name (attr));
-  at->value = g_strdup (value);
+  at->value = g_strdup (atk_text_attribute_get_value (attr, i));
 
   return g_slist_prepend (attributes, at);
 }
@@ -394,9 +394,8 @@ gtk_entry_accessible_get_run_attributes (AtkText *text,
     return NULL;
 
   attributes = NULL;
-  attributes = add_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
-                   atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION,
-                                                 gtk_widget_get_direction (widget)));
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
+                                   gtk_widget_get_direction (widget));
   attributes = _gtk_pango_get_run_attributes (attributes,
                                               gtk_entry_get_layout (GTK_ENTRY (widget)),
                                               offset,
@@ -417,9 +416,8 @@ gtk_entry_accessible_get_default_attributes (AtkText *text)
     return NULL;
 
   attributes = NULL;
-  attributes = add_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
-                   atk_text_attribute_get_value (ATK_TEXT_ATTR_DIRECTION,
-                                                 gtk_widget_get_direction (widget)));
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_DIRECTION,
+                                   gtk_widget_get_direction (widget));
   attributes = _gtk_pango_get_default_attributes (attributes,
                                                   gtk_entry_get_layout (GTK_ENTRY (widget)));
   attributes = _gtk_style_context_get_attributes (attributes,
