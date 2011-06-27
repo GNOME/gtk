@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include <gdk/gdk.h>
+#include <math.h>
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
 
