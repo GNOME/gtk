@@ -363,3 +363,75 @@ delegate_confirm_overwrite (GtkFileChooser    *chooser,
   g_signal_emit_by_name (data, "confirm-overwrite", &conf);
   return conf;
 }
+
+static gint
+recent_sort_mru (gconstpointer a,
+                 gconstpointer b)
+{
+  GtkRecentInfo *info_a = (GtkRecentInfo *) a;
+  GtkRecentInfo *info_b = (GtkRecentInfo *) b;
+
+  return (gtk_recent_info_get_modified (info_b) - gtk_recent_info_get_modified (info_a));
+}
+
+static GFile *
+get_parent_for_uri (const char *uri)
+{
+  GFile *file;
+  GFile *parent;
+
+  file = g_file_new_for_uri (uri);
+  parent = g_file_get_parent (file);
+
+  g_object_unref (file);
+  return parent;
+	
+}
+
+/* Extracts the parent folders out of the recent items, and returns
+ * a list of GFile* for those parents in MRU-first order.
+ */
+GList *
+_gtk_file_chooser_list_recent_folders (GtkRecentManager *manager)
+{
+  GList *infos;
+  GList *l;
+  GList *result;
+  GHashTable *folders;
+
+  result = NULL;
+
+  infos = gtk_recent_manager_get_items (manager);
+  infos = g_list_sort (infos, recent_sort_mru);
+
+  folders = g_hash_table_new (g_file_hash, (GEqualFunc) g_file_equal);
+
+  for (l = infos; l; l = l->next)
+    {
+      GtkRecentInfo *info = l->data;
+      const char *uri;
+      GFile *parent;
+
+      uri = gtk_recent_info_get_uri (info);
+      parent = get_parent_for_uri (uri);
+
+      if (parent)
+	{
+	  if (!g_hash_table_lookup (folders, parent))
+	    {
+	      g_hash_table_insert (folders, parent, (gpointer) 1);
+	      result = g_list_prepend (result, g_object_ref (parent));
+	    }
+
+	  g_object_unref (parent);
+	}
+    }
+
+  result = g_list_reverse (result);
+
+  g_hash_table_destroy (folders);
+  g_list_foreach (infos, (GFunc) gtk_recent_info_unref, NULL);
+  g_list_free (infos);
+
+  return result;
+}
