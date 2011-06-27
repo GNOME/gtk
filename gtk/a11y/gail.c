@@ -24,7 +24,6 @@
 
 #include <gtk/gtkx.h>
 #include "gailadjustment.h"
-#include "gailarrow.h"
 #include "gailbooleancell.h"
 #include "gailbox.h"
 #include "gailbutton.h"
@@ -128,7 +127,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_PROGRESS_BAR, GailProgressBar, gail_progress_b
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TREE_VIEW, GailTreeView, gail_tree_view, GTK_TYPE_TREE_VIEW)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_FRAME, GailFrame, gail_frame, GTK_TYPE_FRAME)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_RADIO_BUTTON, GailRadioButton, gail_radio_button, GTK_TYPE_RADIO_BUTTON)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_ARROW, GailArrow, gail_arrow, GTK_TYPE_ARROW)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SEPARATOR, GailSeparator, gail_separator, GTK_TYPE_SEPARATOR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_BOX, GailBox, gail_box, GTK_TYPE_BOX)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCROLLED_WINDOW, GailScrolledWindow, gail_scrolled_window, GTK_TYPE_SCROLLED_WINDOW)
@@ -905,7 +903,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER, gail_renderer_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_RADIO_BUTTON, gail_radio_button);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_ARROW, gail_arrow);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SEPARATOR, gail_separator);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_BOX, gail_box);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCROLLED_WINDOW, gail_scrolled_window);

@@ -6,7 +6,7 @@ gail_c_sources =			\
 	gail-private-macros.h		\
 	gail.c				\
 	gailadjustment.c		\
-	gailarrow.c			\
+	gtkarrowaccessible.c		\
 	gailbooleancell.c		\
 	gailbox.c			\
 	gailbutton.c			\
@@ -60,7 +60,7 @@ libgailincludedir=$(includedir)/gail-3.0/gail
 
 gail_private_h_sources =		\
 	gailadjustment.h		\
-	gailarrow.h			\
+	gtkarrowaccessible.h		\
 	gailbooleancell.h		\
 	gailbox.h			\
 	gailbutton.h			\
