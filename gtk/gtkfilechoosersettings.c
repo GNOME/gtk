@@ -40,7 +40,6 @@
 #define SETTINGS_GROUP		"Filechooser Settings"
 #define LOCATION_MODE_KEY	"LocationMode"
 #define SHOW_HIDDEN_KEY		"ShowHidden"
-#define EXPAND_FOLDERS_KEY	"ExpandFolders"
 #define SHOW_SIZE_COLUMN_KEY    "ShowSizeColumn"
 #define GEOMETRY_X_KEY		"GeometryX"
 #define GEOMETRY_Y_KEY		"GeometryY"
@@ -164,15 +163,6 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   else
     settings->show_hidden = value != FALSE;
 
-  /* Expand folders */
-
-  value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
-				  EXPAND_FOLDERS_KEY, &error);
-  if (error)
-    warn_if_invalid_key_and_clear_error (EXPAND_FOLDERS_KEY, &error);
-  else
-    settings->expand_folders = value != FALSE;
-
   /* Show size column */
 
   value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
@@ -247,7 +237,6 @@ _gtk_file_chooser_settings_init (GtkFileChooserSettings *settings)
   settings->sort_order = GTK_SORT_ASCENDING;
   settings->sort_column = FILE_LIST_COL_NAME;
   settings->show_hidden = FALSE;
-  settings->expand_folders = FALSE;
   settings->show_size_column = TRUE;
   settings->geometry_x	    = -1;
   settings->geometry_y	    = -1;
@@ -289,13 +278,6 @@ _gtk_file_chooser_settings_set_show_hidden (GtkFileChooserSettings *settings,
   settings->show_hidden = show_hidden != FALSE;
 }
 
-gboolean
-_gtk_file_chooser_settings_get_expand_folders (GtkFileChooserSettings *settings)
-{
-  ensure_settings_read (settings);
-  return settings->expand_folders;
-}
-
 void
 _gtk_file_chooser_settings_set_show_size_column (GtkFileChooserSettings *settings,
 					         gboolean show_column)
@@ -308,13 +290,6 @@ _gtk_file_chooser_settings_get_show_size_column (GtkFileChooserSettings *setting
 {
   ensure_settings_read (settings);
   return settings->show_size_column;
-}
-
-void
-_gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *settings,
-					       gboolean expand_folders)
-{
-  settings->expand_folders = expand_folders != FALSE;
 }
 
 void
@@ -447,8 +422,6 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 			 LOCATION_MODE_KEY, location_mode_str);
   g_key_file_set_boolean (key_file, SETTINGS_GROUP,
 			  SHOW_HIDDEN_KEY, settings->show_hidden);
-  g_key_file_set_boolean (key_file, SETTINGS_GROUP,
-			  EXPAND_FOLDERS_KEY, settings->expand_folders);
   g_key_file_set_boolean (key_file, SETTINGS_GROUP,
 			  SHOW_SIZE_COLUMN_KEY, settings->show_size_column);
   g_key_file_set_integer (key_file, SETTINGS_GROUP,

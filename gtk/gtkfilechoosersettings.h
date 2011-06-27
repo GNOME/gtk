@@ -57,7 +57,6 @@ struct _GtkFileChooserSettings
   guint settings_read    : 1;
   guint show_hidden      : 1;
   guint show_size_column : 1;
-  guint expand_folders   : 1;
 };
 
 struct _GtkFileChooserSettingsClass
@@ -76,10 +75,6 @@ void         _gtk_file_chooser_settings_set_location_mode (GtkFileChooserSetting
 gboolean _gtk_file_chooser_settings_get_show_hidden (GtkFileChooserSettings *settings);
 void     _gtk_file_chooser_settings_set_show_hidden (GtkFileChooserSettings *settings,
 						     gboolean                show_hidden);
-
-gboolean _gtk_file_chooser_settings_get_expand_folders (GtkFileChooserSettings *settings);
-void     _gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *settings,
-							gboolean                expand_folders);
 
 gboolean _gtk_file_chooser_settings_get_show_size_column (GtkFileChooserSettings *settings);
 void     _gtk_file_chooser_settings_set_show_size_column (GtkFileChooserSettings *settings,
