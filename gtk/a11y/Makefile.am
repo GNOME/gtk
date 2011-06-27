@@ -10,7 +10,6 @@ gail_c_sources =			\
 	gailbooleancell.c		\
 	gailbox.c			\
 	gailbutton.c			\
-	gailcalendar.c			\
 	gailcell.c			\
 	gailcellparent.c		\
 	gailcheckmenuitem.c		\
@@ -63,7 +62,6 @@ gail_private_h_sources =		\
 	gailbooleancell.h		\
 	gailbox.h			\
 	gailbutton.h			\
-	gailcalendar.h			\
 	gailcell.h			\
 	gailcellparent.h		\
 	gailcheckmenuitem.h		\

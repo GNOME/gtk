@@ -27,7 +27,6 @@
 #include "gailbooleancell.h"
 #include "gailbox.h"
 #include "gailbutton.h"
-#include "gailcalendar.h"
 #include "gailcell.h"
 #include "gailcheckmenuitem.h"
 #include "gailcombobox.h"
@@ -121,7 +120,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_RANGE, GailRange, gail_range, GTK_TYPE_RANGE)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCALE_BUTTON, GailScaleButton, gail_scale_button, GTK_TYPE_SCALE_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_STATUSBAR, GailStatusbar, gail_statusbar, GTK_TYPE_STATUSBAR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_NOTEBOOK, GailNotebook, gail_notebook, GTK_TYPE_NOTEBOOK)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CALENDAR, GailCalendar, gail_calendar, GTK_TYPE_CALENDAR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_PROGRESS_BAR, GailProgressBar, gail_progress_bar, GTK_TYPE_PROGRESS_BAR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TREE_VIEW, GailTreeView, gail_tree_view, GTK_TYPE_TREE_VIEW)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_FRAME, GailFrame, gail_frame, GTK_TYPE_FRAME)
@@ -892,7 +890,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCALE_BUTTON, gail_scale_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_STATUSBAR, gail_statusbar);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_NOTEBOOK, gail_notebook);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CALENDAR, gail_calendar);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_PROGRESS_BAR, gail_progress_bar);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TREE_VIEW, gail_tree_view);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_FRAME, gail_frame);
