@@ -42,7 +42,6 @@ gail_c_sources =			\
 	gailscalebutton.c		\
 	gailscrollbar.c			\
 	gailscrolledwindow.c		\
-	gailseparator.c			\
 	gtkspinbuttonaccessible.c	\
 	gailsubmenuitem.c		\
 	gailstatusbar.c			\
@@ -97,7 +96,6 @@ gail_private_h_sources =		\
 	gailscalebutton.h		\
 	gailscrollbar.h			\
 	gailscrolledwindow.h		\
-	gailseparator.h			\
 	gtkspinbuttonaccessible.h	\
 	gailsubmenuitem.h		\
 	gailstatusbar.h			\

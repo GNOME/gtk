@@ -72,6 +72,7 @@ static void       gtk_separator_get_preferred_height
                                               gint           *natural);
 static gboolean   gtk_separator_draw         (GtkWidget      *widget,
                                               cairo_t        *cr);
+static AtkObject *gtk_separator_get_accessible (GtkWidget    *widget);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET,
@@ -91,7 +92,8 @@ gtk_separator_class_init (GtkSeparatorClass *class)
   widget_class->get_preferred_width = gtk_separator_get_preferred_width;
   widget_class->get_preferred_height = gtk_separator_get_preferred_height;
 
-  widget_class->draw         = gtk_separator_draw;
+  widget_class->draw = gtk_separator_draw;
+  widget_class->get_accessible = gtk_separator_get_accessible;
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
@@ -270,6 +272,18 @@ gtk_separator_draw (GtkWidget *widget,
   gtk_style_context_restore (context);
 
   return FALSE;
+}
+
+static AtkObject *
+gtk_separator_get_accessible (GtkWidget *widget)
+{
+  AtkObject *obj;
+
+  obj = GTK_WIDGET_CLASS (gtk_separator_parent_class)->get_accessible (widget);
+
+  atk_object_set_role (obj, ATK_ROLE_SEPARATOR);
+
+  return obj;
 }
 
 /**
