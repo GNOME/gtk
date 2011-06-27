@@ -75,7 +75,6 @@ gtk_text_view_accessible_finalize (GObject *object)
 {
   GtkTextViewAccessible *text_view = GTK_TEXT_VIEW_ACCESSIBLE (object);
 
-  g_object_unref (text_view->textutil);
   if (text_view->insert_notify_handler)
     g_source_remove (text_view->insert_notify_handler);
 
@@ -144,7 +143,6 @@ gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 static void
 gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
 {
-  accessible->textutil = NULL;
   accessible->signal_name = NULL;
   accessible->previous_insert_offset = -1;
   accessible->previous_selection_bound = -1;
@@ -158,12 +156,6 @@ setup_buffer (GtkTextView           *view,
   GtkTextBuffer *buffer;
 
   buffer = gtk_text_view_get_buffer (view);
-
-  if (accessible->textutil)
-    g_object_unref (accessible->textutil);
-
-  accessible->textutil = gail_text_util_new ();
-  gail_text_util_buffer_setup (accessible->textutil, buffer);
 
   /* Set up signal callbacks */
   g_signal_connect_data (buffer, "insert-text",
@@ -200,32 +192,6 @@ gtk_text_view_accessible_get_text (AtkText *text,
 }
 
 static gchar *
-get_text_near_offset (AtkText          *text,
-                      GailOffsetType   function,
-                      AtkTextBoundary  boundary_type,
-                      gint             offset,
-                      gint             *start_offset,
-                      gint             *end_offset)
-{
-  GtkTextView *view;
-  gpointer layout = NULL;
-
-  view = GTK_TEXT_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (text)));
-
-  /*
-   * Pass the GtkTextView to the function gail_text_util_get_text()
-   * so it can find the start and end of the current line on the display.
-   */
-  if (boundary_type == ATK_TEXT_BOUNDARY_LINE_START ||
-      boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
-    layout = view;
-
-  return gail_text_util_get_text (GTK_TEXT_VIEW_ACCESSIBLE (text)->textutil, layout,
-                                  function, boundary_type, offset,
-                                    start_offset, end_offset);
-}
-
-static gchar *
 gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
                                                 gint             offset,
                                                 AtkTextBoundary  boundary_type,
@@ -233,14 +199,21 @@ gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
                                                 gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextBuffer *buffer;
+  GtkTextIter pos;
+  GtkTextIter start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     return NULL;
 
-  return get_text_near_offset (text, GAIL_AFTER_OFFSET,
-                               boundary_type, offset,
-                               start_offset, end_offset);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
+  _gtk_text_buffer_get_text_after (buffer, boundary_type,
+                                   &pos, &start, &end);
+  *start_offset = gtk_text_iter_get_offset (&start);
+  *end_offset = gtk_text_iter_get_offset (&end);
+  return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
 static gchar *
@@ -251,14 +224,21 @@ gtk_text_view_accessible_get_text_at_offset (AtkText         *text,
                                              gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextBuffer *buffer;
+  GtkTextIter pos;
+  GtkTextIter start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     return NULL;
 
-  return get_text_near_offset (text, GAIL_AT_OFFSET,
-                               boundary_type, offset,
-                               start_offset, end_offset);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
+  _gtk_text_buffer_get_text_at (buffer, boundary_type,
+                                &pos, &start, &end);
+  *start_offset = gtk_text_iter_get_offset (&start);
+  *end_offset = gtk_text_iter_get_offset (&end);
+  return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
 static gchar *
@@ -269,14 +249,21 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
                                                  gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextBuffer *buffer;
+  GtkTextIter pos;
+  GtkTextIter start, end;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     return NULL;
 
-  return get_text_near_offset (text, GAIL_BEFORE_OFFSET,
-                               boundary_type, offset,
-                               start_offset, end_offset);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
+  _gtk_text_buffer_get_text_before (buffer, boundary_type,
+                                    &pos, &start, &end);
+  *start_offset = gtk_text_iter_get_offset (&start);
+  *end_offset = gtk_text_iter_get_offset (&end);
+  return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
 static gunichar
@@ -1374,6 +1361,7 @@ static gint
 insert_idle_handler (gpointer data)
 {
   GtkTextViewAccessible *accessible = data;
+  GtkWidget *widget;
   GtkTextBuffer *buffer;
 
   g_signal_emit_by_name (data,
@@ -1384,7 +1372,8 @@ insert_idle_handler (gpointer data)
   accessible->position = 0;
   accessible->length = 0;
 
-  buffer = accessible->textutil->buffer;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
   if (accessible->insert_notify_handler)
     {
     /*
@@ -1401,16 +1390,22 @@ insert_idle_handler (gpointer data)
 static gint
 gail_streamable_content_get_n_mime_types (AtkStreamableContent *streamable)
 {
+  GtkWidget *widget;
+  GtkTextBuffer *buffer;
   gint n_mime_types = 0;
 
-  if (GTK_TEXT_VIEW_ACCESSIBLE (streamable)->textutil)
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (streamable));
+  if (widget == NULL)
+    return 0;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  if (buffer)
     {
       gint i;
       gboolean advertises_plaintext = FALSE;
       GdkAtom *atoms;
 
-      atoms = gtk_text_buffer_get_serialize_formats (GTK_TEXT_VIEW_ACCESSIBLE (streamable)->textutil->buffer,
-                                                     &n_mime_types);
+      atoms = gtk_text_buffer_get_serialize_formats (buffer, &n_mime_types);
       for (i = 0; i < n_mime_types-1; ++i)
         if (!strcmp ("text/plain", gdk_atom_name (atoms[i])))
             advertises_plaintext = TRUE;
@@ -1425,13 +1420,20 @@ static const gchar *
 gail_streamable_content_get_mime_type (AtkStreamableContent *streamable,
                                        gint                  i)
 {
-  if (GTK_TEXT_VIEW_ACCESSIBLE (streamable)->textutil)
+  GtkWidget *widget;
+  GtkTextBuffer *buffer;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (streamable));
+  if (widget == NULL)
+    return 0;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  if (buffer)
     {
       gint n_mime_types = 0;
       GdkAtom *atoms;
 
-      atoms = gtk_text_buffer_get_serialize_formats (GTK_TEXT_VIEW_ACCESSIBLE (streamable)->textutil->buffer,
-                                                     &n_mime_types);
+      atoms = gtk_text_buffer_get_serialize_formats (buffer, &n_mime_types);
       if (i < n_mime_types)
         return gdk_atom_name (atoms [i]);
       else if (i == n_mime_types)
@@ -1445,21 +1447,26 @@ static GIOChannel *
 gail_streamable_content_get_stream (AtkStreamableContent *streamable,
                                     const gchar          *mime_type)
 {
+  GtkWidget *widget;
+  GtkTextBuffer *buffer;
   gint i, n_mime_types = 0;
   GdkAtom *atoms;
 
-  if (!GTK_TEXT_VIEW_ACCESSIBLE (streamable)->textutil)
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (streamable));
+  if (widget == NULL)
+    return 0;
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  if (!buffer)
     return NULL;
 
-  atoms = gtk_text_buffer_get_serialize_formats (GTK_TEXT_VIEW_ACCESSIBLE (streamable)->textutil->buffer,
-                                                 &n_mime_types);
+  atoms = gtk_text_buffer_get_serialize_formats (buffer, &n_mime_types);
 
   for (i = 0; i < n_mime_types; ++i)
     {
       if (!strcmp ("text/plain", mime_type) ||
           !strcmp (gdk_atom_name (atoms[i]), mime_type))
         {
-          GtkTextBuffer *buffer;
           guint8 *cbuf;
           GError *err = NULL;
           gsize len, written;
@@ -1468,7 +1475,6 @@ gail_streamable_content_get_stream (AtkStreamableContent *streamable,
           GIOChannel *gio = NULL;
           int fd;
 
-          buffer = GTK_TEXT_VIEW_ACCESSIBLE (streamable)->textutil->buffer;
           gtk_text_buffer_get_iter_at_offset (buffer, &start, 0);
           gtk_text_buffer_get_iter_at_offset (buffer, &end, -1);
           if (!strcmp ("text/plain", mime_type))

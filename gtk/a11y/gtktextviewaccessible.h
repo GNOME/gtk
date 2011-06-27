@@ -21,7 +21,6 @@
 #define __GTK_TEXT_VIEW_ACCESSIBLE_H__
 
 #include "gailcontainer.h"
-#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
@@ -39,7 +38,6 @@ struct _GtkTextViewAccessible
 {
   GailContainer  parent;
 
-  GailTextUtil   *textutil;
   gint           previous_insert_offset;
   gint           previous_selection_bound;
   /*
