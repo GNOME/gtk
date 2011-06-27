@@ -117,6 +117,7 @@
 #define DRAW_TIMEOUT     20
 #define COMPLETION_TIMEOUT 300
 #define PASSWORD_HINT_MAX 8
+#define PAGE_STEP 14
 
 #define MAX_ICONS 2
 
@@ -9591,13 +9592,13 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 	    completion->priv->current_selected = -1;
 	  else if (completion->priv->current_selected < matches) 
 	    {
-	      completion->priv->current_selected -= 14;
+	      completion->priv->current_selected -= PAGE_STEP;
 	      if (completion->priv->current_selected < 0)
 		completion->priv->current_selected = 0;
 	    }
 	  else 
 	    {
-	      completion->priv->current_selected -= 14;
+	      completion->priv->current_selected -= PAGE_STEP;
 	      if (completion->priv->current_selected < matches - 1)
 		completion->priv->current_selected = matches - 1;
 	    }
@@ -9608,7 +9609,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 	    completion->priv->current_selected = 0;
 	  else if (completion->priv->current_selected < matches - 1)
 	    {
-	      completion->priv->current_selected += 14;
+	      completion->priv->current_selected += PAGE_STEP;
 	      if (completion->priv->current_selected > matches - 1)
 		completion->priv->current_selected = matches - 1;
 	    }
@@ -9618,7 +9619,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 	    }
 	  else
 	    {
-	      completion->priv->current_selected += 14;
+	      completion->priv->current_selected += PAGE_STEP;
 	      if (completion->priv->current_selected > matches + actions - 1)
 		completion->priv->current_selected = matches + actions - 1;
 	    }
