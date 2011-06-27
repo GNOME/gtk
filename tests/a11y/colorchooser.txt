@@ -265,7 +265,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
-            unnamed-GailScale-13
+            unnamed-GtkScaleAccessible-13
               "slider"
               parent: unnamed-GailContainer-12
               index: 3
@@ -289,7 +289,7 @@ window1
               parent: unnamed-GailContainer-12
               index: 4
               name: Opacity:
-              label-for: unnamed-GailScale-13
+              label-for: unnamed-GtkScaleAccessible-13
               state: enabled multi-line sensitive
               toolkit: gail
               <AtkComponent>
@@ -324,7 +324,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            unnamed-GailSeparator-14
+            unnamed-GailWidget-14
               "separator"
               parent: unnamed-GailContainer-12
               index: 5
