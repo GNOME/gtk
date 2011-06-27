@@ -57,7 +57,7 @@ typedef struct _GtkMenuPrivate GtkMenuPrivate;
  *     position where the menu shall be drawn.
  * @y: (out): address of the #gint representing the vertical position
  *     where the menu shall be drawn.  This is an output parameter.
- * @push_in: (inout): This parameter controls how menus placed outside
+ * @push_in: (out): This parameter controls how menus placed outside
  *     the monitor are handled.  If this is set to %TRUE and part of
  *     the menu is outside the monitor then GTK+ pushes the window
  *     into the visible area, effectively modifying the popup
