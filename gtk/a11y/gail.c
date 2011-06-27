@@ -33,7 +33,6 @@
 #include "gailcontainercell.h"
 #include "gailexpander.h"
 #include "gailimagecell.h"
-#include "gaillinkbutton.h"
 #include "gailmenu.h"
 #include "gailmenushell.h"
 #include "gailmenuitem.h"
@@ -103,7 +102,6 @@ static GQuark quark_focus_object = 0;
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WIDGET, GailWidget, gail_widget, GTK_TYPE_WIDGET)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CONTAINER, GailContainer, gail_container, GTK_TYPE_CONTAINER)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_BUTTON, GailButton, gail_button, GTK_TYPE_BUTTON)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_LINK_BUTTON, GailLinkButton, gail_link_button, GTK_TYPE_LINK_BUTTON)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_MENU_ITEM, GailMenuItem, gail_menu_item, gail_menu_item_new)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TOGGLE_BUTTON, GailToggleButton, gail_toggle_button, GTK_TYPE_TOGGLE_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_COMBO_BOX, GailComboBox, gail_combo_box, GTK_TYPE_COMBO_BOX)
@@ -868,7 +866,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WIDGET, gail_widget);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CONTAINER, gail_container);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_BUTTON, gail_button);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_LINK_BUTTON, gail_link_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_ITEM, gail_menu_item);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TOGGLE_BUTTON, gail_toggle_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_COMBO_BOX, gail_combo_box);

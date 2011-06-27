@@ -63,9 +63,9 @@
 #include "gtkstock.h"
 #include "gtkshow.h"
 #include "gtktooltip.h"
-
 #include "gtkintl.h"
 
+#include "a11y/gtklinkbuttonaccessible.h"
 
 struct _GtkLinkButtonPrivate
 {
@@ -214,6 +214,8 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LINK_BUTTON_ACCESSIBLE);
 }
 
 static void
