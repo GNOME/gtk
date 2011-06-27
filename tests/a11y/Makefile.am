@@ -2,7 +2,7 @@ include $(top_srcdir)/Makefile.decl
 
 check_PROGRAMS = $(TEST_PROGS)
 
-CFLAGS = \
+INCLUDES =				\
 	-I$(top_srcdir)                 \
 	-I$(top_builddir)/gdk           \
 	-I$(top_srcdir)/gdk             \
