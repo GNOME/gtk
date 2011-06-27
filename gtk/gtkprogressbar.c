@@ -33,6 +33,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include "a11y/gtkprogressbaraccessible.h"
+
 /**
  * SECTION:gtkprogressbar
  * @Short_description: A widget which indicates progress visually
@@ -284,6 +286,8 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              G_PARAM_READWRITE));
 
   g_type_class_add_private (class, sizeof (GtkProgressBarPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PROGRESS_BAR_ACCESSIBLE);
 }
 
 static void
