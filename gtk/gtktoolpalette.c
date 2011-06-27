@@ -526,6 +526,8 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
       GtkToolItemGroupInfo *group = g_ptr_array_index (palette->priv->groups, i);
       gint size;
 
+      group_sizes[i] = 0;
+
       if (!group->widget)
         continue;
 
