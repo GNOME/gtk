@@ -438,15 +438,15 @@ msgstr "Запуск %s"
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:307
 #, c-format
 msgid "Opening %s"
-msgstr "Адкрыццё %s"
+msgstr "Адчыненне %s"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] "Адкрыццё %d элемента"
-msgstr[1] "Адкрыццё %d элементаў"
-msgstr[2] "Адкрыццё %d элементаў"
+msgstr[0] "Адчыненне %d элемента"
+msgstr[1] "Адчыненне %d элементаў"
+msgstr[2] "Адчыненне %d элементаў"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -1161,7 +1161,7 @@ msgstr "Дадаць папку \"%s\" да закладак"
 #: ../gtk/gtkfilechooserdefault.c:2873
 #, c-format
 msgid "Add the current folder to the bookmarks"
-msgstr "Дадаць адкрытую папку да закладак"
+msgstr "Дадаць адчыненую папку да закладак"
 
 #: ../gtk/gtkfilechooserdefault.c:2875
 #, c-format
@@ -1482,7 +1482,7 @@ msgstr "Сістэмны (%s)"
 #. Open Link
 #: ../gtk/gtklabel.c:6302
 msgid "_Open Link"
-msgstr "_Адкрыць спасылку"
+msgstr "_Адчыніць спасылку"
 
 #. Copy Link Address
 #: ../gtk/gtklabel.c:6314
@@ -1566,7 +1566,7 @@ msgstr "default:LTR"
 #: ../gtk/gtkmain.c:909
 #, c-format
 msgid "Cannot open display: %s"
-msgstr "Не ўдалося адкрыць дысплей: %s"
+msgstr "Не ўдалося адчыніць дысплей: %s"
 
 #: ../gtk/gtkmain.c:975
 msgid "GTK+ Options"
@@ -2268,7 +2268,7 @@ msgstr ""
 #: ../gtk/gtkrecentchoosermenu.c:794
 #, c-format
 msgid "Open '%s'"
-msgstr "Адкрыць \"%s\""
+msgstr "Адчыніць \"%s\""
 
 #: ../gtk/gtkrecentchoosermenu.c:824
 msgid "Unknown item"
@@ -2380,7 +2380,7 @@ msgstr "А_чысціць"
 #: ../gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_Close"
-msgstr "_Закрыць"
+msgstr "_Зачыніць"
 
 #: ../gtk/gtkstock.c:329
 msgctxt "Stock label"
@@ -2645,7 +2645,7 @@ msgstr "До_бра"
 #: ../gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_Open"
-msgstr "_Адкрыць"
+msgstr "_Адчыніць"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:400
@@ -3909,7 +3909,7 @@ msgstr "Не ўдалося перазапісаць загаловак\n"
 #: ../gtk/updateiconcache.c:1484
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Не ўдалося адкрыць файл \"%s\": %s\n"
+msgstr "Не ўдалося адчыніць файл \"%s\": %s\n"
 
 #: ../gtk/updateiconcache.c:1492 ../gtk/updateiconcache.c:1522
 #, c-format
@@ -4494,7 +4494,7 @@ msgstr "Не ўдалося атрымаць інфармацыю аб файл�
 #: ../tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Не ўдалося адкрыць файл \"%s\": %s"
+msgstr "Не ўдалося адчыніць файл \"%s\": %s"
 
 #: ../tests/testfilechooser.c:267
 #, c-format
