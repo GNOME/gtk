@@ -252,7 +252,6 @@ typedef enum {
 #define SETTINGS_KEY_LAST_FOLDER_URI     "last-folder-uri"
 #define SETTINGS_KEY_LOCATION_MODE       "location-mode"
 #define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
-#define SETTINGS_KEY_EXPAND_FOLDERS      "expand-folders"
 #define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
 #define SETTINGS_KEY_SORT_COLUMN         "sort-column"
 #define SETTINGS_KEY_SORT_ORDER          "sort-order"
@@ -4515,16 +4514,6 @@ file_pane_create (GtkFileChooserDefault *impl,
   return vbox;
 }
 
-/* Callback used when the "Browse for more folders" expander is toggled */
-static void
-expander_changed_cb (GtkExpander           *expander,
-		     GParamSpec            *pspec,
-		     GtkFileChooserDefault *impl)
-{
-  impl->expand_folders = gtk_expander_get_expanded(GTK_EXPANDER (impl->save_expander));
-  update_appearance (impl);
-}
-
 /* Callback used when the selection changes in the save folder combo box */
 static void
 save_folder_combo_changed_cb (GtkComboBox           *combo,
@@ -4740,17 +4729,6 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->save_folder_combo);
 
-  /* Expander */
-
-  impl->save_expander = gtk_expander_new_with_mnemonic (_("_Browse for other folders"));
-  gtk_widget_set_halign (impl->save_expander, GTK_ALIGN_START);
-  gtk_widget_set_valign (impl->save_expander, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (vbox), impl->save_expander, FALSE, FALSE, 0);
-  g_signal_connect (impl->save_expander, "notify::expanded",
-		    G_CALLBACK (expander_changed_cb),
-		    impl);
-  gtk_widget_show (impl->save_expander);
-
   impl->save_widgets = vbox;
   gtk_box_pack_start (GTK_BOX (impl), impl->save_widgets, FALSE, FALSE, 0);
   gtk_box_reorder_child (GTK_BOX (impl), impl->save_widgets, 0);
@@ -4769,7 +4747,6 @@ save_widgets_destroy (GtkFileChooserDefault *impl)
   impl->location_entry = NULL;
   impl->save_folder_label = NULL;
   impl->save_folder_combo = NULL;
-  impl->save_expander = NULL;
 }
 
 /* Turns on the path bar widget.  Can be called even if we are already in that
@@ -5280,21 +5257,6 @@ update_appearance (GtkFileChooserDefault *impl)
 	text = _("Create in _folder:");
 
       gtk_label_set_text_with_mnemonic (GTK_LABEL (impl->save_folder_label), text);
-
-      if (gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
-	{
-	  gtk_widget_set_sensitive (impl->save_folder_label, FALSE);
-	  gtk_widget_set_sensitive (impl->save_folder_combo, FALSE);
-	  gtk_widget_set_has_tooltip (impl->save_folder_combo, FALSE);
-	  gtk_widget_show (impl->browse_widgets);
-	}
-      else
-	{
-	  gtk_widget_set_sensitive (impl->save_folder_label, TRUE);
-	  gtk_widget_set_sensitive (impl->save_folder_combo, TRUE);
-	  gtk_widget_set_has_tooltip (impl->save_folder_combo, TRUE);
-	  gtk_widget_hide (impl->browse_widgets);
-	}
 
       if (impl->select_multiple)
 	{
@@ -5820,14 +5782,12 @@ settings_load (GtkFileChooserDefault *impl)
 {
   LocationMode location_mode;
   gboolean show_hidden;
-  gboolean expand_folders;
   gboolean show_size_column;
   gint sort_column;
   GtkSortType sort_order;
 
   settings_ensure (impl);
 
-  expand_folders = g_settings_get_boolean (impl->settings, SETTINGS_KEY_EXPAND_FOLDERS);
   location_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE);
   show_hidden = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN);
   show_size_column = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
@@ -5837,10 +5797,6 @@ settings_load (GtkFileChooserDefault *impl)
   location_mode_set (impl, location_mode, TRUE);
 
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
-
-  impl->expand_folders = expand_folders;
-  if (impl->save_expander)
-    gtk_expander_set_expanded (GTK_EXPANDER (impl->save_expander), expand_folders);
 
   impl->show_size_column = show_size_column;
   gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
@@ -5858,14 +5814,6 @@ save_dialog_geometry (GtkFileChooserDefault *impl)
 {
   GtkWindow *toplevel;
   int x, y, width, height;
-
-  /* We don't save the geometry in non-expanded "save" mode, so that the "little
-   * dialog" won't make future Open dialogs too small.
-   */
-  if (!(impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-	|| impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
-	|| impl->expand_folders))
-    return;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
 
@@ -5901,7 +5849,6 @@ settings_save (GtkFileChooserDefault *impl)
   /* All the other state */
 
   g_settings_set_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
-  g_settings_set_boolean (impl->settings, SETTINGS_KEY_EXPAND_FOLDERS, impl->expand_folders);
   g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN,
                           gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
   g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
@@ -7975,51 +7922,39 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
 {
   GtkFileChooserDefault *impl;
   GtkRequisition req;
+  int x, y, width, height;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
-      || impl->expand_folders)
+  settings_ensure (impl);
+
+  g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
+  g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
+
+  if (x >= 0 && y >= 0 && width > 0 && height > 0)
     {
-      int x, y, width, height;
-
-      settings_ensure (impl);
-
-      g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
-      g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
-
-      if (x >= 0 && y >= 0 && width > 0 && height > 0)
-	{
-	  *default_width = width;
-	  *default_height = height;
-	  return;
-	}
-
-      find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
-
-      if (impl->preview_widget_active &&
-	  impl->preview_widget &&
-	  gtk_widget_get_visible (impl->preview_widget))
-	{
-          gtk_widget_get_preferred_size (impl->preview_box,
-                                         &req, NULL);
-	  *default_width += PREVIEW_HBOX_SPACING + req.width;
-	}
-
-      if (impl->extra_widget &&
-	  gtk_widget_get_visible (impl->extra_widget))
-	{
-          gtk_widget_get_preferred_size (impl->extra_align, &req, NULL);
-	  *default_height += gtk_box_get_spacing (GTK_BOX (chooser_embed)) + req.height;
-	}
+      *default_width = width;
+      *default_height = height;
+      return;
     }
-  else
+
+  find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
+
+  if (impl->preview_widget_active &&
+      impl->preview_widget &&
+      gtk_widget_get_visible (impl->preview_widget))
     {
-      gtk_widget_get_preferred_size (GTK_WIDGET (impl),
-                                     &req, NULL);
-      *default_width = req.width;
-      *default_height = req.height;
+      gtk_widget_get_preferred_size (impl->preview_box,
+				     &req, NULL);
+      *default_width += PREVIEW_HBOX_SPACING + req.width;
+    }
+
+  if (impl->extra_widget &&
+      gtk_widget_get_visible (impl->extra_widget))
+    {
+      gtk_widget_get_preferred_size (impl->extra_align,
+				     &req, NULL);
+      *default_height += gtk_box_get_spacing (GTK_BOX (chooser_embed)) + req.height;
     }
 }
 

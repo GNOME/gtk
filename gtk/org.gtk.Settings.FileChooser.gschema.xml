@@ -44,9 +44,6 @@
     <key name='show-hidden' type='b'>
       <default>false</default>
     </key>
-    <key name='expand-folders' type='b'>
-      <default>false</default>
-    </key>
     <key name='show-size-column' type='b'>
       <default>true</default>
     </key>

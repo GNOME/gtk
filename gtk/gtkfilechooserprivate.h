@@ -165,7 +165,6 @@ struct _GtkFileChooserDefault
 
   GtkWidget *save_folder_label;
   GtkWidget *save_folder_combo;
-  GtkWidget *save_expander;
 
   /* The file browsing widgets */
   GtkWidget *browse_widgets;
@@ -298,7 +297,6 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
-  guint expand_folders : 1;
   guint has_home : 1;
   guint has_desktop : 1;
   guint has_search : 1;
