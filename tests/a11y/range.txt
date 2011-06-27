@@ -35,6 +35,7 @@ window1
       "slider"
       parent: grid1
       index: 1
+      description: 45.5
       state: enabled focusable horizontal sensitive showing visible
       toolkit: gail
       <AtkComponent>
