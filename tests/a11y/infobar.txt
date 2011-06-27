@@ -63,7 +63,7 @@ window1
                             variant: <omitted>
                             weight: <omitted>
                             wrap-mode: word
-    unnamed-GailBox-0
+    unnamed-GailContainer-0
       "filler"
       parent: bar1
       index: 1

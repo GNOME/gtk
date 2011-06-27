@@ -7,7 +7,7 @@ window1
   layer: window
   alpha: 1
   statusbar1
-    "statusbar"
+    "filler"
     parent: window1
     index: 0
     name: 
@@ -47,7 +47,7 @@ window1
                         variant: <omitted>
                         weight: <omitted>
                         wrap-mode: word
-    unnamed-GailFrame-0
+    unnamed-GtkFrameAccessible-0
       "panel"
       parent: statusbar1
       index: 0
@@ -56,9 +56,9 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GailBox-1
+      unnamed-GailContainer-1
         "filler"
-        parent: unnamed-GailFrame-0
+        parent: unnamed-GtkFrameAccessible-0
         index: 0
         state: enabled horizontal sensitive showing visible
         toolkit: gail
@@ -67,7 +67,7 @@ window1
         alpha: 1
         
           "label"
-          parent: unnamed-GailBox-1
+          parent: unnamed-GailContainer-1
           index: 0
           name: 
           state: enabled multi-line sensitive showing visible

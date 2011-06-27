@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GailBox-0
+  unnamed-GailContainer-0
     "filler"
     parent: window1
     index: 0
@@ -16,9 +16,9 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GailBox-1
+    unnamed-GailContainer-1
       "filler"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 0
       state: enabled horizontal sensitive showing visible
       toolkit: gail
@@ -27,7 +27,7 @@ window1
       alpha: 1
       unnamed-GailImage-2
         "icon"
-        parent: unnamed-GailBox-1
+        parent: unnamed-GailContainer-1
         index: 0
         name: Information
         state: enabled sensitive showing visible
@@ -38,9 +38,9 @@ window1
         <AtkImage>
         image size: 48 x 48
         image description: (null)
-      unnamed-GailBox-3
+      unnamed-GailContainer-3
         "filler"
-        parent: unnamed-GailBox-1
+        parent: unnamed-GailContainer-1
         index: 1
         state: enabled sensitive showing vertical visible
         toolkit: gail
@@ -49,7 +49,7 @@ window1
         alpha: 1
         Information
           "label"
-          parent: unnamed-GailBox-3
+          parent: unnamed-GailContainer-3
           index: 0
           name: Information
           state: enabled focusable multi-line sensitive showing visible
@@ -88,7 +88,7 @@ window1
                               wrap-mode: word
         More Information
           "label"
-          parent: unnamed-GailBox-3
+          parent: unnamed-GailContainer-3
           index: 1
           name: More Information
           state: enabled focusable multi-line sensitive showing visible
@@ -125,9 +125,9 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
-    unnamed-GailBox-4
+    unnamed-GailContainer-4
       "filler"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gail

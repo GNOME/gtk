@@ -100,9 +100,9 @@ window1
     action 0 name: click
     action 1 name: press
     action 2 name: release
-  unnamed-GailBox-0
+  unnamed-GailContainer-0
     "filler"
-    parent: unnamed-GailBox-1
+    parent: unnamed-GailContainer-1
     index: 1
     state: enabled horizontal sensitive showing visible
     toolkit: gail
@@ -111,7 +111,7 @@ window1
     alpha: 1
     Close
       "push button"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 0
       name: Close
       state: enabled focusable sensitive
@@ -160,7 +160,7 @@ window1
       action 2 name: release
     Cancel
       "push button"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 1
       name: Cancel
       state: enabled focusable sensitive showing visible
@@ -209,7 +209,7 @@ window1
       action 2 name: release
     Finish
       "push button"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 2
       name: Finish
       state: focusable
@@ -258,7 +258,7 @@ window1
       action 2 name: release
     Go Back
       "push button"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 3
       name: Go Back
       state: enabled focusable sensitive
@@ -307,7 +307,7 @@ window1
       action 2 name: release
     Continue
       "push button"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 4
       name: Continue
       state: focusable showing visible
@@ -356,7 +356,7 @@ window1
       action 2 name: release
     Apply
       "push button"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 5
       name: Apply
       state: enabled focusable sensitive

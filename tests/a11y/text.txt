@@ -21,22 +21,16 @@ Did gyre and gimple in the wabe
     character count: 66
     caret offset: 66
     default attributes: bg-color: <omitted>
+                        bg-full-height: false
+                        direction: <omitted>
+                        editable: true
                         family-name: <omitted>
                         fg-color: <omitted>
                         indent: 0
-                        invalid: none
-                        invalid: false
-                        invalid: false
-                        invalid: false
-                        invalid: none
-                        invalid: left
-                        invalid: normal
-                        invalid: normal
-                        invisible: normal
+                        invisible: false
+                        justification: left
                         language: <omitted>
                         left-margin: 0
-                        left-margin: true
-                        left-margin: ltr
                         pixels-above-lines: 0
                         pixels-below-lines: 0
                         pixels-inside-wrap: 0
@@ -44,6 +38,12 @@ Did gyre and gimple in the wabe
                         rise: 0
                         scale: 1
                         size: <omitted>
+                        stretch: <omitted>
+                        strikethrough: false
+                        style: <omitted>
+                        underline: none
+                        variant: <omitted>
                         weight: <omitted>
+                        wrap-mode: none
     <AtkStreamableContent>
     mime types: application/x-gtk-text-buffer-rich-text text/plain

@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GailBox-0
+  unnamed-GailContainer-0
     "filler"
     parent: window1
     index: 0
@@ -16,18 +16,18 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GailBox-1
+    unnamed-GailContainer-1
       "filler"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 0
       state: enabled sensitive showing vertical visible
       toolkit: gail
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GailBox-2
+      unnamed-GailContainer-2
         "filler"
-        parent: unnamed-GailBox-1
+        parent: unnamed-GailContainer-1
         index: 0
         state: enabled sensitive showing vertical visible
         toolkit: gail
@@ -36,7 +36,7 @@ window1
         alpha: 1
         Select an application for "(null)" files
           "label"
-          parent: unnamed-GailBox-2
+          parent: unnamed-GailContainer-2
           index: 0
           name: Select an application for "(null)" files
           state: enabled multi-line sensitive showing visible
@@ -73,9 +73,9 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
-        unnamed-GailBox-3
+        unnamed-GailContainer-3
           "filler"
-          parent: unnamed-GailBox-2
+          parent: unnamed-GailContainer-2
           index: 1
           state: enabled sensitive showing vertical visible
           toolkit: gail
@@ -84,7 +84,7 @@ window1
           alpha: 1
           unnamed-GailScrolledWindow-4
             "scroll pane"
-            parent: unnamed-GailBox-3
+            parent: unnamed-GailContainer-3
             index: 0
             state: enabled focusable sensitive showing visible
             toolkit: gail
@@ -430,7 +430,7 @@ Click "Show other applications", for more options, or "Find applications online"
               minimum increment: 29.800000
           Show other applications
             "push button"
-            parent: unnamed-GailBox-3
+            parent: unnamed-GailContainer-3
             index: 1
             name: Show other applications
             state: enabled focusable sensitive showing visible
@@ -476,9 +476,9 @@ Click "Show other applications", for more options, or "Find applications online"
             action 0 name: click
             action 1 name: press
             action 2 name: release
-    unnamed-GailBox-10
+    unnamed-GailContainer-10
       "filler"
-      parent: unnamed-GailBox-0
+      parent: unnamed-GailContainer-0
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gail
@@ -487,7 +487,7 @@ Click "Show other applications", for more options, or "Find applications online"
       alpha: 1
       Select
         "push button"
-        parent: unnamed-GailBox-10
+        parent: unnamed-GailContainer-10
         index: 0
         name: Select
         state: enabled focusable sensitive showing visible default
@@ -536,7 +536,7 @@ Click "Show other applications", for more options, or "Find applications online"
         action 2 name: release
       Cancel
         "push button"
-        parent: unnamed-GailBox-10
+        parent: unnamed-GailContainer-10
         index: 1
         name: Cancel
         state: enabled focusable sensitive showing visible
