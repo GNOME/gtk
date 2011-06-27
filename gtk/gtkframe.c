@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 
+#include "a11y/gtkframeaccessible.h"
 
 /**
  * SECTION:gtkframe
@@ -221,6 +222,8 @@ gtk_frame_class_init (GtkFrameClass *class)
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
   g_type_class_add_private (class, sizeof (GtkFramePrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FRAME_ACCESSIBLE);
 }
 
 static void

@@ -32,7 +32,6 @@
 #include "gailcontainer.h"
 #include "gailcontainercell.h"
 #include "gailexpander.h"
-#include "gailframe.h"
 #include "gailimage.h"
 #include "gailimagecell.h"
 #include "gaillinkbutton.h"
@@ -121,7 +120,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_STATUSBAR, GailStatusbar, gail_statusbar, GTK_
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_NOTEBOOK, GailNotebook, gail_notebook, GTK_TYPE_NOTEBOOK)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_PROGRESS_BAR, GailProgressBar, gail_progress_bar, GTK_TYPE_PROGRESS_BAR)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_TREE_VIEW, GailTreeView, gail_tree_view, GTK_TYPE_TREE_VIEW)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_FRAME, GailFrame, gail_frame, GTK_TYPE_FRAME)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_RADIO_BUTTON, GailRadioButton, gail_radio_button, GTK_TYPE_RADIO_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCROLLED_WINDOW, GailScrolledWindow, gail_scrolled_window, GTK_TYPE_SCROLLED_WINDOW)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_PANED, GailPaned, gail_paned, GTK_TYPE_PANED)
@@ -890,7 +888,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_NOTEBOOK, gail_notebook);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_PROGRESS_BAR, gail_progress_bar);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_TREE_VIEW, gail_tree_view);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_FRAME, gail_frame);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TEXT, gail_text_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell);
