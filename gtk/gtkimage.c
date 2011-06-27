@@ -39,6 +39,8 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 
+#include "a11y/gtkimageaccessible.h"
+
 /**
  * SECTION:gtkimage
  * @Short_description: A widget displaying an image
@@ -357,6 +359,8 @@ gtk_image_class_init (GtkImageClass *class)
                                                          GTK_PARAM_READWRITE));
 
   g_type_class_add_private (class, sizeof (GtkImagePrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_IMAGE_ACCESSIBLE);
 }
 
 static void

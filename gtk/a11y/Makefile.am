@@ -19,7 +19,7 @@ gail_c_sources =			\
 	gtkentryaccessible.c		\
 	gailexpander.c			\
 	gtkframeaccessible.c		\
-	gailimage.c			\
+	gtkimageaccessible.c		\
 	gailimagecell.c			\
 	gtklabelaccessible.c		\
 	gaillinkbutton.c		\
@@ -71,7 +71,7 @@ gail_private_h_sources =		\
 	gailexpander.h			\
 	gailfactory.h			\
 	gtkframeaccessible.h		\
-	gailimage.h			\
+	gtkimageaccessible.h		\
 	gailimagecell.h			\
 	gtklabelaccessible.h		\
 	gaillinkbutton.h		\

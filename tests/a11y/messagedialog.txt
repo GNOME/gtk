@@ -25,7 +25,7 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GailImage-2
+      unnamed-GtkImageAccessible-2
         "icon"
         parent: unnamed-GailContainer-1
         index: 0
