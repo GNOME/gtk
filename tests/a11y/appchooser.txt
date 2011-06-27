@@ -396,7 +396,7 @@ Click "Show other applications", for more options, or "Find applications online"
                   <AtkAction>
                   action 0 name: activate
                   action 0 description: activate the cell
-            unnamed-GailScrollbar-8
+            unnamed-GtkScrollbarAccessible-8
               "scroll bar"
               parent: unnamed-GailScrolledWindow-4
               index: 1
@@ -412,7 +412,7 @@ Click "Show other applications", for more options, or "Find applications online"
               maximum value: 0.000000
               current value: 0.000000
               minimum increment: 39.800000
-            unnamed-GailScrollbar-9
+            unnamed-GtkScrollbarAccessible-9
               "scroll bar"
               parent: unnamed-GailScrolledWindow-4
               index: 2

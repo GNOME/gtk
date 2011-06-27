@@ -31,6 +31,8 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
+#include "a11y/gtkscrollbaraccessible.h"
+
 
 /**
  * SECTION:gtkscrollbar
@@ -108,6 +110,8 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
                                                                  P_("Display a second forward arrow button on the opposite end of the scrollbar"),
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCROLLBAR_ACCESSIBLE);
 }
 
 static void

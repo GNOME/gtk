@@ -20,42 +20,27 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gailscrollbar.h"
+#include "gtkscrollbaraccessible.h"
 
-static void gail_scrollbar_class_init  (GailScrollbarClass *klass);
-static void gail_scrollbar_init        (GailScrollbar      *accessible);
-static void gail_scrollbar_initialize  (AtkObject           *accessible,
-                                        gpointer             data);
 
-static gint gail_scrollbar_get_index_in_parent (AtkObject *accessible);
-
-G_DEFINE_TYPE (GailScrollbar, gail_scrollbar, GAIL_TYPE_RANGE)
-
-static void	 
-gail_scrollbar_class_init (GailScrollbarClass *klass)
-{
-  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  class->initialize = gail_scrollbar_initialize;
-  class->get_index_in_parent = gail_scrollbar_get_index_in_parent;
-}
+G_DEFINE_TYPE (GtkScrollbarAccessible, gtk_scrollbar_accessible, GAIL_TYPE_RANGE)
 
 static void
-gail_scrollbar_init (GailScrollbar      *accessible)
+gtk_scrollbar_accessible_init (GtkScrollbarAccessible *accessible)
 {
 }
 
 static void
-gail_scrollbar_initialize (AtkObject *accessible,
+gtk_scrollbar_accessible_initialize (AtkObject *accessible,
                            gpointer  data)
 {
-  ATK_OBJECT_CLASS (gail_scrollbar_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (gtk_scrollbar_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_SCROLL_BAR;
 }
 
 static gint
-gail_scrollbar_get_index_in_parent (AtkObject *accessible)
+gtk_scrollbar_accessible_get_index_in_parent (AtkObject *accessible)
 {
   GtkWidget *widget;
   GtkWidget *parent;
@@ -64,19 +49,12 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
   gint id;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-
   if (widget == NULL)
-  {
-    /*
-     * State is defunct
-     */
     return -1;
-  }
-  g_return_val_if_fail (GTK_IS_SCROLLBAR (widget), -1);
 
   parent = gtk_widget_get_parent (widget);
   if (!GTK_IS_SCROLLED_WINDOW (parent))
-    return ATK_OBJECT_CLASS (gail_scrollbar_parent_class)->get_index_in_parent (accessible);
+    return ATK_OBJECT_CLASS (gtk_scrollbar_accessible_parent_class)->get_index_in_parent (accessible);
 
   scrolled_window = GTK_SCROLLED_WINDOW (parent);
   id = 0;
@@ -103,4 +81,13 @@ gail_scrollbar_get_index_in_parent (AtkObject *accessible)
     }
 
   return -1;
-} 
+}
+
+static void
+gtk_scrollbar_accessible_class_init (GtkScrollbarAccessibleClass *klass)
+{
+  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
+
+  class->initialize = gtk_scrollbar_accessible_initialize;
+  class->get_index_in_parent = gtk_scrollbar_accessible_get_index_in_parent;
+}
