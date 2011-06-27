@@ -8,7 +8,6 @@ gail_c_sources =			\
 	gailadjustment.c		\
 	gtkarrowaccessible.c		\
 	gailbooleancell.c		\
-	gailbox.c			\
 	gailbutton.c			\
 	gailcell.c			\
 	gailcellparent.c		\
@@ -60,7 +59,6 @@ gail_private_h_sources =		\
 	gailadjustment.h		\
 	gtkarrowaccessible.h		\
 	gailbooleancell.h		\
-	gailbox.h			\
 	gailbutton.h			\
 	gailcell.h			\
 	gailcellparent.h		\

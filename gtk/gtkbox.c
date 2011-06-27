@@ -198,6 +198,9 @@ static void               gtk_box_get_preferred_height_for_width (GtkWidget     
                                                                   gint                *minimum_height,
                                                                   gint                *natural_height);
 
+static AtkObject         *gtk_box_get_accessible                 (GtkWidget    *widget);
+
+
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
                                                 NULL))
@@ -219,6 +222,7 @@ gtk_box_class_init (GtkBoxClass *class)
   widget_class->get_preferred_width_for_height = gtk_box_get_preferred_width_for_height;
   widget_class->compute_expand                 = gtk_box_compute_expand;
   widget_class->direction_changed              = gtk_box_direction_changed;
+  widget_class->get_accessible                 = gtk_box_get_accessible;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -1348,6 +1352,18 @@ gtk_box_get_preferred_height_for_width (GtkWidget *widget,
     gtk_box_compute_size_for_opposing_orientation (box, width, minimum_height, natural_height);
   else
     gtk_box_compute_size_for_orientation (box, width, minimum_height, natural_height);
+}
+
+static AtkObject *
+gtk_box_get_accessible (GtkWidget *widget)
+{
+  AtkObject *obj;
+
+  obj = GTK_WIDGET_CLASS (gtk_box_parent_class)->get_accessible (widget);
+
+  atk_object_set_role (obj, ATK_ROLE_FILLER);
+
+  return obj;
 }
 
 /**
