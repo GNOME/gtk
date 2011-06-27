@@ -42,6 +42,8 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 
+#include "a11y/gtkscaleaccessible.h"
+
 
 /**
  * SECTION:gtkscale
@@ -410,6 +412,8 @@ gtk_scale_class_init (GtkScaleClass *class)
                       GTK_SCROLL_END);
 
   g_type_class_add_private (gobject_class, sizeof (GtkScalePrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_ACCESSIBLE);
 }
 
 static void
