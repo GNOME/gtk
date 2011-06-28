@@ -4383,7 +4383,6 @@ static void
 save_widgets_create (GtkFileChooserDefault *impl)
 {
   GtkWidget *vbox;
-  GtkWidget *table;
   GtkWidget *widget;
 
   if (impl->save_widgets != NULL)
@@ -4393,17 +4392,17 @@ save_widgets_create (GtkFileChooserDefault *impl)
 
   vbox = gtk_vbox_new (FALSE, 12);
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
-  gtk_widget_show (table);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 12);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  impl->save_widgets_table = gtk_table_new (2, 2, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), impl->save_widgets_table, FALSE, FALSE, 0);
+  gtk_widget_show (impl->save_widgets_table);
+  gtk_table_set_row_spacings (GTK_TABLE (impl->save_widgets_table), 12);
+  gtk_table_set_col_spacings (GTK_TABLE (impl->save_widgets_table), 12);
 
   /* Label */
 
   widget = gtk_label_new_with_mnemonic (_("_Name:"));
   gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), widget,
+  gtk_table_attach (GTK_TABLE (impl->save_widgets_table), widget,
 		    0, 1, 0, 1,
 		    GTK_FILL, GTK_FILL,
 		    0, 0);
@@ -4417,7 +4416,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
   _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
-  gtk_table_attach (GTK_TABLE (table), impl->location_entry,
+  gtk_table_attach (GTK_TABLE (impl->save_widgets_table), impl->location_entry,
 		    1, 2, 0, 1,
 		    GTK_EXPAND | GTK_FILL, 0,
 		    0, 0);
@@ -4427,19 +4426,11 @@ save_widgets_create (GtkFileChooserDefault *impl)
   /* Folder combo */
   impl->save_folder_label = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (impl->save_folder_label), 0.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), impl->save_folder_label,
+  gtk_table_attach (GTK_TABLE (impl->save_widgets_table), impl->save_folder_label,
 		    0, 1, 1, 2,
 		    GTK_FILL, GTK_FILL,
 		    0, 0);
   gtk_widget_show (impl->save_folder_label);
-
-  /*
-  gtk_table_attach (GTK_TABLE (table), impl->save_folder_combo,
-		    1, 2, 1, 2,
-		    GTK_EXPAND | GTK_FILL, GTK_FILL,
-		    0, 0);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->save_folder_combo);
-  */
 
   impl->save_widgets = vbox;
   gtk_box_pack_start (GTK_BOX (impl), impl->save_widgets, FALSE, FALSE, 0);
@@ -4456,6 +4447,7 @@ save_widgets_destroy (GtkFileChooserDefault *impl)
 
   gtk_widget_destroy (impl->save_widgets);
   impl->save_widgets = NULL;
+  impl->save_widgets_table = NULL;
   impl->location_entry = NULL;
   impl->save_folder_label = NULL;
 }
@@ -4709,19 +4701,18 @@ location_button_create (GtkFileChooserDefault *impl)
 }
 
 /* Creates the main hpaned with the widgets shared by Open and Save mode */
-static GtkWidget *
+static void
 browse_widgets_create (GtkFileChooserDefault *impl)
 {
-  GtkWidget *vbox;
   GtkWidget *hpaned;
   GtkWidget *widget;
   GtkSizeGroup *size_group;
 
   /* size group is used by the [+][-] buttons and the filter combo */
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-  vbox = gtk_vbox_new (FALSE, 12);
+  impl->browse_widgets_box = gtk_vbox_new (FALSE, 12);
 
-  /* Location widgets */
+  /* Location widgets - note browse_path_bar_hbox is packed in the right place until switch_path_bar() */
   impl->browse_path_bar_hbox = gtk_hbox_new (FALSE, 12);
   gtk_box_pack_start (GTK_BOX (vbox), impl->browse_path_bar_hbox, FALSE, FALSE, 0);
   gtk_widget_show (impl->browse_path_bar_hbox);
@@ -4753,7 +4744,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   /* Box for the location label and entry */
 
   impl->location_entry_box = gtk_hbox_new (FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (vbox), impl->location_entry_box, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), impl->location_entry_box, FALSE, FALSE, 0);
 
   impl->location_label = gtk_label_new_with_mnemonic (_("_Location:"));
   gtk_widget_show (impl->location_label);
@@ -4762,7 +4753,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   /* Paned widget */
   hpaned = gtk_hpaned_new ();
   gtk_widget_show (hpaned);
-  gtk_box_pack_start (GTK_BOX (vbox), hpaned, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), hpaned, TRUE, TRUE, 0);
 
   widget = shortcuts_pane_create (impl, size_group);
   gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
@@ -4770,8 +4761,6 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
   gtk_paned_set_position (GTK_PANED (hpaned), 148);
   g_object_unref (size_group);
-
-  return vbox;
 }
 
 static GObject*
@@ -4797,8 +4786,8 @@ gtk_file_chooser_default_constructor (GType                  type,
   shortcuts_model_create (impl);
 
   /* The browse widgets */
-  impl->browse_widgets = browse_widgets_create (impl);
-  gtk_box_pack_start (GTK_BOX (impl), impl->browse_widgets, TRUE, TRUE, 0);
+  browse_widgets_create (impl);
+  gtk_box_pack_start (GTK_BOX (impl), impl->browse_widgets_box, TRUE, TRUE, 0);
 
   /* Alignment to hold extra widget */
   impl->extra_align = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
@@ -4942,6 +4931,51 @@ unset_file_system_backend (GtkFileChooserDefault *impl)
   impl->file_system = NULL;
 }
 
+/* Saves the widgets around the pathbar so they can be reparented later
+ * in the correct place.  This function must be called paired with
+ * restore_path_bar().
+ */
+static void
+save_path_bar (GtkFileChooserDefault *impl)
+{
+  GtkWidget *parent;
+
+  g_object_ref (impl->browse_path_bar_hbox);
+
+  parent = gtk_widget_get_parent (impl->browse_path_bar_hbox);
+  if (parent)
+    gtk_container_remove (GTK_CONTAINER (parent), impl->browse_path_bar_hbox);
+}
+
+/* Reparents the path bar and the "Create folder" button to the right place:
+ * Above the file list in Open mode, or to the right of the "Save in folder:"
+ * label in Save mode.  The save_path_bar() function must be called before this
+ * one.
+ */
+static void
+restore_path_bar (GtkFileChooserDefault *impl)
+{
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    {
+      gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), impl->browse_path_bar_hbox, FALSE, FALSE, 0);
+      gtk_box_reorder_child (GTK_BOX (impl->browse_widgets_box), impl->browse_path_bar_hbox, 0);
+    }
+  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    {
+      gtk_table_attach (GTK_TABLE (impl->save_widgets_table), impl->browse_path_bar_hbox,
+			1, 2, 1, 2,
+			GTK_EXPAND | GTK_FILL, GTK_FILL,
+			0, 0);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->browse_path_bar);
+    }
+  else
+    g_assert_not_reached ();
+
+  g_object_unref (impl->browse_path_bar_hbox);
+}
+
 /* This function is basically a do_all function.
  *
  * It sets the visibility on all the widgets based on the current state, and
@@ -4950,6 +4984,8 @@ unset_file_system_backend (GtkFileChooserDefault *impl)
 static void
 update_appearance (GtkFileChooserDefault *impl)
 {
+  save_path_bar (impl);
+
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
@@ -4977,12 +5013,14 @@ update_appearance (GtkFileChooserDefault *impl)
     {
       gtk_widget_show (impl->location_button);
       save_widgets_destroy (impl);
-      gtk_widget_show (impl->browse_widgets);
+      gtk_widget_show (impl->browse_widgets_box);
       location_mode_set (impl, impl->location_mode, TRUE);
     }
 
   if (impl->location_entry)
     _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
+
+  restore_path_bar (impl);
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN || !impl->create_folders)
     gtk_widget_hide (impl->browse_new_folder_button);
