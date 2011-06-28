@@ -57,7 +57,6 @@ static gint                  gail_button_real_add_gtk           (GtkContainer   
 static void                  atk_action_interface_init  (AtkActionIface *iface);
 static gboolean              gail_button_do_action      (AtkAction      *action,
                                                          gint           i);
-static gboolean              idle_do_action             (gpointer       data);
 static gint                  gail_button_get_n_actions  (AtkAction      *action);
 static const gchar* gail_button_get_keybinding (AtkAction      *action,
                                                          gint           i);
@@ -169,8 +168,6 @@ static void
 gail_button_init (GailButton *button)
 {
   button->click_keybinding = NULL;
-  button->action_queue = NULL;
-  button->action_idle_handler = 0;
   button->textutil = NULL;
 }
 
@@ -410,7 +407,6 @@ gail_button_do_action (AtkAction *action,
                        gint      i)
 {
   GtkWidget *widget;
-  GailButton *button;
   gboolean return_value = TRUE;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
@@ -423,61 +419,16 @@ gail_button_do_action (AtkAction *action,
   if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
-  button = GAIL_BUTTON (action); 
-
   switch (i)
     {
     case 0:
-    case 1:
-    case 2:
-      if (!button->action_queue) 
-	{
-	  button->action_queue = g_queue_new ();
-	}
-      g_queue_push_head (button->action_queue, GINT_TO_POINTER(i));
-      if (!button->action_idle_handler)
-	button->action_idle_handler = gdk_threads_add_idle (idle_do_action, button);
+      gtk_button_clicked (GTK_BUTTON (widget));
       break;
     default:
       return_value = FALSE;
       break;
     }
   return return_value; 
-}
-
-static gboolean
-idle_do_action (gpointer data)
-{
-  GtkButton *button; 
-  GtkWidget *widget;
-  GailButton *gail_button;
-
-  gail_button = GAIL_BUTTON (data);
-  gail_button->action_idle_handler = 0;
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_button));
-
-  if (widget == NULL /* State is defunct */ ||
-      !gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
-    return FALSE;
-
-  g_object_ref (gail_button);
-
-  button = GTK_BUTTON (widget); 
-  while (!g_queue_is_empty (gail_button->action_queue)) 
-    {
-      gint action_number = GPOINTER_TO_INT(g_queue_pop_head (gail_button->action_queue));
-      switch (action_number)
-	{
-	case 0:
-          gtk_button_clicked (button);
-	  break;
-	default:
-	  g_assert_not_reached ();
-	  break;
-	}
-    }
-  g_object_unref (gail_button);
-  return FALSE;
 }
 
 static gint
@@ -1227,15 +1178,6 @@ gail_button_finalize (GObject            *object)
   GailButton *button = GAIL_BUTTON (object);
 
   g_free (button->click_keybinding);
-  if (button->action_idle_handler)
-    {
-      g_source_remove (button->action_idle_handler);
-      button->action_idle_handler = 0;
-    }
-  if (button->action_queue)
-    {
-      g_queue_free (button->action_queue);
-    }
   if (button->textutil)
     {
       g_object_unref (button->textutil);
