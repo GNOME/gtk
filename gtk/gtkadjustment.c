@@ -809,3 +809,47 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
   if (need_emission)
     gtk_adjustment_value_changed (adjustment);
 }
+
+/**
+ * gtk_adjustment_get_minimum_increment:
+ * @adjustment: a #GtkAdjustment
+ *
+ * Gets the smaller of step increment and page increment.
+ *
+ * Returns: the minimum increment of @adjustment
+ *
+ * Since: 3.2
+ */
+gdouble
+gtk_adjustment_get_minimum_increment (GtkAdjustment *adjustment)
+{
+  GtkAdjustmentPrivate *priv;
+  gdouble minimum_increment;
+
+  g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0);
+
+  priv = adjustment->priv;
+
+    if (priv->step_increment != 0 && priv->page_increment != 0)
+    {
+      if (ABS (priv->step_increment) < ABS (priv->page_increment))
+        minimum_increment = priv->step_increment;
+      else
+        minimum_increment = priv->page_increment;
+    }
+  else if (priv->step_increment == 0 && priv->page_increment == 0)
+    {
+      minimum_increment = 0;
+    }
+  else if (priv->step_increment == 0)
+    {
+      minimum_increment = priv->page_increment;
+    }
+  else
+    {
+      minimum_increment = priv->step_increment;
+    }
+
+  return minimum_increment;
+}
+
