@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkpango.h>
 #include "gtklabelaccessible.h"
-#include <libgail-util/gailmisc.h>
 
 
 static void atk_text_interface_init (AtkTextIface *iface);
