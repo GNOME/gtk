@@ -23,7 +23,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtkx.h>
-#include "gailadjustment.h"
 #include "gailbooleancell.h"
 #include "gailbutton.h"
 #include "gailcell.h"
