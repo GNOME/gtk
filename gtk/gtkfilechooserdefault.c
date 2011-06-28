@@ -9052,7 +9052,6 @@ typedef struct
   GtkFileChooserDefault *impl;
   GList *items;
   gint n_items;
-  gint n_loaded_items;
   guint needs_sorting : 1;
 } RecentLoadData;
 
@@ -9154,7 +9153,6 @@ recent_idle_load (gpointer data)
             }
          }
 
-      load_data->n_loaded_items = 0;
       load_data->needs_sorting = FALSE;
 
       return TRUE;
@@ -9195,7 +9193,6 @@ recent_start_loading (GtkFileChooserDefault *impl)
   load_data->impl = impl;
   load_data->items = NULL;
   load_data->n_items = 0;
-  load_data->n_loaded_items = 0;
   load_data->needs_sorting = TRUE;
 
   /* begin lazy loading the recent files into the model */
