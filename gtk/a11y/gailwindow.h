@@ -37,9 +37,6 @@ typedef struct _GailWindowClass              GailWindowClass;
 struct _GailWindow
 {
   GailContainer parent;
-
-  guint name_change_handler;
-  gchar *previous_name;
 };
 
 GType gail_window_get_type (void);

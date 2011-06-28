@@ -45,7 +45,6 @@ static void                  gail_window_init            (GailWindow   *accessib
 
 static void                  gail_window_real_initialize (AtkObject    *obj,
                                                           gpointer     data);
-static void                  gail_window_finalize        (GObject      *object);
 
 static const gchar* gail_window_get_name       (AtkObject     *accessible);
 
@@ -85,10 +84,7 @@ static void
 gail_window_class_init (GailWindowClass *klass)
 {
   GailWidgetClass *widget_class;
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-
-  gobject_class->finalize = gail_window_finalize;
 
   widget_class = (GailWidgetClass*)klass;
   widget_class->focus_gtk = gail_window_real_focus_gtk;
@@ -185,7 +181,6 @@ gail_window_real_initialize (AtkObject *obj,
                              gpointer  data)
 {
   GtkWidget *widget = GTK_WIDGET (data);
-  GailWindow *window;
 
   /*
    * A GailWindow can be created for a GtkHandleBox or a GtkWindow
@@ -194,10 +189,6 @@ gail_window_real_initialize (AtkObject *obj,
     return;
 
   ATK_OBJECT_CLASS (gail_window_parent_class)->initialize (obj, data);
-
-  window = GAIL_WINDOW (obj);
-  window->name_change_handler = 0;
-  window->previous_name = g_strdup (gtk_window_get_title (GTK_WINDOW (data)));
 
   g_signal_connect (data,
                     "window_state_event",
@@ -240,25 +231,6 @@ gail_window_real_initialize (AtkObject *obj,
   if (obj->role == ATK_ROLE_TOOL_TIP &&
       gtk_widget_get_mapped (widget))
     atk_object_notify_state_change (obj, ATK_STATE_SHOWING, 1);
-}
-
-static void
-gail_window_finalize (GObject *object)
-{
-  GailWindow* window = GAIL_WINDOW (object);
-
-  if (window->name_change_handler)
-    {
-      g_source_remove (window->name_change_handler);
-      window->name_change_handler = 0;
-    }
-  if (window->previous_name)
-    {
-      g_free (window->previous_name);
-      window->previous_name = NULL;
-    }
-
-  G_OBJECT_CLASS (gail_window_parent_class)->finalize (object);
 }
 
 static const gchar*
@@ -449,60 +421,17 @@ gail_window_ref_state_set (AtkObject *accessible)
   return state_set;
 }
 
-static gboolean
-idle_notify_name_change (gpointer data)
-{
-  GailWindow *window;
-  AtkObject *obj;
-
-  window = GAIL_WINDOW (data);
-  window->name_change_handler = 0;
-  if (gtk_accessible_get_widget (GTK_ACCESSIBLE (window)) == NULL)
-    return FALSE;
-
-  obj = ATK_OBJECT (window);
-  if (obj->name == NULL)
-    {
-    /*
-     * The title has changed so notify a change in accessible-name
-     */
-      g_object_notify (G_OBJECT (obj), "accessible-name");
-    }
-  g_signal_emit_by_name (obj, "visible_data_changed");
-
-  return FALSE;
-}
-
 static void
 gail_window_real_notify_gtk (GObject		*obj,
                              GParamSpec		*pspec)
 {
   GtkWidget *widget = GTK_WIDGET (obj);
   AtkObject* atk_obj = gtk_widget_get_accessible (widget);
-  GailWindow *window = GAIL_WINDOW (atk_obj);
-  const gchar *name;
-  gboolean name_changed = FALSE;
 
   if (strcmp (pspec->name, "title") == 0)
     {
-      name = gtk_window_get_title (GTK_WINDOW (widget));
-      if (name)
-        {
-         if (window->previous_name == NULL ||
-             strcmp (name, window->previous_name) != 0)
-           name_changed = TRUE;
-        }
-      else if (window->previous_name != NULL)
-        name_changed = TRUE;
-
-      if (name_changed)
-        {
-          g_free (window->previous_name);
-          window->previous_name = g_strdup (name);
-       
-          if (window->name_change_handler == 0)
-            window->name_change_handler = gdk_threads_add_idle (idle_notify_name_change, atk_obj);
-        }
+      g_object_notify (G_OBJECT (atk_obj), "accessible-name");
+      g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
   else
     GAIL_WIDGET_CLASS (gail_window_parent_class)->notify_gtk (obj, pspec);
