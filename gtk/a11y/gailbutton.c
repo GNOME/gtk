@@ -451,31 +451,16 @@ idle_do_action (gpointer data)
   GtkButton *button; 
   GtkWidget *widget;
   GailButton *gail_button;
-  GdkEvent tmp_event;
-  GdkWindow *window;
 
   gail_button = GAIL_BUTTON (data);
   gail_button->action_idle_handler = 0;
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_button));
-  window = gtk_widget_get_window (widget);
-
-  tmp_event.button.type = GDK_BUTTON_RELEASE;
-  tmp_event.button.window = window;
-  tmp_event.button.button = 1;
-  tmp_event.button.send_event = TRUE;
-  tmp_event.button.time = GDK_CURRENT_TIME;
-  tmp_event.button.axes = NULL;
-
-  g_object_ref (gail_button);
 
   if (widget == NULL /* State is defunct */ ||
       !gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
-    {
-      g_object_unref (gail_button);
-      return FALSE;
-    }
-  else
-    gtk_widget_event (widget, &tmp_event);
+    return FALSE;
+
+  g_object_ref (gail_button);
 
   button = GTK_BUTTON (widget); 
   while (!g_queue_is_empty (gail_button->action_queue)) 
@@ -484,32 +469,7 @@ idle_do_action (gpointer data)
       switch (action_number)
 	{
 	case 0:
-	  /* first a press */ 
-
-          /* FIXME: Do not access public member
-	  button->in_button = TRUE;
-          */
-	  g_signal_emit_by_name (button, "enter");
-	  /*
-	   * Simulate a button press event. calling gtk_button_pressed() does
-	   * not get the job done for a GtkOptionMenu.  
-	   */
-	  tmp_event.button.type = GDK_BUTTON_PRESS;
-	  tmp_event.button.window = window;
-	  tmp_event.button.button = 1;
-	  tmp_event.button.send_event = TRUE;
-	  tmp_event.button.time = GDK_CURRENT_TIME;
-	  tmp_event.button.axes = NULL;
-	  
-	  gtk_widget_event (widget, &tmp_event);
-
-	  /* then a release */
-	  tmp_event.button.type = GDK_BUTTON_RELEASE;
-	  gtk_widget_event (widget, &tmp_event);
-          /* FIXME: Do not access public member
-	  button->in_button = FALSE;
-          */
-	  g_signal_emit_by_name (button, "leave");
+          gtk_button_clicked (button);
 	  break;
 	default:
 	  g_assert_not_reached ();
