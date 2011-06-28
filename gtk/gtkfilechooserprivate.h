@@ -164,7 +164,6 @@ struct _GtkFileChooserDefault
   GtkWidget *save_widgets;
 
   GtkWidget *save_folder_label;
-  GtkWidget *save_folder_combo;
 
   /* The file browsing widgets */
   GtkWidget *browse_widgets;
@@ -221,11 +220,6 @@ struct _GtkFileChooserDefault
    */
   GtkTreeModel *shortcuts_pane_filter_model;
   
-  /* Filter for the "Save in folder" combo.  We filter out the Search row and
-   * its separator.
-   */
-  GtkTreeModel *shortcuts_combo_filter_model;
-
   /* Handles */
   GSList *loading_shortcuts;
   GSList *reload_icon_cancellables;

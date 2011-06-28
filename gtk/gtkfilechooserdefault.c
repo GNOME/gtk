@@ -386,8 +386,6 @@ static void add_bookmark_button_clicked_cb    (GtkButton             *button,
 					       GtkFileChooserDefault *impl);
 static void remove_bookmark_button_clicked_cb (GtkButton             *button,
 					       GtkFileChooserDefault *impl);
-static void save_folder_combo_changed_cb      (GtkComboBox           *combo,
-					       GtkFileChooserDefault *impl);
 
 static void update_cell_renderer_attributes (GtkFileChooserDefault *impl);
 
@@ -826,9 +824,6 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   if (impl->shortcuts_pane_filter_model)
     g_object_unref (impl->shortcuts_pane_filter_model);
-
-  if (impl->shortcuts_combo_filter_model)
-    g_object_unref (impl->shortcuts_combo_filter_model);
 
   shortcuts_free (impl);
 
@@ -1518,32 +1513,6 @@ get_file_info_finished (GCancellable *cancellable,
   if (request->impl->shortcuts_pane_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (request->impl->shortcuts_pane_filter_model));
 
-  if (request->impl->shortcuts_combo_filter_model)
-    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (request->impl->shortcuts_combo_filter_model));
-
-  if (request->type == SHORTCUTS_CURRENT_FOLDER &&
-      request->impl->save_folder_combo != NULL)
-    {
-      /* The current folder is updated via _activate_iter(), don't
-       * have save_folder_combo_changed_cb() call _activate_iter()
-       * again.
-       */
-      g_signal_handlers_block_by_func (request->impl->save_folder_combo,
-				       G_CALLBACK (save_folder_combo_changed_cb),
-				       request->impl);
-      
-      if (request->impl->has_search)
-        pos -= 1;
-
-      if (request->impl->has_recent)
-        pos -= 2;
-
-      gtk_combo_box_set_active (GTK_COMBO_BOX (request->impl->save_folder_combo), pos);
-      g_signal_handlers_unblock_by_func (request->impl->save_folder_combo,
-				         G_CALLBACK (save_folder_combo_changed_cb),
-				         request->impl);
-    }
-
   if (pixbuf)
     g_object_unref (pixbuf);
 
@@ -1727,33 +1696,6 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
 
   if (impl->shortcuts_pane_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_pane_filter_model));
-
-  if (impl->shortcuts_combo_filter_model)
-    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model));
-
-  if (type == SHORTCUTS_CURRENT_FOLDER && impl->save_folder_combo != NULL)
-    {
-      /* The current folder is updated via _activate_iter(), don't
-       * have save_folder_combo_changed_cb() call _activate_iter()
-       * again.
-       */
-      gint combo_pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
-
-      if (impl->has_search)
-        combo_pos -= 1;
-
-      if (impl->has_recent)
-        combo_pos -= 2;
-      
-      g_signal_handlers_block_by_func (impl->save_folder_combo,
-				       G_CALLBACK (save_folder_combo_changed_cb),
-				       impl);
-      
-      gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), combo_pos);
-      g_signal_handlers_unblock_by_func (impl->save_folder_combo,
-				         G_CALLBACK (save_folder_combo_changed_cb),
-				         impl);
-    }
 
   g_free (label_copy);
 
@@ -2041,9 +1983,6 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
   if (impl->shortcuts_pane_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_pane_filter_model));
 
-  if (impl->shortcuts_combo_filter_model)
-    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model));
-
   impl->changing_folder = old_changing_folders;
 
   profile_end ("end", NULL);
@@ -2079,7 +2018,6 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
   gboolean old_changing_folders;
   GtkTreeIter iter;
   GFile *list_selected = NULL;
-  GFile *combo_selected = NULL;
   ShortcutType shortcut_type;
   gpointer col_data;
 
@@ -2098,25 +2036,6 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 
       if (col_data && shortcut_type == SHORTCUT_TYPE_FILE)
 	list_selected = g_object_ref (col_data);
-    }
-
-  if (impl->save_folder_combo &&
-      gtk_combo_box_get_active_iter (GTK_COMBO_BOX (impl->save_folder_combo), 
-				     &iter))
-    {
-      GtkTreeIter child_iter;
-
-      gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER  (impl->shortcuts_combo_filter_model),
-							&child_iter,
-							&iter);
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), 
-			  &child_iter, 
-			  SHORTCUTS_COL_DATA, &col_data,
-			  SHORTCUTS_COL_TYPE, &shortcut_type,
-			  -1);
-      
-      if (col_data && shortcut_type == SHORTCUT_TYPE_FILE)
-	combo_selected = g_object_ref (col_data);
     }
 
   if (impl->num_bookmarks > 0)
@@ -2138,32 +2057,10 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
   if (impl->shortcuts_pane_filter_model)
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_pane_filter_model));
 
-  if (impl->shortcuts_combo_filter_model)
-    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model));
-
   if (list_selected)
     {
       shortcuts_find_folder (impl, list_selected);
       g_object_unref (list_selected);
-    }
-
-  if (combo_selected)
-    {
-      gint pos;
-
-      pos = shortcut_find_position (impl, combo_selected);
-      if (pos != -1)
-        {
-          if (impl->has_search)
-            pos -= 1;
-
-          if (impl->has_recent)
-            pos -= 2;
-
-	  gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), pos);
-        }
-
-      g_object_unref (combo_selected);
     }
 
   impl->changing_folder = old_changing_folders;
@@ -2206,16 +2103,6 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 
       if (base_file)
         g_object_unref (base_file);
-    }
-  else if (impl->save_folder_combo != NULL)
-    {
-      if (impl->has_search)
-        pos -= 1;
-
-      if (impl->has_recent)
-        pos -= 2; /* + separator */
-
-      gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), pos);
     }
 }
 
@@ -4491,157 +4378,6 @@ file_pane_create (GtkFileChooserDefault *impl,
   return vbox;
 }
 
-/* Callback used when the selection changes in the save folder combo box */
-static void
-save_folder_combo_changed_cb (GtkComboBox           *combo,
-			      GtkFileChooserDefault *impl)
-{
-  GtkTreeIter iter;
-
-  if (impl->changing_folder)
-    return;
-
-  if (gtk_combo_box_get_active_iter (combo, &iter))
-    {
-      GtkTreeIter child_iter;
-      
-      gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model),
-							&child_iter,
-							&iter);
-      shortcuts_activate_iter (impl, &child_iter);
-    }
-}
-
-static void
-save_folder_update_tooltip (GtkComboBox           *combo,
-			    GtkFileChooserDefault *impl)
-{
-  GtkTreeIter iter;
-  gchar *tooltip;
-
-  tooltip = NULL;
-
-  if (gtk_combo_box_get_active_iter (combo, &iter))
-    {
-      GtkTreeIter child_iter;
-      gpointer col_data;
-      ShortcutType shortcut_type;
-
-      gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model),
-                                                        &child_iter,
-                                                        &iter);
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &child_iter,
-                          SHORTCUTS_COL_DATA, &col_data,
-                          SHORTCUTS_COL_TYPE, &shortcut_type,
-                          -1);
-
-      if (shortcut_type == SHORTCUT_TYPE_FILE)
-        tooltip = g_file_get_parse_name (G_FILE (col_data));
-   }
-
-  gtk_widget_set_tooltip_text (GTK_WIDGET (combo), tooltip);
-  gtk_widget_set_has_tooltip (GTK_WIDGET (combo),
-                              gtk_widget_get_sensitive (GTK_WIDGET (combo)));
-  g_free (tooltip);
-}
-
-/* Filter function used to filter out the Search item and its separator.  
- * Used for the "Save in folder" combo box, so that these items do not appear in it.
- */
-static gboolean
-shortcuts_combo_filter_func (GtkTreeModel *model,
-			     GtkTreeIter  *iter,
-			     gpointer      data)
-{
-  GtkFileChooserDefault *impl;
-  GtkTreePath *tree_path;
-  gint *indices;
-  int idx;
-  gboolean retval;
-
-  impl = GTK_FILE_CHOOSER_DEFAULT (data);
-
-  g_assert (model == GTK_TREE_MODEL (impl->shortcuts_model));
-
-  tree_path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), iter);
-  g_assert (tree_path != NULL);
-
-  indices = gtk_tree_path_get_indices (tree_path);
-
-  retval = TRUE;
-
-  if (impl->has_search)
-    {
-      idx = shortcuts_get_index (impl, SHORTCUTS_SEARCH);
-      if (idx == indices[0])
-        retval = FALSE;
-    }
-  
-  if (impl->has_recent)
-    {
-      idx = shortcuts_get_index (impl, SHORTCUTS_RECENT);
-      if (idx == indices[0])
-        retval = FALSE;
-      else
-        {
-          idx = shortcuts_get_index (impl, SHORTCUTS_RECENT_SEPARATOR);
-          if (idx == indices[0])
-            retval = FALSE;
-        }
-     }
-
-  gtk_tree_path_free (tree_path);
-
-  return retval;
- }
-
-/* Creates the combo box with the save folders */
-static GtkWidget *
-save_folder_combo_create (GtkFileChooserDefault *impl)
-{
-  GtkWidget *combo;
-  GtkCellRenderer *cell;
-
-  impl->shortcuts_combo_filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->shortcuts_model), NULL);
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model),
-					  shortcuts_combo_filter_func,
-					  impl,
-					  NULL);
-
-  combo = g_object_new (GTK_TYPE_COMBO_BOX,
-			"model", impl->shortcuts_combo_filter_model,
-			"focus-on-click", FALSE,
-                        NULL);
-  gtk_widget_show (combo);
-
-  cell = gtk_cell_renderer_pixbuf_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, FALSE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell,
-				  "pixbuf", SHORTCUTS_COL_PIXBUF,
-				  "visible", SHORTCUTS_COL_PIXBUF_VISIBLE,
-				  "sensitive", SHORTCUTS_COL_PIXBUF_VISIBLE,
-				  NULL);
-
-  cell = gtk_cell_renderer_text_new ();
-  g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell,
-				  "text", SHORTCUTS_COL_NAME,
-				  "sensitive", SHORTCUTS_COL_PIXBUF_VISIBLE,
-				  NULL);
-
-  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combo),
-					shortcuts_row_separator_func,
-					NULL, NULL);
-
-  g_signal_connect (combo, "changed",
-		    G_CALLBACK (save_folder_combo_changed_cb), impl);
-  g_signal_connect (combo, "changed",
-		    G_CALLBACK (save_folder_update_tooltip), impl);
-
-  return combo;
-}
-
 /* Creates the widgets specific to Save mode */
 static void
 save_widgets_create (GtkFileChooserDefault *impl)
@@ -4697,12 +4433,13 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    0, 0);
   gtk_widget_show (impl->save_folder_label);
 
-  impl->save_folder_combo = save_folder_combo_create (impl);
+  /*
   gtk_table_attach (GTK_TABLE (table), impl->save_folder_combo,
 		    1, 2, 1, 2,
 		    GTK_EXPAND | GTK_FILL, GTK_FILL,
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->save_folder_combo);
+  */
 
   impl->save_widgets = vbox;
   gtk_box_pack_start (GTK_BOX (impl), impl->save_widgets, FALSE, FALSE, 0);
@@ -4721,7 +4458,6 @@ save_widgets_destroy (GtkFileChooserDefault *impl)
   impl->save_widgets = NULL;
   impl->location_entry = NULL;
   impl->save_folder_label = NULL;
-  impl->save_folder_combo = NULL;
 }
 
 /* Turns on the path bar widget.  Can be called even if we are already in that
