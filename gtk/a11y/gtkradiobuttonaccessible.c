@@ -23,7 +23,7 @@
 #include "gtkradiobuttonaccessible.h"
 
 
-G_DEFINE_TYPE (GtkRadioButtonAccessible, gtk_radio_button_accessible, GAIL_TYPE_TOGGLE_BUTTON)
+G_DEFINE_TYPE (GtkRadioButtonAccessible, gtk_radio_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
 
 static void
 gtk_radio_button_accessible_initialize (AtkObject *accessible,

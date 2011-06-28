@@ -45,7 +45,7 @@ gail_c_sources =			\
 	gailtextcell.c			\
 	gailtextutil.c			\
 	gtktextviewaccessible.c		\
-	gailtogglebutton.c		\
+	gtktogglebuttonaccessible.c	\
 	gailtoplevel.c			\
 	gailtreeview.c			\
 	gailutil.c			\
@@ -96,7 +96,7 @@ gail_private_h_sources =		\
 	gailtextcell.h			\
 	gailtextutil.h			\
 	gtktextviewaccessible.h		\
-	gailtogglebutton.h		\
+	gtktogglebuttonaccessible.h	\
 	gailtoplevel.h			\
 	gailtreeview.h			\
 	gailutil.h			\

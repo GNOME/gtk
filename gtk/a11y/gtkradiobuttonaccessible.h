@@ -20,7 +20,7 @@
 #ifndef __GTK_RADIO_BUTTON_ACCESSIBLE_H__
 #define __GTK_RADIO_BUTTON_ACCESSIBLE_H__
 
-#include "gailtogglebutton.h"
+#include "gtktogglebuttonaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkRadioButtonAccessibleClass GtkRadioButtonAccessibleClass;
 
 struct _GtkRadioButtonAccessible
 {
-  GailToggleButton parent;
+  GtkToggleButtonAccessible parent;
 
   GSList *old_group;
 };
 
 struct _GtkRadioButtonAccessibleClass
 {
-  GailToggleButtonClass parent_class;
+  GtkToggleButtonAccessibleClass parent_class;
 };
 
 GType gtk_radio_button_accessible_get_type (void);
