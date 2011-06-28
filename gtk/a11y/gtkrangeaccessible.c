@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gtkrangeaccessible.h"
-#include "gailadjustment.h"
 
 
 static void atk_action_interface_init (AtkActionIface *iface);
@@ -58,14 +57,11 @@ gtk_range_accessible_initialize (AtkObject *obj,
   adj = gtk_range_get_adjustment (gtk_range);
   if (adj)
     {
-      range->adjustment = gail_adjustment_new (adj);
       g_signal_connect (adj,
                         "value-changed",
                         G_CALLBACK (gtk_range_accessible_value_changed),
                         range);
     }
-  else
-    range->adjustment = NULL;
 
   obj->role = ATK_ROLE_SLIDER;
 }
@@ -74,20 +70,16 @@ static void
 gtk_range_accessible_finalize (GObject *object)
 {
   GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (object);
+  GtkWidget *widget;
+  GtkAdjustment *adj;
 
-  if (range->adjustment)
-    {
-      /* The GtkAdjustment may live on so we need to disconnect
-       * the signal handler
-       */
-      if (GAIL_ADJUSTMENT (range->adjustment)->adjustment)
-        g_signal_handlers_disconnect_by_func (GAIL_ADJUSTMENT (range->adjustment)->adjustment,
-                                              (void *)gtk_range_accessible_value_changed,
-                                              range);
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
+  adj = gtk_range_get_adjustment (GTK_RANGE (widget));
 
-      g_object_unref (range->adjustment);
-      range->adjustment = NULL;
-    }
+  if (adj)
+    g_signal_handlers_disconnect_by_func (adj,
+                                          gtk_range_accessible_value_changed,
+                                          range);
 
   if (range->action_idle_handler)
     {
@@ -102,26 +94,14 @@ static void
 gtk_range_accessible_notify_gtk (GObject    *obj,
                                  GParamSpec *pspec)
 {
-  GtkAdjustment *adj;
   GtkWidget *widget = GTK_WIDGET (obj);
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (gtk_widget_get_accessible (widget));
+  GtkAdjustment *adj;
+  AtkObject *range;
 
   if (strcmp (pspec->name, "adjustment") == 0)
     {
-      /* Get rid of the GailAdjustment for the GtkAdjustment
-       * which was associated with the range.
-       */
-      if (range->adjustment)
-        {
-          g_object_unref (range->adjustment);
-          range->adjustment = NULL;
-        }
-
-      /* Create the GailAdjustment when notify for "adjustment" property
-       * is received
-       */
+      range = gtk_widget_get_accessible (widget);
       adj = gtk_range_get_adjustment (GTK_RANGE (widget));
-      range->adjustment = gail_adjustment_new (adj);
       g_signal_connect (adj,
                         "value-changed",
                         G_CALLBACK (gtk_range_accessible_value_changed),
@@ -155,37 +135,40 @@ static void
 gtk_range_accessible_get_current_value (AtkValue *obj,
                                         GValue   *value)
 {
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (obj);
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
 
-  if (range->adjustment == NULL)
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
     return;
 
-  atk_value_get_current_value (ATK_VALUE (range->adjustment), value);
+  memset (value,  0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
+  g_value_set_double (value, gtk_adjustment_get_value (adjustment));
 }
 
 static void
 gtk_range_accessible_get_maximum_value (AtkValue *obj,
                                         GValue   *value)
 {
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (obj);
-  GtkRange *gtk_range;
-  GtkAdjustment *gtk_adjustment;
-  gdouble max = 0;
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
+  gdouble max;
 
-  if (range->adjustment == NULL)
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
     return;
 
-  atk_value_get_maximum_value (ATK_VALUE (range->adjustment), value);
+  max = gtk_adjustment_get_upper (adjustment)
+        - gtk_adjustment_get_page_size (adjustment);
 
-  gtk_range = GTK_RANGE (gtk_accessible_get_widget (GTK_ACCESSIBLE (range)));
+  if (gtk_range_get_restrict_to_fill_level (GTK_RANGE (widget)))
+    max = MIN (max, gtk_range_get_fill_level (GTK_RANGE (widget)));
 
-  gtk_adjustment = gtk_range_get_adjustment (gtk_range);
-  max = g_value_get_double (value);
-  max -=  gtk_adjustment_get_page_size (gtk_adjustment);
-
-  if (gtk_range_get_restrict_to_fill_level (gtk_range))
-    max = MIN (max, gtk_range_get_fill_level (gtk_range));
-
+  memset (value,  0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, max);
 }
 
@@ -193,50 +176,51 @@ static void
 gtk_range_accessible_get_minimum_value (AtkValue *obj,
                                         GValue   *value)
 {
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (obj);
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
 
-  if (range->adjustment == NULL)
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
     return;
 
-  atk_value_get_minimum_value (ATK_VALUE (range->adjustment), value);
+  memset (value,  0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
+  g_value_set_double (value, gtk_adjustment_get_lower (adjustment));
 }
 
 static void
 gtk_range_accessible_get_minimum_increment (AtkValue *obj,
                                             GValue   *value)
 {
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (obj);
+  GtkWidget *widget;
+  GtkAdjustment *adjustment;
 
-  if (range->adjustment == NULL)
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
     return;
 
-  atk_value_get_minimum_increment (ATK_VALUE (range->adjustment), value);
+  memset (value,  0, sizeof (GValue));
+  g_value_init (value, G_TYPE_DOUBLE);
+  g_value_set_double (value, gtk_adjustment_get_minimum_increment (adjustment));
 }
 
 static gboolean
 gtk_range_accessible_set_current_value (AtkValue     *obj,
                                         const GValue *value)
 {
-  GtkWidget *widget;
+ GtkWidget *widget;
+  GtkAdjustment *adjustment;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (widget == NULL)
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
+  if (adjustment == NULL)
     return FALSE;
 
-  if (G_VALUE_HOLDS_DOUBLE (value))
-    {
-      GtkRange *range = GTK_RANGE (widget);
-      gdouble new_value;
+  gtk_adjustment_set_value (adjustment, g_value_get_double (value));
 
-      new_value = g_value_get_double (value);
-      gtk_range_set_value (range, new_value);
-
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
+  return TRUE;
 }
 
 static void

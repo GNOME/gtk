@@ -37,8 +37,6 @@ typedef struct _GtkSpinButtonAccessibleClass  GtkSpinButtonAccessibleClass;
 struct _GtkSpinButtonAccessible
 {
   GtkEntryAccessible parent;
-
-  AtkObject *adjustment;
 };
 
 struct _GtkSpinButtonAccessibleClass

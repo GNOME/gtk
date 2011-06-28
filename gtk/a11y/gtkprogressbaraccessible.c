@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 
 #include "gtkprogressbaraccessible.h"
-#include "gailadjustment.h"
 
 
 static void atk_value_interface_init (AtkValueIface  *iface);

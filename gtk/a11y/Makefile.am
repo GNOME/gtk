@@ -5,7 +5,6 @@ noinst_LTLIBRARIES = libgail.la
 gail_c_sources =			\
 	gail-private-macros.h		\
 	gail.c				\
-	gailadjustment.c		\
 	gtkarrowaccessible.c		\
 	gailbooleancell.c		\
 	gailbutton.c			\
@@ -56,7 +55,6 @@ gail_c_sources =			\
 libgailincludedir=$(includedir)/gail-3.0/gail
 
 gail_private_h_sources =		\
-	gailadjustment.h		\
 	gtkarrowaccessible.h		\
 	gailbooleancell.h		\
 	gailbutton.h			\

@@ -38,8 +38,7 @@ struct _GtkRangeAccessible
 {
   GailWidget parent;
 
-  AtkObject *adjustment;
-  guint     action_idle_handler;
+  guint action_idle_handler;
 };
 
 struct _GtkRangeAccessibleClass
