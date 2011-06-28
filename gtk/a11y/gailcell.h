@@ -49,8 +49,6 @@ struct _GailCell
   AtkStateSet *state_set;
   GList       *action_list;
   void (*refresh_index) (GailCell *cell);
-  gint         action_idle_handler;
-  ACTION_FUNC  action_func;
 };
 
 GType gail_cell_get_type (void);

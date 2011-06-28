@@ -60,7 +60,6 @@ static const gchar *
 				                   gint                index);
 static gboolean     gail_cell_action_do_action    (AtkAction           *action,
 			                           gint                index);
-static gboolean     idle_do_action                (gpointer            data);
 
 static void         atk_component_interface_init  (AtkComponentIface   *iface);
 static void         gail_cell_get_extents         (AtkComponent        *component,
@@ -147,11 +146,6 @@ gail_cell_object_finalize (GObject *obj)
     {
       g_list_foreach (cell->action_list, _gail_cell_destroy_action_info, NULL);
       g_list_free (cell->action_list);
-    }
-  if (cell->action_idle_handler)
-    {
-      g_source_remove (cell->action_idle_handler);
-      cell->action_idle_handler = 0;
     }
   relation_set = atk_object_ref_relation_set (ATK_OBJECT (obj));
   if (ATK_IS_RELATION_SET (relation_set))
@@ -442,23 +436,10 @@ gail_cell_action_do_action (AtkAction *action,
     return FALSE;
   if (info->do_action_func == NULL)
     return FALSE;
-  if (cell->action_idle_handler)
-    return FALSE;
-  cell->action_func = info->do_action_func;
-  cell->action_idle_handler = gdk_threads_add_idle (idle_do_action, cell);
+  
+  info->do_action_func (cell);
+
   return TRUE;
-}
-
-static gboolean
-idle_do_action (gpointer data)
-{
-  GailCell *cell;
-
-  cell = GAIL_CELL (data);
-  cell->action_idle_handler = 0;
-  cell->action_func (cell);
-
-  return FALSE;
 }
 
 static void
