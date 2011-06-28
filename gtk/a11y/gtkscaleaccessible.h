@@ -20,8 +20,7 @@
 #ifndef __GTK_SCALE_ACCESSIBLE_H__
 #define __GTK_SCALE_ACCESSIBLE_H__
 
-#include "gailrange.h"
-#include "gailtextutil.h"
+#include "gtkrangeaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -37,12 +36,12 @@ typedef struct _GtkScaleAccessibleClass GtkScaleAccessibleClass;
 
 struct _GtkScaleAccessible
 {
-  GailRange parent;
+  GtkRangeAccessible parent;
 };
 
 struct _GtkScaleAccessibleClass
 {
-  GailRangeClass parent_class;
+  GtkRangeAccessibleClass parent_class;
 };
 
 GType gtk_scale_accessible_get_type (void);

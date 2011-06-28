@@ -20,7 +20,7 @@
 #ifndef __GTK_SCROLLBAR_ACCESSIBLE_H__
 #define __GTK_SCROLLBAR_ACCESSIBLE_H__
 
-#include "gailrange.h"
+#include "gtkrangeaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +36,12 @@ typedef struct _GtkScrollbarAccessibleClass GtkScrollbarAccessibleClass;
 
 struct _GtkScrollbarAccessible
 {
-  GailRange parent;
+  GtkRangeAccessible parent;
 };
 
 struct _GtkScrollbarAccessibleClass
 {
-  GailRangeClass parent_class;
+  GtkRangeAccessibleClass parent_class;
 };
 
 GType gtk_scrollbar_accessible_get_type (void);

@@ -23,7 +23,7 @@
 #include "gtkscrollbaraccessible.h"
 
 
-G_DEFINE_TYPE (GtkScrollbarAccessible, gtk_scrollbar_accessible, GAIL_TYPE_RANGE)
+G_DEFINE_TYPE (GtkScrollbarAccessible, gtk_scrollbar_accessible, GTK_TYPE_RANGE_ACCESSIBLE)
 
 static void
 gtk_scrollbar_accessible_init (GtkScrollbarAccessible *accessible)

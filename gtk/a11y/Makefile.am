@@ -34,7 +34,7 @@ gail_c_sources =			\
 	gailradiobutton.c		\
 	gailradiomenuitem.c		\
 	gailradiosubmenuitem.c		\
-	gailrange.c			\
+	gtkrangeaccessible.c		\
 	gailrenderercell.c		\
 	gtkscaleaccessible.c		\
 	gailscalebutton.c		\
@@ -86,7 +86,7 @@ gail_private_h_sources =		\
 	gailradiobutton.h		\
 	gailradiomenuitem.h		\
 	gailradiosubmenuitem.h		\
-	gailrange.h			\
+	gtkrangeaccessible.h		\
 	gailrenderercell.h		\
 	gtkscaleaccessible.h		\
 	gailscalebutton.h		\

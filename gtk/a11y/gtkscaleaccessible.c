@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 #include "gtkscaleaccessible.h"
 
-G_DEFINE_TYPE (GtkScaleAccessible, gtk_scale_accessible, GAIL_TYPE_RANGE)
+G_DEFINE_TYPE (GtkScaleAccessible, gtk_scale_accessible, GTK_TYPE_RANGE_ACCESSIBLE)
 
 static const gchar *
 gtk_scale_accessible_get_description (AtkObject *object)
