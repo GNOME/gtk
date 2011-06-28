@@ -70,8 +70,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     column 1 description: Column 2
     <column 1 header>
     Column 2
@@ -120,8 +118,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     Column 1
       "table column header"
       parent: tree1
@@ -168,8 +164,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     Column 2
       "table column header"
       parent: tree1
@@ -216,8 +210,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     One
       "table cell"
       parent: tree1

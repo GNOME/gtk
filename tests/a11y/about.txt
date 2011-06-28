@@ -368,8 +368,6 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>l
-        action 1 name: press
-        action 2 name: release
       Credits
         "toggle button"
         parent: unnamed-GailContainer-7
@@ -417,8 +415,6 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>r
-        action 1 name: press
-        action 2 name: release
       Close
         "push button"
         parent: unnamed-GailContainer-7
@@ -466,5 +462,3 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>c
-        action 1 name: press
-        action 2 name: release

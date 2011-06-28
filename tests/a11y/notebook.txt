@@ -104,8 +104,6 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>y
-        action 1 name: press
-        action 2 name: release
     Tab 2
       "page tab"
       parent: notebook1
@@ -192,5 +190,3 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>n
-        action 1 name: press
-        action 2 name: release

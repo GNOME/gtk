@@ -26,8 +26,6 @@ Click to prevent further changes
     image description: (null)
     <AtkAction>
     action 0 name: click
-    action 1 name: press
-    action 2 name: release
     Lock
       "label"
       parent: button1

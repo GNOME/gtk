@@ -70,8 +70,6 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
-        action 1 name: press
-        action 2 name: release
       unnamed-GailComboBox-0
         "combo box"
         parent: button4
@@ -176,8 +174,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
       Sans
         "label"
         parent: button3
@@ -274,8 +270,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     button1
       "combo box"
       parent: grid1

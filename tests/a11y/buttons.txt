@@ -76,8 +76,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     button3
       "radio button"
       parent: grid1
@@ -126,8 +124,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     button2
       "check box"
       parent: grid1
@@ -174,8 +170,6 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release
     button1
       "toggle button"
       parent: grid1
@@ -222,5 +216,3 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      action 1 name: press
-      action 2 name: release

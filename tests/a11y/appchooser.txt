@@ -153,8 +153,6 @@ window1
                 image description: (null)
                 <AtkAction>
                 action 0 name: click
-                action 1 name: press
-                action 2 name: release
               
                 "table column header"
                 parent: unnamed-GailTreeView-5
@@ -201,8 +199,6 @@ window1
                 image description: (null)
                 <AtkAction>
                 action 0 name: click
-                action 1 name: press
-                action 2 name: release
               unnamed-GailContainerCell-6
                 "table cell"
                 parent: unnamed-GailTreeView-5
@@ -474,8 +470,6 @@ Click "Show other applications", for more options, or "Find applications online"
             image description: (null)
             <AtkAction>
             action 0 name: click
-            action 1 name: press
-            action 2 name: release
     unnamed-GailContainer-10
       "filler"
       parent: unnamed-GailContainer-0
@@ -532,8 +526,6 @@ Click "Show other applications", for more options, or "Find applications online"
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>s
-        action 1 name: press
-        action 2 name: release
       Cancel
         "push button"
         parent: unnamed-GailContainer-10
@@ -581,5 +573,3 @@ Click "Show other applications", for more options, or "Find applications online"
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>c
-        action 1 name: press
-        action 2 name: release

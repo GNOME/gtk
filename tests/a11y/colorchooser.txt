@@ -121,8 +121,6 @@ window1
               image description: (null)
               <AtkAction>
               action 0 name: click
-              action 1 name: press
-              action 2 name: release
         unnamed-GailContainer-11
           "filler"
           parent: unnamed-GailContainer-2
@@ -1362,8 +1360,6 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>h
-        action 1 name: press
-        action 2 name: release
       OK
         "push button"
         parent: unnamed-GailContainer-57
@@ -1411,8 +1407,6 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>o
-        action 1 name: press
-        action 2 name: release
       Cancel
         "push button"
         parent: unnamed-GailContainer-57
@@ -1460,5 +1454,3 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>c
-        action 1 name: press
-        action 2 name: release

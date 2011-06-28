@@ -51,8 +51,6 @@ window1
     image description: (null)
     <AtkAction>
     action 0 name: click
-    action 1 name: press
-    action 2 name: release
   button2
     "push button"
     index: 1
@@ -98,8 +96,6 @@ window1
     image description: (null)
     <AtkAction>
     action 0 name: click
-    action 1 name: press
-    action 2 name: release
   unnamed-GailContainer-0
     "filler"
     parent: unnamed-GailContainer-1
@@ -156,8 +152,6 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>c
-      action 1 name: press
-      action 2 name: release
     Cancel
       "push button"
       parent: unnamed-GailContainer-0
@@ -205,8 +199,6 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>c
-      action 1 name: press
-      action 2 name: release
     Finish
       "push button"
       parent: unnamed-GailContainer-0
@@ -254,8 +246,6 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>f
-      action 1 name: press
-      action 2 name: release
     Go Back
       "push button"
       parent: unnamed-GailContainer-0
@@ -303,8 +293,6 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>b
-      action 1 name: press
-      action 2 name: release
     Continue
       "push button"
       parent: unnamed-GailContainer-0
@@ -352,8 +340,6 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>o
-      action 1 name: press
-      action 2 name: release
     Apply
       "push button"
       parent: unnamed-GailContainer-0
@@ -401,5 +387,3 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>a
-      action 1 name: press
-      action 2 name: release

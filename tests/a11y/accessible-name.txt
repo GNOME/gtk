@@ -52,5 +52,3 @@ window1
     image description: (null)
     <AtkAction>
     action 0 name: click
-    action 1 name: press
-    action 2 name: release

@@ -511,30 +511,6 @@ idle_do_action (gpointer data)
           */
 	  g_signal_emit_by_name (button, "leave");
 	  break;
-	case 1:
-          /* FIXME: Do not access public member
-	  button->in_button = TRUE;
-          */
-	  g_signal_emit_by_name (button, "enter");
-	  /*
-	   * Simulate a button press event. calling gtk_button_pressed() does
-	   * not get the job done for a GtkOptionMenu.  
-	   */
-	  tmp_event.button.type = GDK_BUTTON_PRESS;
-	  tmp_event.button.window = window;
-	  tmp_event.button.button = 1;
-	  tmp_event.button.send_event = TRUE;
-	  tmp_event.button.time = GDK_CURRENT_TIME;
-	  tmp_event.button.axes = NULL;
-	  
-	  gtk_widget_event (widget, &tmp_event);
-	  break;
-	case 2:
-          /* FIXME: Do not access public member
-	  button->in_button = FALSE;
-          */
-	  g_signal_emit_by_name (button, "leave");
-	  break;
 	default:
 	  g_assert_not_reached ();
 	  break;
@@ -547,7 +523,7 @@ idle_do_action (gpointer data)
 static gint
 gail_button_get_n_actions (AtkAction *action)
 {
-  return 3;
+  return 1;
 }
 
 static const gchar*
@@ -638,23 +614,6 @@ gail_button_action_get_name (AtkAction *action,
        * the state of a toggle button check box or radio button.
        */ 
       return_value = "click";
-      break;
-    case 1:
-      /*
-       * This action simulates a button press by simulating moving the
-       * mouse into the button followed by pressing the left mouse button.
-       */
-      return_value = "press";
-      break;
-    case 2:
-      /*
-       * This action simulates releasing the left mouse button outside the 
-       * button.
-       *
-       * To simulate releasing the left mouse button inside the button use
-       * the click action.
-       */
-      return_value = "release";
       break;
     default:
       return_value = NULL;
