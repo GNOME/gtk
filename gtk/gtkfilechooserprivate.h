@@ -162,11 +162,12 @@ struct _GtkFileChooserDefault
 
   /* Save mode widgets */
   GtkWidget *save_widgets;
+  GtkWidget *save_widgets_table;
 
   GtkWidget *save_folder_label;
 
   /* The file browsing widgets */
-  GtkWidget *browse_widgets;
+  GtkWidget *browse_widgets_box;
   GtkWidget *browse_shortcuts_tree_view;
   GtkWidget *browse_shortcuts_add_button;
   GtkWidget *browse_shortcuts_remove_button;
