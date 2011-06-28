@@ -40,7 +40,6 @@ struct _GailExpander
   GailContainer parent;
 
   gchar         *activate_keybinding;
-  guint         action_idle_handler;
 
   GailTextUtil   *textutil;
 };

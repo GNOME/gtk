@@ -49,7 +49,6 @@ static const gchar* gail_expander_get_full_text    (GtkExpander       *widget);
 static void                  atk_action_interface_init  (AtkActionIface *iface);
 static gboolean              gail_expander_do_action    (AtkAction      *action,
                                                          gint           i);
-static gboolean              idle_do_action             (gpointer       data);
 static gint                  gail_expander_get_n_actions(AtkAction      *action);
 static const gchar* gail_expander_get_keybinding
                                                         (AtkAction      *action,
@@ -85,7 +84,6 @@ static void
 gail_expander_init (GailExpander *expander)
 {
   expander->activate_keybinding = NULL;
-  expander->action_idle_handler = 0;
   expander->textutil = NULL;
 }
 
@@ -305,7 +303,6 @@ gail_expander_do_action (AtkAction *action,
                          gint      i)
 {
   GtkWidget *widget;
-  GailExpander *expander;
   gboolean return_value = TRUE;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
@@ -318,39 +315,16 @@ gail_expander_do_action (AtkAction *action,
   if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
-  expander = GAIL_EXPANDER (action);
   switch (i)
     {
     case 0:
-      if (expander->action_idle_handler)
-        return_value = FALSE;
-      else
-	expander->action_idle_handler = gdk_threads_add_idle (idle_do_action, expander);
+      gtk_widget_activate (widget);
       break;
     default:
       return_value = FALSE;
       break;
     }
   return return_value; 
-}
-
-static gboolean
-idle_do_action (gpointer data)
-{
-  GtkWidget *widget;
-  GailExpander *gail_expander;
-
-  gail_expander = GAIL_EXPANDER (data);
-  gail_expander->action_idle_handler = 0;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_expander));
-  if (widget == NULL /* State is defunct */ ||
-      !gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
-    return FALSE;
-
-  gtk_widget_activate (widget);
-
-  return FALSE;
 }
 
 static gint
@@ -454,11 +428,6 @@ gail_expander_finalize (GObject *object)
   GailExpander *expander = GAIL_EXPANDER (object);
 
   g_free (expander->activate_keybinding);
-  if (expander->action_idle_handler)
-    {
-      g_source_remove (expander->action_idle_handler);
-      expander->action_idle_handler = 0;
-    }
   if (expander->textutil)
     g_object_unref (expander->textutil);
 
