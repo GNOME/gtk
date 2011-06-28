@@ -29,7 +29,7 @@ gail_c_sources =			\
 	gailmenuitem.c			\
 	gailnotebook.c			\
 	gailnotebookpage.c		\
-	gailpaned.c			\
+	gtkpanedaccessible.c		\
 	gtkprogressbaraccessible.c	\
 	gailradiobutton.c		\
 	gailradiomenuitem.c		\
@@ -81,7 +81,7 @@ gail_private_h_sources =		\
 	gailmenuitem.h			\
 	gailnotebook.h			\
 	gailnotebookpage.h		\
-	gailpaned.h			\
+	gtkpanedaccessible.h		\
 	gtkprogressbaraccessible.h	\
 	gailradiobutton.h		\
 	gailradiomenuitem.h		\

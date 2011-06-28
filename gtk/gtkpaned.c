@@ -36,7 +36,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-
+#include "a11y/gtkpanedaccessible.h"
 
 /**
  * SECTION:gtkpaned
@@ -653,6 +653,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   add_move_binding (binding_set, GDK_KEY_KP_End, 0, GTK_SCROLL_END);
 
   g_type_class_add_private (object_class, sizeof (GtkPanedPrivate));
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PANED_ACCESSIBLE);
 }
 
 static GType
