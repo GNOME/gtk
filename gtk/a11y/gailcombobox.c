@@ -39,7 +39,6 @@ static void         atk_action_interface_init              (AtkActionIface *ifac
 
 static gboolean     gail_combo_box_do_action               (AtkAction      *action,
                                                             gint           i);
-static gboolean     idle_do_action                         (gpointer       data);
 static gint         gail_combo_box_get_n_actions           (AtkAction      *action);
 static const gchar* gail_combo_box_get_keybinding   (AtkAction       *action,
 		                                             gint            i);
@@ -267,8 +266,9 @@ static gboolean
 gail_combo_box_do_action (AtkAction *action,
                           gint      i)
 {
-  GailComboBox *combo_box;
+  GtkComboBox *combo_box;
   GtkWidget *widget;
+  gboolean popup_shown;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
 
@@ -281,46 +281,18 @@ gail_combo_box_do_action (AtkAction *action,
   if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
-  combo_box = GAIL_COMBO_BOX (action);
   if (i == 0)
     {
-      if (combo_box->action_idle_handler)
-        return FALSE;
-
-      combo_box->action_idle_handler = gdk_threads_add_idle (idle_do_action, combo_box);
+      combo_box = GTK_COMBO_BOX (widget);
+      g_object_get (combo_box, "popup-shown", &popup_shown, NULL);
+      if (popup_shown)
+          gtk_combo_box_popdown (combo_box);
+      else
+          gtk_combo_box_popup (combo_box);
       return TRUE;
     }
   else
     return FALSE;
-}
-
-static gboolean
-idle_do_action (gpointer data)
-{
-  GtkComboBox *combo_box;
-  GtkWidget *widget;
-  GailComboBox *gail_combo_box;
-  AtkObject *popup;
-  gboolean do_popup;
-
-  gail_combo_box = GAIL_COMBO_BOX (data);
-  gail_combo_box->action_idle_handler = 0;
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_combo_box));
-
-  if (widget == NULL || /* State is defunct */
-      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
-    return FALSE;
-
-  combo_box = GTK_COMBO_BOX (widget);
-
-  popup = gtk_combo_box_get_popup_accessible (combo_box);
-  do_popup = !gtk_widget_get_mapped (gtk_accessible_get_widget (GTK_ACCESSIBLE (popup)));
-  if (do_popup)
-      gtk_combo_box_popup (combo_box);
-  else
-      gtk_combo_box_popdown (combo_box);
-
-  return FALSE;
 }
 
 static gint
@@ -538,10 +510,5 @@ gail_combo_box_finalize (GObject *object)
 
   g_free (combo_box->press_keybinding);
   g_free (combo_box->name);
-  if (combo_box->action_idle_handler)
-    {
-      g_source_remove (combo_box->action_idle_handler);
-      combo_box->action_idle_handler = 0;
-    }
   G_OBJECT_CLASS (gail_combo_box_parent_class)->finalize (object);
 }
