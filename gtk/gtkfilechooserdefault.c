@@ -9051,7 +9051,6 @@ typedef struct
 {
   GtkFileChooserDefault *impl;
   GList *items;
-  gint n_items;
   guint needs_sorting : 1;
 } RecentLoadData;
 
@@ -9130,13 +9129,14 @@ recent_idle_load (gpointer data)
   if (load_data->needs_sorting)
     {
       gint limit;
+      gint n_items;
 
       load_data->items = g_list_sort (load_data->items, recent_sort_mru);
-      load_data->n_items = g_list_length (load_data->items);
+      n_items = g_list_length (load_data->items);
 
       limit = get_recent_files_limit (GTK_WIDGET (impl));
       
-      if (limit != -1 && (load_data->n_items > limit))
+      if (limit != -1 && (n_items > limit))
         {
           GList *clamp, *l;
 
@@ -9148,8 +9148,6 @@ recent_idle_load (gpointer data)
 
               g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
               g_list_free (l);
-
-              load_data->n_items = limit;
             }
          }
 
@@ -9192,7 +9190,6 @@ recent_start_loading (GtkFileChooserDefault *impl)
   load_data = g_new (RecentLoadData, 1);
   load_data->impl = impl;
   load_data->items = NULL;
-  load_data->n_items = 0;
   load_data->needs_sorting = TRUE;
 
   /* begin lazy loading the recent files into the model */
