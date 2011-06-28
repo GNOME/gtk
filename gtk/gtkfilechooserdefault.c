@@ -1755,8 +1755,6 @@ shortcuts_append_recent (GtkFileChooserDefault *impl)
   
   if (pixbuf)
     g_object_unref (pixbuf);
-
-  impl->has_recent = TRUE;
 }
 
 /* Appends an item for the user's home directory to the shortcuts model */
@@ -1872,12 +1870,12 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
   if (where == SHORTCUTS_RECENT)
     goto out;
 
-  n += impl->has_recent ? 1 : 0;
+  n += 1; /* we always have the recently-used item */
 
   if (where == SHORTCUTS_RECENT_SEPARATOR)
     goto out;
 
-  n += impl->has_recent ? 1 : 0;
+  n += 1; /* we always have the separator after the recently-used item */
 
   if (where == SHORTCUTS_HOME)
     goto out;
@@ -5226,33 +5224,11 @@ gtk_file_chooser_default_get_property (GObject    *object,
     }
 }
 
-/* Removes the settings signal handler.  It's safe to call multiple times */
+/* This cancels everything that may be going on in the background. */
 static void
-remove_settings_signal (GtkFileChooserDefault *impl,
-			GdkScreen             *screen)
-{
-  if (impl->settings_signal_id)
-    {
-      GtkSettings *settings;
-
-      settings = gtk_settings_get_for_screen (screen);
-      g_signal_handler_disconnect (settings,
-				   impl->settings_signal_id);
-      impl->settings_signal_id = 0;
-    }
-}
-
-static void
-gtk_file_chooser_default_dispose (GObject *object)
+cancel_all_operations (GtkFileChooserDefault *impl)
 {
   GSList *l;
-  GtkFileChooserDefault *impl = (GtkFileChooserDefault *) object;
-
-  if (impl->extra_widget)
-    {
-      g_object_unref (impl->extra_widget);
-      impl->extra_widget = NULL;
-    }
 
   pending_select_files_free (impl);
 
@@ -5322,6 +5298,36 @@ gtk_file_chooser_default_dispose (GObject *object)
 
   search_stop_searching (impl, TRUE);
   recent_stop_loading (impl);
+}
+
+/* Removes the settings signal handler.  It's safe to call multiple times */
+static void
+remove_settings_signal (GtkFileChooserDefault *impl,
+			GdkScreen             *screen)
+{
+  if (impl->settings_signal_id)
+    {
+      GtkSettings *settings;
+
+      settings = gtk_settings_get_for_screen (screen);
+      g_signal_handler_disconnect (settings,
+				   impl->settings_signal_id);
+      impl->settings_signal_id = 0;
+    }
+}
+
+static void
+gtk_file_chooser_default_dispose (GObject *object)
+{
+  GtkFileChooserDefault *impl = (GtkFileChooserDefault *) object;
+
+  cancel_all_operations (impl);
+
+  if (impl->extra_widget)
+    {
+      g_object_unref (impl->extra_widget);
+      impl->extra_widget = NULL;
+    }
 
   remove_settings_signal (impl, gtk_widget_get_screen (GTK_WIDGET (impl)));
 
@@ -5677,17 +5683,10 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     {
-      GFile *folder;
-
       switch (impl->reload_state)
         {
         case RELOAD_EMPTY:
-          /* The user didn't explicitly give us a folder to display, so we'll
-           * use the saved one from the last invocation of the file chooser
-           */
-	  folder = get_file_for_last_folder_opened (impl);
-          gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), folder, NULL);
-	  g_object_unref (folder);
+	  recent_shortcut_handler (impl);
           break;
         
         case RELOAD_HAS_FOLDER:
@@ -5717,6 +5716,9 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   settings_save (impl);
+
+  cancel_all_operations (impl);
+  impl->reload_state = RELOAD_EMPTY;
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unmap (widget);
 }
@@ -10026,8 +10028,7 @@ search_shortcut_handler (GtkFileChooserDefault *impl)
 static void
 recent_shortcut_handler (GtkFileChooserDefault *impl)
 {
-  if (impl->has_recent)
-    switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_RECENT));
+  switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_RECENT));
 }
 
 static void
