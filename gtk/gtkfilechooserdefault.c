@@ -8906,6 +8906,24 @@ stop_operation (GtkFileChooserDefault *impl, OperationMode mode)
     }
 }
 
+/* Sometimes we need to frob the selection in the shortcuts list manually */
+static void
+shortcuts_select_item_without_activating (GtkFileChooserDefault *impl, int pos)
+{
+  GtkTreeSelection *selection;
+  GtkTreePath *path;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
+
+  g_signal_handlers_block_by_func (selection, G_CALLBACK (shortcuts_selection_changed_cb), impl);
+
+  path = gtk_tree_path_new_from_indices (pos, -1);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_path_free (path);
+
+  g_signal_handlers_unblock_by_func (selection, G_CALLBACK (shortcuts_selection_changed_cb), impl);
+}
+
 /* Main entry point to the searching functions; this gets called when the user
  * activates the Search shortcut.
  */
@@ -8922,6 +8940,8 @@ search_activate (GtkFileChooserDefault *impl)
 
   previous_mode = impl->operation_mode;
   impl->operation_mode = OPERATION_MODE_SEARCH;
+
+  shortcuts_select_item_without_activating (impl, shortcuts_get_index (impl, SHORTCUTS_SEARCH));
 
   stop_operation (impl, previous_mode);
 
@@ -9281,6 +9301,8 @@ recent_activate (GtkFileChooserDefault *impl)
 
   previous_mode = impl->operation_mode;
   impl->operation_mode = OPERATION_MODE_RECENT;
+
+  shortcuts_select_item_without_activating (impl, shortcuts_get_index (impl, SHORTCUTS_RECENT));
 
   stop_operation (impl, previous_mode);
 
