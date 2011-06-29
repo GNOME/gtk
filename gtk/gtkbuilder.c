@@ -503,29 +503,29 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (pspec) != GDK_TYPE_PIXBUF))
         {
-          if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
+          GObject *object = gtk_builder_get_object (builder, prop->data);
+
+          if (object)
             {
-              GObject *object;
-              object = gtk_builder_get_object (builder, prop->data);
-              if (!object)
+              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
+              g_value_set_object (&parameter.value, object);
+            }
+          else 
+            {
+              if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
                 {
                   g_warning ("Failed to get constuct only property "
                              "%s of %s with value `%s'",
                              prop->name, object_name, prop->data);
                   continue;
                 }
-              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
-              g_value_set_object (&parameter.value, object);
-            }
-          else
-            {
+              /* Delay setting property */
               property = g_slice_new (DelayedProperty);
               property->object = g_strdup (object_name);
               property->name = g_strdup (prop->name);
               property->value = g_strdup (prop->data);
               builder->priv->delayed_properties =
                 g_slist_prepend (builder->priv->delayed_properties, property);
-
               continue;
             }
         }
