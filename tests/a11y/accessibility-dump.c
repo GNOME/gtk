@@ -235,8 +235,8 @@ dump_attribute_set (GString         *string,
 static gint
 compare_attr (gconstpointer a, gconstpointer b)
 {
-  AtkAttribute *aattr = a;
-  AtkAttribute *battr = b;
+  const AtkAttribute *aattr = a;
+  const AtkAttribute *battr = b;
 
   return strcmp (aattr->name, battr->name);
 }
