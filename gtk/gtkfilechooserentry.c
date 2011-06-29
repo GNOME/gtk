@@ -1568,7 +1568,6 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 
   error = NULL;
   if (!chooser_entry->file_system ||
-      !chooser_entry->base_folder ||
       !_gtk_file_system_parse (chooser_entry->file_system,
 			       chooser_entry->base_folder, text,
 			       &folder_file, &file_part, &error))
