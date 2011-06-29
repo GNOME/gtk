@@ -151,6 +151,7 @@ typedef struct {
   const gchar *word;
 } Word;
 
+#ifdef DUMP_RESULTS
 static const gchar *
 boundary (AtkTextBoundary b)
 {
@@ -211,7 +212,9 @@ escape (const gchar *p)
 
   return g_string_free (s, FALSE);
 }
+#endif
 
+#ifdef SHOW_TEXT_ATTRIBUTES
 static void
 show_text_attributes (PangoLayout *l)
 {
@@ -324,6 +327,7 @@ show_text_attributes (PangoLayout *l)
   while (*p || i < n_attrs);
   printf ("\n");
 }
+#endif
 
 static void
 test_words (GtkWidget *widget)
@@ -482,44 +486,44 @@ test_words (GtkWidget *widget)
   };
   gint start, end;
   gchar *word;
-  gchar *last_word;
-  gint offset;
-  gint i, j, k;
-  gint b;
+  gint i;
 
   atk_text = ATK_TEXT (gtk_widget_get_accessible (widget));
 
   set_text (widget, text);
-#if 0
+#ifdef SHOW_TEXT_ATTRIBUTES
   if (GTK_IS_LABEL (widget))
     show_text_attributes (gtk_label_get_layout (GTK_LABEL (widget)));
   else if (GTK_IS_ENTRY (widget))
     show_text_attributes (gtk_entry_get_layout (GTK_ENTRY (widget)));
 #endif
 
-#if 0
+#if DUMP_RESULTS
   for (i = -1; i < 2; i++)
-    for (j = ATK_TEXT_BOUNDARY_CHAR; j <= ATK_TEXT_BOUNDARY_LINE_END; j++)
-      for (k = 0; k <= strlen (text); k++)
-        {
-      switch (i)
-        {
-          case -1:
-            word = atk_text_get_text_before_offset (atk_text, k, j, &start, &end);
-            break;
-          case 0:
-            word = atk_text_get_text_at_offset (atk_text, k, j, &start, &end);
-            break;
-          case 1:
-            word = atk_text_get_text_after_offset (atk_text, k, j, &start, &end);
-            break;
-          default:
-            g_assert_not_reached ();
-            break;
-        }
-       printf ("    { %2d, %2d, %s %2d, %2d, \"%s\" },\n", i, k, boundary(j), start, end, escape (word));
-       g_free (word);
-     }
+    {
+      gint j, k;
+      for (j = ATK_TEXT_BOUNDARY_CHAR; j <= ATK_TEXT_BOUNDARY_LINE_END; j++)
+        for (k = 0; k <= strlen (text); k++)
+          {
+            switch (i)
+              {
+              case -1:
+                word = atk_text_get_text_before_offset (atk_text, k, j, &start, &end);
+                break;
+              case 0:
+                word = atk_text_get_text_at_offset (atk_text, k, j, &start, &end);
+                break;
+              case 1:
+                word = atk_text_get_text_after_offset (atk_text, k, j, &start, &end);
+                break;
+              default:
+                g_assert_not_reached ();
+                break;
+              }
+            printf ("    { %2d, %2d, %s %2d, %2d, \"%s\" },\n", i, k, boundary(j), start, end, escape (word));
+            g_free (word);
+          }
+    }
 #endif
 
   for (i = 0; expected[i].offset != -1; i++)
