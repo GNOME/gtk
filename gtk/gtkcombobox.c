@@ -53,6 +53,7 @@
 
 #include "gtkentryprivate.h"
 #include "gtktreeprivate.h"
+#include "a11y/gtkcomboboxaccessible.h"
 
 
 /**
@@ -1005,6 +1006,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                               GTK_PARAM_READABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkComboBoxPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
 }
 
 static void

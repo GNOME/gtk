@@ -27,7 +27,6 @@
 #include "gailbutton.h"
 #include "gailcell.h"
 #include "gailcheckmenuitem.h"
-#include "gailcombobox.h"
 #include "gailcontainer.h"
 #include "gailcontainercell.h"
 #include "gailexpander.h"
@@ -96,7 +95,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WIDGET, GailWidget, gail_widget, GTK_TYPE_WIDG
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CONTAINER, GailContainer, gail_container, GTK_TYPE_CONTAINER)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_BUTTON, GailButton, gail_button, GTK_TYPE_BUTTON)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_MENU_ITEM, GailMenuItem, gail_menu_item, gail_menu_item_new)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_COMBO_BOX, GailComboBox, gail_combo_box, GTK_TYPE_COMBO_BOX)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU_SHELL, GailMenuShell, gail_menu_shell, GTK_TYPE_MENU_SHELL)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU, GailMenu, gail_menu, GTK_TYPE_MENU)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WINDOW, GailWindow, gail_window, GTK_TYPE_BIN)
@@ -854,7 +852,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CONTAINER, gail_container);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_BUTTON, gail_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_ITEM, gail_menu_item);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_COMBO_BOX, gail_combo_box);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_BAR, gail_menu_shell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU, gail_menu);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WINDOW, gail_window);

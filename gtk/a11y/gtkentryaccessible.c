@@ -24,7 +24,7 @@
 #include "gtkpango.h"
 #include <gdk/gdkkeysyms.h>
 #include "gtkentryaccessible.h"
-#include "gailcombobox.h"
+#include "gtkcomboboxaccessible.h"
 
 /* Callbacks */
 
@@ -199,7 +199,7 @@ gtk_entry_accessible_get_index_in_parent (AtkObject *accessible)
    * otherwise do the normal thing.
    */
   if (accessible->accessible_parent)
-    if (GAIL_IS_COMBO_BOX (accessible->accessible_parent))
+    if (GTK_IS_COMBO_BOX_ACCESSIBLE (accessible->accessible_parent))
       return 1;
 
   return ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->get_index_in_parent (accessible);
