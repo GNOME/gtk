@@ -390,22 +390,28 @@ dump_atk_selection (AtkSelection *atk_selection,
                     guint         depth,
                     GString      *string)
 {
+  guint n_selections, n_counted_selections;
   gint i;
 
+  n_selections = atk_selection_get_selection_count (atk_selection);
   g_string_append_printf (string, "%*s<AtkSelection>\n", depth, "");
+  g_string_append_printf (string, "%*sselection count: %d\n", depth, "", n_selections);
 
-  g_string_append_printf (string, "%*sselection count: %d\n", depth, "", atk_selection_get_selection_count (atk_selection));
-
-  if (atk_selection_get_selection_count (atk_selection) > 0)
+  n_counted_selections = 0;
+  for (i = 0; i < atk_object_get_n_accessible_children (ATK_OBJECT (atk_selection)); i++)
     {
-      g_string_append_printf (string, "%*sselected children:", depth, "");
-      for (i = 0; i < atk_object_get_n_accessible_children (ATK_OBJECT (atk_selection)); i++)
+      if (atk_selection_is_child_selected (atk_selection, i))
         {
-          if (atk_selection_is_child_selected (atk_selection, i))
-            g_string_append_printf (string, " %d", i);
+          if (n_counted_selections == 0)
+            g_string_append_printf (string, "%*sselected children:", depth, "");
+          g_string_append_printf (string, " %d", i);
+          n_counted_selections++;
         }
-      g_string_append_c (string, '\n');
     }
+  if (n_counted_selections)
+    g_string_append_c (string, '\n');
+  
+  g_assert_cmpint (n_selections, ==, n_counted_selections);
 }
 
 static void
