@@ -36,7 +36,7 @@ gail_c_sources =			\
 	gtkrangeaccessible.c		\
 	gailrenderercell.c		\
 	gtkscaleaccessible.c		\
-	gailscalebutton.c		\
+	gtkscalebuttonaccessible.c	\
 	gtkscrollbaraccessible.c	\
 	gailscrolledwindow.c		\
 	gtkspinbuttonaccessible.c	\
@@ -87,7 +87,7 @@ gail_private_h_sources =		\
 	gtkrangeaccessible.h		\
 	gailrenderercell.h		\
 	gtkscaleaccessible.h		\
-	gailscalebutton.h		\
+	gtkscalebuttonaccessible.h	\
 	gtkscrollbaraccessible.h	\
 	gailscrolledwindow.h		\
 	gtkspinbuttonaccessible.h	\
@@ -131,7 +131,7 @@ libgail_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 libgail_la_LIBADD =  \
-	$(GTK_DEP_LIBS)						\
+	$(GTK_DEP_LIBS)		\
 	$(INTLLIBS)
 
 libgail_la_LDFLAGS =    \
