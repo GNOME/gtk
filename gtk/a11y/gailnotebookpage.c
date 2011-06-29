@@ -185,7 +185,6 @@ gail_notebook_page_new (GtkNotebook *notebook,
 
   page = GAIL_NOTEBOOK_PAGE (object);
   page->notebook = notebook;
-  g_object_add_weak_pointer (G_OBJECT (page->notebook), (gpointer *)&page->notebook);
   page->index = pagenum;
   widget_page = gtk_notebook_get_nth_page (notebook, pagenum);
   page->page = widget_page;
@@ -212,6 +211,18 @@ gail_notebook_page_new (GtkNotebook *notebook,
     }
 
   return atk_object;
+}
+
+void
+gail_notebook_page_invalidate (GailNotebookPage *page)
+{
+  g_return_if_fail (GAIL_IS_NOTEBOOK_PAGE (page));
+
+  atk_object_notify_state_change (ATK_OBJECT (page),
+                                  ATK_STATE_DEFUNCT,
+                                  TRUE);
+  atk_object_set_parent (ATK_OBJECT (page), NULL);
+  page->notebook = NULL;
 }
 
 static void
@@ -281,9 +292,6 @@ static void
 gail_notebook_page_finalize (GObject *object)
 {
   GailNotebookPage *page = GAIL_NOTEBOOK_PAGE (object);
-
-  if (page->notebook)
-    g_object_remove_weak_pointer (G_OBJECT (page->notebook), (gpointer *)&page->notebook);
 
   if (page->textutil)
     g_object_unref (page->textutil);

@@ -35,9 +35,6 @@ static void         gail_notebook_real_notify_gtk     (GObject           *obj,
 
 static AtkObject*   gail_notebook_ref_child           (AtkObject      *obj,
                                                        gint           i);
-static gint         gail_notebook_real_remove_gtk     (GtkContainer   *container,
-                                                       GtkWidget      *widget,
-                                                       gpointer       data);    
 static void         atk_selection_interface_init      (AtkSelectionIface *iface);
 static gboolean     gail_notebook_add_selection       (AtkSelection   *selection,
                                                        gint           i);
@@ -75,10 +72,8 @@ gail_notebook_class_init (GailNotebookClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GailWidgetClass *widget_class;
-  GailContainerClass *container_class;
 
   widget_class = (GailWidgetClass*)klass;
-  container_class = (GailContainerClass*)klass;
 
   gobject_class->finalize = gail_notebook_finalize;
 
@@ -91,7 +86,6 @@ gail_notebook_class_init (GailNotebookClass *klass)
    * as the implementation in GailContainer returns the correct
    * number of children.
    */
-  container_class->remove_gtk = gail_notebook_real_remove_gtk;
 }
 
 static void
@@ -151,6 +145,34 @@ gail_notebook_page_added (GtkNotebook *gtk_notebook,
 }
 
 static void
+gail_notebook_page_removed (GtkNotebook *notebook,
+                            GtkWidget   *widget,
+                            guint        page_num,
+                            gpointer     data)    
+{
+  GailNotebook *gail_notebook;
+  AtkObject *obj;
+  gint index;
+
+  gail_notebook = GAIL_NOTEBOOK (gtk_widget_get_accessible (GTK_WIDGET (notebook)));
+  index = gail_notebook->remove_index;
+  gail_notebook->remove_index = -1;
+
+  obj = find_child_in_list (gail_notebook->page_cache, index);
+  g_return_if_fail (obj);
+  gail_notebook->page_cache = g_list_remove (gail_notebook->page_cache, obj);
+  gail_notebook->page_count -= 1;
+  reset_cache (gail_notebook, index);
+  g_signal_emit_by_name (gail_notebook,
+                         "children_changed::remove",
+                         page_num,
+                         obj,
+                         NULL);
+  gail_notebook_page_invalidate (GAIL_NOTEBOOK_PAGE (obj));
+  g_object_unref (obj);
+}
+
+static void
 gail_notebook_real_initialize (AtkObject *obj,
                                gpointer  data)
 {
@@ -176,6 +198,10 @@ gail_notebook_real_initialize (AtkObject *obj,
   g_signal_connect (gtk_notebook,
                     "page-added",
                     G_CALLBACK (gail_notebook_page_added),
+                    NULL);
+  g_signal_connect (gtk_notebook,
+                    "page-removed",
+                    G_CALLBACK (gail_notebook_page_removed),
                     NULL);
   g_object_weak_ref (G_OBJECT(gtk_notebook),
                      (GWeakNotify) gail_notebook_destroyed,
@@ -499,33 +525,6 @@ gail_notebook_child_parent_set (GtkWidget *widget,
     return;
   gail_notebook = GAIL_NOTEBOOK (gtk_widget_get_accessible (old_parent));
   gail_notebook->remove_index = GAIL_NOTEBOOK_PAGE (data)->index;
-}
-
-static gint
-gail_notebook_real_remove_gtk (GtkContainer *container,
-                               GtkWidget    *widget,
-                               gpointer      data)    
-{
-  GailNotebook *gail_notebook;
-  AtkObject *obj;
-  gint index;
-
-  g_return_val_if_fail (container != NULL, 1);
-  gail_notebook = GAIL_NOTEBOOK (gtk_widget_get_accessible (GTK_WIDGET (container)));
-  index = gail_notebook->remove_index;
-  gail_notebook->remove_index = -1;
-
-  obj = find_child_in_list (gail_notebook->page_cache, index);
-  g_return_val_if_fail (obj, 1);
-  gail_notebook->page_cache = g_list_remove (gail_notebook->page_cache, obj);
-  gail_notebook->page_count -= 1;
-  reset_cache (gail_notebook, index);
-  g_signal_emit_by_name (gail_notebook,
-                         "children_changed::remove",
-                          GAIL_NOTEBOOK_PAGE (obj)->index, 
-                          obj, NULL);
-  g_object_unref (obj);
-  return 1;
 }
 
 static gboolean

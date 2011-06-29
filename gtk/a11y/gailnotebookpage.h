@@ -61,6 +61,8 @@ struct _GailNotebookPageClass
 
 AtkObject *gail_notebook_page_new(GtkNotebook *notebook, gint pagenum);
 
+void       gail_notebook_page_invalidate (GailNotebookPage *page);
+
 G_END_DECLS
 
 #endif /* __GAIL_NOTEBOOK_PAGE_H__ */
