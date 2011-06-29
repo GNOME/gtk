@@ -6588,7 +6588,6 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
   /* no need to update the file chooser's entry if there's no entry */
   if (impl->operation_mode == OPERATION_MODE_SEARCH ||
-      impl->operation_mode == OPERATION_MODE_RECENT ||
       !impl->location_entry)
     return;
 
@@ -6607,7 +6606,10 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
   if (closure.num_selected == 0)
     {
-      goto maybe_clear_entry;
+      if (impl->operation_mode == OPERATION_MODE_RECENT)
+	_gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), NULL);
+      else
+	goto maybe_clear_entry;
     }
   else if (closure.num_selected == 1)
     {
@@ -6648,6 +6650,20 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
           return;
         }
+      else if (impl->operation_mode == OPERATION_MODE_RECENT
+	       && impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	{
+	  GFile *folder;
+
+	  /* Set the base folder on the name entry, so it will do completion relative to the correct recent-folder */
+
+	  gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &closure.first_selected_iter,
+			      MODEL_COL_FILE, &folder,
+			      -1);
+	  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), folder);
+	  g_object_unref (folder);
+	  return;
+	}
     }
   else
     {
