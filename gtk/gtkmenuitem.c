@@ -49,7 +49,7 @@
  * SECTION:gtkmenuitem
  * @Short_description: The widget used for item in menus
  * @Title: GtkMenuItem
- * @See_also: #GtkBin, #GtkItem, #GtkMenuShell
+ * @See_also: #GtkBin, #GtkMenuShell
  *
  * The #GtkMenuItem widget and the derived widgets are the only valid
  * childs for menus. Their function is to correctly handle highlighting,
