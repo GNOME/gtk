@@ -720,9 +720,22 @@ _gtk_file_system_parse (GtkFileSystem     *file_system,
   if (str[0] == '~' || g_path_is_absolute (str) || is_uri)
     file = g_file_parse_name (str);
   else
-    file = g_file_resolve_relative_path (base_file, str);
+    {
+      if (base_file)
+	file = g_file_resolve_relative_path (base_file, str);
+      else
+	{
+	  *folder = NULL;
+	  *file_part = NULL;
+	  g_set_error (error,
+		       GTK_FILE_CHOOSER_ERROR,
+		       GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		       _("Invalid path"));
+	  return FALSE;
+	}
+    }
 
-  if (g_file_equal (base_file, file))
+  if (base_file && g_file_equal (base_file, file))
     {
       /* this is when user types '.', could be the
        * beginning of a hidden file, ./ or ../
