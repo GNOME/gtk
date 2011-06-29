@@ -16,7 +16,6 @@ window1
     layer: widget
     alpha: 1
     <AtkSelection>
-    selection count: 2
     selected children: One
                        Two
     <AtkTable>

@@ -393,9 +393,9 @@ dump_atk_selection (AtkSelection *atk_selection,
   guint n_selections, n_counted_selections;
   gint i;
 
-  n_selections = atk_selection_get_selection_count (atk_selection);
   g_string_append_printf (string, "%*s<AtkSelection>\n", depth, "");
-  g_string_append_printf (string, "%*sselection count: %d\n", depth, "", n_selections);
+
+  n_selections = atk_selection_get_selection_count (atk_selection);
 
   n_counted_selections = 0;
   for (i = 0; i < atk_object_get_n_accessible_children (ATK_OBJECT (atk_selection)); i++)
@@ -418,6 +418,7 @@ dump_atk_selection (AtkSelection *atk_selection,
     }
   
   g_assert_cmpint (n_selections, ==, n_counted_selections);
+  g_assert_cmpint (n_selections, ==, atk_selection_get_selection_count (atk_selection));
 }
 
 static void

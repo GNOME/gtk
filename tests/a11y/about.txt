@@ -86,7 +86,6 @@ window1
         layer: widget
         alpha: 1
         <AtkSelection>
-        selection count: 1
         selected children: unnamed-GailNotebookPage-4
         unnamed-GailNotebookPage-4
           "page tab"

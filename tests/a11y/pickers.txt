@@ -82,7 +82,6 @@ window1
         <AtkAction>
         action 0 name: press
         <AtkSelection>
-        selection count: 0
         unnamed-GailMenu-1
           "menu"
           parent: unnamed-GailComboBox-0
@@ -93,7 +92,6 @@ window1
           layer: popup
           alpha: 1
           <AtkSelection>
-          selection count: 0
           unnamed-GailMenuItem-2
             "menu item"
             parent: unnamed-GailMenu-1
@@ -282,7 +280,6 @@ window1
       <AtkAction>
       action 0 name: press
       <AtkSelection>
-      selection count: 0
       unnamed-GailMenu-8
         "menu"
         parent: button1
@@ -293,4 +290,3 @@ window1
         layer: popup
         alpha: 1
         <AtkSelection>
-        selection count: 0

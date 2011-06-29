@@ -101,7 +101,6 @@ window1
               layer: widget
               alpha: 1
               <AtkSelection>
-              selection count: 0
               <AtkTable>
               rows: 1
               columns: 1
