@@ -25,7 +25,6 @@
 
 #include "gailwindow.h"
 #include "gailtoplevel.h"
-#include "gail-private-macros.h"
 
 enum {
   ACTIVATE,
@@ -191,9 +190,8 @@ gail_window_real_initialize (AtkObject *obj,
   /*
    * A GailWindow can be created for a GtkHandleBox or a GtkWindow
    */
-  if (!GTK_IS_WINDOW (widget) &&
-      !GTK_IS_HANDLE_BOX (widget))
-    gail_return_if_fail (FALSE);
+  if (!GTK_IS_WINDOW (widget) && !GTK_IS_HANDLE_BOX (widget))
+    return;
 
   ATK_OBJECT_CLASS (gail_window_parent_class)->initialize (obj, data);
 
@@ -277,12 +275,7 @@ gail_window_get_name (AtkObject *accessible)
       GtkWidget* widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
       if (widget == NULL)
-        /*
-         * State is defunct
-         */
         return NULL;
-
-      gail_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
       if (GTK_IS_WINDOW (widget))
         {
@@ -345,12 +338,7 @@ gail_window_get_index_in_parent (AtkObject *accessible)
   gint index = -1;
 
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return -1;
-
-  gail_return_val_if_fail (GTK_IS_WIDGET (widget), -1);
 
   index = ATK_OBJECT_CLASS (gail_window_parent_class)->get_index_in_parent (accessible);
   if (index != -1)
@@ -399,13 +387,8 @@ gail_window_ref_relation_set (AtkObject *obj)
   AtkRelation* relation;
   GtkWidget *current_widget;
 
-  gail_return_val_if_fail (GAIL_IS_WIDGET (obj), NULL);
-
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return NULL;
 
   relation_set = ATK_OBJECT_CLASS (gail_window_parent_class)->ref_relation_set (obj);
@@ -558,12 +541,7 @@ gail_window_get_extents (AtkComponent  *component,
   gint x_toplevel, y_toplevel;
 
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return;
-
-  gail_return_if_fail (GTK_IS_WINDOW (widget));
 
   if (!gtk_widget_is_toplevel (widget))
     {
@@ -605,12 +583,7 @@ gail_window_get_size (AtkComponent *component,
   GdkRectangle rect;
 
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return;
-
-  gail_return_if_fail (GTK_IS_WINDOW (widget));
 
   if (!gtk_widget_is_toplevel (widget))
     {
@@ -934,9 +907,7 @@ init_gail_screen (GdkScreen *screen,
 static GailScreenInfo *
 get_screen_info (GdkScreen *screen)
 {
-  int screen_n;
-
-  gail_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  gint screen_n;
 
   screen_n = gdk_screen_get_number (screen);
 
@@ -964,11 +935,10 @@ get_window_zorder (GdkWindow *window)
   int             zorder;
   int             w_desktop;
 
-  gail_return_val_if_fail (GDK_IS_WINDOW (window), -1);
-
   info = get_screen_info (gdk_window_get_screen (window));
 
-  gail_return_val_if_fail (info->stacked_windows != NULL, -1);
+  if (info->stacked_windows == NULL)
+    return -1;
 
   xid = GDK_WINDOW_XID (window);
 
@@ -1007,12 +977,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return -1;
-
-  gail_return_val_if_fail (GTK_IS_WINDOW (widget), -1);
 
   return get_window_zorder (gtk_widget_get_window (widget));
 }
@@ -1025,12 +990,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return -1;
-
-  gail_return_val_if_fail (GTK_IS_WINDOW (widget), -1);
 
   return 0;			/* Punt, FIXME */
 }
@@ -1043,12 +1003,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return -1;
-
-  gail_return_val_if_fail (GTK_IS_WINDOW (widget), -1);
 
   return 0;			/* Punt, FIXME */
 }
