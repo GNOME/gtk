@@ -44,13 +44,10 @@ struct _GailNotebook
    * If the page is found in the list then a new page does not
    * need to be created
    */
-  GList*       page_cache;
+  GHashTable * pages;
   gint         selected_page;
   gint         focus_tab_page;
-  gint         page_count;
   guint        idle_focus_id;
-
-  gint         remove_index;
 };
 
 GType gail_notebook_get_type (void);

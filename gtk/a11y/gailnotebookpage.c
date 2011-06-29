@@ -156,7 +156,11 @@ notify_child_added (gpointer data)
     {
       atk_parent = gtk_widget_get_accessible (GTK_WIDGET (page->notebook));
       atk_object_set_parent (atk_object, atk_parent);
-      g_signal_emit_by_name (atk_parent, "children_changed::add", page->index, atk_object, NULL);
+      g_signal_emit_by_name (atk_parent,
+                             "children_changed::add",
+                             gtk_notebook_page_num (page->notebook, page->child),
+                             atk_object,
+                             NULL);
     }
   
   return FALSE;
@@ -164,30 +168,20 @@ notify_child_added (gpointer data)
 
 AtkObject*
 gail_notebook_page_new (GtkNotebook *notebook, 
-                        gint        pagenum)
+                        GtkWidget   *child)
 {
   GObject *object;
   AtkObject *atk_object;
   GailNotebookPage *page;
-  GtkWidget *child;
   GtkWidget *label;
-  GtkWidget *widget_page;
 
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
 
-  child = gtk_notebook_get_nth_page (notebook, pagenum);
-
-  if (!child)
-    return NULL;
-
   object = g_object_new (GAIL_TYPE_NOTEBOOK_PAGE, NULL);
-  g_return_val_if_fail (object != NULL, NULL);
 
   page = GAIL_NOTEBOOK_PAGE (object);
   page->notebook = notebook;
-  page->index = pagenum;
-  widget_page = gtk_notebook_get_nth_page (notebook, pagenum);
-  page->page = widget_page;
+  page->child = child;
   page->textutil = NULL;
   
   atk_object = ATK_OBJECT (page);
@@ -223,6 +217,7 @@ gail_notebook_page_invalidate (GailNotebookPage *page)
                                   TRUE);
   atk_object_set_parent (ATK_OBJECT (page), NULL);
   page->notebook = NULL;
+  page->child = NULL;
 }
 
 static void
@@ -349,7 +344,6 @@ static AtkObject*
 gail_notebook_page_ref_child (AtkObject *accessible,
                               gint i)
 {
-  GtkWidget *child;
   AtkObject *child_obj;
   GailNotebookPage *page = NULL;
    
@@ -361,11 +355,7 @@ gail_notebook_page_ref_child (AtkObject *accessible,
   if (!page->notebook)
     return NULL;
 
-  child = gtk_notebook_get_nth_page (page->notebook, page->index);
-  if (!GTK_IS_WIDGET (child))
-    return NULL;
-   
-  child_obj = gtk_widget_get_accessible (child);
+  child_obj = gtk_widget_get_accessible (page->child);
   g_object_ref (child_obj);
   return child_obj;
 }
@@ -375,10 +365,11 @@ gail_notebook_page_get_index_in_parent (AtkObject *accessible)
 {
   GailNotebookPage *page;
 
-  g_return_val_if_fail (GAIL_IS_NOTEBOOK_PAGE (accessible), -1);
   page = GAIL_NOTEBOOK_PAGE (accessible);
+  if (!page->notebook || !page->child)
+    return -1;
 
-  return page->index;
+  return gtk_notebook_page_num (page->notebook, page->child);
 }
 
 static AtkStateSet*
@@ -794,11 +785,7 @@ get_label_from_notebook_page (GailNotebookPage *page)
   if (!gtk_notebook_get_show_tabs (notebook))
     return NULL;
 
-  child = gtk_notebook_get_nth_page (notebook, page->index);
-  if (child == NULL) return NULL;
-  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
-
-  child = gtk_notebook_get_tab_label (notebook, child);
+  child = gtk_notebook_get_tab_label (notebook, page->child);
 
   if (GTK_IS_LABEL (child))
     return child;

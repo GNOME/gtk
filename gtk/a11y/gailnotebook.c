@@ -43,20 +43,9 @@ static AtkObject*   gail_notebook_ref_selection       (AtkSelection   *selection
 static gint         gail_notebook_get_selection_count (AtkSelection   *selection);
 static gboolean     gail_notebook_is_child_selected   (AtkSelection   *selection,
                                                        gint           i);
-static AtkObject*   find_child_in_list                (GList          *list,
-                                                       gint           index);
-static void         check_cache                       (GailNotebook   *gail_notebook,
-                                                       GtkNotebook    *notebook);
-static void         reset_cache                       (GailNotebook   *gail_notebook,
-                                                       gint           index);
 static void         create_notebook_page_accessible   (GailNotebook   *gail_notebook,
                                                        GtkNotebook    *notebook,
-                                                       gint           index,
-                                                       gboolean       insert_before,
-                                                       GList          *list);
-static void         gail_notebook_child_parent_set    (GtkWidget      *widget,
-                                                       GtkWidget      *old_parent,
-                                                       gpointer       data);
+                                                       GtkWidget      *child);
 static gboolean     gail_notebook_focus_cb            (GtkWidget      *widget,
                                                        GtkDirectionType type);
 static gboolean     gail_notebook_check_focus_tab     (gpointer       data);
@@ -91,10 +80,12 @@ gail_notebook_class_init (GailNotebookClass *klass)
 static void
 gail_notebook_init (GailNotebook      *notebook)
 {
-  notebook->page_cache = NULL;
+  notebook->pages = g_hash_table_new_full (g_direct_hash,
+                                           g_direct_equal,
+                                           NULL,
+                                           g_object_unref);
   notebook->selected_page = -1;
   notebook->focus_tab_page = -1;
-  notebook->remove_index = -1;
   notebook->idle_focus_id = 0;
 }
 
@@ -115,15 +106,13 @@ gail_notebook_ref_child (AtkObject      *obj,
     return NULL;
 
   gail_notebook = GAIL_NOTEBOOK (obj);
-  
   gtk_notebook = GTK_NOTEBOOK (widget);
 
-  if (gail_notebook->page_count < gtk_notebook_get_n_pages (gtk_notebook))
-    check_cache (gail_notebook, gtk_notebook);
+  accessible = g_hash_table_lookup (gail_notebook->pages, 
+                                    gtk_notebook_get_nth_page (gtk_notebook, i));
+  /* can return NULL when i >= n_children */
 
-  accessible = find_child_in_list (gail_notebook->page_cache, i);
-
-  if (accessible != NULL)
+  if (accessible)
     g_object_ref (accessible);
 
   return accessible;
@@ -140,8 +129,7 @@ gail_notebook_page_added (GtkNotebook *gtk_notebook,
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (gtk_notebook));
   notebook = GAIL_NOTEBOOK (atk_obj);
-  create_notebook_page_accessible (notebook, gtk_notebook, page_num, FALSE, NULL);
-  notebook->page_count++;
+  create_notebook_page_accessible (notebook, gtk_notebook, child);
 }
 
 static void
@@ -152,24 +140,18 @@ gail_notebook_page_removed (GtkNotebook *notebook,
 {
   GailNotebook *gail_notebook;
   AtkObject *obj;
-  gint index;
 
   gail_notebook = GAIL_NOTEBOOK (gtk_widget_get_accessible (GTK_WIDGET (notebook)));
-  index = gail_notebook->remove_index;
-  gail_notebook->remove_index = -1;
 
-  obj = find_child_in_list (gail_notebook->page_cache, index);
+  obj = g_hash_table_lookup (gail_notebook->pages, widget);
   g_return_if_fail (obj);
-  gail_notebook->page_cache = g_list_remove (gail_notebook->page_cache, obj);
-  gail_notebook->page_count -= 1;
-  reset_cache (gail_notebook, index);
   g_signal_emit_by_name (gail_notebook,
                          "children_changed::remove",
                          page_num,
                          obj,
                          NULL);
   gail_notebook_page_invalidate (GAIL_NOTEBOOK_PAGE (obj));
-  g_object_unref (obj);
+  g_hash_table_remove (gail_notebook->pages, widget);
 }
 
 static void
@@ -186,9 +168,10 @@ gail_notebook_real_initialize (AtkObject *obj,
   gtk_notebook = GTK_NOTEBOOK (data);
   for (i = 0; i < gtk_notebook_get_n_pages (gtk_notebook); i++)
     {
-      create_notebook_page_accessible (notebook, gtk_notebook, i, FALSE, NULL);
+      create_notebook_page_accessible (notebook,
+                                       gtk_notebook,
+                                       gtk_notebook_get_nth_page (gtk_notebook, i));
     }
-  notebook->page_count = i;
   notebook->selected_page = gtk_notebook_get_current_page (gtk_notebook);
 
   g_signal_connect (gtk_notebook,
@@ -231,8 +214,6 @@ gail_notebook_real_notify_gtk (GObject           *obj,
       gail_notebook = GAIL_NOTEBOOK (atk_obj);
       gtk_notebook = GTK_NOTEBOOK (widget);
      
-      if (gail_notebook->page_count < gtk_notebook_get_n_pages (gtk_notebook))
-       check_cache (gail_notebook, gtk_notebook);
       /*
        * Notify SELECTED state change for old and new page
        */
@@ -290,22 +271,8 @@ static void
 gail_notebook_finalize (GObject            *object)
 {
   GailNotebook *notebook = GAIL_NOTEBOOK (object);
-  GList *list;
 
-  /*
-   * Get rid of the GailNotebookPage objects which we have cached.
-   */
-  list = notebook->page_cache;
-  if (list != NULL)
-    {
-      while (list)
-        {
-          g_object_unref (list->data);
-          list = list->next;
-        }
-    }
-
-  g_list_free (notebook->page_cache);
+  g_hash_table_destroy (notebook->pages);
 
   if (notebook->idle_focus_id)
     g_source_remove (notebook->idle_focus_id);
@@ -428,103 +395,17 @@ gail_notebook_is_child_selected (AtkSelection *selection,
     return FALSE; 
 }
 
-static AtkObject*
-find_child_in_list (GList *list,
-                    gint  index)
-{
-  AtkObject *obj = NULL;
-
-  while (list)
-    {
-      if (GAIL_NOTEBOOK_PAGE (list->data)->index == index)
-        {
-          obj = ATK_OBJECT (list->data);
-          break;
-        }
-      list = list->next;
-    }
-  return obj;
-}
-
-static void
-check_cache (GailNotebook *gail_notebook,
-             GtkNotebook  *notebook)
-{
-  GList *gtk_list;
-  GList *gail_list;
-  gint i;
-
-  gtk_list = gtk_container_get_children (GTK_CONTAINER (notebook));
-  gail_list = gail_notebook->page_cache;
-
-  i = 0;
-  while (gtk_list)
-    {
-      if (!gail_list)
-        {
-          create_notebook_page_accessible (gail_notebook, notebook, i, FALSE, NULL);
-        }
-      else if (GAIL_NOTEBOOK_PAGE (gail_list->data)->page != gtk_list->data)
-        {
-          create_notebook_page_accessible (gail_notebook, notebook, i, TRUE, gail_list);
-        }
-      else
-        {
-          gail_list = gail_list->next;
-        }
-      i++;
-      gtk_list = gtk_list->next;
-    }
-  g_list_free (gtk_list);
-
-  gail_notebook->page_count = i;
-}
-
-static void
-reset_cache (GailNotebook *gail_notebook,
-             gint         index)
-{
-  GList *l;
-
-  for (l = gail_notebook->page_cache; l; l = l->next)
-    {
-      if (GAIL_NOTEBOOK_PAGE (l->data)->index > index)
-        GAIL_NOTEBOOK_PAGE (l->data)->index -= 1;
-    }
-}
-
 static void
 create_notebook_page_accessible (GailNotebook *gail_notebook,
                                  GtkNotebook  *notebook,
-                                 gint         index,
-                                 gboolean     insert_before,
-                                 GList        *list)
+                                 GtkWidget    *child)
 {
   AtkObject *obj;
 
-  obj = gail_notebook_page_new (notebook, index);
-  g_object_ref (obj);
-  if (insert_before)
-    gail_notebook->page_cache = g_list_insert_before (gail_notebook->page_cache, list, obj);
-  else
-    gail_notebook->page_cache = g_list_append (gail_notebook->page_cache, obj);
-  g_signal_connect (gtk_notebook_get_nth_page (notebook, index), 
-                    "parent_set",
-                    G_CALLBACK (gail_notebook_child_parent_set),
-                    obj);
-}
-
-static void
-gail_notebook_child_parent_set (GtkWidget *widget,
-                                GtkWidget *old_parent,
-                                gpointer   data)
-{
-  GailNotebook *gail_notebook;
-
-  if (!old_parent)
-    return;
-  gail_notebook = GAIL_NOTEBOOK (gtk_widget_get_accessible (old_parent));
-  gail_notebook->remove_index = GAIL_NOTEBOOK_PAGE (data)->index;
+  obj = gail_notebook_page_new (notebook, child);
+  g_hash_table_insert (gail_notebook->pages,
+                       child,
+                       obj);
 }
 
 static gboolean

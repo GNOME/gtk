@@ -40,13 +40,8 @@ struct _GailNotebookPage
   AtkObject parent;
 
   GtkNotebook *notebook;
-#ifndef GTK_DISABLE_DEPRECATED
-  GtkNotebookPage *page;
-#else
-  gpointer page;
-#endif
   
-  gint index;
+  GtkWidget *child;
   guint notify_child_added_id;
 
   GailTextUtil *textutil;
@@ -59,7 +54,7 @@ struct _GailNotebookPageClass
   AtkObjectClass parent_class;
 };
 
-AtkObject *gail_notebook_page_new(GtkNotebook *notebook, gint pagenum);
+AtkObject *gail_notebook_page_new(GtkNotebook *notebook, GtkWidget *child);
 
 void       gail_notebook_page_invalidate (GailNotebookPage *page);
 
