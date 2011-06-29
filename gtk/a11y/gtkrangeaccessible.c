@@ -74,12 +74,14 @@ gtk_range_accessible_finalize (GObject *object)
   GtkAdjustment *adj;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
-  adj = gtk_range_get_adjustment (GTK_RANGE (widget));
-
-  if (adj)
-    g_signal_handlers_disconnect_by_func (adj,
-                                          gtk_range_accessible_value_changed,
-                                          range);
+  if (widget)
+    {
+      adj = gtk_range_get_adjustment (GTK_RANGE (widget));
+      if (adj)
+        g_signal_handlers_disconnect_by_func (adj,
+                                              gtk_range_accessible_value_changed,
+                                              range);
+    }
 
   if (range->action_idle_handler)
     {
