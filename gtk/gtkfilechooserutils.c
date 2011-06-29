@@ -361,16 +361,6 @@ delegate_confirm_overwrite (GtkFileChooser    *chooser,
   return conf;
 }
 
-static gint
-recent_sort_mru (gconstpointer a,
-                 gconstpointer b)
-{
-  GtkRecentInfo *info_a = (GtkRecentInfo *) a;
-  GtkRecentInfo *info_b = (GtkRecentInfo *) b;
-
-  return (gtk_recent_info_get_modified (info_b) - gtk_recent_info_get_modified (info_a));
-}
-
 static GFile *
 get_parent_for_uri (const char *uri)
 {
@@ -385,21 +375,17 @@ get_parent_for_uri (const char *uri)
 	
 }
 
-/* Extracts the parent folders out of the recent items, and returns
- * a list of GFile* for those parents in MRU-first order.
+/* Extracts the parent folders out of the supplied list of GtkRecentInfo* items, and returns
+ * a list of GFile* for those unique parents.
  */
 GList *
-_gtk_file_chooser_list_recent_folders (GtkRecentManager *manager)
+_gtk_file_chooser_extract_recent_folders (GList *infos)
 {
-  GList *infos;
   GList *l;
   GList *result;
   GHashTable *folders;
 
   result = NULL;
-
-  infos = gtk_recent_manager_get_items (manager);
-  infos = g_list_sort (infos, recent_sort_mru);
 
   folders = g_hash_table_new (g_file_hash, (GEqualFunc) g_file_equal);
 
@@ -427,8 +413,6 @@ _gtk_file_chooser_list_recent_folders (GtkRecentManager *manager)
   result = g_list_reverse (result);
 
   g_hash_table_destroy (folders);
-  g_list_foreach (infos, (GFunc) gtk_recent_info_unref, NULL);
-  g_list_free (infos);
 
   return result;
 }

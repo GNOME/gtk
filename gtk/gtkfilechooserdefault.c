@@ -9057,12 +9057,6 @@ recent_idle_cleanup (gpointer data)
   
   impl->load_recent_id = 0;
   
-  if (load_data->items)
-    {
-      g_list_foreach (load_data->items, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (load_data->items);
-    }
-
   g_free (load_data);
 }
 
@@ -9092,13 +9086,61 @@ get_recent_files_limit (GtkWidget *widget)
   return limit;
 }
 
+/* Populates the file system model with the GtkRecentInfo* items in the provided list; frees the items */
+static void
+populate_model_with_recent_items (GtkFileChooserDefault *impl, GList *items)
+{
+  gint limit;
+  GList *l;
+  int n;
+
+  limit = get_recent_files_limit (GTK_WIDGET (impl));
+
+  n = 0;
+
+  for (l = items; l; l = l->next)
+    {
+      GtkRecentInfo *info = l->data;
+      GFile *file;
+
+      file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
+      _gtk_file_system_model_add_and_query_file (impl->recent_model,
+                                                 file,
+                                                 MODEL_ATTRIBUTES);
+      g_object_unref (file);
+
+      n++;
+      if (limit != -1 && n >= limit)
+	break;
+    }
+}
+
+static void
+populate_model_with_folders (GtkFileChooserDefault *impl, GList *items)
+{
+  GList *folders;
+  GList *l;
+
+  folders = _gtk_file_chooser_extract_recent_folders (items);
+
+  for (l = folders; l; l = l->next)
+    {
+      GFile *folder = l->data;
+
+      _gtk_file_system_model_add_and_query_file (impl->recent_model,
+                                                 folder,
+                                                 MODEL_ATTRIBUTES);
+    }
+
+  g_list_foreach (folders, (GFunc) g_object_unref, NULL);
+  g_list_free (folders);
+}
+
 static gboolean
 recent_idle_load (gpointer data)
 {
   RecentLoadData *load_data = data;
   GtkFileChooserDefault *impl = load_data->impl;
-  GList *walk;
-  GFile *file;
 
   if (!impl->recent_manager)
     return FALSE;
@@ -9115,52 +9157,20 @@ recent_idle_load (gpointer data)
       return TRUE;
     }
   
-  /* second iteration: preliminary MRU sorting and clamping */
+  /* second iteration: MRU sorting and clamping, and populating the model */
   if (load_data->needs_sorting)
     {
-      gint limit;
-      gint n_items;
-
       load_data->items = g_list_sort (load_data->items, recent_sort_mru);
-      n_items = g_list_length (load_data->items);
 
-      limit = get_recent_files_limit (GTK_WIDGET (impl));
-      
-      if (limit != -1 && (n_items > limit))
-        {
-          GList *clamp, *l;
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	populate_model_with_recent_items (impl, load_data->items);
+      else
+	populate_model_with_folders (impl, load_data->items);
 
-          clamp = g_list_nth (load_data->items, limit - 1);
-          if (G_LIKELY (clamp))
-            {
-              l = clamp->next;
-              clamp->next = NULL;
-
-              g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
-              g_list_free (l);
-            }
-         }
-
-      load_data->needs_sorting = FALSE;
-
-      return TRUE;
+      g_list_foreach (load_data->items, (GFunc) gtk_recent_info_unref, NULL);
+      g_list_free (load_data->items);
+      load_data->items = NULL;
     }
-
-  /* finished loading items */
-  for (walk = load_data->items; walk; walk = walk->next)
-    {
-      GtkRecentInfo *info = walk->data;
-      file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
-
-      _gtk_file_system_model_add_and_query_file (impl->recent_model,
-                                                 file,
-                                                 MODEL_ATTRIBUTES);
-      gtk_recent_info_unref (walk->data);
-      g_object_unref (file);
-    }
-
-  g_list_free (load_data->items);
-  load_data->items = NULL;
 
   return FALSE;
 }
