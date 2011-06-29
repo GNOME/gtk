@@ -82,7 +82,7 @@ window1
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GailScrolledWindow-4
+          unnamed-GtkScrolledWindowAccessible-4
             "scroll pane"
             parent: unnamed-GailContainer-3
             index: 0
@@ -93,7 +93,7 @@ window1
             alpha: 1
             unnamed-GailTreeView-5
               "table"
-              parent: unnamed-GailScrolledWindow-4
+              parent: unnamed-GtkScrolledWindowAccessible-4
               index: 0
               state: enabled focusable sensitive showing visible manages-descendants
               toolkit: gail
@@ -398,7 +398,7 @@ Click "Show other applications", for more options, or "Find applications online"
                   action 0 description: activate the cell
             unnamed-GtkScrollbarAccessible-8
               "scroll bar"
-              parent: unnamed-GailScrolledWindow-4
+              parent: unnamed-GtkScrolledWindowAccessible-4
               index: 1
               state: enabled horizontal sensitive
               toolkit: gail
@@ -414,7 +414,7 @@ Click "Show other applications", for more options, or "Find applications online"
               minimum increment: 39.800000
             unnamed-GtkScrollbarAccessible-9
               "scroll bar"
-              parent: unnamed-GailScrolledWindow-4
+              parent: unnamed-GtkScrolledWindowAccessible-4
               index: 2
               state: enabled sensitive vertical
               toolkit: gail

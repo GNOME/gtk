@@ -38,7 +38,7 @@ gail_c_sources =			\
 	gtkscaleaccessible.c		\
 	gtkscalebuttonaccessible.c	\
 	gtkscrollbaraccessible.c	\
-	gailscrolledwindow.c		\
+	gtkscrolledwindowaccessible.c	\
 	gtkspinbuttonaccessible.c	\
 	gailsubmenuitem.c		\
 	gailstatusbar.c			\
@@ -89,7 +89,7 @@ gail_private_h_sources =		\
 	gtkscaleaccessible.h		\
 	gtkscalebuttonaccessible.h	\
 	gtkscrollbaraccessible.h	\
-	gailscrolledwindow.h		\
+	gtkscrolledwindowaccessible.h	\
 	gtkspinbuttonaccessible.h	\
 	gailsubmenuitem.h		\
 	gailstatusbar.h			\

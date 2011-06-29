@@ -37,7 +37,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
-
+#include "a11y/gtkscrolledwindowaccessible.h"
 
 /**
  * SECTION:gtkscrolledwindow
@@ -479,6 +479,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   g_type_class_add_private (class, sizeof (GtkScrolledWindowPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE);
 }
 
 static void
