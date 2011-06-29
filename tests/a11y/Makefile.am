@@ -23,13 +23,9 @@ accessibility_dump_SOURCES = \
 
 TEST_PROGS += tree-performance
 
-tree_performance_SOURCES = \
-	tree-performance.c
-
 TEST_PROGS += text
 
-text_SOURCES = \
-	text.c
+TEST_PROGS += misc
 
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
