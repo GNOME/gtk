@@ -87,7 +87,7 @@ window1
         alpha: 1
         <AtkSelection>
         selection count: 1
-        selected children: 0
+        selected children: unnamed-GailNotebookPage-4
         unnamed-GailNotebookPage-4
           "page tab"
           parent: unnamed-GailNotebook-3

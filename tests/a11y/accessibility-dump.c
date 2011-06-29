@@ -402,14 +402,20 @@ dump_atk_selection (AtkSelection *atk_selection,
     {
       if (atk_selection_is_child_selected (atk_selection, i))
         {
+          AtkObject *object = atk_object_ref_accessible_child (ATK_OBJECT (atk_selection), i);
+          
+          g_assert (object);
+          
           if (n_counted_selections == 0)
-            g_string_append_printf (string, "%*sselected children:", depth, "");
-          g_string_append_printf (string, " %d", i);
+            {
+              g_string_append_printf (string, "%*sselected children: %s\n", depth, "", get_name (object));
+              depth += strlen ("selected children: ");
+            }
+          else
+            g_string_append_printf (string, "%*s%s\n", depth, "", get_name (object));
           n_counted_selections++;
         }
     }
-  if (n_counted_selections)
-    g_string_append_c (string, '\n');
   
   g_assert_cmpint (n_selections, ==, n_counted_selections);
 }

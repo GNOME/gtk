@@ -17,7 +17,8 @@ window1
     alpha: 1
     <AtkSelection>
     selection count: 2
-    selected children: 2 3
+    selected children: One
+                       Two
     <AtkTable>
     rows: 4
     columns: 2

@@ -17,7 +17,7 @@ window1
     alpha: 1
     <AtkSelection>
     selection count: 1
-    selected children: 0
+    selected children: Tab 1
     Tab 1
       "page tab"
       parent: notebook1
