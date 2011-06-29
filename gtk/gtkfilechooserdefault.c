@@ -5002,6 +5002,49 @@ restore_path_bar (GtkFileChooserDefault *impl)
   g_object_unref (impl->browse_path_bar_hbox);
 }
 
+/* Takes the folder stored in a row in the recent_model, and puts it in the pathbar */
+static void
+put_recent_folder_in_pathbar (GtkFileChooserDefault *impl, GtkTreeIter *iter)
+{
+  GFile *file;
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), iter,
+		      MODEL_COL_FILE, &file,
+		      -1);
+  _gtk_path_bar_set_file (GTK_PATH_BAR (impl->browse_path_bar), file, FALSE, NULL); /* NULL-GError */
+  g_object_unref (file);
+}
+
+/* For recently-used mode, updates the path in the pathbar with the currently-selected item */
+static void
+update_path_bar (GtkFileChooserDefault *impl)
+{
+  if (impl->operation_mode == OPERATION_MODE_RECENT
+      && impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+      GtkTreeSelection *selection;
+      gboolean have_selected;
+      GtkTreeIter iter;
+
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+
+      /* Save mode means single-selection mode, so the following is valid */
+      have_selected = gtk_tree_selection_get_selected (selection, NULL, &iter);
+
+      if (have_selected)
+	{
+	  put_recent_folder_in_pathbar (impl, &iter);
+	  gtk_widget_show (impl->browse_path_bar);
+	  gtk_widget_hide (impl->browse_select_a_folder_label);
+	}
+      else
+	{
+	  gtk_widget_hide (impl->browse_path_bar);
+	  gtk_widget_show (impl->browse_select_a_folder_label);
+	}
+    }
+}
+
 /* This function is basically a do_all function.
  *
  * It sets the visibility on all the widgets based on the current state, and
@@ -5047,6 +5090,7 @@ update_appearance (GtkFileChooserDefault *impl)
     _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
 
   restore_path_bar (impl);
+  update_path_bar (impl);
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN || !impl->create_folders)
     gtk_widget_hide (impl->browse_new_folder_button);
@@ -9262,27 +9306,43 @@ recent_hide_entry (GtkFileChooserDefault *impl)
   GtkWidget *image;
   gchar *tmp;
 
+  /* Box for recent widgets */
   impl->recent_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 
-  /* Image */
-  image = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_BUTTON);
-  gtk_box_pack_start (GTK_BOX (impl->recent_hbox), image, FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->recent_hbox, TRUE, TRUE, 0);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->recent_hbox);
+  gtk_widget_show (impl->recent_hbox);
 
-  /* Label */
-  label = gtk_label_new (NULL);
-  tmp = g_strdup_printf ("<b>%s</b>", _("Recently Used"));
-  gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), tmp);
-  gtk_box_pack_start (GTK_BOX (impl->recent_hbox), label, FALSE, FALSE, 0);
-  g_free (tmp);
+  /* For Save mode, we don't want this icon/label - we want update_path_bar() to do its thing instead */
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+      char *str;
+
+      str = g_strconcat ("<i>", _("Please select a folder below"), "</i>", NULL);
+      impl->browse_select_a_folder_label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (impl->browse_select_a_folder_label), str);
+      g_free (str);
+      gtk_box_pack_start (GTK_BOX (impl->recent_hbox), impl->browse_select_a_folder_label, FALSE, FALSE, 0);
+    }
+  else
+    {
+      /* Image */
+      image = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_BUTTON);
+      gtk_box_pack_start (GTK_BOX (impl->recent_hbox), image, FALSE, FALSE, 5);
+      gtk_widget_show (image);
+
+      /* Label */
+      label = gtk_label_new (NULL);
+      tmp = g_strdup_printf ("<b>%s</b>", _("Recently Used"));
+      gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), tmp);
+      gtk_box_pack_start (GTK_BOX (impl->recent_hbox), label, FALSE, FALSE, 0);
+      gtk_widget_show (label);
+      g_free (tmp);
+    }
 
   gtk_widget_hide (impl->browse_path_bar);
   gtk_widget_hide (impl->browse_new_folder_button);
   
-  /* Box for recent widgets */
-  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->recent_hbox, TRUE, TRUE, 0);
-  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->recent_hbox);
-  gtk_widget_show_all (impl->recent_hbox);
-
   /* Hide the location widgets temporarily */
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
@@ -9780,6 +9840,8 @@ list_selection_changed (GtkTreeSelection      *selection,
 
   if (impl->location_entry)
     update_chooser_entry (impl);
+
+  update_path_bar (impl);
 
   check_preview_change (impl);
   bookmarks_check_add_sensitivity (impl);
