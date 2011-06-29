@@ -18,14 +18,11 @@ LDADD = \
 
 TEST_PROGS += accessibility-dump
 
-accessibility_dump_SOURCES = \
-	accessibility-dump.c
-
 TEST_PROGS += tree-performance
 
 TEST_PROGS += text
 
-TEST_PROGS += misc
+TEST_PROGS += children
 
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
