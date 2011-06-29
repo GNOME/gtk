@@ -1349,7 +1349,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
 }
 
 /**
- * gtk_drag_dest_unset:
+ * gtk_drag_dest_unset: (method)
  * @widget: a #GtkWidget
  *
  * Clears information about a drop destination set with
