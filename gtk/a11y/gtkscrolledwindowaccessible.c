@@ -80,7 +80,7 @@ visibility_changed (GObject    *object,
       if (child_added)
         g_signal_emit_by_name (accessible, "children_changed::add", index, child, NULL);
       else
-        g_signal_emit_by_name (accessible, "children_changed::delete", index, child, NULL);
+        g_signal_emit_by_name (accessible, "children_changed::remove", index, child, NULL);
 
     }
 }
