@@ -44,7 +44,6 @@ struct _GailMenuItem
   gchar *text;
 
   gchar    *click_keybinding;
-  guint    action_idle_handler;
 };
 
 GType gail_menu_item_get_type (void);

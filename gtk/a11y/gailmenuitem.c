@@ -49,7 +49,6 @@ static const gchar *         gail_menu_item_get_name         (AtkObject    *obje
 static void                  atk_action_interface_init     (AtkActionIface *iface);
 static gboolean              gail_menu_item_do_action      (AtkAction      *action,
                                                             gint           i);
-static gboolean              idle_do_action                (gpointer       data);
 static gint                  gail_menu_item_get_n_actions  (AtkAction      *action);
 static const gchar* gail_menu_item_action_get_name (AtkAction      *action,
                                                              gint           i);
@@ -444,40 +443,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_keybinding = gail_menu_item_get_keybinding;
 }
 
-static gboolean
-gail_menu_item_do_action (AtkAction *action,
-                          gint      i)
-{
-  if (i == 0)
-    {
-      GtkWidget *item;
-      GailMenuItem *gail_menu_item;
-
-      item = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
-      if (item == NULL)
-        /* State is defunct */
-        return FALSE;
-
-      if (!gtk_widget_get_sensitive (item) || !gtk_widget_get_visible (item))
-        return FALSE;
-
-      gail_menu_item = GAIL_MENU_ITEM (action);
-      if (gail_menu_item->action_idle_handler)
-        return FALSE;
-      else
-	{
-	  gail_menu_item->action_idle_handler =
-            gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE,
-                                       idle_do_action,
-                                       g_object_ref (gail_menu_item),
-                                       (GDestroyNotify) g_object_unref);
-	}
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
 static void
 ensure_menus_unposted (GailMenuItem *menu_item)
 {
@@ -500,32 +465,40 @@ ensure_menus_unposted (GailMenuItem *menu_item)
 }
 
 static gboolean
-idle_do_action (gpointer data)
+gail_menu_item_do_action (AtkAction *action,
+                          gint      i)
 {
-  GtkWidget *item;
-  GtkWidget *item_parent;
-  GailMenuItem *menu_item;
-  gboolean item_mapped;
+  if (i == 0)
+    {
+      GtkWidget *item, *item_parent;
+      gboolean item_mapped;
 
-  menu_item = GAIL_MENU_ITEM (data);
-  menu_item->action_idle_handler = 0;
-  item = gtk_accessible_get_widget (GTK_ACCESSIBLE (menu_item));
-  if (item == NULL /* State is defunct */ ||
-      !gtk_widget_get_sensitive (item) || !gtk_widget_get_visible (item))
+      item = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
+      if (item == NULL)
+        /* State is defunct */
+        return FALSE;
+
+      if (!gtk_widget_get_sensitive (item) || !gtk_widget_get_visible (item))
+        return FALSE;
+
+      item_parent = gtk_widget_get_parent (item);
+      if (!GTK_IS_MENU_SHELL (item_parent))
+        return FALSE;
+
+      gtk_menu_shell_select_item (GTK_MENU_SHELL (item_parent), item);
+      item_mapped = gtk_widget_get_mapped (item);
+      /*
+       * This is what is called when <Return> is pressed for a menu item
+       */
+      g_signal_emit_by_name (item_parent, "activate_current",  
+                             /*force_hide*/ 1); 
+      if (!item_mapped)
+        ensure_menus_unposted (GAIL_MENU_ITEM (action));
+
+      return TRUE;
+    }
+  else
     return FALSE;
-
-  item_parent = gtk_widget_get_parent (item);
-  gtk_menu_shell_select_item (GTK_MENU_SHELL (item_parent), item);
-  item_mapped = gtk_widget_get_mapped (item);
-  /*
-   * This is what is called when <Return> is pressed for a menu item
-   */
-  g_signal_emit_by_name (item_parent, "activate_current",  
-                         /*force_hide*/ 1); 
-  if (!item_mapped)
-    ensure_menus_unposted (menu_item);
-
-  return FALSE;
 }
 
 static gint
@@ -743,12 +716,6 @@ gail_menu_item_finalize (GObject *object)
   GailMenuItem *menu_item = GAIL_MENU_ITEM (object);
 
   g_free (menu_item->click_keybinding);
-  if (menu_item->action_idle_handler)
-    {
-      g_source_remove (menu_item->action_idle_handler);
-      menu_item->action_idle_handler = 0;
-    }
-
   if (menu_item->textutil)
     {
       g_object_unref (menu_item->textutil);
