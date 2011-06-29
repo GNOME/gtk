@@ -42,7 +42,6 @@ struct _GailNotebookPage
   GtkAccessible *notebook;
   
   GtkWidget *child;
-  guint notify_child_added_id;
 
   GailTextUtil *textutil;
 };

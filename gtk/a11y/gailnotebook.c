@@ -45,7 +45,8 @@ static gboolean     gail_notebook_is_child_selected   (AtkSelection   *selection
                                                        gint           i);
 static void         create_notebook_page_accessible   (GailNotebook   *gail_notebook,
                                                        GtkNotebook    *notebook,
-                                                       GtkWidget      *child);
+                                                       GtkWidget      *child,
+                                                       int             page_num);
 static gboolean     gail_notebook_focus_cb            (GtkWidget      *widget,
                                                        GtkDirectionType type);
 static gboolean     gail_notebook_check_focus_tab     (gpointer       data);
@@ -129,7 +130,7 @@ gail_notebook_page_added (GtkNotebook *gtk_notebook,
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (gtk_notebook));
   notebook = GAIL_NOTEBOOK (atk_obj);
-  create_notebook_page_accessible (notebook, gtk_notebook, child);
+  create_notebook_page_accessible (notebook, gtk_notebook, child, page_num);
 }
 
 static void
@@ -170,7 +171,8 @@ gail_notebook_real_initialize (AtkObject *obj,
     {
       create_notebook_page_accessible (notebook,
                                        gtk_notebook,
-                                       gtk_notebook_get_nth_page (gtk_notebook, i));
+                                       gtk_notebook_get_nth_page (gtk_notebook, i),
+                                       i);
     }
   notebook->selected_page = gtk_notebook_get_current_page (gtk_notebook);
 
@@ -398,7 +400,8 @@ gail_notebook_is_child_selected (AtkSelection *selection,
 static void
 create_notebook_page_accessible (GailNotebook *gail_notebook,
                                  GtkNotebook  *notebook,
-                                 GtkWidget    *child)
+                                 GtkWidget    *child,
+                                 int           page_num)
 {
   AtkObject *obj;
 
@@ -406,6 +409,8 @@ create_notebook_page_accessible (GailNotebook *gail_notebook,
   g_hash_table_insert (gail_notebook->pages,
                        child,
                        obj);
+  atk_object_set_parent (obj, ATK_OBJECT (gail_notebook));
+  g_signal_emit_by_name (gail_notebook, "children_changed::add", page_num, obj, NULL);
 }
 
 static gboolean
