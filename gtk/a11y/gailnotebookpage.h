@@ -39,7 +39,7 @@ struct _GailNotebookPage
 {
   AtkObject parent;
 
-  GtkNotebook *notebook;
+  GtkAccessible *notebook;
   
   GtkWidget *child;
   guint notify_child_added_id;
@@ -54,7 +54,7 @@ struct _GailNotebookPageClass
   AtkObjectClass parent_class;
 };
 
-AtkObject *gail_notebook_page_new(GtkNotebook *notebook, GtkWidget *child);
+AtkObject *gail_notebook_page_new (GailNotebook *notebook, GtkWidget *child);
 
 void       gail_notebook_page_invalidate (GailNotebookPage *page);
 

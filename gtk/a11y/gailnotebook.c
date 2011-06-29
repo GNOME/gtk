@@ -402,7 +402,7 @@ create_notebook_page_accessible (GailNotebook *gail_notebook,
 {
   AtkObject *obj;
 
-  obj = gail_notebook_page_new (notebook, child);
+  obj = gail_notebook_page_new (gail_notebook, child);
   g_hash_table_insert (gail_notebook->pages,
                        child,
                        obj);
