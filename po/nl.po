@@ -1022,7 +1022,7 @@ msgstr "_Hoogte:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1081
 msgid "Paper Size"
-msgstr "Papiergrootte"
+msgstr "Papierformaat"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1090
 msgid "_Top:"
@@ -1746,7 +1746,7 @@ msgstr "_Opmaken voor:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:929 ../gtk/gtkprintunixdialog.c:3478
 msgid "_Paper size:"
-msgstr "_Papiergroote:"
+msgstr "_Papierformaat:"
 
 # ligging/orientatie/positie/positionering
 #: ../gtk/gtkpagesetupunixdialog.c:960
