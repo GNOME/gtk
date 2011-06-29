@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 #include "gailnotebookpage.h"
 #include <libgail-util/gailmisc.h>
-#include "gail-private-macros.h"
 
 static void      gail_notebook_page_class_init      (GailNotebookPageClass     *klass);
 static void                  gail_notebook_page_init           (GailNotebookPage *page);
@@ -355,7 +354,8 @@ gail_notebook_page_ref_child (AtkObject *accessible,
     return NULL;
 
   child = gtk_notebook_get_nth_page (page->notebook, page->index);
-  gail_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
+  if (!GTK_IS_WIDGET (child))
+    return NULL;
    
   child_obj = gtk_widget_get_accessible (child);
   g_object_ref (child_obj);
@@ -396,7 +396,8 @@ gail_notebook_page_ref_state_set (AtkObject *accessible)
       AtkObject *child;
 
       child = atk_object_ref_accessible_child (accessible, 0);
-      gail_return_val_if_fail (child, state_set);
+      if (!child)
+        return state_set;
 
       merged_state_set = state_set;
       state_set = atk_object_ref_state_set (child);
@@ -465,7 +466,8 @@ gail_notebook_page_get_extents (AtkComponent *component,
       *height = 0;
 
       child = atk_object_ref_accessible_child (ATK_OBJECT (component), 0);
-      gail_return_if_fail (child);
+      if (!child)
+        return;
 
       atk_component_get_position (ATK_COMPONENT (child), x, y, coord_type);
       g_object_unref (child);

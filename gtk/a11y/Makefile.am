@@ -3,7 +3,6 @@ include $(top_srcdir)/Makefile.decl
 noinst_LTLIBRARIES = libgail.la
 
 gail_c_sources =			\
-	gail-private-macros.h		\
 	gail.c				\
 	gtkarrowaccessible.c		\
 	gailbooleancell.c		\

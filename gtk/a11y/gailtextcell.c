@@ -24,7 +24,6 @@
 #include "gailcontainercell.h"
 #include "gailcellparent.h"
 #include <libgail-util/gailmisc.h>
-#include "gail-private-macros.h"
 
 static void      gail_text_cell_class_init		(GailTextCellClass *klass);
 static void      gail_text_cell_init			(GailTextCell	*text_cell);

@@ -25,7 +25,6 @@
 #include "gailutil.h"
 #include "gailtoplevel.h"
 #include "gailwindow.h"
-#include "gail-private-macros.h"
 
 static void		gail_util_class_init			(GailUtilClass		*klass);
 static void             gail_util_init                          (GailUtil               *utils);
@@ -441,7 +440,8 @@ state_event_watcher (GSignalInvocationHint  *hint,
     return FALSE;
 
   event = g_value_get_boxed (param_values + 1);
-  gail_return_val_if_fail (event->type == GDK_WINDOW_STATE, FALSE);
+  if (event->type == GDK_WINDOW_STATE)
+    return FALSE;
   widget = GTK_WIDGET (object);
 
   if (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
@@ -488,7 +488,8 @@ window_added (AtkObject *atk_obj,
   if (!GAIL_IS_WINDOW (child)) return;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
-  gail_return_if_fail (widget);
+  if (!widget)
+    return;
 
   g_signal_connect (widget, "focus-in-event",  
                     (GCallback) window_focus, NULL);
@@ -509,7 +510,8 @@ window_removed (AtkObject *atk_obj,
   if (!GAIL_IS_WINDOW (child)) return;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
-  gail_return_if_fail (widget);
+  if (!widget)
+    return;
 
   window = GTK_WINDOW (widget);
   /*

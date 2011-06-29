@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 #include "gailnotebook.h"
 #include "gailnotebookpage.h"
-#include "gail-private-macros.h"
 
 static void         gail_notebook_class_init          (GailNotebookClass *klass);
 static void         gail_notebook_init                (GailNotebook      *notebook);
@@ -337,11 +336,8 @@ gail_notebook_ref_selection (AtkSelection *selection,
   GtkNotebook *notebook;
   gint pagenum;
   
-  /*
-   * A note book can have only one selection.
-   */
-  gail_return_val_if_fail (i == 0, NULL);
-  g_return_val_if_fail (GAIL_IS_NOTEBOOK (selection), NULL);
+  if (i != 0)
+    return NULL;
   
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
@@ -350,7 +346,8 @@ gail_notebook_ref_selection (AtkSelection *selection,
   
   notebook = GTK_NOTEBOOK (widget);
   pagenum = gtk_notebook_get_current_page (notebook);
-  gail_return_val_if_fail (pagenum != -1, NULL);
+  if (pagenum == -1)
+    return NULL;
   accessible = gail_notebook_ref_child (ATK_OBJECT (selection), pagenum);
 
   return accessible;
@@ -498,7 +495,8 @@ gail_notebook_child_parent_set (GtkWidget *widget,
 {
   GailNotebook *gail_notebook;
 
-  gail_return_if_fail (old_parent != NULL);
+  if (!old_parent)
+    return;
   gail_notebook = GAIL_NOTEBOOK (gtk_widget_get_accessible (old_parent));
   gail_notebook->remove_index = GAIL_NOTEBOOK_PAGE (data)->index;
 }

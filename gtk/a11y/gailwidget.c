@@ -27,7 +27,6 @@
 #endif
 #include "gailwidget.h"
 #include "gailnotebookpage.h"
-#include "gail-private-macros.h"
 
 extern GtkWidget *focus_widget;
 
@@ -257,11 +256,7 @@ gail_widget_get_parent (AtkObject *accessible)
 
       widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
       if (widget == NULL)
-        /*
-         * State is defunct
-         */
         return NULL;
-      gail_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
       parent_widget = gtk_widget_get_parent (widget);
       if (parent_widget == NULL)
@@ -355,13 +350,8 @@ gail_widget_ref_relation_set (AtkObject *obj)
   AtkObject *array[1];
   AtkRelation* relation;
 
-  gail_return_val_if_fail (GAIL_IS_WIDGET (obj), NULL);
-
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
     return NULL;
 
   relation_set = ATK_OBJECT_CLASS (gail_widget_parent_class)->ref_relation_set (obj);
@@ -558,11 +548,11 @@ gail_widget_get_index_in_parent (AtkObject *accessible)
         }
     }
 
-  gail_return_val_if_fail (GTK_IS_WIDGET (widget), -1);
-  parent_widget = gtk_widget_get_parent (widget);
-  if (parent_widget == NULL)
+  if (!GTK_IS_WIDGET (widget))
     return -1;
-  gail_return_val_if_fail (GTK_IS_CONTAINER (parent_widget), -1);
+  parent_widget = gtk_widget_get_parent (widget);
+  if (!GTK_IS_CONTAINER (parent_widget))
+    return -1;
 
   children = gtk_container_get_children (GTK_CONTAINER (parent_widget));
 
@@ -631,12 +621,7 @@ gail_widget_get_extents (AtkComponent   *component,
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * Object is defunct
-     */
     return;
-
-  gail_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_widget_get_allocation (widget, &allocation);
   *width = allocation.width;
@@ -684,12 +669,7 @@ gail_widget_get_size (AtkComponent   *component,
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * Object is defunct
-     */
     return;
-
-  gail_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_widget_get_allocation (widget, &allocation);
   *width = allocation.width;
@@ -705,13 +685,15 @@ gail_widget_get_layer (AtkComponent *component)
   return (AtkLayer) layer;
 }
 
-static gboolean 
+static gboolean
 gail_widget_grab_focus (AtkComponent   *component)
 {
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   GtkWidget *toplevel;
 
-  gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  if (!widget)
+    return FALSE;
+
   if (gtk_widget_get_can_focus (widget))
     {
       gtk_widget_grab_focus (widget);
@@ -749,11 +731,7 @@ gail_widget_set_extents (AtkComponent   *component,
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * Object is defunct
-     */
     return FALSE;
-  gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (gtk_widget_is_toplevel (widget))
     {
@@ -793,11 +771,7 @@ gail_widget_set_position (AtkComponent   *component,
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * Object is defunct
-     */
     return FALSE;
-  gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (gtk_widget_is_toplevel (widget))
     {
@@ -834,11 +808,7 @@ gail_widget_set_size (AtkComponent   *component,
   GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
-    /*
-     * Object is defunct
-     */
     return FALSE;
-  gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (gtk_widget_is_toplevel (widget))
     {
