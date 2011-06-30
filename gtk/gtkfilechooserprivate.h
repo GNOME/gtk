@@ -183,7 +183,9 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_path_bar_hbox;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
+  GtkWidget *browse_select_a_folder_info_bar;
   GtkWidget *browse_select_a_folder_label;
+  GtkWidget *browse_select_a_folder_warning_icon;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;

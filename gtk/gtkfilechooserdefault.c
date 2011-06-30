@@ -46,6 +46,7 @@
 #include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtkimagemenuitem.h"
+#include "gtkinfobar.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
@@ -4957,6 +4958,74 @@ unset_file_system_backend (GtkFileChooserDefault *impl)
   impl->file_system = NULL;
 }
 
+static void
+create_info_bar (GtkFileChooserDefault *impl)
+{
+  GtkWidget *content_area;
+
+  impl->browse_select_a_folder_info_bar = gtk_info_bar_new ();
+  impl->browse_select_a_folder_warning_icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
+  impl->browse_select_a_folder_label = gtk_label_new (NULL);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (impl->browse_select_a_folder_info_bar));
+  gtk_box_set_spacing (GTK_BOX (content_area), 6);
+
+  gtk_box_pack_start (GTK_BOX (content_area), impl->browse_select_a_folder_warning_icon, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), impl->browse_select_a_folder_label, TRUE, TRUE, 0);
+
+  gtk_widget_show (impl->browse_select_a_folder_info_bar);
+  gtk_widget_show (impl->browse_select_a_folder_label);
+}
+
+typedef enum {
+  INFO_BAR_SELECT_A_FOLDER,
+  INFO_BAR_ERROR_NO_FILENAME,
+  INFO_BAR_ERROR_NO_FOLDER
+} InfoBarMode;
+
+static void
+set_info_bar (GtkFileChooserDefault *impl, InfoBarMode mode)
+{
+  char *str;
+  gboolean free_str;
+  GtkMessageType message_type;
+
+  if (!impl->browse_select_a_folder_info_bar)
+    return;
+
+  free_str = FALSE;
+
+  switch (mode)
+    {
+    case INFO_BAR_SELECT_A_FOLDER:
+      str = g_strconcat ("<i>", _("Please select a folder below"), "</i>", NULL);
+      free_str = TRUE;
+      message_type = GTK_MESSAGE_OTHER;
+      break;
+
+    case INFO_BAR_ERROR_NO_FILENAME:
+      str = _("Please type a file name");
+      message_type = GTK_MESSAGE_WARNING;
+      break;
+
+    case INFO_BAR_ERROR_NO_FOLDER:
+      str = _("Please select a folder below");
+      message_type = GTK_MESSAGE_WARNING;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  gtk_info_bar_set_message_type (GTK_INFO_BAR (impl->browse_select_a_folder_info_bar), message_type);
+  gtk_widget_set_visible (impl->browse_select_a_folder_warning_icon, message_type == GTK_MESSAGE_WARNING);
+  gtk_label_set_markup (GTK_LABEL (impl->browse_select_a_folder_label), str);
+
+  if (free_str)
+    g_free (str);
+}
+
 /* Saves the widgets around the pathbar so they can be reparented later
  * in the correct place.  This function must be called paired with
  * restore_path_bar().
@@ -5035,12 +5104,13 @@ update_path_bar (GtkFileChooserDefault *impl)
 	{
 	  put_recent_folder_in_pathbar (impl, &iter);
 	  gtk_widget_show (impl->browse_path_bar);
-	  gtk_widget_hide (impl->browse_select_a_folder_label);
+	  gtk_widget_hide (impl->browse_select_a_folder_info_bar);
 	}
       else
 	{
 	  gtk_widget_hide (impl->browse_path_bar);
-	  gtk_widget_show (impl->browse_select_a_folder_label);
+	  set_info_bar (impl, INFO_BAR_SELECT_A_FOLDER);
+	  gtk_widget_show (impl->browse_select_a_folder_info_bar);
 	}
     }
 }
@@ -8292,7 +8362,6 @@ location_popup_on_paste_handler (GtkFileChooserDefault *impl)
 			      impl);
 }
 
-
 /* Implementation for GtkFileChooserEmbed::should_respond() */
 static gboolean
 gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
@@ -8343,7 +8412,12 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	return search_should_respond (impl);
 
       if (impl->operation_mode == OPERATION_MODE_RECENT)
-        return recent_should_respond (impl);
+	{
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	    goto save_entry;
+	  else
+	    return recent_should_respond (impl);
+	}
 
       selection_check (impl, &num_selected, &all_files, &all_folders);
 
@@ -8411,13 +8485,24 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       check_save_entry (impl, &file, &is_well_formed, &is_empty, &is_file_part_empty, &is_folder);
 
       if (!is_well_formed)
-        return FALSE;
+	{
+	  if (!is_empty
+	      && impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	      && impl->operation_mode == OPERATION_MODE_RECENT)
+	    set_info_bar (impl, INFO_BAR_ERROR_NO_FOLDER);
+
+	  return FALSE;
+	}
 
       if (is_empty)
         {
           if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-            return FALSE;
+	    {
+	      set_info_bar (impl, INFO_BAR_ERROR_NO_FILENAME);
+	      gtk_widget_grab_focus (impl->location_entry);
+	      return FALSE;
+	    }
 
           goto file_list;
         }
@@ -9340,13 +9425,9 @@ recent_hide_entry (GtkFileChooserDefault *impl)
   /* For Save mode, we don't want this icon/label - we want update_path_bar() to do its thing instead */
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
-      char *str;
-
-      str = g_strconcat ("<i>", _("Please select a folder below"), "</i>", NULL);
-      impl->browse_select_a_folder_label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (impl->browse_select_a_folder_label), str);
-      g_free (str);
-      gtk_box_pack_start (GTK_BOX (impl->recent_hbox), impl->browse_select_a_folder_label, FALSE, FALSE, 0);
+      create_info_bar (impl);
+      gtk_box_pack_start (GTK_BOX (impl->recent_hbox), impl->browse_select_a_folder_info_bar, FALSE, FALSE, 0);
+      set_info_bar (impl, INFO_BAR_SELECT_A_FOLDER);
     }
   else
     {
