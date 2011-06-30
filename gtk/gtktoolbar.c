@@ -3871,6 +3871,9 @@ count_widget_position (GtkWidget *widget,
 {
   CountingData *count = data;
 
+  if (!gtk_widget_get_visible (widget))
+    return;
+
   if (count->widget == widget)
     count->found = TRUE;
   else if (count->found)
@@ -3885,22 +3888,29 @@ gtk_toolbar_get_visible_position (GtkToolbar *toolbar,
 {
   CountingData count = { child, FALSE, 0, 0 };
 
-  /* forall iterates in visible order */
+  /* foreach iterates in visible order */
   gtk_container_forall (GTK_CONTAINER (toolbar),
                         count_widget_position,
                         &count);
 
   g_assert (count.found);
 
-  /* FIXME: rtl */
+  if (toolbar->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+      gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
+    return count.after;
+
   return count.before;
 }
 
 static void
-add_widget_to_path (GtkWidget *widget,
-                    gpointer   path)
+add_widget_to_path (gpointer data,
+                    gpointer user_data)
 {
-  gtk_widget_path_append_for_widget (path, widget);
+  GtkWidget *widget = data;
+  GtkWidgetPath *path = user_data;
+
+  if (gtk_widget_get_visible (widget))
+    gtk_widget_path_append_for_widget (path, widget);
 }
 
 static GtkWidgetPath *
@@ -3910,25 +3920,41 @@ gtk_toolbar_get_path_for_child (GtkContainer *container,
   GtkWidgetPath *path;
   GtkToolbar *toolbar;
   GtkToolbarPrivate *priv;
+  gint vis_index;
 
   toolbar = GTK_TOOLBAR (container);
   priv = toolbar->priv;
 
   if (priv->sibling_path == NULL)
     {
+      GList *children;
+
+      /* build a path for all the visible children;
+       * get_children works in visible order
+       */
       priv->sibling_path = gtk_widget_path_new ();
-      /* forall iterates in visible order */
-      gtk_container_forall (container,
-                            add_widget_to_path,
-                            priv->sibling_path);
+      children = gtk_container_get_children (container);
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+          gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
+        children = g_list_reverse (children);
+
+      g_list_foreach (children, add_widget_to_path, priv->sibling_path);
+      g_list_free (children);
     }
 
   path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
   if (gtk_widget_get_visible (child))
-    gtk_widget_path_append_with_siblings (path,
-                                          priv->sibling_path,
-                                          gtk_toolbar_get_visible_position (toolbar,
-                                                                            child));
+    {
+      vis_index = gtk_toolbar_get_visible_position (toolbar, child);
+
+      if (vis_index < gtk_widget_path_length (priv->sibling_path))
+        gtk_widget_path_append_with_siblings (path,
+                                              priv->sibling_path,
+                                              vis_index);
+      else
+        gtk_widget_path_append_for_widget (path, child);
+    }
   else
     gtk_widget_path_append_for_widget (path, child);
 
