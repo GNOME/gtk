@@ -847,11 +847,8 @@ count_widget_position (GtkWidget *widget,
 {
   CountingData *count = data;
 
-#if 0
-  /* We cannot reliably detect changes in widget visibility */
   if (!gtk_widget_get_visible (widget))
     return;
-#endif
 
   if (count->widget == widget)
     count->found = TRUE;
@@ -904,11 +901,9 @@ gtk_box_get_path_for_child (GtkContainer *container,
 
       for (list = children; list; list = list->next)
         {
-#if 0
-          /* We cannot reliably detect changes in widget visibility */
           if (!gtk_widget_get_visible (list->data))
-            return;
-#endif
+            continue;
+
           gtk_widget_path_append_for_widget (private->sibling_path, list->data);
         }
       g_list_free (children);
@@ -950,6 +945,16 @@ gtk_box_direction_changed (GtkWidget        *widget,
 }
 
 static void
+box_child_visibility_notify_cb (GObject *obj,
+                                GParamSpec *pspec,
+                                gpointer user_data)
+{
+  GtkBox *box = user_data;
+
+  gtk_box_invalidate_order (box);
+}
+
+static void
 gtk_box_pack (GtkBox      *box,
               GtkWidget   *child,
               gboolean     expand,
@@ -977,6 +982,9 @@ gtk_box_pack (GtkBox      *box,
 
   gtk_box_invalidate_order (box);
   gtk_widget_set_parent (child, GTK_WIDGET (box));
+
+  g_signal_connect (child, "notify::visible",
+                    G_CALLBACK (box_child_visibility_notify_cb), box);
 
   gtk_widget_child_notify (child, "expand");
   gtk_widget_child_notify (child, "fill");
@@ -1794,6 +1802,10 @@ gtk_box_remove (GtkContainer *container,
 
 	  was_visible = gtk_widget_get_visible (widget);
 	  gtk_widget_unparent (widget);
+
+          g_signal_handlers_disconnect_by_func (widget,
+                                                box_child_visibility_notify_cb,
+                                                box);
 
 	  priv->children = g_list_remove_link (priv->children, children);
 	  g_list_free (children);
