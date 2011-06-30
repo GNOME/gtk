@@ -881,6 +881,8 @@ gdk_x11_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 
               ++i;
             }
+
+          ++keycode;
         }
     }
 
