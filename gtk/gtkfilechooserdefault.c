@@ -7287,15 +7287,23 @@ gtk_file_chooser_default_get_files (GtkFileChooser *chooser)
   GtkWidget *current_focus;
   gboolean file_list_seen;
 
+  info.impl = impl;
+  info.result = NULL;
+  info.file_from_entry = NULL;
+
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
     return search_get_selected_files (impl);
 
   if (impl->operation_mode == OPERATION_MODE_RECENT)
-    return recent_get_selected_files (impl);
-
-  info.impl = impl;
-  info.result = NULL;
-  info.file_from_entry = NULL;
+    {
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+	{
+	  file_list_seen = TRUE;
+	  goto file_entry;
+	}
+      else
+	return recent_get_selected_files (impl);
+    }
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
   if (toplevel)
