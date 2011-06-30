@@ -3267,6 +3267,16 @@ struct _ToolbarContent
   guint          has_menu : 2;
 };
 
+static void
+toolbar_item_visiblity_notify_cb (GObject *obj,
+                                  GParamSpec *pspec,
+                                  gpointer user_data)
+{
+  GtkToolbar *toolbar = user_data;
+
+  gtk_toolbar_invalidate_order (toolbar);
+}
+
 static ToolbarContent *
 toolbar_content_new_tool_item (GtkToolbar  *toolbar,
 			       GtkToolItem *item,
@@ -3286,6 +3296,9 @@ toolbar_content_new_tool_item (GtkToolbar  *toolbar,
   
   gtk_widget_set_parent (GTK_WIDGET (item), GTK_WIDGET (toolbar));
   gtk_toolbar_invalidate_order (toolbar);
+
+  g_signal_connect (content->item, "notify::visible",
+                    G_CALLBACK (toolbar_item_visiblity_notify_cb), toolbar);
 
   if (!is_placeholder)
     {
@@ -3308,6 +3321,10 @@ toolbar_content_remove (ToolbarContent *content,
 
   gtk_toolbar_invalidate_order (toolbar);
   gtk_widget_unparent (GTK_WIDGET (content->item));
+
+  g_signal_handlers_disconnect_by_func (content->item,
+                                        toolbar_item_visiblity_notify_cb,
+                                        toolbar);
 
   priv->content = g_list_remove (priv->content, content);
 
