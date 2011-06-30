@@ -163,6 +163,19 @@ main (int argc, char *argv[])
   add_child_tests (gtk_paned_new (GTK_ORIENTATION_HORIZONTAL));
   add_child_tests (gtk_grid_new ());
   add_child_tests (gtk_event_box_new ());
+  add_child_tests (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+  add_child_tests (gtk_assistant_new ());
+  add_child_tests (gtk_frame_new ("frame"));
+  add_child_tests (gtk_expander_new ("expander"));
+  add_child_tests (gtk_table_new (2, 2, FALSE));
+  add_child_tests (gtk_text_view_new ());
+  add_child_tests (gtk_tree_view_new ());
+#if 0
+  /* gail doesn't handle non-label children in these */
+  add_child_tests (gtk_button_new ());
+  add_child_tests (gtk_statusbar_new ());
+#endif
+  add_child_tests (gtk_notebook_new ());
 
   return g_test_run ();
 }
