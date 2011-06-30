@@ -91,7 +91,7 @@ window1
             <AtkComponent>
             layer: widget
             alpha: 1
-            unnamed-GailTreeView-5
+            unnamed-GtkTreeViewAccessible-5
               "table"
               parent: unnamed-GtkScrolledWindowAccessible-4
               index: 0
@@ -108,7 +108,7 @@ window1
               <column 0 header>
               
                 "table column header"
-                parent: unnamed-GailTreeView-5
+                parent: unnamed-GtkTreeViewAccessible-5
                 index: 0
                 name: 
                 state: enabled focusable selectable sensitive
@@ -154,7 +154,7 @@ window1
                 action 0 name: click
               
                 "table column header"
-                parent: unnamed-GailTreeView-5
+                parent: unnamed-GtkTreeViewAccessible-5
                 index: 0
                 name: 
                 state: enabled focusable selectable sensitive
@@ -200,7 +200,7 @@ window1
                 action 0 name: click
               unnamed-GailContainerCell-6
                 "table cell"
-                parent: unnamed-GailTreeView-5
+                parent: unnamed-GtkTreeViewAccessible-5
                 index: 1
                 state: enabled focusable focused selectable sensitive transient visible
                 <AtkComponent>
