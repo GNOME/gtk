@@ -1826,7 +1826,6 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
     g_object_ref (chooser_entry->base_folder);
 
   clear_completions (chooser_entry);
-  _gtk_file_chooser_entry_select_filename (chooser_entry);
 }
 
 /**
