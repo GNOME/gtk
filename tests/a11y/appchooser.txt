@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GailContainer-0
+  unnamed-GtkBoxAccessible-0
     "filler"
     parent: window1
     index: 0
@@ -16,18 +16,18 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GailContainer-1
+    unnamed-GtkBoxAccessible-1
       "filler"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 0
       state: enabled sensitive showing vertical visible
       toolkit: gail
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GailContainer-2
+      unnamed-GtkBoxAccessible-2
         "filler"
-        parent: unnamed-GailContainer-1
+        parent: unnamed-GtkBoxAccessible-1
         index: 0
         state: enabled sensitive showing vertical visible
         toolkit: gail
@@ -36,7 +36,7 @@ window1
         alpha: 1
         Select an application for "(null)" files
           "label"
-          parent: unnamed-GailContainer-2
+          parent: unnamed-GtkBoxAccessible-2
           index: 0
           name: Select an application for "(null)" files
           state: enabled multi-line sensitive showing visible
@@ -73,9 +73,9 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
-        unnamed-GailContainer-3
+        unnamed-GtkBoxAccessible-3
           "filler"
-          parent: unnamed-GailContainer-2
+          parent: unnamed-GtkBoxAccessible-2
           index: 1
           state: enabled sensitive showing vertical visible
           toolkit: gail
@@ -84,7 +84,7 @@ window1
           alpha: 1
           unnamed-GtkScrolledWindowAccessible-4
             "scroll pane"
-            parent: unnamed-GailContainer-3
+            parent: unnamed-GtkBoxAccessible-3
             index: 0
             state: enabled focusable sensitive showing visible
             toolkit: gail
@@ -425,7 +425,7 @@ Click "Show other applications", for more options, or "Find applications online"
               minimum increment: 29.800000
           Show other applications
             "push button"
-            parent: unnamed-GailContainer-3
+            parent: unnamed-GtkBoxAccessible-3
             index: 1
             name: Show other applications
             state: enabled focusable sensitive showing visible
@@ -469,9 +469,9 @@ Click "Show other applications", for more options, or "Find applications online"
             image description: (null)
             <AtkAction>
             action 0 name: click
-    unnamed-GailContainer-10
+    unnamed-GtkBoxAccessible-10
       "filler"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gail
@@ -480,7 +480,7 @@ Click "Show other applications", for more options, or "Find applications online"
       alpha: 1
       Select
         "push button"
-        parent: unnamed-GailContainer-10
+        parent: unnamed-GtkBoxAccessible-10
         index: 0
         name: Select
         state: enabled focusable sensitive showing visible default
@@ -527,7 +527,7 @@ Click "Show other applications", for more options, or "Find applications online"
         action 0 keybinding: <Alt>s
       Cancel
         "push button"
-        parent: unnamed-GailContainer-10
+        parent: unnamed-GtkBoxAccessible-10
         index: 1
         name: Cancel
         state: enabled focusable sensitive showing visible

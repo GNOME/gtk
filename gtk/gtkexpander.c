@@ -114,6 +114,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkdnd.h"
+#include "a11y/gtkexpanderaccessible.h"
 
 
 #define DEFAULT_EXPANDER_SIZE 10
@@ -375,6 +376,8 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_EXPANDER_ACCESSIBLE);
 }
 
 static void

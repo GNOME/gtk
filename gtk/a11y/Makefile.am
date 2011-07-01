@@ -6,6 +6,7 @@ gail_c_sources =			\
 	gail.c				\
 	gtkarrowaccessible.c		\
 	gailbooleancell.c		\
+	gtkboxaccessible.c		\
 	gailbutton.c			\
 	gailcell.c			\
 	gailcellparent.c		\
@@ -15,7 +16,7 @@ gail_c_sources =			\
 	gailcontainer.c			\
 	gailcontainercell.c		\
 	gtkentryaccessible.c		\
-	gailexpander.c			\
+	gtkexpanderaccessible.c		\
 	gtkframeaccessible.c		\
 	gtkimageaccessible.c		\
 	gailimagecell.c			\
@@ -56,6 +57,7 @@ libgailincludedir=$(includedir)/gail-3.0/gail
 gail_private_h_sources =		\
 	gtkarrowaccessible.h		\
 	gailbooleancell.h		\
+	gtkboxaccessible.h		\
 	gailbutton.h			\
 	gailcell.h			\
 	gailcellparent.h		\
@@ -65,7 +67,7 @@ gail_private_h_sources =		\
 	gailcontainercell.h		\
 	gailcontainer.h			\
 	gtkentryaccessible.h		\
-	gailexpander.h			\
+	gtkexpanderaccessible.h		\
 	gailfactory.h			\
 	gtkframeaccessible.h		\
 	gtkimageaccessible.h		\

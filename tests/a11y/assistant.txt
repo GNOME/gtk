@@ -96,9 +96,9 @@ window1
     image description: (null)
     <AtkAction>
     action 0 name: click
-  unnamed-GailContainer-0
+  unnamed-GtkBoxAccessible-0
     "filler"
-    parent: unnamed-GailContainer-1
+    parent: unnamed-GtkBoxAccessible-1
     index: 1
     state: enabled horizontal sensitive showing visible
     toolkit: gail
@@ -107,7 +107,7 @@ window1
     alpha: 1
     Close
       "push button"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 0
       name: Close
       state: enabled focusable sensitive
@@ -154,7 +154,7 @@ window1
       action 0 keybinding: <Alt>c
     Cancel
       "push button"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 1
       name: Cancel
       state: enabled focusable sensitive showing visible
@@ -201,7 +201,7 @@ window1
       action 0 keybinding: <Alt>c
     Finish
       "push button"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 2
       name: Finish
       state: focusable
@@ -248,7 +248,7 @@ window1
       action 0 keybinding: <Alt>f
     Go Back
       "push button"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 3
       name: Go Back
       state: enabled focusable sensitive
@@ -295,7 +295,7 @@ window1
       action 0 keybinding: <Alt>b
     Continue
       "push button"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 4
       name: Continue
       state: focusable showing visible
@@ -342,7 +342,7 @@ window1
       action 0 keybinding: <Alt>o
     Apply
       "push button"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 5
       name: Apply
       state: enabled focusable sensitive

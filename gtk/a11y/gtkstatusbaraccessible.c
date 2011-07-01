@@ -24,7 +24,7 @@
 #include "gtkstatusbaraccessible.h"
 
 
-G_DEFINE_TYPE (GtkStatusbarAccessible, gtk_statusbar_accessible, GAIL_TYPE_CONTAINER)
+G_DEFINE_TYPE (GtkStatusbarAccessible, gtk_statusbar_accessible, GTK_TYPE_BOX_ACCESSIBLE)
 
 static void
 text_changed (GtkStatusbar *statusbar,

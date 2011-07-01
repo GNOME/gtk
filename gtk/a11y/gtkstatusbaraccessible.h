@@ -20,8 +20,7 @@
 #ifndef __GTK_STATUSBAR_ACCESSIBLE_H__
 #define __GTK_STATUSBAR_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
-#include "gailtextutil.h"
+#include "gtkboxaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -37,12 +36,12 @@ typedef struct _GtkStatusbarAccessibleClass GtkStatusbarAccessibleClass;
 
 struct _GtkStatusbarAccessible
 {
-  GailContainer parent;
+  GtkBoxAccessible parent;
 };
 
 struct _GtkStatusbarAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkBoxAccessibleClass parent_class;
 };
 
 GType gtk_statusbar_accessible_get_type (void);

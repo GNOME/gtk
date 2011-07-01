@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GailContainer-0
+  unnamed-GtkBoxAccessible-0
     "filler"
     parent: window1
     index: 0
@@ -16,27 +16,27 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GailContainer-1
-      "filler"
-      parent: unnamed-GailContainer-0
+    unnamed-GtkBoxAccessible-1
+      "color chooser"
+      parent: unnamed-GtkBoxAccessible-0
       index: 0
       state: enabled sensitive showing vertical visible
       toolkit: gail
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GailContainer-2
+      unnamed-GtkBoxAccessible-2
         "filler"
-        parent: unnamed-GailContainer-1
+        parent: unnamed-GtkBoxAccessible-1
         index: 0
         state: enabled horizontal sensitive showing visible
         toolkit: gail
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GailContainer-3
+        unnamed-GtkBoxAccessible-3
           "filler"
-          parent: unnamed-GailContainer-2
+          parent: unnamed-GtkBoxAccessible-2
           index: 0
           state: enabled sensitive showing vertical visible
           toolkit: gail
@@ -45,7 +45,7 @@ window1
           alpha: 1
           unnamed-GailWidget-4
             "color chooser"
-            parent: unnamed-GailContainer-3
+            parent: unnamed-GtkBoxAccessible-3
             index: 0
             name: Color Wheel
             description: Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle.
@@ -55,9 +55,9 @@ window1
             <AtkComponent>
             layer: widget
             alpha: 1
-          unnamed-GailContainer-5
+          unnamed-GtkBoxAccessible-5
             "filler"
-            parent: unnamed-GailContainer-3
+            parent: unnamed-GtkBoxAccessible-3
             index: 1
             state: enabled horizontal sensitive showing visible
             toolkit: gail
@@ -66,14 +66,14 @@ window1
             alpha: 1
             unnamed-GtkFrameAccessible-6
               "panel"
-              parent: unnamed-GailContainer-5
+              parent: unnamed-GtkBoxAccessible-5
               index: 0
               state: enabled sensitive showing visible
               toolkit: gail
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GailContainer-7
+              unnamed-GtkBoxAccessible-7
                 "filler"
                 parent: unnamed-GtkFrameAccessible-6
                 index: 0
@@ -84,7 +84,7 @@ window1
                 alpha: 1
                 unnamed-GailWidget-8
                   "unknown"
-                  parent: unnamed-GailContainer-7
+                  parent: unnamed-GtkBoxAccessible-7
                   index: 0
                   description: The previously-selected color, for comparison to the color you're selecting now.
                   state: enabled sensitive showing visible
@@ -94,7 +94,7 @@ window1
                   alpha: 1
                 unnamed-GailWidget-9
                   "unknown"
-                  parent: unnamed-GailContainer-7
+                  parent: unnamed-GtkBoxAccessible-7
                   index: 1
                   description: The color you've chosen.
                   state: enabled sensitive showing visible
@@ -104,7 +104,7 @@ window1
                   alpha: 1
             unnamed-GailButton-10
               "push button"
-              parent: unnamed-GailContainer-5
+              parent: unnamed-GtkBoxAccessible-5
               index: 1
               description: Click the eyedropper, then click a color anywhere on your screen to select that color.
               state: enabled focusable sensitive showing visible
@@ -121,9 +121,9 @@ window1
               image description: (null)
               <AtkAction>
               action 0 name: click
-        unnamed-GailContainer-11
+        unnamed-GtkBoxAccessible-11
           "filler"
-          parent: unnamed-GailContainer-2
+          parent: unnamed-GtkBoxAccessible-2
           index: 1
           state: enabled sensitive showing vertical visible
           toolkit: gail
@@ -132,7 +132,7 @@ window1
           alpha: 1
           unnamed-GailContainer-12
             "panel"
-            parent: unnamed-GailContainer-11
+            parent: unnamed-GtkBoxAccessible-11
             index: 0
             state: enabled sensitive showing visible
             toolkit: gail
@@ -865,9 +865,9 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-          unnamed-GailContainer-15
+          unnamed-GtkBoxAccessible-15
             "filler"
-            parent: unnamed-GailContainer-11
+            parent: unnamed-GtkBoxAccessible-11
             index: 1
             state: enabled sensitive vertical
             toolkit: gail
@@ -876,7 +876,7 @@ window1
             alpha: 1
             Palette:
               "label"
-              parent: unnamed-GailContainer-15
+              parent: unnamed-GtkBoxAccessible-15
               index: 0
               name: Palette:
               label-for: unnamed-GailWidget-16
@@ -916,7 +916,7 @@ window1
                                   wrap-mode: word
             unnamed-GailContainer-17
               "panel"
-              parent: unnamed-GailContainer-15
+              parent: unnamed-GtkBoxAccessible-15
               index: 1
               state: enabled sensitive visible
               toolkit: gail
@@ -1304,9 +1304,9 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-    unnamed-GailContainer-57
+    unnamed-GtkBoxAccessible-57
       "filler"
-      parent: unnamed-GailContainer-0
+      parent: unnamed-GtkBoxAccessible-0
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gail
@@ -1315,7 +1315,7 @@ window1
       alpha: 1
       Help
         "push button"
-        parent: unnamed-GailContainer-57
+        parent: unnamed-GtkBoxAccessible-57
         index: 0
         name: Help
         state: enabled focusable sensitive
@@ -1362,7 +1362,7 @@ window1
         action 0 keybinding: <Alt>h
       OK
         "push button"
-        parent: unnamed-GailContainer-57
+        parent: unnamed-GtkBoxAccessible-57
         index: 1
         name: OK
         state: enabled focusable sensitive showing visible default
@@ -1409,7 +1409,7 @@ window1
         action 0 keybinding: <Alt>o
       Cancel
         "push button"
-        parent: unnamed-GailContainer-57
+        parent: unnamed-GtkBoxAccessible-57
         index: 2
         name: Cancel
         state: enabled focusable sensitive showing visible
