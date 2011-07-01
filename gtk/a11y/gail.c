@@ -33,7 +33,6 @@
 #include "gailmenu.h"
 #include "gailmenushell.h"
 #include "gailmenuitem.h"
-#include "gailradiomenuitem.h"
 #include "gailrenderercell.h"
 #include "gailtextcell.h"
 #include "gailtoplevel.h"
@@ -93,7 +92,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU_SHELL, GailMenuShell, gail_menu_shell, GT
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU, GailMenu, gail_menu, GTK_TYPE_MENU)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WINDOW, GailWindow, gail_window, GTK_TYPE_BIN)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_CHECK_MENU_ITEM, GailCheckMenuItem, gail_check_menu_item, gail_check_menu_item_new)
-GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_RADIO_MENU_ITEM, GailRadioMenuItem, gail_radio_menu_item, gail_radio_menu_item_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_RENDERER_CELL, GailRendererCell, gail_renderer_cell, GTK_TYPE_CELL_RENDERER, gail_renderer_cell_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_BOOLEAN_CELL, GailBooleanCell, gail_boolean_cell, GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_IMAGE_CELL, GailImageCell, gail_image_cell, GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell_new)
@@ -850,7 +848,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER, gail_renderer_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CHECK_MENU_ITEM, gail_check_menu_item);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_RADIO_MENU_ITEM, gail_radio_menu_item);
 
   atk_focus_tracker_init (gail_focus_tracker_init);
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);
