@@ -109,7 +109,6 @@ struct _GtkBoxPrivate
 
   GtkOrientation  orientation;
   gint16          spacing;
-  GtkWidgetPath  *sibling_path;
 
   guint           default_expand : 1;
   guint           homogeneous    : 1;
@@ -881,17 +880,19 @@ static GtkWidgetPath *
 gtk_box_get_path_for_child (GtkContainer *container,
                             GtkWidget    *child)
 {
-  GtkWidgetPath *path;
+  GtkWidgetPath *path, *sibling_path;
   GtkBox *box;
   GtkBoxPrivate *private;
+  GList *list, *children;
 
   box = GTK_BOX (container);
   private = box->priv;
 
-  if (private->sibling_path == NULL)
+  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+
+  if (gtk_widget_get_visible (child))
     {
-      GList *list, *children;
-      private->sibling_path = gtk_widget_path_new ();
+      sibling_path = gtk_widget_path_new ();
 
       /* get_children works in visible order */
       children = gtk_container_get_children (container);
@@ -904,17 +905,16 @@ gtk_box_get_path_for_child (GtkContainer *container,
           if (!gtk_widget_get_visible (list->data))
             continue;
 
-          gtk_widget_path_append_for_widget (private->sibling_path, list->data);
+          gtk_widget_path_append_for_widget (sibling_path, list->data);
         }
-      g_list_free (children);
-    }
+        g_list_free (children);
 
-  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
-  if (gtk_widget_get_visible (child))
-    gtk_widget_path_append_with_siblings (path,
-                                          private->sibling_path,
-                                          gtk_box_get_visible_position (box,
-                                                                        child));
+        gtk_widget_path_append_with_siblings (path,
+                                              sibling_path,
+                                              gtk_box_get_visible_position (box,
+                                                                            child));
+        gtk_widget_path_unref (sibling_path);
+    }
   else
     gtk_widget_path_append_for_widget (path, child);
 
@@ -924,17 +924,9 @@ gtk_box_get_path_for_child (GtkContainer *container,
 static void
 gtk_box_invalidate_order (GtkBox *box)
 {
-  GtkBoxPrivate *private = box->priv;
-
-  if (private->sibling_path != NULL)
-    {
-      gtk_widget_path_unref (private->sibling_path);
-      private->sibling_path = NULL;
-
-      gtk_container_foreach (GTK_CONTAINER (box),
-                             (GtkCallback) gtk_widget_reset_style,
-                             NULL);
-    }
+  gtk_container_foreach (GTK_CONTAINER (box),
+                         (GtkCallback) gtk_widget_reset_style,
+                         NULL);
 }
 
 static void
