@@ -4714,6 +4714,37 @@ location_button_create (GtkFileChooserDefault *impl)
   atk_object_set_name (gtk_widget_get_accessible (impl->location_button), str);
 }
 
+/* Creates the info bar for informational messages or warnings, with its icon and label */
+static void
+info_bar_create (GtkFileChooserDefault *impl)
+{
+  GtkWidget *content_area;
+
+  impl->browse_select_a_folder_info_bar = gtk_info_bar_new ();
+  impl->browse_select_a_folder_warning_icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
+  impl->browse_select_a_folder_label = gtk_label_new (NULL);
+
+  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (impl->browse_select_a_folder_info_bar));
+  gtk_box_set_spacing (GTK_BOX (content_area), 6);
+
+  gtk_box_pack_start (GTK_BOX (content_area), impl->browse_select_a_folder_warning_icon, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), impl->browse_select_a_folder_label, TRUE, TRUE, 0);
+
+  gtk_widget_show (impl->browse_select_a_folder_label);
+}
+
+/* Creates the recently-used informational widgets, including the info bar */
+static void
+recent_widgets_create (GtkFileChooserDefault *impl)
+{
+  /* Box for recent widgets */
+  impl->recent_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+
+  /* Info bar */
+  info_bar_create (impl);
+  gtk_box_pack_start (GTK_BOX (impl->recent_hbox), impl->browse_select_a_folder_info_bar, FALSE, FALSE, 0);
+}
+
 /* Creates the path bar's container and eveyrthing that goes in it: location button, pathbar, info bar, and Create Folder button */
 static void
 path_bar_widgets_create (GtkFileChooserDefault *impl)
@@ -4738,6 +4769,11 @@ path_bar_widgets_create (GtkFileChooserDefault *impl)
 
   gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->browse_path_bar);
   gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_path_bar, TRUE, TRUE, 0);
+
+  /* Recent widgets and info bar */
+  recent_widgets_create (impl);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->recent_hbox);
+  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->recent_hbox, TRUE, TRUE, 0);
 
   /* Create Folder */
   impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
@@ -4953,25 +4989,6 @@ unset_file_system_backend (GtkFileChooserDefault *impl)
   g_object_unref (impl->file_system);
 
   impl->file_system = NULL;
-}
-
-static void
-create_info_bar (GtkFileChooserDefault *impl)
-{
-  GtkWidget *content_area;
-
-  impl->browse_select_a_folder_info_bar = gtk_info_bar_new ();
-  impl->browse_select_a_folder_warning_icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
-  impl->browse_select_a_folder_label = gtk_label_new (NULL);
-
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (impl->browse_select_a_folder_info_bar));
-  gtk_box_set_spacing (GTK_BOX (content_area), 6);
-
-  gtk_box_pack_start (GTK_BOX (content_area), impl->browse_select_a_folder_warning_icon, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (content_area), impl->browse_select_a_folder_label, TRUE, TRUE, 0);
-
-  gtk_widget_show (impl->browse_select_a_folder_info_bar);
-  gtk_widget_show (impl->browse_select_a_folder_label);
 }
 
 typedef enum {
@@ -9412,18 +9429,9 @@ recent_hide_entry (GtkFileChooserDefault *impl)
   GtkWidget *image;
   gchar *tmp;
 
-  /* Box for recent widgets */
-  impl->recent_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-
-  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->recent_hbox, TRUE, TRUE, 0);
-  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->recent_hbox);
-  gtk_widget_show (impl->recent_hbox);
-
   /* For Save mode, we don't want this icon/label - we want update_path_bar() to do its thing instead */
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
-      create_info_bar (impl);
-      gtk_box_pack_start (GTK_BOX (impl->recent_hbox), impl->browse_select_a_folder_info_bar, FALSE, FALSE, 0);
       set_info_bar (impl, INFO_BAR_SELECT_A_FOLDER);
     }
   else
