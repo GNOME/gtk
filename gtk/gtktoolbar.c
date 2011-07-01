@@ -3137,6 +3137,12 @@ gtk_toolbar_finalize (GObject *object)
   if (priv->arrow_button)
     gtk_widget_unparent (priv->arrow_button);
 
+  if (priv->sibling_path != NULL)
+    {
+      gtk_widget_path_unref (priv->sibling_path);
+      priv->sibling_path = NULL;
+    }
+
   for (list = priv->content; list != NULL; list = list->next)
     {
       ToolbarContent *content = list->data;
