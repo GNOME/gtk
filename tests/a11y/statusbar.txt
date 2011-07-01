@@ -7,7 +7,7 @@ window1
   layer: window
   alpha: 1
   statusbar1
-    "filler"
+    "statusbar"
     parent: window1
     index: 0
     name: 
@@ -16,91 +16,3 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    <AtkText>
-    text: 
-    character count: 0
-    caret offset: 0
-    default attributes: bg-color: <omitted>
-                        bg-full-height: 0
-                        bg-stipple: false
-                        direction: <omitted>
-                        editable: false
-                        family-name: <omitted>
-                        fg-color: <omitted>
-                        fg-stipple: false
-                        indent: 0
-                        invisible: false
-                        justification: left
-                        language: <omitted>
-                        left-margin: 0
-                        pixels-above-lines: 0
-                        pixels-below-lines: 0
-                        pixels-inside-wrap: 0
-                        right-margin: 0
-                        rise: 0
-                        scale: 1
-                        size: <omitted>
-                        stretch: <omitted>
-                        strikethrough: false
-                        style: <omitted>
-                        underline: none
-                        variant: <omitted>
-                        weight: <omitted>
-                        wrap-mode: word
-    unnamed-GtkFrameAccessible-0
-      "panel"
-      parent: statusbar1
-      index: 0
-      state: enabled sensitive showing visible
-      toolkit: gail
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      unnamed-GailContainer-1
-        "filler"
-        parent: unnamed-GtkFrameAccessible-0
-        index: 0
-        state: enabled horizontal sensitive showing visible
-        toolkit: gail
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        
-          "label"
-          parent: unnamed-GailContainer-1
-          index: 0
-          name: 
-          state: enabled multi-line sensitive showing visible
-          toolkit: gail
-          <AtkComponent>
-          layer: widget
-          alpha: 1
-          <AtkText>
-          text: 
-          character count: 0
-          caret offset: 0
-          default attributes: bg-color: <omitted>
-                              bg-full-height: 0
-                              direction: <omitted>
-                              editable: false
-                              family-name: <omitted>
-                              fg-color: <omitted>
-                              indent: 0
-                              invisible: false
-                              justification: left
-                              language: <omitted>
-                              left-margin: 0
-                              pixels-above-lines: 0
-                              pixels-below-lines: 0
-                              pixels-inside-wrap: 0
-                              right-margin: 0
-                              rise: 0
-                              scale: 1
-                              size: <omitted>
-                              stretch: <omitted>
-                              strikethrough: false
-                              style: <omitted>
-                              underline: none
-                              variant: <omitted>
-                              weight: <omitted>
-                              wrap-mode: word

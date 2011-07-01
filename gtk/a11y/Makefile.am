@@ -40,7 +40,7 @@ gail_c_sources =			\
 	gtkscrolledwindowaccessible.c	\
 	gtkspinbuttonaccessible.c	\
 	gailsubmenuitem.c		\
-	gailstatusbar.c			\
+	gtkstatusbaraccessible.c	\
 	gailtextcell.c			\
 	gailtextutil.c			\
 	gtktextviewaccessible.c		\
@@ -91,7 +91,7 @@ gail_private_h_sources =		\
 	gtkscrolledwindowaccessible.h	\
 	gtkspinbuttonaccessible.h	\
 	gailsubmenuitem.h		\
-	gailstatusbar.h			\
+	gtkstatusbaraccessible.h	\
 	gailtextcell.h			\
 	gailtextutil.h			\
 	gtktextviewaccessible.h		\

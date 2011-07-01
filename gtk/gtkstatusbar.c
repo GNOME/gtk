@@ -37,6 +37,7 @@
 #include "gtkbuildable.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkstatusbaraccessible.h"
 
 /**
  * SECTION:gtkstatusbar
@@ -185,6 +186,8 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
                                                               GTK_PARAM_READABLE));
 
    g_type_class_add_private (class, sizeof (GtkStatusbarPrivate));
+
+   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
 }
 
 static void

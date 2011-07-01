@@ -36,7 +36,6 @@
 #include "gailmenuitem.h"
 #include "gailradiomenuitem.h"
 #include "gailrenderercell.h"
-#include "gailstatusbar.h"
 #include "gailtextcell.h"
 #include "gailtoplevel.h"
 #include "gailutil.h"
@@ -94,7 +93,6 @@ GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_MENU_ITEM, GailMenuItem, gail_menu_i
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU_SHELL, GailMenuShell, gail_menu_shell, GTK_TYPE_MENU_SHELL)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU, GailMenu, gail_menu, GTK_TYPE_MENU)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WINDOW, GailWindow, gail_window, GTK_TYPE_BIN)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_STATUSBAR, GailStatusbar, gail_statusbar, GTK_TYPE_STATUSBAR)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_CHECK_MENU_ITEM, GailCheckMenuItem, gail_check_menu_item, gail_check_menu_item_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_RADIO_MENU_ITEM, GailRadioMenuItem, gail_radio_menu_item, gail_radio_menu_item_new)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_EXPANDER, GailExpander, gail_expander, GTK_TYPE_EXPANDER)
@@ -849,7 +847,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU_BAR, gail_menu_shell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU, gail_menu);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WINDOW, gail_window);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_STATUSBAR, gail_statusbar);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TEXT, gail_text_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell);
