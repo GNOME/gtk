@@ -232,7 +232,7 @@ get_xkb (GdkX11Keymap *keymap_x11)
   keymap_x11->current_serial = display_x11->keymap_serial;
 
   if (keymap_x11->num_lock_mask == 0)
-    keymap_x11->num_lock_mask = XkbKeysymToModifiers (KEYMAP_XDISPLAY (GDK_KEYMAP (keymap_x11)), XK_Num_Lock);
+    keymap_x11->num_lock_mask = XkbKeysymToModifiers (KEYMAP_XDISPLAY (GDK_KEYMAP (keymap_x11)), GDK_KEY_Num_Lock);
 
   return keymap_x11->xkb_desc;
 }
