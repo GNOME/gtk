@@ -139,6 +139,9 @@ EXTRA_DIST += \
 	shorthand-entry-border.ui \
 	simple.ref.ui \
 	simple.ui \
+	style-properties-nth-child.css \
+	style-properties-nth-child.ref.ui \
+	style-properties-nth-child.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
 	unresolvable.css \
