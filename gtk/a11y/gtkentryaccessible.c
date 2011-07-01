@@ -22,7 +22,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gtkpango.h"
-#include <gdk/gdkkeysyms.h>
 #include "gtkentryaccessible.h"
 #include "gtkcomboboxaccessible.h"
 

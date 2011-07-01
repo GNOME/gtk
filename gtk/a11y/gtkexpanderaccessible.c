@@ -21,7 +21,6 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include "gtkexpanderaccessible.h"
 
 static void atk_action_interface_init (AtkActionIface *iface);

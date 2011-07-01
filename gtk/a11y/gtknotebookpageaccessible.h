@@ -21,7 +21,6 @@
 #define __GTK_NOTEBOOK_PAGE_ACCESSIBLE_H__
 
 #include "gtknotebookaccessible.h"
-#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
@@ -40,7 +39,6 @@ struct _GtkNotebookPageAccessible
   AtkObject parent;
 
   GtkAccessible *notebook;
-
   GtkWidget *child;
 };
 
