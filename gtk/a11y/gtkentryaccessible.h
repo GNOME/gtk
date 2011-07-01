@@ -21,7 +21,6 @@
 #define __GTK_ENTRY_ACCESSIBLE_H__
 
 #include "gailwidget.h"
-#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
@@ -32,21 +31,21 @@ G_BEGIN_DECLS
 #define GTK_IS_ENTRY_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY_ACCESSIBLE))
 #define GTK_ENTRY_ACCESSIBLE_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ENTRY_ACCESSIBLE, GtkEntryAccessibleClass))
 
-typedef struct _GtkEntryAccessible              GtkEntryAccessible;
-typedef struct _GtkEntryAccessibleClass         GtkEntryAccessibleClass;
+typedef struct _GtkEntryAccessible      GtkEntryAccessible;
+typedef struct _GtkEntryAccessibleClass GtkEntryAccessibleClass;
 
 struct _GtkEntryAccessible
 {
   GailWidget parent;
 
-  gint           position_insert;
-  gint           position_delete;
-  gint           length_insert;
-  gint           length_delete;
-  gint           cursor_position;
-  gint           selection_bound;
+  gint position_insert;
+  gint position_delete;
+  gint length_insert;
+  gint length_delete;
+  gint cursor_position;
+  gint selection_bound;
 
-  guint          action_idle_handler;
+  guint action_idle_handler;
 };
 
 GType gtk_entry_accessible_get_type (void);

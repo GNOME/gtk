@@ -21,7 +21,6 @@
 #define __GTK_LABEL_ACCESSIBLE_H__
 
 #include "gailwidget.h"
-#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
