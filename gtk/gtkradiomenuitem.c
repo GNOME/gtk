@@ -409,8 +409,6 @@ gtk_radio_menu_item_get_accessible (GtkWidget *widget)
   accessible = ATK_OBJECT (object);
   atk_object_initialize (accessible, widget);
 
-  accessible->role = ATK_ROLE_RADIO_MENU_ITEM;
-
   return accessible;
 }
 

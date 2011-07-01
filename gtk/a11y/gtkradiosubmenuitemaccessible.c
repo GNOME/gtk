@@ -23,7 +23,7 @@
 #include "gtkradiosubmenuitemaccessible.h"
 
 
-G_DEFINE_TYPE (GtkRadioSubmenuItemAccessible, gtk_radio_submenu_item_accessible, GAIL_TYPE_CHECK_SUB_MENU_ITEM)
+G_DEFINE_TYPE (GtkRadioSubmenuItemAccessible, gtk_radio_submenu_item_accessible, GTK_TYPE_CHECK_SUBMENU_ITEM_ACCESSIBLE)
 
 
 AtkRelationSet *
@@ -87,12 +87,23 @@ gtk_radio_submenu_item_accessible_ref_relation_set (AtkObject *obj)
 
   return relation_set;
 }
+
+static void
+gtk_radio_submenu_item_accessible_initialize (AtkObject *obj,
+                                              gpointer   data)
+{
+  ATK_OBJECT_CLASS (gtk_radio_submenu_item_accessible_parent_class)->initialize (obj, data);
+
+  obj->role = ATK_ROLE_RADIO_MENU_ITEM;
+}
+
 static void
 gtk_radio_submenu_item_accessible_class_init (GtkRadioSubmenuItemAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   class->ref_relation_set = gtk_radio_submenu_item_accessible_ref_relation_set;
+  class->initialize = gtk_radio_submenu_item_accessible_initialize;
 }
 
 static void

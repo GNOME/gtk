@@ -10,8 +10,8 @@ gail_c_sources =			\
 	gailbutton.c			\
 	gailcell.c			\
 	gailcellparent.c		\
-	gailcheckmenuitem.c		\
-	gailchecksubmenuitem.c		\
+	gtkcheckmenuitemaccessible.c	\
+	gtkchecksubmenuitemaccessible.c	\
 	gtkcomboboxaccessible.c		\
 	gailcontainer.c			\
 	gailcontainercell.c		\
@@ -61,8 +61,8 @@ gail_private_h_sources =		\
 	gailbutton.h			\
 	gailcell.h			\
 	gailcellparent.h		\
-	gailcheckmenuitem.h		\
-	gailchecksubmenuitem.h		\
+	gtkcheckmenuitemaccessible.h	\
+	gtkchecksubmenuitemaccessible.h	\
 	gtkcomboboxaccessible.h		\
 	gailcontainercell.h		\
 	gailcontainer.h			\
