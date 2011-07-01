@@ -4339,17 +4339,6 @@ create_file_list (GtkFileChooserDefault *impl)
   return swin;
 }
 
-static GtkWidget *
-create_path_bar (GtkFileChooserDefault *impl)
-{
-  GtkWidget *path_bar;
-
-  path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
-  _gtk_path_bar_set_file_system (GTK_PATH_BAR (path_bar), impl->file_system);
-
-  return path_bar;
-}
-
 /* Creates the widgets for the files/folders pane */
 static GtkWidget *
 file_pane_create (GtkFileChooserDefault *impl,
@@ -4717,6 +4706,39 @@ location_button_create (GtkFileChooserDefault *impl)
   atk_object_set_name (gtk_widget_get_accessible (impl->location_button), str);
 }
 
+/* Creates the path bar's container and eveyrthing that goes in it: location button, pathbar, info bar, and Create Folder button */
+static void
+path_bar_widgets_create (GtkFileChooserDefault *impl)
+{
+  /* Location widgets - note browse_path_bar_hbox is packed in the right place until switch_path_bar() */
+  impl->browse_path_bar_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_widget_show (impl->browse_path_bar_hbox);
+
+  /* Size group that allows the path bar to be the same size between modes */
+  impl->browse_path_bar_size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
+  gtk_size_group_set_ignore_hidden (impl->browse_path_bar_size_group, FALSE);
+
+  /* Location button */
+  location_button_create (impl);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->location_button);
+  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->location_button, FALSE, FALSE, 0);
+
+  /* Path bar */
+  impl->browse_path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
+  _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->browse_path_bar), impl->file_system);
+  g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
+
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->browse_path_bar);
+  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_path_bar, TRUE, TRUE, 0);
+
+  /* Create Folder */
+  impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
+  g_signal_connect (impl->browse_new_folder_button, "clicked",
+		    G_CALLBACK (new_folder_button_clicked), impl);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->browse_new_folder_button);
+  gtk_box_pack_end (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_new_folder_button, FALSE, FALSE, 0);
+}
+
 /* Creates the main hpaned with the widgets shared by Open and Save mode */
 static void
 browse_widgets_create (GtkFileChooserDefault *impl)
@@ -4729,33 +4751,8 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
   impl->browse_widgets_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
 
-  /* Location widgets - note browse_path_bar_hbox is packed in the right place until switch_path_bar() */
-  impl->browse_path_bar_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_widget_show (impl->browse_path_bar_hbox);
-
-  /* Size group that allows the path bar to be the same size between modes */
-  impl->browse_path_bar_size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-  gtk_size_group_set_ignore_hidden (impl->browse_path_bar_size_group, FALSE);
-
-  /* Location button */
-
-  location_button_create (impl);
-  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->location_button, FALSE, FALSE, 0);
-  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->location_button);
-
-  /* Path bar */
-
-  impl->browse_path_bar = create_path_bar (impl);
-  g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
-  gtk_widget_show_all (impl->browse_path_bar);
-  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_path_bar, TRUE, TRUE, 0);
-  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->browse_path_bar);
-
-  /* Create Folder */
-  impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
-  g_signal_connect (impl->browse_new_folder_button, "clicked",
-		    G_CALLBACK (new_folder_button_clicked), impl);
-  gtk_box_pack_end (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_new_folder_button, FALSE, FALSE, 0);
+  /* Path bar, info bar, and their respective machinery - the browse_path_bar_hbox will get packed elsewhere */
+  path_bar_widgets_create (impl);
 
   /* Box for the location label and entry */
 
