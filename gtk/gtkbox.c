@@ -1361,7 +1361,8 @@ gtk_box_get_accessible (GtkWidget *widget)
 
   obj = GTK_WIDGET_CLASS (gtk_box_parent_class)->get_accessible (widget);
 
-  atk_object_set_role (obj, ATK_ROLE_FILLER);
+  if (atk_object_get_role (obj) == ATK_ROLE_UNKNOWN)
+    atk_object_set_role (obj, ATK_ROLE_FILLER);
 
   return obj;
 }
