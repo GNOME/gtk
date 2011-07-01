@@ -243,7 +243,6 @@ static const gchar *
 gtk_expander_accessible_get_keybinding (AtkAction *action,
                                         gint       i)
 {
-  GtkExpanderAccessible *expander;
   gchar *return_value = NULL;
   GtkWidget *widget;
   GtkWidget *label;
@@ -254,8 +253,6 @@ gtk_expander_accessible_get_keybinding (AtkAction *action,
 
   if (i != 0)
     return NULL;
-
-  expander = GTK_EXPANDER_ACCESSIBLE (action);
 
   label = gtk_expander_get_label_widget (GTK_EXPANDER (widget));
   if (GTK_IS_LABEL (label))

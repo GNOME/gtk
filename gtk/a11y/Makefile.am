@@ -25,7 +25,7 @@ gail_c_sources =			\
 	gailmisc.c			\
 	gailmenu.c			\
 	gailmenushell.c			\
-	gailmenuitem.c			\
+	gtkmenuitemaccessible.c		\
 	gtknotebookaccessible.c		\
 	gtknotebookpageaccessible.c	\
 	gtkpanedaccessible.c		\
@@ -40,7 +40,7 @@ gail_c_sources =			\
 	gtkscrollbaraccessible.c	\
 	gtkscrolledwindowaccessible.c	\
 	gtkspinbuttonaccessible.c	\
-	gailsubmenuitem.c		\
+	gtksubmenuitemaccessible.c	\
 	gtkstatusbaraccessible.c	\
 	gailtextcell.c			\
 	gailtextutil.c			\
@@ -77,7 +77,7 @@ gail_private_h_sources =		\
 	gailmisc.h			\
 	gailmenu.h			\
 	gailmenushell.h			\
-	gailmenuitem.h			\
+	gtkmenuitemaccessible.h		\
 	gtknotebookaccessible.h		\
 	gtknotebookpageaccessible.h	\
 	gtkpanedaccessible.h		\
@@ -92,7 +92,7 @@ gail_private_h_sources =		\
 	gtkscrollbaraccessible.h	\
 	gtkscrolledwindowaccessible.h	\
 	gtkspinbuttonaccessible.h	\
-	gailsubmenuitem.h		\
+	gtksubmenuitemaccessible.h	\
 	gtkstatusbaraccessible.h	\
 	gailtextcell.h			\
 	gailtextutil.h			\

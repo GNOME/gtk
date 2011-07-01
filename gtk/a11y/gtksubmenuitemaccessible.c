@@ -20,104 +20,51 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gailsubmenuitem.h"
+#include "gtksubmenuitemaccessible.h"
 
-static void         gail_sub_menu_item_class_init       (GailSubMenuItemClass *klass);
-static void         gail_sub_menu_item_init             (GailSubMenuItem *item);
-static void         gail_sub_menu_item_real_initialize  (AtkObject      *obj,
-                                                         gpointer       data);
+static gint menu_item_add_gtk    (GtkContainer   *container,
+                                  GtkWidget      *widget);
+static gint menu_item_remove_gtk (GtkContainer   *container,
+                                  GtkWidget      *widget);
 
-static void         atk_selection_interface_init        (AtkSelectionIface  *iface);
-static gboolean     gail_sub_menu_item_add_selection    (AtkSelection   *selection,
-                                                         gint           i);
-static gboolean     gail_sub_menu_item_clear_selection  (AtkSelection   *selection);
-static AtkObject*   gail_sub_menu_item_ref_selection    (AtkSelection   *selection,
-                                                         gint           i);
-static gint         gail_sub_menu_item_get_selection_count
-                                                        (AtkSelection   *selection);
-static gboolean     gail_sub_menu_item_is_child_selected
-                                                        (AtkSelection   *selection,
-                                                         gint           i);
-static gboolean     gail_sub_menu_item_remove_selection (AtkSelection   *selection,
-                                                         gint           i);
-static gint         menu_item_add_gtk                   (GtkContainer   *container,
-                                                         GtkWidget      *widget);
-static gint         menu_item_remove_gtk                (GtkContainer   *container,
-                                                         GtkWidget      *widget);
+static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GailSubMenuItem, gail_sub_menu_item, GAIL_TYPE_MENU_ITEM,
+G_DEFINE_TYPE_WITH_CODE (GtkSubmenuItemAccessible, gtk_submenu_item_accessible, GTK_TYPE_MENU_ITEM_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
-gail_sub_menu_item_class_init (GailSubMenuItemClass *klass)
-{
-  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-
-  class->initialize = gail_sub_menu_item_real_initialize;
-}
-
-static void
-gail_sub_menu_item_init (GailSubMenuItem *item)
-{
-}
-
-static void
-gail_sub_menu_item_real_initialize (AtkObject *obj,
-                                   gpointer   data)
+gtk_submenu_item_accessible_initialize (AtkObject *obj,
+                                        gpointer   data)
 {
   GtkWidget *submenu;
 
-  ATK_OBJECT_CLASS (gail_sub_menu_item_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_submenu_item_accessible_parent_class)->initialize (obj, data);
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (data));
   g_return_if_fail (submenu);
 
-  g_signal_connect (submenu,
-                    "add",
-                    G_CALLBACK (menu_item_add_gtk),
-                    NULL);
-  g_signal_connect (submenu,
-                    "remove",
-                    G_CALLBACK (menu_item_remove_gtk),
-                    NULL);
+  g_signal_connect (submenu, "add", G_CALLBACK (menu_item_add_gtk), NULL);
+  g_signal_connect (submenu, "remove", G_CALLBACK (menu_item_remove_gtk), NULL);
 
   obj->role = ATK_ROLE_MENU;
 }
 
-AtkObject*
-gail_sub_menu_item_new (GtkWidget *widget)
+static void
+gtk_submenu_item_accessible_class_init (GtkSubmenuItemAccessibleClass *klass)
 {
-  GObject *object;
-  AtkObject *accessible;
+  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-  g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), NULL);
-
-  object = g_object_new (GAIL_TYPE_SUB_MENU_ITEM, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
+  class->initialize = gtk_submenu_item_accessible_initialize;
 }
 
 static void
-atk_selection_interface_init (AtkSelectionIface *iface)
+gtk_submenu_item_accessible_init (GtkSubmenuItemAccessible *item)
 {
-  iface->add_selection = gail_sub_menu_item_add_selection;
-  iface->clear_selection = gail_sub_menu_item_clear_selection;
-  iface->ref_selection = gail_sub_menu_item_ref_selection;
-  iface->get_selection_count = gail_sub_menu_item_get_selection_count;
-  iface->is_child_selected = gail_sub_menu_item_is_child_selected;
-  iface->remove_selection = gail_sub_menu_item_remove_selection;
-  /*
-   * select_all_selection does not make sense for a submenu of a menu item
-   * so no implementation is provided.
-   */
 }
 
 static gboolean
-gail_sub_menu_item_add_selection (AtkSelection *selection,
-                                  gint          i)
+gtk_submenu_item_accessible_add_selection (AtkSelection *selection,
+                                           gint          i)
 {
   GtkMenuShell *shell;
   GList *kids;
@@ -128,7 +75,6 @@ gail_sub_menu_item_add_selection (AtkSelection *selection,
 
   widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
-    /* State is defunct */
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
@@ -150,7 +96,7 @@ gail_sub_menu_item_add_selection (AtkSelection *selection,
 }
 
 static gboolean
-gail_sub_menu_item_clear_selection (AtkSelection   *selection)
+gtk_submenu_item_accessible_clear_selection (AtkSelection *selection)
 {
   GtkMenuShell *shell;
   GtkWidget *widget;
@@ -158,7 +104,6 @@ gail_sub_menu_item_clear_selection (AtkSelection   *selection)
 
   widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
-    /* State is defunct */
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
@@ -169,9 +114,9 @@ gail_sub_menu_item_clear_selection (AtkSelection   *selection)
   return TRUE;
 }
 
-static AtkObject*
-gail_sub_menu_item_ref_selection (AtkSelection   *selection,
-                                  gint           i)
+static AtkObject *
+gtk_submenu_item_accessible_ref_selection (AtkSelection *selection,
+                                           gint          i)
 {
   GtkMenuShell *shell;
   AtkObject *obj;
@@ -184,7 +129,6 @@ gail_sub_menu_item_ref_selection (AtkSelection   *selection,
 
   widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
-    /* State is defunct */
     return NULL;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
@@ -198,14 +142,12 @@ gail_sub_menu_item_ref_selection (AtkSelection   *selection,
       g_object_ref (obj);
       return obj;
     }
-  else
-    {
-      return NULL;
-    }
+
+  return NULL;
 }
 
 static gint
-gail_sub_menu_item_get_selection_count (AtkSelection   *selection)
+gtk_submenu_item_accessible_get_selection_count (AtkSelection *selection)
 {
   GtkMenuShell *shell;
   GtkWidget *widget;
@@ -213,25 +155,21 @@ gail_sub_menu_item_get_selection_count (AtkSelection   *selection)
 
   widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
-    /* State is defunct */
     return 0;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), FALSE);
+  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), 0);
   shell = GTK_MENU_SHELL (submenu);
 
-  /*
-   * Identifies the currently selected menu item
-   */
-  if (gtk_menu_shell_get_selected_item (shell) == NULL)
-    return 0;
-  else
+  if (gtk_menu_shell_get_selected_item (shell) != NULL)
     return 1;
+
+  return 0;
 }
 
 static gboolean
-gail_sub_menu_item_is_child_selected (AtkSelection   *selection,
-                                       gint           i)
+gtk_submenu_item_accessible_is_child_selected (AtkSelection *selection,
+                                               gint          i)
 {
   GtkMenuShell *shell;
   gint j;
@@ -242,7 +180,6 @@ gail_sub_menu_item_is_child_selected (AtkSelection   *selection,
 
   widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
-    /* State is defunct */
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
@@ -257,12 +194,12 @@ gail_sub_menu_item_is_child_selected (AtkSelection   *selection,
   j = g_list_index (kids, item);
   g_list_free (kids);
 
-  return (j==i);
+  return j==i;
 }
 
 static gboolean
-gail_sub_menu_item_remove_selection (AtkSelection   *selection,
-                                  gint           i)
+gtk_submenu_item_accessible_remove_selection (AtkSelection *selection,
+                                              gint          i)
 {
   GtkMenuShell *shell;
   GtkWidget *widget;
@@ -274,7 +211,6 @@ gail_sub_menu_item_remove_selection (AtkSelection   *selection,
 
   widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
-    /* State is defunct */
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
@@ -283,19 +219,25 @@ gail_sub_menu_item_remove_selection (AtkSelection   *selection,
 
   item = gtk_menu_shell_get_selected_item (shell);
   if (item && gtk_menu_item_get_submenu (GTK_MENU_ITEM (item)))
-    {
-    /*
-     * Menu item contains a menu and it is the selected menu item
-     * so deselect it.
-     */
-      gtk_menu_shell_deselect (shell);
-    }
+    gtk_menu_shell_deselect (shell);
+
   return TRUE;
+}
+
+static void
+atk_selection_interface_init (AtkSelectionIface *iface)
+{
+  iface->add_selection = gtk_submenu_item_accessible_add_selection;
+  iface->clear_selection = gtk_submenu_item_accessible_clear_selection;
+  iface->ref_selection = gtk_submenu_item_accessible_ref_selection;
+  iface->get_selection_count = gtk_submenu_item_accessible_get_selection_count;
+  iface->is_child_selected = gtk_submenu_item_accessible_is_child_selected;
+  iface->remove_selection = gtk_submenu_item_accessible_remove_selection;
 }
 
 static gint
 menu_item_add_gtk (GtkContainer *container,
-                   GtkWidget	*widget)
+                   GtkWidget    *widget)
 {
   GtkWidget *parent_widget;
   AtkObject *atk_parent;
@@ -311,9 +253,8 @@ menu_item_add_gtk (GtkContainer *container,
       atk_parent = gtk_widget_get_accessible (parent_widget);
       atk_child = gtk_widget_get_accessible (widget);
 
+      g_object_notify (G_OBJECT (atk_child), "accessible-parent");
       gail_container = GAIL_CONTAINER (atk_parent);
-      g_object_notify (G_OBJECT (atk_child), "accessible_parent");
-
       g_list_free (gail_container->children);
       gail_container->children = gtk_container_get_children (container);
       index = g_list_index (gail_container->children, widget);
@@ -325,13 +266,12 @@ menu_item_add_gtk (GtkContainer *container,
 
 static gint
 menu_item_remove_gtk (GtkContainer *container,
-                      GtkWidget	   *widget)
+                      GtkWidget    *widget)
 {
   GtkWidget *parent_widget;
   AtkObject *atk_parent;
   AtkObject *atk_child;
   GailContainer *gail_container;
-  AtkPropertyValues values = { NULL };
   gint index;
   gint list_length;
 
@@ -343,13 +283,9 @@ menu_item_remove_gtk (GtkContainer *container,
       atk_parent = gtk_widget_get_accessible (parent_widget);
       atk_child = gtk_widget_get_accessible (widget);
 
-      gail_container = GAIL_CONTAINER (atk_parent);
-      g_value_init (&values.old_value, G_TYPE_POINTER);
-      g_value_set_pointer (&values.old_value, atk_parent);
-      values.property_name = "accessible-parent";
-      g_signal_emit_by_name (atk_child,
-                             "property_change::accessible-parent", &values, NULL);
+      g_object_notify (G_OBJECT (atk_child), "accessible-parent");
 
+      gail_container = GAIL_CONTAINER (atk_parent);
       index = g_list_index (gail_container->children, widget);
       list_length = g_list_length (gail_container->children);
       g_list_free (gail_container->children);

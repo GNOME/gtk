@@ -38,10 +38,7 @@ struct _GailContainer
 {
   GailWidget parent;
 
-  /*
-   * Cached list of children
-   */
-  GList      *children;
+  GList *children;
 };
 
 GType gail_container_get_type (void);

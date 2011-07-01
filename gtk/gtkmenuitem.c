@@ -43,6 +43,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkmenuitemaccessible.h"
+#include "a11y/gtksubmenuitemaccessible.h"
 
 
 /**
@@ -207,6 +209,23 @@ G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_menu_item_activatable_interface_init))
 
+static AtkObject *
+gtk_menu_item_get_accessible (GtkWidget *widget)
+{
+  GObject *object;
+  AtkObject *accessible;
+
+  /* FIXME this is not really right, submenus can come and go */
+  if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget)))
+    object = g_object_new (GTK_TYPE_SUBMENU_ITEM_ACCESSIBLE, NULL);
+  else
+    object = g_object_new (GTK_TYPE_MENU_ITEM_ACCESSIBLE, NULL);
+
+  accessible = ATK_OBJECT (object);
+  atk_object_initialize (accessible, widget);
+
+  return accessible;
+}
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
@@ -235,6 +254,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->get_preferred_width = gtk_menu_item_get_preferred_width;
   widget_class->get_preferred_height = gtk_menu_item_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_menu_item_get_preferred_height_for_width;
+  widget_class->get_accessible = gtk_menu_item_get_accessible;
 
   container_class->forall = gtk_menu_item_forall;
 

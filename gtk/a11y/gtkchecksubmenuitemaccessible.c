@@ -24,7 +24,7 @@
 #include "gtkchecksubmenuitemaccessible.h"
 
 
-G_DEFINE_TYPE (GtkCheckSubmenuItemAccessible, gtk_check_submenu_item_accessible, GAIL_TYPE_SUB_MENU_ITEM)
+G_DEFINE_TYPE (GtkCheckSubmenuItemAccessible, gtk_check_submenu_item_accessible, GTK_TYPE_SUBMENU_ITEM_ACCESSIBLE)
 
 static void
 toggled_cb (GtkWidget *widget)
