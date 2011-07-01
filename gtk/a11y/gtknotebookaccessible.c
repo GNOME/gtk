@@ -310,6 +310,8 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GailWidgetClass *widget_class = (GailWidgetClass*)klass;
+  GailContainerClass *container_class = (GailContainerClass*)klass;
+
 
   gobject_class->finalize = gtk_notebook_accessible_finalize;
 
@@ -317,6 +319,10 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
   class->initialize = gtk_notebook_accessible_initialize;
 
   widget_class->notify_gtk = gtk_notebook_accessible_notify_gtk;
+
+  /* we listen to page-added/-removed, so we don't care about these */
+  container_class->add_gtk = NULL;
+  container_class->remove_gtk = NULL;
 }
 
 static void
