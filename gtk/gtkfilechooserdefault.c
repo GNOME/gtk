@@ -4898,7 +4898,9 @@ path_bar_set_mode (GtkFileChooserDefault *impl, PathBarMode mode)
 
   if (path_bar_visible)
     {
-      if (impl->create_folders && impl->action != GTK_FILE_CHOOSER_ACTION_OPEN)
+      if (impl->create_folders
+	  && impl->action != GTK_FILE_CHOOSER_ACTION_OPEN
+	  && impl->operation_mode != OPERATION_MODE_RECENT)
 	create_folder_visible = TRUE;
     }
 
