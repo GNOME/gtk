@@ -17,30 +17,30 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GAIL_NOTEBOOK_H__
-#define __GAIL_NOTEBOOK_H__
+#ifndef __GTK_NOTEBOOK_ACCESSIBLE_H__
+#define __GTK_NOTEBOOK_ACCESSIBLE_H__
 
 #include "gailcontainer.h"
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_NOTEBOOK                   (gail_notebook_get_type ())
-#define GAIL_NOTEBOOK(obj)                   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_NOTEBOOK, GailNotebook))
-#define GAIL_NOTEBOOK_CLASS(klass)           (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_NOTEBOOK, GailNotebookClass))
-#define GAIL_IS_NOTEBOOK(obj)                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_NOTEBOOK))
-#define GAIL_IS_NOTEBOOK_CLASS(klass)        (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_NOTEBOOK))
-#define GAIL_NOTEBOOK_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_NOTEBOOK, GailNotebookClass))
+#define GTK_TYPE_NOTEBOOK_ACCESSIBLE                   (gtk_notebook_accessible_get_type ())
+#define GTK_NOTEBOOK_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_NOTEBOOK_ACCESSIBLE, GtkNotebookAccessible))
+#define GTK_NOTEBOOK_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK_ACCESSIBLE, GtkNotebookAccessibleClass))
+#define GTK_IS_NOTEBOOK_ACCESSIBLE(obj)                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_NOTEBOOK_ACCESSIBLE))
+#define GTK_IS_NOTEBOOK_ACCESSIBLE_CLASS(klass)        (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK_ACCESSIBLE))
+#define GTK_NOTEBOOK_ACCESSIBLE_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK_ACCESSIBLE, GtkNotebookAccessibleClass))
 
-typedef struct _GailNotebook              GailNotebook;
-typedef struct _GailNotebookClass         GailNotebookClass;
+typedef struct _GtkNotebookAccessible      GtkNotebookAccessible;
+typedef struct _GtkNotebookAccessibleClass GtkNotebookAccessibleClass;
 
-struct _GailNotebook
+struct _GtkNotebookAccessible
 {
   GailContainer parent;
 
   /*
    * page_cache maintains a list of pre-ref'd Notebook Pages.
-   * This cache is queried by gail_notebook_ref_child().
+   * This cache is queried by gtk_notebook_accessible_ref_child().
    * If the page is found in the list then a new page does not
    * need to be created
    */
@@ -50,13 +50,13 @@ struct _GailNotebook
   guint        idle_focus_id;
 };
 
-GType gail_notebook_get_type (void);
-
-struct _GailNotebookClass
+struct _GtkNotebookAccessibleClass
 {
   GailContainerClass parent_class;
 };
 
+GType gtk_notebook_accessible_get_type (void);
+
 G_END_DECLS
 
-#endif /* __GAIL_NOTEBOOK_H__ */
+#endif /* __GTK_NOTEBOOK_ACCESSIBLE_H__ */

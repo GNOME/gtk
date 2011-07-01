@@ -25,7 +25,7 @@ gail_c_sources =			\
 	gailmenu.c			\
 	gailmenushell.c			\
 	gailmenuitem.c			\
-	gailnotebook.c			\
+	gtknotebookaccessible.c		\
 	gailnotebookpage.c		\
 	gtkpanedaccessible.c		\
 	gtkprogressbaraccessible.c	\
@@ -76,7 +76,7 @@ gail_private_h_sources =		\
 	gailmenu.h			\
 	gailmenushell.h			\
 	gailmenuitem.h			\
-	gailnotebook.h			\
+	gtknotebookaccessible.h		\
 	gailnotebookpage.h		\
 	gtkpanedaccessible.h		\
 	gtkprogressbaraccessible.h	\

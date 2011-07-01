@@ -76,7 +76,7 @@ window1
                             variant: <omitted>
                             weight: <omitted>
                             wrap-mode: word
-      unnamed-GailNotebook-3
+      unnamed-GtkNotebookAccessible-3
         "page tab list"
         parent: unnamed-GailContainer-1
         index: 2
@@ -89,7 +89,7 @@ window1
         selected children: unnamed-GailNotebookPage-4
         unnamed-GailNotebookPage-4
           "page tab"
-          parent: unnamed-GailNotebook-3
+          parent: unnamed-GtkNotebookAccessible-3
           index: 0
           state: enabled selectable selected showing visible
           <AtkComponent>

@@ -140,7 +140,7 @@ gail_notebook_page_init (GailNotebookPage *page)
 }
 
 AtkObject*
-gail_notebook_page_new (GailNotebook *notebook, 
+gail_notebook_page_new (GtkNotebookAccessible *notebook,
                         GtkWidget    *child)
 {
   GObject *object;
@@ -148,7 +148,7 @@ gail_notebook_page_new (GailNotebook *notebook,
   GailNotebookPage *page;
   GtkWidget *label;
 
-  g_return_val_if_fail (GAIL_IS_NOTEBOOK (notebook), NULL);
+  g_return_val_if_fail (GTK_IS_NOTEBOOK_ACCESSIBLE (notebook), NULL);
   g_return_val_if_fail (GTK_WIDGET (child), NULL);
 
   object = g_object_new (GAIL_TYPE_NOTEBOOK_PAGE, NULL);

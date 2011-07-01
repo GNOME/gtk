@@ -34,7 +34,6 @@
 #include "gailmenu.h"
 #include "gailmenushell.h"
 #include "gailmenuitem.h"
-#include "gailnotebook.h"
 #include "gailradiomenuitem.h"
 #include "gailrenderercell.h"
 #include "gailstatusbar.h"
@@ -64,8 +63,6 @@ static gboolean gail_switch_page_watcher(GSignalInvocationHint *ihint,
                                          guint                  n_param_values,
                                          const GValue          *param_values,
                                          gpointer               data);
-static AtkObject* gail_get_accessible_for_widget (GtkWidget    *widget,
-                                                  gboolean     *transient);
 static void     gail_finish_select       (GtkWidget            *widget);
 static void     gail_map_cb              (GtkWidget            *widget);
 static void     gail_map_submenu_cb      (GtkWidget            *widget);
@@ -98,7 +95,6 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU_SHELL, GailMenuShell, gail_menu_shell, GT
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU, GailMenu, gail_menu, GTK_TYPE_MENU)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WINDOW, GailWindow, gail_window, GTK_TYPE_BIN)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_STATUSBAR, GailStatusbar, gail_statusbar, GTK_TYPE_STATUSBAR)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_NOTEBOOK, GailNotebook, gail_notebook, GTK_TYPE_NOTEBOOK)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_CHECK_MENU_ITEM, GailCheckMenuItem, gail_check_menu_item, gail_check_menu_item_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC (GAIL_TYPE_RADIO_MENU_ITEM, GailRadioMenuItem, gail_radio_menu_item, gail_radio_menu_item_new)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_EXPANDER, GailExpander, gail_expander, GTK_TYPE_EXPANDER)
@@ -854,7 +850,6 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_MENU, gail_menu);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WINDOW, gail_window);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_STATUSBAR, gail_statusbar);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_NOTEBOOK, gail_notebook);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TEXT, gail_text_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell);

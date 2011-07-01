@@ -20,7 +20,7 @@
 #ifndef __GAIL_NOTEBOOK_PAGE_H__
 #define __GAIL_NOTEBOOK_PAGE_H__
 
-#include "gailnotebook.h"
+#include "gtknotebookaccessible.h"
 #include "gailtextutil.h"
 
 G_BEGIN_DECLS
@@ -40,20 +40,21 @@ struct _GailNotebookPage
   AtkObject parent;
 
   GtkAccessible *notebook;
-  
+
   GtkWidget *child;
 
   GailTextUtil *textutil;
 };
-
-GType gail_notebook_page_get_type (void);
 
 struct _GailNotebookPageClass
 {
   AtkObjectClass parent_class;
 };
 
-AtkObject *gail_notebook_page_new (GailNotebook *notebook, GtkWidget *child);
+GType      gail_notebook_page_get_type (void);
+
+AtkObject *gail_notebook_page_new (GtkNotebookAccessible *notebook,
+                                   GtkWidget             *child);
 
 void       gail_notebook_page_invalidate (GailNotebookPage *page);
 
