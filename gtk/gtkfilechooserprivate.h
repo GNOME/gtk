@@ -183,9 +183,11 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_path_bar_hbox;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
+  GtkWidget *browse_special_mode_icon;
+  GtkWidget *browse_special_mode_label;
   GtkWidget *browse_select_a_folder_info_bar;
   GtkWidget *browse_select_a_folder_label;
-  GtkWidget *browse_select_a_folder_warning_icon;
+  GtkWidget *browse_select_a_folder_icon;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
@@ -198,7 +200,6 @@ struct _GtkFileChooserDefault
   GtkFileSystemModel *search_model;
 
   /* OPERATION_MODE_RECENT */
-  GtkWidget *recent_hbox;
   GtkRecentManager *recent_manager;
   GtkFileSystemModel *recent_model;
   guint load_recent_id;
