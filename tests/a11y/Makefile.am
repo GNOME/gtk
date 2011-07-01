@@ -50,4 +50,5 @@ EXTRA_DIST += \
 	paned.ui paned.txt \
 	iconview.ui iconview.txt \
 	entries.ui entries.txt \
-	scale-drawvalue.ui scale-drawvalue.txt
+	scale-drawvalue.ui scale-drawvalue.txt \
+	placeholder-text.ui placeholder-text.txt
