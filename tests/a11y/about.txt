@@ -86,8 +86,8 @@ window1
         layer: widget
         alpha: 1
         <AtkSelection>
-        selected children: unnamed-GailNotebookPage-4
-        unnamed-GailNotebookPage-4
+        selected children: unnamed-GtkNotebookPageAccessible-4
+        unnamed-GtkNotebookPageAccessible-4
           "page tab"
           parent: unnamed-GtkNotebookAccessible-3
           index: 0
@@ -95,10 +95,6 @@ window1
           <AtkComponent>
           layer: widget
           alpha: 1
-          <AtkText>
-          text: (null)
-          character count: 0
-          caret offset: 0
           unnamed-GailContainer-5
             "filler"
             index: 0

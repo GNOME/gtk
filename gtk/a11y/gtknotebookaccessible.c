@@ -22,7 +22,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gtknotebookaccessible.h"
-#include "gailnotebookpage.h"
+#include "gtknotebookpageaccessible.h"
 
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
@@ -92,7 +92,7 @@ create_notebook_page_accessible (GtkNotebookAccessible *accessible,
 {
   AtkObject *obj;
 
-  obj = gail_notebook_page_new (accessible, child);
+  obj = gtk_notebook_page_accessible_new (accessible, child);
   g_hash_table_insert (accessible->pages, child, obj);
   atk_object_set_parent (obj, ATK_OBJECT (accessible));
   g_signal_emit_by_name (accessible, "children_changed::add", page_num, obj, NULL);
@@ -127,7 +127,7 @@ page_removed_cb (GtkNotebook *notebook,
   g_return_if_fail (obj);
   g_signal_emit_by_name (accessible, "children_changed::remove",
                          page_num, obj, NULL);
-  gail_notebook_page_invalidate (GAIL_NOTEBOOK_PAGE (obj));
+  gtk_notebook_page_accessible_invalidate (GTK_NOTEBOOK_PAGE_ACCESSIBLE (obj));
   g_hash_table_remove (accessible->pages, widget);
 }
 

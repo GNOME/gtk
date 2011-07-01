@@ -26,7 +26,7 @@
 #include <gdk/x11/gdkx.h>
 #endif
 #include "gailwidget.h"
-#include "gailnotebookpage.h"
+#include "gtknotebookpageaccessible.h"
 
 extern GtkWidget *focus_widget;
 
@@ -525,7 +525,7 @@ gail_widget_get_index_in_parent (AtkObject *accessible)
 
       parent = accessible->accessible_parent;
 
-      if (GAIL_IS_NOTEBOOK_PAGE (parent))
+      if (GTK_IS_NOTEBOOK_PAGE_ACCESSIBLE (parent))
         return 0;
       else
         {

@@ -70,7 +70,7 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
-      unnamed-GailComboBox-0
+      unnamed-GtkComboBoxAccessible-0
         "combo box"
         parent: button4
         index: 1
@@ -84,7 +84,7 @@ window1
         <AtkSelection>
         unnamed-GailMenu-1
           "menu"
-          parent: unnamed-GailComboBox-0
+          parent: unnamed-GtkComboBoxAccessible-0
           index: 0
           state: enabled selectable sensitive
           toolkit: gail

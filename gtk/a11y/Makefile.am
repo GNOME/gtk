@@ -26,7 +26,7 @@ gail_c_sources =			\
 	gailmenushell.c			\
 	gailmenuitem.c			\
 	gtknotebookaccessible.c		\
-	gailnotebookpage.c		\
+	gtknotebookpageaccessible.c	\
 	gtkpanedaccessible.c		\
 	gtkprogressbaraccessible.c	\
 	gtkradiobuttonaccessible.c	\
@@ -77,7 +77,7 @@ gail_private_h_sources =		\
 	gailmenushell.h			\
 	gailmenuitem.h			\
 	gtknotebookaccessible.h		\
-	gailnotebookpage.h		\
+	gtknotebookpageaccessible.h	\
 	gtkpanedaccessible.h		\
 	gtkprogressbaraccessible.h	\
 	gtkradiobuttonaccessible.h	\

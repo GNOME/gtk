@@ -16,8 +16,8 @@ window1
     layer: widget
     alpha: 1
     <AtkSelection>
-    selected children: Tab 1
-    Tab 1
+    selected children: unnamed-GtkNotebookPageAccessible-0
+    unnamed-GtkNotebookPageAccessible-0
       "page tab"
       parent: notebook1
       index: 0
@@ -26,37 +26,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Tab 1
-      character count: 5
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       page1
         "push button"
         index: 0
@@ -103,7 +72,7 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>y
-    Tab 2
+    unnamed-GtkNotebookPageAccessible-1
       "page tab"
       parent: notebook1
       index: 1
@@ -112,37 +81,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Tab 2
-      character count: 5
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       page2
         "push button"
         index: 1
