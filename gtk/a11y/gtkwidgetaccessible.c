@@ -131,7 +131,8 @@ gtk_widget_accessible_initialize (AtkObject *obj,
   g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
   g_signal_connect (widget, "unmap", G_CALLBACK (map_cb), NULL);
 
-  atk_component_add_focus_handler (ATK_COMPONENT (accessible), focus_event);
+  g_signal_connect (accessible, "focus-event", G_CALLBACK (focus_event), NULL);
+
   g_object_set_data (G_OBJECT (obj), "atk-component-layer", GINT_TO_POINTER (ATK_LAYER_WIDGET));
 
   obj->role = ATK_ROLE_UNKNOWN;
@@ -529,6 +530,7 @@ gtk_widget_accessible_focus_gtk (GtkWidget     *widget,
   return_val = FALSE;
 
   accessible = gtk_widget_get_accessible (widget);
+
   g_signal_emit_by_name (accessible, "focus_event", event->in, &return_val);
   return FALSE;
 }
@@ -571,30 +573,6 @@ gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 static void
 gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
 {
-}
-
-static guint
-gtk_widget_accessible_add_focus_handler (AtkComponent    *component,
-                                         AtkFocusHandler  handler)
-{
-  GSignalMatchType match_type;
-  gulong ret;
-  guint signal_id;
-
-  match_type = G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC;
-  signal_id = g_signal_lookup ("focus-event", ATK_TYPE_OBJECT);
-
-  ret = g_signal_handler_find (component, match_type, signal_id, 0, NULL,
-                               (gpointer) handler, NULL);
-  if (!ret)
-    return g_signal_connect_closure_by_id (component,
-                                           signal_id, 0,
-                                           g_cclosure_new (G_CALLBACK (handler),
-                                           NULL,
-                                           (GClosureNotify) NULL),
-                                           FALSE);
-  else
-    return 0;
 }
 
 static void
@@ -703,13 +681,6 @@ gtk_widget_accessible_grab_focus (AtkComponent *component)
   return TRUE;
 }
 
-static void
-gtk_widget_accessible_remove_focus_handler (AtkComponent *component,
-                                            guint         handler_id)
-{
-  g_signal_handler_disconnect (component, handler_id);
-}
-
 static gboolean
 gtk_widget_accessible_set_extents (AtkComponent *component,
                                    gint          x,
@@ -815,12 +786,10 @@ gtk_widget_accessible_set_size (AtkComponent *component,
 static void
 atk_component_interface_init (AtkComponentIface *iface)
 {
-  iface->add_focus_handler = gtk_widget_accessible_add_focus_handler;
   iface->get_extents = gtk_widget_accessible_get_extents;
   iface->get_size = gtk_widget_accessible_get_size;
   iface->get_layer = gtk_widget_accessible_get_layer;
   iface->grab_focus = gtk_widget_accessible_grab_focus;
-  iface->remove_focus_handler = gtk_widget_accessible_remove_focus_handler;
   iface->set_extents = gtk_widget_accessible_set_extents;
   iface->set_position = gtk_widget_accessible_set_position;
   iface->set_size = gtk_widget_accessible_set_size;
