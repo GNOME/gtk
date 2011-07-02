@@ -3,7 +3,7 @@ window1
   index: 0
   name: 
   state: enabled resizable sensitive showing visible
-  toolkit: gail
+  toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
@@ -12,7 +12,7 @@ window1
     parent: window1
     index: 0
     state: enabled sensitive showing vertical visible
-    toolkit: gail
+    toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
@@ -21,7 +21,7 @@ window1
       parent: unnamed-GtkBoxAccessible-0
       index: 0
       state: enabled sensitive showing vertical visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -30,7 +30,7 @@ window1
         parent: unnamed-GtkBoxAccessible-1
         index: 0
         state: enabled sensitive showing vertical visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -40,7 +40,7 @@ window1
           index: 0
           name: Select an application for "(null)" files
           state: enabled multi-line sensitive showing visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -78,7 +78,7 @@ window1
           parent: unnamed-GtkBoxAccessible-2
           index: 1
           state: enabled sensitive showing vertical visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -87,7 +87,7 @@ window1
             parent: unnamed-GtkBoxAccessible-3
             index: 0
             state: enabled focusable sensitive showing visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -96,7 +96,7 @@ window1
               parent: unnamed-GtkScrolledWindowAccessible-4
               index: 0
               state: enabled focusable sensitive showing visible manages-descendants
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -112,7 +112,7 @@ window1
                 index: 0
                 name: 
                 state: enabled focusable selectable sensitive
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -127,7 +127,7 @@ window1
                 index: 0
                 name: 
                 state: enabled focusable selectable sensitive
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -334,7 +334,7 @@ Click "Show other applications", for more options, or "Find applications online"
               parent: unnamed-GtkScrolledWindowAccessible-4
               index: 1
               state: enabled horizontal sensitive
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -350,7 +350,7 @@ Click "Show other applications", for more options, or "Find applications online"
               parent: unnamed-GtkScrolledWindowAccessible-4
               index: 2
               state: enabled sensitive vertical
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -367,7 +367,7 @@ Click "Show other applications", for more options, or "Find applications online"
             index: 1
             name: Show other applications
             state: enabled focusable sensitive showing visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -381,7 +381,7 @@ Click "Show other applications", for more options, or "Find applications online"
       parent: unnamed-GtkBoxAccessible-0
       index: 1
       state: enabled horizontal sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -391,7 +391,7 @@ Click "Show other applications", for more options, or "Find applications online"
         index: 0
         name: Select
         state: enabled focusable sensitive showing visible default
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -407,7 +407,7 @@ Click "Show other applications", for more options, or "Find applications online"
         index: 1
         name: Cancel
         state: enabled focusable sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1

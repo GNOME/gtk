@@ -2,7 +2,7 @@ window1
   "window"
   index: 0
   state: enabled resizable sensitive showing visible
-  toolkit: gail
+  toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
@@ -11,7 +11,7 @@ window1
     parent: window1
     index: 0
     state: enabled horizontal sensitive showing visible
-    toolkit: gail
+    toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
@@ -20,7 +20,7 @@ window1
       parent: unnamed-GtkBoxAccessible-0
       index: 0
       state: enabled sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -29,7 +29,7 @@ window1
         parent: unnamed-GtkFrameAccessible-1
         index: 0
         state: enabled sensitive showing vertical visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -39,7 +39,7 @@ window1
           index: 0
           name: Page 1
           state: enabled multi-line sensitive
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -78,7 +78,7 @@ window1
           index: 1
           name: Page 1
           state: enabled multi-line sensitive visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -117,7 +117,7 @@ window1
           index: 2
           name: Page 2
           state: enabled multi-line sensitive showing visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -156,7 +156,7 @@ window1
           index: 3
           name: Page 2
           state: enabled multi-line sensitive
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -194,7 +194,7 @@ window1
       parent: unnamed-GtkBoxAccessible-0
       index: 1
       state: enabled sensitive showing vertical visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -203,7 +203,7 @@ window1
         parent: unnamed-GtkBoxAccessible-3
         index: 0
         state: enabled sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -222,7 +222,7 @@ window1
             index: 0
             name: Button 1
             state: enabled focusable sensitive showing visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -244,7 +244,7 @@ window1
             index: 1
             name: Button 2
             state: enabled focusable sensitive visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -258,7 +258,7 @@ window1
         parent: unnamed-GtkBoxAccessible-3
         index: 1
         state: enabled horizontal sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -268,7 +268,7 @@ window1
           index: 0
           name: Close
           state: enabled focusable sensitive
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -284,7 +284,7 @@ window1
           index: 1
           name: Cancel
           state: enabled focusable sensitive showing visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -300,7 +300,7 @@ window1
           index: 2
           name: Finish
           state: focusable
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -316,7 +316,7 @@ window1
           index: 3
           name: Go Back
           state: enabled focusable sensitive
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -332,7 +332,7 @@ window1
           index: 4
           name: Continue
           state: focusable showing visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -348,7 +348,7 @@ window1
           index: 5
           name: Apply
           state: enabled focusable sensitive
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1

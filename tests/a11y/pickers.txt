@@ -2,7 +2,7 @@ window1
   "window"
   index: 0
   state: enabled resizable sensitive showing visible
-  toolkit: gail
+  toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
@@ -11,7 +11,7 @@ window1
     parent: window1
     index: 0
     state: enabled horizontal sensitive showing visible
-    toolkit: gail
+    toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
@@ -20,7 +20,7 @@ window1
       parent: grid1
       index: 0
       state: enabled horizontal sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -30,7 +30,7 @@ window1
         index: 0
         name: (None)
         state: enabled focusable sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -44,7 +44,7 @@ window1
         parent: button4
         index: 1
         state: enabled sensitive
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -56,7 +56,7 @@ window1
           parent: unnamed-GtkComboBoxAccessible-1
           index: 0
           state: enabled selectable sensitive
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: popup
           alpha: 1
@@ -66,7 +66,7 @@ window1
             parent: unnamed-GtkMenuAccessible-2
             index: 0
             state: enabled selectable sensitive visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: popup
             alpha: 1
@@ -78,7 +78,7 @@ window1
             index: 1
             name: File System
             state: enabled selectable sensitive visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: popup
             alpha: 1
@@ -90,7 +90,7 @@ window1
             index: 2
             name: _F15-Livecd-Desk
             state: enabled selectable sensitive visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: popup
             alpha: 1
@@ -101,7 +101,7 @@ window1
             parent: unnamed-GtkMenuAccessible-2
             index: 3
             state: enabled selectable sensitive visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: popup
             alpha: 1
@@ -112,7 +112,7 @@ window1
             parent: unnamed-GtkMenuAccessible-2
             index: 4
             state: enabled selectable sensitive visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: popup
             alpha: 1
@@ -124,7 +124,7 @@ window1
             index: 5
             name: Other...
             state: enabled selectable sensitive visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: popup
             alpha: 1
@@ -136,7 +136,7 @@ window1
       index: 1
       name: Sans
       state: enabled focusable sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -150,7 +150,7 @@ window1
       parent: grid1
       index: 2
       state: enabled focusable sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -164,7 +164,7 @@ window1
       parent: grid1
       index: 3
       state: enabled sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -176,7 +176,7 @@ window1
         parent: button1
         index: 0
         state: enabled selectable sensitive
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: popup
         alpha: 1

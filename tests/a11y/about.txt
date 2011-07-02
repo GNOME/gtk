@@ -3,7 +3,7 @@ window1
   index: 0
   name: About FancyPants
   state: enabled sensitive showing visible
-  toolkit: gail
+  toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
@@ -12,7 +12,7 @@ window1
     parent: window1
     index: 0
     state: enabled sensitive showing vertical visible
-    toolkit: gail
+    toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
@@ -21,7 +21,7 @@ window1
       parent: unnamed-GtkBoxAccessible-0
       index: 0
       state: enabled sensitive showing vertical visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -30,7 +30,7 @@ window1
         parent: unnamed-GtkBoxAccessible-1
         index: 0
         state: enabled sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -43,7 +43,7 @@ window1
         index: 1
         name: FancyPants
         state: enabled focusable multi-line sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -81,7 +81,7 @@ window1
         parent: unnamed-GtkBoxAccessible-1
         index: 2
         state: enabled sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -99,7 +99,7 @@ window1
             "filler"
             index: 0
             state: enabled sensitive showing vertical visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -109,7 +109,7 @@ window1
               index: 0
               name: 0.99
               state: enabled focusable multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -148,7 +148,7 @@ window1
               index: 1
               name: comments
               state: enabled focusable multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -186,7 +186,7 @@ window1
               parent: unnamed-GtkBoxAccessible-5
               index: 2
               state: enabled horizontal sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -196,7 +196,7 @@ window1
                 index: 0
                 name: Homepage
                 state: enabled focusable multi-line sensitive showing visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -235,7 +235,7 @@ window1
               index: 3
               name: no comments
               state: enabled focusable multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -274,7 +274,7 @@ window1
               index: 4
               name: This program comes with ABSOLUTELY NO WARRANTY; for details, visit http://www.gnu.org/licenses/gpl.html
               state: enabled focusable multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -312,7 +312,7 @@ window1
       parent: unnamed-GtkBoxAccessible-0
       index: 1
       state: enabled horizontal sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -322,7 +322,7 @@ window1
         index: 0
         name: License
         state: enabled focusable sensitive
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -338,7 +338,7 @@ window1
         index: 1
         name: Credits
         state: enabled focusable sensitive
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -354,7 +354,7 @@ window1
         index: 2
         name: Close
         state: enabled focusable sensitive showing visible default
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1

@@ -2,7 +2,7 @@ window1
   "window"
   index: 0
   state: enabled resizable sensitive showing visible
-  toolkit: gail
+  toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
@@ -11,7 +11,7 @@ window1
     parent: window1
     index: 0
     state: enabled sensitive showing vertical visible
-    toolkit: gail
+    toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
@@ -20,7 +20,7 @@ window1
       parent: box1
       index: 0
       state: editable enabled focusable sensitive showing single-line visible
-      toolkit: gail
+      toolkit: gtk
       placeholder-text: Subject or Addresses contain
       <AtkComponent>
       layer: widget
@@ -61,7 +61,7 @@ window1
       parent: box1
       index: 1
       state: editable enabled focusable sensitive showing single-line visible
-      toolkit: gail
+      toolkit: gtk
       placeholder-text: Message contains
       <AtkComponent>
       layer: widget
@@ -102,7 +102,7 @@ window1
       parent: box1
       index: 2
       state: editable enabled focusable sensitive showing single-line visible
-      toolkit: gail
+      toolkit: gtk
       placeholder-text: Body contains
       <AtkComponent>
       layer: widget

@@ -2,7 +2,7 @@ window1
   "frame"
   index: 0
   state: enabled resizable sensitive showing visible
-  toolkit: gail
+  toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
@@ -12,7 +12,7 @@ window1
     index: 0
     description: -42.0
     state: enabled focusable horizontal sensitive showing visible
-    toolkit: gail
+    toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1

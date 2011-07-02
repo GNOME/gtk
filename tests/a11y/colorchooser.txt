@@ -3,7 +3,7 @@ window1
   index: 0
   name: Color Selection
   state: enabled resizable sensitive showing visible
-  toolkit: gail
+  toolkit: gtk
   <AtkComponent>
   layer: window
   alpha: 1
@@ -12,7 +12,7 @@ window1
     parent: window1
     index: 0
     state: enabled sensitive showing vertical visible
-    toolkit: gail
+    toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
@@ -21,7 +21,7 @@ window1
       parent: unnamed-GtkBoxAccessible-0
       index: 0
       state: enabled sensitive showing vertical visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -30,7 +30,7 @@ window1
         parent: unnamed-GtkBoxAccessible-1
         index: 0
         state: enabled horizontal sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -39,7 +39,7 @@ window1
           parent: unnamed-GtkBoxAccessible-2
           index: 0
           state: enabled sensitive showing vertical visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -51,7 +51,7 @@ window1
             description: Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle.
             controlled-by: 0
             state: enabled focusable sensitive showing visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -60,7 +60,7 @@ window1
             parent: unnamed-GtkBoxAccessible-3
             index: 1
             state: enabled horizontal sensitive showing visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -69,7 +69,7 @@ window1
               parent: unnamed-GtkBoxAccessible-5
               index: 0
               state: enabled sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -78,7 +78,7 @@ window1
                 parent: unnamed-GtkFrameAccessible-6
                 index: 0
                 state: enabled horizontal sensitive showing visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -88,7 +88,7 @@ window1
                   index: 0
                   description: The previously-selected color, for comparison to the color you're selecting now.
                   state: enabled sensitive showing visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -98,7 +98,7 @@ window1
                   index: 1
                   description: The color you've chosen.
                   state: enabled sensitive showing visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -108,7 +108,7 @@ window1
               index: 1
               description: Click the eyedropper, then click a color anywhere on your screen to select that color.
               state: enabled focusable sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -122,7 +122,7 @@ window1
           parent: unnamed-GtkBoxAccessible-2
           index: 1
           state: enabled sensitive showing vertical visible
-          toolkit: gail
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
@@ -131,7 +131,7 @@ window1
             parent: unnamed-GtkBoxAccessible-11
             index: 0
             state: enabled sensitive showing visible
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -142,7 +142,7 @@ window1
               description: You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry.
               labelled-by: Color name:
               state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -185,7 +185,7 @@ window1
               name: Color name:
               label-for: #FFFFFF
               state: enabled multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -224,7 +224,7 @@ window1
               index: 2
               description: Transparency of the color.
               state: editable enabled focusable sensitive single-line
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -266,7 +266,7 @@ window1
               description: Transparency of the color.
               labelled-by: Opacity:
               state: enabled focusable horizontal sensitive
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -285,7 +285,7 @@ window1
               name: Opacity:
               label-for: unnamed-GtkScaleAccessible-13
               state: enabled multi-line sensitive
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -323,7 +323,7 @@ window1
               parent: unnamed-GtkContainerAccessible-12
               index: 5
               state: enabled horizontal sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -335,7 +335,7 @@ window1
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Blue:
               state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -383,7 +383,7 @@ window1
               name: Blue:
               label-for: 255
               state: enabled multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -424,7 +424,7 @@ window1
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Green:
               state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -472,7 +472,7 @@ window1
               name: Green:
               label-for: 255
               state: enabled multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -513,7 +513,7 @@ window1
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Red:
               state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -561,7 +561,7 @@ window1
               name: Red:
               label-for: 255
               state: enabled multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -602,7 +602,7 @@ window1
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Value:
               state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -650,7 +650,7 @@ window1
               name: Value:
               label-for: 100
               state: enabled multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -691,7 +691,7 @@ window1
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Saturation:
               state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -739,7 +739,7 @@ window1
               name: Saturation:
               label-for: 0
               state: enabled multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -780,7 +780,7 @@ window1
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Hue:
               state: editable enabled focusable sensitive showing single-line visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -828,7 +828,7 @@ window1
               name: Hue:
               label-for: 0
               state: enabled multi-line sensitive showing visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -866,7 +866,7 @@ window1
             parent: unnamed-GtkBoxAccessible-11
             index: 1
             state: enabled sensitive vertical
-            toolkit: gail
+            toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
@@ -877,7 +877,7 @@ window1
               name: Palette:
               label-for: unnamed-GtkWidgetAccessible-16
               state: enabled multi-line sensitive visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -915,7 +915,7 @@ window1
               parent: unnamed-GtkBoxAccessible-15
               index: 1
               state: enabled sensitive visible
-              toolkit: gail
+              toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
@@ -924,7 +924,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 0
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -934,7 +934,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -943,7 +943,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 1
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -953,7 +953,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -962,7 +962,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 2
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -972,7 +972,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -981,7 +981,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 3
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -991,7 +991,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1000,7 +1000,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 4
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1010,7 +1010,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1019,7 +1019,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 5
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1029,7 +1029,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1038,7 +1038,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 6
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1048,7 +1048,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1057,7 +1057,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 7
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1067,7 +1067,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1076,7 +1076,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 8
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1086,7 +1086,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1095,7 +1095,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 9
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1105,7 +1105,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1114,7 +1114,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 10
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1124,7 +1124,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1133,7 +1133,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 11
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1143,7 +1143,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1152,7 +1152,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 12
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1162,7 +1162,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1171,7 +1171,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 13
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1181,7 +1181,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1190,7 +1190,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 14
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1200,7 +1200,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1209,7 +1209,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 15
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1219,7 +1219,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1228,7 +1228,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 16
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1238,7 +1238,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1247,7 +1247,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 17
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1257,7 +1257,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1266,7 +1266,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 18
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1276,7 +1276,7 @@ window1
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1285,7 +1285,7 @@ window1
                 parent: unnamed-GtkContainerAccessible-17
                 index: 19
                 state: enabled sensitive visible
-                toolkit: gail
+                toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
@@ -1296,7 +1296,7 @@ window1
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   labelled-by: Palette:
                   state: enabled focusable sensitive visible
-                  toolkit: gail
+                  toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
@@ -1305,7 +1305,7 @@ window1
       parent: unnamed-GtkBoxAccessible-0
       index: 1
       state: enabled horizontal sensitive showing visible
-      toolkit: gail
+      toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -1315,7 +1315,7 @@ window1
         index: 0
         name: Help
         state: enabled focusable sensitive
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -1331,7 +1331,7 @@ window1
         index: 1
         name: OK
         state: enabled focusable sensitive showing visible default
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
@@ -1347,7 +1347,7 @@ window1
         index: 2
         name: Cancel
         state: enabled focusable sensitive showing visible
-        toolkit: gail
+        toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1

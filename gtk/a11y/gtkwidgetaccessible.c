@@ -543,7 +543,7 @@ gtk_widget_accessible_get_attributes (AtkObject *obj)
 
   toolkit = g_new (AtkAttribute, 1);
   toolkit->name = g_strdup ("toolkit");
-  toolkit->value = g_strdup ("gail");
+  toolkit->value = g_strdup ("gtk");
 
   attributes = g_slist_append (NULL, toolkit);
 
