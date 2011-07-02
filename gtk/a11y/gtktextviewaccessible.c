@@ -53,7 +53,7 @@ static void atk_editable_text_interface_init      (AtkEditableTextIface      *if
 static void atk_text_interface_init               (AtkTextIface              *iface);
 static void atk_streamable_content_interface_init (AtkStreamableContentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTextViewAccessible, gtk_text_view_accessible, GAIL_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkTextViewAccessible, gtk_text_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_STREAMABLE_CONTENT, atk_streamable_content_interface_init))

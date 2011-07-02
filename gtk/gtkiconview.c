@@ -47,6 +47,7 @@
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "a11y/gtkcontaineraccessible.h"
 
 /**
  * SECTION:gtkiconview
@@ -447,6 +448,7 @@ static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildab
 							  GObject       *child,
 							  const gchar   *tagname,
 							  gpointer      *data);
+static GType    gtk_icon_view_accessible_get_type        (void);
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
@@ -1046,6 +1048,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+
+  gtk_widget_class_set_accessible_type (widget_class, gtk_icon_view_accessible_get_type ());
 }
 
 static void
@@ -9216,13 +9220,13 @@ gtk_icon_view_accessible_get_type (void)
     {
       GTypeInfo tinfo =
       {
-        0, /* class size */
+        sizeof (GtkContainerAccessibleClass), /* class size */
         (GBaseInitFunc) NULL, /* base init */
         (GBaseFinalizeFunc) NULL, /* base finalize */
         (GClassInitFunc) gtk_icon_view_accessible_class_init,
         (GClassFinalizeFunc) NULL, /* class finalize */
         NULL, /* class data */
-        0, /* instance size */
+        sizeof (GtkContainerAccessible), /* instance size */
         0, /* nb preallocs */
         (GInstanceInitFunc) NULL, /* instance init */
         NULL /* value table */
@@ -9240,26 +9244,8 @@ gtk_icon_view_accessible_get_type (void)
         NULL
       };
 
-      /*
-       * Figure out the size of the class and instance
-       * we are deriving from
-       */
-      AtkObjectFactory *factory;
-      GType derived_type;
-      GTypeQuery query;
-      GType derived_atk_type;
-
-      derived_type = g_type_parent (GTK_TYPE_ICON_VIEW);
-      factory = atk_registry_get_factory (atk_get_default_registry (), 
-                                          derived_type);
-      derived_atk_type = atk_object_factory_get_accessible_type (factory);
-      g_type_query (derived_atk_type, &query);
-      tinfo.class_size = query.class_size;
-      tinfo.instance_size = query.instance_size;
- 
-      type = g_type_register_static (derived_atk_type, 
-                                     I_("GtkIconViewAccessible"), 
-                                     &tinfo, 0);
+      type = g_type_register_static (GTK_TYPE_CONTAINER_ACCESSIBLE,
+                                     I_("GtkIconViewAccessible"), &tinfo, 0);
       g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
                                    &atk_component_info);
       g_type_add_interface_static (type, ATK_TYPE_SELECTION,

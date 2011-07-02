@@ -130,7 +130,7 @@ static void
 gtk_statusbar_accessible_class_init (GtkStatusbarAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GailContainerClass *container_class = (GailContainerClass*)klass;
+  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
   class->get_name = gtk_statusbar_accessible_get_name;
   class->get_n_children = gtk_statusbar_accessible_get_n_children;

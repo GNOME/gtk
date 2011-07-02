@@ -20,7 +20,7 @@
 #ifndef __GTK_COMBO_BOX_ACCESSIBLE_H__
 #define __GTK_COMBO_BOX_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,7 +36,7 @@ typedef struct _GtkComboBoxAccessibleClass GtkComboBoxAccessibleClass;
 
 struct _GtkComboBoxAccessible
 {
-  GailContainer  parent;
+  GtkContainerAccessible parent;
 
   gchar         *name;
   gint           old_selection;
@@ -45,7 +45,7 @@ struct _GtkComboBoxAccessible
 
 struct _GtkComboBoxAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_combo_box_accessible_get_type (void);

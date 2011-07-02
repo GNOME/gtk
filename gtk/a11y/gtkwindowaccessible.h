@@ -20,7 +20,7 @@
 #ifndef __GTK_WINDOW_ACCESSIBLE_H__
 #define __GTK_WINDOW_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +36,12 @@ typedef struct _GtkWindowAccessibleClass GtkWindowAccessibleClass;
 
 struct _GtkWindowAccessible
 {
-  GailContainer parent;
+  GtkContainerAccessible parent;
 };
 
 struct _GtkWindowAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_window_accessible_get_type (void);

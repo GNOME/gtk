@@ -21,7 +21,7 @@
 #define __GTK_TREE_VIEW_ACCESSIBLE_H__
 
 #include <gtk/gtk.h>
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 #include "gailcell.h"
 
 G_BEGIN_DECLS
@@ -38,7 +38,7 @@ typedef struct _GtkTreeViewAccessibleClass GtkTreeViewAccessibleClass;
 
 struct _GtkTreeViewAccessible
 {
-  GailContainer parent;
+  GtkContainerAccessible parent;
 
   gint           n_children_deleted;
   gint           n_rows;
@@ -58,7 +58,7 @@ struct _GtkTreeViewAccessible
 
 struct _GtkTreeViewAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType      gtk_tree_view_accessible_get_type       (void);

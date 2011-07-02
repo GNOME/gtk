@@ -20,7 +20,7 @@
 #ifndef __GTK_EXPANDER_ACCESSIBLE_H__
 #define __GTK_EXPANDER_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +36,12 @@ typedef struct _GtkExpanderAccessibleClass GtkExpanderAccessibleClass;
 
 struct _GtkExpanderAccessible
 {
-  GailContainer parent;
+  GtkContainerAccessible parent;
 };
 
 struct _GtkExpanderAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_expander_accessible_get_type (void);

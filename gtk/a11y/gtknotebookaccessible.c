@@ -27,7 +27,7 @@
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, gtk_notebook_accessible, GAIL_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, gtk_notebook_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static gboolean
@@ -310,7 +310,7 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GailWidgetClass *widget_class = (GailWidgetClass*)klass;
-  GailContainerClass *container_class = (GailContainerClass*)klass;
+  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
 
   gobject_class->finalize = gtk_notebook_accessible_finalize;

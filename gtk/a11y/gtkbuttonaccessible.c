@@ -28,7 +28,7 @@
 static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_image_interface_init  (AtkImageIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkButtonAccessible, gtk_button_accessible, GAIL_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkButtonAccessible, gtk_button_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
@@ -226,7 +226,7 @@ static void
 gtk_button_accessible_class_init (GtkButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailContainerClass *container_class = (GailContainerClass*)klass;
+  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
   GailWidgetClass *widget_class = (GailWidgetClass*)klass;
 
   class->get_name = gtk_button_accessible_get_name;

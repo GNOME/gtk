@@ -20,7 +20,7 @@
 #ifndef __GTK_FRAME_ACCESSIBLE_H__
 #define __GTK_FRAME_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +36,12 @@ typedef struct _GtkFrameAccessibleClass GtkFrameAccessibleClass;
 
 struct _GtkFrameAccessible
 {
-  GailContainer parent;
+  GtkContainerAccessible parent;
 };
 
 struct _GtkFrameAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_frame_accessible_get_type (void);

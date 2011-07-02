@@ -25,7 +25,6 @@
 #include <gtk/gtkx.h>
 #include "gailbooleancell.h"
 #include "gailcell.h"
-#include "gailcontainer.h"
 #include "gailcontainercell.h"
 #include "gailimagecell.h"
 #include "gailrenderercell.h"
@@ -79,7 +78,6 @@ static guint focus_tracker_id = 0;
 static GQuark quark_focus_object = 0;
 
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WIDGET, GailWidget, gail_widget, GTK_TYPE_WIDGET)
-GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CONTAINER, GailContainer, gail_container, GTK_TYPE_CONTAINER)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_RENDERER_CELL, GailRendererCell, gail_renderer_cell, GTK_TYPE_CELL_RENDERER, gail_renderer_cell_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_BOOLEAN_CELL, GailBooleanCell, gail_boolean_cell, GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell_new)
 GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_IMAGE_CELL, GailImageCell, gail_image_cell, GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell_new)
@@ -825,7 +823,6 @@ gail_accessibility_module_init (void)
     fprintf (stderr, "GTK Accessibility Module initialized\n");
 
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WIDGET, gail_widget);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CONTAINER, gail_container);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TEXT, gail_text_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell);

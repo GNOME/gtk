@@ -126,7 +126,7 @@ window1
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GailContainer-12
+          unnamed-GtkContainerAccessible-12
             "panel"
             parent: unnamed-GtkBoxAccessible-11
             index: 0
@@ -137,7 +137,7 @@ window1
             alpha: 1
             #FFFFFF
               "text"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 0
               description: You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry.
               labelled-by: Color name:
@@ -180,7 +180,7 @@ window1
               action 0 keybinding: <Alt>n
             Color name:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 1
               name: Color name:
               label-for: #FFFFFF
@@ -220,7 +220,7 @@ window1
                                   wrap-mode: word
             255
               "text"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 2
               description: Transparency of the color.
               state: editable enabled focusable sensitive single-line
@@ -261,7 +261,7 @@ window1
               action 0 name: activate
             unnamed-GtkScaleAccessible-13
               "slider"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 3
               description: Transparency of the color.
               labelled-by: Opacity:
@@ -280,7 +280,7 @@ window1
               minimum increment: 1.000000
             Opacity:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 4
               name: Opacity:
               label-for: unnamed-GtkScaleAccessible-13
@@ -320,7 +320,7 @@ window1
                                   wrap-mode: word
             unnamed-GailWidget-14
               "separator"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 5
               state: enabled horizontal sensitive showing visible
               toolkit: gail
@@ -329,7 +329,7 @@ window1
               alpha: 1
             255
               "spin button"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 6
               description: Amount of blue light in the color.
               controller-for: unnamed-GailWidget-4
@@ -378,7 +378,7 @@ window1
               minimum increment: 1.000000
             Blue:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 7
               name: Blue:
               label-for: 255
@@ -418,7 +418,7 @@ window1
                                   wrap-mode: word
             255
               "spin button"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 8
               description: Amount of green light in the color.
               controller-for: unnamed-GailWidget-4
@@ -467,7 +467,7 @@ window1
               minimum increment: 1.000000
             Green:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 9
               name: Green:
               label-for: 255
@@ -507,7 +507,7 @@ window1
                                   wrap-mode: word
             255
               "spin button"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 10
               description: Amount of red light in the color.
               controller-for: unnamed-GailWidget-4
@@ -556,7 +556,7 @@ window1
               minimum increment: 1.000000
             Red:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 11
               name: Red:
               label-for: 255
@@ -596,7 +596,7 @@ window1
                                   wrap-mode: word
             100
               "spin button"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 12
               description: Brightness of the color.
               controller-for: unnamed-GailWidget-4
@@ -645,7 +645,7 @@ window1
               minimum increment: 1.000000
             Value:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 13
               name: Value:
               label-for: 100
@@ -685,7 +685,7 @@ window1
                                   wrap-mode: word
             0
               "spin button"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 14
               description: Intensity of the color.
               controller-for: unnamed-GailWidget-4
@@ -734,7 +734,7 @@ window1
               minimum increment: 1.000000
             Saturation:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 15
               name: Saturation:
               label-for: 0
@@ -774,7 +774,7 @@ window1
                                   wrap-mode: word
             0
               "spin button"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 16
               description: Position on the color wheel.
               controller-for: unnamed-GailWidget-4
@@ -823,7 +823,7 @@ window1
               minimum increment: 1.000000
             Hue:
               "label"
-              parent: unnamed-GailContainer-12
+              parent: unnamed-GtkContainerAccessible-12
               index: 17
               name: Hue:
               label-for: 0
@@ -910,7 +910,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            unnamed-GailContainer-17
+            unnamed-GtkContainerAccessible-17
               "panel"
               parent: unnamed-GtkBoxAccessible-15
               index: 1
@@ -921,7 +921,7 @@ window1
               alpha: 1
               unnamed-GtkFrameAccessible-18
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 0
                 state: enabled sensitive visible
                 toolkit: gail
@@ -940,7 +940,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-20
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 1
                 state: enabled sensitive visible
                 toolkit: gail
@@ -959,7 +959,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-22
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 2
                 state: enabled sensitive visible
                 toolkit: gail
@@ -978,7 +978,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-24
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 3
                 state: enabled sensitive visible
                 toolkit: gail
@@ -997,7 +997,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-26
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 4
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1016,7 +1016,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-28
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 5
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1035,7 +1035,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-30
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 6
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1054,7 +1054,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-32
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 7
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1073,7 +1073,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-34
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 8
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1092,7 +1092,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-36
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 9
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1111,7 +1111,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-38
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 10
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1130,7 +1130,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-40
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 11
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1149,7 +1149,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-42
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 12
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1168,7 +1168,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-44
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 13
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1187,7 +1187,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-46
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 14
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1206,7 +1206,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-48
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 15
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1225,7 +1225,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-50
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 16
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1244,7 +1244,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-52
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 17
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1263,7 +1263,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-54
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 18
                 state: enabled sensitive visible
                 toolkit: gail
@@ -1282,7 +1282,7 @@ window1
                   alpha: 1
               unnamed-GtkFrameAccessible-56
                 "panel"
-                parent: unnamed-GailContainer-17
+                parent: unnamed-GtkContainerAccessible-17
                 index: 19
                 state: enabled sensitive visible
                 toolkit: gail

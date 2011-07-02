@@ -47,7 +47,7 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
-
+#include "a11y/gtkcontaineraccessible.h"
 
 /**
  * SECTION:gtkcontainer
@@ -512,6 +512,8 @@ gtk_container_class_init (GtkContainerClass *class)
                   GTK_TYPE_WIDGET);
 
   g_type_class_add_private (class, sizeof (GtkContainerPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CONTAINER_ACCESSIBLE);
 }
 
 static void

@@ -22,7 +22,8 @@
 #include <gtk/gtk.h>
 #include "gtkboxaccessible.h"
 
-G_DEFINE_TYPE (GtkBoxAccessible, gtk_box_accessible, GAIL_TYPE_CONTAINER)
+
+G_DEFINE_TYPE (GtkBoxAccessible, gtk_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
 
 static void
 gtk_box_accessible_initialize (AtkObject *accessible,

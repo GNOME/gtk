@@ -20,7 +20,7 @@
 #ifndef __GTK_NOTEBOOK_ACCESSIBLE_H__
 #define __GTK_NOTEBOOK_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,7 +36,7 @@ typedef struct _GtkNotebookAccessibleClass GtkNotebookAccessibleClass;
 
 struct _GtkNotebookAccessible
 {
-  GailContainer parent;
+  GtkContainerAccessible parent;
 
   /*
    * page_cache maintains a list of pre-ref'd Notebook Pages.
@@ -52,7 +52,7 @@ struct _GtkNotebookAccessible
 
 struct _GtkNotebookAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_notebook_accessible_get_type (void);

@@ -20,7 +20,7 @@
 #ifndef __GTK_MENU_ITEM_ACCESSIBLE_H__
 #define __GTK_MENU_ITEM_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkMenuItemAccessibleClass GtkMenuItemAccessibleClass;
 
 struct _GtkMenuItemAccessible
 {
-  GailContainer parent;
+  GtkContainerAccessible parent;
 
   gchar *text;
 };
 
 struct _GtkMenuItemAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_menu_item_accessible_get_type (void);

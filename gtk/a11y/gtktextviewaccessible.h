@@ -20,7 +20,7 @@
 #ifndef __GTK_TEXT_VIEW_ACCESSIBLE_H__
 #define __GTK_TEXT_VIEW_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -31,12 +31,12 @@ G_BEGIN_DECLS
 #define GTK_IS_TEXT_VIEW_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_VIEW_ACCESSIBLE))
 #define GTK_TEXT_VIEW_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessibleClass))
 
-typedef struct _GtkTextViewAccessible              GtkTextViewAccessible;
-typedef struct _GtkTextViewAccessibleClass         GtkTextViewAccessibleClass;
+typedef struct _GtkTextViewAccessible      GtkTextViewAccessible;
+typedef struct _GtkTextViewAccessibleClass GtkTextViewAccessibleClass;
 
 struct _GtkTextViewAccessible
 {
-  GailContainer  parent;
+  GtkContainerAccessible parent;
 
   gint           previous_insert_offset;
   gint           previous_selection_bound;
@@ -52,7 +52,7 @@ struct _GtkTextViewAccessible
 
 struct _GtkTextViewAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_text_view_accessible_get_type (void);

@@ -20,7 +20,7 @@
 #ifndef __GTK_PANED_ACCESSIBLE_H__
 #define __GTK_PANED_ACCESSIBLE_H__
 
-#include "gailcontainer.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +36,12 @@ typedef struct _GtkPanedAccessibleClass GtkPanedAccessibleClass;
 
 struct _GtkPanedAccessible
 {
-  GailContainer parent;
+  GtkContainerAccessible parent;
 };
 
 struct _GtkPanedAccessibleClass
 {
-  GailContainerClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType gtk_paned_accessible_get_type (void);

@@ -160,7 +160,7 @@ static void atk_selection_interface_init    (AtkSelectionIface   *iface);
 static void atk_component_interface_init    (AtkComponentIface   *iface);
 static void gail_cell_parent_interface_init (GailCellParentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GAIL_TYPE_CONTAINER,
+G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
@@ -724,11 +724,11 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkAccessibleClass *accessible_class;
   GailWidgetClass *widget_class;
-  GailContainerClass *container_class;
+  GtkContainerAccessibleClass *container_class;
 
   accessible_class = (GtkAccessibleClass*)klass;
   widget_class = (GailWidgetClass*)klass;
-  container_class = (GailContainerClass*)klass;
+  container_class = (GtkContainerAccessibleClass*)klass;
 
   class->get_n_children = gtk_tree_view_accessible_get_n_children;
   class->ref_child = gtk_tree_view_accessible_ref_child;
