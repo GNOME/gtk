@@ -51,7 +51,7 @@ window1
         <AtkAction>
         action 0 name: press
         <AtkSelection>
-        unnamed-GailMenu-2
+        unnamed-GtkMenuAccessible-2
           "menu"
           parent: unnamed-GtkComboBoxAccessible-1
           index: 0
@@ -63,7 +63,7 @@ window1
           <AtkSelection>
           unnamed-GtkMenuItemAccessible-3
             "menu item"
-            parent: unnamed-GailMenu-2
+            parent: unnamed-GtkMenuAccessible-2
             index: 0
             state: enabled selectable sensitive visible
             toolkit: gail
@@ -74,7 +74,7 @@ window1
             action 0 name: click
           unnamed-GtkMenuItemAccessible-4
             "menu item"
-            parent: unnamed-GailMenu-2
+            parent: unnamed-GtkMenuAccessible-2
             index: 1
             name: File System
             state: enabled selectable sensitive visible
@@ -86,7 +86,7 @@ window1
             action 0 name: click
           unnamed-GtkMenuItemAccessible-5
             "menu item"
-            parent: unnamed-GailMenu-2
+            parent: unnamed-GtkMenuAccessible-2
             index: 2
             name: _F15-Livecd-Desk
             state: enabled selectable sensitive visible
@@ -98,7 +98,7 @@ window1
             action 0 name: click
           unnamed-GtkMenuItemAccessible-6
             "separator"
-            parent: unnamed-GailMenu-2
+            parent: unnamed-GtkMenuAccessible-2
             index: 3
             state: enabled selectable sensitive visible
             toolkit: gail
@@ -109,7 +109,7 @@ window1
             action 0 name: click
           unnamed-GtkMenuItemAccessible-7
             "separator"
-            parent: unnamed-GailMenu-2
+            parent: unnamed-GtkMenuAccessible-2
             index: 4
             state: enabled selectable sensitive visible
             toolkit: gail
@@ -120,7 +120,7 @@ window1
             action 0 name: click
           unnamed-GtkMenuItemAccessible-8
             "menu item"
-            parent: unnamed-GailMenu-2
+            parent: unnamed-GtkMenuAccessible-2
             index: 5
             name: Other...
             state: enabled selectable sensitive visible
@@ -171,7 +171,7 @@ window1
       <AtkAction>
       action 0 name: press
       <AtkSelection>
-      unnamed-GailMenu-9
+      unnamed-GtkMenuAccessible-9
         "menu"
         parent: button1
         index: 0

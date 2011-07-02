@@ -23,7 +23,7 @@ gail_c_sources =			\
 	gtklabelaccessible.c		\
 	gtklinkbuttonaccessible.c	\
 	gailmisc.c			\
-	gailmenu.c			\
+	gtkmenuaccessible.c		\
 	gailmenushell.c			\
 	gtkmenuitemaccessible.c		\
 	gtknotebookaccessible.c		\
@@ -75,7 +75,7 @@ gail_private_h_sources =		\
 	gtklabelaccessible.h		\
 	gtklinkbuttonaccessible.h	\
 	gailmisc.h			\
-	gailmenu.h			\
+	gtkmenuaccessible.h		\
 	gailmenushell.h			\
 	gtkmenuitemaccessible.h		\
 	gtknotebookaccessible.h		\
