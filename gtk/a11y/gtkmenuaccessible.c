@@ -22,7 +22,7 @@
 #include "gtkmenuaccessible.h"
 
 
-G_DEFINE_TYPE (GtkMenuAccessible, gtk_menu_accessible, GAIL_TYPE_MENU_SHELL)
+G_DEFINE_TYPE (GtkMenuAccessible, gtk_menu_accessible, GTK_TYPE_MENU_SHELL_ACCESSIBLE)
 
 static void
 gtk_menu_accessible_initialize (AtkObject *obj,

@@ -52,6 +52,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkmenushellaccessible.h"
 
 #define BORDER_SPACING  0
 #define DEFAULT_IPADDING 1
@@ -229,6 +230,8 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                              GTK_PARAM_READABLE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkMenuBarPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_SHELL_ACCESSIBLE);
 }
 
 static void
