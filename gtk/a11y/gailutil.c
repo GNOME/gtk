@@ -24,7 +24,7 @@
 #include <gtk/gtk.h>
 #include "gailutil.h"
 #include "gailtoplevel.h"
-#include "gailwindow.h"
+#include "gtkwindowaccessible.h"
 
 static void		gail_util_class_init			(GailUtilClass		*klass);
 static void             gail_util_init                          (GailUtil               *utils);
@@ -147,7 +147,7 @@ gail_util_add_global_event_listener (GSignalEmissionHook listener,
               do_window_event_initialization ();
               initialized = TRUE;
             }
-          rc = add_listener (listener, "GailWindow", split_string[1], event_type);
+          rc = add_listener (listener, "GtkWindowAccessible", split_string[1], event_type);
         }
       else
         {
@@ -403,9 +403,9 @@ do_window_event_initialization (void)
   AtkObject *root;
 
   /*
-   * Ensure that GailWindowClass exists.
+   * Ensure that GtkWindowAccessibleClass exists.
    */
-  g_type_class_ref (GAIL_TYPE_WINDOW);
+  g_type_class_ref (GTK_TYPE_WINDOW_ACCESSIBLE);
   g_signal_add_emission_hook (g_signal_lookup ("window-state-event", GTK_TYPE_WIDGET),
                               0, state_event_watcher, NULL, (GDestroyNotify) NULL);
   g_signal_add_emission_hook (g_signal_lookup ("configure-event", GTK_TYPE_WIDGET),
@@ -461,15 +461,15 @@ state_event_watcher (GSignalInvocationHint  *hint,
   
   atk_obj = gtk_widget_get_accessible (widget);
 
-  if (GAIL_IS_WINDOW (atk_obj))
+  if (GTK_IS_WINDOW_ACCESSIBLE (atk_obj))
     {
       parent = atk_object_get_parent (atk_obj);
       if (parent == atk_get_root ())
-	{
-	  signal_id = g_signal_lookup (signal_name, GAIL_TYPE_WINDOW); 
-	  g_signal_emit (atk_obj, signal_id, 0);
-	}
-      
+        {
+          signal_id = g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE);
+          g_signal_emit (atk_obj, signal_id, 0);
+        }
+
       return TRUE;
     }
   else
@@ -485,17 +485,15 @@ window_added (AtkObject *atk_obj,
 {
   GtkWidget *widget;
 
-  if (!GAIL_IS_WINDOW (child)) return;
+  if (!GTK_IS_WINDOW_ACCESSIBLE (child)) return;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
   if (!widget)
     return;
 
-  g_signal_connect (widget, "focus-in-event",  
-                    (GCallback) window_focus, NULL);
-  g_signal_connect (widget, "focus-out-event",  
-                    (GCallback) window_focus, NULL);
-  g_signal_emit (child, g_signal_lookup ("create", GAIL_TYPE_WINDOW), 0); 
+  g_signal_connect (widget, "focus-in-event", (GCallback) window_focus, NULL);
+  g_signal_connect (widget, "focus-out-event", (GCallback) window_focus, NULL);
+  g_signal_emit (child, g_signal_lookup ("create", GTK_TYPE_WINDOW_ACCESSIBLE), 0);
 }
 
 
@@ -507,7 +505,7 @@ window_removed (AtkObject *atk_obj,
   GtkWidget *widget;
   GtkWindow *window;
 
-  if (!GAIL_IS_WINDOW (child)) return;
+  if (!GTK_IS_WINDOW_ACCESSIBLE (child)) return;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
   if (!widget)
@@ -526,11 +524,11 @@ window_removed (AtkObject *atk_obj,
 
       atk_obj = gtk_widget_get_accessible (widget);
       signal_name =  "deactivate";
-      g_signal_emit (atk_obj, g_signal_lookup (signal_name, GAIL_TYPE_WINDOW), 0); 
+      g_signal_emit (atk_obj, g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE), 0);
     }
 
   g_signal_handlers_disconnect_by_func (widget, (gpointer) window_focus, NULL);
-  g_signal_emit (child, g_signal_lookup ("destroy", GAIL_TYPE_WINDOW), 0); 
+  g_signal_emit (child, g_signal_lookup ("destroy", GTK_TYPE_WINDOW_ACCESSIBLE), 0);
 }
 
 static gboolean
@@ -544,7 +542,7 @@ window_focus (GtkWidget     *widget,
 
   atk_obj = gtk_widget_get_accessible (widget);
   signal_name =  (event->in) ? "activate" : "deactivate";
-  g_signal_emit (atk_obj, g_signal_lookup (signal_name, GAIL_TYPE_WINDOW), 0); 
+  g_signal_emit (atk_obj, g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE), 0);
 
   return FALSE;
 }
@@ -593,15 +591,15 @@ configure_event_watcher (GSignalInvocationHint  *hint,
     }
 
   atk_obj = gtk_widget_get_accessible (widget);
-  if (GAIL_IS_WINDOW (atk_obj))
+  if (GTK_IS_WINDOW_ACCESSIBLE (atk_obj))
     {
       parent = atk_object_get_parent (atk_obj);
       if (parent == atk_get_root ())
-	{
-	  signal_id = g_signal_lookup (signal_name, GAIL_TYPE_WINDOW); 
-	  g_signal_emit (atk_obj, signal_id, 0);
-	}
-      
+        {
+          signal_id = g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE);
+          g_signal_emit (atk_obj, signal_id, 0);
+        }
+
       return TRUE;
     }
   else

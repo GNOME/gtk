@@ -6,136 +6,355 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  button1
-    "push button"
-    index: 0
-    name: Page 1
-    state: enabled focusable sensitive showing visible
-    toolkit: gail
-    <AtkComponent>
-    layer: widget
-    alpha: 1
-    <AtkImage>
-    image size: -1 x -1
-    image description: (null)
-    <AtkAction>
-    action 0 name: click
-  button2
-    "push button"
-    index: 1
-    name: Page 2
-    state: enabled focusable sensitive visible
-    toolkit: gail
-    <AtkComponent>
-    layer: widget
-    alpha: 1
-    <AtkImage>
-    image size: -1 x -1
-    image description: (null)
-    <AtkAction>
-    action 0 name: click
   unnamed-GtkBoxAccessible-0
     "filler"
-    parent: unnamed-GtkBoxAccessible-1
-    index: 1
+    parent: window1
+    index: 0
     state: enabled horizontal sensitive showing visible
     toolkit: gail
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkButtonAccessible-2
-      "push button"
+    unnamed-GtkFrameAccessible-1
+      "panel"
       parent: unnamed-GtkBoxAccessible-0
       index: 0
-      name: Close
-      state: enabled focusable sensitive
+      state: enabled sensitive showing visible
       toolkit: gail
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkImage>
-      image size: 20 x 20
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 keybinding: <Alt>c
-    unnamed-GtkButtonAccessible-3
-      "push button"
+      unnamed-GtkBoxAccessible-2
+        "filler"
+        parent: unnamed-GtkFrameAccessible-1
+        index: 0
+        state: enabled sensitive showing vertical visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        Page 1
+          "label"
+          parent: unnamed-GtkBoxAccessible-2
+          index: 0
+          name: Page 1
+          state: enabled multi-line sensitive
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Page 1
+          character count: 6
+          caret offset: 0
+          default attributes: bg-color: <omitted>
+                              bg-full-height: 0
+                              direction: <omitted>
+                              editable: false
+                              family-name: <omitted>
+                              fg-color: <omitted>
+                              indent: 0
+                              invisible: false
+                              justification: left
+                              language: <omitted>
+                              left-margin: 0
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              right-margin: 0
+                              rise: 0
+                              scale: 1
+                              size: <omitted>
+                              stretch: <omitted>
+                              strikethrough: false
+                              style: <omitted>
+                              underline: none
+                              variant: <omitted>
+                              weight: <omitted>
+                              wrap-mode: word
+        Page 1
+          "label"
+          parent: unnamed-GtkBoxAccessible-2
+          index: 1
+          name: Page 1
+          state: enabled multi-line sensitive visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Page 1
+          character count: 6
+          caret offset: 0
+          default attributes: bg-color: <omitted>
+                              bg-full-height: 0
+                              direction: <omitted>
+                              editable: false
+                              family-name: <omitted>
+                              fg-color: <omitted>
+                              indent: 0
+                              invisible: false
+                              justification: left
+                              language: <omitted>
+                              left-margin: 0
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              right-margin: 0
+                              rise: 0
+                              scale: 1
+                              size: <omitted>
+                              stretch: <omitted>
+                              strikethrough: false
+                              style: <omitted>
+                              underline: none
+                              variant: <omitted>
+                              weight: <omitted>
+                              wrap-mode: word
+        Page 2
+          "label"
+          parent: unnamed-GtkBoxAccessible-2
+          index: 2
+          name: Page 2
+          state: enabled multi-line sensitive showing visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Page 2
+          character count: 6
+          caret offset: 0
+          default attributes: bg-color: <omitted>
+                              bg-full-height: 0
+                              direction: <omitted>
+                              editable: false
+                              family-name: <omitted>
+                              fg-color: <omitted>
+                              indent: 0
+                              invisible: false
+                              justification: left
+                              language: <omitted>
+                              left-margin: 0
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              right-margin: 0
+                              rise: 0
+                              scale: 1
+                              size: <omitted>
+                              stretch: <omitted>
+                              strikethrough: false
+                              style: <omitted>
+                              underline: none
+                              variant: <omitted>
+                              weight: <omitted>
+                              wrap-mode: word
+        Page 2
+          "label"
+          parent: unnamed-GtkBoxAccessible-2
+          index: 3
+          name: Page 2
+          state: enabled multi-line sensitive
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkText>
+          text: Page 2
+          character count: 6
+          caret offset: 0
+          default attributes: bg-color: <omitted>
+                              bg-full-height: 0
+                              direction: <omitted>
+                              editable: false
+                              family-name: <omitted>
+                              fg-color: <omitted>
+                              indent: 0
+                              invisible: false
+                              justification: left
+                              language: <omitted>
+                              left-margin: 0
+                              pixels-above-lines: 0
+                              pixels-below-lines: 0
+                              pixels-inside-wrap: 0
+                              right-margin: 0
+                              rise: 0
+                              scale: 1
+                              size: <omitted>
+                              stretch: <omitted>
+                              strikethrough: false
+                              style: <omitted>
+                              underline: none
+                              variant: <omitted>
+                              weight: <omitted>
+                              wrap-mode: word
+    unnamed-GtkBoxAccessible-3
+      "filler"
       parent: unnamed-GtkBoxAccessible-0
       index: 1
-      name: Cancel
-      state: enabled focusable sensitive showing visible
+      state: enabled sensitive showing vertical visible
       toolkit: gail
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkImage>
-      image size: 20 x 20
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 keybinding: <Alt>c
-    unnamed-GtkButtonAccessible-4
-      "push button"
-      parent: unnamed-GtkBoxAccessible-0
-      index: 2
-      name: Finish
-      state: focusable
-      toolkit: gail
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 keybinding: <Alt>f
-    unnamed-GtkButtonAccessible-5
-      "push button"
-      parent: unnamed-GtkBoxAccessible-0
-      index: 3
-      name: Go Back
-      state: enabled focusable sensitive
-      toolkit: gail
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 keybinding: <Alt>b
-    unnamed-GtkButtonAccessible-6
-      "push button"
-      parent: unnamed-GtkBoxAccessible-0
-      index: 4
-      name: Continue
-      state: focusable showing visible
-      toolkit: gail
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: 20 x 20
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 keybinding: <Alt>o
-    unnamed-GtkButtonAccessible-7
-      "push button"
-      parent: unnamed-GtkBoxAccessible-0
-      index: 5
-      name: Apply
-      state: enabled focusable sensitive
-      toolkit: gail
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: 20 x 20
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 keybinding: <Alt>a
+      unnamed-GtkNotebookAccessible-4
+        "page tab list"
+        parent: unnamed-GtkBoxAccessible-3
+        index: 0
+        state: enabled sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkSelection>
+        selected children: unnamed-GtkNotebookPageAccessible-5
+        unnamed-GtkNotebookPageAccessible-5
+          "page tab"
+          parent: unnamed-GtkNotebookAccessible-4
+          index: 0
+          state: enabled selectable selected showing visible
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          button1
+            "push button"
+            index: 0
+            name: Button 1
+            state: enabled focusable sensitive showing visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkImage>
+            image size: -1 x -1
+            image description: (null)
+            <AtkAction>
+            action 0 name: click
+        unnamed-GtkNotebookPageAccessible-6
+          "page tab"
+          parent: unnamed-GtkNotebookAccessible-4
+          index: 1
+          state: enabled selectable visible
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          button2
+            "push button"
+            index: 1
+            name: Button 2
+            state: enabled focusable sensitive visible
+            toolkit: gail
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkImage>
+            image size: -1 x -1
+            image description: (null)
+            <AtkAction>
+            action 0 name: click
+      unnamed-GtkBoxAccessible-7
+        "filler"
+        parent: unnamed-GtkBoxAccessible-3
+        index: 1
+        state: enabled horizontal sensitive showing visible
+        toolkit: gail
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        unnamed-GtkButtonAccessible-8
+          "push button"
+          parent: unnamed-GtkBoxAccessible-7
+          index: 0
+          name: Close
+          state: enabled focusable sensitive
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: 20 x 20
+          image description: (null)
+          <AtkAction>
+          action 0 name: click
+          action 0 keybinding: <Alt>c
+        unnamed-GtkButtonAccessible-9
+          "push button"
+          parent: unnamed-GtkBoxAccessible-7
+          index: 1
+          name: Cancel
+          state: enabled focusable sensitive showing visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: 20 x 20
+          image description: (null)
+          <AtkAction>
+          action 0 name: click
+          action 0 keybinding: <Alt>c
+        unnamed-GtkButtonAccessible-10
+          "push button"
+          parent: unnamed-GtkBoxAccessible-7
+          index: 2
+          name: Finish
+          state: focusable
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: -1 x -1
+          image description: (null)
+          <AtkAction>
+          action 0 name: click
+          action 0 keybinding: <Alt>f
+        unnamed-GtkButtonAccessible-11
+          "push button"
+          parent: unnamed-GtkBoxAccessible-7
+          index: 3
+          name: Go Back
+          state: enabled focusable sensitive
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: -1 x -1
+          image description: (null)
+          <AtkAction>
+          action 0 name: click
+          action 0 keybinding: <Alt>b
+        unnamed-GtkButtonAccessible-12
+          "push button"
+          parent: unnamed-GtkBoxAccessible-7
+          index: 4
+          name: Continue
+          state: focusable showing visible
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: 20 x 20
+          image description: (null)
+          <AtkAction>
+          action 0 name: click
+          action 0 keybinding: <Alt>o
+        unnamed-GtkButtonAccessible-13
+          "push button"
+          parent: unnamed-GtkBoxAccessible-7
+          index: 5
+          name: Apply
+          state: enabled focusable sensitive
+          toolkit: gail
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          <AtkImage>
+          image size: 20 x 20
+          image description: (null)
+          <AtkAction>
+          action 0 name: click
+          action 0 keybinding: <Alt>a

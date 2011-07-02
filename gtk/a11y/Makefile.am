@@ -50,7 +50,7 @@ gail_c_sources =			\
 	gtktreeviewaccessible.c		\
 	gailutil.c			\
 	gailwidget.c			\
-	gailwindow.c
+	gtkwindowaccessible.c
 
 libgailincludedir=$(includedir)/gail-3.0/gail
 
@@ -101,7 +101,7 @@ gail_private_h_sources =		\
 	gailtoplevel.h			\
 	gtktreeviewaccessible.h		\
 	gailutil.h			\
-	gailwindow.h
+	gtkwindowaccessible.h
 
 gail_public_h_sources =	\
 	gailwidget.h
