@@ -84,7 +84,6 @@ static void gtk_spinner_get_preferred_height (GtkWidget *widget,
                                         gint            *minimum_size,
                                         gint            *natural_size);
 
-GType      _gtk_spinner_accessible_get_type (void);
 
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
@@ -118,7 +117,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          FALSE,
                                                          G_PARAM_READWRITE));
 
-  gtk_widget_class_set_accessible_type (widget_class, _gtk_spinner_accessible_get_type ());
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPINNER_ACCESSIBLE);
 }
 
 static void
@@ -237,67 +236,6 @@ gtk_spinner_set_active (GtkSpinner *spinner,
         gtk_widget_unset_state_flags (GTK_WIDGET (spinner),
                                       GTK_STATE_FLAG_ACTIVE);
     }
-}
-
-/* accessible implementation */
-
-static void
-gtk_spinner_accessible_image_get_size (AtkImage *image,
-                                       gint     *width,
-                                       gint     *height)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
-  if (widget == NULL)
-    {
-      *width = *height = 0;
-    }
-  else
-    {
-      gtk_widget_get_allocation (widget, &allocation);
-      *width = allocation.width;
-      *height = allocation.height;
-    }
-}
-
-static void
-gtk_spinner_accessible_image_iface_init (AtkImageIface *iface)
-{
-  iface->get_image_size = gtk_spinner_accessible_image_get_size;
-}
-
-/* dummy typedef */
-typedef GtkWidgetAccessible      GtkSpinnerAccessible;
-typedef GtkWidgetAccessibleClass GtkSpinnerAccessibleClass;
-
-G_DEFINE_TYPE_WITH_CODE (GtkSpinnerAccessible, _gtk_spinner_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE,
-                                                gtk_spinner_accessible_image_iface_init));
-
-static void
-gtk_spinner_accessible_initialize (AtkObject *accessible,
-                                   gpointer   widget)
-{
-  ATK_OBJECT_CLASS (_gtk_spinner_accessible_parent_class)->initialize (accessible, widget);
-
-  atk_object_set_name (accessible, C_("throbbing progress animation widget", "Spinner"));
-  atk_object_set_description (accessible, _("Provides visual indication of progress"));
-  atk_object_set_role (accessible, ATK_ROLE_ANIMATION);
-}
-
-static void
-_gtk_spinner_accessible_class_init (GtkSpinnerAccessibleClass *klass)
-{
-  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
-
-  atk_class->initialize = gtk_spinner_accessible_initialize;
-}
-
-static void
-_gtk_spinner_accessible_init (GtkSpinnerAccessible *self)
-{
 }
 
 /**
