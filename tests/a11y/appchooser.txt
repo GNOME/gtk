@@ -106,7 +106,7 @@ window1
               columns: 1
               column 0 description: 
               <column 0 header>
-              
+              unnamed-GtkButtonAccessible-6
                 "table column header"
                 parent: unnamed-GtkTreeViewAccessible-5
                 index: 0
@@ -116,43 +116,12 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                <AtkText>
-                text: 
-                character count: 0
-                caret offset: 0
-                default attributes: bg-color: <omitted>
-                                    bg-full-height: 0
-                                    bg-stipple: false
-                                    direction: <omitted>
-                                    editable: false
-                                    family-name: <omitted>
-                                    fg-color: <omitted>
-                                    fg-stipple: false
-                                    indent: 0
-                                    invisible: false
-                                    justification: left
-                                    language: <omitted>
-                                    left-margin: 0
-                                    pixels-above-lines: 0
-                                    pixels-below-lines: 0
-                                    pixels-inside-wrap: 0
-                                    right-margin: 0
-                                    rise: 0
-                                    scale: 1
-                                    size: <omitted>
-                                    stretch: <omitted>
-                                    strikethrough: false
-                                    style: <omitted>
-                                    underline: none
-                                    variant: <omitted>
-                                    weight: <omitted>
-                                    wrap-mode: word
                 <AtkImage>
                 image size: -1 x -1
                 image description: (null)
                 <AtkAction>
                 action 0 name: click
-              
+              unnamed-GtkButtonAccessible-6
                 "table column header"
                 parent: unnamed-GtkTreeViewAccessible-5
                 index: 0
@@ -162,43 +131,12 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                <AtkText>
-                text: 
-                character count: 0
-                caret offset: 0
-                default attributes: bg-color: <omitted>
-                                    bg-full-height: 0
-                                    bg-stipple: false
-                                    direction: <omitted>
-                                    editable: false
-                                    family-name: <omitted>
-                                    fg-color: <omitted>
-                                    fg-stipple: false
-                                    indent: 0
-                                    invisible: false
-                                    justification: left
-                                    language: <omitted>
-                                    left-margin: 0
-                                    pixels-above-lines: 0
-                                    pixels-below-lines: 0
-                                    pixels-inside-wrap: 0
-                                    right-margin: 0
-                                    rise: 0
-                                    scale: 1
-                                    size: <omitted>
-                                    stretch: <omitted>
-                                    strikethrough: false
-                                    style: <omitted>
-                                    underline: none
-                                    variant: <omitted>
-                                    weight: <omitted>
-                                    wrap-mode: word
                 <AtkImage>
                 image size: -1 x -1
                 image description: (null)
                 <AtkAction>
                 action 0 name: click
-              unnamed-GailContainerCell-6
+              unnamed-GailContainerCell-7
                 "table cell"
                 parent: unnamed-GtkTreeViewAccessible-5
                 index: 1
@@ -336,7 +274,7 @@ Click "Show other applications", for more options, or "Find applications online"
                   <AtkAction>
                   action 0 name: activate
                   action 0 description: activate the cell
-                unnamed-GailImageCell-7
+                unnamed-GailImageCell-8
                   "table cell"
                   index: 3
                   state: enabled focusable focused selectable sensitive transient visible
@@ -391,7 +329,7 @@ Click "Show other applications", for more options, or "Find applications online"
                   <AtkAction>
                   action 0 name: activate
                   action 0 description: activate the cell
-            unnamed-GtkScrollbarAccessible-8
+            unnamed-GtkScrollbarAccessible-9
               "scroll bar"
               parent: unnamed-GtkScrolledWindowAccessible-4
               index: 1
@@ -407,7 +345,7 @@ Click "Show other applications", for more options, or "Find applications online"
               maximum value: 0.000000
               current value: 0.000000
               minimum increment: 39.800000
-            unnamed-GtkScrollbarAccessible-9
+            unnamed-GtkScrollbarAccessible-10
               "scroll bar"
               parent: unnamed-GtkScrolledWindowAccessible-4
               index: 2
@@ -423,7 +361,7 @@ Click "Show other applications", for more options, or "Find applications online"
               maximum value: 0.000000
               current value: 0.000000
               minimum increment: 29.800000
-          Show other applications
+          unnamed-GtkButtonAccessible-11
             "push button"
             parent: unnamed-GtkBoxAccessible-3
             index: 1
@@ -433,43 +371,12 @@ Click "Show other applications", for more options, or "Find applications online"
             <AtkComponent>
             layer: widget
             alpha: 1
-            <AtkText>
-            text: Show other applications
-            character count: 23
-            caret offset: 0
-            default attributes: bg-color: <omitted>
-                                bg-full-height: 0
-                                bg-stipple: false
-                                direction: <omitted>
-                                editable: false
-                                family-name: <omitted>
-                                fg-color: <omitted>
-                                fg-stipple: false
-                                indent: 0
-                                invisible: false
-                                justification: left
-                                language: <omitted>
-                                left-margin: 0
-                                pixels-above-lines: 0
-                                pixels-below-lines: 0
-                                pixels-inside-wrap: 0
-                                right-margin: 0
-                                rise: 0
-                                scale: 1
-                                size: <omitted>
-                                stretch: <omitted>
-                                strikethrough: false
-                                style: <omitted>
-                                underline: none
-                                variant: <omitted>
-                                weight: <omitted>
-                                wrap-mode: word
             <AtkImage>
             image size: 20 x 20
             image description: (null)
             <AtkAction>
             action 0 name: click
-    unnamed-GtkBoxAccessible-10
+    unnamed-GtkBoxAccessible-12
       "filler"
       parent: unnamed-GtkBoxAccessible-0
       index: 1
@@ -478,9 +385,9 @@ Click "Show other applications", for more options, or "Find applications online"
       <AtkComponent>
       layer: widget
       alpha: 1
-      Select
+      unnamed-GtkButtonAccessible-13
         "push button"
-        parent: unnamed-GtkBoxAccessible-10
+        parent: unnamed-GtkBoxAccessible-12
         index: 0
         name: Select
         state: enabled focusable sensitive showing visible default
@@ -488,46 +395,15 @@ Click "Show other applications", for more options, or "Find applications online"
         <AtkComponent>
         layer: widget
         alpha: 1
-        <AtkText>
-        text: Select
-        character count: 6
-        caret offset: 0
-        default attributes: bg-color: <omitted>
-                            bg-full-height: 0
-                            bg-stipple: false
-                            direction: <omitted>
-                            editable: false
-                            family-name: <omitted>
-                            fg-color: <omitted>
-                            fg-stipple: false
-                            indent: 0
-                            invisible: false
-                            justification: left
-                            language: <omitted>
-                            left-margin: 0
-                            pixels-above-lines: 0
-                            pixels-below-lines: 0
-                            pixels-inside-wrap: 0
-                            right-margin: 0
-                            rise: 0
-                            scale: 1
-                            size: <omitted>
-                            stretch: <omitted>
-                            strikethrough: false
-                            style: <omitted>
-                            underline: none
-                            variant: <omitted>
-                            weight: <omitted>
-                            wrap-mode: word
         <AtkImage>
         image size: -1 x -1
         image description: (null)
         <AtkAction>
         action 0 name: click
         action 0 keybinding: <Alt>s
-      Cancel
+      unnamed-GtkButtonAccessible-14
         "push button"
-        parent: unnamed-GtkBoxAccessible-10
+        parent: unnamed-GtkBoxAccessible-12
         index: 1
         name: Cancel
         state: enabled focusable sensitive showing visible
@@ -535,37 +411,6 @@ Click "Show other applications", for more options, or "Find applications online"
         <AtkComponent>
         layer: widget
         alpha: 1
-        <AtkText>
-        text: Cancel
-        character count: 6
-        caret offset: 0
-        default attributes: bg-color: <omitted>
-                            bg-full-height: 0
-                            bg-stipple: false
-                            direction: <omitted>
-                            editable: false
-                            family-name: <omitted>
-                            fg-color: <omitted>
-                            fg-stipple: false
-                            indent: 0
-                            invisible: false
-                            justification: left
-                            language: <omitted>
-                            left-margin: 0
-                            pixels-above-lines: 0
-                            pixels-below-lines: 0
-                            pixels-inside-wrap: 0
-                            right-margin: 0
-                            rise: 0
-                            scale: 1
-                            size: <omitted>
-                            stretch: <omitted>
-                            strikethrough: false
-                            style: <omitted>
-                            underline: none
-                            variant: <omitted>
-                            weight: <omitted>
-                            wrap-mode: word
         <AtkImage>
         image size: 20 x 20
         image description: (null)

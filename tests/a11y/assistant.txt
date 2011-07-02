@@ -15,37 +15,6 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    <AtkText>
-    text: Button 1
-    character count: 8
-    caret offset: 0
-    default attributes: bg-color: <omitted>
-                        bg-full-height: 0
-                        bg-stipple: false
-                        direction: <omitted>
-                        editable: false
-                        family-name: <omitted>
-                        fg-color: <omitted>
-                        fg-stipple: false
-                        indent: 0
-                        invisible: false
-                        justification: left
-                        language: <omitted>
-                        left-margin: 0
-                        pixels-above-lines: 0
-                        pixels-below-lines: 0
-                        pixels-inside-wrap: 0
-                        right-margin: 0
-                        rise: 0
-                        scale: 1
-                        size: <omitted>
-                        stretch: <omitted>
-                        strikethrough: false
-                        style: <omitted>
-                        underline: none
-                        variant: <omitted>
-                        weight: <omitted>
-                        wrap-mode: word
     <AtkImage>
     image size: -1 x -1
     image description: (null)
@@ -60,37 +29,6 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    <AtkText>
-    text: Button 2
-    character count: 8
-    caret offset: 0
-    default attributes: bg-color: <omitted>
-                        bg-full-height: 0
-                        bg-stipple: false
-                        direction: <omitted>
-                        editable: false
-                        family-name: <omitted>
-                        fg-color: <omitted>
-                        fg-stipple: false
-                        indent: 0
-                        invisible: false
-                        justification: left
-                        language: <omitted>
-                        left-margin: 0
-                        pixels-above-lines: 0
-                        pixels-below-lines: 0
-                        pixels-inside-wrap: 0
-                        right-margin: 0
-                        rise: 0
-                        scale: 1
-                        size: <omitted>
-                        stretch: <omitted>
-                        strikethrough: false
-                        style: <omitted>
-                        underline: none
-                        variant: <omitted>
-                        weight: <omitted>
-                        wrap-mode: word
     <AtkImage>
     image size: -1 x -1
     image description: (null)
@@ -105,7 +43,7 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    Close
+    unnamed-GtkButtonAccessible-2
       "push button"
       parent: unnamed-GtkBoxAccessible-0
       index: 0
@@ -115,44 +53,13 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Close
-      character count: 5
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>c
-    Cancel
+    unnamed-GtkButtonAccessible-3
       "push button"
       parent: unnamed-GtkBoxAccessible-0
       index: 1
@@ -162,44 +69,13 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Cancel
-      character count: 6
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>c
-    Finish
+    unnamed-GtkButtonAccessible-4
       "push button"
       parent: unnamed-GtkBoxAccessible-0
       index: 2
@@ -209,44 +85,13 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Finish
-      character count: 6
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       <AtkImage>
       image size: -1 x -1
       image description: (null)
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>f
-    Go Back
+    unnamed-GtkButtonAccessible-5
       "push button"
       parent: unnamed-GtkBoxAccessible-0
       index: 3
@@ -256,44 +101,13 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Go Back
-      character count: 7
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       <AtkImage>
       image size: -1 x -1
       image description: (null)
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>b
-    Continue
+    unnamed-GtkButtonAccessible-6
       "push button"
       parent: unnamed-GtkBoxAccessible-0
       index: 4
@@ -303,44 +117,13 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Continue
-      character count: 8
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)
       <AtkAction>
       action 0 name: click
       action 0 keybinding: <Alt>o
-    Apply
+    unnamed-GtkButtonAccessible-7
       "push button"
       parent: unnamed-GtkBoxAccessible-0
       index: 5
@@ -350,37 +133,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: Apply
-      character count: 5
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          bg-stipple: false
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          fg-stipple: false
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
       <AtkImage>
       image size: 20 x 20
       image description: (null)

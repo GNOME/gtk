@@ -20,7 +20,7 @@
 #ifndef __GTK_TOGGLE_BUTTON_ACCESSIBLE_H__
 #define __GTK_TOGGLE_BUTTON_ACCESSIBLE_H__
 
-#include "gailbutton.h"
+#include "gtkbuttonaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +36,12 @@ typedef struct _GtkToggleButtonAccessibleClass GtkToggleButtonAccessibleClass;
 
 struct _GtkToggleButtonAccessible
 {
-  GailButton parent;
+  GtkButtonAccessible parent;
 };
 
 struct _GtkToggleButtonAccessibleClass
 {
-  GailButtonClass parent_class;
+  GtkButtonAccessibleClass parent_class;
 };
 
 GType gtk_toggle_button_accessible_get_type (void);

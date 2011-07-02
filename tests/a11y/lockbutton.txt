@@ -10,6 +10,7 @@ window1
     "push button"
     parent: window1
     index: 0
+    name: Lock
     description: Dialog is unlocked.
 Click to prevent further changes
     state: enabled focusable sensitive showing visible
@@ -17,90 +18,8 @@ Click to prevent further changes
     <AtkComponent>
     layer: widget
     alpha: 1
-    <AtkText>
-    text: (null)
-    character count: 0
-    caret offset: 0
     <AtkImage>
-    image size: 16 x 16
+    image size: -1 x -1
     image description: (null)
     <AtkAction>
     action 0 name: click
-    Lock
-      "label"
-      parent: button1
-      index: 0
-      name: Lock
-      state: enabled multi-line sensitive showing visible
-      toolkit: gail
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkText>
-      text: Lock
-      character count: 4
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word
-    Unlock
-      "label"
-      parent: button1
-      index: 1
-      name: Unlock
-      state: enabled multi-line sensitive
-      toolkit: gail
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkText>
-      text: Unlock
-      character count: 6
-      caret offset: 0
-      default attributes: bg-color: <omitted>
-                          bg-full-height: 0
-                          direction: <omitted>
-                          editable: false
-                          family-name: <omitted>
-                          fg-color: <omitted>
-                          indent: 0
-                          invisible: false
-                          justification: left
-                          language: <omitted>
-                          left-margin: 0
-                          pixels-above-lines: 0
-                          pixels-below-lines: 0
-                          pixels-inside-wrap: 0
-                          right-margin: 0
-                          rise: 0
-                          scale: 1
-                          size: <omitted>
-                          stretch: <omitted>
-                          strikethrough: false
-                          style: <omitted>
-                          underline: none
-                          variant: <omitted>
-                          weight: <omitted>
-                          wrap-mode: word

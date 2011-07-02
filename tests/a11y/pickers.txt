@@ -24,7 +24,7 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      (None)
+      unnamed-GtkButtonAccessible-0
         "push button"
         parent: button4
         index: 0
@@ -34,43 +34,12 @@ window1
         <AtkComponent>
         layer: widget
         alpha: 1
-        <AtkText>
-        text: (None)
-        character count: 6
-        caret offset: 0
-        default attributes: bg-color: <omitted>
-                            bg-full-height: 0
-                            bg-stipple: false
-                            direction: <omitted>
-                            editable: false
-                            family-name: <omitted>
-                            fg-color: <omitted>
-                            fg-stipple: false
-                            indent: 0
-                            invisible: false
-                            justification: left
-                            language: <omitted>
-                            left-margin: 0
-                            pixels-above-lines: 0
-                            pixels-below-lines: 0
-                            pixels-inside-wrap: 0
-                            right-margin: 0
-                            rise: 0
-                            scale: 1
-                            size: <omitted>
-                            stretch: <omitted>
-                            strikethrough: false
-                            style: <omitted>
-                            underline: none
-                            variant: <omitted>
-                            weight: <omitted>
-                            wrap-mode: word
         <AtkImage>
         image size: -1 x -1
         image description: (null)
         <AtkAction>
         action 0 name: click
-      unnamed-GtkComboBoxAccessible-0
+      unnamed-GtkComboBoxAccessible-1
         "combo box"
         parent: button4
         index: 1
@@ -82,9 +51,9 @@ window1
         <AtkAction>
         action 0 name: press
         <AtkSelection>
-        unnamed-GailMenu-1
+        unnamed-GailMenu-2
           "menu"
-          parent: unnamed-GtkComboBoxAccessible-0
+          parent: unnamed-GtkComboBoxAccessible-1
           index: 0
           state: enabled selectable sensitive
           toolkit: gail
@@ -92,9 +61,9 @@ window1
           layer: popup
           alpha: 1
           <AtkSelection>
-          unnamed-GailMenuItem-2
+          unnamed-GtkMenuItemAccessible-3
             "menu item"
-            parent: unnamed-GailMenu-1
+            parent: unnamed-GailMenu-2
             index: 0
             state: enabled selectable sensitive visible
             toolkit: gail
@@ -103,10 +72,11 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
-          unnamed-GailMenuItem-3
+          unnamed-GtkMenuItemAccessible-4
             "menu item"
-            parent: unnamed-GailMenu-1
+            parent: unnamed-GailMenu-2
             index: 1
+            name: File System
             state: enabled selectable sensitive visible
             toolkit: gail
             <AtkComponent>
@@ -114,10 +84,11 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
-          unnamed-GailMenuItem-4
+          unnamed-GtkMenuItemAccessible-5
             "menu item"
-            parent: unnamed-GailMenu-1
+            parent: unnamed-GailMenu-2
             index: 2
+            name: _F15-Livecd-Desk
             state: enabled selectable sensitive visible
             toolkit: gail
             <AtkComponent>
@@ -125,28 +96,33 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
-          unnamed-GtkSeparatorMenuItemAccessible-5
+          unnamed-GtkMenuItemAccessible-6
             "separator"
-            parent: unnamed-GailMenu-1
+            parent: unnamed-GailMenu-2
             index: 3
             state: enabled selectable sensitive visible
             toolkit: gail
             <AtkComponent>
-            layer: widget
+            layer: popup
             alpha: 1
-          unnamed-GtkSeparatorMenuItemAccessible-6
+            <AtkAction>
+            action 0 name: click
+          unnamed-GtkMenuItemAccessible-7
             "separator"
-            parent: unnamed-GailMenu-1
+            parent: unnamed-GailMenu-2
             index: 4
             state: enabled selectable sensitive visible
             toolkit: gail
             <AtkComponent>
-            layer: widget
+            layer: popup
             alpha: 1
-          unnamed-GailMenuItem-7
+            <AtkAction>
+            action 0 name: click
+          unnamed-GtkMenuItemAccessible-8
             "menu item"
-            parent: unnamed-GailMenu-1
+            parent: unnamed-GailMenu-2
             index: 5
+            name: Other...
             state: enabled selectable sensitive visible
             toolkit: gail
             <AtkComponent>
@@ -158,98 +134,17 @@ window1
       "push button"
       parent: grid1
       index: 1
+      name: Sans
       state: enabled focusable sensitive showing visible
       toolkit: gail
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: (null)
-      character count: 0
-      caret offset: 0
       <AtkImage>
       image size: -1 x -1
       image description: (null)
       <AtkAction>
       action 0 name: click
-      Sans
-        "label"
-        parent: button3
-        index: 0
-        name: Sans
-        state: enabled multi-line sensitive showing visible
-        toolkit: gail
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkText>
-        text: Sans
-        character count: 4
-        caret offset: 0
-        default attributes: bg-color: <omitted>
-                            bg-full-height: 0
-                            direction: <omitted>
-                            editable: false
-                            family-name: <omitted>
-                            fg-color: <omitted>
-                            indent: 0
-                            invisible: false
-                            justification: left
-                            language: <omitted>
-                            left-margin: 0
-                            pixels-above-lines: 0
-                            pixels-below-lines: 0
-                            pixels-inside-wrap: 0
-                            right-margin: 0
-                            rise: 0
-                            scale: 1
-                            size: <omitted>
-                            stretch: <omitted>
-                            strikethrough: false
-                            style: <omitted>
-                            underline: none
-                            variant: <omitted>
-                            weight: <omitted>
-                            wrap-mode: word
-      12
-        "label"
-        parent: button3
-        index: 1
-        name: 12
-        state: enabled multi-line sensitive showing visible
-        toolkit: gail
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkText>
-        text: 12
-        character count: 2
-        caret offset: 0
-        default attributes: bg-color: <omitted>
-                            bg-full-height: 0
-                            direction: <omitted>
-                            editable: false
-                            family-name: <omitted>
-                            fg-color: <omitted>
-                            indent: 0
-                            invisible: false
-                            justification: left
-                            language: <omitted>
-                            left-margin: 0
-                            pixels-above-lines: 0
-                            pixels-below-lines: 0
-                            pixels-inside-wrap: 0
-                            right-margin: 0
-                            rise: 0
-                            scale: 1
-                            size: <omitted>
-                            stretch: <omitted>
-                            strikethrough: false
-                            style: <omitted>
-                            underline: none
-                            variant: <omitted>
-                            weight: <omitted>
-                            wrap-mode: word
     button2
       "push button"
       parent: grid1
@@ -259,10 +154,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkText>
-      text: (null)
-      character count: 0
-      caret offset: 0
       <AtkImage>
       image size: -1 x -1
       image description: (null)
@@ -280,7 +171,7 @@ window1
       <AtkAction>
       action 0 name: press
       <AtkSelection>
-      unnamed-GailMenu-8
+      unnamed-GailMenu-9
         "menu"
         parent: button1
         index: 0

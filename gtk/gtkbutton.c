@@ -58,6 +58,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "a11y/gtkbuttonaccessible.h"
 
 
 static const GtkBorder default_default_border = { 1, 1, 1, 1 };
@@ -528,6 +529,8 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     GTK_PARAM_READABLE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
 }
 
 static void

@@ -20,7 +20,7 @@
 #ifndef __GTK_LINK_BUTTON_ACCESSIBLE_H__
 #define __GTK_LINK_BUTTON_ACCESSIBLE_H__
 
-#include "gailbutton.h"
+#include "gtkbuttonaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkLinkButtonAccessibleClass GtkLinkButtonAccessibleClass;
 
 struct _GtkLinkButtonAccessible
 {
-  GailButton parent;
+  GtkButtonAccessible parent;
 
   AtkHyperlink *link;
 };
 
 struct _GtkLinkButtonAccessibleClass
 {
-  GailButtonClass parent_class;
+  GtkButtonAccessibleClass parent_class;
 };
 
 GType gtk_link_button_accessible_get_type (void);

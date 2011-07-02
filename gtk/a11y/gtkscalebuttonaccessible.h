@@ -21,7 +21,7 @@
 #define __GTK_SCALE_BUTTON_ACCESSIBLE_H__
 
 #include <gtk/gtk.h>
-#include "gailbutton.h"
+#include "gtkbuttonaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -37,12 +37,12 @@ typedef struct _GtkScaleButtonAccessibleClass GtkScaleButtonAccessibleClass;
 
 struct _GtkScaleButtonAccessible
 {
-  GailButton parent;
+  GtkButtonAccessible parent;
 };
 
 struct _GtkScaleButtonAccessibleClass
 {
-  GailButtonClass parent_class;
+  GtkButtonAccessibleClass parent_class;
 };
 
 GType gtk_scale_button_accessible_get_type (void);

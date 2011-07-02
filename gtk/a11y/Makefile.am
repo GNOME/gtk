@@ -7,7 +7,7 @@ gail_c_sources =			\
 	gtkarrowaccessible.c		\
 	gailbooleancell.c		\
 	gtkboxaccessible.c		\
-	gailbutton.c			\
+	gtkbuttonaccessible.c		\
 	gailcell.c			\
 	gailcellparent.c		\
 	gtkcheckmenuitemaccessible.c	\
@@ -58,7 +58,7 @@ gail_private_h_sources =		\
 	gtkarrowaccessible.h		\
 	gailbooleancell.h		\
 	gtkboxaccessible.h		\
-	gailbutton.h			\
+	gtkbuttonaccessible.h		\
 	gailcell.h			\
 	gailcellparent.h		\
 	gtkcheckmenuitemaccessible.h	\

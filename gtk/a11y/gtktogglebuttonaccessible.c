@@ -24,7 +24,7 @@
 #include "gtktogglebuttonaccessible.h"
 
 
-G_DEFINE_TYPE (GtkToggleButtonAccessible, gtk_toggle_button_accessible, GAIL_TYPE_BUTTON)
+G_DEFINE_TYPE (GtkToggleButtonAccessible, gtk_toggle_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE)
 
 static void
 gtk_toggle_button_accessible_toggled (GtkWidget *widget)
