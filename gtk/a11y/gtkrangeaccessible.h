@@ -20,7 +20,7 @@
 #ifndef __GTK_RANGE_ACCESSIBLE_H__
 #define __GTK_RANGE_ACCESSIBLE_H__
 
-#include "gailwidget.h"
+#include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkRangeAccessibleClass GtkRangeAccessibleClass;
 
 struct _GtkRangeAccessible
 {
-  GailWidget parent;
+  GtkWidgetAccessible parent;
 
   guint action_idle_handler;
 };
 
 struct _GtkRangeAccessibleClass
 {
-  GailWidgetClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GType gtk_range_accessible_get_type (void);

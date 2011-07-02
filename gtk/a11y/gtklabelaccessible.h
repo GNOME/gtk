@@ -20,7 +20,7 @@
 #ifndef __GTK_LABEL_ACCESSIBLE_H__
 #define __GTK_LABEL_ACCESSIBLE_H__
 
-#include "gailwidget.h"
+#include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkLabelAccessibleClass GtkLabelAccessibleClass;
 
 struct _GtkLabelAccessible
 {
-  GailWidget parent;
+  GtkWidgetAccessible parent;
 
   gchar *text;
 };
 
 struct _GtkLabelAccessibleClass
 {
-  GailWidgetClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GType gtk_label_accessible_get_type (void);

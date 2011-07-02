@@ -79,7 +79,7 @@ gtk_scale_button_accessible_notify_gtk (GObject    *obj,
     }
   else
     {
-      GAIL_WIDGET_CLASS (gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
+      GTK_WIDGET_ACCESSIBLE_CLASS (gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
     }
 }
 
@@ -87,7 +87,7 @@ static void
 gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
 {
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class = GAIL_WIDGET_CLASS (klass);
+  GtkWidgetAccessibleClass *widget_class = GTK_WIDGET_ACCESSIBLE_CLASS (klass);
 
   atk_object_class->initialize = gtk_scale_button_accessible_initialize;
 

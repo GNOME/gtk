@@ -20,7 +20,7 @@
 #ifndef __GTK_PROGRESS_BAR_ACCESSIBLE_H__
 #define __GTK_PROGRESS_BAR_ACCESSIBLE_H__
 
-#include "gailwidget.h"
+#include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -31,17 +31,17 @@ G_BEGIN_DECLS
 #define GTK_IS_PROGRESS_BAR_ACCESSIBLE_CLASS(klass)               (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PROGRESS_BAR_ACCESSIBLE))
 #define GTK_PROGRESS_BAR_ACCESSIBLE_GET_CLASS(obj)              (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PROGRESS_BAR_ACCESSIBLE, GtkProgressBarAccessibleClass))
 
-typedef struct _GtkProgressBarAccessible         GtkProgressBarAccessible;
-typedef struct _GtkProgressBarAccessibleClass   GtkProgressBarAccessibleClass;
+typedef struct _GtkProgressBarAccessible      GtkProgressBarAccessible;
+typedef struct _GtkProgressBarAccessibleClass GtkProgressBarAccessibleClass;
 
 struct _GtkProgressBarAccessible
 {
-  GailWidget parent;
+  GtkWidgetAccessible parent;
 };
 
 struct _GtkProgressBarAccessibleClass
 {
-  GailWidgetClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GType gtk_progress_bar_accessible_get_type (void);

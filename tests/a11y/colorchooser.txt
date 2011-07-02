@@ -43,7 +43,7 @@ window1
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GailWidget-4
+          unnamed-GtkWidgetAccessible-4
             "color chooser"
             parent: unnamed-GtkBoxAccessible-3
             index: 0
@@ -82,7 +82,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-8
+                unnamed-GtkWidgetAccessible-8
                   "unknown"
                   parent: unnamed-GtkBoxAccessible-7
                   index: 0
@@ -92,7 +92,7 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-                unnamed-GailWidget-9
+                unnamed-GtkWidgetAccessible-9
                   "unknown"
                   parent: unnamed-GtkBoxAccessible-7
                   index: 1
@@ -318,7 +318,7 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            unnamed-GailWidget-14
+            unnamed-GtkWidgetAccessible-14
               "separator"
               parent: unnamed-GtkContainerAccessible-12
               index: 5
@@ -332,7 +332,7 @@ window1
               parent: unnamed-GtkContainerAccessible-12
               index: 6
               description: Amount of blue light in the color.
-              controller-for: unnamed-GailWidget-4
+              controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Blue:
               state: editable enabled focusable sensitive showing single-line visible
               toolkit: gail
@@ -421,7 +421,7 @@ window1
               parent: unnamed-GtkContainerAccessible-12
               index: 8
               description: Amount of green light in the color.
-              controller-for: unnamed-GailWidget-4
+              controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Green:
               state: editable enabled focusable sensitive showing single-line visible
               toolkit: gail
@@ -510,7 +510,7 @@ window1
               parent: unnamed-GtkContainerAccessible-12
               index: 10
               description: Amount of red light in the color.
-              controller-for: unnamed-GailWidget-4
+              controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Red:
               state: editable enabled focusable sensitive showing single-line visible
               toolkit: gail
@@ -599,7 +599,7 @@ window1
               parent: unnamed-GtkContainerAccessible-12
               index: 12
               description: Brightness of the color.
-              controller-for: unnamed-GailWidget-4
+              controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Value:
               state: editable enabled focusable sensitive showing single-line visible
               toolkit: gail
@@ -688,7 +688,7 @@ window1
               parent: unnamed-GtkContainerAccessible-12
               index: 14
               description: Intensity of the color.
-              controller-for: unnamed-GailWidget-4
+              controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Saturation:
               state: editable enabled focusable sensitive showing single-line visible
               toolkit: gail
@@ -777,7 +777,7 @@ window1
               parent: unnamed-GtkContainerAccessible-12
               index: 16
               description: Position on the color wheel.
-              controller-for: unnamed-GailWidget-4
+              controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Hue:
               state: editable enabled focusable sensitive showing single-line visible
               toolkit: gail
@@ -875,7 +875,7 @@ window1
               parent: unnamed-GtkBoxAccessible-15
               index: 0
               name: Palette:
-              label-for: unnamed-GailWidget-16
+              label-for: unnamed-GtkWidgetAccessible-16
               state: enabled multi-line sensitive visible
               toolkit: gail
               <AtkComponent>
@@ -928,7 +928,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-19
+                unnamed-GtkWidgetAccessible-19
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-18
                   index: 0
@@ -947,7 +947,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-21
+                unnamed-GtkWidgetAccessible-21
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-20
                   index: 0
@@ -966,7 +966,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-23
+                unnamed-GtkWidgetAccessible-23
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-22
                   index: 0
@@ -985,7 +985,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-25
+                unnamed-GtkWidgetAccessible-25
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-24
                   index: 0
@@ -1004,7 +1004,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-27
+                unnamed-GtkWidgetAccessible-27
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-26
                   index: 0
@@ -1023,7 +1023,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-29
+                unnamed-GtkWidgetAccessible-29
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-28
                   index: 0
@@ -1042,7 +1042,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-31
+                unnamed-GtkWidgetAccessible-31
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-30
                   index: 0
@@ -1061,7 +1061,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-33
+                unnamed-GtkWidgetAccessible-33
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-32
                   index: 0
@@ -1080,7 +1080,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-35
+                unnamed-GtkWidgetAccessible-35
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-34
                   index: 0
@@ -1099,7 +1099,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-37
+                unnamed-GtkWidgetAccessible-37
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-36
                   index: 0
@@ -1118,7 +1118,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-39
+                unnamed-GtkWidgetAccessible-39
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-38
                   index: 0
@@ -1137,7 +1137,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-41
+                unnamed-GtkWidgetAccessible-41
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-40
                   index: 0
@@ -1156,7 +1156,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-43
+                unnamed-GtkWidgetAccessible-43
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-42
                   index: 0
@@ -1175,7 +1175,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-45
+                unnamed-GtkWidgetAccessible-45
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-44
                   index: 0
@@ -1194,7 +1194,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-47
+                unnamed-GtkWidgetAccessible-47
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-46
                   index: 0
@@ -1213,7 +1213,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-49
+                unnamed-GtkWidgetAccessible-49
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-48
                   index: 0
@@ -1232,7 +1232,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-51
+                unnamed-GtkWidgetAccessible-51
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-50
                   index: 0
@@ -1251,7 +1251,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-53
+                unnamed-GtkWidgetAccessible-53
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-52
                   index: 0
@@ -1270,7 +1270,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-55
+                unnamed-GtkWidgetAccessible-55
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-54
                   index: 0
@@ -1289,7 +1289,7 @@ window1
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GailWidget-16
+                unnamed-GtkWidgetAccessible-16
                   "unknown"
                   parent: unnamed-GtkFrameAccessible-56
                   index: 0

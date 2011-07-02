@@ -20,7 +20,7 @@
 #ifndef __GTK_ARROW_ACCESSIBLE_H__
 #define __GTK_ARROW_ACCESSIBLE_H__
 
-#include "gailwidget.h"
+#include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkArrowAccessibleClass GtkArrowAccessibleClass;
 
 struct _GtkArrowAccessible
 {
-  GailWidget parent;
+  GtkWidgetAccessible parent;
 
   gchar *image_description;
 };
 
 struct _GtkArrowAccessibleClass
 {
-  GailWidgetClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GType gtk_arrow_accessible_get_type (void);

@@ -65,7 +65,7 @@
 #include "gtkdebug.h"
 #include "gtkplug.h"
 #include "gtktypebuiltins.h"
-
+#include "a11y/gtkwidgetaccessible.h"
 
 /**
  * SECTION:gtkwidget
@@ -3178,6 +3178,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                              GTK_PARAM_READABLE));
 
   g_type_class_add_private (klass, sizeof (GtkWidgetPrivate));
+
+  gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
 }
 
 static void

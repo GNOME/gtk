@@ -20,7 +20,7 @@
 #ifndef __GTK_CONTAINER_ACCESSIBLE_H__
 #define __GTK_CONTAINER_ACCESSIBLE_H__
 
-#include "gailwidget.h"
+#include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkContainerAccessibleClass GtkContainerAccessibleClass;
 
 struct _GtkContainerAccessible
 {
-  GailWidget parent;
+  GtkWidgetAccessible parent;
 
   GList *children;
 };
 
 struct _GtkContainerAccessibleClass
 {
-  GailWidgetClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 
   gint (*add_gtk)    (GtkContainer *container,
                       GtkWidget    *widget,

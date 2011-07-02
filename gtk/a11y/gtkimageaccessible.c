@@ -26,7 +26,7 @@
 
 static void atk_image_interface_init (AtkImageIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkImageAccessible, gtk_image_accessible, GAIL_TYPE_WIDGET,
+G_DEFINE_TYPE_WITH_CODE (GtkImageAccessible, gtk_image_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void

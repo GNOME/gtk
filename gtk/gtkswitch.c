@@ -47,6 +47,7 @@
 #include "gtktoggleaction.h"
 #include "gtkwidget.h"
 #include "gtkmarshalers.h"
+#include "a11y/gtkwidgetaccessible.h"
 
 #include <math.h>
 
@@ -89,7 +90,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *switch_props[LAST_PROP] = { NULL, };
 
-static GType gtk_switch_accessible_factory_get_type (void);
+GType _gtk_switch_accessible_get_type (void);
 
 static void gtk_switch_activatable_interface_init (GtkActivatableIface *iface);
 
@@ -659,21 +660,6 @@ gtk_switch_draw (GtkWidget *widget,
   return FALSE;
 }
 
-static AtkObject *
-gtk_switch_get_accessible (GtkWidget *widget)
-{
-  static gboolean first_time = TRUE;
-
-  if (G_UNLIKELY (first_time))
-    {
-      _gtk_accessible_set_factory_type (GTK_TYPE_SWITCH,
-                                        gtk_switch_accessible_factory_get_type ());
-      first_time = FALSE;
-    }
-
-  return GTK_WIDGET_CLASS (gtk_switch_parent_class)->get_accessible (widget);
-}
-
 static void
 gtk_switch_set_related_action (GtkSwitch *sw,
                                GtkAction *action)
@@ -821,7 +807,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->motion_notify_event = gtk_switch_motion;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
-  widget_class->get_accessible = gtk_switch_get_accessible;
 
   klass->activate = gtk_switch_activate;
 
@@ -857,6 +842,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = signals[ACTIVATE];
 
+  gtk_widget_class_set_accessible_type (widget_class, _gtk_switch_accessible_get_type ());
 }
 
 static void
@@ -1025,7 +1011,7 @@ struct _GtkSwitchAccessibleClass
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, _gtk_switch_accessible, g_type_from_name ("GailWidget"),
+G_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static AtkStateSet *
@@ -1177,42 +1163,4 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_name = gtk_switch_action_get_name;
   iface->get_description = gtk_switch_action_get_description;
   iface->set_description = gtk_switch_action_set_description;
-}
-
-/* accessibility: factory */
-
-typedef AtkObjectFactoryClass   GtkSwitchAccessibleFactoryClass;
-typedef AtkObjectFactory        GtkSwitchAccessibleFactory;
-
-G_DEFINE_TYPE (GtkSwitchAccessibleFactory,
-               gtk_switch_accessible_factory,
-               ATK_TYPE_OBJECT_FACTORY);
-
-static GType
-gtk_switch_accessible_factory_get_accessible_type (void)
-{
-  return _gtk_switch_accessible_get_type ();
-}
-
-static AtkObject *
-gtk_switch_accessible_factory_create_accessible (GObject *obj)
-{
-  AtkObject *accessible;
-
-  accessible = g_object_new (_gtk_switch_accessible_get_type (), NULL);
-  atk_object_initialize (accessible, obj);
-
-  return accessible;
-}
-
-static void
-gtk_switch_accessible_factory_class_init (AtkObjectFactoryClass *klass)
-{
-  klass->create_accessible = gtk_switch_accessible_factory_create_accessible;
-  klass->get_accessible_type = gtk_switch_accessible_factory_get_accessible_type;
-}
-
-static void
-gtk_switch_accessible_factory_init (AtkObjectFactory *factory)
-{
 }

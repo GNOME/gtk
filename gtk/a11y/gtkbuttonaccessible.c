@@ -219,7 +219,7 @@ gtk_button_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
   else
-    GAIL_WIDGET_CLASS (gtk_button_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -227,7 +227,7 @@ gtk_button_accessible_class_init (GtkButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
-  GailWidgetClass *widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   class->get_name = gtk_button_accessible_get_name;
   class->get_n_children = gtk_button_accessible_get_n_children;

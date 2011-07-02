@@ -79,7 +79,7 @@ gtk_toggle_button_accessible_notify_gtk (GObject    *obj,
       atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
     }
   else
-    GAIL_WIDGET_CLASS (gtk_toggle_button_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_toggle_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static AtkStateSet*
@@ -111,10 +111,9 @@ gtk_toggle_button_accessible_ref_state_set (AtkObject *accessible)
 static void
 gtk_toggle_button_accessible_class_init (GtkToggleButtonAccessibleClass *klass)
 {
-  GailWidgetClass *widget_class;
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
-  widget_class = (GailWidgetClass*)klass;
   widget_class->notify_gtk = gtk_toggle_button_accessible_notify_gtk;
 
   class->ref_state_set = gtk_toggle_button_accessible_ref_state_set;

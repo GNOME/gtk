@@ -45,7 +45,7 @@ static void atk_text_interface_init          (AtkTextIface         *iface);
 static void atk_action_interface_init        (AtkActionIface       *iface);
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GAIL_TYPE_WIDGET,
+G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
@@ -187,7 +187,7 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
       atk_object_set_role (atk_obj, new_role);
     }
   else
-    GAIL_WIDGET_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static gint
@@ -209,7 +209,7 @@ gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   gobject_class->finalize = gtk_entry_accessible_finalize;
 

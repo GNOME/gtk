@@ -35,6 +35,7 @@
 #include "gtkaccessible.h"
 #include "gtkimage.h"
 #include "gtkspinner.h"
+#include "a11y/gtkwidgetaccessible.h"
 
 
 /**
@@ -83,8 +84,7 @@ static void gtk_spinner_get_preferred_height (GtkWidget *widget,
                                         gint            *minimum_size,
                                         gint            *natural_size);
 
-static AtkObject *gtk_spinner_get_accessible      (GtkWidget *widget);
-static GType      gtk_spinner_accessible_get_type (void);
+GType      _gtk_spinner_accessible_get_type (void);
 
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
@@ -101,7 +101,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
 
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->draw = gtk_spinner_draw;
-  widget_class->get_accessible = gtk_spinner_get_accessible;
   widget_class->get_preferred_width = gtk_spinner_get_preferred_width;
   widget_class->get_preferred_height = gtk_spinner_get_preferred_height;
 
@@ -118,6 +117,8 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          P_("Whether the spinner is active"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
+
+  gtk_widget_class_set_accessible_type (widget_class, _gtk_spinner_accessible_get_type ());
 }
 
 static void
@@ -268,20 +269,18 @@ gtk_spinner_accessible_image_iface_init (AtkImageIface *iface)
 }
 
 /* dummy typedef */
-typedef struct _GtkSpinnerAccessible            GtkSpinnerAccessible;
-typedef struct _GtkSpinnerAccessibleClass       GtkSpinnerAccessibleClass;
+typedef GtkWidgetAccessible      GtkSpinnerAccessible;
+typedef GtkWidgetAccessibleClass GtkSpinnerAccessibleClass;
 
-ATK_DEFINE_TYPE_WITH_CODE (GtkSpinnerAccessible,
-                           gtk_spinner_accessible,
-                           GTK_TYPE_IMAGE,
-                           G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE,
-                                                  gtk_spinner_accessible_image_iface_init));
+G_DEFINE_TYPE_WITH_CODE (GtkSpinnerAccessible, _gtk_spinner_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE,
+                                                gtk_spinner_accessible_image_iface_init));
 
 static void
 gtk_spinner_accessible_initialize (AtkObject *accessible,
                                    gpointer   widget)
 {
-  ATK_OBJECT_CLASS (gtk_spinner_accessible_parent_class)->initialize (accessible, widget);
+  ATK_OBJECT_CLASS (_gtk_spinner_accessible_parent_class)->initialize (accessible, widget);
 
   atk_object_set_name (accessible, C_("throbbing progress animation widget", "Spinner"));
   atk_object_set_description (accessible, _("Provides visual indication of progress"));
@@ -289,7 +288,7 @@ gtk_spinner_accessible_initialize (AtkObject *accessible,
 }
 
 static void
-gtk_spinner_accessible_class_init (GtkSpinnerAccessibleClass *klass)
+_gtk_spinner_accessible_class_init (GtkSpinnerAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
@@ -297,77 +296,8 @@ gtk_spinner_accessible_class_init (GtkSpinnerAccessibleClass *klass)
 }
 
 static void
-gtk_spinner_accessible_init (GtkSpinnerAccessible *self)
+_gtk_spinner_accessible_init (GtkSpinnerAccessible *self)
 {
-}
-
-/* factory */
-typedef AtkObjectFactory        GtkSpinnerAccessibleFactory;
-typedef AtkObjectFactoryClass   GtkSpinnerAccessibleFactoryClass;
-
-G_DEFINE_TYPE (GtkSpinnerAccessibleFactory,
-               _gtk_spinner_accessible_factory,
-               ATK_TYPE_OBJECT_FACTORY);
-
-static GType
-gtk_spinner_accessible_factory_get_accessible_type (void)
-{
-  return gtk_spinner_accessible_get_type ();
-}
-
-static AtkObject *
-gtk_spinner_accessible_factory_create_accessible (GObject *obj)
-{
-  AtkObject *accessible;
-
-  accessible = g_object_new (gtk_spinner_accessible_get_type (), NULL);
-  atk_object_initialize (accessible, obj);
-
-  return accessible;
-}
-
-static void
-_gtk_spinner_accessible_factory_class_init (AtkObjectFactoryClass *klass)
-{
-  klass->create_accessible = gtk_spinner_accessible_factory_create_accessible;
-  klass->get_accessible_type = gtk_spinner_accessible_factory_get_accessible_type;
-}
-
-static void
-_gtk_spinner_accessible_factory_init (AtkObjectFactory *factory)
-{
-}
-
-static AtkObject *
-gtk_spinner_get_accessible (GtkWidget *widget)
-{
-  static gboolean first_time = TRUE;
-
-  if (first_time)
-    {
-      AtkObjectFactory *factory;
-      AtkRegistry *registry;
-      GType derived_type;
-      GType derived_atk_type;
-
-      /*
-       * Figure out whether accessibility is enabled by looking at the
-       * type of the accessible object which would be created for
-       * the parent type of GtkSpinner.
-       */
-      derived_type = g_type_parent (GTK_TYPE_SPINNER);
-
-      registry = atk_get_default_registry ();
-      factory = atk_registry_get_factory (registry, derived_type);
-      derived_atk_type = atk_object_factory_get_accessible_type (factory);
-      if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE))
-        atk_registry_set_factory_type (registry,
-                                       GTK_TYPE_SPINNER,
-                                       _gtk_spinner_accessible_factory_get_type ());
-      first_time = FALSE;
-    }
-
-  return GTK_WIDGET_CLASS (gtk_spinner_parent_class)->get_accessible (widget);
 }
 
 /**

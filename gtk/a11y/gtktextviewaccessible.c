@@ -101,7 +101,7 @@ gtk_text_view_accessible_notify_gtk (GObject    *obj,
       setup_buffer (GTK_TEXT_VIEW (obj), GTK_TEXT_VIEW_ACCESSIBLE (atk_obj));
     }
   else
-    GAIL_WIDGET_CLASS (gtk_text_view_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_text_view_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static AtkStateSet*
@@ -128,9 +128,7 @@ gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class;
-
-  widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   gobject_class->finalize = gtk_text_view_accessible_finalize;
 

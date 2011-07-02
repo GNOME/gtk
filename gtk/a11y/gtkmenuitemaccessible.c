@@ -203,7 +203,7 @@ gtk_menu_item_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
   else
-    GAIL_WIDGET_CLASS (gtk_menu_item_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -211,7 +211,7 @@ gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   widget_class->notify_gtk = gtk_menu_item_accessible_notify_gtk;
 

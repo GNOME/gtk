@@ -23,7 +23,7 @@
 #include "gtkcontaineraccessible.h"
 
 
-G_DEFINE_TYPE (GtkContainerAccessible, gtk_container_accessible, GAIL_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkContainerAccessible, gtk_container_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 gtk_container_accessible_init (GtkContainerAccessible *container)

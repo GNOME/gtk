@@ -85,7 +85,7 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
   else
-    GAIL_WIDGET_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static gboolean
@@ -320,8 +320,8 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
 static void
 gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 {
-  GailWidgetClass *widget_class = (GailWidgetClass*)klass;
-  AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
+  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
   widget_class->focus_gtk = gtk_window_accessible_focus_gtk;
   widget_class->notify_gtk = gtk_window_accessible_notify_gtk;

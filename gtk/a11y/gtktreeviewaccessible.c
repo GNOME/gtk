@@ -395,7 +395,7 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment_changed), tree_view);
     }
   else
-    GAIL_WIDGET_CLASS (gtk_tree_view_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_tree_view_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -722,13 +722,9 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkAccessibleClass *accessible_class;
-  GailWidgetClass *widget_class;
-  GtkContainerAccessibleClass *container_class;
-
-  accessible_class = (GtkAccessibleClass*)klass;
-  widget_class = (GailWidgetClass*)klass;
-  container_class = (GtkContainerAccessibleClass*)klass;
+  GtkAccessibleClass *accessible_class = (GtkAccessibleClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
+  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
   class->get_n_children = gtk_tree_view_accessible_get_n_children;
   class->ref_child = gtk_tree_view_accessible_ref_child;

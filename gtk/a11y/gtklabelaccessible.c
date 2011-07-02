@@ -28,7 +28,7 @@
 
 static void atk_text_interface_init (AtkTextIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkLabelAccessible, gtk_label_accessible, GAIL_TYPE_WIDGET,
+G_DEFINE_TYPE_WITH_CODE (GtkLabelAccessible, gtk_label_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
@@ -119,7 +119,7 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "text_selection_changed");
     }
   else
-    GAIL_WIDGET_CLASS (gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -247,7 +247,7 @@ gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   gobject_class->finalize = gtk_label_accessible_finalize;
 

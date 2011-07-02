@@ -79,7 +79,7 @@ gtk_spin_button_accessible_notify_gtk (GObject    *obj,
                         spin_button);
     }
   else
-    GAIL_WIDGET_CLASS (gtk_spin_button_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_spin_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 
@@ -88,9 +88,7 @@ static void
 gtk_spin_button_accessible_class_init (GtkSpinButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class;
-
-  widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   widget_class->notify_gtk = gtk_spin_button_accessible_notify_gtk;
 

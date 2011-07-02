@@ -20,7 +20,7 @@
 #ifndef __GTK_IMAGE_ACCESSIBLE_H__
 #define __GTK_IMAGE_ACCESSIBLE_H__
 
-#include "gailwidget.h"
+#include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,7 +36,7 @@ typedef struct _GtkImageAccessibleClass GtkImageAccessibleClass;
 
 struct _GtkImageAccessible
 {
-  GailWidget parent;
+  GtkWidgetAccessible parent;
 
   gchar*     image_description;
   gchar*     stock_name;
@@ -44,7 +44,7 @@ struct _GtkImageAccessible
 
 struct _GtkImageAccessibleClass
 {
-  GailWidgetClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GType gtk_image_accessible_get_type (void);

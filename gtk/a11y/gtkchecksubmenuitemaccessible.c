@@ -103,14 +103,14 @@ gtk_check_submenu_item_accessible_notify_gtk (GObject    *obj,
       atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
     }
   else
-    GAIL_WIDGET_CLASS (gtk_check_submenu_item_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_check_submenu_item_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
 gtk_check_submenu_item_accessible_class_init (GtkCheckSubmenuItemAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
   widget_class->notify_gtk = gtk_check_submenu_item_accessible_notify_gtk;
 

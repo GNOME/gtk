@@ -17,31 +17,29 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GAIL_WIDGET_H__
-#define __GAIL_WIDGET_H__
+#ifndef __GTK_WIDGET_ACCESSIBLE_H__
+#define __GTK_WIDGET_ACCESSIBLE_H__
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_WIDGET                     (gail_widget_get_type ())
-#define GAIL_WIDGET(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_WIDGET, GailWidget))
-#define GAIL_WIDGET_CLASS(klass)             (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_WIDGET, GailWidgetClass))
-#define GAIL_IS_WIDGET(obj)                  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_WIDGET))
-#define GAIL_IS_WIDGET_CLASS(klass)          (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_WIDGET))
-#define GAIL_WIDGET_GET_CLASS(obj)           (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_WIDGET, GailWidgetClass))
+#define GTK_TYPE_WIDGET_ACCESSIBLE                     (gtk_widget_accessible_get_type ())
+#define GTK_WIDGET_ACCESSIBLE(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessible))
+#define GTK_WIDGET_ACCESSIBLE_CLASS(klass)             (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessibleClass))
+#define GTK_IS_WIDGET_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WIDGET_ACCESSIBLE))
+#define GTK_IS_WIDGET_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET_ACCESSIBLE))
+#define GTK_WIDGET_ACCESSIBLE_GET_CLASS(obj)           (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessibleClass))
 
-typedef struct _GailWidget                   GailWidget;
-typedef struct _GailWidgetClass              GailWidgetClass;
+typedef struct _GtkWidgetAccessible      GtkWidgetAccessible;
+typedef struct _GtkWidgetAccessibleClass GtkWidgetAccessibleClass;
 
-struct _GailWidget
+struct _GtkWidgetAccessible
 {
   GtkAccessible parent;
 };
 
-GType gail_widget_get_type (void);
-
-struct _GailWidgetClass
+struct _GtkWidgetAccessibleClass
 {
   GtkAccessibleClass parent_class;
 
@@ -58,6 +56,8 @@ struct _GailWidgetClass
 
 };
 
+GType gtk_widget_accessible_get_type (void);
+
 G_END_DECLS
 
-#endif /* __GAIL_WIDGET_H__ */
+#endif /* __GTK_WIDGET_ACCESSIBLE_H__ */

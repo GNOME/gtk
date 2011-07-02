@@ -20,7 +20,7 @@
 #ifndef __GTK_ENTRY_ACCESSIBLE_H__
 #define __GTK_ENTRY_ACCESSIBLE_H__
 
-#include "gailwidget.h"
+#include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,7 +36,7 @@ typedef struct _GtkEntryAccessibleClass GtkEntryAccessibleClass;
 
 struct _GtkEntryAccessible
 {
-  GailWidget parent;
+  GtkWidgetAccessible parent;
 
   gint position_insert;
   gint position_delete;
@@ -48,12 +48,12 @@ struct _GtkEntryAccessible
   guint action_idle_handler;
 };
 
-GType gtk_entry_accessible_get_type (void);
-
 struct _GtkEntryAccessibleClass
 {
-  GailWidgetClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
+
+GType gtk_entry_accessible_get_type (void);
 
 G_END_DECLS
 

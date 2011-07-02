@@ -280,7 +280,7 @@ gtk_notebook_accessible_notify_gtk (GObject    *obj,
         }
     }
   else
-    GAIL_WIDGET_CLASS (gtk_notebook_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_notebook_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 /*
@@ -309,7 +309,7 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class = (GailWidgetClass*)klass;
+  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
   GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
 
