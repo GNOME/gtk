@@ -27,6 +27,7 @@
 #include "gtktreeviewaccessible.h"
 #include "gailrenderercell.h"
 #include "gailbooleancell.h"
+#include "gailimagecell.h"
 #include "gailcontainercell.h"
 #include "gailtextcell.h"
 #include "gailcellparent.h"
@@ -477,8 +478,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GtkTreeViewColumn *tv_col;
   GtkTreeSelection *selection;
   GtkTreePath *path;
-  AtkRegistry *default_registry;
-  AtkObjectFactory *factory;
   AtkObject *child;
   AtkObject *parent;
   GtkTreeViewColumn *expander_tv;
@@ -579,11 +578,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
       GtkCellRenderer *fake_renderer;
 
       fake_renderer = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
-      default_registry = atk_get_default_registry ();
-      factory = atk_registry_get_factory (default_registry,
-                                          G_OBJECT_TYPE (fake_renderer));
-      child = atk_object_factory_create_accessible (factory,
-                                                    G_OBJECT (fake_renderer));
+      child = gail_text_cell_new ();
       cell = GAIL_CELL (child);
       renderer_cell = GAIL_RENDERER_CELL (child);
       renderer_cell->renderer = fake_renderer;
@@ -610,13 +605,17 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           renderer = GTK_CELL_RENDERER (l->data);
 
           if (GTK_IS_CELL_RENDERER_TEXT (renderer))
-            g_object_get (G_OBJECT (renderer), "editable", &editable, NULL);
+            {
+              g_object_get (G_OBJECT (renderer), "editable", &editable, NULL);
+              child = gail_text_cell_new ();
+            }
+          else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
+            child = gail_boolean_cell_new ();
+          else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
+            child = gail_image_cell_new ();
+          else
+            child = gail_renderer_cell_new ();
 
-          default_registry = atk_get_default_registry ();
-          factory = atk_registry_get_factory (default_registry,
-                                              G_OBJECT_TYPE (renderer));
-          child = atk_object_factory_create_accessible (factory,
-                                                        G_OBJECT (renderer));
           cell = GAIL_CELL (child);
           renderer_cell = GAIL_RENDERER_CELL (child);
 

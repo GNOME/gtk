@@ -23,16 +23,8 @@
 #include <stdlib.h>
 
 #include <gtk/gtkx.h>
-#include "gailbooleancell.h"
-#include "gailcell.h"
-#include "gailcontainercell.h"
-#include "gailimagecell.h"
-#include "gailrenderercell.h"
-#include "gailtextcell.h"
 #include "gailtoplevel.h"
 #include "gailutil.h"
-
-#include "gailfactory.h"
 
 #define GNOME_ACCESSIBILITY_ENV "GNOME_ACCESSIBILITY"
 
@@ -75,11 +67,6 @@ static GtkWidget* focus_before_menu = NULL;
 static guint focus_notify_handler = 0;    
 static guint focus_tracker_id = 0;
 static GQuark quark_focus_object = 0;
-
-GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_RENDERER_CELL, GailRendererCell, gail_renderer_cell, GTK_TYPE_CELL_RENDERER, gail_renderer_cell_new)
-GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_BOOLEAN_CELL, GailBooleanCell, gail_boolean_cell, GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell_new)
-GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_IMAGE_CELL, GailImageCell, gail_image_cell, GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell_new)
-GAIL_IMPLEMENT_FACTORY_WITH_FUNC_DUMMY (GAIL_TYPE_TEXT_CELL, GailTextCell, gail_text_cell, GTK_TYPE_CELL_RENDERER_TEXT, gail_text_cell_new)
 
 static AtkObject*
 gail_get_accessible_for_widget (GtkWidget *widget,
@@ -819,11 +806,6 @@ gail_accessibility_module_init (void)
     a_t_support = atoi (env_a_t_support);
   if (a_t_support)
     fprintf (stderr, "GTK Accessibility Module initialized\n");
-
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TEXT, gail_text_cell);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_TOGGLE, gail_boolean_cell);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER_PIXBUF, gail_image_cell);
-  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CELL_RENDERER, gail_renderer_cell);
 
   atk_focus_tracker_init (gail_focus_tracker_init);
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);

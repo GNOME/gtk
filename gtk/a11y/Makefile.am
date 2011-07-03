@@ -70,7 +70,6 @@ gail_private_h_sources =		\
 	gailcontainercell.h		\
 	gtkentryaccessible.h		\
 	gtkexpanderaccessible.h		\
-	gailfactory.h			\
 	gtkframeaccessible.h		\
 	gtkimageaccessible.h		\
 	gailimagecell.h			\
