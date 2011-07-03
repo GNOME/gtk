@@ -62,7 +62,7 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
         atk_object_set_parent (obj, gtk_widget_get_accessible (parent_widget));
     }
 
-  g_object_set_data (G_OBJECT (obj), "atk-component-layer", GINT_TO_POINTER (ATK_LAYER_POPUP));
+  gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
 
   if (GTK_IS_TEAROFF_MENU_ITEM (data))
     obj->role = ATK_ROLE_TEAR_OFF_MENU_ITEM;

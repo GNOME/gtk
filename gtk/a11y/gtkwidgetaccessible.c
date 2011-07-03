@@ -133,8 +133,6 @@ gtk_widget_accessible_initialize (AtkObject *obj,
 
   g_signal_connect (accessible, "focus-event", G_CALLBACK (focus_event), NULL);
 
-  g_object_set_data (G_OBJECT (obj), "atk-component-layer", GINT_TO_POINTER (ATK_LAYER_WIDGET));
-
   obj->role = ATK_ROLE_UNKNOWN;
 }
 
@@ -651,7 +649,17 @@ gtk_widget_accessible_get_layer (AtkComponent *component)
 
   layer = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (component), "atk-component-layer"));
 
-  return (AtkLayer) layer;
+  if (layer == 0)
+    return ATK_LAYER_WIDGET;
+  else
+    return (AtkLayer) layer;
+}
+
+void
+gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
+                                 AtkLayer             layer)
+{
+  g_object_set_data (G_OBJECT (accessible), "atk-component-layer", GINT_TO_POINTER (layer));
 }
 
 static gboolean

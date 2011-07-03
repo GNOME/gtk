@@ -58,6 +58,9 @@ struct _GtkWidgetAccessibleClass
 
 GType gtk_widget_accessible_get_type (void);
 
+void  gtk_widget_accessible_set_layer (GtkWidgetAccessible *obj,
+                                       AtkLayer             layer);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_ACCESSIBLE_H__ */

@@ -114,7 +114,7 @@ gtk_window_accessible_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "window_state_event", G_CALLBACK (window_state_event_cb), NULL);
-  g_object_set_data (G_OBJECT (obj), "atk-component-layer", GINT_TO_POINTER (ATK_LAYER_WINDOW));
+  gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
 
   if (GTK_IS_FILE_CHOOSER_DIALOG (widget))
     obj->role = ATK_ROLE_FILE_CHOOSER;
