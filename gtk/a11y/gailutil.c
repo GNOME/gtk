@@ -335,7 +335,7 @@ gail_util_get_root (void)
 static const gchar *
 gail_util_get_toolkit_name (void)
 {
-  return "GAIL";
+  return "gtk";
 }
 
 static const gchar *
