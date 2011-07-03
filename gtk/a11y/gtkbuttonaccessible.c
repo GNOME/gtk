@@ -276,7 +276,6 @@ static const gchar *
 gtk_button_accessible_get_keybinding (AtkAction *action,
                                       gint       i)
 {
-  GtkButtonAccessible *button;
   gchar *return_value = NULL;
   GtkWidget *widget;
   GtkWidget *label;
@@ -288,8 +287,6 @@ gtk_button_accessible_get_keybinding (AtkAction *action,
 
   if (i != 0)
     return NULL;
-
-  button = GTK_BUTTON_ACCESSIBLE (action);
 
   label = get_label_from_button (widget);
   if (GTK_IS_LABEL (label))
@@ -376,7 +373,7 @@ gtk_button_accessible_get_image_position (AtkImage     *image,
                                           AtkCoordType  coord_type)
 {
   GtkWidget *widget;
-  GtkImage  *button_image;
+  GtkWidget *button_image;
   AtkObject *obj;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
@@ -388,10 +385,9 @@ gtk_button_accessible_get_image_position (AtkImage     *image,
     }
 
   button_image = get_image_from_button (widget);
-
   if (button_image != NULL)
     {
-      obj = gtk_widget_get_accessible (GTK_WIDGET (button_image));
+      obj = gtk_widget_get_accessible (button_image);
       atk_component_get_position (ATK_COMPONENT (obj), x, y, coord_type);
     }
   else
@@ -407,7 +403,7 @@ gtk_button_accessible_get_image_size (AtkImage *image,
                                       gint     *height)
 {
   GtkWidget *widget;
-  GtkImage  *button_image;
+  GtkWidget *button_image;
   AtkObject *obj;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
@@ -419,8 +415,7 @@ gtk_button_accessible_get_image_size (AtkImage *image,
     }
 
   button_image = get_image_from_button (widget);
-
-  if (button_image != NULL)
+  if (GTK_IS_IMAGE (button_image))
     {
       obj = gtk_widget_get_accessible (GTK_WIDGET (button_image));
       atk_image_get_image_size (ATK_IMAGE (obj), width, height);
@@ -437,7 +432,7 @@ gtk_button_accessible_set_image_description (AtkImage    *image,
                                              const gchar *description)
 {
   GtkWidget *widget;
-  GtkImage  *button_image;
+  GtkWidget *button_image;
   AtkObject *obj;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
@@ -446,8 +441,7 @@ gtk_button_accessible_set_image_description (AtkImage    *image,
     return FALSE;
 
   button_image = get_image_from_button (widget);
-
-  if (button_image != NULL)
+  if (GTK_IMAGE (button_image))
     {
       obj = gtk_widget_get_accessible (GTK_WIDGET (button_image));
       return atk_image_set_image_description (ATK_IMAGE (obj), description);
