@@ -52,7 +52,7 @@ window1
       alpha: 1
       page2
         "push button"
-        index: 1
+        index: 0
         name: No
         state: enabled focusable sensitive visible
         toolkit: gtk
