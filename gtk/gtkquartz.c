@@ -160,7 +160,8 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
   selection_data = g_slice_new0 (GtkSelectionData);
   selection_data->selection = selection;
   selection_data->target = target;
-
+  if (!selection_data->display)
+    selection_data->display = gdk_display_get_default ();
   if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
     {
       NSString *s = [pasteboard stringForType:NSStringPboardType];
