@@ -45,6 +45,7 @@ typedef struct {
   gint count;
   gint index;
   gint n_children;
+  gpointer parent;
 } SignalData;
 
 static void
@@ -82,11 +83,20 @@ remove_child (GtkWidget *container,
 }
 
 static void
+parent_notify (AtkObject *obj, GParamSpec *pspec, SignalData *data)
+{
+  data->count++;
+  data->parent = atk_object_get_parent (obj);
+}
+
+static void
 test_add_remove (GtkWidget *widget)
 {
   AtkObject *accessible;
+  AtkObject *child_accessible;
   SignalData add_data;
   SignalData remove_data;
+  SignalData parent_data[3];
   GtkWidget *child[3];
   gint i, j;
   gint step_children;
@@ -108,11 +118,21 @@ test_add_remove (GtkWidget *widget)
         break;
 
       child[i] = gtk_label_new ("bla");
+      parent_data[i].count = 0;
+      child_accessible = gtk_widget_get_accessible (child[i]);
+      g_signal_connect (child_accessible, "notify::accessible-parent",
+                        G_CALLBACK (parent_notify), &(parent_data[i]));
       add_child (widget, child[i]);
 
       g_assert_cmpint (add_data.count, ==, i + 1);
       g_assert_cmpint (add_data.n_children, ==, step_children + i + 1);
       g_assert_cmpint (remove_data.count, ==, 0);
+      g_assert_cmpint (parent_data[i].count, ==, 1);
+      if (GTK_IS_SCROLLED_WINDOW (widget) ||
+          GTK_IS_NOTEBOOK (widget))
+        g_assert (atk_object_get_parent (ATK_OBJECT (parent_data[i].parent)) == accessible);
+      else
+        g_assert (parent_data[i].parent == accessible);
     }
   for (j = 0 ; j < i; j++)
     {
@@ -120,6 +140,15 @@ test_add_remove (GtkWidget *widget)
       g_assert_cmpint (add_data.count, ==, i);
       g_assert_cmpint (remove_data.count, ==, j + 1);
       g_assert_cmpint (remove_data.n_children, ==, step_children + i - j - 1);
+      if (parent_data[j].count == 2)
+        g_assert (parent_data[j].parent == NULL);
+      else
+        {
+          AtkStateSet *set;
+          set = atk_object_ref_state_set (ATK_OBJECT (parent_data[j].parent));
+          g_assert (atk_state_set_contains_state (set, ATK_STATE_DEFUNCT));
+          g_object_unref (set);
+        }
     }
 
   g_signal_handlers_disconnect_by_func (accessible, G_CALLBACK (children_changed), &add_data);
