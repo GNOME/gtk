@@ -24,6 +24,8 @@ TEST_PROGS += text
 
 TEST_PROGS += children
 
+TEST_PROGS += focus
+
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
 	mnemonic.ui mnemonic.txt \
