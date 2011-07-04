@@ -274,7 +274,6 @@ static gboolean         gtk_icon_view_key_press                 (GtkWidget      
 								 GdkEventKey        *event);
 static gboolean         gtk_icon_view_key_release               (GtkWidget          *widget,
 								 GdkEventKey        *event);
-static AtkObject       *gtk_icon_view_get_accessible            (GtkWidget          *widget);
 
 
 /* GtkContainer vfuncs */
@@ -484,7 +483,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
   widget_class->style_updated = gtk_icon_view_style_updated;
-  widget_class->get_accessible = gtk_icon_view_get_accessible;
   widget_class->get_preferred_width = gtk_icon_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_icon_view_get_preferred_height;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
@@ -9252,80 +9250,6 @@ gtk_icon_view_accessible_get_type (void)
                                    &atk_selection_info);
     }
   return type;
-}
-
-static AtkObject *
-gtk_icon_view_accessible_new (GObject *obj)
-{
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (obj), NULL);
-
-  accessible = g_object_new (gtk_icon_view_accessible_get_type (), NULL);
-  atk_object_initialize (accessible, obj);
-
-  return accessible;
-}
-
-static GType
-gtk_icon_view_accessible_factory_get_accessible_type (void)
-{
-  return gtk_icon_view_accessible_get_type ();
-}
-
-static AtkObject*
-gtk_icon_view_accessible_factory_create_accessible (GObject *obj)
-{
-  return gtk_icon_view_accessible_new (obj);
-}
-
-static void
-gtk_icon_view_accessible_factory_class_init (AtkObjectFactoryClass *klass)
-{
-  klass->create_accessible = gtk_icon_view_accessible_factory_create_accessible;
-  klass->get_accessible_type = gtk_icon_view_accessible_factory_get_accessible_type;
-}
-
-static GType
-gtk_icon_view_accessible_factory_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      const GTypeInfo tinfo =
-      {
-        sizeof (AtkObjectFactoryClass),
-        NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_icon_view_accessible_factory_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (AtkObjectFactory),
-        0,             /* n_preallocs */
-        NULL, NULL
-      };
-
-      type = g_type_register_static (ATK_TYPE_OBJECT_FACTORY, 
-                                    I_("GtkIconViewAccessibleFactory"),
-                                    &tinfo, 0);
-    }
-  return type;
-}
-
-
-static AtkObject *
-gtk_icon_view_get_accessible (GtkWidget *widget)
-{
-  static gboolean first_time = TRUE;
-
-  if (first_time)
-    {
-      _gtk_accessible_set_factory_type (GTK_TYPE_ICON_VIEW,
-                                        gtk_icon_view_accessible_factory_get_type ());
-      first_time = FALSE;
-    }
-  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->get_accessible (widget);
 }
 
 static gboolean
