@@ -76,6 +76,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
+#include "a11y/gtkwindowaccessible.h"
 
 
 #define HEADER_SPACING 12
@@ -150,7 +151,6 @@ static void     gtk_assistant_get_child_property (GtkContainer      *container,
                                                   GParamSpec        *pspec);
 
 static AtkObject *gtk_assistant_get_accessible   (GtkWidget         *widget);
-static GType      gtk_assistant_accessible_factory_get_type  (void);
 
 static void       gtk_assistant_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject   *gtk_assistant_buildable_get_internal_child (GtkBuildable  *buildable,
@@ -2189,29 +2189,13 @@ gtk_assistant_commit (GtkAssistant *assistant)
   update_buttons_state (assistant);
 }
 
-static AtkObject *
-gtk_assistant_get_accessible (GtkWidget *widget)
-{
-  static gboolean first_time = TRUE;
-
-  if (first_time)
-    {
-      _gtk_accessible_set_factory_type (GTK_TYPE_ASSISTANT,
-                                        gtk_assistant_accessible_factory_get_type ());
-
-      first_time = FALSE;
-    }
-
-  return GTK_WIDGET_CLASS (gtk_assistant_parent_class)->get_accessible (widget);
-}
-
 /* accessible implementation */
 
 /* dummy typedefs */
-typedef struct _GtkAssistantAccessible          GtkAssistantAccessible;
-typedef struct _GtkAssistantAccessibleClass     GtkAssistantAccessibleClass;
+typedef GtkWindowAccessible      GtkAssistantAccessible;
+typedef GtkWindowAccessibleClass GtkAssistantAccessibleClass;
 
-ATK_DEFINE_TYPE (GtkAssistantAccessible, _gtk_assistant_accessible, GTK_TYPE_ASSISTANT);
+G_DEFINE_TYPE (GtkAssistantAccessible, _gtk_assistant_accessible, GTK_TYPE_WINDOW_ACCESSIBLE);
 
 static gint
 gtk_assistant_accessible_get_n_children (AtkObject *accessible)
@@ -2283,41 +2267,15 @@ _gtk_assistant_accessible_init (GtkAssistantAccessible *self)
 {
 }
 
-/* factory */
-typedef AtkObjectFactory        GtkAssistantAccessibleFactory;
-typedef AtkObjectFactoryClass   GtkAssistantAccessibleFactoryClass;
-
-G_DEFINE_TYPE (GtkAssistantAccessibleFactory,
-               gtk_assistant_accessible_factory,
-               ATK_TYPE_OBJECT_FACTORY);
-
-static GType
-gtk_assistant_accessible_factory_get_accessible_type (void)
+static AtkObject *
+gtk_assistant_get_accessible (GtkWidget *widget)
 {
-  return _gtk_assistant_accessible_get_type ();
-}
+  AtkObject *obj;
 
-static AtkObject*
-gtk_assistant_accessible_factory_create_accessible (GObject *obj)
-{
-  AtkObject *accessible;
+  obj = (AtkObject*)g_object_new (_gtk_assistant_accessible_get_type (), NULL);
+  atk_object_initialize (obj, widget);
 
-  accessible = g_object_new (_gtk_assistant_accessible_get_type (), NULL);
-  atk_object_initialize (accessible, obj);
-
-  return accessible;
-}
-
-static void
-gtk_assistant_accessible_factory_class_init (AtkObjectFactoryClass *class)
-{
-  class->create_accessible = gtk_assistant_accessible_factory_create_accessible;
-  class->get_accessible_type = gtk_assistant_accessible_factory_get_accessible_type;
-}
-
-static void
-gtk_assistant_accessible_factory_init (AtkObjectFactory *factory)
-{
+  return obj;
 }
 
 /* buildable implementation */
