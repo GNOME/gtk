@@ -258,6 +258,18 @@ cmp_module (GtkModuleInfo *info,
   return info->module != module;
 }
 
+static gboolean
+module_is_blacklisted (const gchar *name)
+{
+  if (g_str_equal (name, "gail"))
+    {
+      g_message ("Not loading module \"gail\": The functionality is provided by GTK natively. Please try to not load it.");
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static GSList *
 load_module (GSList      *module_list,
 	     const gchar *name)
@@ -289,7 +301,14 @@ load_module (GSList      *module_list,
 
 	  if (module)
 	    {
-	      if (g_module_symbol (module, "gtk_module_init", &modinit_func_ptr))
+              /* Do the check this late so we only warn about existing modules,
+               * not old modules that are still in the modules path. */
+              if (module_is_blacklisted (name))
+                {
+                  modinit_func = NULL;
+                  success = TRUE;
+                }
+              else if (g_module_symbol (module, "gtk_module_init", &modinit_func_ptr))
 		modinit_func = modinit_func_ptr;
 	      else
 		modinit_func = NULL;
