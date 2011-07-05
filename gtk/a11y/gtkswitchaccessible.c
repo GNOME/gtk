@@ -60,8 +60,6 @@ gtk_switch_accessible_finalize (GObject *obj)
 {
   GtkSwitchAccessible *accessible = (GtkSwitchAccessible *)obj;
 
-  g_free (accessible->action_description);
-
   if (accessible->action_idle)
     g_source_remove (accessible->action_idle);
 
@@ -94,7 +92,6 @@ gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 static void
 gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
-  self->action_description = NULL;
   self->action_idle = 0;
 }
 
@@ -112,34 +109,6 @@ gtk_switch_action_get_name (AtkAction *action,
     return NULL;
 
   return "toggle";
-}
-
-static const gchar *
-gtk_switch_action_get_description (AtkAction *action,
-                                   gint       i)
-{
-  GtkSwitchAccessible *accessible = (GtkSwitchAccessible *)action;
-
-  if (i != 0)
-    return NULL;
-
-  return accessible->action_description;
-}
-
-static gboolean
-gtk_switch_action_set_description (AtkAction   *action,
-                                   gint         i,
-                                   const gchar *description)
-{
-  GtkSwitchAccessible *accessible = (GtkSwitchAccessible*)action;
-
-  if (i != 0)
-    return FALSE;
-
-  g_free (accessible->action_description);
-  accessible->action_description = g_strdup (description);
-
-  return TRUE;
 }
 
 static gboolean
@@ -194,6 +163,4 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->do_action = gtk_switch_action_do_action;
   iface->get_n_actions = gtk_switch_action_get_n_actions;
   iface->get_name = gtk_switch_action_get_name;
-  iface->get_description = gtk_switch_action_get_description;
-  iface->set_description = gtk_switch_action_set_description;
 }

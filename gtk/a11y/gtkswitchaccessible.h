@@ -38,7 +38,6 @@ struct _GtkSwitchAccessible
 {
   GtkWidgetAccessible parent;
 
-  gchar *action_description;
   guint action_idle;
 };
 
