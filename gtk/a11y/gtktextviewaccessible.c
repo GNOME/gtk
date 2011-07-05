@@ -156,15 +156,10 @@ setup_buffer (GtkTextView           *view,
   buffer = gtk_text_view_get_buffer (view);
 
   /* Set up signal callbacks */
-  g_signal_connect_data (buffer, "insert-text",
-                         (GCallback) insert_text_cb, view, NULL, 0);
-  g_signal_connect_data (buffer, "delete-range",
-                         (GCallback) delete_range_cb, view, NULL, 0);
-  g_signal_connect_data (buffer, "mark-set",
-                         (GCallback) mark_set_cb, view, NULL, 0);
-  g_signal_connect_data (buffer, "changed",
-                         (GCallback) changed_cb, view, NULL, 0);
-
+  g_signal_connect (buffer, "insert-text", G_CALLBACK (insert_text_cb), view);
+  g_signal_connect (buffer, "delete-range", G_CALLBACK (delete_range_cb), view);
+  g_signal_connect (buffer, "mark-set", G_CALLBACK (mark_set_cb), view);
+  g_signal_connect (buffer, "changed", G_CALLBACK (changed_cb), view);
 }
 
 static gchar *
