@@ -1,3 +1,31 @@
+Overview of Changes in GTK+ 3.1.8
+=================================
+
+* Theming improvements:
+  - Multiple colors are now supported
+  - Support CSS font properties like font-size, font-family, etc
+  - nth-child works for toolbars too
+
+* Bug fixes:
+ 652506 Improve GtkAssistant button labels
+ 652618 themingengine: shrink the background size to the padding-box
+ 652769 Reordering/removing hidden children in GtkBox results in 100% CPU
+ 653053 Avoid GApplication being released twice...
+ 653191 uninitialized variable in completion_match_func
+ 653333 Assigned value is garbage or undefined in gtktoolpalette.c:565
+ 653512 GtkEntryCompletion: Use a PAGE_STEP macro instead of a magic number
+ 653785 GtkStyleContext ignores style classes when getting style properties
+
+* Translation updates:
+ Belarusian
+ Dutch
+ Galician
+ Hebrew
+ Norwegian bokmål
+ Persian
+ Slovenian
+ Spanish
+
 Overview of Changes in GTK+ 3.1.6
 =================================
 
