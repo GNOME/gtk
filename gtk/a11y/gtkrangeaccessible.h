@@ -37,8 +37,6 @@ typedef struct _GtkRangeAccessibleClass GtkRangeAccessibleClass;
 struct _GtkRangeAccessible
 {
   GtkWidgetAccessible parent;
-
-  guint action_idle_handler;
 };
 
 struct _GtkRangeAccessibleClass

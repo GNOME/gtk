@@ -82,12 +82,6 @@ gtk_range_accessible_finalize (GObject *object)
                                               range);
     }
 
-  if (range->action_idle_handler)
-    {
-      g_source_remove (range->action_idle_handler);
-      range->action_idle_handler = 0;
-    }
-
   G_OBJECT_CLASS (gtk_range_accessible_parent_class)->finalize (object);
 }
 
@@ -235,29 +229,9 @@ atk_value_interface_init (AtkValueIface *iface)
 }
 
 static gboolean
-idle_do_action (gpointer data)
-{
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (data);
-  GtkWidget *widget;
-
-  range->action_idle_handler = 0;
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (range));
-  if (widget == NULL)
-    return FALSE;
-
-  if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
-    return FALSE;
-
-  gtk_widget_activate (widget);
-
-  return TRUE;
-}
-
-static gboolean
 gtk_range_accessible_do_action (AtkAction *action,
                                 gint       i)
 {
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (action);
   GtkWidget *widget;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
@@ -270,10 +244,7 @@ gtk_range_accessible_do_action (AtkAction *action,
   if (i != 0)
     return FALSE;
 
-  if (range->action_idle_handler)
-    return FALSE;
-
-  range->action_idle_handler = gdk_threads_add_idle (idle_do_action, range);
+  gtk_widget_activate (widget);
 
   return TRUE;
 }
