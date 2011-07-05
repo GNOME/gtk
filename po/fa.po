@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-06-20 13:26+0000\n"
-"PO-Revision-Date: 2011-06-23 23:30+0330\n"
+"PO-Revision-Date: 2011-07-05 22:17+0330\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
 "Language: fa\n"
@@ -387,7 +387,7 @@ msgstr "خواب زمستانی"
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86WLAN"
-msgstr ""
+msgstr "لن"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
@@ -4081,7 +4081,7 @@ msgstr "تصدیق هویت برای چاپ یک سند روی %s لازم اس�
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr "تصدیق هویت برای گرفتن خصیصه‌های کار '%s' لازم است."
+msgstr "تصدیق هویت برای گرفتن خصیصه‌های کار «%s» لازم است."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:876
 msgid "Authentication is required to get attributes of a job"
@@ -4226,7 +4226,7 @@ msgstr "_خروجی کاغذ:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2802
 msgid "Resolution"
-msgstr "_دقت"
+msgstr "تفکیک‌پذیری"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2803
 msgid "GhostScript pre-filtering"
@@ -4251,7 +4251,7 @@ msgstr "لبه کوتاه (برگشته)"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2820
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2828
 msgid "Auto Select"
-msgstr "گزینش _خودکار"
+msgstr "گزینش خودکار"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
