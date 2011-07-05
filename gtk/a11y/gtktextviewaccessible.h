@@ -38,16 +38,8 @@ struct _GtkTextViewAccessible
 {
   GtkContainerAccessible parent;
 
-  gint           previous_insert_offset;
-  gint           previous_selection_bound;
-  /*
-   * These fields store information about text changed
-   */
-  gchar          *signal_name;
-  gint           position;
-  gint           length;
-
-  guint          insert_notify_handler;
+  gint           insert_offset;
+  gint           selection_bound;
 };
 
 struct _GtkTextViewAccessibleClass

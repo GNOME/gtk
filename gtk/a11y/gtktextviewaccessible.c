@@ -40,13 +40,10 @@ static void       delete_range_cb      (GtkTextBuffer    *buffer,
                                                         GtkTextIter      *arg1,
                                                         GtkTextIter      *arg2,
                                                         gpointer         user_data);
-static void       changed_cb           (GtkTextBuffer    *buffer,
-                                                        gpointer         user_data);
 static void       mark_set_cb          (GtkTextBuffer    *buffer,
                                                         GtkTextIter      *arg1,
                                                         GtkTextMark      *arg2,
                                                         gpointer         user_data);
-static gint             insert_idle_handler            (gpointer         data);
 
 
 static void atk_editable_text_interface_init      (AtkEditableTextIface      *iface);
@@ -68,17 +65,6 @@ gtk_text_view_accessible_initialize (AtkObject *obj,
   setup_buffer (GTK_TEXT_VIEW (data), GTK_TEXT_VIEW_ACCESSIBLE (obj));
 
   obj->role = ATK_ROLE_TEXT;
-}
-
-static void
-gtk_text_view_accessible_finalize (GObject *object)
-{
-  GtkTextViewAccessible *text_view = GTK_TEXT_VIEW_ACCESSIBLE (object);
-
-  if (text_view->insert_notify_handler)
-    g_source_remove (text_view->insert_notify_handler);
-
-  G_OBJECT_CLASS (gtk_text_view_accessible_parent_class)->finalize (object);
 }
 
 static void
@@ -126,11 +112,8 @@ gtk_text_view_accessible_ref_state_set (AtkObject *accessible)
 static void
 gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-
-  gobject_class->finalize = gtk_text_view_accessible_finalize;
 
   class->ref_state_set = gtk_text_view_accessible_ref_state_set;
   class->initialize = gtk_text_view_accessible_initialize;
@@ -141,10 +124,6 @@ gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 static void
 gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
 {
-  accessible->signal_name = NULL;
-  accessible->previous_insert_offset = -1;
-  accessible->previous_selection_bound = -1;
-  accessible->insert_notify_handler = 0;
 }
 
 static void
@@ -156,10 +135,9 @@ setup_buffer (GtkTextView           *view,
   buffer = gtk_text_view_get_buffer (view);
 
   /* Set up signal callbacks */
-  g_signal_connect (buffer, "insert-text", G_CALLBACK (insert_text_cb), view);
+  g_signal_connect_after (buffer, "insert-text", G_CALLBACK (insert_text_cb), view);
   g_signal_connect (buffer, "delete-range", G_CALLBACK (delete_range_cb), view);
-  g_signal_connect (buffer, "mark-set", G_CALLBACK (mark_set_cb), view);
-  g_signal_connect (buffer, "changed", G_CALLBACK (changed_cb), view);
+  g_signal_connect_after (buffer, "mark-set", G_CALLBACK (mark_set_cb), view);
 }
 
 static gchar *
@@ -1163,6 +1141,35 @@ atk_editable_text_interface_init (AtkEditableTextIface *iface)
 /* Callbacks */
 
 static void
+gtk_text_view_accessible_update_cursor (GtkTextViewAccessible *accessible,
+                                        GtkTextBuffer *        buffer)
+{
+  int prev_insert_offset, prev_selection_bound;
+  int insert_offset, selection_bound;
+  GtkTextIter iter;
+
+  prev_insert_offset = accessible->insert_offset;
+  prev_selection_bound = accessible->selection_bound;
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
+  insert_offset = gtk_text_iter_get_offset (&iter);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_selection_bound (buffer));
+  selection_bound = gtk_text_iter_get_offset (&iter);
+
+  if (prev_insert_offset == insert_offset && prev_selection_bound == selection_bound)
+    return;
+
+  accessible->insert_offset = insert_offset;
+  accessible->selection_bound = selection_bound;
+
+  if (prev_insert_offset != insert_offset)
+    g_signal_emit_by_name (accessible, "text-caret-moved", insert_offset);
+
+  if (prev_insert_offset != prev_selection_bound || insert_offset != selection_bound)
+    g_signal_emit_by_name (accessible, "text-selection-changed");
+}
+
+static void
 insert_text_cb (GtkTextBuffer *buffer,
                 GtkTextIter   *iter,
                 gchar         *text,
@@ -1176,33 +1183,12 @@ insert_text_cb (GtkTextBuffer *buffer,
 
   accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (view)));
 
-  accessible->signal_name = "text_changed::insert";
   position = gtk_text_iter_get_offset (iter);
   length = g_utf8_strlen (text, len);
  
-  if (accessible->length == 0)
-    {
-      accessible->position = position;
-      accessible->length = length;
-    }
-  else if (accessible->position + accessible->length == position)
-    {
-      accessible->length += length;
-    }
-  else
-    {
-      /*
-       * We have a non-contiguous insert so report what we have
-       */
-      if (accessible->insert_notify_handler)
-        {
-          g_source_remove (accessible->insert_notify_handler);
-        }
-      accessible->insert_notify_handler = 0;
-      insert_idle_handler (accessible);
-      accessible->position = position;
-      accessible->length = length;
-    }
+  g_signal_emit_by_name (accessible, "text-changed::insert", position - length, length);
+
+  gtk_text_view_accessible_update_cursor (accessible, buffer);
 }
 
 static void
@@ -1211,73 +1197,21 @@ delete_range_cb (GtkTextBuffer *buffer,
                  GtkTextIter   *end,
                  gpointer       data)
 {
-  GtkTextView *text = data;
+  GtkTextView *view = data;
   GtkTextViewAccessible *accessible;
-  gint offset;
-  gint length;
+  gint offset, length;
 
+  accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (view)));
 
   offset = gtk_text_iter_get_offset (start);
   length = gtk_text_iter_get_offset (end) - offset;
 
-  accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (text)));
-  if (accessible->insert_notify_handler)
-    {
-      g_source_remove (accessible->insert_notify_handler);
-      accessible->insert_notify_handler = 0;
-      if (accessible->position == offset &&
-          accessible->length == length)
-        {
-        /*
-         * Do not bother with insert and delete notifications
-         */
-          accessible->signal_name = NULL;
-          accessible->position = 0;
-          accessible->length = 0;
-          return;
-        }
+  g_signal_emit_by_name (accessible,
+                         "text_changed::delete",
+                         offset,
+                         length);
 
-      insert_idle_handler (accessible);
-    }
-  g_signal_emit_by_name (accessible, "text_changed::delete", offset, length);
-}
-
-static gint
-get_selection_bound (GtkTextBuffer *buffer)
-{
-  GtkTextMark *bound;
-  GtkTextIter iter;
-
-  bound = gtk_text_buffer_get_selection_bound (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, bound);
-  return gtk_text_iter_get_offset (&iter);
-}
-
-static void
-emit_text_caret_moved (GtkTextViewAccessible *accessible,
-                       gint                   offset)
-{
-  /*
-   * If we have text which has been inserted notify the user
-   */
-  if (accessible->insert_notify_handler)
-    {
-      g_source_remove (accessible->insert_notify_handler);
-      accessible->insert_notify_handler = 0;
-      insert_idle_handler (accessible);
-    }
-
-  if (offset != accessible->previous_insert_offset)
-    {
-      /*
-       * If the caret position has not changed then don't bother notifying
-       *
-       * When mouse click is used to change caret position, notification
-       * is received on button down and button up.
-       */
-      g_signal_emit_by_name (accessible, "text_caret_moved", offset);
-      accessible->previous_insert_offset = offset;
-    }
+  gtk_text_view_accessible_update_cursor (accessible, buffer);
 }
 
 static void
@@ -1297,84 +1231,12 @@ mark_set_cb (GtkTextBuffer *buffer,
    */
   if (mark == gtk_text_buffer_get_insert (buffer))
     {
-      gint insert_offset, selection_bound;
-      gboolean selection_changed;
-
-      insert_offset = gtk_text_iter_get_offset (location);
-
-      selection_bound = get_selection_bound (buffer);
-      if (selection_bound != insert_offset)
-        {
-          if (selection_bound != accessible->previous_selection_bound ||
-              insert_offset != accessible->previous_insert_offset)
-            selection_changed = TRUE;
-          else
-            selection_changed = FALSE;
-        }
-      else if (accessible->previous_selection_bound != accessible->previous_insert_offset)
-        selection_changed = TRUE;
-      else
-        selection_changed = FALSE;
-
-      emit_text_caret_moved (accessible, insert_offset);
-      /*
-       * insert and selection_bound marks are different to a selection
-       * has changed
-       */
-      if (selection_changed)
-        g_signal_emit_by_name (accessible, "text_selection_changed");
-      accessible->previous_selection_bound = selection_bound;
+      gtk_text_view_accessible_update_cursor (accessible, buffer);
     }
-}
-
-static void
-changed_cb (GtkTextBuffer *buffer,
-            gpointer       data)
-{
-  GtkTextView *text = data;
-  GtkTextViewAccessible *accessible;
-
-  accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (text)));
-  if (accessible->signal_name)
+  else if (mark == gtk_text_buffer_get_selection_bound (buffer))
     {
-      if (!accessible->insert_notify_handler)
-        {
-          accessible->insert_notify_handler = gdk_threads_add_idle (insert_idle_handler, accessible);
-        }
-      return;
+      gtk_text_view_accessible_update_cursor (accessible, buffer);
     }
-  emit_text_caret_moved (accessible, get_insert_offset (buffer));
-  accessible->previous_selection_bound = get_selection_bound (buffer);
-}
-
-static gint
-insert_idle_handler (gpointer data)
-{
-  GtkTextViewAccessible *accessible = data;
-  GtkWidget *widget;
-  GtkTextBuffer *buffer;
-
-  g_signal_emit_by_name (data,
-                         accessible->signal_name,
-                         accessible->position,
-                         accessible->length);
-  accessible->signal_name = NULL;
-  accessible->position = 0;
-  accessible->length = 0;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
-  if (accessible->insert_notify_handler)
-    {
-    /*
-     * If called from idle handler notify caret moved
-     */
-      accessible->insert_notify_handler = 0;
-      emit_text_caret_moved (accessible, get_insert_offset (buffer));
-      accessible->previous_selection_bound = get_selection_bound (buffer);
-    }
-
-  return FALSE;
 }
 
 static gint
