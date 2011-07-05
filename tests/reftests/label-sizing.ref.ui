@@ -10,7 +10,7 @@
         <property name="can_focus">False</property>
         <property name="row_spacing">1</property>
         <property name="column_spacing">1</property>
-        <property name="row-homogeneous">True</property>
+        <property name="row_homogeneous">True</property>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
@@ -147,8 +147,8 @@
                       <object class="GtkLabel" id="required-required1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -170,8 +170,8 @@
                       <object class="GtkLabel" id="required-natural1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -204,8 +204,8 @@
                       <object class="GtkLabel" id="natural-required1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -227,8 +227,8 @@
                       <object class="GtkLabel" id="natural-natural1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -325,9 +325,9 @@
                       <object class="GtkLabel" id="required-required2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -349,9 +349,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -384,8 +384,8 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -407,8 +407,8 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -505,8 +505,8 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -528,8 +528,8 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -562,8 +562,8 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -585,8 +585,8 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -683,8 +683,8 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -706,9 +706,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…
 …</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -741,8 +741,8 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -764,8 +764,8 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -862,9 +862,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -886,9 +886,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -921,9 +921,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -945,9 +945,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1044,10 +1044,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1069,10 +1069,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1105,9 +1105,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1129,9 +1129,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1228,9 +1228,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1252,9 +1252,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1287,9 +1287,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1311,9 +1311,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1410,9 +1410,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1434,10 +1434,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…
 ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1470,9 +1470,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1494,9 +1494,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1593,9 +1593,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1617,9 +1617,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1652,9 +1652,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1676,9 +1676,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1775,10 +1775,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required10">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1800,10 +1800,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural10">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1836,9 +1836,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required10">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1860,9 +1860,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural10">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1959,9 +1959,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -1983,9 +1983,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2018,9 +2018,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2042,9 +2042,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2141,9 +2141,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2165,10 +2165,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2201,9 +2201,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2225,9 +2225,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural12">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2324,9 +2324,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2348,9 +2348,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2383,9 +2383,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2407,9 +2407,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2506,9 +2506,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2530,9 +2530,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2565,9 +2565,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2589,9 +2589,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2688,9 +2688,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2712,9 +2712,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2747,9 +2747,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2771,9 +2771,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2870,9 +2870,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required16">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2894,9 +2894,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural16">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2929,9 +2929,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required16">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -2953,9 +2953,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural16">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3052,9 +3052,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required17">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3076,9 +3076,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural17">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3111,9 +3111,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required17">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3135,9 +3135,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural17">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3234,10 +3234,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required18">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3259,10 +3259,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural18">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3295,10 +3295,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required18">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3320,10 +3320,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural18">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3420,9 +3420,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required19">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3444,9 +3444,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural19">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3479,9 +3479,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required19">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3503,9 +3503,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural19">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3602,9 +3602,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3626,10 +3626,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…
 …</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3662,9 +3662,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3686,10 +3686,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural20">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…
 ABCD</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3786,10 +3786,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3811,10 +3811,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3847,10 +3847,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3872,10 +3872,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3972,11 +3972,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required22">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -3998,11 +3998,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural22">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4035,11 +4035,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required22">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4061,11 +4061,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural22">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4162,10 +4162,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required23">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4187,10 +4187,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural23">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4223,10 +4223,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required23">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4248,10 +4248,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural23">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4348,10 +4348,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required24">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4373,11 +4373,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural24">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4410,10 +4410,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required24">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4435,11 +4435,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural24">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4536,10 +4536,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required25">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4561,10 +4561,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural25">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4597,10 +4597,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required25">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4622,10 +4622,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural25">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4722,11 +4722,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required26">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4748,11 +4748,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural26">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4785,11 +4785,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required26">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4811,11 +4811,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural26">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4912,10 +4912,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required27">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4937,10 +4937,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural27">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4973,10 +4973,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required27">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -4998,10 +4998,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural27">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5098,10 +5098,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required28">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5123,11 +5123,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural28">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5160,10 +5160,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required28">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5185,11 +5185,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural28">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5286,10 +5286,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required29">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5311,10 +5311,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural29">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5347,10 +5347,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required29">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5372,10 +5372,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural29">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5472,10 +5472,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required30">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5497,10 +5497,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural30">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5533,10 +5533,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required30">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5558,10 +5558,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural30">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5658,10 +5658,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required31">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5683,10 +5683,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural31">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5719,10 +5719,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required31">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5744,10 +5744,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural31">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5844,10 +5844,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required32">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5869,10 +5869,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural32">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5905,10 +5905,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required32">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -5930,10 +5930,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural32">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">4</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6030,9 +6030,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required33">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6054,9 +6054,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural33">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6089,9 +6089,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required33">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6113,9 +6113,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural33">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6212,10 +6212,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required34">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6237,10 +6237,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural34">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6273,10 +6273,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required34">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6298,10 +6298,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural34">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6398,9 +6398,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required35">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6422,9 +6422,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural35">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6457,9 +6457,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required35">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6481,9 +6481,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural35">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6580,9 +6580,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required36">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6604,10 +6604,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural36">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…
 …</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6640,9 +6640,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required36">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6664,10 +6664,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural36">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6764,10 +6764,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required37">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6789,10 +6789,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural37">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6825,10 +6825,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required37">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6850,10 +6850,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural37">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6950,11 +6950,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required38">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -6976,11 +6976,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural38">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7013,11 +7013,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required38">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7039,11 +7039,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural38">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7140,10 +7140,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required39">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7165,10 +7165,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural39">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7201,10 +7201,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required39">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7226,10 +7226,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural39">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7326,10 +7326,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required40">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7351,11 +7351,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural40">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7388,10 +7388,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required40">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7413,11 +7413,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural40">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7514,10 +7514,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required41">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7539,10 +7539,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural41">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7575,10 +7575,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required41">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7600,10 +7600,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural41">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7700,11 +7700,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required42">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7726,11 +7726,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural42">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7763,11 +7763,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required42">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7789,11 +7789,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural42">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7890,10 +7890,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required43">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7915,10 +7915,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural43">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7951,10 +7951,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required43">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -7976,10 +7976,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural43">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8076,10 +8076,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required44">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8101,11 +8101,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural44">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8138,10 +8138,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required44">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8163,11 +8163,11 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural44">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8264,10 +8264,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required45">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8289,10 +8289,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural45">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8325,10 +8325,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required45">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8350,10 +8350,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural45">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8450,10 +8450,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required46">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8475,10 +8475,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural46">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8511,10 +8511,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required46">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8536,10 +8536,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural46">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8636,10 +8636,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required47">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8661,10 +8661,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural47">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8697,10 +8697,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required47">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8722,10 +8722,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural47">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8822,10 +8822,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required48">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8847,10 +8847,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural48">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8883,10 +8883,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required48">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -8908,10 +8908,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural48">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">8</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9008,9 +9008,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required49">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9032,9 +9032,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural49">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9067,9 +9067,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required49">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9091,9 +9091,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural49">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9190,10 +9190,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required50">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9215,10 +9215,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural50">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9251,9 +9251,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required50">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9275,9 +9275,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural50">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9374,9 +9374,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required51">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9398,9 +9398,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural51">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9433,9 +9433,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required51">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9457,9 +9457,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural51">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9556,9 +9556,9 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required52">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9580,10 +9580,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural52">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">…
 …</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9616,9 +9616,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required52">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9640,9 +9640,9 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural52">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9739,10 +9739,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required53">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9764,10 +9764,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural53">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9800,10 +9800,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required53">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9825,10 +9825,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural53">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9925,11 +9925,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required54">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9951,11 +9951,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural54">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -9988,10 +9988,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required54">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10013,10 +10013,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural54">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10113,10 +10113,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required55">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10138,10 +10138,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural55">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10174,10 +10174,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required55">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10199,10 +10199,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural55">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10299,10 +10299,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required56">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10324,11 +10324,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural56">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABC…
 ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10361,10 +10361,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required56">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10386,10 +10386,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural56">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">4</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10486,10 +10486,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required57">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10511,10 +10511,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural57">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10547,10 +10547,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required57">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10572,10 +10572,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural57">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10672,11 +10672,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required58">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10698,11 +10698,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural58">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10735,10 +10735,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required58">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10760,10 +10760,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural58">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10860,10 +10860,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required59">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10885,10 +10885,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural59">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10921,10 +10921,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required59">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -10946,10 +10946,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural59">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11046,10 +11046,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required60">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE A…</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11071,11 +11071,11 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural60">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE   
 ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11108,10 +11108,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required60">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11133,10 +11133,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural60">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD</property>
                         <property name="width_chars">8</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11233,10 +11233,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required61">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11258,10 +11258,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural61">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11294,10 +11294,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required61">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11319,10 +11319,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural61">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11419,10 +11419,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required62">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11444,10 +11444,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural62">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11480,10 +11480,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required62">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11505,10 +11505,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural62">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11605,10 +11605,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required63">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11630,10 +11630,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural63">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11666,10 +11666,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required63">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11691,10 +11691,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural63">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11791,10 +11791,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-required64">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11816,10 +11816,10 @@ ABCD</property>
                       <object class="GtkLabel" id="required-natural64">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11852,10 +11852,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-required64">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
@@ -11877,10 +11877,10 @@ ABCD</property>
                       <object class="GtkLabel" id="natural-natural64">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">ABCDE ABCD  </property>
                         <property name="width_chars">12</property>
                         <property name="max_width_chars">12</property>
-                        <property name="xalign">0.0</property>
                         <attributes>
                           <attribute name="font-desc" value="Monospace"/>
                         </attributes>
