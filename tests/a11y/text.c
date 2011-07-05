@@ -577,6 +577,18 @@ select_region (GtkWidget *widget,
     gtk_editable_select_region (GTK_EDITABLE (widget), start, end);
   else if (GTK_IS_LABEL (widget))
     gtk_label_select_region (GTK_LABEL (widget), start, end);
+  else if (GTK_IS_TEXT_VIEW (widget))
+    {
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+      GtkTextIter start_iter, end_iter;
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &start_iter, end);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end_iter, start);
+
+      gtk_text_buffer_select_range (buffer, &start_iter, &end_iter);
+    }
+  else
+    g_assert_not_reached ();
 }
 
 typedef struct {
@@ -604,7 +616,7 @@ static void
 test_selection (GtkWidget *widget)
 {
   AtkText *atk_text;
-  const gchar *text = "Bla bla";
+  const gchar *text = "Bla bla bla";
   gint n;
   gchar *ret;
   gint start, end;
@@ -628,12 +640,17 @@ test_selection (GtkWidget *widget)
   n = atk_text_get_n_selections (atk_text);
   g_assert_cmpint (n, ==, 0);
 
-  g_assert_cmpint (data1.count, ==, 0);
+  if (data1.count == 1)
+    /* insertion before cursor */
+    g_assert_cmpint (data1.position, ==, 11);
+  else
+    /* insertion after cursor */
+    g_assert_cmpint (data1.count, ==, 0);
   g_assert_cmpint (data2.count, ==, 0);
 
   select_region (widget, 4, 7);
 
-  g_assert_cmpint (data1.count, ==, 1);
+  g_assert_cmpint (data1.count, >=, 1);
   g_assert_cmpint (data1.position, ==, 7);
   g_assert_cmpint (data2.count, >=, 1);
   g_assert_cmpint (data2.bound, ==, 4);
@@ -652,7 +669,7 @@ test_selection (GtkWidget *widget)
   n = atk_text_get_n_selections (atk_text);
   g_assert_cmpint (n, ==, 0);
 
-  g_assert_cmpint (data1.count, ==, 1);
+  g_assert_cmpint (data1.count, >=, 1);
   g_assert_cmpint (data2.count, >=, 2);
   g_assert_cmpint (data2.position, ==, 7);
   g_assert_cmpint (data2.bound, ==, 7);
