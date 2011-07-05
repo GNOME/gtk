@@ -1293,9 +1293,6 @@ mark_set_cb (GtkTextBuffer *buffer,
 {
   GtkTextView *text = data;
   GtkTextViewAccessible *accessible;
-  const char *mark_name;
-
-  mark_name = gtk_text_mark_get_name (mark);
 
   accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (text)));
 
@@ -1303,7 +1300,7 @@ mark_set_cb (GtkTextBuffer *buffer,
    * Only generate the signal for the "insert" mark, which
    * represents the cursor.
    */
-  if (g_strcmp0 (mark_name, "insert") == 0)
+  if (mark == gtk_text_buffer_get_insert (buffer))
     {
       gint insert_offset, selection_bound;
       gboolean selection_changed;
