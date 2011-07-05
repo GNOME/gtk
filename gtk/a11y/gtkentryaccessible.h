@@ -44,8 +44,6 @@ struct _GtkEntryAccessible
   gint length_delete;
   gint cursor_position;
   gint selection_bound;
-
-  guint action_idle_handler;
 };
 
 struct _GtkEntryAccessibleClass

@@ -51,19 +51,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GTK_TYPE_WIDG
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 
-static void
-gtk_entry_accessible_finalize (GObject *object)
-{
-  GtkEntryAccessible *entry = GTK_ENTRY_ACCESSIBLE (object);
-
-  if (entry->action_idle_handler)
-    {
-      g_source_remove (entry->action_idle_handler);
-      entry->action_idle_handler = 0;
-    }
-  G_OBJECT_CLASS (gtk_entry_accessible_parent_class)->finalize (object);
-}
-
 static AtkStateSet*
 gtk_entry_accessible_ref_state_set (AtkObject *accessible)
 {
@@ -207,11 +194,8 @@ gtk_entry_accessible_get_index_in_parent (AtkObject *accessible)
 static void
 gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-
-  gobject_class->finalize = gtk_entry_accessible_finalize;
 
   class->ref_state_set = gtk_entry_accessible_ref_state_set;
   class->get_index_in_parent = gtk_entry_accessible_get_index_in_parent;
@@ -971,31 +955,11 @@ check_for_selection_change (GtkEntryAccessible *accessible,
 }
 
 static gboolean
-idle_do_action (gpointer data)
-{
-  GtkEntryAccessible *entry;
-  GtkWidget *widget;
-
-  entry = GTK_ENTRY_ACCESSIBLE (data);
-  entry->action_idle_handler = 0;
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
-  if (widget == NULL /* State is defunct */ ||
-      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
-    return FALSE;
-
-  gtk_widget_activate (widget);
-
-  return FALSE;
-}
-
-static gboolean
 gtk_entry_accessible_do_action (AtkAction *action,
                                 gint       i)
 {
-  GtkEntryAccessible *entry;
   GtkWidget *widget;
 
-  entry = GTK_ENTRY_ACCESSIBLE (action);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
     return FALSE;
@@ -1006,10 +970,7 @@ gtk_entry_accessible_do_action (AtkAction *action,
   if (i != 0)
     return FALSE;
 
-  if (entry->action_idle_handler)
-    return FALSE;
-
-  entry->action_idle_handler = gdk_threads_add_idle (idle_do_action, entry);
+  gtk_widget_activate (widget);
 
   return TRUE;
 }
