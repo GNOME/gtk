@@ -148,6 +148,7 @@ gtk_menu_item_accessible_ref_state_set (AtkObject *obj)
           atk_state_set_remove_state (state_set, ATK_STATE_FOCUSED);
           atk_state_set_remove_state (state_set, ATK_STATE_SHOWING);
         }
+      g_object_unref (parent_state_set);
     }
 
   return state_set;
