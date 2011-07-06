@@ -41,10 +41,11 @@ gtk_submenu_item_accessible_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gtk_submenu_item_accessible_parent_class)->initialize (obj, data);
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (data));
-  g_return_if_fail (submenu);
-
-  g_signal_connect (submenu, "add", G_CALLBACK (menu_item_add_gtk), NULL);
-  g_signal_connect (submenu, "remove", G_CALLBACK (menu_item_remove_gtk), NULL);
+  if (submenu)
+    {
+      g_signal_connect (submenu, "add", G_CALLBACK (menu_item_add_gtk), NULL);
+      g_signal_connect (submenu, "remove", G_CALLBACK (menu_item_remove_gtk), NULL);
+    }
 
   obj->role = ATK_ROLE_MENU;
 }
@@ -78,7 +79,9 @@ gtk_submenu_item_accessible_add_selection (AtkSelection *selection,
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), FALSE);
+  if (submenu == NULL)
+    return FALSE;
+
   shell = GTK_MENU_SHELL (submenu);
   kids = gtk_container_get_children (GTK_CONTAINER (shell));
   length = g_list_length (kids);
@@ -98,7 +101,6 @@ gtk_submenu_item_accessible_add_selection (AtkSelection *selection,
 static gboolean
 gtk_submenu_item_accessible_clear_selection (AtkSelection *selection)
 {
-  GtkMenuShell *shell;
   GtkWidget *widget;
   GtkWidget *submenu;
 
@@ -107,10 +109,11 @@ gtk_submenu_item_accessible_clear_selection (AtkSelection *selection)
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), FALSE);
-  shell = GTK_MENU_SHELL (submenu);
+  if (submenu == NULL)
+    return FALSE;
 
-  gtk_menu_shell_deselect (shell);
+  gtk_menu_shell_deselect (GTK_MENU_SHELL (submenu));
+
   return TRUE;
 }
 
@@ -132,7 +135,9 @@ gtk_submenu_item_accessible_ref_selection (AtkSelection *selection,
     return NULL;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), NULL);
+  if (submenu == NULL)
+    return NULL;
+
   shell = GTK_MENU_SHELL (submenu);
 
   item = gtk_menu_shell_get_selected_item (shell);
@@ -158,7 +163,9 @@ gtk_submenu_item_accessible_get_selection_count (AtkSelection *selection)
     return 0;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), 0);
+  if (submenu == NULL)
+    return 0;
+
   shell = GTK_MENU_SHELL (submenu);
 
   if (gtk_menu_shell_get_selected_item (shell) != NULL)
@@ -183,7 +190,9 @@ gtk_submenu_item_accessible_is_child_selected (AtkSelection *selection,
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), FALSE);
+  if (submenu == NULL)
+    return FALSE;
+
   shell = GTK_MENU_SHELL (submenu);
 
   item = gtk_menu_shell_get_selected_item (shell);
@@ -214,7 +223,9 @@ gtk_submenu_item_accessible_remove_selection (AtkSelection *selection,
     return FALSE;
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget));
-  g_return_val_if_fail (GTK_IS_MENU_SHELL (submenu), FALSE);
+  if (submenu == NULL)
+    return FALSE;
+
   shell = GTK_MENU_SHELL (submenu);
 
   item = gtk_menu_shell_get_selected_item (shell);
