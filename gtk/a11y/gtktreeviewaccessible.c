@@ -3121,10 +3121,10 @@ toggle_cell_toggled (GailCell *cell)
     {
       pathstring = gtk_tree_path_to_string (path);
       g_signal_emit_by_name (cur_renderer->data, "toggled", pathstring);
+      g_free (pathstring);
     }
 
   g_list_free (renderers);
-  g_free (pathstring);
   gtk_tree_path_free (path);
 }
 
