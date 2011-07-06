@@ -939,7 +939,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
 			  gint          column,
 			  GValue       *value)
 {
-  GtkListStorePrivate *priv = list_store->priv;
+  GtkListStorePrivate *priv;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter_is_valid (iter, list_store));

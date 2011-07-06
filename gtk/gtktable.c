@@ -750,9 +750,9 @@ gtk_table_attach (GtkTable	  *table,
 		  guint		   xpadding,
 		  guint		   ypadding)
 {
-  GtkTablePrivate *priv = table->priv;
+  GtkTablePrivate *priv;
   GtkTableChild *table_child;
-  
+
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (gtk_widget_get_parent (child) == NULL);

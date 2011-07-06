@@ -2820,7 +2820,7 @@ void
 gtk_label_set_pattern (GtkLabel	   *label,
 		       const gchar *pattern)
 {
-  GtkLabelPrivate *priv = label->priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
