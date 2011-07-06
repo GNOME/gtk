@@ -35,7 +35,7 @@ EXTRA_DIST += \
 	link.ui link.txt \
 	text.ui text.txt \
 	tree.ui tree.txt \
-	buttons.ui buttions.txt \
+	buttons.ui buttons.txt \
 	colorchooser.ui colorchooser.txt \
 	about.ui about.txt \
 	appchooser.ui appchooser.txt \

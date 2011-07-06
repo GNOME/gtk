@@ -85,7 +85,7 @@ gail_private_h_sources =		\
 	gtkprogressbaraccessible.h	\
 	gtkradiobuttonaccessible.h	\
 	gtkradiomenuitemaccessible.h	\
-	gtkradiosubmenuitemaccesisble.h	\
+	gtkradiosubmenuitemaccessible.h	\
 	gtkrangeaccessible.h		\
 	gailrenderercell.h		\
 	gtkscaleaccessible.h		\
