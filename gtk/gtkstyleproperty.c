@@ -1649,7 +1649,7 @@ border_color_shorthand_value_parse (GtkCssParser *parser,
 
   g_value_unset (value);
   g_value_init (value, G_TYPE_PTR_ARRAY);
-  g_value_set_boxed (value, array);
+  g_value_take_boxed (value, array);
 
   return TRUE;
 }
