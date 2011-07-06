@@ -704,8 +704,8 @@ cairo_arc (cr, 1.5, 1.5, 1.5, 0, 2 * M_PI);
 cairo_fill (cr);
 cairo_destroy (cr);
 
-pixbuf = gdk_pixbuf_get_from_surface (NULL, s,
-                                      0, 0, 0, 0,
+pixbuf = gdk_pixbuf_get_from_surface (s,
+                                      0, 0,
                                       3, 3);
 
 cairo_surface_destroy (s);
