@@ -394,24 +394,6 @@ gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)
   return radio_menu_item->priv->group;
 }
 
-static AtkObject *
-gtk_radio_menu_item_get_accessible (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  /* FIXME this is not really right, submenus can come and go */
-  if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget)))
-    object = g_object_new (GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE, NULL);
-  else
-    object = g_object_new (GTK_TYPE_RADIO_MENU_ITEM_ACCESSIBLE, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 {
@@ -427,7 +409,8 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
   gobject_class->get_property = gtk_radio_menu_item_get_property;
 
   widget_class->destroy = gtk_radio_menu_item_destroy;
-  widget_class->get_accessible = gtk_radio_menu_item_get_accessible;
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE);
 
   menu_item_class->activate = gtk_radio_menu_item_activate;
 

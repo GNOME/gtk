@@ -103,24 +103,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_IT
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_check_menu_item_activatable_interface_init))
 
-static AtkObject *
-gtk_check_menu_item_get_accessible (GtkWidget *widget)
-{
-  GObject *object;
-  AtkObject *accessible;
-
-  /* FIXME this is not really right, submenus can come and go */
-  if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget)))
-    object = g_object_new (GTK_TYPE_CHECK_SUBMENU_ITEM_ACCESSIBLE, NULL);
-  else
-    object = g_object_new (GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE, NULL);
-
-  accessible = ATK_OBJECT (object);
-  atk_object_initialize (accessible, widget);
-
-  return accessible;
-}
-
 static void
 gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
 {
@@ -169,7 +151,8 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                              GTK_PARAM_READABLE));
 
   widget_class->draw = gtk_check_menu_item_draw;
-  widget_class->get_accessible = gtk_check_menu_item_get_accessible;
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CHECK_SUBMENU_ITEM_ACCESSIBLE);
 
   menu_item_class->activate = gtk_check_menu_item_activate;
   menu_item_class->hide_on_activate = FALSE;
