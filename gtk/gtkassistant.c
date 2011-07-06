@@ -150,8 +150,6 @@ static void     gtk_assistant_get_child_property (GtkContainer      *container,
                                                   GValue            *value,
                                                   GParamSpec        *pspec);
 
-static AtkObject *gtk_assistant_get_accessible   (GtkWidget         *widget);
-
 static void       gtk_assistant_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject   *gtk_assistant_buildable_get_internal_child (GtkBuildable  *buildable,
                                                               GtkBuilder    *builder,
@@ -170,6 +168,8 @@ static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *bui
 
 static GList*     find_page                                  (GtkAssistant  *assistant,
                                                               GtkWidget     *page);
+
+GType             _gtk_assistant_accessible_get_type         (void);
 
 enum
 {
@@ -213,7 +213,8 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
   widget_class->delete_event = gtk_assistant_delete_event;
-  widget_class->get_accessible = gtk_assistant_get_accessible;
+
+  gtk_widget_class_set_accessible_type (widget_class, _gtk_assistant_accessible_get_type ());
 
   container_class->add = gtk_assistant_add;
   container_class->remove = gtk_assistant_remove;
@@ -2265,17 +2266,6 @@ _gtk_assistant_accessible_class_init (GtkAssistantAccessibleClass *klass)
 static void
 _gtk_assistant_accessible_init (GtkAssistantAccessible *self)
 {
-}
-
-static AtkObject *
-gtk_assistant_get_accessible (GtkWidget *widget)
-{
-  AtkObject *obj;
-
-  obj = (AtkObject*)g_object_new (_gtk_assistant_accessible_get_type (), NULL);
-  atk_object_initialize (obj, widget);
-
-  return obj;
 }
 
 /* buildable implementation */
