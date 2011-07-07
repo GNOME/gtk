@@ -23,6 +23,9 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif
+
+#include "gtktreeprivate.h"
+
 #include "gtktreeviewaccessible.h"
 #include "gtkrenderercellaccessible.h"
 #include "gtkbooleancellaccessible.h"
@@ -947,33 +950,19 @@ gtk_tree_view_accessible_get_n_rows (AtkTable *table)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
-  GtkTreeModel *tree_model;
-  gint n_rows;
+  GtkRBTree *tree;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     return 0;
 
   tree_view = GTK_TREE_VIEW (widget);
-  tree_model = gtk_tree_view_get_model (tree_view);
+  tree = _gtk_tree_view_get_rbtree (tree_view);
 
-  if (!tree_model)
-    n_rows = 0;
-  else if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
-    /* No collapsed rows in a list store */
-    n_rows = GTK_TREE_VIEW_ACCESSIBLE (table)->n_rows;
-  else
-    {
-      GtkTreePath *root_tree;
+  if (tree == NULL)
+    return 0;
 
-      n_rows = 0;
-      root_tree = gtk_tree_path_new_first ();
-      iterate_thru_children (tree_view, tree_model,
-                             root_tree, NULL, &n_rows, 0);
-      gtk_tree_path_free (root_tree);
-    }
-
-  return n_rows;
+  return tree->root->parity;
 }
 
 static gint
