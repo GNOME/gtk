@@ -58,7 +58,8 @@ static void     selection_changed_cb (GtkTreeSelection *selection,
                                       gpointer          data);
 
 static void     columns_changed      (GtkTreeView      *tree_view);
-static void     cursor_changed       (GtkTreeView      *tree_view);
+static void     cursor_changed       (GtkTreeView      *tree_view,
+                                      GtkTreeViewAccessible *accessible);
 static gboolean focus_in             (GtkWidget        *widget);
 static gboolean focus_out            (GtkWidget        *widget);
 
@@ -260,7 +261,7 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   g_signal_connect (tree_view, "columns-changed",
                     G_CALLBACK (columns_changed), NULL);
   g_signal_connect (tree_view, "cursor-changed",
-                    G_CALLBACK (cursor_changed), NULL);
+                    G_CALLBACK (cursor_changed), accessible);
   g_signal_connect (tree_view, "focus-in-event",
                     G_CALLBACK (focus_in), NULL);
   g_signal_connect (tree_view, "focus-out-event",
@@ -316,8 +317,6 @@ gtk_tree_view_accessible_finalize (GObject *object)
   /* remove any idle handlers still pending */
   if (accessible->idle_garbage_collect_id)
     g_source_remove (accessible->idle_garbage_collect_id);
-  if (accessible->idle_cursor_changed_id)
-    g_source_remove (accessible->idle_cursor_changed_id);
   if (accessible->idle_expand_id)
     g_source_remove (accessible->idle_expand_id);
 
@@ -1859,21 +1858,11 @@ columns_changed (GtkTreeView *tree_view)
   g_list_free (tv_cols);
 }
 
-static gint
-idle_cursor_changed (gpointer data)
+static void
+cursor_changed (GtkTreeView           *tree_view,
+                GtkTreeViewAccessible *accessible)
 {
-  GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (data);
-  GtkTreeView *tree_view;
-  GtkWidget *widget;
   AtkObject *cell;
-
-  accessible->idle_cursor_changed_id = 0;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  if (widget == NULL)
-    return FALSE;
-
-  tree_view = GTK_TREE_VIEW (widget);
 
   cell = gtk_tree_view_accessible_ref_focus_cell (tree_view);
   if (cell)
@@ -1888,7 +1877,7 @@ idle_cursor_changed (gpointer data)
               accessible->focus_cell = cell;
             }
 
-          if (gtk_widget_has_focus (widget))
+          if (gtk_widget_has_focus (GTK_WIDGET (tree_view)))
             {
               _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_ACTIVE, FALSE);
               _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_FOCUSED, FALSE);
@@ -1899,24 +1888,6 @@ idle_cursor_changed (gpointer data)
       else
         g_object_unref (cell);
     }
-
-  return FALSE;
-}
-
-static void
-cursor_changed (GtkTreeView *tree_view)
-{
-  GtkTreeViewAccessible *accessible;
-
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (tree_view)));
-  if (accessible->idle_cursor_changed_id != 0)
-    return;
-
-  /* We notify the focus change in a idle handler so that the processing
-   * of the cursor change is completed when the focus handler is called.
-   * This will allow actions to be called in the focus handler
-   */
-  accessible->idle_cursor_changed_id = gdk_threads_add_idle (idle_cursor_changed, accessible);
 }
 
 static gboolean
