@@ -135,6 +135,10 @@ gint       _gtk_rbtree_node_find_offset (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 gint       _gtk_rbtree_node_find_parity (GtkRBTree              *tree,
 					 GtkRBNode              *node);
+gboolean   _gtk_rbtree_find_index       (GtkRBTree              *tree,
+					 guint                   index,
+					 GtkRBTree             **new_tree,
+					 GtkRBNode             **new_node);
 gint       _gtk_rbtree_find_offset      (GtkRBTree              *tree,
 					 gint                    offset,
 					 GtkRBTree             **new_tree,

@@ -1104,6 +1104,56 @@ _gtk_rbtree_find_offset (GtkRBTree  *tree,
   return _gtk_rbtree_real_find_offset (tree, height, new_tree, new_node);
 }
 
+gboolean
+_gtk_rbtree_find_index (GtkRBTree  *tree,
+                        guint       index,
+                        GtkRBTree **new_tree,
+                        GtkRBNode **new_node)
+{
+  GtkRBNode *tmp_node;
+
+  g_assert (tree);
+
+  tmp_node = tree->root;
+  while (tmp_node != tree->nil)
+    {
+      if (tmp_node->left->total_count > index)
+        {
+          tmp_node = tmp_node->left;
+        }
+      else if (tmp_node->total_count - tmp_node->right->total_count <= index)
+        {
+          index -= tmp_node->total_count - tmp_node->right->total_count;
+          tmp_node = tmp_node->right;
+        }
+      else
+        {
+          index -= tmp_node->left->total_count;
+          break;
+        }
+    }
+  if (tmp_node == tree->nil)
+    {
+      *new_tree = NULL;
+      *new_node = NULL;
+      return FALSE;
+    }
+
+  if (index > 0)
+    {
+      g_assert (tmp_node->children);
+
+      return _gtk_rbtree_find_index (tmp_node->children,
+                                     index - 1,
+                                     new_tree,
+                                     new_node);
+    }
+
+  *new_tree = tree;
+  *new_node = tmp_node;
+  return TRUE;
+}
+
 void
 _gtk_rbtree_remove_node (GtkRBTree *tree,
 			 GtkRBNode *node)
