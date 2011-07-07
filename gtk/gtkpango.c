@@ -1235,7 +1235,7 @@ _gtk_pango_get_text_at (PangoLayout     *layout,
   switch (boundary_type)
     {
     case ATK_TEXT_BOUNDARY_CHAR:
-      start = _gtk_pango_move_chars (layout, start, 1);
+      end = _gtk_pango_move_chars (layout, end, 1);
       break;
 
     case ATK_TEXT_BOUNDARY_WORD_START:
