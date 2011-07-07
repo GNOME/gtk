@@ -22,7 +22,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gtkbuttonaccessible.h"
-#include <libgail-util/gailmisc.h>
 
 
 static void atk_action_interface_init (AtkActionIface *iface);
