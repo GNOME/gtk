@@ -1489,9 +1489,8 @@ void _fixup_parity (GtkRBTree *tree,
 		    GtkRBNode *node)
 {
   node->parity = 1 +
-    ((node->children != NULL && node->children->root != node->children->nil) ? node->children->root->parity : 0) + 
-    ((node->left != tree->nil) ? node->left->parity : 0) + 
-    ((node->right != tree->nil) ? node->right->parity : 0);
+    (node->children != NULL ? node->children->root->parity : 0) + 
+    node->left->parity + node->right->parity;
 }
 
 #ifdef G_ENABLE_DEBUG
