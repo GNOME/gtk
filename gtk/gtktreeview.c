@@ -4707,6 +4707,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   GtkStyleContext *context;
   GtkStateFlags state;
+  gboolean parity;
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   context = gtk_widget_get_style_context (widget);
@@ -4818,15 +4819,17 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
    * start at the first node of the event, and walk the tree in
    * order, drawing each successive node.
    */
+  
+  parity = !_gtk_rbtree_node_find_parity (tree, node);
 
   do
     {
-      gboolean parity;
       gboolean is_separator = FALSE;
       gboolean is_first = FALSE;
       gboolean is_last = FALSE;
       gint n_col = 0;
 
+      parity = !parity;
       is_separator = row_is_separator (tree_view, &iter, NULL);
 
       max_height = gtk_tree_view_get_row_height (tree_view, node);
@@ -4845,8 +4848,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
         flags |= GTK_CELL_RENDERER_SELECTED;
-
-      parity = _gtk_rbtree_node_find_parity (tree, node);
 
       /* we *need* to set cell data on all cells before the call
        * to _has_can_focus_cell, else _has_can_focus_cell() does not
