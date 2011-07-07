@@ -9,21 +9,20 @@ DOC_MODULE=gail-libgail-util3
 DOC_MAIN_SGML_FILE=gail-libgail-util-docs.sgml
 
 # The directory containing the source code (if it contains documentation).
-DOC_SOURCE_DIR=../../../libgail-util
+DOC_SOURCE_DIR=../../../modules/other/gail/libgail-util
 
 # Used for dependencies
-HFILE_GLOB = $(top_srcdir)/libgail-util/*.h
-CFILE_GLOB = $(top_srcdir)/libgail-util/*.c
+HFILE_GLOB = $(top_srcdir)/modules/other/gail/libgail-util/*.h
+CFILE_GLOB = $(top_srcdir)/modules/other/gail/libgail-util/*.c
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.
 AM_CPPFLAGS =                   \
         -I$(top_srcdir)         \
         -I$(top_builddir)       \
-        -I$(top_builddir)/libgail-util \
         $(DEP_CFLAGS)
 
-GTKDOC_LIBS = $(top_builddir)/libgail-util/libgailutil-3.la
+GTKDOC_LIBS = $(top_builddir)/modules/other/gail/libgail-util/libgailutil.la
 
 # gtkdoc-mkdb related varaibles
 MKDB_OPTIONS =
