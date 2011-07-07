@@ -27,7 +27,6 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtktextviewaccessible.h"
-#include "gailmisc.h"
 
 
 static void setup_buffer (GtkTextView           *view,GtkTextViewAccessible *accessible);
@@ -439,6 +438,33 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
 }
 
 static AtkAttributeSet *
+add_text_attribute (AtkAttributeSet  *attributes,
+                    AtkTextAttribute  attr,
+                    gchar            *value)
+{
+  AtkAttribute *at;
+
+  at = g_new (AtkAttribute, 1);
+  at->name = g_strdup (atk_text_attribute_get_name (attr));
+  at->value = value;
+
+  return g_slist_prepend (attributes, at);
+}
+
+static AtkAttributeSet *
+add_text_int_attribute (AtkAttributeSet  *attributes,
+                        AtkTextAttribute  attr,
+                        gint              i)
+
+{
+  gchar *value;
+
+  value = g_strdup (atk_text_attribute_get_value (attr, i));
+
+  return add_text_attribute (attributes, attr, value);
+}
+
+static AtkAttributeSet *
 gtk_text_view_accessible_get_run_attributes (AtkText *text,
                                              gint     offset,
                                              gint    *start_offset,
@@ -447,6 +473,12 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
   GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkWidget *widget;
+  GtkTextIter iter;
+  AtkAttributeSet *attrib_set = NULL;
+  GSList *tags, *temp_tags;
+  gdouble scale = 1;
+  gboolean val_set = FALSE;
+
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -455,23 +487,468 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
   view = GTK_TEXT_VIEW (widget);
   buffer = gtk_text_view_get_buffer (view);
 
-  return gail_misc_buffer_get_run_attributes (buffer, offset,
-                                              start_offset, end_offset);
-}
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
 
-static AtkAttributeSet *
-add_text_attribute (AtkAttributeSet  *attributes,
-                    AtkTextAttribute  attr,
-                    gint              i)
-{
-  AtkAttribute *at;
+  gtk_text_iter_forward_to_tag_toggle (&iter, NULL);
+  *end_offset = gtk_text_iter_get_offset (&iter);
 
-  at = g_new (AtkAttribute, 1);
+  gtk_text_iter_backward_to_tag_toggle (&iter, NULL);
+  *start_offset = gtk_text_iter_get_offset (&iter);
 
-  at->name = g_strdup (atk_text_attribute_get_name (attr));
-  at->value = g_strdup (atk_text_attribute_get_value (attr, i));
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
 
-  return g_slist_prepend (attributes, at);
+  tags = gtk_text_iter_get_tags (&iter);
+  tags = g_slist_reverse (tags);
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "style-set", &val_set, NULL);
+      if (val_set)
+        {
+          PangoStyle style;
+          g_object_get (tag, "style", &style, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_STYLE, style);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "variant-set", &val_set, NULL);
+      if (val_set)
+        {
+          PangoVariant variant;
+          g_object_get (tag, "variant", &variant, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_VARIANT, variant);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "stretch-set", &val_set, NULL);
+      if (val_set)
+        {
+          PangoStretch stretch;
+          g_object_get (tag, "stretch", &stretch, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_STRETCH, stretch);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "justification-set", &val_set, NULL);
+      if (val_set)
+        {
+          GtkJustification justification;
+          g_object_get (tag, "justification", &justification, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_JUSTIFICATION, justification);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+      GtkTextDirection direction;
+
+      g_object_get (tag, "direction", &direction, NULL);
+
+      if (direction != GTK_TEXT_DIR_NONE)
+        {
+          val_set = TRUE;
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_DIRECTION, direction);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "wrap-mode-set", &val_set, NULL);
+      if (val_set)
+        {
+          GtkWrapMode wrap_mode;
+          g_object_get (tag, "wrap-mode", &wrap_mode, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_WRAP_MODE, wrap_mode);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "foreground-set", &val_set, NULL);
+      if (val_set)
+        {
+          GdkRGBA *rgba;
+          gchar *value;
+
+          g_object_get (tag, "foreground-rgba", &rgba, NULL);
+          value = g_strdup_printf ("%u,%u,%u",
+                                   (guint) rgba->red * 65535,
+                                   (guint) rgba->green * 65535,
+                                   (guint) rgba->blue * 65535);
+          gdk_rgba_free (rgba);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_FG_COLOR, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "background-set", &val_set, NULL);
+      if (val_set)
+        {
+          GdkRGBA *rgba;
+          gchar *value;
+
+          g_object_get (tag, "background-rgba", &rgba, NULL);
+          value = g_strdup_printf ("%u,%u,%u",
+                                   (guint) rgba->red * 65535,
+                                   (guint) rgba->green * 65535,
+                                   (guint) rgba->blue * 65535);
+          gdk_rgba_free (rgba);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_BG_COLOR, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "family-set", &val_set, NULL);
+
+      if (val_set)
+        {
+          gchar *value;
+          g_object_get (tag, "family", &value, NULL);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_FAMILY_NAME, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "language-set", &val_set, NULL);
+
+      if (val_set)
+        {
+          gchar *value;
+          g_object_get (tag, "language", &value, NULL);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_LANGUAGE, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "weight-set", &val_set, NULL);
+
+      if (val_set)
+        {
+          gint weight;
+          gchar *value;
+          g_object_get (tag, "weight", &weight, NULL);
+          value = g_strdup_printf ("%d", weight);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_WEIGHT, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  /* scale is special as the effective value is the product
+   * of all specified values
+   */
+  temp_tags = tags;
+  while (temp_tags)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+      gboolean scale_set;
+
+      g_object_get (tag, "scale-set", &scale_set, NULL);
+      if (scale_set)
+        {
+          gdouble font_scale;
+          g_object_get (tag, "scale", &font_scale, NULL);
+          val_set = TRUE;
+          scale *= font_scale;
+        }
+      temp_tags = temp_tags->next;
+    }
+  if (val_set)
+    {
+      gchar *value;
+      value = g_strdup_printf ("%g", scale);
+      attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_SCALE, value);
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "size-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint size;
+          gchar *value;
+          g_object_get (tag, "size", &size, NULL);
+          value = g_strdup_printf ("%i", size);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_SIZE, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "strikethrough-set", &val_set, NULL);
+      if (val_set)
+        {
+          gboolean strikethrough;
+          g_object_get (tag, "strikethrough", &strikethrough, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_STRIKETHROUGH, strikethrough);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "underline-set", &val_set, NULL);
+      if (val_set)
+        {
+          PangoUnderline underline;
+          g_object_get (tag, "underline", &underline, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_UNDERLINE, underline);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "rise-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint rise;
+          gchar *value;
+          g_object_get (tag, "rise", &rise, NULL);
+          value = g_strdup_printf ("%i", rise);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_RISE, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "background-full-height-set", &val_set, NULL);
+      if (val_set)
+        {
+          gboolean bg_full_height;
+          g_object_get (tag, "background-full-height", &bg_full_height, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_BG_FULL_HEIGHT, bg_full_height);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "pixels-inside-wrap-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint pixels;
+          gchar *value;
+          g_object_get (tag, "pixels-inside-wrap", &pixels, NULL);
+          value = g_strdup_printf ("%i", pixels);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "pixels-below-lines-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint pixels;
+          gchar *value;
+          g_object_get (tag, "pixels-below-lines", &pixels, NULL);
+          value = g_strdup_printf ("%i", pixels);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_BELOW_LINES, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "pixels-above-lines-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint pixels;
+          gchar *value;
+          g_object_get (tag, "pixels-above-lines", &pixels, NULL);
+          value = g_strdup_printf ("%i", pixels);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "editable-set", &val_set, NULL);
+      if (val_set)
+        {
+          gboolean editable;
+          g_object_get (tag, "editable", &editable, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_EDITABLE, editable);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "invisible-set", &val_set, NULL);
+      if (val_set)
+        {
+          gboolean invisible;
+          g_object_get (tag, "invisible", &invisible, NULL);
+          attrib_set = add_text_int_attribute (attrib_set, ATK_TEXT_ATTR_INVISIBLE, invisible);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "indent-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint indent;
+          gchar *value;
+          g_object_get (tag, "indent", &indent, NULL);
+          value = g_strdup_printf ("%i", indent);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_INDENT, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "right-margin-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint margin;
+          gchar *value;
+          g_object_get (tag, "right-margin", &margin, NULL);
+          value = g_strdup_printf ("%i", margin);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_RIGHT_MARGIN, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  temp_tags = tags;
+  while (temp_tags && !val_set)
+    {
+      GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
+
+      g_object_get (tag, "left-margin-set", &val_set, NULL);
+      if (val_set)
+        {
+          gint margin;
+          gchar *value;
+          g_object_get (tag, "left-margin", &margin, NULL);
+          value = g_strdup_printf ("%i", margin);
+          attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_LEFT_MARGIN, value);
+        }
+      temp_tags = temp_tags->next;
+    }
+  val_set = FALSE;
+
+  g_slist_free (tags);
+  return attrib_set;
 }
 
 static AtkAttributeSet *
@@ -497,75 +974,75 @@ gtk_text_view_accessible_get_default_attributes (AtkText *text)
 
   if (font)
     {
-      attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_STYLE,
-                                       pango_font_description_get_style (font));
+      attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_STYLE,
+                                           pango_font_description_get_style (font));
 
-      attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_VARIANT,
-                                       pango_font_description_get_variant (font));
+      attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_VARIANT,
+                                           pango_font_description_get_variant (font));
 
-      attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_STRETCH,
-                                       pango_font_description_get_stretch (font));
+      attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_STRETCH,
+                                           pango_font_description_get_stretch (font));
 
       value = g_strdup (pango_font_description_get_family (font));
-      attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_FAMILY_NAME, value);
+      attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_FAMILY_NAME, value);
 
       value = g_strdup_printf ("%d", pango_font_description_get_weight (font));
-      attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_WEIGHT, value);
+      attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_WEIGHT, value);
 
       value = g_strdup_printf ("%i", pango_font_description_get_size (font) / PANGO_SCALE);
-      attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_SIZE, value);
+      attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_SIZE, value);
     }
 
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_JUSTIFICATION, text_attrs->justification);
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_DIRECTION, text_attrs->direction);
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_WRAP_MODE, text_attrs->wrap_mode);
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_EDITABLE, text_attrs->editable);
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_INVISIBLE, text_attrs->invisible);
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_BG_FULL_HEIGHT, text_attrs->bg_full_height);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_JUSTIFICATION, text_attrs->justification);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_DIRECTION, text_attrs->direction);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_WRAP_MODE, text_attrs->wrap_mode);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_EDITABLE, text_attrs->editable);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_INVISIBLE, text_attrs->invisible);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_BG_FULL_HEIGHT, text_attrs->bg_full_height);
 
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_STRIKETHROUGH,
-                                   text_attrs->appearance.strikethrough);
-  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_UNDERLINE,
-                                   text_attrs->appearance.underline);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_STRIKETHROUGH,
+                                       text_attrs->appearance.strikethrough);
+  attributes = add_text_int_attribute (attributes, ATK_TEXT_ATTR_UNDERLINE,
+                                       text_attrs->appearance.underline);
 
   value = g_strdup_printf ("%u,%u,%u",
                            text_attrs->appearance.bg_color.red,
                            text_attrs->appearance.bg_color.green,
                            text_attrs->appearance.bg_color.blue);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
 
   value = g_strdup_printf ("%u,%u,%u",
                            text_attrs->appearance.fg_color.red,
                            text_attrs->appearance.fg_color.green,
                            text_attrs->appearance.fg_color.blue);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_FG_COLOR, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_FG_COLOR, value);
 
   value = g_strdup_printf ("%g", text_attrs->font_scale);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_SCALE, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_SCALE, value);
 
   value = g_strdup ((gchar *)(text_attrs->language));
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_LANGUAGE, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_LANGUAGE, value);
 
   value = g_strdup_printf ("%i", text_attrs->appearance.rise);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_RISE, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_RISE, value);
 
   value = g_strdup_printf ("%i", text_attrs->pixels_inside_wrap);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP, value);
 
   value = g_strdup_printf ("%i", text_attrs->pixels_below_lines);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_PIXELS_BELOW_LINES, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_PIXELS_BELOW_LINES, value);
 
   value = g_strdup_printf ("%i", text_attrs->pixels_above_lines);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES, value);
 
   value = g_strdup_printf ("%i", text_attrs->indent);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_INDENT, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_INDENT, value);
 
   value = g_strdup_printf ("%i", text_attrs->left_margin);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_LEFT_MARGIN, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_LEFT_MARGIN, value);
 
   value = g_strdup_printf ("%i", text_attrs->right_margin);
-  attributes = gail_misc_add_attribute (attributes, ATK_TEXT_ATTR_RIGHT_MARGIN, value);
+  attributes = add_text_attribute (attributes, ATK_TEXT_ATTR_RIGHT_MARGIN, value);
 
   gtk_text_attributes_unref (text_attrs);
   return attributes;
