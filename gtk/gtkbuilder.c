@@ -1226,7 +1226,8 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * It uses #GModule's introspective features (by opening the module %NULL) 
  * to look at the application's symbol table. From here it tries to match
  * the signal handler names given in the interface description with
- * symbols in the application and connects the signals.
+ * symbols in the application and connects the signals. Note that this
+ * function can only be called once, subsequent calls will do nothing.
  * 
  * Note that this function will not work correctly if #GModule is not
  * supported on the platform.
@@ -1276,7 +1277,8 @@ gtk_builder_connect_signals (GtkBuilder *builder,
  * by the gtk_builder_connect_signals() and gtk_builder_connect_signals_full()
  * methods.  It is mainly intended for interpreted language bindings, but
  * could be useful where the programmer wants more control over the signal
- * connection process.
+ * connection process. Note that this function can only be called once,
+ * subsequent calls will do nothing.
  *
  * Since: 2.12
  */
