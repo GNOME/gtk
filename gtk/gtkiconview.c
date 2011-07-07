@@ -2952,11 +2952,17 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       flags |= GTK_CELL_RENDERER_SELECTED;
 
       gtk_style_context_set_state (style_context, state);
+
       gtk_render_background (style_context, cr,
                              x - icon_view->priv->item_padding,
                              y - icon_view->priv->item_padding,
                              item->cell_area.width  + icon_view->priv->item_padding * 2,
                              item->cell_area.height + icon_view->priv->item_padding * 2);
+      gtk_render_frame (style_context, cr,
+                        x - icon_view->priv->item_padding,
+                        y - icon_view->priv->item_padding,
+                        item->cell_area.width  + icon_view->priv->item_padding * 2,
+                        item->cell_area.height + icon_view->priv->item_padding * 2);
     }
 
   cell_area.x      = x;
