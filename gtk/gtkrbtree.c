@@ -64,6 +64,7 @@ _gtk_rbnode_free (GtkRBNode *node)
       node->left = (gpointer) 0xdeadbeef;
       node->right = (gpointer) 0xdeadbeef;
       node->parent = (gpointer) 0xdeadbeef;
+      node->parity = 56789;
       node->offset = 56789;
       node->count = 56789;
       node->flags = 0;
@@ -382,6 +383,7 @@ _gtk_rbtree_remove (GtkRBTree *tree)
   GtkRBNode *tmp_node;
 
   gint height = tree->root->offset;
+  guint parity = tree->root->parity;
 
 #ifdef G_ENABLE_DEBUG  
   if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
@@ -399,10 +401,7 @@ _gtk_rbtree_remove (GtkRBTree *tree)
     {
       _fixup_validation (tmp_tree, tmp_node);
       tmp_node->offset -= height;
-
-      /* If the removed tree was odd, flip all parents */
-      if (tree->root->parity)
-        tmp_node->parity = !tmp_node->parity;
+      tmp_node->parity -= parity;
       
       tmp_node = tmp_node->parent;
       if (tmp_node == tmp_tree->nil)
@@ -1498,7 +1497,6 @@ static guint
 get_parity (GtkRBNode *node)
 {
   guint child_total = 0;
-  guint rem;
 
   /* The parity of a node is node->parity minus
    * the parity of left, right, and children.
@@ -1515,12 +1513,7 @@ get_parity (GtkRBNode *node)
   if (node->children)
     child_total += (guint) node->children->root->parity;
 
-  rem = child_total % 2;
-  
-  if (rem == 0)
-    return node->parity;
-  else
-    return !node->parity;
+  return child_total + 1;
 }
 
 static guint
@@ -1538,13 +1531,11 @@ count_parity (GtkRBTree *tree,
     (guint)1 +
     (node->children ? count_parity (node->children, node->children->root) : 0);
 
-  res = res % (guint)2;
-  
   if (res != node->parity)
     g_print ("parity incorrect for node\n");
 
-  if (get_parity (node) != 1)
-    g_error ("Node has incorrect parity %u", get_parity (node));
+  if (get_parity (node) != node->parity)
+    g_error ("Node has incorrect parity %u, should be %u", node->parity, get_parity (node));
   
   return res;
 }
@@ -1717,7 +1708,7 @@ _gtk_rbtree_debug_spew_helper (GtkRBTree *tree,
 	   node,
 	   (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)?"BLACK":" RED ",
 	   node->offset,
-	   node->parity?1:0,
+	   node->parity,
 	   (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_DESCENDANTS_INVALID))?1:0,
 	   (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID))?1:0,
 	   (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))?1:0);

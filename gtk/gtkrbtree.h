@@ -66,17 +66,11 @@ struct _GtkRBNode
 {
   guint flags : 14;
 
-  /* We keep track of whether the aggregate count of children plus 1
-   * for the node itself comes to an even number.  The parity flag is
-   * the total count of children mod 2, where the total count of
-   * children gets computed in the same way that the total offset gets
-   * computed. i.e. not the same as the "count" field below which
-   * doesn't include children. We could replace parity with a
-   * full-size int field here, and then take % 2 to get the parity flag,
-   * but that would use extra memory.
+  /* count the number of total nodes beneath us, including nodes
+   * of children trees.
+   * i.e. node->left->count + node->right->count + node->children->root->count + 1
    */
-
-  guint parity : 1;
+  guint parity;
   
   GtkRBNode *left;
   GtkRBNode *right;
