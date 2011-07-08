@@ -22,7 +22,6 @@
 
 #include <atk/atk.h>
 #include "gailrenderercell.h"
-#include "gailtextutil.h"
 
 G_BEGIN_DECLS
 
@@ -39,7 +38,6 @@ typedef struct _GailTextCellClass             GailTextCellClass;
 struct _GailTextCell
 {
   GailRendererCell parent;
-  GailTextUtil *textutil;
   gchar *cell_text;
   gint caret_pos;
   gint cell_length;
