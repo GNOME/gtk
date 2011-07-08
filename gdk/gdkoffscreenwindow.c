@@ -691,6 +691,12 @@ gdk_offscreen_window_set_string (GdkWindow *window,
 }
 
 static void
+gdk_offscreen_window_set_list (GdkWindow *window,
+                               GList *list)
+{
+}
+
+static void
 gdk_offscreen_window_set_wmfunctions (GdkWindow	    *window,
 				      GdkWMFunction  functions)
 {
@@ -763,8 +769,8 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_override_redirect = NULL;
   impl_class->set_accept_focus = NULL;
   impl_class->set_focus_on_map = gdk_offscreen_window_set_boolean;
-  impl_class->set_icon_list = NULL;
-  impl_class->set_icon_name = NULL;
+  impl_class->set_icon_list = gdk_offscreen_window_set_list;
+  impl_class->set_icon_name = gdk_offscreen_window_set_string;
   impl_class->iconify = gdk_offscreen_window_do_nothing;
   impl_class->deiconify = gdk_offscreen_window_do_nothing;
   impl_class->stick = gdk_offscreen_window_do_nothing;
