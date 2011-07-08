@@ -26,9 +26,6 @@
 
 G_BEGIN_DECLS
 
-AtkAttributeSet* gail_misc_add_attribute          (AtkAttributeSet   *attrib_set,
-                                                   AtkTextAttribute   attr,
-                                                   gchar             *value);
 AtkAttributeSet* gail_misc_layout_get_run_attributes
                                                   (AtkAttributeSet   *attrib_set,
                                                    PangoLayout       *layout,

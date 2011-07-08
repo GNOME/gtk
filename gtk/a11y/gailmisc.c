@@ -155,18 +155,7 @@ gail_misc_get_index_at_point_in_layout (GtkWidget   *widget,
   return index;
 }
 
-/**
- * gail_misc_add_attribute:
- * @attrib_set: The #AtkAttributeSet to add the attribute to
- * @attr: The AtkTextAttrribute which identifies the attribute to be added
- * @value: The attribute value
- *
- * Creates an #AtkAttribute from @attr and @value, and adds it
- * to @attrib_set. 
- *
- * Returns: A pointer to the new #AtkAttributeSet.
- **/
-AtkAttributeSet*
+static AtkAttributeSet*
 gail_misc_add_attribute (AtkAttributeSet *attrib_set,
                          AtkTextAttribute attr,
                          gchar           *value)
