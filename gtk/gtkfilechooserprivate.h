@@ -162,13 +162,12 @@ struct _GtkFileChooserDefault
 
   /* Save mode widgets */
   GtkWidget *save_widgets;
+  GtkWidget *save_widgets_table;
 
   GtkWidget *save_folder_label;
-  GtkWidget *save_folder_combo;
-  GtkWidget *save_expander;
 
   /* The file browsing widgets */
-  GtkWidget *browse_widgets;
+  GtkWidget *browse_widgets_box;
   GtkWidget *browse_shortcuts_tree_view;
   GtkWidget *browse_shortcuts_add_button;
   GtkWidget *browse_shortcuts_remove_button;
@@ -184,6 +183,11 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_path_bar_hbox;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
+  GtkWidget *browse_special_mode_icon;
+  GtkWidget *browse_special_mode_label;
+  GtkWidget *browse_select_a_folder_info_bar;
+  GtkWidget *browse_select_a_folder_label;
+  GtkWidget *browse_select_a_folder_icon;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
@@ -196,7 +200,6 @@ struct _GtkFileChooserDefault
   GtkFileSystemModel *search_model;
 
   /* OPERATION_MODE_RECENT */
-  GtkWidget *recent_hbox;
   GtkRecentManager *recent_manager;
   GtkFileSystemModel *recent_model;
   guint load_recent_id;
@@ -222,11 +225,6 @@ struct _GtkFileChooserDefault
    */
   GtkTreeModel *shortcuts_pane_filter_model;
   
-  /* Filter for the "Save in folder" combo.  We filter out the Search row and
-   * its separator.
-   */
-  GtkTreeModel *shortcuts_combo_filter_model;
-
   /* Handles */
   GSList *loading_shortcuts;
   GSList *reload_icon_cancellables;
@@ -298,11 +296,9 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
-  guint expand_folders : 1;
   guint has_home : 1;
   guint has_desktop : 1;
   guint has_search : 1;
-  guint has_recent : 1;
   guint show_size_column : 1;
   guint create_folders : 1;
 
