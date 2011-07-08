@@ -35,13 +35,13 @@
   </enum>
 
   <schema id='org.gtk.Settings.FileChooser'>
+    <key name='last-folder-uri' type='s'>
+      <default>""</default>
+    </key>
     <key name='location-mode' enum='org.gtk.Settings.FileChooser.LocationMode'>
       <default>'path-bar'</default>
     </key>
     <key name='show-hidden' type='b'>
-      <default>false</default>
-    </key>
-    <key name='expand-folders' type='b'>
       <default>false</default>
     </key>
     <key name='show-size-column' type='b'>

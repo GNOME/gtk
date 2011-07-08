@@ -1568,7 +1568,6 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 
   error = NULL;
   if (!chooser_entry->file_system ||
-      !chooser_entry->base_folder ||
       !_gtk_file_system_parse (chooser_entry->file_system,
 			       chooser_entry->base_folder, text,
 			       &folder_file, &file_part, &error))
@@ -1836,7 +1835,6 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
     g_object_ref (chooser_entry->base_folder);
 
   clear_completions (chooser_entry);
-  _gtk_file_chooser_entry_select_filename (chooser_entry);
 }
 
 /**

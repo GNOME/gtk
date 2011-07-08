@@ -52,6 +52,8 @@ void _gtk_file_chooser_set_delegate        (GtkFileChooser *receiver,
 
 GQuark _gtk_file_chooser_delegate_get_quark (void) G_GNUC_CONST;
 
+GList *_gtk_file_chooser_extract_recent_folders (GList *infos);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_UTILS_H__ */
