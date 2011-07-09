@@ -806,7 +806,7 @@ gtk_accel_map_save (const gchar *file_name)
 
 /**
  * gtk_accel_map_foreach:
- * @data:         data to be passed into @foreach_func
+ * @data: (allow-none): data to be passed into @foreach_func
  * @foreach_func: (scope call): function to be executed for each accel
  *                map entry which is not filtered out
  *
