@@ -23,7 +23,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtkx.h>
-#include "gailtoplevel.h"
 #include "gailutil.h"
 
 

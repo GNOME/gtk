@@ -23,7 +23,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gailutil.h"
-#include "gailtoplevel.h"
+#include "gtktoplevelaccessible.h"
 #include "gtkwindowaccessible.h"
 
 static void		gail_util_class_init			(GailUtilClass		*klass);
@@ -320,12 +320,12 @@ gail_util_remove_key_event_listener (guint listener_key)
     }
 }
 
-static AtkObject*
+static AtkObject *
 gail_util_get_root (void)
 {
   if (!root)
     {
-      root = g_object_new (GAIL_TYPE_TOPLEVEL, NULL);
+      root = g_object_new (GTK_TYPE_TOPLEVEL_ACCESSIBLE, NULL);
       atk_object_initialize (root, NULL);
     }
 

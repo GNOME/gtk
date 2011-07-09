@@ -24,7 +24,7 @@
 #include <gtk/gtkx.h>
 
 #include "gtkwindowaccessible.h"
-#include "gailtoplevel.h"
+#include "gtktoplevelaccessible.h"
 
 enum {
   ACTIVATE,
@@ -227,9 +227,9 @@ gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
   if (GTK_IS_WINDOW (widget))
     {
       GtkWindow *window = GTK_WINDOW (widget);
-      if (GAIL_IS_TOPLEVEL (atk_obj))
+      if (GTK_IS_TOPLEVEL_ACCESSIBLE (atk_obj))
         {
-          GailToplevel* toplevel = GAIL_TOPLEVEL (atk_obj);
+          GtkToplevelAccessible *toplevel = GTK_TOPLEVEL_ACCESSIBLE (atk_obj);
           index = g_list_index (toplevel->window_list, window);
         }
       else
