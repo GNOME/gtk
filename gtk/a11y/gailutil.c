@@ -514,7 +514,11 @@ configure_event_watcher (GSignalInvocationHint *hint,
 static void
 gail_util_class_init (GailUtilClass *klass)
 {
-  AtkUtilClass *atk_class = ATK_UTIL_CLASS (klass);
+  AtkUtilClass *atk_class;
+  gpointer data;
+
+  data = g_type_class_peek (ATK_TYPE_UTIL);
+  atk_class = ATK_UTIL_CLASS (data);
 
   atk_class->add_global_event_listener = gail_util_add_global_event_listener;
   atk_class->remove_global_event_listener = gail_util_remove_global_event_listener;
