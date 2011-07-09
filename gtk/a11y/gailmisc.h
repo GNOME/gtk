@@ -26,18 +26,6 @@
 
 G_BEGIN_DECLS
 
-AtkAttributeSet* gail_misc_layout_get_run_attributes
-                                                  (AtkAttributeSet   *attrib_set,
-                                                   PangoLayout       *layout,
-                                                   const gchar       *text,
-                                                   gint              offset,
-                                                   gint              *start_offset,
-                                                   gint              *end_offset);
-
-AtkAttributeSet* gail_misc_get_default_attributes (AtkAttributeSet   *attrib_set,
-                                                   PangoLayout       *layout,
-                                                   GtkWidget         *widget);
-
 void             gail_misc_get_extents_from_pango_rectangle
                                                   (GtkWidget         *widget,
                                                    PangoRectangle    *char_rect,
