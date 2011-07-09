@@ -40,34 +40,12 @@ struct _GailUtil
   GList *listener_list;
 };
 
-GType gail_util_get_type (void);
-
 struct _GailUtilClass
 {
   AtkUtilClass parent_class;
 };
 
-#define GAIL_TYPE_MISC                           (gail_misc_get_type ())
-#define GAIL_MISC(obj)                           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_MISC, GailMisc))
-#define GAIL_MISC_CLASS(klass)                   (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_MISC, GailMiscClass))
-#define GAIL_IS_MISC(obj)                        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_MISC))
-#define GAIL_IS_MISC_CLASS(klass)                (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_MISC))
-#define GAIL_MISC_GET_CLASS(obj)                 (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_MISC, GailMiscClass))
-
-typedef struct _GailMisc                  GailMisc;
-typedef struct _GailMiscClass             GailMiscClass;
-  
-struct _GailMisc
-{
-  AtkMisc parent;
-};
-
-GType gail_misc_get_type (void);
-
-struct _GailMiscClass
-{
-  AtkMiscClass parent_class;
-};
+GType gail_util_get_type (void);
 
 G_END_DECLS
 

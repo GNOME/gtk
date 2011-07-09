@@ -24,6 +24,7 @@
 
 #include <gtk/gtkx.h>
 #include "gailutil.h"
+#include "gailmisc.h"
 
 
 static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
@@ -799,5 +800,6 @@ gail_accessibility_module_init (void)
 
   /* Initialize the GailUtility class */
   g_type_class_unref (g_type_class_ref (GAIL_TYPE_UTIL));
-  g_type_class_unref (g_type_class_ref (GAIL_TYPE_MISC));
+
+  atk_misc_instance = g_object_new (GAIL_TYPE_MISC, NULL);
 }

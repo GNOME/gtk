@@ -40,14 +40,6 @@ static AtkObject*	gail_util_get_root			(void);
 static const gchar *gail_util_get_toolkit_name		(void);
 static const gchar *gail_util_get_toolkit_version      (void);
 
-/* AtkMisc */
-static void		gail_misc_class_init			(GailMiscClass		*klass);
-static void             gail_misc_init                          (GailMisc               *misc);
-
-static void gail_misc_threads_enter (AtkMisc *misc);
-static void gail_misc_threads_leave (AtkMisc *misc);
-
-/* Misc */
 
 static void		_listener_info_destroy			(gpointer		data);
 static guint            add_listener	                        (GSignalEmissionHook    listener,
@@ -100,26 +92,18 @@ G_DEFINE_TYPE (GailUtil, gail_util, ATK_TYPE_UTIL)
 static void	 
 gail_util_class_init (GailUtilClass *klass)
 {
-  AtkUtilClass *atk_class;
-  gpointer data;
+  AtkUtilClass *atk_class = ATK_UTIL_CLASS (klass);
 
-  data = g_type_class_peek (ATK_TYPE_UTIL);
-  atk_class = ATK_UTIL_CLASS (data);
-
-  atk_class->add_global_event_listener =
-    gail_util_add_global_event_listener;
-  atk_class->remove_global_event_listener =
-    gail_util_remove_global_event_listener;
-  atk_class->add_key_event_listener =
-    gail_util_add_key_event_listener;
-  atk_class->remove_key_event_listener =
-    gail_util_remove_key_event_listener;
+  atk_class->add_global_event_listener = gail_util_add_global_event_listener;
+  atk_class->remove_global_event_listener = gail_util_remove_global_event_listener;
+  atk_class->add_key_event_listener = gail_util_add_key_event_listener;
+  atk_class->remove_key_event_listener = gail_util_remove_key_event_listener;
   atk_class->get_root = gail_util_get_root;
   atk_class->get_toolkit_name = gail_util_get_toolkit_name;
   atk_class->get_toolkit_version = gail_util_get_toolkit_version;
 
-  listener_list = g_hash_table_new_full(g_int_hash, g_int_equal, NULL, 
-     _listener_info_destroy);
+  listener_list = g_hash_table_new_full (g_int_hash, g_int_equal,
+                                         NULL, _listener_info_destroy);
 }
 
 static void
@@ -606,32 +590,4 @@ configure_event_watcher (GSignalInvocationHint  *hint,
     {
       return FALSE;
     }
-}
-
-G_DEFINE_TYPE (GailMisc, gail_misc, ATK_TYPE_MISC)
-
-static void	 
-gail_misc_class_init (GailMiscClass *klass)
-{
-  AtkMiscClass *miscclass = ATK_MISC_CLASS (klass);
-  miscclass->threads_enter =
-    gail_misc_threads_enter;
-  miscclass->threads_leave =
-    gail_misc_threads_leave;
-  atk_misc_instance = g_object_new (GAIL_TYPE_MISC, NULL);
-}
-
-static void
-gail_misc_init (GailMisc *misc)
-{
-}
-
-static void gail_misc_threads_enter (AtkMisc *misc)
-{
-  GDK_THREADS_ENTER ();
-}
-
-static void gail_misc_threads_leave (AtkMisc *misc)
-{
-  GDK_THREADS_LEAVE ();
 }

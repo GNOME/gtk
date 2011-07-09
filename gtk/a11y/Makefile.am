@@ -48,9 +48,10 @@ gail_c_sources =			\
 	gtktogglebuttonaccessible.c	\
 	gtktoplevelaccessible.c		\
 	gtktreeviewaccessible.c		\
-	gailutil.c			\
 	gtkwidgetaccessible.c		\
-	gtkwindowaccessible.c
+	gtkwindowaccessible.c		\
+	gailutil.c			\
+	gailmisc.c
 
 libgailincludedir=$(includedir)/gail-3.0/gail
 
@@ -99,8 +100,9 @@ gail_private_h_sources =		\
 	gtktogglebuttonaccessible.h	\
 	gtktoplevelaccessible.h		\
 	gtktreeviewaccessible.h		\
+	gtkwindowaccessible.h		\
 	gailutil.h			\
-	gtkwindowaccessible.h
+	gailmisc.h
 
 gail_public_h_sources =	\
 	gtkwidgetaccessible.h
