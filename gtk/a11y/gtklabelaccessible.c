@@ -151,7 +151,7 @@ gtk_label_accessible_ref_state_set (AtkObject *accessible)
   return state_set;
 }
 
-AtkRelationSet *
+static AtkRelationSet *
 gtk_label_accessible_ref_relation_set (AtkObject *obj)
 {
   GtkWidget *widget;
