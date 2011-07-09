@@ -5,7 +5,7 @@ noinst_LTLIBRARIES = libgail.la
 gail_c_sources =			\
 	gail.c				\
 	gtkarrowaccessible.c		\
-	gailbooleancell.c		\
+	gtkbooleancellaccessible.c	\
 	gtkboxaccessible.c		\
 	gtkbuttonaccessible.c		\
 	gtkcellaccessible.c		\
@@ -57,7 +57,7 @@ libgailincludedir=$(includedir)/gail-3.0/gail
 
 gail_private_h_sources =		\
 	gtkarrowaccessible.h		\
-	gailbooleancell.h		\
+	gtkbooleancellaccessible.h	\
 	gtkboxaccessible.h		\
 	gtkbuttonaccessible.h		\
 	gtkcellaccessible.h		\

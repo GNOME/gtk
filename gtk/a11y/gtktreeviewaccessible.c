@@ -26,7 +26,7 @@
 #endif
 #include "gtktreeviewaccessible.h"
 #include "gailrenderercell.h"
-#include "gailbooleancell.h"
+#include "gtkbooleancellaccessible.h"
 #include "gailimagecell.h"
 #include "gtkcontainercellaccessible.h"
 #include "gailtextcell.h"
@@ -610,7 +610,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
               child = gail_text_cell_new ();
             }
           else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
-            child = gail_boolean_cell_new ();
+            child = _gtk_boolean_cell_accessible_new ();
           else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
             child = gail_image_cell_new ();
           else
@@ -3033,7 +3033,7 @@ static void
 add_cell_actions (GtkCellAccessible *cell,
                   gboolean           editable)
 {
-  if (GAIL_IS_BOOLEAN_CELL (cell))
+  if (GTK_IS_BOOLEAN_CELL_ACCESSIBLE (cell))
     _gtk_cell_accessible_add_action (cell,
                                      "toggle", "toggles the cell",
                                      NULL, toggle_cell_toggled);
