@@ -26,23 +26,8 @@
 #include "gtktoplevelaccessible.h"
 #include "gtkwindowaccessible.h"
 
-static void		gail_util_class_init			(GailUtilClass		*klass);
-static void             gail_util_init                          (GailUtil               *utils);
-/* atkutil.h */
 
-static guint		gail_util_add_global_event_listener	(GSignalEmissionHook	listener,
-							         const gchar*           event_type);
-static void 		gail_util_remove_global_event_listener	(guint			remove_listener);
-static guint		gail_util_add_key_event_listener	(AtkKeySnoopFunc	listener,
-								 gpointer               data);
-static void 		gail_util_remove_key_event_listener	(guint			remove_listener);
-static AtkObject*	gail_util_get_root			(void);
-static const gchar *gail_util_get_toolkit_name		(void);
-static const gchar *gail_util_get_toolkit_version      (void);
-
-
-static void		_listener_info_destroy			(gpointer		data);
-static guint            add_listener	                        (GSignalEmissionHook    listener,
+static guint            add_listener                            (GSignalEmissionHook    listener,
                                                                  const gchar            *object_type,
                                                                  const gchar            *signal,
                                                                  const gchar            *hook_data);
@@ -63,7 +48,7 @@ static gboolean         configure_event_watcher                 (GSignalInvocati
                                                                  guint                  n_param_values,
                                                                  const GValue           *param_values,
                                                                  gpointer               data);
-                                                                  
+
 
 static AtkObject* root = NULL;
 static GHashTable *listener_list = NULL;
@@ -89,31 +74,9 @@ struct _GailKeyEventInfo
 
 G_DEFINE_TYPE (GailUtil, gail_util, ATK_TYPE_UTIL)
 
-static void	 
-gail_util_class_init (GailUtilClass *klass)
-{
-  AtkUtilClass *atk_class = ATK_UTIL_CLASS (klass);
-
-  atk_class->add_global_event_listener = gail_util_add_global_event_listener;
-  atk_class->remove_global_event_listener = gail_util_remove_global_event_listener;
-  atk_class->add_key_event_listener = gail_util_add_key_event_listener;
-  atk_class->remove_key_event_listener = gail_util_remove_key_event_listener;
-  atk_class->get_root = gail_util_get_root;
-  atk_class->get_toolkit_name = gail_util_get_toolkit_name;
-  atk_class->get_toolkit_version = gail_util_get_toolkit_version;
-
-  listener_list = g_hash_table_new_full (g_int_hash, g_int_equal,
-                                         NULL, _listener_info_destroy);
-}
-
-static void
-gail_util_init (GailUtil *utils)
-{
-}
-
 static guint
-gail_util_add_global_event_listener (GSignalEmissionHook listener,
-				     const gchar *event_type)
+gail_util_add_global_event_listener (GSignalEmissionHook  listener,
+                                     const gchar         *event_type)
 {
   guint rc = 0;
   gchar **split_string;
@@ -175,7 +138,7 @@ gail_util_remove_global_event_listener (guint remove_listener)
       }
     else
       {
-        g_warning("No listener with the specified listener id %d", 
+        g_warning("No listener with the specified listener id %d",
           remove_listener);
       }
   }
@@ -185,28 +148,26 @@ gail_util_remove_global_event_listener (guint remove_listener)
   }
 }
 
-
-static
-AtkKeyEventStruct *
+static AtkKeyEventStruct *
 atk_key_event_from_gdk_event_key (GdkEventKey *key)
 {
   AtkKeyEventStruct *event = g_new0 (AtkKeyEventStruct, 1);
   switch (key->type)
     {
     case GDK_KEY_PRESS:
-	    event->type = ATK_KEY_EVENT_PRESS;
-	    break;
+            event->type = ATK_KEY_EVENT_PRESS;
+            break;
     case GDK_KEY_RELEASE:
-	    event->type = ATK_KEY_EVENT_RELEASE;
-	    break;
+            event->type = ATK_KEY_EVENT_RELEASE;
+            break;
     default:
-	    g_assert_not_reached ();
-	    return NULL;
+            g_assert_not_reached ();
+            return NULL;
     }
   event->state = key->state;
   event->keyval = key->keyval;
   event->length = key->length;
-  if (key->string && key->string [0] && 
+  if (key->string && key->string [0] &&
       (key->state & GDK_CONTROL_MASK ||
        g_unichar_isgraph (g_utf8_get_char (key->string))))
     {
@@ -215,16 +176,16 @@ atk_key_event_from_gdk_event_key (GdkEventKey *key)
   else if (key->type == GDK_KEY_PRESS ||
            key->type == GDK_KEY_RELEASE)
     {
-      event->string = gdk_keyval_name (key->keyval);	    
+      event->string = gdk_keyval_name (key->keyval);
     }
   event->keycode = key->hardware_keycode;
   event->timestamp = key->time;
-#ifdef GAIL_DEBUG  
+#ifdef GAIL_DEBUG
   g_print ("GailKey:\tsym %u\n\tmods %x\n\tcode %u\n\ttime %lx\n",
-	   (unsigned int) event->keyval,
-	   (unsigned int) event->state,
-	   (unsigned int) event->keycode,
-	   (unsigned long int) event->timestamp);
+           (unsigned int) event->keyval,
+           (unsigned int) event->state,
+           (unsigned int) event->keycode,
+           (unsigned long int) event->timestamp);
 #endif
   return event;
 }
@@ -236,7 +197,9 @@ typedef struct {
 } KeyEventListener;
 
 static gint
-gail_key_snooper (GtkWidget *the_widget, GdkEventKey *event, gpointer data)
+gail_key_snooper (GtkWidget   *the_widget,
+                  GdkEventKey *event,
+                  gpointer     data)
 {
   GSList *l;
   AtkKeyEventStruct *atk_event;
@@ -325,21 +288,11 @@ gail_util_get_toolkit_name (void)
 static const gchar *
 gail_util_get_toolkit_version (void)
 {
- /*
-  * Version is passed in as a -D flag when this file is
-  * compiled.
-  */
   return GTK_VERSION;
 }
 
-static void
-_listener_info_destroy (gpointer data)
-{
-   g_free(data);
-}
-
 static guint
-add_listener (GSignalEmissionHook listener,
+add_listener (GSignalEmissionHook  listener,
               const gchar         *object_type,
               const gchar         *signal,
               const gchar         *hook_data)
@@ -358,15 +311,15 @@ add_listener (GSignalEmissionHook listener,
 
           rc = listener_idx;
 
-          listener_info = g_malloc(sizeof(GailUtilListenerInfo));
+          listener_info = g_new (GailUtilListenerInfo, 1);
           listener_info->key = listener_idx;
           listener_info->hook_id =
                           g_signal_add_emission_hook (signal_id, 0, listener,
-			        		      g_strdup (hook_data),
-			        		      (GDestroyNotify) g_free);
+                                                      g_strdup (hook_data),
+                                                      (GDestroyNotify) g_free);
           listener_info->signal_id = signal_id;
 
-	  g_hash_table_insert(listener_list, &(listener_info->key), listener_info);
+          g_hash_table_insert (listener_list, &(listener_info->key), listener_info);
           listener_idx++;
         }
       else
@@ -386,9 +339,6 @@ do_window_event_initialization (void)
 {
   AtkObject *root;
 
-  /*
-   * Ensure that GtkWindowAccessibleClass exists.
-   */
   g_type_class_ref (GTK_TYPE_WINDOW_ACCESSIBLE);
   g_signal_add_emission_hook (g_signal_lookup ("window-state-event", GTK_TYPE_WIDGET),
                               0, state_event_watcher, NULL, (GDestroyNotify) NULL);
@@ -403,9 +353,9 @@ do_window_event_initialization (void)
 }
 
 static gboolean
-state_event_watcher (GSignalInvocationHint  *hint,
+state_event_watcher (GSignalInvocationHint *hint,
                      guint                  n_param_values,
-                     const GValue           *param_values,
+                     const GValue          *param_values,
                      gpointer               data)
 {
   GObject *object;
@@ -414,12 +364,8 @@ state_event_watcher (GSignalInvocationHint  *hint,
   AtkObject *parent;
   GdkEventWindowState *event;
   gchar *signal_name;
-  guint signal_id;
 
   object = g_value_get_object (param_values + 0);
-  /*
-   * The object can be a GtkMenu when it is popped up; we ignore this
-   */
   if (!GTK_IS_WINDOW (object))
     return FALSE;
 
@@ -429,47 +375,36 @@ state_event_watcher (GSignalInvocationHint  *hint,
   widget = GTK_WIDGET (object);
 
   if (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
-    {
-      signal_name = "maximize";
-    }
+    signal_name = "maximize";
   else if (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED)
-    {
-      signal_name = "minimize";
-    }
+    signal_name = "minimize";
   else if (event->new_window_state == 0)
-    {
-      signal_name = "restore";
-    }
+    signal_name = "restore";
   else
     return TRUE;
-  
-  atk_obj = gtk_widget_get_accessible (widget);
 
+  atk_obj = gtk_widget_get_accessible (widget);
   if (GTK_IS_WINDOW_ACCESSIBLE (atk_obj))
     {
       parent = atk_object_get_parent (atk_obj);
       if (parent == atk_get_root ())
-        {
-          signal_id = g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE);
-          g_signal_emit (atk_obj, signal_id, 0);
-        }
+        g_signal_emit_by_name (atk_obj, signal_name);
 
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+
+  return FALSE;
 }
 
 static void
 window_added (AtkObject *atk_obj,
-              guint     index,
+              guint      index,
               AtkObject *child)
 {
   GtkWidget *widget;
 
-  if (!GTK_IS_WINDOW_ACCESSIBLE (child)) return;
+  if (!GTK_IS_WINDOW_ACCESSIBLE (child))
+    return;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
   if (!widget)
@@ -477,19 +412,20 @@ window_added (AtkObject *atk_obj,
 
   g_signal_connect (widget, "focus-in-event", (GCallback) window_focus, NULL);
   g_signal_connect (widget, "focus-out-event", (GCallback) window_focus, NULL);
-  g_signal_emit (child, g_signal_lookup ("create", GTK_TYPE_WINDOW_ACCESSIBLE), 0);
+  g_signal_emit_by_name (child, "create");
 }
 
 
 static void
 window_removed (AtkObject *atk_obj,
-                 guint     index,
-                 AtkObject *child)
+                guint      index,
+                AtkObject *child)
 {
   GtkWidget *widget;
   GtkWindow *window;
 
-  if (!GTK_IS_WINDOW_ACCESSIBLE (child)) return;
+  if (!GTK_IS_WINDOW_ACCESSIBLE (child))
+    return;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
   if (!widget)
@@ -503,38 +439,34 @@ window_removed (AtkObject *atk_obj,
   if (gtk_window_is_active (window) &&
       gtk_window_has_toplevel_focus (window))
     {
-      gchar *signal_name;
       AtkObject *atk_obj;
 
       atk_obj = gtk_widget_get_accessible (widget);
-      signal_name =  "deactivate";
-      g_signal_emit (atk_obj, g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE), 0);
+      g_signal_emit_by_name (atk_obj, "deactivate");
     }
 
   g_signal_handlers_disconnect_by_func (widget, (gpointer) window_focus, NULL);
-  g_signal_emit (child, g_signal_lookup ("destroy", GTK_TYPE_WINDOW_ACCESSIBLE), 0);
+  g_signal_emit_by_name (child, "destroy");
 }
 
 static gboolean
 window_focus (GtkWidget     *widget,
               GdkEventFocus *event)
 {
-  gchar *signal_name;
   AtkObject *atk_obj;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   atk_obj = gtk_widget_get_accessible (widget);
-  signal_name =  (event->in) ? "activate" : "deactivate";
-  g_signal_emit (atk_obj, g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE), 0);
+  g_signal_emit_by_name (atk_obj, event->in ? "activate" : "deactivate");
 
   return FALSE;
 }
 
-static gboolean 
-configure_event_watcher (GSignalInvocationHint  *hint,
+static gboolean
+configure_event_watcher (GSignalInvocationHint *hint,
                          guint                  n_param_values,
-                         const GValue           *param_values,
+                         const GValue          *param_values,
                          gpointer               data)
 {
   GtkAllocation allocation;
@@ -544,13 +476,9 @@ configure_event_watcher (GSignalInvocationHint  *hint,
   AtkObject *parent;
   GdkEvent *event;
   gchar *signal_name;
-  guint signal_id;
 
   object = g_value_get_object (param_values + 0);
   if (!GTK_IS_WINDOW (object))
-    /*
-     * GtkDrawingArea can send a GDK_CONFIGURE event but we ignore here
-     */
     return FALSE;
 
   event = g_value_get_boxed (param_values + 1);
@@ -566,28 +494,40 @@ configure_event_watcher (GSignalInvocationHint  *hint,
 
   if (allocation.width != ((GdkEventConfigure *)event)->width ||
       allocation.height != ((GdkEventConfigure *)event)->height)
-    {
-      signal_name = "resize";
-    }
+    signal_name = "resize";
   else
-    {
-      signal_name = "move";
-    }
+    signal_name = "move";
 
   atk_obj = gtk_widget_get_accessible (widget);
   if (GTK_IS_WINDOW_ACCESSIBLE (atk_obj))
     {
       parent = atk_object_get_parent (atk_obj);
       if (parent == atk_get_root ())
-        {
-          signal_id = g_signal_lookup (signal_name, GTK_TYPE_WINDOW_ACCESSIBLE);
-          g_signal_emit (atk_obj, signal_id, 0);
-        }
+        g_signal_emit_by_name (atk_obj, signal_name);
 
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+
+  return FALSE;
+}
+
+static void
+gail_util_class_init (GailUtilClass *klass)
+{
+  AtkUtilClass *atk_class = ATK_UTIL_CLASS (klass);
+
+  atk_class->add_global_event_listener = gail_util_add_global_event_listener;
+  atk_class->remove_global_event_listener = gail_util_remove_global_event_listener;
+  atk_class->add_key_event_listener = gail_util_add_key_event_listener;
+  atk_class->remove_key_event_listener = gail_util_remove_key_event_listener;
+  atk_class->get_root = gail_util_get_root;
+  atk_class->get_toolkit_name = gail_util_get_toolkit_name;
+  atk_class->get_toolkit_version = gail_util_get_toolkit_version;
+
+  listener_list = g_hash_table_new_full (g_int_hash, g_int_equal, NULL, g_free);
+}
+
+static void
+gail_util_init (GailUtil *utils)
+{
 }
