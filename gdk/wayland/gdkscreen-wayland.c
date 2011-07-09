@@ -482,15 +482,14 @@ _gdk_wayland_screen_new (GdkDisplay *display)
   screen_wayland->width = 8192;
   screen_wayland->height = 8192;
 
-  visual = wl_display_get_argb_visual(display_wayland->wl_display);
+  visual = display_wayland->argb_visual;
   screen_wayland->argb_visual = gdk_wayland_visual_new (screen, visual);
 
-  visual =
-    wl_display_get_premultiplied_argb_visual(display_wayland->wl_display);
+  visual = display_wayland->premultiplied_argb_visual;
   screen_wayland->premultiplied_argb_visual =
     gdk_wayland_visual_new (screen, visual);
 
-  visual = wl_display_get_rgb_visual(display_wayland->wl_display);
+  visual = display_wayland->rgb_visual;
   screen_wayland->rgb_visual = gdk_wayland_visual_new (screen, visual);
 
   screen_wayland->root_window =

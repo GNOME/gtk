@@ -156,7 +156,7 @@ struct _GdkTimeCoord
 
 GType                 gdk_device_get_type       (void) G_GNUC_CONST;
 
-G_CONST_RETURN gchar *gdk_device_get_name       (GdkDevice *device);
+const gchar *         gdk_device_get_name       (GdkDevice *device);
 gboolean              gdk_device_get_has_cursor (GdkDevice *device);
 
 /* Functions to configure a device */

@@ -177,11 +177,13 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
 
   dpy = GDK_DISPLAY_XDISPLAY (event_source->display);
 
+#ifdef HAVE_XGENERICEVENTS
   /* Get cookie data here so it's available
    * to every event translator and event filter.
    */
   if (xevent->type == GenericEvent)
     XGetEventData (dpy, &xevent->xcookie);
+#endif
 
   filter_window = gdk_event_source_get_filter_window (event_source, xevent,
                                                       &event_translator);
@@ -204,8 +206,10 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
 
   if (result != GDK_FILTER_CONTINUE)
     {
+#ifdef HAVE_XGENERICEVENTS
       if (xevent->type == GenericEvent)
         XFreeEventData (dpy, &xevent->xcookie);
+#endif
 
       if (result == GDK_FILTER_REMOVE)
         {
@@ -250,8 +254,10 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
       handle_focus_change (&event->crossing);
     }
 
+#ifdef HAVE_XGENERICEVENTS
   if (xevent->type == GenericEvent)
     XFreeEventData (dpy, &xevent->xcookie);
+#endif
 
   return event;
 }

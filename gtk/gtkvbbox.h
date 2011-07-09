@@ -31,6 +31,7 @@
 #ifndef __GTK_VBBOX_H__
 #define __GTK_VBBOX_H__
 
+#ifndef GTK_DISABLE_DEPRECATED
 
 #include <gtk/gtkbbox.h>
 
@@ -64,5 +65,7 @@ GType      gtk_vbutton_box_get_type (void) G_GNUC_CONST;
 GtkWidget *gtk_vbutton_box_new      (void);
 
 G_END_DECLS
+
+#endif
 
 #endif /* __GTK_VBBOX_H__ */

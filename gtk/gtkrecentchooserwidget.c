@@ -23,6 +23,7 @@
 #include "gtkrecentchooserwidget.h"
 #include "gtkrecentchooserdefault.h"
 #include "gtkrecentchooserutils.h"
+#include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 
 /**
@@ -68,7 +69,7 @@ static void     gtk_recent_chooser_widget_finalize     (GObject               *o
 
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserWidget,
 		         gtk_recent_chooser_widget,
-			 GTK_TYPE_VBOX,
+			 GTK_TYPE_BOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
 						_gtk_recent_chooser_delegate_iface_init))
 
@@ -92,7 +93,10 @@ static void
 gtk_recent_chooser_widget_init (GtkRecentChooserWidget *widget)
 {
   widget->priv = G_TYPE_INSTANCE_GET_PRIVATE (widget, GTK_TYPE_RECENT_CHOOSER_WIDGET,
-					      GtkRecentChooserWidgetPrivate);
+                                              GtkRecentChooserWidgetPrivate);
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (widget),
+                                  GTK_ORIENTATION_VERTICAL);
 }
 
 static GObject *

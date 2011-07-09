@@ -33,6 +33,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include "a11y/gtkprogressbaraccessible.h"
+
 /**
  * SECTION:gtkprogressbar
  * @Short_description: A widget which indicates progress visually
@@ -284,6 +286,8 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              G_PARAM_READWRITE));
 
   g_type_class_add_private (class, sizeof (GtkProgressBarPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PROGRESS_BAR_ACCESSIBLE);
 }
 
 static void
@@ -1245,7 +1249,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  * Return value: text, or %NULL; this string is owned by the widget
  * and should not be modified or freed.
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_progress_bar_get_text (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), NULL);

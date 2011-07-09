@@ -57,7 +57,7 @@ typedef struct _GtkMenuPrivate GtkMenuPrivate;
  *     position where the menu shall be drawn.
  * @y: (out): address of the #gint representing the vertical position
  *     where the menu shall be drawn.  This is an output parameter.
- * @push_in: (inout): This parameter controls how menus placed outside
+ * @push_in: (out): This parameter controls how menus placed outside
  *     the monitor are handled.  If this is set to %TRUE and part of
  *     the menu is outside the monitor then GTK+ pushes the window
  *     into the visible area, effectively modifying the popup
@@ -182,9 +182,9 @@ gboolean   gtk_menu_get_tearoff_state     (GtkMenu             *menu);
 /* This sets the window manager title for the window that
  * appears when a menu is torn off
  */
-void       gtk_menu_set_title             (GtkMenu             *menu,
-					   const gchar         *title);
-G_CONST_RETURN gchar *gtk_menu_get_title  (GtkMenu             *menu);
+void          gtk_menu_set_title          (GtkMenu             *menu,
+                                           const gchar         *title);
+const gchar * gtk_menu_get_title          (GtkMenu             *menu);
 
 void       gtk_menu_reorder_child         (GtkMenu             *menu,
                                            GtkWidget           *child,

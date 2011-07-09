@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 
+#include "a11y/gtkframeaccessible.h"
 
 /**
  * SECTION:gtkframe
@@ -221,6 +222,8 @@ gtk_frame_class_init (GtkFrameClass *class)
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
   g_type_class_add_private (class, sizeof (GtkFramePrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_FRAME_ACCESSIBLE);
 }
 
 static void
@@ -384,7 +387,9 @@ gtk_frame_get_path_for_child (GtkContainer *container,
   path = GTK_CONTAINER_CLASS (gtk_frame_parent_class)->get_path_for_child (container, child);
 
   if (child == priv->label_widget)
-    gtk_widget_path_iter_add_class (path, -1, GTK_STYLE_CLASS_FRAME);
+    gtk_widget_path_iter_add_class (path,
+                                    gtk_widget_path_length (path) - 2,
+                                    GTK_STYLE_CLASS_FRAME);
 
   return path;
 }
@@ -430,7 +435,7 @@ gtk_frame_set_label (GtkFrame *frame,
  *               a #GtkLabel. This string is owned by GTK+ and
  *               must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_frame_get_label (GtkFrame *frame)
 {
   GtkFramePrivate *priv;

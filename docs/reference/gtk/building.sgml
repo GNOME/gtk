@@ -49,12 +49,12 @@ How to compile GTK+ itself
       of the tools are already included in the source packages. But
       it's useful to know a bit about how packages that use these
       tools work. A source package is distributed as a
-      <literal>tar.gz</literal> or <literal>tar.bz2</literal> file
+      <literal>tar.bz2</literal> or <literal>tar.xz</literal> file
       which you unpack into a directory full of the source files as follows:
     </para>
     <programlisting>
-      tar xvfz gtk+-3.0.0.tar.gz
-      tar xvfj gtk+-3.0.0.tar.bz2
+      tar xvfj gtk+-3.2.0.tar.bz2
+      tar xvfJ gtk+-3.2.0.tar.xz
     </programlisting>
     <para>
       In the toplevel directory that is created, there will be
@@ -162,8 +162,8 @@ How to compile GTK+ itself
     </itemizedlist>
     <para>
       Some of the libraries that GTK+ depends on are maintained by
-      by the GTK+ team: GLib, GdkPixbuf, Pango, and ATK. Other libraries
-      are maintained separately.
+      by the GTK+ team: GLib, GdkPixbuf, Pango, ATK and GObject Introspection.
+      Other libraries are maintained separately.
     </para>
     <itemizedlist>
       <listitem>
@@ -171,16 +171,24 @@ How to compile GTK+ itself
           The GLib library provides core non-graphical functionality
           such as high level data types, Unicode manipulation, and
           an object and type system to C programs. It is available
-          from the <ulink url="ftp://ftp.gtk.org/pub/glib/">GTK+
-          FTP site</ulink>.
+          from the <ulink url="http://ftp.gtk.org/pub/glib/">GTK+
+          FTP site</ulink> or
+          <ulink url="http://download.gnome.org/sources/glib/">here</ulink>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <ulink url="http://git.gnome.org/browse/gdk-pixbuf/">GdkPixbuf library</ulink>
+          provides facilities for loading images in a variety of file formats.
+          It is available
+          <ulink url="http://download.gnome.org/sources/gdk-pixbuf/">here</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
           <ulink url="http://www.pango.org">Pango</ulink> is a library
-          for internationalized text handling. It is available from
-          the <ulink url="ftp://ftp.gtk.org/pub/pango/">GTK+ FTP
-          site</ulink>.
+          for internationalized text handling. It is available
+          <ulink url="http://download.gnome.org/sources/pango/">here</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -188,10 +196,21 @@ How to compile GTK+ itself
           ATK is the Accessibility Toolkit. It provides a set of generic
           interfaces allowing accessibility technologies such as
           screen readers to interact with a graphical user interface.
-          It is available from the <ulink
-          url="ftp://ftp.gtk.org/pub/atk/">GTK+ FTP site</ulink>.
+          It is available
+          <ulink url="http://download.gnome.org/sources/atk/">here</ulink>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <ulink url="http://live.gnome.org/GObjectIntrospection">Gobject Introspection</ulink>
+          is a framework for making introspection data available to
+          language bindings. It is available
+          <ulink url="http://download.gnome.org/sources/gobject-introspection/">here</ulink>.
+        </para>
+      </listitem>
+    </itemizedlist>
+    <itemizedlist>
+      <title>External dependencies</title>
       <listitem>
         <para>
           The <ulink url="http://www.gnu.org/software/libiconv/">GNU
@@ -233,19 +252,6 @@ How to compile GTK+ itself
           is a graphics library that supports vector graphics and image
           compositing. Both Pango and GTK+ use cairo for all of their
           drawing.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The GdkPixbuf library provides facilities for loading
-          images in a variety of file formats.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <ulink url="http://live.gnome.org/GObjectIntrospection">gobject-introspection</ulink>
-          is a framework for making introspection data available to
-          language bindings.
         </para>
       </listitem>
       <listitem>

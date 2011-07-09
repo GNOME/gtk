@@ -141,12 +141,12 @@
  *
  * /&ast; Theme any widget within a GtkBin &ast;/
  * GtkBin * {
- *     font-name: Sans 20
+ *     font: Sans 20
  * }
  *
  * /&ast; Theme a label named title-label &ast;/
  * GtkLabel&num;title-label {
- *     font-name: Sans 15
+ *     font: Sans 15
  * }
  *
  * /&ast; Theme any widget named main-entry &ast;/
@@ -527,21 +527,85 @@
  * which is always rendered on top of the shadow layer.
  * </para>
  * </refsect2>
- * <refsect2 id="gtkcssprovider-slices">
+ * <refsect2>
+ * <title>Box shadow</title>
+ * <para>
+ * Themes can apply shadows on framed elements using the CSS3 box-shadow syntax,
+ * as defined in 
+ * <ulink url="http://www.w3.org/TR/css3-background/#the-box-shadow">the CSS3 specification</ulink>.
+ * </para>
+ * <para>
+ * A box shadow is specified using the syntax
+ * <literallayout>box-shadow: [ @inset ] @horizontal_offset @vertical_offset [ @blur_radius ] [ @spread ] @color</literallayout>
+ * A positive offset will draw a shadow that is offset to the right (down) of the box,
+ * a negative offset to the left (top). The optional spread parameter defines an additional
+ * distance to expand the shadow shape in all directions, by the specified radius.
+ * The optional blur radius parameter is parsed, but it is currently not rendered by
+ * the GTK+ theming engine.
+ * The inset parameter defines whether the drop shadow should be rendered inside or outside
+ * the box canvas. Only inset box-shadows are currently supported by the GTK+ theming engine,
+ * non-inset elements are currently ignored.
+ * </para>
+ * <para>
+ * To set multiple box-shadows on an element, you can specify a comma-separated list
+ * of shadow elements in the box-shadow property. Shadows are always rendered
+ * front-back, i.e. the first shadow specified is on top of the others, so they may
+ * overlap other boxes or other shadows.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-border-image">
  * <title>Border images</title>
  * <para>
- * Images can be used in 'slices' for the purpose of creating scalable
- * borders.
+ * Images and gradients can also be used in slices for the purpose of creating
+ * scalable borders.
+ * For more information, see the CSS3 documentation for the border-image property,
+ * which can be found <ulink url="http://www.w3.org/TR/css3-background/#border-images">here</ulink>.
  * </para>
  * <inlinegraphic fileref="slices.png" format="PNG"/>
  * <para>
- * The syntax for specifying border images of this kind is:
- * <literallayout>url(@path) @top @right @bottom @left [repeat|stretch]? [repeat|stretch]?</literallayout>
- * The sizes of the 'cut off' portions are specified
- * with the @top, @right, @bottom and @left parameters.
- * The 'middle' sections can be repeated or stretched to create
- * the desired effect, by adding the 'repeat' or 'stretch' options after
- * the dimensions. If two options are specified, the first one affects
+ * The parameters of the slicing process are controlled by
+ * four separate properties. Note that you can use the
+ * <literallayout>border-image</literallayout> shorthand property
+ * to set values for the three properties at the same time.
+ * </para>
+ * <para>
+ * <literallayout>border-image-source: url(@path)
+ * (or border-image-source: -gtk-gradient(...))</literallayout>:
+ * Specifies the source of the border image, and it can either
+ * be an URL or a gradient (see above).
+ * </para>
+ * <para>
+ * <literallayout>border-image-slice: @top @right @bottom @left</literallayout>
+ * The sizes specified by the @top, @right, @bottom and @left parameters
+ * are the offsets, in pixels, from the relevant edge where the image
+ * should be "cut off" to build the slices used for the rendering
+ * of the border.
+ * </para>
+ * <para>
+ * <literallayout>border-image-width: @top @right @bottom @left</literallayout>
+ * The sizes specified by the @top, @right, @bottom and @left parameters
+ * are inward distances from the border box edge, used to specify the
+ * rendered size of each slice determined by border-image-slice.
+ * If this property is not specified, the values of border-width will
+ * be used as a fallback.
+ * </para>
+ * <para>
+ * <literallayout>border-image-repeat: [stretch|repeat|round|space] ? 
+ * [stretch|repeat|round|space]</literallayout>
+ * Specifies how the image slices should be rendered in the area
+ * outlined by border-width.
+ * The default (stretch) is to resize the slice to fill in the whole 
+ * allocated area.
+ * If the value of this property is 'repeat', the image slice
+ * will be tiled to fill the area.
+ * If the value of this property is 'round', the image slice will
+ * be tiled to fill the area, and scaled to fit it exactly
+ * a whole number of times.
+ * If the value of this property is 'space', the image slice will
+ * be tiled to fill the area, and if it doesn't fit it exactly a whole
+ * number of times, the extra space is distributed as padding around 
+ * the slices.
+ * If two options are specified, the first one affects
  * the horizontal behaviour and the second one the vertical behaviour.
  * If only one option is specified, it affects both.
  * </para>
@@ -633,8 +697,8 @@
  *       <row>
  *         <entry>background-color</entry>
  *         <entry morerows="2">color (see above)</entry>
- *         <entry morerows="2">#GdkRGBA</entry>
- *         <entry morerows="2"><literallayout>background-color: &num;fff;
+ *         <entry morerows="7">#GdkRGBA</entry>
+ *         <entry morerows="7"><literallayout>background-color: &num;fff;
  * color: &amp;color1;
  * background-color: shade (&amp;color1, 0.5);
  * color: mix (&amp;color1, &num;f0f, 0.8);</literallayout>
@@ -644,7 +708,51 @@
  *         <entry>color</entry>
  *       </row>
  *       <row>
+ *         <entry>border-top-color</entry>
+ *         <entry morerows="4">transparent|color (see above)</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-right-color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-bottom-color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-left-color</entry>
+ *       </row>
+ *       <row>
  *         <entry>border-color</entry>
+ *         <entry>[transparent|color]{1,4}</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-family</entry>
+ *         <entry>@family [, @family]*</entry>
+ *         <entry>#gchararray</entry>
+ *         <entry>font-family: Sans, Arial;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-style</entry>
+ *         <entry>[normal|oblique|italic]</entry>
+ *         <entry>#PANGO_TYPE_STYLE</entry>
+ *         <entry>font-style: italic;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-variant</entry>
+ *         <entry>[normal|small-caps]</entry>
+ *         <entry>#PANGO_TYPE_VARIANT</entry>
+ *         <entry>font-variant: normal;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-weight</entry>
+ *         <entry>[normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900]</entry>
+ *         <entry>#PANGO_TYPE_WEIGHT</entry>
+ *         <entry>font-weight: bold;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font-size</entry>
+ *         <entry>Font size in point</entry>
+ *         <entry>#gint</entry>
+ *         <entry>font-size: 13;</entry>
  *       </row>
  *       <row>
  *         <entry>font</entry>
@@ -1086,16 +1194,17 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
         {
           const GtkStyleProperty *child;
           GValue *value;
-          
+
           child = _gtk_style_property_lookup (parameters[i].name);
-          value = g_memdup (&parameters[i].value, sizeof (GValue));
+          value = g_slice_dup (GValue, &parameters[i].value);
           gtk_css_ruleset_add (ruleset, child, value);
         }
       g_free (parameters);
+      property_value_free (value);
       return;
     }
 
-  ruleset->has_inherit |= gtk_style_param_get_inherit (prop->pspec);
+  ruleset->has_inherit |= _gtk_style_property_is_inherit (prop);
   g_hash_table_insert (ruleset->style, (gpointer) prop, value);
 }
 
@@ -1296,7 +1405,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
             {
               GtkStyleProperty *prop = key;
 
-              if (l != length && !gtk_style_param_get_inherit (prop->pspec))
+              if (l != length && !_gtk_style_property_is_inherit (prop))
                 continue;
 
               _gtk_style_properties_set_property_by_property (props,
@@ -1370,9 +1479,10 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                         gtk_css_provider_parser_error,
                                         provider);
 
-          found = _gtk_css_value_parse (value,
-                                        parser,
-                                        NULL);
+          found = _gtk_style_property_parse_value (NULL,
+                                                   value,
+                                                   parser,
+                                                   NULL);
 
           _gtk_css_parser_free (parser);
 
@@ -1398,9 +1508,13 @@ gtk_css_provider_finalize (GObject *object)
 {
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
+  guint i;
 
   css_provider = GTK_CSS_PROVIDER (object);
   priv = css_provider->priv;
+
+  for (i = 0; i < priv->rulesets->len; i++)
+    gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
 
   g_array_free (priv->rulesets, TRUE);
 
@@ -1519,6 +1633,8 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
   guint i;
 
   priv = css_provider->priv;
+
+  g_hash_table_remove_all (priv->symbolic_colors);
 
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
@@ -2081,65 +2197,36 @@ parse_declaration (GtkCssScanner *scanner,
       val = g_slice_new0 (GValue);
       g_value_init (val, property->pspec->value_type);
 
-      if (_gtk_css_parser_try (scanner->parser, "none", TRUE))
+      if (_gtk_style_property_parse_value (property,
+                                           val,
+                                           scanner->parser,
+                                           gtk_css_scanner_get_base_url (scanner)))
         {
-          /* Insert the default value, so it has an opportunity
-           * to override other style providers when merged
-           */
-          g_param_value_set_default (property->pspec, val);
-          gtk_css_ruleset_add (ruleset, property, val);
-        }
-      else if (property->parse_func)
-        {
-          GError *error = NULL;
-          char *value_str;
-          
-          value_str = _gtk_css_parser_read_value (scanner->parser);
-          if (value_str == NULL)
+          if (_gtk_css_parser_begins_with (scanner->parser, ';') ||
+              _gtk_css_parser_begins_with (scanner->parser, '}') ||
+              _gtk_css_parser_is_eof (scanner->parser))
             {
+              gtk_css_ruleset_add (ruleset, property, val);
+            }
+          else
+            {
+              gtk_css_provider_error_literal (scanner->provider,
+                                              scanner,
+                                              GTK_CSS_PROVIDER_ERROR,
+                                              GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                              "Junk at end of value");
               _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+              g_value_unset (val);
+              g_slice_free (GValue, val);
               return;
             }
-          
-          if ((*property->parse_func) (value_str, val, &error))
-            gtk_css_ruleset_add (ruleset, property, val);
-          else
-            gtk_css_provider_take_error (scanner->provider, scanner, error);
-
-          g_free (value_str);
         }
       else
         {
-          if (_gtk_css_value_parse (val,
-                                    scanner->parser,
-                                    gtk_css_scanner_get_base_url (scanner)))
-            {
-              if (_gtk_css_parser_begins_with (scanner->parser, ';') ||
-                  _gtk_css_parser_begins_with (scanner->parser, '}') ||
-                  _gtk_css_parser_is_eof (scanner->parser))
-                {
-                  gtk_css_ruleset_add (ruleset, property, val);
-                }
-              else
-                {
-                  gtk_css_provider_error_literal (scanner->provider,
-                                                  scanner,
-                                                  GTK_CSS_PROVIDER_ERROR,
-                                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                                  "Junk at end of value");
-                  _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-                  g_value_unset (val);
-                  g_slice_free (GValue, val);
-                  return;
-                }
-            }
-          else
-            {
-              g_value_unset (val);
-              g_slice_free (GValue, val);
-              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-              return;
-            }
+          g_value_unset (val);
+          g_slice_free (GValue, val);
+          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+          return;
         }
     }
   else if (name[0] == '-')
@@ -2301,7 +2388,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 {
   GtkCssScanner *scanner;
   gulong error_handler;
-  char *free_data;
+  char *free_data = NULL;
 
   if (error)
     error_handler = g_signal_connect (css_provider,
@@ -2342,8 +2429,6 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
             }
         }
     }
-  else
-    free_data = NULL;
 
   if (data)
     {
@@ -2357,10 +2442,12 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
         gtk_css_provider_postprocess (css_provider);
     }
 
+  g_free (free_data);
+
   if (error)
     {
       g_signal_handler_disconnect (css_provider, error_handler);
-      
+
       if (*error)
         {
           /* We clear all contents from the provider for backwards compat reasons */
@@ -2375,7 +2462,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 /**
  * gtk_css_provider_load_from_data:
  * @css_provider: a #GtkCssProvider
- * @data: CSS data loaded in memory
+ * @data: (array length=length) (element-type guint8): CSS data loaded in memory
  * @length: the length of @data in bytes, or -1 for NUL terminated strings
  * @error: (out) (allow-none): return location for a #GError, or %NULL
  *
@@ -2598,7 +2685,8 @@ gtk_css_provider_get_default (void)
         "  border-width: 1;\n"
         "}\n"
         "\n"
-        ".tooltip {\n"
+        ".tooltip,\n"
+        ".tooltip * {\n"
         "  background-color: @tooltip_bg_color; \n"
         "  color: @tooltip_fg_color; \n"
         "  border-color: @tooltip_fg_color; \n"
@@ -2690,7 +2778,7 @@ gtk_css_provider_get_default (void)
         "  background-color: @selected_bg_color;\n"
         "}\n"
         "\n"
-        ".menu.check, .menu.radio {\n"
+        ".menuitem.check, .menuitem.radio {\n"
         "  color: @fg_color;\n"
         "  border-style: none;\n"
         "  border-width: 0;\n"
@@ -2729,8 +2817,9 @@ gtk_css_provider_get_default (void)
         "\n"
         ".menu:hover,\n"
         ".menubar:hover,\n"
-        ".menu.check:hover,\n"
-        ".menu.radio:hover {\n"
+        ".menuitem:hover,\n"
+        ".menuitem.check:hover,\n"
+        ".menuitem.radio:hover {\n"
         "  background-color: @selected_bg_color;\n"
         "  color: @selected_fg_color;\n"
         "}\n"
@@ -2966,7 +3055,6 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
                        GString             *str)
 {
   GList *keys, *walk;
-  char *s;
 
   _gtk_css_selector_print (ruleset->selector, str);
 
@@ -2986,9 +3074,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           g_string_append (str, "  ");
           g_string_append (str, prop->pspec->name);
           g_string_append (str, ": ");
-          s = _gtk_css_value_to_string (value);
-          g_string_append (str, s);
-          g_free (s);
+          _gtk_style_property_print_value (prop, value, str);
           g_string_append (str, ";\n");
         }
 

@@ -58,9 +58,7 @@ m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
        INTROSPECTION_COMPILER=`$PKG_CONFIG --variable=g_ir_compiler gobject-introspection-1.0`
        INTROSPECTION_GENERATE=`$PKG_CONFIG --variable=g_ir_generate gobject-introspection-1.0`
        INTROSPECTION_GIRDIR=`$PKG_CONFIG --variable=girdir gobject-introspection-1.0`
-       INTROSPECTION_GIRDIR=${INTROSPECTION_GIRDIR/$datadir/\$(datadir)}
        INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG --variable=typelibdir gobject-introspection-1.0)"
-       INTROSPECTION_TYPELIBDIR=${INTROSPECTION_TYPELIBDIR/$libdir/\$(libdir)}
        INTROSPECTION_CFLAGS=`$PKG_CONFIG --cflags gobject-introspection-1.0`
        INTROSPECTION_LIBS=`$PKG_CONFIG --libs gobject-introspection-1.0`
        INTROSPECTION_MAKEFILE=`$PKG_CONFIG --variable=datadir gobject-introspection-1.0`/gobject-introspection-1.0/Makefile.introspection

@@ -53,6 +53,7 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 
+#include "a11y/gtktextviewaccessible.h"
 
 /**
  * SECTION:gtktextview
@@ -307,7 +308,6 @@ static void gtk_text_view_size_allocate        (GtkWidget        *widget,
                                                 GtkAllocation    *allocation);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
-static void gtk_text_view_unmap                (GtkWidget        *widget);
 static void gtk_text_view_style_updated        (GtkWidget        *widget);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
@@ -603,7 +603,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->destroy = gtk_text_view_destroy;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
-  widget_class->unmap = gtk_text_view_unmap;
   widget_class->style_updated = gtk_text_view_style_updated;
   widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->grab_notify = gtk_text_view_grab_notify;
@@ -1353,6 +1352,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
   g_type_class_add_private (gobject_class, sizeof (GtkTextViewPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
 }
 
 static void
@@ -4029,6 +4030,7 @@ gtk_text_view_realize (GtkWidget *widget)
     text_window_realize (priv->bottom_window, widget);
 
   gtk_text_view_ensure_layout (text_view);
+  gtk_text_view_invalidate (text_view);
 
   if (priv->buffer)
     {
@@ -4067,8 +4069,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
       gtk_text_buffer_remove_selection_clipboard (priv->buffer, clipboard);
     }
 
-  /* the idles have been removed in unmap */
-  g_assert (priv->first_validate_idle == 0 && priv->incremental_validate_idle == 0);
+  gtk_text_view_remove_validate_idles (text_view);
 
   if (priv->popup_menu)
     {
@@ -4090,21 +4091,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
   if (priv->bottom_window)
     text_window_unrealize (priv->bottom_window);
 
-  gtk_text_view_destroy_layout (text_view);
-
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_text_view_unmap (GtkWidget *widget)
-{
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (widget);
-
-  gtk_text_view_remove_validate_idles (text_view);
-
-  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unmap (widget);
 }
 
 static void
@@ -6744,8 +6731,6 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
           tmp_list = g_slist_next (tmp_list);
         }
-
-      gtk_text_view_invalidate (text_view);
     }
 }
 
@@ -7536,6 +7521,8 @@ adjust_allocation_recurse (GtkWidget *widget,
    * into widget->allocation if the widget is not realized.
    * FIXME someone figure out why this was.
    */
+  gtk_widget_get_allocation (widget, &allocation);
+
   if (!gtk_widget_get_realized (widget))
     {
       if (gtk_widget_get_visible (widget))
@@ -7582,7 +7569,7 @@ adjust_allocation (GtkWidget *widget,
   
   adjust_allocation_recurse (widget, &scroll_data);
 }
-            
+
 static void
 gtk_text_view_value_changed (GtkAdjustment *adjustment,
                              GtkTextView   *text_view)

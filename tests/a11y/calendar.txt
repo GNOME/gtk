@@ -1,0 +1,17 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  calendar1
+    "calendar"
+    parent: window1
+    index: 0
+    state: enabled focusable sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1

@@ -32,7 +32,6 @@
 #include "gtklabel.h"
 #include "gtkimage.h"
 #include "gtkhbox.h"
-#include "gtkalignment.h"
 #include "gtksizerequest.h"
 #include "gtkwindowprivate.h"
 
@@ -156,7 +155,6 @@ static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
 static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
 static void       gtk_tooltip_dispose              (GObject         *object);
 
-static void       gtk_tooltip_window_style_updated (GtkTooltip      *tooltip);
 static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip,
                                                     cairo_t         *cr);
 static void       gtk_tooltip_window_hide          (GtkWidget       *widget,
@@ -184,7 +182,10 @@ static void
 gtk_tooltip_init (GtkTooltip *tooltip)
 {
   GtkStyleContext *context;
-  GtkBorder padding, border;
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *image;
+  GtkWidget *label;
 
   tooltip->timeout_id = 0;
   tooltip->browse_mode_timeout_id = 0;
@@ -200,48 +201,40 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 
   tooltip->last_window = NULL;
 
-  tooltip->window = g_object_ref (gtk_window_new (GTK_WINDOW_POPUP));
-  gtk_window_set_type_hint (GTK_WINDOW (tooltip->window),
-			    GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_widget_set_app_paintable (tooltip->window, TRUE);
-  gtk_window_set_resizable (GTK_WINDOW (tooltip->window), FALSE);
-  gtk_widget_set_name (tooltip->window, "gtk-tooltip");
-  g_signal_connect (tooltip->window, "hide",
-		    G_CALLBACK (gtk_tooltip_window_hide), tooltip);
+  window = g_object_ref (gtk_window_new (GTK_WINDOW_POPUP));
+  gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_TOOLTIP);
+  gtk_widget_set_app_paintable (window, TRUE);
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+  gtk_widget_set_name (window, "gtk-tooltip");
+  g_signal_connect (window, "hide",
+                    G_CALLBACK (gtk_tooltip_window_hide), tooltip);
 
-  context = gtk_widget_get_style_context (tooltip->window);
+  context = gtk_widget_get_style_context (window);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
 
-  gtk_style_context_get_padding (context, 0, &padding);
-  gtk_style_context_get_border (context, 0, &border);
+  g_signal_connect_swapped (window, "draw",
+                            G_CALLBACK (gtk_tooltip_paint_window), tooltip);
 
-  tooltip->alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (tooltip->alignment),
-                             border.top + padding.top,
-                             border.bottom + padding.bottom,
-                             border.left + padding.left,
-                             border.right + padding.right);
-  gtk_container_add (GTK_CONTAINER (tooltip->window), tooltip->alignment);
-  gtk_widget_show (tooltip->alignment);
+  /* FIXME: don't hardcode the padding */
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_margin_left (box, 6);
+  gtk_widget_set_margin_right (box, 6);
+  gtk_widget_set_margin_top (box, 6);
+  gtk_widget_set_margin_bottom (box, 6);
+  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_widget_show (box);
 
-  g_signal_connect_swapped (tooltip->window, "style-updated",
-			    G_CALLBACK (gtk_tooltip_window_style_updated), tooltip);
-  g_signal_connect_swapped (tooltip->window, "draw",
-			    G_CALLBACK (gtk_tooltip_paint_window), tooltip);
+  image = gtk_image_new ();
+  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
 
-  tooltip->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, padding.left);
-  gtk_container_add (GTK_CONTAINER (tooltip->alignment), tooltip->box);
-  gtk_widget_show (tooltip->box);
+  label = gtk_label_new ("");
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
-  tooltip->image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (tooltip->box), tooltip->image,
-		      FALSE, FALSE, 0);
-
-  tooltip->label = gtk_label_new ("");
-  gtk_label_set_line_wrap (GTK_LABEL (tooltip->label), TRUE);
-  gtk_box_pack_start (GTK_BOX (tooltip->box), tooltip->label,
-		      FALSE, FALSE, 0);
-
+  tooltip->window = window;
+  tooltip->box = box;
+  tooltip->image = image;
+  tooltip->label = label;
   tooltip->custom_widget = NULL;
 }
 
@@ -574,27 +567,6 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
    * callback.
    */
   tooltip->custom_was_reset = FALSE;
-}
-
-static void
-gtk_tooltip_window_style_updated (GtkTooltip *tooltip)
-{
-  GtkStyleContext *context;
-  GtkBorder padding, border;
-
-  context = gtk_widget_get_style_context (tooltip->window);
-  gtk_style_context_get_padding (context, 0, &padding);
-  gtk_style_context_get_border (context, 0, &border);
-
-  gtk_alignment_set_padding (GTK_ALIGNMENT (tooltip->alignment),
-                             border.top + padding.top,
-                             border.bottom + padding.bottom,
-                             border.left + padding.left,
-                             border.right + padding.right);
-
-  gtk_box_set_spacing (GTK_BOX (tooltip->box), padding.left);
-
-  gtk_widget_queue_draw (tooltip->window);
 }
 
 static gboolean

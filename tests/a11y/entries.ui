@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">0.5</property>
+    <property name="upper">99.5</property>
+    <property name="page-size">0</property>
+    <property name="value">45.5</property>
+    <property name="step-increment">0.5</property>
+    <property name="page-increment">5.0</property>
+  </object>
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkBox" id="box1">
+        <child>
+          <object class="GtkEntry" id="entry1">
+            <property name="text" translatable="yes">text</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="spinbutton1">
+            <property name="adjustment">adjustment1</property>
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

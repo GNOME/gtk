@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<section id="gtk-migrating-GtkStyleContext">
+<chapter id="gtk-migrating-GtkStyleContext">
   <title>Theming changes</title>
 
   <para>
@@ -688,4 +688,4 @@
       </listitem>
     </orderedlist>
   </section>
-</section>
+</chapter>

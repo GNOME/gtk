@@ -1,0 +1,49 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  text1
+    "text"
+    parent: window1
+    index: 0
+    state: editable enabled focusable multi-line sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkText>
+    text: Twas brillig, and the slithy toves
+Did gyre and gimple in the wabe
+    character count: 66
+    caret offset: 66
+    default attributes: bg-color: <omitted>
+                        bg-full-height: false
+                        direction: <omitted>
+                        editable: true
+                        family-name: <omitted>
+                        fg-color: <omitted>
+                        indent: 0
+                        invisible: false
+                        justification: left
+                        language: <omitted>
+                        left-margin: 0
+                        pixels-above-lines: 0
+                        pixels-below-lines: 0
+                        pixels-inside-wrap: 0
+                        right-margin: 0
+                        rise: 0
+                        scale: 1
+                        size: <omitted>
+                        stretch: <omitted>
+                        strikethrough: false
+                        style: <omitted>
+                        underline: none
+                        variant: <omitted>
+                        weight: <omitted>
+                        wrap-mode: none
+    <AtkStreamableContent>
+    mime types: application/x-gtk-text-buffer-rich-text text/plain

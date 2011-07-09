@@ -33,8 +33,6 @@
 #include "gtktreemodel.h"
 #include "gtkbutton.h"
 #include "gtkscrolledwindow.h"
-#include "gtkvbox.h"
-#include "gtkhbox.h"
 #include "gtkframe.h"
 #include "gtkeventbox.h"
 #include "gtkcombobox.h"
@@ -44,10 +42,7 @@
 #include "gtktable.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
-#include "gtkalignment.h"
 #include "gtkspinbutton.h"
-#include "gtkbbox.h"
-#include "gtkhbbox.h"
 
 #include "gtkpagesetupunixdialog.h"
 #include "gtkcustompaperunixdialog.h"
@@ -905,7 +900,8 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("_Format for:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1,
 		    GTK_FILL, 0, 0, 0);
@@ -927,7 +923,8 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
 
   label = gtk_label_new_with_mnemonic (_("_Paper size:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 1, 2,
 		    GTK_FILL, 0, 0, 0);
@@ -951,14 +948,16 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
 
   label = gtk_label_new (NULL);
   priv->paper_size_label = label;
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    1, 4, 2, 3,
 		    GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
 
   label = gtk_label_new_with_mnemonic (_("_Orientation:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 3, 4,
 		    GTK_FILL, 0, 0, 0);

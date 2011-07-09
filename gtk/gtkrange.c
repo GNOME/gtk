@@ -40,6 +40,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkrangeaccessible.h"
 
 /**
  * SECTION:gtkrange
@@ -600,6 +601,8 @@ gtk_range_class_init (GtkRangeClass *class)
 							       GTK_PARAM_READABLE));
 
   g_type_class_add_private (class, sizeof (GtkRangePrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RANGE_ACCESSIBLE);
 }
 
 static void

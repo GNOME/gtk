@@ -25,7 +25,7 @@
 #ifndef __GTK_FILE_CHOOSER_BUTTON_H__
 #define __GTK_FILE_CHOOSER_BUTTON_H__
 
-#include <gtk/gtkhbox.h>
+#include <gtk/gtkbox.h>
 #include <gtk/gtkfilechooser.h>
 
 G_BEGIN_DECLS
@@ -43,7 +43,7 @@ typedef struct _GtkFileChooserButtonClass   GtkFileChooserButtonClass;
 
 struct _GtkFileChooserButton
 {
-  GtkHBox parent;
+  GtkBox parent;
 
   /*< private >*/
   GtkFileChooserButtonPrivate *priv;
@@ -52,7 +52,7 @@ struct _GtkFileChooserButton
 struct _GtkFileChooserButtonClass
 {
   /*< private >*/
-  GtkHBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   void (* file_set) (GtkFileChooserButton *fc);
 
@@ -68,7 +68,7 @@ GType                 gtk_file_chooser_button_get_type         (void) G_GNUC_CON
 GtkWidget *           gtk_file_chooser_button_new              (const gchar          *title,
 								GtkFileChooserAction  action);
 GtkWidget *           gtk_file_chooser_button_new_with_dialog  (GtkWidget            *dialog);
-G_CONST_RETURN gchar *gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
+const gchar *         gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
 void                  gtk_file_chooser_button_set_title        (GtkFileChooserButton *button,
 								const gchar          *title);
 gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);

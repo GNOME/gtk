@@ -20,7 +20,7 @@
 #define __GTK_PRINTER_OPTION_WIDGET_H__
 
 #include "gtkprinteroption.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 
 G_BEGIN_DECLS
 
@@ -38,14 +38,14 @@ typedef struct GtkPrinterOptionWidgetPrivate   GtkPrinterOptionWidgetPrivate;
 
 struct _GtkPrinterOptionWidget
 {
-  GtkHBox parent_instance;
+  GtkBox parent_instance;
 
   GtkPrinterOptionWidgetPrivate *priv;
 };
 
 struct _GtkPrinterOptionWidgetClass
 {
-  GtkHBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   void (*changed) (GtkPrinterOptionWidget *widget);
 

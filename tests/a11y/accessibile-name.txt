@@ -1,0 +1,44 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gail
+  button1
+    "push button"
+    parent: window1
+    index: 0
+    name: Accessible name
+    state: enabled focusable sensitive showing visible
+    toolkit: gail
+    text: Hello World!
+    character count: 12
+    caret offset: 0
+    default attributes: left-margin: 0
+                        right-margin: 0
+                        indent: 0
+                        invisible: false
+                        editable: false
+                        pixels-above-lines: 0
+                        pixels-below-lines: 0
+                        pixels-inside-wrap: 0
+                        bg-full-height: 0
+                        scale: 1
+                        rise: 0
+                        underline: none
+                        strikethrough: false
+                        bg-stipple: false
+                        fg-stipple: false
+                        fg-color: <omitted>
+                        bg-color: <omitted>
+                        wrap-mode: word
+                        justification: left
+                        size: <omitted>
+                        weight: <omitted>
+                        family-name: <omitted>
+                        stretch: <omitted>
+                        variant: <omitted>
+                        style: <omitted>
+                        language: <omitted>
+                        direction: <omitted>
+    image size: -1 x -1
+    image description: (null)

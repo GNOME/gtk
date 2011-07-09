@@ -4,7 +4,7 @@
 @binding-set entry-bindings {
     bind "<alt>s" { "move-cursor" (visual-positions, 3, 0) };
     bind "<alt>a" { "move-cursor" (visual-positions, -3, 0) };
-};
+}
 
 * {
     -GtkButton-child-displacement-x: 1;

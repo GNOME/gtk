@@ -123,15 +123,14 @@ _gtk_animation_description_from_string (const gchar *str)
   return _gtk_animation_description_new ((gdouble) duration, progress_type, loop);
 }
 
-char *
-_gtk_animation_description_to_string (GtkAnimationDescription *desc)
+void
+_gtk_animation_description_print (GtkAnimationDescription *desc,
+                                  GString                 *str)
 {
-  GString *str;
   int duration;
 
-  g_return_val_if_fail (desc != NULL, NULL);
-
-  str = g_string_new ("");
+  g_return_if_fail (desc != NULL);
+  g_return_if_fail (str != NULL);
 
   duration = desc->duration;
   if (duration % 1000 == 0)
@@ -162,8 +161,6 @@ _gtk_animation_description_to_string (GtkAnimationDescription *desc)
 
   if (desc->loop)
     g_string_append (str, " loop");
-
-  return g_string_free (str, FALSE);
 }
 
 GType

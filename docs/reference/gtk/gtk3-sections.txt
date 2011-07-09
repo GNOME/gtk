@@ -5050,6 +5050,7 @@ gtk_widget_style_get
 gtk_widget_style_get_property
 gtk_widget_style_get_valist
 gtk_widget_style_attach
+gtk_widget_class_set_accessible_type
 gtk_widget_get_accessible
 gtk_widget_child_focus
 gtk_widget_child_notify
@@ -5416,7 +5417,10 @@ GTK_CHECK_VERSION
 <TITLE>GtkWidgetPath</TITLE>
 GtkWidgetPath
 gtk_widget_path_append_type
+gtk_widget_path_append_with_siblings
 gtk_widget_path_copy
+gtk_widget_path_ref
+gtk_widget_path_unref
 gtk_widget_path_free
 gtk_widget_path_get_object_type
 gtk_widget_path_has_parent
@@ -5427,6 +5431,8 @@ gtk_widget_path_iter_clear_classes
 gtk_widget_path_iter_clear_regions
 gtk_widget_path_iter_get_name
 gtk_widget_path_iter_get_object_type
+gtk_widget_path_iter_get_siblings
+gtk_widget_path_iter_get_sibling_index
 gtk_widget_path_iter_has_class
 gtk_widget_path_iter_has_name
 gtk_widget_path_iter_has_qclass
@@ -5487,8 +5493,6 @@ gtk_style_properties_map_color
 gtk_style_properties_merge
 gtk_style_properties_new
 GtkStylePropertyParser
-gtk_style_param_set_inherit
-gtk_style_param_get_inherit
 gtk_style_properties_register_property
 gtk_style_properties_set
 gtk_style_properties_set_property
@@ -5544,18 +5548,23 @@ GTK_STYLE_CLASS_PROGRESSBAR
 GTK_STYLE_CLASS_SPINNER
 GTK_STYLE_CLASS_TOOLBAR
 GTK_STYLE_CLASS_PRIMARY_TOOLBAR
+GTK_STYLE_CLASS_INLINE_TOOLBAR
 GTK_STYLE_CLASS_PANE_SEPARATOR
 GTK_STYLE_CLASS_SEPARATOR
+GTK_STYLE_CLASS_SIDEBAR
 GTK_STYLE_CLASS_DND
 GTK_STYLE_CLASS_ERROR
 GTK_STYLE_CLASS_EXPANDER
 GTK_STYLE_CLASS_FRAME
 GTK_STYLE_CLASS_HIGHLIGHT
+GTK_STYLE_CLASS_IMAGE
 GTK_STYLE_CLASS_INFO
 GTK_STYLE_CLASS_MARK
 GTK_STYLE_CLASS_NOTEBOOK
 GTK_STYLE_CLASS_QUESTION
 GTK_STYLE_CLASS_SCALE
+GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE
+GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW
 GTK_STYLE_CLASS_SPINBUTTON
 GTK_STYLE_CLASS_VIEW
 GTK_STYLE_CLASS_WARNING
@@ -5639,6 +5648,7 @@ gtk_render_option
 gtk_render_slider
 gtk_render_activity
 gtk_render_icon_pixbuf
+gtk_render_icon
 
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_CONTEXT
@@ -7074,4 +7084,30 @@ GTK_LOCK_BUTTON_GET_CLASS
 <SUBSECTION Private>
 gtk_lock_button_get_type
 GtkLockButtonPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkoverlay</FILE>
+<TITLE>GtkOverlay</TITLE>
+GtkOverlay
+
+gtk_overlay_new
+gtk_overlay_set_relative_widget
+gtk_overlay_get_relative_widget
+gtk_overlay_add
+gtk_overlay_set_offset
+gtk_overlay_get_offset
+
+<SUBSECTION Standard>
+GTK_TYPE_OVERLAY
+GTK_OVERLAY
+GTK_OVERLAY_CLASS
+GTK_IS_OVERLAY
+GTK_IS_OVERLAY_CLASS
+GTK_OVERLAY_GET_CLASS
+GtkOverlayClass
+
+<SUBSECTION Private>
+gtk_overlay_get_type
+GtkOverlayPrivate
 </SECTION>

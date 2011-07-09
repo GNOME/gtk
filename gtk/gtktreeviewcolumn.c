@@ -142,6 +142,7 @@ struct _GtkTreeViewColumnPrivate
   GtkTreeViewColumnSizing column_type;
   gint padding;
   gint resized_width;
+  gint x_offset;
   gint width;
   gint fixed_width;
   gint min_width;
@@ -183,6 +184,7 @@ enum
   PROP_0,
   PROP_VISIBLE,
   PROP_RESIZABLE,
+  PROP_X_OFFSET,
   PROP_WIDTH,
   PROP_SPACING,
   PROP_SIZING,
@@ -256,6 +258,16 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
   
+  g_object_class_install_property (object_class,
+                                   PROP_X_OFFSET,
+                                   g_param_spec_int ("x-offset",
+                                                     P_("X position"),
+                                                     P_("Current X position of the column"),
+                                                     -G_MAXINT,
+                                                     G_MAXINT,
+                                                     0,
+                                                     GTK_PARAM_READABLE));
+
   g_object_class_install_property (object_class,
                                    PROP_WIDTH,
                                    g_param_spec_int ("width",
@@ -685,6 +697,11 @@ gtk_tree_view_column_get_property (GObject         *object,
     case PROP_RESIZABLE:
       g_value_set_boolean (value,
                            gtk_tree_view_column_get_resizable (tree_column));
+      break;
+
+    case PROP_X_OFFSET:
+      g_value_set_int (value,
+                       gtk_tree_view_column_get_x_offset (tree_column));
       break;
 
     case PROP_WIDTH:
@@ -2049,6 +2066,24 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
   return tree_column->priv->width;
 }
 
+/**
+ * gtk_tree_view_column_get_x_offset:
+ * @tree_column: A #GtkTreeViewColumn.
+ * 
+ * Returns the current X offset of @tree_column in pixels.
+ * 
+ * Return value: The current X offset of @tree_column.
+ *
+ * Since: 3.2
+ */
+gint
+gtk_tree_view_column_get_x_offset (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
+
+  return tree_column->priv->x_offset;
+}
+
 gint
 _gtk_tree_view_column_request_width (GtkTreeViewColumn *tree_column)
 {
@@ -2113,16 +2148,20 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
   if (priv->width != width)
     gtk_widget_queue_draw (priv->tree_view);
 
+  priv->x_offset = x_offset;
   priv->width = width;
 
   gtk_cell_area_context_allocate (priv->cell_area_context, priv->width - priv->padding, -1);
 
-  allocation.x      = x_offset;
-  allocation.y      = 0;
-  allocation.width  = width;
-  allocation.height = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (priv->tree_view));
+  if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
+    {
+      allocation.x      = x_offset;
+      allocation.y      = 0;
+      allocation.width  = width;
+      allocation.height = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (priv->tree_view));
 
-  gtk_widget_size_allocate (priv->button, &allocation);
+      gtk_widget_size_allocate (priv->button, &allocation);
+    }
 
   if (priv->window)
     {
@@ -2133,6 +2172,7 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 			      TREE_VIEW_DRAG_WIDTH, allocation.height);
     }
 
+  g_object_notify (G_OBJECT (tree_column), "x-offset");
   g_object_notify (G_OBJECT (tree_column), "width");
 }
 
@@ -2372,7 +2412,7 @@ gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
  * Return value: the title of the column. This string should not be
  * modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);

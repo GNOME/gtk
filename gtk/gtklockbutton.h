@@ -21,7 +21,7 @@
 #ifndef __GTK_LOCK_BUTTON_H__
 #define __GTK_LOCK_BUTTON_H__
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtkbutton.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
@@ -39,14 +39,14 @@ typedef struct _GtkLockButtonPrivate GtkLockButtonPrivate;
 
 struct _GtkLockButton
 {
-  GtkBin parent;
+  GtkButton parent;
 
   GtkLockButtonPrivate *priv;
 };
 
 struct _GtkLockButtonClass
 {
-  GtkBinClass parent_class;
+  GtkButtonClass parent_class;
 
   void (*reserved0) (void);
   void (*reserved1) (void);

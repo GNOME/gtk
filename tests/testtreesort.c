@@ -21,8 +21,6 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
-#include "gtk/gtktreedatalist.h"
-
 
 typedef struct _ListSort ListSort;
 struct _ListSort

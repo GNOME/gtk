@@ -96,7 +96,7 @@ void                  gtk_button_set_relief         (GtkButton      *button,
 GtkReliefStyle        gtk_button_get_relief         (GtkButton      *button);
 void                  gtk_button_set_label          (GtkButton      *button,
 						     const gchar    *label);
-G_CONST_RETURN gchar *gtk_button_get_label          (GtkButton      *button);
+const gchar *         gtk_button_get_label          (GtkButton      *button);
 void                  gtk_button_set_use_underline  (GtkButton      *button,
 						     gboolean        use_underline);
 gboolean              gtk_button_get_use_underline  (GtkButton      *button);
@@ -121,13 +121,6 @@ GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
 
 GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
 
-void _gtk_button_set_depressed             (GtkButton          *button,
-					    gboolean            depressed);
-void _gtk_button_paint                     (GtkButton          *button,
-                                            cairo_t            *cr,
-                                            int                 width,
-                                            int                 height,
-					    GtkStateFlags       state);
 
 G_END_DECLS
 

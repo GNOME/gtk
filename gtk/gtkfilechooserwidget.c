@@ -26,6 +26,7 @@
 #include "gtkfilechooserutils.h"
 #include "gtktypebuiltins.h"
 #include "gtkfilechooserembed.h"
+#include "gtkorientable.h"
 #include "gtkintl.h"
 
 
@@ -63,7 +64,7 @@ static void     gtk_file_chooser_widget_get_property (GObject               *obj
 						      GValue                *value,
 						      GParamSpec            *pspec);
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_VBOX,
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_BOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
 						_gtk_file_chooser_delegate_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
@@ -91,6 +92,8 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
 								   GTK_TYPE_FILE_CHOOSER_WIDGET,
 								   GtkFileChooserWidgetPrivate);
   chooser_widget->priv = priv;
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (chooser_widget),
+                                  GTK_ORIENTATION_VERTICAL);
 }
 
 static void

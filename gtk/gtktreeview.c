@@ -32,7 +32,6 @@
 #include "gtkmarshalers.h"
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
-#include "gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
 #include "gtkvbox.h"
@@ -51,6 +50,7 @@
 #include "gtkentryprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtktreeviewaccessible.h"
 
 
 /**
@@ -1696,6 +1696,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F, GDK_CONTROL_MASK, "start-interactive-search", 0);
 
   g_type_class_add_private (o_class, sizeof (GtkTreeViewPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TREE_VIEW_ACCESSIBLE);
 }
 
 static void
@@ -2368,22 +2370,17 @@ gtk_tree_view_size_request_columns (GtkTreeView *tree_view)
 
   tree_view->priv->header_height = 0;
 
-  if (tree_view->priv->model)
+  for (list = tree_view->priv->columns; list; list = list->next)
     {
-      for (list = tree_view->priv->columns; list; list = list->next)
-        {
-          GtkRequisition     requisition;
-          GtkTreeViewColumn *column = list->data;
-	  GtkWidget         *button = gtk_tree_view_column_get_button (column);
+      GtkRequisition     requisition;
+      GtkTreeViewColumn *column = list->data;
+      GtkWidget         *button = gtk_tree_view_column_get_button (column);
 
-	  if (button == NULL)
-	    continue;
+      if (button == NULL)
+        continue;
 
-          column = list->data;
-
-          gtk_widget_get_preferred_size (button, &requisition, NULL);
-          tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
-        }
+      gtk_widget_get_preferred_size (button, &requisition, NULL);
+      tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
     }
 }
 
@@ -2578,10 +2575,9 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        list != (rtl ? first_column->prev : last_column->next);
        list = (rtl ? list->prev : list->next)) 
     {
-      gint old_width, column_width;
+      gint column_width;
 
       column = list->data;
-      old_width = gtk_tree_view_column_get_width (column);
 
       if (!gtk_tree_view_column_get_visible (column))
 	continue;
@@ -2766,8 +2762,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   
   if (gtk_widget_get_realized (widget))
     {
-      gboolean has_expand_column = FALSE;
-
       gdk_window_move_resize (gtk_widget_get_window (widget),
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
@@ -2784,15 +2778,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
       if (tree_view->priv->tree == NULL)
         invalidate_empty_focus (tree_view);
-
-      for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-	{
-	  if (gtk_tree_view_column_get_expand (GTK_TREE_VIEW_COLUMN (tmp_list->data)))
-	    {
-	      has_expand_column = TRUE;
-	      break;
-	    }
-	}
 
       if (width_changed && tree_view->priv->expander_column)
         {
@@ -3198,8 +3183,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  gtk_tree_view_column_get_resizable (column) &&
 	  _gtk_tree_view_column_get_window (column))
 	{
-	  GtkWidget *button;
-          GtkAllocation button_allocation;
 	  gpointer drag_data;
 
 	  if (event->type == GDK_2BUTTON_PRESS &&
@@ -3235,10 +3218,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 					     0, 0, NULL, NULL,
 					     drag_data);
 
-	  button = gtk_tree_view_column_get_button (column);
-          gtk_widget_get_allocation (button, &button_allocation);
 	  tree_view->priv->drag_pos = i;
-	  tree_view->priv->x_drag = button_allocation.x + (rtl ? 0 : button_allocation.width);
+	  tree_view->priv->x_drag = gtk_tree_view_column_get_x_offset (column) + (rtl ? 0 : gtk_tree_view_column_get_width (column));
 
 	  if (!gtk_widget_has_focus (widget))
 	    gtk_widget_grab_focus (widget);
@@ -8552,6 +8533,8 @@ gtk_tree_view_get_path_for_child (GtkContainer *container,
       break;
     }
 
+  gtk_widget_path_append_for_widget (path, child);
+
   return path;
 }
 
@@ -13532,7 +13515,6 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
                              GtkTreeViewColumn  *column,
                              GdkRectangle       *rect)
 {
-  GtkAllocation allocation;
   GtkRBTree *tree = NULL;
   GtkRBNode *node = NULL;
   gint vertical_separator;
@@ -13556,9 +13538,8 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 
   if (column)
     {
-      gtk_widget_get_allocation (gtk_tree_view_column_get_button (column), &allocation);
-      rect->x = allocation.x + horizontal_separator/2;
-      rect->width = allocation.width - horizontal_separator;
+      rect->x = gtk_tree_view_column_get_x_offset (column) + horizontal_separator/2;
+      rect->width = gtk_tree_view_column_get_width (column) - horizontal_separator;
     }
 
   if (path)

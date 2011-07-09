@@ -1231,6 +1231,7 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   GtkGridPrivate *priv = grid->priv;
   GtkGridRequest request;
   GtkGridLines *lines;
+  GtkOrientation orientation;
 
   if (priv->children == NULL)
     {
@@ -1250,10 +1251,15 @@ gtk_grid_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  gtk_grid_request_run (&request, 1 - priv->orientation, FALSE);
-  gtk_grid_request_allocate (&request, 1 - priv->orientation, GET_SIZE (allocation, 1 - priv->orientation));
-  gtk_grid_request_run (&request, priv->orientation, TRUE);
-  gtk_grid_request_allocate (&request, priv->orientation, GET_SIZE (allocation, priv->orientation));
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+    orientation = GTK_ORIENTATION_HORIZONTAL;
+  else
+    orientation = GTK_ORIENTATION_VERTICAL;
+
+  gtk_grid_request_run (&request, 1 - orientation, FALSE);
+  gtk_grid_request_allocate (&request, 1 - orientation, GET_SIZE (allocation, 1 - orientation));
+  gtk_grid_request_run (&request, orientation, TRUE);
+  gtk_grid_request_allocate (&request, orientation, GET_SIZE (allocation, orientation));
 
   gtk_grid_request_position (&request, 0);
   gtk_grid_request_position (&request, 1);

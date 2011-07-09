@@ -1171,7 +1171,7 @@ gtk_icon_size_from_name (const gchar *name)
  * Gets the canonical name of the given icon size. The returned string
  * is statically allocated and should not be freed.
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_icon_size_get_name (GtkIconSize  size)
 {
   if (size >= icon_sizes_used)
@@ -2210,7 +2210,7 @@ gtk_icon_source_set_pixbuf (GtkIconSource *source,
  * Return value: (type filename): image filename. This string must not
  * be modified or freed.
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_icon_source_get_filename (const GtkIconSource *source)
 {
   g_return_val_if_fail (source != NULL, NULL);
@@ -2231,7 +2231,7 @@ gtk_icon_source_get_filename (const GtkIconSource *source)
  *
  * Return value: icon name. This string must not be modified or freed.
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_icon_source_get_icon_name (const GtkIconSource *source)
 {
   g_return_val_if_fail (source != NULL, NULL);

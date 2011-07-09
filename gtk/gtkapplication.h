@@ -55,8 +55,13 @@ struct _GtkApplicationClass
 {
   GApplicationClass parent_class;
 
+  void (*window_added)   (GtkApplication *application,
+                          GtkWindow      *window);
+  void (*window_removed) (GtkApplication *application,
+                          GtkWindow      *window);
+
   /*< private >*/
-  gpointer padding[16];
+  gpointer padding[14];
 };
 
 GType                   gtk_application_get_type                        (void) G_GNUC_CONST;

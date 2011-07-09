@@ -25,7 +25,6 @@
 
 #include "gtkmodules.h"
 #include "gtksettingsprivate.h"
-#include "gtkrc.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkprivate.h"

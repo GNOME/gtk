@@ -515,29 +515,29 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (pspec) != GDK_TYPE_PIXBUF))
         {
-          if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+          GObject *object = gtk_builder_get_object (builder, prop->data);
+
+          if (object)
             {
-              GObject *object;
-              object = gtk_builder_get_object (builder, prop->data);
-              if (!object)
+              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
+              g_value_set_object (&parameter.value, object);
+            }
+          else 
+            {
+              if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
                 {
                   g_warning ("Failed to get constuct only property "
                              "%s of %s with value `%s'",
                              prop->name, object_name, prop->data);
                   continue;
                 }
-              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
-              g_value_set_object (&parameter.value, object);
-            }
-          else
-            {
+              /* Delay setting property */
               property = g_slice_new (DelayedProperty);
               property->object = g_strdup (object_name);
               property->name = g_strdup (prop->name);
               property->value = g_strdup (prop->data);
               builder->priv->delayed_properties =
                 g_slist_prepend (builder->priv->delayed_properties, property);
-
               continue;
             }
         }
@@ -552,7 +552,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
           continue;
         }
 
-      if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+      if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
         g_array_append_val (*construct_parameters, parameter);
       else
         g_array_append_val (*parameters, parameter);
@@ -1296,7 +1296,8 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * It uses #GModule's introspective features (by opening the module %NULL) 
  * to look at the application's symbol table. From here it tries to match
  * the signal handler names given in the interface description with
- * symbols in the application and connects the signals.
+ * symbols in the application and connects the signals. Note that this
+ * function can only be called once, subsequent calls will do nothing.
  * 
  * Note that this function will not work correctly if #GModule is not
  * supported on the platform.
@@ -1346,7 +1347,8 @@ gtk_builder_connect_signals (GtkBuilder *builder,
  * by the gtk_builder_connect_signals() and gtk_builder_connect_signals_full()
  * methods.  It is mainly intended for interpreted language bindings, but
  * could be useful where the programmer wants more control over the signal
- * connection process.
+ * connection process. Note that this function can only be called once,
+ * subsequent calls will do nothing.
  *
  * Since: 2.12
  */

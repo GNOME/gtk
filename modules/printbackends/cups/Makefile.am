@@ -4,19 +4,21 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gtk				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
 	$(CUPS_CFLAGS)					\
+	$(COLORD_CFLAGS)				\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEP_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)
 
 LDADDS = \
 	$(top_builddir)/gtk/libgtk-3.la	\
+	$(COLORD_LIBS)			\
 	$(GTK_DEP_LIBS)
 
 backenddir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/printbackends

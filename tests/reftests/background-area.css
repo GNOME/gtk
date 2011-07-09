@@ -1,0 +1,23 @@
+* {
+  engine: none;
+  border-radius: 0;
+  border-style: none;
+  border-image: none;
+  background-image: none;
+}
+
+GtkWindow {
+  background-color: green;
+}
+
+GtkButton {
+  background-color: black;
+  border-style: solid;
+  border-color: rgba(255,0,0,0.6);
+  border-width: 4;
+}
+
+#reference {
+  border-color: rgb(153,102,0);
+}
+

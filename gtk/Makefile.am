@@ -16,7 +16,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = . tests
+SUBDIRS = a11y . tests
 
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
@@ -32,7 +32,7 @@ endif
 endif
 endif
 
-INCLUDES =						\
+AM_CPPFLAGS =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
 	-DGTK_DATADIR=\"$(datadir)\"			\
@@ -99,7 +99,7 @@ endif
 # This places the generated .def file in srcdir, since it is expected to be there.
 # (The one from a tarball is)
 gtk.def: gtk.symbols
-	$(AM_V_GEN) (echo -e EXPORTS; $(CPP) -P -DG_OS_WIN32 - <$(srcdir)/gtk.symbols | $(SED) -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gtk.def
+	$(AM_V_GEN) (echo -e EXPORTS; $(CPP) -P -DG_OS_WIN32 - <$(srcdir)/gtk.symbols | $(SED) -e '/^$$/d' -e 's/^/	/') > $(srcdir)/gtk.def
 
 TESTS_ENVIRONMENT = srcdir="$(srcdir)" gtk_all_c_sources="$(gtk_all_c_sources)"
 if OS_LINUX
@@ -109,8 +109,11 @@ endif
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
+	$(top_builddir)/gtk/a11y/libgail.la \
 	$(GTK_DEP_LIBS)
-deps =
+deps = \
+	$(top_builddir)/gdk/libgdk-3.la	\
+	$(top_builddir)/gtk/a11y/libgail.la
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
@@ -256,6 +259,7 @@ gtk_public_h_sources = 		\
 	gtknumerableicon.h	\
 	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
+	gtkoverlay.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
@@ -375,7 +379,6 @@ endif
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
-	gtk9slice.h		\
 	gtkaccelgroupprivate.h	\
 	gtkaccessibleprivate.h	\
 	gtkanimationdescription.h \
@@ -383,12 +386,15 @@ gtk_private_h_sources =		\
 	gtkappchoosermodule.h	\
 	gtkappchooseronline.h	\
 	gtkbindingsprivate.h	\
+	gtkborderimageprivate.h \
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
+	gtkcontainerprivate.h   \
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
 	gtkcssselectorprivate.h	\
+	gtkcsstypesprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
@@ -423,6 +429,7 @@ gtk_private_h_sources =		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h	\
+	gtkroundedboxprivate.h	\
 	gtkscaleprivate.h	\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
@@ -443,6 +450,7 @@ gtk_private_h_sources =		\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
 	gtktextutil.h		\
+	gtkthemingengineprivate.h \
 	gtktimeline.h		\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
@@ -455,7 +463,6 @@ gtk_private_h_sources =		\
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources = 		\
-	gtk9slice.c		\
 	gtkquery.c		\
 	gtksearchengine.c	\
 	gtksearchenginesimple.c	\
@@ -485,6 +492,7 @@ gtk_base_c_sources = 		\
 	gtkbin.c		\
 	gtkbindings.c		\
 	gtkborder.c		\
+	gtkborderimage.c        \
 	gtkbox.c		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
@@ -518,6 +526,7 @@ gtk_base_c_sources = 		\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\
 	gtkcssselector.c	\
+	gtkcsstypes.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
@@ -587,6 +596,7 @@ gtk_base_c_sources = 		\
 	gtknumerableicon.c	\
 	gtkoffscreenwindow.c	\
 	gtkorientable.c		\
+	gtkoverlay.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
 	gtkpango.c		\
@@ -614,6 +624,7 @@ gtk_base_c_sources = 		\
 	gtkrecentchooser.c	\
 	gtkrecentfilter.c	\
 	gtkrecentmanager.c	\
+	gtkroundedbox.c		\
 	gtkscale.c		\
 	gtkscalebutton.c	\
 	gtkscrollable.c		\
@@ -883,7 +894,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) gtktypebuiltins.c.template
 
 gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
 	$(AM_V_GEN) echo '#include <gtk/gtkx.h>' > xgen-gtfsrc.c && \
-	  ${CPP} $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
+	  ${CPP} $(DEFS) $(AM_CPPFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
 	  sort | uniq | \
 	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; s/^.*\(gdk_x11\|gtk_plug_\|gtk_socket_\).*$$/#ifdef GDK_WINDOWING_X11\n&\n#endif/; }' > xgen-gtf \
@@ -1007,7 +1018,7 @@ endif
 Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtkx.h"
 Gtk_3_0_gir_INCLUDES = Atk-1.0
 Gtk_3_0_gir_CFLAGS = \
-		$(INCLUDES) \
+		$(AM_CPPFLAGS) \
 		-UGDK_DISABLE_DEPRECATED \
 		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API

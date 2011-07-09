@@ -1050,7 +1050,7 @@ test_child_properties (void)
   GtkBuilder * builder;
   const gchar buffer1[] =
     "<interface>"
-    "  <object class=\"GtkVBox\" id=\"vbox1\">"
+    "  <object class=\"GtkBox\" id=\"vbox1\">"
     "    <child>"
     "      <object class=\"GtkLabel\" id=\"label1\"/>"
     "      <packing>"
@@ -1071,7 +1071,7 @@ test_child_properties (void)
   
   builder = builder_new_from_string (buffer1, -1, NULL);
   vbox = gtk_builder_get_object (builder, "vbox1");
-  g_assert (GTK_IS_VBOX (vbox));
+  g_assert (GTK_IS_BOX (vbox));
 
   label = gtk_builder_get_object (builder, "label1");
   g_assert (GTK_IS_LABEL (label));

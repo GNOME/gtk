@@ -105,7 +105,7 @@ create_model (void)
       gboolean sensitive;
 
       if (i == 1 || i == 3)
-        icon_name = "battery-critical-charging-symbolic";
+        icon_name = "battery-caution-charging-symbolic";
       else
         icon_name = NULL;
       if (i == 3)

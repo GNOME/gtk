@@ -909,7 +909,7 @@ _gdk_broadway_display_open (const gchar *display_name)
 }
 
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gdk_broadway_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);

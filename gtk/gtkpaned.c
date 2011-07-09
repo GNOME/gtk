@@ -36,15 +36,19 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-
+#include "a11y/gtkpanedaccessible.h"
 
 /**
  * SECTION:gtkpaned
- * @Short_description: Base class for widgets with two adjustable panes
+ * @Short_description: A widget with two adjustable panes
  * @Title: GtkPaned
  *
- * #GtkPaned is the base class for widgets with two panes, arranged either
- * horizontally (#GtkHPaned) or vertically (#GtkVPaned). Child widgets are
+ * #GtkPaned has two panes, arranged either
+ * horizontally or vertically. The division between
+ * the two panes is adjustable by the user by dragging
+ * a handle.
+ *
+ * Child widgets are
  * added to the panes of the widget with gtk_paned_pack1() and
  * gtk_paned_pack2(). The division between the two children is set by default
  * from the size requests of the children, but it can be adjusted by the
@@ -649,6 +653,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   add_move_binding (binding_set, GDK_KEY_KP_End, 0, GTK_SCROLL_END);
 
   g_type_class_add_private (object_class, sizeof (GtkPanedPrivate));
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PANED_ACCESSIBLE);
 }
 
 static GType
@@ -983,18 +988,6 @@ flip_child (GtkWidget     *widget,
   child_pos->x = 2 * x + width - child_pos->x - child_pos->width;
 }
 
-static gboolean
-gtk_paned_get_child_visible (GtkPaned  *paned,
-                             guint      id)
-{
-  GtkPanedPrivate *priv = paned->priv;
-  GtkWidget *child;
-
-  child = id == CHILD1 ? priv->child1 : priv->child2;
-
-  return (child != NULL && gtk_widget_get_child_visible (child));
-}
-
 static void
 gtk_paned_set_child_visible (GtkPaned  *paned,
                              guint      id,
@@ -1002,16 +995,10 @@ gtk_paned_set_child_visible (GtkPaned  *paned,
 {
   GtkPanedPrivate *priv = paned->priv;
   GtkWidget *child;
-  gboolean was_visible;
-
-  was_visible = gtk_paned_get_child_visible (paned, id);
 
   child = id == CHILD1 ? priv->child1 : priv->child2;
 
   if (child == NULL)
-    return;
-
-  if (was_visible == visible)
     return;
 
   gtk_widget_set_child_visible (child, visible);
@@ -1020,10 +1007,13 @@ gtk_paned_set_child_visible (GtkPaned  *paned,
     {
       GdkWindow *window = id == CHILD1 ? priv->child1_window : priv->child2_window;
 
-      if (visible)
-        gdk_window_show (window);
-      else
-        gdk_window_hide (window);
+      if (visible != gdk_window_is_visible (window))
+        {
+          if (visible)
+            gdk_window_show (window);
+          else
+            gdk_window_hide (window);
+        }
     }
 }
 
@@ -1239,11 +1229,6 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       if (gtk_widget_get_realized (widget))
 	gdk_window_hide (priv->handle);
 
-      if (priv->child1)
-        gtk_paned_set_child_visible (paned, 0, TRUE);
-      if (priv->child2)
-        gtk_paned_set_child_visible (paned, 1, TRUE);
-
       window_allocation.x = allocation->x;
       window_allocation.y = allocation->y;
       window_allocation.width = allocation->width;
@@ -1254,6 +1239,10 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       if (priv->child1 && gtk_widget_get_visible (priv->child1))
         {
+          gtk_paned_set_child_visible (paned, 0, TRUE);
+          if (priv->child2)
+            gtk_paned_set_child_visible (paned, 1, FALSE);
+
           gtk_paned_child_allocate (priv->child1,
                                     priv->child1_window,
                                     &window_allocation,
@@ -1261,10 +1250,21 @@ gtk_paned_size_allocate (GtkWidget     *widget,
         }
       else if (priv->child2 && gtk_widget_get_visible (priv->child2))
         {
+          gtk_paned_set_child_visible (paned, 1, TRUE);
+          if (priv->child1)
+            gtk_paned_set_child_visible (paned, 0, FALSE);
+
           gtk_paned_child_allocate (priv->child2,
                                     priv->child2_window,
                                     &window_allocation,
                                     &child_allocation);
+        }
+      else
+        {
+          if (priv->child1)
+            gtk_paned_set_child_visible (paned, 0, FALSE);
+          if (priv->child2)
+            gtk_paned_set_child_visible (paned, 1, FALSE);
         }
     }
 }

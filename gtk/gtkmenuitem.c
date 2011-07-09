@@ -40,15 +40,18 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtkactivatable.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkmenuitemaccessible.h"
+#include "a11y/gtksubmenuitemaccessible.h"
 
 
 /**
  * SECTION:gtkmenuitem
  * @Short_description: The widget used for item in menus
  * @Title: GtkMenuItem
- * @See_also: #GtkBin, #GtkItem, #GtkMenuShell
+ * @See_also: #GtkBin, #GtkMenuShell
  *
  * The #GtkMenuItem widget and the derived widgets are the only valid
  * childs for menus. Their function is to correctly handle highlighting,
@@ -154,7 +157,7 @@ static gboolean gtk_menu_item_can_activate_accel (GtkWidget *widget,
 
 static void gtk_real_menu_item_set_label (GtkMenuItem     *menu_item,
                                           const gchar     *label);
-static G_CONST_RETURN gchar * gtk_real_menu_item_get_label (GtkMenuItem *menu_item);
+static const gchar * gtk_real_menu_item_get_label (GtkMenuItem *menu_item);
 
 static void gtk_menu_item_get_preferred_width            (GtkWidget           *widget,
                                                           gint                *minimum_size,
@@ -206,7 +209,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_menu_item_activatable_interface_init))
 
-
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
 {
@@ -234,6 +236,8 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->get_preferred_width = gtk_menu_item_get_preferred_width;
   widget_class->get_preferred_height = gtk_menu_item_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_menu_item_get_preferred_height_for_width;
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SUBMENU_ITEM_ACCESSIBLE);
 
   container_class->forall = gtk_menu_item_forall;
 
@@ -1892,7 +1896,7 @@ gtk_real_menu_item_set_label (GtkMenuItem *menu_item,
     }
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gtk_real_menu_item_get_label (GtkMenuItem *menu_item)
 {
   GtkWidget *child;
@@ -2121,7 +2125,6 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   GtkAllocation allocation;
   GtkWidget *widget;
   GtkMenuItem *parent_menu_item;
-  GtkRequisition requisition;
   GtkWidget *parent;
   GdkScreen *screen;
   gint twidth, theight;
@@ -2147,9 +2150,8 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
   direction = gtk_widget_get_direction (widget);
 
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &requisition, NULL);
-  twidth = requisition.width;
-  theight = requisition.height;
+  twidth = gtk_widget_get_allocated_width (GTK_WIDGET (menu));
+  theight = gtk_widget_get_allocated_height (GTK_WIDGET (menu));
 
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
   monitor_num = gdk_screen_get_monitor_at_window (screen, priv->event_window);
@@ -2522,7 +2524,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
  *
  * Since: 2.14
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)
 {
   g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);
@@ -2605,7 +2607,7 @@ gtk_menu_item_set_label (GtkMenuItem *menu_item,
  *
  * Since: 2.16
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_menu_item_get_label (GtkMenuItem *menu_item)
 {
   g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);

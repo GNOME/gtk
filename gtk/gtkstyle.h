@@ -61,11 +61,6 @@ typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
 					 const GString    *rc_string,
 					 GValue           *property_value);
 
-/* We make this forward declaration here, since we pass
- * GtkWidget's to the draw functions.
- */
-typedef struct _GtkWidget      GtkWidget;
-
 /**
  * GTK_STYLE_ATTACHED:
  * @style: a #GtkStyle.

@@ -55,6 +55,7 @@
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
+#include "a11y/gtkscalebuttonaccessible.h"
 
 /**
  * SECTION:gtkscalebutton
@@ -343,6 +344,8 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 				"popup", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
 				"popdown", 0);
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_BUTTON_ACCESSIBLE);
 }
 
 static void

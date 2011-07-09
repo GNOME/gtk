@@ -20,13 +20,12 @@ draw_callback (GtkWidget *widget,
                gpointer   data)
 {
   GtkStyleContext *context;
-  GdkRGBA *bg;
+  GdkRGBA rgba;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (context, 0, "background-color", &bg, NULL);
-  gdk_cairo_set_source_rgba (cr, bg);
+  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &rgba);
+  gdk_cairo_set_source_rgba (cr, &rgba);
   cairo_paint (cr);
-  gdk_rgba_free (bg);
 
   return TRUE;
 }
@@ -68,7 +67,6 @@ do_colorsel (GtkWidget *do_widget)
 {
   GtkWidget *vbox;
   GtkWidget *button;
-  GtkWidget *alignment;
 
   if (!window)
     {
@@ -111,12 +109,11 @@ do_colorsel (GtkWidget *do_widget)
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
-      alignment = gtk_alignment_new (1.0, 0.5, 0.0, 0.0);
-
       button = gtk_button_new_with_mnemonic ("_Change the above color");
-      gtk_container_add (GTK_CONTAINER (alignment), button);
+      gtk_widget_set_halign (button, GTK_ALIGN_END);
+      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
 
-      gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       g_signal_connect (button, "clicked",
                         G_CALLBACK (change_color_callback), NULL);

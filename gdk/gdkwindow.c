@@ -2408,9 +2408,6 @@ gdk_window_peek_children (GdkWindow *window)
  * doing. Pass %NULL for @window to get all events for all windows,
  * instead of events for a specific window.
  *
- * See gdk_display_add_client_message_filter() if you are interested
- * in X ClientMessage events.
- *
  * If you are interested in X GenericEvents, bear in mind that
  * XGetEventData() has been already called on the event, and
  * XFreeEventData() must not be called within @function.
@@ -6534,18 +6531,22 @@ gdk_window_set_background_pattern (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (window->input_only)
+    return;
+
   if (pattern)
     cairo_pattern_reference (pattern);
   if (window->background)
     cairo_pattern_destroy (window->background);
   window->background = pattern;
 
-  if (gdk_window_has_impl (window) &&
-      !window->input_only)
+  if (gdk_window_has_impl (window))
     {
       GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
       impl_class->set_background (window, pattern);
     }
+  else
+    gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
 }
 
 /**

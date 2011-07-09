@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkorientable.h"
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkvbox.h"
 
 
@@ -42,6 +43,21 @@
  * spacing, height, and alignment of #GtkVBox children.
  *
  * All children are allocated the same width.
+ *
+ * GtkVBox has been deprecated. You can use #GtkBox instead, which is a
+ * very quick and easy change. If you have derived your own classes from
+ * GtkVBox, you can simply change the inheritance to derive directly
+ * from #GtkBox, and set the #GtkOrientable::orientation property to
+ * %GTK_ORIENTATION_VERTICAL in your instance init function, with a
+ * call like:
+ * |[
+ *   gtk_orientable_set_orientation (GTK_ORIENTABLE (object),
+ *                                   GTK_ORIENTATION_VERTICAL);
+ * ]|
+ * If you want your code to be future-proof, the recommendation is to
+ * switch to #GtkGrid, since #GtkBox is going to be deprecated in favor
+ * of the more flexible grid widget eventually. For more information
+ * about migrating to #GtkGrid, see <xref linkend="gtk-migrating-GtkGrid"/>.
  */
 
 G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
@@ -68,6 +84,11 @@ gtk_vbox_init (GtkVBox *vbox)
  * Creates a new #GtkVBox.
  *
  * Returns: a new #GtkVBox.
+ *
+ * Deprecated: 3.2: You can use gtk_box_new() with %GTK_ORIENTATION_VERTICAL instead,
+ *   wich is a very quick and easy change. But the recommendation is to switch to
+ *   #GtkGrid, since #GtkBox is going to go away eventually.
+ *   See <xref linkend="gtk-migrating-GtkGrid"/>.
  */
 GtkWidget *
 gtk_vbox_new (gboolean homogeneous,

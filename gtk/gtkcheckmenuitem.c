@@ -33,7 +33,8 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-
+#include "a11y/gtkcheckmenuitemaccessible.h"
+#include "a11y/gtkchecksubmenuitemaccessible.h"
 
 /**
  * SECTION:gtkcheckmenuitem
@@ -150,7 +151,9 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                              GTK_PARAM_READABLE));
 
   widget_class->draw = gtk_check_menu_item_draw;
-  
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CHECK_SUBMENU_ITEM_ACCESSIBLE);
+
   menu_item_class->activate = gtk_check_menu_item_activate;
   menu_item_class->hide_on_activate = FALSE;
   menu_item_class->toggle_size_request = gtk_check_menu_item_toggle_size_request;

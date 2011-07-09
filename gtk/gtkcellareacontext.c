@@ -87,17 +87,9 @@ G_DEFINE_TYPE (GtkCellAreaContext, gtk_cell_area_context, G_TYPE_OBJECT);
 static void
 gtk_cell_area_context_init (GtkCellAreaContext *context)
 {
-  GtkCellAreaContextPrivate *priv;
-
   context->priv = G_TYPE_INSTANCE_GET_PRIVATE (context,
                                                GTK_TYPE_CELL_AREA_CONTEXT,
                                                GtkCellAreaContextPrivate);
-  priv = context->priv;
-
-  priv->min_width  = -1;
-  priv->nat_width  = -1;
-  priv->min_height = -1;
-  priv->nat_height = -1;
 }
 
 static void
@@ -289,27 +281,27 @@ gtk_cell_area_context_real_reset (GtkCellAreaContext *context)
 
   g_object_freeze_notify (G_OBJECT (context));
 
-  if (priv->min_width != -1)
+  if (priv->min_width != 0)
     {
-      priv->min_width = -1;
+      priv->min_width = 0;
       g_object_notify (G_OBJECT (context), "minimum-width");
     }
 
-  if (priv->nat_width != -1)
+  if (priv->nat_width != 0)
     {
-      priv->nat_width = -1;
+      priv->nat_width = 0;
       g_object_notify (G_OBJECT (context), "natural-width");
     }
 
-  if (priv->min_height != -1)
+  if (priv->min_height != 0)
     {
-      priv->min_height = -1;
+      priv->min_height = 0;
       g_object_notify (G_OBJECT (context), "minimum-height");
     }
 
-  if (priv->nat_height != -1)
+  if (priv->nat_height != 0)
     {
-      priv->nat_height = -1;
+      priv->nat_height = 0;
       g_object_notify (G_OBJECT (context), "natural-height");
     }
 
@@ -444,7 +436,7 @@ gtk_cell_area_context_allocate (GtkCellAreaContext *context,
  * requested with this context.
  *
  * After gtk_cell_area_context_reset() is called and/or before ever
- * requesting the size of a #GtkCellArea, the returned values are -1.
+ * requesting the size of a #GtkCellArea, the returned values are 0.
  *
  * Since: 3.0
  */
@@ -478,7 +470,7 @@ gtk_cell_area_context_get_preferred_width (GtkCellAreaContext *context,
  * requested with this context.
  *
  * After gtk_cell_area_context_reset() is called and/or before ever
- * requesting the size of a #GtkCellArea, the returned values are -1.
+ * requesting the size of a #GtkCellArea, the returned values are 0.
  *
  * Since: 3.0
  */

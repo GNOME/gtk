@@ -1,6 +1,8 @@
 include $(top_srcdir)/Makefile.decl
 
-INCLUDES = \
+SUBDIRS =
+
+AM_CPPFLAGS = \
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk		\
@@ -108,6 +110,18 @@ papersize_LDADD			 = $(progs_ldadd)
 TEST_PROGS			+= cellarea
 cellarea_SOURCES		 = cellarea.c
 cellarea_LDADD			 = $(progs_ldadd)
+
+TEST_PROGS			+= treepath
+treepath_SOURCES		 = treepath.c
+treepath_LDADD			 = $(progs_ldadd)
+
+TEST_PROGS			+= accessible
+accessible_SOURCES		 = accessible.c
+accessible_LDADD		 = $(progs_ldadd)
+
+TEST_PROGS			+= entry
+entry_SOURCES			 = entry.c
+entry_LDADD			 = $(progs_ldadd)
 
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \

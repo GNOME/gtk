@@ -169,7 +169,7 @@ gtk_print_settings_copy (GtkPrintSettings *other)
  * 
  * Since: 2.10
  */
-G_CONST_RETURN gchar *        
+const gchar *
 gtk_print_settings_get (GtkPrintSettings *settings,
 			const gchar      *key)
 {
@@ -524,7 +524,7 @@ gtk_print_settings_foreach (GtkPrintSettings    *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *       
+const gchar *
 gtk_print_settings_get_printer (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_PRINTER);
@@ -1540,7 +1540,7 @@ gtk_print_settings_set_page_ranges  (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_default_source (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE);
@@ -1575,7 +1575,7 @@ gtk_print_settings_set_default_source (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_media_type (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_MEDIA_TYPE);
@@ -1610,7 +1610,7 @@ gtk_print_settings_set_media_type (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_dither (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_DITHER);
@@ -1674,7 +1674,7 @@ gtk_print_settings_set_finishings (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_output_bin (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_BIN);

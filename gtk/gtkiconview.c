@@ -47,6 +47,7 @@
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "a11y/gtkcontaineraccessible.h"
 
 /**
  * SECTION:gtkiconview
@@ -273,7 +274,6 @@ static gboolean         gtk_icon_view_key_press                 (GtkWidget      
 								 GdkEventKey        *event);
 static gboolean         gtk_icon_view_key_release               (GtkWidget          *widget,
 								 GdkEventKey        *event);
-static AtkObject       *gtk_icon_view_get_accessible            (GtkWidget          *widget);
 
 
 /* GtkContainer vfuncs */
@@ -447,6 +447,7 @@ static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildab
 							  GObject       *child,
 							  const gchar   *tagname,
 							  gpointer      *data);
+static GType    gtk_icon_view_accessible_get_type        (void);
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
@@ -482,7 +483,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
   widget_class->style_updated = gtk_icon_view_style_updated;
-  widget_class->get_accessible = gtk_icon_view_get_accessible;
   widget_class->get_preferred_width = gtk_icon_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_icon_view_get_preferred_height;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
@@ -1046,6 +1046,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
+
+  gtk_widget_class_set_accessible_type (widget_class, gtk_icon_view_accessible_get_type ());
 }
 
 static void
@@ -2950,11 +2952,17 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
       flags |= GTK_CELL_RENDERER_SELECTED;
 
       gtk_style_context_set_state (style_context, state);
+
       gtk_render_background (style_context, cr,
                              x - icon_view->priv->item_padding,
                              y - icon_view->priv->item_padding,
                              item->cell_area.width  + icon_view->priv->item_padding * 2,
                              item->cell_area.height + icon_view->priv->item_padding * 2);
+      gtk_render_frame (style_context, cr,
+                        x - icon_view->priv->item_padding,
+                        y - icon_view->priv->item_padding,
+                        item->cell_area.width  + icon_view->priv->item_padding * 2,
+                        item->cell_area.height + icon_view->priv->item_padding * 2);
     }
 
   cell_area.x      = x;
@@ -9216,13 +9224,13 @@ gtk_icon_view_accessible_get_type (void)
     {
       GTypeInfo tinfo =
       {
-        0, /* class size */
+        sizeof (GtkContainerAccessibleClass), /* class size */
         (GBaseInitFunc) NULL, /* base init */
         (GBaseFinalizeFunc) NULL, /* base finalize */
         (GClassInitFunc) gtk_icon_view_accessible_class_init,
         (GClassFinalizeFunc) NULL, /* class finalize */
         NULL, /* class data */
-        0, /* instance size */
+        sizeof (GtkContainerAccessible), /* instance size */
         0, /* nb preallocs */
         (GInstanceInitFunc) NULL, /* instance init */
         NULL /* value table */
@@ -9240,106 +9248,14 @@ gtk_icon_view_accessible_get_type (void)
         NULL
       };
 
-      /*
-       * Figure out the size of the class and instance
-       * we are deriving from
-       */
-      AtkObjectFactory *factory;
-      GType derived_type;
-      GTypeQuery query;
-      GType derived_atk_type;
-
-      derived_type = g_type_parent (GTK_TYPE_ICON_VIEW);
-      factory = atk_registry_get_factory (atk_get_default_registry (), 
-                                          derived_type);
-      derived_atk_type = atk_object_factory_get_accessible_type (factory);
-      g_type_query (derived_atk_type, &query);
-      tinfo.class_size = query.class_size;
-      tinfo.instance_size = query.instance_size;
- 
-      type = g_type_register_static (derived_atk_type, 
-                                     I_("GtkIconViewAccessible"), 
-                                     &tinfo, 0);
+      type = g_type_register_static (GTK_TYPE_CONTAINER_ACCESSIBLE,
+                                     I_("GtkIconViewAccessible"), &tinfo, 0);
       g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
                                    &atk_component_info);
       g_type_add_interface_static (type, ATK_TYPE_SELECTION,
                                    &atk_selection_info);
     }
   return type;
-}
-
-static AtkObject *
-gtk_icon_view_accessible_new (GObject *obj)
-{
-  AtkObject *accessible;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (obj), NULL);
-
-  accessible = g_object_new (gtk_icon_view_accessible_get_type (), NULL);
-  atk_object_initialize (accessible, obj);
-
-  return accessible;
-}
-
-static GType
-gtk_icon_view_accessible_factory_get_accessible_type (void)
-{
-  return gtk_icon_view_accessible_get_type ();
-}
-
-static AtkObject*
-gtk_icon_view_accessible_factory_create_accessible (GObject *obj)
-{
-  return gtk_icon_view_accessible_new (obj);
-}
-
-static void
-gtk_icon_view_accessible_factory_class_init (AtkObjectFactoryClass *klass)
-{
-  klass->create_accessible = gtk_icon_view_accessible_factory_create_accessible;
-  klass->get_accessible_type = gtk_icon_view_accessible_factory_get_accessible_type;
-}
-
-static GType
-gtk_icon_view_accessible_factory_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      const GTypeInfo tinfo =
-      {
-        sizeof (AtkObjectFactoryClass),
-        NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_icon_view_accessible_factory_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (AtkObjectFactory),
-        0,             /* n_preallocs */
-        NULL, NULL
-      };
-
-      type = g_type_register_static (ATK_TYPE_OBJECT_FACTORY, 
-                                    I_("GtkIconViewAccessibleFactory"),
-                                    &tinfo, 0);
-    }
-  return type;
-}
-
-
-static AtkObject *
-gtk_icon_view_get_accessible (GtkWidget *widget)
-{
-  static gboolean first_time = TRUE;
-
-  if (first_time)
-    {
-      _gtk_accessible_set_factory_type (GTK_TYPE_ICON_VIEW,
-                                        gtk_icon_view_accessible_factory_get_type ());
-      first_time = FALSE;
-    }
-  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->get_accessible (widget);
 }
 
 static gboolean

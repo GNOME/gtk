@@ -31,6 +31,7 @@
 #ifndef __GTK_HSCROLLBAR_H__
 #define __GTK_HSCROLLBAR_H__
 
+#ifndef GTK_DISABLE_DEPRECATED
 
 #include <gtk/gtkscrollbar.h>
 
@@ -66,5 +67,6 @@ GtkWidget* gtk_hscrollbar_new      (GtkAdjustment *adjustment);
 
 G_END_DECLS
 
+#endif
 
 #endif /* __GTK_HSCROLLBAR_H__ */

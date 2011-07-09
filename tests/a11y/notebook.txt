@@ -1,0 +1,67 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  notebook1
+    "page tab list"
+    parent: window1
+    index: 0
+    state: enabled focusable sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkSelection>
+    selected children: unnamed-GtkNotebookPageAccessible-0
+    unnamed-GtkNotebookPageAccessible-0
+      "page tab"
+      parent: notebook1
+      index: 0
+      name: Tab 1
+      state: enabled multi-line selectable selected sensitive showing visible
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      page1
+        "push button"
+        index: 0
+        name: Yes
+        state: enabled focusable sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>y
+    unnamed-GtkNotebookPageAccessible-1
+      "page tab"
+      parent: notebook1
+      index: 1
+      name: Tab 2
+      state: enabled multi-line selectable sensitive showing visible
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      page2
+        "push button"
+        index: 0
+        name: No
+        state: enabled focusable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>n

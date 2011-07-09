@@ -24,7 +24,6 @@
 #include <ctype.h>
 
 #include "gtkintl.h"
-#include "gtkalignment.h"
 #include "gtkcheckbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
@@ -37,6 +36,7 @@
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtktogglebutton.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 
 #include "gtkprinteroptionwidget.h"
@@ -60,6 +60,7 @@ struct GtkPrinterOptionWidgetPrivate
   GtkWidget *entry;
   GtkWidget *image;
   GtkWidget *label;
+  GtkWidget *info_label;
   GtkWidget *filechooser;
   GtkWidget *box;
 };
@@ -76,7 +77,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkPrinterOptionWidget, gtk_printer_option_widget, GTK_TYPE_HBOX)
+G_DEFINE_TYPE (GtkPrinterOptionWidget, gtk_printer_option_widget, GTK_TYPE_BOX)
 
 static void gtk_printer_option_widget_set_property (GObject      *object,
 						    guint         prop_id,
@@ -104,7 +105,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
 
   widget_class->mnemonic_activate = gtk_printer_option_widget_mnemonic_activate;
 
-  g_type_class_add_private (class, sizeof (GtkPrinterOptionWidgetPrivate));  
+  g_type_class_add_private (class, sizeof (GtkPrinterOptionWidgetPrivate));
 
   signals[CHANGED] =
     g_signal_new ("changed",
@@ -423,6 +424,11 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
     {
       gtk_widget_destroy (priv->label);
       priv->label = NULL;
+    }
+  if (priv->info_label)
+    {
+      gtk_widget_destroy (priv->info_label);
+      priv->info_label = NULL;
     }
 }
 
@@ -791,7 +797,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                                          gtk_printer_option_get_activates_default (source));
 
         label = gtk_label_new_with_mnemonic (_("_Name:"));
-        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_widget_set_halign (label, GTK_ALIGN_START);
+        gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
         gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->entry);
 
         gtk_table_attach (GTK_TABLE (priv->filechooser), label,
@@ -803,7 +810,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                           0, 0);
 
         label = gtk_label_new_with_mnemonic (_("_Save in folder:"));
-        gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+        gtk_widget_set_halign (label, GTK_ALIGN_START);
+        gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
         gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->combo);
 
         gtk_table_attach (GTK_TABLE (priv->filechooser), label,
@@ -822,6 +830,20 @@ construct_widgets (GtkPrinterOptionWidget *widget)
         g_signal_connect (priv->combo, "selection-changed", G_CALLBACK (filesave_changed_cb), widget);
       }
       break;
+
+    case GTK_PRINTER_OPTION_TYPE_INFO:
+      priv->info_label = gtk_label_new (NULL);
+      gtk_label_set_selectable (GTK_LABEL (priv->info_label), TRUE);
+      gtk_widget_show (priv->info_label);
+      gtk_box_pack_start (GTK_BOX (widget), priv->info_label, FALSE, TRUE, 0);
+
+      text = g_strdup_printf ("%s:", source->display_text);
+      priv->label = gtk_label_new_with_mnemonic (text);
+      g_free (text);
+      gtk_widget_show (priv->label);
+
+      break;
+
     default:
       break;
     }
@@ -886,6 +908,9 @@ update_widgets (GtkPrinterOptionWidget *widget)
 	  gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);
 	break;
       }
+    case GTK_PRINTER_OPTION_TYPE_INFO:
+      gtk_label_set_text (GTK_LABEL (priv->info_label), source->value);
+      break;
     default:
       break;
     }

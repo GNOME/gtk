@@ -729,7 +729,8 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
                              (gpointer) &priv->edit_widget);
   
   label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   gtk_style_context_get_background_color (context, GTK_STATE_FLAG_SELECTED, &color);
   gtk_widget_override_background_color (label, 0, &color);

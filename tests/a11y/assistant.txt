@@ -1,0 +1,141 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  button1
+    "push button"
+    index: 0
+    name: Page 1
+    state: enabled focusable sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkImage>
+    image size: -1 x -1
+    image description: (null)
+    <AtkAction>
+    action 0 name: click
+  button2
+    "push button"
+    index: 0
+    name: Page 2
+    state: enabled focusable sensitive visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkImage>
+    image size: -1 x -1
+    image description: (null)
+    <AtkAction>
+    action 0 name: click
+  unnamed-GtkBoxAccessible-0
+    "filler"
+    parent: unnamed-GtkBoxAccessible-1
+    index: 1
+    state: enabled horizontal sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    unnamed-GtkButtonAccessible-2
+      "push button"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 0
+      name: Close
+      state: enabled focusable sensitive
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>c
+    unnamed-GtkButtonAccessible-3
+      "push button"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 1
+      name: Cancel
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>c
+    unnamed-GtkButtonAccessible-4
+      "push button"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 2
+      name: Finish
+      state: focusable
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>f
+    unnamed-GtkButtonAccessible-5
+      "push button"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 3
+      name: Go Back
+      state: enabled focusable sensitive
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>b
+    unnamed-GtkButtonAccessible-6
+      "push button"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 4
+      name: Continue
+      state: focusable showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>o
+    unnamed-GtkButtonAccessible-7
+      "push button"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 5
+      name: Apply
+      state: enabled focusable sensitive
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: 20 x 20
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>a

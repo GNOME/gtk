@@ -38,7 +38,7 @@
 #include "gtktearoffmenuitem.h"
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
-#include "gtkvseparator.h"
+#include "gtkseparator.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -53,6 +53,7 @@
 
 #include "gtkentryprivate.h"
 #include "gtktreeprivate.h"
+#include "a11y/gtkcomboboxaccessible.h"
 
 
 /**
@@ -1005,6 +1006,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                               GTK_PARAM_READABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkComboBoxPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
 }
 
 static void
@@ -4835,7 +4838,7 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_combo_box_get_title (GtkComboBox *combo_box)
 {
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
@@ -5252,7 +5255,7 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   gint                   font_size, arrow_size;
   PangoContext          *context;
   PangoFontMetrics      *metrics;
-  PangoFontDescription  *font_desc;
+  const PangoFontDescription *font_desc;
   GtkWidget             *child;
   gint                   minimum_width = 0, natural_width = 0;
   gint                   child_min, child_nat;
@@ -5277,9 +5280,7 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   state = gtk_widget_get_state_flags (widget);
 
   get_widget_padding (widget, &padding);
-  gtk_style_context_get (style_context, state,
-                         "font", &font_desc,
-                         NULL);
+  font_desc = gtk_style_context_get_font (style_context, state);
 
   context = gtk_widget_get_pango_context (GTK_WIDGET (widget));
   metrics = pango_context_get_metrics (context, font_desc,
@@ -5287,7 +5288,6 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   font_size = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
                             pango_font_metrics_get_descent (metrics));
   pango_font_metrics_unref (metrics);
-  pango_font_description_free (font_desc);
 
   arrow_size = MAX (arrow_size, font_size) * arrow_scaling;
 
@@ -5605,7 +5605,7 @@ gtk_combo_box_get_active_id (GtkComboBox *combo_box)
   GtkTreeIter iter;
   gint column;
 
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), 0);
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
 
   column = combo_box->priv->id_column;
 

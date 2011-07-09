@@ -53,6 +53,9 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
    * GtkAppChooser:content-type:
    *
    * The content type of the #GtkAppChooser object.
+   *
+   * See <link linkend="gio-GContentType"><type>GContentType</type></link>
+   * for more information about content types.
    */
   pspec = g_param_spec_string ("content-type",
                                P_("Content type"),

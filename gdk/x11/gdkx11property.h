@@ -45,13 +45,13 @@ GdkAtom               gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
                                                          Atom         xatom);
 Atom                  gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
                                                              const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
+const gchar *         gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
                                                           Atom         xatom);
 #ifndef GDK_MULTIHEAD_SAFE
 Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
 GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
 Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
+const gchar *         gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
 
 G_END_DECLS

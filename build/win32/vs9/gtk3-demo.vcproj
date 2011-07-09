@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9.00"
+	Name="gtk3-demo"
+	ProjectGUID="{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FC}"
+	RootNamespace="gtk3demo"
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			ConfigurationType="1"
+			InheritedPropertySheets=".\gtk+.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
+				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+				CompileAs="1"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies=""
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			ConfigurationType="1"
+			InheritedPropertySheets=".\gtk+.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
+				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				CompileAs="1"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies=""
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="17"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			ConfigurationType="1"
+			InheritedPropertySheets=".\gtk+.vsprops"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
+				PreprocessorDefinitions="$(GtkPrefixDefine)"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				CompileAs="1"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies=""
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			ConfigurationType="1"
+			InheritedPropertySheets=".\gtk+.vsprops"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
+				PreprocessorDefinitions="$(GtkPrefixDefine)"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				CompileAs="1"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies=""
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="17"
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File RelativePath="..\..\..\demos\gtk-demo\appwindow.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\assistant.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\builder.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\button_box.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\changedisplay.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\clipboard.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\colorsel.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\combobox.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\dialog.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\drawingarea.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\editable_cells.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\entry_buffer.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\entry_completion.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\expander.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\hypertext.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\iconview.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\iconview_edit.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\images.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\infobar.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\links.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\list_store.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\main.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\menus.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\overlay.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\offscreen_window.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\offscreen_window2.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\panes.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\pickers.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\pixbufs.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\printing.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\rotated_text.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\search_entry.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\sizegroup.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\spinner.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\stock_browser.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\toolpalette.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\tree_store.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\ui_manager.c" />
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

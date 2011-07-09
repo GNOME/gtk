@@ -31,6 +31,8 @@
 #include "gtkanimationdescription.h"
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
+#include "gtkcsstypesprivate.h"
+#include "gtkborderimageprivate.h"
 
 #include "gtkstylepropertyprivate.h"
 #include "gtkintl.h"
@@ -311,7 +313,11 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   _gtk_style_property_register (pspec,
+                                0,
                                 parse_func,
+                                NULL,
+                                NULL,
+                                NULL,
                                 NULL,
                                 NULL);
 }
@@ -348,60 +354,12 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
         *pspec = node->pspec;
 
       if (parse_func)
-        *parse_func = node->parse_func;
+        *parse_func = node->property_parse_func;
 
       found = TRUE;
     }
 
   return found;
-}
-
-/* GParamSpec functionality */
-
-enum {
-  GTK_STYLE_PROPERTY_INHERIT = 1 << G_PARAM_USER_SHIFT
-};
-
-/**
- * gtk_style_param_set_inherit:
- * @pspec: A style param
- * @inherit: whether the @pspec value should be inherited
- *
- * Sets whether a param spec installed with function such as
- * gtk_style_properties_register_property() or
- * gtk_widget_class_install_style_property() should inherit their
- * value from the parent widget if it is not set instead of using
- * the default value of @pspec. See the
- * <ulink url="http://www.w3.org/TR/CSS21/cascade.html#inheritance">
- * CSS specification's description of inheritance</ulink> for a
- * longer description of this concept.
- *
- * By default, param specs do not inherit their value.
- **/
-void
-gtk_style_param_set_inherit (GParamSpec *pspec,
-                             gboolean    inherit)
-{
-  if (inherit)
-    pspec->flags |= GTK_STYLE_PROPERTY_INHERIT;
-  else
-    pspec->flags &= ~GTK_STYLE_PROPERTY_INHERIT;
-}
-
-/**
- * gtk_style_param_get_inherit:
- * @pspec: a style param
- *
- * Checks if the value of this param should be inherited from the parent
- * #GtkWidget instead of using the default value when it has not been
- * specified. See gtk_style_param_set_inherit() for more details.
- *
- * Returns: %TRUE if the param should inherit its value
- **/
-gboolean
-gtk_style_param_get_inherit (GParamSpec *pspec)
-{
-  return (pspec->flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE;
 }
 
 /* GtkStyleProperties methods */
@@ -510,6 +468,11 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
       g_return_if_fail (value_type == CAIRO_GOBJECT_TYPE_PATTERN ||
                         value_type == GTK_TYPE_GRADIENT);
     }
+  else if (style_prop->pspec->value_type == G_TYPE_INT)
+    {
+      g_return_if_fail (value_type == G_TYPE_INT ||
+                        value_type == GTK_TYPE_CSS_BORDER_RADIUS);
+    }
   else
     g_return_if_fail (style_prop->pspec->value_type == value_type);
 
@@ -533,12 +496,12 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, style_prop->pspec);
+  prop = g_hash_table_lookup (priv->properties, style_prop);
 
   if (!prop)
     {
       prop = property_data_new ();
-      g_hash_table_insert (priv->properties, style_prop->pspec, prop);
+      g_hash_table_insert (priv->properties, (gpointer) style_prop, prop);
     }
 
   val = property_data_get_value (prop, state);
@@ -610,19 +573,17 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
                                  GtkStateFlags       state,
                                  va_list             args)
 {
-  GtkStylePropertiesPrivate *priv;
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  priv = props->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
     {
       const GtkStyleProperty *node;
       gchar *error = NULL;
-      GValue val;
+      GValue val = { 0 };
 
       node = _gtk_style_property_lookup (property_name);
 
@@ -673,143 +634,6 @@ gtk_style_properties_set (GtkStyleProperties *props,
   va_end (args);
 }
 
-static gboolean
-resolve_color (GtkStyleProperties *props,
-	       GValue             *value)
-{
-  GdkRGBA color;
-
-  /* Resolve symbolic color to GdkRGBA */
-  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &color))
-    return FALSE;
-
-  /* Store it back, this is where GdkRGBA caching happens */
-  g_value_unset (value);
-  g_value_init (value, GDK_TYPE_RGBA);
-  g_value_set_boxed (value, &color);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_color_rgb (GtkStyleProperties *props,
-                   GValue             *value)
-{
-  GdkColor color = { 0 };
-  GdkRGBA rgba;
-
-  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &rgba))
-    return FALSE;
-
-  color.red = rgba.red * 65535. + 0.5;
-  color.green = rgba.green * 65535. + 0.5;
-  color.blue = rgba.blue * 65535. + 0.5;
-
-  g_value_unset (value);
-  g_value_init (value, GDK_TYPE_COLOR);
-  g_value_set_boxed (value, &color);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_gradient (GtkStyleProperties *props,
-                  GValue             *value)
-{
-  cairo_pattern_t *gradient;
-
-  if (!gtk_gradient_resolve (g_value_get_boxed (value), props, &gradient))
-    return FALSE;
-
-  /* Store it back, this is where cairo_pattern_t caching happens */
-  g_value_unset (value);
-  g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
-  g_value_take_boxed (value, gradient);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_shadow (GtkStyleProperties *props,
-                GValue *value)
-{
-  GtkShadow *resolved, *base;
-
-  base = g_value_get_boxed (value);
-
-  if (base == NULL)
-    return TRUE;
-  
-  if (_gtk_shadow_get_resolved (base))
-    return TRUE;
-
-  resolved = _gtk_shadow_resolve (base, props);
-  if (resolved == NULL)
-    return FALSE;
-
-  g_value_take_boxed (value, resolved);
-
-  return TRUE;
-}
-
-static gboolean
-style_properties_resolve_type (GtkStyleProperties     *props,
-                               const GtkStyleProperty *node,
-                               GValue                 *val)
-{
-  if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
-    {
-      if (node->pspec->value_type == GDK_TYPE_RGBA)
-        {
-          if (!resolve_color (props, val))
-            return FALSE;
-        }
-      else if (node->pspec->value_type == GDK_TYPE_COLOR)
-        {
-          if (!resolve_color_rgb (props, val))
-            return FALSE;
-        }
-      else
-        return FALSE;
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
-    {
-      g_return_val_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
-
-      if (!resolve_gradient (props, val))
-        return FALSE;
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
-    {
-      if (!resolve_shadow (props, val))
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static void
-lookup_default_value (const GtkStyleProperty *node,
-                      GValue                 *value)
-{
-  if (node->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
-    g_value_set_object (value, gtk_theming_engine_load (NULL));
-  else if (node->pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
-    g_value_take_boxed (value, pango_font_description_from_string ("Sans 10"));
-  else if (node->pspec->value_type == GDK_TYPE_RGBA)
-    {
-      GdkRGBA color;
-      gdk_rgba_parse (&color, "pink");
-      g_value_set_boxed (value, &color);
-    }
-  else if (node->pspec->value_type == GTK_TYPE_BORDER)
-    {
-      g_value_take_boxed (value, gtk_border_new ());
-    }
-  else
-    g_param_value_set_default (node->pspec, value);
-}
-
 /* NB: Will return NULL for shorthands */
 const GValue *
 _gtk_style_properties_peek_property (GtkStyleProperties      *props,
@@ -836,16 +660,16 @@ _gtk_style_properties_peek_property (GtkStyleProperties      *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, node->pspec);
+  prop = g_hash_table_lookup (priv->properties, node);
 
   if (!prop)
     return NULL;
 
   val = property_data_match_state (prop, state);
-
-  if (val &&
-      !style_properties_resolve_type (props, node, val))
+  if (val == NULL)
     return NULL;
+  
+  _gtk_style_property_resolve (node, props, state, val);
 
   return val;
 }
@@ -889,7 +713,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
   else if (_gtk_style_property_is_shorthand (node))
     _gtk_style_property_pack (node, props, state, value);
   else
-    lookup_default_value (node, value);
+    _gtk_style_property_default_value (node, props, state, value);
 
   return TRUE;
 }
@@ -909,12 +733,10 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
                                  GtkStateFlags       state,
                                  va_list             args)
 {
-  GtkStylePropertiesPrivate *priv;
   const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  priv = props->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
@@ -945,7 +767,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
           GValue default_value = { 0 };
 
           g_value_init (&default_value, node->pspec->value_type);
-          lookup_default_value (node, &default_value);
+          _gtk_style_property_default_value (node, props, state, &default_value);
           G_VALUE_LCOPY (&default_value, args, 0, &error);
           g_value_unset (&default_value);
         }
@@ -1018,7 +840,7 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
     }
 
   priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, node->pspec);
+  prop = g_hash_table_lookup (priv->properties, node);
 
   if (!prop)
     return;

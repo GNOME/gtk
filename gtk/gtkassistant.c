@@ -76,6 +76,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
+#include "a11y/gtkwindowaccessible.h"
 
 
 #define HEADER_SPACING 12
@@ -149,9 +150,6 @@ static void     gtk_assistant_get_child_property (GtkContainer      *container,
                                                   GValue            *value,
                                                   GParamSpec        *pspec);
 
-static AtkObject *gtk_assistant_get_accessible   (GtkWidget         *widget);
-static GType      gtk_assistant_accessible_factory_get_type  (void);
-
 static void       gtk_assistant_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject   *gtk_assistant_buildable_get_internal_child (GtkBuildable  *buildable,
                                                               GtkBuilder    *builder,
@@ -170,6 +168,8 @@ static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *bui
 
 static GList*     find_page                                  (GtkAssistant  *assistant,
                                                               GtkWidget     *page);
+
+GType             _gtk_assistant_accessible_get_type         (void);
 
 enum
 {
@@ -213,7 +213,8 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
   widget_class->delete_event = gtk_assistant_delete_event;
-  widget_class->get_accessible = gtk_assistant_get_accessible;
+
+  gtk_widget_class_set_accessible_type (widget_class, _gtk_assistant_accessible_get_type ());
 
   container_class->add = gtk_assistant_add;
   container_class->remove = gtk_assistant_remove;
@@ -916,10 +917,16 @@ gtk_assistant_init (GtkAssistant *assistant)
 
   priv->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   priv->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-  priv->forward = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-  priv->back    = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
+  priv->forward = gtk_button_new_with_mnemonic (_("C_ontinue"));
+  gtk_button_set_image (GTK_BUTTON (priv->forward),
+      gtk_image_new_from_stock (GTK_STOCK_GO_FORWARD, GTK_ICON_SIZE_BUTTON));
+  priv->back    = gtk_button_new_with_mnemonic (_("Go _Back"));
+  gtk_button_set_image (GTK_BUTTON (priv->forward),
+      gtk_image_new_from_stock (GTK_STOCK_GO_BACK, GTK_ICON_SIZE_BUTTON));
   priv->cancel  = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  priv->last    = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
+  priv->last    = gtk_button_new_with_mnemonic (_("_Finish"));
+  gtk_button_set_image (GTK_BUTTON (priv->forward),
+      gtk_image_new_from_stock (GTK_STOCK_GOTO_LAST, GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_can_default (priv->close, TRUE);
   gtk_widget_set_can_default (priv->apply, TRUE);
   gtk_widget_set_can_default (priv->forward, TRUE);
@@ -1588,10 +1595,12 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info->regular_title = gtk_label_new (NULL);
   page_info->current_title = gtk_label_new (NULL);
 
-  gtk_misc_set_alignment (GTK_MISC (page_info->regular_title), 0.,0.5);
+  gtk_widget_set_halign (page_info->regular_title, GTK_ALIGN_START);
+  gtk_widget_set_valign (page_info->regular_title, GTK_ALIGN_CENTER);
   gtk_widget_show (page_info->regular_title);
 
-  gtk_misc_set_alignment (GTK_MISC (page_info->current_title), 0.,0.5);
+  gtk_widget_set_halign (page_info->current_title, GTK_ALIGN_START);
+  gtk_widget_set_valign (page_info->current_title, GTK_ALIGN_CENTER);
   gtk_widget_hide (page_info->current_title);
 
   context = gtk_widget_get_style_context (page_info->current_title);
@@ -1793,7 +1802,7 @@ gtk_assistant_set_page_title (GtkAssistant *assistant,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_assistant_get_page_title (GtkAssistant *assistant,
                               GtkWidget    *page)
 {
@@ -2181,29 +2190,13 @@ gtk_assistant_commit (GtkAssistant *assistant)
   update_buttons_state (assistant);
 }
 
-static AtkObject *
-gtk_assistant_get_accessible (GtkWidget *widget)
-{
-  static gboolean first_time = TRUE;
-
-  if (first_time)
-    {
-      _gtk_accessible_set_factory_type (GTK_TYPE_ASSISTANT,
-                                        gtk_assistant_accessible_factory_get_type ());
-
-      first_time = FALSE;
-    }
-
-  return GTK_WIDGET_CLASS (gtk_assistant_parent_class)->get_accessible (widget);
-}
-
 /* accessible implementation */
 
 /* dummy typedefs */
-typedef struct _GtkAssistantAccessible          GtkAssistantAccessible;
-typedef struct _GtkAssistantAccessibleClass     GtkAssistantAccessibleClass;
+typedef GtkWindowAccessible      GtkAssistantAccessible;
+typedef GtkWindowAccessibleClass GtkAssistantAccessibleClass;
 
-ATK_DEFINE_TYPE (GtkAssistantAccessible, _gtk_assistant_accessible, GTK_TYPE_ASSISTANT);
+G_DEFINE_TYPE (GtkAssistantAccessible, _gtk_assistant_accessible, GTK_TYPE_WINDOW_ACCESSIBLE);
 
 static gint
 gtk_assistant_accessible_get_n_children (AtkObject *accessible)
@@ -2272,43 +2265,6 @@ _gtk_assistant_accessible_class_init (GtkAssistantAccessibleClass *klass)
 
 static void
 _gtk_assistant_accessible_init (GtkAssistantAccessible *self)
-{
-}
-
-/* factory */
-typedef AtkObjectFactory        GtkAssistantAccessibleFactory;
-typedef AtkObjectFactoryClass   GtkAssistantAccessibleFactoryClass;
-
-G_DEFINE_TYPE (GtkAssistantAccessibleFactory,
-               gtk_assistant_accessible_factory,
-               ATK_TYPE_OBJECT_FACTORY);
-
-static GType
-gtk_assistant_accessible_factory_get_accessible_type (void)
-{
-  return _gtk_assistant_accessible_get_type ();
-}
-
-static AtkObject*
-gtk_assistant_accessible_factory_create_accessible (GObject *obj)
-{
-  AtkObject *accessible;
-
-  accessible = g_object_new (_gtk_assistant_accessible_get_type (), NULL);
-  atk_object_initialize (accessible, obj);
-
-  return accessible;
-}
-
-static void
-gtk_assistant_accessible_factory_class_init (AtkObjectFactoryClass *class)
-{
-  class->create_accessible = gtk_assistant_accessible_factory_create_accessible;
-  class->get_accessible_type = gtk_assistant_accessible_factory_get_accessible_type;
-}
-
-static void
-gtk_assistant_accessible_factory_init (AtkObjectFactory *factory)
 {
 }
 

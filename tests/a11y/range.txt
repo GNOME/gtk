@@ -1,0 +1,50 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  grid1
+    "panel"
+    parent: window1
+    index: 0
+    state: enabled horizontal sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    scrollbar1
+      "scroll bar"
+      parent: grid1
+      index: 0
+      state: enabled focusable horizontal sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: activate
+      <AtkValue>
+      minimum value: 0.500000
+      maximum value: 99.500000
+      current value: 45.500000
+      minimum increment: 0.500000
+    scale1
+      "slider"
+      parent: grid1
+      index: 1
+      description: 45.5
+      state: enabled focusable horizontal sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: activate
+      <AtkValue>
+      minimum value: 0.500000
+      maximum value: 99.500000
+      current value: 45.500000
+      minimum increment: 0.500000

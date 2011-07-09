@@ -46,8 +46,8 @@
 #include "gtkeventbox.h"
 #include "gtkexpander.h"
 #include "gtkframe.h"
-#include "gtkhbox.h"
-#include "gtkhpaned.h"
+#include "gtkbox.h"
+#include "gtkpaned.h"
 #include "gtkimage.h"
 #include "gtkimagemenuitem.h"
 #include "gtkintl.h"
@@ -65,7 +65,7 @@
 #include "gtktreestore.h"
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
-#include "gtkvbox.h"
+#include "gtkorientable.h"
 #include "gtkactivatable.h"
 
 #include "gtkrecentmanager.h"
@@ -90,16 +90,16 @@ enum
 
 struct _GtkRecentChooserDefault
 {
-  GtkVBox parent_instance;
-  
+  GtkBox parent_instance;
+
   GtkRecentManager *manager;
   gulong manager_changed_id;
   guint local_manager : 1;
-  
+
   gint icon_size;
 
   /* RecentChooser properties */
-  gint limit;  
+  gint limit;
   GtkRecentSortType sort_type;
   guint show_private : 1;
   guint show_not_found : 1;
@@ -143,14 +143,13 @@ struct _GtkRecentChooserDefault
 
 typedef struct _GtkRecentChooserDefaultClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 } GtkRecentChooserDefaultClass;
 
 enum {
   RECENT_URI_COLUMN,
   RECENT_DISPLAY_NAME_COLUMN,
   RECENT_INFO_COLUMN,
-    
   N_RECENT_COLUMNS
 };
 
@@ -293,7 +292,7 @@ static void gtk_recent_chooser_sync_action_properties (GtkActivatable       *act
 
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
 			 _gtk_recent_chooser_default,
-			 GTK_TYPE_VBOX,
+			 GTK_TYPE_BOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
 				 		gtk_recent_chooser_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
@@ -353,9 +352,12 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 {
   gtk_box_set_spacing (GTK_BOX (impl), 6);
 
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (impl),
+                                  GTK_ORIENTATION_VERTICAL);
+
   /* by default, we use the global manager */
   impl->local_manager = FALSE;
-  
+
   impl->limit = FALLBACK_ITEM_LIMIT;
   impl->sort_type = GTK_RECENT_SORT_NONE;
 

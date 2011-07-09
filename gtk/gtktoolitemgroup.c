@@ -393,7 +393,8 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   priv->expander_size = DEFAULT_EXPANDER_SIZE;
 
   priv->label_widget = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (priv->label_widget), 0.0, 0.5);
+  gtk_widget_set_halign (priv->label_widget, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->label_widget, GTK_ALIGN_CENTER);
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_container_add (GTK_CONTAINER (alignment), priv->label_widget);
   gtk_widget_show_all (alignment);
@@ -1207,7 +1208,6 @@ gtk_tool_item_group_realize (GtkWidget *widget)
   GtkWidget *toplevel_window;
   GdkWindow *window;
   GdkWindowAttr attributes;
-  GdkDisplay *display;
   gint attributes_mask;
   guint border_width;
   GtkStyleContext *context;
@@ -1235,11 +1235,6 @@ gtk_tool_item_group_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-
-  display = gdk_window_get_display (window);
-
-  if (gdk_display_supports_composite (display))
-    gdk_window_set_composited (window, TRUE);
 
   gdk_window_set_user_data (window, widget);
 
@@ -1986,7 +1981,7 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
  *
  * Since: 2.20
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_tool_item_group_get_label (GtkToolItemGroup *group)
 {
   GtkToolItemGroupPrivate *priv;

@@ -43,7 +43,8 @@ GtkAnimationDescription * _gtk_animation_description_ref               (GtkAnima
 void                      _gtk_animation_description_unref             (GtkAnimationDescription *desc);
 
 GtkAnimationDescription * _gtk_animation_description_from_string       (const gchar *str);
-char *                    _gtk_animation_description_to_string         (GtkAnimationDescription *desc);
+void                      _gtk_animation_description_print             (GtkAnimationDescription *desc,
+                                                                        GString                 *string);
 
 G_END_DECLS
 

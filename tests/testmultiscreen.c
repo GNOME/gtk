@@ -51,7 +51,7 @@ show_hide (GtkWidget * button, gpointer data)
 }
 
 static void
-move (GtkWidget *button, GtkVBox *vbox)
+move (GtkWidget *button, GtkBox *vbox)
 {
   GdkScreen *screen = gtk_widget_get_screen (button);
   GtkWidget *toplevel = gtk_widget_get_toplevel (button);

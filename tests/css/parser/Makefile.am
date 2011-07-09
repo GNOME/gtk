@@ -31,9 +31,15 @@ EXTRA_DIST += \
 	border.css \
 	border.errors \
 	border.ref.css \
+	border-radius.css \
+	border-radius.errors \
+	border-radius.ref.css \
 	close-at-end-of-file.css \
 	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \
+	colors-errors.css \
+	colors-errors.errors \
+	colors-errors.ref.css \
 	colors-red.css \
 	colors-red.ref.css \
 	css-21-malformed-declarations.css \
@@ -51,6 +57,9 @@ EXTRA_DIST += \
 	enum.css \
 	enum.errors \
 	enum.ref.css \
+	font-family.css \
+	font-family.errors \
+	font-family.ref.css \
 	import-cyclic-1.css \
 	import-cyclic-1.errors \
 	import-cyclic-1.ref.css \
@@ -79,4 +88,7 @@ EXTRA_DIST += \
 	shorthand.css \
 	shorthand.ref.css \
 	simple.css \
+	single-slash.css \
+	single-slash.errors\
+	single-slash.ref.css \
 	widget-style-property.css

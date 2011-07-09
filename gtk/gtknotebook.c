@@ -43,6 +43,7 @@
 #include "gtkdnd.h"
 #include "gtkbuildable.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtknotebookaccessible.h"
 
 
 /**
@@ -326,12 +327,20 @@ static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static void gtk_notebook_realize             (GtkWidget        *widget);
 static void gtk_notebook_unrealize           (GtkWidget        *widget);
-static void gtk_notebook_size_request        (GtkWidget        *widget,
-                                              GtkRequisition   *requisition);
 static void gtk_notebook_get_preferred_width (GtkWidget        *widget,
                                               gint             *minimum,
                                               gint             *natural);
 static void gtk_notebook_get_preferred_height(GtkWidget        *widget,
+                                              gint             *minimum,
+                                              gint             *natural);
+static void gtk_notebook_get_preferred_width_for_height
+                                             (GtkWidget        *widget,
+                                              gint              height,
+                                              gint             *minimum,
+                                              gint             *natural);
+static void gtk_notebook_get_preferred_height_for_width
+                                             (GtkWidget        *widget,
+                                              gint              width,
                                               gint             *minimum,
                                               gint             *natural);
 static void gtk_notebook_size_allocate       (GtkWidget        *widget,
@@ -637,6 +646,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->unrealize = gtk_notebook_unrealize;
   widget_class->get_preferred_width = gtk_notebook_get_preferred_width;
   widget_class->get_preferred_height = gtk_notebook_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_notebook_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_notebook_get_preferred_height_for_width;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->draw = gtk_notebook_draw;
   widget_class->button_press_event = gtk_notebook_button_press;
@@ -1142,6 +1153,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   g_type_class_add_private (class, sizeof (GtkNotebookPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_NOTEBOOK_ACCESSIBLE);
 }
 
 static void
@@ -1951,17 +1964,24 @@ _gtk_notebook_get_tab_flags (GtkNotebook     *notebook,
 }
 
 static void
-gtk_notebook_size_request (GtkWidget      *widget,
-                           GtkRequisition *requisition)
+gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
+                                      GtkRequisition *requisition)
 {
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-  GtkNotebookPage *page;
+  GtkNotebookPrivate *priv;
+  GtkWidget *widget;
+  gint tab_width = 0;
+  gint tab_height = 0;
+  gint tab_max = 0;
+  gint padding;
+  gint i;
+  gint action_width = 0;
+  gint action_height = 0;
+  guint vis_pages = 0;
   GList *children;
-  GtkRequisition child_requisition;
+  GtkNotebookPage *page;
   GtkRequisition action_widget_requisition[2] = { { 0 }, { 0 } };
-  gboolean switch_page = FALSE;
-  gint vis_pages;
+  GtkRequisition child_requisition;
+  GtkStyleContext *context;
   gint focus_width;
   gint focus_pad;
   gint tab_overlap;
@@ -1969,8 +1989,10 @@ gtk_notebook_size_request (GtkWidget      *widget,
   gint arrow_spacing;
   gint scroll_arrow_hlength;
   gint scroll_arrow_vlength;
-  guint border_width;
 
+  priv = notebook->priv;
+  widget = GTK_WIDGET (notebook);
+  context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
                         "focus-padding", &focus_pad,
@@ -1981,8 +2003,214 @@ gtk_notebook_size_request (GtkWidget      *widget,
                         "scroll-arrow-vlength", &scroll_arrow_vlength,
                         NULL);
 
-  requisition->width = 0;
-  requisition->height = 0;
+  for (children = priv->children; children;
+       children = children->next)
+    {
+      page = children->data;
+
+      if (gtk_widget_get_visible (page->child))
+        {
+          GtkBorder tab_padding;
+
+          vis_pages++;
+
+          if (!gtk_widget_get_visible (page->tab_label))
+            gtk_widget_show (page->tab_label);
+
+          gtk_widget_get_preferred_size (page->tab_label,
+                                         &child_requisition, NULL);
+
+          /* Get border/padding for tab */
+          gtk_style_context_save (context);
+          gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
+                                        _gtk_notebook_get_tab_flags (notebook, page));
+          gtk_style_context_get_padding (context, 0, &tab_padding);
+          gtk_style_context_restore (context);
+
+          page->requisition.width = child_requisition.width +
+            tab_padding.left + tab_padding.right + 2 * (focus_width + focus_pad);
+
+          page->requisition.height = child_requisition.height +
+            tab_padding.top + tab_padding.bottom + 2 * (focus_width + focus_pad);
+
+          switch (priv->tab_pos)
+            {
+            case GTK_POS_TOP:
+            case GTK_POS_BOTTOM:
+              page->requisition.height += 2 * priv->tab_vborder;
+              tab_height = MAX (tab_height, page->requisition.height);
+              tab_max = MAX (tab_max, page->requisition.width);
+              break;
+            case GTK_POS_LEFT:
+            case GTK_POS_RIGHT:
+              page->requisition.width += 2 * priv->tab_hborder;
+              tab_width = MAX (tab_width, page->requisition.width);
+              tab_max = MAX (tab_max, page->requisition.height);
+              break;
+            }
+        }
+      else if (gtk_widget_get_visible (page->tab_label))
+        gtk_widget_hide (page->tab_label);
+    }
+
+  children = priv->children;
+
+  if (vis_pages)
+    {
+      for (i = 0; i < N_ACTION_WIDGETS; i++)
+        {
+          if (priv->action_widget[i])
+            {
+              gtk_widget_get_preferred_size (priv->action_widget[i],
+                                             &action_widget_requisition[i], NULL);
+            }
+        }
+
+      switch (priv->tab_pos)
+        {
+        case GTK_POS_TOP:
+        case GTK_POS_BOTTOM:
+          if (tab_height == 0)
+            break;
+
+          if (priv->scrollable)
+            tab_height = MAX (tab_height, scroll_arrow_hlength);
+
+          tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_START].height);
+          tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_END].height);
+
+          padding = 2 * (tab_curvature + priv->tab_hborder) - tab_overlap;
+          tab_max += padding;
+          while (children)
+            {
+              page = children->data;
+              children = children->next;
+
+              if (!gtk_widget_get_visible (page->child))
+                continue;
+
+              if (priv->homogeneous)
+                page->requisition.width = tab_max;
+              else
+                page->requisition.width += padding;
+
+              tab_width += page->requisition.width;
+              page->requisition.height = tab_height;
+            }
+
+          if (priv->scrollable)
+            tab_width = MIN (tab_width,
+                             tab_max + 2 * (scroll_arrow_hlength + arrow_spacing));
+
+          action_width += action_widget_requisition[ACTION_WIDGET_START].width;
+          action_width += action_widget_requisition[ACTION_WIDGET_END].width;
+          if (priv->homogeneous && !priv->scrollable)
+            requisition->width = vis_pages * tab_max + tab_overlap + action_width;
+          else
+            requisition->width = tab_width + tab_overlap + action_width;
+
+          requisition->height = tab_height;
+          break;
+        case GTK_POS_LEFT:
+        case GTK_POS_RIGHT:
+          if (tab_width == 0)
+            break;
+
+          if (priv->scrollable)
+            tab_width = MAX (tab_width, arrow_spacing + 2 * scroll_arrow_vlength);
+
+          tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_START].width);
+          tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_END].width);
+
+          padding = 2 * (tab_curvature + priv->tab_vborder) - tab_overlap;
+          tab_max += padding;
+
+          while (children)
+            {
+              page = children->data;
+              children = children->next;
+
+              if (!gtk_widget_get_visible (page->child))
+                continue;
+
+              page->requisition.width = tab_width;
+
+              if (priv->homogeneous)
+                page->requisition.height = tab_max;
+              else
+                page->requisition.height += padding;
+
+              tab_height += page->requisition.height;
+            }
+
+          if (priv->scrollable)
+            tab_height = MIN (tab_height,
+                              tab_max + (2 * scroll_arrow_vlength + arrow_spacing));
+          action_height += action_widget_requisition[ACTION_WIDGET_START].height;
+          action_height += action_widget_requisition[ACTION_WIDGET_END].height;
+
+          if (priv->homogeneous && !priv->scrollable)
+            requisition->height = vis_pages * tab_max + tab_overlap + action_height;
+          else
+            requisition->height = tab_height + tab_overlap + action_height;
+
+          if (!priv->homogeneous || priv->scrollable)
+            vis_pages = 1;
+          requisition->height = MAX (requisition->height,
+                                     vis_pages * tab_max + tab_overlap);
+
+          requisition->width = tab_width;
+          break;
+        default:
+          g_assert_not_reached ();
+          requisition->width = 0;
+          requisition->height = 0;
+        }
+    }
+  else
+    {
+      requisition->width = 0;
+      requisition->height = 0;
+    }
+}
+
+static void
+get_preferred_size_for_size (GtkWidget      *widget,
+                             GtkOrientation  orientation,
+                             gint            size,
+                             gint           *minimum,
+                             gint           *natural)
+{
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    if (size < 0)
+      gtk_widget_get_preferred_width (widget, minimum, natural);
+    else
+      gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
+  else
+    if (size < 0)
+      gtk_widget_get_preferred_height (widget, minimum, natural);
+    else
+      gtk_widget_get_preferred_height_for_width (widget, size, minimum, natural);
+}
+
+static void
+gtk_notebook_size_request (GtkWidget      *widget,
+                           GtkOrientation  orientation,
+                           gint            size,
+                           gint           *minimum,
+                           gint           *natural)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = notebook->priv;
+  GtkNotebookPage *page;
+  GList *children;
+  gint child_minimum, child_natural;
+  gboolean switch_page = FALSE;
+  gint vis_pages;
+  guint border_width;
+
+  *minimum = 0;
+  *natural = 0;
 
   for (children = priv->children, vis_pages = 0; children;
        children = children->next)
@@ -1993,13 +2221,14 @@ gtk_notebook_size_request (GtkWidget      *widget,
       if (gtk_widget_get_visible (page->child))
         {
           vis_pages++;
-          gtk_widget_get_preferred_size (page->child,
-                                         &child_requisition, NULL);
+          get_preferred_size_for_size (page->child,
+                                       orientation,
+                                       size, 
+                                       &child_minimum,
+                                       &child_natural);
 
-          requisition->width = MAX (requisition->width,
-                                           child_requisition.width);
-          requisition->height = MAX (requisition->height,
-                                            child_requisition.height);
+          *minimum = MAX (*minimum, child_minimum);
+          *natural = MAX (*natural, child_natural);
 
           if (priv->menu && page->menu_label)
             {
@@ -2030,187 +2259,46 @@ gtk_notebook_size_request (GtkWidget      *widget,
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_get_padding (context, 0, &notebook_padding);
 
-      requisition->width += notebook_padding.left + notebook_padding.right;
-      requisition->height += notebook_padding.top + notebook_padding.bottom;
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          *minimum += notebook_padding.left + notebook_padding.right;
+          *natural += notebook_padding.left + notebook_padding.right;
+        }
+      else
+        {
+          *minimum += notebook_padding.top + notebook_padding.bottom;
+          *natural += notebook_padding.top + notebook_padding.bottom;
+        }
 
       if (priv->show_tabs)
         {
-          gint tab_width = 0;
-          gint tab_height = 0;
-          gint tab_max = 0;
-          gint padding;
-          gint i;
-          gint action_width = 0;
-          gint action_height = 0;
+          GtkRequisition tabs_requisition;
 
-          for (children = priv->children; children;
-               children = children->next)
+          gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              page = children->data;
-
-              if (gtk_widget_get_visible (page->child))
+              if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
                 {
-                  GtkBorder tab_padding;
-
-                  if (!gtk_widget_get_visible (page->tab_label))
-                    gtk_widget_show (page->tab_label);
-
-                  gtk_widget_get_preferred_size (page->tab_label,
-                                                 &child_requisition, NULL);
-
-                  /* Get border/padding for tab */
-                  gtk_style_context_save (context);
-                  gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
-                                                _gtk_notebook_get_tab_flags (notebook, page));
-                  gtk_style_context_get_padding (context, 0, &tab_padding);
-                  gtk_style_context_restore (context);
-
-                  page->requisition.width = child_requisition.width +
-                    tab_padding.left + tab_padding.right + 2 * (focus_width + focus_pad);
-
-                  page->requisition.height = child_requisition.height +
-                    tab_padding.top + tab_padding.bottom + 2 * (focus_width + focus_pad);
-
-                  switch (priv->tab_pos)
-                    {
-                    case GTK_POS_TOP:
-                    case GTK_POS_BOTTOM:
-                      page->requisition.height += 2 * priv->tab_vborder;
-                      tab_height = MAX (tab_height, page->requisition.height);
-                      tab_max = MAX (tab_max, page->requisition.width);
-                      break;
-                    case GTK_POS_LEFT:
-                    case GTK_POS_RIGHT:
-                      page->requisition.width += 2 * priv->tab_hborder;
-                      tab_width = MAX (tab_width, page->requisition.width);
-                      tab_max = MAX (tab_max, page->requisition.height);
-                      break;
-                    }
+                  *minimum = MAX (*minimum, tabs_requisition.width);
+                  *natural = MAX (*minimum, *natural);
                 }
-              else if (gtk_widget_get_visible (page->tab_label))
-                gtk_widget_hide (page->tab_label);
+              else
+                {
+                  *minimum += tabs_requisition.width;
+                  *natural += tabs_requisition.width;
+                }
             }
-
-          children = priv->children;
-
-          if (vis_pages)
+          else
             {
-              for (i = 0; i < N_ACTION_WIDGETS; i++)
+              if (priv->tab_pos == GTK_POS_LEFT || priv->tab_pos == GTK_POS_RIGHT)
                 {
-                  if (priv->action_widget[i])
-                    {
-                      gtk_widget_get_preferred_size (priv->action_widget[i],
-                                                     &action_widget_requisition[i], NULL);
-                      action_widget_requisition[i].width += notebook_padding.left;
-                      action_widget_requisition[i].height += notebook_padding.top;
-                    }
+                  *minimum = MAX (*minimum, tabs_requisition.height);
+                  *natural = MAX (*minimum, *natural);
                 }
-
-              switch (priv->tab_pos)
+              else
                 {
-                case GTK_POS_TOP:
-                case GTK_POS_BOTTOM:
-                  if (tab_height == 0)
-                    break;
-
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->width < tab_width)
-                    tab_height = MAX (tab_height, scroll_arrow_hlength);
-
-                  tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_START].height);
-                  tab_height = MAX (tab_height, action_widget_requisition[ACTION_WIDGET_END].height);
-
-                  padding = 2 * (tab_curvature + priv->tab_hborder) - tab_overlap;
-                  tab_max += padding;
-                  while (children)
-                    {
-                      page = children->data;
-                      children = children->next;
-
-                      if (!gtk_widget_get_visible (page->child))
-                        continue;
-
-                      if (priv->homogeneous)
-                        page->requisition.width = tab_max;
-                      else
-                        page->requisition.width += padding;
-
-                      tab_width += page->requisition.width;
-                      page->requisition.height = tab_height;
-                    }
-
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->width < tab_width)
-                    tab_width = tab_max + 2 * (scroll_arrow_hlength + arrow_spacing);
-
-                  action_width += action_widget_requisition[ACTION_WIDGET_START].width;
-                  action_width += action_widget_requisition[ACTION_WIDGET_END].width;
-                  if (priv->homogeneous && !priv->scrollable)
-                    requisition->width = MAX (requisition->width,
-                                                     vis_pages * tab_max +
-                                                     tab_overlap + action_width);
-                  else
-                    requisition->width = MAX (requisition->width,
-                                                     tab_width + tab_overlap + action_width);
-
-                  requisition->height += tab_height;
-                  break;
-                case GTK_POS_LEFT:
-                case GTK_POS_RIGHT:
-                  if (tab_width == 0)
-                    break;
-
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->height < tab_height)
-                    tab_width = MAX (tab_width,
-                                     arrow_spacing + 2 * scroll_arrow_vlength);
-
-                  tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_START].width);
-                  tab_width = MAX (tab_width, action_widget_requisition[ACTION_WIDGET_END].width);
-
-                  padding = 2 * (tab_curvature + priv->tab_vborder) - tab_overlap;
-                  tab_max += padding;
-
-                  while (children)
-                    {
-                      page = children->data;
-                      children = children->next;
-
-                      if (!gtk_widget_get_visible (page->child))
-                        continue;
-
-                      page->requisition.width = tab_width;
-
-                      if (priv->homogeneous)
-                        page->requisition.height = tab_max;
-                      else
-                        page->requisition.height += padding;
-
-                      tab_height += page->requisition.height;
-                    }
-
-                  if (priv->scrollable && vis_pages > 1 &&
-                      requisition->height < tab_height)
-                    tab_height = tab_max + (2 * scroll_arrow_vlength + arrow_spacing);
-                  action_height += action_widget_requisition[ACTION_WIDGET_START].height;
-                  action_height += action_widget_requisition[ACTION_WIDGET_END].height;
-
-                  if (priv->homogeneous && !priv->scrollable)
-                    requisition->height =
-                      MAX (requisition->height,
-                           vis_pages * tab_max + tab_overlap + action_height);
-                  else
-                    requisition->height =
-                      MAX (requisition->height,
-                           tab_height + tab_overlap + action_height);
-
-                  if (!priv->homogeneous || priv->scrollable)
-                    vis_pages = 1;
-                  requisition->height = MAX (requisition->height,
-                                             vis_pages * tab_max + tab_overlap);
-
-                  requisition->width += tab_width;
-                  break;
+                  *minimum += tabs_requisition.height;
+                  *natural += tabs_requisition.height;
                 }
             }
         }
@@ -2229,8 +2317,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  requisition->width += border_width * 2;
-  requisition->height += border_width * 2;
+  *minimum += border_width * 2;
+  *natural += border_width * 2;
 
   if (switch_page)
     {
@@ -2249,8 +2337,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
         }
       else if (gtk_widget_get_visible (widget))
         {
-          requisition->width  = border_width * 2;
-          requisition->height = border_width * 2;
+          *minimum = border_width * 2;
         }
     }
   if (vis_pages && !priv->cur_page)
@@ -2264,17 +2351,30 @@ gtk_notebook_size_request (GtkWidget      *widget,
     }
 }
 
+static void
+gtk_notebook_get_preferred_width_for_height (GtkWidget *widget,
+                                             gint       height,
+                                             gint      *minimum,
+                                             gint      *natural)
+{
+  gtk_notebook_size_request (widget, GTK_ORIENTATION_HORIZONTAL, height, minimum, natural);
+}
+
+static void
+gtk_notebook_get_preferred_height_for_width (GtkWidget *widget,
+                                             gint       width,
+                                             gint      *minimum,
+                                             gint      *natural)
+{
+  gtk_notebook_size_request (widget, GTK_ORIENTATION_VERTICAL, width, minimum, natural);
+}
 
 static void
 gtk_notebook_get_preferred_width (GtkWidget *widget,
                                   gint      *minimum,
                                   gint      *natural)
 {
-  GtkRequisition requisition;
-
-  gtk_notebook_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.width;
+  gtk_notebook_size_request (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum, natural);
 }
 
 static void
@@ -2282,11 +2382,7 @@ gtk_notebook_get_preferred_height (GtkWidget *widget,
                                    gint      *minimum,
                                    gint      *natural)
 {
-  GtkRequisition requisition;
-
-  gtk_notebook_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
+  gtk_notebook_size_request (widget, GTK_ORIENTATION_VERTICAL, -1, minimum, natural);
 }
 
 static void
@@ -4361,7 +4457,6 @@ gtk_notebook_get_path_for_child (GtkContainer *container,
   GtkNotebook *notebook;
   GtkNotebookPage *page;
   GtkWidgetPath *path;
-  GtkRegionFlags flags;
   GList *c;
 
   path = GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->get_path_for_child (container, widget);
@@ -4381,8 +4476,10 @@ gtk_notebook_get_path_for_child (GtkContainer *container,
   if (!c)
     return path;
 
-  flags = _gtk_notebook_get_tab_flags (notebook, page);
-  gtk_widget_path_iter_add_region (path, -1, GTK_STYLE_REGION_TAB, flags);
+  gtk_widget_path_iter_add_region (path, 
+                                   gtk_widget_path_length (path) - 2,
+                                   GTK_STYLE_REGION_TAB,
+                                   _gtk_notebook_get_tab_flags (notebook, page));
 
   return path;
 }
@@ -4466,6 +4563,10 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
     gtk_notebook_menu_item_create (notebook,
                                    g_list_find (priv->children, page));
 
+  /* child visible will be turned on by switch_page below */
+  if (priv->cur_page != page)
+    gtk_widget_set_child_visible (child, FALSE);
+
   gtk_widget_set_parent (child, GTK_WIDGET (notebook));
   if (tab_label)
     gtk_widget_set_parent (tab_label, GTK_WIDGET (notebook));
@@ -4474,10 +4575,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   if (!priv->first_tab)
     priv->first_tab = priv->children;
-
-  /* child visible will be turned on by switch_page below */
-  if (priv->cur_page != page)
-    gtk_widget_set_child_visible (child, FALSE);
 
   if (tab_label)
     {
@@ -6563,7 +6660,8 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
         page->menu_label = gtk_label_new (gtk_label_get_label (GTK_LABEL (page->tab_label)));
       else
         page->menu_label = gtk_label_new ("");
-      gtk_misc_set_alignment (GTK_MISC (page->menu_label), 0.0, 0.5);
+      gtk_widget_set_halign (page->menu_label, GTK_ALIGN_START);
+      gtk_widget_set_valign (page->menu_label, GTK_ALIGN_CENTER);
     }
 
   gtk_widget_show (page->menu_label);
@@ -7570,7 +7668,7 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
  *     tab label widget is not a #GtkLabel. The string is owned
  *     by the widget and must not be freed.
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
                                  GtkWidget   *child)
 {
@@ -7688,7 +7786,8 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
   if (menu_text)
     {
       menu_label = gtk_label_new (menu_text);
-      gtk_misc_set_alignment (GTK_MISC (menu_label), 0.0, 0.5);
+      gtk_widget_set_halign (menu_label, GTK_ALIGN_START);
+      gtk_widget_set_valign (menu_label, GTK_ALIGN_CENTER);
     }
   gtk_notebook_set_menu_label (notebook, child, menu_label);
   gtk_widget_child_notify (child, "menu-label");
@@ -7707,7 +7806,7 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
  *     menu label, or the menu label widget is not a #GtkLabel.
  *     The string is owned by the widget and must not be freed.
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_notebook_get_menu_label_text (GtkNotebook *notebook,
                                   GtkWidget *child)
 {

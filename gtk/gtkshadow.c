@@ -23,7 +23,10 @@
 
 #include "gtkshadowprivate.h"
 #include "gtkstylecontext.h"
+#include "gtkthemingengineprivate.h"
+#include "gtkthemingengine.h"
 #include "gtkpango.h"
+#include "gtkthemingengineprivate.h"
 
 typedef struct _GtkShadowElement GtkShadowElement;
 
@@ -39,13 +42,11 @@ struct _GtkShadowElement {
   GtkSymbolicColor *symbolic_color;
 };
 
-static gchar *
-shadow_element_to_string (GtkShadowElement *element)
+static void
+shadow_element_print (GtkShadowElement *element,
+                      GString          *str)
 {
   gchar *color_str;
-  GString *str;
-
-  str = g_string_new (NULL);
 
   if (element->inset)
     g_string_append (str, "inset ");
@@ -67,8 +68,6 @@ shadow_element_to_string (GtkShadowElement *element)
 
   g_string_append (str, color_str);
   g_free (color_str);
-
-  return g_string_free (str, FALSE);
 }
 
 static void
@@ -226,33 +225,28 @@ _gtk_shadow_resolve (GtkShadow          *shadow,
   return resolved_shadow;
 }
 
-gchar *
-_gtk_shadow_to_string (GtkShadow *shadow)
+void
+_gtk_shadow_print (GtkShadow *shadow,
+                   GString   *str)
 {
-  GString *str;
   gint length;
   GList *l;
 
   length = g_list_length (shadow->elements);
 
   if (length == 0)
-    return NULL;
+    return;
 
-  str = g_string_new (NULL);
-
-  g_string_append (str,
-                   shadow_element_to_string (shadow->elements->data));
+  shadow_element_print (shadow->elements->data, str);
 
   if (length == 1)
-    return g_string_free (str, FALSE);
+    return;
 
   for (l = g_list_next (shadow->elements); l != NULL; l = l->next)
     {
       g_string_append (str, ", ");
-      g_string_append (str, shadow_element_to_string (l->data));
+      shadow_element_print (l->data, str);
     }
-
-  return g_string_free (str, FALSE);
 }
 
 void
@@ -284,3 +278,91 @@ _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
   }
 }
 
+void
+_gtk_icon_shadow_paint (GtkShadow *shadow,
+			cairo_t *cr)
+{
+  GList *l;
+  GtkShadowElement *element;
+  cairo_pattern_t *pattern;
+
+  for (l = g_list_last (shadow->elements); l != NULL; l = l->prev)
+    {
+      element = l->data;
+
+      cairo_save (cr);
+      pattern = cairo_pattern_reference (cairo_get_source (cr));
+      gdk_cairo_set_source_rgba (cr, &element->color);
+
+      cairo_translate (cr, element->hoffset, element->voffset);
+      cairo_mask (cr, pattern);
+
+      cairo_restore (cr);
+      cairo_pattern_destroy (pattern);
+    }
+}
+
+void
+_gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
+                                cairo_t   *cr,
+                                gdouble    radius,
+                                gdouble    progress)
+{
+  GtkShadowElement *element;
+  GList *l;
+
+  for (l = g_list_last (shadow->elements); l != NULL; l = l->prev)
+    {
+      element = l->data;
+
+      cairo_save (cr);
+
+      cairo_translate (cr, element->hoffset, element->voffset);
+      _gtk_theming_engine_paint_spinner (cr,
+                                         radius, progress,
+                                         &element->color);
+
+      cairo_restore (cr);
+    }
+}
+
+void
+_gtk_box_shadow_render (GtkShadow           *shadow,
+                        cairo_t             *cr,
+                        const GtkRoundedBox *padding_box)
+{
+  GtkShadowElement *element;
+  GtkRoundedBox box;
+  GList *l;
+
+  cairo_save (cr);
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+
+  _gtk_rounded_box_path (padding_box, cr);
+  cairo_clip (cr);
+
+  /* render shadows starting from the last one,
+   * and the others on top.
+   */
+  for (l = g_list_last (shadow->elements); l != NULL; l = l->prev)
+    {
+      element = l->data;
+
+      if (!element->inset)
+        continue;
+
+      box = *padding_box;
+      _gtk_rounded_box_move (&box, element->hoffset, element->voffset);
+      _gtk_rounded_box_shrink (&box,
+                               element->spread, element->spread,
+                               element->spread, element->spread);
+
+      _gtk_rounded_box_path (&box, cr);
+      _gtk_rounded_box_clip_path (padding_box, cr);
+
+      gdk_cairo_set_source_rgba (cr, &element->color);
+      cairo_fill (cr);
+  }
+
+  cairo_restore (cr);
+}

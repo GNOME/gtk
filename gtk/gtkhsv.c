@@ -124,6 +124,7 @@ static gboolean gtk_hsv_focus                (GtkWidget          *widget,
                                               GtkDirectionType    direction);
 static void     gtk_hsv_move                 (GtkHSV             *hsv,
                                               GtkDirectionType    dir);
+static AtkObject *gtk_hsv_get_accessible     (GtkWidget          *widget);
 
 static guint hsv_signals[LAST_SIGNAL];
 
@@ -154,6 +155,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
   widget_class->draw = gtk_hsv_draw;
   widget_class->focus = gtk_hsv_focus;
   widget_class->grab_broken_event = gtk_hsv_grab_broken;
+  widget_class->get_accessible = gtk_hsv_get_accessible;
 
   hsv_class->move = gtk_hsv_move;
 
@@ -1358,18 +1360,18 @@ gtk_hsv_get_color (GtkHSV *hsv,
                    double *s,
                    double *v)
 {
-  GtkHSVPrivate *priv = hsv->priv;
+  GtkHSVPrivate *priv;
 
   g_return_if_fail (GTK_IS_HSV (hsv));
 
   priv = hsv->priv;
-  
+
   if (h)
     *h = priv->h;
-  
+
   if (s)
     *s = priv->s;
-  
+
   if (v)
     *v = priv->v;
 }
@@ -1389,7 +1391,7 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
                      gint    size,
                      gint    ring_width)
 {
-  GtkHSVPrivate *priv = hsv->priv;
+  GtkHSVPrivate *priv;
   int same_size;
 
   g_return_if_fail (GTK_IS_HSV (hsv));
@@ -1400,7 +1402,7 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
   priv = hsv->priv;
 
   same_size = (priv->size == size);
-  
+
   priv->size = size;
   priv->ring_width = ring_width;
   
@@ -1425,7 +1427,7 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
                      gint   *size,
                      gint   *ring_width)
 {
-  GtkHSVPrivate *priv = hsv->priv;
+  GtkHSVPrivate *priv;
 
   g_return_if_fail (GTK_IS_HSV (hsv));
 
@@ -1456,7 +1458,7 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
 gboolean
 gtk_hsv_is_adjusting (GtkHSV *hsv)
 {
-  GtkHSVPrivate *priv = hsv->priv;
+  GtkHSVPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_HSV (hsv), FALSE);
 
@@ -1618,3 +1620,16 @@ gtk_hsv_move (GtkHSV          *hsv,
   
   gtk_hsv_set_color (hsv, hue, sat, val);
 }
+
+static AtkObject *
+gtk_hsv_get_accessible (GtkWidget *widget)
+{
+  AtkObject *obj;
+
+  obj = GTK_WIDGET_CLASS (gtk_hsv_parent_class)->get_accessible (widget);
+
+  atk_object_set_role (obj, ATK_ROLE_COLOR_CHOOSER);
+
+  return obj;
+}
+

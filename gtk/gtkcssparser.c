@@ -386,7 +386,10 @@ _gtk_css_parser_read_string (GtkCssParser *parser)
   quote = *parser->data;
   
   if (quote != '"' && quote != '\'')
-    return NULL;
+    {
+      _gtk_css_parser_error (parser, "Expected a string.");
+      return NULL;
+    }
   
   parser->data++;
   str = g_string_new (NULL);
@@ -716,6 +719,7 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser *parser,
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
     {
+      _gtk_css_parser_error (parser, "Expected ')' in color definition");
       gtk_symbolic_color_unref (symbolic);
       return NULL;
     }
@@ -851,7 +855,7 @@ _gtk_css_parser_resync_internal (GtkCssParser *parser,
 
     switch (*parser->data)
       {
-      case '/':
+      case '\\':
         {
           GString *ignore = g_string_new (NULL);
           _gtk_css_parser_unescape (parser, ignore);
@@ -898,7 +902,9 @@ _gtk_css_parser_resync_internal (GtkCssParser *parser,
           }
         parser->data++;
         continue;
+      case '/':
       default:
+        parser->data++;
         break;
       }
   } while (*parser->data);

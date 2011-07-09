@@ -36,6 +36,7 @@
 #include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "a11y/gtktogglebuttonaccessible.h"
 
 
 /**
@@ -212,6 +213,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 		  G_TYPE_NONE, 0);
 
   g_type_class_add_private (class, sizeof (GtkToggleButtonPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE);
 }
 
 static void

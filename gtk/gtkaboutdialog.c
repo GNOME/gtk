@@ -33,7 +33,6 @@
 #include <string.h>
 
 #include "gtkaboutdialog.h"
-#include "gtkalignment.h"
 #include "gtkbutton.h"
 #include "gtkbbox.h"
 #include "gtkdialog.h"
@@ -1025,7 +1024,7 @@ gtk_about_dialog_show (GtkWidget *widget)
  *
  * Since: 2.12
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_program_name (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1105,7 +1104,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_version (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1153,7 +1152,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_copyright (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1212,7 +1211,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_comments (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1269,7 +1268,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_license (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1380,7 +1379,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_website (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1432,7 +1431,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_website_label (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1486,7 +1485,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar * G_CONST_RETURN *
+const gchar * const *
 gtk_about_dialog_get_authors (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1541,7 +1540,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar * G_CONST_RETURN *
+const gchar * const *
 gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1596,7 +1595,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar * G_CONST_RETURN *
+const gchar * const *
 gtk_about_dialog_get_artists (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1650,7 +1649,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
 {
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
@@ -1806,7 +1805,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -2346,7 +2345,6 @@ create_credits_page (GtkAboutDialog *about)
   GtkWidget *page_vbox;
   GtkWidget *sw;
   GtkWidget *grid;
-  GtkWidget *alignment;
   gint row;
 
   page_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
@@ -2360,15 +2358,14 @@ create_credits_page (GtkAboutDialog *about)
                                   GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (page_vbox), sw, TRUE, TRUE, 0);
 
-  alignment = gtk_alignment_new (0.5, 0, 0, 0);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), alignment);
-
   grid = gtk_grid_new ();
   gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
-  gtk_container_add (GTK_CONTAINER (alignment), grid);
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (grid, GTK_ALIGN_START);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), grid);
 
   if (priv->authors != NULL)
     add_credits_section (about, GTK_GRID (grid), &row, _("Created by"), priv->authors);

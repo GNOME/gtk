@@ -1848,6 +1848,7 @@ gtk_text_tag_get_property (GObject      *object,
     case PROP_FOREGROUND:
     case PROP_PARAGRAPH_BACKGROUND:
       g_warning ("'foreground', 'background' and 'paragraph_background' properties are not readable, use 'foreground_gdk', 'background_gdk' and 'paragraph_background_gdk'");
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;

@@ -94,17 +94,13 @@ _gdk_x11_event_translator_get_window (GdkEventTranslator *translator,
                                       XEvent             *xevent)
 {
   GdkEventTranslatorIface *iface;
-  GdkWindow *window = NULL;
 
   g_return_val_if_fail (GDK_IS_EVENT_TRANSLATOR (translator), NULL);
 
   iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
 
   if (iface->get_window)
-    window = iface->get_window (translator, xevent);
+    return iface->get_window (translator, xevent);
 
-  if (!window)
-    window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
-
-  return window;
+  return NULL;
 }

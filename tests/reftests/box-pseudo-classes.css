@@ -1,0 +1,50 @@
+* {
+  engine: none;
+  background-image: none;
+}
+
+.button:nth-child(even) {
+  background-color: yellow;
+}
+
+.button:nth-child(odd) {
+  background-color: red;
+}
+
+.button:nth-child(first) {
+  background-color: purple;
+}
+
+.button:nth-child(last):nth-child(even) {
+  background-color: green;
+}
+
+.button:nth-child(last):nth-child(odd) {
+  background-color: purple;
+}
+
+.button:nth-child(last):nth-child(first) {
+  background-color: blue;
+}
+
+/* for reference */
+
+#red {
+  background-color: red;
+}
+
+#green {
+  background-color: green;
+}
+
+#purple {
+  background-color: purple;
+}
+
+#yellow {
+  background-color: yellow;
+}
+
+#blue {
+  background-color: blue;
+}

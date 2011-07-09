@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkcontainer.h"
+#include "gtkcontainerprivate.h"
 
 #include <stdarg.h>
 #include <string.h>
@@ -46,7 +47,7 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
-
+#include "a11y/gtkcontaineraccessible.h"
 
 /**
  * SECTION:gtkcontainer
@@ -511,6 +512,8 @@ gtk_container_class_init (GtkContainerClass *class)
                   GTK_TYPE_WIDGET);
 
   g_type_class_add_private (class, sizeof (GtkContainerPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CONTAINER_ACCESSIBLE);
 }
 
 static void
@@ -768,8 +771,8 @@ gtk_container_child_type (GtkContainer *container)
 /**
  * gtk_container_child_notify:
  * @container: the #GtkContainer
- * @widget: the child widget
- * @child_property: the name of a chld property installed on
+ * @child: the child widget
+ * @child_property: the name of a child property installed on
  *     the class of @container
  *
  * Emits a #GtkWidget::child-notify signal for the
@@ -784,17 +787,17 @@ gtk_container_child_type (GtkContainer *container)
  */
 void
 gtk_container_child_notify (GtkContainer *container,
-                            GtkWidget    *widget,
+                            GtkWidget    *child,
                             const gchar  *child_property)
 {
   GObject *obj;
   GParamSpec *pspec;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child_property != NULL);
 
-  obj = G_OBJECT (widget);
+  obj = G_OBJECT (child);
 
   if (obj->ref_count == 0)
     return;
@@ -2334,6 +2337,8 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
       g_list_free_1 (cur);
     }
 
+  gtk_widget_path_append_for_widget (path, child);
+
   return path;
 }
 
@@ -3362,7 +3367,7 @@ _gtk_container_get_reallocate_redraws (GtkContainer *container)
  * @child: a child of @container
  *
  * Returns a newly created widget path representing all the widget hierarchy
- * from the toplevel down to @child (this one not being included).
+ * from the toplevel down to and including @child.
  *
  * Returns: A newly created #GtkWidgetPath
  **/

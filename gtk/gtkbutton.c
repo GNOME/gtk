@@ -58,6 +58,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "a11y/gtkbuttonaccessible.h"
 
 
 static const GtkBorder default_default_border = { 1, 1, 1, 1 };
@@ -528,6 +529,8 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     GTK_PARAM_READABLE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
 }
 
 static void
@@ -1472,7 +1475,6 @@ gtk_button_size_allocate (GtkWidget     *widget,
   GtkButtonPrivate *priv = button->priv;
   GtkAllocation child_allocation;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkWidget *child;
   GtkBorder default_border;
   GtkBorder inner_border;
@@ -1481,7 +1483,6 @@ gtk_button_size_allocate (GtkWidget     *widget,
   gint focus_pad;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_button_get_props (button, &default_border, NULL, &inner_border, &padding, NULL);
   gtk_style_context_get_style (context,
@@ -1919,7 +1920,6 @@ gtk_button_get_size (GtkWidget      *widget,
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkWidget *child;
   GtkBorder default_border;
   GtkBorder inner_border;
@@ -1929,7 +1929,6 @@ gtk_button_get_size (GtkWidget      *widget,
   gint minimum, natural;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_button_get_props (button, &default_border, NULL, &inner_border, &padding, NULL);
   gtk_style_context_get_style (context,
@@ -2036,7 +2035,7 @@ gtk_button_set_label (GtkButton   *button,
  * Return value: The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_button_get_label (GtkButton *button)
 {
   g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);

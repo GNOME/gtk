@@ -392,7 +392,7 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
   data = g_new (GdkWaylandCairoSurfaceData, 1);
   data->display = display;
   data->buffer = NULL;
-  visual = wl_display_get_premultiplied_argb_visual(display->wl_display);
+  visual = display->premultiplied_argb_visual;
   data->width = width;
   data->height = height;
   data->pixmap = wl_egl_pixmap_create(width, height, visual, 0);
@@ -450,6 +450,8 @@ gdk_wayland_window_map (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *parent;
+  GdkDisplayWayland *display_wayland =
+		GDK_DISPLAY_WAYLAND (gdk_window_get_display (impl->wrapper));
 
   if (!impl->mapped)
     {
@@ -462,11 +464,11 @@ gdk_wayland_window_map (GdkWindow *window)
 		  window->y);
 
 	  parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
-	  wl_surface_map_transient (impl->surface, parent->surface,
+	  wl_shell_set_transient (display_wayland->shell, impl->surface, parent->surface,
 				    window->x, window->y, 0);
 	}
       else
-	wl_surface_map_toplevel (impl->surface);
+      wl_shell_set_toplevel (display_wayland->shell, impl->surface);
       impl->mapped = TRUE;
     }
 }

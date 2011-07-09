@@ -76,7 +76,7 @@ struct _GtkMenuItemClass
                                  gint         allocation);
   void (* set_label)            (GtkMenuItem *menu_item,
                                  const gchar *label);
-  G_CONST_RETURN gchar *(* get_label) (GtkMenuItem *menu_item);
+  const gchar * (* get_label)   (GtkMenuItem *menu_item);
 
   void (* select)               (GtkMenuItem *menu_item);
   void (* deselect)             (GtkMenuItem *menu_item);
@@ -109,13 +109,13 @@ void       gtk_menu_item_set_right_justified  (GtkMenuItem         *menu_item,
                                                gboolean             right_justified);
 gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
 #endif  /* GTK_DISABLE_DEPRECATED */
-void       gtk_menu_item_set_accel_path       (GtkMenuItem         *menu_item,
+void          gtk_menu_item_set_accel_path    (GtkMenuItem         *menu_item,
                                                const gchar         *accel_path);
-G_CONST_RETURN gchar* gtk_menu_item_get_accel_path (GtkMenuItem    *menu_item);
+const gchar * gtk_menu_item_get_accel_path    (GtkMenuItem    *menu_item);
 
-void       gtk_menu_item_set_label            (GtkMenuItem         *menu_item,
+void          gtk_menu_item_set_label         (GtkMenuItem         *menu_item,
                                                const gchar         *label);
-G_CONST_RETURN gchar *gtk_menu_item_get_label (GtkMenuItem         *menu_item);
+const gchar * gtk_menu_item_get_label         (GtkMenuItem         *menu_item);
 
 void       gtk_menu_item_set_use_underline    (GtkMenuItem         *menu_item,
                                                gboolean             setting);

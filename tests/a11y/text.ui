@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkTextBuffer" id="buffer1">
+    <property name="text">Twas brillig, and the slithy toves
+Did gyre and gimple in the wabe</property>
+  </object>
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkTextView" id="text1">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="buffer">buffer1</property>
+      </object>
+    </child>
+  </object>
+</interface>

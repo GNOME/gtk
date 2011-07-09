@@ -1,0 +1,15 @@
+.button-image {
+  engine: none;
+
+  border-image: url("green-20x20.png") 1 stretch;
+
+  border-width: 1 2 2 1;
+  border-radius: 0;
+}
+
+.button-not-image {
+  border-color: green;
+  border-style: solid;
+  border-width: 1 2 2 1;
+  border-radius: 0;
+}

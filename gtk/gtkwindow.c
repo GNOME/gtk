@@ -34,7 +34,6 @@
 #include <limits.h>
 
 #include "gtkprivate.h"
-#include "gtkrc.h"
 #include "gtkwindowprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkbindings.h"
@@ -48,8 +47,10 @@
 #include "gtkplug.h"
 #include "gtkbuildable.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkwindowaccessible.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -1060,6 +1061,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
 }
 
 static void
@@ -1583,7 +1586,7 @@ gtk_window_set_title (GtkWindow   *window,
  *    been set explicitely. The returned string is owned by the widget
  *    and must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_window_get_title (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
@@ -1745,7 +1748,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
  *   returned is owned by the widget and must not be modified
  *   or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_window_get_role (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);

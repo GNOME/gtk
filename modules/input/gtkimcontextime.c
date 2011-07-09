@@ -348,6 +348,9 @@ gtk_im_context_ime_reset (GtkIMContext *context)
   HWND hwnd;
   HIMC himc;
 
+  if (!context_ime->client_window)
+    return;
+
   hwnd = GDK_WINDOW_HWND (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)

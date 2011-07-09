@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkhseparator.h"
 #include "gtkorientable.h"
 
@@ -46,6 +47,8 @@
  * widget using gtk_separator_menu_item_new() and add it to the menu with
  * gtk_menu_shell_append().
  * </note>
+ *
+ * GtkHSeparator has been deprecated, use #GtkSeparator instead.
  */
 
 
@@ -69,6 +72,8 @@ gtk_hseparator_init (GtkHSeparator *hseparator)
  * Creates a new #GtkHSeparator.
  *
  * Returns: a new #GtkHSeparator.
+ *
+ * Deprecated: 3.2: Use gtk_separator_new() with %GTK_ORIENTATION_HORIZONTAL instead
  */
 GtkWidget *
 gtk_hseparator_new (void)

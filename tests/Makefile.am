@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/tests
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = css reftests
+SUBDIRS = css reftests a11y
 
 INCLUDES =				\
 	-I$(top_srcdir)			\
@@ -36,9 +36,11 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testappchooserbutton		\
 	testassistant			\
 	testbbox			\
+	testboxcss                      \
 	testbuttons			\
 	testcairo			\
 	testcalendar			\
+	testclipboard			\
 	testcombo			\
 	testcombochange			\
 	testcellrenderertext		\
@@ -70,6 +72,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testoffscreen			\
 	testoffscreenwindow		\
 	testorientable			\
+	testoverlay			\
 	testprint			\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
@@ -89,7 +92,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtreecolumns			\
 	testtreecolumnsizing		\
 	testtreesort			\
-	testverticalcells			\
+	testverticalcells		\
 	treestoretest			\
 	testxinerama			\
 	testwindows			\
@@ -110,7 +113,12 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testnoscreen			\
 	testtreepos			\
 	testsensitive			\
-	testtextview
+	testtextview			\
+	testanimation			\
+	testpixbuf-save			\
+	testpixbuf-color		\
+	testpixbuf-scale		\
+	widget-factory
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -142,6 +150,7 @@ testbbox_DEPENDENCIES = $(TEST_DEPS)
 testbuttons_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
+testclipboard_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testcellrenderertext_DEPENDENCIES = $(TEST_DEPS)
@@ -172,6 +181,7 @@ testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
 testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
+testoverlay_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
@@ -211,6 +221,11 @@ testnoscreen_DEPENDENCIES = $(TEST_DEPS)
 testtreepos_DEPENDENCIES = $(TEST_DEPS)
 testsensitive_DEPENDENCIES = $(TEST_DEPS)
 testtextview_DEPENDENCIES = $(TEST_DEPS)
+testanimation_DEPENDENCIES = $(TEST_DEPS)
+testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
+testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
+testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
+widget_factory_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -219,9 +234,11 @@ testaccel_LDADD = $(LDADDS)
 testadjustsize_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
+testboxcss_LDADD = $(LDADDS)
 testbuttons_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
+testclipboard_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testcombochange_LDADD = $(LDADDS)
 testcellrenderertext_LDADD = $(LDADDS)
@@ -256,6 +273,7 @@ testoffscreenwindow_LDADD = $(LDADDS)
 testappchooser_LDADD = $(LDADDS)
 testappchooserbutton_LDADD = $(LDADDS)
 testorientable_LDADD = $(LDADDS)
+testoverlay_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrecentchoosermenu_LDADD = $(LDADDS)
@@ -297,7 +315,16 @@ testnoscreen_LDADD = $(LDADDS)
 testtreepos_LDADD = $(LDADDS)
 testsensitive_LDADD = $(LDADDS)
 testtextview_LDADD = $(LDADDS)
+testanimation_LDADD = $(LDADDS)
+testpixbuf_save_LDADD = $(LDADDS)
+testpixbuf_color_LDADD = $(LDADDS)
+testpixbuf_scale_LDADD = $(LDADDS)
+widget_factory_LDADD = $(LDADDS)
 
+
+testboxcss_SOURCES =	\
+	testboxcss.c	\
+	prop-editor.c
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
@@ -423,6 +450,9 @@ testoffscreen_SOURCES = 	\
 testoffscreenwindow_SOURCES =	\
 	testoffscreenwindow.c
 
+testoverlay_SOURCES =	\
+	testoverlay.c
+
 testappchooser_SOURCES = \
 	testappchooser.c
 
@@ -443,6 +473,16 @@ styleexamples_SOURCES = styleexamples.c
 testtoplevelembed_SOURCES = testtoplevelembed.c
 
 testtextview_SOURCES = testtextview.c
+
+testanimation_SOURCES = testanimation.c
+
+testpixbuf_scale_SOURCES = testpixbuf-scale.c
+
+testpixbuf_color_SOURCES = testpixbuf-color.c
+
+testpixbuf_save_SOURCES = testpixbuf-save.c
+
+widget_factory_SOURCES = widget-factory.c
 
 
 EXTRA_DIST += 			\
@@ -465,7 +505,8 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
-	makefile.msc
+	makefile.msc		\
+	widget-factory.ui
 
 
 -include $(top_srcdir)/git.mk

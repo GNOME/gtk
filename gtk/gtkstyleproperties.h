@@ -66,10 +66,6 @@ typedef gboolean (* GtkStylePropertyParser) (const gchar  *string,
 
 GType gtk_style_properties_get_type (void) G_GNUC_CONST;
 
-void     gtk_style_param_set_inherit            (GParamSpec             *pspec,
-                                                 gboolean                inherit);
-gboolean gtk_style_param_get_inherit            (GParamSpec             *pspec);
-
 /* Functions to register style properties */
 void     gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                                  GParamSpec             *pspec);

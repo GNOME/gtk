@@ -52,6 +52,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 
+#include "a11y/gtklabelaccessible.h"
 
 /**
  * SECTION:gtklabel
@@ -463,6 +464,7 @@ static void gtk_label_ensure_layout       (GtkLabel *label);
 static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
+
 
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
@@ -1093,6 +1095,8 @@ gtk_label_class_init (GtkLabelClass *class)
 				"activate-current-link", 0);
 
   g_type_class_add_private (class, sizeof (GtkLabelPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
 }
 
 static void 
@@ -1201,24 +1205,10 @@ gtk_label_get_property (GObject     *object,
       g_value_set_object (value, (GObject*) priv->mnemonic_widget);
       break;
     case PROP_CURSOR_POSITION:
-      if (priv->select_info && priv->select_info->selectable)
-	{
-	  gint offset = g_utf8_pointer_to_offset (priv->text,
-						  priv->text + priv->select_info->selection_end);
-	  g_value_set_int (value, offset);
-	}
-      else
-	g_value_set_int (value, 0);
+      g_value_set_int (value, _gtk_label_get_cursor_position (label));
       break;
     case PROP_SELECTION_BOUND:
-      if (priv->select_info && priv->select_info->selectable)
-	{
-	  gint offset = g_utf8_pointer_to_offset (priv->text,
-						  priv->text + priv->select_info->selection_anchor);
-	  g_value_set_int (value, offset);
-	}
-      else
-	g_value_set_int (value, 0);
+      g_value_set_int (value, _gtk_label_get_selection_bound (label));
       break;
     case PROP_ELLIPSIZE:
       g_value_set_enum (value, priv->ellipsize);
@@ -2265,7 +2255,7 @@ gtk_label_set_label (GtkLabel    *label,
  * Return value: the text of the label widget. This string is
  *   owned by the widget and must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_label_get_label (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
@@ -2730,7 +2720,7 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
  * Return value: the text in the label widget. This is the internal
  *   string used by the label, and must not be modified.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_label_get_text (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
@@ -2830,7 +2820,7 @@ void
 gtk_label_set_pattern (GtkLabel	   *label,
 		       const gchar *pattern)
 {
-  GtkLabelPrivate *priv = label->priv;
+  GtkLabelPrivate *priv;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -3200,18 +3190,15 @@ static PangoFontMetrics *
 get_font_metrics (PangoContext *context, GtkWidget *widget)
 {
   GtkStyleContext *style_context;
-  PangoFontDescription *font;
+  const PangoFontDescription *font;
   PangoFontMetrics *retval;
 
   style_context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (style_context, 0, "font", &font, NULL);
+  font = gtk_style_context_get_font (style_context, GTK_STATE_FLAG_NORMAL);
 
   retval = pango_context_get_metrics (context,
                                       font,
                                       pango_context_get_language (context));
-
-  if (font != NULL)
-    pango_font_description_free (font);
 
   return retval;
 }
@@ -4766,24 +4753,24 @@ gtk_label_button_press (GtkWidget      *widget,
   if (event->button == 1)
     {
       if (!gtk_widget_has_focus (widget))
-	{
-	  priv->in_click = TRUE;
-	  gtk_widget_grab_focus (widget);
-	  priv->in_click = FALSE;
-	}
+        {
+          priv->in_click = TRUE;
+          gtk_widget_grab_focus (widget);
+          priv->in_click = FALSE;
+        }
 
       if (event->type == GDK_3BUTTON_PRESS)
-	{
-	  gtk_label_select_region_index (label, 0, strlen (priv->text));
-	  return TRUE;
-	}
+        {
+          gtk_label_select_region_index (label, 0, strlen (priv->text));
+          return TRUE;
+        }
 
       if (event->type == GDK_2BUTTON_PRESS)
-	{
+        {
           info->select_words = TRUE;
-	  gtk_label_select_word (label);
-	  return TRUE;
-	}
+          gtk_label_select_word (label);
+          return TRUE;
+        }
 
       get_layout_index (label, event->x, event->y, &index);
 
@@ -4791,38 +4778,49 @@ gtk_label_button_press (GtkWidget      *widget,
       max = MAX (info->selection_anchor, info->selection_end);
 
       if ((info->selection_anchor != info->selection_end) &&
-	  (event->state & GDK_SHIFT_MASK))
-	{
-	  /* extend (same as motion) */
-	  min = MIN (min, index);
-	  max = MAX (max, index);
+          (event->state & GDK_SHIFT_MASK))
+        {
+          if (index > min && index < max)
+            {
+              /* truncate selection, but keep it as big as possible */
+              if (index - min > max - index)
+                max = index;
+              else
+                min = index;
+            }
+          else
+            {
+              /* extend (same as motion) */
+              min = MIN (min, index);
+              max = MAX (max, index);
+            }
 
-	  /* ensure the anchor is opposite index */
-	  if (index == min)
-	    {
-	      gint tmp = min;
-	      min = max;
-	      max = tmp;
-	    }
+          /* ensure the anchor is opposite index */
+          if (index == min)
+            {
+              gint tmp = min;
+              min = max;
+              max = tmp;
+            }
 
-	  gtk_label_select_region_index (label, min, max);
-	}
+          gtk_label_select_region_index (label, min, max);
+        }
       else
-	{
-	  if (event->type == GDK_3BUTTON_PRESS)
-	    gtk_label_select_region_index (label, 0, strlen (priv->text));
-	  else if (event->type == GDK_2BUTTON_PRESS)
-	    gtk_label_select_word (label);
-	  else if (min < max && min <= index && index <= max)
-	    {
-	      info->in_drag = TRUE;
-	      info->drag_start_x = event->x;
-	      info->drag_start_y = event->y;
-	    }
-	  else
-	    /* start a replacement */
-	    gtk_label_select_region_index (label, index, index);
-	}
+        {
+          if (event->type == GDK_3BUTTON_PRESS)
+            gtk_label_select_region_index (label, 0, strlen (priv->text));
+          else if (event->type == GDK_2BUTTON_PRESS)
+            gtk_label_select_word (label);
+          else if (min < max && min <= index && index <= max)
+            {
+              info->in_drag = TRUE;
+              info->drag_start_x = event->x;
+              info->drag_start_y = event->y;
+            }
+          else
+            /* start a replacement */
+            gtk_label_select_region_index (label, index, index);
+        }
 
       return TRUE;
     }
@@ -5430,14 +5428,24 @@ gtk_label_select_region_index (GtkLabel *label,
       GtkClipboard *clipboard;
 
       if (priv->select_info->selection_anchor == anchor_index &&
-	  priv->select_info->selection_end == end_index)
-	return;
+          priv->select_info->selection_end == end_index)
+        return;
+
+      g_object_freeze_notify (G_OBJECT (label));
+
+      if (priv->select_info->selection_anchor != anchor_index)
+        g_object_notify (G_OBJECT (label), "selection-bound");
+      if (priv->select_info->selection_end != end_index)
+        g_object_notify (G_OBJECT (label), "cursor-position");
 
       priv->select_info->selection_anchor = anchor_index;
       priv->select_info->selection_end = end_index;
 
-      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
-					    GDK_SELECTION_PRIMARY);
+      if (gtk_widget_has_screen (GTK_WIDGET (label)))
+        clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
+                                              GDK_SELECTION_PRIMARY);
+      else
+        clipboard = NULL;
 
       if (anchor_index != end_index)
         {
@@ -5449,26 +5457,25 @@ gtk_label_select_region_index (GtkLabel *label,
           gtk_target_list_add_text_targets (list, 0);
           targets = gtk_target_table_new_from_list (list, &n_targets);
 
-          gtk_clipboard_set_with_owner (clipboard,
-                                        targets, n_targets,
-                                        get_text_callback,
-                                        clear_text_callback,
-                                        G_OBJECT (label));
+          if (clipboard)
+            gtk_clipboard_set_with_owner (clipboard,
+                                          targets, n_targets,
+                                          get_text_callback,
+                                          clear_text_callback,
+                                          G_OBJECT (label));
 
           gtk_target_table_free (targets, n_targets);
           gtk_target_list_unref (list);
         }
       else
         {
-          if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (label))
+          if (clipboard &&
+              gtk_clipboard_get_owner (clipboard) == G_OBJECT (label))
             gtk_clipboard_clear (clipboard);
         }
 
       gtk_widget_queue_draw (GTK_WIDGET (label));
 
-      g_object_freeze_notify (G_OBJECT (label));
-      g_object_notify (G_OBJECT (label), "cursor-position");
-      g_object_notify (G_OBJECT (label), "selection-bound");
       g_object_thaw_notify (G_OBJECT (label));
     }
 }
@@ -5650,8 +5657,12 @@ gtk_label_set_use_markup (GtkLabel *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  g_object_freeze_notify (G_OBJECT (label));
+
   gtk_label_set_use_markup_internal (label, setting);
   gtk_label_recalculate (label);
+
+  g_object_thaw_notify (G_OBJECT (label));
 }
 
 /**
@@ -5686,8 +5697,12 @@ gtk_label_set_use_underline (GtkLabel *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
 
+  g_object_freeze_notify (G_OBJECT (label));
+
   gtk_label_set_use_underline_internal (label, setting);
   gtk_label_recalculate (label);
+
+  g_object_thaw_notify (G_OBJECT (label));
 }
 
 /**
@@ -5967,9 +5982,9 @@ gtk_label_move_backward_word (GtkLabel *label,
 
 static void
 gtk_label_move_cursor (GtkLabel       *label,
-		       GtkMovementStep step,
-		       gint            count,
-		       gboolean        extend_selection)
+                       GtkMovementStep step,
+                       gint            count,
+                       gboolean        extend_selection)
 {
   GtkLabelPrivate *priv = label->priv;
   gint old_pos;
@@ -5987,53 +6002,53 @@ gtk_label_move_cursor (GtkLabel       *label,
        * start/or end of the selection as appropriate
        */
       switch (step)
-	{
-	case GTK_MOVEMENT_VISUAL_POSITIONS:
-	  {
-	    gint end_x, end_y;
-	    gint anchor_x, anchor_y;
-	    gboolean end_is_left;
+        {
+        case GTK_MOVEMENT_VISUAL_POSITIONS:
+          {
+            gint end_x, end_y;
+            gint anchor_x, anchor_y;
+            gboolean end_is_left;
 
-	    get_better_cursor (label, priv->select_info->selection_end, &end_x, &end_y);
-	    get_better_cursor (label, priv->select_info->selection_anchor, &anchor_x, &anchor_y);
+            get_better_cursor (label, priv->select_info->selection_end, &end_x, &end_y);
+            get_better_cursor (label, priv->select_info->selection_anchor, &anchor_x, &anchor_y);
 
-	    end_is_left = (end_y < anchor_y) || (end_y == anchor_y && end_x < anchor_x);
-	    
-	    if (count < 0)
-	      new_pos = end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
-	    else
-	      new_pos = !end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
-	    break;
-	  }
-	case GTK_MOVEMENT_LOGICAL_POSITIONS:
-	case GTK_MOVEMENT_WORDS:
-	  if (count < 0)
-	    new_pos = MIN (priv->select_info->selection_end, priv->select_info->selection_anchor);
-	  else
-	    new_pos = MAX (priv->select_info->selection_end, priv->select_info->selection_anchor);
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
-	case GTK_MOVEMENT_PARAGRAPH_ENDS:
-	case GTK_MOVEMENT_BUFFER_ENDS:
-	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (priv->text);
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINES:
-	case GTK_MOVEMENT_PARAGRAPHS:
-	case GTK_MOVEMENT_PAGES:
-	case GTK_MOVEMENT_HORIZONTAL_PAGES:
-	  break;
-	}
+            end_is_left = (end_y < anchor_y) || (end_y == anchor_y && end_x < anchor_x);
+
+            if (count < 0)
+              new_pos = end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
+            else
+              new_pos = !end_is_left ? priv->select_info->selection_end : priv->select_info->selection_anchor;
+            break;
+          }
+        case GTK_MOVEMENT_LOGICAL_POSITIONS:
+        case GTK_MOVEMENT_WORDS:
+          if (count < 0)
+            new_pos = MIN (priv->select_info->selection_end, priv->select_info->selection_anchor);
+          else
+            new_pos = MAX (priv->select_info->selection_end, priv->select_info->selection_anchor);
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+        case GTK_MOVEMENT_PARAGRAPH_ENDS:
+        case GTK_MOVEMENT_BUFFER_ENDS:
+          /* FIXME: Can do better here */
+          new_pos = count < 0 ? 0 : strlen (priv->text);
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINES:
+        case GTK_MOVEMENT_PARAGRAPHS:
+        case GTK_MOVEMENT_PAGES:
+        case GTK_MOVEMENT_HORIZONTAL_PAGES:
+          break;
+        }
     }
   else
     {
       switch (step)
-	{
-	case GTK_MOVEMENT_LOGICAL_POSITIONS:
-	  new_pos = gtk_label_move_logically (label, new_pos, count);
-	  break;
-	case GTK_MOVEMENT_VISUAL_POSITIONS:
-	  new_pos = gtk_label_move_visually (label, new_pos, count);
+        {
+        case GTK_MOVEMENT_LOGICAL_POSITIONS:
+          new_pos = gtk_label_move_logically (label, new_pos, count);
+          break;
+        case GTK_MOVEMENT_VISUAL_POSITIONS:
+          new_pos = gtk_label_move_visually (label, new_pos, count);
           if (new_pos == old_pos)
             {
               if (!extend_selection)
@@ -6055,41 +6070,41 @@ gtk_label_move_cursor (GtkLabel       *label,
                   gtk_widget_error_bell (GTK_WIDGET (label));
                 }
             }
-	  break;
-	case GTK_MOVEMENT_WORDS:
-	  while (count > 0)
-	    {
-	      new_pos = gtk_label_move_forward_word (label, new_pos);
-	      count--;
-	    }
-	  while (count < 0)
-	    {
-	      new_pos = gtk_label_move_backward_word (label, new_pos);
-	      count++;
-	    }
+          break;
+        case GTK_MOVEMENT_WORDS:
+          while (count > 0)
+            {
+              new_pos = gtk_label_move_forward_word (label, new_pos);
+              count--;
+            }
+          while (count < 0)
+            {
+              new_pos = gtk_label_move_backward_word (label, new_pos);
+              count++;
+            }
           if (new_pos == old_pos)
             gtk_widget_error_bell (GTK_WIDGET (label));
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
-	case GTK_MOVEMENT_PARAGRAPH_ENDS:
-	case GTK_MOVEMENT_BUFFER_ENDS:
-	  /* FIXME: Can do better here */
-	  new_pos = count < 0 ? 0 : strlen (priv->text);
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+        case GTK_MOVEMENT_PARAGRAPH_ENDS:
+        case GTK_MOVEMENT_BUFFER_ENDS:
+          /* FIXME: Can do better here */
+          new_pos = count < 0 ? 0 : strlen (priv->text);
           if (new_pos == old_pos)
             gtk_widget_error_bell (GTK_WIDGET (label));
-	  break;
-	case GTK_MOVEMENT_DISPLAY_LINES:
-	case GTK_MOVEMENT_PARAGRAPHS:
-	case GTK_MOVEMENT_PAGES:
-	case GTK_MOVEMENT_HORIZONTAL_PAGES:
-	  break;
-	}
+          break;
+        case GTK_MOVEMENT_DISPLAY_LINES:
+        case GTK_MOVEMENT_PARAGRAPHS:
+        case GTK_MOVEMENT_PAGES:
+        case GTK_MOVEMENT_HORIZONTAL_PAGES:
+          break;
+        }
     }
 
   if (extend_selection)
     gtk_label_select_region_index (label,
-				   priv->select_info->selection_anchor,
-				   new_pos);
+                                   priv->select_info->selection_anchor,
+                                   new_pos);
   else
     gtk_label_select_region_index (label, new_pos, new_pos);
 }
@@ -6523,7 +6538,7 @@ gtk_label_get_current_link (GtkLabel *label)
  *
  * Since: 2.18
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_label_get_current_uri (GtkLabel *label)
 {
   GtkLabelLink *link;
@@ -6638,4 +6653,28 @@ gtk_label_query_tooltip (GtkWidget  *widget,
                                                                    x, y,
                                                                    keyboard_tip,
                                                                    tooltip);
+}
+
+gint
+_gtk_label_get_cursor_position (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+
+  if (priv->select_info && priv->select_info->selectable)
+    return g_utf8_pointer_to_offset (priv->text,
+                                     priv->text + priv->select_info->selection_end);
+
+  return 0;
+}
+
+gint
+_gtk_label_get_selection_bound (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+
+  if (priv->select_info && priv->select_info->selectable)
+    return g_utf8_pointer_to_offset (priv->text,
+                                     priv->text + priv->select_info->selection_anchor);
+
+  return 0;
 }

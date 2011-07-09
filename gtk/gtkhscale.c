@@ -29,6 +29,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkhscale.h"
 #include "gtkorientable.h"
 
@@ -43,6 +44,8 @@
  *
  * The position to show the current value, and the number of decimal places
  * shown can be set using the parent #GtkScale class's functions.
+ *
+ * GtkHScale has been deprecated, use #GtkScale instead.
  */
 
 
@@ -70,6 +73,8 @@ gtk_hscale_init (GtkHScale *hscale)
  * Creates a new #GtkHScale.
  *
  * Returns: a new #GtkHScale.
+ *
+ * Deprecated: 3.2: Use gtk_scale_new() with %GTK_ORIENTATION_HORIZONTAL instead
  */
 GtkWidget *
 gtk_hscale_new (GtkAdjustment *adjustment)
@@ -98,6 +103,8 @@ gtk_hscale_new (GtkAdjustment *adjustment)
  * needs, use gtk_scale_set_digits() to correct it.
  *
  * Return value: a new #GtkHScale
+ *
+ * Deprecated: 3.2: Use gtk_scale_new_with_range() with %GTK_ORIENTATION_HORIZONTAL instead
  **/
 GtkWidget *
 gtk_hscale_new_with_range (gdouble min,

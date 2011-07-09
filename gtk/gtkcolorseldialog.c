@@ -28,7 +28,6 @@
 #include <glib.h>
 #include "gtkcolorseldialog.h"
 #include "gtkframe.h"
-#include "gtkhbbox.h"
 #include "gtkbutton.h"
 #include "gtkstock.h"
 #include "gtkintl.h"

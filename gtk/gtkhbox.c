@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkhbox.h"
 #include "gtkorientable.h"
 
@@ -42,6 +43,17 @@
  * spacing, width, and alignment of #GtkHBox children.
  *
  * All children are allocated the same height.
+ *
+ * GtkHBox has been deprecated. You can use #GtkBox instead, which is a
+ * very quick and easy change. If you have derived your own classes from
+ * GtkHBox, you can simply change the inheritance to derive directly
+ * from #GtkBox. No further changes are needed, since the default
+ * value of the #GtkOrientable::orientation property is
+ * %GTK_ORIENTATION_HORIZONTAL.
+ * If you want your code to be future-proof, the recommendation is to
+ * switch to #GtkGrid, since #GtkBox is going to be deprecated in favor
+ * of the more flexible grid widget eventually. For more information
+ * about migrating to #GtkGrid, see <xref linkend="gtk-migrating-GtkGrid"/>
  */
 
 
@@ -69,6 +81,11 @@ gtk_hbox_init (GtkHBox *hbox)
  * Creates a new #GtkHBox.
  *
  * Returns: a new #GtkHBox.
+ *
+ * Deprecated: 3.2: You can use gtk_box_new() with %GTK_ORIENTATION_HORIZONTAL instead,
+ *   wich is a very quick and easy change. But the recommendation is to switch to
+ *   #GtkGrid, since #GtkBox is going to go away eventually.
+ *   See <xref linkend="gtk-migrating-GtkGrid"/>.
  */
 GtkWidget *
 gtk_hbox_new (gboolean homogeneous,

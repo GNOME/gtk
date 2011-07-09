@@ -45,6 +45,8 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
+#include "a11y/gtkspinbuttonaccessible.h"
+
 #define MIN_SPIN_BUTTON_WIDTH 30
 #define MAX_TIMER_CALLS       5
 #define EPSILON               1e-10
@@ -507,6 +509,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
   g_type_class_add_private (class, sizeof (GtkSpinButtonPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPIN_BUTTON_ACCESSIBLE);
 }
 
 static void
@@ -931,7 +935,6 @@ gtk_spin_button_draw (GtkWidget      *widget,
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ENTRY);
 
   if (is_rtl)
     gtk_style_context_set_junction_sides (context, GTK_JUNCTION_RIGHT);
@@ -939,11 +942,6 @@ gtk_spin_button_draw (GtkWidget      *widget,
     gtk_style_context_set_junction_sides (context, GTK_JUNCTION_LEFT);
 
   gtk_cairo_transform_to_window (cr, widget, priv->panel);
-
-  if (gtk_entry_get_has_frame (GTK_ENTRY (widget)))
-    gtk_render_background (context, cr, 0, 0,
-                           gdk_window_get_width (priv->panel),
-                           gdk_window_get_height (priv->panel));
 
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_UP);
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_DOWN);

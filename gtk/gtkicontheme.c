@@ -2570,32 +2570,20 @@ theme_subdir_load (GtkIconTheme *icon_theme,
       g_free (context_string);
     }
 
-  max_size = g_key_file_get_integer (theme_file, subdir, "MaxSize", &error);
-  if (error)
-    {
-      max_size = size;
+  if (g_key_file_has_key (theme_file, subdir, "MaxSize", NULL))
+    max_size = g_key_file_get_integer (theme_file, subdir, "MaxSize", NULL);
+  else
+    max_size = size;
 
-      g_error_free (error);
-      error = NULL;
-    }
+  if (g_key_file_has_key (theme_file, subdir, "MinSize", NULL))
+    min_size = g_key_file_get_integer (theme_file, subdir, "MinSize", NULL);
+  else
+    min_size = size;
 
-  min_size = g_key_file_get_integer (theme_file, subdir, "MinSize", &error);
-  if (error)
-    {
-      min_size = size;
-
-      g_error_free (error);
-      error = NULL;
-    }
-  
-  threshold = g_key_file_get_integer (theme_file, subdir, "Threshold", &error);
-  if (error)
-    {
-      threshold = 2;
-
-      g_error_free (error);
-      error = NULL;
-    }
+  if (g_key_file_has_key (theme_file, subdir, "Threshold", NULL))
+    threshold = g_key_file_get_integer (theme_file, subdir, "Threshold", NULL);
+  else
+    threshold = 2;
 
   for (d = icon_theme->priv->dir_mtimes; d; d = d->next)
     {
@@ -2777,7 +2765,7 @@ gtk_icon_info_get_base_size (GtkIconInfo *icon_info)
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
@@ -3653,7 +3641,7 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);

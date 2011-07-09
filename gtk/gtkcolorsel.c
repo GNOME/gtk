@@ -33,14 +33,12 @@
 #include <string.h>
 
 #include "gdk/gdk.h"
+#include "gtkorientable.h"
 #include "gtkhsv.h"
 #include "gtkwindow.h"
 #include "gtkselection.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
-#include "gtkhbox.h"
-#include "gtkhbbox.h"
-#include "gtkrc.h"
 #include "gtkframe.h"
 #include "gtktable.h"
 #include "gtklabel.h"
@@ -48,10 +46,9 @@
 #include "gtkimage.h"
 #include "gtkspinbutton.h"
 #include "gtkrange.h"
-#include "gtkhscale.h"
+#include "gtkscale.h"
 #include "gtkentry.h"
 #include "gtkbutton.h"
-#include "gtkhseparator.h"
 #include "gtkinvisible.h"
 #include "gtkmenuitem.h"
 #include "gtkmain.h"
@@ -59,6 +56,7 @@
 #include "gtkstock.h"
 #include "gtkaccessible.h"
 #include "gtksizerequest.h"
+#include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -298,7 +296,7 @@ static const guchar dropper_bits[] = {
   "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
   "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};
 
-G_DEFINE_TYPE (GtkColorSelection, gtk_color_selection, GTK_TYPE_VBOX)
+G_DEFINE_TYPE (GtkColorSelection, gtk_color_selection, GTK_TYPE_BOX)
 
 static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)
@@ -394,6 +392,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   AtkObject *atk_obj;
   GList *focus_chain = NULL;
 
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (colorsel),
+                                  GTK_ORIENTATION_VERTICAL);
+
   gtk_widget_push_composite_child ();
 
   priv = colorsel->private_data = G_TYPE_INSTANCE_GET_PRIVATE (colorsel, GTK_TYPE_COLOR_SELECTION, GtkColorSelectionPrivate);
@@ -464,7 +465,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_table_attach_defaults (GTK_TABLE (table), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 8, 3, 4);
 
   priv->opacity_label = gtk_label_new_with_mnemonic (_("Op_acity:"));
-  gtk_misc_set_alignment (GTK_MISC (priv->opacity_label), 0.0, 0.5);
+  gtk_widget_set_halign (priv->opacity_label, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->opacity_label, GTK_ALIGN_CENTER);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_label, 0, 1, 4, 5);
   adjust = gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0);
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel);
@@ -489,7 +491,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   label = gtk_label_new_with_mnemonic (_("Color _name:"));
   gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   priv->hex_entry = gtk_entry_new ();
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->hex_entry);
@@ -534,7 +537,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   set_selected_palette (colorsel, 0, 0);
   priv->palette_frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   label = gtk_label_new_with_mnemonic (_("_Palette:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_box_pack_start (GTK_BOX (priv->palette_frame), label, FALSE, FALSE, 0);
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label),
@@ -2171,7 +2175,8 @@ make_label_spinbutton (GtkColorSelection *colorsel,
   label = gtk_label_new_with_mnemonic (text);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), *spinbutton);
 
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach_defaults (GTK_TABLE (table), label, i, i+1, j, j+1);
   gtk_table_attach_defaults (GTK_TABLE (table), *spinbutton, i+1, i+2, j, j+1);
 }

@@ -41,13 +41,13 @@
 #include "gtkintl.h"
 #include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkrc.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkcontainerprivate.h"
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkaccessible.h"
@@ -65,7 +65,7 @@
 #include "gtkdebug.h"
 #include "gtkplug.h"
 #include "gtktypebuiltins.h"
-
+#include "a11y/gtkwidgetaccessible.h"
 
 /**
  * SECTION:gtkwidget
@@ -406,6 +406,11 @@ struct _GtkWidgetPrivate
 #endif /* G_ENABLE_DEBUG */
 };
 
+struct _GtkWidgetClassPrivate
+{
+  GType accessible_type;
+};
+
 enum {
   DESTROY,
   SHOW,
@@ -532,6 +537,7 @@ struct _GtkStateData
 };
 
 /* --- prototypes --- */
+static void	gtk_widget_base_class_init	(gpointer            g_class);
 static void	gtk_widget_class_init		(GtkWidgetClass     *klass);
 static void	gtk_widget_base_class_finalize	(GtkWidgetClass     *klass);
 static void	gtk_widget_init			(GtkWidget          *widget);
@@ -738,7 +744,7 @@ gtk_widget_get_type (void)
       const GTypeInfo widget_info =
       {
 	sizeof (GtkWidgetClass),
-	NULL,		/* base_init */
+	gtk_widget_base_class_init,
 	(GBaseFinalizeFunc) gtk_widget_base_class_finalize,
 	(GClassInitFunc) gtk_widget_class_init,
 	NULL,		/* class_finalize */
@@ -766,6 +772,8 @@ gtk_widget_get_type (void)
       widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, "GtkWidget",
                                             &widget_info, G_TYPE_FLAG_ABSTRACT);
 
+      g_type_add_class_private (widget_type, sizeof (GtkWidgetClassPrivate));
+
       g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
                                    &accessibility_info) ;
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
@@ -773,6 +781,14 @@ gtk_widget_get_type (void)
     }
 
   return widget_type;
+}
+
+static void
+gtk_widget_base_class_init (gpointer g_class)
+{
+  GtkWidgetClass *klass = g_class;
+
+  klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
 }
 
 static void
@@ -920,6 +936,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->show_help = gtk_widget_real_show_help;
 
   /* Accessibility support */
+  klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->adjust_size_request = gtk_widget_real_adjust_size_request;
@@ -1668,6 +1685,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * context passed as @cr in any way they like and don't need to
    * restore it. The signal emission takes care of calling cairo_save()
    * before and cairo_restore() after invoking the handler.
+   *
+   * Since: 3.0
    */
   widget_signals[DRAW] =
     g_signal_new (I_("draw"),
@@ -3159,6 +3178,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                              GTK_PARAM_READABLE));
 
   g_type_class_add_private (klass, sizeof (GtkWidgetPrivate));
+
+  gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
 }
 
 static void
@@ -6495,6 +6516,8 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
+  gtk_widget_update_pango_context (widget);
+
   if (priv->style != NULL &&
       priv->style != gtk_widget_get_default_style ())
     {
@@ -6961,7 +6984,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * Return value: name of the widget. This string is owned by GTK+ and
  * should not be modified or freed
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
@@ -9008,22 +9031,18 @@ static void
 update_pango_context (GtkWidget    *widget,
 		      PangoContext *context)
 {
-  PangoFontDescription *font_desc;
+  const PangoFontDescription *font_desc;
   GtkStyleContext *style_context;
 
   style_context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_get (style_context,
-			 gtk_widget_get_state_flags (widget),
-			 "font", &font_desc,
-			 NULL);
+  font_desc = gtk_style_context_get_font (style_context,
+                                          gtk_widget_get_state_flags (widget));
 
   pango_context_set_font_description (context, font_desc);
   pango_context_set_base_dir (context,
 			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
-
-  pango_font_description_free (font_desc);
 }
 
 static void
@@ -11897,6 +11916,33 @@ G_DEFINE_BOXED_TYPE (GtkRequisition, gtk_requisition,
                      gtk_requisition_free)
 
 /**
+ * gtk_widget_class_set_accessible_type:
+ * @widget_class: class to set the accessible type for
+ * @type: The object type that implements the accessible for @widget_class
+ *
+ * Sets the type to be used for creating accessibles for widgets of
+ * @widget_class. The given @type must be a subtype of the type used for
+ * accessibles of the parent class.
+ *
+ * This function should only be called from class init functions of widgets.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_widget_class_set_accessible_type (GtkWidgetClass *widget_class,
+                                      GType           type)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (g_type_is_a (type, widget_class->priv->accessible_type));
+
+  priv = widget_class->priv;
+
+  priv->accessible_type = type;
+}
+
+/**
  * gtk_widget_get_accessible:
  * @widget: a #GtkWidget
  *
@@ -11939,15 +11985,27 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
                                    quark_accessible_object);
   if (!accessible)
   {
+    GtkWidgetClass *widget_class;
     AtkObjectFactory *factory;
     AtkRegistry *default_registry;
 
-    default_registry = atk_get_default_registry ();
-    factory = atk_registry_get_factory (default_registry,
-                                        G_TYPE_FROM_INSTANCE (widget));
-    accessible =
-      atk_object_factory_create_accessible (factory,
-					    G_OBJECT (widget));
+    widget_class = GTK_WIDGET_GET_CLASS (widget);
+
+    if (widget_class->priv->accessible_type == GTK_TYPE_ACCESSIBLE)
+      {
+        default_registry = atk_get_default_registry ();
+        factory = atk_registry_get_factory (default_registry,
+                                            G_TYPE_FROM_INSTANCE (widget));
+        accessible =
+          atk_object_factory_create_accessible (factory,
+                                                G_OBJECT (widget));
+      }
+    else
+      {
+        accessible = g_object_new (widget_class->priv->accessible_type, NULL);
+        atk_object_initialize (accessible, widget);
+      }
+
     g_object_set_qdata (G_OBJECT (widget),
                         quark_accessible_object,
                         accessible);
@@ -14228,6 +14286,52 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
 }
 
 /**
+ * gtk_widget_path_append_for_widget:
+ * @path: a widget path
+ * @widget: the widget to append to the widget path
+ *
+ * Appends the data from @widget to the widget hierarchy represented
+ * by @path. This function is a shortcut for adding information from
+ * @widget to the given @path. This includes setting the name or
+ * adding the style classes from @widget.
+ *
+ * Returns: the position where the data was inserted
+ *
+ * Since: 3.2
+ **/
+gint
+gtk_widget_path_append_for_widget (GtkWidgetPath *path,
+                                   GtkWidget     *widget)
+{
+  gint pos;
+
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  pos = gtk_widget_path_append_type (path, G_OBJECT_TYPE (widget));
+
+  if (widget->priv->name)
+    gtk_widget_path_iter_set_name (path, pos, widget->priv->name);
+
+  if (widget->priv->context)
+    {
+      GList *classes, *l;
+
+      /* Also add any persistent classes in
+       * the style context the widget path
+       */
+      classes = gtk_style_context_list_classes (widget->priv->context);
+
+      for (l = classes; l; l = l->next)
+        gtk_widget_path_iter_add_class (path, pos, l->data);
+
+      g_list_free (classes);
+    }
+
+  return pos;
+}
+
+/**
  * gtk_widget_get_path:
  * @widget: a #GtkWidget
  *
@@ -14257,7 +14361,6 @@ gtk_widget_get_path (GtkWidget *widget)
   if (!widget->priv->path)
     {
       GtkWidget *parent;
-      guint pos;
 
       parent = widget->priv->parent;
 
@@ -14271,30 +14374,13 @@ gtk_widget_get_path (GtkWidget *widget)
            * situation.
            */
           widget->priv->path = gtk_widget_path_new ();
+    
+          gtk_widget_path_append_for_widget (widget->priv->path, widget);
         }
-
-      pos = gtk_widget_path_append_type (widget->priv->path, G_OBJECT_TYPE (widget));
-
-      if (widget->priv->name)
-        gtk_widget_path_iter_set_name (widget->priv->path, pos, widget->priv->name);
 
       if (widget->priv->context)
-        {
-          GList *classes, *l;
-
-          /* Also add any persistent classes in
-           * the style context the widget path
-           */
-          classes = gtk_style_context_list_classes (widget->priv->context);
-
-          for (l = classes; l; l = l->next)
-            gtk_widget_path_iter_add_class (widget->priv->path, pos, l->data);
-
-          gtk_style_context_set_path (widget->priv->context,
-                                      widget->priv->path);
-
-          g_list_free (classes);
-        }
+        gtk_style_context_set_path (widget->priv->context,
+                                    widget->priv->path);
     }
 
   return widget->priv->path;
@@ -14305,8 +14391,6 @@ style_context_changed (GtkStyleContext *context,
                        gpointer         user_data)
 {
   GtkWidget *widget = user_data;
-
-  gtk_widget_update_pango_context (widget);
 
   if (gtk_widget_get_realized (widget))
     g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);

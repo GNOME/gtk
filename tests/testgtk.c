@@ -1446,13 +1446,15 @@ make_toolbar (GtkWidget *window)
       if (make_toolbar_items[i].label == NULL)
         {
           toolitem = gtk_separator_tool_item_new ();
-          continue;
         }
-      icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window));
-      toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
-      gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
-      if (make_toolbar_items[i].callback != NULL)
-        g_signal_connect (toolitem, "clicked",  make_toolbar_items[i].callback, toolbar);
+      else
+        {
+          icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window));
+          toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
+          gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
+          if (make_toolbar_items[i].callback != NULL)
+            g_signal_connect (toolitem, "clicked",  make_toolbar_items[i].callback, toolbar);
+        }
       gtk_toolbar_insert (GTK_TOOLBAR (toolbar), toolitem, -1);
     }
 
@@ -1750,7 +1752,7 @@ create_handle_box (GtkWidget *widget)
 		      "detached");
     gtk_widget_show (handle_box2);
 
-    hbox = g_object_new (GTK_TYPE_HBOX, "visible", 1, "parent", handle_box2, NULL);
+    hbox = g_object_new (GTK_TYPE_BOX, "visible", 1, "parent", handle_box2, NULL);
     label = gtk_label_new ("Fooo!");
     gtk_container_add (GTK_CONTAINER (hbox), label);
     gtk_widget_show (label);
@@ -2673,7 +2675,7 @@ create_saved_position (GtkWidget *widget)
       g_object_set_data (G_OBJECT (window), "y", y_label);
 
       any =
-	g_object_new (gtk_hseparator_get_type (),
+	g_object_new (gtk_separator_get_type (),
 			"GtkWidget::visible", TRUE,
 			NULL);
       gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
@@ -4832,7 +4834,7 @@ cursor_draw (GtkWidget *widget,
 {
   int width, height;
   GtkStyleContext *context;
-  GdkRGBA *bg;
+  GdkRGBA bg;
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -4846,9 +4848,8 @@ cursor_draw (GtkWidget *widget,
   cairo_fill (cr);
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (context, 0, "background-color", &bg, NULL);
-  gdk_cairo_set_source_rgba (cr, bg);
-  gdk_rgba_free (bg);
+  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+  gdk_cairo_set_source_rgba (cr, &bg);
   cairo_rectangle (cr, width / 3, height / 3, width / 3, height / 3);
   cairo_fill (cr);
 
@@ -5047,10 +5048,7 @@ create_cursors (GtkWidget *widget)
 			       NULL);
       g_object_set_data (G_OBJECT (spinner), "user_data", label);
 
-      any =
-	g_object_new (gtk_hseparator_get_type (),
-			"GtkWidget::visible", TRUE,
-			NULL);
+      any = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
   
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -5500,7 +5498,7 @@ label_toggle (GtkWidget  *widget,
 			"destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			label);
-      gtk_misc_set_padding (GTK_MISC (*label), 10, 10);
+      g_object_set (*label, "margin", 10, NULL);
       gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog_window))),
 			  *label, TRUE, TRUE, 0);
       gtk_widget_show (*label);
@@ -6122,7 +6120,10 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       g_object_set_data (G_OBJECT (child), "tab_pixmap", pixwid);
 			   
       gtk_box_pack_start (GTK_BOX (label_box), pixwid, FALSE, TRUE, 0);
-      gtk_misc_set_padding (GTK_MISC (pixwid), 3, 1);
+      gtk_widget_set_margin_left (pixwid, 3);
+      gtk_widget_set_margin_right (pixwid, 3);
+      gtk_widget_set_margin_bottom (pixwid, 1);
+      gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new_with_mnemonic (accel_buffer);
       gtk_box_pack_start (GTK_BOX (label_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (label_box);
@@ -6133,7 +6134,10 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       g_object_set_data (G_OBJECT (child), "menu_pixmap", pixwid);
       
       gtk_box_pack_start (GTK_BOX (menu_box), pixwid, FALSE, TRUE, 0);
-      gtk_misc_set_padding (GTK_MISC (pixwid), 3, 1);
+      gtk_widget_set_margin_left (pixwid, 3);
+      gtk_widget_set_margin_right (pixwid, 3);
+      gtk_widget_set_margin_bottom (pixwid, 1);
+      gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new (buffer);
       gtk_box_pack_start (GTK_BOX (menu_box), label, FALSE, TRUE, 0);
       gtk_widget_show_all (menu_box);
@@ -9349,7 +9353,7 @@ create_timeout_test (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       label = gtk_label_new ("count: 0");
-      gtk_misc_set_padding (GTK_MISC (label), 10, 10);
+      g_object_set (label, "margin", 10, NULL);
       gtk_box_pack_start (GTK_BOX (content_area), label, TRUE, TRUE, 0);
       gtk_widget_show (label);
 
@@ -9471,11 +9475,11 @@ create_idle_test (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       label = gtk_label_new ("count: 0");
-      gtk_misc_set_padding (GTK_MISC (label), 10, 10);
+      g_object_set (label, "margin", 10, NULL);
       gtk_widget_show (label);
       
       container =
-	g_object_new (GTK_TYPE_HBOX,
+	g_object_new (GTK_TYPE_BOX,
 			"visible", TRUE,
 			/* "GtkContainer::child", g_object_new (GTK_TYPE_HBOX,
 			 * "GtkWidget::visible", TRUE,
@@ -9493,9 +9497,10 @@ create_idle_test (GtkWidget *widget)
 			"parent", content_area,
 			NULL);
       box =
-	g_object_new (GTK_TYPE_VBOX,
+	g_object_new (GTK_TYPE_BOX,
 			"visible", TRUE,
 			"parent", frame,
+                        "orientation", GTK_ORIENTATION_VERTICAL,
 			NULL);
       button =
 	g_object_connect (g_object_new (GTK_TYPE_RADIO_BUTTON,
@@ -9668,7 +9673,7 @@ create_mainloop (GtkWidget *widget)
       action_area = gtk_dialog_get_action_area (GTK_DIALOG (window));
 
       label = gtk_label_new ("In recursive main loop...");
-      gtk_misc_set_padding (GTK_MISC(label), 20, 20);
+      g_object_set (label, "margin", 20, NULL);
 
       gtk_box_pack_start (GTK_BOX (content_area), label, TRUE, TRUE, 0);
       gtk_widget_show (label);

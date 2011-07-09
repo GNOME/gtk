@@ -37,7 +37,7 @@
 
 
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkvbox.h>
+#include <gtk/gtkbox.h>
 
 
 G_BEGIN_DECLS
@@ -68,7 +68,7 @@ typedef struct _GtkFontSelectionDialogClass         GtkFontSelectionDialogClass;
 
 struct _GtkFontSelection
 {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   /*< private >*/
   GtkFontSelectionPrivate *priv;
@@ -76,7 +76,7 @@ struct _GtkFontSelection
 
 struct _GtkFontSelectionClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -161,7 +161,7 @@ gboolean   gtk_font_selection_dialog_set_font_name     (GtkFontSelectionDialog *
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
-G_CONST_RETURN gchar* 
+const gchar*
           gtk_font_selection_dialog_get_preview_text   (GtkFontSelectionDialog *fsd);
 
 /* This sets the text in the preview entry. It will be copied by the entry,

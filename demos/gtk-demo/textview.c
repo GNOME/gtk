@@ -132,7 +132,6 @@ insert_text (GtkTextBuffer *buffer)
   GtkTextIter start, end;
   GdkPixbuf *pixbuf;
   GdkPixbuf *scaled;
-  GtkTextChildAnchor *anchor;
   char *filename;
 
   /* demo_find_file() looks in the current directory first,
@@ -376,15 +375,15 @@ insert_text (GtkTextBuffer *buffer)
 
   gtk_text_buffer_insert (buffer, &iter,
                           "You can put widgets in the buffer: Here's a button: ", -1);
-  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, " and a menu: ", -1);
-  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, " and a scale: ", -1);
-  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, " and an animation: ", -1);
-  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, " finally a text entry: ", -1);
-  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, ".\n", -1);
 
   gtk_text_buffer_insert (buffer, &iter,

@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
 #include "gtkhpaned.h"
 #include "gtkorientable.h"
 
@@ -39,6 +40,8 @@
  * children arranged horizontally. The division between
  * the two panes is adjustable by the user by dragging
  * a handle. See #GtkPaned for details.
+ *
+ * GtkHPaned has been deprecated, use #GtkPaned instead.
  */
 
 
@@ -62,6 +65,8 @@ gtk_hpaned_init (GtkHPaned *hpaned)
  * Create a new #GtkHPaned
  *
  * Returns: the new #GtkHPaned
+ *
+ * Deprecated: 3.2: Use gtk_paned_new() with %GTK_ORIENTATION_HORIZONTAL instead
  */
 GtkWidget *
 gtk_hpaned_new (void)

@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.decl
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
 libgdkx11includedir = $(includedir)/gtk-3.0/gdk/x11
 
-INCLUDES = 			\
+AM_CPPFLAGS = 			\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-DGDK_COMPILATION	\
 	-I$(top_srcdir)		\

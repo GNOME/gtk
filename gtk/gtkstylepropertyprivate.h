@@ -25,27 +25,60 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkStyleProperty GtkStyleProperty;
+typedef enum {
+  GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
+} GtkStylePropertyFlags;
 
 typedef GParameter *     (* GtkStyleUnpackFunc)            (const GValue           *value,
                                                             guint                  *n_params);
 typedef void             (* GtkStylePackFunc)              (GValue                 *value,
                                                             GtkStyleProperties     *props,
                                                             GtkStateFlags           state);
+typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser           *parser,
+                                                            GFile                  *base,
+                                                            GValue                 *value);
+typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
+                                                            GString                *string);
+typedef void             (* GtkStyleDefaultValueFunc)      (GtkStyleProperties     *props,
+                                                            GtkStateFlags           state,
+                                                            GValue                 *value);
+
 
 struct _GtkStyleProperty
 {
-  GParamSpec             *pspec;
-  GtkStylePropertyParser  parse_func;
-  GtkStyleUnpackFunc      unpack_func;
-  GtkStylePackFunc        pack_func;
+  GParamSpec               *pspec;
+  GtkStylePropertyFlags     flags;
+
+  GtkStylePropertyParser    property_parse_func;
+  GtkStyleUnpackFunc        unpack_func;
+  GtkStylePackFunc          pack_func;
+  GtkStyleParseFunc         parse_func;
+  GtkStylePrintFunc         print_func;
+  GtkStyleDefaultValueFunc  default_value_func;
 };
 
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
 
 void                     _gtk_style_property_register      (GParamSpec             *pspec,
-                                                            GtkStylePropertyParser  parse_func,
+                                                            GtkStylePropertyFlags   flags,
+                                                            GtkStylePropertyParser  property_parse_func,
                                                             GtkStyleUnpackFunc      unpack_func,
-                                                            GtkStylePackFunc        pack_func);
+                                                            GtkStylePackFunc        pack_func,
+                                                            GtkStyleParseFunc       parse_func,
+                                                            GtkStylePrintFunc       print_func,
+                                                            GtkStyleDefaultValueFunc default_value_func);
+
+gboolean                 _gtk_style_property_is_inherit    (const GtkStyleProperty *property);
+
+void                     _gtk_style_property_default_value (const GtkStyleProperty *property,
+                                                            GtkStyleProperties     *properties,
+                                                            GtkStateFlags           state,
+                                                            GValue                 *value);
+
+void                     _gtk_style_property_resolve       (const GtkStyleProperty *property,
+                                                            GtkStyleProperties     *properties,
+                                                            GtkStateFlags           state,
+                                                            GValue                 *value);
 
 gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
 GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,
@@ -56,10 +89,13 @@ void                     _gtk_style_property_pack          (const GtkStyleProper
                                                             GtkStateFlags           state,
                                                             GValue                 *value);
 
-gboolean                _gtk_css_value_parse              (GValue        *value,
-                                                           GtkCssParser  *parser,
-                                                           GFile         *base);
-char *                  _gtk_css_value_to_string          (const GValue  *value);
+gboolean                 _gtk_style_property_parse_value   (const GtkStyleProperty *property,
+                                                            GValue                 *value,
+                                                            GtkCssParser           *parser,
+                                                            GFile                  *base);
+void                     _gtk_style_property_print_value   (const GtkStyleProperty *property,
+                                                            const GValue           *value,
+                                                            GString                *string);
 
 G_END_DECLS
 

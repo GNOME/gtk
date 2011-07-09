@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include <gdk/gdk.h>
+#include <math.h>
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
 
@@ -177,164 +178,50 @@
  * Widgets can add style classes to their context, which can be used
  * to associate different styles by class (see <xref linkend="gtkcssprovider-selectors"/>). Theme engines can also use style classes to vary their
  * rendering. GTK+ has a number of predefined style classes:
- * <informaltable>
- *   <tgroup cols="3">
- *     <thead>
- *       <row>
- *         <entry>Style class</entry>
- *         <entry>Macro</entry>
- *         <entry>Used by</entry>
- *       </row>
- *     </thead>
- *     <tbody>
- *       <row>
- *         <entry>button</entry>
- *         <entry>GTK_STYLE_CLASS_BUTTON</entry>
- *         <entry>#GtkButton, #GtkToggleButton, #GtkRadioButton, #GtkCheckButton</entry>
- *       </row>
- *       <row>
- *         <entry>default</entry>
- *         <entry>GTK_STYLE_CLASS_DEFAULT</entry>
- *         <entry>#GtkButton</entry>
- *       </row>
- *       <row>
- *         <entry>check</entry>
- *         <entry>GTK_STYLE_CLASS_CHECK</entry>
- *         <entry>#GtkCheckButton, #GtkCheckMenuItem, #GtkCellRendererToggle</entry>
- *       </row>
- *       <row>
- *         <entry>radio</entry>
- *         <entry>GTK_STYLE_CLASS_RADIO</entry>
- *         <entry>#GtkRadioButton, #GtkRadioMenuItem, #GtkCellRendererToggle</entry>
- *       </row>
- *       <row>
- *         <entry>arrow</entry>
- *         <entry>GTK_STYLE_CLASS_ARROW</entry>
- *         <entry>#GtkArrow</entry>
- *       </row>
- *       <row>
- *         <entry>calendar</entry>
- *         <entry>GTK_STYLE_CLASS_CALENDAR</entry>
- *         <entry>#GtkCalendar</entry>
- *       </row>
- *       <row>
- *         <entry>entry</entry>
- *         <entry>GTK_STYLE_CLASS_ENTRY</entry>
- *         <entry>#GtkEntry</entry>
- *       </row>
- *       <row>
- *         <entry>cell</entry>
- *         <entry>GTK_STYLE_CLASS_CELL</entry>
- *         <entry>#GtkCellRendererToggle</entry>
- *       </row>
- *       <row>
- *         <entry>menu</entry>
- *         <entry>GTK_STYLE_CLASS_MENU</entry>
- *         <entry>#GtkMenu, #GtkMenuItem, #GtkCheckMenuItem, #GtkRadioMenuItem</entry>
- *       </row>
- *       <row>
- *         <entry>expander</entry>
- *         <entry>GTK_STYLE_CLASS_EXPANDER</entry>
- *         <entry>#GtkExpander</entry>
- *       </row>
- *       <row>
- *         <entry>tooltip</entry>
- *         <entry>GTK_STYLE_CLASS_TOOLTIP</entry>
- *         <entry>#GtkTooltip</entry>
- *       </row>
- *       <row>
- *         <entry>frame</entry>
- *         <entry>GTK_STYLE_CLASS_FRAME</entry>
- *         <entry>#GtkFrame</entry>
- *       </row>
- *       <row>
- *         <entry>scrolled-window</entry>
- *         <entry></entry>
- *         <entry>#GtkScrolledWindow</entry>
- *       </row>
- *       <row>
- *         <entry>viewport</entry>
- *         <entry></entry>
- *         <entry>#GtkViewport</entry>
- *       </row>
- *       <row>
- *         <entry>trough</entry>
- *         <entry>GTK_STYLE_CLASS_TROUGH</entry>
- *         <entry>#GtkScrollbar, #GtkProgressBar, #GtkScale</entry>
- *       </row>
- *       <row>
- *         <entry>progressbar</entry>
- *         <entry>GTK_STYLE_CLASS_PROGRESSBAR</entry>
- *         <entry>#GtkProgressBar, #GtkCellRendererProgress</entry>
- *       </row>
- *       <row>
- *         <entry>slider</entry>
- *         <entry>GTK_STYLE_CLASS_SLIDER</entry>
- *         <entry>#GtkScrollbar, #GtkScale</entry>
- *       </row>
- *       <row>
- *         <entry>menuitem</entry>
- *         <entry>GTK_STYLE_CLASS_MENUITEM</entry>
- *         <entry>#GtkMenuItem</entry>
- *       </row>
- *       <row>
- *         <entry>popup</entry>
- *         <entry></entry>
- *         <entry>#GtkMenu</entry>
- *       </row>
- *       <row>
- *         <entry>accelerator</entry>
- *         <entry>GTK_STYLE_CLASS_ACCELERATOR</entry>
- *         <entry>#GtkAccelLabel</entry>
- *       </row>
- *       <row>
- *         <entry>menubar</entry>
- *         <entry>GTK_STYLE_CLASS_MENUBAR</entry>
- *         <entry>#GtkMenuBar</entry>
- *       </row>
- *       <row>
- *         <entry>toolbar</entry>
- *         <entry>GTK_STYLE_CLASS_TOOLBAR</entry>
- *         <entry>#GtkToolbar</entry>
- *       </row>
- *       <row>
- *         <entry>dock</entry>
- *         <entry>GTK_STYLE_CLASS_DOCK</entry>
- *         <entry>#GtkHandleBox</entry>
- *       </row>
- *       <row>
- *         <entry>notebook</entry>
- *         <entry></entry>
- *         <entry>#GtkNotebook</entry>
- *       </row>
- *       <row>
- *         <entry>background</entry>
- *         <entry>GTK_STYLE_CLASS_BACKGROUND</entry>
- *         <entry>#GtkWindow</entry>
- *       </row>
- *       <row>
- *         <entry>rubberband</entry>
- *         <entry>GTK_STYLE_CLASS_RUBBERBAND</entry>
- *         <entry></entry>
- *       </row>
- *       <row>
- *         <entry>header</entry>
- *         <entry>GTK_STYLE_CLASS_HEADER</entry>
- *         <entry></entry>
- *       </row>
- *       <row>
- *         <entry>grip</entry>
- *         <entry>GTK_STYLE_CLASS_GRIP</entry>
- *         <entry>#GtkWindow</entry>
- *       </row>
- *       <row>
- *         <entry>spinner</entry>
- *         <entry>GTK_STYLE_CLASS_SPINNER</entry>
- *         <entry>#GtkSpinner</entry>
- *       </row>
- *     </tbody>
- *   </tgroup>
- * </informaltable>
+ * #GTK_STYLE_CLASS_CELL,
+ * #GTK_STYLE_CLASS_ENTRY,
+ * #GTK_STYLE_CLASS_BUTTON,
+ * #GTK_STYLE_CLASS_CALENDAR,
+ * #GTK_STYLE_CLASS_SLIDER,
+ * #GTK_STYLE_CLASS_BACKGROUND,
+ * #GTK_STYLE_CLASS_RUBBERBAND,
+ * #GTK_STYLE_CLASS_TOOLTIP,
+ * #GTK_STYLE_CLASS_MENU,
+ * #GTK_STYLE_CLASS_MENUBAR,
+ * #GTK_STYLE_CLASS_MENUITEM,
+ * #GTK_STYLE_CLASS_TOOLBAR,
+ * #GTK_STYLE_CLASS_PRIMARY_TOOLBAR,
+ * #GTK_STYLE_CLASS_INLINE_TOOLBAR,
+ * #GTK_STYLE_CLASS_RADIO,
+ * #GTK_STYLE_CLASS_CHECK,
+ * #GTK_STYLE_CLASS_TROUGH,
+ * #GTK_STYLE_CLASS_SCROLLBAR,
+ * #GTK_STYLE_CLASS_SCALE,
+ * #GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE,
+ * #GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW,
+ * #GTK_STYLE_CLASS_HEADER,
+ * #GTK_STYLE_CLASS_ACCELERATOR,
+ * #GTK_STYLE_CLASS_GRIP,
+ * #GTK_STYLE_CLASS_DOCK,
+ * #GTK_STYLE_CLASS_PROGRESSBAR,
+ * #GTK_STYLE_CLASS_SPINNER,
+ * #GTK_STYLE_CLASS_EXPANDER,
+ * #GTK_STYLE_CLASS_SPINBUTTON,
+ * #GTK_STYLE_CLASS_NOTEBOOK,
+ * #GTK_STYLE_CLASS_VIEW,
+ * #GTK_STYLE_CLASS_SIDEBAR,
+ * #GTK_STYLE_CLASS_IMAGE,
+ * #GTK_STYLE_CLASS_HIGHLIGHT,
+ * #GTK_STYLE_CLASS_FRAME,
+ * #GTK_STYLE_CLASS_DND,
+ * #GTK_STYLE_CLASS_PANE_SEPARATOR,
+ * #GTK_STYLE_CLASS_SEPARATOR,
+ * #GTK_STYLE_CLASS_INFO,
+ * #GTK_STYLE_CLASS_WARNING,
+ * #GTK_STYLE_CLASS_QUESTION,
+ * #GTK_STYLE_CLASS_ERROR,
+ * #GTK_STYLE_CLASS_HORIZONTAL,
+ * #GTK_STYLE_CLASS_VERTICAL.
  * </para>
  * <para>
  * Widgets can also add regions with flags to their context.
@@ -505,7 +392,6 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static GQuark provider_list_quark = 0;
-static GdkRGBA fallback_color = { 1.0, 0.75, 0.75, 1.0 };
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -1696,7 +1582,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
  *
  * Since: 3.0
  **/
-G_CONST_RETURN GtkWidgetPath *
+const GtkWidgetPath *
 gtk_style_context_get_path (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
@@ -2114,8 +2000,8 @@ _gtk_style_context_check_region_name (const gchar *str)
  * Pseudo-classes are used for matching @flags, so the two
  * following rules:
  * <programlisting>
- * GtkTreeView row:nth-child (even) { ... }
- * GtkTreeView row:nth-child (odd) { ... }
+ * GtkTreeView row:nth-child(even) { ... }
+ * GtkTreeView row:nth-child(odd) { ... }
  * </programlisting>
  *
  * would apply to even and odd rows, respectively.
@@ -3347,30 +3233,18 @@ gtk_style_context_get_color (GtkStyleContext *context,
                              GtkStateFlags    state,
                              GdkRGBA         *color)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
-  const GValue *value;
   GdkRGBA *c;
 
   g_return_if_fail (color != NULL);
-  *color = fallback_color;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "color", &c,
+                         NULL);
 
-  data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "color",
-                                               state,
-                                               NULL);
-
-  if (value)
-    {
-      c = g_value_get_boxed (value);
-      *color = *c;
-    }
+  *color = *c;
+  gdk_rgba_free (c);
 }
 
 /**
@@ -3388,30 +3262,18 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
                                         GtkStateFlags    state,
                                         GdkRGBA         *color)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
-  const GValue *value;
   GdkRGBA *c;
 
   g_return_if_fail (color != NULL);
-  *color = fallback_color;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "background-color", &c,
+                         NULL);
 
-  data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "background-color",
-                                               state,
-                                               NULL);
-
-  if (value)
-    {
-      c = g_value_get_boxed (value);
-      *color = *c;
-    }
+  *color = *c;
+  gdk_rgba_free (c);
 }
 
 /**
@@ -3429,30 +3291,18 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
                                     GtkStateFlags    state,
                                     GdkRGBA         *color)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
-  const GValue *value;
   GdkRGBA *c;
 
   g_return_if_fail (color != NULL);
-  *color = fallback_color;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "border-color", &c,
+                         NULL);
 
-  data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store,
-                                               "border-color",
-                                               state,
-                                               NULL);
-
-  if (value)
-    {
-      c = g_value_get_boxed (value);
-      *color = *c;
-    }
+  *color = *c;
+  gdk_rgba_free (c);
 }
 
 /**
@@ -3599,7 +3449,8 @@ gtk_style_context_get_font (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  const GValue *value;
+  GHashTable *font_cache;
+  PangoFontDescription *description;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
@@ -3607,12 +3458,31 @@ gtk_style_context_get_font (GtkStyleContext *context,
   g_return_val_if_fail (priv->widget_path != NULL, NULL);
 
   data = style_data_lookup (context);
-  value = _gtk_style_properties_peek_property (data->store, "font", state, NULL);
 
-  if (value)
-    return g_value_get_boxed (value);
+  /* Yuck, fonts are created on-demand but we don't return a ref.
+   * Do bad things to achieve this requirement */
+  font_cache = g_object_get_data (G_OBJECT (data->store), "font-cache-for-get_font");
+  if (font_cache)
+    {
+      description = g_hash_table_lookup (font_cache, GUINT_TO_POINTER (state));
+    }
+  else
+    {
+      font_cache = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) pango_font_description_free);
+      g_object_set_data_full (G_OBJECT (data->store),
+                              "font-cache-for-get_font",
+                              font_cache,
+                              (GDestroyNotify) g_hash_table_unref);
+      description = NULL;
+    }
 
-  return NULL;
+  if (description == NULL)
+    {
+      gtk_style_properties_get (data->store, state, "font", &description, NULL);
+      g_hash_table_insert (font_cache, GUINT_TO_POINTER (state), description);
+    }
+
+  return description;
 }
 
 static void
@@ -4402,4 +4272,100 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   return engine_class->render_icon_pixbuf (priv->theming_engine, source, size);
+}
+
+/**
+ * gtk_render_icon:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @pixbuf: a #GdkPixbuf containing the icon to draw
+ * @x: X position for the @pixbuf
+ * @y: Y position for the @pixbuf
+ *
+ * Renders the icon in @pixbuf at the specified @x and @y coordinates.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_render_icon (GtkStyleContext *context,
+                 cairo_t         *cr,
+		 GdkPixbuf       *pixbuf,
+                 gdouble          x,
+                 gdouble          y)
+{
+  GtkStyleContextPrivate *priv;
+  GtkThemingEngineClass *engine_class;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+
+  priv = context->priv;
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
+
+  store_animation_region (context,
+                          x, y,
+                          gdk_pixbuf_get_width (pixbuf),
+                          gdk_pixbuf_get_height (pixbuf));
+
+  _gtk_theming_engine_set_context (priv->theming_engine, context);
+  engine_class->render_icon (priv->theming_engine, cr, pixbuf, x, y);
+
+  cairo_restore (cr);  
+}
+
+static AtkAttributeSet *
+add_attribute (AtkAttributeSet  *attributes,
+               AtkTextAttribute  attr,
+               const gchar      *value)
+{
+  AtkAttribute *at;
+
+  at = g_new (AtkAttribute, 1);
+  at->name = g_strdup (atk_text_attribute_get_name (attr));
+  at->value = g_strdup (value);
+
+  return g_slist_prepend (attributes, at);
+}
+
+/*
+ * _gtk_style_context_get_attributes:
+ * @attributes: a #AtkAttributeSet to add attributes to
+ * @context: the #GtkStyleContext to get attributes from
+ * @flags: the state to use with @context
+ *
+ * Adds the foreground and background color from @context to
+ * @attributes, after translating them to ATK attributes.
+ *
+ * This is a convenience function that can be used in
+ * implementing the #AtkText interface in widgets.
+ *
+ * Returns: the modified #AtkAttributeSet
+ */
+AtkAttributeSet *
+_gtk_style_context_get_attributes (AtkAttributeSet *attributes,
+                                   GtkStyleContext *context,
+                                   GtkStateFlags    flags)
+{
+  GdkRGBA color;
+  gchar *value;
+
+  gtk_style_context_get_background_color (context, flags, &color);
+  value = g_strdup_printf ("%u,%u,%u",
+                           (guint) ceil (color.red * 65536 - color.red),
+                           (guint) ceil (color.green * 65536 - color.green),
+                           (guint) ceil (color.blue * 65536 - color.blue));
+  attributes = add_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
+  g_free (value);
+
+  gtk_style_context_get_color (context, flags, &color);
+  value = g_strdup_printf ("%u,%u,%u",
+                           (guint) ceil (color.red * 65536 - color.red),
+                           (guint) ceil (color.green * 65536 - color.green),
+                           (guint) ceil (color.blue * 65536 - color.blue));
+  attributes = add_attribute (attributes, ATK_TEXT_ATTR_FG_COLOR, value);
+  g_free (value);
+
+  return attributes;
 }

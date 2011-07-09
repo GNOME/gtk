@@ -4,7 +4,7 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) 		\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\

@@ -82,7 +82,7 @@
  **/
 
 G_DEFINE_BOXED_TYPE (GtkWidgetPath, gtk_widget_path,
-		     gtk_widget_path_copy, gtk_widget_path_free)
+		     gtk_widget_path_ref, gtk_widget_path_unref)
 
 
 typedef struct GtkPathElement GtkPathElement;
@@ -93,10 +93,14 @@ struct GtkPathElement
   GQuark name;
   GHashTable *regions;
   GArray *classes;
+  GtkWidgetPath *siblings;
+  guint sibling_index;
 };
 
 struct _GtkWidgetPath
 {
+  volatile guint ref_count;
+
   GArray *elems; /* First element contains the described widget */
 };
 
@@ -116,8 +120,40 @@ gtk_widget_path_new (void)
 
   path = g_slice_new0 (GtkWidgetPath);
   path->elems = g_array_new (FALSE, TRUE, sizeof (GtkPathElement));
+  path->ref_count = 1;
 
   return path;
+}
+
+static void
+gtk_path_element_copy (GtkPathElement       *dest,
+                       const GtkPathElement *src)
+{
+  memset (dest, 0, sizeof (GtkPathElement));
+
+  dest->type = src->type;
+  dest->name = src->name;
+  if (src->siblings)
+    dest->siblings = gtk_widget_path_ref (src->siblings);
+  dest->sibling_index = src->sibling_index;
+
+  if (src->regions)
+    {
+      GHashTableIter iter;
+      gpointer key, value;
+
+      g_hash_table_iter_init (&iter, src->regions);
+      dest->regions = g_hash_table_new (NULL, NULL);
+
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        g_hash_table_insert (dest->regions, key, value);
+    }
+
+  if (src->classes)
+    {
+      dest->classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
+      g_array_append_vals (dest->classes, src->classes->data, src->classes->len);
+    }
 }
 
 /**
@@ -142,30 +178,11 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
 
   for (i = 0; i < path->elems->len; i++)
     {
-      GtkPathElement *elem, new = { 0 };
+      GtkPathElement *elem, new;
 
       elem = &g_array_index (path->elems, GtkPathElement, i);
 
-      new.type = elem->type;
-      new.name = elem->name;
-
-      if (elem->regions)
-        {
-          GHashTableIter iter;
-          gpointer key, value;
-
-          g_hash_table_iter_init (&iter, elem->regions);
-          new.regions = g_hash_table_new (NULL, NULL);
-
-          while (g_hash_table_iter_next (&iter, &key, &value))
-            g_hash_table_insert (new.regions, key, value);
-        }
-
-      if (elem->classes)
-        {
-          new.classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
-          g_array_append_vals (new.classes, elem->classes->data, elem->classes->len);
-        }
+      gtk_path_element_copy (&new, elem);
 
       g_array_append_val (new_path->elems, new);
     }
@@ -174,19 +191,43 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
 }
 
 /**
- * gtk_widget_path_free:
+ * gtk_widget_path_ref:
  * @path: a #GtkWidgetPath
  *
- * Frees a #GtkWidgetPath.
+ * Increments the reference count on @path.
  *
- * Since: 3.0
+ * Returns: @path itself.
+ *
+ * Since: 3.2
+ **/
+GtkWidgetPath *
+gtk_widget_path_ref (GtkWidgetPath *path)
+{
+  g_return_val_if_fail (path != NULL, path);
+
+  g_atomic_int_add (&path->ref_count, 1);
+
+  return path;
+}
+
+/**
+ * gtk_widget_path_unref:
+ * @path: a #GtkWidgetPath
+ *
+ * Decrements the reference count on @path, freeing the structure
+ * if the reference count reaches 0.
+ *
+ * Since: 3.2
  **/
 void
-gtk_widget_path_free (GtkWidgetPath *path)
+gtk_widget_path_unref (GtkWidgetPath *path)
 {
   guint i;
 
   g_return_if_fail (path != NULL);
+
+  if (!g_atomic_int_dec_and_test (&path->ref_count))
+    return;
 
   for (i = 0; i < path->elems->len; i++)
     {
@@ -199,10 +240,30 @@ gtk_widget_path_free (GtkWidgetPath *path)
 
       if (elem->classes)
         g_array_free (elem->classes, TRUE);
+
+      if (elem->siblings)
+        gtk_widget_path_unref (elem->siblings);
     }
 
   g_array_free (path->elems, TRUE);
   g_slice_free (GtkWidgetPath, path);
+}
+
+/**
+ * gtk_widget_path_free:
+ * @path: a #GtkWidgetPath
+ *
+ * Decrements the reference count on @path, freeing the structure
+ * if the reference count reaches 0.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_path_free (GtkWidgetPath *path)
+{
+  g_return_if_fail (path != NULL);
+
+  gtk_widget_path_unref (path);
 }
 
 /**
@@ -266,6 +327,12 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
           g_string_append (string, g_quark_to_string (elem->name));
           g_string_append_c (string, ')');
         }
+
+
+      if (elem->siblings)
+        g_string_append_printf (string, "[%d/%d]",
+                                elem->sibling_index,
+                                gtk_widget_path_length (elem->siblings));
 
       if (elem->classes)
         {
@@ -336,7 +403,7 @@ gtk_widget_path_prepend_type (GtkWidgetPath *path,
  * @path: a #GtkWidgetPath
  * @type: widget type to append
  *
- * Appends a widget type to the widget hierachy represented by @path.
+ * Appends a widget type to the widget hierarchy represented by @path.
  *
  * Returns: the position where the element was inserted
  *
@@ -354,6 +421,100 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
   g_array_append_val (path->elems, new);
 
   return path->elems->len - 1;
+}
+
+/**
+ * gtk_widget_path_append_with_siblings:
+ * @path: the widget path to append to
+ * @siblings: a widget path describing a list of siblings. This path
+ *   may not contain any siblings itself and it must not be modified
+ *   afterwards.
+ * @sibling_index: index into @siblings for where the added element is
+ *   positioned.
+ *
+ * Appends a widget type with all its siblings to the widget hierarchy
+ * represented by @path. Using this function instead of
+ * gtk_widget_path_append_type() will allow the CSS theming to use
+ * sibling matches in selectors and apply :nth-child() pseudo classes.
+ * In turn, it requires a lot more care in widget implementations as
+ * widgets need to make sure to call gtk_widget_reset_style() on all
+ * involved widgets when the @siblings path changes.
+ *
+ * Returns: the position where the element was inserted.
+ *
+ * Since: 3.2
+ **/
+gint
+gtk_widget_path_append_with_siblings (GtkWidgetPath *path,
+                                      GtkWidgetPath *siblings,
+                                      guint          sibling_index)
+{
+  GtkPathElement new;
+
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (siblings != NULL, 0);
+  g_return_val_if_fail (sibling_index < gtk_widget_path_length (siblings), 0);
+
+  gtk_path_element_copy (&new, &g_array_index (siblings->elems, GtkPathElement, sibling_index));
+  new.siblings = gtk_widget_path_ref (siblings);
+  new.sibling_index = sibling_index;
+  g_array_append_val (path->elems, new);
+
+  return path->elems->len - 1;
+}
+
+/**
+ * gtk_widget_path_iter_get_siblings:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the siblings for, -1 for the path head
+ *
+ * Returns the list of siblings for the element at @pos. If the element
+ * was not added with siblings, %NULL is returned.
+ *
+ * Returns: %NULL or the list of siblings for the element at @pos.
+ **/
+const GtkWidgetPath *
+gtk_widget_path_iter_get_siblings (const GtkWidgetPath *path,
+                                   gint                 pos)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (path->elems->len != 0, G_TYPE_INVALID);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return elem->siblings;
+}
+
+/**
+ * gtk_widget_path_iter_get_sibling_index:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the sibling index for, -1 for the path head
+ *
+ * Returns the index into the list of siblings for the element at @pos as
+ * returned by gtk_widget_path_iter_get_siblings(). If that function would
+ * return %NULL because the element at @pos has no siblings, this function
+ * will return 0.
+ *
+ * Returns: 0 or the index into the list of siblings for the element at @pos.
+ **/
+guint
+gtk_widget_path_iter_get_sibling_index (const GtkWidgetPath *path,
+                                        gint                 pos)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (path->elems->len != 0, G_TYPE_INVALID);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return elem->sibling_index;
 }
 
 /**
@@ -423,7 +584,7 @@ gtk_widget_path_iter_set_object_type (GtkWidgetPath *path,
  *
  * Returns: The widget name, or %NULL if none was set.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
                                gint                 pos)
 {

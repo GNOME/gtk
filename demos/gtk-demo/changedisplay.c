@@ -125,7 +125,7 @@ query_for_toplevel (GdkScreen  *screen,
   gtk_container_add (GTK_CONTAINER (popup), frame);
 
   label = gtk_label_new (prompt);
-  gtk_misc_set_padding (GTK_MISC (label), 10, 10);
+  g_object_set (label, "margin", 10, NULL);
   gtk_container_add (GTK_CONTAINER (frame), label);
 
   gtk_widget_show_all (popup);

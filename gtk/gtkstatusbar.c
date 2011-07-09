@@ -35,7 +35,9 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
+#include "gtkorientable.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkstatusbaraccessible.h"
 
 /**
  * SECTION:gtkstatusbar
@@ -118,7 +120,7 @@ static void     gtk_statusbar_hierarchy_changed (GtkWidget         *widget,
 
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkStatusbar, gtk_statusbar, GTK_TYPE_HBOX,
+G_DEFINE_TYPE_WITH_CODE (GtkStatusbar, gtk_statusbar, GTK_TYPE_BOX,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_statusbar_buildable_interface_init));
 
@@ -184,6 +186,8 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
                                                               GTK_PARAM_READABLE));
 
    g_type_class_add_private (class, sizeof (GtkStatusbarPrivate));
+
+   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
 }
 
 static void

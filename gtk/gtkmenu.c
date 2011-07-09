@@ -107,11 +107,13 @@
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 #include "gtkhbox.h"
-#include "gtkvscrollbar.h"
+#include "gtkscrollbar.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkmenuaccessible.h"
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
                                          * extends below the submenu
@@ -881,6 +883,8 @@ gtk_menu_class_init (GtkMenuClass *class)
                                 GTK_SCROLL_PAGE_DOWN);
 
   g_type_class_add_private (gobject_class, sizeof (GtkMenuPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ACCESSIBLE);
 }
 
 
@@ -1695,7 +1699,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
 
     gtk_widget_size_allocate (priv->toplevel, &tmp_allocation);
 
-    gtk_widget_realize (GTK_WIDGET (menu));
+    gtk_widget_realize (priv->toplevel);
   }
 
   gtk_menu_scroll_to (menu, priv->scroll_offset);
@@ -2407,7 +2411,7 @@ gtk_menu_set_title (GtkMenu     *menu,
  *     has no title set on it. This string is owned by GTK+
  *     and should not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_menu_get_title (GtkMenu *menu)
 {
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
@@ -4656,10 +4660,12 @@ gtk_menu_position (GtkMenu  *menu,
   pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
   gdk_device_get_position (pointer, &pointer_screen, &x, &y);
 
-  /* Get the minimum height for minimum width to figure out
+  /* Realize so we have the proper width and heigh to figure out
    * the right place to popup the menu.
    */
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
+  gtk_widget_realize (priv->toplevel);
+  requisition.width = gtk_widget_get_allocated_width (widget);
+  requisition.height = gtk_widget_get_allocated_height (widget);
 
   if (pointer_screen != screen)
     {

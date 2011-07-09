@@ -94,7 +94,7 @@ IGNORE_HFILES=				\
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) 	\
 	-I$(top_builddir) 	\
 	-I$(top_builddir)/gdk	\
@@ -371,6 +371,7 @@ HTML_IMAGES = \
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib \
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gio \
 	--extra-dir=$(ATK_PREFIX)/share/gtk-doc/html/atk \
 	--extra-dir=$(PANGO_PREFIX)/share/gtk-doc/html/pango \
 	--extra-dir=$(CAIRO_PREFIX)/share/gtk-doc/html/cairo

@@ -44,13 +44,15 @@
 #include "gtkliststore.h"
 #include "gtkstock.h"
 #include "gtktreemodelfilter.h"
-#include "gtkvseparator.h"
+#include "gtkseparator.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserutils.h"
 #include "gtkmarshalers.h"
 
 #include "gtkfilechooserbutton.h"
+
+#include "gtkorientable.h"
 
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -342,7 +344,7 @@ static guint file_chooser_button_signals[LAST_SIGNAL] = { 0 };
  *  GType Declaration  *
  * ******************* */
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE_HBOX, { \
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE_BOX, { \
     G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER, gtk_file_chooser_button_file_chooser_iface_init) \
 })
 
@@ -492,7 +494,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 
   priv->label = gtk_label_new (_(FALLBACK_DISPLAY_NAME));
   gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
-  gtk_misc_set_alignment (GTK_MISC (priv->label), 0.0, 0.5);
+  gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
+  gtk_widget_set_valign (priv->label, GTK_ALIGN_CENTER);
   gtk_box_pack_start (GTK_BOX (box), priv->label, TRUE, TRUE, 0);
   //gtk_container_add (GTK_CONTAINER (box), priv->label);
   gtk_widget_show (priv->label);
@@ -2819,7 +2822,7 @@ gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
  * 
  * Since: 2.6
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), NULL);

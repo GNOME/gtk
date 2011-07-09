@@ -37,6 +37,8 @@
 
 G_BEGIN_DECLS
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #define GTK_TYPE_HBOX            (gtk_hbox_get_type ())
 #define GTK_HBOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
 #define GTK_HBOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBOX, GtkHBoxClass))
@@ -62,6 +64,8 @@ struct _GtkHBoxClass
 GType       gtk_hbox_get_type (void) G_GNUC_CONST;
 GtkWidget * gtk_hbox_new      (gboolean homogeneous,
                                gint     spacing);
+
+#endif
 
 G_END_DECLS
 

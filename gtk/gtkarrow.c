@@ -52,6 +52,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include "a11y/gtkarrowaccessible.h"
+
 #define MIN_ARROW_SIZE  15
 
 struct _GtkArrowPrivate
@@ -130,6 +132,8 @@ gtk_arrow_class_init (GtkArrowClass *class)
                                                                GTK_PARAM_READABLE));
 
   g_type_class_add_private (class, sizeof (GtkArrowPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ARROW_ACCESSIBLE);
 }
 
 static void

@@ -17,7 +17,7 @@ CFILE_GLOB = $(top_srcdir)/modules/other/gail/libgail-util/*.c
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.
-INCLUDES =                      \
+AM_CPPFLAGS =                   \
         -I$(top_srcdir)         \
         -I$(top_builddir)       \
         $(DEP_CFLAGS)

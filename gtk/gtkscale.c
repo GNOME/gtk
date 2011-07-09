@@ -42,13 +42,15 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 
+#include "a11y/gtkscaleaccessible.h"
+
 
 /**
  * SECTION:gtkscale
- * @Short_description: Base class for GtkHScale and GtkVScale
+ * @Short_description: A slider widget for selecting a value from a range
  * @Title: GtkScale
  *
- * A GtkScale is a slider control used to select a numeric value.
+ * A GtkScale is a slider control used to select a numeric value. 
  * To use it, you'll probably want to investigate the methods on
  * its base class, #GtkRange, in addition to the methods for GtkScale itself.
  * To set the value of a scale, you would normally use gtk_range_set_value().
@@ -410,6 +412,8 @@ gtk_scale_class_init (GtkScaleClass *class)
                       GTK_SCROLL_END);
 
   g_type_class_add_private (gobject_class, sizeof (GtkScalePrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_ACCESSIBLE);
 }
 
 static void
@@ -1334,8 +1338,7 @@ _gtk_scale_format_value (GtkScale *scale,
   if (fmt)
     return fmt;
   else
-    /* insert a LRM, to prevent -20 to come out as 20- in RTL locales */
-    return g_strdup_printf ("\342\200\216%0.*f", priv->digits, value);
+    return g_strdup_printf ("%0.*f", priv->digits, value);
 }
 
 static void

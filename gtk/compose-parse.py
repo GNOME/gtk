@@ -24,7 +24,7 @@ import getopt
 URL_COMPOSE = 'http://gitweb.freedesktop.org/?p=xorg/lib/libX11.git;a=blob_plain;f=nls/en_US.UTF-8/Compose.pre'
 URL_KEYSYMSTXT = "http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt"
 URL_GDKKEYSYMSH = "http://git.gnome.org/browse/gtk%2B/plain/gdk/gdkkeysyms.h"
-URL_UNICODEDATATXT = 'http://www.unicode.org/Public/5.2.0/ucd/UnicodeData.txt'
+URL_UNICODEDATATXT = 'http://www.unicode.org/Public/6.0.0/ucd/UnicodeData.txt'
 FILENAME_COMPOSE_SUPPLEMENTARY = 'gtk-compose-lookaside.txt'
 
 # We currently support keysyms of size 2; once upstream xorg gets sorted, 
@@ -270,7 +270,7 @@ def process_gdkkeysymsh():
 			unival = long(components[2][2:], 16)
 			if unival == 0:
 				continue
-			keysymdb[components[1][4:]] = unival
+			keysymdb[components[1][8:]] = unival
 		else:
 			print "Invalid line %(linenum)d in %(filename)s: %(line)s"\
 			% {'linenum': linenum_gdkkeysymsh, 'filename': filename_gdkkeysymsh, 'line': line}
@@ -354,6 +354,8 @@ def process_keysymstxt():
 	keysymdb['dead_stroke'] = 0x338
 	""" This is for a missing keysym from Markus Kuhn's db """
 	keysymdb['Oslash'] = 0x0d8		
+	""" This is for a missing keysym from Markus Kuhn's db """
+	keysymdb['Ssharp'] = 0x1e9e
 
 	""" This is for a missing (recently added) keysym """
 	keysymdb['dead_psili'] = 0x313		
@@ -755,11 +757,11 @@ for sequence in xorg_compose_sequences_algorithmic_uniqued:
 if opt_algorithmic:
 	for sequence in xorg_compose_sequences_algorithmic_uniqued:
 		letter = "".join(sequence[-1:])
-		print '0x%(cp)04X, %(uni)c, seq: [ <0x%(base)04X>,' % { 'cp': ord(unicode(letter)), 'uni': letter, 'base': sequence[-2] },
+		print '0x%(cp)04X, %(uni)s, seq: [ <0x%(base)04X>,' % { 'cp': ord(unicode(letter)), 'uni': letter.encode('utf-8'), 'base': sequence[-2] },
 		for elem in sequence[:-2]:
 			print "<0x%(keysym)04X>," % { 'keysym': elem },
 		""" Yeah, verified... We just want to keep the output similar to -u, so we can compare/sort easily """
-		print "], recomposed as", letter, "verified"
+		print "], recomposed as", letter.encode('utf-8'), "verified"
 
 def num_of_keysyms(seq):
 	return len(seq) - 1

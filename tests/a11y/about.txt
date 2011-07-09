@@ -1,0 +1,366 @@
+window1
+  "dialog"
+  index: 0
+  name: About FancyPants
+  state: enabled sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  unnamed-GtkBoxAccessible-0
+    "filler"
+    parent: window1
+    index: 0
+    state: enabled sensitive showing vertical visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    unnamed-GtkBoxAccessible-1
+      "filler"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 0
+      state: enabled sensitive showing vertical visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GtkImageAccessible-2
+        "icon"
+        parent: unnamed-GtkBoxAccessible-1
+        index: 0
+        state: enabled sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+      FancyPants
+        "label"
+        parent: unnamed-GtkBoxAccessible-1
+        index: 1
+        name: FancyPants
+        state: enabled focusable multi-line sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: FancyPants
+        character count: 10
+        caret offset: 0
+        default attributes: bg-color: <omitted>
+                            bg-full-height: 0
+                            direction: <omitted>
+                            editable: false
+                            family-name: <omitted>
+                            fg-color: <omitted>
+                            indent: 0
+                            invisible: false
+                            justification: center
+                            language: <omitted>
+                            left-margin: 0
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            right-margin: 0
+                            rise: 0
+                            scale: 1
+                            size: <omitted>
+                            stretch: <omitted>
+                            strikethrough: false
+                            style: <omitted>
+                            underline: none
+                            variant: <omitted>
+                            weight: <omitted>
+                            wrap-mode: word
+      unnamed-GtkNotebookAccessible-3
+        "page tab list"
+        parent: unnamed-GtkBoxAccessible-1
+        index: 2
+        state: enabled sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkSelection>
+        selected children: unnamed-GtkNotebookPageAccessible-4
+        unnamed-GtkNotebookPageAccessible-4
+          "page tab"
+          parent: unnamed-GtkNotebookAccessible-3
+          index: 0
+          state: enabled selectable selected showing visible
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          unnamed-GtkBoxAccessible-5
+            "filler"
+            index: 0
+            state: enabled sensitive showing vertical visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            0.99
+              "label"
+              parent: unnamed-GtkBoxAccessible-5
+              index: 0
+              name: 0.99
+              state: enabled focusable multi-line sensitive showing visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: 0.99
+              character count: 4
+              caret offset: 0
+              default attributes: bg-color: <omitted>
+                                  bg-full-height: 0
+                                  direction: <omitted>
+                                  editable: false
+                                  family-name: <omitted>
+                                  fg-color: <omitted>
+                                  indent: 0
+                                  invisible: false
+                                  justification: center
+                                  language: <omitted>
+                                  left-margin: 0
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  right-margin: 0
+                                  rise: 0
+                                  scale: 1
+                                  size: <omitted>
+                                  stretch: <omitted>
+                                  strikethrough: false
+                                  style: <omitted>
+                                  underline: none
+                                  variant: <omitted>
+                                  weight: <omitted>
+                                  wrap-mode: word
+            comments
+              "label"
+              parent: unnamed-GtkBoxAccessible-5
+              index: 1
+              name: comments
+              state: enabled focusable multi-line sensitive showing visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: comments
+              character count: 8
+              caret offset: 0
+              default attributes: bg-color: <omitted>
+                                  bg-full-height: 0
+                                  direction: <omitted>
+                                  editable: false
+                                  family-name: <omitted>
+                                  fg-color: <omitted>
+                                  indent: 0
+                                  invisible: false
+                                  justification: center
+                                  language: <omitted>
+                                  left-margin: 0
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  right-margin: 0
+                                  rise: 0
+                                  scale: 1
+                                  size: <omitted>
+                                  stretch: <omitted>
+                                  strikethrough: false
+                                  style: <omitted>
+                                  underline: none
+                                  variant: <omitted>
+                                  weight: <omitted>
+                                  wrap-mode: word
+            unnamed-GtkBoxAccessible-6
+              "filler"
+              parent: unnamed-GtkBoxAccessible-5
+              index: 2
+              state: enabled horizontal sensitive showing visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              Homepage
+                "label"
+                parent: unnamed-GtkBoxAccessible-6
+                index: 0
+                name: Homepage
+                state: enabled focusable multi-line sensitive showing visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: Homepage
+                character count: 8
+                caret offset: 0
+                default attributes: bg-color: <omitted>
+                                    bg-full-height: 0
+                                    direction: <omitted>
+                                    editable: false
+                                    family-name: <omitted>
+                                    fg-color: <omitted>
+                                    indent: 0
+                                    invisible: false
+                                    justification: left
+                                    language: <omitted>
+                                    left-margin: 0
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    right-margin: 0
+                                    rise: 0
+                                    scale: 1
+                                    size: <omitted>
+                                    stretch: <omitted>
+                                    strikethrough: false
+                                    style: <omitted>
+                                    underline: none
+                                    variant: <omitted>
+                                    weight: <omitted>
+                                    wrap-mode: word
+            no comments
+              "label"
+              parent: unnamed-GtkBoxAccessible-5
+              index: 3
+              name: no comments
+              state: enabled focusable multi-line sensitive showing visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: no comments
+              character count: 11
+              caret offset: 0
+              default attributes: bg-color: <omitted>
+                                  bg-full-height: 0
+                                  direction: <omitted>
+                                  editable: false
+                                  family-name: <omitted>
+                                  fg-color: <omitted>
+                                  indent: 0
+                                  invisible: false
+                                  justification: center
+                                  language: <omitted>
+                                  left-margin: 0
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  right-margin: 0
+                                  rise: 0
+                                  scale: 1
+                                  size: <omitted>
+                                  stretch: <omitted>
+                                  strikethrough: false
+                                  style: <omitted>
+                                  underline: none
+                                  variant: <omitted>
+                                  weight: <omitted>
+                                  wrap-mode: word
+            This program comes with ABSOLUTELY NO WARRANTY; for details, visit http://www.gnu.org/licenses/gpl.html
+              "label"
+              parent: unnamed-GtkBoxAccessible-5
+              index: 4
+              name: This program comes with ABSOLUTELY NO WARRANTY; for details, visit http://www.gnu.org/licenses/gpl.html
+              state: enabled focusable multi-line sensitive showing visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkText>
+              text: This program comes with ABSOLUTELY NO WARRANTY; for details, visit http://www.gnu.org/licenses/gpl.html
+              character count: 103
+              caret offset: 0
+              default attributes: bg-color: <omitted>
+                                  bg-full-height: 0
+                                  direction: <omitted>
+                                  editable: false
+                                  family-name: <omitted>
+                                  fg-color: <omitted>
+                                  indent: 0
+                                  invisible: false
+                                  justification: center
+                                  language: <omitted>
+                                  left-margin: 0
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  right-margin: 0
+                                  rise: 0
+                                  scale: 1
+                                  size: <omitted>
+                                  stretch: <omitted>
+                                  strikethrough: false
+                                  style: <omitted>
+                                  underline: none
+                                  variant: <omitted>
+                                  weight: <omitted>
+                                  wrap-mode: word
+    unnamed-GtkBoxAccessible-7
+      "filler"
+      parent: unnamed-GtkBoxAccessible-0
+      index: 1
+      state: enabled horizontal sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GtkToggleButtonAccessible-8
+        "toggle button"
+        parent: unnamed-GtkBoxAccessible-7
+        index: 0
+        name: License
+        state: enabled focusable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>l
+      unnamed-GtkToggleButtonAccessible-9
+        "toggle button"
+        parent: unnamed-GtkBoxAccessible-7
+        index: 1
+        name: Credits
+        state: enabled focusable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>r
+      unnamed-GtkButtonAccessible-10
+        "push button"
+        parent: unnamed-GtkBoxAccessible-7
+        index: 2
+        name: Close
+        state: enabled focusable sensitive showing visible default
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: <Alt>c

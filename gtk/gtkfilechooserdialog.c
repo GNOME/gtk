@@ -93,10 +93,7 @@
  * gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
  *
  * if (user_edited_a_new_document)
- *   {
- *     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), default_folder_for_saving);
- *     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled document");
- *   }
+ *   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled document");
  * else
  *   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
  *
@@ -113,6 +110,59 @@
  * </programlisting></informalexample>
  * </para>
  * </example>
+ * <section id="gtkfilechooserdialog-setting-up">
+ * <title>Setting up a file chooser dialog</title>
+ * There are various cases in which you may need to use a #GtkFileChooserDialog:
+ * <itemizedlist>
+ *   <listitem>
+ *     <para>
+ *       To select a file for opening, as for a
+ *       <guimenuitem>File/Open</guimenuitem> command.  Use
+ *       #GTK_FILE_CHOOSER_ACTION_OPEN.
+ *     </para>
+ *   </listitem>
+ *
+ *   <listitem>
+ *     <para>
+ *       To save a file for the first time, as for a
+ *       <guimenuitem>File/Save</guimenuitem> command.  Use
+ *       #GTK_FILE_CHOOSER_ACTION_SAVE, and suggest a name such as
+ *       "Untitled" with gtk_file_chooser_set_current_name().
+ *     </para>
+ *   </listitem>
+ *
+ *   <listitem>
+ *     <para>
+ *       To save a file under a different name, as for a
+ *       <guimenuitem>File/Save As</guimenuitem> command.  Use
+ *       #GTK_FILE_CHOOSER_ACTION_SAVE, and set the existing filename
+ *       with gtk_file_chooser_set_filename().
+ *     </para>
+ *   </listitem>
+ *
+ *   <listitem>
+ *     <para>
+ *        To choose a folder instead of a file.  Use
+ *        #GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
+ *     </para>
+ *   </listitem>
+ * </itemizedlist>
+ * <note>
+ * <para>
+ * Old versions of the file chooser's documentation suggested
+ * using gtk_file_chooser_set_current_folder() in various
+ * situations, with the intention of letting the application
+ * suggest a reasonable default folder.  This is no longer
+ * considered to be a good policy, as now the file chooser is
+ * able to make good suggestions on its own.  In general, you
+ * should only cause the file chooser to show a specific folder
+ * when it is appropriate to use gtk_file_chooser_set_filename()
+ * - i.e. when you are doing a <guimenuitem>File/Save
+ * As</guimenuitem> command <emphasis>and</emphasis> you already
+ * have a file saved somewhere.
+ * </para>
+ * </note>
+ * </section>
  * <section id="gtkfilechooserdialog-response-codes">
  * <title>Response Codes</title>
  * #GtkFileChooserDialog inherits from #GtkDialog, so buttons that

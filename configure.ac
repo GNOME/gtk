@@ -10,7 +10,7 @@
 
 m4_define([gtk_major_version], [3])
 m4_define([gtk_minor_version], [1])
-m4_define([gtk_micro_version], [5])
+m4_define([gtk_micro_version], [9])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -27,6 +27,7 @@ AC_INIT([gtk+], [gtk_version],
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([gdk/gdktypes.h])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
 
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module
@@ -38,8 +39,8 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.29.4])
-m4_define([pango_required_version], [1.24.0])
+m4_define([glib_required_version], [2.29.9])
+m4_define([pango_required_version], [1.29.0])
 m4_define([atk_required_version], [1.30])
 m4_define([cairo_required_version], [1.10.0])
 m4_define([gdk_pixbuf_required_version], [2.22.0])
@@ -61,13 +62,13 @@ AC_SUBST(INTROSPECTION_REQUIRED_VERSION)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-AM_INIT_AUTOMAKE([1.10 no-define -Wno-portability dist-bzip2])
+AM_INIT_AUTOMAKE([1.11 no-define -Wno-portability tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE([enable])
 
-# Support silent build rules, requires at least automake-1.11. Disable
+# Support silent build rules. Disable
 # by either passing --disable-silent-rules to configure or passing V=1
 # to make
-m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+AM_SILENT_RULES([yes])
 
 #
 # For each of the libraries we build, we define the following
@@ -298,11 +299,11 @@ AC_ARG_ENABLE(quartz-backend,
                               [enable the quartz gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(broadway-backend,
-              [AC_HELP_STRING([--enable-broadway-backend],
+              [AS_HELP_STRING([--enable-broadway-backend],
                               [enable the broadway (HTML5) gdk backend])],
 			      [backend_set=yes])
 AC_ARG_ENABLE(wayland-backend,
-              [AC_HELP_STRING([--enable-wayland-backend],
+              [AS_HELP_STRING([--enable-wayland-backend],
                               [enable the wayland gdk backend])],
 			      [backend_set=yes])
 
@@ -1096,6 +1097,10 @@ if test "x$enable_x11_backend" = xyes; then
     fi
   fi
 
+  # Check for XGetEventData for GenericEvents
+  AC_CHECK_FUNC(XGetEventData,
+                AC_DEFINE(HAVE_XGENERICEVENTS, 1, [Have XGenericEvent]))
+
   # set up things for XInput
   if test "x$enable_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
     have_xinput=yes
@@ -1515,18 +1520,70 @@ GOBJECT_INTROSPECTION_CHECK(introspection_required_version)
 #################################################
 
 AC_ARG_ENABLE(packagekit,
-              [AS_HELP_STRING([--disable-packagekit],
-                              [build packagekit open-with module])])
-
-build_packagekit=no
-if test "os_win32" != "yes"; then
-        if test "x$enable_packagekit" != "xno"; then
-                build_packagekit=yes
-                AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
-        fi
+              [AS_HELP_STRING([--enable-packagekit=@<:@yes/no/auto@:>@],
+                              [build packagekit open-with module [default=auto]])],
+              [enable_packagekit="$enableval"],
+              [enable_packagekit=auto])
+if test "$enable_packagekit" = "auto"; then
+  if test "$os_win32" = "yes"; then
+    enable_packagekit=no
+  else
+    enable_packagekit=yes
+  fi
 fi
 
+AC_MSG_CHECKING([Whether to use PackageKit])
+build_packagekit=no
+if test "x$enable_packagekit" != "xno"; then
+  if test "$os_win32" != "yes"; then
+    build_packagekit=yes
+    AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
+  else
+    AC_MSG_ERROR([packagekit support is not available on win32])
+  fi
+fi
+AC_MSG_RESULT([$build_packagekit])
+
 AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$build_packagekit" = "xyes")
+
+##################################################
+# colord module
+#################################################
+
+AC_ARG_ENABLE(colord,
+              [AS_HELP_STRING([--enable-colord=@<:@yes/no/auto@:>@],
+                              [build colord support code [default=auto]])],
+              [enable_colord="$enableval"],
+              [enable_colord=auto])
+if test "$enable_colord" = "auto"; then
+  if test "$os_win32" = "yes"; then
+    enable_colord=no
+  else
+    enable_colord=yes
+  fi
+fi
+
+AC_MSG_CHECKING([Whether to use colord])
+have_colord=no
+if test "x$enable_colord" != "xno"; then
+        if test "$os_win32" != "yes"; then
+                PKG_CHECK_MODULES(COLORD, colord >= 0.1.9,
+                                  have_colord=yes, have_colord=no)
+                if test "enable_colord" = "yes"; then
+                        if test "have_colord" = "no"; then
+                                AC_MSG_ERROR([--enable-colord specified, but not available])
+                        fi
+                fi
+        else
+                AC_MSG_ERROR([colord support is not available on win32])
+        fi
+fi
+AC_MSG_RESULT([$have_colord])
+
+if test "have_colord" = "yes"; then
+        AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
+fi
+AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
@@ -1648,8 +1705,10 @@ po-properties/Makefile.in
 demos/Makefile
 demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl
+demos/pixbuf-demo/Makefile
 examples/Makefile
 tests/Makefile
+tests/a11y/Makefile
 tests/css/Makefile
 tests/css/parser/Makefile
 tests/reftests/Makefile
@@ -1679,12 +1738,10 @@ gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
+gtk/a11y/Makefile
 gtk/tests/Makefile
+libgail-util/Makefile
 modules/Makefile
-modules/other/Makefile
-modules/other/gail/Makefile
-modules/other/gail/libgail-util/Makefile
-modules/other/gail/tests/Makefile
 modules/engines/Makefile
 modules/engines/pixbuf/Makefile
 modules/engines/ms-windows/Makefile
@@ -1718,6 +1775,7 @@ echo "        Print backends:       $PRINT_BACKENDS"
 echo "        Dynamic modules:      $build_dynamic_modules"
 echo "        Included immodules:   $included_immodules"
 echo "        PackageKit support:   $build_packagekit"
+echo "        colord support:       $have_colord"
 echo "        Introspection:        $found_introspection"
 echo "        Debugging:            $enable_debug"
 echo "        Documentation:        $enable_gtk_doc"

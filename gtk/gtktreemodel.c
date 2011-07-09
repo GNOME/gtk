@@ -222,7 +222,8 @@ static guint tree_model_signals[LAST_SIGNAL] = { 0 };
 
 struct _GtkTreePath
 {
-  gint depth;
+  gint depth;    /* Number of elements */
+  gint alloc;    /* Number of allocated elements */
   gint *indices;
 };
 
@@ -559,6 +560,7 @@ gtk_tree_path_new (void)
   GtkTreePath *retval;
   retval = g_slice_new (GtkTreePath);
   retval->depth = 0;
+  retval->alloc = 0;
   retval->indices = NULL;
 
   return retval;
@@ -724,14 +726,23 @@ gtk_tree_path_new_first (void)
  */
 void
 gtk_tree_path_append_index (GtkTreePath *path,
-                            gint         index)
+                            gint         index_)
 {
   g_return_if_fail (path != NULL);
-  g_return_if_fail (index >= 0);
+  g_return_if_fail (index_ >= 0);
+
+  if (path->depth == path->alloc)
+    {
+      gint *indices;
+      path->alloc = MAX (path->alloc * 2, 1);
+      indices = g_new (gint, path->alloc);
+      memcpy (indices, path->indices, path->depth * sizeof (gint));
+      g_free (path->indices);
+      path->indices = indices;
+    }
 
   path->depth += 1;
-  path->indices = g_realloc (path->indices, path->depth * sizeof(gint));
-  path->indices[path->depth - 1] = index;
+  path->indices[path->depth - 1] = index_;
 }
 
 /**
@@ -747,20 +758,19 @@ void
 gtk_tree_path_prepend_index (GtkTreePath *path,
                              gint       index)
 {
-  gint *new_indices;
-
-  (path->depth)++;
-  new_indices = g_new (gint, path->depth);
-
-  if (path->indices == NULL)
+  if (path->depth == path->alloc)
     {
-      path->indices = new_indices;
-      path->indices[0] = index;
-      return;
+      gint *indices;
+      path->alloc = MAX (path->alloc * 2, 1);
+      indices = g_new (gint, path->alloc);
+      memcpy (indices + 1, path->indices, path->depth * sizeof (gint));
+      g_free (path->indices);
+      path->indices = indices;
     }
-  memcpy (new_indices + 1, path->indices, (path->depth - 1)*sizeof (gint));
-  g_free (path->indices);
-  path->indices = new_indices;
+  else if (path->depth > 0)
+    memmove (path->indices + 1, path->indices, path->depth * sizeof (gint));
+
+  path->depth += 1;
   path->indices[0] = index;
 }
 
@@ -788,6 +798,8 @@ gtk_tree_path_get_depth (GtkTreePath *path)
  *
  * This is an array of integers, each representing a node in a tree.
  * This value should not be freed.
+ *
+ * The length of the array can be obtained with gtk_tree_path_get_depth().
  *
  * Return value: The current indices, or %NULL
  */
@@ -863,7 +875,8 @@ gtk_tree_path_copy (const GtkTreePath *path)
 
   retval = g_slice_new (GtkTreePath);
   retval->depth = path->depth;
-  retval->indices = g_new (gint, path->depth);
+  retval->alloc = retval->depth;
+  retval->indices = g_new (gint, path->alloc);
   memcpy (retval->indices, path->indices, path->depth * sizeof (gint));
   return retval;
 }

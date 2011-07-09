@@ -31,6 +31,8 @@
 #ifndef __GTK_HPANED_H__
 #define __GTK_HPANED_H__
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtkpaned.h>
 
 G_BEGIN_DECLS
@@ -61,5 +63,7 @@ GType       gtk_hpaned_get_type (void) G_GNUC_CONST;
 GtkWidget * gtk_hpaned_new      (void);
 
 G_END_DECLS
+
+#endif
 
 #endif /* __GTK_HPANED_H__ */

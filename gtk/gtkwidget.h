@@ -64,14 +64,15 @@ typedef enum
 
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
-typedef struct _GtkRequisition	   GtkRequisition;
-typedef struct _GtkSelectionData   GtkSelectionData;
-typedef struct _GtkWidgetPrivate   GtkWidgetPrivate;
-typedef struct _GtkWidgetClass	   GtkWidgetClass;
-typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
-typedef struct _GtkClipboard	   GtkClipboard;
-typedef struct _GtkTooltip         GtkTooltip;
-typedef struct _GtkWindow          GtkWindow;
+typedef struct _GtkRequisition	       GtkRequisition;
+typedef struct _GtkSelectionData       GtkSelectionData;
+typedef struct _GtkWidgetPrivate       GtkWidgetPrivate;
+typedef struct _GtkWidgetClass	       GtkWidgetClass;
+typedef struct _GtkWidgetClassPrivate  GtkWidgetClassPrivate;
+typedef struct _GtkWidgetAuxInfo       GtkWidgetAuxInfo;
+typedef struct _GtkClipboard	       GtkClipboard;
+typedef struct _GtkTooltip             GtkTooltip;
+typedef struct _GtkWindow              GtkWindow;
 
 
 /**
@@ -428,8 +429,9 @@ struct _GtkWidgetClass
 
   /*< private >*/
 
+  GtkWidgetClassPrivate *priv;
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
@@ -526,8 +528,6 @@ gboolean   gtk_widget_remove_accelerator  (GtkWidget           *widget,
 void       gtk_widget_set_accel_path      (GtkWidget           *widget,
 					   const gchar         *accel_path,
 					   GtkAccelGroup       *accel_group);
-const gchar* _gtk_widget_get_accel_path   (GtkWidget           *widget,
-					   gboolean	       *locked);
 GList*     gtk_widget_list_accel_closures (GtkWidget	       *widget);
 gboolean   gtk_widget_can_activate_accel  (GtkWidget           *widget,
                                            guint                signal_id);
@@ -580,7 +580,7 @@ gboolean   gtk_widget_device_is_shadowed  (GtkWidget           *widget,
 
 void                  gtk_widget_set_name               (GtkWidget    *widget,
 							 const gchar  *name);
-G_CONST_RETURN gchar* gtk_widget_get_name               (GtkWidget    *widget);
+const gchar *         gtk_widget_get_name               (GtkWidget    *widget);
 
 void                  gtk_widget_set_state              (GtkWidget    *widget,
 							 GtkStateType  state);
@@ -722,6 +722,8 @@ void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
                                                      gboolean        support_multidevice);
 
 /* Accessibility support */
+void             gtk_widget_class_set_accessible_type    (GtkWidgetClass     *widget_class,
+                                                          GType               type);
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
 
 
@@ -937,45 +939,6 @@ GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_new      (void) G_GNUC_MALLOC;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
 void            gtk_requisition_free     (GtkRequisition       *requisition);
-
-GdkEventExpose *  _gtk_cairo_get_event                    (cairo_t      *cr);
-
-void              _gtk_widget_draw_internal               (GtkWidget    *widget,
-                                                           cairo_t      *cr,
-                                                           gboolean      clip_to_size);
-void              _gtk_widget_set_has_default             (GtkWidget    *widget,
-                                                           gboolean      has_default);
-void              _gtk_widget_set_has_grab                (GtkWidget    *widget,
-                                                           gboolean      has_grab);
-void              _gtk_widget_set_is_toplevel             (GtkWidget    *widget,
-                                                           gboolean      is_toplevel);
-
-void              _gtk_widget_grab_notify                 (GtkWidget    *widget,
-						           gboolean	was_grabbed);
-
-void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
-							   GtkWidget    *previous_toplevel);
-void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
-							   GdkScreen    *previous_screen);
-void		  _gtk_widget_propagate_composited_changed (GtkWidget    *widget);
-
-void	   _gtk_widget_set_device_window   (GtkWidget      *widget,
-                                            GdkDevice      *device,
-					    GdkWindow      *pointer_window);
-GdkWindow *_gtk_widget_get_device_window   (GtkWidget      *widget,
-                                            GdkDevice      *device);
-GList *    _gtk_widget_list_devices        (GtkWidget      *widget);
-
-void       _gtk_widget_synthesize_crossing (GtkWidget      *from,
-					    GtkWidget      *to,
-                                            GdkDevice      *device,
-					    GdkCrossingMode mode);
-
-gpointer     _gtk_widget_peek_request_cache (GtkWidget *widget);
-
-void         _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
-						       GtkWidget *toplevel,
-						       gpointer   user_data);
 
 gboolean     gtk_widget_in_destruction (GtkWidget *widget);
 

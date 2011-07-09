@@ -1539,7 +1539,7 @@ gtk_recent_info_unref (GtkRecentInfo *info)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_recent_info_get_uri (GtkRecentInfo *info)
 {
   g_return_val_if_fail (info != NULL, NULL);
@@ -1559,7 +1559,7 @@ gtk_recent_info_get_uri (GtkRecentInfo *info)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_recent_info_get_display_name (GtkRecentInfo *info)
 {
   g_return_val_if_fail (info != NULL, NULL);
@@ -1581,7 +1581,7 @@ gtk_recent_info_get_display_name (GtkRecentInfo *info)
  *
  * Since: 2.10
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_recent_info_get_description (GtkRecentInfo *info)
 {
   g_return_val_if_fail (info != NULL, NULL);
@@ -1600,7 +1600,7 @@ gtk_recent_info_get_description (GtkRecentInfo *info)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_recent_info_get_mime_type (GtkRecentInfo *info)
 {
   g_return_val_if_fail (info != NULL, NULL);

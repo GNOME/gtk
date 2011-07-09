@@ -376,6 +376,7 @@ _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
                          "transient-for", parent,
                          "modal", parent != NULL,
                          "destroy-with-parent", TRUE,
+                         "resizable", FALSE,
                          NULL);
 
   return result;
@@ -930,11 +931,12 @@ static GtkWidget *
 wrap_in_frame (const gchar *label,
                GtkWidget   *child)
 {
-  GtkWidget *frame, *alignment, *label_widget;
+  GtkWidget *frame, *label_widget;
   gchar *bold_text;
 
   label_widget = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+  gtk_widget_set_halign (label_widget, GTK_ALIGN_START);
+  gtk_widget_set_valign (label_widget, GTK_ALIGN_CENTER);
   gtk_widget_show (label_widget);
 
   bold_text = g_markup_printf_escaped ("<b>%s</b>", label);
@@ -944,17 +946,39 @@ wrap_in_frame (const gchar *label,
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE, 0);
 
-  alignment = gtk_alignment_new (0.0, 0.0, 1.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-			     0, 0, 12, 0);
-  gtk_box_pack_start (GTK_BOX (frame), alignment, FALSE, FALSE, 0);
+  gtk_widget_set_margin_left (child, 12);
+  gtk_widget_set_halign (child, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (alignment), child);
+  gtk_box_pack_start (GTK_BOX (frame), child, FALSE, FALSE, 0);
 
   gtk_widget_show (frame);
-  gtk_widget_show (alignment);
 
   return frame;
+}
+
+static GtkWidget *
+toolbutton_new (GtkCustomPaperUnixDialog *dialog,
+                GIcon                    *icon,
+                gboolean                  sensitive,
+                gboolean                  show,
+                GCallback                 callback)
+{
+  GtkToolItem *item;
+  GtkWidget *image;
+
+  item = gtk_tool_button_new (NULL, NULL);
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_widget_show (image);
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
+
+  gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
+  g_signal_connect_swapped (item, "clicked", callback, dialog);
+
+  if (show)
+    gtk_widget_show (GTK_WIDGET (item));
+
+  return GTK_WIDGET (item);
 }
 
 static void
@@ -963,13 +987,15 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkDialog *cpu_dialog = GTK_DIALOG (dialog);
   GtkWidget *action_area, *content_area;
-  GtkWidget *image, *table, *label, *widget, *frame, *combo;
-  GtkWidget *hbox, *vbox, *treeview, *scrolled, *button_box, *button;
+  GtkWidget *table, *label, *widget, *frame, *combo;
+  GtkWidget *hbox, *vbox, *treeview, *scrolled, *toolbar, *button;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
   GtkTreeSelection *selection;
   GtkUnit user_units;
+  GIcon *icon;
+  GtkStyleContext *context;
 
   content_area = gtk_dialog_get_content_area (cpu_dialog);
   action_area = gtk_dialog_get_action_area (cpu_dialog);
@@ -984,18 +1010,20 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
-				  GTK_POLICY_AUTOMATIC,
-				  GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
-				       GTK_SHADOW_IN);
+                                       GTK_SHADOW_IN);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE, TRUE, 0);
   gtk_widget_show (scrolled);
+
+  context = gtk_widget_get_style_context (scrolled);
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_BOTTOM);
 
   treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->custom_paper_list));
   priv->treeview = treeview;
@@ -1008,11 +1036,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   cell = gtk_cell_renderer_text_new ();
   g_object_set (cell, "editable", TRUE, NULL);
-  g_signal_connect (cell, "edited", 
-		    G_CALLBACK (custom_size_name_edited), dialog);
+  g_signal_connect (cell, "edited",
+                    G_CALLBACK (custom_size_name_edited), dialog);
   priv->text_column = column =
-    gtk_tree_view_column_new_with_attributes ("paper", cell,
-					      NULL);
+    gtk_tree_view_column_new_with_attributes ("paper", cell, NULL);
   gtk_tree_view_column_set_cell_data_func  (column, cell, custom_name_func, NULL, NULL);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
@@ -1020,27 +1047,27 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);
   gtk_widget_show (treeview);
 
-  button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_box_pack_start (GTK_BOX (vbox), button_box, FALSE, FALSE, 0);
-  gtk_widget_show (button_box);
+  toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_MENU);
 
-  button = gtk_button_new ();
-  image = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (button), image);
-  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
-  gtk_widget_show (button);
+  context = gtk_widget_get_style_context (toolbar);
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (add_custom_paper), dialog);
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
+  gtk_widget_show (toolbar);
 
-  button = gtk_button_new ();
-  image = gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (button), image);
-  gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 0);
-  gtk_widget_show (button);
+  icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
+  button = toolbutton_new (dialog, icon, TRUE, TRUE, G_CALLBACK (add_custom_paper));
+  g_object_unref (icon);
 
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (remove_custom_paper), dialog);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 0);
+
+  icon = g_themed_icon_new_with_default_fallbacks ("list-remove-symbolic");
+  button = toolbutton_new (dialog, icon, TRUE, TRUE, G_CALLBACK (remove_custom_paper));
+  g_object_unref (icon);
+
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 1);
 
   user_units = _gtk_print_get_default_user_units ();
 
@@ -1055,7 +1082,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Width:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1, GTK_FILL, 0, 0, 0);
@@ -1067,7 +1095,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Height:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 1, 2, GTK_FILL, 0, 0, 0);
@@ -1088,7 +1117,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Top:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 0, 1, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
@@ -1100,7 +1130,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Bottom:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1 , 1, 2, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
@@ -1112,7 +1143,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Left:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 2, 3, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
@@ -1124,7 +1156,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Right:"));
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1, 3, 4, GTK_FILL, 0, 0, 0);
   gtk_widget_show (label);
@@ -1181,6 +1214,5 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
     }
 
   gtk_window_present (GTK_WINDOW (dialog));
-
   load_print_backends (dialog);
 }

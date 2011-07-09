@@ -31,13 +31,13 @@ static GdkPixbuf *
 create_color_pixbuf (const char *color)
 {
         GdkPixbuf *pixbuf;
-        GdkColor col;
+        GdkRGBA rgba;
 
         int x;
         int num;
         guchar *pixels, *p;
 
-        if (!gdk_color_parse (color, &col))
+        if (!gdk_rgba_parse (&rgba, color))
                 return NULL;
 
         pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
@@ -50,9 +50,9 @@ create_color_pixbuf (const char *color)
                 gdk_pixbuf_get_height (pixbuf);
 
         for (x = 0; x < num; x++) {
-                p[0] = col.red / 65535 * 255;
-                p[1] = col.green / 65535 * 255;
-                p[2] = col.blue / 65535 * 255;
+                p[0] = rgba.red * 255;
+                p[1] = rgba.green * 255;
+                p[2] = rgba.blue * 255;
                 p += 3;
         }
 

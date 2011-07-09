@@ -577,21 +577,7 @@ create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
   gint width, height;
   GtkIconInfo *info;
   GdkPixbuf *pixbuf;
-
-  /* Not a named symbolic icon? */
-  if (priv->icon_name) {
-    if (!g_str_has_suffix (priv->icon_name, "-symbolic"))
-      return NULL;
-  } else if (priv->gicon) {
-    const gchar * const *names;
-    if (!G_IS_THEMED_ICON (priv->gicon))
-      return NULL;
-    names = g_themed_icon_get_names (G_THEMED_ICON (priv->gicon));
-    if (names == NULL || !g_str_has_suffix (names[0], "-symbolic"))
-      return NULL;
-  } else {
-    return NULL;
-  }
+  gboolean is_symbolic;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (widget));
   icon_theme = gtk_icon_theme_get_for_screen (screen);
@@ -629,64 +615,20 @@ create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
       gtk_style_context_set_state (context, state);
       pixbuf = gtk_icon_info_load_symbolic_for_context (info,
                                                         context,
-                                                        NULL,
+                                                        &is_symbolic,
                                                         NULL);
 
       gtk_style_context_restore (context);
       gtk_icon_info_free (info);
+
+      if (!is_symbolic)
+	g_clear_object (&pixbuf);
 
       return pixbuf;
     }
 
   return NULL;
 }
-
-static GdkPixbuf *
-create_colorized_pixbuf (GdkPixbuf *src,
-                         GdkRGBA   *new_color)
-{
-  gint i, j;
-  gint width, height, has_alpha, src_row_stride, dst_row_stride;
-  gint red_value, green_value, blue_value;
-  guchar *target_pixels;
-  guchar *original_pixels;
-  guchar *pixsrc;
-  guchar *pixdest;
-  GdkPixbuf *dest;
-
-  red_value = (new_color->red * 65535.0) / 255.0;
-  green_value = (new_color->green * 65535.0) / 255.0;
-  blue_value = (new_color->blue * 65535.0) / 255.0;
-
-  dest = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src),
-			 gdk_pixbuf_get_has_alpha (src),
-			 gdk_pixbuf_get_bits_per_sample (src),
-			 gdk_pixbuf_get_width (src),
-			 gdk_pixbuf_get_height (src));
-  
-  has_alpha = gdk_pixbuf_get_has_alpha (src);
-  width = gdk_pixbuf_get_width (src);
-  height = gdk_pixbuf_get_height (src);
-  src_row_stride = gdk_pixbuf_get_rowstride (src);
-  dst_row_stride = gdk_pixbuf_get_rowstride (dest);
-  target_pixels = gdk_pixbuf_get_pixels (dest);
-  original_pixels = gdk_pixbuf_get_pixels (src);
-  
-  for (i = 0; i < height; i++) {
-    pixdest = target_pixels + i*dst_row_stride;
-    pixsrc = original_pixels + i*src_row_stride;
-    for (j = 0; j < width; j++) {		
-      *pixdest++ = (*pixsrc++ * red_value) >> 8;
-      *pixdest++ = (*pixsrc++ * green_value) >> 8;
-      *pixdest++ = (*pixsrc++ * blue_value) >> 8;
-      if (has_alpha) {
-	*pixdest++ = *pixsrc++;
-      }
-    }
-  }
-  return dest;
-}
-
 
 static void
 gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
@@ -765,6 +707,30 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
     *height = calc_height;
 }
 
+static GdkPixbuf *
+transform_pixbuf_state (GdkPixbuf *pixbuf,
+			GtkStyleContext *context)
+{
+  GtkIconSource *source;
+  GdkPixbuf *retval;
+
+  source = gtk_icon_source_new ();
+  gtk_icon_source_set_pixbuf (source, pixbuf);
+  /* The size here is arbitrary; since size isn't
+   * wildcarded in the source, it isn't supposed to be
+   * scaled by the engine function
+   */
+  gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_icon_source_set_size_wildcarded (source, FALSE);
+
+  retval = gtk_render_icon_pixbuf (context, source,
+				   (GtkIconSize) -1);
+
+  gtk_icon_source_free (source);
+
+  return retval;
+}
+
 static void
 gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
                                  cairo_t              *cr,
@@ -777,25 +743,23 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
   GtkStyleContext *context;
-  GdkPixbuf *pixbuf;
-  GdkPixbuf *invisible = NULL;
-  GdkPixbuf *colorized = NULL;
-  GdkPixbuf *symbolic = NULL;
+  GdkPixbuf *pixbuf, *stated;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gboolean is_expander;
   gint xpad, ypad;
+  GtkStateFlags state;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
-				     &pix_rect.x,
-				     &pix_rect.y,
-				     &pix_rect.width,
-				     &pix_rect.height);
+				     &pix_rect.x, 
+                                     &pix_rect.y,
+                                     &pix_rect.width,
+                                     &pix_rect.height);
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
   pix_rect.x += cell_area->x + xpad;
   pix_rect.y += cell_area->y + ypad;
-  pix_rect.width  -= xpad * 2;
+  pix_rect.width -= xpad * 2;
   pix_rect.height -= ypad * 2;
 
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
@@ -821,60 +785,35 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   if (!pixbuf)
     return;
 
+  g_object_ref (pixbuf);
+
   context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+
+  state = GTK_STATE_FLAG_NORMAL;
 
   if (!gtk_widget_get_sensitive (widget) ||
       !gtk_cell_renderer_get_sensitive (cell))
-    {
-      GtkIconSource *source;
-      
-      source = gtk_icon_source_new ();
-      gtk_icon_source_set_pixbuf (source, pixbuf);
-      /* The size here is arbitrary; since size isn't
-       * wildcarded in the source, it isn't supposed to be
-       * scaled by the engine function
-       */
-      gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
-      gtk_icon_source_set_size_wildcarded (source, FALSE);
-
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, GTK_STATE_FLAG_INSENSITIVE);
-
-      pixbuf = invisible = gtk_render_icon_pixbuf (context, source,
-                                                   (GtkIconSize) -1);
-
-      gtk_style_context_restore (context);
-      gtk_icon_source_free (source);
-    }
+    state |= GTK_STATE_FLAG_INSENSITIVE;
   else if (priv->follow_state && 
-	   (flags & (GTK_CELL_RENDERER_SELECTED|GTK_CELL_RENDERER_PRELIT)) != 0)
+	   (flags & (GTK_CELL_RENDERER_SELECTED |
+		     GTK_CELL_RENDERER_PRELIT)) != 0)
+    state = gtk_cell_renderer_get_state (cell, widget, flags);
+
+  if (state != GTK_STATE_FLAG_NORMAL)
     {
-      GtkStateFlags state;
+      stated = create_symbolic_pixbuf (cellpixbuf, widget, state);
 
-      state = gtk_cell_renderer_get_state (cell, widget, flags);
-      symbolic = create_symbolic_pixbuf (cellpixbuf, widget, state);
+      if (!stated)
+	stated = transform_pixbuf_state (pixbuf, context);
 
-      if (!symbolic)
-        {
-          GdkRGBA color;
-
-          gtk_style_context_get_background_color (context, state, &color);
-          pixbuf = colorized = create_colorized_pixbuf (pixbuf, &color);
-        }
-      else
-        pixbuf = symbolic;
+      g_object_unref (pixbuf);
+      pixbuf = stated;
     }
 
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, pix_rect.x, pix_rect.y);
-  gdk_cairo_rectangle (cr, &draw_rect);
-  cairo_fill (cr);
+  gtk_render_icon (context, cr, pixbuf,
+                   pix_rect.x, pix_rect.y);
 
-  if (invisible)
-    g_object_unref (invisible);
-
-  if (colorized)
-    g_object_unref (colorized);
-
-  if (symbolic)
-    g_object_unref (symbolic);
+  gtk_style_context_restore (context);
+  g_object_unref (pixbuf);
 }

@@ -31,6 +31,7 @@
 #ifndef __GTK_VSCALE_H__
 #define __GTK_VSCALE_H__
 
+#ifndef GTK_DISABLE_DEPRECATED
 
 #include <gtk/gtkscale.h>
 
@@ -75,5 +76,6 @@ GtkWidget* gtk_vscale_new_with_range (gdouble        min,
 
 G_END_DECLS
 
+#endif
 
 #endif /* __GTK_VSCALE_H__ */
