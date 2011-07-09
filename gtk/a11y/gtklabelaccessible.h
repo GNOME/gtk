@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_LABEL_ACCESSIBLE            (gtk_label_accessible_get_type ())
+#define GTK_TYPE_LABEL_ACCESSIBLE            (_gtk_label_accessible_get_type ())
 #define GTK_LABEL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LABEL_ACCESSIBLE, GtkLabelAccessible))
 #define GTK_LABEL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL_ACCESSIBLE, GtkLabelAccessibleClass))
 #define GTK_IS_LABEL_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LABEL_ACCESSIBLE))
@@ -46,7 +46,7 @@ struct _GtkLabelAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
-GType gtk_label_accessible_get_type (void);
+GType _gtk_label_accessible_get_type (void);
 
 G_END_DECLS
 

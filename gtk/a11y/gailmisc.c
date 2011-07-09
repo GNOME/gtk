@@ -23,7 +23,7 @@
 #include "gailmisc.h"
 
 
-G_DEFINE_TYPE (GailMisc, gail_misc, ATK_TYPE_MISC)
+G_DEFINE_TYPE (GailMisc, _gail_misc, ATK_TYPE_MISC)
 
 static void
 gail_misc_threads_enter (AtkMisc *misc)
@@ -38,7 +38,7 @@ gail_misc_threads_leave (AtkMisc *misc)
 }
 
 static void
-gail_misc_class_init (GailMiscClass *klass)
+_gail_misc_class_init (GailMiscClass *klass)
 {
   AtkMiscClass *misc_class = ATK_MISC_CLASS (klass);
 
@@ -47,6 +47,6 @@ gail_misc_class_init (GailMiscClass *klass)
 }
 
 static void
-gail_misc_init (GailMisc *misc)
+_gail_misc_init (GailMisc *misc)
 {
 }

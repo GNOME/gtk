@@ -29,7 +29,7 @@ static gint menu_item_remove_gtk (GtkContainer   *container,
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSubmenuItemAccessible, gtk_submenu_item_accessible, GTK_TYPE_MENU_ITEM_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkSubmenuItemAccessible, _gtk_submenu_item_accessible, GTK_TYPE_MENU_ITEM_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
@@ -38,7 +38,7 @@ gtk_submenu_item_accessible_initialize (AtkObject *obj,
 {
   GtkWidget *submenu;
 
-  ATK_OBJECT_CLASS (gtk_submenu_item_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_submenu_item_accessible_parent_class)->initialize (obj, data);
 
   submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (data));
   if (submenu)
@@ -51,7 +51,7 @@ gtk_submenu_item_accessible_initialize (AtkObject *obj,
 }
 
 static void
-gtk_submenu_item_accessible_class_init (GtkSubmenuItemAccessibleClass *klass)
+_gtk_submenu_item_accessible_class_init (GtkSubmenuItemAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -59,7 +59,7 @@ gtk_submenu_item_accessible_class_init (GtkSubmenuItemAccessibleClass *klass)
 }
 
 static void
-gtk_submenu_item_accessible_init (GtkSubmenuItemAccessible *item)
+_gtk_submenu_item_accessible_init (GtkSubmenuItemAccessible *item)
 {
 }
 
@@ -93,7 +93,7 @@ gtk_submenu_item_accessible_add_selection (AtkSelection *selection,
 
   child = g_list_nth_data (kids, i);
   g_list_free (kids);
-  g_return_val_if_fail (GTK_IS_MENU_ITEM(child), FALSE);
+  g_return_val_if_fail (GTK_IS_MENU_ITEM (child), FALSE);
   gtk_menu_shell_select_item (shell, GTK_WIDGET (child));
   return TRUE;
 }

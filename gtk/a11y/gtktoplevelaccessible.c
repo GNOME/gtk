@@ -27,13 +27,13 @@
 #include "gtktoplevelaccessible.h"
 
 
-G_DEFINE_TYPE (GtkToplevelAccessible, gtk_toplevel_accessible, ATK_TYPE_OBJECT)
+G_DEFINE_TYPE (GtkToplevelAccessible, _gtk_toplevel_accessible, ATK_TYPE_OBJECT)
 
 static void
 gtk_toplevel_accessible_initialize (AtkObject *accessible,
                                     gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_toplevel_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (_gtk_toplevel_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_APPLICATION;
   accessible->name = g_get_prgname ();
@@ -48,7 +48,7 @@ gtk_toplevel_accessible_object_finalize (GObject *obj)
   if (toplevel->window_list)
     g_list_free (toplevel->window_list);
 
-  G_OBJECT_CLASS (gtk_toplevel_accessible_parent_class)->finalize (obj);
+  G_OBJECT_CLASS (_gtk_toplevel_accessible_parent_class)->finalize (obj);
 }
 
 static gint
@@ -126,7 +126,7 @@ is_attached_menu_window (GtkWidget *widget)
 }
 
 static void
-gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
+_gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS(klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS(klass);
@@ -237,7 +237,7 @@ hide_event_watcher (GSignalInvocationHint *ihint,
 }
 
 static void
-gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
+_gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
 {
   GtkWindow *window;
   GtkWidget *widget;

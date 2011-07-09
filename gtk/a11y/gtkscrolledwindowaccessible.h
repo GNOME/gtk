@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE            (gtk_scrolled_window_accessible_get_type ())
+#define GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE            (_gtk_scrolled_window_accessible_get_type ())
 #define GTK_SCROLLED_WINDOW_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE, GtkScrolledWindowAccessible))
 #define GTK_SCROLLED_WINDOW_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE, GtkScrolledWindowAccessibleClass))
 #define GTK_IS_SCROLLED_WINDOW_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkScrolledWindowAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_scrolled_window_accessible_get_type (void);
+GType _gtk_scrolled_window_accessible_get_type (void);
 
 G_END_DECLS
 

@@ -39,7 +39,7 @@ struct _GtkLinkButtonAccessibleLinkClass
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessibleLink, gtk_link_button_accessible_link, ATK_TYPE_HYPERLINK,
+G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessibleLink, _gtk_link_button_accessible_link, ATK_TYPE_HYPERLINK,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static AtkHyperlink *
@@ -47,7 +47,7 @@ gtk_link_button_accessible_link_new (GtkLinkButtonAccessible *button)
 {
   GtkLinkButtonAccessibleLink *link;
 
-  link = g_object_new (gtk_link_button_accessible_link_get_type (), NULL);
+  link = g_object_new (_gtk_link_button_accessible_link_get_type (), NULL);
   link->button = button;
 
   return ATK_HYPERLINK (link);
@@ -55,7 +55,7 @@ gtk_link_button_accessible_link_new (GtkLinkButtonAccessible *button)
 
 static gchar *
 gtk_link_button_accessible_link_get_uri (AtkHyperlink *link,
-                               gint          i)
+                                         gint          i)
 {
   GtkLinkButtonAccessibleLink *l = (GtkLinkButtonAccessibleLink *)link;
   GtkWidget *widget;
@@ -81,7 +81,7 @@ gtk_link_button_accessible_link_is_valid (AtkHyperlink *link)
 
 static AtkObject *
 gtk_link_button_accessible_link_get_object (AtkHyperlink *link,
-                                  gint          i)
+                                            gint          i)
 {
   GtkLinkButtonAccessibleLink *l = (GtkLinkButtonAccessibleLink *)link;
 
@@ -103,12 +103,12 @@ gtk_link_button_accessible_link_get_end_index (AtkHyperlink *link)
 }
 
 static void
-gtk_link_button_accessible_link_init (GtkLinkButtonAccessibleLink *link)
+_gtk_link_button_accessible_link_init (GtkLinkButtonAccessibleLink *link)
 {
 }
 
 static void
-gtk_link_button_accessible_link_class_init (GtkLinkButtonAccessibleLinkClass *class)
+_gtk_link_button_accessible_link_class_init (GtkLinkButtonAccessibleLinkClass *class)
 {
   AtkHyperlinkClass *hyperlink_class = ATK_HYPERLINK_CLASS (class);
 
@@ -122,16 +122,16 @@ gtk_link_button_accessible_link_class_init (GtkLinkButtonAccessibleLinkClass *cl
 
 static gboolean
 gtk_link_button_accessible_link_do_action (AtkAction *action,
-                                 gint       i)
+                                           gint       i)
 {
   GtkLinkButtonAccessibleLink *link = (GtkLinkButtonAccessibleLink *)action;
   GtkWidget *widget;
 
   widget = GTK_WIDGET (link->button);
   if (widget == NULL)
-    /*
-     * State is defunct
-     */
+    return FALSE;
+
+  if (i != 0)
     return FALSE;
 
   if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
@@ -152,7 +152,8 @@ static const gchar *
 gtk_link_button_accessible_link_get_name (AtkAction *action,
                                           gint       i)
 {
-  g_return_val_if_fail (i == 0, NULL);
+  if (i != 0)
+    return NULL;
 
   return "activate";
 }
@@ -166,7 +167,8 @@ atk_action_interface_init (AtkActionIface *iface)
 }
 
 static gboolean
-activate_link (GtkLinkButton *button, AtkHyperlink *link)
+activate_link (GtkLinkButton *button,
+               AtkHyperlink  *link)
 {
   g_signal_emit_by_name (link, "link-activated");
 
@@ -190,11 +192,11 @@ gtk_link_button_accessible_get_hyperlink (AtkHyperlinkImpl *impl)
 
 static void atk_hypertext_impl_interface_init (AtkHyperlinkImplIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessible, gtk_link_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessible, _gtk_link_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_HYPERLINK_IMPL, atk_hypertext_impl_interface_init))
 
 static void
-gtk_link_button_accessible_init (GtkLinkButtonAccessible *button)
+_gtk_link_button_accessible_init (GtkLinkButtonAccessible *button)
 {
 }
 
@@ -206,11 +208,11 @@ gtk_link_button_accessible_finalize (GObject *object)
   if (button->link)
     g_object_unref (button->link);
 
-  G_OBJECT_CLASS (gtk_link_button_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_link_button_accessible_parent_class)->finalize (object);
 }
 
 static void
-gtk_link_button_accessible_class_init (GtkLinkButtonAccessibleClass *klass)
+_gtk_link_button_accessible_class_init (GtkLinkButtonAccessibleClass *klass)
 {
   G_OBJECT_CLASS (klass)->finalize = gtk_link_button_accessible_finalize;
 }

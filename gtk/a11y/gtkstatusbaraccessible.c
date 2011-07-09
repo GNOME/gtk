@@ -24,7 +24,7 @@
 #include "gtkstatusbaraccessible.h"
 
 
-G_DEFINE_TYPE (GtkStatusbarAccessible, gtk_statusbar_accessible, GTK_TYPE_BOX_ACCESSIBLE)
+G_DEFINE_TYPE (GtkStatusbarAccessible, _gtk_statusbar_accessible, GTK_TYPE_BOX_ACCESSIBLE)
 
 static void
 text_changed (GtkStatusbar *statusbar,
@@ -43,7 +43,7 @@ gtk_statusbar_accessible_initialize (AtkObject *obj,
 {
   GtkWidget *statusbar = data;
 
-  ATK_OBJECT_CLASS (gtk_statusbar_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_statusbar_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect_after (statusbar, "text-pushed",
                           G_CALLBACK (text_changed), obj);
@@ -102,7 +102,7 @@ gtk_statusbar_accessible_get_name (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  name = ATK_OBJECT_CLASS (gtk_statusbar_accessible_parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (_gtk_statusbar_accessible_parent_class)->get_name (obj);
   if (name != NULL)
     return name;
 
@@ -127,7 +127,7 @@ gtk_statusbar_accessible_ref_child (AtkObject *obj,
 }
 
 static void
-gtk_statusbar_accessible_class_init (GtkStatusbarAccessibleClass *klass)
+_gtk_statusbar_accessible_class_init (GtkStatusbarAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
@@ -145,6 +145,6 @@ gtk_statusbar_accessible_class_init (GtkStatusbarAccessibleClass *klass)
 }
 
 static void
-gtk_statusbar_accessible_init (GtkStatusbarAccessible *bar)
+_gtk_statusbar_accessible_init (GtkStatusbarAccessible *bar)
 {
 }

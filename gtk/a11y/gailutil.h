@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-void gail_util_install (void);
+void _gail_util_install (void);
 
 G_END_DECLS
 

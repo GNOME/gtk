@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_PANED_ACCESSIBLE                      (gtk_paned_accessible_get_type ())
+#define GTK_TYPE_PANED_ACCESSIBLE                      (_gtk_paned_accessible_get_type ())
 #define GTK_PANED_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PANED_ACCESSIBLE, GtkPanedAccessible))
 #define GTK_PANED_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PANED_ACCESSIBLE, GtkPanedAccessibleClass))
 #define GTK_IS_PANED_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PANED_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkPanedAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_paned_accessible_get_type (void);
+GType _gtk_paned_accessible_get_type (void);
 
 G_END_DECLS
 

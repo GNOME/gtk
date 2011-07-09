@@ -33,7 +33,7 @@ static gchar     *get_text_from_label_widget (GtkWidget *widget);
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkMenuItemAccessible, gtk_menu_item_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkMenuItemAccessible, _gtk_menu_item_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
@@ -43,7 +43,7 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
   GtkWidget *widget;
   GtkWidget *parent;
 
-  ATK_OBJECT_CLASS (gtk_menu_item_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "select", G_CALLBACK (menu_item_select), NULL);
   g_signal_connect (data, "deselect", G_CALLBACK (menu_item_deselect), NULL);
@@ -62,7 +62,7 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
         atk_object_set_parent (obj, gtk_widget_get_accessible (parent_widget));
     }
 
-  gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
+  _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
 
   if (GTK_IS_TEAROFF_MENU_ITEM (data))
     obj->role = ATK_ROLE_TEAR_OFF_MENU_ITEM;
@@ -133,7 +133,7 @@ gtk_menu_item_accessible_ref_state_set (AtkObject *obj)
   AtkObject *menu_item;
   AtkStateSet *state_set, *parent_state_set;
 
-  state_set = ATK_OBJECT_CLASS (gtk_menu_item_accessible_parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->ref_state_set (obj);
 
   menu_item = atk_object_get_parent (obj);
 
@@ -166,7 +166,7 @@ gtk_menu_item_accessible_get_name (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  name = ATK_OBJECT_CLASS (gtk_menu_item_accessible_parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->get_name (obj);
   if (name)
     return name;
 
@@ -186,7 +186,7 @@ gtk_menu_item_accessible_finalize (GObject *object)
 
   g_free (accessible->text);
 
-  G_OBJECT_CLASS (gtk_menu_item_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->finalize (object);
 }
 
 static void
@@ -204,11 +204,11 @@ gtk_menu_item_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_menu_item_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
-gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
+_gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
@@ -226,7 +226,7 @@ gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
 }
 
 static void
-gtk_menu_item_accessible_init (GtkMenuItemAccessible *menu_item)
+_gtk_menu_item_accessible_init (GtkMenuItemAccessible *menu_item)
 {
 }
 

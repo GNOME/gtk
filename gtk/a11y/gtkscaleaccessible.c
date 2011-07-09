@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 #include "gtkscaleaccessible.h"
 
-G_DEFINE_TYPE (GtkScaleAccessible, gtk_scale_accessible, GTK_TYPE_RANGE_ACCESSIBLE)
+G_DEFINE_TYPE (GtkScaleAccessible, _gtk_scale_accessible, GTK_TYPE_RANGE_ACCESSIBLE)
 
 static const gchar *
 gtk_scale_accessible_get_description (AtkObject *object)
@@ -38,11 +38,11 @@ gtk_scale_accessible_get_description (AtkObject *object)
   if (layout)
     return pango_layout_get_text (layout);
 
-  return ATK_OBJECT_CLASS (gtk_scale_accessible_parent_class)->get_description (object);
+  return ATK_OBJECT_CLASS (_gtk_scale_accessible_parent_class)->get_description (object);
 }
 
 static void
-gtk_scale_accessible_class_init (GtkScaleAccessibleClass *klass)
+_gtk_scale_accessible_class_init (GtkScaleAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -50,6 +50,6 @@ gtk_scale_accessible_class_init (GtkScaleAccessibleClass *klass)
 }
 
 static void
-gtk_scale_accessible_init (GtkScaleAccessible *scale)
+_gtk_scale_accessible_init (GtkScaleAccessible *scale)
 {
 }

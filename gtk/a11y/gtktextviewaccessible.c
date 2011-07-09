@@ -49,7 +49,7 @@ static void atk_editable_text_interface_init      (AtkEditableTextIface      *if
 static void atk_text_interface_init               (AtkTextIface              *iface);
 static void atk_streamable_content_interface_init (AtkStreamableContentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTextViewAccessible, gtk_text_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkTextViewAccessible, _gtk_text_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_STREAMABLE_CONTENT, atk_streamable_content_interface_init))
@@ -59,7 +59,7 @@ static void
 gtk_text_view_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_text_view_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_text_view_accessible_parent_class)->initialize (obj, data);
 
   setup_buffer (GTK_TEXT_VIEW (data), GTK_TEXT_VIEW_ACCESSIBLE (obj));
 
@@ -86,7 +86,7 @@ gtk_text_view_accessible_notify_gtk (GObject    *obj,
       setup_buffer (GTK_TEXT_VIEW (obj), GTK_TEXT_VIEW_ACCESSIBLE (atk_obj));
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_text_view_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_text_view_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static AtkStateSet*
@@ -99,7 +99,7 @@ gtk_text_view_accessible_ref_state_set (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (gtk_text_view_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (_gtk_text_view_accessible_parent_class)->ref_state_set (accessible);
 
   if (gtk_text_view_get_editable (GTK_TEXT_VIEW (widget)))
     atk_state_set_add_state (state_set, ATK_STATE_EDITABLE);
@@ -109,7 +109,7 @@ gtk_text_view_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
+_gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
@@ -121,7 +121,7 @@ gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 }
 
 static void
-gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
+_gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
 {
 }
 

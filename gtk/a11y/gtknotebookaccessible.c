@@ -27,7 +27,7 @@
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, gtk_notebook_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, _gtk_notebook_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static gboolean
@@ -92,7 +92,7 @@ create_notebook_page_accessible (GtkNotebookAccessible *accessible,
 {
   AtkObject *obj;
 
-  obj = gtk_notebook_page_accessible_new (accessible, child);
+  obj = _gtk_notebook_page_accessible_new (accessible, child);
   g_hash_table_insert (accessible->pages, child, obj);
   atk_object_set_parent (obj, ATK_OBJECT (accessible));
   g_signal_emit_by_name (accessible, "children_changed::add", page_num, obj, NULL);
@@ -127,7 +127,7 @@ page_removed_cb (GtkNotebook *notebook,
   g_return_if_fail (obj);
   g_signal_emit_by_name (accessible, "children_changed::remove",
                          page_num, obj, NULL);
-  gtk_notebook_page_accessible_invalidate (GTK_NOTEBOOK_PAGE_ACCESSIBLE (obj));
+  _gtk_notebook_page_accessible_invalidate (GTK_NOTEBOOK_PAGE_ACCESSIBLE (obj));
   g_hash_table_remove (accessible->pages, widget);
 }
 
@@ -151,7 +151,7 @@ gtk_notebook_accessible_initialize (AtkObject *obj,
   GtkNotebook *notebook;
   gint i;
 
-  ATK_OBJECT_CLASS (gtk_notebook_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_notebook_accessible_parent_class)->initialize (obj, data);
 
   accessible = GTK_NOTEBOOK_ACCESSIBLE (obj);
   notebook = GTK_NOTEBOOK (data);
@@ -186,7 +186,7 @@ gtk_notebook_accessible_finalize (GObject *object)
   if (accessible->idle_focus_id)
     g_source_remove (accessible->idle_focus_id);
 
-  G_OBJECT_CLASS (gtk_notebook_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_notebook_accessible_parent_class)->finalize (object);
 }
 
 static AtkObject *
@@ -280,7 +280,7 @@ gtk_notebook_accessible_notify_gtk (GObject    *obj,
         }
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_notebook_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_notebook_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 /*
@@ -305,7 +305,7 @@ gtk_notebook_accessible_add_selection (AtkSelection *selection,
 }
 
 static void
-gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
+_gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
@@ -326,7 +326,7 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
 }
 
 static void
-gtk_notebook_accessible_init (GtkNotebookAccessible *notebook)
+_gtk_notebook_accessible_init (GtkNotebookAccessible *notebook)
 {
   notebook->pages = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,

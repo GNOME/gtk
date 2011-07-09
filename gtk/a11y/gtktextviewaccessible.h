@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TEXT_VIEW_ACCESSIBLE                  (gtk_text_view_accessible_get_type ())
+#define GTK_TYPE_TEXT_VIEW_ACCESSIBLE                  (_gtk_text_view_accessible_get_type ())
 #define GTK_TEXT_VIEW_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessible))
 #define GTK_TEXT_VIEW_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessibleClass))
 #define GTK_IS_TEXT_VIEW_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE))
@@ -47,7 +47,7 @@ struct _GtkTextViewAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_text_view_accessible_get_type (void);
+GType _gtk_text_view_accessible_get_type (void);
 
 G_END_DECLS
 

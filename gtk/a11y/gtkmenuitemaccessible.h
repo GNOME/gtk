@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_MENU_ITEM_ACCESSIBLE                     (gtk_menu_item_accessible_get_type ())
+#define GTK_TYPE_MENU_ITEM_ACCESSIBLE                     (_gtk_menu_item_accessible_get_type ())
 #define GTK_MENU_ITEM_ACCESSIBLE(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU_ITEM_ACCESSIBLE, GtkMenuItemAccessible))
 #define GTK_MENU_ITEM_ACCESSIBLE_CLASS(klass)             (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_ITEM_ACCESSIBLE, GtkMenuItemAccessibleClass))
 #define GTK_IS_MENU_ITEM_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU_ITEM_ACCESSIBLE))
@@ -46,7 +46,7 @@ struct _GtkMenuItemAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_menu_item_accessible_get_type (void);
+GType _gtk_menu_item_accessible_get_type (void);
 
 G_END_DECLS
 

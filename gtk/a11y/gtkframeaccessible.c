@@ -24,13 +24,13 @@
 #include "gtkframeaccessible.h"
 
 
-G_DEFINE_TYPE (GtkFrameAccessible, gtk_frame_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkFrameAccessible, _gtk_frame_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
 
 static void
 gtk_frame_accessible_initialize (AtkObject *accessible,
                                  gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_frame_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (_gtk_frame_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_PANEL;
 }
@@ -45,7 +45,7 @@ gtk_frame_accessible_get_name (AtkObject *obj)
   if (widget == NULL)
       return NULL;
 
-  name = ATK_OBJECT_CLASS (gtk_frame_accessible_parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (_gtk_frame_accessible_parent_class)->get_name (obj);
   if (name != NULL)
     return name;
 
@@ -53,7 +53,7 @@ gtk_frame_accessible_get_name (AtkObject *obj)
 }
 
 static void
-gtk_frame_accessible_class_init (GtkFrameAccessibleClass *klass)
+_gtk_frame_accessible_class_init (GtkFrameAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -62,6 +62,6 @@ gtk_frame_accessible_class_init (GtkFrameAccessibleClass *klass)
 }
 
 static void
-gtk_frame_accessible_init (GtkFrameAccessible *frame)
+_gtk_frame_accessible_init (GtkFrameAccessible *frame)
 {
 }

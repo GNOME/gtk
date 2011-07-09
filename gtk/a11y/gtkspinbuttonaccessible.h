@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SPIN_BUTTON_ACCESSIBLE                      (gtk_spin_button_accessible_get_type ())
+#define GTK_TYPE_SPIN_BUTTON_ACCESSIBLE                      (_gtk_spin_button_accessible_get_type ())
 #define GTK_SPIN_BUTTON_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SPIN_BUTTON_ACCESSIBLE, GtkSpinButtonAccessible))
 #define GTK_SPIN_BUTTON_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SPIN_BUTTON_ACCESSIBLE, GtkSpinButtonAccessibleClass))
 #define GTK_IS_SPIN_BUTTON_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SPIN_BUTTON_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkSpinButtonAccessibleClass
   GtkEntryAccessibleClass parent_class;
 };
 
-GType gtk_spin_button_accessible_get_type (void);
+GType _gtk_spin_button_accessible_get_type (void);
 
 G_END_DECLS
 

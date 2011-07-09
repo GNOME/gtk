@@ -28,7 +28,7 @@
 static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkScaleButtonAccessible, gtk_scale_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkScaleButtonAccessible, _gtk_scale_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init));
 
@@ -45,7 +45,7 @@ gtk_scale_button_accessible_initialize (AtkObject *obj,
 {
   GtkAdjustment *adjustment;
 
-  ATK_OBJECT_CLASS (gtk_scale_button_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_scale_button_accessible_parent_class)->initialize (obj, data);
 
   adjustment = gtk_scale_button_get_adjustment (GTK_SCALE_BUTTON (data));
   if (adjustment)
@@ -79,12 +79,12 @@ gtk_scale_button_accessible_notify_gtk (GObject    *obj,
     }
   else
     {
-      GTK_WIDGET_ACCESSIBLE_CLASS (gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
+      GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
     }
 }
 
 static void
-gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
+_gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
 {
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = GTK_WIDGET_ACCESSIBLE_CLASS (klass);
@@ -95,7 +95,7 @@ gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
 }
 
 static void
-gtk_scale_button_accessible_init (GtkScaleButtonAccessible *button)
+_gtk_scale_button_accessible_init (GtkScaleButtonAccessible *button)
 {
 }
 

@@ -161,7 +161,7 @@ static void atk_selection_interface_init    (AtkSelectionIface   *iface);
 static void atk_component_interface_init    (AtkComponentIface   *iface);
 static void gail_cell_parent_interface_init (GailCellParentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, _gtk_tree_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
@@ -218,7 +218,7 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   GtkWidget *widget;
   GtkTreeSelection *selection;
 
-  ATK_OBJECT_CLASS (gtk_tree_view_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->initialize (obj, data);
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
   accessible->col_data = NULL;
@@ -326,7 +326,7 @@ gtk_tree_view_accessible_finalize (GObject *object)
       g_array_free (array, TRUE);
     }
 
-  G_OBJECT_CLASS (gtk_tree_view_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->finalize (object);
 }
 
 static void
@@ -396,7 +396,7 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment_changed), tree_view);
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_tree_view_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_tree_view_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -447,7 +447,7 @@ gtk_tree_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
     g_signal_connect_after (widget, "destroy",
                             G_CALLBACK (gtk_tree_view_accessible_destroyed), accessible);
 
-  GTK_ACCESSIBLE_CLASS (gtk_tree_view_accessible_parent_class)->connect_widget_destroyed (accessible);
+  GTK_ACCESSIBLE_CLASS (_gtk_tree_view_accessible_parent_class)->connect_widget_destroyed (accessible);
 }
 
 static gint
@@ -707,7 +707,7 @@ gtk_tree_view_accessible_ref_state_set (AtkObject *obj)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (gtk_tree_view_accessible_parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->ref_state_set (obj);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
   if (widget != NULL)
@@ -717,7 +717,7 @@ gtk_tree_view_accessible_ref_state_set (AtkObject *obj)
 }
 
 static void
-gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
+_gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -745,7 +745,7 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
 }
 
 static void
-gtk_tree_view_accessible_init (GtkTreeViewAccessible *view)
+_gtk_tree_view_accessible_init (GtkTreeViewAccessible *view)
 {
 }
 
@@ -772,7 +772,7 @@ get_focus_index (GtkTreeView *tree_view)
 /* This function returns a reference to the accessible object
  * for the cell in the treeview which has focus, if any
  */
-AtkObject *
+static AtkObject *
 gtk_tree_view_accessible_ref_focus_cell (GtkTreeView *tree_view)
 {
   AtkObject *focus_cell = NULL;

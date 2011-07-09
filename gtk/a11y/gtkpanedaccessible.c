@@ -25,7 +25,7 @@
 
 static void atk_value_interface_init (AtkValueIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, gtk_paned_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, _gtk_paned_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
@@ -41,18 +41,16 @@ static void
 gtk_paned_accessible_initialize (AtkObject *obj,
                                  gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_paned_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_paned_accessible_parent_class)->initialize (obj, data);
 
-  g_signal_connect (data,
-                    "size_allocate",
-                    G_CALLBACK (gtk_paned_accessible_size_allocate_gtk),
-                    NULL);
+  g_signal_connect (data, "size_allocate",
+                    G_CALLBACK (gtk_paned_accessible_size_allocate_gtk), NULL);
 
   obj->role = ATK_ROLE_SPLIT_PANE;
 }
 
 static void
-gtk_paned_accessible_class_init (GtkPanedAccessibleClass *klass)
+_gtk_paned_accessible_class_init (GtkPanedAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -60,7 +58,7 @@ gtk_paned_accessible_class_init (GtkPanedAccessibleClass *klass)
 }
 
 static void
-gtk_paned_accessible_init (GtkPanedAccessible *paned)
+_gtk_paned_accessible_init (GtkPanedAccessible *paned)
 {
 }
 
@@ -119,13 +117,11 @@ gtk_paned_accessible_get_minimum_value (AtkValue *obj,
   g_value_set_int (value, minimum_value);
 }
 
-/*
- * Calling atk_value_set_current_value() is no guarantee that the value
+/* Calling atk_value_set_current_value() is no guarantee that the value
  * is acceptable; it is necessary to listen for accessible-value signals
  * and check whether the current value has been changed or check what the
  * maximum and minimum values are.
  */
-
 static gboolean
 gtk_paned_accessible_set_current_value (AtkValue     *obj,
                                         const GValue *value)

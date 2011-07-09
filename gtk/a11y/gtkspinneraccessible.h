@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SPINNER_ACCESSIBLE              (gtk_spinner_accessible_get_type ())
+#define GTK_TYPE_SPINNER_ACCESSIBLE              (_gtk_spinner_accessible_get_type ())
 #define GTK_SPINNER_ACCESSIBLE(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SPINNER_ACCESSIBLE, GtkSpinnerAccessible))
 #define GTK_SPINNER_ACCESSIBLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SPINNER_ACCESSIBLE, GtkSpinnerAccessibleClass))
 #define GTK_IS_SPINNER_ACCESSIBLE(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SPINNER_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkSpinnerAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
-GType gtk_spinner_accessible_get_type (void);
+GType _gtk_spinner_accessible_get_type (void);
 
 G_END_DECLS
 

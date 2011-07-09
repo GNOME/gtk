@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_BUTTON_ACCESSIBLE                     (gtk_button_accessible_get_type ())
+#define GTK_TYPE_BUTTON_ACCESSIBLE                     (_gtk_button_accessible_get_type ())
 #define GTK_BUTTON_ACCESSIBLE(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BUTTON_ACCESSIBLE, GtkButtonAccessible))
 #define GTK_BUTTON_ACCESSIBLE_CLASS(klass)             (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_BUTTON_ACCESSIBLE, GtkButtonAccessibleClass))
 #define GTK_IS_BUTTON_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BUTTON_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkButtonAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_button_accessible_get_type (void);
+GType _gtk_button_accessible_get_type (void);
 
 G_END_DECLS
 

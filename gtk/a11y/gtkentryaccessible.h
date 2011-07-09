@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ENTRY_ACCESSIBLE                      (gtk_entry_accessible_get_type ())
+#define GTK_TYPE_ENTRY_ACCESSIBLE                      (_gtk_entry_accessible_get_type ())
 #define GTK_ENTRY_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_ACCESSIBLE, GtkEntryAccessible))
 #define GTK_ENTRY_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ENTRY_ACCESSIBLE, GtkEntryAccessibleClass))
 #define GTK_IS_ENTRY_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ENTRY_ACCESSIBLE))
@@ -51,7 +51,7 @@ struct _GtkEntryAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
-GType gtk_entry_accessible_get_type (void);
+GType _gtk_entry_accessible_get_type (void);
 
 G_END_DECLS
 

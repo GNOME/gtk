@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_IMAGE_ACCESSIBLE                      (gtk_image_accessible_get_type ())
+#define GTK_TYPE_IMAGE_ACCESSIBLE                      (_gtk_image_accessible_get_type ())
 #define GTK_IMAGE_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IMAGE_ACCESSIBLE, GtkImageAccessible))
 #define GTK_IMAGE_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IMAGE_ACCESSIBLE, GtkImageAccessibleClass))
 #define GTK_IS_IMAGE_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IMAGE_ACCESSIBLE))
@@ -47,7 +47,7 @@ struct _GtkImageAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
-GType gtk_image_accessible_get_type (void);
+GType _gtk_image_accessible_get_type (void);
 
 G_END_DECLS
 

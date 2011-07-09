@@ -487,7 +487,7 @@ gail_util_get_toolkit_version (void)
 }
 
 void
-gail_util_install (void)
+_gail_util_install (void)
 {
   AtkUtilClass *atk_class = ATK_UTIL_CLASS (g_type_class_ref (ATK_TYPE_UTIL));
 

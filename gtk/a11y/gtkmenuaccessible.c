@@ -22,17 +22,17 @@
 #include "gtkmenuaccessible.h"
 
 
-G_DEFINE_TYPE (GtkMenuAccessible, gtk_menu_accessible, GTK_TYPE_MENU_SHELL_ACCESSIBLE)
+G_DEFINE_TYPE (GtkMenuAccessible, _gtk_menu_accessible, GTK_TYPE_MENU_SHELL_ACCESSIBLE)
 
 static void
 gtk_menu_accessible_initialize (AtkObject *obj,
                                 gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_menu_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_menu_accessible_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_MENU;
 
-  gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
+  _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
 }
 
 static AtkObject *
@@ -80,11 +80,11 @@ gtk_menu_accessible_get_index_in_parent (AtkObject *accessible)
   if (gtk_menu_get_attach_widget (GTK_MENU (widget)))
     return 0;
 
-  return ATK_OBJECT_CLASS (gtk_menu_accessible_parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (_gtk_menu_accessible_parent_class)->get_index_in_parent (accessible);
 }
 
 static void
-gtk_menu_accessible_class_init (GtkMenuAccessibleClass *klass)
+_gtk_menu_accessible_class_init (GtkMenuAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -94,6 +94,6 @@ gtk_menu_accessible_class_init (GtkMenuAccessibleClass *klass)
 }
 
 static void
-gtk_menu_accessible_init (GtkMenuAccessible *accessible)
+_gtk_menu_accessible_init (GtkMenuAccessible *accessible)
 {
 }

@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TOPLEVEL_ACCESSIBLE               (gtk_toplevel_accessible_get_type ())
+#define GTK_TYPE_TOPLEVEL_ACCESSIBLE               (_gtk_toplevel_accessible_get_type ())
 #define GTK_TOPLEVEL_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOPLEVEL_ACCESSIBLE, GtkToplevelAccessible))
 #define GTK_TOPLEVEL_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOPLEVEL_ACCESSIBLE, GtkToplevelAccessibleClass))
 #define GTK_IS_TOPLEVEL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOPLEVEL_ACCESSIBLE))
@@ -45,7 +45,7 @@ struct _GtkToplevelAccessibleClass
   AtkObjectClass parent_class;
 };
 
-GType gtk_toplevel_accessible_get_type (void);
+GType _gtk_toplevel_accessible_get_type (void);
 
 G_END_DECLS
 

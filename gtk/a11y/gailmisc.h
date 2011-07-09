@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_MISC                           (gail_misc_get_type ())
+#define GAIL_TYPE_MISC                           (_gail_misc_get_type ())
 #define GAIL_MISC(obj)                           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_MISC, GailMisc))
 #define GAIL_MISC_CLASS(klass)                   (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_MISC, GailMiscClass))
 #define GAIL_IS_MISC(obj)                        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_MISC))
@@ -44,7 +44,7 @@ struct _GailMiscClass
   AtkMiscClass parent_class;
 };
 
-GType gail_misc_get_type (void);
+GType _gail_misc_get_type (void);
 
 G_END_DECLS
 

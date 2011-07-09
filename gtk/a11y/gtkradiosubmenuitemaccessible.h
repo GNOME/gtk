@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE               (gtk_radio_submenu_item_accessible_get_type ())
+#define GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE               (_gtk_radio_submenu_item_accessible_get_type ())
 #define GTK_RADIO_SUBMENU_ITEM_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE, GtkRadioSubmenuItemAccessible))
 #define GTK_RADIO_SUBMENU_ITEM_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE, GtkRadioSubmenuItemAccessibleClass))
 #define GTK_IS_RADIO_SUBMENU_ITEM_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE))
@@ -46,7 +46,7 @@ struct _GtkRadioSubmenuItemAccessibleClass
   GtkCheckSubmenuItemAccessibleClass parent_class;
 };
 
-GType gtk_radio_submenu_item_accessible_get_type (void);
+GType _gtk_radio_submenu_item_accessible_get_type (void);
 
 G_END_DECLS
 

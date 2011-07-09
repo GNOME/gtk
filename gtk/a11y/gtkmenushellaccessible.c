@@ -25,14 +25,14 @@
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkMenuShellAccessible, gtk_menu_shell_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkMenuShellAccessible, _gtk_menu_shell_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static void
 gtk_menu_shell_accessible_initialize (AtkObject *accessible,
                                       gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_menu_shell_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (_gtk_menu_shell_accessible_parent_class)->initialize (accessible, data);
 
   if (GTK_IS_MENU_BAR (data))
     accessible->role = ATK_ROLE_MENU_BAR;
@@ -41,7 +41,7 @@ gtk_menu_shell_accessible_initialize (AtkObject *accessible,
 }
 
 static void
-gtk_menu_shell_accessible_class_init (GtkMenuShellAccessibleClass *klass)
+_gtk_menu_shell_accessible_class_init (GtkMenuShellAccessibleClass *klass)
 {
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
 
@@ -49,7 +49,7 @@ gtk_menu_shell_accessible_class_init (GtkMenuShellAccessibleClass *klass)
 }
 
 static void
-gtk_menu_shell_accessible_init (GtkMenuShellAccessible *menu_shell)
+_gtk_menu_shell_accessible_init (GtkMenuShellAccessible *menu_shell)
 {
 }
 
