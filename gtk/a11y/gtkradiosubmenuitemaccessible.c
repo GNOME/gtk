@@ -26,7 +26,7 @@
 G_DEFINE_TYPE (GtkRadioSubmenuItemAccessible, gtk_radio_submenu_item_accessible, GTK_TYPE_CHECK_SUBMENU_ITEM_ACCESSIBLE)
 
 
-AtkRelationSet *
+static AtkRelationSet *
 gtk_radio_submenu_item_accessible_ref_relation_set (AtkObject *obj)
 {
   GtkWidget *widget;
