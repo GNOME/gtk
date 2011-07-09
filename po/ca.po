@@ -28,8 +28,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 21:51+0200\n"
-"PO-Revision-Date: 2011-04-04 21:20+0200\n"
+"POT-Creation-Date: 2011-07-10 00:22+0200\n"
+"PO-Revision-Date: 2011-07-10 00:22+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -984,73 +984,73 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Gestioneu mides personalitzades"
 
-#: ../gtk/gtkcustompaperunixdialog.c:532 ../gtk/gtkpagesetupunixdialog.c:788
+#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:788
 msgid "inch"
 msgstr "in"
 
-#: ../gtk/gtkcustompaperunixdialog.c:534 ../gtk/gtkpagesetupunixdialog.c:786
+#: ../gtk/gtkcustompaperunixdialog.c:535 ../gtk/gtkpagesetupunixdialog.c:786
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:579
+#: ../gtk/gtkcustompaperunixdialog.c:580
 msgid "Margins from Printer..."
 msgstr "Marges de la impressora..."
 
-#: ../gtk/gtkcustompaperunixdialog.c:745
+#: ../gtk/gtkcustompaperunixdialog.c:746
 #, c-format
 msgid "Custom Size %d"
 msgstr "Mida personalitzada %d"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1057
+#: ../gtk/gtkcustompaperunixdialog.c:1085
 msgid "_Width:"
 msgstr "_Amplada:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1069
+#: ../gtk/gtkcustompaperunixdialog.c:1097
 msgid "_Height:"
 msgstr "_Alçada:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1081
+#: ../gtk/gtkcustompaperunixdialog.c:1109
 msgid "Paper Size"
 msgstr "Mida del paper"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1090
+#: ../gtk/gtkcustompaperunixdialog.c:1118
 msgid "_Top:"
 msgstr "_Superior:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1102
+#: ../gtk/gtkcustompaperunixdialog.c:1130
 msgid "_Bottom:"
 msgstr "_Inferior:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1114
+#: ../gtk/gtkcustompaperunixdialog.c:1142
 msgid "_Left:"
 msgstr "_Esquerre:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1126
+#: ../gtk/gtkcustompaperunixdialog.c:1154
 msgid "_Right:"
 msgstr "_Dret:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1167
+#: ../gtk/gtkcustompaperunixdialog.c:1195
 msgid "Paper Margins"
 msgstr "Marges del paper"
 
-#: ../gtk/gtkentry.c:8757 ../gtk/gtktextview.c:8272
+#: ../gtk/gtkentry.c:8761 ../gtk/gtktextview.c:8272
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
-#: ../gtk/gtkentry.c:8771 ../gtk/gtktextview.c:8286
+#: ../gtk/gtkentry.c:8775 ../gtk/gtktextview.c:8286
 msgid "_Insert Unicode Control Character"
 msgstr "_Insereix caràcters de control Unicode"
 
-#: ../gtk/gtkentry.c:10179
+#: ../gtk/gtkentry.c:10183
 msgid "Caps Lock and Num Lock are on"
 msgstr ""
 "La fixació de majúscules i la fixació de teclat numèric estan activades"
 
-#: ../gtk/gtkentry.c:10181
+#: ../gtk/gtkentry.c:10185
 msgid "Num Lock is on"
 msgstr "La fixació de teclat numèric està activada"
 
-#: ../gtk/gtkentry.c:10183
+#: ../gtk/gtkentry.c:10187
 msgid "Caps Lock is on"
 msgstr "La fixació de majúscules està activada"
 
@@ -1061,7 +1061,7 @@ msgstr "La fixació de majúscules està activada"
 msgid "Select a File"
 msgstr "Seleccioneu un fitxer"
 
-#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1865
+#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1806
 msgid "Desktop"
 msgstr "Escriptori"
 
@@ -1073,27 +1073,27 @@ msgstr "(Cap)"
 msgid "Other..."
 msgstr "Altre..."
 
-#: ../gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:149
 msgid "Type name of new folder"
 msgstr "Escriviu el nom de la carpeta nova"
 
-#: ../gtk/gtkfilechooserdefault.c:960
+#: ../gtk/gtkfilechooserdefault.c:956
 msgid "Could not retrieve information about the file"
 msgstr "No s'ha pogut obtenir informació sobre el fitxer"
 
-#: ../gtk/gtkfilechooserdefault.c:971
+#: ../gtk/gtkfilechooserdefault.c:967
 msgid "Could not add a bookmark"
 msgstr "No s'ha pogut afegir una adreça d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:982
+#: ../gtk/gtkfilechooserdefault.c:978
 msgid "Could not remove bookmark"
 msgstr "No s'ha pogut suprimir l'adreça d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:993
+#: ../gtk/gtkfilechooserdefault.c:989
 msgid "The folder could not be created"
 msgstr "No s'ha pogut crear la carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:1006
+#: ../gtk/gtkfilechooserdefault.c:1002
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1102,16 +1102,16 @@ msgstr ""
 "nom. Proveu d'utilitzar un nom diferent per a la carpeta, o bé canvieu el "
 "nom del fitxer abans de crear-la."
 
-#: ../gtk/gtkfilechooserdefault.c:1020
+#: ../gtk/gtkfilechooserdefault.c:1016
 msgid "You need to choose a valid filename."
 msgstr "Cal que trieu un nom de fitxer vàlid."
 
-#: ../gtk/gtkfilechooserdefault.c:1023
+#: ../gtk/gtkfilechooserdefault.c:1019
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "No es pot crear un fitxer a %s, atès que no és una carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:1035
+#: ../gtk/gtkfilechooserdefault.c:1031
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -1119,11 +1119,11 @@ msgstr ""
 "Només podeu seleccionar carpetes. L'element que heu seleccionat no és una "
 "carpeta. Torneu-ho a intentar utilitzant un element diferent."
 
-#: ../gtk/gtkfilechooserdefault.c:1045
+#: ../gtk/gtkfilechooserdefault.c:1041
 msgid "Invalid file name"
 msgstr "El nom del fitxer no és vàlid"
 
-#: ../gtk/gtkfilechooserdefault.c:1055
+#: ../gtk/gtkfilechooserdefault.c:1051
 msgid "The folder contents could not be displayed"
 msgstr "No s'ha pogut mostrar el contingut de la carpeta"
 
@@ -1131,159 +1131,167 @@ msgstr "No s'ha pogut mostrar el contingut de la carpeta"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1608
+#: ../gtk/gtkfilechooserdefault.c:1578
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s a %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1784
+#: ../gtk/gtkfilechooserdefault.c:1727
 msgid "Search"
 msgstr "Cerca"
 
-#: ../gtk/gtkfilechooserdefault.c:1808 ../gtk/gtkfilechooserdefault.c:9494
+#: ../gtk/gtkfilechooserdefault.c:1751 ../gtk/gtkfilechooserdefault.c:4865
 msgid "Recently Used"
 msgstr "Utilitzats recentment"
 
-#: ../gtk/gtkfilechooserdefault.c:2464
+#: ../gtk/gtkfilechooserdefault.c:2350
 msgid "Select which types of files are shown"
 msgstr "Seleccioneu quins tipus de fitxers es mostren"
 
-#: ../gtk/gtkfilechooserdefault.c:2823
+#: ../gtk/gtkfilechooserdefault.c:2709
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Afegeix la carpeta «%s» a les adreces d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:2867
+#: ../gtk/gtkfilechooserdefault.c:2753
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Afegeix la carpeta actual a les adreces d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:2869
+#: ../gtk/gtkfilechooserdefault.c:2755
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Afegeix les carpetes seleccionades a les adreces d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:2907
+#: ../gtk/gtkfilechooserdefault.c:2793
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Suprimeix l'adreça d'interès «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2909
+#: ../gtk/gtkfilechooserdefault.c:2795
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "No es pot suprimir l'adreça d'interès «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2916 ../gtk/gtkfilechooserdefault.c:3800
+#: ../gtk/gtkfilechooserdefault.c:2802 ../gtk/gtkfilechooserdefault.c:3686
 msgid "Remove the selected bookmark"
 msgstr "Suprimeix l'adreça d'interès seleccionada"
 
-#: ../gtk/gtkfilechooserdefault.c:3479
+#: ../gtk/gtkfilechooserdefault.c:3365
 msgid "Remove"
 msgstr "Suprimeix"
 
-#: ../gtk/gtkfilechooserdefault.c:3488
+#: ../gtk/gtkfilechooserdefault.c:3374
 msgid "Rename..."
 msgstr "Canvia el nom..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3652
+#: ../gtk/gtkfilechooserdefault.c:3538
 msgid "Places"
 msgstr "Llocs"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3709
+#: ../gtk/gtkfilechooserdefault.c:3595
 msgid "_Places"
 msgstr "_Llocs"
 
-#: ../gtk/gtkfilechooserdefault.c:3788
+#: ../gtk/gtkfilechooserdefault.c:3674
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Afegeix la carpeta seleccionada a les adreces d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:3935
+#: ../gtk/gtkfilechooserdefault.c:3821
 msgid "Could not select file"
 msgstr "No s'ha pogut seleccionar el fitxer"
 
-#: ../gtk/gtkfilechooserdefault.c:4108
+#: ../gtk/gtkfilechooserdefault.c:3994
 msgid "_Add to Bookmarks"
 msgstr "_Afegeix a les adreces d'interès"
 
-#: ../gtk/gtkfilechooserdefault.c:4121
+#: ../gtk/gtkfilechooserdefault.c:4007
 msgid "Show _Hidden Files"
 msgstr "Mostra els fitxers _ocults"
 
-#: ../gtk/gtkfilechooserdefault.c:4128
+#: ../gtk/gtkfilechooserdefault.c:4014
 msgid "Show _Size Column"
 msgstr "Mostra la columna de la _mida"
 
-#: ../gtk/gtkfilechooserdefault.c:4353
+#: ../gtk/gtkfilechooserdefault.c:4239
 msgid "Files"
 msgstr "Fitxers"
 
-#: ../gtk/gtkfilechooserdefault.c:4404
+#: ../gtk/gtkfilechooserdefault.c:4290
 msgid "Name"
 msgstr "Nom"
 
-#: ../gtk/gtkfilechooserdefault.c:4427
+#: ../gtk/gtkfilechooserdefault.c:4313
 msgid "Size"
 msgstr "Mida"
 
-#: ../gtk/gtkfilechooserdefault.c:4441
+#: ../gtk/gtkfilechooserdefault.c:4327
 msgid "Modified"
 msgstr "Modificat"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4696 ../gtk/gtkprinteroptionwidget.c:793
+#: ../gtk/gtkfilechooserdefault.c:4408 ../gtk/gtkprinteroptionwidget.c:793
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: ../gtk/gtkfilechooserdefault.c:4739
-msgid "_Browse for other folders"
-msgstr "Na_vega per altres carpetes"
-
-#: ../gtk/gtkfilechooserdefault.c:5009
+#: ../gtk/gtkfilechooserdefault.c:4703
 msgid "Type a file name"
 msgstr "Escriviu un nom de fitxer"
 
+#: ../gtk/gtkfilechooserdefault.c:4750 ../gtk/gtkfilechooserdefault.c:4761
+msgid "Please select a folder below"
+msgstr "Seleccioneu una carpeta"
+
+#: ../gtk/gtkfilechooserdefault.c:4756
+msgid "Please type a file name"
+msgstr "Escriviu un nom de fitxer"
+
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5052
+#: ../gtk/gtkfilechooserdefault.c:4827
 msgid "Create Fo_lder"
 msgstr "Crea una ca_rpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:5062
+#: ../gtk/gtkfilechooserdefault.c:4875
+msgid "Search:"
+msgstr "Cerca:"
+
+#: ../gtk/gtkfilechooserdefault.c:4922
 msgid "_Location:"
 msgstr "_Ubicació:"
 
-#: ../gtk/gtkfilechooserdefault.c:5267
+#: ../gtk/gtkfilechooserdefault.c:5237
 msgid "Save in _folder:"
 msgstr "De_sa a la carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5269
+#: ../gtk/gtkfilechooserdefault.c:5239
 msgid "Create in _folder:"
 msgstr "Crea a la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6352
+#: ../gtk/gtkfilechooserdefault.c:6333
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No s'ha pogut llegir el contingut de %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6356
+#: ../gtk/gtkfilechooserdefault.c:6337
 msgid "Could not read the contents of the folder"
 msgstr "No s'ha pogut llegir el contingut de la carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:6449 ../gtk/gtkfilechooserdefault.c:6517
-#: ../gtk/gtkfilechooserdefault.c:6669
+#: ../gtk/gtkfilechooserdefault.c:6430 ../gtk/gtkfilechooserdefault.c:6498
+#: ../gtk/gtkfilechooserdefault.c:6650
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: ../gtk/gtkfilechooserdefault.c:6464
+#: ../gtk/gtkfilechooserdefault.c:6445
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6466
+#: ../gtk/gtkfilechooserdefault.c:6447
 msgid "Yesterday at %H:%M"
 msgstr "Ahir a les %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7135
+#: ../gtk/gtkfilechooserdefault.c:7132
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
@@ -1297,12 +1305,12 @@ msgstr "La drecera %s ja existeix"
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existeix"
 
-#: ../gtk/gtkfilechooserdefault.c:8102 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8089 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8105 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8092 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1310,15 +1318,15 @@ msgstr ""
 "El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu el "
 "contingut."
 
-#: ../gtk/gtkfilechooserdefault.c:8110 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8097 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: ../gtk/gtkfilechooserdefault.c:8836
+#: ../gtk/gtkfilechooserdefault.c:8850
 msgid "Could not start the search process"
 msgstr "No s'ha pogut iniciar el procés de cerca"
 
-#: ../gtk/gtkfilechooserdefault.c:8837
+#: ../gtk/gtkfilechooserdefault.c:8851
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1326,15 +1334,11 @@ msgstr ""
 "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
 "vos que s'està executant."
 
-#: ../gtk/gtkfilechooserdefault.c:8851
+#: ../gtk/gtkfilechooserdefault.c:8865
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
-#: ../gtk/gtkfilechooserdefault.c:9070
-msgid "Search:"
-msgstr "Cerca:"
-
-#: ../gtk/gtkfilechooserdefault.c:9678
+#: ../gtk/gtkfilechooserdefault.c:9657
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
@@ -1342,6 +1346,8 @@ msgstr "No s'ha pogut muntar %s"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1179
+#: ../gtk/gtkfilesystem.c:721
+#, c-format
 msgid "Invalid path"
 msgstr "Camí no vàlid"
 
@@ -1496,12 +1502,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6245
+#: ../gtk/gtklabel.c:6240
 msgid "_Open Link"
 msgstr "Obre l'_enllaç"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6257
+#: ../gtk/gtklabel.c:6252
 msgid "Copy _Link Address"
 msgstr "Copia l'adreça de l'en_llaç"
 
@@ -1643,7 +1649,7 @@ msgstr "Intèrpret d'ordres «Z»"
 msgid "Cannot end process with PID %d: %s"
 msgstr "No es pot finalitzar el procés amb el PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4805 ../gtk/gtknotebook.c:7461
+#: ../gtk/gtknotebook.c:4805 ../gtk/gtknotebook.c:7459
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -4513,6 +4519,9 @@ msgid ""
 msgstr ""
 "No es pot carregar la imatge «%s»: se'n desconeix el motiu; probablement es "
 "tracta d'un fitxer d'imatge malmès"
+
+#~ msgid "_Browse for other folders"
+#~ msgstr "Na_vega per altres carpetes"
 
 #~ msgid "X screen to use"
 #~ msgstr "Pantalla X que s'ha d'utilitzar"
