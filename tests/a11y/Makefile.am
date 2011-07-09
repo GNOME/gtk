@@ -8,6 +8,7 @@ AM_CPPFLAGS =				\
 	-I$(top_srcdir)/gdk             \
 	-DGDK_DISABLE_DEPRECATED        \
 	-DGTK_DISABLE_DEPRECATED        \
+	-DGTK_VERSION=\"$(GTK_VERSION)\"\
 	$(GTK_DEBUG_FLAGS)              \
 	$(GTK_DEP_CFLAGS)
 
@@ -25,6 +26,8 @@ TEST_PROGS += text
 TEST_PROGS += children
 
 TEST_PROGS += focus
+
+TEST_PROGS += util
 
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
