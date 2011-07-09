@@ -798,8 +798,7 @@ gail_accessibility_module_init (void)
   atk_focus_tracker_init (gail_focus_tracker_init);
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);
 
-  /* Initialize the GailUtility class */
-  g_type_class_unref (g_type_class_ref (GAIL_TYPE_UTIL));
+  gail_util_install ();
 
   atk_misc_instance = g_object_new (GAIL_TYPE_MISC, NULL);
 }
