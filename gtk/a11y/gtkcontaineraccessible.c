@@ -142,6 +142,8 @@ gtk_container_accessible_real_remove_gtk (GtkContainer *container,
 
   atk_parent = ATK_OBJECT (data);
   atk_child = gtk_widget_get_accessible (widget);
+  if (atk_child == NULL)
+    return 1;
   accessible = GTK_CONTAINER_ACCESSIBLE (atk_parent);
 
   g_object_notify (G_OBJECT (atk_child), "accessible_parent");
