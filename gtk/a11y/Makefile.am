@@ -14,7 +14,7 @@ gail_c_sources =			\
 	gtkchecksubmenuitemaccessible.c	\
 	gtkcomboboxaccessible.c		\
 	gtkcontaineraccessible.c	\
-	gailcontainercell.c		\
+	gtkcontainercellaccessible.c	\
 	gtkentryaccessible.c		\
 	gtkexpanderaccessible.c		\
 	gtkframeaccessible.c		\
@@ -66,7 +66,7 @@ gail_private_h_sources =		\
 	gtkchecksubmenuitemaccessible.h	\
 	gtkcomboboxaccessible.h		\
 	gtkcontaineraccessible.h	\
-	gailcontainercell.h		\
+	gtkcontainercellaccessible.h	\
 	gtkentryaccessible.h		\
 	gtkexpanderaccessible.h		\
 	gtkframeaccessible.h		\

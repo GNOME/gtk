@@ -28,7 +28,7 @@
 #include "gailrenderercell.h"
 #include "gailbooleancell.h"
 #include "gailimagecell.h"
-#include "gailcontainercell.h"
+#include "gtkcontainercellaccessible.h"
 #include "gailtextcell.h"
 #include "gailcellparent.h"
 
@@ -483,7 +483,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GtkTreeViewColumn *expander_tv;
   GList *renderer_list;
   GList *l;
-  GailContainerCell *container = NULL;
+  GtkContainerCellAccessible *container = NULL;
   GailRendererCell *renderer_cell;
   gboolean is_expander, is_expanded, retval;
   gboolean editable = FALSE;
@@ -552,7 +552,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
     {
       GtkCellAccessible *container_cell;
 
-      container = gail_container_cell_new ();
+      container = _gtk_container_cell_accessible_new ();
 
       container_cell = GTK_CELL_ACCESSIBLE (container);
       _gtk_cell_accessible_initialise (container_cell, widget, ATK_OBJECT (accessible), i);
@@ -625,7 +625,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           _gtk_cell_accessible_initialise (cell, widget, parent, i);
 
           if (container)
-            gail_container_cell_add_child (container, cell);
+            _gtk_container_cell_accessible_add_child (container, cell);
           else
             cell->refresh_index = refresh_cell_index;
 
@@ -1491,7 +1491,7 @@ gtk_tree_view_accessible_grab_cell_focus (GailCellParent    *parent,
   tv_col = cell_info->cell_col_ref;
   if (parent_cell != ATK_OBJECT (parent))
     {
-      /* GtkCellAccessible is in a GailContainerCell.
+      /* GtkCellAccessible is in a GtkContainerCellAccessible.
        * The GtkTreeViewColumn has multiple renderers;
        * find the corresponding one.
        */
@@ -2417,7 +2417,7 @@ update_cell_value (GailRendererCell      *renderer_cell,
     {
       parent = atk_object_get_parent (ATK_OBJECT (cell));
 
-      if (GAIL_IS_CONTAINER_CELL (parent))
+      if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
         cur_renderer = g_list_nth (renderers, cell->index);
       else
         cur_renderer = renderers;
@@ -3011,7 +3011,7 @@ set_expand_state (GtkTreeView           *tree_view,
                       _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
                       if (_gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDABLE, TRUE))
                       /* The state may have been propagated to the container cell */
-                      if (!GAIL_IS_CONTAINER_CELL (cell))
+                      if (!GTK_IS_CONTAINER_CELL_ACCESSIBLE (cell))
                         _gtk_cell_accessible_remove_action_by_name (cell,
                                                                     "expand or contract");
                     }
@@ -3056,7 +3056,7 @@ toggle_cell_expanded (GtkCellAccessible *cell)
   AtkStateSet *stateset;
 
   parent = atk_object_get_parent (ATK_OBJECT (cell));
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
@@ -3088,7 +3088,7 @@ toggle_cell_toggled (GtkCellAccessible *cell)
   gboolean is_container_cell = FALSE;
 
   parent = atk_object_get_parent (ATK_OBJECT (cell));
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     {
       is_container_cell = TRUE;
       parent = atk_object_get_parent (parent);
@@ -3132,7 +3132,7 @@ edit_cell (GtkCellAccessible *cell)
   AtkObject *parent;
 
   parent = atk_object_get_parent (ATK_OBJECT (cell));
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
@@ -3156,7 +3156,7 @@ activate_cell (GtkCellAccessible *cell)
   AtkObject *parent;
 
   parent = atk_object_get_parent (ATK_OBJECT (cell));
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);

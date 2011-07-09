@@ -20,7 +20,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gailcontainercell.h"
+#include "gtkcontainercellaccessible.h"
 #include "gtkcellaccessible.h"
 #include "gailcellparent.h"
 
@@ -189,7 +189,7 @@ _gtk_cell_accessible_add_state (GtkCellAccessible *cell,
    * change to it also
    */
   parent = atk_object_get_parent (ATK_OBJECT (cell));
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (parent), state_type, emit_signal);
 
   return rc;
@@ -225,7 +225,7 @@ _gtk_cell_accessible_remove_state (GtkCellAccessible *cell,
   /* If the parent is a flyweight container cell, propagate the state
    * change to it also
    */
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (parent), state_type, emit_signal);
 
   return rc;
