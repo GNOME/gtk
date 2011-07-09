@@ -40,7 +40,7 @@ static AtkObject*	gail_util_get_root			(void);
 static const gchar *gail_util_get_toolkit_name		(void);
 static const gchar *gail_util_get_toolkit_version      (void);
 
-/* gailmisc/AtkMisc */
+/* AtkMisc */
 static void		gail_misc_class_init			(GailMiscClass		*klass);
 static void             gail_misc_init                          (GailMisc               *misc);
 

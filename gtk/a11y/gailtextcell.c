@@ -24,7 +24,6 @@
 #include "gailtextcell.h"
 #include "gailcontainercell.h"
 #include "gailcellparent.h"
-#include "gailmisc.h"
 
 static void      gail_text_cell_class_init		(GailTextCellClass *klass);
 static void      gail_text_cell_init			(GailTextCell	*text_cell);
@@ -92,7 +91,6 @@ static gboolean gail_text_cell_update_cache		(GailRendererCell *cell,
 gchar *gail_text_cell_property_list[] = {
   /* Set font_desc first since it resets other values if it is NULL */
   "font_desc",
-
   "attributes",
   "background-gdk",
   "editable",
@@ -576,6 +574,26 @@ add_attr (PangoAttrList  *attr_list,
   pango_attr_list_insert (attr_list, attr);
 }
 
+
+static void
+get_origins (GtkWidget *widget,
+             gint      *x_window,
+             gint      *y_window,
+             gint      *x_toplevel,
+             gint      *y_toplevel)
+{
+  GdkWindow *window;
+
+  if (GTK_IS_TREE_VIEW (widget))
+    window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (widget));
+  else
+    window = gtk_widget_get_window (widget);
+
+  gdk_window_get_origin (window, x_window, y_window);
+  window = gdk_window_get_toplevel (gtk_widget_get_window (widget));
+  gdk_window_get_origin (window, x_toplevel, y_toplevel);
+}
+
 static void      
 gail_text_cell_get_character_extents (AtkText          *text,
                                       gint             offset,
@@ -597,6 +615,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
   gfloat xalign, yalign;
   gint x_offset, y_offset, index;
   gint xpad, ypad;
+  gint x_window, y_window, x_toplevel, y_toplevel;
 
   if (!GAIL_TEXT_CELL (text)->cell_text)
     {
@@ -644,16 +663,29 @@ gail_text_cell_get_character_extents (AtkText          *text,
   pango_layout_index_to_pos (layout, index, &char_rect);
 
   gtk_cell_renderer_get_padding (gail_renderer->renderer, &xpad, &ypad);
-  gail_misc_get_extents_from_pango_rectangle (widget,
-      &char_rect,
-      x_offset + rendered_rect.x + xpad,
-      y_offset + rendered_rect.y + ypad,
-      x, y, width, height, coords);
+
+  get_origins (widget, &x_window, &y_window, &x_toplevel, &y_toplevel);
+
+  *x = (char_rect.x / PANGO_SCALE) + x_offset + rendered_rect.x + xpad + x_window;
+  *y = (char_rect.y / PANGO_SCALE) + y_offset + rendered_rect.y + ypad + y_window;
+  if (coords == ATK_XY_WINDOW)
+    {
+      *x -= x_toplevel;
+      *y -= y_toplevel;
+    }
+  else if (coords != ATK_XY_SCREEN)
+    {
+      *x = 0;
+      *y = 0;
+      *height = 0;
+      *width = 0;
+      return;
+    }
+  *height = char_rect.height / PANGO_SCALE;
+  *width = char_rect.width / PANGO_SCALE;
 
   g_free (renderer_text);
   g_object_unref (layout);
-
-  return;
 } 
 
 static gint      
@@ -673,6 +705,10 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   gfloat xalign, yalign;
   gint x_offset, y_offset, index;
   gint xpad, ypad;
+  gint x_window, y_window, x_toplevel, y_toplevel;
+  gint x_temp, y_temp;
+  gboolean ret;
+
  
   if (!GAIL_TEXT_CELL (text)->cell_text)
     return -1;
@@ -709,10 +745,31 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   layout = create_pango_layout (GAIL_TEXT_CELL (text));
 
   gtk_cell_renderer_get_padding (gail_renderer->renderer, &xpad, &ypad);
-  index = gail_misc_get_index_at_point_in_layout (widget, layout,
-        x_offset + rendered_rect.x + xpad,
-        y_offset + rendered_rect.y + ypad,
-        x, y, coords);
+
+  get_origins (widget, &x_window, &y_window, &x_toplevel, &y_toplevel);
+
+  x_temp =  x - (x_offset + rendered_rect.x + xpad) - x_window;
+  y_temp =  y - (y_offset + rendered_rect.y + ypad) - y_window;
+  if (coords == ATK_XY_WINDOW)
+    {
+      x_temp += x_toplevel;  
+      y_temp += y_toplevel;
+    }
+  else if (coords != ATK_XY_SCREEN)
+    index = -1;
+
+  ret = pango_layout_xy_to_index (layout, 
+                                  x_temp * PANGO_SCALE,
+                                  y_temp * PANGO_SCALE,
+                                  &index, NULL);
+  if (!ret)
+    {
+      if (x_temp < 0 || y_temp < 0)
+        index = 0;
+      else
+        index = -1; 
+    }
+
   g_object_unref (layout);
   if (index == -1)
     {
