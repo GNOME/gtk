@@ -28,7 +28,7 @@
 #include "gtkwidgetaccessible.h"
 #include "gtknotebookpageaccessible.h"
 
-extern GtkWidget *focus_widget;
+extern GtkWidget *_focus_widget;
 
 
 static gboolean gtk_widget_accessible_on_screen           (GtkWidget *widget);
@@ -384,7 +384,7 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
             atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
         }
 
-      if (gtk_widget_has_focus (widget) && (widget == focus_widget))
+      if (gtk_widget_has_focus (widget) && (widget == _focus_widget))
         {
           AtkObject *focus_obj;
 
