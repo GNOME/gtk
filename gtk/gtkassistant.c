@@ -865,6 +865,83 @@ assistant_sidebar_draw_cb (GtkWidget *widget,
 }
 
 static void
+on_page_notify_visibility (GtkWidget  *widget,
+                           GParamSpec *arg,
+                           gpointer    data)
+{
+  GtkAssistant *assistant = GTK_ASSISTANT (data);
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
+    {
+      update_buttons_state (assistant);
+      update_title_state (assistant);
+    }
+}
+
+static void
+assistant_remove_page_cb (GtkNotebook *notebook,
+                          GtkWidget *page,
+                          GtkAssistant *assistant)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+  GtkAssistantPage *page_info;
+  GList *page_node;
+  GList *element;
+
+  element = find_page (assistant, page);
+  if (!element)
+    return;
+
+  page_info = element->data;
+
+  /* If this is the current page, we need to switch away. */
+  if (page_info == priv->current_page)
+    {
+      if (!compute_next_step (assistant))
+        {
+          /* The best we can do at this point is probably to pick
+           * the first visible page.
+           */
+          page_node = priv->pages;
+
+          while (page_node &&
+                 !gtk_widget_get_visible (((GtkAssistantPage *) page_node->data)->page))
+            page_node = page_node->next;
+
+          if (page_node == element)
+            page_node = page_node->next;
+
+          if (page_node)
+            priv->current_page = page_node->data;
+          else
+            priv->current_page = NULL;
+        }
+    }
+
+  g_signal_handlers_disconnect_by_func (page_info->page, on_page_notify_visibility, assistant);
+
+  gtk_size_group_remove_widget (priv->title_size_group, page_info->regular_title);
+  gtk_size_group_remove_widget (priv->title_size_group, page_info->current_title);
+
+  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->regular_title);
+  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->current_title);
+
+  priv->pages = g_list_remove_link (priv->pages, element);
+  priv->visited_pages = g_slist_remove_all (priv->visited_pages, page_info);
+
+  g_free (page_info->title);
+
+  g_slice_free (GtkAssistantPage, page_info);
+  g_list_free_1 (element);
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
+    {
+      update_buttons_state (assistant);
+      update_actions_size (assistant);
+    }
+}
+
+static void
 gtk_assistant_init (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv;
@@ -902,6 +979,9 @@ gtk_assistant_init (GtkAssistant *assistant)
   gtk_notebook_set_show_border (GTK_NOTEBOOK (priv->content), FALSE);
   gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->content), FALSE);
   priv->action_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+
+  g_signal_connect (priv->content, "remove",
+                    G_CALLBACK (assistant_remove_page_cb), assistant);
 
   gtk_container_add (GTK_CONTAINER (sidebar_frame), priv->sidebar);
   gtk_box_pack_start (GTK_BOX (main_box), sidebar_frame, FALSE, FALSE, 0);
@@ -1060,78 +1140,6 @@ gtk_assistant_get_child_property (GtkContainer *container,
 }
 
 static void
-on_page_notify_visibility (GtkWidget  *widget,
-                           GParamSpec *arg,
-                           gpointer    data)
-{
-  GtkAssistant *assistant = GTK_ASSISTANT (data);
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
-    {
-      update_buttons_state (assistant);
-      update_title_state (assistant);
-    }
-}
-
-static void
-remove_page (GtkAssistant *assistant,
-             GList        *element)
-{
-  GtkAssistantPrivate *priv = assistant->priv;
-  GtkAssistantPage *page_info;
-  GList *page_node;
-
-  page_info = element->data;
-
-  /* If this is the current page, we need to switch away. */
-  if (page_info == priv->current_page)
-    {
-      if (!compute_next_step (assistant))
-        {
-          /* The best we can do at this point is probably to pick
-           * the first visible page.
-           */
-          page_node = priv->pages;
-
-          while (page_node &&
-                 !gtk_widget_get_visible (((GtkAssistantPage *) page_node->data)->page))
-            page_node = page_node->next;
-
-          if (page_node == element)
-            page_node = page_node->next;
-
-          if (page_node)
-            priv->current_page = page_node->data;
-          else
-            priv->current_page = NULL;
-        }
-    }
-
-  g_signal_handlers_disconnect_by_func (page_info->page, on_page_notify_visibility, assistant);
-
-  gtk_size_group_remove_widget (priv->title_size_group, page_info->regular_title);
-  gtk_size_group_remove_widget (priv->title_size_group, page_info->current_title);
-
-  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->regular_title);
-  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->current_title);
-
-  gtk_notebook_remove_page (GTK_NOTEBOOK (priv->content), gtk_notebook_page_num (GTK_NOTEBOOK (priv->content), page_info->page));
-  priv->pages = g_list_remove_link (priv->pages, element);
-  priv->visited_pages = g_slist_remove_all (priv->visited_pages, page_info);
-
-  g_free (page_info->title);
-
-  g_slice_free (GtkAssistantPage, page_info);
-  g_list_free_1 (element);
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
-    {
-      update_buttons_state (assistant);
-      update_actions_size (assistant);
-    }
-}
-
-static void
 gtk_assistant_destroy (GtkWidget *widget)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
@@ -1142,14 +1150,24 @@ gtk_assistant_destroy (GtkWidget *widget)
    */
   priv->current_page = NULL;
 
-  while (priv->pages)
-    remove_page (assistant, priv->pages);
+  if (priv->content)
+    {
+      GtkNotebook *notebook;
+      GtkWidget *page;
+
+      /* Remove all pages from the content notebook. */
+      notebook = (GtkNotebook *) priv->content;
+      while ((page = gtk_notebook_get_nth_page (notebook, 0)) != NULL)
+        gtk_container_remove ((GtkContainer *) notebook, page);
+
+      /* Our GtkAssistantPage list should be empty now. */
+      g_warn_if_fail (priv->pages == NULL);
+
+      priv->content = NULL;
+    }
 
   if (priv->sidebar)
     priv->sidebar = NULL;
-
-  if (priv->content)
-    priv->content = NULL;
 
   if (priv->action_area)
     priv->action_area = NULL;
@@ -1282,15 +1300,10 @@ gtk_assistant_remove (GtkContainer *container,
                       GtkWidget    *page)
 {
   GtkAssistant *assistant = (GtkAssistant*) container;
-  GList *element;
 
-  element = find_page (assistant, page);
-
-  if (element)
-    {
-      remove_page (assistant, element);
-      gtk_widget_queue_resize ((GtkWidget *) container);
-    }
+  /* Forward this removal to the content notebook. */
+  container = (GtkContainer *) assistant->priv->content;
+  gtk_container_remove (container, page);
 }
 
 /**
