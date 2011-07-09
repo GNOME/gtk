@@ -25,7 +25,7 @@
 #include <gdk/x11/gdkx.h>
 #endif
 #include "gtktreeviewaccessible.h"
-#include "gailrenderercell.h"
+#include "gtkrenderercellaccessible.h"
 #include "gtkbooleancellaccessible.h"
 #include "gailimagecell.h"
 #include "gtkcontainercellaccessible.h"
@@ -95,7 +95,7 @@ static void             traverse_cells                  (GtkTreeViewAccessible  
                                                          GtkTreePath            *tree_path,
                                                          gboolean               set_stale,
                                                          gboolean               inc_row);
-static gboolean         update_cell_value               (GailRendererCell       *renderer_cell,
+static gboolean         update_cell_value               (GtkRendererCellAccessible       *renderer_cell,
                                                          GtkTreeViewAccessible           *accessible,
                                                          gboolean               emit_change_signal);
 static void             set_cell_visibility             (GtkTreeView            *tree_view,
@@ -484,7 +484,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GList *renderer_list;
   GList *l;
   GtkContainerCellAccessible *container = NULL;
-  GailRendererCell *renderer_cell;
+  GtkRendererCellAccessible *renderer_cell;
   gboolean is_expander, is_expanded, retval;
   gboolean editable = FALSE;
   gint focus_index;
@@ -580,7 +580,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
       fake_renderer = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
       child = gail_text_cell_new ();
       cell = GTK_CELL_ACCESSIBLE (child);
-      renderer_cell = GAIL_RENDERER_CELL (child);
+      renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (child);
       renderer_cell->renderer = fake_renderer;
 
       /* Create the GtkTreeViewAccessibleCellInfo structure for this cell */
@@ -614,10 +614,10 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
             child = gail_image_cell_new ();
           else
-            child = gail_renderer_cell_new ();
+            child = _gtk_renderer_cell_accessible_new ();
 
           cell = GTK_CELL_ACCESSIBLE (child);
-          renderer_cell = GAIL_RENDERER_CELL (child);
+          renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (child);
 
           /* Create the GtkTreeViewAccessibleCellInfo for this cell */
           cell_info_new (accessible, tree_model, path, tv_col, cell);
@@ -1999,8 +1999,8 @@ model_row_changed (GtkTreeModel *tree_model,
             {
               if (path && gtk_tree_path_compare (cell_path, path) == 0)
                 {
-                  if (GAIL_IS_RENDERER_CELL (cell_info->cell))
-                    update_cell_value (GAIL_RENDERER_CELL (cell_info->cell),
+                  if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
+                    update_cell_value (GTK_RENDERER_CELL_ACCESSIBLE (cell_info->cell),
                                        accessible, TRUE);
                 }
               gtk_tree_path_free (cell_path);
@@ -2041,7 +2041,7 @@ column_visibility_changed (GObject    *object,
                 {
                   GtkTreePath *row_path;
                   row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-                  if (GAIL_IS_RENDERER_CELL (cell_info->cell))
+                  if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
                     {
                       if (gtk_tree_view_column_get_visible (tv_col))
                           set_cell_visibility (tree_view,
@@ -2346,7 +2346,7 @@ is_cell_showing (GtkTreeView  *tree_view,
  * signal when emit_change_signal is set to TRUE
  */
 static gboolean
-update_cell_value (GailRendererCell      *renderer_cell,
+update_cell_value (GtkRendererCellAccessible      *renderer_cell,
                    GtkTreeViewAccessible *accessible,
                    gboolean               emit_change_signal)
 {
@@ -2357,20 +2357,20 @@ update_cell_value (GailRendererCell      *renderer_cell,
   GtkTreeIter iter;
   GList *renderers, *cur_renderer;
   GParamSpec *spec;
-  GailRendererCellClass *gail_renderer_cell_class;
+  GtkRendererCellAccessibleClass *renderer_cell_class;
   GtkCellRendererClass *gtk_cell_renderer_class;
   GtkCellAccessible *cell;
   gchar **prop_list;
   AtkObject *parent;
   gboolean is_expander, is_expanded;
 
-  gail_renderer_cell_class = GAIL_RENDERER_CELL_GET_CLASS (renderer_cell);
+  renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_GET_CLASS (renderer_cell);
   if (renderer_cell->renderer)
     gtk_cell_renderer_class = GTK_CELL_RENDERER_GET_CLASS (renderer_cell->renderer);
   else
     gtk_cell_renderer_class = NULL;
 
-  prop_list = gail_renderer_cell_class->property_list;
+  prop_list = renderer_cell_class->property_list;
 
   cell = GTK_CELL_ACCESSIBLE (renderer_cell);
   cell_info = find_cell_info (accessible, cell, TRUE);
@@ -2452,7 +2452,7 @@ update_cell_value (GailRendererCell      *renderer_cell,
     }
   g_list_free (renderers);
 
-  return gail_renderer_cell_update_cache (renderer_cell, emit_change_signal);
+  return _gtk_renderer_cell_accessible_update_cache (renderer_cell, emit_change_signal);
 }
 
 static gint

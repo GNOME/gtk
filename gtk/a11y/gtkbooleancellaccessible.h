@@ -21,7 +21,7 @@
 #define __GTK_BOOLEAN_CELL_ACCESSIBLE_H__
 
 #include <atk/atk.h>
-#include "gailrenderercell.h"
+#include "gtkrenderercellaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -37,14 +37,14 @@ typedef struct _GtkBooleanCellAccessibleClass GtkBooleanCellAccessibleClass;
 
 struct _GtkBooleanCellAccessible
 {
-  GailRendererCell parent;
+  GtkRendererCellAccessible parent;
   gboolean cell_value;
   gboolean cell_sensitive;
 };
 
 struct _GtkBooleanCellAccessibleClass
 {
-  GailRendererCellClass parent_class;
+  GtkRendererCellAccessibleClass parent_class;
 };
 
 GType      _gtk_boolean_cell_accessible_get_type (void);

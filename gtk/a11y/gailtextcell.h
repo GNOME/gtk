@@ -21,7 +21,7 @@
 #define __GAIL_TEXT_CELL_H__
 
 #include <atk/atk.h>
-#include "gailrenderercell.h"
+#include "gtkrenderercellaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -37,7 +37,7 @@ typedef struct _GailTextCellClass             GailTextCellClass;
 
 struct _GailTextCell
 {
-  GailRendererCell parent;
+  GtkRendererCellAccessible parent;
   gchar *cell_text;
   gint caret_pos;
   gint cell_length;
@@ -45,7 +45,7 @@ struct _GailTextCell
 
 struct _GailTextCellClass
 {
-  GailRendererCellClass parent_class;
+  GtkRendererCellAccessibleClass parent_class;
 };
 
 GType      gail_text_cell_get_type (void);

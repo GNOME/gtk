@@ -30,12 +30,12 @@ static gchar *property_list[] = {
   NULL
 };
 
-G_DEFINE_TYPE (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GAIL_TYPE_RENDERER_CELL)
+G_DEFINE_TYPE (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE)
 
 
 static gboolean
-gtk_boolean_cell_accessible_update_cache (GailRendererCell *cell,
-                                          gboolean          emit_change_signal)
+gtk_boolean_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
+                                          gboolean                   emit_change_signal)
 {
   GtkBooleanCellAccessible *boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (cell);
   gboolean rv = FALSE;
@@ -75,7 +75,7 @@ gtk_boolean_cell_accessible_update_cache (GailRendererCell *cell,
 static void
 _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 {
-  GailRendererCellClass *renderer_cell_class = GAIL_RENDERER_CELL_CLASS (klass);
+  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
 
   renderer_cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
   renderer_cell_class->property_list = property_list;
@@ -91,7 +91,7 @@ _gtk_boolean_cell_accessible_new (void)
 {
   GObject *object;
   AtkObject *atk_object;
-  GailRendererCell *cell;
+  GtkRendererCellAccessible *cell;
   GtkBooleanCellAccessible *boolean_cell;
 
   object = g_object_new (GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE, NULL);
@@ -99,7 +99,7 @@ _gtk_boolean_cell_accessible_new (void)
   atk_object = ATK_OBJECT (object);
   atk_object->role = ATK_ROLE_TABLE_CELL;
 
-  cell = GAIL_RENDERER_CELL (object);
+  cell = GTK_RENDERER_CELL_ACCESSIBLE (object);
   cell->renderer = gtk_cell_renderer_toggle_new ();
   g_object_ref_sink (cell->renderer);
 

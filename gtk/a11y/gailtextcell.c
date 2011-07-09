@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 #include "../gtkpango.h"
 #include "gailtextcell.h"
-#include "gailcontainercell.h"
+#include "gtkcontainercellaccessible.h"
 #include "gailcellparent.h"
 
 static void      gail_text_cell_class_init		(GailTextCellClass *klass);
@@ -85,7 +85,7 @@ static void             add_attr                        (PangoAttrList  *attr_li
 
 /* Misc */
 
-static gboolean gail_text_cell_update_cache		(GailRendererCell *cell,
+static gboolean gail_text_cell_update_cache		(GtkRendererCellAccessible *cell,
 							 gboolean	emit_change_signal);
 
 gchar *gail_text_cell_property_list[] = {
@@ -125,7 +125,7 @@ gchar *gail_text_cell_property_list[] = {
   NULL
 };
 
-G_DEFINE_TYPE_WITH_CODE (GailTextCell, gail_text_cell, GAIL_TYPE_RENDERER_CELL,
+G_DEFINE_TYPE_WITH_CODE (GailTextCell, gail_text_cell, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void 
@@ -133,7 +133,7 @@ gail_text_cell_class_init (GailTextCellClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
-  GailRendererCellClass *renderer_cell_class = GAIL_RENDERER_CELL_CLASS (klass);
+  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
 
   renderer_cell_class->update_cache = gail_text_cell_update_cache;
   renderer_cell_class->property_list = gail_text_cell_property_list;
@@ -160,7 +160,7 @@ gail_text_cell_new (void)
 {
   GObject *object;
   AtkObject *atk_object;
-  GailRendererCell *cell;
+  GtkRendererCellAccessible *cell;
 
   object = g_object_new (GAIL_TYPE_TEXT_CELL, NULL);
 
@@ -169,7 +169,7 @@ gail_text_cell_new (void)
   atk_object = ATK_OBJECT (object);
   atk_object->role = ATK_ROLE_TABLE_CELL;
 
-  cell = GAIL_RENDERER_CELL(object);
+  cell = GTK_RENDERER_CELL_ACCESSIBLE(object);
 
   cell->renderer = gtk_cell_renderer_text_new ();
   g_object_ref_sink (cell->renderer);
@@ -200,7 +200,7 @@ gail_text_cell_get_name (AtkObject *atk_obj)
 }
 
 static gboolean
-gail_text_cell_update_cache (GailRendererCell *cell,
+gail_text_cell_update_cache (GtkRendererCellAccessible *cell,
                              gboolean         emit_change_signal)
 {
   GailTextCell *text_cell = GAIL_TEXT_CELL (cell);
@@ -451,7 +451,7 @@ get_widget (GailTextCell *text)
   AtkObject *parent;
 
   parent = atk_object_get_parent (ATK_OBJECT (text));
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     parent = atk_object_get_parent (parent);
 
   return gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
@@ -477,10 +477,10 @@ create_pango_layout (GailTextCell *text)
   gchar *renderer_text;
   gdouble scale;
   gint rise;
-  GailRendererCell *gail_renderer;
+  GtkRendererCellAccessible *gail_renderer;
   GtkCellRendererText *gtk_renderer;
 
-  gail_renderer = GAIL_RENDERER_CELL (text);
+  gail_renderer = GTK_RENDERER_CELL_ACCESSIBLE (text);
   gtk_renderer = GTK_CELL_RENDERER_TEXT (gail_renderer->renderer);
 
   g_object_get (gtk_renderer,
@@ -603,7 +603,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
                                       gint             *height,
                                       AtkCoordType     coords)
 {
-  GailRendererCell *gail_renderer; 
+  GtkRendererCellAccessible *gail_renderer; 
   GtkRequisition min_size;
   GtkCellRendererText *gtk_renderer;
   GdkRectangle rendered_rect;
@@ -627,7 +627,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
       *x = *y = *height = *width = 0;
       return;
     }
-  gail_renderer = GAIL_RENDERER_CELL (text);
+  gail_renderer = GTK_RENDERER_CELL_ACCESSIBLE (text);
   gtk_renderer = GTK_CELL_RENDERER_TEXT (gail_renderer->renderer);
   /*
    * Thus would be inconsistent with the cache
@@ -640,7 +640,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
     }
 
   parent = atk_object_get_parent (ATK_OBJECT (text));
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     parent = atk_object_get_parent (parent);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   g_return_if_fail (GAIL_IS_CELL_PARENT (parent));
@@ -695,7 +695,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
                                     AtkCoordType     coords)
 {
   AtkObject *parent;
-  GailRendererCell *gail_renderer; 
+  GtkRendererCellAccessible *gail_renderer; 
   GtkCellRendererText *gtk_renderer;
   GtkRequisition min_size;
   GtkWidget *widget;
@@ -713,7 +713,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   if (!GAIL_TEXT_CELL (text)->cell_text)
     return -1;
 
-  gail_renderer = GAIL_RENDERER_CELL (text);
+  gail_renderer = GTK_RENDERER_CELL_ACCESSIBLE (text);
   gtk_renderer = GTK_CELL_RENDERER_TEXT (gail_renderer->renderer);
   parent = atk_object_get_parent (ATK_OBJECT (text));
 
@@ -724,7 +724,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
       return -1;
     }
 
-  if (GAIL_IS_CONTAINER_CELL (parent))
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     parent = atk_object_get_parent (parent);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));

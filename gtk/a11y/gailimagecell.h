@@ -21,7 +21,7 @@
 #define __GAIL_IMAGE_CELL_H__
 
 #include <atk/atk.h>
-#include "gailrenderercell.h"
+#include "gtkrenderercellaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -37,7 +37,7 @@ typedef struct _GailImageCellClass             GailImageCellClass;
 
 struct _GailImageCell
 {
-  GailRendererCell parent;
+  GtkRendererCellAccessible parent;
 
   gchar            *image_description;
   gint             x, y;
@@ -47,7 +47,7 @@ GType gail_image_cell_get_type (void);
 
 struct _GailImageCellClass
 {
-  GailRendererCellClass parent_class;
+  GtkRendererCellAccessibleClass parent_class;
 };
 
 AtkObject *gail_image_cell_new (void);

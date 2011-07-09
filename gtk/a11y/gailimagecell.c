@@ -43,7 +43,7 @@ static void      gail_image_cell_get_image_size        (AtkImage       *image,
 
 /* Misc */
 
-static gboolean  gail_image_cell_update_cache          (GailRendererCell *cell,
+static gboolean  gail_image_cell_update_cache          (GtkRendererCellAccessible *cell,
                                                         gboolean         emit_change_signal);
 
 // FIXMEchpe static!!!
@@ -52,14 +52,14 @@ gchar *gail_image_cell_property_list[] = {
   NULL
 };
 
-G_DEFINE_TYPE_WITH_CODE (GailImageCell, gail_image_cell, GAIL_TYPE_RENDERER_CELL,
+G_DEFINE_TYPE_WITH_CODE (GailImageCell, gail_image_cell, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void 
 gail_image_cell_class_init (GailImageCellClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GailRendererCellClass *renderer_cell_class = GAIL_RENDERER_CELL_CLASS(klass);
+  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
 
   gobject_class->finalize = gail_image_cell_finalize;
 
@@ -72,7 +72,7 @@ gail_image_cell_new (void)
 {
   GObject *object;
   AtkObject *atk_object;
-  GailRendererCell *cell;
+  GtkRendererCellAccessible *cell;
 
   object = g_object_new (GAIL_TYPE_IMAGE_CELL, NULL);
 
@@ -81,7 +81,7 @@ gail_image_cell_new (void)
   atk_object = ATK_OBJECT (object);
   atk_object->role = ATK_ROLE_TABLE_CELL;
 
-  cell = GAIL_RENDERER_CELL(object);
+  cell = GTK_RENDERER_CELL_ACCESSIBLE (object);
 
   cell->renderer = gtk_cell_renderer_pixbuf_new ();
   g_object_ref_sink (cell->renderer);
@@ -105,7 +105,7 @@ gail_image_cell_finalize (GObject *object)
 }
 
 static gboolean
-gail_image_cell_update_cache (GailRendererCell *cell, 
+gail_image_cell_update_cache (GtkRendererCellAccessible *cell, 
                               gboolean         emit_change_signal)
 {
   return FALSE;
@@ -162,7 +162,7 @@ gail_image_cell_get_image_size (AtkImage *image,
   GtkCellRenderer *cell_renderer;
   GdkPixbuf *pixbuf = NULL;
 
-  cell_renderer  = GAIL_RENDERER_CELL (cell)->renderer;
+  cell_renderer  = GTK_RENDERER_CELL_ACCESSIBLE (cell)->renderer;
   g_object_get (GTK_CELL_RENDERER_PIXBUF (cell_renderer), "pixbuf", &pixbuf, NULL);
 
   if (pixbuf)
