@@ -78,7 +78,7 @@ gchar*     gtk_font_chooser_dialog_get_font_name      (GtkFontChooserDialog *fcd
 
 gboolean   gtk_font_chooser_dialog_set_font_name      (GtkFontChooserDialog *fcd,
                                                        const gchar          *fontname);
-G_CONST_RETURN gchar* 
+const gchar* 
           gtk_font_chooser_dialog_get_preview_text    (GtkFontChooserDialog *fcd);
 
 void      gtk_font_chooser_dialog_set_preview_text    (GtkFontChooserDialog *fcd,

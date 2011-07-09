@@ -280,7 +280,7 @@ gtk_font_chooser_dialog_set_font_name (GtkFontChooserDialog *fcd,
  *
  * Since: 3.2
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_chooser_dialog_get_preview_text (GtkFontChooserDialog *fcd)
 {
   GtkFontChooserDialogPrivate *priv;
