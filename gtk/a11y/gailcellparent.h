@@ -22,7 +22,7 @@
 #define __GAIL_CELL_PARENT_H__
 
 #include <atk/atk.h>
-#include "gailcell.h"
+#include "gtkcellaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -50,23 +50,23 @@ struct _GailCellParentIface
 {
   GTypeInterface parent;
   void                  ( *get_cell_extents)      (GailCellParent        *parent,
-                                                   GailCell              *cell,
+                                                   GtkCellAccessible     *cell,
                                                    gint                  *x,
                                                    gint                  *y,
                                                    gint                  *width,
                                                    gint                  *height,
                                                    AtkCoordType          coord_type);
   void                  ( *get_cell_area)         (GailCellParent        *parent,
-                                                   GailCell              *cell,
+                                                   GtkCellAccessible     *cell,
                                                    GdkRectangle          *cell_rect);
   gboolean              ( *grab_focus)            (GailCellParent        *parent,
-                                                   GailCell              *cell);
+                                                   GtkCellAccessible     *cell);
 };
 
 GType  gail_cell_parent_get_type               (void);
 
 void   gail_cell_parent_get_cell_extents       (GailCellParent        *parent,
-                                                GailCell              *cell,
+                                                GtkCellAccessible     *cell,
                                                 gint                  *x,
                                                 gint                  *y,
                                                 gint                  *width,
@@ -74,10 +74,10 @@ void   gail_cell_parent_get_cell_extents       (GailCellParent        *parent,
                                                 AtkCoordType          coord_type
 );
 void  gail_cell_parent_get_cell_area           (GailCellParent        *parent,
-                                                GailCell              *cell,
+                                                GtkCellAccessible     *cell,
                                                 GdkRectangle          *cell_rect);
 gboolean gail_cell_parent_grab_focus           (GailCellParent        *parent,
-                                                GailCell              *cell);
+                                                GtkCellAccessible     *cell);
 
 G_END_DECLS
 

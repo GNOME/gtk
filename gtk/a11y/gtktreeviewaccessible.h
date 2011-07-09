@@ -22,7 +22,6 @@
 
 #include <gtk/gtk.h>
 #include "gtkcontaineraccessible.h"
-#include "gailcell.h"
 
 G_BEGIN_DECLS
 

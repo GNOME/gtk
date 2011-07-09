@@ -54,4 +54,4 @@ AtkObject *gail_image_cell_new (void);
 
 G_END_DECLS
 
-#endif /* __GAIL_TREE_VIEW_IMAGE_CELL_H__ */
+#endif /* __GAIL_IMAGE_CELL_H__ */

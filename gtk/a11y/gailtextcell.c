@@ -151,7 +151,7 @@ gail_text_cell_init (GailTextCell *text_cell)
   text_cell->cell_text = NULL;
   text_cell->caret_pos = 0;
   text_cell->cell_length = 0;
-  atk_state_set_add_state (GAIL_CELL (text_cell)->state_set,
+  atk_state_set_add_state (GTK_CELL_ACCESSIBLE (text_cell)->state_set,
                            ATK_STATE_SINGLE_LINE);
 }
 
@@ -644,7 +644,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
     parent = atk_object_get_parent (parent);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   g_return_if_fail (GAIL_IS_CELL_PARENT (parent));
-  gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),
+  gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GTK_CELL_ACCESSIBLE (text),
                                   &rendered_rect);
 
   gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
@@ -730,7 +730,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
 
   g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), -1);
-  gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),
+  gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GTK_CELL_ACCESSIBLE (text),
                                   &rendered_rect);
 
   gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),

@@ -97,9 +97,9 @@ gail_boolean_cell_update_cache (GailRendererCell *cell,
       /* Update cell's state */
 
     if (new_boolean)
-      gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_CHECKED, emit_change_signal);
+      _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, emit_change_signal);
     else
-      gail_cell_remove_state (GAIL_CELL (cell), ATK_STATE_CHECKED, emit_change_signal);
+      _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, emit_change_signal);
     }
 
   if (boolean_cell->cell_sensitive != new_sensitive)
@@ -110,9 +110,9 @@ gail_boolean_cell_update_cache (GailRendererCell *cell,
       /* Update cell's state */
 
       if (new_sensitive)
-        gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_SENSITIVE, emit_change_signal);
+        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, emit_change_signal);
       else
-        gail_cell_remove_state (GAIL_CELL (cell), ATK_STATE_SENSITIVE, emit_change_signal);
+        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, emit_change_signal);
     }
 
   return rv;

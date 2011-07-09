@@ -45,28 +45,14 @@ gail_cell_parent_get_type (void)
   return g_define_type_id__volatile;
 }
 
-/**
- * gail_cell_parent_get_cell_extents:
- * @parent: a #GObject instance that implements GailCellParentIface
- * @cell: a #GailCell whose extents is required
- * @x: address of #gint to put x coordinate
- * @y: address of #gint to put y coordinate
- * @width: address of #gint to put width
- * @height: address of #gint to put height
- * @coord_type: specifies whether the coordinates are relative to the screen
- * or to the components top level window
- *
- * Gets the rectangle which gives the extent of the @cell.
- *
- **/
 void
-gail_cell_parent_get_cell_extents (GailCellParent *parent,
-                                   GailCell       *cell,
-                                   gint           *x,
-                                   gint           *y,
-                                   gint           *width,
-                                   gint           *height,
-                                   AtkCoordType   coord_type)
+gail_cell_parent_get_cell_extents (GailCellParent    *parent,
+                                   GtkCellAccessible *cell,
+                                   gint              *x,
+                                   gint              *y,
+                                   gint              *width,
+                                   gint              *height,
+                                   AtkCoordType       coord_type)
 {
   GailCellParentIface *iface;
 
@@ -78,19 +64,10 @@ gail_cell_parent_get_cell_extents (GailCellParent *parent,
     (iface->get_cell_extents) (parent, cell, x, y, width, height, coord_type);
 }
 
-/**
- * gail_cell_parent_get_cell_area:
- * @parent: a #GObject instance that implements GailCellParentIface
- * @cell: a #GailCell whose area is required
- * @cell_rect: address of #GdkRectangle to put the cell area
- *
- * Gets the cell area of the @cell.
- *
- **/
 void
-gail_cell_parent_get_cell_area (GailCellParent *parent,
-                                GailCell       *cell,
-                                GdkRectangle   *cell_rect)
+gail_cell_parent_get_cell_area (GailCellParent    *parent,
+                                GtkCellAccessible *cell,
+                                GdkRectangle      *cell_rect)
 {
   GailCellParentIface *iface;
 
@@ -102,17 +79,10 @@ gail_cell_parent_get_cell_area (GailCellParent *parent,
   if (iface->get_cell_area)
     (iface->get_cell_area) (parent, cell, cell_rect);
 }
-/**
- * gail_cell_parent_grab_focus:
- * @parent: a #GObject instance that implements GailCellParentIface
- * @cell: a #GailCell whose area is required
- *
- * Puts focus in the specified cell.
- *
- **/
+
 gboolean
-gail_cell_parent_grab_focus (GailCellParent *parent,
-                             GailCell       *cell)
+gail_cell_parent_grab_focus (GailCellParent    *parent,
+                             GtkCellAccessible *cell)
 {
   GailCellParentIface *iface;
 

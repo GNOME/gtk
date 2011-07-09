@@ -27,9 +27,9 @@ static void      gail_renderer_cell_init                (GailRendererCell      *
 
 static void      gail_renderer_cell_finalize            (GObject               *object);
 
-G_DEFINE_TYPE (GailRendererCell, gail_renderer_cell, GAIL_TYPE_CELL)
+G_DEFINE_TYPE (GailRendererCell, gail_renderer_cell, GTK_TYPE_CELL_ACCESSIBLE)
 
-static void 
+static void
 gail_renderer_cell_class_init (GailRendererCellClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -46,26 +46,29 @@ gail_renderer_cell_init (GailRendererCell *renderer_cell)
 }
 
 static void
-gail_renderer_cell_finalize (GObject  *object)
+gail_renderer_cell_finalize (GObject *object)
 {
   GailRendererCell *renderer_cell = GAIL_RENDERER_CELL (object);
 
   if (renderer_cell->renderer)
     g_object_unref (renderer_cell->renderer);
+
   G_OBJECT_CLASS (gail_renderer_cell_parent_class)->finalize (object);
 }
 
 gboolean
-gail_renderer_cell_update_cache (GailRendererCell *cell, 
-                                 gboolean         emit_change_signal)
+gail_renderer_cell_update_cache (GailRendererCell *cell,
+                                 gboolean          emit_change_signal)
 {
-  GailRendererCellClass *class = GAIL_RENDERER_CELL_GET_CLASS(cell);
+  GailRendererCellClass *class = GAIL_RENDERER_CELL_GET_CLASS (cell);
+
   if (class->update_cache)
-    return (class->update_cache)(cell, emit_change_signal);
+    return (class->update_cache) (cell, emit_change_signal);
+
   return FALSE;
 }
 
-AtkObject*
+AtkObject *
 gail_renderer_cell_new (void)
 {
   GObject *object;

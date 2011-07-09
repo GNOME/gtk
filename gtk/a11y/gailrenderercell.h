@@ -21,7 +21,7 @@
 #define __GAIL_RENDERER_CELL_H__
 
 #include <atk/atk.h>
-#include "gailcell.h"
+#include "gtkcellaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -32,29 +32,29 @@ G_BEGIN_DECLS
 #define GAIL_IS_RENDERER_CELL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_RENDERER_CELL))
 #define GAIL_RENDERER_CELL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_RENDERER_CELL, GailRendererCellClass))
 
-typedef struct _GailRendererCell                  GailRendererCell;
-typedef struct _GailRendererCellClass             GailRendererCellClass;
+typedef struct _GailRendererCell      GailRendererCell;
+typedef struct _GailRendererCellClass GailRendererCellClass;
 
 struct _GailRendererCell
 {
-  GailCell parent;
-  GtkCellRenderer *renderer;
+  GtkCellAccessible  parent;
+  GtkCellRenderer   *renderer;
 };
-
-GType gail_renderer_cell_get_type (void);
 
 struct _GailRendererCellClass
 {
-  GailCellClass parent_class;
+  GtkCellAccessibleClass parent_class;
   gchar **property_list;
-  gboolean (*update_cache)(GailRendererCell *cell, gboolean emit_change_signal);
+  gboolean (*update_cache) (GailRendererCell *cell,
+                            gboolean          emit_change_signal);
 };
 
-gboolean
-gail_renderer_cell_update_cache (GailRendererCell *cell, gboolean emit_change_signal);
+GType      gail_renderer_cell_get_type     (void);
 
-AtkObject *gail_renderer_cell_new (void);
+AtkObject *gail_renderer_cell_new          (void);
+gboolean   gail_renderer_cell_update_cache (GailRendererCell *cell,
+                                            gboolean          emit_change_signal);
 
 G_END_DECLS
 
-#endif /* __GAIL_TREE_VIEW_TEXT_CELL_H__ */
+#endif /* __GAIL_TEXT_CELL_H__ */

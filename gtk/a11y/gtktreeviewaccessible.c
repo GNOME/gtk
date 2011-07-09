@@ -35,7 +35,7 @@
 typedef struct _GtkTreeViewAccessibleCellInfo  GtkTreeViewAccessibleCellInfo;
 struct _GtkTreeViewAccessibleCellInfo
 {
-  GailCell *cell;
+  GtkCellAccessible *cell;
   GtkTreeRowReference *cell_row_ref;
   GtkTreeViewColumn *cell_col_ref;
   GtkTreeViewAccessible *view;
@@ -99,7 +99,7 @@ static gboolean         update_cell_value               (GailRendererCell       
                                                          GtkTreeViewAccessible           *accessible,
                                                          gboolean               emit_change_signal);
 static void             set_cell_visibility             (GtkTreeView            *tree_view,
-                                                         GailCell               *cell,
+                                                         GtkCellAccessible      *cell,
                                                          GtkTreeViewColumn      *tv_col,
                                                          GtkTreePath            *tree_path,
                                                          gboolean               emit_signal);
@@ -110,22 +110,22 @@ static void             set_expand_state                (GtkTreeView            
                                                          GtkTreeViewAccessible           *accessible,
                                                          GtkTreePath            *tree_path,
                                                          gboolean               set_on_ancestor);
-static void             set_cell_expandable             (GailCell               *cell);
-static void             add_cell_actions                (GailCell               *cell,
+static void             set_cell_expandable             (GtkCellAccessible     *cell);
+static void             add_cell_actions                (GtkCellAccessible     *cell,
                                                          gboolean               editable);
 
-static void             toggle_cell_toggled             (GailCell               *cell);
-static void             edit_cell                       (GailCell               *cell);
-static void             activate_cell                   (GailCell               *cell);
+static void             toggle_cell_toggled             (GtkCellAccessible     *cell);
+static void             edit_cell                       (GtkCellAccessible     *cell);
+static void             activate_cell                   (GtkCellAccessible     *cell);
 static void             cell_destroyed                  (gpointer               data);
 static void             cell_info_new                   (GtkTreeViewAccessible           *accessible,
                                                          GtkTreeModel           *tree_model,
                                                          GtkTreePath            *path,
                                                          GtkTreeViewColumn      *tv_col,
-                                                         GailCell               *cell);
-static GailCell*        find_cell                       (GtkTreeViewAccessible           *accessible,
+                                                         GtkCellAccessible      *cell);
+static GtkCellAccessible *find_cell                       (GtkTreeViewAccessible           *accessible,
                                                          gint                   index);
-static void             refresh_cell_index              (GailCell               *cell);
+static void             refresh_cell_index              (GtkCellAccessible     *cell);
 static void             connect_model_signals           (GtkTreeView            *view,
                                                          GtkTreeViewAccessible           *accessible);
 static void             disconnect_model_signals        (GtkTreeViewAccessible           *accessible);
@@ -150,7 +150,7 @@ static gboolean         get_path_column_from_index      (GtkTreeView            
                                                          GtkTreeViewColumn      **column);
 
 static GtkTreeViewAccessibleCellInfo* find_cell_info    (GtkTreeViewAccessible           *view,
-                                                         GailCell               *cell,
+                                                         GtkCellAccessible               *cell,
                                                          gboolean                live_only);
 static AtkObject *       get_header_from_column         (GtkTreeViewColumn      *tv_col);
 static gboolean          idle_garbage_collect_cell_data (gpointer data);
@@ -470,7 +470,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
 {
   GtkWidget *widget;
   GtkTreeViewAccessible *accessible;
-  GailCell *cell;
+  GtkCellAccessible *cell;
   GtkTreeView *tree_view;
   GtkTreeModel *tree_model;
   GtkCellRenderer *renderer;
@@ -550,12 +550,12 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
    */
   if (renderer_list && renderer_list->next)
     {
-      GailCell *container_cell;
+      GtkCellAccessible *container_cell;
 
       container = gail_container_cell_new ();
 
-      container_cell = GAIL_CELL (container);
-      gail_cell_initialise (container_cell, widget, ATK_OBJECT (accessible), i);
+      container_cell = GTK_CELL_ACCESSIBLE (container);
+      _gtk_cell_accessible_initialise (container_cell, widget, ATK_OBJECT (accessible), i);
 
       /* The GtkTreeViewAccessibleCellInfo structure for the container will
        * be before the ones for the cells so that the first one we find for
@@ -579,14 +579,14 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
 
       fake_renderer = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
       child = gail_text_cell_new ();
-      cell = GAIL_CELL (child);
+      cell = GTK_CELL_ACCESSIBLE (child);
       renderer_cell = GAIL_RENDERER_CELL (child);
       renderer_cell->renderer = fake_renderer;
 
       /* Create the GtkTreeViewAccessibleCellInfo structure for this cell */
       cell_info_new (accessible, tree_model, path, tv_col, cell);
 
-      gail_cell_initialise (cell, widget, parent, i);
+      _gtk_cell_accessible_initialise (cell, widget, parent, i);
 
       cell->refresh_index = refresh_cell_index;
 
@@ -595,7 +595,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
         {
           set_cell_expandable (cell);
           if (is_expanded)
-            gail_cell_add_state (cell, ATK_STATE_EXPANDED, FALSE);
+            _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, FALSE);
         }
     }
   else
@@ -616,13 +616,13 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           else
             child = gail_renderer_cell_new ();
 
-          cell = GAIL_CELL (child);
+          cell = GTK_CELL_ACCESSIBLE (child);
           renderer_cell = GAIL_RENDERER_CELL (child);
 
           /* Create the GtkTreeViewAccessibleCellInfo for this cell */
           cell_info_new (accessible, tree_model, path, tv_col, cell);
 
-          gail_cell_initialise (cell, widget, parent, i);
+          _gtk_cell_accessible_initialise (cell, widget, parent, i);
 
           if (container)
             gail_container_cell_add_child (container, cell);
@@ -639,7 +639,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
             {
               set_cell_expandable (cell);
               if (is_expanded)
-                gail_cell_add_state (cell, ATK_STATE_EXPANDED, FALSE);
+                _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, FALSE);
             }
 
           /* If the column is visible, sets the cell's state */
@@ -650,13 +650,13 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           selection = gtk_tree_view_get_selection (tree_view);
 
           if (gtk_tree_selection_path_is_selected (selection, path))
-            gail_cell_add_state (cell, ATK_STATE_SELECTED, FALSE);
+            _gtk_cell_accessible_add_state (cell, ATK_STATE_SELECTED, FALSE);
 
-          gail_cell_add_state (cell, ATK_STATE_FOCUSABLE, FALSE);
+          _gtk_cell_accessible_add_state (cell, ATK_STATE_FOCUSABLE, FALSE);
           if (focus_index == i)
             {
               accessible->focus_cell = g_object_ref (cell);
-              gail_cell_add_state (cell, ATK_STATE_FOCUSED, FALSE);
+              _gtk_cell_accessible_add_state (cell, ATK_STATE_FOCUSED, FALSE);
               g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
             }
         }
@@ -1332,9 +1332,9 @@ static void atk_selection_interface_init (AtkSelectionIface *iface)
 #define EXTRA_EXPANDER_PADDING 4
 
 static void
-gtk_tree_view_accessible_get_cell_area (GailCellParent *parent,
-                                        GailCell       *cell,
-                                        GdkRectangle   *cell_rect)
+gtk_tree_view_accessible_get_cell_area (GailCellParent    *parent,
+                                        GtkCellAccessible *cell,
+                                        GdkRectangle      *cell_rect)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -1342,7 +1342,7 @@ gtk_tree_view_accessible_get_cell_area (GailCellParent *parent,
   GtkTreePath *path;
   AtkObject *parent_cell;
   GtkTreeViewAccessibleCellInfo *cell_info;
-  GailCell *top_cell;
+  GtkCellAccessible *top_cell;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   if (widget == NULL)
@@ -1351,14 +1351,9 @@ gtk_tree_view_accessible_get_cell_area (GailCellParent *parent,
   tree_view = GTK_TREE_VIEW (widget);
   parent_cell = atk_object_get_parent (ATK_OBJECT (cell));
   if (parent_cell != ATK_OBJECT (parent))
-    {
-      /* GailCell is in a GailContainerCell */
-      top_cell = GAIL_CELL (parent_cell);
-    }
+    top_cell = GTK_CELL_ACCESSIBLE (parent_cell);
   else
-    {
-      top_cell = cell;
-    }
+    top_cell = cell;
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), top_cell, TRUE);
   if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
     return;
@@ -1418,13 +1413,13 @@ gtk_tree_view_accessible_get_cell_area (GailCellParent *parent,
 }
 
 static void
-gtk_tree_view_accessible_get_cell_extents (GailCellParent *parent,
-                                           GailCell       *cell,
-                                           gint           *x,
-                                           gint           *y,
-                                           gint           *width,
-                                           gint           *height,
-                                           AtkCoordType    coord_type)
+gtk_tree_view_accessible_get_cell_extents (GailCellParent    *parent,
+                                           GtkCellAccessible *cell,
+                                           gint              *x,
+                                           gint              *y,
+                                           gint              *width,
+                                           gint              *height,
+                                           AtkCoordType       coord_type)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -1468,8 +1463,8 @@ gtk_tree_view_accessible_get_cell_extents (GailCellParent *parent,
 }
 
 static gboolean
-gtk_tree_view_accessible_grab_cell_focus (GailCellParent *parent,
-                                          GailCell       *cell)
+gtk_tree_view_accessible_grab_cell_focus (GailCellParent    *parent,
+                                          GtkCellAccessible *cell)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -1496,7 +1491,7 @@ gtk_tree_view_accessible_grab_cell_focus (GailCellParent *parent,
   tv_col = cell_info->cell_col_ref;
   if (parent_cell != ATK_OBJECT (parent))
     {
-      /* GailCell is in a GailContainerCell.
+      /* GtkCellAccessible is in a GailContainerCell.
        * The GtkTreeViewColumn has multiple renderers;
        * find the corresponding one.
        */
@@ -1716,11 +1711,11 @@ selection_changed_cb (GtkTreeSelection *selection,
     {
       if (info->in_use)
         {
-          gail_cell_remove_state (info->cell, ATK_STATE_SELECTED, TRUE);
+          _gtk_cell_accessible_remove_state (info->cell, ATK_STATE_SELECTED, TRUE);
 
           path = gtk_tree_row_reference_get_path (info->cell_row_ref);
           if (path && gtk_tree_selection_path_is_selected (tree_selection, path))
-            gail_cell_add_state (info->cell, ATK_STATE_SELECTED, TRUE);
+            _gtk_cell_accessible_add_state (info->cell, ATK_STATE_SELECTED, TRUE);
           gtk_tree_path_free (path);
         }
     }
@@ -1891,16 +1886,16 @@ idle_cursor_changed (gpointer data)
         {
           if (accessible->focus_cell)
             {
-              gail_cell_remove_state (GAIL_CELL (accessible->focus_cell), ATK_STATE_ACTIVE, FALSE);
-              gail_cell_remove_state (GAIL_CELL (accessible->focus_cell), ATK_STATE_FOCUSED, FALSE);
+              _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (accessible->focus_cell), ATK_STATE_ACTIVE, FALSE);
+              _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (accessible->focus_cell), ATK_STATE_FOCUSED, FALSE);
               g_object_unref (accessible->focus_cell);
               accessible->focus_cell = cell;
             }
 
           if (gtk_widget_has_focus (widget))
             {
-              gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_ACTIVE, FALSE);
-              gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_FOCUSED, FALSE);
+              _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_ACTIVE, FALSE);
+              _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_FOCUSED, FALSE);
             }
 
           g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
@@ -1949,9 +1944,9 @@ focus_in (GtkWidget *widget)
             {
               if (!atk_state_set_contains_state (state_set, ATK_STATE_FOCUSED))
                 {
-                  gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_ACTIVE, FALSE);
+                  _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_ACTIVE, FALSE);
                   accessible->focus_cell = cell;
-                  gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_FOCUSED, FALSE);
+                  _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_FOCUSED, FALSE);
                   g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
                 }
               g_object_unref (state_set);
@@ -1968,12 +1963,12 @@ focus_out (GtkWidget *widget)
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (widget));
   if (accessible->focus_cell)
-  {
-    gail_cell_remove_state (GAIL_CELL (accessible->focus_cell), ATK_STATE_ACTIVE, FALSE);
-    gail_cell_remove_state (GAIL_CELL (accessible->focus_cell), ATK_STATE_FOCUSED, FALSE);
-    g_object_unref (accessible->focus_cell);
-    accessible->focus_cell = NULL;
-  }
+    {
+      _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (accessible->focus_cell), ATK_STATE_ACTIVE, FALSE);
+      _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (accessible->focus_cell), ATK_STATE_FOCUSED, FALSE);
+      g_object_unref (accessible->focus_cell);
+      accessible->focus_cell = NULL;
+    }
   return FALSE;
 }
 
@@ -2054,8 +2049,8 @@ column_visibility_changed (GObject    *object,
                                                tv_col, row_path, FALSE);
                       else
                         {
-                          gail_cell_remove_state (cell_info->cell, ATK_STATE_VISIBLE, TRUE);
-                          gail_cell_remove_state (cell_info->cell, ATK_STATE_SHOWING, TRUE);
+                          _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_VISIBLE, TRUE);
+                          _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_SHOWING, TRUE);
                         }
                     }
                   gtk_tree_path_free (row_path);
@@ -2272,7 +2267,7 @@ model_rows_reordered (GtkTreeModel *tree_model,
 
 static void
 set_cell_visibility (GtkTreeView       *tree_view,
-                     GailCell          *cell,
+                     GtkCellAccessible *cell,
                      GtkTreeViewColumn *tv_col,
                      GtkTreePath       *tree_path,
                      gboolean           emit_signal)
@@ -2290,16 +2285,16 @@ set_cell_visibility (GtkTreeView       *tree_view,
       /* The height will be zero for a cell for which an antecedent
        * is not expanded
        */
-      gail_cell_add_state (cell, ATK_STATE_VISIBLE, emit_signal);
+      _gtk_cell_accessible_add_state (cell, ATK_STATE_VISIBLE, emit_signal);
       if (is_cell_showing (tree_view, &cell_rect))
-        gail_cell_add_state (cell, ATK_STATE_SHOWING, emit_signal);
+        _gtk_cell_accessible_add_state (cell, ATK_STATE_SHOWING, emit_signal);
       else
-        gail_cell_remove_state (cell, ATK_STATE_SHOWING, emit_signal);
+        _gtk_cell_accessible_remove_state (cell, ATK_STATE_SHOWING, emit_signal);
     }
   else
     {
-      gail_cell_remove_state (cell, ATK_STATE_VISIBLE, emit_signal);
-      gail_cell_remove_state (cell, ATK_STATE_SHOWING, emit_signal);
+      _gtk_cell_accessible_remove_state (cell, ATK_STATE_VISIBLE, emit_signal);
+      _gtk_cell_accessible_remove_state (cell, ATK_STATE_SHOWING, emit_signal);
     }
 }
 
@@ -2364,7 +2359,7 @@ update_cell_value (GailRendererCell      *renderer_cell,
   GParamSpec *spec;
   GailRendererCellClass *gail_renderer_cell_class;
   GtkCellRendererClass *gtk_cell_renderer_class;
-  GailCell *cell;
+  GtkCellAccessible *cell;
   gchar **prop_list;
   AtkObject *parent;
   gboolean is_expander, is_expanded;
@@ -2377,7 +2372,7 @@ update_cell_value (GailRendererCell      *renderer_cell,
 
   prop_list = gail_renderer_cell_class->property_list;
 
-  cell = GAIL_CELL (renderer_cell);
+  cell = GTK_CELL_ACCESSIBLE (renderer_cell);
   cell_info = find_cell_info (accessible, cell, TRUE);
   if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
     return FALSE;
@@ -2754,7 +2749,7 @@ clean_cell_info (GtkTreeViewAccessible         *accessible,
     {
       obj = G_OBJECT (cell_info->cell);
 
-      gail_cell_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
+      _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
       g_object_weak_unref (obj, (GWeakNotify) cell_destroyed, cell_info);
       cell_info->in_use = FALSE;
       if (!accessible->garbage_collection_pending)
@@ -2924,7 +2919,7 @@ traverse_cells (GtkTreeViewAccessible *accessible,
           if (act_on_cell && cell_info->in_use)
             {
               if (set_stale)
-                gail_cell_add_state (cell_info->cell, ATK_STATE_STALE, TRUE);
+                _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_STALE, TRUE);
               set_cell_visibility (GTK_TREE_VIEW (widget),
                                    cell_info->cell,
                                    cell_info->cell_col_ref,
@@ -2972,7 +2967,7 @@ set_expand_state (GtkTreeView           *tree_view,
 
           if (cell_path != NULL)
             {
-              GailCell *cell = GAIL_CELL (cell_info->cell);
+              GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (cell_info->cell);
 
               expander_tv = gtk_tree_view_get_expander_column (tree_view);
 
@@ -3007,18 +3002,18 @@ set_expand_state (GtkTreeView           *tree_view,
                       set_cell_expandable (cell);
 
                       if (gtk_tree_view_row_expanded (tree_view, cell_path))
-                        gail_cell_add_state (cell, ATK_STATE_EXPANDED, TRUE);
+                        _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, TRUE);
                       else
-                        gail_cell_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
+                        _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
                     }
                   else
                     {
-                      gail_cell_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
-                      if (gail_cell_remove_state (cell, ATK_STATE_EXPANDABLE, TRUE))
+                      _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
+                      if (_gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDABLE, TRUE))
                       /* The state may have been propagated to the container cell */
                       if (!GAIL_IS_CONTAINER_CELL (cell))
-                        gail_cell_remove_action_by_name (cell,
-                                                         "expand or contract");
+                        _gtk_cell_accessible_remove_action_by_name (cell,
+                                                                    "expand or contract");
                     }
 
                   /* We assume that each cell in the cache once and
@@ -3035,24 +3030,24 @@ set_expand_state (GtkTreeView           *tree_view,
 }
 
 static void
-add_cell_actions (GailCell *cell,
-                  gboolean  editable)
+add_cell_actions (GtkCellAccessible *cell,
+                  gboolean           editable)
 {
   if (GAIL_IS_BOOLEAN_CELL (cell))
-    gail_cell_add_action (cell,
-                          "toggle", "toggles the cell",
-                          NULL, toggle_cell_toggled);
+    _gtk_cell_accessible_add_action (cell,
+                                     "toggle", "toggles the cell",
+                                     NULL, toggle_cell_toggled);
   if (editable)
-    gail_cell_add_action (cell,
-                          "edit", "creates a widget in which the contents of the cell can be edited",
-                          NULL, edit_cell);
-  gail_cell_add_action (cell,
-                        "activate", "activate the cell",
-                        NULL, activate_cell);
+    _gtk_cell_accessible_add_action (cell,
+                                     "edit", "creates a widget in which the contents of the cell can be edited",
+                                     NULL, edit_cell);
+  _gtk_cell_accessible_add_action (cell,
+                                   "activate", "activate the cell",
+                                   NULL, activate_cell);
 }
 
 static void
-toggle_cell_expanded (GailCell *cell)
+toggle_cell_expanded (GtkCellAccessible *cell)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
   GtkTreeView *tree_view;
@@ -3083,7 +3078,7 @@ toggle_cell_expanded (GailCell *cell)
 }
 
 static void
-toggle_cell_toggled (GailCell *cell)
+toggle_cell_toggled (GtkCellAccessible *cell)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
   GtkTreePath *path;
@@ -3129,7 +3124,7 @@ toggle_cell_toggled (GailCell *cell)
 }
 
 static void
-edit_cell (GailCell *cell)
+edit_cell (GtkCellAccessible *cell)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
   GtkTreeView *tree_view;
@@ -3153,7 +3148,7 @@ edit_cell (GailCell *cell)
 }
 
 static void
-activate_cell (GailCell *cell)
+activate_cell (GtkCellAccessible *cell)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
   GtkTreeView *tree_view;
@@ -3218,7 +3213,7 @@ cell_info_new (GtkTreeViewAccessible *accessible,
                GtkTreeModel          *tree_model,
                GtkTreePath           *path,
                GtkTreeViewColumn     *tv_col,
-               GailCell              *cell)
+               GtkCellAccessible     *cell)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
 
@@ -3235,7 +3230,7 @@ cell_info_new (GtkTreeViewAccessible *accessible,
   g_object_weak_ref (G_OBJECT (cell), (GWeakNotify) cell_destroyed, cell_info);
 }
 
-static GailCell *
+static GtkCellAccessible *
 find_cell (GtkTreeViewAccessible *accessible,
            gint                   index)
 {
@@ -3249,7 +3244,7 @@ find_cell (GtkTreeViewAccessible *accessible,
 }
 
 static void
-refresh_cell_index (GailCell *cell)
+refresh_cell_index (GtkCellAccessible *cell)
 {
   GtkTreeViewAccessibleCellInfo *info;
   AtkObject *parent;
@@ -3645,18 +3640,18 @@ get_path_column_from_index (GtkTreeView        *tree_view,
 }
 
 static void
-set_cell_expandable (GailCell *cell)
+set_cell_expandable (GtkCellAccessible *cell)
 {
-  if (gail_cell_add_state (cell, ATK_STATE_EXPANDABLE, FALSE))
-    gail_cell_add_action (cell,
-                          "expand or contract",
-                          "expands or contracts the row in the tree view containing this cell",
-                          NULL, toggle_cell_expanded);
+  if (_gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDABLE, FALSE))
+    _gtk_cell_accessible_add_action (cell,
+                                     "expand or contract",
+                                     "expands or contracts the row in the tree view containing this cell",
+                                     NULL, toggle_cell_expanded);
 }
 
 static GtkTreeViewAccessibleCellInfo *
 find_cell_info (GtkTreeViewAccessible *accessible,
-                GailCell              *cell,
+                GtkCellAccessible     *cell,
                 gboolean               live_only)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;

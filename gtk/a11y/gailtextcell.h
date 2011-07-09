@@ -43,15 +43,14 @@ struct _GailTextCell
   gint cell_length;
 };
 
-GType gail_text_cell_get_type (void);
-
 struct _GailTextCellClass
 {
   GailRendererCellClass parent_class;
 };
 
-AtkObject *gail_text_cell_new (void);
+GType      gail_text_cell_get_type (void);
+AtkObject *gail_text_cell_new      (void);
 
 G_END_DECLS
 
-#endif /* __GAIL_TREE_VIEW_TEXT_CELL_H__ */
+#endif /* __GAIL_TEXT_CELL_H__ */

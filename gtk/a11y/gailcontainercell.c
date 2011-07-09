@@ -27,17 +27,17 @@ static void       gail_container_cell_init                (GailContainerCell   *
 static void       gail_container_cell_finalize            (GObject             *obj);
 
 
-static void       _gail_container_cell_recompute_child_indices 
+static void       _gail_container_cell_recompute_child_indices
                                                           (GailContainerCell *container);
 
-static void       gail_container_cell_refresh_child_index (GailCell *cell);
+static void       gail_container_cell_refresh_child_index (GtkCellAccessible *cell);
 
 static gint       gail_container_cell_get_n_children      (AtkObject *obj);
 
 static AtkObject* gail_container_cell_ref_child           (AtkObject *obj,
                                                            gint      child);
 
-G_DEFINE_TYPE (GailContainerCell, gail_container_cell, GAIL_TYPE_CELL)
+G_DEFINE_TYPE (GailContainerCell, gail_container_cell, GTK_TYPE_CELL_ACCESSIBLE)
 
 static void 
 gail_container_cell_class_init (GailContainerCellClass *klass)
@@ -93,65 +93,57 @@ gail_container_cell_finalize (GObject *obj)
   G_OBJECT_CLASS (gail_container_cell_parent_class)->finalize (obj);
 }
 
-
 void
 gail_container_cell_add_child (GailContainerCell *container,
-			       GailCell *child)
+                               GtkCellAccessible *child)
 {
   gint child_index;
 
-  g_return_if_fail (GAIL_IS_CONTAINER_CELL(container));
-  g_return_if_fail (GAIL_IS_CELL(child));
+  g_return_if_fail (GAIL_IS_CONTAINER_CELL (container));
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (child));
 
   child_index = container->NChildren++;
-  container->children = g_list_append (container->children, (gpointer) child);
+  container->children = g_list_append (container->children, child);
   child->index = child_index;
   atk_object_set_parent (ATK_OBJECT (child), ATK_OBJECT (container));
   child->refresh_index = gail_container_cell_refresh_child_index;
 }
 
-
 void
 gail_container_cell_remove_child (GailContainerCell *container,
-				  GailCell *child)
+                                  GtkCellAccessible *child)
 {
-  g_return_if_fail (GAIL_IS_CONTAINER_CELL(container));
-  g_return_if_fail (GAIL_IS_CELL(child));
+  g_return_if_fail (GAIL_IS_CONTAINER_CELL (container));
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (child));
   g_return_if_fail (container->NChildren > 0);
 
-  container->children = g_list_remove (container->children, (gpointer) child);
+  container->children = g_list_remove (container->children, child);
   _gail_container_cell_recompute_child_indices (container);
   container->NChildren--;
 }
-
 
 static void
 _gail_container_cell_recompute_child_indices (GailContainerCell *container)
 {
   gint cur_index = 0;
-  GList *temp_list;
+  GList *l;
 
-  g_return_if_fail (GAIL_IS_CONTAINER_CELL(container));
-
-  for (temp_list = container->children; temp_list; temp_list = temp_list->next)
+  for (l = container->children; l; l = l->next)
     {
-      GAIL_CELL(temp_list->data)->index = cur_index;
+      GTK_CELL_ACCESSIBLE (l->data)->index = cur_index;
       cur_index++;
     }
 }
 
-
 static void
-gail_container_cell_refresh_child_index (GailCell *cell)
+gail_container_cell_refresh_child_index (GtkCellAccessible *cell)
 {
   GailContainerCell *container;
-  g_return_if_fail (GAIL_IS_CELL(cell));
-  container = GAIL_CONTAINER_CELL (atk_object_get_parent (ATK_OBJECT(cell)));
-  g_return_if_fail (GAIL_IS_CONTAINER_CELL (container));
+
+  container = GAIL_CONTAINER_CELL (atk_object_get_parent (ATK_OBJECT (cell)));
+
   _gail_container_cell_recompute_child_indices (container);
 }
-
-
 
 static gint
 gail_container_cell_get_n_children (AtkObject *obj)
@@ -161,7 +153,6 @@ gail_container_cell_get_n_children (AtkObject *obj)
   cell = GAIL_CONTAINER_CELL(obj);
   return cell->NChildren;
 }
-
 
 static AtkObject *
 gail_container_cell_ref_child (AtkObject *obj,

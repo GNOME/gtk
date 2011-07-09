@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -21,7 +21,7 @@
 #define __GAIL_CONTAINER_CELL_H__
 
 #include <atk/atk.h>
-#include "gailcell.h"
+#include "gtkcellaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -37,29 +37,26 @@ typedef struct _GailContainerCellClass             GailContainerCellClass;
 
 struct _GailContainerCell
 {
-  GailCell parent;
+  GtkCellAccessible parent;
   GList *children;
   gint NChildren;
 };
 
-GType gail_container_cell_get_type (void);
-
 struct _GailContainerCellClass
 {
-  GailCellClass parent_class;
+  GtkCellAccessibleClass parent_class;
 };
 
-GailContainerCell *
-gail_container_cell_new (void);
+GType gail_container_cell_get_type (void);
 
-void
-gail_container_cell_add_child (GailContainerCell *container,
-			       GailCell *child);
+GailContainerCell * gail_container_cell_new          (void);
 
-void
-gail_container_cell_remove_child (GailContainerCell *container,
-				  GailCell *child);
+void                gail_container_cell_add_child    (GailContainerCell *container,
+                                                      GtkCellAccessible *child);
+
+void                gail_container_cell_remove_child (GailContainerCell *container,
+                                                      GtkCellAccessible *child);
 
 G_END_DECLS
 
-#endif /* __GAIL_TREE_VIEW_TEXT_CELL_H__ */
+#endif /* __GAIL_CONTAINER_CELL_H__ */
