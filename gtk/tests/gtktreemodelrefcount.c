@@ -217,7 +217,8 @@ gtk_tree_model_ref_count_dump (GtkTreeModelRefCount *ref_model)
 static gboolean
 check_iter (GtkTreeModelRefCount *ref_model,
             GtkTreeIter          *iter,
-            gint                  expected_ref_count)
+            gint                  expected_ref_count,
+            gboolean              may_assert)
 {
   NodeInfo *info;
 
@@ -227,8 +228,15 @@ check_iter (GtkTreeModelRefCount *ref_model,
       if (expected_ref_count == 0)
         return TRUE;
       else
-        return FALSE;
+        {
+          if (may_assert)
+            g_error ("Expected ref count %d, but node has never been referenced.\n", expected_ref_count);
+          return FALSE;
+        }
     }
+
+  if (may_assert)
+    g_assert_cmpint (expected_ref_count, ==, info->ref_count);
 
   return expected_ref_count == info->ref_count;
 }
@@ -237,7 +245,8 @@ gboolean
 gtk_tree_model_ref_count_check_level (GtkTreeModelRefCount *ref_model,
                                       GtkTreeIter          *parent,
                                       gint                  expected_ref_count,
-                                      gboolean              recurse)
+                                      gboolean              recurse,
+                                      gboolean              may_assert)
 {
   GtkTreeIter iter;
 
@@ -247,7 +256,7 @@ gtk_tree_model_ref_count_check_level (GtkTreeModelRefCount *ref_model,
 
   do
     {
-      if (!check_iter (ref_model, &iter, expected_ref_count))
+      if (!check_iter (ref_model, &iter, expected_ref_count, may_assert))
         return FALSE;
 
       if (recurse &&
@@ -255,7 +264,7 @@ gtk_tree_model_ref_count_check_level (GtkTreeModelRefCount *ref_model,
         {
           if (!gtk_tree_model_ref_count_check_level (ref_model, &iter,
                                                      expected_ref_count,
-                                                     recurse))
+                                                     recurse, may_assert))
             return FALSE;
         }
     }
@@ -267,7 +276,8 @@ gtk_tree_model_ref_count_check_level (GtkTreeModelRefCount *ref_model,
 gboolean
 gtk_tree_model_ref_count_check_node (GtkTreeModelRefCount *ref_model,
                                      GtkTreeIter          *iter,
-                                     gint                  expected_ref_count)
+                                     gint                  expected_ref_count,
+                                     gboolean              may_assert)
 {
-  return check_iter (ref_model, iter, expected_ref_count);
+  return check_iter (ref_model, iter, expected_ref_count, may_assert);
 }
