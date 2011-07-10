@@ -21,10 +21,10 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gailcellparent.h"
+#include "gtkcellaccessibleparent.h"
 
 GType
-gail_cell_parent_get_type (void)
+_gtk_cell_accessible_parent_get_type (void)
 {
   static volatile gsize g_define_type_id__volatile = 0;
 
@@ -32,8 +32,8 @@ gail_cell_parent_get_type (void)
     {
       GType g_define_type_id =
         g_type_register_static_simple (G_TYPE_INTERFACE,
-                                       "GailCellParent",
-                                       sizeof (GailCellParentIface),
+                                       "GtkCellAccessibleParent",
+                                       sizeof (GtkCellAccessibleParentIface),
                                        NULL,
                                        0,
                                        NULL,
@@ -46,49 +46,49 @@ gail_cell_parent_get_type (void)
 }
 
 void
-gail_cell_parent_get_cell_extents (GailCellParent    *parent,
-                                   GtkCellAccessible *cell,
-                                   gint              *x,
-                                   gint              *y,
-                                   gint              *width,
-                                   gint              *height,
-                                   AtkCoordType       coord_type)
+_gtk_cell_accessible_parent_get_cell_extents (GtkCellAccessibleParent *parent,
+                                              GtkCellAccessible       *cell,
+                                              gint                    *x,
+                                              gint                    *y,
+                                              gint                    *width,
+                                              gint                    *height,
+                                              AtkCoordType             coord_type)
 {
-  GailCellParentIface *iface;
+  GtkCellAccessibleParentIface *iface;
 
-  g_return_if_fail (GAIL_IS_CELL_PARENT (parent));
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
 
-  iface = GAIL_CELL_PARENT_GET_IFACE (parent);
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
 
   if (iface->get_cell_extents)
     (iface->get_cell_extents) (parent, cell, x, y, width, height, coord_type);
 }
 
 void
-gail_cell_parent_get_cell_area (GailCellParent    *parent,
-                                GtkCellAccessible *cell,
-                                GdkRectangle      *cell_rect)
+_gtk_cell_accessible_parent_get_cell_area (GtkCellAccessibleParent *parent,
+                                           GtkCellAccessible       *cell,
+                                           GdkRectangle            *cell_rect)
 {
-  GailCellParentIface *iface;
+  GtkCellAccessibleParentIface *iface;
 
-  g_return_if_fail (GAIL_IS_CELL_PARENT (parent));
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
   g_return_if_fail (cell_rect);
 
-  iface = GAIL_CELL_PARENT_GET_IFACE (parent);
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
 
   if (iface->get_cell_area)
     (iface->get_cell_area) (parent, cell, cell_rect);
 }
 
 gboolean
-gail_cell_parent_grab_focus (GailCellParent    *parent,
-                             GtkCellAccessible *cell)
+_gtk_cell_accessible_parent_grab_focus (GtkCellAccessibleParent *parent,
+                                        GtkCellAccessible       *cell)
 {
-  GailCellParentIface *iface;
+  GtkCellAccessibleParentIface *iface;
 
-  g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), FALSE);
+  g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent), FALSE);
 
-  iface = GAIL_CELL_PARENT_GET_IFACE (parent);
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
 
   if (iface->grab_focus)
     return (iface->grab_focus) (parent, cell);

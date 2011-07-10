@@ -23,7 +23,7 @@
 #include "../gtkpango.h"
 #include "gtktextcellaccessible.h"
 #include "gtkcontainercellaccessible.h"
-#include "gailcellparent.h"
+#include "gtkcellaccessibleparent.h"
 
 static const gchar* gtk_text_cell_accessible_get_name    (AtkObject      *atk_obj);
 
@@ -611,9 +611,10 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     parent = atk_object_get_parent (parent);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
-  g_return_if_fail (GAIL_IS_CELL_PARENT (parent));
-  gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GTK_CELL_ACCESSIBLE (text),
-                                  &rendered_rect);
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
+  _gtk_cell_accessible_parent_get_cell_area (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                             GTK_CELL_ACCESSIBLE (text),
+                                             &rendered_rect);
 
   gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
                                         widget,
@@ -696,9 +697,10 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
 
-  g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), -1);
-  gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GTK_CELL_ACCESSIBLE (text),
-                                  &rendered_rect);
+  g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent), -1);
+  _gtk_cell_accessible_parent_get_cell_area (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                             GTK_CELL_ACCESSIBLE (text),
+                                             &rendered_rect);
 
   gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
                                         widget,

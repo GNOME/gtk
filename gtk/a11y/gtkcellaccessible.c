@@ -22,7 +22,7 @@
 #include <gtk/gtk.h>
 #include "gtkcontainercellaccessible.h"
 #include "gtkcellaccessible.h"
-#include "gailcellparent.h"
+#include "gtkcellaccessibleparent.h"
 
 typedef struct _ActionInfo ActionInfo;
 struct _ActionInfo {
@@ -399,8 +399,9 @@ gtk_cell_accessible_get_extents (AtkComponent *component,
   cell = GTK_CELL_ACCESSIBLE (component);
   parent = gtk_widget_get_accessible (cell->widget);
 
-  gail_cell_parent_get_cell_extents (GAIL_CELL_PARENT (parent),
-                                     cell, x, y, width, height, coord_type);
+  _gtk_cell_accessible_parent_get_cell_extents (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                                cell,
+                                                x, y, width, height, coord_type);
 }
 
 static gboolean
@@ -412,7 +413,7 @@ gtk_cell_accessible_grab_focus (AtkComponent *component)
   cell = GTK_CELL_ACCESSIBLE (component);
   parent = gtk_widget_get_accessible (cell->widget);
 
-  return gail_cell_parent_grab_focus (GAIL_CELL_PARENT (parent), cell);
+  return _gtk_cell_accessible_parent_grab_focus (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
 
 static void

@@ -30,7 +30,7 @@
 #include "gtkimagecellaccessible.h"
 #include "gtkcontainercellaccessible.h"
 #include "gtktextcellaccessible.h"
-#include "gailcellparent.h"
+#include "gtkcellaccessibleparent.h"
 
 typedef struct _GtkTreeViewAccessibleCellInfo  GtkTreeViewAccessibleCellInfo;
 struct _GtkTreeViewAccessibleCellInfo
@@ -156,16 +156,16 @@ static AtkObject *       get_header_from_column         (GtkTreeViewColumn      
 static gboolean          idle_garbage_collect_cell_data (gpointer data);
 
 
-static void atk_table_interface_init        (AtkTableIface       *iface);
-static void atk_selection_interface_init    (AtkSelectionIface   *iface);
-static void atk_component_interface_init    (AtkComponentIface   *iface);
-static void gail_cell_parent_interface_init (GailCellParentIface *iface);
+static void atk_table_interface_init                  (AtkTableIface                *iface);
+static void atk_selection_interface_init              (AtkSelectionIface            *iface);
+static void atk_component_interface_init              (AtkComponentIface            *iface);
+static void gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, _gtk_tree_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
-                         G_IMPLEMENT_INTERFACE (GAIL_TYPE_CELL_PARENT, gail_cell_parent_interface_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_ACCESSIBLE_PARENT, gtk_cell_accessible_parent_interface_init))
 
 
 static void
@@ -1332,9 +1332,9 @@ static void atk_selection_interface_init (AtkSelectionIface *iface)
 #define EXTRA_EXPANDER_PADDING 4
 
 static void
-gtk_tree_view_accessible_get_cell_area (GailCellParent    *parent,
-                                        GtkCellAccessible *cell,
-                                        GdkRectangle      *cell_rect)
+gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
+                                        GtkCellAccessible       *cell,
+                                        GdkRectangle            *cell_rect)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -1413,13 +1413,13 @@ gtk_tree_view_accessible_get_cell_area (GailCellParent    *parent,
 }
 
 static void
-gtk_tree_view_accessible_get_cell_extents (GailCellParent    *parent,
-                                           GtkCellAccessible *cell,
-                                           gint              *x,
-                                           gint              *y,
-                                           gint              *width,
-                                           gint              *height,
-                                           AtkCoordType       coord_type)
+gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
+                                           GtkCellAccessible       *cell,
+                                           gint                    *x,
+                                           gint                    *y,
+                                           gint                    *width,
+                                           gint                    *height,
+                                           AtkCoordType             coord_type)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -1463,8 +1463,8 @@ gtk_tree_view_accessible_get_cell_extents (GailCellParent    *parent,
 }
 
 static gboolean
-gtk_tree_view_accessible_grab_cell_focus (GailCellParent    *parent,
-                                          GtkCellAccessible *cell)
+gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
+                                          GtkCellAccessible       *cell)
 {
   GtkWidget *widget;
   GtkTreeView *tree_view;
@@ -1532,7 +1532,8 @@ gtk_tree_view_accessible_grab_cell_focus (GailCellParent    *parent,
       return FALSE;
 }
 
-static void gail_cell_parent_interface_init (GailCellParentIface *iface)
+static void
+gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
 {
   iface->get_cell_extents = gtk_tree_view_accessible_get_cell_extents;
   iface->get_cell_area = gtk_tree_view_accessible_get_cell_area;
