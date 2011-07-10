@@ -18,7 +18,7 @@
  */
 
 #include "config.h"
-#include <string.h>
+
 #include <gtk/gtk.h>
 #include "../gtkpango.h"
 #include "gtktextcellaccessible.h"
@@ -161,7 +161,7 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
 
   if (text_cell->cell_text)
     {
-      if (text == NULL || strcmp (text_cell->cell_text, text) != 0)
+      if (text == NULL || g_strcmp0 (text_cell->cell_text, text) != 0)
         {
           g_free (text_cell->cell_text);
           temp_length = text_cell->cell_length;

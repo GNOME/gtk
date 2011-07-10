@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -478,23 +476,23 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
   AtkState state;
   gboolean value;
 
-  if (strcmp (pspec->name, "has-focus") == 0)
+  if (g_strcmp0 (pspec->name, "has-focus") == 0)
     /*
      * We use focus-in-event and focus-out-event signals to catch
      * focus changes so we ignore this.
      */
     return;
-  else if (strcmp (pspec->name, "visible") == 0)
+  else if (g_strcmp0 (pspec->name, "visible") == 0)
     {
       state = ATK_STATE_VISIBLE;
       value = gtk_widget_get_visible (widget);
     }
-  else if (strcmp (pspec->name, "sensitive") == 0)
+  else if (g_strcmp0 (pspec->name, "sensitive") == 0)
     {
       state = ATK_STATE_SENSITIVE;
       value = gtk_widget_get_sensitive (widget);
     }
-  else if (strcmp (pspec->name, "orientation") == 0)
+  else if (g_strcmp0 (pspec->name, "orientation") == 0)
     {
       GtkOrientable *orientable;
 

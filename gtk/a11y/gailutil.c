@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include <stdlib.h>
-#include <string.h>
 #include <gtk/gtk.h>
 #include "gailutil.h"
 #include "gtktoplevelaccessible.h"
@@ -51,7 +50,7 @@ struct _GailKeyEventInfo
 static guint
 add_listener (GSignalEmissionHook  listener,
               const gchar         *object_type,
-              const gchar         *signal,
+              const gchar         *signal_name,
               const gchar         *hook_data)
 {
   GType type;
@@ -61,7 +60,7 @@ add_listener (GSignalEmissionHook  listener,
   type = g_type_from_name (object_type);
   if (type)
     {
-      signal_id  = g_signal_lookup (signal, type);
+      signal_id  = g_signal_lookup (signal_name, type);
       if (signal_id > 0)
         {
           GailUtilListenerInfo *listener_info;
@@ -81,7 +80,7 @@ add_listener (GSignalEmissionHook  listener,
         }
       else
         {
-          g_warning("Invalid signal type %s\n", signal);
+          g_warning("Invalid signal type %s\n", signal_name);
         }
     }
   else
@@ -239,12 +238,7 @@ window_removed (AtkObject *atk_obj,
    */
   if (gtk_window_is_active (window) &&
       gtk_window_has_toplevel_focus (window))
-    {
-      AtkObject *atk_obj;
-
-      atk_obj = gtk_widget_get_accessible (widget);
-      g_signal_emit_by_name (atk_obj, "deactivate");
-    }
+    g_signal_emit_by_name (child, "deactivate");
 
   g_signal_handlers_disconnect_by_func (widget, (gpointer) window_focus, NULL);
   g_signal_emit_by_name (child, "destroy");
@@ -278,7 +272,7 @@ gail_util_add_global_event_listener (GSignalEmissionHook  listener,
 
   if (split_string)
     {
-      if (!strcmp ("window", split_string[0]))
+      if (!g_strcmp0 ("window", split_string[0]))
         {
           static gboolean initialized = FALSE;
 

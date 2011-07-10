@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include <gtk/gtkx.h>
 
 #include "gtkwindowaccessible.h"
@@ -79,7 +77,7 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
   GtkWidget *widget = GTK_WIDGET (obj);
   AtkObject* atk_obj = gtk_widget_get_accessible (widget);
 
-  if (strcmp (pspec->name, "title") == 0)
+  if (g_strcmp0 (pspec->name, "title") == 0)
     {
       g_object_notify (G_OBJECT (atk_obj), "accessible-name");
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
