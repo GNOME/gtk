@@ -1046,22 +1046,43 @@ gtk_tree_model_filter_check_ancestors (GtkTreeModelFilter *filter,
                * request, and thus not shown.  Therefore, we will
                * not emit row-inserted for this node.  Instead,
                * we signal to its parent that a change has occurred.
+               *
+               * Exception: root level, in this case, we must emit
+               * row-inserted.
                */
-              GtkTreeIter f_iter;
-              GtkTreePath *f_path;
+              if (level->parent_level)
+                {
+                  GtkTreeIter f_iter;
+                  GtkTreePath *f_path;
 
-              elt->visible = TRUE;
-              level->visible_nodes++;
+                  elt->visible = TRUE;
+                  level->visible_nodes++;
 
-              f_iter.stamp = filter->priv->stamp;
-              f_iter.user_data = level->parent_level;
-              f_iter.user_data2 = FILTER_LEVEL_PARENT_ELT(level);
+                  f_iter.stamp = filter->priv->stamp;
+                  f_iter.user_data = level->parent_level;
+                  f_iter.user_data2 = FILTER_LEVEL_PARENT_ELT(level);
 
-              f_path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
-                                                &f_iter);
-              gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
-                                                    f_path, &f_iter);
-              gtk_tree_path_free (f_path);
+                  f_path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
+                                                    &f_iter);
+                  gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                        f_path, &f_iter);
+                  gtk_tree_path_free (f_path);
+                }
+              else
+                {
+                  GtkTreePath *c_path;
+
+                  elt->visible = TRUE;
+                  level->visible_nodes++;
+
+                  c_path = gtk_tree_model_get_path (filter->priv->child_model,
+                                                    &c_iter);
+                  gtk_tree_model_filter_emit_row_inserted_for_path (filter,
+                                                                    filter->priv->child_model,
+                                                                    c_path,
+                                                                    &c_iter);
+                  gtk_tree_path_free (c_path);
+                }
 
               /* We can immediately return, because this node was not visible
                * before and the parent will check its children, including
