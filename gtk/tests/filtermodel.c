@@ -1,5 +1,5 @@
 /* Extensive GtkTreeModelFilter tests.
- * Copyright (C) 2009  Kristian Rietveld  <kris@gtk.org>
+ * Copyright (C) 2009,2011  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -419,6 +419,23 @@ filter_test_setup_generic (FilterTest    *fixture,
 }
 
 static void
+filter_test_setup_expand_root (FilterTest *fixture)
+{
+  int i;
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+
+  for (i = 0; i < LEVEL_LENGTH; i++)
+    {
+      gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view),
+                                path, FALSE);
+      gtk_tree_path_next (path);
+    }
+  gtk_tree_path_free (path);
+}
+
+static void
 filter_test_setup (FilterTest    *fixture,
                    gconstpointer  test_data)
 {
@@ -440,10 +457,26 @@ filter_test_setup_unfiltered (FilterTest    *fixture,
 }
 
 static void
+filter_test_setup_unfiltered_root_expanded (FilterTest    *fixture,
+                                            gconstpointer  test_data)
+{
+  filter_test_setup_unfiltered (fixture, test_data);
+  filter_test_setup_expand_root (fixture);
+}
+
+static void
 filter_test_setup_empty_unfiltered (FilterTest    *fixture,
                                     gconstpointer  test_data)
 {
   filter_test_setup_generic (fixture, test_data, 3, TRUE, TRUE);
+}
+
+static void
+filter_test_setup_empty_unfiltered_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  test_data)
+{
+  filter_test_setup_empty_unfiltered (fixture, test_data);
+  filter_test_setup_expand_root (fixture);
 }
 
 static GtkTreePath *
@@ -468,6 +501,32 @@ strip_virtual_root (GtkTreePath *path,
     real_path = gtk_tree_path_copy (path);
 
   return real_path;
+}
+
+static int
+count_visible (FilterTest  *fixture,
+               GtkTreePath *store_path)
+{
+  int i;
+  int n_visible = 0;
+  GtkTreeIter iter;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store),
+                           &iter, store_path);
+
+  for (i = 0; i < LEVEL_LENGTH; i++)
+    {
+      gboolean visible;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (fixture->store), &iter,
+                          1, &visible,
+                          -1);
+
+      if (visible)
+        n_visible++;
+    }
+
+  return n_visible;
 }
 
 static void
@@ -537,26 +596,48 @@ filter_test_append_refilter_signals_recurse (FilterTest  *fixture,
           /* This row will be inserted */
           signal_monitor_append_signal_path (fixture->monitor, ROW_CHANGED,
                                              real_path);
-          signal_monitor_append_signal_path (fixture->monitor,
-                                             ROW_HAS_CHILD_TOGGLED,
-                                             real_path);
 
-          if (depth > 1
-              && gtk_tree_model_iter_has_child (GTK_TREE_MODEL (fixture->store),
-                                                &iter))
+          if (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (fixture->store),
+                                             &iter))
             {
-              GtkTreePath *store_copy;
-              GtkTreePath *filter_copy;
+              signal_monitor_append_signal_path (fixture->monitor,
+                                                 ROW_HAS_CHILD_TOGGLED,
+                                                 real_path);
 
-              store_copy = gtk_tree_path_copy (store_path);
-              filter_copy = gtk_tree_path_copy (filter_path);
-              filter_test_append_refilter_signals_recurse (fixture,
-                                                           store_copy,
-                                                           filter_copy,
-                                                           depth - 1,
-                                                           root_path);
-              gtk_tree_path_free (store_copy);
-              gtk_tree_path_free (filter_copy);
+              if (depth > 1)
+                {
+                  GtkTreePath *store_copy;
+                  GtkTreePath *filter_copy;
+
+                  store_copy = gtk_tree_path_copy (store_path);
+                  filter_copy = gtk_tree_path_copy (filter_path);
+                  filter_test_append_refilter_signals_recurse (fixture,
+                                                               store_copy,
+                                                               filter_copy,
+                                                               depth - 1,
+                                                               root_path);
+                  gtk_tree_path_free (store_copy);
+                  gtk_tree_path_free (filter_copy);
+                }
+              else if (depth == 1)
+                {
+                  GtkTreePath *tmp_path;
+
+                  /* If all child rows are invisible, then the last row to
+                   * become invisible will emit row-has-child-toggled on the
+                   * parent.
+                   */
+
+                  tmp_path = gtk_tree_path_copy (store_path);
+                  gtk_tree_path_append_index (tmp_path, 0);
+
+                  if (count_visible (fixture, tmp_path) == 0)
+                    signal_monitor_append_signal_path (fixture->monitor,
+                                                       ROW_HAS_CHILD_TOGGLED,
+                                                       real_path);
+
+                  gtk_tree_path_free (tmp_path);
+                }
             }
 
           gtk_tree_path_next (filter_path);
@@ -922,6 +1003,59 @@ static void
 filled_hide_child_levels (FilterTest    *fixture,
                           gconstpointer  user_data)
 {
+  set_path_visibility (fixture, "0:2", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "0:4", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "0:4:3", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "0:4:0", FALSE);
+  set_path_visibility (fixture, "0:4:1", FALSE);
+  set_path_visibility (fixture, "0:4:2", FALSE);
+  set_path_visibility (fixture, "0:4:4", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
+  set_path_visibility (fixture, "0:4", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, "0:3", 0);
+
+  set_path_visibility (fixture, "0:2", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, "0:2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:4", 0);
+
+  /* Once 0:4:0 got inserted, 0:4 became a parent.  Because 0:4 is
+   * not visible, not signals are emitted.
+   */
+  set_path_visibility (fixture, "0:4:2", TRUE);
+  set_path_visibility (fixture, "0:4:4", TRUE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, "0:4", 2);
+}
+
+static void
+filled_hide_child_levels_root_expanded (FilterTest    *fixture,
+                                        gconstpointer  user_data)
+{
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
   signal_monitor_append_signal (fixture->monitor, ROW_DELETED, "0:2");
   set_path_visibility (fixture, "0:2", FALSE);
   check_filter_model (fixture);
@@ -949,10 +1083,6 @@ filled_hide_child_levels (FilterTest    *fixture,
 
   /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:3");
-  /* FIXME: Actually, the filter model should not be emitted the
-   * row-has-child-toggled signal here.  *However* an extraneous emission
-   * of this signal does not hurt and is allowed.
-   */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:3");
   set_path_visibility (fixture, "0:4", TRUE);
   check_filter_model (fixture);
@@ -966,13 +1096,8 @@ filled_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
   check_level_length (fixture->filter, "0:4", 0);
 
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:0");
-  /* Once 0:4:0 got inserted, 0:4 became a parent */
+  /* has-child-toggled for 0:4 is required.  */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4:0");
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:1");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4:1");
-
   set_path_visibility (fixture, "0:4:2", TRUE);
   set_path_visibility (fixture, "0:4:4", TRUE);
   signal_monitor_assert_is_empty (fixture->monitor);
@@ -1115,6 +1240,58 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
 
+  set_path_visibility (fixture, "2:0:2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2:0:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:0:4:3", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:0:4:0", FALSE);
+  set_path_visibility (fixture, "2:0:4:1", FALSE);
+  set_path_visibility (fixture, "2:0:4:2", FALSE);
+  set_path_visibility (fixture, "2:0:4:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
+  set_path_visibility (fixture, "2:0:4", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, "0:3", 0);
+
+  set_path_visibility (fixture, "2:0:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, "0:2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:4", 0);
+
+  /* Once 0:4:0 got inserted, 0:4 became a parent */
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
+  set_path_visibility (fixture, "2:0:4:2", TRUE);
+  set_path_visibility (fixture, "2:0:4:4", TRUE);
+  check_level_length (fixture->filter, "0:4", 2);
+}
+
+static void
+filled_vroot_hide_child_levels_root_expanded (FilterTest    *fixture,
+                                              gconstpointer  user_data)
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+  GtkTreePath *tmp_path;
+
+  tmp_path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), tmp_path, FALSE);
+  gtk_tree_path_free (tmp_path);
+
   signal_monitor_append_signal (fixture->monitor, ROW_DELETED, "0:2");
   set_path_visibility (fixture, "2:0:2", FALSE);
   check_filter_model_with_root (fixture, path);
@@ -1142,10 +1319,6 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
 
   /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:3");
-  /* FIXME: Actually, the filter model should not be emitted the
-   * row-has-child-toggled signal here.  *However* an extraneous emission
-   * of this signal does not hurt and is allowed.
-   */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:3");
   set_path_visibility (fixture, "2:0:4", TRUE);
   check_filter_model_with_root (fixture, path);
@@ -1159,18 +1332,12 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
   check_level_length (fixture->filter, "0:4", 0);
 
-  /* FIXME: Inconsistency!  For the non-vroot case we also receive two
-   * row-has-child-toggled signals here.
-   */
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:0");
   /* Once 0:4:0 got inserted, 0:4 became a parent */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:1");
   set_path_visibility (fixture, "2:0:4:2", TRUE);
   set_path_visibility (fixture, "2:0:4:4", TRUE);
   check_level_length (fixture->filter, "0:4", 2);
 }
-
 
 static void
 empty_show_nodes (FilterTest    *fixture,
@@ -1191,9 +1358,7 @@ empty_show_nodes (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, 1);
   check_level_length (fixture->filter, "0", 0);
 
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:0");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:0");
   set_path_visibility (fixture, "3:2", TRUE);
   check_filter_model (fixture);
   check_level_length (fixture->filter, NULL, 1);
@@ -1231,8 +1396,6 @@ empty_show_multiple_nodes (FilterTest    *fixture,
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "1");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "1");
-  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "1");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "1");
 
   /* We simulate a change in visible func condition with this.  The
    * visibility state of multiple nodes changes at once, we emit row-changed
@@ -1247,6 +1410,7 @@ empty_show_multiple_nodes (FilterTest    *fixture,
   gtk_tree_path_append_index (changed_path, 2);
   gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store),
                            &iter, changed_path);
+  /* Invisible node - so no signals expected */
   gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
                               changed_path, &iter);
 
@@ -1271,9 +1435,7 @@ empty_show_multiple_nodes (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, 2);
   check_level_length (fixture->filter, "0", 0);
 
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:0");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:0");
   set_path_visibility (fixture, "3:2", TRUE);
   check_filter_model (fixture);
   check_level_length (fixture->filter, NULL, 2);
@@ -1465,9 +1627,28 @@ unfiltered_hide_single (FilterTest    *fixture,
   signal_monitor_assert_is_empty (fixture->monitor);
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.
    */
+  filter_test_append_refilter_signals (fixture, 1);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_hide_single_root_expanded (FilterTest    *fixture,
+                                      gconstpointer  user_data)
+
+{
+  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  set_path_visibility (fixture, "2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+
   filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
@@ -1480,6 +1661,29 @@ unfiltered_hide_single_child (FilterTest    *fixture,
                               gconstpointer  user_data)
 
 {
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.
+   */
+  filter_test_append_refilter_signals (fixture, 0);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_hide_single_child_root_expanded (FilterTest    *fixture,
+                                            gconstpointer  user_data)
+
+{
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", FALSE);
@@ -1488,9 +1692,6 @@ unfiltered_hide_single_child (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
   filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
@@ -1507,6 +1708,40 @@ unfiltered_hide_single_multi_level (FilterTest    *fixture,
   /* This row is not shown, so its signal is not propagated */
   set_path_visibility (fixture, "2:2:2", FALSE);
 
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.
+   */
+  filter_test_append_refilter_signals (fixture, 1);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2:2", TRUE);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_hide_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2:2", FALSE);
+
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", FALSE);
@@ -1516,9 +1751,6 @@ unfiltered_hide_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
   filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
@@ -1537,6 +1769,7 @@ unfiltered_hide_single_multi_level (FilterTest    *fixture,
 }
 
 
+
 static void
 unfiltered_vroot_hide_single (FilterTest    *fixture,
                               gconstpointer  user_data)
@@ -1551,11 +1784,11 @@ unfiltered_vroot_hide_single (FilterTest    *fixture,
   signal_monitor_assert_is_empty (fixture->monitor);
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.  (We add an additional level to
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.  (Though for the depth argument, we have to
    * take the virtual root into account).
    */
-  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
   filter_test_enable_filter (fixture);
 
   check_filter_model_with_root (fixture, path);
@@ -1569,6 +1802,32 @@ unfiltered_vroot_hide_single_child (FilterTest    *fixture,
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
 
+  /* Not visible, so no signal will be received. */
+  set_path_visibility (fixture, "2:2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.  (Though for the depth argument, we have to
+   * take the virtual root into account).
+   */
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_vroot_hide_single_child_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2:2", FALSE);
@@ -1577,10 +1836,6 @@ unfiltered_vroot_hide_single_child (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.  (We add an additional level to take
-   * the virtual root into account).
-   */
   filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
   filter_test_enable_filter (fixture);
 
@@ -1599,6 +1854,43 @@ unfiltered_vroot_hide_single_multi_level (FilterTest    *fixture,
   /* This row is not shown, so its signal is not propagated */
   set_path_visibility (fixture, "2:2:2:2", FALSE);
 
+  /* Not shown, so no signal */
+  set_path_visibility (fixture, "2:2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  /* We only expect signals for the root level.  The depth is 2
+   * because we have to take the virtual root into account.
+   */
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+
+  /* Not shown, so no signal */
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_vroot_hide_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                        gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2:2:2", FALSE);
+
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2:2", FALSE);
@@ -1608,9 +1900,6 @@ unfiltered_vroot_hide_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
   filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
   filter_test_enable_filter (fixture);
 
@@ -1628,8 +1917,6 @@ unfiltered_vroot_hide_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH - 1);
 }
 
-
-
 static void
 unfiltered_show_single (FilterTest    *fixture,
                         gconstpointer  user_data)
@@ -1642,10 +1929,8 @@ unfiltered_show_single (FilterTest    *fixture,
   signal_monitor_assert_is_empty (fixture->monitor);
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals (fixture, 2);
+  /* We only expect signals for the root level */
+  filter_test_append_refilter_signals (fixture, 1);
   filter_test_enable_filter (fixture);
 
   check_filter_model (fixture);
@@ -1657,6 +1942,35 @@ unfiltered_show_single_child (FilterTest    *fixture,
                               gconstpointer  user_data)
 
 {
+  set_path_visibility (fixture, "2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  /* We only expect signals for the root level */
+  filter_test_append_refilter_signals (fixture, 1);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2", TRUE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+}
+
+static void
+unfiltered_show_single_child_root_expanded (FilterTest    *fixture,
+                                            gconstpointer  user_data)
+
+{
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", TRUE);
@@ -1665,10 +1979,7 @@ unfiltered_show_single_child (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals (fixture, 3);
+  filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
   check_filter_model (fixture);
@@ -1690,13 +2001,10 @@ unfiltered_show_single_multi_level (FilterTest    *fixture,
                                     gconstpointer  user_data)
 
 {
-  /* The view is not showing this row (collapsed state), so it is not
+  /* The view is not showing these rows (collapsed state), so it is not
    * referenced.  The signal should not go through.
    */
   set_path_visibility (fixture, "2:2:2", TRUE);
-
-  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", TRUE);
 
   signal_monitor_assert_is_empty (fixture->monitor);
@@ -1704,10 +2012,8 @@ unfiltered_show_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals (fixture, 3);
+  /* We only expect signals for the first level */
+  filter_test_append_refilter_signals (fixture, 1);
   filter_test_enable_filter (fixture);
 
   check_filter_model (fixture);
@@ -1725,6 +2031,42 @@ unfiltered_show_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:0", 1);
 }
 
+static void
+unfiltered_show_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  /* The view is not showing this row (collapsed state), so it is not
+   * referenced.  The signal should not go through.
+   */
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
+  set_path_visibility (fixture, "2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  filter_test_append_refilter_signals (fixture, 2);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 1);
+}
 
 static void
 unfiltered_vroot_show_single (FilterTest    *fixture,
@@ -1743,7 +2085,7 @@ unfiltered_vroot_show_single (FilterTest    *fixture,
   /* The view only shows the root level, so the filter model only has
    * the first two levels cached.
    */
-  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
   filter_test_enable_filter (fixture);
 
   check_filter_model_with_root (fixture, path);
@@ -1757,8 +2099,6 @@ unfiltered_vroot_show_single_child (FilterTest    *fixture,
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
 
-  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2:2", TRUE);
 
   signal_monitor_assert_is_empty (fixture->monitor);
@@ -1786,8 +2126,79 @@ unfiltered_vroot_show_single_child (FilterTest    *fixture,
 }
 
 static void
+unfiltered_vroot_show_single_child_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2:2", TRUE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+}
+
+
+static void
 unfiltered_vroot_show_single_multi_level (FilterTest    *fixture,
                                           gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  /* The view is not showing this row (collapsed state), so it is not
+   * referenced.  The signal should not go through.
+   */
+  set_path_visibility (fixture, "2:2:2:2", TRUE);
+
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  /* We only expect signals for the root level */
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 1);
+}
+
+static void
+unfiltered_vroot_show_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                        gconstpointer  user_data)
 
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
@@ -1806,10 +2217,7 @@ unfiltered_vroot_show_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals_with_vroot (fixture, 4, path);
+  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
   filter_test_enable_filter (fixture);
 
   check_filter_model_with_root (fixture, path);
@@ -3565,6 +3973,11 @@ register_filter_model_tests (void)
               filter_test_setup,
               filled_hide_child_levels,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup,
+              filled_hide_child_levels_root_expanded,
+              filter_test_teardown);
 
   g_test_add ("/TreeModelFilter/filled/hide-root-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
@@ -3575,6 +3988,11 @@ register_filter_model_tests (void)
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup,
               filled_vroot_hide_child_levels,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels/vroot-root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup,
+              filled_vroot_hide_child_levels_root_expanded,
               filter_test_teardown);
 
 
@@ -3606,15 +4024,30 @@ register_filter_model_tests (void)
               filter_test_setup_unfiltered,
               unfiltered_hide_single,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_hide_single_root_expanded,
+              filter_test_teardown);
   g_test_add ("/TreeModelFilter/unfiltered/hide-single-child",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single_child,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_hide_single_child_root_expanded,
+              filter_test_teardown);
   g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single_multi_level,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_hide_single_multi_level_root_expanded,
               filter_test_teardown);
 
   g_test_add ("/TreeModelFilter/unfiltered/hide-single/vroot",
@@ -3627,10 +4060,20 @@ register_filter_model_tests (void)
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single_child,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_vroot_hide_single_child_root_expanded,
+              filter_test_teardown);
   g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single_multi_level,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_vroot_hide_single_multi_level_root_expanded,
               filter_test_teardown);
 
 
@@ -3645,10 +4088,20 @@ register_filter_model_tests (void)
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single_child,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_show_single_child_root_expanded,
+              filter_test_teardown);
   g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level",
               FilterTest, NULL,
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single_multi_level,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_show_single_multi_level_root_expanded,
               filter_test_teardown);
 
   g_test_add ("/TreeModelFilter/unfiltered/show-single/vroot",
@@ -3661,10 +4114,20 @@ register_filter_model_tests (void)
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single_child,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_vroot_show_single_child_root_expanded,
+              filter_test_teardown);
   g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single_multi_level,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_vroot_show_single_multi_level_root_expanded,
               filter_test_teardown);
 
   /* Inserts in child models after creation of filter model */
