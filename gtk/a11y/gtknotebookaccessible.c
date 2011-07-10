@@ -245,22 +245,22 @@ gtk_notebook_accessible_notify_gtk (GObject    *obj,
 
       if (page_num != old_page_num)
         {
-          AtkObject *obj;
+          AtkObject *child;
 
           if (old_page_num != -1)
             {
-              obj = gtk_notebook_accessible_ref_child (atk_obj, old_page_num);
-              if (obj)
+              child = gtk_notebook_accessible_ref_child (atk_obj, old_page_num);
+              if (child)
                 {
-                  atk_object_notify_state_change (obj, ATK_STATE_SELECTED, FALSE);
-                  g_object_unref (obj);
+                  atk_object_notify_state_change (child, ATK_STATE_SELECTED, FALSE);
+                  g_object_unref (child);
                 }
             }
-          obj = gtk_notebook_accessible_ref_child (atk_obj, page_num);
-          if (obj)
+          child = gtk_notebook_accessible_ref_child (atk_obj, page_num);
+          if (child)
             {
-              atk_object_notify_state_change (obj, ATK_STATE_SELECTED, TRUE);
-              g_object_unref (obj);
+              atk_object_notify_state_change (child, ATK_STATE_SELECTED, TRUE);
+              g_object_unref (child);
               /*
                * The page which is being displayed has changed but there is
                * no need to tell the focus tracker as the focus page will also
