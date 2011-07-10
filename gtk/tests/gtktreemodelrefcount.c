@@ -222,6 +222,9 @@ check_iter (GtkTreeModelRefCount *ref_model,
 {
   NodeInfo *info;
 
+  if (may_assert)
+    g_assert (gtk_tree_store_iter_is_valid (GTK_TREE_STORE (ref_model), iter));
+
   info = g_hash_table_lookup (ref_model->priv->node_hash, iter->user_data);
   if (!info)
     {
