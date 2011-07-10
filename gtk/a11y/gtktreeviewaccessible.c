@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -342,7 +341,7 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
   accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (widget));
   tree_view = GTK_TREE_VIEW (widget);
 
-  if (strcmp (pspec->name, "model") == 0)
+  if (g_strcmp0 (pspec->name, "model") == 0)
     {
       GtkTreeModel *tree_model;
       AtkRole role;
@@ -375,7 +374,7 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (accessible, "visible_data_changed");
       g_object_thaw_notify (G_OBJECT (accessible));
     }
-  else if (strcmp (pspec->name, "hadjustment") == 0)
+  else if (g_strcmp0 (pspec->name, "hadjustment") == 0)
     {
       g_object_get (tree_view, "hadjustment", &adj, NULL);
       g_signal_handlers_disconnect_by_func (accessible->old_hadj,
@@ -385,7 +384,7 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       g_object_add_weak_pointer (G_OBJECT (accessible->old_hadj), (gpointer *)&accessible->old_hadj);
       g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment_changed), tree_view);
     }
-  else if (strcmp (pspec->name, "vadjustment") == 0)
+  else if (g_strcmp0 (pspec->name, "vadjustment") == 0)
     {
       g_object_get (tree_view, "vadjustment", &adj, NULL);
       g_signal_handlers_disconnect_by_func (accessible->old_vadj,
@@ -2016,7 +2015,7 @@ column_visibility_changed (GObject    *object,
                            GParamSpec *pspec,
                            gpointer    user_data)
 {
-  if (strcmp (pspec->name, "visible") == 0)
+  if (g_strcmp0 (pspec->name, "visible") == 0)
     {
       /* A column has been made visible or invisible
        * We update our cache of cells and emit model_changed signal
@@ -2102,13 +2101,13 @@ model_row_inserted (GtkTreeModel *tree_model,
   */
   if (row != -1)
     {
-      GtkTreeIter iter;
+      GtkTreeIter tmp_iter;
       gint n_cols, col;
 
-      gtk_tree_model_get_iter (tree_model, &iter, path);
+      gtk_tree_model_get_iter (tree_model, &tmp_iter, path);
 
       /* Figure out number of visible children. */
-      if (gtk_tree_model_iter_has_child (tree_model, &iter))
+      if (gtk_tree_model_iter_has_child (tree_model, &tmp_iter))
         {
          /*
           * By passing path into this function, we find the number of
