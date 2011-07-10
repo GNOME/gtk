@@ -3463,6 +3463,79 @@ specific_bug_311955 (void)
 }
 
 static void
+specific_bug_311955_clean (void)
+{
+  /* Cleaned up version of the test case for GNOME Bugzilla bug 311955,
+   * which is easier to understand.
+   */
+  GtkTreeIter iter, child, grandchild;
+  GtkTreeStore *store;
+  GtkTreeModel *sort;
+  GtkTreeModel *filter;
+
+  GtkWidget *tree_view;
+  GtkTreePath *path;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_set (store, &iter, 0, 1, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 1, -1);
+
+  sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+  filter = gtk_tree_model_filter_new (sort, NULL);
+
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                          specific_bug_311955_filter_func,
+                                          NULL, NULL);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
+  g_object_unref (store);
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
+
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 1);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 1);
+
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 0, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 1, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 1, -1);
+
+  gtk_tree_store_append (store, &grandchild, &child);
+  gtk_tree_store_set (store, &grandchild, 0, 1, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  /* Don't set a value: assume 0 */
+
+  /* Remove leaf node, check trigger row-has-child-toggled */
+  path = gtk_tree_path_new_from_indices (0, 3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+  gtk_tree_path_free (path);
+  gtk_tree_store_remove (store, &iter);
+
+  path = gtk_tree_path_new_from_indices (0, 2, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 3);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0:2", 0);
+
+  gtk_widget_destroy (tree_view);
+}
+
+static void
 specific_bug_346800 (void)
 {
   /* This is a test case for GNOME Bugzilla bug 346800.  It was written
@@ -4177,6 +4250,8 @@ register_filter_model_tests (void)
                    specific_bug_301558);
   g_test_add_func ("/TreeModelFilter/specific/bug-311955",
                    specific_bug_311955);
+  g_test_add_func ("/TreeModelFilter/specific/bug-311955-clean",
+                   specific_bug_311955_clean);
   g_test_add_func ("/TreeModelFilter/specific/bug-346800",
                    specific_bug_346800);
   g_test_add_func ("/TreeModelFilter/specific/bug-464173",
