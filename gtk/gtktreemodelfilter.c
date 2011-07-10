@@ -526,6 +526,12 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
 
   g_assert (filter->priv->child_model != NULL);
 
+  /* Avoid building a level that already exists */
+  if (parent_level)
+    g_assert (g_array_index (parent_level->array, FilterElt, parent_elt_index).children == NULL);
+  else
+    g_assert (filter->priv->root == NULL);
+
   if (filter->priv->in_row_deleted)
     return;
 
