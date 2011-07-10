@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-07-10 03:58+0000\n"
-"PO-Revision-Date: 2011-07-10 10:52+0200\n"
+"POT-Creation-Date: 2011-07-10 12:45+0000\n"
+"PO-Revision-Date: 2011-07-10 21:04+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -460,6 +460,24 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Aberiendo %d elemento"
 msgstr[1] "Abriendo %d elementos"
+
+#: ../gtk/a11y/gtkspinneraccessible.c:42
+msgctxt "throbbing progress animation widget"
+msgid "Spinner"
+msgstr "Marcador incrementable"
+
+#: ../gtk/a11y/gtkspinneraccessible.c:43
+msgid "Provides visual indication of progress"
+msgstr "Proporciona una indicación visual del progreso"
+
+#: ../gtk/a11y/gtkswitchaccessible.c:65
+msgctxt "light switch widget"
+msgid "Switch"
+msgstr "Interruptor"
+
+#: ../gtk/a11y/gtkswitchaccessible.c:66
+msgid "Switches between on and off states"
+msgstr "Cambia entre los estados encendido y apagado"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -1269,12 +1287,10 @@ msgid "Type a file name"
 msgstr "Teclee un nombre de archivo"
 
 #: ../gtk/gtkfilechooserdefault.c:4756 ../gtk/gtkfilechooserdefault.c:4767
-#| msgid "Select a folder"
 msgid "Please select a folder below"
 msgstr "Seleccionar una carpeta a continuación"
 
 #: ../gtk/gtkfilechooserdefault.c:4762
-#| msgid "Type a file name"
 msgid "Please type a file name"
 msgstr "Escriba un nombre de archivo"
 
@@ -4421,6 +4437,24 @@ msgstr "Perfil de la impresora"
 msgid "Unavailable"
 msgstr "No disponible"
 
+#. TRANSLATORS: when we're running an old CUPS, and
+#. * it hasn't registered the device with colord
+#: ../modules/printbackends/cups/gtkprintercups.c:222
+msgid "Color management unavailable"
+msgstr "Gestión del color no disponible"
+
+#. TRANSLATORS: when there is no color profile available
+#: ../modules/printbackends/cups/gtkprintercups.c:234
+#| msgid "Not available"
+msgid "No profile available"
+msgstr "No hay un perfil disponible"
+
+#. TRANSLATORS: when the color profile has no title
+#: ../modules/printbackends/cups/gtkprintercups.c:245
+#| msgid "Unspecified error"
+msgid "Unspecified profile"
+msgstr "Perfil no especificado"
+
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
@@ -4523,20 +4557,6 @@ msgstr ""
 
 #~ msgid "_Browse for other folders"
 #~ msgstr "_Buscar otras carpetas"
-
-#~ msgctxt "throbbing progress animation widget"
-#~ msgid "Spinner"
-#~ msgstr "Marcador incrementable"
-
-#~ msgid "Provides visual indication of progress"
-#~ msgstr "Proporciona una indicación visual del progreso"
-
-#~ msgctxt "light switch widget"
-#~ msgid "Switch"
-#~ msgstr "Interruptor"
-
-#~ msgid "Switches between on and off states"
-#~ msgstr "Cambia entre los estados encendido y apagado"
 
 #~ msgid "Locked"
 #~ msgstr "Bloqueado"
