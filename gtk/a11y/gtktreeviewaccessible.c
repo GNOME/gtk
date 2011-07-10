@@ -29,7 +29,7 @@
 #include "gtkbooleancellaccessible.h"
 #include "gtkimagecellaccessible.h"
 #include "gtkcontainercellaccessible.h"
-#include "gailtextcell.h"
+#include "gtktextcellaccessible.h"
 #include "gailcellparent.h"
 
 typedef struct _GtkTreeViewAccessibleCellInfo  GtkTreeViewAccessibleCellInfo;
@@ -578,7 +578,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
       GtkCellRenderer *fake_renderer;
 
       fake_renderer = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
-      child = gail_text_cell_new ();
+      child = _gtk_text_cell_accessible_new ();
       cell = GTK_CELL_ACCESSIBLE (child);
       renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (child);
       renderer_cell->renderer = fake_renderer;
@@ -607,7 +607,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           if (GTK_IS_CELL_RENDERER_TEXT (renderer))
             {
               g_object_get (G_OBJECT (renderer), "editable", &editable, NULL);
-              child = gail_text_cell_new ();
+              child = _gtk_text_cell_accessible_new ();
             }
           else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
             child = _gtk_boolean_cell_accessible_new ();

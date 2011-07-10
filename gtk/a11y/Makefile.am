@@ -43,7 +43,7 @@ gail_c_sources =			\
 	gtkstatusbaraccessible.c	\
 	gtksubmenuitemaccessible.c	\
 	gtkswitchaccessible.c		\
-	gailtextcell.c			\
+	gtktextcellaccessible.c		\
 	gtktextviewaccessible.c		\
 	gtktogglebuttonaccessible.c	\
 	gtktoplevelaccessible.c		\
@@ -95,7 +95,7 @@ gail_private_h_sources =		\
 	gtkstatusbaraccessible.h	\
 	gtksubmenuitemaccessible.h	\
 	gtkswitchaccessible.h		\
-	gailtextcell.h			\
+	gtktextcellaccessible.h		\
 	gtktextviewaccessible.h		\
 	gtktogglebuttonaccessible.h	\
 	gtktoplevelaccessible.h		\
