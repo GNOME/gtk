@@ -29,7 +29,7 @@
 #ifndef __GTK_FONT_CHOOSER_H__
 #define __GTK_FONT_CHOOSER_H__
 
-#include <gtk/gtkvbox.h>
+#include <gtk/gtkbox.h>
 
 G_BEGIN_DECLS
 
@@ -46,7 +46,7 @@ typedef struct _GtkFontChooserClass         GtkFontChooserClass;
 
 struct _GtkFontChooser
 {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   /*< private >*/
   GtkFontChooserPrivate *priv;
@@ -54,7 +54,7 @@ struct _GtkFontChooser
 
 struct _GtkFontChooserClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
