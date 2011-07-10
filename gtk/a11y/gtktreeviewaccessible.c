@@ -27,7 +27,7 @@
 #include "gtktreeviewaccessible.h"
 #include "gtkrenderercellaccessible.h"
 #include "gtkbooleancellaccessible.h"
-#include "gailimagecell.h"
+#include "gtkimagecellaccessible.h"
 #include "gtkcontainercellaccessible.h"
 #include "gailtextcell.h"
 #include "gailcellparent.h"
@@ -612,7 +612,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
             child = _gtk_boolean_cell_accessible_new ();
           else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
-            child = gail_image_cell_new ();
+            child = _gtk_image_cell_accessible_new ();
           else
             child = _gtk_renderer_cell_accessible_new ();
 
