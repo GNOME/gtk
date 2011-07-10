@@ -43,7 +43,7 @@
 #include "gtkstock.h"
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
@@ -162,7 +162,7 @@ static void  gtk_font_chooser_ref_face           (GtkFontChooser *fontchooser,
 
 static void gtk_font_chooser_bootstrap_fontlist (GtkFontChooser *fontchooser);
 
-G_DEFINE_TYPE (GtkFontChooser, gtk_font_chooser, GTK_TYPE_VBOX)
+G_DEFINE_TYPE (GtkFontChooser, gtk_font_chooser, GTK_TYPE_BOX)
 
 static void
 gtk_font_chooser_class_init (GtkFontChooserClass *klass)
@@ -1138,7 +1138,7 @@ gtk_font_chooser_set_font_name (GtkFontChooser *fontchooser,
  *
  * Since: 3.2
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
 {
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
