@@ -2359,7 +2359,6 @@ insert_child (void)
 
   /* Insert child */
   path = gtk_tree_path_new_from_indices (0, 0, -1);
-  signal_monitor_append_signal_path (monitor, ROW_INSERTED, path);
   gtk_tree_path_up (path); /* 0 */
   signal_monitor_append_signal_path (monitor, ROW_HAS_CHILD_TOGGLED, path);
   gtk_tree_path_free (path);
@@ -2991,9 +2990,9 @@ specific_root_has_child_filter (void)
   check_level_length (fixture.filter, NULL, 1);
   check_level_length (fixture.filter, "0", 1);
 
-  /* Modify the content of iter, yields row-changed signals */
-  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0:0");
-
+  /* Modify the content of iter, no signals because the parent is not
+   * expanded.
+   */
   create_tree_store_set_values (fixture.store, &iter, TRUE);
   signal_monitor_assert_is_empty (fixture.monitor);
 
@@ -3034,9 +3033,7 @@ specific_root_has_child_filter (void)
 
   /* Check if row-changed is propagated */
   signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1");
-  /* is row-has-child-toggled really necessary? */
   signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
-  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1:0");
 
   create_tree_store_set_values (fixture.store, &root, TRUE);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
@@ -3044,9 +3041,6 @@ specific_root_has_child_filter (void)
   signal_monitor_assert_is_empty (fixture.monitor);
 
   /* Insert another child under node 1 */
-  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1:1");
-  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1:1");
-
   gtk_tree_store_append (fixture.store, &iter, &root);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
   check_level_length (fixture.filter, NULL, 2);
@@ -3058,13 +3052,10 @@ specific_root_has_child_filter (void)
    * change, because filtering is only done on whether the root
    * node has a child, which it still has.
    */
-  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0:0");
-
   set_path_visibility (&fixture, "0:0", FALSE);
   signal_monitor_assert_is_empty (fixture.monitor);
 
   /* Now remove one of the remaining child rows */
-  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0:0");
   signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
   signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0");
 
@@ -3829,7 +3820,6 @@ specific_bug_621076 (void)
   signal_monitor_assert_is_empty (monitor);
 
   /* group-2 is already visible, so this time it is a normal insertion */
-  signal_monitor_append_signal (monitor, ROW_INSERTED, "2:1");
   gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
                                      0, "visible-2:2",
                                      -1);
@@ -3857,7 +3847,6 @@ specific_bug_621076 (void)
   /* This will make group 3 visible. */
   signal_monitor_append_signal (monitor, ROW_INSERTED, "3");
   signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "3");
-  signal_monitor_append_signal (monitor, ROW_INSERTED, "3:0");
   signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "3");
   gtk_tree_store_set (store, &item_iter, 0, "visible-3:1", -1);
   signal_monitor_assert_is_empty (monitor);
