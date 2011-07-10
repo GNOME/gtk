@@ -400,7 +400,7 @@ gtk_label_accessible_get_n_selections (AtkText *text)
 }
 
 static gchar *
-gtk_label_accessible_get_selection (AtkText *text,
+gtk_label_accessible_get_selection (AtkText *atk_text,
                                     gint     selection_num,
                                     gint    *start_pos,
                                     gint    *end_pos)
@@ -408,7 +408,7 @@ gtk_label_accessible_get_selection (AtkText *text,
   GtkWidget *widget;
   GtkLabel  *label;
 
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
     return NULL;
 
