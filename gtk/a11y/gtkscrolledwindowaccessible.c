@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <gtk/gtk.h>
 #include "gtkscrolledwindowaccessible.h"
 
@@ -31,7 +30,7 @@ visibility_changed (GObject    *object,
                     GParamSpec *pspec,
                     gpointer    user_data)
 {
-  if (!strcmp (pspec->name, "visible"))
+  if (!g_strcmp0 (pspec->name, "visible"))
     {
       gint index;
       gint n_children;

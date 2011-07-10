@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <gtk/gtk.h>
 #include "gtkpango.h"
 #include "gtkentryaccessible.h"
@@ -142,7 +141,7 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
   gtk_entry = GTK_ENTRY (widget);
   entry = GTK_ENTRY_ACCESSIBLE (atk_obj);
 
-  if (strcmp (pspec->name, "cursor-position") == 0)
+  if (g_strcmp0 (pspec->name, "cursor-position") == 0)
     {
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
@@ -152,19 +151,19 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "text_caret_moved",
                              entry->cursor_position);
     }
-  else if (strcmp (pspec->name, "selection-bound") == 0)
+  else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
     {
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
     }
-  else if (strcmp (pspec->name, "editable") == 0)
+  else if (g_strcmp0 (pspec->name, "editable") == 0)
     {
       gboolean value;
 
       g_object_get (obj, "editable", &value, NULL);
       atk_object_notify_state_change (atk_obj, ATK_STATE_EDITABLE, value);
     }
-  else if (strcmp (pspec->name, "visibility") == 0)
+  else if (g_strcmp0 (pspec->name, "visibility") == 0)
     {
       gboolean visibility;
       AtkRole new_role;

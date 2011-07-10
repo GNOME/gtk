@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include <gtk/gtk.h>
 #include <gtk/gtkpango.h>
 #include "gtklabelaccessible.h"
@@ -82,12 +80,12 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
 
   accessible = GTK_LABEL_ACCESSIBLE (atk_obj);
 
-  if (strcmp (pspec->name, "label") == 0)
+  if (g_strcmp0 (pspec->name, "label") == 0)
     {
       const gchar *text;
 
       text = gtk_label_get_text (GTK_LABEL (widget));
-      if (strcmp (accessible->text, text) == 0)
+      if (g_strcmp0 (accessible->text, text) == 0)
         return;
 
       /* Create a delete text and an insert text signal */
@@ -108,13 +106,13 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
 
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
-  else if (strcmp (pspec->name, "cursor-position") == 0)
+  else if (g_strcmp0 (pspec->name, "cursor-position") == 0)
     {
       g_signal_emit_by_name (atk_obj, "text_caret_moved",
                              _gtk_label_get_cursor_position (GTK_LABEL (widget)));
       g_signal_emit_by_name (atk_obj, "text_selection_changed");
     }
-  else if (strcmp (pspec->name, "selection-bound") == 0)
+  else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
     {
       g_signal_emit_by_name (atk_obj, "text_selection_changed");
     }

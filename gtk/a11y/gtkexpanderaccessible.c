@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <gtk/gtk.h>
 #include "gtkexpanderaccessible.h"
 
@@ -147,13 +146,13 @@ gtk_expander_accessible_notify_gtk (GObject    *obj,
   expander = GTK_EXPANDER (obj);
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (expander));
 ;
-  if (strcmp (pspec->name, "label") == 0)
+  if (g_strcmp0 (pspec->name, "label") == 0)
     {
       if (atk_obj->name == NULL)
         g_object_notify (G_OBJECT (atk_obj), "accessible-name");
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
     }
-  else if (strcmp (pspec->name, "expanded") == 0)
+  else if (g_strcmp0 (pspec->name, "expanded") == 0)
     {
       atk_object_notify_state_change (atk_obj, ATK_STATE_CHECKED,
                                       gtk_expander_get_expanded (expander));
