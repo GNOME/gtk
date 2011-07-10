@@ -3385,6 +3385,7 @@ specific_bug_311955 (void)
   GtkWidget *tree_view;
   int i;
   int n;
+  GtkTreePath *path;
 
   g_test_bug ("311955");
 
@@ -3415,6 +3416,9 @@ specific_bug_311955 (void)
   while (gtk_events_pending ())
     gtk_main_iteration ();
 
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 2);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 1);
+
   /* Fill model */
   for (i = 0; i < 4; i++)
     {
@@ -3435,6 +3439,9 @@ specific_bug_311955 (void)
   while (gtk_events_pending ())
     gtk_main_iteration ();
 
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 3);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0:2", 1);
+
   /* Remove bottommost child from the tree. */
   gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &root);
   n = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), &root);
@@ -3446,6 +3453,13 @@ specific_bug_311955 (void)
     }
   else
     g_assert_not_reached ();
+
+  path = gtk_tree_path_new_from_indices (0, 2, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 3);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0:2", 0);
 }
 
 static void
