@@ -56,4 +56,5 @@ EXTRA_DIST += \
 	iconview.ui iconview.txt \
 	entries.ui entries.txt \
 	scale-drawvalue.ui scale-drawvalue.txt \
-	placeholder-text.ui placeholder-text.txt
+	placeholder-text.ui placeholder-text.txt \
+	menu.ui menu.txt
