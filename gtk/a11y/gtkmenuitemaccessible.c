@@ -154,6 +154,19 @@ gtk_menu_item_accessible_ref_state_set (AtkObject *obj)
   return state_set;
 }
 
+static AtkRole
+gtk_menu_item_accessible_get_role (AtkObject *obj)
+{
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  if (widget != NULL &&
+      gtk_menu_item_get_submenu (GTK_MENU_ITEM (widget)))
+    return ATK_ROLE_MENU;
+
+  return ATK_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->get_role (obj);
+}
+
 static const gchar *
 gtk_menu_item_accessible_get_name (AtkObject *obj)
 {
@@ -223,6 +236,7 @@ _gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
   class->ref_state_set = gtk_menu_item_accessible_ref_state_set;
   class->initialize = gtk_menu_item_accessible_initialize;
   class->get_name = gtk_menu_item_accessible_get_name;
+  class->get_role = gtk_menu_item_accessible_get_role;
 }
 
 static void
