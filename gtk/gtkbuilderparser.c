@@ -541,9 +541,9 @@ parse_binding (ParserData   *data,
                GError      **error)
 {
   BindingInfo *info;
-  gchar *to = NULL;
-  gchar *from = NULL;
-  gchar *source = NULL;
+  const gchar *to = NULL;
+  const gchar *from = NULL;
+  const gchar *source = NULL;
   ObjectInfo *object_info;
   int i;
   
@@ -557,11 +557,11 @@ parse_binding (ParserData   *data,
   for (i = 0; names[i] != NULL; i++)
     {
       if (strcmp (names[i], "to") == 0)
-	to = g_strdup (values[i]);
+	to = values[i];
       else if (strcmp (names[i], "from") == 0)
-	from = g_strdup (values[i]);
+	from = values[i];
       else if (strcmp (names[i], "source") == 0)
-	source = g_strdup (values[i]);
+	source = values[i];
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -586,9 +586,9 @@ parse_binding (ParserData   *data,
     }
 
   info = g_slice_new0 (BindingInfo);
-  info->to = to;
-  info->from = from;
-  info->source = source;
+  info->to = g_strdup (to);
+  info->from = g_strdup (from);
+  info->source = g_strdup (source);
   state_push (data, info);
 
   info->tag.name = element_name;
