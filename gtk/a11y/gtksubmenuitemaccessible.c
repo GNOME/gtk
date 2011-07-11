@@ -46,8 +46,6 @@ gtk_submenu_item_accessible_initialize (AtkObject *obj,
       g_signal_connect (submenu, "add", G_CALLBACK (menu_item_add_gtk), NULL);
       g_signal_connect (submenu, "remove", G_CALLBACK (menu_item_remove_gtk), NULL);
     }
-
-  obj->role = ATK_ROLE_MENU;
 }
 
 static void
