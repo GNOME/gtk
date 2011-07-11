@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 #include "gtkmenuitemaccessible.h"
 #include "gtksubmenuitemaccessible.h"
+#include "gtk/gtkmenuitemprivate.h"
 
 #define KEYBINDING_SEPARATOR ";"
 
@@ -381,6 +382,15 @@ gtk_menu_item_accessible_do_action (AtkAction *action,
 static gint
 gtk_menu_item_accessible_get_n_actions (AtkAction *action)
 {
+  GtkWidget *item;
+
+  item = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
+  if (item == NULL)
+    return 0;
+
+  if (!_gtk_menu_item_is_selectable (item))
+    return 0;
+
   return 1;
 }
 
@@ -388,7 +398,7 @@ static const gchar *
 gtk_menu_item_accessible_action_get_name (AtkAction *action,
                                           gint       i)
 {
-  if (i != 0)
+  if (i != 0 || gtk_menu_item_accessible_get_n_actions (action) == 0)
     return NULL;
 
   return "click";
