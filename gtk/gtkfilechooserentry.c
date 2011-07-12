@@ -369,7 +369,7 @@ completion_match_func (GtkEntryCompletion *comp,
 		       gpointer            data)
 {
   GtkFileChooserEntry *chooser_entry;
-  char *name = NULL;
+  char *name;
   gboolean result;
   char *norm_file_part;
   char *norm_name;
@@ -667,11 +667,13 @@ typedef enum {
   COMPLETE_BUT_NOT_UNIQUE	/* completion inserted, it is a complete name but not unique */
 } CommonPrefixResult;
 
-/* Finds a common prefix based on the contents of the entry and mandatorily appends it */
+/* Finds a common prefix based on the contents of the entry
+ * and mandatorily appends it
+ */
 static CommonPrefixResult
 append_common_prefix (GtkFileChooserEntry *chooser_entry,
-		      gboolean             highlight,
-		      gboolean             show_errors)
+                      gboolean             highlight,
+                      gboolean             show_errors)
 {
   gchar *common_prefix;
   GFile *unique_file;
@@ -689,16 +691,16 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   error = NULL;
   if (!find_common_prefix (chooser_entry, &common_prefix, &unique_file, &is_complete_not_unique, &prefix_expands_the_file_part, &error))
     {
-      /* If the user types an incomplete hostname ("http://foo" without a slash
-       * after that), it's not an error.  We just don't want to pop up a
-       * meaningless completion window in that state.
+      /* If the user types an incomplete hostname ("http://foo" without
+       * a slash after that), it's not an error.  We just don't want to
+       * pop up a meaningless completion window in that state.
        */
       if (!g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME)
-	  && show_errors)
-	{
-	  beep (chooser_entry);
-	  pop_up_completion_feedback (chooser_entry, _("Invalid path"));
-	}
+          && show_errors)
+        {
+          beep (chooser_entry);
+          pop_up_completion_feedback (chooser_entry, _("Invalid path"));
+        }
 
       g_error_free (error);
 
@@ -710,85 +712,84 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   if (unique_file)
     {
       if (!char_after_cursor_is_directory_separator (chooser_entry))
-	{
-	  gboolean appended;
+        {
+          gboolean appended;
 
-	  common_prefix = maybe_append_separator_to_file (chooser_entry,
-							  unique_file,
-							  common_prefix,
-							  &appended);
-	  if (appended)
-	    prefix_expands_the_file_part = TRUE;
-	}
+          common_prefix = maybe_append_separator_to_file (chooser_entry,
+                                                          unique_file,
+                                                          common_prefix,
+                                                          &appended);
+          if (appended)
+            prefix_expands_the_file_part = TRUE;
+        }
 
       g_object_unref (unique_file);
 
       if (prefix_expands_the_file_part)
-	result = COMPLETED_UNIQUE;
+        result = COMPLETED_UNIQUE;
       else
-	result = NOTHING_INSERTED_UNIQUE;
+        result = NOTHING_INSERTED_UNIQUE;
 
       have_result = TRUE;
     }
   else
     {
       if (is_complete_not_unique)
-	{
-	  result = COMPLETE_BUT_NOT_UNIQUE;
-	  have_result = TRUE;
-	}
+        {
+          result = COMPLETE_BUT_NOT_UNIQUE;
+          have_result = TRUE;
+        }
     }
 
   if (common_prefix)
     {
       gint cursor_pos;
-      gint common_prefix_len;
       gint pos;
 
       cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
-      common_prefix_len = g_utf8_strlen (common_prefix, -1);
 
       pos = chooser_entry->file_part_pos;
 
       if (prefix_expands_the_file_part)
-	{
-	  chooser_entry->in_change = TRUE;
-	  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-				    pos, cursor_pos);
-	  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-				    common_prefix, -1, 
-				    &pos);
-	  chooser_entry->in_change = FALSE;
+        {
+          chooser_entry->in_change = TRUE;
+          gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
+                                    pos, cursor_pos);
+          gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
+                                    common_prefix, -1,
+                                    &pos);
+          chooser_entry->in_change = FALSE;
 
-	  if (highlight)
-	    {
-	      gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
-					  cursor_pos,
-					  pos); /* equivalent to cursor_pos + common_prefix_len); */
-	      chooser_entry->has_completion = TRUE;
-	    }
-	  else
-	    gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
-	}
+          if (highlight)
+            {
+              /* equivalent to cursor_pos + common_prefix_len); */
+              gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
+                                          cursor_pos,
+                                          pos);
+              chooser_entry->has_completion = TRUE;
+            }
+          else
+            gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
+        }
       else if (!have_result)
-	{
-	  result = NOTHING_INSERTED_COMPLETE;
-	  have_result = TRUE;
-	}
+        {
+          result = NOTHING_INSERTED_COMPLETE;
+          have_result = TRUE;
+        }
 
       g_free (common_prefix);
 
       if (have_result)
-	return result;
+        return result;
       else
-	return COMPLETED;
+        return COMPLETED;
     }
   else
     {
       if (have_result)
-	return result;
+        return result;
       else
-	return NO_MATCH;
+        return NO_MATCH;
     }
 }
 
@@ -924,7 +925,7 @@ completion_feedback_window_realize_cb (GtkWidget *widget,
    * GtkEntry hides the cursor when the user types.  We don't want the cursor to
    * come back if the completion feedback ends up where the mouse is.
    */
-  set_invisible_mouse_cursor (widget->window);
+  set_invisible_mouse_cursor (gtk_widget_get_window (widget));
 }
 
 static void
@@ -997,13 +998,16 @@ get_entry_cursor_x (GtkFileChooserEntry *chooser_entry,
   gint layout_x, layout_y;
   gint layout_index;
   PangoRectangle strong_pos;
+  gint start_pos, end_pos;
 
   layout = gtk_entry_get_layout (GTK_ENTRY (chooser_entry));
 
   gtk_entry_get_layout_offsets (GTK_ENTRY (chooser_entry), &layout_x, &layout_y);
 
+  gtk_editable_get_selection_bounds (GTK_EDITABLE (chooser_entry), &start_pos, &end_pos);
   layout_index = gtk_entry_text_index_to_layout_index (GTK_ENTRY (chooser_entry),
-						       GTK_ENTRY (chooser_entry)->current_pos);
+                                                       end_pos);
+
 
   pango_layout_get_cursor_pos (layout, layout_index, &strong_pos, NULL);
 
@@ -1725,7 +1729,7 @@ insert_text_callback (GtkFileChooserEntry *chooser_entry,
        *position + (colon - new_text) != 1) ||
       (new_text_length > 0 &&
        *position <= 1 &&
-       GTK_ENTRY (chooser_entry)->text_length >= 2 &&
+       gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)) >= 2 &&
        gtk_entry_get_text (GTK_ENTRY (chooser_entry))[1] == ':'))
     {
       gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
@@ -1744,7 +1748,7 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
 {
   /* If deleting a drive letter, delete the colon, too */
   if (start_pos == 0 && end_pos == 1 &&
-      GTK_ENTRY (chooser_entry)->text_length >= 2 &&
+      gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)) >= 2 &&
       gtk_entry_get_text (GTK_ENTRY (chooser_entry))[1] == ':')
     {
       g_signal_handlers_block_by_func (chooser_entry,
