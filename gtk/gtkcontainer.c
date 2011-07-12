@@ -46,7 +46,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
-#include "gtktoolbar.h"
 #include "a11y/gtkcontaineraccessible.h"
 
 /**
