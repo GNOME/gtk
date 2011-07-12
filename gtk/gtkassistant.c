@@ -1649,6 +1649,30 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 }
 
 /**
+ * gtk_assistant_remove_page:
+ * @assistant: a #GtkAssistant
+ * @page_num: the index of a page in the @assistant,
+ *     or -1 to get the last page
+ *
+ * Removes the @page_num's page from @assistant.
+ *
+ * Since: 3.2
+ */
+void
+gtk_assistant_remove_page (GtkAssistant *assistant,
+                           gint          page_num)
+{
+  GtkWidget *page;
+
+  g_return_if_fail (GTK_IS_ASSISTANT (assistant));
+
+  page = gtk_assistant_get_nth_page (assistant, page_num);
+
+  if (page)
+    gtk_assistant_remove (assistant, page);
+}
+
+/**
  * gtk_assistant_set_forward_page_func:
  * @assistant: a #GtkAssistant
  * @page_func: (allow-none): the #GtkAssistantPageFunc, or %NULL

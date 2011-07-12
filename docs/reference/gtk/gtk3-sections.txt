@@ -354,6 +354,7 @@ gtk_assistant_get_nth_page
 gtk_assistant_prepend_page
 gtk_assistant_append_page
 gtk_assistant_insert_page
+gtk_assistant_remove_page
 GtkAssistantPageFunc
 gtk_assistant_set_forward_page_func
 GtkAssistantPageType
