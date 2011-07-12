@@ -63,6 +63,8 @@
 #include "gtksizegroup.h"
 #include "gtkstock.h"
 #include "gtktable.h"
+#include "gtktoolbar.h"
+#include "gtktoolbutton.h"
 #include "gtktooltip.h"
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
@@ -457,11 +459,27 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_T
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
 						gtk_file_chooser_embed_default_iface_init));						
 
+
+static void
+add_normal_and_shifted_binding (GtkBindingSet  *binding_set,
+				guint           keyval,
+				GdkModifierType modifiers,
+				const gchar    *signal_name)
+{
+  gtk_binding_entry_add_signal (binding_set,
+				keyval, modifiers,
+				signal_name, 0);
+
+  gtk_binding_entry_add_signal (binding_set,
+				keyval, modifiers | GDK_SHIFT_MASK,
+				signal_name, 0);
+}
+
 static void
 _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 {
   static const guint quick_bookmark_keyvals[10] = {
-    GDK_1, GDK_2, GDK_3, GDK_4, GDK_5, GDK_6, GDK_7, GDK_8, GDK_9, GDK_0
+    GDK_KEY_1, GDK_KEY_2, GDK_KEY_3, GDK_KEY_4, GDK_KEY_5, GDK_KEY_6, GDK_KEY_7, GDK_KEY_8, GDK_KEY_9, GDK_KEY_0
   };
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
@@ -585,74 +603,72 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   binding_set = gtk_binding_set_by_class (class);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_l, GDK_CONTROL_MASK,
+				GDK_KEY_l, GDK_CONTROL_MASK,
 				"location-toggle-popup",
 				0);
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_slash, 0,
+				GDK_KEY_slash, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "/");
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Divide, 0,
+				GDK_KEY_KP_Divide, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "/");
 
 #ifdef G_OS_UNIX
   gtk_binding_entry_add_signal (binding_set,
-				GDK_asciitilde, 0,
+				GDK_KEY_asciitilde, 0,
 				"location-popup",
 				1, G_TYPE_STRING, "~");
 #endif
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_v, GDK_CONTROL_MASK,
+				GDK_KEY_v, GDK_CONTROL_MASK,
 				"location-popup-on-paste",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Up, GDK_MOD1_MASK,
-				"up-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-		  		GDK_BackSpace, 0,
-				"up-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Up, GDK_MOD1_MASK,
+		  		GDK_KEY_BackSpace, 0,
 				"up-folder",
 				0);
 
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_Down, GDK_MOD1_MASK,
-				"down-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Down, GDK_MOD1_MASK,
-				"down-folder",
-				0);
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_Up, GDK_MOD1_MASK,
+				  "up-folder");
+
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_KP_Up, GDK_MOD1_MASK,
+				  "up-folder");
+
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_Down, GDK_MOD1_MASK,
+				  "down-folder");
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_KP_Down, GDK_MOD1_MASK,
+				  "down-folder");
 
   gtk_binding_entry_add_signal (binding_set,
-				GDK_Home, GDK_MOD1_MASK,
+				GDK_KEY_Home, GDK_MOD1_MASK,
 				"home-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KP_Home, GDK_MOD1_MASK,
+				GDK_KEY_KP_Home, GDK_MOD1_MASK,
 				"home-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_d, GDK_MOD1_MASK,
+				GDK_KEY_d, GDK_MOD1_MASK,
 				"desktop-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_h, GDK_CONTROL_MASK,
+				GDK_KEY_h, GDK_CONTROL_MASK,
                                 "show-hidden",
                                 0);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_s, GDK_MOD1_MASK,
+                                GDK_KEY_s, GDK_MOD1_MASK,
                                 "search-shortcut",
                                 0);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_r, GDK_MOD1_MASK,
+                                GDK_KEY_r, GDK_MOD1_MASK,
                                 "recent-shortcut",
                                 0);
 
@@ -800,34 +816,6 @@ pending_select_files_add (GtkFileChooserDefault *impl,
     g_slist_prepend (impl->pending_select_files, g_object_ref (file));
 }
 
-/* Used from gtk_tree_selection_selected_foreach() */
-static void
-store_selection_foreach (GtkTreeModel *model,
-			 GtkTreePath  *path,
-			 GtkTreeIter  *iter,
-			 gpointer      data)
-{
-  GtkFileChooserDefault *impl;
-  GFile *file;
-
-  impl = GTK_FILE_CHOOSER_DEFAULT (data);
-
-  file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), iter);
-  pending_select_files_add (impl, file);
-}
-
-/* Stores the current selection in the list of paths to select; this is used to
- * preserve the selection when reloading the current folder.
- */
-static void
-pending_select_files_store_selection (GtkFileChooserDefault *impl)
-{
-  GtkTreeSelection *selection;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_selection_selected_foreach (selection, store_selection_foreach, impl);
-}
-
 static void
 gtk_file_chooser_default_finalize (GObject *object)
 {
@@ -902,8 +890,9 @@ error_message_with_parent (GtkWindow  *parent,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 					    "%s", detail);
 
-  if (parent && parent->group)
-    gtk_window_group_add_window (parent->group, GTK_WINDOW (dialog));
+  if (parent && gtk_window_has_group (parent))
+    gtk_window_group_add_window (gtk_window_get_group (parent),
+                                 GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
@@ -1012,6 +1001,21 @@ error_creating_folder_over_existing_file_dialog (GtkFileChooserDefault *impl,
                   "name already exists.  Try using a different name for the "
                   "folder, or rename the file first."),
 		file, error);
+}
+
+static void
+error_with_file_under_nonfolder (GtkFileChooserDefault *impl,
+				 GFile *parent_file)
+{
+  GError *error;
+
+  error = NULL;
+  g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_NOT_DIRECTORY,
+		       _("You need to choose a valid filename."));
+
+  error_dialog (impl,
+		_("Cannot create a file under %s as it is not a folder"),
+		parent_file, error);
 }
 
 /* Shows an error about not being able to select a folder because a file with
@@ -1199,11 +1203,14 @@ shortcuts_reload_icons_get_info_cb (GCancellable *cancellable,
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->icon_size);
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
-  gtk_list_store_set (data->impl->shortcuts_model, &iter,
-		      SHORTCUTS_COL_PIXBUF, pixbuf,
-		      -1);
-  gtk_tree_path_free (path);
+  if (path)
+    {
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
+      gtk_list_store_set (data->impl->shortcuts_model, &iter,
+			  SHORTCUTS_COL_PIXBUF, pixbuf,
+			  -1);
+      gtk_tree_path_free (path);
+    }
 
   if (pixbuf)
     g_object_unref (pixbuf);
@@ -2158,7 +2165,7 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 
       g_object_unref (combo_selected);
     }
-  
+
   impl->changing_folder = old_changing_folders;
 
   profile_end ("end", NULL);
@@ -2169,11 +2176,8 @@ static void
 shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 {
   int pos;
-  gboolean success;
 
   g_assert (!impl->shortcuts_current_folder_active);
-
-  success = TRUE;
 
   g_assert (impl->current_folder != NULL);
 
@@ -2184,26 +2188,24 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
       GFile *base_file;
 
       /* Separator */
-
       shortcuts_insert_separator (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
 
       /* Item */
-
       pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
 
       volume = _gtk_file_system_get_volume_for_file (impl->file_system, impl->current_folder);
       if (volume)
-	base_file = _gtk_file_system_volume_get_root (volume);
+        base_file = _gtk_file_system_volume_get_root (volume);
       else
-	base_file = NULL;
+        base_file = NULL;
 
       if (base_file && g_file_equal (base_file, impl->current_folder))
-	shortcuts_insert_file (impl, pos, SHORTCUT_TYPE_VOLUME, volume, NULL, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
+        shortcuts_insert_file (impl, pos, SHORTCUT_TYPE_VOLUME, volume, NULL, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
       else
-	shortcuts_insert_file (impl, pos, SHORTCUT_TYPE_FILE, NULL, impl->current_folder, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
+        shortcuts_insert_file (impl, pos, SHORTCUT_TYPE_FILE, NULL, impl->current_folder, NULL, FALSE, SHORTCUTS_CURRENT_FOLDER);
 
       if (base_file)
-	g_object_unref (base_file);
+        g_object_unref (base_file);
     }
   else if (impl->save_folder_combo != NULL)
     {
@@ -2432,8 +2434,22 @@ renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
 static GtkWidget *
 filter_create (GtkFileChooserDefault *impl)
 {
+  GtkCellRenderer *cell;
+  GList           *cells;
+
   impl->filter_combo = gtk_combo_box_text_new ();
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
+
+  /* Get the combo's text renderer and set ellipsize parameters */
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (impl->filter_combo));
+  g_assert (cells);
+  cell = cells->data;
+
+  g_object_set (G_OBJECT (cell),
+		"ellipsize", PANGO_ELLIPSIZE_END,
+		NULL);
+
+  g_list_free (cells);
 
   g_signal_connect (impl->filter_combo, "changed",
 		    G_CALLBACK (filter_combo_changed), impl);
@@ -2445,27 +2461,27 @@ filter_create (GtkFileChooserDefault *impl)
 }
 
 static GtkWidget *
-button_new (GtkFileChooserDefault *impl,
-	    const char            *text,
-	    const char            *stock_id,
-	    gboolean               sensitive,
-	    gboolean               show,
-	    GCallback              callback)
+toolbutton_new (GtkFileChooserDefault *impl,
+                GIcon                 *icon,
+                gboolean               sensitive,
+                gboolean               show,
+                GCallback              callback)
 {
-  GtkWidget *button;
+  GtkToolItem *item;
   GtkWidget *image;
 
-  button = gtk_button_new_with_mnemonic (text);
-  image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_image (GTK_BUTTON (button), image);
+  item = gtk_tool_button_new (NULL, NULL);
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_widget_show (image);
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
 
-  gtk_widget_set_sensitive (button, sensitive);
-  g_signal_connect (button, "clicked", callback, impl);
+  gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
+  g_signal_connect (item, "clicked", callback, impl);
 
   if (show)
-    gtk_widget_show (button);
+    gtk_widget_show (GTK_WIDGET (item));
 
-  return button;
+  return GTK_WIDGET (item);
 }
 
 /* Looks for a path among the shortcuts; returns its index or -1 if it doesn't exist */
@@ -2966,166 +2982,6 @@ shortcuts_drag_data_delete_cb (GtkWidget             *widget,
   g_signal_stop_emission_by_name (widget, "drag-data-delete");
 }
 
-#if 0
-/* Creates a suitable drag cursor to indicate that the selected bookmark will be
- * deleted or not.
- */
-static void
-shortcuts_drag_set_delete_cursor (GtkFileChooserDefault *impl,
-				  gboolean               delete)
-{
-  GtkTreeView *tree_view;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-  GdkPixmap *row_pixmap;
-  GdkBitmap *mask;
-  int row_pixmap_y;
-  int cell_y;
-
-  tree_view = GTK_TREE_VIEW (impl->browse_shortcuts_tree_view);
-
-  /* Find the selected path and get its drag pixmap */
-
-  if (!shortcuts_get_selected (impl, &iter))
-    g_assert_not_reached ();
-
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
-
-  row_pixmap = gtk_tree_view_create_row_drag_icon (tree_view, path);
-  gtk_tree_path_free (path);
-
-  mask = NULL;
-  row_pixmap_y = 0;
-
-  if (delete)
-    {
-      GdkPixbuf *pixbuf;
-
-      pixbuf = gtk_widget_render_icon (impl->browse_shortcuts_tree_view,
-				       GTK_STOCK_DELETE,
-				       GTK_ICON_SIZE_DND,
-				       NULL);
-      if (pixbuf)
-	{
-	  GdkPixmap *composite;
-	  int row_pixmap_width, row_pixmap_height;
-	  int pixbuf_width, pixbuf_height;
-	  int composite_width, composite_height;
-	  int pixbuf_x, pixbuf_y;
-	  GdkGC *gc, *mask_gc;
-	  GdkColor color;
-	  GdkBitmap *pixbuf_mask;
-
-	  /* Create pixmap and mask for composite image */
-
-	  gdk_drawable_get_size (row_pixmap, &row_pixmap_width, &row_pixmap_height);
-	  pixbuf_width = gdk_pixbuf_get_width (pixbuf);
-	  pixbuf_height = gdk_pixbuf_get_height (pixbuf);
-
-	  composite_width = MAX (row_pixmap_width, pixbuf_width);
-	  composite_height = MAX (row_pixmap_height, pixbuf_height);
-
-	  row_pixmap_y = (composite_height - row_pixmap_height) / 2;
-
-	  if (gtk_widget_get_direction (impl->browse_shortcuts_tree_view) == GTK_TEXT_DIR_RTL)
-	    pixbuf_x = 0;
-	  else
-	    pixbuf_x = composite_width - pixbuf_width;
-
-	  pixbuf_y = (composite_height - pixbuf_height) / 2;
-
-	  composite = gdk_pixmap_new (row_pixmap, composite_width, composite_height, -1);
-	  gc = gdk_gc_new (composite);
-
-	  mask = gdk_pixmap_new (row_pixmap, composite_width, composite_height, 1);
-	  mask_gc = gdk_gc_new (mask);
-	  color.pixel = 0;
-	  gdk_gc_set_foreground (mask_gc, &color);
-	  gdk_draw_rectangle (mask, mask_gc, TRUE, 0, 0, composite_width, composite_height);
-
-	  color.red = 0xffff;
-	  color.green = 0xffff;
-	  color.blue = 0xffff;
-	  gdk_gc_set_rgb_fg_color (gc, &color);
-	  gdk_draw_rectangle (composite, gc, TRUE, 0, 0, composite_width, composite_height);
-
-	  /* Composite the row pixmap and the pixbuf */
-
-	  gdk_pixbuf_render_pixmap_and_mask_for_colormap
-	    (pixbuf,
-	     gtk_widget_get_colormap (impl->browse_shortcuts_tree_view),
-	     NULL, &pixbuf_mask, 128);
-	  gdk_draw_drawable (mask, mask_gc, pixbuf_mask,
-			     0, 0,
-			     pixbuf_x, pixbuf_y,
-			     pixbuf_width, pixbuf_height);
-	  g_object_unref (pixbuf_mask);
-
-	  gdk_draw_drawable (composite, gc, row_pixmap,
-			     0, 0,
-			     0, row_pixmap_y,
-			     row_pixmap_width, row_pixmap_height);
-	  color.pixel = 1;
-	  gdk_gc_set_foreground (mask_gc, &color);
-	  gdk_draw_rectangle (mask, mask_gc, TRUE, 0, row_pixmap_y, row_pixmap_width, row_pixmap_height);
-
-	  gdk_draw_pixbuf (composite, gc, pixbuf,
-			   0, 0,
-			   pixbuf_x, pixbuf_y,
-			   pixbuf_width, pixbuf_height,
-			   GDK_RGB_DITHER_MAX,
-			   0, 0);
-
-	  g_object_unref (pixbuf);
-	  g_object_unref (row_pixmap);
-
-	  row_pixmap = composite;
-	}
-    }
-
-  /* The hotspot offsets here are copied from gtk_tree_view_drag_begin(), ugh */
-
-  gtk_tree_view_get_path_at_pos (tree_view,
-                                 tree_view->priv->press_start_x,
-                                 tree_view->priv->press_start_y,
-                                 NULL,
-                                 NULL,
-                                 NULL,
-                                 &cell_y);
-
-  gtk_drag_set_icon_pixmap (impl->shortcuts_drag_context,
-			    gdk_drawable_get_colormap (row_pixmap),
-			    row_pixmap,
-			    mask,
-			    tree_view->priv->press_start_x + 1,
-			    row_pixmap_y + cell_y + 1);
-
-  g_object_unref (row_pixmap);
-  if (mask)
-    g_object_unref (mask);
-}
-
-/* We set the delete cursor and the shortcuts_drag_outside flag in an idle
- * handler so that we can tell apart the drag_leave event that comes right
- * before a drag_drop, from a normal drag_leave.  We don't want to set the
- * cursor nor the flag in the latter case.
- */
-static gboolean
-shortcuts_drag_outside_idle_cb (GtkFileChooserDefault *impl)
-{
-  GDK_THREADS_ENTER ();
-  
-  shortcuts_drag_set_delete_cursor (impl, TRUE);
-  impl->shortcuts_drag_outside = TRUE;
-
-  shortcuts_cancel_drag_outside_idle (impl);
-
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
-}
-#endif
-
 /* GtkWidget::drag-leave handler for the shortcuts list.  We unhighlight the
  * drop position.
  */
@@ -3163,14 +3019,18 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
   GdkRectangle cell;
   int row;
   int bookmarks_index;
+  int header_height = 0;
 
   tree_view = GTK_TREE_VIEW (impl->browse_shortcuts_tree_view);
+
+  if (gtk_tree_view_get_headers_visible (tree_view))
+    header_height = TREE_VIEW_HEADER_HEIGHT (tree_view);
 
   bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
                                       x,
-				      y - TREE_VIEW_HEADER_HEIGHT (tree_view),
+				      y - header_height,
                                       path,
                                       &column,
                                       NULL,
@@ -3389,6 +3249,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   GtkFileChooserDefault *impl;
   GtkTreePath *tree_path;
   GtkTreeViewDropPosition tree_pos;
+  GdkAtom target;
   int position;
   int bookmarks_index;
 
@@ -3408,9 +3269,11 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   g_assert (position >= bookmarks_index);
   position -= bookmarks_index;
 
-  if (gtk_targets_include_uri (&selection_data->target, 1))
+  target = gtk_selection_data_get_target (selection_data);
+
+  if (gtk_targets_include_uri (&target, 1))
     shortcuts_drop_uris (impl, selection_data, position);
-  else if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  else if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     shortcuts_reorder (impl, position);
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");
@@ -3518,9 +3381,9 @@ shortcuts_key_press_event_after_cb (GtkWidget             *tree_view,
   GtkWidget *entry;
 
   /* don't screw up focus switching with Tab */
-  if (event->keyval == GDK_Tab
-      || event->keyval == GDK_KP_Tab
-      || event->keyval == GDK_ISO_Left_Tab
+  if (event->keyval == GDK_KEY_Tab
+      || event->keyval == GDK_KEY_KP_Tab
+      || event->keyval == GDK_KEY_ISO_Left_Tab
       || event->length < 1)
     return FALSE;
 
@@ -3846,10 +3709,13 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 				       NULL);
 
   renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-  g_signal_connect (renderer, "edited", 
+  g_object_set (renderer,
+                "width-chars", 12,
+                "ellipsize", PANGO_ELLIPSIZE_END,
+                NULL);
+  g_signal_connect (renderer, "edited",
 		    G_CALLBACK (shortcuts_edited), impl);
-  g_signal_connect (renderer, "editing-canceled", 
+  g_signal_connect (renderer, "editing-canceled",
 		    G_CALLBACK (shortcuts_editing_canceled), impl);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
@@ -3871,45 +3737,51 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 		       GtkSizeGroup          *size_group)
 {
   GtkWidget *vbox;
-  GtkWidget *hbox;
+  GtkWidget *toolbar;
   GtkWidget *widget;
+  GIcon *icon;
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (vbox);
 
   /* Shortcuts tree */
 
   widget = shortcuts_list_create (impl);
+
+  gtk_size_group_add_widget (size_group, widget);
+
   gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
 
   /* Box for buttons */
 
-  hbox = gtk_hbox_new (TRUE, 6);
-  gtk_size_group_add_widget (size_group, hbox);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-  gtk_widget_show (hbox);
+  toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_MENU);
+
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
+  gtk_widget_show (toolbar);
 
   /* Add bookmark button */
+  icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
+  impl->browse_shortcuts_add_button = toolbutton_new (impl,
+                                                      icon,
+                                                      FALSE,
+                                                      TRUE,
+                                                      G_CALLBACK (add_bookmark_button_clicked_cb));
+  g_object_unref (icon);
 
-  impl->browse_shortcuts_add_button = button_new (impl,
-						  _("_Add"),
-						  GTK_STOCK_ADD,
-						  FALSE,
-						  TRUE,
-						  G_CALLBACK (add_bookmark_button_clicked_cb));
-  gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_add_button, TRUE, TRUE, 0);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (impl->browse_shortcuts_add_button), 0);
   gtk_widget_set_tooltip_text (impl->browse_shortcuts_add_button,
                                _("Add the selected folder to the Bookmarks"));
 
   /* Remove bookmark button */
-
-  impl->browse_shortcuts_remove_button = button_new (impl,
-						     _("_Remove"),
-						     GTK_STOCK_REMOVE,
-						     FALSE,
-						     TRUE,
-						     G_CALLBACK (remove_bookmark_button_clicked_cb));
-  gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_remove_button, TRUE, TRUE, 0);
+  icon = g_themed_icon_new_with_default_fallbacks ("list-remove-symbolic");
+  impl->browse_shortcuts_remove_button = toolbutton_new (impl,
+                                                         icon,
+                                                         FALSE,
+                                                         TRUE,
+                                                         G_CALLBACK (remove_bookmark_button_clicked_cb));
+  g_object_unref (icon);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (impl->browse_shortcuts_remove_button), 1);
   gtk_widget_set_tooltip_text (impl->browse_shortcuts_remove_button,
                                _("Remove the selected bookmark"));
 
@@ -3923,10 +3795,10 @@ key_is_left_or_right (GdkEventKey *event)
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
 
-  return ((event->keyval == GDK_Right
-	   || event->keyval == GDK_KP_Right
-	   || event->keyval == GDK_Left
-	   || event->keyval == GDK_KP_Left)
+  return ((event->keyval == GDK_KEY_Right
+	   || event->keyval == GDK_KEY_KP_Right
+	   || event->keyval == GDK_KEY_Left
+	   || event->keyval == GDK_KEY_KP_Left)
 	  && (event->state & modifiers) == 0);
 }
 
@@ -3946,10 +3818,10 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
 
-  if ((event->keyval == GDK_slash
-       || event->keyval == GDK_KP_Divide
+  if ((event->keyval == GDK_KEY_slash
+       || event->keyval == GDK_KEY_KP_Divide
 #ifdef G_OS_UNIX
-       || event->keyval == GDK_asciitilde
+       || event->keyval == GDK_KEY_asciitilde
 #endif
        ) && ! (event->state & (~GDK_SHIFT_MASK & modifiers)))
     {
@@ -3963,11 +3835,11 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       return TRUE;
     }
 
-  if ((event->keyval == GDK_Return
-       || event->keyval == GDK_ISO_Enter
-       || event->keyval == GDK_KP_Enter
-       || event->keyval == GDK_space
-       || event->keyval == GDK_KP_Space)
+  if ((event->keyval == GDK_KEY_Return
+       || event->keyval == GDK_KEY_ISO_Enter
+       || event->keyval == GDK_KEY_KP_Enter
+       || event->keyval == GDK_KEY_space
+       || event->keyval == GDK_KEY_KP_Space)
       && ((event->state & modifiers) == 0)
       && !(impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 	   impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
@@ -3975,14 +3847,21 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       GtkWindow *window;
 
       window = get_toplevel (widget);
-      if (window
-	  && widget != window->default_widget
-	  && !(widget == window->focus_widget &&
-	       (!window->default_widget || !gtk_widget_get_sensitive (window->default_widget))))
-	{
-	  gtk_window_activate_default (window);
-	  return TRUE;
-	}
+      if (window)
+        {
+          GtkWidget *default_widget, *focus_widget;
+
+          default_widget = gtk_window_get_default_widget (window);
+          focus_widget = gtk_window_get_focus (window);
+
+          if (widget != default_widget &&
+              !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
+	    {
+	      gtk_window_activate_default (window);
+
+	      return TRUE;
+	    }
+        }
     }
 
   return FALSE;
@@ -4121,23 +4000,21 @@ out:
 }
 
 static void
-file_list_drag_data_received_cb (GtkWidget          *widget,
-				 GdkDragContext     *context,
-				 gint                x,
-				 gint                y,
-				 GtkSelectionData   *selection_data,
-				 guint               info,
-				 guint               time_,
-				 gpointer            data)
+file_list_drag_data_received_cb (GtkWidget        *widget,
+                                 GdkDragContext   *context,
+                                 gint              x,
+                                 gint              y,
+                                 GtkSelectionData *selection_data,
+                                 guint             info,
+                                 guint             time_,
+                                 gpointer          data)
 {
   GtkFileChooserDefault *impl;
-  GtkFileChooser *chooser;
   gchar **uris;
   char *uri;
   GFile *file;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
-  chooser = GTK_FILE_CHOOSER (data);
 
   /* Allow only drags from other widgets; see bug #533891. */
   if (gtk_drag_get_source_widget (context) == widget)
@@ -4161,13 +4038,13 @@ file_list_drag_data_received_cb (GtkWidget          *widget,
       data->file = file;
 
       if (impl->file_list_drag_data_received_cancellable)
-	g_cancellable_cancel (impl->file_list_drag_data_received_cancellable);
+        g_cancellable_cancel (impl->file_list_drag_data_received_cancellable);
 
       impl->file_list_drag_data_received_cancellable =
-	_gtk_file_system_get_info (impl->file_system, file,
-				   "standard::type",
-				   file_list_drag_data_received_get_info_cb,
-				   data);
+        _gtk_file_system_get_info (impl->file_system, file,
+                                   "standard::type",
+                                   file_list_drag_data_received_get_info_cb,
+                                   data);
     }
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");
@@ -4344,7 +4221,6 @@ list_button_press_event_cb (GtkWidget             *widget,
 			    GtkFileChooserDefault *impl)
 {
   static gboolean in_press = FALSE;
-  gboolean handled;
 
   if (in_press)
     return FALSE;
@@ -4353,7 +4229,7 @@ list_button_press_event_cb (GtkWidget             *widget,
     return FALSE;
 
   in_press = TRUE;
-  handled = gtk_widget_event (impl->browse_files_tree_view, (GdkEvent *) event);
+  gtk_widget_event (impl->browse_files_tree_view, (GdkEvent *) event);
   in_press = FALSE;
 
   file_list_popup_menu (impl, event);
@@ -4426,9 +4302,12 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
 static void
 set_icon_cell_renderer_fixed_size (GtkFileChooserDefault *impl, GtkCellRenderer *renderer)
 {
+  gint xpad, ypad;
+
+  gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
   gtk_cell_renderer_set_fixed_size (renderer, 
-                                    renderer->xpad * 2 + impl->icon_size,
-                                    renderer->ypad * 2 + impl->icon_size);
+                                    xpad * 2 + impl->icon_size,
+                                    ypad * 2 + impl->icon_size);
 }
 
 /* Creates the widgets for the file list */
@@ -4590,6 +4469,7 @@ file_pane_create (GtkFileChooserDefault *impl,
 
   widget = create_file_list (impl);
   gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_size_group_add_widget (size_group, widget);
 
   /* Preview */
 
@@ -4606,7 +4486,6 @@ file_pane_create (GtkFileChooserDefault *impl,
   gtk_widget_show (widget);
   gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox), widget, FALSE, FALSE, 0);
 
-  gtk_size_group_add_widget (size_group, impl->filter_combo_hbox);
   gtk_box_pack_end (GTK_BOX (vbox), impl->filter_combo_hbox, FALSE, FALSE, 0);
 
   return vbox;
@@ -5176,7 +5055,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
   widget = file_pane_create (impl, size_group);
   gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
-
+  gtk_paned_set_position (GTK_PANED (hpaned), 148);
   g_object_unref (size_group);
 
   return vbox;
@@ -5736,21 +5615,20 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
   GtkWidget *toplevel;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+  toplevel = gtk_widget_get_toplevel (widget);
 
-  if (previous_toplevel)
+  if (previous_toplevel && 
+      impl->toplevel_set_focus_id != 0)
     {
-      g_assert (impl->toplevel_set_focus_id != 0);
       g_signal_handler_disconnect (previous_toplevel,
                                    impl->toplevel_set_focus_id);
       impl->toplevel_set_focus_id = 0;
       impl->toplevel_last_focus_widget = NULL;
     }
-  else
-    g_assert (impl->toplevel_set_focus_id == 0);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     {
+      g_assert (impl->toplevel_set_focus_id == 0);
       impl->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
 						      G_CALLBACK (toplevel_set_focus_cb), impl);
       impl->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
@@ -6039,17 +5917,6 @@ gtk_file_chooser_default_map (GtkWidget *widget)
            */
           break;
 
-        case RELOAD_WAS_UNMAPPED:
-          /* Just reload the current folder; else continue
-           * the pending load.
-           */
-          if (impl->current_folder)
-            {
-              pending_select_files_store_selection (impl);
-              change_folder_and_display_error (impl, impl->current_folder, FALSE);
-            }
-          break;
-
         default:
           g_assert_not_reached ();
       }
@@ -6073,8 +5940,6 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
   settings_save (impl);
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unmap (widget);
-
-  impl->reload_state = RELOAD_WAS_UNMAPPED;
 }
 
 static void
@@ -6184,22 +6049,24 @@ static void
 set_busy_cursor (GtkFileChooserDefault *impl,
 		 gboolean               busy)
 {
+  GtkWidget *widget;
   GtkWindow *toplevel;
   GdkDisplay *display;
   GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
-  if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
+  widget = GTK_WIDGET (toplevel);
+  if (!toplevel || !gtk_widget_get_realized (widget))
     return;
 
-  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+  display = gtk_widget_get_display (widget);
 
   if (busy)
     cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
   else
     cursor = NULL;
 
-  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
   gdk_display_flush (display);
 
   if (cursor)
@@ -6402,7 +6269,15 @@ show_and_select_files (GtkFileChooserDefault *impl,
 
       if (_gtk_file_system_model_iter_is_visible (fsmodel, &iter))
         {
+          GtkTreePath *path;
+
           gtk_tree_selection_select_iter (selection, &iter);
+
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (fsmodel), &iter);
+          gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                                    path, NULL, FALSE);
+          gtk_tree_path_free (path);
+
           selected_a_file = TRUE;
         }
     }
@@ -6875,7 +6750,6 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 {
   GtkTreeSelection *selection;
   struct update_chooser_entry_selected_foreach_closure closure;
-  const char *file_part;
 
   /* no need to update the file chooser's entry if there's no entry */
   if (impl->operation_mode == OPERATION_MODE_SEARCH ||
@@ -6884,10 +6758,10 @@ update_chooser_entry (GtkFileChooserDefault *impl)
     return;
 
   if (!(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-	|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
-	|| ((impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-	     || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-	    && impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)))
+        || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+        || ((impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+             || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+            && impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)))
     return;
 
   g_assert (impl->location_entry != NULL);
@@ -6895,8 +6769,6 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
   closure.num_selected = 0;
   gtk_tree_selection_selected_foreach (selection, update_chooser_entry_selected_foreach, &closure);
-
-  file_part = NULL;
 
   if (closure.num_selected == 0)
     {
@@ -6911,7 +6783,7 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
           info = _gtk_file_system_model_get_info (impl->browse_files_model, &closure.first_selected_iter);
 
-          /* If the cursor moved to the row of the newly created folder, 
+          /* If the cursor moved to the row of the newly created folder,
            * retrieving info will return NULL.
            */
           if (!info)
@@ -6923,13 +6795,13 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
           if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
               impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-	      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-	    {
-	      /* We don't want the name to change when clicking on a folder... */
-	      change_entry = (! _gtk_file_info_consider_as_directory (info));
-	    }
+              impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+            {
+              /* Don't change the name when clicking on a folder... */
+              change_entry = (! _gtk_file_info_consider_as_directory (info));
+            }
           else
-	    change_entry = TRUE; /* ... unless we are in SELECT_FOLDER mode */
+            change_entry = TRUE; /* ... unless we are in SELECT_FOLDER mode */
 
           if (change_entry)
             {
@@ -6945,10 +6817,9 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   else
     {
       g_assert (!(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
- 		  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER));
+                  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER));
 
       /* Multiple selection, so just clear the entry. */
-
       g_free (impl->browse_files_last_selected_name);
       impl->browse_files_last_selected_name = NULL;
 
@@ -6968,26 +6839,26 @@ update_chooser_entry (GtkFileChooserDefault *impl)
       entry_text = gtk_entry_get_text (GTK_ENTRY (impl->location_entry));
       len = strlen (entry_text);
       if (len != 0)
-	{
-	  /* The file chooser entry may have appended a "/" to its text.  So
-	   * take it out, and compare the result to the old selection.
-	   */
-	  if (entry_text[len - 1] == G_DIR_SEPARATOR)
-	    {
-	      char *tmp;
+        {
+          /* The file chooser entry may have appended a "/" to its text.
+           * So take it out, and compare the result to the old selection.
+           */
+          if (entry_text[len - 1] == G_DIR_SEPARATOR)
+            {
+              gchar *tmp;
 
-	      tmp = g_strndup (entry_text, len - 1);
-	      clear_entry = (compare_utf8_filenames (impl->browse_files_last_selected_name, tmp) == 0);
-	      g_free (tmp);
-	    }
-	  else
-	    clear_entry = (compare_utf8_filenames (impl->browse_files_last_selected_name, entry_text) == 0);
-	}
+              tmp = g_strndup (entry_text, len - 1);
+              clear_entry = (compare_utf8_filenames (impl->browse_files_last_selected_name, tmp) == 0);
+              g_free (tmp);
+            }
+          else
+            clear_entry = (compare_utf8_filenames (impl->browse_files_last_selected_name, entry_text) == 0);
+        }
       else
-	clear_entry = FALSE;
+        clear_entry = FALSE;
 
       if (clear_entry)
-	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
+        _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
     }
 }
 
@@ -8221,8 +8092,9 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-  if (toplevel->group)
-    gtk_window_group_add_window (toplevel->group, GTK_WINDOW (dialog));
+  if (gtk_window_has_group (toplevel))
+    gtk_window_group_add_window (gtk_window_get_group (toplevel),
+                                 GTK_WINDOW (dialog));
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -8361,7 +8233,11 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
 
   if (parent_is_folder)
     {
-      if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+      if (data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
+	  g_signal_emit_by_name (data->impl, "response-requested"); /* even if the file doesn't exist, apps can make good use of that (e.g. Emacs) */
+	}
+      else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
         {
           if (data->file_exists_and_is_not_folder)
 	    {
@@ -8385,28 +8261,40 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
       else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 	       || data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
         {
-	  GError *error = NULL;
+	  GError *mkdir_error = NULL;
 
 	  /* In both cases (SELECT_FOLDER and CREATE_FOLDER), if you type
 	   * "/blah/nonexistent" you *will* want a folder created.
 	   */
 
 	  set_busy_cursor (data->impl, TRUE);
-	  g_file_make_directory (data->file, NULL, &error);
+	  g_file_make_directory (data->file, NULL, &mkdir_error);
 	  set_busy_cursor (data->impl, FALSE);
 
-	  if (!error)
+	  if (!mkdir_error)
 	    g_signal_emit_by_name (data->impl, "response-requested");
 	  else
-	    error_creating_folder_dialog (data->impl, data->file, error);
+	    error_creating_folder_dialog (data->impl, data->file, mkdir_error);
         }
       else
 	g_assert_not_reached ();
     }
   else
     {
-      /* This will display an error, which is what we want */
-      change_folder_and_display_error (data->impl, data->parent_file, FALSE);
+      if (info)
+	{
+	  /* The parent exists, but it's not a folder!  Someone probably typed existing_file.txt/subfile.txt */
+	  error_with_file_under_nonfolder (data->impl, data->parent_file);
+	}
+      else
+	{
+	  GError *error_copy;
+
+	  /* The parent folder is not readable for some reason */
+
+	  error_copy = g_error_copy (error);
+	  error_changing_folder_dialog (data->impl, data->parent_file, error_copy);
+	}
     }
 
 out:
@@ -8428,7 +8316,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   gboolean file_exists;
   gboolean is_folder;
-  gboolean needs_file_type_check = FALSE;
+  gboolean needs_parent_check = FALSE;
   struct FileExistsData *data = user_data;
 
   if (cancellable != data->impl->file_exists_get_info_cancellable)
@@ -8450,8 +8338,10 @@ file_exists_get_info_cb (GCancellable *cancellable,
 	change_folder_and_display_error (data->impl, data->file, TRUE);
       else
 	{
-	  /* user typed a filename; we are done */
-	  g_signal_emit_by_name (data->impl, "response-requested");
+	  if (file_exists)
+	    g_signal_emit_by_name (data->impl, "response-requested"); /* user typed an existing filename; we are done */
+	  else
+	    needs_parent_check = TRUE; /* file doesn't exist; see if its parent exists */
 	}
     }
   else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
@@ -8466,14 +8356,14 @@ file_exists_get_info_cb (GCancellable *cancellable,
         }
       else
         {
-          needs_file_type_check = TRUE;
+          needs_parent_check = TRUE;
         }
     }
   else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       if (!file_exists)
         {
-	  needs_file_type_check = TRUE;
+	  needs_parent_check = TRUE;
         }
       else
 	{
@@ -8491,15 +8381,15 @@ file_exists_get_info_cb (GCancellable *cancellable,
       if (is_folder)
 	change_folder_and_display_error (data->impl, data->file, TRUE);
       else
-	needs_file_type_check = TRUE;
+	needs_parent_check = TRUE;
     }
   else
     {
       g_assert_not_reached();
     }
 
-  if (needs_file_type_check) {
-    /* check that everything up to the last component exists */
+  if (needs_parent_check) {
+    /* check that everything up to the last path component exists (i.e. the parent) */
 
     data->file_exists_and_is_not_folder = file_exists && !is_folder;
     data_ownership_taken = TRUE;
@@ -8680,7 +8570,8 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 
       if (is_empty)
         {
-          if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+          if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
             return FALSE;
 
           goto file_list;
@@ -9274,13 +9165,9 @@ static void
 recent_clear_model (GtkFileChooserDefault *impl,
                     gboolean               remove_from_treeview)
 {
-  GtkTreeModel *model;
-
   if (!impl->recent_model)
     return;
 
-  model = GTK_TREE_MODEL (impl->recent_model);
-  
   if (remove_from_treeview)
     gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 
@@ -10002,16 +9889,16 @@ shortcuts_key_press_event_cb (GtkWidget             *widget,
       return TRUE;
     }
 
-  if ((event->keyval == GDK_BackSpace
-      || event->keyval == GDK_Delete
-      || event->keyval == GDK_KP_Delete)
+  if ((event->keyval == GDK_KEY_BackSpace
+      || event->keyval == GDK_KEY_Delete
+      || event->keyval == GDK_KEY_KP_Delete)
       && (event->state & modifiers) == 0)
     {
       remove_selected_bookmarks (impl);
       return TRUE;
     }
 
-  if ((event->keyval == GDK_F2)
+  if ((event->keyval == GDK_KEY_F2)
       && (event->state & modifiers) == 0)
     {
       rename_selected_bookmark (impl);
@@ -10438,16 +10325,14 @@ shortcuts_pane_model_filter_row_draggable (GtkTreeDragSource *drag_source,
   return (pos >= bookmarks_pos && pos < bookmarks_pos + model->impl->num_bookmarks);
 }
 
-/* GtkTreeDragSource::drag_data_get implementation for the shortcuts filter model */
+/* GtkTreeDragSource::drag_data_get implementation for the shortcuts
+ * filter model
+ */
 static gboolean
 shortcuts_pane_model_filter_drag_data_get (GtkTreeDragSource *drag_source,
-				           GtkTreePath       *path,
-				           GtkSelectionData  *selection_data)
+                                           GtkTreePath       *path,
+                                           GtkSelectionData  *selection_data)
 {
-  ShortcutsPaneModelFilter *model;
-
-  model = SHORTCUTS_PANE_MODEL_FILTER (drag_source);
-
   /* FIXME */
 
   return FALSE;
