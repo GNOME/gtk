@@ -138,8 +138,7 @@ typedef enum {
 
 typedef enum {
   RELOAD_EMPTY,			/* No folder has been set */
-  RELOAD_HAS_FOLDER,		/* We have a folder, although it may not be completely loaded yet; no need to reload */
-  RELOAD_WAS_UNMAPPED		/* We had a folder but got unmapped; reload is needed */
+  RELOAD_HAS_FOLDER		/* We have a folder, although it may not be completely loaded yet; no need to reload */
 } ReloadState;
 
 typedef enum {
