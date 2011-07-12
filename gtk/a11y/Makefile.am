@@ -53,8 +53,6 @@ gail_c_sources =			\
 	gailutil.c			\
 	gailmisc.c
 
-libgailincludedir=$(includedir)/gail-3.0/gail
-
 gail_private_h_sources =		\
 	gtkarrowaccessible.h		\
 	gtkbooleancellaccessible.h	\
@@ -100,20 +98,14 @@ gail_private_h_sources =		\
 	gtktogglebuttonaccessible.h	\
 	gtktoplevelaccessible.h		\
 	gtktreeviewaccessible.h		\
+	gtkwidgetaccessible.h		\
 	gtkwindowaccessible.h		\
 	gailutil.h			\
 	gailmisc.h
 
-gail_public_h_sources =	\
-	gtkwidgetaccessible.h
-
 libgail_la_SOURCES = 			\
 	$(gail_c_sources)		\
-	$(gail_public_h_sources)	\
 	$(gail_private_h_sources)
-
-libgailinclude_HEADERS =		\
-	$(gail_public_h_sources)
 
 libgail_la_CPPFLAGS = \
 	-I$(top_srcdir)			\
