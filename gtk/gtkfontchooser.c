@@ -339,14 +339,9 @@ slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
   GtkFontChooserPrivate *priv = (GtkFontChooserPrivate*)data;
 
-  /* If we set the silder value manually, we ignore this callback */
-  if (priv->ignore_slider)
-    {
-      priv->ignore_slider = FALSE;
-      return;
-    }
+  priv->ignore_slider = TRUE;
 
-  gtk_adjustment_set_value (gtk_spin_button_get_adjustment( GTK_SPIN_BUTTON(priv->size_spin)),
+  gtk_adjustment_set_value (gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON (priv->size_spin)),
                             gtk_adjustment_get_value (adjustment));
 }
 
@@ -358,25 +353,28 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   GtkFontChooserPrivate   *priv        = fontchooser->priv;
 
   gdouble size = gtk_adjustment_get_value (adjustment);
-  
-  GtkAdjustment *slider_adj = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
-
-  /* We ignore the slider value change callback for both of this set_value call */
-  priv->ignore_slider = TRUE;
-  if (size < gtk_adjustment_get_lower (slider_adj))
-    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
-  else if (size > gtk_adjustment_get_upper (slider_adj))
-    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
-  else
-    gtk_adjustment_set_value (slider_adj, size);
-
-  priv->size = ((gint)gtk_adjustment_get_value (adjustment)) * PANGO_SCALE;
+  priv->size = ((gint)size) * PANGO_SCALE;
 
   desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
   
   g_object_notify (G_OBJECT (fontchooser), "font-name");
+  
+  if (priv->ignore_slider)
+  {
+    priv->ignore_slider = FALSE;
+    return;
+  }
+
+  GtkAdjustment *slider_adj = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
+
+  if (size < gtk_adjustment_get_lower (slider_adj))
+    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
+  else if (size > gtk_adjustment_get_upper (slider_adj))
+    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
+  else
+    gtk_adjustment_set_value (slider_adj, size);
 
   gtk_widget_queue_draw (priv->preview);
 }
@@ -514,6 +512,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   PangoFontDescription    *font_desc;
   GtkWidget               *scrolled_win;
   GtkWidget               *grid;
+  GtkWidget               *sub_grid;
 
   fontchooser->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontchooser,
                                                    GTK_TYPE_FONT_CHOOSER,
@@ -557,17 +556,25 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /* Basic layout */
   grid = gtk_grid_new ();
+  sub_grid = gtk_grid_new ();
 
   gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 3, 1);
   gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 3, 1);
   gtk_grid_attach (GTK_GRID (grid), priv->preview,      0, 2, 3, 1);
-  gtk_grid_attach (GTK_GRID (grid), priv->size_slider,  0, 3, 2, 1);
-  gtk_grid_attach (GTK_GRID (grid), priv->size_spin,    2, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), sub_grid,           0, 3, 3, 1);
+  
+  gtk_widget_set_hexpand  (GTK_WIDGET (sub_grid),          TRUE);  
+  gtk_grid_attach (GTK_GRID (sub_grid), priv->size_slider,  0, 3, 2, 1);
+  gtk_grid_attach (GTK_GRID (sub_grid), priv->size_spin,    2, 3, 1, 1);
 
   gtk_widget_set_hexpand  (GTK_WIDGET (scrolled_win),      TRUE);
   gtk_widget_set_vexpand  (GTK_WIDGET (scrolled_win),      TRUE);
-  gtk_widget_set_hexpand (GTK_WIDGET (priv->search_entry), TRUE);
+  gtk_widget_set_hexpand  (GTK_WIDGET (priv->search_entry), TRUE);
 
+  gtk_widget_set_hexpand  (GTK_WIDGET (priv->size_slider), TRUE);
+  gtk_widget_set_hexpand  (GTK_WIDGET (priv->size_spin),   FALSE);
+
+  gtk_grid_set_column_homogeneous (GTK_GRID (sub_grid), FALSE);
   gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, TRUE, 0);
 
   /* Setting the adjustment values for the size slider */
