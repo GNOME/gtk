@@ -623,8 +623,8 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
                     G_CALLBACK (cursor_changed_cb),    fontchooser);
 
   /* Zoom on preview scroll*/
-  g_signal_connect (G_OBJECT (scrolled_win),      "scroll-event",
-                    G_CALLBACK (zoom_preview_cb), priv);
+  g_signal_connect (G_OBJECT (priv->preview), "scroll-event",
+                    G_CALLBACK (zoom_preview_cb),  priv);
 
   g_signal_connect (G_OBJECT (priv->size_slider), "scroll-event",
                     G_CALLBACK (zoom_preview_cb), priv);
