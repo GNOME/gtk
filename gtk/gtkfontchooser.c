@@ -107,10 +107,6 @@ struct _GtkFontChooserPrivate
 #define PREVIEW_HEIGHT 72
 #define PREVIEW_TOP_PADDING 6
 
-/* Widget default geometry */
-#define FONT_CHOOSER_WIDTH           540
-#define FONT_CHOOSER_HEIGHT          408
-
 /* These are the sizes of the font, style & size lists. */
 #define FONT_LIST_HEIGHT  136
 #define FONT_LIST_WIDTH   190
