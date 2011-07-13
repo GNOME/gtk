@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-09 08:56+0200\n"
-"PO-Revision-Date: 2011-07-09 08:57+0200\n"
+"POT-Creation-Date: 2011-07-13 08:44+0200\n"
+"PO-Revision-Date: 2011-07-13 08:45+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1227,7 +1227,7 @@ msgstr "Utwórz kata_log"
 
 #: ../gtk/gtkfilechooserdefault.c:4875
 msgid "Search:"
-msgstr "Wyszukaj:"
+msgstr "Wyszukiwanie:"
 
 #: ../gtk/gtkfilechooserdefault.c:4922
 msgid "_Location:"
@@ -1294,11 +1294,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Zastąp"
 
-#: ../gtk/gtkfilechooserdefault.c:8850
+#: ../gtk/gtkfilechooserdefault.c:8892
 msgid "Could not start the search process"
 msgstr "Nie można rozpocząć procesu wyszukiwania"
 
-#: ../gtk/gtkfilechooserdefault.c:8851
+#: ../gtk/gtkfilechooserdefault.c:8893
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1306,11 +1306,11 @@ msgstr ""
 "Nie można było utworzyć połączenia z usługą indeksowania. Proszę się "
 "upewnić, czy usługa jest uruchomiona."
 
-#: ../gtk/gtkfilechooserdefault.c:8865
+#: ../gtk/gtkfilechooserdefault.c:8907
 msgid "Could not send the search request"
 msgstr "Nie można wysłać żądania wyszukiwania"
 
-#: ../gtk/gtkfilechooserdefault.c:9657
+#: ../gtk/gtkfilechooserdefault.c:9699
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nie można zamontować %s"
