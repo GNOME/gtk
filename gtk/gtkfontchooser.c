@@ -117,7 +117,7 @@ struct _GtkFontChooserPrivate
 #define FONT_STYLE_LIST_WIDTH 170
 #define FONT_SIZE_LIST_WIDTH  60
 
-#define ROW_FORMAT_STRING "<span weight=\"bold\" size=\"small\" foreground=\"%s\">%s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
+#define ROW_FORMAT_STRING "<span weight=\"bold\" size=\"small\">%s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
 
 /* These are what we use as the standard font sizes, for the size list.
  */
@@ -667,9 +667,6 @@ static void
 populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore* model)
 {
   GtkStyleContext      *style_context;
-  GdkRGBA               g_color;
-  PangoColor            p_color;
-  gchar                *color_string;
   PangoFontDescription *default_font;
 
   GtkTreeIter   match_row;
@@ -691,14 +688,6 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
 
   /* Get row header font color */
   style_context = gtk_widget_get_style_context (GTK_WIDGET (treeview));
-  gtk_style_context_get_color (style_context,
-                               GTK_STATE_FLAG_NORMAL | GTK_STATE_FLAG_INSENSITIVE,
-                               &g_color);
-
-  p_color.red   = (guint16)((gdouble)G_MAXUINT16 * g_color.red);
-  p_color.green = (guint16)((gdouble)G_MAXUINT16 * g_color.green);
-  p_color.blue  = (guint16)((gdouble)G_MAXUINT16 * g_color.blue);
-  color_string  = pango_color_to_string (&p_color);
 
   /* Get theme font */
   default_font  = (PangoFontDescription*) gtk_style_context_get_font (style_context,
@@ -727,7 +716,6 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
                                             face_name);
           
           g_string_printf (tmp, ROW_FORMAT_STRING,
-                           color_string,
                            family_and_face->str,
                            font_desc,
                            fontchooser->priv->preview_text);
@@ -763,7 +751,6 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
 
   g_string_free (family_and_face, TRUE);
   g_string_free (tmp, TRUE);
-  g_free (color_string);
   g_free (families);
 }
 
