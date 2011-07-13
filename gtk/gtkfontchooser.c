@@ -564,7 +564,11 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   gtk_grid_attach (GTK_GRID (grid), priv->size_slider,  0, 3, 2, 1);
   gtk_grid_attach (GTK_GRID (grid), priv->size_spin,    2, 3, 1, 1);
 
-  gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, FALSE, 0);
+  gtk_widget_set_hexpand  (GTK_WIDGET (scrolled_win),      TRUE);
+  gtk_widget_set_vexpand  (GTK_WIDGET (scrolled_win),      TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (priv->search_entry), TRUE);
+
+  gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, TRUE, 0);
 
   /* Setting the adjustment values for the size slider */
   gtk_adjustment_set_value (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
