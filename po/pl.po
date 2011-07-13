@@ -7,10 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&component=general\n"
-"POT-Creation-Date: 2011-01-31 16:52+0000\n"
-"PO-Revision-Date: 2011-02-02 17:47+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-07-13 08:37+0200\n"
+"PO-Revision-Date: 2011-07-13 08:39+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -785,23 +784,23 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: ../gtk/gtkentry.c:8742 ../gtk/gtktextview.c:7976
+#: ../gtk/gtkentry.c:8748 ../gtk/gtktextview.c:7976
 msgid "Input _Methods"
 msgstr "_Metoda wprowadzania danych"
 
-#: ../gtk/gtkentry.c:8756 ../gtk/gtktextview.c:7990
+#: ../gtk/gtkentry.c:8762 ../gtk/gtktextview.c:7990
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unikodu"
 
-#: ../gtk/gtkentry.c:10136
+#: ../gtk/gtkentry.c:10142
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
 #: ../gtk/gtkfilechooserbutton.c:64
-msgid "Select A File"
+msgid "Select a File"
 msgstr "Wybór pliku"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1852
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1800
 msgid "Desktop"
 msgstr "Pulpit"
 
@@ -809,37 +808,46 @@ msgstr "Pulpit"
 msgid "(None)"
 msgstr "(brak)"
 
-#: ../gtk/gtkfilechooserbutton.c:2024
+#: ../gtk/gtkfilechooserbutton.c:2025
 msgid "Other..."
 msgstr "Inne..."
 
-#: ../gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:151
 msgid "Type name of new folder"
 msgstr "Proszę wprowadzić nazwę nowego katalogu"
 
-#: ../gtk/gtkfilechooserdefault.c:965
+#: ../gtk/gtkfilechooserdefault.c:950
 msgid "Could not retrieve information about the file"
 msgstr "Nie można pobrać informacji o pliku"
 
-#: ../gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:961
 msgid "Could not add a bookmark"
 msgstr "Nie można dodać zakładki"
 
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:972
 msgid "Could not remove bookmark"
 msgstr "Nie można usunąć zakładki"
 
-#: ../gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:983
 msgid "The folder could not be created"
 msgstr "Nie można utworzyć katalogu"
 
-#: ../gtk/gtkfilechooserdefault.c:1011
+#: ../gtk/gtkfilechooserdefault.c:996
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 "Nie można utworzyć katalogu, ponieważ istnieje już plik o tej samej nazwie. "
 "Proszę użyć innej nazwy dla katalogu lub zmienić nazwę pliku."
+
+#: ../gtk/gtkfilechooserdefault.c:1010
+msgid "You need to choose a valid filename."
+msgstr "Należy wybrać prawidłową nazwę pliku."
+
+#: ../gtk/gtkfilechooserdefault.c:1013
+#, c-format
+msgid "Cannot create a file under %s as it is not a folder"
+msgstr "Nie można utworzyć pliku w %s, ponieważ nie jest to katalogiem"
 
 #: ../gtk/gtkfilechooserdefault.c:1025
 msgid ""
@@ -861,186 +869,186 @@ msgstr "Nie można wyświetlić zawartości katalogu"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1595
+#: ../gtk/gtkfilechooserdefault.c:1572
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1771
+#: ../gtk/gtkfilechooserdefault.c:1721
 msgid "Search"
 msgstr "Wyszukaj"
 
-#: ../gtk/gtkfilechooserdefault.c:1795 ../gtk/gtkfilechooserdefault.c:9559
+#: ../gtk/gtkfilechooserdefault.c:1745 ../gtk/gtkfilechooserdefault.c:4847
 msgid "Recently Used"
 msgstr "Ostatnio używane"
 
-#: ../gtk/gtkfilechooserdefault.c:2442
+#: ../gtk/gtkfilechooserdefault.c:2344
 msgid "Select which types of files are shown"
 msgstr "Wybór typów wyświetlanych plików"
 
-#: ../gtk/gtkfilechooserdefault.c:2801
+#: ../gtk/gtkfilechooserdefault.c:2703
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Dodaje zakładkę do katalogu \"%s\""
 
-#: ../gtk/gtkfilechooserdefault.c:2845
+#: ../gtk/gtkfilechooserdefault.c:2747
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Dodaje zakładkę do bieżącego katalogu"
 
-#: ../gtk/gtkfilechooserdefault.c:2847
+#: ../gtk/gtkfilechooserdefault.c:2749
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Dodaje zakładki do zaznaczonych katalogów"
 
-#: ../gtk/gtkfilechooserdefault.c:2885
+#: ../gtk/gtkfilechooserdefault.c:2787
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Usuwa zakładkę \"%s\""
 
-#: ../gtk/gtkfilechooserdefault.c:2887
+#: ../gtk/gtkfilechooserdefault.c:2789
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Zakładka \"%s\" nie może zostać usunięta"
 
-#: ../gtk/gtkfilechooserdefault.c:2894 ../gtk/gtkfilechooserdefault.c:3914
+#: ../gtk/gtkfilechooserdefault.c:2796 ../gtk/gtkfilechooserdefault.c:3672
 msgid "Remove the selected bookmark"
 msgstr "Usuwa wybraną zakładkę"
 
-#: ../gtk/gtkfilechooserdefault.c:3610
+#: ../gtk/gtkfilechooserdefault.c:3359
 msgid "Remove"
 msgstr "Usuń"
 
-#: ../gtk/gtkfilechooserdefault.c:3619
+#: ../gtk/gtkfilechooserdefault.c:3368
 msgid "Rename..."
 msgstr "Zmień nazwę..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3782
+#: ../gtk/gtkfilechooserdefault.c:3531
 msgid "Places"
 msgstr "Miejsca"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3839
+#: ../gtk/gtkfilechooserdefault.c:3588
 msgid "_Places"
 msgstr "_Miejsca"
 
-#: ../gtk/gtkfilechooserdefault.c:3895
-msgid "_Add"
-msgstr "_Dodaj"
-
-#: ../gtk/gtkfilechooserdefault.c:3902
+#: ../gtk/gtkfilechooserdefault.c:3660
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dodaje zakładkę do wybranego katalogu"
 
-#: ../gtk/gtkfilechooserdefault.c:3907
-msgid "_Remove"
-msgstr "_Usuń"
-
-#: ../gtk/gtkfilechooserdefault.c:4042
+#: ../gtk/gtkfilechooserdefault.c:3807
 msgid "Could not select file"
 msgstr "Nie można wybrać pliku"
 
-#: ../gtk/gtkfilechooserdefault.c:4217
+#: ../gtk/gtkfilechooserdefault.c:3980
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj zakładkę"
 
-#: ../gtk/gtkfilechooserdefault.c:4230
+#: ../gtk/gtkfilechooserdefault.c:3993
 msgid "Show _Hidden Files"
 msgstr "Wyświetlanie u_krytych plików"
 
-#: ../gtk/gtkfilechooserdefault.c:4237
+#: ../gtk/gtkfilechooserdefault.c:4000
 msgid "Show _Size Column"
 msgstr "_Wyświetlanie kolumny rozmiaru"
 
-#: ../gtk/gtkfilechooserdefault.c:4457 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4222 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Pliki"
 
-#: ../gtk/gtkfilechooserdefault.c:4508
+#: ../gtk/gtkfilechooserdefault.c:4273
 msgid "Name"
 msgstr "Nazwa"
 
-#: ../gtk/gtkfilechooserdefault.c:4531
+#: ../gtk/gtkfilechooserdefault.c:4296
 msgid "Size"
 msgstr "Rozmiar"
 
-#: ../gtk/gtkfilechooserdefault.c:4545
+#: ../gtk/gtkfilechooserdefault.c:4310
 msgid "Modified"
 msgstr "Zmodyfikowany"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4800 ../gtk/gtkprinteroptionwidget.c:801
+#: ../gtk/gtkfilechooserdefault.c:4391 ../gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "_Nazwa:"
 
-#: ../gtk/gtkfilechooserdefault.c:4843
-msgid "_Browse for other folders"
-msgstr "_Przeglądaj inne katalogi"
-
-#: ../gtk/gtkfilechooserdefault.c:5113
+#: ../gtk/gtkfilechooserdefault.c:4685
 msgid "Type a file name"
 msgstr "Nazwa pliku"
 
+#: ../gtk/gtkfilechooserdefault.c:4732 ../gtk/gtkfilechooserdefault.c:4743
+msgid "Please select a folder below"
+msgstr "Proszę wybrać katalog poniżej"
+
+#: ../gtk/gtkfilechooserdefault.c:4738
+msgid "Please type a file name"
+msgstr "Proszę wpisać nazwę pliku"
+
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5156
+#: ../gtk/gtkfilechooserdefault.c:4809
 msgid "Create Fo_lder"
 msgstr "Utwórz kata_log"
 
-#: ../gtk/gtkfilechooserdefault.c:5166
+#: ../gtk/gtkfilechooserdefault.c:4857
+msgid "Search:"
+msgstr "Wyszukiwanie:"
+
+#: ../gtk/gtkfilechooserdefault.c:4904
 msgid "_Location:"
 msgstr "Położ_enie:"
 
-#: ../gtk/gtkfilechooserdefault.c:5370
+#: ../gtk/gtkfilechooserdefault.c:5218
 msgid "Save in _folder:"
 msgstr "Zapis w katal_ogu:"
 
-#: ../gtk/gtkfilechooserdefault.c:5372
+#: ../gtk/gtkfilechooserdefault.c:5220
 msgid "Create in _folder:"
 msgstr "Utworzenie w k_atalogu:"
 
-#: ../gtk/gtkfilechooserdefault.c:6439
+#: ../gtk/gtkfilechooserdefault.c:6313
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nie można odczytać zawartości %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6443
+#: ../gtk/gtkfilechooserdefault.c:6317
 msgid "Could not read the contents of the folder"
 msgstr "Nie można odczytać zawartości katalogu"
 
-#: ../gtk/gtkfilechooserdefault.c:6536 ../gtk/gtkfilechooserdefault.c:6604
-#: ../gtk/gtkfilechooserdefault.c:6749
+#: ../gtk/gtkfilechooserdefault.c:6410 ../gtk/gtkfilechooserdefault.c:6478
+#: ../gtk/gtkfilechooserdefault.c:6630
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: ../gtk/gtkfilechooserdefault.c:6551
+#: ../gtk/gtkfilechooserdefault.c:6425
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6553
+#: ../gtk/gtkfilechooserdefault.c:6427
 msgid "Yesterday at %H:%M"
 msgstr "Wczoraj o %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7219
+#: ../gtk/gtkfilechooserdefault.c:7112
 msgid "Cannot change to folder because it is not local"
 msgstr "Nie można przejść do katalogu, ponieważ nie jest on lokalny"
 
-#: ../gtk/gtkfilechooserdefault.c:7816 ../gtk/gtkfilechooserdefault.c:7837
+#: ../gtk/gtkfilechooserdefault.c:7712 ../gtk/gtkfilechooserdefault.c:7733
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Skrót %s już istnieje"
 
-#: ../gtk/gtkfilechooserdefault.c:7927
+#: ../gtk/gtkfilechooserdefault.c:7823
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Skrót %s nie istnieje"
 
-#: ../gtk/gtkfilechooserdefault.c:8182 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8066 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Plik o nazwie \"%s\" już istnieje. Zastąpić go?"
 
-#: ../gtk/gtkfilechooserdefault.c:8185 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8069 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1048,15 +1056,15 @@ msgstr ""
 "Plik już istnieje w \"%s\". Zastąpienie go spowoduje nadpisanie jego "
 "zawartości."
 
-#: ../gtk/gtkfilechooserdefault.c:8190 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8074 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Zastąp"
 
-#: ../gtk/gtkfilechooserdefault.c:8897
+#: ../gtk/gtkfilechooserdefault.c:8869
 msgid "Could not start the search process"
 msgstr "Nie można rozpocząć procesu wyszukiwania"
 
-#: ../gtk/gtkfilechooserdefault.c:8898
+#: ../gtk/gtkfilechooserdefault.c:8870
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1064,36 +1072,34 @@ msgstr ""
 "Nie można było utworzyć połączenia z usługą indeksowania. Proszę się "
 "upewnić, czy usługa jest uruchomiona."
 
-#: ../gtk/gtkfilechooserdefault.c:8912
+#: ../gtk/gtkfilechooserdefault.c:8884
 msgid "Could not send the search request"
 msgstr "Nie można wysłać żądania wyszukiwania"
 
-#: ../gtk/gtkfilechooserdefault.c:9131
-msgid "Search:"
-msgstr "Wyszukaj:"
-
-#: ../gtk/gtkfilechooserdefault.c:9736
+#: ../gtk/gtkfilechooserdefault.c:9676
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nie można zamontować %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:700 ../gtk/gtkfilechooserentry.c:1166
+#: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1170
+#: ../gtk/gtkfilesystem.c:733
+#, c-format
 msgid "Invalid path"
 msgstr "Nieprawidłowa ścieżka"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1098
+#: ../gtk/gtkfilechooserentry.c:1102
 msgid "No match"
 msgstr "Brak wyników"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1109
+#: ../gtk/gtkfilechooserentry.c:1113
 msgid "Sole completion"
 msgstr "Pojedyncze uzupełnienie"
 
@@ -1101,13 +1107,13 @@ msgstr "Pojedyncze uzupełnienie"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1125
+#: ../gtk/gtkfilechooserentry.c:1129
 msgid "Complete, but not unique"
 msgstr "Uzupełnione, lecz niekompletne"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1157
+#: ../gtk/gtkfilechooserentry.c:1161
 msgid "Completing..."
 msgstr "Uzupełnianie..."
 
@@ -1115,7 +1121,7 @@ msgstr "Uzupełnianie..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1179 ../gtk/gtkfilechooserentry.c:1204
+#: ../gtk/gtkfilechooserentry.c:1183 ../gtk/gtkfilechooserentry.c:1208
 msgid "Only local files may be selected"
 msgstr "Można wybrać tylko lokalne pliki"
 
@@ -1123,18 +1129,18 @@ msgstr "Można wybrać tylko lokalne pliki"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1188
+#: ../gtk/gtkfilechooserentry.c:1192
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Niekompletna nazwa komputera. Musi się kończyć znakiem \"/\""
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1199
+#: ../gtk/gtkfilechooserentry.c:1203
 msgid "Path does not exist"
 msgstr "Ścieżka nie istnieje"
 
-#: ../gtk/gtkfilechoosersettings.c:487 ../gtk/gtkfilesel.c:1349
+#: ../gtk/gtkfilechoosersettings.c:481 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -1338,7 +1344,7 @@ msgstr "Wartość g_amma"
 msgid "Error loading icon: %s"
 msgstr "Błąd podczas wczytywania ikony: %s"
 
-#: ../gtk/gtkicontheme.c:1364
+#: ../gtk/gtkicontheme.c:1365
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1351,12 +1357,12 @@ msgstr ""
 "należy je zainstalować. Ich kopię można pobrać z:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1544
+#: ../gtk/gtkicontheme.c:1546
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Brak ikony \"%s\" w motywie"
 
-#: ../gtk/gtkicontheme.c:3084
+#: ../gtk/gtkicontheme.c:3086
 msgid "Failed to load icon"
 msgstr "Wczytanie ikony się nie powiodło"
 
@@ -1507,20 +1513,20 @@ msgstr "Wyczyszczone znaczniki debugowania biblioteki GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:732
+#: ../gtk/gtkmain.c:743
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:797
+#: ../gtk/gtkmain.c:808
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nie można otworzyć ekranu: %s"
 
-#: ../gtk/gtkmain.c:834
+#: ../gtk/gtkmain.c:845
 msgid "GTK+ Options"
 msgstr "Opcje biblioteki GTK+"
 
-#: ../gtk/gtkmain.c:834
+#: ../gtk/gtkmain.c:845
 msgid "Show GTK+ Options"
 msgstr "Wyświetla opcje biblioteki GTK+"
 
@@ -2146,12 +2152,12 @@ msgstr "Część ustawień w oknie jest sprzecznych"
 msgid "Print"
 msgstr "Wydruk"
 
-#: ../gtk/gtkrc.c:2878
+#: ../gtk/gtkrc.c:2886
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nie można odnaleźć dołączanego pliku: \"%s\""
 
-#: ../gtk/gtkrc.c:3508 ../gtk/gtkrc.c:3511
+#: ../gtk/gtkrc.c:3516 ../gtk/gtkrc.c:3519
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nie można odnaleźć pliku obrazu na ścieżce: \"%s\""
@@ -2218,12 +2224,12 @@ msgstr "Nie odnaleziono elementów"
 msgid "No recently used resource found with URI `%s'"
 msgstr "Nie odnaleziono ostatnio używanego zasobu z URI \"%s\""
 
-#: ../gtk/gtkrecentchoosermenu.c:775
+#: ../gtk/gtkrecentchoosermenu.c:774
 #, c-format
 msgid "Open '%s'"
 msgstr "Otwórz \"%s\""
 
-#: ../gtk/gtkrecentchoosermenu.c:805
+#: ../gtk/gtkrecentchoosermenu.c:804
 msgid "Unknown item"
 msgstr "Nieznany element"
 
@@ -2232,7 +2238,7 @@ msgstr "Nieznany element"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:816
+#: ../gtk/gtkrecentchoosermenu.c:815
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2241,16 +2247,16 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:821
+#: ../gtk/gtkrecentchoosermenu.c:820
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1164 ../gtk/gtkrecentmanager.c:1177
-#: ../gtk/gtkrecentmanager.c:1315 ../gtk/gtkrecentmanager.c:1325
-#: ../gtk/gtkrecentmanager.c:1378 ../gtk/gtkrecentmanager.c:1387
-#: ../gtk/gtkrecentmanager.c:1402
+#: ../gtk/gtkrecentmanager.c:1170 ../gtk/gtkrecentmanager.c:1183
+#: ../gtk/gtkrecentmanager.c:1321 ../gtk/gtkrecentmanager.c:1331
+#: ../gtk/gtkrecentmanager.c:1384 ../gtk/gtkrecentmanager.c:1393
+#: ../gtk/gtkrecentmanager.c:1408
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nie można odnaleźć elementu z adresem URI \"%s\""
@@ -2763,12 +2769,12 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Po_mniejsz"
 
-#: ../gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:652
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Nieznany błąd podczas próby deserializacji %s"
 
-#: ../gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:711
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Nie odnaleziono funkcji deserializacji dla formatu %s"
