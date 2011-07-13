@@ -327,6 +327,8 @@ static void           gtk_file_chooser_default_get_default_size       (GtkFileCh
 static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_default_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
+static void add_selection_to_recent_list (GtkFileChooserDefault *impl);
+
 static void location_popup_handler  (GtkFileChooserDefault *impl,
 				     const gchar           *path);
 static void location_popup_on_paste_handler (GtkFileChooserDefault *impl);
@@ -8129,6 +8131,16 @@ struct GetDisplayNameData
   gchar *file_part;
 };
 
+/* Every time we request a response explicitly, we need to save the selection to the recently-used list,
+ * as requesting a response means, "the dialog is confirmed".
+ */
+static void
+request_response_and_add_to_recent_list (GtkFileChooserDefault *impl)
+{
+  g_signal_emit_by_name (impl, "response-requested");
+  add_selection_to_recent_list (impl);
+}
+
 static void
 confirmation_confirm_get_info_cb (GCancellable *cancellable,
 				  GFileInfo    *info,
@@ -8155,7 +8167,7 @@ confirmation_confirm_get_info_cb (GCancellable *cancellable,
 
   set_busy_cursor (data->impl, FALSE);
   if (should_respond)
-    g_signal_emit_by_name (data->impl, "response-requested");
+    request_response_and_add_to_recent_list (data->impl);
 
 out:
   g_object_unref (data->impl);
@@ -8255,7 +8267,7 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
     {
       if (data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
-	  g_signal_emit_by_name (data->impl, "response-requested"); /* even if the file doesn't exist, apps can make good use of that (e.g. Emacs) */
+	  request_response_and_add_to_recent_list (data->impl); /* even if the file doesn't exist, apps can make good use of that (e.g. Emacs) */
 	}
       else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
         {
@@ -8273,10 +8285,10 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
               g_free (file_part);
 
 	      if (retval)
-		g_signal_emit_by_name (data->impl, "response-requested");
+		request_response_and_add_to_recent_list (data->impl);
 	    }
 	  else
-	    g_signal_emit_by_name (data->impl, "response-requested");
+	    request_response_and_add_to_recent_list (data->impl);
 	}
       else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 	       || data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
@@ -8292,7 +8304,7 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
 	  set_busy_cursor (data->impl, FALSE);
 
 	  if (!mkdir_error)
-	    g_signal_emit_by_name (data->impl, "response-requested");
+	    request_response_and_add_to_recent_list (data->impl);
 	  else
 	    error_creating_folder_dialog (data->impl, data->file, mkdir_error);
         }
@@ -8359,7 +8371,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
       else
 	{
 	  if (file_exists)
-	    g_signal_emit_by_name (data->impl, "response-requested"); /* user typed an existing filename; we are done */
+	    request_response_and_add_to_recent_list (data->impl); /* user typed an existing filename; we are done */
 	  else
 	    needs_parent_check = TRUE; /* file doesn't exist; see if its parent exists */
 	}
@@ -8390,7 +8402,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
 	  if (is_folder)
 	    {
 	      /* User typed a folder; we are done */
-	      g_signal_emit_by_name (data->impl, "response-requested");
+	      request_response_and_add_to_recent_list (data->impl);
 	    }
 	  else
 	    error_selecting_folder_over_existing_file_dialog (data->impl, data->file);
