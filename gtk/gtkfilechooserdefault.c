@@ -5858,7 +5858,7 @@ get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
   /* If no last folder is set, we use the user's home directory, since
    * this is the starting point for most documents.
    */
-  if (last_folder_uri[0] == '\0')
+  if (last_folder_uri == NULL || last_folder_uri[0] == '\0')
     file = g_file_new_for_path (g_get_home_dir ());
   else
     file = g_file_new_for_uri (last_folder_uri);
