@@ -130,5 +130,38 @@ libgail_la_LIBADD =  \
 
 libgail_la_LDFLAGS =    \
         $(LDFLAGS)
+		
+dist-hook: ../../build/win32/vs9/libgail.vcproj ../../build/win32/vs10/libgail.vcxproj ../../build/win32/vs10/libgail.vcxproj.filters
+
+../../build/win32/vs9/libgail.vcproj: ../../build/win32/vs9/libgail.vcprojin
+	for F in $(libgail_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <File RelativePath="..\..\..\gtk\a11y\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgail.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/libgail.vcprojin >$@
+	rm libgail.sourcefiles
+	
+../../build/win32/vs10/libgail.vcxproj: ../../build/win32/vs10/libgail.vcxprojin
+	for F in $(libgail_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\a11y\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgail.vs10.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/libgail.vcxprojin >$@
+	rm libgail.vs10.sourcefiles
+
+../../build/win32/vs10/libgail.vcxproj.filters: ../../build/win32/vs10/libgail.vcxproj.filtersin
+	for F in $(libgail_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\a11y\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
+		     ;; \
+		esac; \
+	done >libgail.vs10.sourcefiles.filters
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/libgail.vcxproj.filtersin >$@
+	rm libgail.vs10.sourcefiles.filters
+
 
 -include $(top_srcdir)/git.mk

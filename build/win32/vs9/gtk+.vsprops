@@ -318,9 +318,15 @@ copy ..\..\..\gtk\gtkwidget.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#
 copy ..\..\..\gtk\gtkwidgetpath.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 
+mkdir $(OutDir)\include\gail-$(GtkApiVersion)\libgail-util&#x0D;&#x0A;
+copy ..\..\..\libgail-util\gail-util.h $(OutDir)\include\gail-$(GtkApiVersion)\libgail-util&#x0D;&#x0A;
+copy ..\..\..\libgail-util\gailmisc.h $(OutDir)\include\gail-$(GtkApiVersion)\libgail-util&#x0D;&#x0A;
+copy ..\..\..\libgail-util\gailtextutil.h $(OutDir)\include\gail-$(GtkApiVersion)\libgail-util&#x0D;&#x0A;
+
 copy ..\..\..\gdk\gdkconfig.h $(OutDir)\include\gtk-3.0\gdk&#x0D;&#x0A;
 
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\lib&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gailutil.lib $(OutDir)\lib&#x0D;&#x0A;
 
 mkdir $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;

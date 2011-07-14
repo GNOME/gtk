@@ -527,10 +527,21 @@ copy ..\..\..\gtk\gtkwidgetpath.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 copy ..\..\..\gtk\gtkwindow.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 
+mkdir $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+copy ..\..\..\libgail-util\gail-util.h $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+copy ..\..\..\libgail-util\gailmisc.h $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+copy ..\..\..\libgail-util\gailtextutil.h $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+
 copy ..\..\..\gdk\gdkconfig.h $(CopyDir)\include\gtk-3.0\gdk
 
 
 copy $(Configuration)\$(Platform)\bin\*-$(GtkApiVersion).lib $(CopyDir)\lib
+
+copy $(Configuration)\$(Platform)\bin\gailutil.lib $(CopyDir)\lib
 
 
 mkdir $(CopyDir)\share\glib-2.0\schemas
