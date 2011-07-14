@@ -25,7 +25,6 @@
  */
 
 #include "config.h"
-#include "gtkaccessibleprivate.h"
 #include "gtkseparatormenuitem.h"
 
 /**

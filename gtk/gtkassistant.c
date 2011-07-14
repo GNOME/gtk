@@ -62,7 +62,6 @@
 
 #include "gtkassistant.h"
 
-#include "gtkaccessibleprivate.h"
 #include "gtkbutton.h"
 #include "gtkbox.h"
 #include "gtkframe.h"
