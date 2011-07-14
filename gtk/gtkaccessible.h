@@ -36,13 +36,10 @@ G_BEGIN_DECLS
 #define GTK_IS_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACCESSIBLE))
 #define GTK_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
 
-typedef struct _GtkAccessible                GtkAccessible;
-typedef struct _GtkAccessiblePrivate         GtkAccessiblePrivate;
-typedef struct _GtkAccessibleClass           GtkAccessibleClass;
+typedef struct _GtkAccessible        GtkAccessible;
+typedef struct _GtkAccessiblePrivate GtkAccessiblePrivate;
+typedef struct _GtkAccessibleClass   GtkAccessibleClass;
 
-  /*
-   * This object is a thin wrapper, in the GTK+ namespace, for AtkObject
-   */
 struct _GtkAccessible
 {
   AtkObject parent;
@@ -55,8 +52,8 @@ struct _GtkAccessibleClass
 {
   AtkObjectClass parent_class;
 
-  void (*connect_widget_destroyed)              (GtkAccessible     *accessible);
-  
+  void (*connect_widget_destroyed) (GtkAccessible *accessible);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -64,12 +61,12 @@ struct _GtkAccessibleClass
   void (*_gtk_reserved4) (void);
 };
 
-GType gtk_accessible_get_type (void) G_GNUC_CONST;
+GType      gtk_accessible_get_type                 (void) G_GNUC_CONST;
 
-void        gtk_accessible_set_widget                  (GtkAccessible     *accessible,
-                                                        GtkWidget         *widget);
-GtkWidget*  gtk_accessible_get_widget                  (GtkAccessible     *accessible);
-void        gtk_accessible_connect_widget_destroyed    (GtkAccessible     *accessible);
+void       gtk_accessible_set_widget               (GtkAccessible *accessible,
+                                                    GtkWidget     *widget);
+GtkWidget *gtk_accessible_get_widget               (GtkAccessible *accessible);
+void       gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible);
 
 G_END_DECLS
 
