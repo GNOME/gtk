@@ -66,6 +66,7 @@ libgdkinclude_HEADERS = 	\
 libgdkx11include_HEADERS = 	\
 	gdkx11applaunchcontext.h \
 	gdkx11cursor.h		\
+	gdkx11device.h		\
 	gdkx11device-core.h	\
 	gdkx11device-xi.h	\
 	gdkx11device-xi2.h	\
