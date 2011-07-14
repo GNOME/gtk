@@ -254,6 +254,8 @@ guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
                                                    XIGroupState    *group_state);
 gint     _gdk_x11_device_xi2_get_id               (GdkX11DeviceXI2 *device);
 
+GdkDevice * _gdk_x11_device_manager_xi2_lookup    (GdkX11DeviceManagerXI2 *device_manager_xi2,
+                                                   gint                    device_id);
 
 #endif
 

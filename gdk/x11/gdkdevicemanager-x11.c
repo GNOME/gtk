@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkx11devicemanager-core.h"
+#include "gdkdevicemanagerprivate-core.h"
 #ifdef XINPUT_XFREE
 #include "gdkx11devicemanager-xi.h"
 #ifdef XINPUT_2
@@ -88,6 +89,45 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
   return g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_CORE,
                        "display", display,
                        NULL);
+}
+
+/**
+ * gdk_x11_device_manager_lookup:
+ * @device_manager: a #GdkDeviceManager
+ * @device_id: a device ID, as understood by the XInput2 protocol
+ *
+ * Returns the #GdkDevice that wraps the given device ID.
+ *
+ * Returns: (transfer none): (allow-none): The #GdkDevice wrapping the device ID,
+ *          or %NULL if the given ID doesn't currently represent a device.
+ **/
+GdkDevice *
+gdk_x11_device_manager_lookup (GdkDeviceManager *device_manager,
+			       gint              device_id)
+{
+  GdkDevice *device = NULL;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
+
+#ifdef XINPUT_2
+  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (device_manager))
+    device = _gdk_x11_device_manager_xi2_lookup (GDK_X11_DEVICE_MANAGER_XI2 (device_manager),
+                                                 device_id);
+  else
+#endif /* XINPUT_2 */
+    if (GDK_IS_X11_DEVICE_MANAGER_CORE (device_manager))
+      {
+        /* It is a core/xi1 device manager, we only map
+         * IDs 2 and 3, matching XI2's Virtual Core Pointer
+         * and Keyboard.
+         */
+        if (device_id == VIRTUAL_CORE_POINTER_ID)
+          device = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->core_pointer;
+        else if (device_id == VIRTUAL_CORE_KEYBOARD_ID)
+          device = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->core_keyboard;
+      }
+
+  return device;
 }
 
 /**
