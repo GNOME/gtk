@@ -5052,7 +5052,6 @@ gtk_widget_style_get_property
 gtk_widget_style_get_valist
 gtk_widget_style_attach
 gtk_widget_class_set_accessible_type
-gtk_widget_class_get_accessible_type
 gtk_widget_get_accessible
 gtk_widget_child_focus
 gtk_widget_child_notify
