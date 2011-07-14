@@ -1111,6 +1111,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 {
   GtkDragSourceInfo *info;
   GdkDragContext *context;
+  GdkDevice *pointer;
   NSWindow *nswindow;
 
   context = gdk_drag_begin (gtk_widget_get_window (widget), NULL);
@@ -1167,7 +1168,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
   g_idle_add_full (G_PRIORITY_HIGH_IDLE, gtk_drag_begin_idle, context, NULL);
 
-  gdk_pointer_ungrab (0);
+  pointer = gdk_drag_context_get_device (info->context);
+  gdk_device_ungrab (pointer, 0);
 
   return context;
 }
