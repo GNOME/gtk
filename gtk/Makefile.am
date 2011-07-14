@@ -380,7 +380,6 @@ endif
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
 	gtkaccelgroupprivate.h	\
-	gtkaccessibleprivate.h	\
 	gtkanimationdescription.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
