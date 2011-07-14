@@ -11943,6 +11943,29 @@ gtk_widget_class_set_accessible_type (GtkWidgetClass *widget_class,
 }
 
 /**
+ * gtk_widget_class_get_accessible_type:
+ * @widget_class: class to query the accessible type for
+ *
+ * Returns the #GType for accessibles for widgets of the given
+ * class. See gtk_widget_class_set_accessible_type().
+ *
+ * Returns: the accessible type for @widget_class
+ *
+ * Since: 3.2
+ */
+GType
+gtk_widget_class_get_accessible_type (GtkWidgetClass *widget_class)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  priv = widget_class->priv;
+
+  return priv->accessible_type;
+}
+
+/**
  * gtk_widget_get_accessible:
  * @widget: a #GtkWidget
  *
