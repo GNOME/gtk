@@ -1671,7 +1671,7 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
   page = gtk_assistant_get_nth_page (assistant, page_num);
 
   if (page)
-    gtk_assistant_remove (GTK_CONTAINER (assistant), page);
+    gtk_container_remove (GTK_CONTAINER (assistant), page);
 }
 
 /**
