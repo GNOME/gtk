@@ -391,8 +391,8 @@ gtk_theming_engine_register_property (const gchar            *name_space,
 
   /* FIXME: hack hack hack, replacing pspec->name to include namespace */
   name = g_strdup_printf ("-%s-%s", name_space, pspec->name);
-  g_free (pspec->name);
-  pspec->name = name;
+  pspec->name = (char *)g_intern_string (name);
+  g_free (name);
 
   gtk_style_properties_register_property (parse_func, pspec);
 }
