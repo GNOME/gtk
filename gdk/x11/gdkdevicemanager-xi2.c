@@ -1025,6 +1025,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
   ev = (XIEvent *) cookie->data;
 
+  if (!ev)
+    return FALSE;
+
   window = get_event_window (translator, ev);
 
   if (window && GDK_WINDOW_DESTROYED (window))
