@@ -427,7 +427,7 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
       GtkStyleContext *context;
       GtkStateFlags state;
       GtkBorder padding;
-      guint size;
+      gint size;
 
       gtk_widget_get_allocation (widget, &allocation);
       context = gtk_widget_get_style_context (widget);
