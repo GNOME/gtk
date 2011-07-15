@@ -186,6 +186,10 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * the #GtkProgressBar::text property or, if that is %NULL,
    * the #GtkProgressBar::fraction value, as a percentage.
    *
+   * To make a progress bar that is styled and sized suitably for containing
+   * text (even if the actual text is blank), set #GtkProgressBar:show-text to
+   * %TRUE and #GtkProgressBar:text to the empty string (not %NULL).
+   *
    * Since: 3.0
    */
   g_object_class_install_property (gobject_class,
@@ -1099,6 +1103,14 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
  * @text: (allow-none): a UTF-8 string, or %NULL
  *
  * Causes the given @text to appear superimposed on the progress bar.
+ *
+ * If @text is %NULL and #GtkProgressBar:show-text is %TRUE, the current
+ * value of #GtkProgressBar:fraction will be displayed as a percentage.
+ *
+ * If @text is non-%NULL and #GtkProgressBar:show-text is %TRUE, the text will
+ * be displayed. In this case, it will not display the progress percentage.
+ * If @text is the empty string, the progress bar will still be styled and sized
+ * suitably for containing text, as long as #GtkProgressBar:show-text is %TRUE.
  **/
 void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
@@ -1110,8 +1122,12 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
 
   priv = pbar->priv;
 
+  /* Don't notify again if nothing's changed. */
+  if (g_strcmp0 (priv->text, text) == 0)
+    return;
+
   g_free (priv->text);
-  priv->text = text && *text ? g_strdup (text) : NULL;
+  priv->text = g_strdup (text);
 
   gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
@@ -1127,6 +1143,10 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
  * over the bar. The shown text is either the value of
  * the #GtkProgressBar::text property or, if that is %NULL,
  * the #GtkProgressBar::fraction value, as a percentage.
+ *
+ * To make a progress bar that is styled and sized suitably for containing
+ * text (even if the actual text is blank), set #GtkProgressBar:show-text to
+ * %TRUE and #GtkProgressBar:text to the empty string (not %NULL).
  *
  * Since: 3.0
  */
