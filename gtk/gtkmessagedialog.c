@@ -391,7 +391,7 @@ setup_primary_label_font (GtkMessageDialog *dialog)
   GtkStateFlags state;
 
   /* unset the font settings */
-  gtk_widget_modify_font (priv->label, NULL);
+  gtk_widget_override_font (priv->label, NULL);
 
   if (priv->has_secondary_text && !priv->has_primary_markup)
     {
@@ -402,7 +402,7 @@ setup_primary_label_font (GtkMessageDialog *dialog)
       font_desc = pango_font_description_new ();
       pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
       pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
-      gtk_widget_modify_font (priv->label, font_desc);
+      gtk_widget_override_font (priv->label, font_desc);
       pango_font_description_free (font_desc);
     }
 }
