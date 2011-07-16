@@ -26,6 +26,7 @@ TEST_PROGS += text
 TEST_PROGS += children
 
 TEST_PROGS += focus
+TEST_PROGS += testfocus
 
 TEST_PROGS += util
 
