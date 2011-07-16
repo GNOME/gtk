@@ -69,6 +69,31 @@ gtk_label_accessible_initialize (AtkObject *obj,
     obj->role = ATK_ROLE_LABEL;
 }
 
+static gboolean
+check_for_selection_change (GtkLabelAccessible *accessible,
+                            GtkLabel           *label)
+{
+  gboolean ret_val = FALSE;
+  gint start, end;
+
+  if (gtk_label_get_selection_bounds (label, &start, &end))
+    {
+      if (end != accessible->cursor_position ||
+          start != accessible->selection_bound)
+        ret_val = TRUE;
+    }
+  else
+    {
+      ret_val = (accessible->cursor_position != accessible->selection_bound);
+    }
+
+  accessible->cursor_position = end;
+  accessible->selection_bound = start;
+
+  return ret_val;
+}
+
+
 static void
 gtk_label_accessible_notify_gtk (GObject    *obj,
                                  GParamSpec *pspec)
@@ -91,30 +116,32 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
       /* Create a delete text and an insert text signal */
       length = g_utf8_strlen (accessible->text, -1);
       if (length > 0)
-        g_signal_emit_by_name (atk_obj, "text_changed::delete", 0, length);
+        g_signal_emit_by_name (atk_obj, "text-changed::delete", 0, length);
 
       g_free (accessible->text);
       accessible->text = g_strdup (text);
 
       length = g_utf8_strlen (accessible->text, -1);
       if (length > 0)
-        g_signal_emit_by_name (atk_obj, "text_changed::insert", 0, length);
+        g_signal_emit_by_name (atk_obj, "text-changed::insert", 0, length);
 
       if (atk_obj->name == NULL)
         /* The label has changed so notify a change in accessible-name */
         g_object_notify (G_OBJECT (atk_obj), "accessible-name");
 
-      g_signal_emit_by_name (atk_obj, "visible_data_changed");
+      g_signal_emit_by_name (atk_obj, "visible-data-changed");
     }
   else if (g_strcmp0 (pspec->name, "cursor-position") == 0)
     {
-      g_signal_emit_by_name (atk_obj, "text_caret_moved",
+      g_signal_emit_by_name (atk_obj, "text-caret-moved",
                              _gtk_label_get_cursor_position (GTK_LABEL (widget)));
-      g_signal_emit_by_name (atk_obj, "text_selection_changed");
+      if (check_for_selection_change (atk_obj, GTK_LABEL (widget)))
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
     }
   else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
     {
-      g_signal_emit_by_name (atk_obj, "text_selection_changed");
+      if (check_for_selection_change (atk_obj, GTK_LABEL (widget)))
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
     }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);

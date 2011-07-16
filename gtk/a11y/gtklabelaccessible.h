@@ -39,6 +39,8 @@ struct _GtkLabelAccessible
   GtkWidgetAccessible parent;
 
   gchar *text;
+  gint cursor_position;
+  gint selection_bound;
 };
 
 struct _GtkLabelAccessibleClass
