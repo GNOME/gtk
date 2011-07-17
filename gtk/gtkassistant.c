@@ -1300,9 +1300,12 @@ gtk_assistant_remove (GtkContainer *container,
 {
   GtkAssistant *assistant = (GtkAssistant*) container;
 
-  /* Forward this removal to the content notebook. */
-  container = (GtkContainer *) assistant->priv->content;
-  gtk_container_remove (container, page);
+  /* Forward this removal to the content notebook */
+  if (gtk_widget_get_parent (page) == assistant->priv->content)
+    {
+      container = (GtkContainer *) assistant->priv->content;
+      gtk_container_remove (container, page);
+    }
 }
 
 /**
@@ -1668,7 +1671,7 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
   page = gtk_assistant_get_nth_page (assistant, page_num);
 
   if (page)
-    gtk_assistant_remove (assistant, page);
+    gtk_assistant_remove (GTK_CONTAINER (assistant), page);
 }
 
 /**
