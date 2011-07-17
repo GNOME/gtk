@@ -85,7 +85,7 @@ static gboolean gtk_text_cell_accessible_update_cache             (GtkRendererCe
 
 static gchar *property_list[] = {
   /* Set font_desc first since it resets other values if it is NULL */
-  "font_desc",
+  "font-desc",
   "attributes",
   "background-gdk",
   "editable",
@@ -169,7 +169,7 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
           text_cell->cell_length = 0;
           if (emit_change_signal)
             {
-              g_signal_emit_by_name (cell, "text_changed::delete", 0, temp_length);
+              g_signal_emit_by_name (cell, "text-changed::delete", 0, temp_length);
               if (obj->name == NULL)
                 g_object_notify (G_OBJECT (obj), "accessible-name");
             }
@@ -200,7 +200,7 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
     {
       if (emit_change_signal)
         {
-          g_signal_emit_by_name (cell, "text_changed::insert",
+          g_signal_emit_by_name (cell, "text-changed::insert",
                                  0, text_cell->cell_length);
 
           if (obj->name == NULL)
@@ -355,7 +355,7 @@ gtk_text_cell_accessible_set_caret_offset (AtkText *text,
           text_cell->caret_pos = offset;
 
           /* emit the signal */
-          g_signal_emit_by_name (text, "text_caret_moved", offset);
+          g_signal_emit_by_name (text, "text-caret-moved", offset);
           return TRUE;
         }
       else

@@ -267,7 +267,7 @@ menu_item_add_gtk (GtkContainer *container,
       g_list_free (container_accessible->children);
       container_accessible->children = gtk_container_get_children (container);
       index = g_list_index (container_accessible->children, widget);
-      g_signal_emit_by_name (atk_parent, "children_changed::add",
+      g_signal_emit_by_name (atk_parent, "children-changed::add",
                              index, atk_child, NULL);
     }
   return 1;
@@ -300,7 +300,7 @@ menu_item_remove_gtk (GtkContainer *container,
       g_list_free (container_accessible->children);
       container_accessible->children = gtk_container_get_children (container);
       if (index >= 0 && index <= list_length)
-        g_signal_emit_by_name (atk_parent, "children_changed::remove",
+        g_signal_emit_by_name (atk_parent, "children-changed::remove",
                                index, atk_child, NULL);
     }
   return 1;

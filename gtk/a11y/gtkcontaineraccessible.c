@@ -116,11 +116,11 @@ gtk_container_accessible_real_add_gtk (GtkContainer *container,
   atk_child = gtk_widget_get_accessible (widget);
   accessible = GTK_CONTAINER_ACCESSIBLE (atk_parent);
 
-  g_object_notify (G_OBJECT (atk_child), "accessible_parent");
+  g_object_notify (G_OBJECT (atk_child), "accessible-parent");
   g_list_free (accessible->children);
   accessible->children = gtk_container_get_children (container);
   index = g_list_index (accessible->children, widget);
-  g_signal_emit_by_name (atk_parent, "children_changed::add", index, atk_child, NULL);
+  g_signal_emit_by_name (atk_parent, "children-changed::add", index, atk_child, NULL);
 
   return 1;
 }
@@ -141,12 +141,12 @@ gtk_container_accessible_real_remove_gtk (GtkContainer *container,
     return 1;
   accessible = GTK_CONTAINER_ACCESSIBLE (atk_parent);
 
-  g_object_notify (G_OBJECT (atk_child), "accessible_parent");
+  g_object_notify (G_OBJECT (atk_child), "accessible-parent");
   index = g_list_index (accessible->children, widget);
   g_list_free (accessible->children);
   accessible->children = gtk_container_get_children (container);
   if (index >= 0 && index <= g_list_length (accessible->children))
-    g_signal_emit_by_name (atk_parent, "children_changed::remove", index, atk_child, NULL);
+    g_signal_emit_by_name (atk_parent, "children-changed::remove", index, atk_child, NULL);
 
   return 1;
 }

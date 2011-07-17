@@ -47,7 +47,7 @@ changed_cb (GtkWidget *widget)
     {
       accessible->old_selection = index;
       g_object_notify (G_OBJECT (obj), "accessible-name");
-      g_signal_emit_by_name (obj, "selection_changed");
+      g_signal_emit_by_name (obj, "selection-changed");
     }
 }
 

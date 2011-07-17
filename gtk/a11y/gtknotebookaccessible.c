@@ -95,7 +95,7 @@ create_notebook_page_accessible (GtkNotebookAccessible *accessible,
   obj = _gtk_notebook_page_accessible_new (accessible, child);
   g_hash_table_insert (accessible->pages, child, obj);
   atk_object_set_parent (obj, ATK_OBJECT (accessible));
-  g_signal_emit_by_name (accessible, "children_changed::add", page_num, obj, NULL);
+  g_signal_emit_by_name (accessible, "children-changed::add", page_num, obj, NULL);
 }
 
 static void
@@ -125,7 +125,7 @@ page_removed_cb (GtkNotebook *notebook,
 
   obj = g_hash_table_lookup (accessible->pages, widget);
   g_return_if_fail (obj);
-  g_signal_emit_by_name (accessible, "children_changed::remove",
+  g_signal_emit_by_name (accessible, "children-changed::remove",
                          page_num, obj, NULL);
   _gtk_notebook_page_accessible_invalidate (GTK_NOTEBOOK_PAGE_ACCESSIBLE (obj));
   g_hash_table_remove (accessible->pages, widget);
@@ -268,8 +268,8 @@ gtk_notebook_accessible_notify_gtk (GObject    *obj,
                * Notebook does not have tabs.
                */
             }
-          g_signal_emit_by_name (atk_obj, "selection_changed");
-          g_signal_emit_by_name (atk_obj, "visible_data_changed");
+          g_signal_emit_by_name (atk_obj, "selection-changed");
+          g_signal_emit_by_name (atk_obj, "visible-data-changed");
         }
       if (gtk_notebook_get_show_tabs (notebook) &&
          (focus_page_num != old_focus_page_num))

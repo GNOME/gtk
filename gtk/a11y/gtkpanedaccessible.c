@@ -43,7 +43,7 @@ gtk_paned_accessible_initialize (AtkObject *obj,
 {
   ATK_OBJECT_CLASS (_gtk_paned_accessible_parent_class)->initialize (obj, data);
 
-  g_signal_connect (data, "size_allocate",
+  g_signal_connect (data, "size-allocate",
                     G_CALLBACK (gtk_paned_accessible_size_allocate_gtk), NULL);
 
   obj->role = ATK_ROLE_SPLIT_PANE;

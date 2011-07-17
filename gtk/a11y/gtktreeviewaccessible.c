@@ -370,8 +370,8 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
         }
       atk_object_set_role (ATK_OBJECT (accessible), role);
       g_object_freeze_notify (G_OBJECT (accessible));
-      g_signal_emit_by_name (accessible, "model_changed");
-      g_signal_emit_by_name (accessible, "visible_data_changed");
+      g_signal_emit_by_name (accessible, "model-changed");
+      g_signal_emit_by_name (accessible, "visible-data-changed");
       g_object_thaw_notify (G_OBJECT (accessible));
     }
   else if (g_strcmp0 (pspec->name, "hadjustment") == 0)
@@ -1369,7 +1369,7 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
         {
           gint expander_size;
           gtk_widget_style_get (widget,
-                                "expander_size", &expander_size,
+                                "expander-size", &expander_size,
                                 NULL);
           cell_rect->x += expander_size + EXTRA_EXPANDER_PADDING;
           cell_rect->width -= expander_size + EXTRA_EXPANDER_PADDING;
@@ -1602,7 +1602,7 @@ idle_expand_row (gpointer data)
   /* Must add 1 because the "added rows" are below the row being expanded */
   row += 1;
 
-  g_signal_emit_by_name (accessible, "row_inserted", row, n_inserted);
+  g_signal_emit_by_name (accessible, "row-inserted", row, n_inserted);
 
   accessible->idle_expand_path = NULL;
 
@@ -1661,7 +1661,7 @@ row_collapsed_cb (GtkTreeView *tree_view,
   row = get_row_from_tree_path (tree_view, path);
   if (row == -1)
     return FALSE;
-  g_signal_emit_by_name (atk_obj, "row_deleted", row,
+  g_signal_emit_by_name (atk_obj, "row-deleted", row,
                          accessible->n_children_deleted);
   accessible->n_children_deleted = 0;
   return FALSE;
@@ -1720,7 +1720,7 @@ selection_changed_cb (GtkTreeSelection *selection,
         }
     }
   if (gtk_widget_get_realized (widget))
-    g_signal_emit_by_name (accessible, "selection_changed");
+    g_signal_emit_by_name (accessible, "selection-changed");
 }
 
 static void
@@ -1770,7 +1770,7 @@ columns_changed (GtkTreeView *tree_view)
                     }
 
                   /* Just emit one column reordered signal when a move happens */
-                  g_signal_emit_by_name (atk_obj, "column_reordered");
+                  g_signal_emit_by_name (atk_obj, "column-reordered");
                   move_found = TRUE;
                 }
 
@@ -1793,13 +1793,13 @@ columns_changed (GtkTreeView *tree_view)
             }
 
           /* Generate column-inserted signal */
-          g_signal_emit_by_name (atk_obj, "column_inserted", column_count, 1);
+          g_signal_emit_by_name (atk_obj, "column-inserted", column_count, 1);
 
           /* Generate children-changed signals */
           for (row = 0; row < accessible->n_rows; row++)
             {
              /* Pass NULL as the child object, i.e. 4th argument */
-              g_signal_emit_by_name (atk_obj, "children_changed::add",
+              g_signal_emit_by_name (atk_obj, "children-changed::add",
                                     ((row * accessible->n_cols) + column_count), NULL, NULL);
             }
         }
@@ -1842,13 +1842,13 @@ columns_changed (GtkTreeView *tree_view)
             }
 
           /* Generate column-deleted signal */
-          g_signal_emit_by_name (atk_obj, "column_deleted", i, 1);
+          g_signal_emit_by_name (atk_obj, "column-deleted", i, 1);
 
           /* Generate children-changed signals */
           for (row = 0; row < accessible->n_rows; row++)
             {
               /* Pass NULL as the child object, 4th argument */
-              g_signal_emit_by_name (atk_obj, "children_changed::remove",
+              g_signal_emit_by_name (atk_obj, "children-changed::remove",
                                      ((row * accessible->n_cols) + column_count), NULL, NULL);
             }
         }
@@ -2029,7 +2029,7 @@ column_visibility_changed (GObject    *object,
 
       accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (tree_view))
 );
-      g_signal_emit_by_name (accessible, "model_changed");
+      g_signal_emit_by_name (accessible, "model-changed");
 
       g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
@@ -2127,7 +2127,7 @@ model_row_inserted (GtkTreeModel *tree_model,
       traverse_cells (accessible, path, TRUE, TRUE);
 
       /* Generate row-inserted signal */
-      g_signal_emit_by_name (atk_obj, "row_inserted", row, n_inserted);
+      g_signal_emit_by_name (atk_obj, "row-inserted", row, n_inserted);
 
       /* Generate children-changed signals */
       n_cols = gtk_tree_view_accessible_get_n_columns (ATK_TABLE (atk_obj));
@@ -2136,7 +2136,7 @@ model_row_inserted (GtkTreeModel *tree_model,
           for (col = 0; col < n_cols; col++)
             {
              /* Pass NULL as the child object, i.e. 4th argument */
-              g_signal_emit_by_name (atk_obj, "children_changed::add",
+              g_signal_emit_by_name (atk_obj, "children-changed::add",
                                     ((row * n_cols) + col), NULL, NULL);
             }
         }
@@ -2200,7 +2200,7 @@ model_row_deleted (GtkTreeModel *tree_model,
    * a collapsed row then row will be -1
    */
   if (row > 0)
-    g_signal_emit_by_name (atk_obj, "row_deleted", row,
+    g_signal_emit_by_name (atk_obj, "row-deleted", row,
                            accessible->n_children_deleted + 1);
   accessible->n_children_deleted = 0;
 
@@ -2208,7 +2208,7 @@ model_row_deleted (GtkTreeModel *tree_model,
   for (col = 0; col < accessible->n_cols; col++)
     {
       /* Pass NULL as the child object, 4th argument */
-      g_signal_emit_by_name (atk_obj, "children_changed::remove",
+      g_signal_emit_by_name (atk_obj, "children-changed::remove",
                              ((row * accessible->n_cols) + col), NULL, NULL);
     }
 }
@@ -2262,7 +2262,7 @@ model_rows_reordered (GtkTreeModel *tree_model,
     }
   traverse_cells (accessible, NULL, TRUE, FALSE);
 
-  g_signal_emit_by_name (atk_obj, "row_reordered");
+  g_signal_emit_by_name (atk_obj, "row-reordered");
 }
 
 static void

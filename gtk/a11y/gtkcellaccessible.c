@@ -182,7 +182,7 @@ _gtk_cell_accessible_add_state (GtkCellAccessible *cell,
       atk_object_notify_state_change (ATK_OBJECT (cell), state_type, TRUE);
       /* If state_type is ATK_STATE_VISIBLE, additional notification */
       if (state_type == ATK_STATE_VISIBLE)
-        g_signal_emit_by_name (cell, "visible_data_changed");
+        g_signal_emit_by_name (cell, "visible-data-changed");
     }
 
   /* If the parent is a flyweight container cell, propagate the state
@@ -219,7 +219,7 @@ _gtk_cell_accessible_remove_state (GtkCellAccessible *cell,
       atk_object_notify_state_change (ATK_OBJECT (cell), state_type, FALSE);
       /* If state_type is ATK_STATE_VISIBLE, additional notification */
       if (state_type == ATK_STATE_VISIBLE)
-        g_signal_emit_by_name (cell, "visible_data_changed");
+        g_signal_emit_by_name (cell, "visible-data-changed");
     }
 
   /* If the parent is a flyweight container cell, propagate the state

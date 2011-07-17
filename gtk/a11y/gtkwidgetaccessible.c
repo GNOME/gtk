@@ -82,7 +82,7 @@ size_allocate_cb (GtkWidget     *widget,
       rect.y = allocation->y;
       rect.width = allocation->width;
       rect.height = allocation->height;
-      g_signal_emit_by_name (accessible, "bounds_changed", &rect);
+      g_signal_emit_by_name (accessible, "bounds-changed", &rect);
     }
 }
 
@@ -527,7 +527,7 @@ gtk_widget_accessible_focus_gtk (GtkWidget     *widget,
 
   accessible = gtk_widget_get_accessible (widget);
 
-  g_signal_emit_by_name (accessible, "focus_event", event->in, &return_val);
+  g_signal_emit_by_name (accessible, "focus-event", event->in, &return_val);
   return FALSE;
 }
 

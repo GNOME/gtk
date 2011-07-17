@@ -215,7 +215,7 @@ gtk_button_accessible_notify_gtk (GObject    *obj,
       if (atk_obj->name == NULL)
         g_object_notify (G_OBJECT (atk_obj), "accessible-name");
 
-      g_signal_emit_by_name (atk_obj, "visible_data_changed");
+      g_signal_emit_by_name (atk_obj, "visible-data-changed");
     }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_button_accessible_parent_class)->notify_gtk (obj, pspec);

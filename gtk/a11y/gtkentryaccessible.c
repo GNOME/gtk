@@ -144,17 +144,17 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
   if (g_strcmp0 (pspec->name, "cursor-position") == 0)
     {
       if (check_for_selection_change (entry, gtk_entry))
-        g_signal_emit_by_name (atk_obj, "text_selection_changed");
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
       /*
        * The entry cursor position has moved so generate the signal.
        */
-      g_signal_emit_by_name (atk_obj, "text_caret_moved",
+      g_signal_emit_by_name (atk_obj, "text-caret-moved",
                              entry->cursor_position);
     }
   else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
     {
       if (check_for_selection_change (entry, gtk_entry))
-        g_signal_emit_by_name (atk_obj, "text_selection_changed");
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
     }
   else if (g_strcmp0 (pspec->name, "editable") == 0)
     {
@@ -906,7 +906,7 @@ changed_cb (GtkEditable *editable)
   if (accessible->length_delete > 0)
     {
       g_signal_emit_by_name (accessible,
-                             "text_changed::delete",
+                             "text-changed::delete",
                              accessible->position_delete,
                              accessible->length_delete);
       accessible->length_delete = 0;
@@ -914,7 +914,7 @@ changed_cb (GtkEditable *editable)
   if (accessible->length_insert > 0)
     {
       g_signal_emit_by_name (accessible,
-                             "text_changed::insert",
+                             "text-changed::insert",
                              accessible->position_insert,
                              accessible->length_insert);
       accessible->length_insert = 0;

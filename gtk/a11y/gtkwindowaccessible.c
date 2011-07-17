@@ -80,7 +80,7 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
   if (g_strcmp0 (pspec->name, "title") == 0)
     {
       g_object_notify (G_OBJECT (atk_obj), "accessible-name");
-      g_signal_emit_by_name (atk_obj, "visible_data_changed");
+      g_signal_emit_by_name (atk_obj, "visible-data-changed");
     }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
@@ -111,7 +111,7 @@ gtk_window_accessible_initialize (AtkObject *obj,
 
   ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->initialize (obj, data);
 
-  g_signal_connect (data, "window_state_event", G_CALLBACK (window_state_event_cb), NULL);
+  g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
   _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
 
   if (GTK_IS_FILE_CHOOSER_DIALOG (widget))

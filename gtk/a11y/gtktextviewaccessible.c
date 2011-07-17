@@ -1261,22 +1261,22 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
       value = at->value;
 
       if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_LEFT_MARGIN)))
-        g_object_set (G_OBJECT (tag), "left_margin", atoi (value), NULL);
+        g_object_set (G_OBJECT (tag), "left-margin", atoi (value), NULL);
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_RIGHT_MARGIN)))
-        g_object_set (G_OBJECT (tag), "right_margin", atoi (value), NULL);
+        g_object_set (G_OBJECT (tag), "right-margin", atoi (value), NULL);
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_INDENT)))
         g_object_set (G_OBJECT (tag), "indent", atoi (value), NULL);
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_ABOVE_LINES)))
-        g_object_set (G_OBJECT (tag), "pixels_above_lines", atoi (value), NULL);
+        g_object_set (G_OBJECT (tag), "pixels-above-lines", atoi (value), NULL);
 
       else if (!strcmp(name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_BELOW_LINES)))
-        g_object_set (G_OBJECT (tag), "pixels_below_lines", atoi (value), NULL);
+        g_object_set (G_OBJECT (tag), "pixels-below-lines", atoi (value), NULL);
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP)))
-        g_object_set (G_OBJECT (tag), "pixels_inside_wrap", atoi (value), NULL);
+        g_object_set (G_OBJECT (tag), "pixels-inside-wrap", atoi (value), NULL);
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_SIZE)))
         g_object_set (G_OBJECT (tag), "size", atoi (value), NULL);
@@ -1289,7 +1289,7 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_BG_FULL_HEIGHT)))
         {
-          g_object_set (G_OBJECT (tag), "bg_full_height",
+          g_object_set (G_OBJECT (tag), "bg-full-height",
                    (strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_BG_FULL_HEIGHT, 0))),
                    NULL);
         }
@@ -1340,7 +1340,7 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
           color->red = atoi (RGB_vals[0]);
           color->green = atoi (RGB_vals[1]);
           color->blue = atoi (RGB_vals[2]);
-          g_object_set (G_OBJECT (tag), "background_gdk", color, NULL);
+          g_object_set (G_OBJECT (tag), "background-gdk", color, NULL);
         }
  
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_FG_COLOR)))
@@ -1350,7 +1350,7 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
           color->red = atoi (RGB_vals[0]);
           color->green = atoi (RGB_vals[1]);
           color->blue = atoi (RGB_vals[2]);
-          g_object_set (G_OBJECT (tag), "foreground_gdk", color, NULL);
+          g_object_set (G_OBJECT (tag), "foreground-gdk", color, NULL);
         }
 
       else if (!strcmp (name, atk_text_attribute_get_name (ATK_TEXT_ATTR_STRETCH)))
@@ -1407,7 +1407,7 @@ gtk_text_view_accessible_set_run_attributes (AtkEditableText *text,
             {
               if (!strcmp (value, atk_text_attribute_get_value (ATK_TEXT_ATTR_WRAP_MODE, j)))
                 {
-                  g_object_set (G_OBJECT (tag), "wrap_mode", j, NULL);
+                  g_object_set (G_OBJECT (tag), "wrap-mode", j, NULL);
                   break;
                 }
             }
@@ -1688,7 +1688,7 @@ delete_range_cb (GtkTextBuffer *buffer,
   length = gtk_text_iter_get_offset (end) - offset;
 
   g_signal_emit_by_name (accessible,
-                         "text_changed::delete",
+                         "text-changed::delete",
                          offset,
                          length);
 
