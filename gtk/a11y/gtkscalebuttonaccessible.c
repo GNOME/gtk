@@ -118,7 +118,7 @@ gtk_scale_button_accessible_do_action (AtkAction *action,
       g_signal_emit_by_name (widget, "popup");
       return TRUE;
     case 1:
-      g_signal_emit_by_name (widget, "podown");
+      g_signal_emit_by_name (widget, "popdown");
       return TRUE;
     default:
       return FALSE;
