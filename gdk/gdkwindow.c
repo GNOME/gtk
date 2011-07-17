@@ -10702,7 +10702,7 @@ gdk_drag_begin_for_device (GdkWindow     *window,
 void
 gdk_test_render_sync (GdkWindow *window)
 {
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->sync_rendering (window);
+  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->sync_rendering (window);
 }
 
 /**
