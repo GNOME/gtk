@@ -26,9 +26,10 @@ TEST_PROGS += text
 TEST_PROGS += children
 
 TEST_PROGS += focus
-TEST_PROGS += testfocus
 
 TEST_PROGS += util
+
+noinst_PROGS = testfocus
 
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
