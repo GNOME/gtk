@@ -109,9 +109,7 @@ gtk_window_accessible_initialize (AtkObject *obj,
   g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
   GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_WINDOW;
 
-  if (GTK_IS_FILE_CHOOSER_DIALOG (widget))
-    obj->role = ATK_ROLE_FILE_CHOOSER;
-  else if (GTK_IS_COLOR_SELECTION_DIALOG (widget))
+  if (GTK_IS_COLOR_SELECTION_DIALOG (widget))
     obj->role = ATK_ROLE_COLOR_CHOOSER;
   else if (GTK_IS_FONT_SELECTION_DIALOG (widget))
     obj->role = ATK_ROLE_FONT_CHOOSER;

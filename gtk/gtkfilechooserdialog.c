@@ -250,6 +250,8 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
 
   widget_class->map       = gtk_file_chooser_dialog_map;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILE_CHOOSER);
+
   _gtk_file_chooser_install_properties (gobject_class);
 
   g_type_class_add_private (class, sizeof (GtkFileChooserDialogPrivate));
