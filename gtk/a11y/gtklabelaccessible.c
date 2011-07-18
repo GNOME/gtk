@@ -63,10 +63,7 @@ gtk_label_accessible_initialize (AtkObject *obj,
         }
     }
 
-  if (GTK_IS_ACCEL_LABEL (widget))
-    obj->role = ATK_ROLE_ACCEL_LABEL;
-  else
-    obj->role = ATK_ROLE_LABEL;
+  obj->role = ATK_ROLE_LABEL;
 }
 
 static gboolean

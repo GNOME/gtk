@@ -144,6 +144,8 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   widget_class->get_preferred_width = gtk_accel_label_get_preferred_width;
   widget_class->destroy = gtk_accel_label_destroy;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
+
   class->signal_quote1 = g_strdup ("<:");
   class->signal_quote2 = g_strdup (":>");
 
