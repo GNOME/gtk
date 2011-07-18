@@ -135,12 +135,12 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
     {
       g_signal_emit_by_name (atk_obj, "text-caret-moved",
                              _gtk_label_get_cursor_position (GTK_LABEL (widget)));
-      if (check_for_selection_change (atk_obj, GTK_LABEL (widget)))
+      if (check_for_selection_change (accessible, GTK_LABEL (widget)))
         g_signal_emit_by_name (atk_obj, "text-selection-changed");
     }
   else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
     {
-      if (check_for_selection_change (atk_obj, GTK_LABEL (widget)))
+      if (check_for_selection_change (accessible, GTK_LABEL (widget)))
         g_signal_emit_by_name (atk_obj, "text-selection-changed");
     }
   else
