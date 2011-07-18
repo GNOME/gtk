@@ -48,10 +48,7 @@ gtk_toggle_button_accessible_initialize (AtkObject *obj,
   g_signal_connect (data, "toggled",
                     G_CALLBACK (gtk_toggle_button_accessible_toggled), NULL);
 
-  if (GTK_IS_CHECK_BUTTON (data))
-    obj->role = ATK_ROLE_CHECK_BOX;
-  else
-    obj->role = ATK_ROLE_TOGGLE_BUTTON;
+  obj->role = ATK_ROLE_TOGGLE_BUTTON;
 }
 
 static void

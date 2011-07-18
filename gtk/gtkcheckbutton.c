@@ -87,6 +87,8 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 
   class->draw_indicator = gtk_real_check_button_draw_indicator;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CHECK_BOX);
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("indicator-size",
 							     P_("Indicator Size"),
