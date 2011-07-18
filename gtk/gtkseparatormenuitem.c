@@ -39,23 +39,12 @@
 
 G_DEFINE_TYPE (GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM)
 
-static AtkObject *
-gtk_separator_menu_item_get_accessible (GtkWidget *widget)
-{
-  AtkObject *obj;
-
-  obj = GTK_WIDGET_CLASS (gtk_separator_menu_item_parent_class)->get_accessible (widget);
-
-  atk_object_set_role (obj, ATK_ROLE_SEPARATOR);
-
-  return obj;
-}
-
 static void
 gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
 {
   GTK_CONTAINER_CLASS (class)->child_type = NULL;
-  GTK_WIDGET_CLASS (class)->get_accessible = gtk_separator_menu_item_get_accessible;
+
+  gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_SEPARATOR);
 }
 
 static void 
