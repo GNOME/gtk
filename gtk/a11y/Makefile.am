@@ -30,7 +30,7 @@ gail_c_sources =			\
 	gtkpanedaccessible.c		\
 	gtkprogressbaraccessible.c	\
 	gtkradiobuttonaccessible.c	\
-	gtkradiosubmenuitemaccessible.c	\
+	gtkradiomenuitemaccessible.c	\
 	gtkrangeaccessible.c		\
 	gtkrenderercellaccessible.c	\
 	gtkscaleaccessible.c		\
@@ -79,7 +79,7 @@ gail_private_h_sources =		\
 	gtkpanedaccessible.h		\
 	gtkprogressbaraccessible.h	\
 	gtkradiobuttonaccessible.h	\
-	gtkradiosubmenuitemaccessible.h	\
+	gtkradiomenuitemaccessible.h	\
 	gtkrangeaccessible.h		\
 	gtkrenderercellaccessible.h	\
 	gtkscaleaccessible.h		\
