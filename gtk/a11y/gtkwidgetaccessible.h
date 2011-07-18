@@ -48,11 +48,6 @@ struct _GtkWidgetAccessibleClass
    */
   void (*notify_gtk)                   (GObject             *object,
                                         GParamSpec          *pspec);
-  /*
-   * Signal handler for focus_in_event and focus_out_event signal on GTK widget
-   */
-  gboolean (*focus_gtk)                (GtkWidget           *widget,
-                                        GdkEventFocus       *event);
 
 };
 

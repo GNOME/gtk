@@ -58,16 +58,11 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible, _gtk_window_accessible, GTK_TYPE_C
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 
-static gboolean
-gtk_window_accessible_focus_gtk (GtkWidget     *widget,
-                                 GdkEventFocus *event)
+static void
+gtk_window_accessible_focus_event (AtkObject *obj,
+                                   gboolean   focus_in)
 {
-  AtkObject* obj;
-
-  obj = gtk_widget_get_accessible (widget);
-  atk_object_notify_state_change (obj, ATK_STATE_ACTIVE, event->in);
-
-  return FALSE;
+  atk_object_notify_state_change (obj, ATK_STATE_ACTIVE, focus_in);
 }
 
 static void
@@ -321,7 +316,6 @@ _gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-  widget_class->focus_gtk = gtk_window_accessible_focus_gtk;
   widget_class->notify_gtk = gtk_window_accessible_notify_gtk;
 
   class->get_name = gtk_window_accessible_get_name;
@@ -329,6 +323,7 @@ _gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
   class->ref_relation_set = gtk_window_accessible_ref_relation_set;
   class->ref_state_set = gtk_window_accessible_ref_state_set;
   class->initialize = gtk_window_accessible_initialize;
+  class->focus_event = gtk_window_accessible_focus_event;
 
   gtk_window_accessible_signals [ACTIVATE] =
     g_signal_new ("activate",
