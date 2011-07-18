@@ -33,7 +33,6 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "a11y/gtkcheckmenuitemaccessible.h"
 #include "a11y/gtkchecksubmenuitemaccessible.h"
 
 /**
