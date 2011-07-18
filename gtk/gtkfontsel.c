@@ -1642,6 +1642,10 @@ static GtkBuildableIface *parent_buildable_iface;
 static void
 gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FONT_CHOOSER);
+
   g_type_class_add_private (klass, sizeof (GtkFontSelectionDialogPrivate));
 }
 

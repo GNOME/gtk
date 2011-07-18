@@ -99,6 +99,7 @@ gtk_window_accessible_initialize (AtkObject *obj,
                                   gpointer   data)
 {
   GtkWidget *widget = GTK_WIDGET (data);
+  const gchar *name;
 
   /* A GtkWindowAccessible can be created for a GtkHandleBox or a GtkWindow */
   if (!GTK_IS_WINDOW (widget) && !GTK_IS_HANDLE_BOX (widget))
@@ -109,25 +110,18 @@ gtk_window_accessible_initialize (AtkObject *obj,
   g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
   GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_WINDOW;
 
-  if (GTK_IS_FONT_SELECTION_DIALOG (widget))
-    obj->role = ATK_ROLE_FONT_CHOOSER;
-  else
-    {
-      const gchar *name;
+  name = gtk_widget_get_name (widget);
 
-      name = gtk_widget_get_name (widget);
-
-      if (!g_strcmp0 (name, "gtk-tooltip"))
-        obj->role = ATK_ROLE_TOOL_TIP;
+  if (!g_strcmp0 (name, "gtk-tooltip"))
+    obj->role = ATK_ROLE_TOOL_TIP;
 #ifdef  GDK_WINDOWING_X11
-      else if (GTK_IS_PLUG (widget))
-        obj->role = ATK_ROLE_PANEL;
+  else if (GTK_IS_PLUG (widget))
+    obj->role = ATK_ROLE_PANEL;
 #endif
-      else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
-        obj->role = ATK_ROLE_WINDOW;
-      else
-        obj->role = ATK_ROLE_FRAME;
-    }
+  else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
+    obj->role = ATK_ROLE_WINDOW;
+  else
+    obj->role = ATK_ROLE_FRAME;
 
   /* Notify that tooltip is showing */
   if (obj->role == ATK_ROLE_TOOL_TIP && gtk_widget_get_mapped (widget))
