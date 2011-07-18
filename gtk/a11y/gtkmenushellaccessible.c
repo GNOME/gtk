@@ -34,10 +34,7 @@ gtk_menu_shell_accessible_initialize (AtkObject *accessible,
 {
   ATK_OBJECT_CLASS (_gtk_menu_shell_accessible_parent_class)->initialize (accessible, data);
 
-  if (GTK_IS_MENU_BAR (data))
-    accessible->role = ATK_ROLE_MENU_BAR;
-  else
-    accessible->role = ATK_ROLE_UNKNOWN;
+  accessible->role = ATK_ROLE_UNKNOWN;
 }
 
 static void

@@ -130,6 +130,8 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   widget_class->draw = gtk_menu_bar_draw;
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
   
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
+
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
   menu_shell_class->get_popup_delay = gtk_menu_bar_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_bar_move_current;
