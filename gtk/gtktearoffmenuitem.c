@@ -103,6 +103,8 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
   widget_class->get_preferred_height = gtk_tearoff_menu_item_get_preferred_height;
   widget_class->parent_set = gtk_tearoff_menu_item_parent_set;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TEAR_OFF_MENU_ITEM);
+
   menu_item_class->activate = gtk_tearoff_menu_item_activate;
 
   g_type_class_add_private (klass, sizeof (GtkTearoffMenuItemPrivate));

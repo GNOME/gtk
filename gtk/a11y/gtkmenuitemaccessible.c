@@ -65,10 +65,7 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
 
   GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_POPUP;
 
-  if (GTK_IS_TEAROFF_MENU_ITEM (data))
-    obj->role = ATK_ROLE_TEAR_OFF_MENU_ITEM;
-  else
-    obj->role = ATK_ROLE_MENU_ITEM;
+  obj->role = ATK_ROLE_MENU_ITEM;
 }
 
 static gint
