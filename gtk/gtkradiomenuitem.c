@@ -31,7 +31,6 @@
 #include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "a11y/gtkradiomenuitemaccessible.h"
 #include "a11y/gtkradiosubmenuitemaccessible.h"
 
 /**
