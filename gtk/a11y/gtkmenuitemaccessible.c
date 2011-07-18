@@ -67,8 +67,6 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
 
   if (GTK_IS_TEAROFF_MENU_ITEM (data))
     obj->role = ATK_ROLE_TEAR_OFF_MENU_ITEM;
-  else if (GTK_IS_SEPARATOR_MENU_ITEM (data))
-    obj->role = ATK_ROLE_SEPARATOR;
   else
     obj->role = ATK_ROLE_MENU_ITEM;
 }
