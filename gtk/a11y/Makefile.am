@@ -39,7 +39,6 @@ gail_c_sources =			\
 	gtkspinbuttonaccessible.c	\
 	gtkspinneraccessible.c		\
 	gtkstatusbaraccessible.c	\
-	gtksubmenuitemaccessible.c	\
 	gtkswitchaccessible.c		\
 	gtktextcellaccessible.c		\
 	gtktextviewaccessible.c		\
@@ -87,7 +86,6 @@ gail_private_h_sources =		\
 	gtkspinbuttonaccessible.h	\
 	gtkspinneraccessible.h		\
 	gtkstatusbaraccessible.h	\
-	gtksubmenuitemaccessible.h	\
 	gtkswitchaccessible.h		\
 	gtktextcellaccessible.h		\
 	gtktextviewaccessible.h		\

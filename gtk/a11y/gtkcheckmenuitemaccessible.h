@@ -20,7 +20,7 @@
 #ifndef __GTK_CHECK_MENU_ITEM_ACCESSIBLE_H__
 #define __GTK_CHECK_MENU_ITEM_ACCESSIBLE_H__
 
-#include "gtksubmenuitemaccessible.h"
+#include "gtkmenuitemaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,12 +36,12 @@ typedef struct _GtkCheckMenuItemAccessibleClass GtkCheckMenuItemAccessibleClass;
 
 struct _GtkCheckMenuItemAccessible
 {
-  GtkSubmenuItemAccessible parent;
+  GtkMenuItemAccessible parent;
 };
 
 struct _GtkCheckMenuItemAccessibleClass
 {
-  GtkSubmenuItemAccessibleClass parent_class;
+  GtkMenuItemAccessibleClass parent_class;
 };
 
 GType _gtk_check_menu_item_accessible_get_type (void);
