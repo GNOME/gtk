@@ -21,10 +21,10 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
-#include "gtkchecksubmenuitemaccessible.h"
+#include "gtkcheckmenuitemaccessible.h"
 
 
-G_DEFINE_TYPE (GtkCheckSubmenuItemAccessible, _gtk_check_submenu_item_accessible, GTK_TYPE_SUBMENU_ITEM_ACCESSIBLE)
+G_DEFINE_TYPE (GtkCheckMenuItemAccessible, _gtk_check_menu_item_accessible, GTK_TYPE_SUBMENU_ITEM_ACCESSIBLE)
 
 static void
 toggled_cb (GtkWidget *widget)
@@ -41,10 +41,10 @@ toggled_cb (GtkWidget *widget)
 }
 
 static void
-gtk_check_submenu_item_accessible_initialize (AtkObject *obj,
+gtk_check_menu_item_accessible_initialize (AtkObject *obj,
                                               gpointer   data)
 {
-  ATK_OBJECT_CLASS (_gtk_check_submenu_item_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_check_menu_item_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "toggled", G_CALLBACK (toggled_cb), NULL);
 
@@ -52,7 +52,7 @@ gtk_check_submenu_item_accessible_initialize (AtkObject *obj,
 }
 
 static AtkStateSet *
-gtk_check_submenu_item_accessible_ref_state_set (AtkObject *accessible)
+gtk_check_menu_item_accessible_ref_state_set (AtkObject *accessible)
 {
   AtkStateSet *state_set;
   GtkCheckMenuItem *check_menu_item;
@@ -62,7 +62,7 @@ gtk_check_submenu_item_accessible_ref_state_set (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_check_submenu_item_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (_gtk_check_menu_item_accessible_parent_class)->ref_state_set (accessible);
 
   check_menu_item = GTK_CHECK_MENU_ITEM (widget);
 
@@ -79,7 +79,7 @@ gtk_check_submenu_item_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-gtk_check_submenu_item_accessible_notify_gtk (GObject    *obj,
+gtk_check_menu_item_accessible_notify_gtk (GObject    *obj,
                                               GParamSpec *pspec)
 {
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (obj);
@@ -103,22 +103,22 @@ gtk_check_submenu_item_accessible_notify_gtk (GObject    *obj,
       atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_check_submenu_item_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_check_menu_item_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
-_gtk_check_submenu_item_accessible_class_init (GtkCheckSubmenuItemAccessibleClass *klass)
+_gtk_check_menu_item_accessible_class_init (GtkCheckMenuItemAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
-  widget_class->notify_gtk = gtk_check_submenu_item_accessible_notify_gtk;
+  widget_class->notify_gtk = gtk_check_menu_item_accessible_notify_gtk;
 
-  class->ref_state_set = gtk_check_submenu_item_accessible_ref_state_set;
-  class->initialize = gtk_check_submenu_item_accessible_initialize;
+  class->ref_state_set = gtk_check_menu_item_accessible_ref_state_set;
+  class->initialize = gtk_check_menu_item_accessible_initialize;
 }
 
 static void
-_gtk_check_submenu_item_accessible_init (GtkCheckSubmenuItemAccessible *item)
+_gtk_check_menu_item_accessible_init (GtkCheckMenuItemAccessible *item)
 {
 }

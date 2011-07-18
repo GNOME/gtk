@@ -20,7 +20,7 @@
 #ifndef __GTK_RADIO_MENU_ITEM_ACCESSIBLE_H__
 #define __GTK_RADIO_MENU_ITEM_ACCESSIBLE_H__
 
-#include "gtkchecksubmenuitemaccessible.h"
+#include "gtkcheckmenuitemaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +36,14 @@ typedef struct _GtkRadioMenuItemAccessibleClass GtkRadioMenuItemAccessibleClass;
 
 struct _GtkRadioMenuItemAccessible
 {
-  GtkCheckSubmenuItemAccessible parent;
+  GtkCheckMenuItemAccessible parent;
 
   GSList *old_group;
 };
 
 struct _GtkRadioMenuItemAccessibleClass
 {
-  GtkCheckSubmenuItemAccessibleClass parent_class;
+  GtkCheckMenuItemAccessibleClass parent_class;
 };
 
 GType _gtk_radio_menu_item_accessible_get_type (void);

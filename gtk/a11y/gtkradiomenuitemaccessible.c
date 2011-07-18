@@ -23,7 +23,7 @@
 #include "gtkradiomenuitemaccessible.h"
 
 
-G_DEFINE_TYPE (GtkRadioMenuItemAccessible, _gtk_radio_menu_item_accessible, GTK_TYPE_CHECK_SUBMENU_ITEM_ACCESSIBLE)
+G_DEFINE_TYPE (GtkRadioMenuItemAccessible, _gtk_radio_menu_item_accessible, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE)
 
 
 static AtkRelationSet *
