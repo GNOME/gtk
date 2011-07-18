@@ -139,6 +139,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->get_preferred_width = gtk_viewport_get_preferred_width;
   widget_class->get_preferred_height = gtk_viewport_get_preferred_height;
   
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
+
   container_class->add = gtk_viewport_add;
 
   /* GtkScrollable implementation */

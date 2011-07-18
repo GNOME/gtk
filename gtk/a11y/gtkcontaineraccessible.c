@@ -166,8 +166,6 @@ gtk_container_accessible_real_initialize (AtkObject *obj,
 
   if (GTK_IS_TOOLBAR (data))
     obj->role = ATK_ROLE_TOOL_BAR;
-  else if (GTK_IS_VIEWPORT (data))
-    obj->role = ATK_ROLE_VIEWPORT;
   else
     obj->role = ATK_ROLE_PANEL;
 }
