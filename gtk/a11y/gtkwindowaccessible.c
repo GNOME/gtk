@@ -111,8 +111,6 @@ gtk_window_accessible_initialize (AtkObject *obj,
 
   if (GTK_IS_FONT_SELECTION_DIALOG (widget))
     obj->role = ATK_ROLE_FONT_CHOOSER;
-  else if (GTK_IS_MESSAGE_DIALOG (widget))
-    obj->role = ATK_ROLE_ALERT;
   else
     {
       const gchar *name;

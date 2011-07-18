@@ -177,6 +177,8 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   
   widget_class->style_updated = gtk_message_dialog_style_updated;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ALERT);
+
   gobject_class->set_property = gtk_message_dialog_set_property;
   gobject_class->get_property = gtk_message_dialog_get_property;
   
