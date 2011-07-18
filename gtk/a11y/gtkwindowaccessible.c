@@ -114,10 +114,6 @@ gtk_window_accessible_initialize (AtkObject *obj,
 
   if (!g_strcmp0 (name, "gtk-tooltip"))
     obj->role = ATK_ROLE_TOOL_TIP;
-#ifdef  GDK_WINDOWING_X11
-  else if (GTK_IS_PLUG (widget))
-    obj->role = ATK_ROLE_PANEL;
-#endif
   else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
     obj->role = ATK_ROLE_WINDOW;
   else
