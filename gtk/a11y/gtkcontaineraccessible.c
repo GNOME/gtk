@@ -164,10 +164,7 @@ gtk_container_accessible_real_initialize (AtkObject *obj,
   g_signal_connect (data, "add", G_CALLBACK (gtk_container_accessible_add_gtk), obj);
   g_signal_connect (data, "remove", G_CALLBACK (gtk_container_accessible_remove_gtk), obj);
 
-  if (GTK_IS_TOOLBAR (data))
-    obj->role = ATK_ROLE_TOOL_BAR;
-  else
-    obj->role = ATK_ROLE_PANEL;
+  obj->role = ATK_ROLE_PANEL;
 }
 
 static void
