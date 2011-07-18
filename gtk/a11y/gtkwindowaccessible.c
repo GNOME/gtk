@@ -113,8 +113,6 @@ gtk_window_accessible_initialize (AtkObject *obj,
     obj->role = ATK_ROLE_FONT_CHOOSER;
   else if (GTK_IS_MESSAGE_DIALOG (widget))
     obj->role = ATK_ROLE_ALERT;
-  else if (GTK_IS_DIALOG (widget))
-    obj->role = ATK_ROLE_DIALOG;
   else
     {
       const gchar *name;

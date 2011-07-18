@@ -241,6 +241,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   widget_class->map = gtk_dialog_map;
   widget_class->style_updated = gtk_dialog_style_updated;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DIALOG);
+
   class->close = gtk_dialog_close;
 
   g_type_class_add_private (gobject_class, sizeof (GtkDialogPrivate));
