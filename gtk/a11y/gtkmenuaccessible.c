@@ -32,7 +32,7 @@ gtk_menu_accessible_initialize (AtkObject *obj,
 
   obj->role = ATK_ROLE_MENU;
 
-  _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
+  GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_POPUP;
 }
 
 static AtkObject *

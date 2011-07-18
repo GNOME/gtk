@@ -37,6 +37,8 @@ typedef struct _GtkWidgetAccessibleClass GtkWidgetAccessibleClass;
 struct _GtkWidgetAccessible
 {
   GtkAccessible parent;
+
+  AtkLayer layer;
 };
 
 struct _GtkWidgetAccessibleClass
@@ -52,9 +54,6 @@ struct _GtkWidgetAccessibleClass
 };
 
 GType _gtk_widget_accessible_get_type (void);
-
-void  _gtk_widget_accessible_set_layer (GtkWidgetAccessible *obj,
-                                        AtkLayer             layer);
 
 G_END_DECLS
 

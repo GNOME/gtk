@@ -127,6 +127,7 @@ gtk_widget_accessible_initialize (AtkObject *obj,
   g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
   g_signal_connect (widget, "unmap", G_CALLBACK (map_cb), NULL);
 
+  GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_WIDGET;
   obj->role = ATK_ROLE_UNKNOWN;
 }
 
@@ -620,21 +621,9 @@ gtk_widget_accessible_get_size (AtkComponent *component,
 static AtkLayer
 gtk_widget_accessible_get_layer (AtkComponent *component)
 {
-  gint layer;
+  GtkWidgetAccessible *accessible = GTK_WIDGET_ACCESSIBLE (component);
 
-  layer = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (component), "atk-component-layer"));
-
-  if (layer == 0)
-    return ATK_LAYER_WIDGET;
-  else
-    return (AtkLayer) layer;
-}
-
-void
-_gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
-                                 AtkLayer             layer)
-{
-  g_object_set_data (G_OBJECT (accessible), "atk-component-layer", GINT_TO_POINTER (layer));
+  return accessible->layer;
 }
 
 static gboolean
