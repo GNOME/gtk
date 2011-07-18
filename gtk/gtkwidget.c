@@ -11942,6 +11942,8 @@ gtk_widget_class_set_accessible_type (GtkWidgetClass *widget_class,
   priv = widget_class->priv;
 
   priv->accessible_type = type;
+  /* reset this - honoring the type's role is better. */
+  priv->accessible_role = ATK_ROLE_INVALID;
 }
 
 /**
@@ -11951,7 +11953,8 @@ gtk_widget_class_set_accessible_type (GtkWidgetClass *widget_class,
  *
  * Sets the default #AtkRole to be set on accessibles created for
  * widgets of @widget_class. Accessibles may decide to not honor this
- * setting if their role reporting is more refined.
+ * setting if their role reporting is more refined. Calls to 
+ * gtk_widget_class_set_accessible_type() will reset this value.
  *
  * In cases where you want more fine-grained control over the role of
  * accessibles created for @widget_class, you should provide your own
