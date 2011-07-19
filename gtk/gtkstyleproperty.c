@@ -1992,6 +1992,79 @@ pack_border_color (GValue             *value,
   gtk_style_properties_get_property (props, "border-top-color", state, value);
 }
 
+/*** UNSET FUNCS ***/
+
+static void
+unset_font_description (GtkStyleProperties *props,
+                        GtkStateFlags       state)
+{
+  gtk_style_properties_unset_property (props, "font-family", state);
+  gtk_style_properties_unset_property (props, "font-style", state);
+  gtk_style_properties_unset_property (props, "font-variant", state);
+  gtk_style_properties_unset_property (props, "font-weight", state);
+  gtk_style_properties_unset_property (props, "font-size", state);
+}
+
+static void
+unset_margin (GtkStyleProperties *props,
+              GtkStateFlags       state)
+{
+  gtk_style_properties_unset_property (props, "margin-top", state);
+  gtk_style_properties_unset_property (props, "margin-right", state);
+  gtk_style_properties_unset_property (props, "margin-bottom", state);
+  gtk_style_properties_unset_property (props, "margin-left", state);
+}
+
+static void
+unset_padding (GtkStyleProperties *props,
+               GtkStateFlags       state)
+{
+  gtk_style_properties_unset_property (props, "padding-top", state);
+  gtk_style_properties_unset_property (props, "padding-right", state);
+  gtk_style_properties_unset_property (props, "padding-bottom", state);
+  gtk_style_properties_unset_property (props, "padding-left", state);
+}
+
+static void
+unset_border_width (GtkStyleProperties *props,
+                    GtkStateFlags       state)
+{
+  gtk_style_properties_unset_property (props, "border-top-width", state);
+  gtk_style_properties_unset_property (props, "border-right-width", state);
+  gtk_style_properties_unset_property (props, "border-bottom-width", state);
+  gtk_style_properties_unset_property (props, "border-left-width", state);
+}
+
+static void
+unset_border_radius (GtkStyleProperties *props,
+                     GtkStateFlags       state)
+{
+  gtk_style_properties_unset_property (props, "border-top-right-radius", state);
+  gtk_style_properties_unset_property (props, "border-bottom-right-radius", state);
+  gtk_style_properties_unset_property (props, "border-bottom-left-radius", state);
+  gtk_style_properties_unset_property (props, "border-top-left-radius", state);
+}
+
+static void
+unset_border_color (GtkStyleProperties *props,
+                    GtkStateFlags       state)
+{
+  gtk_style_properties_unset_property (props, "border-top-color", state);
+  gtk_style_properties_unset_property (props, "border-right-color", state);
+  gtk_style_properties_unset_property (props, "border-bottom-color", state);
+  gtk_style_properties_unset_property (props, "border-left-color", state);
+}
+
+static void
+unset_border_image (GtkStyleProperties *props,
+                    GtkStateFlags       state)
+{
+  gtk_style_properties_unset_property (props, "border-image-source", state);
+  gtk_style_properties_unset_property (props, "border-image-slice", state);
+  gtk_style_properties_unset_property (props, "border-image-repeat", state);
+  gtk_style_properties_unset_property (props, "border-image-width", state);
+}
+
 /*** default values ***/
 
 static void
@@ -2478,7 +2551,7 @@ gtk_style_property_init (void)
                                           font_description_value_parse,
                                           font_description_value_print,
                                           NULL,
-                                          NULL);
+                                          unset_font_description);
 
   _gtk_style_property_register           (g_param_spec_boxed ("text-shadow",
                                                               "Text shadow",
@@ -2542,7 +2615,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL);
+                                          unset_margin);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("padding-top",
                                                             "padding top",
@@ -2574,7 +2647,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL);
+                                          unset_padding);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("border-top-width",
                                                             "border top width",
@@ -2606,7 +2679,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL);
+                                          unset_border_width);
 
   _gtk_style_property_register           (g_param_spec_boxed ("border-top-left-radius",
                                                               "Border top left radius",
@@ -2667,7 +2740,7 @@ gtk_style_property_init (void)
                                           border_radius_value_parse,
                                           border_radius_value_print,
                                           NULL,
-                                          NULL);
+                                          unset_border_radius);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_enum ("border-style",
@@ -2734,7 +2807,7 @@ gtk_style_property_init (void)
                                           border_color_shorthand_value_parse,
                                           NULL,
                                           NULL,
-                                          NULL);
+                                          unset_border_color);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("background-image",
@@ -2779,7 +2852,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL);
+                                          unset_border_image);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_object ("engine",
                                                                "Theming Engine",
