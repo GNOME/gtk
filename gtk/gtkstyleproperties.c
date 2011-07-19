@@ -319,6 +319,7 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                 NULL,
                                 NULL,
                                 NULL,
+                                NULL,
                                 NULL);
 }
 
@@ -836,6 +837,12 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
   if (!node)
     {
       g_warning ("Style property \"%s\" is not registered", property);
+      return;
+    }
+
+  if (node->unset_func)
+    {
+      node->unset_func (props, state);
       return;
     }
 
