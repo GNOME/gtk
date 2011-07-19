@@ -1,12 +1,5 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2011 Alberto Ruiz <aruiz@gnome.org>
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * Massively updated to rework the user interface by Alberto Ruiz, 2011
- * Massively updated for Pango by Owen Taylor, May 2000
- * GtkFontChooser widget for Gtk+, by Damon Chaplin, May 1998.
- * Based on the GnomeFontSelector widget, by Elliot Lee, but major changes.
- * The GnomeFontSelector was derived from app/text_tool.c in the GIMP.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -201,9 +194,9 @@ gtk_font_chooser_class_init (GtkFontChooserClass *klass)
 
 static void 
 gtk_font_chooser_set_property (GObject         *object,
-                                 guint            prop_id,
-                                 const GValue    *value,
-                                 GParamSpec      *pspec)
+                               guint            prop_id,
+                               const GValue    *value,
+                               GParamSpec      *pspec)
 {
   GtkFontChooser *fontchooser;
 
@@ -377,9 +370,9 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 
 void
 set_range_marks (GtkFontChooserPrivate *priv,
-                 GtkWidget* size_slider,
-                 gint* sizes,
-                 gint length)
+                 GtkWidget             *size_slider,
+                 gint                  *sizes,
+                 gint                   length)
 {
   GtkAdjustment *adj;
   gint i;
@@ -483,7 +476,9 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 }
 
 gboolean
-zoom_preview_cb (GtkWidget *scrolled_window, GdkEventScroll *event, gpointer data)
+zoom_preview_cb (GtkWidget      *scrolled_window,
+                 GdkEventScroll *event,
+                 gpointer        data)
 {
   GtkFontChooserPrivate *priv = (GtkFontChooserPrivate*)data;
 
@@ -905,9 +900,9 @@ gtk_font_chooser_ref_face (GtkFontChooser *fontchooser,
 }
 
 
-/*****************************************************************************
+/*
  * These functions are the main public interface for getting/setting the font.
- *****************************************************************************/
+ */
 
 /**
  * gtk_font_chooser_get_family:
