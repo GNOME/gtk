@@ -164,7 +164,6 @@ struct _GtkNotebookPrivate
   guint          during_reorder     : 1;
   guint          focus_out          : 1; /* Flag used by ::move-focus-out implementation */
   guint          has_scrolled       : 1;
-  guint          have_visible_child : 1;
   guint          in_child           : 3;
   guint          need_timer         : 1;
   guint          show_border        : 1;
@@ -1189,7 +1188,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->button = 0;
   priv->need_timer = 0;
   priv->child_has_focus = FALSE;
-  priv->have_visible_child = FALSE;
   priv->focus_out = FALSE;
 
   priv->has_before_previous = 1;
