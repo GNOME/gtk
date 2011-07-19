@@ -63,12 +63,6 @@ struct _GtkFontChooserDialogClass
   void (*_gtk_reserved4) (void);
 };
 
-/*****************************************************************************
- * GtkFontChooserDialog functions.
- *   most of these functions simply call the corresponding function in the
- *   GtkFontChooser.
- *****************************************************************************/
-
 GType	     gtk_font_chooser_dialog_get_type           (void) G_GNUC_CONST;
 GtkWidget* gtk_font_chooser_dialog_new	              (const gchar            *title);
 
