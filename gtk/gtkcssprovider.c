@@ -1670,7 +1670,10 @@ parse_import (GtkCssScanner *scanner)
   GFile *file;
   char *uri;
 
-  uri = _gtk_css_parser_read_uri (scanner->parser);
+  if (_gtk_css_parser_is_string (scanner->parser))
+    uri = _gtk_css_parser_read_string (scanner->parser);
+  else
+    uri = _gtk_css_parser_read_uri (scanner->parser);
   if (uri == NULL)
     {
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
