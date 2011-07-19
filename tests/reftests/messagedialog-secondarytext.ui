@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkMessageDialog" id="messagedialog1">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="type">popup</property>
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="buttons">ok</property>
+    <property name="text" translatable="yes">Text</property>
+    <!-- We set the property multiple times on purpose here -->
+    <property name="secondary_text" translatable="yes">Secondary text #1</property>
+    <property name="secondary_text" translatable="yes">Secondary text #2</property>
+    <property name="secondary_text" translatable="yes">Secondary text #3</property>
+    <property name="secondary_text" translatable="yes">Secondary text #4</property>
+    <property name="secondary_text" translatable="yes">Secondary text #5</property>
+  </object>
+</interface>
