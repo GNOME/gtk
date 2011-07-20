@@ -23,7 +23,6 @@
 
 #include <atk/atk.h>
 
-#include "gtkaccessibleprivate.h"
 #include "gtkiconview.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderer.h"

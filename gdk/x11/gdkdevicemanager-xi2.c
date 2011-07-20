@@ -1025,6 +1025,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
   ev = (XIEvent *) cookie->data;
 
+  if (!ev)
+    return FALSE;
+
   window = get_event_window (translator, ev);
 
   if (window && GDK_WINDOW_DESTROYED (window))
@@ -1392,3 +1395,11 @@ gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface
 }
 
 #endif /* XINPUT_2 */
+
+GdkDevice *
+_gdk_x11_device_manager_xi2_lookup (GdkX11DeviceManagerXI2 *device_manager_xi2,
+                                    gint                    device_id)
+{
+  return g_hash_table_lookup (device_manager_xi2->id_table,
+                              GINT_TO_POINTER (device_id));
+}

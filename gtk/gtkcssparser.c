@@ -662,7 +662,7 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser *parser,
           child2 = _gtk_css_parser_read_symbolic_color (parser);
           if (child2 == NULL)
             {
-              g_object_unref (child1);
+              gtk_symbolic_color_unref (child1);
               return NULL;
             }
         }

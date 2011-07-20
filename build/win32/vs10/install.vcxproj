@@ -105,6 +105,10 @@
       <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f5}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gailutil.vcxproj">
+      <Project>{29e3e814-1ba3-4ad7-a3a7-3669cb80a942}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -32,7 +32,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkradiomenuitemaccessible.h"
-#include "a11y/gtkradiosubmenuitemaccessible.h"
 
 /**
  * SECTION:gtkradiomenuitem
@@ -410,7 +409,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 
   widget_class->destroy = gtk_radio_menu_item_destroy;
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_SUBMENU_ITEM_ACCESSIBLE);
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_MENU_ITEM_ACCESSIBLE);
 
   menu_item_class->activate = gtk_radio_menu_item_activate;
 

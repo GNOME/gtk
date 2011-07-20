@@ -40,7 +40,6 @@
 
 #include "gtkswitch.h"
 
-#include "gtkaccessibleprivate.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

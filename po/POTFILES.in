@@ -1,7 +1,7 @@
 # Files from the Gtk distribution which have already been
 # marked to allow runtime translation of messages
-gdk/gdk.c
 gdk/gdkapplaunchcontext.c
+gdk/gdk.c
 gdk/gdkcursor.c
 gdk/gdkdevice.c
 gdk/gdkdevicemanager.c
@@ -12,11 +12,13 @@ gdk/gdkwindow.c
 gdk/keyname-table.h
 gdk/win32/gdkmain-win32.c
 gdk/x11/gdkapplaunchcontext-x11.c
-gdk/x11/gdkdevice-xi.c
-gdk/x11/gdkdevice-xi2.c
-gdk/x11/gdkdevicemanager-xi.c
 gdk/x11/gdkdevicemanager-xi2.c
+gdk/x11/gdkdevicemanager-xi.c
+gdk/x11/gdkdevice-xi2.c
+gdk/x11/gdkdevice-xi.c
 gdk/x11/gdkmain-x11.c
+gtk/a11y/gtkspinneraccessible.c
+gtk/a11y/gtkswitchaccessible.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
 gtk/gtkaccellabel.c
@@ -27,13 +29,13 @@ gtk/gtkactiongroup.c
 gtk/gtkactivatable.c
 gtk/gtkadjustment.c
 gtk/gtkalignment.c
-gtk/gtkarrow.c
-gtk/gtkaspectframe.c
 gtk/gtkanimationdescription.c
-gtk/gtkappchooser.c
 gtk/gtkappchooserbutton.c
+gtk/gtkappchooser.c
 gtk/gtkappchooserdialog.c
 gtk/gtkappchooserwidget.c
+gtk/gtkarrow.c
+gtk/gtkaspectframe.c
 gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
@@ -44,8 +46,8 @@ gtk/gtkbuilder.c
 gtk/gtkbuilderparser.c
 gtk/gtkbutton.c
 gtk/gtkcalendar.c
-gtk/gtkcellarea.c
 gtk/gtkcellareabox.c
+gtk/gtkcellarea.c
 gtk/gtkcellareacontext.c
 gtk/gtkcelleditable.c
 gtk/gtkcelllayout.c
@@ -68,14 +70,15 @@ gtk/gtkcolorsel.c
 gtk/gtkcolorseldialog.c
 gtk/gtkcombobox.c
 gtk/gtkcontainer.c
+gtk/gtkcssprovider.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
 gtk/gtkdnd.c
 gtk/gtkdnd-quartz.c
 gtk/gtkdrawingarea.c
 gtk/gtkeditable.c
-gtk/gtkentry.c
 gtk/gtkentrybuffer.c
+gtk/gtkentry.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkexpander.c
@@ -135,6 +138,7 @@ gtk/gtkmountoperation-x11.c
 gtk/gtknotebook.c
 gtk/gtknumerableicon.c
 gtk/gtkorientable.c
+gtk/gtkoverlay.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
@@ -143,6 +147,7 @@ gtk/gtkpathbar.c
 gtk/gtkplug.c
 gtk/gtkprintbackend.c
 gtk/gtkprinter.c
+gtk/gtkprinteroption.c
 gtk/gtkprinteroptionwidget.c
 gtk/gtkprintjob.c
 gtk/gtkprintoperation.c
@@ -244,6 +249,7 @@ modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
 modules/printbackends/cups/gtkprintbackendcups.c
+modules/printbackends/cups/gtkprintercups.c
 modules/printbackends/file/gtkprintbackendfile.c
 modules/printbackends/lpr/gtkprintbackendlpr.c
 modules/printbackends/papi/gtkprintbackendpapi.c

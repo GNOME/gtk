@@ -3,7 +3,7 @@
   <PropertyGroup Label="UserMacros">
     <GlibEtcInstallRoot>..\..\..\..\..\vs10\$(Platform)</GlibEtcInstallRoot>
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
-    <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj</DefDir>
+    <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
     <GtkApiVersion>3.0</GtkApiVersion>
     <GtkBinaryVersion>2.10.0</GtkBinaryVersion>
     <GtkDummyPrefix>\"/dummy\"</GtkDummyPrefix>
@@ -527,10 +527,21 @@ copy ..\..\..\gtk\gtkwidgetpath.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 copy ..\..\..\gtk\gtkwindow.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 
+mkdir $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+copy ..\..\..\libgail-util\gail-util.h $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+copy ..\..\..\libgail-util\gailmisc.h $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+copy ..\..\..\libgail-util\gailtextutil.h $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util
+
+
 copy ..\..\..\gdk\gdkconfig.h $(CopyDir)\include\gtk-3.0\gdk
 
 
 copy $(Configuration)\$(Platform)\bin\*-$(GtkApiVersion).lib $(CopyDir)\lib
+
+copy $(Configuration)\$(Platform)\bin\gailutil.lib $(CopyDir)\lib
 
 
 mkdir $(CopyDir)\share\glib-2.0\schemas
@@ -559,7 +570,7 @@ $(CopyDir)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-2.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;G_DISABLE_DEPRECATED;G_DISABLE_SINGLE_INCLUDES;ATK_DISABLE_SINGLE_INCLUDES;GDK_PIXBUF_DISABLE_SINGLE_INCLUDES;GTK_DISABLE_SINGLE_INCLUDES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>

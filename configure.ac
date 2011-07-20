@@ -165,6 +165,9 @@ case $host in
   *-*-linux*)
     os_linux=yes
     ;;
+  *-*-openbsd*)
+    os_openbsd=yes
+    ;;
 esac
 
 dnl
@@ -1300,6 +1303,10 @@ if test "x$enable_x11_backend" = xyes; then
   GTK_PACKAGES="$GTK_PACKAGES pangoft2"
 fi
 GTK_EXTRA_LIBS=
+if test x"$os_openbsd" = xyes; then
+  GTK_EXTRA_LIBS="$GTK_EXTRA_LIBS -lkvm"
+fi
+
 GTK_EXTRA_CFLAGS=
 GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES` $GTK_EXTRA_LIBS"
 GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES $GTK_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"

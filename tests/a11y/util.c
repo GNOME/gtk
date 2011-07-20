@@ -40,6 +40,17 @@ test_toolkit_version (void)
   g_assert_cmpstr (s, ==, GTK_VERSION);
 }
 
+static void
+test_root (void)
+{
+  AtkObject *obj;
+
+  obj = atk_get_root ();
+
+  g_assert (atk_object_get_role (obj) == ATK_ROLE_APPLICATION);
+  g_assert (atk_object_get_parent (obj) == NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -47,6 +58,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/util/toolkit-name", test_toolkit_name);
   g_test_add_func ("/util/toolkit-version", test_toolkit_version);
+  g_test_add_func ("/util/root", test_root);
 
   return g_test_run ();
 }

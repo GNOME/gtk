@@ -21,12 +21,12 @@
 
 #include <gtk/gtk.h>
 #include "gtkradiomenuitemaccessible.h"
-#include "gtkradiosubmenuitemaccessible.h"
 
 
-G_DEFINE_TYPE (GtkRadioMenuItemAccessible, gtk_radio_menu_item_accessible, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE)
+G_DEFINE_TYPE (GtkRadioMenuItemAccessible, _gtk_radio_menu_item_accessible, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE)
 
-AtkRelationSet *
+
+static AtkRelationSet *
 gtk_radio_menu_item_accessible_ref_relation_set (AtkObject *obj)
 {
   GtkWidget *widget;
@@ -40,10 +40,11 @@ gtk_radio_menu_item_accessible_ref_relation_set (AtkObject *obj)
 
   radio_menu_item = GTK_RADIO_MENU_ITEM_ACCESSIBLE (obj);
 
-  relation_set = ATK_OBJECT_CLASS (gtk_radio_menu_item_accessible_parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (_gtk_radio_menu_item_accessible_parent_class)->ref_relation_set (obj);
 
-  /* If the radio menu_item'group has changed remove the relation */
+  /* If the radio menu_item's group has changed remove the relation */
   list = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (widget));
+
   if (radio_menu_item->old_group != list)
     {
       AtkRelation *relation;
@@ -55,7 +56,6 @@ gtk_radio_menu_item_accessible_ref_relation_set (AtkObject *obj)
   if (!atk_relation_set_contains (relation_set, ATK_RELATION_MEMBER_OF))
     {
       /* Get the members of the menu_item group */
-
       radio_menu_item->old_group = list;
       if (list)
         {
@@ -80,7 +80,7 @@ gtk_radio_menu_item_accessible_ref_relation_set (AtkObject *obj)
 
           atk_relation_set_add (relation_set, relation);
 
-          /* Unref the relation so that it is not leaked  */
+          /* Unref the relation so that it is not leaked */
           g_object_unref (relation);
         }
     }
@@ -90,15 +90,15 @@ gtk_radio_menu_item_accessible_ref_relation_set (AtkObject *obj)
 
 static void
 gtk_radio_menu_item_accessible_initialize (AtkObject *obj,
-                                           gpointer   data)
+                                              gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_radio_menu_item_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_radio_menu_item_accessible_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_RADIO_MENU_ITEM;
 }
 
 static void
-gtk_radio_menu_item_accessible_class_init (GtkRadioMenuItemAccessibleClass *klass)
+_gtk_radio_menu_item_accessible_class_init (GtkRadioMenuItemAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -107,6 +107,7 @@ gtk_radio_menu_item_accessible_class_init (GtkRadioMenuItemAccessibleClass *klas
 }
 
 static void
-gtk_radio_menu_item_accessible_init (GtkRadioMenuItemAccessible *radio_menu_item)
+_gtk_radio_menu_item_accessible_init (GtkRadioMenuItemAccessible *radio_menu_item)
 {
+  radio_menu_item->old_group = NULL;
 }

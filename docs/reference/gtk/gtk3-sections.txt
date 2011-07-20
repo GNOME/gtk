@@ -354,6 +354,7 @@ gtk_assistant_get_nth_page
 gtk_assistant_prepend_page
 gtk_assistant_append_page
 gtk_assistant_insert_page
+gtk_assistant_remove_page
 GtkAssistantPageFunc
 gtk_assistant_set_forward_page_func
 GtkAssistantPageType
@@ -5051,6 +5052,7 @@ gtk_widget_style_get_property
 gtk_widget_style_get_valist
 gtk_widget_style_attach
 gtk_widget_class_set_accessible_type
+gtk_widget_class_set_accessible_role
 gtk_widget_get_accessible
 gtk_widget_child_focus
 gtk_widget_child_notify

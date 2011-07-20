@@ -327,6 +327,8 @@ static void           gtk_file_chooser_default_get_default_size       (GtkFileCh
 static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_default_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
+static void add_selection_to_recent_list (GtkFileChooserDefault *impl);
+
 static void location_popup_handler  (GtkFileChooserDefault *impl,
 				     const gchar           *path);
 static void location_popup_on_paste_handler (GtkFileChooserDefault *impl);
@@ -1452,7 +1454,6 @@ get_file_info_finished (GCancellable *cancellable,
 			const GError *error,
 			gpointer      data)
 {
-  gint pos = -1;
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
@@ -1465,7 +1466,6 @@ get_file_info_finished (GCancellable *cancellable,
     /* Handle doesn't exist anymore in the model */
     goto out;
 
-  pos = gtk_tree_path_get_indices (path)[0];
   gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->shortcuts_model),
 			   &iter, path);
   gtk_tree_path_free (path);
@@ -8129,6 +8129,16 @@ struct GetDisplayNameData
   gchar *file_part;
 };
 
+/* Every time we request a response explicitly, we need to save the selection to the recently-used list,
+ * as requesting a response means, "the dialog is confirmed".
+ */
+static void
+request_response_and_add_to_recent_list (GtkFileChooserDefault *impl)
+{
+  g_signal_emit_by_name (impl, "response-requested");
+  add_selection_to_recent_list (impl);
+}
+
 static void
 confirmation_confirm_get_info_cb (GCancellable *cancellable,
 				  GFileInfo    *info,
@@ -8155,7 +8165,7 @@ confirmation_confirm_get_info_cb (GCancellable *cancellable,
 
   set_busy_cursor (data->impl, FALSE);
   if (should_respond)
-    g_signal_emit_by_name (data->impl, "response-requested");
+    request_response_and_add_to_recent_list (data->impl);
 
 out:
   g_object_unref (data->impl);
@@ -8255,7 +8265,7 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
     {
       if (data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
-	  g_signal_emit_by_name (data->impl, "response-requested"); /* even if the file doesn't exist, apps can make good use of that (e.g. Emacs) */
+	  request_response_and_add_to_recent_list (data->impl); /* even if the file doesn't exist, apps can make good use of that (e.g. Emacs) */
 	}
       else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
         {
@@ -8273,10 +8283,10 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
               g_free (file_part);
 
 	      if (retval)
-		g_signal_emit_by_name (data->impl, "response-requested");
+		request_response_and_add_to_recent_list (data->impl);
 	    }
 	  else
-	    g_signal_emit_by_name (data->impl, "response-requested");
+	    request_response_and_add_to_recent_list (data->impl);
 	}
       else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 	       || data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
@@ -8292,7 +8302,7 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
 	  set_busy_cursor (data->impl, FALSE);
 
 	  if (!mkdir_error)
-	    g_signal_emit_by_name (data->impl, "response-requested");
+	    request_response_and_add_to_recent_list (data->impl);
 	  else
 	    error_creating_folder_dialog (data->impl, data->file, mkdir_error);
         }
@@ -8359,7 +8369,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
       else
 	{
 	  if (file_exists)
-	    g_signal_emit_by_name (data->impl, "response-requested"); /* user typed an existing filename; we are done */
+	    request_response_and_add_to_recent_list (data->impl); /* user typed an existing filename; we are done */
 	  else
 	    needs_parent_check = TRUE; /* file doesn't exist; see if its parent exists */
 	}
@@ -8390,7 +8400,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
 	  if (is_folder)
 	    {
 	      /* User typed a folder; we are done */
-	      g_signal_emit_by_name (data->impl, "response-requested");
+	      request_response_and_add_to_recent_list (data->impl);
 	    }
 	  else
 	    error_selecting_folder_over_existing_file_dialog (data->impl, data->file);
@@ -8468,17 +8478,45 @@ location_popup_on_paste_handler (GtkFileChooserDefault *impl)
 }
 
 /* Implementation for GtkFileChooserEmbed::should_respond() */
+static void
+add_selection_to_recent_list (GtkFileChooserDefault *impl)
+{
+  GSList *files;
+  GSList *l;
+
+  files = gtk_file_chooser_default_get_files (GTK_FILE_CHOOSER (impl));
+
+  for (l = files; l; l = l->next)
+    {
+      GFile *file = l->data;
+      char *uri;
+
+      uri = g_file_get_uri (file);
+      if (uri)
+	{
+	  gtk_recent_manager_add_item (impl->recent_manager, uri);
+	  g_free (uri);
+	}
+    }
+
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
+}
+
 static gboolean
 gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 {
   GtkFileChooserDefault *impl;
   GtkWidget *toplevel;
   GtkWidget *current_focus;
+  gboolean retval;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
   g_assert (GTK_IS_WINDOW (toplevel));
+
+  retval = FALSE;
 
   current_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
 
@@ -8514,14 +8552,20 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       g_assert (impl->action >= GTK_FILE_CHOOSER_ACTION_OPEN && impl->action <= GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
       if (impl->operation_mode == OPERATION_MODE_SEARCH)
-	return search_should_respond (impl);
+	{
+	  retval = search_should_respond (impl);
+	  goto out;
+	}
 
       if (impl->operation_mode == OPERATION_MODE_RECENT)
 	{
 	  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	    goto save_entry;
 	  else
-	    return recent_should_respond (impl);
+	    {
+	      retval = recent_should_respond (impl);
+	      goto out;
+	    }
 	}
 
       selection_check (impl, &num_selected, &all_files, &all_folders);
@@ -8539,7 +8583,8 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  return FALSE;
 
 	case RESPOND:
-	  return TRUE;
+	  retval = TRUE;
+	  goto out;
 
 	case RESPOND_OR_SWITCH:
 	  g_assert (num_selected == 1);
@@ -8550,17 +8595,25 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	      return FALSE;
 	    }
 	  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	    return should_respond_after_confirm_overwrite (impl,
-							   get_display_name_from_file_list (impl),
-							   impl->current_folder);
+	    {
+	      retval = should_respond_after_confirm_overwrite (impl,
+							       get_display_name_from_file_list (impl),
+							       impl->current_folder);
+	      goto out;
+	    }
 	  else
-	    return TRUE;
+	    {
+	      retval = TRUE;
+	      goto out;
+	    }
 
 	case ALL_FILES:
-	  return all_files;
+	  retval = all_files;
+	  goto out;
 
 	case ALL_FOLDERS:
-	  return all_folders;
+	  retval = all_folders;
+	  goto out;
 
 	case SAVE_ENTRY:
 	  goto save_entry;
@@ -8574,7 +8627,6 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       GFile *file;
       gboolean is_well_formed, is_empty, is_file_part_empty;
       gboolean is_folder;
-      gboolean retval;
       GtkFileChooserEntry *entry;
       GError *error;
 
@@ -8632,7 +8684,6 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	      impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	    {
 	      change_folder_and_display_error (impl, file, TRUE);
-	      retval = FALSE;
 	    }
 	  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 		   impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
@@ -8645,7 +8696,6 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  else
 	    {
 	      g_assert_not_reached ();
-	      retval = FALSE;
 	    }
 	}
       else
@@ -8673,14 +8723,12 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 				       data);
 
 	  set_busy_cursor (impl, TRUE);
-	  retval = FALSE;
 
 	  if (error != NULL)
 	    g_error_free (error);
 	}
 
       g_object_unref (file);
-      return retval;
     }
   else if (impl->toplevel_last_focus_widget == impl->browse_files_tree_view)
     {
@@ -8708,9 +8756,13 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       goto save_entry;
     else
       goto file_list; 
-  
-  g_assert_not_reached ();
-  return FALSE;
+
+ out:
+
+  if (retval)
+    add_selection_to_recent_list (impl);
+
+  return retval;
 }
 
 /* Implementation for GtkFileChooserEmbed::initial_focus() */

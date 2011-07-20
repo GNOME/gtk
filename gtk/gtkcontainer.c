@@ -45,8 +45,8 @@
 #include "gtksizerequest.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtkassistant.h"
 #include "gtkintl.h"
-#include "gtktoolbar.h"
 #include "a11y/gtkcontaineraccessible.h"
 
 /**
@@ -1532,7 +1532,7 @@ gtk_container_remove (GtkContainer *container,
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container) || GTK_IS_ASSISTANT (container));
 
   g_signal_emit (container, container_signals[REMOVE], 0, widget);
 }

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-02 10:23+0300\n"
-"PO-Revision-Date: 2011-07-02 10:25+0200\n"
+"POT-Creation-Date: 2011-07-15 11:00+0300\n"
+"PO-Revision-Date: 2011-07-15 11:01+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer (Hebrew)\n"
 "Language: he\n"
@@ -457,6 +457,24 @@ msgid_plural "Opening %d Items"
 msgstr[0] "פותח פריט אחד"
 msgstr[1] "פותח %d פריטים"
 
+#: ../gtk/a11y/gtkspinneraccessible.c:42
+msgctxt "throbbing progress animation widget"
+msgid "Spinner"
+msgstr "הנפשת המתנה"
+
+#: ../gtk/a11y/gtkspinneraccessible.c:43
+msgid "Provides visual indication of progress"
+msgstr "אספקת חיווי חזותי של התהליך"
+
+#: ../gtk/a11y/gtkswitchaccessible.c:65
+msgctxt "light switch widget"
+msgid "Switch"
+msgstr "החלפה"
+
+#: ../gtk/a11y/gtkswitchaccessible.c:66
+msgid "Switches between on and off states"
+msgstr "החלפה בין המצבים פעיל ולא פעיל"
+
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
@@ -668,15 +686,15 @@ msgstr "יישומים קשורים"
 msgid "Other Applications"
 msgstr "יישומים אחרים"
 
-#: ../gtk/gtkassistant.c:919
+#: ../gtk/gtkassistant.c:999
 msgid "C_ontinue"
 msgstr "הת_קדמות"
 
-#: ../gtk/gtkassistant.c:922
+#: ../gtk/gtkassistant.c:1002
 msgid "Go _Back"
 msgstr "ח_זרה"
 
-#: ../gtk/gtkassistant.c:926
+#: ../gtk/gtkassistant.c:1006
 msgid "_Finish"
 msgstr "_סיום"
 
@@ -710,7 +728,7 @@ msgstr "תגית בלתי מטופלת: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:870
+#: ../gtk/gtkcalendar.c:874
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -718,7 +736,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:908
+#: ../gtk/gtkcalendar.c:912
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -727,7 +745,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1909
+#: ../gtk/gtkcalendar.c:1913
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -742,7 +760,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1940 ../gtk/gtkcalendar.c:2637
+#: ../gtk/gtkcalendar.c:1944 ../gtk/gtkcalendar.c:2641
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -758,7 +776,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1972 ../gtk/gtkcalendar.c:2498
+#: ../gtk/gtkcalendar.c:1976 ../gtk/gtkcalendar.c:2502
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -774,7 +792,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2267
+#: ../gtk/gtkcalendar.c:2271
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1009,23 +1027,23 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:8929 ../gtk/gtktextview.c:8274
+#: ../gtk/gtkentry.c:8949 ../gtk/gtktextview.c:8277
 msgid "Input _Methods"
 msgstr "_שיטות קלט"
 
-#: ../gtk/gtkentry.c:8943 ../gtk/gtktextview.c:8288
+#: ../gtk/gtkentry.c:8963 ../gtk/gtktextview.c:8291
 msgid "_Insert Unicode Control Character"
 msgstr "_הזנת תו בקרה יוניקוד"
 
-#: ../gtk/gtkentry.c:10414
+#: ../gtk/gtkentry.c:10434
 msgid "Caps Lock and Num Lock are on"
 msgstr "ה־Caps Lock וה־Num Lock פעילים"
 
-#: ../gtk/gtkentry.c:10416
+#: ../gtk/gtkentry.c:10436
 msgid "Num Lock is on"
 msgstr "ה־Num Lock פעיל"
 
-#: ../gtk/gtkentry.c:10418
+#: ../gtk/gtkentry.c:10438
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -1074,7 +1092,7 @@ msgstr "ה־Caps Lock פעיל"
 msgid "Select a File"
 msgstr "נא לבחור קובץ"
 
-#: ../gtk/gtkfilechooserbutton.c:106 ../gtk/gtkfilechooserdefault.c:1871
+#: ../gtk/gtkfilechooserbutton.c:106 ../gtk/gtkfilechooserdefault.c:1811
 msgid "Desktop"
 msgstr "שולחן עבודה"
 
@@ -1086,27 +1104,27 @@ msgstr "(ללא)"
 msgid "Other..."
 msgstr "אחר..."
 
-#: ../gtk/gtkfilechooserdefault.c:147
+#: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
 msgstr "הזנת שם לתיקייה החדשה"
 
-#: ../gtk/gtkfilechooserdefault.c:965
+#: ../gtk/gtkfilechooserdefault.c:962
 msgid "Could not retrieve information about the file"
 msgstr "לא ניתן לקבל מידע על הקובץ"
 
-#: ../gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:973
 msgid "Could not add a bookmark"
 msgstr "לא ניתן להוסיף סימנייה"
 
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:984
 msgid "Could not remove bookmark"
 msgstr "לא ניתן להסיר את הסימנייה"
 
-#: ../gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:995
 msgid "The folder could not be created"
 msgstr "לא ניתן ליצור את התיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:1011
+#: ../gtk/gtkfilechooserdefault.c:1008
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1114,27 +1132,27 @@ msgstr ""
 "לא ניתן לייצר את התיקייה מכיוון שקיים קובץ בעל שם דומה. יש לנסות ולבחור שם "
 "חדש לתיקייה, או לשנות את שם הקובץ."
 
-#: ../gtk/gtkfilechooserdefault.c:1025
+#: ../gtk/gtkfilechooserdefault.c:1022
 msgid "You need to choose a valid filename."
 msgstr "עליך לבחור בשם קובץ תקני."
 
-#: ../gtk/gtkfilechooserdefault.c:1028
+#: ../gtk/gtkfilechooserdefault.c:1025
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "לא ניתן ליצור קובץ תחת %s כיוון שזו איננה תיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:1040
+#: ../gtk/gtkfilechooserdefault.c:1037
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
 "ניתן לבחור תיקיות בלבד.  הפריט שברחת אינו תיקייה; נא לנסות לבחור בפריט אחר."
 
-#: ../gtk/gtkfilechooserdefault.c:1050
+#: ../gtk/gtkfilechooserdefault.c:1047
 msgid "Invalid file name"
 msgstr "שם קובץ לא תקני"
 
-#: ../gtk/gtkfilechooserdefault.c:1060
+#: ../gtk/gtkfilechooserdefault.c:1057
 msgid "The folder contents could not be displayed"
 msgstr "לא ניתן להציג את תוכן התיקייה"
 
@@ -1142,209 +1160,212 @@ msgstr "לא ניתן להציג את תוכן התיקייה"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1614
+#: ../gtk/gtkfilechooserdefault.c:1583
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "‏%1$s ב־%2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1790
+#: ../gtk/gtkfilechooserdefault.c:1732
 msgid "Search"
 msgstr "חיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:1814 ../gtk/gtkfilechooserdefault.c:9539
+#: ../gtk/gtkfilechooserdefault.c:1756 ../gtk/gtkfilechooserdefault.c:4873
 msgid "Recently Used"
 msgstr "בשימוש לאחרונה"
 
-#: ../gtk/gtkfilechooserdefault.c:2470
+#: ../gtk/gtkfilechooserdefault.c:2355
 msgid "Select which types of files are shown"
 msgstr "בחירה בסוגי הקבצים שיוצגו"
 
-#: ../gtk/gtkfilechooserdefault.c:2829
+#: ../gtk/gtkfilechooserdefault.c:2714
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "הוסף את התיקייה '%s' לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:2873
+#: ../gtk/gtkfilechooserdefault.c:2758
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "הוסף את התיקייה הנוכחית לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:2875
+#: ../gtk/gtkfilechooserdefault.c:2760
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "הוסף את התיקיות הנבחרות לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:2913
+#: ../gtk/gtkfilechooserdefault.c:2798
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "הסרת הסימנייה '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2915
+#: ../gtk/gtkfilechooserdefault.c:2800
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "לא ניתן להסיר את הסימנייה '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2922 ../gtk/gtkfilechooserdefault.c:3807
+#: ../gtk/gtkfilechooserdefault.c:2807 ../gtk/gtkfilechooserdefault.c:3692
 msgid "Remove the selected bookmark"
 msgstr "הסרת הסימנייה הנבחרת"
 
-#: ../gtk/gtkfilechooserdefault.c:3486
+#: ../gtk/gtkfilechooserdefault.c:3371
 msgid "Remove"
 msgstr "הסרה"
 
-#: ../gtk/gtkfilechooserdefault.c:3495
+#: ../gtk/gtkfilechooserdefault.c:3380
 msgid "Rename..."
 msgstr "שינוי שם..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3659
+#: ../gtk/gtkfilechooserdefault.c:3544
 msgid "Places"
 msgstr "מקומות"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3716
+#: ../gtk/gtkfilechooserdefault.c:3601
 msgid "_Places"
 msgstr "_מקומות"
 
-#: ../gtk/gtkfilechooserdefault.c:3795
+#: ../gtk/gtkfilechooserdefault.c:3680
 msgid "Add the selected folder to the Bookmarks"
 msgstr "הוספת התיקייה הנבחרת לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:3942
+#: ../gtk/gtkfilechooserdefault.c:3827
 msgid "Could not select file"
 msgstr "לא ניתן לבחור את הקובץ"
 
-#: ../gtk/gtkfilechooserdefault.c:4115
+#: ../gtk/gtkfilechooserdefault.c:4000
 msgid "_Add to Bookmarks"
 msgstr "_הוספה לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:4128
+#: ../gtk/gtkfilechooserdefault.c:4013
 msgid "Show _Hidden Files"
 msgstr "הצגת קבצים _נסתרים"
 
-#: ../gtk/gtkfilechooserdefault.c:4135
+#: ../gtk/gtkfilechooserdefault.c:4020
 msgid "Show _Size Column"
 msgstr "הצגת _רוחב העמודה"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: ../gtk/gtkfilechooserdefault.c:4360
+#: ../gtk/gtkfilechooserdefault.c:4245
 msgid "Files"
 msgstr "קבצים"
 
-#: ../gtk/gtkfilechooserdefault.c:4411
+#: ../gtk/gtkfilechooserdefault.c:4296
 msgid "Name"
 msgstr "שם"
 
-#: ../gtk/gtkfilechooserdefault.c:4434
+#: ../gtk/gtkfilechooserdefault.c:4319
 msgid "Size"
 msgstr "גודל"
 
-#: ../gtk/gtkfilechooserdefault.c:4448
+#: ../gtk/gtkfilechooserdefault.c:4333
 msgid "Modified"
 msgstr "שונה"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4702 ../gtk/gtkprinteroptionwidget.c:799
+#: ../gtk/gtkfilechooserdefault.c:4414 ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "_שם:"
 
-#. Expander
-#: ../gtk/gtkfilechooserdefault.c:4745
-msgid "_Browse for other folders"
-msgstr "_דפדוף לתיקיות אחרות"
-
-#: ../gtk/gtkfilechooserdefault.c:5018
+#: ../gtk/gtkfilechooserdefault.c:4711
 msgid "Type a file name"
 msgstr "הזנת שם קובץ"
 
+#: ../gtk/gtkfilechooserdefault.c:4758 ../gtk/gtkfilechooserdefault.c:4769
+msgid "Please select a folder below"
+msgstr "נא לבחור תיקייה להלן"
+
+#: ../gtk/gtkfilechooserdefault.c:4764
+msgid "Please type a file name"
+msgstr "נא להזין שם קובץ"
+
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5061
+#: ../gtk/gtkfilechooserdefault.c:4835
 msgid "Create Fo_lder"
 msgstr "יצירת _תיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:5071
+#: ../gtk/gtkfilechooserdefault.c:4883
+msgid "Search:"
+msgstr "חיפוש:"
+
+#: ../gtk/gtkfilechooserdefault.c:4930
 msgid "_Location:"
 msgstr "_מיקום:"
 
-#: ../gtk/gtkfilechooserdefault.c:5278
+#: ../gtk/gtkfilechooserdefault.c:5247
 msgid "Save in _folder:"
 msgstr "שמירה ב_תיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:5280
+#: ../gtk/gtkfilechooserdefault.c:5249
 msgid "Create in _folder:"
 msgstr "יצירה ב_תיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:6402
+#: ../gtk/gtkfilechooserdefault.c:6343
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "לא ניתן לקרוא את התוכן של %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6406
+#: ../gtk/gtkfilechooserdefault.c:6347
 msgid "Could not read the contents of the folder"
 msgstr "לא ניתן לקרוא את תכני התיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:6499 ../gtk/gtkfilechooserdefault.c:6567
-#: ../gtk/gtkfilechooserdefault.c:6719
+#: ../gtk/gtkfilechooserdefault.c:6440 ../gtk/gtkfilechooserdefault.c:6508
+#: ../gtk/gtkfilechooserdefault.c:6660
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../gtk/gtkfilechooserdefault.c:6514
+#: ../gtk/gtkfilechooserdefault.c:6455
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6516
+#: ../gtk/gtkfilechooserdefault.c:6457
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב־%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7185
+#: ../gtk/gtkfilechooserdefault.c:7142
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: ../gtk/gtkfilechooserdefault.c:7777 ../gtk/gtkfilechooserdefault.c:7798
+#: ../gtk/gtkfilechooserdefault.c:7742 ../gtk/gtkfilechooserdefault.c:7763
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "הקיצור %s כבר קיים"
 
-#: ../gtk/gtkfilechooserdefault.c:7888
+#: ../gtk/gtkfilechooserdefault.c:7853
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "הקיצור %s אינו קיים"
 
-#: ../gtk/gtkfilechooserdefault.c:8146 ../gtk/gtkprintunixdialog.c:550
+#: ../gtk/gtkfilechooserdefault.c:8099 ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "קובץ בשם \"%s\" כבר קיים. האם ברצונך להחליפו?"
 
-#: ../gtk/gtkfilechooserdefault.c:8149 ../gtk/gtkprintunixdialog.c:554
+#: ../gtk/gtkfilechooserdefault.c:8102 ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים ב-\"%s\". החלפתו תגרום לאיבוד תוכנו."
 
-#: ../gtk/gtkfilechooserdefault.c:8154 ../gtk/gtkprintunixdialog.c:561
+#: ../gtk/gtkfilechooserdefault.c:8107 ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: ../gtk/gtkfilechooserdefault.c:8881
+#: ../gtk/gtkfilechooserdefault.c:8912
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:8882
+#: ../gtk/gtkfilechooserdefault.c:8913
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "התנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
-#: ../gtk/gtkfilechooserdefault.c:8896
+#: ../gtk/gtkfilechooserdefault.c:8927
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:9115
-msgid "Search:"
-msgstr "חיפוש:"
-
-#: ../gtk/gtkfilechooserdefault.c:9723
+#: ../gtk/gtkfilechooserdefault.c:9719
 #, c-format
 msgid "Could not mount %s"
 msgstr "לא ניתן לעגון את %s"
@@ -1352,6 +1373,8 @@ msgstr "לא ניתן לעגון את %s"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
+#: ../gtk/gtkfilesystem.c:721
+#, c-format
 msgid "Invalid path"
 msgstr "נתיב לא תקין"
 
@@ -1489,20 +1512,20 @@ msgid "System (%s)"
 msgstr "מערכת (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6302
+#: ../gtk/gtklabel.c:6309
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6314
+#: ../gtk/gtklabel.c:6321
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
-#: ../gtk/gtklinkbutton.c:482
+#: ../gtk/gtklinkbutton.c:484
 msgid "Copy URL"
 msgstr "ה_עתקת כתובת"
 
-#: ../gtk/gtklinkbutton.c:645
+#: ../gtk/gtklinkbutton.c:647
 msgid "Invalid URI"
 msgstr "כתובת לא תקנית"
 
@@ -1568,20 +1591,20 @@ msgstr "GTK+ debugging flags to unset"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:845
+#: ../gtk/gtkmain.c:848
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmain.c:909
+#: ../gtk/gtkmain.c:914
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Cannot open display: %s"
 
-#: ../gtk/gtkmain.c:975
+#: ../gtk/gtkmain.c:980
 msgid "GTK+ Options"
 msgstr "GTK+ Options"
 
-#: ../gtk/gtkmain.c:975
+#: ../gtk/gtkmain.c:980
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 
@@ -1640,32 +1663,32 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d. הפעולה אינה מוטמעת עדיין."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:859
+#: ../gtk/gtkmountoperation-x11.c:959
 msgid "Terminal Pager"
 msgstr "מציג טקסט במסוף"
 
-#: ../gtk/gtkmountoperation-x11.c:860
+#: ../gtk/gtkmountoperation-x11.c:960
 msgid "Top Command"
 msgstr "פקודת Top"
 
-#: ../gtk/gtkmountoperation-x11.c:861
+#: ../gtk/gtkmountoperation-x11.c:961
 msgid "Bourne Again Shell"
 msgstr "מעטפת Bourne Again"
 
-#: ../gtk/gtkmountoperation-x11.c:862
+#: ../gtk/gtkmountoperation-x11.c:962
 msgid "Bourne Shell"
 msgstr "מעטפת Bourne"
 
-#: ../gtk/gtkmountoperation-x11.c:863
+#: ../gtk/gtkmountoperation-x11.c:963
 msgid "Z Shell"
 msgstr "מעטפת Z"
 
-#: ../gtk/gtkmountoperation-x11.c:960
+#: ../gtk/gtkmountoperation-x11.c:1060
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
-#: ../gtk/gtknotebook.c:4919 ../gtk/gtknotebook.c:7608
+#: ../gtk/gtknotebook.c:4922 ../gtk/gtknotebook.c:7611
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -2317,15 +2340,6 @@ msgstr "לא ניתן למצוא פריט עם כתובת '%s'"
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "לא נמצא יישום הרשום בשם '%s' עבור הפריט בעל הכתובת '%s'"
 
-#: ../gtk/gtkspinner.c:286
-msgctxt "throbbing progress animation widget"
-msgid "Spinner"
-msgstr "הנפשת המתנה"
-
-#: ../gtk/gtkspinner.c:287
-msgid "Provides visual indication of progress"
-msgstr "אספקת חיווי חזותי של התהליך"
-
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:313
 msgctxt "Stock label"
@@ -2839,7 +2853,7 @@ msgstr "הת_רחקות"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:604
+#: ../gtk/gtkswitch.c:335 ../gtk/gtkswitch.c:395 ../gtk/gtkswitch.c:602
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -2847,19 +2861,10 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:633
+#: ../gtk/gtkswitch.c:343 ../gtk/gtkswitch.c:396 ../gtk/gtkswitch.c:631
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
-
-#: ../gtk/gtkswitch.c:1060
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "החלפה"
-
-#: ../gtk/gtkswitch.c:1061
-msgid "Switches between on and off states"
-msgstr "החלפה בין המצבים פעיל ולא פעיל"
 
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -4260,7 +4265,7 @@ msgstr "בחירה אוטומטית"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3326
 msgid "Printer Default"
-msgstr "ברירת מחדל עבור המדפסת"
+msgstr "בררת מחדל עבור המדפסת"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2832
@@ -4407,6 +4412,22 @@ msgstr "פרופיל מדפסת"
 msgid "Unavailable"
 msgstr "לא זמין"
 
+#. TRANSLATORS: when we're running an old CUPS, and
+#. * it hasn't registered the device with colord
+#: ../modules/printbackends/cups/gtkprintercups.c:222
+msgid "Color management unavailable"
+msgstr "ניהול צבעים אינו זמין"
+
+#. TRANSLATORS: when there is no color profile available
+#: ../modules/printbackends/cups/gtkprintercups.c:234
+msgid "No profile available"
+msgstr "אין פרופיל זמין"
+
+#. TRANSLATORS: when the color profile has no title
+#: ../modules/printbackends/cups/gtkprintercups.c:245
+msgid "Unspecified profile"
+msgstr "פרופיל בלתי מוגדר"
+
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
@@ -4506,6 +4527,9 @@ msgstr "נכשל בפתיחת הקובץ '%s': %s"
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
+
+#~ msgid "_Browse for other folders"
+#~ msgstr "_דפדוף לתיקיות אחרות"
 
 #~ msgid "Locked"
 #~ msgstr "נעולה"

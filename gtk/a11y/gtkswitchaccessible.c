@@ -34,7 +34,7 @@
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, gtk_switch_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static AtkStateSet *
@@ -43,7 +43,7 @@ gtk_switch_accessible_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (_gtk_switch_accessible_parent_class)->ref_state_set (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -59,7 +59,7 @@ static void
 gtk_switch_accessible_initialize (AtkObject *accessible,
                                   gpointer   widget)
 {
-  ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->initialize (accessible, widget);
+  ATK_OBJECT_CLASS (_gtk_switch_accessible_parent_class)->initialize (accessible, widget);
 
   atk_object_set_role (accessible, ATK_ROLE_TOGGLE_BUTTON);
   atk_object_set_name (accessible, C_("light switch widget", "Switch"));
@@ -67,7 +67,7 @@ gtk_switch_accessible_initialize (AtkObject *accessible,
 }
 
 static void
-gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
+_gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
@@ -76,7 +76,7 @@ gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 }
 
 static void
-gtk_switch_accessible_init (GtkSwitchAccessible *self)
+_gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
 }
 

@@ -136,7 +136,7 @@ window1
                 image description: (null)
                 <AtkAction>
                 action 0 name: click
-              unnamed-GailContainerCell-7
+              unnamed-GtkContainerCellAccessible-7
                 "table cell"
                 parent: unnamed-GtkTreeViewAccessible-5
                 index: 1
@@ -159,12 +159,9 @@ window1
                   caret offset: 0
                   default attributes: bg-color: <omitted>
                                       bg-full-height: 0
-                                      bg-stipple: false
-                                      direction: <omitted>
                                       editable: false
                                       family-name: <omitted>
                                       fg-color: <omitted>
-                                      fg-stipple: false
                                       indent: 0
                                       invisible: false
                                       justification: left
@@ -204,12 +201,9 @@ Click "Show other applications", for more options, or "Find applications online"
                   caret offset: 0
                   default attributes: bg-color: <omitted>
                                       bg-full-height: 0
-                                      bg-stipple: false
-                                      direction: <omitted>
                                       editable: false
                                       family-name: <omitted>
                                       fg-color: <omitted>
-                                      fg-stipple: false
                                       indent: 0
                                       invisible: false
                                       justification: left
@@ -246,12 +240,9 @@ Click "Show other applications", for more options, or "Find applications online"
                   caret offset: 0
                   default attributes: bg-color: <omitted>
                                       bg-full-height: 0
-                                      bg-stipple: false
-                                      direction: <omitted>
                                       editable: false
                                       family-name: <omitted>
                                       fg-color: <omitted>
-                                      fg-stipple: false
                                       indent: 0
                                       invisible: false
                                       justification: left
@@ -274,7 +265,7 @@ Click "Show other applications", for more options, or "Find applications online"
                   <AtkAction>
                   action 0 name: activate
                   action 0 description: activate the cell
-                unnamed-GailImageCell-8
+                unnamed-GtkImageCellAccessible-8
                   "table cell"
                   index: 3
                   state: enabled focusable focused selectable sensitive transient visible
@@ -301,12 +292,9 @@ Click "Show other applications", for more options, or "Find applications online"
                   caret offset: 0
                   default attributes: bg-color: <omitted>
                                       bg-full-height: 0
-                                      bg-stipple: false
-                                      direction: <omitted>
                                       editable: false
                                       family-name: <omitted>
                                       fg-color: <omitted>
-                                      fg-stipple: false
                                       indent: 0
                                       invisible: false
                                       justification: left

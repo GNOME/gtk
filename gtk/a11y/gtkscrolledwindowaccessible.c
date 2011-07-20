@@ -19,19 +19,18 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <gtk/gtk.h>
 #include "gtkscrolledwindowaccessible.h"
 
 
-G_DEFINE_TYPE (GtkScrolledWindowAccessible, gtk_scrolled_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkScrolledWindowAccessible, _gtk_scrolled_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
 
 static void
 visibility_changed (GObject    *object,
                     GParamSpec *pspec,
                     gpointer    user_data)
 {
-  if (!strcmp (pspec->name, "visible"))
+  if (!g_strcmp0 (pspec->name, "visible"))
     {
       gint index;
       gint n_children;
@@ -78,19 +77,20 @@ visibility_changed (GObject    *object,
         }
 
       if (child_added)
-        g_signal_emit_by_name (accessible, "children_changed::add", index, child, NULL);
+        g_signal_emit_by_name (accessible, "children-changed::add", index, child, NULL);
       else
-        g_signal_emit_by_name (accessible, "children_changed::remove", index, child, NULL);
+        g_signal_emit_by_name (accessible, "children-changed::remove", index, child, NULL);
 
     }
 }
+
 static void
 gtk_scrolled_window_accessible_initialize (AtkObject *obj,
                                            gpointer  data)
 {
   GtkScrolledWindow *window;
 
-  ATK_OBJECT_CLASS (gtk_scrolled_window_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_scrolled_window_accessible_parent_class)->initialize (obj, data);
 
   window = GTK_SCROLLED_WINDOW (data);
 
@@ -180,7 +180,7 @@ gtk_scrolled_window_accessible_ref_child (AtkObject *obj,
 }
 
 static void
-gtk_scrolled_window_accessible_class_init (GtkScrolledWindowAccessibleClass *klass)
+_gtk_scrolled_window_accessible_class_init (GtkScrolledWindowAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
@@ -190,6 +190,6 @@ gtk_scrolled_window_accessible_class_init (GtkScrolledWindowAccessibleClass *kla
 }
 
 static void
-gtk_scrolled_window_accessible_init (GtkScrolledWindowAccessible *window)
+_gtk_scrolled_window_accessible_init (GtkScrolledWindowAccessible *window)
 {
 }

@@ -27,7 +27,7 @@
 static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkRangeAccessible, gtk_range_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkRangeAccessible, _gtk_range_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
@@ -46,7 +46,7 @@ gtk_range_accessible_initialize (AtkObject *obj,
   GtkAdjustment *adj;
   GtkRange *gtk_range;
 
-  ATK_OBJECT_CLASS (gtk_range_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_range_accessible_parent_class)->initialize (obj, data);
 
   gtk_range = GTK_RANGE (data);
   /*
@@ -55,12 +55,9 @@ gtk_range_accessible_initialize (AtkObject *obj,
    */
   adj = gtk_range_get_adjustment (gtk_range);
   if (adj)
-    {
-      g_signal_connect (adj,
-                        "value-changed",
-                        G_CALLBACK (gtk_range_accessible_value_changed),
-                        range);
-    }
+    g_signal_connect (adj, "value-changed",
+                      G_CALLBACK (gtk_range_accessible_value_changed),
+                      range);
 
   obj->role = ATK_ROLE_SLIDER;
 }
@@ -82,7 +79,7 @@ gtk_range_accessible_finalize (GObject *object)
                                               range);
     }
 
-  G_OBJECT_CLASS (gtk_range_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_range_accessible_parent_class)->finalize (object);
 }
 
 static void
@@ -97,18 +94,17 @@ gtk_range_accessible_notify_gtk (GObject    *obj,
     {
       range = gtk_widget_get_accessible (widget);
       adj = gtk_range_get_adjustment (GTK_RANGE (widget));
-      g_signal_connect (adj,
-                        "value-changed",
+      g_signal_connect (adj, "value-changed",
                         G_CALLBACK (gtk_range_accessible_value_changed),
                         range);
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_range_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_range_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 
 static void
-gtk_range_accessible_class_init (GtkRangeAccessibleClass *klass)
+_gtk_range_accessible_class_init (GtkRangeAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
@@ -122,7 +118,7 @@ gtk_range_accessible_class_init (GtkRangeAccessibleClass *klass)
 }
 
 static void
-gtk_range_accessible_init (GtkRangeAccessible *range)
+_gtk_range_accessible_init (GtkRangeAccessible *range)
 {
 }
 

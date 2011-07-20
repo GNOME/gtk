@@ -22,11 +22,10 @@
 
 #include <gtk/gtk.h>
 #include "gtkcontaineraccessible.h"
-#include "gailcell.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TREE_VIEW_ACCESSIBLE                  (gtk_tree_view_accessible_get_type ())
+#define GTK_TYPE_TREE_VIEW_ACCESSIBLE                  (_gtk_tree_view_accessible_get_type ())
 #define GTK_TREE_VIEW_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_VIEW_ACCESSIBLE, GtkTreeViewAccessible))
 #define GTK_TREE_VIEW_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW_ACCESSIBLE, GtkTreeViewAccessibleClass))
 #define GTK_IS_TREE_VIEW_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_VIEW_ACCESSIBLE))
@@ -61,8 +60,7 @@ struct _GtkTreeViewAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType      gtk_tree_view_accessible_get_type       (void);
-AtkObject *gtk_tree_view_accessible_ref_focus_cell (GtkTreeView *treeview);
+GType _gtk_tree_view_accessible_get_type (void);
 
 G_END_DECLS
 

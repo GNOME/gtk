@@ -183,6 +183,8 @@ gtk_plug_class_init (GtkPlugClass *class)
 
   widget_class->focus = gtk_plug_focus;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
+
   container_class->check_resize = gtk_plug_check_resize;
 
   window_class->set_focus = gtk_plug_set_focus;

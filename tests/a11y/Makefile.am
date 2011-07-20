@@ -29,6 +29,8 @@ TEST_PROGS += focus
 
 TEST_PROGS += util
 
+noinst_PROGS = testfocus
+
 EXTRA_DIST += \
 	hello-world.ui hello-world.txt \
 	mnemonic.ui mnemonic.txt \
@@ -56,4 +58,5 @@ EXTRA_DIST += \
 	iconview.ui iconview.txt \
 	entries.ui entries.txt \
 	scale-drawvalue.ui scale-drawvalue.txt \
-	placeholder-text.ui placeholder-text.txt
+	placeholder-text.ui placeholder-text.txt \
+	menu.ui menu.txt

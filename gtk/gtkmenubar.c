@@ -52,7 +52,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "a11y/gtkmenushellaccessible.h"
 
 #define BORDER_SPACING  0
 #define DEFAULT_IPADDING 1
@@ -131,6 +130,8 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   widget_class->draw = gtk_menu_bar_draw;
   widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
   
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
+
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
   menu_shell_class->get_popup_delay = gtk_menu_bar_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_bar_move_current;
@@ -230,8 +231,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                              GTK_PARAM_READABLE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkMenuBarPrivate));
-
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_SHELL_ACCESSIBLE);
 }
 
 static void

@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_PROGRESS_BAR_ACCESSIBLE                      (gtk_progress_bar_accessible_get_type ())
+#define GTK_TYPE_PROGRESS_BAR_ACCESSIBLE                      (_gtk_progress_bar_accessible_get_type ())
 #define GTK_PROGRESS_BAR_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PROGRESS_BAR_ACCESSIBLE, GtkProgressBarAccessible))
 #define GTK_PROGRESS_BAR_ACCESSIBLE_CLASS(klass)                        (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PROGRESS_BAR_ACCESSIBLE, GtkProgressBarAccessibleClass))
 #define GTK_IS_PROGRESS_BAR_ACCESSIBLE(obj)                       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PROGRESS_BAR_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkProgressBarAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
-GType gtk_progress_bar_accessible_get_type (void);
+GType _gtk_progress_bar_accessible_get_type (void);
 
 G_END_DECLS
 

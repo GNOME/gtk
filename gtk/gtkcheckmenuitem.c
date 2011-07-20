@@ -34,7 +34,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkcheckmenuitemaccessible.h"
-#include "a11y/gtkchecksubmenuitemaccessible.h"
 
 /**
  * SECTION:gtkcheckmenuitem
@@ -152,7 +151,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
 
   widget_class->draw = gtk_check_menu_item_draw;
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CHECK_SUBMENU_ITEM_ACCESSIBLE);
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE);
 
   menu_item_class->activate = gtk_check_menu_item_activate;
   menu_item_class->hide_on_activate = FALSE;

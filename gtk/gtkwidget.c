@@ -409,6 +409,7 @@ struct _GtkWidgetPrivate
 struct _GtkWidgetClassPrivate
 {
   GType accessible_type;
+  AtkRole accessible_role;
 };
 
 enum {
@@ -937,6 +938,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /* Accessibility support */
   klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
+  klass->priv->accessible_role = ATK_ROLE_INVALID;
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->adjust_size_request = gtk_widget_real_adjust_size_request;
@@ -11940,6 +11942,43 @@ gtk_widget_class_set_accessible_type (GtkWidgetClass *widget_class,
   priv = widget_class->priv;
 
   priv->accessible_type = type;
+  /* reset this - honoring the type's role is better. */
+  priv->accessible_role = ATK_ROLE_INVALID;
+}
+
+/**
+ * gtk_widget_class_set_accessible_role:
+ * @widget_class: class to set the accessible role for
+ * @role: The role to use for accessibles created for @widget_class
+ *
+ * Sets the default #AtkRole to be set on accessibles created for
+ * widgets of @widget_class. Accessibles may decide to not honor this
+ * setting if their role reporting is more refined. Calls to 
+ * gtk_widget_class_set_accessible_type() will reset this value.
+ *
+ * In cases where you want more fine-grained control over the role of
+ * accessibles created for @widget_class, you should provide your own
+ * accessible type and use gtk_widget_class_set_accessible_type()
+ * instead.
+ *
+ * If @role is #ATK_ROLE_INVALID, the default role will not be changed
+ * and the accessible's default role will be used instead.
+ *
+ * This function should only be called from class init functions of widgets.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_widget_class_set_accessible_role (GtkWidgetClass *widget_class,
+                                      AtkRole         role)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  priv = widget_class->priv;
+
+  priv->accessible_role = role;
 }
 
 /**
@@ -11986,12 +12025,14 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
   if (!accessible)
   {
     GtkWidgetClass *widget_class;
+    GtkWidgetClassPrivate *priv;
     AtkObjectFactory *factory;
     AtkRegistry *default_registry;
 
     widget_class = GTK_WIDGET_GET_CLASS (widget);
+    priv = widget_class->priv;
 
-    if (widget_class->priv->accessible_type == GTK_TYPE_ACCESSIBLE)
+    if (priv->accessible_type == GTK_TYPE_ACCESSIBLE)
       {
         default_registry = atk_get_default_registry ();
         factory = atk_registry_get_factory (default_registry,
@@ -12002,9 +12043,12 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
       }
     else
       {
-        accessible = g_object_new (widget_class->priv->accessible_type, NULL);
+        accessible = g_object_new (priv->accessible_type, NULL);
         atk_object_initialize (accessible, widget);
       }
+
+    if (priv->accessible_role != ATK_ROLE_INVALID)
+      atk_object_set_role (accessible, priv->accessible_role);
 
     g_object_set_qdata (G_OBJECT (widget),
                         quark_accessible_object,

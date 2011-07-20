@@ -381,6 +381,8 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->style_updated = gtk_toolbar_style_updated;
   widget_class->focus = gtk_toolbar_focus;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_BAR);
+
   /* need to override the base class function via override_class_handler,
    * because the signal slot is not available in GtkWidgetClass
    */

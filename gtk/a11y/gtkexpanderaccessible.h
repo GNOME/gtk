@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_EXPANDER_ACCESSIBLE              (gtk_expander_accessible_get_type ())
+#define GTK_TYPE_EXPANDER_ACCESSIBLE              (_gtk_expander_accessible_get_type ())
 #define GTK_EXPANDER_ACCESSIBLE(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_EXPANDER_ACCESSIBLE, GtkExpanderAccessible))
 #define GTK_EXPANDER_ACCESSIBLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_EXPANDER_ACCESSIBLE, GtkExpanderAccessibleClass))
 #define GTK_IS_EXPANDER_ACCESSIBLE(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_EXPANDER_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkExpanderAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_expander_accessible_get_type (void);
+GType _gtk_expander_accessible_get_type (void);
 
 G_END_DECLS
 

@@ -126,6 +126,8 @@ static void
 gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 {
   GObjectClass   *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
   gobject_class->get_property = gtk_color_selection_dialog_get_property;
 
   g_object_class_install_property (gobject_class,
@@ -156,6 +158,8 @@ gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 						     P_("The help button of the dialog."),
 						     GTK_TYPE_WIDGET,
 						     G_PARAM_READABLE));
+
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_COLOR_CHOOSER);
 
   g_type_class_add_private (klass, sizeof (GtkColorSelectionDialogPrivate));
 }

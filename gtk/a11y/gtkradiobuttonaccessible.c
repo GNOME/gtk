@@ -23,13 +23,13 @@
 #include "gtkradiobuttonaccessible.h"
 
 
-G_DEFINE_TYPE (GtkRadioButtonAccessible, gtk_radio_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
+G_DEFINE_TYPE (GtkRadioButtonAccessible, _gtk_radio_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
 
 static void
 gtk_radio_button_accessible_initialize (AtkObject *accessible,
                                         gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_radio_button_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (_gtk_radio_button_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_RADIO_BUTTON;
 }
@@ -48,7 +48,7 @@ gtk_radio_button_accessible_ref_relation_set (AtkObject *obj)
 
   radio_button = GTK_RADIO_BUTTON_ACCESSIBLE (obj);
 
-  relation_set = ATK_OBJECT_CLASS (gtk_radio_button_accessible_parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (_gtk_radio_button_accessible_parent_class)->ref_relation_set (obj);
 
   /* If the radio button'group has changed remove the relation */
   list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
@@ -100,7 +100,7 @@ gtk_radio_button_accessible_ref_relation_set (AtkObject *obj)
 }
 
 static void
-gtk_radio_button_accessible_class_init (GtkRadioButtonAccessibleClass *klass)
+_gtk_radio_button_accessible_class_init (GtkRadioButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -109,8 +109,7 @@ gtk_radio_button_accessible_class_init (GtkRadioButtonAccessibleClass *klass)
 }
 
 static void
-gtk_radio_button_accessible_init (GtkRadioButtonAccessible *radio_button)
+_gtk_radio_button_accessible_init (GtkRadioButtonAccessible *radio_button)
 {
   radio_button->old_group = NULL;
 }
-

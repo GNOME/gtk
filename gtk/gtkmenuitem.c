@@ -44,7 +44,6 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkmenuitemaccessible.h"
-#include "a11y/gtksubmenuitemaccessible.h"
 
 
 /**
@@ -237,7 +236,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->get_preferred_height = gtk_menu_item_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_menu_item_get_preferred_height_for_width;
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SUBMENU_ITEM_ACCESSIBLE);
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ITEM_ACCESSIBLE);
 
   container_class->forall = gtk_menu_item_forall;
 

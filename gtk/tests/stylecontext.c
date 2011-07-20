@@ -1,117 +1,6 @@
 #include <gtk/gtk.h>
 
 static void
-test_parse_empty (void)
-{
-  GtkCssProvider *provider;
-  GError *error;
-  gboolean res;
-
-  provider = gtk_css_provider_new ();
-  error = NULL;
-  res = gtk_css_provider_load_from_data (provider, "", -1, &error);
-
-  g_assert (res);
-  g_assert_no_error (error);
-  g_clear_error (&error);
-
-  g_object_unref (provider);
-}
-
-static void
-test_parse_at (void)
-{
-  GtkCssProvider *provider;
-  GError *error;
-  gboolean res;
-  gint i;
-  const gchar *valid[] = {
-    "@import \"" SRCDIR "/test.css\";",
-    "@import '" SRCDIR "/test.css';",
-    "@import url(\"" SRCDIR "/test.css\");",
-    "@import url('" SRCDIR "/test.css');",
-    "@import\nurl (\t\"" SRCDIR "/test.css\" ) ;",
-    "@define-color bg_color #f9a039;",
-    "@define-color color @bg_color;",
-    "@define-color color rgb(100, 99, 88);",
-    "@define-color color rgba(50%, 50%, 50%, 0.5);",
-    "@define-color color lighter(#f9a039);",
-    "@define-color color darker ( @blue ) ;",
-    "@define-color color shade(@blue, 1.3);",
-    "@define-color color alpha(@blue, 1.3);",
-    "@define-color color mix(@blue, @red, 0.2);",
-    "@define-color color red;",
-    "@define-color color mix(shade (#121212, 0.5), mix (rgb(10%,20%,100%), @blue,0.5), 0.2);",
-    "@define-color blue @blue;",
-    "@define-color blue123_a-b #123;",
-    "@binding-set gtk-emacs-menu { bind \"<ctrl>n\" { \"move-current\" (next) }; };",
-    "@binding-set gtk-emacs-text-view {\n"
-      "  bind \"<ctrl>u\" { \"move-cursor\" (paragraph-ends, -1, 0)\n"
-      "                   \"delete-from-cursor\" (paragraph-ends, 1) };\n"
-      "};",
-    "@binding-set test {\n"
-       "  bind \"<ctrl>space\" { \"set-anchor\" () };\n"
-       "  unbind \"<ctrl>v\";\n"
-       "};",
-    NULL
-  };
-
-  const gchar *invalid[] = {
-    "@import " SRCDIR "/test.css ;",
-    "@import url ( \"" SRCDIR "/test.css\" xyz );",
-    "@import url(\");",
-    "@import url(');",
-    "@import url(\"abc');",
-    "@ import ;",
-    "@define_color blue  red;",
-    "@define-color blue #12234;",
-    "@define-color blue #12g234;",
-    "@define-color blue @@;",
-    "@define-color blue 5!#%4@DG$##x;",
-    "@define-color color mix(@red, @blue, @green);",
-    "@define-color color mix(@blue, 0.2, @red);",
-    "@define-color color mix(0.2, @blue, @red);",
-    "@define-color color mix(@blue, @red);",
-    "@define-color color mix(@blue);",
-    "@define-color color mix();",
-    "@define-color color rgba(50%, 50%, 50%);",
-    "@define-color color rgb(50%, a);",
-    "@define-color 1col rgb(50%, a);",
-    "@three-dee { some other crap };",
-    "@binding-set \"foo\";",
-    "@binding-set foo { bind key { \"action\"() }; };",
-    "@binding-set foo { bind key { \"action\"() }; };",
-    "@binding-set foo { bind \"key\" { action() }; };",
-    "@binding-set foo { bind \"key\"; };",
-    "@binding-set foo { unbind \"key\" { \"bla\" () }; };",
-    NULL
-  };
-
-  error = NULL;
-  for (i = 0; valid[i]; i++)
-    {
-      provider = gtk_css_provider_new ();
-      res = gtk_css_provider_load_from_data (provider, valid[i], -1, &error);
-      if (error)
-        g_print ("parsing '%s': got unexpected error: %s\n", valid[i], error->message);
-      g_assert_no_error (error);
-      g_assert (res);
-
-      g_object_unref (provider);
-   }
-
-  for (i = 0; invalid[i]; i++)
-    {
-      provider = gtk_css_provider_new ();
-      res = gtk_css_provider_load_from_data (provider, invalid[i], -1, &error);
-      g_assert_error (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_FAILED);
-      g_assert (!res);
-      g_object_unref (provider);
-      g_clear_error (&error);
-   }
-}
-
-static void
 test_parse_selectors (void)
 {
   GtkCssProvider *provider;
@@ -562,8 +451,6 @@ main (int argc, char *argv[])
   gtk_init (NULL, NULL);
   g_test_init (&argc, &argv, NULL);
 
-  g_test_add_func ("/style/parse/empty", test_parse_empty);
-  g_test_add_func ("/style/parse/at", test_parse_at);
   g_test_add_func ("/style/parse/selectors", test_parse_selectors);
   g_test_add_func ("/style/parse/declarations", test_parse_declarations);
   g_test_add_func ("/style/path", test_path);

@@ -42,6 +42,8 @@ typedef void             (* GtkStylePrintFunc)             (const GValue        
 typedef void             (* GtkStyleDefaultValueFunc)      (GtkStyleProperties     *props,
                                                             GtkStateFlags           state,
                                                             GValue                 *value);
+typedef void             (* GtkStyleUnsetFunc)             (GtkStyleProperties     *props,
+                                                            GtkStateFlags           state);
 
 
 struct _GtkStyleProperty
@@ -55,6 +57,7 @@ struct _GtkStyleProperty
   GtkStyleParseFunc         parse_func;
   GtkStylePrintFunc         print_func;
   GtkStyleDefaultValueFunc  default_value_func;
+  GtkStyleUnsetFunc         unset_func;
 };
 
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
@@ -66,7 +69,8 @@ void                     _gtk_style_property_register      (GParamSpec          
                                                             GtkStylePackFunc        pack_func,
                                                             GtkStyleParseFunc       parse_func,
                                                             GtkStylePrintFunc       print_func,
-                                                            GtkStyleDefaultValueFunc default_value_func);
+                                                            GtkStyleDefaultValueFunc default_value_func,
+                                                            GtkStyleUnsetFunc       unset_func);
 
 gboolean                 _gtk_style_property_is_inherit    (const GtkStyleProperty *property);
 

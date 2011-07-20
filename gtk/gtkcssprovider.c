@@ -1670,7 +1670,10 @@ parse_import (GtkCssScanner *scanner)
   GFile *file;
   char *uri;
 
-  uri = _gtk_css_parser_read_uri (scanner->parser);
+  if (_gtk_css_parser_is_string (scanner->parser))
+    uri = _gtk_css_parser_read_string (scanner->parser);
+  else
+    uri = _gtk_css_parser_read_uri (scanner->parser);
   if (uri == NULL)
     {
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
@@ -1800,7 +1803,15 @@ parse_binding_set (GtkCssScanner *scanner)
           continue;
         }
 
-      gtk_binding_entry_add_signal_from_string (binding_set, name);
+      if (gtk_binding_entry_add_signal_from_string (binding_set, name) != G_TOKEN_NONE)
+        {
+          gtk_css_provider_error_literal (scanner->provider,
+                                          scanner,
+                                          GTK_CSS_PROVIDER_ERROR,
+                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                          "Failed to parse binding set.");
+        }
+
       g_free (name);
 
       if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
@@ -1830,12 +1841,15 @@ parse_binding_set (GtkCssScanner *scanner)
     }
 
 skip_semicolon:
-  if (_gtk_css_parser_try (scanner->parser, ";", TRUE))
-    gtk_css_provider_error_literal (scanner->provider,
-                                    scanner,
-                                    GTK_CSS_PROVIDER_ERROR,
-                                    GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                    "Nonstandard semicolon at end of binding set");
+  if (_gtk_css_parser_begins_with (scanner->parser, ';'))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                      "Nonstandard semicolon at end of binding set");
+      _gtk_css_parser_try (scanner->parser, ";", TRUE);
+    }
 }
 
 static void

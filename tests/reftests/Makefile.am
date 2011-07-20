@@ -119,6 +119,8 @@ EXTRA_DIST += \
 	label-small-ellipsized.ui \
 	label-wrap-justify.ref.ui \
 	label-wrap-justify.ui \
+	messagedialog-secondarytext.ui \
+	messagedialog-secondarytext.ref.ui \
 	misc-alignment.css \
 	misc-alignment.ui \
 	misc-alignment.ref.ui \

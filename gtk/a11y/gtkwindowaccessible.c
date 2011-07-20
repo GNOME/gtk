@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include <gtk/gtkx.h>
 
 #include "gtkwindowaccessible.h"
@@ -56,20 +54,15 @@ static guint gtk_window_accessible_signals [LAST_SIGNAL] = { 0, };
 
 static void atk_component_interface_init (AtkComponentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible, gtk_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible, _gtk_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 
-static gboolean
-gtk_window_accessible_focus_gtk (GtkWidget     *widget,
-                                 GdkEventFocus *event)
+static void
+gtk_window_accessible_focus_event (AtkObject *obj,
+                                   gboolean   focus_in)
 {
-  AtkObject* obj;
-
-  obj = gtk_widget_get_accessible (widget);
-  atk_object_notify_state_change (obj, ATK_STATE_ACTIVE, event->in);
-
-  return FALSE;
+  atk_object_notify_state_change (obj, ATK_STATE_ACTIVE, focus_in);
 }
 
 static void
@@ -79,13 +72,13 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
   GtkWidget *widget = GTK_WIDGET (obj);
   AtkObject* atk_obj = gtk_widget_get_accessible (widget);
 
-  if (strcmp (pspec->name, "title") == 0)
+  if (g_strcmp0 (pspec->name, "title") == 0)
     {
       g_object_notify (G_OBJECT (atk_obj), "accessible-name");
-      g_signal_emit_by_name (atk_obj, "visible_data_changed");
+      g_signal_emit_by_name (atk_obj, "visible-data-changed");
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static gboolean
@@ -106,43 +99,25 @@ gtk_window_accessible_initialize (AtkObject *obj,
                                   gpointer   data)
 {
   GtkWidget *widget = GTK_WIDGET (data);
+  const gchar *name;
 
   /* A GtkWindowAccessible can be created for a GtkHandleBox or a GtkWindow */
   if (!GTK_IS_WINDOW (widget) && !GTK_IS_HANDLE_BOX (widget))
     return;
 
-  ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->initialize (obj, data);
 
-  g_signal_connect (data, "window_state_event", G_CALLBACK (window_state_event_cb), NULL);
-  gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
+  g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
+  GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_WINDOW;
 
-  if (GTK_IS_FILE_CHOOSER_DIALOG (widget))
-    obj->role = ATK_ROLE_FILE_CHOOSER;
-  else if (GTK_IS_COLOR_SELECTION_DIALOG (widget))
-    obj->role = ATK_ROLE_COLOR_CHOOSER;
-  else if (GTK_IS_FONT_SELECTION_DIALOG (widget))
-    obj->role = ATK_ROLE_FONT_CHOOSER;
-  else if (GTK_IS_MESSAGE_DIALOG (widget))
-    obj->role = ATK_ROLE_ALERT;
-  else if (GTK_IS_DIALOG (widget))
-    obj->role = ATK_ROLE_DIALOG;
+  name = gtk_widget_get_name (widget);
+
+  if (!g_strcmp0 (name, "gtk-tooltip"))
+    obj->role = ATK_ROLE_TOOL_TIP;
+  else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
+    obj->role = ATK_ROLE_WINDOW;
   else
-    {
-      const gchar *name;
-
-      name = gtk_widget_get_name (widget);
-
-      if (!g_strcmp0 (name, "gtk-tooltip"))
-        obj->role = ATK_ROLE_TOOL_TIP;
-#ifdef  GDK_WINDOWING_X11
-      else if (GTK_IS_PLUG (widget))
-        obj->role = ATK_ROLE_PANEL;
-#endif
-      else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
-        obj->role = ATK_ROLE_WINDOW;
-      else
-        obj->role = ATK_ROLE_FRAME;
-    }
+    obj->role = ATK_ROLE_FRAME;
 
   /* Notify that tooltip is showing */
   if (obj->role == ATK_ROLE_TOOL_TIP && gtk_widget_get_mapped (widget))
@@ -186,7 +161,7 @@ gtk_window_accessible_get_name (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  name = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->get_name (accessible);
+  name = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->get_name (accessible);
   if (name != NULL)
     return name;
 
@@ -218,7 +193,7 @@ gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
   if (widget == NULL)
     return -1;
 
-  index = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->get_index_in_parent (accessible);
+  index = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->get_index_in_parent (accessible);
   if (index != -1)
     return index;
 
@@ -262,7 +237,7 @@ gtk_window_accessible_ref_relation_set (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  relation_set = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->ref_relation_set (obj);
 
   if (atk_object_get_role (obj) == ATK_ROLE_TOOL_TIP)
     {
@@ -294,7 +269,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->ref_state_set (accessible);
 
   window = GTK_WINDOW (widget);
 
@@ -318,12 +293,11 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
+_gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 {
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
-  widget_class->focus_gtk = gtk_window_accessible_focus_gtk;
   widget_class->notify_gtk = gtk_window_accessible_notify_gtk;
 
   class->get_name = gtk_window_accessible_get_name;
@@ -331,6 +305,7 @@ gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
   class->ref_relation_set = gtk_window_accessible_ref_relation_set;
   class->ref_state_set = gtk_window_accessible_ref_state_set;
   class->initialize = gtk_window_accessible_initialize;
+  class->focus_event = gtk_window_accessible_focus_event;
 
   gtk_window_accessible_signals [ACTIVATE] =
     g_signal_new ("activate",
@@ -407,7 +382,7 @@ gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 }
 
 static void
-gtk_window_accessible_init (GtkWindowAccessible *accessible)
+_gtk_window_accessible_init (GtkWindowAccessible *accessible)
 {
 }
 

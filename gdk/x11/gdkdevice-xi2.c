@@ -750,6 +750,14 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
   return state;
 }
 
+gint
+_gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
+{
+  g_return_val_if_fail (GDK_IS_X11_DEVICE_XI2 (device), 0);
+
+  return device->device_id;
+}
+
 #else /* XINPUT_2 */
 
 static void

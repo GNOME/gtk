@@ -42,6 +42,12 @@
 #include <signal.h>
 #include <errno.h>
 
+#if defined(__OpenBSD__)
+#include <kvm.h>
+#include <fcntl.h>
+#include <sys/sysctl.h>
+#endif
+
 #include "gtkmountoperationprivate.h"
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -711,6 +717,100 @@ pid_get_command_line (GPid pid)
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
+
+#elif defined(__OpenBSD__)
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+static GPid
+pid_get_parent (GPid pid)
+{
+  struct kinfo_proc *proc;
+  int count;
+  kvm_t *kvm;
+  GPid ppid = 0;
+
+  kvm = kvm_openfiles (NULL, NULL, NULL, KVM_NO_FILES, NULL);
+  if (kvm == NULL)
+    return 0;
+
+  proc = kvm_getprocs (kvm, KERN_PROC_PID, pid, sizeof(struct kinfo_proc), &count);
+  if (count == 1)
+    ppid = proc->p_ppid;
+
+  kvm_close (kvm);
+  return ppid;
+}
+
+static gchar *
+pid_get_env (GPid pid, const gchar *key)
+{
+  kvm_t *kvm;
+  struct kinfo_proc *proc;
+  char **strs;
+  char *ret;
+  char *end;
+  int key_len;
+  int count;
+  int i;
+
+  kvm = kvm_openfiles (NULL, NULL, NULL, KVM_NO_FILES, NULL);
+  if (kvm == NULL)
+    return NULL;
+
+  key_len = strlen (key);
+
+  ret = NULL;
+  proc = kvm_getprocs (kvm, KERN_PROC_PID, pid, sizeof(struct kinfo_proc), &count);
+  if (proc != NULL)
+    {
+      strs = kvm_getenvv (kvm, proc, 0);
+      for (i = 0; strs[i] != NULL; i++)
+	{
+	  if (g_str_has_prefix (strs[i], key) && (*(strs[i] + key_len) == '='))
+	    {
+	      ret = g_strdup (strs[i] + key_len + 1);
+
+	      /* skip invalid UTF-8 */
+	      if (!g_utf8_validate (ret, -1, (const gchar **) &end))
+		*end = '\0';
+	      break;
+	    }
+	}
+    }
+
+  kvm_close (kvm);
+  return ret;
+}
+
+static gchar *
+pid_get_command_line (GPid pid)
+{
+  kvm_t *kvm;
+  struct kinfo_proc *proc;
+  int count;
+  char **strs;
+  char *ret;
+  char *end;
+
+  kvm = kvm_openfiles (NULL, NULL, NULL, KVM_NO_FILES, NULL);
+  if (kvm == NULL)
+    return NULL;
+
+  proc = kvm_getprocs (kvm, KERN_PROC_PID, pid, sizeof (struct kinfo_proc), &count);
+  if (proc == NULL)
+    return NULL;
+
+  strs = kvm_getargv (kvm, proc, 0);
+  ret = g_strjoinv (" ", strs);
+  /* skip invalid UTF-8 */
+  if (!g_utf8_validate (ret, -1, (const gchar **) &end))
+    *end = '\0';
+
+  kvm_close (kvm);
+  return ret;
+}
+
 #else
 
 /* TODO: please implement for your OS - must return valid UTF-8 */

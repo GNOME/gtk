@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <gtk/gtk.h>
 #include "gtkpango.h"
 #include "gtkentryaccessible.h"
@@ -45,13 +44,13 @@ static void atk_text_interface_init          (AtkTextIface         *iface);
 static void atk_action_interface_init        (AtkActionIface       *iface);
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, _gtk_entry_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 
-static AtkStateSet*
+static AtkStateSet *
 gtk_entry_accessible_ref_state_set (AtkObject *accessible)
 {
   AtkStateSet *state_set;
@@ -62,7 +61,7 @@ gtk_entry_accessible_ref_state_set (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->ref_state_set (accessible);
 
   g_object_get (G_OBJECT (widget), "editable", &value, NULL);
   if (value)
@@ -80,7 +79,7 @@ gtk_entry_accessible_get_attributes (AtkObject *accessible)
   AtkAttribute *placeholder_text;
   const gchar *text;
 
-  attributes = ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->get_attributes (accessible);
+  attributes = ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->get_attributes (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -107,7 +106,7 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   GtkEntryAccessible *gtk_entry_accessible;
   gint start_pos, end_pos;
 
-  ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->initialize (obj, data);
 
   gtk_entry_accessible = GTK_ENTRY_ACCESSIBLE (obj);
 
@@ -142,29 +141,29 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
   gtk_entry = GTK_ENTRY (widget);
   entry = GTK_ENTRY_ACCESSIBLE (atk_obj);
 
-  if (strcmp (pspec->name, "cursor-position") == 0)
+  if (g_strcmp0 (pspec->name, "cursor-position") == 0)
     {
       if (check_for_selection_change (entry, gtk_entry))
-        g_signal_emit_by_name (atk_obj, "text_selection_changed");
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
       /*
        * The entry cursor position has moved so generate the signal.
        */
-      g_signal_emit_by_name (atk_obj, "text_caret_moved",
+      g_signal_emit_by_name (atk_obj, "text-caret-moved",
                              entry->cursor_position);
     }
-  else if (strcmp (pspec->name, "selection-bound") == 0)
+  else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
     {
       if (check_for_selection_change (entry, gtk_entry))
-        g_signal_emit_by_name (atk_obj, "text_selection_changed");
+        g_signal_emit_by_name (atk_obj, "text-selection-changed");
     }
-  else if (strcmp (pspec->name, "editable") == 0)
+  else if (g_strcmp0 (pspec->name, "editable") == 0)
     {
       gboolean value;
 
       g_object_get (obj, "editable", &value, NULL);
       atk_object_notify_state_change (atk_obj, ATK_STATE_EDITABLE, value);
     }
-  else if (strcmp (pspec->name, "visibility") == 0)
+  else if (g_strcmp0 (pspec->name, "visibility") == 0)
     {
       gboolean visibility;
       AtkRole new_role;
@@ -174,7 +173,7 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
       atk_object_set_role (atk_obj, new_role);
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static gint
@@ -188,11 +187,11 @@ gtk_entry_accessible_get_index_in_parent (AtkObject *accessible)
     if (GTK_IS_COMBO_BOX_ACCESSIBLE (accessible->accessible_parent))
       return 1;
 
-  return ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->get_index_in_parent (accessible);
 }
 
 static void
-gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
+_gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
@@ -206,7 +205,7 @@ gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 }
 
 static void
-gtk_entry_accessible_init (GtkEntryAccessible *entry)
+_gtk_entry_accessible_init (GtkEntryAccessible *entry)
 {
   entry->length_insert = 0;
   entry->length_delete = 0;
@@ -907,7 +906,7 @@ changed_cb (GtkEditable *editable)
   if (accessible->length_delete > 0)
     {
       g_signal_emit_by_name (accessible,
-                             "text_changed::delete",
+                             "text-changed::delete",
                              accessible->position_delete,
                              accessible->length_delete);
       accessible->length_delete = 0;
@@ -915,7 +914,7 @@ changed_cb (GtkEditable *editable)
   if (accessible->length_insert > 0)
     {
       g_signal_emit_by_name (accessible,
-                             "text_changed::insert",
+                             "text-changed::insert",
                              accessible->position_insert,
                              accessible->length_insert);
       accessible->length_insert = 0;

@@ -24,28 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_UTIL                           (gail_util_get_type ())
-#define GAIL_UTIL(obj)                           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_UTIL, GailUtil))
-#define GAIL_UTIL_CLASS(klass)                   (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_UTIL, GailUtilClass))
-#define GAIL_IS_UTIL(obj)                        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_UTIL))
-#define GAIL_IS_UTIL_CLASS(klass)                (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_UTIL))
-#define GAIL_UTIL_GET_CLASS(obj)                 (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_UTIL, GailUtilClass))
-
-typedef struct _GailUtil                  GailUtil;
-typedef struct _GailUtilClass             GailUtilClass;
-  
-struct _GailUtil
-{
-  AtkUtil parent;
-  GList *listener_list;
-};
-
-struct _GailUtilClass
-{
-  AtkUtilClass parent_class;
-};
-
-GType gail_util_get_type (void);
+void _gail_util_install (void);
 
 G_END_DECLS
 

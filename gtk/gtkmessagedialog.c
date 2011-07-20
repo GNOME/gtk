@@ -177,6 +177,8 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   
   widget_class->style_updated = gtk_message_dialog_style_updated;
 
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ALERT);
+
   gobject_class->set_property = gtk_message_dialog_set_property;
   gobject_class->get_property = gtk_message_dialog_get_property;
   
@@ -391,7 +393,7 @@ setup_primary_label_font (GtkMessageDialog *dialog)
   GtkStateFlags state;
 
   /* unset the font settings */
-  gtk_widget_modify_font (priv->label, NULL);
+  gtk_widget_override_font (priv->label, NULL);
 
   if (priv->has_secondary_text && !priv->has_primary_markup)
     {
@@ -402,7 +404,7 @@ setup_primary_label_font (GtkMessageDialog *dialog)
       font_desc = pango_font_description_new ();
       pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
       pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
-      gtk_widget_modify_font (priv->label, font_desc);
+      gtk_widget_override_font (priv->label, font_desc);
       pango_font_description_free (font_desc);
     }
 }

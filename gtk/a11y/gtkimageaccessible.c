@@ -26,14 +26,14 @@
 
 static void atk_image_interface_init (AtkImageIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkImageAccessible, gtk_image_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkImageAccessible, _gtk_image_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void
 gtk_image_accessible_initialize (AtkObject *accessible,
                                  gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_image_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (_gtk_image_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_ICON;
 }
@@ -46,7 +46,7 @@ gtk_image_accessible_finalize (GObject *object)
   g_free (aimage->image_description);
   g_free (aimage->stock_name);
 
-  G_OBJECT_CLASS (gtk_image_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_image_accessible_parent_class)->finalize (object);
 }
 
 static const gchar *
@@ -63,7 +63,7 @@ gtk_image_accessible_get_name (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  name = ATK_OBJECT_CLASS (gtk_image_accessible_parent_class)->get_name (accessible);
+  name = ATK_OBJECT_CLASS (_gtk_image_accessible_parent_class)->get_name (accessible);
   if (name)
     return name;
 
@@ -88,7 +88,7 @@ gtk_image_accessible_get_name (AtkObject *accessible)
 }
 
 static void
-gtk_image_accessible_class_init (GtkImageAccessibleClass *klass)
+_gtk_image_accessible_class_init (GtkImageAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
@@ -99,7 +99,7 @@ gtk_image_accessible_class_init (GtkImageAccessibleClass *klass)
 }
 
 static void
-gtk_image_accessible_init (GtkImageAccessible *image)
+_gtk_image_accessible_init (GtkImageAccessible *image)
 {
 }
 

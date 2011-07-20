@@ -1,0 +1,297 @@
+window1
+  "frame"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  menubar1
+    "menu bar"
+    parent: window1
+    index: 0
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkSelection>
+    menuitem1
+      "menu"
+      parent: menubar1
+      index: 0
+      name: File
+      state: enabled selectable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: popup
+      alpha: 1
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>f;<Alt>f;
+      <AtkSelection>
+      imagemenuitem1
+        "menu item"
+        parent: menuitem1
+        index: 0
+        name: New
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: n;<Alt>f:n;
+        <AtkSelection>
+      imagemenuitem2
+        "menu"
+        parent: menuitem1
+        index: 1
+        name: Open
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: o;<Alt>f:o;
+        <AtkSelection>
+        radiomenuitem1
+          "radio menu item"
+          parent: imagemenuitem2
+          index: 0
+          name: One
+          member-of: radiomenuitem3
+                     radiomenuitem2
+                     radiomenuitem1
+          state: checked enabled selectable sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: popup
+          alpha: 1
+          <AtkAction>
+          action 0 name: click
+          <AtkSelection>
+        radiomenuitem2
+          "radio menu item"
+          parent: imagemenuitem2
+          index: 1
+          name: Two
+          member-of: radiomenuitem3
+                     radiomenuitem2
+                     radiomenuitem1
+          state: enabled selectable sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: popup
+          alpha: 1
+          <AtkAction>
+          action 0 name: click
+          <AtkSelection>
+        radiomenuitem3
+          "radio menu item"
+          parent: imagemenuitem2
+          index: 2
+          name: Three
+          member-of: radiomenuitem3
+                     radiomenuitem2
+                     radiomenuitem1
+          state: enabled selectable sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: popup
+          alpha: 1
+          <AtkAction>
+          action 0 name: click
+          <AtkSelection>
+      imagemenuitem3
+        "menu item"
+        parent: menuitem1
+        index: 2
+        name: Save
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: s;<Alt>f:s;
+        <AtkSelection>
+      imagemenuitem4
+        "menu item"
+        parent: menuitem1
+        index: 3
+        name: Save As
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: a;<Alt>f:a;
+        <AtkSelection>
+      separatormenuitem1
+        "separator"
+        parent: menuitem1
+        index: 4
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        <AtkSelection>
+      checkmenuitem1
+        "check menu item"
+        parent: menuitem1
+        index: 5
+        name: awesome
+        state: selectable sensitive visible indeterminate
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        <AtkSelection>
+      separatormenuitem2
+        "separator"
+        parent: menuitem1
+        index: 6
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        <AtkSelection>
+      imagemenuitem5
+        "menu item"
+        parent: menuitem1
+        index: 7
+        name: Quit
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: q;<Alt>f:q;
+        <AtkSelection>
+    menuitem2
+      "menu"
+      parent: menubar1
+      index: 1
+      name: Edit
+      state: enabled selectable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: popup
+      alpha: 1
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>e;<Alt>e;
+      <AtkSelection>
+      imagemenuitem6
+        "menu item"
+        parent: menuitem2
+        index: 0
+        name: Cut
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: t;<Alt>e:t;
+        <AtkSelection>
+      imagemenuitem7
+        "menu item"
+        parent: menuitem2
+        index: 1
+        name: Copy
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: c;<Alt>e:c;
+        <AtkSelection>
+      imagemenuitem8
+        "menu item"
+        parent: menuitem2
+        index: 2
+        name: Paste
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: p;<Alt>e:p;
+        <AtkSelection>
+      imagemenuitem9
+        "menu item"
+        parent: menuitem2
+        index: 3
+        name: Delete
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: d;<Alt>e:d;
+        <AtkSelection>
+    menuitem3
+      "menu item"
+      parent: menubar1
+      index: 2
+      name: View
+      state: enabled selectable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: popup
+      alpha: 1
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>v;<Alt>v;
+      <AtkSelection>
+    menuitem4
+      "menu"
+      parent: menubar1
+      index: 3
+      name: Help
+      state: enabled selectable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: popup
+      alpha: 1
+      <AtkAction>
+      action 0 name: click
+      action 0 keybinding: <Alt>h;<Alt>h;
+      <AtkSelection>
+      imagemenuitem10
+        "menu item"
+        parent: menuitem4
+        index: 0
+        name: About
+        state: enabled selectable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkAction>
+        action 0 name: click
+        action 0 keybinding: a;<Alt>h:a;
+        <AtkSelection>

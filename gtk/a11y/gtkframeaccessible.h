@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_FRAME_ACCESSIBLE                      (gtk_frame_accessible_get_type ())
+#define GTK_TYPE_FRAME_ACCESSIBLE                      (_gtk_frame_accessible_get_type ())
 #define GTK_FRAME_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FRAME_ACCESSIBLE, GtkFrameAccessible))
 #define GTK_FRAME_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FRAME_ACCESSIBLE, GtkFrameAccessibleClass))
 #define GTK_IS_FRAME_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FRAME_ACCESSIBLE))
@@ -44,7 +44,7 @@ struct _GtkFrameAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_frame_accessible_get_type (void);
+GType _gtk_frame_accessible_get_type (void);
 
 G_END_DECLS
 

@@ -1,0 +1,1 @@
+@binding-set gtk-emacs-menu { bind "<ctrl>n" { "move-current" (next) }; };

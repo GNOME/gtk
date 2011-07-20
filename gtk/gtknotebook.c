@@ -164,8 +164,6 @@ struct _GtkNotebookPrivate
   guint          during_reorder     : 1;
   guint          focus_out          : 1; /* Flag used by ::move-focus-out implementation */
   guint          has_scrolled       : 1;
-  guint          have_visible_child : 1;
-  guint          homogeneous        : 1;
   guint          in_child           : 3;
   guint          need_timer         : 1;
   guint          show_border        : 1;
@@ -1190,7 +1188,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->button = 0;
   priv->need_timer = 0;
   priv->child_has_focus = FALSE;
-  priv->have_visible_child = FALSE;
   priv->focus_out = FALSE;
 
   priv->has_before_previous = 1;
@@ -2089,10 +2086,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
               if (!gtk_widget_get_visible (page->child))
                 continue;
 
-              if (priv->homogeneous)
-                page->requisition.width = tab_max;
-              else
-                page->requisition.width += padding;
+              page->requisition.width += padding;
 
               tab_width += page->requisition.width;
               page->requisition.height = tab_height;
@@ -2104,10 +2098,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
 
           action_width += action_widget_requisition[ACTION_WIDGET_START].width;
           action_width += action_widget_requisition[ACTION_WIDGET_END].width;
-          if (priv->homogeneous && !priv->scrollable)
-            requisition->width = vis_pages * tab_max + tab_overlap + action_width;
-          else
-            requisition->width = tab_width + tab_overlap + action_width;
+          requisition->width = tab_width + tab_overlap + action_width;
 
           requisition->height = tab_height;
           break;
@@ -2135,10 +2126,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
 
               page->requisition.width = tab_width;
 
-              if (priv->homogeneous)
-                page->requisition.height = tab_max;
-              else
-                page->requisition.height += padding;
+              page->requisition.height += padding;
 
               tab_height += page->requisition.height;
             }
@@ -2149,15 +2137,9 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
           action_height += action_widget_requisition[ACTION_WIDGET_START].height;
           action_height += action_widget_requisition[ACTION_WIDGET_END].height;
 
-          if (priv->homogeneous && !priv->scrollable)
-            requisition->height = vis_pages * tab_max + tab_overlap + action_height;
-          else
-            requisition->height = tab_height + tab_overlap + action_height;
+          requisition->height = tab_height + tab_overlap + action_height;
 
-          if (!priv->homogeneous || priv->scrollable)
-            vis_pages = 1;
-          requisition->height = MAX (requisition->height,
-                                     vis_pages * tab_max + tab_overlap);
+          requisition->height = MAX (requisition->height, tab_max + tab_overlap);
 
           requisition->width = tab_width;
           break;
@@ -5749,10 +5731,6 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook  *notebook,
               (gtk_widget_compute_expand (page->tab_label, tab_expand_orientation)))
             (*n)++;
         }
-
-      /* if notebook is homogeneous, all tabs are expanded */
-      if (priv->homogeneous && *n)
-        *n = c;
     }
 }
 
@@ -5881,7 +5859,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
         continue;
 
       tab_extra_space = 0;
-      if (*expanded_tabs && (showarrow || page->expand || gtk_widget_compute_expand (page->tab_label, tab_expand_orientation) || priv->homogeneous))
+      if (*expanded_tabs && (showarrow || page->expand || gtk_widget_compute_expand (page->tab_label, tab_expand_orientation)))
         {
           tab_extra_space = *remaining_space / *expanded_tabs;
           *remaining_space -= tab_extra_space;

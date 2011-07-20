@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_RADIO_BUTTON_ACCESSIBLE               (gtk_radio_button_accessible_get_type ())
+#define GTK_TYPE_RADIO_BUTTON_ACCESSIBLE               (_gtk_radio_button_accessible_get_type ())
 #define GTK_RADIO_BUTTON_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RADIO_BUTTON_ACCESSIBLE, GtkRadioButtonAccessible))
 #define GTK_RADIO_BUTTON_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_BUTTON_ACCESSIBLE, GtkRadioButtonAccessibleClass))
 #define GTK_IS_RADIO_BUTTON_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_RADIO_BUTTON_ACCESSIBLE))
@@ -46,7 +46,7 @@ struct _GtkRadioButtonAccessibleClass
   GtkToggleButtonAccessibleClass parent_class;
 };
 
-GType gtk_radio_button_accessible_get_type (void);
+GType _gtk_radio_button_accessible_get_type (void);
 
 G_END_DECLS
 

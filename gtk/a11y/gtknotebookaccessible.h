@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_NOTEBOOK_ACCESSIBLE                   (gtk_notebook_accessible_get_type ())
+#define GTK_TYPE_NOTEBOOK_ACCESSIBLE                   (_gtk_notebook_accessible_get_type ())
 #define GTK_NOTEBOOK_ACCESSIBLE(obj)                   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_NOTEBOOK_ACCESSIBLE, GtkNotebookAccessible))
 #define GTK_NOTEBOOK_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK_ACCESSIBLE, GtkNotebookAccessibleClass))
 #define GTK_IS_NOTEBOOK_ACCESSIBLE(obj)                (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_NOTEBOOK_ACCESSIBLE))
@@ -55,7 +55,7 @@ struct _GtkNotebookAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType gtk_notebook_accessible_get_type (void);
+GType _gtk_notebook_accessible_get_type (void);
 
 G_END_DECLS
 

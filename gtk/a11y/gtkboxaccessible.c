@@ -23,18 +23,18 @@
 #include "gtkboxaccessible.h"
 
 
-G_DEFINE_TYPE (GtkBoxAccessible, gtk_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkBoxAccessible, _gtk_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
 
 static void
 gtk_box_accessible_initialize (AtkObject *accessible,
                                gpointer   data)
 {
-  ATK_OBJECT_CLASS (gtk_box_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (_gtk_box_accessible_parent_class)->initialize (accessible, data);
   accessible->role = ATK_ROLE_FILLER;
 }
 
 static void
-gtk_box_accessible_class_init (GtkBoxAccessibleClass *klass)
+_gtk_box_accessible_class_init (GtkBoxAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -42,6 +42,6 @@ gtk_box_accessible_class_init (GtkBoxAccessibleClass *klass)
 }
 
 static void
-gtk_box_accessible_init (GtkBoxAccessible *scale)
+_gtk_box_accessible_init (GtkBoxAccessible *scale)
 {
 }

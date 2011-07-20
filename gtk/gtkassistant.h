@@ -139,6 +139,8 @@ gint                  gtk_assistant_append_page           (GtkAssistant         
 gint                  gtk_assistant_insert_page           (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            gint                  position);
+void                  gtk_asssistant_remove_page          (GtkAssistant         *assistant,
+                                                           gint                  page_num);
 void                  gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
                                                            GtkAssistantPageFunc  page_func,
                                                            gpointer              data,

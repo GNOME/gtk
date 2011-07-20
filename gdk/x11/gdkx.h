@@ -36,9 +36,11 @@
 
 #include <gdk/x11/gdkx11applaunchcontext.h>
 #include <gdk/x11/gdkx11cursor.h>
+#include <gdk/x11/gdkx11device.h>
 #include <gdk/x11/gdkx11device-core.h>
 #include <gdk/x11/gdkx11device-xi.h>
 #include <gdk/x11/gdkx11device-xi2.h>
+#include <gdk/x11/gdkx11devicemanager.h>
 #include <gdk/x11/gdkx11devicemanager-core.h>
 #include <gdk/x11/gdkx11devicemanager-xi.h>
 #include <gdk/x11/gdkx11devicemanager-xi2.h>

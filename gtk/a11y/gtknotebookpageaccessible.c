@@ -26,7 +26,7 @@
 
 static void atk_component_interface_init (AtkComponentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkNotebookPageAccessible, gtk_notebook_page_accessible, ATK_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkNotebookPageAccessible, _gtk_notebook_page_accessible, ATK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 
@@ -140,7 +140,7 @@ gtk_notebook_page_accessible_ref_state_set (AtkObject *accessible)
   AtkObject *atk_label;
   GtkWidget *label;
 
-  state_set = ATK_OBJECT_CLASS (gtk_notebook_page_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (_gtk_notebook_page_accessible_parent_class)->ref_state_set (accessible);
 
   label = get_label_from_notebook_page (GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible));
   if (label)
@@ -190,7 +190,7 @@ gtk_notebook_page_accessible_get_index_in_parent (AtkObject *accessible)
 }
 
 static void
-gtk_notebook_page_accessible_class_init (GtkNotebookPageAccessibleClass *klass)
+_gtk_notebook_page_accessible_class_init (GtkNotebookPageAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -203,7 +203,7 @@ gtk_notebook_page_accessible_class_init (GtkNotebookPageAccessibleClass *klass)
 }
 
 static void
-gtk_notebook_page_accessible_init (GtkNotebookPageAccessible *page)
+_gtk_notebook_page_accessible_init (GtkNotebookPageAccessible *page)
 {
 }
 
@@ -218,8 +218,8 @@ notify_tab_label (GObject    *object,
 }
 
 AtkObject *
-gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
-                                  GtkWidget             *child)
+_gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
+                                   GtkWidget             *child)
 {
   GObject *object;
   AtkObject *atk_object;
@@ -248,7 +248,7 @@ gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
 }
 
 void
-gtk_notebook_page_accessible_invalidate (GtkNotebookPageAccessible *page)
+_gtk_notebook_page_accessible_invalidate (GtkNotebookPageAccessible *page)
 {
   AtkObject *obj = ATK_OBJECT (page);
   GtkWidget *notebook;

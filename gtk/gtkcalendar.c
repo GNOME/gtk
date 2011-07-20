@@ -393,7 +393,6 @@ static gboolean gtk_calendar_drag_drop          (GtkWidget        *widget,
                                                  gint              y,
                                                  guint             time);
 
-static AtkObject *gtk_calendar_get_accessible   (GtkWidget        *widget);
 
 static void calendar_start_spinning (GtkCalendar *calendar,
                                      gint         click_child);
@@ -457,7 +456,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->drag_drop = gtk_calendar_drag_drop;
   widget_class->drag_data_received = gtk_calendar_drag_data_received;
 
-  widget_class->get_accessible = gtk_calendar_get_accessible;
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_CALENDAR);
 
   /**
    * GtkCalendar:year:
@@ -3556,18 +3555,6 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
     gtk_calendar_select_month (calendar, month - 1, year);
   gtk_calendar_select_day (calendar, day);
   g_object_thaw_notify (G_OBJECT (calendar));
-}
-
-static AtkObject *
-gtk_calendar_get_accessible (GtkWidget *widget)
-{
-  AtkObject *obj;
-
-  obj = GTK_WIDGET_CLASS (gtk_calendar_parent_class)->get_accessible (widget);
-
-  atk_object_set_role (obj, ATK_ROLE_CALENDAR);
-
-  return obj;
 }
 
 

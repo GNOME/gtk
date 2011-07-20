@@ -30,14 +30,14 @@
 
 static void atk_image_interface_init (AtkImageIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSpinnerAccessible, gtk_spinner_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkSpinnerAccessible, _gtk_spinner_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init));
 
 static void
 gtk_spinner_accessible_initialize (AtkObject *accessible,
                                    gpointer   widget)
 {
-  ATK_OBJECT_CLASS (gtk_spinner_accessible_parent_class)->initialize (accessible, widget);
+  ATK_OBJECT_CLASS (_gtk_spinner_accessible_parent_class)->initialize (accessible, widget);
 
   atk_object_set_name (accessible, C_("throbbing progress animation widget", "Spinner"));
   atk_object_set_description (accessible, _("Provides visual indication of progress"));
@@ -45,7 +45,7 @@ gtk_spinner_accessible_initialize (AtkObject *accessible,
 }
 
 static void
-gtk_spinner_accessible_class_init (GtkSpinnerAccessibleClass *klass)
+_gtk_spinner_accessible_class_init (GtkSpinnerAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
@@ -53,7 +53,7 @@ gtk_spinner_accessible_class_init (GtkSpinnerAccessibleClass *klass)
 }
 
 static void
-gtk_spinner_accessible_init (GtkSpinnerAccessible *self)
+_gtk_spinner_accessible_init (GtkSpinnerAccessible *self)
 {
 }
 

@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_WIDGET_ACCESSIBLE                     (gtk_widget_accessible_get_type ())
+#define GTK_TYPE_WIDGET_ACCESSIBLE                     (_gtk_widget_accessible_get_type ())
 #define GTK_WIDGET_ACCESSIBLE(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessible))
 #define GTK_WIDGET_ACCESSIBLE_CLASS(klass)             (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessibleClass))
 #define GTK_IS_WIDGET_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WIDGET_ACCESSIBLE))
@@ -37,6 +37,8 @@ typedef struct _GtkWidgetAccessibleClass GtkWidgetAccessibleClass;
 struct _GtkWidgetAccessible
 {
   GtkAccessible parent;
+
+  AtkLayer layer;
 };
 
 struct _GtkWidgetAccessibleClass
@@ -48,18 +50,10 @@ struct _GtkWidgetAccessibleClass
    */
   void (*notify_gtk)                   (GObject             *object,
                                         GParamSpec          *pspec);
-  /*
-   * Signal handler for focus_in_event and focus_out_event signal on GTK widget
-   */
-  gboolean (*focus_gtk)                (GtkWidget           *widget,
-                                        GdkEventFocus       *event);
 
 };
 
-GType gtk_widget_accessible_get_type (void);
-
-void  gtk_widget_accessible_set_layer (GtkWidgetAccessible *obj,
-                                       AtkLayer             layer);
+GType _gtk_widget_accessible_get_type (void);
 
 G_END_DECLS
 

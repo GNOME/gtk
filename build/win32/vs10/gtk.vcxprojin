@@ -80,7 +80,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>atk-2.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll</OutputFile>
       <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -100,7 +100,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>atk-2.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll</OutputFile>
       <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,7 +125,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>atk-2.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll</OutputFile>
       <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -145,7 +145,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>atk-2.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll</OutputFile>
       <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -196,6 +196,10 @@
   <ItemGroup>
     <ProjectReference Include="gdk.vcxproj">
       <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f7}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="libgail.vcxproj">
+      <Project>{f756b0db-40a1-4e9f-be1f-8f02cb86ea46}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

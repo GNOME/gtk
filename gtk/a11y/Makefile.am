@@ -5,21 +5,20 @@ noinst_LTLIBRARIES = libgail.la
 gail_c_sources =			\
 	gail.c				\
 	gtkarrowaccessible.c		\
-	gailbooleancell.c		\
+	gtkbooleancellaccessible.c	\
 	gtkboxaccessible.c		\
 	gtkbuttonaccessible.c		\
-	gailcell.c			\
-	gailcellparent.c		\
+	gtkcellaccessible.c		\
+	gtkcellaccessibleparent.c	\
 	gtkcheckmenuitemaccessible.c	\
-	gtkchecksubmenuitemaccessible.c	\
 	gtkcomboboxaccessible.c		\
 	gtkcontaineraccessible.c	\
-	gailcontainercell.c		\
+	gtkcontainercellaccessible.c	\
 	gtkentryaccessible.c		\
 	gtkexpanderaccessible.c		\
 	gtkframeaccessible.c		\
 	gtkimageaccessible.c		\
-	gailimagecell.c			\
+	gtkimagecellaccessible.c	\
 	gtklabelaccessible.c		\
 	gtklinkbuttonaccessible.c	\
 	gtkmenuaccessible.c		\
@@ -31,9 +30,8 @@ gail_c_sources =			\
 	gtkprogressbaraccessible.c	\
 	gtkradiobuttonaccessible.c	\
 	gtkradiomenuitemaccessible.c	\
-	gtkradiosubmenuitemaccessible.c	\
 	gtkrangeaccessible.c		\
-	gailrenderercell.c		\
+	gtkrenderercellaccessible.c	\
 	gtkscaleaccessible.c		\
 	gtkscalebuttonaccessible.c	\
 	gtkscrollbaraccessible.c	\
@@ -41,9 +39,8 @@ gail_c_sources =			\
 	gtkspinbuttonaccessible.c	\
 	gtkspinneraccessible.c		\
 	gtkstatusbaraccessible.c	\
-	gtksubmenuitemaccessible.c	\
 	gtkswitchaccessible.c		\
-	gailtextcell.c			\
+	gtktextcellaccessible.c		\
 	gtktextviewaccessible.c		\
 	gtktogglebuttonaccessible.c	\
 	gtktoplevelaccessible.c		\
@@ -53,25 +50,22 @@ gail_c_sources =			\
 	gailutil.c			\
 	gailmisc.c
 
-libgailincludedir=$(includedir)/gail-3.0/gail
-
 gail_private_h_sources =		\
 	gtkarrowaccessible.h		\
-	gailbooleancell.h		\
+	gtkbooleancellaccessible.h	\
 	gtkboxaccessible.h		\
 	gtkbuttonaccessible.h		\
-	gailcell.h			\
-	gailcellparent.h		\
+	gtkcellaccessible.h		\
+	gtkcellaccessibleparent.h	\
 	gtkcheckmenuitemaccessible.h	\
-	gtkchecksubmenuitemaccessible.h	\
 	gtkcomboboxaccessible.h		\
 	gtkcontaineraccessible.h	\
-	gailcontainercell.h		\
+	gtkcontainercellaccessible.h	\
 	gtkentryaccessible.h		\
 	gtkexpanderaccessible.h		\
 	gtkframeaccessible.h		\
 	gtkimageaccessible.h		\
-	gailimagecell.h			\
+	gtkimagecellaccessible.h	\
 	gtklabelaccessible.h		\
 	gtklinkbuttonaccessible.h	\
 	gtkmenuaccessible.h		\
@@ -83,9 +77,8 @@ gail_private_h_sources =		\
 	gtkprogressbaraccessible.h	\
 	gtkradiobuttonaccessible.h	\
 	gtkradiomenuitemaccessible.h	\
-	gtkradiosubmenuitemaccessible.h	\
 	gtkrangeaccessible.h		\
-	gailrenderercell.h		\
+	gtkrenderercellaccessible.h	\
 	gtkscaleaccessible.h		\
 	gtkscalebuttonaccessible.h	\
 	gtkscrollbaraccessible.h	\
@@ -93,27 +86,20 @@ gail_private_h_sources =		\
 	gtkspinbuttonaccessible.h	\
 	gtkspinneraccessible.h		\
 	gtkstatusbaraccessible.h	\
-	gtksubmenuitemaccessible.h	\
 	gtkswitchaccessible.h		\
-	gailtextcell.h			\
+	gtktextcellaccessible.h		\
 	gtktextviewaccessible.h		\
 	gtktogglebuttonaccessible.h	\
 	gtktoplevelaccessible.h		\
 	gtktreeviewaccessible.h		\
+	gtkwidgetaccessible.h		\
 	gtkwindowaccessible.h		\
 	gailutil.h			\
 	gailmisc.h
 
-gail_public_h_sources =	\
-	gtkwidgetaccessible.h
-
 libgail_la_SOURCES = 			\
 	$(gail_c_sources)		\
-	$(gail_public_h_sources)	\
 	$(gail_private_h_sources)
-
-libgailinclude_HEADERS =		\
-	$(gail_public_h_sources)
 
 libgail_la_CPPFLAGS = \
 	-I$(top_srcdir)			\
@@ -138,5 +124,38 @@ libgail_la_LIBADD =  \
 
 libgail_la_LDFLAGS =    \
         $(LDFLAGS)
+		
+dist-hook: ../../build/win32/vs9/libgail.vcproj ../../build/win32/vs10/libgail.vcxproj ../../build/win32/vs10/libgail.vcxproj.filters
+
+../../build/win32/vs9/libgail.vcproj: ../../build/win32/vs9/libgail.vcprojin
+	for F in $(libgail_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <File RelativePath="..\..\..\gtk\a11y\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgail.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/libgail.vcprojin >$@
+	rm libgail.sourcefiles
+	
+../../build/win32/vs10/libgail.vcxproj: ../../build/win32/vs10/libgail.vcxprojin
+	for F in $(libgail_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\a11y\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgail.vs10.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/libgail.vcxprojin >$@
+	rm libgail.vs10.sourcefiles
+
+../../build/win32/vs10/libgail.vcxproj.filters: ../../build/win32/vs10/libgail.vcxproj.filtersin
+	for F in $(libgail_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\a11y\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
+		     ;; \
+		esac; \
+	done >libgail.vs10.sourcefiles.filters
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/libgail.vcxproj.filtersin >$@
+	rm libgail.vs10.sourcefiles.filters
+
 
 -include $(top_srcdir)/git.mk

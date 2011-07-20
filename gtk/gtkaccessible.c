@@ -28,13 +28,20 @@
  * SECTION:gtkaccessible
  * @Short_description: Accessibility support for widgets
  * @Title: GtkAccessible
+ *
+ * The #GtkAccessible class is the base class for accessible
+ * implementations for #GtkWidget subclasses. It is a thin
+ * wrapper around #AtkObject, which adds facilities for associating
+ * a widget with its accessible object.
+ *
+ * An accessible implementation for a third-party widget should
+ * derive from #GtkAccessible and implement the suitable interfaces
+ * from ATK, such as #AtkText or #AtkSelection. To establish
+ * the connection between the widget class and its corresponding
+ * acccessible implementation, override the get_accessible vfunc
+ * in #GtkWidgetClass.
  */
 
-/*
- * GtkAccessiblePriv:
- * @widget: The GtkWidget whose properties and features are exported via this
- *   accessible instance
- */
 struct _GtkAccessiblePrivate
 {
   GtkWidget *widget;
@@ -68,7 +75,7 @@ gtk_accessible_class_init (GtkAccessibleClass *klass)
  * Sets the #GtkWidget corresponding to the #GtkAccessible.
  *
  * Since: 2.22
- **/
+ */
 void
 gtk_accessible_set_widget (GtkAccessible *accessible,
                            GtkWidget     *widget)
@@ -82,14 +89,15 @@ gtk_accessible_set_widget (GtkAccessible *accessible,
  * gtk_accessible_get_widget:
  * @accessible: a #GtkAccessible
  *
- * Gets the #GtkWidget corresponding to the #GtkAccessible. The returned widget
- * does not have a reference added, so you do not need to unref it.
+ * Gets the #GtkWidget corresponding to the #GtkAccessible.
+ * The returned widget does not have a reference added, so
+ * you do not need to unref it.
  *
- * Returns: (transfer none): pointer to the #GtkWidget corresponding to
- *   the #GtkAccessible, or %NULL.
+ * Returns: (transfer none): pointer to the #GtkWidget
+ *     corresponding to the #GtkAccessible, or %NULL.
  *
  * Since: 2.22
- **/
+ */
 GtkWidget*
 gtk_accessible_get_widget (GtkAccessible *accessible)
 {
@@ -99,11 +107,11 @@ gtk_accessible_get_widget (GtkAccessible *accessible)
 }
 
 /**
- * gtk_accessible_connect_widget_destroyed
+ * gtk_accessible_connect_widget_destroyed:
  * @accessible: a #GtkAccessible
  *
- * This function specifies the callback function to be called when the widget
- * corresponding to a GtkAccessible is destroyed.
+ * This function specifies the callback function to be called
+ * when the widget corresponding to a GtkAccessible is destroyed.
  */
 void
 gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible)
@@ -127,34 +135,3 @@ gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
     g_signal_connect (priv->widget, "destroy",
                       G_CALLBACK (gtk_widget_destroyed), &priv->widget);
 }
-
-/*
- * _gtk_accessible_set_factory_type:
- * @widget_type: a #GtkWidget subtype
- * @factory_type: a #AtkObjectFactory subtype
- *
- * A wrapper around atk_registry_set_factory_type().
- *
- * Only installs the factory if accessibility is
- * enabled.
- */
-void
-_gtk_accessible_set_factory_type (GType widget_type,
-                                  GType factory_type)
-{
-  AtkObjectFactory *factory;
-  AtkRegistry *registry;
-  GType accessible_type;
-
-  /*
-   * Figure out whether accessibility is enabled by looking
-   * at the type of the accessible object which would be created
-   * for GtkWidget.
-   */
-  registry = atk_get_default_registry ();
-  factory = atk_registry_get_factory (registry, GTK_TYPE_WIDGET);
-  accessible_type = atk_object_factory_get_accessible_type (factory);
-  if (g_type_is_a (accessible_type, GTK_TYPE_ACCESSIBLE))
-    atk_registry_set_factory_type (registry, widget_type, factory_type);
-}
-
