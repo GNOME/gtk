@@ -1833,12 +1833,15 @@ parse_binding_set (GtkCssScanner *scanner)
     }
 
 skip_semicolon:
-  if (_gtk_css_parser_try (scanner->parser, ";", TRUE))
-    gtk_css_provider_error_literal (scanner->provider,
-                                    scanner,
-                                    GTK_CSS_PROVIDER_ERROR,
-                                    GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                    "Nonstandard semicolon at end of binding set");
+  if (_gtk_css_parser_begins_with (scanner->parser, ';'))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                      "Nonstandard semicolon at end of binding set");
+      _gtk_css_parser_try (scanner->parser, ";", TRUE);
+    }
 }
 
 static void
