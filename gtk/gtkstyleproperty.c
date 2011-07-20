@@ -523,7 +523,7 @@ theming_engine_value_print (const GValue *value,
     {
       /* XXX: gtk_theming_engine_get_name()? */
       g_object_get (engine, "name", &name, NULL);
-      g_string_append (string, name);
+      g_string_append (string, name ? name : "none");
       g_free (name);
     }
 }
