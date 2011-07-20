@@ -1,0 +1,4 @@
+@binding-set test {
+  bind "<ctrl>space" { "set-anchor" () };
+  unbind "<ctrl>v";
+};
