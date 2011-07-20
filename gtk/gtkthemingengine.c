@@ -55,8 +55,6 @@
  * style information contained in the rendered object's #GtkStyleContext.
  */
 
-typedef struct GtkThemingEnginePrivate GtkThemingEnginePrivate;
-
 enum {
   SIDE_LEFT   = 1,
   SIDE_BOTTOM = 1 << 1,
