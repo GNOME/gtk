@@ -6645,7 +6645,7 @@ file_system_model_set (GtkFileSystemModel *model,
       if (info == NULL || _gtk_file_info_consider_as_directory (info))
         g_value_set_string (value, NULL);
       else
-        g_value_take_string (value, g_format_size_for_display (g_file_info_get_size (info)));
+        g_value_take_string (value, g_format_size (g_file_info_get_size (info)));
       break;
     case MODEL_COL_MTIME:
     case MODEL_COL_MTIME_TEXT:
