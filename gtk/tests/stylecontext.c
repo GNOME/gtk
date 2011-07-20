@@ -41,13 +41,6 @@ test_parse_selectors (void)
     "E, F /* comment here */ {}",
     "E,/* comment here */ F {}",
     "E1.e1_2 #T3_4 {}",
-    NULL
-  };
-
-  const gchar *invalid[] = {
-    /* nth-child and similar pseudo classes can only
-     * be used with regions, not with types
-     */
     "E:first-child {}",
     "E:last-child {}",
     "E:nth-child(first) {}",
@@ -55,9 +48,6 @@ test_parse_selectors (void)
     "E:nth-child(even) {}",
     "E:nth-child(odd) {}",
     "E:sorted {}",
-    /* widget state pseudo-classes can only be used for
-     * the last element
-     */
     "E:focused tab {}",
      NULL
   };
@@ -73,16 +63,6 @@ test_parse_selectors (void)
       g_assert (res);
 
       g_object_unref (provider);
-   }
-
-  for (i = 0; invalid[i]; i++)
-    {
-      provider = gtk_css_provider_new ();
-      res = gtk_css_provider_load_from_data (provider, invalid[i], -1, &error);
-      g_assert_error (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_FAILED);
-      g_assert (!res);
-      g_object_unref (provider);
-      g_clear_error (&error);
    }
 }
 
