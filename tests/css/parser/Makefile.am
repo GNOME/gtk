@@ -178,6 +178,7 @@ EXTRA_DIST += \
 	does-not-exist.css \
 	does-not-exist.errors \
 	does-not-exist.ref.css \
+	empty.css \
 	enum.css \
 	enum.errors \
 	enum.ref.css \

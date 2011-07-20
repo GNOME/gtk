@@ -1,24 +1,6 @@
 #include <gtk/gtk.h>
 
 static void
-test_parse_empty (void)
-{
-  GtkCssProvider *provider;
-  GError *error;
-  gboolean res;
-
-  provider = gtk_css_provider_new ();
-  error = NULL;
-  res = gtk_css_provider_load_from_data (provider, "", -1, &error);
-
-  g_assert (res);
-  g_assert_no_error (error);
-  g_clear_error (&error);
-
-  g_object_unref (provider);
-}
-
-static void
 test_parse_selectors (void)
 {
   GtkCssProvider *provider;
@@ -469,7 +451,6 @@ main (int argc, char *argv[])
   gtk_init (NULL, NULL);
   g_test_init (&argc, &argv, NULL);
 
-  g_test_add_func ("/style/parse/empty", test_parse_empty);
   g_test_add_func ("/style/parse/selectors", test_parse_selectors);
   g_test_add_func ("/style/parse/declarations", test_parse_declarations);
   g_test_add_func ("/style/path", test_path);
