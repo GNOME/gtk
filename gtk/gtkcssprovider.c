@@ -1803,7 +1803,15 @@ parse_binding_set (GtkCssScanner *scanner)
           continue;
         }
 
-      gtk_binding_entry_add_signal_from_string (binding_set, name);
+      if (gtk_binding_entry_add_signal_from_string (binding_set, name) != G_TOKEN_NONE)
+        {
+          gtk_css_provider_error_literal (scanner->provider,
+                                          scanner,
+                                          GTK_CSS_PROVIDER_ERROR,
+                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                          "Failed to parse binding set.");
+        }
+
       g_free (name);
 
       if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
