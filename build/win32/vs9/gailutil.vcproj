@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalDependencies="atk-2.0.lib"
+				AdditionalDependencies="atk-1.0.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				GenerateDebugInformation="true"
 				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="atk-2.0.lib"
+				AdditionalDependencies="atk-1.0.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
@@ -110,7 +110,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
-				AdditionalDependencies="atk-2.0.lib"
+				AdditionalDependencies="atk-1.0.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				GenerateDebugInformation="true"
 				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="atk-2.0.lib"
+				AdditionalDependencies="atk-1.0.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"

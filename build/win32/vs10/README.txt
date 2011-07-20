@@ -4,7 +4,8 @@ This VS10 solution and the projects it includes are intented to be used
 in a GTK+ source tree unpacked from a tarball. In a git checkout you
 first need to use some Unix-like environment or manual work to expand
 the files needed, like config.h.win32.in into config.h.win32 and the
-.vcprojin files here into corresponding actual .vcproj files.
+.vcxprojin and .vcxproj.filtersin files here into corresponding actual
+.vcxproj and vcxproj.filters files.
 
 You will need the parts from below in the GTK+ stack: GDK-Pixbuf, Pango,
 ATK and GLib.  External dependencies are at least Cairo
@@ -20,8 +21,8 @@ to different CRTs can be kept at a minimum.
 zlib, libpng, and Cairo do contain support for compiling under VS10
 using VS project files and/or makefiles at this time of writing, For the
 GTK+ stack, VS10 project files are either available under
-$(srcroot)/build/vs10 in the case of GLib (stable/unstable), ATK**
-(2.x stable/unstable) and GDK-Pixbuf (unstable), and should be in the next
+$(srcroot)/build/vs10 in the case of GLib (stable/unstable), ATK
+(stable/unstable) and GDK-Pixbuf (unstable), and should be in the next
 unstable version of Pango.  There is no known official VS10 build
 support for fontconfig (along with freetype and expat) and
 gettext-runtime, so please use the binaries from: 
@@ -48,11 +49,11 @@ The recommended build order for these dependencies:
 -(for GDK-Pixbuf, if not using GDI+) jasper [jpeg-2000 library]
 -(optional for GLib) PCRE (version 8.12 or later, use of CMake to
   build PCRE is recommended-see build/win32/vs10/README.txt of GLib)
--GLib ***
+-GLib **
 -Cairo (inclusive of Cairo-GObject)
--ATK-2.x** ***
--Pango***
--GDK-Pixbuf***
+-ATK**
+-Pango**
+-GDK-Pixbuf**
 (note the last 3 dependencies are not interdependent, so the last 3
  dependencies can be built in any order)
 
@@ -71,19 +72,8 @@ from a specific GLib source tree.
  are referred to by components in Cairo and Pango mainly.
  Decide whether you need fontconfig support prior to building Cairo
  and Pango.
- 
-**Regarding ATK-2.x: prior to compiling ATK-2.x, please open atkprops
-  in VS under "Properties Manager" view (it is under any one of the
-  build configurations, right-click on atkprops and select "Properties").
-  Navigate to "User Macros", and edit the following fields:
-  AtkApiVersion -> 2.0
-  AtkLibToolCompatibleDllSuffix -> -2.0-0
-  AtkSeperateVS10DLLSuffix -> -2-vs10
-  Sorry this change did not make it upstream prior to ATK-2.0.0 release-
-  this will be in the subsequent releases of ATK-2.x and was committed
-  upstream.
 
-***:Put the sources of the packages marked with *** in <root>\<package-
+**:Put the sources of the packages marked with ** in <root>\<package-
     source-tree>, and build with VS10 from there.
 
 --Tor Lillqvist <tml@iki.fi>
