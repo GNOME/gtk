@@ -948,6 +948,72 @@ pattern_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
+static cairo_status_t
+surface_write (void                *closure,
+               const unsigned char *data,
+               unsigned int         length)
+{
+  g_byte_array_append (closure, data, length);
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static void
+surface_print (cairo_surface_t *surface,
+               GString *        string)
+{
+#if CAIRO_HAS_PNG_FUNCTIONS
+  GByteArray *array;
+  char *base64;
+  
+  array = g_byte_array_new ();
+  cairo_surface_write_to_png_stream (surface, surface_write, array);
+  base64 = g_base64_encode (array->data, array->len);
+  g_byte_array_free (array, TRUE);
+
+  g_string_append (string, "url(\"data:image/png;base64,");
+  g_string_append (string, base64);
+  g_string_append (string, "\")");
+
+  g_free (base64);
+#else
+  g_string_append (string, "none /* you need cairo png functions enabled to make this work */");
+#endif
+}
+
+static void
+pattern_value_print (const GValue *value,
+                     GString      *string)
+{
+  cairo_pattern_t *pattern;
+  cairo_surface_t *surface;
+
+  pattern = g_value_get_boxed (value);
+
+  if (pattern == NULL)
+    {
+      g_string_append (string, "none");
+      return;
+    }
+
+  switch (cairo_pattern_get_type (pattern))
+    {
+    case CAIRO_PATTERN_TYPE_SURFACE:
+      if (cairo_pattern_get_surface (pattern, &surface) != CAIRO_STATUS_SUCCESS)
+        {
+          g_assert_not_reached ();
+        }
+      surface_print (surface, string);
+      break;
+    case CAIRO_PATTERN_TYPE_SOLID:
+    case CAIRO_PATTERN_TYPE_LINEAR:
+    case CAIRO_PATTERN_TYPE_RADIAL:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
 static gboolean
 shadow_value_parse (GtkCssParser *parser,
                     GFile *base,
@@ -2138,7 +2204,7 @@ css_string_funcs_init (void)
                                 gradient_value_print);
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
-                                NULL);
+                                pattern_value_print);
   register_conversion_function (GTK_TYPE_BORDER_IMAGE,
                                 border_image_value_parse,
                                 NULL);
