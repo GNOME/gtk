@@ -125,8 +125,8 @@ test_parse_declarations (void)
     "                                     center center, 0.8,   \n"
     "                                     color-stop (0.0,#fff),\n"
     "                                     color-stop (1.0,#000))}\n",
-    "* { border-image: url (\"" SRCDIR "/test.png\") 3 4 3 4 stretch       }",
-    "* { border-image: url (\"" SRCDIR "/test.png\") 3 4 3 4 repeat stretch}",
+    "* { border-image: url(\"" SRCDIR "/test.png\") 3 4 3 4 stretch       }",
+    "* { border-image: url(\"" SRCDIR "/test.png\") 3 4 3 4 repeat stretch}",
     "* { transition: 150ms ease-in-out                          }",
     "* { transition: 1s linear loop                             }",
     NULL
