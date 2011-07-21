@@ -1183,9 +1183,12 @@ border_image_repeat_value_print (const GValue *value,
 
   image_repeat = g_value_get_boxed (value);
 
-  g_string_append_printf (string, "%s %s",
-                          border_image_repeat_style_to_string (image_repeat->hrepeat),
-                          border_image_repeat_style_to_string (image_repeat->vrepeat));
+  g_string_append (string, border_image_repeat_style_to_string (image_repeat->hrepeat));
+  if (image_repeat->hrepeat != image_repeat->vrepeat)
+    {
+      g_string_append (string, " ");
+      g_string_append (string, border_image_repeat_style_to_string (image_repeat->vrepeat));
+    }
 }
 
 static gboolean
