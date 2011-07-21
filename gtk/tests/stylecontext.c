@@ -67,88 +67,6 @@ test_parse_selectors (void)
 }
 
 static void
-test_parse_declarations (void)
-{
-  GtkCssProvider *provider;
-  GError *error;
-  gboolean res;
-  gint i;
-  const gchar *valid[] = {
-    "* {}",
-    "* { font: Sans 15 }",
-    "* { font: Sans 15; }",
-    "* { font: bold }",
-    "* { color: red }",
-    "* { /* just a comment */ }",
-    "* { /* multi\nline\ncomment */ }",
-    "* { font: /* comment here */ Sans 15 }",
-    "* { color: red; background-color: shade (@bg_color, 0.5) }",
-    "* { margin: 5 }",
-    "* { margin: 5 10 }",
-    "* { margin: 5 10 3 }",
-    "* { margin: 5 10 3 5 }",
-    "* { padding: 5 }",
-    "* { padding: 5 10 }",
-    "* { border-width: 5; border-radius: 10 }",
-    "* { border-color: #ff00ff }",
-    "* { engine: clearlooks }",
-    "* { background-image: -gtk-gradient (linear,               \n"
-    "                                    left top, right top,   \n"
-    "                                    from (#fff), to (#000)) }",
-    "* { background-image: -gtk-gradient (linear,               \n"
-    "                                    0.0 0.5, 0.5 1.0,      \n"
-    "                                    from (#fff),           \n"
-    "                                    color-stop (0.5, #f00),\n"
-    "                                    to (#000))              }",
-    "* { background-image: -gtk-gradient (radial,               \n"
-    "                                     center center, 0.2,   \n"
-    "                                     center center, 0.8,   \n"
-    "                                     color-stop (0.0,#fff),\n"
-    "                                     color-stop (1.0,#000))}\n",
-    "* { border-image: url(\"" SRCDIR "/test.png\") 3 4 3 4 stretch       }",
-    "* { border-image: url(\"" SRCDIR "/test.png\") 3 4 3 4 repeat stretch}",
-    "* { transition: 150ms ease-in-out                          }",
-    "* { transition: 1s linear loop                             }",
-    NULL
-  };
-
-  const gchar *invalid[] = {
-    "* { color }",
-    "* { color:green; color }",
-    "* { color:red; color; color:green }",
-    "* { color:green; color: }",
-    "* { color:red; color:; color:green }",
-    "* { color:green; color{;color:maroon} }",
-    "* { color:red; color{;color:maroon}; color:green }",
-    "* { content: 'Hello",
-    NULL
-  };
-
-  error = NULL;
-  for (i = 0; valid[i]; i++)
-    {
-      provider = gtk_css_provider_new ();
-      res = gtk_css_provider_load_from_data (provider, valid[i], -1, &error);
-      if (error)
-        g_print ("parsing '%s': got unexpected error: %s\n", valid[i], error->message);
-      g_assert_no_error (error);
-      g_assert (res);
-
-      g_object_unref (provider);
-   }
-
-  for (i = 0; invalid[i]; i++)
-    {
-      provider = gtk_css_provider_new ();
-      res = gtk_css_provider_load_from_data (provider, invalid[i], -1, &error);
-      g_assert_error (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_FAILED);
-      g_assert (!res);
-      g_object_unref (provider);
-      g_clear_error (&error);
-   }
-}
-
-static void
 test_path (void)
 {
   GtkWidgetPath *path;
@@ -432,7 +350,6 @@ main (int argc, char *argv[])
   g_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/style/parse/selectors", test_parse_selectors);
-  g_test_add_func ("/style/parse/declarations", test_parse_declarations);
   g_test_add_func ("/style/path", test_path);
   g_test_add_func ("/style/match", test_match);
   g_test_add_func ("/style/style-property", test_style_property);
