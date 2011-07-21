@@ -1020,8 +1020,7 @@ gtk_theming_engine_load (const gchar *name)
             }
         }
     }
-
-  if (!engine)
+  else
     {
       if (G_UNLIKELY (!default_engine))
         default_engine = g_object_new (GTK_TYPE_THEMING_ENGINE, NULL);
