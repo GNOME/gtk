@@ -381,8 +381,28 @@ gtk_theming_engine_register_property (const gchar            *name_space,
 
   /* FIXME: hack hack hack, replacing pspec->name to include namespace */
   name = g_strdup_printf ("-%s-%s", name_space, pspec->name);
-  g_free (pspec->name);
-  pspec->name = name;
+
+  /**
+   * GParamSpec ->name field is stored in two different ways depending
+   * on the flags used to create it and the GLib verison we are using.
+   *
+   * If G_PARAM_STATIC_NAME (or G_PARAM_STATIC_STRINGS) was given then
+   * the string is interned.  It is also interned in all cases for GLib
+   * versions starting with 2.29.12.
+   *
+   * On GLib versions before 2.29.12, if G_PARAM_STATIC_NAME was not
+   * specified, then ->name was allocated with g_strdup().
+   */
+  if (glib_check_version (2, 29, 12) == NULL || (pspec->flags & G_PARAM_STATIC_NAME) != 0)
+    {
+      pspec->name = (char *) g_intern_string (name);
+      g_free (name);
+    }
+  else
+    {
+      g_free ((char *) pspec->name);
+      pspec->name = name;
+    }
 
   gtk_style_properties_register_property (parse_func, pspec);
 }
