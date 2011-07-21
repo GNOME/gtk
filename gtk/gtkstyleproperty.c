@@ -302,6 +302,7 @@ font_description_value_parse (GtkCssParser *parser,
                               GValue       *value)
 {
   PangoFontDescription *font_desc;
+  guint mask;
   char *str;
 
   str = _gtk_css_parser_read_value (parser);
@@ -309,6 +310,13 @@ font_description_value_parse (GtkCssParser *parser,
     return FALSE;
 
   font_desc = pango_font_description_from_string (str);
+  mask = pango_font_description_get_set_fields (font_desc);
+  /* These values are not really correct,
+   * but the fields must be set, so we set them to something */
+  if ((mask & PANGO_FONT_MASK_FAMILY) == 0)
+    pango_font_description_set_family_static (font_desc, "Sans");
+  if ((mask & PANGO_FONT_MASK_SIZE) == 0)
+    pango_font_description_set_size (font_desc, 10 * PANGO_SCALE);
   g_free (str);
   g_value_take_boxed (value, font_desc);
   return TRUE;
