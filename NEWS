@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.0.12
+==================================
+
+* Assorted file chooser improvements/redesign:
+ - Remove the expander in Save mode
+ - Move the path bar up in Save mode
+ - Remember the last opened directory
+ - Start in recently-used mode when no folder is set
+ - Update recent-files when confirming in the file chooser
+
+* Bugs fixed:
+ 644426 GNOME-wide default to remember last folder
+ 652045 file open dialog refuses to open or complete non-local...
+ 653191 uninitialized variable in completion_match_func
+ 653333 Assigned value is garbage or undefined in gtktool...
+ 654125 gdkoffscreenwindow set any impl handlers to null but...
+        Fix problems with toolbar animations
+        Improve handling of construct properties in GtkBuilder
+        Fix an infinite loop in non-XKB keymap code
+        Fix GtkThemingEngine to work with recent GLib versions
+        Win32 build fixes
+
+* Translation updates:
+ Catalan
+ Czech
+ Dutch
+ German
+ Polish
+ Serbian
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.0.11
 ==================================
 
