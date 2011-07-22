@@ -244,8 +244,8 @@ test_match (void)
   g_assert (gdk_rgba_equal (&color, &expected));
 
   data = "* { color: #f00 }\n"
-         "GtkWindow .button { color: #fff }\n"
-         "GObject .button { color: #000 }";
+         "GtkWindow .button { color: #000 }\n"
+         "GObject .button { color: #fff }";
   gtk_css_provider_load_from_data (provider, data, -1, &error);
   g_assert_no_error (error);
   gtk_style_context_invalidate (context);
