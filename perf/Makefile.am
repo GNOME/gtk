@@ -30,8 +30,6 @@ testperf_SOURCES =		\
 	gtkwidgetprofiler.c	\
 	gtkwidgetprofiler.h	\
 	main.c			\
-	marshalers.c		\
-	marshalers.h		\
 	textview.c		\
 	treeview.c		\
 	typebuiltins.c		\
@@ -39,13 +37,10 @@ testperf_SOURCES =		\
 	widgets.h
 
 BUILT_SOURCES =			\
-	marshalers.c		\
-	marshalers.h		\
 	typebuiltins.c		\
 	typebuiltins.h
 
 stamp_files =			\
-	stamp-marshalers.h	\
 	stamp-typebuiltins.h
 
 headers_with_enums = 		\
@@ -53,18 +48,6 @@ headers_with_enums = 		\
 
 MAINTAINERCLEANFILES = $(BUILT_SOURCES) $(stamp_files)
 
-marshalers.h: stamp-marshalers.h
-	@true
-
-stamp-marshalers.h: @REBUILD@ marshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_testperf_marshal $(srcdir)/marshalers.list --header >> xgen-gmlh \
-	&& (cmp -s xgen-gmlh marshalers.h || cp xgen-gmlh marshalers.h) \
-	&& rm -f xgen-gmlh \
-	&& echo timestamp > $(@F)
-marshalers.c: @REBUILD@ marshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_testperf_marshal $(srcdir)/marshalers.list --body >> xgen-gmlc \
-	&& cp xgen-gmlc marshalers.c \
-	&& rm -f xgen-gmlc
 
 typebuiltins.h: stamp-typebuiltins.h
 	@true
@@ -83,7 +66,6 @@ typebuiltins.c: @REBUILD@ $(headers_with_enums) typebuiltins.c.template
 
 EXTRA_DIST += 		\
 	README		\
-	marshalers.list	\
 	typebuiltins.c.template	\
 	typebuiltins.h.template	\
 	$(BUILT_SOURCES)
