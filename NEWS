@@ -1,3 +1,51 @@
+Overview of Changes in GTK+ 3.1.10
+==================================
+
+* Assorted file chooser improvements/redesign:
+ - Remove the expander in Save mode
+ - Move the path bar up in Save mode
+ - Remember the last opened directory
+ - Start in recently-used mode when no folder is set
+ - Update recent-files when confirming in the file chooser
+
+* Accessibility:
+ - Gail has been merged into GTK+ and is no longer a module
+ - A testsuite for a11y functionality has been added
+
+* Theming:
+ - Icon view cells can now have a border
+
+* GtkMountOperation can now show processes on OpenBSD
+
+* Gdk input devices now expose their XInput2 device ID
+  via gdk_x11_device_get_id()
+
+* Bugs fixed:
+ 653450 gtkfilechooser crashes when adding favorite
+ 653705 GtkAssistant doesn't notice destroyed pages
+ 653947 Crash in gdk/x11/gdkdevicemanager-xi2.c:get_event_window
+ 654125 gdkoffscreenwindow set any impl handlers to null...
+ 654179 iconview: make it possible for selected cells to render...
+ 654428 focusable labels are emitting inappropriate object:text-sel...
+ 654678 Message dialog's primary text font increases on every call...
+ 654695 Memory corruption in gtk_theming_engine_register_property()
+ 654720 void return issues cause compile issues for GTK 3.1.8
+ 655009 Clamp border radius following CSS specs
+
+* Translation updates:
+ Galician
+ German
+ Hebrew
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Persian
+ Polish
+ Slovenian
+ Spanish
+ Uighur
+
+
 Overview of Changes in GTK+ 3.1.8
 =================================
 
