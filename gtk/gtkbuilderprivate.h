@@ -68,6 +68,7 @@ typedef struct {
   gchar *to;
   gchar *from;
   gchar *source;
+  gchar *transform_func;
 } BindingInfo;
 
 typedef struct {
@@ -133,8 +134,10 @@ void      _gtk_builder_add_signals (GtkBuilder *builder,
 void      _gtk_builder_add_bindings (GtkBuilder  *builder,
 				     GSList      *bindings);
 void      _gtk_builder_finish (GtkBuilder *builder);
-void _free_signal_info (SignalInfo *info,
-                        gpointer user_data);
+void _free_signal_info  (SignalInfo *info,
+                         gpointer user_data);
+void _free_binding_info (BindingInfo *info,
+                         gpointer user_data);
 
 /* Internal API which might be made public at some point */
 gboolean _gtk_builder_boolean_from_string (const gchar  *string,

@@ -544,6 +544,7 @@ parse_binding (ParserData   *data,
   const gchar *to = NULL;
   const gchar *from = NULL;
   const gchar *source = NULL;
+  const gchar *transform_func = NULL;
   ObjectInfo *object_info;
   int i;
   
@@ -562,6 +563,8 @@ parse_binding (ParserData   *data,
 	from = values[i];
       else if (strcmp (names[i], "source") == 0)
 	source = values[i];
+      else if (strcmp (names[i], "transform-func") == 0)
+	transform_func = values[i];
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -589,6 +592,8 @@ parse_binding (ParserData   *data,
   info->to = g_strdup (to);
   info->from = g_strdup (from);
   info->source = g_strdup (source);
+  if (transform_func)
+    info->transform_func = g_strdup (transform_func);
   state_push (data, info);
 
   info->tag.name = element_name;
@@ -693,6 +698,18 @@ _free_signal_info (SignalInfo *info,
   g_free (info->connect_object_name);
   g_free (info->object_name);
   g_slice_free (SignalInfo, info);
+}
+
+void
+_free_binding_info (BindingInfo *info,
+                    gpointer user_data)
+{
+  g_free (info->object_name);
+  g_free (info->to);
+  g_free (info->from);
+  g_free (info->source);
+  g_free (info->transform_func);
+  g_slice_free (BindingInfo, info);
 }
 
 void
