@@ -41,12 +41,13 @@ G_BEGIN_DECLS
 #define GTK_THEMING_ENGINE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_THEMING_ENGINE, GtkThemingEngineClass))
 
 typedef struct _GtkThemingEngine GtkThemingEngine;
+typedef struct GtkThemingEnginePrivate GtkThemingEnginePrivate;
 typedef struct _GtkThemingEngineClass GtkThemingEngineClass;
 
 struct _GtkThemingEngine
 {
   GObject parent_object;
-  gpointer priv;
+  GtkThemingEnginePrivate *priv;
 };
 
 /**

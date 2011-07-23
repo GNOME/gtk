@@ -1,0 +1,9 @@
+.progressbar {
+  engine: none;
+  border-image: none;
+  border-radius: 25;
+}
+
+#reference .progressbar {
+  border-radius: 10;
+}

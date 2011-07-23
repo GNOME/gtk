@@ -1930,8 +1930,8 @@ parse_selector_pseudo_class (GtkCssScanner  *scanner,
     GtkRegionFlags region_flag;
     GtkStateFlags state_flag;
   } pseudo_classes[] = {
-    { "first",        GTK_REGION_FIRST, 0 },
-    { "last",         GTK_REGION_LAST, 0 },
+    { "first-child",  GTK_REGION_FIRST, 0 },
+    { "last-child",   GTK_REGION_LAST, 0 },
     { "sorted",       GTK_REGION_SORTED, 0 },
     { "active",       0, GTK_STATE_FLAG_ACTIVE },
     { "prelight",     0, GTK_STATE_FLAG_PRELIGHT },

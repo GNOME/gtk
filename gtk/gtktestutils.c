@@ -43,7 +43,7 @@
  *        <parameter>argv</parameter> parameter of main().
  *        Any parameters understood by g_test_init() or gtk_init() are
  *        stripped before return.
- * @Varargs: currently unused
+ * @...: currently unused
  *
  * This function is used to initialize a GTK+ test program.
  *
@@ -513,7 +513,7 @@ gtk_test_text_get (GtkWidget *widget)
  * gtk_test_create_widget:
  * @widget_type: a valid widget type.
  * @first_property_name: (allow-none): Name of first property to set or %NULL
- * @Varargs: value to set the first property to, followed by more
+ * @...: value to set the first property to, followed by more
  *    name-value pairs, terminated by %NULL
  *
  * This function wraps g_object_new() for widget types.
@@ -643,14 +643,15 @@ static guint  n_all_registered_types = 0;
 /**
  * gtk_test_list_all_types:
  * @n_types: location to store number of types
- * @returns: (array length=n_types zero-terminated=1) (transfer none):
- *    0-terminated array of type ids
  *
  * Return the type ids that have been registered after
  * calling gtk_test_register_all_types().
  *
+ * Returns: (array length=n_types zero-terminated=1) (transfer none):
+ *    0-terminated array of type ids
+ *
  * Since: 2.14
- **/
+ */
 const GType*
 gtk_test_list_all_types (guint *n_types)
 {

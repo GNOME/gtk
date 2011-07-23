@@ -302,6 +302,7 @@ font_description_value_parse (GtkCssParser *parser,
                               GValue       *value)
 {
   PangoFontDescription *font_desc;
+  guint mask;
   char *str;
 
   str = _gtk_css_parser_read_value (parser);
@@ -309,6 +310,13 @@ font_description_value_parse (GtkCssParser *parser,
     return FALSE;
 
   font_desc = pango_font_description_from_string (str);
+  mask = pango_font_description_get_set_fields (font_desc);
+  /* These values are not really correct,
+   * but the fields must be set, so we set them to something */
+  if ((mask & PANGO_FONT_MASK_FAMILY) == 0)
+    pango_font_description_set_family_static (font_desc, "Sans");
+  if ((mask & PANGO_FONT_MASK_SIZE) == 0)
+    pango_font_description_set_size (font_desc, 10 * PANGO_SCALE);
   g_free (str);
   g_value_take_boxed (value, font_desc);
   return TRUE;
@@ -523,7 +531,7 @@ theming_engine_value_print (const GValue *value,
     {
       /* XXX: gtk_theming_engine_get_name()? */
       g_object_get (engine, "name", &name, NULL);
-      g_string_append (string, name);
+      g_string_append (string, name ? name : "none");
       g_free (name);
     }
 }
@@ -948,6 +956,72 @@ pattern_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
+static cairo_status_t
+surface_write (void                *closure,
+               const unsigned char *data,
+               unsigned int         length)
+{
+  g_byte_array_append (closure, data, length);
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static void
+surface_print (cairo_surface_t *surface,
+               GString *        string)
+{
+#if CAIRO_HAS_PNG_FUNCTIONS
+  GByteArray *array;
+  char *base64;
+  
+  array = g_byte_array_new ();
+  cairo_surface_write_to_png_stream (surface, surface_write, array);
+  base64 = g_base64_encode (array->data, array->len);
+  g_byte_array_free (array, TRUE);
+
+  g_string_append (string, "url(\"data:image/png;base64,");
+  g_string_append (string, base64);
+  g_string_append (string, "\")");
+
+  g_free (base64);
+#else
+  g_string_append (string, "none /* you need cairo png functions enabled to make this work */");
+#endif
+}
+
+static void
+pattern_value_print (const GValue *value,
+                     GString      *string)
+{
+  cairo_pattern_t *pattern;
+  cairo_surface_t *surface;
+
+  pattern = g_value_get_boxed (value);
+
+  if (pattern == NULL)
+    {
+      g_string_append (string, "none");
+      return;
+    }
+
+  switch (cairo_pattern_get_type (pattern))
+    {
+    case CAIRO_PATTERN_TYPE_SURFACE:
+      if (cairo_pattern_get_surface (pattern, &surface) != CAIRO_STATUS_SUCCESS)
+        {
+          g_assert_not_reached ();
+        }
+      surface_print (surface, string);
+      break;
+    case CAIRO_PATTERN_TYPE_SOLID:
+    case CAIRO_PATTERN_TYPE_LINEAR:
+    case CAIRO_PATTERN_TYPE_RADIAL:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
 static gboolean
 shadow_value_parse (GtkCssParser *parser,
                     GFile *base,
@@ -1109,9 +1183,12 @@ border_image_repeat_value_print (const GValue *value,
 
   image_repeat = g_value_get_boxed (value);
 
-  g_string_append_printf (string, "%s %s",
-                          border_image_repeat_style_to_string (image_repeat->hrepeat),
-                          border_image_repeat_style_to_string (image_repeat->vrepeat));
+  g_string_append (string, border_image_repeat_style_to_string (image_repeat->hrepeat));
+  if (image_repeat->hrepeat != image_repeat->vrepeat)
+    {
+      g_string_append (string, " ");
+      g_string_append (string, border_image_repeat_style_to_string (image_repeat->vrepeat));
+    }
 }
 
 static gboolean
@@ -2138,7 +2215,7 @@ css_string_funcs_init (void)
                                 gradient_value_print);
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
-                                NULL);
+                                pattern_value_print);
   register_conversion_function (GTK_TYPE_BORDER_IMAGE,
                                 border_image_value_parse,
                                 NULL);

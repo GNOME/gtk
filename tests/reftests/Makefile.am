@@ -51,6 +51,9 @@ EXTRA_DIST += \
 	border-image-url.css \
 	border-image-url.ref.ui \
 	border-image-url.ui \
+	border-radius-clamp.css\
+	border-radius-clamp.ref.ui \
+	border-radius-clamp.ui \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \

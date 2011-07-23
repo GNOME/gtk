@@ -1,7 +1,6 @@
 #include "config.h"
 #include <string.h>
 #include "gtkwidgetprofiler.h"
-#include "marshalers.h"
 #include "typebuiltins.h"
 
 typedef enum {
@@ -53,7 +52,7 @@ gtk_widget_profiler_class_init (GtkWidgetProfilerClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetProfilerClass, create_widget),
 		  NULL, NULL,
-		  _testperf_marshal_OBJECT__VOID,
+		  NULL,
 		  G_TYPE_OBJECT, 0);
 
   signals[REPORT] =
@@ -62,7 +61,7 @@ gtk_widget_profiler_class_init (GtkWidgetProfilerClass *class)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetProfilerClass, report),
 		  NULL, NULL,
-		  _testperf_marshal_VOID__ENUM_OBJECT_DOUBLE,
+		  NULL,
 		  G_TYPE_NONE, 3,
 		  GTK_TYPE_WIDGET_PROFILER_REPORT,
 		  G_TYPE_OBJECT,
