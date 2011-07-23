@@ -2008,7 +2008,7 @@ pack_font_description (GValue             *value,
   pango_font_description_set_variant (description, variant);
   pango_font_description_set_weight (description, weight);
 
-  g_free (families);
+  g_strfreev (families);
 
   g_value_take_boxed (value, description);
 }
