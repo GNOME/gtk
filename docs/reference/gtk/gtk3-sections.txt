@@ -7095,11 +7095,6 @@ GtkLockButtonPrivate
 GtkOverlay
 
 gtk_overlay_new
-gtk_overlay_set_relative_widget
-gtk_overlay_get_relative_widget
-gtk_overlay_add
-gtk_overlay_set_offset
-gtk_overlay_get_offset
 
 <SUBSECTION Standard>
 GTK_TYPE_OVERLAY
