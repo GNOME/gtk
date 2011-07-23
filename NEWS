@@ -31,6 +31,7 @@ Overview of Changes in GTK+ 3.1.10
  654695 Memory corruption in gtk_theming_engine_register_property()
  654720 void return issues cause compile issues for GTK 3.1.8
  655009 Clamp border radius following CSS specs
+ 654266 No longer possible to set empty text on a GtkProgressBar
 
 * Translation updates:
  Galician
