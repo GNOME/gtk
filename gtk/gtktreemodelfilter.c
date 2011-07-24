@@ -2641,17 +2641,20 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 
 
   /* emit rows_reordered */
-  if (!gtk_tree_path_get_indices (path))
-    gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, NULL,
-                                   tmp_array);
-  else
+  if (level->visible_nodes > 0)
     {
-      /* get a path taking only visible nodes into account */
-      gtk_tree_path_free (path);
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
+      if (!gtk_tree_path_get_indices (path))
+        gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, NULL,
+                                       tmp_array);
+      else
+        {
+          /* get a path taking only visible nodes into account */
+          gtk_tree_path_free (path);
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
 
-      gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, &iter,
-                                     tmp_array);
+          gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, &iter,
+                                         tmp_array);
+        }
     }
 
   /* done */
