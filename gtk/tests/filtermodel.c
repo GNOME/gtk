@@ -3512,8 +3512,6 @@ ref_count_transfer_root_level_reordered (void)
   gtk_tree_store_move_after (GTK_TREE_STORE (model),
                              &grandparent1, &grandparent3);
 
-  gtk_tree_model_ref_count_dump (ref_model);
-
   assert_node_ref_count (ref_model, &grandparent2, 2);
   assert_node_ref_count (ref_model, &grandparent3, 1);
   assert_node_ref_count (ref_model, &grandparent1, 1);
