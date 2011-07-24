@@ -11988,12 +11988,11 @@ gtk_widget_class_set_accessible_role (GtkWidgetClass *widget_class,
  * Returns the accessible object that describes the widget to an
  * assistive technology.
  *
- * If no accessibility library is loaded (i.e. no ATK implementation library is
- * loaded via <envar>GTK_MODULES</envar> or via another application library,
- * such as libgnome), then this #AtkObject instance may be a no-op. Likewise,
- * if no class-specific #AtkObject implementation is available for the widget
- * instance in question, it will inherit an #AtkObject implementation from the
- * first ancestor class for which such an implementation is defined.
+ * If accessibility support is not available, this #AtkObject
+ * instance may be a no-op. Likewise, if no class-specific #AtkObject
+ * implementation is available for the widget instance in question,
+ * it will inherit an #AtkObject implementation from the first ancestor
+ * class for which such an implementation is defined.
  *
  * The documentation of the
  * <ulink url="http://library.gnome.org/devel/atk/stable/">ATK</ulink>
