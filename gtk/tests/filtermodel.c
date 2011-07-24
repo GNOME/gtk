@@ -135,6 +135,10 @@ typedef struct
 {
   SignalName signal;
   GtkTreePath *path;
+
+  /* For rows-reordered */
+  int *new_order;
+  int len;
 }
 Signal;
 
@@ -147,6 +151,19 @@ signal_new (SignalName signal, GtkTreePath *path)
   s = g_new0 (Signal, 1);
   s->signal = signal;
   s->path = gtk_tree_path_copy (path);
+  s->new_order = NULL;
+
+  return s;
+}
+
+static Signal *
+signal_new_with_order (SignalName signal, GtkTreePath *path,
+                       int *new_order, int len)
+{
+  Signal *s = signal_new (signal, path);
+
+  s->new_order = new_order;
+  s->len = len;
 
   return s;
 }
@@ -174,7 +191,9 @@ static void
 signal_monitor_generic_handler (SignalMonitor *m,
                                 SignalName     signal,
                                 GtkTreeModel  *model,
-                                GtkTreePath   *path)
+                                GtkTreeIter   *iter,
+                                GtkTreePath   *path,
+                                int           *new_order)
 {
   Signal *s;
 
@@ -205,8 +224,11 @@ signal_monitor_generic_handler (SignalMonitor *m,
            gtk_tree_path_to_string (path));
 #endif
 
-  if (s->signal != signal
-      || gtk_tree_path_compare (s->path, path) != 0)
+  if (s->signal != signal ||
+      (gtk_tree_path_get_depth (s->path) == 0 &&
+       gtk_tree_path_get_depth (path) != 0) ||
+      (gtk_tree_path_get_depth (s->path) != 0 &&
+       gtk_tree_path_compare (s->path, path) != 0))
     {
       gchar *path_str, *s_path_str;
 
@@ -223,6 +245,19 @@ signal_monitor_generic_handler (SignalMonitor *m,
       g_assert_not_reached ();
     }
 
+  if (signal == ROWS_REORDERED && s->new_order != NULL)
+    {
+      int i, len;
+
+      g_assert (new_order != NULL);
+
+      len = gtk_tree_model_iter_n_children (model, iter);
+      g_assert (s->len == len);
+
+      for (i = 0; i < len; i++)
+        g_assert (s->new_order[i] == new_order[i]);
+    }
+
   s = g_queue_pop_tail (m->queue);
 
   signal_free (s);
@@ -235,7 +270,7 @@ signal_monitor_row_inserted (GtkTreeModel *model,
                              gpointer      data)
 {
   signal_monitor_generic_handler (data, ROW_INSERTED,
-                                  model, path);
+                                  model, iter, path, NULL);
 }
 
 static void
@@ -244,7 +279,7 @@ signal_monitor_row_deleted (GtkTreeModel *model,
                             gpointer      data)
 {
   signal_monitor_generic_handler (data, ROW_DELETED,
-                                  model, path);
+                                  model, NULL, path, NULL);
 }
 
 static void
@@ -254,7 +289,7 @@ signal_monitor_row_changed (GtkTreeModel *model,
                             gpointer      data)
 {
   signal_monitor_generic_handler (data, ROW_CHANGED,
-                                  model, path);
+                                  model, iter, path, NULL);
 }
 
 static void
@@ -264,7 +299,7 @@ signal_monitor_row_has_child_toggled (GtkTreeModel *model,
                                       gpointer      data)
 {
   signal_monitor_generic_handler (data, ROW_HAS_CHILD_TOGGLED,
-                                  model, path);
+                                  model, iter, path, NULL);
 }
 
 static void
@@ -275,7 +310,7 @@ signal_monitor_rows_reordered (GtkTreeModel *model,
                                gpointer      data)
 {
   signal_monitor_generic_handler (data, ROWS_REORDERED,
-                                  model, path);
+                                  model, iter, path, new_order);
 }
 
 static SignalMonitor *
@@ -341,6 +376,19 @@ signal_monitor_append_signal_path (SignalMonitor *m,
   Signal *s;
 
   s = signal_new (signal, path);
+  g_queue_push_head (m->queue, s);
+}
+
+static void
+signal_monitor_append_signal_reordered (SignalMonitor *m,
+                                        SignalName     signal,
+                                        GtkTreePath   *path,
+                                        int           *new_order,
+                                        int            len)
+{
+  Signal *s;
+
+  s = signal_new_with_order (signal, path, new_order, len);
   g_queue_push_head (m->queue, s);
 }
 
@@ -2233,6 +2281,370 @@ unfiltered_vroot_show_single_multi_level_root_expanded (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:0", 1);
 }
 
+static void
+unfiltered_rows_reordered_root_level (FilterTest    *fixture,
+                                      gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 4, 0 };
+  int order1[] = { 0, 2, 1, 3, 4 };
+  int order2[] = { 4, 0, 1, 2, 3 };
+  GtkTreeIter iter0, iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "4");
+
+  path = gtk_tree_path_new ();
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 5);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 5);
+  gtk_tree_store_move_after (fixture->store, &iter2, &iter3);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 5);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+unfiltered_rows_reordered_child_level (FilterTest    *fixture,
+                                       gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 4, 0 };
+  int order1[] = { 0, 2, 1, 3, 4 };
+  int order2[] = { 4, 0, 1, 2, 3 };
+  GtkTreeIter iter0, iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0:0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "0:2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "0:3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 5);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 5);
+  gtk_tree_store_move_after (fixture->store, &iter2, &iter3);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 5);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_root_level_first_hidden (FilterTest    *fixture,
+                                                 gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0");
+  set_path_visibility (fixture, "0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "4");
+
+  path = gtk_tree_path_new ();
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter1, &iter2);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_root_level_middle_hidden (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter0, iter1, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "2");
+  set_path_visibility (fixture, "2", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "4");
+
+  path = gtk_tree_path_new ();
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_first_hidden (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, TRUE);
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:0");
+  set_path_visibility (fixture, "0:0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "0:2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "0:3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter1, &iter2);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_middle_hidden (FilterTest    *fixture,
+                                                   gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter0, iter1, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:2");
+  set_path_visibility (fixture, "0:2", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0:0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "0:3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_4_hidden (FilterTest    *fixture,
+                                              gconstpointer  user_data)
+{
+  int order0[] = { 0 };
+  GtkTreeIter iter1, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+
+  /* Hide last 4 paths */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:4");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:3");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:2");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:0");
+  set_path_visibility (fixture, "0:4", FALSE);
+  set_path_visibility (fixture, "0:3", FALSE);
+  set_path_visibility (fixture, "0:2", FALSE);
+  set_path_visibility (fixture, "0:0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 1);
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_all_hidden (FilterTest    *fixture,
+                                                gconstpointer  user_data)
+{
+  GtkTreeIter iter1, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  /* Hide last 4 paths */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:4");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:3");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:2");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:1");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:0");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "0:4", FALSE);
+  set_path_visibility (fixture, "0:3", FALSE);
+  set_path_visibility (fixture, "0:2", FALSE);
+  set_path_visibility (fixture, "0:1", FALSE);
+  set_path_visibility (fixture, "0:0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+}
 
 static void
 insert_before (void)
@@ -5047,6 +5459,49 @@ register_filter_model_tests (void)
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered_root_expanded,
               unfiltered_vroot_show_single_multi_level_root_expanded,
+              filter_test_teardown);
+
+
+  g_test_add ("/TreeModelFilter/unfiltered/rows-reordered/root-level",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered,
+              unfiltered_rows_reordered_root_level,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/rows-reordered/child-level",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered,
+              unfiltered_rows_reordered_child_level,
+              filter_test_teardown);
+
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/root-level/first-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_root_level_first_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/root-level/middle-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_root_level_middle_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/first-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_first_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/middle-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_middle_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/4-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_4_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/all-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_all_hidden,
               filter_test_teardown);
 
   /* Inserts in child models after creation of filter model */
