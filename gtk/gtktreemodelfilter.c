@@ -2475,6 +2475,7 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
   gint *tmp_array;
   gint i, j, elt_count;
   gint length;
+  gint first_elt_new_index = -1;
 
   GArray *new_array;
 
@@ -2610,6 +2611,9 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
       if (!e)
         continue;
 
+      if (old_offset == 0)
+        first_elt_new_index = elt_count;
+
       tmp_array[elt_count] = old_offset;
       g_array_append_val (new_array, *e);
       g_array_index (new_array, FilterElt, elt_count).offset = i;
@@ -2630,10 +2634,10 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
   /* Transfer the reference from the old item at position 0 to the
    * new item at position 0.
    */
-  if (tmp_array[0] != 0)
+  if (first_elt_new_index != -1 && first_elt_new_index != 0)
     gtk_tree_model_filter_level_transfer_first_ref (filter,
                                                     level,
-                                                    tmp_array[0], 0);
+                                                    first_elt_new_index, 0);
 
 
   /* emit rows_reordered */
