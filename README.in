@@ -27,6 +27,13 @@ Installation
 See the file 'INSTALL'
 
 
+Release notes for 3.2
+=====================
+
+* The accessible implementations for GTK+ widgets have been integrated
+  into libgtk itself, and the gail module does not exist anymore. This
+  change should not affect applications very much.
+
 Release notes for 3.0
 =====================
 
