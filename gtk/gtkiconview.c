@@ -7073,7 +7073,6 @@ gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
 
 static gpointer accessible_parent_class;
 static gpointer accessible_item_parent_class;
-static GQuark accessible_private_data_quark = 0;
 
 #define GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE      (gtk_icon_view_item_accessible_get_type ())
 #define GTK_ICON_VIEW_ITEM_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE, GtkIconViewItemAccessible))
@@ -8387,7 +8386,12 @@ static GType gtk_icon_view_accessible_get_type (void);
 
 typedef struct
 {
-   AtkObject parent;
+  GtkContainerAccessible parent;
+
+  GList *items;
+  GtkAdjustment *old_hadj;
+  GtkAdjustment *old_vadj;
+  GtkTreeModel *model;
 } GtkIconViewAccessible;
 
 typedef struct
@@ -8396,40 +8400,22 @@ typedef struct
   gint       index;
 } GtkIconViewItemAccessibleInfo;
 
-typedef struct
-{
-  GList *items;
-
-  GtkAdjustment *old_hadj;
-  GtkAdjustment *old_vadj;
-
-  GtkTreeModel *model;
-
-} GtkIconViewAccessiblePrivate;
-
-static GtkIconViewAccessiblePrivate *
-gtk_icon_view_accessible_get_priv (AtkObject *accessible)
-{
-  return g_object_get_qdata (G_OBJECT (accessible),
-                             accessible_private_data_quark);
-}
 
 static void
 gtk_icon_view_item_accessible_info_new (AtkObject *accessible,
                                         AtkObject *item,
                                         gint       index)
 {
+  GtkIconViewAccessible *view = (GtkIconViewAccessible *)accessible;
   GtkIconViewItemAccessibleInfo *info;
   GtkIconViewItemAccessibleInfo *tmp_info;
-  GtkIconViewAccessiblePrivate *priv;
   GList *items;
 
   info = g_new (GtkIconViewItemAccessibleInfo, 1);
   info->item = item;
   info->index = index;
 
-  priv = gtk_icon_view_accessible_get_priv (accessible);
-  items = priv->items;
+  items = view->items;
   while (items)
     {
       tmp_info = items->data;
@@ -8437,9 +8423,9 @@ gtk_icon_view_item_accessible_info_new (AtkObject *accessible,
         break;
       items = items->next;
     }
-  priv->items = g_list_insert_before (priv->items, items, info);
-  priv->old_hadj = NULL;
-  priv->old_vadj = NULL;
+  view->items = g_list_insert_before (view->items, items, info);
+  view->old_hadj = NULL;
+  view->old_vadj = NULL;
 }
 
 static gint
@@ -8461,20 +8447,20 @@ static AtkObject *
 gtk_icon_view_accessible_find_child (AtkObject *accessible,
                                      gint       index)
 {
-  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewAccessible *view = (GtkIconViewAccessible*)accessible;
   GtkIconViewItemAccessibleInfo *info;
   GList *items;
 
-  priv = gtk_icon_view_accessible_get_priv (accessible);
-  items = priv->items;
+  items = view->items;
 
   while (items)
     {
       info = items->data;
       if (info->index == index)
         return info->item;
-      items = items->next; 
+      items = items->next;
     }
+
   return NULL;
 }
 
@@ -8498,7 +8484,7 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
   if (icons)
     {
       GtkIconViewItem *item = icons->data;
-   
+
       g_return_val_if_fail (item->index == index, NULL);
       obj = gtk_icon_view_accessible_find_child (accessible, index);
       if (!obj)
@@ -8506,9 +8492,7 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
           gchar *text;
 
           obj = g_object_new (gtk_icon_view_item_accessible_get_type (), NULL);
-          gtk_icon_view_item_accessible_info_new (accessible,
-                                                  obj,
-                                                  index);
+          gtk_icon_view_item_accessible_info_new (accessible, obj, index);
           obj->role = ATK_ROLE_ICON;
           a11y_item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
           a11y_item->item = item;
@@ -8520,7 +8504,7 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
             {
               gtk_text_buffer_set_text (a11y_item->text_buffer, text, -1);
               g_free (text);
-            } 
+            }
 
           gtk_icon_view_item_accessible_set_visibility (a11y_item, FALSE);
           g_object_add_weak_pointer (G_OBJECT (widget), (gpointer) &(a11y_item->widget));
@@ -8534,13 +8518,11 @@ static void
 gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
                                          GList                 *list)
 {
-  GtkIconViewAccessiblePrivate *priv;
   GtkIconViewItemAccessibleInfo *info;
   GtkIconViewItemAccessible *item;
   GList *items;
-  
-  priv =  gtk_icon_view_accessible_get_priv (ATK_OBJECT (view));
-  if (priv->items)
+
+  if (view->items)
     {
       GtkWidget *widget;
       gboolean act_on_item;
@@ -8549,7 +8531,7 @@ gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
       if (widget == NULL)
         return;
 
-      items = priv->items;
+      items = view->items;
 
       act_on_item = (list == NULL);
 
@@ -8563,7 +8545,7 @@ gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
             act_on_item = TRUE;
 
           if (act_on_item)
-	    gtk_icon_view_item_accessible_set_visibility (item, TRUE);
+            gtk_icon_view_item_accessible_set_visibility (item, TRUE);
 
           items = items->next;
        }
@@ -8582,36 +8564,34 @@ gtk_icon_view_accessible_set_adjustment (AtkObject      *accessible,
                                          GtkOrientation  orientation,
                                          GtkAdjustment  *adjustment)
 {
-  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewAccessible *view = (GtkIconViewAccessible*)accessible;
   GtkAdjustment **old_adj_ptr;
-
-  priv = gtk_icon_view_accessible_get_priv (accessible);
 
   /* Adjustments are set for the first time in constructor and priv is not
    * initialized at that time, so skip this first setting. */
-  if (!priv)
+  if (!view)
     return;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (priv->old_hadj == adjustment)
+      if (view->old_hadj == adjustment)
         return;
 
-      old_adj_ptr = &priv->old_hadj;
+      old_adj_ptr = &view->old_hadj;
     }
   else
     {
-      if (priv->old_vadj == adjustment)
+      if (view->old_vadj == adjustment)
         return;
 
-      old_adj_ptr = &priv->old_vadj;
+      old_adj_ptr = &view->old_vadj;
     }
 
   /* Disconnect signal handlers */
   if (*old_adj_ptr)
     {
       g_object_remove_weak_pointer (G_OBJECT (*old_adj_ptr),
-                                    (gpointer *)&priv->old_hadj);
+                                    (gpointer *)&view->old_hadj);
       g_signal_handlers_disconnect_by_func (*old_adj_ptr,
                                             gtk_icon_view_accessible_adjustment_changed,
                                             accessible);
@@ -8675,7 +8655,6 @@ gtk_icon_view_accessible_model_row_inserted (GtkTreeModel *tree_model,
                                              GtkTreeIter  *iter,
                                              gpointer     user_data)
 {
-  GtkIconViewAccessiblePrivate *priv;
   GtkIconViewItemAccessibleInfo *info;
   GtkIconViewAccessible *view;
   GtkIconViewItemAccessible *item;
@@ -8687,9 +8666,8 @@ gtk_icon_view_accessible_model_row_inserted (GtkTreeModel *tree_model,
   index = gtk_tree_path_get_indices(path)[0];
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
-  priv = gtk_icon_view_accessible_get_priv (atk_obj);
 
-  items = priv->items;
+  items = view->items;
   tmp_list = NULL;
   while (items)
     {
@@ -8719,7 +8697,6 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
                                             GtkTreePath  *path,
                                             gpointer     user_data)
 {
-  GtkIconViewAccessiblePrivate *priv;
   GtkIconViewItemAccessibleInfo *info;
   GtkIconViewAccessible *view;
   GtkIconViewItemAccessible *item;
@@ -8732,9 +8709,8 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
   index = gtk_tree_path_get_indices(path)[0];
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
-  priv = gtk_icon_view_accessible_get_priv (atk_obj);
 
-  items = priv->items;
+  items = view->items;
   tmp_list = NULL;
   deleted_item = NULL;
   info = NULL;
@@ -8750,7 +8726,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
         {
           if (tmp_list == NULL)
             tmp_list = items;
-            
+
           info->index = item->item->index;
         }
 
@@ -8763,7 +8739,7 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
       gtk_icon_view_item_accessible_add_state (GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item), ATK_STATE_DEFUNCT, TRUE);
       g_signal_emit_by_name (atk_obj, "children-changed::remove",
                              index, NULL, NULL);
-      priv->items = g_list_remove_link (priv->items, deleted_item);
+      view->items = g_list_remove_link (view->items, deleted_item);
       g_free (info);
     }
 
@@ -8784,7 +8760,7 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
                                                gint         *new_order,
                                                gpointer     user_data)
 {
-  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewAccessible *view;
   GtkIconViewItemAccessibleInfo *info;
   GtkIconView *icon_view;
   GtkIconViewItemAccessible *item;
@@ -8795,7 +8771,7 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   icon_view = GTK_ICON_VIEW (user_data);
-  priv = gtk_icon_view_accessible_get_priv (atk_obj);
+  view = (GtkIconViewAccessible*)atk_obj;
 
   length = gtk_tree_model_iter_n_children (tree_model, NULL);
 
@@ -8803,7 +8779,7 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
   for (i = 0; i < length; i++)
     order [new_order[i]] = i;
 
-  items = priv->items;
+  items = view->items;
   while (items)
     {
       info = items->data;
@@ -8813,7 +8789,7 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
       items = items->next;
     }
   g_free (order);
-  priv->items = g_list_sort (priv->items, 
+  view->items = g_list_sort (view->items,
                              (GCompareFunc)gtk_icon_view_accessible_item_compare);
 
   return;
@@ -8842,23 +8818,23 @@ gtk_icon_view_accessible_connect_model_signals (GtkIconView *icon_view)
                          (GCallback) gtk_icon_view_accessible_model_row_changed,
                          icon_view, NULL, 0);
   g_signal_connect_data (obj, "row-inserted",
-                         (GCallback) gtk_icon_view_accessible_model_row_inserted, 
+                         (GCallback) gtk_icon_view_accessible_model_row_inserted,
                          icon_view, NULL, G_CONNECT_AFTER);
   g_signal_connect_data (obj, "row-deleted",
-                         (GCallback) gtk_icon_view_accessible_model_row_deleted, 
+                         (GCallback) gtk_icon_view_accessible_model_row_deleted,
                          icon_view, NULL, G_CONNECT_AFTER);
   g_signal_connect_data (obj, "rows-reordered",
-                         (GCallback) gtk_icon_view_accessible_model_rows_reordered, 
+                         (GCallback) gtk_icon_view_accessible_model_rows_reordered,
                          icon_view, NULL, G_CONNECT_AFTER);
 }
 
 static void
-gtk_icon_view_accessible_clear_cache (GtkIconViewAccessiblePrivate *priv)
+gtk_icon_view_accessible_clear_cache (GtkIconViewAccessible *view)
 {
   GtkIconViewItemAccessibleInfo *info;
   GList *items;
 
-  items = priv->items;
+  items = view->items;
   while (items)
     {
       info = (GtkIconViewItemAccessibleInfo *) items->data;
@@ -8866,38 +8842,38 @@ gtk_icon_view_accessible_clear_cache (GtkIconViewAccessiblePrivate *priv)
       g_free (items->data);
       items = items->next;
     }
-  g_list_free (priv->items);
-  priv->items = NULL;
+  g_list_free (view->items);
+  view->items = NULL;
 }
 
 static void
-gtk_icon_view_accessible_notify_gtk (GObject *obj,
+gtk_icon_view_accessible_notify_gtk (GObject    *obj,
                                      GParamSpec *pspec)
 {
   GtkIconView *icon_view;
   GtkWidget *widget;
   AtkObject *atk_obj;
-  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewAccessible *view;
 
   if (strcmp (pspec->name, "model") == 0)
     {
-      widget = GTK_WIDGET (obj); 
+      widget = GTK_WIDGET (obj);
       atk_obj = gtk_widget_get_accessible (widget);
-      priv = gtk_icon_view_accessible_get_priv (atk_obj);
-      if (priv->model)
+      view = (GtkIconViewAccessible*)atk_obj;
+      if (view->model)
         {
-          g_object_remove_weak_pointer (G_OBJECT (priv->model),
-                                        (gpointer *)&priv->model);
-          gtk_icon_view_accessible_disconnect_model_signals (priv->model, widget);
+          g_object_remove_weak_pointer (G_OBJECT (view->model),
+                                        (gpointer *)&view->model);
+          gtk_icon_view_accessible_disconnect_model_signals (view->model, widget);
         }
-      gtk_icon_view_accessible_clear_cache (priv);
+      gtk_icon_view_accessible_clear_cache (view);
 
       icon_view = GTK_ICON_VIEW (obj);
-      priv->model = icon_view->priv->model;
+      view->model = icon_view->priv->model;
       /* If there is no model the GtkIconView is probably being destroyed */
-      if (priv->model)
+      if (view->model)
         {
-          g_object_add_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+          g_object_add_weak_pointer (G_OBJECT (view->model), (gpointer *)&view->model);
           gtk_icon_view_accessible_connect_model_signals (icon_view);
         }
     }
@@ -8909,82 +8885,74 @@ static void
 gtk_icon_view_accessible_initialize (AtkObject *accessible,
                                      gpointer   data)
 {
-  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewAccessible *view;
   GtkIconView *icon_view;
 
   if (ATK_OBJECT_CLASS (accessible_parent_class)->initialize)
     ATK_OBJECT_CLASS (accessible_parent_class)->initialize (accessible, data);
 
-  priv = g_new0 (GtkIconViewAccessiblePrivate, 1);
-  g_object_set_qdata (G_OBJECT (accessible),
-                      accessible_private_data_quark,
-                      priv);
+  icon_view = (GtkIconView*)data;
+  view = (GtkIconViewAccessible*)accessible;
 
-  icon_view = GTK_ICON_VIEW (data);
   if (icon_view->priv->hadjustment)
     gtk_icon_view_accessible_set_adjustment (accessible,
-					     GTK_ORIENTATION_HORIZONTAL,
-					     icon_view->priv->hadjustment);
+                                             GTK_ORIENTATION_HORIZONTAL,
+                                             icon_view->priv->hadjustment);
   if (icon_view->priv->vadjustment)
     gtk_icon_view_accessible_set_adjustment (accessible,
-					     GTK_ORIENTATION_VERTICAL,
-					     icon_view->priv->vadjustment);
-  g_signal_connect (data,
-                    "notify",
-                    G_CALLBACK (gtk_icon_view_accessible_notify_gtk),
-                    NULL);
+                                             GTK_ORIENTATION_VERTICAL,
+                                             icon_view->priv->vadjustment);
+  g_signal_connect (data, "notify",
+                    G_CALLBACK (gtk_icon_view_accessible_notify_gtk), NULL);
 
-  priv->model = icon_view->priv->model;
-  if (priv->model)
+  view->model = icon_view->priv->model;
+  if (view->model)
     {
-      g_object_add_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+      g_object_add_weak_pointer (G_OBJECT (view->model), (gpointer *)&view->model);
       gtk_icon_view_accessible_connect_model_signals (icon_view);
     }
-                          
+
   accessible->role = ATK_ROLE_LAYERED_PANE;
 }
 
 static void
 gtk_icon_view_accessible_finalize (GObject *object)
 {
-  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewAccessible *view = (GtkIconViewAccessible*)object;
 
-  priv = gtk_icon_view_accessible_get_priv (ATK_OBJECT (object));
-  gtk_icon_view_accessible_clear_cache (priv);
-
-  g_free (priv);
+  gtk_icon_view_accessible_clear_cache (view);
 
   G_OBJECT_CLASS (accessible_parent_class)->finalize (object);
 }
 
 static void
-gtk_icon_view_accessible_destroyed (GtkWidget *widget,
+gtk_icon_view_accessible_destroyed (GtkWidget     *widget,
                                     GtkAccessible *accessible)
 {
   AtkObject *atk_obj;
-  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewAccessible *view;
 
   atk_obj = ATK_OBJECT (accessible);
-  priv = gtk_icon_view_accessible_get_priv (atk_obj);
-  if (priv->old_hadj)
+  view = (GtkIconViewAccessible*)atk_obj;
+  if (view->old_hadj)
     {
-      g_object_remove_weak_pointer (G_OBJECT (priv->old_hadj),
-                                    (gpointer *)&priv->old_hadj);
-          
-      g_signal_handlers_disconnect_by_func (priv->old_hadj,
+      g_object_remove_weak_pointer (G_OBJECT (view->old_hadj),
+                                    (gpointer *)&view->old_hadj);
+
+      g_signal_handlers_disconnect_by_func (view->old_hadj,
                                             (gpointer) gtk_icon_view_accessible_adjustment_changed,
                                             accessible);
-      priv->old_hadj = NULL;
+      view->old_hadj = NULL;
     }
-  if (priv->old_vadj)
+  if (view->old_vadj)
     {
-      g_object_remove_weak_pointer (G_OBJECT (priv->old_vadj),
-                                    (gpointer *)&priv->old_vadj);
-          
-      g_signal_handlers_disconnect_by_func (priv->old_vadj,
+      g_object_remove_weak_pointer (G_OBJECT (view->old_vadj),
+                                    (gpointer *)&view->old_vadj);
+
+      g_signal_handlers_disconnect_by_func (view->old_vadj,
                                             (gpointer) gtk_icon_view_accessible_adjustment_changed,
                                             accessible);
-      priv->old_vadj = NULL;
+      view->old_vadj = NULL;
     }
 }
 
@@ -8996,10 +8964,8 @@ gtk_icon_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget)
     {
-      g_signal_connect_after (widget,
-                              "destroy",
-                              G_CALLBACK (gtk_icon_view_accessible_destroyed),
-                              accessible);
+      g_signal_connect_after (widget, "destroy",
+                              G_CALLBACK (gtk_icon_view_accessible_destroyed), accessible);
     }
   GTK_ACCESSIBLE_CLASS (accessible_parent_class)->connect_widget_destroyed (accessible);
 }
@@ -9022,8 +8988,6 @@ gtk_icon_view_accessible_class_init (AtkObjectClass *klass)
   klass->initialize = gtk_icon_view_accessible_initialize;
 
   accessible_class->connect_widget_destroyed = gtk_icon_view_accessible_connect_widget_destroyed;
-
-  accessible_private_data_quark = g_quark_from_static_string ("icon_view-accessible-private-data");
 }
 
 static AtkObject*
@@ -9257,7 +9221,7 @@ gtk_icon_view_accessible_get_type (void)
         (GClassInitFunc) gtk_icon_view_accessible_class_init,
         (GClassFinalizeFunc) NULL, /* class finalize */
         NULL, /* class data */
-        sizeof (GtkContainerAccessible), /* instance size */
+        sizeof (GtkIconViewAccessible), /* instance size */
         0, /* nb preallocs */
         (GInstanceInitFunc) NULL, /* instance init */
         NULL /* value table */
