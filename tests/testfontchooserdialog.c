@@ -28,7 +28,7 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  dialog = gtk_font_chooser_dialog_new (NULL);
+  dialog = gtk_font_chooser_dialog_new (NULL, NULL);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
 

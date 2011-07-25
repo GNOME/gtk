@@ -140,7 +140,8 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 
 /**
  * gtk_font_chooser_dialog_new:
- * @title: (allow-none): the title of the dialog window 
+ * @title: (allow-none): Title of the dialog, or %NULL
+ * @parent: (allow-none): Trasient parent of the dialog, or %NULL
  *
  * Creates a new #GtkFontChooserDialog.
  *
@@ -149,11 +150,15 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
  * Since: 3.2
  */
 GtkWidget*
-gtk_font_chooser_dialog_new (const gchar *title)
+gtk_font_chooser_dialog_new (const gchar *title,
+                             GtkWindow   *parent)
 {
   GtkFontChooserDialog *dialog;
 
-  dialog = g_object_new (GTK_TYPE_FONT_CHOOSER_DIALOG, "title", title, NULL);
+  dialog = g_object_new (GTK_TYPE_FONT_CHOOSER_DIALOG,
+                         "title", title,
+                         "transient-for", parent,
+                         NULL);
 
   return GTK_WIDGET (dialog);
 }
