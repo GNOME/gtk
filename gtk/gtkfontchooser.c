@@ -221,9 +221,9 @@ gtk_font_chooser_set_property (GObject         *object,
 
 static void
 gtk_font_chooser_get_property (GObject         *object,
-                                 guint            prop_id,
-                                 GValue          *value,
-                                 GParamSpec      *pspec)
+                               guint            prop_id,
+                               GValue          *value,
+                               GParamSpec      *pspec)
 {
   GtkFontChooser *fontchooser;
 
@@ -251,7 +251,8 @@ deleted_text_cb (GtkEntryBuffer *buffer,
                  guint           n_chars,
                  gpointer        user_data)
 {
-  GtkFontChooserPrivate *priv  = (GtkFontChooserPrivate*)user_data;
+  GtkFontChooser        *fc    = (GtkFontChooser*)user_data;
+  GtkFontChooserPrivate *priv  = fc->priv;
   GtkWidget             *entry = priv->search_entry;
   
   if (gtk_entry_buffer_get_length (buffer) == 0)
@@ -273,7 +274,8 @@ inserted_text_cb (GtkEntryBuffer *buffer,
                   guint           n_chars,
                   gpointer        user_data) 
 {
-  GtkFontChooserPrivate *priv  = (GtkFontChooserPrivate*)user_data;
+  GtkFontChooser        *fc    = (GtkFontChooser*)user_data;
+  GtkFontChooserPrivate *priv  = fc->priv;
   GtkWidget             *entry = priv->search_entry;
 
   if (g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
@@ -301,9 +303,11 @@ icon_press_cb (GtkEntry             *entry,
 }
 
 static void
-slider_change_cb (GtkAdjustment *adjustment, gpointer data)
+slider_change_cb (GtkAdjustment *adjustment,
+                  gpointer       user_data)
 {
-  GtkFontChooserPrivate *priv         = (GtkFontChooserPrivate*)data;
+  GtkFontChooser        *fc    = (GtkFontChooser*)user_data;
+  GtkFontChooserPrivate *priv  = fc->priv;
   GtkAdjustment         *spin_adj     = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON (priv->size_spin));
   gdouble                slider_value = gtk_adjustment_get_value (adjustment);
   gdouble                spin_value   = gtk_adjustment_get_value (spin_adj);
@@ -314,10 +318,11 @@ slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 }
 
 static void
-spin_change_cb (GtkAdjustment *adjustment, gpointer data)
+spin_change_cb (GtkAdjustment *adjustment,
+                gpointer       user_data)
 {
   PangoFontDescription    *desc;
-  GtkFontChooser          *fontchooser = (GtkFontChooser*)data;
+  GtkFontChooser          *fontchooser = (GtkFontChooser*)user_data;
   GtkFontChooserPrivate   *priv        = fontchooser->priv;
   GtkAdjustment           *slider_adj  = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
 
@@ -399,7 +404,8 @@ set_range_marks (GtkFontChooserPrivate *priv,
 }
 
 static void
-cursor_changed_cb (GtkTreeView *treeview, gpointer data)
+cursor_changed_cb (GtkTreeView *treeview,
+                   gpointer     user_data)
 {
   PangoFontFamily      *family;
   PangoFontFace        *face;
@@ -411,7 +417,7 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   GtkTreeIter  iter;
   GtkTreePath *path = gtk_tree_path_new ();
   
-  GtkFontChooser *fontchooser = (GtkFontChooser*)data;
+  GtkFontChooser *fontchooser = (GtkFontChooser*)user_data;
   
   gtk_tree_view_get_cursor (treeview, &path, NULL);
   
@@ -467,9 +473,10 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 static gboolean
 zoom_preview_cb (GtkWidget      *scrolled_window,
                  GdkEventScroll *event,
-                 gpointer        data)
+                 gpointer        user_data)
 {
-  GtkFontChooserPrivate *priv = (GtkFontChooserPrivate*)data;
+  GtkFontChooser        *fc    = (GtkFontChooser*)user_data;
+  GtkFontChooserPrivate *priv  = fc->priv;
 
   GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
 
@@ -590,15 +597,15 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   /** Callback connections **/
   /* Connect to callback for the live search text entry */
   g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
-                    "deleted-text", G_CALLBACK (deleted_text_cb), priv);
+                    "deleted-text", G_CALLBACK (deleted_text_cb), fontchooser);
   g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
-                    "inserted-text", G_CALLBACK (inserted_text_cb), priv);
+                    "inserted-text", G_CALLBACK (inserted_text_cb), fontchooser);
   g_signal_connect (G_OBJECT (priv->search_entry),
-                    "icon-press", G_CALLBACK (icon_press_cb), priv);
+                    "icon-press", G_CALLBACK (icon_press_cb), NULL);
 
   /* Size controls callbacks */
   g_signal_connect (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider))),
-                    "value-changed", G_CALLBACK (slider_change_cb), priv);
+                    "value-changed", G_CALLBACK (slider_change_cb), fontchooser);
   g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
                     "value-changed", G_CALLBACK (spin_change_cb), fontchooser);
   priv->stop_notify = FALSE;
@@ -609,10 +616,10 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /* Zoom on preview scroll*/
   g_signal_connect (G_OBJECT (priv->preview), "scroll-event",
-                    G_CALLBACK (zoom_preview_cb),  priv);
+                    G_CALLBACK (zoom_preview_cb),  fontchooser);
 
   g_signal_connect (G_OBJECT (priv->size_slider), "scroll-event",
-                    G_CALLBACK (zoom_preview_cb), priv);
+                    G_CALLBACK (zoom_preview_cb), fontchooser);
 
   set_range_marks (priv, priv->size_slider, (gint*)font_sizes, FONT_SIZES_LENGTH);
 
@@ -640,7 +647,8 @@ gtk_font_chooser_new (void)
 }
 
 static int
-cmp_families (const void *a, const void *b)
+cmp_families (const void *a, 
+              const void *b)
 {
   const char *a_name = pango_font_family_get_name (*(PangoFontFamily **)a);
   const char *b_name = pango_font_family_get_name (*(PangoFontFamily **)b);
@@ -649,7 +657,9 @@ cmp_families (const void *a, const void *b)
 }
 
 static void 
-populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore* model)
+populate_list (GtkFontChooser *fontchooser,
+               GtkTreeView    *treeview,
+               GtkListStore   *model)
 {
   GtkStyleContext      *style_context;
   PangoFontDescription *default_font;
@@ -740,10 +750,12 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
 }
 
 static gboolean
-visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+visible_func (GtkTreeModel *model,
+              GtkTreeIter  *iter,
+              gpointer      user_data)
 {
   gboolean result = TRUE;
-  GtkFontChooserPrivate *priv = (GtkFontChooserPrivate*) data;
+  GtkFontChooserPrivate *priv = (GtkFontChooserPrivate*)user_data;
 
   const gchar *search_text = (const gchar*)gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
   gchar       *font_name;
@@ -844,7 +856,7 @@ gtk_font_chooser_finalize (GObject *object)
 
 static void
 gtk_font_chooser_screen_changed (GtkWidget *widget,
-                                   GdkScreen *previous_screen)
+                                 GdkScreen *previous_screen)
 {
   GtkFontChooser *fontchooser = GTK_FONT_CHOOSER (widget);
 
@@ -868,8 +880,8 @@ gtk_font_chooser_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_font_chooser_ref_family (GtkFontChooser *fontchooser,
-                               PangoFontFamily  *family)
+gtk_font_chooser_ref_family (GtkFontChooser   *fontchooser,
+                             PangoFontFamily  *family)
 {
   GtkFontChooserPrivate *priv = fontchooser->priv;
 
@@ -881,8 +893,8 @@ gtk_font_chooser_ref_family (GtkFontChooser *fontchooser,
 }
 
 static void
-gtk_font_chooser_ref_face (GtkFontChooser *fontchooser,
-                             PangoFontFace    *face)
+gtk_font_chooser_ref_face (GtkFontChooser   *fontchooser,
+                           PangoFontFace    *face)
 {
   GtkFontChooserPrivate *priv = fontchooser->priv;
 
@@ -1014,7 +1026,7 @@ gtk_font_chooser_get_font_name (GtkFontChooser *fontchooser)
  */
 gboolean
 gtk_font_chooser_set_font_name (GtkFontChooser *fontchooser,
-                                  const gchar      *fontname)
+                                const gchar      *fontname)
 {
   GtkFontChooserPrivate *priv = fontchooser->priv;
   GtkTreeIter           iter;
@@ -1141,7 +1153,7 @@ gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
  */
 void
 gtk_font_chooser_set_preview_text  (GtkFontChooser *fontchooser,
-                                      const gchar      *text)
+                                    const gchar    *text)
 {
   g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
   g_return_if_fail (text != NULL);
@@ -1184,7 +1196,7 @@ gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
  */
 void
 gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
-                                           gboolean          show_preview_entry)
+                                         gboolean        show_preview_entry)
 {
   g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
 
