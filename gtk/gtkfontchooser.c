@@ -373,7 +373,7 @@ set_range_marks (GtkFontChooserPrivate *priv,
   gint i;
   gdouble value;
 
-  if (length<2)
+  if (length < 2)
     {
       sizes = (gint*)font_sizes;
       length = FONT_SIZES_LENGTH;
@@ -392,7 +392,7 @@ set_range_marks (GtkFontChooserPrivate *priv,
   else if (value < (gdouble) sizes[0])
     gtk_adjustment_set_value (adj, (gdouble) sizes[0]);
   
-  for (i=0; i<length; i++)
+  for (i = 0; i < length; i++)
     gtk_scale_add_mark (GTK_SCALE (size_slider),
                         (gdouble) sizes[i],
                         GTK_POS_BOTTOM, NULL);
@@ -448,7 +448,7 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 
   pango_font_face_list_sizes (face, &sizes, &n_sizes);
   /* It seems not many fonts actually have a sane set of sizes */
-  for (i=0; i<n_sizes; i++)
+  for (i = 0; i < n_sizes; i++)
     sizes[i] = sizes[i] / PANGO_SCALE;
   
   set_range_marks (fontchooser->priv, fontchooser->priv->size_slider, sizes, n_sizes);
@@ -679,7 +679,7 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
                                                                       GTK_STATE_NORMAL);
 
   /* Iterate over families and faces */
-  for (i=0; i<n_families; i++)
+  for (i = 0; i < n_families; i++)
     {
       GtkTreeIter     iter;
       PangoFontFace **faces;
@@ -689,7 +689,7 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
 
       pango_font_family_list_faces (families[i], &faces, &n_faces);
       
-      for (j=0; j<n_faces; j++)
+      for (j = 0; j < n_faces; j++)
         {
           PangoFontDescription *pango_desc = pango_font_face_describe (faces[j]);
           const gchar *face_name = pango_font_face_get_face_name (faces[j]);
