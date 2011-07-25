@@ -277,9 +277,9 @@ inserted_text_cb (GtkEntryBuffer *buffer,
   GtkWidget             *entry = priv->search_entry;
 
   if (g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
-                 "edit-clear-symbolic") ||
+                 "edit-clear-symbolic") != 0 ||
       g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
-                 GTK_STOCK_CLEAR))
+                 GTK_STOCK_CLEAR)       != 0)
     {
       GIcon *icon = g_themed_icon_new_with_default_fallbacks ("edit-clear-symbolic");
       gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
