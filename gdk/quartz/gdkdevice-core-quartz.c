@@ -214,7 +214,8 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
   toplevel = gdk_window_get_effective_toplevel (window);
 
   if (mask)
-    *mask = _gdk_quartz_events_get_current_event_mask ();
+    *mask = _gdk_quartz_events_get_current_keyboard_modifiers () |
+        _gdk_quartz_events_get_current_mouse_modifiers ();
 
   /* Get the y coordinate, needs to be flipped. */
   if (window == _gdk_root)
@@ -358,7 +359,8 @@ gdk_quartz_device_core_window_at_position (GdkDevice       *device,
     *win_y = found_window ? y_tmp : -1;
 
   if (mask)
-    *mask = _gdk_quartz_events_get_current_event_mask ();
+    *mask = _gdk_quartz_events_get_current_keyboard_modifiers () |
+        _gdk_quartz_events_get_current_mouse_modifiers ();
 
   return found_window;
 }

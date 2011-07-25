@@ -1836,7 +1836,8 @@ gdk_window_quartz_get_device_state_helper (GdkWindow       *window,
   
   toplevel = gdk_window_get_toplevel (window);
 
-  *mask = _gdk_quartz_events_get_current_event_mask ();
+  *mask = _gdk_quartz_events_get_current_keyboard_modifiers () |
+      _gdk_quartz_events_get_current_mouse_modifiers ();
 
   /* Get the y coordinate, needs to be flipped. */
   if (window == _gdk_root)
