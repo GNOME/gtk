@@ -560,6 +560,11 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   /* Basic layout */
   grid = gtk_grid_new ();
   sub_grid = gtk_grid_new ();
+  
+  gtk_widget_set_margin_bottom (priv->search_entry, 6);
+  gtk_widget_set_margin_bottom (scrolled_win,       6);
+  gtk_widget_set_margin_bottom (priv->preview,      6);
+  gtk_widget_set_margin_right  (priv->size_slider,  6);
 
   gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 3, 1);
   gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 3, 1);
