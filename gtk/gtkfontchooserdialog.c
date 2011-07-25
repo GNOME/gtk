@@ -151,14 +151,11 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 GtkWidget*
 gtk_font_chooser_dialog_new (const gchar *title)
 {
-  GtkFontChooserDialog *fontchooserdiag;
-  
-  fontchooserdiag = g_object_new (GTK_TYPE_FONT_CHOOSER_DIALOG, NULL);
+  GtkFontChooserDialog *dialog;
 
-  if (title)
-    gtk_window_set_title (GTK_WINDOW (fontchooserdiag), title);
-  
-  return GTK_WIDGET (fontchooserdiag);
+  dialog = g_object_new (GTK_TYPE_FONT_CHOOSER_DIALOG, "title", title, NULL);
+
+  return GTK_WIDGET (dialog);
 }
 
 /**
