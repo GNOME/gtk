@@ -7071,13 +7071,9 @@ gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
 
 /* Accessibility Support */
 
-static gpointer accessible_item_parent_class;
-
-#define GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE      (gtk_icon_view_item_accessible_get_type ())
+#define GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE      (_gtk_icon_view_item_accessible_get_type ())
 #define GTK_ICON_VIEW_ITEM_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE, GtkIconViewItemAccessible))
 #define GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE(obj)   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE))
-
-static GType gtk_icon_view_item_accessible_get_type (void);
 
 typedef struct
 {
@@ -7092,13 +7088,25 @@ typedef struct
   guint action_idle_handler;
 } GtkIconViewItemAccessible;
 
-typedef struct _GtkIconViewItemAccessibleClass
+typedef struct
 {
   AtkObjectClass parent_class;
 
 } GtkIconViewItemAccessibleClass;
 
 static gboolean gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item);
+
+static void atk_component_item_interface_init (AtkComponentIface *iface);
+static void atk_action_item_interface_init    (AtkActionIface    *iface);
+static void atk_text_item_interface_init      (AtkTextIface      *iface);
+static void atk_image_item_interface_init     (AtkImageIface     *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkIconViewItemAccessible, _gtk_icon_view_item_accessible, ATK_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_item_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_item_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_item_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_item_interface_init))
+
 
 static gboolean
 idle_do_action (gpointer data)
@@ -7761,7 +7769,7 @@ gtk_icon_view_item_accessible_set_visibility (GtkIconViewItemAccessible *item,
 }
 
 static void
-gtk_icon_view_item_accessible_object_init (GtkIconViewItemAccessible *item)
+_gtk_icon_view_item_accessible_init (GtkIconViewItemAccessible *item)
 {
   item->state_set = atk_state_set_new ();
 
@@ -7801,7 +7809,7 @@ gtk_icon_view_item_accessible_finalize (GObject *object)
       item->action_idle_handler = 0;
     }
 
-  G_OBJECT_CLASS (accessible_item_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_icon_view_item_accessible_parent_class)->finalize (object);
 }
 
 static AtkObject*
@@ -7826,7 +7834,7 @@ gtk_icon_view_item_accessible_get_index_in_parent (AtkObject *obj)
   g_return_val_if_fail (GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE (obj), 0);
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
 
-  return item->item->index; 
+  return item->item->index;
 }
 
 static AtkStateSet *
@@ -7855,80 +7863,19 @@ gtk_icon_view_item_accessible_ref_state_set (AtkObject *obj)
 }
 
 static void
-gtk_icon_view_item_accessible_class_init (AtkObjectClass *klass)
+_gtk_icon_view_item_accessible_class_init (GtkIconViewItemAccessibleClass *klass)
 {
   GObjectClass *gobject_class;
-
-  accessible_item_parent_class = g_type_class_peek_parent (klass);
+  AtkObjectClass *atk_class;
 
   gobject_class = (GObjectClass *)klass;
+  atk_class = (AtkObjectClass *)klass;
 
   gobject_class->finalize = gtk_icon_view_item_accessible_finalize;
 
-  klass->get_index_in_parent = gtk_icon_view_item_accessible_get_index_in_parent;
-  klass->get_parent = gtk_icon_view_item_accessible_get_parent;
-  klass->ref_state_set = gtk_icon_view_item_accessible_ref_state_set;
-}
-
-static GType
-gtk_icon_view_item_accessible_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      const GTypeInfo tinfo =
-      {
-        sizeof (GtkIconViewItemAccessibleClass),
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gtk_icon_view_item_accessible_class_init, /* class init */
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GtkIconViewItemAccessible), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) gtk_icon_view_item_accessible_object_init, /* instance init */
-        NULL /* value table */
-      };
-
-      const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) atk_component_item_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-      const GInterfaceInfo atk_action_info =
-      {
-        (GInterfaceInitFunc) atk_action_item_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-      const GInterfaceInfo atk_image_info =
-      {
-        (GInterfaceInitFunc) atk_image_item_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-      const GInterfaceInfo atk_text_info =
-      {
-        (GInterfaceInitFunc) atk_text_item_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (ATK_TYPE_OBJECT,
-                                     I_("GtkIconViewItemAccessible"), &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-      g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                   &atk_action_info);
-      g_type_add_interface_static (type, ATK_TYPE_IMAGE,
-                                   &atk_image_info);
-      g_type_add_interface_static (type, ATK_TYPE_TEXT,
-                                   &atk_text_info);
-    }
-
-  return type;
+  atk_class->get_index_in_parent = gtk_icon_view_item_accessible_get_index_in_parent;
+  atk_class->get_parent = gtk_icon_view_item_accessible_get_parent;
+  atk_class->ref_state_set = gtk_icon_view_item_accessible_ref_state_set;
 }
 
 #define GTK_TYPE_ICON_VIEW_ACCESSIBLE      (_gtk_icon_view_accessible_get_type ())
@@ -8049,7 +7996,7 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
       obj = gtk_icon_view_accessible_find_child (accessible, index);
       if (!obj)
         {
-          obj = g_object_new (gtk_icon_view_item_accessible_get_type (), NULL);
+          obj = g_object_new (GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE, NULL);
           gtk_icon_view_item_accessible_info_new (accessible, obj, index);
           obj->role = ATK_ROLE_ICON;
           a11y_item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
