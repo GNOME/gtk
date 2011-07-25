@@ -7236,9 +7236,9 @@ typedef struct {
 
 static gboolean
 get_pixbuf_foreach (GtkCellRenderer    *renderer,
-		    const GdkRectangle *cell_area,
-		    const GdkRectangle *cell_background,
-		    GetPixbufBoxData   *data)
+                    const GdkRectangle *cell_area,
+                    const GdkRectangle *cell_background,
+                    GetPixbufBoxData   *data)
 {
   if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
     {
@@ -7250,8 +7250,8 @@ get_pixbuf_foreach (GtkCellRenderer    *renderer,
 
 static gboolean
 get_pixbuf_box (GtkIconView     *icon_view,
-		GtkIconViewItem *item,
-		GdkRectangle    *box)
+                GtkIconViewItem *item,
+                GdkRectangle    *box)
 {
   GetPixbufBoxData data = { { 0, }, FALSE };
   GtkCellAreaContext *context;
@@ -7260,9 +7260,9 @@ get_pixbuf_box (GtkIconView     *icon_view,
 
   gtk_icon_view_set_cell_data (icon_view, item);
   gtk_cell_area_foreach_alloc (icon_view->priv->cell_area, context,
-			       GTK_WIDGET (icon_view),
-			       (GdkRectangle *)item, (GdkRectangle *)item,
-			       (GtkCellAllocCallback)get_pixbuf_foreach, &data);
+                               GTK_WIDGET (icon_view),
+                               (GdkRectangle *)item, (GdkRectangle *)item,
+                               (GtkCellAllocCallback)get_pixbuf_foreach, &data);
 
   return data.pixbuf_found;
 }
@@ -7663,12 +7663,11 @@ gtk_icon_view_item_accessible_add_state (GtkIconViewItemAccessible *item,
   gboolean rc;
 
   rc = atk_state_set_add_state (item->state_set, state_type);
-  /*
-   * The signal should only be generated if the value changed,
-   * not when the item is set up.  So states that are set
+
+  /* The signal should only be generated if the value changed,
+   * not when the item is set up. So states that are set
    * initially should pass FALSE as the emit_signal argument.
    */
-
   if (emit_signal)
     {
       atk_object_notify_state_change (ATK_OBJECT (item), state_type, TRUE);
@@ -7690,12 +7689,11 @@ gtk_icon_view_item_accessible_remove_state (GtkIconViewItemAccessible *item,
       gboolean rc;
 
       rc = atk_state_set_remove_state (item->state_set, state_type);
-      /*
-       * The signal should only be generated if the value changed,
-       * not when the item is set up.  So states that are set
+
+      /* The signal should only be generated if the value changed,
+       * not when the item is set up. So states that are set
        * initially should pass FALSE as the emit_signal argument.
        */
-
       if (emit_signal)
         {
           atk_object_notify_state_change (ATK_OBJECT (item), state_type, FALSE);
@@ -7718,11 +7716,9 @@ gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item)
   GdkRectangle visible_rect;
   gboolean is_showing;
 
-  /*
-   * An item is considered "SHOWING" if any part of the item is in the
-   * visible rectangle.
+  /* An item is considered "SHOWING" if any part of the item
+   * is in the visible rectangle.
    */
-
   if (!GTK_IS_ICON_VIEW (item->widget))
     return FALSE;
 
@@ -7745,7 +7741,7 @@ gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item)
      ((item->item->cell_area.y + item->item->cell_area.height) < (visible_rect.y)) ||
      (item->item->cell_area.x > (visible_rect.x + visible_rect.width)) ||
      (item->item->cell_area.y > (visible_rect.y + visible_rect.height)))
-    is_showing =  FALSE;
+    is_showing = FALSE;
   else
     is_showing = TRUE;
 
@@ -7758,10 +7754,10 @@ gtk_icon_view_item_accessible_set_visibility (GtkIconViewItemAccessible *item,
 {
   if (gtk_icon_view_item_accessible_is_showing (item))
     return gtk_icon_view_item_accessible_add_state (item, ATK_STATE_SHOWING,
-						    emit_signal);
+                                                    emit_signal);
   else
     return gtk_icon_view_item_accessible_remove_state (item, ATK_STATE_SHOWING,
-						       emit_signal);
+                                                       emit_signal);
 }
 
 static void
