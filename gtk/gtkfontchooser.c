@@ -212,6 +212,7 @@ gtk_font_chooser_set_property (GObject         *object,
       break;
     case PROP_SHOW_PREVIEW_ENTRY:
       gtk_font_chooser_set_show_preview_entry (fontchooser, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -238,6 +239,7 @@ gtk_font_chooser_get_property (GObject         *object,
       break;
     case PROP_SHOW_PREVIEW_ENTRY:
       g_value_set_boolean (value, gtk_font_chooser_get_show_preview_entry (fontchooser));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
