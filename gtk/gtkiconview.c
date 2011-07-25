@@ -7040,6 +7040,34 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
   g_object_notify (G_OBJECT (icon_view), "reorderable");
 }
 
+static gboolean
+gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+                                          GtkBuilder    *builder,
+                                          GObject       *child,
+                                          const gchar   *tagname,
+                                          GMarkupParser *parser,
+                                          gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, data))
+    return TRUE;
+
+  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
+                                                      tagname, parser, data);
+}
+
+static void
+gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
+                                        GtkBuilder   *builder,
+                                        GObject      *child,
+                                        const gchar  *tagname,
+                                        gpointer     *data)
+{
+  if (!_gtk_cell_layout_buildable_custom_tag_end (buildable, builder,
+                                                  child, tagname, data))
+    parent_buildable_iface->custom_tag_end (buildable, builder,
+                                            child, tagname, data);
+}
 
 /* Accessibility Support */
 
@@ -9257,31 +9285,3 @@ gtk_icon_view_accessible_get_type (void)
   return type;
 }
 
-static gboolean
-gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
-					  GtkBuilder    *builder,
-					  GObject       *child,
-					  const gchar   *tagname,
-					  GMarkupParser *parser,
-					  gpointer      *data)
-{
-  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
-						tagname, parser, data))
-    return TRUE;
-
-  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
-						      tagname, parser, data);
-}
-
-static void
-gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
-					GtkBuilder   *builder,
-					GObject      *child,
-					const gchar  *tagname,
-					gpointer     *data)
-{
-  if (!_gtk_cell_layout_buildable_custom_tag_end (buildable, builder, 
-						  child, tagname, data))
-    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
-					    data);
-}
