@@ -86,7 +86,7 @@ struct _GtkFontChooserPrivate
 
   GtkWidget *size_spin;
   GtkWidget *size_slider;
-  gboolean   ignore_slider;
+  gboolean   stop_notify;
 
   gint             size;
   PangoFontFace   *face;
@@ -326,12 +326,14 @@ icon_press_cb (GtkEntry             *entry,
 void
 slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
-  GtkFontChooserPrivate *priv = (GtkFontChooserPrivate*)data;
+  GtkFontChooserPrivate *priv         = (GtkFontChooserPrivate*)data;
+  GtkAdjustment         *spin_adj     = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON (priv->size_spin));
+  gdouble                slider_value = gtk_adjustment_get_value (adjustment);
+  gdouble                spin_value   = gtk_adjustment_get_value (spin_adj);
 
-  priv->ignore_slider = TRUE;
-
-  gtk_adjustment_set_value (gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON (priv->size_spin)),
-                            gtk_adjustment_get_value (adjustment));
+  if (slider_value != spin_value)
+    gtk_adjustment_set_value (spin_adj,
+                              gtk_adjustment_get_value (adjustment));
 }
 
 void
@@ -340,6 +342,7 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   PangoFontDescription    *desc;
   GtkFontChooser          *fontchooser = (GtkFontChooser*)data;
   GtkFontChooserPrivate   *priv        = fontchooser->priv;
+  GtkAdjustment           *slider_adj  = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
 
   gdouble size = gtk_adjustment_get_value (adjustment);
   priv->size = ((gint)size) * PANGO_SCALE;
@@ -347,23 +350,38 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
-  
-  g_object_notify (G_OBJECT (fontchooser), "font-name");
-  
-  if (priv->ignore_slider)
-  {
-    priv->ignore_slider = FALSE;
-    return;
-  }
 
-  GtkAdjustment *slider_adj = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
-
-  if (size < gtk_adjustment_get_lower (slider_adj))
-    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
-  else if (size > gtk_adjustment_get_upper (slider_adj))
-    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
+  if (priv->stop_notify)
+    priv->stop_notify = FALSE;
   else
-    gtk_adjustment_set_value (slider_adj, size);
+    g_object_notify (G_OBJECT (fontchooser), "font-name");
+
+  /* If the new value is lower than the lower bound of the slider, we set
+   * the slider adjustment to the lower bound value if it is not already set
+   */
+  if (size < gtk_adjustment_get_lower (slider_adj) &&
+      gtk_adjustment_get_value (slider_adj) != gtk_adjustment_get_lower (slider_adj))
+    {
+      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
+      priv->stop_notify = TRUE;
+    }
+
+  /* If the new value is upper than the upper bound of the slider, we set
+   * the slider adjustment to the upper bound value if it is not already set
+   */
+  else if (size > gtk_adjustment_get_upper (slider_adj) &&
+           gtk_adjustment_get_value (slider_adj) != gtk_adjustment_get_upper (slider_adj))
+    {
+      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
+      priv->stop_notify = TRUE;
+    }
+
+  /* If the new value is not already set on the slider we set it */
+  else if (size != gtk_adjustment_get_value (slider_adj))
+    {
+      gtk_adjustment_set_value (slider_adj, size);
+      priv->stop_notify = TRUE;
+    }
 
   gtk_widget_queue_draw (priv->preview);
 }
@@ -393,15 +411,9 @@ set_range_marks (GtkFontChooserPrivate *priv,
 
   value = gtk_adjustment_get_value (adj);
   if (value > (gdouble) sizes[length-1])
-    {
-      gtk_adjustment_set_value (adj, (gdouble) sizes[length-1]);
-      priv->ignore_slider = TRUE;
-    }
+    gtk_adjustment_set_value (adj, (gdouble) sizes[length-1]);
   else if (value < (gdouble) sizes[0])
-    {
-      gtk_adjustment_set_value (adj, (gdouble) sizes[0]);
-      priv->ignore_slider = TRUE; 
-    }
+    gtk_adjustment_set_value (adj, (gdouble) sizes[0]);
   
   for (i=0; i<length; i++)
     gtk_scale_add_mark (GTK_SCALE (size_slider),
@@ -607,7 +619,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
                     "value-changed", G_CALLBACK (slider_change_cb), priv);
   g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
                     "value-changed", G_CALLBACK (spin_change_cb), fontchooser);
-  priv->ignore_slider = FALSE;
+  priv->stop_notify = FALSE;
 
   /* Font selection callback */
   g_signal_connect (G_OBJECT (priv->family_face_list), "cursor-changed",
