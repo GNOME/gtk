@@ -156,13 +156,15 @@ Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
 makefile.msc in gdk and gtk. Be prepared to manually edit various
 makefile.msc files, and the makefile snippets in build/win32.
 
-Since this release, there are also Visual Studio 9 (2008) Project Files
-that can be used to compile GTK+.  They can be found in ./build/win32/vs9
+Since this release, there are also Visual Studio 9 (2008) and Visual
+Studio 10 (2010) Project Files that can be used to compile GTK+.
+They can be found in ./build/win32/vs9 and .build/win32/vs10 respectively
 for usage, and should build GTK+ out of the box provided the afore-mentioned
-compile-time dependencies are installed.  The VS2008 Solution and Project
-files are currently maintained by Chun-wei Fan, and they currently build
-GDK with the Win32 backend, GTK+ and the gtk-demo demonstration program
-(GAIL and GAIL-utils are not built with this method yet)
+compile-time dependencies are installed.  The VS2008/2010 Solution and
+Project files are currently maintained by Chun-wei Fan, and they currently
+build GDK with the Win32 backend, GTK+ and the gtk-demo demonstration program
+(GAIL and GAIL-utils are not built with this method yet).  Please see the
+READNE.txt file in ./build/win32/vs9 or ./build/win32/vs10 for more information.
 
 Alternative 1 also generates Microsoft import libraries (.lib), if you
 have lib.exe available. It might also work for cross-compilation from

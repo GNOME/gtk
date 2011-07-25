@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\gtk\gtk-win32.rc"><Filter>Resource Files</Filter></ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+#include "libgtk.vs10.sourcefiles.filters"
+    <ClCompile Include="..\..\..\modules\input\gtkimcontextime.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\gtkimcontextmultipress.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\gtkimcontextthai.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imam-et.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imcedilla.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imcyrillic-translit.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imime.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\iminuktitut.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imipa.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\immultipress.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imthai.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imti-er.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imti-et.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\imviqr.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\modules\input\thai-charprop.c"><Filter>Source Files</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\gdk\gtk.symbols">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

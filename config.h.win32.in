@@ -128,7 +128,11 @@
 #ifndef _MSC_VER
 #define HAVE_STDINT_H 1
 #else
+#if (_MSC_VER >= 1600) /* VS 2010 ships with stdint.h */
+#define HAVE_STDINT_H 1
+#else
 /* #undef HAVE_STDINT_H */
+#endif
 #endif
 
 /* Define to 1 if you have the <stdlib.h> header file. */
