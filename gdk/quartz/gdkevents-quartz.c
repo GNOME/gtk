@@ -50,8 +50,7 @@ static GdkWindow   *current_keyboard_window;
 
 /* This is the event mask and button state from the last event */
 static GdkModifierType current_keyboard_modifiers;
-static GdkModifierType current_mouse_modifiers;
-static int             current_button_state;
+static GdkModifierType current_button_state;
 
 static void append_event                        (GdkEvent  *event,
                                                  gboolean   windowing);
@@ -1068,7 +1067,7 @@ _gdk_quartz_events_get_current_keyboard_modifiers (void)
 GdkModifierType
 _gdk_quartz_events_get_current_mouse_modifiers (void)
 {
-  return current_mouse_modifiers;
+  return current_button_state;
 }
 
 static gboolean
@@ -1204,7 +1203,6 @@ gdk_event_translate (GdkEvent *event,
     }
 
   current_keyboard_modifiers = get_keyboard_modifiers_from_ns_event (nsevent);
-  current_mouse_modifiers = get_mouse_button_modifiers_from_ns_event (nsevent);
 
   return_val = TRUE;
 
