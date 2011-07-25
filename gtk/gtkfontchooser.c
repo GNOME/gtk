@@ -110,7 +110,6 @@ struct _GtkFontChooserPrivate
 
 /* These are what we use as the standard font sizes, for the size list.
  */
-#define FONT_SIZES_LENGTH 14
 static const gint font_sizes[] = {
   6, 8, 9, 10, 11, 12, 13, 14, 16, 20, 24, 36, 48, 72
 };
@@ -381,7 +380,7 @@ set_range_marks (GtkFontChooserPrivate *priv,
   if (length < 2)
     {
       sizes = (gint*)font_sizes;
-      length = FONT_SIZES_LENGTH;
+      length = G_N_ELEMENTS (font_sizes);
     }
   
   gtk_scale_clear_marks (GTK_SCALE (size_slider));
@@ -525,7 +524,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   priv->preview = gtk_entry_new ();
   priv->size_slider = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
                                                 (gdouble) font_sizes[0],
-                                                (gdouble) font_sizes[FONT_SIZES_LENGTH - 1],
+                                                (gdouble) font_sizes[G_N_ELEMENTS (font_sizes) - 1],
                                                 1.0);
 
   priv->size_spin = gtk_spin_button_new_with_range (0.0, (gdouble)(G_MAXINT / PANGO_SCALE), 1.0);
@@ -621,7 +620,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   g_signal_connect (G_OBJECT (priv->size_slider), "scroll-event",
                     G_CALLBACK (zoom_preview_cb), fontchooser);
 
-  set_range_marks (priv, priv->size_slider, (gint*)font_sizes, FONT_SIZES_LENGTH);
+  set_range_marks (priv, priv->size_slider, (gint*)font_sizes, G_N_ELEMENTS (font_sizes));
 
   /* Set default focus */
   gtk_widget_pop_composite_child();
