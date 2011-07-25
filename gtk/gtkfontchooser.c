@@ -243,32 +243,7 @@ gtk_font_chooser_get_property (GObject         *object,
       break;
     }
 }
-
-void
-refilter_and_focus (GtkFontChooserPrivate *priv)
-{
-  GtkTreeIter  iter;
-  GtkTreeView *treeview = GTK_TREE_VIEW (priv->family_face_list);
-  GtkTreePath *path = gtk_tree_path_new ();
-
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
-
-  if (!path)
-    return;
-
-  gtk_tree_view_get_cursor (treeview, &path, NULL);
-
-  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->filter), &iter, path))
-    {
-      gtk_tree_path_free (path);
-      return;
-    }
-
-  gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0.5, 0.5);
-  gtk_tree_path_free (path);
-}
-
-void
+static void
 deleted_text_cb (GtkEntryBuffer *buffer,
                  guint           position,
                  guint           n_chars,
@@ -289,7 +264,7 @@ deleted_text_cb (GtkEntryBuffer *buffer,
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
 
-void
+static void
 inserted_text_cb (GtkEntryBuffer *buffer,
                   guint           position,
                   gchar          *chars,
@@ -314,7 +289,7 @@ inserted_text_cb (GtkEntryBuffer *buffer,
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
 }
 
-void
+static void
 icon_press_cb (GtkEntry             *entry,
                GtkEntryIconPosition  pos,
                GdkEvent             *event,
@@ -323,7 +298,7 @@ icon_press_cb (GtkEntry             *entry,
   gtk_entry_buffer_delete_text (gtk_entry_get_buffer (entry), 0, -1);
 }
 
-void
+static void
 slider_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
   GtkFontChooserPrivate *priv         = (GtkFontChooserPrivate*)data;
@@ -336,7 +311,7 @@ slider_change_cb (GtkAdjustment *adjustment, gpointer data)
                               gtk_adjustment_get_value (adjustment));
 }
 
-void
+static void
 spin_change_cb (GtkAdjustment *adjustment, gpointer data)
 {
   PangoFontDescription    *desc;
@@ -386,7 +361,7 @@ spin_change_cb (GtkAdjustment *adjustment, gpointer data)
   gtk_widget_queue_draw (priv->preview);
 }
 
-void
+static void
 set_range_marks (GtkFontChooserPrivate *priv,
                  GtkWidget             *size_slider,
                  gint                  *sizes,
@@ -421,7 +396,7 @@ set_range_marks (GtkFontChooserPrivate *priv,
                         GTK_POS_BOTTOM, NULL);
 }
 
-void
+static void
 cursor_changed_cb (GtkTreeView *treeview, gpointer data)
 {
   PangoFontFamily      *family;
@@ -487,7 +462,7 @@ cursor_changed_cb (GtkTreeView *treeview, gpointer data)
   g_object_notify (G_OBJECT (fontchooser), "font-name");
 }
 
-gboolean
+static gboolean
 zoom_preview_cb (GtkWidget      *scrolled_window,
                  GdkEventScroll *event,
                  gpointer        data)
@@ -762,7 +737,7 @@ populate_list (GtkFontChooser *fontchooser, GtkTreeView* treeview, GtkListStore*
   g_free (families);
 }
 
-gboolean
+static gboolean
 visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 {
   gboolean result = TRUE;
