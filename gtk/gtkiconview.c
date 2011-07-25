@@ -446,7 +446,7 @@ static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildab
 							  GObject       *child,
 							  const gchar   *tagname,
 							  gpointer      *data);
-static GType    gtk_icon_view_accessible_get_type        (void);
+static GType    _gtk_icon_view_accessible_get_type       (void);
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
@@ -1046,7 +1046,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   gtk_icon_view_add_move_binding (binding_set, GDK_KEY_KP_Left, 0, 
 				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-  gtk_widget_class_set_accessible_type (widget_class, gtk_icon_view_accessible_get_type ());
+  gtk_widget_class_set_accessible_type (widget_class, _gtk_icon_view_accessible_get_type ());
 }
 
 static void
@@ -7071,7 +7071,6 @@ gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
 
 /* Accessibility Support */
 
-static gpointer accessible_parent_class;
 static gpointer accessible_item_parent_class;
 
 #define GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE      (gtk_icon_view_item_accessible_get_type ())
@@ -8378,11 +8377,9 @@ gtk_icon_view_item_accessible_get_type (void)
   return type;
 }
 
-#define GTK_TYPE_ICON_VIEW_ACCESSIBLE      (gtk_icon_view_accessible_get_type ())
+#define GTK_TYPE_ICON_VIEW_ACCESSIBLE      (_gtk_icon_view_accessible_get_type ())
 #define GTK_ICON_VIEW_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW_ACCESSIBLE, GtkIconViewAccessible))
 #define GTK_IS_ICON_VIEW_ACCESSIBLE(obj)   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_VIEW_ACCESSIBLE))
-
-static GType gtk_icon_view_accessible_get_type (void);
 
 typedef struct
 {
@@ -8393,6 +8390,15 @@ typedef struct
   GtkAdjustment *old_vadj;
   GtkTreeModel *model;
 } GtkIconViewAccessible;
+
+typedef GtkContainerAccessibleClass GtkIconViewAccessibleClass;
+
+static void atk_component_interface_init (AtkComponentIface *iface);
+static void atk_selection_interface_init (AtkSelectionIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkIconViewAccessible, _gtk_icon_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 typedef struct
 {
@@ -8888,8 +8894,8 @@ gtk_icon_view_accessible_initialize (AtkObject *accessible,
   GtkIconViewAccessible *view;
   GtkIconView *icon_view;
 
-  if (ATK_OBJECT_CLASS (accessible_parent_class)->initialize)
-    ATK_OBJECT_CLASS (accessible_parent_class)->initialize (accessible, data);
+  if (ATK_OBJECT_CLASS (_gtk_icon_view_accessible_parent_class)->initialize)
+    ATK_OBJECT_CLASS (_gtk_icon_view_accessible_parent_class)->initialize (accessible, data);
 
   icon_view = (GtkIconView*)data;
   view = (GtkIconViewAccessible*)accessible;
@@ -8922,7 +8928,7 @@ gtk_icon_view_accessible_finalize (GObject *object)
 
   gtk_icon_view_accessible_clear_cache (view);
 
-  G_OBJECT_CLASS (accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_icon_view_accessible_parent_class)->finalize (object);
 }
 
 static void
@@ -8967,27 +8973,32 @@ gtk_icon_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
       g_signal_connect_after (widget, "destroy",
                               G_CALLBACK (gtk_icon_view_accessible_destroyed), accessible);
     }
-  GTK_ACCESSIBLE_CLASS (accessible_parent_class)->connect_widget_destroyed (accessible);
+  GTK_ACCESSIBLE_CLASS (_gtk_icon_view_accessible_parent_class)->connect_widget_destroyed (accessible);
 }
 
 static void
-gtk_icon_view_accessible_class_init (AtkObjectClass *klass)
+_gtk_icon_view_accessible_class_init (GtkIconViewAccessibleClass *klass)
 {
   GObjectClass *gobject_class;
   GtkAccessibleClass *accessible_class;
-
-  accessible_parent_class = g_type_class_peek_parent (klass);
+  AtkObjectClass *atk_class;
 
   gobject_class = (GObjectClass *)klass;
   accessible_class = (GtkAccessibleClass *)klass;
+  atk_class = (AtkObjectClass *)klass;
 
   gobject_class->finalize = gtk_icon_view_accessible_finalize;
 
-  klass->get_n_children = gtk_icon_view_accessible_get_n_children;
-  klass->ref_child = gtk_icon_view_accessible_ref_child;
-  klass->initialize = gtk_icon_view_accessible_initialize;
+  atk_class->get_n_children = gtk_icon_view_accessible_get_n_children;
+  atk_class->ref_child = gtk_icon_view_accessible_ref_child;
+  atk_class->initialize = gtk_icon_view_accessible_initialize;
 
   accessible_class->connect_widget_destroyed = gtk_icon_view_accessible_connect_widget_destroyed;
+}
+
+static void
+_gtk_icon_view_accessible_init (GtkIconViewAccessible *accessible)
+{
 }
 
 static AtkObject*
@@ -9083,7 +9094,7 @@ gtk_icon_view_accessible_ref_selection (AtkSelection *selection,
       if (item->selected)
         {
           if (i == 0)
-	    return atk_object_ref_accessible_child (gtk_widget_get_accessible (widget), item->index);
+            return atk_object_ref_accessible_child (gtk_widget_get_accessible (widget), item->index);
           else
             i--;
         }
@@ -9115,7 +9126,7 @@ gtk_icon_view_accessible_get_selection_count (AtkSelection *selection)
       item = l->data;
 
       if (item->selected)
-	count++;
+        count++;
 
       l = l->next;
     }
@@ -9195,7 +9206,7 @@ gtk_icon_view_accessible_select_all_selection (AtkSelection *selection)
 }
 
 static void
-gtk_icon_view_accessible_selection_interface_init (AtkSelectionIface *iface)
+atk_selection_interface_init (AtkSelectionIface *iface)
 {
   iface->add_selection = gtk_icon_view_accessible_add_selection;
   iface->clear_selection = gtk_icon_view_accessible_clear_selection;
@@ -9205,47 +9216,3 @@ gtk_icon_view_accessible_selection_interface_init (AtkSelectionIface *iface)
   iface->remove_selection = gtk_icon_view_accessible_remove_selection;
   iface->select_all_selection = gtk_icon_view_accessible_select_all_selection;
 }
-
-static GType
-gtk_icon_view_accessible_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      GTypeInfo tinfo =
-      {
-        sizeof (GtkContainerAccessibleClass), /* class size */
-        (GBaseInitFunc) NULL, /* base init */
-        (GBaseFinalizeFunc) NULL, /* base finalize */
-        (GClassInitFunc) gtk_icon_view_accessible_class_init,
-        (GClassFinalizeFunc) NULL, /* class finalize */
-        NULL, /* class data */
-        sizeof (GtkIconViewAccessible), /* instance size */
-        0, /* nb preallocs */
-        (GInstanceInitFunc) NULL, /* instance init */
-        NULL /* value table */
-      };
-      const GInterfaceInfo atk_component_info =
-      {
-        (GInterfaceInitFunc) atk_component_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-      const GInterfaceInfo atk_selection_info =
-      {
-        (GInterfaceInitFunc) gtk_icon_view_accessible_selection_interface_init,
-        (GInterfaceFinalizeFunc) NULL,
-        NULL
-      };
-
-      type = g_type_register_static (GTK_TYPE_CONTAINER_ACCESSIBLE,
-                                     I_("GtkIconViewAccessible"), &tinfo, 0);
-      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
-                                   &atk_component_info);
-      g_type_add_interface_static (type, ATK_TYPE_SELECTION,
-                                   &atk_selection_info);
-    }
-  return type;
-}
-
