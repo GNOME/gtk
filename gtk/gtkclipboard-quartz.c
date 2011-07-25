@@ -109,9 +109,10 @@ struct _GtkClipboardClass
       clipboard->get_func (clipboard, &selection_data,
                            info,
                            clipboard->user_data);
- 
-      _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard,
-                                                     &selection_data);
+
+      if (selection_data.length >= 0)
+        _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard,
+                                                       &selection_data);
 
       g_free (selection_data.data);
     }
