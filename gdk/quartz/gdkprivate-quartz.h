@@ -62,7 +62,6 @@ typedef enum {
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
                                                         gboolean   got_focus);
 void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
-GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
 
 GdkModifierType _gdk_quartz_events_get_current_keyboard_modifiers (void);
 GdkModifierType _gdk_quartz_events_get_current_mouse_modifiers    (void);
