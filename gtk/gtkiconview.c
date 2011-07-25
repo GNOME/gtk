@@ -7079,41 +7079,20 @@ static gpointer accessible_item_parent_class;
 
 static GType gtk_icon_view_item_accessible_get_type (void);
 
-enum {
-    ACTION_ACTIVATE,
-    LAST_ACTION
-};
-
 typedef struct
 {
   AtkObject parent;
 
   GtkIconViewItem *item;
-
   GtkWidget *widget;
-
   AtkStateSet *state_set;
-
   gchar *text;
-
   GtkTextBuffer *text_buffer;
-
-  gchar *action_descriptions[LAST_ACTION];
+  gchar *action_description;
   gchar *image_description;
   guint action_idle_handler;
 } GtkIconViewItemAccessible;
 
-static const gchar *const gtk_icon_view_item_accessible_action_names[] = 
-{
-  "activate",
-  NULL
-};
-
-static const gchar *const gtk_icon_view_item_accessible_action_descriptions[] =
-{
-  "Activate item",
-  NULL
-};
 typedef struct _GtkIconViewItemAccessibleClass
 {
   AtkObjectClass parent_class;
@@ -7149,7 +7128,7 @@ gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
 {
   GtkIconViewItemAccessible *item;
 
-  if (i < 0 || i >= LAST_ACTION) 
+  if (i != 0)
     return FALSE;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (action);
@@ -7160,24 +7139,16 @@ gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return FALSE;
 
-  switch (i)
-    {
-    case ACTION_ACTIVATE:
-      if (!item->action_idle_handler)
-        item->action_idle_handler = gdk_threads_add_idle (gtk_icon_view_item_accessible_idle_do_action, item);
-      break;
-    default:
-      g_assert_not_reached ();
-      return FALSE;
+  if (!item->action_idle_handler)
+    item->action_idle_handler = gdk_threads_add_idle (gtk_icon_view_item_accessible_idle_do_action, item);
 
-    }        
   return TRUE;
 }
 
 static gint
 gtk_icon_view_item_accessible_action_get_n_actions (AtkAction *action)
 {
-        return LAST_ACTION;
+        return 1;
 }
 
 static const gchar *
@@ -7186,25 +7157,25 @@ gtk_icon_view_item_accessible_action_get_description (AtkAction *action,
 {
   GtkIconViewItemAccessible *item;
 
-  if (i < 0 || i >= LAST_ACTION) 
+  if (i != 0)
     return NULL;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (action);
 
-  if (item->action_descriptions[i])
-    return item->action_descriptions[i];
+  if (item->action_description)
+    return item->action_description;
   else
-    return gtk_icon_view_item_accessible_action_descriptions[i];
+    return "Activate item";
 }
 
 static const gchar *
 gtk_icon_view_item_accessible_action_get_name (AtkAction *action,
                                                gint       i)
 {
-  if (i < 0 || i >= LAST_ACTION) 
+  if (i != 0)
     return NULL;
 
-  return gtk_icon_view_item_accessible_action_names[i];
+  return "activate";
 }
 
 static gboolean
@@ -7214,14 +7185,13 @@ gtk_icon_view_item_accessible_action_set_description (AtkAction   *action,
 {
   GtkIconViewItemAccessible *item;
 
-  if (i < 0 || i >= LAST_ACTION) 
+  if (i != 0)
     return FALSE;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (action);
 
-  g_free (item->action_descriptions[i]);
-
-  item->action_descriptions[i] = g_strdup (description);
+  g_free (item->action_description);
+  item->action_description = g_strdup (description);
 
   return TRUE;
 }
@@ -8199,8 +8169,6 @@ gtk_icon_view_item_accessible_set_visibility (GtkIconViewItemAccessible *item,
 static void
 gtk_icon_view_item_accessible_object_init (GtkIconViewItemAccessible *item)
 {
-  gint i;
-
   item->state_set = atk_state_set_new ();
 
   atk_state_set_add_state (item->state_set, ATK_STATE_ENABLED);
@@ -8209,9 +8177,7 @@ gtk_icon_view_item_accessible_object_init (GtkIconViewItemAccessible *item)
   atk_state_set_add_state (item->state_set, ATK_STATE_SELECTABLE);
   atk_state_set_add_state (item->state_set, ATK_STATE_VISIBLE);
 
-  for (i = 0; i < LAST_ACTION; i++)
-    item->action_descriptions[i] = NULL;
-
+  item->action_description = NULL;
   item->image_description = NULL;
 
   item->action_idle_handler = 0;
@@ -8221,9 +8187,6 @@ static void
 gtk_icon_view_item_accessible_finalize (GObject *object)
 {
   GtkIconViewItemAccessible *item;
-  gint i;
-
-  g_return_if_fail (GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE (object));
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (object);
 
@@ -8236,9 +8199,7 @@ gtk_icon_view_item_accessible_finalize (GObject *object)
   if (item->text_buffer)
      g_object_unref (item->text_buffer);
 
-  for (i = 0; i < LAST_ACTION; i++)
-    g_free (item->action_descriptions[i]);
-
+  g_free (item->action_description);
   g_free (item->image_description);
 
   if (item->action_idle_handler)
@@ -8573,11 +8534,6 @@ gtk_icon_view_accessible_set_adjustment (AtkObject      *accessible,
   GtkIconViewAccessible *view = (GtkIconViewAccessible*)accessible;
   GtkAdjustment **old_adj_ptr;
 
-  /* Adjustments are set for the first time in constructor and priv is not
-   * initialized at that time, so skip this first setting. */
-  if (!view)
-    return;
-
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (view->old_hadj == adjustment)
@@ -8683,10 +8639,10 @@ gtk_icon_view_accessible_model_row_inserted (GtkTreeModel *tree_model,
         {
           if (info->index < index)
             g_warning ("Unexpected index value on insertion %d %d", index, info->index);
- 
+
           if (tmp_list == NULL)
             tmp_list = items;
-   
+
           info->index = item->item->index;
         }
 
@@ -9014,7 +8970,6 @@ gtk_icon_view_accessible_ref_accessible_at_point (AtkComponent *component,
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
-  /* State is defunct */
     return NULL;
 
   icon_view = GTK_ICON_VIEW (widget);
@@ -9034,7 +8989,7 @@ atk_component_interface_init (AtkComponentIface *iface)
 
 static gboolean
 gtk_icon_view_accessible_add_selection (AtkSelection *selection,
-                                        gint i)
+                                        gint          i)
 {
   GtkWidget *widget;
   GtkIconView *icon_view;
@@ -9047,7 +9002,6 @@ gtk_icon_view_accessible_add_selection (AtkSelection *selection,
   icon_view = GTK_ICON_VIEW (widget);
 
   item = g_list_nth_data (icon_view->priv->items, i);
-
   if (!item)
     return FALSE;
 
