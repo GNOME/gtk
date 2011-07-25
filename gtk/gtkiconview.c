@@ -40,12 +40,12 @@
 #include "gtkwindow.h"
 #include "gtkentry.h"
 #include "gtkcombobox.h"
-#include "gtktextbuffer.h"
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtkpango.h"
 #include "a11y/gtkcontaineraccessible.h"
 
 /**
@@ -7087,7 +7087,6 @@ typedef struct
   GtkWidget *widget;
   AtkStateSet *state_set;
   gchar *text;
-  GtkTextBuffer *text_buffer;
   gchar *action_description;
   gchar *image_description;
   guint action_idle_handler;
@@ -7102,7 +7101,7 @@ typedef struct _GtkIconViewItemAccessibleClass
 static gboolean gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item);
 
 static gboolean
-gtk_icon_view_item_accessible_idle_do_action (gpointer data)
+idle_do_action (gpointer data)
 {
   GtkIconViewItemAccessible *item;
   GtkIconView *icon_view;
@@ -7123,8 +7122,8 @@ gtk_icon_view_item_accessible_idle_do_action (gpointer data)
 }
 
 static gboolean
-gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
-                                                gint       i)
+gtk_icon_view_item_accessible_do_action (AtkAction *action,
+                                         gint       i)
 {
   GtkIconViewItemAccessible *item;
 
@@ -7140,20 +7139,20 @@ gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
     return FALSE;
 
   if (!item->action_idle_handler)
-    item->action_idle_handler = gdk_threads_add_idle (gtk_icon_view_item_accessible_idle_do_action, item);
+    item->action_idle_handler = gdk_threads_add_idle (idle_do_action, item);
 
   return TRUE;
 }
 
 static gint
-gtk_icon_view_item_accessible_action_get_n_actions (AtkAction *action)
+gtk_icon_view_item_accessible_get_n_actions (AtkAction *action)
 {
         return 1;
 }
 
 static const gchar *
-gtk_icon_view_item_accessible_action_get_description (AtkAction *action,
-                                                      gint       i)
+gtk_icon_view_item_accessible_get_description (AtkAction *action,
+                                               gint       i)
 {
   GtkIconViewItemAccessible *item;
 
@@ -7169,8 +7168,8 @@ gtk_icon_view_item_accessible_action_get_description (AtkAction *action,
 }
 
 static const gchar *
-gtk_icon_view_item_accessible_action_get_name (AtkAction *action,
-                                               gint       i)
+gtk_icon_view_item_accessible_get_name (AtkAction *action,
+                                        gint       i)
 {
   if (i != 0)
     return NULL;
@@ -7179,9 +7178,9 @@ gtk_icon_view_item_accessible_action_get_name (AtkAction *action,
 }
 
 static gboolean
-gtk_icon_view_item_accessible_action_set_description (AtkAction   *action,
-                                                      gint         i,
-                                                      const gchar *description)
+gtk_icon_view_item_accessible_set_description (AtkAction   *action,
+                                               gint         i,
+                                               const gchar *description)
 {
   GtkIconViewItemAccessible *item;
 
@@ -7199,15 +7198,15 @@ gtk_icon_view_item_accessible_action_set_description (AtkAction   *action,
 static void
 atk_action_item_interface_init (AtkActionIface *iface)
 {
-  iface->do_action = gtk_icon_view_item_accessible_action_do_action;
-  iface->get_n_actions = gtk_icon_view_item_accessible_action_get_n_actions;
-  iface->get_description = gtk_icon_view_item_accessible_action_get_description;
-  iface->get_name = gtk_icon_view_item_accessible_action_get_name;
-  iface->set_description = gtk_icon_view_item_accessible_action_set_description;
+  iface->do_action = gtk_icon_view_item_accessible_do_action;
+  iface->set_description = gtk_icon_view_item_accessible_set_description;
+  iface->get_name = gtk_icon_view_item_accessible_get_name;
+  iface->get_n_actions = gtk_icon_view_item_accessible_get_n_actions;
+  iface->get_description = gtk_icon_view_item_accessible_get_description;
 }
 
 static const gchar *
-gtk_icon_view_item_accessible_image_get_image_description (AtkImage *image)
+gtk_icon_view_item_accessible_get_image_description (AtkImage *image)
 {
   GtkIconViewItemAccessible *item;
 
@@ -7217,8 +7216,8 @@ gtk_icon_view_item_accessible_image_get_image_description (AtkImage *image)
 }
 
 static gboolean
-gtk_icon_view_item_accessible_image_set_image_description (AtkImage    *image,
-                                                           const gchar *description)
+gtk_icon_view_item_accessible_set_image_description (AtkImage    *image,
+                                                     const gchar *description)
 {
   GtkIconViewItemAccessible *item;
 
@@ -7235,7 +7234,7 @@ typedef struct {
   gboolean     pixbuf_found;
 } GetPixbufBoxData;
 
-static gboolean 
+static gboolean
 get_pixbuf_foreach (GtkCellRenderer    *renderer,
 		    const GdkRectangle *cell_area,
 		    const GdkRectangle *cell_background,
@@ -7268,14 +7267,13 @@ get_pixbuf_box (GtkIconView     *icon_view,
   return data.pixbuf_found;
 }
 
-static gboolean 
-get_text_foreach (GtkCellRenderer    *renderer,
-		  gchar             **text)
+static gboolean
+get_text_foreach (GtkCellRenderer  *renderer,
+                  gchar           **text)
 {
   if (GTK_IS_CELL_RENDERER_TEXT (renderer))
     {
       g_object_get (renderer, "text", text, NULL);
-
       return TRUE;
     }
   return FALSE;
@@ -7283,21 +7281,21 @@ get_text_foreach (GtkCellRenderer    *renderer,
 
 static gchar *
 get_text (GtkIconView     *icon_view,
-	  GtkIconViewItem *item)
+          GtkIconViewItem *item)
 {
   gchar *text = NULL;
 
   gtk_icon_view_set_cell_data (icon_view, item);
   gtk_cell_area_foreach (icon_view->priv->cell_area,
-			 (GtkCellCallback)get_text_foreach, &text);
+                         (GtkCellCallback)get_text_foreach, &text);
 
   return text;
 }
 
 static void
-gtk_icon_view_item_accessible_image_get_image_size (AtkImage *image,
-                                                    gint     *width,
-                                                    gint     *height)
+gtk_icon_view_item_accessible_get_image_size (AtkImage *image,
+                                              gint     *width,
+                                              gint     *height)
 {
   GtkIconViewItemAccessible *item;
   GdkRectangle box;
@@ -7313,15 +7311,15 @@ gtk_icon_view_item_accessible_image_get_image_size (AtkImage *image,
   if (get_pixbuf_box (GTK_ICON_VIEW (item->widget), item->item, &box))
     {
       *width = box.width;
-      *height = box.height;  
+      *height = box.height;
     }
 }
 
 static void
-gtk_icon_view_item_accessible_image_get_image_position (AtkImage    *image,
-                                                        gint        *x,
-                                                        gint        *y,
-                                                        AtkCoordType coord_type)
+gtk_icon_view_item_accessible_get_image_position (AtkImage    *image,
+                                                  gint        *x,
+                                                  gint        *y,
+                                                  AtkCoordType coord_type)
 {
   GtkIconViewItemAccessible *item;
   GdkRectangle box;
@@ -7347,553 +7345,153 @@ gtk_icon_view_item_accessible_image_get_image_position (AtkImage    *image,
 static void
 atk_image_item_interface_init (AtkImageIface *iface)
 {
-  iface->get_image_description = gtk_icon_view_item_accessible_image_get_image_description;
-  iface->set_image_description = gtk_icon_view_item_accessible_image_set_image_description;
-  iface->get_image_size = gtk_icon_view_item_accessible_image_get_image_size;
-  iface->get_image_position = gtk_icon_view_item_accessible_image_get_image_position;
+  iface->get_image_description = gtk_icon_view_item_accessible_get_image_description;
+  iface->set_image_description = gtk_icon_view_item_accessible_set_image_description;
+  iface->get_image_size = gtk_icon_view_item_accessible_get_image_size;
+  iface->get_image_position = gtk_icon_view_item_accessible_get_image_position;
 }
 
 static gchar *
-gtk_icon_view_item_accessible_text_get_text (AtkText *text,
-                                             gint     start_pos,
-                                             gint     end_pos)
+gtk_icon_view_item_accessible_get_text (AtkText *text,
+                                        gint     start_pos,
+                                        gint     end_pos)
 {
   GtkIconViewItemAccessible *item;
-  GtkTextIter start, end;
-  GtkTextBuffer *buffer;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
-
-  if (!GTK_IS_ICON_VIEW (item->widget))
-    return NULL;
-
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return NULL;
 
-  buffer = item->text_buffer;
-  gtk_text_buffer_get_iter_at_offset (buffer, &start, start_pos);
-  if (end_pos < 0)
-    gtk_text_buffer_get_end_iter (buffer, &end);
+  if (item->text)
+    return g_utf8_substring (item->text, start_pos, end_pos > -1 ? end_pos : g_utf8_strlen (item->text, -1));
   else
-    gtk_text_buffer_get_iter_at_offset (buffer, &end, end_pos);
-
-  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+    return g_strdup ("");
 }
 
 static gunichar
-gtk_icon_view_item_accessible_text_get_character_at_offset (AtkText *text,
-                                                            gint     offset)
+gtk_icon_view_item_accessible_get_character_at_offset (AtkText *text,
+                                                       gint     offset)
 {
   GtkIconViewItemAccessible *item;
-  GtkTextIter start, end;
-  GtkTextBuffer *buffer;
   gchar *string;
-  gunichar unichar;
+  gchar *index;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
-
-  if (!GTK_IS_ICON_VIEW (item->widget))
-    return '\0';
-
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return '\0';
 
-  buffer = item->text_buffer;
-  if (offset >= gtk_text_buffer_get_char_count (buffer))
+  string = item->text;
+
+  if (!string)
     return '\0';
 
-  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
-  end = start;
-  gtk_text_iter_forward_char (&end);
-  string = gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
-  unichar = g_utf8_get_char (string);
-  g_free(string);
+  if (offset >= g_utf8_strlen (string, -1))
+    return '\0';
 
-  return unichar;
+  index = g_utf8_offset_to_pointer (string, offset);
+
+  return g_utf8_get_char (index);
 }
 
-#if 0
-static void
-get_pango_text_offsets (PangoLayout     *layout,
-                        GtkTextBuffer   *buffer,
-                        gint             function,
-                        AtkTextBoundary  boundary_type,
-                        gint             offset,
-                        gint            *start_offset,
-                        gint            *end_offset,
-                        GtkTextIter     *start_iter,
-                        GtkTextIter     *end_iter)
+static PangoLayout *
+create_pango_layout (GtkIconViewItemAccessible *item)
 {
-  PangoLayoutIter *iter;
-  PangoLayoutLine *line, *prev_line = NULL, *prev_prev_line = NULL;
-  gint index, start_index, end_index;
-  const gchar *text;
-  gboolean found = FALSE;
+  PangoLayout *layout;
 
-  text = pango_layout_get_text (layout);
-  index = g_utf8_offset_to_pointer (text, offset) - text;
-  iter = pango_layout_get_iter (layout);
-  do
-    {
-      line = pango_layout_iter_get_line_readonly (iter);
-      start_index = line->start_index;
-      end_index = start_index + line->length;
+  layout = gtk_widget_create_pango_layout (item->widget, item->text);
 
-      if (index >= start_index && index <= end_index)
-        {
-          /*
-           * Found line for offset
-           */
-          switch (function)
-            {
-            case 0:
-                  /*
-                   * We want the previous line
-                   */
-              if (prev_line)
-                {
-                  switch (boundary_type)
-                    {
-                    case ATK_TEXT_BOUNDARY_LINE_START:
-                      end_index = start_index;
-                      start_index = prev_line->start_index;
-                      break;
-                    case ATK_TEXT_BOUNDARY_LINE_END:
-                      if (prev_prev_line)
-                        start_index = prev_prev_line->start_index + 
-                                  prev_prev_line->length;
-                      end_index = prev_line->start_index + prev_line->length;
-                      break;
-                    default:
-                      g_assert_not_reached();
-                    }
-                }
-              else
-                start_index = end_index = 0;
-              break;
-            case 1:
-              switch (boundary_type)
-                {
-                case ATK_TEXT_BOUNDARY_LINE_START:
-                  if (pango_layout_iter_next_line (iter))
-                    end_index = pango_layout_iter_get_line_readonly (iter)->start_index;
-                  break;
-                case ATK_TEXT_BOUNDARY_LINE_END:
-                  if (prev_line)
-                    start_index = prev_line->start_index + 
-                                  prev_line->length;
-                  break;
-                default:
-                  g_assert_not_reached();
-                }
-              break;
-            case 2:
-               /*
-                * We want the next line
-                */
-              if (pango_layout_iter_next_line (iter))
-                {
-                  line = pango_layout_iter_get_line_readonly (iter);
-                  switch (boundary_type)
-                    {
-                    case ATK_TEXT_BOUNDARY_LINE_START:
-                      start_index = line->start_index;
-                      if (pango_layout_iter_next_line (iter))
-                        end_index = pango_layout_iter_get_line_readonly (iter)->start_index;
-                      else
-                        end_index = start_index + line->length;
-                      break;
-                    case ATK_TEXT_BOUNDARY_LINE_END:
-                      start_index = end_index;
-                      end_index = line->start_index + line->length;
-                      break;
-                    default:
-                      g_assert_not_reached();
-                    }
-                }
-              else
-                start_index = end_index;
-              break;
-            }
-          found = TRUE;
-          break;
-        }
-      prev_prev_line = prev_line; 
-      prev_line = line; 
-    }
-  while (pango_layout_iter_next_line (iter));
-
-  if (!found)
-    {
-      start_index = prev_line->start_index + prev_line->length;
-      end_index = start_index;
-    }
-  pango_layout_iter_free (iter);
-  *start_offset = g_utf8_pointer_to_offset (text, text + start_index);
-  *end_offset = g_utf8_pointer_to_offset (text, text + end_index);
- 
-  gtk_text_buffer_get_iter_at_offset (buffer, start_iter, *start_offset);
-  gtk_text_buffer_get_iter_at_offset (buffer, end_iter, *end_offset);
+  return layout;
 }
-#endif
 
-static gchar*
-gtk_icon_view_item_accessible_text_get_text_before_offset (AtkText         *text,
-                                                           gint            offset,
-                                                           AtkTextBoundary boundary_type,
-                                                           gint            *start_offset,
-                                                           gint            *end_offset)
+static gchar *
+gtk_icon_view_item_accessible_get_text_before_offset (AtkText         *atk_text,
+                                                      gint             offset,
+                                                      AtkTextBoundary  boundary_type,
+                                                      gint            *start_offset,
+                                                      gint            *end_offset)
 {
   GtkIconViewItemAccessible *item;
-  GtkTextIter start, end;
-  GtkTextBuffer *buffer;
-#if 0
-  GtkIconView *icon_view;
-#endif
+  PangoLayout *layout;
+  gchar *text;
 
-  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
-
-  if (!GTK_IS_ICON_VIEW (item->widget))
-    return NULL;
-
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (atk_text);
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return NULL;
 
-  buffer = item->text_buffer;
+  layout = create_pango_layout (item);
+  text = _gtk_pango_get_text_before (layout, boundary_type, offset, start_offset, end_offset);
+  g_object_unref (layout);
 
-  if (!gtk_text_buffer_get_char_count (buffer))
-    {
-      *start_offset = 0;
-      *end_offset = 0;
-      return g_strdup ("");
-    }
-  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
-   
-  end = start;
-
-  switch (boundary_type)
-    {
-    case ATK_TEXT_BOUNDARY_CHAR:
-      gtk_text_iter_backward_char(&start);
-      break;
-    case ATK_TEXT_BOUNDARY_WORD_START:
-      if (!gtk_text_iter_starts_word (&start))
-        gtk_text_iter_backward_word_start (&start);
-      end = start;
-      gtk_text_iter_backward_word_start(&start);
-      break;
-    case ATK_TEXT_BOUNDARY_WORD_END:
-      if (gtk_text_iter_inside_word (&start) &&
-          !gtk_text_iter_starts_word (&start))
-        gtk_text_iter_backward_word_start (&start);
-      while (!gtk_text_iter_ends_word (&start))
-        {
-          if (!gtk_text_iter_backward_char (&start))
-            break;
-        }
-      end = start;
-      gtk_text_iter_backward_word_start(&start);
-      while (!gtk_text_iter_ends_word (&start))
-        {
-          if (!gtk_text_iter_backward_char (&start))
-            break;
-        }
-      break;
-    case ATK_TEXT_BOUNDARY_SENTENCE_START:
-      if (!gtk_text_iter_starts_sentence (&start))
-        gtk_text_iter_backward_sentence_start (&start);
-      end = start;
-      gtk_text_iter_backward_sentence_start (&start);
-      break;
-    case ATK_TEXT_BOUNDARY_SENTENCE_END:
-      if (gtk_text_iter_inside_sentence (&start) &&
-          !gtk_text_iter_starts_sentence (&start))
-        gtk_text_iter_backward_sentence_start (&start);
-      while (!gtk_text_iter_ends_sentence (&start))
-        {
-          if (!gtk_text_iter_backward_char (&start))
-            break;
-        }
-      end = start;
-      gtk_text_iter_backward_sentence_start (&start);
-      while (!gtk_text_iter_ends_sentence (&start))
-        {
-          if (!gtk_text_iter_backward_char (&start))
-            break;
-        }
-      break;
-   case ATK_TEXT_BOUNDARY_LINE_START:
-   case ATK_TEXT_BOUNDARY_LINE_END:
-#if 0
-      icon_view = GTK_ICON_VIEW (item->widget);
-      /* FIXME we probably have to use GailTextCell to salvage this */
-      gtk_icon_view_update_item_text (icon_view, item->item);
-      get_pango_text_offsets (icon_view->priv->layout,
-                              buffer,
-                              0,
-                              boundary_type,
-                              offset,
-                              start_offset,
-                              end_offset,
-                              &start,
-                              &end);
-#endif
-      break;
-    }
-
-  *start_offset = gtk_text_iter_get_offset (&start);
-  *end_offset = gtk_text_iter_get_offset (&end);
-
-  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+  return text;
 }
 
-static gchar*
-gtk_icon_view_item_accessible_text_get_text_at_offset (AtkText         *text,
-                                                       gint            offset,
-                                                       AtkTextBoundary boundary_type,
-                                                       gint            *start_offset,
-                                                       gint            *end_offset)
+static gchar *
+gtk_icon_view_item_accessible_get_text_at_offset (AtkText         *atk_text,
+                                                  gint             offset,
+                                                  AtkTextBoundary  boundary_type,
+                                                  gint            *start_offset,
+                                                  gint            *end_offset)
 {
   GtkIconViewItemAccessible *item;
-  GtkTextIter start, end;
-  GtkTextBuffer *buffer;
-#if 0
-  GtkIconView *icon_view;
-#endif
+  PangoLayout *layout;
+  gchar *text;
 
-  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
-
-  if (!GTK_IS_ICON_VIEW (item->widget))
-    return NULL;
-
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (atk_text);
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return NULL;
 
-  buffer = item->text_buffer;
+  layout = create_pango_layout (item);
+  text = _gtk_pango_get_text_at (layout, boundary_type, offset, start_offset, end_offset);
+  g_object_unref (layout);
 
-  if (!gtk_text_buffer_get_char_count (buffer))
-    {
-      *start_offset = 0;
-      *end_offset = 0;
-      return g_strdup ("");
-    }
-  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
-   
-  end = start;
-
-  switch (boundary_type)
-    {
-    case ATK_TEXT_BOUNDARY_CHAR:
-      gtk_text_iter_forward_char (&end);
-      break;
-    case ATK_TEXT_BOUNDARY_WORD_START:
-      if (!gtk_text_iter_starts_word (&start))
-        gtk_text_iter_backward_word_start (&start);
-      if (gtk_text_iter_inside_word (&end))
-        gtk_text_iter_forward_word_end (&end);
-      while (!gtk_text_iter_starts_word (&end))
-        {
-          if (!gtk_text_iter_forward_char (&end))
-            break;
-        }
-      break;
-    case ATK_TEXT_BOUNDARY_WORD_END:
-      if (gtk_text_iter_inside_word (&start) &&
-          !gtk_text_iter_starts_word (&start))
-        gtk_text_iter_backward_word_start (&start);
-      while (!gtk_text_iter_ends_word (&start))
-        {
-          if (!gtk_text_iter_backward_char (&start))
-            break;
-        }
-      gtk_text_iter_forward_word_end (&end);
-      break;
-    case ATK_TEXT_BOUNDARY_SENTENCE_START:
-      if (!gtk_text_iter_starts_sentence (&start))
-        gtk_text_iter_backward_sentence_start (&start);
-      if (gtk_text_iter_inside_sentence (&end))
-        gtk_text_iter_forward_sentence_end (&end);
-      while (!gtk_text_iter_starts_sentence (&end))
-        {
-          if (!gtk_text_iter_forward_char (&end))
-            break;
-        }
-      break;
-    case ATK_TEXT_BOUNDARY_SENTENCE_END:
-      if (gtk_text_iter_inside_sentence (&start) &&
-          !gtk_text_iter_starts_sentence (&start))
-        gtk_text_iter_backward_sentence_start (&start);
-      while (!gtk_text_iter_ends_sentence (&start))
-        {
-          if (!gtk_text_iter_backward_char (&start))
-            break;
-        }
-      gtk_text_iter_forward_sentence_end (&end);
-      break;
-   case ATK_TEXT_BOUNDARY_LINE_START:
-   case ATK_TEXT_BOUNDARY_LINE_END:
-#if 0
-      icon_view = GTK_ICON_VIEW (item->widget);
-      /* FIXME we probably have to use GailTextCell to salvage this */
-      gtk_icon_view_update_item_text (icon_view, item->item);
-      get_pango_text_offsets (icon_view->priv->layout,
-                              buffer,
-                              1,
-                              boundary_type,
-                              offset,
-                              start_offset,
-                              end_offset,
-                              &start,
-                              &end);
-#endif
-      break;
-    }
-
-
-  *start_offset = gtk_text_iter_get_offset (&start);
-  *end_offset = gtk_text_iter_get_offset (&end);
-
-  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+  return text;
 }
 
-static gchar*
-gtk_icon_view_item_accessible_text_get_text_after_offset (AtkText         *text,
-                                                          gint            offset,
-                                                          AtkTextBoundary boundary_type,
-                                                          gint            *start_offset,
-                                                          gint            *end_offset)
+static gchar *
+gtk_icon_view_item_accessible_get_text_after_offset (AtkText         *atk_text,
+                                                     gint             offset,
+                                                     AtkTextBoundary  boundary_type,
+                                                     gint            *start_offset,
+                                                     gint            *end_offset)
 {
   GtkIconViewItemAccessible *item;
-  GtkTextIter start, end;
-  GtkTextBuffer *buffer;
-#if 0
-  GtkIconView *icon_view;
-#endif
+  PangoLayout *layout;
+  gchar *text;
 
-  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
-
-  if (!GTK_IS_ICON_VIEW (item->widget))
-    return NULL;
-
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (atk_text);
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return NULL;
 
-  buffer = item->text_buffer;
+  layout = create_pango_layout (item);
+  text = _gtk_pango_get_text_after (layout, boundary_type, offset, start_offset, end_offset);
+  g_object_unref (layout);
 
-  if (!gtk_text_buffer_get_char_count (buffer))
-    {
-      *start_offset = 0;
-      *end_offset = 0;
-      return g_strdup ("");
-    }
-  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
-   
-  end = start;
-
-  switch (boundary_type)
-    {
-    case ATK_TEXT_BOUNDARY_CHAR:
-      gtk_text_iter_forward_char(&start);
-      gtk_text_iter_forward_chars(&end, 2);
-      break;
-    case ATK_TEXT_BOUNDARY_WORD_START:
-      if (gtk_text_iter_inside_word (&end))
-        gtk_text_iter_forward_word_end (&end);
-      while (!gtk_text_iter_starts_word (&end))
-        {
-          if (!gtk_text_iter_forward_char (&end))
-            break;
-        }
-      start = end;
-      if (!gtk_text_iter_is_end (&end))
-        {
-          gtk_text_iter_forward_word_end (&end);
-          while (!gtk_text_iter_starts_word (&end))
-            {
-              if (!gtk_text_iter_forward_char (&end))
-                break;
-            }
-        }
-      break;
-    case ATK_TEXT_BOUNDARY_WORD_END:
-      gtk_text_iter_forward_word_end (&end);
-      start = end;
-      if (!gtk_text_iter_is_end (&end))
-        gtk_text_iter_forward_word_end (&end);
-      break;
-    case ATK_TEXT_BOUNDARY_SENTENCE_START:
-      if (gtk_text_iter_inside_sentence (&end))
-        gtk_text_iter_forward_sentence_end (&end);
-      while (!gtk_text_iter_starts_sentence (&end))
-        {
-          if (!gtk_text_iter_forward_char (&end))
-            break;
-        }
-      start = end;
-      if (!gtk_text_iter_is_end (&end))
-        {
-          gtk_text_iter_forward_sentence_end (&end);
-          while (!gtk_text_iter_starts_sentence (&end))
-            {
-              if (!gtk_text_iter_forward_char (&end))
-                break;
-            }
-        }
-      break;
-    case ATK_TEXT_BOUNDARY_SENTENCE_END:
-      gtk_text_iter_forward_sentence_end (&end);
-      start = end;
-      if (!gtk_text_iter_is_end (&end))
-        gtk_text_iter_forward_sentence_end (&end);
-      break;
-   case ATK_TEXT_BOUNDARY_LINE_START:
-   case ATK_TEXT_BOUNDARY_LINE_END:
-#if 0
-      icon_view = GTK_ICON_VIEW (item->widget);
-      /* FIXME we probably have to use GailTextCell to salvage this */
-      gtk_icon_view_update_item_text (icon_view, item->item);
-      get_pango_text_offsets (icon_view->priv->layout,
-                              buffer,
-                              2,
-                              boundary_type,
-                              offset,
-                              start_offset,
-                              end_offset,
-                              &start,
-                              &end);
-#endif
-      break;
-    }
-  *start_offset = gtk_text_iter_get_offset (&start);
-  *end_offset = gtk_text_iter_get_offset (&end);
-
-  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+  return text;
 }
 
 static gint
-gtk_icon_view_item_accessible_text_get_character_count (AtkText *text)
+gtk_icon_view_item_accessible_get_character_count (AtkText *text)
 {
   GtkIconViewItemAccessible *item;
 
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
-
-  if (!GTK_IS_ICON_VIEW (item->widget))
-    return 0;
-
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return 0;
 
-  return gtk_text_buffer_get_char_count (item->text_buffer);
+  if (item->text)
+    return g_utf8_strlen (item->text, -1);
+  else
+    return 0;
 }
 
 static void
-gtk_icon_view_item_accessible_text_get_character_extents (AtkText      *text,
-                                                          gint         offset,
-                                                          gint         *x,
-                                                          gint         *y,
-                                                          gint         *width,
-                                                          gint         *height,
-                                                          AtkCoordType coord_type)
+gtk_icon_view_item_accessible_get_character_extents (AtkText      *text,
+                                                     gint         offset,
+                                                     gint         *x,
+                                                     gint         *y,
+                                                     gint         *width,
+                                                     gint         *height,
+                                                     AtkCoordType coord_type)
 {
   GtkIconViewItemAccessible *item;
 #if 0
@@ -7930,10 +7528,10 @@ gtk_icon_view_item_accessible_text_get_character_extents (AtkText      *text,
 }
 
 static gint
-gtk_icon_view_item_accessible_text_get_offset_at_point (AtkText      *text,
-                                                        gint          x,
-                                                        gint          y,
-                                                        AtkCoordType coord_type)
+gtk_icon_view_item_accessible_get_offset_at_point (AtkText      *text,
+                                                   gint          x,
+                                                   gint          y,
+                                                   AtkCoordType coord_type)
 {
   GtkIconViewItemAccessible *item;
   gint offset = 0;
@@ -7982,14 +7580,14 @@ gtk_icon_view_item_accessible_text_get_offset_at_point (AtkText      *text,
 static void
 atk_text_item_interface_init (AtkTextIface *iface)
 {
-  iface->get_text = gtk_icon_view_item_accessible_text_get_text;
-  iface->get_character_at_offset = gtk_icon_view_item_accessible_text_get_character_at_offset;
-  iface->get_text_before_offset = gtk_icon_view_item_accessible_text_get_text_before_offset;
-  iface->get_text_at_offset = gtk_icon_view_item_accessible_text_get_text_at_offset;
-  iface->get_text_after_offset = gtk_icon_view_item_accessible_text_get_text_after_offset;
-  iface->get_character_count = gtk_icon_view_item_accessible_text_get_character_count;
-  iface->get_character_extents = gtk_icon_view_item_accessible_text_get_character_extents;
-  iface->get_offset_at_point = gtk_icon_view_item_accessible_text_get_offset_at_point;
+  iface->get_text = gtk_icon_view_item_accessible_get_text;
+  iface->get_character_at_offset = gtk_icon_view_item_accessible_get_character_at_offset;
+  iface->get_text_before_offset = gtk_icon_view_item_accessible_get_text_before_offset;
+  iface->get_text_at_offset = gtk_icon_view_item_accessible_get_text_at_offset;
+  iface->get_text_after_offset = gtk_icon_view_item_accessible_get_text_after_offset;
+  iface->get_character_count = gtk_icon_view_item_accessible_get_character_count;
+  iface->get_character_extents = gtk_icon_view_item_accessible_get_character_extents;
+  iface->get_offset_at_point = gtk_icon_view_item_accessible_get_offset_at_point;
 }
 
 static void
@@ -8196,9 +7794,8 @@ gtk_icon_view_item_accessible_finalize (GObject *object)
   if (item->state_set)
     g_object_unref (item->state_set);
 
-  if (item->text_buffer)
-     g_object_unref (item->text_buffer);
 
+  g_free (item->text);
   g_free (item->action_description);
   g_free (item->image_description);
 
@@ -8456,22 +8053,15 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
       obj = gtk_icon_view_accessible_find_child (accessible, index);
       if (!obj)
         {
-          gchar *text;
-
           obj = g_object_new (gtk_icon_view_item_accessible_get_type (), NULL);
           gtk_icon_view_item_accessible_info_new (accessible, obj, index);
           obj->role = ATK_ROLE_ICON;
           a11y_item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
           a11y_item->item = item;
           a11y_item->widget = widget;
-          a11y_item->text_buffer = gtk_text_buffer_new (NULL);
 
-          text = get_text (icon_view, item);
-          if (text)
-            {
-              gtk_text_buffer_set_text (a11y_item->text_buffer, text, -1);
-              g_free (text);
-            }
+          g_free (a11y_item->text);
+          a11y_item->text = get_text (icon_view, item);
 
           gtk_icon_view_item_accessible_set_visibility (a11y_item, FALSE);
           g_object_add_weak_pointer (G_OBJECT (widget), (gpointer) &(a11y_item->widget));
@@ -8580,7 +8170,6 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
   GtkIconViewItem *item;
   GtkIconViewItemAccessible *a11y_item;
   const gchar *name;
-  gchar *text;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   index = gtk_tree_path_get_indices(path)[0];
@@ -8594,15 +8183,10 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
       item = a11y_item->item;
 
       name = atk_object_get_name (ATK_OBJECT (a11y_item));
-
       if (!name || strcmp (name, "") == 0)
         {
-          text = get_text (icon_view, item);
-          if (text)
-            {
-              gtk_text_buffer_set_text (a11y_item->text_buffer, text, -1);
-              g_free (text);
-            }
+          g_free (a11y_item->text);
+          a11y_item->text = get_text (icon_view, item);
         }
     }
 
