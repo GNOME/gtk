@@ -412,7 +412,6 @@ static void     search_stop_searching        (GtkFileChooserDefault *impl,
 static void     search_clear_model           (GtkFileChooserDefault *impl, 
 					      gboolean               remove_from_treeview);
 static gboolean search_should_respond        (GtkFileChooserDefault *impl);
-static void     search_switch_to_browse_mode (GtkFileChooserDefault *impl);
 static GSList  *search_get_selected_files    (GtkFileChooserDefault *impl);
 static void     search_entry_activate_cb     (GtkEntry              *entry, 
 					      gpointer               data);
@@ -422,7 +421,6 @@ static void     recent_stop_loading          (GtkFileChooserDefault *impl);
 static void     recent_clear_model           (GtkFileChooserDefault *impl,
                                               gboolean               remove_from_treeview);
 static gboolean recent_should_respond        (GtkFileChooserDefault *impl);
-static void     recent_switch_to_browse_mode (GtkFileChooserDefault *impl);
 static GSList * recent_get_selected_files    (GtkFileChooserDefault *impl);
 static void     set_file_system_backend      (GtkFileChooserDefault *impl);
 static void     unset_file_system_backend    (GtkFileChooserDefault *impl);
@@ -5246,6 +5244,42 @@ operation_mode_stop (GtkFileChooserDefault *impl, OperationMode mode)
     }
 }
 
+static void
+operation_mode_set_browse (GtkFileChooserDefault *impl)
+{
+  path_bar_update (impl);
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    {
+      gtk_widget_show (impl->location_button);
+
+      if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
+	gtk_widget_show (impl->location_entry_box);
+    }
+
+  file_list_set_sort_column_ids (impl);
+}
+
+static void
+operation_mode_set (GtkFileChooserDefault *impl, OperationMode mode)
+{
+  operation_mode_stop (impl, impl->operation_mode);
+
+  impl->operation_mode = mode;
+
+  switch (impl->operation_mode)
+    {
+    case OPERATION_MODE_BROWSE:
+      operation_mode_set_browse (impl);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+}
+
 /* This function is basically a do_all function.
  *
  * It sets the visibility on all the widgets based on the current state, and
@@ -7143,17 +7177,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 
   g_object_ref (file);
 
-  switch (impl->operation_mode)
-    {
-    case OPERATION_MODE_SEARCH:
-      search_switch_to_browse_mode (impl);
-      break;
-    case OPERATION_MODE_RECENT:
-      recent_switch_to_browse_mode (impl);
-      break;
-    case OPERATION_MODE_BROWSE:
-      break;
-    }
+  operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
   if (impl->local_only && !g_file_is_native (file))
     {
@@ -8985,29 +9009,6 @@ search_stop_searching (GtkFileChooserDefault *impl,
     }
 }
 
-/* Stops any pending searches, clears the file list, and switches back to OPERATION_MODE_BROWSE */
-static void
-search_switch_to_browse_mode (GtkFileChooserDefault *impl)
-{
-  g_assert (impl->operation_mode != OPERATION_MODE_BROWSE);
-
-  operation_mode_stop (impl, impl->operation_mode);
-
-  impl->operation_mode = OPERATION_MODE_BROWSE;
-  path_bar_update (impl);
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    {
-      gtk_widget_show (impl->location_button);
-
-      if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
-	gtk_widget_show (impl->location_entry_box);
-    }
-
-  file_list_set_sort_column_ids (impl);
-}
-
 /* Creates the search_model and puts it in the tree view */
 static void
 search_setup_model (GtkFileChooserDefault *impl)
@@ -9264,33 +9265,6 @@ recent_stop_loading (GtkFileChooserDefault *impl)
       g_source_remove (impl->load_recent_id);
       impl->load_recent_id = 0;
     }
-}
-
-/* Stops any pending load, clears the file list, and switches
- * back to OPERATION_MODE_BROWSE
- */
-static void
-recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
-{
-  g_assert (impl->operation_mode != OPERATION_MODE_BROWSE);
-
-  operation_mode_stop (impl, impl->operation_mode);
-
-  impl->operation_mode = OPERATION_MODE_BROWSE;
-  path_bar_update (impl);
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    {
-      gtk_widget_show (impl->location_button);
-
-      if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
-	gtk_widget_show (impl->location_entry_box);
-    }
-
-  gtk_tree_view_column_set_visible (impl->list_size_column, impl->show_size_column);
-
-  file_list_set_sort_column_ids (impl);
 }
 
 static void
@@ -9738,17 +9712,7 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
 {
   GFile *file;
 
-  switch (impl->operation_mode)
-    {
-    case OPERATION_MODE_BROWSE:
-      break;
-    case OPERATION_MODE_SEARCH:
-      search_switch_to_browse_mode (impl);
-      break;
-    case OPERATION_MODE_RECENT:
-      recent_switch_to_browse_mode (impl);
-      break;
-    }
+  operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
   /* We ref the file chooser since volume_mount() may run a main loop, and the
    * user could close the file chooser window in the meantime.
@@ -10182,21 +10146,9 @@ location_popup_handler (GtkFileChooserDefault *impl,
   if (impl->operation_mode != OPERATION_MODE_BROWSE)
     {
       GtkWidget *widget_to_focus;
-      
-      /* This will give us the location widgets back */
-      switch (impl->operation_mode)
-        {
-        case OPERATION_MODE_SEARCH:
-          search_switch_to_browse_mode (impl);
-          break;
-        case OPERATION_MODE_RECENT:
-          recent_switch_to_browse_mode (impl);
-          break;
-        case OPERATION_MODE_BROWSE:
-          g_assert_not_reached ();
-          break;
-        }
 
+      operation_mode_set (impl, OPERATION_MODE_BROWSE);
+      
       if (impl->current_folder)
         change_folder_and_display_error (impl, impl->current_folder, FALSE);
 
