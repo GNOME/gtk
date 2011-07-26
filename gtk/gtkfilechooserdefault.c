@@ -9001,12 +9001,7 @@ search_switch_to_browse_mode (GtkFileChooserDefault *impl)
 {
   g_assert (impl->operation_mode != OPERATION_MODE_BROWSE);
 
-  search_stop_searching (impl, FALSE);
-  search_clear_model (impl, TRUE);
-
-  gtk_widget_destroy (impl->search_hbox);
-  impl->search_hbox = NULL;
-  impl->search_entry = NULL;
+  operation_mode_stop (impl, impl->operation_mode);
 
   impl->operation_mode = OPERATION_MODE_BROWSE;
   path_bar_update (impl);
@@ -9289,8 +9284,7 @@ recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
 {
   g_assert (impl->operation_mode != OPERATION_MODE_BROWSE);
 
-  recent_stop_loading (impl);
-  recent_clear_model (impl, TRUE);
+  operation_mode_stop (impl, impl->operation_mode);
 
   impl->operation_mode = OPERATION_MODE_BROWSE;
   path_bar_update (impl);
