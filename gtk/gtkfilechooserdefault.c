@@ -5217,6 +5217,35 @@ path_bar_update (GtkFileChooserDefault *impl)
   path_bar_set_mode (impl, mode);
 }
 
+/* Stops running operations like populating the browse model, searches, and the recent-files model */
+static void
+operation_mode_stop (GtkFileChooserDefault *impl, OperationMode mode)
+{
+  switch (mode)
+    {
+    case OPERATION_MODE_BROWSE:
+      stop_loading_and_clear_list_model (impl, TRUE);
+      break;
+
+    case OPERATION_MODE_SEARCH:
+      search_stop_searching (impl, FALSE);
+      search_clear_model (impl, TRUE);
+
+      gtk_widget_destroy (impl->search_hbox);
+      impl->search_hbox = NULL;
+      impl->search_entry = NULL;
+      break;
+
+    case OPERATION_MODE_RECENT:
+      recent_stop_loading (impl);
+      recent_clear_model (impl, TRUE);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* This function is basically a do_all function.
  *
  * It sets the visibility on all the widgets based on the current state, and
@@ -9163,32 +9192,6 @@ search_setup_widgets (GtkFileChooserDefault *impl)
   /* FMQ: hide the filter combo? */
 }
 
-/* Stops running operations like populating the browse model, searches, and the recent-files model */
-static void
-stop_operation (GtkFileChooserDefault *impl, OperationMode mode)
-{
-  switch (mode)
-    {
-    case OPERATION_MODE_BROWSE:
-      stop_loading_and_clear_list_model (impl, TRUE);
-      break;
-
-    case OPERATION_MODE_SEARCH:
-      search_stop_searching (impl, FALSE);
-      search_clear_model (impl, TRUE);
-
-      gtk_widget_destroy (impl->search_hbox);
-      impl->search_hbox = NULL;
-      impl->search_entry = NULL;
-      break;
-
-    case OPERATION_MODE_RECENT:
-      recent_stop_loading (impl);
-      recent_clear_model (impl, TRUE);
-      break;
-    }
-}
-
 /* Sometimes we need to frob the selection in the shortcuts list manually */
 static void
 shortcuts_select_item_without_activating (GtkFileChooserDefault *impl, int pos)
@@ -9226,7 +9229,7 @@ search_activate (GtkFileChooserDefault *impl)
 
   shortcuts_select_item_without_activating (impl, shortcuts_get_index (impl, SHORTCUTS_SEARCH));
 
-  stop_operation (impl, previous_mode);
+  operation_mode_stop (impl, previous_mode);
 
   g_assert (impl->search_hbox == NULL);
   g_assert (impl->search_entry == NULL);
@@ -9560,7 +9563,7 @@ recent_activate (GtkFileChooserDefault *impl)
 
   shortcuts_select_item_without_activating (impl, shortcuts_get_index (impl, SHORTCUTS_RECENT));
 
-  stop_operation (impl, previous_mode);
+  operation_mode_stop (impl, previous_mode);
 
   recent_hide_entry (impl);
 
