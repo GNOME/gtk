@@ -23,16 +23,14 @@
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *dialog;
-  GtkWidget *ok;
+  GtkWidget *window;
 
   gtk_init (&argc, &argv);
 
-  dialog = gtk_font_chooser_dialog_new (NULL, NULL);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_container_add (GTK_CONTAINER (window), gtk_font_button_new ());
+  gtk_widget_show_all (window);
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_widget_destroy (dialog);
-
+  gtk_main ();
   return 0;
 }
