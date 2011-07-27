@@ -1045,14 +1045,20 @@ gchar *
 gtk_font_chooser_get_font_name (GtkFontChooser *fontchooser)
 {
   gchar                *font_name;
+  gchar                *font_desc_name;
   PangoFontDescription *desc;
 
   if (!fontchooser->priv->face)
     return NULL;
 
+
+
   desc = pango_font_face_describe (fontchooser->priv->face);
-  font_name = pango_font_description_to_string (desc);
+  font_desc_name = pango_font_description_to_string (desc);
   pango_font_description_free (desc);
+  
+  font_name = g_strdup_printf ("%s %d", font_desc_name, fontchooser->priv->size / PANGO_SCALE);
+  g_free (font_desc_name);
   return font_name;
 }
 
