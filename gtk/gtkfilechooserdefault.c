@@ -4895,9 +4895,13 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   GtkWidget *widget;
   GtkSizeGroup *size_group;
 
-  /* size group is used by the scrolled windows of the panes */
-  size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
   impl->browse_widgets_box = gtk_vbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (impl), impl->browse_widgets_box, TRUE, TRUE, 0);
+  gtk_widget_show (impl->browse_widgets_box);
+
+  impl->browse_header_box = gtk_vbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), impl->browse_header_box, FALSE, FALSE, 0);
+  gtk_widget_show (impl->browse_header_box);
 
   /* Path bar, info bar, and their respective machinery - the browse_path_bar_hbox will get packed elsewhere */
   path_bar_widgets_create (impl);
@@ -4905,11 +4909,14 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   /* Box for the location label and entry */
 
   impl->location_entry_box = gtk_hbox_new (FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), impl->location_entry_box, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (impl->browse_header_box), impl->location_entry_box, FALSE, FALSE, 0);
 
   impl->location_label = gtk_label_new_with_mnemonic (_("_Location:"));
   gtk_widget_show (impl->location_label);
   gtk_box_pack_start (GTK_BOX (impl->location_entry_box), impl->location_label, FALSE, FALSE, 0);
+
+  /* size group is used by the scrolled windows of the panes */
+  size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
   /* Paned widget */
   hpaned = gtk_hpaned_new ();
@@ -4948,7 +4955,6 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   /* The browse widgets */
   browse_widgets_create (impl);
-  gtk_box_pack_start (GTK_BOX (impl), impl->browse_widgets_box, TRUE, TRUE, 0);
 
   /* Alignment to hold extra widget */
   impl->extra_align = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
@@ -5119,8 +5125,8 @@ restore_path_bar (GtkFileChooserDefault *impl)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-      gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), impl->browse_path_bar_hbox, FALSE, FALSE, 0);
-      gtk_box_reorder_child (GTK_BOX (impl->browse_widgets_box), impl->browse_path_bar_hbox, 0);
+      gtk_box_pack_start (GTK_BOX (impl->browse_header_box), impl->browse_path_bar_hbox, FALSE, FALSE, 0);
+      gtk_box_reorder_child (GTK_BOX (impl->browse_header_box), impl->browse_path_bar_hbox, 0);
     }
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
@@ -5362,7 +5368,6 @@ update_appearance (GtkFileChooserDefault *impl)
     {
       gtk_widget_show (impl->location_button);
       save_widgets_destroy (impl);
-      gtk_widget_show (impl->browse_widgets_box);
       location_mode_set (impl, impl->location_mode, TRUE);
     }
 
