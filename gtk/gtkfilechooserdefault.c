@@ -5233,6 +5233,7 @@ operation_mode_set_browse (GtkFileChooserDefault *impl)
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       gtk_widget_show (impl->location_button);
+      location_mode_set (impl, impl->location_mode, TRUE);
 
       if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
 	gtk_widget_show (impl->location_entry_box);
