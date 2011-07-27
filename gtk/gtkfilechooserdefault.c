@@ -9825,7 +9825,10 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
   gpointer col_data;
   ShortcutType shortcut_type;
 
-  if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY
+  /* In the Save modes, we want to preserve what the uesr typed in the filename
+   * entry, so that he may choose another folder without erasing his typed name.
+   */
+  if (impl->location_entry
       && !(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
