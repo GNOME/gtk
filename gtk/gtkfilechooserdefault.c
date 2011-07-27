@@ -5208,6 +5208,18 @@ path_bar_update (GtkFileChooserDefault *impl)
   path_bar_set_mode (impl, mode);
 }
 
+static void
+operation_mode_discard_search_widgets (GtkFileChooserDefault *impl)
+{
+  if (impl->search_hbox)
+    {
+      gtk_widget_destroy (impl->search_hbox);
+
+      impl->search_hbox = NULL;
+      impl->search_entry = NULL;
+    }
+}
+
 /* Stops running operations like populating the browse model, searches, and the recent-files model */
 static void
 operation_mode_stop (GtkFileChooserDefault *impl, OperationMode mode)
@@ -5222,9 +5234,7 @@ operation_mode_stop (GtkFileChooserDefault *impl, OperationMode mode)
       search_stop_searching (impl, FALSE);
       search_clear_model (impl, TRUE);
 
-      gtk_widget_destroy (impl->search_hbox);
-      impl->search_hbox = NULL;
-      impl->search_entry = NULL;
+      operation_mode_discard_search_widgets (impl);
       break;
 
     case OPERATION_MODE_RECENT:
