@@ -3707,7 +3707,7 @@ key_is_left_or_right (GdkEventKey *event)
 
 /* Handles key press events on the file list, so that we can trap Enter to
  * activate the default button on our own.  Also, checks to see if '/' has been
- * pressed.  See comment by tree_view_keybinding_cb() for more details.
+ * pressed.
  */
 static gboolean
 browse_files_key_press_event_cb (GtkWidget   *widget,
@@ -4484,53 +4484,6 @@ location_switch_to_path_bar (GtkFileChooserDefault *impl)
     }
 
   gtk_widget_hide (impl->location_entry_box);
-}
-
-/* Sets the full path of the current folder as the text in the location entry. */
-static void
-location_entry_set_initial_text (GtkFileChooserDefault *impl)
-{
-  gchar *text, *filename;
-
-  if (!impl->current_folder)
-    return;
-
-  filename = g_file_get_path (impl->current_folder);
-
-  if (filename)
-    {
-      text = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-      g_free (filename);
-    }
-  else
-    text = g_file_get_uri (impl->current_folder);
-
-  if (text)
-    {
-      gboolean need_slash;
-      int len;
-
-      len = strlen (text);
-      need_slash = (text[len - 1] != G_DIR_SEPARATOR);
-
-      if (need_slash)
-	{
-	  char *slash_text;
-
-	  slash_text = g_new (char, len + 2);
-	  strcpy (slash_text, text);
-	  slash_text[len] = G_DIR_SEPARATOR;
-	  slash_text[len + 1] = 0;
-
-	  g_free (text);
-	  text = slash_text;
-	}
-
-      _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), text);
-      g_free (text);
-    }
-
-  g_free (filename);
 }
 
 /* Turns on the location entry.  Can be called even if we are already in that
@@ -10169,34 +10122,11 @@ location_popup_handler (GtkFileChooserDefault *impl,
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-      LocationMode new_mode;
+      if (!path)
+	return;
 
-      if (path != NULL)
-	{
-	  /* since the user typed something, we unconditionally want to turn on the entry */
-	  new_mode = LOCATION_MODE_FILENAME_ENTRY;
-	}
-      else if (impl->location_mode == LOCATION_MODE_PATH_BAR)
-	new_mode = LOCATION_MODE_FILENAME_ENTRY;
-      else if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
-	new_mode = LOCATION_MODE_PATH_BAR;
-      else
-	{
-	  g_assert_not_reached ();
-	  return;
-	}
-
-      location_mode_set (impl, new_mode, TRUE);
-      if (new_mode == LOCATION_MODE_FILENAME_ENTRY)
-	{
-	  if (path != NULL)
-	    location_set_user_text (impl, path);
-	  else
-	    {
-	      location_entry_set_initial_text (impl);
-	      gtk_editable_select_region (GTK_EDITABLE (impl->location_entry), 0, -1);
-	    }
-	}
+      location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY, TRUE);
+      location_set_user_text (impl, path);
     }
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
 	   impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
