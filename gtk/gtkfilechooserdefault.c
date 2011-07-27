@@ -9779,12 +9779,16 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
 
       volume = col_data;
 
+      operation_mode_set (impl, OPERATION_MODE_BROWSE);
+
       shortcuts_activate_volume (impl, volume);
     }
   else if (shortcut_type == SHORTCUT_TYPE_FILE)
     {
       struct ShortcutsActivateData *data;
       GtkFileSystemVolume *volume;
+
+      operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
       volume = _gtk_file_system_get_volume_for_file (impl->file_system, col_data);
 
