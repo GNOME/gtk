@@ -4371,6 +4371,20 @@ file_pane_create (GtkFileChooserDefault *impl,
   return vbox;
 }
 
+static void
+location_entry_create (GtkFileChooserDefault *impl)
+{
+  if (!impl->location_entry)
+    impl->location_entry = _gtk_file_chooser_entry_new (TRUE);
+
+  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+					   impl->file_system);
+  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
+  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
+  gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
+  gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
+}
+
 /* Creates the widgets specific to Save mode */
 static void
 save_widgets_create (GtkFileChooserDefault *impl)
@@ -4403,12 +4417,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
 
   /* Location entry */
 
-  impl->location_entry = _gtk_file_chooser_entry_new (TRUE);
-  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-					   impl->file_system);
-  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
-  gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
-  gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
+  location_entry_create (impl);
   gtk_table_attach (GTK_TABLE (impl->save_widgets_table), impl->location_entry,
 		    1, 2, 0, 1,
 		    GTK_EXPAND | GTK_FILL, 0,
@@ -4522,7 +4531,10 @@ location_switch_to_filename_entry (GtkFileChooserDefault *impl)
     return;
 
   if (impl->location_entry)
-    gtk_widget_destroy (impl->location_entry);
+    {
+      gtk_widget_destroy (impl->location_entry);
+      impl->location_entry = NULL;
+    }
 
   /* Box */
 
@@ -4530,19 +4542,13 @@ location_switch_to_filename_entry (GtkFileChooserDefault *impl)
 
   /* Entry */
 
-  impl->location_entry = _gtk_file_chooser_entry_new (TRUE);
-  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-					   impl->file_system);
-  gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
-  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
-
+  location_entry_create (impl);
   gtk_box_pack_start (GTK_BOX (impl->location_entry_box), impl->location_entry, TRUE, TRUE, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (impl->location_label), impl->location_entry);
 
   /* Configure the entry */
 
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->current_folder);
-  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
 
   /* Done */
 
