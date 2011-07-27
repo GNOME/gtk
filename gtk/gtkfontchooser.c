@@ -86,7 +86,6 @@ struct _GtkFontChooserPrivate
 
   GtkWidget *size_spin;
   GtkWidget *size_slider;
-  gboolean   stop_notify;
 
   gint             size;
   PangoFontFace   *face;
@@ -332,37 +331,25 @@ spin_change_cb (GtkAdjustment *adjustment,
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
 
-  if (priv->stop_notify)
-    priv->stop_notify = FALSE;
-  else
-    g_object_notify (G_OBJECT (fontchooser), "font-name");
+  g_object_notify (G_OBJECT (fontchooser), "font-name");
 
   /* If the new value is lower than the lower bound of the slider, we set
    * the slider adjustment to the lower bound value if it is not already set
    */
   if (size < gtk_adjustment_get_lower (slider_adj) &&
       gtk_adjustment_get_value (slider_adj) != gtk_adjustment_get_lower (slider_adj))
-    {
-      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
-      priv->stop_notify = TRUE;
-    }
+    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
 
   /* If the new value is upper than the upper bound of the slider, we set
    * the slider adjustment to the upper bound value if it is not already set
    */
   else if (size > gtk_adjustment_get_upper (slider_adj) &&
            gtk_adjustment_get_value (slider_adj) != gtk_adjustment_get_upper (slider_adj))
-    {
-      gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
-      priv->stop_notify = TRUE;
-    }
+    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
 
   /* If the new value is not already set on the slider we set it */
   else if (size != gtk_adjustment_get_value (slider_adj))
-    {
-      gtk_adjustment_set_value (slider_adj, size);
-      priv->stop_notify = TRUE;
-    }
+    gtk_adjustment_set_value (slider_adj, size);
 
   gtk_widget_queue_draw (priv->preview);
 }
@@ -607,7 +594,6 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
                     "value-changed", G_CALLBACK (slider_change_cb), fontchooser);
   g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
                     "value-changed", G_CALLBACK (spin_change_cb), fontchooser);
-  priv->stop_notify = FALSE;
 
   /* Font selection callback */
   g_signal_connect (G_OBJECT (priv->family_face_list), "cursor-changed",
