@@ -286,7 +286,7 @@ _gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
 
 /**
  * gdk_x11_cursor_get_xdisplay:
- * @cursor: a #GdkCursor.
+ * @cursor: (type GdkX11Cursor): a #GdkCursor.
  * 
  * Returns the display of a #GdkCursor.
  * 
@@ -302,7 +302,7 @@ gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
 
 /**
  * gdk_x11_cursor_get_xcursor:
- * @cursor: a #GdkCursor.
+ * @cursor: (type GdkX11Cursor): a #GdkCursor.
  * 
  * Returns the X cursor belonging to a #GdkCursor.
  * 
@@ -435,7 +435,7 @@ update_cursor (gpointer data,
 
 /**
  * gdk_x11_display_set_cursor_theme:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @theme: the name of the cursor theme to use, or %NULL to unset
  *         a previously set value
  * @size: the cursor size to use, or 0 to keep the previous size

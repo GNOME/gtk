@@ -333,7 +333,7 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
 
 /**
  * gdk_x11_display_text_property_to_text_list:
- * @display: The #GdkDisplay where the encoding is defined
+ * @display: (type GdkX11Display): The #GdkDisplay where the encoding is defined
  * @encoding: an atom representing the encoding. The most
  *    common values for this are STRING, or COMPOUND_TEXT.
  *    This is value used as the type for the property
@@ -574,7 +574,7 @@ _gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
 
 /**
  * gdk_x11_display_string_to_compound_text:
- * @display: the #GdkDisplay where the encoding is defined
+ * @display: (type GdkX11Display): the #GdkDisplay where the encoding is defined
  * @str: a nul-terminated string
  * @encoding: (out) (transfer none): location to store the encoding atom
  *     (to be used as the type for the property)
@@ -695,7 +695,7 @@ _gdk_x11_display_utf8_to_string_target (GdkDisplay  *display,
 
 /**
  * gdk_x11_display_utf8_to_compound_text:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @str: a UTF-8 string
  * @encoding: (out): location to store resulting encoding
  * @format: (out): location to store format of the result
