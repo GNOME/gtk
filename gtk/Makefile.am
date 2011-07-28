@@ -1007,15 +1007,22 @@ introspection_files = \
     gtktypebuiltins.h \
     gtktypebuiltins.c
 
+if USE_X11
+introspection_files += \
+    gtksocket.c \
+    gtkplug.c
+endif
+
 Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
 Gtk_3_0_gir_SCANNERFLAGS = 			\
 	--add-include-path=$(top_builddir)/gdk	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
+Gtk_3_0_gir_INCLUDES = Atk-1.0
 if USE_X11
 Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
+Gtk_3_0_gir_INCLUDES += xlib-2.0
 endif
 Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtkx.h"
-Gtk_3_0_gir_INCLUDES = Atk-1.0
 Gtk_3_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
 		-UGDK_DISABLE_DEPRECATED \
