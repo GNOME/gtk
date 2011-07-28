@@ -289,7 +289,7 @@ types related to the text widget and how they work together.
 @text: 
 @len: 
 @first_tag: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_insert_with_tags_by_name ##### -->
@@ -302,7 +302,7 @@ types related to the text widget and how they work together.
 @text: 
 @len: 
 @first_tag_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_delete ##### -->
@@ -581,7 +581,7 @@ types related to the text widget and how they work together.
 @buffer: 
 @tag_name: 
 @first_property_name: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
