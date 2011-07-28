@@ -442,7 +442,7 @@ gdk_x11_get_default_screen (void)
 }
 
 /**
- * gdk_x11_get_default_root_xwindow: (skip)
+ * gdk_x11_get_default_root_xwindow:
  * 
  * Gets the root window of the default screen 
  * (see gdk_x11_get_default_screen()).  
@@ -456,13 +456,13 @@ gdk_x11_get_default_root_xwindow (void)
 }
 
 /**
- * gdk_x11_get_default_xdisplay: (skip)
+ * gdk_x11_get_default_xdisplay:
  * 
  * Gets the default GTK+ display.
  * 
- * Return value: the Xlib <type>Display*</type> for the display
- * specified in the <option>--display</option> command line option 
- * or the <envar>DISPLAY</envar> environment variable.
+ * Return value: (transfer none): the Xlib <type>Display*</type> for
+ * the display specified in the <option>--display</option> command
+ * line option or the <envar>DISPLAY</envar> environment variable.
  **/
 Display *
 gdk_x11_get_default_xdisplay (void)

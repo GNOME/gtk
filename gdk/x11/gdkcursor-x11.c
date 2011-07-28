@@ -285,12 +285,12 @@ _gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
 }
 
 /**
- * gdk_x11_cursor_get_xdisplay: (skip)
+ * gdk_x11_cursor_get_xdisplay:
  * @cursor: a #GdkCursor.
  * 
  * Returns the display of a #GdkCursor.
  * 
- * Return value: an Xlib <type>Display*</type>.
+ * Return value: (transfer none): an Xlib <type>Display*</type>.
  **/
 Display *
 gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
@@ -301,7 +301,7 @@ gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
 }
 
 /**
- * gdk_x11_cursor_get_xcursor: (skip)
+ * gdk_x11_cursor_get_xcursor:
  * @cursor: a #GdkCursor.
  * 
  * Returns the X cursor belonging to a #GdkCursor.

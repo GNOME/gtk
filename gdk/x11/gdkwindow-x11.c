@@ -4738,7 +4738,7 @@ gdk_x11_get_server_time (GdkWindow *window)
 }
 
 /**
- * gdk_x11_window_get_xid: (skip)
+ * gdk_x11_window_get_xid:
  * @window: a native #GdkWindow.
  * 
  * Returns the X resource (window) belonging to a #GdkWindow.

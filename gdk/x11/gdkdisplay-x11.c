@@ -1843,9 +1843,9 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 }
 
 /**
- * gdk_x11_display_get_xdisplay: (skip)
+ * gdk_x11_display_get_xdisplay:
  * @display: a #GdkDisplay
- * @returns: an X display.
+ * @returns: (transfer none): an X display.
  *
  * Returns the X display of a #GdkDisplay.
  *
