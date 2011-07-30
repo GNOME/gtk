@@ -13135,8 +13135,6 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
         {
           GtkTreeSelectMode mode = 0;
 
-          if (tree_view->priv->ctrl_pressed)
-            mode |= GTK_TREE_SELECT_MODE_TOGGLE;
           if (tree_view->priv->shift_pressed)
             mode |= GTK_TREE_SELECT_MODE_EXTEND;
 
