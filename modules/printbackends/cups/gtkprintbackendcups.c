@@ -92,6 +92,7 @@ typedef struct
 
   http_t *http;
   GtkCupsRequest *request;
+  GtkCupsPollState poll_state;
   GPollFD *data_poll;
   GtkPrintBackendCups *backend;
   GtkPrintCupsResponseCallbackFunc callback;
@@ -917,11 +918,20 @@ cups_dispatch_add_poll (GSource *source)
 
   poll_state = gtk_cups_request_get_poll_state (dispatch->request);
 
+  /* Remove the old source if the poll state changed. */
+  if (poll_state != dispatch->poll_state && dispatch->data_poll != NULL)
+    {
+      g_source_remove_poll (source, dispatch->data_poll);
+      g_free (dispatch->data_poll);
+      dispatch->data_poll = NULL;
+    }
+
   if (dispatch->request->http != NULL)
     {
       if (dispatch->data_poll == NULL)
         {
 	  dispatch->data_poll = g_new0 (GPollFD, 1);
+	  dispatch->poll_state = poll_state;
 
 	  if (poll_state == GTK_CUPS_HTTP_READ)
 	    dispatch->data_poll->events = G_IO_IN | G_IO_HUP | G_IO_ERR | G_IO_PRI;
@@ -1093,13 +1103,11 @@ cups_dispatch_watch_check (GSource *source)
 
   poll_state = gtk_cups_request_get_poll_state (dispatch->request);
 
-  cups_dispatch_add_poll (source);
-    
   if (poll_state != GTK_CUPS_HTTP_IDLE && !dispatch->request->need_password)
     if (!(dispatch->data_poll->revents & dispatch->data_poll->events)) 
        return FALSE;
   
-  result = gtk_cups_request_read_write (dispatch->request);
+  result = gtk_cups_request_read_write (dispatch->request, FALSE);
   if (result && dispatch->data_poll != NULL)
     {
       g_source_remove_poll (source, dispatch->data_poll);
@@ -1130,8 +1138,8 @@ cups_dispatch_watch_prepare (GSource *source,
             g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
 
   *timeout_ = -1;
-  
-  result = gtk_cups_request_read_write (dispatch->request);
+
+  result = gtk_cups_request_read_write (dispatch->request, TRUE);
 
   cups_dispatch_add_poll (source);
 
@@ -1231,7 +1239,12 @@ cups_dispatch_watch_finalize (GSource *source)
       dispatch->backend = NULL;
     }
 
-  g_free (dispatch->data_poll);
+  if (dispatch->data_poll)
+    {
+      g_source_remove_poll (source, dispatch->data_poll);
+      g_free (dispatch->data_poll);
+      dispatch->data_poll = NULL;
+    }
 }
 
 static GSourceFuncs _cups_dispatch_watch_funcs = {
@@ -1260,6 +1273,7 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
 
   dispatch->request = request;
   dispatch->backend = g_object_ref (print_backend);
+  dispatch->poll_state = GTK_CUPS_HTTP_IDLE;
   dispatch->data_poll = NULL;
   dispatch->callback = NULL;
   dispatch->callback_data = NULL;
