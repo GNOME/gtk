@@ -253,34 +253,43 @@ gtk_cups_request_free (GtkCupsRequest *request)
 }
 
 gboolean 
-gtk_cups_request_read_write (GtkCupsRequest *request)
+gtk_cups_request_read_write (GtkCupsRequest *request, gboolean connect_only)
 {
-  if (request->type == GTK_CUPS_POST)
-    post_states[request->state] (request);
-  else if (request->type == GTK_CUPS_GET)
-    get_states[request->state] (request);
-
-  if (request->attempts > _GTK_CUPS_MAX_ATTEMPTS && 
-      request->state != GTK_CUPS_REQUEST_DONE)
-    {
-      /* TODO: should add a status or error code for too many failed attempts */
-      gtk_cups_result_set_error (request->result, 
-                                 GTK_CUPS_ERROR_GENERAL,
-                                 0,
-                                 0, 
-                                 "Too many failed attempts");
-
-      request->state = GTK_CUPS_REQUEST_DONE;
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
-    }
-    
-  if (request->state == GTK_CUPS_REQUEST_DONE)
-    {
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
-      return TRUE;
-    }
-  else
+  if (connect_only && request->state != GTK_CUPS_REQUEST_START)
     return FALSE;
+
+  do
+    {
+      if (request->type == GTK_CUPS_POST)
+        post_states[request->state] (request);
+      else if (request->type == GTK_CUPS_GET)
+        get_states[request->state] (request);
+
+      if (request->attempts > _GTK_CUPS_MAX_ATTEMPTS &&
+          request->state != GTK_CUPS_REQUEST_DONE)
+        {
+          /* TODO: should add a status or error code for too many failed attempts */
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_GENERAL,
+                                     0,
+                                     0,
+                                     "Too many failed attempts");
+
+          request->state = GTK_CUPS_REQUEST_DONE;
+        }
+
+      if (request->state == GTK_CUPS_REQUEST_DONE)
+        {
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+          return TRUE;
+        }
+    }
+  /* We need to recheck using httpCheck if the poll_state is read, because
+   * Cups has an internal read buffer. And if this buffer is filled, we may
+   * never get a poll event again. */
+  while (request->poll_state == GTK_CUPS_HTTP_READ && request->http && httpCheck(request->http));
+
+  return FALSE;
 }
 
 GtkCupsPollState 
@@ -643,6 +652,7 @@ static void
 _connect (GtkCupsRequest *request)
 {
   request->poll_state = GTK_CUPS_HTTP_IDLE;
+  request->bytes_received = 0;
 
   if (request->http == NULL)
     {
@@ -1404,18 +1414,11 @@ _get_read_data (GtkCupsRequest *request)
 #else
   bytes = httpRead (request->http, buffer, sizeof (buffer));
 #endif /* HAVE_CUPS_API_1_2 */
+  request->bytes_received += bytes;
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %"G_GSIZE_FORMAT" bytes read\n", bytes));
-  
-  if (bytes == 0)
-    {
-      request->state = GTK_CUPS_GET_DONE;
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
 
-      return;
-    }
-  
   io_status =
     g_io_channel_write_chars (request->data_io, 
                               buffer, 
@@ -1434,6 +1437,19 @@ _get_read_data (GtkCupsRequest *request)
                                  error->code, 
                                  error->message);
       g_error_free (error);
+    }
+
+  /* Stop if we do not expect any more data or EOF was received. */
+#if HAVE_CUPS_API_1_2
+  if (httpGetLength2 (request->http) <= request->bytes_received || bytes == 0)
+#else
+  if (httpGetLength (request->http) <= request->bytes_received || bytes == 0)
+#endif /* HAVE_CUPS_API_1_2 */
+    {
+      request->state = GTK_CUPS_GET_DONE;
+      request->poll_state = GTK_CUPS_HTTP_IDLE;
+
+      return;
     }
 }
 
