@@ -80,6 +80,7 @@ void         gtk_font_chooser_set_preview_text         (GtkFontChooser *fontchoo
 gboolean     gtk_font_chooser_get_show_preview_entry   (GtkFontChooser *fontchooser);
 void         gtk_font_chooser_set_show_preview_entry   (GtkFontChooser *fontchooser,
                                                         gboolean        show_preview_entry);
+
 G_END_DECLS
 
 #endif /* __GTK_FONT_CHOOSER_H__ */
