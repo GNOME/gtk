@@ -1090,6 +1090,9 @@ gtk_grid_get_column_spacing
 gtk_grid_get_row_homogeneous
 gtk_grid_get_row_spacing
 gtk_grid_get_type
+gtk_grid_insert_column
+gtk_grid_insert_next_to
+gtk_grid_insert_row
 gtk_grid_new
 gtk_grid_set_column_homogeneous
 gtk_grid_set_column_spacing
