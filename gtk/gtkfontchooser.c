@@ -248,49 +248,43 @@ gtk_font_chooser_get_property (GObject         *object,
       break;
     }
 }
-static void
-deleted_text_cb (GtkEntryBuffer *buffer,
-                 guint           position,
-                 guint           n_chars,
-                 gpointer        user_data)
-{
-  GtkFontChooser        *fc    = (GtkFontChooser*)user_data;
-  GtkFontChooserPrivate *priv  = fc->priv;
-  GtkWidget             *entry = priv->search_entry;
 
-  if (gtk_entry_buffer_get_length (buffer) == 0)
+static void
+text_changed_cb (GtkEntry       *entry,
+                 GParamSpec     *pspec,
+                 GtkFontChooser *fc)
+{
+  GtkFontChooserPrivate *priv = fc->priv;
+  const gchar *text;
+
+  text = gtk_entry_get_text (entry);
+
+  if (text == NULL || text[0] == '\0')
     {
-      GIcon *icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
-      gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
-                                     GTK_ENTRY_ICON_SECONDARY,
-                                     icon);
+      GIcon *icon;
+
+      icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
+      g_object_set (G_OBJECT (priv->search_entry),
+                    "secondary-icon-gicon", icon,
+                    "secondary-icon-activatable", FALSE,
+                    "secondary-icon-sensitive", FALSE,
+                    NULL);
       g_object_unref (icon);
     }
-
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
-}
-
-static void
-inserted_text_cb (GtkEntryBuffer *buffer,
-                  guint           position,
-                  gchar          *chars,
-                  guint           n_chars,
-                  gpointer        user_data)
-{
-  GtkFontChooser        *fc    = (GtkFontChooser*)user_data;
-  GtkFontChooserPrivate *priv  = fc->priv;
-  GtkWidget             *entry = priv->search_entry;
-
-  if (g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
-                 "edit-clear-symbolic") != 0 ||
-      g_strcmp0 (gtk_entry_get_icon_stock (GTK_ENTRY (entry), GTK_ENTRY_ICON_SECONDARY),
-                 GTK_STOCK_CLEAR)       != 0)
+  else
     {
-      GIcon *icon = g_themed_icon_new_with_default_fallbacks ("edit-clear-symbolic");
-      gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
-                                     GTK_ENTRY_ICON_SECONDARY,
-                                     icon);
-      g_object_unref (icon);
+      if (!gtk_entry_get_icon_activatable (GTK_ENTRY (priv->search_entry), GTK_ENTRY_ICON_SECONDARY))
+        {
+          GIcon *icon;
+
+          icon = g_themed_icon_new_with_default_fallbacks ("edit-clear-symbolic");
+          g_object_set (G_OBJECT (priv->search_entry),
+                        "secondary-icon-gicon", icon,
+                        "secondary-icon-activatable", TRUE,
+                        "secondary-icon-sensitive", TRUE,
+                        NULL);
+          g_object_unref (icon);
+        }
     }
 
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
@@ -302,7 +296,7 @@ icon_press_cb (GtkEntry             *entry,
                GdkEvent             *event,
                gpointer              user_data)
 {
-  gtk_entry_buffer_delete_text (gtk_entry_get_buffer (entry), 0, -1);
+  gtk_entry_set_text (entry, "");
 }
 
 static void
@@ -588,10 +582,8 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   grid = gtk_grid_new ();
   sub_grid = gtk_grid_new ();
 
-  gtk_widget_set_margin_bottom (priv->search_entry, 6);
-  gtk_widget_set_margin_bottom (scrolled_win,       6);
-  gtk_widget_set_margin_bottom (priv->preview,      6);
-  gtk_widget_set_margin_right  (priv->size_slider,  6);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+  gtk_grid_set_row_spacing (GTK_GRID (sub_grid), 6);
 
   gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 3, 1);
   gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 3, 1);
@@ -630,37 +622,34 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /* Set search icon and place holder text */
   icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
-  gtk_entry_set_icon_from_gicon (GTK_ENTRY (priv->search_entry),
-                                 GTK_ENTRY_ICON_SECONDARY,
-                                 icon);
+  g_object_set (G_OBJECT (priv->search_entry),
+                "secondary-icon-gicon", icon,
+                "secondary-icon-activatable", FALSE,
+                "secondary-icon-sensitive", FALSE,
+                NULL);
   g_object_unref (icon);
 
   gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), _("Search font name"));
 
   /** Callback connections **/
-  /* Connect to callback for the live search text entry */
-  g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
-                    "deleted-text", G_CALLBACK (deleted_text_cb), fontchooser);
-  g_signal_connect (G_OBJECT (gtk_entry_get_buffer (GTK_ENTRY (priv->search_entry))),
-                    "inserted-text", G_CALLBACK (inserted_text_cb), fontchooser);
-  g_signal_connect (G_OBJECT (priv->search_entry),
+  g_signal_connect (priv->search_entry, "notify::text",
+                    G_CALLBACK (text_changed_cb), fontchooser);
+  g_signal_connect (priv->search_entry,
                     "icon-press", G_CALLBACK (icon_press_cb), NULL);
 
-  /* Size controls callbacks */
-  g_signal_connect (G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider))),
+  g_signal_connect (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
                     "value-changed", G_CALLBACK (slider_change_cb), fontchooser);
-  g_signal_connect (G_OBJECT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin))),
+  g_signal_connect (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
                     "value-changed", G_CALLBACK (spin_change_cb), fontchooser);
 
-  /* Font selection callback */
-  g_signal_connect (G_OBJECT (priv->family_face_list), "cursor-changed",
-                    G_CALLBACK (cursor_changed_cb),    fontchooser);
+  g_signal_connect (priv->family_face_list, "cursor-changed",
+                    G_CALLBACK (cursor_changed_cb), fontchooser);
 
   /* Zoom on preview scroll*/
-  g_signal_connect (G_OBJECT (priv->preview), "scroll-event",
-                    G_CALLBACK (zoom_preview_cb),  fontchooser);
+  g_signal_connect (priv->preview, "scroll-event",
+                    G_CALLBACK (zoom_preview_cb), fontchooser);
 
-  g_signal_connect (G_OBJECT (priv->size_slider), "scroll-event",
+  g_signal_connect (priv->size_slider, "scroll-event",
                     G_CALLBACK (zoom_preview_cb), fontchooser);
 
   set_range_marks (priv, priv->size_slider, (gint*)font_sizes, G_N_ELEMENTS (font_sizes));
@@ -674,7 +663,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   */
 
   /* Set default focus */
-  gtk_widget_pop_composite_child();
+  gtk_widget_pop_composite_child ();
 }
 
 /**
