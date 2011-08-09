@@ -17,7 +17,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "config.h"
 #include <gtk/gtk.h>
 
 int
@@ -32,5 +31,6 @@ main (int argc, char *argv[])
   gtk_widget_show_all (window);
 
   gtk_main ();
+
   return 0;
 }
