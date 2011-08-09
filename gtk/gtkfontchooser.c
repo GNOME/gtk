@@ -573,6 +573,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
                                        GTK_SHADOW_ETCHED_IN);
+  gtk_widget_set_size_request (scrolled_win, 400, 300);
   gtk_container_add (GTK_CONTAINER (scrolled_win),
                      priv->family_face_list);
 
