@@ -345,7 +345,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZE_TOPLEVEL,
                                    g_param_spec_boolean ("resize-toplevel",
-                                                         P_("Resize tolevel"),
+                                                         P_("Resize toplevel"),
                                                          P_("Whether the expander will resize the toplevel window upon expanding and collapsing"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));

@@ -219,7 +219,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_RGBA,
                                    g_param_spec_boxed ("background-rgba",
-                                                       P_("Background rgba"),
+                                                       P_("Background RGBA"),
                                                        P_("Background color as a GdkRGBA"),
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
@@ -258,7 +258,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_RGBA,
                                    g_param_spec_boxed ("foreground-rgba",
-                                                       P_("Foreground rgba"),
+                                                       P_("Foreground RGBA"),
                                                        P_("Foreground color as a GdkRGBA"),
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
@@ -573,8 +573,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_PARAGRAPH_BACKGROUND_RGBA,
                                    g_param_spec_boxed ("paragraph-background-rgba",
-                                                       P_("Paragraph background rgba"),
-                                                       P_("Paragraph background rgba as a GdkRGBA"),
+                                                       P_("Paragraph background RGBA"),
+                                                       P_("Paragraph background RGBA as a GdkRGBA"),
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
