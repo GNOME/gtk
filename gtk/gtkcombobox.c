@@ -4591,10 +4591,14 @@ gtk_combo_box_constructor (GType                  type,
   if (priv->has_entry)
     {
       GtkWidget *entry;
+      GtkStyleContext *context;
 
       entry = gtk_entry_new ();
       gtk_widget_show (entry);
       gtk_container_add (GTK_CONTAINER (combo_box), entry);
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (combo_box));
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_COMBOBOX_ENTRY);
 
       priv->text_renderer = gtk_cell_renderer_text_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box),
