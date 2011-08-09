@@ -3171,17 +3171,20 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkAllocation allocation;
   GtkRequisition requisition;
+  gint req_height;
   gint frame_height;
   gint xborder, yborder;
 
   gtk_widget_get_preferred_size (widget, &requisition, NULL);
+  req_height = requisition.height - gtk_widget_get_margin_top (widget) - gtk_widget_get_margin_bottom (widget);
+
   gtk_widget_get_allocation (widget, &allocation);
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
   if (gtk_widget_get_realized (widget))
     get_frame_size (entry, TRUE, NULL, NULL, NULL, &frame_height);
   else
-    frame_height = requisition.height;
+    frame_height = req_height;
 
   if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     frame_height -= 2 * priv->focus_width;
@@ -3190,13 +3193,13 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
     *x = xborder;
 
   if (y)
-    *y = frame_height / 2 - (requisition.height - yborder * 2) / 2;
+    *y = frame_height / 2 - (req_height - yborder * 2) / 2;
 
   if (width)
     *width = allocation.width - xborder * 2;
 
   if (height)
-    *height = requisition.height - yborder * 2;
+    *height = req_height - yborder * 2;
 }
 
 static void
@@ -3229,8 +3232,12 @@ get_frame_size (GtkEntry *entry,
   GtkAllocation allocation;
   GtkRequisition requisition;
   GtkWidget *widget = GTK_WIDGET (entry);
+  gint req_height;
 
   gtk_widget_get_preferred_size (widget, &requisition, NULL);
+
+  req_height = requisition.height - gtk_widget_get_margin_top (widget) - gtk_widget_get_margin_bottom (widget);
+
   gtk_widget_get_allocation (widget, &allocation);
 
   if (x)
@@ -3239,9 +3246,9 @@ get_frame_size (GtkEntry *entry,
   if (y)
     {
       if (priv->is_cell_renderer)
-	*y = 0;
+        *y = 0;
       else
-	*y = (allocation.height - requisition.height) / 2;
+        *y = (allocation.height - req_height) / 2;
 
       if (relative_to_window)
         *y += allocation.y;
@@ -3253,9 +3260,9 @@ get_frame_size (GtkEntry *entry,
   if (height)
     {
       if (priv->is_cell_renderer)
-	*height = allocation.height;
+        *height = allocation.height;
       else
-	*height = requisition.height;
+        *height = req_height;
     }
 }
 
