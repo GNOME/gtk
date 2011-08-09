@@ -83,7 +83,6 @@ struct _GtkFontChooserPrivate
   GtkTreeModel *filter;
 
   GtkWidget       *preview;
-  GtkWidget       *preview_scrolled_window;
   gchar           *preview_text;
   gboolean         show_preview_entry;
 
@@ -93,6 +92,8 @@ struct _GtkFontChooserPrivate
   gint             size;
   PangoFontFace   *face;
   PangoFontFamily *family;
+
+  gulong           cursor_changed_handler;
 };
 
 #define DEFAULT_FONT_NAME "Sans 10"
@@ -142,6 +143,7 @@ static void  gtk_font_chooser_get_property       (GObject         *object,
                                                   GValue          *value,
                                                   GParamSpec      *pspec);
 static void  gtk_font_chooser_finalize           (GObject         *object);
+static void  gtk_font_chooser_dispose            (GObject         *object);
 
 static void  gtk_font_chooser_screen_changed     (GtkWidget       *widget,
                                                   GdkScreen       *previous_screen);
@@ -165,6 +167,7 @@ gtk_font_chooser_class_init (GtkFontChooserClass *klass)
   widget_class->screen_changed = gtk_font_chooser_screen_changed;
   widget_class->style_updated = gtk_font_chooser_style_updated;
 
+  gobject_class->dispose = gtk_font_chooser_dispose;
   gobject_class->finalize = gtk_font_chooser_finalize;
   gobject_class->set_property = gtk_font_chooser_set_property;
   gobject_class->get_property = gtk_font_chooser_get_property;
@@ -642,8 +645,9 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   g_signal_connect (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
                     "value-changed", G_CALLBACK (spin_change_cb), fontchooser);
 
-  g_signal_connect (priv->family_face_list, "cursor-changed",
-                    G_CALLBACK (cursor_changed_cb), fontchooser);
+  priv->cursor_changed_handler =
+      g_signal_connect (priv->family_face_list, "cursor-changed",
+                        G_CALLBACK (cursor_changed_cb), fontchooser);
 
   /* Zoom on preview scroll*/
   g_signal_connect (priv->preview, "scroll-event",
@@ -708,9 +712,14 @@ populate_list (GtkFontChooser *fontchooser,
 
   gint n_families, i;
   PangoFontFamily **families;
+  GString     *tmp;
+  GString     *family_and_face;
 
-  GString     *tmp = g_string_new (NULL);
-  GString     *family_and_face = g_string_new (NULL);
+  if (!gtk_widget_has_screen (GTK_WIDGET (fontchooser)))
+    return;
+
+  tmp = g_string_new (NULL);
+  family_and_face = g_string_new (NULL);
 
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
                                &families,
@@ -878,6 +887,21 @@ gtk_font_chooser_bootstrap_fontlist (GtkFontChooser *fontchooser)
   populate_list (fontchooser, treeview, fontchooser->priv->model);
 }
 
+static void
+gtk_font_chooser_dispose (GObject *object)
+{
+  GtkFontChooser *fontchooser = GTK_FONT_CHOOSER (object);
+  GtkFontChooserPrivate *priv = fontchooser->priv;
+
+  if (priv->cursor_changed_handler != 0)
+    {
+      g_signal_handler_disconnect (priv->family_face_list,
+                                   priv->cursor_changed_handler);
+      priv->cursor_changed_handler = 0;
+    }
+
+  G_OBJECT_CLASS (gtk_font_chooser_parent_class)->dispose (object);
+}
 
 static void
 gtk_font_chooser_finalize (GObject *object)
@@ -889,7 +913,6 @@ gtk_font_chooser_finalize (GObject *object)
 
   G_OBJECT_CLASS (gtk_font_chooser_parent_class)->finalize (object);
 }
-
 
 static void
 gtk_font_chooser_screen_changed (GtkWidget *widget,
@@ -939,11 +962,6 @@ gtk_font_chooser_ref_face (GtkFontChooser *fontchooser,
     g_object_unref (priv->face);
   priv->face = face;
 }
-
-
-/*
- * These functions are the main public interface for getting/setting the font.
- */
 
 /**
  * gtk_font_chooser_get_family:
@@ -1242,13 +1260,19 @@ void
 gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
                                          gboolean        show_preview_entry)
 {
+  GtkFontChooserPrivate *priv = fontchooser->priv;
+
   g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
 
-  if (show_preview_entry)
-    gtk_widget_show (fontchooser->priv->preview_scrolled_window);
-  else
-    gtk_widget_hide (fontchooser->priv->preview_scrolled_window);
+  if (priv->show_preview_entry != show_preview_entry)
+    {
+      fontchooser->priv->show_preview_entry = show_preview_entry;
 
-  fontchooser->priv->show_preview_entry = show_preview_entry;
-  g_object_notify (G_OBJECT (fontchooser), "show-preview-entry");
+      if (show_preview_entry)
+        gtk_widget_show (fontchooser->priv->preview);
+      else
+        gtk_widget_hide (fontchooser->priv->preview);
+
+      g_object_notify (G_OBJECT (fontchooser), "show-preview-entry");
+    }
 }
