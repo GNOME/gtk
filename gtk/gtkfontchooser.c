@@ -429,10 +429,13 @@ cursor_changed_cb (GtkTreeView *treeview,
   gtk_tree_path_free (path);
   path = NULL;
 
-  if (!face || !family)
+  if (face == NULL || family == NULL)
     {
-      g_object_unref (face);
-      g_object_unref (family);
+      if (face)
+        g_object_unref (face);
+      if (family)
+        g_object_unref (family);
+
       return;
     }
 
@@ -450,10 +453,9 @@ cursor_changed_cb (GtkTreeView *treeview,
   gtk_font_chooser_set_family (fontchooser, family);
   gtk_font_chooser_set_face   (fontchooser, face);
 
-  /* Free resources */
-  g_object_unref ((gpointer)family);
-  g_object_unref ((gpointer)face);
-  pango_font_description_free(desc);
+  g_object_unref (family);
+  g_object_unref (face);
+  pango_font_description_free (desc);
 
   g_object_notify (G_OBJECT (fontchooser), "font-name");
 }
