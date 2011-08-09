@@ -149,9 +149,9 @@ static void  gtk_font_chooser_screen_changed     (GtkWidget       *widget,
                                                   GdkScreen       *previous_screen);
 static void  gtk_font_chooser_style_updated      (GtkWidget      *widget);
 
-static void  gtk_font_chooser_ref_family         (GtkFontChooser *fontchooser,
+static void  gtk_font_chooser_set_family         (GtkFontChooser *fontchooser,
                                                   PangoFontFamily  *family);
-static void  gtk_font_chooser_ref_face           (GtkFontChooser *fontchooser,
+static void  gtk_font_chooser_set_face           (GtkFontChooser *fontchooser,
                                                   PangoFontFace    *face);
 
 static void gtk_font_chooser_bootstrap_fontlist (GtkFontChooser *fontchooser);
@@ -447,8 +447,8 @@ cursor_changed_cb (GtkTreeView *treeview,
 
   set_range_marks (fontchooser->priv, fontchooser->priv->size_slider, sizes, n_sizes);
 
-  gtk_font_chooser_ref_family (fontchooser, family);
-  gtk_font_chooser_ref_face   (fontchooser, face);
+  gtk_font_chooser_set_family (fontchooser, family);
+  gtk_font_chooser_set_face   (fontchooser, face);
 
   /* Free resources */
   g_object_unref ((gpointer)family);
@@ -908,8 +908,8 @@ gtk_font_chooser_finalize (GObject *object)
 {
   GtkFontChooser *fontchooser = GTK_FONT_CHOOSER (object);
 
-  gtk_font_chooser_ref_family (fontchooser, NULL);
-  gtk_font_chooser_ref_face (fontchooser, NULL);
+  gtk_font_chooser_set_family (fontchooser, NULL);
+  gtk_font_chooser_set_face (fontchooser, NULL);
 
   G_OBJECT_CLASS (gtk_font_chooser_parent_class)->finalize (object);
 }
@@ -938,7 +938,7 @@ gtk_font_chooser_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_font_chooser_ref_family (GtkFontChooser  *fontchooser,
+gtk_font_chooser_set_family (GtkFontChooser  *fontchooser,
                              PangoFontFamily *family)
 {
   GtkFontChooserPrivate *priv = fontchooser->priv;
@@ -951,7 +951,7 @@ gtk_font_chooser_ref_family (GtkFontChooser  *fontchooser,
 }
 
 static void
-gtk_font_chooser_ref_face (GtkFontChooser *fontchooser,
+gtk_font_chooser_set_face (GtkFontChooser *fontchooser,
                            PangoFontFace  *face)
 {
   GtkFontChooserPrivate *priv = fontchooser->priv;
