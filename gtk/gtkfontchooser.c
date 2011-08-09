@@ -533,7 +533,6 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   PangoFontDescription    *font_desc;
   GtkWidget               *scrolled_win;
   GtkWidget               *grid;
-  GtkWidget               *sub_grid;
 
   fontchooser->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontchooser,
                                                    GTK_TYPE_FONT_CHOOSER,
@@ -585,19 +584,16 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
 
   /* Basic layout */
   grid = gtk_grid_new ();
-  sub_grid = gtk_grid_new ();
 
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
-  gtk_grid_set_row_spacing (GTK_GRID (sub_grid), 6);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
 
-  gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 3, 1);
-  gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 3, 1);
-  gtk_grid_attach (GTK_GRID (grid), priv->preview,      0, 2, 3, 1);
-  gtk_grid_attach (GTK_GRID (grid), sub_grid,           0, 4, 3, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->preview,      0, 2, 2, 1);
 
-  gtk_widget_set_hexpand  (GTK_WIDGET (sub_grid),          TRUE);
-  gtk_grid_attach (GTK_GRID (sub_grid), priv->size_slider,  0, 3, 2, 1);
-  gtk_grid_attach (GTK_GRID (sub_grid), priv->size_spin,    2, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->size_slider,  0, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->size_spin,    1, 3, 1, 1);
 
   gtk_widget_set_hexpand  (GTK_WIDGET (scrolled_win),      TRUE);
   gtk_widget_set_vexpand  (GTK_WIDGET (scrolled_win),      TRUE);
@@ -606,7 +602,6 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   gtk_widget_set_hexpand  (GTK_WIDGET (priv->size_slider), TRUE);
   gtk_widget_set_hexpand  (GTK_WIDGET (priv->size_spin),   FALSE);
 
-  gtk_grid_set_column_homogeneous (GTK_GRID (sub_grid), FALSE);
   gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, TRUE, 0);
 
   /* Setting the adjustment values for the size slider */
@@ -1017,7 +1012,7 @@ gtk_font_chooser_get_face (GtkFontChooser *fontchooser)
  *     or -1 if no font size is selected.
  *
  * Since: 3.2
- **/
+ */
 gint
 gtk_font_chooser_get_size (GtkFontChooser *fontchooser)
 {
