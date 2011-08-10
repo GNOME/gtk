@@ -2710,8 +2710,8 @@ calendar_paint_day (GtkCalendar *calendar,
       pango_cairo_show_layout (cr, layout);
     }
 
-  if (gtk_widget_has_focus (widget)
-      && priv->focus_row == row && priv->focus_col == col)
+  if (gtk_widget_has_visible_focus (widget) &&
+      priv->focus_row == row && priv->focus_col == col)
     gtk_render_focus (context, cr,
                       day_rect.x, day_rect.y,
                       day_rect.width, day_rect.height);

@@ -4519,7 +4519,7 @@ draw_empty_focus (GtkTreeView *tree_view, cairo_t *cr)
   GtkWidget *widget = GTK_WIDGET (tree_view);
   gint w, h;
 
-  if (!gtk_widget_has_focus (widget))
+  if (!gtk_widget_has_visible_focus (widget))
     return;
 
   w = gdk_window_get_width (tree_view->priv->bin_window) - 2;
@@ -4965,7 +4965,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  if (node == cursor && has_can_focus_cell
               && ((column == tree_view->priv->focus_column
                    && tree_view->priv->draw_keyfocus &&
-                   gtk_widget_has_focus (widget))
+                   gtk_widget_has_visible_focus (widget))
                   || (column == tree_view->priv->edited_column)))
             draw_focus = TRUE;
           else
@@ -5202,7 +5202,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
       /* draw the big row-spanning focus rectangle, if needed */
       if (!has_can_focus_cell && node == cursor &&
           tree_view->priv->draw_keyfocus &&
-	  gtk_widget_has_focus (widget))
+	  gtk_widget_has_visible_focus (widget))
         {
 	  gint tmp_y, tmp_height;
 	  GtkStateFlags focus_rect_state = 0;

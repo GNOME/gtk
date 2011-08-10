@@ -1204,6 +1204,9 @@ gtk_cell_area_real_render (GtkCellArea          *area,
   if (gtk_cell_area_get_edited_cell (area))
     render_data.paint_focus = FALSE;
 
+  if (!gtk_widget_has_visible_focus (widget))
+    render_data.paint_focus = FALSE;
+
   /* If no cell can activate but the caller wants focus painted,
    * then we paint focus around all cells */
   if ((flags & GTK_CELL_RENDERER_FOCUSED) != 0 && paint_focus &&

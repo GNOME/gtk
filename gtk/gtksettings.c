@@ -178,6 +178,7 @@ enum {
   PROP_TOOLBAR_STYLE,
   PROP_TOOLBAR_ICON_SIZE,
   PROP_AUTO_MNEMONICS,
+  PROP_VISIBLE_FOCUS,
   PROP_APPLICATION_PREFER_DARK_THEME,
   PROP_BUTTON_IMAGES,
   PROP_ENTRY_SELECT_ON_FOCUS,
@@ -1112,6 +1113,24 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_AUTO_MNEMONICS);
+
+  /**
+   * GtkSettings:gtk-visible-focus:
+   *
+   * Whether 'focus rectangles' should be always visible, never visible,
+   * or hidden until the user starts to use the keyboard.
+   *
+   * Since: 3.2
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-visible-focus",
+                                                                P_("Visible Focus"),
+                                                                P_("Whether 'focus rectangles' should be hidden until the user starts to use the keyboard."),
+                                                                GTK_TYPE_POLICY_TYPE,
+                                                                GTK_POLICY_ALWAYS,
+                                                                GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_VISIBLE_FOCUS);
 
   /**
    * GtkSettings:gtk-application-prefer-dark-theme:

@@ -2194,7 +2194,7 @@ gtk_range_draw (GtkWidget *widget,
 
       gtk_style_context_restore (context);
 
-      if (sensitive && gtk_widget_has_focus (widget))
+      if (sensitive && gtk_widget_has_visible_focus (widget))
         {
           gtk_style_context_save (context);
           gtk_style_context_set_state (context,

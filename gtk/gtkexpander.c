@@ -1016,7 +1016,7 @@ gtk_expander_draw (GtkWidget *widget,
 
   gtk_expander_paint (expander, cr);
 
-  if (gtk_widget_has_focus (widget))
+  if (gtk_widget_has_visible_focus (widget))
     gtk_expander_paint_focus (expander, cr);
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->draw (widget, cr);

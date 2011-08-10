@@ -862,13 +862,6 @@ paint_ring (GtkHSV  *hsv,
   cairo_surface_t *source;
   cairo_t *source_cr;
   gint stride;
-  gint focus_width;
-  gint focus_pad;
-
-  gtk_widget_style_get (widget,
-                        "focus-line-width", &focus_width,
-                        "focus-padding", &focus_pad,
-                        NULL);
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -993,8 +986,9 @@ get_color (gdouble h,
 
 /* Paints the HSV triangle */
 static void
-paint_triangle (GtkHSV      *hsv,
-                cairo_t     *cr)
+paint_triangle (GtkHSV   *hsv,
+                cairo_t  *cr,
+                gboolean  draw_focus)
 {
   GtkHSVPrivate *priv = hsv->priv;
   GtkWidget *widget = GTK_WIDGET (hsv);
@@ -1182,8 +1176,7 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Draw focus outline */
 
-  if (gtk_widget_has_focus (widget) &&
-      !priv->focus_on_ring)
+  if (draw_focus && !priv->focus_on_ring)
     {
       gint focus_width;
       gint focus_pad;
@@ -1205,16 +1198,20 @@ paint_triangle (GtkHSV      *hsv,
 
 /* Paints the contents of the HSV color selector */
 static gboolean
-gtk_hsv_draw (GtkWidget      *widget,
-              cairo_t        *cr)
+gtk_hsv_draw (GtkWidget *widget,
+              cairo_t   *cr)
 {
   GtkHSV *hsv = GTK_HSV (widget);
   GtkHSVPrivate *priv = hsv->priv;
+  gboolean draw_focus;
+
+  draw_focus = gtk_widget_has_visible_focus (widget);
 
   paint_ring (hsv, cr);
-  paint_triangle (hsv, cr);
+  paint_triangle (hsv, cr, draw_focus);
 
-  if (gtk_widget_has_focus (widget) && priv->focus_on_ring)
+
+  if (draw_focus && priv->focus_on_ring)
     {
       GtkStyleContext *context;
       GtkStateFlags state;

@@ -157,6 +157,7 @@ struct _GtkWindowPrivate
   guint    maximize_initially        : 1;
   guint    mnemonics_visible         : 1;
   guint    mnemonics_visible_set     : 1;
+  guint    focus_visible             : 1;
   guint    modal                     : 1;
   guint    opacity_set               : 1;
   guint    position                  : 3;
@@ -225,11 +226,12 @@ enum {
   /* Readonly properties */
   PROP_IS_ACTIVE,
   PROP_HAS_TOPLEVEL_FOCUS,
-  
+
   /* Writeonly properties */
   PROP_STARTUP_ID,
-  
+
   PROP_MNEMONICS_VISIBLE,
+  PROP_FOCUS_VISIBLE,
 
   LAST_ARG
 };
@@ -702,11 +704,42 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("Icon for this window"),
                                                         GDK_TYPE_PIXBUF,
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWindow:mnemonics-visible:
+   *
+   * Whether mnemonics are currently visible in this window.
+   *
+   * This property is maintained by GTK+ based on the
+   * #GtkSettings:gtk-auto-mnemonics setting and user input,
+   * and should not be set by applications.
+   *
+   * Since: 2.20
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_MNEMONICS_VISIBLE,
                                    g_param_spec_boolean ("mnemonics-visible",
                                                          P_("Mnemonics Visible"),
                                                          P_("Whether mnemonics are currently visible in this window"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWindow:focus-visible:
+   *
+   * Whether 'focus rectangles' are currently visible in this window.
+   *
+   * This property is maintained by GTK+ based on the
+   * #GtkSettings:gtk-visible-focus setting and user input
+   * and should not be set by applications.
+   *
+   * Since: 2.20
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_FOCUS_VISIBLE,
+                                   g_param_spec_boolean ("focus-visible",
+                                                         P_("Focus Visible"),
+                                                         P_("Whether focus rectangles are currently visible in this window"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
   
@@ -1112,6 +1145,7 @@ gtk_window_init (GtkWindow *window)
   priv->initial_timestamp = GDK_CURRENT_TIME;
   priv->has_resize_grip = TRUE;
   priv->mnemonics_visible = TRUE;
+  priv->focus_visible = TRUE;
 
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
@@ -1231,6 +1265,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_MNEMONICS_VISIBLE:
       gtk_window_set_mnemonics_visible (window, g_value_get_boolean (value));
       break;
+    case PROP_FOCUS_VISIBLE:
+      gtk_window_set_focus_visible (window, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1348,6 +1385,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_MNEMONICS_VISIBLE:
       g_value_set_boolean (value, priv->mnemonics_visible);
+      break;
+    case PROP_FOCUS_VISIBLE:
+      g_value_set_boolean (value, priv->focus_visible);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4675,6 +4715,7 @@ gtk_window_map (GtkWidget *widget)
   GdkWindow *toplevel;
   GdkWindow *gdk_window;
   gboolean auto_mnemonics;
+  GtkPolicyType visible_focus;
 
   gdk_window = gtk_widget_get_window (widget);
 
@@ -4747,7 +4788,7 @@ gtk_window_map (GtkWidget *widget)
       if (priv->startup_id != NULL)
         {
           /* Make sure we have a "real" id */
-          if (!startup_id_is_fake (priv->startup_id)) 
+          if (!startup_id_is_fake (priv->startup_id))
             gdk_notify_startup_complete_with_id (priv->startup_id);
 
           g_free (priv->startup_id);
@@ -4763,10 +4804,21 @@ gtk_window_map (GtkWidget *widget)
   /* if auto-mnemonics is enabled and mnemonics visible is not already set
    * (as in the case of popup menus), then hide mnemonics initially
    */
-  g_object_get (gtk_widget_get_settings (widget), "gtk-auto-mnemonics",
-                &auto_mnemonics, NULL);
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-auto-mnemonics", &auto_mnemonics,
+                "gtk-visible-focus", &visible_focus,
+                NULL);
+
   if (auto_mnemonics && !priv->mnemonics_visible_set)
     gtk_window_set_mnemonics_visible (window, FALSE);
+
+  /* inherit from transient parent, so that a dialog that is
+   * opened via keynav shows focus initially
+   */
+  if (priv->transient_parent)
+    gtk_window_set_focus_visible (window, gtk_window_get_focus_visible (priv->transient_parent));
+  else
+    gtk_window_set_focus_visible (window, visible_focus == GTK_POLICY_ALWAYS);
 }
 
 static gboolean
@@ -5983,7 +6035,7 @@ gtk_window_focus_in_event (GtkWidget     *widget,
       if (auto_mnemonics)
         maybe_set_mnemonics_visible (window);
     }
-      
+
   return FALSE;
 }
 
@@ -9484,6 +9536,53 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
     }
 
   priv->mnemonics_visible_set = TRUE;
+}
+
+/**
+ * gtk_window_get_focus_visible:
+ * @window: a #GtkWindow
+ *
+ * Gets the value of the #GtkWindow:focus-visible property.
+ *
+ * Returns: %TRUE if 'focus rectangles' are supposed to be visible
+ *     in this window.
+ *
+ * Since: 3.2
+ */
+gboolean
+gtk_window_get_focus_visible (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  return window->priv->focus_visible;
+}
+
+/**
+ * gtk_window_set_focus_visible:
+ * @window: a #GtkWindow
+ * @setting: the new value
+ *
+ * Sets the #GtkWindow:focus-visible property.
+ *
+ * Since: 3.2
+ */
+void
+gtk_window_set_focus_visible (GtkWindow *window,
+                              gboolean   setting)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  priv = window->priv;
+
+  setting = setting != FALSE;
+
+  if (priv->focus_visible != setting)
+    {
+      priv->focus_visible = setting;
+      g_object_notify (G_OBJECT (window), "focus-visible");
+    }
 }
 
 void

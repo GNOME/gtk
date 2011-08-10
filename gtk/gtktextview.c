@@ -4906,7 +4906,7 @@ gtk_text_view_draw_focus (GtkWidget *widget,
 			"interior-focus", &interior_focus,
 			NULL);
   
-  if (gtk_widget_has_focus (widget) && !interior_focus)
+  if (gtk_widget_has_visible_focus (widget) && !interior_focus)
     {
       GtkStyleContext *context;
 

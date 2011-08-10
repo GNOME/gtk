@@ -1589,7 +1589,7 @@ gtk_icon_view_draw (GtkWidget *widget,
   cairo_save (cr);
 
   gtk_cairo_transform_to_window (cr, widget, icon_view->priv->bin_window);
-      
+
   cairo_set_line_width (cr, 1.);
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
@@ -1602,7 +1602,7 @@ gtk_icon_view_draw (GtkWidget *widget,
   else
     dest_index = -1;
 
-  for (icons = icon_view->priv->items; icons; icons = icons->next) 
+  for (icons = icon_view->priv->items; icons; icons = icons->next)
     {
       GtkIconViewItem *item = icons->data;
       GdkRectangle paint_area;
@@ -1621,8 +1621,8 @@ gtk_icon_view_draw (GtkWidget *widget,
         {
           gtk_icon_view_paint_item (icon_view, cr, item,
                                     ((GdkRectangle *)item)->x, ((GdkRectangle *)item)->y,
-                                    icon_view->priv->draw_focus); 
-     
+                                    icon_view->priv->draw_focus);
+
           if (dest_index == item->index)
             dest_item = item;
         }
@@ -1677,7 +1677,7 @@ gtk_icon_view_draw (GtkWidget *widget,
                         rect.x, rect.y,
                         rect.width, rect.height);
     }
-  
+
   if (icon_view->priv->doing_rubberband)
     gtk_icon_view_paint_rubberband (icon_view, cr);
 

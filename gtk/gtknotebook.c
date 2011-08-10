@@ -5255,7 +5255,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
                        page->allocation.height,
                        get_tab_gap_pos (notebook));
 
-  if (gtk_widget_has_focus (widget) &&
+  if (gtk_widget_has_visible_focus (widget) &&
       priv->cur_page == page)
     {
       gint focus_width, focus_pad;

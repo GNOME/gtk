@@ -1845,6 +1845,17 @@ gtk_main_do_event (GdkEvent *event)
             break;
         }
 
+      /* make focus visible in a window that receives a key event */
+      {
+        GtkWidget *window;
+        GtkPolicyType visible_focus;
+
+        window = gtk_widget_get_toplevel (grab_widget);
+        g_object_get (gtk_widget_get_settings (grab_widget), "gtk-visible-focus", &visible_focus, NULL);
+        if (GTK_IS_WINDOW (window) && visible_focus != GTK_POLICY_NEVER)
+          gtk_window_set_focus_visible (GTK_WINDOW (window), TRUE);
+      }
+
       /* Catch alt press to enable auto-mnemonics;
        * menus are handled elsewhere
        * FIXME: this does not work with mnemonic modifiers other than Alt
@@ -1866,7 +1877,6 @@ gtk_main_do_event (GdkEvent *event)
               mnemonics_visible = (event->type == GDK_KEY_PRESS);
 
               window = gtk_widget_get_toplevel (grab_widget);
-
               if (GTK_IS_WINDOW (window))
                 gtk_window_set_mnemonics_visible (GTK_WINDOW (window), mnemonics_visible);
             }

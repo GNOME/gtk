@@ -3438,7 +3438,7 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 
   gtk_entry_draw_progress (widget, context, cr);
 
-  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
+  if (gtk_widget_has_visible_focus (widget) && !priv->interior_focus)
     {
       x -= priv->focus_width;
       y -= priv->focus_width;

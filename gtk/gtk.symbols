@@ -3725,6 +3725,7 @@ gtk_window_get_deletable
 gtk_window_get_destroy_with_parent
 gtk_window_get_focus
 gtk_window_get_focus_on_map
+gtk_window_get_focus_visible
 gtk_window_get_gravity
 gtk_window_get_group
 gtk_window_get_has_resize_grip
@@ -3791,6 +3792,7 @@ gtk_window_set_deletable
 gtk_window_set_destroy_with_parent
 gtk_window_set_focus
 gtk_window_set_focus_on_map
+gtk_window_set_focus_visible
 gtk_window_set_geometry_hints
 gtk_window_set_gravity
 gtk_window_set_has_resize_grip

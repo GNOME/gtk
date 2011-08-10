@@ -1131,7 +1131,7 @@ palette_draw (GtkWidget *drawing_area,
   gdk_cairo_set_source_rgba (cr, &color);
   cairo_paint (cr);
 
-  if (gtk_widget_has_focus (drawing_area))
+  if (gtk_widget_has_visible_focus (drawing_area))
     {
       set_focus_line_attributes (drawing_area, cr, &focus_width);
 

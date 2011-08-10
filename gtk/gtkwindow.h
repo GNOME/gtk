@@ -162,6 +162,9 @@ gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
 void       gtk_window_set_mnemonics_visible    (GtkWindow           *window,
                                                 gboolean             setting);
 gboolean   gtk_window_get_mnemonics_visible    (GtkWindow           *window);
+void       gtk_window_set_focus_visible        (GtkWindow           *window,
+                                                gboolean             setting);
+gboolean   gtk_window_get_focus_visible        (GtkWindow           *window);
 
 void       gtk_window_set_resizable            (GtkWindow           *window,
                                                 gboolean             resizable);
