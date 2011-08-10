@@ -442,7 +442,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   gdk_window_get_origin (window, &x_window, &y_window);
 
   *x = x_window + x_layout + char_rect.x;
-  *y = x_window + y_layout + char_rect.y;
+  *y = y_window + y_layout + char_rect.y;
   *width = char_rect.width;
   *height = char_rect.height;
 
