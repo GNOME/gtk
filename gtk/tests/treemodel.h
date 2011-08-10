@@ -17,8 +17,44 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <gtk/gtk.h>
+
 void register_list_store_tests ();
 void register_tree_store_tests ();
 void register_sort_model_tests ();
 void register_filter_model_tests ();
 void register_model_ref_count_tests ();
+
+/*
+ * Signal monitor
+ */
+typedef struct _SignalMonitor           SignalMonitor;
+typedef enum _SignalName                SignalName;
+
+enum _SignalName
+{
+  ROW_INSERTED,
+  ROW_DELETED,
+  ROW_CHANGED,
+  ROW_HAS_CHILD_TOGGLED,
+  ROWS_REORDERED,
+  LAST_SIGNAL
+};
+
+
+SignalMonitor *signal_monitor_new                     (GtkTreeModel  *client);
+void           signal_monitor_free                    (SignalMonitor *m);
+
+void           signal_monitor_assert_is_empty         (SignalMonitor *m);
+
+void           signal_monitor_append_signal_reordered (SignalMonitor *m,
+                                                       SignalName     signal,
+                                                       GtkTreePath   *path,
+                                                       int           *new_order,
+                                                       int            len);
+void           signal_monitor_append_signal_path      (SignalMonitor *m,
+                                                       SignalName     signal,
+                                                       GtkTreePath   *path);
+void           signal_monitor_append_signal           (SignalMonitor *m,
+                                                       SignalName     signal,
+                                                       const gchar   *path_string);
