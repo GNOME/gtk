@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-07-10 12:46+0000\n"
-"PO-Revision-Date: 2011-07-10 21:03+0200\n"
+"POT-Creation-Date: 2011-08-10 11:16+0000\n"
+"PO-Revision-Date: 2011-08-10 13:23+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -287,24 +287,24 @@ msgstr "Ajustar licencia"
 msgid "Whether to wrap the license text."
 msgstr "Indica si se debe ajustar el texto de la licencia."
 
-#: ../gtk/gtkaccellabel.c:185
+#: ../gtk/gtkaccellabel.c:187
 msgid "Accelerator Closure"
 msgstr "Cierre del acelerador"
 
-#: ../gtk/gtkaccellabel.c:186
+#: ../gtk/gtkaccellabel.c:188
 msgid "The closure to be monitored for accelerator changes"
 msgstr "El cierre que monitorizar para cambios en el acelerador"
 
-#: ../gtk/gtkaccellabel.c:192
+#: ../gtk/gtkaccellabel.c:194
 msgid "Accelerator Widget"
 msgstr "Widget acelerador"
 
-#: ../gtk/gtkaccellabel.c:193
+#: ../gtk/gtkaccellabel.c:195
 msgid "The widget to be monitored for accelerator changes"
 msgstr "El widget que monitorizar para cambios en el acelerador"
 
 #: ../gtk/gtkaction.c:222 ../gtk/gtkactiongroup.c:228 ../gtk/gtkprinter.c:125
-#: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:258
+#: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:256
 msgid "Name"
 msgstr "Nombre"
 
@@ -313,7 +313,7 @@ msgid "A unique name for the action."
 msgstr "Un nombre único para la acción."
 
 #: ../gtk/gtkaction.c:241 ../gtk/gtkbutton.c:228 ../gtk/gtkexpander.c:290
-#: ../gtk/gtkframe.c:171 ../gtk/gtklabel.c:744 ../gtk/gtkmenuitem.c:384
+#: ../gtk/gtkframe.c:171 ../gtk/gtklabel.c:744 ../gtk/gtkmenuitem.c:383
 #: ../gtk/gtktoolbutton.c:232 ../gtk/gtktoolitemgroup.c:1592
 msgid "Label"
 msgstr "Etiqueta"
@@ -431,7 +431,7 @@ msgstr ""
 "acción se ocultan."
 
 #: ../gtk/gtkaction.c:381 ../gtk/gtkactiongroup.c:235
-#: ../gtk/gtkcellrenderer.c:290 ../gtk/gtkwidget.c:988
+#: ../gtk/gtkcellrenderer.c:290 ../gtk/gtkwidget.c:990
 msgid "Sensitive"
 msgstr "Sensible"
 
@@ -441,7 +441,7 @@ msgstr "Indica si la acción está activada."
 
 #: ../gtk/gtkaction.c:388 ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:310 ../gtk/gtktreeviewcolumn.c:248
-#: ../gtk/gtkwidget.c:981
+#: ../gtk/gtkwidget.c:983
 msgid "Visible"
 msgstr "Visible"
 
@@ -730,7 +730,7 @@ msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Apariencia de la sombra que rodea la flecha"
 
 #: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:986 ../gtk/gtkmenu.c:798
-#: ../gtk/gtkmenuitem.c:447
+#: ../gtk/gtkmenuitem.c:446
 msgid "Arrow Scaling"
 msgstr "Escalado de flechas"
 
@@ -738,7 +738,7 @@ msgstr "Escalado de flechas"
 msgid "Amount of space used up by arrow"
 msgstr "Cantidad de espacio ocupado por flecha"
 
-#: ../gtk/gtkaspectframe.c:109 ../gtk/gtkwidget.c:1176
+#: ../gtk/gtkaspectframe.c:109 ../gtk/gtkwidget.c:1178
 msgid "Horizontal Alignment"
 msgstr "Alineación horizontal"
 
@@ -746,7 +746,7 @@ msgstr "Alineación horizontal"
 msgid "X alignment of the child"
 msgstr "Alineación X del hijo"
 
-#: ../gtk/gtkaspectframe.c:116 ../gtk/gtkwidget.c:1192
+#: ../gtk/gtkaspectframe.c:116 ../gtk/gtkwidget.c:1194
 msgid "Vertical Alignment"
 msgstr "Alineación vertical"
 
@@ -770,59 +770,59 @@ msgstr "Obedecer al hijo"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Forzar la proporción para que coincida con el hijo del marco"
 
-#: ../gtk/gtkassistant.c:311
+#: ../gtk/gtkassistant.c:310
 msgid "Header Padding"
 msgstr "Separación de la cabecera"
 
-#: ../gtk/gtkassistant.c:312
+#: ../gtk/gtkassistant.c:311
 msgid "Number of pixels around the header."
 msgstr "Número de píxeles alrededor de la cabecera."
 
-#: ../gtk/gtkassistant.c:319
+#: ../gtk/gtkassistant.c:318
 msgid "Content Padding"
 msgstr "Separación del contenido"
 
-#: ../gtk/gtkassistant.c:320
+#: ../gtk/gtkassistant.c:319
 msgid "Number of pixels around the content pages."
 msgstr "Número de píxeles alrededor de las páginas de contenidos."
 
-#: ../gtk/gtkassistant.c:336
+#: ../gtk/gtkassistant.c:335
 msgid "Page type"
 msgstr "Tipo de página"
 
-#: ../gtk/gtkassistant.c:337
+#: ../gtk/gtkassistant.c:336
 msgid "The type of the assistant page"
 msgstr "El tipo de página del asistente"
 
-#: ../gtk/gtkassistant.c:352
+#: ../gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "Título de página"
 
-#: ../gtk/gtkassistant.c:353
+#: ../gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "El título de la página del asistente"
 
-#: ../gtk/gtkassistant.c:370
+#: ../gtk/gtkassistant.c:369
 msgid "Header image"
 msgstr "Imagen de la cabecera"
 
-#: ../gtk/gtkassistant.c:371
+#: ../gtk/gtkassistant.c:370
 msgid "Header image for the assistant page"
 msgstr "Imagen de la cabecera para la página del asistente"
 
-#: ../gtk/gtkassistant.c:387
+#: ../gtk/gtkassistant.c:386
 msgid "Sidebar image"
 msgstr "Imagen de barra lateral"
 
-#: ../gtk/gtkassistant.c:388
+#: ../gtk/gtkassistant.c:387
 msgid "Sidebar image for the assistant page"
 msgstr "Imagen de barra lateral para la página del asistente"
 
-#: ../gtk/gtkassistant.c:404
+#: ../gtk/gtkassistant.c:403
 msgid "Page complete"
 msgstr "Página completa"
 
-#: ../gtk/gtkassistant.c:405
+#: ../gtk/gtkassistant.c:404
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Indica si todos los campos requeridos en la página se han rellenado"
 
@@ -892,7 +892,7 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Si es TRUE, el hijo no será objeto de tamaño homogéneo"
 
 #: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:314
-#: ../gtk/gtkiconview.c:644 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkiconview.c:643 ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "Espaciado"
 
@@ -900,7 +900,7 @@ msgstr "Espaciado"
 msgid "The amount of space between children"
 msgstr "La cantidad de espacio entre hijos"
 
-#: ../gtk/gtkbox.c:251 ../gtk/gtktable.c:227 ../gtk/gtktoolbar.c:561
+#: ../gtk/gtkbox.c:251 ../gtk/gtktable.c:227 ../gtk/gtktoolbar.c:563
 #: ../gtk/gtktoolitemgroup.c:1645
 msgid "Homogeneous"
 msgstr "Homogéneo"
@@ -909,7 +909,7 @@ msgstr "Homogéneo"
 msgid "Whether the children should all be the same size"
 msgstr "Indica si todos los hijos deben ser del mismo tamaño"
 
-#: ../gtk/gtkbox.c:272 ../gtk/gtkcellareabox.c:337 ../gtk/gtktoolbar.c:553
+#: ../gtk/gtkbox.c:272 ../gtk/gtkcellareabox.c:337 ../gtk/gtktoolbar.c:555
 #: ../gtk/gtktoolitemgroup.c:1652 ../gtk/gtktoolpalette.c:1070
 #: ../gtk/gtktreeviewcolumn.c:339
 msgid "Expand"
@@ -951,12 +951,12 @@ msgstr ""
 "Un GtkPackType que indica si el hijo está empaquetado con referencia al "
 "inicio o el final del padre"
 
-#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:771 ../gtk/gtkpaned.c:349
+#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:769 ../gtk/gtkpaned.c:349
 #: ../gtk/gtktoolitemgroup.c:1673
 msgid "Position"
 msgstr "Posición"
 
-#: ../gtk/gtkbox.c:312 ../gtk/gtknotebook.c:772
+#: ../gtk/gtkbox.c:312 ../gtk/gtknotebook.c:770
 msgid "The index of the child in the parent"
 msgstr "El índice del hijo en el padre"
 
@@ -977,12 +977,12 @@ msgstr ""
 "etiqueta del widget"
 
 #: ../gtk/gtkbutton.c:236 ../gtk/gtkexpander.c:298 ../gtk/gtklabel.c:765
-#: ../gtk/gtkmenuitem.c:399 ../gtk/gtktoolbutton.c:239
+#: ../gtk/gtkmenuitem.c:398 ../gtk/gtktoolbutton.c:239
 msgid "Use underline"
 msgstr "Utilizar subrayado"
 
 #: ../gtk/gtkbutton.c:237 ../gtk/gtkexpander.c:299 ../gtk/gtklabel.c:766
-#: ../gtk/gtkmenuitem.c:400
+#: ../gtk/gtkmenuitem.c:399
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1110,27 +1110,27 @@ msgstr "Espaciado de imagen"
 msgid "Spacing in pixels between the image and label"
 msgstr "Espaciado en píxeles entre la imagen y la etiqueta"
 
-#: ../gtk/gtkcalendar.c:471
+#: ../gtk/gtkcalendar.c:470
 msgid "Year"
 msgstr "Año"
 
-#: ../gtk/gtkcalendar.c:472
+#: ../gtk/gtkcalendar.c:471
 msgid "The selected year"
 msgstr "El año seleccionado"
 
-#: ../gtk/gtkcalendar.c:485
+#: ../gtk/gtkcalendar.c:484
 msgid "Month"
 msgstr "Mes"
 
-#: ../gtk/gtkcalendar.c:486
+#: ../gtk/gtkcalendar.c:485
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "El mes seleccionado (como un número entre 0 y 11)"
 
-#: ../gtk/gtkcalendar.c:500
+#: ../gtk/gtkcalendar.c:499
 msgid "Day"
 msgstr "Día"
 
-#: ../gtk/gtkcalendar.c:501
+#: ../gtk/gtkcalendar.c:500
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -1138,83 +1138,83 @@ msgstr ""
 "El día seleccionado (como un número entre 1 y 31, o 0 para deseleccionar el "
 "día actualmente seleccionado)"
 
-#: ../gtk/gtkcalendar.c:515
+#: ../gtk/gtkcalendar.c:514
 msgid "Show Heading"
 msgstr "Mostrar cabecera"
 
-#: ../gtk/gtkcalendar.c:516
+#: ../gtk/gtkcalendar.c:515
 msgid "If TRUE, a heading is displayed"
 msgstr "Si es TRUE, se muestra una cabecera"
 
-#: ../gtk/gtkcalendar.c:530
+#: ../gtk/gtkcalendar.c:529
 msgid "Show Day Names"
 msgstr "Mostrar nombres de los días"
 
-#: ../gtk/gtkcalendar.c:531
+#: ../gtk/gtkcalendar.c:530
 msgid "If TRUE, day names are displayed"
 msgstr "Si es TRUE, se muestran los nombres de los días"
 
-#: ../gtk/gtkcalendar.c:544
+#: ../gtk/gtkcalendar.c:543
 msgid "No Month Change"
 msgstr "Sin cambio de mes"
 
-#: ../gtk/gtkcalendar.c:545
+#: ../gtk/gtkcalendar.c:544
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Si es TRUE, el mes seleccionado no puede cambiarse"
 
-#: ../gtk/gtkcalendar.c:559
+#: ../gtk/gtkcalendar.c:558
 msgid "Show Week Numbers"
 msgstr "Mostrar números de las semanas"
 
-#: ../gtk/gtkcalendar.c:560
+#: ../gtk/gtkcalendar.c:559
 msgid "If TRUE, week numbers are displayed"
 msgstr "Si es TRUE, se muestran los números de las semanas"
 
-#: ../gtk/gtkcalendar.c:575
+#: ../gtk/gtkcalendar.c:574
 msgid "Details Width"
 msgstr "Detalles de la anchura"
 
-#: ../gtk/gtkcalendar.c:576
+#: ../gtk/gtkcalendar.c:575
 msgid "Details width in characters"
 msgstr "Detalla la anchura en los caracteres"
 
-#: ../gtk/gtkcalendar.c:591
+#: ../gtk/gtkcalendar.c:590
 msgid "Details Height"
 msgstr "Detalles de la altura"
 
-#: ../gtk/gtkcalendar.c:592
+#: ../gtk/gtkcalendar.c:591
 msgid "Details height in rows"
 msgstr "Detalla la altura en las filas"
 
-#: ../gtk/gtkcalendar.c:608
+#: ../gtk/gtkcalendar.c:607
 msgid "Show Details"
 msgstr "Mostrar detalles"
 
-#: ../gtk/gtkcalendar.c:609
+#: ../gtk/gtkcalendar.c:608
 msgid "If TRUE, details are shown"
 msgstr "Si es TRUE, se muestran los detalles"
 
-#: ../gtk/gtkcalendar.c:621
+#: ../gtk/gtkcalendar.c:620
 msgid "Inner border"
 msgstr "Borde interior"
 
-#: ../gtk/gtkcalendar.c:622
+#: ../gtk/gtkcalendar.c:621
 msgid "Inner border space"
 msgstr "Espacio del borde interior"
 
-#: ../gtk/gtkcalendar.c:633
+#: ../gtk/gtkcalendar.c:632
 msgid "Vertical separation"
 msgstr "Separación vertical"
 
-#: ../gtk/gtkcalendar.c:634
+#: ../gtk/gtkcalendar.c:633
 msgid "Space between day headers and main area"
 msgstr "Espacio entre las cabeceras del día y el área principal"
 
-#: ../gtk/gtkcalendar.c:645
+#: ../gtk/gtkcalendar.c:644
 msgid "Horizontal separation"
 msgstr "Separación horizontal"
 
-#: ../gtk/gtkcalendar.c:646
+#: ../gtk/gtkcalendar.c:645
 msgid "Space between week headers and main area"
 msgstr "Espacio entre las cabeceras de la semana y el área principal"
 
@@ -1562,7 +1562,7 @@ msgstr "Valor de la barra de progreso"
 
 #: ../gtk/gtkcellrendererprogress.c:156 ../gtk/gtkcellrenderertext.c:254
 #: ../gtk/gtkentrybuffer.c:352 ../gtk/gtkentry.c:837
-#: ../gtk/gtkmessagedialog.c:227 ../gtk/gtkprogressbar.c:176
+#: ../gtk/gtkmessagedialog.c:229 ../gtk/gtkprogressbar.c:176
 #: ../gtk/gtktextbuffer.c:221
 msgid "Text"
 msgstr "Texto"
@@ -1638,8 +1638,8 @@ msgstr "Dígitos"
 msgid "The number of decimal places to display"
 msgstr "El número de lugares decimales que mostrar"
 
-#: ../gtk/gtkcellrendererspinner.c:119 ../gtk/gtkcheckmenuitem.c:123
-#: ../gtk/gtkmenu.c:588 ../gtk/gtkspinner.c:115 ../gtk/gtkswitch.c:784
+#: ../gtk/gtkcellrendererspinner.c:119 ../gtk/gtkcheckmenuitem.c:122
+#: ../gtk/gtkmenu.c:588 ../gtk/gtkspinner.c:115 ../gtk/gtkswitch.c:783
 #: ../gtk/gtktoggleaction.c:133 ../gtk/gtktogglebutton.c:178
 #: ../gtk/gtktoggletoolbutton.c:127
 msgid "Active"
@@ -1711,7 +1711,7 @@ msgstr "Color de fondo como GdkColor"
 
 #: ../gtk/gtkcellrenderertext.c:310
 msgid "Background color as RGBA"
-msgstr "Nombre del color de fondo como RGBA"
+msgstr "Color de fondo como RGBA"
 
 #: ../gtk/gtkcellrenderertext.c:311 ../gtk/gtkcellview.c:213
 #: ../gtk/gtktexttag.c:223
@@ -1859,7 +1859,7 @@ msgstr ""
 "parámetro probablemente no lo necesite"
 
 #: ../gtk/gtkcellrenderertext.c:499 ../gtk/gtklabel.c:876
-#: ../gtk/gtkprogressbar.c:216
+#: ../gtk/gtkprogressbar.c:220
 msgid "Ellipsize"
 msgstr "Elipsis"
 
@@ -2083,8 +2083,8 @@ msgstr "Dibujar el botón de activación como un botón de radio"
 msgid "Indicator size"
 msgstr "Tamaño del indicador"
 
-#: ../gtk/gtkcellrenderertoggle.c:173 ../gtk/gtkcheckbutton.c:93
-#: ../gtk/gtkcheckmenuitem.c:147
+#: ../gtk/gtkcellrenderertoggle.c:173 ../gtk/gtkcheckbutton.c:95
+#: ../gtk/gtkcheckmenuitem.c:146
 msgid "Size of check or radio indicator"
 msgstr "Tamaño del indicador de radio o de la casilla"
 
@@ -2101,13 +2101,13 @@ msgid "The model for cell view"
 msgstr "El modelo para la vista de celda"
 
 #: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:945
-#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:769
+#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:768
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
 msgstr "Área de la celda"
 
 #: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:946
-#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:770
+#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:769
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
 msgstr "El GtkCellArea usado para la distribución de las celdas"
@@ -2137,35 +2137,35 @@ msgid "Whether to request enough space for every row in the model"
 msgstr ""
 "Indica si se debe solicitar espacio suficiente para cada fila en el modelo"
 
-#: ../gtk/gtkcheckbutton.c:92 ../gtk/gtkcheckmenuitem.c:146
+#: ../gtk/gtkcheckbutton.c:94 ../gtk/gtkcheckmenuitem.c:145
 msgid "Indicator Size"
 msgstr "Tamaño del indicador"
 
-#: ../gtk/gtkcheckbutton.c:100 ../gtk/gtkexpander.c:364
+#: ../gtk/gtkcheckbutton.c:102 ../gtk/gtkexpander.c:364
 msgid "Indicator Spacing"
 msgstr "Espacio del indicador"
 
-#: ../gtk/gtkcheckbutton.c:101
+#: ../gtk/gtkcheckbutton.c:103
 msgid "Spacing around check or radio indicator"
 msgstr "Espacio que rodea el indicador de radio o casilla"
 
-#: ../gtk/gtkcheckmenuitem.c:124
+#: ../gtk/gtkcheckmenuitem.c:123
 msgid "Whether the menu item is checked"
 msgstr "Indica si el elemento de menú está marcado"
 
-#: ../gtk/gtkcheckmenuitem.c:131 ../gtk/gtktogglebutton.c:186
+#: ../gtk/gtkcheckmenuitem.c:130 ../gtk/gtktogglebutton.c:186
 msgid "Inconsistent"
 msgstr "Inconsistente"
 
-#: ../gtk/gtkcheckmenuitem.c:132
+#: ../gtk/gtkcheckmenuitem.c:131
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Indica si se debe mostrar un estado «inconsistente»"
 
-#: ../gtk/gtkcheckmenuitem.c:139
+#: ../gtk/gtkcheckmenuitem.c:138
 msgid "Draw as radio menu item"
 msgstr "Dibujar como un elemento de menú de radio"
 
-#: ../gtk/gtkcheckmenuitem.c:140
+#: ../gtk/gtkcheckmenuitem.c:139
 msgid "Whether the menu item looks like a radio menu item"
 msgstr ""
 "Indica si la apariencia del elemento de menú es como un elemento de menú de "
@@ -2250,35 +2250,35 @@ msgstr "RGBA actual"
 msgid "The current RGBA color"
 msgstr "El color RGBA actual"
 
-#: ../gtk/gtkcolorseldialog.c:134
+#: ../gtk/gtkcolorseldialog.c:136
 msgid "Color Selection"
 msgstr "Selección de color"
 
-#: ../gtk/gtkcolorseldialog.c:135
+#: ../gtk/gtkcolorseldialog.c:137
 msgid "The color selection embedded in the dialog."
 msgstr "La selección de color empotrada en el diálogo."
 
-#: ../gtk/gtkcolorseldialog.c:141
+#: ../gtk/gtkcolorseldialog.c:143
 msgid "OK Button"
 msgstr "Botón Aceptar"
 
-#: ../gtk/gtkcolorseldialog.c:142
+#: ../gtk/gtkcolorseldialog.c:144
 msgid "The OK button of the dialog."
 msgstr "El botón Aceptar del diálogo."
 
-#: ../gtk/gtkcolorseldialog.c:148
+#: ../gtk/gtkcolorseldialog.c:150
 msgid "Cancel Button"
 msgstr "Botón Cancelar"
 
-#: ../gtk/gtkcolorseldialog.c:149
+#: ../gtk/gtkcolorseldialog.c:151
 msgid "The cancel button of the dialog."
 msgstr "El botón Cancelar del diálogo."
 
-#: ../gtk/gtkcolorseldialog.c:155
+#: ../gtk/gtkcolorseldialog.c:157
 msgid "Help Button"
 msgstr "Botón Ayuda"
 
-#: ../gtk/gtkcolorseldialog.c:156
+#: ../gtk/gtkcolorseldialog.c:158
 msgid "The help button of the dialog."
 msgstr "El botón Ayuda del diálogo."
 
@@ -2434,8 +2434,8 @@ msgid "The amount of space used by the arrow"
 msgstr "La cantidad de espacio usado por la flecha"
 
 #: ../gtk/gtkcombobox.c:1002 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
-#: ../gtk/gtkmenubar.c:217 ../gtk/gtkstatusbar.c:182 ../gtk/gtktoolbar.c:611
-#: ../gtk/gtkviewport.c:153
+#: ../gtk/gtkmenubar.c:218 ../gtk/gtkstatusbar.c:182 ../gtk/gtktoolbar.c:613
+#: ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
@@ -2467,35 +2467,35 @@ msgstr "Hijo"
 msgid "Can be used to add a new child to the container"
 msgstr "Puede usarse para añadir un hijo nuevo al contenedor"
 
-#: ../gtk/gtkdialog.c:289 ../gtk/gtkinfobar.c:427
+#: ../gtk/gtkdialog.c:291 ../gtk/gtkinfobar.c:427
 msgid "Content area border"
 msgstr "Borde del área de contenidos"
 
-#: ../gtk/gtkdialog.c:290
+#: ../gtk/gtkdialog.c:292
 msgid "Width of border around the main dialog area"
 msgstr "Anchura del borde alrededor del área principal del diálogo"
 
-#: ../gtk/gtkdialog.c:307 ../gtk/gtkinfobar.c:444
+#: ../gtk/gtkdialog.c:309 ../gtk/gtkinfobar.c:444
 msgid "Content area spacing"
 msgstr "Separación del área de contenido"
 
-#: ../gtk/gtkdialog.c:308
+#: ../gtk/gtkdialog.c:310
 msgid "Spacing between elements of the main dialog area"
 msgstr "Espacio entre los elementos del área del diálogo principal"
 
-#: ../gtk/gtkdialog.c:315 ../gtk/gtkinfobar.c:460
+#: ../gtk/gtkdialog.c:317 ../gtk/gtkinfobar.c:460
 msgid "Button spacing"
 msgstr "Espaciado de los botones"
 
-#: ../gtk/gtkdialog.c:316 ../gtk/gtkinfobar.c:461
+#: ../gtk/gtkdialog.c:318 ../gtk/gtkinfobar.c:461
 msgid "Spacing between buttons"
 msgstr "Espaciado entre los botones"
 
-#: ../gtk/gtkdialog.c:324 ../gtk/gtkinfobar.c:476
+#: ../gtk/gtkdialog.c:326 ../gtk/gtkinfobar.c:476
 msgid "Action area border"
 msgstr "Borde del área de acción"
 
-#: ../gtk/gtkdialog.c:325
+#: ../gtk/gtkdialog.c:327
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Anchura del borde alrededor del área del botón en la parte inferior del "
@@ -2893,7 +2893,7 @@ msgstr "Longitud mínima de clave"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Longitud mínima de la clave de búsqueda para buscar coincidencias"
 
-#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:565
+#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:564
 msgid "Text column"
 msgstr "Columna de texto"
 
@@ -3010,7 +3010,8 @@ msgstr ""
 "disponible"
 
 #: ../gtk/gtkexpander.c:348
-msgid "Resize tolevel"
+#| msgid "Resize tolevel"
+msgid "Resize toplevel"
 msgstr "Redimensionar nivel superior"
 
 #: ../gtk/gtkexpander.c:349
@@ -3376,136 +3377,136 @@ msgstr ""
 "Una variable booleana indicando si el hijo del manejador de la caja está "
 "acoplado o desacoplado."
 
-#: ../gtk/gtkiconview.c:528 ../gtk/gtktreeselection.c:131
+#: ../gtk/gtkiconview.c:527 ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Modo de selección"
 
-#: ../gtk/gtkiconview.c:529
+#: ../gtk/gtkiconview.c:528
 msgid "The selection mode"
 msgstr "El modo de selección"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:546
 msgid "Pixbuf column"
 msgstr "Columna de pixbuf"
 
-#: ../gtk/gtkiconview.c:548
+#: ../gtk/gtkiconview.c:547
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Columna modelo usada para obtener el pixbuf del icono"
 
-#: ../gtk/gtkiconview.c:566
+#: ../gtk/gtkiconview.c:565
 msgid "Model column used to retrieve the text from"
 msgstr "Columna modelo usada para obtener el texto"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:584
 msgid "Markup column"
 msgstr "Columna de marcado"
 
-#: ../gtk/gtkiconview.c:586
+#: ../gtk/gtkiconview.c:585
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Columna modelo usada para obtener el texto si se usa marcado Pango"
 
-#: ../gtk/gtkiconview.c:593
+#: ../gtk/gtkiconview.c:592
 msgid "Icon View Model"
 msgstr "Modelo de vista de icono"
 
-#: ../gtk/gtkiconview.c:594
+#: ../gtk/gtkiconview.c:593
 msgid "The model for the icon view"
 msgstr "El modelo para la vista de icono"
 
-#: ../gtk/gtkiconview.c:610
+#: ../gtk/gtkiconview.c:609
 msgid "Number of columns"
 msgstr "Número de columnas"
 
-#: ../gtk/gtkiconview.c:611
+#: ../gtk/gtkiconview.c:610
 msgid "Number of columns to display"
 msgstr "El número de columnas que se mostrarán"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:627
 msgid "Width for each item"
 msgstr "Anchura de cada elemento"
 
-#: ../gtk/gtkiconview.c:629
+#: ../gtk/gtkiconview.c:628
 msgid "The width used for each item"
 msgstr "La anchura usada por cada elemento"
 
-#: ../gtk/gtkiconview.c:645
+#: ../gtk/gtkiconview.c:644
 msgid "Space which is inserted between cells of an item"
 msgstr "Espacio que se introduce entre las celdas de un elemento"
 
-#: ../gtk/gtkiconview.c:660
+#: ../gtk/gtkiconview.c:659
 msgid "Row Spacing"
 msgstr "Espaciado entre filas"
 
-#: ../gtk/gtkiconview.c:661
+#: ../gtk/gtkiconview.c:660
 msgid "Space which is inserted between grid rows"
 msgstr "Espacio que se introduce entre las filas de la rejilla"
 
-#: ../gtk/gtkiconview.c:676
+#: ../gtk/gtkiconview.c:675
 msgid "Column Spacing"
 msgstr "Espaciado entre columnas"
 
-#: ../gtk/gtkiconview.c:677
+#: ../gtk/gtkiconview.c:676
 msgid "Space which is inserted between grid columns"
 msgstr "Espacio que se inserta entre las columnas de la rejilla"
 
-#: ../gtk/gtkiconview.c:692
+#: ../gtk/gtkiconview.c:691
 msgid "Margin"
 msgstr "Margen"
 
-#: ../gtk/gtkiconview.c:693
+#: ../gtk/gtkiconview.c:692
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Espacio que se introduce entre los bordes de la vista de icono"
 
-#: ../gtk/gtkiconview.c:708
+#: ../gtk/gtkiconview.c:707
 msgid "Item Orientation"
 msgstr "Orientación del elemento"
 
-#: ../gtk/gtkiconview.c:709
+#: ../gtk/gtkiconview.c:708
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Cómo se sitúan el texto y el icono para cada elemento relativo a los demás"
 
-#: ../gtk/gtkiconview.c:725 ../gtk/gtktreeview.c:1022
+#: ../gtk/gtkiconview.c:724 ../gtk/gtktreeview.c:1022
 #: ../gtk/gtktreeviewcolumn.c:374
 msgid "Reorderable"
 msgstr "Reordenable"
 
-#: ../gtk/gtkiconview.c:726 ../gtk/gtktreeview.c:1023
+#: ../gtk/gtkiconview.c:725 ../gtk/gtktreeview.c:1023
 msgid "View is reorderable"
 msgstr "La vista es reordenable"
 
-#: ../gtk/gtkiconview.c:733 ../gtk/gtktreeview.c:1173
+#: ../gtk/gtkiconview.c:732 ../gtk/gtktreeview.c:1173
 msgid "Tooltip Column"
 msgstr "Columna de sugerencia"
 
-#: ../gtk/gtkiconview.c:734
+#: ../gtk/gtkiconview.c:733
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr ""
 "La columna del modelo que contiene los textos de sugerencia para los "
 "elementos"
 
-#: ../gtk/gtkiconview.c:751
+#: ../gtk/gtkiconview.c:750
 msgid "Item Padding"
 msgstr "Separación del elemento"
 
-#: ../gtk/gtkiconview.c:752
+#: ../gtk/gtkiconview.c:751
 msgid "Padding around icon view items"
 msgstr "Separación alrededor de la vista de iconos"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "Color de la caja de selección"
 
-#: ../gtk/gtkiconview.c:784
+#: ../gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "Color de la caja de selección"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "Alfa de la caja de selección"
 
-#: ../gtk/gtkiconview.c:791
+#: ../gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "Opacidad de la caja de selección"
 
@@ -3538,7 +3539,7 @@ msgstr "Conjunto de iconos"
 msgid "Icon set to display"
 msgstr "Conjunto de iconos para mostrar"
 
-#: ../gtk/gtkimage.c:270 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:528
+#: ../gtk/gtkimage.c:270 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:530
 #: ../gtk/gtktoolpalette.c:1008
 msgid "Icon size"
 msgstr "Tamaño del icono"
@@ -3600,11 +3601,11 @@ msgid "The Accel Group to use for stock accelerator keys"
 msgstr ""
 "El grupo de aceleración que usar para los aceleradores de teclado de stock"
 
-#: ../gtk/gtkinfobar.c:372 ../gtk/gtkmessagedialog.c:202
+#: ../gtk/gtkinfobar.c:372 ../gtk/gtkmessagedialog.c:204
 msgid "Message Type"
 msgstr "Tipo de mensaje"
 
-#: ../gtk/gtkinfobar.c:373 ../gtk/gtkmessagedialog.c:203
+#: ../gtk/gtkinfobar.c:373 ../gtk/gtkmessagedialog.c:205
 msgid "The type of message"
 msgstr "El tipo de mensaje"
 
@@ -3621,7 +3622,7 @@ msgid "Width of border around the action area"
 msgstr "Anchura del borde alrededor del área de acción"
 
 #: ../gtk/gtkinvisible.c:103 ../gtk/gtkmountoperation.c:173
-#: ../gtk/gtkstatusicon.c:302 ../gtk/gtkstylecontext.c:431
+#: ../gtk/gtkstatusicon.c:302 ../gtk/gtkstylecontext.c:432
 #: ../gtk/gtkwindow.c:732
 msgid "Screen"
 msgstr "Pantalla"
@@ -3818,31 +3819,31 @@ msgstr ""
 "La sugerencia que mostrar al mostrar al usuario que no se pudo obtener una "
 "autorización"
 
-#: ../gtk/gtkmenubar.c:191
+#: ../gtk/gtkmenubar.c:192
 msgid "Pack direction"
 msgstr "Dirección del empaquetado"
 
-#: ../gtk/gtkmenubar.c:192
+#: ../gtk/gtkmenubar.c:193
 msgid "The pack direction of the menubar"
 msgstr "La dirección del empaquetado de la barra de menú"
 
-#: ../gtk/gtkmenubar.c:208
+#: ../gtk/gtkmenubar.c:209
 msgid "Child Pack direction"
 msgstr "Dirección de empaquetado del hijo"
 
-#: ../gtk/gtkmenubar.c:209
+#: ../gtk/gtkmenubar.c:210
 msgid "The child pack direction of the menubar"
 msgstr "La dirección de empaquetado hijo de la barra de menú"
 
-#: ../gtk/gtkmenubar.c:218
+#: ../gtk/gtkmenubar.c:219
 msgid "Style of bevel around the menubar"
 msgstr "Estilo del bisel alrededor de la barra de menús"
 
-#: ../gtk/gtkmenubar.c:225 ../gtk/gtktoolbar.c:578
+#: ../gtk/gtkmenubar.c:226 ../gtk/gtktoolbar.c:580
 msgid "Internal padding"
 msgstr "Relleno interno"
 
-#: ../gtk/gtkmenubar.c:226
+#: ../gtk/gtkmenubar.c:227
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr ""
 "Número de espacios del borde entre la sombra de la barra de menús y los "
@@ -3856,7 +3857,7 @@ msgstr "El elemento del menú actualmente seleccionado"
 msgid "The accel group holding accelerators for the menu"
 msgstr "El grupo de aceleración que contiene los aceleradores para el menú"
 
-#: ../gtk/gtkmenu.c:618 ../gtk/gtkmenuitem.c:369
+#: ../gtk/gtkmenu.c:618 ../gtk/gtkmenuitem.c:368
 msgid "Accel Path"
 msgstr "Ruta del acelerador"
 
@@ -3999,52 +4000,52 @@ msgstr ""
 "Constante arbitraria para reducir el escalado del tamaño de la flecha de "
 "desplazamiento"
 
-#: ../gtk/gtkmenuitem.c:337
+#: ../gtk/gtkmenuitem.c:336
 msgid "Right Justified"
 msgstr "Justificado a la derecha"
 
-#: ../gtk/gtkmenuitem.c:338
+#: ../gtk/gtkmenuitem.c:337
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "Establece si el elemento del menú aparece justificado en la parte derecha de "
 "una barra de menú"
 
-#: ../gtk/gtkmenuitem.c:352
+#: ../gtk/gtkmenuitem.c:351
 msgid "Submenu"
 msgstr "Submenú"
 
-#: ../gtk/gtkmenuitem.c:353
+#: ../gtk/gtkmenuitem.c:352
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "El submenú acoplado al elemento del menú, o NULL si no tiene ninguno"
 
-#: ../gtk/gtkmenuitem.c:370
+#: ../gtk/gtkmenuitem.c:369
 msgid "Sets the accelerator path of the menu item"
 msgstr "Establece la ruta del acelerador del elemento del menú"
 
-#: ../gtk/gtkmenuitem.c:385
+#: ../gtk/gtkmenuitem.c:384
 msgid "The text for the child label"
 msgstr "El texto para la etiqueta hijo"
 
-#: ../gtk/gtkmenuitem.c:448
+#: ../gtk/gtkmenuitem.c:447
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Cantidad de espacio ocupado por una flecha, relativa al tamaño de tipografía "
 "del elemento del menú"
 
-#: ../gtk/gtkmenuitem.c:461
+#: ../gtk/gtkmenuitem.c:460
 msgid "Width in Characters"
 msgstr "Anchura en caracteres"
 
-#: ../gtk/gtkmenuitem.c:462
+#: ../gtk/gtkmenuitem.c:461
 msgid "The minimum desired width of the menu item in characters"
 msgstr "La anchura mínima deseada del elemento del menú en caracteres"
 
-#: ../gtk/gtkmenushell.c:420
+#: ../gtk/gtkmenushell.c:421
 msgid "Take Focus"
 msgstr "Toma el foco"
 
-#: ../gtk/gtkmenushell.c:421
+#: ../gtk/gtkmenushell.c:422
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Un booleano que indica si el menú obtiene el foco del teclado"
 
@@ -4056,65 +4057,65 @@ msgstr "Menú"
 msgid "The dropdown menu"
 msgstr "El menú desplegable"
 
-#: ../gtk/gtkmessagedialog.c:185
+#: ../gtk/gtkmessagedialog.c:187
 msgid "Image/label border"
 msgstr "Borde de la imagen/etiqueta"
 
-#: ../gtk/gtkmessagedialog.c:186
+#: ../gtk/gtkmessagedialog.c:188
 msgid "Width of border around the label and image in the message dialog"
 msgstr ""
 "Anchura del borde alrededor de la etiqueta y la imagen en el diálogo de "
 "mensajes"
 
-#: ../gtk/gtkmessagedialog.c:210
+#: ../gtk/gtkmessagedialog.c:212
 msgid "Message Buttons"
 msgstr "Botones del mensaje"
 
-#: ../gtk/gtkmessagedialog.c:211
+#: ../gtk/gtkmessagedialog.c:213
 msgid "The buttons shown in the message dialog"
 msgstr "Los botones mostrados en el diálogo de mensaje"
 
-#: ../gtk/gtkmessagedialog.c:228
+#: ../gtk/gtkmessagedialog.c:230
 msgid "The primary text of the message dialog"
 msgstr "El texto primario del diálogo de mensaje"
 
-#: ../gtk/gtkmessagedialog.c:243
+#: ../gtk/gtkmessagedialog.c:245
 msgid "Use Markup"
 msgstr "Usar marcado"
 
-#: ../gtk/gtkmessagedialog.c:244
+#: ../gtk/gtkmessagedialog.c:246
 msgid "The primary text of the title includes Pango markup."
 msgstr "El texto primario del título incluye marcado Pango."
 
-#: ../gtk/gtkmessagedialog.c:258
+#: ../gtk/gtkmessagedialog.c:260
 msgid "Secondary Text"
 msgstr "Texto secundario"
 
-#: ../gtk/gtkmessagedialog.c:259
+#: ../gtk/gtkmessagedialog.c:261
 msgid "The secondary text of the message dialog"
 msgstr "El texto secundario del diálogo de mensaje"
 
-#: ../gtk/gtkmessagedialog.c:274
+#: ../gtk/gtkmessagedialog.c:276
 msgid "Use Markup in secondary"
 msgstr "Usar marcado en el secundario"
 
-#: ../gtk/gtkmessagedialog.c:275
+#: ../gtk/gtkmessagedialog.c:277
 msgid "The secondary text includes Pango markup."
 msgstr "El texto secundario incluye marcado Pango."
 
-#: ../gtk/gtkmessagedialog.c:289
+#: ../gtk/gtkmessagedialog.c:291
 msgid "Image"
 msgstr "Imagen"
 
-#: ../gtk/gtkmessagedialog.c:290
+#: ../gtk/gtkmessagedialog.c:292
 msgid "The image"
 msgstr "La imagen"
 
-#: ../gtk/gtkmessagedialog.c:306
+#: ../gtk/gtkmessagedialog.c:308
 msgid "Message area"
 msgstr "Área de mensajes"
 
-#: ../gtk/gtkmessagedialog.c:307
+#: ../gtk/gtkmessagedialog.c:309
 msgid "GtkVBox that holds the dialog's primary and secondary labels"
 msgstr "GtkVBox que contiene las etiquetas primaria y secundaria del diálogo"
 
@@ -4168,52 +4169,52 @@ msgstr "Estamos mostrando un diálogo"
 msgid "The screen where this window will be displayed."
 msgstr "La pantalla donde se mostrará esta ventana."
 
-#: ../gtk/gtknotebook.c:696
+#: ../gtk/gtknotebook.c:694
 msgid "Page"
 msgstr "Página"
 
-#: ../gtk/gtknotebook.c:697
+#: ../gtk/gtknotebook.c:695
 msgid "The index of the current page"
 msgstr "El índice de la página actual"
 
-#: ../gtk/gtknotebook.c:705
+#: ../gtk/gtknotebook.c:703
 msgid "Tab Position"
 msgstr "Posición del tabulador"
 
-#: ../gtk/gtknotebook.c:706
+#: ../gtk/gtknotebook.c:704
 msgid "Which side of the notebook holds the tabs"
 msgstr "Qué lado del cuaderno contiene las pestañas"
 
-#: ../gtk/gtknotebook.c:713
+#: ../gtk/gtknotebook.c:711
 msgid "Show Tabs"
 msgstr "Mostrar pestañas"
 
-#: ../gtk/gtknotebook.c:714
+#: ../gtk/gtknotebook.c:712
 msgid "Whether tabs should be shown"
 msgstr "Indica si se deben mostrar las pestañas"
 
-#: ../gtk/gtknotebook.c:720
+#: ../gtk/gtknotebook.c:718
 msgid "Show Border"
 msgstr "Mostrar borde"
 
-#: ../gtk/gtknotebook.c:721
+#: ../gtk/gtknotebook.c:719
 msgid "Whether the border should be shown"
 msgstr "Indica si se debe mostrar el borde"
 
-#: ../gtk/gtknotebook.c:727
+#: ../gtk/gtknotebook.c:725
 msgid "Scrollable"
 msgstr "Desplazable"
 
-#: ../gtk/gtknotebook.c:728
+#: ../gtk/gtknotebook.c:726
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Si es TRUE, añadir flechas de desplazamiento si no caben todas las pestañas"
 
-#: ../gtk/gtknotebook.c:734
+#: ../gtk/gtknotebook.c:732
 msgid "Enable Popup"
 msgstr "Activar emergente"
 
-#: ../gtk/gtknotebook.c:735
+#: ../gtk/gtknotebook.c:733
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -4221,129 +4222,129 @@ msgstr ""
 "Si es TRUE, presionando el botón derecho del ratón en el cuaderno emerge un "
 "menú que puede usar para ir a una página"
 
-#: ../gtk/gtknotebook.c:749
+#: ../gtk/gtknotebook.c:747
 msgid "Group Name"
 msgstr "Nombre del grupo"
 
-#: ../gtk/gtknotebook.c:750
+#: ../gtk/gtknotebook.c:748
 msgid "Group name for tab drag and drop"
 msgstr "Nombre del grupo para el arrastre y suelte de pestañas"
 
-#: ../gtk/gtknotebook.c:757
+#: ../gtk/gtknotebook.c:755
 msgid "Tab label"
 msgstr "Etiqueta de la pestaña"
 
-#: ../gtk/gtknotebook.c:758
+#: ../gtk/gtknotebook.c:756
 msgid "The string displayed on the child's tab label"
 msgstr "La cadena mostrada en la etiqueta de la pestaña hija"
 
-#: ../gtk/gtknotebook.c:764
+#: ../gtk/gtknotebook.c:762
 msgid "Menu label"
 msgstr "Etiqueta de menú"
 
-#: ../gtk/gtknotebook.c:765
+#: ../gtk/gtknotebook.c:763
 msgid "The string displayed in the child's menu entry"
 msgstr "La cadena mostrada en la entrada de menú hija"
 
-#: ../gtk/gtknotebook.c:778
+#: ../gtk/gtknotebook.c:776
 msgid "Tab expand"
 msgstr "Expansión de la pestaña"
 
-#: ../gtk/gtknotebook.c:779
+#: ../gtk/gtknotebook.c:777
 msgid "Whether to expand the child's tab"
 msgstr "Indica si se deben expandir la pestañas del hijo"
 
-#: ../gtk/gtknotebook.c:785
+#: ../gtk/gtknotebook.c:783
 msgid "Tab fill"
 msgstr "Relleno de la pestaña"
 
-#: ../gtk/gtknotebook.c:786
+#: ../gtk/gtknotebook.c:784
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Indica si se debe rellenar el área asignada de las pestañas hijas "
 
-#: ../gtk/gtknotebook.c:793
+#: ../gtk/gtknotebook.c:791
 msgid "Tab reorderable"
 msgstr "Pestaña reordenable"
 
-#: ../gtk/gtknotebook.c:794
+#: ../gtk/gtknotebook.c:792
 msgid "Whether the tab is reorderable by user action"
 msgstr "Indica si la pestaña se puede reordenar por una acción del usuario"
 
-#: ../gtk/gtknotebook.c:800
+#: ../gtk/gtknotebook.c:798
 msgid "Tab detachable"
 msgstr "Pestaña desprendible"
 
-#: ../gtk/gtknotebook.c:801
+#: ../gtk/gtknotebook.c:799
 msgid "Whether the tab is detachable"
 msgstr "Indica si la pestaña es desprendible"
 
-#: ../gtk/gtknotebook.c:816 ../gtk/gtkscrollbar.c:102
+#: ../gtk/gtknotebook.c:814 ../gtk/gtkscrollbar.c:102
 msgid "Secondary backward stepper"
 msgstr "Flecha de retroceso secundaria"
 
-#: ../gtk/gtknotebook.c:817
+#: ../gtk/gtknotebook.c:815
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Muestra una segunda flecha de retroceso en el extremo opuesto del área de "
 "pestañas"
 
-#: ../gtk/gtknotebook.c:832 ../gtk/gtkscrollbar.c:109
+#: ../gtk/gtknotebook.c:830 ../gtk/gtkscrollbar.c:109
 msgid "Secondary forward stepper"
 msgstr "Flecha de adelanto secundaria"
 
-#: ../gtk/gtknotebook.c:833
+#: ../gtk/gtknotebook.c:831
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Mostrar una segunda flecha de avance en el extremo opuesto del área de "
 "pestañas"
 
-#: ../gtk/gtknotebook.c:847 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:845 ../gtk/gtkscrollbar.c:88
 msgid "Backward stepper"
 msgstr "Flecha de retroceso"
 
-#: ../gtk/gtknotebook.c:848 ../gtk/gtkscrollbar.c:89
+#: ../gtk/gtknotebook.c:846 ../gtk/gtkscrollbar.c:89
 msgid "Display the standard backward arrow button"
 msgstr "Mostrar el botón estándar de flecha de retroceso"
 
-#: ../gtk/gtknotebook.c:862 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:860 ../gtk/gtkscrollbar.c:95
 msgid "Forward stepper"
 msgstr "Flecha de avance"
 
-#: ../gtk/gtknotebook.c:863 ../gtk/gtkscrollbar.c:96
+#: ../gtk/gtknotebook.c:861 ../gtk/gtkscrollbar.c:96
 msgid "Display the standard forward arrow button"
 msgstr "Mostrar el botón estándar de flecha de avance"
 
-#: ../gtk/gtknotebook.c:877
+#: ../gtk/gtknotebook.c:875
 msgid "Tab overlap"
 msgstr "Solapamiento de la pestaña"
 
-#: ../gtk/gtknotebook.c:878
+#: ../gtk/gtknotebook.c:876
 msgid "Size of tab overlap area"
 msgstr "Tamaño del área de solapamiento de la pestaña"
 
-#: ../gtk/gtknotebook.c:893
+#: ../gtk/gtknotebook.c:891
 msgid "Tab curvature"
 msgstr "Curvatura de la pestaña"
 
-#: ../gtk/gtknotebook.c:894
+#: ../gtk/gtknotebook.c:892
 msgid "Size of tab curvature"
 msgstr "Tamaño de la curvatura de la pestaña"
 
-#: ../gtk/gtknotebook.c:910
+#: ../gtk/gtknotebook.c:908
 msgid "Arrow spacing"
 msgstr "Espaciado de las flechas"
 
-#: ../gtk/gtknotebook.c:911
+#: ../gtk/gtknotebook.c:909
 msgid "Scroll arrow spacing"
 msgstr "Espaciado del desplazamiento de las flechas"
 
-#: ../gtk/gtknotebook.c:927
+#: ../gtk/gtknotebook.c:925
 msgid "Initial gap"
 msgstr "Espacio inicial"
 
-#: ../gtk/gtknotebook.c:928
+#: ../gtk/gtknotebook.c:926
 msgid "Initial gap before the first tab"
 msgstr "Espacio inicial antes de la primera pestaña"
 
@@ -4451,19 +4452,19 @@ msgstr "Encoger"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Si es TRUE, el hijo puede hacerse más pequeño que sus requisitos"
 
-#: ../gtk/gtkplug.c:201 ../gtk/gtkstatusicon.c:326
+#: ../gtk/gtkplug.c:203 ../gtk/gtkstatusicon.c:326
 msgid "Embedded"
 msgstr "Empotrado"
 
-#: ../gtk/gtkplug.c:202
+#: ../gtk/gtkplug.c:204
 msgid "Whether the plug is embedded"
 msgstr "Indica si el complemento está empotrado"
 
-#: ../gtk/gtkplug.c:216
+#: ../gtk/gtkplug.c:218
 msgid "Socket Window"
 msgstr "Ventana del socket"
 
-#: ../gtk/gtkplug.c:217
+#: ../gtk/gtkplug.c:219
 msgid "The window of the socket the plug is embedded in"
 msgstr "La ventana del socket en la que el enchufe está empotrado"
 
@@ -4548,12 +4549,10 @@ msgid "TRUE if this printer is accepting new jobs"
 msgstr "TRUE si esta impresora está aceptando trabajos nuevos"
 
 #: ../gtk/gtkprinteroption.c:105
-#| msgid "Minimum Value"
 msgid "Option Value"
 msgstr "Valor de la opción"
 
 #: ../gtk/gtkprinteroption.c:106
-#| msgid "Name of the printer"
 msgid "Value of the option"
 msgstr "Valor de la opción"
 
@@ -4805,15 +4804,15 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr "Texto que se mostrará en la barra de progreso"
 
-#: ../gtk/gtkprogressbar.c:194
+#: ../gtk/gtkprogressbar.c:198
 msgid "Show text"
 msgstr "Mostrar texto"
 
-#: ../gtk/gtkprogressbar.c:195
+#: ../gtk/gtkprogressbar.c:199
 msgid "Whether the progress is shown as text."
 msgstr "Indica si el progreso se muestra como texto."
 
-#: ../gtk/gtkprogressbar.c:217
+#: ../gtk/gtkprogressbar.c:221
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -4821,51 +4820,51 @@ msgstr ""
 "El lugar preferido para la elipsis de la cadena, si la barra de progreso no "
 "tiene suficiente espacio para mostrar la cadena completa."
 
-#: ../gtk/gtkprogressbar.c:224
+#: ../gtk/gtkprogressbar.c:228
 msgid "X spacing"
 msgstr "Espaciado X"
 
-#: ../gtk/gtkprogressbar.c:225
+#: ../gtk/gtkprogressbar.c:229
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Espacio extra aplicado a la anchura de una barra de progreso."
 
-#: ../gtk/gtkprogressbar.c:230
+#: ../gtk/gtkprogressbar.c:234
 msgid "Y spacing"
 msgstr "Espaciado Y"
 
-#: ../gtk/gtkprogressbar.c:231
+#: ../gtk/gtkprogressbar.c:235
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Espacio adicional aplicado a la altura >de una barra de progreso."
 
-#: ../gtk/gtkprogressbar.c:244
+#: ../gtk/gtkprogressbar.c:248
 msgid "Minimum horizontal bar width"
 msgstr "Anchura mínima de la barra horizontal"
 
-#: ../gtk/gtkprogressbar.c:245
+#: ../gtk/gtkprogressbar.c:249
 msgid "The minimum horizontal width of the progress bar"
 msgstr "La anchura mínima horizontal de la barra de progreso"
 
-#: ../gtk/gtkprogressbar.c:257
+#: ../gtk/gtkprogressbar.c:261
 msgid "Minimum horizontal bar height"
 msgstr "Altura mínima de la barra horizontal"
 
-#: ../gtk/gtkprogressbar.c:258
+#: ../gtk/gtkprogressbar.c:262
 msgid "Minimum horizontal height of the progress bar"
 msgstr "La altura mínima horizontal de la barra de progreso"
 
-#: ../gtk/gtkprogressbar.c:270
+#: ../gtk/gtkprogressbar.c:274
 msgid "Minimum vertical bar width"
 msgstr "Anchura mínima horizontal de la barra"
 
-#: ../gtk/gtkprogressbar.c:271
+#: ../gtk/gtkprogressbar.c:275
 msgid "The minimum vertical width of the progress bar"
 msgstr "La anchura mínima vertical de la barra de progreso"
 
-#: ../gtk/gtkprogressbar.c:283
+#: ../gtk/gtkprogressbar.c:287
 msgid "Minimum vertical bar height"
 msgstr "Altura mínima vertical de la barra"
 
-#: ../gtk/gtkprogressbar.c:284
+#: ../gtk/gtkprogressbar.c:288
 msgid "The minimum vertical height of the progress bar"
 msgstr "La altura mínima vertical de la barra de progreso"
 
@@ -4882,7 +4881,7 @@ msgstr ""
 "acción es la acción actual de su grupo."
 
 #: ../gtk/gtkradioaction.c:135 ../gtk/gtkradiobutton.c:164
-#: ../gtk/gtkradiomenuitem.c:427 ../gtk/gtkradiotoolbutton.c:85
+#: ../gtk/gtkradiomenuitem.c:426 ../gtk/gtkradiotoolbutton.c:85
 msgid "Group"
 msgstr "Grupo"
 
@@ -4906,7 +4905,7 @@ msgstr ""
 msgid "The radio button whose group this widget belongs to."
 msgstr "El botón de radio a cuyo grupo pertenece este widget."
 
-#: ../gtk/gtkradiomenuitem.c:428
+#: ../gtk/gtkradiomenuitem.c:427
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "El elemento del menú de radio a cuyo grupo pertenece este widget."
 
@@ -4982,7 +4981,7 @@ msgstr "Redondear dígitos"
 msgid "The number of digits to round the value to."
 msgstr "El número de dígitos al que redondear el valor."
 
-#: ../gtk/gtkrange.c:521 ../gtk/gtkswitch.c:818
+#: ../gtk/gtkrange.c:521 ../gtk/gtkswitch.c:817
 msgid "Slider Width"
 msgstr "Anchura del deslizador"
 
@@ -6115,7 +6114,7 @@ msgstr "Indica si el icono de estado está empotrado"
 msgid "The orientation of the tray"
 msgstr "La orientación de la bandeja"
 
-#: ../gtk/gtkstatusicon.c:370 ../gtk/gtkwidget.c:1089
+#: ../gtk/gtkstatusicon.c:370 ../gtk/gtkwidget.c:1091
 msgid "Has tooltip"
 msgstr "Tiene consejo"
 
@@ -6123,15 +6122,15 @@ msgstr "Tiene consejo"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Indica si el icono de la bandeja tiene un consejo"
 
-#: ../gtk/gtkstatusicon.c:396 ../gtk/gtkwidget.c:1110
+#: ../gtk/gtkstatusicon.c:396 ../gtk/gtkwidget.c:1112
 msgid "Tooltip Text"
 msgstr "Texto de la sugerencia"
 
-#: ../gtk/gtkstatusicon.c:397 ../gtk/gtkwidget.c:1111 ../gtk/gtkwidget.c:1132
+#: ../gtk/gtkstatusicon.c:397 ../gtk/gtkwidget.c:1113 ../gtk/gtkwidget.c:1134
 msgid "The contents of the tooltip for this widget"
 msgstr "El contenido de las sugerencias para este widget"
 
-#: ../gtk/gtkstatusicon.c:420 ../gtk/gtkwidget.c:1131
+#: ../gtk/gtkstatusicon.c:420 ../gtk/gtkwidget.c:1133
 msgid "Tooltip markup"
 msgstr "Marcado de sugerencias"
 
@@ -6151,23 +6150,23 @@ msgstr "Estilo del contexto"
 msgid "GtkStyleContext to get style from"
 msgstr "GtkStyleContext del que obtener el estilo"
 
-#: ../gtk/gtkstylecontext.c:432
+#: ../gtk/gtkstylecontext.c:433
 msgid "The associated GdkScreen"
 msgstr "La GdkScreen asociada"
 
-#: ../gtk/gtkstylecontext.c:438
+#: ../gtk/gtkstylecontext.c:439
 msgid "Direction"
 msgstr "Dirección"
 
-#: ../gtk/gtkstylecontext.c:439 ../gtk/gtktexttag.c:269
+#: ../gtk/gtkstylecontext.c:440 ../gtk/gtktexttag.c:269
 msgid "Text direction"
 msgstr "Dirección del texto"
 
-#: ../gtk/gtkswitch.c:785
+#: ../gtk/gtkswitch.c:784
 msgid "Whether the switch is on or off"
 msgstr "Indica si el interruptor está encendido o apagado"
 
-#: ../gtk/gtkswitch.c:819
+#: ../gtk/gtkswitch.c:818
 msgid "The minimum width of the handle"
 msgstr "La anchura mínima del tirador"
 
@@ -6326,8 +6325,9 @@ msgstr ""
 "anónimas"
 
 #: ../gtk/gtktexttag.c:222
-msgid "Background rgba"
-msgstr "RGBA de fondo"
+#| msgid "Background RGBA color"
+msgid "Background RGBA"
+msgstr "Fondo RGBA"
 
 #: ../gtk/gtktexttag.c:230
 msgid "Background full height"
@@ -6342,8 +6342,9 @@ msgstr ""
 "ancho de los caracteres etiquetados"
 
 #: ../gtk/gtktexttag.c:261
-msgid "Foreground rgba"
-msgstr "RGBA de primer plano"
+#| msgid "Foreground color as RGBA"
+msgid "Foreground RGBA"
+msgstr "Primer plano RGBA"
 
 #: ../gtk/gtktexttag.c:270
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -6500,11 +6501,13 @@ msgid "Paragraph background color as a GdkColor"
 msgstr "Color de fondo del párrafo como un GdkColor"
 
 #: ../gtk/gtktexttag.c:576
-msgid "Paragraph background rgba"
-msgstr "RGBA de fondo del párrafo"
+#| msgid "Paragraph background set"
+msgid "Paragraph background RGBA"
+msgstr "Fondo de parágrafo RGBA"
 
 #: ../gtk/gtktexttag.c:577
-msgid "Paragraph background rgba as a GdkRGBA"
+#| msgid "Paragraph background rgba as a GdkRGBA"
+msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "Color de fondo del párrafo como un GdkRGBA"
 
 #: ../gtk/gtktexttag.c:595
@@ -6669,7 +6672,7 @@ msgstr "Color de subrayado de errores"
 msgid "Color with which to draw error-indication underlines"
 msgstr "Color con el que dibujar el subrayado de indicación de errores"
 
-#: ../gtk/gtkthemingengine.c:259
+#: ../gtk/gtkthemingengine.c:257
 msgid "Theming engine name"
 msgstr "Nombre del motor de temas"
 
@@ -6703,85 +6706,85 @@ msgstr "Indicador de dibujo"
 msgid "If the toggle part of the button is displayed"
 msgstr "Si se muestra la parte de conmutación del botón"
 
-#: ../gtk/gtktoolbar.c:499 ../gtk/gtktoolpalette.c:1038
+#: ../gtk/gtktoolbar.c:501 ../gtk/gtktoolpalette.c:1038
 msgid "Toolbar Style"
 msgstr "Estilo de la barra de herramientas"
 
-#: ../gtk/gtktoolbar.c:500
+#: ../gtk/gtktoolbar.c:502
 msgid "How to draw the toolbar"
 msgstr "Cómo dibujar la barra de herramientas"
 
-#: ../gtk/gtktoolbar.c:507
+#: ../gtk/gtktoolbar.c:509
 msgid "Show Arrow"
 msgstr "Mostrar flecha"
 
-#: ../gtk/gtktoolbar.c:508
+#: ../gtk/gtktoolbar.c:510
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Indica si debe mostrarse una flecha si no cabe la barra de herramientas"
 
-#: ../gtk/gtktoolbar.c:529
+#: ../gtk/gtktoolbar.c:531
 msgid "Size of icons in this toolbar"
 msgstr "Tamaño de los iconos en esta barra de herramientas"
 
-#: ../gtk/gtktoolbar.c:544 ../gtk/gtktoolpalette.c:1024
+#: ../gtk/gtktoolbar.c:546 ../gtk/gtktoolpalette.c:1024
 msgid "Icon size set"
 msgstr "Tamaño del icono establecido"
 
-#: ../gtk/gtktoolbar.c:545 ../gtk/gtktoolpalette.c:1025
+#: ../gtk/gtktoolbar.c:547 ../gtk/gtktoolpalette.c:1025
 msgid "Whether the icon-size property has been set"
 msgstr "Indica si se ha establecido la propiedad de tamaño del icono"
 
-#: ../gtk/gtktoolbar.c:554
+#: ../gtk/gtktoolbar.c:556
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Indica si el elemento debe recibir espacio extra cuando la barra crezca"
 
-#: ../gtk/gtktoolbar.c:562 ../gtk/gtktoolitemgroup.c:1646
+#: ../gtk/gtktoolbar.c:564 ../gtk/gtktoolitemgroup.c:1646
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Indica si el elemento debe ser del mismo tamaño que otros elementos "
 "homogéneos"
 
-#: ../gtk/gtktoolbar.c:569
+#: ../gtk/gtktoolbar.c:571
 msgid "Spacer size"
 msgstr "Tamaño del espaciador"
 
-#: ../gtk/gtktoolbar.c:570
+#: ../gtk/gtktoolbar.c:572
 msgid "Size of spacers"
 msgstr "Tamaño de los espaciadores"
 
-#: ../gtk/gtktoolbar.c:579
+#: ../gtk/gtktoolbar.c:581
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Número de espacio del borde entre la sombra de la barra de herramientas y "
 "los botones"
 
-#: ../gtk/gtktoolbar.c:587
+#: ../gtk/gtktoolbar.c:589
 msgid "Maximum child expand"
 msgstr "Expansión de hijos máxima"
 
-#: ../gtk/gtktoolbar.c:588
+#: ../gtk/gtktoolbar.c:590
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "Cantidad máxima de espacio que se le dará a un elemento expandible"
 
-#: ../gtk/gtktoolbar.c:596
+#: ../gtk/gtktoolbar.c:598
 msgid "Space style"
 msgstr "Estilo del espacio"
 
-#: ../gtk/gtktoolbar.c:597
+#: ../gtk/gtktoolbar.c:599
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Indica si los espaciadores son líneas verticales o sólo blancos"
 
-#: ../gtk/gtktoolbar.c:604
+#: ../gtk/gtktoolbar.c:606
 msgid "Button relief"
 msgstr "Borde del botón"
 
-#: ../gtk/gtktoolbar.c:605
+#: ../gtk/gtktoolbar.c:607
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipo de bisel alrededor de los botones de la barra de herramientas"
 
-#: ../gtk/gtktoolbar.c:612
+#: ../gtk/gtktoolbar.c:614
 msgid "Style of bevel around the toolbar"
 msgstr "Estilo del bisel alrededor de la barra de herramientas"
 
@@ -7349,7 +7352,7 @@ msgstr "Definición del IU combinado"
 msgid "An XML string describing the merged UI"
 msgstr "Una cadena XML describiendo el IU combinado"
 
-#: ../gtk/gtkviewport.c:154
+#: ../gtk/gtkviewport.c:156
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "Determina como es dibujado el marco sombreado alrededor del puerto de visión"
@@ -7362,27 +7365,27 @@ msgstr "Usar iconos simbólicos"
 msgid "Whether to use symbolic icons"
 msgstr "Indica si se deben usar enlaces simbólicos"
 
-#: ../gtk/gtkwidget.c:948
+#: ../gtk/gtkwidget.c:950
 msgid "Widget name"
 msgstr "Nombre del widget"
 
-#: ../gtk/gtkwidget.c:949
+#: ../gtk/gtkwidget.c:951
 msgid "The name of the widget"
 msgstr "El nombre del widget"
 
-#: ../gtk/gtkwidget.c:955
+#: ../gtk/gtkwidget.c:957
 msgid "Parent widget"
 msgstr "Widget padre"
 
-#: ../gtk/gtkwidget.c:956
+#: ../gtk/gtkwidget.c:958
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "El widget padre de este widget. Debe ser un widget contenedor"
 
-#: ../gtk/gtkwidget.c:963
+#: ../gtk/gtkwidget.c:965
 msgid "Width request"
 msgstr "Petición de anchura"
 
-#: ../gtk/gtkwidget.c:964
+#: ../gtk/gtkwidget.c:966
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7390,11 +7393,11 @@ msgstr ""
 "Sobreescribir el ancho solicitado del widget, o -1 si deber ser utilizado la "
 "solicitud natural"
 
-#: ../gtk/gtkwidget.c:972
+#: ../gtk/gtkwidget.c:974
 msgid "Height request"
 msgstr "Petición de altura"
 
-#: ../gtk/gtkwidget.c:973
+#: ../gtk/gtkwidget.c:975
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7402,84 +7405,84 @@ msgstr ""
 "Sobreescribir la altura solicitada del widget, o -1 si deber ser utilizada "
 "la solicitud natural"
 
-#: ../gtk/gtkwidget.c:982
+#: ../gtk/gtkwidget.c:984
 msgid "Whether the widget is visible"
 msgstr "Indica si el widget es visible"
 
-#: ../gtk/gtkwidget.c:989
+#: ../gtk/gtkwidget.c:991
 msgid "Whether the widget responds to input"
 msgstr "Indica si el widget responde al ingreso"
 
-#: ../gtk/gtkwidget.c:995
+#: ../gtk/gtkwidget.c:997
 msgid "Application paintable"
 msgstr "Pintable por la aplicación"
 
-#: ../gtk/gtkwidget.c:996
+#: ../gtk/gtkwidget.c:998
 msgid "Whether the application will paint directly on the widget"
 msgstr "Indica si la aplicación pintará directamente sobre el widget"
 
-#: ../gtk/gtkwidget.c:1002
+#: ../gtk/gtkwidget.c:1004
 msgid "Can focus"
 msgstr "Puede enfocar"
 
-#: ../gtk/gtkwidget.c:1003
+#: ../gtk/gtkwidget.c:1005
 msgid "Whether the widget can accept the input focus"
 msgstr "Indica si el widget puede aceptar el foco de entrada"
 
-#: ../gtk/gtkwidget.c:1009
+#: ../gtk/gtkwidget.c:1011
 msgid "Has focus"
 msgstr "Tiene foco"
 
-#: ../gtk/gtkwidget.c:1010
+#: ../gtk/gtkwidget.c:1012
 msgid "Whether the widget has the input focus"
 msgstr "Indica si el widget tiene el foco de entrada"
 
-#: ../gtk/gtkwidget.c:1016
+#: ../gtk/gtkwidget.c:1018
 msgid "Is focus"
 msgstr "Tiene el foco"
 
-#: ../gtk/gtkwidget.c:1017
+#: ../gtk/gtkwidget.c:1019
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Indica si el widget es el widget con foco dentro del nivel superior"
 
-#: ../gtk/gtkwidget.c:1023
+#: ../gtk/gtkwidget.c:1025
 msgid "Can default"
 msgstr "Puede por omisión"
 
-#: ../gtk/gtkwidget.c:1024
+#: ../gtk/gtkwidget.c:1026
 msgid "Whether the widget can be the default widget"
 msgstr "Indica si el widget puede ser el widget predeterminado"
 
-#: ../gtk/gtkwidget.c:1030
+#: ../gtk/gtkwidget.c:1032
 msgid "Has default"
 msgstr "Tiene por omisión"
 
-#: ../gtk/gtkwidget.c:1031
+#: ../gtk/gtkwidget.c:1033
 msgid "Whether the widget is the default widget"
 msgstr "Indica si el widget es el widget predeterminado"
 
-#: ../gtk/gtkwidget.c:1037
+#: ../gtk/gtkwidget.c:1039
 msgid "Receives default"
 msgstr "Recibe por omisión"
 
-#: ../gtk/gtkwidget.c:1038
+#: ../gtk/gtkwidget.c:1040
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Si es TRUE el widget recibirá la acción predeterminada cuando obtiene el foco"
 
-#: ../gtk/gtkwidget.c:1044
+#: ../gtk/gtkwidget.c:1046
 msgid "Composite child"
 msgstr "Hijo compuesto"
 
-#: ../gtk/gtkwidget.c:1045
+#: ../gtk/gtkwidget.c:1047
 msgid "Whether the widget is part of a composite widget"
 msgstr "Indica si el widget es parte de un widget compuesto"
 
-#: ../gtk/gtkwidget.c:1051
+#: ../gtk/gtkwidget.c:1053
 msgid "Style"
 msgstr "Estilo"
 
-#: ../gtk/gtkwidget.c:1052
+#: ../gtk/gtkwidget.c:1054
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -7487,176 +7490,176 @@ msgstr ""
 "El estilo del widget, que contiene información sobre la apariencia (colores, "
 "etc)"
 
-#: ../gtk/gtkwidget.c:1058
+#: ../gtk/gtkwidget.c:1060
 msgid "Events"
 msgstr "Eventos"
 
-#: ../gtk/gtkwidget.c:1059
+#: ../gtk/gtkwidget.c:1061
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "La máscara de eventos que decide que tipo de GtkEvents recibe este widget"
 
-#: ../gtk/gtkwidget.c:1066
+#: ../gtk/gtkwidget.c:1068
 msgid "No show all"
 msgstr "No mostrar todo"
 
-#: ../gtk/gtkwidget.c:1067
+#: ../gtk/gtkwidget.c:1069
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Indica que gtk_widget_show_all() no debe afectar a este widget"
 
-#: ../gtk/gtkwidget.c:1090
+#: ../gtk/gtkwidget.c:1092
 msgid "Whether this widget has a tooltip"
 msgstr "Indica si el widget tiene un consejo"
 
-#: ../gtk/gtkwidget.c:1146
+#: ../gtk/gtkwidget.c:1148
 msgid "Window"
 msgstr "Ventana"
 
-#: ../gtk/gtkwidget.c:1147
+#: ../gtk/gtkwidget.c:1149
 msgid "The widget's window if it is realized"
 msgstr "La ventana del widget si se realiza"
 
-#: ../gtk/gtkwidget.c:1161
+#: ../gtk/gtkwidget.c:1163
 msgid "Double Buffered"
 msgstr "Búfer doble"
 
-#: ../gtk/gtkwidget.c:1162
+#: ../gtk/gtkwidget.c:1164
 msgid "Whether the widget is double buffered"
 msgstr "Indica si el widget tiene búfer doble"
 
-#: ../gtk/gtkwidget.c:1177
+#: ../gtk/gtkwidget.c:1179
 msgid "How to position in extra horizontal space"
 msgstr "Cómo posicionar en el espacio horizontal adicional"
 
-#: ../gtk/gtkwidget.c:1193
+#: ../gtk/gtkwidget.c:1195
 msgid "How to position in extra vertical space"
 msgstr "Cómo posicionar en el espacio vertical adicional"
 
-#: ../gtk/gtkwidget.c:1212
+#: ../gtk/gtkwidget.c:1214
 msgid "Margin on Left"
 msgstr "Margen a la izquierda"
 
-#: ../gtk/gtkwidget.c:1213
+#: ../gtk/gtkwidget.c:1215
 msgid "Pixels of extra space on the left side"
 msgstr "Píxeles de espacio adicional en la parte izquierda"
 
-#: ../gtk/gtkwidget.c:1233
+#: ../gtk/gtkwidget.c:1235
 msgid "Margin on Right"
 msgstr "Margen a la derecha"
 
-#: ../gtk/gtkwidget.c:1234
+#: ../gtk/gtkwidget.c:1236
 msgid "Pixels of extra space on the right side"
 msgstr "Píxeles de espacio adicional en la parte derecha"
 
-#: ../gtk/gtkwidget.c:1254
+#: ../gtk/gtkwidget.c:1256
 msgid "Margin on Top"
 msgstr "Margen arriba"
 
-#: ../gtk/gtkwidget.c:1255
+#: ../gtk/gtkwidget.c:1257
 msgid "Pixels of extra space on the top side"
 msgstr "Píxeles de espacio adicional en la parte superior"
 
-#: ../gtk/gtkwidget.c:1275
+#: ../gtk/gtkwidget.c:1277
 msgid "Margin on Bottom"
 msgstr "Margen abajo"
 
-#: ../gtk/gtkwidget.c:1276
+#: ../gtk/gtkwidget.c:1278
 msgid "Pixels of extra space on the bottom side"
 msgstr "Píxeles de espacio adicional en la parte inferior"
 
-#: ../gtk/gtkwidget.c:1293
+#: ../gtk/gtkwidget.c:1295
 msgid "All Margins"
 msgstr "Todos los márgenes"
 
-#: ../gtk/gtkwidget.c:1294
+#: ../gtk/gtkwidget.c:1296
 msgid "Pixels of extra space on all four sides"
 msgstr "Píxeles de espacio adicionales en las cuatro partes"
 
-#: ../gtk/gtkwidget.c:1327
+#: ../gtk/gtkwidget.c:1329
 msgid "Horizontal Expand"
 msgstr "Expansión horizontal"
 
-#: ../gtk/gtkwidget.c:1328
+#: ../gtk/gtkwidget.c:1330
 msgid "Whether widget wants more horizontal space"
 msgstr "Indica si el widget quiere usar más espacio horizontal"
 
-#: ../gtk/gtkwidget.c:1342
+#: ../gtk/gtkwidget.c:1344
 msgid "Horizontal Expand Set"
 msgstr "Ajuste de expansión horizontal"
 
-#: ../gtk/gtkwidget.c:1343
+#: ../gtk/gtkwidget.c:1345
 msgid "Whether to use the hexpand property"
 msgstr "Indica si se debe usar la propiedad hexpand"
 
-#: ../gtk/gtkwidget.c:1357
+#: ../gtk/gtkwidget.c:1359
 msgid "Vertical Expand"
 msgstr "Expansión vertial"
 
-#: ../gtk/gtkwidget.c:1358
+#: ../gtk/gtkwidget.c:1360
 msgid "Whether widget wants more vertical space"
 msgstr "Indica si el widget quiere usar más espacio vertical"
 
-#: ../gtk/gtkwidget.c:1372
+#: ../gtk/gtkwidget.c:1374
 msgid "Vertical Expand Set"
 msgstr "Ajuste de expansión vertical"
 
-#: ../gtk/gtkwidget.c:1373
+#: ../gtk/gtkwidget.c:1375
 msgid "Whether to use the vexpand property"
 msgstr "Indica si se debe usar la propiedad vexpand"
 
-#: ../gtk/gtkwidget.c:1387
+#: ../gtk/gtkwidget.c:1389
 msgid "Expand Both"
 msgstr "Expandir en ambas"
 
-#: ../gtk/gtkwidget.c:1388
+#: ../gtk/gtkwidget.c:1390
 msgid "Whether widget wants to expand in both directions"
 msgstr "Indica si el widget quiere expandirse en ambas direcciones"
 
-#: ../gtk/gtkwidget.c:3027
+#: ../gtk/gtkwidget.c:3029
 msgid "Interior Focus"
 msgstr "Foco interior"
 
-#: ../gtk/gtkwidget.c:3028
+#: ../gtk/gtkwidget.c:3030
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Indica si se ha de dibujar el indicador del foco dentro de los widgets"
 
-#: ../gtk/gtkwidget.c:3034
+#: ../gtk/gtkwidget.c:3036
 msgid "Focus linewidth"
 msgstr "Dar foco al ancho de línea"
 
-#: ../gtk/gtkwidget.c:3035
+#: ../gtk/gtkwidget.c:3037
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Anchura, en píxeles, de la línea indicadora del foco"
 
-#: ../gtk/gtkwidget.c:3041
+#: ../gtk/gtkwidget.c:3043
 msgid "Focus line dash pattern"
 msgstr "Dar foco a la línea con patrón punteado"
 
-#: ../gtk/gtkwidget.c:3042
+#: ../gtk/gtkwidget.c:3044
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Patrón punteado utilizado para dibujar el indicador de foco"
 
-#: ../gtk/gtkwidget.c:3047
+#: ../gtk/gtkwidget.c:3049
 msgid "Focus padding"
 msgstr "Relleno del foco"
 
-#: ../gtk/gtkwidget.c:3048
+#: ../gtk/gtkwidget.c:3050
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Anchura, en píxeles, entre el indicador de foco y la «caja» del widget"
 
-#: ../gtk/gtkwidget.c:3053
+#: ../gtk/gtkwidget.c:3055
 msgid "Cursor color"
 msgstr "Color del cursor"
 
-#: ../gtk/gtkwidget.c:3054
+#: ../gtk/gtkwidget.c:3056
 msgid "Color with which to draw insertion cursor"
 msgstr "Color con el cual dibujar el cursor de inserción"
 
-#: ../gtk/gtkwidget.c:3059
+#: ../gtk/gtkwidget.c:3061
 msgid "Secondary cursor color"
 msgstr "Color secundario del cursor"
 
-#: ../gtk/gtkwidget.c:3060
+#: ../gtk/gtkwidget.c:3062
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7664,43 +7667,43 @@ msgstr ""
 "Color con el cual dibujar el cursor de inserción secundario cuando se esta "
 "editando una mezcla de texto de derecha-a-izquierda y izquierda-a-derecha"
 
-#: ../gtk/gtkwidget.c:3065
+#: ../gtk/gtkwidget.c:3067
 msgid "Cursor line aspect ratio"
 msgstr "Proporción de la línea del cursor"
 
-#: ../gtk/gtkwidget.c:3066
+#: ../gtk/gtkwidget.c:3068
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "La proporción con la cual dibujar el cursor de inserción"
 
-#: ../gtk/gtkwidget.c:3072
+#: ../gtk/gtkwidget.c:3074
 msgid "Window dragging"
 msgstr "Arrastre de ventana"
 
-#: ../gtk/gtkwidget.c:3073
+#: ../gtk/gtkwidget.c:3075
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "Indica si las ventanas se pueden arrastrar pulsando en áreas vacías"
 
-#: ../gtk/gtkwidget.c:3086
+#: ../gtk/gtkwidget.c:3088
 msgid "Unvisited Link Color"
 msgstr "Color del enlace no visitado"
 
-#: ../gtk/gtkwidget.c:3087
+#: ../gtk/gtkwidget.c:3089
 msgid "Color of unvisited links"
 msgstr "Color de los enlaces no visitados"
 
-#: ../gtk/gtkwidget.c:3100
+#: ../gtk/gtkwidget.c:3102
 msgid "Visited Link Color"
 msgstr "Color del enlace visitado"
 
-#: ../gtk/gtkwidget.c:3101
+#: ../gtk/gtkwidget.c:3103
 msgid "Color of visited links"
 msgstr "Color de los enlaces visitados"
 
-#: ../gtk/gtkwidget.c:3115
+#: ../gtk/gtkwidget.c:3117
 msgid "Wide Separators"
 msgstr "Separadores anchos"
 
-#: ../gtk/gtkwidget.c:3116
+#: ../gtk/gtkwidget.c:3118
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -7708,35 +7711,35 @@ msgstr ""
 "Indica si los separadores tienen anchura configurable y deben dibujarse "
 "usando una caja en lugar de una línea"
 
-#: ../gtk/gtkwidget.c:3130
+#: ../gtk/gtkwidget.c:3132
 msgid "Separator Width"
 msgstr "Anchura del separador"
 
-#: ../gtk/gtkwidget.c:3131
+#: ../gtk/gtkwidget.c:3133
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "La anchura de los separadores si «wide-separators« es TRUE"
 
-#: ../gtk/gtkwidget.c:3145
+#: ../gtk/gtkwidget.c:3147
 msgid "Separator Height"
 msgstr "Altura del separador"
 
-#: ../gtk/gtkwidget.c:3146
+#: ../gtk/gtkwidget.c:3148
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "La altura de los separadores si «wide-separators» es TRUE"
 
-#: ../gtk/gtkwidget.c:3160
+#: ../gtk/gtkwidget.c:3162
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Longitud de la flecha de desplazamiento horizontal"
 
-#: ../gtk/gtkwidget.c:3161
+#: ../gtk/gtkwidget.c:3163
 msgid "The length of horizontal scroll arrows"
 msgstr "La longitud de las flechas de desplazamiento horizontal"
 
-#: ../gtk/gtkwidget.c:3175
+#: ../gtk/gtkwidget.c:3177
 msgid "Vertical Scroll Arrow Length"
 msgstr "Longitud de las flechas de desplazamiento vertical"
 
-#: ../gtk/gtkwidget.c:3176
+#: ../gtk/gtkwidget.c:3178
 msgid "The length of vertical scroll arrows"
 msgstr "La longitud de las flechas de desplazamiento vertical"
 
@@ -7988,9 +7991,17 @@ msgid "Color Profile Title"
 msgstr "Título del perfil de color"
 
 #: ../modules/printbackends/cups/gtkprintercups.c:96
-#| msgid "The title of the color selection dialog"
 msgid "The title of the color profile to use"
 msgstr "El título del perfil de color que usar"
+
+#~ msgid "Background rgba"
+#~ msgstr "RGBA de fondo"
+
+#~ msgid "Foreground rgba"
+#~ msgstr "RGBA de primer plano"
+
+#~ msgid "Paragraph background rgba"
+#~ msgstr "RGBA de fondo del párrafo"
 
 #~ msgid "Not Authorized Text"
 #~ msgstr "Texto de no autorizado"
