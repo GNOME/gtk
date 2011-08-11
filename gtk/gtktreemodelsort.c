@@ -18,19 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* NOTE: There is a potential for confusion in this code as to whether an iter,
- * path or value refers to the GtkTreeModelSort model, or the child model being
- * sorted.  As a convention, variables referencing the child model will have an
- * s_ prefix before them (ie. s_iter, s_value, s_path);
- */
-
-/* ITER FORMAT:
- *
- * iter->stamp = tree_model_sort->stamp
- * iter->user_data = SortLevel
- * iter->user_data2 = SortElt
- */
-
 #include "config.h"
 #include <string.h>
 
@@ -149,6 +136,88 @@
  * </example>
  */
 
+
+/* Notes on this implementation of GtkTreeModelSort
+ * ================================================
+ *
+ * Warnings
+ * --------
+ *
+ * In this code there is a potential for confusion as to whether an iter,
+ * path or value refers to the GtkTreeModelSort model, or to the child model
+ * that has been set. As a convention, variables referencing the child model
+ * will have an s_ prefix before them (ie. s_iter, s_value, s_path);
+ * Conversion of iterators and paths between GtkTreeModelSort and the child
+ * model is done through the various gtk_tree_model_sort_convert_* functions.
+ *
+ * Iterator format
+ * ---------------
+ *
+ * The iterator format of iterators handed out by GtkTreeModelSort is as
+ * follows:
+ *
+ *    iter->stamp = tree_model_sort->stamp
+ *    iter->user_data = SortLevel
+ *    iter->user_data2 = SortElt
+ *
+ * Internal data structure
+ * -----------------------
+ *
+ * Using SortLevel and SortElt, GtkTreeModelSort maintains a "cache" of
+ * the mapping from GtkTreeModelSort nodes to nodes in the child model.
+ * This is to avoid sorting a level each time an operation is requested
+ * on GtkTreeModelSort, such as get iter, get path, get value.
+ *
+ * A SortElt corresponds to a single node. A node and its siblings are
+ * stored in a SortLevel. The SortLevel keeps a reference to the parent
+ * SortElt and its SortLevel (if any). The SortElt can have a "children"
+ * pointer set, which points at a child level (a sub level).
+ *
+ * In a SortLevel, nodes are stored in a GSequence. The GSequence
+ * allows for fast additions and removals, and supports sorting
+ * the level of SortElt nodes.
+ *
+ * It is important to recognize the two different mappings that play
+ * a part in this code:
+ *   I.  The mapping from the client to this model. The order in which
+ *       nodes are stored in the GSequence is the order in which the
+ *       nodes are exposed to clients of the GtkTreeModelSort.
+ *   II. The mapping from this model to its child model. Each SortElt
+ *       contains an "offset" field which is the offset of the
+ *       corresponding node in the child model.
+ *
+ * Reference counting
+ * ------------------
+ *
+ * GtkTreeModelSort forwards all reference and unreference operations
+ * to the corresponding node in the child model. The reference count
+ * of each node is also maintained internally, in the "ref_count"
+ * fields in SortElt and SortLevel. For each ref and unref operation on
+ * a SortElt, the "ref_count" of the SortLevel is updated accordingly.
+ * In addition, if a SortLevel has a parent, a reference is taken on
+ * this parent. This happens in gtk_tree_model_sort_build_level() and
+ * the reference is released again in gtk_tree_model_sort_free_level().
+ * This ensures that when GtkTreeModelSort takes a reference on a node
+ * (for example during sorting), all parent nodes are referenced
+ * according to reference counting rule 1, see the GtkTreeModel
+ * documentation.
+ *
+ * When a level has a reference count of zero, which means that
+ * none of the nodes in the level is referenced, the level has
+ * a "zero ref count" on all its parents. As soon as the level
+ * reaches a reference count of zero, the zero ref count value is
+ * incremented by one on all parents of this level. Similarly, as
+ * soon as the reference count of a level changes from zero, the
+ * zero ref count value is decremented by one on all parents.
+ *
+ * The zero ref count value is used to clear unused portions of
+ * the cache. If a SortElt has a zero ref count of one, then
+ * its child level is unused and can be removed from the cache.
+ * If the zero ref count value is higher than one, then the
+ * child level contains sublevels which are unused as well.
+ * gtk_tree_model_sort_clear_cache() uses this to not recurse
+ * into levels which have a zero ref count of zero.
+ */
 
 typedef struct _SortElt SortElt;
 typedef struct _SortLevel SortLevel;
