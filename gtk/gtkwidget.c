@@ -14038,7 +14038,7 @@ gtk_widget_get_requisition (GtkWidget      *widget,
 /**
  * gtk_widget_set_window:
  * @widget: a #GtkWidget
- * @window: a #GdkWindow
+ * @window: (transfer full): a #GdkWindow
  *
  * Sets a widget's window. This function should only be used in a
  * widget's #GtkWidget::realize implementation. The %window passed is
