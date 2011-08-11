@@ -1129,7 +1129,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 GTK_TYPE_POLICY_TYPE,
                                                                 GTK_POLICY_ALWAYS,
                                                                 GTK_PARAM_READWRITE),
-                                             NULL);
+                                             gtk_rc_property_parse_enum);
   g_assert (result == PROP_VISIBLE_FOCUS);
 
   /**
