@@ -47,6 +47,7 @@
 #include "gtkscale.h"
 #include "gtkbox.h"
 #include "gtkspinbutton.h"
+#include "gtknotebook.h"
 #include "gtkwidget.h"
 #include "gtkgrid.h"
 
@@ -79,6 +80,7 @@ struct _GtkFontChooserPrivate
   GtkWidget    *family_face_list;
   GtkWidget    *list_scrolled_window;
   GtkWidget    *empty_list;
+  GtkWidget    *list_notebook;
   GtkListStore *model;
   GtkTreeModel *filter;
 
@@ -481,7 +483,6 @@ zoom_preview_cb (GtkWidget      *scrolled_window,
   return TRUE;
 }
 
-#if 0
 static void
 row_inserted_cb (GtkTreeModel *model,
                  GtkTreePath  *path,
@@ -491,15 +492,7 @@ row_inserted_cb (GtkTreeModel *model,
   GtkFontChooser        *fontchooser = (GtkFontChooser*)user_data;
   GtkFontChooserPrivate *priv        = fontchooser->priv;
 
-  if (gtk_bin_get_child (GTK_BIN (priv->list_scrolled_window)) ==
-      priv->empty_list)
-    {
-      g_object_ref (priv->empty_list);
-      gtk_container_remove (GTK_CONTAINER (priv->list_scrolled_window),
-                            priv->empty_list);
-      gtk_container_add (GTK_CONTAINER (priv->list_scrolled_window),
-                         priv->family_face_list);
-    }
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->list_notebook), 0);
 }
 
 static void
@@ -511,19 +504,8 @@ row_deleted_cb  (GtkTreeModel *model,
   GtkFontChooserPrivate *priv        = fontchooser->priv;
 
   if (gtk_tree_model_iter_n_children (model, NULL) == 0)
-    {
-      if (gtk_bin_get_child (GTK_BIN (priv->list_scrolled_window)) ==
-          priv->family_face_list)
-        {
-          g_object_ref (priv->family_face_list);
-          gtk_container_remove (GTK_CONTAINER (priv->list_scrolled_window),
-                                priv->family_face_list);
-          gtk_container_add (GTK_CONTAINER (priv->list_scrolled_window),
-                             priv->empty_list);
-        }
-    }
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->list_notebook), 1);
 }
-#endif
 
 static void
 gtk_font_chooser_init (GtkFontChooser *fontchooser)
@@ -574,14 +556,21 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
                                        GTK_SHADOW_ETCHED_IN);
   gtk_widget_set_size_request (scrolled_win, 400, 300);
-  gtk_container_add (GTK_CONTAINER (scrolled_win),
-                     priv->family_face_list);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), priv->family_face_list);
 
   /* Text to display when list is empty */
-  priv->empty_list = gtk_text_view_new ();
-  gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (priv->empty_list)),
-                            _(NO_FONT_MATCHED_SEARCH),
-                            -1);
+  priv->empty_list = gtk_label_new (_(NO_FONT_MATCHED_SEARCH));
+  gtk_widget_set_margin_top    (priv->empty_list, 12);
+  gtk_widget_set_margin_left   (priv->empty_list, 12);
+  gtk_widget_set_margin_right  (priv->empty_list, 12);
+  gtk_widget_set_margin_bottom (priv->empty_list, 12);
+  gtk_widget_set_halign (priv->empty_list, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (priv->empty_list, GTK_ALIGN_START);
+
+  priv->list_notebook = gtk_notebook_new ();
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->list_notebook), FALSE);
+  gtk_notebook_append_page (GTK_NOTEBOOK (priv->list_notebook), scrolled_win, NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK (priv->list_notebook), priv->empty_list, NULL);
 
   /* Basic layout */
   grid = gtk_grid_new ();
@@ -590,7 +579,7 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
 
   gtk_grid_attach (GTK_GRID (grid), priv->search_entry, 0, 0, 2, 1);
-  gtk_grid_attach (GTK_GRID (grid), scrolled_win,       0, 1, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), priv->list_notebook, 0, 1, 2, 1);
   gtk_grid_attach (GTK_GRID (grid), priv->preview,      0, 2, 2, 1);
 
   gtk_grid_attach (GTK_GRID (grid), priv->size_slider,  0, 3, 1, 1);
@@ -657,12 +646,10 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
   set_range_marks (priv, priv->size_slider, (gint*)font_sizes, G_N_ELEMENTS (font_sizes));
 
   /* Font list empty hides the scrolledwindow */
-  /*
   g_signal_connect (G_OBJECT (priv->filter), "row-deleted",
                     G_CALLBACK (row_deleted_cb), fontchooser);
   g_signal_connect (G_OBJECT (priv->filter), "row-inserted",
                     G_CALLBACK (row_inserted_cb), fontchooser);
-  */
 
   /* Set default focus */
   gtk_widget_pop_composite_child ();
