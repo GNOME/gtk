@@ -39,11 +39,24 @@ typedef unsigned int NSUInteger;
 typedef float CGFloat;
 #endif
 
+typedef enum
+{
+  GDK_OSX_UNSUPPORTED = 0,
+  GDK_OSX_MIN = 4,
+  GDK_OSX_TIGER = 4,
+  GDK_OSX_LEOPARD = 5,
+  GDK_OSX_SNOW_LEOPARD = 6,
+  GDK_OSX_LION = 7,
+  GDK_OSX_CURRENT = 7,
+  GDK_OSX_NEW = 99
+} GdkOSXVersion;
+
 NSWindow *gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
 NSView   *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
 NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
 id        gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context);
 NSEvent  *gdk_quartz_event_get_nsevent                          (GdkEvent       *event);
+GdkOSXVersion gdk_quartz_osx_version                            (void);
 
 G_END_DECLS
 
