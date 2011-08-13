@@ -1,3 +1,4 @@
+
 /* gdkquartz.h
  *
  * Copyright (C) 2005-2007 Imendio AB
@@ -40,6 +41,20 @@ typedef unsigned int NSUInteger;
 #ifndef CGFLOAT_DEFINED
 typedef float CGFloat;
 #endif
+
+typedef enum
+{
+  GDK_OSX_UNSUPPORTED = 0,
+  GDK_OSX_MIN = 4,
+  GDK_OSX_TIGER = 4,
+  GDK_OSX_LEOPARD = 5,
+  GDK_OSX_SNOW_LEOPARD = 6,
+  GDK_OSX_LION = 7,
+  GDK_OSX_CURRENT = 7,
+  GDK_OSX_NEW = 99
+} GdkOSXVersion;
+
+GdkOSXVersion gdk_quartz_osx_version (void);
 
 G_END_DECLS
 
