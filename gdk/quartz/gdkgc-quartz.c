@@ -436,7 +436,7 @@ gdk_quartz_draw_opaque_stippled_pattern (void         *info,
   CGImageRelease (pattern_image);
 }
 
-void
+gboolean
 _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 				  GdkDrawable                *drawable,
 				  CGContextRef                context,
@@ -446,10 +446,10 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
   guint32      fg_pixel;
   guint32      bg_pixel;
 
-  g_return_if_fail (gc == NULL || GDK_IS_GC (gc));
+  g_return_val_if_fail (gc == NULL || GDK_IS_GC (gc), FALSE);
 
   if (!gc)
-    return;
+    return FALSE;
 
   private = GDK_GC_QUARTZ (gc);
 
@@ -462,6 +462,9 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 
       gdk_region_get_rectangles (_gdk_gc_get_clip_region (gc),
 				 &rects, &n_rects);
+
+      if (!n_rects)
+	  return FALSE;
 
       if (n_rects == 1)
 	cg_rects = &rect;
@@ -715,4 +718,6 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
       private->is_window = TRUE;
   else
       private->is_window = FALSE;
+
+  return TRUE;
 }

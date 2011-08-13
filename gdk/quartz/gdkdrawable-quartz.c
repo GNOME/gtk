@@ -161,13 +161,16 @@ gdk_quartz_draw_rectangle (GdkDrawable *drawable,
   if (!context)
     return;
 
-  _gdk_quartz_gc_update_cg_context (gc, 
-				    drawable,
-				    context,
-				    filled ?
-				    GDK_QUARTZ_CONTEXT_FILL : 
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
+  if(!_gdk_quartz_gc_update_cg_context (gc,
+					drawable,
+					context,
+					filled ?
+					GDK_QUARTZ_CONTEXT_FILL :
+					GDK_QUARTZ_CONTEXT_STROKE))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
   if (filled)
     {
       CGRect rect = CGRectMake (x, y, width, height);
@@ -202,11 +205,14 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
   if (!context)
     return;
 
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    filled ?
-				    GDK_QUARTZ_CONTEXT_FILL :
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
+  if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					 filled ?
+					 GDK_QUARTZ_CONTEXT_FILL :
+					 GDK_QUARTZ_CONTEXT_STROKE))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
   start_angle = angle1 * 2.0 * G_PI / 360.0 / 64.0;
   end_angle = start_angle + angle2 * 2.0 * G_PI / 360.0 / 64.0;
 
@@ -271,11 +277,14 @@ gdk_quartz_draw_polygon (GdkDrawable *drawable,
   if (!context)
     return;
 
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    filled ?
-				    GDK_QUARTZ_CONTEXT_FILL :
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
+  if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					 filled ?
+					 GDK_QUARTZ_CONTEXT_FILL :
+					 GDK_QUARTZ_CONTEXT_STROKE))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
   if (filled)
     {
       CGContextMoveToPoint (context, points[0].x, points[0].y);
@@ -385,9 +394,12 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
       if (!context)
         return;
 
-      _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-                                        GDK_QUARTZ_CONTEXT_STROKE);
-
+      if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					     GDK_QUARTZ_CONTEXT_STROKE))
+	{
+	  gdk_quartz_drawable_release_context (drawable, context);
+	  return;
+	}
       CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
       CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc +
                              pixmap_impl->height);
@@ -418,10 +430,13 @@ gdk_quartz_draw_points (GdkDrawable *drawable,
   if (!context)
     return;
 
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE |
-				    GDK_QUARTZ_CONTEXT_FILL);
-
+  if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					 GDK_QUARTZ_CONTEXT_STROKE |
+					 GDK_QUARTZ_CONTEXT_FILL))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
   /* Just draw 1x1 rectangles */
   for (i = 0; i < npoints; i++) 
     {
@@ -474,9 +489,12 @@ gdk_quartz_draw_segments (GdkDrawable    *drawable,
 
   private = GDK_GC_QUARTZ (gc);
 
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
+  if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					 GDK_QUARTZ_CONTEXT_STROKE))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
   for (i = 0; i < nsegs; i++)
     {
       gint xfix, yfix;
@@ -511,9 +529,12 @@ gdk_quartz_draw_lines (GdkDrawable *drawable,
 
   private = GDK_GC_QUARTZ (gc);
 
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
+  if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					 GDK_QUARTZ_CONTEXT_STROKE))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
   CGContextMoveToPoint (context, points[0].x + 0.5, points[0].y + 0.5);
 
   for (i = 1; i < npoints - 1; i++)
@@ -578,9 +599,12 @@ gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE);
-
+  if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					 GDK_QUARTZ_CONTEXT_STROKE))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
   CGContextClipToRect (context, CGRectMake (dest_x, dest_y, width, height));
   CGContextTranslateCTM (context, dest_x - src_x, dest_y - src_y + pixbuf_height);
   CGContextScaleCTM (context, 1, -1);
@@ -624,8 +648,12 @@ gdk_quartz_draw_image (GdkDrawable     *drawable,
   CGDataProviderRelease (data_provider);
   CGColorSpaceRelease (colorspace);
 
-  _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-				    GDK_QUARTZ_CONTEXT_STROKE);
+  if (!_gdk_quartz_gc_update_cg_context (gc, drawable, context,
+					 GDK_QUARTZ_CONTEXT_STROKE))
+    {
+      gdk_quartz_drawable_release_context (drawable, context);
+      return;
+    }
 
   CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
   CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc + image->height);

@@ -125,10 +125,10 @@ GType  _gdk_gc_quartz_get_type          (void);
 GdkGC *_gdk_quartz_gc_new               (GdkDrawable                *drawable,
 					 GdkGCValues                *values,
 					 GdkGCValuesMask             values_mask);
-void   _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
-					 GdkDrawable                *drawable,
-					 CGContextRef                context,
-					 GdkQuartzContextValuesMask  mask);
+gboolean _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
+					   GdkDrawable                *drawable,
+					   CGContextRef                context,
+					   GdkQuartzContextValuesMask  mask);
 
 /* Colormap */
 CGColorRef _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
