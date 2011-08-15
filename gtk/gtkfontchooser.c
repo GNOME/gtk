@@ -695,8 +695,9 @@ populate_list (GtkFontChooser *fontchooser,
   GtkFontChooserPrivate *priv = fontchooser->priv;
   GtkStyleContext      *style_context;
   PangoFontDescription *default_font;
+  PangoFontDescription *selected_font;
 
-  gboolean selected;
+  gint match;
   GtkTreeIter   match_row;
   GtkTreePath  *path;
 
@@ -717,23 +718,25 @@ populate_list (GtkFontChooser *fontchooser,
 
   qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
-  gtk_list_store_clear (model);
-
-  /* Get row header font color */
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (treeview));
-
   /* Get theme font */
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (treeview));
   default_font = (PangoFontDescription*) gtk_style_context_get_font (style_context,
                                                                      GTK_STATE_NORMAL);
 
-  selected = FALSE;
+  if (priv->face)
+    selected_font = pango_font_face_describe (priv->face);
+  else
+    selected_font = NULL;
+
+  gtk_list_store_clear (model);
+
+  match = 0;
 
   /* Iterate over families and faces */
   for (i = 0; i < n_families; i++)
     {
       GtkTreeIter     iter;
       PangoFontFace **faces;
-
       int             j, n_faces;
       const gchar    *fam_name = pango_font_family_get_name (families[i]);
 
@@ -767,12 +770,27 @@ populate_list (GtkFontChooser *fontchooser,
                               PREVIEW_TEXT_COLUMN, tmp->str,
                               -1);
 
-          /* Select the first font or the default font/face from the style context */
-          if (!selected ||
-              (!strcmp (fam_name, pango_font_description_get_family (default_font)) && j == 0))
+          /* Select the current font,
+           * the default font/face from the theme,
+           * or the first font
+           */
+          if (match < 3 &&
+              selected_font != NULL &&
+              pango_font_description_equal (selected_font, pango_desc))
             {
               match_row = iter;
-              selected = TRUE;
+              match = 3;
+            }
+          if (match < 2 &&
+              strcmp (fam_name, pango_font_description_get_family (default_font)) == 0)
+            {
+              match_row = iter;
+              match = 2;
+            }
+          if (match < 1)
+            {
+              match_row = iter;
+              match = 1;
             }
 
           pango_font_description_free (pango_desc);
@@ -783,13 +801,15 @@ populate_list (GtkFontChooser *fontchooser,
     }
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &match_row);
-
   if (path)
     {
       gtk_tree_view_set_cursor (treeview, path, NULL, FALSE);
       gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0.5, 0.5);
-      gtk_tree_path_free(path);
+      gtk_tree_path_free (path);
     }
+
+  if (selected_font)
+    pango_font_description_free (selected_font);
 
   g_string_free (family_and_face, TRUE);
   g_string_free (tmp, TRUE);
