@@ -219,6 +219,8 @@
       <xi:include href="xml/gtkfilechooserwidget.xml" />
       <xi:include href="xml/gtkfilefilter.xml" />
       <xi:include href="xml/gtkfontbutton.xml" />
+      <xi:include href="xml/gtkfontchooser.xml" />
+      <xi:include href="xml/gtkfontchooserdlg.xml" />
       <xi:include href="xml/gtkfontsel.xml" />
       <xi:include href="xml/gtkfontseldlg.xml" />
     </chapter>

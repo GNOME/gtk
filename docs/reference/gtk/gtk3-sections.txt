@@ -1477,6 +1477,62 @@ gtk_font_selection_dialog_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkfontchooser</FILE>
+<TITLE>GtkFontChooser</TITLE>
+GtkFontChooser
+gtk_font_chooser_new
+gtk_font_chooser_get_family
+gtk_font_chooser_get_face
+gtk_font_chooser_get_size
+gtk_font_chooser_get_font_name
+gtk_font_chooser_set_font_name
+gtk_font_chooser_get_preview_text
+gtk_font_chooser_set_preview_text
+gtk_font_chooser_get_show_preview_entry
+gtk_font_chooser_set_show_preview_entry
+GtkFontFilterFunc
+gtk_font_chooser_set_filter_func
+
+<SUBSECTION Standard>
+GtkFontChooserClass
+GTK_TYPE_FONT_CHOOSER
+GTK_FONT_CHOOSER
+GTK_FONT_CHOOSER_CLASS
+GTK_IS_FONT_CHOOSER
+GTK_IS_FONT_CHOOSER_CLASS
+GTK_FONT_CHOOSER_GET_CLASS
+
+<SUBSECTION Private>
+GtkFontChooserPrivate
+gtk_font_chooser_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkfontchooserdlg</FILE>
+<TITLE>GtkFontChooserDialog</TITLE>
+GtkFontChooserDialog
+gtk_font_chooser_dialog_new
+gtk_font_chooser_dialog_get_font_chooser
+gtk_font_chooser_dialog_get_font_name
+gtk_font_chooser_dialog_set_font_name
+gtk_font_chooser_dialog_get_preview_text
+gtk_font_chooser_dialog_set_preview_text
+
+<SUBSECTION Standard>
+GtkFontChooserDialogClass
+GTK_TYPE_FONT_CHOOSER_DIALOG
+GTK_FONT_CHOOSER_DIALOG
+GTK_FONT_CHOOSER_DIALOG_CLASS
+GTK_IS_FONT_CHOOSER_DIALOG
+GTK_IS_FONT_CHOOSER_DIALOG_CLASS
+GTK_FONT_CHOOSER_DIALOG_GET_CLASS
+
+<SUBSECTION Private>
+GtkFontChooserDialogPrivate
+gtk_font_chooser_dialog_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkframe</FILE>
 <TITLE>GtkFrame</TITLE>
 GtkFrame
