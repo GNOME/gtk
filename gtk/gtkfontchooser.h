@@ -81,6 +81,26 @@ gboolean     gtk_font_chooser_get_show_preview_entry   (GtkFontChooser *fontchoo
 void         gtk_font_chooser_set_show_preview_entry   (GtkFontChooser *fontchooser,
                                                         gboolean        show_preview_entry);
 
+/**
+ * GtkFontFilterFunc:
+ * @family: a #PangoFontFamily
+ * @face: a #PangoFontFace belonging to @family
+ * @data (closure): user data passed to gtk_font_chooser_set_filter_func()
+ *
+ * The type of function that is used for deciding what fonts get
+ * shown in a #GtkFontChooser. See gtk_font_chooser_set_filter_func().
+ *
+ * Returns: %TRUE if the font should be displayed
+ */
+typedef gboolean (*GtkFontFilterFunc) (const PangoFontFamily *family,
+                                       const PangoFontFace   *face,
+                                       gpointer               data);
+
+void         gtk_font_chooser_set_filter_func (GtkFontChooser   *fontchooser,
+                                               GtkFontFilterFunc filter,
+                                               gpointer          data,
+                                               GDestroyNotify    destroy);
+
 G_END_DECLS
 
 #endif /* __GTK_FONT_CHOOSER_H__ */
