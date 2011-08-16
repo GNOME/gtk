@@ -81,7 +81,7 @@ main (gint argc, gchar **argv)
   toplevel_delete_event (widget, NULL, NULL);
   g_signal_connect (widget, "delete-event", G_CALLBACK (toplevel_delete_event), NULL);
 
-  widget = gtk_font_selection_dialog_new ("the fontsel");
+  widget = gtk_font_chooser_dialog_new ("the fontsel", NULL);
   toplevel_delete_event (widget, NULL, NULL);
   g_signal_connect (widget, "delete-event", G_CALLBACK (toplevel_delete_event), NULL);
 
