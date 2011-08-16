@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.1.12
+==================================
+
+* GtkFontChooserDialog: A newly designed font selection dialog
+  that is intended to replace GtkFontSelectionDialog
+
+* Drawing of focus rectangles is now optional; it can be turned
+  off altogether, or until actual keyboard interaction happens,
+  with the gtk-visible-focus setting.
+
+* OS X: Fixes for 10.7 (Lion)
+
+* Bugs fixed:
+ 407885 A new GtkFontSelectionDialog
+ 508601 Copying from GTK+ applications causes crash
+ 599664 The print dialog should not block while looking for an...
+ 645258 Add gtk_text_iter_assign API
+ 649567 hide focus rectangles when not keynavigating
+ 652991 Remove local copy of introspection.m4
+ 653817 Would like GtkGrid methods to insert rows/columns
+ 653964 Installing MinGW32 build misses gdk/win32 headers
+ 655074 Fix crash with undecorated windows on MacOS Lion
+ 655122 Crash when resizing window on MacOS Lion
+ 655173 small memory leak in GtkStyleProperty
+ 655495 Make X11-specific functions introspectable
+ 655496 X11-specific objects methods are introspected as static functions
+ 655545 condition can never be true in gtk_tree_view_real_set_cursor
+ 655822 Removal of GSettings key causes crash on upgrades
+ 656098 Tweak GtkAppChooser's short description
+ 656421 3.1.10: G_DISABLE_DEPRECATED detection breaks compilation
+
+* Translation updates
+ Brazilian Portuguese
+ Bulgarian
+ Russian
+ Spanish
+ Swedish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.1.10
 ==================================
 
