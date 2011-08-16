@@ -2728,6 +2728,7 @@ gtk_text_child_anchor_queue_resize
 gtk_text_child_anchor_register_child
 gtk_text_child_anchor_unregister_child
 gtk_text_direction_get_type
+gtk_text_iter_assign
 gtk_text_iter_backward_char
 gtk_text_iter_backward_chars
 gtk_text_iter_backward_cursor_position
@@ -3574,6 +3575,7 @@ gtk_widget_has_focus
 gtk_widget_has_grab
 gtk_widget_has_rc_style
 gtk_widget_has_screen
+gtk_widget_has_visible_focus
 gtk_widget_help_type_get_type
 gtk_widget_hide
 gtk_widget_hide_on_delete
