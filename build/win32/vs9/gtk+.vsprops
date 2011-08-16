@@ -105,6 +105,15 @@ copy ..\..\..\gdk\gdkvisual.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#
 copy ..\..\..\gdk\win32\gdkwin32.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 
+mkdir $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32cursor.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32display.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32displaymanager.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32dnd.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32keys.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32screen.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32window.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk\win32&#x0D;&#x0A;
+
 mkdir $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtk.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaboutdialog.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
