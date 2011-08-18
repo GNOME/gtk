@@ -54,6 +54,8 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
 	g_object_unref (tmp->data.v_pointer);
       else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
 	g_boxed_free (column_headers [i], (gpointer) tmp->data.v_pointer);
+      else if (g_type_is_a (column_headers [i], G_TYPE_VARIANT) && tmp->data.v_pointer != NULL)
+	g_variant_unref ((gpointer) tmp->data.v_pointer);
 
       g_slice_free (GtkTreeDataList, tmp);
       i++;
@@ -84,6 +86,7 @@ _gtk_tree_data_list_check_type (GType type)
     G_TYPE_POINTER,
     G_TYPE_BOXED,
     G_TYPE_OBJECT,
+    G_TYPE_VARIANT,
     G_TYPE_INVALID
   };
 
@@ -172,6 +175,9 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
     case G_TYPE_BOXED:
       g_value_set_boxed (value, (gpointer) list->data.v_pointer);
       break;
+    case G_TYPE_VARIANT:
+      g_value_set_variant (value, (gpointer) list->data.v_pointer);
+      break;
     case G_TYPE_OBJECT:
       g_value_set_object (value, (GObject *) list->data.v_pointer);
       break;
@@ -243,6 +249,11 @@ _gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
 	g_boxed_free (G_VALUE_TYPE (value), list->data.v_pointer);
       list->data.v_pointer = g_value_dup_boxed (value);
       break;
+    case G_TYPE_VARIANT:
+      if (list->data.v_pointer)
+	g_variant_unref (list->data.v_pointer);
+      list->data.v_pointer = g_value_dup_variant (value);
+      break;
     default:
       g_warning ("%s: Unsupported type (%s) stored.", G_STRLOC, g_type_name (G_VALUE_TYPE (value)));
       break;
@@ -290,6 +301,12 @@ _gtk_tree_data_list_node_copy (GtkTreeDataList *list,
     case G_TYPE_BOXED:
       if (list->data.v_pointer)
 	new_list->data.v_pointer = g_boxed_copy (type, list->data.v_pointer);
+      else
+	new_list->data.v_pointer = NULL;
+      break;
+    case G_TYPE_VARIANT:
+      if (list->data.v_pointer)
+	new_list->data.v_pointer = g_variant_ref (list->data.v_pointer);
       else
 	new_list->data.v_pointer = NULL;
       break;
@@ -432,6 +449,7 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
       if (strb == NULL) strb = "";
       retval = g_utf8_collate (stra, strb);
       break;
+    case G_TYPE_VARIANT:
     case G_TYPE_POINTER:
     case G_TYPE_BOXED:
     case G_TYPE_OBJECT:
