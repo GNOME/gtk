@@ -1477,6 +1477,62 @@ gtk_font_selection_dialog_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkfontchooser</FILE>
+<TITLE>GtkFontChooser</TITLE>
+GtkFontChooser
+gtk_font_chooser_new
+gtk_font_chooser_get_family
+gtk_font_chooser_get_face
+gtk_font_chooser_get_size
+gtk_font_chooser_get_font_name
+gtk_font_chooser_set_font_name
+gtk_font_chooser_get_preview_text
+gtk_font_chooser_set_preview_text
+gtk_font_chooser_get_show_preview_entry
+gtk_font_chooser_set_show_preview_entry
+GtkFontFilterFunc
+gtk_font_chooser_set_filter_func
+
+<SUBSECTION Standard>
+GtkFontChooserClass
+GTK_TYPE_FONT_CHOOSER
+GTK_FONT_CHOOSER
+GTK_FONT_CHOOSER_CLASS
+GTK_IS_FONT_CHOOSER
+GTK_IS_FONT_CHOOSER_CLASS
+GTK_FONT_CHOOSER_GET_CLASS
+
+<SUBSECTION Private>
+GtkFontChooserPrivate
+gtk_font_chooser_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkfontchooserdlg</FILE>
+<TITLE>GtkFontChooserDialog</TITLE>
+GtkFontChooserDialog
+gtk_font_chooser_dialog_new
+gtk_font_chooser_dialog_get_font_chooser
+gtk_font_chooser_dialog_get_font_name
+gtk_font_chooser_dialog_set_font_name
+gtk_font_chooser_dialog_get_preview_text
+gtk_font_chooser_dialog_set_preview_text
+
+<SUBSECTION Standard>
+GtkFontChooserDialogClass
+GTK_TYPE_FONT_CHOOSER_DIALOG
+GTK_FONT_CHOOSER_DIALOG
+GTK_FONT_CHOOSER_DIALOG_CLASS
+GTK_IS_FONT_CHOOSER_DIALOG
+GTK_IS_FONT_CHOOSER_DIALOG_CLASS
+GTK_FONT_CHOOSER_DIALOG_GET_CLASS
+
+<SUBSECTION Private>
+GtkFontChooserDialogPrivate
+gtk_font_chooser_dialog_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkframe</FILE>
 <TITLE>GtkFrame</TITLE>
 GtkFrame
@@ -5111,6 +5167,7 @@ gtk_widget_unset_state_flags
 gtk_widget_get_state_flags
 gtk_widget_has_default
 gtk_widget_has_focus
+gtk_widget_has_visible_focus
 gtk_widget_has_grab
 gtk_widget_has_rc_style
 gtk_widget_is_drawable
@@ -5293,6 +5350,8 @@ gtk_window_get_opacity
 gtk_window_set_opacity
 gtk_window_get_mnemonics_visible
 gtk_window_set_mnemonics_visible
+gtk_window_get_focus_visible
+gtk_window_set_focus_visible
 gtk_window_set_has_resize_grip
 gtk_window_get_has_resize_grip
 gtk_window_resize_grip_is_visible
@@ -5530,6 +5589,7 @@ GTK_STYLE_CLASS_BACKGROUND
 GTK_STYLE_CLASS_BUTTON
 GTK_STYLE_CLASS_CALENDAR
 GTK_STYLE_CLASS_CELL
+GTK_STYLE_CLASS_COMBOBOX_ENTRY
 GTK_STYLE_CLASS_CHECK
 GTK_STYLE_CLASS_DEFAULT
 GTK_STYLE_CLASS_ENTRY
@@ -6914,6 +6974,9 @@ GtkGrid
 gtk_grid_new
 gtk_grid_attach
 gtk_grid_attach_next_to
+gtk_grid_insert_row
+gtk_grid_insert_column
+gtk_grid_insert_next_to
 gtk_grid_set_row_homogeneous
 gtk_grid_get_row_homogeneous
 gtk_grid_set_row_spacing

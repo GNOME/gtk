@@ -247,6 +247,79 @@ scrolling (void)
   gtk_widget_show_all (window);
 }
 
+static void
+insert (void)
+{
+  GtkWidget *window;
+  GtkWidget *g;
+  GtkWidget *grid;
+  GtkWidget *child;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Insertion");
+
+  g = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (g), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (g), 10);
+  gtk_container_add (GTK_CONTAINER (window), g);
+
+  grid = gtk_grid_new ();
+  gtk_grid_attach (GTK_GRID (g), grid, 0, 0, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 0)", "blue"), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "blue"), 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "green"), 1, 0, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 0)", "yellow"), 2, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "yellow"), 2, 1, 1, 1);
+
+  gtk_grid_insert_row (GTK_GRID (grid), 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "red"), 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "red"), 2, 1, 1, 1);
+
+  grid = gtk_grid_new ();
+  gtk_grid_attach (GTK_GRID (g), grid, 1, 0, 1, 1);
+
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 0)", "blue"), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "blue"), 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "green"), 0, 1, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 2)", "yellow"), 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "yellow"), 1, 2, 1, 1);
+
+  gtk_grid_insert_column (GTK_GRID (grid), 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
+
+  grid = gtk_grid_new ();
+  gtk_grid_attach (GTK_GRID (g), grid, 0, 1, 1, 1);
+
+  child = test_widget ("(0, 0)", "blue");
+  gtk_grid_attach (GTK_GRID (grid), child, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "blue"), 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "green"), 1, 0, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 0)", "yellow"), 2, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "yellow"), 2, 1, 1, 1);
+
+  gtk_grid_insert_next_to (GTK_GRID (grid), child, GTK_POS_BOTTOM);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "red"), 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "red"), 2, 1, 1, 1);
+
+  grid = gtk_grid_new ();
+  gtk_grid_attach (GTK_GRID (g), grid, 1, 1, 1, 1);
+
+  child = test_widget ("(0, 0)", "blue");
+  gtk_grid_attach (GTK_GRID (grid), child, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "blue"), 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "green"), 0, 1, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 2)", "yellow"), 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "yellow"), 1, 2, 1, 1);
+
+  gtk_grid_insert_next_to (GTK_GRID (grid), child, GTK_POS_RIGHT);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
+
+  gtk_widget_show_all (window);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -260,6 +333,7 @@ main (int argc, char *argv[])
   box_comparison ();
   empty_line ();
   scrolling ();
+  insert ();
 
   gtk_main ();
 

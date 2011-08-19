@@ -1570,6 +1570,7 @@ _gtk_button_paint (GtkButton          *button,
   gint focus_pad;
   GtkAllocation allocation;
   GtkStyleContext *context;
+  gboolean draw_focus;
 
   widget = GTK_WIDGET (button);
   context = gtk_widget_get_style_context (widget);
@@ -1605,8 +1606,11 @@ _gtk_button_paint (GtkButton          *button,
       width -= default_outside_border.left + default_outside_border.right;
       height -= default_outside_border.top + default_outside_border.bottom;
     }
-   
-  if (!interior_focus && gtk_widget_has_focus (widget))
+
+  draw_focus = gtk_widget_has_visible_focus (widget);
+
+
+  if (!interior_focus && draw_focus)
     {
       x += focus_width + focus_pad;
       y += focus_width + focus_pad;
@@ -1623,7 +1627,7 @@ _gtk_button_paint (GtkButton          *button,
 			x, y, width, height);
     }
 
-  if (gtk_widget_has_focus (widget))
+  if (draw_focus)
     {
       gint child_displacement_x;
       gint child_displacement_y;
@@ -1658,8 +1662,7 @@ _gtk_button_paint (GtkButton          *button,
           y += child_displacement_y;
         }
 
-      gtk_render_focus (context, cr,
-			x, y, width, height);
+      gtk_render_focus (context, cr, x, y, width, height);
     }
 
   gtk_style_context_restore (context);

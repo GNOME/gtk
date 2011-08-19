@@ -1635,7 +1635,7 @@ gdk_x11_display_get_default_group (GdkDisplay *display)
 
 /**
  * gdk_x11_display_grab:
- * @display: a #GdkDisplay 
+ * @display: (type GdkX11Display): a #GdkDisplay 
  * 
  * Call XGrabServer() on @display. 
  * To ungrab the display again, use gdk_x11_display_ungrab(). 
@@ -1660,7 +1660,7 @@ gdk_x11_display_grab (GdkDisplay *display)
 
 /**
  * gdk_x11_display_ungrab:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * 
  * Ungrab @display after it has been grabbed with 
  * gdk_x11_display_grab(). 
@@ -1843,9 +1843,9 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 }
 
 /**
- * gdk_x11_display_get_xdisplay: (skip)
- * @display: a #GdkDisplay
- * @returns: an X display.
+ * gdk_x11_display_get_xdisplay:
+ * @display: (type GdkX11Display): a #GdkDisplay
+ * @returns: (transfer none): an X display.
  *
  * Returns the X display of a #GdkDisplay.
  *
@@ -1975,7 +1975,7 @@ broadcast_xmessage (GdkDisplay *display,
 
 /**
  * gdk_x11_display_broadcast_startup_message:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @message_type: startup notification message type ("new", "change",
  * or "remove")
  * @...: a list of key/value pairs (as strings), terminated by a
@@ -2148,7 +2148,7 @@ gdk_x11_display_store_clipboard (GdkDisplay    *display,
 
 /**
  * gdk_x11_display_get_user_time:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  *
  * Returns the timestamp of the last user interaction on 
  * @display. The timestamp is taken from events caused
@@ -2180,7 +2180,7 @@ gdk_x11_display_supports_input_shapes (GdkDisplay *display)
 
 /**
  * gdk_x11_display_get_startup_notification_id:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  *
  * Gets the startup notification ID for a display.
  * 
@@ -2196,7 +2196,7 @@ gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
 
 /**
  * gdk_x11_display_set_startup_notification_id:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  * @startup_id: the startup notification ID (must be valid utf8)
  *
  * Sets the startup notification ID for a display.
@@ -2412,7 +2412,7 @@ delete_outdated_error_traps (GdkX11Display *display_x11)
 
 /**
  * gdk_x11_display_error_trap_push:
- * @display: a #GdkDisplay
+ * @display: (type GdkX11Display): a #GdkDisplay
  *
  * Begins a range of X requests on @display for which X error events
  * will be ignored. Unignored errors (when no trap is pushed) will abort
@@ -2517,7 +2517,7 @@ gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
 
 /**
  * gdk_x11_display_error_trap_pop:
- * @display: the display
+ * @display: (type GdkX11Display): the display
  *
  * Pops the error trap pushed by gdk_x11_display_error_trap_push().
  * Will XSync() if necessary and will always block until
@@ -2544,7 +2544,7 @@ gdk_x11_display_error_trap_pop (GdkDisplay *display)
 
 /**
  * gdk_x11_display_error_trap_pop_ignored:
- * @display: the display
+ * @display: (type GdkX11Display): the display
  *
  * Pops the error trap pushed by gdk_x11_display_error_trap_push().
  * Does not block to see if an error occurred; merely records the

@@ -8,7 +8,6 @@ EXTRA_DIST += \
 	developers.txt			\
 	dnd_internals.txt		\
 	focus_tracking.txt		\
-	generation.txt			\
 	gtkdocs_fix			\
 	make-todo			\
 	refcounting.txt			\

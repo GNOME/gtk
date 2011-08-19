@@ -2008,7 +2008,7 @@ pack_font_description (GValue             *value,
   pango_font_description_set_variant (description, variant);
   pango_font_description_set_weight (description, weight);
 
-  g_free (families);
+  g_strfreev (families);
 
   g_value_take_boxed (value, description);
 }
@@ -3001,5 +3001,6 @@ _gtk_style_property_register (GParamSpec               *pspec,
   node->default_value_func = default_value_func;
   node->unset_func = unset_func;
 
-  g_hash_table_insert (properties, pspec->name, node);
+  /* pspec owns name */
+  g_hash_table_insert (properties, (gchar *)pspec->name, node);
 }

@@ -33,12 +33,14 @@
 
 #include "gdkscreen.h"
 #include "gdkkeysyms.h"
+#include "gdkquartz.h"
 #include "gdkquartzdisplay.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartzdevicemanager-core.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
+#define GDK_LION_RESIZE 5
 
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
@@ -49,8 +51,8 @@
 static GdkWindow   *current_keyboard_window;
 
 /* This is the event mask and button state from the last event */
-static GdkEventMask current_event_mask;
-static int          current_button_state;
+static GdkModifierType current_keyboard_modifiers;
+static GdkModifierType current_button_state;
 
 static void append_event                        (GdkEvent  *event,
                                                  gboolean   windowing);
@@ -647,30 +649,6 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
 
           toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
 
-          if ([toplevel_impl->toplevel showsResizeIndicator])
-            {
-              NSRect frame;
-
-              /* If the resize indicator is visible and the event
-               * is in the lower right 15x15 corner, we leave these
-               * events to Cocoa as to be handled as resize events.
-               * Applications may have widgets in this area.  These
-               * will most likely be larger than 15x15 and for
-               * scroll bars there are also other means to move
-               * the scroll bar.  Since the resize indicator is
-               * the only way of resizing windows on Mac OS, it
-               * is too important to not make functional.
-               */
-              frame = [toplevel_impl->view bounds];
-              if (x_tmp > frame.size.width - GRIP_WIDTH
-                  && x_tmp < frame.size.width
-                  && y_tmp > frame.size.height - GRIP_HEIGHT
-                  && y_tmp < frame.size.height)
-                {
-                  return NULL;
-                }
-            }
-
           *x = x_tmp;
           *y = y_tmp;
         }
@@ -1058,10 +1036,71 @@ synthesize_crossing_event (GdkWindow *window,
   return FALSE;
 }
 
-GdkEventMask 
-_gdk_quartz_events_get_current_event_mask (void)
+GdkModifierType
+_gdk_quartz_events_get_current_keyboard_modifiers (void)
 {
-  return current_event_mask;
+  return current_keyboard_modifiers;
+}
+
+GdkModifierType
+_gdk_quartz_events_get_current_mouse_modifiers (void)
+{
+  return current_button_state;
+}
+
+/* Detect window resizing */
+
+static gboolean
+test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
+{
+  GdkWindowImplQuartz *toplevel_impl;
+  gboolean lion;
+  /* Resizing only begins if an NSLeftMouseButton event is received in
+   * the resizing area. Handle anything else.
+   */
+  if ([event type] != NSLeftMouseDown)
+      return FALSE;
+
+  toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
+  if ([toplevel_impl->toplevel showsResizeIndicator])
+    {
+      NSRect frame;
+
+      /* If the resize indicator is visible and the event
+       * is in the lower right 15x15 corner, we leave these
+       * events to Cocoa as to be handled as resize events.
+       * Applications may have widgets in this area.  These
+       * will most likely be larger than 15x15 and for
+       * scroll bars there are also other means to move
+       * the scroll bar.  Since the resize indicator is
+       * the only way of resizing windows on Mac OS, it
+       * is too important to not make functional.
+       */
+      frame = [toplevel_impl->view bounds];
+      if (x > frame.size.width - GRIP_WIDTH
+	  && x < frame.size.width
+	  && y > frame.size.height - GRIP_HEIGHT
+	  && y < frame.size.height)
+	{
+	  return TRUE;
+	}
+     }
+  /* If we're on Lion and within 5 pixels of an edge,
+   * then assume that the user wants to resize, and
+   * return NULL to let Quartz get on with it. We check
+   * the selector isRestorable to see if we're on 10.7.
+   * This extra check is in case the user starts
+   * dragging before GDK recognizes the grab.
+   */
+
+  lion = gdk_quartz_osx_version() >= GDK_OSX_LION;
+  if (lion && (x < GDK_LION_RESIZE ||
+	       x > toplevel->width - GDK_LION_RESIZE ||
+	       y > toplevel->height - GDK_LION_RESIZE))
+    {
+      return TRUE;
+    }
+  return FALSE;
 }
 
 static gboolean
@@ -1147,6 +1186,9 @@ gdk_event_translate (GdkEvent *event,
   window = find_window_for_ns_event (nsevent, &x, &y, &x_root, &y_root);
   if (!window)
     return FALSE;
+  /* Quartz handles resizing on its own, so we want to stay out of the way. */
+  if (test_resize(nsevent, window, x, y))
+    return FALSE;
 
   /* Apply any window filters. */
   if (GDK_IS_WINDOW (window))
@@ -1196,7 +1238,7 @@ gdk_event_translate (GdkEvent *event,
         }
     }
 
-  current_event_mask = get_event_mask_from_ns_event (nsevent);
+  current_keyboard_modifiers = get_keyboard_modifiers_from_ns_event (nsevent);
 
   return_val = TRUE;
 

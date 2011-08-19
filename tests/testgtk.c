@@ -5431,17 +5431,6 @@ create_focus (GtkWidget *widget)
  */
 
 void
-font_selection_ok (GtkWidget              *w,
-		   GtkFontSelectionDialog *fs)
-{
-  gchar *s = gtk_font_selection_dialog_get_font_name (fs);
-
-  g_print ("%s\n", s);
-  g_free (s);
-  gtk_widget_destroy (GTK_WIDGET (fs));
-}
-
-void
 create_font_selection (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;

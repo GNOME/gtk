@@ -172,26 +172,27 @@ gtk_check_button_paint (GtkWidget    *widget,
 			cairo_t      *cr)
 {
   GtkCheckButton *check_button = GTK_CHECK_BUTTON (widget);
-  gint border_width;
-  gint interior_focus;
-  gint focus_width;
-  gint focus_pad;
-      
-  gtk_widget_style_get (widget,
-                        "interior-focus", &interior_focus,
-                        "focus-line-width", &focus_width,
-                        "focus-padding", &focus_pad,
-                        NULL);
 
   gtk_check_button_draw_indicator (check_button, cr);
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  if (gtk_widget_has_focus (widget))
+  if (gtk_widget_has_visible_focus (widget))
     {
       GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
       GtkStyleContext *context;
       GtkStateFlags state;
       GtkAllocation allocation;
+      gint border_width;
+      gint interior_focus;
+      gint focus_width;
+      gint focus_pad;
+
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+      gtk_widget_style_get (widget,
+                            "interior-focus", &interior_focus,
+                            "focus-line-width", &focus_width,
+                            "focus-padding", &focus_pad,
+                            NULL);
 
       gtk_widget_get_allocation (widget, &allocation);
       context = gtk_widget_get_style_context (widget);

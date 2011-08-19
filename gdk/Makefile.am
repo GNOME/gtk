@@ -25,7 +25,6 @@ EXTRA_DIST += 			\
 	gdk.def			\
 	gdkmarshalers.list	\
 	gdkwindowimpl.h		\
-	makeenums.pl		\
 	makefile.msc		\
 	gdk.symbols		\
 	gdkenumtypes.c.template	\

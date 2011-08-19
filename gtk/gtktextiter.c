@@ -444,6 +444,28 @@ gtk_text_iter_free (GtkTextIter *iter)
   g_slice_free (GtkTextIter, iter);
 }
 
+/**
+ * gtk_text_iter_assign:
+ * @iter: a #GtkTextIter
+ * @other: another #GtkTextIter
+ *
+ * Assigns the value of @other to @iter.  This function
+ * is not useful in applications, because iterators can be assigned
+ * with <literal>GtkTextIter i = j;</literal>. The
+ * function is used by language bindings.
+ *
+ * Since: 3.2
+ **/
+void
+gtk_text_iter_assign (GtkTextIter       *iter,
+                      const GtkTextIter *other)
+{
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (other != NULL);
+
+  *iter = *other;
+}
+
 G_DEFINE_BOXED_TYPE (GtkTextIter, gtk_text_iter,
                      gtk_text_iter_copy,
                      gtk_text_iter_free)

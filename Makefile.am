@@ -145,6 +145,7 @@ DISTCHECK_CONFIGURE_FLAGS =		\
 		--enable-gtk-doc 	\
 		--enable-man 		\
 		--disable-rebuilds 	\
+		--disable-maintainer-mode \
 		--enable-introspection
 
 GITIGNOREFILES = \

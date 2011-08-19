@@ -560,6 +560,7 @@ void       gtk_widget_set_can_focus       (GtkWidget           *widget,
 gboolean   gtk_widget_get_can_focus       (GtkWidget           *widget);
 gboolean   gtk_widget_has_focus           (GtkWidget           *widget);
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
+gboolean   gtk_widget_has_visible_focus   (GtkWidget           *widget);
 void       gtk_widget_grab_focus          (GtkWidget           *widget);
 
 void       gtk_widget_set_can_default     (GtkWidget           *widget,

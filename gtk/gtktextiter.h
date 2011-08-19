@@ -88,6 +88,8 @@ GtkTextBuffer *gtk_text_iter_get_buffer (const GtkTextIter *iter);
 
 GtkTextIter *gtk_text_iter_copy     (const GtkTextIter *iter);
 void         gtk_text_iter_free     (GtkTextIter       *iter);
+void         gtk_text_iter_assign   (GtkTextIter       *iter,
+                                     const GtkTextIter *other);
 
 GType        gtk_text_iter_get_type (void) G_GNUC_CONST;
 
@@ -234,7 +236,6 @@ gboolean gtk_text_iter_forward_visible_cursor_positions  (GtkTextIter *iter,
 gboolean gtk_text_iter_backward_visible_cursor_positions (GtkTextIter *iter,
                                                           gint         count);
 
-
 void     gtk_text_iter_set_offset         (GtkTextIter *iter,
                                            gint         char_offset);
 void     gtk_text_iter_set_line           (GtkTextIter *iter,
@@ -286,7 +287,6 @@ gboolean gtk_text_iter_backward_search (const GtkTextIter *iter,
                                         GtkTextIter       *match_end,
                                         const GtkTextIter *limit);
 
-
 /*
  * Comparisons
  */
@@ -305,5 +305,3 @@ void     gtk_text_iter_order           (GtkTextIter *first,
 G_END_DECLS
 
 #endif
-
-

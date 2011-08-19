@@ -265,8 +265,8 @@ gdk_x11_screen_get_monitor_plug_name (GdkScreen *screen,
 }
 
 /**
- * gdk_x11_screen_get_monitor_output: (skip)
- * @screen: a #GdkScreen
+ * gdk_x11_screen_get_monitor_output:
+ * @screen: (type GdkX11Screen): a #GdkScreen
  * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
  * Gets the XID of the specified output/monitor.
@@ -319,7 +319,7 @@ gdk_x11_screen_get_rgba_visual (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_get_xscreen:
- * @screen: a #GdkScreen.
+ * @screen: (type GdkX11Screen): a #GdkScreen.
  * @returns: (transfer none): an Xlib <type>Screen*</type>
  *
  * Returns the screen of a #GdkScreen.
@@ -334,7 +334,7 @@ gdk_x11_screen_get_xscreen (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_get_screen_number:
- * @screen: a #GdkScreen.
+ * @screen: (type GdkX11Screen): a #GdkScreen.
  * @returns: the position of @screen among the screens of
  *   its display.
  *
@@ -1275,7 +1275,7 @@ fetch_net_wm_check_window (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_supports_net_wm_hint:
- * @screen: the relevant #GdkScreen.
+ * @screen: (type GdkX11Screen): the relevant #GdkScreen.
  * @property: a property atom.
  *
  * This function is specific to the X11 backend of GDK, and indicates
@@ -1510,7 +1510,7 @@ _gdk_x11_screen_init_events (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_get_window_manager_name:
- * @screen: a #GdkScreen
+ * @screen: (type GdkX11Screen): a #GdkScreen
  *
  * Returns the name of the window manager for @screen.
  *

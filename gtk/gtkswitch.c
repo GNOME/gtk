@@ -570,7 +570,7 @@ gtk_switch_draw (GtkWidget *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
-  if (gtk_widget_has_focus (widget))
+  if (gtk_widget_has_visible_focus (widget))
     gtk_render_focus (context, cr, x, y, width, height);
 
   x += focus_width + focus_pad;

@@ -1480,6 +1480,142 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
 }
 
 /**
+ * gtk_grid_insert_row:
+ * @grid: a #GtkGrid
+ * @position: the position to insert the row at
+ *
+ * Inserts a row at the specified position.
+ *
+ * Children which are attached at or below this position
+ * are moved one row down. Children which span across this
+ * position are grown to span the new row.
+ *
+ * Since: 3.2
+ */
+void
+gtk_grid_insert_row (GtkGrid *grid,
+                     gint     position)
+{
+  GtkGridPrivate *priv = grid->priv;
+  GtkGridChild *child;
+  GList *list;
+  gint top, height;
+
+  g_return_if_fail (GTK_IS_GRID (grid));
+
+  for (list = priv->children; list; list = list->next)
+    {
+      child = list->data;
+
+      top = CHILD_TOP (child);
+      height = CHILD_HEIGHT (child);
+
+      if (top >= position)
+        {
+          CHILD_TOP (child) = top + 1;
+          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "top-attach");
+        }
+      else if (top + height > position)
+        {
+          CHILD_HEIGHT (child) = height + 1;
+          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "height");
+        }
+    }
+}
+
+/**
+ * gtk_grid_insert_column:
+ * @grid: a #GtkGrid
+ * @position: the position to insert the column at
+ *
+ * Inserts a column at the specified position.
+ *
+ * Children which are attached at or to the right of this position
+ * are moved one column to the right. Children which span across this
+ * position are grown to span the new column.
+ *
+ * Since: 3.2
+ */
+void
+gtk_grid_insert_column (GtkGrid *grid,
+                        gint     position)
+{
+  GtkGridPrivate *priv = grid->priv;
+  GtkGridChild *child;
+  GList *list;
+  gint left, width;
+
+  g_return_if_fail (GTK_IS_GRID (grid));
+
+  for (list = priv->children; list; list = list->next)
+    {
+      child = list->data;
+
+      left = CHILD_LEFT (child);
+      width = CHILD_WIDTH (child);
+
+      if (left >= position)
+        {
+          CHILD_LEFT (child) = left + 1;
+          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "left-attach");
+        }
+      else if (left + width > position)
+        {
+          CHILD_WIDTH (child) = width + 1;
+          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "width");
+        }
+    }
+}
+
+/**
+ * gtk_grid_insert_next_to:
+ * @grid: a #GtkGrid
+ * @sibling: the child of @grid that the new row or column will be
+ *     placed next to
+ * @side: the side of @sibling that @child is positioned next to
+ *
+ * Inserts a row or column at the specified position.
+ *
+ * The new row or column is placed next to @sibling, on the side
+ * determined by @side. If @side is %GTK_POS_TOP or %GTK_POS_BOTTOM,
+ * a row is inserted. If @side is %GTK_POS_LEFT of %GTK_POS_RIGHT,
+ * a column is inserted.
+ *
+ * Since: 3.2
+ */
+void
+gtk_grid_insert_next_to (GtkGrid         *grid,
+                         GtkWidget       *sibling,
+                         GtkPositionType  side)
+{
+  GtkGridChild *child;
+
+  g_return_if_fail (GTK_IS_GRID (grid));
+  g_return_if_fail (GTK_IS_WIDGET (sibling));
+  g_return_if_fail (gtk_widget_get_parent (sibling) == (GtkWidget*)grid);
+
+  child = find_grid_child (grid, sibling);
+
+  switch (side)
+    {
+    case GTK_POS_LEFT:
+      gtk_grid_insert_column (grid, CHILD_LEFT (child));
+      break;
+    case GTK_POS_RIGHT:
+      gtk_grid_insert_column (grid, CHILD_LEFT (child) + CHILD_WIDTH (child));
+      break;
+    case GTK_POS_TOP:
+      gtk_grid_insert_row (grid, CHILD_TOP (child));
+      break;
+    case GTK_POS_BOTTOM:
+      gtk_grid_insert_row (grid, CHILD_TOP (child) + CHILD_HEIGHT (child));
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+/**
  * gtk_grid_set_row_homogeneous:
  * @grid: a #GtkGrid
  * @homogeneous: %TRUE to make rows homogeneous

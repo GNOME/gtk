@@ -171,6 +171,15 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_ENTRY "entry"
 
 /**
+ * GTK_STYLE_CLASS_COMBOBOX_ENTRY:
+ *
+ * A CSS class to match combobox entries.
+ *
+ * This is used by #GtkComboBox.
+ */
+#define GTK_STYLE_CLASS_COMBOBOX_ENTRY "combobox-entry"
+
+/**
  * GTK_STYLE_CLASS_BUTTON:
  *
  * A CSS class to match buttons.

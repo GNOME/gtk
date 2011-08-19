@@ -1836,7 +1836,8 @@ gdk_window_quartz_get_device_state_helper (GdkWindow       *window,
   
   toplevel = gdk_window_get_toplevel (window);
 
-  *mask = _gdk_quartz_events_get_current_event_mask ();
+  *mask = _gdk_quartz_events_get_current_keyboard_modifiers () |
+      _gdk_quartz_events_get_current_mouse_modifiers ();
 
   /* Get the y coordinate, needs to be flipped. */
   if (window == _gdk_root)
@@ -2559,10 +2560,6 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
 
   old_mask = [impl->toplevel styleMask];
 
-  /* Note, there doesn't seem to be a way to change this without
-   * recreating the toplevel. There might be bad side-effects of doing
-   * that, but it seems alright.
-   */
   if (old_mask != new_mask)
     {
       NSRect rect;
@@ -2586,15 +2583,26 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
           rect = [NSWindow contentRectForFrameRect:rect styleMask:old_mask];
         }
 
-      impl->toplevel = [impl->toplevel initWithContentRect:rect
-                                                 styleMask:new_mask
-                                                   backing:NSBackingStoreBuffered
-                                                     defer:NO];
+      /* Note, before OS 10.6 there doesn't seem to be a way to change this without
+       * recreating the toplevel. There might be bad side-effects of doing
+       * that, but it seems alright.
+       */
+      if ([impl->toplevel respondsToSelector:@selector(setStyleMask:)])
+        {
+          [impl->toplevel setStyleMask:new_mask];
+        }
+      else
+        {
+          [impl->toplevel release];
+          impl->toplevel = [[GdkQuartzNSWindow alloc] initWithContentRect:rect
+                                                                styleMask:new_mask
+                                                                  backing:NSBackingStoreBuffered
+                                                                    defer:NO];
+          [impl->toplevel setHasShadow: window_type_hint_to_shadow (impl->type_hint)];
+          [impl->toplevel setLevel: window_type_hint_to_level (impl->type_hint)];
+          [impl->toplevel setContentView:old_view];
+        }
 
-      [impl->toplevel setHasShadow: window_type_hint_to_shadow (impl->type_hint)];
-      [impl->toplevel setLevel: window_type_hint_to_level (impl->type_hint)];
-
-      [impl->toplevel setContentView:old_view];
       [impl->toplevel setFrame:rect display:YES];
 
       /* Invalidate the window shadow for non-opaque views that have shadow

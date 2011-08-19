@@ -101,7 +101,6 @@ action_LDADD			 = $(progs_ldadd)
 TEST_PROGS			+= stylecontext
 stylecontext_SOURCES		 = stylecontext.c
 stylecontext_LDADD		 = $(progs_ldadd)
-EXTRA_DIST			+= test.png
 
 TEST_PROGS			+= papersize
 papersize_SOURCES		 = papersize.c

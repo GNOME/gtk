@@ -1699,7 +1699,7 @@ gdk_window_x11_lower (GdkWindow *window)
 
 /**
  * gdk_x11_window_move_to_current_desktop:
- * @window: a #GdkWindow
+ * @window: (type GdkX11Window): a #GdkWindow
  * 
  * Moves the window to the correct workspace when running under a 
  * window manager that supports multiple workspaces, as described
@@ -3023,7 +3023,7 @@ gdk_x11_window_set_focus_on_map (GdkWindow *window,
 
 /**
  * gdk_x11_window_set_user_time:
- * @window: A toplevel #GdkWindow
+ * @window: (type GdkX11Window): A toplevel #GdkWindow
  * @timestamp: An XServer timestamp to which the property should be set
  *
  * The application can use this call to update the _NET_WM_USER_TIME
@@ -3088,7 +3088,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 
 /**
  * gdk_x11_window_set_theme_variant:
- * @window: a #GdkWindow
+ * @window: (type GdkX11Window): a #GdkWindow
  * @variant: the theme variant to export
  *
  * GTK+ applications can request a dark theme variant. In order to
@@ -4701,9 +4701,10 @@ timestamp_predicate (Display *display,
 
 /**
  * gdk_x11_get_server_time:
- * @window: a #GdkWindow, used for communication with the server.
- *          The window must have GDK_PROPERTY_CHANGE_MASK in its
- *          events mask or a hang will result.
+ * @window: (type GdkX11Window): a #GdkWindow, used for communication
+ *          with the server.  The window must have
+ *          GDK_PROPERTY_CHANGE_MASK in its events mask or a hang will
+ *          result.
  *
  * Routine to get the current X server time stamp.
  *
@@ -4738,8 +4739,8 @@ gdk_x11_get_server_time (GdkWindow *window)
 }
 
 /**
- * gdk_x11_window_get_xid: (skip)
- * @window: a native #GdkWindow.
+ * gdk_x11_window_get_xid:
+ * @window: (type GdkX11Window): a native #GdkWindow.
  * 
  * Returns the X resource (window) belonging to a #GdkWindow.
  * 

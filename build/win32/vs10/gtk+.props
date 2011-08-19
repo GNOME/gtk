@@ -102,6 +102,23 @@ copy ..\..\..\gdk\win32\gdkwin32.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk
 copy ..\..\..\gdk\gdkwindow.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk
 
 
+mkdir $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+copy ..\..\..\gdk\win32\gdkwin32cursor.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+copy ..\..\..\gdk\win32\gdkwin32display.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+copy ..\..\..\gdk\win32\gdkwin32displaymanager.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+copy ..\..\..\gdk\win32\gdkwin32dnd.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+copy ..\..\..\gdk\win32\gdkwin32keys.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+copy ..\..\..\gdk\win32\gdkwin32screen.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+copy ..\..\..\gdk\win32\gdkwin32window.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gdk\win32
+
+
 mkdir $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtk.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk

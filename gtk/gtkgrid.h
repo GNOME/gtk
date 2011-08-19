@@ -79,6 +79,13 @@ void       gtk_grid_attach_next_to         (GtkGrid         *grid,
                                             GtkPositionType  side,
                                             gint             width,
                                             gint             height);
+void       gtk_grid_insert_row             (GtkGrid         *grid,
+                                            gint             position);
+void       gtk_grid_insert_column          (GtkGrid         *grid,
+                                            gint             position);
+void       gtk_grid_insert_next_to         (GtkGrid         *grid,
+                                            GtkWidget       *sibling,
+                                            GtkPositionType  side);
 void       gtk_grid_set_row_homogeneous    (GtkGrid         *grid,
                                             gboolean         homogeneous);
 gboolean   gtk_grid_get_row_homogeneous    (GtkGrid         *grid);

@@ -45,7 +45,7 @@ get_democodedir (void)
       if (result == NULL)
 	result = "unknown-location";
 
-      result = g_strconcat (result, "\\share\\gtk-2.0\\demo", NULL);
+      result = g_strconcat (result, "\\share\\gtk-3.0\\demo", NULL);
     }
 
   return result;

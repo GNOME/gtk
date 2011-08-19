@@ -81,7 +81,8 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
 
 /**
  * gdk_x11_window_lookup_for_display:
- * @display: the #GdkDisplay corresponding to the window handle
+ * @display: (type GdkX11Window): the #GdkDisplay corresponding to the
+ *           window handle
  * @window: an XLib <type>Window</type>
  *
  * Looks up the #GdkWindow that wraps the given native window handle.

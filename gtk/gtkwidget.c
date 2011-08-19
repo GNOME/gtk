@@ -6682,6 +6682,48 @@ gtk_widget_has_focus (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_has_visible_focus:
+ * @widget: a #GtkWidget
+ *
+ * Determines if the widget should show a visible indication that
+ * it has the global input focus. This is a convenience function for
+ * use in ::draw handlers that takes into account whether focus
+ * indication should currently be shown in the toplevel window of
+ * @widget. See gtk_window_get_focus_visible() for more information
+ * about focus indication.
+ *
+ * To find out if the widget has the global input focus, use
+ * gtk_widget_has_focus().
+ *
+ * Return value: %TRUE if the widget should display a 'focus rectangle'
+ *
+ * Since: 3.2
+ */
+gboolean
+gtk_widget_has_visible_focus (GtkWidget *widget)
+{
+  gboolean draw_focus;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  if (widget->priv->has_focus)
+    {
+      GtkWidget *toplevel;
+
+      toplevel = gtk_widget_get_toplevel (widget);
+
+      if (GTK_IS_WINDOW (toplevel))
+        draw_focus = gtk_window_get_focus_visible (GTK_WINDOW (toplevel));
+      else
+        draw_focus = TRUE;
+    }
+  else
+    draw_focus = FALSE;
+
+  return draw_focus;
+}
+
+/**
  * gtk_widget_is_focus:
  * @widget: a #GtkWidget
  *
@@ -11988,12 +12030,11 @@ gtk_widget_class_set_accessible_role (GtkWidgetClass *widget_class,
  * Returns the accessible object that describes the widget to an
  * assistive technology.
  *
- * If no accessibility library is loaded (i.e. no ATK implementation library is
- * loaded via <envar>GTK_MODULES</envar> or via another application library,
- * such as libgnome), then this #AtkObject instance may be a no-op. Likewise,
- * if no class-specific #AtkObject implementation is available for the widget
- * instance in question, it will inherit an #AtkObject implementation from the
- * first ancestor class for which such an implementation is defined.
+ * If accessibility support is not available, this #AtkObject
+ * instance may be a no-op. Likewise, if no class-specific #AtkObject
+ * implementation is available for the widget instance in question,
+ * it will inherit an #AtkObject implementation from the first ancestor
+ * class for which such an implementation is defined.
  *
  * The documentation of the
  * <ulink url="http://library.gnome.org/devel/atk/stable/">ATK</ulink>
@@ -13997,7 +14038,7 @@ gtk_widget_get_requisition (GtkWidget      *widget,
 /**
  * gtk_widget_set_window:
  * @widget: a #GtkWidget
- * @window: a #GdkWindow
+ * @window: (transfer full): a #GdkWindow
  *
  * Sets a widget's window. This function should only be used in a
  * widget's #GtkWidget::realize implementation. The %window passed is

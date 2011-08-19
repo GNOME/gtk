@@ -4209,7 +4209,6 @@ gtk_label_draw (GtkWidget *widget,
           focus_link = gtk_label_get_focus_link (label);
           active_link = info->active_link;
 
-
           if (active_link)
             {
               GdkRGBA bg_color;
@@ -4253,7 +4252,7 @@ gtk_label_draw (GtkWidget *widget,
               cairo_restore (cr);
             }
 
-          if (focus_link && gtk_widget_has_focus (widget))
+          if (focus_link && gtk_widget_has_visible_focus (widget))
             {
               range[0] = focus_link->start;
               range[1] = focus_link->end;

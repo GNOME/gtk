@@ -189,6 +189,21 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_View</property>
                 <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="view-menu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkCheckMenuItem" id="darkmenuitem">
+                        <property name="label">_Dark theme</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -304,7 +319,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">search...</property>
+                    <property name="placeholder-text" translatable="yes">search...</property>
                   </object>
                 </child>
               </object>
@@ -1018,7 +1033,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="has_tooltip">True</property>
                             <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
-                            <property name="uri">http://www.ubuntu.com</property>
+                            <property name="uri">http://www.gtk.org</property>
                           </object>
                         </child>
                       </object>

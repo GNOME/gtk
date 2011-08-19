@@ -7,6 +7,8 @@ test -n "$srcdir" || srcdir=.
 olddir=`pwd`
 cd "$srcdir"
 
+mkdir -p m4
+
 GTKDOCIZE=`which gtkdocize`
 if test -z $GTKDOCIZE; then
         echo "*** No GTK-Doc found, please install it ***"

@@ -2,6 +2,7 @@
 include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
+libgdkwin32includedir = $(includedir)/gtk-3.0/gdk/win32
 
 AM_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
@@ -64,5 +65,14 @@ libgdk_win32_la_SOURCES = \
 
 libgdkinclude_HEADERS =		\
 	gdkwin32.h
+
+libgdkwin32include_HEADERS =	\
+	gdkwin32cursor.h	\
+	gdkwin32display.h	\
+	gdkwin32displaymanager.h\
+	gdkwin32dnd.h		\
+	gdkwin32keys.h		\
+	gdkwin32screen.h	\
+	gdkwin32window.h
 
 -include $(top_srcdir)/git.mk

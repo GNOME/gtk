@@ -4528,8 +4528,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   if (!tab_label)
     {
       page->default_tab = TRUE;
-      if (priv->show_tabs)
-        tab_label = gtk_label_new (NULL);
     }
   page->tab_label = tab_label;
   page->menu_label = menu_label;
@@ -5255,7 +5253,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
                        page->allocation.height,
                        get_tab_gap_pos (notebook));
 
-  if (gtk_widget_has_focus (widget) &&
+  if (gtk_widget_has_visible_focus (widget) &&
       priv->cur_page == page)
     {
       gint focus_width, focus_pad;

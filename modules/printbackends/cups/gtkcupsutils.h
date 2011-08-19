@@ -93,6 +93,7 @@ struct _GtkCupsRequest
 
   gint state;
   GtkCupsPollState poll_state;
+  guint64 bytes_received;
 
   gchar *password;
   gchar *username;
@@ -172,7 +173,8 @@ void                    gtk_cups_request_ipp_add_strings   (GtkCupsRequest     *
 const char            * gtk_cups_request_ipp_get_string    (GtkCupsRequest     *request,
 							    ipp_tag_t           tag,
 							    const char         *name);
-gboolean                gtk_cups_request_read_write        (GtkCupsRequest     *request);
+gboolean                gtk_cups_request_read_write        (GtkCupsRequest     *request,
+                                                            gboolean            connect_only);
 GtkCupsPollState        gtk_cups_request_get_poll_state    (GtkCupsRequest     *request);
 void                    gtk_cups_request_free              (GtkCupsRequest     *request);
 GtkCupsResult         * gtk_cups_request_get_result        (GtkCupsRequest     *request);

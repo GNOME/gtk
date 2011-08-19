@@ -24,7 +24,7 @@
 /**
  * SECTION:gtkappchooser
  * @Title: GtkAppChooser
- * @Short_description: Interface implemented by widgets allowing to chooser applications
+ * @Short_description: Interface implemented by widgets for choosing an application
  *
  * #GtkAppChooser is an interface that can be implemented by widgets which
  * allow the user to choose an application (typically for the purpose of

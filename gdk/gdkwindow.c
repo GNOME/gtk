@@ -2043,7 +2043,7 @@ gdk_window_destroy (GdkWindow *window)
 /**
  * gdk_window_set_user_data:
  * @window: a #GdkWindow
- * @user_data: (allow-none): user data
+ * @user_data: (allow-none) (type GObject.Object): user data
  *
  * For most purposes this function is deprecated in favor of
  * g_object_set_data(). However, for historical reasons GTK+ stores

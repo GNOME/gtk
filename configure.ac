@@ -10,7 +10,7 @@
 
 m4_define([gtk_major_version], [3])
 m4_define([gtk_minor_version], [1])
-m4_define([gtk_micro_version], [9])
+m4_define([gtk_micro_version], [13])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -43,7 +43,7 @@ m4_define([glib_required_version], [2.29.14])
 m4_define([pango_required_version], [1.29.0])
 m4_define([atk_required_version], [1.30])
 m4_define([cairo_required_version], [1.10.0])
-m4_define([gdk_pixbuf_required_version], [2.22.0])
+m4_define([gdk_pixbuf_required_version], [2.23.5])
 m4_define([introspection_required_version], [0.10.1])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version

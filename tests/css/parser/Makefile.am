@@ -291,4 +291,5 @@ EXTRA_DIST += \
 	single-slash.css \
 	single-slash.errors\
 	single-slash.ref.css \
+	test.png \
 	widget-style-property.css

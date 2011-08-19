@@ -387,7 +387,7 @@ gtk_tray_icon_draw (GtkWidget *widget,
     retval = GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->draw (widget, cr);
 
   focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget));
-  if (focus_child && gtk_widget_has_focus (focus_child))
+  if (focus_child && gtk_widget_has_visible_focus (focus_child))
     {
       GtkStyleContext *context;
       GtkStateFlags state;
