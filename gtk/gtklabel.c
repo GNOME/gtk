@@ -54,6 +54,11 @@
 
 #include "a11y/gtklabelaccessible.h"
 
+/* this is in case rint() is not provided by the compiler, 
+ * such as in the case of C89 compilers, like MSVC
+ */
+#include "fallback-c89.c"
+
 /**
  * SECTION:gtklabel
  * @Short_description: A widget that displays a small to medium amount of text
@@ -229,26 +234,6 @@
  * </para>
  * </refsect2>
  */
-
-
-/*rint() is only available in GCC and/or C99*/
-#if (__STDC_VERSION__ < 199901L && !defined __GNUC__)
-double rint(double x)
-{
-	if (ceil(x+0.5) == floor(x+0.5))
-	{
-		int a = (int)ceil(x);
-		if (a%2 == 0)
-			return ceil(x);
-		else
-			return floor(x);
-	}
-	else
-		return floor(x+0.5);
-}
-#endif
-
-
 
 struct _GtkLabelPrivate
 {

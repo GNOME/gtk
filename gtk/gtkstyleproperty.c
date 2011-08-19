@@ -42,6 +42,11 @@
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 
+/* this is in case round() is not provided by the compiler, 
+ * such as in the case of C89 compilers, like MSVC
+ */
+#include "fallback-c89.c"
+
 static GHashTable *parse_funcs = NULL;
 static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
