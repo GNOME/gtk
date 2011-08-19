@@ -843,7 +843,8 @@ gtk_extra_sources =				\
 	gtkstatusicon-quartz.c			\
 	gtk.symbols				\
 	gtkversion.h.in				\
-	gtkmarshalers.list
+	gtkmarshalers.list			\
+	fallback-c89.c
 
 #
 # setup GTK+ sources and their dependencies
