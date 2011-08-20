@@ -53,36 +53,191 @@
  * a #GtkTreePath indicating the root node for the filter at construction time.
  * </para></listitem>
  * </itemizedlist>
- */
-
-
-/* ITER FORMAT:
  *
- * iter->stamp = filter->priv->stamp
- * iter->user_data = FilterLevel
- * iter->user_data2 = FilterElt
+ * The basic API is similar to #GtkTreeModelSort. For an example on its usage,
+ * see the section on #GtkTreeModelSort.
+ *
+ * When using #GtkTreeModelFilter, it is important to realize that
+ * #GtkTreeModelFilter maintains an internal cache of all nodes which are
+ * visible in its clients. The cache is likely to be a subtree of the tree
+ * exposed by the child model. #GtkTreeModelFilter will not cache the entire
+ * child model when unnecessary to not compromise the caching mechanism
+ * that is exposed by the reference counting scheme. If the child model
+ * implements reference counting, unnecessary signals may not be emitted
+ * because of reference counting rule 3, see the #GtkTreeModel
+ * documentation. (Note that e.g. #GtkTreeStore does not implement
+ * reference counting and will always emit all signals, even when
+ * the receiving node is not visible).
+ *
+ * Because of this, limitations for possible visible functions do apply.
+ * In general, visible functions should only use data or properties from
+ * the node for which the visibility state must be determined, its siblings
+ * or its parents. Usually, having a dependency on the state of any child
+ * node is not possible, unless references are taken on these explicitly.
+ * When no such reference exists, no signals may be received for these child
+ * nodes (see reference couting rule number 3 in the #GtkTreeModel section).
+ *
+ * Determining the visibility state of a given node based on the state
+ * of its child nodes is a frequently occurring use case. Therefore,
+ * #GtkTreeModelFilter explicitly supports this. For example, when a node
+ * does not have any children, you might not want the node to be visible.
+ * As soon as the first row is added to the node's child level (or the
+ * last row removed), the node's visibility should be updated.
+ *
+ * This introduces a dependency from the node on its child nodes. In order
+ * to accommodate this, #GtkTreeModelFilter must make sure the necesary
+ * signals are received from the child model. This is achieved by building,
+ * for all nodes which are exposed as visible nodes to #GtkTreeModelFilter's
+ * clients, the child level (if any) and take a reference on the first node
+ * in this level. Furthermore, for every row-inserted, row-changed or
+ * row-deleted signal (also these which were not handled because the node
+ * was not cached), #GtkTreeModelFilter will check if the visibility state
+ * of any parent node has changed.
+ *
+ * Beware, however, that this explicit support is limited to these two
+ * cases. For example, if you want a node to be visible only if two nodes
+ * in a child's child level (2 levels deeper) are visible, you are on your
+ * own. In this case, either rely on #GtkTreeStore to emit all signals
+ * because it does not implement reference counting, or for models that
+ * do implement reference counting, obtain references on these child levels
+ * yourself.
  */
 
-/* all paths, iters, etc prefixed with c_ are paths, iters, etc relative to the
- * child model.
+/* Notes on this implementation of GtkTreeModelFilter
+ * ==================================================
+ *
+ * Warnings
+ * --------
+ *
+ * In this code there is a potential for confusion as to whether an iter,
+ * path or value refers to the GtkTreeModelFilter model, or to the child
+ * model that has been set. As a convention, variables referencing the
+ * child model will have a c_ prefix before them (ie. c_iter, c_value,
+ * c_path). In case the c_ prefixed names are already in use, an f_
+ * prefix is used. Conversion of iterators and paths between
+ * GtkTreeModelFilter and the child model is done through the various
+ * gtk_tree_model_filter_convert_* functions.
+ *
+ * Even though the GtkTreeModelSort and GtkTreeModelFilter have very
+ * similar data structures, many assumptions made in the GtkTreeModelSort
+ * code do *not* apply in the GtkTreeModelFilter case. Reference counting
+ * in particular is more complicated in GtkTreeModelFilter, because
+ * we explicitly support reliance on the state of a node's children as
+ * outlined in the public API documentation. Because of these differences,
+ * you are strongly recommended to first read through these notes before
+ * making any modification to the code.
+ *
+ * Iterator format
+ * ---------------
+ *
+ * The iterator format of iterators handed out by GtkTreeModelFilter is
+ * as follows:
+ *
+ *     iter->stamp = filter->priv->stamp
+ *     iter->user_data = FilterLevel
+ *     iter->user_data2 = FilterElt
+ *
+ * Internal data structure
+ * -----------------------
+ *
+ * Using FilterLevel and FilterElt, GtkTreeModelFilter maintains a "cache"
+ * of the mapping from GtkTreeModelFilter nodes to nodes in the child model.
+ * This is to avoid re-creating a level each time (which involves computing
+ * visibility for each node in that level) an operation is requested on
+ * GtkTreeModelFilter, such as get iter, get path and get value.
+ *
+ * A FilterElt corresponds to a single node. The FilterElt can either be
+ * visible or invisible in the model that is exposed to the clients of this
+ * GtkTreeModelFilter. The visibility state is stored in the "visible_siter"
+ * field, which is NULL when the node is not visible. The FilterLevel keeps
+ * a reference to the parent FilterElt and its FilterLevel (if any). The
+ * FilterElt can have a "children" pointer set, which points at a child
+ * level (a sub level).
+ *
+ * In a FilterLevel, two separate GSequences are maintained. One contains
+ * all nodes of this FilterLevel, regardless of the visibility state of
+ * the node. Another contains only visible nodes. A visible FilterElt
+ * is thus present in both the full and the visible GSequence. The
+ * GSequence allows for fast access, addition and removal of nodes.
+ *
+ * It is important to recognize the two different mappings that play
+ * a part in this code:
+ *   I.  The mapping from the client to this model. The order in which
+ *       nodes are stored in the *visible* GSequence is the order in
+ *       which the nodes are exposed to clients of the GtkTreeModelFilter.
+ *   II. The mapping from this model to its child model. Each FilterElt
+ *       contains an "offset" field which is the offset of the
+ *       corresponding node in the child model.
+ *
+ * Throughout the code, two kinds of paths relative to the GtkTreeModelFilter
+ * (those generated from the sequence positions) are used. There are paths
+ * which take non-visible nodes into account (generated from the full
+ * sequences) and paths which don't (generated from the visible sequences).
+ * Paths which have been generated from the full sequences should only be
+ * used internally and NEVER be passed along with a signal emisson.
+ *
+ * Reference counting
+ * ------------------
+ *
+ * GtkTreeModelFilter forwards all reference and unreference operations
+ * to the corresponding node in the child model. In addition,
+ * GtkTreeModelFilter will also add references of its own. The full reference
+ * count of each node (i.e. all forwarded references and these by the
+ * filter model) is maintained internally in the "ref_count" fields in
+ * FilterElt and FilterLevel. Because there is a need to determine whether
+ * a node should be visible for the client, the reference count of only
+ * the forwarded references is maintained as well, in the "ext_ref_count"
+ * fields.
+ *
+ * In a few cases, GtkTreeModelFilter takes additional references on
+ * nodes. The first case is that a reference is taken on the parent
+ * (if any) of each level. This happens in gtk_tree_model_filter_build_level()
+ * and the reference is released again in gtk_tree_model_filter_free_level().
+ * This ensures that for all references which are taken by the filter
+ * model, all parent nodes are referenced according to reference counting
+ * rule 1 in the GtkTreeModel documentation.
+ *
+ * A second case is required to support visible functions which depend on
+ * the state of a node's children (see the public API documentation for
+ * GtkTreeModelFilter above). We build the child level of each node that
+ * could be visible in the client (i.e. the level has an ext_ref_count > 0;
+ * not the elt, because the elt might be invisible and thus unreferenced
+ * by the client). For each node that becomes visible, due to insertion or
+ * changes in visibility state, it is checked whether node has children, if
+ * so the child level is built.
+ *
+ * A reference is taken on the first node of each level so that the child
+ * model will emit all signals for this level, due to reference counting
+ * rule 3 in the GtkTreeModel documentation. If due to changes in the level,
+ * another node becomes the first node (e.g. due to insertion or reordering),
+ * this reference is transferred from the old to the new first node.
+ *
+ * When a level has an *external* reference count of zero (which means that
+ * none of the nodes in the level is referenced by the clients), the level
+ * has a "zero ref count" on all its parents. As soon as the level reaches
+ * an *external* reference count of zero, the zero ref count value is
+ * incremented by one for all parents of this level. Due to the additional
+ * references taken by the filter model, it is important to base the
+ * zero ref count on the external reference count instead of on the full
+ * reference count of the node.
+ *
+ * The zero ref count value aids in determining which portions of the
+ * cache are possibly unused and could be removed. If a FilterElt has
+ * a zero ref count of one, then its child level is unused. However, the
+ * child level can only be removed from the cache if the FilterElt's
+ * parent has an external ref count of zero. Otherwise, monitoring
+ * this level is necessary to possibly update the visibility state
+ * of the parent. This is an important difference from GtkTreeModelSort!
+ *
+ * Signals are only required for levels with an external ref count > 0.
+ * This due to reference counting rule 3, see the GtkTreeModel
+ * documentation. In the GtkTreeModelFilter we try hard to stick to this
+ * rule and not emit redundant signals (though redundant emissions of
+ * row-has-child-toggled could appear frequently; it does happen that
+ * we simply forward the signal emitted by e.g. GtkTreeStore but also
+ * emit our own copy).
  */
 
-/* A few notes:
- *  There are three model/views involved, so there are two mappings:
- *    * this model -> child model: mapped via offset in FilterElt.
- *    * this model -> parent model (or view): mapped via the position
- *                                            of FilterElt in the sequence.
- *
- *  Note that there are two kinds of paths relative to the filter model
- *  (those generated from the sequence positions): paths taking non-visible
- *  nodes into account, and paths which don't.  Paths which take
- *  non-visible nodes into account should only be used internally and
- *  NEVER be passed along with a signal emission.
- *
- *  The filter model has a reference on every node that is not in the root
- *  level and has a parent with ref_count > 1.  Exception is a virtual root
- *  level; all nodes in the virtual root level are referenced too.
- */
 
 typedef struct _FilterElt FilterElt;
 typedef struct _FilterLevel FilterLevel;
@@ -1385,7 +1540,7 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
    *  - else, remove level.
    *
    *  if level != root level and the number of visible nodes is 0 (ie. this
-   *  is the last *  node to be removed from the level), emit
+   *  is the last node to be removed from the level), emit
    *  row-has-child-toggled.
    */
 
