@@ -881,8 +881,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
    * possible changes in state of the parent are not requested.
    */
   if (empty &&
-       (parent_level && parent_level->parent_level &&
-        parent_level->parent_elt->ext_ref_count == 0))
+       (parent_level && parent_elt->ext_ref_count == 0))
     {
       gtk_tree_model_filter_free_level (filter, new_level, FALSE);
       return;
@@ -1190,8 +1189,7 @@ gtk_tree_model_filter_clear_cache_helper (GtkTreeModelFilter *filter,
    */
   if (level->ext_ref_count == 0 && level != filter->priv->root &&
       level->parent_level && level->parent_elt &&
-      level->parent_level->parent_level &&
-      level->parent_level->parent_elt->ext_ref_count == 0)
+      level->parent_elt->ext_ref_count == 0)
     {
       gtk_tree_model_filter_free_level (filter, level, TRUE);
       return;
