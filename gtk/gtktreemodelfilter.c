@@ -814,7 +814,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
 
   while (tmp_level)
     {
-      parent_elt->zero_ref_count++;
+      tmp_elt->zero_ref_count++;
 
       tmp_elt = tmp_level->parent_elt;
       tmp_level = tmp_level->parent_level;
