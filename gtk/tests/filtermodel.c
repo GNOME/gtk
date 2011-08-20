@@ -26,6 +26,16 @@
  *   - Proper coverage checking to see if the unit tests cover
  *     all possible cases.
  *   - Check if the iterator stamp is incremented at the correct times.
+ *
+ * For more thorough testing:
+ *   - Test with randomized models.
+ *   - Extensively test a filter model wrapping a sort model,
+ *     or a sort model wrapping a filter model by:
+ *       # Checking structure.
+ *       # Checking for correct signals emissions.
+ *       # Checking correct reference counting.
+ *       # Tests should be done with the sort and filter model
+ *         in various filtering and sorting states.
  */
 
 
