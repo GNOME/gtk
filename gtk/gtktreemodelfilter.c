@@ -2633,7 +2633,6 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
           gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (data),
                                                &iter, path);
 
-          level = FILTER_LEVEL (iter.user_data);
           elt = FILTER_ELT (iter.user_data2);
 
           if (!elt->children)
@@ -3037,7 +3036,6 @@ static gboolean
 gtk_tree_model_filter_iter_previous (GtkTreeModel *model,
                                      GtkTreeIter  *iter)
 {
-  FilterLevel *level;
   FilterElt *elt;
   GSequenceIter *siter;
 
@@ -3045,7 +3043,6 @@ gtk_tree_model_filter_iter_previous (GtkTreeModel *model,
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->stamp == iter->stamp, FALSE);
 
-  level = iter->user_data;
   elt = iter->user_data2;
 
   siter = g_sequence_iter_prev (elt->visible_siter);
