@@ -1010,11 +1010,13 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
   check_level_length (fixture->filter, "0:4", 0);
 
-  /* Once 0:4:0 got inserted, 0:4 became a parent */
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
+  /* Once 0:4:0 got inserted, 0:4 became a parent. However, 0:4 is not
+   * visible, so no signal should be emitted.
+   */
   set_path_visibility (fixture, "2:0:4:2", TRUE);
   set_path_visibility (fixture, "2:0:4:4", TRUE);
   check_level_length (fixture->filter, "0:4", 2);
+  signal_monitor_assert_is_empty (fixture->monitor);
 }
 
 static void
@@ -1073,6 +1075,7 @@ filled_vroot_hide_child_levels_root_expanded (FilterTest    *fixture,
   set_path_visibility (fixture, "2:0:4:2", TRUE);
   set_path_visibility (fixture, "2:0:4:4", TRUE);
   check_level_length (fixture->filter, "0:4", 2);
+  signal_monitor_assert_is_empty (fixture->monitor);
 }
 
 static void
