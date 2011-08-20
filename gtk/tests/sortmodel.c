@@ -292,6 +292,7 @@ ref_count_delete_row (void)
 
   path = gtk_tree_path_new_from_indices (1, -1);
   gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, TRUE);
+  gtk_tree_path_free (path);
 
   assert_node_ref_count (ref_model, &grandparent1, 1);
   assert_node_ref_count (ref_model, &grandparent2, 2);
@@ -1071,6 +1072,8 @@ specific_bug_300089 (void)
   /* change the "E" row in a way that causes it to change position */ 
   gtk_tree_model_get_iter (child_model, &iter, path);
   gtk_tree_store_set (GTK_TREE_STORE (child_model), &iter, 0, "A", -1);
+
+  gtk_tree_path_free (path);
 }
 
 static void

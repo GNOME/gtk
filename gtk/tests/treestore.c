@@ -1028,6 +1028,7 @@ specific_bug_77977 (void)
 
   gtk_tree_store_remove (tree_store, &iter1);
 
+  gtk_tree_row_reference_free (row_ref);
   g_object_unref (tree_store);
 }
 

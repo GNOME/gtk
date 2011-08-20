@@ -2913,6 +2913,7 @@ ref_count_delete_row (void)
 
   path = gtk_tree_path_new_from_indices (1, -1);
   gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, TRUE);
+  gtk_tree_path_free (path);
 
   assert_node_ref_count (ref_model, &grandparent1, 2);
   assert_node_ref_count (ref_model, &grandparent2, 2);
