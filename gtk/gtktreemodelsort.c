@@ -1127,7 +1127,6 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 	return;
       gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
 
-      level = SORT_LEVEL (iter.user_data);
       elt = SORT_ELT (iter.user_data2);
 
       if (!elt->children)
@@ -1376,14 +1375,12 @@ gtk_tree_model_sort_iter_next (GtkTreeModel *tree_model,
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
-  SortLevel *level;
   SortElt *elt;
   GSequenceIter *siter;
 
   g_return_val_if_fail (priv->child_model != NULL, FALSE);
   g_return_val_if_fail (priv->stamp == iter->stamp, FALSE);
 
-  level = iter->user_data;
   elt = iter->user_data2;
 
   siter = g_sequence_iter_next (elt->siter);
@@ -1403,14 +1400,12 @@ gtk_tree_model_sort_iter_previous (GtkTreeModel *tree_model,
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
-  SortLevel *level;
   SortElt *elt;
   GSequenceIter *siter;
 
   g_return_val_if_fail (priv->child_model != NULL, FALSE);
   g_return_val_if_fail (priv->stamp == iter->stamp, FALSE);
 
-  level = iter->user_data;
   elt = iter->user_data2;
 
   siter = g_sequence_iter_prev (elt->siter);
