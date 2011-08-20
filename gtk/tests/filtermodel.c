@@ -2680,11 +2680,10 @@ ref_count_two_levels (void)
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* The first two levels should not be cleared, these are used to
-   * monitor whether or not the parent must become (in)visible.
-   */
-  assert_root_level_referenced (ref_model, 1);
-  assert_node_ref_count (ref_model, &iter_first, 1);
+  /* Only the reference on the first node of the root level is kept. */
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_first, 0);
   assert_node_ref_count (ref_model, &iter, 0);
 
   g_object_unref (filter_model);
@@ -2774,10 +2773,10 @@ ref_count_three_levels (void)
 
   assert_node_ref_count (ref_model, &grandparent1, 2);
   assert_node_ref_count (ref_model, &grandparent2, 2);
-  assert_node_ref_count (ref_model, &parent1, 2);
-  assert_node_ref_count (ref_model, &parent2, 1);
-  assert_node_ref_count (ref_model, &iter_parent1, 1);
-  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 0);
   assert_node_ref_count (ref_model, &iter_parent2, 0);
 
   gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
@@ -2837,22 +2836,20 @@ ref_count_three_levels (void)
 
   assert_node_ref_count (ref_model, &grandparent1, 2);
   assert_node_ref_count (ref_model, &grandparent2, 2);
-  assert_node_ref_count (ref_model, &parent1, 2);
-  assert_node_ref_count (ref_model, &parent2, 1);
-  assert_node_ref_count (ref_model, &iter_parent1, 1);
-  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 0);
   assert_node_ref_count (ref_model, &iter_parent2, 0);
 
   gtk_widget_destroy (tree_view);
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* The first two levels should not be cleared, these are used to
-   * monitor whether or not the parent must become (in)visible.
-   */
+  /* Only the reference on the first node of the root level is kept. */
   assert_node_ref_count (ref_model, &grandparent1, 1);
-  assert_node_ref_count (ref_model, &grandparent2, 1);
-  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 0);
+  assert_node_ref_count (ref_model, &parent1, 0);
   assert_node_ref_count (ref_model, &parent2, 0);
   assert_node_ref_count (ref_model, &iter_parent1, 0);
   assert_node_ref_count (ref_model, &iter_parent2_first, 0);
@@ -3006,12 +3003,10 @@ ref_count_cleanup (void)
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* The first two levels should not be cleared, these are used to
-   * monitor whether or not the parent must become (in)visible.
-   */
+  /* Only the reference on the first node of the root level is kept. */
   assert_node_ref_count (ref_model, &grandparent1, 1);
-  assert_node_ref_count (ref_model, &grandparent2, 1);
-  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 0);
+  assert_node_ref_count (ref_model, &parent1, 0);
   assert_node_ref_count (ref_model, &parent2, 0);
   assert_node_ref_count (ref_model, &iter_parent1, 0);
   assert_node_ref_count (ref_model, &iter_parent2_first, 0);
@@ -3108,12 +3103,10 @@ ref_count_row_ref (void)
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* The first two levels should not be cleared, these are used to
-   * monitor whether or not the parent must become (in)visible.
-   */
+  /* Only the reference on the first node of the root level is kept. */
   assert_node_ref_count (ref_model, &grandparent1, 1);
-  assert_node_ref_count (ref_model, &grandparent2, 1);
-  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 0);
+  assert_node_ref_count (ref_model, &parent1, 0);
 
   g_object_unref (filter_model);
   g_object_unref (ref_model);
