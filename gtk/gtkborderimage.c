@@ -28,6 +28,11 @@
 
 #include "gtkborderimageprivate.h"
 
+/* this is in case round() is not provided by the compiler, 
+ * such as in the case of C89 compilers, like MSVC
+ */
+#include "fallback-c89.c"
+
 G_DEFINE_BOXED_TYPE (GtkBorderImage, _gtk_border_image,
                      _gtk_border_image_ref, _gtk_border_image_unref)
 

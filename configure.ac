@@ -753,6 +753,18 @@ if test $gtk_uxtheme_h = yes; then
 fi
 AC_MSG_RESULT($gtk_uxtheme_h)
 
+# Check for round()
+AC_CHECK_LIB(m,round,have_round=yes,have_round=no)
+if test $have_round = yes; then
+    AC_DEFINE(HAVE_ROUND, 1, [Define to 1 if round() is available])
+fi
+
+# Check for rint()
+AC_CHECK_LIB(m,rint,have_rint=yes,have_rint=no)
+if test $have_rint = yes; then
+    AC_DEFINE(HAVE_RINT, 1, [Define to 1 if rint() is available])
+fi
+
 # Checks for gdkspawn
 AC_CHECK_HEADERS(crt_externs.h)
 AC_CHECK_FUNCS(_NSGetEnviron)

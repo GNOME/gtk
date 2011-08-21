@@ -11,14 +11,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-06-20 13:26+0000\n"
-"PO-Revision-Date: 2011-07-05 22:17+0330\n"
+"POT-Creation-Date: 2011-08-19 14:58+0000\n"
+"PO-Revision-Date: 2011-08-20 00:52+0330\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
-"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fa\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Language: Persian\n"
 "X-Poedit-Country: IRAN\n"
@@ -140,7 +140,7 @@ msgstr "کلید _رسانه"
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "آغازه"
+msgstr "خانه"
 
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
@@ -216,7 +216,7 @@ msgstr "_ورود صفحه اعداد"
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "آغا_زه‌ی صفحه اعداد"
+msgstr "_خانه صفحه اعداد"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
@@ -460,6 +460,24 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "درحال باز کردن %Id مورد"
 
+#: ../gtk/a11y/gtkspinneraccessible.c:42
+msgctxt "throbbing progress animation widget"
+msgid "Spinner"
+msgstr "گرداننده"
+
+#: ../gtk/a11y/gtkspinneraccessible.c:43
+msgid "Provides visual indication of progress"
+msgstr "نشان‌گر تصویری پیشرفت را فراهم می‌کند"
+
+#: ../gtk/a11y/gtkswitchaccessible.c:65
+msgctxt "light switch widget"
+msgid "Switch"
+msgstr "تعویض"
+
+#: ../gtk/a11y/gtkswitchaccessible.c:66
+msgid "Switches between on and off states"
+msgstr "تعویض بین حالت‌های روشن و خاموش"
+
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
@@ -520,7 +538,7 @@ msgstr "طرح‌ها و تصاویر توسط"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:156
+#: ../gtk/gtkaccellabel.c:158
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "تبدیل"
@@ -530,7 +548,7 @@ msgstr "تبدیل"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:162
+#: ../gtk/gtkaccellabel.c:164
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "مهار"
@@ -540,7 +558,7 @@ msgstr "مهار"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:168
+#: ../gtk/gtkaccellabel.c:170
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "دگرساز"
@@ -550,7 +568,7 @@ msgstr "دگرساز"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:787
+#: ../gtk/gtkaccellabel.c:789
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -560,7 +578,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:800
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -570,17 +588,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:814
+#: ../gtk/gtkaccellabel.c:816
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:830
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "فاصله"
 
-#: ../gtk/gtkaccellabel.c:833
+#: ../gtk/gtkaccellabel.c:835
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "ممیز وارونه"
@@ -665,15 +683,15 @@ msgstr "برنامه‌های مشابه"
 msgid "Other Applications"
 msgstr "برنامه‌های دیگر"
 
-#: ../gtk/gtkassistant.c:919
+#: ../gtk/gtkassistant.c:999
 msgid "C_ontinue"
 msgstr "ا_دامه"
 
-#: ../gtk/gtkassistant.c:922
+#: ../gtk/gtkassistant.c:1002
 msgid "Go _Back"
 msgstr "برو به _عقب"
 
-#: ../gtk/gtkassistant.c:926
+#: ../gtk/gtkassistant.c:1006
 msgid "_Finish"
 msgstr "_پایان"
 
@@ -707,7 +725,7 @@ msgstr "برچسب تصدی نشده: «%s»"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:870
+#: ../gtk/gtkcalendar.c:873
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -715,7 +733,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:908
+#: ../gtk/gtkcalendar.c:911
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:6"
 
@@ -724,7 +742,7 @@ msgstr "calendar:week_start:6"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1909
+#: ../gtk/gtkcalendar.c:1912
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -739,8 +757,8 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1940
-#: ../gtk/gtkcalendar.c:2637
+#: ../gtk/gtkcalendar.c:1943
+#: ../gtk/gtkcalendar.c:2640
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -756,8 +774,8 @@ msgstr "%Id"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1972
-#: ../gtk/gtkcalendar.c:2498
+#: ../gtk/gtkcalendar.c:1975
+#: ../gtk/gtkcalendar.c:2501
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -773,7 +791,7 @@ msgstr "%Id"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2267
+#: ../gtk/gtkcalendar.c:2270
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -921,7 +939,7 @@ msgstr "_ذخیره‌ی رنگ در اینجا"
 msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr "روی این مدخل تخته‌رنگ کلیک کنید تا رنگ فعلی شود. برای تغییر این مدخل، یک نمونه‌ی رنگ را به اینجا بکشید یا روی آن کلیک راست کنید و «ذخیره‌ی رنگ در اینجا» را انتخاب کنید."
 
-#: ../gtk/gtkcolorseldialog.c:213
+#: ../gtk/gtkcolorseldialog.c:217
 msgid "Color Selection"
 msgstr "انتخاب رنگ"
 
@@ -992,25 +1010,25 @@ msgstr "_راست:"
 msgid "Paper Margins"
 msgstr "حاشیه‌های کاغذ"
 
-#: ../gtk/gtkentry.c:8928
-#: ../gtk/gtktextview.c:8274
+#: ../gtk/gtkentry.c:8956
+#: ../gtk/gtktextview.c:8277
 msgid "Input _Methods"
 msgstr "روش‌های _ورودی"
 
-#: ../gtk/gtkentry.c:8942
-#: ../gtk/gtktextview.c:8288
+#: ../gtk/gtkentry.c:8970
+#: ../gtk/gtktextview.c:8291
 msgid "_Insert Unicode Control Character"
 msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
 
-#: ../gtk/gtkentry.c:10413
+#: ../gtk/gtkentry.c:10441
 msgid "Caps Lock and Num Lock are on"
 msgstr "قفل تبدیل و قفل اعداد هر دو روشن هستند"
 
-#: ../gtk/gtkentry.c:10415
+#: ../gtk/gtkentry.c:10443
 msgid "Num Lock is on"
 msgstr "قفل اعداد روشن است"
 
-#: ../gtk/gtkentry.c:10417
+#: ../gtk/gtkentry.c:10445
 msgid "Caps Lock is on"
 msgstr "قفل تبدیل روشن است"
 
@@ -1060,7 +1078,7 @@ msgid "Select a File"
 msgstr "یک پرونده انتخاب کنید"
 
 #: ../gtk/gtkfilechooserbutton.c:106
-#: ../gtk/gtkfilechooserdefault.c:1871
+#: ../gtk/gtkfilechooserdefault.c:1812
 msgid "Desktop"
 msgstr "رومیزی"
 
@@ -1073,48 +1091,48 @@ msgstr "(هیچ‌کدام)"
 msgid "Other..."
 msgstr "غیره..."
 
-#: ../gtk/gtkfilechooserdefault.c:147
+#: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
 msgstr "نام پوشه‌ی جدید را وارد کنید"
 
-#: ../gtk/gtkfilechooserdefault.c:965
+#: ../gtk/gtkfilechooserdefault.c:963
 msgid "Could not retrieve information about the file"
 msgstr "نمی‌توان اطلاعاتی درباره‌ی پرونده بازیابی کرد"
 
-#: ../gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:974
 msgid "Could not add a bookmark"
 msgstr "نمی‌توان نشانکی اضافه کرد"
 
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:985
 msgid "Could not remove bookmark"
 msgstr "نمی‌توان نشانک را حذف کرد"
 
-#: ../gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:996
 msgid "The folder could not be created"
 msgstr "نمی‌توان پوشه را ایجاد کرد"
 
-#: ../gtk/gtkfilechooserdefault.c:1011
+#: ../gtk/gtkfilechooserdefault.c:1009
 msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
 msgstr "پوشه نمی‌تواند ایجاد شود، چون پرونده‌ای با همین نام از قبل وجود دارد.  از نام‌ دیگری برای پوشه استفاده کنید، یا نام پرونده را تغییر دهید."
 
-#: ../gtk/gtkfilechooserdefault.c:1025
+#: ../gtk/gtkfilechooserdefault.c:1023
 msgid "You need to choose a valid filename."
 msgstr "شما باید یک نام معتبر انتخاب کنید."
 
-#: ../gtk/gtkfilechooserdefault.c:1028
+#: ../gtk/gtkfilechooserdefault.c:1026
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "از آنجایی که %s یک پوشه نیست، نمی‌توان یک پرونده در آن ساخت"
 
-#: ../gtk/gtkfilechooserdefault.c:1040
+#: ../gtk/gtkfilechooserdefault.c:1038
 msgid "You may only select folders.  The item that you selected is not a folder; try using a different item."
 msgstr "شما فقط می‌توانید پوشه‌ها را انتخاب کنید.  موردی که شما انتخاب کرده‌اید، پوشه نیست؛ مورد دیگری را استفاده کنید."
 
-#: ../gtk/gtkfilechooserdefault.c:1050
+#: ../gtk/gtkfilechooserdefault.c:1048
 msgid "Invalid file name"
 msgstr "نام پرونده‌ی نامعتبر"
 
-#: ../gtk/gtkfilechooserdefault.c:1060
+#: ../gtk/gtkfilechooserdefault.c:1058
 msgid "The folder contents could not be displayed"
 msgstr "نمی‌توان محتویات پوشه را نمایش داد"
 
@@ -1122,212 +1140,218 @@ msgstr "نمی‌توان محتویات پوشه را نمایش داد"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1614
+#: ../gtk/gtkfilechooserdefault.c:1584
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s روی %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1790
+#: ../gtk/gtkfilechooserdefault.c:1733
 msgid "Search"
 msgstr "جستجو"
 
-#: ../gtk/gtkfilechooserdefault.c:1814
-#: ../gtk/gtkfilechooserdefault.c:9539
+#: ../gtk/gtkfilechooserdefault.c:1757
+#: ../gtk/gtkfilechooserdefault.c:4835
 msgid "Recently Used"
 msgstr "به‌تازه‌گی استفاده شده"
 
-#: ../gtk/gtkfilechooserdefault.c:2470
+#: ../gtk/gtkfilechooserdefault.c:2356
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
-#: ../gtk/gtkfilechooserdefault.c:2829
+#: ../gtk/gtkfilechooserdefault.c:2715
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "اضافه کردن پوشه‌ی «%s» به نشانک‌ها"
 
-#: ../gtk/gtkfilechooserdefault.c:2873
+#: ../gtk/gtkfilechooserdefault.c:2759
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "اضافه کردن پوشه‌ی فعلی به نشانک‌ها"
 
-#: ../gtk/gtkfilechooserdefault.c:2875
+#: ../gtk/gtkfilechooserdefault.c:2761
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "اضافه کردن پوشه‌های انتخاب‌شده به نشانک‌ها"
 
-#: ../gtk/gtkfilechooserdefault.c:2913
+#: ../gtk/gtkfilechooserdefault.c:2799
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "حذف نشانک «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2915
+#: ../gtk/gtkfilechooserdefault.c:2801
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "نشانک «%s» حذف نمی‌شود"
 
-#: ../gtk/gtkfilechooserdefault.c:2922
-#: ../gtk/gtkfilechooserdefault.c:3807
+#: ../gtk/gtkfilechooserdefault.c:2808
+#: ../gtk/gtkfilechooserdefault.c:3693
 msgid "Remove the selected bookmark"
 msgstr "حذف پوشه‌های انتخاب‌شده"
 
-#: ../gtk/gtkfilechooserdefault.c:3486
+#: ../gtk/gtkfilechooserdefault.c:3372
 msgid "Remove"
 msgstr "حذف"
 
-#: ../gtk/gtkfilechooserdefault.c:3495
+#: ../gtk/gtkfilechooserdefault.c:3381
 msgid "Rename..."
 msgstr "تغییر نام..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3659
+#: ../gtk/gtkfilechooserdefault.c:3545
 msgid "Places"
 msgstr "محل‌ها"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3716
+#: ../gtk/gtkfilechooserdefault.c:3602
 msgid "_Places"
 msgstr "_محل‌ها"
 
-#: ../gtk/gtkfilechooserdefault.c:3795
+#: ../gtk/gtkfilechooserdefault.c:3681
 msgid "Add the selected folder to the Bookmarks"
 msgstr "افزودن پوشه‌ی انتخاب شده به نشانک‌ها"
 
-#: ../gtk/gtkfilechooserdefault.c:3942
+#: ../gtk/gtkfilechooserdefault.c:3828
 msgid "Could not select file"
 msgstr "انتخاب پرونده ممکن نیست"
 
-#: ../gtk/gtkfilechooserdefault.c:4115
+#: ../gtk/gtkfilechooserdefault.c:4001
 msgid "_Add to Bookmarks"
 msgstr "_افزودن به نشانک‌ها"
 
-#: ../gtk/gtkfilechooserdefault.c:4128
+#: ../gtk/gtkfilechooserdefault.c:4014
 msgid "Show _Hidden Files"
 msgstr "نمایش پرونده‌های _مخفی"
 
-#: ../gtk/gtkfilechooserdefault.c:4135
+#: ../gtk/gtkfilechooserdefault.c:4021
 msgid "Show _Size Column"
 msgstr "نمایش ستون _اندازه"
 
-#: ../gtk/gtkfilechooserdefault.c:4360
+#: ../gtk/gtkfilechooserdefault.c:4248
 msgid "Files"
 msgstr "پرونده‌ها"
 
-#: ../gtk/gtkfilechooserdefault.c:4411
+#: ../gtk/gtkfilechooserdefault.c:4299
 msgid "Name"
 msgstr "نام"
 
-#: ../gtk/gtkfilechooserdefault.c:4434
+#: ../gtk/gtkfilechooserdefault.c:4322
 msgid "Size"
 msgstr "اندازه"
 
-#: ../gtk/gtkfilechooserdefault.c:4448
+#: ../gtk/gtkfilechooserdefault.c:4336
 msgid "Modified"
 msgstr "تغییریافته"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4702
+#: ../gtk/gtkfilechooserdefault.c:4431
 #: ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "_نام:"
 
-#. Expander
-#: ../gtk/gtkfilechooserdefault.c:4745
-msgid "_Browse for other folders"
-msgstr "_مرور برای سایر پوشه‌ها"
-
-#: ../gtk/gtkfilechooserdefault.c:5018
+#: ../gtk/gtkfilechooserdefault.c:4673
 msgid "Type a file name"
 msgstr "یک نام پرونده وارد کنید"
 
+#: ../gtk/gtkfilechooserdefault.c:4720
+#: ../gtk/gtkfilechooserdefault.c:4731
+#| msgid "Select a folder"
+msgid "Please select a folder below"
+msgstr "لطفا یک پوشه از پایین انتخاب کنید"
+
+#: ../gtk/gtkfilechooserdefault.c:4726
+#| msgid "Type a file name"
+msgid "Please type a file name"
+msgstr "لطفا یک نام پرونده تایپ کنید"
+
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5061
+#: ../gtk/gtkfilechooserdefault.c:4797
 msgid "Create Fo_lder"
 msgstr "ایجاد پو_شه"
 
-#: ../gtk/gtkfilechooserdefault.c:5071
+#: ../gtk/gtkfilechooserdefault.c:4845
+msgid "Search:"
+msgstr "جستجو:"
+
+#: ../gtk/gtkfilechooserdefault.c:4896
 msgid "_Location:"
 msgstr "_مکان:"
 
-#: ../gtk/gtkfilechooserdefault.c:5278
+#: ../gtk/gtkfilechooserdefault.c:5349
 msgid "Save in _folder:"
 msgstr "ذخیره در پو_شه‌ی:"
 
-#: ../gtk/gtkfilechooserdefault.c:5280
+#: ../gtk/gtkfilechooserdefault.c:5351
 msgid "Create in _folder:"
 msgstr "ایجاد در پو_شه‌ی:"
 
-#: ../gtk/gtkfilechooserdefault.c:6402
+#: ../gtk/gtkfilechooserdefault.c:6445
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "محتوای %s قابل خواندن نبود"
 
-#: ../gtk/gtkfilechooserdefault.c:6406
+#: ../gtk/gtkfilechooserdefault.c:6449
 msgid "Could not read the contents of the folder"
 msgstr "محتوای پوشه قابل خواندن نبود"
 
-#: ../gtk/gtkfilechooserdefault.c:6499
-#: ../gtk/gtkfilechooserdefault.c:6567
-#: ../gtk/gtkfilechooserdefault.c:6719
+#: ../gtk/gtkfilechooserdefault.c:6542
+#: ../gtk/gtkfilechooserdefault.c:6610
+#: ../gtk/gtkfilechooserdefault.c:6762
 msgid "Unknown"
 msgstr "نامعلوم"
 
-#: ../gtk/gtkfilechooserdefault.c:6514
+#: ../gtk/gtkfilechooserdefault.c:6557
 msgid "%H:%M"
 msgstr "%OH:%OM"
 
-#: ../gtk/gtkfilechooserdefault.c:6516
+#: ../gtk/gtkfilechooserdefault.c:6559
 msgid "Yesterday at %H:%M"
 msgstr "دیروز ساعت %OH:%OM"
 
-#: ../gtk/gtkfilechooserdefault.c:7185
+#: ../gtk/gtkfilechooserdefault.c:7234
 msgid "Cannot change to folder because it is not local"
 msgstr "نمی‌توان به پوشه رفت چون «محلی» نیست"
 
-#: ../gtk/gtkfilechooserdefault.c:7777
-#: ../gtk/gtkfilechooserdefault.c:7798
+#: ../gtk/gtkfilechooserdefault.c:7834
+#: ../gtk/gtkfilechooserdefault.c:7855
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "میان‌بر %s از قبل موجود است"
 
-#: ../gtk/gtkfilechooserdefault.c:7888
+#: ../gtk/gtkfilechooserdefault.c:7945
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "میانبر %s وجود ندارد"
 
-#: ../gtk/gtkfilechooserdefault.c:8146
+#: ../gtk/gtkfilechooserdefault.c:8191
 #: ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "پرونده‌ای با نام «%s» از قبل وجود دارد. می‌خواهید آن را جایگزین کنید؟"
 
-#: ../gtk/gtkfilechooserdefault.c:8149
+#: ../gtk/gtkfilechooserdefault.c:8194
 #: ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "پرونده از قبل در «%s» وجود دارد. با جایگزینی آن تمام محتوایش بازنویسی می‌شود."
 
-#: ../gtk/gtkfilechooserdefault.c:8154
+#: ../gtk/gtkfilechooserdefault.c:8199
 #: ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "_جایگزینی"
 
-#: ../gtk/gtkfilechooserdefault.c:8881
+#: ../gtk/gtkfilechooserdefault.c:9005
 msgid "Could not start the search process"
 msgstr "نمی‌توان فرآیند جستجو رو شروع کرد"
 
-#: ../gtk/gtkfilechooserdefault.c:8882
+#: ../gtk/gtkfilechooserdefault.c:9006
 msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr "برنامه نتوانست اتصالی به شبح نمایه‌گذار برقرار کند. بررسی کنید که در حال اجرا باشد."
 
-#: ../gtk/gtkfilechooserdefault.c:8896
+#: ../gtk/gtkfilechooserdefault.c:9020
 msgid "Could not send the search request"
 msgstr "نمی‌توان درخواست جستجو را ارسال کرد"
 
-#: ../gtk/gtkfilechooserdefault.c:9115
-msgid "Search:"
-msgstr "جستجو:"
-
-#: ../gtk/gtkfilechooserdefault.c:9723
+#: ../gtk/gtkfilechooserdefault.c:9646
 #, c-format
 msgid "Could not mount %s"
 msgstr "نمی‌توان %s را سوار کرد"
@@ -1336,6 +1360,8 @@ msgstr "نمی‌توان %s را سوار کرد"
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702
 #: ../gtk/gtkfilechooserentry.c:1174
+#: ../gtk/gtkfilesystem.c:721
+#, c-format
 msgid "Invalid path"
 msgstr "مسیر نامعتبر"
 
@@ -1400,44 +1426,44 @@ msgstr "مسیر وجود ندارد"
 msgid "File System"
 msgstr "سیستم پرونده‌ها"
 
-#: ../gtk/gtkfontbutton.c:153
-#: ../gtk/gtkfontbutton.c:277
+#: ../gtk/gtkfontbutton.c:152
+#: ../gtk/gtkfontbutton.c:276
 msgid "Pick a Font"
 msgstr "یک قلم بردارید"
 
 #. Initialize fields
-#: ../gtk/gtkfontbutton.c:271
+#: ../gtk/gtkfontbutton.c:270
 msgid "Sans 12"
 msgstr "sans 12"
 
-#: ../gtk/gtkfontbutton.c:796
+#: ../gtk/gtkfontbutton.c:787
 msgid "Font"
 msgstr "قلم"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:119
+#: ../gtk/gtkfontsel.c:125
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "بشنو از نی چون حکایت میکند / از جدایی‌ها شکایت می‌کند"
 
-#: ../gtk/gtkfontsel.c:388
+#: ../gtk/gtkfontsel.c:394
 msgid "_Family:"
 msgstr "_خانواده:"
 
-#: ../gtk/gtkfontsel.c:395
+#: ../gtk/gtkfontsel.c:401
 msgid "_Style:"
 msgstr "_سبک:"
 
-#: ../gtk/gtkfontsel.c:402
+#: ../gtk/gtkfontsel.c:408
 msgid "Si_ze:"
 msgstr "_اندازه:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:579
+#: ../gtk/gtkfontsel.c:585
 msgid "_Preview:"
 msgstr "_پیش‌نمایش:"
 
-#: ../gtk/gtkfontsel.c:1701
+#: ../gtk/gtkfontsel.c:1738
 msgid "Font Selection"
 msgstr "انتخابگر قلم"
 
@@ -1472,20 +1498,20 @@ msgid "System (%s)"
 msgstr "سیستم (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6302
+#: ../gtk/gtklabel.c:6308
 msgid "_Open Link"
 msgstr "_باز کردن پیوند"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6314
+#: ../gtk/gtklabel.c:6320
 msgid "Copy _Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: ../gtk/gtklinkbutton.c:482
+#: ../gtk/gtklinkbutton.c:484
 msgid "Copy URL"
 msgstr "رونوشت از نشانی وب"
 
-#: ../gtk/gtklinkbutton.c:645
+#: ../gtk/gtklinkbutton.c:647
 msgid "Invalid URI"
 msgstr "نشانی وب نامعتبر"
 
@@ -1551,20 +1577,20 @@ msgstr "پرچمهای اشکال‌زدایی GTK+ که باید از تنظی�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:845
+#: ../gtk/gtkmain.c:848
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmain.c:909
+#: ../gtk/gtkmain.c:914
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ناتوان در باز کردن نمایشگر: %s"
 
-#: ../gtk/gtkmain.c:975
+#: ../gtk/gtkmain.c:980
 msgid "GTK+ Options"
 msgstr "گزینه‌های GTK+"
 
-#: ../gtk/gtkmain.c:975
+#: ../gtk/gtkmain.c:980
 msgid "Show GTK+ Options"
 msgstr "نمایش گزینه‌های GTK+"
 
@@ -1623,33 +1649,33 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "نمی‌توان فرآیند با شناسه‌ی %Id را کشت. این کنش پیاده‌سازی نشده است."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:859
+#: ../gtk/gtkmountoperation-x11.c:959
 msgid "Terminal Pager"
 msgstr "پی‌جوی پایانه"
 
-#: ../gtk/gtkmountoperation-x11.c:860
+#: ../gtk/gtkmountoperation-x11.c:960
 msgid "Top Command"
 msgstr "فرمان تاپ (top)"
 
-#: ../gtk/gtkmountoperation-x11.c:861
+#: ../gtk/gtkmountoperation-x11.c:961
 msgid "Bourne Again Shell"
 msgstr "پوسته‌ی بورن اِگِین"
 
-#: ../gtk/gtkmountoperation-x11.c:862
+#: ../gtk/gtkmountoperation-x11.c:962
 msgid "Bourne Shell"
 msgstr "پوسته‌ی بورن"
 
-#: ../gtk/gtkmountoperation-x11.c:863
+#: ../gtk/gtkmountoperation-x11.c:963
 msgid "Z Shell"
 msgstr "پوسته‌ی زی"
 
-#: ../gtk/gtkmountoperation-x11.c:960
+#: ../gtk/gtkmountoperation-x11.c:1060
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "نمی‌توان فرآیند با شناسه‌ی %Id را به پایان برد: %s"
 
-#: ../gtk/gtknotebook.c:4919
-#: ../gtk/gtknotebook.c:7608
+#: ../gtk/gtknotebook.c:4902
+#: ../gtk/gtknotebook.c:7587
 #, c-format
 msgid "Page %u"
 msgstr "صفحه‌ی %Iu"
@@ -1839,7 +1865,7 @@ msgstr "بدون کاغذ"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:615
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2022
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2036
 msgid "Paused"
 msgstr "مکث"
 
@@ -1968,42 +1994,42 @@ msgstr "عمومی"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3572
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3586
 msgid "Left to right, top to bottom"
 msgstr "از چپ به راست، از بالا به پایین"
 
 #: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3572
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3586
 msgid "Left to right, bottom to top"
 msgstr "از چپ به راست، از پایین به ابتدا"
 
 #: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3573
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Right to left, top to bottom"
 msgstr "از راست به چپ، از بالا به پایین"
 
 #: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3573
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Right to left, bottom to top"
 msgstr "از راست به چپ، از پایین به بالا"
 
 #: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3574
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Top to bottom, left to right"
 msgstr "از بالا به پایین، از چپ به راست"
 
 #: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3574
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Top to bottom, right to left"
 msgstr "از بالا به پایین، از راست به چپ"
 
 #: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3575
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3589
 msgid "Bottom to top, left to right"
 msgstr "از انتها به ابتدا، از چپ به راست"
 
 #: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3575
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3589
 msgid "Bottom to top, right to left"
 msgstr "از پایین به بالا، از راست به چپ"
 
@@ -2012,7 +2038,7 @@ msgstr "از پایین به بالا، از راست به چپ"
 #.
 #: ../gtk/gtkprintunixdialog.c:3116
 #: ../gtk/gtkprintunixdialog.c:3129
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3609
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3623
 msgid "Page Ordering"
 msgstr "ترتیب صفحه‌ها"
 
@@ -2313,15 +2339,6 @@ msgstr "نمی‌توان موردی با نشانی «%s» یافت"
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "هیچ برنامه‌ی ثبت شده‌ای با نام «%s» برای موردی با آدرس «%s» یافت نشد"
 
-#: ../gtk/gtkspinner.c:286
-msgctxt "throbbing progress animation widget"
-msgid "Spinner"
-msgstr "گرداننده"
-
-#: ../gtk/gtkspinner.c:287
-msgid "Provides visual indication of progress"
-msgstr "نشان‌گر تصویری پیشرفت را فراهم می‌کند"
-
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:313
 msgctxt "Stock label"
@@ -2522,7 +2539,7 @@ msgstr "_راهنما"
 #: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Home"
-msgstr "_آغازه"
+msgstr "_خانه"
 
 #: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
@@ -2830,9 +2847,9 @@ msgstr "_کوچک نمایی"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:337
-#: ../gtk/gtkswitch.c:397
-#: ../gtk/gtkswitch.c:604
+#: ../gtk/gtkswitch.c:335
+#: ../gtk/gtkswitch.c:395
+#: ../gtk/gtkswitch.c:602
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -2840,21 +2857,12 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:345
-#: ../gtk/gtkswitch.c:398
-#: ../gtk/gtkswitch.c:633
+#: ../gtk/gtkswitch.c:343
+#: ../gtk/gtkswitch.c:396
+#: ../gtk/gtkswitch.c:631
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
-
-#: ../gtk/gtkswitch.c:1060
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "تعویض"
-
-#: ../gtk/gtkswitch.c:1061
-msgid "Switches between on and off states"
-msgstr "تعویض بین حالت‌های روشن و خاموش"
 
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -4057,254 +4065,254 @@ msgstr "ویتنامی (VIQR)"
 msgid "X Input Method"
 msgstr "شیوه‌ی ورودی X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:828
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1038
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:829
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
 msgid "Username:"
 msgstr "نام کاربری:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:829
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1057
 msgid "Password:"
 msgstr "گذرواژه:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:868
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1060
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1070
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "تصدیق هویت برای چاپ سند «%s» برروی چاپگر %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:870
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "تصدیق هویت برای چاپ یک سند روی %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:875
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "تصدیق هویت برای گرفتن خصیصه‌های کار «%s» لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:876
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:877
 msgid "Authentication is required to get attributes of a job"
 msgstr "تصدیق هویت برای گرفتن خصیصه‌های کار لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:880
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:881
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "تصدیق هویت برای گرفتن خصیصه‌های چاپگر %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:882
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:883
 msgid "Authentication is required to get attributes of a printer"
 msgstr "تصدیق هویت برای خصیصه‌های چاپگر لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:885
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:886
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "تصدیق هویت برای گرفتن چاپگر پیش‌فرض %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:888
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:889
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "تصدیق هویت برای گرفتن چاپگر‌ها از %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:893
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:894
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "تصدیق هویت برای گرفتن یک پرونده از %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:895
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:896
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "تصدیق هویت برروی %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1032
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 msgid "Domain:"
 msgstr "دامنه:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1062
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1072
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "تصدیق هویت برای چاپ سند‌ «%s» لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1077
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "تصدیق هویت برای چاپ این سند برروی چاپگر %s لازم است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1069
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1079
 msgid "Authentication is required to print this document"
 msgstr "تصدیق هویت برای چاپ این سند لازم است"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1690
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "چاپگر «%s» جوهر کم دارد."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1705
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "چاپگر «%s» هیچی جوهر ندارد."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1693
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1707
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "چاپگر «%s» فرابر(developer) کم دارد."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1695
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1709
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "چاپگر «%s» هیچی فرابر(developer) ندارد."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "چاپگر «%s» دست‌کم یک منبع نشانگر کم دارد."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "چاپگر «%s»  دست کم از یک منبع نشانگر هیچی ندارد."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "روکش روی چاپگر «%s» باز است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1701
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "در روی چاپگر «%s» باز است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1702
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1716
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "چاپگر «%s» کاغذ کم دارد."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1703
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1717
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "چاپگر «%s» هیچی کاغذ ندارد."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1718
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "چاپگر «%s» هم‌اکنون برون‌خط است."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1705
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1719
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "چاپگر «%s» مشکلی دارد."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2033
 msgid "Paused ; Rejecting Jobs"
 msgstr "مکث؛ در حال رد کردن کار‌ها"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2025
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2039
 msgid "Rejecting Jobs"
 msgstr "در حال رد کردن کار‌ها"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
 msgid "Two Sided"
 msgstr "دو رو"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Paper Type"
 msgstr "نوع کاغذ:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "Paper Source"
 msgstr "منبع کاغذ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Output Tray"
 msgstr "_خروجی کاغذ:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2802
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2816
 msgid "Resolution"
 msgstr "تفکیک‌پذیری"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "GhostScript pre-filtering"
 msgstr "پیش‌پالایش GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "One Sided"
 msgstr "یک رو"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2828
 msgid "Long Edge (Standard)"
 msgstr "لبه بلند (استاندارد)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Short Edge (Flip)"
 msgstr "لبه کوتاه (برگشته)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2818
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2820
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2828
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2832
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2834
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2842
 msgid "Auto Select"
 msgstr "گزینش خودکار"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2822
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2824
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3326
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2844
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3340
 msgid "Printer Default"
 msgstr "پیش‌فرض چاپگر"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2832
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2846
 msgid "Embed GhostScript fonts only"
 msgstr "تنها قلم‌های GhostScript نهفته شوند"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2834
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2848
 msgid "Convert to PS level 1"
 msgstr "تبدیل به سطح ۱ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2850
 msgid "Convert to PS level 2"
 msgstr "تبدیل به سطح ۲ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2852
 msgid "No pre-filtering"
 msgstr "بدون پیش‌پالایش"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2847
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2861
 msgid "Miscellaneous"
 msgstr "گوناگون"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "Urgent"
 msgstr "فوری"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "High"
 msgstr "بالا"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "Medium"
 msgstr "متوسط"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "Low"
 msgstr "پایین"
 
@@ -4312,21 +4320,21 @@ msgstr "پایین"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3593
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3607
 msgid "Pages per Sheet"
 msgstr "تعداد صفحه‌ها در برگه"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3630
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3644
 msgid "Job Priority"
 msgstr "اولویت کار"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3655
 msgid "Billing Info"
 msgstr "اطلاعات صورتحساب"
 
@@ -4334,45 +4342,45 @@ msgstr "اطلاعات صورتحساب"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Classified"
 msgstr "طبقه‌بندی شده"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Confidential"
 msgstr "محرمانه"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Secret"
 msgstr "سری"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Standard"
 msgstr "استاندارد"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Top Secret"
 msgstr "فوق سری"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Unclassified"
 msgstr "غیر طبقه‌بندی شده"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3705
 msgid "Before"
 msgstr "پیش از"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3706
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3720
 msgid "After"
 msgstr "پس از"
 
@@ -4380,14 +4388,14 @@ msgstr "پس از"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3726
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3740
 msgid "Print at"
 msgstr "زمان چاپ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3751
 msgid "Print at time"
 msgstr "چاپ در زمان مشخص"
 
@@ -4395,19 +4403,37 @@ msgstr "چاپ در زمان مشخص"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3772
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3786
 #, c-format
 msgid "Custom %sx%s"
 msgstr "سفارشی %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3853
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3867
 msgid "Printer Profile"
 msgstr "مجموعه تنظیمات چاپگر"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3874
 msgid "Unavailable"
 msgstr "خارج از دسترس"
+
+#. TRANSLATORS: when we're running an old CUPS, and
+#. * it hasn't registered the device with colord
+#: ../modules/printbackends/cups/gtkprintercups.c:222
+msgid "Color management unavailable"
+msgstr "مدیریت رنگ موجود نیست"
+
+#. TRANSLATORS: when there is no color profile available
+#: ../modules/printbackends/cups/gtkprintercups.c:234
+#| msgid "Not available"
+msgid "No profile available"
+msgstr "مجموعه تنظیماتی موجود نیست"
+
+#. TRANSLATORS: when the color profile has no title
+#: ../modules/printbackends/cups/gtkprintercups.c:245
+#| msgid "Unspecified error"
+msgid "Unspecified profile"
+msgstr "مجموعه تنطیمات نامشخص"
 
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:250
@@ -4505,6 +4531,9 @@ msgstr "باز کردن پرونده‌ی «%s» شکست خورد: %s"
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "بار کردن تصویر «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی تصویری خراب است"
+
+#~ msgid "_Browse for other folders"
+#~ msgstr "_مرور برای سایر پوشه‌ها"
 
 #~ msgid "X screen to use"
 #~ msgstr "صفحه‌ی X مورد استفاده"
@@ -4635,8 +4664,8 @@ msgstr "بار کردن تصویر «%s» شکست خورد: دلیل آن مع�
 #~ "Internal error: Image loader module '%s' failed to complete an operation, "
 #~ "but didn't give a reason for the failure"
 #~ msgstr ""
-#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست خورد،"
-#~ "ولی دلیلی برای این شکست اعلام نکرد"
+#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست "
+#~ "خورد،ولی دلیلی برای این شکست اعلام نکرد"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr "بار کردن افزایشی تصویر نوع «%s» پشتیبانی نمی‌شود"
