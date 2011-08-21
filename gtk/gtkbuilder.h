@@ -113,6 +113,15 @@ typedef void (*GtkBuilderConnectFunc) (GtkBuilder    *builder,
 				       GConnectFlags  flags,
 				       gpointer       user_data);
 
+typedef void (*GtkBuilderBindingFunc) (GtkBuilder    *builder,
+				       GObject       *source,
+				       const gchar   *source_property,
+				       GObject       *target,
+				       const gchar   *target_property,
+                                       const gchar   *transform_func,
+				       GBindingFlags  flags,
+				       gpointer       user_data);
+
 GType        gtk_builder_get_type                (void) G_GNUC_CONST;
 GtkBuilder*  gtk_builder_new                     (void);
 
@@ -140,6 +149,12 @@ void         gtk_builder_connect_signals         (GtkBuilder    *builder,
 void         gtk_builder_connect_signals_full    (GtkBuilder    *builder,
                                                   GtkBuilderConnectFunc func,
 						  gpointer       user_data);
+void         gtk_builder_create_bindings         (GtkBuilder    *builder,
+						  gpointer       user_data);
+void         gtk_builder_create_bindings_full    (GtkBuilder    *builder,
+						  GtkBuilderBindingFunc func,
+						  gpointer       user_data);
+
 void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
                                                   const gchar  	*domain);
 const gchar* gtk_builder_get_translation_domain  (GtkBuilder   	*builder);

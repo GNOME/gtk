@@ -68,6 +68,7 @@ typedef struct {
   gchar *to;
   gchar *from;
   gchar *source;
+  gchar *transform_func;
 } BindingInfo;
 
 typedef struct {
