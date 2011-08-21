@@ -2601,7 +2601,6 @@ test_property_bindings (void)
   GObject *checkbutton, *button, *window;
   
   builder = builder_new_from_string (buffer, -1, NULL);
-  gtk_builder_create_bindings (builder, NULL);
   
   checkbutton = gtk_builder_get_object (builder, "checkbutton");
   g_assert (checkbutton != NULL);
@@ -2637,55 +2636,6 @@ reverse_func (GBinding *binding,
   g_free (tmp);
 
   return TRUE;
-}
-
-static void
-test_transform_funcs (void)
-{
-  const gchar *buffer =
-    "<interface>"
-    "  <object class=\"GtkWindow\" id=\"window\">"
-    "    <child>"
-    "      <object class=\"GtkVBox\" id=\"vbox\">"
-    "        <property name=\"visible\">True</property>"
-    "        <property name=\"orientation\">vertical</property>"
-    "        <child>"
-    "          <object class=\"GtkEntry\" id=\"entry\">"
-    "            <property name=\"text\">GTK+</property>"
-    "          </object>"
-    "        </child>"
-    "        <child>"
-    "          <object class=\"GtkButton\" id=\"button\">"
-    "            <binding to=\"label\" from=\"text\" source=\"entry\" transform-func=\"reverse_func\"/>"
-    "          </object>"
-    "        </child>"
-    "      </object>"
-    "    </child>"
-    "  </object>"
-    "</interface>";
-
-  GtkBuilder *builder;
-  GObject *entry, *button, *window;
-  
-  builder = builder_new_from_string (buffer, -1, NULL);
-  gtk_builder_create_bindings (builder, "user_data");
-  
-  entry = gtk_builder_get_object (builder, "entry");
-  g_assert (entry != NULL);
-  g_assert (GTK_IS_ENTRY (entry));
-  g_assert (strcmp (gtk_entry_get_text (GTK_ENTRY (entry)), "GTK+") == 0);
-
-  button = gtk_builder_get_object (builder, "button");
-  g_assert (button != NULL);
-  g_assert (GTK_IS_BUTTON (button));
-  g_assert (strcmp (gtk_button_get_label (GTK_BUTTON (button)), "+KTG") == 0);
-
-  gtk_entry_set_text (GTK_ENTRY (entry), "rocks");
-  g_assert (strcmp (gtk_button_get_label (GTK_BUTTON (button)), "skcor") == 0);
-  
-  window = gtk_builder_get_object (builder, "window");
-  gtk_widget_destroy (GTK_WIDGET (window));
-  g_object_unref (builder);
 }
 
 int
@@ -2735,7 +2685,6 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/MessageArea", test_message_area);
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
-  g_test_add_func ("/Builder/Transformation Functions", test_transform_funcs);  
 
   return g_test_run();
 }

@@ -93,8 +93,7 @@
  *                      internal-child 	    #IMPLIED >
  * <!ATTLIST binding    to                  #REQUIRED
  *                      from                #REQUIRED
- *                      source              #REQUIRED
- *                      transform-func      #IMPLIED>
+ *                      source              #REQUIRED>
  * ]]></programlisting>
  * <para>
  * The toplevel element is &lt;interface&gt;. It optionally takes a "domain"
@@ -164,19 +163,13 @@
  * another property with a &lt;binding&gt; element. This causes the value
  * of the property specified with the "to" attribute to be whatever the
  * property "from" of object "source" is set to, even if that property
- * is later set to another value. If present, "transform-func" specifies a
- * transformation function that converts the source property value before
- * it is passed to the target property. GTK+'s default method for finding
- * such a function is using g_module_symbol(); to overridde this behavior,
- * a custom #GtkBuilderBindingFunc can be passed to
- * gtk_builder_create_bindings_full(). For more information about the
- * property binding mechanism, see #GBinding (which GTK+ uses internally).
+ * is later set to another value. For more information about the property
+ * binding mechanism, see #GBinding (which GTK+ uses internally).
  *
  * Signal handlers are set up with the &lt;signal&gt; element. The "name"
  * attribute specifies the name of the signal, and the "handler" attribute
- * specifies the function to connect to the signal. Like in the case of
- * transformation functions, GTK+ tries to find the handler using
- * g_module_symbol() by default, but this can be changed by passing
+ * specifies the function to connect to the signal. By default, GTK+ tries to
+ * find the handler using g_module_symbol(), but this can be changed by passing
  * a custom #GtkBuilderConnectFunc to gtk_builder_connect_signals_full(). The
  * remaining attributes, "after", "swapped" and "object", have the same meaning
  * as the corresponding parameters of the g_signal_connect_object() or
@@ -886,10 +879,37 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
   g_slist_free (props);
 }
 
+static void
+gtk_builder_create_bindings (GtkBuilder *builder)
+{
+  GSList *l;
+
+  for (l = builder->priv->bindings; l; l = l->next)
+    {
+      BindingInfo *binding = (BindingInfo*)l->data;
+      GObject *target, *source;
+
+      target = gtk_builder_lookup_object (builder, binding->object_name);
+      g_assert (target != NULL);
+
+      source = gtk_builder_lookup_object (builder, binding->source);
+      if (source)
+        {
+          g_object_bind_property (source, binding->from,
+                                  target, binding->to,
+                                  G_BINDING_SYNC_CREATE);
+        }
+    }
+
+  g_slist_free (builder->priv->bindings);
+  builder->priv->bindings = NULL;
+}
+
 void
 _gtk_builder_finish (GtkBuilder *builder)
 {
   gtk_builder_apply_delayed_properties (builder);
+  gtk_builder_create_bindings (builder);
 }
 
 /**
@@ -1391,145 +1411,6 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
   g_slist_foreach (builder->priv->signals, (GFunc)_free_signal_info, NULL);
   g_slist_free (builder->priv->signals);
   builder->priv->signals = NULL;
-}
-
-static void
-gtk_builder_create_bindings_default (GtkBuilder    *builder,
-                                     GObject       *source,
-                                     const gchar   *source_property,
-                                     GObject       *target,
-                                     const gchar   *target_property,
-                                     const gchar   *transform_func,
-                                     GBindingFlags  flags,
-                                     gpointer       user_data)
-{
-  GBindingTransformFunc func = NULL;
-  connect_args *args = (connect_args*)user_data;
-  
-  if (transform_func &&
-      !g_module_symbol (args->module, transform_func, (gpointer)&func))
-    {
-      g_warning ("Could not find binding transformation function '%s'",
-                 transform_func);
-      return;
-    }
-
-  g_object_bind_property_full (source, source_property,
-                               target, target_property,
-                               flags | G_BINDING_SYNC_CREATE,
-                               func, NULL,
-                               args->data, NULL);
-}
-
-/**
- * gtk_builder_create_bindings:
- * @builder: a #GtkBuilder
- * @user_data: a pointer to a structure sent in as user data to all signals
- *
- * This function establishes all property bindings defined in the interface
- * description. It uses g_object_bind_property_full() with the
- * #G_BINDING_SYNC_CREATE flag flag for this purpose. Like
- * gtk_builder_connect_signals(), #GModule is used to match any
- * transformation function names given in the interface description with
- * symbols exported through the application's symbol table.  To overide
- * this behavior with a different binding creation method, use
- * gtk_builder_create_bindings_full() with a custom #GtkBuilderBindingFunc
- * instead.
- * 
- * Note that this function requires #GModule to be supported on the platform
- * to work. It can only be called once, subsequent calls will do nothing.
- *
- * When compiling applications for Windows, you must declare transformation
- * functions with #G_MODULE_EXPORT, or they will not be put in the symbol
- * table. On Linux and Unices, this is not necessary; applications should
- * instead be compiled with the -Wl,--export-dynamic CFLAGS, and linked
- * against gmodule-export-2.0.
- */
-void
-gtk_builder_create_bindings (GtkBuilder *builder,
-                             gpointer    user_data)
-{
-  /* Reuse connect_args from gtk_builder_connect_signals */
-  connect_args *args;
-  
-  g_return_if_fail (GTK_IS_BUILDER (builder));
-  
-  if (!g_module_supported ())
-    g_error ("gtk_builder_create_bindings() requires working GModule");
-
-  args = g_slice_new0 (connect_args);
-  args->module = g_module_open (NULL, G_MODULE_BIND_LAZY);
-  args->data = user_data;
-  
-  gtk_builder_create_bindings_full (builder,
-                                    gtk_builder_create_bindings_default,
-                                    args);
-  g_module_close (args->module);
-
-  g_slice_free (connect_args, args);
-}
-
-/**
- * GtkBuilderBindingFunc:
- * @builder: a #GtkBuilder
- * @source: the binding source object
- * @source_property: the binding source property
- * @target: the binding target object
- * @target_property: the binding target property
- * @flags: #GBindingFlags to use
- * @user_data: user data
- *
- * The signature of a function used to create property bindings, used by the
- * gtk_builder_create_bindings() and gtk_builder_create_bindings_full()
- * methods.  Like #GtkBuilderConnectFunc, its main use case is bindings for
- * interpreted programming languages.
- *
- * Since: ?
- */
-
-/**
- * gtk_builder_create_bindings_full:
- * @builder: a #GtkBuilder
- * @func: (scope call): the function used to create the bindings
- * @user_data: arbitrary data that will be passed to the binding function
- *
- * Calls @func for every property binding defined in the interface description
- * in order to create it. Like gtk_builder_connect_signals_full(), this
- * function is mainly thought as a version of gtk_builder_create_bindings()
- * suitable for interpreted language bindings, but has other uses too.
- */
-void
-gtk_builder_create_bindings_full (GtkBuilder            *builder,
-                                  GtkBuilderBindingFunc  func,
-                                  gpointer               user_data)
-{
-  GSList *l;
-
-  builder->priv->bindings = g_slist_reverse (builder->priv->bindings);
-  for (l = builder->priv->bindings; l; l = l->next)
-    {
-      BindingInfo *binding = (BindingInfo*)l->data;
-      GObject *target, *source;
-
-      target = gtk_builder_lookup_object (builder, binding->object_name);
-      g_assert (target != NULL);
-
-      source = gtk_builder_lookup_object (builder, binding->source);
-      if (!source)
-        {
-          g_warning ("Could not lookup source object %s for binding to "
-                     "property %s of object %s",
-                     binding->source, binding->to, binding->object_name);
-          continue;
-        }
-      
-        func (builder, source, binding->from, target, binding->to,
-              binding->transform_func, 0, user_data);
-    }
-
-  g_slist_foreach (builder->priv->bindings, (GFunc)_free_binding_info, NULL);
-  g_slist_free (builder->priv->bindings);
-  builder->priv->bindings = NULL;
 }
 
 /**
