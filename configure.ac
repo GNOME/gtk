@@ -383,7 +383,7 @@ if test "x$enable_wayland_backend" == "xyes"; then
   GIO_PACKAGE=gio-unix-2.0
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
-  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-egl"
+  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-egl egl"
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
