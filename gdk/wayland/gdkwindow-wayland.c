@@ -400,9 +400,11 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
     display->create_image(display->egl_display, NULL, EGL_NATIVE_PIXMAP_KHR,
 			  (EGLClientBuffer) data->pixmap, NULL);
 
+  cairo_device_acquire(display->cairo_device);
   glGenTextures(1, &data->texture);
   glBindTexture(GL_TEXTURE_2D, data->texture);
   display->image_target_texture_2d(GL_TEXTURE_2D, data->image);
+  cairo_device_release(display->cairo_device);
 
   surface = cairo_gl_surface_create_for_texture(display->cairo_device,
 						CAIRO_CONTENT_COLOR_ALPHA,
