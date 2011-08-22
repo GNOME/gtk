@@ -242,6 +242,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <style>
+              <class name="primary-toolbar"/>
+            </style>
             <child>
               <object class="GtkToolButton" id="toolbutton2">
                 <property name="visible">True</property>
