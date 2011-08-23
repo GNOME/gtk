@@ -1,6 +1,5 @@
 demos/gtk-demo/demo.ui
 gtk/paper_names.c
-tests/testfilechooser.c
 tests/a11y/accessible-name.ui
 tests/a11y/assistant.ui
 tests/a11y/buttons.ui
@@ -9,8 +8,8 @@ tests/a11y/expander.ui
 tests/a11y/hello-world.ui
 tests/a11y/infobar.ui
 tests/a11y/link.ui
-tests/a11y/menu.ui
 tests/a11y/menus.ui
+tests/a11y/menu.ui
 tests/a11y/messagedialog.ui
 tests/a11y/mnemonic.ui
 tests/a11y/notebook.ui
@@ -60,4 +59,5 @@ tests/reftests/rotated-layout.ref.ui
 tests/reftests/rotated-layout.ui
 tests/reftests/toplevel-vs-popup.ref.ui
 tests/reftests/toplevel-vs-popup.ui
+tests/testfilechooser.c
 tests/widget-factory.ui
