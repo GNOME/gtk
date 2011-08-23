@@ -1,63 +1,63 @@
 demos/gtk-demo/demo.ui
 gtk/paper_names.c
 tests/testfilechooser.c
-[type: gettext/glade]tests/a11y/accessible-name.ui
-[type: gettext/glade]tests/a11y/assistant.ui
-[type: gettext/glade]tests/a11y/buttons.ui
-[type: gettext/glade]tests/a11y/entries.ui
-[type: gettext/glade]tests/a11y/expander.ui
-[type: gettext/glade]tests/a11y/hello-world.ui
-[type: gettext/glade]tests/a11y/infobar.ui
-[type: gettext/glade]tests/a11y/link.ui
-[type: gettext/glade]tests/a11y/menu.ui
-[type: gettext/glade]tests/a11y/menus.ui
-[type: gettext/glade]tests/a11y/messagedialog.ui
-[type: gettext/glade]tests/a11y/mnemonic.ui
-[type: gettext/glade]tests/a11y/notebook.ui
-[type: gettext/glade]tests/a11y/paned.ui
-[type: gettext/glade]tests/a11y/placeholder-text.ui
-[type: gettext/glade]tests/a11y/tree.ui
-[type: gettext/glade]tests/reftests/background-area.ref.ui
-[type: gettext/glade]tests/reftests/background-area.ui
-[type: gettext/glade]tests/reftests/border-image-gradient.ref.ui
-[type: gettext/glade]tests/reftests/border-image-gradient.ui
-[type: gettext/glade]tests/reftests/border-image-url.ref.ui
-[type: gettext/glade]tests/reftests/border-image-url.ui
-[type: gettext/glade]tests/reftests/box-packing.ui
-[type: gettext/glade]tests/reftests/box-pseudo-classes.ref.ui
-[type: gettext/glade]tests/reftests/box-pseudo-classes.ui
-[type: gettext/glade]tests/reftests/css-match-inherit.ref.ui
-[type: gettext/glade]tests/reftests/css-match-inherit.ui
-[type: gettext/glade]tests/reftests/css-match-region-matches-star.ref.ui
-[type: gettext/glade]tests/reftests/css-match-region-matches-star.ui
-[type: gettext/glade]tests/reftests/css-match-regions.ref.ui
-[type: gettext/glade]tests/reftests/css-match-regions.ui
-[type: gettext/glade]tests/reftests/css-match-style-property-order.ref.ui
-[type: gettext/glade]tests/reftests/css-match-style-property-order.ui
-[type: gettext/glade]tests/reftests/entry-progress-coloring.ref.ui
-[type: gettext/glade]tests/reftests/entry-progress-coloring.ui
-[type: gettext/glade]tests/reftests/grid-wfh.ref.ui
-[type: gettext/glade]tests/reftests/grid-wfh.ui
-[type: gettext/glade]tests/reftests/label-shadows.ref.ui
-[type: gettext/glade]tests/reftests/label-shadows.ui
-[type: gettext/glade]tests/reftests/label-sizing.ref.ui
-[type: gettext/glade]tests/reftests/label-sizing.ui
-[type: gettext/glade]tests/reftests/label-small-ellipsized.ref.ui
-[type: gettext/glade]tests/reftests/label-small-ellipsized.ui
-[type: gettext/glade]tests/reftests/label-wrap-justify.ref.ui
-[type: gettext/glade]tests/reftests/label-wrap-justify.ui
-[type: gettext/glade]tests/reftests/messagedialog-secondarytext.ref.ui
-[type: gettext/glade]tests/reftests/messagedialog-secondarytext.ui
-[type: gettext/glade]tests/reftests/misc-alignment.ref.ui
-[type: gettext/glade]tests/reftests/misc-alignment.ui
-[type: gettext/glade]tests/reftests/no-colors.ref.ui
-[type: gettext/glade]tests/reftests/no-colors.ui
-[type: gettext/glade]tests/reftests/nonresizable-size.ref.ui
-[type: gettext/glade]tests/reftests/nonresizable-size.ui
-[type: gettext/glade]tests/reftests/quit-mnemonic.ref.ui
-[type: gettext/glade]tests/reftests/quit-mnemonic.ui
-[type: gettext/glade]tests/reftests/rotated-layout.ref.ui
-[type: gettext/glade]tests/reftests/rotated-layout.ui
-[type: gettext/glade]tests/reftests/toplevel-vs-popup.ref.ui
-[type: gettext/glade]tests/reftests/toplevel-vs-popup.ui
-[type: gettext/glade]tests/widget-factory.ui
+tests/a11y/accessible-name.ui
+tests/a11y/assistant.ui
+tests/a11y/buttons.ui
+tests/a11y/entries.ui
+tests/a11y/expander.ui
+tests/a11y/hello-world.ui
+tests/a11y/infobar.ui
+tests/a11y/link.ui
+tests/a11y/menu.ui
+tests/a11y/menus.ui
+tests/a11y/messagedialog.ui
+tests/a11y/mnemonic.ui
+tests/a11y/notebook.ui
+tests/a11y/paned.ui
+tests/a11y/placeholder-text.ui
+tests/a11y/tree.ui
+tests/reftests/background-area.ref.ui
+tests/reftests/background-area.ui
+tests/reftests/border-image-gradient.ref.ui
+tests/reftests/border-image-gradient.ui
+tests/reftests/border-image-url.ref.ui
+tests/reftests/border-image-url.ui
+tests/reftests/box-packing.ui
+tests/reftests/box-pseudo-classes.ref.ui
+tests/reftests/box-pseudo-classes.ui
+tests/reftests/css-match-inherit.ref.ui
+tests/reftests/css-match-inherit.ui
+tests/reftests/css-match-region-matches-star.ref.ui
+tests/reftests/css-match-region-matches-star.ui
+tests/reftests/css-match-regions.ref.ui
+tests/reftests/css-match-regions.ui
+tests/reftests/css-match-style-property-order.ref.ui
+tests/reftests/css-match-style-property-order.ui
+tests/reftests/entry-progress-coloring.ref.ui
+tests/reftests/entry-progress-coloring.ui
+tests/reftests/grid-wfh.ref.ui
+tests/reftests/grid-wfh.ui
+tests/reftests/label-shadows.ref.ui
+tests/reftests/label-shadows.ui
+tests/reftests/label-sizing.ref.ui
+tests/reftests/label-sizing.ui
+tests/reftests/label-small-ellipsized.ref.ui
+tests/reftests/label-small-ellipsized.ui
+tests/reftests/label-wrap-justify.ref.ui
+tests/reftests/label-wrap-justify.ui
+tests/reftests/messagedialog-secondarytext.ref.ui
+tests/reftests/messagedialog-secondarytext.ui
+tests/reftests/misc-alignment.ref.ui
+tests/reftests/misc-alignment.ui
+tests/reftests/no-colors.ref.ui
+tests/reftests/no-colors.ui
+tests/reftests/nonresizable-size.ref.ui
+tests/reftests/nonresizable-size.ui
+tests/reftests/quit-mnemonic.ref.ui
+tests/reftests/quit-mnemonic.ui
+tests/reftests/rotated-layout.ref.ui
+tests/reftests/rotated-layout.ui
+tests/reftests/toplevel-vs-popup.ref.ui
+tests/reftests/toplevel-vs-popup.ui
+tests/widget-factory.ui
