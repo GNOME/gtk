@@ -256,3 +256,4 @@ modules/printbackends/lpr/gtkprintbackendlpr.c
 modules/printbackends/papi/gtkprintbackendpapi.c
 modules/printbackends/test/gtkprintbackendtest.c
 gtk/gtkfontchooser.c
+gtk/gtkfontchooserdialog.c
