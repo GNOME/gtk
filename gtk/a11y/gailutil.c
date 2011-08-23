@@ -1,4 +1,5 @@
 /* GAIL - The GNOME Accessibility Implementation Library
+ * Copyright 2011, F123 Consulting & Mais Diferenças
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -270,26 +271,7 @@ gail_util_add_global_event_listener (GSignalEmissionHook  listener,
 
   split_string = g_strsplit (event_type, ":", 3);
 
-  if (split_string)
-    {
-      if (!g_strcmp0 ("window", split_string[0]))
-        {
-          static gboolean initialized = FALSE;
-
-          if (!initialized)
-            {
-              do_window_event_initialization ();
-              initialized = TRUE;
-            }
-          rc = add_listener (listener, "GtkWindowAccessible", split_string[1], event_type);
-        }
-      else
-        {
-          rc = add_listener (listener, split_string[1], split_string[2], event_type);
-        }
-
-      g_strfreev (split_string);
-    }
+  rc = add_listener (listener, split_string[1], split_string[2], event_type);
 
   return rc;
 }
@@ -494,4 +476,5 @@ _gail_util_install (void)
   atk_class->get_toolkit_version = gail_util_get_toolkit_version;
 
   listener_list = g_hash_table_new_full (g_int_hash, g_int_equal, NULL, g_free);
+  do_window_event_initialization ();
 }
