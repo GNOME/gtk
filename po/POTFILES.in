@@ -96,7 +96,6 @@ gtk/gtkfilesystemmodel.c
 gtk/gtkfixed.c
 gtk/gtkfontbutton.c
 gtk/gtkfontchooser.c
-gtk/gtkfontchooserdialog.c
 gtk/gtkfontsel.c
 gtk/gtkframe.c
 gtk/gtkgrid.c
