@@ -902,10 +902,10 @@ property_widget (GObject    *object,
 
       label = gtk_label_new ("");
       button = gtk_button_new_with_label ("Properties");
-      g_object_set_data (G_OBJECT (button), "property-name", spec->name);
-      g_signal_connect (button, "clicked", 
-			G_CALLBACK (object_properties), 
-			object);
+      g_object_set_data (G_OBJECT (button), "property-name", (gpointer) spec->name);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (object_properties),
+                        object);
 
       gtk_container_add (GTK_CONTAINER (prop_edit), label);
       gtk_container_add (GTK_CONTAINER (prop_edit), button);
