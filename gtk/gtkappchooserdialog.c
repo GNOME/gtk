@@ -527,23 +527,9 @@ build_dialog_ui (GtkAppChooserDialog *self)
                          GTK_STOCK_CANCEL,
                          GTK_RESPONSE_CANCEL);
 
-  /* Create a custom stock icon */
-  self->priv->button = gtk_button_new ();
-
-  label = gtk_label_new_with_mnemonic (_("_Select"));
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (self->priv->button));
-  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_widget_show (label);
-  self->priv->open_label = label;
-
-  gtk_container_add (GTK_CONTAINER (self->priv->button),
-                     self->priv->open_label);
-
-  gtk_widget_show (self->priv->button);
-  gtk_widget_set_can_default (self->priv->button, TRUE);
-
-  gtk_dialog_add_action_widget (GTK_DIALOG (self),
-                                self->priv->button, GTK_RESPONSE_OK);
+  self->priv->button = gtk_dialog_add_button (GTK_DIALOG (self),
+                                              _("_Select"),
+                                              GTK_RESPONSE_OK);
 
   gtk_dialog_set_default_response (GTK_DIALOG (self),
                                    GTK_RESPONSE_OK);
