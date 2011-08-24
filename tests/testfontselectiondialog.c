@@ -27,7 +27,7 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *dialog;
-  GtkWidget *ok;
+  GtkWidget *ok G_GNUC_UNUSED;
 
   gtk_init (&argc, &argv);
 
