@@ -336,8 +336,6 @@ gtk_color_button_draw_cb (GtkWidget *widget,
       cairo_pattern_destroy (checkered);
     }
 
-  cairo_destroy (cr);
-
   return FALSE;
 }
 
