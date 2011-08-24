@@ -141,6 +141,13 @@ enum {
   PREVIEW_TITLE_COLUMN
 };
 
+enum {
+  SIGNAL_FONT_ACTIVATED,
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS] = { 0, };
+
 static void  gtk_font_chooser_set_property       (GObject         *object,
                                                   guint            prop_id,
                                                   const GValue    *value,
@@ -198,6 +205,26 @@ gtk_font_chooser_class_init (GtkFontChooserClass *klass)
                                                         P_("Whether the preview text entry is shown or not"),
                                                         TRUE,
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkFontChooserWidget::font-activated:
+   * @self: the object which received the signal
+   * @fontname: the font name
+   *
+   * Emitted when a font is activated from the widget's list.
+   * This usually happens when the user double clicks an item,
+   * or an item is selected and the user presses one of the keys
+   * Space, Shift+Space, Return or Enter.
+   */
+  signals[SIGNAL_FONT_ACTIVATED] =
+    g_signal_new ("font-activated",
+                  GTK_TYPE_FONT_CHOOSER,
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkFontChooserClass, font_activated),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1, G_TYPE_STRING);
 
   g_type_class_add_private (klass, sizeof (GtkFontChooserPrivate));
 }
@@ -393,6 +420,21 @@ set_range_marks (GtkFontChooserPrivate *priv,
     gtk_scale_add_mark (GTK_SCALE (size_slider),
                         (gdouble) sizes[i],
                         GTK_POS_BOTTOM, NULL);
+}
+
+static void
+row_activated_cb (GtkTreeView       *view,
+                  GtkTreePath       *path,
+                  GtkTreeViewColumn *column,
+                  gpointer           user_data)
+{
+  GtkFontChooser *self = user_data;
+  gchar *fontname;
+
+  fontname = gtk_font_chooser_get_font_name (self);
+
+  g_signal_emit (self, signals[SIGNAL_FONT_ACTIVATED], 0, fontname);
+  g_free (fontname);
 }
 
 static void
@@ -642,7 +684,10 @@ gtk_font_chooser_init (GtkFontChooser *fontchooser)
       g_signal_connect (priv->family_face_list, "cursor-changed",
                         G_CALLBACK (cursor_changed_cb), fontchooser);
 
-  /* Zoom on preview scroll*/
+  g_signal_connect (priv->family_face_list, "row-activated",
+                    G_CALLBACK (row_activated_cb), fontchooser);
+
+  /* Zoom on preview scroll */
   g_signal_connect (priv->preview, "scroll-event",
                     G_CALLBACK (zoom_preview_cb), fontchooser);
 
@@ -1070,6 +1115,7 @@ gtk_font_chooser_get_font_name (GtkFontChooser *fontchooser)
 
   font_name = g_strdup_printf ("%s %d", font_desc_name, fontchooser->priv->size / PANGO_SCALE);
   g_free (font_desc_name);
+
   return font_name;
 }
 
