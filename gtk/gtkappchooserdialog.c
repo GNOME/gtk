@@ -477,7 +477,6 @@ build_dialog_ui (GtkAppChooserDialog *self)
 {
   GtkWidget *vbox;
   GtkWidget *vbox2;
-  GtkWidget *label;
   GtkWidget *button, *w;
 
   gtk_container_set_border_width (GTK_CONTAINER (self), 5);
