@@ -9322,16 +9322,6 @@ recent_idle_cleanup (gpointer data)
 }
 
 static gint
-recent_sort_mru (gconstpointer a,
-                 gconstpointer b)
-{
-  GtkRecentInfo *info_a = (GtkRecentInfo *) a;
-  GtkRecentInfo *info_b = (GtkRecentInfo *) b;
-
-  return (gtk_recent_info_get_modified (info_b) - gtk_recent_info_get_modified (info_a));
-}
-
-static gint
 get_recent_files_limit (GtkWidget *widget)
 {
   GtkSettings *settings;
@@ -9421,8 +9411,6 @@ recent_idle_load (gpointer data)
   /* second iteration: MRU sorting and clamping, and populating the model */
   if (load_data->needs_sorting)
     {
-      load_data->items = g_list_sort (load_data->items, recent_sort_mru);
-
       if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	populate_model_with_recent_items (impl, load_data->items);
       else
