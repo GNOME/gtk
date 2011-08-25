@@ -3692,7 +3692,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
 				   gint         count)
 {
   GtkIconViewItem *item;
-  GtkCellRenderer *cell;
+  GtkCellRenderer *cell = NULL;
   gboolean dirty = FALSE;
   gint step;
   GtkDirectionType direction;

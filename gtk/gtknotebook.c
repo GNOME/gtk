@@ -2254,7 +2254,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
       if (priv->show_tabs)
         {
-          GtkRequisition tabs_requisition;
+          GtkRequisition tabs_requisition = { 0, 0 };
 
           gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
