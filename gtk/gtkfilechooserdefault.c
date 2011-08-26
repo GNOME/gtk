@@ -9280,6 +9280,7 @@ recent_idle_cleanup (gpointer data)
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
                            GTK_TREE_MODEL (impl->recent_model));
   file_list_set_sort_column_ids (impl);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->recent_model), MODEL_COL_MTIME, GTK_SORT_DESCENDING);
 
   set_busy_cursor (impl, FALSE);
   
