@@ -9269,7 +9269,6 @@ typedef struct
 {
   GtkFileChooserDefault *impl;
   GList *items;
-  guint needs_sorting : 1;
 } RecentLoadData;
 
 static void
@@ -9364,30 +9363,18 @@ recent_idle_load (gpointer data)
   if (!impl->recent_manager)
     return FALSE;
 
-  /* first iteration: load all the items */
+  load_data->items = gtk_recent_manager_get_items (impl->recent_manager);
   if (!load_data->items)
-    {
-      load_data->items = gtk_recent_manager_get_items (impl->recent_manager);
-      if (!load_data->items)
-        return FALSE;
+    return FALSE;
 
-      load_data->needs_sorting = TRUE;
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    populate_model_with_recent_items (impl, load_data->items);
+  else
+    populate_model_with_folders (impl, load_data->items);
 
-      return TRUE;
-    }
-  
-  /* second iteration: MRU sorting and clamping, and populating the model */
-  if (load_data->needs_sorting)
-    {
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
-	populate_model_with_recent_items (impl, load_data->items);
-      else
-	populate_model_with_folders (impl, load_data->items);
-
-      g_list_foreach (load_data->items, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (load_data->items);
-      load_data->items = NULL;
-    }
+  g_list_foreach (load_data->items, (GFunc) gtk_recent_info_unref, NULL);
+  g_list_free (load_data->items);
+  load_data->items = NULL;
 
   return FALSE;
 }
@@ -9407,7 +9394,6 @@ recent_start_loading (GtkFileChooserDefault *impl)
   load_data = g_new (RecentLoadData, 1);
   load_data->impl = impl;
   load_data->items = NULL;
-  load_data->needs_sorting = TRUE;
 
   /* begin lazy loading the recent files into the model */
   impl->load_recent_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
