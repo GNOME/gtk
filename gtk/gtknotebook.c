@@ -7853,7 +7853,7 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
   gtk_widget_child_notify (child, "tab-fill");
   gtk_widget_child_notify (child, "position");
   if (priv->show_tabs)
-    gtk_notebook_pages_allocate (notebook);
+    gtk_widget_queue_resize (GTK_WIDGET (notebook));
   gtk_widget_thaw_child_notify (child);
 }
 
