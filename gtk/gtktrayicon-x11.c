@@ -505,9 +505,12 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
       visual = gdk_x11_screen_lookup_visual (screen, visual_id);
     }
 
-  gdk_visual_get_red_pixel_details (visual, NULL, NULL, &red_prec);
-  gdk_visual_get_green_pixel_details (visual, NULL, NULL, &green_prec);
-  gdk_visual_get_blue_pixel_details (visual, NULL, NULL, &blue_prec);
+  if (visual != NULL)
+    {
+      gdk_visual_get_red_pixel_details (visual, NULL, NULL, &red_prec);
+      gdk_visual_get_green_pixel_details (visual, NULL, NULL, &green_prec);
+      gdk_visual_get_blue_pixel_details (visual, NULL, NULL, &blue_prec);
+    }
 
   icon->priv->manager_visual = visual;
   icon->priv->manager_visual_rgba = visual != NULL &&
