@@ -52,6 +52,8 @@ tests/reftests/no-colors.ref.ui
 tests/reftests/no-colors.ui
 tests/reftests/nonresizable-size.ref.ui
 tests/reftests/nonresizable-size.ui
+tests/reftests/notebook-childproperties.ref.ui
+tests/reftests/notebook-childproperties.ui
 tests/reftests/quit-mnemonic.ref.ui
 tests/reftests/quit-mnemonic.ui
 tests/reftests/rotated-layout.ref.ui
