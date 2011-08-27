@@ -2964,6 +2964,17 @@ gtk_status_icon_set_name (GtkStatusIcon *status_icon,
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
+  if (gtk_widget_get_realized (priv->tray_icon))
+    {
+      /* gtk_window_set_wmclass() only operates on non-realized windows,
+       * so temporarily unrealize the tray here
+       */
+      gtk_widget_hide (priv->tray_icon);
+      gtk_widget_unrealize (priv->tray_icon);
+      gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
+      gtk_widget_show (priv->tray_icon);
+    }
+  else
+    gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
 #endif
 }
