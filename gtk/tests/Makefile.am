@@ -37,7 +37,7 @@ treeview_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= treeview-scrolling
 treeview_scrolling_SOURCES	 = treeview-scrolling.c
-treeview_scrolling_LDADD	 = $(progs_ldadd)
+treeview_scrolling_LDADD	 = $(progs_ldadd) -lm
 
 TEST_PROGS			+= recentmanager
 recentmanager_SOURCES 		 = recentmanager.c
