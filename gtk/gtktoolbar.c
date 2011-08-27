@@ -3896,6 +3896,9 @@ gtk_toolbar_get_visible_position (GtkToolbar *toolbar,
 {
   CountingData count = { child, FALSE, 0, 0 };
 
+  if (child == (GtkWidget*)toolbar->priv->highlight_tool_item)
+    return 0;
+
   /* foreach iterates in visible order */
   gtk_container_forall (GTK_CONTAINER (toolbar),
                         count_widget_position,
