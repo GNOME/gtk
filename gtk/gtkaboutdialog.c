@@ -37,7 +37,7 @@
 #include "gtkbbox.h"
 #include "gtkdialog.h"
 #include "gtkgrid.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtklinkbutton.h"

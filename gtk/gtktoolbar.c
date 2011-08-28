@@ -39,7 +39,6 @@
 
 #include "gtkarrow.h"
 #include "gtkbindings.h"
-#include "gtkhbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkmainprivate.h"
@@ -52,7 +51,7 @@
 #include "gtkseparatortoolitem.h"
 #include "gtkstock.h"
 #include "gtktoolshell.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
