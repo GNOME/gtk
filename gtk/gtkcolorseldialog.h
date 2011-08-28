@@ -33,7 +33,6 @@
 
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkcolorsel.h>
-#include <gtk/gtkvbox.h>
 
 G_BEGIN_DECLS
 
