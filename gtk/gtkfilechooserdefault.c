@@ -61,7 +61,7 @@
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
 #include "gtkstock.h"
-#include "gtktable.h"
+#include "gtkgrid.h"
 #include "gtktoolbar.h"
 #include "gtktoolbutton.h"
 #include "gtktooltip.h"
@@ -4545,30 +4545,25 @@ save_widgets_create (GtkFileChooserDefault *impl)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
 
-  impl->save_widgets_table = gtk_table_new (2, 2, FALSE);
+  impl->save_widgets_table = gtk_grid_new ();
   gtk_box_pack_start (GTK_BOX (vbox), impl->save_widgets_table, FALSE, FALSE, 0);
   gtk_widget_show (impl->save_widgets_table);
-  gtk_table_set_row_spacings (GTK_TABLE (impl->save_widgets_table), 12);
-  gtk_table_set_col_spacings (GTK_TABLE (impl->save_widgets_table), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (impl->save_widgets_table), 12);
+  gtk_grid_set_column_spacing (GTK_GRID (impl->save_widgets_table), 12);
 
   /* Label */
 
   widget = gtk_label_new_with_mnemonic (_("_Name:"));
   gtk_widget_set_halign (widget, GTK_ALIGN_START);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_table_attach (GTK_TABLE (impl->save_widgets_table), widget,
-		    0, 1, 0, 1,
-		    GTK_FILL, GTK_FILL,
-		    0, 0);
+  gtk_grid_attach (GTK_GRID (impl->save_widgets_table), widget, 0, 0, 1, 1);
   gtk_widget_show (widget);
 
   /* Location entry */
 
   location_entry_create (impl);
-  gtk_table_attach (GTK_TABLE (impl->save_widgets_table), impl->location_entry,
-		    1, 2, 0, 1,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0, 0);
+  gtk_widget_set_hexpand (impl->location_entry, TRUE);
+  gtk_grid_attach (GTK_GRID (impl->save_widgets_table), impl->location_entry, 1, 0, 1, 1);
   gtk_widget_show (impl->location_entry);
   gtk_label_set_mnemonic_widget (GTK_LABEL (widget), impl->location_entry);
 
@@ -4576,10 +4571,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
   impl->save_folder_label = gtk_label_new (NULL);
   gtk_widget_set_halign (impl->save_folder_label, GTK_ALIGN_START);
   gtk_widget_set_valign (impl->save_folder_label, GTK_ALIGN_CENTER);
-  gtk_table_attach (GTK_TABLE (impl->save_widgets_table), impl->save_folder_label,
-		    0, 1, 1, 2,
-		    GTK_FILL, GTK_FILL,
-		    0, 0);
+  gtk_grid_attach (GTK_GRID (impl->save_widgets_table), impl->save_folder_label, 0, 1, 1, 1);
   gtk_widget_show (impl->save_folder_label);
 
   impl->save_widgets = vbox;
@@ -5241,10 +5233,8 @@ restore_path_bar (GtkFileChooserDefault *impl)
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      gtk_table_attach (GTK_TABLE (impl->save_widgets_table), impl->browse_path_bar_hbox,
-			1, 2, 1, 2,
-			GTK_EXPAND | GTK_FILL, GTK_FILL,
-			0, 0);
+      gtk_widget_set_hexpand (impl->browse_path_bar_hbox, TRUE);
+      gtk_grid_attach (GTK_GRID (impl->save_widgets_table), impl->browse_path_bar_hbox, 1, 1, 1, 1);
       gtk_label_set_mnemonic_widget (GTK_LABEL (impl->save_folder_label), impl->browse_path_bar);
     }
   else
