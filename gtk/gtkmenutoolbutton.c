@@ -25,8 +25,7 @@
 
 #include "gtktogglebutton.h"
 #include "gtkarrow.h"
-#include "gtkhbox.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
 #include "gtkmenu.h"
 #include "gtkmain.h"
 #include "gtksizerequest.h"

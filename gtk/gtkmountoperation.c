@@ -35,7 +35,7 @@
 #include "gtkhbox.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"
 #include "gtkprivate.h"

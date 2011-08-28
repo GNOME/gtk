@@ -34,7 +34,7 @@
 #include "gtkliststore.h"
 #include "gtkradiobutton.h"
 #include "gtkstock.h"
-#include "gtktable.h"
+#include "gtkgrid.h"
 #include "gtktogglebutton.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
@@ -783,9 +783,9 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       {
         GtkWidget *label;
         
-        priv->filechooser = gtk_table_new (2, 2, FALSE);
-        gtk_table_set_row_spacings (GTK_TABLE (priv->filechooser), 6);
-        gtk_table_set_col_spacings (GTK_TABLE (priv->filechooser), 12);
+        priv->filechooser = gtk_grid_new ();
+        gtk_grid_set_row_spacing (GTK_GRID (priv->filechooser), 6);
+        gtk_grid_set_column_spacing (GTK_GRID (priv->filechooser), 12);
 
         /* TODO: make this a gtkfilechooserentry once we move to GTK */
         priv->entry = gtk_entry_new ();
@@ -801,26 +801,16 @@ construct_widgets (GtkPrinterOptionWidget *widget)
         gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
         gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->entry);
 
-        gtk_table_attach (GTK_TABLE (priv->filechooser), label,
-                          0, 1, 0, 1, GTK_FILL, 0,
-                          0, 0);
-
-        gtk_table_attach (GTK_TABLE (priv->filechooser), priv->entry,
-                          1, 2, 0, 1, GTK_FILL, 0,
-                          0, 0);
+        gtk_grid_attach (GTK_GRID (priv->filechooser), label, 0, 0, 1, 1);
+        gtk_grid_attach (GTK_GRID (priv->filechooser), priv->entry, 1, 0, 1, 1);
 
         label = gtk_label_new_with_mnemonic (_("_Save in folder:"));
         gtk_widget_set_halign (label, GTK_ALIGN_START);
         gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
         gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->combo);
 
-        gtk_table_attach (GTK_TABLE (priv->filechooser), label,
-                          0, 1, 1, 2, GTK_FILL, 0,
-                          0, 0);
-
-        gtk_table_attach (GTK_TABLE (priv->filechooser), priv->combo,
-                          1, 2, 1, 2, GTK_FILL, 0,
-                          0, 0);
+        gtk_grid_attach (GTK_GRID (priv->filechooser), label, 0, 1, 1, 1);
+        gtk_grid_attach (GTK_GRID (priv->filechooser), priv->combo, 1, 1, 1, 1);
 
         gtk_widget_show_all (priv->filechooser);
         gtk_box_pack_start (GTK_BOX (widget), priv->filechooser, TRUE, TRUE, 0);

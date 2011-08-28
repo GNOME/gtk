@@ -47,7 +47,6 @@
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtktextview.h"
-#include "gtkvbox.h"
 #include "gtkiconfactory.h"
 #include "gtkshow.h"
 #include "gtkmainprivate.h"
