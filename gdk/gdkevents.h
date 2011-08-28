@@ -1054,9 +1054,19 @@ gboolean  gdk_event_get_state           (const GdkEvent  *event,
 gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 					 gdouble	 *x_win,
 					 gdouble	 *y_win);
-gboolean  gdk_event_get_root_coords	(const GdkEvent  *event,
-					 gdouble	 *x_root,
-					 gdouble	 *y_root);
+gboolean  gdk_event_get_root_coords	(const GdkEvent *event,
+					 gdouble	*x_root,
+					 gdouble	*y_root);
+gboolean  gdk_event_get_button          (const GdkEvent *event,
+                                         guint          *button);
+gboolean  gdk_event_get_click_count     (const GdkEvent *event,
+                                         guint          *click_count);
+gboolean  gdk_event_get_keyval          (const GdkEvent *event,
+                                         guint          *keyval);
+gboolean  gdk_event_get_keycode         (const GdkEvent *event,
+                                         guint16        *keycode);
+gboolean gdk_event_get_scroll_direction (const GdkEvent *event,
+                                         GdkScrollDirection *direction);
 gboolean  gdk_event_get_axis            (const GdkEvent  *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
