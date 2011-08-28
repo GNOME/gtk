@@ -40,7 +40,7 @@
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
 #include "gtkframe.h"
-#include "gtktable.h"
+#include "gtkgrid.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkimage.h"
@@ -49,7 +49,6 @@
 #include "gtkscale.h"
 #include "gtkentry.h"
 #include "gtkbutton.h"
-#include "gtkinvisible.h"
 #include "gtkmenuitem.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
@@ -444,10 +443,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   top_right_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE, 0);
-  table = gtk_table_new (8, 6, FALSE);
+  table = gtk_grid_new ();
   gtk_box_pack_start (GTK_BOX (top_right_vbox), table, FALSE, FALSE, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (table), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (table), 12);
 
   make_label_spinbutton (colorsel, &priv->hue_spinbutton, _("_Hue:"), table, 0, 0, COLORSEL_HUE,
                          _("Position on the color wheel."));
@@ -462,12 +461,12 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                          _("Amount of green light in the color."));
   make_label_spinbutton (colorsel, &priv->blue_spinbutton, _("_Blue:"), table, 6, 2, COLORSEL_BLUE,
                          _("Amount of blue light in the color."));
-  gtk_table_attach_defaults (GTK_TABLE (table), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 8, 3, 4);
+  gtk_grid_attach (GTK_GRID (table), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 3, 8, 1);
 
   priv->opacity_label = gtk_label_new_with_mnemonic (_("Op_acity:"));
   gtk_widget_set_halign (priv->opacity_label, GTK_ALIGN_START);
   gtk_widget_set_valign (priv->opacity_label, GTK_ALIGN_CENTER);
-  gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_label, 0, 1, 4, 5);
+  gtk_grid_attach (GTK_GRID (table), priv->opacity_label, 0, 4, 1, 1);
   adjust = gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0);
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel);
   priv->opacity_slider = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjust);
@@ -479,7 +478,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   g_signal_connect (adjust, "value-changed",
                     G_CALLBACK (adjustment_changed),
                     GINT_TO_POINTER (COLORSEL_OPACITY));
-  gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5);
+  gtk_grid_attach (GTK_GRID (table), priv->opacity_slider, 1, 4, 6, 1);
   priv->opacity_entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (priv->opacity_entry,
                         _("Transparency of the color."));
@@ -487,10 +486,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   g_signal_connect (priv->opacity_entry, "activate",
                     G_CALLBACK (opacity_entry_changed), colorsel);
-  gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_entry, 7, 8, 4, 5);
+  gtk_grid_attach (GTK_GRID (table), priv->opacity_entry, 7, 4, 1, 1);
 
   label = gtk_label_new_with_mnemonic (_("Color _name:"));
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+  gtk_grid_attach (GTK_GRID (table), label, 0, 5, 1, 1);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   priv->hex_entry = gtk_entry_new ();
@@ -509,7 +508,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                           "in this entry."));
 
   gtk_entry_set_width_chars (GTK_ENTRY (priv->hex_entry), 7);
-  gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
+  gtk_grid_attach (GTK_GRID (table), priv->hex_entry, 1, 5, 4, 1);
 
   focus_chain = g_list_append (focus_chain, priv->hue_spinbutton);
   focus_chain = g_list_append (focus_chain, priv->sat_spinbutton);
@@ -524,9 +523,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   g_list_free (focus_chain);
 
   /* Set up the palette */
-  table = gtk_table_new (GTK_CUSTOM_PALETTE_HEIGHT, GTK_CUSTOM_PALETTE_WIDTH, TRUE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 1);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 1);
+  table = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (table), 1);
+  gtk_grid_set_column_spacing (GTK_GRID (table), 1);
   for (i = 0; i < GTK_CUSTOM_PALETTE_WIDTH; i++)
     {
       for (j = 0; j < GTK_CUSTOM_PALETTE_HEIGHT; j++)
@@ -2177,8 +2176,8 @@ make_label_spinbutton (GtkColorSelection *colorsel,
 
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_table_attach_defaults (GTK_TABLE (table), label, i, i+1, j, j+1);
-  gtk_table_attach_defaults (GTK_TABLE (table), *spinbutton, i+1, i+2, j, j+1);
+  gtk_grid_attach (GTK_GRID (table), label, i, j, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), *spinbutton, i+1, j, 1, 1);
 }
 
 static void
@@ -2196,7 +2195,7 @@ make_palette_frame (GtkColorSelection *colorsel,
   priv->custom_palette[i][j] = palette_new (colorsel);
   gtk_widget_set_size_request (priv->custom_palette[i][j], CUSTOM_PALETTE_ENTRY_WIDTH, CUSTOM_PALETTE_ENTRY_HEIGHT);
   gtk_container_add (GTK_CONTAINER (frame), priv->custom_palette[i][j]);
-  gtk_table_attach_defaults (GTK_TABLE (table), frame, i, i+1, j, j+1);
+  gtk_grid_attach (GTK_GRID (table), frame, i, j, 1, 1);
 }
 
 /* Set the palette entry [x][y] to be the currently selected one. */
