@@ -212,6 +212,12 @@ check_application (GtkAppChooserDialog  *self,
   command = NULL;
 
   info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
+  if (info == NULL)
+    {
+      *app_out = NULL;
+      return FALSE;
+    }
+
   command = g_app_info_get_executable (info);
 
   g_shell_parse_argv (command, &argc, &argv, &error);
@@ -258,13 +264,15 @@ add_or_find_application (GtkAppChooserDialog *self)
 
   app = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self));
 
-  /* we don't care about reporting errors here */
-  if (self->priv->content_type)
-    g_app_info_set_as_last_used_for_type (app,
-					  self->priv->content_type,
-					  NULL);
-
-  g_object_unref (app);
+  if (app)
+    {
+      /* we don't care about reporting errors here */
+      if (self->priv->content_type)
+        g_app_info_set_as_last_used_for_type (app,
+                                              self->priv->content_type,
+                                              NULL);
+      g_object_unref (app);
+    }
 }
 
 static void
