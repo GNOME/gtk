@@ -7316,6 +7316,9 @@ gtk_icon_view_item_accessible_get_image_size (AtkImage *image,
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return;
 
+  *width = 0;
+  *height = 0;
+
   if (get_pixbuf_box (GTK_ICON_VIEW (item->widget), item->item, &box))
     {
       *width = box.width;
