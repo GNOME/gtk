@@ -4096,7 +4096,8 @@ check_copy_file_location_sensitivity (GtkFileChooserDefault *impl)
   else
     active = TRUE;
 
-  gtk_widget_set_sensitive (impl->browse_files_popup_menu_copy_file_location_item, active);
+  if (impl->browse_files_popup_menu_copy_file_location_item)
+    gtk_widget_set_sensitive (impl->browse_files_popup_menu_copy_file_location_item, active);
 }
 
 /* Constructs the popup menu for the file list if needed */
