@@ -41,10 +41,14 @@ dialog_response (GtkDialog *d,
   if (response_id == GTK_RESPONSE_OK)
     {
       app_info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (d));
-      name = g_app_info_get_name (app_info);
-      g_print ("Application selected: %s\n", name);
-
-      g_object_unref (app_info);
+      if (app_info)
+        {
+          name = g_app_info_get_name (app_info);
+          g_print ("Application selected: %s\n", name);
+          g_object_unref (app_info);
+        }
+      else
+        g_print ("No application selected\n");
     }
 
   gtk_widget_destroy (GTK_WIDGET (d));
