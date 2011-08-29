@@ -378,7 +378,7 @@ Click "Show other applications", for more options, or "Find applications online"
         parent: unnamed-GtkBoxAccessible-12
         index: 0
         name: Select
-        state: enabled focusable sensitive showing visible default
+        state: focusable showing visible default
         toolkit: gtk
         <AtkComponent>
         layer: widget
