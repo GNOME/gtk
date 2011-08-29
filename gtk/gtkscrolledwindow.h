@@ -31,9 +31,7 @@
 #ifndef __GTK_SCROLLED_WINDOW_H__
 #define __GTK_SCROLLED_WINDOW_H__
 
-
-#include <gtk/gtkviewport.h>
-
+#include <gtk/gtkbin.h>
 
 G_BEGIN_DECLS
 

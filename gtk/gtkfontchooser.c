@@ -42,7 +42,6 @@
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
 #include "gtkprivate.h"
-#include "gtkalignment.h"
 #include "gtkscale.h"
 #include "gtkspinbutton.h"
 #include "gtknotebook.h"
