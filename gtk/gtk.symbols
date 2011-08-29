@@ -1114,6 +1114,7 @@ gtk_grab_get_current
 gtk_grab_remove
 gtk_grid_attach
 gtk_grid_attach_next_to
+gtk_grid_get_child_at
 gtk_grid_get_column_homogeneous
 gtk_grid_get_column_spacing
 gtk_grid_get_row_homogeneous
