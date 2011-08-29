@@ -710,6 +710,7 @@ gtk_css_section_get_start_line
 gtk_css_section_get_start_position
 gtk_css_section_get_type
 gtk_css_section_ref
+gtk_css_section_type_get_type
 gtk_css_section_unref
 #ifdef G_OS_UNIX
 gtk_custom_paper_unix_dialog_get_type
