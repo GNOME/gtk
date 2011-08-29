@@ -1176,7 +1176,7 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   gtk_widget_show (self->priv->program_list);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->priv->program_list));
-  gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
   gtk_tree_selection_set_select_function (selection, gtk_app_chooser_selection_func,
                                           self, NULL);
   g_signal_connect_swapped (selection, "changed",

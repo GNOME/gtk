@@ -486,6 +486,7 @@ build_dialog_ui (GtkAppChooserDialog *self)
   GtkWidget *vbox;
   GtkWidget *vbox2;
   GtkWidget *button, *w;
+  GAppInfo *info;
 
   gtk_container_set_border_width (GTK_CONTAINER (self), 5);
 
@@ -538,6 +539,11 @@ build_dialog_ui (GtkAppChooserDialog *self)
   self->priv->button = gtk_dialog_add_button (GTK_DIALOG (self),
                                               _("_Select"),
                                               GTK_RESPONSE_OK);
+
+  info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
+  gtk_widget_set_sensitive (self->priv->button, info != NULL);
+  if (info)
+    g_object_unref (info);
 
   gtk_dialog_set_default_response (GTK_DIALOG (self),
                                    GTK_RESPONSE_OK);
