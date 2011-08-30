@@ -210,7 +210,6 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
                                                     GtkRadioButtonPrivate);
   priv = radio_button->priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (radio_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
 
   _gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
