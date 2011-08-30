@@ -130,7 +130,7 @@ window1
             "panel"
             parent: unnamed-GtkBoxAccessible-11
             index: 0
-            state: enabled sensitive showing visible
+            state: enabled horizontal sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
@@ -726,7 +726,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
-              action 0 keybinding: <Alt>s
+              action 0 keybinding: <Alt>a
               <AtkValue>
               minimum value: 0.000000
               maximum value: 100.000000
@@ -914,7 +914,7 @@ window1
               "panel"
               parent: unnamed-GtkBoxAccessible-15
               index: 1
-              state: enabled sensitive visible
+              state: enabled horizontal sensitive visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
@@ -1329,18 +1329,18 @@ window1
         "push button"
         parent: unnamed-GtkBoxAccessible-57
         index: 1
-        name: OK
+        name: Select
         state: enabled focusable sensitive showing visible default
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
         <AtkImage>
-        image size: 20 x 20
+        image size: -1 x -1
         image description: (null)
         <AtkAction>
         action 0 name: click
-        action 0 keybinding: <Alt>o
+        action 0 keybinding: <Alt>s
       unnamed-GtkButtonAccessible-60
         "push button"
         parent: unnamed-GtkBoxAccessible-57

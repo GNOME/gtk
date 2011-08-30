@@ -73,7 +73,7 @@ EXTRA_DIST += 		\
 	demo.ui
 
 demos.h: @REBUILD@ $(demos) geninclude.pl
-	(here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
+	$(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
 
 gtk3_demo_SOURCES = 		\
 	$(demos)		\

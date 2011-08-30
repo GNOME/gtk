@@ -21,6 +21,7 @@
 #define __GTK_CSS_PROVIDER_H__
 
 #include <gio/gio.h>
+#include <gtk/gtkcsssection.h>
 
 G_BEGIN_DECLS
 
@@ -60,9 +61,7 @@ struct _GtkCssProviderClass
   GObjectClass parent_class;
 
   void (* parsing_error)                        (GtkCssProvider  *provider,
-                                                 const gchar     *path,
-                                                 guint            line,
-                                                 guint            position,
+                                                 GtkCssSection   *section,
                                                  const GError *   error);
 
   /* Padding for future expansion */

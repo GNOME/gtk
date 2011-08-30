@@ -27,13 +27,18 @@ TEST_PROGS			+= testing
 testing_SOURCES			 = testing.c
 testing_LDADD			 = $(progs_ldadd)
 
-TEST_PROGS			+= liststore
-liststore_SOURCES		 = liststore.c
-liststore_LDADD			 = $(progs_ldadd)
-
-TEST_PROGS			+= treestore
-treestore_SOURCES		 = treestore.c
-treestore_LDADD			 = $(progs_ldadd)
+TEST_PROGS			+= treemodel
+treemodel_SOURCES		 = \
+				treemodel.h \
+				treemodel.c \
+				liststore.c \
+				treestore.c \
+				filtermodel.c \
+				sortmodel.c \
+				modelrefcount.c \
+				gtktreemodelrefcount.h \
+				gtktreemodelrefcount.c
+treemodel_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= treeview
 treeview_SOURCES		 = treeview.c
@@ -41,7 +46,7 @@ treeview_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= treeview-scrolling
 treeview_scrolling_SOURCES	 = treeview-scrolling.c
-treeview_scrolling_LDADD	 = $(progs_ldadd)
+treeview_scrolling_LDADD	 = $(progs_ldadd) -lm
 
 TEST_PROGS			+= recentmanager
 recentmanager_SOURCES 		 = recentmanager.c
@@ -85,10 +90,6 @@ textbuffer_LDADD		 = $(progs_ldadd)
 TEST_PROGS			+= textiter
 textiter_SOURCES		 = textiter.c
 textiter_LDADD			 = $(progs_ldadd)
-
-TEST_PROGS			+= filtermodel
-filtermodel_SOURCES		 = filtermodel.c
-filtermodel_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= expander
 expander_SOURCES		 = expander.c

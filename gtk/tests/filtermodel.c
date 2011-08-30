@@ -1,5 +1,5 @@
 /* Extensive GtkTreeModelFilter tests.
- * Copyright (C) 2009  Kristian Rietveld  <kris@gtk.org>
+ * Copyright (C) 2009,2011  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,15 +19,23 @@
 
 #include <gtk/gtk.h>
 
+#include "treemodel.h"
+#include "gtktreemodelrefcount.h"
 
 /* Left to do:
  *   - Proper coverage checking to see if the unit tests cover
  *     all possible cases.
- *   - Verify if the ref counting is done properly for both the
- *     normal ref_count and the zero_ref_count.  One way to test
- *     this area is by collapsing/expanding branches on the view
- *     that is connected to the filter model.
  *   - Check if the iterator stamp is incremented at the correct times.
+ *
+ * For more thorough testing:
+ *   - Test with randomized models.
+ *   - Extensively test a filter model wrapping a sort model,
+ *     or a sort model wrapping a filter model by:
+ *       # Checking structure.
+ *       # Checking for correct signals emissions.
+ *       # Checking correct reference counting.
+ *       # Tests should be done with the sort and filter model
+ *         in various filtering and sorting states.
  */
 
 
@@ -91,271 +99,6 @@ create_tree_store (int      depth,
 }
 
 /*
- * Signal monitor
- */
-
-typedef enum
-{
-  ROW_INSERTED,
-  ROW_DELETED,
-  ROW_CHANGED,
-  ROW_HAS_CHILD_TOGGLED,
-  ROWS_REORDERED,
-  LAST_SIGNAL
-}
-SignalName;
-
-static const char *
-signal_name_to_string (SignalName signal)
-{
-  switch (signal)
-    {
-      case ROW_INSERTED:
-          return "row-inserted";
-
-      case ROW_DELETED:
-          return "row-deleted";
-
-      case ROW_CHANGED:
-          return "row-changed";
-
-      case ROW_HAS_CHILD_TOGGLED:
-          return "row-has-child-toggled";
-
-      case ROWS_REORDERED:
-          return "rows-reordered";
-
-      default:
-          /* Fall through */
-          break;
-    }
-
-  return "(unknown)";
-}
-
-typedef struct
-{
-  SignalName signal;
-  GtkTreePath *path;
-}
-Signal;
-
-
-static Signal *
-signal_new (SignalName signal, GtkTreePath *path)
-{
-  Signal *s;
-
-  s = g_new0 (Signal, 1);
-  s->signal = signal;
-  s->path = gtk_tree_path_copy (path);
-
-  return s;
-}
-
-static void
-signal_free (Signal *s)
-{
-  if (s->path)
-    gtk_tree_path_free (s->path);
-
-  g_free (s);
-}
-
-
-typedef struct
-{
-  GQueue *queue;
-  GtkTreeModel *client;
-  gulong signal_ids[LAST_SIGNAL];
-}
-SignalMonitor;
-
-
-static void
-signal_monitor_generic_handler (SignalMonitor *m,
-                                SignalName     signal,
-                                GtkTreeModel  *model,
-                                GtkTreePath   *path)
-{
-  Signal *s;
-
-  if (g_queue_is_empty (m->queue))
-    {
-      g_error ("Signal queue empty\n");
-      g_assert_not_reached ();
-    }
-
-  if (m->client != model)
-    {
-      g_error ("Model mismatch; expected %p, got %p\n",
-               m->client, model);
-      g_assert_not_reached ();
-    }
-
-  s = g_queue_peek_tail (m->queue);
-
-#if 0
-  /* For debugging: output signals that are coming in.  Leaks memory. */
-  g_print ("signal=%d  path=%s\n", signal, gtk_tree_path_to_string (path));
-#endif
-
-  if (s->signal != signal
-      || gtk_tree_path_compare (s->path, path) != 0)
-    {
-      gchar *path_str, *s_path_str;
-
-      s_path_str = gtk_tree_path_to_string (s->path);
-      path_str = gtk_tree_path_to_string (path);
-
-      g_error ("Signals don't match; expected signal %s path %s, got signal %s path %s\n",
-               signal_name_to_string (s->signal), s_path_str,
-               signal_name_to_string (signal), path_str);
-
-      g_free (s_path_str);
-      g_free (path_str);
-
-      g_assert_not_reached ();
-    }
-
-  s = g_queue_pop_tail (m->queue);
-
-  signal_free (s);
-}
-
-static void
-signal_monitor_row_inserted (GtkTreeModel *model,
-                             GtkTreePath  *path,
-                             GtkTreeIter  *iter,
-                             gpointer      data)
-{
-  signal_monitor_generic_handler (data, ROW_INSERTED,
-                                  model, path);
-}
-
-static void
-signal_monitor_row_deleted (GtkTreeModel *model,
-                            GtkTreePath  *path,
-                            gpointer      data)
-{
-  signal_monitor_generic_handler (data, ROW_DELETED,
-                                  model, path);
-}
-
-static void
-signal_monitor_row_changed (GtkTreeModel *model,
-                            GtkTreePath  *path,
-                            GtkTreeIter  *iter,
-                            gpointer      data)
-{
-  signal_monitor_generic_handler (data, ROW_CHANGED,
-                                  model, path);
-}
-
-static void
-signal_monitor_row_has_child_toggled (GtkTreeModel *model,
-                                      GtkTreePath  *path,
-                                      GtkTreeIter  *iter,
-                                      gpointer      data)
-{
-  signal_monitor_generic_handler (data, ROW_HAS_CHILD_TOGGLED,
-                                  model, path);
-}
-
-static void
-signal_monitor_rows_reordered (GtkTreeModel *model,
-                               GtkTreePath  *path,
-                               GtkTreeIter  *iter,
-                               gint         *new_order,
-                               gpointer      data)
-{
-  signal_monitor_generic_handler (data, ROWS_REORDERED,
-                                  model, path);
-}
-
-static SignalMonitor *
-signal_monitor_new (GtkTreeModel *client)
-{
-  SignalMonitor *m;
-
-  m = g_new0 (SignalMonitor, 1);
-  m->client = g_object_ref (client);
-  m->queue = g_queue_new ();
-
-  m->signal_ids[ROW_INSERTED] = g_signal_connect (client,
-                                                  "row-inserted",
-                                                  G_CALLBACK (signal_monitor_row_inserted),
-                                                  m);
-  m->signal_ids[ROW_DELETED] = g_signal_connect (client,
-                                                 "row-deleted",
-                                                 G_CALLBACK (signal_monitor_row_deleted),
-                                                 m);
-  m->signal_ids[ROW_CHANGED] = g_signal_connect (client,
-                                                 "row-changed",
-                                                 G_CALLBACK (signal_monitor_row_changed),
-                                                 m);
-  m->signal_ids[ROW_HAS_CHILD_TOGGLED] = g_signal_connect (client,
-                                                           "row-has-child-toggled",
-                                                           G_CALLBACK (signal_monitor_row_has_child_toggled),
-                                                           m);
-  m->signal_ids[ROWS_REORDERED] = g_signal_connect (client,
-                                                    "rows-reordered",
-                                                    G_CALLBACK (signal_monitor_rows_reordered),
-                                                    m);
-
-  return m;
-}
-
-static void
-signal_monitor_free (SignalMonitor *m)
-{
-  int i;
-
-  for (i = 0; i < LAST_SIGNAL; i++)
-    g_signal_handler_disconnect (m->client, m->signal_ids[i]);
-
-  g_object_unref (m->client);
-
-  if (m->queue)
-    g_queue_free (m->queue);
-
-  g_free (m);
-}
-
-static void
-signal_monitor_assert_is_empty (SignalMonitor *m)
-{
-  g_assert (g_queue_is_empty (m->queue));
-}
-
-static void
-signal_monitor_append_signal_path (SignalMonitor *m,
-                                   SignalName     signal,
-                                   GtkTreePath   *path)
-{
-  Signal *s;
-
-  s = signal_new (signal, path);
-  g_queue_push_head (m->queue, s);
-}
-
-static void
-signal_monitor_append_signal (SignalMonitor *m,
-                              SignalName     signal,
-                              const gchar   *path_string)
-{
-  Signal *s;
-  GtkTreePath *path;
-
-  path = gtk_tree_path_new_from_string (path_string);
-
-  s = signal_new (signal, path);
-  g_queue_push_head (m->queue, s);
-
-  gtk_tree_path_free (path);
-}
-
-/*
  * Fixture
  */
 
@@ -412,6 +155,23 @@ filter_test_setup_generic (FilterTest    *fixture,
 }
 
 static void
+filter_test_setup_expand_root (FilterTest *fixture)
+{
+  int i;
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+
+  for (i = 0; i < LEVEL_LENGTH; i++)
+    {
+      gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view),
+                                path, FALSE);
+      gtk_tree_path_next (path);
+    }
+  gtk_tree_path_free (path);
+}
+
+static void
 filter_test_setup (FilterTest    *fixture,
                    gconstpointer  test_data)
 {
@@ -433,10 +193,26 @@ filter_test_setup_unfiltered (FilterTest    *fixture,
 }
 
 static void
+filter_test_setup_unfiltered_root_expanded (FilterTest    *fixture,
+                                            gconstpointer  test_data)
+{
+  filter_test_setup_unfiltered (fixture, test_data);
+  filter_test_setup_expand_root (fixture);
+}
+
+static void
 filter_test_setup_empty_unfiltered (FilterTest    *fixture,
                                     gconstpointer  test_data)
 {
   filter_test_setup_generic (fixture, test_data, 3, TRUE, TRUE);
+}
+
+static void
+filter_test_setup_empty_unfiltered_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  test_data)
+{
+  filter_test_setup_empty_unfiltered (fixture, test_data);
+  filter_test_setup_expand_root (fixture);
 }
 
 static GtkTreePath *
@@ -461,6 +237,32 @@ strip_virtual_root (GtkTreePath *path,
     real_path = gtk_tree_path_copy (path);
 
   return real_path;
+}
+
+static int
+count_visible (FilterTest  *fixture,
+               GtkTreePath *store_path)
+{
+  int i;
+  int n_visible = 0;
+  GtkTreeIter iter;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store),
+                           &iter, store_path);
+
+  for (i = 0; i < LEVEL_LENGTH; i++)
+    {
+      gboolean visible;
+
+      gtk_tree_model_get (GTK_TREE_MODEL (fixture->store), &iter,
+                          1, &visible,
+                          -1);
+
+      if (visible)
+        n_visible++;
+    }
+
+  return n_visible;
 }
 
 static void
@@ -530,26 +332,48 @@ filter_test_append_refilter_signals_recurse (FilterTest  *fixture,
           /* This row will be inserted */
           signal_monitor_append_signal_path (fixture->monitor, ROW_CHANGED,
                                              real_path);
-          signal_monitor_append_signal_path (fixture->monitor,
-                                             ROW_HAS_CHILD_TOGGLED,
-                                             real_path);
 
-          if (depth > 1
-              && gtk_tree_model_iter_has_child (GTK_TREE_MODEL (fixture->store),
-                                                &iter))
+          if (gtk_tree_model_iter_has_child (GTK_TREE_MODEL (fixture->store),
+                                             &iter))
             {
-              GtkTreePath *store_copy;
-              GtkTreePath *filter_copy;
+              signal_monitor_append_signal_path (fixture->monitor,
+                                                 ROW_HAS_CHILD_TOGGLED,
+                                                 real_path);
 
-              store_copy = gtk_tree_path_copy (store_path);
-              filter_copy = gtk_tree_path_copy (filter_path);
-              filter_test_append_refilter_signals_recurse (fixture,
-                                                           store_copy,
-                                                           filter_copy,
-                                                           depth - 1,
-                                                           root_path);
-              gtk_tree_path_free (store_copy);
-              gtk_tree_path_free (filter_copy);
+              if (depth > 1)
+                {
+                  GtkTreePath *store_copy;
+                  GtkTreePath *filter_copy;
+
+                  store_copy = gtk_tree_path_copy (store_path);
+                  filter_copy = gtk_tree_path_copy (filter_path);
+                  filter_test_append_refilter_signals_recurse (fixture,
+                                                               store_copy,
+                                                               filter_copy,
+                                                               depth - 1,
+                                                               root_path);
+                  gtk_tree_path_free (store_copy);
+                  gtk_tree_path_free (filter_copy);
+                }
+              else if (depth == 1)
+                {
+                  GtkTreePath *tmp_path;
+
+                  /* If all child rows are invisible, then the last row to
+                   * become invisible will emit row-has-child-toggled on the
+                   * parent.
+                   */
+
+                  tmp_path = gtk_tree_path_copy (store_path);
+                  gtk_tree_path_append_index (tmp_path, 0);
+
+                  if (count_visible (fixture, tmp_path) == 0)
+                    signal_monitor_append_signal_path (fixture->monitor,
+                                                       ROW_HAS_CHILD_TOGGLED,
+                                                       real_path);
+
+                  gtk_tree_path_free (tmp_path);
+                }
             }
 
           gtk_tree_path_next (filter_path);
@@ -660,6 +484,8 @@ filter_test_teardown (FilterTest    *fixture,
 {
   signal_monitor_free (fixture->monitor);
 
+  gtk_widget_destroy (fixture->tree_view);
+
   g_object_unref (fixture->filter);
   g_object_unref (fixture->store);
 }
@@ -733,6 +559,9 @@ check_filter_model_recurse (FilterTest  *fixture,
                                           gtk_tree_path_copy (store_parent_path),
                                           tmp);
             }
+          else
+            /* Only when we do not recurse we need to free tmp */
+            gtk_tree_path_free (tmp);
 
           gtk_tree_path_next (filter_parent_path);
           filter_has_next = gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->filter), &filter_iter);
@@ -780,24 +609,26 @@ check_filter_model_with_root (FilterTest  *fixture,
 static void
 check_level_length (GtkTreeModelFilter *filter,
                     const gchar        *level,
-                    const int           length)
+                    const int           expected_length)
 {
   if (!level)
     {
-      int l = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), NULL);
-      g_return_if_fail (l == length);
+      int model_length;
+
+      model_length = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), NULL);
+      g_assert_cmpint (model_length, ==, expected_length);
     }
   else
     {
-      int l;
+      int model_length;
       gboolean retrieved_iter = FALSE;
       GtkTreeIter iter;
 
       retrieved_iter = gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (filter),
                                                             &iter, level);
       g_return_if_fail (retrieved_iter);
-      l = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), &iter);
-      g_return_if_fail (l == length);
+      model_length = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), &iter);
+      g_assert_cmpint (model_length, ==, expected_length);
     }
 }
 
@@ -908,6 +739,59 @@ static void
 filled_hide_child_levels (FilterTest    *fixture,
                           gconstpointer  user_data)
 {
+  set_path_visibility (fixture, "0:2", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "0:4", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "0:4:3", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "0:4:0", FALSE);
+  set_path_visibility (fixture, "0:4:1", FALSE);
+  set_path_visibility (fixture, "0:4:2", FALSE);
+  set_path_visibility (fixture, "0:4:4", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
+  set_path_visibility (fixture, "0:4", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, "0:3", 0);
+
+  set_path_visibility (fixture, "0:2", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, "0:2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:4", 0);
+
+  /* Once 0:4:0 got inserted, 0:4 became a parent.  Because 0:4 is
+   * not visible, not signals are emitted.
+   */
+  set_path_visibility (fixture, "0:4:2", TRUE);
+  set_path_visibility (fixture, "0:4:4", TRUE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, "0:4", 2);
+}
+
+static void
+filled_hide_child_levels_root_expanded (FilterTest    *fixture,
+                                        gconstpointer  user_data)
+{
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
   signal_monitor_append_signal (fixture->monitor, ROW_DELETED, "0:2");
   set_path_visibility (fixture, "0:2", FALSE);
   check_filter_model (fixture);
@@ -935,10 +819,6 @@ filled_hide_child_levels (FilterTest    *fixture,
 
   /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:3");
-  /* FIXME: Actually, the filter model should not be emitted the
-   * row-has-child-toggled signal here.  *However* an extraneous emission
-   * of this signal does not hurt and is allowed.
-   */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:3");
   set_path_visibility (fixture, "0:4", TRUE);
   check_filter_model (fixture);
@@ -952,13 +832,8 @@ filled_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
   check_level_length (fixture->filter, "0:4", 0);
 
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:0");
-  /* Once 0:4:0 got inserted, 0:4 became a parent */
+  /* has-child-toggled for 0:4 is required.  */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4:0");
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:1");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4:1");
-
   set_path_visibility (fixture, "0:4:2", TRUE);
   set_path_visibility (fixture, "0:4:4", TRUE);
   signal_monitor_assert_is_empty (fixture->monitor);
@@ -1101,6 +976,60 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
 
+  set_path_visibility (fixture, "2:0:2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2:0:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:0:4:3", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:0:4:0", FALSE);
+  set_path_visibility (fixture, "2:0:4:1", FALSE);
+  set_path_visibility (fixture, "2:0:4:2", FALSE);
+  set_path_visibility (fixture, "2:0:4:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
+  set_path_visibility (fixture, "2:0:4", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, "0:3", 0);
+
+  set_path_visibility (fixture, "2:0:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, "0:2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:4", 0);
+
+  /* Once 0:4:0 got inserted, 0:4 became a parent. However, 0:4 is not
+   * visible, so no signal should be emitted.
+   */
+  set_path_visibility (fixture, "2:0:4:2", TRUE);
+  set_path_visibility (fixture, "2:0:4:4", TRUE);
+  check_level_length (fixture->filter, "0:4", 2);
+  signal_monitor_assert_is_empty (fixture->monitor);
+}
+
+static void
+filled_vroot_hide_child_levels_root_expanded (FilterTest    *fixture,
+                                              gconstpointer  user_data)
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+  GtkTreePath *tmp_path;
+
+  tmp_path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), tmp_path, FALSE);
+  gtk_tree_path_free (tmp_path);
+
   signal_monitor_append_signal (fixture->monitor, ROW_DELETED, "0:2");
   set_path_visibility (fixture, "2:0:2", FALSE);
   check_filter_model_with_root (fixture, path);
@@ -1128,10 +1057,6 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
 
   /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:3");
-  /* FIXME: Actually, the filter model should not be emitted the
-   * row-has-child-toggled signal here.  *However* an extraneous emission
-   * of this signal does not hurt and is allowed.
-   */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:3");
   set_path_visibility (fixture, "2:0:4", TRUE);
   check_filter_model_with_root (fixture, path);
@@ -1145,18 +1070,13 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
   check_level_length (fixture->filter, "0:4", 0);
 
-  /* FIXME: Inconsistency!  For the non-vroot case we also receive two
-   * row-has-child-toggled signals here.
-   */
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:0");
   /* Once 0:4:0 got inserted, 0:4 became a parent */
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:1");
   set_path_visibility (fixture, "2:0:4:2", TRUE);
   set_path_visibility (fixture, "2:0:4:4", TRUE);
   check_level_length (fixture->filter, "0:4", 2);
+  signal_monitor_assert_is_empty (fixture->monitor);
 }
-
 
 static void
 empty_show_nodes (FilterTest    *fixture,
@@ -1177,9 +1097,7 @@ empty_show_nodes (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, 1);
   check_level_length (fixture->filter, "0", 0);
 
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:0");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:0");
   set_path_visibility (fixture, "3:2", TRUE);
   check_filter_model (fixture);
   check_level_length (fixture->filter, NULL, 1);
@@ -1217,8 +1135,6 @@ empty_show_multiple_nodes (FilterTest    *fixture,
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "1");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "1");
-  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "1");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "1");
 
   /* We simulate a change in visible func condition with this.  The
    * visibility state of multiple nodes changes at once, we emit row-changed
@@ -1233,6 +1149,7 @@ empty_show_multiple_nodes (FilterTest    *fixture,
   gtk_tree_path_append_index (changed_path, 2);
   gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store),
                            &iter, changed_path);
+  /* Invisible node - so no signals expected */
   gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
                               changed_path, &iter);
 
@@ -1257,9 +1174,7 @@ empty_show_multiple_nodes (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, 2);
   check_level_length (fixture->filter, "0", 0);
 
-  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:0");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:0");
   set_path_visibility (fixture, "3:2", TRUE);
   check_filter_model (fixture);
   check_level_length (fixture->filter, NULL, 2);
@@ -1451,9 +1366,28 @@ unfiltered_hide_single (FilterTest    *fixture,
   signal_monitor_assert_is_empty (fixture->monitor);
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.
    */
+  filter_test_append_refilter_signals (fixture, 1);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_hide_single_root_expanded (FilterTest    *fixture,
+                                      gconstpointer  user_data)
+
+{
+  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  set_path_visibility (fixture, "2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+
   filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
@@ -1466,6 +1400,29 @@ unfiltered_hide_single_child (FilterTest    *fixture,
                               gconstpointer  user_data)
 
 {
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.
+   */
+  filter_test_append_refilter_signals (fixture, 0);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_hide_single_child_root_expanded (FilterTest    *fixture,
+                                            gconstpointer  user_data)
+
+{
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", FALSE);
@@ -1474,9 +1431,6 @@ unfiltered_hide_single_child (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
   filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
@@ -1493,6 +1447,40 @@ unfiltered_hide_single_multi_level (FilterTest    *fixture,
   /* This row is not shown, so its signal is not propagated */
   set_path_visibility (fixture, "2:2:2", FALSE);
 
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.
+   */
+  filter_test_append_refilter_signals (fixture, 1);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2:2", TRUE);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_hide_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2:2", FALSE);
+
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", FALSE);
@@ -1502,9 +1490,6 @@ unfiltered_hide_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
   filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
@@ -1523,6 +1508,7 @@ unfiltered_hide_single_multi_level (FilterTest    *fixture,
 }
 
 
+
 static void
 unfiltered_vroot_hide_single (FilterTest    *fixture,
                               gconstpointer  user_data)
@@ -1537,11 +1523,11 @@ unfiltered_vroot_hide_single (FilterTest    *fixture,
   signal_monitor_assert_is_empty (fixture->monitor);
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.  (We add an additional level to
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.  (Though for the depth argument, we have to
    * take the virtual root into account).
    */
-  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
   filter_test_enable_filter (fixture);
 
   check_filter_model_with_root (fixture, path);
@@ -1555,6 +1541,32 @@ unfiltered_vroot_hide_single_child (FilterTest    *fixture,
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
 
+  /* Not visible, so no signal will be received. */
+  set_path_visibility (fixture, "2:2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  /* The view only shows the root level, so we only expect signals
+   * for the root level.  (Though for the depth argument, we have to
+   * take the virtual root into account).
+   */
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_vroot_hide_single_child_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2:2", FALSE);
@@ -1563,10 +1575,6 @@ unfiltered_vroot_hide_single_child (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.  (We add an additional level to take
-   * the virtual root into account).
-   */
   filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
   filter_test_enable_filter (fixture);
 
@@ -1585,6 +1593,43 @@ unfiltered_vroot_hide_single_multi_level (FilterTest    *fixture,
   /* This row is not shown, so its signal is not propagated */
   set_path_visibility (fixture, "2:2:2:2", FALSE);
 
+  /* Not shown, so no signal */
+  set_path_visibility (fixture, "2:2:2", FALSE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  /* We only expect signals for the root level.  The depth is 2
+   * because we have to take the virtual root into account.
+   */
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH - 1);
+
+  /* Not shown, so no signal */
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH - 1);
+}
+
+static void
+unfiltered_vroot_hide_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                        gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  /* This row is not shown, so its signal is not propagated */
+  set_path_visibility (fixture, "2:2:2:2", FALSE);
+
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2:2", FALSE);
@@ -1594,9 +1639,6 @@ unfiltered_vroot_hide_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
   filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
   filter_test_enable_filter (fixture);
 
@@ -1614,8 +1656,6 @@ unfiltered_vroot_hide_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH - 1);
 }
 
-
-
 static void
 unfiltered_show_single (FilterTest    *fixture,
                         gconstpointer  user_data)
@@ -1628,10 +1668,8 @@ unfiltered_show_single (FilterTest    *fixture,
   signal_monitor_assert_is_empty (fixture->monitor);
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals (fixture, 2);
+  /* We only expect signals for the root level */
+  filter_test_append_refilter_signals (fixture, 1);
   filter_test_enable_filter (fixture);
 
   check_filter_model (fixture);
@@ -1643,6 +1681,35 @@ unfiltered_show_single_child (FilterTest    *fixture,
                               gconstpointer  user_data)
 
 {
+  set_path_visibility (fixture, "2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  /* We only expect signals for the root level */
+  filter_test_append_refilter_signals (fixture, 1);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2", TRUE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+}
+
+static void
+unfiltered_show_single_child_root_expanded (FilterTest    *fixture,
+                                            gconstpointer  user_data)
+
+{
   signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", TRUE);
@@ -1651,10 +1718,7 @@ unfiltered_show_single_child (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals (fixture, 3);
+  filter_test_append_refilter_signals (fixture, 2);
   filter_test_enable_filter (fixture);
 
   check_filter_model (fixture);
@@ -1676,13 +1740,10 @@ unfiltered_show_single_multi_level (FilterTest    *fixture,
                                     gconstpointer  user_data)
 
 {
-  /* The view is not showing this row (collapsed state), so it is not
+  /* The view is not showing these rows (collapsed state), so it is not
    * referenced.  The signal should not go through.
    */
   set_path_visibility (fixture, "2:2:2", TRUE);
-
-  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2", TRUE);
 
   signal_monitor_assert_is_empty (fixture->monitor);
@@ -1690,10 +1751,8 @@ unfiltered_show_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals (fixture, 3);
+  /* We only expect signals for the first level */
+  filter_test_append_refilter_signals (fixture, 1);
   filter_test_enable_filter (fixture);
 
   check_filter_model (fixture);
@@ -1711,6 +1770,42 @@ unfiltered_show_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:0", 1);
 }
 
+static void
+unfiltered_show_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  /* The view is not showing this row (collapsed state), so it is not
+   * referenced.  The signal should not go through.
+   */
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
+  set_path_visibility (fixture, "2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  filter_test_append_refilter_signals (fixture, 2);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 1);
+}
 
 static void
 unfiltered_vroot_show_single (FilterTest    *fixture,
@@ -1729,7 +1824,7 @@ unfiltered_vroot_show_single (FilterTest    *fixture,
   /* The view only shows the root level, so the filter model only has
    * the first two levels cached.
    */
-  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
   filter_test_enable_filter (fixture);
 
   check_filter_model_with_root (fixture, path);
@@ -1743,8 +1838,6 @@ unfiltered_vroot_show_single_child (FilterTest    *fixture,
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
 
-  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
-  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
   set_path_visibility (fixture, "2:2:2", TRUE);
 
   signal_monitor_assert_is_empty (fixture->monitor);
@@ -1772,8 +1865,79 @@ unfiltered_vroot_show_single_child (FilterTest    *fixture,
 }
 
 static void
+unfiltered_vroot_show_single_child_root_expanded (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "2:2");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "2:2");
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+
+  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2:2", TRUE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+}
+
+
+static void
 unfiltered_vroot_show_single_multi_level (FilterTest    *fixture,
                                           gconstpointer  user_data)
+
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  /* The view is not showing this row (collapsed state), so it is not
+   * referenced.  The signal should not go through.
+   */
+  set_path_visibility (fixture, "2:2:2:2", TRUE);
+
+  set_path_visibility (fixture, "2:2:2", TRUE);
+
+  signal_monitor_assert_is_empty (fixture->monitor);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
+
+  /* We only expect signals for the root level */
+  filter_test_append_refilter_signals_with_vroot (fixture, 2, path);
+  filter_test_enable_filter (fixture);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 1);
+}
+
+static void
+unfiltered_vroot_show_single_multi_level_root_expanded (FilterTest    *fixture,
+                                                        gconstpointer  user_data)
 
 {
   GtkTreePath *path = (GtkTreePath *)user_data;
@@ -1792,10 +1956,7 @@ unfiltered_vroot_show_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, "2", LEVEL_LENGTH);
   check_level_length (fixture->filter, "2:2", LEVEL_LENGTH);
 
-  /* The view only shows the root level, so the filter model only has
-   * the first two levels cached.
-   */
-  filter_test_append_refilter_signals_with_vroot (fixture, 4, path);
+  filter_test_append_refilter_signals_with_vroot (fixture, 3, path);
   filter_test_enable_filter (fixture);
 
   check_filter_model_with_root (fixture, path);
@@ -1811,6 +1972,1332 @@ unfiltered_vroot_show_single_multi_level (FilterTest    *fixture,
   check_level_length (fixture->filter, NULL, 1);
   check_level_length (fixture->filter, "0", 1);
   check_level_length (fixture->filter, "0:0", 1);
+}
+
+static void
+unfiltered_rows_reordered_root_level (FilterTest    *fixture,
+                                      gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 4, 0 };
+  int order1[] = { 0, 2, 1, 3, 4 };
+  int order2[] = { 4, 0, 1, 2, 3 };
+  GtkTreeIter iter0, iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "4");
+
+  path = gtk_tree_path_new ();
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 5);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 5);
+  gtk_tree_store_move_after (fixture->store, &iter2, &iter3);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 5);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+unfiltered_rows_reordered_child_level (FilterTest    *fixture,
+                                       gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 4, 0 };
+  int order1[] = { 0, 2, 1, 3, 4 };
+  int order2[] = { 4, 0, 1, 2, 3 };
+  GtkTreeIter iter0, iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0:0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "0:2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "0:3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 5);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 5);
+  gtk_tree_store_move_after (fixture->store, &iter2, &iter3);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 5);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_root_level_first_hidden (FilterTest    *fixture,
+                                                 gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0");
+  set_path_visibility (fixture, "0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "4");
+
+  path = gtk_tree_path_new ();
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter1, &iter2);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_root_level_middle_hidden (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter0, iter1, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "2");
+  set_path_visibility (fixture, "2", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "4");
+
+  path = gtk_tree_path_new ();
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_first_hidden (FilterTest    *fixture,
+                                                  gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter1, iter2, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, TRUE);
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:0");
+  set_path_visibility (fixture, "0:0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter2, "0:2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "0:3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter1, &iter2);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_middle_hidden (FilterTest    *fixture,
+                                                   gconstpointer  user_data)
+{
+  int order0[] = { 1, 2, 3, 0 };
+  int order1[] = { 0, 2, 1, 3 };
+  int order2[] = { 3, 0, 1, 2 };
+  GtkTreeIter iter0, iter1, iter3, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+
+  /* Hide middle path */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:2");
+  set_path_visibility (fixture, "0:2", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter0, "0:0");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter3, "0:3");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 4);
+  gtk_tree_store_move_after (fixture->store, &iter0, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order1, 4);
+  gtk_tree_store_move_after (fixture->store, &iter3, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order2, 4);
+  gtk_tree_store_move_before (fixture->store, &iter0, &iter1);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_4_hidden (FilterTest    *fixture,
+                                              gconstpointer  user_data)
+{
+  int order0[] = { 0 };
+  GtkTreeIter iter1, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+
+  /* Hide last 4 paths */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:4");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:3");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:2");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:0");
+  set_path_visibility (fixture, "0:4", FALSE);
+  set_path_visibility (fixture, "0:3", FALSE);
+  set_path_visibility (fixture, "0:2", FALSE);
+  set_path_visibility (fixture, "0:0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  signal_monitor_append_signal_reordered (fixture->monitor,
+                                          ROWS_REORDERED,
+                                          path, order0, 1);
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+filtered_rows_reordered_child_level_all_hidden (FilterTest    *fixture,
+                                                gconstpointer  user_data)
+{
+  GtkTreeIter iter1, iter4;
+  GtkTreePath *path;
+
+  /* Expand row 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (fixture->tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  /* Hide last 4 paths */
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:4");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:3");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:2");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:1");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_DELETED, "0:0");
+  signal_monitor_append_signal (fixture->monitor,
+                                ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "0:4", FALSE);
+  set_path_visibility (fixture, "0:3", FALSE);
+  set_path_visibility (fixture, "0:2", FALSE);
+  set_path_visibility (fixture, "0:1", FALSE);
+  set_path_visibility (fixture, "0:0", FALSE);
+  signal_monitor_assert_is_empty (fixture->monitor);
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter1, "0:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture->store),
+                                       &iter4, "0:4");
+
+  gtk_tree_store_move_after (fixture->store, &iter1, &iter4);
+  signal_monitor_assert_is_empty (fixture->monitor);
+}
+
+static void
+insert_before (void)
+{
+  GtkTreeStore *store;
+  GtkTreeModel *filter;
+  GtkWidget *tree_view;
+  SignalMonitor *monitor;
+  GtkTreeIter iter;
+  GtkTreeIter last_iter;
+  GtkTreePath *path;
+
+  /* This tests two aspects of the row-inserted handling:
+   *   1) If the newly inserted node was already handled by building
+   *      the root level, don't handle it a second time.
+   *   2) Offsets of existing nodes must be updated when a new
+   *      node is inserted.
+   */
+
+  store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter),
+                                            1);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
+  monitor = signal_monitor_new (filter);
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 0);
+
+  /* Insert 0 */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  signal_monitor_append_signal_path (monitor, ROW_INSERTED, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_insert_with_values (store, &iter, NULL, 0,
+                                     0, "Foo", 1, TRUE, -1);
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 1);
+
+  /* Insert 1 */
+  path = gtk_tree_path_new_from_indices (1, -1);
+  signal_monitor_append_signal_path (monitor, ROW_INSERTED, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_insert_with_values (store, &iter, NULL, 1,
+                                     0, "Foo", 1, TRUE, -1);
+  last_iter = iter;
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 2);
+
+  /* Insert on 1 again -- invisible */
+  gtk_tree_store_insert_with_values (store, &iter, NULL, 1,
+                                     0, "Foo", 1, FALSE, -1);
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 2);
+
+  /* Insert on 1 again -- visible */
+  path = gtk_tree_path_new_from_indices (1, -1);
+  signal_monitor_append_signal_path (monitor, ROW_INSERTED, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_insert_with_values (store, &iter, NULL, 1,
+                                     0, "Foo", 1, TRUE, -1);
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 3);
+
+  /* Modify the iter that should be at the last position and check the
+   * signal we get.
+   */
+  path = gtk_tree_path_new_from_indices (2, -1);
+  signal_monitor_append_signal_path (monitor, ROW_CHANGED, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_set (store, &last_iter, 0, "Foo changed", -1);
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 3);
+}
+
+static void
+insert_child (void)
+{
+  GtkTreeStore *store;
+  GtkTreeModel *filter;
+  GtkWidget *tree_view;
+  SignalMonitor *monitor;
+  GtkTreeIter parent, iter;
+  GtkTreePath *path;
+
+  store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+
+  gtk_tree_store_insert_with_values (store, &parent, NULL, 0,
+                                     0, "Parent", 1, TRUE, -1);
+
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter),
+                                            1);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
+  monitor = signal_monitor_new (filter);
+
+  /* Insert child -- invisible */
+  path = gtk_tree_path_new_from_indices (0, -1);
+  signal_monitor_append_signal_path (monitor, ROW_HAS_CHILD_TOGGLED, path);
+  /* The signal is received twice, once a pass through from GtkTreeStore
+   * and one generated by GtkTreeModelFilter.  Not accurate, but cannot
+   * hurt.
+   */
+  signal_monitor_append_signal_path (monitor, ROW_HAS_CHILD_TOGGLED, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_insert_with_values (store, &iter, &parent, 1,
+                                     0, "Child", 1, FALSE, -1);
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 1);
+
+  /* Insert child */
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  gtk_tree_path_up (path); /* 0 */
+  signal_monitor_append_signal_path (monitor, ROW_HAS_CHILD_TOGGLED, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_insert_with_values (store, &iter, &parent, 0,
+                                     0, "Child", 1, TRUE, -1);
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 1);
+
+  /* Insert child -- invisible */
+  gtk_tree_store_insert_with_values (store, &iter, &parent, 1,
+                                     0, "Child", 1, FALSE, -1);
+
+  signal_monitor_assert_is_empty (monitor);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 1);
+}
+
+
+
+static void
+remove_node (void)
+{
+  GtkTreeIter iter, iter1, iter2, iter3;
+  GtkListStore *list;
+  GtkTreeModel *filter;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  list = gtk_list_store_new (1, G_TYPE_INT);
+  gtk_list_store_insert_with_values (list, &iter1, 0, 0, 1, -1);
+  gtk_list_store_insert_with_values (list, &iter, 1, 0, 2, -1);
+  gtk_list_store_insert_with_values (list, &iter, 2, 0, 3, -1);
+  gtk_list_store_insert_with_values (list, &iter, 3, 0, 4, -1);
+  gtk_list_store_insert_with_values (list, &iter, 4, 0, 5, -1);
+  gtk_list_store_insert_with_values (list, &iter, 5, 0, 6, -1);
+  gtk_list_store_insert_with_values (list, &iter2, 6, 0, 7, -1);
+  gtk_list_store_insert_with_values (list, &iter3, 7, 0, 8, -1);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (list), NULL);
+  view = gtk_tree_view_new_with_model (filter);
+
+  gtk_list_store_remove (list, &iter1);
+  gtk_list_store_remove (list, &iter3);
+  gtk_list_store_remove (list, &iter2);
+
+  gtk_widget_destroy (view);
+  g_object_unref (filter);
+  g_object_unref (list);
+}
+
+static void
+remove_node_vroot (void)
+{
+  GtkTreeIter parent, root;
+  GtkTreeIter iter, iter1, iter2, iter3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &parent, NULL, 0, 0, 0, -1);
+  gtk_tree_store_insert_with_values (tree, &root, &parent, 0, 0, 0, -1);
+
+  gtk_tree_store_insert_with_values (tree, &iter1, &root, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 3, 0, 4, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 4, 0, 5, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 5, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &iter2, &root, 6, 0, 7, -1);
+  gtk_tree_store_insert_with_values (tree, &iter3, &root, 7, 0, 8, -1);
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
+  gtk_tree_path_free (path);
+
+  view = gtk_tree_view_new_with_model (filter);
+
+  gtk_tree_store_remove (tree, &iter1);
+  gtk_tree_store_remove (tree, &iter3);
+  gtk_tree_store_remove (tree, &iter2);
+
+  gtk_widget_destroy (view);
+  g_object_unref (filter);
+  g_object_unref (tree);
+}
+
+static void
+remove_vroot_ancestor (void)
+{
+  GtkTreeIter parent, root;
+  GtkTreeIter iter, iter1, iter2, iter3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &parent, NULL, 0, 0, 0, -1);
+  gtk_tree_store_insert_with_values (tree, &root, &parent, 0, 0, 0, -1);
+
+  gtk_tree_store_insert_with_values (tree, &iter1, &root, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 3, 0, 4, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 4, 0, 5, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, &root, 5, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &iter2, &root, 6, 0, 7, -1);
+  gtk_tree_store_insert_with_values (tree, &iter3, &root, 7, 0, 8, -1);
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
+  gtk_tree_path_free (path);
+
+  view = gtk_tree_view_new_with_model (filter);
+
+  gtk_tree_store_remove (tree, &parent);
+
+  gtk_widget_destroy (view);
+  g_object_unref (filter);
+  g_object_unref (tree);
+}
+
+static void
+ref_count_single_level (void)
+{
+  GtkTreeIter iter[5];
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter[0], NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter[1], NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter[2], NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter[3], NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter[4], NULL);
+
+  assert_root_level_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &iter[0], 2);
+  assert_node_ref_count (ref_model, &iter[1], 1);
+  assert_node_ref_count (ref_model, &iter[2], 1);
+  assert_node_ref_count (ref_model, &iter[3], 1);
+  assert_node_ref_count (ref_model, &iter[4], 1);
+
+  gtk_widget_destroy (tree_view);
+
+  assert_node_ref_count (ref_model, &iter[0], 1);
+  assert_node_ref_count (ref_model, &iter[1], 0);
+  assert_node_ref_count (ref_model, &iter[2], 0);
+  assert_node_ref_count (ref_model, &iter[3], 0);
+  assert_node_ref_count (ref_model, &iter[4], 0);
+
+  g_object_unref (filter_model);
+
+  assert_node_ref_count (ref_model, &iter[0], 0);
+
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_two_levels (void)
+{
+  GtkTreeIter parent1, parent2, iter, iter_first;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_first, &parent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter, &parent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter, &parent2);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  /* This is quite confusing:
+   *  - node 0 has a ref count of 2 because it is referenced as the
+   *    first node in a level and by the tree view.
+   *  - node 1 has a ref count of 2 because it is referenced by its
+   *    child level and by the tree view.
+   */
+  assert_root_level_referenced (ref_model, 2);
+  assert_node_ref_count (ref_model, &iter_first, 1);
+  assert_node_ref_count (ref_model, &iter, 0);
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
+
+  assert_node_ref_count (ref_model, &parent1, 2);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_first, 2);
+  assert_node_ref_count (ref_model, &iter, 1);
+
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW (tree_view));
+
+  /* The child level is not destroyed because its parent is visible */
+  assert_node_ref_count (ref_model, &parent1, 2);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_first, 1);
+  assert_node_ref_count (ref_model, &iter, 0);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &parent1, 2);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_first, 1);
+  assert_node_ref_count (ref_model, &iter, 0);
+
+  gtk_widget_destroy (tree_view);
+
+  assert_root_level_referenced (ref_model, 1);
+  assert_node_ref_count (ref_model, &iter_first, 1);
+  assert_node_ref_count (ref_model, &iter, 0);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  /* Only the reference on the first node of the root level is kept. */
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_first, 0);
+  assert_node_ref_count (ref_model, &iter, 0);
+
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_three_levels (void)
+{
+  GtkTreeIter grandparent1, grandparent2, parent1, parent2;
+  GtkTreeIter iter_parent1, iter_parent2, iter_parent2_first;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkTreePath *path;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   * + grandparent2
+   *   + parent1
+   *     + iter_parent1
+   *   + parent2
+   *     + iter_parent2_first
+   *     + iter_parent2
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent1, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent1, &parent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent2, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2_first, &parent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2, &parent2);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  /* This is quite confusing:
+   *  - node 0 has a ref count of 2 because it is referenced as the
+   *    first node in a level and by the tree view.
+   *  - node 1 has a ref count of 2 because it is referenced by its
+   *    child level and by the tree view.
+   */
+  assert_root_level_referenced (ref_model, 2);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_level_unreferenced (ref_model, &parent1);
+  assert_level_unreferenced (ref_model, &parent2);
+
+  path = gtk_tree_path_new_from_indices (1, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, TRUE);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 2);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 2);
+  assert_node_ref_count (ref_model, &iter_parent2, 1);
+
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW (tree_view));
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 2);
+  assert_node_ref_count (ref_model, &parent2, 1);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 0);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_path_append_index (path, 1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 2);
+  assert_node_ref_count (ref_model, &iter_parent2, 1);
+
+  gtk_tree_view_collapse_row (GTK_TREE_VIEW (tree_view), path);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_path_up (path);
+  gtk_tree_view_collapse_row (GTK_TREE_VIEW (tree_view), path);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 2);
+  assert_node_ref_count (ref_model, &parent2, 1);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 0);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_widget_destroy (tree_view);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  /* Only the reference on the first node of the root level is kept. */
+  assert_node_ref_count (ref_model, &grandparent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 0);
+  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 0);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_delete_row (void)
+{
+  GtkTreeIter grandparent1, grandparent2, parent1, parent2;
+  GtkTreeIter iter_parent1, iter_parent2, iter_parent2_first;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkTreePath *path;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   * + grandparent2
+   *   + parent1
+   *     + iter_parent1
+   *   + parent2
+   *     + iter_parent2_first
+   *     + iter_parent2
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent1, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent1, &parent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent2, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2_first, &parent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2, &parent2);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_root_level_referenced (ref_model, 2);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_level_unreferenced (ref_model, &parent1);
+  assert_level_unreferenced (ref_model, &parent2);
+
+  path = gtk_tree_path_new_from_indices (1, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, TRUE);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 2);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 2);
+  assert_node_ref_count (ref_model, &iter_parent2, 1);
+
+  gtk_tree_store_remove (GTK_TREE_STORE (model), &iter_parent2);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 2);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 2);
+
+  gtk_tree_store_remove (GTK_TREE_STORE (model), &parent1);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent2, 3);
+  assert_level_referenced (ref_model, 2, &parent2);
+
+  gtk_tree_store_remove (GTK_TREE_STORE (model), &grandparent2);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+
+  gtk_widget_destroy (tree_view);
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &grandparent1, 1);
+
+  g_object_unref (filter_model);
+
+  assert_node_ref_count (ref_model, &grandparent1, 0);
+
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_cleanup (void)
+{
+  GtkTreeIter grandparent1, grandparent2, parent1, parent2;
+  GtkTreeIter iter_parent1, iter_parent2, iter_parent2_first;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   * + grandparent2
+   *   + parent1
+   *     + iter_parent1
+   *   + parent2
+   *     + iter_parent2_first
+   *     + iter_parent2
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent1, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent1, &parent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent2, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2_first, &parent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2, &parent2);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 2);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 2);
+  assert_node_ref_count (ref_model, &iter_parent2, 1);
+
+  gtk_widget_destroy (tree_view);
+
+  assert_node_ref_count (ref_model, &grandparent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+  assert_node_ref_count (ref_model, &parent1, 2);
+  assert_node_ref_count (ref_model, &parent2, 1);
+  assert_node_ref_count (ref_model, &iter_parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  /* Only the reference on the first node of the root level is kept. */
+  assert_node_ref_count (ref_model, &grandparent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 0);
+  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 0);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_row_ref (void)
+{
+  GtkTreeIter grandparent1, grandparent2, parent1, parent2;
+  GtkTreeIter iter_parent1, iter_parent2, iter_parent2_first;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+  GtkTreePath *path;
+  GtkTreeRowReference *row_ref;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   * + grandparent2
+   *   + parent1
+   *     + iter_parent1
+   *   + parent2
+   *     + iter_parent2
+   *     + iter_parent2
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent1, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent1, &parent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent2, &grandparent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2_first, &parent2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &iter_parent2, &parent2);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  path = gtk_tree_path_new_from_indices (1, 1, 1, -1);
+  row_ref = gtk_tree_row_reference_new (filter_model, path);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 3);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 1);
+
+  gtk_tree_row_reference_free (row_ref);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 1);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 0);
+
+  path = gtk_tree_path_new_from_indices (1, 1, 1, -1);
+  row_ref = gtk_tree_row_reference_new (filter_model, path);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 3);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 2);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+  assert_node_ref_count (ref_model, &iter_parent2_first, 1);
+  assert_node_ref_count (ref_model, &iter_parent2, 1);
+
+  gtk_tree_store_remove (GTK_TREE_STORE (model), &parent2);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+
+  gtk_tree_row_reference_free (row_ref);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &iter_parent1, 0);
+
+  gtk_widget_destroy (tree_view);
+
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  /* Only the reference on the first node of the root level is kept. */
+  assert_node_ref_count (ref_model, &grandparent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 0);
+  assert_node_ref_count (ref_model, &parent1, 0);
+
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_transfer_root_level_insert (void)
+{
+  GtkTreeIter grandparent1, grandparent2, grandparent3;
+  GtkTreeIter new_node;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   * + grandparent2
+   * + grandparent3
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent3, NULL);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+  assert_node_ref_count (ref_model, &grandparent3, 1);
+
+  gtk_tree_store_prepend (GTK_TREE_STORE (model), &new_node, NULL);
+
+  assert_node_ref_count (ref_model, &new_node, 2);
+  assert_node_ref_count (ref_model, &grandparent1, 1);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+  assert_node_ref_count (ref_model, &grandparent3, 1);
+
+  gtk_widget_destroy (tree_view);
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_transfer_root_level_reordered (void)
+{
+  GtkTreeIter grandparent1, grandparent2, grandparent3;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   * + grandparent2
+   * + grandparent3
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent3, NULL);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &grandparent1, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+  assert_node_ref_count (ref_model, &grandparent3, 1);
+
+  /* gtk_tree_store_move() will emit rows-reordered */
+  gtk_tree_store_move_after (GTK_TREE_STORE (model),
+                             &grandparent1, &grandparent3);
+
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &grandparent3, 1);
+  assert_node_ref_count (ref_model, &grandparent1, 1);
+
+  gtk_widget_destroy (tree_view);
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_transfer_child_level_insert (void)
+{
+  GtkTreeIter grandparent1;
+  GtkTreeIter parent1, parent2, parent3;
+  GtkTreeIter new_node;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   *   + parent1
+   *   + parent2
+   *   + parent3
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent1, &grandparent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent2, &grandparent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent3, &grandparent1);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &grandparent1, 3);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &parent3, 0);
+
+  gtk_tree_store_prepend (GTK_TREE_STORE (model), &new_node, &grandparent1);
+
+  assert_node_ref_count (ref_model, &grandparent1, 3);
+  assert_node_ref_count (ref_model, &new_node, 1);
+  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &parent3, 0);
+
+  gtk_widget_destroy (tree_view);
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_transfer_child_level_reordered (void)
+{
+  GtkTreeIter grandparent1;
+  GtkTreeIter parent1, parent2, parent3;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  /* + grandparent1
+   *   + parent1
+   *   + parent2
+   *   + parent3
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &grandparent1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent1, &grandparent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent2, &grandparent1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &parent3, &grandparent1);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &grandparent1, 3);
+  assert_node_ref_count (ref_model, &parent1, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+  assert_node_ref_count (ref_model, &parent3, 0);
+
+  /* gtk_tree_store_move() will emit rows-reordered */
+  gtk_tree_store_move_after (GTK_TREE_STORE (model),
+                             &parent1, &parent3);
+
+  assert_node_ref_count (ref_model, &grandparent1, 3);
+  assert_node_ref_count (ref_model, &parent2, 1);
+  assert_node_ref_count (ref_model, &parent3, 0);
+  assert_node_ref_count (ref_model, &parent1, 0);
+
+  gtk_widget_destroy (tree_view);
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
 }
 
 
@@ -1866,6 +3353,10 @@ specific_path_dependent_filter (void)
                                          NULL, 2))
         gtk_list_store_remove (list, &iter);
     }
+
+  g_object_unref (filter);
+  g_object_unref (sort);
+  g_object_unref (list);
 }
 
 
@@ -2078,6 +3569,8 @@ specific_sort_filter_remove_root (void)
   sort = gtk_tree_model_sort_new_with_model (model);
   filter = gtk_tree_model_filter_new (sort, path);
 
+  gtk_tree_path_free (path);
+
   gtk_tree_store_remove (GTK_TREE_STORE (model), &root);
 
   g_object_unref (filter);
@@ -2138,13 +3631,15 @@ specific_has_child_filter (void)
 {
   GtkTreeModel *filter;
   GtkTreeIter iter, root;
-  /* A bit nasty, apologies */
-  FilterTest fixture;
+  FilterTest fixture; /* This is not how it should be done */
+  GtkWidget *tree_view;
 
   fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture.store), NULL);
   fixture.filter = GTK_TREE_MODEL_FILTER (filter);
-  fixture.monitor = NULL;
+  fixture.monitor = signal_monitor_new (filter);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
 
   /* We will filter on parent state using a filter function.  We will
    * manually keep the boolean column in sync, so that we can use
@@ -2158,11 +3653,20 @@ specific_has_child_filter (void)
                                           specific_has_child_filter_filter_func,
                                           NULL, NULL);
 
+  /* The first node will be initially invisible: no signals */
   gtk_tree_store_append (fixture.store, &root, NULL);
   create_tree_store_set_values (fixture.store, &root, FALSE);
 
   /* check_filter_model (&fixture); */
   check_level_length (fixture.filter, NULL, 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert a child node. This will cause the parent to become visible
+   * since there is a child now.
+   */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
 
   gtk_tree_store_append (fixture.store, &iter, &root);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
@@ -2173,12 +3677,27 @@ specific_has_child_filter (void)
    */
   check_level_length (fixture.filter, NULL, 1);
   check_level_length (fixture.filter, "0", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* This should propagate row-changed */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
 
   set_path_visibility (&fixture, "0", TRUE);
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 
+  /* New root node, no child, so no signal */
   gtk_tree_store_append (fixture.store, &root, NULL);
   check_level_length (fixture.filter, NULL, 1);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* When the child comes in, this node will become visible */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
 
   gtk_tree_store_append (fixture.store, &iter, &root);
   check_level_length (fixture.filter, NULL, 2);
@@ -2188,14 +3707,19 @@ specific_has_child_filter (void)
   create_tree_store_set_values (fixture.store, &iter, TRUE);
 
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 
+  /* Add another child for 1 */
   gtk_tree_store_append (fixture.store, &iter, &root);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
   check_level_length (fixture.filter, NULL, 2);
   check_level_length (fixture.filter, "0", 0);
   check_level_length (fixture.filter, "1", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
 
   /* Now remove one of the remaining child rows */
+  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0");
+
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture.store),
                                        &iter, "0:0");
   gtk_tree_store_remove (fixture.store, &iter);
@@ -2205,6 +3729,7 @@ specific_has_child_filter (void)
 
   set_path_visibility (&fixture, "0", FALSE);
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 }
 
 
@@ -2231,17 +3756,21 @@ specific_root_has_child_filter (void)
 {
   GtkTreeModel *filter;
   GtkTreeIter iter, root;
-  /* A bit nasty, apologies */
-  FilterTest fixture;
+  FilterTest fixture; /* This is not how it should be done ... */
+  GtkWidget *tree_view;
 
-  /* This is a variation on the above test case wherein the has-child
-   * check for visibility only applies to root level nodes.
+  /* This is a variation on the above test case, specific has-child-filter,
+   * herein the has-child check for visibility only applies to root level
+   * nodes.  In this test, children are always visible because we
+   * only filter based on the "has child" criterion.
    */
 
   fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture.store), NULL);
   fixture.filter = GTK_TREE_MODEL_FILTER (filter);
-  fixture.monitor = NULL;
+  fixture.monitor = signal_monitor_new (filter);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
 
   /* We will filter on parent state using a filter function.  We will
    * manually keep the boolean column in sync, so that we can use
@@ -2255,11 +3784,156 @@ specific_root_has_child_filter (void)
                                           specific_root_has_child_filter_filter_func,
                                           NULL, NULL);
 
+  /* Add a first node, this will be invisible initially, so no signal
+   * should be emitted.
+   */
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  create_tree_store_set_values (fixture.store, &root, FALSE);
+
+  signal_monitor_assert_is_empty (fixture.monitor);
+  /* check_filter_model (&fixture); */
+  check_level_length (fixture.filter, NULL, 0);
+
+  /* Add a child node.  This will cause the parent to become visible,
+   * so we expect row-inserted signals for both.
+   */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 1);
+
+  /* Modify the content of iter, no signals because the parent is not
+   * expanded.
+   */
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Parent must now be visible.  Do the level length check first,
+   * to avoid modifying the child model triggering a row-changed to
+   * the filter model.
+   */
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 1);
+
+  /* Modify path 0 */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+
+  set_path_visibility (&fixture, "0", TRUE);
+  /* check_filter_model (&fixture); */
+
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert another node in the root level.  Initially invisible, so
+   * not expecting any signal.
+   */
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  check_level_length (fixture.filter, NULL, 1);
+
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Adding a child node which also makes parent at path 1 visible. */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "1", 1);
+
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Check if row-changed is propagated */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+
+  create_tree_store_set_values (fixture.store, &root, TRUE);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+  /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert another child under node 1 */
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "0", 1);
+  check_level_length (fixture.filter, "1", 2);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Set a child node to invisible.  This should not yield any
+   * change, because filtering is only done on whether the root
+   * node has a child, which it still has.
+   */
+  set_path_visibility (&fixture, "0:0", FALSE);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Now remove one of the remaining child rows */
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0");
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture.store),
+                                       &iter, "0:0");
+  gtk_tree_store_remove (fixture.store, &iter);
+
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 2);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Set visibility of 0 to FALSE, no-op for filter model since
+   * the child 0:0 is already gone
+   */
+  set_path_visibility (&fixture, "0", FALSE);
+  /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
+}
+
+static void
+specific_has_child_filter_on_sort_model (void)
+{
+  GtkTreeModel *filter;
+  GtkTreeModel *sort_model;
+  GtkTreeIter iter, root;
+  FilterTest fixture; /* This is not how it should be done */
+  GtkWidget *tree_view;
+
+  fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (fixture.store));
+  filter = gtk_tree_model_filter_new (sort_model, NULL);
+  fixture.filter = GTK_TREE_MODEL_FILTER (filter);
+  fixture.monitor = signal_monitor_new (filter);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
+
+  /* We will filter on parent state using a filter function.  We will
+   * manually keep the boolean column in sync, so that we can use
+   * check_filter_model() to check the consistency of the model.
+   */
+  /* FIXME: We need a check_filter_model() that is not tied to LEVEL_LENGTH
+   * to be able to check the structure here.  We keep the calls to
+   * check_filter_model() commented out until then.
+   */
+  gtk_tree_model_filter_set_visible_func (fixture.filter,
+                                          specific_has_child_filter_filter_func,
+                                          NULL, NULL);
+
+  /* The first node will be initially invisible: no signals */
   gtk_tree_store_append (fixture.store, &root, NULL);
   create_tree_store_set_values (fixture.store, &root, FALSE);
 
   /* check_filter_model (&fixture); */
   check_level_length (fixture.filter, NULL, 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert a child node. This will cause the parent to become visible
+   * since there is a child now.
+   */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
 
   gtk_tree_store_append (fixture.store, &iter, &root);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
@@ -2269,39 +3943,252 @@ specific_root_has_child_filter (void)
    * the filter model.
    */
   check_level_length (fixture.filter, NULL, 1);
-  check_level_length (fixture.filter, "0", 1);
+  check_level_length (fixture.filter, "0", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* This should propagate row-changed */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
 
   set_path_visibility (&fixture, "0", TRUE);
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 
+  /* New root node, no child, so no signal */
   gtk_tree_store_append (fixture.store, &root, NULL);
   check_level_length (fixture.filter, NULL, 1);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* When the child comes in, this node will become visible */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
 
   gtk_tree_store_append (fixture.store, &iter, &root);
   check_level_length (fixture.filter, NULL, 2);
-  check_level_length (fixture.filter, "1", 1);
+  check_level_length (fixture.filter, "1", 0);
 
   create_tree_store_set_values (fixture.store, &root, TRUE);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
 
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
 
+  /* Add another child for 1 */
   gtk_tree_store_append (fixture.store, &iter, &root);
   create_tree_store_set_values (fixture.store, &iter, TRUE);
   check_level_length (fixture.filter, NULL, 2);
-  check_level_length (fixture.filter, "0", 1);
-  check_level_length (fixture.filter, "1", 2);
+  check_level_length (fixture.filter, "0", 0);
+  check_level_length (fixture.filter, "1", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
 
   /* Now remove one of the remaining child rows */
+  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0");
+
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture.store),
                                        &iter, "0:0");
   gtk_tree_store_remove (fixture.store, &iter);
 
   check_level_length (fixture.filter, NULL, 1);
-  check_level_length (fixture.filter, "0", 2);
+  check_level_length (fixture.filter, "0", 0);
 
   set_path_visibility (&fixture, "0", FALSE);
   /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
+}
+
+static gboolean
+specific_at_least_2_children_filter_filter_func (GtkTreeModel *model,
+                                                 GtkTreeIter  *iter,
+                                                 gpointer      data)
+{
+  return gtk_tree_model_iter_n_children (model, iter) >= 2;
+}
+
+static void
+specific_at_least_2_children_filter (void)
+{
+  GtkTreeModel *filter;
+  GtkTreeIter iter, root;
+  FilterTest fixture; /* This is not how it should be done */
+  GtkWidget *tree_view;
+
+  fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture.store), NULL);
+  fixture.filter = GTK_TREE_MODEL_FILTER (filter);
+  fixture.monitor = signal_monitor_new (filter);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
+
+  gtk_tree_model_filter_set_visible_func (fixture.filter,
+                                          specific_at_least_2_children_filter_filter_func,
+                                          NULL, NULL);
+
+  /* The first node will be initially invisible: no signals */
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  create_tree_store_set_values (fixture.store, &root, FALSE);
+
+  /* check_filter_model (&fixture); */
+  check_level_length (fixture.filter, NULL, 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert a child node.  Nothing should happen.
+   */
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  check_level_length (fixture.filter, NULL, 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert a second child node.  This will cause the parent to become
+   * visible.
+   */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  /* Parent must now be visible.  Do the level length check first,
+   * to avoid modifying the child model triggering a row-changed to
+   * the filter model.
+   */
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* This should propagate row-changed */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+
+  set_path_visibility (&fixture, "0", TRUE);
+  /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* New root node, no child, so no signal */
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  check_level_length (fixture.filter, NULL, 1);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* First child, no signal, no change */
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  check_level_length (fixture.filter, NULL, 1);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* When the second child comes in, this node will become visible */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "1");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "1");
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "1", 0);
+
+  create_tree_store_set_values (fixture.store, &root, TRUE);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Add another child for 1 */
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "0", 0);
+  check_level_length (fixture.filter, "1", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Now remove one of the remaining child rows */
+  signal_monitor_append_signal (fixture.monitor, ROW_DELETED, "0");
+
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture.store),
+                                       &iter, "0:0");
+  gtk_tree_store_remove (fixture.store, &iter);
+
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 0);
+
+  set_path_visibility (&fixture, "0", FALSE);
+  /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
+}
+
+static void
+specific_at_least_2_children_filter_on_sort_model (void)
+{
+  GtkTreeModel *filter;
+  GtkTreeModel *sort_model;
+  GtkTreeIter iter, root;
+  FilterTest fixture; /* This is not how it should be done */
+  GtkWidget *tree_view;
+
+  fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (fixture.store));
+  filter = gtk_tree_model_filter_new (sort_model, NULL);
+  fixture.filter = GTK_TREE_MODEL_FILTER (filter);
+  fixture.monitor = signal_monitor_new (filter);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
+
+  gtk_tree_model_filter_set_visible_func (fixture.filter,
+                                          specific_at_least_2_children_filter_filter_func,
+                                          NULL, NULL);
+
+  /* The first node will be initially invisible: no signals */
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  create_tree_store_set_values (fixture.store, &root, FALSE);
+
+  /* check_filter_model (&fixture); */
+  check_level_length (fixture.filter, NULL, 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* Insert a child node.  Nothing should happen.
+   */
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  check_level_length (fixture.filter, NULL, 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+    {
+      GtkTreePath *path = gtk_tree_path_new_from_indices (0, 0, -1);
+      GtkTreeRowReference *ref;
+
+      ref = gtk_tree_row_reference_new (sort_model, path);
+      gtk_tree_path_free (path);
+    }
+
+  /* Insert a second child node.  This will cause the parent to become
+   * visible.
+   */
+  signal_monitor_append_signal (fixture.monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  /* Parent must now be visible.  Do the level length check first,
+   * to avoid modifying the child model triggering a row-changed to
+   * the filter model.
+   */
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 0);
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* This should propagate row-changed */
+  signal_monitor_append_signal (fixture.monitor, ROW_CHANGED, "0");
+  signal_monitor_append_signal (fixture.monitor, ROW_HAS_CHILD_TOGGLED, "0");
+
+  set_path_visibility (&fixture, "0", TRUE);
+  /* check_filter_model (&fixture); */
+  signal_monitor_assert_is_empty (fixture.monitor);
+
+  /* New root node, no child, so no signal */
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  check_level_length (fixture.filter, NULL, 1);
+  signal_monitor_assert_is_empty (fixture.monitor);
 }
 
 
@@ -2365,43 +4252,150 @@ specific_list_store_clear (void)
 }
 
 static void
-specific_bug_300089 (void)
+specific_sort_ref_leaf_and_remove_ancestor (void)
 {
-  /* Test case for GNOME Bugzilla bug 300089.  Written by
-   * Matthias Clasen.
-   */
-  GtkTreeModel *sort_model, *child_model;
+  GtkTreeIter iter, child, child2, child3;
+  GtkTreeStore *tree;
+  GtkTreeModel *sort;
   GtkTreePath *path;
-  GtkTreeIter iter, iter2, sort_iter;
+  GtkTreeRowReference *rowref;
+  GtkWidget *view G_GNUC_UNUSED;
 
-  child_model = GTK_TREE_MODEL (gtk_tree_store_new (1, G_TYPE_STRING));
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 3, 0, 4, -1);
 
-  gtk_tree_store_append (GTK_TREE_STORE (child_model), &iter, NULL);
-  gtk_tree_store_set (GTK_TREE_STORE (child_model), &iter, 0, "A", -1);
-  gtk_tree_store_append (GTK_TREE_STORE (child_model), &iter, NULL);
-  gtk_tree_store_set (GTK_TREE_STORE (child_model), &iter, 0, "B", -1);
+  gtk_tree_store_insert_with_values (tree, &child, &iter, 0, 0, 50, -1);
+  gtk_tree_store_insert_with_values (tree, &child2, &child, 0, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &child3, &child2, 0, 0, 7, -1);
 
-  gtk_tree_store_append (GTK_TREE_STORE (child_model), &iter2, &iter);
-  gtk_tree_store_set (GTK_TREE_STORE (child_model), &iter2, 0, "D", -1);
-  gtk_tree_store_append (GTK_TREE_STORE (child_model), &iter2, &iter);
-  gtk_tree_store_set (GTK_TREE_STORE (child_model), &iter2, 0, "E", -1);
+  sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (tree));
+  view = gtk_tree_view_new_with_model (sort);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
 
-  gtk_tree_store_append (GTK_TREE_STORE (child_model), &iter, NULL);
-  gtk_tree_store_set (GTK_TREE_STORE (child_model), &iter, 0, "C", -1);
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
 
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
 
-  sort_model = GTK_TREE_MODEL (gtk_tree_model_sort_new_with_model (child_model));
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model),
-                                        0, GTK_SORT_ASCENDING);
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
 
-  path = gtk_tree_path_new_from_indices (1, 1, -1);
+  path = gtk_tree_path_new_from_indices (3, -1);
+  rowref = gtk_tree_row_reference_new (sort, path);
+  gtk_tree_path_free (path);
 
-  /* make sure a level is constructed */ 
-  gtk_tree_model_get_iter (sort_model, &sort_iter, path);
+  /* Deleting a parent */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree), &iter, path);
+  gtk_tree_store_remove (tree, &iter);
+  gtk_tree_path_free (path);
 
-  /* change the "E" row in a way that causes it to change position */ 
-  gtk_tree_model_get_iter (child_model, &iter, path);
-  gtk_tree_store_set (GTK_TREE_STORE (child_model), &iter, 0, "A", -1);
+  gtk_tree_row_reference_free (rowref);
+}
+
+static void
+specific_ref_leaf_and_remove_ancestor (void)
+{
+  GtkTreeIter iter, child, child2, child3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkTreeRowReference *rowref;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 3, 0, 4, -1);
+
+  gtk_tree_store_insert_with_values (tree, &child, &iter, 0, 0, 50, -1);
+  gtk_tree_store_insert_with_values (tree, &child2, &child, 0, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &child3, &child2, 0, 0, 7, -1);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), NULL);
+  view = gtk_tree_view_new_with_model (filter);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, 0, 0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (3, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  /* Deleting a parent */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree), &iter, path);
+  gtk_tree_store_remove (tree, &iter);
+  gtk_tree_path_free (path);
+
+  gtk_tree_row_reference_free (rowref);
+}
+
+static void
+specific_virtual_ref_leaf_and_remove_ancestor (void)
+{
+  GtkTreeIter iter, child, child2, child3;
+  GtkTreeStore *tree;
+  GtkTreeModel *filter;
+  GtkTreePath *path;
+  GtkTreeRowReference *rowref;
+  GtkWidget *view G_GNUC_UNUSED;
+
+  tree = gtk_tree_store_new (1, G_TYPE_INT);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 0, 0, 1, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 1, 0, 2, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 2, 0, 3, -1);
+  gtk_tree_store_insert_with_values (tree, &iter, NULL, 3, 0, 4, -1);
+
+  gtk_tree_store_insert_with_values (tree, &child, &iter, 0, 0, 50, -1);
+  gtk_tree_store_insert_with_values (tree, &child2, &child, 0, 0, 6, -1);
+  gtk_tree_store_insert_with_values (tree, &child3, &child2, 0, 0, 7, -1);
+
+  /* Set a virtual root of 3:0 */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (tree), path);
+  gtk_tree_path_free (path);
+
+  view = gtk_tree_view_new_with_model (filter);
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (0, 0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  rowref = gtk_tree_row_reference_new (filter, path);
+  gtk_tree_path_free (path);
+
+  /* Deleting the virtual root */
+  path = gtk_tree_path_new_from_indices (3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (tree), &iter, path);
+  gtk_tree_store_remove (tree, &iter);
+  gtk_tree_path_free (path);
+
+  gtk_tree_row_reference_free (rowref);
 }
 
 
@@ -2432,6 +4426,8 @@ specific_bug_301558 (void)
   GtkWidget *view G_GNUC_UNUSED;
   int i;
   gboolean add;
+
+  g_test_bug ("301558");
 
   tree = gtk_tree_store_new (2, G_TYPE_INT, G_TYPE_BOOLEAN);
   gtk_tree_store_append (tree, &iter, NULL);
@@ -2505,6 +4501,9 @@ specific_bug_311955 (void)
   GtkWidget *tree_view;
   int i;
   int n;
+  GtkTreePath *path;
+
+  g_test_bug ("311955");
 
   store = gtk_tree_store_new (1, G_TYPE_INT);
 
@@ -2533,6 +4532,9 @@ specific_bug_311955 (void)
   while (gtk_events_pending ())
     gtk_main_iteration ();
 
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 2);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 1);
+
   /* Fill model */
   for (i = 0; i < 4; i++)
     {
@@ -2553,6 +4555,9 @@ specific_bug_311955 (void)
   while (gtk_events_pending ())
     gtk_main_iteration ();
 
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 3);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0:2", 1);
+
   /* Remove bottommost child from the tree. */
   gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &root);
   n = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), &root);
@@ -2564,6 +4569,86 @@ specific_bug_311955 (void)
     }
   else
     g_assert_not_reached ();
+
+  path = gtk_tree_path_new_from_indices (0, 2, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 3);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0:2", 0);
+}
+
+static void
+specific_bug_311955_clean (void)
+{
+  /* Cleaned up version of the test case for GNOME Bugzilla bug 311955,
+   * which is easier to understand.
+   */
+  GtkTreeIter iter, child, grandchild;
+  GtkTreeStore *store;
+  GtkTreeModel *sort;
+  GtkTreeModel *filter;
+
+  GtkWidget *tree_view;
+  GtkTreePath *path;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_set (store, &iter, 0, 1, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 1, -1);
+
+  sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+  filter = gtk_tree_model_filter_new (sort, NULL);
+
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                          specific_bug_311955_filter_func,
+                                          NULL, NULL);
+
+  tree_view = gtk_tree_view_new_with_model (filter);
+  g_object_unref (store);
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
+
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 1);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 1);
+
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 0, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 1, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 0, 1, -1);
+
+  gtk_tree_store_append (store, &grandchild, &child);
+  gtk_tree_store_set (store, &grandchild, 0, 1, -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  /* Don't set a value: assume 0 */
+
+  /* Remove leaf node, check trigger row-has-child-toggled */
+  path = gtk_tree_path_new_from_indices (0, 3, 0, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path);
+  gtk_tree_path_free (path);
+  gtk_tree_store_remove (store, &iter);
+
+  path = gtk_tree_path_new_from_indices (0, 2, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 3);
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "0:2", 0);
+
+  gtk_widget_destroy (tree_view);
 }
 
 static void
@@ -2586,6 +4671,8 @@ specific_bug_346800 (void)
   columns[1] = G_TYPE_BOOLEAN;
   store = gtk_tree_store_newv (2, columns);
   model = GTK_TREE_MODEL (store);
+
+  g_test_bug ("346800");
 
   filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (model, NULL));
   gtk_tree_model_filter_set_visible_column (filter, 1);
@@ -2622,45 +4709,6 @@ specific_bug_346800 (void)
     }
 }
 
-
-static void
-specific_bug_364946 (void)
-{
-  /* This is a test case for GNOME Bugzilla bug 364946.  It was written
-   * by Andreas Koehler.
-   */
-  GtkTreeStore *store;
-  GtkTreeIter a, aa, aaa, aab, iter;
-  GtkTreeModel *s_model;
-
-  store = gtk_tree_store_new (1, G_TYPE_STRING);
-
-  gtk_tree_store_append (store, &a, NULL);
-  gtk_tree_store_set (store, &a, 0, "0", -1);
-
-  gtk_tree_store_append (store, &aa, &a);
-  gtk_tree_store_set (store, &aa, 0, "0:0", -1);
-
-  gtk_tree_store_append (store, &aaa, &aa);
-  gtk_tree_store_set (store, &aaa, 0, "0:0:0", -1);
-
-  gtk_tree_store_append (store, &aab, &aa);
-  gtk_tree_store_set (store, &aab, 0, "0:0:1", -1);
-
-  s_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (s_model), 0,
-                                        GTK_SORT_ASCENDING);
-
-  gtk_tree_model_get_iter_from_string (s_model, &iter, "0:0:0");
-
-  gtk_tree_store_set (store, &aaa, 0, "0:0:0", -1);
-  gtk_tree_store_remove (store, &aaa);
-  gtk_tree_store_remove (store, &aab);
-
-  gtk_tree_model_sort_clear_cache (GTK_TREE_MODEL_SORT (s_model));
-}
-
-
 static gboolean
 specific_bug_464173_visible_func (GtkTreeModel *model,
                                   GtkTreeIter  *iter,
@@ -2682,6 +4730,8 @@ specific_bug_464173 (void)
   GtkTreeIter iter1, iter2;
   GtkWidget *view G_GNUC_UNUSED;
   gboolean visible = TRUE;
+
+  g_test_bug ("464173");
 
   model = gtk_tree_store_new (1, G_TYPE_STRING);
   gtk_tree_store_append (model, &iter1, NULL);
@@ -2724,6 +4774,8 @@ specific_bug_540201 (void)
   GtkTreeModel *filter;
 
   GtkWidget *tree_view G_GNUC_UNUSED;
+
+  g_test_bug ("540201");
 
   store = gtk_tree_store_new (1, G_TYPE_INT);
 
@@ -2776,6 +4828,8 @@ specific_bug_549287 (void)
   GtkTreeIter iter;
   GtkTreeIter *swap, *parent, *child;
 
+  g_test_bug ("529287");
+
   store = gtk_tree_store_new (1, G_TYPE_STRING);
   filtered = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filtered),
@@ -2821,180 +4875,582 @@ specific_bug_549287 (void)
     }
 }
 
+static gboolean
+specific_bug_621076_visible_func (GtkTreeModel *model,
+                                  GtkTreeIter  *iter,
+                                  gpointer      data)
+{
+  gboolean visible = FALSE;
+  gchar *str = NULL;
+
+  gtk_tree_model_get (model, iter, 0, &str, -1);
+  if (str != NULL && g_str_has_prefix (str, "visible"))
+    {
+      visible = TRUE;
+    }
+  else
+    {
+      GtkTreeIter child_iter;
+      gboolean valid;
+
+      /* Recursively check if we have a visible child */
+      for (valid = gtk_tree_model_iter_children (model, &child_iter, iter);
+           valid; valid = gtk_tree_model_iter_next (model, &child_iter))
+        {
+          if (specific_bug_621076_visible_func (model, &child_iter, data))
+            {
+              visible = TRUE;
+              break;
+            }
+        }
+    }
+
+  if (str)
+    g_free (str);
+
+  return visible;
+}
+
+static void
+specific_bug_621076 (void)
+{
+  /* Test case for GNOME Bugzilla bug 621076, provided by Xavier Claessens */
+
+  /* This test case differs from has-child-filter and root-has-child-filter
+   * in that the visible function both filters on content and model
+   * structure.  Also, it is recursive.
+   */
+
+  GtkTreeStore *store;
+  GtkTreeModel *filter;
+  GtkWidget *view;
+  GtkTreeIter group_iter;
+  GtkTreeIter item_iter;
+  SignalMonitor *monitor;
+
+  g_test_bug ("621076");
+
+  store = gtk_tree_store_new (1, G_TYPE_STRING);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                          specific_bug_621076_visible_func,
+                                          NULL, NULL);
+
+  view = gtk_tree_view_new_with_model (filter);
+  g_object_ref_sink (view);
+
+  monitor = signal_monitor_new (filter);
+
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "0");
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "visible-group-0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* visible-group-0 is not expanded, so ROW_INSERTED should not be emitted
+   * for its children. However, ROW_HAS_CHILD_TOGGLED should be emitted on
+   * visible-group-0 to tell the view that row can be expanded. */
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "visible-0:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "1");
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "visible-group-1",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* We are adding an hidden item inside visible-group-1, so
+   * ROW_HAS_CHILD_TOGGLED should not be emitted.  It is emitted though,
+   * because the signal originating at TreeStore will be propagated,
+   * as well a generated signal because the state of the parent *could*
+   * change by a change in the model.
+   */
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "group-1:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* This group is invisible and its parent too. Nothing should be emitted */
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "group-1:0:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Adding a visible item in this group hierarchy will make all nodes
+   * in this path visible.  The first level should simply tell the view
+   * that it now has a child, and the view will load the tree if needed
+   * (depends on the expanded state).
+   */
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "visible-1:0:0:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  check_level_length (GTK_TREE_MODEL_FILTER (filter), "1", 1);
+
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "group-2",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Parent is invisible, and adding this invisible item won't change that,
+   * so no signal should be emitted. */
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "invisible-2:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* This makes group-2 visible, so it gets inserted and tells it has
+   * children.
+   */
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "2");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "visible-2:1",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* group-2 is already visible, so this time it is a normal insertion */
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "visible-2:2",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+
+  gtk_tree_store_insert_with_values (store, &item_iter, NULL, -1,
+                                     0, "group-3",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Parent is invisible, and adding this invisible item won't change that,
+   * so no signal should be emitted. */
+  group_iter = item_iter;
+  gtk_tree_store_insert_with_values (store, NULL, &group_iter, -1,
+                                     0, "invisible-3:0",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  gtk_tree_store_insert_with_values (store, &item_iter, &group_iter, -1,
+                                     0, "invisible-3:1",
+                                     -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* This will make group 3 visible. */
+  signal_monitor_append_signal (monitor, ROW_INSERTED, "3");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "3");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "3");
+  gtk_tree_store_set (store, &item_iter, 0, "visible-3:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Make sure all groups are expanded, so the filter has the tree cached */
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+
+  /* Should only yield a row-changed */
+  signal_monitor_append_signal (monitor, ROW_CHANGED, "3:0");
+  gtk_tree_store_set (store, &item_iter, 0, "visible-3:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Now remove/hide some items. If a group loses its last item, the group
+   * should be deleted instead of the item.
+   */
+
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2:1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter, "2:2");
+  gtk_tree_store_remove (store, &item_iter);
+  signal_monitor_assert_is_empty (monitor);
+
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter, "2:1");
+  gtk_tree_store_set (store, &item_iter, 0, "invisible-2:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+  signal_monitor_append_signal (monitor, ROW_DELETED, "1:0:0:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1:0:0");
+  signal_monitor_append_signal (monitor, ROW_DELETED, "1:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter, "1:0:0:0");
+  gtk_tree_store_remove (store, &item_iter);
+  signal_monitor_assert_is_empty (monitor);
+
+  /* Hide a group using row-changed instead of row-deleted */
+  /* Caution: group 2 is gone, so offsets of the signals have moved. */
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2:0");
+  signal_monitor_append_signal (monitor, ROW_HAS_CHILD_TOGGLED, "2");
+  signal_monitor_append_signal (monitor, ROW_DELETED, "2");
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (store), &item_iter,
+                                       "3:1");
+  gtk_tree_store_set (store, &item_iter, 0, "invisible-3:1", -1);
+  signal_monitor_assert_is_empty (monitor);
+
+#if 0
+  {
+    GtkWidget *window;
+    GtkTreeViewColumn *col;
+
+    gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
+
+    col = gtk_tree_view_column_new_with_attributes ("foo",
+        gtk_cell_renderer_text_new (),
+        "text", 0, NULL);
+    gtk_tree_view_append_column (GTK_TREE_VIEW (view), col);
+
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    g_signal_connect (window, "delete-event",
+        G_CALLBACK (gtk_widget_destroy), NULL);
+    g_signal_connect (window, "destroy",
+        G_CALLBACK (gtk_main_quit), NULL);
+
+    gtk_container_add (GTK_CONTAINER (window), view);
+
+    gtk_widget_show (view);
+    gtk_widget_show (window);
+
+    gtk_main ();
+  }
+#endif
+
+  /* Cleanup */
+  signal_monitor_free (monitor);
+  g_object_unref (view);
+  g_object_unref (store);
+  g_object_unref (filter);
+}
+
 /* main */
 
-int
-main (int    argc,
-      char **argv)
+void
+register_filter_model_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
-  g_test_add ("/FilterModel/self/verify-test-suite",
+  g_test_add ("/TreeModelFilter/self/verify-test-suite",
               FilterTest, NULL,
               filter_test_setup,
               verify_test_suite,
               filter_test_teardown);
 
-  g_test_add ("/FilterModel/self/verify-test-suite/vroot/depth-1",
+  g_test_add ("/TreeModelFilter/self/verify-test-suite/vroot/depth-1",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup,
               verify_test_suite_vroot,
               filter_test_teardown);
-  g_test_add ("/FilterModel/self/verify-test-suite/vroot/depth-2",
+  g_test_add ("/TreeModelFilter/self/verify-test-suite/vroot/depth-2",
               FilterTest, gtk_tree_path_new_from_indices (2, 3, -1),
               filter_test_setup,
               verify_test_suite_vroot,
               filter_test_teardown);
 
 
-  g_test_add ("/FilterModel/filled/hide-root-level",
+  g_test_add ("/TreeModelFilter/filled/hide-root-level",
               FilterTest, NULL,
               filter_test_setup,
               filled_hide_root_level,
               filter_test_teardown);
-  g_test_add ("/FilterModel/filled/hide-child-levels",
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels",
               FilterTest, NULL,
               filter_test_setup,
               filled_hide_child_levels,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup,
+              filled_hide_child_levels_root_expanded,
+              filter_test_teardown);
 
-  g_test_add ("/FilterModel/filled/hide-root-level/vroot",
+  g_test_add ("/TreeModelFilter/filled/hide-root-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup,
               filled_vroot_hide_root_level,
               filter_test_teardown);
-  g_test_add ("/FilterModel/filled/hide-child-levels/vroot",
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup,
               filled_vroot_hide_child_levels,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filled/hide-child-levels/vroot-root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup,
+              filled_vroot_hide_child_levels_root_expanded,
+              filter_test_teardown);
 
 
-  g_test_add ("/FilterModel/empty/show-nodes",
+  g_test_add ("/TreeModelFilter/empty/show-nodes",
               FilterTest, NULL,
               filter_test_setup_empty,
               empty_show_nodes,
               filter_test_teardown);
-  g_test_add ("/FilterModel/empty/show-multiple-nodes",
+  g_test_add ("/TreeModelFilter/empty/show-multiple-nodes",
               FilterTest, NULL,
               filter_test_setup_empty,
               empty_show_multiple_nodes,
               filter_test_teardown);
 
-  g_test_add ("/FilterModel/empty/show-nodes/vroot",
+  g_test_add ("/TreeModelFilter/empty/show-nodes/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty,
               empty_vroot_show_nodes,
               filter_test_teardown);
-  g_test_add ("/FilterModel/empty/show-multiple-nodes/vroot",
+  g_test_add ("/TreeModelFilter/empty/show-multiple-nodes/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty,
               empty_vroot_show_multiple_nodes,
               filter_test_teardown);
 
 
-  g_test_add ("/FilterModel/unfiltered/hide-single",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-child",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_hide_single_root_expanded,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-multi-level",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_hide_single_child_root_expanded,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level",
               FilterTest, NULL,
               filter_test_setup_unfiltered,
               unfiltered_hide_single_multi_level,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_hide_single_multi_level_root_expanded,
+              filter_test_teardown);
 
-  g_test_add ("/FilterModel/unfiltered/hide-single/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-child/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/hide-single-multi-level/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-child/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_vroot_hide_single_child_root_expanded,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_unfiltered,
               unfiltered_vroot_hide_single_multi_level,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/hide-single-multi-level/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_unfiltered_root_expanded,
+              unfiltered_vroot_hide_single_multi_level_root_expanded,
+              filter_test_teardown);
 
 
 
-  g_test_add ("/FilterModel/unfiltered/show-single",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single",
               FilterTest, NULL,
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-child",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child",
               FilterTest, NULL,
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-multi-level",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_show_single_child_root_expanded,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level",
               FilterTest, NULL,
               filter_test_setup_empty_unfiltered,
               unfiltered_show_single_multi_level,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level/root-expanded",
+              FilterTest, NULL,
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_show_single_multi_level_root_expanded,
+              filter_test_teardown);
 
-  g_test_add ("/FilterModel/unfiltered/show-single/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-child/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single_child,
               filter_test_teardown);
-  g_test_add ("/FilterModel/unfiltered/show-single-multi-level/vroot",
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-child/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_vroot_show_single_child_root_expanded,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty_unfiltered,
               unfiltered_vroot_show_single_multi_level,
               filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/show-single-multi-level/vroot/root-expanded",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_empty_unfiltered_root_expanded,
+              unfiltered_vroot_show_single_multi_level_root_expanded,
+              filter_test_teardown);
 
 
-  g_test_add_func ("/FilterModel/specific/path-dependent-filter",
+  g_test_add ("/TreeModelFilter/unfiltered/rows-reordered/root-level",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered,
+              unfiltered_rows_reordered_root_level,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/unfiltered/rows-reordered/child-level",
+              FilterTest, NULL,
+              filter_test_setup_unfiltered,
+              unfiltered_rows_reordered_child_level,
+              filter_test_teardown);
+
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/root-level/first-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_root_level_first_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/root-level/middle-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_root_level_middle_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/first-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_first_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/middle-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_middle_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/4-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_4_hidden,
+              filter_test_teardown);
+  g_test_add ("/TreeModelFilter/filtered/rows-reordered/child-level/all-hidden",
+              FilterTest, NULL,
+              filter_test_setup,
+              filtered_rows_reordered_child_level_all_hidden,
+              filter_test_teardown);
+
+  /* Inserts in child models after creation of filter model */
+  g_test_add_func ("/TreeModelFilter/insert/before",
+                   insert_before);
+  g_test_add_func ("/TreeModelFilter/insert/child",
+                   insert_child);
+
+  /* Removals from child model after creating of filter model */
+  g_test_add_func ("/TreeModelFilter/remove/node",
+                   remove_node);
+  g_test_add_func ("/TreeModelFilter/remove/node-vroot",
+                   remove_node_vroot);
+  g_test_add_func ("/TreeModelFilter/remove/vroot-ancestor",
+                   remove_vroot_ancestor);
+
+  /* Reference counting */
+  g_test_add_func ("/TreeModelFilter/ref-count/single-level",
+                   ref_count_single_level);
+  g_test_add_func ("/TreeModelFilter/ref-count/two-levels",
+                   ref_count_two_levels);
+  g_test_add_func ("/TreeModelFilter/ref-count/three-levels",
+                   ref_count_three_levels);
+  g_test_add_func ("/TreeModelFilter/ref-count/delete-row",
+                   ref_count_delete_row);
+  g_test_add_func ("/TreeModelFilter/ref-count/cleanup",
+                   ref_count_cleanup);
+  g_test_add_func ("/TreeModelFilter/ref-count/row-ref",
+                   ref_count_row_ref);
+
+  /* Reference counting, transfer of first reference on
+   * first node in level.  This is a GtkTreeModelFilter-specific
+   * feature.
+   */
+  g_test_add_func ("/TreeModelFilter/ref-count/transfer/root-level/insert",
+                   ref_count_transfer_root_level_insert);
+  g_test_add_func ("/TreeModelFilter/ref-count/transfer/root-level/reordered",
+                   ref_count_transfer_root_level_reordered);
+  g_test_add_func ("/TreeModelFilter/ref-count/transfer/child-level/insert",
+                   ref_count_transfer_child_level_insert);
+  g_test_add_func ("/TreeModelFilter/ref-count/transfer/child-level/reordered",
+                   ref_count_transfer_child_level_reordered);
+
+  g_test_add_func ("/TreeModelFilter/specific/path-dependent-filter",
                    specific_path_dependent_filter);
-  g_test_add_func ("/FilterModel/specific/append-after-collapse",
+  g_test_add_func ("/TreeModelFilter/specific/append-after-collapse",
                    specific_append_after_collapse);
-  g_test_add_func ("/FilterModel/specific/sort-filter-remove-node",
+  g_test_add_func ("/TreeModelFilter/specific/sort-filter-remove-node",
                    specific_sort_filter_remove_node);
-  g_test_add_func ("/FilterModel/specific/sort-filter-remove-root",
+  g_test_add_func ("/TreeModelFilter/specific/sort-filter-remove-root",
                    specific_sort_filter_remove_root);
-  g_test_add_func ("/FilterModel/specific/root-mixed-visibility",
+  g_test_add_func ("/TreeModelFilter/specific/root-mixed-visibility",
                    specific_root_mixed_visibility);
-  g_test_add_func ("/FilterModel/specific/has-child-filter",
+  g_test_add_func ("/TreeModelFilter/specific/has-child-filter",
                    specific_has_child_filter);
-  g_test_add_func ("/FilterModel/specific/root-has-child-filter",
+  g_test_add_func ("/TreeModelFilter/specific/has-child-filter-on-sort-model",
+                   specific_has_child_filter_on_sort_model);
+  g_test_add_func ("/TreeModelFilter/specific/at-least-2-children-filter",
+                   specific_at_least_2_children_filter);
+  g_test_add_func ("/TreeModelFilter/specific/at-least-2-children-filter-on-sort-model",
+                   specific_at_least_2_children_filter_on_sort_model);
+  g_test_add_func ("/TreeModelFilter/specific/root-has-child-filter",
                    specific_root_has_child_filter);
-  g_test_add_func ("/FilterModel/specific/filter-add-child",
+  g_test_add_func ("/TreeModelFilter/specific/filter-add-child",
                    specific_filter_add_child);
-  g_test_add_func ("/FilterModel/specific/list-store-clear",
+  g_test_add_func ("/TreeModelFilter/specific/list-store-clear",
                    specific_list_store_clear);
+  g_test_add_func ("/TreeModelFilter/specific/sort-ref-leaf-and-remove-ancestor",
+                   specific_sort_ref_leaf_and_remove_ancestor);
+  g_test_add_func ("/TreeModelFilter/specific/ref-leaf-and-remove-ancestor",
+                   specific_ref_leaf_and_remove_ancestor);
+  g_test_add_func ("/TreeModelFilter/specific/virtual-ref-leaf-and-remove-ancestor",
+                   specific_virtual_ref_leaf_and_remove_ancestor);
 
-  g_test_add_func ("/FilterModel/specific/bug-300089",
-                   specific_bug_300089);
-  g_test_add_func ("/FilterModel/specific/bug-301558",
+  g_test_add_func ("/TreeModelFilter/specific/bug-301558",
                    specific_bug_301558);
-  g_test_add_func ("/FilterModel/specific/bug-311955",
+  g_test_add_func ("/TreeModelFilter/specific/bug-311955",
                    specific_bug_311955);
-  g_test_add_func ("/FilterModel/specific/bug-346800",
+  g_test_add_func ("/TreeModelFilter/specific/bug-311955-clean",
+                   specific_bug_311955_clean);
+  g_test_add_func ("/TreeModelFilter/specific/bug-346800",
                    specific_bug_346800);
-  g_test_add_func ("/FilterModel/specific/bug-364946",
-                   specific_bug_364946);
-  g_test_add_func ("/FilterModel/specific/bug-464173",
+  g_test_add_func ("/TreeModelFilter/specific/bug-464173",
                    specific_bug_464173);
-  g_test_add_func ("/FilterModel/specific/bug-540201",
+  g_test_add_func ("/TreeModelFilter/specific/bug-540201",
                    specific_bug_540201);
-  g_test_add_func ("/FilterModel/specific/bug-549287",
+  g_test_add_func ("/TreeModelFilter/specific/bug-549287",
                    specific_bug_549287);
-
-  return g_test_run ();
+  g_test_add_func ("/TreeModelFilter/specific/bug-621076",
+                   specific_bug_621076);
 }

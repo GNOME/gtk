@@ -37,7 +37,7 @@
 #include "gtkbbox.h"
 #include "gtkdialog.h"
 #include "gtkgrid.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtklinkbutton.h"
@@ -47,7 +47,6 @@
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtktextview.h"
-#include "gtkvbox.h"
 #include "gtkiconfactory.h"
 #include "gtkshow.h"
 #include "gtkmainprivate.h"
@@ -2240,7 +2239,8 @@ add_credits_section (GtkAboutDialog *about,
   label = gtk_label_new (markup);
   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
   g_free (markup);
-  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_grid_attach (grid, label, 0, *row, 1, 1);
 
   for (p = people; *p; p++)
@@ -2329,7 +2329,8 @@ add_credits_section (GtkAboutDialog *about,
       label = gtk_label_new (str->str);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       g_string_free (str, TRUE);
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_grid_attach (grid, label, 1, *row, 1, 1);
       (*row)++;
     }

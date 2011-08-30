@@ -16,10 +16,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-08-16 06:22+0000\n"
-"PO-Revision-Date: 2011-08-17 01:34+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-08-23 19:56+0000\n"
+"PO-Revision-Date: 2011-08-24 12:27+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -313,7 +313,7 @@ msgid "A unique name for the action."
 msgstr "Un nombre único para la acción."
 
 #: ../gtk/gtkaction.c:241 ../gtk/gtkbutton.c:228 ../gtk/gtkexpander.c:290
-#: ../gtk/gtkframe.c:171 ../gtk/gtklabel.c:744 ../gtk/gtkmenuitem.c:383
+#: ../gtk/gtkframe.c:171 ../gtk/gtklabel.c:729 ../gtk/gtkmenuitem.c:383
 #: ../gtk/gtktoolbutton.c:232 ../gtk/gtktoolitemgroup.c:1592
 msgid "Label"
 msgstr "Etiqueta"
@@ -976,12 +976,12 @@ msgstr ""
 "Texto del etiqueta del widget dentro del botón, si el botón contiene una "
 "etiqueta del widget"
 
-#: ../gtk/gtkbutton.c:236 ../gtk/gtkexpander.c:298 ../gtk/gtklabel.c:765
+#: ../gtk/gtkbutton.c:236 ../gtk/gtkexpander.c:298 ../gtk/gtklabel.c:750
 #: ../gtk/gtkmenuitem.c:398 ../gtk/gtktoolbutton.c:239
 msgid "Use underline"
 msgstr "Utilizar subrayado"
 
-#: ../gtk/gtkbutton.c:237 ../gtk/gtkexpander.c:299 ../gtk/gtklabel.c:766
+#: ../gtk/gtkbutton.c:237 ../gtk/gtkexpander.c:299 ../gtk/gtklabel.c:751
 #: ../gtk/gtkmenuitem.c:399
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1490,8 +1490,7 @@ msgstr "Tiene entrada"
 
 #: ../gtk/gtkcellrenderercombo.c:172
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
+msgstr "Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
 
 #: ../gtk/gtkcellrendererpixbuf.c:140
 msgid "Pixbuf Object"
@@ -1672,7 +1671,7 @@ msgstr "Marcado"
 msgid "Marked up text to render"
 msgstr "Texto resaltado a renderizar"
 
-#: ../gtk/gtkcellrenderertext.c:270 ../gtk/gtklabel.c:751
+#: ../gtk/gtkcellrenderertext.c:270 ../gtk/gtklabel.c:736
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -1760,8 +1759,7 @@ msgstr "Tipografía"
 
 #: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtktexttag.c:295
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
-"Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
+msgstr "Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
 
 #: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtktexttag.c:303
 msgid "Font description as a PangoFontDescription struct"
@@ -1858,7 +1856,7 @@ msgstr ""
 "como una ayuda cuando está renderizando el texto. Si no comprende este "
 "parámetro probablemente no lo necesite"
 
-#: ../gtk/gtkcellrenderertext.c:499 ../gtk/gtklabel.c:876
+#: ../gtk/gtkcellrenderertext.c:499 ../gtk/gtklabel.c:861
 #: ../gtk/gtkprogressbar.c:220
 msgid "Ellipsize"
 msgstr "Elipsis"
@@ -1872,15 +1870,15 @@ msgstr ""
 "celda no tiene espacio suficiente para mostrar la cadena completa"
 
 #: ../gtk/gtkcellrenderertext.c:519 ../gtk/gtkfilechooserbutton.c:454
-#: ../gtk/gtklabel.c:897
+#: ../gtk/gtklabel.c:882
 msgid "Width In Characters"
 msgstr "Anchura en caracteres"
 
-#: ../gtk/gtkcellrenderertext.c:520 ../gtk/gtklabel.c:898
+#: ../gtk/gtkcellrenderertext.c:520 ../gtk/gtklabel.c:883
 msgid "The desired width of the label, in characters"
 msgstr "La anchura deseada de la etiqueta, en caracteres"
 
-#: ../gtk/gtkcellrenderertext.c:544 ../gtk/gtklabel.c:958
+#: ../gtk/gtkcellrenderertext.c:544 ../gtk/gtklabel.c:943
 msgid "Maximum Width In Characters"
 msgstr "Anchura máxima en caracteres"
 
@@ -2529,19 +2527,19 @@ msgstr "Búfer de texto"
 msgid "Text buffer object which actually stores entry text"
 msgstr "Objeto de búfer de texto que realmente almacena la entrada de texto"
 
-#: ../gtk/gtkentry.c:741 ../gtk/gtklabel.c:839
+#: ../gtk/gtkentry.c:741 ../gtk/gtklabel.c:824
 msgid "Cursor Position"
 msgstr "Posición del cursor"
 
-#: ../gtk/gtkentry.c:742 ../gtk/gtklabel.c:840
+#: ../gtk/gtkentry.c:742 ../gtk/gtklabel.c:825
 msgid "The current position of the insertion cursor in chars"
 msgstr "La posición actual del cursor de inserción en caracteres"
 
-#: ../gtk/gtkentry.c:751 ../gtk/gtklabel.c:849
+#: ../gtk/gtkentry.c:751 ../gtk/gtklabel.c:834
 msgid "Selection Bound"
 msgstr "Límite de selección"
 
-#: ../gtk/gtkentry.c:752 ../gtk/gtklabel.c:850
+#: ../gtk/gtkentry.c:752 ../gtk/gtklabel.c:835
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
@@ -2978,11 +2976,11 @@ msgstr "Indica si el expansor ha sido abierto para revelar el widget hijo"
 msgid "Text of the expander's label"
 msgstr "Texto de la etiqueta del expansor"
 
-#: ../gtk/gtkexpander.c:306 ../gtk/gtklabel.c:758
+#: ../gtk/gtkexpander.c:306 ../gtk/gtklabel.c:743
 msgid "Use markup"
 msgstr "Usar marcado"
 
-#: ../gtk/gtkexpander.c:307 ../gtk/gtklabel.c:759
+#: ../gtk/gtkexpander.c:307 ../gtk/gtklabel.c:744
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "El texto de la etiqueta incluye marcado XML. Vea pango_parse_markup()"
 
@@ -3171,11 +3169,11 @@ msgid "Y position of child widget"
 msgstr "Posición Y del widget hijo"
 
 #: ../gtk/gtkfontbutton.c:151
-#| msgid "The title of the file chooser dialog."
 msgid "The title of the font chooser dialog"
 msgstr "El título del diálogo de selección de tipografía"
 
-#: ../gtk/gtkfontbutton.c:166 ../gtk/gtkfontsel.c:244
+#: ../gtk/gtkfontbutton.c:166 ../gtk/gtkfontchooser.c:182
+#: ../gtk/gtkfontsel.c:244
 msgid "Font name"
 msgstr "Nombre de la tipografía"
 
@@ -3221,17 +3219,27 @@ msgid "Whether selected font size is shown in the label"
 msgstr ""
 "Indica si el tamaño de tipografía seleccionado se muestra en la etiqueta"
 
-#: ../gtk/gtkfontsel.c:245
+#: ../gtk/gtkfontchooser.c:183 ../gtk/gtkfontsel.c:245
 msgid "The string that represents this font"
 msgstr "La cadena que representa esta tipografía"
 
-#: ../gtk/gtkfontsel.c:251
+#: ../gtk/gtkfontchooser.c:189 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Vista previa del texto"
 
-#: ../gtk/gtkfontsel.c:252
+#: ../gtk/gtkfontchooser.c:190 ../gtk/gtkfontsel.c:252
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "El texto que mostrar como demostración de la tipografía seleccionada"
+
+#: ../gtk/gtkfontchooser.c:197
+#| msgid "Preview text"
+msgid "Show preview text entry"
+msgstr "Mostrar la vista previa de la entrada de texto"
+
+#: ../gtk/gtkfontchooser.c:198
+#| msgid "Whether the switch is on or off"
+msgid "Whether the preview text entry is shown or not"
+msgstr "Indica si se muestra o no la vista previa de la entrada texto"
 
 #: ../gtk/gtkframe.c:172
 msgid "Text of the frame's label"
@@ -3631,19 +3639,19 @@ msgstr "Pantalla"
 msgid "The screen where this window will be displayed"
 msgstr "La pantalla donde se mostrará esta ventana"
 
-#: ../gtk/gtklabel.c:745
+#: ../gtk/gtklabel.c:730
 msgid "The text of the label"
 msgstr "El texto de la etiqueta"
 
-#: ../gtk/gtklabel.c:752
+#: ../gtk/gtklabel.c:737
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Un lista de atributos de estilos para aplicar al texto de la etiqueta"
 
-#: ../gtk/gtklabel.c:773 ../gtk/gtktexttag.c:386 ../gtk/gtktextview.c:703
+#: ../gtk/gtklabel.c:758 ../gtk/gtktexttag.c:386 ../gtk/gtktextview.c:703
 msgid "Justification"
 msgstr "Justificación"
 
-#: ../gtk/gtklabel.c:774
+#: ../gtk/gtklabel.c:759
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3653,11 +3661,11 @@ msgstr ""
 "Esto NO afecta la alineación de la etiqueta dentro de su ubicación.  Ver "
 "GtkMisc::xalign para ello"
 
-#: ../gtk/gtklabel.c:782
+#: ../gtk/gtklabel.c:767
 msgid "Pattern"
 msgstr "Patrón"
 
-#: ../gtk/gtklabel.c:783
+#: ../gtk/gtklabel.c:768
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -3665,50 +3673,50 @@ msgstr ""
 "Un cadena con caracteres _ en posiciones correspondientes a caracteres en el "
 "texto a subrayar"
 
-#: ../gtk/gtklabel.c:790
+#: ../gtk/gtklabel.c:775
 msgid "Line wrap"
 msgstr "Ajuste de línea"
 
-#: ../gtk/gtklabel.c:791
+#: ../gtk/gtklabel.c:776
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr ""
 "Si esta definido, ajustar las líneas si el texto se vuelve demasiado ancho"
 
-#: ../gtk/gtklabel.c:806
+#: ../gtk/gtklabel.c:791
 msgid "Line wrap mode"
 msgstr "Modo de ajuste de línea"
 
-#: ../gtk/gtklabel.c:807
+#: ../gtk/gtklabel.c:792
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "Si se establece el ajuste, controla cómo se hace el ajuste de línea"
 
-#: ../gtk/gtklabel.c:814
+#: ../gtk/gtklabel.c:799
 msgid "Selectable"
 msgstr "Seleccionable"
 
-#: ../gtk/gtklabel.c:815
+#: ../gtk/gtklabel.c:800
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Indica si el texto de la etiqueta puede ser seleccionado con el ratón"
 
-#: ../gtk/gtklabel.c:821
+#: ../gtk/gtklabel.c:806
 msgid "Mnemonic key"
 msgstr "Tecla nemónica"
 
-#: ../gtk/gtklabel.c:822
+#: ../gtk/gtklabel.c:807
 msgid "The mnemonic accelerator key for this label"
 msgstr "La tecla nemotécnica del acelerador para esta etiqueta"
 
-#: ../gtk/gtklabel.c:830
+#: ../gtk/gtklabel.c:815
 msgid "Mnemonic widget"
 msgstr "Widget nemónico"
 
-#: ../gtk/gtklabel.c:831
+#: ../gtk/gtklabel.c:816
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "El widget que se activará cuando se presione la tecla mnemotécnica de la "
 "etiqueta"
 
-#: ../gtk/gtklabel.c:877
+#: ../gtk/gtklabel.c:862
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3716,31 +3724,31 @@ msgstr ""
 "El lugar preferido para la elipsis de la cadena, si la etiqueta no tiene "
 "suficiente espacio para mostrar la cadena completa"
 
-#: ../gtk/gtklabel.c:918
+#: ../gtk/gtklabel.c:903
 msgid "Single Line Mode"
 msgstr "Modo de línea única"
 
-#: ../gtk/gtklabel.c:919
+#: ../gtk/gtklabel.c:904
 msgid "Whether the label is in single line mode"
 msgstr "Indica si la etiqueta está en modo de línea única"
 
-#: ../gtk/gtklabel.c:936
+#: ../gtk/gtklabel.c:921
 msgid "Angle"
 msgstr "Ángulo"
 
-#: ../gtk/gtklabel.c:937
+#: ../gtk/gtklabel.c:922
 msgid "Angle at which the label is rotated"
 msgstr "Ángulo al cual la etiqueta se rota"
 
-#: ../gtk/gtklabel.c:959
+#: ../gtk/gtklabel.c:944
 msgid "The desired maximum width of the label, in characters"
 msgstr "La anchura máxima deseada de la etiqueta, en caracteres"
 
-#: ../gtk/gtklabel.c:977
+#: ../gtk/gtklabel.c:962
 msgid "Track visited links"
 msgstr "Seguir los enlaces visitados"
 
-#: ../gtk/gtklabel.c:978
+#: ../gtk/gtklabel.c:963
 msgid "Whether visited links should be tracked"
 msgstr "Indica si deben seguir los enlaces visitados"
 
@@ -5520,8 +5528,8 @@ msgstr "Suavizado Xft"
 #: ../gtk/gtksettings.c:487
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, "
-"-1=predeterminado"
+"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, -"
+"1=predeterminado"
 
 #: ../gtk/gtksettings.c:496
 msgid "Xft Hinting"
@@ -7011,11 +7019,11 @@ msgstr "Ajustar anchura"
 msgid "Wrap width for laying out items in a grid"
 msgstr "Ajustar la anchura para distribuir los elementos en una rejilla"
 
-#: ../gtk/gtktreemodelsort.c:419
+#: ../gtk/gtktreemodelsort.c:491
 msgid "TreeModelSort Model"
 msgstr "Modelo TreeModelSort"
 
-#: ../gtk/gtktreemodelsort.c:420
+#: ../gtk/gtktreemodelsort.c:492
 msgid "The model for the TreeModelSort to sort"
 msgstr "El modelo para el TreeModelSort a ordenar"
 

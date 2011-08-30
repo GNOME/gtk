@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.1.14
+==================================
+
+* GtkTreeView:
+ - The GtkTreeModelFilter and GtkTreeModelSort implementations
+   have been improved and a comprehensive test suite has been added.
+
+* GtkFileChooser:
+ - The selected file(s) can now be copied to the clipboard
+
+* Bugs fixed:
+ 656851 Allow use of GVariant in GtkListStore
+ 344858 gtk_menu_item_new_with_label() created widget with refcount 2
+ 349502 option to copy full path in "Save AS"/"Open file" dialogs
+ 621076 GtkTreeModelFilter does not emit all signals in some situations
+ 634136 GtkTable::children accessor
+ 649588 crash when sending a notification: "Gdk-CRITICAL **: gdk_visual_...
+ 650762 gtk_misc_set_alignment replacement with the new API functions
+ 651827 Crash in check_application()
+ 656986 GtkSwitch is unusable when added to primary toolbar.
+ 657146 Missing files in POTFILEs.in
+ 657260 Gtk should use AtkWindow and remove that hack on GailUtil
+ 657359 Crash when specifying data length in gtk_css_provider_load_...
+ 657384 missing accessors for GdkEvent structures
+
+* Translation updates:
+ Galician
+ German
+ Gujarati
+ Indonesian
+ Norwegian bokmål
+ Persian
+ Russian
+ Serbian
+ Spanish
+ Swedish
+ Traditional Chinese
+ Uighur
+
+
 Overview of Changes in GTK+ 3.1.12
 ==================================
 

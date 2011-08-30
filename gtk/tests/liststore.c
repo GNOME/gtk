@@ -27,6 +27,8 @@
 
 #include <gtk/gtk.h>
 
+#include "treemodel.h"
+
 static inline gboolean
 iters_equal (GtkTreeIter *a,
 	     GtkTreeIter *b)
@@ -998,128 +1000,123 @@ list_store_test_iter_parent_invalid (ListStore     *fixture,
 
 /* main */
 
-int
-main (int    argc,
-      char **argv)
+void
+register_list_store_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   /* insertion */
-  g_test_add_func ("/list-store/insert-high-values",
+  g_test_add_func ("/ListStore/insert-high-values",
 	           list_store_test_insert_high_values);
-  g_test_add_func ("/list-store/append",
+  g_test_add_func ("/ListStore/append",
 		   list_store_test_append);
-  g_test_add_func ("/list-store/prepend",
+  g_test_add_func ("/ListStore/prepend",
 		   list_store_test_prepend);
-  g_test_add_func ("/list-store/insert-after",
+  g_test_add_func ("/ListStore/insert-after",
 		   list_store_test_insert_after);
-  g_test_add_func ("/list-store/insert-after-NULL",
+  g_test_add_func ("/ListStore/insert-after-NULL",
 		   list_store_test_insert_after_NULL);
-  g_test_add_func ("/list-store/insert-before",
+  g_test_add_func ("/ListStore/insert-before",
 		   list_store_test_insert_before);
-  g_test_add_func ("/list-store/insert-before-NULL",
+  g_test_add_func ("/ListStore/insert-before-NULL",
 		   list_store_test_insert_before_NULL);
 
   /* setting values (FIXME) */
 
   /* removal */
-  g_test_add ("/list-store/remove-begin", ListStore, NULL,
+  g_test_add ("/ListStore/remove-begin", ListStore, NULL,
 	      list_store_setup, list_store_test_remove_begin,
 	      list_store_teardown);
-  g_test_add ("/list-store/remove-middle", ListStore, NULL,
+  g_test_add ("/ListStore/remove-middle", ListStore, NULL,
 	      list_store_setup, list_store_test_remove_middle,
 	      list_store_teardown);
-  g_test_add ("/list-store/remove-end", ListStore, NULL,
+  g_test_add ("/ListStore/remove-end", ListStore, NULL,
 	      list_store_setup, list_store_test_remove_end,
 	      list_store_teardown);
 
-  g_test_add ("/list-store/clear", ListStore, NULL,
+  g_test_add ("/ListStore/clear", ListStore, NULL,
 	      list_store_setup, list_store_test_clear,
 	      list_store_teardown);
 
   /* reordering */
-  g_test_add ("/list-store/reorder", ListStore, NULL,
+  g_test_add ("/ListStore/reorder", ListStore, NULL,
 	      list_store_setup, list_store_test_reorder,
 	      list_store_teardown);
 
   /* swapping */
-  g_test_add ("/list-store/swap-begin", ListStore, NULL,
+  g_test_add ("/ListStore/swap-begin", ListStore, NULL,
 	      list_store_setup, list_store_test_swap_begin,
 	      list_store_teardown);
-  g_test_add ("/list-store/swap-middle-next", ListStore, NULL,
+  g_test_add ("/ListStore/swap-middle-next", ListStore, NULL,
 	      list_store_setup, list_store_test_swap_middle_next,
 	      list_store_teardown);
-  g_test_add ("/list-store/swap-middle-apart", ListStore, NULL,
+  g_test_add ("/ListStore/swap-middle-apart", ListStore, NULL,
 	      list_store_setup, list_store_test_swap_middle_apart,
 	      list_store_teardown);
-  g_test_add ("/list-store/swap-end", ListStore, NULL,
+  g_test_add ("/ListStore/swap-end", ListStore, NULL,
 	      list_store_setup, list_store_test_swap_end,
 	      list_store_teardown);
-  g_test_add_func ("/list-store/swap-single",
+  g_test_add_func ("/ListStore/swap-single",
 		   list_store_test_swap_single);
 
   /* moving */
-  g_test_add ("/list-store/move-after-from-start", ListStore, NULL,
+  g_test_add ("/ListStore/move-after-from-start", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_from_start,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-after-next", ListStore, NULL,
+  g_test_add ("/ListStore/move-after-next", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_next,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-after-apart", ListStore, NULL,
+  g_test_add ("/ListStore/move-after-apart", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_apart,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-after-end", ListStore, NULL,
+  g_test_add ("/ListStore/move-after-end", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_end,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-after-from-end", ListStore, NULL,
+  g_test_add ("/ListStore/move-after-from-end", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_from_end,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-after-change-ends", ListStore, NULL,
+  g_test_add ("/ListStore/move-after-change-ends", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_change_ends,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-after-NULL", ListStore, NULL,
+  g_test_add ("/ListStore/move-after-NULL", ListStore, NULL,
 	      list_store_setup, list_store_test_move_after_NULL,
 	      list_store_teardown);
-  g_test_add_func ("/list-store/move-after-single",
+  g_test_add_func ("/ListStore/move-after-single",
 		   list_store_test_move_after_single);
 
-  g_test_add ("/list-store/move-before-next", ListStore, NULL,
+  g_test_add ("/ListStore/move-before-next", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_next,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-before-apart", ListStore, NULL,
+  g_test_add ("/ListStore/move-before-apart", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_apart,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-before-to-start", ListStore, NULL,
+  g_test_add ("/ListStore/move-before-to-start", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_to_start,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-before-from-end", ListStore, NULL,
+  g_test_add ("/ListStore/move-before-from-end", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_from_end,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-before-change-ends", ListStore, NULL,
+  g_test_add ("/ListStore/move-before-change-ends", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_change_ends,
 	      list_store_teardown);
-  g_test_add ("/list-store/move-before-NULL", ListStore, NULL,
+  g_test_add ("/ListStore/move-before-NULL", ListStore, NULL,
 	      list_store_setup, list_store_test_move_before_NULL,
 	      list_store_teardown);
-  g_test_add_func ("/list-store/move-before-single",
+  g_test_add_func ("/ListStore/move-before-single",
 		   list_store_test_move_before_single);
 
   /* iter invalidation */
-  g_test_add ("/list-store/iter-prev-invalid", ListStore, NULL,
+  g_test_add ("/ListStore/iter-prev-invalid", ListStore, NULL,
               list_store_setup, list_store_test_iter_previous_invalid,
               list_store_teardown);
-  g_test_add ("/list-store/iter-next-invalid", ListStore, NULL,
+  g_test_add ("/ListStore/iter-next-invalid", ListStore, NULL,
               list_store_setup, list_store_test_iter_next_invalid,
               list_store_teardown);
-  g_test_add ("/list-store/iter-children-invalid", ListStore, NULL,
+  g_test_add ("/ListStore/iter-children-invalid", ListStore, NULL,
               list_store_setup, list_store_test_iter_children_invalid,
               list_store_teardown);
-  g_test_add ("/list-store/iter-nth-child-invalid", ListStore, NULL,
+  g_test_add ("/ListStore/iter-nth-child-invalid", ListStore, NULL,
               list_store_setup, list_store_test_iter_nth_child_invalid,
               list_store_teardown);
-  g_test_add ("/list-store/iter-parent-invalid", ListStore, NULL,
+  g_test_add ("/ListStore/iter-parent-invalid", ListStore, NULL,
               list_store_setup, list_store_test_iter_parent_invalid,
               list_store_teardown);
-
-  return g_test_run ();
 }

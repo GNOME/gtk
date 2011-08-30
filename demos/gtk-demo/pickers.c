@@ -33,33 +33,38 @@ do_pickers (GtkWidget *do_widget)
     gtk_container_set_border_width (GTK_CONTAINER (table), 10);
 
     label = gtk_label_new ("Color:");
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     picker = gtk_color_button_new ();
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
     gtk_table_attach_defaults (GTK_TABLE (table), picker, 1, 2, 0, 1);
 
     label = gtk_label_new ("Font:");
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     picker = gtk_font_button_new ();
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
     gtk_table_attach_defaults (GTK_TABLE (table), picker, 1, 2, 1, 2);
 
     label = gtk_label_new ("File:");
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     picker = gtk_file_chooser_button_new ("Pick a File",
                                           GTK_FILE_CHOOSER_ACTION_OPEN);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
     gtk_table_attach_defaults (GTK_TABLE (table), picker, 1, 2, 2, 3);
 
     label = gtk_label_new ("Folder:");
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     picker = gtk_file_chooser_button_new ("Pick a Folder",
                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     gtk_table_attach_defaults (GTK_TABLE (table), picker, 1, 2, 3, 4);
 
     label = gtk_label_new ("Mail:");
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_widget_set_halign (label, GTK_ALIGN_START);
+    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     picker = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
     gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (picker), TRUE);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);

@@ -2254,7 +2254,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
       if (priv->show_tabs)
         {
-          GtkRequisition tabs_requisition;
+          GtkRequisition tabs_requisition = { 0, 0 };
 
           gtk_notebook_get_preferred_tabs_size (notebook, &tabs_requisition);
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -7853,7 +7853,7 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
   gtk_widget_child_notify (child, "tab-fill");
   gtk_widget_child_notify (child, "position");
   if (priv->show_tabs)
-    gtk_notebook_pages_allocate (notebook);
+    gtk_widget_queue_resize (GTK_WIDGET (notebook));
   gtk_widget_thaw_child_notify (child);
 }
 

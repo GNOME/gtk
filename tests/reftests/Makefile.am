@@ -132,6 +132,8 @@ EXTRA_DIST += \
 	no-colors.ui \
 	nonresizable-size.ref.ui \
 	nonresizable-size.ui \
+	notebook-childproperties.ui \
+	notebook-childproperties.ref.ui \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \

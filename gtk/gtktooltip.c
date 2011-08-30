@@ -31,7 +31,7 @@
 #include "gtkmain.h"
 #include "gtklabel.h"
 #include "gtkimage.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtksizerequest.h"
 #include "gtkwindowprivate.h"
 

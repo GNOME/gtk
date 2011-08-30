@@ -560,13 +560,19 @@ gtk_tree_store_get_iter (GtkTreeModel *tree_model,
   parent.user_data = priv->root;
 
   if (!gtk_tree_store_iter_nth_child (tree_model, iter, &parent, indices[0]))
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 
   for (i = 1; i < depth; i++)
     {
       parent = *iter;
       if (!gtk_tree_store_iter_nth_child (tree_model, iter, &parent, indices[i]))
-	return FALSE;
+        {
+          iter->stamp = 0;
+          return FALSE;
+        }
     }
 
   return TRUE;

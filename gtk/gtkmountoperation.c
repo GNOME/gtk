@@ -32,16 +32,15 @@
 #include "gtkmountoperationprivate.h"
 #include "gtkbox.h"
 #include "gtkentry.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
-#include "gtkvbox.h"
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"
 #include "gtkprivate.h"
 #include "gtkradiobutton.h"
 #include "gtkstock.h"
-#include "gtktable.h"
+#include "gtkgrid.h"
 #include "gtkwindow.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
@@ -418,17 +417,15 @@ table_add_entry (GtkWidget  *table,
   label = gtk_label_new_with_mnemonic (label_text);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (label, TRUE);
 
   entry = gtk_entry_new ();
 
   if (value)
     gtk_entry_set_text (GTK_ENTRY (entry), value);
 
-  gtk_table_attach (GTK_TABLE (table), label,
-                    0, 1, row, row + 1,
-                    GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-  gtk_table_attach_defaults (GTK_TABLE (table), entry,
-                             1, 2, row, row + 1);
+  gtk_grid_attach (GTK_GRID (table), label, 0, row, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), entry, 1, row, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
 
   g_signal_connect (entry, "changed",
@@ -585,9 +582,9 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
     rows++;
 
   /* The table that holds the entries */
-  table = gtk_table_new (rows, 2, FALSE);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  table = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (table), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (table), 6);
 
   if (can_anonymous)
     gtk_widget_set_margin_left (table, 12);

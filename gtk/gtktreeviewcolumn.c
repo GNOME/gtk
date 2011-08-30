@@ -29,7 +29,7 @@
 #include "gtkbutton.h"
 #include "gtkalignment.h"
 #include "gtklabel.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtkmarshalers.h"
 #include "gtkarrow.h"
 #include "gtkcellareacontext.h"

@@ -95,6 +95,8 @@ gtk/gtkfilesystem.c
 gtk/gtkfilesystemmodel.c
 gtk/gtkfixed.c
 gtk/gtkfontbutton.c
+gtk/gtkfontchooser.c
+gtk/gtkfontchooserdialog.c
 gtk/gtkfontsel.c
 gtk/gtkframe.c
 gtk/gtkgrid.c
@@ -254,4 +256,3 @@ modules/printbackends/file/gtkprintbackendfile.c
 modules/printbackends/lpr/gtkprintbackendlpr.c
 modules/printbackends/papi/gtkprintbackendpapi.c
 modules/printbackends/test/gtkprintbackendtest.c
-tests/testfilechooser.c

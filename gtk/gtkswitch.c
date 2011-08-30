@@ -112,7 +112,7 @@ gtk_switch_button_press (GtkWidget      *widget,
       if (event->x <= allocation.width / 2)
         {
           priv->in_press = TRUE;
-          return FALSE;
+          return TRUE;
         }
 
       priv->offset = event->x - allocation.width / 2;
@@ -125,7 +125,7 @@ gtk_switch_button_press (GtkWidget      *widget,
       if (event->x >= allocation.width / 2)
         {
           priv->in_press = TRUE;
-          return FALSE;
+          return TRUE;
         }
 
       priv->offset = event->x;
@@ -137,7 +137,7 @@ gtk_switch_button_press (GtkWidget      *widget,
                 "gtk-dnd-drag-threshold", &priv->drag_threshold,
                 NULL);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean

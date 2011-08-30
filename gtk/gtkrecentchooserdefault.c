@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * gtkrecentchooserdefault.c
  * Copyright (C) 2005-2006, Emmanuele Bassi
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -58,7 +58,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
-#include "gtktable.h"
 #include "gtktreemodelsort.h"
 #include "gtktreemodelfilter.h"
 #include "gtktreeselection.h"

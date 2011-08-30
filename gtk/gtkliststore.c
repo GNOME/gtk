@@ -647,7 +647,10 @@ gtk_list_store_get_iter (GtkTreeModel *tree_model,
   i = gtk_tree_path_get_indices (path)[0];
 
   if (i >= g_sequence_get_length (seq))
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 
   iter->stamp = priv->stamp;
   iter->user_data = g_sequence_get_iter_at_pos (seq, i);

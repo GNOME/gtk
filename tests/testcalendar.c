@@ -488,7 +488,8 @@ create_calendar(void)
 
   label = gtk_label_new_with_mnemonic ("_Font:");
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_size_group_add_widget (size, label);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, DEF_PAD_SMALL);
@@ -508,7 +509,8 @@ create_calendar(void)
 
   label = gtk_label_new_with_mnemonic ("Details W_idth:");
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_size_group_add_widget (size, label);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, DEF_PAD_SMALL);
@@ -528,7 +530,8 @@ create_calendar(void)
 
   label = gtk_label_new_with_mnemonic ("Details H_eight:");
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_size_group_add_widget (size, label);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, DEF_PAD_SMALL);

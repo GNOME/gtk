@@ -134,21 +134,16 @@ append_error_value (GString *string,
 
 static void
 parsing_error_cb (GtkCssProvider *provider,
-                  const gchar     *path,
-                  guint            line,
-                  guint            position,
-                  const GError *   error,
-                  GString *        errors)
+                  GtkCssSection  *section,
+                  const GError   *error,
+                  GString        *errors)
 {
   char *basename;
 
-  g_assert (path);
-  g_assert (line > 0);
-
-  basename = g_path_get_basename (path);
+  basename = g_file_get_basename (gtk_css_section_get_file (section));
   g_string_append_printf (errors,
                           "%s:%u: error: ",
-                          basename, line);
+                          basename, gtk_css_section_get_end_line (section) + 1);
   g_free (basename);
                           
   if (error->domain == GTK_CSS_PROVIDER_ERROR)

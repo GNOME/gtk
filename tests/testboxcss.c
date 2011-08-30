@@ -49,20 +49,21 @@
 
 static void
 show_parsing_error (GtkCssProvider *provider,
-                    const gchar    *path,
-                    guint           line,
-                    guint           position,
+                    GtkCssSection  *section,
                     const GError   *error,
                     GtkTextBuffer  *buffer)
 {
   GtkTextIter start, end;
   const char *tag_name;
 
-  gtk_text_buffer_get_iter_at_line (buffer, &start, line - 1);
-  if (gtk_text_buffer_get_line_count (buffer) <= line)
-    gtk_text_buffer_get_end_iter (buffer, &end);
-  else
-    gtk_text_buffer_get_iter_at_line (buffer, &end, line);
+  gtk_text_buffer_get_iter_at_line_index (buffer,
+                                          &start,
+                                          gtk_css_section_get_start_line (section),
+                                          gtk_css_section_get_start_position (section));
+  gtk_text_buffer_get_iter_at_line_index (buffer,
+                                          &end,
+                                          gtk_css_section_get_end_line (section),
+                                          gtk_css_section_get_end_position (section));
 
   if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
     tag_name = "warning";

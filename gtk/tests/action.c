@@ -57,6 +57,7 @@ menu_item_label_notify_count (ActionTest    *fixture,
   GtkWidget *item = gtk_menu_item_new ();
   unsigned int emmisions = 0;
 
+  g_object_ref_sink (item);
   g_signal_connect (item, "notify::label",
 		    G_CALLBACK (notify_count_emmisions), &emmisions);
 
