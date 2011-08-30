@@ -1,3 +1,35 @@
+Overview of Changes from GTK+ 2.24.5 to 2.24.6
+=============================================
+
+* Filechooser updates:
+ - Remove the expander in Save mode
+ - Move the path bar up in Save mode
+ - Remember the last opened directory
+ - Start in recently-used mode when no folder is set
+ - Update recent-files when confirming in the file chooser
+
+* Win32 build fixes
+
+* OS X build fixes for Lion
+
+* Bugs fixed:
+ 508601  Copying from GTK+ applications causes crash
+ 599664  The print dialog should not block while looking...
+ 649588  crash when sending a notification...
+ 652045  file open dialog refuses to open or complete non-local...
+ 653191  uninitialized variable in completion_match_func
+ 655074  Fix crash with undecorated windows on MacOS Lion
+ 655087  CoreGraphics error "clip: empty path" creating new window...
+ 655122  Crash when resizing window on MacOS Lion
+ 655392  GtkColorButton does not close the cairo context
+
+* Translation updates:
+ German
+ Indonesian
+ Polish
+ Spanish
+
+
 Overview of Changes from GTK+ 2.24.3 to 2.24.5
 ==============================================
 
