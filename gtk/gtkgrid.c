@@ -163,11 +163,11 @@ gtk_grid_get_property (GObject    *object,
       break;
 
     case PROP_ROW_SPACING:
-      g_value_set_int (value, ROWS (priv)->spacing);
+      g_value_set_int (value, COLUMNS (priv)->spacing);
       break;
 
     case PROP_COLUMN_SPACING:
-      g_value_set_int (value, COLUMNS (priv)->spacing);
+      g_value_set_int (value, ROWS (priv)->spacing);
       break;
 
     case PROP_ROW_HOMOGENEOUS:
@@ -1821,9 +1821,9 @@ gtk_grid_set_row_spacing (GtkGrid *grid,
 
   priv = grid->priv;
 
-  if (ROWS (priv)->spacing != spacing)
+  if (COLUMNS (priv)->spacing != spacing)
     {
-      ROWS (priv)->spacing = spacing;
+      COLUMNS (priv)->spacing = spacing;
 
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
@@ -1848,7 +1848,7 @@ gtk_grid_get_row_spacing (GtkGrid *grid)
 
   priv = grid->priv;
 
-  return ROWS (priv)->spacing;
+  return COLUMNS (priv)->spacing;
 }
 
 /**
@@ -1868,9 +1868,9 @@ gtk_grid_set_column_spacing (GtkGrid *grid,
 
   priv = grid->priv;
 
-  if (COLUMNS (priv)->spacing != spacing)
+  if (ROWS (priv)->spacing != spacing)
     {
-      COLUMNS (priv)->spacing = spacing;
+      ROWS (priv)->spacing = spacing;
 
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
@@ -1896,5 +1896,5 @@ gtk_grid_get_column_spacing (GtkGrid *grid)
 
   priv = grid->priv;
 
-  return COLUMNS (priv)->spacing;
+  return ROWS (priv)->spacing;
 }
