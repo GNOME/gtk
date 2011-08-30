@@ -1309,6 +1309,7 @@ test_combo_box (void)
   g_object_unref (builder);
 }
 
+#if 0
 static void
 test_combo_box_entry (void)
 {
@@ -1379,6 +1380,7 @@ test_combo_box_entry (void)
 
   g_object_unref (builder);
 }
+#endif
 
 static void
 test_cell_view (void)
@@ -2603,7 +2605,9 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/TreeView Column", test_treeview_column);
   g_test_add_func ("/Builder/IconView", test_icon_view);
   g_test_add_func ("/Builder/ComboBox", test_combo_box);
+#if 0
   g_test_add_func ("/Builder/ComboBox Entry", test_combo_box_entry);
+#endif
   g_test_add_func ("/Builder/CellView", test_cell_view);
   g_test_add_func ("/Builder/Dialog", test_dialog);
   g_test_add_func ("/Builder/Accelerators", test_accelerators);
