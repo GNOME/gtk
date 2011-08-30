@@ -336,7 +336,6 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
   gulong nitems;
   gulong bytes_after;
   int error, result;
-  GdkVisual *visual;
 
   g_assert (icon->priv->manager_window != None);
 
@@ -351,18 +350,25 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
 			       &bytes_after, &(prop.prop_ch));
   error = gdk_error_trap_pop ();
 
-  visual = NULL;
-
   if (!error && result == Success &&
       type == XA_VISUALID && nitems == 1 && format == 32)
     {
-      VisualID visual_id = prop.prop[0];
+      VisualID visual_id;
+      GdkVisual *visual;
+
+      visual_id = prop.prop[0];
       visual = gdk_x11_screen_lookup_visual (screen, visual_id);
+
+      icon->priv->manager_visual = visual;
+      icon->priv->manager_visual_rgba = visual != NULL &&
+        (visual->red_prec + visual->blue_prec + visual->green_prec < visual->depth);
+    }
+  else
+    {
+      icon->priv->manager_visual = NULL;
+      icon->priv->manager_visual_rgba = FALSE;
     }
 
-  icon->priv->manager_visual = visual;
-  icon->priv->manager_visual_rgba = visual != NULL &&
-    (visual->red_prec + visual->blue_prec + visual->green_prec < visual->depth);
 
   /* For the background-relative hack we use when we aren't using a real RGBA
    * visual, we can't be double-buffered */
