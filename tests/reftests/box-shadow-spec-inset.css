@@ -17,7 +17,7 @@ GtkButton {
 }
 
 .column1 {
-  border-radius: 20/*px*/;
+  /* border-radius: 20px */;
 }
 
 .column2 {
@@ -53,6 +53,7 @@ GtkButton {
   background-color: rgba(0,0,0,1);
 }
 
+/*
 .reference-padding-radius {
   border-radius: 15
 }
@@ -64,3 +65,4 @@ GtkButton {
 .reference-radii2 {
   border-radius: 5 0 10;
 }
+*/
