@@ -28,7 +28,7 @@
 #include "gtkcellview.h"
 #include "gtkeventbox.h"
 #include "gtkframe.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmenuprivate.h"

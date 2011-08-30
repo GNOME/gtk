@@ -31,7 +31,7 @@
 #include "gtkfontbutton.h"
 
 #include "gtkmain.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtklabel.h"
 #include "gtkfontchooserdialog.h"
 #include "gtkimage.h"

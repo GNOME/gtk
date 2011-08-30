@@ -1,4 +1,5 @@
 /* GAIL - The GNOME Accessibility Implementation Library
+ * Copyright 2011, F123 Consulting & Mais Diferenças
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -24,20 +25,6 @@
 #include "gtkwindowaccessible.h"
 #include "gtktoplevelaccessible.h"
 
-enum {
-  ACTIVATE,
-  CREATE,
-  DEACTIVATE,
-  DESTROY,
-  MAXIMIZE,
-  MINIMIZE,
-  MOVE,
-  RESIZE,
-  RESTORE,
-  LAST_SIGNAL
-};
-
-
 /* atkcomponent.h */
 
 static void                  gtk_window_accessible_get_extents      (AtkComponent         *component,
@@ -50,12 +37,16 @@ static void                  gtk_window_accessible_get_size         (AtkComponen
                                                            gint                 *width,
                                                            gint                 *height);
 
-static guint gtk_window_accessible_signals [LAST_SIGNAL] = { 0, };
-
 static void atk_component_interface_init (AtkComponentIface *iface);
+static void atk_window_interface_init (AtkWindowIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible, _gtk_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
+G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible,
+                         _gtk_window_accessible,
+                         GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT,
+                                                atk_component_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_WINDOW,
+                                                atk_window_interface_init));
 
 
 static void
@@ -306,79 +297,6 @@ _gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
   class->ref_state_set = gtk_window_accessible_ref_state_set;
   class->initialize = gtk_window_accessible_initialize;
   class->focus_event = gtk_window_accessible_focus_event;
-
-  gtk_window_accessible_signals [ACTIVATE] =
-    g_signal_new ("activate",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [CREATE] =
-    g_signal_new ("create",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [DEACTIVATE] =
-    g_signal_new ("deactivate",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [DESTROY] =
-    g_signal_new ("destroy",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [MAXIMIZE] =
-    g_signal_new ("maximize",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [MINIMIZE] =
-    g_signal_new ("minimize",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [MOVE] =
-    g_signal_new ("move",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [RESIZE] =
-    g_signal_new ("resize",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  gtk_window_accessible_signals [RESTORE] =
-    g_signal_new ("restore",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
 }
 
 static void
@@ -465,4 +383,10 @@ atk_component_interface_init (AtkComponentIface *iface)
 {
   iface->get_extents = gtk_window_accessible_get_extents;
   iface->get_size = gtk_window_accessible_get_size;
+}
+
+static void
+atk_window_interface_init (AtkWindowIface *iface)
+{
+  /* At this moment AtkWindow is just about signals */
 }

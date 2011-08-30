@@ -71,6 +71,7 @@ enum {
   CANCEL,
   CYCLE_FOCUS,
   MOVE_SELECTED,
+  INSERT,
   LAST_SIGNAL
 };
 
@@ -368,6 +369,31 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_INT);
 
+  /**
+   * GtkMenuShell::insert:
+   * @menu_shell: the object on which the signal is emitted
+   * @child: the #GtkMenuItem that is being inserted
+   * @position: the position at which the insert occurs
+   *
+   * The ::insert signal is emitted when a new #GtkMenuItem is added to
+   * a #GtkMenuShell.  A separate signal is used instead of
+   * GtkContainer::add because of the need for an additional position
+   * parameter.
+   *
+   * The inverse of this signal is the GtkContainer::removed signal.
+   *
+   * Since: 3.2
+   **/
+  menu_shell_signals[INSERT] =
+    g_signal_new (I_("insert"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkMenuShellClass, insert),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT_INT,
+                  G_TYPE_NONE, 2, GTK_TYPE_WIDGET, G_TYPE_INT);
+
+
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_Escape, 0,
@@ -552,15 +578,10 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
                        GtkWidget    *child,
                        gint          position)
 {
-  GtkMenuShellClass *class;
-
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
-  class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
-
-  if (class->insert)
-    class->insert (menu_shell, child, position);
+  g_signal_emit (menu_shell, menu_shell_signals[INSERT], 0, child, position);
 }
 
 static void

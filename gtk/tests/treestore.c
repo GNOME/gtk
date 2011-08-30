@@ -998,131 +998,162 @@ tree_store_test_iter_parent_invalid (TreeStore     *fixture,
   g_assert (iter.stamp == 0);
 }
 
+/* specific bugs */
+static void
+specific_bug_77977 (void)
+{
+  GtkTreeStore *tree_store;
+  GtkTreeIter iter1, iter2, iter3;
+  GtkTreePath *path;
+  GtkTreeRowReference *row_ref;
+
+  /* Stripped down version of test case for bug 77977 by Damon Chaplin */
+
+  g_test_bug ("77977");
+
+  tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
+
+  gtk_tree_store_append (tree_store, &iter1, NULL);
+  gtk_tree_store_set (tree_store, &iter1, 0, "Window1", -1);
+
+  gtk_tree_store_append (tree_store, &iter2, &iter1);
+  gtk_tree_store_set (tree_store, &iter2, 0, "Table1", -1);
+
+  gtk_tree_store_append (tree_store, &iter3, &iter2);
+  gtk_tree_store_set (tree_store, &iter3, 0, "Button1", -1);
+
+  path = gtk_tree_path_new_from_indices (0, 0, 0, -1);
+  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (tree_store), path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_store_remove (tree_store, &iter1);
+
+  gtk_tree_row_reference_free (row_ref);
+  g_object_unref (tree_store);
+}
 
 /* main */
 
-int
-main (int    argc,
-      char **argv)
+void
+register_tree_store_tests (void)
 {
-  gtk_test_init (&argc, &argv, NULL);
-
   /* insertion */
-  g_test_add_func ("/tree-store/insert-high-values",
+  g_test_add_func ("/TreeStore/insert-high-values",
 	           tree_store_test_insert_high_values);
-  g_test_add_func ("/tree-store/append",
+  g_test_add_func ("/TreeStore/append",
 		   tree_store_test_append);
-  g_test_add_func ("/tree-store/prepend",
+  g_test_add_func ("/TreeStore/prepend",
 		   tree_store_test_prepend);
-  g_test_add_func ("/tree-store/insert-after",
+  g_test_add_func ("/TreeStore/insert-after",
 		   tree_store_test_insert_after);
-  g_test_add_func ("/tree-store/insert-after-NULL",
+  g_test_add_func ("/TreeStore/insert-after-NULL",
 		   tree_store_test_insert_after_NULL);
-  g_test_add_func ("/tree-store/insert-before",
+  g_test_add_func ("/TreeStore/insert-before",
 		   tree_store_test_insert_before);
-  g_test_add_func ("/tree-store/insert-before-NULL",
+  g_test_add_func ("/TreeStore/insert-before-NULL",
 		   tree_store_test_insert_before_NULL);
 
   /* setting values (FIXME) */
 
   /* removal */
-  g_test_add ("/tree-store/remove-begin", TreeStore, NULL,
+  g_test_add ("/TreeStore/remove-begin", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_remove_begin,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/remove-middle", TreeStore, NULL,
+  g_test_add ("/TreeStore/remove-middle", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_remove_middle,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/remove-end", TreeStore, NULL,
+  g_test_add ("/TreeStore/remove-end", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_remove_end,
 	      tree_store_teardown);
 
-  g_test_add ("/tree-store/clear", TreeStore, NULL,
+  g_test_add ("/TreeStore/clear", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_clear,
 	      tree_store_teardown);
 
   /* reordering */
-  g_test_add ("/tree-store/reorder", TreeStore, NULL,
+  g_test_add ("/TreeStore/reorder", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_reorder,
 	      tree_store_teardown);
 
   /* swapping */
-  g_test_add ("/tree-store/swap-begin", TreeStore, NULL,
+  g_test_add ("/TreeStore/swap-begin", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_swap_begin,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/swap-middle-next", TreeStore, NULL,
+  g_test_add ("/TreeStore/swap-middle-next", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_swap_middle_next,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/swap-middle-apart", TreeStore, NULL,
+  g_test_add ("/TreeStore/swap-middle-apart", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_swap_middle_apart,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/swap-end", TreeStore, NULL,
+  g_test_add ("/TreeStore/swap-end", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_swap_end,
 	      tree_store_teardown);
-  g_test_add_func ("/tree-store/swap-single",
+  g_test_add_func ("/TreeStore/swap-single",
 		   tree_store_test_swap_single);
 
   /* moving */
-  g_test_add ("/tree-store/move-after-from-start", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-after-from-start", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_from_start,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-after-next", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-after-next", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_next,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-after-apart", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-after-apart", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_apart,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-after-end", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-after-end", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_end,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-after-from-end", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-after-from-end", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_from_end,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-after-change-ends", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-after-change-ends", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_change_ends,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-after-NULL", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-after-NULL", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_after_NULL,
 	      tree_store_teardown);
-  g_test_add_func ("/tree-store/move-after-single",
+  g_test_add_func ("/TreeStore/move-after-single",
 		   tree_store_test_move_after_single);
 
-  g_test_add ("/tree-store/move-before-next", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-before-next", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_next,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-before-apart", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-before-apart", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_apart,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-before-to-start", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-before-to-start", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_to_start,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-before-from-end", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-before-from-end", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_from_end,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-before-change-ends", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-before-change-ends", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_change_ends,
 	      tree_store_teardown);
-  g_test_add ("/tree-store/move-before-NULL", TreeStore, NULL,
+  g_test_add ("/TreeStore/move-before-NULL", TreeStore, NULL,
 	      tree_store_setup, tree_store_test_move_before_NULL,
 	      tree_store_teardown);
-  g_test_add_func ("/tree-store/move-before-single",
+  g_test_add_func ("/TreeStore/move-before-single",
 		   tree_store_test_move_before_single);
 
   /* iter invalidation */
-  g_test_add ("/tree-store/iter-prev-invalid", TreeStore, NULL,
+  g_test_add ("/TreeStore/iter-prev-invalid", TreeStore, NULL,
               tree_store_setup, tree_store_test_iter_previous_invalid,
               tree_store_teardown);
-  g_test_add ("/tree-store/iter-next-invalid", TreeStore, NULL,
+  g_test_add ("/TreeStore/iter-next-invalid", TreeStore, NULL,
               tree_store_setup, tree_store_test_iter_next_invalid,
               tree_store_teardown);
-  g_test_add ("/tree-store/iter-children-invalid", TreeStore, NULL,
+  g_test_add ("/TreeStore/iter-children-invalid", TreeStore, NULL,
               tree_store_setup, tree_store_test_iter_children_invalid,
               tree_store_teardown);
-  g_test_add ("/tree-store/iter-nth-child-invalid", TreeStore, NULL,
+  g_test_add ("/TreeStore/iter-nth-child-invalid", TreeStore, NULL,
               tree_store_setup, tree_store_test_iter_nth_child_invalid,
               tree_store_teardown);
-  g_test_add ("/tree-store/iter-parent-invalid", TreeStore, NULL,
+  g_test_add ("/TreeStore/iter-parent-invalid", TreeStore, NULL,
               tree_store_setup, tree_store_test_iter_parent_invalid,
               tree_store_teardown);
 
-  return g_test_run ();
+  /* specific bugs */
+  g_test_add_func ("/TreeStore/bug-77977", specific_bug_77977);
 }

@@ -51,7 +51,7 @@
 #include "gtkscale.h"
 #include "gtkscalebutton.h"
 #include "gtkstock.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"

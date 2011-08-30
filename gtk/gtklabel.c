@@ -5333,7 +5333,8 @@ gtk_label_set_selection_text (GtkLabel         *label,
 {
   GtkLabelPrivate *priv = label->priv;
 
-  if ((priv->select_info->selection_anchor !=
+  if (priv->select_info &&
+      (priv->select_info->selection_anchor !=
        priv->select_info->selection_end) &&
       priv->text)
     {

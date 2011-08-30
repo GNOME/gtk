@@ -214,6 +214,8 @@ other_application_dialog_response_cb (GtkDialog *dialog,
 
   info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (dialog));
 
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
   /* refresh the combobox to get the new application */
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
   gtk_app_chooser_button_select_application (self, info);

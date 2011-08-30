@@ -478,10 +478,6 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
   gulong nitems;
   gulong bytes_after;
   int error, result;
-  GdkVisual *visual;
-  gint red_prec;
-  gint green_prec;
-  gint blue_prec;
 
   g_assert (icon->priv->manager_window != None);
 
@@ -496,25 +492,31 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
 			       &bytes_after, &(prop.prop_ch));
   error = gdk_error_trap_pop ();
 
-  visual = NULL;
-
   if (!error && result == Success &&
       type == XA_VISUALID && nitems == 1 && format == 32)
     {
-      VisualID visual_id = prop.prop[0];
+      VisualID visual_id;
+      GdkVisual *visual;
+      gint red_prec, green_prec, blue_prec;
+
+      visual_id = prop.prop[0];
       visual = gdk_x11_screen_lookup_visual (screen, visual_id);
+      gdk_visual_get_red_pixel_details (visual, NULL, NULL, &red_prec);
+      gdk_visual_get_green_pixel_details (visual, NULL, NULL, &green_prec);
+      gdk_visual_get_blue_pixel_details (visual, NULL, NULL, &blue_prec);
+      icon->priv->manager_visual = visual;
+      icon->priv->manager_visual_rgba =
+          (red_prec + blue_prec + green_prec < gdk_visual_get_depth (visual));
+    }
+  else
+    {
+      icon->priv->manager_visual = NULL;
+      icon->priv->manager_visual_rgba = FALSE;
     }
 
-  gdk_visual_get_red_pixel_details (visual, NULL, NULL, &red_prec);
-  gdk_visual_get_green_pixel_details (visual, NULL, NULL, &green_prec);
-  gdk_visual_get_blue_pixel_details (visual, NULL, NULL, &blue_prec);
-
-  icon->priv->manager_visual = visual;
-  icon->priv->manager_visual_rgba = visual != NULL &&
-    (red_prec + blue_prec + green_prec < gdk_visual_get_depth (visual));
-
-  /* For the background-relative hack we use when we aren't using a real RGBA
-   * visual, we can't be double-buffered */
+  /* For the background-relative hack we use when we aren't
+   * using a real RGBA visual, we can't be double-buffered
+   */
   gtk_widget_set_double_buffered (GTK_WIDGET (icon), icon->priv->manager_visual_rgba);
 
   if (type != None)

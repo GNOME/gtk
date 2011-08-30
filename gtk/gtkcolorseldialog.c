@@ -190,17 +190,17 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_color_selection_set_has_opacity_control (GTK_COLOR_SELECTION (priv->colorsel), FALSE);
   gtk_container_add (GTK_CONTAINER (content_area), priv->colorsel);
   gtk_widget_show (priv->colorsel);
-  
+
   priv->cancel_button = gtk_dialog_add_button (dialog,
                                                GTK_STOCK_CANCEL,
                                                GTK_RESPONSE_CANCEL);
 
   priv->ok_button = gtk_dialog_add_button (dialog,
-                                           GTK_STOCK_OK,
+                                           _("_Select"),
                                            GTK_RESPONSE_OK);
-                                                   
+
   gtk_widget_grab_default (priv->ok_button);
-  
+
   priv->help_button = gtk_dialog_add_button (dialog,
                                              GTK_STOCK_HELP,
                                              GTK_RESPONSE_HELP);

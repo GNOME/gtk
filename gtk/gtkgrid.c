@@ -1480,6 +1480,42 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
 }
 
 /**
+ * gtk_grid_get_child_at:
+ * @grid: a #GtkGrid
+ * @left: the left edge of the cell
+ * @top: the top edge of the cell
+ *
+ * Gets the child of @grid whose area covers the grid
+ * cell whose upper left corner is at @left, @top.
+ *
+ * Returns: the child at the given position, or %NULL
+ *
+ * Since: 3.2
+ */
+GtkWidget *
+gtk_grid_get_child_at (GtkGrid *grid,
+                       gint     left,
+                       gint     top)
+{
+  GtkGridPrivate *priv = grid->priv;
+  GtkGridChild *child;
+  GList *list;
+
+  for (list = priv->children; list; list = list->next)
+    {
+      child = list->data;
+
+      if (CHILD_LEFT (child) <= left &&
+          CHILD_LEFT (child) + CHILD_WIDTH (child) > left &&
+          CHILD_TOP (child) <= top &&
+          CHILD_TOP (child) + CHILD_HEIGHT (child) > top)
+        return child->widget;
+    }
+
+  return NULL;
+}
+
+/**
  * gtk_grid_insert_row:
  * @grid: a #GtkGrid
  * @position: the position to insert the row at

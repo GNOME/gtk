@@ -40,7 +40,7 @@ simple_grid (void)
 {
   GtkWidget *window;
   GtkWidget *grid;
-  GtkWidget *child;
+  GtkWidget *test1, *test2, *test3, *test4, *test5, *test6;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Orientation");
@@ -50,17 +50,28 @@ simple_grid (void)
 
   gtk_grid_set_column_spacing (GTK_GRID (grid), 5);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
-  gtk_container_add (GTK_CONTAINER (grid), test_widget ("1", "red"));
-  gtk_container_add (GTK_CONTAINER (grid), test_widget ("2", "green"));
-  gtk_container_add (GTK_CONTAINER (grid), test_widget ("3", "blue"));
-  child = test_widget ("4", "green");
-  gtk_grid_attach (GTK_GRID (grid), child, 0, 1, 1, 1);
-  gtk_widget_set_vexpand (child, TRUE);
-  gtk_grid_attach_next_to (GTK_GRID (grid), test_widget ("5", "blue"), child, GTK_POS_RIGHT, 2, 1);
-  child = test_widget ("6", "yellow");
-  gtk_grid_attach (GTK_GRID (grid), child, -1, 0, 1, 2);
-  gtk_widget_set_hexpand (child, TRUE);
+  test1 = test_widget ("1", "red");
+  gtk_container_add (GTK_CONTAINER (grid), test1);
+  test2 = test_widget ("2", "green");
+  gtk_container_add (GTK_CONTAINER (grid), test2);
+  test3 = test_widget ("3", "blue");
+  gtk_container_add (GTK_CONTAINER (grid), test3);
+  test4 = test_widget ("4", "green");
+  gtk_grid_attach (GTK_GRID (grid), test4, 0, 1, 1, 1);
+  gtk_widget_set_vexpand (test4, TRUE);
+  test5 = test_widget ("5", "blue");
+  gtk_grid_attach_next_to (GTK_GRID (grid), test5, test4, GTK_POS_RIGHT, 2, 1);
+  test6 = test_widget ("6", "yellow");
+  gtk_grid_attach (GTK_GRID (grid), test6, -1, 0, 1, 2);
+  gtk_widget_set_hexpand (test6, TRUE);
 
+  g_assert (gtk_grid_get_child_at (GTK_GRID (grid), 0, -1) == NULL);
+  g_assert (gtk_grid_get_child_at (GTK_GRID (grid), 0, 0) == test1);
+  g_assert (gtk_grid_get_child_at (GTK_GRID (grid), 1, 0) == test2);
+  g_assert (gtk_grid_get_child_at (GTK_GRID (grid), 0, 1) == test4);
+  g_assert (gtk_grid_get_child_at (GTK_GRID (grid), -1, 0) == test6);
+  g_assert (gtk_grid_get_child_at (GTK_GRID (grid), -1, 1) == test6);
+  g_assert (gtk_grid_get_child_at (GTK_GRID (grid), -1, 2) == NULL);
   gtk_widget_show_all (window);
 }
 

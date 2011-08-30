@@ -46,7 +46,8 @@ add_row (GtkTable     *table,
   GtkWidget *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
-  gtk_misc_set_alignment (GTK_MISC (label), 0, 1);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_END);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1,                  row, row + 1,
 		    GTK_EXPAND | GTK_FILL, 0,

@@ -79,7 +79,7 @@
 #include "gtktreeview.h"
 #include "gtkscrolledwindow.h"
 #include "gtksizerequest.h"
-#include "gtkvbox.h"
+#include "gtkbox.h"
 #include "gtkwindow.h"
 #include "gtkentry.h"
 #include "gtkmainprivate.h"

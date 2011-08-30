@@ -53,36 +53,191 @@
  * a #GtkTreePath indicating the root node for the filter at construction time.
  * </para></listitem>
  * </itemizedlist>
- */
-
-
-/* ITER FORMAT:
  *
- * iter->stamp = filter->priv->stamp
- * iter->user_data = FilterLevel
- * iter->user_data2 = FilterElt
+ * The basic API is similar to #GtkTreeModelSort. For an example on its usage,
+ * see the section on #GtkTreeModelSort.
+ *
+ * When using #GtkTreeModelFilter, it is important to realize that
+ * #GtkTreeModelFilter maintains an internal cache of all nodes which are
+ * visible in its clients. The cache is likely to be a subtree of the tree
+ * exposed by the child model. #GtkTreeModelFilter will not cache the entire
+ * child model when unnecessary to not compromise the caching mechanism
+ * that is exposed by the reference counting scheme. If the child model
+ * implements reference counting, unnecessary signals may not be emitted
+ * because of reference counting rule 3, see the #GtkTreeModel
+ * documentation. (Note that e.g. #GtkTreeStore does not implement
+ * reference counting and will always emit all signals, even when
+ * the receiving node is not visible).
+ *
+ * Because of this, limitations for possible visible functions do apply.
+ * In general, visible functions should only use data or properties from
+ * the node for which the visibility state must be determined, its siblings
+ * or its parents. Usually, having a dependency on the state of any child
+ * node is not possible, unless references are taken on these explicitly.
+ * When no such reference exists, no signals may be received for these child
+ * nodes (see reference couting rule number 3 in the #GtkTreeModel section).
+ *
+ * Determining the visibility state of a given node based on the state
+ * of its child nodes is a frequently occurring use case. Therefore,
+ * #GtkTreeModelFilter explicitly supports this. For example, when a node
+ * does not have any children, you might not want the node to be visible.
+ * As soon as the first row is added to the node's child level (or the
+ * last row removed), the node's visibility should be updated.
+ *
+ * This introduces a dependency from the node on its child nodes. In order
+ * to accommodate this, #GtkTreeModelFilter must make sure the necesary
+ * signals are received from the child model. This is achieved by building,
+ * for all nodes which are exposed as visible nodes to #GtkTreeModelFilter's
+ * clients, the child level (if any) and take a reference on the first node
+ * in this level. Furthermore, for every row-inserted, row-changed or
+ * row-deleted signal (also these which were not handled because the node
+ * was not cached), #GtkTreeModelFilter will check if the visibility state
+ * of any parent node has changed.
+ *
+ * Beware, however, that this explicit support is limited to these two
+ * cases. For example, if you want a node to be visible only if two nodes
+ * in a child's child level (2 levels deeper) are visible, you are on your
+ * own. In this case, either rely on #GtkTreeStore to emit all signals
+ * because it does not implement reference counting, or for models that
+ * do implement reference counting, obtain references on these child levels
+ * yourself.
  */
 
-/* all paths, iters, etc prefixed with c_ are paths, iters, etc relative to the
- * child model.
+/* Notes on this implementation of GtkTreeModelFilter
+ * ==================================================
+ *
+ * Warnings
+ * --------
+ *
+ * In this code there is a potential for confusion as to whether an iter,
+ * path or value refers to the GtkTreeModelFilter model, or to the child
+ * model that has been set. As a convention, variables referencing the
+ * child model will have a c_ prefix before them (ie. c_iter, c_value,
+ * c_path). In case the c_ prefixed names are already in use, an f_
+ * prefix is used. Conversion of iterators and paths between
+ * GtkTreeModelFilter and the child model is done through the various
+ * gtk_tree_model_filter_convert_* functions.
+ *
+ * Even though the GtkTreeModelSort and GtkTreeModelFilter have very
+ * similar data structures, many assumptions made in the GtkTreeModelSort
+ * code do *not* apply in the GtkTreeModelFilter case. Reference counting
+ * in particular is more complicated in GtkTreeModelFilter, because
+ * we explicitly support reliance on the state of a node's children as
+ * outlined in the public API documentation. Because of these differences,
+ * you are strongly recommended to first read through these notes before
+ * making any modification to the code.
+ *
+ * Iterator format
+ * ---------------
+ *
+ * The iterator format of iterators handed out by GtkTreeModelFilter is
+ * as follows:
+ *
+ *     iter->stamp = filter->priv->stamp
+ *     iter->user_data = FilterLevel
+ *     iter->user_data2 = FilterElt
+ *
+ * Internal data structure
+ * -----------------------
+ *
+ * Using FilterLevel and FilterElt, GtkTreeModelFilter maintains a "cache"
+ * of the mapping from GtkTreeModelFilter nodes to nodes in the child model.
+ * This is to avoid re-creating a level each time (which involves computing
+ * visibility for each node in that level) an operation is requested on
+ * GtkTreeModelFilter, such as get iter, get path and get value.
+ *
+ * A FilterElt corresponds to a single node. The FilterElt can either be
+ * visible or invisible in the model that is exposed to the clients of this
+ * GtkTreeModelFilter. The visibility state is stored in the "visible_siter"
+ * field, which is NULL when the node is not visible. The FilterLevel keeps
+ * a reference to the parent FilterElt and its FilterLevel (if any). The
+ * FilterElt can have a "children" pointer set, which points at a child
+ * level (a sub level).
+ *
+ * In a FilterLevel, two separate GSequences are maintained. One contains
+ * all nodes of this FilterLevel, regardless of the visibility state of
+ * the node. Another contains only visible nodes. A visible FilterElt
+ * is thus present in both the full and the visible GSequence. The
+ * GSequence allows for fast access, addition and removal of nodes.
+ *
+ * It is important to recognize the two different mappings that play
+ * a part in this code:
+ *   I.  The mapping from the client to this model. The order in which
+ *       nodes are stored in the *visible* GSequence is the order in
+ *       which the nodes are exposed to clients of the GtkTreeModelFilter.
+ *   II. The mapping from this model to its child model. Each FilterElt
+ *       contains an "offset" field which is the offset of the
+ *       corresponding node in the child model.
+ *
+ * Throughout the code, two kinds of paths relative to the GtkTreeModelFilter
+ * (those generated from the sequence positions) are used. There are paths
+ * which take non-visible nodes into account (generated from the full
+ * sequences) and paths which don't (generated from the visible sequences).
+ * Paths which have been generated from the full sequences should only be
+ * used internally and NEVER be passed along with a signal emisson.
+ *
+ * Reference counting
+ * ------------------
+ *
+ * GtkTreeModelFilter forwards all reference and unreference operations
+ * to the corresponding node in the child model. In addition,
+ * GtkTreeModelFilter will also add references of its own. The full reference
+ * count of each node (i.e. all forwarded references and these by the
+ * filter model) is maintained internally in the "ref_count" fields in
+ * FilterElt and FilterLevel. Because there is a need to determine whether
+ * a node should be visible for the client, the reference count of only
+ * the forwarded references is maintained as well, in the "ext_ref_count"
+ * fields.
+ *
+ * In a few cases, GtkTreeModelFilter takes additional references on
+ * nodes. The first case is that a reference is taken on the parent
+ * (if any) of each level. This happens in gtk_tree_model_filter_build_level()
+ * and the reference is released again in gtk_tree_model_filter_free_level().
+ * This ensures that for all references which are taken by the filter
+ * model, all parent nodes are referenced according to reference counting
+ * rule 1 in the GtkTreeModel documentation.
+ *
+ * A second case is required to support visible functions which depend on
+ * the state of a node's children (see the public API documentation for
+ * GtkTreeModelFilter above). We build the child level of each node that
+ * could be visible in the client (i.e. the level has an ext_ref_count > 0;
+ * not the elt, because the elt might be invisible and thus unreferenced
+ * by the client). For each node that becomes visible, due to insertion or
+ * changes in visibility state, it is checked whether node has children, if
+ * so the child level is built.
+ *
+ * A reference is taken on the first node of each level so that the child
+ * model will emit all signals for this level, due to reference counting
+ * rule 3 in the GtkTreeModel documentation. If due to changes in the level,
+ * another node becomes the first node (e.g. due to insertion or reordering),
+ * this reference is transferred from the old to the new first node.
+ *
+ * When a level has an *external* reference count of zero (which means that
+ * none of the nodes in the level is referenced by the clients), the level
+ * has a "zero ref count" on all its parents. As soon as the level reaches
+ * an *external* reference count of zero, the zero ref count value is
+ * incremented by one for all parents of this level. Due to the additional
+ * references taken by the filter model, it is important to base the
+ * zero ref count on the external reference count instead of on the full
+ * reference count of the node.
+ *
+ * The zero ref count value aids in determining which portions of the
+ * cache are possibly unused and could be removed. If a FilterElt has
+ * a zero ref count of one, then its child level is unused. However, the
+ * child level can only be removed from the cache if the FilterElt's
+ * parent has an external ref count of zero. Otherwise, monitoring
+ * this level is necessary to possibly update the visibility state
+ * of the parent. This is an important difference from GtkTreeModelSort!
+ *
+ * Signals are only required for levels with an external ref count > 0.
+ * This due to reference counting rule 3, see the GtkTreeModel
+ * documentation. In the GtkTreeModelFilter we try hard to stick to this
+ * rule and not emit redundant signals (though redundant emissions of
+ * row-has-child-toggled could appear frequently; it does happen that
+ * we simply forward the signal emitted by e.g. GtkTreeStore but also
+ * emit our own copy).
  */
 
-/* A few notes:
- *  There are three model/views involved, so there are two mappings:
- *    * this model -> child model: mapped via offset in FilterElt.
- *    * this model -> parent model (or view): mapped via the array index
- *                                            of FilterElt.
- *
- *  Note that there are two kinds of paths relative to the filter model
- *  (those generated from the array indices): paths taking non-visible
- *  nodes into account, and paths which don't.  Paths which take
- *  non-visible nodes into account should only be used internally and
- *  NEVER be passed along with a signal emission.
- *
- *  The filter model has a reference on every node that is not in the root
- *  level and has a parent with ref_count > 1.  Exception is a virtual root
- *  level; all nodes in the virtual root level are referenced too.
- */
 
 typedef struct _FilterElt FilterElt;
 typedef struct _FilterLevel FilterLevel;
@@ -93,17 +248,19 @@ struct _FilterElt
   FilterLevel *children;
   gint offset;
   gint ref_count;
+  gint ext_ref_count;
   gint zero_ref_count;
-  gboolean visible;
+  GSequenceIter *visible_siter; /* iter into visible_seq */
 };
 
 struct _FilterLevel
 {
-  GArray *array;
+  GSequence *seq;
+  GSequence *visible_seq;
   gint ref_count;
-  gint visible_nodes;
+  gint ext_ref_count;
 
-  gint parent_elt_index;
+  FilterElt *parent_elt;
   FilterLevel *parent_level;
 };
 
@@ -151,14 +308,21 @@ enum
   PROP_VIRTUAL_ROOT
 };
 
-#define GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS(filter) \
+/* Set this to 0 to disable caching of child iterators.  This
+ * allows for more stringent testing.  It is recommended to set this
+ * to one when refactoring this code and running the unit tests to
+ * catch more errors.
+ */
+#if 1
+#  define GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS(filter) \
         (((GtkTreeModelFilter *)filter)->priv->child_flags & GTK_TREE_MODEL_ITERS_PERSIST)
+#else
+#  define GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS(filter) (FALSE)
+#endif
 
 #define FILTER_ELT(filter_elt) ((FilterElt *)filter_elt)
 #define FILTER_LEVEL(filter_level) ((FilterLevel *)filter_level)
-
-#define FILTER_LEVEL_PARENT_ELT(level) (&g_array_index (FILTER_LEVEL ((level))->parent_level->array, FilterElt, FILTER_LEVEL ((level))->parent_elt_index))
-#define FILTER_LEVEL_ELT_INDEX(level, elt) (FILTER_ELT ((elt)) - FILTER_ELT (FILTER_LEVEL ((level))->array->data))
+#define GET_ELT(siter) ((FilterElt*) (siter ? g_sequence_get (siter) : NULL))
 
 /* general code (object/interface init, properties, etc) */
 static void         gtk_tree_model_filter_tree_model_init                 (GtkTreeModelIface       *iface);
@@ -247,11 +411,12 @@ static gboolean    gtk_tree_model_filter_drag_data_delete                 (GtkTr
 /* private functions */
 static void        gtk_tree_model_filter_build_level                      (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *parent_level,
-                                                                           gint                    parent_elt_index,
+                                                                           FilterElt              *parent_elt,
                                                                            gboolean                emit_inserted);
 
 static void        gtk_tree_model_filter_free_level                       (GtkTreeModelFilter     *filter,
-                                                                           FilterLevel            *filter_level);
+                                                                           FilterLevel            *filter_level,
+                                                                           gboolean                unref);
 
 static GtkTreePath *gtk_tree_model_filter_elt_get_path                    (FilterLevel            *level,
                                                                            FilterElt              *elt,
@@ -277,8 +442,12 @@ static gboolean     gtk_tree_model_filter_visible                         (GtkTr
 static void         gtk_tree_model_filter_clear_cache_helper              (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level);
 
+static void         gtk_tree_model_filter_real_ref_node                   (GtkTreeModel           *model,
+                                                                           GtkTreeIter            *iter,
+                                                                           gboolean                external);
 static void         gtk_tree_model_filter_real_unref_node                 (GtkTreeModel           *model,
                                                                            GtkTreeIter            *iter,
+                                                                           gboolean                external,
                                                                            gboolean                propagate_unref);
 
 static void         gtk_tree_model_filter_set_model                       (GtkTreeModelFilter     *filter,
@@ -286,7 +455,8 @@ static void         gtk_tree_model_filter_set_model                       (GtkTr
 static void         gtk_tree_model_filter_ref_path                        (GtkTreeModelFilter     *filter,
                                                                            GtkTreePath            *path);
 static void         gtk_tree_model_filter_unref_path                      (GtkTreeModelFilter     *filter,
-                                                                           GtkTreePath            *path);
+                                                                           GtkTreePath            *path,
+                                                                           int                     depth);
 static void         gtk_tree_model_filter_set_root                        (GtkTreeModelFilter     *filter,
                                                                            GtkTreePath            *root);
 
@@ -295,27 +465,28 @@ static GtkTreePath *gtk_real_tree_model_filter_convert_child_path_to_path (GtkTr
                                                                            gboolean                build_levels,
                                                                            gboolean                fetch_children);
 
-static FilterElt   *gtk_tree_model_filter_get_nth                         (GtkTreeModelFilter     *filter,
-                                                                           FilterLevel            *level,
-                                                                           int                     n);
 static gboolean    gtk_tree_model_filter_elt_is_visible_in_target         (FilterLevel            *level,
                                                                            FilterElt              *elt);
-static FilterElt   *gtk_tree_model_filter_get_nth_visible                 (GtkTreeModelFilter     *filter,
-                                                                           FilterLevel            *level,
-                                                                           int                     n);
 
+static FilterElt   *gtk_tree_model_filter_insert_elt_in_level             (GtkTreeModelFilter     *filter,
+                                                                           GtkTreeIter            *c_iter,
+                                                                           FilterLevel            *level,
+                                                                           gint                    offset,
+                                                                           gint                   *index);
 static FilterElt   *gtk_tree_model_filter_fetch_child                     (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level,
                                                                            gint                    offset,
                                                                            gint                   *index);
-static void         gtk_tree_model_filter_remove_node                     (GtkTreeModelFilter     *filter,
-                                                                           GtkTreeIter            *iter);
+static void         gtk_tree_model_filter_remove_elt_from_level           (GtkTreeModelFilter     *filter,
+                                                                           FilterLevel            *level,
+                                                                           FilterElt              *elt);
 static void         gtk_tree_model_filter_update_children                 (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level,
                                                                            FilterElt              *elt);
-static FilterElt   *bsearch_elt_with_offset                               (GArray                 *array,
-                                                                           gint                   offset,
-                                                                           gint                  *index);
+static void         gtk_tree_model_filter_emit_row_inserted_for_path      (GtkTreeModelFilter     *filter,
+                                                                           GtkTreeModel           *c_model,
+                                                                           GtkTreePath            *c_path,
+                                                                           GtkTreeIter            *c_iter);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeModelFilter, gtk_tree_model_filter, G_TYPE_OBJECT,
@@ -412,7 +583,8 @@ gtk_tree_model_filter_finalize (GObject *object)
 
   if (filter->priv->virtual_root && !filter->priv->virtual_root_deleted)
     {
-      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
+      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root,
+                                        -1);
       filter->priv->virtual_root_deleted = TRUE;
     }
 
@@ -422,7 +594,7 @@ gtk_tree_model_filter_finalize (GObject *object)
     gtk_tree_path_free (filter->priv->virtual_root);
 
   if (filter->priv->root)
-    gtk_tree_model_filter_free_level (filter, filter->priv->root);
+    gtk_tree_model_filter_free_level (filter, filter->priv->root, TRUE);
 
   g_free (filter->priv->modify_types);
   
@@ -482,21 +654,97 @@ gtk_tree_model_filter_get_property (GObject    *object,
 
 /* helpers */
 
+static FilterElt *
+filter_elt_new (void)
+{
+  return g_slice_new (FilterElt);
+}
+
+static void
+filter_elt_free (gpointer elt)
+{
+  g_slice_free (FilterElt, elt);
+}
+
+static gint
+filter_elt_cmp (gconstpointer a,
+                gconstpointer b,
+                gpointer      user_data)
+{
+  const FilterElt *elt_a = a;
+  const FilterElt *elt_b = b;
+
+  if (elt_a->offset > elt_b->offset)
+    return +1;
+  else if (elt_a->offset < elt_b->offset)
+    return -1;
+  else
+    return 0;
+}
+
+static FilterElt *
+lookup_elt_with_offset (GSequence      *seq,
+                        gint            offset,
+                        GSequenceIter **ret_siter)
+{
+  GSequenceIter *siter;
+  FilterElt dummy;
+
+  dummy.offset = offset;
+  siter = g_sequence_lookup (seq, &dummy, filter_elt_cmp, NULL);
+
+  if (ret_siter)
+    *ret_siter = siter;
+
+  return GET_ELT (siter);
+}
+
+static void
+increase_offset_iter (gpointer data,
+                      gpointer user_data)
+{
+  FilterElt *elt = data;
+  gint offset = GPOINTER_TO_INT (user_data);
+
+  if (elt->offset >= offset)
+    elt->offset++;
+}
+
+static void
+decrease_offset_iter (gpointer data,
+                      gpointer user_data)
+{
+  FilterElt *elt = data;
+  gint offset = GPOINTER_TO_INT (user_data);
+
+  if (elt->offset > offset)
+    elt->offset--;
+}
+
 static void
 gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
                                    FilterLevel        *parent_level,
-                                   gint                parent_elt_index,
+                                   FilterElt          *parent_elt,
                                    gboolean            emit_inserted)
 {
   GtkTreeIter iter;
   GtkTreeIter first_node;
   GtkTreeIter root;
-  FilterElt *parent_elt = NULL;
   FilterLevel *new_level;
+  FilterLevel *tmp_level;
+  FilterElt *tmp_elt;
+  GtkTreeIter f_iter;
   gint length = 0;
   gint i;
+  gboolean empty = TRUE;
 
   g_assert (filter->priv->child_model != NULL);
+
+  /* Avoid building a level that already exists */
+  if (parent_level)
+    g_assert (parent_elt->children == NULL);
+  else
+    g_assert (filter->priv->root == NULL);
 
   if (filter->priv->in_row_deleted)
     return;
@@ -524,8 +772,6 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
       GtkTreeIter parent_iter;
       GtkTreeIter child_parent_iter;
 
-      parent_elt = &g_array_index (parent_level->array, FilterElt, parent_elt_index);
-
       parent_iter.stamp = filter->priv->stamp;
       parent_iter.user_data = parent_level;
       parent_iter.user_data2 = parent_elt;
@@ -541,31 +787,37 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
                                                         &child_parent_iter,
                                                         &parent_iter);
       length = gtk_tree_model_iter_n_children (filter->priv->child_model, &child_parent_iter);
+
+      /* Take a reference on the parent */
+      gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter),
+                                           &parent_iter, FALSE);
     }
 
   g_return_if_fail (length > 0);
 
   new_level = g_new (FilterLevel, 1);
-  new_level->array = g_array_sized_new (FALSE, FALSE,
-                                        sizeof (FilterElt),
-                                        length);
+  new_level->seq = g_sequence_new (filter_elt_free);
+  new_level->visible_seq = g_sequence_new (NULL);
   new_level->ref_count = 0;
-  new_level->visible_nodes = 0;
-  new_level->parent_elt_index = parent_elt_index;
+  new_level->ext_ref_count = 0;
+  new_level->parent_elt = parent_elt;
   new_level->parent_level = parent_level;
 
-  if (parent_elt_index >= 0)
+  if (parent_elt)
     parent_elt->children = new_level;
   else
     filter->priv->root = new_level;
 
   /* increase the count of zero ref_counts */
-  while (parent_level)
-    {
-      g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count++;
+  tmp_level = parent_level;
+  tmp_elt = parent_elt;
 
-      parent_elt_index = parent_level->parent_elt_index;
-      parent_level = parent_level->parent_level;
+  while (tmp_level)
+    {
+      tmp_elt->zero_ref_count++;
+
+      tmp_elt = tmp_level->parent_elt;
+      tmp_level = tmp_level->parent_level;
     }
   if (new_level != filter->priv->root)
     filter->priv->zero_ref_count++;
@@ -578,32 +830,32 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
     {
       if (gtk_tree_model_filter_visible (filter, &iter))
         {
-          GtkTreeIter f_iter;
-          FilterElt filter_elt;
+          FilterElt *filter_elt;
 
-          filter_elt.offset = i;
-          filter_elt.zero_ref_count = 0;
-          filter_elt.ref_count = 0;
-          filter_elt.children = NULL;
-          filter_elt.visible = TRUE;
+          filter_elt = filter_elt_new ();
+          filter_elt->offset = i;
+          filter_elt->zero_ref_count = 0;
+          filter_elt->ref_count = 0;
+          filter_elt->ext_ref_count = 0;
+          filter_elt->children = NULL;
+          filter_elt->visible_siter = NULL;
 
           if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
-            filter_elt.iter = iter;
+            filter_elt->iter = iter;
 
-          g_array_append_val (new_level->array, filter_elt);
-          new_level->visible_nodes++;
-
-          f_iter.stamp = filter->priv->stamp;
-          f_iter.user_data = new_level;
-          f_iter.user_data2 = &(g_array_index (new_level->array, FilterElt, new_level->array->len - 1));
-
-          if (new_level->parent_level || filter->priv->virtual_root)
-            gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
+          g_sequence_append (new_level->seq, filter_elt);
+          filter_elt->visible_siter = g_sequence_append (new_level->visible_seq, filter_elt);
+          empty = FALSE;
 
           if (emit_inserted)
             {
               GtkTreePath *f_path;
+              GtkTreeIter f_iter;
               GtkTreeIter children;
+
+              f_iter.stamp = filter->priv->stamp;
+              f_iter.user_data = new_level;
+              f_iter.user_data2 = filter_elt;
 
               f_path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
                                                 &f_iter);
@@ -622,90 +874,162 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
     }
   while (gtk_tree_model_iter_next (filter->priv->child_model, &iter));
 
-  if (new_level->array->len == 0
-      && (new_level != filter->priv->root || filter->priv->virtual_root))
+  /* The level does not contain any visible nodes.  However, changes in
+   * this level might affect the parent node, which can either be visible
+   * or invisible.  Therefore, this level can only be removed again,
+   * if the parent of the parent node is not visible.  In that case,
+   * possible changes in state of the parent are not requested.
+   */
+  if (empty &&
+       (parent_level && parent_elt->ext_ref_count == 0))
     {
-      /* If none of the nodes are visible, we will just pull in the
-       * first node of the level and keep a reference on it.  We need this
-       * to make sure that we get all signals for this level.
-       */
-      FilterElt filter_elt;
-      GtkTreeIter f_iter;
+      gtk_tree_model_filter_free_level (filter, new_level, FALSE);
+      return;
+    }
 
-      filter_elt.offset = 0;
-      filter_elt.zero_ref_count = 0;
-      filter_elt.ref_count = 0;
-      filter_elt.children = NULL;
-      filter_elt.visible = FALSE;
+  /* If none of the nodes are visible, we will just pull in the
+   * first node of the level.
+   */
+  if (empty)
+    {
+      FilterElt *filter_elt;
+
+      filter_elt = filter_elt_new ();
+      filter_elt->offset = 0;
+      filter_elt->zero_ref_count = 0;
+      filter_elt->ref_count = 0;
+      filter_elt->ext_ref_count = 0;
+      filter_elt->children = NULL;
+      filter_elt->visible_siter = NULL;
 
       if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
-        filter_elt.iter = first_node;
+        filter_elt->iter = first_node;
 
-      g_array_append_val (new_level->array, filter_elt);
-
-      f_iter.stamp = filter->priv->stamp;
-      f_iter.user_data = new_level;
-      f_iter.user_data2 = &(g_array_index (new_level->array, FilterElt, new_level->array->len - 1));
-
-      gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
+      g_sequence_append (new_level->seq, filter_elt);
     }
-  else if (new_level->array->len == 0)
-    gtk_tree_model_filter_free_level (filter, new_level);
+
+  /* Keep a reference on the first node of this level.  We need this
+   * to make sure that we get all signals for this level.
+   */
+  f_iter.stamp = filter->priv->stamp;
+  f_iter.user_data = new_level;
+  f_iter.user_data2 = g_sequence_get (g_sequence_get_begin_iter (new_level->seq));
+
+  gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter), &f_iter,
+                                       FALSE);
 }
 
 static void
 gtk_tree_model_filter_free_level (GtkTreeModelFilter *filter,
-                                  FilterLevel        *filter_level)
+                                  FilterLevel        *filter_level,
+                                  gboolean            unref)
 {
-  gint i;
+  GSequenceIter *siter;
+  GSequenceIter *end_siter;
 
   g_assert (filter_level);
 
-  for (i = 0; i < filter_level->array->len; i++)
+  end_siter = g_sequence_get_end_iter (filter_level->seq);
+  for (siter = g_sequence_get_begin_iter (filter_level->seq);
+       siter != end_siter;
+       siter = g_sequence_iter_next (siter))
     {
-      if (g_array_index (filter_level->array, FilterElt, i).children)
+      FilterElt *elt = g_sequence_get (siter);
+
+      if (elt->children)
         gtk_tree_model_filter_free_level (filter,
-                                          FILTER_LEVEL (g_array_index (filter_level->array, FilterElt, i).children));
-
-      if (filter_level->parent_level || filter->priv->virtual_root)
-        {
-          GtkTreeIter f_iter;
-
-          f_iter.stamp = filter->priv->stamp;
-          f_iter.user_data = filter_level;
-          f_iter.user_data2 = &(g_array_index (filter_level->array, FilterElt, i));
-
-          gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), &f_iter);
-        }
+                                          FILTER_LEVEL (elt->children),
+                                          unref);
     }
 
-  if (filter_level->ref_count == 0)
+  /* Release the reference on the first item.
+   */
+  if (unref)
+    {
+      GtkTreeIter f_iter;
+
+      f_iter.stamp = filter->priv->stamp;
+      f_iter.user_data = filter_level;
+      f_iter.user_data2 = g_sequence_get (g_sequence_get_begin_iter (filter_level->seq));
+
+      gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                             &f_iter, FALSE, TRUE);
+    }
+
+  if (filter_level->ext_ref_count == 0)
     {
       FilterLevel *parent_level = filter_level->parent_level;
-      gint parent_elt_index = filter_level->parent_elt_index;
+      FilterElt *parent_elt = filter_level->parent_elt;
 
       while (parent_level)
         {
-	  g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count--;
+          parent_elt->zero_ref_count--;
 
-	  parent_elt_index = parent_level->parent_elt_index;
-	  parent_level = parent_level->parent_level;
+          parent_elt = parent_level->parent_elt;
+          parent_level = parent_level->parent_level;
         }
 
       if (filter_level != filter->priv->root)
         filter->priv->zero_ref_count--;
     }
 
-  if (filter_level->parent_elt_index >= 0)
-    FILTER_LEVEL_PARENT_ELT (filter_level)->children = NULL;
+  if (filter_level->parent_elt)
+    {
+      /* Release reference on parent */
+      if (unref)
+        {
+          GtkTreeIter parent_iter;
+
+          parent_iter.stamp = filter->priv->stamp;
+          parent_iter.user_data = filter_level->parent_level;
+          parent_iter.user_data2 = filter_level->parent_elt;
+
+          gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                                 &parent_iter, FALSE, TRUE);
+        }
+
+      filter_level->parent_elt->children = NULL;
+    }
   else
     filter->priv->root = NULL;
 
-  g_array_free (filter_level->array, TRUE);
-  filter_level->array = NULL;
-
+  g_sequence_free (filter_level->seq);
+  g_sequence_free (filter_level->visible_seq);
   g_free (filter_level);
-  filter_level = NULL;
+}
+
+static void
+gtk_tree_model_filter_level_transfer_first_ref (GtkTreeModelFilter *filter,
+                                                FilterLevel        *level,
+                                                GSequenceIter      *from_iter,
+                                                GSequenceIter      *to_iter)
+{
+  GtkTreeIter f_iter;
+
+  f_iter.stamp = filter->priv->stamp;
+  f_iter.user_data = level;
+  f_iter.user_data2 = g_sequence_get (to_iter);
+
+  gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter),
+                                       &f_iter, FALSE);
+
+  f_iter.stamp = filter->priv->stamp;
+  f_iter.user_data = level;
+  f_iter.user_data2 = g_sequence_get (from_iter);
+
+  gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                         &f_iter, FALSE, TRUE);
+}
+
+static void
+gtk_tree_model_filter_level_transfer_first_ref_with_index (GtkTreeModelFilter *filter,
+                                                           FilterLevel        *level,
+                                                           gint                from_index,
+                                                           gint                to_index)
+{
+  gtk_tree_model_filter_level_transfer_first_ref (filter, level,
+                                                  g_sequence_get_iter_at_pos (level->seq, from_index),
+                                                  g_sequence_get_iter_at_pos (level->seq, to_index));
 }
 
 /* Creates paths suitable for accessing the child model. */
@@ -728,10 +1052,7 @@ gtk_tree_model_filter_elt_get_path (FilterLevel *level,
     {
       gtk_tree_path_prepend_index (path, walker2->offset);
 
-      if (!walker->parent_level)
-        break;
-
-      walker2 = FILTER_LEVEL_PARENT_ELT (walker);
+      walker2 = walker->parent_elt;
       walker = walker->parent_level;
     }
 
@@ -841,56 +1162,56 @@ gtk_tree_model_filter_visible (GtkTreeModelFilter *self,
 }
 
 static void
+gtk_tree_model_filter_clear_cache_helper_iter (gpointer data,
+                                               gpointer user_data)
+{
+  GtkTreeModelFilter *filter = user_data;
+  FilterElt *elt = data;
+
+  if (elt->zero_ref_count > 0)
+    gtk_tree_model_filter_clear_cache_helper (filter, elt->children);
+}
+
+static void
 gtk_tree_model_filter_clear_cache_helper (GtkTreeModelFilter *filter,
                                           FilterLevel        *level)
 {
-  gint i;
-
   g_assert (level);
 
-  for (i = 0; i < level->array->len; i++)
-    {
-      if (g_array_index (level->array, FilterElt, i).zero_ref_count > 0)
-        gtk_tree_model_filter_clear_cache_helper (filter, g_array_index (level->array, FilterElt, i).children);
-     }
+  g_sequence_foreach (level->seq, gtk_tree_model_filter_clear_cache_helper_iter, filter);
 
-  if (level->ref_count == 0 && level != filter->priv->root)
+  /* If the level's ext_ref_count is zero, it means the level is not visible
+   * and can be removed.  But, since we support monitoring a child level
+   * of a parent for changes (these might affect the parent), we will only
+   * free the level if the parent's parent also has an external ref
+   * count of zero.  In that case, changes concerning our parent are
+   * not requested.
+   */
+  if (level->ext_ref_count == 0 && level != filter->priv->root &&
+      level->parent_level && level->parent_elt &&
+      level->parent_elt->ext_ref_count == 0)
     {
-      gtk_tree_model_filter_free_level (filter, level);
+      gtk_tree_model_filter_free_level (filter, level, TRUE);
       return;
     }
-}
-
-static FilterElt *
-gtk_tree_model_filter_get_nth (GtkTreeModelFilter *filter,
-                               FilterLevel        *level,
-                               int                 n)
-{
-  if (level->array->len <= n)
-    return NULL;
-
-  return &g_array_index (level->array, FilterElt, n);
 }
 
 static gboolean
 gtk_tree_model_filter_elt_is_visible_in_target (FilterLevel *level,
                                                 FilterElt   *elt)
 {
-  gint elt_index;
-
-  if (!elt->visible)
+  if (!elt->visible_siter)
     return FALSE;
 
-  if (level->parent_elt_index == -1)
+  if (!level->parent_elt)
     return TRUE;
 
   do
     {
-      elt_index = level->parent_elt_index;
+      elt = level->parent_elt;
       level = level->parent_level;
 
-      if (elt_index >= 0
-          && !g_array_index (level->array, FilterElt, elt_index).visible)
+      if (elt && !elt->visible_siter)
         return FALSE;
     }
   while (level);
@@ -898,30 +1219,214 @@ gtk_tree_model_filter_elt_is_visible_in_target (FilterLevel *level,
   return TRUE;
 }
 
-static FilterElt *
-gtk_tree_model_filter_get_nth_visible (GtkTreeModelFilter *filter,
-                                       FilterLevel        *level,
-                                       int                 n)
+/* If a change has occurred in path (inserted, changed or deleted),
+ * then this function is used to check all its ancestors.  An ancestor
+ * could have changed state as a result and this needs to be propagated
+ * to the objects monitoring the filter model.
+ */
+static void
+gtk_tree_model_filter_check_ancestors (GtkTreeModelFilter *filter,
+                                       GtkTreePath        *path)
 {
   int i = 0;
+  int *indices = gtk_tree_path_get_indices (path);
   FilterElt *elt;
+  FilterLevel *level;
+  GtkTreeIter c_iter, tmp_iter;
 
-  if (level->visible_nodes <= n)
-    return NULL;
+  level = FILTER_LEVEL (filter->priv->root);
 
-  elt = FILTER_ELT (level->array->data);
-  while (!elt->visible)
-    elt++;
+  if (!level)
+    return;
 
-  while (i < n)
+  if (filter->priv->virtual_root)
+    gtk_tree_model_get_iter (filter->priv->child_model, &c_iter,
+                             filter->priv->virtual_root);
+
+  tmp_iter = c_iter;
+  gtk_tree_model_iter_nth_child (filter->priv->child_model, &c_iter,
+                                 filter->priv->virtual_root ? &tmp_iter : NULL,
+                                 indices[i]);
+
+  while (i < gtk_tree_path_get_depth (path) - 1)
     {
-      if (elt->visible)
-        i++;
-      elt++;
-    }
+      gboolean requested_state;
 
-  while (!elt->visible)
-    elt++;
+      elt = lookup_elt_with_offset (level->seq,
+                                    gtk_tree_path_get_indices (path)[i], NULL);
+
+      requested_state = gtk_tree_model_filter_visible (filter, &c_iter);
+
+      if (!elt)
+        {
+          int index;
+          GtkTreePath *c_path;
+
+          if (requested_state == FALSE)
+            return;
+
+          /* The elt does not exist in this level (so it is not
+           * visible), but should now be visible.  We emit the
+           * row-inserted and row-has-child-toggled signals.
+           */
+          elt = gtk_tree_model_filter_insert_elt_in_level (filter,
+                                                           &c_iter,
+                                                           level,
+                                                           indices[i],
+                                                           &index);
+
+          /* insert_elt_in_level defaults to FALSE */
+          elt->visible_siter = g_sequence_insert_sorted (level->visible_seq,
+                                                         elt,
+                                                         filter_elt_cmp, NULL);
+
+          c_path = gtk_tree_model_get_path (filter->priv->child_model,
+                                            &c_iter);
+
+          gtk_tree_model_filter_emit_row_inserted_for_path (filter,
+                                                            filter->priv->child_model,
+                                                            c_path,
+                                                            &c_iter);
+
+          gtk_tree_path_free (c_path);
+
+          /* We can immediately return, because this node was not visible
+           * before and its children will be checked for in response to
+           * the emitted row-has-child-toggled signal.
+           */
+          return;
+        }
+      else if (elt->visible_siter)
+        {
+          if (!requested_state)
+            {
+              /* A node has turned invisible.  Remove it from the level
+               * and emit row-deleted.  Since this node is being
+               * deleted. it makes no sense to look further up the
+               * chain.
+               */
+              gtk_tree_model_filter_remove_elt_from_level (filter,
+                                                           level, elt);
+              return;
+            }
+
+          /* Otherwise continue up the chain */
+        }
+      else if (!elt->visible_siter)
+        {
+          if (requested_state)
+            {
+              /* A node is already in the cache, but invisible.  This
+               * is usually a node on which a reference is kept by
+               * the filter model, or a node fetched on the filter's
+               * request, and thus not shown.  Therefore, we will
+               * not emit row-inserted for this node.  Instead,
+               * we signal to its parent that a change has occurred.
+               *
+               * Exception: root level, in this case, we must emit
+               * row-inserted.
+               */
+              if (level->parent_level)
+                {
+                  GtkTreeIter f_iter;
+                  GtkTreePath *f_path;
+
+                  elt->visible_siter = g_sequence_insert_sorted (level->visible_seq, elt,
+                                                                 filter_elt_cmp, NULL);
+
+                  f_iter.stamp = filter->priv->stamp;
+                  f_iter.user_data = level->parent_level;
+                  f_iter.user_data2 = level->parent_elt;
+
+                  f_path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
+                                                    &f_iter);
+                  gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                        f_path, &f_iter);
+                  gtk_tree_path_free (f_path);
+                }
+              else
+                {
+                  GtkTreePath *c_path;
+
+                  elt->visible_siter = g_sequence_insert_sorted (level->visible_seq, elt,
+                                                                 filter_elt_cmp, NULL);
+
+                  c_path = gtk_tree_model_get_path (filter->priv->child_model,
+                                                    &c_iter);
+
+                  gtk_tree_model_filter_emit_row_inserted_for_path (filter,
+                                                                    filter->priv->child_model,
+                                                                    c_path,
+                                                                    &c_iter);
+
+                  gtk_tree_path_free (c_path);
+                }
+
+              /* We can immediately return, because this node was not visible
+               * before and the parent will check its children, including
+               * this node, in response to the emitted row-has-child-toggled
+               * signal.
+               */
+              return;
+            }
+
+          /* Not visible, so no need to continue. */
+          return;
+        }
+
+      if (!elt->children)
+        {
+          /* If an elt does not have children, these are not visible.
+           * Therefore, any signals emitted for these children will
+           * be ignored, so we do not have to emit them.
+           */
+          return;
+        }
+
+      level = elt->children;
+      i++;
+
+      tmp_iter = c_iter;
+      gtk_tree_model_iter_nth_child (filter->priv->child_model, &c_iter,
+                                     &tmp_iter, indices[i]);
+    }
+}
+
+static FilterElt *
+gtk_tree_model_filter_insert_elt_in_level (GtkTreeModelFilter *filter,
+                                           GtkTreeIter        *c_iter,
+                                           FilterLevel        *level,
+                                           gint                offset,
+                                           gint               *index)
+{
+  FilterElt *elt;
+  GSequenceIter *siter;
+
+  elt = filter_elt_new ();
+
+  if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
+    elt->iter = *c_iter;
+
+  elt->offset = offset;
+  elt->zero_ref_count = 0;
+  elt->ref_count = 0;
+  elt->ext_ref_count = 0;
+  elt->children = NULL;
+
+  /* Because we don't emit row_inserted, the node is invisible and thus
+   * not inserted in visible_seq
+   */
+  elt->visible_siter = NULL;
+
+  siter = g_sequence_insert_sorted (level->seq, elt, filter_elt_cmp, NULL);
+  *index = g_sequence_iter_get_position (siter);
+
+  /* If the insert location is zero, we need to move our reference
+   * on the old first node to the new first node.
+   */
+  if (*index == 0)
+    gtk_tree_model_filter_level_transfer_first_ref_with_index (filter, level,
+                                                               1, 0);
 
   return elt;
 }
@@ -932,21 +1437,18 @@ gtk_tree_model_filter_fetch_child (GtkTreeModelFilter *filter,
                                    gint                offset,
                                    gint               *index)
 {
-  gint i = 0;
-  gint start, middle, end;
   gint len;
   GtkTreePath *c_path = NULL;
   GtkTreeIter c_iter;
   GtkTreePath *c_parent_path = NULL;
   GtkTreeIter c_parent_iter;
-  FilterElt elt;
 
   /* check if child exists and is visible */
-  if (level->parent_elt_index >= 0)
+  if (level->parent_elt)
     {
       c_parent_path =
         gtk_tree_model_filter_elt_get_path (level->parent_level,
-                                            FILTER_LEVEL_PARENT_ELT (level),
+                                            level->parent_elt,
                                             filter->priv->virtual_root);
       if (!c_parent_path)
         return NULL;
@@ -983,189 +1485,148 @@ gtk_tree_model_filter_fetch_child (GtkTreeModelFilter *filter,
   if (offset >= len || !gtk_tree_model_filter_visible (filter, &c_iter))
     return NULL;
 
-  /* add child */
-  elt.offset = offset;
-  elt.zero_ref_count = 0;
-  elt.ref_count = 0;
-  elt.children = NULL;
-  /* visibility should be FALSE as we don't emit row_inserted */
-  elt.visible = FALSE;
-
-  if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
-    elt.iter = c_iter;
-
-  /* find index (binary search on offset) */
-  start = 0;
-  end = level->array->len;
-
-  if (start != end)
-    {
-      while (start != end)
-        {
-          middle = (start + end) / 2;
-
-          if (g_array_index (level->array, FilterElt, middle).offset <= offset)
-            start = middle + 1;
-          else
-            end = middle;
-        }
-
-      if (g_array_index (level->array, FilterElt, middle).offset <= offset)
-        i = middle + 1;
-      else
-        i = middle;
-    }
-  else
-    i = 0;
-
-  g_array_insert_val (level->array, i, elt);
-  *index = i;
-
-  for (i = 0; i < level->array->len; i++)
-    {
-      FilterElt *e = &(g_array_index (level->array, FilterElt, i));
-      if (e->children)
-        e->children->parent_elt_index = i;
-    }
-
-  c_iter.stamp = filter->priv->stamp;
-  c_iter.user_data = level;
-  c_iter.user_data2 = &g_array_index (level->array, FilterElt, *index);
-
-  if (level->parent_level || filter->priv->virtual_root)
-    gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &c_iter);
-
-  return &g_array_index (level->array, FilterElt, *index);
+  return gtk_tree_model_filter_insert_elt_in_level (filter, &c_iter,
+                                                    level, offset,
+                                                    index);
 }
 
+/* Note that this function is never called from the row-deleted handler.
+ * This means that this function is only used for removing elements
+ * which are still present in the child model.  As a result, we must
+ * take care to properly release the references the filter model has
+ * on the child model nodes.
+ */
 static void
-gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
-                                   GtkTreeIter        *iter)
+gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
+                                             FilterLevel        *level,
+                                             FilterElt          *elt)
 {
-  FilterElt *elt, *parent;
-  FilterLevel *level, *parent_level;
-  gint i, length, parent_elt_index;
+  FilterElt *parent;
+  FilterLevel *parent_level;
+  gint length, orig_level_ext_ref_count;
+  GtkTreeIter iter;
+  GtkTreePath *path = NULL;
 
   gboolean emit_child_toggled = FALSE;
 
-  level = FILTER_LEVEL (iter->user_data);
-  elt = FILTER_ELT (iter->user_data2);
+  iter.stamp = filter->priv->stamp;
+  iter.user_data = level;
+  iter.user_data2 = elt;
 
-  parent_elt_index = level->parent_elt_index;
-  if (parent_elt_index >= 0)
-    parent = FILTER_LEVEL_PARENT_ELT (level);
-  else
-    parent = NULL;
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
+
+  parent = level->parent_elt;
   parent_level = level->parent_level;
 
-  length = level->array->len;
+  length = g_sequence_get_length (level->seq);
+
+  /* We need to know about the level's ext ref count before removal
+   * of this node.
+   */
+  orig_level_ext_ref_count = level->ext_ref_count;
+
+  /* first register the node to be invisible */
+  g_sequence_remove (elt->visible_siter);
+  elt->visible_siter = NULL;
 
   /* we distinguish a couple of cases:
    *  - root level, length > 1: emit row-deleted and remove.
    *  - root level, length == 1: emit row-deleted and keep in cache.
-   *  - level, length == 1: parent->ref_count > 1: emit row-deleted and keep.
+   *  - level, length == 1: parent->ext_ref_count > 0: emit row-deleted
+   *                        and keep.
    *  - level, length > 1: emit row-deleted and remove.
    *  - else, remove level.
    *
-   *  if level != root level and visible nodes == 0, emit row-has-child-toggled.
+   *  if level != root level and the number of visible nodes is 0 (ie. this
+   *  is the last node to be removed from the level), emit
+   *  row-has-child-toggled.
    */
 
   if (level != filter->priv->root
-      && level->visible_nodes == 0
+      && g_sequence_get_length (level->visible_seq) == 0
       && parent
-      && parent->visible)
+      && parent->visible_siter)
     emit_child_toggled = TRUE;
 
   if (length > 1)
     {
-      GtkTreePath *path;
-      FilterElt *tmp;
+      GSequenceIter *siter;
 
       /* We emit row-deleted, and remove the node from the cache.
        * If it has any children, these will be removed here as well.
        */
 
       if (elt->children)
-        gtk_tree_model_filter_free_level (filter, elt->children);
+        gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), iter);
-      elt->visible = FALSE;
-      gtk_tree_model_filter_increment_stamp (filter);
-      iter->stamp = filter->priv->stamp;
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-      gtk_tree_path_free (path);
+      /* If the first node is being removed, transfer, the reference */
+      if (elt == g_sequence_get (g_sequence_get_begin_iter (level->seq)))
+        {
+          gtk_tree_model_filter_level_transfer_first_ref_with_index (filter, level,
+                                                                     0, 1);
+        }
 
-      while (elt->ref_count > 1)
+      while (elt->ext_ref_count > 0)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
-                                               iter, FALSE);
-
-      if (parent_level || filter->priv->virtual_root)
-        gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), iter);
-      else if (elt->ref_count > 0)
+                                               &iter, TRUE, FALSE);
+      while (elt->ref_count > 0)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
-                                               iter, FALSE);
+                                               &iter, FALSE, FALSE);
 
       /* remove the node */
-      tmp = bsearch_elt_with_offset (level->array, elt->offset, &i);
+      lookup_elt_with_offset (level->seq, elt->offset, &siter);
+      g_sequence_remove (siter);
 
-      if (tmp)
-        {
-          g_array_remove_index (level->array, i);
+      gtk_tree_model_filter_increment_stamp (filter);
 
-	  i--;
-          for (i = MAX (i, 0); i < level->array->len; i++)
-            {
-              /* NOTE: here we do *not* decrease offsets, because the node was
-               * not removed from the child model
-               */
-              elt = &g_array_index (level->array, FilterElt, i);
-              if (elt->children)
-                elt->children->parent_elt_index = i;
-            }
-        }
+      /* Only if the node is in the root level (parent == NULL) or
+       * the level is visible, a row-deleted signal is necessary.
+       */
+      if (!parent || orig_level_ext_ref_count > 0)
+        gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
     }
-  else if ((length == 1 && parent && parent->ref_count > 1)
+  else if ((length == 1 && parent && parent->ext_ref_count > 0)
            || (length == 1 && level == filter->priv->root))
     {
-      GtkTreePath *path;
-
       /* We emit row-deleted, but keep the node in the cache and
        * referenced.  Its children will be removed.
        */
 
       if (elt->children)
         {
-          gtk_tree_model_filter_free_level (filter, elt->children);
+          gtk_tree_model_filter_free_level (filter, elt->children, TRUE);
           elt->children = NULL;
         }
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), iter);
-      elt->visible = FALSE;
       gtk_tree_model_filter_increment_stamp (filter);
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-      gtk_tree_path_free (path);
+
+      /* Only if the node is in the root level (parent == NULL) or
+       * the level is visible, a row-deleted signal is necessary.
+       */
+      if (!parent || orig_level_ext_ref_count > 0)
+        gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
     }
   else
     {
-      GtkTreePath *path;
+      while (elt->ext_ref_count > 0)
+        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                               &iter, TRUE, FALSE);
+      while (elt->ref_count > 0)
+        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                               &iter, FALSE, FALSE);
 
       /* Blow level away, including any child levels */
+      gtk_tree_model_filter_free_level (filter, level, TRUE);
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), iter);
-      elt->visible = FALSE;
       gtk_tree_model_filter_increment_stamp (filter);
-      iter->stamp = filter->priv->stamp;
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
-      gtk_tree_path_free (path);
 
-      while (elt->ref_count > 1)
-        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
-                                               iter, FALSE);
-
-      gtk_tree_model_filter_free_level (filter, level);
+      if (!parent || orig_level_ext_ref_count > 0)
+        gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
     }
 
-  if (emit_child_toggled)
+  gtk_tree_path_free (path);
+
+  if (emit_child_toggled && parent->ext_ref_count > 0)
     {
       GtkTreeIter piter;
       GtkTreePath *ppath;
@@ -1182,6 +1643,10 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
     }
 }
 
+/* This function is called after the given node has become visible.
+ * When the node has children, we should build the level and
+ * take a reference on the first child.
+ */
 static void
 gtk_tree_model_filter_update_children (GtkTreeModelFilter *filter,
 				       FilterLevel        *level,
@@ -1190,7 +1655,7 @@ gtk_tree_model_filter_update_children (GtkTreeModelFilter *filter,
   GtkTreeIter c_iter;
   GtkTreeIter iter;
 
-  if (!elt->visible)
+  if (!elt->visible_siter)
     return;
 
   iter.stamp = filter->priv->stamp;
@@ -1199,70 +1664,162 @@ gtk_tree_model_filter_update_children (GtkTreeModelFilter *filter,
 
   gtk_tree_model_filter_convert_iter_to_child_iter (filter, &c_iter, &iter);
 
-  if (gtk_tree_model_iter_has_child (filter->priv->child_model, &c_iter))
+  if ((!level->parent_level || level->parent_elt->ext_ref_count > 0) &&
+      gtk_tree_model_iter_has_child (filter->priv->child_model, &c_iter))
     {
-      GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
-                                                   &iter);
-      gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
-                                            path,
-                                            &iter);
-      if (path)
-        gtk_tree_path_free (path);
+      if (!elt->children)
+        gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
+
+      if (elt->ext_ref_count > 0 && elt->children &&
+          g_sequence_get_length (elt->children->seq))
+        {
+          GtkTreePath *path;
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
+          gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                path,
+                                                &iter);
+          if (path)
+            gtk_tree_path_free (path);
+        }
     }
 }
 
-static FilterElt *
-bsearch_elt_with_offset (GArray *array,
-                         gint    offset,
-                         gint   *index)
+/* Path is relative to the child model (this is on search on elt offset)
+ * but with the virtual root already removed if necesssary.
+ */
+static gboolean
+find_elt_with_offset (GtkTreeModelFilter *filter,
+                      GtkTreePath        *path,
+                      FilterLevel       **level_,
+                      FilterElt         **elt_)
 {
-  gint start, middle, end;
-  FilterElt *elt;
+  int i = 0;
+  FilterLevel *level;
+  FilterLevel *parent_level = NULL;
+  FilterElt *elt = NULL;
 
-  start = 0;
-  end = array->len;
+  level = FILTER_LEVEL (filter->priv->root);
 
-  if (array->len < 1)
-    return NULL;
-
-  if (start == end)
+  while (i < gtk_tree_path_get_depth (path))
     {
-      elt = &g_array_index (array, FilterElt, 0);
+      if (!level)
+        return FALSE;
 
-      if (elt->offset == offset)
-        {
-          *index = 0;
-          return elt;
-        }
-      else
-        return NULL;
+      elt = lookup_elt_with_offset (level->seq,
+                                    gtk_tree_path_get_indices (path)[i],
+                                    NULL);
+
+      if (!elt)
+        return FALSE;
+
+      parent_level = level;
+      level = elt->children;
+      i++;
     }
 
-  do
-    {
-      middle = (start + end) / 2;
+  if (level_)
+    *level_ = parent_level;
 
-      elt = &g_array_index (array, FilterElt, middle);
+  if (elt_)
+    *elt_ = elt;
 
-      if (elt->offset < offset)
-        start = middle + 1;
-      else if (elt->offset > offset)
-        end = middle;
-      else
-        break;
-    }
-  while (start != end);
-
-  if (elt->offset == offset)
-    {
-      *index = middle;
-      return elt;
-    }
-
-  return NULL;
+  return TRUE;
 }
 
 /* TreeModel signals */
+static void
+gtk_tree_model_filter_emit_row_inserted_for_path (GtkTreeModelFilter *filter,
+                                                  GtkTreeModel       *c_model,
+                                                  GtkTreePath        *c_path,
+                                                  GtkTreeIter        *c_iter)
+{
+  FilterLevel *level;
+  FilterElt *elt;
+  GtkTreePath *path;
+  GtkTreeIter iter, children;
+  gboolean signals_emitted = FALSE;
+
+  if (!filter->priv->root)
+    {
+      /* The root level has not been exposed to the view yet, so we
+       * need to emit signals for any node that is being inserted.
+       */
+      gtk_tree_model_filter_build_level (filter, NULL, NULL, TRUE);
+
+      /* Check if the root level was built.  Then child levels
+       * that matter have also been built (due to update_children,
+       * which triggers iter_n_children).
+       */
+      if (filter->priv->root &&
+          g_sequence_get_length (FILTER_LEVEL (filter->priv->root)->visible_seq) > 0)
+        signals_emitted = TRUE;
+    }
+
+  gtk_tree_model_filter_increment_stamp (filter);
+
+  /* We need to disallow to build new levels, because we are then pulling
+   * in a child in an invisible level.  We only want to find path if it
+   * is in a visible level (and thus has a parent that is visible).
+   */
+  path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
+                                                                c_path,
+                                                                FALSE,
+                                                                TRUE);
+
+  if (!path)
+    /* parent is probably being filtered out */
+    return;
+
+  gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (filter), &iter, path);
+
+  level = FILTER_LEVEL (iter.user_data);
+  elt = FILTER_ELT (iter.user_data2);
+
+  /* Make sure elt is visible.  elt can already be visible in case
+   * it was pulled in above, so avoid inserted it into visible_seq twice.
+   */
+  if (!elt->visible_siter)
+    {
+      elt->visible_siter = g_sequence_insert_sorted (level->visible_seq,
+                                                     elt, filter_elt_cmp,
+                                                     NULL);
+    }
+
+  /* Check whether the node and all of its parents are visible */
+  if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
+    {
+      /* visibility changed -- reget path */
+      gtk_tree_path_free (path);
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
+
+      if (!signals_emitted &&
+          (!level->parent_level || level->ext_ref_count > 0))
+        gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
+
+      if (level->parent_level && level->parent_elt->ext_ref_count > 0 &&
+          g_sequence_get_length (level->visible_seq) == 1)
+        {
+          /* We know that this is the first visible node in this level, so
+           * we need to emit row-has-child-toggled on the parent.  This
+           * does not apply to the root level.
+           */
+
+          gtk_tree_path_up (path);
+          gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
+
+          gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                path,
+                                                &iter);
+        }
+
+      if (!signals_emitted
+          && gtk_tree_model_iter_children (c_model, &children, c_iter))
+        gtk_tree_model_filter_update_children (filter, level, elt);
+    }
+
+  gtk_tree_path_free (path);
+}
+
 static void
 gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
                                    GtkTreePath  *c_path,
@@ -1274,6 +1831,7 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   GtkTreeIter children;
   GtkTreeIter real_c_iter;
   GtkTreePath *path = NULL;
+  GtkTreePath *real_path = NULL;
 
   FilterElt *elt;
   FilterLevel *level;
@@ -1281,7 +1839,6 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   gboolean requested_state;
   gboolean current_state;
   gboolean free_c_path = FALSE;
-  gboolean signals_emitted = FALSE;
 
   g_return_if_fail (c_path != NULL || c_iter != NULL);
 
@@ -1290,6 +1847,12 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
       c_path = gtk_tree_model_get_path (c_model, c_iter);
       free_c_path = TRUE;
     }
+
+  if (filter->priv->virtual_root)
+    real_path = gtk_tree_model_filter_remove_root (c_path,
+                                                   filter->priv->virtual_root);
+  else
+    real_path = gtk_tree_path_copy (c_path);
 
   if (c_iter)
     real_c_iter = *c_iter;
@@ -1315,7 +1878,7 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
     {
       gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (filter),
                                            &iter, path);
-      current_state = FILTER_ELT (iter.user_data2)->visible;
+      current_state = FILTER_ELT (iter.user_data2)->visible_siter != NULL;
     }
   else
     current_state = FALSE;
@@ -1326,11 +1889,12 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
   if (current_state == TRUE && requested_state == FALSE)
     {
-      /* get rid of this node */
-      level = FILTER_LEVEL (iter.user_data);
-      level->visible_nodes--;
+      gtk_tree_model_filter_remove_elt_from_level (filter,
+                                                   FILTER_LEVEL (iter.user_data),
+                                                   FILTER_ELT (iter.user_data2));
 
-      gtk_tree_model_filter_remove_node (filter, &iter);
+      if (real_path)
+        gtk_tree_model_filter_check_ancestors (filter, real_path);
 
       goto done;
     }
@@ -1348,12 +1912,16 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
       if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
         {
-          gtk_tree_model_row_changed (GTK_TREE_MODEL (filter), path, &iter);
+          if (level->ext_ref_count > 0)
+            gtk_tree_model_row_changed (GTK_TREE_MODEL (filter), path, &iter);
 
           /* and update the children */
           if (gtk_tree_model_iter_children (c_model, &children, &real_c_iter))
             gtk_tree_model_filter_update_children (filter, level, elt);
         }
+
+      if (real_path)
+        gtk_tree_model_filter_check_ancestors (filter, real_path);
 
       goto done;
     }
@@ -1363,78 +1931,18 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
    */
   g_return_if_fail (current_state == FALSE && requested_state == TRUE);
 
-  /* make sure the new item has been pulled in */
-  if (!filter->priv->root)
-    {
-      gtk_tree_model_filter_build_level (filter, NULL, -1, TRUE);
+  if (real_path)
+    gtk_tree_model_filter_check_ancestors (filter, real_path);
 
-      /* We will only proceed below if the item is found.  If the item
-       * is found, we can be sure row-inserted has just been emitted
-       * for it.
-       */
-      signals_emitted = TRUE;
-    }
-
-  gtk_tree_model_filter_increment_stamp (filter);
-
-  /* We need to allow to build new levels, because we are then pulling
-   * in a child in an invisible level.  We only want to find path if it
-   * is in a visible level (and thus has a parent that is visible).
-   */
-  if (!path)
-    path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
-                                                                  c_path,
-                                                                  FALSE,
-                                                                  TRUE);
-
-  if (!path)
-    /* parent is probably being filtered out */
-    goto done;
-
-  gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (filter), &iter, path);
-
-  level = FILTER_LEVEL (iter.user_data);
-  elt = FILTER_ELT (iter.user_data2);
-
-  /* elt->visible can be TRUE at this point if it was pulled in above */
-  if (!elt->visible)
-    {
-      elt->visible = TRUE;
-      level->visible_nodes++;
-    }
-
-  if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
-    {
-      /* visibility changed -- reget path */
-      gtk_tree_path_free (path);
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
-
-      if (!signals_emitted)
-        gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
-
-      if (level->parent_level && level->visible_nodes == 1)
-        {
-          /* We know that this is the first visible node in this level, so
-           * we need to emit row-has-child-toggled on the parent.  This
-           * does not apply to the root level.
-           */
-
-          gtk_tree_path_up (path);
-          gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
-
-          gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
-                                                path,
-                                                &iter);
-        }
-
-      if (!signals_emitted
-          && gtk_tree_model_iter_children (c_model, &children, c_iter))
-        gtk_tree_model_filter_update_children (filter, level, elt);
-    }
+  gtk_tree_model_filter_emit_row_inserted_for_path (filter, c_model,
+                                                    c_path, c_iter);
 
 done:
   if (path)
     gtk_tree_path_free (path);
+
+  if (real_path)
+    gtk_tree_path_free (real_path);
 
   if (free_c_path)
     gtk_tree_path_free (c_path);
@@ -1447,19 +1955,20 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
                                     gpointer      data)
 {
   GtkTreeModelFilter *filter = GTK_TREE_MODEL_FILTER (data);
-  GtkTreePath *path = NULL;
   GtkTreePath *real_path = NULL;
-  GtkTreeIter iter;
 
   GtkTreeIter real_c_iter;
 
-  FilterElt *elt;
-  FilterLevel *level;
-  FilterLevel *parent_level;
+  FilterElt *elt = NULL;
+  FilterLevel *level = NULL;
+  FilterLevel *parent_level = NULL;
+  GSequenceIter *siter;
+  FilterElt dummy;
 
   gint i = 0, offset;
 
   gboolean free_c_path = FALSE;
+  gboolean emit_row_inserted = FALSE;
 
   g_return_if_fail (c_path != NULL || c_iter != NULL);
 
@@ -1502,25 +2011,6 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
         }
     }
 
-  if (!filter->priv->root)
-    {
-      /* No point in building the level if this node is not visible. */
-      if (!filter->priv->virtual_root
-          && !gtk_tree_model_filter_visible (filter, c_iter))
-        goto done;
-
-      /* build level will pull in the new child */
-      gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
-
-      if (filter->priv->root
-          && FILTER_LEVEL (filter->priv->root)->visible_nodes)
-        goto done_and_emit;
-      else
-        goto done;
-    }
-
-  parent_level = level = FILTER_LEVEL (filter->priv->root);
-
   /* subtract virtual root if necessary */
   if (filter->priv->virtual_root)
     {
@@ -1533,56 +2023,70 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
   else
     real_path = gtk_tree_path_copy (c_path);
 
-  if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
+  if (!filter->priv->root)
     {
-      /* find the parent level */
-      while (i < gtk_tree_path_get_depth (real_path) - 1)
+      /* The root level has not been exposed to the view yet, so we
+       * need to emit signals for any node that is being inserted.
+       */
+      gtk_tree_model_filter_build_level (filter, NULL, NULL, TRUE);
+
+      /* Check if the root level was built.  Then child levels
+       * that matter have also been built (due to update_children,
+       * which triggers iter_n_children).
+       */
+      if (filter->priv->root)
         {
-          gint j;
-
-          if (!level)
-            /* we don't cover this signal */
-            goto done;
-
-          elt = bsearch_elt_with_offset (level->array,
-                                         gtk_tree_path_get_indices (real_path)[i],
-                                         &j);
-
-          if (!elt)
-            /* parent is probably being filtered out */
-            goto done;
-
-          if (!elt->children)
-            {
-              GtkTreePath *tmppath;
-              GtkTreeIter  tmpiter;
-
-              tmpiter.stamp = filter->priv->stamp;
-              tmpiter.user_data = level;
-              tmpiter.user_data2 = elt;
-
-              tmppath = gtk_tree_model_get_path (GTK_TREE_MODEL (data),
-                                                 &tmpiter);
-
-              if (tmppath)
-                {
-                  gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (data),
-                                                        tmppath, &tmpiter);
-                  gtk_tree_path_free (tmppath);
-                }
-
-              /* not covering this signal */
-              goto done;
-            }
-
-          level = elt->children;
-          parent_level = level;
-          i++;
+          emit_row_inserted = FALSE;
+          goto done;
         }
     }
 
-  if (!parent_level)
-    goto done;
+  if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
+    {
+      gboolean found = FALSE;
+      GtkTreePath *parent = gtk_tree_path_copy (real_path);
+      gtk_tree_path_up (parent);
+
+      found = find_elt_with_offset (filter, parent, &parent_level, &elt);
+
+      gtk_tree_path_free (parent);
+
+      if (!found)
+        /* Parent is not in the cache and probably being filtered out */
+        goto done;
+
+      level = elt->children;
+    }
+  else
+    level = FILTER_LEVEL (filter->priv->root);
+
+  if (!level)
+    {
+      if (elt && elt->visible_siter)
+        {
+          /* The level in which the new node should be inserted does not
+           * exist, but the parent, elt, does.  If elt is visible, emit
+           * row-has-child-toggled.
+           */
+          GtkTreePath *tmppath;
+          GtkTreeIter  tmpiter;
+
+          tmpiter.stamp = filter->priv->stamp;
+          tmpiter.user_data = parent_level;
+          tmpiter.user_data2 = elt;
+
+          tmppath = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
+                                             &tmpiter);
+
+          if (tmppath)
+            {
+              gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                    tmppath, &tmpiter);
+              gtk_tree_path_free (tmppath);
+            }
+        }
+      goto done;
+    }
 
   /* let's try to insert the value */
   offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
@@ -1591,83 +2095,36 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
    * be a gap here. This will be filled with the node (via fetch_child) when
    * it becomes visible
    */
-  for (i = 0; i < level->array->len; i++)
-    {
-      FilterElt *e = &g_array_index (level->array, FilterElt, i);
-      if ((e->offset >= offset))
-        e->offset++;
-    }
+  dummy.offset = offset;
+  siter = g_sequence_search (level->seq, &dummy, filter_elt_cmp, NULL);
+  siter = g_sequence_iter_prev (siter);
+  g_sequence_foreach_range (siter, g_sequence_get_end_iter (level->seq),
+                            increase_offset_iter, GINT_TO_POINTER (offset));
 
   /* only insert when visible */
   if (gtk_tree_model_filter_visible (filter, &real_c_iter))
     {
-      FilterElt felt;
+      FilterElt *felt;
 
-      if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
-        felt.iter = real_c_iter;
+      felt = gtk_tree_model_filter_insert_elt_in_level (filter,
+                                                        &real_c_iter,
+                                                        level, offset,
+                                                        &i);
 
-      felt.offset = offset;
-      felt.zero_ref_count = 0;
-      felt.ref_count = 0;
-      felt.visible = TRUE;
-      felt.children = NULL;
-
-      for (i = 0; i < level->array->len; i++)
-        if (g_array_index (level->array, FilterElt, i).offset > offset)
-          break;
-
-      level->visible_nodes++;
-
-      g_array_insert_val (level->array, i, felt);
-
-      if (level->parent_level || filter->priv->virtual_root)
-        {
-          GtkTreeIter f_iter;
-
-          f_iter.stamp = filter->priv->stamp;
-          f_iter.user_data = level;
-          f_iter.user_data2 = &g_array_index (level->array, FilterElt, i);
-
-          gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
-        }
+      /* insert_elt_in_level defaults to FALSE */
+      felt->visible_siter = g_sequence_insert_sorted (level->visible_seq,
+                                                      felt,
+                                                      filter_elt_cmp, NULL);
+      emit_row_inserted = TRUE;
     }
-
-  /* another iteration to update the references of children to parents. */
-  for (i = 0; i < level->array->len; i++)
-    {
-      FilterElt *e = &g_array_index (level->array, FilterElt, i);
-      if (e->children)
-        e->children->parent_elt_index = i;
-    }
-
-  /* don't emit the signal if we aren't visible */
-  if (!gtk_tree_model_filter_visible (filter, &real_c_iter))
-    goto done;
-
-done_and_emit:
-  /* NOTE: pass c_path here and NOT real_path. This function does
-   * root subtraction itself
-   */
-  path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
-                                                                c_path,
-                                                                FALSE, TRUE);
-
-  if (!path)
-    goto done;
-
-  gtk_tree_model_filter_increment_stamp (filter);
-
-  gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (data), &iter, path);
-
-  /* get a path taking only visible nodes into account */
-  gtk_tree_path_free (path);
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
-
-  gtk_tree_model_row_inserted (GTK_TREE_MODEL (data), path, &iter);
-
-  gtk_tree_path_free (path);
 
 done:
+  gtk_tree_model_filter_check_ancestors (filter, real_path);
+
+  if (emit_row_inserted)
+    gtk_tree_model_filter_emit_row_inserted_for_path (filter, c_model,
+                                                      c_path, c_iter);
+
   if (real_path)
     gtk_tree_path_free (real_path);
 
@@ -1696,7 +2153,7 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
   if (filter->priv->virtual_root && !filter->priv->root
       && !gtk_tree_path_compare (c_path, filter->priv->virtual_root))
     {
-      gtk_tree_model_filter_build_level (filter, NULL, -1, TRUE);
+      gtk_tree_model_filter_build_level (filter, NULL, NULL, TRUE);
       return;
     }
 
@@ -1720,29 +2177,28 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
 
   requested_state = gtk_tree_model_filter_visible (filter, c_iter);
 
-  if (!elt->visible && !requested_state)
+  if (!elt->visible_siter && !requested_state)
     {
       /* The parent node currently is not visible and will not become
        * visible, so we will not pass on the row-has-child-toggled event.
        */
       return;
     }
-  else if (elt->visible && !requested_state)
+  else if (elt->visible_siter && !requested_state)
     {
       /* The node is no longer visible, so it has to be removed.
-       * _remove_node() takes care of emitting row-has-child-toggled
+       * _remove_elt_from_level() takes care of emitting row-has-child-toggled
        * when required.
        */
-      level->visible_nodes--;
-
-      gtk_tree_model_filter_remove_node (filter, &iter);
+      gtk_tree_model_filter_remove_elt_from_level (filter, level, elt);
 
       return;
     }
-  else if (!elt->visible && requested_state)
+  else if (!elt->visible_siter && requested_state)
     {
-      elt->visible = TRUE;
-      level->visible_nodes++;
+      elt->visible_siter = g_sequence_insert_sorted (level->visible_seq,
+                                                     elt, filter_elt_cmp,
+                                                     NULL);
 
       /* Only insert if the parent is visible in the target */
       if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
@@ -1763,15 +2219,149 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
   /* If this node is referenced and has children, build the level so we
    * can monitor it for changes.
    */
-  if (elt->ref_count > 1 && gtk_tree_model_iter_has_child (c_model, c_iter))
-    gtk_tree_model_filter_build_level (filter, level,
-                                       FILTER_LEVEL_ELT_INDEX (level, elt),
-                                       TRUE);
+  if (elt->ref_count > 1 && !elt->children &&
+      gtk_tree_model_iter_has_child (c_model, c_iter))
+    gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
 
   /* get a path taking only visible nodes into account */
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
   gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (data), path, &iter);
   gtk_tree_path_free (path);
+}
+
+static void
+gtk_tree_model_filter_virtual_root_deleted (GtkTreeModelFilter *filter,
+                                            GtkTreePath        *c_path)
+{
+  gint i, nodes;
+  GtkTreePath *path;
+  FilterLevel *level = FILTER_LEVEL (filter->priv->root);
+
+  /* The virtual root (or one of its ancestors) has been deleted.  This
+   * means that all content for our model is now gone.  We deal with
+   * this by removing everything in the filter model: we just iterate
+   * over the root level and emit a row-deleted for each FilterElt.
+   * (FIXME: Should we emit row-deleted for child nodes as well? This
+   * has never been fully clear in TreeModel).
+   */
+
+  /* We unref the path of the virtual root, up to and not including the
+   * deleted node which can no longer be unreffed.
+   */
+  gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root,
+                                    gtk_tree_path_get_depth (c_path) - 1);
+  filter->priv->virtual_root_deleted = TRUE;
+
+  if (!level)
+    return;
+
+  nodes = g_sequence_get_length (level->visible_seq);
+
+  /* We should not propagate the unref here.  An unref for any of these
+   * nodes will fail, since the respective nodes in the child model are
+   * no longer there.
+   */
+  gtk_tree_model_filter_free_level (filter, filter->priv->root, FALSE);
+
+  gtk_tree_model_filter_increment_stamp (filter);
+
+  path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (path, 0);
+
+  for (i = 0; i < nodes; i++)
+    gtk_tree_model_row_deleted (GTK_TREE_MODEL (filter), path);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+gtk_tree_model_filter_adjust_virtual_root (GtkTreeModelFilter *filter,
+                                           GtkTreePath        *c_path)
+{
+  gint i;
+  gint level;
+  gint *v_indices, *c_indices;
+  gboolean common_prefix = TRUE;
+
+  level = gtk_tree_path_get_depth (c_path) - 1;
+  v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root);
+  c_indices = gtk_tree_path_get_indices (c_path);
+
+  for (i = 0; i < level; i++)
+    if (v_indices[i] != c_indices[i])
+      {
+        common_prefix = FALSE;
+        break;
+      }
+
+  if (common_prefix && v_indices[level] > c_indices[level])
+    (v_indices[level])--;
+}
+
+static void
+gtk_tree_model_filter_row_deleted_invisible_node (GtkTreeModelFilter *filter,
+                                                  GtkTreePath        *c_path)
+{
+  int offset;
+  GtkTreePath *real_path;
+  FilterLevel *level;
+  FilterElt *elt;
+  FilterElt dummy;
+  GSequenceIter *siter;
+
+  /* The node deleted in the child model is not visible in the
+   * filter model.  We will not emit a signal, just fixup the offsets
+   * of the other nodes.
+   */
+
+  if (!filter->priv->root)
+    return;
+
+  level = FILTER_LEVEL (filter->priv->root);
+
+  /* subtract vroot if necessary */
+  if (filter->priv->virtual_root)
+    {
+      real_path = gtk_tree_model_filter_remove_root (c_path,
+                                                     filter->priv->virtual_root);
+      /* we don't handle this */
+      if (!real_path)
+        return;
+    }
+  else
+    real_path = gtk_tree_path_copy (c_path);
+
+  if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
+    {
+      gboolean found = FALSE;
+      GtkTreePath *parent = gtk_tree_path_copy (real_path);
+      gtk_tree_path_up (parent);
+
+      found = find_elt_with_offset (filter, parent, &level, &elt);
+
+      gtk_tree_path_free (parent);
+
+      if (!found)
+        {
+          /* parent is filtered out, so no level */
+          gtk_tree_path_free (real_path);
+          return;
+        }
+
+      level = elt->children;
+    }
+
+  offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
+  gtk_tree_path_free (real_path);
+
+  if (!level)
+    return;
+
+  /* decrease offset of all nodes following the deleted node */
+  dummy.offset = offset;
+  siter = g_sequence_search (level->seq, &dummy, filter_elt_cmp, NULL);
+  g_sequence_foreach_range (siter, g_sequence_get_end_iter (level->seq),
+                            decrease_offset_iter, GINT_TO_POINTER (offset));
 }
 
 static void
@@ -1782,13 +2372,13 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
   GtkTreeModelFilter *filter = GTK_TREE_MODEL_FILTER (data);
   GtkTreePath *path;
   GtkTreeIter iter;
-  FilterElt *elt;
+  FilterElt *elt, *parent_elt = NULL;
   FilterLevel *level, *parent_level = NULL;
+  GSequenceIter *siter;
   gboolean emit_child_toggled = FALSE;
   gboolean emit_row_deleted = FALSE;
   gint offset;
-  gint i;
-  gint parent_elt_index = -1;
+  gint orig_level_ext_ref_count;
 
   g_return_if_fail (c_path != NULL);
 
@@ -1797,60 +2387,15 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       (gtk_tree_path_is_ancestor (c_path, filter->priv->virtual_root) ||
        !gtk_tree_path_compare (c_path, filter->priv->virtual_root)))
     {
-      gint i;
-      GtkTreePath *path2;
-      FilterLevel *level2 = FILTER_LEVEL (filter->priv->root);
-
-      gtk_tree_model_filter_unref_path (filter, filter->priv->virtual_root);
-      filter->priv->virtual_root_deleted = TRUE;
-
-      if (!level2)
-        return;
-
-      /* remove everything in the filter model
-       *
-       * For now, we just iterate over the root level and emit a
-       * row_deleted for each FilterElt. Not sure if this is correct.
-       */
-
-      gtk_tree_model_filter_increment_stamp (filter);
-      path2 = gtk_tree_path_new ();
-      gtk_tree_path_append_index (path2, 0);
-
-      for (i = 0; i < level2->visible_nodes; i++)
-        gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path2);
-
-      gtk_tree_path_free (path2);
-      gtk_tree_model_filter_free_level (filter, filter->priv->root);
-
+      gtk_tree_model_filter_virtual_root_deleted (filter, c_path);
       return;
     }
 
-  /* fixup virtual root */
-  if (filter->priv->virtual_root)
-    {
-      if (gtk_tree_path_get_depth (filter->priv->virtual_root) >=
-          gtk_tree_path_get_depth (c_path))
-        {
-          gint level2;
-          gint *v_indices, *c_indices;
-          gboolean common_prefix = TRUE;
-
-          level2 = gtk_tree_path_get_depth (c_path) - 1;
-          v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root);
-          c_indices = gtk_tree_path_get_indices (c_path);
-
-          for (i = 0; i < level2; i++)
-            if (v_indices[i] != c_indices[i])
-              {
-                common_prefix = FALSE;
-                break;
-              }
-
-          if (common_prefix && v_indices[level2] > c_indices[level2])
-            (v_indices[level2])--;
-        }
-    }
+  /* adjust the virtual root for the deleted row */
+  if (filter->priv->virtual_root &&
+      gtk_tree_path_get_depth (filter->priv->virtual_root) >=
+      gtk_tree_path_get_depth (c_path))
+    gtk_tree_model_filter_adjust_virtual_root (filter, c_path);
 
   path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
                                                                 c_path,
@@ -1859,76 +2404,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
 
   if (!path)
     {
-      /* The node deleted in the child model is not visible in the
-       * filter model.  We will not emit a signal, just fixup the offsets
-       * of the other nodes.
-       */
-      GtkTreePath *real_path;
-
-      if (!filter->priv->root)
-        return;
-
-      level = FILTER_LEVEL (filter->priv->root);
-
-      /* subtract vroot if necessary */
-      if (filter->priv->virtual_root)
-        {
-          real_path = gtk_tree_model_filter_remove_root (c_path,
-                                                         filter->priv->virtual_root);
-          /* we don't handle this */
-          if (!real_path)
-            return;
-        }
-      else
-        real_path = gtk_tree_path_copy (c_path);
-
-      i = 0;
-      if (gtk_tree_path_get_depth (real_path) - 1 >= 1)
-        {
-          /* find the level where the deletion occurred */
-          while (i < gtk_tree_path_get_depth (real_path) - 1)
-            {
-              gint j;
-
-              if (!level)
-                {
-                  /* we don't cover this */
-                  gtk_tree_path_free (real_path);
-                  return;
-                }
-
-              elt = bsearch_elt_with_offset (level->array,
-                                             gtk_tree_path_get_indices (real_path)[i],
-                                             &j);
-
-              if (!elt || !elt->children)
-                {
-                  /* parent is filtered out, so no level */
-                  gtk_tree_path_free (real_path);
-                  return;
-                }
-
-              level = elt->children;
-              i++;
-            }
-        }
-
-      offset = gtk_tree_path_get_indices (real_path)[gtk_tree_path_get_depth (real_path) - 1];
-      gtk_tree_path_free (real_path);
-
-      if (!level)
-        return;
-
-      /* decrease offset of all nodes following the deleted node */
-      for (i = 0; i < level->array->len; i++)
-        {
-          elt = &g_array_index (level->array, FilterElt, i);
-          if (elt->offset > offset)
-            elt->offset--;
-          if (elt->children)
-            elt->children->parent_elt_index = i;
-        }
-
+      gtk_tree_model_filter_row_deleted_invisible_node (filter, c_path);
       return;
     }
 
@@ -1938,61 +2414,69 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
   level = FILTER_LEVEL (iter.user_data);
   elt = FILTER_ELT (iter.user_data2);
   offset = elt->offset;
+  orig_level_ext_ref_count = level->ext_ref_count;
 
-  if (elt->visible)
+  if (elt->visible_siter)
     {
       /* get a path taking only visible nodes into account */
       gtk_tree_path_free (path);
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
 
-      level->visible_nodes--;
-
-      if (level->visible_nodes == 0)
+      if (g_sequence_get_length (level->visible_seq) == 1)
         {
           emit_child_toggled = TRUE;
           parent_level = level->parent_level;
-          parent_elt_index = level->parent_elt_index;
+          parent_elt = level->parent_elt;
         }
 
       emit_row_deleted = TRUE;
     }
 
-  /* The filter model's reference on the child node is released
-   * below.
+  /* Release the references on this node, without propagation because
+   * the node does not exist anymore in the child model.  The filter
+   * model's references on the node in case of level->parent or use
+   * of a virtual root are automatically destroyed by the child model.
    */
-  while (elt->ref_count > 1)
-    gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter, FALSE);
+  while (elt->ext_ref_count > 0)
+    gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter,
+                                           TRUE, FALSE);
+  while (elt->ref_count > 0)
+    gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter,
+                                           FALSE, FALSE);
 
-  if (level->array->len == 1)
+  if (g_sequence_get_length (level->seq) == 1)
     {
       /* kill level */
-      gtk_tree_model_filter_free_level (filter, level);
+      gtk_tree_model_filter_free_level (filter, level, FALSE);
     }
   else
     {
-      FilterElt *tmp;
+      GSequenceIter *tmp;
+      gboolean is_first;
 
-      /* release the filter model's reference on the node */
-      if (level->parent_level || filter->priv->virtual_root)
-        gtk_tree_model_filter_unref_node (GTK_TREE_MODEL (filter), &iter);
-      else if (elt->ref_count > 0)
-        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (data), &iter,
-                                               FALSE);
+      lookup_elt_with_offset (level->seq, elt->offset, &siter);
+      is_first = g_sequence_get_begin_iter (level->seq) == siter;
 
       /* remove the row */
-      tmp = bsearch_elt_with_offset (level->array, elt->offset, &i);
+      g_sequence_remove (elt->visible_siter);
+      tmp = g_sequence_iter_next (siter);
+      g_sequence_remove (siter);
+      g_sequence_foreach_range (tmp, g_sequence_get_end_iter (level->seq),
+                                decrease_offset_iter, GINT_TO_POINTER (offset));
 
-      offset = tmp->offset;
-      g_array_remove_index (level->array, i);
-
-      i--;
-      for (i = MAX (i, 0); i < level->array->len; i++)
+      /* Take a reference on the new first node.  The first node previously
+       * keeping this reference has been removed above.
+       */
+      if (is_first)
         {
-          elt = &g_array_index (level->array, FilterElt, i);
-          if (elt->offset > offset)
-            elt->offset--;
-          if (elt->children)
-            elt->children->parent_elt_index = i;
+          GtkTreeIter f_iter;
+
+          f_iter.stamp = filter->priv->stamp;
+          f_iter.user_data = level;
+          f_iter.user_data2 = g_sequence_get (g_sequence_get_begin_iter (level->seq));
+
+          gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter),
+                                               &f_iter, FALSE);
         }
     }
 
@@ -2000,8 +2484,9 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
     {
       /* emit row_deleted */
       gtk_tree_model_filter_increment_stamp (filter);
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
-      iter.stamp = filter->priv->stamp;
+
+      if (!parent_elt || orig_level_ext_ref_count > 0)
+        gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);
     }
 
   if (emit_child_toggled && parent_level)
@@ -2011,7 +2496,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
 
       iter2.stamp = filter->priv->stamp;
       iter2.user_data = parent_level;
-      iter2.user_data2 = &g_array_index (parent_level->array, FilterElt, parent_elt_index);
+      iter2.user_data2 = parent_elt;
 
       /* We set in_row_deleted to TRUE to avoid a level build triggered
        * by row-has-child-toggled (parent model could call iter_has_child
@@ -2024,6 +2509,21 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
       gtk_tree_path_free (path2);
       filter->priv->in_row_deleted = FALSE;
     }
+
+  if (filter->priv->virtual_root)
+    {
+      GtkTreePath *real_path;
+
+      real_path = gtk_tree_model_filter_remove_root (c_path,
+                                                     filter->priv->root);
+      if (real_path)
+        {
+          gtk_tree_model_filter_check_ancestors (filter, real_path);
+          gtk_tree_path_free (real_path);
+        }
+    }
+  else
+    gtk_tree_model_filter_check_ancestors (filter, c_path);
 
   gtk_tree_path_free (path);
 }
@@ -2042,11 +2542,12 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
   GtkTreePath *path;
   GtkTreeIter iter;
 
+  GSequence *tmp_seq;
+  GSequenceIter *tmp_end_iter;
+  GSequenceIter *old_first_elt = NULL;
   gint *tmp_array;
-  gint i, j, elt_count;
+  gint i, elt_count;
   gint length;
-
-  GArray *new_array;
 
   g_return_if_fail (new_order != NULL);
 
@@ -2132,7 +2633,6 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
           gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (data),
                                                &iter, path);
 
-          level = FILTER_LEVEL (iter.user_data);
           elt = FILTER_ELT (iter.user_data2);
 
           if (!elt->children)
@@ -2148,67 +2648,76 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
         }
     }
 
-  if (!level || level->array->len < 1)
+  if (!level || g_sequence_get_length (level->seq) < 1)
     {
       gtk_tree_path_free (path);
       return;
     }
 
-  /* NOTE: we do not bail out here if level->array->len < 2 like
+  /* NOTE: we do not bail out here if level->seq->len < 2 like
    * GtkTreeModelSort does. This because we do some special tricky
    * reordering.
    */
 
-  /* construct a new array */
-  new_array = g_array_sized_new (FALSE, FALSE, sizeof (FilterElt),
-                                 level->array->len);
-  tmp_array = g_new (gint, level->array->len);
+  tmp_seq = g_sequence_new (filter_elt_free);
+  tmp_end_iter = g_sequence_get_end_iter (tmp_seq);
+  tmp_array = g_new (gint, g_sequence_get_length (level->visible_seq));
+  elt_count = 0;
 
-  for (i = 0, elt_count = 0; i < length; i++)
+  for (i = 0; i < length; i++)
     {
-      FilterElt *e = NULL;
-      gint old_offset = -1;
+      FilterElt *elt;
+      GSequenceIter *siter;
 
-      for (j = 0; j < level->array->len; j++)
-        if (g_array_index (level->array, FilterElt, j).offset == new_order[i])
-          {
-            e = &g_array_index (level->array, FilterElt, j);
-            old_offset = j;
-            break;
-          }
-
-      if (!e)
+      elt = lookup_elt_with_offset (level->seq, new_order[i], &siter);
+      if (elt == NULL)
         continue;
 
-      tmp_array[elt_count] = old_offset;
-      g_array_append_val (new_array, *e);
-      g_array_index (new_array, FilterElt, elt_count).offset = i;
-      elt_count++;
+      /* Keep a reference if this elt has old_pos == 0 */
+      if (new_order[i] == 0)
+        old_first_elt = siter;
+
+      /* Only for visible items an entry should be present in the order array
+       * to be emitted.
+       */
+      if (elt->visible_siter)
+        tmp_array[elt_count++] = g_sequence_iter_get_position (elt->visible_siter);
+
+      /* Steal elt from level->seq and append it to tmp_seq */
+      g_sequence_move (siter, tmp_end_iter);
+      elt->offset = i;
     }
 
-  g_array_free (level->array, TRUE);
-  level->array = new_array;
+  g_warn_if_fail (g_sequence_get_length (level->seq) == 0);
+  g_sequence_free (level->seq);
+  level->seq = tmp_seq;
+  g_sequence_sort (level->visible_seq, filter_elt_cmp, NULL);
 
-  /* fix up stuff */
-  for (i = 0; i < level->array->len; i++)
-    {
-      FilterElt *e = &g_array_index (level->array, FilterElt, i);
-      if (e->children)
-        e->children->parent_elt_index = i;
-    }
+  /* Transfer the reference from the old item at position 0 to the
+   * new item at position 0.
+   */
+  if (old_first_elt && g_sequence_iter_get_position (old_first_elt))
+    gtk_tree_model_filter_level_transfer_first_ref (filter,
+                                                    level,
+                                                    old_first_elt,
+                                                    g_sequence_get_iter_at_pos (level->seq, 0));
+
 
   /* emit rows_reordered */
-  if (!gtk_tree_path_get_indices (path))
-    gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, NULL,
-                                   tmp_array);
-  else
+  if (g_sequence_get_length (level->visible_seq) > 0)
     {
-      /* get a path taking only visible nodes into account */
-      gtk_tree_path_free (path);
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
+      if (!gtk_tree_path_get_indices (path))
+        gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, NULL,
+                                       tmp_array);
+      else
+        {
+          /* get a path taking only visible nodes into account */
+          gtk_tree_path_free (path);
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
 
-      gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, &iter,
-                                     tmp_array);
+          gtk_tree_model_rows_reordered (GTK_TREE_MODEL (data), path, &iter,
+                                         tmp_array);
+        }
     }
 
   /* done */
@@ -2289,13 +2798,15 @@ gtk_tree_model_filter_get_iter_full (GtkTreeModel *model,
   FilterLevel *level;
   FilterElt *elt;
   gint depth, i;
+  GSequenceIter *siter;
+
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
   g_return_val_if_fail (filter->priv->child_model != NULL, FALSE);
 
   indices = gtk_tree_path_get_indices (path);
 
   if (filter->priv->root == NULL)
-    gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
+    gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
   level = FILTER_LEVEL (filter->priv->root);
 
   depth = gtk_tree_path_get_depth (path);
@@ -2307,21 +2818,27 @@ gtk_tree_model_filter_get_iter_full (GtkTreeModel *model,
 
   for (i = 0; i < depth - 1; i++)
     {
-      if (!level || indices[i] >= level->array->len)
+      if (!level || indices[i] >= g_sequence_get_length (level->seq))
         {
+          iter->stamp = 0;
           return FALSE;
         }
 
-      elt = gtk_tree_model_filter_get_nth (filter, level, indices[i]);
+      siter = g_sequence_get_iter_at_pos (level->seq, indices[i]);
+      if (g_sequence_iter_is_end (siter))
+        {
+          iter->stamp = 0;
+          return FALSE;
+        }
+
+      elt = GET_ELT (siter);
 
       if (!elt->children)
-        gtk_tree_model_filter_build_level (filter, level,
-                                           FILTER_LEVEL_ELT_INDEX (level, elt),
-                                           FALSE);
+        gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
       level = elt->children;
     }
 
-  if (!level || indices[i] >= level->array->len)
+  if (!level || indices[i] >= g_sequence_get_length (level->seq))
     {
       iter->stamp = 0;
       return FALSE;
@@ -2330,8 +2847,13 @@ gtk_tree_model_filter_get_iter_full (GtkTreeModel *model,
   iter->stamp = filter->priv->stamp;
   iter->user_data = level;
 
-  elt = gtk_tree_model_filter_get_nth (filter, level, indices[depth - 1]);
-  iter->user_data2 = elt;
+  siter = g_sequence_get_iter_at_pos (level->seq, indices[depth - 1]);
+  if (g_sequence_iter_is_end (siter))
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
+  iter->user_data2 = GET_ELT (siter);
 
   return TRUE;
 }
@@ -2345,14 +2867,16 @@ gtk_tree_model_filter_get_iter (GtkTreeModel *model,
   gint *indices;
   FilterLevel *level;
   FilterElt *elt;
+  GSequenceIter *siter;
   gint depth, i;
+
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
   g_return_val_if_fail (filter->priv->child_model != NULL, FALSE);
 
   indices = gtk_tree_path_get_indices (path);
 
   if (filter->priv->root == NULL)
-    gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
+    gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
   level = FILTER_LEVEL (filter->priv->root);
 
   depth = gtk_tree_path_get_depth (path);
@@ -2364,21 +2888,26 @@ gtk_tree_model_filter_get_iter (GtkTreeModel *model,
 
   for (i = 0; i < depth - 1; i++)
     {
-      if (!level || indices[i] >= level->visible_nodes)
+      if (!level || indices[i] >= g_sequence_get_length (level->visible_seq))
         {
+          iter->stamp = 0;
           return FALSE;
         }
 
-      elt = gtk_tree_model_filter_get_nth_visible (filter, level, indices[i]);
+      siter = g_sequence_get_iter_at_pos (level->visible_seq, indices[i]);
+      if (g_sequence_iter_is_end (siter))
+        {
+          iter->stamp = 0;
+          return FALSE;
+        }
 
+      elt = GET_ELT (siter);
       if (!elt->children)
-        gtk_tree_model_filter_build_level (filter, level,
-                                           FILTER_LEVEL_ELT_INDEX (level, elt),
-                                           FALSE);
+        gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
       level = elt->children;
     }
 
-  if (!level || indices[i] >= level->visible_nodes)
+  if (!level || indices[i] >= g_sequence_get_length (level->visible_seq))
     {
       iter->stamp = 0;
       return FALSE;
@@ -2387,9 +2916,13 @@ gtk_tree_model_filter_get_iter (GtkTreeModel *model,
   iter->stamp = filter->priv->stamp;
   iter->user_data = level;
 
-  elt = gtk_tree_model_filter_get_nth_visible (filter, level,
-                                               indices[depth - 1]);
-  iter->user_data2 = elt;
+  siter = g_sequence_get_iter_at_pos (level->visible_seq, indices[depth - 1]);
+  if (g_sequence_iter_is_end (siter))
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
+  iter->user_data2 = GET_ELT (siter);
 
   return TRUE;
 }
@@ -2401,7 +2934,6 @@ gtk_tree_model_filter_get_path (GtkTreeModel *model,
   GtkTreePath *retval;
   FilterLevel *level;
   FilterElt *elt;
-  gint elt_index;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), NULL);
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, NULL);
@@ -2409,28 +2941,20 @@ gtk_tree_model_filter_get_path (GtkTreeModel *model,
 
   level = iter->user_data;
   elt = iter->user_data2;
-  elt_index = FILTER_LEVEL_ELT_INDEX (level, elt);
 
-  if (!elt->visible)
+  if (!elt->visible_siter)
     return NULL;
 
   retval = gtk_tree_path_new ();
 
   while (level)
     {
-      int i = 0, index = 0;
+      gint index;
 
-      while (i < elt_index)
-        {
-          if (g_array_index (level->array, FilterElt, i).visible)
-            index++;
-          i++;
-
-          g_assert (i < level->array->len);
-        }
-
+      index = g_sequence_iter_get_position (elt->visible_siter);
       gtk_tree_path_prepend_index (retval, index);
-      elt_index = level->parent_elt_index;
+
+      elt = level->parent_elt;
       level = level->parent_level;
     }
 
@@ -2459,10 +2983,9 @@ gtk_tree_model_filter_real_modify (GtkTreeModelFilter *self,
     {
       GtkTreeIter child_iter;
 
-      gtk_tree_model_filter_convert_iter_to_child_iter (
-          GTK_TREE_MODEL_FILTER (self), &child_iter, iter);
-      gtk_tree_model_get_value (child_model,
-          &child_iter, column, value);
+      gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (self),
+                                                        &child_iter, iter);
+      gtk_tree_model_get_value (child_model, &child_iter, column, value);
     }
 }
 
@@ -2486,9 +3009,9 @@ static gboolean
 gtk_tree_model_filter_iter_next (GtkTreeModel *model,
                                  GtkTreeIter  *iter)
 {
-  int i;
   FilterLevel *level;
   FilterElt *elt;
+  GSequenceIter *siter;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, FALSE);
@@ -2497,59 +3020,41 @@ gtk_tree_model_filter_iter_next (GtkTreeModel *model,
   level = iter->user_data;
   elt = iter->user_data2;
 
-  i = elt - FILTER_ELT (level->array->data);
-
-  while (i < level->array->len - 1)
+  siter = g_sequence_iter_next (elt->visible_siter);
+  if (g_sequence_iter_is_end (siter))
     {
-      i++;
-      elt++;
-
-      if (elt->visible)
-        {
-          iter->user_data2 = elt;
-          return TRUE;
-        }
+      iter->stamp = 0;
+      return FALSE;
     }
 
-  /* no next visible iter */
-  iter->stamp = 0;
+  iter->user_data2 = GET_ELT (siter);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean
 gtk_tree_model_filter_iter_previous (GtkTreeModel *model,
                                      GtkTreeIter  *iter)
 {
-  int i;
-  FilterLevel *level;
   FilterElt *elt;
+  GSequenceIter *siter;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->stamp == iter->stamp, FALSE);
 
-  level = iter->user_data;
   elt = iter->user_data2;
 
-  i = elt - FILTER_ELT (level->array->data);
-
-  while (i > 0)
+  siter = g_sequence_iter_prev (elt->visible_siter);
+  if (g_sequence_iter_is_begin (siter))
     {
-      i--;
-      elt--;
-
-      if (elt->visible)
-        {
-          iter->user_data2 = elt;
-          return TRUE;
-        }
+      iter->stamp = 0;
+      return FALSE;
     }
 
-  /* no previous visible iter */
-  iter->stamp = 0;
+  iter->user_data2 = GET_ELT (siter);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean
@@ -2559,6 +3064,7 @@ gtk_tree_model_filter_iter_children (GtkTreeModel *model,
 {
   GtkTreeModelFilter *filter = (GtkTreeModelFilter *)model;
   FilterLevel *level;
+  GSequenceIter *siter;
 
   iter->stamp = 0;
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
@@ -2568,74 +3074,48 @@ gtk_tree_model_filter_iter_children (GtkTreeModel *model,
 
   if (!parent)
     {
-      int i = 0;
-
       if (!filter->priv->root)
-        gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
+        gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
       if (!filter->priv->root)
         return FALSE;
 
       level = filter->priv->root;
-
-      if (!level->visible_nodes)
-        return FALSE;
+      siter = g_sequence_get_begin_iter (level->visible_seq);
+      if (g_sequence_iter_is_end (siter))
+        {
+          iter->stamp = 0;
+          return FALSE;
+        }
 
       iter->stamp = filter->priv->stamp;
       iter->user_data = level;
+      iter->user_data2 = GET_ELT (siter);
 
-      while (i < level->array->len)
-        {
-          if (!g_array_index (level->array, FilterElt, i).visible)
-            {
-              i++;
-              continue;
-            }
-
-          iter->user_data2 = &g_array_index (level->array, FilterElt, i);
-          return TRUE;
-        }
-
-      iter->stamp = 0;
-      return FALSE;
+      return TRUE;
     }
   else
     {
-      int i = 0;
-      FilterElt *elt;
-
-      elt = FILTER_ELT (parent->user_data2);
-
-      if (elt->children == NULL)
+      if (FILTER_ELT (parent->user_data2)->children == NULL)
         gtk_tree_model_filter_build_level (filter,
                                            FILTER_LEVEL (parent->user_data),
-                                           FILTER_LEVEL_ELT_INDEX (parent->user_data, elt),
+                                           FILTER_ELT (parent->user_data2),
                                            FALSE);
-
-      if (elt->children == NULL)
+      if (FILTER_ELT (parent->user_data2)->children == NULL)
         return FALSE;
 
-      if (elt->children->visible_nodes <= 0)
-        return FALSE;
-
-      iter->stamp = filter->priv->stamp;
-      iter->user_data = elt->children;
-
-      level = FILTER_LEVEL (iter->user_data);
-
-      while (i < level->array->len)
+      level = FILTER_ELT (parent->user_data2)->children;
+      siter = g_sequence_get_begin_iter (level->visible_seq);
+      if (g_sequence_iter_is_end (siter))
         {
-          if (!g_array_index (level->array, FilterElt, i).visible)
-            {
-              i++;
-              continue;
-            }
-
-          iter->user_data2 = &g_array_index (level->array, FilterElt, i);
-          return TRUE;
+          iter->stamp = 0;
+          return FALSE;
         }
 
-      iter->stamp = 0;
-      return FALSE;
+      iter->stamp = filter->priv->stamp;
+      iter->user_data = level;
+      iter->user_data2 = GET_ELT (siter);
+
+      return TRUE;
     }
 
   iter->stamp = 0;
@@ -2659,7 +3139,7 @@ gtk_tree_model_filter_iter_has_child (GtkTreeModel *model,
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_iter, iter);
   elt = FILTER_ELT (iter->user_data2);
 
-  if (!elt->visible)
+  if (!elt->visible_siter)
     return FALSE;
 
   /* we need to build the level to check if not all children are filtered
@@ -2668,10 +3148,9 @@ gtk_tree_model_filter_iter_has_child (GtkTreeModel *model,
   if (!elt->children
       && gtk_tree_model_iter_has_child (filter->priv->child_model, &child_iter))
     gtk_tree_model_filter_build_level (filter, FILTER_LEVEL (iter->user_data),
-                                       FILTER_LEVEL_ELT_INDEX (iter->user_data, elt),
-                                       FALSE);
+                                       elt, FALSE);
 
-  if (elt->children && elt->children->visible_nodes > 0)
+  if (elt->children && g_sequence_get_length (elt->children->visible_seq) > 0)
     return TRUE;
 
   return FALSE;
@@ -2693,17 +3172,17 @@ gtk_tree_model_filter_iter_n_children (GtkTreeModel *model,
   if (!iter)
     {
       if (!filter->priv->root)
-        gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
+        gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
 
       if (filter->priv->root)
-        return FILTER_LEVEL (filter->priv->root)->visible_nodes;
+        return g_sequence_get_length (FILTER_LEVEL (filter->priv->root)->visible_seq);
 
       return 0;
     }
 
   elt = FILTER_ELT (iter->user_data2);
 
-  if (!elt->visible)
+  if (!elt->visible_siter)
     return 0;
 
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_iter, iter);
@@ -2712,11 +3191,10 @@ gtk_tree_model_filter_iter_n_children (GtkTreeModel *model,
       gtk_tree_model_iter_has_child (filter->priv->child_model, &child_iter))
     gtk_tree_model_filter_build_level (filter,
                                        FILTER_LEVEL (iter->user_data),
-                                       FILTER_LEVEL_ELT_INDEX (iter->user_data, elt),
-                                       FALSE);
+                                       elt, FALSE);
 
   if (elt->children)
-    return elt->children->visible_nodes;
+    return g_sequence_get_length (elt->children->visible_seq);
 
   return 0;
 }
@@ -2727,9 +3205,9 @@ gtk_tree_model_filter_iter_nth_child (GtkTreeModel *model,
                                       GtkTreeIter  *parent,
                                       gint          n)
 {
-  FilterElt *elt;
   FilterLevel *level;
   GtkTreeIter children;
+  GSequenceIter *siter;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
   if (parent)
@@ -2743,20 +3221,13 @@ gtk_tree_model_filter_iter_nth_child (GtkTreeModel *model,
     }
 
   level = children.user_data;
-  elt = FILTER_ELT (level->array->data);
-
-  if (n >= level->visible_nodes)
-    {
-      iter->stamp = 0;
-      return FALSE;
-    }
-
-  elt = gtk_tree_model_filter_get_nth_visible (GTK_TREE_MODEL_FILTER (model),
-                                               level, n);
+  siter = g_sequence_get_iter_at_pos (level->visible_seq, n);
+  if (g_sequence_iter_is_end (siter))
+    return FALSE;
 
   iter->stamp = GTK_TREE_MODEL_FILTER (model)->priv->stamp;
   iter->user_data = level;
-  iter->user_data2 = elt;
+  iter->user_data2 = GET_ELT (siter);
 
   return TRUE;
 }
@@ -2779,7 +3250,7 @@ gtk_tree_model_filter_iter_parent (GtkTreeModel *model,
     {
       iter->stamp = GTK_TREE_MODEL_FILTER (model)->priv->stamp;
       iter->user_data = level->parent_level;
-      iter->user_data2 = FILTER_LEVEL_PARENT_ELT (level);
+      iter->user_data2 = level->parent_elt;
 
       return TRUE;
     }
@@ -2790,6 +3261,14 @@ gtk_tree_model_filter_iter_parent (GtkTreeModel *model,
 static void
 gtk_tree_model_filter_ref_node (GtkTreeModel *model,
                                 GtkTreeIter  *iter)
+{
+  gtk_tree_model_filter_real_ref_node (model, iter, TRUE);
+}
+
+static void
+gtk_tree_model_filter_real_ref_node (GtkTreeModel *model,
+                                     GtkTreeIter  *iter,
+                                     gboolean      external)
 {
   GtkTreeModelFilter *filter = (GtkTreeModelFilter *)model;
   GtkTreeIter child_iter;
@@ -2809,22 +3288,29 @@ gtk_tree_model_filter_ref_node (GtkTreeModel *model,
 
   elt->ref_count++;
   level->ref_count++;
-  if (level->ref_count == 1)
+
+  if (external)
     {
-      FilterLevel *parent_level = level->parent_level;
-      gint parent_elt_index = level->parent_elt_index;
+      elt->ext_ref_count++;
+      level->ext_ref_count++;
 
-      /* we were at zero -- time to decrease the zero_ref_count val */
-      while (parent_level)
+      if (level->ext_ref_count == 1)
         {
-          g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count--;
+          FilterLevel *parent_level = level->parent_level;
+          FilterElt *parent_elt = level->parent_elt;
 
-          parent_elt_index = parent_level->parent_elt_index;
-	  parent_level = parent_level->parent_level;
+          /* we were at zero -- time to decrease the zero_ref_count val */
+          while (parent_level)
+            {
+              parent_elt->zero_ref_count--;
+
+              parent_elt = parent_level->parent_elt;
+              parent_level = parent_level->parent_level;
+            }
+
+          if (filter->priv->root != level)
+            filter->priv->zero_ref_count--;
         }
-
-      if (filter->priv->root != level)
-	filter->priv->zero_ref_count--;
     }
 }
 
@@ -2832,12 +3318,13 @@ static void
 gtk_tree_model_filter_unref_node (GtkTreeModel *model,
                                   GtkTreeIter  *iter)
 {
-  gtk_tree_model_filter_real_unref_node (model, iter, TRUE);
+  gtk_tree_model_filter_real_unref_node (model, iter, TRUE, TRUE);
 }
 
 static void
 gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
                                        GtkTreeIter  *iter,
+                                       gboolean      external,
                                        gboolean      propagate_unref)
 {
   GtkTreeModelFilter *filter = (GtkTreeModelFilter *)model;
@@ -2862,22 +3349,29 @@ gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
 
   elt->ref_count--;
   level->ref_count--;
-  if (level->ref_count == 0)
+
+  if (external)
     {
-      FilterLevel *parent_level = level->parent_level;
-      gint parent_elt_index = level->parent_elt_index;
+      elt->ext_ref_count--;
+      level->ext_ref_count--;
 
-      /* we are at zero -- time to increase the zero_ref_count val */
-      while (parent_level)
+      if (level->ext_ref_count == 0)
         {
-          g_array_index (parent_level->array, FilterElt, parent_elt_index).zero_ref_count++;
+          FilterLevel *parent_level = level->parent_level;
+          FilterElt *parent_elt = level->parent_elt;
 
-          parent_elt_index = parent_level->parent_elt_index;
-          parent_level = parent_level->parent_level;
+          /* we are at zero -- time to increase the zero_ref_count val */
+          while (parent_level)
+            {
+              parent_elt->zero_ref_count++;
+
+              parent_elt = parent_level->parent_elt;
+              parent_level = parent_level->parent_level;
+            }
+
+          if (filter->priv->root != level)
+            filter->priv->zero_ref_count++;
         }
-
-      if (filter->priv->root != level)
-	filter->priv->zero_ref_count++;
     }
 }
 
@@ -2959,7 +3453,7 @@ gtk_tree_model_filter_set_model (GtkTreeModelFilter *filter,
 
       /* reset our state */
       if (filter->priv->root)
-        gtk_tree_model_filter_free_level (filter, filter->priv->root);
+        gtk_tree_model_filter_free_level (filter, filter->priv->root, TRUE);
 
       filter->priv->root = NULL;
       g_object_unref (filter->priv->child_model);
@@ -3022,12 +3516,17 @@ gtk_tree_model_filter_ref_path (GtkTreeModelFilter *filter,
 
 static void
 gtk_tree_model_filter_unref_path (GtkTreeModelFilter *filter,
-                                  GtkTreePath        *path)
+                                  GtkTreePath        *path,
+                                  int                 depth)
 {
   int len;
   GtkTreePath *p;
 
-  len = gtk_tree_path_get_depth (path);
+  if (depth != -1)
+    len = depth;
+  else
+    len = gtk_tree_path_get_depth (path);
+
   p = gtk_tree_path_copy (path);
   while (len--)
     {
@@ -3319,12 +3818,16 @@ gtk_tree_model_filter_convert_iter_to_child_iter (GtkTreeModelFilter *filter,
   else
     {
       GtkTreePath *path;
+      gboolean valid = FALSE;
 
       path = gtk_tree_model_filter_elt_get_path (filter_iter->user_data,
                                                  filter_iter->user_data2,
                                                  filter->priv->virtual_root);
-      gtk_tree_model_get_iter (filter->priv->child_model, child_iter, path);
+      valid = gtk_tree_model_get_iter (filter->priv->child_model, child_iter,
+                                       path);
       gtk_tree_path_free (path);
+
+      g_return_if_fail (valid == TRUE);
     }
 }
 
@@ -3359,12 +3862,12 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
   child_indices = gtk_tree_path_get_indices (real_path);
 
   if (filter->priv->root == NULL && build_levels)
-    gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
+    gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
   level = FILTER_LEVEL (filter->priv->root);
 
   for (i = 0; i < gtk_tree_path_get_depth (real_path); i++)
     {
-      gint j;
+      GSequenceIter *siter;
       gboolean found_child = FALSE;
 
       if (!level)
@@ -3374,20 +3877,20 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
           return NULL;
         }
 
-      tmp = bsearch_elt_with_offset (level->array, child_indices[i], &j);
+      tmp = lookup_elt_with_offset (level->seq, child_indices[i], &siter);
       if (tmp)
         {
-          gtk_tree_path_append_index (retval, j);
+          gtk_tree_path_append_index (retval, g_sequence_iter_get_position (siter));
           if (!tmp->children && build_levels)
-            gtk_tree_model_filter_build_level (filter, level,
-                                               FILTER_LEVEL_ELT_INDEX (level, tmp),
-                                               FALSE);
+            gtk_tree_model_filter_build_level (filter, level, tmp, FALSE);
           level = tmp->children;
           found_child = TRUE;
         }
 
       if (!found_child && fetch_children)
         {
+          int j;
+
           tmp = gtk_tree_model_filter_fetch_child (filter, level,
                                                    child_indices[i],
                                                    &j);
@@ -3403,9 +3906,7 @@ gtk_real_tree_model_filter_convert_child_path_to_path (GtkTreeModelFilter *filte
 
           gtk_tree_path_append_index (retval, j);
           if (!tmp->children && build_levels)
-            gtk_tree_model_filter_build_level (filter, level,
-                                               FILTER_LEVEL_ELT_INDEX (level, tmp),
-                                               FALSE);
+            gtk_tree_model_filter_build_level (filter, level, tmp, FALSE);
           level = tmp->children;
           found_child = TRUE;
         }
@@ -3497,32 +3998,30 @@ gtk_tree_model_filter_convert_path_to_child_path (GtkTreeModelFilter *filter,
   retval = gtk_tree_path_new ();
   filter_indices = gtk_tree_path_get_indices (filter_path);
   if (!filter->priv->root)
-    gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
+    gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
   level = FILTER_LEVEL (filter->priv->root);
 
   for (i = 0; i < gtk_tree_path_get_depth (filter_path); i++)
     {
       FilterElt *elt;
+      GSequenceIter *siter;
 
-      if (!level || level->visible_nodes <= filter_indices[i])
+      if (!level)
         {
           gtk_tree_path_free (retval);
           return NULL;
         }
 
-      elt = gtk_tree_model_filter_get_nth_visible (filter, level,
-                                                   filter_indices[i]);
+      siter = g_sequence_get_iter_at_pos (level->visible_seq, filter_indices[i]);
+      if (g_sequence_iter_is_end (siter))
+        {
+          gtk_tree_path_free (retval);
+          return NULL;
+        }
 
+      elt = GET_ELT (siter);
       if (elt->children == NULL)
-        gtk_tree_model_filter_build_level (filter, level,
-                                           FILTER_LEVEL_ELT_INDEX (level, elt),
-                                           FALSE);
-
-      if (!level || level->visible_nodes <= filter_indices[i])
-        {
-          gtk_tree_path_free (retval);
-          return NULL;
-        }
+        gtk_tree_model_filter_build_level (filter, level, elt, FALSE);
 
       gtk_tree_path_append_index (retval, elt->offset);
       level = elt->children;

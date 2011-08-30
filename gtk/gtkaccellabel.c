@@ -481,40 +481,56 @@ refetch_widget_accel_closure (GtkAccelLabel *accel_label)
   gtk_accel_label_set_accel_closure (accel_label, closure);
 }
 
+static void
+accel_widget_weak_ref_cb (GtkAccelLabel *accel_label,
+                          GtkWidget     *old_accel_widget)
+{
+  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+  g_return_if_fail (GTK_IS_WIDGET (accel_label->priv->accel_widget));
+
+  g_signal_handlers_disconnect_by_func (accel_label->priv->accel_widget,
+                                        refetch_widget_accel_closure,
+                                        accel_label);
+  accel_label->priv->accel_widget = NULL;
+  g_object_notify (G_OBJECT (accel_label), "accel-widget");
+}
+
 /**
  * gtk_accel_label_set_accel_widget:
  * @accel_label: a #GtkAccelLabel
  * @accel_widget: the widget to be monitored.
  *
- * Sets the widget to be monitored by this accelerator label. 
- **/
+ * Sets the widget to be monitored by this accelerator label.
+ */
 void
 gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
-				  GtkWidget     *accel_widget)
+                                  GtkWidget     *accel_widget)
 {
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
   if (accel_widget)
     g_return_if_fail (GTK_IS_WIDGET (accel_widget));
-    
+
   if (accel_widget != accel_label->priv->accel_widget)
     {
       if (accel_label->priv->accel_widget)
-	{
-	  gtk_accel_label_set_accel_closure (accel_label, NULL);
-	  g_signal_handlers_disconnect_by_func (accel_label->priv->accel_widget,
-						refetch_widget_accel_closure,
-						accel_label);
-	  g_object_unref (accel_label->priv->accel_widget);
-	}
+        {
+          gtk_accel_label_set_accel_closure (accel_label, NULL);
+          g_signal_handlers_disconnect_by_func (accel_label->priv->accel_widget,
+                                                refetch_widget_accel_closure,
+                                                accel_label);
+          g_object_weak_unref (G_OBJECT (accel_label->priv->accel_widget),
+                               (GWeakNotify) accel_widget_weak_ref_cb, accel_label);
+        }
       accel_label->priv->accel_widget = accel_widget;
       if (accel_label->priv->accel_widget)
-	{
-	  g_object_ref (accel_label->priv->accel_widget);
-	  g_signal_connect_object (accel_label->priv->accel_widget, "accel-closures-changed",
-				   G_CALLBACK (refetch_widget_accel_closure),
-				   accel_label, G_CONNECT_SWAPPED);
-	  refetch_widget_accel_closure (accel_label);
-	}
+        {
+          g_object_weak_ref (G_OBJECT (accel_label->priv->accel_widget),
+                             (GWeakNotify) accel_widget_weak_ref_cb, accel_label);
+          g_signal_connect_object (accel_label->priv->accel_widget, "accel-closures-changed",
+                                   G_CALLBACK (refetch_widget_accel_closure),
+                                   accel_label, G_CONNECT_SWAPPED);
+          refetch_widget_accel_closure (accel_label);
+        }
       g_object_notify (G_OBJECT (accel_label), "accel-widget");
     }
 }

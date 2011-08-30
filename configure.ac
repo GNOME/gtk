@@ -10,7 +10,7 @@
 
 m4_define([gtk_major_version], [3])
 m4_define([gtk_minor_version], [1])
-m4_define([gtk_micro_version], [13])
+m4_define([gtk_micro_version], [15])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -41,7 +41,7 @@ m4_define([gtk_binary_version], [3.0.0])
 # required versions of other packages
 m4_define([glib_required_version], [2.29.14])
 m4_define([pango_required_version], [1.29.0])
-m4_define([atk_required_version], [1.30])
+m4_define([atk_required_version], [2.1.5])
 m4_define([cairo_required_version], [1.10.0])
 m4_define([gdk_pixbuf_required_version], [2.23.5])
 m4_define([introspection_required_version], [0.10.1])
@@ -383,7 +383,7 @@ if test "x$enable_wayland_backend" == "xyes"; then
   GIO_PACKAGE=gio-unix-2.0
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
-  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-egl"
+  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-egl egl"
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
@@ -1263,7 +1263,7 @@ LDFLAGS="$saved_ldflags"
 
 GDK_PACKAGES="$PANGO_PACKAGES $GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES gdk-pixbuf-2.0 $cairo_backends cairo-gobject"
 
-GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES`"
+GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES` $MATH_LIB"
 GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
@@ -1320,7 +1320,7 @@ if test x"$os_openbsd" = xyes; then
 fi
 
 GTK_EXTRA_CFLAGS=
-GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES` $GTK_EXTRA_LIBS"
+GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES` $GTK_EXTRA_LIBS $MATH_LIB"
 GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES $GTK_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
 
 if test x"$os_win32" = xyes; then

@@ -87,6 +87,16 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 }
 
 static void
+font_activated_cb (GtkFontChooser *fontchooser,
+                   const gchar    *fontname,
+                   gpointer        user_data)
+{
+  GtkDialog *dialog = user_data;
+
+  gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+}
+
+static void
 gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 {
   GtkFontChooserDialogPrivate *priv;
@@ -117,27 +127,29 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
   gtk_box_pack_start (GTK_BOX (content_area),
                       priv->fontchooser, TRUE, TRUE, 0);
 
+  g_signal_connect (priv->fontchooser, "font-activated",
+                    G_CALLBACK (font_activated_cb), dialog);
+
   /* Create the action area */
   priv->cancel_button = gtk_dialog_add_button (dialog,
                                                GTK_STOCK_CANCEL,
                                                GTK_RESPONSE_CANCEL);
   priv->select_button = gtk_dialog_add_button (dialog,
-                                               _("Select"),
+                                               _("_Select"),
                                                GTK_RESPONSE_OK);
   gtk_widget_grab_default (priv->select_button);
 
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontchooserdiag),
-             GTK_RESPONSE_OK,
-             GTK_RESPONSE_CANCEL,
-             -1);
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
 
   gtk_window_set_title (GTK_WINDOW (fontchooserdiag), _("Font Selection"));
 
   gtk_widget_pop_composite_child ();
 }
 
-/**
- * gtk_font_chooser_dialog_new:
+/** gtk_font_chooser_dialog_new:
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Trasient parent of the dialog, or %NULL
  *

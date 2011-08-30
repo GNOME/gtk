@@ -693,6 +693,7 @@ _gtk_pango_move_lines (PangoLayout *layout,
   text = pango_layout_get_text (layout);
   index = g_utf8_offset_to_pointer (text, offset) - text;
   lines = pango_layout_get_lines (layout);
+  line = NULL;
 
   num = 0;
   for (l = lines; l; l = l->next)

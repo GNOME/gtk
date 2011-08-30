@@ -32,7 +32,7 @@
 #include "gtkicontheme.h"
 #include "gtkiconfactory.h"
 #include "gtklabel.h"
-#include "gtkhbox.h"
+#include "gtkbox.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 
