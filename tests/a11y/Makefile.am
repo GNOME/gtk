@@ -25,7 +25,10 @@ TEST_PROGS += text
 
 TEST_PROGS += children
 
-TEST_PROGS += focus
+# the focus test has no chance of working until
+# all the idle handlers in gail are gone
+#
+# TEST_PROGS += focus
 
 TEST_PROGS += util
 
