@@ -99,7 +99,7 @@ copy ..\..\..\gdk\gdkkeysyms-compat.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk
 copy ..\..\..\gdk\gdkpango.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkpixbuf.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkpixmap.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkprivate.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A
+copy ..\..\..\gdk\gdkprivate.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkproperty.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkregion.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkrgb.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
