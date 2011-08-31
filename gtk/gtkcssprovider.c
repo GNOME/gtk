@@ -1666,16 +1666,37 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
 static void
 gtk_css_provider_propagate_error (GtkCssProvider  *provider,
-                                  const gchar     *path,
-                                  guint            line,
-                                  guint            position,
+                                  GtkCssSection   *section,
                                   const GError    *error,
                                   GError         **propagate_to)
 {
+
+  GFileInfo *info;
+  GFile *file;
+  const char *path;
+
+  file = gtk_css_section_get_file (section);
+  if (file)
+    {
+      info = g_file_query_info (file,G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
+
+      if (info)
+        path = g_file_info_get_display_name (info);
+      else
+        path = "<broken file>";
+    }
+  else
+    {
+      info = NULL;
+      path = "<unknown>";
+    }
+
   /* don't fail for deprecations */
   if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
     {
-      g_warning ("Theme parsing error: %s:%u:%u: %s", path ? path : "<unknown>", line, position, error->message);
+      g_warning ("Theme parsing error: %s:%u:%u: %s", path,
+                 gtk_css_section_get_end_line (section) + 1,
+                 gtk_css_section_get_end_position (section), error->message);
       return;
     }
 
@@ -1684,7 +1705,12 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
     return;
 
   *propagate_to = g_error_copy (error);
-  g_prefix_error (propagate_to, "%s:%u:%u: ", path ? path : "<unknown>", line, position);
+  g_prefix_error (propagate_to, "%s:%u:%u: ", path,
+                  gtk_css_section_get_end_line (section) + 1,
+                  gtk_css_section_get_end_position (section));
+
+  if (info)
+    g_object_unref (info);
 }
 
 static gboolean
