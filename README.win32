@@ -156,11 +156,17 @@ Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
 makefile.msc in gdk and gtk. Be prepared to manually edit various
 makefile.msc files, and the makefile snippets in build/win32.
 
-There are also VS 2008 solution and project files to build GTK+, which
+There are also VS 2008/2010 solution and project files to build GTK+, which
 are maintained by Chun-wei Fan.  They should build GTK+ out of the box,
 provided that the afore-mentioned dependencies are installed.  They will
-build GDK with the Win32 backend, GTK+ itself and the gtk-demo program.
-(The GAIL and GAIL-util sources are not built by this method yet)
+build GDK with the Win32 backend, GTK+ itself (with GAIL/a11y built in),
+the GAIL-Util library and the gtk-demo program.
+
+Please refer to the following GNOME Live! page for a more detailed ouline
+on the process of building the GTK+ stack and its dependencies with Visual
+C++:
+
+https://live.gnome.org/GTK%2B/Win32/MSVCCompilationOfGTKStack
 
 Alternative 1 also generates Microsoft import libraries (.lib), if you
 have lib.exe available. It might also work for cross-compilation from
