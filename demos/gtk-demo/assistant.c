@@ -101,6 +101,7 @@ create_page1 (GtkWidget *assistant)
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
   entry = gtk_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (on_entry_changed), assistant);
