@@ -36,7 +36,7 @@ create_combo_box (const char **strings)
 }
 
 static void
-add_row (GtkTable     *table,
+add_row (GtkGrid      *table,
 	 int           row,
 	 GtkSizeGroup *size_group,
 	 const char   *label_text,
@@ -48,18 +48,13 @@ add_row (GtkTable     *table,
   label = gtk_label_new_with_mnemonic (label_text);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_END);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1,                  row, row + 1,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
-  
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_grid_attach (table, label, 0, row, 1, 1);
+
   combo_box = create_combo_box (options);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
   gtk_size_group_add_widget (size_group, combo_box);
-  gtk_table_attach (GTK_TABLE (table), combo_box,
-		    1, 2,                  row, row + 1,
-		    0,                     0,
-		    0,                     0);
+  gtk_grid_attach (table, combo_box, 1, row, 1, 1);
 }
 
 static void
@@ -130,33 +125,33 @@ do_sizegroup (GtkWidget *do_widget)
       frame = gtk_frame_new ("Color Options");
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
 
-      table = gtk_table_new (2, 2, FALSE);
+      table = gtk_grid_new ();
       gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+      gtk_grid_set_row_spacing (GTK_GRID (table), 5);
+      gtk_grid_set_column_spacing (GTK_GRID (table), 10);
       gtk_container_add (GTK_CONTAINER (frame), table);
 
-      add_row (GTK_TABLE (table), 0, size_group, "_Foreground", color_options);
-      add_row (GTK_TABLE (table), 1, size_group, "_Background", color_options);
+      add_row (GTK_GRID (table), 0, size_group, "_Foreground", color_options);
+      add_row (GTK_GRID (table), 1, size_group, "_Background", color_options);
 
       /* And another frame holding line style options
        */
       frame = gtk_frame_new ("Line Options");
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-      table = gtk_table_new (2, 2, FALSE);
+      table = gtk_grid_new ();
       gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+      gtk_grid_set_row_spacing (GTK_GRID (table), 5);
+      gtk_grid_set_column_spacing (GTK_GRID (table), 10);
       gtk_container_add (GTK_CONTAINER (frame), table);
 
-      add_row (GTK_TABLE (table), 0, size_group, "_Dashing", dash_options);
-      add_row (GTK_TABLE (table), 1, size_group, "_Line ends", end_options);
+      add_row (GTK_GRID (table), 0, size_group, "_Dashing", dash_options);
+      add_row (GTK_GRID (table), 1, size_group, "_Line ends", end_options);
 
       /* And a check button to turn grouping on and off */
       check_button = gtk_check_button_new_with_mnemonic ("_Enable grouping");
       gtk_box_pack_start (GTK_BOX (vbox), check_button, FALSE, FALSE, 0);
-      
+
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
       g_signal_connect (check_button, "toggled",
 			G_CALLBACK (toggle_grouping), size_group);

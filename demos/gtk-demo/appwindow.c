@@ -416,7 +416,7 @@ do_appwindow (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed),
                         &window);
 
-      table = gtk_table_new (1, 5, FALSE);
+      table = gtk_grid_new ();
 
       gtk_container_add (GTK_CONTAINER (window), table);
 
@@ -464,21 +464,13 @@ do_appwindow (GtkWidget *do_widget)
 
       bar = gtk_ui_manager_get_widget (merge, "/MenuBar");
       gtk_widget_show (bar);
-      gtk_table_attach (GTK_TABLE (table),
-			bar,
-                        /* X direction */          /* Y direction */
-                        0, 1,                      0, 1,
-                        GTK_EXPAND | GTK_FILL,     0,
-                        0,                         0);
+      gtk_widget_set_halign (bar, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), bar, 0, 0, 1, 1);
 
       bar = gtk_ui_manager_get_widget (merge, "/ToolBar");
       gtk_widget_show (bar);
-      gtk_table_attach (GTK_TABLE (table),
-			bar,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   1, 2,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
+      gtk_widget_set_halign (bar, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), bar, 0, 1, 1, 1);
 
       /* Create document
        */
@@ -495,12 +487,8 @@ do_appwindow (GtkWidget *do_widget)
       g_signal_connect (infobar, "response",
                         G_CALLBACK (gtk_widget_hide), NULL);
 
-      gtk_table_attach (GTK_TABLE (table),
-                        infobar,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   2, 3,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
+      gtk_widget_set_halign (infobar, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), infobar, 0, 2, 1, 1);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
 
@@ -511,12 +499,11 @@ do_appwindow (GtkWidget *do_widget)
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
                                            GTK_SHADOW_IN);
 
-      gtk_table_attach (GTK_TABLE (table),
-                        sw,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   3, 4,
-                        GTK_EXPAND | GTK_FILL,  GTK_EXPAND | GTK_FILL,
-                        0,                      0);
+      gtk_widget_set_halign (sw, GTK_ALIGN_FILL);
+      gtk_widget_set_valign (sw, GTK_ALIGN_FILL);
+      gtk_widget_set_hexpand (sw, TRUE);
+      gtk_widget_set_vexpand (sw, TRUE);
+      gtk_grid_attach (GTK_GRID (table), sw, 0, 3, 1, 1);
 
       gtk_window_set_default_size (GTK_WINDOW (window),
                                    200, 200);
@@ -530,16 +517,12 @@ do_appwindow (GtkWidget *do_widget)
       /* Create statusbar */
 
       statusbar = gtk_statusbar_new ();
-      gtk_table_attach (GTK_TABLE (table),
-                        statusbar,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   4, 5,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
+      gtk_widget_set_halign (sw, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), statusbar, 0, 4, 1, 1);
 
       /* Show text widget info in the statusbar */
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));
-      
+
       g_signal_connect_object (buffer,
                                "changed",
                                G_CALLBACK (update_statusbar),

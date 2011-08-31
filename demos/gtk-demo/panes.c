@@ -15,7 +15,7 @@
 
 void
 toggle_resize (GtkWidget *widget,
-	       GtkWidget *child)
+               GtkWidget *child)
 {
   GtkWidget *parent;
   GtkPaned *paned;
@@ -43,7 +43,7 @@ toggle_resize (GtkWidget *widget,
 
 void
 toggle_shrink (GtkWidget *widget,
-	       GtkWidget *child)
+               GtkWidget *child)
 {
   GtkWidget *parent;
   GtkPaned *paned;
@@ -70,10 +70,10 @@ toggle_shrink (GtkWidget *widget,
 }
 
 GtkWidget *
-create_pane_options (GtkPaned	 *paned,
-		     const gchar *frame_label,
-		     const gchar *label1,
-		     const gchar *label2)
+create_pane_options (GtkPaned    *paned,
+                     const gchar *frame_label,
+                     const gchar *label1,
+                     const gchar *label2)
 {
   GtkWidget *child1, *child2;
   GtkWidget *frame;
@@ -86,47 +86,38 @@ create_pane_options (GtkPaned	 *paned,
 
   frame = gtk_frame_new (frame_label);
   gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
-  
-  table = gtk_table_new (3, 2, TRUE);
+
+  table = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (frame), table);
-  
+
   label = gtk_label_new (label1);
-  gtk_table_attach_defaults (GTK_TABLE (table), label,
-			     0, 1, 0, 1);
-  
+  gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
+
   check_button = gtk_check_button_new_with_mnemonic ("_Resize");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (table), check_button, 0, 1, 1, 1);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_resize), child1);
+                    G_CALLBACK (toggle_resize), child1);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     0, 1, 2, 3);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
-			       TRUE);
+  gtk_grid_attach (GTK_GRID (table), check_button, 0, 2, 1, 1);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_shrink), child1);
+                    G_CALLBACK (toggle_shrink), child1);
 
   label = gtk_label_new (label2);
-  gtk_table_attach_defaults (GTK_TABLE (table), label,
-			     1, 2, 0, 1);
-  
+  gtk_grid_attach (GTK_GRID (table), label, 1, 0, 1, 1);
+
   check_button = gtk_check_button_new_with_mnemonic ("_Resize");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     1, 2, 1, 2);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
-			       TRUE);
+  gtk_grid_attach (GTK_GRID (table), check_button, 1, 1, 1, 1);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_resize), child2);
+                    G_CALLBACK (toggle_resize), child2);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     1, 2, 2, 3);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
-			       TRUE);
+  gtk_grid_attach (GTK_GRID (table), check_button, 1, 2, 1, 1);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
   g_signal_connect (check_button, "toggled",
-		    G_CALLBACK (toggle_shrink), child2);
+                    G_CALLBACK (toggle_shrink), child2);
 
   return frame;
 }
@@ -145,10 +136,10 @@ do_panes (GtkWidget *do_widget)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
 
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -184,18 +175,18 @@ do_panes (GtkWidget *do_widget)
       /* Now create toggle buttons to control sizing */
 
       gtk_box_pack_start (GTK_BOX (vbox),
-			  create_pane_options (GTK_PANED (hpaned),
-					       "Horizontal",
-					       "Left",
-					       "Right"),
-			  FALSE, FALSE, 0);
+                          create_pane_options (GTK_PANED (hpaned),
+                                               "Horizontal",
+                                               "Left",
+                                               "Right"),
+                          FALSE, FALSE, 0);
 
       gtk_box_pack_start (GTK_BOX (vbox),
-			  create_pane_options (GTK_PANED (vpaned),
-					       "Vertical",
-					       "Top",
-					       "Bottom"),
-			  FALSE, FALSE, 0);
+                          create_pane_options (GTK_PANED (vpaned),
+                                               "Vertical",
+                                               "Top",
+                                               "Bottom"),
+                          FALSE, FALSE, 0);
 
       gtk_widget_show_all (vbox);
     }

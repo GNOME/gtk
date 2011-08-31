@@ -61,29 +61,25 @@ interactive_dialog_clicked (GtkButton *button,
   stock = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (hbox), stock, FALSE, FALSE, 0);
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 4);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 4);
+  table = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (table), 4);
+  gtk_grid_set_column_spacing (GTK_GRID (table), 4);
   gtk_box_pack_start (GTK_BOX (hbox), table, TRUE, TRUE, 0);
   label = gtk_label_new_with_mnemonic ("_Entry 1");
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     label,
-			     0, 1, 0, 1);
+  gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
   local_entry1 = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (local_entry1), gtk_entry_get_text (GTK_ENTRY (entry1)));
-  gtk_table_attach_defaults (GTK_TABLE (table), local_entry1, 1, 2, 0, 1);
+  gtk_grid_attach (GTK_GRID (table), local_entry1, 1, 0, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry1);
 
   label = gtk_label_new_with_mnemonic ("E_ntry 2");
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     label,
-			     0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
 
   local_entry2 = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (local_entry2), gtk_entry_get_text (GTK_ENTRY (entry2)));
-  gtk_table_attach_defaults (GTK_TABLE (table), local_entry2, 1, 2, 1, 2);
+  gtk_grid_attach (GTK_GRID (table), local_entry2, 1, 1, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry2);
-  
+
   gtk_widget_show_all (hbox);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -146,29 +142,23 @@ do_dialog (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 
-      table = gtk_table_new (2, 2, FALSE);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 4);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 4);
+      table = gtk_grid_new ();
+      gtk_grid_set_row_spacing (GTK_GRID (table), 4);
+      gtk_grid_set_column_spacing (GTK_GRID (table), 4);
       gtk_box_pack_start (GTK_BOX (hbox), table, FALSE, FALSE, 0);
 
       label = gtk_label_new_with_mnemonic ("_Entry 1");
-      gtk_table_attach_defaults (GTK_TABLE (table),
-				 label,
-				 0, 1, 0, 1);
+      gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
 
       entry1 = gtk_entry_new ();
-      gtk_table_attach_defaults (GTK_TABLE (table), entry1, 1, 2, 0, 1);
+      gtk_grid_attach (GTK_GRID (table), entry1, 1, 0, 1, 1);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry1);
 
       label = gtk_label_new_with_mnemonic ("E_ntry 2");
-      
-      gtk_table_attach_defaults (GTK_TABLE (table),
-				 label,
-				 0, 1, 1, 2);
+      gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
 
       entry2 = gtk_entry_new ();
-      gtk_table_attach_defaults (GTK_TABLE (table), entry2, 1, 2, 1, 2);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry2);
+      gtk_grid_attach (GTK_GRID (table), entry2, 1, 1, 1, 1);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -176,7 +166,7 @@ do_dialog (GtkWidget *do_widget)
       gtk_widget_show_all (window);
     }
   else
-    {	 
+    {
       gtk_widget_destroy (window);
       window = NULL;
     }
