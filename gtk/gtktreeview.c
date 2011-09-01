@@ -5005,18 +5005,28 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	      expander_cell_width = cell_area.width;
 
 	      if (is_separator)
-                gtk_render_line (context, cr,
-                                 cell_area.x,
-                                 cell_area.y + cell_area.height / 2,
-				 cell_area.x + cell_area.width,
-				 cell_area.y + cell_area.height / 2);
+                {
+                  gtk_style_context_save (context);
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+
+                  gtk_render_line (context, cr,
+                                   cell_area.x,
+                                   cell_area.y + cell_area.height / 2,
+                                   cell_area.x + cell_area.width,
+                                   cell_area.y + cell_area.height / 2);
+
+                  gtk_style_context_restore (context);
+                }
 	      else
-		_gtk_tree_view_column_cell_render (column,
-						   cr,
-						   &background_area,
-						   &cell_area,
-						   flags,
-                                                   draw_focus);
+                {
+                  _gtk_tree_view_column_cell_render (column,
+                                                     cr,
+                                                     &background_area,
+                                                     &cell_area,
+                                                     flags,
+                                                     draw_focus);
+                }
+
 	      if (gtk_tree_view_draw_expanders (tree_view)
 		  && (node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
 		{
@@ -14559,17 +14569,26 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       if (gtk_tree_view_column_cell_is_visible (column))
 	{
 	  if (is_separator)
-            gtk_render_line (context, cr,
-                             cell_area.x,
-                             cell_area.y + cell_area.height / 2,
-                             cell_area.x + cell_area.width,
-                             cell_area.y + cell_area.height / 2);
+            {
+              gtk_style_context_save (context);
+              gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
+
+              gtk_render_line (context, cr,
+                               cell_area.x,
+                               cell_area.y + cell_area.height / 2,
+                               cell_area.x + cell_area.width,
+                               cell_area.y + cell_area.height / 2);
+
+              gtk_style_context_restore (context);
+            }
 	  else
-	    _gtk_tree_view_column_cell_render (column,
-                                               cr,
-					       &background_area,
-					       &cell_area,
-					       0, FALSE);
+            {
+              _gtk_tree_view_column_cell_render (column,
+                                                 cr,
+                                                 &background_area,
+                                                 &cell_area,
+                                                 0, FALSE);
+            }
 	}
       cell_offset += gtk_tree_view_column_get_width (column);
     }
