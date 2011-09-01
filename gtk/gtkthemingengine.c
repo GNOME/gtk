@@ -2030,68 +2030,23 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
                                 gdouble           x1,
                                 gdouble           y1)
 {
-  GdkRGBA bg_color, darker, lighter;
+  GdkRGBA color;
   GtkStateFlags flags;
-  gint i, thickness, thickness_dark, thickness_light, len;
   cairo_matrix_t matrix;
-  gdouble angle;
-
-  /* FIXME: thickness */
-  thickness = 2;
-  thickness_dark = thickness / 2;
-  thickness_light = thickness - thickness_dark;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
 
-  gtk_theming_engine_get_background_color (engine, flags, &bg_color);
-  color_shade (&bg_color, 0.7, &darker);
-  color_shade (&bg_color, 1.3, &lighter);
+  gtk_theming_engine_get_color (engine, flags, &color);
 
   cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
   cairo_set_line_width (cr, 1);
 
-  angle = atan2 (x1 - x0, y1 - y0);
-  angle = (2 * G_PI) - angle;
-  angle += G_PI / 2;
+  cairo_move_to (cr, x0 + 0.5, y0 + 0.5);
+  cairo_line_to (cr, x1 + 0.5, y1 + 0.5);
 
-  cairo_get_matrix (cr, &matrix);
-  cairo_matrix_translate (&matrix, x0, y0);
-  cairo_matrix_rotate (&matrix, angle);
-  cairo_set_matrix (cr, &matrix);
-
-  x1 -= x0;
-  y1 -= y0;
-
-  len = (gint) sqrt ((x1 * x1) + (y1 * y1));
-
-  y0 = -thickness_dark;
-
-  for (i = 0; i < thickness_dark; i++)
-    {
-      gdk_cairo_set_source_rgba (cr, &lighter);
-      add_path_line (cr, len - i - 1.5, y0, len - 0.5, y0);
-      cairo_stroke (cr);
-
-      gdk_cairo_set_source_rgba (cr, &darker);
-      add_path_line (cr, 0.5, y0, len - i - 1.5, y0);
-      cairo_stroke (cr);
-
-      y0++;
-    }
-
-  for (i = 0; i < thickness_light; i++)
-    {
-      gdk_cairo_set_source_rgba (cr, &darker);
-      add_path_line (cr, 0.5, y0, thickness_light - i + 0.5, y0);
-      cairo_stroke (cr);
-
-      gdk_cairo_set_source_rgba (cr, &lighter);
-      add_path_line (cr, thickness_light - i + 0.5, y0, len - 0.5, y0);
-      cairo_stroke (cr);
-
-      y0++;
-    }
+  gdk_cairo_set_source_rgba (cr, &color);
+  cairo_stroke (cr);
 
   cairo_restore (cr);
 }
