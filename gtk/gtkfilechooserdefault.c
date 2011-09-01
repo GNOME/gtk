@@ -2323,22 +2323,8 @@ renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
 static GtkWidget *
 filter_create (GtkFileChooserDefault *impl)
 {
-  GtkCellRenderer *cell;
-  GList           *cells;
-
   impl->filter_combo = gtk_combo_box_text_new ();
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
-
-  /* Get the combo's text renderer and set ellipsize parameters */
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (impl->filter_combo));
-  g_assert (cells);
-  cell = cells->data;
-
-  g_object_set (G_OBJECT (cell),
-		"ellipsize", PANGO_ELLIPSIZE_END,
-		NULL);
-
-  g_list_free (cells);
 
   g_signal_connect (impl->filter_combo, "changed",
 		    G_CALLBACK (filter_combo_changed), impl);
