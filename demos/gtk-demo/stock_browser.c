@@ -393,7 +393,7 @@ label_set_func (GtkTreeViewColumn *tree_column,
 
 GtkWidget *
 do_stock_browser (GtkWidget *do_widget)
-{  
+{
   if (!window)
     {
       GtkWidget *frame;
@@ -401,7 +401,6 @@ do_stock_browser (GtkWidget *do_widget)
       GtkWidget *hbox;
       GtkWidget *sw;
       GtkWidget *treeview;
-      GtkWidget *align;
       GtkTreeModel *model;
       GtkCellRenderer *cell_renderer;
       StockItemDisplay *display;
@@ -479,12 +478,10 @@ do_stock_browser (GtkWidget *do_widget)
                                                   id_set_func,
                                                   NULL,
                                                   NULL);
-      
-      align = gtk_alignment_new (0.5, 0.0, 0.0, 0.0);
-      gtk_box_pack_end (GTK_BOX (hbox), align, FALSE, FALSE, 0);
-      
+
       frame = gtk_frame_new ("Selected Item");
-      gtk_container_add (GTK_CONTAINER (align), frame);
+      gtk_widget_set_valign (frame, GTK_ALIGN_START);
+      gtk_box_pack_end (GTK_BOX (hbox), frame, FALSE, FALSE, 0);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);

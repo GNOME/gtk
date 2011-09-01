@@ -314,7 +314,6 @@ do_images (GtkWidget *do_widget)
   GtkWidget *vbox;
   GtkWidget *image;
   GtkWidget *label;
-  GtkWidget *align;
   GtkWidget *button;
   GdkPixbuf *pixbuf;
   GIcon     *gicon;
@@ -346,12 +345,9 @@ do_images (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       /* demo_find_file() looks in the current directory first,
        * so you can run gtk-demo without installing GTK, then looks
@@ -403,12 +399,9 @@ do_images (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       filename = demo_find_file ("floppybuddy.gif", NULL);
       image = gtk_image_new_from_file (filename);
@@ -425,12 +418,9 @@ do_images (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       gicon = g_themed_icon_new_with_default_fallbacks ("battery-caution-charging-symbolic");
       image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_DIALOG);
@@ -447,12 +437,9 @@ do_images (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       /* Create an empty image for now; the progressive loader
        * will create the pixbuf and fill it in.

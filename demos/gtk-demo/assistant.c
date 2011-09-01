@@ -147,22 +147,19 @@ create_page3 (GtkWidget *assistant)
 static void
 create_page4 (GtkWidget *assistant)
 {
-  GtkWidget *page;
-
-  page = gtk_alignment_new (0.5, 0.5, 0.5, 0.0);
-
   progress_bar = gtk_progress_bar_new ();
-  gtk_container_add (GTK_CONTAINER (page), progress_bar);
+  gtk_widget_set_halign (progress_bar, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (progress_bar, GTK_ALIGN_CENTER);
 
-  gtk_widget_show_all (page);
-  gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-  gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_PROGRESS);
-  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Applying changes");
+  gtk_widget_show (progress_bar);
+  gtk_assistant_append_page (GTK_ASSISTANT (assistant), progress_bar);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), progress_bar, GTK_ASSISTANT_PAGE_PROGRESS);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), progress_bar, "Applying changes");
 
   /* This prevents the assistant window from being
    * closed while we're "busy" applying changes.
    */
-  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, FALSE);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), progress_bar, FALSE);
 }
 
 GtkWidget*
