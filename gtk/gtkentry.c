@@ -992,7 +992,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
   * GtkEntry:placeholder-text:
   *
-  * The text that will be displayed in the #GtkEntry when it is empty and unfocused.
+  * The text that will be displayed in the #GtkEntry when it is empty
+  * and unfocused.
   *
   * Since: 3.2
   */
@@ -10344,9 +10345,15 @@ gtk_entry_progress_pulse (GtkEntry *entry)
  * @entry: a #GtkEntry
  * @text: a string to be displayed when @entry is empty an unfocused, or %NULL
  *
- * Sets text to be displayed in @entry when
- * it is empty and unfocused. This can be used to give a visual hint
- * of the expected contents of the #GtkEntry.
+ * Sets text to be displayed in @entry when it is empty and unfocused.
+ * This can be used to give a visual hint of the expected contents of
+ * the #GtkEntry.
+ *
+ * Note that since the placeholder text gets removed when the entry
+ * received focus, using this feature is a bit problematic if the entry
+ * is given the initial focus in a window. Sometimes this can be
+ * worked around by delaying the initial focus setting until the
+ * first key event arrives.
  *
  * Since: 3.2
  **/
