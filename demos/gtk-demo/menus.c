@@ -31,7 +31,7 @@
 
 static GtkWidget *
 create_menu (gint     depth,
-	     gboolean tearoff)
+             gboolean tearoff)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -61,7 +61,7 @@ create_menu (gint     depth,
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       if (i == 3)
-	gtk_widget_set_sensitive (menuitem, FALSE);
+        gtk_widget_set_sensitive (menuitem, FALSE);
 
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1, TRUE));
     }
@@ -106,10 +106,10 @@ do_menus (GtkWidget *do_widget)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Menus");
       g_signal_connect (window, "destroy",
-			G_CALLBACK(gtk_widget_destroyed), &window);
+                        G_CALLBACK(gtk_widget_destroyed), &window);
 
       accel_group = gtk_accel_group_new ();
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
@@ -152,13 +152,13 @@ do_menus (GtkWidget *do_widget)
 
       button = gtk_button_new_with_label ("Flip");
       g_signal_connect (button, "clicked",
-			G_CALLBACK (change_orientation), menubar);
+                        G_CALLBACK (change_orientation), menubar);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK(gtk_widget_destroy), window);
+                                G_CALLBACK(gtk_widget_destroy), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);

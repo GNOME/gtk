@@ -25,8 +25,8 @@ activate_action (GtkAction *action)
       GtkSettings *settings = gtk_settings_get_default ();
 
       g_object_set (G_OBJECT (settings),
-		    "gtk-application-prefer-dark-theme", value,
-		    NULL);
+                    "gtk-application-prefer-dark-theme", value,
+                    NULL);
       return;
     }
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
@@ -69,7 +69,7 @@ activate_radio_action (GtkAction *action, GtkRadioAction *current)
 
 static void
 about_cb (GtkAction *action,
-	  GtkWidget *window)
+          GtkWidget *window)
 {
   GdkPixbuf *pixbuf, *transparent;
   gchar *filename;
@@ -102,21 +102,21 @@ about_cb (GtkAction *action,
     }
 
   gtk_show_about_dialog (GTK_WINDOW (window),
-			 "program-name", "GTK+ Code Demos",
-			 "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
-						     PACKAGE_VERSION,
-						     gtk_get_major_version (),
-						     gtk_get_minor_version (),
-						     gtk_get_micro_version ()),
-			 "copyright", "(C) 1997-2009 The GTK+ Team",
-			 "license-type", GTK_LICENSE_LGPL_2_1,
-			 "website", "http://www.gtk.org",
-			 "comments", "Program to demonstrate GTK+ functions.",
-			 "authors", authors,
-			 "documenters", documentors,
-			 "logo", transparent,
+                         "program-name", "GTK+ Code Demos",
+                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                                                     PACKAGE_VERSION,
+                                                     gtk_get_major_version (),
+                                                     gtk_get_minor_version (),
+                                                     gtk_get_micro_version ()),
+                         "copyright", "(C) 1997-2009 The GTK+ Team",
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to demonstrate GTK+ functions.",
+                         "authors", authors,
+                         "documenters", documentors,
+                         "logo", transparent,
                          "title", "About GTK+ Code Demos",
-			 NULL);
+                         NULL);
 
   g_object_unref (transparent);
 }
@@ -249,9 +249,9 @@ static const gchar *ui_info =
 "    <menu action='PreferencesMenu'>"
 "      <menuitem action='DarkTheme'/>"
 "      <menu action='ColorMenu'>"
-"	<menuitem action='Red'/>"
-"	<menuitem action='Green'/>"
-"	<menuitem action='Blue'/>"
+"       <menuitem action='Red'/>"
+"       <menuitem action='Green'/>"
+"       <menuitem action='Blue'/>"
 "      </menu>"
 "      <menu action='ShapeMenu'>"
 "        <menuitem action='Square'/>"
@@ -317,10 +317,10 @@ register_stock_icons (void)
       pixbuf = NULL;
       filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
       if (filename)
-	{
-	  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-	  g_free (filename);
-	}
+        {
+          pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+          g_free (filename);
+        }
 
       /* Register icon to accompany stock item */
       if (pixbuf != NULL)
@@ -355,8 +355,8 @@ update_statusbar (GtkTextBuffer *buffer,
   GtkTextIter iter;
 
   gtk_statusbar_pop (statusbar, 0); /* clear any previous message,
-				     * underflow is allowed
-				     */
+                                     * underflow is allowed
+                                     */
 
   count = gtk_text_buffer_get_char_count (buffer);
 
@@ -407,7 +407,7 @@ do_appwindow (GtkWidget *do_widget)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Application Window");
       gtk_window_set_icon_name (GTK_WINDOW (window), "document-open");
 
@@ -425,42 +425,42 @@ do_appwindow (GtkWidget *do_widget)
 
       action_group = gtk_action_group_new ("AppWindowActions");
       open_action = g_object_new (tool_menu_action_get_type (),
-				  "name", "Open",
-				  "label", "_Open",
-				  "tooltip", "Open a file",
-				  "stock-id", GTK_STOCK_OPEN,
-				  NULL);
+                                  "name", "Open",
+                                  "label", "_Open",
+                                  "tooltip", "Open a file",
+                                  "stock-id", GTK_STOCK_OPEN,
+                                  NULL);
       gtk_action_group_add_action (action_group, open_action);
       g_object_unref (open_action);
       gtk_action_group_add_actions (action_group,
-				    entries, n_entries,
-				    window);
+                                    entries, n_entries,
+                                    window);
       gtk_action_group_add_toggle_actions (action_group,
-					   toggle_entries, n_toggle_entries,
-					   NULL);
+                                           toggle_entries, n_toggle_entries,
+                                           NULL);
       gtk_action_group_add_radio_actions (action_group,
-					  color_entries, n_color_entries,
-					  COLOR_RED,
-					  G_CALLBACK (activate_radio_action),
-					  NULL);
+                                          color_entries, n_color_entries,
+                                          COLOR_RED,
+                                          G_CALLBACK (activate_radio_action),
+                                          NULL);
       gtk_action_group_add_radio_actions (action_group,
-					  shape_entries, n_shape_entries,
-					  SHAPE_SQUARE,
-					  G_CALLBACK (activate_radio_action),
-					  NULL);
+                                          shape_entries, n_shape_entries,
+                                          SHAPE_SQUARE,
+                                          G_CALLBACK (activate_radio_action),
+                                          NULL);
 
       merge = gtk_ui_manager_new ();
       g_object_set_data_full (G_OBJECT (window), "ui-manager", merge,
-			      g_object_unref);
+                              g_object_unref);
       gtk_ui_manager_insert_action_group (merge, action_group, 0);
       gtk_window_add_accel_group (GTK_WINDOW (window),
-				  gtk_ui_manager_get_accel_group (merge));
+                                  gtk_ui_manager_get_accel_group (merge));
 
       if (!gtk_ui_manager_add_ui_from_string (merge, ui_info, -1, &error))
-	{
-	  g_message ("building menus failed: %s", error->message);
-	  g_error_free (error);
-	}
+        {
+          g_message ("building menus failed: %s", error->message);
+          g_error_free (error);
+        }
 
       bar = gtk_ui_manager_get_widget (merge, "/MenuBar");
       gtk_widget_show (bar);
@@ -552,4 +552,3 @@ do_appwindow (GtkWidget *do_widget)
 
   return window;
 }
-

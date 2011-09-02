@@ -11,17 +11,17 @@ static GtkWidget *entry2 = NULL;
 
 static void
 message_dialog_clicked (GtkButton *button,
-			gpointer   user_data)
+                        gpointer   user_data)
 {
   GtkWidget *dialog;
   static gint i = 1;
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				   GTK_MESSAGE_INFO,
-				   GTK_BUTTONS_OK,
-				   "This message box has been popped up the following\n"
-				   "number of times:");
+                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_INFO,
+                                   GTK_BUTTONS_OK,
+                                   "This message box has been popped up the following\n"
+                                   "number of times:");
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             "%d", i);
   gtk_dialog_run (GTK_DIALOG (dialog));
@@ -31,7 +31,7 @@ message_dialog_clicked (GtkButton *button,
 
 static void
 interactive_dialog_clicked (GtkButton *button,
-			    gpointer   user_data)
+                            gpointer   user_data)
 {
   GtkWidget *content_area;
   GtkWidget *dialog;
@@ -44,13 +44,13 @@ interactive_dialog_clicked (GtkButton *button,
   gint response;
 
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
-					GTK_WINDOW (window),
-					GTK_DIALOG_MODAL| GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_OK,
-					GTK_RESPONSE_OK,
+                                        GTK_WINDOW (window),
+                                        GTK_DIALOG_MODAL| GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_STOCK_OK,
+                                        GTK_RESPONSE_OK,
                                         "_Non-stock Button",
                                         GTK_RESPONSE_CANCEL,
-					NULL);
+                                        NULL);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
@@ -102,12 +102,12 @@ do_dialog (GtkWidget *do_widget)
   GtkWidget *button;
   GtkWidget *table;
   GtkWidget *label;
-  
+
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Dialogs");
 
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
@@ -125,7 +125,7 @@ do_dialog (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("_Message Dialog");
       g_signal_connect (button, "clicked",
-			G_CALLBACK (message_dialog_clicked), NULL);
+                        G_CALLBACK (message_dialog_clicked), NULL);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
       gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
@@ -138,7 +138,7 @@ do_dialog (GtkWidget *do_widget)
 
       button = gtk_button_new_with_mnemonic ("_Interactive Dialog");
       g_signal_connect (button, "clicked",
-			G_CALLBACK (interactive_dialog_clicked), NULL);
+                        G_CALLBACK (interactive_dialog_clicked), NULL);
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 

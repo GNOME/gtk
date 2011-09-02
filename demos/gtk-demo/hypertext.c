@@ -1,8 +1,8 @@
 /* Text Widget/Hypertext
  *
- * Usually, tags modify the appearance of text in the view, e.g. making it 
- * bold or colored or underlined. But tags are not restricted to appearance. 
- * They can also affect the behavior of mouse and key presses, as this demo 
+ * Usually, tags modify the appearance of text in the view, e.g. making it
+ * bold or colored or underlined. But tags are not restricted to appearance.
+ * They can also affect the behavior of mouse and key presses, as this demo
  * shows.
  */
 
@@ -12,19 +12,19 @@
 /* Inserts a piece of text into the buffer, giving it the usual
  * appearance of a hyperlink in a web browser: blue and underlined.
  * Additionally, attaches some data on the tag, to make it recognizable
- * as a link. 
+ * as a link.
  */
-static void 
-insert_link (GtkTextBuffer *buffer, 
-             GtkTextIter   *iter, 
-             gchar         *text, 
+static void
+insert_link (GtkTextBuffer *buffer,
+             GtkTextIter   *iter,
+             gchar         *text,
              gint           page)
 {
   GtkTextTag *tag;
-  
-  tag = gtk_text_buffer_create_tag (buffer, NULL, 
-                                    "foreground", "blue", 
-                                    "underline", PANGO_UNDERLINE_SINGLE, 
+
+  tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                    "foreground", "blue",
+                                    "underline", PANGO_UNDERLINE_SINGLE,
                                     NULL);
   g_object_set_data (G_OBJECT (tag), "page", GINT_TO_POINTER (page));
   gtk_text_buffer_insert_with_tags (buffer, iter, text, -1, tag, NULL);
@@ -34,7 +34,7 @@ insert_link (GtkTextBuffer *buffer,
  * hypertext app, this method would parse a file to identify the links.
  */
 static void
-show_page (GtkTextBuffer *buffer, 
+show_page (GtkTextBuffer *buffer,
            gint           page)
 {
   GtkTextIter iter;
@@ -51,7 +51,7 @@ show_page (GtkTextBuffer *buffer,
     }
   else if (page == 2)
     {
-      gtk_text_buffer_insert (buffer, &iter, 
+      gtk_text_buffer_insert (buffer, &iter,
                               "A tag is an attribute that can be applied to some range of text. "
                               "For example, a tag might be called \"bold\" and make the text inside "
                               "the tag bold. However, the tag concept is more general than that; "
@@ -60,27 +60,27 @@ show_page (GtkTextBuffer *buffer,
                               "user can't edit it, or countless other things.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
     }
-  else if (page == 3) 
+  else if (page == 3)
     {
       GtkTextTag *tag;
-  
-      tag = gtk_text_buffer_create_tag (buffer, NULL, 
-                                        "weight", PANGO_WEIGHT_BOLD, 
+
+      tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                        "weight", PANGO_WEIGHT_BOLD,
                                         NULL);
       gtk_text_buffer_insert_with_tags (buffer, &iter, "hypertext:\n", -1, tag, NULL);
-      gtk_text_buffer_insert (buffer, &iter, 
+      gtk_text_buffer_insert (buffer, &iter,
                               "machine-readable text that is not sequential but is organized "
                               "so that related items of information are connected.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
     }
 }
 
-/* Looks at all tags covering the position of iter in the text view, 
+/* Looks at all tags covering the position of iter in the text view,
  * and if one of them is a link, follow it by showing the page identified
  * by the data attached to it.
  */
 static void
-follow_if_link (GtkWidget   *text_view, 
+follow_if_link (GtkWidget   *text_view,
                 GtkTextIter *iter)
 {
   GSList *tags = NULL, *tagp = NULL;
@@ -98,7 +98,7 @@ follow_if_link (GtkWidget   *text_view,
         }
     }
 
-  if (tags) 
+  if (tags)
     g_slist_free (tags);
 }
 
@@ -113,10 +113,10 @@ key_press_event (GtkWidget *text_view,
 
   switch (event->keyval)
     {
-      case GDK_KEY_Return: 
+      case GDK_KEY_Return:
       case GDK_KEY_KP_Enter:
         buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
-        gtk_text_buffer_get_iter_at_mark (buffer, &iter, 
+        gtk_text_buffer_get_iter_at_mark (buffer, &iter,
                                           gtk_text_buffer_get_insert (buffer));
         follow_if_link (text_view, &iter);
         break;
@@ -154,7 +154,7 @@ event_after (GtkWidget *text_view,
   if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end))
     return FALSE;
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view), 
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
                                          event->x, event->y, &x, &y);
 
@@ -169,7 +169,7 @@ static gboolean hovering_over_link = FALSE;
 static GdkCursor *hand_cursor = NULL;
 static GdkCursor *regular_cursor = NULL;
 
-/* Looks at all tags covering the position (x, y) in the text view, 
+/* Looks at all tags covering the position (x, y) in the text view,
  * and if one of them is a link, change the cursor to the "hands" cursor
  * typically used by web browsers.
  */
@@ -183,14 +183,14 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
   gboolean hovering = FALSE;
 
   gtk_text_view_get_iter_at_location (text_view, &iter, x, y);
-  
+
   tags = gtk_text_iter_get_tags (&iter);
   for (tagp = tags;  tagp != NULL;  tagp = tagp->next)
     {
       GtkTextTag *tag = tagp->data;
       gint page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tag), "page"));
 
-      if (page != 0) 
+      if (page != 0)
         {
           hovering = TRUE;
           break;
@@ -207,11 +207,11 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
         gdk_window_set_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), regular_cursor);
     }
 
-  if (tags) 
+  if (tags)
     g_slist_free (tags);
 }
 
-/* Update the cursor image if the pointer moved. 
+/* Update the cursor image if the pointer moved.
  */
 static gboolean
 motion_notify_event (GtkWidget      *text_view,
@@ -219,7 +219,7 @@ motion_notify_event (GtkWidget      *text_view,
 {
   gint x, y;
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view), 
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
                                          event->x, event->y, &x, &y);
 
@@ -242,7 +242,7 @@ visibility_notify_event (GtkWidget          *text_view,
   gdk_window_get_pointer (gtk_widget_get_window (text_view),
                           &wx, &wy, NULL);
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view), 
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
                                          wx, wy, &bx, &by);
 
@@ -264,13 +264,13 @@ do_hypertext (GtkWidget *do_widget)
 
       hand_cursor = gdk_cursor_new (GDK_HAND2);
       regular_cursor = gdk_cursor_new (GDK_XTERM);
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window),
                                    450, 450);
-      
+
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
@@ -279,17 +279,17 @@ do_hypertext (GtkWidget *do_widget)
 
       view = gtk_text_view_new ();
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
-      g_signal_connect (view, "key-press-event", 
+      g_signal_connect (view, "key-press-event",
                         G_CALLBACK (key_press_event), NULL);
-      g_signal_connect (view, "event-after", 
+      g_signal_connect (view, "event-after",
                         G_CALLBACK (event_after), NULL);
-      g_signal_connect (view, "motion-notify-event", 
+      g_signal_connect (view, "motion-notify-event",
                         G_CALLBACK (motion_notify_event), NULL);
-      g_signal_connect (view, "visibility-notify-event", 
+      g_signal_connect (view, "visibility-notify-event",
                         G_CALLBACK (visibility_notify_event), NULL);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-      
+
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
@@ -314,4 +314,3 @@ do_hypertext (GtkWidget *do_widget)
 
   return window;
 }
-

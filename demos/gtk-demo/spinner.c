@@ -93,5 +93,3 @@ do_spinner (GtkWidget *do_widget)
 
   return window;
 }
-
-

@@ -95,8 +95,8 @@ find_toplevel_at_pointer (GdkDisplay *display)
 
 static gboolean
 button_release_event_cb (GtkWidget       *widget,
-			 GdkEventButton  *event,
-			 gboolean        *clicked)
+                         GdkEventButton  *event,
+                         gboolean        *clicked)
 {
   *clicked = TRUE;
   return TRUE;
@@ -108,7 +108,7 @@ button_release_event_cb (GtkWidget       *widget,
  */
 static GtkWidget *
 query_for_toplevel (GdkScreen  *screen,
-		    const char *prompt)
+                    const char *prompt)
 {
   GdkDisplay *display = gdk_screen_get_display (screen);
   GtkWidget *popup, *label, *frame;
@@ -132,31 +132,31 @@ query_for_toplevel (GdkScreen  *screen,
   cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
 
   if (gdk_pointer_grab (gtk_widget_get_window (popup), FALSE,
-			GDK_BUTTON_RELEASE_MASK,
-			NULL,
-			cursor,
-			GDK_CURRENT_TIME) == GDK_GRAB_SUCCESS)
+                        GDK_BUTTON_RELEASE_MASK,
+                        NULL,
+                        cursor,
+                        GDK_CURRENT_TIME) == GDK_GRAB_SUCCESS)
     {
       gboolean clicked = FALSE;
 
       g_signal_connect (popup, "button-release-event",
-			G_CALLBACK (button_release_event_cb), &clicked);
+                        G_CALLBACK (button_release_event_cb), &clicked);
 
       /* Process events until clicked is set by button_release_event_cb.
        * We pass in may_block=TRUE since we want to wait if there
        * are no events currently.
        */
       while (!clicked)
-	g_main_context_iteration (NULL, TRUE);
+        g_main_context_iteration (NULL, TRUE);
 
       toplevel = find_toplevel_at_pointer (gdk_screen_get_display (screen));
       if (toplevel == popup)
-	toplevel = NULL;
+        toplevel = NULL;
     }
 
   g_object_unref (cursor);
   gtk_widget_destroy (popup);
-  gdk_flush ();			/* Really release the grab */
+  gdk_flush ();                 /* Really release the grab */
 
   return toplevel;
 }
@@ -171,8 +171,8 @@ query_change_display (ChangeDisplayInfo *info)
   GtkWidget *toplevel;
 
   toplevel = query_for_toplevel (screen,
-				 "Please select the toplevel\n"
-				 "to move to the new screen");
+                                 "Please select the toplevel\n"
+                                 "to move to the new screen");
 
   if (toplevel)
     gtk_window_set_screen (GTK_WINDOW (toplevel), info->current_screen);
@@ -193,19 +193,19 @@ fill_screens (ChangeDisplayInfo *info)
       gint i;
 
       for (i = 0; i < n_screens; i++)
-	{
-	  GdkScreen *screen = gdk_display_get_screen (info->current_display, i);
-	  GtkTreeIter iter;
+        {
+          GdkScreen *screen = gdk_display_get_screen (info->current_display, i);
+          GtkTreeIter iter;
 
-	  gtk_list_store_append (GTK_LIST_STORE (info->screen_model), &iter);
-	  gtk_list_store_set (GTK_LIST_STORE (info->screen_model), &iter,
-			      SCREEN_COLUMN_NUMBER, i,
-			      SCREEN_COLUMN_SCREEN, screen,
-			      -1);
+          gtk_list_store_append (GTK_LIST_STORE (info->screen_model), &iter);
+          gtk_list_store_set (GTK_LIST_STORE (info->screen_model), &iter,
+                              SCREEN_COLUMN_NUMBER, i,
+                              SCREEN_COLUMN_SCREEN, screen,
+                              -1);
 
-	  if (i == 0)
-	    gtk_tree_selection_select_iter (info->screen_selection, &iter);
-	}
+          if (i == 0)
+            gtk_tree_selection_select_iter (info->screen_selection, &iter);
+        }
     }
 }
 
@@ -215,8 +215,8 @@ fill_screens (ChangeDisplayInfo *info)
  */
 static void
 response_cb (GtkDialog         *dialog,
-	     gint               response_id,
-	     ChangeDisplayInfo *info)
+             gint               response_id,
+             ChangeDisplayInfo *info)
 {
   if (response_id == GTK_RESPONSE_OK)
     query_change_display (info);
@@ -230,7 +230,7 @@ response_cb (GtkDialog         *dialog,
  */
 static void
 open_display_cb (GtkWidget         *button,
-		 ChangeDisplayInfo *info)
+                 ChangeDisplayInfo *info)
 {
   GtkWidget *content_area;
   GtkWidget *dialog;
@@ -240,11 +240,11 @@ open_display_cb (GtkWidget         *button,
   GdkDisplay *result = NULL;
 
   dialog = gtk_dialog_new_with_buttons ("Open Display",
-					GTK_WINDOW (info->window),
-					GTK_DIALOG_MODAL,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK, GTK_RESPONSE_OK,
-					NULL);
+                                        GTK_WINDOW (info->window),
+                                        GTK_DIALOG_MODAL,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                        NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   display_entry = gtk_entry_new ();
@@ -264,25 +264,25 @@ open_display_cb (GtkWidget         *button,
     {
       gint response_id = gtk_dialog_run (GTK_DIALOG (dialog));
       if (response_id != GTK_RESPONSE_OK)
-	break;
+        break;
 
       new_screen_name = gtk_editable_get_chars (GTK_EDITABLE (display_entry),
-						0, -1);
+                                                0, -1);
 
       if (strcmp (new_screen_name, "") != 0)
-	{
-	  result = gdk_display_open (new_screen_name);
-	  if (!result)
-	    {
-	      gchar *error_msg =
-		g_strdup_printf  ("Can't open display :\n\t%s\nplease try another one\n",
-				  new_screen_name);
-	      gtk_label_set_text (GTK_LABEL (dialog_label), error_msg);
-	      g_free (error_msg);
-	    }
+        {
+          result = gdk_display_open (new_screen_name);
+          if (!result)
+            {
+              gchar *error_msg =
+                g_strdup_printf  ("Can't open display :\n\t%s\nplease try another one\n",
+                                  new_screen_name);
+              gtk_label_set_text (GTK_LABEL (dialog_label), error_msg);
+              g_free (error_msg);
+            }
 
-	  g_free (new_screen_name);
-	}
+          g_free (new_screen_name);
+        }
     }
 
   gtk_widget_destroy (dialog);
@@ -293,7 +293,7 @@ open_display_cb (GtkWidget         *button,
  */
 static void
 close_display_cb (GtkWidget         *button,
-		  ChangeDisplayInfo *info)
+                  ChangeDisplayInfo *info)
 {
   if (info->current_display)
     gdk_display_close (info->current_display);
@@ -305,7 +305,7 @@ close_display_cb (GtkWidget         *button,
  */
 static void
 display_changed_cb (GtkTreeSelection  *selection,
-		    ChangeDisplayInfo *info)
+                    ChangeDisplayInfo *info)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -314,8 +314,8 @@ display_changed_cb (GtkTreeSelection  *selection,
     g_object_unref (info->current_display);
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     gtk_tree_model_get (model, &iter,
-			DISPLAY_COLUMN_DISPLAY, &info->current_display,
-			-1);
+                        DISPLAY_COLUMN_DISPLAY, &info->current_display,
+                        -1);
   else
     info->current_display = NULL;
 
@@ -327,7 +327,7 @@ display_changed_cb (GtkTreeSelection  *selection,
  */
 static void
 screen_changed_cb (GtkTreeSelection  *selection,
-		   ChangeDisplayInfo *info)
+                   ChangeDisplayInfo *info)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -336,8 +336,8 @@ screen_changed_cb (GtkTreeSelection  *selection,
     g_object_unref (info->current_screen);
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     gtk_tree_model_get (model, &iter,
-			SCREEN_COLUMN_SCREEN, &info->current_screen,
-			-1);
+                        SCREEN_COLUMN_SCREEN, &info->current_screen,
+                        -1);
   else
     info->current_screen = NULL;
 }
@@ -349,10 +349,10 @@ screen_changed_cb (GtkTreeSelection  *selection,
  */
 static void
 create_frame (ChangeDisplayInfo *info,
-	      const char        *title,
-	      GtkWidget        **frame,
-	      GtkWidget        **tree_view,
-	      GtkWidget        **button_vbox)
+              const char        *title,
+              GtkWidget        **frame,
+              GtkWidget        **tree_view,
+              GtkWidget        **button_vbox)
 {
   GtkTreeSelection *selection;
   GtkWidget *scrollwin;
@@ -366,9 +366,9 @@ create_frame (ChangeDisplayInfo *info,
 
   scrollwin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrollwin),
-				  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin),
-				       GTK_SHADOW_IN);
+                                       GTK_SHADOW_IN);
   gtk_box_pack_start (GTK_BOX (hbox), scrollwin, TRUE, TRUE, 0);
 
   *tree_view = gtk_tree_view_new ();
@@ -426,20 +426,20 @@ create_display_frame (ChangeDisplayInfo *info)
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
 
   info->display_model = (GtkTreeModel *)gtk_list_store_new (DISPLAY_NUM_COLUMNS,
-							    G_TYPE_STRING,
-							    GDK_TYPE_DISPLAY);
+                                                            G_TYPE_STRING,
+                                                            GDK_TYPE_DISPLAY);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), info->display_model);
 
   column = gtk_tree_view_column_new_with_attributes ("Name",
-						     gtk_cell_renderer_text_new (),
-						     "text", DISPLAY_COLUMN_NAME,
-						     NULL);
+                                                     gtk_cell_renderer_text_new (),
+                                                     "text", DISPLAY_COLUMN_NAME,
+                                                     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
   g_signal_connect (selection, "changed",
-		    G_CALLBACK (display_changed_cb), info);
+                    G_CALLBACK (display_changed_cb), info);
 
   return frame;
 }
@@ -457,20 +457,20 @@ create_screen_frame (ChangeDisplayInfo *info)
   create_frame (info, "Screen", &frame, &tree_view, &button_vbox);
 
   info->screen_model = (GtkTreeModel *)gtk_list_store_new (SCREEN_NUM_COLUMNS,
-							   G_TYPE_INT,
-							   GDK_TYPE_SCREEN);
+                                                           G_TYPE_INT,
+                                                           GDK_TYPE_SCREEN);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), info->screen_model);
 
   column = gtk_tree_view_column_new_with_attributes ("Number",
-						     gtk_cell_renderer_text_new (),
-						     "text", SCREEN_COLUMN_NUMBER,
-						     NULL);
+                                                     gtk_cell_renderer_text_new (),
+                                                     "text", SCREEN_COLUMN_NUMBER,
+                                                     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   info->screen_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
   g_signal_connect (info->screen_selection, "changed",
-		    G_CALLBACK (screen_changed_cb), info);
+                    G_CALLBACK (screen_changed_cb), info);
 
   return frame;
 }
@@ -480,8 +480,8 @@ create_screen_frame (ChangeDisplayInfo *info)
  */
 static void
 display_closed_cb (GdkDisplay        *display,
-		   gboolean           is_error,
-		   ChangeDisplayInfo *info)
+                   gboolean           is_error,
+                   ChangeDisplayInfo *info)
 {
   GtkTreeIter iter;
   gboolean valid;
@@ -493,13 +493,13 @@ display_closed_cb (GdkDisplay        *display,
       GdkDisplay *tmp_display;
 
       gtk_tree_model_get (info->display_model, &iter,
-			  DISPLAY_COLUMN_DISPLAY, &tmp_display,
-			  -1);
+                          DISPLAY_COLUMN_DISPLAY, &tmp_display,
+                          -1);
       if (tmp_display == display)
-	{
-	  gtk_list_store_remove (GTK_LIST_STORE (info->display_model), &iter);
-	  break;
-	}
+        {
+          gtk_list_store_remove (GTK_LIST_STORE (info->display_model), &iter);
+          break;
+        }
     }
 }
 
@@ -509,27 +509,27 @@ display_closed_cb (GdkDisplay        *display,
  */
 static void
 add_display (ChangeDisplayInfo *info,
-	     GdkDisplay        *display)
+             GdkDisplay        *display)
 {
   const gchar *name = gdk_display_get_name (display);
   GtkTreeIter iter;
 
   gtk_list_store_append (GTK_LIST_STORE (info->display_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (info->display_model), &iter,
-		      DISPLAY_COLUMN_NAME, name,
-		      DISPLAY_COLUMN_DISPLAY, display,
-		      -1);
+                      DISPLAY_COLUMN_NAME, name,
+                      DISPLAY_COLUMN_DISPLAY, display,
+                      -1);
 
   g_signal_connect (display, "closed",
-		    G_CALLBACK (display_closed_cb), info);
+                    G_CALLBACK (display_closed_cb), info);
 }
 
 /* Called when a new display is opened
  */
 static void
 display_opened_cb (GdkDisplayManager *manager,
-		   GdkDisplay        *display,
-		   ChangeDisplayInfo *info)
+                   GdkDisplay        *display,
+                   ChangeDisplayInfo *info)
 {
   add_display (info, display);
 }
@@ -551,7 +551,7 @@ initialize_displays (ChangeDisplayInfo *info)
   g_slist_free (tmp_list);
 
   g_signal_connect (manager, "display-opened",
-		    G_CALLBACK (display_opened_cb), info);
+                    G_CALLBACK (display_opened_cb), info);
 }
 
 /* Cleans up when the toplevel is destroyed; we remove the
@@ -566,13 +566,13 @@ destroy_info (ChangeDisplayInfo *info)
   GSList *tmp_list;
 
   g_signal_handlers_disconnect_by_func (manager,
-					display_opened_cb,
-					info);
+                                        display_opened_cb,
+                                        info);
 
   for (tmp_list = displays; tmp_list; tmp_list = tmp_list->next)
     g_signal_handlers_disconnect_by_func (tmp_list->data,
-					  display_closed_cb,
-					  info);
+                                          display_closed_cb,
+                                          info);
 
   g_slist_free (tmp_list);
 
@@ -590,7 +590,7 @@ destroy_info (ChangeDisplayInfo *info)
 
 static void
 destroy_cb (GObject            *object,
-	    ChangeDisplayInfo **info)
+            ChangeDisplayInfo **info)
 {
   destroy_info (*info);
   *info = NULL;
@@ -613,18 +613,18 @@ do_changedisplay (GtkWidget *do_widget)
       info = g_new0 (ChangeDisplayInfo, 1);
 
       info->window = gtk_dialog_new_with_buttons ("Change Screen or display",
-					    GTK_WINDOW (do_widget),
-					    0,
-					    GTK_STOCK_CLOSE,  GTK_RESPONSE_CLOSE,
-					    "Change",         GTK_RESPONSE_OK,
-					    NULL);
+                                            GTK_WINDOW (do_widget),
+                                            0,
+                                            GTK_STOCK_CLOSE,  GTK_RESPONSE_CLOSE,
+                                            "Change",         GTK_RESPONSE_OK,
+                                            NULL);
 
       gtk_window_set_default_size (GTK_WINDOW (info->window), 300, 400);
 
       g_signal_connect (info->window, "response",
-			G_CALLBACK (response_cb), info);
+                        G_CALLBACK (response_cb), info);
       g_signal_connect (info->window, "destroy",
-			G_CALLBACK (destroy_cb), &info);
+                        G_CALLBACK (destroy_cb), &info);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (info->window));
 

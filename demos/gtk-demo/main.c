@@ -43,7 +43,7 @@ get_democodedir (void)
     {
       result = g_win32_get_package_installation_directory_of_module (NULL);
       if (result == NULL)
-	result = "unknown-location";
+        result = "unknown-location";
 
       result = g_strconcat (result, "\\share\\gtk-3.0\\demo", NULL);
     }
@@ -59,19 +59,19 @@ get_democodedir (void)
  * demo_find_file:
  * @base: base filename
  * @err:  location to store error, or %NULL.
- * 
+ *
  * Looks for @base first in the current directory, then in the
  * location GTK+ where it will be installed on make install,
  * returns the first file found.
- * 
+ *
  * Return value: the filename, if found or %NULL
- **/
+ */
 gchar *
 demo_find_file (const char *base,
-		GError    **err)
+                GError    **err)
 {
   g_return_val_if_fail (err == NULL || *err == NULL, NULL);
-  
+
   if (g_file_test ("gtk-logo-rgb.gif", G_FILE_TEST_EXISTS) &&
       g_file_test (base, G_FILE_TEST_EXISTS))
     return g_strdup (base);
@@ -79,12 +79,12 @@ demo_find_file (const char *base,
     {
       char *filename = g_build_filename (DEMOCODEDIR, base, NULL);
       if (!g_file_test (filename, G_FILE_TEST_EXISTS))
-	{
-	  g_set_error (err, G_FILE_ERROR, G_FILE_ERROR_NOENT,
-		       "Cannot find demo data file \"%s\"", base);
-	  g_free (filename);
-	  return NULL;
-	}
+        {
+          g_set_error (err, G_FILE_ERROR, G_FILE_ERROR_NOENT,
+                       "Cannot find demo data file \"%s\"", base);
+          g_free (filename);
+          return NULL;
+        }
       return filename;
     }
 }
@@ -98,12 +98,12 @@ window_closed_cb (GtkWidget *window, gpointer data)
 
   gtk_tree_model_get_iter (cbdata->model, &iter, cbdata->path);
   gtk_tree_model_get (GTK_TREE_MODEL (cbdata->model), &iter,
-		      STYLE_COLUMN, &style,
-		      -1);
+                      STYLE_COLUMN, &style,
+                      -1);
   if (style == PANGO_STYLE_ITALIC)
     gtk_tree_store_set (GTK_TREE_STORE (cbdata->model), &iter,
-			STYLE_COLUMN, PANGO_STYLE_NORMAL,
-			-1);
+                        STYLE_COLUMN, PANGO_STYLE_NORMAL,
+                        -1);
 
   gtk_tree_path_free (cbdata->path);
   g_free (cbdata);
@@ -113,17 +113,17 @@ gboolean
 read_line (FILE *stream, GString *str)
 {
   int n_read = 0;
-  
+
 #ifdef HAVE_FLOCKFILE
   flockfile (stream);
 #endif
 
   g_string_truncate (str, 0);
-  
+
   while (1)
     {
       int c;
-      
+
 #ifdef HAVE_FLOCKFILE
       c = getc_unlocked (stream);
 #else
@@ -131,31 +131,31 @@ read_line (FILE *stream, GString *str)
 #endif
 
       if (c == EOF)
-	goto done;
+        goto done;
       else
-	n_read++;
+        n_read++;
 
       switch (c)
-	{
-	case '\r':
-	case '\n':
-	  {
+        {
+        case '\r':
+        case '\n':
+          {
 #ifdef HAVE_FLOCKFILE
-	    int next_c = getc_unlocked (stream);
+            int next_c = getc_unlocked (stream);
 #else
-	    int next_c = getc (stream);
+            int next_c = getc (stream);
 #endif
-	    
-	    if (!(next_c == EOF ||
-		  (c == '\r' && next_c == '\n') ||
-		  (c == '\n' && next_c == '\r')))
-	      ungetc (next_c, stream);
-	    
-	    goto done;
-	  }
-	default:
-	  g_string_append_c (str, c);
-	}
+
+            if (!(next_c == EOF ||
+                  (c == '\r' && next_c == '\n') ||
+                  (c == '\n' && next_c == '\r')))
+              ungetc (next_c, stream);
+
+            goto done;
+          }
+        default:
+          g_string_append_c (str, c);
+        }
     }
 
  done:
@@ -333,10 +333,10 @@ static gchar *control[] =
 };
 void
 parse_chars (gchar     *text,
-	     gchar    **end_ptr,
-	     gint      *state,
-	     gchar    **tag,
-	     gboolean   start)
+             gchar    **end_ptr,
+             gint      *state,
+             gchar    **tag,
+             gboolean   start)
 {
   gint i;
   gchar *next_token;
@@ -346,11 +346,11 @@ parse_chars (gchar     *text,
     {
       *end_ptr = strstr (text, "*/");
       if (*end_ptr)
-	{
-	  *end_ptr += 2;
-	  *state = STATE_NORMAL;
-	  *tag = "comment";
-	}
+        {
+          *end_ptr += 2;
+          *state = STATE_NORMAL;
+          *tag = "comment";
+        }
       return;
     }
 
@@ -362,9 +362,9 @@ parse_chars (gchar     *text,
     {
       *end_ptr = strstr (text, "*/");
       if (*end_ptr)
-	*end_ptr += 2;
+        *end_ptr += 2;
       else
-	*state = STATE_IN_COMMENT;
+        *state = STATE_IN_COMMENT;
       *tag = "comment";
       return;
     }
@@ -381,29 +381,29 @@ parse_chars (gchar     *text,
   if (start && * text != '\t' && *text != ' ' && *text != '{' && *text != '}')
     {
       if (strstr (text, "("))
-	{
-	  *end_ptr = strstr (text, "(");
-	  *tag = "function";
-	  return;
-	}
+        {
+          *end_ptr = strstr (text, "(");
+          *tag = "function";
+          return;
+        }
     }
   /* check for types */
   for (i = 0; types[i] != NULL; i++)
     if (!strncmp (text, types[i], strlen (types[i])) ||
         (start && types[i][0] == ' ' && !strncmp (text, types[i] + 1, strlen (types[i]) - 1)))
       {
-	*end_ptr = text + strlen (types[i]);
-	*tag = "type";
-	return;
+        *end_ptr = text + strlen (types[i]);
+        *tag = "type";
+        return;
       }
 
   /* check for control */
   for (i = 0; control[i] != NULL; i++)
     if (!strncmp (text, control[i], strlen (control[i])))
       {
-	*end_ptr = text + strlen (control[i]);
-	*tag = "control";
-	return;
+        *end_ptr = text + strlen (control[i]);
+        *tag = "control";
+        return;
       }
 
   /* check for string */
@@ -414,18 +414,18 @@ parse_chars (gchar     *text,
       *end_ptr = text + 1;
       *tag = "string";
       while (**end_ptr != '\000')
-	{
-	  if (**end_ptr == '\"' && !maybe_escape)
-	    {
-	      *end_ptr += 1;
-	      return;
-	    }
-	  if (**end_ptr == '\\')
-	    maybe_escape = TRUE;
-	  else
-	    maybe_escape = FALSE;
-	  *end_ptr += 1;
-	}
+        {
+          if (**end_ptr == '\"' && !maybe_escape)
+            {
+              *end_ptr += 1;
+              return;
+            }
+          if (**end_ptr == '\\')
+            maybe_escape = TRUE;
+          else
+            maybe_escape = FALSE;
+          *end_ptr += 1;
+        }
       return;
     }
 
@@ -434,36 +434,36 @@ parse_chars (gchar     *text,
     {
       next_token = strstr (text, tokens[i]);
       if (next_token)
-	{
-	  if (*end_ptr)
-	    *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
-	  else
-	    *end_ptr = next_token;
-	}
+        {
+          if (*end_ptr)
+            *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
+          else
+            *end_ptr = next_token;
+        }
     }
 
   for (i = 0; types[i] != NULL; i++)
     {
       next_token = strstr (text, types[i]);
       if (next_token)
-	{
-	  if (*end_ptr)
-	    *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
-	  else
-	    *end_ptr = next_token;
-	}
+        {
+          if (*end_ptr)
+            *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
+          else
+            *end_ptr = next_token;
+        }
     }
 
   for (i = 0; control[i] != NULL; i++)
     {
       next_token = strstr (text, control[i]);
       if (next_token)
-	{
-	  if (*end_ptr)
-	    *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
-	  else
-	    *end_ptr = next_token;
-	}
+        {
+          if (*end_ptr)
+            *end_ptr = (*end_ptr<next_token)?*end_ptr:next_token;
+          else
+            *end_ptr = next_token;
+        }
     }
 }
 
@@ -488,25 +488,25 @@ fontify (void)
       start_ptr = text = gtk_text_iter_get_text (&start_iter, &next_iter);
 
       do
-	{
-	  parse_chars (start_ptr, &end_ptr, &state, &tag, start);
+        {
+          parse_chars (start_ptr, &end_ptr, &state, &tag, start);
 
-	  start = FALSE;
-	  if (end_ptr)
-	    {
-	      tmp_iter = start_iter;
-	      gtk_text_iter_forward_chars (&tmp_iter, end_ptr - start_ptr);
-	    }
-	  else
-	    {
-	      tmp_iter = next_iter;
-	    }
-	  if (tag)
-	    gtk_text_buffer_apply_tag_by_name (source_buffer, tag, &start_iter, &tmp_iter);
+          start = FALSE;
+          if (end_ptr)
+            {
+              tmp_iter = start_iter;
+              gtk_text_iter_forward_chars (&tmp_iter, end_ptr - start_ptr);
+            }
+          else
+            {
+              tmp_iter = next_iter;
+            }
+          if (tag)
+            gtk_text_buffer_apply_tag_by_name (source_buffer, tag, &start_iter, &tmp_iter);
 
-	  start_iter = tmp_iter;
-	  start_ptr = end_ptr;
-	}
+          start_iter = tmp_iter;
+          start_ptr = end_ptr;
+        }
       while (end_ptr);
 
       g_free (text);
@@ -533,7 +533,7 @@ load_file (const gchar *filename)
 
   g_free (current_file);
   current_file = g_strdup (filename);
-  
+
   gtk_text_buffer_get_bounds (info_buffer, &start, &end);
   gtk_text_buffer_delete (info_buffer, &start, &end);
 
@@ -564,101 +564,101 @@ load_file (const gchar *filename)
       gchar *p = buffer->str;
       gchar *q;
       gchar *r;
-      
+
       switch (state)
-	{
-	case 0:
-	  /* Reading title */
-	  while (*p == '/' || *p == '*' || g_ascii_isspace (*p))
-	    p++;
-	  r = p;
-	  while (*r != '/' && strlen (r))
-	    r++;
-	  if (strlen (r) > 0)
-	    p = r + 1;
-	  q = p + strlen (p);
-	  while (q > p && g_ascii_isspace (*(q - 1)))
-	    q--;
+        {
+        case 0:
+          /* Reading title */
+          while (*p == '/' || *p == '*' || g_ascii_isspace (*p))
+            p++;
+          r = p;
+          while (*r != '/' && strlen (r))
+            r++;
+          if (strlen (r) > 0)
+            p = r + 1;
+          q = p + strlen (p);
+          while (q > p && g_ascii_isspace (*(q - 1)))
+            q--;
 
-	  if (q > p)
-	    {
-	      int len_chars = g_utf8_pointer_to_offset (p, q);
+          if (q > p)
+            {
+              int len_chars = g_utf8_pointer_to_offset (p, q);
 
-	      end = start;
+              end = start;
 
-	      g_assert (strlen (p) >= q - p);
-	      gtk_text_buffer_insert (info_buffer, &end, p, q - p);
-	      start = end;
+              g_assert (strlen (p) >= q - p);
+              gtk_text_buffer_insert (info_buffer, &end, p, q - p);
+              start = end;
 
-	      gtk_text_iter_backward_chars (&start, len_chars);
-	      gtk_text_buffer_apply_tag_by_name (info_buffer, "title", &start, &end);
+              gtk_text_iter_backward_chars (&start, len_chars);
+              gtk_text_buffer_apply_tag_by_name (info_buffer, "title", &start, &end);
 
-	      start = end;
-	      
-	      state++;
-	    }
-	  break;
-	    
-	case 1:
-	  /* Reading body of info section */
-	  while (g_ascii_isspace (*p))
-	    p++;
-	  if (*p == '*' && *(p + 1) == '/')
-	    {
-	      gtk_text_buffer_get_iter_at_offset (source_buffer, &start, 0);
-	      state++;
-	    }
-	  else
-	    {
-	      int len;
-	      
-	      while (*p == '*' || g_ascii_isspace (*p))
-		p++;
+              start = end;
 
-	      len = strlen (p);
-	      while (g_ascii_isspace (*(p + len - 1)))
-		len--;
-	      
-	      if (len > 0)
-		{
-		  if (in_para)
-		    gtk_text_buffer_insert (info_buffer, &start, " ", 1);
+              state++;
+            }
+          break;
 
-		  g_assert (strlen (p) >= len);
-		  gtk_text_buffer_insert (info_buffer, &start, p, len);
-		  in_para = 1;
-		}
-	      else
-		{
-		  gtk_text_buffer_insert (info_buffer, &start, "\n", 1);
-		  in_para = 0;
-		}
-	    }
-	  break;
+        case 1:
+          /* Reading body of info section */
+          while (g_ascii_isspace (*p))
+            p++;
+          if (*p == '*' && *(p + 1) == '/')
+            {
+              gtk_text_buffer_get_iter_at_offset (source_buffer, &start, 0);
+              state++;
+            }
+          else
+            {
+              int len;
 
-	case 2:
-	  /* Skipping blank lines */
-	  while (g_ascii_isspace (*p))
-	    p++;
-	  if (*p)
-	    {
-	      p = buffer->str;
-	      state++;
-	      /* Fall through */
-	    }
-	  else
-	    break;
-	  
-	case 3:
-	  /* Reading program body */
-	  gtk_text_buffer_insert (source_buffer, &start, p, -1);
-	  gtk_text_buffer_insert (source_buffer, &start, "\n", 1);
-	  break;
-	}
+              while (*p == '*' || g_ascii_isspace (*p))
+                p++;
+
+              len = strlen (p);
+              while (g_ascii_isspace (*(p + len - 1)))
+                len--;
+
+              if (len > 0)
+                {
+                  if (in_para)
+                    gtk_text_buffer_insert (info_buffer, &start, " ", 1);
+
+                  g_assert (strlen (p) >= len);
+                  gtk_text_buffer_insert (info_buffer, &start, p, len);
+                  in_para = 1;
+                }
+              else
+                {
+                  gtk_text_buffer_insert (info_buffer, &start, "\n", 1);
+                  in_para = 0;
+                }
+            }
+          break;
+
+        case 2:
+          /* Skipping blank lines */
+          while (g_ascii_isspace (*p))
+            p++;
+          if (*p)
+            {
+              p = buffer->str;
+              state++;
+              /* Fall through */
+            }
+          else
+            break;
+
+        case 3:
+          /* Reading program body */
+          gtk_text_buffer_insert (source_buffer, &start, p, -1);
+          gtk_text_buffer_insert (source_buffer, &start, "\n", 1);
+          break;
+        }
     }
 
   fclose (file);
-  
+
   fontify ();
 
   g_string_free (buffer, TRUE);
@@ -667,7 +667,7 @@ load_file (const gchar *filename)
 void
 row_activated_cb (GtkTreeView       *tree_view,
                   GtkTreePath       *path,
-		  GtkTreeViewColumn *column)
+                  GtkTreeViewColumn *column)
 {
   GtkTreeIter iter;
   PangoStyle style;
@@ -676,39 +676,39 @@ row_activated_cb (GtkTreeView       *tree_view,
   GtkTreeModel *model;
 
   model = gtk_tree_view_get_model (tree_view);
-  
+
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (model),
-		      &iter,
-		      FUNC_COLUMN, &func,
-		      STYLE_COLUMN, &style,
-		      -1);
+                      &iter,
+                      FUNC_COLUMN, &func,
+                      STYLE_COLUMN, &style,
+                      -1);
 
   if (func)
     {
       gtk_tree_store_set (GTK_TREE_STORE (model),
-			  &iter,
-			  STYLE_COLUMN, (style == PANGO_STYLE_ITALIC ? PANGO_STYLE_NORMAL : PANGO_STYLE_ITALIC),
-			  -1);
+                          &iter,
+                          STYLE_COLUMN, (style == PANGO_STYLE_ITALIC ? PANGO_STYLE_NORMAL : PANGO_STYLE_ITALIC),
+                          -1);
       window = (func) (gtk_widget_get_toplevel (GTK_WIDGET (tree_view)));
-      
+
       if (window != NULL)
-	{
-	  CallbackData *cbdata;
-	  
-	  cbdata = g_new (CallbackData, 1);
-	  cbdata->model = model;
-	  cbdata->path = gtk_tree_path_copy (path);
-	  
-	  g_signal_connect (window, "destroy",
-			    G_CALLBACK (window_closed_cb), cbdata);
-	}
+        {
+          CallbackData *cbdata;
+
+          cbdata = g_new (CallbackData, 1);
+          cbdata->model = model;
+          cbdata->path = gtk_tree_path_copy (path);
+
+          g_signal_connect (window, "destroy",
+                            G_CALLBACK (window_closed_cb), cbdata);
+        }
     }
 }
 
 static void
 selection_cb (GtkTreeSelection *selection,
-	      GtkTreeModel     *model)
+              GtkTreeModel     *model)
 {
   GtkTreeIter iter;
   GValue value = {0, };
@@ -717,8 +717,8 @@ selection_cb (GtkTreeSelection *selection,
     return;
 
   gtk_tree_model_get_value (model, &iter,
-			    FILENAME_COLUMN,
-			    &value);
+                            FILENAME_COLUMN,
+                            &value);
   if (g_value_get_string (&value))
     load_file (g_value_get_string (&value));
   g_value_unset (&value);
@@ -726,7 +726,7 @@ selection_cb (GtkTreeSelection *selection,
 
 static GtkWidget *
 create_text (GtkTextBuffer **buffer,
-	     gboolean        is_source)
+             gboolean        is_source)
 {
   GtkWidget *scrolled_window;
   GtkWidget *text_view;
@@ -734,20 +734,20 @@ create_text (GtkTextBuffer **buffer,
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-				  GTK_POLICY_AUTOMATIC,
-				  GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
-				       GTK_SHADOW_IN);
-  
+                                       GTK_SHADOW_IN);
+
   text_view = gtk_text_view_new ();
-  
+
   *buffer = gtk_text_buffer_new (NULL);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (text_view), *buffer);
   gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
-  
+
   if (is_source)
     {
       font_desc = pango_font_description_from_string ("monospace");
@@ -767,7 +767,7 @@ create_text (GtkTextBuffer **buffer,
       gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (text_view),
                                             2);
     }
-  
+
   return scrolled_window;
 }
 
@@ -790,7 +790,7 @@ create_tree (void)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
 
   gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
-			       GTK_SELECTION_BROWSE);
+                               GTK_SELECTION_BROWSE);
   gtk_widget_set_size_request (tree_view, 200, -1);
 
   /* this code only supports 1 level of children. If we
@@ -803,46 +803,46 @@ create_tree (void)
       gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
       gtk_tree_store_set (GTK_TREE_STORE (model),
-			  &iter,
-			  TITLE_COLUMN, d->title,
-			  FILENAME_COLUMN, d->filename,
-			  FUNC_COLUMN, d->func,
-			  STYLE_COLUMN, PANGO_STYLE_NORMAL,
-			  -1);
+                          &iter,
+                          TITLE_COLUMN, d->title,
+                          FILENAME_COLUMN, d->filename,
+                          FUNC_COLUMN, d->func,
+                          STYLE_COLUMN, PANGO_STYLE_NORMAL,
+                          -1);
 
       d++;
 
       if (!children)
-	continue;
-      
-      while (children->title)
-	{
-	  GtkTreeIter child_iter;
+        continue;
 
-	  gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
-	  
-	  gtk_tree_store_set (GTK_TREE_STORE (model),
-			      &child_iter,
-			      TITLE_COLUMN, children->title,
-			      FILENAME_COLUMN, children->filename,
-			      FUNC_COLUMN, children->func,
-			      STYLE_COLUMN, PANGO_STYLE_NORMAL,
-			      -1);
-	  
-	  children++;
-	}
+      while (children->title)
+        {
+          GtkTreeIter child_iter;
+
+          gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+
+          gtk_tree_store_set (GTK_TREE_STORE (model),
+                              &child_iter,
+                              TITLE_COLUMN, children->title,
+                              FILENAME_COLUMN, children->filename,
+                              FUNC_COLUMN, children->func,
+                              STYLE_COLUMN, PANGO_STYLE_NORMAL,
+                              -1);
+
+          children++;
+        }
     }
 
   cell = gtk_cell_renderer_text_new ();
 
   column = gtk_tree_view_column_new_with_attributes ("Widget (double click for demo)",
-						     cell,
-						     "text", TITLE_COLUMN,
-						     "style", STYLE_COLUMN,
-						     NULL);
-  
+                                                     cell,
+                                                     "text", TITLE_COLUMN,
+                                                     "style", STYLE_COLUMN,
+                                                     NULL);
+
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
-			       GTK_TREE_VIEW_COLUMN (column));
+                               GTK_TREE_VIEW_COLUMN (column));
 
   gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model), &iter);
   gtk_tree_selection_select_iter (GTK_TREE_SELECTION (selection), &iter);
@@ -852,11 +852,11 @@ create_tree (void)
 
   gtk_tree_view_collapse_all (GTK_TREE_VIEW (tree_view));
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
-  				    
+
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-				  GTK_POLICY_NEVER,
-				  GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
 
   label = gtk_label_new ("Widget (double click for demo)");
@@ -895,21 +895,21 @@ setup_default_icon (void)
   if (err)
     {
       GtkWidget *dialog;
-      
+
       dialog = gtk_message_dialog_new (NULL, 0,
-				       GTK_MESSAGE_ERROR,
-				       GTK_BUTTONS_CLOSE,
-				       "Failed to read icon file: %s",
-				       err->message);
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       "Failed to read icon file: %s",
+                                       err->message);
       g_error_free (err);
 
       g_signal_connect (dialog, "response",
-			G_CALLBACK (gtk_widget_destroy), NULL);
+                        G_CALLBACK (gtk_widget_destroy), NULL);
     }
 
   if (pixbuf)
     {
-      GList *list;      
+      GList *list;
       GdkPixbuf *transparent;
 
       /* The gtk-logo-rgb icon has a white background, make it transparent */
@@ -943,15 +943,15 @@ main (int argc, char **argv)
       g_setenv ("GTK_IM_MODULE_FILE", "../../modules/input/immodules.cache", TRUE);
     }
   /* -- End of hack -- */
-  
+
   gtk_init (&argc, &argv);
 
   setup_default_icon ();
-  
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GTK+ Code Demos");
   g_signal_connect_after (window, "destroy",
-		    G_CALLBACK (gtk_main_quit), NULL);
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (window), hbox);
@@ -963,8 +963,8 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (hbox), notebook, TRUE, TRUE, 0);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-			    create_text (&info_buffer, FALSE),
-			    gtk_label_new_with_mnemonic ("_Info"));
+                            create_text (&info_buffer, FALSE),
+                            gtk_label_new_with_mnemonic ("_Info"));
 
   gtk_text_buffer_create_tag (info_buffer, "title",
                               "font", "Sans 18",
@@ -972,8 +972,8 @@ main (int argc, char **argv)
   g_object_unref (info_buffer);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-			    create_text (&source_buffer, TRUE),
-			    gtk_label_new_with_mnemonic ("_Source"));
+                            create_text (&source_buffer, TRUE),
+                            gtk_label_new_with_mnemonic ("_Source"));
 
 
   gtk_text_buffer_create_tag (source_buffer, "comment",
@@ -998,13 +998,12 @@ main (int argc, char **argv)
                               "foreground", "DarkGoldenrod4",
                               NULL);
   g_object_unref (source_buffer);
-  
+
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
-  
 
   load_file (testgtk_demos[0].filename);
-  
+
   gtk_main ();
 
   return 0;

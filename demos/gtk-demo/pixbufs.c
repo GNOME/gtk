@@ -71,7 +71,7 @@ load_pixbufs (GError **error)
 
   background = gdk_pixbuf_new_from_file (filename, error);
   g_free (filename);
-  
+
   if (!background)
     return FALSE; /* Note that "error" was filled with a GError */
 
@@ -83,10 +83,10 @@ load_pixbufs (GError **error)
       filename = demo_find_file (image_names[i], error);
       if (!filename)
         return FALSE; /* Note that "error" was filled with a GError */
-      
+
       images[i] = gdk_pixbuf_new_from_file (filename, error);
       g_free (filename);
-      
+
       if (!images[i])
         return FALSE; /* Note that "error" was filled with a GError */
     }

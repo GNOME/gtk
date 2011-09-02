@@ -632,4 +632,3 @@ easter_egg_callback (GtkWidget *button,
 
   gtk_widget_show_all (window);
 }
-

@@ -6,7 +6,7 @@
  * GtkCellRenderer::editing-started signal to do custom setup of the
  * editable widget.
  *
- * The cell renderers used in this demo are GtkCellRendererText, 
+ * The cell renderers used in this demo are GtkCellRendererText,
  * GtkCellRendererCombo and GtkCellRendererProgress.
  */
 
@@ -205,7 +205,7 @@ editing_started (GtkCellRenderer *cell,
                  const gchar     *path,
                  gpointer         data)
 {
-  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable), 
+  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable),
                                         separator_row, NULL, NULL);
 }
 
@@ -259,7 +259,7 @@ cell_edited (GtkCellRendererText *cell,
 }
 
 static void
-add_columns (GtkTreeView  *treeview, 
+add_columns (GtkTreeView  *treeview,
              GtkTreeModel *items_model,
              GtkTreeModel *numbers_model)
 {
@@ -306,8 +306,6 @@ add_columns (GtkTreeView  *treeview,
                                                -1, "Yummy", renderer,
                                                "value", COLUMN_ITEM_YUMMY,
                                                NULL);
-  
-
 }
 
 GtkWidget *
