@@ -123,6 +123,10 @@ TEST_PROGS			+= entry
 entry_SOURCES			 = entry.c
 entry_LDADD			 = $(progs_ldadd)
 
+TEST_PROGS			+= grid
+grid_SOURCES			 = grid.c
+grid_LDADD			 = $(progs_ldadd)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
