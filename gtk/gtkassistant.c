@@ -1610,12 +1610,15 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info->regular_title = gtk_label_new (NULL);
   page_info->current_title = gtk_label_new (NULL);
 
-  gtk_widget_set_halign (page_info->regular_title, GTK_ALIGN_START);
-  gtk_widget_set_valign (page_info->regular_title, GTK_ALIGN_CENTER);
+  /* Note: we need to use misc alignment here as long as GtkLabel
+   * pays attention to it. GtkWiget::halign is ineffective, since
+   * all the labels are getting the same size anyway, due to the
+   * size group.
+   */
+  gtk_misc_set_alignment (GTK_MISC (page_info->regular_title), 0, 0.5);
   gtk_widget_show (page_info->regular_title);
 
-  gtk_widget_set_halign (page_info->current_title, GTK_ALIGN_START);
-  gtk_widget_set_valign (page_info->current_title, GTK_ALIGN_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (page_info->current_title), 0, 0.5);
   gtk_widget_hide (page_info->current_title);
 
   context = gtk_widget_get_style_context (page_info->current_title);
