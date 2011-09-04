@@ -748,14 +748,11 @@ populate_list (GtkFontChooser *fontchooser,
 
   gint n_families, i;
   PangoFontFamily **families;
-  GString     *tmp;
-  GString     *family_and_face;
+  gchar *tmp;
+  gchar *family_and_face;
 
   if (!gtk_widget_has_screen (GTK_WIDGET (fontchooser)))
     return;
-
-  tmp = g_string_new (NULL);
-  family_and_face = g_string_new (NULL);
 
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
                                &families,
@@ -800,18 +797,18 @@ populate_list (GtkFontChooser *fontchooser,
           face_name = pango_font_face_get_face_name (faces[j]);
           font_desc = pango_font_description_to_string (pango_desc);
 
-          g_string_printf (family_and_face, "%s %s", fam_name, face_name);
-          g_string_printf (tmp, ROW_FORMAT_STRING,
-                           family_and_face->str,
-                           font_desc,
-                           fontchooser->priv->preview_text);
+          family_and_face = g_strconcat (fam_name, " ", face_name, NULL);
+          tmp = g_markup_printf_escaped (ROW_FORMAT_STRING,
+                                         family_and_face,
+                                         font_desc,
+                                         fontchooser->priv->preview_text);
 
           gtk_list_store_append (model, &iter);
           gtk_list_store_set (model, &iter,
                               FAMILY_COLUMN, families[i],
                               FACE_COLUMN, faces[j],
-                              PREVIEW_TITLE_COLUMN, family_and_face->str,
-                              PREVIEW_TEXT_COLUMN, tmp->str,
+                              PREVIEW_TITLE_COLUMN, family_and_face,
+                              PREVIEW_TEXT_COLUMN, tmp,
                               -1);
 
           /* Select the current font,
@@ -839,6 +836,8 @@ populate_list (GtkFontChooser *fontchooser,
 
           pango_font_description_free (pango_desc);
           g_free (font_desc);
+          g_free (family_and_face);
+          g_free (tmp);
         }
 
       g_free (faces);
@@ -855,8 +854,6 @@ populate_list (GtkFontChooser *fontchooser,
   if (selected_font)
     pango_font_description_free (selected_font);
 
-  g_string_free (family_and_face, TRUE);
-  g_string_free (tmp, TRUE);
   g_free (families);
 }
 
