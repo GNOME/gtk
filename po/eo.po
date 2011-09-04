@@ -1,6 +1,6 @@
 # Esperanto translation for gtk+.
-# This file is distributed under the same license as the gtk+3 package.
 # Copyright (C) 2007-2011 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtk+ package.
 #
 # Antono VASILJEV <antono.vasiljev@gmail.com>, 2007.
 # Guillaume SAVATON <llumeao@gmail.com>, 2007.
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-05-27 14:19+0000\n"
-"PO-Revision-Date: 2011-05-28 13:49+0200\n"
+"PO-Revision-Date: 2011-09-04 13:17+0200\n"
 "Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
 "Language-Team: Esperanto <ubuntu-l10n-eo@lists.launchpad.net>\n"
 "Language: eo\n"
@@ -141,7 +141,7 @@ msgstr "Hejmo"
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "maldekstren"
+msgstr "Maldekstren"
 
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
@@ -472,16 +472,16 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:346
 msgid "License"
-msgstr "Licenco"
+msgstr "Permesilo"
 
 #: ../gtk/gtkaboutdialog.c:347
 msgid "The license of the program"
-msgstr "La licenco de la programo"
+msgstr "La permesilo de la programo"
 
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:739
 msgid "C_redits"
-msgstr "Dankoj"
+msgstr "_Dankoj"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:752
@@ -1528,7 +1528,7 @@ msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
-"Sistempolitiko preventas ŝanĝojn.\n"
+"Sistempolitiko preventas ŝanĝojn.\n"
 "Kontaktu vian sistemadministranton"
 
 #. Description of --gtk-module=MODULES in --help output
@@ -1948,7 +1948,7 @@ msgstr "Kopioj"
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:2322
 msgid "Copie_s:"
-msgstr "Popioj:"
+msgstr "Kopio_j:"
 
 #: ../gtk/gtkprintunixdialog.c:2340
 msgid "C_ollate"
@@ -2166,14 +2166,14 @@ msgstr "Aldoni kovrilan paĝon"
 #.
 #: ../gtk/gtkprintunixdialog.c:3755
 msgid "Be_fore:"
-msgstr "Antaŭ:"
+msgstr "An_taŭ:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
 #: ../gtk/gtkprintunixdialog.c:3773
 msgid "_After:"
-msgstr "Post:"
+msgstr "_Post:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
@@ -2184,7 +2184,7 @@ msgstr "Laboro"
 
 #: ../gtk/gtkprintunixdialog.c:3857
 msgid "Advanced"
-msgstr "Progresita"
+msgstr "Progresite"
 
 #. Translators: this will appear as tab label in print dialog.
 #: ../gtk/gtkprintunixdialog.c:3895
@@ -2233,11 +2233,11 @@ msgstr "Ne povis vakigi liston"
 
 #: ../gtk/gtkrecentchooserdefault.c:1785
 msgid "Copy _Location"
-msgstr "Kopii lokon"
+msgstr "Kopii _lokon"
 
 #: ../gtk/gtkrecentchooserdefault.c:1798
 msgid "_Remove From List"
-msgstr "Forviŝi el la listo"
+msgstr "Fo_rigi de la listo"
 
 #: ../gtk/gtkrecentchooserdefault.c:1807
 msgid "_Clear List"
@@ -2360,7 +2360,7 @@ msgstr "_Apliki"
 #: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Bold"
-msgstr "Grase"
+msgstr "_Grase"
 
 #: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
@@ -2435,17 +2435,17 @@ msgstr "_Dosiero"
 #: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
-msgstr "Serĉi"
+msgstr "_Serĉi"
 
 #: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
-msgstr "Serĉi kaj anstataŭigi"
+msgstr "Serĉi kaj _anstataŭigi"
 
 #: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Floppy"
-msgstr "Disketo"
+msgstr "_Disketo"
 
 #: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
@@ -2461,25 +2461,25 @@ msgstr "_Lasi tutekranan reĝimon"
 #: ../gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "Malsupra"
+msgstr "_Malsupre"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:347
 msgctxt "Stock label, navigation"
 msgid "_First"
-msgstr "Unua"
+msgstr "_Unuen"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:349
 msgctxt "Stock label, navigation"
 msgid "_Last"
-msgstr "Lasten"
+msgstr "_Lasten"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:351
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "Supren"
+msgstr "_Supren"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:353
@@ -2533,7 +2533,7 @@ msgstr "Malpligrandigi krommarĝenon"
 #: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
-msgstr "Indekso"
+msgstr "_Indekso"
 
 #: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
@@ -2548,7 +2548,7 @@ msgstr "Kurs_ive"
 #: ../gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr "Salti al"
+msgstr "_Salti al"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:370
@@ -4568,7 +4568,7 @@ msgstr ""
 #~ "Image-loading module %s does not export the proper interface; perhaps "
 #~ "it's from a different GTK version?"
 #~ msgstr ""
-#~ "Bildoŝarga modulo %s ne eksportas la taŭgan interfacon; eble ĝi apartenas "
+#~ "Bildoŝarga modulo %s ne elsportas la taŭgan interfacon; eble ĝi apartenas "
 #~ "al alia versio de GTK?"
 
 #~ msgid "Image type '%s' is not supported"
@@ -5188,7 +5188,7 @@ msgstr ""
 #~ msgstr "Eraro dum printado"
 
 #~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Printilo '%s' eble estas malkonektita."
+#~ msgstr "Presilo '%s' eble estas malkonektita."
 
 #~ msgid "Folders"
 #~ msgstr "Dosierujoj"
