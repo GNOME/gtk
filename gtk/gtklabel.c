@@ -1861,17 +1861,17 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (label->use_markup)
     gtk_label_set_markup_internal (label, label->label, label->use_underline);
+  else if (label->use_underline)
+    gtk_label_set_uline_text_internal (label, label->label);
   else
     {
-      if (label->use_underline)
-	gtk_label_set_uline_text_internal (label, label->label);
-      else
+      if (!label->pattern_set)
         {
           if (label->effective_attrs)
             pango_attr_list_unref (label->effective_attrs);
           label->effective_attrs = NULL;
-          gtk_label_set_text_internal (label, g_strdup (label->label));
         }
+      gtk_label_set_text_internal (label, g_strdup (label->label));
     }
 
   gtk_label_compose_effective_attrs (label);
