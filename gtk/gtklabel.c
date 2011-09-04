@@ -250,7 +250,7 @@ struct _GtkLabelPrivate
 
   gdouble  angle;
 
-  guint     mnemonics_visible : 1;
+  guint    mnemonics_visible  : 1;
   guint    jtype              : 2;
   guint    wrap               : 1;
   guint    use_underline      : 1;
@@ -2098,17 +2098,17 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (priv->use_markup)
     gtk_label_set_markup_internal (label, priv->label, priv->use_underline);
+  else if (priv->use_underline)
+    gtk_label_set_uline_text_internal (label, priv->label);
   else
     {
-      if (priv->use_underline)
-	gtk_label_set_uline_text_internal (label, priv->label);
-      else
+      if (!priv->pattern_set)
         {
           if (priv->effective_attrs)
             pango_attr_list_unref (priv->effective_attrs);
           priv->effective_attrs = NULL;
-          gtk_label_set_text_internal (label, g_strdup (priv->label));
         }
+      gtk_label_set_text_internal (label, g_strdup (priv->label));
     }
 
   gtk_label_compose_effective_attrs (label);
