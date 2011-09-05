@@ -60,7 +60,7 @@ struct _GtkFontChooserIface
 
   /* Methods */
   gchar *           (* get_font)                (GtkFontChooser *chooser);
-  gboolean          (* set_font)                (GtkFontChooser *chooser,
+  void              (* set_font)                (GtkFontChooser *chooser,
                                                  const gchar    *fontname);
   PangoFontFamily * (* get_font_family)         (GtkFontChooser  *chooser);
   PangoFontFace *   (* get_font_face)           (GtkFontChooser  *chooser);
@@ -85,7 +85,7 @@ PangoFontFace   *gtk_font_chooser_get_face                 (GtkFontChooser   *fo
 gint             gtk_font_chooser_get_size                 (GtkFontChooser   *fontchooser);
 gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
-gboolean         gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
+void             gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
                                                             const gchar      *font_name);
 gchar*           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
 void             gtk_font_chooser_set_preview_text         (GtkFontChooser   *fontchooser,

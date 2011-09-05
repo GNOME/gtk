@@ -50,9 +50,6 @@ enum
 
 static guint chooser_signals[LAST_SIGNAL];
 
-#define DEFAULT_FONT_NAME "Sans 10"
-#define MAX_FONT_SIZE 999
-
 typedef GtkFontChooserIface GtkFontChooserInterface;
 G_DEFINE_INTERFACE (GtkFontChooser, gtk_font_chooser, G_TYPE_OBJECT);
 
@@ -64,7 +61,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
       g_param_spec_string ("font",
                           P_("Font"),
                           P_("The string that represents this font"),
-                          DEFAULT_FONT_NAME,
+                          GTK_FONT_CHOOSER_DEFAULT_FONT_NAME,
                           GTK_PARAM_READWRITE));
 
   g_object_interface_install_property
@@ -201,21 +198,17 @@ gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
  *
  * Sets the currently-selected font.
  *
- * Return value: %TRUE if the font could be set successfully; %FALSE
- *     if no such font exists or if the @fontchooser doesn't belong
- *     to a particular screen yet.
- *
  * Since: 3.2
  */
-gboolean
+void
 gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
                            const gchar    *fontname)
 {
-  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), FALSE);
-  g_return_val_if_fail (fontname != NULL, FALSE);
+  g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
+  g_return_if_fail (fontname != NULL);
 
-  return GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->set_font (fontchooser,
-                                                             fontname);
+  GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->set_font (fontchooser,
+                                                      fontname);
 }
 
 /**

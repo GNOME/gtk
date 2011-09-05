@@ -41,11 +41,11 @@ delegate_get_font (GtkFontChooser *chooser)
   return gtk_font_chooser_get_font (get_delegate (chooser));
 }
 
-static gboolean
+static void
 delegate_set_font (GtkFontChooser *chooser,
                         const gchar    *fontname)
 {
-  return gtk_font_chooser_set_font (get_delegate (chooser), fontname);
+  gtk_font_chooser_set_font (get_delegate (chooser), fontname);
 }
 
 static PangoFontFamily *

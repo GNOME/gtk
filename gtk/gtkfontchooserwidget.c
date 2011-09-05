@@ -146,10 +146,10 @@ static void gtk_font_chooser_widget_style_updated        (GtkWidget       *widge
 
 static void gtk_font_chooser_widget_bootstrap_fontlist   (GtkFontChooserWidget *fontchooser);
 
-static gboolean gtk_font_chooser_widget_select_font_name (GtkFontChooserWidget *fontchooser);
+static void gtk_font_chooser_widget_select_font_name     (GtkFontChooserWidget *fontchooser);
 
 static gchar   *gtk_font_chooser_widget_get_font         (GtkFontChooser *chooser);
-static gboolean gtk_font_chooser_widget_set_font         (GtkFontChooser *chooser,
+static void     gtk_font_chooser_widget_set_font         (GtkFontChooser *chooser,
                                                           const gchar     *fontname);
 
 static const gchar *gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser);
@@ -945,8 +945,7 @@ gtk_font_chooser_widget_screen_changed (GtkWidget *widget,
                  GTK_TREE_VIEW (priv->family_face_list),
                  priv->model);
 
-  if (priv->fontname)
-    gtk_font_chooser_widget_select_font_name (fontchooser);
+  gtk_font_chooser_widget_select_font_name (fontchooser);
 }
 
 static void
@@ -994,7 +993,7 @@ gtk_font_chooser_widget_get_font (GtkFontChooser *chooser)
   PangoFontDescription *desc;
 
   if (!fontchooser->priv->face)
-    return NULL;
+    return g_strdup (GTK_FONT_CHOOSER_DEFAULT_FONT_NAME);
 
   desc = pango_font_face_describe (fontchooser->priv->face);
   font_desc_name = pango_font_description_to_string (desc);
@@ -1006,27 +1005,24 @@ gtk_font_chooser_widget_get_font (GtkFontChooser *chooser)
   return font_name;
 }
 
-static gboolean
+static void
 gtk_font_chooser_widget_set_font (GtkFontChooser *chooser,
                                   const gchar    *fontname)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  gboolean found = FALSE;
 
   if (priv->fontname)
     g_free (priv->fontname);
   priv->fontname = g_strdup (fontname);
 
   if (gtk_widget_has_screen (GTK_WIDGET (fontchooser)))
-    found = gtk_font_chooser_widget_select_font_name (fontchooser);
+    gtk_font_chooser_widget_select_font_name (fontchooser);
 
   g_object_notify (G_OBJECT (fontchooser), "font");
-
-  return found;
 }
 
-static gboolean
+static void
 gtk_font_chooser_widget_select_font_name (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
@@ -1036,7 +1032,11 @@ gtk_font_chooser_widget_select_font_name (GtkFontChooserWidget *fontchooser)
   PangoFontDescription *desc;
   gboolean found = FALSE;
 
-  desc = pango_font_description_from_string (priv->fontname);
+  if (priv->fontname)
+    desc = pango_font_description_from_string (priv->fontname);
+  else
+    desc = pango_font_description_from_string (GTK_FONT_CHOOSER_DEFAULT_FONT_NAME);
+
   family_name = (gchar*)pango_font_description_get_family (desc);
 
   g_free (priv->fontname);
@@ -1045,7 +1045,7 @@ gtk_font_chooser_widget_select_font_name (GtkFontChooserWidget *fontchooser)
   if (!family_name)
     {
       pango_font_description_free (desc);
-      return FALSE;
+      return;
     }
 
   /* We make sure the filter is clear */
@@ -1112,8 +1112,6 @@ gtk_font_chooser_widget_select_font_name (GtkFontChooserWidget *fontchooser)
     }
 
   pango_font_description_free (desc);
-
-  return found;
 }
 
 static const gchar*

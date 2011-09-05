@@ -201,13 +201,13 @@ gtk_font_button_font_chooser_get_font (GtkFontChooser *chooser)
   return g_strdup (gtk_font_button_get_font_name (font_button));
 }
 
-static gboolean
+static void
 gtk_font_button_font_chooser_set_font (GtkFontChooser *chooser,
                                        const gchar    *fontname)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (chooser);
 
-  return gtk_font_button_set_font_name (font_button, fontname);
+  gtk_font_button_set_font_name (font_button, fontname);
 }
 
 static PangoFontFamily *
@@ -873,7 +873,6 @@ gboolean
 gtk_font_button_set_font_name (GtkFontButton *font_button,
                                const gchar    *fontname)
 {
-  gboolean result;
   gchar *old_fontname;
 
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), FALSE);
@@ -889,15 +888,13 @@ gtk_font_button_set_font_name (GtkFontButton *font_button,
   gtk_font_button_update_font_info (font_button);
   
   if (font_button->priv->font_dialog)
-    result = gtk_font_chooser_set_font (GTK_FONT_CHOOSER (font_button->priv->font_dialog),
-                                        font_button->priv->fontname);
-  else
-    result = FALSE;
+    gtk_font_chooser_set_font (GTK_FONT_CHOOSER (font_button->priv->font_dialog),
+                               font_button->priv->fontname);
 
   g_object_notify (G_OBJECT (font_button), "font");
   g_object_notify (G_OBJECT (font_button), "font-name");
 
-  return result;
+  return TRUE;
 }
 
 static void

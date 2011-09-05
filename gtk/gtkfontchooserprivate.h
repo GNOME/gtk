@@ -25,6 +25,8 @@
 
 #include "gtkfontchooser.h"
 
+#define GTK_FONT_CHOOSER_DEFAULT_FONT_NAME "Sans 10"
+
 G_BEGIN_DECLS
 
 void            _gtk_font_chooser_font_activated        (GtkFontChooser *chooser,
