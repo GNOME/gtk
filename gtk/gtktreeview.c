@@ -13044,8 +13044,8 @@ gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
  * @reorderable: %TRUE, if the tree can be reordered.
  *
  * This function is a convenience function to allow you to reorder
- * models that support the #GtkDragSourceIface and the
- * #GtkDragDestIface.  Both #GtkTreeStore and #GtkListStore support
+ * models that support the #GtkTreeDragSourceIface and the
+ * #GtkTreeDragDestIface.  Both #GtkTreeStore and #GtkListStore support
  * these.  If @reorderable is %TRUE, then the user can reorder the
  * model by dragging and dropping rows. The developer can listen to
  * these changes by connecting to the model's row_inserted and
