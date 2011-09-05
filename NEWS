@@ -1,6 +1,10 @@
 Overview of Changes in GTK+ 3.1.18
 ==================================
 
+* GtkFileChooser:
+ - It is no possible to go to the containing folder of a
+   selected file in recent files or search results.
+
 * Bugs fixed
  530253 typo ifaces under gtk_tree_view_set_reorderable
  566202 GTK_SELECTION_MULTIPLE description unclear
@@ -21,6 +25,7 @@ Overview of Changes in GTK+ 3.1.18
  Belarusian
  Brazilian Portuguese
  Esperanto
+ Galician
  Korean
  Lithuanian
 
