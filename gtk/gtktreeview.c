@@ -14211,11 +14211,12 @@ gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_drag_dest_row:
  * @tree_view: a #GtkTreeView
- * @path: (allow-none): The path of the row to highlight, or %NULL.
+ * @path: (allow-none): The path of the row to highlight, or %NULL
  * @pos: Specifies whether to drop before, after or into the row
- * 
+ *
  * Sets the row that is highlighted for feedback.
- **/
+ * If @path is %NULL, an existing highlight is removed.
+ */
 void
 gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
                                  GtkTreePath            *path,
