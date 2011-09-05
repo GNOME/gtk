@@ -3647,8 +3647,8 @@ gtk_render_option (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @cr: a #cairo_t
  * @angle: arrow angle from 0 to 2 * %G_PI, being 0 the arrow pointing to the north
- * @x: Center X for the render area
- * @y: Center Y for the render area
+ * @x: X origin of the render area
+ * @y: Y origin of the render area
  * @size: square side for render area
  *
  * Renders an arrow pointing to @angle.
