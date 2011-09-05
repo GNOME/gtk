@@ -115,7 +115,7 @@ struct _GtkFontChooserPrivate
 
 #define ROW_FORMAT_STRING "<span weight=\"bold\" size=\"small\">%s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
 
-#define NO_FONT_MATCHED_SEARCH "No fonts matched your search. You can revise your search and try again."
+#define NO_FONT_MATCHED_SEARCH N_("No fonts matched your search. You can revise your search and try again.")
 
 /* These are what we use as the standard font sizes, for the size list.
  */
