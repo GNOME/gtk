@@ -327,7 +327,7 @@ GDK_WINDOWING=
 GIO_PACKAGE=gio-2.0
 PANGO_PACKAGES="pango pangocairo"
 
-if test "x$enable_x11_backend" = xyes; then
+if test "$enable_x11_backend" = "yes"; then
   # GDK calls the xlib backend "x11," cairo calls it "xlib." Other
   # backend names are identical.
   cairo_backends="$cairo_backends cairo-xlib"
@@ -340,7 +340,7 @@ if test "x$enable_x11_backend" = xyes; then
 #define GDK_WINDOWING_X11"
 fi
 
-if test "x$enable_win32_backend" = xyes; then
+if test "$enable_win32_backend" = "yes"; then
   cairo_backends="$cairo_backends cairo-win32"
   GDK_BACKENDS="$GDK_BACKENDS win32"
   backend_immodules="$backend_immodules,ime"
@@ -1540,7 +1540,7 @@ GOBJECT_INTROSPECTION_CHECK(introspection_required_version)
 
 AC_ARG_ENABLE(packagekit,
               [AS_HELP_STRING([--enable-packagekit=@<:@yes/no/auto@:>@],
-                              [build packagekit open-with module [default=auto]])],
+                              [build PackageKit open-with module [default=auto]])],
               [enable_packagekit="$enableval"],
               [enable_packagekit=auto])
 if test "$enable_packagekit" = "auto"; then
@@ -1551,7 +1551,7 @@ if test "$enable_packagekit" = "auto"; then
   fi
 fi
 
-AC_MSG_CHECKING([Whether to use PackageKit])
+AC_MSG_CHECKING([whether to use PackageKit])
 build_packagekit=no
 if test "x$enable_packagekit" != "xno"; then
   if test "$os_win32" != "yes"; then
@@ -1574,17 +1574,21 @@ AC_ARG_ENABLE(colord,
                               [build colord support code [default=auto]])],
               [enable_colord="$enableval"],
               [enable_colord=auto])
+
+AC_MSG_CHECKING([whether to use colord])
 if test "$enable_colord" = "auto"; then
   if test "$os_win32" = "yes"; then
     enable_colord=no
-  else
-    enable_colord=yes
   fi
 fi
+if test "$enable_colord" != "no"; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
 
-AC_MSG_CHECKING([Whether to use colord])
 have_colord=no
-if test "x$enable_colord" != "xno"; then
+if test "$enable_colord" != "no"; then
         if test "$os_win32" != "yes"; then
                 PKG_CHECK_MODULES(COLORD, colord >= 0.1.9,
                                   have_colord=yes, have_colord=no)
@@ -1597,7 +1601,6 @@ if test "x$enable_colord" != "xno"; then
                 AC_MSG_ERROR([colord support is not available on win32])
         fi
 fi
-AC_MSG_RESULT([$have_colord])
 
 if test "$have_colord" = "yes"; then
         AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
@@ -1787,7 +1790,7 @@ echo "        GTK+ $GTK_VERSION"
 echo "        ==========="
 echo ""
 echo "        GDK backends:         $GDK_BACKENDS"
-if test "x$enable_x11_backend" = "xyes"; then
+if test "$enable_x11_backend" = "yes"; then
 echo "        X11 extensions:       $X_EXTENSIONS"
 fi
 echo "        Print backends:       $PRINT_BACKENDS"
