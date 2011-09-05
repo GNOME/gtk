@@ -102,6 +102,8 @@ static void gtk_path_bar_forall                   (GtkContainer     *container,
 						   gboolean          include_internals,
 						   GtkCallback       callback,
 						   gpointer          callback_data);
+static GtkWidgetPath *gtk_path_bar_get_path_for_child (GtkContainer *container,
+                                                       GtkWidget    *child);
 static gboolean gtk_path_bar_scroll               (GtkWidget        *widget,
 						   GdkEventScroll   *event);
 static void gtk_path_bar_scroll_up                (GtkPathBar       *path_bar);
@@ -234,6 +236,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
   container_class->remove = gtk_path_bar_remove;
+  container_class->get_path_for_child = gtk_path_bar_get_path_for_child;
   gtk_container_class_handle_border_width (container_class);
   /* FIXME: */
   /*  container_class->child_type = gtk_path_bar_child_type;*/
@@ -479,6 +482,24 @@ gtk_path_bar_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unrealize (widget);
 }
 
+static void
+child_ordering_changed (GtkPathBar *path_bar)
+{
+  GList *l;
+
+  if (path_bar->up_slider_button)
+    gtk_widget_reset_style (path_bar->up_slider_button);
+  if (path_bar->down_slider_button)
+    gtk_widget_reset_style (path_bar->down_slider_button);
+
+  for (l = path_bar->button_list; l; l = l->next)
+    {
+      ButtonData *data = l->data;
+
+      gtk_widget_reset_style (data->button);
+    }
+}
+
 /* This is a tad complicated
  */
 static void
@@ -706,6 +727,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
     }
   else
     gtk_widget_set_child_visible (path_bar->down_slider_button, FALSE);
+
+  child_ordering_changed (path_bar);
 }
 
 static void
@@ -752,6 +775,7 @@ gtk_path_bar_scroll (GtkWidget      *widget,
 static void
 gtk_path_bar_add (GtkContainer *container,
 		  GtkWidget    *widget)
+
 {
   gtk_widget_set_parent (widget, GTK_WIDGET (container));
 }
@@ -831,6 +855,82 @@ gtk_path_bar_forall (GtkContainer *container,
 
   if (path_bar->down_slider_button)
     (* callback) (path_bar->down_slider_button, callback_data);
+}
+
+static GtkWidgetPath *
+gtk_path_bar_get_path_for_child (GtkContainer *container,
+                                 GtkWidget    *child)
+{
+  GtkPathBar *path_bar = GTK_PATH_BAR (container);
+  GtkWidgetPath *path;
+
+  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (path_bar)));
+
+  if (gtk_widget_get_visible (child) &&
+      gtk_widget_get_child_visible (child))
+    {
+      GtkWidgetPath *sibling_path;
+      GList *visible_children;
+      GList *l;
+      int pos;
+
+      /* 1. Build the list of visible children, in visually left-to-right order
+       * (i.e. independently of the widget's direction).  Note that our
+       * button_list is stored in innermost-to-outermost path order!
+       */
+
+      visible_children = NULL;
+
+      if (gtk_widget_get_visible (path_bar->down_slider_button) &&
+          gtk_widget_get_child_visible (path_bar->down_slider_button))
+        visible_children = g_list_prepend (visible_children, path_bar->down_slider_button);
+
+      for (l = path_bar->button_list; l; l = l->next)
+        {
+          ButtonData *data = l->data;
+
+          if (gtk_widget_get_visible (data->button) &&
+              gtk_widget_get_child_visible (data->button))
+            visible_children = g_list_prepend (visible_children, data->button);
+        }
+
+      if (gtk_widget_get_visible (path_bar->up_slider_button) &&
+          gtk_widget_get_child_visible (path_bar->up_slider_button))
+        visible_children = g_list_prepend (visible_children, path_bar->up_slider_button);
+
+      if (gtk_widget_get_direction (GTK_WIDGET (path_bar)) == GTK_TEXT_DIR_RTL)
+        visible_children = g_list_reverse (visible_children);
+
+      /* 2. Find the index of the child within that list */
+
+      pos = 0;
+
+      for (l = visible_children; l; l = l->next)
+        {
+          GtkWidget *button = l->data;
+
+          if (button == child)
+            break;
+
+          pos++;
+        }
+
+      /* 3. Build the path */
+
+      sibling_path = gtk_widget_path_new ();
+
+      for (l = visible_children; l; l = l->next)
+        gtk_widget_path_append_for_widget (sibling_path, l->data);
+
+      gtk_widget_path_append_with_siblings (path, sibling_path, pos);
+
+      g_list_free (visible_children);
+      gtk_widget_path_unref (sibling_path);
+    }
+  else
+    gtk_widget_path_append_for_widget (path, child);
+
+  return path;
 }
 
 static void
@@ -1671,6 +1771,9 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
     g_object_unref (info->file);
   if (info->parent_file)
     g_object_unref (info->parent_file);
+
+  child_ordering_changed (info->path_bar);
+
   g_free (info);
 }
 
