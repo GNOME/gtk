@@ -361,9 +361,11 @@ testfontselectiondialog_SOURCES = \
 	testfontselectiondialog.c
 
 testfontchooser_SOURCES = \
+	prop-editor.c		\
 	testfontchooser.c
 
 testfontchooserdialog_SOURCES = \
+	prop-editor.c		\
 	testfontchooserdialog.c
 
 testgrid_SOURCES =	\

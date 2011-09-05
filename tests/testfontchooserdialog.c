@@ -18,17 +18,25 @@
  */
 
 #include <gtk/gtk.h>
+#include "prop-editor.h"
 
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
+  GtkWidget *font_button;
 
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_container_add (GTK_CONTAINER (window), gtk_font_button_new ());
+  font_button = gtk_font_button_new ();
+  gtk_container_add (GTK_CONTAINER (window), font_button);
   gtk_widget_show_all (window);
+
+  g_signal_connect (window, "delete-event",
+                    G_CALLBACK (gtk_main_quit), NULL);
+
+  create_prop_editor (G_OBJECT (font_button), 0);
 
   gtk_main ();
 
