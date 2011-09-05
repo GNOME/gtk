@@ -3894,7 +3894,28 @@ copy_file_location_cb (GtkMenuItem           *item,
     }
 }
 
-/* Callback used when the "Show Hidden Files" menu item is toggled */
+/* Callback used when the "Visit this file" menu item is activated */
+static void
+visit_file_cb (GtkMenuItem *item,
+	       GtkFileChooserDefault *impl)
+{
+  GSList *files;
+
+  files = search_get_selected_files (impl);
+
+  /* Sigh, just use the first one */
+  if (files)
+    {
+      GFile *file = files->data;
+
+      gtk_file_chooser_default_select_file (impl, file, NULL); /* NULL-GError */
+    }
+
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
+}
+
+/* callback used when the "Show Hidden Files" menu item is toggled */
 static void
 show_hidden_toggled_cb (GtkCheckMenuItem      *item,
 			GtkFileChooserDefault *impl)
@@ -4147,6 +4168,9 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
 			     impl->browse_files_tree_view,
 			     popup_menu_detach_cb);
 
+  impl->browse_files_popup_menu_visit_file_item		= file_list_add_image_menu_item (impl, GTK_STOCK_DIRECTORY, _("_Visit this file"),
+											 G_CALLBACK (visit_file_cb));
+
   impl->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy file's location"),
 											 G_CALLBACK (copy_file_location_cb));
 
@@ -4173,11 +4197,12 @@ file_list_update_popup_menu (GtkFileChooserDefault *impl)
 {
   file_list_build_popup_menu (impl);
 
-  /* FIXME - handle OPERATION_MODE_SEARCH and OPERATION_MODE_RECENT */
-
   /* The sensitivity of the Add to Bookmarks item is set in
    * bookmarks_check_add_sensitivity()
    */
+
+  /* 'Visit this file' */
+  gtk_widget_set_visible (impl->browse_files_popup_menu_visit_file_item, (impl->operation_mode != OPERATION_MODE_BROWSE));
 
   /* 'Show Hidden Files' */
   g_signal_handlers_block_by_func (impl->browse_files_popup_menu_hidden_files_item,
