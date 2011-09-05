@@ -1,3 +1,30 @@
+Overview of Changes in GTK+ 3.1.18
+==================================
+
+* Bugs fixed
+ 530253 typo ifaces under gtk_tree_view_set_reorderable
+ 566202 GTK_SELECTION_MULTIPLE description unclear
+ 581435 gtk_tree_view_set_drag_dest_row() needs more documentation
+ 655631 Description of x and y parameters in gtk_render_arrow is in...
+ 657793 Support NULL sibling in gtk_grid_attach_next_to
+ 657882 gtk_css_provider_propagate_error's signature not updated...
+ 657963 themingengine: remove xthickness FIXME from gtk_render_line()
+ 657985 reeview: add GTK_STYLE_CLASS_SEPARATOR for tree view separators
+ 658008 Centered text alignment in GtkAssistant is wrong
+ 658077 Add theming support to GtkPathBar
+ 658111 gtk_label_set_pattern() is reset by a call to gtk_box_pack_...
+ 658168 Gtk-Message: Failed to load module "gail"
+ 658200 gtk_toolbar_finalize() does stuff it shouldn't
+        Fix colord support in the print dialog
+
+* Translation updates
+ Belarusian
+ Brazilian Portuguese
+ Esperanto
+ Korean
+ Lithuanian
+
+
 Overview of Changes in GTK+ 3.1.16
 ==================================
 
