@@ -3894,7 +3894,28 @@ copy_file_location_cb (GtkMenuItem           *item,
     }
 }
 
-/* Callback used when the "Show Hidden Files" menu item is toggled */
+/* Callback used when the "Visit this file" menu item is activated */
+static void
+visit_file_cb (GtkMenuItem *item,
+	       GtkFileChooserDefault *impl)
+{
+  GSList *files;
+
+  files = search_get_selected_files (impl);
+
+  /* Sigh, just use the first one */
+  if (files)
+    {
+      GFile *file = files->data;
+
+      gtk_file_chooser_default_select_file (impl, file, NULL); /* NULL-GError */
+    }
+
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
+}
+
+/* callback used when the "Show Hidden Files" menu item is toggled */
 static void
 show_hidden_toggled_cb (GtkCheckMenuItem      *item,
 			GtkFileChooserDefault *impl)
@@ -4100,6 +4121,39 @@ check_copy_file_location_sensitivity (GtkFileChooserDefault *impl)
     gtk_widget_set_sensitive (impl->browse_files_popup_menu_copy_file_location_item, active);
 }
 
+static GtkWidget *
+file_list_add_image_menu_item (GtkFileChooserDefault *impl,
+			       const char *stock_name,
+			       const char *mnemonic_label,
+			       GCallback callback)
+{
+  GtkWidget *item;
+
+  item = gtk_image_menu_item_new_with_mnemonic (mnemonic_label);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+                                 gtk_image_new_from_stock (stock_name, GTK_ICON_SIZE_MENU));
+  g_signal_connect (item, "activate", callback, impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+  
+  return item;
+}
+
+static GtkWidget *
+file_list_add_check_menu_item (GtkFileChooserDefault *impl,
+			       const char *mnemonic_label,
+			       GCallback callback)
+{
+  GtkWidget *item;
+
+  item = gtk_check_menu_item_new_with_mnemonic (mnemonic_label);
+  g_signal_connect (item, "toggled", callback, impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+
+  return item;
+}
+
 /* Constructs the popup menu for the file list if needed */
 static void
 file_list_build_popup_menu (GtkFileChooserDefault *impl)
@@ -4114,41 +4168,24 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
 			     impl->browse_files_tree_view,
 			     popup_menu_detach_cb);
 
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Copy file's location"));
-  impl->browse_files_popup_menu_copy_file_location_item = item;
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-                                 gtk_image_new_from_stock (GTK_STOCK_COPY, GTK_ICON_SIZE_MENU));
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (copy_file_location_cb), impl);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+  impl->browse_files_popup_menu_visit_file_item		= file_list_add_image_menu_item (impl, GTK_STOCK_DIRECTORY, _("_Visit this file"),
+											 G_CALLBACK (visit_file_cb));
 
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Add to Bookmarks"));
-  impl->browse_files_popup_menu_add_shortcut_item = item;
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-				 gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
-  g_signal_connect (item, "activate",
-		    G_CALLBACK (add_to_shortcuts_cb), impl);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+  impl->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy file's location"),
+											 G_CALLBACK (copy_file_location_cb));
+
+  impl->browse_files_popup_menu_add_shortcut_item	= file_list_add_image_menu_item (impl, GTK_STOCK_ADD, _("_Add to Bookmarks"),
+											 G_CALLBACK (add_to_shortcuts_cb));
 
   item = gtk_separator_menu_item_new ();
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
 
-  item = gtk_check_menu_item_new_with_mnemonic (_("Show _Hidden Files"));
-  impl->browse_files_popup_menu_hidden_files_item = item;
-  g_signal_connect (item, "toggled",
-		    G_CALLBACK (show_hidden_toggled_cb), impl);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+  impl->browse_files_popup_menu_hidden_files_item	= file_list_add_check_menu_item (impl, _("Show _Hidden Files"),
+											 G_CALLBACK (show_hidden_toggled_cb));
 
-  item = gtk_check_menu_item_new_with_mnemonic (_("Show _Size Column"));
-  impl->browse_files_popup_menu_size_column_item = item;
-  g_signal_connect (item, "toggled",
-                    G_CALLBACK (show_size_column_toggled_cb), impl);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+  impl->browse_files_popup_menu_size_column_item	= file_list_add_check_menu_item (impl, _("Show _Size Column"),
+											 G_CALLBACK (show_size_column_toggled_cb));
 
   bookmarks_check_add_sensitivity (impl);
   check_copy_file_location_sensitivity (impl);
@@ -4160,11 +4197,12 @@ file_list_update_popup_menu (GtkFileChooserDefault *impl)
 {
   file_list_build_popup_menu (impl);
 
-  /* FIXME - handle OPERATION_MODE_SEARCH and OPERATION_MODE_RECENT */
-
   /* The sensitivity of the Add to Bookmarks item is set in
    * bookmarks_check_add_sensitivity()
    */
+
+  /* 'Visit this file' */
+  gtk_widget_set_visible (impl->browse_files_popup_menu_visit_file_item, (impl->operation_mode != OPERATION_MODE_BROWSE));
 
   /* 'Show Hidden Files' */
   g_signal_handlers_block_by_func (impl->browse_files_popup_menu_hidden_files_item,
