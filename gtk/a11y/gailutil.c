@@ -81,12 +81,12 @@ add_listener (GSignalEmissionHook  listener,
         }
       else
         {
-          g_warning("Invalid signal type %s\n", signal_name);
+          g_warning ("Invalid signal type %s\n", signal_name);
         }
     }
   else
     {
-      g_warning("Invalid object type %s\n", object_type);
+      g_warning ("Invalid object type %s\n", object_type);
     }
   return rc;
 }
@@ -271,7 +271,10 @@ gail_util_add_global_event_listener (GSignalEmissionHook  listener,
 
   split_string = g_strsplit (event_type, ":", 3);
 
-  rc = add_listener (listener, split_string[1], split_string[2], event_type);
+  if (g_strv_length (split_string) == 3)
+    rc = add_listener (listener, split_string[1], split_string[2], event_type);
+
+  g_strfreev (split_string);
 
   return rc;
 }
@@ -301,19 +304,19 @@ gail_util_remove_global_event_listener (guint remove_listener)
           }
         else
           {
-            g_warning("Invalid listener hook_id %ld or signal_id %d\n",
-              listener_info->hook_id, listener_info->signal_id);
+            g_warning ("Invalid listener hook_id %ld or signal_id %d\n",
+                       listener_info->hook_id, listener_info->signal_id);
           }
       }
     else
       {
-        g_warning("No listener with the specified listener id %d",
-          remove_listener);
+        g_warning ("No listener with the specified listener id %d",
+                   remove_listener);
       }
   }
   else
   {
-    g_warning("Invalid listener_id %d", remove_listener);
+    g_warning ("Invalid listener_id %d", remove_listener);
   }
 }
 
