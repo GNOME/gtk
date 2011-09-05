@@ -59,12 +59,10 @@ struct _GtkFontChooserIface
   GTypeInterface base_iface;
 
   /* Methods */
-  gchar *           (* get_font)                (GtkFontChooser *chooser);
-  void              (* set_font)                (GtkFontChooser *chooser,
-                                                 const gchar    *fontname);
   PangoFontFamily * (* get_font_family)         (GtkFontChooser  *chooser);
   PangoFontFace *   (* get_font_face)           (GtkFontChooser  *chooser);
   gint              (* get_font_size)           (GtkFontChooser  *chooser);
+
   void              (* set_filter_func)         (GtkFontChooser   *chooser,
                                                  GtkFontFilterFunc filter,
                                                  gpointer          data,

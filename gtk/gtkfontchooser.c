@@ -186,9 +186,14 @@ gtk_font_chooser_get_size (GtkFontChooser *fontchooser)
 gchar *
 gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
 {
+  gchar *fontname;
+
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
-  return GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->get_font (fontchooser);
+  g_object_get (fontchooser, "font", &fontname, NULL);
+
+
+  return fontname;
 }
 
 /**
@@ -207,8 +212,7 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
   g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
   g_return_if_fail (fontname != NULL);
 
-  GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->set_font (fontchooser,
-                                                      fontname);
+  g_object_set (fontchooser, "font", fontname, NULL);
 }
 
 /**

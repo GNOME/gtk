@@ -1187,8 +1187,6 @@ gtk_font_chooser_widget_set_filter_func (GtkFontChooser  *chooser,
 static void
 gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface)
 {
-  iface->get_font = gtk_font_chooser_widget_get_font;
-  iface->set_font = gtk_font_chooser_widget_set_font;
   iface->get_font_family = gtk_font_chooser_widget_get_family;
   iface->get_font_face = gtk_font_chooser_widget_get_face;
   iface->get_font_size = gtk_font_chooser_widget_get_size;

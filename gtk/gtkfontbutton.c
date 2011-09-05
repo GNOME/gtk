@@ -193,23 +193,6 @@ gtk_font_button_set_show_preview_entry (GtkFontButton *font_button,
   priv->show_preview_entry = show != FALSE;
 }
 
-static gchar *
-gtk_font_button_font_chooser_get_font (GtkFontChooser *chooser)
-{
-  GtkFontButton *font_button = GTK_FONT_BUTTON (chooser);
-
-  return g_strdup (gtk_font_button_get_font_name (font_button));
-}
-
-static void
-gtk_font_button_font_chooser_set_font (GtkFontChooser *chooser,
-                                       const gchar    *fontname)
-{
-  GtkFontButton *font_button = GTK_FONT_BUTTON (chooser);
-
-  gtk_font_button_set_font_name (font_button, fontname);
-}
-
 static PangoFontFamily *
 gtk_font_button_font_chooser_get_font_family (GtkFontChooser *chooser)
 {
@@ -275,8 +258,6 @@ gtk_font_button_font_chooser_notify (GObject    *object,
 static void
 gtk_font_button_font_chooser_iface_init (GtkFontChooserIface *iface)
 {
-  iface->get_font = gtk_font_button_font_chooser_get_font;
-  iface->set_font = gtk_font_button_font_chooser_set_font;
   iface->get_font_family = gtk_font_button_font_chooser_get_font_family;
   iface->get_font_face = gtk_font_button_font_chooser_get_font_face;
   iface->get_font_size = gtk_font_button_font_chooser_get_font_size;

@@ -35,19 +35,6 @@ get_delegate (GtkFontChooser *receiver)
                              GTK_FONT_CHOOSER_DELEGATE_QUARK);
 }
 
-static gchar *
-delegate_get_font (GtkFontChooser *chooser)
-{
-  return gtk_font_chooser_get_font (get_delegate (chooser));
-}
-
-static void
-delegate_set_font (GtkFontChooser *chooser,
-                        const gchar    *fontname)
-{
-  gtk_font_chooser_set_font (get_delegate (chooser), fontname);
-}
-
 static PangoFontFamily *
 delegate_get_font_family (GtkFontChooser *chooser)
 {
@@ -149,8 +136,6 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
 void
 _gtk_font_chooser_delegate_iface_init (GtkFontChooserIface *iface)
 {
-  iface->get_font = delegate_get_font;
-  iface->set_font = delegate_set_font;
   iface->get_font_family = delegate_get_font_family;
   iface->get_font_face = delegate_get_font_face;
   iface->get_font_size = delegate_get_font_size;
