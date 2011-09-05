@@ -72,10 +72,24 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
+            <AtkSelection>
           unnamed-GtkMenuItemAccessible-4
             "menu item"
             parent: unnamed-GtkMenuAccessible-2
             index: 1
+            name: Desktop
+            state: enabled selectable sensitive visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: popup
+            alpha: 1
+            <AtkAction>
+            action 0 name: click
+            <AtkSelection>
+          unnamed-GtkMenuItemAccessible-5
+            "menu item"
+            parent: unnamed-GtkMenuAccessible-2
+            index: 2
             name: File System
             state: enabled selectable sensitive visible
             toolkit: gtk
@@ -84,18 +98,7 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
-          unnamed-GtkMenuItemAccessible-5
-            "menu item"
-            parent: unnamed-GtkMenuAccessible-2
-            index: 2
-            name: _F15-Livecd-Desk
-            state: enabled selectable sensitive visible
-            toolkit: gtk
-            <AtkComponent>
-            layer: popup
-            alpha: 1
-            <AtkAction>
-            action 0 name: click
+            <AtkSelection>
           unnamed-GtkMenuItemAccessible-6
             "separator"
             parent: unnamed-GtkMenuAccessible-2
@@ -106,7 +109,7 @@ window1
             layer: popup
             alpha: 1
             <AtkAction>
-            action 0 name: click
+            <AtkSelection>
           unnamed-GtkMenuItemAccessible-7
             "separator"
             parent: unnamed-GtkMenuAccessible-2
@@ -117,7 +120,7 @@ window1
             layer: popup
             alpha: 1
             <AtkAction>
-            action 0 name: click
+            <AtkSelection>
           unnamed-GtkMenuItemAccessible-8
             "menu item"
             parent: unnamed-GtkMenuAccessible-2
@@ -130,6 +133,7 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
+            <AtkSelection>
     button3
       "push button"
       parent: grid1
