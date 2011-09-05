@@ -690,8 +690,8 @@ gtk_font_button_set_font_name (GtkFontButton *font_button,
   gtk_font_button_update_font_info (font_button);
   
   if (font_button->priv->font_dialog)
-    result = gtk_font_chooser_set_font_name (GTK_FONT_CHOOSER (font_button->priv->font_dialog),
-                                             font_button->priv->fontname);
+    result = gtk_font_chooser_set_font (GTK_FONT_CHOOSER (font_button->priv->font_dialog),
+                                        font_button->priv->fontname);
   else
     result = FALSE;
 
@@ -736,7 +736,7 @@ gtk_font_button_clicked (GtkButton *button)
   if (!gtk_widget_get_visible (font_button->priv->font_dialog))
     {
       font_dialog = GTK_FONT_CHOOSER (font_button->priv->font_dialog);
-      gtk_font_chooser_set_font_name (font_dialog, font_button->priv->fontname);
+      gtk_font_chooser_set_font (font_dialog, font_button->priv->fontname);
     } 
 
   gtk_window_present (GTK_WINDOW (font_button->priv->font_dialog));
@@ -755,7 +755,7 @@ response_cb (GtkDialog *dialog,
     return;
 
   g_free (font_button->priv->fontname);
-  font_button->priv->fontname = gtk_font_chooser_get_font_name (GTK_FONT_CHOOSER (font_button->priv->font_dialog));
+  font_button->priv->fontname = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (font_button->priv->font_dialog));
   
   /* Set label font */
   gtk_font_button_update_font_info (font_button);

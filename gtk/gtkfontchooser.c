@@ -61,8 +61,8 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
 {
   g_object_interface_install_property
      (iface,
-      g_param_spec_string ("font-name",
-                          P_("Font name"),
+      g_param_spec_string ("font",
+                          P_("Font"),
                           P_("The string that represents this font"),
                           DEFAULT_FONT_NAME,
                           GTK_PARAM_READWRITE));
@@ -166,7 +166,7 @@ gtk_font_chooser_get_size (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_font_name:
+ * gtk_font_chooser_get_font:
  * @fontchooser: a #GtkFontChooser
  *
  * Gets the currently-selected font name.
@@ -187,15 +187,15 @@ gtk_font_chooser_get_size (GtkFontChooser *fontchooser)
  * Since: 3.2
  */
 gchar *
-gtk_font_chooser_get_font_name (GtkFontChooser *fontchooser)
+gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
 {
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
-  return GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->get_font_name (fontchooser);
+  return GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->get_font (fontchooser);
 }
 
 /**
- * gtk_font_chooser_set_font_name:
+ * gtk_font_chooser_set_font:
  * @fontchooser: a #GtkFontChooser
  * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
  *
@@ -208,14 +208,14 @@ gtk_font_chooser_get_font_name (GtkFontChooser *fontchooser)
  * Since: 3.2
  */
 gboolean
-gtk_font_chooser_set_font_name (GtkFontChooser *fontchooser,
-                                const gchar    *fontname)
+gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
+                           const gchar    *fontname)
 {
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), FALSE);
   g_return_val_if_fail (fontname != NULL, FALSE);
 
-  return GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->set_font_name (fontchooser,
-                                                                  fontname);
+  return GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->set_font (fontchooser,
+                                                             fontname);
 }
 
 /**

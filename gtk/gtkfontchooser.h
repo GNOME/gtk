@@ -59,8 +59,8 @@ struct _GtkFontChooserIface
   GTypeInterface base_iface;
 
   /* Methods */
-  gchar *           (* get_font_name)           (GtkFontChooser *chooser);
-  gboolean          (* set_font_name)           (GtkFontChooser *chooser,
+  gchar *           (* get_font)                (GtkFontChooser *chooser);
+  gboolean          (* set_font)                (GtkFontChooser *chooser,
                                                  const gchar    *fontname);
   PangoFontFamily * (* get_font_family)         (GtkFontChooser  *chooser);
   PangoFontFace *   (* get_font_face)           (GtkFontChooser  *chooser);
@@ -83,9 +83,9 @@ GType            gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
 PangoFontFamily *gtk_font_chooser_get_family               (GtkFontChooser   *fontchooser);
 PangoFontFace   *gtk_font_chooser_get_face                 (GtkFontChooser   *fontchooser);
 gint             gtk_font_chooser_get_size                 (GtkFontChooser   *fontchooser);
-gchar*           gtk_font_chooser_get_font_name            (GtkFontChooser   *fontchooser);
+gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
-gboolean         gtk_font_chooser_set_font_name            (GtkFontChooser   *fontchooser,
+gboolean         gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
                                                             const gchar      *font_name);
 gchar*           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
 void             gtk_font_chooser_set_preview_text         (GtkFontChooser   *fontchooser,

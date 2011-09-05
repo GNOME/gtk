@@ -62,12 +62,12 @@
  * selecting fonts.
  *
  * To set the font which is initially selected, use
- * gtk_font_chooser_widget_set_font_name().
+ * gtk_font_chooser_set_font().
  *
- * To get the selected font use gtk_font_chooser_widget_get_font_name().
+ * To get the selected font use gtk_font_chooser_get_font().
  *
  * To change the text which is shown in the preview area, use
- * gtk_font_chooser_widget_set_preview_text().
+ * gtk_font_chooser_set_preview_text().
  *
  * Since: 3.2
  */
@@ -148,8 +148,8 @@ static void gtk_font_chooser_widget_bootstrap_fontlist   (GtkFontChooserWidget *
 
 static gboolean gtk_font_chooser_widget_select_font_name (GtkFontChooserWidget *fontchooser);
 
-static gchar   *gtk_font_chooser_widget_get_font_name    (GtkFontChooser *chooser);
-static gboolean gtk_font_chooser_widget_set_font_name    (GtkFontChooser *chooser,
+static gchar   *gtk_font_chooser_widget_get_font         (GtkFontChooser *chooser);
+static gboolean gtk_font_chooser_widget_set_font         (GtkFontChooser *chooser,
                                                           const gchar     *fontname);
 
 static const gchar *gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser);
@@ -195,8 +195,8 @@ gtk_font_chooser_widget_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case GTK_FONT_CHOOSER_PROP_FONT_NAME:
-      gtk_font_chooser_widget_set_font_name (GTK_FONT_CHOOSER (fontchooser), g_value_get_string (value));
+    case GTK_FONT_CHOOSER_PROP_FONT:
+      gtk_font_chooser_widget_set_font (GTK_FONT_CHOOSER (fontchooser), g_value_get_string (value));
       break;
     case GTK_FONT_CHOOSER_PROP_PREVIEW_TEXT:
       gtk_font_chooser_widget_set_preview_text (fontchooser, g_value_get_string (value));
@@ -220,8 +220,8 @@ gtk_font_chooser_widget_get_property (GObject         *object,
 
   switch (prop_id)
     {
-    case GTK_FONT_CHOOSER_PROP_FONT_NAME:
-      g_value_take_string (value, gtk_font_chooser_widget_get_font_name (GTK_FONT_CHOOSER (fontchooser)));
+    case GTK_FONT_CHOOSER_PROP_FONT:
+      g_value_take_string (value, gtk_font_chooser_widget_get_font (GTK_FONT_CHOOSER (fontchooser)));
       break;
     case GTK_FONT_CHOOSER_PROP_PREVIEW_TEXT:
       g_value_set_string (value, gtk_font_chooser_widget_get_preview_text (fontchooser));
@@ -316,7 +316,7 @@ spin_change_cb (GtkAdjustment *adjustment,
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
 
-  g_object_notify (G_OBJECT (fontchooser), "font-name");
+  g_object_notify (G_OBJECT (fontchooser), "font");
 
   /* If the new value is lower than the lower bound of the slider, we set
    * the slider adjustment to the lower bound value if it is not already set
@@ -383,7 +383,7 @@ row_activated_cb (GtkTreeView       *view,
   GtkFontChooser *chooser = user_data;
   gchar *fontname;
 
-  fontname = gtk_font_chooser_widget_get_font_name (chooser);
+  fontname = gtk_font_chooser_widget_get_font (chooser);
   _gtk_font_chooser_font_activated (chooser, fontname);
   g_free (fontname);
 }
@@ -458,7 +458,7 @@ cursor_changed_cb (GtkTreeView *treeview,
 
   pango_font_description_free (desc);
 
-  g_object_notify (G_OBJECT (fontchooser), "font-name");
+  g_object_notify (G_OBJECT (fontchooser), "font");
 }
 
 static gboolean
@@ -986,7 +986,7 @@ gtk_font_chooser_widget_get_size (GtkFontChooser *chooser)
 }
 
 static gchar *
-gtk_font_chooser_widget_get_font_name (GtkFontChooser *chooser)
+gtk_font_chooser_widget_get_font (GtkFontChooser *chooser)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
   gchar                *font_name;
@@ -1007,8 +1007,8 @@ gtk_font_chooser_widget_get_font_name (GtkFontChooser *chooser)
 }
 
 static gboolean
-gtk_font_chooser_widget_set_font_name (GtkFontChooser *chooser,
-                                       const gchar    *fontname)
+gtk_font_chooser_widget_set_font (GtkFontChooser *chooser,
+                                  const gchar    *fontname)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
@@ -1021,7 +1021,7 @@ gtk_font_chooser_widget_set_font_name (GtkFontChooser *chooser,
   if (gtk_widget_has_screen (GTK_WIDGET (fontchooser)))
     found = gtk_font_chooser_widget_select_font_name (fontchooser);
 
-  g_object_notify (G_OBJECT (fontchooser), "font-name");
+  g_object_notify (G_OBJECT (fontchooser), "font");
 
   return found;
 }
@@ -1189,8 +1189,8 @@ gtk_font_chooser_widget_set_filter_func (GtkFontChooser  *chooser,
 static void
 gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface)
 {
-  iface->get_font_name = gtk_font_chooser_widget_get_font_name;
-  iface->set_font_name = gtk_font_chooser_widget_set_font_name;
+  iface->get_font = gtk_font_chooser_widget_get_font;
+  iface->set_font = gtk_font_chooser_widget_set_font;
   iface->get_font_family = gtk_font_chooser_widget_get_family;
   iface->get_font_face = gtk_font_chooser_widget_get_face;
   iface->get_font_size = gtk_font_chooser_widget_get_size;

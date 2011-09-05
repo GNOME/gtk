@@ -22,7 +22,7 @@
 static void
 notify_font_name_cb (GObject *fontchooser, GParamSpec *pspec, gpointer data)
 {
-  g_debug ("Changed font name %s", gtk_font_chooser_get_font_name (GTK_FONT_CHOOSER (fontchooser)));
+  g_debug ("Changed font name %s", gtk_font_chooser_get_font (GTK_FONT_CHOOSER (fontchooser)));
 }
 
 static void
@@ -57,7 +57,7 @@ main (int argc, char *argv[])
   g_signal_connect (fontchooser, "notify::preview-text",
                     G_CALLBACK (notify_preview_text_cb), NULL);
 
-  gtk_font_chooser_set_font_name (GTK_FONT_CHOOSER (fontchooser), "Bitstream Vera Sans 45");
+  gtk_font_chooser_set_font (GTK_FONT_CHOOSER (fontchooser), "Bitstream Vera Sans 45");
   gtk_font_chooser_set_preview_text (GTK_FONT_CHOOSER (fontchooser), "[user@host ~]$ &>>");
   gtk_font_chooser_set_show_preview_entry (GTK_FONT_CHOOSER (fontchooser), FALSE);
 

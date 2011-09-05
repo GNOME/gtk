@@ -36,16 +36,16 @@ get_delegate (GtkFontChooser *receiver)
 }
 
 static gchar *
-delegate_get_font_name (GtkFontChooser *chooser)
+delegate_get_font (GtkFontChooser *chooser)
 {
-  return gtk_font_chooser_get_font_name (get_delegate (chooser));
+  return gtk_font_chooser_get_font (get_delegate (chooser));
 }
 
 static gboolean
-delegate_set_font_name (GtkFontChooser *chooser,
+delegate_set_font (GtkFontChooser *chooser,
                         const gchar    *fontname)
 {
-  return gtk_font_chooser_set_font_name (get_delegate (chooser), fontname);
+  return gtk_font_chooser_set_font (get_delegate (chooser), fontname);
 }
 
 static PangoFontFamily *
@@ -125,8 +125,8 @@ void
 _gtk_font_chooser_install_properties (GObjectClass *klass)
 {
   g_object_class_override_property (klass,
-                                    GTK_FONT_CHOOSER_PROP_FONT_NAME,
-                                    "font-name");
+                                    GTK_FONT_CHOOSER_PROP_FONT,
+                                    "font");
   g_object_class_override_property (klass,
                                     GTK_FONT_CHOOSER_PROP_PREVIEW_TEXT,
                                     "preview-text");
@@ -149,8 +149,8 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
 void
 _gtk_font_chooser_delegate_iface_init (GtkFontChooserIface *iface)
 {
-  iface->get_font_name = delegate_get_font_name;
-  iface->set_font_name = delegate_set_font_name;
+  iface->get_font = delegate_get_font;
+  iface->set_font = delegate_set_font;
   iface->get_font_family = delegate_get_font_family;
   iface->get_font_face = delegate_get_font_face;
   iface->get_font_size = delegate_get_font_size;
