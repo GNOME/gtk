@@ -259,11 +259,14 @@ cmp_module (GtkModuleInfo *info,
 }
 
 static gboolean
-module_is_blacklisted (const gchar *name)
+module_is_blacklisted (const gchar *name,
+                       gboolean     verbose)
 {
   if (g_str_equal (name, "gail"))
     {
-      g_message ("Not loading module \"gail\": The functionality is provided by GTK natively. Please try to not load it.");
+      if (verbose)
+        g_message ("Not loading module \"gail\": The functionality is provided by GTK natively. Please try to not load it.");
+
       return TRUE;
     }
 
@@ -303,7 +306,7 @@ load_module (GSList      *module_list,
 	    {
               /* Do the check this late so we only warn about existing modules,
                * not old modules that are still in the modules path. */
-              if (module_is_blacklisted (name))
+              if (module_is_blacklisted (name, TRUE))
                 {
                   modinit_func = NULL;
                   success = TRUE;
@@ -383,10 +386,13 @@ load_module (GSList      *module_list,
     }
   else
     {
-      const gchar *error = g_module_error ();
+      if (!module_is_blacklisted (name, FALSE))
+        {
+          const gchar *error = g_module_error ();
 
-      g_message ("Failed to load module \"%s\"%s%s",
-                 name, error ? ": " : "", error ? error : "");
+          g_message ("Failed to load module \"%s\"%s%s",
+                     name, error ? ": " : "", error ? error : "");
+        }
     }
 
   return module_list;
