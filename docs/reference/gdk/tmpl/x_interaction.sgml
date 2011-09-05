@@ -41,7 +41,7 @@ The current display.
 
 @Returns: an Xlib <type>Display*</type>.
 
-@Deprecated: 2.22: Use gdk_display_get_default ()
+@Deprecated: 2.22: Use gdk_display_get_default() to get the default #GdkDisplay or gdk_x11_get_default_xdisplay() to get the corresponding Xlib <type>Display *</type>.
 
 
 <!-- ##### MACRO GDK_WINDOW_XDISPLAY ##### -->
