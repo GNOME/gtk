@@ -22,38 +22,13 @@
  *
  */
 
-#include <config.h>
+#include "config.h"
 
-#include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
+#include "gdk/gdkkeysyms.h"
+#include "gtkplacessidebar.h"
+#include "gtkscrolledwindow.h"
+#include "gtktreeview.h"
 #include <gio/gio.h>
-
-#include <libnautilus-private/nautilus-dnd.h>
-#include <libnautilus-private/nautilus-bookmark.h>
-#include <libnautilus-private/nautilus-global-preferences.h>
-#include <libnautilus-private/nautilus-module.h>
-#include <libnautilus-private/nautilus-file.h>
-#include <libnautilus-private/nautilus-file-utilities.h>
-#include <libnautilus-private/nautilus-file-operations.h>
-#include <libnautilus-private/nautilus-trash-monitor.h>
-#include <libnautilus-private/nautilus-icon-names.h>
-
-#include <eel/eel-debug.h>
-#include <eel/eel-gtk-extensions.h>
-#include <eel/eel-glib-extensions.h>
-#include <eel/eel-graphic-effects.h>
-#include <eel/eel-string.h>
-#include <eel/eel-stock-dialogs.h>
-
-#include "nautilus-application.h"
-#include "nautilus-bookmark-list.h"
-#include "nautilus-places-sidebar.h"
-#include "nautilus-window.h"
-#include "nautilus-window-slot.h"
-
-#define DEBUG_FLAG NAUTILUS_DEBUG_PLACES
-#include <libnautilus-private/nautilus-debug.h>
 
 #define EJECT_BUTTON_XPAD 6
 #define ICON_CELL_XPAD 6
