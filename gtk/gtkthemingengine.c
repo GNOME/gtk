@@ -2032,7 +2032,6 @@ gtk_theming_engine_render_line (GtkThemingEngine *engine,
 {
   GdkRGBA color;
   GtkStateFlags flags;
-  cairo_matrix_t matrix;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
