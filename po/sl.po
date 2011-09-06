@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-07-19 11:22+0000\n"
-"PO-Revision-Date: 2011-07-19 21:55+0100\n"
-"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"PO-Revision-Date: 2011-09-03 09:51+0100\n"
+"Last-Translator: Andrej Žnidaršič <andrej.znidarsic@gmail.com>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -2698,7 +2698,7 @@ msgstr "Nastavitev _strani"
 #: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Paste"
-msgstr "_Prilepi"
+msgstr "Pr_ilepi"
 
 #: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
@@ -4529,16 +4529,12 @@ msgstr "Slike '%s' ni mogoče naložiti: vzrok ni znan, najverjetneje je datotek
 
 #~ msgid "_Browse for other folders"
 #~ msgstr "_Brskaj za drugimi mapami"
-
 #~ msgid "Locked"
 #~ msgstr "Zaklenjeno"
-
 #~ msgid "Received invalid color data\n"
 #~ msgstr "Prejeti so bili neveljavni podatki o barvi\n"
-
 #~ msgid "Error loading icon: %s"
 #~ msgstr "Napaka med nalaganjem ikone: %s"
-
 #~ msgid ""
 #~ "Could not find the icon '%s'. The '%s' theme\n"
 #~ "was not found either, perhaps you need to install it.\n"
@@ -4549,138 +4545,99 @@ msgstr "Slike '%s' ni mogoče naložiti: vzrok ni znan, najverjetneje je datotek
 #~ "prav tako ni mogoče najti. Potrebno jo je namestiti\n"
 #~ "Kopijo lahko dobite na:\n"
 #~ "\t%s"
-
 #~ msgid "Unable to locate image file in pixmap_path: \"%s\""
 #~ msgstr "Slikovne datoteke v poti pixmap_path ni mogoče najti: \"%s\""
-
 #~ msgid "This function is not implemented for widgets of class '%s'"
 #~ msgstr "Ta funkcija ni podprta za gradnike razreda '%s'"
-
 #~ msgid "different idatas found for symlinked '%s' and '%s'\n"
 #~ msgstr ""
 #~ "najdeni so različni ipodatki (idatas) za simbolno povezana '%s' in '%s'\n"
-
 #~ msgid "X screen to use"
 #~ msgstr "Zaslon X, ki naj se uporabi"
-
 #~ msgid "SCREEN"
 #~ msgstr "ZASLON"
-
 #~ msgid "Make X calls synchronous"
 #~ msgstr "Naredi klice X usklajene"
-
 #~ msgid "Credits"
 #~ msgstr "Zasluge"
-
 #~ msgid "Written by"
 #~ msgstr "Napisali"
-
 #~ msgid "_Add"
 #~ msgstr "_Dodaj"
-
 #~ msgid "_Remove"
 #~ msgstr "Odst_rani"
-
 #~ msgid "Error creating folder '%s': %s"
 #~ msgstr "Napaka med ustvarjanjem mape '%s': %s"
-
 #~ msgid "Unable to find include file: \"%s\""
 #~ msgstr "Ni mogoče najti vstavljene datoteke: \"%s\""
-
 #~ msgid "Unable to locate theme engine in module_path: \"%s\","
 #~ msgstr "Ni mogoče najti pogona tem v poti module_path: \"%s\","
-
 #~ msgid "Gdk debugging flags to set"
 #~ msgstr "Zastavice razhroščevanja GDK, ki naj bodo nastavljene"
-
 #~ msgid "Gdk debugging flags to unset"
 #~ msgstr "Zastavice rahroščevanja GDK, ki naj ne bodo nastavljene"
-
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "Slikovna datoteka '%s' ne vsebuje podatkov"
-
 #~ msgid ""
 #~ "Failed to load animation '%s': reason not known, probably a corrupt "
 #~ "animation file"
 #~ msgstr ""
 #~ "Nalaganje animacije '%s' ni bilo uspešno: razlog ni znan, verjetno "
 #~ "pokvarjena datoteka"
-
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "Ni mogoče naložiti modula za nalaganje slik: %s: %s"
-
 #~ msgid ""
 #~ "Image-loading module %s does not export the proper interface; perhaps "
 #~ "it's from a different GTK version?"
 #~ msgstr ""
 #~ "Modul za nalaganje slik %s ne izvaža zahtevanega vmesnika; morda je iz "
 #~ "druge različice GTK."
-
 #~ msgid "Image type '%s' is not supported"
 #~ msgstr "Vrsta slike '%s' ni podprta"
-
 #~ msgid "Couldn't recognize the image file format for file '%s'"
 #~ msgstr "Ni mogoče prepoznati vrste zapisa slike v datoteki '%s'"
-
 #~ msgid "Unrecognized image file format"
 #~ msgstr "Neznana vrsta zapisa slikovne datoteke"
-
 #~ msgid "Failed to load image '%s': %s"
 #~ msgstr "Nalaganje slike '%s' ni bilo uspešno: %s"
-
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "Napaka med pisanjem v slikovno datoteko: %s"
-
 #~ msgid ""
 #~ "This build of gdk-pixbuf does not support saving the image format: %s"
 #~ msgstr "Ta izgradnja gdk-pixbuf ne podpira shranjevanja v obliki zapisa: %s"
-
 #~ msgid "Insufficient memory to save image to callback"
 #~ msgstr "Premalo pomnilnika za hrambo slike v preklicni funkciji"
-
 #~ msgid "Failed to open temporary file"
 #~ msgstr "Odpiranje začasne datoteke ni bilo uspešno"
-
 #~ msgid "Failed to read from temporary file"
 #~ msgstr "Branje iz začasne datoteke ni bilo uspešno"
-
 #~ msgid "Failed to open '%s' for writing: %s"
 #~ msgstr "Odpiranje '%s' za pisanje ni bilo uspešno: %s"
-
 #~ msgid ""
 #~ "Failed to close '%s' while writing image, all data may not have been "
 #~ "saved: %s"
 #~ msgstr ""
 #~ "Zapiranje '%s' med pisanjem slike ni bilo uspešno; vseh podatkov ni bilo "
 #~ "mogoče shraniti: %s"
-
 #~ msgid "Insufficient memory to save image into a buffer"
 #~ msgstr "Ni dovolj pomnilnika za hrambo slike v medpomnilnik"
-
 #~ msgid "Error writing to image stream"
 #~ msgstr "Napaka med pisanjem v slikovni pretok"
-
 #~ msgid ""
 #~ "Internal error: Image loader module '%s' failed to complete an operation, "
 #~ "but didn't give a reason for the failure"
 #~ msgstr ""
 #~ "Notranja napaka: modul nalagalnika slik '%s' ni uspel končati opravila, "
 #~ "vendar ni podal razloga za neuspeh"
-
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr "Postopno nalaganje slike v zapisu '%s' ni podprto"
-
 #~ msgid "Image header corrupt"
 #~ msgstr "Glava slike je pokvarjena"
-
 #~ msgid "Image format unknown"
 #~ msgstr "Vrsta zapisa slike ni znana"
-
 #~ msgid "Image pixel data corrupt"
 #~ msgstr "Podatki o točkah slike so pokvarjeni"
-
 #~ msgid "failed to allocate image buffer of %u byte"
-
 #~ msgid_plural "failed to allocate image buffer of %u bytes"
 #~ msgstr[0] ""
 #~ "ni mogoče dodeliti slikovnega medpomnilnika v velikosti %u bajtov"
@@ -4689,577 +4646,396 @@ msgstr "Slike '%s' ni mogoče naložiti: vzrok ni znan, najverjetneje je datotek
 #~ "ni mogoče dodeliti slikovnega medpomnilnika v velikosti %u bajtov"
 #~ msgstr[3] ""
 #~ "ni mogoče dodeliti slikovnega medpomnilnika v velikosti %u bajtov"
-
 #~ msgid "Unexpected icon chunk in animation"
 #~ msgstr "Nepričakovan sklop ikone v animaciji"
-
 #~ msgid "Unsupported animation type"
 #~ msgstr "Nepodprta vrsta animacije"
-
 #~ msgid "Invalid header in animation"
 #~ msgstr "Neveljavna glava v animaciji"
-
 #~ msgid "Not enough memory to load animation"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje animacije"
-
 #~ msgid "Malformed chunk in animation"
 #~ msgstr "Nepravilno oblikovan sklop v animaciji"
-
 #~ msgid "The ANI image format"
 #~ msgstr "Vrsta zapisa slike ANI"
-
 #~ msgid "BMP image has bogus header data"
 #~ msgstr "Slika BMP ima v glavi neveljavne podatke"
-
 #~ msgid "Not enough memory to load bitmap image"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje slike"
-
 #~ msgid "BMP image has unsupported header size"
 #~ msgstr "Slika BMP ima nepodprto velikost glave"
-
 #~ msgid "Topdown BMP images cannot be compressed"
 #~ msgstr "Slik BMP ni mogoče stisniti"
-
 #~ msgid "Premature end-of-file encountered"
 #~ msgstr "Zaznan je predčasni konec datoteke"
-
 #~ msgid "Couldn't allocate memory for saving BMP file"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za shranjevanje datoteke BMP"
-
 #~ msgid "Couldn't write to BMP file"
 #~ msgstr "Ni mogoče pisati v datoteko BMP"
-
 #~ msgid "The BMP image format"
 #~ msgstr "Vrsta zapisa slike BMP"
-
 #~ msgid "Failure reading GIF: %s"
 #~ msgstr "Napaka med branjem GIF: %s"
-
 #~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 #~ msgstr "V datoteki GIF manjka nekaj podatkov (morda je bila razdeljena)"
-
 #~ msgid "Internal error in the GIF loader (%s)"
 #~ msgstr "Notranja napaka v nalagalniku GIF (%s)"
-
 #~ msgid "Stack overflow"
 #~ msgstr "Prekoračitev sklada"
-
 #~ msgid "GIF image loader cannot understand this image."
 #~ msgstr "Nalagalnik slik GIF ne razume te slike."
-
 #~ msgid "Bad code encountered"
 #~ msgstr "Zaznana je neveljavna koda"
-
 #~ msgid "Circular table entry in GIF file"
 #~ msgstr "Krožni vnos razpredelnice v GIF datoteki"
-
 #~ msgid "Not enough memory to load GIF file"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje slike GIF"
-
 #~ msgid "Not enough memory to composite a frame in GIF file"
 #~ msgstr "Ni dovolj pomnilnika za združevanje okvirjev v sliki GIF"
-
 #~ msgid "GIF image is corrupt (incorrect LZW compression)"
 #~ msgstr "Slika GIF je pokvarjena (nepravilno stiskanje LZW)"
-
 #~ msgid "File does not appear to be a GIF file"
 #~ msgstr "Datoteka ni podobna datoteki GIF"
-
 #~ msgid "Version %s of the GIF file format is not supported"
 #~ msgstr "Različica %s vrste zapisa GIF ni podprta"
-
 #~ msgid ""
 #~ "GIF image has no global colormap, and a frame inside it has no local "
 #~ "colormap."
 #~ msgstr ""
 #~ "Slika GIF nima globalne karte barv in okvir nima krajevne karte barv."
-
 #~ msgid "GIF image was truncated or incomplete."
 #~ msgstr "Slika GIF je bila razdeljena ali pa je nepopolna."
-
 #~ msgid "The GIF image format"
 #~ msgstr "Vrsta zapisa slike GIF"
-
 #~ msgid "Invalid header in icon"
 #~ msgstr "Ikona ima neveljavno glavo"
-
 #~ msgid "Not enough memory to load icon"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje ikone"
-
 #~ msgid "Icon has zero width"
 #~ msgstr "Ikona ima ničelno širino"
-
 #~ msgid "Icon has zero height"
 #~ msgstr "Ikona ima ničelno višino"
-
 #~ msgid "Compressed icons are not supported"
 #~ msgstr "Stisnjene ikone niso podprte"
-
 #~ msgid "Unsupported icon type"
 #~ msgstr "Nepodprta vrsta ikone"
-
 #~ msgid "Not enough memory to load ICO file"
 #~ msgstr "Premalo pomnilnika za nalaganje datoteke ICO"
-
 #~ msgid "Image too large to be saved as ICO"
 #~ msgstr "Slika je prevelika, da bi bila shranjena kot ICO"
-
 #~ msgid "Cursor hotspot outside image"
 #~ msgstr "Vroča točka kazalca je zunaj slike"
-
 #~ msgid "Unsupported depth for ICO file: %d"
 #~ msgstr "Nepodprta barvna globina datoteke ICO: %d"
-
 #~ msgid "The ICO image format"
 #~ msgstr "Vrsta zapisa slike ICO"
-
 #~ msgid "Error reading ICNS image: %s"
 #~ msgstr "Napaka med branjem slike ICNS: %s"
-
 #~ msgid "Could not decode ICNS file"
 #~ msgstr "Ni mogoče dekodirati ICNS datoteke"
-
 #~ msgid "The ICNS image format"
 #~ msgstr "Vrsta zapisa slike ICNS"
-
 #~ msgid "Couldn't allocate memory for stream"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za pretok"
-
 #~ msgid "Couldn't decode image"
 #~ msgstr "Ni mogoče dekodirati slike"
-
 #~ msgid "Transformed JPEG2000 has zero width or height"
 #~ msgstr "Preoblikovan JPEG2000 ima ničelno višino ali širino."
-
 #~ msgid "Image type currently not supported"
 #~ msgstr "Vrsta slike trenutno ni podprta"
-
 #~ msgid "Couldn't allocate memory for color profile"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje barvnega profila"
-
 #~ msgid "Insufficient memory to open JPEG 2000 file"
 #~ msgstr "Premalo pomnilnika za odprtje datoteke JPEG 2000"
-
 #~ msgid "Couldn't allocate memory to buffer image data"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za medpomnenje slikovnih podatkov"
-
 #~ msgid "The JPEG 2000 image format"
 #~ msgstr "Vrsta zapisa slike JPEG 2000"
-
 #~ msgid "Error interpreting JPEG image file (%s)"
 #~ msgstr "Napaka ob tolmačenju slikovne datoteke JPEG (%s)"
-
 #~ msgid ""
 #~ "Insufficient memory to load image, try exiting some applications to free "
 #~ "memory"
 #~ msgstr ""
 #~ "Ni dovolj pomnilnika za nalaganje slike; za sprostitev pomnilnika zaprite "
 #~ "nekaj programov"
-
 #~ msgid "Unsupported JPEG color space (%s)"
 #~ msgstr "Nepodprta vrsta barvnega prostora JPEG (%s)"
-
 #~ msgid "Couldn't allocate memory for loading JPEG file"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje datoteke JPEG"
-
 #~ msgid "Transformed JPEG has zero width or height."
 #~ msgstr "Preoblikovan JPEG ima ničelno višino ali širino."
-
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 #~ "parsed."
 #~ msgstr ""
 #~ "Kakovost JPEG je določena z vrednostjo med 0 in 100; vrednosti '%s' ni "
 #~ "mogoče razčleniti."
-
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 #~ msgstr ""
 #~ "Kakovost JPEG mora biti vrednost med 0 in 100; vrednost '%d' ni dovoljena."
-
 #~ msgid "The JPEG image format"
 #~ msgstr "Vrsta zapisa slike JPEG"
-
 #~ msgid "Couldn't allocate memory for header"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za glavo"
-
 #~ msgid "Couldn't allocate memory for context buffer"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za medpomnilnik vsebine"
-
 #~ msgid "Image has invalid width and/or height"
 #~ msgstr "Slika ima neveljavno širino in/ali višino"
-
 #~ msgid "Image has unsupported bpp"
 #~ msgstr "Slika ima nepodprto barvno globino"
-
 #~ msgid "Image has unsupported number of %d-bit planes"
 #~ msgstr "Slika ima nepodprto število %d-bitnih ravnin"
-
 #~ msgid "Couldn't create new pixbuf"
 #~ msgstr "Ni mogoče ustvariti novega medpomnilnika slik"
-
 #~ msgid "Couldn't allocate memory for line data"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za vrstične podatke"
-
 #~ msgid "Couldn't allocate memory for paletted data"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za paletne podatke"
-
 #~ msgid "Didn't get all lines of PCX image"
 #~ msgstr "Ni mogoče pridobiti vseh vrstic slike PCX"
-
 #~ msgid "No palette found at end of PCX data"
 #~ msgstr "Nobena paleta ni bila najdena na koncu podatkov datoteke PCX"
-
 #~ msgid "The PCX image format"
 #~ msgstr "Vrsta zapisa slike PCX"
-
 #~ msgid "Bits per channel of PNG image is invalid."
 #~ msgstr "Podatek o bitih na kanal slike PNG je neveljaven."
-
 #~ msgid "Transformed PNG has zero width or height."
 #~ msgstr "Preoblikovan PNG ima ničelno višino ali širino."
-
 #~ msgid "Bits per channel of transformed PNG is not 8."
 #~ msgstr "Preoblikovani PNG nima 8 bitov na kanal."
-
 #~ msgid "Transformed PNG not RGB or RGBA."
 #~ msgstr "Pretvorjen PNG ni RGB ali RGBA."
-
 #~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 #~ msgstr "Pretvorjen PNG ima nepodprto število kanalov, mora biti 3 ali 4."
-
 #~ msgid "Fatal error in PNG image file: %s"
 #~ msgstr "Usodna napak v slikovni datoteki PNG: %s"
-
 #~ msgid "Insufficient memory to load PNG file"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje datoteke PNG"
-
 #~ msgid ""
 #~ "Insufficient memory to store a %ld by %ld image; try exiting some "
 #~ "applications to reduce memory usage"
 #~ msgstr ""
 #~ "Ni dovolj pomnilnika za shranjevanje slike velikosti %ld x %ld; za "
 #~ "sproščanje pomnilnika je treba zapreti nekaj programov"
-
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "Usodna napaka med branjem slikovne datoteke PNG"
-
 #~ msgid "Fatal error reading PNG image file: %s"
 #~ msgstr "Usodna napaka med branjem slikovne datoteke PNG: %s"
-
 #~ msgid ""
 #~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 #~ msgstr "Ključi za sklope besedila PNG morajo imeti med 1 in 79 znakov."
-
 #~ msgid "Keys for PNG text chunks must be ASCII characters."
 #~ msgstr "Ključi za sklope besedila PNG morajo biti znaki ASCII."
-
 #~ msgid "Color profile has invalid length %d."
 #~ msgstr "Barvni profil je neveljavne dolžine %d."
-
 #~ msgid ""
 #~ "PNG compression level must be a value between 0 and 9; value '%s' could "
 #~ "not be parsed."
 #~ msgstr ""
 #~ "Raven stiskanja PNG je določena z vrednostmi med 0 in 9; vrednosti '%s' "
 #~ "ni mogoče razčleniti."
-
 #~ msgid ""
 #~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
 #~ "allowed."
 #~ msgstr ""
 #~ "Raven stiskanja JPEG mora biti vrednost med 0 in 9; vrednost '%d' ni "
 #~ "dovoljena."
-
 #~ msgid ""
 #~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 #~ msgstr ""
 #~ "Vrednosti za sklop besedila PNG %s ni mogoče pretvoriti v kodiranje "
 #~ "ISO-8859-1."
-
 #~ msgid "The PNG image format"
 #~ msgstr "Vrsta zapisa slike PNG"
-
 #~ msgid "PNM loader expected to find an integer, but didn't"
 #~ msgstr "Nalagalnik PNM je pričakoval celo število, a ga ni našel"
-
 #~ msgid "PNM file has an incorrect initial byte"
 #~ msgstr "Datoteka PNM ima napačen začetni bajt"
-
 #~ msgid "PNM file is not in a recognized PNM subformat"
 #~ msgstr "Datoteka PNM ni v prepoznani podvrsti zapisa PNM"
-
 #~ msgid "PNM file has an image width of 0"
 #~ msgstr "Datoteka PNM ima širino slike 0"
-
 #~ msgid "PNM file has an image height of 0"
 #~ msgstr "Datoteka PNM ima višino slike 0"
-
 #~ msgid "Maximum color value in PNM file is 0"
 #~ msgstr "Največja vrednost barve v datoteki PNM je 0"
-
 #~ msgid "Maximum color value in PNM file is too large"
 #~ msgstr "Največja vrednost barve v datoteki PNM je prevelika"
-
 #~ msgid "Raw PNM image type is invalid"
 #~ msgstr "Surova vrsta slike PNM ni veljavna"
-
 #~ msgid "PNM image loader does not support this PNM subformat"
 #~ msgstr "Nalagalnik slik PNM ne podpira te podvrste zapisa PNM"
-
 #~ msgid "Raw PNM formats require exactly one whitespace before sample data"
 #~ msgstr ""
 #~ "Surove vrste zapisa PNM zahtevajo natančno en presledni znak pred podatki"
-
 #~ msgid "Cannot allocate memory for loading PNM image"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje slike PNM"
-
 #~ msgid "Insufficient memory to load PNM context struct"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje zgradbe vsebine PNM"
-
 #~ msgid "Unexpected end of PNM image data"
 #~ msgstr "Nepričakovan konec podatkov slike PNM"
-
 #~ msgid "Insufficient memory to load PNM file"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje slike PNM"
-
 #~ msgid "The PNM/PBM/PGM/PPM image format family"
 #~ msgstr "Družina vrst zapisa slik PNM/PBM/PGM/PPM"
-
 #~ msgid "Input file descriptor is NULL."
 #~ msgstr "Opisnik datoteke je vrednosti NULL."
-
 #~ msgid "Failed to read QTIF header"
 #~ msgstr "Napaka med branjem QTIF glave"
-
 #~ msgid "QTIF atom size too large (%d bytes)"
 #~ msgstr "Velikost atoma QTIF je prevelika (%d bajtov)"
-
 #~ msgid "Failed to allocate %d bytes for file read buffer"
 #~ msgstr "Napaka med dodeljevanjem %d bajtov za predpomnilnik branja datotek"
-
 #~ msgid "File error when reading QTIF atom: %s"
 #~ msgstr "Napaka datoteke med branjem atoma QTIF: %s"
-
 #~ msgid "Failed to skip the next %d bytes with seek()."
 #~ msgstr "Napaka med preskakovanjem naslednjih %d bajtov z uporabo seek()."
-
 #~ msgid "Failed to allocate QTIF context structure."
 #~ msgstr "Napaka dodelitve zgradbe QTIF vsebine."
-
 #~ msgid "Failed to create GdkPixbufLoader object."
 #~ msgstr "Napaka med ustvarjanjem predmeta GdkPixbufLoader."
-
 #~ msgid "Failed to find an image data atom."
 #~ msgstr "Napaka med iskanjem atoma podatkov slike"
-
 #~ msgid "The QTIF image format"
 #~ msgstr "Vrsta zapisa slike QTIF"
-
 #~ msgid "RAS image has bogus header data"
 #~ msgstr "Slika RAS ima v glavi neveljavne podatke"
-
 #~ msgid "RAS image has unknown type"
 #~ msgstr "Slika RAS je neznane vrste"
-
 #~ msgid "unsupported RAS image variation"
 #~ msgstr "Nepodprta različica slike RAS"
-
 #~ msgid "Not enough memory to load RAS image"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje slike RAS"
-
 #~ msgid "The Sun raster image format"
 #~ msgstr "Vrsta zapisa rastrske slike Sun"
-
 #~ msgid "Cannot allocate memory for IOBuffer struct"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za zgradbo IOBuffer"
-
 #~ msgid "Cannot allocate memory for IOBuffer data"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za podatke IOBuffer"
-
 #~ msgid "Cannot realloc IOBuffer data"
 #~ msgstr "Ni mogoče znova dodeliti pomnilnika za podatke IOBuffer"
-
 #~ msgid "Cannot allocate temporary IOBuffer data"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za začasne podatke IOBuffer"
-
 #~ msgid "Cannot allocate new pixbuf"
 #~ msgstr "Ni mogoče dodeliti novega medpomnilnika slik"
-
 #~ msgid "Image is corrupted or truncated"
 #~ msgstr "Slika je okrnjena ali pa nepopolna."
-
 #~ msgid "Cannot allocate colormap structure"
 #~ msgstr "Ni mogoče dodeliti zgradbe barvne karte"
-
 #~ msgid "Cannot allocate colormap entries"
 #~ msgstr "Ni mogoče dodeliti vnosov barvne karte"
-
 #~ msgid "Unexpected bitdepth for colormap entries"
 #~ msgstr "Nepričakovana barvna globina za vnose barvne karte"
-
 #~ msgid "Cannot allocate TGA header memory"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za glavo TGA"
-
 #~ msgid "TGA image has invalid dimensions"
 #~ msgstr "Slika TGA ima neveljavne dimenzije"
-
 #~ msgid "TGA image type not supported"
 #~ msgstr "Vrsta zapisa slike TGA ni podprta"
-
 #~ msgid "Cannot allocate memory for TGA context struct"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za zgradbo vsebine TGA"
-
 #~ msgid "Excess data in file"
 #~ msgstr "Preveč podatkov v datoteki"
-
 #~ msgid "The Targa image format"
 #~ msgstr "Vrsta zapisa slike Targa"
-
 #~ msgid "Could not get image width (bad TIFF file)"
 #~ msgstr "Ni mogoče dobiti širine slike (slaba datoteka TIFF)"
-
 #~ msgid "Could not get image height (bad TIFF file)"
 #~ msgstr "Ni mogoče dobiti višine slike (slaba datoteka TIFF)"
-
 #~ msgid "Width or height of TIFF image is zero"
 #~ msgstr "Širina ali višina slike TIFF je nič"
-
 #~ msgid "Dimensions of TIFF image too large"
 #~ msgstr "Dimenzije slike TIFF so prevelike"
-
 #~ msgid "Insufficient memory to open TIFF file"
 #~ msgstr "Premalo pomnilnika za odprtje datoteke TIFF"
-
 #~ msgid "Failed to load RGB data from TIFF file"
 #~ msgstr "Nalaganje podatkov RGB iz datoteke TIFF ni bilo uspešno"
-
 #~ msgid "Failed to open TIFF image"
 #~ msgstr "Odpiranje slike TIFF ni bilo uspešno"
-
 #~ msgid "TIFFClose operation failed"
 #~ msgstr "Opravilo TIFFClose ni uspelo"
-
 #~ msgid "Failed to load TIFF image"
 #~ msgstr "Nalaganje slike TIFF ni bilo uspešno"
-
 #~ msgid "Failed to save TIFF image"
 #~ msgstr "Shranjevanje slike TIFF ni bilo uspešno"
-
 #~ msgid "TIFF compression doesn't refer to a valid codec."
 #~ msgstr "Stiskanje TIFF ne sledi veljavnemu kodeku."
-
 #~ msgid "Failed to write TIFF data"
 #~ msgstr "Zapisovanje podatkov TIFF ni bilo uspešno"
-
 #~ msgid "Couldn't write to TIFF file"
 #~ msgstr "Ni mogoče pisati v datoteko TIFF"
-
 #~ msgid "The TIFF image format"
 #~ msgstr "Vrsta zapisa slike TIFF"
-
 #~ msgid "Image has zero width"
 #~ msgstr "Slika ima ničelno širino"
-
 #~ msgid "Image has zero height"
 #~ msgstr "Slika ima ničelno višino"
-
 #~ msgid "Not enough memory to load image"
 #~ msgstr "Ni dovolj pomnilnika za nalaganje slike"
-
 #~ msgid "Couldn't save the rest"
 #~ msgstr "Ni mogoče shraniti preostanka"
-
 #~ msgid "The WBMP image format"
 #~ msgstr "Vrsta zapisa slike WBMP"
-
 #~ msgid "Invalid XBM file"
 #~ msgstr "Neveljavna datoteka XBM"
-
 #~ msgid "Insufficient memory to load XBM image file"
 #~ msgstr "Premalo pomnilnika za nalaganje slike XBM"
-
 #~ msgid "Failed to write to temporary file when loading XBM image"
 #~ msgstr "Pisanje v začasno datoteko med nalaganjem slike XBM ni bilo uspešno"
-
 #~ msgid "The XBM image format"
 #~ msgstr "Vrsta zapisa slike XBM"
-
 #~ msgid "No XPM header found"
 #~ msgstr "Glava XPM ni bila najdena"
-
 #~ msgid "Invalid XPM header"
 #~ msgstr "Neveljavna glava XPM"
-
 #~ msgid "XPM file has image width <= 0"
 #~ msgstr "Datoteka XPM ima širino slike <= 0"
-
 #~ msgid "XPM file has image height <= 0"
 #~ msgstr "Datoteka XPM ima višino slike <=0"
-
 #~ msgid "XPM has invalid number of chars per pixel"
 #~ msgstr "XPM ima neveljavno število znakov na slikovno točko"
-
 #~ msgid "XPM file has invalid number of colors"
 #~ msgstr "Datoteka XPM ima neveljavno število barv"
-
 #~ msgid "Cannot allocate memory for loading XPM image"
 #~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje slike XPM"
-
 #~ msgid "Cannot read XPM colormap"
 #~ msgstr "Ni mogoče prebrati barvne karte XPM"
-
 #~ msgid "Failed to write to temporary file when loading XPM image"
 #~ msgstr "Pisanje v začasno datoteko med nalaganjem slike XPM ni bilo uspešno"
-
 #~ msgid "The XPM image format"
 #~ msgstr "Vrsta zapisa slike XPM"
-
 #~ msgid "The EMF image format"
 #~ msgstr "Vrsta zapisa slike EMF"
-
 #~ msgid "Could not allocate memory: %s"
 #~ msgstr "Ni mogoče dodeliti pomnilnika: %s"
-
 #~ msgid "Could not create stream: %s"
 #~ msgstr "Ni mogoče ustvariti pretoka: %s"
-
 #~ msgid "Could not seek stream: %s"
 #~ msgstr "Ni mogoče iskati po pretoku: %s"
-
 #~ msgid "Could not read from stream: %s"
 #~ msgstr "Ni mogoče prebrati pretoka: %s"
-
 #~ msgid "Couldn't load bitmap"
 #~ msgstr "Ni mogoče naložiti slike"
-
 #~ msgid "Couldn't load metafile"
 #~ msgstr "Ni mogoče naložiti metadatoteke"
-
 #~ msgid "Unsupported image format for GDI+"
 #~ msgstr "Nepodprta vrsta zapisa slike za GDI+"
-
 #~ msgid "Couldn't save"
 #~ msgstr "Ni mogoče shraniti"
-
 #~ msgid "The WMF image format"
 #~ msgstr "Vrsta zapisa slike WMF"
-
 #~ msgid "Printer '%s' may not be connected."
 #~ msgstr "Tiskalnik '%s' morda ni povezan."
-
 #~ msgid "\"Deepness\" of the color."
 #~ msgstr "\"Globina\" barve."
-
 #~ msgid "Folders"
 #~ msgstr "Mape"
-
 #~ msgid "Fol_ders"
 #~ msgstr "_Mape"
-
 #~ msgid "Folder unreadable: %s"
 #~ msgstr "Neberljiv imenik: %s"
-
 #~ msgid ""
 #~ "The file \"%s\" resides on another machine (called %s) and may not be "
 #~ "available to this program.\n"
@@ -5268,39 +5044,29 @@ msgstr "Slike '%s' ni mogoče naložiti: vzrok ni znan, najverjetneje je datotek
 #~ "Datoteka \"%s\" je na drugem računalniku (imenovanem %s) in morda ni na "
 #~ "voljo programu.\n"
 #~ "Ali ste prepričani, da jo želite izbrati?"
-
 #~ msgid "_New Folder"
 #~ msgstr "_Nova mapa"
-
 #~ msgid "De_lete File"
 #~ msgstr "_Izbriši datoteko"
-
 #~ msgid "_Rename File"
 #~ msgstr "P_reimenuj datoteko"
-
 #~ msgid ""
 #~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
-
 #~ msgid "New Folder"
 #~ msgstr "Nova mapa"
-
 #~ msgid "_Folder name:"
 #~ msgstr "Ime _mape:"
-
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr ""
 #~ "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
-
 #~ msgid "Error deleting file '%s': %s"
 #~ msgstr "Napaka med brisanjem datoteke '%s': %s"
-
 #~ msgid "Really delete file \"%s\"?"
 #~ msgstr "Ali zares želite izbrisati datoteko \"%s\"?"
-
 #~ msgid "Delete File"
 #~ msgstr "Izbriši datoteko"
-
 #~ msgid "Group"
 #~ msgstr "Skupina"
+
