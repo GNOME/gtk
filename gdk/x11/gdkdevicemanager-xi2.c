@@ -417,6 +417,10 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   for (i = 0; i < ndevices; i++)
     {
       dev = &info[i];
+
+      if (!dev->enabled)
+	      continue;
+
       add_device (device_manager, dev, FALSE);
 
       if (dev->use == XIMasterPointer ||
