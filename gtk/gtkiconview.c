@@ -8089,7 +8089,7 @@ gtk_icon_view_accessible_set_adjustment (AtkObject      *accessible,
   if (*old_adj_ptr)
     {
       g_object_remove_weak_pointer (G_OBJECT (*old_adj_ptr),
-                                    (gpointer *)&view->old_hadj);
+                                    (gpointer *)old_adj_ptr);
       g_signal_handlers_disconnect_by_func (*old_adj_ptr,
                                             gtk_icon_view_accessible_adjustment_changed,
                                             accessible);
