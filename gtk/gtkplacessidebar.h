@@ -1,8 +1,9 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
 
 /*
- *  Nautilus
+ *  GtkPlacesSidebar - sidebar widget for places in the filesystem
  *
+ *  This code comes from Nautilus, GNOME's file manager.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License as
@@ -21,30 +22,26 @@
  *  Author : Mr Jamie McCracken (jamiemcc at blueyonder dot co dot uk)
  *
  */
-#ifndef _NAUTILUS_PLACES_SIDEBAR_H
-#define _NAUTILUS_PLACES_SIDEBAR_H
-
-#include "nautilus-window.h"
-
-#include <gtk/gtk.h>
-
-#define NAUTILUS_PLACES_SIDEBAR_ID    "places"
-
-#define NAUTILUS_TYPE_PLACES_SIDEBAR nautilus_places_sidebar_get_type()
-#define NAUTILUS_PLACES_SIDEBAR(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), NAUTILUS_TYPE_PLACES_SIDEBAR, NautilusPlacesSidebar))
-#define NAUTILUS_PLACES_SIDEBAR_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST ((klass), NAUTILUS_TYPE_PLACES_SIDEBAR, NautilusPlacesSidebarClass))
-#define NAUTILUS_IS_PLACES_SIDEBAR(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), NAUTILUS_TYPE_PLACES_SIDEBAR))
-#define NAUTILUS_IS_PLACES_SIDEBAR_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), NAUTILUS_TYPE_PLACES_SIDEBAR))
-#define NAUTILUS_PLACES_SIDEBAR_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), NAUTILUS_TYPE_PLACES_SIDEBAR, NautilusPlacesSidebarClass))
-
-
-GType nautilus_places_sidebar_get_type (void);
-GtkWidget * nautilus_places_sidebar_new (NautilusWindow *window);
-
-
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
 #endif
+
+#ifndef __GTK_PLACES_SIDEBAR_H__
+#define __GTK_PLACES_SIDEBAR_H__
+
+#include <gtk/gtkwidget.h>
+
+#define GTK_TYPE_PLACES_SIDEBAR			(gtk_places_sidebar_get_type ())
+#define GTK_PLACES_SIDEBAR(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PLACES_SIDEBAR, GtkPlacesSidebar))
+#define GTK_PLACES_SIDEBAR_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PLACES_SIDEBAR, GtkPlacesSidebarClass))
+#define GTK_IS_PLACES_SIDEBAR(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PLACES_SIDEBAR))
+#define GTK_IS_PLACES_SIDEBAR_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PLACES_SIDEBAR))
+#define GTK_PLACES_SIDEBAR_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PLACES_SIDEBAR, GtkPlacesSidebarClass))
+
+
+GType gtk_places_sidebar_get_type (void);
+GtkWidget *gtk_places_sidebar_new (void);
+
+G_END_DECLS
+
+#endif /* __GTK_PLACES_SIDEBAR_H__ */
