@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-04 19:02+0300\n"
-"PO-Revision-Date: 2011-09-04 19:06+0300\n"
+"POT-Creation-Date: 2011-09-07 01:33+0300\n"
+"PO-Revision-Date: 2011-09-07 01:33+0300\n"
 "Last-Translator: Ігар Грачышка <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n-bel-gnome@googlegroups.com>\n"
 "Language: be\n"
@@ -469,7 +469,7 @@ msgstr "Уключэнне і выключэнне тумблера"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:102
+#: ../gtk/gtkaboutdialog.c:106
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
@@ -478,50 +478,50 @@ msgstr ""
 "Аўтары гэтай праграмы не даюць ніякіх гарантый, падрабязней глядзіце <a href="
 "\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:344
+#: ../gtk/gtkaboutdialog.c:348
 msgid "License"
 msgstr "Ліцэнзія"
 
-#: ../gtk/gtkaboutdialog.c:345
+#: ../gtk/gtkaboutdialog.c:349
 msgid "The license of the program"
 msgstr "Ліцэнзія праграмы"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:737
+#: ../gtk/gtkaboutdialog.c:741
 msgid "C_redits"
 msgstr "_Падзякі"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:750
+#: ../gtk/gtkaboutdialog.c:754
 msgid "_License"
 msgstr "_Ліцэнзія"
 
-#: ../gtk/gtkaboutdialog.c:955
+#: ../gtk/gtkaboutdialog.c:959
 msgid "Could not show link"
 msgstr "Не ўдалося паказаць спасылку"
 
-#: ../gtk/gtkaboutdialog.c:992
+#: ../gtk/gtkaboutdialog.c:996
 msgid "Homepage"
 msgstr "Хатняя старонка"
 
-#: ../gtk/gtkaboutdialog.c:1046
+#: ../gtk/gtkaboutdialog.c:1050
 #, c-format
 msgid "About %s"
 msgstr "Аб %s"
 
-#: ../gtk/gtkaboutdialog.c:2372
+#: ../gtk/gtkaboutdialog.c:2376
 msgid "Created by"
 msgstr "Стварэнне"
 
-#: ../gtk/gtkaboutdialog.c:2375
+#: ../gtk/gtkaboutdialog.c:2379
 msgid "Documented by"
 msgstr "Дакументацыя"
 
-#: ../gtk/gtkaboutdialog.c:2385
+#: ../gtk/gtkaboutdialog.c:2389
 msgid "Translated by"
 msgstr "Перакладчыкі"
 
-#: ../gtk/gtkaboutdialog.c:2390
+#: ../gtk/gtkaboutdialog.c:2394
 msgid "Artwork by"
 msgstr "Аздабленне"
 
@@ -1164,7 +1164,7 @@ msgstr "%1$s на %2$s"
 msgid "Search"
 msgstr "Пошук"
 
-#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4953
+#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4991
 msgid "Recently Used"
 msgstr "Нядаўнія файлы"
 
@@ -1223,137 +1223,141 @@ msgstr "_Мясціны"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Дадаць вылучаную папку да закладак"
 
-#: ../gtk/gtkfilechooserdefault.c:3925
+#: ../gtk/gtkfilechooserdefault.c:3946
 msgid "Could not select file"
 msgstr "Не ўдалося выбраць файл"
 
-#: ../gtk/gtkfilechooserdefault.c:4117
+#: ../gtk/gtkfilechooserdefault.c:4171
+msgid "_Visit this file"
+msgstr "_Наведаць гэты файл"
+
+#: ../gtk/gtkfilechooserdefault.c:4174
 msgid "_Copy file's location"
 msgstr "_Скапіраваць размяшчэнне файла"
 
-#: ../gtk/gtkfilechooserdefault.c:4126
+#: ../gtk/gtkfilechooserdefault.c:4177
 msgid "_Add to Bookmarks"
 msgstr "Д_адаць да закладак"
 
-#: ../gtk/gtkfilechooserdefault.c:4139
+#: ../gtk/gtkfilechooserdefault.c:4184
 msgid "Show _Hidden Files"
 msgstr "Паказваць с_хаваныя файлы"
 
-#: ../gtk/gtkfilechooserdefault.c:4146
+#: ../gtk/gtkfilechooserdefault.c:4187
 msgid "Show _Size Column"
 msgstr "Паказваць _слупок памераў"
 
-#: ../gtk/gtkfilechooserdefault.c:4374
+#: ../gtk/gtkfilechooserdefault.c:4412
 msgid "Files"
 msgstr "Файлы"
 
-#: ../gtk/gtkfilechooserdefault.c:4425
+#: ../gtk/gtkfilechooserdefault.c:4463
 msgid "Name"
 msgstr "Назва"
 
-#: ../gtk/gtkfilechooserdefault.c:4448
+#: ../gtk/gtkfilechooserdefault.c:4486
 msgid "Size"
 msgstr "Памер"
 
-#: ../gtk/gtkfilechooserdefault.c:4462
+#: ../gtk/gtkfilechooserdefault.c:4500
 msgid "Modified"
 msgstr "Зменены"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4557 ../gtk/gtkprinteroptionwidget.c:799
+#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "_Назва:"
 
-#: ../gtk/gtkfilechooserdefault.c:4791
+#: ../gtk/gtkfilechooserdefault.c:4829
 msgid "Type a file name"
 msgstr "Упішыце назву файла"
 
-#: ../gtk/gtkfilechooserdefault.c:4838 ../gtk/gtkfilechooserdefault.c:4849
+#: ../gtk/gtkfilechooserdefault.c:4876 ../gtk/gtkfilechooserdefault.c:4887
 msgid "Please select a folder below"
 msgstr "Выберыце папку"
 
-#: ../gtk/gtkfilechooserdefault.c:4844
+#: ../gtk/gtkfilechooserdefault.c:4882
 msgid "Please type a file name"
 msgstr "Упішыце назву файла"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4915
+#: ../gtk/gtkfilechooserdefault.c:4953
 msgid "Create Fo_lder"
 msgstr "Стварыць _папку"
 
-#: ../gtk/gtkfilechooserdefault.c:4963
+#: ../gtk/gtkfilechooserdefault.c:5001
 msgid "Search:"
 msgstr "Шукаць:"
 
-#: ../gtk/gtkfilechooserdefault.c:5014
+#: ../gtk/gtkfilechooserdefault.c:5052
 msgid "_Location:"
 msgstr "_Мясціна:"
 
-#: ../gtk/gtkfilechooserdefault.c:5465
+#: ../gtk/gtkfilechooserdefault.c:5503
 msgid "Save in _folder:"
 msgstr "Захаваць у _папцы:"
 
-#: ../gtk/gtkfilechooserdefault.c:5467
+#: ../gtk/gtkfilechooserdefault.c:5505
 msgid "Create in _folder:"
 msgstr "Стварыць у _папцы:"
 
-#: ../gtk/gtkfilechooserdefault.c:6561
+#: ../gtk/gtkfilechooserdefault.c:6599
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не ўдалося прачытаць змест папкі \"%s\""
 
-#: ../gtk/gtkfilechooserdefault.c:6565
+#: ../gtk/gtkfilechooserdefault.c:6603
 msgid "Could not read the contents of the folder"
 msgstr "Не ўдалося прачытаць змест гэтай папкі"
 
-#: ../gtk/gtkfilechooserdefault.c:6658 ../gtk/gtkfilechooserdefault.c:6726
-#: ../gtk/gtkfilechooserdefault.c:6878
+#: ../gtk/gtkfilechooserdefault.c:6696 ../gtk/gtkfilechooserdefault.c:6764
+#: ../gtk/gtkfilechooserdefault.c:6916
 msgid "Unknown"
 msgstr "Невядома"
 
-#: ../gtk/gtkfilechooserdefault.c:6673
+#: ../gtk/gtkfilechooserdefault.c:6711
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6675
+#: ../gtk/gtkfilechooserdefault.c:6713
 msgid "Yesterday at %H:%M"
 msgstr "Учора, %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7350
+#: ../gtk/gtkfilechooserdefault.c:7388
 msgid "Cannot change to folder because it is not local"
 msgstr "Не ўдалося перайсці ў папку, бо яна аддалена"
 
-#: ../gtk/gtkfilechooserdefault.c:7950 ../gtk/gtkfilechooserdefault.c:7971
+#: ../gtk/gtkfilechooserdefault.c:7988 ../gtk/gtkfilechooserdefault.c:8009
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Закладка %s ужо існуе"
 
-#: ../gtk/gtkfilechooserdefault.c:8061
+#: ../gtk/gtkfilechooserdefault.c:8099
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Закладкі %s няма"
 
-#: ../gtk/gtkfilechooserdefault.c:8307 ../gtk/gtkprintunixdialog.c:550
+#: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Файл \"%s\" ужо існуе. Ці хочаце яго замяніць?"
 
-#: ../gtk/gtkfilechooserdefault.c:8310 ../gtk/gtkprintunixdialog.c:554
+#: ../gtk/gtkfilechooserdefault.c:8348 ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Такі файл ужо існуе ў \"%s\". Яго замена перапіша змесціва файла новым."
 
-#: ../gtk/gtkfilechooserdefault.c:8315 ../gtk/gtkprintunixdialog.c:561
+#: ../gtk/gtkfilechooserdefault.c:8353 ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "_Замяніць"
 
-#: ../gtk/gtkfilechooserdefault.c:9121
+#: ../gtk/gtkfilechooserdefault.c:9159
 msgid "Could not start the search process"
 msgstr "Не ўдалося распачаць пошук"
 
-#: ../gtk/gtkfilechooserdefault.c:9122
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1361,11 +1365,11 @@ msgstr ""
 "Праграма не здолела злучыцца з службай індэксавання. Спраўдзьце, што яна "
 "працуе."
 
-#: ../gtk/gtkfilechooserdefault.c:9136
+#: ../gtk/gtkfilechooserdefault.c:9174
 msgid "Could not send the search request"
 msgstr "Не ўдалося паслаць запыт на пошук"
 
-#: ../gtk/gtkfilechooserdefault.c:9737
+#: ../gtk/gtkfilechooserdefault.c:9775
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не ўдалося прымацаваць %s"
@@ -1450,6 +1454,11 @@ msgstr "Sans 12"
 #: ../gtk/gtkfontbutton.c:787
 msgid "Font"
 msgstr "Шрыфт"
+
+#: ../gtk/gtkfontchooser.c:118
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr ""
+"Ні адзін шрыфт не адпавядае крытэрыям пошуку. Праверце іх і паўтарыце спробу."
 
 #: ../gtk/gtkfontchooser.c:667
 msgid "Search font name"
@@ -1750,15 +1759,15 @@ msgstr "_Арыентацыя:"
 msgid "Page Setup"
 msgstr "Наладка аркушаў"
 
-#: ../gtk/gtkpathbar.c:156
+#: ../gtk/gtkpathbar.c:158
 msgid "Up Path"
 msgstr "Вышэй"
 
-#: ../gtk/gtkpathbar.c:158
+#: ../gtk/gtkpathbar.c:160
 msgid "Down Path"
 msgstr "Глыбей"
 
-#: ../gtk/gtkpathbar.c:1516
+#: ../gtk/gtkpathbar.c:1616
 msgid "File System Root"
 msgstr "Корань файлавай сістэмы"
 
@@ -4515,4 +4524,3 @@ msgstr "тэставы-выдрук.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Тэставы выдрук"
-
