@@ -3353,14 +3353,9 @@ gtk_places_sidebar_style_set (GtkWidget *widget,
 }
 
 GtkWidget *
-gtk_places_sidebar_new (NautilusWindow *window)
+gtk_places_sidebar_new (void)
 {
-	GtkPlacesSidebar *sidebar;
-
-	sidebar = g_object_new (gtk_places_sidebar_get_type (), NULL);
-	gtk_places_sidebar_set_parent_window (sidebar, window);
-
-	return GTK_WIDGET (sidebar);
+	return GTK_WIDGET (g_object_new (gtk_places_sidebar_get_type (), NULL));
 }
 
 
