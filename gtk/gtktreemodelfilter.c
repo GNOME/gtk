@@ -1302,9 +1302,13 @@ gtk_tree_model_filter_clear_cache_helper (GtkTreeModelFilter *filter,
    * free the level if the parent level also has an external ref
    * count of zero.  In that case, changes concerning our parent are
    * not requested.
+   *
+   * The root level is always visible, so an exception holds for levels
+   * with the root level as parent level: these have to remain cached.
    */
   if (level->ext_ref_count == 0 && level != filter->priv->root &&
-      level->parent_level && level->parent_level->ext_ref_count == 0)
+      level->parent_level && level->parent_level != filter->priv->root &&
+      level->parent_level->ext_ref_count == 0)
     {
       gtk_tree_model_filter_free_level (filter, level, TRUE, FALSE);
       return;
