@@ -225,8 +225,10 @@
  * cache are possibly unused and could be removed. If a FilterElt has
  * a zero ref count of one, then its child level is unused. However, the
  * child level can only be removed from the cache if the FilterElt's
- * parent has an external ref count of zero. Otherwise, monitoring
- * this level is necessary to possibly update the visibility state
+ * parent level has an external ref count of zero. (Not the parent elt,
+ * because an invisible parent elt with external ref count == 0 might still
+ * become visible because of a state change in its child level!).  Otherwise,
+ * monitoring this level is necessary to possibly update the visibility state
  * of the parent. This is an important difference from GtkTreeModelSort!
  *
  * Signals are only required for levels with an external ref count > 0.
@@ -877,11 +879,12 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
   /* The level does not contain any visible nodes.  However, changes in
    * this level might affect the parent node, which can either be visible
    * or invisible.  Therefore, this level can only be removed again,
-   * if the parent of the parent node is not visible.  In that case,
-   * possible changes in state of the parent are not requested.
+   * if the parent level has an external reference count of zero.  That is,
+   * if this level changes state, no signals are required in the parent
+   * level.
    */
   if (empty &&
-       (parent_level && parent_elt->ext_ref_count == 0))
+       (parent_level && parent_level->ext_ref_count == 0))
     {
       gtk_tree_model_filter_free_level (filter, new_level, FALSE);
       return;
@@ -1183,13 +1186,12 @@ gtk_tree_model_filter_clear_cache_helper (GtkTreeModelFilter *filter,
   /* If the level's ext_ref_count is zero, it means the level is not visible
    * and can be removed.  But, since we support monitoring a child level
    * of a parent for changes (these might affect the parent), we will only
-   * free the level if the parent's parent also has an external ref
+   * free the level if the parent level also has an external ref
    * count of zero.  In that case, changes concerning our parent are
    * not requested.
    */
   if (level->ext_ref_count == 0 && level != filter->priv->root &&
-      level->parent_level && level->parent_elt &&
-      level->parent_elt->ext_ref_count == 0)
+      level->parent_level && level->parent_level->ext_ref_count == 0)
     {
       gtk_tree_model_filter_free_level (filter, level, TRUE);
       return;
@@ -1664,7 +1666,7 @@ gtk_tree_model_filter_update_children (GtkTreeModelFilter *filter,
 
   gtk_tree_model_filter_convert_iter_to_child_iter (filter, &c_iter, &iter);
 
-  if ((!level->parent_level || level->parent_elt->ext_ref_count > 0) &&
+  if ((!level->parent_level || level->parent_level->ext_ref_count > 0) &&
       gtk_tree_model_iter_has_child (filter->priv->child_model, &c_iter))
     {
       if (!elt->children)
