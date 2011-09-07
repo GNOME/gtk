@@ -1097,11 +1097,10 @@ gtk_selection_convert (GtkWidget *widget,
     {
       GtkWidget *owner_widget;
       gpointer owner_widget_ptr;
-      GtkSelectionData selection_data;
+      GtkSelectionData selection_data = {0};
       
       selection_data.selection = selection;
       selection_data.target = target;
-      selection_data.data = NULL;
       selection_data.length = -1;
       selection_data.display = display;
       
