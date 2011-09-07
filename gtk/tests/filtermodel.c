@@ -2693,10 +2693,12 @@ ref_count_two_levels (void)
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* Only the reference on the first node of the root level is kept. */
+  /* The root level and first level remain cached, only the references on the
+   * first nodes of these levels are kept.
+   */
   assert_node_ref_count (ref_model, &parent1, 1);
-  assert_node_ref_count (ref_model, &parent2, 0);
-  assert_node_ref_count (ref_model, &iter_first, 0);
+  assert_node_ref_count (ref_model, &parent2, 1);
+  assert_node_ref_count (ref_model, &iter_first, 1);
   assert_node_ref_count (ref_model, &iter, 0);
 
   g_object_unref (filter_model);
@@ -2859,10 +2861,14 @@ ref_count_three_levels (void)
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* Only the reference on the first node of the root level is kept. */
+  /* The root level and first level remain cached, only the references on the
+   * first nodes of these levels are kept.  Grandparent2 is the parent
+   * of the first level with parent1, so grandparent2 keeps a reference
+   * as well.
+   */
   assert_node_ref_count (ref_model, &grandparent1, 1);
-  assert_node_ref_count (ref_model, &grandparent2, 0);
-  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+  assert_node_ref_count (ref_model, &parent1, 1);
   assert_node_ref_count (ref_model, &parent2, 0);
   assert_node_ref_count (ref_model, &iter_parent1, 0);
   assert_node_ref_count (ref_model, &iter_parent2_first, 0);
@@ -3017,10 +3023,14 @@ ref_count_cleanup (void)
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* Only the reference on the first node of the root level is kept. */
+  /* The root level and first level remain cached, only the references on the
+   * first nodes of these levels are kept.  Grandparent2 is the parent
+   * of the first level with parent1, so grandparent2 keeps a reference
+   * as well.
+   */
   assert_node_ref_count (ref_model, &grandparent1, 1);
-  assert_node_ref_count (ref_model, &grandparent2, 0);
-  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+  assert_node_ref_count (ref_model, &parent1, 1);
   assert_node_ref_count (ref_model, &parent2, 0);
   assert_node_ref_count (ref_model, &iter_parent1, 0);
   assert_node_ref_count (ref_model, &iter_parent2_first, 0);
@@ -3117,10 +3127,14 @@ ref_count_row_ref (void)
 
   gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
 
-  /* Only the reference on the first node of the root level is kept. */
+  /* The root level and first level remain cached, only the references on the
+   * first nodes of these levels are kept.  Grandparent2 is the parent
+   * of the first level with parent1, so grandparent2 keeps a reference
+   * as well.
+   */
   assert_node_ref_count (ref_model, &grandparent1, 1);
-  assert_node_ref_count (ref_model, &grandparent2, 0);
-  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+  assert_node_ref_count (ref_model, &parent1, 1);
 
   g_object_unref (filter_model);
   g_object_unref (ref_model);
