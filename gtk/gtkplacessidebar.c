@@ -1,7 +1,9 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
 
 /*
- *  Nautilus
+ *  GtkPlacesSidebar - sidebar widget for places in the filesystem
+ *
+ *  This code comes from Nautilus, GNOME's file manager.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License as
