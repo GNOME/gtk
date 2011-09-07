@@ -33,7 +33,7 @@
 #define EJECT_BUTTON_XPAD 6
 #define ICON_CELL_XPAD 6
 
-typedef struct {
+struct _GtkPlacesSidebar {
 	GtkScrolledWindow  parent;
 	GtkTreeView        *tree_view;
 	GtkCellRenderer    *eject_icon_cell_renderer;
@@ -75,11 +75,11 @@ typedef struct {
 	GtkTreePath *eject_highlight_path;
 
 	guint bookmarks_changed_id;
-} GtkPlacesSidebar;
+};
 
-typedef struct {
+struct _GtkPlacesSidebarClass {
 	GtkScrolledWindowClass parent;
-} GtkPlacesSidebarClass;
+};
 
 typedef struct {
         GObject parent;

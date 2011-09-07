@@ -38,6 +38,9 @@
 #define GTK_IS_PLACES_SIDEBAR_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PLACES_SIDEBAR))
 #define GTK_PLACES_SIDEBAR_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PLACES_SIDEBAR, GtkPlacesSidebarClass))
 
+typedef struct _GtkPlacesSidebar GtkPlacesSidebar;
+typedef struct _GtkPlacesSidebarClass GtkPlacesSidebarClass;
+
 
 GType gtk_places_sidebar_get_type (void);
 GtkWidget *gtk_places_sidebar_new (void);
