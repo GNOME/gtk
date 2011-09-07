@@ -3032,6 +3032,33 @@ heading_cell_renderer_func (GtkTreeViewColumn *column,
 }
 
 static void
+create_volume_monitor (GtkPlacesSidebar *sidebar)
+{
+	g_assert (sidebar->volume_monitor == NULL);
+
+	sidebar->volume_monitor = g_volume_monitor_get ();
+
+	g_signal_connect_object (sidebar->volume_monitor, "volume_added",
+				 G_CALLBACK (volume_added_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "volume_removed",
+				 G_CALLBACK (volume_removed_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "volume_changed",
+				 G_CALLBACK (volume_changed_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "mount_added",
+				 G_CALLBACK (mount_added_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "mount_removed",
+				 G_CALLBACK (mount_removed_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "mount_changed",
+				 G_CALLBACK (mount_changed_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "drive_disconnected",
+				 G_CALLBACK (drive_disconnected_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "drive_connected",
+				 G_CALLBACK (drive_connected_callback), sidebar, 0);
+	g_signal_connect_object (sidebar->volume_monitor, "drive_changed",
+				 G_CALLBACK (drive_changed_callback), sidebar, 0);
+}
+
+static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
 	GtkTreeView       *tree_view;
@@ -3039,7 +3066,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	GtkCellRenderer   *cell;
 	GtkTreeSelection  *selection;
 
-	sidebar->volume_monitor = g_volume_monitor_get ();
+	create_volume_monitor (sidebar);
 
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sidebar),
 					GTK_POLICY_NEVER,
@@ -3294,6 +3321,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	GTK_WIDGET_CLASS (class)->style_set = gtk_places_sidebar_style_set;
 }
 
+/* FIXME: do the following in a constructor or in ::map() */
 static void
 gtk_places_sidebar_set_parent_window (GtkPlacesSidebar *sidebar,
 					   NautilusWindow *window)
@@ -3315,25 +3343,6 @@ gtk_places_sidebar_set_parent_window (GtkPlacesSidebar *sidebar,
 	g_signal_connect_object (window, "loading_uri",
 				 G_CALLBACK (loading_uri_callback),
 				 sidebar, 0);
-
-	g_signal_connect_object (sidebar->volume_monitor, "volume_added",
-				 G_CALLBACK (volume_added_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "volume_removed",
-				 G_CALLBACK (volume_removed_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "volume_changed",
-				 G_CALLBACK (volume_changed_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "mount_added",
-				 G_CALLBACK (mount_added_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "mount_removed",
-				 G_CALLBACK (mount_removed_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "mount_changed",
-				 G_CALLBACK (mount_changed_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "drive_disconnected",
-				 G_CALLBACK (drive_disconnected_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "drive_connected",
-				 G_CALLBACK (drive_connected_callback), sidebar, 0);
-	g_signal_connect_object (sidebar->volume_monitor, "drive_changed",
-				 G_CALLBACK (drive_changed_callback), sidebar, 0);
 
 	g_signal_connect_swapped (nautilus_preferences, "changed::" NAUTILUS_PREFERENCES_ALWAYS_USE_BROWSER,
 				  G_CALLBACK (bookmarks_popup_menu_detach_cb), sidebar);
