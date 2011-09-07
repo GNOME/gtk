@@ -81,14 +81,6 @@ struct _GtkPlacesSidebarClass {
 	GtkScrolledWindowClass parent;
 };
 
-typedef struct {
-        GObject parent;
-} GtkPlacesSidebarProvider;
-
-typedef struct {
-        GObjectClass parent;
-} GtkPlacesSidebarProviderClass;
-
 enum {
 	PLACES_SIDEBAR_COLUMN_ROW_TYPE,
 	PLACES_SIDEBAR_COLUMN_URI,
