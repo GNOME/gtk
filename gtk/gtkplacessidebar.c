@@ -970,42 +970,6 @@ desktop_setting_changed_callback (gpointer user_data)
 	update_places (sidebar);
 }
 
-static void
-loading_uri_callback (NautilusWindow *window,
-		      char *location,
-		      GtkPlacesSidebar *sidebar)
-{
-	GtkTreeSelection *selection;
-	GtkTreeIter 	 iter;
-	gboolean 	 valid;
-	char  		 *uri;
-
-        if (strcmp (sidebar->uri, location) != 0) {
-		g_free (sidebar->uri);
-                sidebar->uri = g_strdup (location);
-
-		/* set selection if any place matches location */
-		selection = gtk_tree_view_get_selection (sidebar->tree_view);
-		gtk_tree_selection_unselect_all (selection);
-  		valid = gtk_tree_model_get_iter_first (sidebar->filter_model, &iter);
-
-		while (valid) {
-			gtk_tree_model_get (sidebar->filter_model, &iter,
-		 		       	    PLACES_SIDEBAR_COLUMN_URI, &uri,
-					    -1);
-			if (uri != NULL) {
-				if (strcmp (uri, location) == 0) {
-					g_free (uri);
-					gtk_tree_selection_select_iter (selection, &iter);
-					break;
-				}
-				g_free (uri);
-			}
-        	 	valid = gtk_tree_model_iter_next (sidebar->filter_model, &iter);
-		}
-    	}
-}
-
 /* Computes the appropriate row and position for dropping */
 static gboolean
 compute_drop_position (GtkTreeView *tree_view,
@@ -3340,10 +3304,6 @@ gtk_places_sidebar_set_parent_window (GtkPlacesSidebar *sidebar,
 					  G_CALLBACK (update_places),
 					  sidebar);
 
-	g_signal_connect_object (window, "loading_uri",
-				 G_CALLBACK (loading_uri_callback),
-				 sidebar, 0);
-
 	g_signal_connect_swapped (nautilus_preferences, "changed::" NAUTILUS_PREFERENCES_ALWAYS_USE_BROWSER,
 				  G_CALLBACK (bookmarks_popup_menu_detach_cb), sidebar);
 
@@ -3427,4 +3387,47 @@ nautilus_shortcuts_model_filter_new (GtkPlacesSidebar *sidebar,
 	model->sidebar = sidebar;
 
 	return GTK_TREE_MODEL (model);
+}
+
+/**
+ * gtk_places_sidebar_set_current_uri:
+ * @sidebar: a places sidebar
+ * @uri: URI to select, or #NULL for no current path
+ *
+ * Sets the URI that is being shown in the widgets surrounding the @sidebar.  In turn,
+ * it will highlight that URI if it is being shown in the list of places, or it will
+ * unhighlight everything if the URI is not among the places in the list.
+ */
+void
+gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
+{
+	GtkTreeSelection *selection;
+	GtkTreeIter 	 iter;
+	gboolean 	 valid;
+	char  		 *iter_uri;
+
+        if (strcmp (sidebar->uri, uri) != 0) {
+		g_free (sidebar->uri);
+                sidebar->uri = g_strdup (uri);
+
+		/* set selection if any place matches the uri */
+		selection = gtk_tree_view_get_selection (sidebar->tree_view);
+		gtk_tree_selection_unselect_all (selection);
+  		valid = gtk_tree_model_get_iter_first (sidebar->filter_model, &iter);
+
+		while (valid) {
+			gtk_tree_model_get (sidebar->filter_model, &iter,
+		 		       	    PLACES_SIDEBAR_COLUMN_URI, &iter_uri,
+					    -1);
+			if (iter_uri != NULL) {
+				if (strcmp (iter_uri, uri) == 0) {
+					g_free (iter_uri);
+					gtk_tree_selection_select_iter (selection, &iter);
+					break;
+				}
+				g_free (iter_uri);
+			}
+        	 	valid = gtk_tree_model_iter_next (sidebar->filter_model, &iter);
+		}
+    	}
 }

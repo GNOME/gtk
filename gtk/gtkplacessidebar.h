@@ -41,9 +41,11 @@
 typedef struct _GtkPlacesSidebar GtkPlacesSidebar;
 typedef struct _GtkPlacesSidebarClass GtkPlacesSidebarClass;
 
-
 GType gtk_places_sidebar_get_type (void);
 GtkWidget *gtk_places_sidebar_new (void);
+
+/* FIXME: add an "uri" property so this can be set via g_object_set() */
+void gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri);
 
 G_END_DECLS
 
