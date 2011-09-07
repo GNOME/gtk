@@ -2969,6 +2969,527 @@ ref_count_delete_row (void)
 }
 
 static void
+ref_count_filter_row_length_1 (void)
+{
+  GtkTreeIter level1_1;
+  GtkTreeIter level2_1;
+  GtkTreeIter level3_1;
+  GtkTreeIter level4_1;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkTreePath *path;
+  GtkWidget *tree_view;
+  GType column_types[] = { G_TYPE_BOOLEAN };
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_set_column_types (GTK_TREE_STORE (model), 1,
+                                   column_types);
+
+
+  /* + level1_1
+   *   + level2_1
+   *     + level3_1
+   *       + level4_1
+   *
+   * Node level1_1 is expanded.  This makes that levels 1 and 2 are
+   * visible.  Level 3 is cached because its parent is visible.  Level 4
+   * is not cached.
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level1_1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level2_1, &level1_1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level3_1, &level2_1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level4_1, &level3_1);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_1, 0, TRUE, -1);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter_model), 0);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 3);
+  assert_node_ref_count (ref_model, &level3_1, 1);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 3);
+  assert_node_ref_count (ref_model, &level3_1, 1);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  /* level3_1 has a visible parent, so the node is kept in the cache. */
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 3);
+  assert_node_ref_count (ref_model, &level3_1, 1);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  /* level2_1 has a visible parent, so is kept in the cache.  However,
+   * the external reference should be released.
+   */
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  gtk_widget_destroy (tree_view);
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+
+  g_object_unref (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 0);
+
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_filter_row_length_1_remove_in_root_level (void)
+{
+  GtkTreeIter level1_1;
+  GtkTreeIter level2_1;
+  GtkTreeIter level3_1;
+  GtkTreeIter level4_1;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkTreePath *path;
+  GtkWidget *tree_view;
+  GType column_types[] = { G_TYPE_BOOLEAN };
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_set_column_types (GTK_TREE_STORE (model), 1,
+                                   column_types);
+
+
+  /* + level1_1
+   *   + level2_1
+   *     + level3_1
+   *       + level4_1
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level1_1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level2_1, &level1_1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level3_1, &level2_1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level4_1, &level3_1);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_1, 0, TRUE, -1);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter_model), 0);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, TRUE);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 3);
+  assert_node_ref_count (ref_model, &level3_1, 3);
+  assert_node_ref_count (ref_model, &level4_1, 2);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  gtk_widget_destroy (tree_view);
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  g_object_unref (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 0);
+  assert_node_ref_count (ref_model, &level2_1, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_filter_row_length_1_remove_in_child_level (void)
+{
+  GtkTreeIter level1_1;
+  GtkTreeIter level2_1;
+  GtkTreeIter level3_1;
+  GtkTreeIter level4_1;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkTreePath *path;
+  GtkWidget *tree_view;
+  GType column_types[] = { G_TYPE_BOOLEAN };
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_set_column_types (GTK_TREE_STORE (model), 1,
+                                   column_types);
+
+
+  /* + level1_1
+   *   + level2_1
+   *     + level3_1
+   *       + level4_1
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level1_1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level2_1, &level1_1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level3_1, &level2_1);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level4_1, &level3_1);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_1, 0, TRUE, -1);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter_model), 0);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, TRUE);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 3);
+  assert_node_ref_count (ref_model, &level3_1, 3);
+  assert_node_ref_count (ref_model, &level4_1, 2);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 3);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  gtk_widget_destroy (tree_view);
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  g_object_unref (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 0);
+  assert_node_ref_count (ref_model, &level2_1, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_filter_row_length_gt_1 (void)
+{
+  GtkTreeIter level1_1, level1_2;
+  GtkTreeIter level2_1, level2_2;
+  GtkTreeIter level3_1, level3_2;
+  GtkTreeIter level4_1, level4_2;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkTreePath *path;
+  GtkWidget *tree_view;
+  GType column_types[] = { G_TYPE_BOOLEAN };
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_set_column_types (GTK_TREE_STORE (model), 1,
+                                   column_types);
+
+
+  /* + level1_1
+   * + level1_2
+   *   + level2_1
+   *   + level2_2
+   *     + level3_1
+   *     + level3_2
+   *       + level4_1
+   *       + level4_2
+   *
+   * Node level1_2 is expanded.  This makes that levels 1 and 2 are
+   * visible.  Level 3 is cached because its parent is visible.  Level 4
+   * is not cached.
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level1_1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level1_2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level2_1, &level1_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level2_2, &level1_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level3_1, &level2_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level3_2, &level2_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level4_1, &level3_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level4_2, &level3_2);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_2, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_2, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_2, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_2, 0, TRUE, -1);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter_model), 0);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level2_2, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  path = gtk_tree_path_new_from_indices (1, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, FALSE);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 2);
+  assert_node_ref_count (ref_model, &level2_2, 2);
+  assert_node_ref_count (ref_model, &level3_1, 1);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 2);
+  assert_node_ref_count (ref_model, &level2_2, 2);
+  assert_node_ref_count (ref_model, &level3_1, 1);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_1, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 2);
+  assert_node_ref_count (ref_model, &level2_2, 2);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 1);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_2, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 2);
+  assert_node_ref_count (ref_model, &level2_2, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_2, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 0);
+  assert_node_ref_count (ref_model, &level2_1, 0);
+  assert_node_ref_count (ref_model, &level2_2, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  gtk_widget_destroy (tree_view);
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &level1_1, 1);
+
+  g_object_unref (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 0);
+
+  g_object_unref (ref_model);
+}
+
+static void
+ref_count_filter_row_length_gt_1_visible_children (void)
+{
+  GtkTreeIter level1_1, level1_2;
+  GtkTreeIter level2_1, level2_2;
+  GtkTreeIter level3_1, level3_2;
+  GtkTreeIter level4_1, level4_2;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkTreePath *path;
+  GtkWidget *tree_view;
+  GType column_types[] = { G_TYPE_BOOLEAN };
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_set_column_types (GTK_TREE_STORE (model), 1,
+                                   column_types);
+
+
+  /* + level1_1
+   * + level1_2
+   *   + level2_1
+   *   + level2_2
+   *     + level3_1
+   *     + level3_2
+   *       + level4_1
+   *       + level4_2
+   */
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level1_1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level1_2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level2_1, &level1_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level2_2, &level1_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level3_1, &level2_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level3_2, &level2_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level4_1, &level3_2);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &level4_2, &level3_2);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level1_2, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_2, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level3_2, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_1, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level4_2, 0, TRUE, -1);
+
+  assert_entire_model_unreferenced (ref_model);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter_model), 0);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level2_2, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  path = gtk_tree_path_new_from_indices (1, -1);
+  gtk_tree_view_expand_row (GTK_TREE_VIEW (tree_view), path, TRUE);
+  gtk_tree_path_free (path);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 2);
+  assert_node_ref_count (ref_model, &level2_2, 2);
+  assert_node_ref_count (ref_model, &level3_1, 2);
+  assert_node_ref_count (ref_model, &level3_2, 2);
+  assert_node_ref_count (ref_model, &level4_1, 2);
+  assert_node_ref_count (ref_model, &level4_2, 1);
+
+  gtk_tree_store_set (GTK_TREE_STORE (model), &level2_2, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &level1_1, 2);
+  assert_node_ref_count (ref_model, &level1_2, 2);
+  assert_node_ref_count (ref_model, &level2_1, 2);
+  assert_node_ref_count (ref_model, &level2_2, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  gtk_widget_destroy (tree_view);
+  gtk_tree_model_filter_clear_cache (GTK_TREE_MODEL_FILTER (filter_model));
+
+  assert_node_ref_count (ref_model, &level1_1, 1);
+  assert_node_ref_count (ref_model, &level1_2, 1);
+  assert_node_ref_count (ref_model, &level2_1, 1);
+  assert_node_ref_count (ref_model, &level2_2, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  g_object_unref (filter_model);
+
+  assert_node_ref_count (ref_model, &level1_1, 0);
+  assert_node_ref_count (ref_model, &level1_2, 0);
+  assert_node_ref_count (ref_model, &level2_1, 0);
+  assert_node_ref_count (ref_model, &level2_2, 0);
+  assert_node_ref_count (ref_model, &level3_1, 0);
+  assert_node_ref_count (ref_model, &level3_2, 0);
+  assert_node_ref_count (ref_model, &level4_1, 0);
+  assert_node_ref_count (ref_model, &level4_2, 0);
+
+  g_object_unref (ref_model);
+}
+
+static void
 ref_count_cleanup (void)
 {
   GtkTreeIter grandparent1, grandparent2, parent1, parent2;
@@ -5568,6 +6089,16 @@ register_filter_model_tests (void)
                    ref_count_three_levels);
   g_test_add_func ("/TreeModelFilter/ref-count/delete-row",
                    ref_count_delete_row);
+  g_test_add_func ("/TreeModelFilter/ref-count/filter-row/length-1",
+                   ref_count_filter_row_length_1);
+  g_test_add_func ("/TreeModelFilter/ref-count/filter-row/length-1-remove-in-root-level",
+                   ref_count_filter_row_length_1_remove_in_root_level);
+  g_test_add_func ("/TreeModelFilter/ref-count/filter-row/length-1-remove-in-child-level",
+                   ref_count_filter_row_length_1_remove_in_child_level);
+  g_test_add_func ("/TreeModelFilter/ref-count/filter-row/length-gt-1",
+                   ref_count_filter_row_length_gt_1);
+  g_test_add_func ("/TreeModelFilter/ref-count/filter-row/length-gt-1-visible-children",
+                   ref_count_filter_row_length_gt_1_visible_children);
   g_test_add_func ("/TreeModelFilter/ref-count/cleanup",
                    ref_count_cleanup);
   g_test_add_func ("/TreeModelFilter/ref-count/row-ref",
