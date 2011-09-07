@@ -322,6 +322,11 @@ enum
 #  define GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS(filter) (FALSE)
 #endif
 
+/* Defining this constant enables more assertions, which will be
+ * helpful when debugging the code.
+ */
+#undef MODEL_FILTER_DEBUG
+
 #define FILTER_ELT(filter_elt) ((FilterElt *)filter_elt)
 #define FILTER_LEVEL(filter_level) ((FilterLevel *)filter_level)
 #define GET_ELT(siter) ((FilterElt*) (siter ? g_sequence_get (siter) : NULL))
@@ -1170,6 +1175,10 @@ gtk_tree_model_filter_clear_cache_helper_iter (gpointer data,
 {
   GtkTreeModelFilter *filter = user_data;
   FilterElt *elt = data;
+
+#ifdef MODEL_FILTER_DEBUG
+  g_assert (elt->zero_ref_count >= 0);
+#endif
 
   if (elt->zero_ref_count > 0)
     gtk_tree_model_filter_clear_cache_helper (filter, elt->children);
@@ -3312,8 +3321,18 @@ gtk_tree_model_filter_real_ref_node (GtkTreeModel *model,
 
           if (filter->priv->root != level)
             filter->priv->zero_ref_count--;
+
+#ifdef MODEL_FILTER_DEBUG
+          g_assert (filter->priv->zero_ref_count >= 0);
+#endif
         }
     }
+
+#ifdef MODEL_FILTER_DEBUG
+  g_assert (elt->ref_count >= elt->ext_ref_count);
+  g_assert (elt->ref_count >= 0);
+  g_assert (elt->ext_ref_count >= 0);
+#endif
 }
 
 static void
@@ -3348,6 +3367,11 @@ gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
   elt = iter->user_data2;
 
   g_return_if_fail (elt->ref_count > 0);
+#ifdef MODEL_FILTER_DEBUG
+  g_assert (elt->ref_count >= elt->ext_ref_count);
+  g_assert (elt->ref_count >= 0);
+  g_assert (elt->ext_ref_count >= 0);
+#endif
 
   elt->ref_count--;
   level->ref_count--;
@@ -3373,8 +3397,18 @@ gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
 
           if (filter->priv->root != level)
             filter->priv->zero_ref_count++;
+
+#ifdef MODEL_FILTER_DEBUG
+          g_assert (filter->priv->zero_ref_count >= 0);
+#endif
         }
     }
+
+#ifdef MODEL_FILTER_DEBUG
+  g_assert (elt->ref_count >= elt->ext_ref_count);
+  g_assert (elt->ref_count >= 0);
+  g_assert (elt->ext_ref_count >= 0);
+#endif
 }
 
 /* TreeDragSource interface implementation */
