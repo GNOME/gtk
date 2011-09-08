@@ -377,7 +377,7 @@ load_module (GSList      *module_list,
 	}
     }
 
-  if (success)
+  if (success && info)
     {
       if (!g_slist_find (module_list, info))
 	{
