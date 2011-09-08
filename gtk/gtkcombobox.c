@@ -462,7 +462,10 @@ static void     gtk_combo_box_get_preferred_height_for_width (GtkWidget    *widg
                                                               gint          avail_size,
                                                               gint         *minimum_size,
                                                               gint         *natural_size);
-
+static GtkWidgetPath *gtk_combo_box_get_path_for_child       (GtkContainer *container,
+                                                              GtkWidget    *child);
+static void     gtk_combo_box_direction_changed              (GtkWidget    *widget,
+                                                              GtkTextDirection  previous_direction);
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
@@ -486,6 +489,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   container_class->forall = gtk_combo_box_forall;
   container_class->add = gtk_combo_box_add;
   container_class->remove = gtk_combo_box_remove;
+  container_class->get_path_for_child = gtk_combo_box_get_path_for_child;
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
@@ -500,6 +504,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->get_preferred_height_for_width = gtk_combo_box_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_combo_box_get_preferred_width_for_height;
   widget_class->destroy = gtk_combo_box_destroy;
+  widget_class->direction_changed = gtk_combo_box_direction_changed;
 
   object_class = (GObjectClass *)klass;
   object_class->constructor = gtk_combo_box_constructor;
@@ -1315,6 +1320,88 @@ gtk_combo_box_button_state_flags_changed (GtkWidget     *widget,
     }
 
   gtk_widget_queue_draw (widget);
+}
+
+static void
+gtk_combo_box_invalidate_order (GtkComboBox *combo_box)
+{
+  gtk_container_forall (GTK_CONTAINER (combo_box),
+                        (GtkCallback) gtk_widget_reset_style,
+                        NULL);
+}
+
+static void
+gtk_combo_box_direction_changed (GtkWidget        *widget,
+                                 GtkTextDirection  previous_direction)
+{
+  gtk_combo_box_invalidate_order (GTK_COMBO_BOX (widget));
+}
+
+static GtkWidgetPath *
+gtk_combo_box_get_path_for_child (GtkContainer *container,
+                                  GtkWidget    *child)
+{
+  GtkComboBoxPrivate *priv = GTK_COMBO_BOX (container)->priv;
+  GtkWidgetPath *path;
+  GtkWidget *widget;
+  gboolean found = FALSE;
+  GList *visible_children, *l;
+  GtkWidgetPath *sibling_path;
+  int pos;
+
+  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+
+  if (gtk_widget_get_visible (child))
+    {
+      visible_children = NULL;
+
+      if (priv->button && gtk_widget_get_visible (priv->button))
+        visible_children = g_list_prepend (visible_children, priv->button);
+
+      if (priv->cell_view_frame && gtk_widget_get_visible (priv->cell_view_frame))
+        visible_children = g_list_prepend (visible_children, priv->cell_view_frame);
+
+      widget = gtk_bin_get_child (GTK_BIN (container));
+      if (widget && gtk_widget_get_visible (widget))
+        visible_children = g_list_prepend (visible_children, widget);
+
+      if (gtk_widget_get_direction (GTK_WIDGET (container)) == GTK_TEXT_DIR_RTL)
+        visible_children = g_list_reverse (visible_children);
+
+      pos = 0;
+
+      for (l = visible_children; l; l = l->next)
+        {
+          widget = l->data;
+
+          if (widget == child)
+            {
+              found = TRUE;
+              break;
+            }
+
+          pos++;
+        }
+    }
+
+  if (found)
+    {
+      sibling_path = gtk_widget_path_new ();
+
+      for (l = visible_children; l; l = l->next)
+        gtk_widget_path_append_for_widget (sibling_path, l->data);
+
+      gtk_widget_path_append_with_siblings (path, sibling_path, pos);
+
+      g_list_free (visible_children);
+      gtk_widget_path_unref (sibling_path);
+    }
+  else
+    {
+      gtk_widget_path_append_for_widget (path, child);
+    }
+
+  return path;
 }
 
 static void
