@@ -1057,7 +1057,7 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
       file = gtk_css_section_get_file (section);
       if (file)
         {
-          GFileInfo *info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
+          info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
 
           if (info)
             path = g_file_info_get_display_name (info);
