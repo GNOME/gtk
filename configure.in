@@ -194,7 +194,7 @@ AM_PROG_AS
 AC_PATH_PROG(NM, nm, nm)
 
 dnl Initialize maintainer mode
-AM_MAINTAINER_MODE
+AM_MAINTAINER_MODE([enable])
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in
