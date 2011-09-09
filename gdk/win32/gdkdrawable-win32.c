@@ -1962,6 +1962,26 @@ gdk_win32_get_visual (GdkDrawable *drawable)
 HGDIOBJ
 gdk_win32_drawable_get_handle (GdkDrawable *drawable)
 {
+  if (GDK_IS_WINDOW (drawable))
+    {
+      GdkWindow *window = (GdkWindow *)drawable;
+
+      /* Try to ensure the window has a native window */
+      if (!_gdk_window_has_impl (window))
+	gdk_window_ensure_native (window);
+
+      if (!GDK_WINDOW_IS_WIN32 (window))
+	{
+	  g_warning (G_STRLOC " drawable is not a native Win32 window");
+	  return NULL;
+	}
+    }
+  else if (!GDK_IS_PIXMAP (drawable))
+    {
+      g_warning (G_STRLOC " drawable is not a pixmap or window");
+      return NULL;
+    }
+
   return GDK_DRAWABLE_HANDLE (drawable);
 }
 
