@@ -3409,5 +3409,15 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 HGDIOBJ
 gdk_win32_window_get_handle (GdkWindow *window)
 {
+  /* Try to ensure the window has a native window */
+  if (!_gdk_window_has_impl (window))
+    gdk_window_ensure_native (window);
+
+  if (!GDK_WINDOW_IS_WIN32 (window))
+    {
+      g_warning (G_STRLOC " window is not a native Win32 window");
+      return NULL;
+    }
+
   return GDK_WINDOW_HWND (window);
 }
