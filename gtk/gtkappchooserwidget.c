@@ -54,6 +54,19 @@
  * It is the main building block for #GtkAppChooserDialog. Most
  * applications only need to use the latter; but you can use
  * this widget as part of a larger widget if you have special needs.
+ *
+ * #GtkAppChooserWidget offers detailed control over what applications
+ * are shown, using the
+ * #GtkAppChooserWidget:show-default,
+ * #GtkAppChooserWidget:show-recommended,
+ * #GtkAppChooserWidget:show-fallback,
+ * #GtkAppChooserWidget:show-other and
+ * #GtkAppChooserWidget:show-all
+ * properties. See the #GtkAppChooser documentation for more information
+ * about these groups of applications.
+ *
+ * To keep track of the selected application, use the
+ * #GtkAppChooserWidget::application-selected and #GtkAppChooserWidget::application-activated signals.
  */
 
 struct _GtkAppChooserWidgetPrivate {
@@ -1022,9 +1035,10 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-recommended:
    *
-   * The #GtkAppChooserWidget:show-recommended property determines whether the app chooser
-   * should show a section for recommended applications. If %FALSE, the
-   * recommended applications are listed among the other applications.
+   * The #GtkAppChooserWidget:show-recommended property determines
+   * whether the app chooser should show a section for recommended
+   * applications. If %FALSE, the recommended applications are listed
+   * among the other applications.
    */
   pspec = g_param_spec_boolean ("show-recommended",
                                 P_("Show recommended apps"),
@@ -1036,9 +1050,10 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-fallback:
    *
-   * The #GtkAppChooserWidget:show-fallback property determines whether the app chooser
-   * should show a section for related applications. If %FALSE, the
-   * related applications are listed among the other applications.
+   * The #GtkAppChooserWidget:show-fallback property determines whether
+   * the app chooser should show a section for fallback applications.
+   * If %FALSE, the fallback applications are listed among the other
+   * applications.
    */
   pspec = g_param_spec_boolean ("show-fallback",
                                 P_("Show fallback apps"),
@@ -1050,8 +1065,8 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-other:
    *
-   * The #GtkAppChooserWidget:show-other property determines whether the app chooser
-   * should show a section for other applications.
+   * The #GtkAppChooserWidget:show-other property determines whether
+   * the app chooser should show a section for other applications.
    */
   pspec = g_param_spec_boolean ("show-other",
                                 P_("Show other apps"),
@@ -1063,9 +1078,9 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-all:
    *
-   * If the #GtkAppChooserWidget:show-all property is %TRUE, the app chooser presents
-   * all applications in a single list, without subsections for
-   * default, recommended or related applications.
+   * If the #GtkAppChooserWidget:show-all property is %TRUE, the app
+   * chooser presents all applications in a single list, without
+   * subsections for default, recommended or related applications.
    */
   pspec = g_param_spec_boolean ("show-all",
                                 P_("Show all apps"),
@@ -1077,8 +1092,9 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:default-text:
    *
-   * The #GtkAppChooserWidget:default-text property determines the text that appears
-   * in the widget when there are no applications for the given content type.
+   * The #GtkAppChooserWidget:default-text property determines the text
+   * that appears in the widget when there are no applications for the
+   * given content type.
    * See also gtk_app_chooser_widget_set_default_text().
    */
   pspec = g_param_spec_string ("default-text",
@@ -1111,6 +1127,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * @application: the activated #GAppInfo
    *
    * Emitted when an application item is activated from the widget's list.
+   *
    * This usually happens when the user double clicks an item, or an item
    * is selected and the user presses one of the keys Space, Shift+Space,
    * Return or Enter.
@@ -1133,8 +1150,8 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    *
    * Emitted when a context menu is about to popup over an application item.
    * Clients can insert menu items into the provided #GtkMenu object in the
-   * callback of this signal; the context menu will be shown over the item if
-   * at least one item has been added to the menu.
+   * callback of this signal; the context menu will be shown over the item
+   * if at least one item has been added to the menu.
    */
   signals[SIGNAL_POPULATE_POPUP] =
     g_signal_new ("populate-popup",
