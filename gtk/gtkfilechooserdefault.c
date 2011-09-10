@@ -3908,7 +3908,7 @@ visit_file_cb (GtkMenuItem *item,
     {
       GFile *file = files->data;
 
-      gtk_file_chooser_default_select_file (impl, file, NULL); /* NULL-GError */
+      gtk_file_chooser_default_select_file (GTK_FILE_CHOOSER (impl), file, NULL); /* NULL-GError */
     }
 
   g_slist_foreach (files, (GFunc) g_object_unref, NULL);
