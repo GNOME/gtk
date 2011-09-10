@@ -2279,7 +2279,8 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
     }
 
 done:
-  gtk_tree_model_filter_check_ancestors (filter, real_path);
+  if (real_path)
+    gtk_tree_model_filter_check_ancestors (filter, real_path);
 
   if (emit_row_inserted)
     gtk_tree_model_filter_emit_row_inserted_for_path (filter, c_model,
