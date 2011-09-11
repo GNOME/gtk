@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-09-04 19:45+0300\n"
-"PO-Revision-Date: 2011-09-04 19:47+0300\n"
+"PO-Revision-Date: 2011-09-11 21:49+0300\n"
 "Last-Translator: Ігар Грачышка <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n-bel-gnome@googlegroups.com>\n"
 "Language: be\n"
@@ -779,7 +779,7 @@ msgstr "_Спосабы ўводу"
 
 #: ../gtk/gtkentry.c:8762 ../gtk/gtktextview.c:7990
 msgid "_Insert Unicode Control Character"
-msgstr "_Уставіць кіроўны знак Юнікоду"
+msgstr "_Уставіць кіроўны знак Унікоду"
 
 #: ../gtk/gtkentry.c:10142
 msgid "Caps Lock is on"
