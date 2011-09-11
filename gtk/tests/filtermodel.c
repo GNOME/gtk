@@ -3780,6 +3780,8 @@ ref_count_transfer_root_level_reordered_filtered (void)
   assert_node_ref_count (ref_model, &grandparent2, 2);
   assert_node_ref_count (ref_model, &grandparent3, 1);
 
+  /* Move the invisible node grandparent1 */
+
   /* gtk_tree_store_move() will emit rows-reordered */
   gtk_tree_store_move_after (GTK_TREE_STORE (model),
                              &grandparent1, &grandparent3);
@@ -3788,9 +3790,28 @@ ref_count_transfer_root_level_reordered_filtered (void)
   assert_node_ref_count (ref_model, &grandparent3, 1);
   assert_node_ref_count (ref_model, &grandparent1, 0);
 
+  /* Move the invisible node grandparent1 */
+
   /* gtk_tree_store_move() will emit rows-reordered */
   gtk_tree_store_move_before (GTK_TREE_STORE (model),
                               &grandparent1, &grandparent2);
+
+  assert_node_ref_count (ref_model, &grandparent1, 0);
+  assert_node_ref_count (ref_model, &grandparent2, 2);
+  assert_node_ref_count (ref_model, &grandparent3, 1);
+
+  /* Now swap grandparent2 and grandparent3, first reference must transfer */
+  /* gtk_tree_store_swap() will emit rows-reordered */
+  gtk_tree_store_swap (GTK_TREE_STORE (model),
+                       &grandparent2, &grandparent3);
+
+  assert_node_ref_count (ref_model, &grandparent1, 0);
+  assert_node_ref_count (ref_model, &grandparent3, 2);
+  assert_node_ref_count (ref_model, &grandparent2, 1);
+
+  /* Swap back */
+  gtk_tree_store_swap (GTK_TREE_STORE (model),
+                       &grandparent2, &grandparent3);
 
   assert_node_ref_count (ref_model, &grandparent1, 0);
   assert_node_ref_count (ref_model, &grandparent2, 2);
@@ -3957,6 +3978,8 @@ ref_count_transfer_child_level_reordered_filtered (void)
   assert_node_ref_count (ref_model, &parent2, 1);
   assert_node_ref_count (ref_model, &parent3, 0);
 
+  /* Move invisible node parent 1 */
+
   /* gtk_tree_store_move() will emit rows-reordered */
   gtk_tree_store_move_after (GTK_TREE_STORE (model),
                              &parent1, &parent3);
@@ -3966,9 +3989,30 @@ ref_count_transfer_child_level_reordered_filtered (void)
   assert_node_ref_count (ref_model, &parent3, 0);
   assert_node_ref_count (ref_model, &parent1, 0);
 
+  /* Move invisible node parent 1 */
+
   /* gtk_tree_store_move() will emit rows-reordered */
   gtk_tree_store_move_before (GTK_TREE_STORE (model),
                               &parent1, &parent2);
+
+  assert_node_ref_count (ref_model, &grandparent1, 3);
+  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &parent2, 1);
+  assert_node_ref_count (ref_model, &parent3, 0);
+
+  /* Now swap parent2 and parent2, first reference must transfer */
+  /* gtk_tree_store_swap() will emit rows-reordered */
+  gtk_tree_store_swap (GTK_TREE_STORE (model),
+                       &parent2, &parent3);
+
+  assert_node_ref_count (ref_model, &grandparent1, 3);
+  assert_node_ref_count (ref_model, &parent1, 0);
+  assert_node_ref_count (ref_model, &parent3, 1);
+  assert_node_ref_count (ref_model, &parent2, 0);
+
+  /* Swap back */
+  gtk_tree_store_swap (GTK_TREE_STORE (model),
+                       &parent2, &parent3);
 
   assert_node_ref_count (ref_model, &grandparent1, 3);
   assert_node_ref_count (ref_model, &parent1, 0);
@@ -5833,6 +5877,74 @@ specific_bug_621076 (void)
   g_object_unref (filter);
 }
 
+static void
+specific_bug_657353_related (void)
+{
+  GtkTreeIter node1, node2, node3, node4;
+  GtkTreeModel *model;
+  GtkTreeModelRefCount *ref_model;
+  GtkTreeModel *filter_model;
+  GtkWidget *tree_view;
+  GType column_types[] = { G_TYPE_BOOLEAN };
+
+  /* gtk_tree_model_filter_rows_reordered() used to have a problem to
+   * not properly transfer the first ref count when the first node in
+   * the level does not have elt->offset == 0.  This test checks for
+   * that.  This bug could cause the faulty condition
+   *   elt->ext_ref_count > elt->ref_count
+   * to raise.
+   */
+
+  model = gtk_tree_model_ref_count_new ();
+  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
+
+  gtk_tree_store_set_column_types (GTK_TREE_STORE (model), 1,
+                                   column_types);
+
+  gtk_tree_store_append (GTK_TREE_STORE (model), &node1, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &node2, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &node3, NULL);
+  gtk_tree_store_append (GTK_TREE_STORE (model), &node4, NULL);
+
+  /* Hide the first node */
+  gtk_tree_store_set (GTK_TREE_STORE (model), &node1, 0, FALSE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &node2, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &node3, 0, TRUE, -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model), &node4, 0, TRUE, -1);
+
+  filter_model = gtk_tree_model_filter_new (model, NULL);
+  gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER (filter_model), 0);
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  assert_node_ref_count (ref_model, &node1, 0);
+  assert_node_ref_count (ref_model, &node2, 2);
+  assert_node_ref_count (ref_model, &node3, 1);
+  assert_node_ref_count (ref_model, &node4, 1);
+
+  /* Swap nodes 2 and 3 */
+
+  /* gtk_tree_store_swap() will emit rows-reordered */
+  gtk_tree_store_swap (GTK_TREE_STORE (model),
+                       &node2, &node3);
+
+  assert_node_ref_count (ref_model, &node1, 0);
+  assert_node_ref_count (ref_model, &node3, 2);
+  assert_node_ref_count (ref_model, &node2, 1);
+  assert_node_ref_count (ref_model, &node4, 1);
+
+  /* Hide node 3 */
+  gtk_tree_store_set (GTK_TREE_STORE (model), &node3, 0, FALSE, -1);
+
+  assert_node_ref_count (ref_model, &node1, 0);
+  assert_node_ref_count (ref_model, &node3, 0);
+  assert_node_ref_count (ref_model, &node2, 2);
+  assert_node_ref_count (ref_model, &node4, 1);
+
+  gtk_widget_destroy (tree_view);
+  g_object_unref (filter_model);
+  g_object_unref (ref_model);
+}
+
 /* main */
 
 void
@@ -6168,4 +6280,6 @@ register_filter_model_tests (void)
                    specific_bug_549287);
   g_test_add_func ("/TreeModelFilter/specific/bug-621076",
                    specific_bug_621076);
+  g_test_add_func ("/TreeModelFilter/specific/bug-657353-related",
+                   specific_bug_657353_related);
 }
