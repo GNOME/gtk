@@ -1480,7 +1480,6 @@ gtk_font_selection_dialog_get_type
 <FILE>gtkfontchooser</FILE>
 <TITLE>GtkFontChooser</TITLE>
 GtkFontChooser
-gtk_font_chooser_new
 gtk_font_chooser_get_family
 gtk_font_chooser_get_face
 gtk_font_chooser_get_size
@@ -1494,17 +1493,32 @@ GtkFontFilterFunc
 gtk_font_chooser_set_filter_func
 
 <SUBSECTION Standard>
-GtkFontChooserClass
+GtkFontChooserIface
 GTK_TYPE_FONT_CHOOSER
 GTK_FONT_CHOOSER
-GTK_FONT_CHOOSER_CLASS
+GTK_FONT_CHOOSER_IFACE
 GTK_IS_FONT_CHOOSER
-GTK_IS_FONT_CHOOSER_CLASS
-GTK_FONT_CHOOSER_GET_CLASS
+GTK_IS_FONT_CHOOSER_IFACE
+GTK_FONT_CHOOSER_GET_IFACE
+</SECTION>
+
+<SECTION>
+<FILE>gtkfontchooserwidget</FILE>
+<TITLE>GtkFontChooserWidget</TITLE>
+GtkFontChooserWidget
+
+<SUBSECTION Standard>
+GtkFontChooserWidgetClass
+GTK_TYPE_FONT_CHOOSER_WIDGET
+GTK_FONT_CHOOSER_WIDGET
+GTK_FONT_CHOOSER_WIDGET_CLASS
+GTK_IS_FONT_CHOOSER_WIDGET
+GTK_IS_FONT_CHOOSER_WIDGET_CLASS
+GTK_FONT_CHOOSER_WIDGET_GET_CLASS
 
 <SUBSECTION Private>
-GtkFontChooserPrivate
-gtk_font_chooser_get_type
+GtkFontChooserWidgetPrivate
+gtk_font_chooser_widget_get_type
 </SECTION>
 
 <SECTION>
@@ -1512,11 +1526,6 @@ gtk_font_chooser_get_type
 <TITLE>GtkFontChooserDialog</TITLE>
 GtkFontChooserDialog
 gtk_font_chooser_dialog_new
-gtk_font_chooser_dialog_get_font_chooser
-gtk_font_chooser_dialog_get_font_name
-gtk_font_chooser_dialog_set_font_name
-gtk_font_chooser_dialog_get_preview_text
-gtk_font_chooser_dialog_set_preview_text
 
 <SUBSECTION Standard>
 GtkFontChooserDialogClass

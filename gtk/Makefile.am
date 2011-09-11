@@ -221,6 +221,7 @@ gtk_public_h_sources = 		\
 	gtkfontsel.h		\
 	gtkfontchooser.h        \
 	gtkfontchooserdialog.h  \
+	gtkfontchooserwidget.h	\
 	gtkframe.h		\
 	gtkgradient.h		\
 	gtkgrid.h		\
@@ -408,6 +409,8 @@ gtk_private_h_sources =		\
 	gtkfilechooserutils.h	\
 	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
+	gtkfontchooserprivate.h	\
+	gtkfontchooserutils.h	\
 	gtkiconcache.h		\
 	gtkimageprivate.h	\
 	gtkimcontextsimpleseqs.h \
@@ -555,6 +558,8 @@ gtk_base_c_sources = 		\
 	gtkfontsel.c		\
 	gtkfontchooser.c        \
 	gtkfontchooserdialog.c  \
+	gtkfontchooserutils.c	\
+	gtkfontchooserwidget.c	\
 	gtkframe.c		\
 	gtkgradient.c		\
 	gtkgrid.c		\

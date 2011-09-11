@@ -27,6 +27,9 @@
 
 #include "gtkfontchooserdialog.h"
 #include "gtkfontchooser.h"
+#include "gtkfontchooserwidget.h"
+#include "gtkfontchooserutils.h"
+#include "gtkbox.h"
 #include "gtkstock.h"
 #include "gtkintl.h"
 #include "gtkaccessible.h"
@@ -50,19 +53,11 @@ struct _GtkFontChooserDialogPrivate
  *
  * The #GtkFontChooserDialog widget is a dialog box for selecting a font.
  *
- * To set the font which is initially selected, use
- * gtk_font_chooser_dialog_set_font_name().
- *
- * To get the selected font use gtk_font_chooser_dialog_get_font_name().
- *
- * To change the text which is shown in the preview area, use
- * gtk_font_chooser_dialog_set_preview_text().
- *
+*
  * <refsect2 id="GtkFontChooserDialog-BUILDER-UI">
  * <title>GtkFontChooserDialog as GtkBuildable</title>
  * The GtkFontChooserDialog implementation of the GtkBuildable interface
- * exposes the embedded #GtkFontChooser as internal child with the
- * name "font_chooser". It also exposes the buttons with the names
+ * exposes the buttons with the names
  * "select_button" and "cancel_button.
  * </refsect2>
  *
@@ -75,14 +70,57 @@ static GObject *gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildab
                                                                       const gchar  *childname);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontChooserDialog, gtk_font_chooser_dialog, GTK_TYPE_DIALOG,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_FONT_CHOOSER,
+                                                _gtk_font_chooser_delegate_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                         gtk_font_chooser_dialog_buildable_interface_init))
+                                                gtk_font_chooser_dialog_buildable_interface_init))
 
 static GtkBuildableIface *parent_buildable_iface;
 
 static void
+gtk_font_chooser_dialog_set_property (GObject      *object,
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
+{
+  GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (object);
+  GtkFontChooserDialogPrivate *priv = dialog->priv;
+
+  switch (prop_id)
+    {
+    default:
+      g_object_set_property (G_OBJECT (priv->fontchooser), pspec->name, value);
+      break;
+    }
+}
+
+static void
+gtk_font_chooser_dialog_get_property (GObject      *object,
+                                      guint         prop_id,
+                                      GValue       *value,
+                                      GParamSpec   *pspec)
+{
+  GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (object);
+  GtkFontChooserDialogPrivate *priv = dialog->priv;
+
+  switch (prop_id)
+    {
+    default:
+      g_object_get_property (G_OBJECT (priv->fontchooser), pspec->name, value);
+      break;
+    }
+}
+
+static void
 gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->get_property = gtk_font_chooser_dialog_get_property;
+  gobject_class->set_property = gtk_font_chooser_dialog_set_property;
+
+  _gtk_font_chooser_install_properties (gobject_class);
+
   g_type_class_add_private (klass, sizeof (GtkFontChooserDialogPrivate));
 }
 
@@ -121,7 +159,7 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
   gtk_window_set_resizable (GTK_WINDOW (fontchooserdiag), TRUE);
 
   /* Create the content area */
-  priv->fontchooser = gtk_font_chooser_new ();
+  priv->fontchooser = gtk_font_chooser_widget_new ();
   gtk_container_set_border_width (GTK_CONTAINER (priv->fontchooser), 5);
   gtk_widget_show (priv->fontchooser);
   gtk_box_pack_start (GTK_BOX (content_area),
@@ -147,6 +185,9 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
   gtk_window_set_title (GTK_WINDOW (fontchooserdiag), _("Font Selection"));
 
   gtk_widget_pop_composite_child ();
+
+  _gtk_font_chooser_set_delegate (GTK_FONT_CHOOSER (fontchooserdiag),
+                                  GTK_FONT_CHOOSER (priv->fontchooser));
 }
 
 /** gtk_font_chooser_dialog_new:
@@ -173,24 +214,6 @@ gtk_font_chooser_dialog_new (const gchar *title,
   return GTK_WIDGET (dialog);
 }
 
-/**
- * gtk_font_chooser_dialog_get_font_chooser:
- * @fcd: a #GtkFontChooserDialog
- *
- * Retrieves the #GtkFontChooser widget embedded in the dialog.
- *
- * Returns: (transfer none): the embedded #GtkFontChooser
- *
- * Since: 3.2
- */
-GtkWidget*
-gtk_font_chooser_dialog_get_font_chooser (GtkFontChooserDialog *fcd)
-{
-  g_return_val_if_fail (GTK_IS_FONT_CHOOSER_DIALOG (fcd), NULL);
-
-  return fcd->priv->fontchooser;
-}
-
 static void
 gtk_font_chooser_dialog_buildable_interface_init (GtkBuildableIface *iface)
 {
@@ -211,113 +234,6 @@ gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildable *buildable,
     return G_OBJECT (priv->select_button);
   else if (g_strcmp0 (childname, "cancel_button") == 0)
     return G_OBJECT (priv->cancel_button);
-  else if (g_strcmp0 (childname, "font_chooser") == 0)
-    return G_OBJECT (priv->fontchooser);
 
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
-}
-
-/**
- * gtk_font_chooser_dialog_get_font_name:
- * @fcd: a #GtkFontChooserDialog
- *
- * Gets the currently-selected font name.
- *
- * Note that this can be a different string than what you set with
- * gtk_font_chooser_dialog_set_font_name(), as the font chooser widget
- * may normalize font names and thus return a string with a different
- * structure. For example, "Helvetica Italic Bold 12" could be normalized
- * to "Helvetica Bold Italic 12".
- *
- * Use pango_font_description_equal() if you want to compare two
- * font descriptions.
- *
- * Return value: A string with the name of the current font, or %NULL
- *     if no font is selected. You must free this string with g_free().
- *
- * Since: 3.2
- */
-gchar*
-gtk_font_chooser_dialog_get_font_name (GtkFontChooserDialog *fcd)
-{
-  GtkFontChooserDialogPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_FONT_CHOOSER_DIALOG (fcd), NULL);
-
-  priv = fcd->priv;
-
-  return gtk_font_chooser_get_font_name (GTK_FONT_CHOOSER (priv->fontchooser));
-}
-
-/**
- * gtk_font_chooser_dialog_set_font_name:
- * @fcd: a #GtkFontChooserDialog
- * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
- *
- * Sets the currently selected font.
- *
- * Return value: %TRUE if the font selected in @fcd is now the
- *     @fontname specified, %FALSE otherwise.
- *
- * Since: 3.2
- */
-gboolean
-gtk_font_chooser_dialog_set_font_name (GtkFontChooserDialog *fcd,
-                                       const gchar          *fontname)
-{
-  GtkFontChooserDialogPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_FONT_CHOOSER_DIALOG (fcd), FALSE);
-  g_return_val_if_fail (fontname, FALSE);
-
-  priv = fcd->priv;
-
-  return gtk_font_chooser_set_font_name (GTK_FONT_CHOOSER (priv->fontchooser), fontname);
-}
-
-/**
- * gtk_font_chooser_dialog_get_preview_text:
- * @fcd: a #GtkFontChooserDialog
- *
- * Gets the text displayed in the preview area.
- *
- * Return value: the text displayed in the preview area.
- *     This string is owned by the widget and should not be
- *     modified or freed
- *
- * Since: 3.2
- */
-const gchar*
-gtk_font_chooser_dialog_get_preview_text (GtkFontChooserDialog *fcd)
-{
-  GtkFontChooserDialogPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_FONT_CHOOSER_DIALOG (fcd), NULL);
-
-  priv = fcd->priv;
-
-  return gtk_font_chooser_get_preview_text (GTK_FONT_CHOOSER (priv->fontchooser));
-}
-
-/**
- * gtk_font_chooser_dialog_set_preview_text:
- * @fcd: a #GtkFontChooserDialog
- * @text: the text to display in the preview area
- *
- * Sets the text displayed in the preview area.
- *
- * Since: 3.2
- */
-void
-gtk_font_chooser_dialog_set_preview_text (GtkFontChooserDialog *fcd,
-                                          const gchar          *text)
-{
-  GtkFontChooserDialogPrivate *priv;
-
-  g_return_if_fail (GTK_IS_FONT_CHOOSER_DIALOG (fcd));
-  g_return_if_fail (text != NULL);
-
-  priv = fcd->priv;
-
-  gtk_font_chooser_set_preview_text (GTK_FONT_CHOOSER (priv->fontchooser), text);
 }

@@ -33,6 +33,7 @@
 #include "gtkmain.h"
 #include "gtkbox.h"
 #include "gtklabel.h"
+#include "gtkfontchooser.h"
 #include "gtkfontchooserdialog.h"
 #include "gtkimage.h"
 #include "gtkmarshalers.h"
@@ -689,8 +690,8 @@ gtk_font_button_set_font_name (GtkFontButton *font_button,
   gtk_font_button_update_font_info (font_button);
   
   if (font_button->priv->font_dialog)
-    result = gtk_font_chooser_dialog_set_font_name (GTK_FONT_CHOOSER_DIALOG (font_button->priv->font_dialog), 
-                                                    font_button->priv->fontname);
+    result = gtk_font_chooser_set_font_name (GTK_FONT_CHOOSER (font_button->priv->font_dialog),
+                                             font_button->priv->fontname);
   else
     result = FALSE;
 
@@ -702,8 +703,8 @@ gtk_font_button_set_font_name (GtkFontButton *font_button,
 static void
 gtk_font_button_clicked (GtkButton *button)
 {
-  GtkFontChooserDialog *font_dialog;
-  GtkFontButton        *font_button = GTK_FONT_BUTTON (button);
+  GtkFontChooser *font_dialog;
+  GtkFontButton  *font_button = GTK_FONT_BUTTON (button);
   
   if (!font_button->priv->font_dialog) 
     {
@@ -714,7 +715,7 @@ gtk_font_button_clicked (GtkButton *button)
       font_button->priv->font_dialog = gtk_font_chooser_dialog_new (font_button->priv->title,
                                                                     NULL);
       
-      font_dialog = GTK_FONT_CHOOSER_DIALOG (font_button->priv->font_dialog);
+      font_dialog = GTK_FONT_CHOOSER (font_button->priv->font_dialog);
       
       if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
         {
@@ -734,8 +735,8 @@ gtk_font_button_clicked (GtkButton *button)
   
   if (!gtk_widget_get_visible (font_button->priv->font_dialog))
     {
-      font_dialog = GTK_FONT_CHOOSER_DIALOG (font_button->priv->font_dialog);
-      gtk_font_chooser_dialog_set_font_name (font_dialog, font_button->priv->fontname);
+      font_dialog = GTK_FONT_CHOOSER (font_button->priv->font_dialog);
+      gtk_font_chooser_set_font_name (font_dialog, font_button->priv->fontname);
     } 
 
   gtk_window_present (GTK_WINDOW (font_button->priv->font_dialog));
@@ -754,7 +755,7 @@ response_cb (GtkDialog *dialog,
     return;
 
   g_free (font_button->priv->fontname);
-  font_button->priv->fontname = gtk_font_chooser_dialog_get_font_name (GTK_FONT_CHOOSER_DIALOG (font_button->priv->font_dialog));
+  font_button->priv->fontname = gtk_font_chooser_get_font_name (GTK_FONT_CHOOSER (font_button->priv->font_dialog));
   
   /* Set label font */
   gtk_font_button_update_font_info (font_button);

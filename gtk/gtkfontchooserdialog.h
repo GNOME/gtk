@@ -62,15 +62,6 @@ GType      gtk_font_chooser_dialog_get_type         (void) G_GNUC_CONST;
 GtkWidget* gtk_font_chooser_dialog_new              (const gchar          *title,
                                                      GtkWindow            *window);
 
-GtkWidget* gtk_font_chooser_dialog_get_font_chooser (GtkFontChooserDialog *fcd);
-gchar*     gtk_font_chooser_dialog_get_font_name    (GtkFontChooserDialog *fcd);
-gboolean   gtk_font_chooser_dialog_set_font_name    (GtkFontChooserDialog *fcd,
-                                                     const gchar          *fontname);
-const gchar*
-          gtk_font_chooser_dialog_get_preview_text  (GtkFontChooserDialog *fcd);
-void      gtk_font_chooser_dialog_set_preview_text  (GtkFontChooserDialog *fcd,
-                                                     const gchar          *text);
-
 G_END_DECLS
 
 #endif /* __GTK_FONT_CHOOSER_DIALOG_H__ */

@@ -40,7 +40,7 @@ main (int argc, char *argv[])
 
   gtk_init (NULL, NULL);
 
-  fontchooser = gtk_font_chooser_new ();
+  fontchooser = gtk_font_chooser_widget_new ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_size_request (window, 600, 600);
