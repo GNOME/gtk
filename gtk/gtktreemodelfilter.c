@@ -2698,7 +2698,7 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 
   GSequence *tmp_seq;
   GSequenceIter *tmp_end_iter;
-  GSequenceIter *old_first_elt = NULL;
+  GSequenceIter *old_first_siter = NULL;
   gint *tmp_array;
   gint i, elt_count;
   gint length;
@@ -2818,6 +2818,8 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
   tmp_array = g_new (gint, g_sequence_get_length (level->visible_seq));
   elt_count = 0;
 
+  old_first_siter = g_sequence_get_iter_at_pos (level->seq, 0);
+
   for (i = 0; i < length; i++)
     {
       FilterElt *elt;
@@ -2826,10 +2828,6 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
       elt = lookup_elt_with_offset (level->seq, new_order[i], &siter);
       if (elt == NULL)
         continue;
-
-      /* Keep a reference if this elt has old_pos == 0 */
-      if (new_order[i] == 0)
-        old_first_elt = siter;
 
       /* Only for visible items an entry should be present in the order array
        * to be emitted.
@@ -2848,14 +2846,14 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
   g_sequence_sort (level->visible_seq, filter_elt_cmp, NULL);
 
   /* Transfer the reference from the old item at position 0 to the
-   * new item at position 0.
+   * new item at position 0, unless the old item at position 0 is also
+   * at position 0 in the new sequence.
    */
-  if (old_first_elt && g_sequence_iter_get_position (old_first_elt))
+  if (g_sequence_iter_get_position (old_first_siter) != 0)
     gtk_tree_model_filter_level_transfer_first_ref (filter,
                                                     level,
-                                                    old_first_elt,
+                                                    old_first_siter,
                                                     g_sequence_get_iter_at_pos (level->seq, 0));
-
 
   /* emit rows_reordered */
   if (g_sequence_get_length (level->visible_seq) > 0)
