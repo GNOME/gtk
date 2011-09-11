@@ -348,7 +348,7 @@ gtk_drag_highlight_draw (GtkWidget *widget,
 {
   int width = gtk_widget_get_allocated_width (widget);
   int height = gtk_widget_get_allocated_height (widget);
-  GtkStyleContext *context;
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
