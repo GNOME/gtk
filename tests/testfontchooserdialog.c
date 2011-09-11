@@ -17,8 +17,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <string.h>
 #include <gtk/gtk.h>
 #include "prop-editor.h"
+
+static gboolean
+monospace_filter (const PangoFontFamily *family,
+                  const PangoFontFace   *face,
+                  gpointer               data)
+{
+  return pango_font_family_is_monospace ((PangoFontFamily *) family);
+}
 
 static void
 notify_font_cb (GtkFontChooser *fontchooser, GParamSpec *pspec, gpointer data)
@@ -76,6 +85,12 @@ main (int argc, char *argv[])
                     G_CALLBACK (notify_preview_text_cb), NULL);
   g_signal_connect (font_button, "font-activated",
                     G_CALLBACK (font_activated_cb), NULL);
+
+  if (argc >= 2 && strcmp (argv[1], "--monospace") == 0)
+    {
+      gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (font_button),
+                                        monospace_filter, NULL, NULL);
+    }
 
   g_signal_connect (window, "delete-event",
                     G_CALLBACK (gtk_main_quit), NULL);
