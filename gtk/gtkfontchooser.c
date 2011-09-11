@@ -136,8 +136,10 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
  * Gets the #PangoFontFamily representing the selected font family.
  * Font families are a collection of font faces.
  *
+ * If the selected font is not installed, returns %NULL.
+ *
  * Return value: (transfer none): A #PangoFontFamily representing the
- *     selected font family. The returned object is owned by @fontchooser
+ *     selected font family, or %NULL. The returned object is owned by @fontchooser
  *     and must not be modified or freed.
  *
  * Since: 3.2
@@ -157,8 +159,10 @@ gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
  * Gets the #PangoFontFace representing the selected font group
  * details (i.e. family, slant, weight, width, etc).
  *
+ * If the selected font is not installed, returns %NULL.
+ *
  * Return value: (transfer none): A #PangoFontFace representing the
- *     selected font group details. The returned object is owned by
+ *     selected font group details, or %NULL. The returned object is owned by
  *     @fontchooser and must not be modified or freed.
  *
  * Since: 3.2
