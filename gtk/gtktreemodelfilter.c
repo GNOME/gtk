@@ -1650,7 +1650,7 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
   iter.user_data = level;
   iter.user_data2 = elt;
 
-  if (orig_level_ext_ref_count > 0)
+  if (!parent || orig_level_ext_ref_count > 0)
     path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
   else
     /* If the level is not visible, the parent is potentially invisible
