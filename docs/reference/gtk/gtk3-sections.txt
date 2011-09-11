@@ -1500,12 +1500,16 @@ GTK_FONT_CHOOSER_IFACE
 GTK_IS_FONT_CHOOSER
 GTK_IS_FONT_CHOOSER_IFACE
 GTK_FONT_CHOOSER_GET_IFACE
+
+<SUBSECTION Private>
+gtk_font_chooser_get_type
 </SECTION>
 
 <SECTION>
 <FILE>gtkfontchooserwidget</FILE>
 <TITLE>GtkFontChooserWidget</TITLE>
 GtkFontChooserWidget
+gtk_font_chooser_widget_new
 
 <SUBSECTION Standard>
 GtkFontChooserWidgetClass
