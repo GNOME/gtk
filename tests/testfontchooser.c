@@ -28,8 +28,8 @@ notify_font_cb (GtkFontChooser *fontchooser, GParamSpec *pspec, gpointer data)
 
   g_debug ("Changed font name %s", gtk_font_chooser_get_font (fontchooser));
 
-  family = gtk_font_chooser_get_family (fontchooser);
-  face = gtk_font_chooser_get_face (fontchooser);
+  family = gtk_font_chooser_get_font_family (fontchooser);
+  face = gtk_font_chooser_get_font_face (fontchooser);
   if (family)
     {
        g_debug ("  Family: %s is-monospace:%s",

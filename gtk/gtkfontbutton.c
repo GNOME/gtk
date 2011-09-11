@@ -1012,17 +1012,17 @@ response_cb (GtkDialog *dialog,
 
   if (priv->font_family)
     g_object_unref (priv->font_family);
-  priv->font_family = gtk_font_chooser_get_family (font_chooser);
+  priv->font_family = gtk_font_chooser_get_font_family (font_chooser);
   if (priv->font_family)
     g_object_ref (priv->font_family);
 
   if (priv->font_face)
     g_object_unref (priv->font_face);
-  priv->font_face = gtk_font_chooser_get_face (font_chooser);
+  priv->font_face = gtk_font_chooser_get_font_face (font_chooser);
   if (priv->font_face)
     g_object_ref (priv->font_face);
 
-  priv->font_size = gtk_font_chooser_get_size (font_chooser);
+  priv->font_size = gtk_font_chooser_get_font_size (font_chooser);
 
   /* Set label font */
   gtk_font_button_update_font_info (font_button);

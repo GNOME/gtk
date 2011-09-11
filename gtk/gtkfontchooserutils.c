@@ -38,19 +38,19 @@ get_delegate (GtkFontChooser *receiver)
 static PangoFontFamily *
 delegate_get_font_family (GtkFontChooser *chooser)
 {
-  return gtk_font_chooser_get_family (get_delegate (chooser));
+  return gtk_font_chooser_get_font_family (get_delegate (chooser));
 }
 
 static PangoFontFace *
 delegate_get_font_face (GtkFontChooser *chooser)
 {
-  return gtk_font_chooser_get_face (get_delegate (chooser));
+  return gtk_font_chooser_get_font_face (get_delegate (chooser));
 }
 
 static int
 delegate_get_font_size (GtkFontChooser *chooser)
 {
-  return gtk_font_chooser_get_size (get_delegate (chooser));
+  return gtk_font_chooser_get_font_size (get_delegate (chooser));
 }
 
 static void

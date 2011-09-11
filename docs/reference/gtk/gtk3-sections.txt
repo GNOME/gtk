@@ -1480,9 +1480,9 @@ gtk_font_selection_dialog_get_type
 <FILE>gtkfontchooser</FILE>
 <TITLE>GtkFontChooser</TITLE>
 GtkFontChooser
-gtk_font_chooser_get_family
-gtk_font_chooser_get_face
-gtk_font_chooser_get_size
+gtk_font_chooser_get_font_family
+gtk_font_chooser_get_font_face
+gtk_font_chooser_get_font_size
 gtk_font_chooser_get_font
 gtk_font_chooser_set_font
 gtk_font_chooser_get_font_desc

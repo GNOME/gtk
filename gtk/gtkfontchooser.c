@@ -130,7 +130,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
 }
 
 /**
- * gtk_font_chooser_get_family:
+ * gtk_font_chooser_get_font_family:
  * @fontchooser: a #GtkFontChooser
  *
  * Gets the #PangoFontFamily representing the selected font family.
@@ -143,7 +143,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
  * Since: 3.2
  */
 PangoFontFamily *
-gtk_font_chooser_get_family (GtkFontChooser *fontchooser)
+gtk_font_chooser_get_font_family (GtkFontChooser *fontchooser)
 {
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
@@ -151,7 +151,7 @@ gtk_font_chooser_get_family (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_face:
+ * gtk_font_chooser_get_font_face:
  * @fontchooser: a #GtkFontChooser
  *
  * Gets the #PangoFontFace representing the selected font group
@@ -164,7 +164,7 @@ gtk_font_chooser_get_family (GtkFontChooser *fontchooser)
  * Since: 3.2
  */
 PangoFontFace *
-gtk_font_chooser_get_face (GtkFontChooser *fontchooser)
+gtk_font_chooser_get_font_face (GtkFontChooser *fontchooser)
 {
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
@@ -172,7 +172,7 @@ gtk_font_chooser_get_face (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_size:
+ * gtk_font_chooser_get_font_size:
  * @fontchooser: a #GtkFontChooser
  *
  * The selected font size.
@@ -183,7 +183,7 @@ gtk_font_chooser_get_face (GtkFontChooser *fontchooser)
  * Since: 3.2
  */
 gint
-gtk_font_chooser_get_size (GtkFontChooser *fontchooser)
+gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
 {
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), -1);
 

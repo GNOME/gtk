@@ -78,9 +78,9 @@ struct _GtkFontChooserIface
 
 GType            gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
 
-PangoFontFamily *gtk_font_chooser_get_family               (GtkFontChooser   *fontchooser);
-PangoFontFace   *gtk_font_chooser_get_face                 (GtkFontChooser   *fontchooser);
-gint             gtk_font_chooser_get_size                 (GtkFontChooser   *fontchooser);
+PangoFontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fontchooser);
+PangoFontFace   *gtk_font_chooser_get_font_face            (GtkFontChooser   *fontchooser);
+gint             gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
 
 PangoFontDescription *
                  gtk_font_chooser_get_font_desc            (GtkFontChooser             *fontchooser);
