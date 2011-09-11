@@ -172,7 +172,7 @@ gtk_font_chooser_get_size (GtkFontChooser *fontchooser)
  * Gets the currently-selected font name.
  *
  * Note that this can be a different string than what you set with
- * gtk_font_chooser_set_font_name(), as the font chooser widget may
+ * gtk_font_chooser_set_font(), as the font chooser widget may
  * normalize font names and thus return a string with a different
  * structure. For example, "Helvetica Italic Bold 12" could be
  * normalized to "Helvetica Bold Italic 12".
