@@ -81,6 +81,12 @@ GType            gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
 PangoFontFamily *gtk_font_chooser_get_family               (GtkFontChooser   *fontchooser);
 PangoFontFace   *gtk_font_chooser_get_face                 (GtkFontChooser   *fontchooser);
 gint             gtk_font_chooser_get_size                 (GtkFontChooser   *fontchooser);
+
+PangoFontDescription *
+                 gtk_font_chooser_get_font_desc            (GtkFontChooser             *fontchooser);
+void             gtk_font_chooser_set_font_desc            (GtkFontChooser             *fontchooser,
+                                                            const PangoFontDescription *font_desc);
+
 gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
 void             gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,

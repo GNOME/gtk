@@ -56,14 +56,37 @@ G_DEFINE_INTERFACE (GtkFontChooser, gtk_font_chooser, G_TYPE_OBJECT);
 static void
 gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
 {
+  /**
+   * GtkFontChooser:font:
+   *
+   * The font description as a string, e.g. "Sans Italic 12".
+   */
   g_object_interface_install_property
      (iface,
       g_param_spec_string ("font",
                           P_("Font"),
-                          P_("The string that represents this font"),
-                          GTK_FONT_CHOOSER_DEFAULT_FONT_NAME,
+                           P_("Font description as a string, e.g. \"Sans Italic 12\""),
+                           GTK_FONT_CHOOSER_DEFAULT_FONT_NAME,
+                           GTK_PARAM_READWRITE));
+
+  /**
+   * GtkFontChooser:font-desc:
+   *
+   * The font description as a #PangoFontDescription.
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_boxed ("font-desc",
+                          P_("Font"),
+                          P_("Font description as a PangoFontDescription struct"),
+                          PANGO_TYPE_FONT_DESCRIPTION,
                           GTK_PARAM_READWRITE));
 
+  /**
+   * GtkFontChooser:preview-text:
+   *
+   * The string with which to preview the font.
+   */
   g_object_interface_install_property
      (iface,
       g_param_spec_string ("preview-text",
@@ -72,6 +95,11 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           pango_language_get_sample_string (NULL),
                           GTK_PARAM_READWRITE));
 
+  /**
+   * GtkFontChooser:show-preview-entry:
+   *
+   * Whether to show an entry to change the preview text.
+   */
   g_object_interface_install_property
      (iface,
       g_param_spec_boolean ("show-preview-entry",
@@ -213,6 +241,57 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
   g_return_if_fail (fontname != NULL);
 
   g_object_set (fontchooser, "font", fontname, NULL);
+}
+
+/**
+ * gtk_font_chooser_get_font_desc:
+ * @fontchooser: a #GtkFontChooser
+ *
+ * Gets the currently-selected font.
+ *
+ * Note that this can be a different string than what you set with
+ * gtk_font_chooser_set_font(), as the font chooser widget may
+ * normalize font names and thus return a string with a different
+ * structure. For example, "Helvetica Italic Bold 12" could be
+ * normalized to "Helvetica Bold Italic 12".
+ *
+ * Use pango_font_description_equal() if you want to compare two
+ * font descriptions.
+ *
+ * Return value: (transfer full) (allow-none): A #PangoFontDescription for the
+ *     current font, or %NULL if  no font is selected.
+ *
+ * Since: 3.2
+ */
+PangoFontDescription *
+gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
+{
+  PangoFontDescription *font_desc;
+
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
+
+  g_object_get (fontchooser, "font-desc", &font_desc, NULL);
+
+  return font_desc;
+}
+
+/**
+ * gtk_font_chooser_set_font_desc:
+ * @fontchooser: a #GtkFontChooser
+ * @font_desc: a #PangoFontDescription
+ *
+ * Sets the currently-selected font from @font_desc.
+ *
+ * Since: 3.2
+ */
+void
+gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
+                                const PangoFontDescription *font_desc)
+{
+  g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
+  g_return_if_fail (font_desc != NULL);
+
+  g_object_set (fontchooser, "font-desc", font_desc, NULL);
 }
 
 /**

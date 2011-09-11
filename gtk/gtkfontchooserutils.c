@@ -115,6 +115,9 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
                                     GTK_FONT_CHOOSER_PROP_FONT,
                                     "font");
   g_object_class_override_property (klass,
+                                    GTK_FONT_CHOOSER_PROP_FONT_DESC,
+                                    "font-desc");
+  g_object_class_override_property (klass,
                                     GTK_FONT_CHOOSER_PROP_PREVIEW_TEXT,
                                     "preview-text");
   g_object_class_override_property (klass,

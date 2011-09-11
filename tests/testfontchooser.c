@@ -21,15 +21,40 @@
 #include "prop-editor.h"
 
 static void
-notify_font_name_cb (GObject *fontchooser, GParamSpec *pspec, gpointer data)
+notify_font_cb (GtkFontChooser *fontchooser, GParamSpec *pspec, gpointer data)
 {
-  g_debug ("Changed font name %s", gtk_font_chooser_get_font (GTK_FONT_CHOOSER (fontchooser)));
+  PangoFontFamily *family;
+  PangoFontFace *face;
+
+  g_debug ("Changed font name %s", gtk_font_chooser_get_font (fontchooser));
+
+  family = gtk_font_chooser_get_family (fontchooser);
+  face = gtk_font_chooser_get_face (fontchooser);
+  if (family)
+    {
+       g_debug ("  Family: %s is-monospace:%s",
+                pango_font_family_get_name (family),
+                pango_font_family_is_monospace (family) ? "true" : "false");
+    }
+  else
+    g_debug ("  No font family!");
+
+  if (face)
+    g_debug ("  Face description: %s", pango_font_face_get_face_name (face));
+  else
+    g_debug ("  No font face!");
 }
 
 static void
 notify_preview_text_cb (GObject *fontchooser, GParamSpec *pspec, gpointer data)
 {
   g_debug ("Changed preview text %s", gtk_font_chooser_get_preview_text (GTK_FONT_CHOOSER (fontchooser)));
+}
+
+static void
+font_activated_cb (GtkFontChooser *chooser, const gchar *font_name, gpointer data)
+{
+  g_debug ("font-activated: %s", font_name);
 }
 
 int
@@ -53,10 +78,12 @@ main (int argc, char *argv[])
 
   g_signal_connect (window, "delete-event",
                     G_CALLBACK (gtk_main_quit), NULL);
-  g_signal_connect (fontchooser, "notify::font-name",
-                    G_CALLBACK (notify_font_name_cb), NULL);
+  g_signal_connect (fontchooser, "notify::font",
+                    G_CALLBACK (notify_font_cb), NULL);
   g_signal_connect (fontchooser, "notify::preview-text",
                     G_CALLBACK (notify_preview_text_cb), NULL);
+  g_signal_connect (fontchooser, "font-activated",
+                    G_CALLBACK (font_activated_cb), NULL);
 
   gtk_font_chooser_set_font (GTK_FONT_CHOOSER (fontchooser), "Bitstream Vera Sans 45");
   gtk_font_chooser_set_preview_text (GTK_FONT_CHOOSER (fontchooser), "[user@host ~]$ &>>");
