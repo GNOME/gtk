@@ -18,6 +18,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "treemodel.h"
 #include "gtktreemodelrefcount.h"
@@ -6476,6 +6477,85 @@ specific_bug_657353_related (void)
   g_object_unref (ref_model);
 }
 
+static gboolean
+specific_bug_657353_visible_func (GtkTreeModel *model,
+                                  GtkTreeIter  *iter,
+                                  gpointer      data)
+{
+  gchar *str;
+  gboolean ret = FALSE;
+
+  gtk_tree_model_get (model, iter, 0, &str, -1);
+  ret = strstr (str, "hidden") ? FALSE : TRUE;
+  g_free (str);
+
+  return ret;
+}
+
+static void
+specific_bug_657353 (void)
+{
+  GtkListStore *store;
+  GtkTreeModel *sort_model;
+  GtkTreeModel *filter_model;
+  GtkTreeIter iter, iter_a, iter_b, iter_c;
+  GtkWidget *tree_view;
+
+  /* This is a very carefully crafted test case that is triggering the
+   * situation described in bug 657353.
+   *
+   *   GtkListStore acts like EphyCompletionModel
+   *   GtkTreeModelSort acts like the sort model added in
+   *                      ephy_location_entry_set_completion.
+   *   GtkTreeModelFilter acts like the filter model in
+   *                      GtkEntryCompletion.
+   */
+
+  /* Set up a model that's wrapped in a GtkTreeModelSort.  The first item
+   * will be hidden.
+   */
+  store = gtk_list_store_new (1, G_TYPE_STRING);
+  gtk_list_store_insert_with_values (store, &iter_b, 0, 0, "BBB hidden", -1);
+  gtk_list_store_insert_with_values (store, &iter, 1, 0, "EEE", -1);
+  gtk_list_store_insert_with_values (store, &iter, 2, 0, "DDD", -1);
+  gtk_list_store_insert_with_values (store, &iter_c, 3, 0, "CCC", -1);
+
+  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+
+  filter_model = gtk_tree_model_filter_new (sort_model, NULL);
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter_model),
+                                          specific_bug_657353_visible_func,
+                                          filter_model, NULL);
+
+  tree_view = gtk_tree_view_new_with_model (filter_model);
+
+  /* This triggers emission of rows-reordered.  The elt with offset == 0
+   * is hidden, which used to cause misbehavior.  (The first reference should
+   * have moved to CCC, which did not happen).
+   */
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model),
+                                        0, GTK_SORT_ASCENDING);
+
+  /* By inserting another item that will appear at the first position, a
+   * reference transfer is done from CCC (which failed to get this reference
+   * earlier) to AAA.  At this point, the rule
+   * elt->ref_count >= elt->ext_ref_count is broken for CCC.
+   */
+  gtk_list_store_insert_with_values (store, &iter_a, 6, 0, "AAA", -1);
+
+  /* When we hide CCC, the references cannot be correctly released, because
+   * CCC failed to get a reference during rows-reordered.  The faulty condition
+   * only manifests itself here with MODEL_FILTER_DEBUG disabled (as is usual
+   * in production).
+   */
+  gtk_list_store_set (store, &iter_c, 0, "CCC hidden", -1);
+
+  gtk_widget_destroy (tree_view);
+  g_object_unref (filter_model);
+  g_object_unref (sort_model);
+  g_object_unref (store);
+}
+
 static void
 specific_bug_658696 (void)
 {
@@ -6843,6 +6923,8 @@ register_filter_model_tests (void)
                    specific_bug_621076);
   g_test_add_func ("/TreeModelFilter/specific/bug-657353-related",
                    specific_bug_657353_related);
+  g_test_add_func ("/TreeModelFilter/specific/bug-657353",
+                   specific_bug_657353);
   g_test_add_func ("/TreeModelFilter/specific/bug-658696",
                    specific_bug_658696);
 }
