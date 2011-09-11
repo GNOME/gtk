@@ -5945,6 +5945,24 @@ specific_bug_657353_related (void)
   g_object_unref (ref_model);
 }
 
+static void
+specific_bug_658696 (void)
+{
+  GtkTreeStore *store;
+  GtkTreeModel *filter;
+  GtkTreePath *vroot;
+  GtkTreeIter iter;
+
+  store = create_tree_store (4, TRUE);
+
+  vroot = gtk_tree_path_new_from_indices (0, 0, -1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), vroot);
+  gtk_tree_path_free (vroot);
+
+  /* This used to cause a crash in gtk_tree_model_filter_check_ancestors() */
+  gtk_tree_store_append (store, &iter, NULL);
+}
+
 /* main */
 
 void
@@ -6282,4 +6300,6 @@ register_filter_model_tests (void)
                    specific_bug_621076);
   g_test_add_func ("/TreeModelFilter/specific/bug-657353-related",
                    specific_bug_657353_related);
+  g_test_add_func ("/TreeModelFilter/specific/bug-658696",
+                   specific_bug_658696);
 }
