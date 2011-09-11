@@ -33,7 +33,8 @@
 
 G_BEGIN_DECLS
 
-#ifdef G_OS_WIN32
+#if defined G_OS_WIN32 \
+  || (defined GDK_WINDOWING_QUARTZ && defined QUARTZ_RELOCATION)
 
 const gchar *_gtk_get_datadir ();
 const gchar *_gtk_get_libdir ();
