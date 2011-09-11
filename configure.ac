@@ -318,6 +318,11 @@ if test -z "$backend_set"; then
   fi
 fi
 
+AC_ARG_ENABLE(quartz-relocation,
+              [AS_HELP_STRING([--enable-quartz-relocation],
+                              [enable bundle-based relocation functions])],
+                              [quartz_relocation=yes])
+
 cairo_backends=
 backend_immodules=
 GDK_BACKENDS=
@@ -360,6 +365,10 @@ if test "x$enable_quartz_backend" = xyes; then
 #define GDK_WINDOWING_QUARTZ"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
   AM_CONDITIONAL(USE_QUARTZ, true)
+  if test "x$quartz_relocation" = xyes; then
+    AC_DEFINE([QUARTZ_RELOCATION], [1], [Use NSBundle functions to determine load paths for libraries, translations, etc.])
+  fi
+
 else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
