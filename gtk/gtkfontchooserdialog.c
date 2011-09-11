@@ -52,8 +52,8 @@ struct _GtkFontChooserDialogPrivate
  * @See_also: #GtkFontChooser, #GtkDialog
  *
  * The #GtkFontChooserDialog widget is a dialog box for selecting a font.
+ * It implements the #GtkFontChooser interface.
  *
-*
  * <refsect2 id="GtkFontChooserDialog-BUILDER-UI">
  * <title>GtkFontChooserDialog as GtkBuildable</title>
  * The GtkFontChooserDialog implementation of the GtkBuildable interface
@@ -192,7 +192,7 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 
 /** gtk_font_chooser_dialog_new:
  * @title: (allow-none): Title of the dialog, or %NULL
- * @parent: (allow-none): Trasient parent of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog, or %NULL
  *
  * Creates a new #GtkFontChooserDialog.
  *

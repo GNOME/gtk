@@ -56,10 +56,10 @@
  * @Title: GtkFontChooserWidget
  * @See_also: #GtkFontChooserWidgetDialog
  *
- * The #GtkFontChooserWidget widget lists the available fonts, styles and sizes,
- * allowing the user to select a font.
- * It is used in the #GtkFontChooserWidgetDialog widget to provide a dialog box for
- * selecting fonts.
+ * The #GtkFontChooserWidget widget lists the available fonts,
+ * styles and sizes, allowing the user to select a font. It is
+ * used in the #GtkFontChooserWidgetDialog widget to provide a
+ * dialog box for selecting fonts.
  *
  * To set the font which is initially selected, use
  * gtk_font_chooser_set_font().
