@@ -1088,6 +1088,12 @@ gtk_tree_model_filter_prune_level (GtkTreeModelFilter *filter,
       while (elt->ext_ref_count > 0)
         gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
                                                &f_iter, TRUE, TRUE);
+      /* In this case, we do remove reference counts we've added ourselves,
+       * since the node will be removed from the data structures.
+       */
+      while (elt->ref_count > 0)
+        gtk_tree_model_filter_real_unref_node (GTK_TREE_MODEL (filter),
+                                               &f_iter, FALSE, TRUE);
 
       if (elt->visible_siter)
         {
