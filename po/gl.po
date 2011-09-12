@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-05 21:59+0200\n"
+"POT-Creation-Date: 2011-09-12 21:35+0200\n"
 "PO-Revision-Date: 2011-09-05 22:00+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
@@ -612,54 +612,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Barra invertida"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "Outro aplicativo…"
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "Produciuse un fallo ao ver os aplicativos en liña"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "Buscar os aplicativos en liña"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "Non foi posíbel executar o aplicativo"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "Non foi posíbel atopar «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "Non foi posíbel atopar o aplicativo"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Seleccione un aplicativo para abrir «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:364 ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Non existen aplicativos dispoñíbeis para abrir «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Seleccione un aplicativo para os ficheiros «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Non hai ningún aplicativo dispoñíbel para abrir os ficheiros «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -667,32 +667,32 @@ msgstr ""
 "Prema «Mostrar outros aplicativos», para ver máis opcións, ou «Buscar "
 "aplicativos en liña» para instalar un novo aplicativo"
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "Esquecer a asociación"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "Mostrar outros aplicativos"
 
-#: ../gtk/gtkappchooserdialog.c:540 ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
 #: ../gtk/gtkfontchooserdialog.c:138
 msgid "_Select"
 msgstr "_Selección: "
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "Aplicativo predeterminado"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "Aplicativos recomendados"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "Aplicativos relacionados"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "Outros aplicativos"
 
@@ -1404,7 +1404,7 @@ msgstr "Non foi posíbel montar %s"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Ruta incorrecta"
