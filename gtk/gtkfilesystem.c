@@ -264,6 +264,9 @@ read_bookmarks (GFile *file)
       if (!*lines[i])
 	continue;
 
+      if (!g_utf8_validate (lines[i], -1, NULL))
+	continue;
+
       bookmark = g_slice_new0 (GtkFileSystemBookmark);
 
       if ((space = strchr (lines[i], ' ')) != NULL)
@@ -289,23 +292,25 @@ save_bookmarks (GFile  *bookmarks_file,
 {
   GError *error = NULL;
   GString *contents;
+  GSList *l;
 
   contents = g_string_new ("");
 
-  while (bookmarks)
+  for (l = bookmarks; l; l = l->next)
     {
-      GtkFileSystemBookmark *bookmark;
+      GtkFileSystemBookmark *bookmark = l->data;
       gchar *uri;
 
-      bookmark = bookmarks->data;
       uri = g_file_get_uri (bookmark->file);
+      if (!uri)
+	continue;
+
       g_string_append (contents, uri);
 
       if (bookmark->label)
 	g_string_append_printf (contents, " %s", bookmark->label);
 
       g_string_append_c (contents, '\n');
-      bookmarks = bookmarks->next;
       g_free (uri);
     }
 
