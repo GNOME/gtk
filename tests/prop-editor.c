@@ -704,6 +704,56 @@ color_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_unset (&val);
 }
 
+static void
+font_modified (GtkFontChooser *fb, GParamSpec *pspec, gpointer data)
+{
+  ObjectProperty *p = data;
+  PangoFontDescription *font_desc;
+
+  font_desc = gtk_font_chooser_get_font_desc (fb);
+
+  if (is_child_property (p->spec))
+    {
+      GtkWidget *widget = GTK_WIDGET (p->obj);
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+
+      gtk_container_child_set (GTK_CONTAINER (parent),
+                               widget, p->spec->name, font_desc, NULL);
+    }
+  else
+    g_object_set (p->obj, p->spec->name, font_desc, NULL);
+
+  pango_font_description_free (font_desc);
+}
+
+static void
+font_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkFontChooser *fb = GTK_FONT_CHOOSER (data);
+  GValue val = { 0, };
+  const PangoFontDescription *font_desc;
+  PangoFontDescription *fb_font_desc;
+
+  g_value_init (&val, PANGO_TYPE_FONT_DESCRIPTION);
+  get_property_value (object, pspec, &val);
+
+  font_desc = g_value_get_boxed (&val);
+  fb_font_desc = gtk_font_chooser_get_font_desc (fb);
+
+  if (font_desc == NULL ||
+      (fb_font_desc != NULL &&
+       !pango_font_description_equal (fb_font_desc, font_desc)))
+    {
+      block_controller (G_OBJECT (fb));
+      gtk_font_chooser_set_font_desc (fb, font_desc);
+      unblock_controller (G_OBJECT (fb));
+    }
+
+  g_value_unset (&val);
+  pango_font_description_free (fb_font_desc);
+}
+
+
 static GtkWidget *
 property_widget (GObject    *object,
                  GParamSpec *spec,
@@ -929,6 +979,19 @@ property_widget (GObject    *object,
       if (can_modify)
         connect_controller (G_OBJECT (prop_edit), "color-set",
                             object, spec, G_CALLBACK (color_modified));
+    }
+  else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_FONT_DESCRIPTION)
+    {
+      prop_edit = gtk_font_button_new ();
+
+      g_object_connect_property (object, spec,
+                                 G_CALLBACK (font_changed),
+                                 prop_edit, G_OBJECT (prop_edit));
+
+      if (can_modify)
+        connect_controller (G_OBJECT (prop_edit), "notify::font-desc",
+                            object, spec, G_CALLBACK (font_modified));
     }
   else
     {
