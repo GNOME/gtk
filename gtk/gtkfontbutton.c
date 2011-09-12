@@ -354,6 +354,11 @@ gtk_font_button_take_font_desc (GtkFontButton        *font_button,
   else
     priv->font_desc = pango_font_description_from_string (_("Sans 12"));
 
+  if (pango_font_description_get_size_is_absolute (priv->font_desc))
+    priv->font_size = pango_font_description_get_size (priv->font_desc);
+  else 
+    priv->font_size = pango_font_description_get_size (priv->font_desc) / PANGO_SCALE;
+
   gtk_font_button_update_font_data (font_button);
   gtk_font_button_update_font_info (font_button);
 

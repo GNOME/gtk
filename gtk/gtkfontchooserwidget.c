@@ -320,17 +320,19 @@ spin_change_cb (GtkAdjustment *adjustment,
   GtkFontChooserWidget          *fontchooser = (GtkFontChooserWidget*)user_data;
   GtkFontChooserWidgetPrivate   *priv        = fontchooser->priv;
   GtkAdjustment           *slider_adj  = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
-
   gdouble size = gtk_adjustment_get_value (adjustment);
+
   priv->size = ((gint)size) * PANGO_SCALE;
 
   desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
 
-  g_object_notify (G_OBJECT (fontchooser), "font");
-  g_object_notify (G_OBJECT (fontchooser), "font-desc");
-  
+  if (pango_font_description_get_size_is_absolute (priv->font_desc))
+    pango_font_description_set_absolute_size (priv->font_desc, size);
+  else
+    pango_font_description_set_size (priv->font_desc, priv->size);
+
   /* If the new value is lower than the lower bound of the slider, we set
    * the slider adjustment to the lower bound value if it is not already set
    */
@@ -350,6 +352,9 @@ spin_change_cb (GtkAdjustment *adjustment,
     gtk_adjustment_set_value (slider_adj, size);
 
   gtk_widget_queue_draw (priv->preview);
+
+  g_object_notify (G_OBJECT (fontchooser), "font");
+  g_object_notify (G_OBJECT (fontchooser), "font-desc");
 }
 
 static void
