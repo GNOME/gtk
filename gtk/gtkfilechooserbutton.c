@@ -479,9 +479,10 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 
   /* Button */
   priv->button = gtk_button_new ();
-  g_signal_connect (priv->button, "clicked", G_CALLBACK (button_clicked_cb),
-		    button);
-  gtk_container_add (GTK_CONTAINER (button), priv->button);
+  g_signal_connect (priv->button, "clicked",
+                    G_CALLBACK (button_clicked_cb), button);
+  gtk_box_pack_start (GTK_BOX (button), priv->button, TRUE, TRUE, 0);
+  gtk_widget_set_halign (priv->button, GTK_ALIGN_FILL);
   gtk_widget_show (priv->button);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
@@ -504,8 +505,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_box_pack_start (GTK_BOX (box), sep, FALSE, FALSE, 0);
   gtk_widget_show (sep);
 
-  image = gtk_image_new_from_stock (GTK_STOCK_OPEN,
-				    GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_stock (GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
   gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
   gtk_widget_show (image);
 
@@ -524,7 +524,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   priv->combo_box_changed_id =
     g_signal_connect (priv->combo_box, "changed",
 		      G_CALLBACK (combo_box_changed_cb), button);
-  gtk_container_add (GTK_CONTAINER (button), priv->combo_box);
+  gtk_box_pack_start (GTK_BOX (button), priv->combo_box, TRUE, TRUE, 0);
+  gtk_widget_set_halign (priv->combo_box, GTK_ALIGN_FILL);
 
   priv->icon_cell = gtk_cell_renderer_pixbuf_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (priv->combo_box),
