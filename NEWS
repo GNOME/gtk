@@ -1,3 +1,56 @@
+Overview of Changes in GTK+ 3.1.90
+==================================
+
+* GtkAppChooserButton: A new function has been added
+  that makes it possible to have the button select the
+  default app (as opposed to the most-recently-used app).
+
+* A lot of feedback on the the tree model refactoring has
+  been incorporated via new test cases and bug fixes
+
+* The filechooser search has been ported to tracker 0.12
+  and is using the tracker DBus API directly now.
+
+* The new fontchooser API has been reworked a bit to make
+  it follow the same pattern we use else where. GtkFontChooser
+  is now an interface that is implemented by GtkFontChooserButton,
+  GtkFontChooserDialog and GtkFontChooserWidget (to which the
+  original GtkFontChooser has been renamed).
+
+* Bugs fixed
+ 514843 gtkfilechooser should be more robust to malformed URIs...
+ 617583 Dead accents keys don't work in GTK+ applications on OSX
+ 642706 No way to select the default entry
+ 657353 GtkTreeModelFilter hangs when filtering
+ 657627 new font chooser API inconsistent
+ 658272 Port gtksearchenginetracker.c to tracker 0.11/0.12
+ 658379 Disabled devices still added to list on startup
+ 658398 Use of uninitialized variable reported by Valgrind
+ 658507 better comboboxes for right to left languages
+ 658600 Geany crashes when reopening file chooser dialog
+ 658696 Crash when inserting a new node
+ 658774 Regression: GtkFileChooserButtons do not expand
+
+* Translation updates:
+ Belarusian
+ British English
+ French
+ Galician
+ Indonesian
+ Italian
+ Latvian
+ Norwegian bokmål
+ Persian
+ Polish
+ Portuguese
+ Punjabi
+ Simplified Chinese
+ Slovenian
+ Spanish
+ Swedish
+ Tamil
+
+
 Overview of Changes in GTK+ 3.1.18
 ==================================
 
