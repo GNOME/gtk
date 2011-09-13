@@ -5,10 +5,10 @@
 # Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.92.x\n"
+"Project-Id-Version: gtk+ 3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-06 21:51+0200\n"
-"PO-Revision-Date: 2011-09-06 21:51+0200\n"
+"POT-Creation-Date: 2011-09-13 18:47+0200\n"
+"PO-Revision-Date: 2011-09-13 18:47+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "Language: nn\n"
@@ -598,54 +598,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "Annet program..."
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "Klarte ikke å se etter programmer på nettet"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "Finn programmer på nettet"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "Klarte ikke å kjøre programmet"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "Klarte ikke å finne «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "Klarte ikke å finne programmet"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Velg et program å åpne «%s» i"
 
-#: ../gtk/gtkappchooserdialog.c:364 ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Ingen tilgjengelige programmer for åpning av «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Velg et program for «%s»-filer"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Ingen tilgjengelige programmer for åpning av «%s»-filer"
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -653,32 +653,32 @@ msgstr ""
 "Klikk på «Vis andre programmer» for flere alternativer, eller «Finn "
 "programmer på nettet» for å installere et nytt program"
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "Glem kobling"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "Vis andre programmer"
 
-#: ../gtk/gtkappchooserdialog.c:540 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "Vel_g"
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "Forvalgt program"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "Anbefalte programmer"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "Relaterte programmer"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "Andre programmer"
 
@@ -1102,7 +1102,7 @@ msgstr "Skrivebord"
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Annet …"
 
@@ -1386,7 +1386,7 @@ msgstr "Klarte ikke å montere %s"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Ugyldig sti"
@@ -1451,30 +1451,33 @@ msgstr "Stien eksisterer ikke"
 msgid "File System"
 msgstr "Filsystem"
 
-#: ../gtk/gtkfontbutton.c:152 ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "Velg en skrift"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Velg en skrift"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "Skrift"
 
-#: ../gtk/gtkfontchooser.c:118
+#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "Valg av skrift"
+
+#: ../gtk/gtkfontchooserwidget.c:118
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "Ingen skrifter passer til søket. Du kan endre søket og prøve igjen."
 
-#: ../gtk/gtkfontchooser.c:667
+#: ../gtk/gtkfontchooserwidget.c:642
 msgid "Search font name"
 msgstr "Søk etter navn på skrift"
 
-#: ../gtk/gtkfontchooserdialog.c:147 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "Valg av skrift"
+#: ../gtk/gtkfontchooserwidget.c:911
+msgid "Font Family"
+msgstr "Skriftfamilie"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
