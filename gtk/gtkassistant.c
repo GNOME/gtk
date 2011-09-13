@@ -1657,7 +1657,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
  * gtk_assistant_remove_page:
  * @assistant: a #GtkAssistant
  * @page_num: the index of a page in the @assistant,
- *     or -1 to get the last page
+ *     or -1 to remove the last page
  *
  * Removes the @page_num's page from @assistant.
  *
