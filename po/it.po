@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.1.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-09-13 23:21+0200\n"
-"PO-Revision-Date: 2011-09-13 23:21+0200\n"
+"PO-Revision-Date: 2011-09-13 23:29+0200\n"
 "Last-Translator: Luca Ferretti <lferrett@gnome.org>\n"
 "Language-Team: Italiano <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1537,7 +1537,6 @@ msgid "Search font name"
 msgstr "Cerca nome tipo carattere"
 
 #: ../gtk/gtkfontchooserwidget.c:911
-#, fuzzy
 msgid "Font Family"
 msgstr "Famiglia carattere"
 
