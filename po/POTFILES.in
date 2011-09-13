@@ -98,6 +98,7 @@ gtk/gtkfontbutton.c
 gtk/gtkfontchooser.c
 gtk/gtkfontchooser.c
 gtk/gtkfontchooserdialog.c
+gtk/gtkfontchooserwidget.c
 gtk/gtkfontsel.c
 gtk/gtkframe.c
 gtk/gtkgrid.c
