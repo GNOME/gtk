@@ -11,20 +11,22 @@
 # Aron Xu <aronxu@gnome.org>, 2010, 2011.
 # Yinghua Wang <wantinghard@gmail.com>, 2010, 2011.
 # wei Li <lw124124@gmail.com>, 2011.
+# YunQiang Su <wzssyqa@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.properties master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&keywords=I18N+L10N&component=general\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-09-13 01:36+0000\n"
-"PO-Revision-Date: 2011-03-29 18:44+0800\n"
-"Last-Translator: Wylmer Wang <wantinghard@gmail.com>\n"
+"PO-Revision-Date: 2011-09-13 13:19+0800\n"
+"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bits\n"
 "Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:136
 #: ../gdk/gdkdevicemanager.c:146
@@ -6204,7 +6206,7 @@ msgstr "RGBA 段落背景色"
 
 #: ../gtk/gtktexttag.c:577
 msgid "Paragraph background RGBA as a GdkRGBA"
-msgstr "以GdkRGBA 方式表示的段落背景色"
+msgstr "以 GdkRGBA 方式表示的段落背景色"
 
 #: ../gtk/gtktexttag.c:595
 msgid "Margin Accumulates"
