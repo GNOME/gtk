@@ -8825,7 +8825,8 @@ gtk_file_chooser_default_initial_focus (GtkFileChooserEmbed *chooser_embed)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-      if (impl->location_mode == LOCATION_MODE_PATH_BAR)
+      if (impl->location_mode == LOCATION_MODE_PATH_BAR
+	  || impl->operation_mode == OPERATION_MODE_RECENT)
 	widget = impl->browse_files_tree_view;
       else
 	widget = impl->location_entry;
