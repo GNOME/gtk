@@ -328,13 +328,15 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
       if (icon == NULL)
         {
           icon = g_app_info_get_icon (info);
-          g_object_ref (icon);
+          if (icon != NULL)
+            g_object_ref (icon);
         }
 
-      if (icon)
-        icon_name = gicon_to_string (icon);
-
-      g_object_unref (icon);
+      if (icon != NULL)
+        {
+          icon_name = gicon_to_string (icon);
+          g_object_unref (icon);
+        }
     }
 
   binary_name = g_app_info_get_executable (info);
