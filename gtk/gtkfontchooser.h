@@ -90,7 +90,7 @@ void             gtk_font_chooser_set_font_desc            (GtkFontChooser      
 gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
 void             gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
-                                                            const gchar      *font_name);
+                                                            const gchar      *fontname);
 gchar*           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
 void             gtk_font_chooser_set_preview_text         (GtkFontChooser   *fontchooser,
                                                             const gchar      *text);
