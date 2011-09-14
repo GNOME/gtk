@@ -5383,7 +5383,7 @@ gtk_tree_view_draw (GtkWidget *widget,
                                     button, cr);
     }
 
-  return TRUE;
+  return FALSE;
 }
 
 enum
