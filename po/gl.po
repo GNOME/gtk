@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-12 21:35+0200\n"
-"PO-Revision-Date: 2011-09-05 22:00+0200\n"
+"POT-Creation-Date: 2011-09-14 23:13+0200\n"
+"PO-Revision-Date: 2011-09-14 23:13+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -676,7 +676,7 @@ msgid "Show other applications"
 msgstr "Mostrar outros aplicativos"
 
 #: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "_Selección: "
 
@@ -1121,7 +1121,7 @@ msgstr "Escritorio"
 msgid "(None)"
 msgstr "(Ningún)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Outro…"
 
@@ -1380,11 +1380,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Substituír"
 
-#: ../gtk/gtkfilechooserdefault.c:9159
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "Could not start the search process"
 msgstr "Non foi posíbel iniciar o proceso de busca"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9161
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1392,11 +1392,11 @@ msgstr ""
 "O programa non puido crear unha conexión co daemon indexador.  Asegúrese de "
 "que está en execución."
 
-#: ../gtk/gtkfilechooserdefault.c:9174
+#: ../gtk/gtkfilechooserdefault.c:9175
 msgid "Could not send the search request"
 msgstr "Non foi posíbel enviar a solicitude de busca"
 
-#: ../gtk/gtkfilechooserdefault.c:9775
+#: ../gtk/gtkfilechooserdefault.c:9776
 #, c-format
 msgid "Could not mount %s"
 msgstr "Non foi posíbel montar %s"
@@ -1469,32 +1469,35 @@ msgstr "A ruta non existe"
 msgid "File System"
 msgstr "Sistema de ficheiros"
 
-#: ../gtk/gtkfontbutton.c:152 ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "Escolla un tipo de letra"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Escolla un tipo de letra"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "Tipo de letra"
 
-#: ../gtk/gtkfontchooser.c:118
+#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "Selección do tipo de letra"
+
+#: ../gtk/gtkfontchooserwidget.c:118
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Non hai ningún tipo de letra que coincida coa túa busca. Revise o criterio "
 "de busca e ténteo de novo."
 
-#: ../gtk/gtkfontchooser.c:667
+#: ../gtk/gtkfontchooserwidget.c:642
 msgid "Search font name"
 msgstr "Buscar nome de tipo de letra"
 
-#: ../gtk/gtkfontchooserdialog.c:147 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "Selección do tipo de letra"
+#: ../gtk/gtkfontchooserwidget.c:911
+msgid "Font Family"
+msgstr "Familia do tipo de letra"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
