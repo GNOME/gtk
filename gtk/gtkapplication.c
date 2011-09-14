@@ -30,7 +30,6 @@
 #include "gtkapplication.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
-#include "gtkmain.h"
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
@@ -101,18 +100,6 @@ gtk_application_startup (GApplication *application)
     ->startup (application);
 
   gtk_init (0, 0);
-}
-
-static void
-gtk_application_quit_mainloop (GApplication *application)
-{
-  gtk_main_quit ();
-}
-
-static void
-gtk_application_run_mainloop (GApplication *application)
-{
-  gtk_main ();
 }
 
 static void
@@ -207,9 +194,6 @@ gtk_application_class_init (GtkApplicationClass *class)
   application_class->before_emit = gtk_application_before_emit;
   application_class->after_emit = gtk_application_after_emit;
   application_class->startup = gtk_application_startup;
-
-  application_class->quit_mainloop = gtk_application_quit_mainloop;
-  application_class->run_mainloop = gtk_application_run_mainloop;
 
   class->window_added = gtk_application_window_added;
   class->window_removed = gtk_application_window_removed;
