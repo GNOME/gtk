@@ -1683,9 +1683,7 @@ gtk_icon_view_draw (GtkWidget *widget,
 
   cairo_restore (cr);
 
-  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->draw (widget, cr);
-
-  return TRUE;
+  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->draw (widget, cr);
 }
 
 static gboolean
