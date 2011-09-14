@@ -82,6 +82,7 @@ struct _GtkIconViewItem
   
   gint row, col;
 
+  guint prelight : 1;
   guint selected : 1;
   guint selected_before_rubberbanding : 1;
 
@@ -134,6 +135,7 @@ struct _GtkIconViewPrivate
   GtkIconViewItem *cursor_item;
 
   GtkIconViewItem *last_single_clicked;
+  GtkIconViewItem *last_prelight;
 
   GtkOrientation item_orientation;
 
@@ -1740,6 +1742,33 @@ gtk_icon_view_motion (GtkWidget      *widget,
       else 
 	remove_scroll_timeout (icon_view);
     }
+  else
+    {
+      GtkIconViewItem *item, *last_prelight_item;
+      GtkCellRenderer *cell = NULL;
+
+      last_prelight_item = icon_view->priv->last_prelight;
+      item = gtk_icon_view_get_item_at_coords (icon_view,
+                                               event->x, event->y,
+                                               FALSE,
+                                               &cell);
+
+      if (item != NULL)
+        {
+          item->prelight = TRUE;
+          gtk_icon_view_queue_draw_item (icon_view, item);
+        }
+
+      if (last_prelight_item != NULL &&
+          last_prelight_item != item)
+        {
+          last_prelight_item->prelight = FALSE;
+          gtk_icon_view_queue_draw_item (icon_view,
+                                         icon_view->priv->last_prelight);
+        }
+
+      icon_view->priv->last_prelight = item;
+    }
   
   return TRUE;
 }
@@ -2947,9 +2976,18 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
       state |= GTK_STATE_FLAG_SELECTED;
       flags |= GTK_CELL_RENDERER_SELECTED;
+    }
 
-      gtk_style_context_set_state (style_context, state);
+  if (item->prelight)
+    {
+      state |= GTK_STATE_FLAG_PRELIGHT;
+      flags |= GTK_CELL_RENDERER_PRELIT;
+    }
 
+  gtk_style_context_set_state (style_context, state);
+
+  if (item->selected)
+    {
       gtk_render_background (style_context, cr,
                              x - icon_view->priv->item_padding,
                              y - icon_view->priv->item_padding,
@@ -3367,6 +3405,9 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
 
   if (item == icon_view->priv->cursor_item)
     icon_view->priv->cursor_item = NULL;
+
+  if (item == icon_view->priv->last_prelight)
+    icon_view->priv->last_prelight = NULL;
 
   if (item->selected)
     emit = TRUE;
@@ -4845,6 +4886,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
       icon_view->priv->anchor_item = NULL;
       icon_view->priv->cursor_item = NULL;
       icon_view->priv->last_single_clicked = NULL;
+      icon_view->priv->last_prelight = NULL;
       icon_view->priv->width = 0;
       icon_view->priv->height = 0;
     }
