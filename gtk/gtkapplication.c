@@ -97,6 +97,9 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
 static void
 gtk_application_startup (GApplication *application)
 {
+  G_APPLICATION_CLASS (gtk_application_parent_class)
+    ->startup (application);
+
   gtk_init (0, 0);
 }
 
