@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-06 04:07+0000\n"
-"PO-Revision-Date: 2011-09-08 20:34+0530\n"
+"POT-Creation-Date: 2011-09-13 15:20+0000\n"
+"PO-Revision-Date: 2011-09-15 22:20+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
 "MIME-Version: 1.0\n"
@@ -601,54 +601,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "ਪਿੱਛੇ ਡੰਡਾ"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "...ਹੋਰ ਐਪਲੀਕੇਸ਼ਨ"
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "ਆਨਲਾਈਨ ਐਪਲੀਕੇਸ਼ਨ ਲੱਭਣ ਲਈ ਫੇਲ੍ਹ ਹੈ"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "ਆਨਲਾਈਨ ਐਪਲੀਕੇਸ਼ਨ ਲੱਭੋ"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ ਚਲਾਈ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "'%s' ਲੱਭਿਆ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ ਲੱਭੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\" ਖੋਲ੍ਹਣ ਲਈ ਐਪਲੀਕੇਸ਼ਨ ਚੁਣੋ ਜੀ"
 
-#: ../gtk/gtkappchooserdialog.c:364 ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\" ਖੋਲ੍ਹਣ ਲਈ ਕੋਈ ਵੀ ਐਪਲੀਕੇਸ਼ਨ ਨਹੀਂ ਹੈ"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "\"%s\" ਫਾਇਲਾਂ ਲਈ ਐਪਲੀਕੇਸ਼ਨ ਚੁਣੋ"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "\"%s\" ਫਾਇਲਾਂ ਖੋਲ੍ਹਣ ਲਈ ਕੋਈ ਐਪਲੀਕੇਸ਼ਨ ਨਹੀਂ ਹੈ"
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -657,32 +657,32 @@ msgstr ""
 "ਲਈ \"ਆਨਲਾਈਨ "
 "ਐਪਲੀਕੇਸ਼ਨ ਲੱਭੋ\" ਨੂੰ ਕਲਿੱਕ ਕਰੋ।"
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "ਸਬੰਧ ਭੁੱਲ ਜਾਓ"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "ਹੋਰ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖੋ"
 
-#: ../gtk/gtkappchooserdialog.c:540 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "ਚੁਣੋ(_S)"
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "ਡਿਫਾਲਟ ਐਪਲੀਕੇਸ਼ਨ"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "ਸਿਫਾਰਸ਼ੀ ਐਪਲੀਕੇਸ਼ਨ"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "ਸਬੰਧਿਤ ਐਪਲੀਕੇਸ਼ਨ"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "ਹੋਰ ਐਪਲੀਕੇਸ਼ਨ"
 
@@ -856,7 +856,6 @@ msgid "Position on the color wheel."
 msgstr "ਰੰਗ ਚੱਕਰ 'ਤੇ ਟਿਕਾਣਾ ਹੈ।"
 
 #: ../gtk/gtkcolorsel.c:454
-#| msgid "_Saturation:"
 msgid "S_aturation:"
 msgstr "ਸੰਤ੍ਰਿਪਤ(_a):"
 
@@ -1108,7 +1107,7 @@ msgstr "ਡੈਸਕਟਾਪ"
 msgid "(None)"
 msgstr "(ਕੋਈ ਨਹੀਂ)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "ਹੋਰ..."
 
@@ -1248,7 +1247,6 @@ msgid "_Visit this file"
 msgstr "ਇਹ ਫਾਇਲ ਵੇਖੋ(_V)"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
-#| msgid "Copy _Location"
 msgid "_Copy file's location"
 msgstr "ਫਾਇਲ ਦਾ ਟਿਕਾਣਾ ਕਾਪੀ ਕਰੋ(_C)"
 
@@ -1395,7 +1393,7 @@ msgstr "%s ਮਾਊਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "ਗਲਤ ਪਾਥ"
@@ -1460,32 +1458,36 @@ msgstr "ਪਾਥ ਮੌਜੂਦ ਨਹੀਂ"
 msgid "File System"
 msgstr "ਫਾਇਲ ਸਿਸਟਮ"
 
-#: ../gtk/gtkfontbutton.c:152 ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "ਇੱਕ ਫੋਂਟ ਚੁਣੋ"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans ੧੨"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "ਇੱਕ ਫੋਂਟ ਚੁਣੋ"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "ਫੋਂਟ"
 
-#: ../gtk/gtkfontchooser.c:118
+#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "ਫੋਂਟ ਚੋਣ"
+
+#: ../gtk/gtkfontchooserwidget.c:118
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "ਤੁਹਾਡੀ ਖੋਜ ਨਾਲ ਮਿਲਦਾ ਕੋਈ ਫੋਂਟ ਨਹੀਂ ਹੈ। ਤੁਸੀਂ ਆਪਣੀ ਖੋਜ ਬਦਲ ਕੇ ਮੁੜ ਕੋਸਿਸ਼ ਕਰ "
 "ਸਕਦੇ ਹੋ।"
 
-#: ../gtk/gtkfontchooser.c:667
+#: ../gtk/gtkfontchooserwidget.c:642
 msgid "Search font name"
 msgstr "ਫੋਂਟ ਨਾਂ ਲੱਭੋ"
 
-#: ../gtk/gtkfontchooserdialog.c:147 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "ਫੋਂਟ ਚੋਣ"
+#: ../gtk/gtkfontchooserwidget.c:911
+#| msgid "_Family:"
+msgid "Font Family"
+msgstr "ਫੋਂਟ ਵਰਗ"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.

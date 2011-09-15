@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-06 04:10+0000\n"
-"PO-Revision-Date: 2011-09-08 20:36+0530\n"
+"POT-Creation-Date: 2011-09-12 19:46+0000\n"
+"PO-Revision-Date: 2011-09-15 22:22+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
 "MIME-Version: 1.0\n"
@@ -606,86 +606,96 @@ msgstr "ਸੱਜੇ ਚਿਣੋ"
 msgid "The padding to insert at the right of the widget."
 msgstr "ਵਿਡਗਿਟ ਦੇ ਸੱਜੇ ਚਿਣ ਦਿਓ"
 
-#: ../gtk/gtkappchooserbutton.c:557
+#: ../gtk/gtkappchooserbutton.c:616
 msgid "Include an 'Other...' item"
 msgstr "'ਹੋਰ...' ਆਈਟਮ ਸਮੇਤ"
 
-#: ../gtk/gtkappchooserbutton.c:558
+#: ../gtk/gtkappchooserbutton.c:617
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
 msgstr ""
 "ਕੀ ਕੰਬੋਬਾਕਸ ਵਿੱਚ ਆਈਟਮ ਸ਼ਾਮਲ ਕਰਨੀ ਹੈ, ਜੋ ਕਿ GtkAppChooserDialog ਚਾਲੂ ਕਰੇ"
 
-#: ../gtk/gtkappchooserbutton.c:570 ../gtk/gtkappchooserdialog.c:722
+#: ../gtk/gtkappchooserbutton.c:633
+#| msgid "Show default app"
+msgid "Show default item"
+msgstr "ਡਿਫਾਲਟ ਆਈਟਮ ਵੇਖਾਓ"
+
+#: ../gtk/gtkappchooserbutton.c:634
+#| msgid "Whether the widget should show the default application"
+msgid "Whether the combobox should show the default application on top"
+msgstr "ਕੀ ਕੰਬੋਬਾਕਸ ਡਿਫਾਲਟ ਐਪਲੀਕੇਸ਼ਨ ਨੂੰ ਸਭ ਤੋਂ ਉੱਤੇ ਵੇਖਾਏ"
+
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
 msgstr "ਹੈਡਿੰਗ"
 
-#: ../gtk/gtkappchooserbutton.c:571 ../gtk/gtkappchooserdialog.c:723
+#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:726
 msgid "The text to show at the top of the dialog"
 msgstr "ਡਾਈਲਾਗ ਦੇ ਉੱਤੇ ਵੇਖਾਉਣ ਲਈ ਟੈਕਸਟ"
 
-#: ../gtk/gtkappchooser.c:61
+#: ../gtk/gtkappchooser.c:75
 msgid "Content type"
 msgstr "ਸਮੱਗਰੀ ਕਿਸਮ"
 
-#: ../gtk/gtkappchooser.c:62
+#: ../gtk/gtkappchooser.c:76
 msgid "The content type used by the open with object"
 msgstr "ਆਬਜੈਕਟ ਨਾਲ ਖੋਲ੍ਹਣ ਲਈ ਵਰਤੀ ਜਾਂਦੀ ਸਮੱਗਰੀ ਕਿਸਮ"
 
-#: ../gtk/gtkappchooserdialog.c:708
+#: ../gtk/gtkappchooserdialog.c:711
 msgid "GFile"
 msgstr "ਜੀਫਾਇਲ"
 
-#: ../gtk/gtkappchooserdialog.c:709
+#: ../gtk/gtkappchooserdialog.c:712
 msgid "The GFile used by the app chooser dialog"
 msgstr "ਫਾਇਲ ਚੋਣਕਾਰ ਡਾਈਲਾਗ ਵਲੋਂ ਵਰਤੀ ਜੀਫਾਇਲ"
 
-#: ../gtk/gtkappchooserwidget.c:1016
+#: ../gtk/gtkappchooserwidget.c:1029
 msgid "Show default app"
 msgstr "ਡਿਫਾਲਟ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖੋ"
 
-#: ../gtk/gtkappchooserwidget.c:1017
+#: ../gtk/gtkappchooserwidget.c:1030
 msgid "Whether the widget should show the default application"
 msgstr "ਕੀ ਵਿਦਜੈੱਟ ਡਿਫਾਲਟ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਏ"
 
-#: ../gtk/gtkappchooserwidget.c:1030
+#: ../gtk/gtkappchooserwidget.c:1044
 msgid "Show recommended apps"
 msgstr "ਸਿਫਾਰਸ਼ੀ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਓ"
 
-#: ../gtk/gtkappchooserwidget.c:1031
+#: ../gtk/gtkappchooserwidget.c:1045
 msgid "Whether the widget should show recommended applications"
 msgstr "ਕੀ ਵਿਦਜੈੱਟ ਸਿਫਾਰਸ਼ੀ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਏ"
 
-#: ../gtk/gtkappchooserwidget.c:1044
+#: ../gtk/gtkappchooserwidget.c:1059
 msgid "Show fallback apps"
 msgstr "ਫਾਲਬੈਕ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਓ"
 
-#: ../gtk/gtkappchooserwidget.c:1045
+#: ../gtk/gtkappchooserwidget.c:1060
 msgid "Whether the widget should show fallback applications"
 msgstr "ਕੀ ਵਿਦਜੈੱਟ ਫਾਲਬੈਕ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਏ"
 
-#: ../gtk/gtkappchooserwidget.c:1057
+#: ../gtk/gtkappchooserwidget.c:1072
 msgid "Show other apps"
 msgstr "ਹੋਰ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਓ"
 
-#: ../gtk/gtkappchooserwidget.c:1058
+#: ../gtk/gtkappchooserwidget.c:1073
 msgid "Whether the widget should show other applications"
 msgstr "ਕੀ ਵਿਦਜੈੱਟ ਹੋਰ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਏ"
 
-#: ../gtk/gtkappchooserwidget.c:1071
+#: ../gtk/gtkappchooserwidget.c:1086
 msgid "Show all apps"
 msgstr "ਸਭ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਓ"
 
-#: ../gtk/gtkappchooserwidget.c:1072
+#: ../gtk/gtkappchooserwidget.c:1087
 msgid "Whether the widget should show all applications"
 msgstr "ਕੀ ਵਿਦਜੈੱਟ ਸਭ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖਾਏ"
 
-#: ../gtk/gtkappchooserwidget.c:1085
+#: ../gtk/gtkappchooserwidget.c:1101
 msgid "Widget's default text"
 msgstr "ਵਿਦਜੈੱਟ ਦਾ ਮੂਲ ਟੈਕਸਟ"
 
-#: ../gtk/gtkappchooserwidget.c:1086
+#: ../gtk/gtkappchooserwidget.c:1102
 msgid "The default text appearing when there are no applications"
 msgstr "ਜਦੋਂ ਕੋਈ ਐਪਲੀਕੇਸ਼ਨ ਨਾ ਹੋਵੇ ਤਾਂ ਵੇਖਾਉਣ ਲਈ ਡਿਫਾਲਟ ਟੈਕਸਟ"
 
@@ -705,7 +715,7 @@ msgstr "ਤੀਰ ਛਾਂ"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "ਤੀਰ ਦੇ ਆਲੇ ਦੁਆਲੇ ਛਾਂ ਵੇਖਾਓ"
 
-#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:986 ../gtk/gtkmenu.c:798
+#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:991 ../gtk/gtkmenu.c:798
 #: ../gtk/gtkmenuitem.c:446
 msgid "Arrow Scaling"
 msgstr "ਤੀਰ ਸਕੇਲਿੰਗ"
@@ -971,7 +981,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "ਜੇਕਰ ਸੈੱਟ ਕੀਤਾ ਤਾਂ, ਲੇਬਲ ਸਟਾਕ ਆਈਟਮ ਨੂੰ ਚੁੱਕੇਗਾ ਨਾ ਕਿ ਉਸ ਨੂੰ ਵੇਖਾਵੇਗਾ"
 
-#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:792
+#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:797
 #: ../gtk/gtkfilechooserbutton.c:426
 msgid "Focus on click"
 msgstr "ਕਲਿੱਕ 'ਤੇ ਫੋਕਸ"
@@ -1448,7 +1458,7 @@ msgstr "ਟੈਕਸਟ ਕਾਲਮ"
 msgid "A column in the data source model to get the strings from"
 msgstr "ਕਾਲਮ ਡੈਟਾ-ਸਰੋਤ ਮਾਡਲ ਵਿੱਚ ਸਤਰਾਂ ਇਸ ਤੋਂ ਪਰਾਪਤ ਕਰੇਗਾ"
 
-#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:864
 msgid "Has Entry"
 msgstr "ਇੰਦਰਾਜ਼ ਹੈ"
 
@@ -1856,7 +1866,7 @@ msgstr ""
 "ਲਈ ਲੋੜੀਦੀ ਥਾਂ ਨਾ "
 "ਹੋਵੇ।"
 
-#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:681
+#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:686
 msgid "Wrap width"
 msgstr "ਚੌੜਾਈ ਨੂੰ ਲੇਪਟੋ"
 
@@ -2055,13 +2065,13 @@ msgstr "ਸੈੱਲ-ਝਲਕ ਮਾਡਲ"
 msgid "The model for cell view"
 msgstr "ਸੈੱਲ ਝਲਕ ਲਈ ਮਾਡਲ"
 
-#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:945
+#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:950
 #: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:768
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
 msgstr "ਸੈੱਲ ਖੇਤਰ"
 
-#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:946
+#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:951
 #: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:769
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
@@ -2230,97 +2240,97 @@ msgstr "ਮੱਦਦ ਬਟਨ"
 msgid "The help button of the dialog."
 msgstr "ਡਾਈਲਾਗ ਲਈ ਮੱਦਦ ਬਟਨ ਹੈ।"
 
-#: ../gtk/gtkcombobox.c:664
+#: ../gtk/gtkcombobox.c:669
 msgid "ComboBox model"
 msgstr "ਕੰਬੋ-ਬਾਕਸ ਮਾਡਲ"
 
-#: ../gtk/gtkcombobox.c:665
+#: ../gtk/gtkcombobox.c:670
 msgid "The model for the combo box"
 msgstr "ਕੰਬੋ-ਬਾਕਸ ਲਈ ਮਾਡਲ"
 
-#: ../gtk/gtkcombobox.c:682
+#: ../gtk/gtkcombobox.c:687
 msgid "Wrap width for laying out the items in a grid"
 msgstr "ਗਰਿੱਡ ਵਿੱਚ ਆਈਟਮਾਂ ਨੂੰ ਲੇਪਟਣ ਦੀ ਚੌੜਾਈ"
 
-#: ../gtk/gtkcombobox.c:704 ../gtk/gtktreemenu.c:383
+#: ../gtk/gtkcombobox.c:709 ../gtk/gtktreemenu.c:383
 msgid "Row span column"
 msgstr "ਕਤਾਰ ਕਾਲਮ ਦਾ ਫਾਸਲਾ"
 
-#: ../gtk/gtkcombobox.c:705 ../gtk/gtktreemenu.c:384
+#: ../gtk/gtkcombobox.c:710 ../gtk/gtktreemenu.c:384
 msgid "TreeModel column containing the row span values"
 msgstr "ਟਰੀਮਾਡਲ ਕਾਲਮ ਵਿੱਚ ਕਤਾਰਾਂ ਦੇ ਵਿੱਚ ਦੂਰੀ ਦਾ ਮੁੱਲ"
 
-#: ../gtk/gtkcombobox.c:726 ../gtk/gtktreemenu.c:404
+#: ../gtk/gtkcombobox.c:731 ../gtk/gtktreemenu.c:404
 msgid "Column span column"
 msgstr "ਕਾਲਮ ਕਾਲਮ ਵਿੱਚ ਦੂਰੀ"
 
-#: ../gtk/gtkcombobox.c:727 ../gtk/gtktreemenu.c:405
+#: ../gtk/gtkcombobox.c:732 ../gtk/gtktreemenu.c:405
 msgid "TreeModel column containing the column span values"
 msgstr "ਟਰੀਮਾਡਲ ਕਾਲਮ ਵਿੱਚ ਕਾਲਮਾਂ ਦੇ ਵਿੱਚ ਦੂਰੀ ਦਾ ਮੁੱਲ"
 
-#: ../gtk/gtkcombobox.c:748
+#: ../gtk/gtkcombobox.c:753
 msgid "Active item"
 msgstr "ਸਰਗਰਮ ਆਈਟਮ"
 
-#: ../gtk/gtkcombobox.c:749
+#: ../gtk/gtkcombobox.c:754
 msgid "The item which is currently active"
 msgstr "ਆਈਟਮ, ਜੋ ਹੁਣ ਸਰਗਰਮ ਹੈ"
 
-#: ../gtk/gtkcombobox.c:768 ../gtk/gtkuimanager.c:479
+#: ../gtk/gtkcombobox.c:773 ../gtk/gtkuimanager.c:479
 msgid "Add tearoffs to menus"
 msgstr "ਵੱਖ-ਕਰਨ ਨੂੰ ਸੂਚੀ ਵਿੱਚ ਜੋੜੋ"
 
-#: ../gtk/gtkcombobox.c:769
+#: ../gtk/gtkcombobox.c:774
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ਕੀ ਲਟਕਣ ਵਾਲੇ ਵੱਖ ਮੇਨੂ ਆਈਟਮਾਂ ਹੋਣ"
 
-#: ../gtk/gtkcombobox.c:784 ../gtk/gtkentry.c:786
+#: ../gtk/gtkcombobox.c:789 ../gtk/gtkentry.c:786
 msgid "Has Frame"
 msgstr "ਫਰੇਮ ਹੈ"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:790
 msgid "Whether the combo box draws a frame around the child"
 msgstr "ਕੀ ਕੰਬੋ-ਬਕਸਾ ਚਾਈਲਡ ਦੁਆਲੇ ਫਰੇਮ ਵੇਖਾਓ"
 
-#: ../gtk/gtkcombobox.c:793
+#: ../gtk/gtkcombobox.c:798
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "ਕੀ ਕੰਬੋ-ਬਕਸ ਫੋਕਸ ਹੋ ਜਾਵੇ, ਜਦੋਂ ਕਿ ਇਹ ਮਾਊਸ ਨਾਲ ਦਬਾਇਆ ਜਾਵੇ"
 
-#: ../gtk/gtkcombobox.c:808 ../gtk/gtkmenu.c:643
+#: ../gtk/gtkcombobox.c:813 ../gtk/gtkmenu.c:643
 msgid "Tearoff Title"
 msgstr "ਟਾਈਟਲ ਨੂੰ ਵੱਖ ਕਰੋ"
 
-#: ../gtk/gtkcombobox.c:809
+#: ../gtk/gtkcombobox.c:814
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "ਜਦੋਂ ਪੋਪਅੱਪ ਵੱਖ ਹੋਵੇ ਤਾਂ ਵਿੰਡੋ ਮੈਨੇਜਰ ਵਲੋਂ ਵੇਖਾਇਆ ਜਾਣ ਵਾਲਾ ਇੱਕ ਟਾਈਟਲ"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:831
 msgid "Popup shown"
 msgstr "ਪੋਪਅੱਪ ਵੇਖਾਉਣਾ"
 
-#: ../gtk/gtkcombobox.c:827
+#: ../gtk/gtkcombobox.c:832
 msgid "Whether the combo's dropdown is shown"
 msgstr "ਕੀ ਕੰਬੋ ਦੀ ਲਟਕਦੀ ਸੂਚੀ ਵੇਖਾਈ ਜਾਵੇ"
 
-#: ../gtk/gtkcombobox.c:843
+#: ../gtk/gtkcombobox.c:848
 msgid "Button Sensitivity"
 msgstr "ਬਟਨ ਸੰਵਦੇਨਸ਼ੀਲਤਾ"
 
-#: ../gtk/gtkcombobox.c:844
+#: ../gtk/gtkcombobox.c:849
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "ਜਦੋਂ ਮਾਡਲ ਖਾਲੀ ਹੋਵੇ ਤਾਂ ਲਟਕਦੇ ਬਟਨ ਸੰਵੇਦਨਸ਼ੀਲ ਹੋਣ"
 
-#: ../gtk/gtkcombobox.c:860
+#: ../gtk/gtkcombobox.c:865
 msgid "Whether combo box has an entry"
 msgstr "ਕੀ ਕੰਬੋ-ਬਕਸਾ ਦੀ ਐਂਟਰੀ ਹੈ"
 
-#: ../gtk/gtkcombobox.c:875
+#: ../gtk/gtkcombobox.c:880
 msgid "Entry Text Column"
 msgstr "ਐਂਟਰੀ ਟੈਕਸਟ ਕਾਲਮ"
 
-#: ../gtk/gtkcombobox.c:876
+#: ../gtk/gtkcombobox.c:881
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -2329,61 +2339,61 @@ msgstr ""
 "#GtkComboBox:"
 "has-entry = %TRUE ਨਾਲ ਬਣਾਇਆ ਹੋਵੇ"
 
-#: ../gtk/gtkcombobox.c:893
+#: ../gtk/gtkcombobox.c:898
 msgid "ID Column"
 msgstr "ID ਕਾਲਮ"
 
-#: ../gtk/gtkcombobox.c:894
+#: ../gtk/gtkcombobox.c:899
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
 msgstr "ਕੰਬੋਬਾਕਸ ਦੇ ਮਾਡਲ ਵਿੱਚ ਕਾਲਮ, ਜੋ ਕਿ ਮਾਡਲ ਵਿੱਚ ਮੁੱਲ ਲਈ ਲਾਈਨ ID ਦਿੰਦਾ ਹੈ"
 
-#: ../gtk/gtkcombobox.c:909
+#: ../gtk/gtkcombobox.c:914
 msgid "Active id"
 msgstr "ਸਰਗਰਮ id"
 
-#: ../gtk/gtkcombobox.c:910
+#: ../gtk/gtkcombobox.c:915
 msgid "The value of the id column for the active row"
 msgstr "ਐਕਟਿਵ ਕਤਾਰ ਲਈ id ਕਾਲਮ ਦਾ ਮੁੱਲ"
 
-#: ../gtk/gtkcombobox.c:925
+#: ../gtk/gtkcombobox.c:930
 msgid "Popup Fixed Width"
 msgstr "ਪੋਪਅੱਪ ਸਥਿਰ ਚੌੜਾਈ"
 
-#: ../gtk/gtkcombobox.c:926
+#: ../gtk/gtkcombobox.c:931
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
 msgstr "ਕੀ ਪੋਪਅੱਪ ਦੀ ਚੌੜਾਈ ਕੰਬੋ ਬਾਕਸ ਦੀ ਦਿੱਤੀ ਗਈ ਚੌੜਾਈ ਦੇ ਮੁਤਾਬਕ ਸਥਿਰ ਹੋਵੇ"
 
-#: ../gtk/gtkcombobox.c:952
+#: ../gtk/gtkcombobox.c:957
 msgid "Appears as list"
 msgstr "ਸੂਚੀ ਦੀ ਦਿੱਸੇ"
 
-#: ../gtk/gtkcombobox.c:953
+#: ../gtk/gtkcombobox.c:958
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "ਕੀ ਲਟਕਣ ਹੇਠਾਂ-ਖੁੱਲ੍ਹਣ ਵਾਲਾ ਮੇਨੂ ਦੀ ਤਰਾਂ ਨਾ ਹੋਕੇ ਇੱਕ ਲਿਸਟ ਵਾਂਗ ਦਿੱਸੇ"
 
-#: ../gtk/gtkcombobox.c:969
+#: ../gtk/gtkcombobox.c:974
 msgid "Arrow Size"
 msgstr "ਤੀਰ ਆਕਾਰ"
 
-#: ../gtk/gtkcombobox.c:970
+#: ../gtk/gtkcombobox.c:975
 msgid "The minimum size of the arrow in the combo box"
 msgstr "ਕੰਬੋ ਬਾਕਸ ਵਿੱਚ ਤੀਰ ਦਾ ਘੱਟੋ-ਘੱਟ ਆਕਾਰ ਹੈ।"
 
-#: ../gtk/gtkcombobox.c:987
+#: ../gtk/gtkcombobox.c:992
 msgid "The amount of space used by the arrow"
 msgstr "ਤੀਰ ਵਲੋਂ ਵਰਤੀ ਗਈ ਥਾਂ ਦੀ ਮਾਤਰਾ"
 
-#: ../gtk/gtkcombobox.c:1002 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
+#: ../gtk/gtkcombobox.c:1007 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
 #: ../gtk/gtkmenubar.c:218 ../gtk/gtkstatusbar.c:182 ../gtk/gtktoolbar.c:614
 #: ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "ਛਾਂ ਕਿਸਮ"
 
-#: ../gtk/gtkcombobox.c:1003
+#: ../gtk/gtkcombobox.c:1008
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "ਕੰਬੋ ਬਾਕਸ ਦੁਆਲੇ ਕਿਸ ਕਿਸਮ ਦੀ ਛਾਂ ਖਿੱਚੀ ਜਾਵੇ"
 
@@ -3152,12 +3162,10 @@ msgid "The text to display in order to demonstrate the selected font"
 msgstr "ਚੁਣੇ ਫੋਟਾਂ ਲਈ ਝਲਕ ਵੇਖਾਉਣ ਲਈ ਟੈਕਸਟ"
 
 #: ../gtk/gtkfontchooser.c:201
-#| msgid "Preview text"
 msgid "Show preview text entry"
 msgstr "ਟੈਕਸਟ ਐਂਟਰੀ ਝਲਕ ਵੇਖੋ"
 
 #: ../gtk/gtkfontchooser.c:202
-#| msgid "Whether the switch is on or off"
 msgid "Whether the preview text entry is shown or not"
 msgstr "ਕੀ ਟੈਕਸਟ ਐਂਟਰੀ ਝਲਕ ਵੇਖਾਉਣੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
