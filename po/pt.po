@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-05 22:37+0100\n"
+"POT-Creation-Date: 2011-09-16 00:45+0100\n"
 "PO-Revision-Date: 2011-09-05 22:45+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -598,54 +598,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Barra Atrás"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "Outra aplicação..."
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "Falha ao procurar aplicações online"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "Procurar aplicações online"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "Incapaz de executar a aplicação"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "Incapaz de encontrar '%s'"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "Incapaz de encontrar a aplicação"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Seleccione uma aplicação para abrir \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:364 ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Nenhuma aplicação disponível para abrir \"%s\""
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Seleccione uma aplicação para os ficheiros \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Nenhuma aplicação disponível para abrir os ficheiros \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -653,32 +653,32 @@ msgstr ""
 "Clique em \"Apresentar outras aplicações\" para mais opções ou \"Procurar "
 "aplicações online\" para instalar uma nova aplicação"
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "Esquecer a associação"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "Apresentar outras aplicações"
 
-#: ../gtk/gtkappchooserdialog.c:540 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "_Seleccionar"
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "Aplicação por Omissão"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "Aplicações Recomendadas"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "Aplicações Relacionadas"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "Outras Aplicações"
 
@@ -1104,7 +1104,7 @@ msgstr "Ambiente de Trabalho"
 msgid "(None)"
 msgstr "(Nenhum)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Outro..."
 
@@ -1363,11 +1363,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Substituir"
 
-#: ../gtk/gtkfilechooserdefault.c:9159
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "Could not start the search process"
 msgstr "Incapaz de iniciar o processo de procura"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9161
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1375,11 +1375,11 @@ msgstr ""
 "A aplicação foi incapaz de criar uma ligação ao daemon de indexação. "
 "Certifique-se de que este se encontra em execução."
 
-#: ../gtk/gtkfilechooserdefault.c:9174
+#: ../gtk/gtkfilechooserdefault.c:9175
 msgid "Could not send the search request"
 msgstr "Incapaz de enviar o pedido de procura"
 
-#: ../gtk/gtkfilechooserdefault.c:9775
+#: ../gtk/gtkfilechooserdefault.c:9776
 #, c-format
 msgid "Could not mount %s"
 msgstr "Incapaz de montar %s"
@@ -1387,7 +1387,7 @@ msgstr "Incapaz de montar %s"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Caminho inválido"
@@ -1452,30 +1452,35 @@ msgstr "Caminho não existe"
 msgid "File System"
 msgstr "Sistema de Ficheiros"
 
-#: ../gtk/gtkfontbutton.c:152 ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "Seleccione uma Fonte"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Seleccione uma Fonte"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "Fonte"
 
-#: ../gtk/gtkfontchooser.c:118
-msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "Nenhuma fonte correspondeu à pesquisa. Pode rever a pesquisa e tentar novamente."
+#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "Selecção de Fonte"
 
-#: ../gtk/gtkfontchooser.c:667
+#: ../gtk/gtkfontchooserwidget.c:118
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr ""
+"Nenhuma fonte correspondeu à pesquisa. Pode rever a pesquisa e tentar "
+"novamente."
+
+#: ../gtk/gtkfontchooserwidget.c:642
 msgid "Search font name"
 msgstr "Procurar o nome da fonte"
 
-#: ../gtk/gtkfontchooserdialog.c:147 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "Selecção de Fonte"
+#: ../gtk/gtkfontchooserwidget.c:911
+msgid "Font Family"
+msgstr "Família da Fonte"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
