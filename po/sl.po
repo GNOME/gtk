@@ -11,14 +11,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-07-19 11:22+0000\n"
-"PO-Revision-Date: 2011-09-03 09:51+0100\n"
-"Last-Translator: Andrej Žnidaršič <andrej.znidarsic@gmail.com>\n"
+"POT-Creation-Date: 2011-09-13 15:20+0000\n"
+"PO-Revision-Date: 2011-09-15 22:29+0100\n"
+"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 "X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -483,55 +483,55 @@ msgstr "Preklaplja med stanji 'vključeno' in 'izključeno'"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:103
+#: ../gtk/gtkaboutdialog.c:106
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>"
 msgstr "Ta program je objavljen BREZ VSAKRŠNE GARANCIJE; za več podrobnosti obiščite <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:345
+#: ../gtk/gtkaboutdialog.c:348
 msgid "License"
 msgstr "Dovoljenje"
 
-#: ../gtk/gtkaboutdialog.c:346
+#: ../gtk/gtkaboutdialog.c:349
 msgid "The license of the program"
 msgstr "Dovoljenje programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:738
+#: ../gtk/gtkaboutdialog.c:741
 msgid "C_redits"
 msgstr "_Zasluge"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:751
+#: ../gtk/gtkaboutdialog.c:754
 msgid "_License"
 msgstr "_Dovoljenje"
 
-#: ../gtk/gtkaboutdialog.c:956
+#: ../gtk/gtkaboutdialog.c:959
 msgid "Could not show link"
 msgstr "Povezave ni mogoče pokazati"
 
-#: ../gtk/gtkaboutdialog.c:993
+#: ../gtk/gtkaboutdialog.c:996
 msgid "Homepage"
 msgstr "Domača stran"
 
-#: ../gtk/gtkaboutdialog.c:1047
+#: ../gtk/gtkaboutdialog.c:1050
 #, c-format
 msgid "About %s"
 msgstr "O programu %s"
 
-#: ../gtk/gtkaboutdialog.c:2371
+#: ../gtk/gtkaboutdialog.c:2376
 msgid "Created by"
 msgstr "Ustvarili:"
 
-#: ../gtk/gtkaboutdialog.c:2374
+#: ../gtk/gtkaboutdialog.c:2379
 msgid "Documented by"
 msgstr "Dokumentacija:"
 
-#: ../gtk/gtkaboutdialog.c:2384
+#: ../gtk/gtkaboutdialog.c:2389
 msgid "Translated by"
 msgstr "Prevod:"
 
-#: ../gtk/gtkaboutdialog.c:2389
+#: ../gtk/gtkaboutdialog.c:2394
 msgid "Artwork by"
 msgstr "Grafična podoba:"
 
@@ -570,7 +570,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:789
+#: ../gtk/gtkaccellabel.c:805
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -580,7 +580,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:802
+#: ../gtk/gtkaccellabel.c:818
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hiper"
@@ -590,98 +590,100 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:816
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:832
+#: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Preslednica"
 
-#: ../gtk/gtkaccellabel.c:835
+#: ../gtk/gtkaccellabel.c:851
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Leva poševnica"
 
-#: ../gtk/gtkappchooserbutton.c:268
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "Drug program ..."
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "Iskanje programov na spletu je spodletelo"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "Najdi programe na spletu"
 
-#: ../gtk/gtkappchooserdialog.c:221
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "Programa ni mogoče zagnati"
 
-#: ../gtk/gtkappchooserdialog.c:234
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "'%s' ni mogoče najti"
 
-#: ../gtk/gtkappchooserdialog.c:237
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "Programa ni mogoče najti"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:355
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Izberite program za odpiranje datotek \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:356
-#: ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367
+#: ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Za odpiranje datotek \"%s\" ni razpoložljivih programov"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:362
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Izberite program za odpiranje datotek \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:364
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Za odpiranje datotek \"%s\" ni razpoložljivih programov"
 
-#: ../gtk/gtkappchooserdialog.c:380
+#: ../gtk/gtkappchooserdialog.c:391
 msgid "Click \"Show other applications\", for more options, or \"Find applications online\" to install a new application"
 msgstr "Za več možnosti izberite \"Pokaži druge programe\", za namestitev novih pa \"Najdi programe na spletu\""
 
-#: ../gtk/gtkappchooserdialog.c:450
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "Pozabi povezavo"
 
-#: ../gtk/gtkappchooserdialog.c:515
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "Pokaži druge programe"
 
-#: ../gtk/gtkappchooserdialog.c:533
+#: ../gtk/gtkappchooserdialog.c:543
+#: ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "_Izberi"
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "Privzeti program"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "Priporočeni programi"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "Sorodni programi"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "Drugi programi"
 
@@ -836,108 +838,109 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Izberite barvo"
 
-#: ../gtk/gtkcolorsel.c:416
+#: ../gtk/gtkcolorsel.c:415
 msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
 msgstr "Iz zunanjega obroča izberite željeno barvo. Izberite temnost ali svetlost te barve z uporabno notranjega trikotnika."
 
-#: ../gtk/gtkcolorsel.c:442
+#: ../gtk/gtkcolorsel.c:441
 msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
 msgstr "Kliknite na kapalko, nato kjerkoli na zaslon za izbiro tiste barve."
 
-#: ../gtk/gtkcolorsel.c:452
+#: ../gtk/gtkcolorsel.c:451
 msgid "_Hue:"
 msgstr "_Odtenek:"
 
-#: ../gtk/gtkcolorsel.c:453
+#: ../gtk/gtkcolorsel.c:452
 msgid "Position on the color wheel."
 msgstr "Položaj na barvnem krogu."
 
-#: ../gtk/gtkcolorsel.c:455
-msgid "_Saturation:"
+#: ../gtk/gtkcolorsel.c:454
+#| msgid "_Saturation:"
+msgid "S_aturation:"
 msgstr "_Nasičenost:"
 
-#: ../gtk/gtkcolorsel.c:456
+#: ../gtk/gtkcolorsel.c:455
 msgid "Intensity of the color."
 msgstr "Jakost barve."
 
-#: ../gtk/gtkcolorsel.c:457
+#: ../gtk/gtkcolorsel.c:456
 msgid "_Value:"
 msgstr "_Vrednost:"
 
-#: ../gtk/gtkcolorsel.c:458
+#: ../gtk/gtkcolorsel.c:457
 msgid "Brightness of the color."
 msgstr "Svetlost barve."
 
-#: ../gtk/gtkcolorsel.c:459
+#: ../gtk/gtkcolorsel.c:458
 msgid "_Red:"
 msgstr "_Rdeča:"
 
-#: ../gtk/gtkcolorsel.c:460
+#: ../gtk/gtkcolorsel.c:459
 msgid "Amount of red light in the color."
 msgstr "Količina rdeče luči v barvi."
 
-#: ../gtk/gtkcolorsel.c:461
+#: ../gtk/gtkcolorsel.c:460
 msgid "_Green:"
 msgstr "_Zelena:"
 
-#: ../gtk/gtkcolorsel.c:462
+#: ../gtk/gtkcolorsel.c:461
 msgid "Amount of green light in the color."
 msgstr "Količina zelene luči v barvi."
 
-#: ../gtk/gtkcolorsel.c:463
+#: ../gtk/gtkcolorsel.c:462
 msgid "_Blue:"
 msgstr "_Modra:"
 
-#: ../gtk/gtkcolorsel.c:464
+#: ../gtk/gtkcolorsel.c:463
 msgid "Amount of blue light in the color."
 msgstr "Količina modre luči v barvi."
 
-#: ../gtk/gtkcolorsel.c:467
+#: ../gtk/gtkcolorsel.c:466
 msgid "Op_acity:"
 msgstr "_Prosojnost:"
 
-#: ../gtk/gtkcolorsel.c:475
-#: ../gtk/gtkcolorsel.c:485
+#: ../gtk/gtkcolorsel.c:474
+#: ../gtk/gtkcolorsel.c:484
 msgid "Transparency of the color."
 msgstr "Prosojnost barve."
 
-#: ../gtk/gtkcolorsel.c:492
+#: ../gtk/gtkcolorsel.c:491
 msgid "Color _name:"
 msgstr "_Ime barve:"
 
-#: ../gtk/gtkcolorsel.c:507
+#: ../gtk/gtkcolorsel.c:506
 msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
 msgstr "V tem vnosu lahko vpišete šestnajstiško vrednost barve (kot v HTML) ali enostavno ime barve (na primer 'orange')."
 
-#: ../gtk/gtkcolorsel.c:539
+#: ../gtk/gtkcolorsel.c:538
 msgid "_Palette:"
 msgstr "_Paleta:"
 
-#: ../gtk/gtkcolorsel.c:569
+#: ../gtk/gtkcolorsel.c:568
 msgid "Color Wheel"
 msgstr "Barvni krog"
 
-#: ../gtk/gtkcolorsel.c:1042
+#: ../gtk/gtkcolorsel.c:1041
 msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
 msgstr "Predhodno izbrana barva za primerjavo s trenutno izbrano barvo. To barvo lahko povlečete do vnosa v paleti ali jo izberete barvo kot trenutno z vlečenjem na drug vzorec."
 
-#: ../gtk/gtkcolorsel.c:1048
+#: ../gtk/gtkcolorsel.c:1047
 msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
 msgstr "Trenutno izbrana barva. To barvo lahko povlečete do vnosa v paleti za kasnejšo uporabo."
 
-#: ../gtk/gtkcolorsel.c:1054
+#: ../gtk/gtkcolorsel.c:1053
 msgid "The previously-selected color, for comparison to the color you're selecting now."
 msgstr "Predhodno izbrana barva za primerjavo s trenutno izbrano barvo."
 
-#: ../gtk/gtkcolorsel.c:1058
+#: ../gtk/gtkcolorsel.c:1057
 msgid "The color you've chosen."
 msgstr "Izbrana barva."
 
-#: ../gtk/gtkcolorsel.c:1460
+#: ../gtk/gtkcolorsel.c:1459
 msgid "_Save color here"
 msgstr "_Shrani barvo sem"
 
-#: ../gtk/gtkcolorsel.c:1665
+#: ../gtk/gtkcolorsel.c:1664
 msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr "Kliknite na ta vnos palete, da postane trenutna barva. Za spremembo tega vnosa potegnite sem drugo barvo ali kliknite z desnim gumbom in izberite \"Shrani barvo sem.\""
 
@@ -957,17 +960,17 @@ msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:372
-#: ../gtk/gtkprintunixdialog.c:3325
+#: ../gtk/gtkprintunixdialog.c:3324
 msgid "Manage Custom Sizes"
 msgstr "Upravljanje poljubnih velikosti"
 
 #: ../gtk/gtkcustompaperunixdialog.c:533
-#: ../gtk/gtkpagesetupunixdialog.c:783
+#: ../gtk/gtkpagesetupunixdialog.c:780
 msgid "inch"
 msgstr "palec"
 
 #: ../gtk/gtkcustompaperunixdialog.c:535
-#: ../gtk/gtkpagesetupunixdialog.c:781
+#: ../gtk/gtkpagesetupunixdialog.c:778
 msgid "mm"
 msgstr "mm"
 
@@ -1012,25 +1015,25 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Robovi papirja"
 
-#: ../gtk/gtkentry.c:8949
+#: ../gtk/gtkentry.c:8957
 #: ../gtk/gtktextview.c:8277
 msgid "Input _Methods"
 msgstr "Načini _vnosa"
 
-#: ../gtk/gtkentry.c:8963
+#: ../gtk/gtkentry.c:8971
 #: ../gtk/gtktextview.c:8291
 msgid "_Insert Unicode Control Character"
 msgstr "_Vstavi nadzorni znak Unicode"
 
-#: ../gtk/gtkentry.c:10434
+#: ../gtk/gtkentry.c:10448
 msgid "Caps Lock and Num Lock are on"
 msgstr "Tipki Caps Lock in Num Lock sta vključeni"
 
-#: ../gtk/gtkentry.c:10436
+#: ../gtk/gtkentry.c:10450
 msgid "Num Lock is on"
 msgstr "Tipka Num Lock je vključena"
 
-#: ../gtk/gtkentry.c:10438
+#: ../gtk/gtkentry.c:10452
 msgid "Caps Lock is on"
 msgstr "Tipka Caps Lock je vključena"
 
@@ -1080,7 +1083,7 @@ msgid "Select a File"
 msgstr "Izberite datoteko"
 
 #: ../gtk/gtkfilechooserbutton.c:106
-#: ../gtk/gtkfilechooserdefault.c:1811
+#: ../gtk/gtkfilechooserdefault.c:1817
 msgid "Desktop"
 msgstr "Namizje"
 
@@ -1088,52 +1091,52 @@ msgstr "Namizje"
 msgid "(None)"
 msgstr "(Brez)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Drugo ..."
 
-#: ../gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:153
 msgid "Type name of new folder"
 msgstr "Vnesite ime nove mape"
 
-#: ../gtk/gtkfilechooserdefault.c:962
+#: ../gtk/gtkfilechooserdefault.c:968
 msgid "Could not retrieve information about the file"
 msgstr "Podatkov o datoteki ni mogoče pridobiti"
 
-#: ../gtk/gtkfilechooserdefault.c:973
+#: ../gtk/gtkfilechooserdefault.c:979
 msgid "Could not add a bookmark"
 msgstr "Zaznamka ni mogoče dodati"
 
-#: ../gtk/gtkfilechooserdefault.c:984
+#: ../gtk/gtkfilechooserdefault.c:990
 msgid "Could not remove bookmark"
 msgstr "Zaznamka ni mogoče odstraniti"
 
-#: ../gtk/gtkfilechooserdefault.c:995
+#: ../gtk/gtkfilechooserdefault.c:1001
 msgid "The folder could not be created"
 msgstr "Mape ni mogoče ustvariti"
 
-#: ../gtk/gtkfilechooserdefault.c:1008
+#: ../gtk/gtkfilechooserdefault.c:1014
 msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
 msgstr "Mape ni mogoče ustvariti, saj že obstaja datoteka z enakim imenom. Uporabite drugo ime ali pa najprej preimenujte datoteko."
 
-#: ../gtk/gtkfilechooserdefault.c:1022
+#: ../gtk/gtkfilechooserdefault.c:1028
 msgid "You need to choose a valid filename."
 msgstr "Izbrati morate veljavno ime datoteke."
 
-#: ../gtk/gtkfilechooserdefault.c:1025
+#: ../gtk/gtkfilechooserdefault.c:1031
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Datoteke pod %s ni mogoče ustvariti, ker ni mapa"
 
-#: ../gtk/gtkfilechooserdefault.c:1037
+#: ../gtk/gtkfilechooserdefault.c:1043
 msgid "You may only select folders.  The item that you selected is not a folder; try using a different item."
 msgstr "Izbrati je mogoče le mape, kar pa izbran predmet ni. Izberite drug predmet."
 
-#: ../gtk/gtkfilechooserdefault.c:1047
+#: ../gtk/gtkfilechooserdefault.c:1053
 msgid "Invalid file name"
 msgstr "Neveljavno ime datoteke"
 
-#: ../gtk/gtkfilechooserdefault.c:1057
+#: ../gtk/gtkfilechooserdefault.c:1063
 msgid "The folder contents could not be displayed"
 msgstr "Vsebine mape ni mogoče prikazati"
 
@@ -1141,216 +1144,225 @@ msgstr "Vsebine mape ni mogoče prikazati"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1583
+#: ../gtk/gtkfilechooserdefault.c:1589
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1732
+#: ../gtk/gtkfilechooserdefault.c:1738
 msgid "Search"
 msgstr "Poišči"
 
-#: ../gtk/gtkfilechooserdefault.c:1756
-#: ../gtk/gtkfilechooserdefault.c:4873
+#: ../gtk/gtkfilechooserdefault.c:1762
+#: ../gtk/gtkfilechooserdefault.c:4991
 msgid "Recently Used"
 msgstr "Nedavno uporabljeno"
 
-#: ../gtk/gtkfilechooserdefault.c:2355
+#: ../gtk/gtkfilechooserdefault.c:2361
 msgid "Select which types of files are shown"
 msgstr "Izberite, katere vrste datotek naj bodo prikazane"
 
-#: ../gtk/gtkfilechooserdefault.c:2714
+#: ../gtk/gtkfilechooserdefault.c:2720
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Dodaj mapo '%s' med zaznamke"
 
-#: ../gtk/gtkfilechooserdefault.c:2758
+#: ../gtk/gtkfilechooserdefault.c:2764
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Dodaj trenutno mapo med zaznamke"
 
-#: ../gtk/gtkfilechooserdefault.c:2760
+#: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Dodaj izbrane mape med zaznamke"
 
-#: ../gtk/gtkfilechooserdefault.c:2798
+#: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstrani zaznamek '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2800
+#: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Zaznamka '%s' ni mogoče odstraniti"
 
-#: ../gtk/gtkfilechooserdefault.c:2807
-#: ../gtk/gtkfilechooserdefault.c:3692
+#: ../gtk/gtkfilechooserdefault.c:2813
+#: ../gtk/gtkfilechooserdefault.c:3698
 msgid "Remove the selected bookmark"
 msgstr "Odstrani izbrani zaznamek"
 
-#: ../gtk/gtkfilechooserdefault.c:3371
+#: ../gtk/gtkfilechooserdefault.c:3377
 msgid "Remove"
 msgstr "Odstrani"
 
-#: ../gtk/gtkfilechooserdefault.c:3380
+#: ../gtk/gtkfilechooserdefault.c:3386
 msgid "Rename..."
 msgstr "Preimenuj ..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3544
+#: ../gtk/gtkfilechooserdefault.c:3550
 msgid "Places"
 msgstr "Mesta"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3601
+#: ../gtk/gtkfilechooserdefault.c:3607
 msgid "_Places"
 msgstr "_Mesta"
 
-#: ../gtk/gtkfilechooserdefault.c:3680
+#: ../gtk/gtkfilechooserdefault.c:3686
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dodaj izbrano mapo med zaznamke"
 
-#: ../gtk/gtkfilechooserdefault.c:3827
+#: ../gtk/gtkfilechooserdefault.c:3946
 msgid "Could not select file"
 msgstr "Datoteke ni mogoče izbrati"
 
-#: ../gtk/gtkfilechooserdefault.c:4000
+#: ../gtk/gtkfilechooserdefault.c:4171
+msgid "_Visit this file"
+msgstr "O_bišči to datoteko"
+
+#: ../gtk/gtkfilechooserdefault.c:4174
+#| msgid "Copy _Location"
+msgid "_Copy file's location"
+msgstr "Kopiraj _mesto datoteke"
+
+#: ../gtk/gtkfilechooserdefault.c:4177
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj med zaznamke"
 
-#: ../gtk/gtkfilechooserdefault.c:4013
+#: ../gtk/gtkfilechooserdefault.c:4184
 msgid "Show _Hidden Files"
 msgstr "Pokaži _skrite datoteke"
 
-#: ../gtk/gtkfilechooserdefault.c:4020
+#: ../gtk/gtkfilechooserdefault.c:4187
 msgid "Show _Size Column"
 msgstr "Pokaži stolpec _velikosti"
 
-#: ../gtk/gtkfilechooserdefault.c:4245
+#: ../gtk/gtkfilechooserdefault.c:4412
 msgid "Files"
 msgstr "Datoteke"
 
-#: ../gtk/gtkfilechooserdefault.c:4296
+#: ../gtk/gtkfilechooserdefault.c:4463
 msgid "Name"
 msgstr "Ime"
 
-#: ../gtk/gtkfilechooserdefault.c:4319
+#: ../gtk/gtkfilechooserdefault.c:4486
 msgid "Size"
 msgstr "Velikost"
 
-#: ../gtk/gtkfilechooserdefault.c:4333
+#: ../gtk/gtkfilechooserdefault.c:4500
 msgid "Modified"
 msgstr "Spremenjeno"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4414
+#: ../gtk/gtkfilechooserdefault.c:4595
 #: ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: ../gtk/gtkfilechooserdefault.c:4711
+#: ../gtk/gtkfilechooserdefault.c:4829
 msgid "Type a file name"
 msgstr "Vnesite ime datoteke"
 
-#: ../gtk/gtkfilechooserdefault.c:4758
-#: ../gtk/gtkfilechooserdefault.c:4769
+#: ../gtk/gtkfilechooserdefault.c:4876
+#: ../gtk/gtkfilechooserdefault.c:4887
 msgid "Please select a folder below"
 msgstr "Izberite mapo s seznama map"
 
-#: ../gtk/gtkfilechooserdefault.c:4764
+#: ../gtk/gtkfilechooserdefault.c:4882
 msgid "Please type a file name"
 msgstr "Vnesite ime datoteke"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4835
+#: ../gtk/gtkfilechooserdefault.c:4953
 msgid "Create Fo_lder"
 msgstr "Ustvari _mapo"
 
-#: ../gtk/gtkfilechooserdefault.c:4883
+#: ../gtk/gtkfilechooserdefault.c:5001
 msgid "Search:"
 msgstr "Poišči:"
 
-#: ../gtk/gtkfilechooserdefault.c:4930
+#: ../gtk/gtkfilechooserdefault.c:5052
 msgid "_Location:"
 msgstr "_Mesto:"
 
-#: ../gtk/gtkfilechooserdefault.c:5247
+#: ../gtk/gtkfilechooserdefault.c:5503
 msgid "Save in _folder:"
 msgstr "_Shrani v mapo:"
 
-#: ../gtk/gtkfilechooserdefault.c:5249
+#: ../gtk/gtkfilechooserdefault.c:5505
 msgid "Create in _folder:"
 msgstr "_Ustvari v mapi:"
 
-#: ../gtk/gtkfilechooserdefault.c:6343
+#: ../gtk/gtkfilechooserdefault.c:6599
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Vsebine %s ni mogoče prebrati"
 
-#: ../gtk/gtkfilechooserdefault.c:6347
+#: ../gtk/gtkfilechooserdefault.c:6603
 msgid "Could not read the contents of the folder"
 msgstr "Vsebine mape ni mogoče prebrati"
 
-#: ../gtk/gtkfilechooserdefault.c:6440
-#: ../gtk/gtkfilechooserdefault.c:6508
-#: ../gtk/gtkfilechooserdefault.c:6660
+#: ../gtk/gtkfilechooserdefault.c:6696
+#: ../gtk/gtkfilechooserdefault.c:6764
+#: ../gtk/gtkfilechooserdefault.c:6916
 msgid "Unknown"
 msgstr "Neznano"
 
-#: ../gtk/gtkfilechooserdefault.c:6455
+#: ../gtk/gtkfilechooserdefault.c:6711
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6457
+#: ../gtk/gtkfilechooserdefault.c:6713
 msgid "Yesterday at %H:%M"
 msgstr "Včeraj ob %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7142
+#: ../gtk/gtkfilechooserdefault.c:7388
 msgid "Cannot change to folder because it is not local"
 msgstr "Mape ni mogoče spremeniti, ker ni krajevna"
 
-#: ../gtk/gtkfilechooserdefault.c:7742
-#: ../gtk/gtkfilechooserdefault.c:7763
+#: ../gtk/gtkfilechooserdefault.c:7988
+#: ../gtk/gtkfilechooserdefault.c:8009
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Bližnjica %s že obstaja"
 
-#: ../gtk/gtkfilechooserdefault.c:7853
+#: ../gtk/gtkfilechooserdefault.c:8099
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Bližnjica %s ne obstaja"
 
-#: ../gtk/gtkfilechooserdefault.c:8099
+#: ../gtk/gtkfilechooserdefault.c:8345
 #: ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Datoteka z imenom \"%s\" že obstaja. Ali jo želite zamenjati?"
 
-#: ../gtk/gtkfilechooserdefault.c:8102
+#: ../gtk/gtkfilechooserdefault.c:8348
 #: ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Datoteka že obstaja v \"%s\". Z zamenjavo bo njena vsebina izgubljena."
 
-#: ../gtk/gtkfilechooserdefault.c:8107
+#: ../gtk/gtkfilechooserdefault.c:8353
 #: ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: ../gtk/gtkfilechooserdefault.c:8912
+#: ../gtk/gtkfilechooserdefault.c:9159
 msgid "Could not start the search process"
 msgstr "Postopka iskanja ni mogoče začeti"
 
-#: ../gtk/gtkfilechooserdefault.c:8913
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr "Povezave z ozadnjim programom za ustvarjanje kazala ni mogoče ustvariti. Preverite, če je le-ta zagnan."
 
-#: ../gtk/gtkfilechooserdefault.c:8927
+#: ../gtk/gtkfilechooserdefault.c:9174
 msgid "Could not send the search request"
 msgstr "Zahteve po iskanju ni mogoče poslati"
 
-#: ../gtk/gtkfilechooserdefault.c:9719
+#: ../gtk/gtkfilechooserdefault.c:9775
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ni mogoče priklopiti"
@@ -1359,7 +1371,7 @@ msgstr "%s ni mogoče priklopiti"
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702
 #: ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Neveljavna pot"
@@ -1425,46 +1437,59 @@ msgstr "Pot ne obstaja"
 msgid "File System"
 msgstr "Datotečni sistem"
 
-#: ../gtk/gtkfontbutton.c:153
-#: ../gtk/gtkfontbutton.c:277
-msgid "Pick a Font"
-msgstr "Izberite pisavo"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:271
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:796
+#: ../gtk/gtkfontbutton.c:437
+#: ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Izberite pisavo"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "Pisava"
 
+#: ../gtk/gtkfontchooserdialog.c:185
+#: ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "Izbira pisave"
+
+#: ../gtk/gtkfontchooserwidget.c:118
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr "Nobena pisava ne ustreza iskanemu nizu. Preverite niz in poskusite znova."
+
+#: ../gtk/gtkfontchooserwidget.c:642
+msgid "Search font name"
+msgstr "Poišči pisavo po imenu"
+
+#: ../gtk/gtkfontchooserwidget.c:911
+#| msgid "_Family:"
+msgid "Font Family"
+msgstr "Družina pisav"
+
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:119
+#: ../gtk/gtkfontsel.c:125
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "AaBbCcČčDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsŠšTtUuVvZzŽž"
 
-#: ../gtk/gtkfontsel.c:388
+#: ../gtk/gtkfontsel.c:394
 msgid "_Family:"
 msgstr "_Družina:"
 
-#: ../gtk/gtkfontsel.c:395
+#: ../gtk/gtkfontsel.c:401
 msgid "_Style:"
 msgstr "_Slog:"
 
-#: ../gtk/gtkfontsel.c:402
+#: ../gtk/gtkfontsel.c:408
 msgid "Si_ze:"
 msgstr "_Velikost:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:579
+#: ../gtk/gtkfontsel.c:585
 msgid "_Preview:"
 msgstr "_Predolged:"
-
-#: ../gtk/gtkfontsel.c:1705
-msgid "Font Selection"
-msgstr "Izbira pisave"
 
 #: ../gtk/gtkicontheme.c:1605
 #, c-format
@@ -1496,12 +1521,12 @@ msgid "System (%s)"
 msgstr "Sistem (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6309
+#: ../gtk/gtklabel.c:6294
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6321
+#: ../gtk/gtklabel.c:6306
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
@@ -1592,52 +1617,52 @@ msgstr "Možnosti GTK+"
 msgid "Show GTK+ Options"
 msgstr "Pokaži možnosti GTK+"
 
-#: ../gtk/gtkmountoperation.c:489
+#: ../gtk/gtkmountoperation.c:486
 msgid "Co_nnect"
 msgstr "_Poveži"
 
-#: ../gtk/gtkmountoperation.c:559
+#: ../gtk/gtkmountoperation.c:556
 msgid "Connect _anonymously"
 msgstr "Poveži se _brezimno"
 
-#: ../gtk/gtkmountoperation.c:568
+#: ../gtk/gtkmountoperation.c:565
 msgid "Connect as u_ser:"
 msgstr "Poveži se kot _uporabnik:"
 
-#: ../gtk/gtkmountoperation.c:602
+#: ../gtk/gtkmountoperation.c:599
 msgid "_Username:"
 msgstr "_Uporabniško ime:"
 
-#: ../gtk/gtkmountoperation.c:607
+#: ../gtk/gtkmountoperation.c:604
 msgid "_Domain:"
 msgstr "_Domena:"
 
-#: ../gtk/gtkmountoperation.c:613
+#: ../gtk/gtkmountoperation.c:610
 msgid "_Password:"
 msgstr "_Geslo:"
 
-#: ../gtk/gtkmountoperation.c:631
+#: ../gtk/gtkmountoperation.c:628
 msgid "Forget password _immediately"
 msgstr "_Takoj pozabi geslo"
 
-#: ../gtk/gtkmountoperation.c:641
+#: ../gtk/gtkmountoperation.c:638
 msgid "Remember password until you _logout"
 msgstr "Zapomni si geslo do _odjave"
 
-#: ../gtk/gtkmountoperation.c:651
+#: ../gtk/gtkmountoperation.c:648
 msgid "Remember _forever"
 msgstr "_Zapomni si za vedno"
 
-#: ../gtk/gtkmountoperation.c:880
+#: ../gtk/gtkmountoperation.c:877
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Neznan program (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1063
+#: ../gtk/gtkmountoperation.c:1060
 msgid "Unable to end process"
 msgstr "Opravila ni mogoče končati"
 
-#: ../gtk/gtkmountoperation.c:1100
+#: ../gtk/gtkmountoperation.c:1097
 msgid "_End Process"
 msgstr "_Končaj opravilo"
 
@@ -1672,8 +1697,8 @@ msgstr "Lupina Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Opravila s PID %d ni mogoče končati: %s"
 
-#: ../gtk/gtknotebook.c:4906
-#: ../gtk/gtknotebook.c:7591
+#: ../gtk/gtknotebook.c:4902
+#: ../gtk/gtknotebook.c:7587
 #, c-format
 msgid "Page %u"
 msgstr "Stran %u"
@@ -1693,15 +1718,15 @@ msgstr "%d"
 msgid "Not a valid page setup file"
 msgstr "Ni veljavna datoteka nastavitev strani"
 
-#: ../gtk/gtkpagesetupunixdialog.c:172
+#: ../gtk/gtkpagesetupunixdialog.c:169
 msgid "Any Printer"
 msgstr "Katerikoli tiskalnik"
 
-#: ../gtk/gtkpagesetupunixdialog.c:172
+#: ../gtk/gtkpagesetupunixdialog.c:169
 msgid "For portable documents"
 msgstr "Za prenosljive dokumente"
 
-#: ../gtk/gtkpagesetupunixdialog.c:802
+#: ../gtk/gtkpagesetupunixdialog.c:798
 #, c-format
 msgid ""
 "Margins:\n"
@@ -1716,38 +1741,38 @@ msgstr ""
 " Zgoraj: %s %s\n"
 " Spodaj: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:851
-#: ../gtk/gtkprintunixdialog.c:3376
+#: ../gtk/gtkpagesetupunixdialog.c:847
+#: ../gtk/gtkprintunixdialog.c:3375
 msgid "Manage Custom Sizes..."
 msgstr "Upravljaj poljubne velikosti ..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:902
+#: ../gtk/gtkpagesetupunixdialog.c:898
 msgid "_Format for:"
 msgstr "_Vrsta za:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:925
-#: ../gtk/gtkprintunixdialog.c:3556
+#: ../gtk/gtkpagesetupunixdialog.c:919
+#: ../gtk/gtkprintunixdialog.c:3523
 msgid "_Paper size:"
 msgstr "_Velikost papirja:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:958
+#: ../gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
 msgstr "_Usmerjenost:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1023
-#: ../gtk/gtkprintunixdialog.c:3620
+#: ../gtk/gtkpagesetupunixdialog.c:1008
+#: ../gtk/gtkprintunixdialog.c:3578
 msgid "Page Setup"
 msgstr "Nastavitev strani"
 
-#: ../gtk/gtkpathbar.c:156
+#: ../gtk/gtkpathbar.c:158
 msgid "Up Path"
 msgstr "Po poti navzgor"
 
-#: ../gtk/gtkpathbar.c:158
+#: ../gtk/gtkpathbar.c:160
 msgid "Down Path"
 msgstr "Po poti navzdol"
 
-#: ../gtk/gtkpathbar.c:1516
+#: ../gtk/gtkpathbar.c:1616
 msgid "File System Root"
 msgstr "Koren datotečnega sistema"
 
@@ -1763,7 +1788,7 @@ msgstr "Ni na voljo"
 msgid "Select a folder"
 msgstr "Izberite mapo"
 
-#: ../gtk/gtkprinteroptionwidget.c:812
+#: ../gtk/gtkprinteroptionwidget.c:807
 msgid "_Save in folder:"
 msgstr "_Shrani v mapo:"
 
@@ -1863,7 +1888,7 @@ msgstr "Brez papirja"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:615
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2022
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2036
 msgid "Paused"
 msgstr "Premor"
 
@@ -1914,45 +1939,45 @@ msgstr "Nedoločena napaka"
 msgid "Getting printer information failed"
 msgstr "Pridobivanje podatkov tiskalnika ni uspelo"
 
-#: ../gtk/gtkprintunixdialog.c:1942
+#: ../gtk/gtkprintunixdialog.c:1962
 msgid "Getting printer information..."
 msgstr "Pridobivanje podatkov tiskalnika ..."
 
-#: ../gtk/gtkprintunixdialog.c:2216
+#: ../gtk/gtkprintunixdialog.c:2236
 msgid "Printer"
 msgstr "Tiskalnik"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2226
+#: ../gtk/gtkprintunixdialog.c:2246
 msgid "Location"
 msgstr "Mesto"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2237
+#: ../gtk/gtkprintunixdialog.c:2257
 msgid "Status"
 msgstr "Stanje"
 
-#: ../gtk/gtkprintunixdialog.c:2263
+#: ../gtk/gtkprintunixdialog.c:2283
 msgid "Range"
 msgstr "Obseg"
 
-#: ../gtk/gtkprintunixdialog.c:2267
+#: ../gtk/gtkprintunixdialog.c:2287
 msgid "_All Pages"
 msgstr "_Vse strani"
 
-#: ../gtk/gtkprintunixdialog.c:2274
+#: ../gtk/gtkprintunixdialog.c:2292
 msgid "C_urrent Page"
 msgstr "_Trenutna stran"
 
-#: ../gtk/gtkprintunixdialog.c:2284
+#: ../gtk/gtkprintunixdialog.c:2300
 msgid "Se_lection"
 msgstr "_Izbira"
 
-#: ../gtk/gtkprintunixdialog.c:2293
+#: ../gtk/gtkprintunixdialog.c:2306
 msgid "Pag_es:"
 msgstr "_Strani:"
 
-#: ../gtk/gtkprintunixdialog.c:2294
+#: ../gtk/gtkprintunixdialog.c:2307
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -1960,28 +1985,28 @@ msgstr ""
 "Določite enega ali več obsegov strani,\n"
 " npr. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2304
+#: ../gtk/gtkprintunixdialog.c:2315
 msgid "Pages"
 msgstr "Strani"
 
-#: ../gtk/gtkprintunixdialog.c:2317
+#: ../gtk/gtkprintunixdialog.c:2326
 msgid "Copies"
 msgstr "Kopije"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2322
+#: ../gtk/gtkprintunixdialog.c:2331
 msgid "Copie_s:"
 msgstr "_Kopije:"
 
-#: ../gtk/gtkprintunixdialog.c:2341
+#: ../gtk/gtkprintunixdialog.c:2346
 msgid "C_ollate"
 msgstr "_Zloži"
 
-#: ../gtk/gtkprintunixdialog.c:2349
+#: ../gtk/gtkprintunixdialog.c:2352
 msgid "_Reverse"
 msgstr "_Obrnjeno"
 
-#: ../gtk/gtkprintunixdialog.c:2369
+#: ../gtk/gtkprintunixdialog.c:2368
 msgid "General"
 msgstr "Splošno"
 
@@ -1991,169 +2016,169 @@ msgstr "Splošno"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3572
+#: ../gtk/gtkprintunixdialog.c:3108
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3586
 msgid "Left to right, top to bottom"
 msgstr "Z leve proti desni, od zgoraj navzdol"
 
-#: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3572
+#: ../gtk/gtkprintunixdialog.c:3108
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3586
 msgid "Left to right, bottom to top"
 msgstr "Z leve proti desni, od spodaj navzgor"
 
-#: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3573
+#: ../gtk/gtkprintunixdialog.c:3109
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Right to left, top to bottom"
 msgstr "Z desne proti levi, od zgoraj navzdol"
 
-#: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3573
+#: ../gtk/gtkprintunixdialog.c:3109
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Right to left, bottom to top"
 msgstr "Z desne proti levi, od spodaj navzgor"
 
-#: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3574
+#: ../gtk/gtkprintunixdialog.c:3110
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Top to bottom, left to right"
 msgstr "Od zgoraj navzdol, z leve proti desni"
 
-#: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3574
+#: ../gtk/gtkprintunixdialog.c:3110
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Top to bottom, right to left"
 msgstr "Od zgoraj navzdol, z desne proti levi"
 
-#: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3575
+#: ../gtk/gtkprintunixdialog.c:3111
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3589
 msgid "Bottom to top, left to right"
 msgstr "Od spodaj navzgor, z leve proti desni"
 
-#: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3575
+#: ../gtk/gtkprintunixdialog.c:3111
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3589
 msgid "Bottom to top, right to left"
 msgstr "Od spodaj navzgor, z desne proti levi"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3116
-#: ../gtk/gtkprintunixdialog.c:3129
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3609
+#: ../gtk/gtkprintunixdialog.c:3115
+#: ../gtk/gtkprintunixdialog.c:3128
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3623
 msgid "Page Ordering"
 msgstr "Vrstni red strani"
 
-#: ../gtk/gtkprintunixdialog.c:3145
+#: ../gtk/gtkprintunixdialog.c:3144
 msgid "Left to right"
 msgstr "Z leve proti desni"
 
-#: ../gtk/gtkprintunixdialog.c:3146
+#: ../gtk/gtkprintunixdialog.c:3145
 msgid "Right to left"
 msgstr "Z desne proti levi"
 
-#: ../gtk/gtkprintunixdialog.c:3158
+#: ../gtk/gtkprintunixdialog.c:3157
 msgid "Top to bottom"
 msgstr "Od zgoraj navzdol"
 
-#: ../gtk/gtkprintunixdialog.c:3159
+#: ../gtk/gtkprintunixdialog.c:3158
 msgid "Bottom to top"
 msgstr "Od spodaj navzgor"
 
-#: ../gtk/gtkprintunixdialog.c:3399
+#: ../gtk/gtkprintunixdialog.c:3398
 msgid "Layout"
 msgstr "Razporeditev"
 
-#: ../gtk/gtkprintunixdialog.c:3403
+#: ../gtk/gtkprintunixdialog.c:3402
 msgid "T_wo-sided:"
 msgstr "_Dvostransko:"
 
-#: ../gtk/gtkprintunixdialog.c:3419
+#: ../gtk/gtkprintunixdialog.c:3414
 msgid "Pages per _side:"
 msgstr "Strani na _stran:"
 
-#: ../gtk/gtkprintunixdialog.c:3437
+#: ../gtk/gtkprintunixdialog.c:3428
 msgid "Page or_dering:"
 msgstr "Vrstni _red strani:"
 
-#: ../gtk/gtkprintunixdialog.c:3454
+#: ../gtk/gtkprintunixdialog.c:3441
 msgid "_Only print:"
 msgstr "Natisni _samo:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3470
+#: ../gtk/gtkprintunixdialog.c:3453
 msgid "All sheets"
 msgstr "Vse liste"
 
-#: ../gtk/gtkprintunixdialog.c:3471
+#: ../gtk/gtkprintunixdialog.c:3454
 msgid "Even sheets"
 msgstr "Sode liste"
 
-#: ../gtk/gtkprintunixdialog.c:3472
+#: ../gtk/gtkprintunixdialog.c:3455
 msgid "Odd sheets"
 msgstr "Lihe liste"
 
-#: ../gtk/gtkprintunixdialog.c:3475
+#: ../gtk/gtkprintunixdialog.c:3458
 msgid "Sc_ale:"
 msgstr "_Merilo:"
 
-#: ../gtk/gtkprintunixdialog.c:3503
+#: ../gtk/gtkprintunixdialog.c:3482
 msgid "Paper"
 msgstr "Papir"
 
-#: ../gtk/gtkprintunixdialog.c:3507
+#: ../gtk/gtkprintunixdialog.c:3486
 msgid "Paper _type:"
 msgstr "V_rsta papirja:"
 
-#: ../gtk/gtkprintunixdialog.c:3523
+#: ../gtk/gtkprintunixdialog.c:3498
 msgid "Paper _source:"
 msgstr "_Vir papirja:"
 
-#: ../gtk/gtkprintunixdialog.c:3539
+#: ../gtk/gtkprintunixdialog.c:3510
 msgid "Output t_ray:"
 msgstr "Izhodni p_ult:"
 
-#: ../gtk/gtkprintunixdialog.c:3581
+#: ../gtk/gtkprintunixdialog.c:3543
 msgid "Or_ientation:"
 msgstr "_Usmerjenost:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3597
+#: ../gtk/gtkprintunixdialog.c:3555
 msgid "Portrait"
 msgstr "Pokončno"
 
-#: ../gtk/gtkprintunixdialog.c:3598
+#: ../gtk/gtkprintunixdialog.c:3556
 msgid "Landscape"
 msgstr "Ležeče"
 
-#: ../gtk/gtkprintunixdialog.c:3599
+#: ../gtk/gtkprintunixdialog.c:3557
 msgid "Reverse portrait"
 msgstr "Obrnjeno pokončno"
 
-#: ../gtk/gtkprintunixdialog.c:3600
+#: ../gtk/gtkprintunixdialog.c:3558
 msgid "Reverse landscape"
 msgstr "Obrnjeno ležeče"
 
-#: ../gtk/gtkprintunixdialog.c:3645
+#: ../gtk/gtkprintunixdialog.c:3603
 msgid "Job Details"
 msgstr "Podrobnosti posla"
 
-#: ../gtk/gtkprintunixdialog.c:3651
+#: ../gtk/gtkprintunixdialog.c:3607
 msgid "Pri_ority:"
 msgstr "_Prednost:"
 
-#: ../gtk/gtkprintunixdialog.c:3667
+#: ../gtk/gtkprintunixdialog.c:3619
 msgid "_Billing info:"
 msgstr "Podatki o _plačilu:"
 
-#: ../gtk/gtkprintunixdialog.c:3686
+#: ../gtk/gtkprintunixdialog.c:3634
 msgid "Print Document"
 msgstr "Natisni dokument"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3695
+#: ../gtk/gtkprintunixdialog.c:3641
 msgid "_Now"
 msgstr "_Zdaj"
 
-#: ../gtk/gtkprintunixdialog.c:3706
+#: ../gtk/gtkprintunixdialog.c:3650
 msgid "A_t:"
 msgstr "_Ob:"
 
@@ -2161,7 +2186,7 @@ msgstr "_Ob:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3712
+#: ../gtk/gtkprintunixdialog.c:3656
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2169,106 +2194,106 @@ msgstr ""
 "Navedite časa tiskanja,\n"
 " npr.: 15:30, 14:15:20 ..."
 
-#: ../gtk/gtkprintunixdialog.c:3722
+#: ../gtk/gtkprintunixdialog.c:3664
 msgid "Time of print"
 msgstr "Čas tiskanja"
 
-#: ../gtk/gtkprintunixdialog.c:3738
+#: ../gtk/gtkprintunixdialog.c:3678
 msgid "On _hold"
 msgstr "_Zadržano"
 
-#: ../gtk/gtkprintunixdialog.c:3739
+#: ../gtk/gtkprintunixdialog.c:3679
 msgid "Hold the job until it is explicitly released"
 msgstr "Zadrži posel, dokler ni izrecno sproščen"
 
-#: ../gtk/gtkprintunixdialog.c:3759
+#: ../gtk/gtkprintunixdialog.c:3697
 msgid "Add Cover Page"
 msgstr "Dodaj naslovno stran"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3768
+#: ../gtk/gtkprintunixdialog.c:3704
 msgid "Be_fore:"
 msgstr "P_red:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3787
+#: ../gtk/gtkprintunixdialog.c:3719
 msgid "_After:"
 msgstr "_Po:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3806
+#: ../gtk/gtkprintunixdialog.c:3734
 msgid "Job"
 msgstr "Posel"
 
-#: ../gtk/gtkprintunixdialog.c:3872
+#: ../gtk/gtkprintunixdialog.c:3800
 msgid "Advanced"
 msgstr "Napredno"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3910
+#: ../gtk/gtkprintunixdialog.c:3838
 msgid "Image Quality"
 msgstr "Kakovost slike"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3914
+#: ../gtk/gtkprintunixdialog.c:3842
 msgid "Color"
 msgstr "Barva"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3919
+#: ../gtk/gtkprintunixdialog.c:3847
 msgid "Finishing"
 msgstr "Zaključevanje"
 
-#: ../gtk/gtkprintunixdialog.c:3929
+#: ../gtk/gtkprintunixdialog.c:3857
 msgid "Some of the settings in the dialog conflict"
 msgstr "Nekatere nastavitve v pogovornem oknu so v sporu"
 
-#: ../gtk/gtkprintunixdialog.c:3952
+#: ../gtk/gtkprintunixdialog.c:3880
 msgid "Print"
 msgstr "Natisni"
 
-#: ../gtk/gtkrecentchooserdefault.c:485
+#: ../gtk/gtkrecentchooserdefault.c:484
 msgid "Select which type of documents are shown"
 msgstr "Izberite, katere vrste dokumentov so prikazane"
 
-#: ../gtk/gtkrecentchooserdefault.c:1142
-#: ../gtk/gtkrecentchooserdefault.c:1179
+#: ../gtk/gtkrecentchooserdefault.c:1141
+#: ../gtk/gtkrecentchooserdefault.c:1178
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Noben predmet za URI '%s' ni bil najden"
 
-#: ../gtk/gtkrecentchooserdefault.c:1306
+#: ../gtk/gtkrecentchooserdefault.c:1305
 msgid "Untitled filter"
 msgstr "Neimenovan filter"
 
-#: ../gtk/gtkrecentchooserdefault.c:1659
+#: ../gtk/gtkrecentchooserdefault.c:1658
 msgid "Could not remove item"
 msgstr "Predmeta ni mogoče odstraniti"
 
-#: ../gtk/gtkrecentchooserdefault.c:1703
+#: ../gtk/gtkrecentchooserdefault.c:1702
 msgid "Could not clear list"
 msgstr "Seznama ni mogoče počistitit"
 
-#: ../gtk/gtkrecentchooserdefault.c:1787
+#: ../gtk/gtkrecentchooserdefault.c:1786
 msgid "Copy _Location"
 msgstr "Kopiraj _mesto"
 
-#: ../gtk/gtkrecentchooserdefault.c:1800
+#: ../gtk/gtkrecentchooserdefault.c:1799
 msgid "_Remove From List"
 msgstr "_Odstrani s seznama"
 
-#: ../gtk/gtkrecentchooserdefault.c:1809
+#: ../gtk/gtkrecentchooserdefault.c:1808
 msgid "_Clear List"
 msgstr "_Počisti seznam"
 
-#: ../gtk/gtkrecentchooserdefault.c:1823
+#: ../gtk/gtkrecentchooserdefault.c:1822
 msgid "Show _Private Resources"
 msgstr "Pokaži _zasebne vire"
 
@@ -4063,254 +4088,254 @@ msgstr "vietnamski (VIQR)"
 msgid "X Input Method"
 msgstr "Vnosni način X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:828
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1038
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:829
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
 msgid "Username:"
 msgstr "Uporabniško ime:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:829
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1057
 msgid "Password:"
 msgstr "Geslo:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:868
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1060
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1070
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Za tiskanje dokumenta '%s' na tiskalniku %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:870
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Za tiskanje dokumenta na %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:875
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Za pridobitev atributov posla '%s' je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:876
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:877
 msgid "Authentication is required to get attributes of a job"
 msgstr "Za pridobitev atributov posla je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:880
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:881
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Za pridobitev atributov tiskalnika %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:882
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:883
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Za pridobitev atributov tiskalnika je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:885
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:886
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Za pridobitev privzetega tiskalnika %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:888
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:889
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Za pridobitev tiskalnikov iz %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:893
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:894
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Za pridobitev datoteke iz %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:895
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:896
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Na %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1032
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 msgid "Domain:"
 msgstr "Domena:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1062
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1072
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "Za tiskanje dokumenta '%s'  je potreba overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1077
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Za tiskanje tega dokumenta na tiskalniku %s je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1069
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1079
 msgid "Authentication is required to print this document"
 msgstr "Za tiskanje tega dokumenta je potrebna overitev"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1690
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Tiskalnik '%s' ima skoraj prazen toner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1705
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "V tiskalniku '%s' je prazen toner."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1693
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1707
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Tiskalnik '%s' ima le še nekaj razvijalca."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1695
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1709
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Tiskalnik '%s' je brez razvijalca."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "V tiskalniku '%s' je skoraj prazna vsaj ena kartuša."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "V tiskalniku '%s' je prazna vsaj ena kartuša."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Tiskalnik '%s' ima odprt pokrov."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1701
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Tiskalnik '%s' ima odprta vratca."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1702
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1716
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Tiskalnik '%s' ima le še nekaj papirja."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1703
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1717
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Tiskalnik '%s' je brez papirja."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1718
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "Tiskalnik '%s' trenutno ni povezan."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1705
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1719
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Na tiskalniku '%s' je prišlo do napake."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2033
 msgid "Paused ; Rejecting Jobs"
 msgstr "Premor ; zavračanje poslov"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2025
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2039
 msgid "Rejecting Jobs"
 msgstr "Zavračanje poslov"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
 msgid "Two Sided"
 msgstr "Dvostransko"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Paper Type"
 msgstr "Vrsta papirja"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "Paper Source"
 msgstr "Vir papirja"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Output Tray"
 msgstr "Pladenj za papir"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2802
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2816
 msgid "Resolution"
 msgstr "Ločljivost"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "GhostScript pre-filtering"
 msgstr "Predhodno filtriranje GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "One Sided"
 msgstr "Enostransko"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2828
 msgid "Long Edge (Standard)"
 msgstr "Dolga stranica (standardno)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Short Edge (Flip)"
 msgstr "Kratka stranica (zrcaljeno)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2818
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2820
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2828
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2832
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2834
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2842
 msgid "Auto Select"
 msgstr "Samodejno izberi"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2822
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2824
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3326
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2844
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3340
 msgid "Printer Default"
 msgstr "Privzeto za tiskalnik"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2832
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2846
 msgid "Embed GhostScript fonts only"
 msgstr "Vstavi samo pisave GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2834
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2848
 msgid "Convert to PS level 1"
 msgstr "Pretvori v PS ravni 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2850
 msgid "Convert to PS level 2"
 msgstr "Pretvori v PS ravni 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2852
 msgid "No pre-filtering"
 msgstr "Brez predhodnega filtriranja"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2847
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2861
 msgid "Miscellaneous"
 msgstr "Razno"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "Urgent"
 msgstr "Nujno"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "High"
 msgstr "Visoka"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "Medium"
 msgstr "Srednja"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3567
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
 msgid "Low"
 msgstr "Nizka"
 
@@ -4318,66 +4343,66 @@ msgstr "Nizka"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3593
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3607
 msgid "Pages per Sheet"
 msgstr "Strani na stran"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3630
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3644
 msgid "Job Priority"
 msgstr "Prednost posla"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3641
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3655
 msgid "Billing Info"
 msgstr "Podatki o plačilu"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "None"
 msgstr "Noben"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Classified"
 msgstr "Omejeno"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Confidential"
 msgstr "Zaupno"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Secret"
 msgstr "Skrivnost"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Standard"
 msgstr "Običajno"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Top Secret"
 msgstr "Strogo zaupno"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Unclassified"
 msgstr "Nerazvrščeno"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3705
 msgid "Before"
 msgstr "Pred"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3706
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3720
 msgid "After"
 msgstr "Po"
 
@@ -4385,14 +4410,14 @@ msgstr "Po"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3726
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3740
 msgid "Print at"
 msgstr "Natisni ob"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3751
 msgid "Print at time"
 msgstr "Natisni ob času"
 
@@ -4400,17 +4425,17 @@ msgstr "Natisni ob času"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3772
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3786
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Po meri %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3853
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3867
 msgid "Printer Profile"
 msgstr "Profil tiskalnika"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3874
 msgid "Unavailable"
 msgstr "Ni na voljo"
 
@@ -4511,562 +4536,4 @@ msgstr "preizkusni-izhod.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Natisni na preizkusnem tiskalniku"
-
-#: ../tests/testfilechooser.c:207
-#, c-format
-msgid "Could not get information for file '%s': %s"
-msgstr "Podatkov o datoteki '%s' ni mogoče pridobiti: %s"
-
-#: ../tests/testfilechooser.c:222
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Datoteke '%s' ni mogoče odpreti: %s"
-
-#: ../tests/testfilechooser.c:267
-#, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Slike '%s' ni mogoče naložiti: vzrok ni znan, najverjetneje je datoteka pokvarjena"
-
-#~ msgid "_Browse for other folders"
-#~ msgstr "_Brskaj za drugimi mapami"
-#~ msgid "Locked"
-#~ msgstr "Zaklenjeno"
-#~ msgid "Received invalid color data\n"
-#~ msgstr "Prejeti so bili neveljavni podatki o barvi\n"
-#~ msgid "Error loading icon: %s"
-#~ msgstr "Napaka med nalaganjem ikone: %s"
-#~ msgid ""
-#~ "Could not find the icon '%s'. The '%s' theme\n"
-#~ "was not found either, perhaps you need to install it.\n"
-#~ "You can get a copy from:\n"
-#~ "\t%s"
-#~ msgstr ""
-#~ "Ikone '%s' ni mogoče najti. Teme '%s'\n"
-#~ "prav tako ni mogoče najti. Potrebno jo je namestiti\n"
-#~ "Kopijo lahko dobite na:\n"
-#~ "\t%s"
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\""
-#~ msgstr "Slikovne datoteke v poti pixmap_path ni mogoče najti: \"%s\""
-#~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "Ta funkcija ni podprta za gradnike razreda '%s'"
-#~ msgid "different idatas found for symlinked '%s' and '%s'\n"
-#~ msgstr ""
-#~ "najdeni so različni ipodatki (idatas) za simbolno povezana '%s' in '%s'\n"
-#~ msgid "X screen to use"
-#~ msgstr "Zaslon X, ki naj se uporabi"
-#~ msgid "SCREEN"
-#~ msgstr "ZASLON"
-#~ msgid "Make X calls synchronous"
-#~ msgstr "Naredi klice X usklajene"
-#~ msgid "Credits"
-#~ msgstr "Zasluge"
-#~ msgid "Written by"
-#~ msgstr "Napisali"
-#~ msgid "_Add"
-#~ msgstr "_Dodaj"
-#~ msgid "_Remove"
-#~ msgstr "Odst_rani"
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "Napaka med ustvarjanjem mape '%s': %s"
-#~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "Ni mogoče najti vstavljene datoteke: \"%s\""
-#~ msgid "Unable to locate theme engine in module_path: \"%s\","
-#~ msgstr "Ni mogoče najti pogona tem v poti module_path: \"%s\","
-#~ msgid "Gdk debugging flags to set"
-#~ msgstr "Zastavice razhroščevanja GDK, ki naj bodo nastavljene"
-#~ msgid "Gdk debugging flags to unset"
-#~ msgstr "Zastavice rahroščevanja GDK, ki naj ne bodo nastavljene"
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "Slikovna datoteka '%s' ne vsebuje podatkov"
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "Nalaganje animacije '%s' ni bilo uspešno: razlog ni znan, verjetno "
-#~ "pokvarjena datoteka"
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "Ni mogoče naložiti modula za nalaganje slik: %s: %s"
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "Modul za nalaganje slik %s ne izvaža zahtevanega vmesnika; morda je iz "
-#~ "druge različice GTK."
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "Vrsta slike '%s' ni podprta"
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "Ni mogoče prepoznati vrste zapisa slike v datoteki '%s'"
-#~ msgid "Unrecognized image file format"
-#~ msgstr "Neznana vrsta zapisa slikovne datoteke"
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "Nalaganje slike '%s' ni bilo uspešno: %s"
-#~ msgid "Error writing to image file: %s"
-#~ msgstr "Napaka med pisanjem v slikovno datoteko: %s"
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr "Ta izgradnja gdk-pixbuf ne podpira shranjevanja v obliki zapisa: %s"
-#~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "Premalo pomnilnika za hrambo slike v preklicni funkciji"
-#~ msgid "Failed to open temporary file"
-#~ msgstr "Odpiranje začasne datoteke ni bilo uspešno"
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "Branje iz začasne datoteke ni bilo uspešno"
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "Odpiranje '%s' za pisanje ni bilo uspešno: %s"
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr ""
-#~ "Zapiranje '%s' med pisanjem slike ni bilo uspešno; vseh podatkov ni bilo "
-#~ "mogoče shraniti: %s"
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "Ni dovolj pomnilnika za hrambo slike v medpomnilnik"
-#~ msgid "Error writing to image stream"
-#~ msgstr "Napaka med pisanjem v slikovni pretok"
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "Notranja napaka: modul nalagalnika slik '%s' ni uspel končati opravila, "
-#~ "vendar ni podal razloga za neuspeh"
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "Postopno nalaganje slike v zapisu '%s' ni podprto"
-#~ msgid "Image header corrupt"
-#~ msgstr "Glava slike je pokvarjena"
-#~ msgid "Image format unknown"
-#~ msgstr "Vrsta zapisa slike ni znana"
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "Podatki o točkah slike so pokvarjeni"
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] ""
-#~ "ni mogoče dodeliti slikovnega medpomnilnika v velikosti %u bajtov"
-#~ msgstr[1] "ni mogoče dodeliti slikovnega medpomnilnika v velikosti %u bajta"
-#~ msgstr[2] ""
-#~ "ni mogoče dodeliti slikovnega medpomnilnika v velikosti %u bajtov"
-#~ msgstr[3] ""
-#~ "ni mogoče dodeliti slikovnega medpomnilnika v velikosti %u bajtov"
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "Nepričakovan sklop ikone v animaciji"
-#~ msgid "Unsupported animation type"
-#~ msgstr "Nepodprta vrsta animacije"
-#~ msgid "Invalid header in animation"
-#~ msgstr "Neveljavna glava v animaciji"
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje animacije"
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "Nepravilno oblikovan sklop v animaciji"
-#~ msgid "The ANI image format"
-#~ msgstr "Vrsta zapisa slike ANI"
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "Slika BMP ima v glavi neveljavne podatke"
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje slike"
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "Slika BMP ima nepodprto velikost glave"
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "Slik BMP ni mogoče stisniti"
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "Zaznan je predčasni konec datoteke"
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za shranjevanje datoteke BMP"
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "Ni mogoče pisati v datoteko BMP"
-#~ msgid "The BMP image format"
-#~ msgstr "Vrsta zapisa slike BMP"
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "Napaka med branjem GIF: %s"
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "V datoteki GIF manjka nekaj podatkov (morda je bila razdeljena)"
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "Notranja napaka v nalagalniku GIF (%s)"
-#~ msgid "Stack overflow"
-#~ msgstr "Prekoračitev sklada"
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "Nalagalnik slik GIF ne razume te slike."
-#~ msgid "Bad code encountered"
-#~ msgstr "Zaznana je neveljavna koda"
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "Krožni vnos razpredelnice v GIF datoteki"
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje slike GIF"
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "Ni dovolj pomnilnika za združevanje okvirjev v sliki GIF"
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "Slika GIF je pokvarjena (nepravilno stiskanje LZW)"
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "Datoteka ni podobna datoteki GIF"
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "Različica %s vrste zapisa GIF ni podprta"
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "Slika GIF nima globalne karte barv in okvir nima krajevne karte barv."
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "Slika GIF je bila razdeljena ali pa je nepopolna."
-#~ msgid "The GIF image format"
-#~ msgstr "Vrsta zapisa slike GIF"
-#~ msgid "Invalid header in icon"
-#~ msgstr "Ikona ima neveljavno glavo"
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje ikone"
-#~ msgid "Icon has zero width"
-#~ msgstr "Ikona ima ničelno širino"
-#~ msgid "Icon has zero height"
-#~ msgstr "Ikona ima ničelno višino"
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "Stisnjene ikone niso podprte"
-#~ msgid "Unsupported icon type"
-#~ msgstr "Nepodprta vrsta ikone"
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "Premalo pomnilnika za nalaganje datoteke ICO"
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "Slika je prevelika, da bi bila shranjena kot ICO"
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "Vroča točka kazalca je zunaj slike"
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "Nepodprta barvna globina datoteke ICO: %d"
-#~ msgid "The ICO image format"
-#~ msgstr "Vrsta zapisa slike ICO"
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "Napaka med branjem slike ICNS: %s"
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "Ni mogoče dekodirati ICNS datoteke"
-#~ msgid "The ICNS image format"
-#~ msgstr "Vrsta zapisa slike ICNS"
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za pretok"
-#~ msgid "Couldn't decode image"
-#~ msgstr "Ni mogoče dekodirati slike"
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "Preoblikovan JPEG2000 ima ničelno višino ali širino."
-#~ msgid "Image type currently not supported"
-#~ msgstr "Vrsta slike trenutno ni podprta"
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje barvnega profila"
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "Premalo pomnilnika za odprtje datoteke JPEG 2000"
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za medpomnenje slikovnih podatkov"
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "Vrsta zapisa slike JPEG 2000"
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "Napaka ob tolmačenju slikovne datoteke JPEG (%s)"
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "Ni dovolj pomnilnika za nalaganje slike; za sprostitev pomnilnika zaprite "
-#~ "nekaj programov"
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "Nepodprta vrsta barvnega prostora JPEG (%s)"
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje datoteke JPEG"
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "Preoblikovan JPEG ima ničelno višino ali širino."
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "Kakovost JPEG je določena z vrednostjo med 0 in 100; vrednosti '%s' ni "
-#~ "mogoče razčleniti."
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "Kakovost JPEG mora biti vrednost med 0 in 100; vrednost '%d' ni dovoljena."
-#~ msgid "The JPEG image format"
-#~ msgstr "Vrsta zapisa slike JPEG"
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za glavo"
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za medpomnilnik vsebine"
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "Slika ima neveljavno širino in/ali višino"
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "Slika ima nepodprto barvno globino"
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "Slika ima nepodprto število %d-bitnih ravnin"
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "Ni mogoče ustvariti novega medpomnilnika slik"
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za vrstične podatke"
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za paletne podatke"
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "Ni mogoče pridobiti vseh vrstic slike PCX"
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "Nobena paleta ni bila najdena na koncu podatkov datoteke PCX"
-#~ msgid "The PCX image format"
-#~ msgstr "Vrsta zapisa slike PCX"
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "Podatek o bitih na kanal slike PNG je neveljaven."
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "Preoblikovan PNG ima ničelno višino ali širino."
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "Preoblikovani PNG nima 8 bitov na kanal."
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "Pretvorjen PNG ni RGB ali RGBA."
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr "Pretvorjen PNG ima nepodprto število kanalov, mora biti 3 ali 4."
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "Usodna napak v slikovni datoteki PNG: %s"
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje datoteke PNG"
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "Ni dovolj pomnilnika za shranjevanje slike velikosti %ld x %ld; za "
-#~ "sproščanje pomnilnika je treba zapreti nekaj programov"
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "Usodna napaka med branjem slikovne datoteke PNG"
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "Usodna napaka med branjem slikovne datoteke PNG: %s"
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "Ključi za sklope besedila PNG morajo imeti med 1 in 79 znakov."
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "Ključi za sklope besedila PNG morajo biti znaki ASCII."
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "Barvni profil je neveljavne dolžine %d."
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "Raven stiskanja PNG je določena z vrednostmi med 0 in 9; vrednosti '%s' "
-#~ "ni mogoče razčleniti."
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "Raven stiskanja JPEG mora biti vrednost med 0 in 9; vrednost '%d' ni "
-#~ "dovoljena."
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr ""
-#~ "Vrednosti za sklop besedila PNG %s ni mogoče pretvoriti v kodiranje "
-#~ "ISO-8859-1."
-#~ msgid "The PNG image format"
-#~ msgstr "Vrsta zapisa slike PNG"
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "Nalagalnik PNM je pričakoval celo število, a ga ni našel"
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "Datoteka PNM ima napačen začetni bajt"
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "Datoteka PNM ni v prepoznani podvrsti zapisa PNM"
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "Datoteka PNM ima širino slike 0"
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "Datoteka PNM ima višino slike 0"
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "Največja vrednost barve v datoteki PNM je 0"
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "Največja vrednost barve v datoteki PNM je prevelika"
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "Surova vrsta slike PNM ni veljavna"
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "Nalagalnik slik PNM ne podpira te podvrste zapisa PNM"
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr ""
-#~ "Surove vrste zapisa PNM zahtevajo natančno en presledni znak pred podatki"
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje slike PNM"
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje zgradbe vsebine PNM"
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "Nepričakovan konec podatkov slike PNM"
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje slike PNM"
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "Družina vrst zapisa slik PNM/PBM/PGM/PPM"
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "Opisnik datoteke je vrednosti NULL."
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "Napaka med branjem QTIF glave"
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "Velikost atoma QTIF je prevelika (%d bajtov)"
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "Napaka med dodeljevanjem %d bajtov za predpomnilnik branja datotek"
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "Napaka datoteke med branjem atoma QTIF: %s"
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "Napaka med preskakovanjem naslednjih %d bajtov z uporabo seek()."
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "Napaka dodelitve zgradbe QTIF vsebine."
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "Napaka med ustvarjanjem predmeta GdkPixbufLoader."
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "Napaka med iskanjem atoma podatkov slike"
-#~ msgid "The QTIF image format"
-#~ msgstr "Vrsta zapisa slike QTIF"
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "Slika RAS ima v glavi neveljavne podatke"
-#~ msgid "RAS image has unknown type"
-#~ msgstr "Slika RAS je neznane vrste"
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "Nepodprta različica slike RAS"
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje slike RAS"
-#~ msgid "The Sun raster image format"
-#~ msgstr "Vrsta zapisa rastrske slike Sun"
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za zgradbo IOBuffer"
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za podatke IOBuffer"
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "Ni mogoče znova dodeliti pomnilnika za podatke IOBuffer"
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za začasne podatke IOBuffer"
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "Ni mogoče dodeliti novega medpomnilnika slik"
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "Slika je okrnjena ali pa nepopolna."
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "Ni mogoče dodeliti zgradbe barvne karte"
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "Ni mogoče dodeliti vnosov barvne karte"
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "Nepričakovana barvna globina za vnose barvne karte"
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za glavo TGA"
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "Slika TGA ima neveljavne dimenzije"
-#~ msgid "TGA image type not supported"
-#~ msgstr "Vrsta zapisa slike TGA ni podprta"
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za zgradbo vsebine TGA"
-#~ msgid "Excess data in file"
-#~ msgstr "Preveč podatkov v datoteki"
-#~ msgid "The Targa image format"
-#~ msgstr "Vrsta zapisa slike Targa"
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "Ni mogoče dobiti širine slike (slaba datoteka TIFF)"
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "Ni mogoče dobiti višine slike (slaba datoteka TIFF)"
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "Širina ali višina slike TIFF je nič"
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "Dimenzije slike TIFF so prevelike"
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "Premalo pomnilnika za odprtje datoteke TIFF"
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "Nalaganje podatkov RGB iz datoteke TIFF ni bilo uspešno"
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "Odpiranje slike TIFF ni bilo uspešno"
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "Opravilo TIFFClose ni uspelo"
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "Nalaganje slike TIFF ni bilo uspešno"
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "Shranjevanje slike TIFF ni bilo uspešno"
-#~ msgid "TIFF compression doesn't refer to a valid codec."
-#~ msgstr "Stiskanje TIFF ne sledi veljavnemu kodeku."
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "Zapisovanje podatkov TIFF ni bilo uspešno"
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "Ni mogoče pisati v datoteko TIFF"
-#~ msgid "The TIFF image format"
-#~ msgstr "Vrsta zapisa slike TIFF"
-#~ msgid "Image has zero width"
-#~ msgstr "Slika ima ničelno širino"
-#~ msgid "Image has zero height"
-#~ msgstr "Slika ima ničelno višino"
-#~ msgid "Not enough memory to load image"
-#~ msgstr "Ni dovolj pomnilnika za nalaganje slike"
-#~ msgid "Couldn't save the rest"
-#~ msgstr "Ni mogoče shraniti preostanka"
-#~ msgid "The WBMP image format"
-#~ msgstr "Vrsta zapisa slike WBMP"
-#~ msgid "Invalid XBM file"
-#~ msgstr "Neveljavna datoteka XBM"
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "Premalo pomnilnika za nalaganje slike XBM"
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "Pisanje v začasno datoteko med nalaganjem slike XBM ni bilo uspešno"
-#~ msgid "The XBM image format"
-#~ msgstr "Vrsta zapisa slike XBM"
-#~ msgid "No XPM header found"
-#~ msgstr "Glava XPM ni bila najdena"
-#~ msgid "Invalid XPM header"
-#~ msgstr "Neveljavna glava XPM"
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "Datoteka XPM ima širino slike <= 0"
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "Datoteka XPM ima višino slike <=0"
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM ima neveljavno število znakov na slikovno točko"
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "Datoteka XPM ima neveljavno število barv"
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "Ni mogoče dodeliti pomnilnika za nalaganje slike XPM"
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "Ni mogoče prebrati barvne karte XPM"
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "Pisanje v začasno datoteko med nalaganjem slike XPM ni bilo uspešno"
-#~ msgid "The XPM image format"
-#~ msgstr "Vrsta zapisa slike XPM"
-#~ msgid "The EMF image format"
-#~ msgstr "Vrsta zapisa slike EMF"
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "Ni mogoče dodeliti pomnilnika: %s"
-#~ msgid "Could not create stream: %s"
-#~ msgstr "Ni mogoče ustvariti pretoka: %s"
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "Ni mogoče iskati po pretoku: %s"
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "Ni mogoče prebrati pretoka: %s"
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "Ni mogoče naložiti slike"
-#~ msgid "Couldn't load metafile"
-#~ msgstr "Ni mogoče naložiti metadatoteke"
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "Nepodprta vrsta zapisa slike za GDI+"
-#~ msgid "Couldn't save"
-#~ msgstr "Ni mogoče shraniti"
-#~ msgid "The WMF image format"
-#~ msgstr "Vrsta zapisa slike WMF"
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Tiskalnik '%s' morda ni povezan."
-#~ msgid "\"Deepness\" of the color."
-#~ msgstr "\"Globina\" barve."
-#~ msgid "Folders"
-#~ msgstr "Mape"
-#~ msgid "Fol_ders"
-#~ msgstr "_Mape"
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "Neberljiv imenik: %s"
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "Datoteka \"%s\" je na drugem računalniku (imenovanem %s) in morda ni na "
-#~ "voljo programu.\n"
-#~ "Ali ste prepričani, da jo želite izbrati?"
-#~ msgid "_New Folder"
-#~ msgstr "_Nova mapa"
-#~ msgid "De_lete File"
-#~ msgstr "_Izbriši datoteko"
-#~ msgid "_Rename File"
-#~ msgstr "P_reimenuj datoteko"
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
-#~ msgid "New Folder"
-#~ msgstr "Nova mapa"
-#~ msgid "_Folder name:"
-#~ msgstr "Ime _mape:"
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "Napaka med brisanjem datoteke '%s': %s"
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Ali zares želite izbrisati datoteko \"%s\"?"
-#~ msgid "Delete File"
-#~ msgstr "Izbriši datoteko"
-#~ msgid "Group"
-#~ msgstr "Skupina"
 
