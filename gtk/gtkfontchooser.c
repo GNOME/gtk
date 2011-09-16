@@ -77,7 +77,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
   g_object_interface_install_property
      (iface,
       g_param_spec_boxed ("font-desc",
-                          P_("Font"),
+                          P_("Font description"),
                           P_("Font description as a PangoFontDescription struct"),
                           PANGO_TYPE_FONT_DESCRIPTION,
                           GTK_PARAM_READWRITE));
