@@ -835,16 +835,15 @@ visible_func (GtkTreeModel *model,
               GtkTreeIter  *iter,
               gpointer      user_data)
 {
+  GtkFontChooserWidgetPrivate *priv = user_data;
   gboolean result = TRUE;
-  GtkFontChooserWidgetPrivate *priv = (GtkFontChooserWidgetPrivate*)user_data;
-
-  const gchar *search_text = (const gchar*)gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
-  gchar       *font_name;
-  gchar       *term;
-  gchar      **split_terms;
-  gint         n_terms = 0;
+  const gchar *search_text;
+  gchar **split_terms;
+  gchar *font_name, *font_name_casefold, *term_casefold;
+  guint i;
 
   /* If there's no filter string we show the item */
+  search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
   if (strlen (search_text) == 0)
     return TRUE;
 
@@ -856,25 +855,19 @@ visible_func (GtkTreeModel *model,
     return FALSE;
 
   split_terms = g_strsplit (search_text, " ", 0);
-  term = split_terms[0];
+  font_name_casefold = g_utf8_casefold (font_name, -1);
 
-  while (term && result)
-  {
-    gchar* font_name_casefold = g_utf8_casefold (font_name, -1);
-    gchar* term_casefold = g_utf8_casefold (term, -1);
+  for (i = 0; split_terms[i] && result; i++)
+    {
+      gchar* term_casefold = g_utf8_casefold (split_terms[i], -1);
 
-    if (g_strrstr (font_name_casefold, term_casefold))
-      result = result && TRUE;
-    else
-      result = FALSE;
+      if (!strstr (font_name_casefold, term_casefold))
+        result = FALSE;
 
-    n_terms++;
-    term = split_terms[n_terms];
+      g_free (term_casefold);
+    }
 
-    g_free (term_casefold);
-    g_free (font_name_casefold);
-  }
-
+  g_free (font_name_casefold);
   g_free (font_name);
   g_strfreev (split_terms);
 
