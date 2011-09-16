@@ -106,6 +106,7 @@ static gboolean gtk_link_button_button_press (GtkWidget        *widget,
 static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
 static void     gtk_link_button_style_updated (GtkWidget        *widget);
+static void     gtk_link_button_unrealize    (GtkWidget        *widget);
 static gboolean gtk_link_button_enter_cb     (GtkWidget        *widget,
 					      GdkEventCrossing *event,
 					      gpointer          user_data);
@@ -153,6 +154,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   widget_class->button_press_event = gtk_link_button_button_press;
   widget_class->popup_menu = gtk_link_button_popup_menu;
   widget_class->style_updated = gtk_link_button_style_updated;
+  widget_class->unrealize = gtk_link_button_unrealize;
   
   container_class->add = gtk_link_button_add;
 
@@ -389,6 +391,14 @@ set_hand_cursor (GtkWidget *widget,
 
   if (cursor)
     g_object_unref (cursor);
+}
+
+static void
+gtk_link_button_unrealize (GtkWidget *widget)
+{
+  set_hand_cursor (widget, FALSE);
+
+  GTK_WIDGET_CLASS (gtk_link_button_parent_class)->unrealize (widget);
 }
 
 static void
