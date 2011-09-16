@@ -106,15 +106,6 @@ gboolean       gdk_keymap_get_entries_for_keycode  (GdkKeymap           *keymap,
 						    guint              **keyvals,
 						    gint                *n_entries);
 
-/**
- * gdk_keymap_get_direction:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap.
- *
- * Returns the direction of the keymap.
- *
- * Returns: the direction of the keymap, %PANGO_DIRECTION_LTR or
- *   %PANGO_DIRECTION_RTL.
- */
 PangoDirection gdk_keymap_get_direction            (GdkKeymap           *keymap);
 gboolean       gdk_keymap_have_bidi_layouts        (GdkKeymap           *keymap);
 gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap);
@@ -128,15 +119,6 @@ gboolean       gdk_keymap_map_virtual_modifiers    (GdkKeymap           *keymap,
  */
 gchar*   gdk_keyval_name         (guint        keyval) G_GNUC_CONST;
 
-/**
- * gdk_keyval_from_name:
- * @keyval_name: a key name.
- *
- * Converts a key name to a key value.
- *
- * Returns: the corresponding key value, or %GDK_VoidSymbol if the key name is
- *  not a valid key.
- */
 guint    gdk_keyval_from_name    (const gchar *keyval_name);
 void     gdk_keyval_convert_case (guint        symbol,
 				  guint       *lower,
