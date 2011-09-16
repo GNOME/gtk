@@ -776,13 +776,12 @@ populate_list (GtkFontChooserWidget *fontchooser,
                                          font_desc,
                                          fontchooser->priv->preview_text);
 
-          gtk_list_store_append (model, &iter);
-          gtk_list_store_set (model, &iter,
-                              FAMILY_COLUMN, families[i],
-                              FACE_COLUMN, faces[j],
-                              PREVIEW_TITLE_COLUMN, family_and_face,
-                              PREVIEW_TEXT_COLUMN, tmp,
-                              -1);
+          gtk_list_store_insert_with_values (model, &iter, -1,
+                                             FAMILY_COLUMN, families[i],
+                                             FACE_COLUMN, faces[j],
+                                             PREVIEW_TITLE_COLUMN, family_and_face,
+                                             PREVIEW_TEXT_COLUMN, tmp,
+                                             -1);
 
           /* Select the current font,
            * the default font/face from the theme,
