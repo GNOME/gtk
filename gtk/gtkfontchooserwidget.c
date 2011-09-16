@@ -444,16 +444,6 @@ cursor_changed_cb (GtkTreeView *treeview,
   gtk_tree_path_free (path);
   path = NULL;
 
-  if (face == NULL || family == NULL)
-    {
-      if (face)
-        g_object_unref (face);
-      if (family)
-        g_object_unref (family);
-
-      return;
-    }
-
   desc = pango_font_face_describe (face);
   pango_font_description_set_size (desc, priv->size);
   gtk_widget_override_font (priv->preview, desc);
