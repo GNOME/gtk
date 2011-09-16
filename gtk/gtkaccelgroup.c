@@ -35,6 +35,7 @@
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gdk/gdkkeysyms.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 /**
@@ -1121,6 +1122,20 @@ is_hyper (const gchar *string)
 	  (string[6] == '>'));
 }
 
+static inline gboolean
+is_primary (const gchar *string)
+{
+  return ((string[0] == '<') &&
+	  (string[1] == 'p' || string[1] == 'P') &&
+	  (string[2] == 'r' || string[2] == 'R') &&
+	  (string[3] == 'i' || string[3] == 'I') &&
+	  (string[4] == 'm' || string[4] == 'M') &&
+	  (string[5] == 'a' || string[5] == 'A') &&
+	  (string[6] == 'r' || string[6] == 'R') &&
+	  (string[7] == 'y' || string[7] == 'Y') &&
+	  (string[8] == '>'));
+}
+
 /**
  * gtk_accelerator_parse:
  * @accelerator:      string representing an accelerator
@@ -1166,6 +1181,12 @@ gtk_accelerator_parse (const gchar     *accelerator,
 	      accelerator += 9;
 	      len -= 9;
 	      mods |= GDK_RELEASE_MASK;
+	    }
+	  else if (len >= 9 && is_primary (accelerator))
+	    {
+	      accelerator += 9;
+	      len -= 9;
+	      mods |= GTK_DEFAULT_ACCEL_MOD_MASK;
 	    }
 	  else if (len >= 9 && is_control (accelerator))
 	    {
@@ -1280,6 +1301,7 @@ gtk_accelerator_name (guint           accelerator_key,
 		      GdkModifierType accelerator_mods)
 {
   static const gchar text_release[] = "<Release>";
+  static const gchar text_primary[] = "<Primary>";
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
   static const gchar text_mod1[] = "<Alt>";
@@ -1290,6 +1312,7 @@ gtk_accelerator_name (guint           accelerator_key,
   static const gchar text_meta[] = "<Meta>";
   static const gchar text_super[] = "<Super>";
   static const gchar text_hyper[] = "<Hyper>";
+  GdkModifierType saved_mods;
   guint l;
   gchar *keyval_name;
   gchar *accelerator;
@@ -1300,9 +1323,15 @@ gtk_accelerator_name (guint           accelerator_key,
   if (!keyval_name)
     keyval_name = "";
 
+  saved_mods = accelerator_mods;
   l = 0;
   if (accelerator_mods & GDK_RELEASE_MASK)
     l += sizeof (text_release) - 1;
+  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK)
+    {
+      l += sizeof (text_primary) - 1;
+      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK; /* consume the default accel */
+    }
   if (accelerator_mods & GDK_SHIFT_MASK)
     l += sizeof (text_shift) - 1;
   if (accelerator_mods & GDK_CONTROL_MASK)
@@ -1327,12 +1356,19 @@ gtk_accelerator_name (guint           accelerator_key,
 
   accelerator = g_new (gchar, l + 1);
 
+  accelerator_mods = saved_mods;
   l = 0;
   accelerator[l] = 0;
   if (accelerator_mods & GDK_RELEASE_MASK)
     {
       strcpy (accelerator + l, text_release);
       l += sizeof (text_release) - 1;
+    }
+  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK)
+    {
+      strcpy (accelerator + l, text_primary);
+      l += sizeof (text_primary) - 1;
+      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK; /* consume the default accel */
     }
   if (accelerator_mods & GDK_SHIFT_MASK)
     {
