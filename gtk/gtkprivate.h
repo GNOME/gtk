@@ -112,6 +112,16 @@ gboolean _gtk_fnmatch (const char *pattern,
 #define GTK_DEFAULT_ACCEL_MOD_MASK GDK_META_MASK
 #endif
 
+/* When any of these modifiers are active, a key
+ * event cannot produce a symbol, so should be
+ * skipped when handling text input
+ */
+#ifndef GDK_WINDOWING_QUARTZ
+#define GTK_NO_TEXT_INPUT_MOD_MASK (GDK_MOD1_MASK | GDK_CONTROL_MASK)
+#else
+#define GTK_NO_TEXT_INPUT_MOD_MASK (GDK_MOD2_MASK | GDK_CONTROL_MASK)
+#endif
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */

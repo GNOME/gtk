@@ -871,7 +871,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       (context_simple->in_hex_sequence && !hex_keyval && 
        !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
-      if (event->state & (GDK_MOD1_MASK | GDK_CONTROL_MASK) ||
+      if (event->state & GTK_NO_TEXT_INPUT_MOD_MASK ||
 	  (context_simple->in_hex_sequence && context_simple->modifiers_dropped &&
 	   (event->keyval == GDK_Return || 
 	    event->keyval == GDK_ISO_Enter ||
