@@ -1501,7 +1501,7 @@ msgstr "Pesquisar nome da fonte"
 
 #: ../gtk/gtkfontchooserwidget.c:911
 msgid "Font Family"
-msgstr "Família da fonte"
+msgstr "Font Family"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
