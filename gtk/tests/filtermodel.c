@@ -3789,8 +3789,6 @@ ref_count_transfer_root_level_remove_filtered (void)
 
   gtk_tree_store_remove (GTK_TREE_STORE (model), &grandparent2);
 
-  gtk_tree_model_ref_count_dump (ref_model);
-
   assert_node_ref_count (ref_model, &grandparent1, 0);
   assert_node_ref_count (ref_model, &grandparent3, 2);
   assert_node_ref_count (ref_model, &grandparent4, 1);
@@ -4179,8 +4177,6 @@ ref_count_transfer_child_level_remove (void)
   assert_node_ref_count (ref_model, &parent3, 0);
 
   gtk_tree_store_remove (GTK_TREE_STORE (model), &parent1);
-
-  gtk_tree_model_ref_count_dump (ref_model);
 
   assert_node_ref_count (ref_model, &grandparent1, 3);
   assert_node_ref_count (ref_model, &parent2, 1);
