@@ -1,4 +1,4 @@
-# 'gtk+/po-properties/
+#'gtk+/po-properties/
 # Slovenian translation of gtk+-properties.
 # Copyright (C) 1999-2011 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+-properties package.
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-09-12 19:46+0000\n"
-"PO-Revision-Date: 2011-09-15 22:31+0100\n"
+"PO-Revision-Date: 2011-09-17 10:13+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -614,16 +614,14 @@ msgid "Whether the combobox should include an item that triggers a GtkAppChooser
 msgstr "Ali naj spustno polje vključi tudi predmet, ki sproži dejanje GtkAppChooserDialo"
 
 #: ../gtk/gtkappchooserbutton.c:633
-#, fuzzy
 #| msgid "Show default app"
 msgid "Show default item"
-msgstr "Pokaži privzeti program"
+msgstr "Pokaži privzeti predmet"
 
 #: ../gtk/gtkappchooserbutton.c:634
-#, fuzzy
 #| msgid "Whether the widget should show the default application"
 msgid "Whether the combobox should show the default application on top"
-msgstr "Ali naj kombinirano polje pokaže privzete programe na vrhu"
+msgstr "Ali naj spustno polje pokaže privzete programe na vrhu"
 
 #: ../gtk/gtkappchooserbutton.c:647
 #: ../gtk/gtkappchooserdialog.c:725
@@ -3021,7 +3019,6 @@ msgid "Whether the label widget should fill all available horizontal space"
 msgstr "Ali naj gradnik oznake zapolni celoten razpoložljiv vodoravni prostor"
 
 #: ../gtk/gtkexpander.c:348
-#, fuzzy
 #| msgid "Resize tolevel"
 msgid "Resize toplevel"
 msgstr "Spremeni velikost vrhnje ravni"
@@ -5724,15 +5721,13 @@ msgid "Whether mnemonics should be automatically shown and hidden when the user 
 msgstr "Ali naj bodo pospeševalne tipke samodejno prikazane (in skrite), kadar uporabnik pritisne (spusti) ustrezno tipko."
 
 #: ../gtk/gtksettings.c:1127
-#, fuzzy
 #| msgid "Visible"
 msgid "Visible Focus"
 msgstr "Okno v žarišču"
 
 #: ../gtk/gtksettings.c:1128
-#, fuzzy
 msgid "Whether 'focus rectangles' should be hidden until the user starts to use the keyboard."
-msgstr "Ali naj bodo 'pravokotniki pozornosti' skriti, dokler uporabnik ne prične uporabljati tipkovnice."
+msgstr "Ali naj bodo 'pravokotniki žariščenja' skriti, dokler uporabnik ne začne uporabljati tipkovnice."
 
 #: ../gtk/gtksettings.c:1154
 msgid "Application prefers a dark theme"
@@ -7551,16 +7546,14 @@ msgid "Whether mnemonics are currently visible in this window"
 msgstr "Ali naj bodo menijske bližnjice v oknu trenutno vidne"
 
 #: ../gtk/gtkwindow.c:741
-#, fuzzy
 #| msgid "Cursor Visible"
 msgid "Focus Visible"
-msgstr "Pozornost vidna"
+msgstr "Žarišče je vidno"
 
 #: ../gtk/gtkwindow.c:742
-#, fuzzy
 #| msgid "Whether mnemonics are currently visible in this window"
 msgid "Whether focus rectangles are currently visible in this window"
-msgstr "Ali naj bodo pravokotniki pozornosti v oknu trenutno vidne"
+msgstr "Ali naj bodo pravokotniki žariščenja v oknu trenutno vidni"
 
 #: ../gtk/gtkwindow.c:758
 msgid "Name of the themed icon for this window"
