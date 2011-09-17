@@ -44,6 +44,7 @@ Duis eu lectus quam. Vivamus eget metus a mauris molestie venenatis pulvinar ele
 Nulla facilisi. Pellentesque at dolor sit amet purus dapibus pulvinar molestie quis neque.
 Suspendisse feugiat quam quis dolor accumsan cursus. </property>
   </object>
+  <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
     <child>
@@ -141,8 +142,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem6">
                         <property name="label">gtk-cut</property>
+                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
@@ -151,6 +153,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem7">
                         <property name="label">gtk-copy</property>
+                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
@@ -161,6 +164,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem8">
                         <property name="label">gtk-paste</property>
+                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
@@ -171,11 +175,169 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem9">
                         <property name="label">gtk-delete</property>
+                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="togglesmenuitem">
+                        <property name="label">Checks &amp; Radios</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
+                        <child type="submenu">
+                          <object class="GtkMenu" id="togglessubmenu">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem1">
+                                <property name="label">_Check</property>
+                                <property name="active">True</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem2">
+                                <property name="label">_Check</property>
+                                <property name="active">True</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem3">
+                                <property name="label">_Check</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="inconsistent">True</property>
+                                <property name="sensitive">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem4">
+                                <property name="label">_Check</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem5">
+                                <property name="label">_Check</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="checkmenuitem6">
+                                <property name="label">_Check</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="inconsistent">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSeparatorMenuItem" id="separatormenuitem">
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radiomenuitem1">
+                                <property name="label">_Radio</property>
+                                <property name="active">True</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radiomenuitem2">
+                                <property name="label">_Radio</property>
+                                <property name="active">True</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radiomenuitem3">
+                                <property name="label">_Radio</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="inconsistent">True</property>
+                                <property name="sensitive">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radiomenuitem4">
+                                <property name="label">_Radio</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radiomenuitem5">
+                                <property name="label">_Radio</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioMenuItem" id="radiomenuitem6">
+                                <property name="label">_Radio</property>
+                                <property name="active">False</property>
+                                <property name="visible">True</property>
+                                <property name="inconsistent">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -518,12 +680,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <object class="GtkCheckButton" id="checkbutton3">
                         <property name="label" translatable="yes">checkbutton</property>
                         <property name="visible">True</property>
-                        <property name="sensitive">False</property>
+                        <property name="inconsistent">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
@@ -542,11 +703,49 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
+                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="checkbutton5">
+                        <property name="label" translatable="yes">checkbutton</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="checkbutton6">
+                        <property name="label" translatable="yes">checkbutton</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="inconsistent">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">5</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -592,13 +791,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <object class="GtkRadioButton" id="radiobutton3">
                         <property name="label" translatable="yes">radiobutton</property>
                         <property name="visible">True</property>
-                        <property name="sensitive">False</property>
+                        <property name="inconsistent">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">radiobutton1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -618,11 +818,51 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">radiobutton3</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">3</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="radiobutton5">
+                        <property name="label" translatable="yes">radiobutton</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">radiobutton3</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">4</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="radiobutton6">
+                        <property name="label" translatable="yes">radiobutton</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="inconsistent">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">radiobutton3</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">5</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -1729,5 +1969,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
         </child>
       </object>
     </child>
+    <accel-groups>
+      <group name="accelgroup1"/>
+    </accel-groups>
   </object>
 </interface>
