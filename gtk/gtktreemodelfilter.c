@@ -1007,6 +1007,11 @@ gtk_tree_model_filter_free_level (GtkTreeModelFilter *filter,
         filter->priv->zero_ref_count--;
     }
 
+#ifdef MODEL_FILTER_DEBUG
+  if (filter_level == filter->priv->root)
+    g_assert (filter->priv->zero_ref_count == 0);
+#endif
+
   if (filter_level->parent_elt)
     {
       /* Release reference on parent */
@@ -3493,6 +3498,8 @@ gtk_tree_model_filter_real_ref_node (GtkTreeModel *model,
 
 #ifdef MODEL_FILTER_DEBUG
           g_assert (filter->priv->zero_ref_count >= 0);
+          if (filter->priv->zero_ref_count > 0)
+            g_assert (filter->priv->root != NULL);
 #endif
         }
     }
@@ -3569,6 +3576,8 @@ gtk_tree_model_filter_real_unref_node (GtkTreeModel *model,
 
 #ifdef MODEL_FILTER_DEBUG
           g_assert (filter->priv->zero_ref_count >= 0);
+          if (filter->priv->zero_ref_count > 0)
+            g_assert (filter->priv->root != NULL);
 #endif
         }
     }
