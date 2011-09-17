@@ -3712,7 +3712,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
        || event->keyval == GDK_KEY_KP_Enter
        || event->keyval == GDK_KEY_space
        || event->keyval == GDK_KEY_KP_Space)
-      && !(event->state & gtk_get_default_accel_mod_mask ())
+      && !(event->state & gtk_accelerator_get_default_mod_mask ())
       && !(impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 	   impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     {
