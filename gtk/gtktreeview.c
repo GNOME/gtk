@@ -2773,21 +2773,21 @@ gtk_tree_view_button_press (GtkWidget      *widget,
        */
       if (event->type == GDK_BUTTON_PRESS)
         {
-          if ((event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-            tree_view->priv->ctrl_pressed = TRUE;
-          if ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
-            tree_view->priv->shift_pressed = TRUE;
+          if ((event->state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+            tree_view->priv->modify_selection_pressed = TRUE;
+          if ((event->state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+            tree_view->priv->extend_selection_pressed = TRUE;
 
           focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
           if (focus_cell)
             gtk_tree_view_column_focus_cell (column, focus_cell);
 
-          if (event->state & GDK_CONTROL_MASK)
+          if (event->state & GTK_MODIFY_SELECTION_MOD_MASK)
             {
               gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
               gtk_tree_view_real_toggle_cursor_row (tree_view);
             }
-          else if (event->state & GDK_SHIFT_MASK)
+          else if (event->state & GTK_EXTEND_SELECTION_MOD_MASK)
             {
               gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
               gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
@@ -2797,8 +2797,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
               gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
             }
 
-          tree_view->priv->ctrl_pressed = FALSE;
-          tree_view->priv->shift_pressed = FALSE;
+          tree_view->priv->modify_selection_pressed = FALSE;
+          tree_view->priv->extend_selection_pressed = FALSE;
         }
 
       /* the treeview may have been scrolled because of _set_cursor,
@@ -2830,10 +2830,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      tree_view->priv->rubber_band_y = event->y + tree_view->priv->dy;
 	      tree_view->priv->rubber_band_status = RUBBER_BAND_MAYBE_START;
 
-	      if ((event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-		tree_view->priv->rubber_band_ctrl = TRUE;
-	      if ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
-		tree_view->priv->rubber_band_shift = TRUE;
+	      if ((event->state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+		tree_view->priv->rubber_band_modify = TRUE;
+	      if ((event->state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+		tree_view->priv->rubber_band_extend = TRUE;
 	    }
         }
 
@@ -3791,8 +3791,8 @@ gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
 
   /* Clear status variables */
   tree_view->priv->rubber_band_status = RUBBER_BAND_OFF;
-  tree_view->priv->rubber_band_shift = 0;
-  tree_view->priv->rubber_band_ctrl = 0;
+  tree_view->priv->rubber_band_extend = FALSE;
+  tree_view->priv->rubber_band_modify = FALSE;
 
   tree_view->priv->rubber_band_start_node = NULL;
   tree_view->priv->rubber_band_start_tree = NULL;
@@ -3837,9 +3837,9 @@ gtk_tree_view_update_rubber_band_selection_range (GtkTreeView *tree_view,
 
       if (select)
         {
-	  if (tree_view->priv->rubber_band_shift)
-	    GTK_RBNODE_SET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
-	  else if (tree_view->priv->rubber_band_ctrl)
+	  if (tree_view->priv->rubber_band_extend)
+            GTK_RBNODE_SET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
+	  else if (tree_view->priv->rubber_band_modify)
 	    {
 	      /* Toggle the selection state */
 	      if (GTK_RBNODE_FLAG_SET (start_node, GTK_RBNODE_IS_SELECTED))
@@ -3853,9 +3853,9 @@ gtk_tree_view_update_rubber_band_selection_range (GtkTreeView *tree_view,
       else
         {
 	  /* Mirror the above */
-	  if (tree_view->priv->rubber_band_shift)
+	  if (tree_view->priv->rubber_band_extend)
 	    GTK_RBNODE_UNSET_FLAG (start_node, GTK_RBNODE_IS_SELECTED);
-	  else if (tree_view->priv->rubber_band_ctrl)
+	  else if (tree_view->priv->rubber_band_modify)
 	    {
 	      /* Toggle the selection state */
 	      if (GTK_RBNODE_FLAG_SET (start_node, GTK_RBNODE_IS_SELECTED))
@@ -8203,10 +8203,10 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 
   if (gtk_get_current_event_state (&state))
     {
-      if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-        tree_view->priv->ctrl_pressed = TRUE;
-      if ((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
-        tree_view->priv->shift_pressed = TRUE;
+      if ((state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+        tree_view->priv->modify_selection_pressed = TRUE;
+      if ((state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+        tree_view->priv->extend_selection_pressed = TRUE;
     }
   /* else we assume not pressed */
 
@@ -8230,8 +8230,8 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
       g_assert_not_reached ();
     }
 
-  tree_view->priv->ctrl_pressed = FALSE;
-  tree_view->priv->shift_pressed = FALSE;
+  tree_view->priv->modify_selection_pressed = FALSE;
+  tree_view->priv->extend_selection_pressed = FALSE;
 
   return TRUE;
 }
@@ -9690,7 +9690,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 
   if (selection_count == 0
       && tree_view->priv->selection->type != GTK_SELECTION_NONE
-      && !tree_view->priv->ctrl_pressed
+      && !tree_view->priv->modify_selection_pressed
       && selectable)
     {
       /* Don't move the cursor, but just select the current node */
@@ -9759,7 +9759,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
     {
       gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
 
-      if (!tree_view->priv->shift_pressed)
+      if (!tree_view->priv->extend_selection_pressed)
         {
           if (! gtk_widget_keynav_failed (GTK_WIDGET (tree_view),
                                           count < 0 ?
@@ -10111,7 +10111,7 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
       return FALSE;
     }
 
-  if (!tree_view->priv->shift_pressed && start_editing &&
+  if (!tree_view->priv->extend_selection_pressed && start_editing &&
       tree_view->priv->focus_column)
     {
       if (gtk_tree_view_start_editing (tree_view, cursor_path))
@@ -10121,9 +10121,9 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
 	}
     }
 
-  if (tree_view->priv->ctrl_pressed)
+  if (tree_view->priv->modify_selection_pressed)
     mode |= GTK_TREE_SELECT_MODE_TOGGLE;
-  if (tree_view->priv->shift_pressed)
+  if (tree_view->priv->extend_selection_pressed)
     mode |= GTK_TREE_SELECT_MODE_EXTEND;
 
   _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
@@ -10147,7 +10147,7 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   _gtk_tree_view_queue_draw_node (tree_view, cursor_tree, cursor_node, NULL);
 
-  if (!tree_view->priv->shift_pressed)
+  if (!tree_view->priv->extend_selection_pressed)
     gtk_tree_view_row_activated (tree_view, cursor_path,
                                  tree_view->priv->focus_column);
     
@@ -10285,8 +10285,8 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 
       if (gtk_get_current_event_state (&state))
 	{
-	  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-	    tree_view->priv->ctrl_pressed = TRUE;
+	  if ((state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+	    tree_view->priv->modify_selection_pressed = TRUE;
 	}
 
       gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
@@ -10296,7 +10296,7 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
       gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
       gtk_tree_path_free (cursor_path);
 
-      tree_view->priv->ctrl_pressed = FALSE;
+      tree_view->priv->modify_selection_pressed = FALSE;
 
       return TRUE;
     }
@@ -12579,13 +12579,13 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
       GtkRBTree *new_tree = NULL;
       GtkRBNode *new_node = NULL;
 
-      if (clear_and_select && !tree_view->priv->ctrl_pressed)
+      if (clear_and_select && !tree_view->priv->modify_selection_pressed)
         {
           GtkTreeSelectMode mode = 0;
 
-          if (tree_view->priv->ctrl_pressed)
+          if (tree_view->priv->modify_selection_pressed)
             mode |= GTK_TREE_SELECT_MODE_TOGGLE;
-          if (tree_view->priv->shift_pressed)
+          if (tree_view->priv->extend_selection_pressed)
             mode |= GTK_TREE_SELECT_MODE_EXTEND;
 
           _gtk_tree_selection_internal_select_node (tree_view->priv->selection,

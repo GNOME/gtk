@@ -3696,7 +3696,7 @@ gtk_entry_button_press (GtkWidget      *widget,
       entry->select_words = FALSE;
       entry->select_lines = FALSE;
 
-      if (event->state & GDK_SHIFT_MASK)
+      if (event->state & GTK_EXTEND_SELECTION_MOD_MASK)
 	{
 	  _gtk_entry_reset_im_context (entry);
 	  

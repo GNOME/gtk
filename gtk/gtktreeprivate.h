@@ -211,8 +211,8 @@ struct _GtkTreeViewPrivate
   gint rubber_band_status;
   gint rubber_band_x;
   gint rubber_band_y;
-  gint rubber_band_shift;
-  gint rubber_band_ctrl;
+  gint rubber_band_extend;
+  gint rubber_band_modify;
 
   GtkRBNode *rubber_band_start_node;
   GtkRBTree *rubber_band_start_tree;
@@ -276,8 +276,8 @@ struct _GtkTreeViewPrivate
   /* for DnD */
   guint empty_view_drop : 1;
 
-  guint ctrl_pressed : 1;
-  guint shift_pressed : 1;
+  guint modify_selection_pressed : 1;
+  guint extend_selection_pressed : 1;
 
   guint init_hadjust_value : 1;
 
