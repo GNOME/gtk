@@ -178,8 +178,8 @@ struct _GtkIconViewPrivate
   guint reorderable : 1;
   guint empty_view_drop :1;
 
-  guint ctrl_pressed : 1;
-  guint shift_pressed : 1;
+  guint modify_selection_pressed : 1;
+  guint extend_selection_pressed : 1;
 
   guint draw_focus : 1;
 
@@ -2043,7 +2043,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	      gtk_icon_view_set_cursor_item (icon_view, item, cursor_cell);
 	    }
 	  else if (icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE &&
-		   (event->state & GDK_SHIFT_MASK))
+		   (event->state & GTK_EXTEND_SELECTION_MOD_MASK))
 	    {
 	      gtk_icon_view_unselect_all_internal (icon_view);
 
@@ -2060,7 +2060,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	    {
 	      if ((icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE ||
 		  ((icon_view->priv->selection_mode == GTK_SELECTION_SINGLE) && item->selected)) &&
-		  (event->state & GDK_CONTROL_MASK))
+		  (event->state & GTK_MODIFY_SELECTION_MOD_MASK))
 		{
 		  item->selected = !item->selected;
 		  gtk_icon_view_queue_draw_item (icon_view, item);
@@ -2107,7 +2107,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
       else
 	{
 	  if (icon_view->priv->selection_mode != GTK_SELECTION_BROWSE &&
-	      !(event->state & GDK_CONTROL_MASK))
+	      !(event->state & GTK_MODIFY_SELECTION_MOD_MASK))
 	    {
 	      dirty = gtk_icon_view_unselect_all_internal (icon_view);
 	    }
@@ -3566,10 +3566,10 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 
   if (gtk_get_current_event_state (&state))
     {
-      if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-        icon_view->priv->ctrl_pressed = TRUE;
-      if ((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
-        icon_view->priv->shift_pressed = TRUE;
+      if ((state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+        icon_view->priv->modify_selection_pressed = TRUE;
+      if ((state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+        icon_view->priv->extend_selection_pressed = TRUE;
     }
   /* else we assume not pressed */
 
@@ -3592,8 +3592,8 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
       g_assert_not_reached ();
     }
 
-  icon_view->priv->ctrl_pressed = FALSE;
-  icon_view->priv->shift_pressed = FALSE;
+  icon_view->priv->modify_selection_pressed = FALSE;
+  icon_view->priv->extend_selection_pressed = FALSE;
 
   icon_view->priv->draw_focus = TRUE;
 
@@ -3792,8 +3792,8 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
       return;
     }
 
-  if (icon_view->priv->ctrl_pressed ||
-      !icon_view->priv->shift_pressed ||
+  if (icon_view->priv->modify_selection_pressed ||
+      !icon_view->priv->extend_selection_pressed ||
       !icon_view->priv->anchor_item ||
       icon_view->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_view->priv->anchor_item = item;
@@ -3801,7 +3801,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
   cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
   gtk_icon_view_set_cursor_item (icon_view, item, cell);
 
-  if (!icon_view->priv->ctrl_pressed &&
+  if (!icon_view->priv->modify_selection_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
       dirty = gtk_icon_view_unselect_all_internal (icon_view);
@@ -3848,15 +3848,15 @@ gtk_icon_view_move_cursor_page_up_down (GtkIconView *icon_view,
   if (!item)
     return;
 
-  if (icon_view->priv->ctrl_pressed ||
-      !icon_view->priv->shift_pressed ||
+  if (icon_view->priv->modify_selection_pressed ||
+      !icon_view->priv->extend_selection_pressed ||
       !icon_view->priv->anchor_item ||
       icon_view->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_view->priv->anchor_item = item;
 
   gtk_icon_view_set_cursor_item (icon_view, item, NULL);
 
-  if (!icon_view->priv->ctrl_pressed &&
+  if (!icon_view->priv->modify_selection_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
       dirty = gtk_icon_view_unselect_all_internal (icon_view);
@@ -3937,8 +3937,8 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
       return;
     }
 
-  if (icon_view->priv->ctrl_pressed ||
-      !icon_view->priv->shift_pressed ||
+  if (icon_view->priv->modify_selection_pressed ||
+      !icon_view->priv->extend_selection_pressed ||
       !icon_view->priv->anchor_item ||
       icon_view->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_view->priv->anchor_item = item;
@@ -3946,7 +3946,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
   cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
   gtk_icon_view_set_cursor_item (icon_view, item, cell);
 
-  if (!icon_view->priv->ctrl_pressed &&
+  if (!icon_view->priv->modify_selection_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
       dirty = gtk_icon_view_unselect_all_internal (icon_view);
@@ -3985,15 +3985,15 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
   if (!item)
     return;
 
-  if (icon_view->priv->ctrl_pressed ||
-      !icon_view->priv->shift_pressed ||
+  if (icon_view->priv->modify_selection_pressed ||
+      !icon_view->priv->extend_selection_pressed ||
       !icon_view->priv->anchor_item ||
       icon_view->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_view->priv->anchor_item = item;
 
   gtk_icon_view_set_cursor_item (icon_view, item, NULL);
 
-  if (!icon_view->priv->ctrl_pressed &&
+  if (!icon_view->priv->modify_selection_pressed &&
       icon_view->priv->selection_mode != GTK_SELECTION_NONE)
     {
       dirty = gtk_icon_view_unselect_all_internal (icon_view);

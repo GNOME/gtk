@@ -77,6 +77,14 @@ const gchar *_gtk_get_data_prefix ();
 #define GTK_NO_TEXT_INPUT_MOD_MASK (GDK_MOD2_MASK | GDK_CONTROL_MASK)
 #endif
 
+#ifndef GDK_WINDOWING_QUARTZ
+#define GTK_EXTEND_SELECTION_MOD_MASK GDK_SHIFT_MASK
+#define GTK_MODIFY_SELECTION_MOD_MASK GDK_CONTROL_MASK
+#else
+#define GTK_EXTEND_SELECTION_MOD_MASK GDK_SHIFT_MASK
+#define GTK_MODIFY_SELECTION_MOD_MASK GDK_MOD2_MASK
+#endif
+
 gboolean _gtk_fnmatch      (const char *pattern,
                             const char *string,
                             gboolean    no_leading_period);
