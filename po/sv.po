@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-12 17:49+0200\n"
-"PO-Revision-Date: 2011-09-12 17:50+0100\n"
+"POT-Creation-Date: 2011-09-18 19:33+0200\n"
+"PO-Revision-Date: 2011-09-18 19:35+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -660,7 +660,7 @@ msgstr "Visa övriga program"
 
 #: ../gtk/gtkappchooserdialog.c:543
 #: ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "_Välj "
 
@@ -1085,7 +1085,7 @@ msgstr "Skrivbord"
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Annan..."
 
@@ -1343,19 +1343,19 @@ msgstr "Filen finns redan i \"%s\". Att ersätta den kommer att skriva över des
 msgid "_Replace"
 msgstr "_Ersätt"
 
-#: ../gtk/gtkfilechooserdefault.c:9159
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "Could not start the search process"
 msgstr "Kunde inte starta sökprocessen"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9161
 msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr "Programmet kunde inte skapa en anslutning till indexeringsdemonen. Försäkra dig om att den kör."
 
-#: ../gtk/gtkfilechooserdefault.c:9174
+#: ../gtk/gtkfilechooserdefault.c:9175
 msgid "Could not send the search request"
 msgstr "Kunde inte skicka sökbegäran"
 
-#: ../gtk/gtkfilechooserdefault.c:9775
+#: ../gtk/gtkfilechooserdefault.c:9776
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunde inte montera %s"
@@ -1364,7 +1364,7 @@ msgstr "Kunde inte montera %s"
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702
 #: ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Ogiltig sökväg"
@@ -1430,32 +1430,35 @@ msgstr "Sökvägen finns inte"
 msgid "File System"
 msgstr "Filsystem"
 
-#: ../gtk/gtkfontbutton.c:152
-#: ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "Välj ett typsnitt"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437
+#: ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Välj ett typsnitt"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "Typsnitt"
 
-#: ../gtk/gtkfontchooser.c:118
-msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "Inga typsnitt matchade din sökning. Du kan ändra din sökning och försöka igen."
-
-#: ../gtk/gtkfontchooser.c:667
-msgid "Search font name"
-msgstr "Sök efter typsnittsnamn"
-
-#: ../gtk/gtkfontchooserdialog.c:147
+#: ../gtk/gtkfontchooserdialog.c:185
 #: ../gtk/gtkfontsel.c:1738
 msgid "Font Selection"
 msgstr "Typsnittsval"
+
+#: ../gtk/gtkfontchooserwidget.c:118
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr "Inga typsnitt matchade din sökning. Du kan ändra din sökning och försöka igen."
+
+#: ../gtk/gtkfontchooserwidget.c:642
+msgid "Search font name"
+msgstr "Sök efter typsnittsnamn"
+
+#: ../gtk/gtkfontchooserwidget.c:911
+msgid "Font Family"
+msgstr "Typsnittsfamilj"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1519,11 +1522,11 @@ msgstr "_Öppna länk"
 msgid "Copy _Link Address"
 msgstr "Kopiera _länkadress"
 
-#: ../gtk/gtklinkbutton.c:484
+#: ../gtk/gtklinkbutton.c:494
 msgid "Copy URL"
 msgstr "Kopiera url"
 
-#: ../gtk/gtklinkbutton.c:647
+#: ../gtk/gtklinkbutton.c:657
 msgid "Invalid URI"
 msgstr "Ogiltig uri"
 
