@@ -192,6 +192,7 @@ static void       gtk_toolbar_get_child_property   (GtkContainer        *contain
 						    guint                property_id,
 						    GValue              *value,
 						    GParamSpec          *pspec);
+static void       gtk_toolbar_dispose              (GObject             *object);
 static void       gtk_toolbar_finalize             (GObject             *object);
 static void       gtk_toolbar_show_all             (GtkWidget           *widget);
 static void       gtk_toolbar_hide_all             (GtkWidget           *widget);
@@ -367,8 +368,9 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   gobject_class->set_property = gtk_toolbar_set_property;
   gobject_class->get_property = gtk_toolbar_get_property;
+  gobject_class->dispose = gtk_toolbar_dispose;
   gobject_class->finalize = gtk_toolbar_finalize;
-  
+
   widget_class->button_press_event = gtk_toolbar_button_press;
   widget_class->expose_event = gtk_toolbar_expose;
   widget_class->size_request = gtk_toolbar_size_request;
@@ -3159,6 +3161,24 @@ gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
 }
 
 static void
+gtk_toolbar_dispose (GObject *object)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (object);
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+
+  if (priv->arrow_button)
+    {
+      gtk_widget_unparent (priv->arrow_button);
+      priv->arrow_button = NULL;
+    }
+
+  if (priv->menu)
+    gtk_widget_destroy (GTK_WIDGET (priv->menu));
+
+  G_OBJECT_CLASS (gtk_toolbar_parent_class)->dispose (object);
+}
+
+static void
 gtk_toolbar_finalize (GObject *object)
 {
   GList *list;
@@ -3167,9 +3187,6 @@ gtk_toolbar_finalize (GObject *object)
   
   if (toolbar->tooltips)
     g_object_unref (toolbar->tooltips);
-  
-  if (priv->arrow_button)
-    gtk_widget_unparent (priv->arrow_button);
 
   for (list = priv->content; list != NULL; list = list->next)
     {
@@ -3182,10 +3199,7 @@ gtk_toolbar_finalize (GObject *object)
   g_list_free (toolbar->children);
   
   g_timer_destroy (priv->timer);
-  
-  if (priv->menu)
-    gtk_widget_destroy (GTK_WIDGET (priv->menu));
-  
+
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
 
