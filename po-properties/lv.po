@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-06 04:10+0000\n"
-"PO-Revision-Date: 2011-09-08 00:15+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-09-12 19:46+0000\n"
+"PO-Revision-Date: 2011-09-15 19:56+0300\n"
 "Last-Translator: Rūdofls Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Language: lv\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:136
 #: ../gdk/gdkdevicemanager.c:146
@@ -607,11 +607,11 @@ msgstr "Labais papildinājums"
 msgid "The padding to insert at the right of the widget."
 msgstr "Papildinājums, ko ievietot labajā logdaļas pusē."
 
-#: ../gtk/gtkappchooserbutton.c:557
+#: ../gtk/gtkappchooserbutton.c:616
 msgid "Include an 'Other...' item"
 msgstr "Iekļaut 'Citi...' vienumu"
 
-#: ../gtk/gtkappchooserbutton.c:558
+#: ../gtk/gtkappchooserbutton.c:617
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
@@ -619,75 +619,85 @@ msgstr ""
 "Vai kombinētajā lodziņā vajadzētu iekļaut vienumu, kas izsauc "
 "GtkAppChooserDialog"
 
-#: ../gtk/gtkappchooserbutton.c:570 ../gtk/gtkappchooserdialog.c:722
+#: ../gtk/gtkappchooserbutton.c:633
+#| msgid "Show default app"
+msgid "Show default item"
+msgstr "Rādīt noklusēto vienumu"
+
+#: ../gtk/gtkappchooserbutton.c:634
+#| msgid "Whether the widget should show the default application"
+msgid "Whether the combobox should show the default application on top"
+msgstr "Vai kombinētajā lauciņā noklusētā lietotne jārāda augšpusē"
+
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
 msgstr "Virsraksts"
 
-#: ../gtk/gtkappchooserbutton.c:571 ../gtk/gtkappchooserdialog.c:723
+#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:726
 msgid "The text to show at the top of the dialog"
 msgstr "Teksts, ko rādīt dialoglodziņa augšpusē"
 
-#: ../gtk/gtkappchooser.c:61
+#: ../gtk/gtkappchooser.c:75
 msgid "Content type"
 msgstr "Satura tips"
 
-#: ../gtk/gtkappchooser.c:62
+#: ../gtk/gtkappchooser.c:76
 msgid "The content type used by the open with object"
 msgstr "Satura tips, ko izmanto 'atvērt ar objektu'"
 
-#: ../gtk/gtkappchooserdialog.c:708
+#: ../gtk/gtkappchooserdialog.c:711
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:709
+#: ../gtk/gtkappchooserdialog.c:712
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile, ko izmanto lietotnes selektora dialoglodziņš"
 
-#: ../gtk/gtkappchooserwidget.c:1016
+#: ../gtk/gtkappchooserwidget.c:1029
 msgid "Show default app"
 msgstr "Rādīt noklusēto lietotni"
 
-#: ../gtk/gtkappchooserwidget.c:1017
+#: ../gtk/gtkappchooserwidget.c:1030
 msgid "Whether the widget should show the default application"
 msgstr "Vai logdaļai jārāda noklusētā lietotne"
 
-#: ../gtk/gtkappchooserwidget.c:1030
+#: ../gtk/gtkappchooserwidget.c:1044
 msgid "Show recommended apps"
 msgstr "Rādīt ieteicamās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1031
+#: ../gtk/gtkappchooserwidget.c:1045
 msgid "Whether the widget should show recommended applications"
 msgstr "Vai logdaļām vajadzētu rādīt ieteicamās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1044
+#: ../gtk/gtkappchooserwidget.c:1059
 msgid "Show fallback apps"
 msgstr "Rādīt atkāpšanās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1045
+#: ../gtk/gtkappchooserwidget.c:1060
 msgid "Whether the widget should show fallback applications"
 msgstr "Vai logdaļām vajadzētu rādīt atkāpšanās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1057
+#: ../gtk/gtkappchooserwidget.c:1072
 msgid "Show other apps"
 msgstr "Rādīt citas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1058
+#: ../gtk/gtkappchooserwidget.c:1073
 msgid "Whether the widget should show other applications"
 msgstr "Vai logdaļai vajadzētu rādīt citas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1071
+#: ../gtk/gtkappchooserwidget.c:1086
 msgid "Show all apps"
 msgstr "Rādīt visas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1072
+#: ../gtk/gtkappchooserwidget.c:1087
 msgid "Whether the widget should show all applications"
 msgstr "Vai logdaļai vajadzētu rādīt visas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1085
+#: ../gtk/gtkappchooserwidget.c:1101
 msgid "Widget's default text"
 msgstr "Logdaļas noklusētais teksts"
 
-#: ../gtk/gtkappchooserwidget.c:1086
+#: ../gtk/gtkappchooserwidget.c:1102
 msgid "The default text appearing when there are no applications"
 msgstr "Noklusētais teksts, kas parādās, kad nav lietotņu"
 
@@ -707,7 +717,7 @@ msgstr "Bultas ēna"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Ēnas parādīšanās ap bultu"
 
-#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:986 ../gtk/gtkmenu.c:798
+#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:991 ../gtk/gtkmenu.c:798
 #: ../gtk/gtkmenuitem.c:446
 msgid "Arrow Scaling"
 msgstr "Bultiņu mērogs"
@@ -975,7 +985,7 @@ msgstr ""
 "Ja iestatīts, iezīme tiek lietota, lai izvēlētos krājuma priekšmetu tā "
 "vietā, lai parādītu"
 
-#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:792
+#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:797
 #: ../gtk/gtkfilechooserbutton.c:426
 msgid "Focus on click"
 msgstr "Fokuss uz klikšķa"
@@ -1454,7 +1464,7 @@ msgstr "Teksta kolonna"
 msgid "A column in the data source model to get the strings from"
 msgstr "Kolonna datu avota modelī, no kuras iegūt virknes"
 
-#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:864
 msgid "Has Entry"
 msgstr "Ir ieraksts"
 
@@ -1861,7 +1871,7 @@ msgstr ""
 "Kā sadalīt virkni vairākās līnijās, ja šūnas attēlojumam nav pietiekami "
 "daudz vietas, lai attēlotu visu virkni"
 
-#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:681
+#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:686
 msgid "Wrap width"
 msgstr "Aplaušanas platums"
 
@@ -2060,13 +2070,13 @@ msgstr "CellView modelis"
 msgid "The model for cell view"
 msgstr "Šūnu skata modelis"
 
-#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:945
+#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:950
 #: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:768
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
 msgstr "Šūnas laukums"
 
-#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:946
+#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:951
 #: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:769
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
@@ -2238,97 +2248,97 @@ msgstr "Poga 'Palīdzība'"
 msgid "The help button of the dialog."
 msgstr "Dialoglodziņa 'Palīdzība' poga."
 
-#: ../gtk/gtkcombobox.c:664
+#: ../gtk/gtkcombobox.c:669
 msgid "ComboBox model"
 msgstr "Kombinētā lodziņa modelis"
 
-#: ../gtk/gtkcombobox.c:665
+#: ../gtk/gtkcombobox.c:670
 msgid "The model for the combo box"
 msgstr "Lauku saraksta modelis"
 
-#: ../gtk/gtkcombobox.c:682
+#: ../gtk/gtkcombobox.c:687
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Aplaušanas platums, priekšmetu izklāšanai uz režģa"
 
-#: ../gtk/gtkcombobox.c:704 ../gtk/gtktreemenu.c:383
+#: ../gtk/gtkcombobox.c:709 ../gtk/gtktreemenu.c:383
 msgid "Row span column"
 msgstr "Rindas izvērsuma kolona"
 
-#: ../gtk/gtkcombobox.c:705 ../gtk/gtktreemenu.c:384
+#: ../gtk/gtkcombobox.c:710 ../gtk/gtktreemenu.c:384
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel kolonna, kas satur rindas savienojuma vērtības"
 
-#: ../gtk/gtkcombobox.c:726 ../gtk/gtktreemenu.c:404
+#: ../gtk/gtkcombobox.c:731 ../gtk/gtktreemenu.c:404
 msgid "Column span column"
 msgstr "Kolonnas savienotājkolonna"
 
-#: ../gtk/gtkcombobox.c:727 ../gtk/gtktreemenu.c:405
+#: ../gtk/gtkcombobox.c:732 ../gtk/gtktreemenu.c:405
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel kolonna, kas satur kolonnas savienojuma vērtības"
 
-#: ../gtk/gtkcombobox.c:748
+#: ../gtk/gtkcombobox.c:753
 msgid "Active item"
 msgstr "Aktīvais priekšmets"
 
-#: ../gtk/gtkcombobox.c:749
+#: ../gtk/gtkcombobox.c:754
 msgid "The item which is currently active"
 msgstr "Šobrīd aktīvais objekts"
 
-#: ../gtk/gtkcombobox.c:768 ../gtk/gtkuimanager.c:479
+#: ../gtk/gtkcombobox.c:773 ../gtk/gtkuimanager.c:479
 msgid "Add tearoffs to menus"
 msgstr "Pievienot pārcēlienus izvēlnēm"
 
-#: ../gtk/gtkcombobox.c:769
+#: ../gtk/gtkcombobox.c:774
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Vai izkrītošajām izvēlnēm vajadzētu pārceļamās izvelnes elementu"
 
-#: ../gtk/gtkcombobox.c:784 ../gtk/gtkentry.c:786
+#: ../gtk/gtkcombobox.c:789 ../gtk/gtkentry.c:786
 msgid "Has Frame"
 msgstr "Ir ietvars"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:790
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Vai lauki sarakstā zīmē rāmi ap bērnu"
 
-#: ../gtk/gtkcombobox.c:793
+#: ../gtk/gtkcombobox.c:798
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Vai lauki sarakstā sagrābj fokusu, kad ir noklikšķināta pele"
 
-#: ../gtk/gtkcombobox.c:808 ../gtk/gtkmenu.c:643
+#: ../gtk/gtkcombobox.c:813 ../gtk/gtkmenu.c:643
 msgid "Tearoff Title"
 msgstr "Pārcelšanas virsraksts"
 
-#: ../gtk/gtkcombobox.c:809
+#: ../gtk/gtkcombobox.c:814
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Logu pārvaldnieks var parādīt virsrakstu, kad uzvedne ir pārcelta"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:831
 msgid "Popup shown"
 msgstr "Parādīts uznirstošais logs"
 
-#: ../gtk/gtkcombobox.c:827
+#: ../gtk/gtkcombobox.c:832
 msgid "Whether the combo's dropdown is shown"
 msgstr "Vai tiek rādīts kombinētā lodziņa izkrītošais saraksts"
 
-#: ../gtk/gtkcombobox.c:843
+#: ../gtk/gtkcombobox.c:848
 msgid "Button Sensitivity"
 msgstr "Pogu jutība"
 
-#: ../gtk/gtkcombobox.c:844
+#: ../gtk/gtkcombobox.c:849
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Vai izkrītošā poga ir ir jutīga, kad modelis ir tukšs"
 
-#: ../gtk/gtkcombobox.c:860
+#: ../gtk/gtkcombobox.c:865
 msgid "Whether combo box has an entry"
 msgstr "Vai kombinētajam lodziņam ir ieraksti"
 
-#: ../gtk/gtkcombobox.c:875
+#: ../gtk/gtkcombobox.c:880
 msgid "Entry Text Column"
 msgstr "Ievades teksta kolonna"
 
-#: ../gtk/gtkcombobox.c:876
+#: ../gtk/gtkcombobox.c:881
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -2336,30 +2346,30 @@ msgstr ""
 "Kolonna kombinētā lodziņa modelī, ko asociēt ar virknēm no ieraksta, ja "
 "kombinētais lodziņš ir veidots ar #GtkComboBox:has-entry = %TRUE"
 
-#: ../gtk/gtkcombobox.c:893
+#: ../gtk/gtkcombobox.c:898
 msgid "ID Column"
 msgstr "ID kolonna"
 
-#: ../gtk/gtkcombobox.c:894
+#: ../gtk/gtkcombobox.c:899
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
 msgstr ""
 "Kolonna kombinētā lodziņa modelī, kas nodrošina virknes ID vērtībām modelī"
 
-#: ../gtk/gtkcombobox.c:909
+#: ../gtk/gtkcombobox.c:914
 msgid "Active id"
 msgstr "Aktīvais id"
 
-#: ../gtk/gtkcombobox.c:910
+#: ../gtk/gtkcombobox.c:915
 msgid "The value of the id column for the active row"
 msgstr "ID kolonnas vērtība aktīvajai rindai"
 
-#: ../gtk/gtkcombobox.c:925
+#: ../gtk/gtkcombobox.c:930
 msgid "Popup Fixed Width"
 msgstr "Uznirstošā loga fiksēts platums"
 
-#: ../gtk/gtkcombobox.c:926
+#: ../gtk/gtkcombobox.c:931
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -2367,33 +2377,33 @@ msgstr ""
 "Vai uzvednes platumam vajadzētu būt fiksētam un tādam pašam, kā kombinētajam "
 "lodziņam."
 
-#: ../gtk/gtkcombobox.c:952
+#: ../gtk/gtkcombobox.c:957
 msgid "Appears as list"
 msgstr "Parādās kā saraksts"
 
-#: ../gtk/gtkcombobox.c:953
+#: ../gtk/gtkcombobox.c:958
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Vai izkrītošajiem jāizskatās kā sarakstiem nevis kā izvēlnēm"
 
-#: ../gtk/gtkcombobox.c:969
+#: ../gtk/gtkcombobox.c:974
 msgid "Arrow Size"
 msgstr "Bultas izmērs"
 
-#: ../gtk/gtkcombobox.c:970
+#: ../gtk/gtkcombobox.c:975
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Minimālais izvēļu saraksta bultas izmērs"
 
-#: ../gtk/gtkcombobox.c:987
+#: ../gtk/gtkcombobox.c:992
 msgid "The amount of space used by the arrow"
 msgstr "Bultiņas izmantotās vietas apjoms"
 
-#: ../gtk/gtkcombobox.c:1002 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
+#: ../gtk/gtkcombobox.c:1007 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
 #: ../gtk/gtkmenubar.c:218 ../gtk/gtkstatusbar.c:182 ../gtk/gtktoolbar.c:614
 #: ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "Ēnas tips"
 
-#: ../gtk/gtkcombobox.c:1003
+#: ../gtk/gtkcombobox.c:1008
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Kāda tipa ēnu zīmēt ap izvēļņu sarakstu"
 
@@ -2947,7 +2957,6 @@ msgstr ""
 "Vai iezīmes logdaļai vajadzētu aizpildīt visu redzamo horizontālo telpu"
 
 #: ../gtk/gtkexpander.c:348
-#| msgid "Resize tolevel"
 msgid "Resize toplevel"
 msgstr "Mainīt izmēru augšējam līmenim"
 
@@ -3106,7 +3115,6 @@ msgid "Y position of child widget"
 msgstr "Bērna logdaļas Y pozīcija"
 
 #: ../gtk/gtkfontbutton.c:151
-#| msgid "The title of the file chooser dialog."
 msgid "The title of the font chooser dialog"
 msgstr "Fontu izvēles loga nosaukums"
 
@@ -3168,12 +3176,10 @@ msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teksts, ko parādīt, lai demonstrētu izvēlēto fontu"
 
 #: ../gtk/gtkfontchooser.c:201
-#| msgid "Preview text"
 msgid "Show preview text entry"
 msgstr "Rādīt priekšskatījuma teksta ierakstu"
 
 #: ../gtk/gtkfontchooser.c:202
-#| msgid "Whether the switch is on or off"
 msgid "Whether the preview text entry is shown or not"
 msgstr "Vai priekšskatījuma teksta ieraksts tiek rādīts"
 
@@ -4472,12 +4478,10 @@ msgid "TRUE if this printer is accepting new jobs"
 msgstr "PATIESS, ja printeris pieņem jaunus darbus"
 
 #: ../gtk/gtkprinteroption.c:105
-#| msgid "Minimum Value"
 msgid "Option Value"
 msgstr "Opcijas vērtība"
 
 #: ../gtk/gtkprinteroption.c:106
-#| msgid "Name of the printer"
 msgid "Value of the option"
 msgstr "Opcijas vērtība"
 
@@ -5759,7 +5763,6 @@ msgstr ""
 "mnemonikas aktivizētāju."
 
 #: ../gtk/gtksettings.c:1127
-#| msgid "Visible"
 msgid "Visible Focus"
 msgstr "Redzams fokuss"
 
@@ -6199,7 +6202,6 @@ msgstr ""
 "birkām"
 
 #: ../gtk/gtktexttag.c:222
-#| msgid "Background RGBA color"
 msgid "Background RGBA"
 msgstr "Fona RGBA"
 
@@ -6216,7 +6218,6 @@ msgstr ""
 "rakstzīmju garumā"
 
 #: ../gtk/gtktexttag.c:261
-#| msgid "Foreground color as RGBA"
 msgid "Foreground RGBA"
 msgstr "Priekšplāna RGBA"
 
@@ -6365,12 +6366,10 @@ msgid "Paragraph background color as a GdkColor"
 msgstr "Rindkopas fona krāsa kā GdkColor"
 
 #: ../gtk/gtktexttag.c:576
-#| msgid "Paragraph background set"
 msgid "Paragraph background RGBA"
 msgstr "Rindkopas fona RGBA"
 
 #: ../gtk/gtktexttag.c:577
-#| msgid "Paragraph background rgba as a GdkRGBA"
 msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "Rindkopas fona RGBA kā GdkRGBA"
 
@@ -7669,12 +7668,10 @@ msgid "Whether mnemonics are currently visible in this window"
 msgstr "Vai mnemonikas ir pašlaik redzamas šajā logā"
 
 #: ../gtk/gtkwindow.c:741
-#| msgid "Cursor Visible"
 msgid "Focus Visible"
 msgstr "Kursors redzams"
 
 #: ../gtk/gtkwindow.c:742
-#| msgid "Whether mnemonics are currently visible in this window"
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Vai fokusa taisnstūri ir pašlaik redzami šajā logā"
 
@@ -7827,7 +7824,6 @@ msgid "Color Profile Title"
 msgstr "Krāsu profila nosaukums"
 
 #: ../modules/printbackends/cups/gtkprintercups.c:96
-#| msgid "The title of the color selection dialog"
 msgid "The title of the color profile to use"
 msgstr "Lietojamā krāsu profila nosaukums"
 

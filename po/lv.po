@@ -7,17 +7,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-06 04:07+0000\n"
-"PO-Revision-Date: 2011-09-07 11:24+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-09-13 15:20+0000\n"
+"PO-Revision-Date: 2011-09-15 19:56+0300\n"
 "Last-Translator: Rūdofls Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -465,7 +465,6 @@ msgid "Provides visual indication of progress"
 msgstr "Vizuāls progresa indikators"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:65
-#| msgid "inch"
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Slēdzis"
@@ -603,54 +602,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Otrādā slīpsvītra"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "Citas lietotnes..."
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "Neizdevās tiešsaistē atrast lietotni"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "Atrast lietotni tiešsaistē"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "Neizdevās palaist lietotni"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "Neizdevās atrast '%s'"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "Neizdodas atrast lietotni"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Izvēlieties lietotni, ar kuru atvērt \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:364 ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Nav atrasta lietotne, ar ko atvērt \"%s\""
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Izvēlieties lietotni \"%s\" failiem"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Nav atrasta lietotne, ar ko atvērt \"%s\" failus"
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -658,32 +657,32 @@ msgstr ""
 "Spiediet \"Rādīt citas lietotnes\", lai redzētu vairāk opciju, vai \"Atrast "
 "lietotni tiešsaistē\", lai instalētu jaunu lietotni"
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "Aizmirst saistību"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "Rādīt citas lietotnes"
 
-#: ../gtk/gtkappchooserdialog.c:540 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "Izvēlētie_s: "
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "Noklusētā lietotne"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "Ieteiktās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "Saistītās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "Citas lietotnes"
 
@@ -858,7 +857,6 @@ msgid "Position on the color wheel."
 msgstr "Pozīcija uz krāsu joslas."
 
 #: ../gtk/gtkcolorsel.c:454
-#| msgid "_Saturation:"
 msgid "S_aturation:"
 msgstr "Pi_esātinājums:"
 
@@ -1107,7 +1105,7 @@ msgstr "Darbvirsma"
 msgid "(None)"
 msgstr "(Nekas)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Cita vieta..."
 
@@ -1245,7 +1243,6 @@ msgid "_Visit this file"
 msgstr "_Apmeklēt šo failu"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
-#| msgid "Copy _Location"
 msgid "_Copy file's location"
 msgstr "_Kopēt faila vietu"
 
@@ -1391,7 +1388,7 @@ msgstr "Neizdevās piemontēt %s"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Nederīgs ceļš"
@@ -1456,32 +1453,36 @@ msgstr "Ceļš neeksistē"
 msgid "File System"
 msgstr "Failu sistēma"
 
-#: ../gtk/gtkfontbutton.c:152 ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "Izvēlieties fontu"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Izvēlieties fontu"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "Fonts"
 
-#: ../gtk/gtkfontchooser.c:118
+#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "Fonta izvēle"
+
+#: ../gtk/gtkfontchooserwidget.c:118
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Neviens fonts neatbilst šim meklējumam. Pārskatiet savu meklējumu un "
 "mēģiniet vēlreiz."
 
-#: ../gtk/gtkfontchooser.c:667
+#: ../gtk/gtkfontchooserwidget.c:642
 msgid "Search font name"
 msgstr "Meklēt fonta nosaukumu"
 
-#: ../gtk/gtkfontchooserdialog.c:147 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "Fonta izvēle"
+#: ../gtk/gtkfontchooserwidget.c:911
+#| msgid "_Family:"
+msgid "Font Family"
+msgstr "Fontu saime"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -4439,13 +4440,11 @@ msgstr "Krāsu pārvaldība na pieejama"
 
 #. TRANSLATORS: when there is no color profile available
 #: ../modules/printbackends/cups/gtkprintercups.c:234
-#| msgid "Not available"
 msgid "No profile available"
 msgstr "Nav pieejamu profilu"
 
 #. TRANSLATORS: when the color profile has no title
 #: ../modules/printbackends/cups/gtkprintercups.c:245
-#| msgid "Unspecified error"
 msgid "Unspecified profile"
 msgstr "Nenorādīts profils"
 
