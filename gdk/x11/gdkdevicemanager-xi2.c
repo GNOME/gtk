@@ -876,8 +876,7 @@ get_event_window (GdkEventTranslator *translator,
     case XI_ButtonRelease:
     case XI_Motion:
 #ifdef XINPUT_2_1
-    case XI_TouchMotion:
-    case XI_TouchMotionUnowned:
+    case XI_TouchUpdate:
     case XI_TouchBegin:
     case XI_TouchEnd:
 #endif /* XINPUT_2_1 */
@@ -1143,9 +1142,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         else
           {
 #ifdef XINPUT_2_1
-            if (ev->evtype == XI_TouchBegin ||
-                ev->evtype == XI_TouchEnd)
-              event->button.type = (ev->evtype == XI_TouchBegin) ? GDK_TOUCH_PRESS : GDK_TOUCH_RELEASE;
+            if (ev->evtype == XI_TouchBegin)
+              event->button.type = GDK_TOUCH_PRESS;
+	    else if (ev->evtype == XI_TouchEnd)
+              event->button.type = GDK_TOUCH_RELEASE;
             else
 #endif /* XINPUT_2_1 */
               event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
@@ -1209,14 +1209,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       }
     case XI_Motion:
 #ifdef XINPUT_2_1
-    case XI_TouchMotion:
-    case XI_TouchMotionUnowned:
-      /* FIXME: Unowned events should be rollback-able,
-       * the easiest way to go could be just storing the
-       * events so they can be replayed in arrival order
-       * when an ownership event arrives, needs further
-       * investigation though.
-       */
+    case XI_TouchUpdate:
 #endif /* XINPUT_2_1 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
