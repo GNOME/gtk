@@ -1750,14 +1750,14 @@ gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
   if (handled)
     return TRUE;
 
-  if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
-    {
-      emit_activate_signal (status_icon);
-      return TRUE;
-    }
-  else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       emit_popup_menu_signal (status_icon, event->button, event->time);
+      return TRUE;
+    }
+  else if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
+    {
+      emit_activate_signal (status_icon);
       return TRUE;
     }
 

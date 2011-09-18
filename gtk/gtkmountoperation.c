@@ -1171,8 +1171,7 @@ on_button_press_event_for_process_tree_view (GtkWidget      *widget,
 
   ret = FALSE;
 
-  /* Ignore double-clicks and triple-clicks */
-  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       ret = do_popup_menu_for_process_tree_view (widget, event, op);
     }

@@ -1436,9 +1436,8 @@ palette_press (GtkWidget      *drawing_area,
   GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
 
   gtk_widget_grab_focus (drawing_area);
-  
-  if (event->button == 3 &&
-      event->type == GDK_BUTTON_PRESS)
+
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       do_popup (colorsel, drawing_area, event->time);
       return TRUE;

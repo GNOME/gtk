@@ -3688,8 +3688,15 @@ gtk_entry_button_press (GtkWidget      *widget,
     }
   
   tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
-    
-  if (event->button == 1)
+
+  if (_gtk_button_event_triggers_context_menu (event))
+    {
+      gtk_entry_do_popup (entry, event);
+      entry->button = 0;	/* Don't wait for release, since the menu will gtk_grab_add */
+
+      return TRUE;
+    }
+  else if (event->button == 1)
     {
       gboolean have_selection = gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
       
@@ -3809,13 +3816,6 @@ gtk_entry_button_press (GtkWidget      *widget,
         {
           gtk_widget_error_bell (widget);
         }
-    }
-  else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
-    {
-      gtk_entry_do_popup (entry, event);
-      entry->button = 0;	/* Don't wait for release, since the menu will gtk_grab_add */
-
-      return TRUE;
     }
 
   return FALSE;

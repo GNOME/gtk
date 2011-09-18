@@ -3419,7 +3419,7 @@ shortcuts_button_press_event_cb (GtkWidget             *widget,
   if (in_press)
     return FALSE;
 
-  if (event->button != 3)
+  if (!_gtk_button_event_triggers_context_menu (event))
     return FALSE;
 
   in_press = TRUE;
@@ -4097,7 +4097,7 @@ list_button_press_event_cb (GtkWidget             *widget,
   if (in_press)
     return FALSE;
 
-  if (event->button != 3)
+  if (!_gtk_button_event_triggers_context_menu (event))
     return FALSE;
 
   in_press = TRUE;

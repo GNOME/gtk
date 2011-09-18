@@ -130,6 +130,8 @@ gboolean _gtk_fnmatch (const char *pattern,
 #define GTK_MODIFY_SELECTION_MOD_MASK GDK_MOD2_MASK
 #endif
 
+gboolean _gtk_button_event_triggers_context_menu (GdkEventButton *event);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
