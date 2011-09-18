@@ -22,9 +22,9 @@ msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-17 19:17+0000\n"
-"PO-Revision-Date: 2011-08-28 13:36+0100\n"
-"Last-Translator: Mario Blättermann <mariobl@freenet.de>\n"
+"POT-Creation-Date: 2011-09-17 20:29+0000\n"
+"PO-Revision-Date: 2011-09-18 16:31+0200\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -645,16 +645,12 @@ msgstr ""
 "GtkAppChooserDialog auslöst"
 
 #: ../gtk/gtkappchooserbutton.c:633
-#, fuzzy
-#| msgid "Show default app"
 msgid "Show default item"
-msgstr "Vorgabeanwendung anzeigen"
+msgstr "Vorgabeobjekt anzeigen"
 
 #: ../gtk/gtkappchooserbutton.c:634
-#, fuzzy
-#| msgid "Whether the widget should show the default application"
 msgid "Whether the combobox should show the default application on top"
-msgstr "Soll das Widget die Standardanwendung anzeigen?"
+msgstr "Soll das Auswahlfeld die Vorgabeanwendung oben anzeigen?"
 
 #: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
@@ -4178,7 +4174,7 @@ msgstr "Nachrichtenbereich"
 
 #: ../gtk/gtkmessagedialog.c:308
 msgid "GtkVBox that holds the dialog's primary and secondary labels"
-msgstr "GtkVBox mit den primären und sekundären Beschriftungen des Dialogs"
+msgstr "GtkVBox mit den primären und sekundären Beschriftungen des Dialogs"
 
 #: ../gtk/gtkmisc.c:115
 msgid "Y align"
