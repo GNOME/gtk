@@ -2744,7 +2744,7 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
 {
   GtkWidget *window;
 
-  if (event->button == 3)
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       gboolean return_value;
 

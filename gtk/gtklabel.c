@@ -4715,16 +4715,16 @@ gtk_label_button_press (GtkWidget      *widget,
 
   if (info->active_link)
     {
-      if (event->button == 1)
-        {
-          info->link_clicked = 1;
-          gtk_widget_queue_draw (widget);
-        }
-      else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+      if (_gtk_button_event_triggers_context_menu (event))
         {
           info->link_clicked = 1;
           gtk_label_do_popup (label, event);
           return TRUE;
+        }
+      else if (event->button == 1)
+        {
+          info->link_clicked = 1;
+          gtk_widget_queue_draw (widget);
         }
     }
 
@@ -4734,7 +4734,13 @@ gtk_label_button_press (GtkWidget      *widget,
   info->in_drag = FALSE;
   info->select_words = FALSE;
 
-  if (event->button == 1)
+  if (_gtk_button_event_triggers_context_menu (event))
+    {
+      gtk_label_do_popup (label, event);
+
+      return TRUE;
+    }
+  else if (event->button == 1)
     {
       if (!gtk_widget_has_focus (widget))
         {
@@ -4808,12 +4814,7 @@ gtk_label_button_press (GtkWidget      *widget,
 
       return TRUE;
     }
-  else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
-    {
-      gtk_label_do_popup (label, event);
 
-      return TRUE;
-    }
   return FALSE;
 }
 

@@ -2643,3 +2643,23 @@ _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
 
   return continue_emission;
 }
+
+gboolean
+_gtk_button_event_triggers_context_menu (GdkEventButton *event)
+{
+  if (event->type == GDK_BUTTON_PRESS)
+    {
+      if (event->button == 3 &&
+          ! (event->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
+        return TRUE;
+
+#ifdef GDK_WINDOWING_QUARTZ
+      if (event->button == 1 &&
+          ! (event->state & (GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) &&
+          (event->state & GDK_CONTROL_MASK))
+        return TRUE;
+#endif
+    }
+
+  return FALSE;
+}

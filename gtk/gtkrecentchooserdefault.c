@@ -1904,8 +1904,8 @@ recent_view_button_press_cb (GtkWidget      *widget,
 			     gpointer        user_data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-  
-  if (event->button == 3)
+
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       GtkTreePath *path;
       gboolean res;

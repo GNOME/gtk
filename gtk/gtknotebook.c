@@ -2858,7 +2858,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
   if (arrow)
     return gtk_notebook_arrow_button_press (notebook, arrow, event->button);
 
-  if (event->button == 3 && priv->menu)
+  if (priv->menu && _gtk_button_event_triggers_context_menu (event))
     {
       gtk_menu_popup (GTK_MENU (priv->menu), NULL, NULL,
                       NULL, NULL, 3, event->time);

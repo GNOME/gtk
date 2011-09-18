@@ -4545,7 +4545,12 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
     {
       gtk_text_view_reset_im_context (text_view);
 
-      if (event->button == 1)
+      if (_gtk_button_event_triggers_context_menu (event))
+        {
+	  gtk_text_view_do_popup (text_view, event);
+	  return TRUE;
+        }
+      else if (event->button == 1)
         {
           /* If we're in the selection, start a drag copy/move of the
            * selection; otherwise, start creating a new selection.
@@ -4592,11 +4597,6 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 					   &iter,
 					   priv->editable);
           return TRUE;
-        }
-      else if (event->button == 3)
-        {
-	  gtk_text_view_do_popup (text_view, event);
-	  return TRUE;
         }
     }
   else if ((event->type == GDK_2BUTTON_PRESS ||

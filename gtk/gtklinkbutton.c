@@ -63,6 +63,7 @@
 #include "gtkstock.h"
 #include "gtkshow.h"
 #include "gtktooltip.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 
 #include "a11y/gtklinkbuttonaccessible.h"
@@ -521,7 +522,7 @@ gtk_link_button_button_press (GtkWidget      *widget,
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if ((event->button == 3) && (event->type == GDK_BUTTON_PRESS))
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), event);
       
