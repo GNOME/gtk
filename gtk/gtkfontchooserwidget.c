@@ -292,45 +292,21 @@ icon_press_cb (GtkEntry             *entry,
 }
 
 static void
-slider_change_cb (GtkAdjustment *adjustment,
-                  gpointer       user_data)
-{
-  GtkFontChooserWidget        *fc    = (GtkFontChooserWidget*)user_data;
-  GtkFontChooserWidgetPrivate *priv  = fc->priv;
-  GtkAdjustment         *spin_adj     = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON (priv->size_spin));
-  gdouble                slider_value = gtk_adjustment_get_value (adjustment);
-  gdouble                spin_value   = gtk_adjustment_get_value (spin_adj);
-
-  if (slider_value != spin_value)
-    gtk_adjustment_set_value (spin_adj,
-                              gtk_adjustment_get_value (adjustment));
-}
-
-static void
-spin_change_cb (GtkAdjustment *adjustment,
+size_change_cb (GtkAdjustment *adjustment,
                 gpointer       user_data)
 {
-  PangoFontDescription    *desc;
-  GtkFontChooserWidget          *fontchooser = (GtkFontChooserWidget*)user_data;
-  GtkFontChooserWidgetPrivate   *priv        = fontchooser->priv;
-  GtkAdjustment           *slider_adj  = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
+  GtkFontChooserWidget *fontchooser = user_data;
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  PangoFontDescription *font_desc;
   gdouble size = gtk_adjustment_get_value (adjustment);
 
-  desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
-  pango_font_description_set_size (desc, ((gint)size) * PANGO_SCALE);
-  gtk_widget_override_font (priv->preview, desc);
-
+  font_desc = pango_font_description_new ();
   if (pango_font_description_get_size_is_absolute (priv->font_desc))
-    pango_font_description_set_absolute_size (priv->font_desc, size * PANGO_SCALE);
+    pango_font_description_set_absolute_size (font_desc, size * PANGO_SCALE);
   else
-    pango_font_description_set_size (priv->font_desc, size * PANGO_SCALE);
+    pango_font_description_set_size (font_desc, size * PANGO_SCALE);
 
-  gtk_adjustment_set_value (slider_adj, size);
-
-  gtk_widget_queue_draw (priv->preview);
-
-  g_object_notify (G_OBJECT (fontchooser), "font");
-  g_object_notify (G_OBJECT (fontchooser), "font-desc");
+  gtk_font_chooser_widget_take_font_desc (fontchooser, font_desc);
 }
 
 static void
@@ -509,6 +485,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   /* Default preview string  */
   priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
   priv->show_preview_entry = TRUE;
+  priv->font_desc = pango_font_description_new ();
 
   gtk_widget_push_composite_child ();
 
@@ -600,9 +577,9 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
                     "icon-press", G_CALLBACK (icon_press_cb), NULL);
 
   g_signal_connect (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
-                    "value-changed", G_CALLBACK (slider_change_cb), fontchooser);
+                    "value-changed", G_CALLBACK (size_change_cb), fontchooser);
   g_signal_connect (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
-                    "value-changed", G_CALLBACK (spin_change_cb), fontchooser);
+                    "value-changed", G_CALLBACK (size_change_cb), fontchooser);
 
   g_signal_connect (priv->family_face_list, "cursor-changed",
                     G_CALLBACK (cursor_changed_cb), fontchooser);
@@ -971,6 +948,7 @@ gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
                                         PangoFontDescription *font_desc)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  PangoFontMask mask;
 
   if (font_desc && priv->font_desc &&
       pango_font_description_equal (font_desc, priv->font_desc))
@@ -979,14 +957,31 @@ gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
       return;
     }
 
-  if (priv->font_desc)
-    pango_font_description_free (priv->font_desc);
-  if (font_desc)
-    priv->font_desc = font_desc; /* adopted */
-  else
-    priv->font_desc = pango_font_description_from_string (GTK_FONT_CHOOSER_DEFAULT_FONT_NAME);
+  if (font_desc == NULL)
+    font_desc = pango_font_description_from_string (GTK_FONT_CHOOSER_DEFAULT_FONT_NAME);
 
-  gtk_font_chooser_widget_select_font (fontchooser);
+  pango_font_description_merge (priv->font_desc, font_desc, TRUE);
+
+  mask = pango_font_description_get_set_fields (font_desc);
+  
+  if (mask & PANGO_FONT_MASK_SIZE)
+    {
+      double font_size = (double) pango_font_description_get_size (priv->font_desc) / PANGO_SCALE;
+      /* XXX: This clamps, which can cause it to reloop into here, do we need
+       * to block its signal handler? */
+      gtk_range_set_value (GTK_RANGE (priv->size_slider), font_size);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->size_spin), font_size);
+    }
+  if (mask & (PANGO_FONT_MASK_FAMILY | PANGO_FONT_MASK_STYLE | PANGO_FONT_MASK_VARIANT |
+              PANGO_FONT_MASK_WEIGHT | PANGO_FONT_MASK_STRETCH))
+    gtk_font_chooser_widget_select_font (fontchooser);
+
+  gtk_widget_override_font (priv->preview, priv->font_desc);
+
+  pango_font_description_free (font_desc); /* adopted */
+
+  g_object_notify (G_OBJECT (fontchooser), "font");
+  g_object_notify (G_OBJECT (fontchooser), "font-desc");
 }
 
 static void
