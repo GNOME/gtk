@@ -2000,46 +2000,87 @@ _gdk_win32_window_get_drag_protocol (GdkWindow *window,
   return protocol;
 }
 
+typedef struct {
+  gint x;
+  gint y;
+  HWND ignore;
+  HWND result;
+} find_window_enum_arg;
+
+static BOOL CALLBACK
+find_window_enum_proc (HWND   hwnd,
+                       LPARAM lparam)
+{
+  RECT rect;
+  POINT tl, br;
+  find_window_enum_arg *a = (find_window_enum_arg *) lparam;
+
+  if (hwnd == a->ignore)
+    return TRUE;
+
+  if (!IsWindowVisible (hwnd))
+    return TRUE;
+
+  tl.x = tl.y = 0;
+  ClientToScreen (hwnd, &tl);
+  GetClientRect (hwnd, &rect);
+  br.x = rect.right;
+  br.y = rect.bottom;
+  ClientToScreen (hwnd, &br);
+
+  if (a->x >= tl.x && a->y >= tl.y && a->x < br.x && a->y < br.y)
+    {
+      a->result = hwnd;
+      return FALSE;
+    }
+  else
+    return TRUE;
+}
+
 static GdkWindow *
 gdk_win32_drag_context_find_window (GdkDragContext  *context,
-				 GdkWindow       *drag_window,
-				 GdkScreen       *screen,
-				 gint             x_root,
-				 gint             y_root,
-				 GdkDragProtocol *protocol)
+				    GdkWindow       *drag_window,
+				    GdkScreen       *screen,
+				    gint             x_root,
+				    gint             y_root,
+				    GdkDragProtocol *protocol)
 {
-  GdkWindow *dest_window;
-  POINT pt;
-  HWND hwnd;
+  GdkWindow *dest_window, *dw;
+  find_window_enum_arg a;
 
-  pt.x = x_root - _gdk_offset_x;
-  pt.y = y_root - _gdk_offset_y;
+  a.x = x_root - _gdk_offset_x;
+  a.y = y_root - _gdk_offset_y;
+  a.ignore = drag_window ? GDK_WINDOW_HWND (drag_window) : NULL;
+  a.result = NULL;
 
-  hwnd = WindowFromPoint (pt);
+  EnumWindows (find_window_enum_proc, (LPARAM) &a);
 
-  if (hwnd == NULL)
+  if (a.result == NULL)
     dest_window = NULL;
   else
     {
-      dest_window = gdk_win32_handle_table_lookup (hwnd);
-      if (dest_window)
-	g_object_ref (dest_window);
+      dw = gdk_win32_handle_table_lookup (a.result);
+      if (dw)
+        {
+          dest_window = gdk_window_get_toplevel (dw);
+          g_object_ref (dest_window);
+        }
       else
-	dest_window = gdk_win32_window_foreign_new_for_display (_gdk_display, hwnd);
+        dest_window = gdk_win32_window_foreign_new_for_display (_gdk_display, a.result);
 
       if (use_ole2_dnd)
-	*protocol = GDK_DRAG_PROTO_OLE2;
+        *protocol = GDK_DRAG_PROTO_OLE2;
       else if (context->source_window)
         *protocol = GDK_DRAG_PROTO_LOCAL;
       else
-	*protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
+        *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
     }
 
   GDK_NOTE (DND,
 	    g_print ("gdk_drag_find_window: %p %+d%+d: %p: %p %s\n",
 		     (drag_window ? GDK_WINDOW_HWND (drag_window) : NULL),
 		     x_root, y_root,
-		     hwnd,
+		     a.result,
 		     (dest_window ? GDK_WINDOW_HWND (dest_window) : NULL),
 		     _gdk_win32_drag_protocol_to_string (*protocol)));
 
