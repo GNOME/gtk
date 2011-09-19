@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-14 23:13+0200\n"
+"POT-Creation-Date: 2011-09-20 01:26+0200\n"
 "PO-Revision-Date: 2011-09-14 23:13+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
@@ -1485,17 +1485,17 @@ msgstr "Tipo de letra"
 msgid "Font Selection"
 msgstr "Selección do tipo de letra"
 
-#: ../gtk/gtkfontchooserwidget.c:118
+#: ../gtk/gtkfontchooserwidget.c:115
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Non hai ningún tipo de letra que coincida coa túa busca. Revise o criterio "
 "de busca e ténteo de novo."
 
-#: ../gtk/gtkfontchooserwidget.c:642
+#: ../gtk/gtkfontchooserwidget.c:595
 msgid "Search font name"
 msgstr "Buscar nome de tipo de letra"
 
-#: ../gtk/gtkfontchooserwidget.c:911
+#: ../gtk/gtkfontchooserwidget.c:868
 msgid "Font Family"
 msgstr "Familia do tipo de letra"
 
@@ -1561,11 +1561,11 @@ msgstr "_Abrir a ligazón"
 msgid "Copy _Link Address"
 msgstr "Copiar o enderezo da _ligazón"
 
-#: ../gtk/gtklinkbutton.c:484
+#: ../gtk/gtklinkbutton.c:494
 msgid "Copy URL"
 msgstr "Copiar URL"
 
-#: ../gtk/gtklinkbutton.c:647
+#: ../gtk/gtklinkbutton.c:657
 msgid "Invalid URI"
 msgstr "URI incorrecto"
 
