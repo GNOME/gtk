@@ -752,10 +752,6 @@ populate_list (GtkFontChooserWidget *fontchooser,
           const gchar *face_name;
           gchar *font_desc;
 
-          if (priv->filter_func != NULL &&
-              !priv->filter_func (families[i], faces[j], priv->filter_data))
-            continue;
-
           pango_desc = pango_font_face_describe (faces[j]);
           face_name = pango_font_face_get_face_name (faces[j]);
           font_desc = pango_font_description_to_string (pango_desc);
@@ -830,6 +826,25 @@ visible_func (GtkTreeModel *model,
   gchar **split_terms;
   gchar *font_name, *font_name_casefold, *term_casefold;
   guint i;
+
+  if (priv->filter_func != NULL)
+    {
+      PangoFontFamily *family;
+      PangoFontFace *face;
+
+      gtk_tree_model_get (model, iter,
+                          FAMILY_COLUMN, &family,
+                          FACE_COLUMN, &face,
+                          -1);
+
+      result = priv->filter_func (family, face, priv->filter_data);
+
+      g_object_unref (family);
+      g_object_unref (face);
+      
+      if (!result)
+        return FALSE;
+    }
 
   /* If there's no filter string we show the item */
   search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
@@ -1190,9 +1205,7 @@ gtk_font_chooser_widget_set_filter_func (GtkFontChooser  *chooser,
   priv->filter_data = data;
   priv->filter_data_destroy = destroy;
 
-  populate_list (fontchooser,
-                 GTK_TREE_VIEW (priv->family_face_list),
-                 priv->model);
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
 }
 
 static void
