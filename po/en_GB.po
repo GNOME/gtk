@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-07 17:17+0100\n"
-"PO-Revision-Date: 2011-09-07 17:18+0100\n"
+"POT-Creation-Date: 2011-09-19 13:09+0100\n"
+"PO-Revision-Date: 2011-09-19 13:10+0100\n"
 "Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
@@ -601,54 +601,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "Other application..."
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "Failed to look for applications online"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "Find applications online"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "Could not run application"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "Could not find '%s'"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "Could not find application"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Select an application to open \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:364 ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "No applications available to open \"%s\""
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Select an application for \"%s\" files"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "No applications available to open \"%s\" files"
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -656,32 +656,32 @@ msgstr ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "Forget association"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "Show other applications"
 
-#: ../gtk/gtkappchooserdialog.c:540 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "_Select"
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "Default Application"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "Recommended Applications"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "Related Applications"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "Other Applications"
 
@@ -1107,7 +1107,7 @@ msgstr "Desktop"
 msgid "(None)"
 msgstr "(None)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Other…"
 
@@ -1366,11 +1366,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Replace"
 
-#: ../gtk/gtkfilechooserdefault.c:9159
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "Could not start the search process"
 msgstr "Could not start the search process"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9161
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1378,11 +1378,11 @@ msgstr ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 
-#: ../gtk/gtkfilechooserdefault.c:9174
+#: ../gtk/gtkfilechooserdefault.c:9175
 msgid "Could not send the search request"
 msgstr "Could not send the search request"
 
-#: ../gtk/gtkfilechooserdefault.c:9775
+#: ../gtk/gtkfilechooserdefault.c:9776
 #, c-format
 msgid "Could not mount %s"
 msgstr "Could not mount %s"
@@ -1390,7 +1390,7 @@ msgstr "Could not mount %s"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Invalid path"
@@ -1455,30 +1455,35 @@ msgstr "Path does not exist"
 msgid "File System"
 msgstr "File System"
 
-#: ../gtk/gtkfontbutton.c:152 ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "Pick a Font"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Pick a Font"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "Font"
 
-#: ../gtk/gtkfontchooser.c:118
-msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "No fonts matched your search. You can revise your search and try again."
+#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "Font Selection"
 
-#: ../gtk/gtkfontchooser.c:667
+#: ../gtk/gtkfontchooserwidget.c:118
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr ""
+"No fonts matched your search. You can revise your search and try again."
+
+#: ../gtk/gtkfontchooserwidget.c:642
 msgid "Search font name"
 msgstr "Search font name"
 
-#: ../gtk/gtkfontchooserdialog.c:147 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "Font Selection"
+#: ../gtk/gtkfontchooserwidget.c:911
+#, fuzzy
+msgid "Font Family"
+msgstr "Font Family"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1542,11 +1547,11 @@ msgstr "_Open Link"
 msgid "Copy _Link Address"
 msgstr "Copy _Link Address"
 
-#: ../gtk/gtklinkbutton.c:484
+#: ../gtk/gtklinkbutton.c:494
 msgid "Copy URL"
 msgstr "Copy URL"
 
-#: ../gtk/gtklinkbutton.c:647
+#: ../gtk/gtklinkbutton.c:657
 msgid "Invalid URI"
 msgstr "Invalid URI"
 

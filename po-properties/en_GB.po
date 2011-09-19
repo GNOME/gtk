@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-07 17:19+0100\n"
-"PO-Revision-Date: 2011-09-07 17:21+0100\n"
+"POT-Creation-Date: 2011-09-19 13:10+0100\n"
+"PO-Revision-Date: 2011-09-19 13:10+0100\n"
 "Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
@@ -606,11 +606,11 @@ msgstr "Right Padding"
 msgid "The padding to insert at the right of the widget."
 msgstr "The padding to insert at the right of the widget."
 
-#: ../gtk/gtkappchooserbutton.c:557
+#: ../gtk/gtkappchooserbutton.c:616
 msgid "Include an 'Other...' item"
 msgstr "Include an 'Other...' item"
 
-#: ../gtk/gtkappchooserbutton.c:558
+#: ../gtk/gtkappchooserbutton.c:617
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
@@ -618,75 +618,83 @@ msgstr ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
 
-#: ../gtk/gtkappchooserbutton.c:570 ../gtk/gtkappchooserdialog.c:722
+#: ../gtk/gtkappchooserbutton.c:633
+msgid "Show default item"
+msgstr "Show default item"
+
+#: ../gtk/gtkappchooserbutton.c:634
+msgid "Whether the combobox should show the default application on top"
+msgstr "Whether the combobox should show the default application on top"
+
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
 msgstr "Heading"
 
-#: ../gtk/gtkappchooserbutton.c:571 ../gtk/gtkappchooserdialog.c:723
+#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:726
 msgid "The text to show at the top of the dialog"
 msgstr "The text to show at the top of the dialogue"
 
-#: ../gtk/gtkappchooser.c:61
+#: ../gtk/gtkappchooser.c:75
 msgid "Content type"
 msgstr "Content type"
 
-#: ../gtk/gtkappchooser.c:62
+#: ../gtk/gtkappchooser.c:76
 msgid "The content type used by the open with object"
 msgstr "The content type used by the open with object"
 
-#: ../gtk/gtkappchooserdialog.c:708
+#: ../gtk/gtkappchooserdialog.c:711
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:709
+#: ../gtk/gtkappchooserdialog.c:712
 msgid "The GFile used by the app chooser dialog"
 msgstr "The GFile used by the app chooser dialogue"
 
-#: ../gtk/gtkappchooserwidget.c:1016
+#: ../gtk/gtkappchooserwidget.c:1029
 msgid "Show default app"
 msgstr "Show default app"
 
-#: ../gtk/gtkappchooserwidget.c:1017
+#: ../gtk/gtkappchooserwidget.c:1030
 msgid "Whether the widget should show the default application"
 msgstr "Whether the widget should show the default application"
 
-#: ../gtk/gtkappchooserwidget.c:1030
+#: ../gtk/gtkappchooserwidget.c:1044
 msgid "Show recommended apps"
 msgstr "Show recommended apps"
 
-#: ../gtk/gtkappchooserwidget.c:1031
+#: ../gtk/gtkappchooserwidget.c:1045
 msgid "Whether the widget should show recommended applications"
 msgstr "Whether the widget should show recommended applications"
 
-#: ../gtk/gtkappchooserwidget.c:1044
+#: ../gtk/gtkappchooserwidget.c:1059
 msgid "Show fallback apps"
 msgstr "Show fallback apps"
 
-#: ../gtk/gtkappchooserwidget.c:1045
+#: ../gtk/gtkappchooserwidget.c:1060
 msgid "Whether the widget should show fallback applications"
 msgstr "Whether the widget should show fallback applications"
 
-#: ../gtk/gtkappchooserwidget.c:1057
+#: ../gtk/gtkappchooserwidget.c:1072
 msgid "Show other apps"
 msgstr "Show other apps"
 
-#: ../gtk/gtkappchooserwidget.c:1058
+#: ../gtk/gtkappchooserwidget.c:1073
 msgid "Whether the widget should show other applications"
 msgstr "Whether the widget should show other applications"
 
-#: ../gtk/gtkappchooserwidget.c:1071
+#: ../gtk/gtkappchooserwidget.c:1086
 msgid "Show all apps"
 msgstr "Show all apps"
 
-#: ../gtk/gtkappchooserwidget.c:1072
+#: ../gtk/gtkappchooserwidget.c:1087
 msgid "Whether the widget should show all applications"
 msgstr "Whether the widget should show all applications"
 
-#: ../gtk/gtkappchooserwidget.c:1085
+#: ../gtk/gtkappchooserwidget.c:1101
 msgid "Widget's default text"
 msgstr "Widget's default text"
 
-#: ../gtk/gtkappchooserwidget.c:1086
+#: ../gtk/gtkappchooserwidget.c:1102
 msgid "The default text appearing when there are no applications"
 msgstr "The default text appearing when there are no applications"
 
@@ -706,7 +714,7 @@ msgstr "Arrow shadow"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Appearance of the shadow surrounding the arrow"
 
-#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:986 ../gtk/gtkmenu.c:798
+#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:991 ../gtk/gtkmenu.c:798
 #: ../gtk/gtkmenuitem.c:446
 msgid "Arrow Scaling"
 msgstr "Arrow Scaling"
@@ -868,7 +876,7 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "If TRUE, the child will not be subject to homogeneous sizing"
 
 #: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:314
-#: ../gtk/gtkiconview.c:643 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkiconview.c:645 ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "Spacing"
 
@@ -976,7 +984,7 @@ msgid ""
 msgstr ""
 "If set, the label is used to pick a stock item instead of being displayed"
 
-#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:792
+#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:797
 #: ../gtk/gtkfilechooserbutton.c:426
 msgid "Focus on click"
 msgstr "Focus on click"
@@ -1458,7 +1466,7 @@ msgstr "Text Column"
 msgid "A column in the data source model to get the strings from"
 msgstr "A column in the data source model to get the strings from"
 
-#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:864
 msgid "Has Entry"
 msgstr "Has Entry"
 
@@ -1723,15 +1731,18 @@ msgid "Whether the text can be modified by the user"
 msgstr "Whether the text can be modified by the user"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtkfontchooser.c:80
 #: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Font"
 
-#: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtktexttag.c:295
+#: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtkfontchooser.c:68
+#: ../gtk/gtktexttag.c:295
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Font description as a string, e.g. \"Sans Italic 12\""
 
-#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtktexttag.c:303
+#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtkfontchooser.c:81
+#: ../gtk/gtktexttag.c:303
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Font description as a PangoFontDescription struct"
 
@@ -1866,7 +1877,7 @@ msgstr ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:681
+#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:686
 msgid "Wrap width"
 msgstr "Wrap width"
 
@@ -2065,14 +2076,14 @@ msgstr "CellView model"
 msgid "The model for cell view"
 msgstr "The model for cell view"
 
-#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:945
-#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:768
+#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:950
+#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:770
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
 msgstr "Cell Area"
 
-#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:946
-#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:769
+#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:951
+#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:771
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
 msgstr "The GtkCellArea used to layout cells"
@@ -2142,7 +2153,7 @@ msgid "Whether to give the color an alpha value"
 msgstr "Whether to give the colour an alpha value"
 
 #: ../gtk/gtkcolorbutton.c:185 ../gtk/gtkfilechooserbutton.c:440
-#: ../gtk/gtkfontbutton.c:150 ../gtk/gtkprintjob.c:141
+#: ../gtk/gtkfontbutton.c:435 ../gtk/gtkprintjob.c:141
 #: ../gtk/gtkstatusicon.c:438 ../gtk/gtktreeviewcolumn.c:331
 msgid "Title"
 msgstr "Title"
@@ -2239,67 +2250,67 @@ msgstr "Help Button"
 msgid "The help button of the dialog."
 msgstr "The help button of the dialogue."
 
-#: ../gtk/gtkcombobox.c:664
+#: ../gtk/gtkcombobox.c:669
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: ../gtk/gtkcombobox.c:665
+#: ../gtk/gtkcombobox.c:670
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: ../gtk/gtkcombobox.c:682
+#: ../gtk/gtkcombobox.c:687
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Wrap width for laying out the items in a grid"
 
-#: ../gtk/gtkcombobox.c:704 ../gtk/gtktreemenu.c:383
+#: ../gtk/gtkcombobox.c:709 ../gtk/gtktreemenu.c:383
 msgid "Row span column"
 msgstr "Row span column"
 
-#: ../gtk/gtkcombobox.c:705 ../gtk/gtktreemenu.c:384
+#: ../gtk/gtkcombobox.c:710 ../gtk/gtktreemenu.c:384
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: ../gtk/gtkcombobox.c:726 ../gtk/gtktreemenu.c:404
+#: ../gtk/gtkcombobox.c:731 ../gtk/gtktreemenu.c:404
 msgid "Column span column"
 msgstr "Column span column"
 
-#: ../gtk/gtkcombobox.c:727 ../gtk/gtktreemenu.c:405
+#: ../gtk/gtkcombobox.c:732 ../gtk/gtktreemenu.c:405
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: ../gtk/gtkcombobox.c:748
+#: ../gtk/gtkcombobox.c:753
 msgid "Active item"
 msgstr "Active item"
 
-#: ../gtk/gtkcombobox.c:749
+#: ../gtk/gtkcombobox.c:754
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: ../gtk/gtkcombobox.c:768 ../gtk/gtkuimanager.c:479
+#: ../gtk/gtkcombobox.c:773 ../gtk/gtkuimanager.c:479
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
-#: ../gtk/gtkcombobox.c:769
+#: ../gtk/gtkcombobox.c:774
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Whether dropdowns should have a tearoff menu item"
 
-#: ../gtk/gtkcombobox.c:784 ../gtk/gtkentry.c:786
+#: ../gtk/gtkcombobox.c:789 ../gtk/gtkentry.c:786
 msgid "Has Frame"
 msgstr "Has Frame"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:790
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Whether the combo box draws a frame around the child"
 
-#: ../gtk/gtkcombobox.c:793
+#: ../gtk/gtkcombobox.c:798
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Whether the combo box grabs focus when it is clicked with the mouse"
 
-#: ../gtk/gtkcombobox.c:808 ../gtk/gtkmenu.c:643
+#: ../gtk/gtkcombobox.c:813 ../gtk/gtkmenu.c:643
 msgid "Tearoff Title"
 msgstr "Tearoff Title"
 
-#: ../gtk/gtkcombobox.c:809
+#: ../gtk/gtkcombobox.c:814
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -2307,31 +2318,31 @@ msgstr ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:831
 msgid "Popup shown"
 msgstr "Popup shown"
 
-#: ../gtk/gtkcombobox.c:827
+#: ../gtk/gtkcombobox.c:832
 msgid "Whether the combo's dropdown is shown"
 msgstr "Whether the combo's dropdown is shown"
 
-#: ../gtk/gtkcombobox.c:843
+#: ../gtk/gtkcombobox.c:848
 msgid "Button Sensitivity"
 msgstr "Button Sensitivity"
 
-#: ../gtk/gtkcombobox.c:844
+#: ../gtk/gtkcombobox.c:849
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Whether the dropdown button is sensitive when the model is empty"
 
-#: ../gtk/gtkcombobox.c:860
+#: ../gtk/gtkcombobox.c:865
 msgid "Whether combo box has an entry"
 msgstr "Whether combo box has an entry"
 
-#: ../gtk/gtkcombobox.c:875
+#: ../gtk/gtkcombobox.c:880
 msgid "Entry Text Column"
 msgstr "Entry Text Column"
 
-#: ../gtk/gtkcombobox.c:876
+#: ../gtk/gtkcombobox.c:881
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -2339,11 +2350,11 @@ msgstr ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
 
-#: ../gtk/gtkcombobox.c:893
+#: ../gtk/gtkcombobox.c:898
 msgid "ID Column"
 msgstr "ID Column"
 
-#: ../gtk/gtkcombobox.c:894
+#: ../gtk/gtkcombobox.c:899
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
@@ -2351,19 +2362,19 @@ msgstr ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
 
-#: ../gtk/gtkcombobox.c:909
+#: ../gtk/gtkcombobox.c:914
 msgid "Active id"
 msgstr "Active id"
 
-#: ../gtk/gtkcombobox.c:910
+#: ../gtk/gtkcombobox.c:915
 msgid "The value of the id column for the active row"
 msgstr "The value of the id column for the active row"
 
-#: ../gtk/gtkcombobox.c:925
+#: ../gtk/gtkcombobox.c:930
 msgid "Popup Fixed Width"
 msgstr "Popup Fixed Width"
 
-#: ../gtk/gtkcombobox.c:926
+#: ../gtk/gtkcombobox.c:931
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -2371,33 +2382,33 @@ msgstr ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
 
-#: ../gtk/gtkcombobox.c:952
+#: ../gtk/gtkcombobox.c:957
 msgid "Appears as list"
 msgstr "Appears as list"
 
-#: ../gtk/gtkcombobox.c:953
+#: ../gtk/gtkcombobox.c:958
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
 
-#: ../gtk/gtkcombobox.c:969
+#: ../gtk/gtkcombobox.c:974
 msgid "Arrow Size"
 msgstr "Arrow Size"
 
-#: ../gtk/gtkcombobox.c:970
+#: ../gtk/gtkcombobox.c:975
 msgid "The minimum size of the arrow in the combo box"
 msgstr "The minimum size of the arrow in the combo box"
 
-#: ../gtk/gtkcombobox.c:987
+#: ../gtk/gtkcombobox.c:992
 msgid "The amount of space used by the arrow"
 msgstr "The amount of space used by the arrow"
 
-#: ../gtk/gtkcombobox.c:1002 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
+#: ../gtk/gtkcombobox.c:1007 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
 #: ../gtk/gtkmenubar.c:218 ../gtk/gtkstatusbar.c:182 ../gtk/gtktoolbar.c:614
 #: ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "Shadow type"
 
-#: ../gtk/gtkcombobox.c:1003
+#: ../gtk/gtkcombobox.c:1008
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Which kind of shadow to draw around the combo box"
 
@@ -2838,7 +2849,7 @@ msgstr "Minimum Key Length"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum length of the search key in order to look up matches"
 
-#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:564
+#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:566
 msgid "Text column"
 msgstr "Text column"
 
@@ -3107,74 +3118,73 @@ msgstr "Y position"
 msgid "Y position of child widget"
 msgstr "Y position of child widget"
 
-#: ../gtk/gtkfontbutton.c:151
+#: ../gtk/gtkfontbutton.c:436
 msgid "The title of the font chooser dialog"
 msgstr "The title of the font chooser dialogue"
 
-#: ../gtk/gtkfontbutton.c:166 ../gtk/gtkfontchooser.c:186
-#: ../gtk/gtkfontsel.c:244
+#: ../gtk/gtkfontbutton.c:451 ../gtk/gtkfontsel.c:244
 msgid "Font name"
 msgstr "Font name"
 
-#: ../gtk/gtkfontbutton.c:167
+#: ../gtk/gtkfontbutton.c:452
 msgid "The name of the selected font"
 msgstr "The name of the selected font"
 
-#: ../gtk/gtkfontbutton.c:168
+#: ../gtk/gtkfontbutton.c:453
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:183
+#: ../gtk/gtkfontbutton.c:468
 msgid "Use font in label"
 msgstr "Use font in label"
 
-#: ../gtk/gtkfontbutton.c:184
+#: ../gtk/gtkfontbutton.c:469
 msgid "Whether the label is drawn in the selected font"
 msgstr "Whether the label is drawn in the selected font"
 
-#: ../gtk/gtkfontbutton.c:199
+#: ../gtk/gtkfontbutton.c:484
 msgid "Use size in label"
 msgstr "Use size in label"
 
-#: ../gtk/gtkfontbutton.c:200
+#: ../gtk/gtkfontbutton.c:485
 msgid "Whether the label is drawn with the selected font size"
 msgstr "Whether the label is drawn with the selected font size"
 
-#: ../gtk/gtkfontbutton.c:216
+#: ../gtk/gtkfontbutton.c:501
 msgid "Show style"
 msgstr "Show style"
 
-#: ../gtk/gtkfontbutton.c:217
+#: ../gtk/gtkfontbutton.c:502
 msgid "Whether the selected font style is shown in the label"
 msgstr "Whether the selected font style is shown in the label"
 
-#: ../gtk/gtkfontbutton.c:232
+#: ../gtk/gtkfontbutton.c:517
 msgid "Show size"
 msgstr "Show size"
 
-#: ../gtk/gtkfontbutton.c:233
+#: ../gtk/gtkfontbutton.c:518
 msgid "Whether selected font size is shown in the label"
 msgstr "Whether selected font size is shown in the label"
 
-#: ../gtk/gtkfontchooser.c:187 ../gtk/gtkfontsel.c:245
-msgid "The string that represents this font"
-msgstr "The string that represents this font"
-
-#: ../gtk/gtkfontchooser.c:193 ../gtk/gtkfontsel.c:251
+#: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Preview text"
 
-#: ../gtk/gtkfontchooser.c:194 ../gtk/gtkfontsel.c:252
+#: ../gtk/gtkfontchooser.c:94 ../gtk/gtkfontsel.c:252
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "The text to display in order to demonstrate the selected font"
 
-#: ../gtk/gtkfontchooser.c:201
+#: ../gtk/gtkfontchooser.c:106
 msgid "Show preview text entry"
 msgstr "Show preview text entry"
 
-#: ../gtk/gtkfontchooser.c:202
+#: ../gtk/gtkfontchooser.c:107
 msgid "Whether the preview text entry is shown or not"
 msgstr "Whether the preview text entry is shown or not"
+
+#: ../gtk/gtkfontsel.c:245
+msgid "The string that represents this font"
+msgstr "The string that represents this font"
 
 #: ../gtk/gtkframe.c:172
 msgid "Text of the frame's label"
@@ -3320,134 +3330,134 @@ msgstr ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
 
-#: ../gtk/gtkiconview.c:527 ../gtk/gtktreeselection.c:131
+#: ../gtk/gtkiconview.c:529 ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Selection mode"
 
-#: ../gtk/gtkiconview.c:528
+#: ../gtk/gtkiconview.c:530
 msgid "The selection mode"
 msgstr "The selection mode"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:548
 msgid "Pixbuf column"
 msgstr "Pixbuf column"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:549
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Model column used to retrieve the icon pixbuf from"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:567
 msgid "Model column used to retrieve the text from"
 msgstr "Model column used to retrieve the text from"
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:586
 msgid "Markup column"
 msgstr "Markup column"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Model column used to retrieve the text if using Pango markup"
 
-#: ../gtk/gtkiconview.c:592
+#: ../gtk/gtkiconview.c:594
 msgid "Icon View Model"
 msgstr "Icon View Model"
 
-#: ../gtk/gtkiconview.c:593
+#: ../gtk/gtkiconview.c:595
 msgid "The model for the icon view"
 msgstr "The model for the icon view"
 
-#: ../gtk/gtkiconview.c:609
+#: ../gtk/gtkiconview.c:611
 msgid "Number of columns"
 msgstr "Number of columns"
 
-#: ../gtk/gtkiconview.c:610
+#: ../gtk/gtkiconview.c:612
 msgid "Number of columns to display"
 msgstr "Number of columns to display"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:629
 msgid "Width for each item"
 msgstr "Width for each item"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:630
 msgid "The width used for each item"
 msgstr "The width used for each item"
 
-#: ../gtk/gtkiconview.c:644
+#: ../gtk/gtkiconview.c:646
 msgid "Space which is inserted between cells of an item"
 msgstr "Space which is inserted between cells of an item"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:661
 msgid "Row Spacing"
 msgstr "Row Spacing"
 
-#: ../gtk/gtkiconview.c:660
+#: ../gtk/gtkiconview.c:662
 msgid "Space which is inserted between grid rows"
 msgstr "Space which is inserted between grid rows"
 
-#: ../gtk/gtkiconview.c:675
+#: ../gtk/gtkiconview.c:677
 msgid "Column Spacing"
 msgstr "Column Spacing"
 
-#: ../gtk/gtkiconview.c:676
+#: ../gtk/gtkiconview.c:678
 msgid "Space which is inserted between grid columns"
 msgstr "Space which is inserted between grid columns"
 
-#: ../gtk/gtkiconview.c:691
+#: ../gtk/gtkiconview.c:693
 msgid "Margin"
 msgstr "Margin"
 
-#: ../gtk/gtkiconview.c:692
+#: ../gtk/gtkiconview.c:694
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Space which is inserted at the edges of the icon view"
 
-#: ../gtk/gtkiconview.c:707
+#: ../gtk/gtkiconview.c:709
 msgid "Item Orientation"
 msgstr "Item Orientation"
 
-#: ../gtk/gtkiconview.c:708
+#: ../gtk/gtkiconview.c:710
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "How the text and icon of each item are positioned relative to each other"
 
-#: ../gtk/gtkiconview.c:724 ../gtk/gtktreeview.c:1021
+#: ../gtk/gtkiconview.c:726 ../gtk/gtktreeview.c:1021
 #: ../gtk/gtktreeviewcolumn.c:374
 msgid "Reorderable"
 msgstr "Reorderable"
 
-#: ../gtk/gtkiconview.c:725 ../gtk/gtktreeview.c:1022
+#: ../gtk/gtkiconview.c:727 ../gtk/gtktreeview.c:1022
 msgid "View is reorderable"
 msgstr "View is reorderable"
 
-#: ../gtk/gtkiconview.c:732 ../gtk/gtktreeview.c:1172
+#: ../gtk/gtkiconview.c:734 ../gtk/gtktreeview.c:1172
 msgid "Tooltip Column"
 msgstr "Tooltip Column"
 
-#: ../gtk/gtkiconview.c:733
+#: ../gtk/gtkiconview.c:735
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "The column in the model containing the tooltip texts for the items"
 
-#: ../gtk/gtkiconview.c:750
+#: ../gtk/gtkiconview.c:752
 msgid "Item Padding"
 msgstr "Item Padding"
 
-#: ../gtk/gtkiconview.c:751
+#: ../gtk/gtkiconview.c:753
 msgid "Padding around icon view items"
 msgstr "Padding around icon view items"
 
-#: ../gtk/gtkiconview.c:782
+#: ../gtk/gtkiconview.c:784
 msgid "Selection Box Color"
 msgstr "Selection Box Colour"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:785
 msgid "Color of the selection box"
 msgstr "Colour of the selection box"
 
-#: ../gtk/gtkiconview.c:789
+#: ../gtk/gtkiconview.c:791
 msgid "Selection Box Alpha"
 msgstr "Selection Box Alpha"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:792
 msgid "Opacity of the selection box"
 msgstr "Opacity of the selection box"
 
@@ -3685,19 +3695,19 @@ msgstr "The width of the layout"
 msgid "The height of the layout"
 msgstr "The height of the layout"
 
-#: ../gtk/gtklinkbutton.c:173
+#: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:174
+#: ../gtk/gtklinkbutton.c:176
 msgid "The URI bound to this button"
 msgstr "The URI bound to this button"
 
-#: ../gtk/gtklinkbutton.c:188
+#: ../gtk/gtklinkbutton.c:190
 msgid "Visited"
 msgstr "Visited"
 
-#: ../gtk/gtklinkbutton.c:189
+#: ../gtk/gtklinkbutton.c:191
 msgid "Whether this link has been visited."
 msgstr "Whether this link has been visited."
 
