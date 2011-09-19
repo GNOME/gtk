@@ -92,7 +92,6 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget *size_slider;
 
   PangoFontDescription *font_desc;
-  gint             size;
   PangoFontFace   *face;
   PangoFontFamily *family;
 
@@ -321,16 +320,14 @@ spin_change_cb (GtkAdjustment *adjustment,
   GtkAdjustment           *slider_adj  = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
   gdouble size = gtk_adjustment_get_value (adjustment);
 
-  priv->size = ((gint)size) * PANGO_SCALE;
-
   desc = pango_context_get_font_description (gtk_widget_get_pango_context (priv->preview));
-  pango_font_description_set_size (desc, priv->size);
+  pango_font_description_set_size (desc, ((gint)size) * PANGO_SCALE);
   gtk_widget_override_font (priv->preview, desc);
 
   if (pango_font_description_get_size_is_absolute (priv->font_desc))
     pango_font_description_set_absolute_size (priv->font_desc, size);
   else
-    pango_font_description_set_size (priv->font_desc, priv->size);
+    pango_font_description_set_size (priv->font_desc, ((gint)size) * PANGO_SCALE);
 
   /* If the new value is lower than the lower bound of the slider, we set
    * the slider adjustment to the lower bound value if it is not already set
@@ -444,7 +441,7 @@ cursor_changed_cb (GtkTreeView *treeview,
   path = NULL;
 
   desc = pango_font_face_describe (face);
-  pango_font_description_set_size (desc, priv->size);
+  pango_font_description_set_size (desc, pango_font_description_get_size (priv->font_desc));
   gtk_widget_override_font (priv->preview, desc);
 
   pango_font_face_list_sizes (face, &sizes, &n_sizes);
@@ -534,13 +531,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
   priv->show_preview_entry = TRUE;
 
-  /* Getting the default size */
-  font_desc  = pango_context_get_font_description (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)));
-  priv->size = pango_font_description_get_size (font_desc);
-  priv->face = NULL;
-  priv->family = NULL;
-  priv->font_desc = NULL;
-
   gtk_widget_push_composite_child ();
 
   /* Creating fundamental widgets for the private struct */
@@ -602,12 +592,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   gtk_widget_set_hexpand  (GTK_WIDGET (priv->size_spin),   FALSE);
 
   gtk_box_pack_start (GTK_BOX (fontchooser), grid, TRUE, TRUE, 0);
-
-  /* Setting the adjustment values for the size slider */
-  gtk_adjustment_set_value (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
-                            (gdouble)(priv->size / PANGO_SCALE));
-  gtk_adjustment_set_value (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
-                            (gdouble)(priv->size / PANGO_SCALE));
 
   gtk_widget_show_all (GTK_WIDGET (fontchooser));
   gtk_widget_hide     (GTK_WIDGET (fontchooser));
@@ -996,7 +980,7 @@ gtk_font_chooser_widget_get_size (GtkFontChooser *chooser)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
 
-  return fontchooser->priv->size;
+  return pango_font_description_get_size (fontchooser->priv->font_desc);
 }
 
 static gchar *
