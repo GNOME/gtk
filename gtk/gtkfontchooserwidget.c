@@ -329,23 +329,7 @@ spin_change_cb (GtkAdjustment *adjustment,
   else
     pango_font_description_set_size (priv->font_desc, ((gint)size) * PANGO_SCALE);
 
-  /* If the new value is lower than the lower bound of the slider, we set
-   * the slider adjustment to the lower bound value if it is not already set
-   */
-  if (size < gtk_adjustment_get_lower (slider_adj) &&
-      gtk_adjustment_get_value (slider_adj) != gtk_adjustment_get_lower (slider_adj))
-    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_lower (slider_adj));
-
-  /* If the new value is upper than the upper bound of the slider, we set
-   * the slider adjustment to the upper bound value if it is not already set
-   */
-  else if (size > gtk_adjustment_get_upper (slider_adj) &&
-           gtk_adjustment_get_value (slider_adj) != gtk_adjustment_get_upper (slider_adj))
-    gtk_adjustment_set_value (slider_adj, gtk_adjustment_get_upper (slider_adj));
-
-  /* If the new value is not already set on the slider we set it */
-  else if (size != gtk_adjustment_get_value (slider_adj))
-    gtk_adjustment_set_value (slider_adj, size);
+  gtk_adjustment_set_value (slider_adj, size);
 
   gtk_widget_queue_draw (priv->preview);
 
