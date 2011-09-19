@@ -43,7 +43,7 @@
  * You can add items to a GtkComboBoxText with
  * gtk_combo_box_text_append_text(), gtk_combo_box_text_insert_text()
  * or gtk_combo_box_text_prepend_text() and remove options with
- * gtk_combo_box_text_remove_text().
+ * gtk_combo_box_text_remove().
  *
  * If the GtkComboBoxText contains an entry (via the 'has-entry' property),
  * its contents can be retrieved using gtk_combo_box_text_get_active_text().
@@ -55,7 +55,7 @@
  * <para>
  * The GtkComboBoxText implementation of the GtkBuildable interface
  * supports adding items directly using the &lt;items&gt element
- * and specifying &lt;item&gt elements for each item. Each &lt;item&gt
+ * and specifying &lt;item&gt; elements for each item. Each &lt;item&gt;
  * element supports the regular translation attributes "translatable",
  * "context" and "comments".
  * </para>
