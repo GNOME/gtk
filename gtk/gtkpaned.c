@@ -1291,12 +1291,14 @@ gtk_paned_create_child_window (GtkPaned  *paned,
 
       gtk_widget_get_allocation (widget, &allocation);
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          child == priv->child2)
+          child == priv->child2 && priv->child1 &&
+          gtk_widget_get_visible (priv->child1))
         attributes.x = priv->handle_pos.x + handle_size;
       else
         attributes.x = allocation.x;
       if (priv->orientation == GTK_ORIENTATION_VERTICAL &&
-          child == priv->child2)
+          child == priv->child2 && priv->child1 &&
+          gtk_widget_get_visible (priv->child1))
         attributes.y = priv->handle_pos.y + handle_size;
       else
         attributes.y = allocation.y;
