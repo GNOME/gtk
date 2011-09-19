@@ -1,3 +1,38 @@
+Overview of Changes in GTK+ 3.1.92
+==================================
+
+* GtkIconView:
+ - Cells will now be prelighted, if you set the
+   GtkCellRendererPixbuf::follow-state property.
+
+* GtkFontChooser:
+ - Speed up population of the font list somewhat.
+   More speedups are expected in 3.2
+
+* Bugs fixed:
+ 615501 GtkIconView does not support prelight cells
+ 658981 Inability to effectively clear string indicator in stf imp...
+ 659241 GtkPaned initially allocates space for separator, even if...
+ 659247 link-button: Reset the mouse cursor when destroyed
+
+* Translation updates:
+ Asturian
+ Belarussian
+ Brazilian Portuguese
+ British English
+ Bulgarian
+ French
+ Galician
+ German
+ Latvian
+ Portuguese
+ Punjabi
+ Russian
+ Serbian
+ Slovenian
+ Swedish
+
+
 Overview of Changes in GTK+ 3.1.90
 ==================================
 
