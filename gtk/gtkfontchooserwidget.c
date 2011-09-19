@@ -945,11 +945,9 @@ gtk_font_chooser_widget_screen_changed (GtkWidget *widget,
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  void (* screen_changed) (GtkWidget *, GdkScreen *) =
-    GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed;
 
-  if (screen_changed)
-    screen_changed (widget, previous_screen);
+  if (GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed)
+    GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed (widget, previous_screen);
 
   populate_list (fontchooser,
                  GTK_TREE_VIEW (priv->family_face_list),
