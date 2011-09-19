@@ -95,8 +95,6 @@ struct _GtkFontChooserWidgetPrivate
   PangoFontFace   *face;
   PangoFontFamily *family;
 
-  gulong           cursor_changed_handler;
-
   GtkFontFilterFunc filter_func;
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
@@ -139,7 +137,6 @@ static void gtk_font_chooser_widget_get_property         (GObject         *objec
                                                           GValue          *value,
                                                           GParamSpec      *pspec);
 static void gtk_font_chooser_widget_finalize             (GObject         *object);
-static void gtk_font_chooser_widget_dispose              (GObject         *object);
 
 static void gtk_font_chooser_widget_screen_changed       (GtkWidget       *widget,
                                                           GdkScreen       *previous_screen);
@@ -179,7 +176,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
 
   widget_class->screen_changed = gtk_font_chooser_widget_screen_changed;
 
-  gobject_class->dispose = gtk_font_chooser_widget_dispose;
   gobject_class->finalize = gtk_font_chooser_widget_finalize;
   gobject_class->set_property = gtk_font_chooser_widget_set_property;
   gobject_class->get_property = gtk_font_chooser_widget_get_property;
@@ -609,10 +605,8 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   g_signal_connect (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin)),
                     "value-changed", G_CALLBACK (spin_change_cb), fontchooser);
 
-  priv->cursor_changed_handler =
-      g_signal_connect (priv->family_face_list, "cursor-changed",
-                        G_CALLBACK (cursor_changed_cb), fontchooser);
-
+  g_signal_connect (priv->family_face_list, "cursor-changed",
+                    G_CALLBACK (cursor_changed_cb), fontchooser);
   g_signal_connect (priv->family_face_list, "row-activated",
                     G_CALLBACK (row_activated_cb), fontchooser);
 
@@ -881,22 +875,6 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
   gtk_tree_view_append_column (treeview, col);
 
   populate_list (fontchooser, treeview, priv->model);
-}
-
-static void
-gtk_font_chooser_widget_dispose (GObject *object)
-{
-  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (object);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-
-  if (priv->cursor_changed_handler != 0)
-    {
-      g_signal_handler_disconnect (priv->family_face_list,
-                                   priv->cursor_changed_handler);
-      priv->cursor_changed_handler = 0;
-    }
-
-  G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->dispose (object);
 }
 
 static void
