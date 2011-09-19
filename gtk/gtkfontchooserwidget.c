@@ -321,9 +321,9 @@ spin_change_cb (GtkAdjustment *adjustment,
   gtk_widget_override_font (priv->preview, desc);
 
   if (pango_font_description_get_size_is_absolute (priv->font_desc))
-    pango_font_description_set_absolute_size (priv->font_desc, size);
+    pango_font_description_set_absolute_size (priv->font_desc, size * PANGO_SCALE);
   else
-    pango_font_description_set_size (priv->font_desc, ((gint)size) * PANGO_SCALE);
+    pango_font_description_set_size (priv->font_desc, size * PANGO_SCALE);
 
   gtk_adjustment_set_value (slider_adj, size);
 
