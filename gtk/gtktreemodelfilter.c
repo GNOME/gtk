@@ -1655,6 +1655,9 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
   iter.user_data = level;
   iter.user_data2 = elt;
 
+  parent = level->parent_elt;
+  parent_level = level->parent_level;
+
   if (!parent || orig_level_ext_ref_count > 0)
     path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
   else
@@ -1663,9 +1666,6 @@ gtk_tree_model_filter_remove_elt_from_level (GtkTreeModelFilter *filter,
      * for a path.
      */
     path = NULL;
-
-  parent = level->parent_elt;
-  parent_level = level->parent_level;
 
   length = g_sequence_get_length (level->seq);
 
@@ -3194,7 +3194,6 @@ static gboolean
 gtk_tree_model_filter_iter_next (GtkTreeModel *model,
                                  GtkTreeIter  *iter)
 {
-  FilterLevel *level;
   FilterElt *elt;
   GSequenceIter *siter;
 
@@ -3202,7 +3201,6 @@ gtk_tree_model_filter_iter_next (GtkTreeModel *model,
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->stamp == iter->stamp, FALSE);
 
-  level = iter->user_data;
   elt = iter->user_data2;
 
   siter = g_sequence_iter_next (elt->visible_siter);
