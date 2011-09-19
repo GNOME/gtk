@@ -126,6 +126,7 @@ static const gint font_sizes[] = {
 enum {
   FAMILY_COLUMN,
   FACE_COLUMN,
+  FONT_DESC_COLUMN,
   PREVIEW_TEXT_COLUMN,
   PREVIEW_TITLE_COLUMN
 };
@@ -765,6 +766,7 @@ populate_list (GtkFontChooserWidget *fontchooser,
           gtk_list_store_insert_with_values (model, &iter, -1,
                                              FAMILY_COLUMN, families[i],
                                              FACE_COLUMN, faces[j],
+                                             FONT_DESC_COLUMN, pango_desc,
                                              PREVIEW_TITLE_COLUMN, family_and_face,
                                              PREVIEW_TEXT_COLUMN, tmp,
                                              -1);
@@ -886,9 +888,10 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
   GtkCellRenderer   *cell;
   GtkTreeViewColumn *col;
 
-  priv->model = gtk_list_store_new (4,
+  priv->model = gtk_list_store_new (5,
                                     PANGO_TYPE_FONT_FAMILY,
                                     PANGO_TYPE_FONT_FACE,
+                                    PANGO_TYPE_FONT_DESCRIPTION,
                                     G_TYPE_STRING,
                                     G_TYPE_STRING);
 
