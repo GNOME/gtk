@@ -715,9 +715,6 @@ populate_list (GtkFontChooserWidget *fontchooser,
   gchar *tmp;
   gchar *family_and_face;
 
-  if (!gtk_widget_has_screen (GTK_WIDGET (fontchooser)))
-    return;
-
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
                                &families,
                                &n_families);
@@ -966,6 +963,12 @@ gtk_font_chooser_widget_screen_changed (GtkWidget *widget,
 
   if (GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed)
     GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed (widget, previous_screen);
+
+  if (previous_screen == NULL)
+    previous_screen = gdk_screen_get_default ();
+
+  if (previous_screen == gtk_widget_get_screen (widget))
+    return;
 
   populate_list (fontchooser,
                  GTK_TREE_VIEW (priv->family_face_list),
