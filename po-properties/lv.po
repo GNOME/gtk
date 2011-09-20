@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-12 19:46+0000\n"
-"PO-Revision-Date: 2011-09-15 19:56+0300\n"
+"POT-Creation-Date: 2011-09-20 07:10+0000\n"
+"PO-Revision-Date: 2011-09-20 20:42+0300\n"
 "Last-Translator: Rūdofls Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
 "MIME-Version: 1.0\n"
@@ -620,12 +620,10 @@ msgstr ""
 "GtkAppChooserDialog"
 
 #: ../gtk/gtkappchooserbutton.c:633
-#| msgid "Show default app"
 msgid "Show default item"
 msgstr "Rādīt noklusēto vienumu"
 
 #: ../gtk/gtkappchooserbutton.c:634
-#| msgid "Whether the widget should show the default application"
 msgid "Whether the combobox should show the default application on top"
 msgstr "Vai kombinētajā lauciņā noklusētā lietotne jārāda augšpusē"
 
@@ -878,7 +876,7 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Ja PATIESS, bērns netiks pakļauts viendabīgai izmēra maiņai"
 
 #: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:314
-#: ../gtk/gtkiconview.c:643 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkiconview.c:645 ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "Atstarpe"
 
@@ -1730,15 +1728,17 @@ msgid "Whether the text can be modified by the user"
 msgstr "Vai tekstu var modificēt lietotājs"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
-#: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Fonts"
 
-#: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtktexttag.c:295
+#: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtkfontchooser.c:68
+#: ../gtk/gtktexttag.c:295
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Fonta apraksts kā virkne, piem.,  \"Sans Italic 12\""
 
-#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtktexttag.c:303
+#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtkfontchooser.c:81
+#: ../gtk/gtktexttag.c:303
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Fonta apraksts kā PangoFontDescription struktūra"
 
@@ -2071,13 +2071,13 @@ msgid "The model for cell view"
 msgstr "Šūnu skata modelis"
 
 #: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:950
-#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:768
+#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:770
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
 msgstr "Šūnas laukums"
 
 #: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:951
-#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:769
+#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:771
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
 msgstr "GtkCellArea, ko izmanto, lai izkārtotu šūnas"
@@ -2147,7 +2147,7 @@ msgid "Whether to give the color an alpha value"
 msgstr "Vai piešķirt, krāsai alfa vērtību"
 
 #: ../gtk/gtkcolorbutton.c:185 ../gtk/gtkfilechooserbutton.c:440
-#: ../gtk/gtkfontbutton.c:150 ../gtk/gtkprintjob.c:141
+#: ../gtk/gtkfontbutton.c:435 ../gtk/gtkprintjob.c:141
 #: ../gtk/gtkstatusicon.c:438 ../gtk/gtktreeviewcolumn.c:331
 msgid "Title"
 msgstr "Virsraksts"
@@ -2842,7 +2842,7 @@ msgstr "Minimālais atslēgas garums"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Meklēšanas atslēgas minimālais garums, meklējot sakritības"
 
-#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:564
+#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:566
 msgid "Text column"
 msgstr "Teksta kolonna"
 
@@ -3114,74 +3114,78 @@ msgstr "Y pozīcija"
 msgid "Y position of child widget"
 msgstr "Bērna logdaļas Y pozīcija"
 
-#: ../gtk/gtkfontbutton.c:151
+#: ../gtk/gtkfontbutton.c:436
 msgid "The title of the font chooser dialog"
 msgstr "Fontu izvēles loga nosaukums"
 
-#: ../gtk/gtkfontbutton.c:166 ../gtk/gtkfontchooser.c:186
-#: ../gtk/gtkfontsel.c:244
+#: ../gtk/gtkfontbutton.c:451 ../gtk/gtkfontsel.c:244
 msgid "Font name"
 msgstr "Fonta nosaukums"
 
-#: ../gtk/gtkfontbutton.c:167
+#: ../gtk/gtkfontbutton.c:452
 msgid "The name of the selected font"
 msgstr "Izvēlētā fonta nosaukums"
 
-#: ../gtk/gtkfontbutton.c:168
+#: ../gtk/gtkfontbutton.c:453
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:183
+#: ../gtk/gtkfontbutton.c:468
 msgid "Use font in label"
 msgstr "Izmantot fontu iezīmē"
 
-#: ../gtk/gtkfontbutton.c:184
+#: ../gtk/gtkfontbutton.c:469
 msgid "Whether the label is drawn in the selected font"
 msgstr "Vai iezīme ir uzzīmēta ar izvēlēto fontu"
 
-#: ../gtk/gtkfontbutton.c:199
+#: ../gtk/gtkfontbutton.c:484
 msgid "Use size in label"
 msgstr "Lietot izmēru iezīmē"
 
-#: ../gtk/gtkfontbutton.c:200
+#: ../gtk/gtkfontbutton.c:485
 msgid "Whether the label is drawn with the selected font size"
 msgstr "Vai iezīme ir uzzīmēta ar izvēlēto fonta izmēru"
 
-#: ../gtk/gtkfontbutton.c:216
+#: ../gtk/gtkfontbutton.c:501
 msgid "Show style"
 msgstr "Rādīt stilu"
 
-#: ../gtk/gtkfontbutton.c:217
+#: ../gtk/gtkfontbutton.c:502
 msgid "Whether the selected font style is shown in the label"
 msgstr "Vai izvēlētais fonta stils tiek rādīts iezīmē"
 
-#: ../gtk/gtkfontbutton.c:232
+#: ../gtk/gtkfontbutton.c:517
 msgid "Show size"
 msgstr "Rādīt izmēru"
 
-#: ../gtk/gtkfontbutton.c:233
+#: ../gtk/gtkfontbutton.c:518
 msgid "Whether selected font size is shown in the label"
 msgstr "Vai izvēlētais fonta izmērs tiek attēlots iezīmē"
 
-#: ../gtk/gtkfontchooser.c:187 ../gtk/gtkfontsel.c:245
-msgid "The string that represents this font"
-msgstr "Virkne apzīmē šo fontu"
+#: ../gtk/gtkfontchooser.c:80
+#| msgid "Font options"
+msgid "Font description"
+msgstr "Fonta apraksts"
 
-#: ../gtk/gtkfontchooser.c:193 ../gtk/gtkfontsel.c:251
+#: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Priekšskatījuma teksts"
 
-#: ../gtk/gtkfontchooser.c:194 ../gtk/gtkfontsel.c:252
+#: ../gtk/gtkfontchooser.c:94 ../gtk/gtkfontsel.c:252
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teksts, ko parādīt, lai demonstrētu izvēlēto fontu"
 
-#: ../gtk/gtkfontchooser.c:201
+#: ../gtk/gtkfontchooser.c:106
 msgid "Show preview text entry"
 msgstr "Rādīt priekšskatījuma teksta ierakstu"
 
-#: ../gtk/gtkfontchooser.c:202
+#: ../gtk/gtkfontchooser.c:107
 msgid "Whether the preview text entry is shown or not"
 msgstr "Vai priekšskatījuma teksta ieraksts tiek rādīts"
+
+#: ../gtk/gtkfontsel.c:245
+msgid "The string that represents this font"
+msgstr "Virkne apzīmē šo fontu"
 
 #: ../gtk/gtkframe.c:172
 msgid "Text of the frame's label"
@@ -3326,135 +3330,135 @@ msgid ""
 msgstr ""
 "Bula vērtība, kas norāda, vai tura kastes bērns ir piesaistīts vai atsaistīts"
 
-#: ../gtk/gtkiconview.c:527 ../gtk/gtktreeselection.c:131
+#: ../gtk/gtkiconview.c:529 ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Atlases režīms"
 
-#: ../gtk/gtkiconview.c:528
+#: ../gtk/gtkiconview.c:530
 msgid "The selection mode"
 msgstr "Atlases režīms"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:548
 msgid "Pixbuf column"
 msgstr "Pikseļu bufera kolonna"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:549
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modeļa kolonna, izmantota, lai iegūtu ikonas pikseļu bufera formu"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:567
 msgid "Model column used to retrieve the text from"
 msgstr "Modeļa kolonna, izmantota, lai iegūtu tekstu no formas "
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:586
 msgid "Markup column"
 msgstr "Marķējuma kolonna"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Modeļa kolonna, izmantota teksta iegūšana, ja tiek izmantots Pango marķējums"
 
-#: ../gtk/gtkiconview.c:592
+#: ../gtk/gtkiconview.c:594
 msgid "Icon View Model"
 msgstr "Ikonas skata modelis"
 
-#: ../gtk/gtkiconview.c:593
+#: ../gtk/gtkiconview.c:595
 msgid "The model for the icon view"
 msgstr "Ikonu skata modelis"
 
-#: ../gtk/gtkiconview.c:609
+#: ../gtk/gtkiconview.c:611
 msgid "Number of columns"
 msgstr "Kolonnu skaits"
 
-#: ../gtk/gtkiconview.c:610
+#: ../gtk/gtkiconview.c:612
 msgid "Number of columns to display"
 msgstr "Rādāmo kolonnu skaits"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:629
 msgid "Width for each item"
 msgstr "Katra elementa platums"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:630
 msgid "The width used for each item"
 msgstr "Platums, kas lietots katrai sadaļai"
 
-#: ../gtk/gtkiconview.c:644
+#: ../gtk/gtkiconview.c:646
 msgid "Space which is inserted between cells of an item"
 msgstr "Atstarpe, kas ievietota starp sadaļas šūnām"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:661
 msgid "Row Spacing"
 msgstr "Rindu atstarpe"
 
-#: ../gtk/gtkiconview.c:660
+#: ../gtk/gtkiconview.c:662
 msgid "Space which is inserted between grid rows"
 msgstr "Atstarpe, kas ievietota starp režģa rindām"
 
-#: ../gtk/gtkiconview.c:675
+#: ../gtk/gtkiconview.c:677
 msgid "Column Spacing"
 msgstr "Kolonnu atstarpe"
 
-#: ../gtk/gtkiconview.c:676
+#: ../gtk/gtkiconview.c:678
 msgid "Space which is inserted between grid columns"
 msgstr "Atstarpe, kas ievietota starp režģa kolonnām"
 
-#: ../gtk/gtkiconview.c:691
+#: ../gtk/gtkiconview.c:693
 msgid "Margin"
 msgstr "Mala"
 
-#: ../gtk/gtkiconview.c:692
+#: ../gtk/gtkiconview.c:694
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Atstarpe, kas ievietota ikonas skata malās"
 
-#: ../gtk/gtkiconview.c:707
+#: ../gtk/gtkiconview.c:709
 msgid "Item Orientation"
 msgstr "Priekšmeta novietojums"
 
-#: ../gtk/gtkiconview.c:708
+#: ../gtk/gtkiconview.c:710
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Kā teksts un ikona katrai sadaļai ir novietoti attiecība viens pret otru"
 
-#: ../gtk/gtkiconview.c:724 ../gtk/gtktreeview.c:1021
+#: ../gtk/gtkiconview.c:726 ../gtk/gtktreeview.c:1021
 #: ../gtk/gtktreeviewcolumn.c:374
 msgid "Reorderable"
 msgstr "Pārkārtojams"
 
-#: ../gtk/gtkiconview.c:725 ../gtk/gtktreeview.c:1022
+#: ../gtk/gtkiconview.c:727 ../gtk/gtktreeview.c:1022
 msgid "View is reorderable"
 msgstr "Skats ir pārkārtojams"
 
-#: ../gtk/gtkiconview.c:732 ../gtk/gtktreeview.c:1172
+#: ../gtk/gtkiconview.c:734 ../gtk/gtktreeview.c:1172
 msgid "Tooltip Column"
 msgstr "Paskaidres kolonna"
 
-#: ../gtk/gtkiconview.c:733
+#: ../gtk/gtkiconview.c:735
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Kolonna modelī, kura satur elementu tekstu paskaidres"
 
-#: ../gtk/gtkiconview.c:750
+#: ../gtk/gtkiconview.c:752
 msgid "Item Padding"
 msgstr "Priekšmeta papildinājums"
 
-#: ../gtk/gtkiconview.c:751
+#: ../gtk/gtkiconview.c:753
 msgid "Padding around icon view items"
 msgstr "Papildinājums ap ikonu skata priekšmetiem"
 
-#: ../gtk/gtkiconview.c:782
+#: ../gtk/gtkiconview.c:784
 msgid "Selection Box Color"
 msgstr "Izvēles rāmja krāsa"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:785
 msgid "Color of the selection box"
 msgstr "Izvēles kastes krāsa"
 
-#: ../gtk/gtkiconview.c:789
+#: ../gtk/gtkiconview.c:791
 msgid "Selection Box Alpha"
 msgstr "Izvēles rāmis alfa"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:792
 msgid "Opacity of the selection box"
 msgstr "Izvēles kastes caurspīdīgums"
 
@@ -3694,19 +3698,19 @@ msgstr "Izkārtojuma platums"
 msgid "The height of the layout"
 msgstr "Izkārtojuma augstums"
 
-#: ../gtk/gtklinkbutton.c:173
+#: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:174
+#: ../gtk/gtklinkbutton.c:176
 msgid "The URI bound to this button"
 msgstr "Šai pogai piešķirtais URI"
 
-#: ../gtk/gtklinkbutton.c:188
+#: ../gtk/gtklinkbutton.c:190
 msgid "Visited"
 msgstr "Apmeklēts"
 
-#: ../gtk/gtklinkbutton.c:189
+#: ../gtk/gtklinkbutton.c:191
 msgid "Whether this link has been visited."
 msgstr "Vai šī saite ir apmeklēta."
 
