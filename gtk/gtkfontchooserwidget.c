@@ -81,7 +81,7 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget    *list_scrolled_window;
   GtkWidget    *empty_list;
   GtkWidget    *list_notebook;
-  GtkListStore *model;
+  GtkTreeModel *model;
   GtkTreeModel *filter_model;
 
   GtkWidget       *preview;
@@ -379,13 +379,13 @@ cursor_changed_cb (GtkTreeView *treeview,
   if (!path)
     return;
 
-  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->filter_model), &iter, path))
+  if (!gtk_tree_model_get_iter (priv->filter_model, &iter, path))
     {
       gtk_tree_path_free (path);
       return;
     }
 
-  gtk_tree_model_get (GTK_TREE_MODEL (priv->filter_model), &iter,
+  gtk_tree_model_get (priv->filter_model, &iter,
                       FACE_COLUMN, &face,
                       FAMILY_COLUMN, &family,
                       -1);
@@ -787,19 +787,19 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
   GtkCellRenderer   *cell;
   GtkTreeViewColumn *col;
 
-  priv->model = gtk_list_store_new (4,
-                                    PANGO_TYPE_FONT_FAMILY,
-                                    PANGO_TYPE_FONT_FACE,
-                                    PANGO_TYPE_FONT_DESCRIPTION,
-                                    G_TYPE_STRING);
+  priv->model = GTK_TREE_MODEL (gtk_list_store_new (4,
+                                                    PANGO_TYPE_FONT_FAMILY,
+                                                    PANGO_TYPE_FONT_FACE,
+                                                    PANGO_TYPE_FONT_DESCRIPTION,
+                                                    G_TYPE_STRING));
 
-  priv->filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL (priv->model), NULL);
+  priv->filter_model = gtk_tree_model_filter_new (priv->model, NULL);
   g_object_unref (priv->model);
 
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (priv->filter_model),
                                           visible_func, (gpointer)priv, NULL);
 
-  gtk_tree_view_set_model (treeview, GTK_TREE_MODEL (priv->filter_model));
+  gtk_tree_view_set_model (treeview, priv->filter_model);
   g_object_unref (priv->filter_model);
 
   gtk_tree_view_set_rules_hint      (treeview, TRUE);
@@ -855,11 +855,11 @@ gtk_font_chooser_widget_find_font (GtkFontChooserWidget        *fontchooser,
   PangoFontDescription *desc;
   gboolean valid;
 
-  for (valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->model), iter);
+  for (valid = gtk_tree_model_get_iter_first (priv->model, iter);
        valid;
-       valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->model), iter))
+       valid = gtk_tree_model_iter_next (priv->model, iter))
     {
-      gtk_tree_model_get (GTK_TREE_MODEL (priv->model), iter,
+      gtk_tree_model_get (priv->model, iter,
                           FACE_COLUMN, face,
                           FAMILY_COLUMN, family,
                           FONT_DESC_COLUMN, &desc,
@@ -1007,7 +1007,7 @@ gtk_font_chooser_widget_select_font (GtkFontChooserWidget *fontchooser)
                                                             &filter_iter,
                                                             &iter))
         {
-          GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->filter_model), &filter_iter);
+          GtkTreePath *path = gtk_tree_model_get_path (priv->filter_model, &filter_iter);
           gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->family_face_list),
                                     path,
                                     NULL,
