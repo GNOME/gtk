@@ -36,8 +36,8 @@
 #include "gtkstock.h"
 #include "gtkshow.h"
 #include "gtktooltip.h"
-
 #include "gtklinkbutton.h"
+#include "gtkprivate.h"
 
 #include "gtkintl.h"
 #include "gtkalias.h"
