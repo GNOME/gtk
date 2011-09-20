@@ -92,6 +92,8 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget *size_slider;
 
   PangoFontDescription *font_desc;
+  GtkTreeIter           font_iter;      /* invalid if font not available or pointer into model
+                                           (not filter_model) to the row containing font */
   PangoFontFace   *face;
   PangoFontFamily *family;
 
@@ -385,6 +387,9 @@ cursor_changed_cb (GtkTreeView *treeview,
       return;
     }
 
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
+                                                    &priv->font_iter,
+                                                    &iter);
   gtk_tree_model_get (priv->filter_model, &iter,
                       FACE_COLUMN, &face,
                       FAMILY_COLUMN, &family,
@@ -647,6 +652,7 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser)
   qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
   gtk_list_store_clear (list_store);
+  memset (&priv->font_iter, 0, sizeof (GtkTreeIter));
 
   /* Iterate over families and faces */
   for (i = 0; i < n_families; i++)
@@ -997,7 +1003,7 @@ gtk_font_chooser_widget_select_font (GtkFontChooserWidget *fontchooser)
 
   if (gtk_font_chooser_widget_find_font (fontchooser,
                                          priv->font_desc,
-                                         &iter,
+                                         &priv->font_iter,
                                          &priv->family,
                                          &priv->face))
     {
@@ -1021,6 +1027,7 @@ gtk_font_chooser_widget_select_font (GtkFontChooserWidget *fontchooser)
         (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->family_face_list)));
       priv->face = NULL;
       priv->family = NULL;
+      memset (&priv->font_iter, 0, sizeof (GtkTreeIter));
     }
 }
 
