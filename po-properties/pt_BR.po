@@ -14,9 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-14 08:49-0400\n"
-"PO-Revision-Date: 2011-09-13 22:17-0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-09-19 23:27+0000\n"
+"PO-Revision-Date: 2011-09-19 22:56-0300\n"
 "Last-Translator: Antonio Fernandes C. Neto <fernandesn@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -892,7 +893,7 @@ msgstr ""
 "requisição"
 
 #: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:314
-#: ../gtk/gtkiconview.c:643 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkiconview.c:645 ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "Espaçamento"
 
@@ -1747,8 +1748,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Se o texto pode ser modificado pelo usuário"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
-#: ../gtk/gtkfontchooser.c:67 ../gtk/gtkfontchooser.c:80
-#: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Fonte"
 
@@ -2094,13 +2094,13 @@ msgid "The model for cell view"
 msgstr "O modelo para a visualização da célula"
 
 #: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:950
-#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:768
+#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:770
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
 msgstr "Área da célula"
 
 #: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:951
-#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:769
+#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:771
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
 msgstr "O GtkCellArea usado para disposição das células"
@@ -2877,7 +2877,7 @@ msgstr "Tamanho mínimo da chave"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Tamanho mínimo da chave de pesquisa para procurar correspondências"
 
-#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:564
+#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:566
 msgid "Text column"
 msgstr "Coluna de texto"
 
@@ -3200,6 +3200,10 @@ msgstr "Exibir tamanho"
 msgid "Whether selected font size is shown in the label"
 msgstr "Se o tamanho da fonte selecionada é mostrado no rótulo"
 
+#: ../gtk/gtkfontchooser.c:80
+msgid "Font description"
+msgstr "Descrição da fonte"
+
 #: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Texto de visualização"
@@ -3364,137 +3368,137 @@ msgstr ""
 "Um valor booleano indicando quando a filha da caixa de manipulação está "
 "anexada ou desanexada."
 
-#: ../gtk/gtkiconview.c:527 ../gtk/gtktreeselection.c:131
+#: ../gtk/gtkiconview.c:529 ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Modo de seleção"
 
-#: ../gtk/gtkiconview.c:528
+#: ../gtk/gtkiconview.c:530
 msgid "The selection mode"
 msgstr "O modo de seleção"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:548
 msgid "Pixbuf column"
 msgstr "Coluna do pixbuf"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:549
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modelo de colunas utilizado para obter o pixbuf do ícone"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:567
 msgid "Model column used to retrieve the text from"
 msgstr "Modelo de colunas utilizado para obter o texto"
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:586
 msgid "Markup column"
 msgstr "Coluna de marcação"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Modelo de colunas utilizado para obter o texto se for usada a marcação do "
 "Pango"
 
-#: ../gtk/gtkiconview.c:592
+#: ../gtk/gtkiconview.c:594
 msgid "Icon View Model"
 msgstr "Modelo de visualização de ícone"
 
-#: ../gtk/gtkiconview.c:593
+#: ../gtk/gtkiconview.c:595
 msgid "The model for the icon view"
 msgstr "O modelo para visualização de ícone"
 
-#: ../gtk/gtkiconview.c:609
+#: ../gtk/gtkiconview.c:611
 msgid "Number of columns"
 msgstr "Número de colunas"
 
-#: ../gtk/gtkiconview.c:610
+#: ../gtk/gtkiconview.c:612
 msgid "Number of columns to display"
 msgstr "O número de colunas a serem exibidas"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:629
 msgid "Width for each item"
 msgstr "Largura para cada item"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:630
 msgid "The width used for each item"
 msgstr "A largura utilizada para cada item"
 
-#: ../gtk/gtkiconview.c:644
+#: ../gtk/gtkiconview.c:646
 msgid "Space which is inserted between cells of an item"
 msgstr "Espaço inserido entre as células de um item"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:661
 msgid "Row Spacing"
 msgstr "Espaçamento entre Linhas"
 
-#: ../gtk/gtkiconview.c:660
+#: ../gtk/gtkiconview.c:662
 msgid "Space which is inserted between grid rows"
 msgstr "Espaço inserido entre as linhas da grade"
 
-#: ../gtk/gtkiconview.c:675
+#: ../gtk/gtkiconview.c:677
 msgid "Column Spacing"
 msgstr "Espaçamento entre coluna"
 
-#: ../gtk/gtkiconview.c:676
+#: ../gtk/gtkiconview.c:678
 msgid "Space which is inserted between grid columns"
 msgstr "Espaço inserido entre colunas da grade"
 
-#: ../gtk/gtkiconview.c:691
+#: ../gtk/gtkiconview.c:693
 msgid "Margin"
 msgstr "Margem"
 
-#: ../gtk/gtkiconview.c:692
+#: ../gtk/gtkiconview.c:694
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Espaço inserido nas arestas do visualizador do ícone"
 
-#: ../gtk/gtkiconview.c:707
+#: ../gtk/gtkiconview.c:709
 msgid "Item Orientation"
 msgstr "Orientação do item"
 
-#: ../gtk/gtkiconview.c:708
+#: ../gtk/gtkiconview.c:710
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Como o texto e ícone de cada item estão posicionados um em relação ao outro"
 
-#: ../gtk/gtkiconview.c:724 ../gtk/gtktreeview.c:1021
+#: ../gtk/gtkiconview.c:726 ../gtk/gtktreeview.c:1021
 #: ../gtk/gtktreeviewcolumn.c:374
 msgid "Reorderable"
 msgstr "Reordenável"
 
-#: ../gtk/gtkiconview.c:725 ../gtk/gtktreeview.c:1022
+#: ../gtk/gtkiconview.c:727 ../gtk/gtktreeview.c:1022
 msgid "View is reorderable"
 msgstr "O visualizador é reordenável"
 
-#: ../gtk/gtkiconview.c:732 ../gtk/gtktreeview.c:1172
+#: ../gtk/gtkiconview.c:734 ../gtk/gtktreeview.c:1172
 msgid "Tooltip Column"
 msgstr "Coluna de dica de ferramenta"
 
-#: ../gtk/gtkiconview.c:733
+#: ../gtk/gtkiconview.c:735
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr ""
 "A coluna no modelo contendo os textos das dicas de ferramentas para os itens"
 
-#: ../gtk/gtkiconview.c:750
+#: ../gtk/gtkiconview.c:752
 msgid "Item Padding"
 msgstr "Preenchimento do item"
 
-#: ../gtk/gtkiconview.c:751
+#: ../gtk/gtkiconview.c:753
 msgid "Padding around icon view items"
 msgstr "Preenchimento ao redor de itens de visualização de ícone"
 
-#: ../gtk/gtkiconview.c:782
+#: ../gtk/gtkiconview.c:784
 msgid "Selection Box Color"
 msgstr "Cor da caixa de seleção"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:785
 msgid "Color of the selection box"
 msgstr "Cor da caixa de seleção"
 
-#: ../gtk/gtkiconview.c:789
+#: ../gtk/gtkiconview.c:791
 msgid "Selection Box Alpha"
 msgstr "Alfa da caixa de seleção"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:792
 msgid "Opacity of the selection box"
 msgstr "Opacidade da caixa de seleção"
 
@@ -3735,19 +3739,19 @@ msgstr "A largura do layout"
 msgid "The height of the layout"
 msgstr "A altura do layout"
 
-#: ../gtk/gtklinkbutton.c:173
+#: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:174
+#: ../gtk/gtklinkbutton.c:176
 msgid "The URI bound to this button"
 msgstr "O URI ligado a botão"
 
-#: ../gtk/gtklinkbutton.c:188
+#: ../gtk/gtklinkbutton.c:190
 msgid "Visited"
 msgstr "Visitado"
 
-#: ../gtk/gtklinkbutton.c:189
+#: ../gtk/gtklinkbutton.c:191
 msgid "Whether this link has been visited."
 msgstr "Se este link foi visitado."
 
