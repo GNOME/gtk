@@ -636,14 +636,6 @@ populate_list (GtkFontChooserWidget *fontchooser,
                GtkListStore   *model)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  GtkStyleContext *style_context;
-  PangoFontDescription *default_font;
-  PangoFontDescription *selected_font;
-
-  gint match;
-  GtkTreeIter match_row;
-  GtkTreePath *path;
-
   gint n_families, i;
   PangoFontFamily **families;
   gchar *tmp;
@@ -655,18 +647,7 @@ populate_list (GtkFontChooserWidget *fontchooser,
 
   qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (treeview));
-  default_font = (PangoFontDescription*) gtk_style_context_get_font (style_context,
-                                                                     GTK_STATE_NORMAL);
-
-  if (priv->face)
-    selected_font = pango_font_face_describe (priv->face);
-  else
-    selected_font = NULL;
-
   gtk_list_store_clear (model);
-
-  match = 0;
 
   /* Iterate over families and faces */
   for (i = 0; i < n_families; i++)
@@ -702,29 +683,6 @@ populate_list (GtkFontChooserWidget *fontchooser,
                                              PREVIEW_TEXT_COLUMN, tmp,
                                              -1);
 
-          /* Select the current font,
-           * the default font/face from the theme,
-           * or the first font
-           */
-          if (match < 3 &&
-              selected_font != NULL &&
-              pango_font_description_equal (selected_font, pango_desc))
-            {
-              match_row = iter;
-              match = 3;
-            }
-          if (match < 2 &&
-              strcmp (fam_name, pango_font_description_get_family (default_font)) == 0)
-            {
-              match_row = iter;
-              match = 2;
-            }
-          if (match < 1)
-            {
-              match_row = iter;
-              match = 1;
-            }
-
           pango_font_description_free (pango_desc);
           g_free (family_and_face);
           g_free (tmp);
@@ -733,17 +691,6 @@ populate_list (GtkFontChooserWidget *fontchooser,
 
       g_free (faces);
     }
-
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (model), &match_row);
-  if (path)
-    {
-      gtk_tree_view_set_cursor (treeview, path, NULL, FALSE);
-      gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0.5, 0.5);
-      gtk_tree_path_free (path);
-    }
-
-  if (selected_font)
-    pango_font_description_free (selected_font);
 
   g_free (families);
 }
