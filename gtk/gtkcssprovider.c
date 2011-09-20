@@ -668,13 +668,6 @@
  * map intuitively in a widget based environment).
  * </para>
  * <para>
- * There is also a difference in shorthand properties, for
- * example in common CSS it is fine to define a font through
- * the different @font-family, @font-style, @font-size
- * properties, meanwhile in GTK+'s CSS only the canonical
- * @font property is supported.
- * </para>
- * <para>
  * The currently supported properties are:
  * </para>
  * <informaltable>
