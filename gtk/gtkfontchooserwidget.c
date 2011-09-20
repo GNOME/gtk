@@ -874,6 +874,40 @@ gtk_font_chooser_widget_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->finalize (object);
 }
 
+static gboolean
+gtk_font_chooser_widget_find_font (GtkFontChooserWidget        *fontchooser,
+                                   const PangoFontDescription  *font_desc,
+                                   /* out arguments */
+                                   GtkTreeIter                 *iter,
+                                   PangoFontFamily            **family,
+                                   PangoFontFace              **face)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  PangoFontDescription *desc;
+  gboolean valid;
+
+  for (valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->model), iter);
+       valid;
+       valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->model), iter))
+    {
+      gtk_tree_model_get (GTK_TREE_MODEL (priv->model), iter,
+                          FACE_COLUMN, face,
+                          FAMILY_COLUMN, family,
+                          FONT_DESC_COLUMN, &desc,
+                          -1);
+
+      pango_font_description_merge_static (desc, font_desc, FALSE);
+      if (pango_font_description_equal (desc, font_desc))
+        break;
+
+      g_object_unref (face);
+      g_object_unref (family);
+      pango_font_description_free (desc);
+    }
+  
+  return valid;
+}
+
 static void
 gtk_font_chooser_widget_screen_changed (GtkWidget *widget,
                                         GdkScreen *previous_screen)
@@ -988,89 +1022,45 @@ static void
 gtk_font_chooser_widget_select_font (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  const PangoFontDescription *desc;
-  const gchar *family_name;
-  gint font_size;
-  gboolean font_size_is_absolute;
   GtkTreeIter iter;
-  gboolean valid;
-  gboolean found = FALSE;
 
-  desc = priv->font_desc;
-  g_assert (desc != NULL);
+  if (priv->family)
+    g_object_unref (priv->family);
+  if (priv->face)
+    g_object_unref (priv->face);
 
-  font_size = pango_font_description_get_size (desc);
-  font_size_is_absolute = pango_font_description_get_size_is_absolute (desc);
-  family_name = pango_font_description_get_family (desc);
-
-  /* We make sure the filter is clear */
-  gtk_entry_set_text (GTK_ENTRY (priv->search_entry), "");
-
-  if (!family_name)
-    goto deselect;
-
-  /* We find the matching family/face */
-  for (valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (priv->filter_model), &iter);
-       valid;
-       valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->filter_model), &iter))
+  if (gtk_font_chooser_widget_find_font (fontchooser,
+                                         priv->font_desc,
+                                         &iter,
+                                         &priv->family,
+                                         &priv->face))
     {
-      PangoFontFace        *face;
-      PangoFontDescription *tmp_desc;
+      GtkTreeIter filter_iter;
 
-      gtk_tree_model_get (GTK_TREE_MODEL (priv->filter_model), &iter,
-                          FACE_COLUMN, &face,
-                          -1);
-
-      tmp_desc = pango_font_face_describe (face);
-      if (font_size_is_absolute)
-        pango_font_description_set_absolute_size (tmp_desc, font_size);
-      else
-        pango_font_description_set_size (tmp_desc, font_size);
-
-      if (pango_font_description_equal (desc, tmp_desc))
+      if (gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
+                                                            &filter_iter,
+                                                            &iter))
         {
-          GtkTreePath *path;
-
-          if (font_size)
-            {
-              if (font_size_is_absolute)
-                font_size *= PANGO_SCALE;
-              gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->size_spin),
-                                         font_size / PANGO_SCALE);
-            }
-
-          path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->filter_model), &iter);
-
-          if (path)
-            {
-              gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->family_face_list),
+          GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->filter_model), &filter_iter);
+          gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->family_face_list),
+                                    path,
+                                    NULL,
+                                    FALSE);
+          gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->family_face_list),
                                         path,
                                         NULL,
-                                        FALSE);
-              gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->family_face_list),
-                                            path,
-                                            NULL,
-                                            FALSE,
-                                            0.5,
-                                            0.5);
-              gtk_tree_path_free (path);
-            }
-
-          found = TRUE;
+                                        FALSE,
+                                        0.5,
+                                        0.5);
+          gtk_tree_path_free (path);
         }
-
-      g_object_unref (face);
-      pango_font_description_free (tmp_desc);
-
-      if (found)
-        break;
     }
-
-deselect:
-  if (!found)
+  else
     {
       gtk_tree_selection_unselect_all
         (gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->family_face_list)));
+      priv->face = NULL;
+      priv->family = NULL;
     }
 }
 
