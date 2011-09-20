@@ -390,12 +390,12 @@ cursor_changed_cb (GtkTreeView *treeview,
   gtk_tree_model_get (priv->filter_model, &iter,
                       FACE_COLUMN, &face,
                       FAMILY_COLUMN, &family,
+                      FONT_DESC_COLUMN, &desc,
                       -1);
 
   gtk_tree_path_free (path);
   path = NULL;
 
-  desc = pango_font_face_describe (face);
   pango_font_description_set_size (desc, pango_font_description_get_size (priv->font_desc));
   gtk_widget_override_font (priv->preview, desc);
 
