@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-12 19:46+0000\n"
-"PO-Revision-Date: 2011-09-14 21:38+0300\n"
+"POT-Creation-Date: 2011-09-20 07:10+0000\n"
+"PO-Revision-Date: 2011-09-20 12:04+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -610,12 +610,10 @@ msgid "Whether the combobox should include an item that triggers a GtkAppChooser
 msgstr "Включить ли в комбинированный список элемент для вызова GtkAppChooserDialog"
 
 #: ../gtk/gtkappchooserbutton.c:633
-#| msgid "Show default app"
 msgid "Show default item"
 msgstr "Показывать элемент по умолчанию"
 
 #: ../gtk/gtkappchooserbutton.c:634
-#| msgid "Whether the widget should show the default application"
 msgid "Whether the combobox should show the default application on top"
 msgstr "Должно ли приложение по умолчанию находиться вверху выпадающего списка"
 
@@ -869,7 +867,7 @@ msgstr "Если установлено, то дочерний элемент н
 #: ../gtk/gtkbox.c:241
 #: ../gtk/gtkcellareabox.c:317
 #: ../gtk/gtkexpander.c:314
-#: ../gtk/gtkiconview.c:643
+#: ../gtk/gtkiconview.c:645
 #: ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "Интервал"
@@ -1741,17 +1739,20 @@ msgstr "Может ли текст быть изменён пользовате�
 
 #: ../gtk/gtkcellrenderertext.c:357
 #: ../gtk/gtkcellrenderertext.c:365
+#: ../gtk/gtkfontchooser.c:67
 #: ../gtk/gtktexttag.c:294
 #: ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Шрифт"
 
 #: ../gtk/gtkcellrenderertext.c:358
+#: ../gtk/gtkfontchooser.c:68
 #: ../gtk/gtktexttag.c:295
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Описание шрифта в виде строки, например, «Sans Italic 12»"
 
 #: ../gtk/gtkcellrenderertext.c:366
+#: ../gtk/gtkfontchooser.c:81
 #: ../gtk/gtktexttag.c:303
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Описание шрифта структурой PangoFontDescription"
@@ -2125,7 +2126,7 @@ msgstr "Модель для отображения элементов в яче�
 #: ../gtk/gtkcellview.c:246
 #: ../gtk/gtkcombobox.c:950
 #: ../gtk/gtkentrycompletion.c:448
-#: ../gtk/gtkiconview.c:768
+#: ../gtk/gtkiconview.c:770
 #: ../gtk/gtktreemenu.c:329
 #: ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
@@ -2134,7 +2135,7 @@ msgstr "Область ячейки"
 #: ../gtk/gtkcellview.c:247
 #: ../gtk/gtkcombobox.c:951
 #: ../gtk/gtkentrycompletion.c:449
-#: ../gtk/gtkiconview.c:769
+#: ../gtk/gtkiconview.c:771
 #: ../gtk/gtktreemenu.c:330
 #: ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
@@ -2209,7 +2210,7 @@ msgstr "Давать ли цвету значение прозрачности"
 
 #: ../gtk/gtkcolorbutton.c:185
 #: ../gtk/gtkfilechooserbutton.c:440
-#: ../gtk/gtkfontbutton.c:150
+#: ../gtk/gtkfontbutton.c:435
 #: ../gtk/gtkprintjob.c:141
 #: ../gtk/gtkstatusicon.c:438
 #: ../gtk/gtktreeviewcolumn.c:331
@@ -2905,7 +2906,7 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "Минимальная длина ключа в порядке поиска на совпадение"
 
 #: ../gtk/gtkentrycompletion.c:344
-#: ../gtk/gtkiconview.c:564
+#: ../gtk/gtkiconview.c:566
 msgid "Text column"
 msgstr "Текстовый столбец"
 
@@ -3165,78 +3166,81 @@ msgstr "Позиция по Y"
 msgid "Y position of child widget"
 msgstr "Позиция дочернего виджета по вертикали"
 
-#: ../gtk/gtkfontbutton.c:151
+#: ../gtk/gtkfontbutton.c:436
 msgid "The title of the font chooser dialog"
 msgstr "Заголовок диалога выбора шрифта"
 
-#: ../gtk/gtkfontbutton.c:166
-#: ../gtk/gtkfontchooser.c:186
+#: ../gtk/gtkfontbutton.c:451
 #: ../gtk/gtkfontsel.c:244
 msgid "Font name"
 msgstr "Наименование шрифта"
 
-#: ../gtk/gtkfontbutton.c:167
+#: ../gtk/gtkfontbutton.c:452
 msgid "The name of the selected font"
 msgstr "Наименование выбранного шрифта"
 
-#: ../gtk/gtkfontbutton.c:168
+#: ../gtk/gtkfontbutton.c:453
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:183
+#: ../gtk/gtkfontbutton.c:468
 msgid "Use font in label"
 msgstr "Использовать шрифт в метке"
 
-#: ../gtk/gtkfontbutton.c:184
+#: ../gtk/gtkfontbutton.c:469
 msgid "Whether the label is drawn in the selected font"
 msgstr "Использовать ли в метке выбранный шрифт"
 
-#: ../gtk/gtkfontbutton.c:199
+#: ../gtk/gtkfontbutton.c:484
 msgid "Use size in label"
 msgstr "Использовать размер в метке"
 
-#: ../gtk/gtkfontbutton.c:200
+#: ../gtk/gtkfontbutton.c:485
 msgid "Whether the label is drawn with the selected font size"
 msgstr "Использовать ли в метке выбранный размер"
 
-#: ../gtk/gtkfontbutton.c:216
+#: ../gtk/gtkfontbutton.c:501
 msgid "Show style"
 msgstr "Показывать стиль"
 
-#: ../gtk/gtkfontbutton.c:217
+#: ../gtk/gtkfontbutton.c:502
 msgid "Whether the selected font style is shown in the label"
 msgstr "Показывать ли в метке стиль выбранного шрифта"
 
-#: ../gtk/gtkfontbutton.c:232
+#: ../gtk/gtkfontbutton.c:517
 msgid "Show size"
 msgstr "Показывать размер"
 
-#: ../gtk/gtkfontbutton.c:233
+#: ../gtk/gtkfontbutton.c:518
 msgid "Whether selected font size is shown in the label"
 msgstr "Показывать ли в метке размер выбранного шрифта"
 
-#: ../gtk/gtkfontchooser.c:187
-#: ../gtk/gtkfontsel.c:245
-msgid "The string that represents this font"
-msgstr "Строка, представляющая этот шрифт"
+#: ../gtk/gtkfontchooser.c:80
+#| msgid "Font options"
+msgid "Font description"
+msgstr "Описание шрифта"
 
-#: ../gtk/gtkfontchooser.c:193
+#: ../gtk/gtkfontchooser.c:93
 #: ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Образец текста"
 
-#: ../gtk/gtkfontchooser.c:194
+#: ../gtk/gtkfontchooser.c:94
 #: ../gtk/gtkfontsel.c:252
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Текст, используемый для демонстрации выбранного шрифта"
 
-#: ../gtk/gtkfontchooser.c:201
+#: ../gtk/gtkfontchooser.c:106
 msgid "Show preview text entry"
 msgstr "Показывать предварительный просмотр текста"
 
-#: ../gtk/gtkfontchooser.c:202
+#: ../gtk/gtkfontchooser.c:107
 msgid "Whether the preview text entry is shown or not"
 msgstr "Включён ли предварительный просмотр текста"
+
+#: ../gtk/gtkfontsel.c:245
+msgid "The string that represents this font"
+msgstr "Строка, представляющая этот шрифт"
 
 #: ../gtk/gtkframe.c:172
 msgid "Text of the frame's label"
@@ -3381,136 +3385,136 @@ msgstr "Дочерний виджет отсоединён"
 msgid "A boolean value indicating whether the handlebox's child is attached or detached."
 msgstr "Булево значение, показывающее, отсоединён ли дочерний виджет."
 
-#: ../gtk/gtkiconview.c:527
+#: ../gtk/gtkiconview.c:529
 #: ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Режим выделения"
 
-#: ../gtk/gtkiconview.c:528
+#: ../gtk/gtkiconview.c:530
 msgid "The selection mode"
 msgstr "Режим выделения"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:548
 msgid "Pixbuf column"
 msgstr "Столбец pixbuf"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:549
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Модель столбца, используемая для получения изображения (pixbuf) значка"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:567
 msgid "Model column used to retrieve the text from"
 msgstr "Модель столбца, используемая для получения из нее текста"
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:586
 msgid "Markup column"
 msgstr "Разметка столбца"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Модель столбца, используемая для получения из нее текста, если используется разметка Pango"
 
-#: ../gtk/gtkiconview.c:592
+#: ../gtk/gtkiconview.c:594
 msgid "Icon View Model"
 msgstr "Модель Icon View"
 
-#: ../gtk/gtkiconview.c:593
+#: ../gtk/gtkiconview.c:595
 msgid "The model for the icon view"
 msgstr "Модель для просмотра в виде значков"
 
-#: ../gtk/gtkiconview.c:609
+#: ../gtk/gtkiconview.c:611
 msgid "Number of columns"
 msgstr "Число столбцов"
 
-#: ../gtk/gtkiconview.c:610
+#: ../gtk/gtkiconview.c:612
 msgid "Number of columns to display"
 msgstr "Количество отображаемых столбцов"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:629
 msgid "Width for each item"
 msgstr "Виджет для каждого элемента"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:630
 msgid "The width used for each item"
 msgstr "Ширина, используемая для каждого элемента"
 
-#: ../gtk/gtkiconview.c:644
+#: ../gtk/gtkiconview.c:646
 msgid "Space which is inserted between cells of an item"
 msgstr "Пространство, вставляемое между ячейками элемента"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:661
 msgid "Row Spacing"
 msgstr "Межстрочный интервал"
 
-#: ../gtk/gtkiconview.c:660
+#: ../gtk/gtkiconview.c:662
 msgid "Space which is inserted between grid rows"
 msgstr "Пространство, вставляемое между строками сетки"
 
-#: ../gtk/gtkiconview.c:675
+#: ../gtk/gtkiconview.c:677
 msgid "Column Spacing"
 msgstr "Интервал столбцов"
 
-#: ../gtk/gtkiconview.c:676
+#: ../gtk/gtkiconview.c:678
 msgid "Space which is inserted between grid columns"
 msgstr "Пространство между столбцами сетки"
 
-#: ../gtk/gtkiconview.c:691
+#: ../gtk/gtkiconview.c:693
 msgid "Margin"
 msgstr "Граница"
 
-#: ../gtk/gtkiconview.c:692
+#: ../gtk/gtkiconview.c:694
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Пространство, вставляемое между углами значков в режиме просмотра «значки»"
 
-#: ../gtk/gtkiconview.c:707
+#: ../gtk/gtkiconview.c:709
 msgid "Item Orientation"
 msgstr "Ориентация элемента"
 
-#: ../gtk/gtkiconview.c:708
+#: ../gtk/gtkiconview.c:710
 msgid "How the text and icon of each item are positioned relative to each other"
 msgstr "Как текст и значки каждого элемента позиционируются относительно друг друга"
 
-#: ../gtk/gtkiconview.c:724
+#: ../gtk/gtkiconview.c:726
 #: ../gtk/gtktreeview.c:1021
 #: ../gtk/gtktreeviewcolumn.c:374
 msgid "Reorderable"
 msgstr "Переставляемые"
 
-#: ../gtk/gtkiconview.c:725
+#: ../gtk/gtkiconview.c:727
 #: ../gtk/gtktreeview.c:1022
 msgid "View is reorderable"
 msgstr "Элементы просмотра можно перегруппировывать"
 
-#: ../gtk/gtkiconview.c:732
+#: ../gtk/gtkiconview.c:734
 #: ../gtk/gtktreeview.c:1172
 msgid "Tooltip Column"
 msgstr "Столбец всплывающей подсказки"
 
-#: ../gtk/gtkiconview.c:733
+#: ../gtk/gtkiconview.c:735
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Столбец в модели источника данных, содержащий текст всплывающей подсказки элементов"
 
-#: ../gtk/gtkiconview.c:750
+#: ../gtk/gtkiconview.c:752
 msgid "Item Padding"
 msgstr "Дополнения элемента"
 
-#: ../gtk/gtkiconview.c:751
+#: ../gtk/gtkiconview.c:753
 msgid "Padding around icon view items"
 msgstr "Дополнения вокруг значков"
 
-#: ../gtk/gtkiconview.c:782
+#: ../gtk/gtkiconview.c:784
 msgid "Selection Box Color"
 msgstr "Цвет диалога выделения"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:785
 msgid "Color of the selection box"
 msgstr "Цвет диалога выделения"
 
-#: ../gtk/gtkiconview.c:789
+#: ../gtk/gtkiconview.c:791
 msgid "Selection Box Alpha"
 msgstr "Прозрачность диалога выделения"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:792
 msgid "Opacity of the selection box"
 msgstr "Прозрачность диалога выделения"
 
@@ -3751,19 +3755,19 @@ msgstr "Ширина макета"
 msgid "The height of the layout"
 msgstr "Высота макета"
 
-#: ../gtk/gtklinkbutton.c:173
+#: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:174
+#: ../gtk/gtklinkbutton.c:176
 msgid "The URI bound to this button"
 msgstr "URI, связанный с этой кнопкой"
 
-#: ../gtk/gtklinkbutton.c:188
+#: ../gtk/gtklinkbutton.c:190
 msgid "Visited"
 msgstr "Посещён"
 
-#: ../gtk/gtklinkbutton.c:189
+#: ../gtk/gtklinkbutton.c:191
 msgid "Whether this link has been visited."
 msgstr "Открывалась ли эта ссылка ранее."
 
