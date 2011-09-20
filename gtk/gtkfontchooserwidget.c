@@ -363,16 +363,13 @@ static void
 cursor_changed_cb (GtkTreeView *treeview,
                    gpointer     user_data)
 {
-  GtkFontChooserWidget *fontchooser = (GtkFontChooserWidget*)user_data;
+  GtkFontChooserWidget *fontchooser = user_data;
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-
   PangoFontFamily      *family;
   PangoFontFace        *face;
   PangoFontDescription *desc;
-
   gint *sizes;
   gint  i, n_sizes;
-
   GtkTreeIter  iter;
   GtkTreePath *path = NULL;
 
@@ -430,9 +427,8 @@ zoom_preview_cb (GtkWidget      *scrolled_window,
                  GdkEventScroll *event,
                  gpointer        user_data)
 {
-  GtkFontChooserWidget        *fc    = (GtkFontChooserWidget*)user_data;
-  GtkFontChooserWidgetPrivate *priv  = fc->priv;
-
+  GtkFontChooserWidget *fc = user_data;
+  GtkFontChooserWidgetPrivate *priv = fc->priv;
   GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
 
   if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_RIGHT)
@@ -452,8 +448,8 @@ row_inserted_cb (GtkTreeModel *model,
                  GtkTreeIter  *iter,
                  gpointer      user_data)
 {
-  GtkFontChooserWidget        *fontchooser = (GtkFontChooserWidget*)user_data;
-  GtkFontChooserWidgetPrivate *priv        = fontchooser->priv;
+  GtkFontChooserWidget *fontchooser = user_data;
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
   gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->list_notebook), 0);
 }
@@ -463,8 +459,8 @@ row_deleted_cb  (GtkTreeModel *model,
                  GtkTreePath  *path,
                  gpointer      user_data)
 {
-  GtkFontChooserWidget        *fontchooser = (GtkFontChooserWidget*)user_data;
-  GtkFontChooserWidgetPrivate *priv        = fontchooser->priv;
+  GtkFontChooserWidget *fontchooser = user_data;
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
   if (gtk_tree_model_iter_n_children (model, NULL) == 0)
     gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->list_notebook), 1);
@@ -473,10 +469,10 @@ row_deleted_cb  (GtkTreeModel *model,
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
-  GIcon                   *icon;
-  GtkFontChooserWidgetPrivate   *priv;
-  GtkWidget               *scrolled_win;
-  GtkWidget               *grid;
+  GIcon *icon;
+  GtkFontChooserWidgetPrivate *priv;
+  GtkWidget *scrolled_win;
+  GtkWidget *grid;
 
   fontchooser->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontchooser,
                                                    GTK_TYPE_FONT_CHOOSER_WIDGET,
@@ -789,8 +785,8 @@ static void
 gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  GtkTreeView       *treeview = GTK_TREE_VIEW (priv->family_face_list);
-  GtkCellRenderer   *cell;
+  GtkTreeView *treeview = GTK_TREE_VIEW (priv->family_face_list);
+  GtkCellRenderer *cell;
   GtkTreeViewColumn *col;
 
   priv->model = GTK_TREE_MODEL (gtk_list_store_new (4,
@@ -1086,7 +1082,7 @@ gtk_font_chooser_widget_set_filter_func (GtkFontChooser  *chooser,
                                          gpointer          data,
                                          GDestroyNotify    destroy)
 {
-  GtkFontChooserWidget        *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
+  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
   if (priv->filter_data_destroy)
