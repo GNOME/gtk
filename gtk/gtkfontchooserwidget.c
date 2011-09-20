@@ -124,7 +124,6 @@ enum {
   FAMILY_COLUMN,
   FACE_COLUMN,
   FONT_DESC_COLUMN,
-  PREVIEW_TEXT_COLUMN,
   PREVIEW_TITLE_COLUMN
 };
 
@@ -638,7 +637,6 @@ populate_list (GtkFontChooserWidget *fontchooser,
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   gint n_families, i;
   PangoFontFamily **families;
-  gchar *tmp;
   gchar *family_and_face;
 
   pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (treeview)),
@@ -663,30 +661,21 @@ populate_list (GtkFontChooserWidget *fontchooser,
         {
           PangoFontDescription *pango_desc;
           const gchar *face_name;
-          gchar *font_desc;
 
           pango_desc = pango_font_face_describe (faces[j]);
           face_name = pango_font_face_get_face_name (faces[j]);
-          font_desc = pango_font_description_to_string (pango_desc);
 
           family_and_face = g_strconcat (fam_name, " ", face_name, NULL);
-          tmp = g_markup_printf_escaped (ROW_FORMAT_STRING,
-                                         family_and_face,
-                                         font_desc,
-                                         fontchooser->priv->preview_text);
 
           gtk_list_store_insert_with_values (model, &iter, -1,
                                              FAMILY_COLUMN, families[i],
                                              FACE_COLUMN, faces[j],
                                              FONT_DESC_COLUMN, pango_desc,
                                              PREVIEW_TITLE_COLUMN, family_and_face,
-                                             PREVIEW_TEXT_COLUMN, tmp,
                                              -1);
 
           pango_font_description_free (pango_desc);
           g_free (family_and_face);
-          g_free (tmp);
-          g_free (font_desc);
         }
 
       g_free (faces);
@@ -759,6 +748,37 @@ visible_func (GtkTreeModel *model,
 }
 
 static void
+gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
+                                        GtkCellRenderer   *cell,
+                                        GtkTreeModel      *tree_model,
+                                        GtkTreeIter       *iter,
+                                        gpointer           user_data)
+{
+  GtkFontChooserWidget *fontchooser = user_data;
+  PangoFontDescription *font_desc;
+  char *to_string, *markup;
+
+  gtk_tree_model_get (tree_model, iter,
+                      FONT_DESC_COLUMN, &font_desc,
+                      -1);
+
+  to_string = pango_font_description_to_string (font_desc);
+
+  markup = g_markup_printf_escaped (ROW_FORMAT_STRING,
+                                    to_string,
+                                    to_string,
+                                    fontchooser->priv->preview_text);
+
+  g_object_set (cell,
+                "markup", markup,
+                NULL);
+
+  pango_font_description_free (font_desc);
+  g_free (to_string);
+  g_free (markup);
+}
+
+static void
 gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
@@ -766,11 +786,10 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
   GtkCellRenderer   *cell;
   GtkTreeViewColumn *col;
 
-  priv->model = gtk_list_store_new (5,
+  priv->model = gtk_list_store_new (4,
                                     PANGO_TYPE_FONT_FAMILY,
                                     PANGO_TYPE_FONT_FACE,
                                     PANGO_TYPE_FONT_DESCRIPTION,
-                                    G_TYPE_STRING,
                                     G_TYPE_STRING);
 
   priv->filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL (priv->model), NULL);
@@ -786,12 +805,16 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
   gtk_tree_view_set_headers_visible (treeview, FALSE);
 
   cell = gtk_cell_renderer_text_new ();
-  col = gtk_tree_view_column_new_with_attributes (_("Font Family"),
-                                                  cell,
-                                                  "markup", PREVIEW_TEXT_COLUMN,
-                                                  NULL);
-
   g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+
+  col = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (col, _("Font Family"));
+  gtk_tree_view_column_pack_start (col, cell, TRUE);
+  gtk_tree_view_column_set_cell_data_func (col,
+                                           cell,
+                                           gtk_font_chooser_widget_cell_data_func,
+                                           fontchooser,
+                                           NULL);
 
   gtk_tree_view_append_column (treeview, col);
 
