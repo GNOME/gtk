@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 00:46+0100\n"
-"PO-Revision-Date: 2011-09-05 22:55+0000\n"
+"POT-Creation-Date: 2011-09-21 00:58+0100\n"
+"PO-Revision-Date: 2011-09-21 01:00+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "Language: pt\n"
@@ -631,7 +631,9 @@ msgstr "Apresentar o item por omissão"
 
 #: ../gtk/gtkappchooserbutton.c:634
 msgid "Whether the combobox should show the default application on top"
-msgstr "Se a caixa de selecção exclusiva deverá ou não apresentar a aplicação por omissão no topo"
+msgstr ""
+"Se a caixa de selecção exclusiva deverá ou não apresentar a aplicação por "
+"omissão no topo"
 
 #: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
@@ -1739,8 +1741,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Se o texto pode ou não ser alterado pelo utilizador"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
-#: ../gtk/gtkfontchooser.c:67 ../gtk/gtkfontchooser.c:80
-#: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Fonte"
 
@@ -3196,6 +3197,10 @@ msgstr "Apresentar tamanho"
 msgid "Whether selected font size is shown in the label"
 msgstr "Se o tamanho de fonte seleccionado é ou não apresentado na etiqueta"
 
+#: ../gtk/gtkfontchooser.c:80
+msgid "Font description"
+msgstr "Descrição da fonte"
+
 #: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Antever texto"
@@ -3727,19 +3732,19 @@ msgstr "A largura da disposição"
 msgid "The height of the layout"
 msgstr "A altura da disposição"
 
-#: ../gtk/gtklinkbutton.c:173
+#: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:174
+#: ../gtk/gtklinkbutton.c:176
 msgid "The URI bound to this button"
 msgstr "O URI associado a este botão"
 
-#: ../gtk/gtklinkbutton.c:188
+#: ../gtk/gtklinkbutton.c:190
 msgid "Visited"
 msgstr "Visitado"
 
-#: ../gtk/gtklinkbutton.c:189
+#: ../gtk/gtklinkbutton.c:191
 msgid "Whether this link has been visited."
 msgstr "Se este link já foi ou não visitado."
 
