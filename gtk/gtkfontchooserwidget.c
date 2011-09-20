@@ -374,7 +374,7 @@ cursor_changed_cb (GtkTreeView *treeview,
   gint  i, n_sizes;
 
   GtkTreeIter  iter;
-  GtkTreePath *path = gtk_tree_path_new ();
+  GtkTreePath *path = NULL;
 
   gtk_tree_view_get_cursor (treeview, &path, NULL);
 
