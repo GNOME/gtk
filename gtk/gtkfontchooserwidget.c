@@ -391,8 +391,6 @@ cursor_changed_cb (GtkTreeView *treeview,
                       FAMILY_COLUMN, &family,
                       -1);
 
-  gtk_tree_view_scroll_to_cell (treeview, path, NULL, FALSE, 0.5, 0.5);
-
   gtk_tree_path_free (path);
   path = NULL;
 
@@ -1046,12 +1044,6 @@ gtk_font_chooser_widget_select_font (GtkFontChooserWidget *fontchooser)
                                     path,
                                     NULL,
                                     FALSE);
-          gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->family_face_list),
-                                        path,
-                                        NULL,
-                                        FALSE,
-                                        0.5,
-                                        0.5);
           gtk_tree_path_free (path);
         }
     }
