@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-13 17:26+0200\n"
-"PO-Revision-Date: 2011-09-13 17:27+0200\n"
-"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
+"POT-Creation-Date: 2011-09-20 17:29+0200\n"
+"PO-Revision-Date: 2011-09-20 17:30+0200\n"
+"Last-Translator: Piotr Drąg <piotrdrag@aviary.pl>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -1367,11 +1367,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Zastąp"
 
-#: ../gtk/gtkfilechooserdefault.c:9159
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "Could not start the search process"
 msgstr "Nie można rozpocząć procesu wyszukiwania"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9161
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1379,11 +1379,11 @@ msgstr ""
 "Nie można było utworzyć połączenia z usługą indeksowania. Proszę się "
 "upewnić, czy usługa jest uruchomiona."
 
-#: ../gtk/gtkfilechooserdefault.c:9174
+#: ../gtk/gtkfilechooserdefault.c:9175
 msgid "Could not send the search request"
 msgstr "Nie można wysłać żądania wyszukiwania"
 
-#: ../gtk/gtkfilechooserdefault.c:9775
+#: ../gtk/gtkfilechooserdefault.c:9776
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nie można zamontować %s"
@@ -1472,17 +1472,17 @@ msgstr "Czcionka"
 msgid "Font Selection"
 msgstr "Wybór czcionki"
 
-#: ../gtk/gtkfontchooserwidget.c:118
+#: ../gtk/gtkfontchooserwidget.c:115
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
-"Brak czcionek pasujących do wyszukiwanej frazy. Proszę ją zmienić i "
+"Brak czcionek o nazwie pasującej do wyszukiwanej. Można ją zmienić i "
 "spróbować ponownie."
 
-#: ../gtk/gtkfontchooserwidget.c:642
+#: ../gtk/gtkfontchooserwidget.c:595
 msgid "Search font name"
 msgstr "Wyszukiwanie nazwy czcionki"
 
-#: ../gtk/gtkfontchooserwidget.c:911
+#: ../gtk/gtkfontchooserwidget.c:868
 msgid "Font Family"
 msgstr "Rodzina czcionek"
 
@@ -1548,11 +1548,11 @@ msgstr "_Otwórz odnośnik"
 msgid "Copy _Link Address"
 msgstr "Sk_opiuj adres odnośnika"
 
-#: ../gtk/gtklinkbutton.c:484
+#: ../gtk/gtklinkbutton.c:494
 msgid "Copy URL"
 msgstr "Skopiuj adres URL"
 
-#: ../gtk/gtklinkbutton.c:647
+#: ../gtk/gtklinkbutton.c:657
 msgid "Invalid URI"
 msgstr "Nieprawidłowy adres URI"
 
@@ -1570,7 +1570,7 @@ msgid ""
 "Click to prevent further changes"
 msgstr ""
 "Okno jest odblokowane.\n"
-"Kliknięcie uniemożliwi dalsze zmiany"
+"Kliknięcie uniemożliwi wprowadzanie dalszych zmian"
 
 #: ../gtk/gtklockbutton.c:315
 msgid ""
@@ -1585,7 +1585,7 @@ msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
-"Polityka systemu powstrzymuje dokonanie zmian.\n"
+"Polityka systemu uniemożliwia wprowadzanie zmian.\n"
 "Proszę się skontaktować z administratorem systemu"
 
 #. Description of --gtk-module=MODULES in --help output
@@ -1695,7 +1695,6 @@ msgstr ""
 msgid "Terminal Pager"
 msgstr "Stronicowanie terminala"
 
-# przetłumaczone wg hiszpańskiego tłumaczenia
 #: ../gtk/gtkmountoperation-x11.c:960
 msgid "Top Command"
 msgstr "Polecenie top"
