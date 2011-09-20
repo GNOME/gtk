@@ -1036,16 +1036,18 @@ static void
 gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
                                           const gchar          *text)
 {
-  g_free (fontchooser->priv->preview_text);
-  fontchooser->priv->preview_text = g_strdup (text);
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
-  populate_list (fontchooser,
-                 GTK_TREE_VIEW (fontchooser->priv->family_face_list),
-                 fontchooser->priv->model);
+  g_free (priv->preview_text);
+  priv->preview_text = g_strdup (text);
 
-  gtk_entry_set_text (GTK_ENTRY (fontchooser->priv->preview), text);
+  gtk_entry_set_text (GTK_ENTRY (priv->preview), text);
 
   g_object_notify (G_OBJECT (fontchooser), "preview-text");
+
+  /* XXX: There's no API to tell the treeview that a column has changed,
+   * so we just */
+  gtk_widget_queue_draw (priv->family_face_list);
 }
 
 static gboolean
