@@ -43,6 +43,7 @@
 #include <errno.h>
 
 #if defined(__OpenBSD__)
+#include <sys/param.h>
 #include <kvm.h>
 #include <fcntl.h>
 #include <sys/sysctl.h>
