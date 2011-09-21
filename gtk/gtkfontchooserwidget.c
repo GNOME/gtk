@@ -240,6 +240,13 @@ gtk_font_chooser_widget_get_property (GObject         *object,
 }
 
 static void
+gtk_font_chooser_widget_refilter_font_list (GtkFontChooserWidget *fontchooser)
+{
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (fontchooser->priv->filter_model));
+  gtk_font_chooser_widget_ensure_selection (fontchooser);
+}
+
+static void
 text_changed_cb (GtkEntry       *entry,
                  GParamSpec     *pspec,
                  GtkFontChooserWidget *fc)
@@ -277,7 +284,7 @@ text_changed_cb (GtkEntry       *entry,
         }
     }
 
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+  gtk_font_chooser_widget_refilter_font_list (fc);
 }
 
 static void
@@ -1185,7 +1192,7 @@ gtk_font_chooser_widget_set_filter_func (GtkFontChooser  *chooser,
   priv->filter_data = data;
   priv->filter_data_destroy = destroy;
 
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+  gtk_font_chooser_widget_refilter_font_list (fontchooser);
 }
 
 static void
