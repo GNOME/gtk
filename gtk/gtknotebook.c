@@ -6239,10 +6239,8 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
           child_allocation.width = tab_requisition.width;
         }
 
-      child_allocation.y = page->allocation.y;
-
-      if (tab_pos == GTK_POS_TOP)
-        child_allocation.y += tab_padding.top + focus_width + focus_padding;
+      child_allocation.y = 
+        page->allocation.y + tab_padding.top + focus_width + focus_padding;
 
       child_allocation.height = MAX (1, (page->allocation.height -
                                          tab_padding.top - tab_padding.bottom -
@@ -6288,10 +6286,8 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
           child_allocation.height = tab_requisition.height;
         }
 
-      child_allocation.x = page->allocation.x;
-
-      if (tab_pos == GTK_POS_LEFT)
-        child_allocation.x += tab_padding.left + focus_width + focus_padding;
+      child_allocation.x =
+        page->allocation.x + tab_padding.left + focus_width + focus_padding;
 
       child_allocation.width = MAX (1, (page->allocation.width -
                                          tab_padding.left - tab_padding.right -
