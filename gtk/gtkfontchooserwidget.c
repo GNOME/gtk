@@ -109,8 +109,6 @@ struct _GtkFontChooserWidgetPrivate
 #define FONT_STYLE_LIST_WIDTH 170
 #define FONT_SIZE_LIST_WIDTH  60
 
-#define ROW_FORMAT_STRING "<span weight=\"bold\" size=\"small\">%s</span>\n<span size=\"x-large\" font_desc=\"%s\">%s</span>"
-
 #define NO_FONT_MATCHED_SEARCH N_("No fonts matched your search. You can revise your search and try again.")
 
 enum {
@@ -803,24 +801,45 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
 {
   GtkFontChooserWidget *fontchooser = user_data;
   PangoFontDescription *font_desc;
-  char *to_string, *markup;
+  PangoAttrList *attrs;
+  PangoAttribute *attribute;
+  char *to_string, *text;
+  gsize to_string_len;
 
   font_desc = tree_model_get_font_description (tree_model, iter);
 
   to_string = pango_font_description_to_string (font_desc);
+  to_string_len = strlen (to_string) + 1;
 
-  markup = g_markup_printf_escaped (ROW_FORMAT_STRING,
-                                    to_string,
-                                    to_string,
-                                    fontchooser->priv->preview_text);
+  text = g_strconcat (to_string, "\n", fontchooser->priv->preview_text, NULL);
+  
+  attrs = pango_attr_list_new ();
+
+  attribute = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+  attribute->end_index = to_string_len;
+  pango_attr_list_insert (attrs, attribute);
+
+  attribute = pango_attr_scale_new (PANGO_SCALE_SMALL);
+  attribute->end_index = to_string_len;
+  pango_attr_list_insert (attrs, attribute);
+
+  attribute = pango_attr_font_desc_new (font_desc);
+  attribute->start_index = to_string_len;
+  pango_attr_list_insert (attrs, attribute);
+
+  attribute = pango_attr_scale_new (PANGO_SCALE_X_LARGE);
+  attribute->start_index = to_string_len;
+  pango_attr_list_insert (attrs, attribute);
 
   g_object_set (cell,
-                "markup", markup,
+                "attributes", attrs,
+                "text", text,
                 NULL);
 
   pango_font_description_free (font_desc);
+  pango_attr_list_unref (attrs);
   g_free (to_string);
-  g_free (markup);
+  g_free (text);
 }
 
 static void
