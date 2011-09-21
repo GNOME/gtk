@@ -497,7 +497,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
   GIcon                   *icon;
   GtkFontChooserWidgetPrivate   *priv;
-  const PangoFontDescription *font_desc;
   GtkWidget               *scrolled_win;
   GtkWidget               *grid;
 
@@ -783,7 +782,7 @@ visible_func (GtkTreeModel *model,
   gboolean result = TRUE;
   const gchar *search_text;
   gchar **split_terms;
-  gchar *font_name, *font_name_casefold, *term_casefold;
+  gchar *font_name, *font_name_casefold;
   guint i;
 
   if (priv->filter_func != NULL)
