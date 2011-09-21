@@ -113,12 +113,6 @@ struct _GtkFontChooserWidgetPrivate
 
 #define NO_FONT_MATCHED_SEARCH N_("No fonts matched your search. You can revise your search and try again.")
 
-/* These are what we use as the standard font sizes, for the size list.
- */
-static const gint font_sizes[] = {
-  6, 8, 9, 10, 11, 12, 13, 14, 16, 20, 24, 36, 48, 72
-};
-
 enum {
   FAMILY_COLUMN,
   FACE_COLUMN,
@@ -311,38 +305,73 @@ size_change_cb (GtkAdjustment *adjustment,
 }
 
 static void
-set_range_marks (GtkFontChooserWidgetPrivate *priv,
-                 GtkWidget             *size_slider,
-                 gint                  *sizes,
-                 gint                   length)
+gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *fontchooser)
 {
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   GtkAdjustment *adj;
-  gint i;
-  gdouble value;
+  const int *sizes;
+  gint *font_sizes;
+  gint i, n_sizes;
 
-  if (length < 2)
+  if (gtk_list_store_iter_is_valid (GTK_LIST_STORE (priv->model), &priv->font_iter))
     {
-      sizes = (gint*)font_sizes;
-      length = G_N_ELEMENTS (font_sizes);
+      PangoFontFace *face;
+
+      gtk_tree_model_get (priv->model, &priv->font_iter,
+                          FACE_COLUMN, &face,
+                          -1);
+
+      pango_font_face_list_sizes (face, &font_sizes, &n_sizes);
+
+      /* It seems not many fonts actually have a sane set of sizes */
+      for (i = 0; i < n_sizes; i++)
+        font_sizes[i] = font_sizes[i] / PANGO_SCALE;
+
+      g_object_unref (face);
+    }
+  else
+    {
+      font_sizes = NULL;
+      n_sizes = 0;
     }
 
-  gtk_scale_clear_marks (GTK_SCALE (size_slider));
+  if (n_sizes < 2)
+    {
+      static const gint fallback_sizes[] = {
+        6, 8, 9, 10, 11, 12, 13, 14, 16, 20, 24, 36, 48, 72
+      };
 
-  adj = gtk_range_get_adjustment(GTK_RANGE (size_slider));
+      sizes = fallback_sizes;
+      n_sizes = G_N_ELEMENTS (fallback_sizes);
+    }
+  else
+    {
+      sizes = font_sizes;
+    }
 
-  gtk_adjustment_set_lower (adj, (gdouble) sizes[0]);
-  gtk_adjustment_set_upper (adj, (gdouble) sizes[length-1]);
+  gtk_scale_clear_marks (GTK_SCALE (priv->size_slider));
 
-  value = gtk_adjustment_get_value (adj);
-  if (value > (gdouble) sizes[length-1])
-    gtk_adjustment_set_value (adj, (gdouble) sizes[length-1]);
-  else if (value < (gdouble) sizes[0])
-    gtk_adjustment_set_value (adj, (gdouble) sizes[0]);
+  adj = gtk_range_get_adjustment(GTK_RANGE (priv->size_slider));
 
-  for (i = 0; i < length; i++)
-    gtk_scale_add_mark (GTK_SCALE (size_slider),
-                        (gdouble) sizes[i],
-                        GTK_POS_BOTTOM, NULL);
+  /* ensure clamping doesn't callback into font resizing code */
+  g_signal_handlers_block_by_func (adj, size_change_cb, fontchooser);
+  gtk_adjustment_configure (adj,
+                            gtk_adjustment_get_value (adj),
+                            sizes[0],
+                            sizes[n_sizes - 1],
+                            gtk_adjustment_get_step_increment (adj),
+                            gtk_adjustment_get_page_increment (adj),
+                            gtk_adjustment_get_page_size (adj));
+  g_signal_handlers_unblock_by_func (adj, size_change_cb, fontchooser);
+
+  for (i = 0; i < n_sizes; i++)
+    {
+      gtk_scale_add_mark (GTK_SCALE (priv->size_slider),
+                          sizes[i],
+                          GTK_POS_BOTTOM, NULL);
+    }
+
+  g_free (font_sizes);
 }
 
 static void
@@ -366,9 +395,6 @@ cursor_changed_cb (GtkTreeView *treeview,
   GtkFontChooserWidget *fontchooser = user_data;
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFontDescription *desc;
-  PangoFontFace *face;
-  gint *sizes;
-  gint  i, n_sizes;
   GtkTreeIter  iter;
   GtkTreePath *path = NULL;
 
@@ -387,7 +413,6 @@ cursor_changed_cb (GtkTreeView *treeview,
                                                     &priv->font_iter,
                                                     &iter);
   gtk_tree_model_get (priv->filter_model, &iter,
-                      FACE_COLUMN, &face,
                       FONT_DESC_COLUMN, &desc,
                       -1);
 
@@ -397,18 +422,11 @@ cursor_changed_cb (GtkTreeView *treeview,
   pango_font_description_set_size (desc, pango_font_description_get_size (priv->font_desc));
   gtk_widget_override_font (priv->preview, desc);
 
-  pango_font_face_list_sizes (face, &sizes, &n_sizes);
-  /* It seems not many fonts actually have a sane set of sizes */
-  for (i = 0; i < n_sizes; i++)
-    sizes[i] = sizes[i] / PANGO_SCALE;
-
-  set_range_marks (priv, priv->size_slider, sizes, n_sizes);
+  gtk_font_chooser_widget_update_marks (fontchooser);
 
   if (priv->font_desc)
     pango_font_description_free (priv->font_desc);
   priv->font_desc = desc;
-
-  g_object_unref (face);
 
   g_object_notify (G_OBJECT (fontchooser), "font");
   g_object_notify (G_OBJECT (fontchooser), "font-desc");
@@ -484,8 +502,8 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->family_face_list = gtk_tree_view_new ();
   priv->preview = gtk_entry_new ();
   priv->size_slider = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
-                                                (gdouble) font_sizes[0],
-                                                (gdouble) font_sizes[G_N_ELEMENTS (font_sizes) - 1],
+                                                0.0,
+                                                (gdouble)(G_MAXINT / PANGO_SCALE),
                                                 1.0);
 
   priv->size_spin = gtk_spin_button_new_with_range (0.0, (gdouble)(G_MAXINT / PANGO_SCALE), 1.0);
@@ -582,8 +600,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   g_signal_connect (priv->size_slider, "scroll-event",
                     G_CALLBACK (zoom_preview_cb), fontchooser);
-
-  set_range_marks (priv, priv->size_slider, (gint*)font_sizes, G_N_ELEMENTS (font_sizes));
 
   /* Font list empty hides the scrolledwindow */
   g_signal_connect (G_OBJECT (priv->filter_model), "row-deleted",
@@ -1015,6 +1031,8 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget *fontchooser,
           
           gtk_font_chooser_widget_ensure_selection (fontchooser);
         }
+
+      gtk_font_chooser_widget_update_marks (fontchooser);
     }
 
   gtk_widget_override_font (priv->preview, priv->font_desc);
