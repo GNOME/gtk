@@ -792,6 +792,22 @@ visible_func (GtkTreeModel *model,
   return result;
 }
 
+/* in pango units */
+static int
+gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchooser)
+{
+  GtkWidget *treeview = fontchooser->priv->family_face_list;
+  double dpi, font_size;
+
+  dpi = gdk_screen_get_resolution (gtk_widget_get_screen (treeview));
+  gtk_style_context_get (gtk_widget_get_style_context (treeview),
+                         gtk_widget_get_state_flags (treeview),
+                         "font-size", &font_size,
+                         NULL);
+
+  return dpi / 72.0 * PANGO_SCALE_X_LARGE * font_size * PANGO_SCALE;
+}
+
 static void
 gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
                                         GtkCellRenderer   *cell,
@@ -827,7 +843,7 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
   attribute->start_index = to_string_len;
   pango_attr_list_insert (attrs, attribute);
 
-  attribute = pango_attr_scale_new (PANGO_SCALE_X_LARGE);
+  attribute = pango_attr_size_new_absolute (gtk_font_chooser_widget_get_preview_text_height (fontchooser));
   attribute->start_index = to_string_len;
   pango_attr_list_insert (attrs, attribute);
 
