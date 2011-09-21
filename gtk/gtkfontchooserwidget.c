@@ -391,6 +391,42 @@ row_activated_cb (GtkTreeView       *view,
   g_free (fontname);
 }
 
+static PangoFontDescription *
+tree_model_get_font_description (GtkTreeModel *model,
+                                 GtkTreeIter  *iter)
+{
+  PangoFontDescription *desc;
+  PangoFontFace *face;
+  GtkTreeIter child_iter;
+
+  gtk_tree_model_get (model, iter,
+                      FONT_DESC_COLUMN, &desc,
+                      -1);
+  if (desc != NULL)
+    return desc;
+
+  gtk_tree_model_get (model, iter,
+                      FACE_COLUMN, &face,
+                      -1);
+  desc = pango_font_face_describe (face);
+  g_object_unref (face);
+  
+  if (GTK_IS_TREE_MODEL_FILTER (model))
+    {
+      gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model),
+                                                        &child_iter,
+                                                        iter);
+      iter = &child_iter;
+      model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
+    }
+
+  gtk_list_store_set (GTK_LIST_STORE (model), iter,
+                      FONT_DESC_COLUMN, desc,
+                      -1);
+
+  return desc;
+}
+
 static void
 cursor_changed_cb (GtkTreeView *treeview,
                    gpointer     user_data)
@@ -414,12 +450,10 @@ cursor_changed_cb (GtkTreeView *treeview,
 
   gtk_tree_path_free (path);
 
-  gtk_tree_model_get (priv->filter_model, &filter_iter,
-                      FONT_DESC_COLUMN, &desc,
-                      -1);
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
                                                     &iter,
                                                     &filter_iter);
+  desc = tree_model_get_font_description (priv->model, &iter);
 
   gtk_font_chooser_widget_merge_font_desc (fontchooser, desc, &iter);
 }
@@ -661,10 +695,8 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser)
 
       for (j = 0; j < n_faces; j++)
         {
-          PangoFontDescription *pango_desc;
           const gchar *face_name;
 
-          pango_desc = pango_font_face_describe (faces[j]);
           face_name = pango_font_face_get_face_name (faces[j]);
 
           family_and_face = g_strconcat (fam_name, " ", face_name, NULL);
@@ -672,11 +704,9 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser)
           gtk_list_store_insert_with_values (list_store, &iter, -1,
                                              FAMILY_COLUMN, families[i],
                                              FACE_COLUMN, faces[j],
-                                             FONT_DESC_COLUMN, pango_desc,
                                              PREVIEW_TITLE_COLUMN, family_and_face,
                                              -1);
 
-          pango_font_description_free (pango_desc);
           g_free (family_and_face);
         }
 
@@ -768,9 +798,7 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
   PangoFontDescription *font_desc;
   char *to_string, *markup;
 
-  gtk_tree_model_get (tree_model, iter,
-                      FONT_DESC_COLUMN, &font_desc,
-                      -1);
+  font_desc = tree_model_get_font_description (tree_model, iter);
 
   to_string = pango_font_description_to_string (font_desc);
 
@@ -860,9 +888,7 @@ gtk_font_chooser_widget_find_font (GtkFontChooserWidget        *fontchooser,
        valid;
        valid = gtk_tree_model_iter_next (priv->model, iter))
     {
-      gtk_tree_model_get (priv->model, iter,
-                          FONT_DESC_COLUMN, &desc,
-                          -1);
+      desc = tree_model_get_font_description (priv->model, iter);
 
       pango_font_description_merge_static (desc, font_desc, FALSE);
       if (pango_font_description_equal (desc, font_desc))
