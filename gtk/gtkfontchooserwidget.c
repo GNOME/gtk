@@ -145,6 +145,9 @@ static void     gtk_font_chooser_widget_set_font         (GtkFontChooserWidget *
                                                           const gchar          *fontname);
 
 static PangoFontDescription *gtk_font_chooser_widget_get_font_desc  (GtkFontChooserWidget *fontchooser);
+static void                  gtk_font_chooser_widget_merge_font_desc(GtkFontChooserWidget *fontchooser,
+                                                                     PangoFontDescription *font_desc,
+                                                                     GtkTreeIter          *iter);
 static void                  gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
                                                                      PangoFontDescription *font_desc);
 
@@ -395,7 +398,7 @@ cursor_changed_cb (GtkTreeView *treeview,
   GtkFontChooserWidget *fontchooser = user_data;
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFontDescription *desc;
-  GtkTreeIter  iter;
+  GtkTreeIter filter_iter, iter;
   GtkTreePath *path = NULL;
 
   gtk_tree_view_get_cursor (treeview, &path, NULL);
@@ -403,33 +406,22 @@ cursor_changed_cb (GtkTreeView *treeview,
   if (!path)
     return;
 
-  if (!gtk_tree_model_get_iter (priv->filter_model, &iter, path))
+  if (!gtk_tree_model_get_iter (priv->filter_model, &filter_iter, path))
     {
       gtk_tree_path_free (path);
       return;
     }
 
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
-                                                    &priv->font_iter,
-                                                    &iter);
-  gtk_tree_model_get (priv->filter_model, &iter,
+  gtk_tree_path_free (path);
+
+  gtk_tree_model_get (priv->filter_model, &filter_iter,
                       FONT_DESC_COLUMN, &desc,
                       -1);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
+                                                    &iter,
+                                                    &filter_iter);
 
-  gtk_tree_path_free (path);
-  path = NULL;
-
-  pango_font_description_set_size (desc, pango_font_description_get_size (priv->font_desc));
-  gtk_widget_override_font (priv->preview, desc);
-
-  gtk_font_chooser_widget_update_marks (fontchooser);
-
-  if (priv->font_desc)
-    pango_font_description_free (priv->font_desc);
-  priv->font_desc = desc;
-
-  g_object_notify (G_OBJECT (fontchooser), "font");
-  g_object_notify (G_OBJECT (fontchooser), "font-desc");
+  gtk_font_chooser_widget_merge_font_desc (fontchooser, desc, &iter);
 }
 
 static gboolean
