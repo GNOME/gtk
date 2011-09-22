@@ -808,6 +808,35 @@ gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchoos
   return dpi / 72.0 * PANGO_SCALE_X_LARGE * font_size * PANGO_SCALE;
 }
 
+static PangoAttrList *
+gtk_font_chooser_widget_get_preview_attributes (GtkFontChooserWidget       *fontchooser,
+                                                const PangoFontDescription *font_desc,
+                                                gsize                       first_line_len)
+{
+  PangoAttribute *attribute;
+  PangoAttrList *attrs;
+
+  attrs = pango_attr_list_new ();
+
+  attribute = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+  attribute->end_index = first_line_len;
+  pango_attr_list_insert (attrs, attribute);
+
+  attribute = pango_attr_scale_new (PANGO_SCALE_SMALL);
+  attribute->end_index = first_line_len;
+  pango_attr_list_insert (attrs, attribute);
+
+  attribute = pango_attr_font_desc_new (font_desc);
+  attribute->start_index = first_line_len;
+  pango_attr_list_insert (attrs, attribute);
+
+  attribute = pango_attr_size_new_absolute (gtk_font_chooser_widget_get_preview_text_height (fontchooser));
+  attribute->start_index = first_line_len;
+  pango_attr_list_insert (attrs, attribute);
+
+  return attrs;
+}
+
 static void
 gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
                                         GtkCellRenderer   *cell,
@@ -818,34 +847,19 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
   GtkFontChooserWidget *fontchooser = user_data;
   PangoFontDescription *font_desc;
   PangoAttrList *attrs;
-  PangoAttribute *attribute;
   char *to_string, *text;
-  gsize to_string_len;
+  gsize first_line_len;
 
   font_desc = tree_model_get_font_description (tree_model, iter);
 
   to_string = pango_font_description_to_string (font_desc);
-  to_string_len = strlen (to_string) + 1;
 
   text = g_strconcat (to_string, "\n", fontchooser->priv->preview_text, NULL);
+  first_line_len = strlen (to_string) + 1;
   
-  attrs = pango_attr_list_new ();
-
-  attribute = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-  attribute->end_index = to_string_len;
-  pango_attr_list_insert (attrs, attribute);
-
-  attribute = pango_attr_scale_new (PANGO_SCALE_SMALL);
-  attribute->end_index = to_string_len;
-  pango_attr_list_insert (attrs, attribute);
-
-  attribute = pango_attr_font_desc_new (font_desc);
-  attribute->start_index = to_string_len;
-  pango_attr_list_insert (attrs, attribute);
-
-  attribute = pango_attr_size_new_absolute (gtk_font_chooser_widget_get_preview_text_height (fontchooser));
-  attribute->start_index = to_string_len;
-  pango_attr_list_insert (attrs, attribute);
+  attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, 
+                                                          font_desc,
+                                                          first_line_len);
 
   g_object_set (cell,
                 "attributes", attrs,
