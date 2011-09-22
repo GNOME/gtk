@@ -934,12 +934,14 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
 
   gtk_tree_view_set_rules_hint      (treeview, TRUE);
   gtk_tree_view_set_headers_visible (treeview, FALSE);
+  gtk_tree_view_set_fixed_height_mode (treeview, TRUE);
 
   priv->family_face_cell = gtk_cell_renderer_text_new ();
   g_object_set (priv->family_face_cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
   col = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (col, _("Font Family"));
+  gtk_tree_view_column_set_sizing (col, GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_pack_start (col, priv->family_face_cell, TRUE);
   gtk_tree_view_column_set_cell_data_func (col,
                                            priv->family_face_cell,
