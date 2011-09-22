@@ -834,6 +834,10 @@ gtk_font_chooser_widget_get_preview_attributes (GtkFontChooserWidget       *font
       pango_attr_list_insert (attrs, attribute);
     }
 
+  attribute = pango_attr_fallback_new (FALSE);
+  attribute->start_index = first_line_len;
+  pango_attr_list_insert (attrs, attribute);
+
   attribute = pango_attr_size_new_absolute (gtk_font_chooser_widget_get_preview_text_height (fontchooser));
   attribute->start_index = first_line_len;
   pango_attr_list_insert (attrs, attribute);
