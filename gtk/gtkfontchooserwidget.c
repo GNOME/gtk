@@ -78,6 +78,7 @@ struct _GtkFontChooserWidgetPrivate
 {
   GtkWidget    *search_entry;
   GtkWidget    *family_face_list;
+  GtkCellRenderer *family_face_cell;
   GtkWidget    *list_scrolled_window;
   GtkWidget    *empty_list;
   GtkWidget    *list_notebook;
@@ -826,9 +827,12 @@ gtk_font_chooser_widget_get_preview_attributes (GtkFontChooserWidget       *font
   attribute->end_index = first_line_len;
   pango_attr_list_insert (attrs, attribute);
 
-  attribute = pango_attr_font_desc_new (font_desc);
-  attribute->start_index = first_line_len;
-  pango_attr_list_insert (attrs, attribute);
+  if (font_desc)
+    {
+      attribute = pango_attr_font_desc_new (font_desc);
+      attribute->start_index = first_line_len;
+      pango_attr_list_insert (attrs, attribute);
+    }
 
   attribute = pango_attr_size_new_absolute (gtk_font_chooser_widget_get_preview_text_height (fontchooser));
   attribute->start_index = first_line_len;
@@ -873,12 +877,45 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
 }
 
 static void
+gtk_font_chooser_widget_set_cell_size (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  PangoAttrList *attrs;
+  GtkRequisition size;
+
+  gtk_cell_renderer_set_fixed_size (priv->family_face_cell, -1, -1);
+
+  attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, 
+                                                          NULL,
+                                                          1);
+  
+  g_object_set (priv->family_face_cell,
+                "attributes", attrs,
+                "text", "x\nx",
+                NULL);
+
+  pango_attr_list_unref (attrs);
+
+  gtk_cell_renderer_get_preferred_size (priv->family_face_cell,
+                                        priv->family_face_list,
+                                        &size,
+                                        NULL);
+  gtk_cell_renderer_set_fixed_size (priv->family_face_cell, size.width, size.height);
+}
+
+static void
 gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   GtkTreeView *treeview = GTK_TREE_VIEW (priv->family_face_list);
-  GtkCellRenderer *cell;
   GtkTreeViewColumn *col;
+
+  g_signal_connect_data (priv->family_face_list,
+                         "style-updated",
+                         G_CALLBACK (gtk_font_chooser_widget_set_cell_size),
+                         fontchooser,
+                         NULL,
+                         G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 
   priv->model = GTK_TREE_MODEL (gtk_list_store_new (4,
                                                     PANGO_TYPE_FONT_FAMILY,
@@ -898,14 +935,14 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
   gtk_tree_view_set_rules_hint      (treeview, TRUE);
   gtk_tree_view_set_headers_visible (treeview, FALSE);
 
-  cell = gtk_cell_renderer_text_new ();
-  g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  priv->family_face_cell = gtk_cell_renderer_text_new ();
+  g_object_set (priv->family_face_cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
   col = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (col, _("Font Family"));
-  gtk_tree_view_column_pack_start (col, cell, TRUE);
+  gtk_tree_view_column_pack_start (col, priv->family_face_cell, TRUE);
   gtk_tree_view_column_set_cell_data_func (col,
-                                           cell,
+                                           priv->family_face_cell,
                                            gtk_font_chooser_widget_cell_data_func,
                                            fontchooser,
                                            NULL);
@@ -913,6 +950,8 @@ gtk_font_chooser_widget_bootstrap_fontlist (GtkFontChooserWidget *fontchooser)
   gtk_tree_view_append_column (treeview, col);
 
   gtk_font_chooser_widget_load_fonts (fontchooser);
+
+  gtk_font_chooser_widget_set_cell_size (fontchooser);
 }
 
 static void
