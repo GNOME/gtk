@@ -794,12 +794,9 @@ gtk_font_button_set_use_font (GtkFontButton *font_button,
     {
       font_button->priv->use_font = use_font;
 
-      if (use_font)
-        gtk_font_button_label_use_font (font_button);
-      else
-	gtk_widget_set_style (font_button->priv->font_label, NULL);
+      gtk_font_button_label_use_font (font_button);
  
-     g_object_notify (G_OBJECT (font_button), "use-font");
+      g_object_notify (G_OBJECT (font_button), "use-font");
     }
 } 
 
@@ -842,8 +839,7 @@ gtk_font_button_set_use_size (GtkFontButton *font_button,
     {
       font_button->priv->use_size = use_size;
 
-      if (font_button->priv->use_font)
-        gtk_font_button_label_use_font (font_button);
+      gtk_font_button_label_use_font (font_button);
 
       g_object_notify (G_OBJECT (font_button), "use-size");
     }
@@ -1147,17 +1143,20 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
 {
   PangoFontDescription *desc;
 
-  if (!font_button->priv->use_font)
-    return;
+  if (font_button->priv->use_font)
+    {
+      desc = pango_font_description_copy (font_button->priv->font_desc);
 
-  desc = pango_font_description_copy (font_button->priv->font_desc);
+      if (!font_button->priv->use_size)
+        pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+    }
+  else
+    desc = NULL;
 
-  if (!font_button->priv->use_size)
-    pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+  gtk_widget_override_font (font_button->priv->font_label, desc);
 
-  gtk_widget_modify_font (font_button->priv->font_label, desc);
-
-  pango_font_description_free (desc);
+  if (desc)
+    pango_font_description_free (desc);
 }
 
 static void
