@@ -14,10 +14,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-19 23:27+0000\n"
-"PO-Revision-Date: 2011-09-19 22:56-0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-22 10:29-0400\n"
+"PO-Revision-Date: 2011-09-13 22:17-0300\n"
 "Last-Translator: Antonio Fernandes C. Neto <fernandesn@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -637,7 +636,7 @@ msgstr "Mostrar item padrão"
 
 #: ../gtk/gtkappchooserbutton.c:634
 msgid "Whether the combobox should show the default application on top"
-msgstr "Se a caixa de combinação deve mostrar o aplicativo padrão no topo"
+msgstr "Se o combobox deve mostrar o aplicativo padrão no topo"
 
 #: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
@@ -3214,11 +3213,11 @@ msgstr "O texto a exibir para demonstrar a fonte selecionada"
 
 #: ../gtk/gtkfontchooser.c:106
 msgid "Show preview text entry"
-msgstr "Mostrar visualização da entrada de texto"
+msgstr "Mostrar pré-visualização de entrada de texto"
 
 #: ../gtk/gtkfontchooser.c:107
 msgid "Whether the preview text entry is shown or not"
-msgstr "Se o texto de visualização da entrada é mostrado ou não"
+msgstr "Se a entrada de texto pré-visualização é mostrada ou não"
 
 #: ../gtk/gtkfontsel.c:245
 msgid "The string that represents this font"
