@@ -460,7 +460,7 @@ static void gtk_notebook_paint               (GtkWidget        *widget,
 static void gtk_notebook_draw_tab            (GtkNotebook      *notebook,
                                               GtkNotebookPage  *page,
                                               cairo_t          *cr,
-                                              GtkRegionFlags    flags);
+                                              gboolean          use_flags);
 static void gtk_notebook_draw_arrow          (GtkNotebook      *notebook,
                                               cairo_t          *cr,
                                               GtkNotebookArrow  arrow);
@@ -1954,6 +1954,48 @@ _gtk_notebook_get_tab_flags (GtkNotebook     *notebook,
   return flags;
 }
 
+static GtkStateFlags
+notebook_tab_prepare_style_context (GtkNotebook *notebook,
+                                    GtkNotebookPage *page,
+                                    GtkStyleContext *context,
+                                    gboolean use_flags)
+{
+  gint tab_pos = get_effective_tab_pos (notebook);
+  GtkRegionFlags flags = 0;
+  GtkStateFlags state = GTK_STATE_FLAG_NORMAL;
+
+  if (page != NULL &&
+      page == notebook->priv->cur_page)
+    state = GTK_STATE_FLAG_ACTIVE;
+
+  gtk_style_context_set_state (context, state);
+
+  if (use_flags && (page != NULL))
+    flags = _gtk_notebook_get_tab_flags (notebook, page);
+
+  gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, flags);
+
+  switch (tab_pos)
+    {
+    case GTK_POS_TOP:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      break;
+    case GTK_POS_BOTTOM:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+      break;
+    case GTK_POS_LEFT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      break;
+    case GTK_POS_RIGHT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      break;
+    default:
+      break;
+    }
+
+  return state;
+}
+
 static void
 gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
                                       GtkRequisition *requisition)
@@ -2013,14 +2055,8 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
                                          &child_requisition, NULL);
 
           /* Get border/padding for tab */
-          if (page == priv->cur_page)
-            state = GTK_STATE_FLAG_ACTIVE;
-          else
-            state = GTK_STATE_FLAG_NORMAL;
-
           gtk_style_context_save (context);
-          gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
-                                        _gtk_notebook_get_tab_flags (notebook, page));
+          state = notebook_tab_prepare_style_context (notebook, page, context, TRUE);
           gtk_style_context_get_padding (context, state, &tab_padding);
           gtk_style_context_restore (context);
 
@@ -2579,7 +2615,7 @@ gtk_notebook_draw (GtkWidget *widget,
 
       gtk_notebook_draw_tab (notebook,
                              priv->cur_page,
-                             cr, 0);
+                             cr, FALSE);
 
       cairo_restore (cr);
 
@@ -3511,7 +3547,7 @@ on_drag_icon_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-  gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, 0);
+  notebook_tab_prepare_style_context (GTK_NOTEBOOK (notebook), NULL, context, FALSE);
 
   gtk_widget_get_preferred_size (widget,
                                  &requisition, NULL);
@@ -5165,8 +5201,7 @@ gtk_notebook_paint (GtkWidget    *widget,
           !gtk_widget_get_mapped (page->tab_label))
         continue;
 
-      tab_flags = _gtk_notebook_get_tab_flags (notebook, page);
-      gtk_notebook_draw_tab (notebook, page, cr, tab_flags);
+      gtk_notebook_draw_tab (notebook, page, cr, TRUE);
     }
 
   if (children != NULL)
@@ -5190,9 +5225,7 @@ gtk_notebook_paint (GtkWidget    *widget,
       for (children = other_order; children; children = children->next)
         {
           page = children->data;
-
-          tab_flags = _gtk_notebook_get_tab_flags (notebook, page);
-          gtk_notebook_draw_tab (notebook, page, cr, tab_flags);
+          gtk_notebook_draw_tab (notebook, page, cr, TRUE);
         }
 
       g_list_free (other_order);
@@ -5211,22 +5244,19 @@ gtk_notebook_paint (GtkWidget    *widget,
     }
 
   if (priv->operation != DRAG_OPERATION_REORDER)
-    {
-      tab_flags = _gtk_notebook_get_tab_flags (notebook, priv->cur_page);
-      gtk_notebook_draw_tab (notebook, priv->cur_page, cr, tab_flags);
-    }
+    gtk_notebook_draw_tab (notebook, priv->cur_page, cr, TRUE);
 }
 
 static void
 gtk_notebook_draw_tab (GtkNotebook     *notebook,
                        GtkNotebookPage *page,
                        cairo_t         *cr,
-                       GtkRegionFlags   flags)
+                       gboolean         use_flags)
 {
   GtkNotebookPrivate *priv;
-  GtkStateFlags state = 0;
   GtkWidget *widget;
   GtkStyleContext *context;
+  GtkStateFlags state = 0;
 
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) ||
       !gtk_widget_get_mapped (page->tab_label) ||
@@ -5236,13 +5266,9 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   widget = GTK_WIDGET (notebook);
   priv = notebook->priv;
 
-  if (priv->cur_page == page)
-    state = GTK_STATE_FLAG_ACTIVE;
-
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
-  gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, flags);
-  gtk_style_context_set_state (context, state);
+  state = notebook_tab_prepare_style_context (notebook, page, context, use_flags);
 
   gtk_render_extension (context, cr,
                        page->allocation.x,
@@ -5980,8 +6006,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
            * see gtk_notebook_page_allocate().
            */
           gtk_style_context_save (context);
-          gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
-                                        _gtk_notebook_get_tab_flags (notebook, page));
+          notebook_tab_prepare_style_context (notebook, page, context, TRUE);
 
           gtk_style_context_get_padding (context, GTK_STATE_FLAG_ACTIVE, &active_padding);
           gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &normal_padding);
@@ -6177,16 +6202,10 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       return was_visible;
     }
 
-  if (page == priv->cur_page)
-    state = GTK_STATE_FLAG_ACTIVE;
-  else
-    state = GTK_STATE_FLAG_NORMAL;
-
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-  gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
-                                _gtk_notebook_get_tab_flags (notebook, page));
+  state = notebook_tab_prepare_style_context (notebook, page, context, TRUE);
 
   gtk_style_context_get_padding (context, state, &tab_padding);
 
