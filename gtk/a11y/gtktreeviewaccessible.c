@@ -2109,13 +2109,18 @@ model_row_inserted (GtkTreeModel *tree_model,
       /* Figure out number of visible children. */
       if (gtk_tree_model_iter_has_child (tree_model, &tmp_iter))
         {
+          GtkTreePath *path2;
          /*
           * By passing path into this function, we find the number of
           * visible children of path.
           */
           n_inserted = 0;
+          /* iterate_thru_children modifies path, we don't want that, so give
+           * it a copy */
+          path2 = gtk_tree_path_copy (path);
           iterate_thru_children (tree_view, tree_model,
-                                 path, NULL, &n_inserted, 0);
+                                 path2, NULL, &n_inserted, 0);
+          gtk_tree_path_free (path2);
 
           /* Must add one to include the row that is being added */
           n_inserted++;
@@ -2620,6 +2625,7 @@ set_iter_nth_row (GtkTreeView *tree_view,
  *
  * *count will be set to the visible row number of the child
  * relative to the row that was initially passed in as tree_path.
+ * tree_path could be modified by this function.
  *
  * *count will be -1 if orig is not found as a child (a row that is
  * not visible will not be found, e.g. if the row is inside a
