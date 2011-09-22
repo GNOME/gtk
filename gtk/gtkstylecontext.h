@@ -600,6 +600,45 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_VERTICAL "vertical"
 
+/**
+ * GTK_STYLE_CLASS_TOP:
+ *
+ * A CSS class to indicate an area at the top of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_TOP "top"
+
+/**
+ * GTK_STYLE_CLASS_BOTTOM:
+ *
+ * A CSS class to indicate an area at the bottom of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_BOTTOM "bottom"
+
+/**
+ * GTK_STYLE_CLASS_LEFT:
+ *
+ * A CSS class to indicate an area at the left of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_LEFT "left"
+
+/**
+ * GTK_STYLE_CLASS_RIGHT:
+ *
+ * A CSS class to indicate an area at the right of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_RIGHT "right"
 
 /* Predefined set of widget regions */
 
