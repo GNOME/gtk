@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-02 04:40+0000\n"
-"PO-Revision-Date: 2011-09-03 21:58+0900\n"
+"POT-Creation-Date: 2011-09-20 07:10+0000\n"
+"PO-Revision-Date: 2011-09-23 03:00+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -154,103 +154,103 @@ msgstr "장치 ID"
 msgid "Device identifier"
 msgstr "장치 아이디"
 
-#: ../gtk/gtkaboutdialog.c:274
+#: ../gtk/gtkaboutdialog.c:278
 msgid "Program name"
 msgstr "프로그램 이름"
 
-#: ../gtk/gtkaboutdialog.c:275
+#: ../gtk/gtkaboutdialog.c:279
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "프로그램의 이름. 설정하지 않으면 기본 값은 g_get_application_name()입니다"
 
-#: ../gtk/gtkaboutdialog.c:289
+#: ../gtk/gtkaboutdialog.c:293
 msgid "Program version"
 msgstr "프로그램 버전"
 
-#: ../gtk/gtkaboutdialog.c:290
+#: ../gtk/gtkaboutdialog.c:294
 msgid "The version of the program"
 msgstr "프로그램의 버전"
 
-#: ../gtk/gtkaboutdialog.c:304
+#: ../gtk/gtkaboutdialog.c:308
 msgid "Copyright string"
 msgstr "저작권 문자열"
 
-#: ../gtk/gtkaboutdialog.c:305
+#: ../gtk/gtkaboutdialog.c:309
 msgid "Copyright information for the program"
 msgstr "프로그램의 저작권 정보"
 
-#: ../gtk/gtkaboutdialog.c:322
+#: ../gtk/gtkaboutdialog.c:326
 msgid "Comments string"
 msgstr "설명 문자열"
 
-#: ../gtk/gtkaboutdialog.c:323
+#: ../gtk/gtkaboutdialog.c:327
 msgid "Comments about the program"
 msgstr "프로그램에 대한 설명"
 
-#: ../gtk/gtkaboutdialog.c:373
+#: ../gtk/gtkaboutdialog.c:377
 msgid "License Type"
 msgstr "사용권 종류"
 
-#: ../gtk/gtkaboutdialog.c:374
+#: ../gtk/gtkaboutdialog.c:378
 msgid "The license type of the program"
 msgstr "이 프로그램의 사용권 종류"
 
-#: ../gtk/gtkaboutdialog.c:390
+#: ../gtk/gtkaboutdialog.c:394
 msgid "Website URL"
 msgstr "웹사이트 URL"
 
-#: ../gtk/gtkaboutdialog.c:391
+#: ../gtk/gtkaboutdialog.c:395
 msgid "The URL for the link to the website of the program"
 msgstr "프로그램의 웹사이트의 링크 URL"
 
-#: ../gtk/gtkaboutdialog.c:405
+#: ../gtk/gtkaboutdialog.c:409
 msgid "Website label"
 msgstr "웹사이트 레이블"
 
-#: ../gtk/gtkaboutdialog.c:406
+#: ../gtk/gtkaboutdialog.c:410
 msgid "The label for the link to the website of the program"
 msgstr "프로그램의 웹사이트의 링크에 사용할 레이블"
 
-#: ../gtk/gtkaboutdialog.c:422
+#: ../gtk/gtkaboutdialog.c:426
 msgid "Authors"
 msgstr "개발자"
 
-#: ../gtk/gtkaboutdialog.c:423
+#: ../gtk/gtkaboutdialog.c:427
 msgid "List of authors of the program"
 msgstr "프로그램의 개발자 목록"
 
-#: ../gtk/gtkaboutdialog.c:439
+#: ../gtk/gtkaboutdialog.c:443
 msgid "Documenters"
 msgstr "문서 작성자"
 
-#: ../gtk/gtkaboutdialog.c:440
+#: ../gtk/gtkaboutdialog.c:444
 msgid "List of people documenting the program"
 msgstr "프로그램의 문서 작성자 목록"
 
-#: ../gtk/gtkaboutdialog.c:456
+#: ../gtk/gtkaboutdialog.c:460
 msgid "Artists"
 msgstr "아티스트"
 
-#: ../gtk/gtkaboutdialog.c:457
+#: ../gtk/gtkaboutdialog.c:461
 msgid "List of people who have contributed artwork to the program"
 msgstr "프로그램의 아트워크에 도움을 준 사람들 목록"
 
-#: ../gtk/gtkaboutdialog.c:474
+#: ../gtk/gtkaboutdialog.c:478
 msgid "Translator credits"
 msgstr "옮긴이"
 
-#: ../gtk/gtkaboutdialog.c:475
+#: ../gtk/gtkaboutdialog.c:479
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "옮긴이 목록. 이 문자열은 번역 가능한 문자열로 표시해야 합니다"
 
-#: ../gtk/gtkaboutdialog.c:490
+#: ../gtk/gtkaboutdialog.c:494
 msgid "Logo"
 msgstr "로고"
 
-#: ../gtk/gtkaboutdialog.c:491
+#: ../gtk/gtkaboutdialog.c:495
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -258,19 +258,19 @@ msgstr ""
 "정보 상자의 로고. 설정하지 않으면, 기본값은 gtk_window_get_default_icon_list"
 "()입니다"
 
-#: ../gtk/gtkaboutdialog.c:506
+#: ../gtk/gtkaboutdialog.c:510
 msgid "Logo Icon Name"
 msgstr "로고 아이콘 이름"
 
-#: ../gtk/gtkaboutdialog.c:507
+#: ../gtk/gtkaboutdialog.c:511
 msgid "A named icon to use as the logo for the about box."
 msgstr "정보 상자의 로고로 사용할 이름붙인 아이콘."
 
-#: ../gtk/gtkaboutdialog.c:520
+#: ../gtk/gtkaboutdialog.c:524
 msgid "Wrap license"
 msgstr "사용권 줄바꿈"
 
-#: ../gtk/gtkaboutdialog.c:521
+#: ../gtk/gtkaboutdialog.c:525
 msgid "Whether to wrap the license text."
 msgstr "사용권 텍스트에 줄바꿈을 할지 여부."
 
@@ -600,87 +600,95 @@ msgstr "오른쪽 여백"
 msgid "The padding to insert at the right of the widget."
 msgstr "위젯의 오른쪽에 끼워 넣을 여백."
 
-#: ../gtk/gtkappchooserbutton.c:557
+#: ../gtk/gtkappchooserbutton.c:616
 msgid "Include an 'Other...' item"
 msgstr "'다른...' 항목 포함"
 
-#: ../gtk/gtkappchooserbutton.c:558
+#: ../gtk/gtkappchooserbutton.c:617
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
 msgstr "콤보 상자에 GtkAppChooserDialog를 실행하는 항목을 넣을지 여부"
 
-#: ../gtk/gtkappchooserbutton.c:570 ../gtk/gtkappchooserdialog.c:722
+#: ../gtk/gtkappchooserbutton.c:633
+msgid "Show default item"
+msgstr "기본 항목 표시"
+
+#: ../gtk/gtkappchooserbutton.c:634
+msgid "Whether the combobox should show the default application on top"
+msgstr "콤보 상자에 맨 위에 기본 프로그램을 표시할지 여부"
+
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
 msgstr "제목"
 
-#: ../gtk/gtkappchooserbutton.c:571 ../gtk/gtkappchooserdialog.c:723
+#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:726
 msgid "The text to show at the top of the dialog"
 msgstr "대화 상자 위에 표시할 텍스트"
 
 # Content-type
-#: ../gtk/gtkappchooser.c:61
+#: ../gtk/gtkappchooser.c:75
 msgid "Content type"
 msgstr "컨텐츠 종류"
 
 # Content-type
-#: ../gtk/gtkappchooser.c:62
+#: ../gtk/gtkappchooser.c:76
 msgid "The content type used by the open with object"
 msgstr "오브젝트를 여는데 사용할 컨텐츠 종류"
 
-#: ../gtk/gtkappchooserdialog.c:708
+#: ../gtk/gtkappchooserdialog.c:711
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:709
+#: ../gtk/gtkappchooserdialog.c:712
 msgid "The GFile used by the app chooser dialog"
 msgstr "프로그램 선택 대화 상자가 사용할 GFile"
 
-#: ../gtk/gtkappchooserwidget.c:1016
+#: ../gtk/gtkappchooserwidget.c:1029
 msgid "Show default app"
 msgstr "기본 프로그램 표시"
 
-#: ../gtk/gtkappchooserwidget.c:1017
+#: ../gtk/gtkappchooserwidget.c:1030
 msgid "Whether the widget should show the default application"
 msgstr "위젯에서 기본 프로그램을 표시할지 여부"
 
-#: ../gtk/gtkappchooserwidget.c:1030
+#: ../gtk/gtkappchooserwidget.c:1044
 msgid "Show recommended apps"
 msgstr "추천 프로그램 표시"
 
-#: ../gtk/gtkappchooserwidget.c:1031
+#: ../gtk/gtkappchooserwidget.c:1045
 msgid "Whether the widget should show recommended applications"
 msgstr "위젯에서 추천 프로그램을 표시할지 여부"
 
-#: ../gtk/gtkappchooserwidget.c:1044
+#: ../gtk/gtkappchooserwidget.c:1059
 msgid "Show fallback apps"
 msgstr "대체 프로그램 표시"
 
-#: ../gtk/gtkappchooserwidget.c:1045
+#: ../gtk/gtkappchooserwidget.c:1060
 msgid "Whether the widget should show fallback applications"
 msgstr "위젯에서 대체 프로그램을 표시할지 여부"
 
-#: ../gtk/gtkappchooserwidget.c:1057
+#: ../gtk/gtkappchooserwidget.c:1072
 msgid "Show other apps"
 msgstr "다른 프로그램 표시"
 
-#: ../gtk/gtkappchooserwidget.c:1058
+#: ../gtk/gtkappchooserwidget.c:1073
 msgid "Whether the widget should show other applications"
 msgstr "위젯에서 다른 프로그램을 표시할지 여부"
 
-#: ../gtk/gtkappchooserwidget.c:1071
+#: ../gtk/gtkappchooserwidget.c:1086
 msgid "Show all apps"
 msgstr "모든 프로그램 표시"
 
-#: ../gtk/gtkappchooserwidget.c:1072
+#: ../gtk/gtkappchooserwidget.c:1087
 msgid "Whether the widget should show all applications"
 msgstr "위젯에서 모든 프로그램을 표시할지 여부"
 
-#: ../gtk/gtkappchooserwidget.c:1085
+#: ../gtk/gtkappchooserwidget.c:1101
 msgid "Widget's default text"
 msgstr "위젯의 기본 텍스트"
 
-#: ../gtk/gtkappchooserwidget.c:1086
+#: ../gtk/gtkappchooserwidget.c:1102
 msgid "The default text appearing when there are no applications"
 msgstr "프로그램이 없을 때 표시하는 기본 텍스트"
 
@@ -700,7 +708,7 @@ msgstr "화살표 그림자"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "화살표 주위의 그림자 모양"
 
-#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:986 ../gtk/gtkmenu.c:798
+#: ../gtk/gtkarrow.c:129 ../gtk/gtkcombobox.c:991 ../gtk/gtkmenu.c:798
 #: ../gtk/gtkmenuitem.c:446
 msgid "Arrow Scaling"
 msgstr "화살표 크기 조정"
@@ -860,7 +868,7 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "참이면, 하위 위젯이 균등한 크기로 제한받지 않습니다"
 
 #: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:314
-#: ../gtk/gtkiconview.c:643 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkiconview.c:645 ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "간격"
 
@@ -868,7 +876,7 @@ msgstr "간격"
 msgid "The amount of space between children"
 msgstr "하위 위젯 사이의 간격"
 
-#: ../gtk/gtkbox.c:251 ../gtk/gtktable.c:227 ../gtk/gtktoolbar.c:562
+#: ../gtk/gtkbox.c:251 ../gtk/gtktable.c:227 ../gtk/gtktoolbar.c:564
 #: ../gtk/gtktoolitemgroup.c:1645
 msgid "Homogeneous"
 msgstr "균등"
@@ -877,7 +885,7 @@ msgstr "균등"
 msgid "Whether the children should all be the same size"
 msgstr "하위 위젯이 모두 같은 크기를 갖는지 여부."
 
-#: ../gtk/gtkbox.c:272 ../gtk/gtkcellareabox.c:337 ../gtk/gtktoolbar.c:554
+#: ../gtk/gtkbox.c:272 ../gtk/gtkcellareabox.c:337 ../gtk/gtktoolbar.c:556
 #: ../gtk/gtktoolitemgroup.c:1652 ../gtk/gtktoolpalette.c:1070
 #: ../gtk/gtktreeviewcolumn.c:339
 msgid "Expand"
@@ -967,7 +975,7 @@ msgstr ""
 "참이면, 레이블은 그 텍스트를 표시하는 게 아니라 스톡 아이템을 선택하는 데 쓰"
 "입니다"
 
-#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:792
+#: ../gtk/gtkbutton.c:251 ../gtk/gtkcombobox.c:797
 #: ../gtk/gtkfilechooserbutton.c:426
 msgid "Focus on click"
 msgstr "누르면 포커스"
@@ -1439,7 +1447,7 @@ msgstr "텍스트 열"
 msgid "A column in the data source model to get the strings from"
 msgstr "데이터 소스 모델에서 문자열을 가져올 때 쓰이는 열"
 
-#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcellrenderercombo.c:171 ../gtk/gtkcombobox.c:864
 msgid "Has Entry"
 msgstr "입력창 있음"
 
@@ -1703,15 +1711,17 @@ msgid "Whether the text can be modified by the user"
 msgstr "텍스트를 사용자가 수정할 수 있는지 여부"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
-#: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "글꼴"
 
-#: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtktexttag.c:295
+#: ../gtk/gtkcellrenderertext.c:358 ../gtk/gtkfontchooser.c:68
+#: ../gtk/gtktexttag.c:295
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "글꼴 설명 문자열, 가령 \"Sans Italic 12\""
 
-#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtktexttag.c:303
+#: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtkfontchooser.c:81
+#: ../gtk/gtktexttag.c:303
 msgid "Font description as a PangoFontDescription struct"
 msgstr "글꼴 설명 PangoFontDescription 구조"
 
@@ -1844,7 +1854,7 @@ msgstr ""
 "문자열을 어떻게 여러 줄로 나눌 지, 셀 렌더러에서 전체 문자열을 표시할 공간이 "
 "부족한 경우"
 
-#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:681
+#: ../gtk/gtkcellrenderertext.c:583 ../gtk/gtkcombobox.c:686
 msgid "Wrap width"
 msgstr "줄바꿈 너비"
 
@@ -2043,14 +2053,14 @@ msgstr "셀 보기 모델"
 msgid "The model for cell view"
 msgstr "셀 보기를 위한 모델"
 
-#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:945
-#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:768
+#: ../gtk/gtkcellview.c:246 ../gtk/gtkcombobox.c:950
+#: ../gtk/gtkentrycompletion.c:448 ../gtk/gtkiconview.c:770
 #: ../gtk/gtktreemenu.c:329 ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
 msgstr "셀 영역"
 
-#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:946
-#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:769
+#: ../gtk/gtkcellview.c:247 ../gtk/gtkcombobox.c:951
+#: ../gtk/gtkentrycompletion.c:449 ../gtk/gtkiconview.c:771
 #: ../gtk/gtktreemenu.c:330 ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
 msgstr "셀을 배치할 때 사용할 GtkCellArea"
@@ -2120,7 +2130,7 @@ msgid "Whether to give the color an alpha value"
 msgstr "색에 투명 값을 사용할지 여부"
 
 #: ../gtk/gtkcolorbutton.c:185 ../gtk/gtkfilechooserbutton.c:440
-#: ../gtk/gtkfontbutton.c:150 ../gtk/gtkprintjob.c:141
+#: ../gtk/gtkfontbutton.c:435 ../gtk/gtkprintjob.c:141
 #: ../gtk/gtkstatusicon.c:438 ../gtk/gtktreeviewcolumn.c:331
 msgid "Title"
 msgstr "제목"
@@ -2217,97 +2227,97 @@ msgstr "도움말 단추"
 msgid "The help button of the dialog."
 msgstr "대화 상자의 도움말 단추."
 
-#: ../gtk/gtkcombobox.c:664
+#: ../gtk/gtkcombobox.c:669
 msgid "ComboBox model"
 msgstr "콤보 상자 모델"
 
-#: ../gtk/gtkcombobox.c:665
+#: ../gtk/gtkcombobox.c:670
 msgid "The model for the combo box"
 msgstr "콤보 상자를 위한 모델"
 
-#: ../gtk/gtkcombobox.c:682
+#: ../gtk/gtkcombobox.c:687
 msgid "Wrap width for laying out the items in a grid"
 msgstr "격자에 항목을 배치할 때 줄바꿈 너비"
 
-#: ../gtk/gtkcombobox.c:704 ../gtk/gtktreemenu.c:383
+#: ../gtk/gtkcombobox.c:709 ../gtk/gtktreemenu.c:383
 msgid "Row span column"
 msgstr "행 범위 열"
 
-#: ../gtk/gtkcombobox.c:705 ../gtk/gtktreemenu.c:384
+#: ../gtk/gtkcombobox.c:710 ../gtk/gtktreemenu.c:384
 msgid "TreeModel column containing the row span values"
 msgstr "행 범위 값이 들어 있는 트리모델 열"
 
-#: ../gtk/gtkcombobox.c:726 ../gtk/gtktreemenu.c:404
+#: ../gtk/gtkcombobox.c:731 ../gtk/gtktreemenu.c:404
 msgid "Column span column"
 msgstr "열 범위 열"
 
-#: ../gtk/gtkcombobox.c:727 ../gtk/gtktreemenu.c:405
+#: ../gtk/gtkcombobox.c:732 ../gtk/gtktreemenu.c:405
 msgid "TreeModel column containing the column span values"
 msgstr "열 범위 값이 들어 있는 트리모델 열"
 
-#: ../gtk/gtkcombobox.c:748
+#: ../gtk/gtkcombobox.c:753
 msgid "Active item"
 msgstr "활성 항목"
 
-#: ../gtk/gtkcombobox.c:749
+#: ../gtk/gtkcombobox.c:754
 msgid "The item which is currently active"
 msgstr "현재 활성화된 항목"
 
-#: ../gtk/gtkcombobox.c:768 ../gtk/gtkuimanager.c:479
+#: ../gtk/gtkcombobox.c:773 ../gtk/gtkuimanager.c:479
 msgid "Add tearoffs to menus"
 msgstr "메뉴에 떼어내기 더하기"
 
-#: ../gtk/gtkcombobox.c:769
+#: ../gtk/gtkcombobox.c:774
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "드롭다운 메뉴의 항목이 떼어내가 메뉴 항목인지 여부"
 
-#: ../gtk/gtkcombobox.c:784 ../gtk/gtkentry.c:786
+#: ../gtk/gtkcombobox.c:789 ../gtk/gtkentry.c:786
 msgid "Has Frame"
 msgstr "프레임 사용"
 
-#: ../gtk/gtkcombobox.c:785
+#: ../gtk/gtkcombobox.c:790
 msgid "Whether the combo box draws a frame around the child"
 msgstr "콤보 상자의 하위 위젯 주위에 프레임을 그릴지 여부"
 
-#: ../gtk/gtkcombobox.c:793
+#: ../gtk/gtkcombobox.c:798
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "마우스로 킬릭하면 콤보 상자에 포커스가 가는지 여부"
 
-#: ../gtk/gtkcombobox.c:808 ../gtk/gtkmenu.c:643
+#: ../gtk/gtkcombobox.c:813 ../gtk/gtkmenu.c:643
 msgid "Tearoff Title"
 msgstr "떼어내기 제목"
 
-#: ../gtk/gtkcombobox.c:809
+#: ../gtk/gtkcombobox.c:814
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "팝업을 떼어냈을 때 창 관리자가 표시할 제목"
 
-#: ../gtk/gtkcombobox.c:826
+#: ../gtk/gtkcombobox.c:831
 msgid "Popup shown"
 msgstr "팝업 표시"
 
-#: ../gtk/gtkcombobox.c:827
+#: ../gtk/gtkcombobox.c:832
 msgid "Whether the combo's dropdown is shown"
 msgstr "콤보에 드롭다운 메뉴를 표시할지 여부"
 
-#: ../gtk/gtkcombobox.c:843
+#: ../gtk/gtkcombobox.c:848
 msgid "Button Sensitivity"
 msgstr "단추 반응"
 
-#: ../gtk/gtkcombobox.c:844
+#: ../gtk/gtkcombobox.c:849
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "모델이 없을 때 드롭다운 단추가 반응할지 여부"
 
-#: ../gtk/gtkcombobox.c:860
+#: ../gtk/gtkcombobox.c:865
 msgid "Whether combo box has an entry"
 msgstr "콤보 상자에 입력창을 만들지 여부"
 
-#: ../gtk/gtkcombobox.c:875
+#: ../gtk/gtkcombobox.c:880
 msgid "Entry Text Column"
 msgstr "입력창 텍스트 열"
 
-#: ../gtk/gtkcombobox.c:876
+#: ../gtk/gtkcombobox.c:881
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -2315,61 +2325,61 @@ msgstr ""
 "콤보 상자가 #GtkComboBox:has-entry = %TRUE 속성으로 만들어졌을 경우, 입력란"
 "의 문자열과 연결될 콤보 상자의 모델의 열."
 
-#: ../gtk/gtkcombobox.c:893
+#: ../gtk/gtkcombobox.c:898
 msgid "ID Column"
 msgstr "ID 열"
 
-#: ../gtk/gtkcombobox.c:894
+#: ../gtk/gtkcombobox.c:899
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
 msgstr "콤보 상자 모델에서 값의 문자열 ID가 들어 있는 콤보 상자 모델의 열."
 
-#: ../gtk/gtkcombobox.c:909
+#: ../gtk/gtkcombobox.c:914
 msgid "Active id"
 msgstr "활성 ID"
 
-#: ../gtk/gtkcombobox.c:910
+#: ../gtk/gtkcombobox.c:915
 msgid "The value of the id column for the active row"
 msgstr "활성화된 행에서 ID 열의 값"
 
-#: ../gtk/gtkcombobox.c:925
+#: ../gtk/gtkcombobox.c:930
 msgid "Popup Fixed Width"
 msgstr "팝업 고정 너비"
 
-#: ../gtk/gtkcombobox.c:926
+#: ../gtk/gtkcombobox.c:931
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
 msgstr "팝업의 너비를 할당된 콤보 상자 너비에 맞게 고정 너비로 할 지 여부"
 
-#: ../gtk/gtkcombobox.c:952
+#: ../gtk/gtkcombobox.c:957
 msgid "Appears as list"
 msgstr "목록으로 표시"
 
-#: ../gtk/gtkcombobox.c:953
+#: ../gtk/gtkcombobox.c:958
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "드롭다운이 메뉴가 아니라 목록으로 표시할지 여부"
 
-#: ../gtk/gtkcombobox.c:969
+#: ../gtk/gtkcombobox.c:974
 msgid "Arrow Size"
 msgstr "화살표 크기"
 
-#: ../gtk/gtkcombobox.c:970
+#: ../gtk/gtkcombobox.c:975
 msgid "The minimum size of the arrow in the combo box"
 msgstr "콤보 상자에 있는 화살표의 최소 크기"
 
-#: ../gtk/gtkcombobox.c:987
+#: ../gtk/gtkcombobox.c:992
 msgid "The amount of space used by the arrow"
 msgstr "화살표에 사용된 공간"
 
-#: ../gtk/gtkcombobox.c:1002 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
-#: ../gtk/gtkmenubar.c:218 ../gtk/gtkstatusbar.c:182 ../gtk/gtktoolbar.c:612
+#: ../gtk/gtkcombobox.c:1007 ../gtk/gtkentry.c:886 ../gtk/gtkhandlebox.c:218
+#: ../gtk/gtkmenubar.c:218 ../gtk/gtkstatusbar.c:182 ../gtk/gtktoolbar.c:614
 #: ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "그림자 형식"
 
-#: ../gtk/gtkcombobox.c:1003
+#: ../gtk/gtkcombobox.c:1008
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "콤보 상자 주위의 그림자 종류"
 
@@ -2804,7 +2814,7 @@ msgstr "최소 키 길이"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "일치하는 텍스트를 찾을 때 사용할 검색 키의 최소 길이"
 
-#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:564
+#: ../gtk/gtkentrycompletion.c:344 ../gtk/gtkiconview.c:566
 msgid "Text column"
 msgstr "텍스트 열"
 
@@ -3069,75 +3079,78 @@ msgstr "세로 위치"
 msgid "Y position of child widget"
 msgstr "하위 위젯의 세로 위치"
 
-#: ../gtk/gtkfontbutton.c:151
+#: ../gtk/gtkfontbutton.c:436
 msgid "The title of the font chooser dialog"
 msgstr "글꼴 선택 대화 상자의 제목"
 
-#: ../gtk/gtkfontbutton.c:166 ../gtk/gtkfontchooser.c:186
-#: ../gtk/gtkfontsel.c:244
+#: ../gtk/gtkfontbutton.c:451 ../gtk/gtkfontsel.c:244
 msgid "Font name"
 msgstr "글꼴 이름"
 
-#: ../gtk/gtkfontbutton.c:167
+#: ../gtk/gtkfontbutton.c:452
 msgid "The name of the selected font"
 msgstr "선택한 글꼴의 이름"
 
 # 한글 글꼴은 그냥 fontconfig에 의존하도록 한다
-#: ../gtk/gtkfontbutton.c:168
+#: ../gtk/gtkfontbutton.c:453
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:183
+#: ../gtk/gtkfontbutton.c:468
 msgid "Use font in label"
 msgstr "레이블에서 글꼴 사용"
 
-#: ../gtk/gtkfontbutton.c:184
+#: ../gtk/gtkfontbutton.c:469
 msgid "Whether the label is drawn in the selected font"
 msgstr "선택한 글꼴로 레이블을 그릴지 여부"
 
-#: ../gtk/gtkfontbutton.c:199
+#: ../gtk/gtkfontbutton.c:484
 msgid "Use size in label"
 msgstr "레이블에서 크기 사용"
 
-#: ../gtk/gtkfontbutton.c:200
+#: ../gtk/gtkfontbutton.c:485
 msgid "Whether the label is drawn with the selected font size"
 msgstr "선택한 크기로 레이블을 그릴지 여부"
 
-#: ../gtk/gtkfontbutton.c:216
+#: ../gtk/gtkfontbutton.c:501
 msgid "Show style"
 msgstr "모양새 표시"
 
-#: ../gtk/gtkfontbutton.c:217
+#: ../gtk/gtkfontbutton.c:502
 msgid "Whether the selected font style is shown in the label"
 msgstr "선택한 글꼴 모양새를 레이블에 표시할지 여부"
 
-#: ../gtk/gtkfontbutton.c:232
+#: ../gtk/gtkfontbutton.c:517
 msgid "Show size"
 msgstr "크기 표시"
 
-#: ../gtk/gtkfontbutton.c:233
+#: ../gtk/gtkfontbutton.c:518
 msgid "Whether selected font size is shown in the label"
 msgstr "선택한 글꼴 크기를 레이블에 표시할지 여부"
 
-#: ../gtk/gtkfontchooser.c:187 ../gtk/gtkfontsel.c:245
-msgid "The string that represents this font"
-msgstr "이 글꼴을 표현하는 문자열"
+#: ../gtk/gtkfontchooser.c:80
+msgid "Font description"
+msgstr "글꼴 설명 문자열"
 
-#: ../gtk/gtkfontchooser.c:193 ../gtk/gtkfontsel.c:251
+#: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "미리보기 텍스트"
 
-#: ../gtk/gtkfontchooser.c:194 ../gtk/gtkfontsel.c:252
+#: ../gtk/gtkfontchooser.c:94 ../gtk/gtkfontsel.c:252
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "선택한 글꼴을 데모하기 위해서 보여줄 텍스트"
 
-#: ../gtk/gtkfontchooser.c:201
+#: ../gtk/gtkfontchooser.c:106
 msgid "Show preview text entry"
 msgstr "미리보기 텍스트 입력창 표시"
 
-#: ../gtk/gtkfontchooser.c:202
+#: ../gtk/gtkfontchooser.c:107
 msgid "Whether the preview text entry is shown or not"
 msgstr "미리보기 텍스트 입력창을 표시할지 여부"
+
+#: ../gtk/gtkfontsel.c:245
+msgid "The string that represents this font"
+msgstr "이 글꼴을 표현하는 문자열"
 
 #: ../gtk/gtkframe.c:172
 msgid "Text of the frame's label"
@@ -3171,67 +3184,67 @@ msgstr "프레임 테두리의 모양"
 msgid "A widget to display in place of the usual frame label"
 msgstr "일반적인 프레임 레이블 대신에 표시할 위젯"
 
-#: ../gtk/gtkgrid.c:1298 ../gtk/gtktable.c:209
+#: ../gtk/gtkgrid.c:1350 ../gtk/gtktable.c:209
 msgid "Row spacing"
 msgstr "행 간격"
 
-#: ../gtk/gtkgrid.c:1299 ../gtk/gtktable.c:210
+#: ../gtk/gtkgrid.c:1351 ../gtk/gtktable.c:210
 msgid "The amount of space between two consecutive rows"
 msgstr "두 개의 인접한 행 사이의 간격"
 
-#: ../gtk/gtkgrid.c:1305 ../gtk/gtktable.c:218
+#: ../gtk/gtkgrid.c:1357 ../gtk/gtktable.c:218
 msgid "Column spacing"
 msgstr "열 간격"
 
-#: ../gtk/gtkgrid.c:1306 ../gtk/gtktable.c:219
+#: ../gtk/gtkgrid.c:1358 ../gtk/gtktable.c:219
 msgid "The amount of space between two consecutive columns"
 msgstr "두 개의 인접한 열 사이의 간격"
 
-#: ../gtk/gtkgrid.c:1312
+#: ../gtk/gtkgrid.c:1364
 msgid "Row Homogeneous"
 msgstr "행 균등"
 
-#: ../gtk/gtkgrid.c:1313
+#: ../gtk/gtkgrid.c:1365
 msgid "If TRUE, the rows are all the same height"
 msgstr "참이면 행의 높이가 모두 같습니다"
 
-#: ../gtk/gtkgrid.c:1319
+#: ../gtk/gtkgrid.c:1371
 msgid "Column Homogeneous"
 msgstr "열 균등"
 
-#: ../gtk/gtkgrid.c:1320
+#: ../gtk/gtkgrid.c:1372
 msgid "If TRUE, the columns are all the same width"
 msgstr "참이면 열의 높이가 모두 같습니다"
 
-#: ../gtk/gtkgrid.c:1326 ../gtk/gtktable.c:235
+#: ../gtk/gtkgrid.c:1378 ../gtk/gtktable.c:235
 msgid "Left attachment"
 msgstr "왼쪽 붙임"
 
-#: ../gtk/gtkgrid.c:1327 ../gtk/gtkmenu.c:761 ../gtk/gtktable.c:236
+#: ../gtk/gtkgrid.c:1379 ../gtk/gtkmenu.c:761 ../gtk/gtktable.c:236
 msgid "The column number to attach the left side of the child to"
 msgstr "하위 위젯의 왼쪽을 붙일 열 번호"
 
-#: ../gtk/gtkgrid.c:1333 ../gtk/gtktable.c:249
+#: ../gtk/gtkgrid.c:1385 ../gtk/gtktable.c:249
 msgid "Top attachment"
 msgstr "위쪽 붙임"
 
-#: ../gtk/gtkgrid.c:1334
+#: ../gtk/gtkgrid.c:1386
 msgid "The row number to attach the top side of a child widget to"
 msgstr "하위 위젯의 위쪽과 붙을 행 번호"
 
-#: ../gtk/gtkgrid.c:1340 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:274
+#: ../gtk/gtkgrid.c:1392 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:274
 msgid "Width"
 msgstr "너비"
 
-#: ../gtk/gtkgrid.c:1341
+#: ../gtk/gtkgrid.c:1393
 msgid "The number of columns that a child spans"
 msgstr "하위 위젯이 차지하는 열 개수"
 
-#: ../gtk/gtkgrid.c:1347 ../gtk/gtklayout.c:669
+#: ../gtk/gtkgrid.c:1399 ../gtk/gtklayout.c:669
 msgid "Height"
 msgstr "높이"
 
-#: ../gtk/gtkgrid.c:1348
+#: ../gtk/gtkgrid.c:1400
 msgid "The number of rows that a child spans"
 msgstr "하위 위젯이 차지하는 행 개수"
 
@@ -3280,133 +3293,133 @@ msgid ""
 msgstr ""
 "핸들 상자의 하위 위젯이 붙어 있는지 떼어져 있는지 여부를 나타내는 불리언 값."
 
-#: ../gtk/gtkiconview.c:527 ../gtk/gtktreeselection.c:131
+#: ../gtk/gtkiconview.c:529 ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "선택 모드"
 
-#: ../gtk/gtkiconview.c:528
+#: ../gtk/gtkiconview.c:530
 msgid "The selection mode"
 msgstr "선택 모드"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:548
 msgid "Pixbuf column"
 msgstr "픽스버퍼 열"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:549
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "아이콘 픽스버퍼를 가져오는 데 사용할 모델 열"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:567
 msgid "Model column used to retrieve the text from"
 msgstr "텍스트를 가져오는 데 사용할 모델 열"
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:586
 msgid "Markup column"
 msgstr "마크업 열"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "판고 마크업을 사용할 경우 텍스트를 가져오는 데 사용할 모델 열"
 
-#: ../gtk/gtkiconview.c:592
+#: ../gtk/gtkiconview.c:594
 msgid "Icon View Model"
 msgstr "아이콘 보기 모델"
 
-#: ../gtk/gtkiconview.c:593
+#: ../gtk/gtkiconview.c:595
 msgid "The model for the icon view"
 msgstr "아이콘 보기를 위한 모델"
 
-#: ../gtk/gtkiconview.c:609
+#: ../gtk/gtkiconview.c:611
 msgid "Number of columns"
 msgstr "열 개수"
 
-#: ../gtk/gtkiconview.c:610
+#: ../gtk/gtkiconview.c:612
 msgid "Number of columns to display"
 msgstr "표시할 열 개수"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:629
 msgid "Width for each item"
 msgstr "각 항목의 폭"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:630
 msgid "The width used for each item"
 msgstr "각 항목에 사용할 폭"
 
-#: ../gtk/gtkiconview.c:644
+#: ../gtk/gtkiconview.c:646
 msgid "Space which is inserted between cells of an item"
 msgstr "항목 내의 셀에 사이에 들어가는 간격"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:661
 msgid "Row Spacing"
 msgstr "행 간격"
 
-#: ../gtk/gtkiconview.c:660
+#: ../gtk/gtkiconview.c:662
 msgid "Space which is inserted between grid rows"
 msgstr "격자 행 사이에 들어가는 간격"
 
-#: ../gtk/gtkiconview.c:675
+#: ../gtk/gtkiconview.c:677
 msgid "Column Spacing"
 msgstr "열 간격"
 
-#: ../gtk/gtkiconview.c:676
+#: ../gtk/gtkiconview.c:678
 msgid "Space which is inserted between grid columns"
 msgstr "격자 열 사이에 들어가는 간격"
 
-#: ../gtk/gtkiconview.c:691
+#: ../gtk/gtkiconview.c:693
 msgid "Margin"
 msgstr "여백"
 
-#: ../gtk/gtkiconview.c:692
+#: ../gtk/gtkiconview.c:694
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "아이콘 보기에서 주변에 들어갈 간격"
 
-#: ../gtk/gtkiconview.c:707
+#: ../gtk/gtkiconview.c:709
 msgid "Item Orientation"
 msgstr "항목 방향"
 
-#: ../gtk/gtkiconview.c:708
+#: ../gtk/gtkiconview.c:710
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "각 항목의 텍스트와 아이콘이 상대적으로 어떻게 위치할 지"
 
-#: ../gtk/gtkiconview.c:724 ../gtk/gtktreeview.c:1021
+#: ../gtk/gtkiconview.c:726 ../gtk/gtktreeview.c:1021
 #: ../gtk/gtktreeviewcolumn.c:374
 msgid "Reorderable"
 msgstr "순서 바꾸기 가능"
 
-#: ../gtk/gtkiconview.c:725 ../gtk/gtktreeview.c:1022
+#: ../gtk/gtkiconview.c:727 ../gtk/gtktreeview.c:1022
 msgid "View is reorderable"
 msgstr "뷰가 순서 바꾸기가 가능한지 여부"
 
-#: ../gtk/gtkiconview.c:732 ../gtk/gtktreeview.c:1172
+#: ../gtk/gtkiconview.c:734 ../gtk/gtktreeview.c:1172
 msgid "Tooltip Column"
 msgstr "도구 설명 열"
 
-#: ../gtk/gtkiconview.c:733
+#: ../gtk/gtkiconview.c:735
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "해당 항목의 도구 설명 텍스트가 들어 있는 모델의 열."
 
-#: ../gtk/gtkiconview.c:750
+#: ../gtk/gtkiconview.c:752
 msgid "Item Padding"
 msgstr "항목 여백"
 
-#: ../gtk/gtkiconview.c:751
+#: ../gtk/gtkiconview.c:753
 msgid "Padding around icon view items"
 msgstr "아이콘 보기 항목 주위의 여백"
 
-#: ../gtk/gtkiconview.c:782
+#: ../gtk/gtkiconview.c:784
 msgid "Selection Box Color"
 msgstr "선택 상자 색"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:785
 msgid "Color of the selection box"
 msgstr "선택 상자의 색"
 
-#: ../gtk/gtkiconview.c:789
+#: ../gtk/gtkiconview.c:791
 msgid "Selection Box Alpha"
 msgstr "선택 상자 알파"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:792
 msgid "Opacity of the selection box"
 msgstr "선택 상자의 불투명 정도"
 
@@ -3439,7 +3452,7 @@ msgstr "아이콘 집합"
 msgid "Icon set to display"
 msgstr "표시할 아이콘 집합"
 
-#: ../gtk/gtkimage.c:270 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:529
+#: ../gtk/gtkimage.c:270 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:531
 #: ../gtk/gtktoolpalette.c:1008
 msgid "Icon size"
 msgstr "아이콘 크기"
@@ -3642,19 +3655,19 @@ msgstr "레이아웃의 너비"
 msgid "The height of the layout"
 msgstr "레이아웃의 높이"
 
-#: ../gtk/gtklinkbutton.c:173
+#: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:174
+#: ../gtk/gtklinkbutton.c:176
 msgid "The URI bound to this button"
 msgstr "이 단추에 해당하는 URI"
 
-#: ../gtk/gtklinkbutton.c:188
+#: ../gtk/gtklinkbutton.c:190
 msgid "Visited"
 msgstr "방문함"
 
-#: ../gtk/gtklinkbutton.c:189
+#: ../gtk/gtklinkbutton.c:191
 msgid "Whether this link has been visited."
 msgstr "이 링크를 방문했는지 여부."
 
@@ -3727,7 +3740,7 @@ msgstr "메뉴 모음의 하위 위젯 모으기 방향"
 msgid "Style of bevel around the menubar"
 msgstr "메뉴 모음 주위의 경사 모양"
 
-#: ../gtk/gtkmenubar.c:226 ../gtk/gtktoolbar.c:579
+#: ../gtk/gtkmenubar.c:226 ../gtk/gtktoolbar.c:581
 msgid "Internal padding"
 msgstr "내부 padding"
 
@@ -6453,79 +6466,79 @@ msgstr "표시기 그리기"
 msgid "If the toggle part of the button is displayed"
 msgstr "단추의 토글 부분을 표시할지 여부"
 
-#: ../gtk/gtktoolbar.c:500 ../gtk/gtktoolpalette.c:1038
+#: ../gtk/gtktoolbar.c:502 ../gtk/gtktoolpalette.c:1038
 msgid "Toolbar Style"
 msgstr "도구 모음 모양"
 
-#: ../gtk/gtktoolbar.c:501
+#: ../gtk/gtktoolbar.c:503
 msgid "How to draw the toolbar"
 msgstr "도구 모음을 그리는 방법"
 
-#: ../gtk/gtktoolbar.c:508
+#: ../gtk/gtktoolbar.c:510
 msgid "Show Arrow"
 msgstr "화살표 표시"
 
-#: ../gtk/gtktoolbar.c:509
+#: ../gtk/gtktoolbar.c:511
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "툴바가 좁을 경우에 화살표를 표시하는지 여부"
 
-#: ../gtk/gtktoolbar.c:530
+#: ../gtk/gtktoolbar.c:532
 msgid "Size of icons in this toolbar"
 msgstr "이 도구 모음의 아이콘 크기"
 
-#: ../gtk/gtktoolbar.c:545 ../gtk/gtktoolpalette.c:1024
+#: ../gtk/gtktoolbar.c:547 ../gtk/gtktoolpalette.c:1024
 msgid "Icon size set"
 msgstr "아이콘 크기 설정"
 
-#: ../gtk/gtktoolbar.c:546 ../gtk/gtktoolpalette.c:1025
+#: ../gtk/gtktoolbar.c:548 ../gtk/gtktoolpalette.c:1025
 msgid "Whether the icon-size property has been set"
 msgstr "아이콘 크기 속성을 설정했는지 여부"
 
-#: ../gtk/gtktoolbar.c:555
+#: ../gtk/gtktoolbar.c:557
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "도구 모음이 커질 때 그 도구 항목들이 추가 공간을 받는지 여부"
 
-#: ../gtk/gtktoolbar.c:563 ../gtk/gtktoolitemgroup.c:1646
+#: ../gtk/gtktoolbar.c:565 ../gtk/gtktoolitemgroup.c:1646
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "도구 항목들이 모두 같은 크기를 갖는지 여부"
 
-#: ../gtk/gtktoolbar.c:570
+#: ../gtk/gtktoolbar.c:572
 msgid "Spacer size"
 msgstr "간격 크기"
 
-#: ../gtk/gtktoolbar.c:571
+#: ../gtk/gtktoolbar.c:573
 msgid "Size of spacers"
 msgstr "간격의 크기"
 
-#: ../gtk/gtktoolbar.c:580
+#: ../gtk/gtktoolbar.c:582
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "도구 모음 그림자와 단추 사이의 테두리 공백 크기"
 
-#: ../gtk/gtktoolbar.c:588
+#: ../gtk/gtktoolbar.c:590
 msgid "Maximum child expand"
 msgstr "최대 하위 위젯 확장"
 
-#: ../gtk/gtktoolbar.c:589
+#: ../gtk/gtktoolbar.c:591
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "확장 가능한 항목에 주어진 최대 공간의 크기"
 
-#: ../gtk/gtktoolbar.c:597
+#: ../gtk/gtktoolbar.c:599
 msgid "Space style"
 msgstr "간격 모양"
 
-#: ../gtk/gtktoolbar.c:598
+#: ../gtk/gtktoolbar.c:600
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "간격에 세로선을 그릴지 아니면 빈 칸을 그릴 지"
 
-#: ../gtk/gtktoolbar.c:605
+#: ../gtk/gtktoolbar.c:607
 msgid "Button relief"
 msgstr "단추 강조"
 
-#: ../gtk/gtktoolbar.c:606
+#: ../gtk/gtktoolbar.c:608
 msgid "Type of bevel around toolbar buttons"
 msgstr "도구 모음 단추 주위의 경사 형식"
 
-#: ../gtk/gtktoolbar.c:613
+#: ../gtk/gtktoolbar.c:615
 msgid "Style of bevel around the toolbar"
 msgstr "도구 모음 주위의 경사 모양"
 

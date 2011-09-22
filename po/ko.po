@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-02 04:36+0000\n"
-"PO-Revision-Date: 2011-09-03 21:41+0900\n"
+"POT-Creation-Date: 2011-09-20 07:07+0000\n"
+"PO-Revision-Date: 2011-09-23 02:56+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -498,7 +498,7 @@ msgstr "켜고 끄는 상태를 전환합니다"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:102
+#: ../gtk/gtkaboutdialog.c:106
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
@@ -507,50 +507,50 @@ msgstr ""
 "이 프로그램은 어떠한 형태의 보증도 제공하지 않습니다. 자세한 정보는 <a href="
 "\"%s\">%s</a> 페이지를 참고하십시오."
 
-#: ../gtk/gtkaboutdialog.c:344
+#: ../gtk/gtkaboutdialog.c:348
 msgid "License"
 msgstr "라이선스"
 
-#: ../gtk/gtkaboutdialog.c:345
+#: ../gtk/gtkaboutdialog.c:349
 msgid "The license of the program"
 msgstr "프로그램의 사용권"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:737
+#: ../gtk/gtkaboutdialog.c:741
 msgid "C_redits"
 msgstr "만든 사람들(_R)"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:750
+#: ../gtk/gtkaboutdialog.c:754
 msgid "_License"
 msgstr "라이선스(_L)"
 
-#: ../gtk/gtkaboutdialog.c:955
+#: ../gtk/gtkaboutdialog.c:959
 msgid "Could not show link"
 msgstr "링크를 표시할 수 없습니다"
 
-#: ../gtk/gtkaboutdialog.c:992
+#: ../gtk/gtkaboutdialog.c:996
 msgid "Homepage"
 msgstr "홈페이지"
 
-#: ../gtk/gtkaboutdialog.c:1046
+#: ../gtk/gtkaboutdialog.c:1050
 #, c-format
 msgid "About %s"
 msgstr "%s 정보"
 
-#: ../gtk/gtkaboutdialog.c:2372
+#: ../gtk/gtkaboutdialog.c:2376
 msgid "Created by"
 msgstr "만든 사람"
 
-#: ../gtk/gtkaboutdialog.c:2375
+#: ../gtk/gtkaboutdialog.c:2379
 msgid "Documented by"
 msgstr "문서 작성"
 
-#: ../gtk/gtkaboutdialog.c:2385
+#: ../gtk/gtkaboutdialog.c:2389
 msgid "Translated by"
 msgstr "번역"
 
-#: ../gtk/gtkaboutdialog.c:2390
+#: ../gtk/gtkaboutdialog.c:2394
 msgid "Artwork by"
 msgstr "아트워크"
 
@@ -624,54 +624,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "백슬래시"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "다른 프로그램..."
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "프로그램을 온라인으로 찾는데 실패했습니다."
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "프로그램 온라인으로 찾기"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "프로그램을 실행할 수 없습니다"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "'%s' 프로그램을 찾을 수 없습니다"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "프로그램을 찾을 수 없습니다"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\" 파일을 여는데 사용할 프로그램 선택"
 
-#: ../gtk/gtkappchooserdialog.c:364 ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\" 파일을 여는데 사용 가능한 프로그램이 없습니다"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "\"%s\" 파일에 사용할 프로그램을 선택하십시오"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "\"%s\" 파일을 여는데 사용 가능한 프로그램이 없습니다"
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -679,32 +679,32 @@ msgstr ""
 "다른 옵션을 보려면 \"다른 프로그램 표시\"를 누르고, 새 프로그램을 설치하려면 "
 "\"프로그램 온라인으로 찾기\"를 누르십시오."
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "연관성 지우기"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "다른 프로그램 표시"
 
-#: ../gtk/gtkappchooserdialog.c:540 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "선택(_S)"
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "기본 프로그램"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "추천 프로그램"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "관련 프로그램"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "다른 프로그램"
 
@@ -1130,7 +1130,7 @@ msgstr "바탕 화면"
 msgid "(None)"
 msgstr "(없음)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "기타..."
 
@@ -1200,7 +1200,7 @@ msgstr "%s %s"
 msgid "Search"
 msgstr "검색"
 
-#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4953
+#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4991
 msgid "Recently Used"
 msgstr "최근 사용"
 
@@ -1259,148 +1259,152 @@ msgstr "위치(_P)"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "선택한 폴더를 책갈피에 추가합니다"
 
-#: ../gtk/gtkfilechooserdefault.c:3925
+#: ../gtk/gtkfilechooserdefault.c:3946
 msgid "Could not select file"
 msgstr "파일을 선택할 수 없습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:4117
+#: ../gtk/gtkfilechooserdefault.c:4171
+msgid "_Visit this file"
+msgstr "이 파일 보기(_V)"
+
+#: ../gtk/gtkfilechooserdefault.c:4174
 msgid "_Copy file's location"
 msgstr "파일 위치 복사(_C)"
 
-#: ../gtk/gtkfilechooserdefault.c:4126
+#: ../gtk/gtkfilechooserdefault.c:4177
 msgid "_Add to Bookmarks"
 msgstr "책갈피에 추가(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4139
+#: ../gtk/gtkfilechooserdefault.c:4184
 msgid "Show _Hidden Files"
 msgstr "숨긴 파일 표시(_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4146
+#: ../gtk/gtkfilechooserdefault.c:4187
 msgid "Show _Size Column"
 msgstr "크기 열 표시(_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4374
+#: ../gtk/gtkfilechooserdefault.c:4412
 msgid "Files"
 msgstr "파일"
 
-#: ../gtk/gtkfilechooserdefault.c:4425
+#: ../gtk/gtkfilechooserdefault.c:4463
 msgid "Name"
 msgstr "이름"
 
-#: ../gtk/gtkfilechooserdefault.c:4448
+#: ../gtk/gtkfilechooserdefault.c:4486
 msgid "Size"
 msgstr "크기"
 
-#: ../gtk/gtkfilechooserdefault.c:4462
+#: ../gtk/gtkfilechooserdefault.c:4500
 msgid "Modified"
 msgstr "수정"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4557 ../gtk/gtkprinteroptionwidget.c:799
+#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "이름(_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4791
+#: ../gtk/gtkfilechooserdefault.c:4829
 msgid "Type a file name"
 msgstr "파일 이름을 입력하십시오"
 
-#: ../gtk/gtkfilechooserdefault.c:4838 ../gtk/gtkfilechooserdefault.c:4849
+#: ../gtk/gtkfilechooserdefault.c:4876 ../gtk/gtkfilechooserdefault.c:4887
 msgid "Please select a folder below"
 msgstr "아래에서 폴더를 선택하십시오"
 
-#: ../gtk/gtkfilechooserdefault.c:4844
+#: ../gtk/gtkfilechooserdefault.c:4882
 msgid "Please type a file name"
 msgstr "파일 이름을 입력하십시오"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4915
+#: ../gtk/gtkfilechooserdefault.c:4953
 msgid "Create Fo_lder"
 msgstr "폴더 만들기(_L)"
 
-#: ../gtk/gtkfilechooserdefault.c:4963
+#: ../gtk/gtkfilechooserdefault.c:5001
 msgid "Search:"
 msgstr "검색:"
 
-#: ../gtk/gtkfilechooserdefault.c:5014
+#: ../gtk/gtkfilechooserdefault.c:5052
 msgid "_Location:"
 msgstr "위치(_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5465
+#: ../gtk/gtkfilechooserdefault.c:5503
 msgid "Save in _folder:"
 msgstr "폴더에 저장(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:5467
+#: ../gtk/gtkfilechooserdefault.c:5505
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:6561
+#: ../gtk/gtkfilechooserdefault.c:6599
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s의 내용을 읽을 수 없습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:6565
+#: ../gtk/gtkfilechooserdefault.c:6603
 msgid "Could not read the contents of the folder"
 msgstr "폴더의 내용을 읽을 수 없습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:6658 ../gtk/gtkfilechooserdefault.c:6726
-#: ../gtk/gtkfilechooserdefault.c:6878
+#: ../gtk/gtkfilechooserdefault.c:6696 ../gtk/gtkfilechooserdefault.c:6764
+#: ../gtk/gtkfilechooserdefault.c:6916
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: ../gtk/gtkfilechooserdefault.c:6673
+#: ../gtk/gtkfilechooserdefault.c:6711
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6675
+#: ../gtk/gtkfilechooserdefault.c:6713
 msgid "Yesterday at %H:%M"
 msgstr "어제 %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7350
+#: ../gtk/gtkfilechooserdefault.c:7388
 msgid "Cannot change to folder because it is not local"
 msgstr "로컬 폴더가 아니므로 폴더로 이동할 수 없습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:7950 ../gtk/gtkfilechooserdefault.c:7971
+#: ../gtk/gtkfilechooserdefault.c:7988 ../gtk/gtkfilechooserdefault.c:8009
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s 바로 가기가 이미 있습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:8061
+#: ../gtk/gtkfilechooserdefault.c:8099
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:8307 ../gtk/gtkprintunixdialog.c:550
+#: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "이름이 \"%s\"인 파일이 이미 있습니다.  이 파일을 바꾸시겠습니까?"
 
-#: ../gtk/gtkfilechooserdefault.c:8310 ../gtk/gtkprintunixdialog.c:554
+#: ../gtk/gtkfilechooserdefault.c:8348 ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" 안에 파일이 이미 있습니다.  파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
-#: ../gtk/gtkfilechooserdefault.c:8315 ../gtk/gtkprintunixdialog.c:561
+#: ../gtk/gtkfilechooserdefault.c:8353 ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9121
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "Could not start the search process"
 msgstr "검색 작업을 시작할 수 없습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:9122
+#: ../gtk/gtkfilechooserdefault.c:9161
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "프로그램이 인덱스 데몬에 연결할 수 없습니다. 데몬이 실행 중인지 확인하십시오."
 
-#: ../gtk/gtkfilechooserdefault.c:9136
+#: ../gtk/gtkfilechooserdefault.c:9175
 msgid "Could not send the search request"
 msgstr "검색 요청을 보낼 수 없습니다"
 
-#: ../gtk/gtkfilechooserdefault.c:9737
+#: ../gtk/gtkfilechooserdefault.c:9776
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
@@ -1408,7 +1412,7 @@ msgstr "%s을(를) 마운트할 수 없습니다"
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "올바르지 않은 경로"
@@ -1473,27 +1477,34 @@ msgstr "경로가 없습니다"
 msgid "File System"
 msgstr "파일시스템"
 
-#: ../gtk/gtkfontbutton.c:152 ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "글꼴 고르기"
-
 # 한글 글꼴은 그냥 fontconfig에 의존하도록 한다
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "글꼴 고르기"
+
+#: ../gtk/gtkfontbutton.c:1126
 msgid "Font"
 msgstr "글꼴"
 
-#: ../gtk/gtkfontchooser.c:667
+#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
+msgid "Font Selection"
+msgstr "글꼴 선택"
+
+#: ../gtk/gtkfontchooserwidget.c:115
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr "조건에 맞는 글꼴이 없습니다. 검색 조건을 바꿔서 다시 시도해 보십시오."
+
+#: ../gtk/gtkfontchooserwidget.c:595
 msgid "Search font name"
 msgstr "글꼴 이름 검색"
 
-#: ../gtk/gtkfontchooserdialog.c:147 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "글꼴 선택"
+#: ../gtk/gtkfontchooserwidget.c:868
+msgid "Font Family"
+msgstr "글꼴 패밀리"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1557,11 +1568,11 @@ msgstr "링크 열기(_O)"
 msgid "Copy _Link Address"
 msgstr "링크 주소 복사(_L)"
 
-#: ../gtk/gtklinkbutton.c:484
+#: ../gtk/gtklinkbutton.c:494
 msgid "Copy URL"
 msgstr "URL 복사"
 
-#: ../gtk/gtklinkbutton.c:647
+#: ../gtk/gtklinkbutton.c:657
 msgid "Invalid URI"
 msgstr "올바르지 않은 URI"
 
@@ -1788,15 +1799,15 @@ msgstr "방향(_O):"
 msgid "Page Setup"
 msgstr "페이지 설정"
 
-#: ../gtk/gtkpathbar.c:156
+#: ../gtk/gtkpathbar.c:158
 msgid "Up Path"
 msgstr "위 경로"
 
-#: ../gtk/gtkpathbar.c:158
+#: ../gtk/gtkpathbar.c:160
 msgid "Down Path"
 msgstr "아래 경로"
 
-#: ../gtk/gtkpathbar.c:1516
+#: ../gtk/gtkpathbar.c:1616
 msgid "File System Root"
 msgstr "파일 시스템 루트"
 
