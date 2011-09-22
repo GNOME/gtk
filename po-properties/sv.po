@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-12 20:57+0200\n"
-"PO-Revision-Date: 2011-09-12 21:07+0100\n"
+"POT-Creation-Date: 2011-09-22 16:36+0200\n"
+"PO-Revision-Date: 2011-09-22 16:36+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -864,7 +864,7 @@ msgstr "Om SANT kommer barnet inte att vara ämnat för homogena storlekar"
 #: ../gtk/gtkbox.c:241
 #: ../gtk/gtkcellareabox.c:317
 #: ../gtk/gtkexpander.c:314
-#: ../gtk/gtkiconview.c:643
+#: ../gtk/gtkiconview.c:645
 #: ../gtk/gtktreeviewcolumn.c:283
 msgid "Spacing"
 msgstr "Utrymme"
@@ -1744,17 +1744,20 @@ msgstr "Huruvida texten kan ändras av användaren"
 
 #: ../gtk/gtkcellrenderertext.c:357
 #: ../gtk/gtkcellrenderertext.c:365
+#: ../gtk/gtkfontchooser.c:67
 #: ../gtk/gtktexttag.c:294
 #: ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Typsnitt"
 
 #: ../gtk/gtkcellrenderertext.c:358
+#: ../gtk/gtkfontchooser.c:68
 #: ../gtk/gtktexttag.c:295
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Typsnittsbeskrivning som en sträng, t.ex. \"Sans Italic 12\""
 
 #: ../gtk/gtkcellrenderertext.c:366
+#: ../gtk/gtkfontchooser.c:81
 #: ../gtk/gtktexttag.c:303
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Typsnittsbeskrivning som en PangoFontDescription-struct"
@@ -2128,7 +2131,7 @@ msgstr "Modellen för cellvisning"
 #: ../gtk/gtkcellview.c:246
 #: ../gtk/gtkcombobox.c:950
 #: ../gtk/gtkentrycompletion.c:448
-#: ../gtk/gtkiconview.c:768
+#: ../gtk/gtkiconview.c:770
 #: ../gtk/gtktreemenu.c:329
 #: ../gtk/gtktreeviewcolumn.c:427
 msgid "Cell Area"
@@ -2137,7 +2140,7 @@ msgstr "Cellområde"
 #: ../gtk/gtkcellview.c:247
 #: ../gtk/gtkcombobox.c:951
 #: ../gtk/gtkentrycompletion.c:449
-#: ../gtk/gtkiconview.c:769
+#: ../gtk/gtkiconview.c:771
 #: ../gtk/gtktreemenu.c:330
 #: ../gtk/gtktreeviewcolumn.c:428
 msgid "The GtkCellArea used to layout cells"
@@ -2213,7 +2216,7 @@ msgstr "Huruvida färgen ska ges ett alfavärde"
 
 #: ../gtk/gtkcolorbutton.c:185
 #: ../gtk/gtkfilechooserbutton.c:440
-#: ../gtk/gtkfontbutton.c:150
+#: ../gtk/gtkfontbutton.c:435
 #: ../gtk/gtkprintjob.c:141
 #: ../gtk/gtkstatusicon.c:438
 #: ../gtk/gtktreeviewcolumn.c:331
@@ -2910,7 +2913,7 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minsta längd på söknyckeln för att hitta träffar"
 
 #: ../gtk/gtkentrycompletion.c:344
-#: ../gtk/gtkiconview.c:564
+#: ../gtk/gtkiconview.c:566
 msgid "Text column"
 msgstr "Textkolumn"
 
@@ -3170,78 +3173,80 @@ msgstr "Y-position"
 msgid "Y position of child widget"
 msgstr "Y-position på barnwidgeten"
 
-#: ../gtk/gtkfontbutton.c:151
+#: ../gtk/gtkfontbutton.c:436
 msgid "The title of the font chooser dialog"
 msgstr "Titeln på typsnittsväljardialogen"
 
-#: ../gtk/gtkfontbutton.c:166
-#: ../gtk/gtkfontchooser.c:186
+#: ../gtk/gtkfontbutton.c:451
 #: ../gtk/gtkfontsel.c:244
 msgid "Font name"
 msgstr "Typsnittsnamn"
 
-#: ../gtk/gtkfontbutton.c:167
+#: ../gtk/gtkfontbutton.c:452
 msgid "The name of the selected font"
 msgstr "Namnet på det valda typsnittet"
 
-#: ../gtk/gtkfontbutton.c:168
+#: ../gtk/gtkfontbutton.c:453
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:183
+#: ../gtk/gtkfontbutton.c:468
 msgid "Use font in label"
 msgstr "Använd typsnitt i etikett"
 
-#: ../gtk/gtkfontbutton.c:184
+#: ../gtk/gtkfontbutton.c:469
 msgid "Whether the label is drawn in the selected font"
 msgstr "Huruvida etiketten ritas med det valda typsnittet"
 
-#: ../gtk/gtkfontbutton.c:199
+#: ../gtk/gtkfontbutton.c:484
 msgid "Use size in label"
 msgstr "Använd storlek i etikett"
 
-#: ../gtk/gtkfontbutton.c:200
+#: ../gtk/gtkfontbutton.c:485
 msgid "Whether the label is drawn with the selected font size"
 msgstr "Huruvida etiketten ritas med den valda typsnittsstorleken"
 
-#: ../gtk/gtkfontbutton.c:216
+#: ../gtk/gtkfontbutton.c:501
 msgid "Show style"
 msgstr "Visa stil"
 
-#: ../gtk/gtkfontbutton.c:217
+#: ../gtk/gtkfontbutton.c:502
 msgid "Whether the selected font style is shown in the label"
 msgstr "Huruvida den valda typsnittsstilen visas i etiketten"
 
-#: ../gtk/gtkfontbutton.c:232
+#: ../gtk/gtkfontbutton.c:517
 msgid "Show size"
 msgstr "Visa storlek"
 
-#: ../gtk/gtkfontbutton.c:233
+#: ../gtk/gtkfontbutton.c:518
 msgid "Whether selected font size is shown in the label"
 msgstr "Huruvida den valda typsnittsstorleken visas i etiketten"
 
-#: ../gtk/gtkfontchooser.c:187
-#: ../gtk/gtkfontsel.c:245
-msgid "The string that represents this font"
-msgstr "Strängen som representerar detta typsnitt"
+#: ../gtk/gtkfontchooser.c:80
+msgid "Font description"
+msgstr "Typsnittsbeskrivning"
 
-#: ../gtk/gtkfontchooser.c:193
+#: ../gtk/gtkfontchooser.c:93
 #: ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Förhandsvisningstext"
 
-#: ../gtk/gtkfontchooser.c:194
+#: ../gtk/gtkfontchooser.c:94
 #: ../gtk/gtkfontsel.c:252
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Den text som ska visas för att demonstrera det valda typsnittet"
 
-#: ../gtk/gtkfontchooser.c:201
+#: ../gtk/gtkfontchooser.c:106
 msgid "Show preview text entry"
 msgstr "Visa förhandsvisningstext"
 
-#: ../gtk/gtkfontchooser.c:202
+#: ../gtk/gtkfontchooser.c:107
 msgid "Whether the preview text entry is shown or not"
 msgstr "Huruvida förhandsvisningstexten visas eller inte"
+
+#: ../gtk/gtkfontsel.c:245
+msgid "The string that represents this font"
+msgstr "Strängen som representerar detta typsnitt"
 
 #: ../gtk/gtkframe.c:172
 msgid "Text of the frame's label"
@@ -3386,136 +3391,136 @@ msgstr "Barn frånkopplat"
 msgid "A boolean value indicating whether the handlebox's child is attached or detached."
 msgstr "Ett booleskt värde som indikerar huruvida handlebox:ens barn är fäst eller frånkopplat."
 
-#: ../gtk/gtkiconview.c:527
+#: ../gtk/gtkiconview.c:529
 #: ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Markeringsläge"
 
-#: ../gtk/gtkiconview.c:528
+#: ../gtk/gtkiconview.c:530
 msgid "The selection mode"
 msgstr "Markeringsläget"
 
-#: ../gtk/gtkiconview.c:546
+#: ../gtk/gtkiconview.c:548
 msgid "Pixbuf column"
 msgstr "Pixbufkolumn"
 
-#: ../gtk/gtkiconview.c:547
+#: ../gtk/gtkiconview.c:549
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modellkolumn som används för att hämta ikonpixbufen från"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:567
 msgid "Model column used to retrieve the text from"
 msgstr "Modellkolumn som används för att hämta texten från"
 
-#: ../gtk/gtkiconview.c:584
+#: ../gtk/gtkiconview.c:586
 msgid "Markup column"
 msgstr "Markupkolumn"
 
-#: ../gtk/gtkiconview.c:585
+#: ../gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Modellkolumn som används för att hämta texten om Pango-markup används"
 
-#: ../gtk/gtkiconview.c:592
+#: ../gtk/gtkiconview.c:594
 msgid "Icon View Model"
 msgstr "Ikonvymodell"
 
-#: ../gtk/gtkiconview.c:593
+#: ../gtk/gtkiconview.c:595
 msgid "The model for the icon view"
 msgstr "Modellen för ikonvyn"
 
-#: ../gtk/gtkiconview.c:609
+#: ../gtk/gtkiconview.c:611
 msgid "Number of columns"
 msgstr "Antal kolumner"
 
-#: ../gtk/gtkiconview.c:610
+#: ../gtk/gtkiconview.c:612
 msgid "Number of columns to display"
 msgstr "Antalet kolumner att visa"
 
-#: ../gtk/gtkiconview.c:627
+#: ../gtk/gtkiconview.c:629
 msgid "Width for each item"
 msgstr "Bredd på varje objekt"
 
-#: ../gtk/gtkiconview.c:628
+#: ../gtk/gtkiconview.c:630
 msgid "The width used for each item"
 msgstr "Bredden som används på varje objekt"
 
-#: ../gtk/gtkiconview.c:644
+#: ../gtk/gtkiconview.c:646
 msgid "Space which is inserted between cells of an item"
 msgstr "Utrymme som infogas mellan cellerna i ett objekt"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:661
 msgid "Row Spacing"
 msgstr "Radutrymme"
 
-#: ../gtk/gtkiconview.c:660
+#: ../gtk/gtkiconview.c:662
 msgid "Space which is inserted between grid rows"
 msgstr "Utrymme som infogas mellan rader i rutnät"
 
-#: ../gtk/gtkiconview.c:675
+#: ../gtk/gtkiconview.c:677
 msgid "Column Spacing"
 msgstr "Kolumnutrymme"
 
-#: ../gtk/gtkiconview.c:676
+#: ../gtk/gtkiconview.c:678
 msgid "Space which is inserted between grid columns"
 msgstr "Utrymme som infogas mellan kolumner i rutnät"
 
-#: ../gtk/gtkiconview.c:691
+#: ../gtk/gtkiconview.c:693
 msgid "Margin"
 msgstr "Marginal"
 
-#: ../gtk/gtkiconview.c:692
+#: ../gtk/gtkiconview.c:694
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Utrymme som infogas vid kanterna på ikonvyn"
 
-#: ../gtk/gtkiconview.c:707
+#: ../gtk/gtkiconview.c:709
 msgid "Item Orientation"
 msgstr "Objektorientering"
 
-#: ../gtk/gtkiconview.c:708
+#: ../gtk/gtkiconview.c:710
 msgid "How the text and icon of each item are positioned relative to each other"
 msgstr "Hur texten och ikonen för varje objekt positioneras relativt varandra"
 
-#: ../gtk/gtkiconview.c:724
+#: ../gtk/gtkiconview.c:726
 #: ../gtk/gtktreeview.c:1021
 #: ../gtk/gtktreeviewcolumn.c:374
 msgid "Reorderable"
 msgstr "Omarrangeringsbar"
 
-#: ../gtk/gtkiconview.c:725
+#: ../gtk/gtkiconview.c:727
 #: ../gtk/gtktreeview.c:1022
 msgid "View is reorderable"
 msgstr "Vyn är omarrangeringsbar"
 
-#: ../gtk/gtkiconview.c:732
+#: ../gtk/gtkiconview.c:734
 #: ../gtk/gtktreeview.c:1172
 msgid "Tooltip Column"
 msgstr "Verktygstipskolumn"
 
-#: ../gtk/gtkiconview.c:733
+#: ../gtk/gtkiconview.c:735
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Kolumnen för modellen som innehåller verktygstipstexterna för objekten"
 
-#: ../gtk/gtkiconview.c:750
+#: ../gtk/gtkiconview.c:752
 msgid "Item Padding"
 msgstr "Objektutfyllnad"
 
-#: ../gtk/gtkiconview.c:751
+#: ../gtk/gtkiconview.c:753
 msgid "Padding around icon view items"
 msgstr "Utfyllnad runt objekt i ikonvy"
 
-#: ../gtk/gtkiconview.c:782
+#: ../gtk/gtkiconview.c:784
 msgid "Selection Box Color"
 msgstr "Färg på markeringsruta"
 
-#: ../gtk/gtkiconview.c:783
+#: ../gtk/gtkiconview.c:785
 msgid "Color of the selection box"
 msgstr "Färgen på markeringsrutan"
 
-#: ../gtk/gtkiconview.c:789
+#: ../gtk/gtkiconview.c:791
 msgid "Selection Box Alpha"
 msgstr "Alfavärde för markeringsrutan"
 
-#: ../gtk/gtkiconview.c:790
+#: ../gtk/gtkiconview.c:792
 msgid "Opacity of the selection box"
 msgstr "Opakhet för markeringsrutan"
 
@@ -3758,19 +3763,19 @@ msgstr "Bredden på layouten"
 msgid "The height of the layout"
 msgstr "Höjden på layouten"
 
-#: ../gtk/gtklinkbutton.c:173
+#: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:174
+#: ../gtk/gtklinkbutton.c:176
 msgid "The URI bound to this button"
 msgstr "Den URI som bundits till denna knapp"
 
-#: ../gtk/gtklinkbutton.c:188
+#: ../gtk/gtklinkbutton.c:190
 msgid "Visited"
 msgstr "Besökt"
 
-#: ../gtk/gtklinkbutton.c:189
+#: ../gtk/gtklinkbutton.c:191
 msgid "Whether this link has been visited."
 msgstr "Huruvida denna länk har besökts."
 
