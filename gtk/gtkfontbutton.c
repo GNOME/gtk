@@ -1168,21 +1168,16 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
 
   g_assert (priv->font_desc != NULL);
 
-  if (priv->show_style &&
-      priv->font_family != NULL &&
-      priv->font_face != NULL &&
-      g_ascii_strcasecmp (pango_font_face_get_face_name (priv->font_face), "Regular") != 0)
+  if (priv->show_style)
     {
-      family_style = g_strdup_printf ("%s %s",
-                                      pango_font_family_get_name (priv->font_family),
-                                      pango_font_face_get_face_name (priv->font_face));
-  
+      PangoFontDescription *desc = pango_font_description_copy_static (priv->font_desc);
 
+      pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+      family_style = pango_font_description_to_string (desc);
+      pango_font_description_free (desc);
     }
-  else if (priv->font_family != NULL)
-    family_style = g_strdup (pango_font_family_get_name (priv->font_family));
   else
-    family_style = g_strdup ("");
+    family_style = g_strdup (pango_font_description_get_family (priv->font_desc));
 
   gtk_label_set_text (GTK_LABEL (font_button->priv->font_label), family_style);
   g_free (family_style);
