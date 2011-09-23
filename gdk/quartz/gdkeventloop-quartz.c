@@ -632,7 +632,7 @@ gdk_event_check (GSource *source)
 
   GDK_THREADS_ENTER ();
 
-`/* Refresh the autorelease pool if we're at the base CFRunLoop level
+/* Refresh the autorelease pool if we're at the base CFRunLoop level
   * (indicated by current_loop_level) and the base g_main_loop level
   * (indicated by g_main_depth()). Messing with the autorelease pool at
   * any level of nesting can cause access to deallocated memory because
