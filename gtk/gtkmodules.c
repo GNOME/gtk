@@ -295,7 +295,9 @@ load_module (GSList      *module_list,
 	      info->ref_count++;
 	      
 	      success = TRUE;
+              break;
 	    }
+          info = NULL;
 	}
 
       if (!success)
