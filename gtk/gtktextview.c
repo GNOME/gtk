@@ -5324,7 +5324,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       old_xpos = priv->xoffset;
       old_ypos = priv->yoffset;
       gtk_text_view_move_viewport (text_view, scroll_step, count);
-      if ((old_xpos != priv->xoffset || old_ypos != priv->yoffset) &&
+      if ((old_xpos == priv->xoffset && old_ypos == priv->yoffset) &&
           leave_direction != -1 &&
           !gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
