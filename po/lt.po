@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-02 15:30+0000\n"
-"PO-Revision-Date: 2011-09-04 18:34+0300\n"
+"POT-Creation-Date: 2011-09-23 11:45+0000\n"
+"PO-Revision-Date: 2011-09-24 00:28+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -482,55 +482,55 @@ msgstr "Perjungia tarp įjungimo ir išjungimo būsenų"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:102
+#: ../gtk/gtkaboutdialog.c:106
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>"
 msgstr "Ši programa teikia BE JOKIOS GARANTIJOS; daugiau informacijos rasite <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:344
+#: ../gtk/gtkaboutdialog.c:348
 msgid "License"
 msgstr "Licencija"
 
-#: ../gtk/gtkaboutdialog.c:345
+#: ../gtk/gtkaboutdialog.c:349
 msgid "The license of the program"
 msgstr "Programos licencija"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:737
+#: ../gtk/gtkaboutdialog.c:741
 msgid "C_redits"
 msgstr "_Padėkos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:750
+#: ../gtk/gtkaboutdialog.c:754
 msgid "_License"
 msgstr "_Licencija"
 
-#: ../gtk/gtkaboutdialog.c:955
+#: ../gtk/gtkaboutdialog.c:959
 msgid "Could not show link"
 msgstr "Nepavyko parodyti nuorodos"
 
-#: ../gtk/gtkaboutdialog.c:992
+#: ../gtk/gtkaboutdialog.c:996
 msgid "Homepage"
 msgstr "Namų tinklapis"
 
-#: ../gtk/gtkaboutdialog.c:1046
+#: ../gtk/gtkaboutdialog.c:1050
 #, c-format
 msgid "About %s"
 msgstr "Apie %s"
 
-#: ../gtk/gtkaboutdialog.c:2372
+#: ../gtk/gtkaboutdialog.c:2376
 msgid "Created by"
 msgstr "Autoriai"
 
-#: ../gtk/gtkaboutdialog.c:2375
+#: ../gtk/gtkaboutdialog.c:2379
 msgid "Documented by"
 msgstr "Dokumentavo"
 
-#: ../gtk/gtkaboutdialog.c:2385
+#: ../gtk/gtkaboutdialog.c:2389
 msgid "Translated by"
 msgstr "Išvertė"
 
-#: ../gtk/gtkaboutdialog.c:2390
+#: ../gtk/gtkaboutdialog.c:2394
 msgid "Artwork by"
 msgstr "Apipavidalino"
 
@@ -604,85 +604,85 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:270
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application..."
 msgstr "Kita programa..."
 
-#: ../gtk/gtkappchooserdialog.c:130
+#: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
 msgstr "Nepavyko rasti programų internete"
 
-#: ../gtk/gtkappchooserdialog.c:171
+#: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
 msgstr "Ieškoti programų internete"
 
-#: ../gtk/gtkappchooserdialog.c:227
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Could not run application"
 msgstr "Nepavyko paleisti programos"
 
-#: ../gtk/gtkappchooserdialog.c:240
+#: ../gtk/gtkappchooserdialog.c:243
 #, c-format
 msgid "Could not find '%s'"
 msgstr "Nepavyko rasti „%s“"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:246
 msgid "Could not find application"
 msgstr "Nepavyko rasti programos"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:363
+#: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Pasirinkite programą atverti „%s“"
 
-#: ../gtk/gtkappchooserdialog.c:364
-#: ../gtk/gtkappchooserwidget.c:643
+#: ../gtk/gtkappchooserdialog.c:367
+#: ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Nera programų „%s“ atverimui"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:370
+#: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Pasirinkite programą „%s“ failams"
 
-#: ../gtk/gtkappchooserdialog.c:372
+#: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Nėra programų „%s“ failams atverti"
 
-#: ../gtk/gtkappchooserdialog.c:388
+#: ../gtk/gtkappchooserdialog.c:391
 msgid "Click \"Show other applications\", for more options, or \"Find applications online\" to install a new application"
 msgstr "Spauskite „Rodyti kitas programas“, jei norite daugiau parinkčių, arba „Ieškoti programų internete“ naujų programų įdiegimui"
 
-#: ../gtk/gtkappchooserdialog.c:458
+#: ../gtk/gtkappchooserdialog.c:461
 msgid "Forget association"
 msgstr "Pamiršti susiejimą"
 
-#: ../gtk/gtkappchooserdialog.c:524
+#: ../gtk/gtkappchooserdialog.c:527
 msgid "Show other applications"
 msgstr "Rodyti kitas programas"
 
-#: ../gtk/gtkappchooserdialog.c:540
+#: ../gtk/gtkappchooserdialog.c:543
 #: ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:138
+#: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "Pa_sirinkti"
 
-#: ../gtk/gtkappchooserwidget.c:592
+#: ../gtk/gtkappchooserwidget.c:605
 msgid "Default Application"
 msgstr "Numatytoji programa"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:743
 msgid "Recommended Applications"
 msgstr "Rekomenduojama programa"
 
-#: ../gtk/gtkappchooserwidget.c:745
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Related Applications"
 msgstr "Susijusios programos"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:772
 msgid "Other Applications"
 msgstr "Kitos programos"
 
@@ -854,7 +854,6 @@ msgid "Position on the color wheel."
 msgstr "Vieta spalvų rate."
 
 #: ../gtk/gtkcolorsel.c:454
-#| msgid "_Saturation:"
 msgid "S_aturation:"
 msgstr "Sodrum_as:"
 
@@ -1090,7 +1089,7 @@ msgstr "Darbastalis"
 msgid "(None)"
 msgstr "(Joks)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
+#: ../gtk/gtkfilechooserbutton.c:2047
 msgid "Other..."
 msgstr "Kita…"
 
@@ -1153,7 +1152,7 @@ msgid "Search"
 msgstr "Paieška"
 
 #: ../gtk/gtkfilechooserdefault.c:1762
-#: ../gtk/gtkfilechooserdefault.c:4953
+#: ../gtk/gtkfilechooserdefault.c:4991
 msgid "Recently Used"
 msgstr "Vėliausiai naudotieji"
 
@@ -1213,151 +1212,154 @@ msgstr "_Vietos"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Įdėti pažymėtą aplanką į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:3925
+#: ../gtk/gtkfilechooserdefault.c:3946
 msgid "Could not select file"
 msgstr "Failo pasirinkti nepavyko"
 
-#: ../gtk/gtkfilechooserdefault.c:4117
-#| msgid "Copy _Location"
+#: ../gtk/gtkfilechooserdefault.c:4171
+msgid "_Visit this file"
+msgstr "_Aplankyti šį failą"
+
+#: ../gtk/gtkfilechooserdefault.c:4174
 msgid "_Copy file's location"
 msgstr "_Kopijuoti failo vietą"
 
-#: ../gtk/gtkfilechooserdefault.c:4126
+#: ../gtk/gtkfilechooserdefault.c:4177
 msgid "_Add to Bookmarks"
 msgstr "Į_dėti į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:4139
+#: ../gtk/gtkfilechooserdefault.c:4184
 msgid "Show _Hidden Files"
 msgstr "Rod_yti paslėptus failus"
 
-#: ../gtk/gtkfilechooserdefault.c:4146
+#: ../gtk/gtkfilechooserdefault.c:4187
 msgid "Show _Size Column"
 msgstr "Rodydi _dydžio stulpelį"
 
-#: ../gtk/gtkfilechooserdefault.c:4374
+#: ../gtk/gtkfilechooserdefault.c:4412
 msgid "Files"
 msgstr "Failai"
 
-#: ../gtk/gtkfilechooserdefault.c:4425
+#: ../gtk/gtkfilechooserdefault.c:4463
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: ../gtk/gtkfilechooserdefault.c:4448
+#: ../gtk/gtkfilechooserdefault.c:4486
 msgid "Size"
 msgstr "Dydis"
 
-#: ../gtk/gtkfilechooserdefault.c:4462
+#: ../gtk/gtkfilechooserdefault.c:4500
 msgid "Modified"
 msgstr "Pakeista"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4557
+#: ../gtk/gtkfilechooserdefault.c:4595
 #: ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "_Pavadinimas:"
 
-#: ../gtk/gtkfilechooserdefault.c:4791
+#: ../gtk/gtkfilechooserdefault.c:4829
 msgid "Type a file name"
 msgstr "Įveskite failo pavadinimą"
 
-#: ../gtk/gtkfilechooserdefault.c:4838
-#: ../gtk/gtkfilechooserdefault.c:4849
+#: ../gtk/gtkfilechooserdefault.c:4876
+#: ../gtk/gtkfilechooserdefault.c:4887
 msgid "Please select a folder below"
 msgstr "Pasirinkite aplanką žemiau"
 
-#: ../gtk/gtkfilechooserdefault.c:4844
+#: ../gtk/gtkfilechooserdefault.c:4882
 msgid "Please type a file name"
 msgstr "Įveskite failo pavadinimą"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4915
+#: ../gtk/gtkfilechooserdefault.c:4953
 msgid "Create Fo_lder"
 msgstr "Sukurti ap_lanką"
 
-#: ../gtk/gtkfilechooserdefault.c:4963
+#: ../gtk/gtkfilechooserdefault.c:5001
 msgid "Search:"
 msgstr "Ieškoti:"
 
-#: ../gtk/gtkfilechooserdefault.c:5014
+#: ../gtk/gtkfilechooserdefault.c:5052
 msgid "_Location:"
 msgstr "Vi_eta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5465
+#: ../gtk/gtkfilechooserdefault.c:5503
 msgid "Save in _folder:"
 msgstr "Išsaugoti _aplanke:"
 
-#: ../gtk/gtkfilechooserdefault.c:5467
+#: ../gtk/gtkfilechooserdefault.c:5505
 msgid "Create in _folder:"
 msgstr "Sukurti _aplanke:"
 
-#: ../gtk/gtkfilechooserdefault.c:6561
+#: ../gtk/gtkfilechooserdefault.c:6599
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nepavyko perskaityti %s turinio"
 
-#: ../gtk/gtkfilechooserdefault.c:6565
+#: ../gtk/gtkfilechooserdefault.c:6603
 msgid "Could not read the contents of the folder"
 msgstr "Nepavyko perskaityti aplanko turinio"
 
-#: ../gtk/gtkfilechooserdefault.c:6658
-#: ../gtk/gtkfilechooserdefault.c:6726
-#: ../gtk/gtkfilechooserdefault.c:6878
+#: ../gtk/gtkfilechooserdefault.c:6696
+#: ../gtk/gtkfilechooserdefault.c:6764
+#: ../gtk/gtkfilechooserdefault.c:6916
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: ../gtk/gtkfilechooserdefault.c:6673
+#: ../gtk/gtkfilechooserdefault.c:6711
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6675
+#: ../gtk/gtkfilechooserdefault.c:6713
 msgid "Yesterday at %H:%M"
 msgstr "Vakar %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7350
+#: ../gtk/gtkfilechooserdefault.c:7388
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: ../gtk/gtkfilechooserdefault.c:7950
-#: ../gtk/gtkfilechooserdefault.c:7971
+#: ../gtk/gtkfilechooserdefault.c:7988
+#: ../gtk/gtkfilechooserdefault.c:8009
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Nuoroda %s jau egzistuoja"
 
-#: ../gtk/gtkfilechooserdefault.c:8061
+#: ../gtk/gtkfilechooserdefault.c:8099
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nuoroda %s neegzistuoja"
 
-#: ../gtk/gtkfilechooserdefault.c:8307
+#: ../gtk/gtkfilechooserdefault.c:8345
 #: ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Failas pavadinimu „%s“ jau egzistuoja. Ar norite jį perrašyti?"
 
-#: ../gtk/gtkfilechooserdefault.c:8310
+#: ../gtk/gtkfilechooserdefault.c:8348
 #: ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Failas vietoje „%s“ jau egzistuoja. Pakeitus jį, jo turinys bus perrašytas."
 
-#: ../gtk/gtkfilechooserdefault.c:8315
+#: ../gtk/gtkfilechooserdefault.c:8353
 #: ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "_Pakeisti"
 
-#: ../gtk/gtkfilechooserdefault.c:9121
+#: ../gtk/gtkfilechooserdefault.c:9160
 msgid "Could not start the search process"
 msgstr "Nepavyko paleisti paieškos proceso"
 
-#: ../gtk/gtkfilechooserdefault.c:9122
+#: ../gtk/gtkfilechooserdefault.c:9161
 msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr "Programai nepavyko sukurti ryšio su indeksavimo posisteme. Įsitikinkite, kad ji veikia."
 
-#: ../gtk/gtkfilechooserdefault.c:9136
+#: ../gtk/gtkfilechooserdefault.c:9175
 msgid "Could not send the search request"
 msgstr "Nepavyko išsiųsti paieškos užklausos"
 
-#: ../gtk/gtkfilechooserdefault.c:9737
+#: ../gtk/gtkfilechooserdefault.c:9776
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepavyko prijungti %s"
@@ -1366,7 +1368,7 @@ msgstr "Nepavyko prijungti %s"
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:702
 #: ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:721
+#: ../gtk/gtkfilesystem.c:726
 #, c-format
 msgid "Invalid path"
 msgstr "Netinkamas kelias"
@@ -1432,28 +1434,36 @@ msgstr "Tokio kelio nėra"
 msgid "File System"
 msgstr "Failų sistema"
 
-#: ../gtk/gtkfontbutton.c:152
-#: ../gtk/gtkfontbutton.c:276
-msgid "Pick a Font"
-msgstr "Pasirinkite šriftą"
-
-#. Initialize fields
-#: ../gtk/gtkfontbutton.c:270
+#: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:787
+#: ../gtk/gtkfontbutton.c:437
+#: ../gtk/gtkfontbutton.c:564
+msgid "Pick a Font"
+msgstr "Pasirinkite šriftą"
+
+#: ../gtk/gtkfontbutton.c:1122
 msgid "Font"
 msgstr "Šriftas"
 
-#: ../gtk/gtkfontchooser.c:667
-msgid "Search font name"
-msgstr "Ieškoti šrifto pavadinimo"
-
-#: ../gtk/gtkfontchooserdialog.c:147
+#: ../gtk/gtkfontchooserdialog.c:185
 #: ../gtk/gtkfontsel.c:1738
 msgid "Font Selection"
 msgstr "Šrifto pasirinkimas"
+
+#: ../gtk/gtkfontchooserwidget.c:113
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr "Joks šriftas neatitiko jūsų paieškos. Galite peržiūrėti paiešką ir bandyti vėl."
+
+#: ../gtk/gtkfontchooserwidget.c:611
+msgid "Search font name"
+msgstr "Ieškoti šrifto pavadinimo"
+
+#: ../gtk/gtkfontchooserwidget.c:947
+#| msgid "_Family:"
+msgid "Font Family"
+msgstr "Šriftų šeima"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1517,11 +1527,11 @@ msgstr "_Atverti nuorodą"
 msgid "Copy _Link Address"
 msgstr "Kopijuoti _nuorodos adresą"
 
-#: ../gtk/gtklinkbutton.c:484
+#: ../gtk/gtklinkbutton.c:494
 msgid "Copy URL"
 msgstr "Kopijuoti URL"
 
-#: ../gtk/gtklinkbutton.c:647
+#: ../gtk/gtklinkbutton.c:657
 msgid "Invalid URI"
 msgstr "Netinkamas URI"
 
@@ -1659,27 +1669,27 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "Nepavyko užbaigti (kill) proceso su PID %d. Operacija nerealizuota."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:959
+#: ../gtk/gtkmountoperation-x11.c:960
 msgid "Terminal Pager"
 msgstr "Terminalo puslapiavimo programa"
 
-#: ../gtk/gtkmountoperation-x11.c:960
+#: ../gtk/gtkmountoperation-x11.c:961
 msgid "Top Command"
 msgstr "Viršutinė komanda"
 
-#: ../gtk/gtkmountoperation-x11.c:961
+#: ../gtk/gtkmountoperation-x11.c:962
 msgid "Bourne Again Shell"
 msgstr "Bourne Again aplinka"
 
-#: ../gtk/gtkmountoperation-x11.c:962
+#: ../gtk/gtkmountoperation-x11.c:963
 msgid "Bourne Shell"
 msgstr "Bourne aplinka"
 
-#: ../gtk/gtkmountoperation-x11.c:963
+#: ../gtk/gtkmountoperation-x11.c:964
 msgid "Z Shell"
 msgstr "Z aplinka"
 
-#: ../gtk/gtkmountoperation-x11.c:1060
+#: ../gtk/gtkmountoperation-x11.c:1061
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nepavyko užbaigti proceso su PID %d: %s"
@@ -1751,15 +1761,15 @@ msgstr "_Orientacija:"
 msgid "Page Setup"
 msgstr "Puslapio sąranka"
 
-#: ../gtk/gtkpathbar.c:156
+#: ../gtk/gtkpathbar.c:158
 msgid "Up Path"
 msgstr "Aukštyn keliu"
 
-#: ../gtk/gtkpathbar.c:158
+#: ../gtk/gtkpathbar.c:160
 msgid "Down Path"
 msgstr "Žemyn keliu"
 
-#: ../gtk/gtkpathbar.c:1516
+#: ../gtk/gtkpathbar.c:1616
 msgid "File System Root"
 msgstr "Failų sistemos šakninis aplankas"
 
