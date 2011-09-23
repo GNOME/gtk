@@ -426,7 +426,7 @@ gdk_quartz_draw_opaque_stippled_pattern (void         *info,
   CGContextFillRect (context, rect);
 
   CGContextClipToMask (context, rect, pattern_image);
-  color = _gdk_quartz_colormap_get_cgcolor_from_pixel (info,
+  color = _gdk_quartz_colormap_get_cgcolor_from_pixel (pinfo->drawable,
                                                        _gdk_gc_get_fg_pixel (gc));
   CGContextSetFillColorWithColor (context, color);
   CGColorRelease (color);
