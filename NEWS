@@ -1,3 +1,36 @@
+Overview of Changes in GTK+ 3.2
+===============================
+
+* GtkFontChooser:
+ - More speed ups. The font chooser will now load
+   instanteously, even if you have thousands of fonts
+
+* Bug fixes
+ 659826 new broadband connection weirdness in assistant
+ 659966 Fix module blacklisting
+        Assertion in the treeview accessible code
+        Fix erroneous beeping in textview keynav
+
+* Translation updates
+ Assamese
+ Basque
+ Brazilian Portuguese
+ French
+ Galician
+ German
+ Hungarian
+ Korean
+ Latvian
+ Lithuanian
+ Oriya
+ Polish
+ Portuguese
+ Russian
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.1.92
 ==================================
 
