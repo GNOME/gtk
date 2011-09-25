@@ -1777,6 +1777,9 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
 static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
+  NSPasteboard *pasteboard;
+  NSAutoreleasePool *pool;
+
   if (info->icon_pixbuf)
     g_object_unref (info->icon_pixbuf);
 
@@ -1791,10 +1794,21 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 
   gtk_target_list_unref (info->target_list);
 
+  pool = [[NSAutoreleasePool alloc] init];
+
+  /* Empty the pasteboard, so that it will not accidentally access
+   * info->context after it has been destroyed.
+   */
+  pasteboard = [NSPasteboard pasteboardWithName: NSDragPboard];
+  [pasteboard declareTypes: nil owner: nil];
+
+  [pool relase];
+
   gtk_drag_clear_source_info (info->context);
   g_object_unref (info->context);
 
   g_free (info);
+  info = NULL;
 }
 
 static gboolean
