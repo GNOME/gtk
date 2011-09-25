@@ -1100,6 +1100,13 @@ gtk_drag_begin_idle (gpointer arg)
 
   return FALSE;
 }
+/* Fake protocol to let us call GdkNSView gdkWindow without including
+ * gdk/GdkNSView.h (which we can't because it pulls in the internal-only
+ * gdkwindow.h).
+ */
+@protocol GdkNSView
+- (GdkWindow *)gdkWindow;
+@end
 
 static GdkDragContext *
 gtk_drag_begin_internal (GtkWidget         *widget,
@@ -1110,14 +1117,47 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 			 GdkEvent          *event)
 {
   GtkDragSourceInfo *info;
-  GdkDragContext *context;
   GdkDevice *pointer;
-  NSWindow *nswindow;
+  GdkWindow *window;
+  GdkDragContext *context = gdk_drag_begin (gtk_widget_get_window (widget),
+					    NULL);
+  NSWindow *nswindow = get_toplevel_nswindow (widget);
+  NSPoint point = {0, 0};
+  gdouble x, y;
+  double time = (double)g_get_real_time ();
+  NSEvent *nsevent;
+  NSTimeInterval nstime;
 
-  context = gdk_drag_begin (gtk_widget_get_window (widget), NULL);
+  if (event)
+    {
+      if (gdk_event_get_coords (event, &x, &y))
+        {
+          point.x = x;
+          point.y = y;
+        }
+      time = (double)gdk_event_get_time (event);
+    }
+  nstime = [[NSDate dateWithTimeIntervalSince1970: time / 1000] timeIntervalSinceReferenceDate];
+  nsevent = [NSEvent mouseEventWithType: NSLeftMouseDown
+        	      location: point
+		      modifierFlags: 0
+	              timestamp: nstime
+		      windowNumber: [nswindow windowNumber]
+		      context: [nswindow graphicsContext]
+		      eventNumber: 0
+		      clickCount: 1
+	              pressure: 0.0 ];
+
+  window = [(id<GdkNSView>)[nswindow contentView] gdkWindow];
+  g_return_val_if_fail(nsevent != NULL, NULL);
+
+  context = gdk_drag_begin (window, NULL);
+  g_return_val_if_fail( context != NULL, NULL);
 
   info = gtk_drag_get_source_info (context, TRUE);
-  
+  info->nsevent = nsevent;
+  [info->nsevent retain];
+
   info->source_widget = g_object_ref (widget);
   info->widget = g_object_ref (widget);
   info->target_list = target_list;
@@ -1159,10 +1199,6 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	    break;
 	  }
     }
-
-  nswindow = get_toplevel_nswindow (widget);
-  info->nsevent = [nswindow currentEvent];
-  [info->nsevent retain];
 
   /* drag will begin in an idle handler to avoid nested run loops */
 
@@ -1802,7 +1838,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   pasteboard = [NSPasteboard pasteboardWithName: NSDragPboard];
   [pasteboard declareTypes: nil owner: nil];
 
-  [pool relase];
+  [pool release];
 
   gtk_drag_clear_source_info (info->context);
   g_object_unref (info->context);
