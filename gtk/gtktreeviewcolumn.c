@@ -3095,6 +3095,9 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
 
   priv = tree_column->priv;
 
+  if (! gtk_cell_area_has_renderer (priv->cell_area, cell_renderer))
+    return FALSE;
+
   gtk_tree_view_get_background_area (GTK_TREE_VIEW (priv->tree_view),
                                      NULL, tree_column, &cell_area);
 
