@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 22:14+0300\n"
-"PO-Revision-Date: 2011-09-17 22:13+0300\n"
+"POT-Creation-Date: 2011-09-25 14:53+0300\n"
+"PO-Revision-Date: 2011-09-25 14:53+0300\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "Language: bg\n"
@@ -1752,8 +1752,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Дали текстът може да бъде модифициран от потребителя"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
-#: ../gtk/gtkfontchooser.c:67 ../gtk/gtkfontchooser.c:80
-#: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Шрифт"
 
@@ -3203,6 +3202,10 @@ msgstr "Показване на размер"
 #: ../gtk/gtkfontbutton.c:518
 msgid "Whether selected font size is shown in the label"
 msgstr "Дали избраният размер на шрифта да се изпише в етикета"
+
+#: ../gtk/gtkfontchooser.c:80
+msgid "Font description"
+msgstr "Описание на шрифт"
 
 #: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
