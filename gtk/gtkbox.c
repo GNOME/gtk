@@ -861,18 +861,24 @@ count_widget_position (GtkWidget *widget,
     count->before++;
 }
 
-static guint
-gtk_box_get_visible_position (GtkBox *box,
+static gint
+gtk_box_get_visible_position (GtkBox    *box,
                               GtkWidget *child)
 {
   CountingData count = { child, FALSE, 0, 0 };
 
-  /* forall iterates in visible order */
-  gtk_container_forall (GTK_CONTAINER (box),
-                        count_widget_position,
-                        &count);
+  /* foreach iterates in visible order */
+  gtk_container_foreach (GTK_CONTAINER (box),
+                         count_widget_position,
+                         &count);
 
-  g_assert (count.found);
+  /* the child wasn't found, it's likely an internal child of some
+   * subclass, return -1 to indicate that there is no sibling relation
+   * to the regular box children
+   */
+  if (!count.found)
+    return -1;
+
   if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
       gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
     return count.after;
@@ -896,6 +902,8 @@ gtk_box_get_path_for_child (GtkContainer *container,
 
   if (gtk_widget_get_visible (child))
     {
+      gint position;
+
       sibling_path = gtk_widget_path_new ();
 
       /* get_children works in visible order */
@@ -911,13 +919,17 @@ gtk_box_get_path_for_child (GtkContainer *container,
 
           gtk_widget_path_append_for_widget (sibling_path, list->data);
         }
-        g_list_free (children);
 
-        gtk_widget_path_append_with_siblings (path,
-                                              sibling_path,
-                                              gtk_box_get_visible_position (box,
-                                                                            child));
-        gtk_widget_path_unref (sibling_path);
+      g_list_free (children);
+
+      position = gtk_box_get_visible_position (box, child);
+
+      if (position >= 0)
+        gtk_widget_path_append_with_siblings (path, sibling_path, position);
+      else
+        gtk_widget_path_append_for_widget (path, child);
+
+      gtk_widget_path_unref (sibling_path);
     }
   else
     gtk_widget_path_append_for_widget (path, child);
