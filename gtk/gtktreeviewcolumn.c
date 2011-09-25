@@ -3109,13 +3109,8 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
                                      &allocation);
 
   if (x_offset)
-    {
-      GdkRectangle button_allocation;
+    *x_offset = allocation.x - cell_area.x;
 
-      /* Retrieve column offset */
-      gtk_widget_get_allocation (priv->button, &button_allocation);
-      *x_offset = allocation.x - button_allocation.x;
-    }
   if (width)
     *width = allocation.width;
 
