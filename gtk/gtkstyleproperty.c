@@ -2551,12 +2551,18 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL);
-
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("background-color",
-                                                              "Background color",
-                                                              "Background color",
-                                                              GDK_TYPE_RGBA, 0));
+  _gtk_style_property_register           (g_param_spec_boxed ("background-color",
+                                          "Background color",
+                                          "Background color",
+                                          GDK_TYPE_RGBA, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL);
 
   _gtk_style_property_register           (g_param_spec_boxed ("font-family",
                                                               "Font family",
