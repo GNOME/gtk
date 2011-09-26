@@ -8,6 +8,7 @@ Overview of Changes in GTK+ 3.2
 * Bug fixes
  659826 new broadband connection weirdness in assistant
  659966 Fix module blacklisting
+ 640741 Fix return value fo gtk_tree_view_column_cell_get_position
         Assertion in the treeview accessible code
         Fix erroneous beeping in textview keynav
 
@@ -15,10 +16,15 @@ Overview of Changes in GTK+ 3.2
  Assamese
  Basque
  Brazilian Portuguese
+ Bulgarian
+ Catalan
+ Czech
+ Danish
  French
  Galician
  German
  Hungarian
+ Japanese
  Korean
  Latvian
  Lithuanian
@@ -29,6 +35,7 @@ Overview of Changes in GTK+ 3.2
  Slovenian
  Spanish
  Swedish
+ Telugu
 
 
 Overview of Changes in GTK+ 3.1.92
