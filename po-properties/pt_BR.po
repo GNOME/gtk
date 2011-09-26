@@ -325,7 +325,7 @@ msgstr "Rótulo curto"
 #: ../gtk/gtkaction.c:259
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr ""
-"Um rótulo mais curto que pode ser usada em botões de barras de ferramentas."
+"Um rótulo mais curto que pode ser usado em botões de barras de ferramentas."
 
 #: ../gtk/gtkaction.c:267
 msgid "Tooltip"
@@ -636,7 +636,7 @@ msgstr "Mostrar item padrão"
 
 #: ../gtk/gtkappchooserbutton.c:634
 msgid "Whether the combobox should show the default application on top"
-msgstr "Se o combobox deve mostrar o aplicativo padrão no topo"
+msgstr "Se a caixa de combinação deve mostrar o aplicativo padrão no topo"
 
 #: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:725
 msgid "Heading"
@@ -754,11 +754,11 @@ msgstr "Alinhamento y do filho"
 
 #: ../gtk/gtkaspectframe.c:123
 msgid "Ratio"
-msgstr "Taxa"
+msgstr "Proporção"
 
 #: ../gtk/gtkaspectframe.c:124
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "Taxa de proporção se \"Obedecer ao filho\" for FALSO"
+msgstr "Proporção de tela se \"Obedecer ao filho\" for FALSO"
 
 #: ../gtk/gtkaspectframe.c:130
 msgid "Obey child"
@@ -766,7 +766,7 @@ msgstr "Obedecer ao filho"
 
 #: ../gtk/gtkaspectframe.c:131
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr "Força taxa de proporção a acompanhar à do filho dentro da moldura"
+msgstr "Força a proporção de tela a acompanhar à do filho dentro da moldura"
 
 #: ../gtk/gtkassistant.c:310
 msgid "Header Padding"
@@ -888,7 +888,7 @@ msgstr "Não-homogêneo"
 #: ../gtk/gtkbbox.c:213
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr ""
-"Se VERDADEIRO o filho pode ser reduzido para um tamanho menor do que sua "
+"Se VERDADEIRO, o filho pode ser reduzido para um tamanho menor do que sua "
 "requisição"
 
 #: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:317 ../gtk/gtkexpander.c:314
@@ -972,7 +972,8 @@ msgstr "O domínio de tradução usado pelo gettext"
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr "Texto do rótulo dentro do botão, se o botão contiver um rótulo"
+msgstr "Texto do rótulo dentro do botão, se o botão contiver um rótulo de "
+"widget"
 
 #: ../gtk/gtkbutton.c:235 ../gtk/gtkexpander.c:298 ../gtk/gtklabel.c:750
 #: ../gtk/gtkmenuitem.c:398 ../gtk/gtktoolbutton.c:238
@@ -1546,7 +1547,7 @@ msgstr "Seguir estado"
 
 #: ../gtk/gtkcellrendererpixbuf.c:217
 msgid "Whether the rendered pixbuf should be colorized according to the state"
-msgstr "Se o pixbuf desenhado deve ser colorizado de acordo com o estado"
+msgstr "Se o pixbuf desenhado deve ser colorido de acordo com o estado"
 
 #: ../gtk/gtkcellrendererpixbuf.c:234 ../gtk/gtkimage.c:329
 #: ../gtk/gtkwindow.c:703
@@ -1624,7 +1625,7 @@ msgstr "Taxa de aumento"
 
 #: ../gtk/gtkcellrendererspin.c:130 ../gtk/gtkspinbutton.c:332
 msgid "The acceleration rate when you hold down a button"
-msgstr "O taxa de aceleração quando você mantém um botão pressionado"
+msgstr "O taxa de aceleração quando você obtém um botão pressionado"
 
 #: ../gtk/gtkcellrendererspin.c:143 ../gtk/gtkscale.c:254
 #: ../gtk/gtkspinbutton.c:341
