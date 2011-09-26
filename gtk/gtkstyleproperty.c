@@ -1662,9 +1662,9 @@ border_radius_value_print (const GValue *value,
 }
 
 static gboolean 
-border_color_value_parse (GtkCssParser *parser,
-                          GFile        *base,
-                          GValue       *value)
+transparent_color_value_parse (GtkCssParser *parser,
+                               GFile        *base,
+                               GValue       *value)
 {
   if (_gtk_css_parser_try (parser, "transparent", TRUE))
     {
@@ -2569,7 +2569,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          transparent_color_value_parse,
                                           NULL,
                                           background_color_default_value,
                                           NULL);
@@ -2854,7 +2854,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          border_color_value_parse,
+                                          transparent_color_value_parse,
                                           NULL,
                                           border_color_default_value,
                                           NULL);
@@ -2866,7 +2866,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          border_color_value_parse,
+                                          transparent_color_value_parse,
                                           NULL,
                                           border_color_default_value,
                                           NULL);
@@ -2878,7 +2878,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          border_color_value_parse,
+                                          transparent_color_value_parse,
                                           NULL,
                                           border_color_default_value,
                                           NULL);
@@ -2890,7 +2890,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          border_color_value_parse,
+                                          transparent_color_value_parse,
                                           NULL,
                                           border_color_default_value,
                                           NULL);
