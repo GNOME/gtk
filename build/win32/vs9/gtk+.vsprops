@@ -4,7 +4,7 @@
 	Version="8.00"
 	Name="gtk+props"
 	OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin"
-	IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj"
+	IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj\$(ProjectName)"
 	>
 	<Tool
 		Name="VCCLCompilerTool"

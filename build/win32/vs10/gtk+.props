@@ -562,10 +562,9 @@ copy $(Configuration)\$(Platform)\bin\*-$(GtkApiVersion).lib $(CopyDir)\lib
     <GtkDllSuffix>$(GtkSeparateVS10DllSuffix)</GtkDllSuffix>
   </PropertyGroup>
   <PropertyGroup>
-    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <_PropertySheetDisplayName>gtk+props</_PropertySheetDisplayName>
     <OutDir>$(SolutionDir)$(Configuration)\$(PlatformName)\bin\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)\$(PlatformName)\obj\</IntDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(PlatformName)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
