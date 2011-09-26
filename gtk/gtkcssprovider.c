@@ -974,32 +974,6 @@ struct _GtkCssProviderPrivate
   GArray *rulesets;
 };
 
-enum ParserScope {
-  SCOPE_SELECTOR,
-  SCOPE_PSEUDO_CLASS,
-  SCOPE_NTH_CHILD,
-  SCOPE_DECLARATION,
-  SCOPE_VALUE,
-  SCOPE_BINDING_SET
-};
-
-/* Extend GtkStateType, since these
- * values are also used as symbols
- */
-enum ParserSymbol {
-  /* Scope: pseudo-class */
-  SYMBOL_NTH_CHILD = GTK_STATE_FOCUSED + 1,
-  SYMBOL_FIRST_CHILD,
-  SYMBOL_LAST_CHILD,
-  SYMBOL_SORTED_CHILD,
-
-  /* Scope: nth-child */
-  SYMBOL_NTH_CHILD_EVEN,
-  SYMBOL_NTH_CHILD_ODD,
-  SYMBOL_NTH_CHILD_FIRST,
-  SYMBOL_NTH_CHILD_LAST
-};
-
 enum {
   PARSING_ERROR,
   LAST_SIGNAL
