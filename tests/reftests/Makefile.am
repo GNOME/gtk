@@ -29,6 +29,9 @@ EXTRA_DIST += \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
+	background-color-transparent.css \
+	background-color-transparent.ref.ui \
+	background-color-transparent.ui \
 	border-color-default.css \
 	border-color-default.ref.ui \
 	border-color-default.ui \
