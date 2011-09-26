@@ -244,7 +244,6 @@ enum {
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
 
-#define BONUS_PADDING 4
 #define SCROLL_TIME  100
 
 /* common */
