@@ -2157,6 +2157,16 @@ border_image_width_default_value (GtkStyleProperties *props,
 }
 
 static void
+background_color_default_value (GtkStyleProperties *props,
+                                GtkStateFlags       state,
+                                GValue             *value)
+{
+  GdkRGBA transparent_black = { 0, 0, 0, 0 };
+
+  g_value_set_boxed (value, &transparent_black);
+}
+
+static void
 border_color_default_value (GtkStyleProperties *props,
                             GtkStateFlags       state,
                             GValue             *value)
@@ -2561,7 +2571,7 @@ gtk_style_property_init (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          background_color_default_value,
                                           NULL);
 
   _gtk_style_property_register           (g_param_spec_boxed ("font-family",
