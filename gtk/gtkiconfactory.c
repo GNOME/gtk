@@ -1166,10 +1166,11 @@ gtk_icon_size_from_name (const gchar *name)
 /**
  * gtk_icon_size_get_name:
  * @size: (type int): a #GtkIconSize.
- * @returns: the name of the given icon size.
  *
  * Gets the canonical name of the given icon size. The returned string
  * is statically allocated and should not be freed.
+ *
+ * Returns: the name of the given icon size.
  */
 const gchar*
 gtk_icon_size_get_name (GtkIconSize  size)

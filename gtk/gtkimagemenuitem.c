@@ -774,10 +774,11 @@ gtk_image_menu_item_sync_action_properties (GtkActivatable *activatable,
 
 /**
  * gtk_image_menu_item_new:
- * @returns: a new #GtkImageMenuItem.
  *
  * Creates a new #GtkImageMenuItem with an empty label.
- **/
+ *
+ * Returns: a new #GtkImageMenuItem
+ */
 GtkWidget*
 gtk_image_menu_item_new (void)
 {
@@ -787,9 +788,10 @@ gtk_image_menu_item_new (void)
 /**
  * gtk_image_menu_item_new_with_label:
  * @label: the text of the menu item.
- * @returns: a new #GtkImageMenuItem.
  *
  * Creates a new #GtkImageMenuItem containing a label.
+ *
+ * Returns: a new #GtkImageMenuItem.
  */
 GtkWidget*
 gtk_image_menu_item_new_with_label (const gchar *label)
@@ -799,16 +801,16 @@ gtk_image_menu_item_new_with_label (const gchar *label)
                        NULL);
 }
 
-
 /**
  * gtk_image_menu_item_new_with_mnemonic:
  * @label: the text of the menu item, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkImageMenuItem
  *
  * Creates a new #GtkImageMenuItem containing a label. The label
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the menu item.
+ *
+ * Returns: a new #GtkImageMenuItem
  */
 GtkWidget*
 gtk_image_menu_item_new_with_mnemonic (const gchar *label)
@@ -824,7 +826,6 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
  * @stock_id: the name of the stock item.
  * @accel_group: (allow-none): the #GtkAccelGroup to add the menu items
  *   accelerator to, or %NULL.
- * @returns: a new #GtkImageMenuItem.
  *
  * Creates a new #GtkImageMenuItem containing the image and text from a
  * stock item. Some stock ids have preprocessor macros like #GTK_STOCK_OK
@@ -835,6 +836,8 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
  * appropriate path for the menu item, use gtk_stock_lookup() to look up the
  * standard accelerator for the stock item, and if one is found, call
  * gtk_accel_map_add_entry() to register it.
+ *
+ * Returns: a new #GtkImageMenuItem.
  */
 GtkWidget*
 gtk_image_menu_item_new_from_stock (const gchar   *stock_id,

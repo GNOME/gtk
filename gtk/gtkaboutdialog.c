@@ -2483,7 +2483,7 @@ close_cb (GtkAboutDialog *about)
  * gtk_show_about_dialog:
  * @parent: (allow-none): transient parent, or %NULL for none
  * @first_property_name: the name of the first property
- * @Varargs: value of first property, followed by more properties, %NULL-terminated
+ * @...: value of first property, followed by more properties, %NULL-terminated
  *
  * This is a convenience function for showing an application's about box.
  * The constructed dialog is associated with the parent window and

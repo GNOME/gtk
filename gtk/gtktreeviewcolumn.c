@@ -1643,12 +1643,12 @@ gtk_tree_view_column_new_with_area (GtkCellArea *area)
 
 /**
  * gtk_tree_view_column_new_with_attributes:
- * @title: The title to set the header to.
- * @cell: The #GtkCellRenderer.
- * @Varargs: A %NULL-terminated list of attributes.
- * 
- * Creates a new #GtkTreeViewColumn with a number of default values.  This is
- * equivalent to calling gtk_tree_view_column_set_title(),
+ * @title: The title to set the header to
+ * @cell: The #GtkCellRenderer
+ * @...: A %NULL-terminated list of attributes
+ *
+ * Creates a new #GtkTreeViewColumn with a number of default values.
+ * This is equivalent to calling gtk_tree_view_column_set_title(),
  * gtk_tree_view_column_pack_start(), and
  * gtk_tree_view_column_set_attributes() on the newly created #GtkTreeViewColumn.
  *
@@ -1787,15 +1787,15 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_set_attributes:
- * @tree_column: A #GtkTreeViewColumn.
+ * @tree_column: A #GtkTreeViewColumn
  * @cell_renderer: the #GtkCellRenderer we're setting the attributes of
- * @Varargs: A %NULL-terminated list of attributes.
- * 
+ * @...: A %NULL-terminated list of attributes
+ *
  * Sets the attributes in the list as the attributes of @tree_column.
  * The attributes should be in attribute/column order, as in
  * gtk_tree_view_column_add_attribute(). All existing attributes
  * are removed, and replaced with the new attributes.
- **/
+ */
 void
 gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
 				     GtkCellRenderer   *cell_renderer,

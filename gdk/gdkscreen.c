@@ -287,12 +287,13 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
  * gdk_screen_get_monitor_at_window:
  * @screen: a #GdkScreen.
  * @window: a #GdkWindow
- * @returns: the monitor number in which most of @window is located,
- *           or if @window does not intersect any monitors, a monitor,
- *           close to @window.
  *
- * Returns the number of the monitor in which the largest area of the 
+ * Returns the number of the monitor in which the largest area of the
  * bounding rectangle of @window resides.
+ *
+ * Returns: the monitor number in which most of @window is located,
+ *     or if @window does not intersect any monitors, a monitor,
+ *     close to @window.
  *
  * Since: 2.2
  **/

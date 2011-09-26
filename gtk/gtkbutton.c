@@ -1135,14 +1135,15 @@ gtk_button_new_from_stock (const gchar *stock_id)
  * gtk_button_new_with_mnemonic:
  * @label: The text of the button, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkButton
  *
  * Creates a new #GtkButton containing a label.
  * If characters in @label are preceded by an underscore, they are underlined.
- * If you need a literal underscore character in a label, use '__' (two 
- * underscores). The first underlined character represents a keyboard 
+ * If you need a literal underscore character in a label, use '__' (two
+ * underscores). The first underlined character represents a keyboard
  * accelerator called a mnemonic.
  * Pressing Alt and that key activates the button.
+ *
+ * Returns: a new #GtkButton
  **/
 GtkWidget*
 gtk_button_new_with_mnemonic (const gchar *label)

@@ -1145,8 +1145,8 @@ gtk_container_child_set_property (GtkContainer *container,
  * @container: a #GtkContainer
  * @widget: a widget to be placed inside @container
  * @first_prop_name: the name of the first child property to set
- * @Varargs: a %NULL-terminated list of property names and values, starting
- *           with @first_prop_name
+ * @...: a %NULL-terminated list of property names and values, starting
+ *     with @first_prop_name
  *
  * Adds @widget to @container, setting child properties at the same time.
  * See gtk_container_add() and gtk_container_child_set() for more details.
@@ -1185,8 +1185,8 @@ gtk_container_add_with_properties (GtkContainer *container,
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
  * @first_prop_name: the name of the first property to set
- * @Varargs: a %NULL-terminated list of property names and values, starting
- *           with @first_prop_name
+ * @...: a %NULL-terminated list of property names and values, starting
+ *     with @first_prop_name
  *
  * Sets one or more child properties for @child and @container.
  */
@@ -1208,11 +1208,11 @@ gtk_container_child_set (GtkContainer      *container,
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
  * @first_prop_name: the name of the first property to get
- * @Varargs: return location for the first property, followed
+ * @...: return location for the first property, followed
  *     optionally by more name/return location pairs, followed by %NULL
  *
  * Gets the values of one or more child properties for @child and @container.
- **/
+ */
 void
 gtk_container_child_get (GtkContainer      *container,
                          GtkWidget         *child,
@@ -1267,10 +1267,11 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  * gtk_container_class_find_child_property:
  * @cclass: (type GtkContainerClass): a #GtkContainerClass
  * @property_name: the name of the child property to find
- * @returns: (transfer none): the #GParamSpec of the child property or
- *           %NULL if @class has no child property with that name.
  *
  * Finds a child property of a container class by name.
+ *
+ * Returns: (transfer none): the #GParamSpec of the child property
+ *     or %NULL if @class has no child property with that name.
  */
 GParamSpec*
 gtk_container_class_find_child_property (GObjectClass *cclass,
@@ -1289,11 +1290,12 @@ gtk_container_class_find_child_property (GObjectClass *cclass,
  * gtk_container_class_list_child_properties:
  * @cclass: (type GtkContainerClass): a #GtkContainerClass
  * @n_properties: location to return the number of child properties found
- * @returns: (array length=n_properties) (transfer container): a newly
- *           allocated %NULL-terminated array of #GParamSpec*.  The
- *           array must be freed with g_free().
  *
  * Returns all child properties of a container class.
+ *
+ * Returns: (array length=n_properties) (transfer container):
+ *     a newly allocated %NULL-terminated array of #GParamSpec*.
+ *     The array must be freed with g_free().
  */
 GParamSpec**
 gtk_container_class_list_child_properties (GObjectClass *cclass,

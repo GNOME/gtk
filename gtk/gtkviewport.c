@@ -252,13 +252,13 @@ gtk_viewport_init (GtkViewport *viewport)
 
 /**
  * gtk_viewport_new:
- * @hadjustment: horizontal adjustment.
- * @vadjustment: vertical adjustment.
- * @returns: a new #GtkViewport.
+ * @hadjustment: horizontal adjustment
+ * @vadjustment: vertical adjustment
  *
  * Creates a new #GtkViewport with the given adjustments.
  *
- **/
+ * Returns: a new #GtkViewport
+ */
 GtkWidget*
 gtk_viewport_new (GtkAdjustment *hadjustment,
 		  GtkAdjustment *vadjustment)

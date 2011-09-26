@@ -449,7 +449,7 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
  * gtk_cell_layout_set_attributes:
  * @cell_layout: a #GtkCellLayout
  * @cell: a #GtkCellRenderer
- * @Varargs: a %NULL-terminated list of attributes
+ * @...: a %NULL-terminated list of attributes
  *
  * Sets the attributes in list as the attributes of @cell_layout.
  *

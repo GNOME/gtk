@@ -3656,8 +3656,8 @@ gtk_widget_thaw_child_notify (GtkWidget *widget)
  * gtk_widget_new:
  * @type: type ID of the widget to create
  * @first_property_name: name of first property to set
- * @Varargs: value of first property, followed by more properties,
- *           %NULL-terminated
+ * @...: value of first property, followed by more properties,
+ *     %NULL-terminated
  *
  * This is a convenience function for creating a widget and setting
  * its properties in one go. For example you might write:
@@ -5406,10 +5406,11 @@ gtk_widget_add_accelerator (GtkWidget      *widget,
  * @accel_group:  accel group for this widget
  * @accel_key:    GDK keyval of the accelerator
  * @accel_mods:   modifier key combination of the accelerator
- * @returns:      whether an accelerator was installed and could be removed
  *
  * Removes an accelerator from @widget, previously installed with
  * gtk_widget_add_accelerator().
+ *
+ * Returns: whether an accelerator was installed and could be removed
  */
 gboolean
 gtk_widget_remove_accelerator (GtkWidget      *widget,
@@ -6342,16 +6343,16 @@ gtk_widget_intersect (GtkWidget	         *widget,
  *          @widget->allocation. That is, relative to @widget->window
  *          for %NO_WINDOW widgets; relative to the parent window
  *          of @widget->window for widgets with their own window.
- * @returns: A newly allocated region holding the intersection of @widget
- *           and @region. The coordinates of the return value are
- *           relative to @widget->window for %NO_WINDOW widgets, and
- *           relative to the parent window of @widget->window for
- *           widgets with their own window.
  *
  * Computes the intersection of a @widget's area and @region, returning
  * the intersection. The result may be empty, use cairo_region_is_empty() to
  * check.
- **/
+ *
+ * Returns: A newly allocated region holding the intersection of @widget
+ *     and @region. The coordinates of the return value are relative to
+ *     @widget->window for %NO_WINDOW widgets, and relative to the parent
+ *     window of @widget->window for widgets with their own window.
+ */
 cairo_region_t *
 gtk_widget_region_intersect (GtkWidget       *widget,
 			     const cairo_region_t *region)
@@ -11579,10 +11580,11 @@ gtk_widget_class_install_style_property (GtkWidgetClass *klass,
  * gtk_widget_class_find_style_property:
  * @klass: a #GtkWidgetClass
  * @property_name: the name of the style property to find
- * @returns: (transfer none): the #GParamSpec of the style property or
- *   %NULL if @class has no style property with that name.
  *
  * Finds a style property of a widget class by name.
+ *
+ * Returns: (transfer none): the #GParamSpec of the style property or
+ *   %NULL if @class has no style property with that name.
  *
  * Since: 2.2
  */
@@ -11602,11 +11604,12 @@ gtk_widget_class_find_style_property (GtkWidgetClass *klass,
  * gtk_widget_class_list_style_properties:
  * @klass: a #GtkWidgetClass
  * @n_properties: location to return the number of style properties found
- * @returns: (array length=n_properties) (transfer container): an
- *       newly allocated array of #GParamSpec*. The array must be
- *       freed with g_free().
  *
  * Returns all style properties of a widget class.
+ *
+ * Returns: (array length=n_properties) (transfer container): a
+ *     newly allocated array of #GParamSpec*. The array must be
+ *     freed with g_free().
  *
  * Since: 2.2
  */
@@ -11752,9 +11755,9 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
  * gtk_widget_style_get:
  * @widget: a #GtkWidget
  * @first_property_name: the name of the first property to get
- * @Varargs: pairs of property names and locations to
- *   return the property values, starting with the location for
- *   @first_property_name, terminated by %NULL.
+ * @...: pairs of property names and locations to return the
+ *     property values, starting with the location for
+ *     @first_property_name, terminated by %NULL.
  *
  * Gets the values of a multiple style properties of @widget.
  */
@@ -14388,7 +14391,7 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
  * Returns: the position where the data was inserted
  *
  * Since: 3.2
- **/
+ */
 gint
 gtk_widget_path_append_for_widget (GtkWidgetPath *path,
                                    GtkWidget     *widget)

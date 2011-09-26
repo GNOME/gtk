@@ -414,18 +414,18 @@ iter_is_valid (GtkTreeIter  *iter,
 /**
  * gtk_list_store_new:
  * @n_columns: number of columns in the list store
- * @Varargs: all #GType types for the columns, from first to last
+ * @...: all #GType types for the columns, from first to last
  *
  * Creates a new list store as with @n_columns columns each of the types passed
- * in.  Note that only types derived from standard GObject fundamental types 
- * are supported. 
+ * in.  Note that only types derived from standard GObject fundamental types
+ * are supported.
  *
  * As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
  * GDK_TYPE_PIXBUF);</literal> will create a new #GtkListStore with three columns, of type
  * int, string and #GdkPixbuf respectively.
  *
  * Return value: a new #GtkListStore
- **/
+ */
 GtkListStore *
 gtk_list_store_new (gint n_columns,
 		    ...)
@@ -1172,7 +1172,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
  * gtk_list_store_set:
  * @list_store: a #GtkListStore
  * @iter: row iterator
- * @Varargs: pairs of column number and value, terminated with -1
+ * @...: pairs of column number and value, terminated with -1
  *
  * Sets the value of one or more cells in the row referenced by @iter.
  * The variable argument list should contain integer column numbers,
@@ -1183,7 +1183,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
  *
  * The value will be referenced by the store if it is a %G_TYPE_OBJECT, and it
  * will be copied if it is a %G_TYPE_STRING or %G_TYPE_BOXED.
- **/
+ */
 void
 gtk_list_store_set (GtkListStore *list_store,
 		    GtkTreeIter  *iter,
@@ -2170,18 +2170,18 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
 /**
  * gtk_list_store_insert_with_values:
  * @list_store: A #GtkListStore
- * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
+ * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL
  * @position: position to insert the new row
- * @Varargs: pairs of column number and value, terminated with -1
+ * @...: pairs of column number and value, terminated with -1
  *
- * Creates a new row at @position.  @iter will be changed to point to this new
- * row.  If @position is larger than the number of rows on the list, then the
- * new row will be appended to the list. The row will be filled with the 
- * values given to this function. 
- * 
+ * Creates a new row at @position. @iter will be changed to point to this new
+ * row. If @position is larger than the number of rows on the list, then the
+ * new row will be appended to the list. The row will be filled with the
+ * values given to this function.
+ *
  * Calling
- * <literal>gtk_list_store_insert_with_values(list_store, iter, position...)</literal> 
- * has the same effect as calling 
+ * <literal>gtk_list_store_insert_with_values (list_store, iter, position...)</literal>
+ * has the same effect as calling
  * |[
  * gtk_list_store_insert (list_store, iter, position);
  * gtk_list_store_set (list_store, iter, ...);
@@ -2189,7 +2189,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * with the difference that the former will only emit a row_inserted signal,
  * while the latter will emit row_inserted, row_changed and, if the list store
  * is sorted, rows_reordered. Since emitting the rows_reordered signal
- * repeatedly can affect the performance of the program, 
+ * repeatedly can affect the performance of the program,
  * gtk_list_store_insert_with_values() should generally be preferred when
  * inserting rows in a sorted list store.
  *

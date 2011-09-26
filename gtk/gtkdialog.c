@@ -607,7 +607,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * @parent: (allow-none): Transient parent of the dialog, or %NULL
  * @flags: from #GtkDialogFlags
  * @first_button_text: (allow-none): stock ID or text to go in first button, or %NULL
- * @Varargs: response ID for first button, then additional buttons, ending with %NULL
+ * @...: response ID for first button, then additional buttons, ending with %NULL
  *
  * Creates a new #GtkDialog with title @title (or %NULL for the default
  * title; see gtk_window_set_title()) and transient parent @parent (or
@@ -641,7 +641,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * ]|
  *
  * Return value: a new #GtkDialog
- **/
+ */
 GtkWidget*
 gtk_dialog_new_with_buttons (const gchar    *title,
                              GtkWindow      *parent,
@@ -828,13 +828,13 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
  * gtk_dialog_add_buttons:
  * @dialog: a #GtkDialog
  * @first_button_text: button text or stock ID
- * @Varargs: response ID for first button, then more text-response_id pairs
+ * @...: response ID for first button, then more text-response_id pairs
  *
  * Adds more buttons, same as calling gtk_dialog_add_button()
  * repeatedly.  The variable argument list should be %NULL-terminated
  * as with gtk_dialog_new_with_buttons(). Each button must have both
  * text and response ID.
- **/
+ */
 void
 gtk_dialog_add_buttons (GtkDialog   *dialog,
                         const gchar *first_button_text,
@@ -1265,7 +1265,7 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
  * gtk_dialog_set_alternative_button_order:
  * @dialog: a #GtkDialog
  * @first_response_id: a response id used by one @dialog's buttons
- * @Varargs: a list of more response ids of @dialog's buttons, terminated by -1
+ * @...: a list of more response ids of @dialog's buttons, terminated by -1
  *
  * Sets an alternative button order. If the
  * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE,

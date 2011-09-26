@@ -831,12 +831,13 @@ _gtk_style_new_for_path (GdkScreen     *screen,
 
 /**
  * gtk_style_new:
- * @returns: a new #GtkStyle.
  *
  * Creates a new #GtkStyle.
  *
+ * Returns: a new #GtkStyle.
+ *
  * Deprecated: 3.0: Use #GtkStyleContext
- **/
+ */
 GtkStyle*
 gtk_style_new (void)
 {
@@ -1203,7 +1204,7 @@ gtk_style_get_valist (GtkStyle    *style,
  * @style: a #GtkStyle
  * @widget_type: the #GType of a descendant of #GtkWidget
  * @first_property_name: the name of the first style property to get
- * @Varargs: pairs of property names and locations to
+ * @...: pairs of property names and locations to
  *   return the property values, starting with the location for
  *   @first_property_name, terminated by %NULL.
  *
@@ -1291,9 +1292,8 @@ gtk_style_render_icon (GtkStyle            *style,
 /**
  * gtk_style_apply_default_background:
  * @style:
- * @cr: 
+ * @cr:
  * @window:
- * @set_bg:
  * @state_type:
  * @x:
  * @y:

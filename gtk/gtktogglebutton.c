@@ -309,12 +309,13 @@ gtk_toggle_button_new_with_label (const gchar *label)
  * gtk_toggle_button_new_with_mnemonic:
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkToggleButton
  *
  * Creates a new #GtkToggleButton containing a label. The label
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the button.
- **/
+ *
+ * Returns: a new #GtkToggleButton
+ */
 GtkWidget*
 gtk_toggle_button_new_with_mnemonic (const gchar *label)
 {

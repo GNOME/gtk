@@ -260,9 +260,10 @@ gtk_accel_map_add_entry (const gchar    *accel_path,
  * gtk_accel_map_lookup_entry:
  * @accel_path: a valid accelerator path
  * @key: (allow-none) (out): the accelerator key to be filled in (optional)
- * @returns:    %TRUE if @accel_path is known, %FALSE otherwise
  *
  * Looks up the accelerator entry for @accel_path and fills in @key.
+ *
+ * Returns: %TRUE if @accel_path is known, %FALSE otherwise
  */
 gboolean
 gtk_accel_map_lookup_entry (const gchar *accel_path,
@@ -485,7 +486,6 @@ internal_change_entry (const gchar    *accel_path,
  * @accel_key:   the new accelerator key
  * @accel_mods:  the new accelerator modifiers
  * @replace:     %TRUE if other accelerators may be deleted upon conflicts
- * @returns:     %TRUE if the accelerator could be changed, %FALSE otherwise
  *
  * Changes the @accel_key and @accel_mods currently associated with @accel_path.
  * Due to conflicts with other accelerators, a change may not always be possible,
@@ -493,10 +493,12 @@ internal_change_entry (const gchar    *accel_path,
  * conflicts. A change will only occur if all conflicts could be resolved (which
  * might not be the case if conflicting accelerators are locked). Successful
  * changes are indicated by a %TRUE return value.
- * 
+ *
  * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
- * pass a static string, you can save some memory by interning it first with 
+ * pass a static string, you can save some memory by interning it first with
  * g_intern_static_string().
+ *
+ * Returns: %TRUE if the accelerator could be changed, %FALSE otherwise
  */
 gboolean
 gtk_accel_map_change_entry (const gchar    *accel_path,

@@ -147,12 +147,13 @@ gtk_check_button_new_with_label (const gchar *label)
  * gtk_check_button_new_with_mnemonic:
  * @label: The text of the button, with an underscore in front of the
  *   mnemonic character
- * @returns: a new #GtkCheckButton
  *
  * Creates a new #GtkCheckButton containing a label. The label
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the check button.
- **/
+ *
+ * Returns: a new #GtkCheckButton
+ */
 GtkWidget*
 gtk_check_button_new_with_mnemonic (const gchar *label)
 {

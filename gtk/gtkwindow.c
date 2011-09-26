@@ -2075,10 +2075,11 @@ gtk_window_remove_mnemonic (GtkWindow *window,
  * gtk_window_mnemonic_activate:
  * @window: a #GtkWindow
  * @keyval: the mnemonic
- * @modifier: the modifiers 
- * @returns: %TRUE if the activation is done. 
- * 
+ * @modifier: the modifiers
+ *
  * Activates the targets associated with the mnemonic.
+ *
+ * Returns: %TRUE if the activation is done.
  */
 gboolean
 gtk_window_mnemonic_activate (GtkWindow      *window,

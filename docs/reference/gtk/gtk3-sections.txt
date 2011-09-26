@@ -903,6 +903,7 @@ gtk_container_child_get_property
 gtk_container_child_set_property
 gtk_container_child_get_valist
 gtk_container_child_set_valist
+gtk_container_child_notify
 gtk_container_forall
 gtk_container_get_border_width
 gtk_container_set_border_width

@@ -582,7 +582,7 @@ gtk_message_dialog_get_property (GObject     *object,
  * @type: type of message
  * @buttons: set of buttons to use
  * @message_format: (allow-none): printf()-style format string, or %NULL
- * @Varargs: arguments for @message_format
+ * @...: arguments for @message_format
  *
  * Creates a new message dialog, which is a simple dialog with an icon
  * indicating the dialog type (error, warning, etc.) and some text the
@@ -591,7 +591,7 @@ gtk_message_dialog_get_property (GObject     *object,
  * #GtkDialog for more details.
  *
  * Return value: (transfer none): a new #GtkMessageDialog
- **/
+ */
 GtkWidget*
 gtk_message_dialog_new (GtkWindow     *parent,
                         GtkDialogFlags flags,
@@ -640,13 +640,13 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
 /**
  * gtk_message_dialog_new_with_markup:
- * @parent: (allow-none): transient parent, or %NULL for none 
+ * @parent: (allow-none): transient parent, or %NULL for none
  * @flags: flags
  * @type: type of message
  * @buttons: set of buttons to use
  * @message_format: (allow-none): printf()-style format string, or %NULL
- * @Varargs: arguments for @message_format
- * 
+ * @...: arguments for @message_format
+ *
  * Creates a new message dialog, which is a simple dialog with an icon
  * indicating the dialog type (error, warning, etc.) and some text which
  * is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
@@ -794,16 +794,16 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
  * gtk_message_dialog_format_secondary_text:
  * @message_dialog: a #GtkMessageDialog
  * @message_format: (allow-none): printf()-style format string, or %NULL
- * @Varargs: arguments for @message_format
- * 
- * Sets the secondary text of the message dialog to be @message_format 
+ * @...: arguments for @message_format
+ *
+ * Sets the secondary text of the message dialog to be @message_format
  * (with printf()-style).
  *
  * Note that setting a secondary text makes the primary text become
  * bold, unless you have provided explicit markup.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
                                           const gchar      *message_format,
@@ -842,32 +842,32 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
 /**
  * gtk_message_dialog_format_secondary_markup:
  * @message_dialog: a #GtkMessageDialog
- * @message_format: printf()-style markup string (see 
+ * @message_format: printf()-style markup string (see
      <link linkend="PangoMarkupFormat">Pango markup format</link>), or %NULL
- * @Varargs: arguments for @message_format
- * 
- * Sets the secondary text of the message dialog to be @message_format (with 
- * printf()-style), which is marked up with the 
+ * @...: arguments for @message_format
+ *
+ * Sets the secondary text of the message dialog to be @message_format (with
+ * printf()-style), which is marked up with the
  * <link linkend="PangoMarkupFormat">Pango text markup language</link>.
  *
  * Note that setting a secondary text makes the primary text become
  * bold, unless you have provided explicit markup.
  *
  * Due to an oversight, this function does not escape special XML characters
- * like gtk_message_dialog_new_with_markup() does. Thus, if the arguments 
+ * like gtk_message_dialog_new_with_markup() does. Thus, if the arguments
  * may contain special XML characters, you should use g_markup_printf_escaped()
  * to escape it.
 
  * <informalexample><programlisting>
  * gchar *msg;
- *  
+ *
  * msg = g_markup_printf_escaped (message_format, ...);
  * gtk_message_dialog_format_secondary_markup (message_dialog, "&percnt;s", msg);
  * g_free (msg);
  * </programlisting></informalexample>
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
                                             const gchar      *message_format,

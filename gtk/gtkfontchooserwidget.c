@@ -532,6 +532,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   /* Creating fundamental widgets for the private struct */
   priv->search_entry = gtk_entry_new ();
   priv->family_face_list = gtk_tree_view_new ();
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (priv->family_face_list), FALSE);
   priv->preview = gtk_entry_new ();
   priv->size_slider = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
                                                 0.0,

@@ -1903,7 +1903,7 @@ gtk_settings_install_property (GParamSpec *pspec)
 
 /**
  * gtk_settings_install_property_parser:
- * @psepc:
+ * @pspec:
  * @parser: (scope call):
  */
 void

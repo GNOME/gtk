@@ -912,14 +912,15 @@ gtk_rc_make_default_dir (const gchar *type)
 
 /**
  * gtk_rc_get_im_module_path:
- * @returns: (type filename): a newly-allocated string containing the
- *    path in which to look for IM modules.
  *
  * Obtains the path in which to look for IM modules. See the documentation
  * of the <link linkend="im-module-path"><envar>GTK_PATH</envar></link>
  * environment variable for more details about looking up modules. This
  * function is useful solely for utilities supplied with GTK+ and should
  * not be used by applications under normal circumstances.
+ *
+ * Returns: (type filename): a newly-allocated string containing the
+ *    path in which to look for IM modules.
  *
  * Deprecated: 3.0: Use #GtkCssProvider instead.
  */
@@ -935,12 +936,13 @@ gtk_rc_get_im_module_path (void)
 
 /**
  * gtk_rc_get_im_module_file:
- * @returns: (type filename): a newly-allocated string containing the
- *    name of the file listing the IM modules available for loading
  *
  * Obtains the path to the IM modules file. See the documentation
  * of the <link linkend="im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link>
  * environment variable for more details.
+ *
+ * Returns: (type filename): a newly-allocated string containing the
+ *    name of the file listing the IM modules available for loading
  *
  * Deprecated: 3.0: Use #GtkCssProvider instead.
  */
