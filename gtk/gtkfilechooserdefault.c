@@ -3724,15 +3724,19 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 				 gpointer     data)
 {
   GtkFileChooserDefault *impl;
+  GdkModifierType no_text_input_mask;
 
   impl = (GtkFileChooserDefault *) data;
+
+  no_text_input_mask =
+    gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
   if ((event->keyval == GDK_KEY_slash
        || event->keyval == GDK_KEY_KP_Divide
 #ifdef G_OS_UNIX
        || event->keyval == GDK_KEY_asciitilde
 #endif
-       ) && !(event->state & GTK_NO_TEXT_INPUT_MOD_MASK))
+       ) && !(event->state & no_text_input_mask))
     {
       location_popup_handler (impl, event->string);
       return TRUE;

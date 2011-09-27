@@ -348,24 +348,38 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
   if (slave)
-    return gtk_im_context_filter_keypress (slave, event);
-  else if (event->type == GDK_KEY_PRESS &&
-           (event->state & GTK_NO_TEXT_INPUT_MOD_MASK) == 0)
     {
-      gunichar ch;
+      return gtk_im_context_filter_keypress (slave, event);
+    }
+  else
+    {
+      GdkDisplay *display;
+      GdkModifierType no_text_input_mask;
 
-      ch = gdk_keyval_to_unicode (event->keyval);
-      if (ch != 0 && !g_unichar_iscntrl (ch))
+      display = gdk_window_get_display (event->window);
+
+      no_text_input_mask =
+        gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                      GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+
+      if (event->type == GDK_KEY_PRESS &&
+          (event->state & no_text_input_mask) == 0)
         {
-          gint len;
-          gchar buf[10];
+          gunichar ch;
 
-          len = g_unichar_to_utf8 (ch, buf);
-          buf[len] = '\0';
+          ch = gdk_keyval_to_unicode (event->keyval);
+          if (ch != 0 && !g_unichar_iscntrl (ch))
+            {
+              gint len;
+              gchar buf[10];
 
-          g_signal_emit_by_name (multicontext, "commit", buf);
+              len = g_unichar_to_utf8 (ch, buf);
+              buf[len] = '\0';
 
-          return TRUE;
+              g_signal_emit_by_name (multicontext, "commit", buf);
+
+              return TRUE;
+            }
         }
     }
 

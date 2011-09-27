@@ -895,7 +895,16 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       (priv->in_hex_sequence && !hex_keyval &&
        !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
-      if (event->state & GTK_NO_TEXT_INPUT_MOD_MASK ||
+      GdkDisplay *display;
+      GdkModifierType no_text_input_mask;
+
+      display = gdk_window_get_display (event->window);
+
+      no_text_input_mask =
+        gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                      GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+
+      if (event->state & no_text_input_mask ||
 	  (priv->in_hex_sequence && priv->modifiers_dropped &&
 	   (event->keyval == GDK_KEY_Return ||
 	    event->keyval == GDK_KEY_ISO_Enter ||
