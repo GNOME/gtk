@@ -2008,6 +2008,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
       if (gtk_widget_get_visible (page->child))
         {
           GtkBorder tab_padding;
+          GtkStateFlags state;
 
           vis_pages++;
 
@@ -2018,10 +2019,15 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
                                          &child_requisition, NULL);
 
           /* Get border/padding for tab */
+          if (page == priv->cur_page)
+            state = GTK_STATE_FLAG_ACTIVE;
+          else
+            state = GTK_STATE_FLAG_NORMAL;
+
           gtk_style_context_save (context);
           gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
                                         _gtk_notebook_get_tab_flags (notebook, page));
-          gtk_style_context_get_padding (context, 0, &tab_padding);
+          gtk_style_context_get_padding (context, state, &tab_padding);
           gtk_style_context_restore (context);
 
           page->requisition.width = child_requisition.width +
@@ -6155,6 +6161,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   gboolean tab_allocation_changed;
   gboolean was_visible = page->tab_allocated_visible;
   GtkBorder tab_padding;
+  GtkStateFlags state;
 
   if (!page->tab_label ||
       !gtk_widget_get_visible (page->tab_label) ||
@@ -6164,13 +6171,18 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       return was_visible;
     }
 
+  if (page == priv->cur_page)
+    state = GTK_STATE_FLAG_ACTIVE;
+  else
+    state = GTK_STATE_FLAG_NORMAL;
+
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
   gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
                                 _gtk_notebook_get_tab_flags (notebook, page));
 
-  gtk_style_context_get_padding (context, 0, &tab_padding);
+  gtk_style_context_get_padding (context, state, &tab_padding);
 
   gtk_widget_get_preferred_size (page->tab_label, &tab_requisition, NULL);
   gtk_widget_style_get (widget,
