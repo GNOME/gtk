@@ -123,36 +123,32 @@ create_box_window (void)
 }
 
 static void
-create_table_window (void)
+create_grid_window (void)
 {
   GtkWidget *window;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *toggle;
   GtkWidget *alignment;
   GtkWidget *colorbox;
   GdkRGBA red, blue;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), "Table");
+  gtk_window_set_title (GTK_WINDOW (window), "Grid");
 
-  table = gtk_table_new (4, 3, FALSE);
+  grid = gtk_grid_new ();
 
-  gtk_table_attach (GTK_TABLE (table),
-                    gtk_label_new ("Top"),
-                    1, 2, 0, 1,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  gtk_table_attach (GTK_TABLE (table),
-                    gtk_label_new ("Bottom"),
-                    1, 2, 3, 4,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  gtk_table_attach (GTK_TABLE (table),
-                    gtk_label_new ("Left"),
-                    0, 1, 1, 3,
-                    GTK_FILL, GTK_FILL, 0, 0);
-  gtk_table_attach (GTK_TABLE (table),
-                    gtk_label_new ("Right"),
-                    2, 3, 1, 3,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid),
+                   gtk_label_new ("Top"),
+                   1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid),
+                   gtk_label_new ("Bottom"),
+                   1, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid),
+                   gtk_label_new ("Left"),
+                   0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid),
+                   gtk_label_new ("Right"),
+                   2, 1, 1, 2);
 
   gdk_rgba_parse (&red, "red");
   gdk_rgba_parse (&blue, "blue");
@@ -169,10 +165,9 @@ create_table_window (void)
                     G_CALLBACK (on_toggle_hexpand), NULL);
   gtk_container_add (GTK_CONTAINER (alignment), toggle);
 
-  gtk_table_attach (GTK_TABLE (table),
-                    colorbox,
-                    1, 2, 1, 2,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid),
+                   colorbox,
+                   1, 1, 1, 1);
 
   colorbox = gtk_event_box_new ();
   gtk_widget_override_background_color (colorbox, 0, &blue);
@@ -186,12 +181,11 @@ create_table_window (void)
                     G_CALLBACK (on_toggle_vexpand), NULL);
   gtk_container_add (GTK_CONTAINER (alignment), toggle);
 
-  gtk_table_attach (GTK_TABLE (table),
-                    colorbox,
-                    1, 2, 2, 3,
-                    GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid),
+                   colorbox,
+                   1, 2, 1, 1);
 
-  gtk_container_add (GTK_CONTAINER (window), table);
+  gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_widget_show_all (window);
 }
 
@@ -204,7 +198,7 @@ main (int argc, char *argv[])
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
   create_box_window ();
-  create_table_window ();
+  create_grid_window ();
 
   gtk_main ();
 
