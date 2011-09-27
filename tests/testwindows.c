@@ -457,45 +457,53 @@ manual_clicked (GtkWidget *button,
 
   
   label = gtk_label_new ("x:");
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     label,
 			     0, 1,
 			     0, 1);
   label = gtk_label_new ("y:");
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     label,
 			     0, 1,
 			     1, 2);
   label = gtk_label_new ("width:");
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     label,
 			     0, 1,
 			     2, 3);
   label = gtk_label_new ("height:");
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     label,
 			     0, 1,
 			     3, 4);
 
   xspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (xspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (xspin), x);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     xspin,
 			     1, 2,
 			     0, 1);
   yspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (yspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (yspin), y);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     yspin,
 			     1, 2,
 			     1, 2);
   wspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (wspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (wspin), w);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     wspin,
 			     1, 2,
 			     2, 3);
   hspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (hspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (hspin), h);
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     hspin,
