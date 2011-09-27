@@ -449,7 +449,7 @@ manual_clicked (GtkWidget *button,
 					NULL);
   
 
-  table = gtk_table_new (2, 4, TRUE);
+  table = gtk_table_new (4, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
 		      table,
 		      FALSE, FALSE,
