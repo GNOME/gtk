@@ -49,21 +49,21 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *box, *button;
   GList *orientables = NULL;
 
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  table = gtk_table_new (2, 3, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 12);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  grid= gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
   /* GtkBox */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   orientables = g_list_prepend (orientables, box);
-  gtk_table_attach_defaults (GTK_TABLE (table), box, 0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), box, 0, 1, 1, 1);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 1"),
                   TRUE, TRUE, 0);
@@ -77,7 +77,7 @@ main (int argc, char **argv)
   /* GtkButtonBox */
   box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   orientables = g_list_prepend (orientables, box);
-  gtk_table_attach_defaults (GTK_TABLE (table), box, 1, 2, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), box, 1, 1, 1, 1);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkButtonBox 1"),
                   TRUE, TRUE, 0);
@@ -91,15 +91,14 @@ main (int argc, char **argv)
   /* GtkSeparator */
   box = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   orientables = g_list_prepend (orientables, box);
-  gtk_table_attach_defaults (GTK_TABLE (table), box, 2, 3, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), box, 2, 1, 1, 1);
 
   button = gtk_toggle_button_new_with_label ("Horizontal");
-  gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-                  GTK_FILL, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
   g_signal_connect (button, "toggled",
                   G_CALLBACK (orient_toggled), orientables);
 
-  gtk_container_add (GTK_CONTAINER (window), table);
+  gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_widget_show_all (window);
 
   g_signal_connect (window, "destroy",
