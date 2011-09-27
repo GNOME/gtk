@@ -96,7 +96,7 @@ anim_image_draw (GtkWidget *widget,
 int
 main (int argc, char **argv)
 {
-  GtkWidget *window, *table;
+  GtkWidget *window, *grid;
   GtkWidget *label, *image, *box;
   GtkIconTheme *theme;
   GdkPixbuf *pixbuf;
@@ -116,25 +116,23 @@ main (int argc, char **argv)
     anim_filename = argv[2];
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  table = gtk_table_new (6, 3, FALSE);
-  gtk_container_add (GTK_CONTAINER (window), table);
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window), grid);
 
   label = gtk_label_new ("symbolic size");
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-		    0, 0, 5, 5);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
   label = gtk_label_new ("fixed size");
-  gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-		    0, 0, 5, 5);
+  gtk_grid_attach (GTK_GRID (grid), label, 2, 0, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_PIXBUF");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   theme = gtk_icon_theme_get_default ();
   pixbuf = gtk_icon_theme_load_icon (theme, icon_name, 48, 0, NULL);
   image = gtk_image_new_from_pixbuf (pixbuf);
   box = gtk_event_box_new ();
   gtk_container_add (GTK_CONTAINER (box), image);
-  gtk_table_attach_defaults (GTK_TABLE (table), box, 2, 3, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), box, 2, 1, 1, 1);
 
   gtk_drag_source_set (box, GDK_BUTTON1_MASK, 
 		       NULL, 0,
@@ -153,50 +151,50 @@ main (int argc, char **argv)
 		    G_CALLBACK (drag_data_received), image);
 
   label = gtk_label_new ("GTK_IMAGE_STOCK");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
 
   image = gtk_image_new_from_stock (GTK_STOCK_REDO, GTK_ICON_SIZE_DIALOG);
-  gtk_table_attach_defaults (GTK_TABLE (table), image, 1, 2, 2, 3);
+  gtk_grid_attach (GTK_GRID (grid), image, 1, 2, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_ICON_SET");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
 
   iconsource = gtk_icon_source_new ();
   gtk_icon_source_set_icon_name (iconsource, icon_name);
   iconset = gtk_icon_set_new ();
   gtk_icon_set_add_source (iconset, iconsource);
   image = gtk_image_new_from_icon_set (iconset, GTK_ICON_SIZE_DIALOG);
-  gtk_table_attach_defaults (GTK_TABLE (table), image, 1, 2, 3, 4);
+  gtk_grid_attach (GTK_GRID (grid), image, 1, 3, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_ICON_NAME");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
-  gtk_table_attach_defaults (GTK_TABLE (table), image, 1, 2, 4, 5);
+  gtk_grid_attach (GTK_GRID (grid), image, 1, 4, 1, 1);
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
-  gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 4, 5);
+  gtk_grid_attach (GTK_GRID (grid), image, 2, 4, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_GICON");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 5, 1, 1);
   icon = g_themed_icon_new_with_default_fallbacks ("folder-remote");
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
   g_object_unref (icon);
-  gtk_table_attach_defaults (GTK_TABLE (table), image, 1, 2, 5, 6);
+  gtk_grid_attach (GTK_GRID (grid), image, 1, 5, 1, 1);
   file = g_file_new_for_path ("apple-red.png");
   icon = g_file_icon_new (file);
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_DIALOG);
   g_object_unref (icon);
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
-  gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 5, 6);
+  gtk_grid_attach (GTK_GRID (grid), image, 2, 5, 1, 1);
 
   
   if (anim_filename)
     {
       label = gtk_label_new ("GTK_IMAGE_ANIMATION (from file)");
-      gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 6, 1, 1);
       image = gtk_image_new_from_file (anim_filename);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
-      gtk_table_attach_defaults (GTK_TABLE (table), image, 2, 3, 5, 6);
+      gtk_grid_attach (GTK_GRID (grid), image, 2, 6, 1, 1);
 
       /* produce high load */
       g_signal_connect_after (image, "draw",
