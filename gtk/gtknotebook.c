@@ -5788,7 +5788,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   gboolean gap_left, packing_changed;
   GtkAllocation child_allocation = { 0, };
   GtkOrientation tab_expand_orientation;
-  GtkBorder padding;
 
   widget = GTK_WIDGET (notebook);
   container = GTK_CONTAINER (notebook);
@@ -5841,15 +5840,9 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   else
     tab_expand_orientation = GTK_ORIENTATION_VERTICAL;
 
-  gtk_style_context_save (context);
-
   while (*children && *children != last_child)
     {
       page = (*children)->data;
-
-      gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
-                                    _gtk_notebook_get_tab_flags (notebook, page));
-      gtk_style_context_get_padding (context, 0, &padding);
 
       if (direction == STEP_NEXT)
         *children = gtk_notebook_search_page (notebook, *children, direction, TRUE);
@@ -5985,21 +5978,44 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 
       if (page != priv->cur_page)
         {
+          GtkBorder active_padding, normal_padding, padding;
+
+          /* The active tab is by definition at least the same height as the inactive one.
+           * The padding we're building is the offset between the two tab states, 
+           * so in case the style specifies normal_padding > active_padding we
+           * remove the offset and draw them with the same height.
+           * Note that the padding will still be applied to the tab content though,
+           * see gtk_notebook_page_allocate().
+           */
+          gtk_style_context_save (context);
+          gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB,
+                                        _gtk_notebook_get_tab_flags (notebook, page));
+
+          gtk_style_context_get_padding (context, GTK_STATE_FLAG_ACTIVE, &active_padding);
+          gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &normal_padding);
+
+          gtk_style_context_restore (context);
+
+          padding.top = MAX (0, active_padding.top - normal_padding.top);
+          padding.right = MAX (0, active_padding.right - normal_padding.right);
+          padding.bottom = MAX (0, active_padding.bottom - normal_padding.bottom);
+          padding.left = MAX (0, active_padding.left - normal_padding.left);
+
           switch (tab_pos)
             {
             case GTK_POS_TOP:
-              page->allocation.y += padding.top;
-              page->allocation.height = MAX (1, page->allocation.height - padding.top);
+              page->allocation.y += padding.top + padding.bottom;
+              page->allocation.height = MAX (1, page->allocation.height - padding.top - padding.bottom);
               break;
             case GTK_POS_BOTTOM:
-              page->allocation.height = MAX (1, page->allocation.height - padding.bottom);
+              page->allocation.height = MAX (1, page->allocation.height - padding.top - padding.bottom);
               break;
             case GTK_POS_LEFT:
-              page->allocation.x += padding.left;
-              page->allocation.width = MAX (1, page->allocation.width - padding.left);
+              page->allocation.x += padding.left + padding.right;
+              page->allocation.width = MAX (1, page->allocation.width - padding.left - padding.right);
               break;
             case GTK_POS_RIGHT:
-              page->allocation.width = MAX (1, page->allocation.width - padding.right);
+              page->allocation.width = MAX (1, page->allocation.width - padding.left - padding.right);
               break;
             }
         }
@@ -6061,8 +6077,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
       if (page->tab_label)
         gtk_widget_set_child_visible (page->tab_label, TRUE);
     }
-
-  gtk_style_context_restore (context);
 
   /* Don't move the current tab past the last position during tabs reordering */
   if (children &&
@@ -6291,27 +6305,6 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
                                          tab_padding.left - tab_padding.right -
                                          2 * (priv->tab_hborder + focus_width + focus_padding)));
       break;
-    }
-
-  if (page != priv->cur_page)
-    {
-      switch (tab_pos)
-        {
-        case GTK_POS_TOP:
-          child_allocation.y -= tab_padding.top;
-          child_allocation.height += tab_padding.top;
-          break;
-        case GTK_POS_BOTTOM:
-          child_allocation.height += tab_padding.bottom;
-          break;
-        case GTK_POS_LEFT:
-          child_allocation.x -= tab_padding.left;
-          child_allocation.width += tab_padding.left;
-          break;
-        case GTK_POS_RIGHT:
-          child_allocation.width += tab_padding.right;
-          break;
-        }
     }
 
   gtk_widget_get_allocation (page->tab_label, &label_allocation);
