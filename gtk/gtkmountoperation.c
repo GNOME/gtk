@@ -1167,7 +1167,7 @@ on_button_press_event_for_process_tree_view (GtkWidget      *widget,
 
   ret = FALSE;
 
-  if (gtk_button_event_triggers_context_menu (event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       ret = do_popup_menu_for_process_tree_view (widget, event, op);
     }
