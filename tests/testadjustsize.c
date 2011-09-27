@@ -97,7 +97,7 @@ create_alignment (void)
 static void
 open_test_window (void)
 {
-  GtkWidget *table;
+  GtkWidget *grid;
   int i;
 
   test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -115,19 +115,13 @@ open_test_window (void)
   test_widgets[TEST_WIDGET_BUTTON] = create_button ();
   test_widgets[TEST_WIDGET_ALIGNMENT] = create_alignment ();
 
-  table = gtk_table_new (2, 3, FALSE);
+  grid = gtk_grid_new ();
 
-  gtk_container_add (GTK_CONTAINER (test_window), table);
+  gtk_container_add (GTK_CONTAINER (test_window), grid);
 
   for (i = 0; i < TEST_WIDGET_LAST; ++i)
     {
-      gtk_table_attach (GTK_TABLE (table),
-                        test_widgets[i],
-                        i % 3,
-                        i % 3 + 1,
-                        i / 3,
-                        i / 3 + 1,
-                        0, 0, 0, 0);
+      gtk_grid_attach (GTK_GRID (grid), test_widgets[i], i % 3, i / 3, 1, 1);
     }
 
   gtk_widget_show_all (test_window);
@@ -293,6 +287,8 @@ create_aligned (GtkAlign halign,
   g_object_set (G_OBJECT (TEST_WIDGET (widget)),
                 "halign", halign,
                 "valign", valign,
+                "hexpand", TRUE,
+                "vexpand", TRUE,
                 NULL);
 
   return widget;
@@ -301,7 +297,7 @@ create_aligned (GtkAlign halign,
 static void
 open_alignment_window (void)
 {
-  GtkWidget *table;
+  GtkWidget *grid;
   int i;
   GEnumClass *align_class;
 
@@ -316,9 +312,11 @@ open_alignment_window (void)
 
   align_class = g_type_class_peek (GTK_TYPE_ALIGN);
 
-  table = gtk_table_new (align_class->n_values, align_class->n_values, TRUE);
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_homogeneous (GTK_GRID (grid), TRUE);
+  gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (test_window), table);
+  gtk_container_add (GTK_CONTAINER (test_window), grid);
 
   for (i = 0; i < align_class->n_values; ++i)
     {
@@ -329,11 +327,7 @@ open_alignment_window (void)
             create_aligned(align_class->values[i].value,
                            align_class->values[j].value);
 
-          gtk_table_attach (GTK_TABLE (table),
-                            child,
-                            i, i + 1,
-                            j, j + 1,
-                            GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+          gtk_grid_attach (GTK_GRID (grid), child, i, j, 1, 1);
         }
     }
 
@@ -349,6 +343,8 @@ create_margined (const char *propname)
 
   g_object_set (G_OBJECT (TEST_WIDGET (widget)),
                 propname, 15,
+                "hexpand", TRUE,
+                "vexpand", TRUE,
                 NULL);
 
   return widget;
@@ -357,7 +353,7 @@ create_margined (const char *propname)
 static void
 open_margin_window (void)
 {
-  GtkWidget *table;
+  GtkWidget *box;
   int i;
   const char * margins[] = {
     "margin-left",
@@ -375,20 +371,16 @@ open_margin_window (void)
 
   gtk_window_set_resizable (GTK_WINDOW (test_window), TRUE);
 
-  table = gtk_table_new (G_N_ELEMENTS (margins), 1, FALSE);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (test_window), table);
+  gtk_container_add (GTK_CONTAINER (test_window), box);
 
   for (i = 0; i < (int) G_N_ELEMENTS (margins); ++i)
     {
       GtkWidget *child =
         create_margined(margins[i]);
 
-      gtk_table_attach (GTK_TABLE (table),
-                        child,
-                        0, 1,
-                        i, i + 1,
-                        GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+      gtk_container_add (GTK_CONTAINER (box), child);
     }
 
   gtk_widget_show_all (test_window);
