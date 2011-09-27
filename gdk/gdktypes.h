@@ -242,6 +242,41 @@ typedef enum
   GDK_MODIFIER_MASK = 0x5c001fff
 } GdkModifierType;
 
+/**
+ * GdkModifierIntent:
+ * @GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR: the primary modifier used to invoke
+ *  menu accelerators.
+ * @GDK_MODIFIER_INTENT_CONTEXT_MENU: the modifier used to invoke context menus.
+ *  Note that mouse button 3 always triggers context menus. When this modifier
+ *  is not 0, it <strong>additionally</strong> triggers context menus when used
+ *  with mouse button 1.
+ * @GDK_MODIFIER_INTENT_EXTEND_SELECTION: the modifier used to extend selections
+ *  using &lt;modifier&gt;-click or &lt;modifier&gt;-cursor-key
+ * @GDK_MODIFIER_INTENT_MODIFY_SELECTION: the modifier used to modify selections,
+ *  which in most cases means toggling the clicked item into or out of the selection.
+ * @GDK_MODIFIER_INTENT_NO_TEXT_INPUT: when any of these modifiers is pressed, the
+ *  key event cannot produce a symbol directly. This is meant to be used for
+ *  input methods, and for use cases like typeahead search.
+ *
+ * This enum is used with gdk_keymap_get_modifier_mask() and
+ * gdk_get_modifier_mask() in order to determine what modifiers the
+ * currently used windowing system backend uses for particular
+ * purposes. For example, on X11/Windows, the Control key is used for
+ * invoking menu shortcuts (accelerators), whereas on Apple computers
+ * it's the Command key (which correspond to %GDK_CONTROL_MASK and
+ * %GDK_MOD2_MASK, respectively).
+ *
+ * Since: 3.4
+ **/
+typedef enum
+{
+  GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR,
+  GDK_MODIFIER_INTENT_CONTEXT_MENU,
+  GDK_MODIFIER_INTENT_EXTEND_SELECTION,
+  GDK_MODIFIER_INTENT_MODIFY_SELECTION,
+  GDK_MODIFIER_INTENT_NO_TEXT_INPUT
+} GdkModifierIntent;
+
 typedef enum
 {
   GDK_OK          = 0,

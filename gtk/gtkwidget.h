@@ -949,6 +949,9 @@ GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
 
 GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
 
+GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
+                                                GdkModifierIntent  intent);
+
 
 G_END_DECLS
 

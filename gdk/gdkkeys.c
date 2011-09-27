@@ -108,6 +108,11 @@ enum {
   LAST_SIGNAL
 };
 
+
+static GdkModifierType gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
+                                                          GdkModifierIntent  intent);
+
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkKeymap, gdk_keymap, G_TYPE_OBJECT)
@@ -116,6 +121,8 @@ static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  klass->get_modifier_mask = gdk_keymap_real_get_modifier_mask;
 
   /**
    * GdkKeymap::direction-changed:
@@ -604,6 +611,61 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 
   return GDK_KEYMAP_GET_CLASS(keymap)->map_virtual_modifiers (keymap, state);
 }
+
+static GdkModifierType
+gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
+                                   GdkModifierIntent  intent)
+{
+  switch (intent)
+    {
+    case GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR:
+      return GDK_CONTROL_MASK;
+
+    case GDK_MODIFIER_INTENT_CONTEXT_MENU:
+      return 0;
+
+    case GDK_MODIFIER_INTENT_EXTEND_SELECTION:
+      return GDK_SHIFT_MASK;
+
+    case GDK_MODIFIER_INTENT_MODIFY_SELECTION:
+      return GDK_CONTROL_MASK;
+
+    case GDK_MODIFIER_INTENT_NO_TEXT_INPUT:
+      return GDK_MOD1_MASK | GDK_CONTROL_MASK;
+
+    default:
+      g_return_val_if_reached (0);
+    }
+}
+
+/**
+ * gdk_keymap_get_modifier_mask:
+ * @keymap: a #GdkKeymap
+ * @intent: the use case for the modifier mask
+ *
+ * Returns the modifier mask the @keymap's windowing system backend
+ * uses for a particular purpose.
+ *
+ * Note that this function always returns real hardware modifiers, not
+ * virtual ones (e.g. it will return #GDK_MOD1_MASK rather than
+ * #GDK_META_MASK if the backend maps MOD1 to META), so there are use
+ * cases where the return value of this function has to be transformed
+ * by gdk_keymap_add_virtual_modifiers() in order to contain the
+ * expected result.
+ *
+ * Returns: the modifier mask used for @intent.
+ *
+ * Since: 3.4
+ **/
+GdkModifierType
+gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
+                              GdkModifierIntent  intent)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_modifier_mask (keymap, intent);
+}
+
 
 /**
  * gdk_keyval_name:

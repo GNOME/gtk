@@ -61,6 +61,8 @@ struct _GdkKeymapClass
                                          GdkModifierType *state);
   gboolean (* map_virtual_modifiers)    (GdkKeymap       *keymap,
                                          GdkModifierType *state);
+  GdkModifierType (*get_modifier_mask)  (GdkKeymap         *keymap,
+                                         GdkModifierIntent  intent);
 
 
   /* Signals */

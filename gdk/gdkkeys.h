@@ -114,6 +114,9 @@ void           gdk_keymap_add_virtual_modifiers    (GdkKeymap           *keymap,
                                                     GdkModifierType     *state);
 gboolean       gdk_keymap_map_virtual_modifiers    (GdkKeymap           *keymap,
                                                     GdkModifierType     *state);
+GdkModifierType gdk_keymap_get_modifier_mask       (GdkKeymap           *keymap,
+                                                    GdkModifierIntent    intent);
+
 
 /* Key values
  */
