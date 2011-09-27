@@ -4566,7 +4566,9 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
           if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                     &start, &end) &&
               gtk_text_iter_in_range (&iter, &start, &end) &&
-              !(event->state & GTK_EXTEND_SELECTION_MOD_MASK))
+              !(event->state &
+                gtk_widget_get_modifier_mask (widget,
+                                              GDK_MODIFIER_INTENT_EXTEND_SELECTION)))
             {
               priv->drag_start_x = event->x;
               priv->drag_start_y = event->y;
@@ -6491,7 +6493,9 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
   orig_start = ins;
   orig_end = bound;
 
-  if (button->state & GTK_EXTEND_SELECTION_MOD_MASK)
+  if (button->state &
+      gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
+                                    GDK_MODIFIER_INTENT_EXTEND_SELECTION))
     {
       /* Extend selection */
       GtkTextIter old_ins, old_bound;

@@ -2018,6 +2018,15 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 
   if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
     {
+      GdkModifierType extend_mod_mask;
+      GdkModifierType modify_mod_mask;
+
+      extend_mod_mask =
+        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+
+      modify_mod_mask =
+        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+
       item = gtk_icon_view_get_item_at_coords (icon_view, 
 					       event->x, event->y,
 					       FALSE,
@@ -2043,7 +2052,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	      gtk_icon_view_set_cursor_item (icon_view, item, cursor_cell);
 	    }
 	  else if (icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE &&
-		   (event->state & GTK_EXTEND_SELECTION_MOD_MASK))
+		   (event->state & extend_mod_mask))
 	    {
 	      gtk_icon_view_unselect_all_internal (icon_view);
 
@@ -2060,7 +2069,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	    {
 	      if ((icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE ||
 		  ((icon_view->priv->selection_mode == GTK_SELECTION_SINGLE) && item->selected)) &&
-		  (event->state & GTK_MODIFY_SELECTION_MOD_MASK))
+		  (event->state & modify_mod_mask))
 		{
 		  item->selected = !item->selected;
 		  gtk_icon_view_queue_draw_item (icon_view, item);
@@ -2107,7 +2116,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
       else
 	{
 	  if (icon_view->priv->selection_mode != GTK_SELECTION_BROWSE &&
-	      !(event->state & GTK_MODIFY_SELECTION_MOD_MASK))
+	      !(event->state & modify_mod_mask))
 	    {
 	      dirty = gtk_icon_view_unselect_all_internal (icon_view);
 	    }
@@ -3566,9 +3575,19 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 
   if (gtk_get_current_event_state (&state))
     {
-      if ((state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+      GdkModifierType extend_mod_mask;
+      GdkModifierType modify_mod_mask;
+
+      extend_mod_mask =
+        gtk_widget_get_modifier_mask (GTK_WIDGET (icon_view),
+                                      GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+      modify_mod_mask =
+        gtk_widget_get_modifier_mask (GTK_WIDGET (icon_view),
+                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+
+      if ((state & modify_mod_mask) == modify_mod_mask)
         icon_view->priv->modify_selection_pressed = TRUE;
-      if ((state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+      if ((state & extend_mod_mask) == extend_mod_mask)
         icon_view->priv->extend_selection_pressed = TRUE;
     }
   /* else we assume not pressed */

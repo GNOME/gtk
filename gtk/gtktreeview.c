@@ -2880,6 +2880,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gboolean row_double_click = FALSE;
       gboolean rtl;
       gboolean node_selected;
+      GdkModifierType extend_mod_mask;
+      GdkModifierType modify_mod_mask;
 
       /* Empty tree? */
       if (tree_view->priv->tree == NULL)
@@ -3034,6 +3036,12 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    gtk_tree_path_free (anchor);
 	}
 
+      extend_mod_mask =
+        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+
+      modify_mod_mask =
+        gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+
       /* select */
       node_selected = GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED);
       pre_val = gtk_adjustment_get_value (tree_view->priv->vadjustment);
@@ -3044,9 +3052,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
         {
           GtkCellRenderer *focus_cell;
 
-          if ((event->state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+          if ((event->state & modify_mod_mask) == modify_mod_mask)
             tree_view->priv->modify_selection_pressed = TRUE;
-          if ((event->state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+          if ((event->state & extend_mod_mask) == extend_mod_mask)
             tree_view->priv->extend_selection_pressed = TRUE;
 
           /* We update the focus cell here, this is also needed if the
@@ -3063,12 +3071,12 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           if (focus_cell)
             gtk_tree_view_column_focus_cell (column, focus_cell);
 
-          if (event->state & GTK_MODIFY_SELECTION_MOD_MASK)
+          if (event->state & modify_mod_mask)
             {
               gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
               gtk_tree_view_real_toggle_cursor_row (tree_view);
             }
-          else if (event->state & GTK_EXTEND_SELECTION_MOD_MASK)
+          else if (event->state & extend_mod_mask)
             {
               gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
               gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
@@ -3111,9 +3119,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      tree_view->priv->rubber_band_y = event->y + tree_view->priv->dy;
 	      tree_view->priv->rubber_band_status = RUBBER_BAND_MAYBE_START;
 
-	      if ((event->state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+	      if ((event->state & modify_mod_mask) == modify_mod_mask)
 		tree_view->priv->rubber_band_modify = TRUE;
-	      if ((event->state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+	      if ((event->state & extend_mod_mask) == extend_mod_mask)
 		tree_view->priv->rubber_band_extend = TRUE;
 	    }
         }
@@ -8572,9 +8580,20 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 
   if (gtk_get_current_event_state (&state))
     {
-      if ((state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+      GdkModifierType extend_mod_mask;
+      GdkModifierType modify_mod_mask;
+
+      extend_mod_mask =
+        gtk_widget_get_modifier_mask (GTK_WIDGET (tree_view),
+                                      GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+
+      modify_mod_mask =
+        gtk_widget_get_modifier_mask (GTK_WIDGET (tree_view),
+                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+
+      if ((state & modify_mod_mask) == modify_mod_mask)
         tree_view->priv->modify_selection_pressed = TRUE;
-      if ((state & GTK_EXTEND_SELECTION_MOD_MASK) == GTK_EXTEND_SELECTION_MOD_MASK)
+      if ((state & extend_mod_mask) == extend_mod_mask)
         tree_view->priv->extend_selection_pressed = TRUE;
     }
   /* else we assume not pressed */
@@ -10803,7 +10822,13 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 
       if (gtk_get_current_event_state (&state))
 	{
-	  if ((state & GTK_MODIFY_SELECTION_MOD_MASK) == GTK_MODIFY_SELECTION_MOD_MASK)
+          GdkModifierType modify_mod_mask;
+
+          modify_mod_mask =
+            gtk_widget_get_modifier_mask (GTK_WIDGET (tree_view),
+                                          GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+
+	  if ((state & modify_mod_mask) == modify_mod_mask)
 	    tree_view->priv->modify_selection_pressed = TRUE;
 	}
 

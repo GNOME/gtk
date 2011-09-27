@@ -3784,14 +3784,16 @@ gtk_entry_button_press (GtkWidget      *widget,
   else if (event->button == 1)
     {
       gboolean have_selection = gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
-      
+
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
 
-      if (event->state & GTK_EXTEND_SELECTION_MOD_MASK)
+      if (event->state &
+          gtk_widget_get_modifier_mask (widget,
+                                        GDK_MODIFIER_INTENT_EXTEND_SELECTION))
 	{
 	  _gtk_entry_reset_im_context (entry);
-	  
+
 	  if (!have_selection) /* select from the current position to the clicked position */
 	    sel_start = sel_end = priv->current_pos;
 	  
