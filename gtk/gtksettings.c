@@ -2516,11 +2516,11 @@ settings_update_modules (GtkSettings *settings)
 static void
 settings_update_cursor_theme (GtkSettings *settings)
 {
+#ifdef GDK_WINDOWING_X11
   GdkDisplay *display = gdk_screen_get_display (settings->priv->screen);
   gchar *theme = NULL;
   gint size = 0;
 
-#ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
     {
       g_object_get (settings,
@@ -2644,6 +2644,8 @@ settings_update_fontconfig (GtkSettings *settings)
     }
 
   return last_update_needed;
+#else
+  return FALSE;
 #endif /* GDK_WINDOWING_X11 */
 }
 
