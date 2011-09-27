@@ -3377,9 +3377,21 @@ GtkWidgetPath *
 gtk_container_get_path_for_child (GtkContainer *container,
                                   GtkWidget    *child)
 {
+  GtkWidgetPath *path;
+
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
   g_return_val_if_fail (container == (GtkContainer *) gtk_widget_get_parent (child), NULL);
 
-  return GTK_CONTAINER_GET_CLASS (container)->get_path_for_child (container, child);
+  path = GTK_CONTAINER_GET_CLASS (container)->get_path_for_child (container, child);
+  if (gtk_widget_path_get_object_type (path) != G_OBJECT_TYPE (child))
+    {
+      g_critical ("%s %p returned a widget path for type %s, but child is %s",
+                  G_OBJECT_TYPE_NAME (container),
+                  container,
+                  g_type_name (gtk_widget_path_get_object_type (path)),
+                  G_OBJECT_TYPE_NAME (child));
+    }
+
+  return path;
 }
