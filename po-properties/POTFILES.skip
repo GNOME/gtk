@@ -17,6 +17,8 @@ tests/a11y/placeholder-text.ui
 tests/a11y/tree.ui
 tests/reftests/background-area.ref.ui
 tests/reftests/background-area.ui
+tests/reftests/background-color-transparent.ref.ui
+tests/reftests/background-color-transparent.ui
 tests/reftests/border-image-gradient.ref.ui
 tests/reftests/border-image-gradient.ui
 tests/reftests/border-image-url.ref.ui
