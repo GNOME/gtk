@@ -39,6 +39,7 @@
 
 #include "gtkarrow.h"
 #include "gtkbindings.h"
+#include "gtkcontainerprivate.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkmainprivate.h"
@@ -233,6 +234,8 @@ static GtkWidgetPath * gtk_toolbar_get_path_for_child
                                                    GtkWidget           *child);
 static void       gtk_toolbar_invalidate_order    (GtkToolbar           *toolbar);
 
+static void       gtk_toolbar_direction_changed    (GtkWidget           *widget,
+                                                    GtkTextDirection     previous_direction);
 static void       gtk_toolbar_orientation_changed  (GtkToolbar          *toolbar,
 						    GtkOrientation       orientation);
 static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar,
@@ -398,6 +401,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->unmap = gtk_toolbar_unmap;
   widget_class->popup_menu = gtk_toolbar_popup_menu;
   widget_class->show_all = gtk_toolbar_show_all;
+  widget_class->direction_changed = gtk_toolbar_direction_changed;
   
   container_class->add    = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
@@ -3947,10 +3951,10 @@ gtk_toolbar_get_path_for_child (GtkContainer *container,
        * get_children works in visible order
        */
       priv->sibling_path = gtk_widget_path_new ();
-      children = gtk_container_get_children (container);
+      children = _gtk_container_get_all_children (container);
 
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
+      if (priv->orientation != GTK_ORIENTATION_HORIZONTAL ||
+          gtk_widget_get_direction (GTK_WIDGET (toolbar)) != GTK_TEXT_DIR_RTL)
         children = g_list_reverse (children);
 
       g_list_foreach (children, add_widget_to_path, priv->sibling_path);
@@ -3985,9 +3989,18 @@ gtk_toolbar_invalidate_order (GtkToolbar *toolbar)
       gtk_widget_path_unref (priv->sibling_path);
       priv->sibling_path = NULL;
 
-      gtk_container_foreach (GTK_CONTAINER (toolbar),
-                             (GtkCallback) gtk_widget_reset_style,
-                             NULL);
+      gtk_container_forall (GTK_CONTAINER (toolbar),
+                            (GtkCallback) gtk_widget_reset_style,
+                            NULL);
     }
+}
+
+static void
+gtk_toolbar_direction_changed (GtkWidget        *widget,
+                               GtkTextDirection  previous_direction)
+{
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->direction_changed (widget, previous_direction);
+
+  gtk_toolbar_invalidate_order (GTK_TOOLBAR (widget));
 }
 
