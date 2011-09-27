@@ -7403,7 +7403,7 @@ gtk_notebook_get_scrollable (GtkNotebook *notebook)
  *
  * Since: 2.22
  *
- * Deprecated: 3.2: this function returns zero
+ * Deprecated: 3.4: this function returns zero
  */
 guint16
 gtk_notebook_get_tab_hborder (GtkNotebook *notebook)
@@ -7423,7 +7423,7 @@ gtk_notebook_get_tab_hborder (GtkNotebook *notebook)
  *
  * Since: 2.22
  *
- * Deprecated: 3.2: this function returns zero
+ * Deprecated: 3.4: this function returns zero
  */
 guint16
 gtk_notebook_get_tab_vborder (GtkNotebook *notebook)
