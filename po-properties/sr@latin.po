@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-17 20:29+0000\n"
-"PO-Revision-Date: 2011-09-18 13:33+0200\n"
+"POT-Creation-Date: 2011-09-26 14:03+0000\n"
+"PO-Revision-Date: 2011-09-23 10:53+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
@@ -1744,8 +1744,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Da li korisnik može menjati tekst"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
-#: ../gtk/gtkfontchooser.c:67 ../gtk/gtkfontchooser.c:80
-#: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Pismo"
 
@@ -3192,6 +3191,10 @@ msgstr "Prikaži veličinu"
 msgid "Whether selected font size is shown in the label"
 msgstr "Da li se prikazuje izabrana veličina pisma u oznaci"
 
+#: ../gtk/gtkfontchooser.c:80
+msgid "Font description"
+msgstr "Opis slovnog lika"
+
 #: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Tekst za pregled"
@@ -3720,19 +3723,19 @@ msgstr "Širina prikaza"
 msgid "The height of the layout"
 msgstr "Visina prikaza"
 
-#: ../gtk/gtklinkbutton.c:175
+#: ../gtk/gtklinkbutton.c:176
 msgid "URI"
 msgstr "Adresa"
 
-#: ../gtk/gtklinkbutton.c:176
+#: ../gtk/gtklinkbutton.c:177
 msgid "The URI bound to this button"
 msgstr "Adresa vezana za ovo dugme"
 
-#: ../gtk/gtklinkbutton.c:190
+#: ../gtk/gtklinkbutton.c:191
 msgid "Visited"
 msgstr "Posećena"
 
-#: ../gtk/gtklinkbutton.c:191
+#: ../gtk/gtklinkbutton.c:192
 msgid "Whether this link has been visited."
 msgstr "Da li je adresa posećena."
 
@@ -4833,7 +4836,7 @@ msgstr ""
 "tekuća akcija svoje grupe."
 
 #: ../gtk/gtkradioaction.c:135 ../gtk/gtkradiobutton.c:164
-#: ../gtk/gtkradiomenuitem.c:426 ../gtk/gtkradiotoolbutton.c:85
+#: ../gtk/gtkradiomenuitem.c:427 ../gtk/gtkradiotoolbutton.c:85
 msgid "Group"
 msgstr "Grupa"
 
@@ -4856,7 +4859,7 @@ msgstr ""
 msgid "The radio button whose group this widget belongs to."
 msgstr "Radio-dugme čijoj grupi ovaj element pripada."
 
-#: ../gtk/gtkradiomenuitem.c:427
+#: ../gtk/gtkradiomenuitem.c:428
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Radio stavka menija čijoj grupi ovaj element pripada."
 
