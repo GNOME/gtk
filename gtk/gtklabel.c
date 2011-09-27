@@ -4715,7 +4715,7 @@ gtk_label_button_press (GtkWidget      *widget,
 
   if (info->active_link)
     {
-      if (_gtk_button_event_triggers_context_menu (event))
+      if (gdk_event_triggers_context_menu ((GdkEvent *) event))
         {
           info->link_clicked = 1;
           gtk_label_do_popup (label, event);
@@ -4734,7 +4734,7 @@ gtk_label_button_press (GtkWidget      *widget,
   info->in_drag = FALSE;
   info->select_words = FALSE;
 
-  if (_gtk_button_event_triggers_context_menu (event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       gtk_label_do_popup (label, event);
 

@@ -83,8 +83,6 @@ void    _gtk_modules_init             (gint          *argc,
 void    _gtk_modules_settings_changed (GtkSettings   *settings,
                                        const gchar   *modules);
 
-gboolean _gtk_button_event_triggers_context_menu (GdkEventButton *event);
-
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */

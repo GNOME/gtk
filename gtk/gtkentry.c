@@ -3774,7 +3774,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 
   tmp_pos = gtk_entry_find_position (entry, event->x + priv->scroll_offset);
 
-  if (_gtk_button_event_triggers_context_menu (event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       gtk_entry_do_popup (entry, event);
       priv->button = 0; /* Don't wait for release, since the menu will gtk_grab_add */

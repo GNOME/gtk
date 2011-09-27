@@ -522,10 +522,10 @@ gtk_link_button_button_press (GtkWidget      *widget,
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if (_gtk_button_event_triggers_context_menu (event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), event);
-      
+
       return TRUE;
     }
 

@@ -2748,7 +2748,7 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
 {
   GtkWidget *window;
 
-  if (_gtk_button_event_triggers_context_menu (event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       gboolean return_value;
 

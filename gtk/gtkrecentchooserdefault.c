@@ -74,8 +74,6 @@
 #include "gtkrecentchooserutils.h"
 #include "gtkrecentchooserdefault.h"
 
-#include "gtkprivate.h"
-
 
 enum 
 {
@@ -1905,7 +1903,7 @@ recent_view_button_press_cb (GtkWidget      *widget,
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
 
-  if (_gtk_button_event_triggers_context_menu (event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       GtkTreePath *path;
       gboolean res;

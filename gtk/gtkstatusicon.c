@@ -1810,7 +1810,7 @@ gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
   if (handled)
     return TRUE;
 
-  if (_gtk_button_event_triggers_context_menu (event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       emit_popup_menu_signal (status_icon, event->button, event->time);
       return TRUE;
