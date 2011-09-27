@@ -496,13 +496,13 @@ popup_cb (gpointer data)
       if (!popup_window)
 	{
 	  GtkWidget *button;
-	  GtkWidget *table;
+	  GtkWidget *grid;
 	  int i, j;
 	  
 	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 	  gtk_window_set_position (GTK_WINDOW (popup_window), GTK_WIN_POS_MOUSE);
 
-	  table = gtk_table_new (3,3, FALSE);
+	  grid = gtk_grid_new ();
 
 	  for (i=0; i<3; i++)
 	    for (j=0; j<3; j++)
@@ -510,9 +510,9 @@ popup_cb (gpointer data)
 		char buffer[128];
 		g_snprintf(buffer, sizeof(buffer), "%d,%d", i, j);
 		button = gtk_button_new_with_label (buffer);
-		gtk_table_attach (GTK_TABLE (table), button, i, i+1, j, j+1,
-				  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-				  0, 0);
+                gtk_widget_set_hexpand (button, TRUE);
+                gtk_widget_set_vexpand (button, TRUE);
+		gtk_grid_attach (GTK_GRID (grid), button, i, j, 1, 1);
 
 		gtk_drag_dest_set (button,
 				   GTK_DEST_DEFAULT_ALL,
@@ -524,8 +524,8 @@ popup_cb (gpointer data)
 				  G_CALLBACK (popup_leave), NULL);
 	      }
 
-	  gtk_widget_show_all (table);
-	  gtk_container_add (GTK_CONTAINER (popup_window), table);
+	  gtk_widget_show_all (grid);
+	  gtk_container_add (GTK_CONTAINER (popup_window), grid);
 
 	}
       gtk_widget_show (popup_window);
@@ -584,7 +584,7 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *pixmap;
   GtkWidget *button;
@@ -599,8 +599,8 @@ main (int argc, char **argv)
 		    G_CALLBACK (gtk_main_quit), NULL);
 
   
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_container_add (GTK_CONTAINER (window), table);
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window), grid);
 
   drag_icon = gdk_pixbuf_new_from_xpm_data (drag_icon_xpm);
   trashcan_open = gdk_pixbuf_new_from_xpm_data (trashcan_open_xpm);
@@ -616,9 +616,9 @@ main (int argc, char **argv)
   g_signal_connect (label, "drag_data_received",
 		    G_CALLBACK( label_drag_data_received), NULL);
 
-  gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-		    0, 0);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_vexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   label = gtk_label_new ("Popup\n");
 
@@ -627,9 +627,9 @@ main (int argc, char **argv)
 		     target_table, n_targets - 1, /* no rootwin */
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
-  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-		    0, 0);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_vexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
 
   g_signal_connect (label, "drag_motion",
 		    G_CALLBACK (popsite_motion), NULL);
@@ -638,9 +638,9 @@ main (int argc, char **argv)
   
   pixmap = gtk_image_new_from_pixbuf (trashcan_closed);
   gtk_drag_dest_set (pixmap, 0, NULL, 0, 0);
-  gtk_table_attach (GTK_TABLE (table), pixmap, 1, 2, 0, 1,
-		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-		    0, 0);
+  gtk_widget_set_hexpand (pixmap, TRUE);
+  gtk_widget_set_vexpand (pixmap, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), pixmap, 1, 0, 1, 1);
 
   g_signal_connect (pixmap, "drag_leave",
 		    G_CALLBACK (target_drag_leave), NULL);
@@ -665,9 +665,9 @@ main (int argc, char **argv)
 
   g_object_unref (drag_icon);
 
-  gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-		    0, 0);
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_vexpand (button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 1, 1);
 
   g_signal_connect (button, "drag_data_get",
 		    G_CALLBACK (source_drag_data_get), NULL);
