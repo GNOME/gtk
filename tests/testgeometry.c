@@ -91,7 +91,7 @@ create_window (GdkWindowHints  mask)
 {
   GtkWidget *window;
   GtkWidget *drawing_area;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *button;
   GdkGeometry geometry;
@@ -120,40 +120,32 @@ create_window (GdkWindowHints  mask)
   g_signal_connect (window, "destroy",
 		    G_CALLBACK (on_window_destroy), NULL);
 
-  table = gtk_table_new (0, 0, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+  grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 10);
 
   label = gtk_label_new (label_text->str);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1,                  0, 1,
-		    GTK_EXPAND | GTK_FILL, GTK_FILL,
-		    0,                     0);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   label = gtk_label_new ("A\nB\nC\nD\nE");
-  gtk_table_attach (GTK_TABLE (table), label,
-		    1, 2,              1, 2,
-		    GTK_FILL,          GTK_EXPAND | GTK_FILL,
-		    0,                 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
 
   drawing_area = gtk_drawing_area_new ();
   g_signal_connect (drawing_area, "draw",
 		    G_CALLBACK (on_drawing_area_draw),
 		    GUINT_TO_POINTER (mask));
-  gtk_table_attach (GTK_TABLE (table), drawing_area,
-		    0, 1,                  1, 2,
-		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-		    0,                     0);
+  gtk_widget_set_hexpand (drawing_area, TRUE);
+  gtk_widget_set_vexpand (drawing_area, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), drawing_area, 0, 1, 1, 1);
 
   button = gtk_button_new_with_label ("Resize");
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (on_resize_clicked),
 		    GUINT_TO_POINTER (mask));
-  gtk_table_attach (GTK_TABLE (table), button,
-		    0, 2,              2, 3,
-		    GTK_EXPAND,        0,
-		    0,                 8);
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 2, 1, 1);
 
-  gtk_container_add (GTK_CONTAINER (window), table);
+  gtk_container_add (GTK_CONTAINER (window), grid);
 
   if ((mask & GDK_HINT_BASE_SIZE) != 0)
     {
@@ -181,7 +173,7 @@ create_window (GdkWindowHints  mask)
     }
 
   /* Contents must be set up before gtk_window_parse_geometry() */
-  gtk_widget_show_all (table);
+  gtk_widget_show_all (grid);
 
   gtk_window_set_geometry_hints (GTK_WINDOW (window),
 				 drawing_area,
