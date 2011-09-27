@@ -145,6 +145,8 @@ create_notebook (gchar           **labels,
   gint count = 0;
 
   notebook = gtk_notebook_new ();
+  gtk_widget_set_vexpand (notebook, TRUE);
+  gtk_widget_set_hexpand (notebook, TRUE);
   g_signal_connect (notebook, "create-window",
                     G_CALLBACK (window_creation_function), NULL);
 
@@ -235,34 +237,34 @@ create_trash_button (void)
 gint
 main (gint argc, gchar *argv[])
 {
-  GtkWidget *window, *table;
+  GtkWidget *window, *grid;
 
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  table = gtk_table_new (3, 2, FALSE);
+  grid = gtk_grid_new ();
 
-  gtk_table_attach_defaults (GTK_TABLE (table),
-                             create_notebook (tabs1, GROUP_A, GTK_POS_TOP),
-                             0, 1, 0, 1);
+  gtk_grid_attach (GTK_GRID (grid),
+                   create_notebook (tabs1, GROUP_A, GTK_POS_TOP),
+                   0, 0, 1, 1);
 
-  gtk_table_attach_defaults (GTK_TABLE (table),
-                             create_notebook (tabs2, GROUP_B, GTK_POS_BOTTOM),
-                             0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid),
+                   create_notebook (tabs2, GROUP_B, GTK_POS_BOTTOM),
+                   0, 1, 1, 1);
 
-  gtk_table_attach_defaults (GTK_TABLE (table),
-                             create_notebook (tabs3, GROUP_B, GTK_POS_LEFT),
-                             1, 2, 0, 1);
+  gtk_grid_attach (GTK_GRID (grid),
+                   create_notebook (tabs3, GROUP_B, GTK_POS_LEFT),
+                   1, 0, 1, 1);
 
-  gtk_table_attach_defaults (GTK_TABLE (table),
-                             create_notebook_with_notebooks (tabs4, GROUP_A, GTK_POS_RIGHT),
-                             1, 2, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid),
+                   create_notebook_with_notebooks (tabs4, GROUP_A, GTK_POS_RIGHT),
+                   1, 1, 1, 1);
 
-  gtk_table_attach (GTK_TABLE (table),
-                    create_trash_button (), 1, 2, 2, 3,
-                    GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid),
+                   create_trash_button (),
+                   1, 2, 1, 1);
 
-  gtk_container_add (GTK_CONTAINER (window), table);
+  gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
   gtk_widget_show_all (window);
 
