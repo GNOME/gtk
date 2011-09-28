@@ -636,8 +636,11 @@ create_buttons (GtkWidget *widget)
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *table;
-  GtkWidget *button[10];
   GtkWidget *separator;
+  GtkWidget *button[10];
+  int button_x[9] = { 0, 1, 2, 0, 2, 1, 1, 2, 0 };
+  int button_y[9] = { 0, 1, 2, 2, 0, 2, 0, 1, 1 };
+  guint i;
 
   if (!window)
     {
@@ -671,61 +674,17 @@ create_buttons (GtkWidget *widget)
       button[7] = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
       button[8] = gtk_button_new_with_label ("button9");
       
-      g_signal_connect (button[0], "clicked",
-			G_CALLBACK (button_window),
-			button[1]);
+      for (i = 0; i < 9; i++)
+        {
+          g_signal_connect (button[i], "clicked",
+                            G_CALLBACK (button_window),
+                            button[(i + 1) % 9]);
 
-      gtk_table_attach (GTK_TABLE (table), button[0], 0, 1, 0, 1,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[1], "clicked",
-			G_CALLBACK (button_window),
-			button[2]);
-
-      gtk_table_attach (GTK_TABLE (table), button[1], 1, 2, 1, 2,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[2], "clicked",
-			G_CALLBACK (button_window),
-			button[3]);
-      gtk_table_attach (GTK_TABLE (table), button[2], 2, 3, 2, 3,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[3], "clicked",
-			G_CALLBACK (button_window),
-			button[4]);
-      gtk_table_attach (GTK_TABLE (table), button[3], 0, 1, 2, 3,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[4], "clicked",
-			G_CALLBACK (button_window),
-			button[5]);
-      gtk_table_attach (GTK_TABLE (table), button[4], 2, 3, 0, 1,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[5], "clicked",
-			G_CALLBACK (button_window),
-			button[6]);
-      gtk_table_attach (GTK_TABLE (table), button[5], 1, 2, 2, 3,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[6], "clicked",
-			G_CALLBACK (button_window),
-			button[7]);
-      gtk_table_attach (GTK_TABLE (table), button[6], 1, 2, 0, 1,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[7], "clicked",
-			G_CALLBACK (button_window),
-			button[8]);
-      gtk_table_attach (GTK_TABLE (table), button[7], 2, 3, 1, 2,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-      g_signal_connect (button[8], "clicked",
-			G_CALLBACK (button_window),
-			button[0]);
-      gtk_table_attach (GTK_TABLE (table), button[8], 0, 1, 1, 2,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+          gtk_table_attach (GTK_TABLE (table), button[i],
+                            button_x[i], button_x[i] + 1,
+                            button_y[i], button_y[i] + 1,
+                            GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+        }
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
