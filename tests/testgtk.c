@@ -5554,7 +5554,7 @@ screen_display_destroy_diag (GtkWidget *widget, GtkWidget *data)
 void
 create_display_screen (GtkWidget *widget)
 {
-  GtkWidget *table, *frame, *window, *combo_dpy, *vbox;
+  GtkWidget *grid, *frame, *window, *combo_dpy, *vbox;
   GtkWidget *radio_dpy, *radio_scr, *applyb, *cancelb;
   GtkWidget *bbox;
   ScreenDisplaySelection *scr_dpy_data;
@@ -5576,11 +5576,11 @@ create_display_screen (GtkWidget *widget)
   frame = gtk_frame_new ("Select screen or display");
   gtk_container_add (GTK_CONTAINER (vbox), frame);
   
-  table = gtk_table_new (2, 2, TRUE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 3);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 3);
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 3);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 3);
 
-  gtk_container_add (GTK_CONTAINER (frame), table);
+  gtk_container_add (GTK_CONTAINER (frame), grid);
 
   radio_dpy = gtk_radio_button_new_with_label (NULL, "move to another X display");
   if (gdk_display_get_n_screens(display) > 1)
@@ -5594,13 +5594,14 @@ create_display_screen (GtkWidget *widget)
       gtk_widget_set_sensitive (radio_scr, FALSE);
     }
   combo_dpy = gtk_combo_box_text_new_with_entry ();
+  gtk_widget_set_hexpand (combo_dpy, TRUE);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
   gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_dpy))),
                       "<hostname>:<X Server Num>.<Screen Num>");
 
-  gtk_table_attach_defaults (GTK_TABLE (table), radio_dpy, 0, 1, 0, 1);
-  gtk_table_attach_defaults (GTK_TABLE (table), radio_scr, 0, 1, 1, 2);
-  gtk_table_attach_defaults (GTK_TABLE (table), combo_dpy, 1, 2, 0, 1);
+  gtk_grid_attach (GTK_GRID (grid), radio_dpy, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), radio_scr, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), combo_dpy, 1, 0, 1, 1);
 
   bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   applyb = gtk_button_new_from_stock (GTK_STOCK_APPLY);
