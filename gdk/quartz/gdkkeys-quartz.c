@@ -420,15 +420,9 @@ maybe_update_keymap (void)
 		      /* Special-case shift-tab since GTK+ expects
 		       * GDK_ISO_Left_Tab for that.
 		       */
-<<<<<<< HEAD
 		      if (found && p[j] == GDK_Tab && modifiers[j] == shiftKey)
 			p[j] = GDK_ISO_Left_Tab;
-		      
-=======
-		      if (found && p[j] == GDK_KEY_Tab && modifiers[j] == shiftKey)
-			p[j] = GDK_KEY_ISO_Left_Tab;
 
->>>>>>> 0a13dea... quartz: don't filter away directly encoded 24-bit UCS characters
 		      if (!found)
                         p[j] = gdk_unicode_to_keyval (uc);
 		    }
