@@ -5250,10 +5250,13 @@ create_flipping (GtkWidget *widget)
 static GtkWidget*
 make_focus_table (GList **list)
 {
-  GtkWidget *table;
+  GtkWidget *grid;
   gint i, j;
   
-  table = gtk_table_new (5, 5, FALSE);
+  grid = gtk_grid_new ();
+
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
 
   for (i = 0; i < 5; i++)
     {
@@ -5268,19 +5271,16 @@ make_focus_table (GList **list)
 
           *list = g_list_prepend (*list, widget);
           
-          gtk_table_attach (GTK_TABLE (table),
-                            widget,
-                            i, i + 1,
-                            j, j + 1,
-                            GTK_EXPAND | GTK_FILL,
-                            GTK_EXPAND | GTK_FILL,
-                            5, 5);
+          gtk_widget_set_hexpand (widget, TRUE);
+          gtk_widget_set_vexpand (widget, TRUE);
+
+          gtk_grid_attach (GTK_GRID (grid), widget, i, j, 1, 1);
         }
     }
 
   *list = g_list_reverse (*list);
   
-  return table;
+  return grid;
 }
 
 static void
