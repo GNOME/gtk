@@ -8239,7 +8239,7 @@ create_progress_bar (GtkWidget *widget)
   GtkWidget *hbox;
   GtkWidget *check;
   GtkWidget *frame;
-  GtkWidget *tab;
+  GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *align;
   static ProgressData *pdata = NULL;
@@ -8317,49 +8317,42 @@ create_progress_bar (GtkWidget *widget)
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       gtk_container_add (GTK_CONTAINER (frame), vbox2);
 
-      tab = gtk_table_new (7, 2, FALSE);
-      gtk_box_pack_start (GTK_BOX (vbox2), tab, FALSE, TRUE, 0);
+      grid = gtk_grid_new ();
+      gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+      gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+      gtk_box_pack_start (GTK_BOX (vbox2), grid, FALSE, TRUE, 0);
 
       label = gtk_label_new ("Orientation :");
-      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 0, 1,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
       pdata->omenu1 = build_option_menu (items1, 4, 0,
 					 progressbar_toggle_orientation,
 					 pdata);
-      gtk_table_attach (GTK_TABLE (tab), pdata->omenu1, 1, 2, 0, 1,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), pdata->omenu1, 1, 0, 1, 1);
       
       check = gtk_check_button_new_with_label ("Running");
       g_signal_connect (check, "toggled",
 			G_CALLBACK (toggle_running),
 			pdata);
-      gtk_table_attach (GTK_TABLE (tab), check, 0, 2, 1, 2,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), check, 0, 1, 2, 1);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
       check = gtk_check_button_new_with_label ("Show text");
       g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_show_text),
 			pdata);
-      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 2, 3,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), check, 0, 2, 1, 1);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 2, 3,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), hbox, 1, 2, 1, 1);
 
       label = gtk_label_new ("Text: ");
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
       pdata->entry = gtk_entry_new ();
+      gtk_widget_set_hexpand (pdata->entry, TRUE);
       g_signal_connect (pdata->entry, "changed",
 			G_CALLBACK (entry_changed),
 			pdata);
@@ -8367,9 +8360,8 @@ create_progress_bar (GtkWidget *widget)
       gtk_widget_set_size_request (pdata->entry, 100, -1);
 
       label = gtk_label_new ("Ellipsize text :");
-      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 10, 11,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, 10, 1, 1);
+
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       pdata->elmenu = build_option_menu (ellipsize_items,
@@ -8377,16 +8369,12 @@ create_progress_bar (GtkWidget *widget)
                                          2, // PANGO_ELLIPSIZE_MIDDLE
 					 progressbar_toggle_ellipsize,
 					 pdata);
-      gtk_table_attach (GTK_TABLE (tab), pdata->elmenu, 1, 2, 10, 11,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), pdata->elmenu, 1, 10, 1, 1);
 
       check = gtk_check_button_new_with_label ("Activity mode");
       g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_activity_mode), pdata);
-      gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 15, 16,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
+      gtk_grid_attach (GTK_GRID (grid), check, 0, 15, 1, 1);
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
