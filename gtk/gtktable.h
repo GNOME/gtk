@@ -37,6 +37,8 @@
 
 G_BEGIN_DECLS
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #define GTK_TYPE_TABLE			(gtk_table_get_type ())
 #define GTK_TABLE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TABLE, GtkTable))
 #define GTK_TABLE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TABLE, GtkTableClass))
@@ -146,6 +148,7 @@ void       gtk_table_get_size         (GtkTable        *table,
                                        guint           *rows,
                                        guint           *columns);
 
+#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 
