@@ -169,78 +169,49 @@ on_alpha_window_draw (GtkWidget *widget,
 static GtkWidget *
 build_alpha_widgets (void)
 {
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *radio_button;
+  GtkWidget *check_button;
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *entry;
 
-  table = gtk_table_new (1, 1, FALSE);
+  grid = gtk_grid_new ();
 
   radio_button = gtk_radio_button_new_with_label (NULL, "Red");
-  gtk_table_attach (GTK_TABLE (table),
-		    radio_button,
-		    0, 1,                  0, 1,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
+  gtk_widget_set_hexpand (radio_button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), radio_button, 0, 0, 1, 1);
 
   radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Green");
-  gtk_table_attach (GTK_TABLE (table),
-		    radio_button,
-		    0, 1,                  1, 2,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
+  gtk_widget_set_hexpand (radio_button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), radio_button, 0, 1, 1, 1);
 
   radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Blue"),
-  gtk_table_attach (GTK_TABLE (table),
-		    radio_button,
-		    0, 1,                  2, 3,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
+  gtk_widget_set_hexpand (radio_button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), radio_button, 0, 2, 1, 1);
 
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_check_button_new_with_label ("Sedentary"),
-		    1, 2,                  0, 1,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_check_button_new_with_label ("Nocturnal"),
-		    1, 2,                  1, 2,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
-  gtk_table_attach (GTK_TABLE (table),
-		    gtk_check_button_new_with_label ("Compulsive"),
-		    1, 2,                  2, 3,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
+  check_button = gtk_check_button_new_with_label ("Sedentary"),
+  gtk_widget_set_hexpand (check_button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 0, 1, 1);
 
-  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Green");
-  gtk_table_attach (GTK_TABLE (table),
-		    radio_button,
-		    0, 1,                  1, 2,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
+  check_button = gtk_check_button_new_with_label ("Nocturnal"),
+  gtk_widget_set_hexpand (check_button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 1, 1, 1);
 
-  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Blue"),
-  gtk_table_attach (GTK_TABLE (table),
-		    radio_button,
-		    0, 1,                  2, 3,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
-  
+  check_button = gtk_check_button_new_with_label ("Compulsive"),
+  gtk_widget_set_hexpand (check_button, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 2, 1, 1);
+
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), "<i>Entry: </i>");
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-  gtk_table_attach (GTK_TABLE (table),
-		    hbox,
-		    0, 1,                  3, 4,
-		    GTK_EXPAND | GTK_FILL, 0,
-		    0,                     0);
+  gtk_widget_set_hexpand (hbox, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), hbox, 0, 3, 2, 1);
   
-  return table;
+  return grid;
 }
 
 static void
