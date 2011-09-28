@@ -129,7 +129,7 @@ int main (int argc, char **argv)
   GtkStyleContext *context;
   GtkBorder pad;
   GtkWidget *window, *frame, *xthickness_spin, *ythickness_spin, *vbox;
-  GtkWidget *xalign_spin, *yalign_spin, *button, *table, *label;
+  GtkWidget *xalign_spin, *yalign_spin, *button, *grid, *label;
   gfloat xalign, yalign;
 
   gtk_init (&argc, &argv);
@@ -149,49 +149,49 @@ int main (int argc, char **argv)
   button = gtk_button_new_with_label ("Hello!");
   gtk_container_add (GTK_CONTAINER (frame), button);
 
-  table = gtk_table_new (4, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  grid = gtk_grid_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
 
   context = gtk_widget_get_style_context (frame);
   gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &pad);
 
   /* Spin to control xthickness */
   label = gtk_label_new ("xthickness: ");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   xthickness_spin = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (G_OBJECT (xthickness_spin), "value-changed", G_CALLBACK (spin_xthickness_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (xthickness_spin), pad.left);
-  gtk_table_attach_defaults (GTK_TABLE (table), xthickness_spin, 1, 2, 0, 1);
+  gtk_grid_attach (GTK_GRID (grid), xthickness_spin, 1, 0, 1, 1);
 
   /* Spin to control ythickness */
   label = gtk_label_new ("ythickness: ");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   ythickness_spin = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (G_OBJECT (ythickness_spin), "value-changed", G_CALLBACK (spin_ythickness_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (ythickness_spin), pad.top);
-  gtk_table_attach_defaults (GTK_TABLE (table), ythickness_spin, 1, 2, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), ythickness_spin, 1, 1, 1, 1);
 
   gtk_frame_get_label_align (GTK_FRAME (frame), &xalign, &yalign);
 
   /* Spin to control label xalign */
   label = gtk_label_new ("xalign: ");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
 
   xalign_spin = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   g_signal_connect (G_OBJECT (xalign_spin), "value-changed", G_CALLBACK (spin_xalign_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (xalign_spin), xalign);
-  gtk_table_attach_defaults (GTK_TABLE (table), xalign_spin, 1, 2, 2, 3);
+  gtk_grid_attach (GTK_GRID (grid), xalign_spin, 1, 2, 1, 1);
 
   /* Spin to control label yalign */
   label = gtk_label_new ("yalign: ");
-  gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
 
   yalign_spin = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   g_signal_connect (G_OBJECT (yalign_spin), "value-changed", G_CALLBACK (spin_yalign_cb), frame);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (yalign_spin), yalign);
-  gtk_table_attach_defaults (GTK_TABLE (table), yalign_spin, 1, 2, 3, 4);
+  gtk_grid_attach (GTK_GRID (grid), yalign_spin, 1, 3, 1, 1);
 
   gtk_widget_show_all (window);
 
