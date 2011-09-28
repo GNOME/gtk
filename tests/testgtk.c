@@ -3737,7 +3737,7 @@ create_scrolled_windows (GtkWidget *widget)
   static GtkWidget *window;
   GtkWidget *content_area, *action_area;
   GtkWidget *scrolled_window;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *button;
   char buffer[32];
   int i, j;
@@ -3767,23 +3767,22 @@ create_scrolled_windows (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (content_area), scrolled_window, TRUE, TRUE, 0);
       gtk_widget_show (scrolled_window);
 
-      table = gtk_table_new (20, 20, FALSE);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 10);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 10);
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window), table);
-      gtk_container_set_focus_hadjustment (GTK_CONTAINER (table),
+      grid = gtk_grid_new ();
+      gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+      gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window), grid);
+      gtk_container_set_focus_hadjustment (GTK_CONTAINER (grid),
 					   gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
-      gtk_container_set_focus_vadjustment (GTK_CONTAINER (table),
+      gtk_container_set_focus_vadjustment (GTK_CONTAINER (grid),
 					   gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
-      gtk_widget_show (table);
+      gtk_widget_show (grid);
 
       for (i = 0; i < 20; i++)
 	for (j = 0; j < 20; j++)
 	  {
 	    sprintf (buffer, "button (%d,%d)\n", i, j);
 	    button = gtk_toggle_button_new_with_label (buffer);
-	    gtk_table_attach_defaults (GTK_TABLE (table), button,
-				       i, i+1, j, j+1);
+	    gtk_grid_attach (GTK_GRID (grid), button, i, j, 1, 1);
 	    gtk_widget_show (button);
 	  }
 
