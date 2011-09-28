@@ -635,7 +635,7 @@ create_buttons (GtkWidget *widget)
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *separator;
   GtkWidget *button[10];
   int button_x[9] = { 0, 1, 2, 0, 2, 1, 1, 2, 0 };
@@ -658,11 +658,11 @@ create_buttons (GtkWidget *widget)
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
 
-      table = gtk_table_new (3, 3, FALSE);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 5);
-      gtk_container_set_border_width (GTK_CONTAINER (table), 10);
-      gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
+      grid = gtk_grid_new ();
+      gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
+      gtk_grid_set_column_spacing (GTK_GRID (grid), 5);
+      gtk_container_set_border_width (GTK_CONTAINER (grid), 10);
+      gtk_box_pack_start (GTK_BOX (box1), grid, TRUE, TRUE, 0);
 
       button[0] = gtk_button_new_with_label ("button1");
       button[1] = gtk_button_new_with_mnemonic ("_button2");
@@ -679,11 +679,11 @@ create_buttons (GtkWidget *widget)
           g_signal_connect (button[i], "clicked",
                             G_CALLBACK (button_window),
                             button[(i + 1) % 9]);
+          gtk_widget_set_hexpand (button[i], TRUE);
+          gtk_widget_set_vexpand (button[i], TRUE);
 
-          gtk_table_attach (GTK_TABLE (table), button[i],
-                            button_x[i], button_x[i] + 1,
-                            button_y[i], button_y[i] + 1,
-                            GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+          gtk_grid_attach (GTK_GRID (grid), button[i],
+                           button_x[i], button_y[i] + 1, 1, 1);
         }
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
