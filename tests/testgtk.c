@@ -779,11 +779,11 @@ create_toggle_buttons (GtkWidget *widget)
 static GtkWidget *
 create_widget_grid (GType widget_type)
 {
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *group_widget = NULL;
   gint i, j;
   
-  table = gtk_table_new (FALSE, 3, 3);
+  grid = gtk_grid_new ();
   
   for (i = 0; i < 5; i++)
     {
@@ -822,14 +822,11 @@ create_widget_grid (GType widget_type)
 	    }
 	  
 	  if (widget)
-	    gtk_table_attach (GTK_TABLE (table), widget,
-			      i, i + 1, j, j + 1,
-			      0,        0,
-			      0,        0);
+	    gtk_grid_attach (GTK_GRID (grid), widget, i, j, 1, 1);
 	}
     }
 
-  return table;
+  return grid;
 }
 
 /*
