@@ -5562,12 +5562,11 @@ create_display_screen (GtkWidget *widget)
   GdkDisplay *display = gdk_screen_get_display (screen);
 
   window = g_object_new (gtk_window_get_type (),
-			   "screen", screen,
-			   "user_data", NULL,
-			   "type", GTK_WINDOW_TOPLEVEL,
-			   "title",
-			   "Screen or Display selection",
-			   "border_width", 10, NULL);
+			 "screen", screen,
+			 "type", GTK_WINDOW_TOPLEVEL,
+			 "title", "Screen or Display selection",
+			 "border_width",
+                         10, NULL);
   g_signal_connect (window, "destroy", 
 		    G_CALLBACK (gtk_widget_destroy), NULL);
 
