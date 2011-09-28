@@ -541,7 +541,7 @@ create_big_windows (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *content_area;
-  GtkWidget *darea, *table, *scrollbar;
+  GtkWidget *darea, *grid, *scrollbar;
   GtkWidget *eventbox;
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
@@ -574,8 +574,8 @@ create_big_windows (GtkWidget *widget)
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
-      table = gtk_table_new (2, 2, FALSE);
-      gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
+      grid = gtk_grid_new ();
+      gtk_box_pack_start (GTK_BOX (content_area), grid, TRUE, TRUE, 0);
 
       darea = gtk_drawing_area_new ();
 
@@ -594,25 +594,19 @@ create_big_windows (GtkWidget *widget)
                         NULL);
 
       eventbox = gtk_event_box_new ();
-      gtk_table_attach (GTK_TABLE (table), eventbox,
-			0, 1,                  0, 1,
-			GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND,
-			0,                     0);
+      gtk_widget_set_hexpand (eventbox, TRUE);
+      gtk_widget_set_vexpand (eventbox, TRUE);
+      gtk_grid_attach (GTK_GRID (grid), eventbox, 0, 0, 1, 1);
 
       gtk_container_add (GTK_CONTAINER (eventbox), darea);
 
       scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
-      gtk_table_attach (GTK_TABLE (table), scrollbar,
-			0, 1,                  1, 2,
-			GTK_FILL | GTK_EXPAND, GTK_FILL,
-			0,                     0);
+      gtk_widget_set_hexpand (scrollbar, TRUE);
+      gtk_grid_attach (GTK_GRID (grid), scrollbar, 0, 1, 1, 1);
 
       scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadjustment);
-      gtk_table_attach (GTK_TABLE (table), scrollbar,
-			1, 2,                  0, 1,
-			GTK_FILL,              GTK_EXPAND | GTK_FILL,
-			0,                     0);
-
+      gtk_widget_set_vexpand (scrollbar, TRUE);
+      gtk_grid_attach (GTK_GRID (grid), scrollbar, 1, 0, 1, 1);
     }
 
   if (!gtk_widget_get_visible (window))
