@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gdk/gdkkeysyms.h"
+#include "gtkmarshalers.h"
 #include "gtkplacessidebar.h"
 #include "gtkscrolledwindow.h"
 #include "gtktreeview.h"
@@ -71,7 +72,6 @@ struct _GtkPlacesSidebar {
 
 	/* volume mounting - delayed open process */
 	gboolean mounting;
-	NautilusWindowSlot *go_to_after_mount_slot;
 	GtkPlacesOpenMode go_to_after_mount_open_mode;
 
 	GtkTreePath *eject_highlight_path;
@@ -81,6 +81,10 @@ struct _GtkPlacesSidebar {
 
 struct _GtkPlacesSidebarClass {
 	GtkScrolledWindowClass parent;
+
+	void (* location_selected) (GtkPlacesSidebar *sidebar,
+				    GFile            *location,
+				    GtkPlacesOpenMode open_mode);
 };
 
 enum {
@@ -116,6 +120,13 @@ typedef enum {
 	SECTION_COMPUTER,
 	SECTION_NETWORK,
 } SectionType;
+
+enum {
+	LOCATION_SELECTED,
+	LAST_SIGNAL,
+};
+
+static guint placess_sidebar_signals [LAST_SIGNAL] = { 0 };
 
 static void  open_selected_bookmark                    (GtkPlacesSidebar        *sidebar,
 							GtkTreeModel                 *model,
@@ -179,6 +190,13 @@ static GtkTreeModel *nautilus_shortcuts_model_filter_new (GtkPlacesSidebar *side
 							  GtkTreePath           *root);
 
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
+
+static void
+emit_location_selected (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[LOCATION_SELECTED], 0,
+		       location, open_mode);
+}
 
 static GdkPixbuf *
 get_eject_icon (GtkPlacesSidebar *sidebar,
@@ -1652,7 +1670,6 @@ volume_mounted_cb (GVolume *volume,
 {
 	GMount *mount;
 	GtkPlacesSidebar *sidebar;
-	GFile *location;
 
 	sidebar = GTK_PLACES_SIDEBAR (user_data);
 
@@ -1660,28 +1677,14 @@ volume_mounted_cb (GVolume *volume,
 
 	mount = g_volume_get_mount (volume);
 	if (mount != NULL) {
+		GFile *location;
+
 		location = g_mount_get_default_location (mount);
-
-		if (sidebar->go_to_after_mount_slot != NULL) {
-			if ((sidebar->go_to_after_mount_open_mode & NAUTILUS_WINDOW_OPEN_FLAG_NEW_WINDOW) == 0) {
-				nautilus_window_slot_open_location (sidebar->go_to_after_mount_slot, location,
-								    sidebar->go_to_after_mount_open_mode, NULL);
-			} else {
-				NautilusWindow *new, *cur;
-
-				cur = NAUTILUS_WINDOW (sidebar->window);
-				new = nautilus_application_create_window (nautilus_application_get_singleton (),
-									  gtk_window_get_screen (GTK_WINDOW (cur)));
-				nautilus_window_go_to (new, location);
-			}
-		}
+		emit_location_selected (sidebar, location, sidebar->go_to_after_mount_open_mode);
 
 		g_object_unref (G_OBJECT (location));
 		g_object_unref (G_OBJECT (mount));
 	}
-
-
-	eel_remove_weak_pointer (&(sidebar->go_to_after_mount_slot));
 }
 
 static void
@@ -1714,7 +1717,6 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 			GtkTreeIter	      *iter,
 			GtkPlacesOpenMode      open_mode)
 {
-	NautilusWindowSlot *slot;
 	GFile *location;
 	char *uri;
 
@@ -1728,29 +1730,14 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 		DEBUG ("Activating bookmark %s", uri);
 
 		location = g_file_new_for_uri (uri);
-		/* Navigate to the clicked location */
-#if 0
-		/* FIXME: emit the signal with the open_mode */
-		if ((flags & NAUTILUS_WINDOW_OPEN_FLAG_NEW_WINDOW) == 0) {
-			slot = nautilus_window_get_active_slot (sidebar->window);
-			nautilus_window_slot_open_location (slot, location,
-							    flags, NULL);
-		} else {
-			NautilusWindow *cur, *new;
+		emit_location_selected (sidebar, location, open_mode);
 
-			cur = NAUTILUS_WINDOW (sidebar->window);
-			new = nautilus_application_create_window (nautilus_application_get_singleton (),
-								  gtk_window_get_screen (GTK_WINDOW (cur)));
-			nautilus_window_go_to (new, location);
-		}
-#endif
 		g_object_unref (location);
 		g_free (uri);
 
 	} else {
 		GDrive *drive;
 		GVolume *volume;
-		NautilusWindowSlot *slot;
 
 		gtk_tree_model_get (model, iter,
 				    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
@@ -1759,12 +1746,6 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 
 		if (volume != NULL && !sidebar->mounting) {
 			sidebar->mounting = TRUE;
-
-			g_assert (sidebar->go_to_after_mount_slot == NULL);
-
-			slot = nautilus_window_get_active_slot (sidebar->window);
-			sidebar->go_to_after_mount_slot = slot;
-			eel_add_weak_pointer (&(sidebar->go_to_after_mount_slot));
 
 			sidebar->go_to_after_mount_open_mode = open_mode;
 
@@ -1806,24 +1787,24 @@ open_shortcut_from_menu (GtkPlacesSidebar *sidebar,
 }
 
 static void
-open_shortcut_cb (GtkMenuItem		*item,
-		  GtkPlacesSidebar	*sidebar)
+open_shortcut_cb (GtkMenuItem      *item,
+		  GtkPlacesSidebar *sidebar)
 {
-	open_shortcut_from_menu (sidebar, 0);
+	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NORMAL);
 }
 
 static void
-open_shortcut_in_new_window_cb (GtkMenuItem	      *item,
+open_shortcut_in_new_window_cb (GtkMenuItem      *item,
 				GtkPlacesSidebar *sidebar)
 {
-	open_shortcut_from_menu (sidebar, NAUTILUS_WINDOW_OPEN_FLAG_NEW_WINDOW);
+	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NEW_WINDOW);
 }
 
 static void
-open_shortcut_in_new_tab_cb (GtkMenuItem	      *item,
-				GtkPlacesSidebar *sidebar)
+open_shortcut_in_new_tab_cb (GtkMenuItem      *item,
+			     GtkPlacesSidebar *sidebar)
 {
-	open_shortcut_from_menu (sidebar, NAUTILUS_WINDOW_OPEN_FLAG_NEW_TAB);
+	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NEW_TAB);
 }
 
 /* Add bookmark for the selected item */
@@ -2837,7 +2818,7 @@ bookmarks_button_press_event_cb (GtkWidget             *widget,
 				     GTK_PLACES_OPEN_MODE_NEW_WINDOW :
 				     GTK_PLACES_OPEN_MODE_NEW_TAB);
 		} else {
-			open_mode = NAUTILUS_WINDOW_OPEN_FLAG_NEW_WINDOW; /* FIXME: was CLOSE_BEHIND */
+			open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW; /* FIXME: was CLOSE_BEHIND; make Nautilus handle this */
 		}
 
 		open_selected_bookmark (sidebar, model, &iter, open_mode);
@@ -3262,8 +3243,6 @@ gtk_places_sidebar_dispose (GObject *object)
 	g_clear_object (&sidebar->bookmarks);
 	g_clear_object (&sidebar->filter_model);
 
-	eel_remove_weak_pointer (&(sidebar->go_to_after_mount_slot));
-
 	g_signal_handlers_disconnect_by_func (nautilus_preferences,
 					      desktop_setting_changed_callback,
 					      sidebar);
@@ -3282,9 +3261,24 @@ gtk_places_sidebar_dispose (GObject *object)
 static void
 gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 {
-	G_OBJECT_CLASS (class)->dispose = gtk_places_sidebar_dispose;
+	GObjectClass *gobject_class;
+
+	gobject_class = (GObjectClass *) places_sidebar_class;
+
+	gobject_class->dispose = gtk_places_sidebar_dispose;
 
 	GTK_WIDGET_CLASS (class)->style_set = gtk_places_sidebar_style_set;
+
+	places_sidebar_signals [LOCATION_SELECTED] =
+		g_signal_new (I_("location-selected"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, location_selected),
+			      NULL, NULL,
+			      _gtk_marshal_VOID__OBJECT_ENUM,
+			      G_TYPE_NONE, 2,
+			      G_TYPE_OBJECT,
+			      G_TYPE_ENUM);
 }
 
 /* FIXME: do the following in a constructor or in ::map() */
@@ -3292,14 +3286,9 @@ static void
 gtk_places_sidebar_set_parent_window (GtkPlacesSidebar *sidebar,
 					   NautilusWindow *window)
 {
-	NautilusWindowSlot *slot;
-
 	sidebar->window = window;
 
-	slot = nautilus_window_get_active_slot (window);
-
 	sidebar->bookmarks = nautilus_bookmark_list_new ();
-	sidebar->uri = nautilus_window_slot_get_current_uri (slot);
 
 	sidebar->bookmarks_changed_id =
 		g_signal_connect_swapped (sidebar->bookmarks, "changed",
