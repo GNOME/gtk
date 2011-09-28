@@ -8330,11 +8330,9 @@ create_progress_bar (GtkWidget *widget)
       pdata->omenu1 = build_option_menu (items1, 4, 0,
 					 progressbar_toggle_orientation,
 					 pdata);
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 0, 1,
+      gtk_table_attach (GTK_TABLE (tab), pdata->omenu1, 1, 2, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
-      gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu1, TRUE, TRUE, 0);
       
       check = gtk_check_button_new_with_label ("Running");
       g_signal_connect (check, "toggled",
@@ -8379,11 +8377,9 @@ create_progress_bar (GtkWidget *widget)
                                          2, // PANGO_ELLIPSIZE_MIDDLE
 					 progressbar_toggle_ellipsize,
 					 pdata);
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 10, 11,
+      gtk_table_attach (GTK_TABLE (tab), pdata->elmenu, 1, 2, 10, 11,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
-      gtk_box_pack_start (GTK_BOX (hbox), pdata->elmenu, TRUE, TRUE, 0);
 
       check = gtk_check_button_new_with_label ("Activity mode");
       g_signal_connect (check, "clicked",
