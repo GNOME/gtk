@@ -2138,8 +2138,8 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 				int                width)
 {
   GtkTreeViewColumnPrivate *priv;
-  GtkAllocation             allocation;
   gboolean                  rtl;
+  GtkAllocation             allocation = { 0, 0, 0, 0 };
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
