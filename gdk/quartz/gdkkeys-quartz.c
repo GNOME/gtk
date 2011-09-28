@@ -336,18 +336,10 @@ maybe_update_keymap (void)
 			p[j] = GDK_ISO_Left_Tab;
 
 		      if (!found)
-                        {
-                          guint tmp;
-                          
-                          tmp = gdk_unicode_to_keyval (uc);
-                          if (tmp != (uc | 0x01000000))
-                            p[j] = tmp;
-                          else
-                            p[j] = 0;
-                        }
+                        p[j] = gdk_unicode_to_keyval (uc);
 		    }
 		}
-	      
+
 	      if (p[3] == p[2])
 		p[3] = 0;
 	      if (p[2] == p[1])
@@ -428,22 +420,20 @@ maybe_update_keymap (void)
 		      /* Special-case shift-tab since GTK+ expects
 		       * GDK_ISO_Left_Tab for that.
 		       */
+<<<<<<< HEAD
 		      if (found && p[j] == GDK_Tab && modifiers[j] == shiftKey)
 			p[j] = GDK_ISO_Left_Tab;
 		      
+=======
+		      if (found && p[j] == GDK_KEY_Tab && modifiers[j] == shiftKey)
+			p[j] = GDK_KEY_ISO_Left_Tab;
+
+>>>>>>> 0a13dea... quartz: don't filter away directly encoded 24-bit UCS characters
 		      if (!found)
-                        {
-                          guint tmp;
-                          
-                          tmp = gdk_unicode_to_keyval (uc);
-                          if (tmp != (uc | 0x01000000))
-                            p[j] = tmp;
-                          else
-                            p[j] = 0;
-                        }
+                        p[j] = gdk_unicode_to_keyval (uc);
 		    }
 		}
-	      
+
 	      if (p[3] == p[2])
 		p[3] = 0;
 	      if (p[2] == p[1])
