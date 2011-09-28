@@ -41,6 +41,12 @@
 typedef struct _GtkPlacesSidebar GtkPlacesSidebar;
 typedef struct _GtkPlacesSidebarClass GtkPlacesSidebarClass;
 
+typedef enum {
+  GTK_PLACES_OPEN_MODE_NORMAL,
+  GTK_PLACES_OPEN_MODE_NEW_TAB,
+  GTK_PLACES_OPEN_MODE_NEW_WINDOW
+} GtkPlacesOpenMode;
+
 GType gtk_places_sidebar_get_type (void);
 GtkWidget *gtk_places_sidebar_new (void);
 
