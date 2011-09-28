@@ -141,12 +141,12 @@ enum {
 };
 
 /* Target types for dragging from the shortcuts list */
-static const GtkTargetEntry nautilus_shortcuts_source_targets[] = {
+static const GtkTargetEntry dnd_source_targets[] = {
 	{ "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW }
 };
 
 /* Target types for dropping into the shortcuts list */
-static const GtkTargetEntry nautilus_shortcuts_drop_targets [] = {
+static const GtkTargetEntry dnd_drop_targets [] = {
 	{ "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
 	{ "text/uri-list", 0, TEXT_URI_LIST }
 };
@@ -3181,12 +3181,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tree_view),
 						GDK_BUTTON1_MASK,
-						nautilus_shortcuts_source_targets,
-						G_N_ELEMENTS (nautilus_shortcuts_source_targets),
+						dnd_source_targets, G_N_ELEMENTS (dnd_source_targets),
 						GDK_ACTION_MOVE);
 	gtk_drag_dest_set (GTK_WIDGET (tree_view),
 			   0,
-			   nautilus_shortcuts_drop_targets, G_N_ELEMENTS (nautilus_shortcuts_drop_targets),
+			   dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets),
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
 
 	g_signal_connect (tree_view, "key-press-event",
