@@ -987,7 +987,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkDialog *cpu_dialog = GTK_DIALOG (dialog);
   GtkWidget *action_area, *content_area;
-  GtkWidget *table, *label, *widget, *frame, *combo;
+  GtkWidget *grid, *label, *widget, *frame, *combo;
   GtkWidget *hbox, *vbox, *treeview, *scrolled, *toolbar, *button;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *column;
@@ -1076,101 +1076,88 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
 
-  table = gtk_table_new (2, 2, FALSE);
+  grid = gtk_grid_new ();
 
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Width:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->width_widget = widget;
-  gtk_table_attach (GTK_TABLE (table), widget,
-		    1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, 0, 1, 1);
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Height:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->height_widget = widget;
-  gtk_table_attach (GTK_TABLE (table), widget,
-		    1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, 1, 1, 1);
   gtk_widget_show (widget);
 
-  frame = wrap_in_frame (_("Paper Size"), table);
-  gtk_widget_show (table);
+  frame = wrap_in_frame (_("Paper Size"), grid);
+  gtk_widget_show (grid);
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
   gtk_widget_show (frame);
 
-  table = gtk_table_new (5, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Top:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->top_widget = widget;
-  gtk_table_attach (GTK_TABLE (table), widget,
-		    1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, 0, 1, 1);
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Bottom:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1 , 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->bottom_widget = widget;
-  gtk_table_attach (GTK_TABLE (table), widget,
-		    1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, 1, 1, 1);
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Left:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1, 2, 3, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->left_widget = widget;
-  gtk_table_attach (GTK_TABLE (table), widget,
-		    1, 2, 2, 3, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, 2, 1, 1);
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Right:"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_table_attach (GTK_TABLE (table), label,
-		    0, 1, 3, 4, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
   gtk_widget_show (label);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->right_widget = widget;
-  gtk_table_attach (GTK_TABLE (table), widget,
-		    1, 2, 3, 4, GTK_FILL, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), widget, 1, 3, 1, 1);
   gtk_widget_show (widget);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_table_attach (GTK_TABLE (table), hbox,
-		    0, 2, 4, 5, GTK_FILL | GTK_EXPAND, 0, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), hbox, 0, 4, 2, 1);
   gtk_widget_show (hbox);
 
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (priv->printer_list));
@@ -1197,8 +1184,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   g_signal_connect_swapped (combo, "changed",
 			    G_CALLBACK (margins_from_printer_changed), dialog);
 
-  frame = wrap_in_frame (_("Paper Margins"), table);
-  gtk_widget_show (table);
+  frame = wrap_in_frame (_("Paper Margins"), grid);
+  gtk_widget_show (grid);
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
   gtk_widget_show (frame);
 
