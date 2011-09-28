@@ -6930,10 +6930,8 @@ gdk_window_get_root_coords (GdkWindow *window,
 
   if (GDK_WINDOW_DESTROYED (window))
     {
-      if (x)
-	*root_x = x;
-      if (y)
-	*root_y = y;
+      *root_x = 0;
+      *root_y = 0;
       return;
     }
   
