@@ -6468,7 +6468,7 @@ paned_keyboard_window1 (GtkWidget *widget)
   GtkWidget *button6;
   GtkWidget *frame3;
   GtkWidget *frame4;
-  GtkWidget *table1;
+  GtkWidget *grid1;
   GtkWidget *button1;
   GtkWidget *button2;
   GtkWidget *button3;
@@ -6525,29 +6525,21 @@ paned_keyboard_window1 (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (frame3), frame4);
   gtk_container_set_border_width (GTK_CONTAINER (frame4), 15);
 
-  table1 = gtk_table_new (2, 2, FALSE);
-  gtk_container_add (GTK_CONTAINER (frame4), table1);
-  gtk_container_set_border_width (GTK_CONTAINER (table1), 11);
+  grid1 = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (frame4), grid1);
+  gtk_container_set_border_width (GTK_CONTAINER (grid1), 11);
 
   button1 = gtk_button_new_with_label ("button1");
-  gtk_table_attach (GTK_TABLE (table1), button1, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
+  gtk_grid_attach (GTK_GRID (grid1), button1, 0, 0, 1, 1);
 
   button2 = gtk_button_new_with_label ("button2");
-  gtk_table_attach (GTK_TABLE (table1), button2, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
+  gtk_grid_attach (GTK_GRID (grid1), button2, 1, 0, 1, 1);
 
   button3 = gtk_button_new_with_label ("button3");
-  gtk_table_attach (GTK_TABLE (table1), button3, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
+  gtk_grid_attach (GTK_GRID (grid1), button3, 0, 1, 1, 1);
 
   button4 = gtk_button_new_with_label ("button4");
-  gtk_table_attach (GTK_TABLE (table1), button4, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
+  gtk_grid_attach (GTK_GRID (grid1), button4, 1, 1, 1, 1);
 
   return window1;
 }
