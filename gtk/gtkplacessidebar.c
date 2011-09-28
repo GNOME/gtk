@@ -167,27 +167,27 @@ typedef struct {
   GtkTreeModelFilter parent;
 
   GtkPlacesSidebar *sidebar;
-} NautilusShortcutsModelFilter;
+} ShortcutsModelFilter;
 
 typedef struct {
   GtkTreeModelFilterClass parent_class;
-} NautilusShortcutsModelFilterClass;
+} ShortcutsModelFilterClass;
 
-#define NAUTILUS_SHORTCUTS_MODEL_FILTER_TYPE (_nautilus_shortcuts_model_filter_get_type ())
-#define NAUTILUS_SHORTCUTS_MODEL_FILTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), NAUTILUS_SHORTCUTS_MODEL_FILTER_TYPE, NautilusShortcutsModelFilter))
+#define SHORTCUTS_MODEL_FILTER_TYPE (shortcuts_model_filter_get_type ())
+#define SHORTCUTS_MODEL_FILTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHORTCUTS_MODEL_FILTER_TYPE, ShortcutsModelFilter))
 
-GType _nautilus_shortcuts_model_filter_get_type (void);
-static void nautilus_shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface);
+static GType shortcuts_model_filter_get_type (void);
+static void shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (NautilusShortcutsModelFilter,
-			 _nautilus_shortcuts_model_filter,
+G_DEFINE_TYPE_WITH_CODE (ShortcutsModelFilter,
+			 shortcuts_model_filter,
 			 GTK_TYPE_TREE_MODEL_FILTER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-						nautilus_shortcuts_model_filter_drag_source_iface_init));
+						shortcuts_model_filter_drag_source_iface_init));
 
-static GtkTreeModel *nautilus_shortcuts_model_filter_new (GtkPlacesSidebar *sidebar,
-							  GtkTreeModel          *child_model,
-							  GtkTreePath           *root);
+static GtkTreeModel *shortcuts_model_filter_new (GtkPlacesSidebar *sidebar,
+						 GtkTreeModel          *child_model,
+						 GtkTreePath           *root);
 
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 
@@ -3143,9 +3143,9 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	gtk_tree_view_set_tooltip_column (tree_view, PLACES_SIDEBAR_COLUMN_TOOLTIP);
 
-	sidebar->filter_model = nautilus_shortcuts_model_filter_new (sidebar,
-								     GTK_TREE_MODEL (sidebar->store),
-								     NULL);
+	sidebar->filter_model = shortcuts_model_filter_new (sidebar,
+							    GTK_TREE_MODEL (sidebar->store),
+							    NULL);
 
 	gtk_tree_view_set_model (tree_view, sidebar->filter_model);
 	gtk_container_add (GTK_CONTAINER (sidebar), GTK_WIDGET (tree_view));
@@ -3322,20 +3322,20 @@ gtk_places_sidebar_new (void)
 /* Drag and drop interfaces */
 
 static void
-_nautilus_shortcuts_model_filter_class_init (NautilusShortcutsModelFilterClass *class)
+shortcuts_model_filter_class_init (ShortcutsModelFilterClass *class)
 {
 }
 
 static void
-_nautilus_shortcuts_model_filter_init (NautilusShortcutsModelFilter *model)
+shortcuts_model_filter_init (ShortcutsModelFilter *model)
 {
 	model->sidebar = NULL;
 }
 
 /* GtkTreeDragSource::row_draggable implementation for the shortcuts filter model */
 static gboolean
-nautilus_shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
-					       GtkTreePath       *path)
+shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
+				      GtkTreePath       *path)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -3358,19 +3358,19 @@ nautilus_shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
 
 /* Fill the GtkTreeDragSourceIface vtable */
 static void
-nautilus_shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface)
+shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface)
 {
-	iface->row_draggable = nautilus_shortcuts_model_filter_row_draggable;
+	iface->row_draggable = shortcuts_model_filter_row_draggable;
 }
 
 static GtkTreeModel *
-nautilus_shortcuts_model_filter_new (GtkPlacesSidebar *sidebar,
-				     GtkTreeModel          *child_model,
-				     GtkTreePath           *root)
+shortcuts_model_filter_new (GtkPlacesSidebar *sidebar,
+			    GtkTreeModel     *child_model,
+			    GtkTreePath      *root)
 {
-	NautilusShortcutsModelFilter *model;
+	ShortcutsModelFilter *model;
 
-	model = g_object_new (NAUTILUS_SHORTCUTS_MODEL_FILTER_TYPE,
+	model = g_object_new (SHORTCUTS_MODEL_FILTER_TYPE,
 			      "child-model", child_model,
 			      "virtual-root", root,
 			      NULL);
