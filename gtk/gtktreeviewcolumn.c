@@ -517,6 +517,12 @@ gtk_tree_view_column_dispose (GObject *object)
   GtkTreeViewColumn        *tree_column = (GtkTreeViewColumn *) object;
   GtkTreeViewColumnPrivate *priv        = tree_column->priv;
 
+  /* Remove this column from its treeview, 
+   * in case this column is destroyed before its treeview.
+   */ 
+  if (priv->tree_view)
+    gtk_tree_view_remove_column (GTK_TREE_VIEW (priv->tree_view), tree_column);
+    
   if (priv->cell_area_context)
     { 
       g_signal_handler_disconnect (priv->cell_area_context,
