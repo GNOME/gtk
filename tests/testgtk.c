@@ -6310,7 +6310,7 @@ create_pane_options (GtkPaned    *paned,
 {
   GtkWidget *child1, *child2;
   GtkWidget *frame;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *check_button;
@@ -6321,23 +6321,20 @@ create_pane_options (GtkPaned    *paned,
   frame = gtk_frame_new (frame_label);
   gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
   
-  table = gtk_table_new (4, 2, 4);
-  gtk_container_add (GTK_CONTAINER (frame), table);
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (frame), grid);
   
   label = gtk_label_new (label1);
-  gtk_table_attach_defaults (GTK_TABLE (table), label,
-			     0, 1, 0, 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   
   check_button = gtk_check_button_new_with_label ("Resize");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     0, 1, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), check_button, 0, 1, 1, 1);
   g_signal_connect (check_button, "toggled",
 		    G_CALLBACK (toggle_resize),
                     child1);
 
   check_button = gtk_check_button_new_with_label ("Shrink");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     0, 1, 2, 3);
+  gtk_grid_attach (GTK_GRID (grid), check_button, 0, 2, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
@@ -6345,12 +6342,10 @@ create_pane_options (GtkPaned    *paned,
                     child1);
 
   label = gtk_label_new (label2);
-  gtk_table_attach_defaults (GTK_TABLE (table), label,
-			     1, 2, 0, 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
   
   check_button = gtk_check_button_new_with_label ("Resize");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     1, 2, 1, 2);
+  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 1, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
@@ -6358,8 +6353,7 @@ create_pane_options (GtkPaned    *paned,
                     child2);
 
   check_button = gtk_check_button_new_with_label ("Shrink");
-  gtk_table_attach_defaults (GTK_TABLE (table), check_button,
-			     1, 2, 2, 3);
+  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 2, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
@@ -6367,8 +6361,7 @@ create_pane_options (GtkPaned    *paned,
                     child2);
 
   button = gtk_button_new_with_mnemonic ("_Properties");
-  gtk_table_attach_defaults (GTK_TABLE (table), button,
-			     0, 2, 3, 4);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 3, 2, 1);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (paned_props_clicked),
 		    paned);
