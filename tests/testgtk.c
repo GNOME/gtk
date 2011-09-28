@@ -4217,7 +4217,7 @@ create_size_group_window (GdkScreen    *screen,
 {
   GtkWidget *content_area;
   GtkWidget *window;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *main_button;
   GtkWidget *button;
   GtkWidget *spin_button;
@@ -4243,13 +4243,13 @@ create_size_group_window (GdkScreen    *screen,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
+  grid = gtk_grid_new ();
+  gtk_box_pack_start (GTK_BOX (content_area), grid, TRUE, TRUE, 0);
 
-  gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 5);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-  gtk_widget_set_size_request (table, 250, 250);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
+  gtk_widget_set_size_request (grid, 250, 250);
 
   hgroup1 = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   hgroup2 = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -4257,11 +4257,12 @@ create_size_group_window (GdkScreen    *screen,
   vgroup2 = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
   main_button = gtk_button_new_with_label ("X");
+  gtk_widget_set_hexpand (main_button, TRUE);
+  gtk_widget_set_vexpand (main_button, TRUE);
+  gtk_widget_set_halign (main_button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (main_button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), main_button, 0, 0, 1, 1);
   
-  gtk_table_attach (GTK_TABLE (table), main_button,
-		    0, 1,       0, 1,
-		    GTK_EXPAND, GTK_EXPAND,
-		    0,          0);
   gtk_size_group_add_widget (master_size_group, main_button);
   gtk_size_group_add_widget (hgroup1, main_button);
   gtk_size_group_add_widget (vgroup1, main_button);
@@ -4270,26 +4271,32 @@ create_size_group_window (GdkScreen    *screen,
 			       SIZE_GROUP_INITIAL_SIZE);
 
   button = gtk_button_new ();
-  gtk_table_attach (GTK_TABLE (table), button,
-		    1, 2,       0, 1,
-		    GTK_EXPAND, GTK_EXPAND,
-		    0,          0);
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_vexpand (button, TRUE);
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 1);
+
   gtk_size_group_add_widget (vgroup1, button);
   gtk_size_group_add_widget (vgroup2, button);
 
   button = gtk_button_new ();
-  gtk_table_attach (GTK_TABLE (table), button,
-		    0, 1,       1, 2,
-		    GTK_EXPAND, GTK_EXPAND,
-		    0,          0);
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_vexpand (button, TRUE);
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 1, 1);
+
   gtk_size_group_add_widget (hgroup1, button);
   gtk_size_group_add_widget (hgroup2, button);
 
   button = gtk_button_new ();
-  gtk_table_attach (GTK_TABLE (table), button,
-		    1, 2,       1, 2,
-		    GTK_EXPAND, GTK_EXPAND,
-		    0,          0);
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_vexpand (button, TRUE);
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), button, 1, 1, 1, 1);
+
   gtk_size_group_add_widget (hgroup2, button);
   gtk_size_group_add_widget (vgroup2, button);
 
