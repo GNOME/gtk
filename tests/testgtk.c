@@ -5255,13 +5255,9 @@ make_focus_table (GList **list)
   
   table = gtk_table_new (5, 5, FALSE);
 
-  i = 0;
-  j = 0;
-
-  while (i < 5)
+  for (i = 0; i < 5; i++)
     {
-      j = 0;
-      while (j < 5)
+      for (j = 0; j < 5; j++)
         {
           GtkWidget *widget;
           
@@ -5279,11 +5275,7 @@ make_focus_table (GList **list)
                             GTK_EXPAND | GTK_FILL,
                             GTK_EXPAND | GTK_FILL,
                             5, 5);
-          
-          ++j;
         }
-
-      ++i;
     }
 
   *list = g_list_reverse (*list);
