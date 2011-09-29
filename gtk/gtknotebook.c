@@ -5266,6 +5266,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
+  notebook_tab_prepare_style_context (notebook, page, context, use_flags);
 
   gtk_render_extension (context, cr,
                        page->allocation.x,
