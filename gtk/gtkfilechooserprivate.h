@@ -19,6 +19,7 @@
 #ifndef __GTK_FILE_CHOOSER_PRIVATE_H__
 #define __GTK_FILE_CHOOSER_PRIVATE_H__
 
+#include "gtkbookmarksmanager.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
 #include "gtkfilesystemmodel.h"
@@ -247,6 +248,8 @@ struct _GtkFileChooserDefault
 
   GtkFileFilter *current_filter;
   GSList *filters;
+
+  GtkBookmarksManager *bookmarks_manager;
 
   int num_volumes;
   int num_shortcuts;

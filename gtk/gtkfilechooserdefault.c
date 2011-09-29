@@ -333,6 +333,9 @@ static void           gtk_file_chooser_default_get_default_size       (GtkFileCh
 static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_default_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
+static void volumes_bookmarks_changed_cb (GtkFileSystem         *file_system,
+					  GtkFileChooserDefault *impl);
+
 static void add_selection_to_recent_list (GtkFileChooserDefault *impl);
 
 static void location_popup_handler  (GtkFileChooserDefault *impl,
@@ -724,6 +727,14 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
 }
 
 static void
+bookmarks_changed_cb (gpointer data)
+{
+  GtkFileChooserDefault *impl = data;
+
+  volumes_bookmarks_changed_cb (impl->file_system, impl);
+}
+
+static void
 _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 {
   profile_start ("start", NULL);
@@ -752,6 +763,8 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
   set_file_system_backend (impl);
+
+  impl->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, impl);
 
   profile_end ("end", NULL);
 }
@@ -1852,7 +1865,7 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
       if (shortcut_find_position (impl, file) != -1)
         continue;
 
-      label = _gtk_file_system_get_bookmark_label (impl->file_system, file);
+      label = _gtk_bookmarks_manager_get_bookmark_label (impl->bookmarks_manager, file);
 
       shortcuts_insert_file (impl, start_row + num_inserted, SHORTCUT_TYPE_FILE, NULL, file, label, TRUE, SHORTCUTS_BOOKMARKS);
       g_free (label);
@@ -2062,7 +2075,7 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
   impl->num_bookmarks = 0;
   shortcuts_insert_separator (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
 
-  bookmarks = _gtk_file_system_list_bookmarks (impl->file_system);
+  bookmarks = _gtk_bookmarks_manager_list_bookmarks (impl->bookmarks_manager);
   shortcuts_append_bookmarks (impl, bookmarks);
   g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
   g_slist_free (bookmarks);
@@ -2471,7 +2484,7 @@ shortcuts_add_bookmark_from_file (GtkFileChooserDefault *impl,
     return FALSE;
 
   error = NULL;
-  if (!_gtk_file_system_insert_bookmark (impl->file_system, file, pos, &error))
+  if (!_gtk_bookmarks_manager_insert_bookmark (impl->bookmarks_manager, file, pos, &error))
     {
       error_adding_bookmark_dialog (impl, file, error);
       return FALSE;
@@ -2574,7 +2587,7 @@ remove_selected_bookmarks (GtkFileChooserDefault *impl)
   file = col_data;
 
   error = NULL;
-  if (!_gtk_file_system_remove_bookmark (impl->file_system, file, &error))
+  if (!_gtk_bookmarks_manager_remove_bookmark (impl->bookmarks_manager, file, &error))
     error_removing_bookmark_dialog (impl, file, error);
 }
 
@@ -3123,10 +3136,10 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
     goto out;
 
   error = NULL;
-  if (_gtk_file_system_remove_bookmark (impl->file_system, file, &error))
+  if (_gtk_bookmarks_manager_remove_bookmark (impl->bookmarks_manager, file, &error))
     {
       shortcuts_add_bookmark_from_file (impl, file, new_position);
-      _gtk_file_system_set_bookmark_label (impl->file_system, file, name);
+      _gtk_bookmarks_manager_set_bookmark_label (impl->bookmarks_manager, file, name);
     }
   else
     error_adding_bookmark_dialog (impl, file, error);
@@ -3483,7 +3496,7 @@ shortcuts_edited (GtkCellRenderer       *cell,
 		      -1);
   gtk_tree_path_free (path);
   
-  _gtk_file_system_set_bookmark_label (impl->file_system, shortcut, new_text);
+  _gtk_bookmarks_manager_set_bookmark_label (impl->bookmarks_manager, shortcut, new_text);
 }
 
 static void
@@ -5219,8 +5232,6 @@ set_file_system_backend (GtkFileChooserDefault *impl)
 
   g_signal_connect (impl->file_system, "volumes-changed",
 		    G_CALLBACK (volumes_bookmarks_changed_cb), impl);
-  g_signal_connect (impl->file_system, "bookmarks-changed",
-		    G_CALLBACK (volumes_bookmarks_changed_cb), impl);
 
   profile_end ("end", NULL);
 }
@@ -5811,6 +5822,12 @@ gtk_file_chooser_default_dispose (GObject *object)
     }
 
   remove_settings_signal (impl, gtk_widget_get_screen (GTK_WIDGET (impl)));
+
+  if (impl->bookmarks_manager)
+    {
+      _gtk_bookmarks_manager_free (impl->bookmarks_manager);
+      impl->bookmarks_manager = NULL;
+    }
 
   G_OBJECT_CLASS (_gtk_file_chooser_default_parent_class)->dispose (object);
 }
