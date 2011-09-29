@@ -603,7 +603,7 @@ gtk_table_init (GtkTable *table)
  *
  * Returns: A pointer to the the newly created table widget.
  *
- * @Deprecated: 3.4: Use gtk_grid_new().
+ * Deprecated: 3.4: Use gtk_grid_new().
  */
 GtkWidget*
 gtk_table_new (guint	rows,
@@ -637,7 +637,7 @@ gtk_table_new (guint	rows,
  * If you need to change a table's size <emphasis>after</emphasis>
  * it has been created, this function allows you to do so.
  *
- * @Deprecated: 3.4: #GtkGrid resizes automatically.
+ * Deprecated: 3.4: #GtkGrid resizes automatically.
  */
 void
 gtk_table_resize (GtkTable *table,
@@ -744,7 +744,7 @@ gtk_table_resize (GtkTable *table,
  * </programlisting></informalexample>
  * If you want to make the button span the entire bottom row, use @left_attach == 0 and @right_attach = 2 instead.
  *
- * @Deprecated: 3.4: Use gtk_grid_attach() with #GtkGrid. Note that the attach
+ * Deprecated: 3.4: Use gtk_grid_attach() with #GtkGrid. Note that the attach
  *     arguments differ between those two functions.
  */
 void
@@ -813,7 +813,7 @@ gtk_table_attach (GtkTable	  *table,
  * identical padding and expansion options. The values used for the #GtkAttachOptions
  * are <literal>GTK_EXPAND | GTK_FILL</literal>, and the padding is set to 0.
  *
- * @Deprecated: 3.4: Use gtk_grid_attach() with #GtkGrid. Note that the attach
+ * Deprecated: 3.4: Use gtk_grid_attach() with #GtkGrid. Note that the attach
  *     arguments differ between those two functions.
  */
 void
@@ -840,7 +840,7 @@ gtk_table_attach_defaults (GtkTable  *table,
  *
  * Changes the space between a given table row and the subsequent row.
  *
- * @Deprecated: 3.4: Use gtk_widget_set_margin_top() and 
+ * Deprecated: 3.4: Use gtk_widget_set_margin_top() and
  *     gtk_widget_set_margin_bottom() on the widgets contained in the row if
  *     you need this functionality. #GtkGrid does not support per-row spacing.
  */
@@ -876,7 +876,7 @@ gtk_table_set_row_spacing (GtkTable *table,
  *
  * Return value: the row spacing
  *
- * @Deprecated: 3.4: #GtkGrid does not offer a replacement for this
+ * Deprecated: 3.4: #GtkGrid does not offer a replacement for this
  *     functionality.
  **/
 guint
@@ -903,7 +903,7 @@ gtk_table_get_row_spacing (GtkTable *table,
  * Alters the amount of space between a given table column and the following
  * column.
  *
- * @Deprecated: 3.4: Use gtk_widget_set_margin_left() and 
+ * Deprecated: 3.4: Use gtk_widget_set_margin_left() and
  *     gtk_widget_set_margin_right() on the widgets contained in the row if
  *     you need this functionality. #GtkGrid does not support per-row spacing.
  */
@@ -939,7 +939,7 @@ gtk_table_set_col_spacing (GtkTable *table,
  *
  * Return value: the column spacing
  *
- * @Deprecated: 3.4: #GtkGrid does not offer a replacement for this
+ * Deprecated: 3.4: #GtkGrid does not offer a replacement for this
  *     functionality.
  **/
 guint
@@ -964,7 +964,7 @@ gtk_table_get_col_spacing (GtkTable *table,
  *
  * Sets the space between every row in @table equal to @spacing.
  *
- * @Deprecated: 3.4: Use gtk_grid_set_row_spacing() with #GtkGrid.
+ * Deprecated: 3.4: Use gtk_grid_set_row_spacing() with #GtkGrid.
  */
 void
 gtk_table_set_row_spacings (GtkTable *table,
@@ -997,7 +997,7 @@ gtk_table_set_row_spacings (GtkTable *table,
  *
  * Return value: the default row spacing
  *
- * @Deprecated: 3.4: Use gtk_grid_get_row_spacing() with #GtkGrid.
+ * Deprecated: 3.4: Use gtk_grid_get_row_spacing() with #GtkGrid.
  **/
 guint
 gtk_table_get_default_row_spacing (GtkTable *table)
@@ -1015,7 +1015,7 @@ gtk_table_get_default_row_spacing (GtkTable *table)
  *
  * Sets the space between every column in @table equal to @spacing.
  *
- * @Deprecated: 3.4: Use gtk_grid_set_column_spacing() with #GtkGrid.
+ * Deprecated: 3.4: Use gtk_grid_set_column_spacing() with #GtkGrid.
  */
 void
 gtk_table_set_col_spacings (GtkTable *table,
@@ -1048,7 +1048,7 @@ gtk_table_set_col_spacings (GtkTable *table,
  *
  * Return value: the default column spacing
  *
- * @Deprecated: 3.4: Use gtk_grid_get_column_spacing() with #GtkGrid.
+ * Deprecated: 3.4: Use gtk_grid_get_column_spacing() with #GtkGrid.
  **/
 guint
 gtk_table_get_default_col_spacing (GtkTable *table)
@@ -1067,7 +1067,7 @@ gtk_table_get_default_col_spacing (GtkTable *table)
  * Changes the homogenous property of table cells, ie. whether all cells are
  * an equal size or not.
  *
- * @Deprecated: 3.4: Use gtk_grid_set_row_homogeneous() and
+ * Deprecated: 3.4: Use gtk_grid_set_row_homogeneous() and
  *     gtk_grid_set_column_homogeneous() with #GtkGrid.
  */
 void
@@ -1101,7 +1101,7 @@ gtk_table_set_homogeneous (GtkTable *table,
  *
  * Return value: %TRUE if the cells are all constrained to the same size
  *
- * @Deprecated: 3.4: Use gtk_grid_get_row_homogeneous() and
+ * Deprecated: 3.4: Use gtk_grid_get_row_homogeneous() and
  *     gtk_grid_get_column_homogeneous() with #GtkGrid.
  **/
 gboolean
@@ -1124,7 +1124,7 @@ gtk_table_get_homogeneous (GtkTable *table)
  *
  * Since: 2.22
  *
- * @Deprecated: 3.4: #GtkGrid does not expose the number of columns and
+ * Deprecated: 3.4: #GtkGrid does not expose the number of columns and
  *     rows.
  **/
 void
