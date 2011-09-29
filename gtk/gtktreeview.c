@@ -15628,7 +15628,7 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
  * @tree_view: a #GtkTreeView
  * @hover: %TRUE to enable hover selection mode
  *
- * Enables of disables the hover selection mode of @tree_view.
+ * Enables or disables the hover selection mode of @tree_view.
  * Hover selection makes the selected row follow the pointer.
  * Currently, this works only for the selection modes 
  * %GTK_SELECTION_SINGLE and %GTK_SELECTION_BROWSE.
