@@ -5044,7 +5044,6 @@ gtk_notebook_paint (GtkWidget    *widget,
   gboolean is_rtl;
   gint tab_pos;
   GtkStyleContext *context;
-  GtkRegionFlags tab_flags;
 
   notebook = GTK_NOTEBOOK (widget);
   priv = notebook->priv;
@@ -5256,7 +5255,6 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   GtkNotebookPrivate *priv;
   GtkWidget *widget;
   GtkStyleContext *context;
-  GtkStateFlags state = 0;
 
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) ||
       !gtk_widget_get_mapped (page->tab_label) ||
@@ -5268,7 +5266,6 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
-  state = notebook_tab_prepare_style_context (notebook, page, context, use_flags);
 
   gtk_render_extension (context, cr,
                        page->allocation.x,
