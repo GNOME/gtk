@@ -58,7 +58,7 @@
  * For widgets that lack native scrolling support, the #GtkViewport
  * widget acts as an adaptor class, implementing scrollability for child
  * widgets that lack their own scrolling capabilities. Use #GtkViewport
- * to scroll child widgets such as #GtkTable, #GtkBox, and so on.
+ * to scroll child widgets such as #GtkGrid, #GtkBox, and so on.
  *
  * If a widget has native scrolling abilities, it can be added to the
  * #GtkScrolledWindow with gtk_container_add(). If a widget does not, you
@@ -79,7 +79,7 @@
  *
  * If a #GtkScrolledWindow doesn't behave quite as you would like, or
  * doesn't have exactly the right layout, it's very possible to set up
- * your own scrolling with #GtkScrollbar and for example a #GtkTable.
+ * your own scrolling with #GtkScrollbar and for example a #GtkGrid.
  */
 
 

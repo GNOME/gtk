@@ -28,7 +28,7 @@
  * SECTION:gtkbox
  * @Short_description: A container box
  * @Title: GtkBox
- * @See_also: #GtkFrame, #GtkTable, #GtkLayout
+ * @See_also: #GtkFrame, #GtkGrid, #GtkLayout
  *
  * The GtkBox widget organizes child widgets into a rectangular area.
  *
