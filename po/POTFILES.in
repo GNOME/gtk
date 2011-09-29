@@ -48,6 +48,7 @@ gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbindings.c
+gtk/gtkbookmarksmanager.c
 gtk/gtkbox.c
 gtk/gtkbuildable.c
 gtk/gtkbuilder.c
