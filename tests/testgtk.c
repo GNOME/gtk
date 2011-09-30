@@ -1320,68 +1320,6 @@ create_toolbar (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-static GtkActionEntry make_toolbar_items[] = {
-    { NULL, NULL, "Horizontal", NULL, "Horizontal toolbar layout",
-      G_CALLBACK (set_toolbar_horizontal) },
-    { NULL, NULL, "Vertical", NULL, "Vertical toolbar layout",
-      G_CALLBACK (set_toolbar_vertical) },
-    { NULL },
-    { NULL, NULL, "Icons", NULL, "Only show toolbar icons",
-      G_CALLBACK (set_toolbar_icons) },
-    { NULL, NULL, "Text", NULL, "Only show toolbar text",
-      G_CALLBACK (set_toolbar_text) },
-    { NULL, NULL, "Both", NULL, "Show toolbar icons and text",
-      G_CALLBACK (set_toolbar_both) },
-    { NULL },
-    { NULL, NULL, "Woot", NULL, "Woot woot woot",
-      NULL },
-    { NULL, NULL, "Blah", NULL, "Blah blah blah",
-      NULL },
-    { NULL },
-    { NULL, NULL, "Enable", NULL, "Enable tooltips",
-      G_CALLBACK (set_toolbar_enable) },
-    { NULL, NULL, "Disable", NULL, "Disable tooltips",
-      G_CALLBACK (set_toolbar_disable) },
-    { NULL },
-    { NULL, NULL, "Hoo", NULL, "Hoo tooltip",
-      NULL },
-    { NULL, NULL, "Woo", NULL, "Woo tooltip",
-      NULL }
-};
-
-static GtkWidget*
-make_toolbar (GtkWidget *window)
-{
-  GtkWidget *toolbar;
-  guint i;
-
-  if (!gtk_widget_get_realized (window))
-    gtk_widget_realize (window);
-
-  toolbar = gtk_toolbar_new ();
-  for (i = 0; i < G_N_ELEMENTS (make_toolbar_items); i++)
-    {
-      GtkWidget *icon;
-      GtkToolItem *toolitem;
-
-      if (make_toolbar_items[i].label == NULL)
-        {
-          toolitem = gtk_separator_tool_item_new ();
-        }
-      else
-        {
-          icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window));
-          toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
-          gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
-          if (make_toolbar_items[i].callback != NULL)
-            g_signal_connect (toolitem, "clicked",  make_toolbar_items[i].callback, toolbar);
-        }
-      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), toolitem, -1);
-    }
-
-  return toolbar;
-}
-
 /*
  * GtkStatusBar
  */
@@ -1560,128 +1498,6 @@ create_statusbar (GtkWidget *widget)
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
-  else
-    gtk_widget_destroy (window);
-}
-
-/*
- * GtkHandleBox
- */
-
-static void
-handle_box_child_signal (GtkHandleBox *hb,
-			 GtkWidget    *child,
-			 const gchar  *action)
-{
-  printf ("%s: child <%s> %sed\n",
-	  g_type_name (G_OBJECT_TYPE (hb)),
-	  g_type_name (G_OBJECT_TYPE (child)),
-	  action);
-}
-
-static void
-create_handle_box (GtkWidget *widget)
-{
-  static GtkWidget* window = NULL;
-  GtkWidget *handle_box;
-  GtkWidget *handle_box2;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *toolbar;
-  GtkWidget *label;
-  GtkWidget *separator;
-
-  if (!window)
-  {
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    
-    gtk_window_set_screen (GTK_WINDOW (window),
-			   gtk_widget_get_screen (widget));
-    gtk_window_set_modal (GTK_WINDOW (window), FALSE);
-    gtk_window_set_title (GTK_WINDOW (window),
-			  "Handle Box Test");
-    gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-    
-    g_signal_connect (window, "destroy",
-		      G_CALLBACK (gtk_widget_destroyed),
-		      &window);
-    
-    gtk_container_set_border_width (GTK_CONTAINER (window), 20);
-
-    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_add (GTK_CONTAINER (window), vbox);
-    gtk_widget_show (vbox);
-
-    label = gtk_label_new ("Above");
-    gtk_container_add (GTK_CONTAINER (vbox), label);
-    gtk_widget_show (label);
-
-    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_container_add (GTK_CONTAINER (vbox), separator);
-    gtk_widget_show (separator);
-    
-    hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_container_add (GTK_CONTAINER (vbox), hbox);
-    gtk_widget_show (hbox);
-
-    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_container_add (GTK_CONTAINER (vbox), separator);
-    gtk_widget_show (separator);
-
-    label = gtk_label_new ("Below");
-    gtk_container_add (GTK_CONTAINER (vbox), label);
-    gtk_widget_show (label);
-
-    handle_box = gtk_handle_box_new ();
-    gtk_box_pack_start (GTK_BOX (hbox), handle_box, FALSE, FALSE, 0);
-    g_signal_connect (handle_box,
-		      "child_attached",
-		      G_CALLBACK (handle_box_child_signal),
-		      "attached");
-    g_signal_connect (handle_box,
-		      "child_detached",
-		      G_CALLBACK (handle_box_child_signal),
-		      "detached");
-    gtk_widget_show (handle_box);
-
-    toolbar = make_toolbar (window);
-    
-    gtk_container_add (GTK_CONTAINER (handle_box), toolbar);
-    gtk_widget_show (toolbar);
-
-    handle_box = gtk_handle_box_new ();
-    gtk_box_pack_start (GTK_BOX (hbox), handle_box, FALSE, FALSE, 0);
-    g_signal_connect (handle_box,
-		      "child_attached",
-		      G_CALLBACK (handle_box_child_signal),
-		      "attached");
-    g_signal_connect (handle_box,
-		      "child_detached",
-		      G_CALLBACK (handle_box_child_signal),
-		      "detached");
-    gtk_widget_show (handle_box);
-
-    handle_box2 = gtk_handle_box_new ();
-    gtk_container_add (GTK_CONTAINER (handle_box), handle_box2);
-    g_signal_connect (handle_box2,
-		      "child_attached",
-		      G_CALLBACK (handle_box_child_signal),
-		      "attached");
-    g_signal_connect (handle_box2,
-		      "child_detached",
-		      G_CALLBACK (handle_box_child_signal),
-		      "detached");
-    gtk_widget_show (handle_box2);
-
-    hbox = g_object_new (GTK_TYPE_BOX, "visible", 1, "parent", handle_box2, NULL);
-    label = gtk_label_new ("Fooo!");
-    gtk_container_add (GTK_CONTAINER (hbox), label);
-    gtk_widget_show (label);
-    g_object_new (GTK_TYPE_ARROW, "visible", 1, "parent", hbox, NULL);
-  }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
 }
@@ -9888,7 +9704,6 @@ struct {
   { "flipping", create_flipping },
   { "focus", create_focus },
   { "font selection", create_font_selection },
-  { "handle box", create_handle_box },
   { "image", create_image },
   { "key lookup", create_key_lookup },
   { "labels", create_labels },
