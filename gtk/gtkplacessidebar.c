@@ -3397,12 +3397,23 @@ gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
 	gboolean 	 valid;
 	char  		 *iter_uri;
 
-        if (strcmp (sidebar->uri, uri) != 0) {
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	selection = gtk_tree_view_get_selection (sidebar->tree_view);
+
+	if (uri == NULL) {
+		g_free (sidebar->uri);
+		sidebar->uri = NULL;
+
+		gtk_tree_selection_unselect_all (selection);
+		return;
+	}
+
+        if (sidebar->uri == NULL || strcmp (sidebar->uri, uri) != 0) {
 		g_free (sidebar->uri);
                 sidebar->uri = g_strdup (uri);
 
 		/* set selection if any place matches the uri */
-		selection = gtk_tree_view_get_selection (sidebar->tree_view);
 		gtk_tree_selection_unselect_all (selection);
   		valid = gtk_tree_model_get_iter_first (sidebar->filter_model, &iter);
 
