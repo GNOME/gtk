@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <gtk/gtkx.h>
+#include <gtk/gtk.h>
 
 #include "gtkwindowaccessible.h"
 #include "gtktoplevelaccessible.h"
