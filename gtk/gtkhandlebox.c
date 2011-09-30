@@ -29,6 +29,8 @@
 
 #include <stdlib.h>
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkhandlebox.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
@@ -65,6 +67,12 @@
  * when the handlebox is detached, the bottom edge of the handlebox's
  * allocation will remain fixed as the height of the handlebox shrinks,
  * so the snap edge should be set to %GTK_POS_BOTTOM.
+ *
+ * <note>
+ * #GtkHandleBox has been deprecated. It is very specialized, lacks features
+ * to make it useful and most importantly does not fit well into modern
+ * application design. Do not use it. There is no replacement.
+ * </note>
  */
 
 
@@ -282,6 +290,8 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
    *
    * This signal is emitted when the contents of the
    * handlebox are reattached to the main window.
+   *
+   * Deprecated: 3.4: #GtkHandleBox has been deprecated.
    */
   handle_box_signals[SIGNAL_CHILD_ATTACHED] =
     g_signal_new (I_("child-attached"),
@@ -302,6 +312,8 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
    *
    * This signal is emitted when the contents of the
    * handlebox are detached from the main window.
+   *
+   * Deprecated: 3.4: #GtkHandleBox has been deprecated.
    */
   handle_box_signals[SIGNAL_CHILD_DETACHED] =
     g_signal_new (I_("child-detached"),
@@ -412,6 +424,8 @@ gtk_handle_box_get_property (GObject         *object,
  * Create a new handle box.
  *
  * Returns: a new #GtkHandleBox.
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  */
 GtkWidget*
 gtk_handle_box_new (void)
@@ -896,6 +910,8 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
  *
  * Sets the type of shadow to be drawn around the border
  * of the handle box.
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  */
 void
 gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
@@ -923,6 +939,8 @@ gtk_handle_box_set_shadow_type (GtkHandleBox  *handle_box,
  * gtk_handle_box_set_shadow_type().
  *
  * Return value: the type of shadow currently drawn around the handle box.
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  **/
 GtkShadowType
 gtk_handle_box_get_shadow_type (GtkHandleBox *handle_box)
@@ -938,6 +956,8 @@ gtk_handle_box_get_shadow_type (GtkHandleBox *handle_box)
  * @position: the side of the handlebox where the handle should be drawn.
  *
  * Sets the side of the handlebox where the handle is drawn.
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  */
 void        
 gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
@@ -965,6 +985,8 @@ gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
  * gtk_handle_box_set_handle_position().
  *
  * Return value: the current handle position.
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  **/
 GtkPositionType
 gtk_handle_box_get_handle_position (GtkHandleBox *handle_box)
@@ -994,6 +1016,8 @@ gtk_handle_box_get_handle_position (GtkHandleBox *handle_box)
  * handle position is %GTK_POS_RIGHT or %GTK_POS_LEFT,
  * then the snap edge will be %GTK_POS_TOP, otherwise
  * it will be %GTK_POS_LEFT.
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  */
 void
 gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
@@ -1026,6 +1050,8 @@ gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
  * Return value: the edge used for determining reattachment, or
  *   (GtkPositionType)-1 if this is determined (as per default)
  *   from the handle position.
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  **/
 GtkPositionType
 gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
@@ -1044,6 +1070,8 @@ gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
  * Return value: %TRUE if the child is currently detached, otherwise %FALSE
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.4: #GtkHandleBox has been deprecated.
  **/
 gboolean
 gtk_handle_box_get_child_detached (GtkHandleBox *handle_box)
