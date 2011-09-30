@@ -35,6 +35,7 @@ typedef struct
   GSList *bookmarks;
 
   GFileMonitor *bookmarks_monitor;
+  gulong bookmarks_monitor_changed_id;
 
   gpointer changed_func_data;
   GtkBookmarksChangedFunc changed_func;

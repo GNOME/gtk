@@ -224,8 +224,8 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
       g_error_free (error);
     }
   else
-    g_signal_connect (manager->bookmarks_monitor, "changed",
-		      G_CALLBACK (bookmarks_file_changed), manager);
+    manager->bookmarks_monitor_changed_id = g_signal_connect (manager->bookmarks_monitor, "changed",
+							      G_CALLBACK (bookmarks_file_changed), manager);
 
   g_object_unref (bookmarks_file);
 
@@ -238,7 +238,12 @@ _gtk_bookmarks_manager_free (GtkBookmarksManager *manager)
   g_return_if_fail (manager != NULL);
 
   if (manager->bookmarks_monitor)
-    g_object_unref (manager->bookmarks_monitor);
+    {
+      g_file_monitor_cancel (manager->bookmarks_monitor);
+      g_signal_handler_disconnect (manager->bookmarks_monitor, manager->bookmarks_monitor_changed_id);
+      manager->bookmarks_monitor_changed_id = 0;
+      g_object_unref (manager->bookmarks_monitor);
+    }
 
   if (manager->bookmarks)
     {
