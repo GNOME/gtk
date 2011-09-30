@@ -873,7 +873,7 @@ gtk_scale_button_screen_changed (GtkWidget *widget,
   GtkScaleButton *button = (GtkScaleButton *) widget;
   GtkScaleButtonPrivate *priv;
   GdkScreen *screen;
-  GValue value = { 0, };
+  GValue value = G_VALUE_INIT;
 
   if (gtk_widget_has_screen (widget) == FALSE)
     return;

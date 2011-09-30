@@ -2442,7 +2442,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
 
           if (spec != NULL)
             {
-              GValue value = { 0, };
+              GValue value = G_VALUE_INIT;
 
               g_value_init (&value, spec->value_type);
               g_object_get_property (cur_renderer->data, *prop_list, &value);

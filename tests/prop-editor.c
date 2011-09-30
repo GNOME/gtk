@@ -184,7 +184,7 @@ static void
 int_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_INT);
 
@@ -221,7 +221,7 @@ static void
 uint_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_UINT);
   get_property_value (object, pspec, &val);
@@ -257,7 +257,7 @@ static void
 float_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_FLOAT);
   get_property_value (object, pspec, &val);
@@ -293,7 +293,7 @@ static void
 double_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_DOUBLE);
   get_property_value (object, pspec, &val);
@@ -332,7 +332,7 @@ static void
 string_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   const gchar *str;
   const gchar *text;
 
@@ -377,7 +377,7 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON (data);
   GtkWidget *child;
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_BOOLEAN);
   get_property_value (object, pspec, &val);
@@ -425,7 +425,7 @@ static void
 enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkComboBox *cb = GTK_COMBO_BOX (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   GEnumClass *eclass;
   gint i;
 
@@ -499,7 +499,7 @@ static void
 flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GList *children, *c;
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   GFlagsClass *fclass;
   guint flags;
   gint i;
@@ -559,7 +559,7 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GtkEntry *entry = GTK_ENTRY (data);
   gunichar new_val;
   gunichar old_val = unichar_get_value (entry);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   gchar buf[7];
   gint len;
 
@@ -684,7 +684,7 @@ static void
 color_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkColorButton *cb = GTK_COLOR_BUTTON (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   GdkRGBA *color;
   GdkRGBA cb_color;
 
@@ -730,7 +730,7 @@ static void
 font_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkFontChooser *fb = GTK_FONT_CHOOSER (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   const PangoFontDescription *font_desc;
   PangoFontDescription *fb_font_desc;
 

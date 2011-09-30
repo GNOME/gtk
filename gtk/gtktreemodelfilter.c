@@ -1264,7 +1264,7 @@ gtk_tree_model_filter_real_visible (GtkTreeModelFilter *filter,
     }
   else if (filter->priv->visible_column >= 0)
    {
-     GValue val = {0, };
+     GValue val = G_VALUE_INIT;
 
      gtk_tree_model_get_value (child_model, child_iter,
                                filter->priv->visible_column, &val);

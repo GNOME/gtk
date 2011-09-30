@@ -711,7 +711,7 @@ gtk_cell_layout_buildable_set_cell_property (GtkCellArea     *area,
 					     const gchar     *value)
 {
   GParamSpec *pspec;
-  GValue gvalue = { 0, };
+  GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
   pspec = gtk_cell_area_class_find_cell_property (GTK_CELL_AREA_GET_CLASS (area), name);

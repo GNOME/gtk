@@ -326,8 +326,8 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 {
   gint column = GPOINTER_TO_INT (user_data);
   GType type = gtk_tree_model_get_column_type (model, column);
-  GValue a_value = {0, };
-  GValue b_value = {0, };
+  GValue a_value = G_VALUE_INIT;
+  GValue b_value = G_VALUE_INIT;
   gint retval;
   const gchar *stra, *strb;
 

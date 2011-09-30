@@ -584,7 +584,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
     {
       const GtkStyleProperty *node;
       gchar *error = NULL;
-      GValue val = { 0 };
+      GValue val = G_VALUE_INIT;
 
       node = _gtk_style_property_lookup (property_name);
 
@@ -756,7 +756,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
         }
       else if (_gtk_style_property_is_shorthand (node))
         {
-          GValue packed = { 0 };
+          GValue packed = G_VALUE_INIT;
 
           g_value_init (&packed, node->pspec->value_type);
           _gtk_style_property_pack (node, props, state, &packed);
@@ -765,7 +765,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
         }
       else
         {
-          GValue default_value = { 0 };
+          GValue default_value = G_VALUE_INIT;
 
           g_value_init (&default_value, node->pspec->value_type);
           _gtk_style_property_default_value (node, props, state, &default_value);

@@ -479,7 +479,7 @@ binding_compose_params (GObject         *object,
   valid = TRUE;
   for (i = 1; i < query->n_params + 1 && valid; i++)
     {
-      GValue tmp_value = { 0, };
+      GValue tmp_value = G_VALUE_INIT;
 
       g_value_init (params, *types);
 
@@ -602,7 +602,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
       GSignalQuery query;
       guint signal_id;
       GValue *params = NULL;
-      GValue return_val = { 0, };
+      GValue return_val = G_VALUE_INIT;
       gchar *accelerator = NULL;
 
       signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));

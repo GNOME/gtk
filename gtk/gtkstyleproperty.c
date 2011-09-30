@@ -1201,7 +1201,7 @@ border_image_value_parse (GtkCssParser *parser,
                           GFile *base,
                           GValue *value)
 {
-  GValue temp = { 0, };
+  GValue temp = G_VALUE_INIT;
   cairo_pattern_t *pattern = NULL;
   GtkGradient *gradient = NULL;
   GtkBorder slice, *width = NULL, *parsed_slice;

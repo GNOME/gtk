@@ -987,7 +987,7 @@ gtk_cell_view_new_with_text (const gchar *text)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;
-  GValue value = {0, };
+  GValue value = G_VALUE_INIT;
 
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
@@ -1021,7 +1021,7 @@ gtk_cell_view_new_with_markup (const gchar *markup)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;
-  GValue value = {0, };
+  GValue value = G_VALUE_INIT;
 
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
@@ -1053,7 +1053,7 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
 {
   GtkCellView *cellview;
   GtkCellRenderer *renderer;
-  GValue value = {0, };
+  GValue value = G_VALUE_INIT;
 
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 

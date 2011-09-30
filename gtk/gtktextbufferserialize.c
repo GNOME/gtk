@@ -54,7 +54,7 @@ serialize_value (GValue *value)
 {
   if (g_value_type_transformable (value->g_type, G_TYPE_STRING))
     {
-      GValue text_value = { 0 };
+      GValue text_value = G_VALUE_INIT;
       gchar *tmp;
 
       g_value_init (&text_value, G_TYPE_STRING);
@@ -85,7 +85,7 @@ deserialize_value (const gchar *str,
 {
   if (g_value_type_transformable (G_TYPE_STRING, value->g_type))
     {
-      GValue text_value = { 0 };
+      GValue text_value = G_VALUE_INIT;
       gboolean retval;
 
       g_value_init (&text_value, G_TYPE_STRING);
@@ -313,7 +313,7 @@ serialize_tag (gpointer key,
 
   for (i = 0; i < n_pspecs; i++)
     {
-      GValue value = { 0 };
+      GValue value = G_VALUE_INIT;
       gchar *tmp, *tmp2;
 
       if (!(pspecs[i]->flags & G_PARAM_READABLE) ||
@@ -1164,7 +1164,7 @@ parse_attr_element (GMarkupParseContext  *context,
 {
   const gchar *name, *type, *value;
   GType gtype;
-  GValue gvalue = { 0 };
+  GValue gvalue = G_VALUE_INIT;
   GParamSpec *pspec;
 
   g_assert (peek_state (info) == STATE_TAG);

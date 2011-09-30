@@ -1250,7 +1250,7 @@ apply_cell_attributes (GtkCellRenderer *renderer,
 {
   CellAttribute *attribute;
   GSList        *list;
-  GValue         value = { 0, };
+  GValue         value = G_VALUE_INIT;
   gboolean       is_expander;
   gboolean       is_expanded;
 
@@ -2602,7 +2602,7 @@ area_set_cell_property (GtkCellArea     *area,
                         GParamSpec      *pspec,
                         const GValue    *value)
 {
-  GValue tmp_value = { 0, };
+  GValue tmp_value = G_VALUE_INIT;
   GtkCellAreaClass *class = g_type_class_peek (pspec->owner_type);
 
   /* provide a copy to work from, convert (if necessary) and validate */
@@ -2656,7 +2656,7 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
   name = first_property_name;
   while (name)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       gchar *error = NULL;
       GParamSpec *pspec =
         g_param_spec_pool_lookup (cell_property_pool, name,
@@ -2718,7 +2718,7 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
   name = first_property_name;
   while (name)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       GParamSpec *pspec;
       gchar *error;
 
@@ -2824,7 +2824,7 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
                G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
   else
     {
-      GValue *prop_value, tmp_value = { 0, };
+      GValue *prop_value, tmp_value = G_VALUE_INIT;
 
       /* auto-conversion of the callers value type
        */

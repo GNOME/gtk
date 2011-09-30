@@ -1285,7 +1285,7 @@ attribute_from_text (GtkBuilder   *builder,
   PangoLanguage  *language;
   PangoFontDescription *font_desc;
   GdkColor       *color;
-  GValue          val = { 0, };
+  GValue          val = G_VALUE_INIT;
 
   if (!gtk_builder_value_from_string_type (builder, PANGO_TYPE_ATTR_TYPE, name, &val, error))
     return NULL;
@@ -1441,7 +1441,7 @@ pango_start_element (GMarkupParseContext *context,
 		     GError             **error)
 {
   PangoParserData *data = (PangoParserData*)user_data;
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   guint i;
   gint line_number, char_number;
 

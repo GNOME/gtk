@@ -212,7 +212,7 @@ object_test_property (GObject           *object,
   if (pspec->flags & G_PARAM_WRITABLE &&
       !(pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)))
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       guint i;
       const IgnoreProperty *ignore_properties;
       /* select value to set */

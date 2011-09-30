@@ -1583,7 +1583,7 @@ gtk_settings_get_property (GObject     *object,
     }
   else
     {
-      GValue val = { 0, };
+      GValue val = G_VALUE_INIT;
 
       /* Try to get xsetting as a string and parse it. */
 
@@ -1596,8 +1596,8 @@ gtk_settings_get_property (GObject     *object,
         }
       else
         {
-          GValue tmp_value = { 0, };
-          GValue gstring_value = { 0, };
+          GValue tmp_value = G_VALUE_INIT;
+          GValue gstring_value = G_VALUE_INIT;
           GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
 
           g_value_init (&gstring_value, G_TYPE_GSTRING);
@@ -1759,7 +1759,7 @@ apply_queued_setting (GtkSettings             *settings,
                       GtkSettingsValuePrivate *qvalue)
 {
   GtkSettingsPrivate *priv = settings->priv;
-  GValue tmp_value = { 0, };
+  GValue tmp_value = G_VALUE_INIT;
   GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
@@ -2411,7 +2411,7 @@ _gtk_settings_handle_event (GdkEventSetting *event)
 
       if (property_id == PROP_COLOR_SCHEME)
         {
-          GValue value = { 0, };
+          GValue value = G_VALUE_INIT;
 
           g_value_init (&value, G_TYPE_STRING);
           if (!gdk_screen_get_setting (screen, pspec->name, &value))
@@ -2699,7 +2699,7 @@ settings_update_color_scheme (GtkSettings *settings)
     {
       GtkSettingsPrivate *priv = settings->priv;
       ColorSchemeData *data;
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
 
       data = g_slice_new0 (ColorSchemeData);
       data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,

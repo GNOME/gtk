@@ -1754,7 +1754,7 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
 
   while (column != -1)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       gchar *error = NULL;
 
       if (column >= gtk_tree_model_get_n_columns (tree_model))

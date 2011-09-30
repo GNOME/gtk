@@ -849,7 +849,7 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
   gint old_column = column;
-  GValue real_value = { 0, };
+  GValue real_value = G_VALUE_INIT;
   gboolean converted = FALSE;
   gboolean retval = FALSE;
 
@@ -1040,7 +1040,7 @@ gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
 
   while (column != -1)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       gchar *error = NULL;
 
       if (column < 0 || column >= priv->n_columns)

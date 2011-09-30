@@ -553,7 +553,7 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
                                             const gchar  *value)
 {
   GParamSpec *pspec;
-  GValue gvalue = { 0, };
+  GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
   pspec = gtk_container_class_find_child_property
@@ -847,7 +847,7 @@ container_set_child_property (GtkContainer       *container,
                               const GValue       *value,
                               GObjectNotifyQueue *nqueue)
 {
-  GValue tmp_value = { 0, };
+  GValue tmp_value = G_VALUE_INIT;
   GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
 
   /* provide a copy to work from, convert (if necessary) and validate */
@@ -903,7 +903,7 @@ gtk_container_child_get_valist (GtkContainer *container,
   name = first_property_name;
   while (name)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       GParamSpec *pspec;
       gchar *error;
 
@@ -983,7 +983,7 @@ gtk_container_child_get_property (GtkContainer *container,
                G_OBJECT_TYPE_NAME (container));
   else
     {
-      GValue *prop_value, tmp_value = { 0, };
+      GValue *prop_value, tmp_value = G_VALUE_INIT;
 
       /* auto-conversion of the callers value type
        */
@@ -1047,7 +1047,7 @@ gtk_container_child_set_valist (GtkContainer *container,
   name = first_property_name;
   while (name)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       gchar *error = NULL;
       GParamSpec *pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
                                                     name,

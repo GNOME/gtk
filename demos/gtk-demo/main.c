@@ -711,7 +711,7 @@ selection_cb (GtkTreeSelection *selection,
               GtkTreeModel     *model)
 {
   GtkTreeIter iter;
-  GValue value = {0, };
+  GValue value = G_VALUE_INIT;
 
   if (! gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;

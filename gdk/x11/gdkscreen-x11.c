@@ -1117,7 +1117,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   GdkX11Screen *x11_screen;
   gboolean success = FALSE;
   gint i;
-  GValue tmp_val = { 0, };
+  GValue tmp_val = G_VALUE_INIT;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 

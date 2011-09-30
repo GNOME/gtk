@@ -364,7 +364,7 @@ iter_compare_func (GtkTreeModel *model,
 		   GtkTreeIter  *b,
 		   gpointer      user_data)
 {
-  GValue a_value = { 0, }, b_value = { 0, };
+  GValue a_value = G_VALUE_INIT, b_value = G_VALUE_INIT;
   GtkAction *a_action, *b_action;
   const gchar *a_name, *b_name;
   gint retval = 0;

@@ -117,7 +117,7 @@ gtk_combo_box_accessible_get_name (AtkObject *obj)
       n_columns = gtk_tree_model_get_n_columns (model);
       for (i = 0; i < n_columns; i++)
         {
-          GValue value = { 0, };
+          GValue value = G_VALUE_INIT;
 
           gtk_tree_model_get_value (model, &iter, i, &value);
           if (G_VALUE_HOLDS_STRING (&value))

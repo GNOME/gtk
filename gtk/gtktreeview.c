@@ -15300,8 +15300,8 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
   gchar *normalized_key;
   gchar *case_normalized_string = NULL;
   gchar *case_normalized_key = NULL;
-  GValue value = {0,};
-  GValue transformed = {0,};
+  GValue value = G_VALUE_INIT;
+  GValue transformed = G_VALUE_INIT;
 
   gtk_tree_model_get_value (model, iter, column, &value);
 
@@ -16329,8 +16329,8 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
 				    GtkTooltip *tooltip,
 				    gpointer    data)
 {
-  GValue value = { 0, };
-  GValue transformed = { 0, };
+  GValue value = G_VALUE_INIT;
+  GValue transformed = G_VALUE_INIT;
   GtkTreeIter iter;
   GtkTreePath *path;
   GtkTreeModel *model;

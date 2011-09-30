@@ -1637,7 +1637,7 @@ marks_start_element (GMarkupParseContext *context,
             msg_context = values[i];
           else if (strcmp (names[i], "value") == 0)
             {
-              GValue gvalue = { 0, };
+              GValue gvalue = G_VALUE_INIT;
 
               if (!gtk_builder_value_from_string_type (parser_data->builder, G_TYPE_DOUBLE, values[i], &gvalue, error))
                 return;
@@ -1647,7 +1647,7 @@ marks_start_element (GMarkupParseContext *context,
             }
           else if (strcmp (names[i], "position") == 0)
             {
-              GValue gvalue = { 0, };
+              GValue gvalue = G_VALUE_INIT;
 
               if (!gtk_builder_value_from_string_type (parser_data->builder, GTK_TYPE_POSITION_TYPE, values[i], &gvalue, error))
                 return;

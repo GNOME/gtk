@@ -1721,7 +1721,7 @@ test_window (void)
 static void
 test_value_from_string (void)
 {
-  GValue value = { 0 };
+  GValue value = G_VALUE_INIT;
   GError *error = NULL;
   GtkBuilder *builder;
 

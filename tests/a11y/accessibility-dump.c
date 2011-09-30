@@ -426,8 +426,8 @@ dump_atk_value (AtkValue *atk_value,
                 guint     depth,
                 GString  *string)
 {
-  GValue value = { 0, };
-  GValue svalue = { 0, };
+  GValue value = G_VALUE_INIT;
+  GValue svalue = G_VALUE_INIT;
 
   g_string_append_printf (string, "%*s<AtkValue>\n", depth, "");
 

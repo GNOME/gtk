@@ -510,7 +510,7 @@ display_opened_cb (GdkDisplayManager *display_manager,
   
   for (i = 0; i < gdk_display_get_n_screens (display); i++)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
 
       g_value_init (&value, G_TYPE_STRING);
 

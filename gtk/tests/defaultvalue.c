@@ -27,7 +27,7 @@ check_property (const char *output,
 	        GParamSpec *pspec,
 		GValue *value)
 {
-  GValue default_value = { 0, };
+  GValue default_value = G_VALUE_INIT;
   char *v, *dv, *msg;
 
   if (g_param_value_defaults (pspec, value))
@@ -103,7 +103,7 @@ test_type (gconstpointer data)
   for (i = 0; i < n_pspecs; ++i)
     {
       GParamSpec *pspec = pspecs[i];
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       
       if (pspec->owner_type != type)
 	continue;
@@ -298,7 +298,7 @@ test_type (gconstpointer data)
       for (i = 0; i < n_pspecs; ++i)
 	{
 	  GParamSpec *pspec = pspecs[i];
-	  GValue value = { 0, };
+	  GValue value = G_VALUE_INIT;
 	  
 	  if (pspec->owner_type != type)
 	    continue;
