@@ -55,7 +55,6 @@ enum {
 };
 
 enum {
-  BOOKMARKS_CHANGED,
   VOLUMES_CHANGED,
   FS_LAST_SIGNAL
 };
@@ -81,11 +80,6 @@ struct GtkFileSystemPrivate
    * of type GDrive, GVolume and GMount
    */
   GSList *volumes;
-
-  /* This list contains GtkFileSystemBookmark structs */
-  GSList *bookmarks;
-
-  GFileMonitor *bookmarks_monitor;
 };
 
 struct AsyncFuncData
@@ -99,23 +93,8 @@ struct AsyncFuncData
   gpointer data;
 };
 
-struct GtkFileSystemBookmark
-{
-  GFile *file;
-  gchar *label;
-};
-
 G_DEFINE_TYPE (GtkFileSystem, _gtk_file_system, G_TYPE_OBJECT)
 
-
-/* GtkFileSystemBookmark methods */
-void
-_gtk_file_system_bookmark_free (GtkFileSystemBookmark *bookmark)
-{
-  g_object_unref (bookmark->file);
-  g_free (bookmark->label);
-  g_slice_free (GtkFileSystemBookmark, bookmark);
-}
 
 /* GtkFileSystem methods */
 static void
@@ -158,41 +137,11 @@ gtk_file_system_dispose (GObject *object)
 }
 
 static void
-gtk_file_system_finalize (GObject *object)
-{
-  GtkFileSystem *file_system = GTK_FILE_SYSTEM (object);
-  GtkFileSystemPrivate *priv = file_system->priv;
-
-  DEBUG ("finalize");
-
-  if (priv->bookmarks_monitor)
-    g_object_unref (priv->bookmarks_monitor);
-
-  if (priv->bookmarks)
-    {
-      g_slist_foreach (priv->bookmarks, (GFunc) _gtk_file_system_bookmark_free, NULL);
-      g_slist_free (priv->bookmarks);
-    }
-
-  G_OBJECT_CLASS (_gtk_file_system_parent_class)->finalize (object);
-}
-
-static void
 _gtk_file_system_class_init (GtkFileSystemClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->dispose = gtk_file_system_dispose;
-  object_class->finalize = gtk_file_system_finalize;
-
-  fs_signals[BOOKMARKS_CHANGED] =
-    g_signal_new ("bookmarks-changed",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFileSystemClass, bookmarks_changed),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
 
   fs_signals[VOLUMES_CHANGED] =
     g_signal_new ("volumes-changed",
@@ -204,155 +153,6 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
 		  G_TYPE_NONE, 0);
 
   g_type_class_add_private (object_class, sizeof (GtkFileSystemPrivate));
-}
-
-static GFile *
-get_legacy_bookmarks_file (void)
-{
-  GFile *file;
-  gchar *filename;
-
-  filename = g_build_filename (g_get_home_dir (), ".gtk-bookmarks", NULL);
-  file = g_file_new_for_path (filename);
-  g_free (filename);
-
-  return file;
-}
-
-static GFile *
-get_bookmarks_file (void)
-{
-  GFile *file;
-  gchar *filename;
-
-  filename = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "bookmarks", NULL);
-  file = g_file_new_for_path (filename);
-  g_free (filename);
-
-  return file;
-}
-
-static GSList *
-read_bookmarks (GFile *file)
-{
-  gchar *contents;
-  gchar **lines, *space;
-  GSList *bookmarks = NULL;
-  gint i;
-
-  if (!g_file_load_contents (file, NULL, &contents,
-			     NULL, NULL, NULL))
-    return NULL;
-
-  lines = g_strsplit (contents, "\n", -1);
-
-  for (i = 0; lines[i]; i++)
-    {
-      GtkFileSystemBookmark *bookmark;
-
-      if (!*lines[i])
-	continue;
-
-      if (!g_utf8_validate (lines[i], -1, NULL))
-	continue;
-
-      bookmark = g_slice_new0 (GtkFileSystemBookmark);
-
-      if ((space = strchr (lines[i], ' ')) != NULL)
-	{
-	  space[0] = '\0';
-	  bookmark->label = g_strdup (space + 1);
-	}
-
-      bookmark->file = g_file_new_for_uri (lines[i]);
-      bookmarks = g_slist_prepend (bookmarks, bookmark);
-    }
-
-  bookmarks = g_slist_reverse (bookmarks);
-  g_strfreev (lines);
-  g_free (contents);
-
-  return bookmarks;
-}
-
-static void
-save_bookmarks (GFile  *bookmarks_file,
-		GSList *bookmarks)
-{
-  GError *error = NULL;
-  GString *contents;
-  GSList *l;
-  GFile *parent_file;
-  gchar *path;
-
-  contents = g_string_new ("");
-
-  for (l = bookmarks; l; l = l->next)
-    {
-      GtkFileSystemBookmark *bookmark = l->data;
-      gchar *uri;
-
-      uri = g_file_get_uri (bookmark->file);
-      if (!uri)
-	continue;
-
-      g_string_append (contents, uri);
-
-      if (bookmark->label)
-	g_string_append_printf (contents, " %s", bookmark->label);
-
-      g_string_append_c (contents, '\n');
-      g_free (uri);
-    }
-
-  parent_file = g_file_get_parent (bookmarks_file);
-  path = g_file_get_path (parent_file);
-  if (g_mkdir_with_parents (path, 0700) == 0)
-    {
-      if (!g_file_replace_contents (bookmarks_file,
-                                    contents->str,
-                                    strlen (contents->str),
-                                    NULL, FALSE, 0, NULL,
-                                    NULL, &error))
-        {
-          g_critical ("%s", error->message);
-          g_error_free (error);
-        }
-    }
-  g_free (path);
-  g_object_unref (parent_file);
-  g_string_free (contents, TRUE);
-}
-
-static void
-bookmarks_file_changed (GFileMonitor      *monitor,
-			GFile             *file,
-			GFile             *other_file,
-			GFileMonitorEvent  event,
-			gpointer           data)
-{
-  GtkFileSystem *file_system = GTK_FILE_SYSTEM (data);
-  GtkFileSystemPrivate *priv = file_system->priv;
-
-  switch (event)
-    {
-    case G_FILE_MONITOR_EVENT_CHANGED:
-    case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-    case G_FILE_MONITOR_EVENT_CREATED:
-    case G_FILE_MONITOR_EVENT_DELETED:
-      g_slist_foreach (priv->bookmarks, (GFunc) _gtk_file_system_bookmark_free, NULL);
-      g_slist_free (priv->bookmarks);
-
-      priv->bookmarks = read_bookmarks (file);
-
-      gdk_threads_enter ();
-      g_signal_emit (data, fs_signals[BOOKMARKS_CHANGED], 0);
-      gdk_threads_leave ();
-      break;
-    default:
-      /* ignore at the moment */
-      break;
-    }
 }
 
 static gboolean
@@ -533,8 +333,6 @@ static void
 _gtk_file_system_init (GtkFileSystem *file_system)
 {
   GtkFileSystemPrivate *priv;
-  GFile *bookmarks_file;
-  GError *error = NULL;
 
   DEBUG ("init");
 
@@ -564,35 +362,6 @@ _gtk_file_system_init (GtkFileSystem *file_system)
 		    G_CALLBACK (volumes_changed), file_system);
   g_signal_connect (priv->volume_monitor, "drive-changed",
 		    G_CALLBACK (volumes_changed), file_system);
-
-  /* Bookmarks */
-  bookmarks_file = get_bookmarks_file ();
-  priv->bookmarks = read_bookmarks (bookmarks_file);
-  if (!priv->bookmarks)
-    {
-      GFile *legacy_bookmarks_file;
-
-      /* Read the legacy one and write it to the new one */
-      legacy_bookmarks_file = get_legacy_bookmarks_file ();
-      priv->bookmarks = read_bookmarks (legacy_bookmarks_file);
-      save_bookmarks (bookmarks_file, priv->bookmarks);
-
-      g_object_unref (legacy_bookmarks_file);
-    }
-
-  priv->bookmarks_monitor = g_file_monitor_file (bookmarks_file,
-						 G_FILE_MONITOR_NONE,
-						 NULL, &error);
-  if (error)
-    {
-      g_warning ("%s", error->message);
-      g_error_free (error);
-    }
-  else
-    g_signal_connect (priv->bookmarks_monitor, "changed",
-		      G_CALLBACK (bookmarks_file_changed), file_system);
-
-  g_object_unref (bookmarks_file);
 }
 
 /* GtkFileSystem public methods */
@@ -620,29 +389,6 @@ _gtk_file_system_list_volumes (GtkFileSystem *file_system)
 #endif
 
   return list;
-}
-
-GSList *
-_gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
-{
-  GtkFileSystemPrivate *priv = file_system->priv;
-  GSList *bookmarks, *files = NULL;
-
-  DEBUG ("list_bookmarks");
-
-  bookmarks = priv->bookmarks;
-
-  while (bookmarks)
-    {
-      GtkFileSystemBookmark *bookmark;
-
-      bookmark = bookmarks->data;
-      bookmarks = bookmarks->next;
-
-      files = g_slist_prepend (files, g_object_ref (bookmark->file));
-    }
-
-  return g_slist_reverse (files);
 }
 
 static void
@@ -869,185 +615,6 @@ _gtk_file_system_mount_enclosing_volume (GtkFileSystem                     *file
 				 enclosing_volume_mount_cb,
 				 async_data);
   return cancellable;
-}
-
-gboolean
-_gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
-				  GFile          *file,
-				  gint            position,
-				  GError        **error)
-{
-  GtkFileSystemPrivate *priv = file_system->priv;
-  GSList *bookmarks;
-  GtkFileSystemBookmark *bookmark;
-  gboolean result = TRUE;
-  GFile *bookmarks_file;
-
-  bookmarks = priv->bookmarks;
-
-  while (bookmarks)
-    {
-      bookmark = bookmarks->data;
-      bookmarks = bookmarks->next;
-
-      if (g_file_equal (bookmark->file, file))
-	{
-	  /* File is already in bookmarks */
-	  result = FALSE;
-	  break;
-	}
-    }
-
-  if (!result)
-    {
-      gchar *uri = g_file_get_uri (file);
-
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
-		   "%s already exists in the bookmarks list",
-		   uri);
-
-      g_free (uri);
-
-      return FALSE;
-    }
-
-  bookmark = g_slice_new0 (GtkFileSystemBookmark);
-  bookmark->file = g_object_ref (file);
-
-  priv->bookmarks = g_slist_insert (priv->bookmarks, bookmark, position);
-
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
-
-  g_signal_emit (file_system, fs_signals[BOOKMARKS_CHANGED], 0);
-
-  return TRUE;
-}
-
-gboolean
-_gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
-				  GFile          *file,
-				  GError        **error)
-{
-  GtkFileSystemPrivate *priv = file_system->priv;
-  GtkFileSystemBookmark *bookmark;
-  GSList *bookmarks;
-  gboolean result = FALSE;
-  GFile *bookmarks_file;
-
-  if (!priv->bookmarks)
-    return FALSE;
-
-  bookmarks = priv->bookmarks;
-
-  while (bookmarks)
-    {
-      bookmark = bookmarks->data;
-
-      if (g_file_equal (bookmark->file, file))
-	{
-	  result = TRUE;
-	  priv->bookmarks = g_slist_remove_link (priv->bookmarks, bookmarks);
-	  _gtk_file_system_bookmark_free (bookmark);
-	  g_slist_free_1 (bookmarks);
-	  break;
-	}
-
-      bookmarks = bookmarks->next;
-    }
-
-  if (!result)
-    {
-      gchar *uri = g_file_get_uri (file);
-
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		   "%s does not exist in the bookmarks list",
-		   uri);
-
-      g_free (uri);
-
-      return FALSE;
-    }
-
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
-
-  g_signal_emit (file_system, fs_signals[BOOKMARKS_CHANGED], 0);
-
-  return TRUE;
-}
-
-gchar *
-_gtk_file_system_get_bookmark_label (GtkFileSystem *file_system,
-				     GFile         *file)
-{
-  GtkFileSystemPrivate *priv = file_system->priv;
-  GSList *bookmarks;
-  gchar *label = NULL;
-
-  DEBUG ("get_bookmark_label");
-
-  bookmarks = priv->bookmarks;
-
-  while (bookmarks)
-    {
-      GtkFileSystemBookmark *bookmark;
-
-      bookmark = bookmarks->data;
-      bookmarks = bookmarks->next;
-
-      if (g_file_equal (file, bookmark->file))
-	{
-	  label = g_strdup (bookmark->label);
-	  break;
-	}
-    }
-
-  return label;
-}
-
-void
-_gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
-				     GFile         *file,
-				     const gchar   *label)
-{
-  GtkFileSystemPrivate *priv = file_system->priv;
-  gboolean changed = FALSE;
-  GFile *bookmarks_file;
-  GSList *bookmarks;
-
-  DEBUG ("set_bookmark_label");
-
-  bookmarks = priv->bookmarks;
-
-  while (bookmarks)
-    {
-      GtkFileSystemBookmark *bookmark;
-
-      bookmark = bookmarks->data;
-      bookmarks = bookmarks->next;
-
-      if (g_file_equal (file, bookmark->file))
-	{
-          g_free (bookmark->label);
-	  bookmark->label = g_strdup (label);
-	  changed = TRUE;
-	  break;
-	}
-    }
-
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
-
-  if (changed)
-    g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
 }
 
 GtkFileSystemVolume *
