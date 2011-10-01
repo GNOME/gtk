@@ -4713,14 +4713,11 @@ gtk_window_map (GtkWidget *widget)
   GtkWidget *child;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
-  GdkWindow *toplevel;
   GdkWindow *gdk_window;
   gboolean auto_mnemonics;
   GtkPolicyType visible_focus;
 
-  gdk_window = gtk_widget_get_window (widget);
-
-  if (!gtk_widget_is_toplevel (GTK_WIDGET (widget)))
+  if (!gtk_widget_is_toplevel (widget))
     {
       GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
       return;
@@ -4734,31 +4731,31 @@ gtk_window_map (GtkWidget *widget)
       !gtk_widget_get_mapped (child))
     gtk_widget_map (child);
 
-  toplevel = gdk_window;
+  gdk_window = gtk_widget_get_window (widget);
 
   if (priv->maximize_initially)
-    gdk_window_maximize (toplevel);
+    gdk_window_maximize (gdk_window);
   else
-    gdk_window_unmaximize (toplevel);
-  
+    gdk_window_unmaximize (gdk_window);
+
   if (priv->stick_initially)
-    gdk_window_stick (toplevel);
+    gdk_window_stick (gdk_window);
   else
-    gdk_window_unstick (toplevel);
-  
+    gdk_window_unstick (gdk_window);
+
   if (priv->iconify_initially)
-    gdk_window_iconify (toplevel);
+    gdk_window_iconify (gdk_window);
   else
-    gdk_window_deiconify (toplevel);
+    gdk_window_deiconify (gdk_window);
 
   if (priv->fullscreen_initially)
-    gdk_window_fullscreen (toplevel);
+    gdk_window_fullscreen (gdk_window);
   else
-    gdk_window_unfullscreen (toplevel);
-  
-  gdk_window_set_keep_above (toplevel, priv->above_initially);
+    gdk_window_unfullscreen (gdk_window);
 
-  gdk_window_set_keep_below (toplevel, priv->below_initially);
+  gdk_window_set_keep_above (gdk_window, priv->above_initially);
+
+  gdk_window_set_keep_below (gdk_window, priv->below_initially);
 
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     gtk_window_set_theme_variant (window);
@@ -4766,7 +4763,7 @@ gtk_window_map (GtkWidget *widget)
   /* No longer use the default settings */
   priv->need_default_size = FALSE;
   priv->need_default_position = FALSE;
-  
+
   if (priv->reset_type_hint)
     {
       /* We should only reset the type hint when the application
