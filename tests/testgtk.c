@@ -2697,7 +2697,7 @@ create_image (GtkWidget *widget)
  */
 
 static GtkWidget*
-create_menu (GdkScreen *screen, gint depth, gint length, gboolean tearoff)
+create_menu (GdkScreen *screen, gint depth, gint length)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -2713,13 +2713,6 @@ create_menu (GdkScreen *screen, gint depth, gint length, gboolean tearoff)
   gtk_menu_set_screen (GTK_MENU (menu), screen);
 
   group = NULL;
-
-  if (tearoff)
-    {
-      menuitem = gtk_tearoff_menu_item_new ();
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
-    }
 
   image = gtk_image_new_from_stock (GTK_STOCK_OPEN,
                                     GTK_ICON_SIZE_MENU);
@@ -2747,14 +2740,14 @@ create_menu (GdkScreen *screen, gint depth, gint length, gboolean tearoff)
 
       if (i < 5)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), 
-				   create_menu (screen, depth - 1, 5,  TRUE));
+				   create_menu (screen, depth - 1, 5));
     }
 
   return menu;
 }
 
 static GtkWidget*
-create_table_menu (GdkScreen *screen, gint cols, gint rows, gboolean tearoff)
+create_table_menu (GdkScreen *screen, gint cols, gint rows)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -2767,13 +2760,6 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows, gboolean tearoff)
   gtk_menu_set_screen (GTK_MENU (menu), screen);
 
   j = 0;
-  if (tearoff)
-    {
-      menuitem = gtk_tearoff_menu_item_new ();
-      gtk_menu_attach (GTK_MENU (menu), menuitem, 0, cols, j, j + 1);
-      gtk_widget_show (menuitem);
-      j++;
-    }
   
   menuitem = gtk_menu_item_new_with_label ("items");
   gtk_menu_attach (GTK_MENU (menu), menuitem, 0, cols, j, j + 1);
@@ -2987,14 +2973,14 @@ create_menus (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
       
-      menu = create_menu (screen, 2, 50, TRUE);
+      menu = create_menu (screen, 2, 50);
       
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
-      menu = create_table_menu (screen, 2, 50, TRUE);
+      menu = create_table_menu (screen, 2, 50);
       
       menuitem = gtk_menu_item_new_with_label ("table");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
@@ -3002,7 +2988,7 @@ create_menus (GtkWidget *widget)
       gtk_widget_show (menuitem);
       
       menuitem = gtk_menu_item_new_with_label ("foo");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (screen, 3, 5, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (screen, 3, 5));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
@@ -3011,7 +2997,7 @@ create_menus (GtkWidget *widget)
       gtk_widget_show (image);
       menuitem = gtk_image_menu_item_new_with_label ("Help");
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (screen, 4, 5, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (screen, 4, 5));
       gtk_widget_set_hexpand (menuitem, TRUE);
       gtk_widget_set_halign (menuitem, GTK_ALIGN_END);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
@@ -3021,7 +3007,7 @@ create_menus (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
       
-      menu = create_menu (screen, 2, 10, TRUE);
+      menu = create_menu (screen, 2, 10);
       
       menuitem = gtk_menu_item_new_with_label ("Second menu bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
@@ -3033,7 +3019,7 @@ create_menus (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
       
-      menu = create_menu (screen, 1, 5, FALSE);
+      menu = create_menu (screen, 1, 5);
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
       menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
