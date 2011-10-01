@@ -10825,7 +10825,6 @@ gdk_test_simulate_button (GdkWindow      *window,
  * <para>
  * The XGetWindowProperty() function that gdk_property_get()
  * uses has a very confusing and complicated set of semantics.
- * uses has a very confusing and complicated set of semantics.
  * Unfortunately, gdk_property_get() makes the situation
  * worse instead of better (the semantics should be considered
  * undefined), and also prints warnings to stderr in cases where it
