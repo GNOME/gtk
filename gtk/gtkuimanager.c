@@ -43,12 +43,13 @@
 #include "gtkmenutoolbutton.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
-#include "gtktearoffmenuitem.h"
 #include "gtktoolbar.h"
 #include "gtkuimanager.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 
+#undef GTK_DISABLE_DEPRECATED
+#include "gtktearoffmenuitem.h"
 
 /**
  * SECTION:gtkuimanager

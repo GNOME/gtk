@@ -37,6 +37,8 @@
 
 G_BEGIN_DECLS
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #define GTK_TYPE_TEAROFF_MENU_ITEM	      (gtk_tearoff_menu_item_get_type ())
 #define GTK_TEAROFF_MENU_ITEM(obj)	      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEAROFF_MENU_ITEM, GtkTearoffMenuItem))
 #define GTK_TEAROFF_MENU_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEAROFF_MENU_ITEM, GtkTearoffMenuItemClass))
@@ -71,6 +73,8 @@ struct _GtkTearoffMenuItemClass
 
 GType	   gtk_tearoff_menu_item_get_type     (void) G_GNUC_CONST;
 GtkWidget* gtk_tearoff_menu_item_new	      (void);
+
+#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

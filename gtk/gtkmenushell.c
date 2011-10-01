@@ -49,12 +49,16 @@
 #include "gtkmenushellprivate.h"
 #include "gtkmenuprivate.h"
 #include "gtkmnemonichash.h"
-#include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+
+#undef GTK_DISABLE_DEPRECATED
+#include "gtktearoffmenuitem.h"
+
 #include "a11y/gtkmenushellaccessible.h"
+
 
 #define MENU_SHELL_TIMEOUT   500
 

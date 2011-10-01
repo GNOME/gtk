@@ -26,6 +26,8 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkmenuprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtktearoffmenuitem.h"
@@ -50,6 +52,9 @@
  * as a dotted line which has a left pointing arrow graphic indicating that
  * the tearoff menu can be reattached.  Activating it will erase the tearoff
  * menu window.
+ *
+ * <note>#GtkTearoffMenuItem is deprecated and should not be used in newly
+ * written code. Menus are not meant to be torn around.</note>
  */
 
 
@@ -82,6 +87,9 @@ G_DEFINE_TYPE (GtkTearoffMenuItem, gtk_tearoff_menu_item, GTK_TYPE_MENU_ITEM)
  * Creates a new #GtkTearoffMenuItem.
  *
  * Returns: a new #GtkTearoffMenuItem.
+ *
+ * Deprecated: 3.4: #GtkTearoffMenuItem is deprecated and should not be
+ *     used in newly written code.
  */
 GtkWidget*
 gtk_tearoff_menu_item_new (void)
