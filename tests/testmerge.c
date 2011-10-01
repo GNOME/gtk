@@ -24,6 +24,9 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 
 #ifndef STDOUT_FILENO

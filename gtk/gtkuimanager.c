@@ -44,11 +44,11 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtktoolbar.h"
-#include "gtkuimanager.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 
 #undef GTK_DISABLE_DEPRECATED
+#include "gtkuimanager.h"
 #include "gtktearoffmenuitem.h"
 
 /**
@@ -473,6 +473,9 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * menus never have tearoff menu items.   
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.4: Tearoff menus are deprecated and should not
+   *     be used in newly written code.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ADD_TEAROFFS,
@@ -480,7 +483,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 							 P_("Add tearoffs to menus"),
 							 P_("Whether tearoff menu items should be added to menus"),
                                                          FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
 				   PROP_UI,
@@ -866,6 +869,9 @@ gtk_ui_manager_new (void)
  * Return value: whether tearoff menu items are added
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Tearoff menus are deprecated and should not
+ *     be used in newly written code.
  **/
 gboolean 
 gtk_ui_manager_get_add_tearoffs (GtkUIManager *manager)
@@ -888,6 +894,9 @@ gtk_ui_manager_get_add_tearoffs (GtkUIManager *manager)
  * menus never have tearoff menu items.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Tearoff menus are deprecated and should not
+ *     be used in newly written code.
  **/
 void 
 gtk_ui_manager_set_add_tearoffs (GtkUIManager *manager,

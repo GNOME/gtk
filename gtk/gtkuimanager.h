@@ -126,9 +126,11 @@ typedef enum {
 
 GType          gtk_ui_manager_get_type            (void) G_GNUC_CONST;
 GtkUIManager  *gtk_ui_manager_new                 (void);
+#ifndef GTK_DISABLE_DEPRECATED
 void           gtk_ui_manager_set_add_tearoffs    (GtkUIManager          *manager,
 						   gboolean               add_tearoffs);
 gboolean       gtk_ui_manager_get_add_tearoffs    (GtkUIManager          *manager);
+#endif
 void           gtk_ui_manager_insert_action_group (GtkUIManager          *manager,
 						   GtkActionGroup        *action_group,
 						   gint                   pos);
