@@ -30,8 +30,7 @@
 #include <stdio.h>
 
 static GtkWidget *
-create_menu (gint     depth,
-             gboolean tearoff)
+create_menu (gint     depth)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -45,13 +44,6 @@ create_menu (gint     depth,
   menu = gtk_menu_new ();
   group = NULL;
 
-  if (tearoff)
-    {
-      menuitem = gtk_tearoff_menu_item_new ();
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
-    }
-
   for (i = 0, j = 1; i < 5; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
@@ -63,7 +55,7 @@ create_menu (gint     depth,
       if (i == 3)
         gtk_widget_set_sensitive (menuitem, FALSE);
 
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1));
     }
 
   return menu;
@@ -128,7 +120,7 @@ do_menus (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
 
-      menu = create_menu (2, TRUE);
+      menu = create_menu (2);
 
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
@@ -136,12 +128,12 @@ do_menus (GtkWidget *do_widget)
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("foo");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
