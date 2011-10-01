@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-09-28 11:59+0000\n"
-"PO-Revision-Date: 2011-10-01 19:55+1000\n"
+"PO-Revision-Date: 2011-10-01 20:10+1000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -24,12 +24,12 @@ msgstr ""
 #: ../gdk/gdk.c:135
 #, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr "Lỗi phân tích cú pháp của tuỳ chọn « --gdk-debug »"
+msgstr "Lỗi phân tích cú pháp của tuỳ chọn --gdk-debug"
 
 #: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr "Lỗi phân tích cú pháp của tuỳ chọn « --gdk-no-debug »"
+msgstr "Lỗi phân tích cú pháp của tuỳ chọn --gdk-no-debug»"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:183
@@ -420,7 +420,7 @@ msgstr "Đừng dùng API Wintab để hỗ trợ phiến đồ họa"
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:59
 msgid "Same as --no-wintab"
-msgstr "Bằng « --no-wintab »"
+msgstr "Bằng --no-wintab"
 
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:61
@@ -685,25 +685,22 @@ msgid "Other Applications"
 msgstr "Ứng dụng khác"
 
 #: ../gtk/gtkassistant.c:999
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "C_onnect"
 msgid "C_ontinue"
-msgstr "_Kết nối"
+msgstr "_Tiếp tục"
 
 #: ../gtk/gtkassistant.c:1002
-#, fuzzy
 #| msgctxt "Stock label, navigation"
 #| msgid "_Back"
 msgid "Go _Back"
-msgstr "Lù_i"
+msgstr "Quay _lại"
 
 #: ../gtk/gtkassistant.c:1006
-#, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Finished"
 msgid "_Finish"
-msgstr "Hoàn tất"
+msgstr "_Hoàn tất"
 
 #: ../gtk/gtkbuilderparser.c:342
 #, c-format
@@ -718,12 +715,12 @@ msgstr "Trùng ID đối tượng '%s' trên dòng %d (trùng với dòng %d)"
 #: ../gtk/gtkbuilderparser.c:858
 #, c-format
 msgid "Invalid root element: '%s'"
-msgstr "Yếu tố gốc không hợp lệ: « %s »"
+msgstr "Yếu tố gốc không hợp lệ: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:897
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr "Thẻ không được quản lý: « %s »"
+msgstr "Thẻ không được quản lý: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -864,7 +861,6 @@ msgid "Position on the color wheel."
 msgstr "Vị trí trên vòng màu."
 
 #: ../gtk/gtkcolorsel.c:454
-#, fuzzy
 #| msgid "_Saturation:"
 msgid "S_aturation:"
 msgstr "Độ _bão hòa:"
@@ -923,7 +919,7 @@ msgid ""
 "such as 'orange' in this entry."
 msgstr ""
 "Bạn có thể nhập một giá trị thập lục phân theo kiểu HTML, hoặc đơn giản là "
-"nhập tên màu như « orange » (cam) vào ô này."
+"nhập tên màu như 'orange' (cam) vào ô này."
 
 #: ../gtk/gtkcolorsel.c:538
 msgid "_Palette:"
@@ -971,8 +967,8 @@ msgid ""
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 "Nhấn trường nhập bảng chọn này để chọn nó như màu hiện thời. Để thay đổi mục "
-"nhập này, kéo 1 dải màu vào đây hoặc nhấn-phải vào nó rồi chọn « Lưu màu vào "
-"đây »."
+"nhập này, kéo 1 dải màu vào đây hoặc nhấn-phải vào nó rồi chọn \"Lưu màu vào "
+"đây\"."
 
 #: ../gtk/gtkcolorseldialog.c:217
 msgid "Color Selection"
@@ -1196,31 +1192,31 @@ msgstr "Chọn hiển thị những kiểu tập tin nào"
 #: ../gtk/gtkfilechooserdefault.c:2720
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "Thêm thư mục « %s » vào Đánh dấu"
+msgstr "Đánh dấu thư mục '%s'"
 
 #: ../gtk/gtkfilechooserdefault.c:2764
 #, c-format
 msgid "Add the current folder to the bookmarks"
-msgstr "Thêm thư mục hiện thời vào Đánh dấu"
+msgstr "Đánh dấu thư mục hiện thời"
 
 #: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the selected folders to the bookmarks"
-msgstr "Thêm các thư mục được chọn vào Đánh dấu"
+msgstr "Đánh dấu thư mục đang được chọn"
 
 #: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr "Gỡ bỏ Đánh dấu « %s »"
+msgstr "Bỏ đánh dấu '%s'"
 
 #: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr "Không thể gỡ bỏ Đánh dấu '%s'."
+msgstr "Không thể bỏ đánh dấu '%s'"
 
 #: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3698
 msgid "Remove the selected bookmark"
-msgstr "Gỡ bỏ Đánh dấu được chọn"
+msgstr "Bỏ đánh dấu được chọn"
 
 #: ../gtk/gtkfilechooserdefault.c:3377
 msgid "Remove"
@@ -1242,7 +1238,7 @@ msgstr "_Mở nhanh"
 
 #: ../gtk/gtkfilechooserdefault.c:3686
 msgid "Add the selected folder to the Bookmarks"
-msgstr "Thêm thư mục được chọn vào Đánh dấu"
+msgstr "Đánh dấu thư mục được chọn"
 
 #: ../gtk/gtkfilechooserdefault.c:3943
 msgid "Could not select file"
@@ -1250,17 +1246,16 @@ msgstr "Không thể chọn tập tin đó"
 
 #: ../gtk/gtkfilechooserdefault.c:4168
 msgid "_Visit this file"
-msgstr ""
+msgstr "_Xem tập tin này"
 
 #: ../gtk/gtkfilechooserdefault.c:4171
-#, fuzzy
 #| msgid "Copy _Location"
 msgid "_Copy file's location"
-msgstr "Chép Đị_a chỉ"
+msgstr "_Chép địa chỉ tập tin"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
 msgid "_Add to Bookmarks"
-msgstr "T_hêm Đánh dấu"
+msgstr "T_hêm đánh dấu"
 
 #: ../gtk/gtkfilechooserdefault.c:4181
 msgid "Show _Hidden Files"
@@ -1296,16 +1291,14 @@ msgid "Type a file name"
 msgstr "Gõ tên tập tin"
 
 #: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
-#, fuzzy
 #| msgid "Select a folder"
 msgid "Please select a folder below"
-msgstr "Chọn thư mục"
+msgstr "Chọn thư mục bên dưới"
 
 #: ../gtk/gtkfilechooserdefault.c:4879
-#, fuzzy
 #| msgid "Type a file name"
 msgid "Please type a file name"
-msgstr "Gõ tên tập tin"
+msgstr "Nhập tên tập tin"
 
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:4950
@@ -1368,14 +1361,14 @@ msgstr "Không có phím tắt %s"
 #: ../gtk/gtkfilechooserdefault.c:8342 ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr "Tập tin tên « %s » đã có. Bạn có muốn thay thế nó không?"
+msgstr "Tập tin tên \"%s\" đã có. Bạn có muốn thay thế nó không?"
 
 #: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"Tập tin đó đã có trong « %s ». Việc thay thế nó sẽ ghi đè lên nội dung nó."
+"Tập tin đó đã có trong \"%s\". Việc thay thế nó sẽ ghi đè lên nội dung nó."
 
 #: ../gtk/gtkfilechooserdefault.c:8350 ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
@@ -1452,7 +1445,7 @@ msgstr "Chỉ có thể chọn tập tin cục bộ"
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: ../gtk/gtkfilechooserentry.c:1196
 msgid "Incomplete hostname; end it with '/'"
-msgstr "Tên máy chưa hoàn tất; kết thúc bằng « / »"
+msgstr "Tên máy chưa hoàn tất; kết thúc bằng '/'"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
@@ -1489,16 +1482,17 @@ msgstr "Chọn phông"
 #: ../gtk/gtkfontchooserwidget.c:113
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
+"Không có phông phù hợp tiêu chí tìm kiếm. Bạn có thể điều chỉnh tiêu chí và "
+"thử lại."
 
 #: ../gtk/gtkfontchooserwidget.c:612
 msgid "Search font name"
-msgstr ""
+msgstr "Tìm tên phông"
 
 #: ../gtk/gtkfontchooserwidget.c:948
-#, fuzzy
 #| msgid "_Family:"
 msgid "Font Family"
-msgstr "_Họ:"
+msgstr "Họ phông"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1526,7 +1520,7 @@ msgstr "_Xem thử:"
 #: ../gtk/gtkicontheme.c:1605
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr "Biểu tượng « %s » không có trong sắc thái"
+msgstr "Biểu tượng '%s' không có trong sắc thái"
 
 #: ../gtk/gtkicontheme.c:3115
 msgid "Failed to load icon"
@@ -1571,33 +1565,38 @@ msgid "Invalid URI"
 msgstr "URI không hợp lệ"
 
 #: ../gtk/gtklockbutton.c:288
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Num_Lock"
 msgid "Lock"
-msgstr "Num_Lock"
+msgstr "Khoá"
 
 #: ../gtk/gtklockbutton.c:297
 msgid "Unlock"
-msgstr ""
+msgstr "Bỏ khoá"
 
 #: ../gtk/gtklockbutton.c:306
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr ""
+"Hộp thoại đã mở khoá.\n"
+"Nhấn để ngăn thay đổi"
 
 #: ../gtk/gtklockbutton.c:315
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr ""
+"Hộp thoại đã khoá.\n"
+"Nhấn để có thể thay đổi"
 
 #: ../gtk/gtklockbutton.c:324
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
+"Chính sách hệ thống không cho phép sửa đổi.\n"
+"Hãy liên lạc với quản trị hệ thống của bạn"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:562
@@ -2286,7 +2285,7 @@ msgstr "Chọn hiển thị những kiểu tập tin nào"
 #: ../gtk/gtkrecentchooserdefault.c:1141 ../gtk/gtkrecentchooserdefault.c:1178
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr "Không tìm thấy mục cho URI « %s »"
+msgstr "Không tìm thấy mục cho URI '%s'"
 
 #: ../gtk/gtkrecentchooserdefault.c:1305
 msgid "Untitled filter"
@@ -2333,12 +2332,12 @@ msgstr "Không tìm thấy"
 #: ../gtk/gtkrecentchoosermenu.c:528 ../gtk/gtkrecentchoosermenu.c:584
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "Không tìm thấy tài nguyên vừa dùng có URI « %s »"
+msgstr "Không tìm thấy tài nguyên vừa dùng có URI `%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:794
 #, c-format
 msgid "Open '%s'"
-msgstr "Mở « %s »"
+msgstr "Mở '%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:824
 msgid "Unknown item"
@@ -2370,7 +2369,7 @@ msgstr "%d. %s"
 #: ../gtk/gtkrecentmanager.c:1242
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Không thể tìm thấy mục có URI « %s »"
+msgstr "Không thể tìm thấy mục có URI '%s'"
 
 #: ../gtk/gtkrecentmanager.c:2442
 #, c-format
@@ -2911,39 +2910,39 @@ msgstr "Không tìm thấy chức năng bỏ thứ tự cho dạng thức %s"
 #: ../gtk/gtktextbufferserialize.c:800 ../gtk/gtktextbufferserialize.c:826
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr "Tìm cả « id » (mã nhận diện) lẫn « name » (tên) trên yếu tố <%s>"
+msgstr "Tìm cả \"id\" (mã nhận diện) lẫn \"name\" (tên) trên yếu tố <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:810 ../gtk/gtktextbufferserialize.c:836
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "Tìm thuộc tính « %s » hai lần trên yếu tố <%s>"
+msgstr "Tìm thuộc tính \"%s\" lần trên yếu tố <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:852
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "Yếu tố <%s> có ID không hợp lệ « %s »"
+msgstr "Yếu tố <%s> có ID không hợp lệ \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:862
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr ""
-"Yếu tố <%s> không có yếu tố « name » (tên), cũng không phải có yếu tố « id "
-"» (mã nhận diện)"
+"Yếu tố <%s> không có yếu tố \"name\" (tên), cũng không phải có yếu tố \"id"
+"\" (mã nhận diện)"
 
 #: ../gtk/gtktextbufferserialize.c:949
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr "Thuộc tính « %s » được lặp lại hai lần trên cùng một yếu tố <%s>"
+msgstr "Thuộc tính \"%s\" được lặp lại hai lần trên cùng một yếu tố <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:967 ../gtk/gtktextbufferserialize.c:992
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "Thuộc tính « %s » không hợp lệ trên yếu tố <%s> trong ngữ cảnh này"
+msgstr "Thuộc tính \"%s\" không hợp lệ trên yếu tố <%s> trong ngữ cảnh này"
 
 #: ../gtk/gtktextbufferserialize.c:1031
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr "Chưa xác định thẻ « %s »."
+msgstr "Chưa xác định thẻ \"%s\"."
 
 #: ../gtk/gtktextbufferserialize.c:1043
 msgid "Anonymous tag found and tags can not be created."
@@ -2952,7 +2951,7 @@ msgstr "Tìm thẻ vô danh còn không thể tạo thẻ."
 #: ../gtk/gtktextbufferserialize.c:1054
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "Thẻ « %s » không tồn tại trong bộ đệm còn không thể tạo thẻ."
+msgstr "Thẻ \"%s\" không tồn tại trong bộ đệm còn không thể tạo thẻ."
 
 #: ../gtk/gtktextbufferserialize.c:1153 ../gtk/gtktextbufferserialize.c:1228
 #: ../gtk/gtktextbufferserialize.c:1333 ../gtk/gtktextbufferserialize.c:1407
@@ -2963,35 +2962,35 @@ msgstr "Không cho phép yếu tố <%s> nằm dưới <%s>"
 #: ../gtk/gtktextbufferserialize.c:1184
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr "« %s » không phải là kiểu thuộc tính hợp lệ"
+msgstr "\"%s\" không phải là kiểu thuộc tính hợp lệ"
 
 #: ../gtk/gtktextbufferserialize.c:1192
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr "« %s » không phải là tên thuộc tính hợp lệ"
+msgstr "\"%s\" không phải là tên thuộc tính hợp lệ"
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"« %s » không thể được chuyển đổi sang giá trị kiểu « %s » cho thuộc tính « "
-"%s »"
+"\"%s\" không thể được chuyển đổi sang giá trị kiểu \"%s\" cho thuộc tính \"%s"
+"\""
 
 #: ../gtk/gtktextbufferserialize.c:1211
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr "« %s » không phải là giá trị hợp lệ cho thuộc tính « %s »"
+msgstr "\"%s\" không phải là giá trị hợp lệ cho thuộc tính \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr "Thẻ « %s » đã được xác định"
+msgstr "Thẻ \"%s\" đã được xác định"
 
 #: ../gtk/gtktextbufferserialize.c:1309
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr "Thẻ « %s » có ưu tiên không hợp lệ « %s »"
+msgstr "Thẻ \"%s\" có ưu tiên không hợp lệ \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1362
 #, c-format
@@ -3017,8 +3016,8 @@ msgstr "Dữ liệu đã xếp thứ tự có dạng sai"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
-"Dữ liệu đã xếp thứ tự có dạng sai. Phần thứ nhất không phải là « "
-"GTKTEXTBUFFERCONTENTS-0001 »"
+"Dữ liệu đã xếp thứ tự có dạng sai. Phần thứ nhất không phải là "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -3063,7 +3062,7 @@ msgstr "ZW_NJ Bộ không nối kết có độ dài bằng không"
 #: ../gtk/gtkuimanager.c:1760
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Gặp thẻ đầu bất thường « %s » trên dòng %d ký tự %d"
+msgstr "Gặp thẻ đầu bất thường '%s' trên dòng %d ký tự %d"
 
 #: ../gtk/gtkuimanager.c:1850
 #, c-format
@@ -3964,7 +3963,7 @@ msgstr "Lỗi ghi lại phần đầu\n"
 #: ../gtk/updateiconcache.c:1484
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Lỗi mở tập tin « %s »': %s\n"
+msgstr "Lỗi mở tập tin %s : %s\n"
 
 #: ../gtk/updateiconcache.c:1492 ../gtk/updateiconcache.c:1522
 #, c-format
@@ -4002,7 +4001,7 @@ msgstr "Ghi đè lên bộ nhớ tạm đã có, ngay cả điều hiện thời
 
 #: ../gtk/updateiconcache.c:1638
 msgid "Don't check for the existence of index.theme"
-msgstr "Không kiểm tra có chỉ mục sắc thái (« index.theme ») không"
+msgstr "Không kiểm tra có chỉ mục sắc thái (index.theme) không"
 
 #: ../gtk/updateiconcache.c:1639
 msgid "Don't include image data in the cache"
@@ -4041,9 +4040,9 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Không có tập tin chỉ mục sắc thái nằm trong « %s ».\n"
-"Nếu bạn thật muốn tạo một bộ nhớ biểu tượng ở đây, hãy dùng « --ignore-theme-"
-"index ».\n"
+"Không có tập tin chỉ mục sắc thái nằm trong '%s'.\n"
+"Nếu bạn thật muốn tạo một bộ nhớ biểu tượng ở đây, hãy dùng --ignore-theme-"
+"index.\n"
 
 #. ID
 #: ../modules/input/imam-et.c:454
@@ -4180,56 +4179,56 @@ msgstr "Cần xác thực để in tài liệu này"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr "Máy in « %s » gần cạn mực sắc điệu."
+msgstr "Máy in '%s' gần cạn mực sắc điệu."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1705
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr "Máy in « %s » cạn mực sắc điệu."
+msgstr "Máy in '%s' cạn mực sắc điệu."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1707
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr "Máy in « %s » gần cạn thuốc rửa ảnh."
+msgstr "Máy in '%s' gần cạn thuốc rửa ảnh."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1709
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr "Máy in « %s » cạn thuốc rửa ảnh."
+msgstr "Máy in '%s' cạn thuốc rửa ảnh."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr "Máy in « %s » gần cạn ít nhất một mực ngụ ý."
+msgstr "Máy in '%s' gần cạn ít nhất một mực ngụ ý."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr "Máy in « %s » cạn ít nhất một mực ngụ ý."
+msgstr "Máy in '%s' cạn ít nhất một mực ngụ ý."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr "Cái nắp còn mở trên máy in « %s »."
+msgstr "Cái nắp còn mở trên máy in '%s'."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr "Cửa còn mở trên máy in « %s »."
+msgstr "Cửa còn mở trên máy in '%s'."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1716
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr "Máy in « %s » gần cạn giấy."
+msgstr "Máy in '%s' gần hết giấy."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1717
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr "Máy in « %s » cạn giấy."
+msgstr "Máy in '%s' hết giấy."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1718
 #, c-format
@@ -4239,7 +4238,7 @@ msgstr "Máy in '%s' hiện thời ngoại tuyến."
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1719
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr "Gặp vấn đề trên máy in « %s »."
+msgstr "Gặp vấn đề trên máy in '%s'."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2033
@@ -4443,14 +4442,12 @@ msgid "Custom %sx%s"
 msgstr "Tự chọn  %sx%s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3867
-#, fuzzy
 #| msgid "Printer offline"
 msgid "Printer Profile"
-msgstr "Máy in ngoại tuyến"
+msgstr "Hồ sơ máy in"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3874
-#, fuzzy
 #| msgid "Not available"
 msgid "Unavailable"
 msgstr "Không sẵn sàng"
@@ -4459,21 +4456,19 @@ msgstr "Không sẵn sàng"
 #. * it hasn't registered the device with colord
 #: ../modules/printbackends/cups/gtkprintercups.c:222
 msgid "Color management unavailable"
-msgstr ""
+msgstr "Không có quản lý màu"
 
 #. TRANSLATORS: when there is no color profile available
 #: ../modules/printbackends/cups/gtkprintercups.c:234
-#, fuzzy
 #| msgid "Not available"
 msgid "No profile available"
-msgstr "Không sẵn sàng"
+msgstr "Không có hồ sơ có thể dùng"
 
 #. TRANSLATORS: when the color profile has no title
 #: ../modules/printbackends/cups/gtkprintercups.c:245
-#, fuzzy
 #| msgid "Unspecified error"
 msgid "Unspecified profile"
-msgstr "Lỗi chưa xác định"
+msgstr "Hồ sơ xác định"
 
 #. default filename used for print-to-file
 #: ../modules/printbackends/file/gtkprintbackendfile.c:250
