@@ -513,6 +513,9 @@ gtk_file_system_model_get_iter (GtkTreeModel *tree_model,
 {
   g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
 
+  if (gtk_tree_path_get_depth (path) > 1)
+    return FALSE;
+
   return gtk_file_system_model_iter_nth_child (tree_model, 
                                                iter,
                                                NULL, 
