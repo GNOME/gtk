@@ -1275,8 +1275,13 @@ gdk_display_pointer_is_grabbed (GdkDisplay *display)
 
       if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE &&
           gdk_display_device_is_grabbed (display, device))
-        return TRUE;
+        {
+          g_list_free (devices);
+          return TRUE;
+        }
     }
+
+  g_list_free (devices);
 
   return FALSE;
 }
