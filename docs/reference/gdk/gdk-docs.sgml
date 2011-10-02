@@ -61,6 +61,10 @@
     <title>Index of new symbols in 3.2</title>
     <xi:include href="xml/api-index-3.2.xml"><xi:fallback /></xi:include>
   </index>
+  <index id="api-index-3-4" role="3.4">
+    <title>Index of new symbols in 3.4</title>
+    <xi:include href="xml/api-index-3.4.xml"><xi:fallback /></xi:include>
+  </index>
 
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 
