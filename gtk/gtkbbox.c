@@ -53,6 +53,7 @@
 
 #include "gtkbbox.h"
 
+#include "gtkboxprivate.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"

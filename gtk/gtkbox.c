@@ -80,6 +80,7 @@
 #include "config.h"
 
 #include "gtkbox.h"
+#include "gtkboxprivate.h"
 #include "gtkorientable.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"

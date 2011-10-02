@@ -109,13 +109,6 @@ void        gtk_box_set_child_packing   (GtkBox         *box,
                                          guint           padding,
                                          GtkPackType     pack_type);
 
-/* internal API */
-void        _gtk_box_set_old_defaults   (GtkBox         *box);
-gboolean    _gtk_box_get_spacing_set    (GtkBox         *box);
-void        _gtk_box_set_spacing_set    (GtkBox         *box,
-                                         gboolean        spacing_set);
-GList      *_gtk_box_get_children       (GtkBox         *box);
-
 G_END_DECLS
 
 #endif /* __GTK_BOX_H__ */

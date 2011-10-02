@@ -27,10 +27,12 @@
 
 #include "config.h"
 
+#include "gtkstatusbar.h"
+
+#include "gtkboxprivate.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
-#include "gtkstatusbar.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
