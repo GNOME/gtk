@@ -178,6 +178,7 @@ gdk_event_request_motions
 gdk_event_set_device
 gdk_event_set_screen
 gdk_event_set_source_device
+gdk_event_triggers_context_menu
 gdk_events_get_angle
 gdk_events_get_center
 gdk_events_get_distance
@@ -207,6 +208,7 @@ gdk_keymap_get_direction
 gdk_keymap_get_entries_for_keycode
 gdk_keymap_get_entries_for_keyval
 gdk_keymap_get_for_display
+gdk_keymap_get_modifier_mask
 gdk_keymap_get_num_lock_state
 gdk_keymap_get_type
 gdk_keymap_have_bidi_layouts
@@ -222,6 +224,7 @@ gdk_keyval_to_lower
 gdk_keyval_to_unicode
 gdk_keyval_to_upper
 gdk_list_visuals
+gdk_modifier_intent_get_type
 gdk_modifier_type_get_type
 gdk_notify_startup_complete
 gdk_notify_startup_complete_with_id

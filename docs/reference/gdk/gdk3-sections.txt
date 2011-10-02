@@ -74,6 +74,7 @@ gdk_grab_status_get_type
 gdk_gravity_get_type
 gdk_input_mode_get_type
 gdk_input_source_get_type
+gdk_modifier_intent_get_type
 gdk_modifier_type_get_type
 gdk_notify_type_get_type
 gdk_property_state_get_type
@@ -629,6 +630,7 @@ gdk_keymap_get_caps_lock_state
 gdk_keymap_get_num_lock_state
 gdk_keymap_add_virtual_modifiers
 gdk_keymap_map_virtual_modifiers
+gdk_keymap_get_modifier_mask
 
 <SUBSECTION>
 gdk_keyval_name
@@ -775,6 +777,7 @@ gdk_event_request_motions
 gdk_events_get_angle
 gdk_events_get_center
 gdk_events_get_distance
+gdk_event_triggers_context_menu
 
 <SUBSECTION>
 gdk_event_handler_set
