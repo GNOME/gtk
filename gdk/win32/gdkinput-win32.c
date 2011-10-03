@@ -617,8 +617,8 @@ _gdk_input_wintab_init_check (void)
 		  gdkdev->axes[k].min_value = -1000;
 		  gdkdev->axes[k].max_value = 1000;
 		  gdkdev->info.axes[k].use = axis;
-		  gdkdev->info.axes[k].min = -1000;
-		  gdkdev->info.axes[k].max = 1000;
+		  gdkdev->info.axes[k].min = -1.0;
+		  gdkdev->info.axes[k].max = 1.0;
 		  k++;
 		}
 	    }
