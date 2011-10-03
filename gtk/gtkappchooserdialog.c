@@ -137,6 +137,7 @@ search_for_mimetype_ready_cb (GObject      *source,
     }
   else
     {
+      gtk_widget_set_sensitive (self->priv->online_button, TRUE);
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
     }
 
@@ -152,6 +153,8 @@ online_button_clicked_cb (GtkButton *b,
   GtkAppChooserDialog *self = user_data;
 
   self->priv->online_cancellable = g_cancellable_new ();
+  gtk_widget_set_sensitive (self->priv->online_button, FALSE);
+
   _gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
 						     self->priv->content_type,
 						     GTK_WINDOW (self),
