@@ -12089,19 +12089,27 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
         accessible =
           atk_object_factory_create_accessible (factory,
                                                 G_OBJECT (widget));
+
+        if (priv->accessible_role != ATK_ROLE_INVALID)
+          atk_object_set_role (accessible, priv->accessible_role);
+
+        g_object_set_qdata (G_OBJECT (widget),
+                            quark_accessible_object,
+                            accessible);
       }
     else
       {
         accessible = g_object_new (priv->accessible_type, NULL);
+
+        if (priv->accessible_role != ATK_ROLE_INVALID)
+          atk_object_set_role (accessible, priv->accessible_role);
+
+        g_object_set_qdata (G_OBJECT (widget),
+                            quark_accessible_object,
+                            accessible);
+
         atk_object_initialize (accessible, widget);
       }
-
-    if (priv->accessible_role != ATK_ROLE_INVALID)
-      atk_object_set_role (accessible, priv->accessible_role);
-
-    g_object_set_qdata (G_OBJECT (widget),
-                        quark_accessible_object,
-                        accessible);
   }
   return accessible;
 }
