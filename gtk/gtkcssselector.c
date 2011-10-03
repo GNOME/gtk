@@ -130,6 +130,7 @@ _gtk_css_selector_print (const GtkCssSelector *selector,
         "nth-child(odd)",
         "first-child",
         "last-child",
+        "only-child",
         "sorted"
       };
       guint i;
@@ -201,6 +202,8 @@ compute_region_flags_for_index (const GtkWidgetPath *path,
     flags |= GTK_REGION_FIRST;
   if (sibling_id + 1 == n_siblings)
     flags |= GTK_REGION_LAST;
+  if (n_siblings == 1)
+    flags |= GTK_REGION_ONLY;
 
   return flags;
 }

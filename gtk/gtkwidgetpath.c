@@ -357,6 +357,7 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
                 "odd",
                 "first",
                 "last",
+                "only",
                 "sorted"
               };
 

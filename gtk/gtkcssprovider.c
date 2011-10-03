@@ -1987,6 +1987,7 @@ parse_selector_pseudo_class (GtkCssScanner  *scanner,
   } pseudo_classes[] = {
     { "first-child",  GTK_REGION_FIRST, 0 },
     { "last-child",   GTK_REGION_LAST, 0 },
+    { "only-child",   GTK_REGION_ONLY, 0 },
     { "sorted",       GTK_REGION_SORTED, 0 },
     { "active",       0, GTK_STATE_FLAG_ACTIVE },
     { "prelight",     0, GTK_STATE_FLAG_PRELIGHT },
