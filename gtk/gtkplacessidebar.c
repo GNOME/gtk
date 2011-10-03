@@ -439,12 +439,11 @@ update_places (GtkPlacesSidebar *sidebar)
 	GVolume *volume;
 	GSList *bookmarks, *sl;
 	int index;
-	char *location, *mount_uri, *name, *desktop_path, *last_uri;
+	char *mount_uri, *name, *desktop_path, *last_uri;
 	char *bookmark_name;
 	const gchar *path;
 	GIcon *icon;
 	GFile *root;
-	NautilusWindowSlot *slot;
 	char *tooltip;
 	GList *network_mounts;
 
@@ -462,9 +461,6 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	sidebar->devices_header_added = FALSE;
 	sidebar->bookmarks_header_added = FALSE;
-
-	slot = nautilus_window_get_active_slot (sidebar->window);
-	location = nautilus_window_slot_get_current_uri (slot);
 
 	volume_monitor = sidebar->volume_monitor;
 
@@ -492,7 +488,7 @@ update_places (GtkPlacesSidebar *sidebar)
 							       name, icon, mount_uri,
 							       drive, volume, mount, 0, tooltip);
 					compare_for_selection (sidebar,
-							       location, mount_uri, last_uri,
+							       sidebar->uri, mount_uri, last_uri,
 							       &last_iter, &select_path);
 					g_object_unref (root);
 					g_object_unref (mount);
@@ -574,7 +570,7 @@ update_places (GtkPlacesSidebar *sidebar)
 					       name, icon, mount_uri,
 					       NULL, volume, mount, 0, tooltip);
 			compare_for_selection (sidebar,
-					       location, mount_uri, last_uri,
+					       sidebar->uri, mount_uri, last_uri,
 					       &last_iter, &select_path);
 			g_object_unref (mount);
 			g_object_unref (icon);
@@ -634,7 +630,7 @@ update_places (GtkPlacesSidebar *sidebar)
 				       NULL, NULL, NULL, index,
 				       tooltip);
 		compare_for_selection (sidebar,
-				       location, mount_uri, last_uri,
+				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 
 		g_object_unref (root);
@@ -660,7 +656,7 @@ update_places (GtkPlacesSidebar *sidebar)
 				       _("Open your personal folder"));
 		g_object_unref (icon);
 		compare_for_selection (sidebar,
-				       location, mount_uri, last_uri,
+				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 		g_free (mount_uri);
 	}
@@ -678,7 +674,7 @@ update_places (GtkPlacesSidebar *sidebar)
 				       _("Open the contents of your desktop in a folder"));
 		g_object_unref (icon);
 		compare_for_selection (sidebar,
-				       location, mount_uri, last_uri,
+				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 		g_free (mount_uri);
 		g_free (desktop_path);
@@ -716,7 +712,7 @@ update_places (GtkPlacesSidebar *sidebar)
 				       NULL, NULL, NULL, 0,
 				       tooltip);
 		compare_for_selection (sidebar,
-				       location, mount_uri, last_uri,
+				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 		g_free (name);
 		g_object_unref (root);
@@ -757,7 +753,7 @@ update_places (GtkPlacesSidebar *sidebar)
 				       name, icon, mount_uri,
 				       NULL, NULL, mount, 0, tooltip);
 		compare_for_selection (sidebar,
-				       location, mount_uri, last_uri,
+				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 		g_object_unref (root);
 		g_object_unref (mount);
@@ -778,7 +774,7 @@ update_places (GtkPlacesSidebar *sidebar)
 			       _("Open the contents of the File System"));
 	g_object_unref (icon);
 	compare_for_selection (sidebar,
-			       location, mount_uri, last_uri,
+			       sidebar->uri, mount_uri, last_uri,
 			       &last_iter, &select_path);
 
 	mount_uri = "trash:///"; /* No need to strdup */
@@ -789,7 +785,7 @@ update_places (GtkPlacesSidebar *sidebar)
 			       NULL, NULL, NULL, 0,
 			       _("Open the trash"));
 	compare_for_selection (sidebar,
-			       location, mount_uri, last_uri,
+			       sidebar->uri, mount_uri, last_uri,
 			       &last_iter, &select_path);
 	g_object_unref (icon);
 
@@ -810,7 +806,7 @@ update_places (GtkPlacesSidebar *sidebar)
 				       name, icon, mount_uri,
 				       NULL, NULL, mount, 0, tooltip);
 		compare_for_selection (sidebar,
-				       location, mount_uri, last_uri,
+				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 		g_object_unref (root);
 		g_object_unref (mount);
@@ -832,10 +828,8 @@ update_places (GtkPlacesSidebar *sidebar)
 			       _("Browse the contents of the network"));
 	g_object_unref (icon);
 	compare_for_selection (sidebar,
-			       location, mount_uri, last_uri,
+			       sidebar->uri, mount_uri, last_uri,
 			       &last_iter, &select_path);
-
-	g_free (location);
 
 	if (select_path != NULL) {
 		gtk_tree_selection_select_path (selection, select_path);
