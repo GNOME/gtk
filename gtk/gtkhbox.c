@@ -29,6 +29,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkhbox.h"
 #include "gtkorientable.h"
+#include "gtkboxprivate.h"
 
 
 /**
