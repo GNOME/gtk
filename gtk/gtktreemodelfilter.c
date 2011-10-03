@@ -2073,17 +2073,17 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
   if (current_state == TRUE && requested_state == TRUE)
     {
-      /* propagate the signal; also get a path taking only visible
-       * nodes into account.
-       */
-      gtk_tree_path_free (path);
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
-
       level = FILTER_LEVEL (iter.user_data);
       elt = FILTER_ELT (iter.user_data2);
 
       if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
         {
+          /* propagate the signal; also get a path taking only visible
+           * nodes into account.
+           */
+          gtk_tree_path_free (path);
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
+
           if (level->ext_ref_count > 0)
             gtk_tree_model_row_changed (GTK_TREE_MODEL (filter), path, &iter);
 
