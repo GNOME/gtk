@@ -2423,7 +2423,7 @@ insert_before (void)
 
   g_object_unref (filter);
   g_object_unref (store);
-  g_object_unref (tree_view);
+  gtk_widget_destroy (tree_view);
 }
 
 static void
@@ -2486,7 +2486,7 @@ insert_child (void)
 
   g_object_unref (filter);
   g_object_unref (store);
-  g_object_unref (tree_view);
+  gtk_widget_destroy (tree_view);
 }
 
 
@@ -5014,7 +5014,7 @@ specific_has_child_filter (void)
 
   g_object_unref (fixture.filter);
   g_object_unref (fixture.store);
-  g_object_unref (tree_view);
+  gtk_widget_destroy (tree_view);
 }
 
 
@@ -5178,7 +5178,7 @@ specific_root_has_child_filter (void)
 
   g_object_unref (fixture.filter);
   g_object_unref (fixture.store);
-  g_object_unref (tree_view);
+  gtk_widget_destroy (tree_view);
 }
 
 static void
@@ -5288,7 +5288,7 @@ specific_has_child_filter_on_sort_model (void)
 
   g_object_unref (fixture.filter);
   g_object_unref (fixture.store);
-  g_object_unref (tree_view);
+  gtk_widget_destroy (tree_view);
 }
 
 static gboolean
@@ -5409,7 +5409,7 @@ specific_at_least_2_children_filter (void)
 
   g_object_unref (fixture.filter);
   g_object_unref (fixture.store);
-  g_object_unref (tree_view);
+  gtk_widget_destroy (tree_view);
 }
 
 static void
@@ -5490,7 +5490,7 @@ specific_at_least_2_children_filter_on_sort_model (void)
   gtk_tree_row_reference_free (ref);
   g_object_unref (fixture.filter);
   g_object_unref (fixture.store);
-  g_object_unref (tree_view);
+  gtk_widget_destroy (tree_view);
 }
 
 
