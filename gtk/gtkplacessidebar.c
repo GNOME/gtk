@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gdk/gdkkeysyms.h"
+#include "gtkbookmarksmanager.h"
 #include "gtkmarshalers.h"
 #include "gtkplacessidebar.h"
 #include "gtkscrolledwindow.h"
@@ -44,7 +45,7 @@ struct _GtkPlacesSidebar {
 	GtkListStore       *store;
 	GtkTreeModel       *filter_model;
 	NautilusWindow *window;
-	NautilusBookmarkList *bookmarks;
+	GtkBookmarksManager *bookmarks_manager;
 	GVolumeMonitor *volume_monitor;
 
 	gboolean devices_header_added;
@@ -75,8 +76,6 @@ struct _GtkPlacesSidebar {
 	GtkPlacesOpenMode go_to_after_mount_open_mode;
 
 	GtkTreePath *eject_highlight_path;
-
-	guint bookmarks_changed_id;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -3007,6 +3006,12 @@ create_volume_monitor (GtkPlacesSidebar *sidebar)
 }
 
 static void
+bookmarks_changed_cb (gpointer data)
+{
+	update_places (sidebar);
+}
+
+static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
 	GtkTreeView       *tree_view;
@@ -3015,6 +3020,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	GtkTreeSelection  *selection;
 
 	create_volume_monitor (sidebar);
+
+	sidebar->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, sidebar);
 
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sidebar),
 					GTK_POLICY_NEVER,
@@ -3232,10 +3239,9 @@ gtk_places_sidebar_dispose (GObject *object)
 		sidebar->eject_highlight_path = NULL;
 	}
 
-	if (sidebar->bookmarks_changed_id != 0) {
-		g_signal_handler_disconnect (sidebar->bookmarks,
-					     sidebar->bookmarks_changed_id);
-		sidebar->bookmarks_changed_id = 0;
+	if (sidebar->bookmarks_manager != NULL) {
+		_gtk_bookmarks_manager_free (sidebar->bookmarks_manager);
+		sidebar->bookmarks_manager = NULL;
 	}
 
 	g_clear_object (&sidebar->store);
@@ -3287,13 +3293,6 @@ gtk_places_sidebar_set_parent_window (GtkPlacesSidebar *sidebar,
 					   NautilusWindow *window)
 {
 	sidebar->window = window;
-
-	sidebar->bookmarks = nautilus_bookmark_list_new ();
-
-	sidebar->bookmarks_changed_id =
-		g_signal_connect_swapped (sidebar->bookmarks, "changed",
-					  G_CALLBACK (update_places),
-					  sidebar);
 
 	g_signal_connect_swapped (nautilus_preferences, "changed::" NAUTILUS_PREFERENCES_ALWAYS_USE_BROWSER,
 				  G_CALLBACK (bookmarks_popup_menu_detach_cb), sidebar);
