@@ -77,6 +77,7 @@ struct _GtkAppChooserDialogPrivate {
   GtkWidget *show_more_button;
 
   GtkAppChooserOnline *online;
+  GCancellable *online_cancellable;
 
   gboolean show_more_clicked;
 };
@@ -128,16 +129,18 @@ search_for_mimetype_ready_cb (GObject      *source,
 
   _gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
 
-  if (error != NULL)
+  if (error != NULL &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     {
       show_error_dialog (_("Failed to look for applications online"),
                          error->message, GTK_WINDOW (self));
-      g_error_free (error);
     }
   else
     {
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
     }
+
+  g_clear_error (&error);
 
   gdk_threads_leave ();
 }
@@ -148,9 +151,11 @@ online_button_clicked_cb (GtkButton *b,
 {
   GtkAppChooserDialog *self = user_data;
 
+  self->priv->online_cancellable = g_cancellable_new ();
   _gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
 						     self->priv->content_type,
 						     GTK_WINDOW (self),
+                                                     self->priv->online_cancellable,
 						     search_for_mimetype_ready_cb,
 						     self);
 }
@@ -611,6 +616,12 @@ gtk_app_chooser_dialog_dispose (GObject *object)
   
   g_clear_object (&self->priv->gfile);
   g_clear_object (&self->priv->online);
+
+  if (self->priv->online_cancellable != NULL)
+    {
+      g_cancellable_cancel (self->priv->online_cancellable);
+      g_clear_object (&self->priv->online_cancellable);
+    }
 
   G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->dispose (object);
 }

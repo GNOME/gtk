@@ -77,6 +77,7 @@ void
 _gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
                                                    const gchar         *content_type,
                                                    GtkWindow           *parent,
+                                                   GCancellable        *cancellable,
                                                    GAsyncReadyCallback  callback,
                                                    gpointer             user_data)
 {
@@ -86,7 +87,7 @@ _gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
 
   iface = GTK_APP_CHOOSER_ONLINE_GET_IFACE (self);
 
-  (* iface->search_for_mimetype_async) (self, content_type, parent, callback, user_data);
+  (* iface->search_for_mimetype_async) (self, content_type, parent, cancellable, callback, user_data);
 }
 
 gboolean
