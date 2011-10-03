@@ -83,6 +83,8 @@ struct _GtkPlacesSidebarClass {
 	void (* location_selected) (GtkPlacesSidebar *sidebar,
 				    GFile            *location,
 				    GtkPlacesOpenMode open_mode);
+	void (* initiated_unmount) (GtkPlacesSidebar *sidebar,
+				    gboolean          initiated_unmount);
 };
 
 enum {
@@ -121,6 +123,7 @@ typedef enum {
 
 enum {
 	LOCATION_SELECTED,
+	INITIATED_UNMOUNT,
 	LAST_SIGNAL,
 };
 
@@ -194,6 +197,13 @@ emit_location_selected (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpe
 {
 	g_signal_emit (sidebar, places_sidebar_signals[LOCATION_SELECTED], 0,
 		       location, open_mode);
+}
+
+static void
+emit_initiated_unmount (GtkPlacesSidebar *sidebar, gboolean initiated_unmount)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[INITIATED_UNMOUNT], 0,
+		       initiated_unmount);
 }
 
 static GdkPixbuf *
@@ -1960,7 +1970,7 @@ unmount_done (gpointer data)
 	GtkPlacesSidebar *sidebar;
 
 	sidebar = data;
-	nautilus_window_set_initiated_unmount (sidebar->window, FALSE);
+	emit_initiated_unmount (sidebar, FALSE);
 	g_object_unref (sidebar);
 }
 
@@ -1969,7 +1979,7 @@ do_unmount (GMount *mount,
 	    GtkPlacesSidebar *sidebar)
 {
 	if (mount != NULL) {
-		nautilus_window_set_initiated_unmount (sidebar->window, TRUE);
+		emit_initiated_unmount (sidebar, TRUE);
 		nautilus_file_operations_unmount_mount_full (NULL, mount, FALSE, TRUE,
 							     unmount_done,
 							     g_object_ref (sidebar));
@@ -2014,7 +2024,7 @@ drive_eject_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	nautilus_window_set_initiated_unmount (sidebar->window, FALSE);
+	emit_initiated_unmount (sidebar, FALSE);
 	g_object_unref (sidebar);
 
 	error = NULL;
@@ -2043,7 +2053,7 @@ volume_eject_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	nautilus_window_set_initiated_unmount (sidebar->window, FALSE);
+	emit_initiated_unmount (sidebar, FALSE);
 	g_object_unref (sidebar);
 
 	error = NULL;
@@ -2072,7 +2082,7 @@ mount_eject_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	nautilus_window_set_initiated_unmount (sidebar->window, FALSE);
+	emit_initiated_unmount (sidebar, FALSE);
 	g_object_unref (sidebar);
 
 	error = NULL;
@@ -2100,15 +2110,15 @@ do_eject (GMount *mount,
 
 	mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
 	if (mount != NULL) {
-		nautilus_window_set_initiated_unmount (sidebar->window, TRUE);
+		emit_initiated_unmount (sidebar, TRUE);
 		g_mount_eject_with_operation (mount, 0, mount_op, NULL, mount_eject_cb,
 					      g_object_ref (sidebar));
 	} else if (volume != NULL) {
-		nautilus_window_set_initiated_unmount (sidebar->window, TRUE);
+		emit_initiated_unmount (sidebar, TRUE);
 		g_volume_eject_with_operation (volume, 0, mount_op, NULL, volume_eject_cb,
 					      g_object_ref (sidebar));
 	} else if (drive != NULL) {
-		nautilus_window_set_initiated_unmount (sidebar->window, TRUE);
+		emit_initiated_unmount (sidebar, TRUE);
 		g_drive_eject_with_operation (drive, 0, mount_op, NULL, drive_eject_cb,
 					      g_object_ref (sidebar));
 	}
@@ -2316,7 +2326,7 @@ drive_stop_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	nautilus_window_set_initiated_unmount (sidebar->window, FALSE);
+	emit_initiated_unmount (sidebar, FALSE);
 	g_object_unref (sidebar);
 
 	error = NULL;
@@ -2353,7 +2363,7 @@ stop_shortcut_cb (GtkMenuItem           *item,
 		GMountOperation *mount_op;
 
 		mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
-		nautilus_window_set_initiated_unmount (sidebar->window, TRUE);
+		emit_initiated_unmount (sidebar, TRUE);
 		g_drive_stop (drive, G_MOUNT_UNMOUNT_NONE, mount_op, NULL, drive_stop_cb,
 			      g_object_ref (sidebar));
 		g_object_unref (mount_op);
@@ -3300,6 +3310,16 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_NONE, 2,
 			      G_TYPE_OBJECT,
 			      G_TYPE_ENUM);
+
+	places_sidebar_signals [INITIATED_UNMOUNT] =
+		g_signal_new (I_("initiated-unmount"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, initiated_unmount),
+			      NULL, NULL,
+			      gtk_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_BOOLEAN);
 }
 
 static void
