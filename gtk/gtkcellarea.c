@@ -3464,11 +3464,14 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
  * @area: a #GtkCellArea
  * @canceled: whether editing was canceled.
  *
- * Explicitly stops the editing of the currently
- * edited cell (see gtk_cell_area_get_edited_cell()).
+ * Explicitly stops the editing of the currently edited cell.
  *
- * If @canceled is %TRUE, the cell renderer will emit
- * the ::editing-canceled signal.
+ * If @canceled is %TRUE, the currently edited cell renderer
+ * will emit the ::editing-canceled signal, otherwise the
+ * the ::editing-done signal will be emitted on the current
+ * edit widget.
+ *
+ * See gtk_cell_area_get_edited_cell() and gtk_cell_area_get_edit_widget().
  *
  * Since: 3.0
  */
@@ -3489,6 +3492,13 @@ gtk_cell_area_stop_editing (GtkCellArea *area,
 
       /* Stop editing of the cell renderer */
       gtk_cell_renderer_stop_editing (priv->edited_cell, canceled);
+
+      /* When editing is explicitly halted either
+       * the "editing-canceled" signal is emitted on the cell 
+       * renderer or the "editing-done" signal on the GtkCellEditable widget
+       */
+      if (!canceled)
+	gtk_cell_editable_editing_done (edit_widget);
 
       /* Remove any references to the editable widget */
       gtk_cell_area_set_edited_cell (area, NULL);
