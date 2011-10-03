@@ -414,7 +414,6 @@ compare_for_selection (GtkPlacesSidebar *sidebar,
 static void
 update_places (GtkPlacesSidebar *sidebar)
 {
-	NautilusBookmark *bookmark;
 	GtkTreeSelection *selection;
 	GtkTreeIter last_iter;
 	GtkTreePath *select_path;
@@ -426,15 +425,16 @@ update_places (GtkPlacesSidebar *sidebar)
 	GDrive *drive;
 	GList *volumes;
 	GVolume *volume;
-	int bookmark_count, index;
+	GSList *bookmarks, *sl;
+	int index;
 	char *location, *mount_uri, *name, *desktop_path, *last_uri;
-	const gchar *path, *bookmark_name;
+	char *bookmark_name;
+	const gchar *path;
 	GIcon *icon;
 	GFile *root;
 	NautilusWindowSlot *slot;
 	char *tooltip;
 	GList *network_mounts;
-	NautilusFile *file;
 
 	model = NULL;
 	last_uri = NULL;
@@ -585,16 +585,22 @@ update_places (GtkPlacesSidebar *sidebar)
 	g_list_free (volumes);
 
 	/* add bookmarks */
-	bookmark_count = nautilus_bookmark_list_length (sidebar->bookmarks);
 
-	for (index = 0; index < bookmark_count; ++index) {
-		bookmark = nautilus_bookmark_list_item_at (sidebar->bookmarks, index);
+	bookmarks = _gtk_bookmarks_manager_list_bookmarks (sidebar->bookmarks_manager);
 
+	for (sl = bookmarks; sl; sl = sl->next) {
+		root = sl->data;
+
+#if 0
+		/* FIXME: remove this?  If we *do* show bookmarks for nonexistent files, the user will eventually clean them up */
 		if (nautilus_bookmark_uri_known_not_to_exist (bookmark)) {
 			continue;
 		}
+#endif
 
-		root = nautilus_bookmark_get_location (bookmark);
+#if 0
+		/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
+		NautilusFile *file;
 		file = nautilus_file_get (root);
 
 		if (is_built_in_bookmark (file)) {
@@ -603,11 +609,12 @@ update_places (GtkPlacesSidebar *sidebar)
 			continue;
 		}
 		nautilus_file_unref (file);
+#endif
 
-		bookmark_name = nautilus_bookmark_get_name (bookmark);
-		icon = nautilus_bookmark_get_icon (bookmark);
-		mount_uri = nautilus_bookmark_get_uri (bookmark);
+		bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (root);
+		mount_uri = g_file_get_uri (root);
 		tooltip = g_file_get_parse_name (root);
+		icon = NULL; /* FIXME: icon = nautilus_bookmark_get_icon (bookmark); */
 
 		last_iter = add_place (sidebar, PLACES_BOOKMARK,
 				       SECTION_BOOKMARKS,
@@ -622,6 +629,7 @@ update_places (GtkPlacesSidebar *sidebar)
 		g_object_unref (icon);
 		g_free (mount_uri);
 		g_free (tooltip);
+		g_free (bookmark_name);
 	}
 
 	last_iter = add_heading (sidebar, SECTION_COMPUTER,
