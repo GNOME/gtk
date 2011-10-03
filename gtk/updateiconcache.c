@@ -73,11 +73,11 @@ static gchar *var_name = "-";
 
 #include <ftw.h>
 
-static struct stat cache_stat;
+static GStatBuf cache_stat;
 static gboolean cache_up_to_date;
 
 static int check_dir_mtime (const char        *dir, 
-                            const struct stat *sb,
+                            const GStatBuf    *sb,
                             int                tf)
 {
   if (tf != FTW_NS && sb->st_mtime > cache_stat.st_mtime)
@@ -118,7 +118,7 @@ static int check_dir_mtime (const char        *dir,
 gboolean
 is_cache_up_to_date (const gchar *path)
 {
-  struct stat path_stat, cache_stat;
+  GStatBuf path_stat, cache_stat;
   gchar *cache_path;
   int retval; 
   
@@ -1455,7 +1455,7 @@ build_cache (const gchar *path)
 #endif
   GHashTable *files;
   FILE *cache;
-  struct stat path_stat, cache_stat;
+  GStatBuf path_stat, cache_stat;
   struct utimbuf utime_buf;
   GList *directories = NULL;
   int fd;
