@@ -89,8 +89,8 @@ _gtk_icon_cache_new_for_path (const gchar *path)
 
   gchar *cache_filename;
   gint fd = -1;
-  struct stat st;
-  struct stat path_st;
+  GStatBuf st;
+  GStatBuf path_st;
   CacheInfo info;
 
    /* Check if we have a cache file */
@@ -107,7 +107,12 @@ _gtk_icon_cache_new_for_path (const gchar *path)
 
   if (fd < 0)
     goto done;
-  
+
+#ifdef G_OS_WIN32
+#undef fstat /* Just in case */
+#define fstat _fstat32  
+#endif
+
   if (fstat (fd, &st) < 0 || st.st_size < 4)
     goto done;
 

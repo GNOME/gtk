@@ -2037,7 +2037,7 @@ gboolean
 gtk_recent_info_exists (GtkRecentInfo *info)
 {
   gchar *filename;
-  struct stat stat_buf;
+  GStatBuf stat_buf;
   gboolean retval = FALSE;
   
   g_return_val_if_fail (info != NULL, FALSE);
@@ -2049,7 +2049,7 @@ gtk_recent_info_exists (GtkRecentInfo *info)
   filename = g_filename_from_uri (info->uri, NULL, NULL);
   if (filename)
     {
-      if (stat (filename, &stat_buf) == 0)
+      if (g_stat (filename, &stat_buf) == 0)
         retval = TRUE;
      
       g_free (filename);
