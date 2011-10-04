@@ -152,6 +152,9 @@ EXTRA_DIST += \
 	style-properties-nth-child.css \
 	style-properties-nth-child.ref.ui \
 	style-properties-nth-child.ui \
+	style-properties-only-child.css \
+	style-properties-only-child.ref.ui \
+	style-properties-only-child.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
 	unresolvable.css \
