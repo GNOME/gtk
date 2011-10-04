@@ -58,6 +58,8 @@ void gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, 
 
 void gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sidebar, gboolean supported);
 
+void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
+
 G_END_DECLS
 
 #endif /* __GTK_PLACES_SIDEBAR_H__ */

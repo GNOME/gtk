@@ -78,6 +78,7 @@ struct _GtkPlacesSidebar {
 
 	guint multiple_tabs_supported : 1;
 	guint multiple_windows_supported : 1;
+	guint show_desktop : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -701,8 +702,7 @@ update_places (GtkPlacesSidebar *sidebar)
 		g_free (mount_uri);
 	}
 
-	if (g_settings_get_boolean (gnome_background_preferences, NAUTILUS_PREFERENCES_SHOW_DESKTOP) &&
-	    !g_settings_get_boolean (nautilus_preferences, NAUTILUS_PREFERENCES_DESKTOP_IS_HOME_DIR)) {
+	if (sidebar->show_desktop) {
 		/* desktop */
 		desktop_path = nautilus_get_desktop_directory ();
 		mount_uri = g_filename_to_uri (desktop_path, NULL, NULL);
@@ -1031,16 +1031,6 @@ clicked_eject_button (GtkPlacesSidebar *sidebar,
 	}
 
 	return FALSE;
-}
-
-static void
-desktop_setting_changed_callback (gpointer user_data)
-{
-	GtkPlacesSidebar *sidebar;
-
-	sidebar = GTK_PLACES_SIDEBAR (user_data);
-
-	update_places (sidebar);
 }
 
 /* Computes the appropriate row and position for dropping */
@@ -3270,14 +3260,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	eel_gtk_tree_view_set_activate_on_single_click (sidebar->tree_view,
 							TRUE);
 
-	g_signal_connect_swapped (nautilus_preferences, "changed::" NAUTILUS_PREFERENCES_DESKTOP_IS_HOME_DIR,
-				  G_CALLBACK(desktop_setting_changed_callback),
-				  sidebar);
-
-	g_signal_connect_swapped (gnome_background_preferences, "changed::" NAUTILUS_PREFERENCES_SHOW_DESKTOP,
-				  G_CALLBACK(desktop_setting_changed_callback),
-				  sidebar);
-
 	g_signal_connect_object (nautilus_trash_monitor_get (),
 				 "trash_state_changed",
 				 G_CALLBACK (trash_state_changed_cb),
@@ -3496,9 +3478,10 @@ gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
  * @sidebar: a places sidebar
  * @supported: whether the appliacation supports multiple notebook tabs for file browsing
  *
- * Sets whether the calling appliacation supports multiple tabs for file browsing.
- * When @supported is #TRUE, the context menu for the @sidebar's items will show
- * items relevant to opening folders in new tabs.
+ * Sets whether the calling appliacation supports multiple tabs for file
+ * browsing; this is off by default.  When @supported is #TRUE, the context menu
+ * for the @sidebar's items will show items relevant to opening folders in new
+ * tabs.
  */
 void
 gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, gboolean supported)
@@ -3514,9 +3497,10 @@ gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, gbool
  * @sidebar: a places sidebar
  * @supported: whether the appliacation supports multiple windows for file browsing
  *
- * Sets whether the calling appliacation supports multiple windows for file browsing.
- * When @supported is #TRUE, the context menu for the @sidebar's items will show
- * items relevant to opening folders in new windows.
+ * Sets whether the calling appliacation supports multiple windows for file
+ * browsing; this is off by default.  When @supported is #TRUE, the context menu
+ * for the @sidebar's items will show items relevant to opening folders in new
+ * windows.
  */
 void
 gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sidebar, gboolean supported)
@@ -3525,4 +3509,22 @@ gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sidebar, gb
 
 	sidebar->multiple_windows_supported = !!supported;
 	bookmarks_popup_menu_detach_cb (sidebar, NULL);
+}
+
+/**
+ * gtk_places_sidebar_set_show_desktop:
+ * @sidebar: a places sidebar
+ * @show_desktop: whether to show an item for the Desktop folder
+ *
+ * Sets whether the @sidebar should show an item for the Desktop folder; this is off by default.
+ * An application may want to turn this on if the desktop environment actually supports the
+ * notion of a desktop.
+ */
+void
+gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->show_desktop = !!show_desktop;
+	update_places (sidebar);
 }
