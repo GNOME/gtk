@@ -75,6 +75,9 @@ struct _GtkPlacesSidebar {
 	GtkPlacesOpenMode go_to_after_mount_open_mode;
 
 	GtkTreePath *eject_highlight_path;
+
+	guint multiple_tabs_supported : 1;
+	guint multiple_windows_supported : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -202,6 +205,10 @@ G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 static void
 emit_location_selected (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
 {
+	if ((!sidebar->multiple_tabs_supported && open_mode == GTK_PLACES_OPEN_MODE_NEW_TAB)
+	    || (!sidebar->multiple_windows_supported && open_mode == GTK_PLACES_OPEN_MODE_NEW_WINDOW))
+		open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
+
 	g_signal_emit (sidebar, places_sidebar_signals[LOCATION_SELECTED], 0,
 		       location, open_mode);
 }
@@ -2545,14 +2552,10 @@ static void
 bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 {
 	GtkWidget *item;
-	gboolean use_browser;
 
 	if (sidebar->popup_menu) {
 		return;
 	}
-
-	use_browser = g_settings_get_boolean (nautilus_preferences,
-					      NAUTILUS_PREFERENCES_ALWAYS_USE_BROWSER);
 
 	sidebar->popup_menu = gtk_menu_new ();
 	gtk_menu_attach_to_widget (GTK_MENU (sidebar->popup_menu),
@@ -2573,7 +2576,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (open_shortcut_in_new_tab_cb), sidebar);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
-	if (use_browser) {
+	if (settings->multiple_tabs_supported) {
 		gtk_widget_show (item);
 	}
 
@@ -2582,7 +2585,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (open_shortcut_in_new_window_cb), sidebar);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
-	if (use_browser) {
+	if (sidebar->multiple_windows_supported) {
 		gtk_widget_show (item);
 	}
 
@@ -2873,13 +2876,13 @@ bookmarks_button_press_event_cb (GtkWidget             *widget,
 					       &path, NULL, NULL, NULL);
 		gtk_tree_model_get_iter (model, &iter, path);
 
-		if (g_settings_get_boolean (nautilus_preferences,
-					    NAUTILUS_PREFERENCES_ALWAYS_USE_BROWSER)) {
-			open_mode = ((event->state & GDK_CONTROL_MASK) ?
-				     GTK_PLACES_OPEN_MODE_NEW_WINDOW :
-				     GTK_PLACES_OPEN_MODE_NEW_TAB);
+		if (sidebar->multiple_tabs_supported) {
+			if (event->state & GDK_CONTROL_MASK)
+				open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW;
+			else
+				open_mode = GTK_PLACES_OPEN_MODE_NEW_TAB;
 		} else {
-			open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW; /* FIXME: was CLOSE_BEHIND; make Nautilus handle this */
+			open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW;
 		}
 
 		open_selected_bookmark (sidebar, model, &iter, open_mode);
@@ -3315,10 +3318,6 @@ gtk_places_sidebar_dispose (GObject *object)
 					      desktop_setting_changed_callback,
 					      sidebar);
 
-	g_signal_handlers_disconnect_by_func (nautilus_preferences,
-					      bookmarks_popup_menu_detach_cb,
-					      sidebar);
-
 	g_signal_handlers_disconnect_by_func (gnome_background_preferences,
 					      desktop_setting_changed_callback,
 					      sidebar);
@@ -3490,4 +3489,40 @@ gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
         	 	valid = gtk_tree_model_iter_next (sidebar->filter_model, &iter);
 		}
     	}
+}
+
+/**
+ * gtk_places_sidebar_set_multiple_tabs_supported:
+ * @sidebar: a places sidebar
+ * @supported: whether the appliacation supports multiple notebook tabs for file browsing
+ *
+ * Sets whether the calling appliacation supports multiple tabs for file browsing.
+ * When @supported is #TRUE, the context menu for the @sidebar's items will show
+ * items relevant to opening folders in new tabs.
+ */
+void
+gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, gboolean supported)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->multiple_tabs_supported = !!supported;
+	bookmarks_popup_menu_detach_cb (sidebar, NULL);
+}
+
+/**
+ * gtk_places_sidebar_set_multiple_windows_supported:
+ * @sidebar: a places sidebar
+ * @supported: whether the appliacation supports multiple windows for file browsing
+ *
+ * Sets whether the calling appliacation supports multiple windows for file browsing.
+ * When @supported is #TRUE, the context menu for the @sidebar's items will show
+ * items relevant to opening folders in new windows.
+ */
+void
+gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sidebar, gboolean supported)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->multiple_windows_supported = !!supported;
+	bookmarks_popup_menu_detach_cb (sidebar, NULL);
 }
