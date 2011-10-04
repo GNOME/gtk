@@ -3066,6 +3066,37 @@ bookmarks_changed_cb (gpointer data)
 	update_places (sidebar);
 }
 
+static gboolean
+tree_view_button_press_callback (GtkWidget *tree_view,
+				 GdkEventButton *event,
+				 gpointer data)
+{
+	GtkTreePath *path;
+	GtkTreeViewColumn *column;
+
+	if (event->button == 1 && event->type == GDK_BUTTON_PRESS) {
+		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (tree_view),
+						   event->x, event->y,
+						   &path,
+						   &column,
+						   NULL,
+						   NULL)) {
+			gtk_tree_view_row_activated (GTK_TREE_VIEW (tree_view), path, column);
+		}
+	}
+
+	return FALSE;
+}
+
+static void
+tree_view_set_activate_on_single_click (GtkTreeView *tree_view)
+{
+	g_signal_connect (tree_view, "button_press_event",
+			  G_CALLBACK (tree_view_button_press_callback),
+			  NULL);
+}
+
+
 static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
@@ -3257,8 +3288,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	g_signal_connect (tree_view, "button-release-event",
 			  G_CALLBACK (bookmarks_button_release_event_cb), sidebar);
 
-	eel_gtk_tree_view_set_activate_on_single_click (sidebar->tree_view,
-							TRUE);
+	tree_view_set_activate_on_single_click (sidebar->tree_view);
 
 	g_signal_connect_object (nautilus_trash_monitor_get (),
 				 "trash_state_changed",
