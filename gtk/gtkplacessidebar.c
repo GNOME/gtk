@@ -127,6 +127,13 @@ enum {
 	LAST_SIGNAL,
 };
 
+/* Names for themed icons */
+#define ICON_NAME_HOME		"user-home"
+#define ICON_NAME_DESKTOP	"user-desktop"
+#define ICON_NAME_FILESYSTEM	"drive-harddisk-system"
+#define ICON_NAME_EJECT		"media-eject-symbolic"
+#define ICON_NAME_NETWORK	"network-workgroup"
+
 static guint placess_sidebar_signals [LAST_SIGNAL] = { 0 };
 
 static void  open_selected_bookmark                    (GtkPlacesSidebar        *sidebar,
@@ -674,7 +681,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	/* home folder */
 	mount_uri = get_home_directory_uri ();
 	if (mount_uri) {
-		icon = g_themed_icon_new ("user-home");
+		icon = g_themed_icon_new (ICON_NAME_HOME);
 		last_iter = add_place (sidebar, PLACES_BUILT_IN,
 				       SECTION_COMPUTER,
 				       _("Home"), icon,
@@ -692,7 +699,7 @@ update_places (GtkPlacesSidebar *sidebar)
 		/* desktop */
 		desktop_path = nautilus_get_desktop_directory ();
 		mount_uri = g_filename_to_uri (desktop_path, NULL, NULL);
-		icon = g_themed_icon_new (NAUTILUS_ICON_DESKTOP);
+		icon = g_themed_icon_new (ICON_NAME_DESKTOP);
 		last_iter = add_place (sidebar, PLACES_BUILT_IN,
 				       SECTION_COMPUTER,
 				       _("Desktop"), icon,
@@ -792,7 +799,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	/* file system root */
  	mount_uri = "file:///"; /* No need to strdup */
-	icon = g_themed_icon_new (NAUTILUS_ICON_FILESYSTEM);
+	icon = g_themed_icon_new (ICON_NAME_FILESYSTEM);
 	last_iter = add_place (sidebar, PLACES_BUILT_IN,
 			       SECTION_COMPUTER,
 			       _("File System"), icon,
@@ -846,7 +853,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	/* network:// */
  	mount_uri = "network:///"; /* No need to strdup */
-	icon = g_themed_icon_new (NAUTILUS_ICON_NETWORK);
+	icon = g_themed_icon_new (ICON_NAME_NETWORK);
 	last_iter = add_place (sidebar, PLACES_BUILT_IN,
 			       SECTION_NETWORK,
 			       _("Browse Network"), icon,
