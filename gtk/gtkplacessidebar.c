@@ -206,6 +206,20 @@ emit_initiated_unmount (GtkPlacesSidebar *sidebar, gboolean initiated_unmount)
 		       initiated_unmount);
 }
 
+static gint
+get_icon_size (GtkPlacesSidebar *sidebar)
+{
+	GtkSettings *settings;
+	gint width, height;
+
+	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (sidebar)));
+
+	if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
+		return MAX (width, height);
+	else
+		return 16;
+}
+
 static GdkPixbuf *
 get_eject_icon (GtkPlacesSidebar *sidebar,
 		gboolean highlighted)
@@ -218,7 +232,7 @@ get_eject_icon (GtkPlacesSidebar *sidebar,
 	GtkStyleContext *style;
 
 	icon_theme = gtk_icon_theme_get_default ();
-	icon_size = nautilus_get_icon_size_for_stock_size (GTK_ICON_SIZE_MENU);
+	icon_size = get_icon_size (sidebar);
 	icon = g_themed_icon_new_with_default_fallbacks ("media-eject-symbolic");
 	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, icon_size, 0);
 
@@ -340,7 +354,7 @@ add_place (GtkPlacesSidebar *sidebar,
 
 	check_heading_for_section (sidebar, section_type);
 
-	icon_size = nautilus_get_icon_size_for_stock_size (GTK_ICON_SIZE_MENU);
+	icon_size = get_icon_size (sidebar);
 	icon_info = nautilus_icon_info_lookup (icon, icon_size);
 
 	pixbuf = nautilus_icon_info_get_pixbuf_at_size (icon_info, icon_size);
@@ -965,7 +979,7 @@ over_eject_button (GtkPlacesSidebar *sidebar,
 							sidebar->eject_icon_cell_renderer,
 							&x_offset, &width);
 
-		eject_button_size = nautilus_get_icon_size_for_stock_size (GTK_ICON_SIZE_MENU);
+		eject_button_size = get_icon_size (sidebar);
 
 		/* This is kinda weird, but we have to do it to workaround gtk+ expanding
 		 * the eject cell renderer (even thought we told it not to) and we then
