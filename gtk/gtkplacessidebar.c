@@ -84,11 +84,14 @@ struct _GtkPlacesSidebar {
 struct _GtkPlacesSidebarClass {
 	GtkScrolledWindowClass parent;
 
-	void (* location_selected) (GtkPlacesSidebar *sidebar,
-				    GFile            *location,
-				    GtkPlacesOpenMode open_mode);
-	void (* initiated_unmount) (GtkPlacesSidebar *sidebar,
-				    gboolean          initiated_unmount);
+	void (* location_selected)  (GtkPlacesSidebar *sidebar,
+				     GFile            *location,
+				     GtkPlacesOpenMode open_mode);
+	void (* initiated_unmount)  (GtkPlacesSidebar *sidebar,
+				     gboolean          initiated_unmount);
+	void (* show_error_message) (GtkPlacesSidebar *sidebar,
+				     const char       *primary,
+				     const char       *secondary);
 };
 
 enum {
@@ -128,6 +131,7 @@ typedef enum {
 enum {
 	LOCATION_SELECTED,
 	INITIATED_UNMOUNT,
+	SHOW_ERROR_MESSAGE,
 	LAST_SIGNAL,
 };
 
@@ -219,6 +223,13 @@ emit_initiated_unmount (GtkPlacesSidebar *sidebar, gboolean initiated_unmount)
 {
 	g_signal_emit (sidebar, places_sidebar_signals[INITIATED_UNMOUNT], 0,
 		       initiated_unmount);
+}
+
+static void
+emit_show_error_message (GtkPlacesSidebar *sidebar, const char *primary, const char *secondary)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[SHOW_ERROR_MESSAGE], 0,
+		       primary, secondary);
 }
 
 static gint
@@ -1760,9 +1771,7 @@ drive_start_from_bookmark_cb (GObject      *source_object,
 			name = g_drive_get_name (G_DRIVE (source_object));
 			primary = g_strdup_printf (_("Unable to start %s"), name);
 			g_free (name);
-			eel_show_error_dialog (primary,
-					       error->message,
-					       NULL);
+			emit_show_error_message (sidebar, primary, error->message);
 			g_free (primary);
 		}
 		g_error_free (error);
@@ -2067,9 +2076,7 @@ drive_eject_cb (GObject *source_object,
 			name = g_drive_get_name (G_DRIVE (source_object));
 			primary = g_strdup_printf (_("Unable to eject %s"), name);
 			g_free (name);
-			eel_show_error_dialog (primary,
-					       error->message,
-				       NULL);
+			emit_show_error_message (sidebar, primary, error->message);
 			g_free (primary);
 		}
 		g_error_free (error);
@@ -2096,9 +2103,7 @@ volume_eject_cb (GObject *source_object,
 			name = g_volume_get_name (G_VOLUME (source_object));
 			primary = g_strdup_printf (_("Unable to eject %s"), name);
 			g_free (name);
-			eel_show_error_dialog (primary,
-					       error->message,
-					       NULL);
+			emit_show_error_message (sidebar, primary, error->message);
 			g_free (primary);
 		}
 		g_error_free (error);
@@ -2125,9 +2130,7 @@ mount_eject_cb (GObject *source_object,
 			name = g_mount_get_name (G_MOUNT (source_object));
 			primary = g_strdup_printf (_("Unable to eject %s"), name);
 			g_free (name);
-			eel_show_error_dialog (primary,
-					       error->message,
-					       NULL);
+			emit_show_error_message (sidebar, primary, error->message);
 			g_free (primary);
 		}
 		g_error_free (error);
@@ -2268,9 +2271,7 @@ drive_poll_for_media_cb (GObject *source_object,
 			name = g_drive_get_name (G_DRIVE (source_object));
 			primary = g_strdup_printf (_("Unable to poll %s for media changes"), name);
 			g_free (name);
-			eel_show_error_dialog (primary,
-					       error->message,
-					       NULL);
+			emit_show_error_message (sidebar, primary, error->message);
 			g_free (primary);
 		}
 		g_error_free (error);
@@ -2313,9 +2314,7 @@ drive_start_cb (GObject      *source_object,
 			name = g_drive_get_name (G_DRIVE (source_object));
 			primary = g_strdup_printf (_("Unable to start %s"), name);
 			g_free (name);
-			eel_show_error_dialog (primary,
-					       error->message,
-					       NULL);
+			emit_show_error_message (sidebar, primary, error->message);
 			g_free (primary);
 		}
 		g_error_free (error);
@@ -2369,9 +2368,7 @@ drive_stop_cb (GObject *source_object,
 			name = g_drive_get_name (G_DRIVE (source_object));
 			primary = g_strdup_printf (_("Unable to stop %s"), name);
 			g_free (name);
-			eel_show_error_dialog (primary,
-					       error->message,
-					       NULL);
+			emit_show_error_message (sidebar, primary, error->message);
 			g_free (primary);
 		}
 		g_error_free (error);
@@ -3348,6 +3345,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 
 	GTK_WIDGET_CLASS (class)->style_set = gtk_places_sidebar_style_set;
 
+	/* FIXME: add docstrings for the signals */
+
 	places_sidebar_signals [LOCATION_SELECTED] =
 		g_signal_new (I_("location-selected"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3368,6 +3367,17 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      gtk_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1,
 			      G_TYPE_BOOLEAN);
+
+	places_sidebar_signals [SHOW_ERROR_MESSAGE] =
+		g_signal_new (I_("show-error-message"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_error_message),
+			      NULL, NULL,
+			      _gtk_marshal_VOID__STRING_STRING,
+			      G_TYPE_NONE, 2,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING);
 }
 
 static void
