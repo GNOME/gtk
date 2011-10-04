@@ -259,7 +259,7 @@ get_eject_icon (GtkPlacesSidebar *sidebar,
 
 	icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (sidebar)));
 	icon_size = get_icon_size (sidebar);
-	icon = g_themed_icon_new_with_default_fallbacks ("media-eject-symbolic");
+	icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_EJECT);
 	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, icon_size, 0);
 
 	style = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
