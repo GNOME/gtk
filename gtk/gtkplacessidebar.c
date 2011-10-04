@@ -3190,7 +3190,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (bookmarks_editing_canceled), sidebar);
 
 	/* this is required to align the eject buttons to the right */
-	gtk_tree_view_column_set_max_width (GTK_TREE_VIEW_COLUMN (col), NAUTILUS_ICON_SIZE_SMALLER);
+	gtk_tree_view_column_set_max_width (GTK_TREE_VIEW_COLUMN (col), 24);
 	gtk_tree_view_append_column (tree_view, col);
 
 	sidebar->store = gtk_list_store_new (PLACES_SIDEBAR_COLUMN_COUNT,
