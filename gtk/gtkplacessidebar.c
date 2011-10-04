@@ -255,6 +255,8 @@ get_eject_icon (GtkPlacesSidebar *sidebar,
 	return eject;
 }
 
+#if 0
+/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
 static gboolean
 is_built_in_bookmark (NautilusFile *file)
 {
@@ -280,6 +282,7 @@ is_built_in_bookmark (NautilusFile *file)
 
 	return built_in;
 }
+#endif
 
 static GtkTreeIter
 add_heading (GtkPlacesSidebar *sidebar,
@@ -1127,6 +1130,8 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	}
 }
 
+#if 0
+/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
 static gboolean
 can_accept_file_as_bookmark (NautilusFile *file)
 {
@@ -1156,6 +1161,7 @@ can_accept_items_as_bookmarks (const GList *items)
 
 	return TRUE;
 }
+#endif
 
 static gboolean
 drag_motion_callback (GtkTreeView *tree_view,
@@ -1190,11 +1196,18 @@ drag_motion_callback (GtkTreeView *tree_view,
 		if (sidebar->drag_data_received &&
 		    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 			action = GDK_ACTION_MOVE;
-		} else if (can_accept_items_as_bookmarks (sidebar->drag_list)) {
+		}
+#if 1
+		else
+			action = GDK_ACTION_COPY;
+#else
+		/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
+		else if (can_accept_items_as_bookmarks (sidebar->drag_list)) {
 			action = GDK_ACTION_COPY;
 		} else {
 			action = 0;
 		}
+#endif
 	} else {
 		if (sidebar->drag_list == NULL) {
 			action = 0;
@@ -1264,10 +1277,13 @@ bookmarks_drop_uris (GtkPlacesSidebar *sidebar,
 		uri = uris[i];
 		file = nautilus_file_get_by_uri (uri);
 
+#if 0
+		/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
 		if (!can_accept_file_as_bookmark (file)) {
 			nautilus_file_unref (file);
 			continue;
 		}
+#endif
 
 		uri = nautilus_file_get_drop_target_uri (file);
 		location = g_file_new_for_uri (uri);
