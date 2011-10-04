@@ -141,6 +141,7 @@ enum {
 #define ICON_NAME_FILESYSTEM	"drive-harddisk-system"
 #define ICON_NAME_EJECT		"media-eject-symbolic"
 #define ICON_NAME_NETWORK	"network-workgroup"
+#define ICON_NAME_TRASH		"user-trash"
 
 static guint placess_sidebar_signals [LAST_SIGNAL] = { 0 };
 
@@ -841,7 +842,7 @@ update_places (GtkPlacesSidebar *sidebar)
 			       &last_iter, &select_path);
 
 	mount_uri = "trash:///"; /* No need to strdup */
-	icon = nautilus_trash_monitor_get_icon ();
+	icon = g_themed_icon_new (ICON_NAME_TRASH);
 	last_iter = add_place (sidebar, PLACES_BUILT_IN,
 			       SECTION_COMPUTER,
 			       _("Trash"), icon, mount_uri,
