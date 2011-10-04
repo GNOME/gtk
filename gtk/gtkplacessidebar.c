@@ -360,6 +360,24 @@ check_heading_for_section (GtkPlacesSidebar *sidebar,
 	}
 }
 
+static GdkPixbuf *
+get_pixbuf_from_gicon (GtkPlacesSidebar *sidebar, GIcon *icon)
+{
+	int icon_size;
+	GtkIconTheme *icon_theme;
+	GtkIconInfo *icon_info;
+	GdkPixbuf *pixbuf;
+
+	icon_theme = gtk_icon_theme_get_default ();
+	icon_size = get_icon_size (sidebar);
+	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, icon_size, 0);
+
+	pixbuf = gtk_icon_info_load_icon (icon_info, NULL); /* NULL-GError */
+	gtk_icon_info_free (icon_info);
+
+	return pixbuf;
+}
+
 static GtkTreeIter
 add_place (GtkPlacesSidebar *sidebar,
 	   PlaceType place_type,
@@ -376,18 +394,12 @@ add_place (GtkPlacesSidebar *sidebar,
 	GdkPixbuf            *pixbuf;
 	GtkTreeIter           iter, child_iter;
 	GdkPixbuf	     *eject;
-	NautilusIconInfo *icon_info;
-	int icon_size;
 	gboolean show_eject, show_unmount;
 	gboolean show_eject_button;
 
 	check_heading_for_section (sidebar, section_type);
 
-	icon_size = get_icon_size (sidebar);
-	icon_info = nautilus_icon_info_lookup (icon, icon_size);
-
-	pixbuf = nautilus_icon_info_get_pixbuf_at_size (icon_info, icon_size);
-	g_object_unref (icon_info);
+	pixbuf = get_pixbuf_from_gicon (sidebar, icon);
 
 	check_unmount_and_eject (mount, volume, drive,
 				 &show_unmount, &show_eject);
