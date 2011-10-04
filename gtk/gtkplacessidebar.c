@@ -143,6 +143,16 @@ enum {
 #define ICON_NAME_NETWORK	"network-workgroup"
 #define ICON_NAME_TRASH		"user-trash"
 
+#define ICON_NAME_FOLDER_DESKTOP	"user-desktop"
+#define ICON_NAME_FOLDER_DOCUMENTS	"folder-documents"
+#define ICON_NAME_FOLDER_DOWNLOAD	"folder-download"
+#define ICON_NAME_FOLDER_MUSIC		"folder-music"
+#define ICON_NAME_FOLDER_PICTURES	"folder-pictures"
+#define ICON_NAME_FOLDER_PUBLIC_SHARE	"folder-publicshare"
+#define ICON_NAME_FOLDER_TEMPLATES	"folder-templates"
+#define ICON_NAME_FOLDER_VIDEOS		"folder-videos"
+#define ICON_NAME_FOLDER_SAVED_SEARCH	"folder-saved-search"
+
 static guint placess_sidebar_signals [LAST_SIGNAL] = { 0 };
 
 static void  open_selected_bookmark                    (GtkPlacesSidebar        *sidebar,
@@ -488,6 +498,30 @@ get_home_directory_uri (void)
 	return g_strconcat ("file://", home, NULL);
 }
 
+static GIcon *
+get_gicon_for_user_special_directory (GUserDirectory directory)
+{
+	#define ICON_CASE(x) \
+		case G_USER_DIRECTORY_ ## x:\
+			return g_themed_icon_new (ICON_NAME_FOLDER_ ## x);
+
+	switch (directory) {
+		ICON_CASE (DESKTOP);
+		ICON_CASE (DOCUMENTS);
+		ICON_CASE (DOWNLOAD);
+		ICON_CASE (MUSIC);
+		ICON_CASE (PICTURES);
+		ICON_CASE (PUBLIC_SHARE);
+		ICON_CASE (TEMPLATES);
+		ICON_CASE (VIDEOS);
+
+	default:
+		return g_themed_icon_new ("folder");
+	}
+
+	#undef ICON_CASE
+}
+
 static void
 update_places (GtkPlacesSidebar *sidebar)
 {
@@ -766,7 +800,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 		root = g_file_new_for_path (path);
 		name = g_file_get_basename (root);
-		icon = nautilus_user_special_directory_get_gicon (index);
+		icon = get_gicon_for_user_special_directory (index);
 		mount_uri = g_file_get_uri (root);
 		tooltip = g_file_get_parse_name (root);
 
