@@ -3411,14 +3411,6 @@ gtk_places_sidebar_dispose (GObject *object)
 	g_clear_object (&sidebar->bookmarks);
 	g_clear_object (&sidebar->filter_model);
 
-	g_signal_handlers_disconnect_by_func (nautilus_preferences,
-					      desktop_setting_changed_callback,
-					      sidebar);
-
-	g_signal_handlers_disconnect_by_func (gnome_background_preferences,
-					      desktop_setting_changed_callback,
-					      sidebar);
-
 	G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
 
