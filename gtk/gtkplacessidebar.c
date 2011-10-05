@@ -2582,6 +2582,18 @@ bookmarks_key_press_event_cb (GtkWidget             *widget,
   return FALSE;
 }
 
+static GtkMenuItem *
+append_menu_separator (GtkMenu *menu)
+{
+	GtkWidget *menu_item;
+
+	menu_item = gtk_separator_menu_item_new ();
+	gtk_widget_show (menu_item);
+	gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menu_item, -1);
+
+	return GTK_MENU_ITEM (menu_item);
+}
+
 /* Constructs the popup menu for the file list if needed */
 static void
 bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
@@ -2624,7 +2636,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 		gtk_widget_show (item);
 	}
 
-	eel_gtk_menu_append_separator (GTK_MENU (sidebar->popup_menu));
+	append_menu_separator (GTK_MENU (sidebar->popup_menu));
 
 	item = gtk_menu_item_new_with_mnemonic (_("_Add Bookmark"));
 	sidebar->popup_menu_add_shortcut_item = item;
@@ -2650,8 +2662,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 
 	/* Mount/Unmount/Eject menu items */
 
-	sidebar->popup_menu_separator_item =
-		GTK_WIDGET (eel_gtk_menu_append_separator (GTK_MENU (sidebar->popup_menu)));
+	sidebar->popup_menu_separator_item = GTK_WIDGET (append_menu_separator (GTK_MENU (sidebar->popup_menu)));
 
 	item = gtk_menu_item_new_with_mnemonic (_("_Mount"));
 	sidebar->popup_menu_mount_item = item;
