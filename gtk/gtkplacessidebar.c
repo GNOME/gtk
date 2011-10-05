@@ -1339,20 +1339,18 @@ bookmarks_drop_uris (GtkPlacesSidebar *sidebar,
 		     GtkSelectionData      *selection_data,
 		     int                    position)
 {
-	NautilusBookmark *bookmark;
-	NautilusFile *file;
-	char *uri;
 	char **uris;
 	int i;
-	GFile *location;
 
 	uris = gtk_selection_data_get_uris (selection_data);
 	if (!uris)
 		return;
 
 	for (i = 0; uris[i]; i++) {
+		char *uri;
+		GFile *location;
+
 		uri = uris[i];
-		file = nautilus_file_get_by_uri (uri);
 
 #if 0
 		/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
@@ -1362,19 +1360,12 @@ bookmarks_drop_uris (GtkPlacesSidebar *sidebar,
 		}
 #endif
 
-		uri = nautilus_file_get_drop_target_uri (file);
 		location = g_file_new_for_uri (uri);
-		nautilus_file_unref (file);
 
-		bookmark = nautilus_bookmark_new (location, NULL, NULL);
-
-		if (!nautilus_bookmark_list_contains (sidebar->bookmarks, bookmark)) {
-			nautilus_bookmark_list_insert_item (sidebar->bookmarks, bookmark, position++);
-		}
+		if (_gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, location, position, NULL)) /* NULL-GError */
+			position++;
 
 		g_object_unref (location);
-		g_object_unref (bookmark);
-		g_free (uri);
 	}
 
 	g_strfreev (uris);
