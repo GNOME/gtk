@@ -274,17 +274,18 @@ get_eject_icon (GtkPlacesSidebar *sidebar,
 	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, icon_size, 0);
 
 	style = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
+
+	gtk_style_context_save (style);
+
+	if (highlighted)
+		gtk_style_context_set_state (style, GTK_STATE_FLAG_PRELIGHT);
+
 	eject = gtk_icon_info_load_symbolic_for_context (icon_info,
 							 style,
 							 NULL,
 							 NULL);
 
-	if (highlighted) {
-		GdkPixbuf *high;
-		high = eel_create_spotlight_pixbuf (eject);
-		g_object_unref (eject);
-		eject = high;
-	}
+	gtk_style_context_restore (context);
 
 	g_object_unref (icon);
 	gtk_icon_info_free (icon_info);
