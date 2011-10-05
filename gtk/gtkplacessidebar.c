@@ -749,12 +749,14 @@ update_places (GtkPlacesSidebar *sidebar)
 				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 
-		g_object_unref (root);
 		g_object_unref (icon);
 		g_free (mount_uri);
 		g_free (tooltip);
 		g_free (bookmark_name);
 	}
+
+	g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
+	g_slist_free (bookmarks);
 
 	last_iter = add_heading (sidebar, SECTION_COMPUTER,
 			       _("Computer"));
