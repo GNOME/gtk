@@ -2726,13 +2726,35 @@ bookmarks_update_popup_menu (GtkPlacesSidebar *sidebar)
 
 static void
 bookmarks_popup_menu (GtkPlacesSidebar *sidebar,
-		      GdkEventButton        *event)
+		      GdkEventButton   *event)
 {
+	int button;
+
 	bookmarks_update_popup_menu (sidebar);
-	eel_pop_up_context_menu (GTK_MENU(sidebar->popup_menu),
-			      EEL_DEFAULT_POPUP_MENU_DISPLACEMENT,
-			      EEL_DEFAULT_POPUP_MENU_DISPLACEMENT,
-			      event);
+
+	/* The event button needs to be 0 if we're popping up this menu from
+	 * a button release, else a 2nd click outside the menu with any button
+	 * other than the one that invoked the menu will be ignored (instead
+	 * of dismissing the menu). This is a subtle fragility of the GTK menu code.
+	 */
+	if (event) {
+		if (event->type == GDK_BUTTON_RELEASE)
+			button = 0;
+		else
+			button = event->button;
+	} else {
+		button = 0;
+	}
+	
+	gtk_menu_popup (GTK_MENU (sidebar->popup_menu),		/* menu */
+			NULL,					/* parent_menu_shell */
+			NULL,					/* parent_menu_item */
+			NULL,					/* popup_position_func */
+			NULL,					/* popup_position_user_data */
+			button,					/* button */
+			event ? event->time : gtk_get_currrent_event_time ()); /* activate_time */
+
+	gtk_object_sink (GTK_OBJECT (menu));
 }
 
 /* Callback used for the GtkWidget::popup-menu signal of the shortcuts list */
