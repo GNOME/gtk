@@ -523,6 +523,22 @@ get_gicon_for_user_special_directory (GUserDirectory directory)
 	#undef ICON_CASE
 }
 
+static const char *
+get_desktop_directory (void)
+{
+	const char *name;
+
+	name = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+	/* "To disable a directory, point it to the homedir."
+	 * See http://freedesktop.org/wiki/Software/xdg-user-dirs
+	 **/
+	if (!g_strcmp0 (name, g_get_home_dir ())) {
+		return NULL;
+	} else {
+		return name;
+	}
+}
+
 static void
 update_places (GtkPlacesSidebar *sidebar)
 {
@@ -761,9 +777,9 @@ update_places (GtkPlacesSidebar *sidebar)
 		g_free (mount_uri);
 	}
 
-	if (sidebar->show_desktop) {
+	desktop_path = get_desktop_directory ();
+	if (sidebar->show_desktop && desktop_path) {
 		/* desktop */
-		desktop_path = nautilus_get_desktop_directory ();
 		mount_uri = g_filename_to_uri (desktop_path, NULL, NULL);
 		icon = g_themed_icon_new (ICON_NAME_DESKTOP);
 		last_iter = add_place (sidebar, PLACES_BUILT_IN,
@@ -776,9 +792,7 @@ update_places (GtkPlacesSidebar *sidebar)
 				       sidebar->uri, mount_uri, last_uri,
 				       &last_iter, &select_path);
 		g_free (mount_uri);
-		g_free (desktop_path);
 	}
-
 
 	/* XDG directories */
 	for (index = 0; index < G_USER_N_DIRECTORIES; index++) {
