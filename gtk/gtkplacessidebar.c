@@ -26,13 +26,26 @@
 
 #include "config.h"
 
+#include <gio/gio.h>
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkbookmarksmanager.h"
+#include "gtkcelllayout.h"
+#include "gtkcellrenderertext.h"
+#include "gtkcellrendererpixbuf.h"
+#include "gtkicontheme.h"
+#include "gtkimagemenuitem.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkmenuitem.h"
+#include "gtkmountoperation.h"
 #include "gtkplacessidebar.h"
 #include "gtkscrolledwindow.h"
-#include "gtktreeview.h"
-#include <gio/gio.h>
+#include "gtkseparatormenuitem.h"
+#include "gtktreeselection.h"
+#include "gtktreednd.h"
+#include "gtkwindow.h"
 
 #define EJECT_BUTTON_XPAD 6
 #define ICON_CELL_XPAD 6
@@ -155,7 +168,7 @@ enum {
 #define ICON_NAME_FOLDER_VIDEOS		"folder-videos"
 #define ICON_NAME_FOLDER_SAVED_SEARCH	"folder-saved-search"
 
-static guint placess_sidebar_signals [LAST_SIGNAL] = { 0 };
+static guint places_sidebar_signals [LAST_SIGNAL] = { 0 };
 
 static void  open_selected_bookmark                    (GtkPlacesSidebar        *sidebar,
 							GtkTreeModel                 *model,
@@ -287,7 +300,7 @@ get_eject_icon (GtkPlacesSidebar *sidebar,
 							 NULL,
 							 NULL);
 
-	gtk_style_context_restore (context);
+	gtk_style_context_restore (style);
 
 	g_object_unref (icon);
 	gtk_icon_info_free (icon_info);
@@ -557,7 +570,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	GVolume *volume;
 	GSList *bookmarks, *sl;
 	int index;
-	char *mount_uri, *name, *desktop_path, *last_uri;
+	const char *desktop_path;
+	char *mount_uri, *name, *last_uri;
 	char *bookmark_name;
 	const gchar *path;
 	GIcon *icon;
@@ -714,7 +728,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	bookmarks = _gtk_bookmarks_manager_list_bookmarks (sidebar->bookmarks_manager);
 
-	for (sl = bookmarks; sl; sl = sl->next) {
+	for (sl = bookmarks, index = 0; sl; sl = sl->next, index++) {
 		root = sl->data;
 
 #if 0
@@ -737,7 +751,7 @@ update_places (GtkPlacesSidebar *sidebar)
 		nautilus_file_unref (file);
 #endif
 
-		bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (root);
+		bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
 		mount_uri = g_file_get_uri (root);
 		tooltip = g_file_get_parse_name (root);
 		icon = NULL; /* FIXME: icon = nautilus_bookmark_get_icon (bookmark); */
@@ -1402,7 +1416,9 @@ uri_list_from_selection (GList *selection)
 static GList*
 build_selection_list (const char *data)
 {
+#if DO_NOT_COMPILE
 	NautilusDragSelectionItem *item;
+#endif
 	GList *result;
 	char **uris;
 	char *uri;
@@ -1834,9 +1850,12 @@ drive_start_from_bookmark_cb (GObject      *source_object,
 			      GAsyncResult *res,
 			      gpointer      user_data)
 {
+	GtkPlacesSidebar *sidebar;
 	GError *error;
 	char *primary;
 	char *name;
+
+	sidebar = GTK_PLACES_SIDEBAR (user_data);
 
 	error = NULL;
 	if (!g_drive_poll_for_media_finish (G_DRIVE (source_object), res, &error)) {
@@ -1867,8 +1886,6 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 	gtk_tree_model_get (model, iter, PLACES_SIDEBAR_COLUMN_URI, &uri, -1);
 
 	if (uri != NULL) {
-		DEBUG ("Activating bookmark %s", uri);
-
 		location = g_file_new_for_uri (uri);
 		emit_location_selected (sidebar, location, open_mode);
 
@@ -1899,7 +1916,7 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 			GMountOperation *mount_op;
 
 			mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
-			g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_from_bookmark_cb, NULL);
+			g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_from_bookmark_cb, sidebar);
 			g_object_unref (mount_op);
 		}
 
@@ -1953,6 +1970,7 @@ open_shortcut_in_new_tab_cb (GtkMenuItem      *item,
 static void
 add_bookmark (GtkPlacesSidebar *sidebar)
 {
+#if DO_NOT_COMPILE
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	char *uri;
@@ -1979,6 +1997,7 @@ add_bookmark (GtkPlacesSidebar *sidebar)
 		g_object_unref (bookmark);
 		g_free (uri);
 	}
+#endif
 }
 
 static void
@@ -2031,6 +2050,7 @@ rename_shortcut_cb (GtkMenuItem           *item,
 static void
 remove_selected_bookmarks (GtkPlacesSidebar *sidebar)
 {
+#if DO_NOT_COMPILE
 	GtkTreeIter iter;
 	PlaceType type;
 	int index;
@@ -2052,6 +2072,7 @@ remove_selected_bookmarks (GtkPlacesSidebar *sidebar)
 			    -1);
 
 	nautilus_bookmark_list_delete_item_at (sidebar->bookmarks, index);
+#endif
 }
 
 static void
@@ -2147,7 +2168,6 @@ drive_eject_cb (GObject *source_object,
 
 	sidebar = user_data;
 	emit_initiated_unmount (sidebar, FALSE);
-	g_object_unref (sidebar);
 
 	error = NULL;
 	if (!g_drive_eject_with_operation_finish (G_DRIVE (source_object), res, &error)) {
@@ -2160,6 +2180,8 @@ drive_eject_cb (GObject *source_object,
 		}
 		g_error_free (error);
 	}
+
+	g_object_unref (sidebar);
 }
 
 static void
@@ -2174,7 +2196,6 @@ volume_eject_cb (GObject *source_object,
 
 	sidebar = user_data;
 	emit_initiated_unmount (sidebar, FALSE);
-	g_object_unref (sidebar);
 
 	error = NULL;
 	if (!g_volume_eject_with_operation_finish (G_VOLUME (source_object), res, &error)) {
@@ -2187,6 +2208,8 @@ volume_eject_cb (GObject *source_object,
 		}
 		g_error_free (error);
 	}
+
+	g_object_unref (sidebar);
 }
 
 static void
@@ -2201,7 +2224,6 @@ mount_eject_cb (GObject *source_object,
 
 	sidebar = user_data;
 	emit_initiated_unmount (sidebar, FALSE);
-	g_object_unref (sidebar);
 
 	error = NULL;
 	if (!g_mount_eject_with_operation_finish (G_MOUNT (source_object), res, &error)) {
@@ -2214,6 +2236,8 @@ mount_eject_cb (GObject *source_object,
 		}
 		g_error_free (error);
 	}
+
+	g_object_unref (sidebar);
 }
 
 static void
@@ -2340,9 +2364,12 @@ drive_poll_for_media_cb (GObject *source_object,
 			 GAsyncResult *res,
 			 gpointer user_data)
 {
+	GtkPlacesSidebar *sidebar;
 	GError *error;
 	char *primary;
 	char *name;
+
+	sidebar = GTK_PLACES_SIDEBAR (user_data);
 
 	error = NULL;
 	if (!g_drive_poll_for_media_finish (G_DRIVE (source_object), res, &error)) {
@@ -2355,6 +2382,8 @@ drive_poll_for_media_cb (GObject *source_object,
 		}
 		g_error_free (error);
 	}
+
+	/* FIXME: drive_stop_cb() gets a reffed sidebar, and unrefs it.  Do we need to do the same here? */
 }
 
 static void
@@ -2373,7 +2402,7 @@ rescan_shortcut_cb (GtkMenuItem           *item,
 			    -1);
 
 	if (drive != NULL) {
-		g_drive_poll_for_media (drive, NULL, drive_poll_for_media_cb, NULL);
+		g_drive_poll_for_media (drive, NULL, drive_poll_for_media_cb, sidebar);
 	}
 	g_object_unref (drive);
 }
@@ -2383,9 +2412,12 @@ drive_start_cb (GObject      *source_object,
 		GAsyncResult *res,
 		gpointer      user_data)
 {
+	GtkPlacesSidebar *sidebar;
 	GError *error;
 	char *primary;
 	char *name;
+
+	sidebar = GTK_PLACES_SIDEBAR (user_data);
 
 	error = NULL;
 	if (!g_drive_poll_for_media_finish (G_DRIVE (source_object), res, &error)) {
@@ -2398,6 +2430,8 @@ drive_start_cb (GObject      *source_object,
 		}
 		g_error_free (error);
 	}
+
+	/* FIXME: drive_stop_cb() gets a reffed sidebar, and unrefs it.  Do we need to do the same here? */
 }
 
 static void
@@ -2420,7 +2454,7 @@ start_shortcut_cb (GtkMenuItem           *item,
 
 		mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
 
-		g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_cb, NULL);
+		g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_cb, sidebar);
 
 		g_object_unref (mount_op);
 	}
@@ -2439,7 +2473,6 @@ drive_stop_cb (GObject *source_object,
 
 	sidebar = user_data;
 	emit_initiated_unmount (sidebar, FALSE);
-	g_object_unref (sidebar);
 
 	error = NULL;
 	if (!g_drive_poll_for_media_finish (G_DRIVE (source_object), res, &error)) {
@@ -2452,6 +2485,8 @@ drive_stop_cb (GObject *source_object,
 		}
 		g_error_free (error);
 	}
+
+	g_object_unref (sidebar);
 }
 
 static void
@@ -2656,7 +2691,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (open_shortcut_in_new_tab_cb), sidebar);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
-	if (settings->multiple_tabs_supported) {
+	if (sidebar->multiple_tabs_supported) {
 		gtk_widget_show (item);
 	}
 
@@ -2787,9 +2822,9 @@ bookmarks_popup_menu (GtkPlacesSidebar *sidebar,
 			NULL,					/* popup_position_func */
 			NULL,					/* popup_position_user_data */
 			button,					/* button */
-			event ? event->time : gtk_get_currrent_event_time ()); /* activate_time */
+			event ? event->time : gtk_get_current_event_time ()); /* activate_time */
 
-	gtk_object_sink (GTK_OBJECT (menu));
+	g_object_ref_sink (sidebar->popup_menu); /* FIXME: is this right?  It was gtk_object_sink() */
 }
 
 /* Callback used for the GtkWidget::popup-menu signal of the shortcuts list */
@@ -3006,6 +3041,7 @@ bookmarks_edited (GtkCellRenderer       *cell,
 		  gchar                 *new_text,
 		  GtkPlacesSidebar *sidebar)
 {
+#if DO_NOT_COMPILE
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	NautilusBookmark *bookmark;
@@ -3024,6 +3060,7 @@ bookmarks_edited (GtkCellRenderer       *cell,
 	if (bookmark != NULL) {
 		nautilus_bookmark_set_custom_name (bookmark, new_text);
 	}
+#endif
 }
 
 static void
@@ -3178,6 +3215,8 @@ create_volume_monitor (GtkPlacesSidebar *sidebar)
 static void
 bookmarks_changed_cb (gpointer data)
 {
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (data);
+
 	update_places (sidebar);
 }
 
@@ -3420,7 +3459,6 @@ gtk_places_sidebar_dispose (GObject *object)
 
 	sidebar = GTK_PLACES_SIDEBAR (object);
 
-	sidebar->window = NULL;
 	sidebar->tree_view = NULL;
 
 	g_free (sidebar->uri);
@@ -3440,7 +3478,6 @@ gtk_places_sidebar_dispose (GObject *object)
 
 	g_clear_object (&sidebar->store);
 	g_clear_object (&sidebar->volume_monitor);
-	g_clear_object (&sidebar->bookmarks);
 	g_clear_object (&sidebar->filter_model);
 
 	G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
@@ -3451,7 +3488,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 {
 	GObjectClass *gobject_class;
 
-	gobject_class = (GObjectClass *) places_sidebar_class;
+	gobject_class = (GObjectClass *) class;
 
 	gobject_class->dispose = gtk_places_sidebar_dispose;
 
@@ -3476,7 +3513,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, initiated_unmount),
 			      NULL, NULL,
-			      gtk_marshal_VOID__BOOLEAN,
+			      _gtk_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1,
 			      G_TYPE_BOOLEAN);
 
@@ -3641,7 +3678,7 @@ gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, gbool
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
 	sidebar->multiple_tabs_supported = !!supported;
-	bookmarks_popup_menu_detach_cb (sidebar, NULL);
+	bookmarks_popup_menu_detach_cb (GTK_WIDGET (sidebar), NULL);
 }
 
 /**
@@ -3660,7 +3697,7 @@ gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sidebar, gb
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
 	sidebar->multiple_windows_supported = !!supported;
-	bookmarks_popup_menu_detach_cb (sidebar, NULL);
+	bookmarks_popup_menu_detach_cb (GTK_WIDGET (sidebar), NULL);
 }
 
 /**
