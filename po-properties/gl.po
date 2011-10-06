@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-20 01:26+0200\n"
+"POT-Creation-Date: 2011-10-07 01:20+0200\n"
 "PO-Revision-Date: 2011-09-20 01:27+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
@@ -3756,19 +3756,19 @@ msgstr "A largura da disposición"
 msgid "The height of the layout"
 msgstr "A altura da disposición"
 
-#: ../gtk/gtklinkbutton.c:175
+#: ../gtk/gtklinkbutton.c:176
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:176
+#: ../gtk/gtklinkbutton.c:177
 msgid "The URI bound to this button"
 msgstr "O URI vinculado a este botón"
 
-#: ../gtk/gtklinkbutton.c:190
+#: ../gtk/gtklinkbutton.c:191
 msgid "Visited"
 msgstr "Visitada"
 
-#: ../gtk/gtklinkbutton.c:191
+#: ../gtk/gtklinkbutton.c:192
 msgid "Whether this link has been visited."
 msgstr "Indica se esta ligazón foi visitada."
 
@@ -4884,7 +4884,7 @@ msgstr ""
 "a acción actual do seu grupo."
 
 #: ../gtk/gtkradioaction.c:135 ../gtk/gtkradiobutton.c:164
-#: ../gtk/gtkradiomenuitem.c:426 ../gtk/gtkradiotoolbutton.c:85
+#: ../gtk/gtkradiomenuitem.c:427 ../gtk/gtkradiotoolbutton.c:85
 msgid "Group"
 msgstr "Grupo"
 
@@ -4908,7 +4908,7 @@ msgstr ""
 msgid "The radio button whose group this widget belongs to."
 msgstr "O botón de opción a cuxo grupo pertence este widget."
 
-#: ../gtk/gtkradiomenuitem.c:427
+#: ../gtk/gtkradiomenuitem.c:428
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "O elemento do menú de opción a cuxo grupo pertence este widget."
 
