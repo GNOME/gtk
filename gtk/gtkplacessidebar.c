@@ -37,6 +37,8 @@
 #define EJECT_BUTTON_XPAD 6
 #define ICON_CELL_XPAD 6
 
+#define DO_NOT_COMPILE 0
+
 struct _GtkPlacesSidebar {
 	GtkScrolledWindow  parent;
 	GtkTreeView        *tree_view;
@@ -1204,7 +1206,9 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	sidebar->drag_data_received = FALSE;
 
 	if (sidebar->drag_list) {
+#if DO_NOT_COMPILE
 		nautilus_drag_destroy_selection_list (sidebar->drag_list);
+#endif
 		sidebar->drag_list = NULL;
 	}
 }
@@ -1297,9 +1301,11 @@ drag_motion_callback (GtkTreeView *tree_view,
 					    &iter,
 					    PLACES_SIDEBAR_COLUMN_URI, &uri,
 					    -1);
+#if DO_NOT_COMPILE
 			nautilus_drag_default_drop_action_for_icons (context, uri,
 								     sidebar->drag_list,
 								     &action);
+#endif
 			g_free (uri);
 		}
 	}
@@ -1376,15 +1382,19 @@ bookmarks_drop_uris (GtkPlacesSidebar *sidebar,
 static GList *
 uri_list_from_selection (GList *selection)
 {
+#if DO_NOT_COMPILE
 	NautilusDragSelectionItem *item;
+#endif
 	GList *ret;
 	GList *l;
 
 	ret = NULL;
+#if DO_NOT_COMPILE
 	for (l = selection; l != NULL; l = l->next) {
 		item = l->data;
 		ret = g_list_prepend (ret, item->uri);
 	}
+#endif
 
 	return g_list_reverse (ret);
 }
@@ -1401,6 +1411,7 @@ build_selection_list (const char *data)
 	uris = g_uri_list_extract_uris (data);
 
 	result = NULL;
+#if DO_NOT_COMPILE
 	for (i = 0; uris[i]; i++) {
 		uri = uris[i];
 		item = nautilus_drag_selection_item_new ();
@@ -1408,6 +1419,7 @@ build_selection_list (const char *data)
 		item->got_icon_position = FALSE;
 		result = g_list_prepend (result, item);
 	}
+#endif
 
 	g_strfreev (uris);
 
@@ -1430,6 +1442,7 @@ static void
 reorder_bookmarks (GtkPlacesSidebar *sidebar,
 		   int                   new_position)
 {
+#if DO_NOT_COMPILE
 	GtkTreeIter iter;
 	PlaceType type;
 	int old_position;
@@ -1452,6 +1465,7 @@ reorder_bookmarks (GtkPlacesSidebar *sidebar,
 
 	nautilus_bookmark_list_move_item (sidebar->bookmarks, old_position,
 					  new_position);
+#endif
 }
 
 static void
@@ -1464,6 +1478,7 @@ drag_data_received_callback (GtkWidget *widget,
 			     unsigned int time,
 			     GtkPlacesSidebar *sidebar)
 {
+#if DO_NOT_COMPILE
 	GtkTreeView *tree_view;
 	GtkTreePath *tree_path;
 	GtkTreeViewDropPosition tree_pos;
@@ -1585,6 +1600,7 @@ out:
 	gtk_drag_finish (context, success, FALSE, time);
 
 	gtk_tree_path_free (tree_path);
+#endif
 }
 
 static gboolean
@@ -1723,7 +1739,9 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 
 	gtk_widget_set_sensitive (sidebar->popup_menu_remove_item, (type == PLACES_BOOKMARK));
 	gtk_widget_set_sensitive (sidebar->popup_menu_rename_item, (type == PLACES_BOOKMARK));
+#if DO_NOT_COMPILE
 	gtk_widget_set_sensitive (sidebar->popup_menu_empty_trash_item, !nautilus_trash_monitor_is_empty ());
+#endif
 
  	check_visibility (mount, volume, drive,
  			  &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
@@ -1871,9 +1889,11 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 
 			sidebar->go_to_after_mount_open_mode = open_mode;
 
+#if DO_NOT_COMPILE
 			nautilus_file_operations_mount_volume_full (NULL, volume,
 								    volume_mounted_cb,
 								    G_OBJECT (sidebar));
+#endif
 		} else if (volume == NULL && drive != NULL &&
 			   (g_drive_can_start (drive) || g_drive_can_start_degraded (drive))) {
 			GMountOperation *mount_op;
@@ -2057,8 +2077,10 @@ mount_shortcut_cb (GtkMenuItem           *item,
 			    -1);
 
 	if (volume != NULL) {
+#if DO_NOT_COMPILE
 		nautilus_file_operations_mount_volume (NULL, volume);
 		g_object_unref (volume);
+#endif
 	}
 }
 
@@ -2078,9 +2100,11 @@ do_unmount (GMount *mount,
 {
 	if (mount != NULL) {
 		emit_initiated_unmount (sidebar, TRUE);
+#if DO_NOT_COMPILE
 		nautilus_file_operations_unmount_mount_full (NULL, mount, FALSE, TRUE,
 							     unmount_done,
 							     g_object_ref (sidebar));
+#endif
 	}
 }
 
@@ -2457,12 +2481,14 @@ stop_shortcut_cb (GtkMenuItem           *item,
 	g_object_unref (drive);
 }
 
+#if DO_NOT_COMPILE
 static void
 empty_trash_cb (GtkMenuItem           *item,
 		GtkPlacesSidebar *sidebar)
 {
 	nautilus_file_operations_empty_trash (GTK_WIDGET (sidebar->window));
 }
+#endif
 
 static gboolean
 find_prev_or_next_row (GtkPlacesSidebar *sidebar,
@@ -2713,6 +2739,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
+#if DO_NOT_COMPILE
 	/* Empty Trash menu item */
 
 	item = gtk_menu_item_new_with_mnemonic (_("Empty _Trash"));
@@ -2721,6 +2748,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 		    G_CALLBACK (empty_trash_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+#endif
 
 	bookmarks_check_popup_sensitivity (sidebar);
 }
@@ -3005,6 +3033,7 @@ bookmarks_editing_canceled (GtkCellRenderer       *cell,
 	g_object_set (cell, "editable", FALSE, NULL);
 }
 
+#if DO_NOT_COMPILE
 static void
 trash_state_changed_cb (NautilusTrashMonitor *trash_monitor,
 			gboolean             state,
@@ -3019,6 +3048,7 @@ trash_state_changed_cb (NautilusTrashMonitor *trash_monitor,
 
 	bookmarks_check_popup_sensitivity (sidebar);
 }
+#endif
 
 static gboolean
 tree_selection_func (GtkTreeSelection *selection,
@@ -3375,10 +3405,12 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	tree_view_set_activate_on_single_click (sidebar->tree_view);
 
+#if DO_NOT_COMPILE
 	g_signal_connect_object (nautilus_trash_monitor_get (),
 				 "trash_state_changed",
 				 G_CALLBACK (trash_state_changed_cb),
 				 sidebar, 0);
+#endif
 }
 
 static void
