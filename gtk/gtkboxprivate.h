@@ -19,6 +19,8 @@
 #ifndef __GTK_BOX_PRIVATE_H__
 #define __GTK_BOX_PRIVATE_H__
 
+#include "gtkbox.h"
+
 G_BEGIN_DECLS
 
 

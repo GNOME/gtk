@@ -26,10 +26,10 @@
 
 #include "config.h"
 
+#include "gtkboxprivate.h"
+#include "gtkorientable.h"
 #undef GTK_DISABLE_DEPRECATED
 #include "gtkhbox.h"
-#include "gtkorientable.h"
-#include "gtkboxprivate.h"
 
 
 /**
