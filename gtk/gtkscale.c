@@ -41,6 +41,7 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkmainprivate.h"
 
 #include "a11y/gtkscaleaccessible.h"
 
@@ -166,23 +167,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
                                                 gtk_scale_buildable_interface_init))
 
 
-static gboolean
-single_string_accumulator (GSignalInvocationHint *ihint,
-                           GValue                *return_accu,
-                           const GValue          *handler_return,
-                           gpointer               dummy)
-{
-  gboolean continue_emission;
-  const gchar *str;
-  
-  str = g_value_get_string (handler_return);
-  g_value_set_string (return_accu, str);
-  continue_emission = str == NULL;
-  
-  return continue_emission;
-}
-
-
 #define add_slider_binding(binding_set, keyval, mask, scroll)              \
   gtk_binding_entry_add_signal (binding_set, keyval, mask,                 \
                                 I_("move-slider"), 1, \
@@ -243,7 +227,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkScaleClass, format_value),
-                  single_string_accumulator, NULL,
+                  _gtk_single_string_accumulator, NULL,
                   _gtk_marshal_STRING__DOUBLE,
                   G_TYPE_STRING, 1,
                   G_TYPE_DOUBLE);

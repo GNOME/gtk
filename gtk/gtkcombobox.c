@@ -41,6 +41,7 @@
 #include "gtkseparator.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
+#include "gtkmainprivate.h"
 #include "gtkprivate.h"
 
 #include <gobject/gvaluecollector.h>
@@ -217,6 +218,7 @@ enum {
   MOVE_ACTIVE,
   POPUP,
   POPDOWN,
+  FORMAT_ENTRY_TEXT,
   LAST_SIGNAL
 };
 
@@ -421,7 +423,8 @@ static void     gtk_combo_box_entry_contents_changed         (GtkEntry        *e
                                                               gpointer         user_data);
 static void     gtk_combo_box_entry_active_changed           (GtkComboBox     *combo_box,
                                                               gpointer         user_data);
-
+static gchar   *gtk_combo_box_format_entry_text              (GtkComboBox     *combo_box,
+							      const gchar     *path);
 
 /* GtkBuildable method implementation */
 static GtkBuildableIface *parent_buildable_iface;
@@ -512,6 +515,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   object_class->set_property = gtk_combo_box_set_property;
   object_class->get_property = gtk_combo_box_get_property;
 
+  klass->format_entry_text = gtk_combo_box_format_entry_text;
+
   /* signals */
   /**
    * GtkComboBox::changed:
@@ -595,6 +600,58 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                 NULL, NULL,
                                 _gtk_marshal_BOOLEAN__VOID,
                                 G_TYPE_BOOLEAN, 0);
+
+  /**
+   * GtkComboBox::format-entry-text:
+   * @combo: the object which received the signal
+   * @path: the GtkTreePath string from the combo box's current model to format text for
+   *
+   * For combo boxes that are created with an entry (See GtkComboBox:has-entry).
+   *
+   * A signal which allows you to change how the text displayed in a combo box's
+   * entry is displayed.
+   *
+   * Connect a signal handler which returns an allocated string representing
+   * @path. That string will then be used to set the text in the combo box's entry.
+   * The default signal handler uses the text from the GtkComboBox::entry-text-column 
+   * model column.
+   *
+   * Here's an example signal handler which fetches data from the model and
+   * displays it in the entry.
+   * |[
+   * static gchar*
+   * format_entry_text_callback (GtkComboBox *combo,
+   *                             const gchar *path,
+   *                             gpointer     user_data)
+   * {
+   *   GtkTreeIter iter;
+   *   GtkTreeModel model;
+   *   gdouble      value;
+   *   
+   *   model = gtk_combo_box_get_model (combo);
+   *
+   *   gtk_tree_model_get_iter_from_string (model, &iter, path);
+   *   gtk_tree_model_get (model, &iter, 
+   *                       THE_DOUBLE_VALUE_COLUMN, &value,
+   *                       -1);
+   *
+   *   return g_strdup_printf ("&percnt;g", value);
+   * }
+   * ]|
+   *
+   * Return value: (transfer full): a newly allocated string representing @path 
+   * for the current GtkComboBox model.
+   *
+   * Since: 3.4
+   */
+  combo_box_signals[FORMAT_ENTRY_TEXT] =
+    g_signal_new (I_("format-entry-text"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkComboBoxClass, format_entry_text),
+                  _gtk_single_string_accumulator, NULL,
+                  _gtk_marshal_STRING__STRING,
+                  G_TYPE_STRING, 1, G_TYPE_STRING);
 
   /* key bindings */
   binding_set = gtk_binding_set_by_class (widget_class);
@@ -4614,7 +4671,6 @@ static void
 gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
                                     gpointer     user_data)
 {
-  GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeModel *model;
   GtkTreeIter iter;
 
@@ -4624,25 +4680,57 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
 
       if (entry)
         {
-          GValue value = {0,};
+	  GtkTreePath *path;
+	  gchar       *path_str;
+	  gchar       *text = NULL;
+
+          model    = gtk_combo_box_get_model (combo_box);
+	  path     = gtk_tree_model_get_path (model, &iter);
+	  path_str = gtk_tree_path_to_string (path);
 
           g_signal_handlers_block_by_func (entry,
                                            gtk_combo_box_entry_contents_changed,
                                            combo_box);
 
-          model = gtk_combo_box_get_model (combo_box);
 
-          gtk_tree_model_get_value (model, &iter,
-                                    priv->text_column, &value);
-          g_object_set_property (G_OBJECT (entry), "text", &value);
-          g_value_unset (&value);
+	  g_signal_emit (combo_box, combo_box_signals[FORMAT_ENTRY_TEXT], 0, 
+			 path_str, &text);
+
+	  gtk_entry_set_text (entry, text);
 
           g_signal_handlers_unblock_by_func (entry,
                                              gtk_combo_box_entry_contents_changed,
                                              combo_box);
+
+	  gtk_tree_path_free (path);
+	  g_free (text);
+	  g_free (path_str);
         }
     }
 }
+
+static gchar *
+gtk_combo_box_format_entry_text (GtkComboBox     *combo_box,
+				 const gchar     *path)
+{
+  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkTreeModel       *model;
+  GtkTreeIter         iter;
+  gchar              *text = NULL;
+
+  if (priv->text_column >= 0)
+    {
+      model = gtk_combo_box_get_model (combo_box);
+      gtk_tree_model_get_iter_from_string (model, &iter, path);
+
+      gtk_tree_model_get (model, &iter,
+			  priv->text_column, &text,
+			  -1);
+    }
+
+  return text;
+}
+
 
 static GObject *
 gtk_combo_box_constructor (GType                  type,
