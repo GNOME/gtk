@@ -58,15 +58,6 @@ const gchar *_gtk_get_data_prefix ();
 #define GTK_PARAM_WRITABLE G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
-/* Many keyboard shortcuts for Mac are the same as for X
- * except they use Command key instead of Control (e.g. Cut,
- * Copy, Paste). This symbol is for those simple cases. */
-#ifndef GDK_WINDOWING_QUARTZ
-#define GTK_DEFAULT_ACCEL_MOD_MASK GDK_CONTROL_MASK
-#else
-#define GTK_DEFAULT_ACCEL_MOD_MASK GDK_META_MASK
-#endif
-
 gboolean _gtk_fnmatch      (const char *pattern,
                             const char *string,
                             gboolean    no_leading_period);
@@ -82,6 +73,10 @@ void    _gtk_modules_init             (gint          *argc,
                                        const gchar   *gtk_modules_args);
 void    _gtk_modules_settings_changed (GtkSettings   *settings,
                                        const gchar   *modules);
+
+GdkModifierType _gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
+                                                GdkModifierType  modifiers);
+GdkModifierType _gtk_get_primary_accel_mod     (void);
 
 G_END_DECLS
 
