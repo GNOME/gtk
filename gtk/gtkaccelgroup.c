@@ -1186,7 +1186,7 @@ gtk_accelerator_parse (const gchar     *accelerator,
 	    {
 	      accelerator += 9;
 	      len -= 9;
-	      mods |= GTK_DEFAULT_ACCEL_MOD_MASK;
+	      mods |= GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL;
 	    }
 	  else if (len >= 9 && is_control (accelerator))
 	    {
@@ -1327,10 +1327,10 @@ gtk_accelerator_name (guint           accelerator_key,
   l = 0;
   if (accelerator_mods & GDK_RELEASE_MASK)
     l += sizeof (text_release) - 1;
-  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK)
+  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL)
     {
       l += sizeof (text_primary) - 1;
-      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK; /* consume the default accel */
+      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL; /* consume the default accel */
     }
   if (accelerator_mods & GDK_SHIFT_MASK)
     l += sizeof (text_shift) - 1;
@@ -1364,11 +1364,11 @@ gtk_accelerator_name (guint           accelerator_key,
       strcpy (accelerator + l, text_release);
       l += sizeof (text_release) - 1;
     }
-  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK)
+  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL)
     {
       strcpy (accelerator + l, text_primary);
       l += sizeof (text_primary) - 1;
-      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK; /* consume the default accel */
+      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL; /* consume the default accel */
     }
   if (accelerator_mods & GDK_SHIFT_MASK)
     {

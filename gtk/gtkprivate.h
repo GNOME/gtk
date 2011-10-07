@@ -108,8 +108,10 @@ gboolean _gtk_fnmatch (const char *pattern,
  * Copy, Paste). This symbol is for those simple cases. */
 #ifndef GDK_WINDOWING_QUARTZ
 #define GTK_DEFAULT_ACCEL_MOD_MASK GDK_CONTROL_MASK
+#define GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL GDK_CONTROL_MASK
 #else
-#define GTK_DEFAULT_ACCEL_MOD_MASK GDK_META_MASK
+#define GTK_DEFAULT_ACCEL_MOD_MASK GDK_MOD2_MASK
+#define GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL GDK_META_MASK
 #endif
 
 /* When any of these modifiers are active, a key
