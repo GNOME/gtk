@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-08 00:38+0200\n"
-"PO-Revision-Date: 2011-09-25 21:48+0200\n"
-"Last-Translator: Rachid <rachidbm@ubuntu.com>\n"
+"PO-Revision-Date: 2011-10-08 00:38+0200\n"
+"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -721,7 +721,7 @@ msgstr "_Doorgaan"
 
 #: ../gtk/gtkassistant.c:1002
 msgid "Go _Back"
-msgstr "_Teruggaan"
+msgstr "_Terug"
 
 #: ../gtk/gtkassistant.c:1006
 msgid "_Finish"
@@ -1296,7 +1296,7 @@ msgstr "Kon bestand niet selecteren"
 
 #: ../gtk/gtkfilechooserdefault.c:4172
 msgid "_Visit this file"
-msgstr "_Bezoek dit bestand"
+msgstr "Dit bestand _bezoeken"
 
 #: ../gtk/gtkfilechooserdefault.c:4175
 msgid "_Copy file's location"
@@ -1554,8 +1554,8 @@ msgstr "Lettertypeselectie"
 #: ../gtk/gtkfontchooserwidget.c:113
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
-"Geen lettertype kwam overeen met uw zoekopdracht. U kunt uw zoekopdracht "
-"herzien en het opnieuw proberen."
+"Geen lettertypes gevonden voor de zoekopdracht. U kunt de zoekopdracht "
+"aanpassen en het opnieuw proberen."
 
 #: ../gtk/gtkfontchooserwidget.c:612
 msgid "Search font name"
@@ -1665,7 +1665,7 @@ msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
-"Systeempolicy verhindert het aanbrengen van wijzigingen.\n"
+"Systeempolicy staat het aanbrengen van wijzigingen niet toe.\n"
 "Neem contact op met uw systeembeheerder."
 
 #. Description of --gtk-module=MODULES in --help output
@@ -2687,12 +2687,11 @@ msgstr "O_mlaag"
 # This is a navigation label as in "go forward"
 # Context: Stock label, navigation
 #
-# Was eerst _Vooruit, maar bij navigeren is dit volgende/vorige
 #. This is a navigation label as in "go forward"
 #: ../gtk/gtkstock.c:370
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "_Volgende"
+msgstr "_Vooruit"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:372
