@@ -628,7 +628,6 @@ check_algorithmically (GtkIMContextSimple *context_simple,
  * with Ctrl-Shift-U, then release the modifiers before typing any
  * digits, and enter the digits without modifiers.
  */
-#define HEX_MOD_MASK (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)
 
 static gboolean
 check_hex (GtkIMContextSimple *context_simple,
@@ -814,8 +813,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
+  GdkDisplay *display = gdk_window_get_display (event->window);
   GSList *tmp_list;  
   int n_compose = 0;
+  GdkModifierType hex_mod_mask;
   gboolean have_hex_mods;
   gboolean is_hex_start;
   gboolean is_hex_end;
@@ -868,10 +869,14 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (event->keyval == gtk_compose_ignore[i])
       return FALSE;
 
+  hex_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                               GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+  hex_mod_mask |= GDK_SHIFT_MASK;
+
   if (priv->in_hex_sequence && priv->modifiers_dropped)
     have_hex_mods = TRUE;
   else
-    have_hex_mods = (event->state & (HEX_MOD_MASK)) == HEX_MOD_MASK;
+    have_hex_mods = (event->state & (hex_mod_mask)) == hex_mod_mask;
   is_hex_start = event->keyval == GDK_KEY_U;
   is_hex_end = (event->keyval == GDK_KEY_space ||
 		event->keyval == GDK_KEY_KP_Space ||

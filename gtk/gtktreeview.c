@@ -15157,7 +15157,8 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
 				      GdkEventKey *event,
 				      GtkTreeView *tree_view)
 {
-  gboolean retval = FALSE;
+  GdkModifierType default_accel;
+  gboolean        retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
@@ -15174,6 +15175,9 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       return TRUE;
     }
 
+  default_accel = gtk_widget_get_modifier_mask (widget,
+                                                GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+
   /* select previous matching iter */
   if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up)
     {
@@ -15183,7 +15187,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       retval = TRUE;
     }
 
-  if (((event->state & (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)) == (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK))
+  if (((event->state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK))
       && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
     {
       if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
@@ -15201,7 +15205,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       retval = TRUE;
     }
 
-  if (((event->state & (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)) == GTK_DEFAULT_ACCEL_MOD_MASK)
+  if (((event->state & (default_accel | GDK_SHIFT_MASK)) == default_accel)
       && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
     {
       if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
