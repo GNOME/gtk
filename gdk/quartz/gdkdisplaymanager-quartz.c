@@ -92,19 +92,6 @@ gdk_quartz_display_manager_lookup_keyval (GdkDisplayManager *manager,
 }
 
 static void
-gdk_quartz_display_manager_keyval_convert_case (GdkDisplayManager *manager,
-                                                guint              symbol,
-                                                guint             *lower,
-                                                guint             *upper)
-{
-  /* FIXME implement this */
-  if (lower)
-    *lower = symbol;
-  if (upper)
-    *upper = symbol;
-}
-
-static void
 gdk_quartz_display_manager_init (GdkQuartzDisplayManager *manager)
 {
   ProcessSerialNumber psn = { 0, kCurrentProcess };
@@ -144,7 +131,6 @@ gdk_quartz_display_manager_class_init (GdkQuartzDisplayManagerClass *class)
   manager_class->get_atom_name = _gdk_quartz_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_quartz_display_manager_lookup_keyval;
   manager_class->get_keyval_name = gdk_quartz_display_manager_get_keyval_name;
-  manager_class->keyval_convert_case = gdk_quartz_display_manager_keyval_convert_case;
 }
 
 void

@@ -275,10 +275,12 @@ guint   _gdk_x11_display_manager_lookup_keyval (GdkDisplayManager *manager,
                                                 const gchar       *name);
 gchar * _gdk_x11_display_manager_get_keyval_name (GdkDisplayManager *manager,
                                                   guint              keyval);
+#ifdef HAVE_XCONVERTCASE
 void    _gdk_x11_display_manager_keyval_convert_case (GdkDisplayManager *manager,
                                                       guint              symbol,
                                                       guint             *lower,
                                                       guint             *upper);
+#endif
 
 GdkCursor *_gdk_x11_display_get_cursor_for_type     (GdkDisplay    *display,
                                                      GdkCursorType  type);
