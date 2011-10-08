@@ -165,6 +165,11 @@
   window->width = content_rect.size.width;
   window->height = content_rect.size.height;
 
+  /* Certain resize operations (e.g. going fullscreen), also move the
+   * origin of the window.
+   */
+  _gdk_quartz_window_update_position (window);
+
   [[self contentView] setFrame:NSMakeRect (0, 0, window->width, window->height)];
 
   _gdk_window_update_size (window);
