@@ -504,7 +504,7 @@ GdkScreen *   gdk_window_get_screen            (GdkWindow     *window);
 GdkDisplay *  gdk_window_get_display           (GdkWindow     *window);
 #ifndef GDK_MULTIDEVICE_SAFE
 GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
-                                                gint          *win_y);
+                                                gint          *win_y) G_GNUC_DEPRECATED_FOR(gdk_device_get_window_at_position);
 #endif /* GDK_MULTIDEVICE_SAFE */
 void          gdk_window_show                  (GdkWindow     *window);
 void          gdk_window_hide                  (GdkWindow     *window);
@@ -710,10 +710,10 @@ void          gdk_window_get_frame_extents (GdkWindow     *window,
                                             GdkRectangle  *rect);
 
 #ifndef GDK_MULTIDEVICE_SAFE
-GdkWindow*    gdk_window_get_pointer	 (GdkWindow	  *window,
-					  gint		  *x,
-					  gint		  *y,
-					  GdkModifierType *mask);
+GdkWindow *   gdk_window_get_pointer     (GdkWindow       *window,
+                                          gint            *x,
+                                          gint            *y,
+                                          GdkModifierType *mask) G_GNUC_DEPRECATED_FOR(gdk_window_get_device_position);
 #endif /* GDK_MULTIDEVICE_SAFE */
 GdkWindow *   gdk_window_get_device_position (GdkWindow       *window,
                                               GdkDevice       *device,
