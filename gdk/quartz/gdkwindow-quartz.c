@@ -2530,9 +2530,17 @@ gdk_quartz_window_get_frame_extents (GdkWindow    *window,
   rect->height = ns_rect.size.height;
 }
 
+/* Fake protocol to make gcc think that it's OK to call setStyleMask
+   even if it isn't. We check to make sure before actually calling
+   it. */
+
+@protocol CanSetStyleMask
+- (void)setStyleMask:(int)mask;
+@end
+
 static void
 gdk_quartz_window_set_decorations (GdkWindow       *window,
-                                   GdkWMDecoration  decorations)
+			    GdkWMDecoration  decorations)
 {
   GdkWindowImplQuartz *impl;
   NSUInteger old_mask, new_mask;
@@ -2589,7 +2597,7 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
        */
       if ([impl->toplevel respondsToSelector:@selector(setStyleMask:)])
         {
-          [impl->toplevel setStyleMask:new_mask];
+          [(id<CanSetStyleMask>)impl->toplevel setStyleMask:new_mask];
         }
       else
         {
