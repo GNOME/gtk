@@ -3542,6 +3542,7 @@ gtk_widget_get_margin_bottom
 gtk_widget_get_margin_left
 gtk_widget_get_margin_right
 gtk_widget_get_margin_top
+gtk_widget_get_modifier_mask
 gtk_widget_get_modifier_style
 gtk_widget_get_name
 gtk_widget_get_no_show_all
