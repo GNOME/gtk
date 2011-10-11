@@ -105,8 +105,10 @@ void       gtk_menu_item_toggle_size_request  (GtkMenuItem         *menu_item,
 void       gtk_menu_item_toggle_size_allocate (GtkMenuItem         *menu_item,
                                                gint                 allocation);
 #ifndef GTK_DISABLE_DEPRECATED
+GDK_DEPRECATED
 void       gtk_menu_item_set_right_justified  (GtkMenuItem         *menu_item,
                                                gboolean             right_justified);
+GDK_DEPRECATED
 gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
 #endif  /* GTK_DISABLE_DEPRECATED */
 void          gtk_menu_item_set_accel_path    (GtkMenuItem         *menu_item,

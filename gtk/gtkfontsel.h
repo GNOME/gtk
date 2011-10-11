@@ -12,7 +12,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -114,23 +114,36 @@ struct _GtkFontSelectionDialogClass
  *   see the comments in the GtkFontSelectionDialog functions.
  *****************************************************************************/
 
-GType	     gtk_font_selection_get_type	  (void) G_GNUC_CONST;
+GType        gtk_font_selection_get_type          (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *  gtk_font_selection_new               (void);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *  gtk_font_selection_get_family_list   (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *  gtk_font_selection_get_face_list     (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *  gtk_font_selection_get_size_entry    (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *  gtk_font_selection_get_size_list     (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *  gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 PangoFontFamily *
              gtk_font_selection_get_family        (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 PangoFontFace *
              gtk_font_selection_get_face          (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 gint         gtk_font_selection_get_size          (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 gchar*       gtk_font_selection_get_font_name     (GtkFontSelection *fontsel);
 
+GDK_DEPRECATED_FOR(GtkFontChooser)
 gboolean     gtk_font_selection_set_font_name     (GtkFontSelection *fontsel,
                                                    const gchar      *fontname);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 const gchar* gtk_font_selection_get_preview_text  (GtkFontSelection *fontsel);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 void         gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
                                                    const gchar      *text);
 
@@ -140,11 +153,15 @@ void         gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
  *   GtkFontSelection.
  *****************************************************************************/
 
-GType	   gtk_font_selection_dialog_get_type	       (void) G_GNUC_CONST;
-GtkWidget *gtk_font_selection_dialog_new	       (const gchar            *title);
+GType      gtk_font_selection_dialog_get_type          (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(GtkFontChooser)
+GtkWidget *gtk_font_selection_dialog_new               (const gchar            *title);
 
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *gtk_font_selection_dialog_get_ok_button     (GtkFontSelectionDialog *fsd);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd);
+GDK_DEPRECATED_FOR(GtkFontChooser)
 GtkWidget *gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font
@@ -152,24 +169,28 @@ GtkWidget *gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog 
    have been loaded OK. You should call gtk_font_selection_dialog_get_font()
    to see if it has been loaded OK.
    You should g_free() the returned font name after you're done with it. */
-gchar*	   gtk_font_selection_dialog_get_font_name     (GtkFontSelectionDialog *fsd);
+GDK_DEPRECATED_FOR(GtkFontChooser)
+gchar*     gtk_font_selection_dialog_get_font_name     (GtkFontSelectionDialog *fsd);
 
 /* This sets the currently displayed font. It should be a valid X Logical
    Font Description font name (anything else will be ignored), e.g.
-   "-adobe-courier-bold-o-normal--25-*-*-*-*-*-*-*" 
+   "-adobe-courier-bold-o-normal--25-*-*-*-*-*-*-*"
    It returns TRUE on success. */
+GDK_DEPRECATED_FOR(GtkFontChooser)
 gboolean   gtk_font_selection_dialog_set_font_name     (GtkFontSelectionDialog *fsd,
-                                                        const gchar	       *fontname);
+                                                        const gchar            *fontname);
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
+GDK_DEPRECATED_FOR(GtkFontChooser)
 const gchar*
           gtk_font_selection_dialog_get_preview_text   (GtkFontSelectionDialog *fsd);
 
 /* This sets the text in the preview entry. It will be copied by the entry,
    so there's no need to g_strdup() it first. */
-void	  gtk_font_selection_dialog_set_preview_text   (GtkFontSelectionDialog *fsd,
-                                                        const gchar	       *text);
+GDK_DEPRECATED_FOR(GtkFontChooser)
+void      gtk_font_selection_dialog_set_preview_text   (GtkFontSelectionDialog *fsd,
+                                                        const gchar            *text);
 
 
 #endif /* GTK_DISABLE_DEPRECATED */

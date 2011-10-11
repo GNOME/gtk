@@ -39,7 +39,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.29.14])
+m4_define([glib_required_version], [2.31.0])
 m4_define([pango_required_version], [1.29.0])
 m4_define([atk_required_version], [2.1.5])
 m4_define([cairo_required_version], [1.10.0])
@@ -1672,6 +1672,20 @@ AC_CONFIG_COMMANDS([gdk/gdkconfig.h], [
 #include <glib.h>
 
 G_BEGIN_DECLS
+
+/* These macros are used to mark deprecated functions in GDK and
+ * GTK+ headers, and thus have to be exposed in installed headers.
+ * But please do *not* use them in other projects. Instead, use
+ * G_DEPRECATED or define your own wrappers around it.
+ */
+
+#ifdef GDK_DISABLE_DEPRECATION_WARNINGS
+#define GDK_DEPRECATED
+#define GDK_DEPRECATED_FOR(f)
+#else
+#define GDK_DEPRECATED G_DEPRECATED
+#define GDK_DEPRECATED_FOR(f) G_DEPRECATED_FOR(f)
+#endif
 
 _______EOF
 

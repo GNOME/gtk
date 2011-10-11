@@ -87,6 +87,7 @@ void              gtk_cell_view_set_fit_model           (GtkCellView     *cell_v
                                                          gboolean         fit_model);
 
 #ifndef GTK_DISABLE_DEPRECATED
+GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
 gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_view,
                                                          GtkTreePath     *path,
                                                          GtkRequisition  *requisition);

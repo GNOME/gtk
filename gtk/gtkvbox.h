@@ -62,6 +62,7 @@ struct _GtkVBoxClass
 
 
 GType       gtk_vbox_get_type (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_box_new)
 GtkWidget * gtk_vbox_new      (gboolean homogeneous,
                                gint     spacing);
 

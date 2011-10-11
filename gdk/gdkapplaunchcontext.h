@@ -41,9 +41,11 @@ G_BEGIN_DECLS
 GType                gdk_app_launch_context_get_type      (void);
 
 #ifndef GDK_DISABLE_DEPRECATED
-GdkAppLaunchContext *gdk_app_launch_context_new           (void) G_GNUC_DEPRECATED_FOR(gdk_display_get_app_launch_context);
+GDK_DEPRECATED_FOR(gdk_display_get_app_launch_context)
+GdkAppLaunchContext *gdk_app_launch_context_new           (void);
+GDK_DEPRECATED_FOR(gdk_display_get_app_launch_context)
 void                 gdk_app_launch_context_set_display   (GdkAppLaunchContext *context,
-                                                           GdkDisplay          *display) G_GNUC_DEPRECATED_FOR(gdk_display_get_app_launch_context);
+                                                           GdkDisplay          *display);
 #endif
 void                 gdk_app_launch_context_set_screen    (GdkAppLaunchContext *context,
                                                            GdkScreen           *screen);

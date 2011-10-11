@@ -125,6 +125,7 @@ GtkIconSet* gtk_icon_set_copy            (GtkIconSet      *icon_set);
 /* Get one of the icon variants in the set, creating the variant if
  * necessary.
  */
+GDK_DEPRECATED_FOR(gtk_icon_set_render_icon_pixbuf)
 GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
                                           GtkStyle        *style,
                                           GtkTextDirection direction,
