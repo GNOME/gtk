@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <gdk/gdk.h>
 #include <gtk/gtkx.h>
 #include "gailutil.h"
 #include "gailmisc.h"
