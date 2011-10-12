@@ -698,16 +698,6 @@ AM_PATH_GLIB_2_0(glib_required_version, :,
 *** GLIB is always available from ftp://ftp.gtk.org/pub/gtk/.]),
   gobject gmodule-no-export gthread)
 
-# See if it's safe to turn G_DISABLE_DEPRECATED on.
-GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.@<:@^.@:>@*\$//"`
-GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo glib_required_version | sed "s/\.@<:@^.@:>@*\$//"`
-if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
-  CFLAGS="-DG_DISABLE_DEPRECATED $CFLAGS"
-fi
-
-CFLAGS="-DGDK_PIXBUF_DISABLE_DEPRECATED $CFLAGS"
-
-
 dnl
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
 dnl
