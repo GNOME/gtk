@@ -109,8 +109,14 @@ _gtk_icon_cache_new_for_path (const gchar *path)
     goto done;
 
 #ifdef G_OS_WIN32
+
+/* Bug 660730: _fstat32 is only defined in msvcrt80.dll+/VS 2005+ */
+/*             or possibly in the msvcrt.dll linked to by the Windows DDK */
+/*             (will need to check on the Windows DDK part later) */
+#if (_MSC_VER >= 1400 || __MSVCRT_VERSION__ >= 0x0800)
 #undef fstat /* Just in case */
 #define fstat _fstat32  
+#endif
 #endif
 
   if (fstat (fd, &st) < 0 || st.st_size < 4)
