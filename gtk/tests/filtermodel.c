@@ -6625,13 +6625,11 @@ specific_bug_659022_row_changed_emission (void)
 {
   GtkTreeModel *filter;
   GtkTreeModel *model;
-  GtkTreeModelRefCount *ref_model;
   GtkTreeIter parent, child, child2;
   GtkTreePath *path;
   GtkWidget *tree_view;
 
   model = gtk_tree_model_ref_count_new ();
-  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
 
   filter = gtk_tree_model_filter_new (model, NULL);
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
@@ -6666,13 +6664,11 @@ specific_bug_659022_row_deleted_node_invisible (void)
 {
   GtkTreeModel *filter;
   GtkTreeModel *model;
-  GtkTreeModelRefCount *ref_model;
   GtkTreeIter parent, child;
   GtkTreeIter parent2, child2, child3;
   GtkWidget *tree_view;
 
   model = gtk_tree_model_ref_count_new ();
-  ref_model = GTK_TREE_MODEL_REF_COUNT (model);
 
   filter = gtk_tree_model_filter_new (model, NULL);
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
