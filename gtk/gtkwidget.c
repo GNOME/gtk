@@ -12099,7 +12099,6 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
     else
       {
         accessible = g_object_new (priv->accessible_type, NULL);
-
         if (priv->accessible_role != ATK_ROLE_INVALID)
           atk_object_set_role (accessible, priv->accessible_role);
 
@@ -12108,6 +12107,13 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
                             accessible);
 
         atk_object_initialize (accessible, widget);
+
+        /* Set the role again, since we don't want a role set
+         * in some parent initialize() function to override
+         * our own.
+         */
+        if (priv->accessible_role != ATK_ROLE_INVALID)
+          atk_object_set_role (accessible, priv->accessible_role);
       }
   }
   return accessible;
