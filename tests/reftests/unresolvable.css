@@ -10,7 +10,7 @@ GtkWindow {
 }
 
 #reference {
-  background-color: pink;
+  background-color: transparent;
   box-shadow: none;
   border-image: none;
 }
