@@ -483,7 +483,7 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
 }
 
 /**
- * gtk_radio_button_new_from_widget:
+ * gtk_radio_button_new_from_widget: (constructor)
  * @radio_group_member: (allow-none): an existing #GtkRadioButton.
  *
  * Creates a new #GtkRadioButton, adding it to the same group as
