@@ -43,8 +43,8 @@
 #include <errno.h>
 
 #if defined(__OpenBSD__)
+#include <stdlib.h>
 #include <sys/param.h>
-#include <kvm.h>
 #include <fcntl.h>
 #include <sys/sysctl.h>
 #endif
@@ -726,46 +726,44 @@ pid_get_command_line (GPid pid)
 static GPid
 pid_get_parent (GPid pid)
 {
-  struct kinfo_proc *proc;
-  int count;
-  kvm_t *kvm;
-  GPid ppid = 0;
+  struct kinfo_proc kp;
+  size_t len;
+  GPid ppid;
 
-  kvm = kvm_openfiles (NULL, NULL, NULL, KVM_NO_FILES, NULL);
-  if (kvm == NULL)
-    return 0;
+  int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid,
+                sizeof(struct kinfo_proc), 0 };
 
-  proc = kvm_getprocs (kvm, KERN_PROC_PID, pid, sizeof(struct kinfo_proc), &count);
-  if (count == 1)
-    ppid = proc->p_ppid;
+  if (sysctl(mib, nitems(mib), NULL, &len, NULL, 0) == -1)
+      return (-1);
+  mib[5] = (len / sizeof(struct kinfo_proc));
 
-  kvm_close (kvm);
+  if (sysctl(mib, nitems(mib), &kp, &len, NULL, 0) < 0)
+      return -1;
+
+  ppid = kp.p_ppid;
+
   return ppid;
 }
 
 static gchar *
 pid_get_env (GPid pid, const gchar *key)
 {
-  kvm_t *kvm;
-  struct kinfo_proc *proc;
-  char **strs;
+  size_t len = PATH_MAX;
+  char **strs = NULL;
   char *ret;
   char *end;
   int key_len;
-  int count;
   int i;
 
-  kvm = kvm_openfiles (NULL, NULL, NULL, KVM_NO_FILES, NULL);
-  if (kvm == NULL)
-    return NULL;
+  int mib[] = { CTL_KERN, KERN_PROC_ARGS, pid, KERN_PROC_ENV };
+
+  strs = (char **)realloc(strs, len);
 
   key_len = strlen (key);
 
   ret = NULL;
-  proc = kvm_getprocs (kvm, KERN_PROC_PID, pid, sizeof(struct kinfo_proc), &count);
-  if (proc != NULL)
+  if (sysctl(mib, nitems(mib), strs, &len, NULL, 0) != -1)
     {
-      strs = kvm_getenvv (kvm, proc, 0);
       for (i = 0; strs[i] != NULL; i++)
 	{
 	  if (g_str_has_prefix (strs[i], key) && (*(strs[i] + key_len) == '='))
@@ -780,35 +778,33 @@ pid_get_env (GPid pid, const gchar *key)
 	}
     }
 
-  kvm_close (kvm);
+  g_free (strs);
   return ret;
 }
 
 static gchar *
 pid_get_command_line (GPid pid)
 {
-  kvm_t *kvm;
-  struct kinfo_proc *proc;
-  int count;
-  char **strs;
-  char *ret;
+  size_t len = PATH_MAX;
+  char **strs = NULL;
+  char *ret = NULL;
   char *end;
 
-  kvm = kvm_openfiles (NULL, NULL, NULL, KVM_NO_FILES, NULL);
-  if (kvm == NULL)
-    return NULL;
+  int mib[] = { CTL_KERN, KERN_PROC_ARGS, pid, KERN_PROC_ARGV };
 
-  proc = kvm_getprocs (kvm, KERN_PROC_PID, pid, sizeof (struct kinfo_proc), &count);
-  if (proc == NULL)
-    return NULL;
+  strs = (char **)realloc(strs, len);
 
-  strs = kvm_getargv (kvm, proc, 0);
+  if (sysctl(mib, nitems(mib), strs, &len, NULL, 0) == -1) {
+    g_free (strs);
+    return ret;
+  }
+
   ret = g_strjoinv (" ", strs);
   /* skip invalid UTF-8 */
   if (!g_utf8_validate (ret, -1, (const gchar **) &end))
     *end = '\0';
 
-  kvm_close (kvm);
+  g_free (strs);
   return ret;
 }
 
