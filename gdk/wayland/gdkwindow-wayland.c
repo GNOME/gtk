@@ -360,7 +360,7 @@ gdk_window_impl_wayland_finalize (GObject *object)
   impl = GDK_WINDOW_IMPL_WAYLAND (object);
 
   if (impl->cursor)
-    gdk_cursor_unref (impl->cursor);
+    g_object_unref (impl->cursor);
   if (impl->server_surface)
     cairo_surface_destroy (impl->server_surface);
 

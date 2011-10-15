@@ -273,7 +273,7 @@ gdk_window_impl_x11_finalize (GObject *object)
   g_free (impl->toplevel);
 
   if (impl->cursor)
-    gdk_cursor_unref (impl->cursor);
+    g_object_unref (impl->cursor);
 
   g_hash_table_destroy (impl->device_cursor);
 

@@ -257,7 +257,7 @@ gdk_window_impl_broadway_init (GdkWindowImplBroadway *impl)
 {
   impl->toplevel_window_type = -1;
   impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
-                                               (GDestroyNotify) gdk_cursor_unref);
+                                               (GDestroyNotify) g_object_unref);
 }
 
 static void
@@ -286,7 +286,7 @@ gdk_window_impl_broadway_finalize (GObject *object)
   g_hash_table_remove (broadway_display->id_ht, GINT_TO_POINTER(impl->id));
 
   if (impl->cursor)
-    gdk_cursor_unref (impl->cursor);
+    g_object_unref (impl->cursor);
 
   g_hash_table_destroy (impl->device_cursor);
 
