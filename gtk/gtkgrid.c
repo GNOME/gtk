@@ -1453,7 +1453,7 @@ gtk_grid_attach (GtkGrid   *grid,
  * gtk_grid_attach_next_to:
  * @grid: a #GtkGrid
  * @child: the widget to add
- * @sibling (allow-none): the child of @grid that @child will be placed
+ * @sibling: (allow-none): the child of @grid that @child will be placed
  *     next to, or %NULL to place @child at the beginning or end
  * @side: the side of @sibling that @child is positioned next to
  * @width: the number of columns that @child will span
