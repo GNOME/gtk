@@ -184,7 +184,7 @@ gtk_radio_tool_button_new_from_stock (GSList      *group,
 }
 
 /**
- * gtk_radio_tool_button_new_from_widget:
+ * gtk_radio_tool_button_new_from_widget: (constructor)
  * @group: (allow-none): An existing #GtkRadioToolButton, or %NULL
  *
  * Creates a new #GtkRadioToolButton adding it to the same group as @gruup
@@ -207,7 +207,7 @@ gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
 }
 
 /**
- * gtk_radio_tool_button_new_with_stock_from_widget:
+ * gtk_radio_tool_button_new_with_stock_from_widget: (constructor)
  * @group: (allow-none): An existing #GtkRadioToolButton.
  * @stock_id: the name of a stock item
  *
