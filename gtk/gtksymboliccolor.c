@@ -131,7 +131,7 @@ gtk_symbolic_color_new_name (const gchar *name)
 }
 
 /**
- * gtk_symbolic_color_new_shade:
+ * gtk_symbolic_color_new_shade: (constructor)
  * @color: another #GtkSymbolicColor
  * @factor: shading factor to apply to @color
  *
@@ -162,7 +162,7 @@ gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
 }
 
 /**
- * gtk_symbolic_color_new_alpha:
+ * gtk_symbolic_color_new_alpha: (constructor)
  * @color: another #GtkSymbolicColor
  * @factor: factor to apply to @color alpha
  *
@@ -193,7 +193,7 @@ gtk_symbolic_color_new_alpha (GtkSymbolicColor *color,
 }
 
 /**
- * gtk_symbolic_color_new_mix:
+ * gtk_symbolic_color_new_mix: (constructor)
  * @color1: color to mix
  * @color2: another color to mix
  * @factor: mix factor
