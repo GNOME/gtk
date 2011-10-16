@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-19 13:10+0100\n"
-"PO-Revision-Date: 2011-09-19 13:10+0100\n"
+"POT-Creation-Date: 2011-10-16 14:44+0100\n"
+"PO-Revision-Date: 2011-10-16 14:44+0100\n"
 "Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1-beta1\n"
+"X-Generator: Virtaal 0.7.1-rc1\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:136
 #: ../gdk/gdkdevicemanager.c:146
@@ -100,11 +100,11 @@ msgstr "Number of axes in the device"
 msgid "Display for the device manager"
 msgstr "Display for the device manager"
 
-#: ../gdk/gdkdisplaymanager.c:162
+#: ../gdk/gdkdisplaymanager.c:165
 msgid "Default Display"
 msgstr "Default Display"
 
-#: ../gdk/gdkdisplaymanager.c:163
+#: ../gdk/gdkdisplaymanager.c:166
 msgid "The default display for GDK"
 msgstr "The default display for GDK"
 
@@ -1731,8 +1731,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Whether the text can be modified by the user"
 
 #: ../gtk/gtkcellrenderertext.c:357 ../gtk/gtkcellrenderertext.c:365
-#: ../gtk/gtkfontchooser.c:67 ../gtk/gtkfontchooser.c:80
-#: ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
+#: ../gtk/gtkfontchooser.c:67 ../gtk/gtktexttag.c:294 ../gtk/gtktexttag.c:302
 msgid "Font"
 msgstr "Font"
 
@@ -3166,6 +3165,10 @@ msgstr "Show size"
 msgid "Whether selected font size is shown in the label"
 msgstr "Whether selected font size is shown in the label"
 
+#: ../gtk/gtkfontchooser.c:80
+msgid "Font description"
+msgstr "Font description"
+
 #: ../gtk/gtkfontchooser.c:93 ../gtk/gtkfontsel.c:251
 msgid "Preview text"
 msgstr "Preview text"
@@ -3695,19 +3698,19 @@ msgstr "The width of the layout"
 msgid "The height of the layout"
 msgstr "The height of the layout"
 
-#: ../gtk/gtklinkbutton.c:175
+#: ../gtk/gtklinkbutton.c:176
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:176
+#: ../gtk/gtklinkbutton.c:177
 msgid "The URI bound to this button"
 msgstr "The URI bound to this button"
 
-#: ../gtk/gtklinkbutton.c:190
+#: ../gtk/gtklinkbutton.c:191
 msgid "Visited"
 msgstr "Visited"
 
-#: ../gtk/gtklinkbutton.c:191
+#: ../gtk/gtklinkbutton.c:192
 msgid "Whether this link has been visited."
 msgstr "Whether this link has been visited."
 
@@ -4802,7 +4805,7 @@ msgstr ""
 "is the current action of its group."
 
 #: ../gtk/gtkradioaction.c:135 ../gtk/gtkradiobutton.c:164
-#: ../gtk/gtkradiomenuitem.c:426 ../gtk/gtkradiotoolbutton.c:85
+#: ../gtk/gtkradiomenuitem.c:427 ../gtk/gtkradiotoolbutton.c:85
 msgid "Group"
 msgstr "Group"
 
@@ -4826,7 +4829,7 @@ msgstr ""
 msgid "The radio button whose group this widget belongs to."
 msgstr "The radio button whose group this widget belongs to."
 
-#: ../gtk/gtkradiomenuitem.c:427
+#: ../gtk/gtkradiomenuitem.c:428
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "The radio menu item whose group this widget belongs to."
 
