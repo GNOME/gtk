@@ -10,15 +10,16 @@
 # Nishibori Kiyotaka <ml.nishibori.kiyotaka@gmail.com>, 2009-2010.
 # Masato Hashimoto <cabezon.hashimoto@gmail.com>, 2010.
 # IWAI, Masaharu <iwaim.sub@gmail.com>, 2010.
+# Jiro Matsuzawa <jmatsuzawa@src.gnome.org>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ gtk-2-22\n"
+"Project-Id-Version: gtk+ gtk-3-2\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-25 12:56+0000\n"
-"PO-Revision-Date: 2011-09-25 23:48+0900\n"
-"Last-Translator: OKANO Takayoshi <kano@na.rim.or.jp>\n"
+"POT-Creation-Date: 2011-10-12 03:32+0000\n"
+"PO-Revision-Date: 2011-10-13 15:45+0900\n"
+"Last-Translator: Jiro Matsuzawa <jmatsuzawa@src.gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,7 +40,7 @@ msgstr "--gdk-no-debug オプションの解析エラーです"
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:183
 msgid "Program class as used by the window manager"
-msgstr "ウィンドウ・マネージャで利用するプログラムのクラスを指定する"
+msgstr "ウィンドウマネージャーで利用するプログラムのクラスを指定する"
 
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:184
@@ -49,7 +50,7 @@ msgstr "CLASS"
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:186
 msgid "Program name as used by the window manager"
-msgstr "ウィンドウ・マネージャで利用するプログラムの名前を指定する"
+msgstr "ウィンドウマネージャーで利用するプログラムの名前を指定する"
 
 #. Placeholder in --name=NAME in --help output
 #: ../gdk/gdk.c:187
@@ -70,7 +71,7 @@ msgstr "DISPLAY"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:193
 msgid "GDK debugging flags to set"
-msgstr "有効にする GDK のデバッグ・フラグを指定する"
+msgstr "有効にする GDK のデバッグフラグを指定する"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -83,7 +84,7 @@ msgstr "FLAGS"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:196
 msgid "GDK debugging flags to unset"
-msgstr "無効にする GDK のデバッグ・フラグを指定する"
+msgstr "無効にする GDK のデバッグフラグを指定する"
 
 #.
 #. * Translators, the strings in the 'keyboard label' context are
@@ -438,7 +439,7 @@ msgstr "Wintab API を使用する [デフォルト]"
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:63
 msgid "Size of the palette in 8 bit mode"
-msgstr "8-ビット・モードでのパレット・サイズを指定する"
+msgstr "8-ビットモードでのパレットサイズを指定する"
 
 #. Placeholder in --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:64
@@ -471,14 +472,13 @@ msgid "Provides visual indication of progress"
 msgstr "進行している様子を視覚的に表します"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:65
-#, fuzzy
 msgctxt "light switch widget"
 msgid "Switch"
-msgstr "インチ"
+msgstr "スイッチ"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:66
 msgid "Switches between on and off states"
-msgstr ""
+msgstr "オン・オフ状態を切り替えます"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -489,6 +489,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
 msgstr ""
+"This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
+"\"%s\">%s</a>"
 
 #: ../gtk/gtkaboutdialog.c:348
 msgid "License"
@@ -513,9 +515,8 @@ msgid "Could not show link"
 msgstr "リンクを表示できませんでした"
 
 #: ../gtk/gtkaboutdialog.c:996
-#, fuzzy
 msgid "Homepage"
-msgstr "Home"
+msgstr "ホームページ"
 
 #: ../gtk/gtkaboutdialog.c:1050
 #, c-format
@@ -523,9 +524,8 @@ msgid "About %s"
 msgstr "%s について"
 
 #: ../gtk/gtkaboutdialog.c:2376
-#, fuzzy
 msgid "Created by"
-msgstr "作成(_R)"
+msgstr "作成者"
 
 #: ../gtk/gtkaboutdialog.c:2379
 msgid "Documented by"
@@ -610,96 +610,89 @@ msgid "Backslash"
 msgstr "\\"
 
 #: ../gtk/gtkappchooserbutton.c:292
-#, fuzzy
 msgid "Other application..."
-msgstr "アプリケーション"
+msgstr "別のアプリケーション..."
 
 #: ../gtk/gtkappchooserdialog.c:133
 msgid "Failed to look for applications online"
-msgstr ""
+msgstr "オンラインでのアプリケーション検索に失敗しました"
 
 #: ../gtk/gtkappchooserdialog.c:174
 msgid "Find applications online"
-msgstr ""
+msgstr "オンラインでアプリケーションを探す"
 
 #: ../gtk/gtkappchooserdialog.c:230
-#, fuzzy
 msgid "Could not run application"
-msgstr "一覧をクリアできませんでした"
+msgstr "アプリケーションを実行できませんでした"
 
 #: ../gtk/gtkappchooserdialog.c:243
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find '%s'"
-msgstr "%s をマウントできませんでした"
+msgstr "'%s' が見つかりませんでした"
 
 #: ../gtk/gtkappchooserdialog.c:246
-#, fuzzy
 msgid "Could not find application"
-msgstr "リンクを表示できませんでした"
+msgstr "アプリケーションが見つかりませんでした"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:366
 #, c-format
 msgid "Select an application to open \"%s\""
-msgstr ""
+msgstr "\"%s\" を開くアプリケーションを選択してください"
 
 #: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr ""
+msgstr "\"%s\" を開くアプリケーションが見つかりません"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:373
 #, c-format
 msgid "Select an application for \"%s\" files"
-msgstr ""
+msgstr "\"%s\" ファイルを開くアプリケーションを選択してください"
 
 #: ../gtk/gtkappchooserdialog.c:375
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr ""
+msgstr "\"%s\" ファイルを開くアプリケーションが見つかりません"
 
 #: ../gtk/gtkappchooserdialog.c:391
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"\"別のアプリケーションを表示する\"をクリックして利用可能なアプリケーションを"
+"選択するか、あるいは\"オンラインでアプリケーションを探す\"をクリックしてアプ"
+"リケーションを新規にインストールしてください。"
 
 #: ../gtk/gtkappchooserdialog.c:461
-#, fuzzy
 msgid "Forget association"
-msgstr "今すぐパスワードを破棄する(_I)"
+msgstr "関連づけを取り消す"
 
 #: ../gtk/gtkappchooserdialog.c:527
-#, fuzzy
 msgid "Show other applications"
-msgstr "GTK+ のオプションを表示する"
+msgstr "別のアプリケーションを表示する"
 
 #: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
 #: ../gtk/gtkfontchooserdialog.c:176
-#, fuzzy
 msgid "_Select"
-msgstr "選択(_S): "
+msgstr "選択(_S)"
 
 #: ../gtk/gtkappchooserwidget.c:605
-#, fuzzy
 msgid "Default Application"
-msgstr "アプリケーション"
+msgstr "既定のアプリケーション"
 
 #: ../gtk/gtkappchooserwidget.c:743
-#, fuzzy
 msgid "Recommended Applications"
-msgstr "アプリケーション"
+msgstr "推奨アプリケーション"
 
 #: ../gtk/gtkappchooserwidget.c:758
-#, fuzzy
 msgid "Related Applications"
-msgstr "アプリケーション"
+msgstr "関連するアプリケーション"
 
 #: ../gtk/gtkappchooserwidget.c:772
-#, fuzzy
 msgid "Other Applications"
-msgstr "アプリケーション"
+msgstr "別のアプリケーション"
 
 #: ../gtk/gtkassistant.c:999
 #, fuzzy
@@ -842,7 +835,7 @@ msgstr "無効"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:432 ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:432 ../gtk/gtkcellrendereraccel.c:748
 msgid "New accelerator..."
 msgstr "新しいアクセラレータ..."
 
@@ -982,7 +975,7 @@ msgstr "選択した色です。"
 msgid "_Save color here"
 msgstr "ここに色を保存する(_S)"
 
-#: ../gtk/gtkcolorsel.c:1664
+#: ../gtk/gtkcolorsel.c:1663
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1020,7 +1013,7 @@ msgstr "ミリ"
 
 #: ../gtk/gtkcustompaperunixdialog.c:580
 msgid "Margins from Printer..."
-msgstr "プリンタのマージン..."
+msgstr "プリンターのマージン..."
 
 #: ../gtk/gtkcustompaperunixdialog.c:746
 #, c-format
@@ -1069,16 +1062,15 @@ msgstr "Unicode 制御文字の挿入(_I)"
 
 #: ../gtk/gtkentry.c:10448
 msgid "Caps Lock and Num Lock are on"
-msgstr ""
+msgstr "Caps Lock と Num Lock がオンになっています"
 
 #: ../gtk/gtkentry.c:10450
-#, fuzzy
 msgid "Num Lock is on"
-msgstr "Caps Lock が ON です"
+msgstr "Num Lock がオンになっています"
 
 #: ../gtk/gtkentry.c:10452
 msgid "Caps Lock is on"
-msgstr "Caps Lock が ON です"
+msgstr "Caps Lock がオンになっています"
 
 #. *
 #. * SECTION:gtkfilechooserbutton
@@ -1122,9 +1114,8 @@ msgstr "Caps Lock が ON です"
 #. *  Private Macros  *
 #. * ****************
 #: ../gtk/gtkfilechooserbutton.c:105
-#, fuzzy
 msgid "Select a File"
-msgstr "ファイルの選択"
+msgstr "ファイルを選択"
 
 #: ../gtk/gtkfilechooserbutton.c:106 ../gtk/gtkfilechooserdefault.c:1817
 msgid "Desktop"
@@ -1140,7 +1131,7 @@ msgstr "その他..."
 
 #: ../gtk/gtkfilechooserdefault.c:153
 msgid "Type name of new folder"
-msgstr "新しいフォルダの種類"
+msgstr "新しいフォルダー名を入力してください"
 
 #: ../gtk/gtkfilechooserdefault.c:968
 msgid "Could not retrieve information about the file"
@@ -1156,30 +1147,33 @@ msgstr "ブックマークを削除できませんでした"
 
 #: ../gtk/gtkfilechooserdefault.c:1001
 msgid "The folder could not be created"
-msgstr "フォルダを生成できませんでした"
+msgstr "フォルダーを生成できませんでした"
 
 #: ../gtk/gtkfilechooserdefault.c:1014
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"同名のフォルダが既に存在しているので、そのフォルダを生成できませんでした。別"
-"の名前にするか、ファイル名を変更するなどして、もう一度実行してください。"
+"同名のファイルがすでに存在しているので、そのフォルダーを生成できませんでし"
+"た。別の名前にするか、ファイル名を変更するなどして、もう一度実行してくださ"
+"い。"
 
 #: ../gtk/gtkfilechooserdefault.c:1028
 msgid "You need to choose a valid filename."
-msgstr ""
+msgstr "有効なファイル名を指定してください。"
 
 #: ../gtk/gtkfilechooserdefault.c:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr "ローカルではないので、フォルダを変更できません"
+msgstr "%s はフォルダーではないため、その配下にファイルを作成できません"
 
 #: ../gtk/gtkfilechooserdefault.c:1043
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
+"フォルダーのみ選択できます。選択したアイテムはフォルダーではありません。他の"
+"アイテムを使用してみてください。"
 
 #: ../gtk/gtkfilechooserdefault.c:1053
 msgid "Invalid file name"
@@ -1187,7 +1181,7 @@ msgstr "無効なファイル名です"
 
 #: ../gtk/gtkfilechooserdefault.c:1063
 msgid "The folder contents could not be displayed"
-msgstr "フォルダの内容を表示できませんでした"
+msgstr "フォルダーの内容を表示できませんでした"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -1202,7 +1196,7 @@ msgstr "%2$s:%1$s"
 msgid "Search"
 msgstr "検索"
 
-#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4991
+#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4988
 msgid "Recently Used"
 msgstr "最近開いたファイル"
 
@@ -1213,17 +1207,17 @@ msgstr "表示するファイルの種類を選択してください"
 #: ../gtk/gtkfilechooserdefault.c:2720
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "'%s' というフォルダをブックマークへ追加します"
+msgstr "'%s' というフォルダーをブックマークへ追加します"
 
 #: ../gtk/gtkfilechooserdefault.c:2764
 #, c-format
 msgid "Add the current folder to the bookmarks"
-msgstr "このフォルダをブックマークへ追加します"
+msgstr "このフォルダーをブックマークへ追加します"
 
 #: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the selected folders to the bookmarks"
-msgstr "指定したフォルダをブックマークへ追加します"
+msgstr "指定したフォルダーをブックマークへ追加します"
 
 #: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
@@ -1259,147 +1253,142 @@ msgstr "場所(_P)"
 
 #: ../gtk/gtkfilechooserdefault.c:3686
 msgid "Add the selected folder to the Bookmarks"
-msgstr "指定したフォルダをブックマークへ追加します"
+msgstr "指定したフォルダーをブックマークへ追加します"
 
-#: ../gtk/gtkfilechooserdefault.c:3946
+#: ../gtk/gtkfilechooserdefault.c:3943
 msgid "Could not select file"
 msgstr "ファイルを選択できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:4171
+#: ../gtk/gtkfilechooserdefault.c:4168
 msgid "_Visit this file"
-msgstr ""
+msgstr "このファイルの内容を見る(_V)"
+
+#: ../gtk/gtkfilechooserdefault.c:4171
+msgid "_Copy file's location"
+msgstr "ファイルの場所をコピーする(_C)"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
-#, fuzzy
-#| msgid "Copy _Location"
-msgid "_Copy file's location"
-msgstr "場所のコピー(_L)"
-
-#: ../gtk/gtkfilechooserdefault.c:4177
 msgid "_Add to Bookmarks"
 msgstr "ブックマークへ追加(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4184
+#: ../gtk/gtkfilechooserdefault.c:4181
 msgid "Show _Hidden Files"
 msgstr "隠しファイルを表示する(_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4187
+#: ../gtk/gtkfilechooserdefault.c:4184
 msgid "Show _Size Column"
 msgstr "サイズを表示する(_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4412
+#: ../gtk/gtkfilechooserdefault.c:4409
 msgid "Files"
 msgstr "ファイル"
 
-#: ../gtk/gtkfilechooserdefault.c:4463
+#: ../gtk/gtkfilechooserdefault.c:4460
 msgid "Name"
 msgstr "名前"
 
-#: ../gtk/gtkfilechooserdefault.c:4486
+#: ../gtk/gtkfilechooserdefault.c:4483
 msgid "Size"
 msgstr "サイズ"
 
-#: ../gtk/gtkfilechooserdefault.c:4500
+#: ../gtk/gtkfilechooserdefault.c:4497
 msgid "Modified"
 msgstr "最終変更日"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:799
+#: ../gtk/gtkfilechooserdefault.c:4592 ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4829
+#: ../gtk/gtkfilechooserdefault.c:4826
 msgid "Type a file name"
 msgstr "ファイル名を入力してください"
 
-#: ../gtk/gtkfilechooserdefault.c:4876 ../gtk/gtkfilechooserdefault.c:4887
-#, fuzzy
+#: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
 msgid "Please select a folder below"
-msgstr "ファイルの選択"
+msgstr "以下からフォルダーを選択してください"
 
-#: ../gtk/gtkfilechooserdefault.c:4882
-#, fuzzy
-#| msgid "Type a file name"
+#: ../gtk/gtkfilechooserdefault.c:4879
 msgid "Please type a file name"
 msgstr "ファイル名を入力してください"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4953
+#: ../gtk/gtkfilechooserdefault.c:4950
 msgid "Create Fo_lder"
-msgstr "フォルダの作成(_L)"
+msgstr "フォルダーの作成(_L)"
 
-#: ../gtk/gtkfilechooserdefault.c:5001
+#: ../gtk/gtkfilechooserdefault.c:4998
 msgid "Search:"
 msgstr "検索:"
 
-#: ../gtk/gtkfilechooserdefault.c:5052
+#: ../gtk/gtkfilechooserdefault.c:5049
 msgid "_Location:"
 msgstr "場所(_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5503
+#: ../gtk/gtkfilechooserdefault.c:5500
 msgid "Save in _folder:"
-msgstr "フォルダの中に保存(_F):"
+msgstr "次のフォルダーに保存(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:5505
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Create in _folder:"
-msgstr "フォルダの中に作成(_F):"
+msgstr "フォルダーの中に作成(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:6599
+#: ../gtk/gtkfilechooserdefault.c:6596
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s の内容を読み込めませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:6603
+#: ../gtk/gtkfilechooserdefault.c:6600
 msgid "Could not read the contents of the folder"
-msgstr "フォルダの内容を読み込めませんでした"
+msgstr "フォルダーの内容を読み込めませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:6696 ../gtk/gtkfilechooserdefault.c:6764
-#: ../gtk/gtkfilechooserdefault.c:6916
+#: ../gtk/gtkfilechooserdefault.c:6693 ../gtk/gtkfilechooserdefault.c:6761
+#: ../gtk/gtkfilechooserdefault.c:6913
 msgid "Unknown"
 msgstr "不明"
 
-#: ../gtk/gtkfilechooserdefault.c:6711
+#: ../gtk/gtkfilechooserdefault.c:6708
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6713
+#: ../gtk/gtkfilechooserdefault.c:6710
 msgid "Yesterday at %H:%M"
 msgstr "昨日の %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7388
+#: ../gtk/gtkfilechooserdefault.c:7385
 msgid "Cannot change to folder because it is not local"
-msgstr "ローカルではないので、フォルダを変更できません"
+msgstr "ローカルではないので、フォルダーを変更できません"
 
-#: ../gtk/gtkfilechooserdefault.c:7988 ../gtk/gtkfilechooserdefault.c:8009
+#: ../gtk/gtkfilechooserdefault.c:7985 ../gtk/gtkfilechooserdefault.c:8006
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ショートカット %s は既にあります"
 
-#: ../gtk/gtkfilechooserdefault.c:8099
+#: ../gtk/gtkfilechooserdefault.c:8096
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ショートカット %s はありません"
 
-#: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:550
+#: ../gtk/gtkfilechooserdefault.c:8342 ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" というファイルは既に存在します。上書きしてもよろしいですか?"
 
-#: ../gtk/gtkfilechooserdefault.c:8348 ../gtk/gtkprintunixdialog.c:554
+#: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\" にファイルが既に存在しています。すべての内容を上書きします。"
 
-#: ../gtk/gtkfilechooserdefault.c:8353 ../gtk/gtkprintunixdialog.c:561
+#: ../gtk/gtkfilechooserdefault.c:8350 ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "置き換える(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9157
 msgid "Could not start the search process"
 msgstr "検索処理を開始できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:9161
+#: ../gtk/gtkfilechooserdefault.c:9158
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1407,11 +1396,11 @@ msgstr ""
 "検索用のインデックスを生成するデーモンに接続できませんでした。デーモンが実行"
 "中か確認してください。"
 
-#: ../gtk/gtkfilechooserdefault.c:9175
+#: ../gtk/gtkfilechooserdefault.c:9172
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: ../gtk/gtkfilechooserdefault.c:9776
+#: ../gtk/gtkfilechooserdefault.c:9773
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s をマウントできませんでした"
@@ -1482,7 +1471,7 @@ msgstr "パスがありません"
 #.
 #: ../gtk/gtkfilesystem.c:48
 msgid "File System"
-msgstr "ファイル・システム"
+msgstr "ファイルシステム"
 
 #: ../gtk/gtkfontbutton.c:355
 msgid "Sans 12"
@@ -1503,16 +1492,16 @@ msgstr "フォントの選択"
 #: ../gtk/gtkfontchooserwidget.c:113
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
+"検索条件にマッチするフォントが見つかりません。条件を修正して再度試してくださ"
+"い。"
 
-#: ../gtk/gtkfontchooserwidget.c:611
+#: ../gtk/gtkfontchooserwidget.c:612
 msgid "Search font name"
-msgstr ""
+msgstr "フォント名で検索"
 
-#: ../gtk/gtkfontchooserwidget.c:947
-#, fuzzy
-#| msgid "_Family:"
+#: ../gtk/gtkfontchooserwidget.c:948
 msgid "Font Family"
-msgstr "ファミリ(_F):"
+msgstr "フォントファミリ"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1567,51 +1556,54 @@ msgid "System (%s)"
 msgstr "システム (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6294
+#: ../gtk/gtklabel.c:6295
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6306
+#: ../gtk/gtklabel.c:6307
 msgid "Copy _Link Address"
 msgstr "リンクのアドレスをコピー(_L)"
 
-#: ../gtk/gtklinkbutton.c:494
+#: ../gtk/gtklinkbutton.c:495
 msgid "Copy URL"
 msgstr "URL のコピー"
 
-#: ../gtk/gtklinkbutton.c:657
+#: ../gtk/gtklinkbutton.c:658
 msgid "Invalid URI"
 msgstr "URI が間違っています"
 
 #: ../gtk/gtklockbutton.c:288
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Num_Lock"
 msgid "Lock"
-msgstr "Num_Lock"
+msgstr "ロック"
 
 #: ../gtk/gtklockbutton.c:297
 msgid "Unlock"
-msgstr ""
+msgstr "ロック解除"
 
 #: ../gtk/gtklockbutton.c:306
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr ""
+"ダイアログのロックは解除されています。\n"
+"これ以上変更を加えない場合クリックしてください"
 
 #: ../gtk/gtklockbutton.c:315
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr ""
+"ダイアログはロックされています。\n"
+"変更を加える場合クリックしてください"
 
 #: ../gtk/gtklockbutton.c:324
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
+"システムポリシーにより、システム設定の変更はできません。\n"
+"システム管理者に連絡してください。"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:562
@@ -1631,12 +1623,12 @@ msgstr "警告をすべて致命的と見なす"
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:568
 msgid "GTK+ debugging flags to set"
-msgstr "有効にする GTK+ のデバッグ・フラグを指定する"
+msgstr "有効にする GTK+ のデバッグフラグを指定する"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:571
 msgid "GTK+ debugging flags to unset"
-msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
+msgstr "無効にする GTK+ のデバッグフラグを指定する"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1670,11 +1662,11 @@ msgstr "匿名で接続する(_A)"
 
 #: ../gtk/gtkmountoperation.c:565
 msgid "Connect as u_ser:"
-msgstr "ユーザを指定する(_S):"
+msgstr "ユーザーを指定する(_S):"
 
 #: ../gtk/gtkmountoperation.c:599
 msgid "_Username:"
-msgstr "ユーザ名(_U):"
+msgstr "ユーザー名(_U):"
 
 #: ../gtk/gtkmountoperation.c:604
 msgid "_Domain:"
@@ -1717,7 +1709,7 @@ msgstr "PID %d のプロセスを kill できません。操作が実装され�
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:960
 msgid "Terminal Pager"
-msgstr "端末ページャ"
+msgstr "端末ページャー"
 
 #: ../gtk/gtkmountoperation-x11.c:961
 msgid "Top Command"
@@ -1749,7 +1741,7 @@ msgstr "%u ページ"
 #. * in the number emblem.
 #.
 #: ../gtk/gtknumerableicon.c:482
-#, fuzzy, c-format
+#, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
@@ -1761,7 +1753,7 @@ msgstr "妥当なページ設定のファイルではありません"
 
 #: ../gtk/gtkpagesetupunixdialog.c:169
 msgid "Any Printer"
-msgstr "任意のプリンタ"
+msgstr "任意のプリンター"
 
 #: ../gtk/gtkpagesetupunixdialog.c:169
 msgid "For portable documents"
@@ -1812,7 +1804,7 @@ msgstr "下のパス"
 
 #: ../gtk/gtkpathbar.c:1616
 msgid "File System Root"
-msgstr "ファイル・システムのルート"
+msgstr "ファイルシステムのルート"
 
 #: ../gtk/gtkprintbackend.c:749
 msgid "Authentication"
@@ -1823,13 +1815,12 @@ msgid "Not available"
 msgstr "利用できません"
 
 #: ../gtk/gtkprinteroptionwidget.c:792
-#, fuzzy
 msgid "Select a folder"
-msgstr "ファイルの選択"
+msgstr "フォルダーを選択"
 
 #: ../gtk/gtkprinteroptionwidget.c:807
 msgid "_Save in folder:"
-msgstr "フォルダの中に保存(_S):"
+msgstr "フォルダーの中に保存(_S):"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -1848,7 +1839,7 @@ msgstr "初期状態"
 #: ../gtk/gtkprintoperation.c:1769
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "プリンタの準備中"
+msgstr "プリンターの準備中"
 
 #: ../gtk/gtkprintoperation.c:1770
 msgctxt "print operation status"
@@ -1917,7 +1908,7 @@ msgstr "アプリケーション"
 
 #: ../gtk/gtkprintoperation-win32.c:611
 msgid "Printer offline"
-msgstr "プリンタはオフラインです"
+msgstr "プリンターはオフラインです"
 
 #: ../gtk/gtkprintoperation-win32.c:613
 msgid "Out of paper"
@@ -1931,7 +1922,7 @@ msgstr "一時停止"
 
 #: ../gtk/gtkprintoperation-win32.c:617
 msgid "Need user intervention"
-msgstr "ユーザの操作が必要です"
+msgstr "ユーザーの操作が必要です"
 
 #: ../gtk/gtkprintoperation-win32.c:717
 msgid "Custom size"
@@ -1939,7 +1930,7 @@ msgstr "その他のサイズ"
 
 #: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
-msgstr "プリンタが見つかりません"
+msgstr "プリンターが見つかりません"
 
 #: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
@@ -1960,11 +1951,11 @@ msgstr "PrintDlgEx() の引数が無効です"
 
 #: ../gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "PrintDlgEx() を指すポインタが無効です"
+msgstr "PrintDlgEx() を指すポインターが無効です"
 
 #: ../gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
-msgstr "PrintDlgEx() のハンドラが無効です"
+msgstr "PrintDlgEx() のハンドラーが無効です"
 
 #: ../gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
@@ -1972,15 +1963,15 @@ msgstr "原因不明のエラー"
 
 #: ../gtk/gtkprintunixdialog.c:688
 msgid "Getting printer information failed"
-msgstr "プリンタの情報の取得に失敗しました。"
+msgstr "プリンターの情報の取得に失敗しました。"
 
 #: ../gtk/gtkprintunixdialog.c:1962
 msgid "Getting printer information..."
-msgstr "プリンタの情報を取得中..."
+msgstr "プリンターの情報を取得中..."
 
 #: ../gtk/gtkprintunixdialog.c:2236
 msgid "Printer"
-msgstr "プリンタ"
+msgstr "プリンター"
 
 #. Translators: this is the header for the location column in the print dialog
 #: ../gtk/gtkprintunixdialog.c:2246
@@ -2304,7 +2295,7 @@ msgstr "URI '%s' のアイテムはありません"
 
 #: ../gtk/gtkrecentchooserdefault.c:1305
 msgid "Untitled filter"
-msgstr "タイトルなしのフィルタ"
+msgstr "タイトルなしのフィルター"
 
 #: ../gtk/gtkrecentchooserdefault.c:1658
 msgid "Could not remove item"
@@ -2441,7 +2432,6 @@ msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
 #: ../gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "CD-ROM(_C)"
@@ -2502,7 +2492,6 @@ msgid "_Edit"
 msgstr "編集(_E)"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
 msgstr "ファイル(_F)"
@@ -2581,7 +2570,6 @@ msgid "_Up"
 msgstr "上へ(_U)"
 
 #: ../gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "ハードディスク(_H)"
@@ -2842,7 +2830,7 @@ msgstr "降順(_D)"
 #: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
-msgstr "スペル・チェック(_S)"
+msgstr "スペルチェック(_S)"
 
 #: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
@@ -2905,7 +2893,7 @@ msgstr "縮小(_O)"
 #: ../gtk/gtkswitch.c:335 ../gtk/gtkswitch.c:395 ../gtk/gtkswitch.c:602
 msgctxt "switch"
 msgid "ON"
-msgstr ""
+msgstr "オン"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -2913,7 +2901,7 @@ msgstr ""
 #: ../gtk/gtkswitch.c:343 ../gtk/gtkswitch.c:396 ../gtk/gtkswitch.c:631
 msgctxt "switch"
 msgid "OFF"
-msgstr ""
+msgstr "オフ"
 
 #: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -2967,7 +2955,7 @@ msgstr "匿名のタグがあるので、タグを生成できません"
 #: ../gtk/gtktextbufferserialize.c:1054
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "タグ \"%s\" がバッファに存在しないので、タグを生成できません"
+msgstr "タグ \"%s\" がバッファーに存在しないので、タグを生成できません"
 
 #: ../gtk/gtktextbufferserialize.c:1153 ../gtk/gtktextbufferserialize.c:1228
 #: ../gtk/gtktextbufferserialize.c:1333 ../gtk/gtktextbufferserialize.c:1407
@@ -3767,7 +3755,7 @@ msgstr "US リーガル"
 #: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr "US リーガル・エキストラ"
+msgstr "US リーガルエキストラ"
 
 #: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
@@ -3777,12 +3765,12 @@ msgstr "US レター"
 #: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr "US レター・エキストラ"
+msgstr "US レターエキストラ"
 
 #: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr "US レター・プラス"
+msgstr "US レタープラス"
 
 #: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
@@ -3957,22 +3945,22 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:1370
 #, c-format
 msgid "Failed to write header\n"
-msgstr "ヘッダの書き込みに失敗しました\n"
+msgstr "ヘッダーの書き込みに失敗しました\n"
 
 #: ../gtk/updateiconcache.c:1376
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr "ハッシュ・テーブルの書き込みに失敗しました\n"
+msgstr "ハッシュテーブルの書き込みに失敗しました\n"
 
 #: ../gtk/updateiconcache.c:1382
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr "フォルダ・インデックスの書き込みに失敗しました\n"
+msgstr "フォルダーインデックスの書き込みに失敗しました\n"
 
 #: ../gtk/updateiconcache.c:1390
 #, c-format
 msgid "Failed to rewrite header\n"
-msgstr "ヘッダの再書き込みに失敗しました\n"
+msgstr "ヘッダーの再書き込みに失敗しました\n"
 
 #: ../gtk/updateiconcache.c:1484
 #, c-format
@@ -3982,7 +3970,7 @@ msgstr "%s というファイルのオープンに失敗しました: %s\n"
 #: ../gtk/updateiconcache.c:1492 ../gtk/updateiconcache.c:1522
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "キャッシュ・ファイルの書き込みに失敗しました: %s\n"
+msgstr "キャッシュファイルの書き込みに失敗しました: %s\n"
 
 #: ../gtk/updateiconcache.c:1533
 #, c-format
@@ -4007,7 +3995,7 @@ msgstr "%s の名前を %s に戻せませんでした: %s\n"
 #: ../gtk/updateiconcache.c:1598
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr "キャッシュ・ファイルの生成が完了しました\n"
+msgstr "キャッシュファイルの生成が完了しました\n"
 
 #: ../gtk/updateiconcache.c:1637
 msgid "Overwrite an existing cache, even if up to date"
@@ -4023,7 +4011,7 @@ msgstr "キャッシュに画像データを含めない"
 
 #: ../gtk/updateiconcache.c:1640
 msgid "Output a C header file"
-msgstr "C言語のヘッダ・ファイルを出力する"
+msgstr "C言語のヘッダーファイルを出力する"
 
 #: ../gtk/updateiconcache.c:1641
 msgid "Turn off verbose output"
@@ -4031,7 +4019,7 @@ msgstr "詳細な出力を無効にする"
 
 #: ../gtk/updateiconcache.c:1642
 msgid "Validate existing icon cache"
-msgstr "既存のアイコン・キャッシュを検証する"
+msgstr "既存のアイコンキャッシュを検証する"
 
 #: ../gtk/updateiconcache.c:1709
 #, c-format
@@ -4041,7 +4029,7 @@ msgstr "ファイルが見つかりませんでした: %s\n"
 #: ../gtk/updateiconcache.c:1715
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "妥当なアイコン・キャッシュではありません: %s\n"
+msgstr "妥当なアイコンキャッシュではありません: %s\n"
 
 #: ../gtk/updateiconcache.c:1728
 #, c-format
@@ -4097,12 +4085,12 @@ msgstr "タイ/ラオス語"
 #. ID
 #: ../modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "ティグリグナ・エリトリア語 (EZ+)"
+msgstr "ティグリグナエリトリア語 (EZ+)"
 
 #. ID
 #: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "ティグリグナ・エチオピア語 (EZ+)"
+msgstr "ティグリグナエチオピア語 (EZ+)"
 
 #. ID
 #: ../modules/input/imviqr.c:244
@@ -4117,7 +4105,7 @@ msgstr "Xの入力メソッド"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:829
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
 msgid "Username:"
-msgstr "ユーザ名:"
+msgstr "ユーザー名:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:830
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1057
@@ -4128,7 +4116,7 @@ msgstr "パスワード:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1070
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "文書 '%s' をプリンタ '%s' で印刷するには認証が必要"
+msgstr "文書 '%s' をプリンター '%s' で印刷するには認証が必要"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
@@ -4147,21 +4135,21 @@ msgstr "ジョブの属性を取得するには認証が必要"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:881
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr "プリンタ %s の属性を取得するには認証が必要"
+msgstr "プリンター %s の属性を取得するには認証が必要"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:883
 msgid "Authentication is required to get attributes of a printer"
-msgstr "プリンタの属性を取得するには認証が必要"
+msgstr "プリンターの属性を取得するには認証が必要"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:886
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "%s のデフォルトのプリンタを取得するには認証が必要"
+msgstr "%s のデフォルトのプリンターを取得するには認証が必要"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:889
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr "%s からプリンタを取得するには認証が必要"
+msgstr "%s からプリンターを取得するには認証が必要"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:894
 #, c-format
@@ -4185,7 +4173,7 @@ msgstr "文書 '%s' を印刷するには認証が必要"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1077
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "この文書をプリンタ '%s' で印刷するには認証が必要"
+msgstr "この文書をプリンター '%s' で印刷するには認証が必要"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1079
 msgid "Authentication is required to print this document"
@@ -4194,70 +4182,70 @@ msgstr "この文書を印刷するには認証が必要"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr "プリンタ '%s' のトナーが少なくなっています。"
+msgstr "プリンター '%s' のトナーが少なくなっています。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1705
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr "プリンタ '%s' のトナーがなくなりました。"
+msgstr "プリンター '%s' のトナーがなくなりました。"
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1707
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr "プリンタ '%s' の現像液が少なくなっています。"
+msgstr "プリンター '%s' の現像液が少なくなっています。"
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1709
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr "プリンタ '%s' の現像液がなくなりました。"
+msgstr "プリンター '%s' の現像液がなくなりました。"
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
-"プリンタ '%s' にセットされているカートリッジのうち少なくとも1本のインクが少な"
-"くなっています。"
+"プリンター '%s' にセットされているカートリッジのうち少なくとも1本のインクが少"
+"なくなっています。"
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
-"プリンタ '%s' にセットされているカートリッジのうち少なくとも1本のインクがなく"
-"なりました。"
+"プリンター '%s' にセットされているカートリッジのうち少なくとも1本のインクがな"
+"くなりました。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr "プリンタ '%s' のカバーが開いています。"
+msgstr "プリンター '%s' のカバーが開いています。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr "プリンタ '%s' のドアが開いています。"
+msgstr "プリンター '%s' のドアが開いています。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1716
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr "プリンタ '%s' の用紙が少なくなっています。"
+msgstr "プリンター '%s' の用紙が少なくなっています。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1717
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr "プリンタ '%s' の用紙がなくなりました。"
+msgstr "プリンター '%s' の用紙がなくなりました。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1718
 #, c-format
 msgid "Printer '%s' is currently offline."
-msgstr "プリンタ '%s' は現在オフラインです。"
+msgstr "プリンター '%s' は現在オフラインです。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1719
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr "プリンタ '%s' で問題が発生しました。"
+msgstr "プリンター '%s' で問題が発生しました。"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2033
@@ -4322,7 +4310,7 @@ msgstr "自動選択"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2844
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3340
 msgid "Printer Default"
-msgstr "プリンタのデフォルト"
+msgstr "プリンターのデフォルト"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2846
@@ -4416,7 +4404,7 @@ msgstr "標準"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Top Secret"
-msgstr "トップ・シークレット"
+msgstr "トップシークレット"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
 msgid "Unclassified"
@@ -4464,7 +4452,7 @@ msgstr "カスタム %sx%s"
 #, fuzzy
 #| msgid "Printer offline"
 msgid "Printer Profile"
-msgstr "プリンタはオフラインです"
+msgstr "プリンターはオフラインです"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3874
@@ -4543,7 +4531,7 @@ msgstr "コマンドライン"
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "printer offline"
-msgstr "プリンタはオフライン"
+msgstr "プリンターはオフライン"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
@@ -4573,892 +4561,4 @@ msgstr "test-output.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
-msgstr "テスト用プリンタに印刷する"
-
-#~ msgid "Received invalid color data\n"
-#~ msgstr "受け取った無効な色のデータ\n"
-
-#~ msgid "_Browse for other folders"
-#~ msgstr "他のフォルダ(_B)"
-
-#~ msgid "Error loading icon: %s"
-#~ msgstr "アイコンの読み込みでエラー: %s"
-
-#~ msgid ""
-#~ "Could not find the icon '%s'. The '%s' theme\n"
-#~ "was not found either, perhaps you need to install it.\n"
-#~ "You can get a copy from:\n"
-#~ "\t%s"
-#~ msgstr ""
-#~ "アイコン '%s' が見つかりませんでした。テーマ '%s' も\n"
-#~ "見つからないので、インストールする必要があります。\n"
-#~ "次からコピーを取得できます:\n"
-#~ "\t%s"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\""
-#~ msgstr "pixmap_path に画像ファイルが見つかりません: \"%s\""
-
-#~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "この関数は '%s' クラスのウィジットでは実装されていません"
-
-#~ msgid "different idatas found for symlinked '%s' and '%s'\n"
-#~ msgstr "シンボリックリンクの '%s' と '%s' で別の idata が見つかりました\n"
-
-#~ msgid "Could not get information for file '%s': %s"
-#~ msgstr "'%s' というファイルの情報を取得できませんでした: %s"
-
-#~ msgid "Failed to open file '%s': %s"
-#~ msgstr "ファイル '%s' のオープンに失敗しました: %s"
-
-#~ msgid ""
-#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
-#~ msgstr ""
-#~ "画像 '%s' の読み込みに失敗しました: 理由は不明ですが、おそらく画像ファイル"
-#~ "が壊れていると思われます"
-
-# 'X' という1文字は X-Window で固有名詞のため大文字のXで表示する
-#~ msgid "X screen to use"
-#~ msgstr "使用するXのスクリーンを指定する"
-
-#~ msgid "SCREEN"
-#~ msgstr "SCREEN"
-
-#~ msgid "Make X calls synchronous"
-#~ msgstr "Xの呼び出しと同期する"
-
-#~ msgid "Credits"
-#~ msgstr "クレジット"
-
-#~ msgid "Written by"
-#~ msgstr "開発担当"
-
-#~ msgid "_Add"
-#~ msgstr "追加(_A)"
-
-#~ msgid "_Remove"
-#~ msgstr "削除(_R)"
-
-#~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "インクルードファイルが見つかりません: \"%s\""
-
-#~ msgid "Unable to locate theme engine in module_path: \"%s\","
-#~ msgstr "module_path にはテーマ・エンジンがありません: \"%s\","
-
-#~ msgid "\"Deepness\" of the color."
-#~ msgstr "色の \"深さ\" です"
-
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "フォルダ '%s' を作成する際にエラー: %s"
-
-#~ msgid "Folders"
-#~ msgstr "フォルダ"
-
-#~ msgid "Fol_ders"
-#~ msgstr "フォルダ(_D)"
-
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "読み込み不可のフォルダ: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "ファイル \"%s\" は他のマシン %s にあるため、このプログラムでは利用できませ"
-#~ "ん。\n"
-#~ "本当に選択しますか?"
-
-#~ msgid "_New Folder"
-#~ msgstr "新しいフォルダ(_N)"
-
-#~ msgid "De_lete File"
-#~ msgstr "ファイルの削除(_L)"
-
-#~ msgid "_Rename File"
-#~ msgstr "ファイル名の変更(_R)"
-
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "フォルダ名 \"%s\" にファイル名として利用できない文字が含まれています"
-
-#~ msgid "New Folder"
-#~ msgstr "新しいフォルダ"
-
-#~ msgid "_Folder name:"
-#~ msgstr "フォルダ名(_F):"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "ファイル名 \"%s\" にファイル名として利用できない文字が含まれています"
-
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "ファイル '%s' の削除中にエラー: %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "本当にファイル \"%s\" を削除しますか?"
-
-#~ msgid "Delete File"
-#~ msgstr "ファイルの削除"
-
-#~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr "ファイル名を \"%s\" へ変更する際にエラー: %s"
-
-#~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr "ファイル名 \"%s\" を変更する際にエラー: %s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "ファイル名 \"%s\" を \"%s\" に変更する際にエラー: %s"
-
-#~ msgid "Rename File"
-#~ msgstr "ファイル名の変更"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "ファイル '%s' の名前の変更:"
-
-#~ msgid "_Rename"
-#~ msgstr "ファイル名の変更(_R)"
-
-#~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-#~ "environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr ""
-#~ "ファイル名 \"%s\" を UTF-8 に変換できませんでした (環境変数 "
-#~ "$G_FILENAME_ENCODING を設定してみてください): %s"
-
-#~ msgid "Invalid UTF-8"
-#~ msgstr "無効な UTF-8 コードです"
-
-#~ msgid "Name too long"
-#~ msgstr "名前が長すぎます"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "ファイル名を変換できませんでした"
-
-#~ msgid "Gamma"
-#~ msgstr "ガンマ"
-
-#~ msgid "_Gamma value"
-#~ msgstr "ガンマ値(_G)"
-
-#~ msgid "Input"
-#~ msgstr "入力"
-
-#~ msgid "No extended input devices"
-#~ msgstr "追加の入力デバイスが見つかりませんでした"
-
-#~ msgid "_Device:"
-#~ msgstr "デバイス(_D):"
-
-#~ msgid "Disabled"
-#~ msgstr "無効"
-
-#~ msgid "Screen"
-#~ msgstr "画面"
-
-#~ msgid "Window"
-#~ msgstr "ウィンドウ"
-
-#~ msgid "_Mode:"
-#~ msgstr "モード(_M):"
-
-#~ msgid "Axes"
-#~ msgstr "軸"
-
-#~ msgid "Keys"
-#~ msgstr "キー"
-
-#~ msgid "_X:"
-#~ msgstr "X(_X):"
-
-#~ msgid "_Y:"
-#~ msgstr "Y(_Y):"
-
-#~ msgid "_Pressure:"
-#~ msgstr "圧力(_P):"
-
-#~ msgid "X _tilt:"
-#~ msgstr "X軸の傾き(_T):"
-
-#~ msgid "Y t_ilt:"
-#~ msgstr "Y軸の傾き(_I):"
-
-#~ msgid "_Wheel:"
-#~ msgstr "ホイール(_W):"
-
-#~ msgid "none"
-#~ msgstr "無し"
-
-#~ msgid "(disabled)"
-#~ msgstr "(無効)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(不明)"
-
-#~ msgid "Cl_ear"
-#~ msgstr "クリア(_E)"
-
-#~ msgid "Error printing"
-#~ msgstr "印刷エラー"
-
-#~ msgid "--- No Tip ---"
-#~ msgstr "--- Tip なし ---"
-
-#~ msgid "Gdk debugging flags to set"
-#~ msgstr "有効にする GDK のデバッグ・フラグを指定する"
-
-#~ msgid "Gdk debugging flags to unset"
-#~ msgstr "無効にする GDK のデバッグ・フラグを指定する"
-
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "画像ファイル '%s' にはデータがありません"
-
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "アニメーション '%s' の読み込みに失敗しました: 理由は不明ですが、おそらくア"
-#~ "ニメーションファイルが壊れていると思われます"
-
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "画像ロード・モジュールを読み込めません: %s: %s"
-
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "画像ロード・モジュール %s は正しいインターフェースをエクスポートしていませ"
-#~ "ん。GTK+ の別のバージョンのモジュールかも?"
-
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "画像の種類 '%s' はサポートされていません"
-
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "ファイル '%s' の画像ファイルの形式を認識できませんでした"
-
-#~ msgid "Unrecognized image file format"
-#~ msgstr "認識できない画像ファイルの形式"
-
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "画像 '%s' の読み込みに失敗しました: %s"
-
-#~ msgid "Error writing to image file: %s"
-#~ msgstr "画像ファイルの書き込みでエラー: %s"
-
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr ""
-#~ "お使いの gdk-pixbuf は画像ファイルの形式 %s の保存をサポートしていません"
-
-#~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "画像をコールバックへ保存するために必要なメモリが足りません"
-
-#~ msgid "Failed to open temporary file"
-#~ msgstr "作業用ファイルのオープンに失敗しました"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "作業用ファイルからの読み込みに失敗しました"
-
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "書き込みモードで '%s' のオープンに失敗しました: %s"
-
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr ""
-#~ "画像を書き込む際に '%s' を閉じることができなかったため、すべてのデータが保"
-#~ "存されていないかもしれません: %s"
-
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "画像をバッファへ保存するために必要なメモリが足りません"
-
-#~ msgid "Error writing to image stream"
-#~ msgstr "画像ストリームへ書き込む際にエラー"
-
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "内部エラー: 画像ロード・モジュール '%s' の処理に失敗しましたが、その原因を"
-#~ "取得できませんでした"
-
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "画像の種類 '%s' のインクリメンタル・ロードはサポートされていません"
-
-#~ msgid "Image header corrupt"
-#~ msgstr "画像ヘッダが壊れています"
-
-#~ msgid "Image format unknown"
-#~ msgstr "画像形式が不明です"
-
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "画像のピクセルデータが壊れています"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "%uバイトの画像バッファの確保に失敗しました"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "アニメーションに予期しないアイコン・チャンクがあります"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "サポートされていないアニメーションの種類です"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "アニメーションのヘッダがおかしいです"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "アニメーションを読み込むためのメモリが足りません"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "アニメーションに異常なチャンクがあります"
-
-#~ msgid "The ANI image format"
-#~ msgstr "ANI 画像形式"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "BMP 画像のヘッダのデータがおかしいです"
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "BMP 画像を読み込むために必要なメモリが足りません"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "サポートしていない BMP 画像のヘッダ・サイズです"
-
-#~ msgid "Topdown BMP images cannot be compressed"
-#~ msgstr "全体を覆う BMP 画像は圧縮できません"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "ファイルの終わりが早すぎます"
-
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "BMP 画像を読み込むためのメモリを確保できませんでした"
-
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "BMP ファイル名に書き込めませんでした"
-
-#~ msgid "The BMP image format"
-#~ msgstr "BMP 画像形式"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "GIF 画像の読み込みに失敗: %s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "GIF ファイルに何か足りないデータがあります (理由は不明ですが切りつめられた"
-#~ "かも?)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "GIF ローダの内部エラー (%s)"
-
-#~ msgid "Stack overflow"
-#~ msgstr "スタックあふれ"
-
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "(GIF 画像ローダ) この画像を理解できません"
-
-#~ msgid "Bad code encountered"
-#~ msgstr "おかしなコードに出会いました"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "GIF ファイルのテーブル・エントリが循環しています"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "GIF 画像を読み込むために必要なメモリが足りません"
-
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "GIF 画像でフレームを結合するために必要なメモリが足りません"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "GIF 画像が壊れています (おかしな LZW 圧縮です)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "ファイルは GIF ファイルではないようです"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "バージョン %s の GIF ファイル形式はサポートしていません"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "GIF 画像にグローバルなカラーマップがありません。そしてフレームにローカルな"
-#~ "カラーマップがありません"
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "GIF 画像は切りつめられたか、不完全になっています"
-
-#~ msgid "The GIF image format"
-#~ msgstr "GIF 画像形式"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "アイコンのヘッダがおかしいです"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "アイコンを読み込むために必要なメモリが足りません"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "アイコンの幅が 0 です"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "アイコンの高さが 0 です"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "圧縮アイコンはサポートされていません"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "サポートしていない種類のアイコンです"
-
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "アイコン・ファイルを読み込むために必要なメモリが足りません"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "アイコンとして保存するには画像が大きすぎます"
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "カーソルのホットスポットより外側の画像です"
-
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "アイコン・ファイルとしてサポートされない色深度です: %d"
-
-#~ msgid "The ICO image format"
-#~ msgstr "ICO 画像形式"
-
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "ICNS 画像を読み込む際にエラー: %s"
-
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "ICNS ファイルをデコードできませんでした"
-
-#~ msgid "The ICNS image format"
-#~ msgstr "ICNS 画像形式"
-
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "ストリームのメモリを確保できませんでした"
-
-#~ msgid "Couldn't decode image"
-#~ msgstr "画像をデコードできませんでした"
-
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "変換した JPEG2000 の幅または高さが 0 です"
-
-#~ msgid "Image type currently not supported"
-#~ msgstr "画像の種類はサポートされていません"
-
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "色のプロファイルで使用するメモリを確保できませんでした"
-
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "JPEG 2000 のファイルをオープンするために必要なメモリが足りません"
-
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "画像データを格納するためのメモリを確保できませんでした"
-
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "JPEG 2000 画像形式"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "JPEG 画像ファイル (%s) の解釈でエラー"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "画像の読み込みに必要なメモリがありません。アプリケーションをいくつか終了し"
-#~ "てメモリを解放してください"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "サポートしていない JPEG のカラー・スペースです (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "JPEG 画像を読み込むためのメモリを確保できませんでした"
-
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "変換した JPEG の幅または高さが 0 です"
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "JPEG の \"クオリティ\" は 0〜100 の値にしてください。値 '%s' を解析できま"
-#~ "せんでした"
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "JPEG の \"クオリティ\" は 0〜100 の値にしてください。値 '%d' は確保されま"
-#~ "せん"
-
-#~ msgid "The JPEG image format"
-#~ msgstr "JPEG 画像形式"
-
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "ヘッダのメモリを確保できませんでした"
-
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "コンテキスト・バッファ用のメモリを確保できませんでした"
-
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "画像の幅と/または高さが無効です"
-
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "サポートしていない bpp を保持しています"
-
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "サポートしていない数の %d ビット・プレーンを保持しています"
-
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "新しい pixbuf を生成できませんでした"
-
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "行のデータ用のメモリを確保できませんでした"
-
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "パレット・データ用のメモリを確保できませんでした"
-
-#~ msgid "Didn't get all lines of PCX image"
-#~ msgstr "PCX 画像のすべての行を取得できません"
-
-#~ msgid "No palette found at end of PCX data"
-#~ msgstr "PCX データ末尾のパレットが見つかりません"
-
-#~ msgid "The PCX image format"
-#~ msgstr "PCX 画像形式"
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "PNG 画像のチャンネル毎のビット数がおかしいです"
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "変換した PNG の幅または高さが 0 です"
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "変換した PNG のチャンネル毎のビット数が 8 ではありません"
-
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "変換した PNG は RGB でも RGBA でもありません"
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "変換した PNG のチャンネル数がサポートされているものではありません。3 また"
-#~ "は 4 にしてください"
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "PNG 画像ファイルに致命的なエラー: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "PNG 画像を読み込むために必要なメモリが足りません"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "%ldx%ld の画像を保存するために必要なメモリが足りません。アプリケーションを"
-#~ "いくつか終了してメモリの使用量を減らしてください"
-
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "PNG 画像ファイルの読み込みで致命的なエラー"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "PNG 画像ファイルの読み込みで致命的なエラー: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "PNG のテキスト・チャンクのキーは 1〜79 文字にしてください"
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "PNG のテキスト・チャンクのキーは ASCII 文字にしてください"
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "PNG の圧縮レベルは 0〜9 の値にしてください。値 '%s' を解析できませんでした"
-
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "PNG の圧縮レベルは 0〜9 の値にしてください。値 '%d' は確保されません"
-
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr ""
-#~ "PNG のテキスト・チャンク %s の値を ISO-8859-1 エンコーディングに変換できま"
-#~ "せん"
-
-#~ msgid "The PNG image format"
-#~ msgstr "PNG 画像形式"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "PNM ローダは整数を期待していたのですが、整数ではありませんでした"
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "PNM ファイルの最初のバイトが正しくありません"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "PNM ファイルが認識可能な PNM サブ形式ではありません"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "PNM ファイルの画像の幅が 0 です"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "PNM ファイルの画像の高さが 0 です"
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "PNM ファイルの色の最大値が 0 です"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "PNM ファイルの色の最大値が大きすぎます"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "ロー PNM 画像の形式がおかしいです"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "PNM 画像ローダはこの PNM サブ形式をサポートしていません"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr "ロー PNM 形式ではサンプルデータの前に空白文字が 1 つだけ必要です"
-
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "PNM 画像を読み込むためのメモリを確保できません"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "PNM コンテキスト構造を読み込むために必要なメモリが足りません"
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "PNM 画像データが予期せずに終わっています"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "PNM ファイルを読み込むために必要なメモリが足りません"
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "PNM/PBM/PGM/PPM 画像形式ファミリ"
-
-#, fuzzy
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "ヘッダの書き込みに失敗しました\n"
-
-#, fuzzy
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "%uバイトの画像バッファの確保に失敗しました"
-
-#, fuzzy
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "GIF 画像の読み込みに失敗: %s"
-
-#, fuzzy
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "TGA コンテキスト構造体用のメモリを確保できません"
-
-#, fuzzy
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "フォルダ・インデックスの書き込みに失敗しました\n"
-
-#, fuzzy
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "TIFF 画像のオープンに失敗しました"
-
-#, fuzzy
-#~ msgid "The QTIF image format"
-#~ msgstr "TIFF 画像形式"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "RAS 画像のヘッダのデータがおかしいです"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "不明な種類の RAS 画像です"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "サポートしていない RAS 画像の一種です"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "RAS 画像を読み込むために必要なメモリが足りません"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Sun ラスタ画像形式"
-
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "IOBuffer 構造体のメモリを確保できません"
-
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "IOBuffer データのメモリを確保できません"
-
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "IOBuffer データのメモリを再確保できません"
-
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "一時的な IOBuffer データのメモリを確保できません"
-
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "新しい pixbuf を確保できません"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "画像は切りつめられたか、不完全になっています"
-
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "カラーマップ構造体を確保できません"
-
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "カラーマップのエントリを確保できません"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "カラーマップのエントリの bitdepth が予期しないものです"
-
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "TGA ヘッダのメモリを確保できません"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "TGA 画像の次元がおかしいです"
-
-#~ msgid "TGA image type not supported"
-#~ msgstr "TGA 画像はサポートしていません"
-
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "TGA コンテキスト構造体用のメモリを確保できません"
-
-#~ msgid "Excess data in file"
-#~ msgstr "ファイルのデータが多すぎます"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Targa 画像形式"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "画像の幅を取得できません (おかしな TIFF ファイル)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "画像の高さを取得できません (おかしな TIFF ファイル)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "TIFF 画像の幅か高さが 0 です"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "TIFF 画像の次元が大きすぎます"
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "TIFF ファイルをオープンするために必要なメモリが足りません"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "TIFF ファイルから RGB データの読み込むに失敗しました"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "TIFF 画像のオープンに失敗しました"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "TIFFClose 操作に失敗しました"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "TIFF 画像を読み込むのに失敗しました"
-
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "TIFF 画像の保存に失敗しました"
-
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "TIFF データの書き込みに失敗しました"
-
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "TIFF ファイルに書き込めませんでした"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "TIFF 画像形式"
-
-#~ msgid "Image has zero width"
-#~ msgstr "画像の幅が 0 です"
-
-#~ msgid "Image has zero height"
-#~ msgstr "画像の高さが 0 です"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "画像を読み込むために必要なメモリが足りません"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "残りのデータを保存できませんでした"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "WBMP 画像形式"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "おかしな XBM 形式です"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "XBM 画像を読み込むために必要なメモリが足りません"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "XBM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
-
-#~ msgid "The XBM image format"
-#~ msgstr "XBM 画像形式"
-
-#~ msgid "No XPM header found"
-#~ msgstr "XPM ヘッダが見つかりませんでした"
-
-#~ msgid "Invalid XPM header"
-#~ msgstr "おかしな XPM ヘッダです"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "XPM ファイルの画像の幅が 0 以下です"
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "XPM ファイルの画像の高さが 0 以下です"
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM のピクセル当たりの文字数がおかしいです"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "XPM ファイルの色の数がおかしいです"
-
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "XPM 画像を読み込むためのメモリを確保できません"
-
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "XPM のカラーマップを読み込めません"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "XPM 画像を読み込む際に一時ファイルへの書き込みに失敗しました"
-
-#~ msgid "The XPM image format"
-#~ msgstr "XPM 画像形式"
-
-#~ msgid "The EMF image format"
-#~ msgstr "EMF 画像形式"
-
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "メモリを確保できませんでした: %s"
-
-#~ msgid "Could not create stream: %s"
-#~ msgstr "ストリームを生成できませんでした: %s"
-
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "ストリームの中を検索できませんでした: %s"
-
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "ストリームから読み込めませんでした: %s"
-
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "BMP 画像を読み込めませんでした"
-
-#~ msgid "Couldn't load metafile"
-#~ msgstr "メタ・ファイルを読み込めませんでした"
-
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "GDI+ ではサポートしていない画像です"
-
-#~ msgid "Couldn't save"
-#~ msgstr "保存できませんでした"
-
-#~ msgid "The WMF image format"
-#~ msgstr "WMF 画像形式"
-
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "プリンタ '%s' が接続されていないようです。"
-
-#~ msgid "(Empty)"
-#~ msgstr "(空)"
-
-#, fuzzy
-#~ msgid "<b>_Search:</b>"
-#~ msgstr "検索(_S):"
-
-#, fuzzy
-#~ msgid "<b>Recently Used</b>"
-#~ msgstr "最近開いたファイル"
+msgstr "テスト用プリンターに印刷する"
