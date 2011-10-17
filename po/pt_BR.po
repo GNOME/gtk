@@ -12,7 +12,7 @@
 # Fábio Nogueira <deb-user-ba@ubuntu.com>, 2008.
 # Leonardo Ferreira Fontenelle <leonardof@gnome.org>, 2006-2009.
 # Vladimir Melo <vmelo@gnome.org>, 2009.
-# André Gondim <andregondim@ubuntu.com>, 2009.
+# André Gondim <andregondim@ubuntu.com>, 2009, 2011.
 # Rodrigo L. M. Flores <mail@rodrigoflores.org>
 # Jonh Wendell <jwendell@gnome.org>, 2009, 2010.
 # Fabrício Godoy <skarllot@gmail.com>, 2010.
@@ -21,10 +21,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-14 08:46-0400\n"
-"PO-Revision-Date: 2011-09-13 22:42-0300\n"
-"Last-Translator: Antonio Fernandes C. Neto <fernandesn@gnome.org>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2011-10-12 03:32+0000\n"
+"PO-Revision-Date: 2011-10-13 10:30-0300\n"
+"Last-Translator: André Gondim <andregondim@ubuntu.com>\n"
 "Language-Team: Português Brasileiro <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -832,7 +833,7 @@ msgstr "Inválido"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:432 ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:432 ../gtk/gtkcellrendereraccel.c:748
 msgid "New accelerator..."
 msgstr "Novo acelerador..."
 
@@ -974,7 +975,7 @@ msgstr "A cor que você escolheu."
 msgid "_Save color here"
 msgstr "_Salvar cor aqui"
 
-#: ../gtk/gtkcolorsel.c:1664
+#: ../gtk/gtkcolorsel.c:1663
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1065,7 +1066,7 @@ msgstr "As teclas Caps e Num Lock estão ativas"
 
 #: ../gtk/gtkentry.c:10450
 msgid "Num Lock is on"
-msgstr "A tecla Caps Lock está ativa"
+msgstr "A tecla Num Lock está ativa"
 
 #: ../gtk/gtkentry.c:10452
 msgid "Caps Lock is on"
@@ -1195,7 +1196,7 @@ msgstr "%1$s em %2$s"
 msgid "Search"
 msgstr "Pesquisar"
 
-#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4991
+#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4988
 msgid "Recently Used"
 msgstr "Usado recentemente"
 
@@ -1254,141 +1255,141 @@ msgstr "_Locais"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Adiciona a pasta selecionada aos Marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:3946
+#: ../gtk/gtkfilechooserdefault.c:3943
 msgid "Could not select file"
 msgstr "Não foi possível selecionar arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4171
+#: ../gtk/gtkfilechooserdefault.c:4168
 msgid "_Visit this file"
 msgstr "_Visitar este arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4174
+#: ../gtk/gtkfilechooserdefault.c:4171
 msgid "_Copy file's location"
 msgstr "_Copiar localização do arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4177
+#: ../gtk/gtkfilechooserdefault.c:4174
 msgid "_Add to Bookmarks"
 msgstr "_Adicionar aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:4184
+#: ../gtk/gtkfilechooserdefault.c:4181
 msgid "Show _Hidden Files"
 msgstr "Mostrar arquivos _ocultos"
 
-#: ../gtk/gtkfilechooserdefault.c:4187
+#: ../gtk/gtkfilechooserdefault.c:4184
 msgid "Show _Size Column"
 msgstr "Mostrar coluna _Tamanho"
 
-#: ../gtk/gtkfilechooserdefault.c:4412
+#: ../gtk/gtkfilechooserdefault.c:4409
 msgid "Files"
 msgstr "Arquivos"
 
-#: ../gtk/gtkfilechooserdefault.c:4463
+#: ../gtk/gtkfilechooserdefault.c:4460
 msgid "Name"
 msgstr "Nome"
 
-#: ../gtk/gtkfilechooserdefault.c:4486
+#: ../gtk/gtkfilechooserdefault.c:4483
 msgid "Size"
 msgstr "Tamanho"
 
-#: ../gtk/gtkfilechooserdefault.c:4500
+#: ../gtk/gtkfilechooserdefault.c:4497
 msgid "Modified"
 msgstr "Modificado"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:799
+#: ../gtk/gtkfilechooserdefault.c:4592 ../gtk/gtkprinteroptionwidget.c:799
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: ../gtk/gtkfilechooserdefault.c:4829
+#: ../gtk/gtkfilechooserdefault.c:4826
 msgid "Type a file name"
 msgstr "Digite um nome de arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4876 ../gtk/gtkfilechooserdefault.c:4887
+#: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
 msgid "Please select a folder below"
 msgstr "Por favor, selecione uma pasta abaixo"
 
-#: ../gtk/gtkfilechooserdefault.c:4882
+#: ../gtk/gtkfilechooserdefault.c:4879
 msgid "Please type a file name"
 msgstr "Por favor, digite um nome de arquivo"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4953
+#: ../gtk/gtkfilechooserdefault.c:4950
 msgid "Create Fo_lder"
 msgstr "Criar _pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:5001
+#: ../gtk/gtkfilechooserdefault.c:4998
 msgid "Search:"
 msgstr "Pesquisar:"
 
-#: ../gtk/gtkfilechooserdefault.c:5052
+#: ../gtk/gtkfilechooserdefault.c:5049
 msgid "_Location:"
 msgstr "Locali_zação:"
 
-#: ../gtk/gtkfilechooserdefault.c:5503
+#: ../gtk/gtkfilechooserdefault.c:5500
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5505
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6599
+#: ../gtk/gtkfilechooserdefault.c:6596
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Não foi possível ler o conteúdo de %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6603
+#: ../gtk/gtkfilechooserdefault.c:6600
 msgid "Could not read the contents of the folder"
 msgstr "Não foi possível ler o conteúdo da pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:6696 ../gtk/gtkfilechooserdefault.c:6764
-#: ../gtk/gtkfilechooserdefault.c:6916
+#: ../gtk/gtkfilechooserdefault.c:6693 ../gtk/gtkfilechooserdefault.c:6761
+#: ../gtk/gtkfilechooserdefault.c:6913
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../gtk/gtkfilechooserdefault.c:6711
+#: ../gtk/gtkfilechooserdefault.c:6708
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6713
+#: ../gtk/gtkfilechooserdefault.c:6710
 msgid "Yesterday at %H:%M"
 msgstr "Ontem às %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7388
+#: ../gtk/gtkfilechooserdefault.c:7385
 msgid "Cannot change to folder because it is not local"
 msgstr "Não foi possível ir para a pasta porque ela não é local"
 
-#: ../gtk/gtkfilechooserdefault.c:7988 ../gtk/gtkfilechooserdefault.c:8009
+#: ../gtk/gtkfilechooserdefault.c:7985 ../gtk/gtkfilechooserdefault.c:8006
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "O atalho %s já existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8099
+#: ../gtk/gtkfilechooserdefault.c:8096
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atalho %s não existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:550
+#: ../gtk/gtkfilechooserdefault.c:8342 ../gtk/gtkprintunixdialog.c:550
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Um arquivo com o nome \"%s\" já existe. Você deseja substituí-lo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8348 ../gtk/gtkprintunixdialog.c:554
+#: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:554
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O arquivo já existe em \"%s\". Substituí-lo irá sobrescrever seu conteúdo."
 
-#: ../gtk/gtkfilechooserdefault.c:8353 ../gtk/gtkprintunixdialog.c:561
+#: ../gtk/gtkfilechooserdefault.c:8350 ../gtk/gtkprintunixdialog.c:561
 msgid "_Replace"
 msgstr "Substitui_r"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9157
 msgid "Could not start the search process"
 msgstr "Não foi possível iniciar o processo de pesquisa"
 
-#: ../gtk/gtkfilechooserdefault.c:9161
+#: ../gtk/gtkfilechooserdefault.c:9158
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1396,11 +1397,11 @@ msgstr ""
 "Não foi possível estabelecer uma conexão com o serviço indexador. Por favor, "
 "certifique-se de que o serviço está em execução."
 
-#: ../gtk/gtkfilechooserdefault.c:9175
+#: ../gtk/gtkfilechooserdefault.c:9172
 msgid "Could not send the search request"
 msgstr "Não foi possível enviar o pedido de pesquisa"
 
-#: ../gtk/gtkfilechooserdefault.c:9776
+#: ../gtk/gtkfilechooserdefault.c:9773
 #, c-format
 msgid "Could not mount %s"
 msgstr "Não foi possível montar %s"
@@ -1481,7 +1482,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Selecione uma fonte"
 
-#: ../gtk/gtkfontbutton.c:1126
+#: ../gtk/gtkfontbutton.c:1122
 msgid "Font"
 msgstr "Fonte"
 
@@ -1489,17 +1490,17 @@ msgstr "Fonte"
 msgid "Font Selection"
 msgstr "Seleção de fonte"
 
-#: ../gtk/gtkfontchooserwidget.c:118
+#: ../gtk/gtkfontchooserwidget.c:113
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Nenhuma fonte corresponde com sua pesquisa. Você pode revisar sua pesquisa e "
 "tentar novamente."
 
-#: ../gtk/gtkfontchooserwidget.c:642
+#: ../gtk/gtkfontchooserwidget.c:612
 msgid "Search font name"
 msgstr "Pesquisar nome da fonte"
 
-#: ../gtk/gtkfontchooserwidget.c:911
+#: ../gtk/gtkfontchooserwidget.c:948
 msgid "Font Family"
 msgstr "Font Family"
 
@@ -1557,20 +1558,20 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6294
+#: ../gtk/gtklabel.c:6295
 msgid "_Open Link"
 msgstr "_Abrir o link"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6306
+#: ../gtk/gtklabel.c:6307
 msgid "Copy _Link Address"
 msgstr "Copiar endereço do _link"
 
-#: ../gtk/gtklinkbutton.c:484
+#: ../gtk/gtklinkbutton.c:495
 msgid "Copy URL"
 msgstr "Copiar URL"
 
-#: ../gtk/gtklinkbutton.c:647
+#: ../gtk/gtklinkbutton.c:658
 msgid "Invalid URI"
 msgstr "URI inválida"
 
@@ -1708,27 +1709,27 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "Não é possível matar o processo PID %d. Operação não implementada."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:959
+#: ../gtk/gtkmountoperation-x11.c:960
 msgid "Terminal Pager"
 msgstr "Paginador do terminal"
 
-#: ../gtk/gtkmountoperation-x11.c:960
+#: ../gtk/gtkmountoperation-x11.c:961
 msgid "Top Command"
 msgstr "Comando top"
 
-#: ../gtk/gtkmountoperation-x11.c:961
+#: ../gtk/gtkmountoperation-x11.c:962
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:962
+#: ../gtk/gtkmountoperation-x11.c:963
 msgid "Bourne Shell"
 msgstr "Bourne Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:963
+#: ../gtk/gtkmountoperation-x11.c:964
 msgid "Z Shell"
 msgstr "Z Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:1060
+#: ../gtk/gtkmountoperation-x11.c:1061
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Não pode finalizar o processo PID %d: %s"
