@@ -1,5 +1,47 @@
+Overview of Changes from GTK+ 2.24.6 to 2.24.7
+==============================================
+
+* Filechooser updates:
+ - Sort recent files by age
+ - Don't ellipsize filter names
+
+* OS X updates:
+ - Disable mnemonics
+ - Map Alt/Option modifier to MOD1, Command to MOD2
+ - Make Option work as a modifier
+ - Allow <Primary> in accel strings
+ - Use platform-appropriate modifiers for extending
+   and modifying selections
+ - Use platform-appropriate button events for context
+   menus
+ - Fix keysym -> unicode and upper/lowercase mapping
+
+* Bugs fixed:
+ 514843 gtkfilechooser should be more robust to malformed...
+ 616544 win32 drag and drop (DnD) broken for GTK+ 3
+ 617583 Dead accents keys don't work in GTK+ applications on...
+ 624270 crash in gtk_entry_completion_default_completion_func
+ 628396 Option to "Forget Previous Running Applications"
+ 630962 double click isn't catched
+ 649979 Argument count TypeError from Gtk.TreeView.enable_mo...
+ 653450 gtkfilechooser crashes when adding favorite
+ 653847 `GDK_DISPLAY' should suggest `gdk_x11_get_default_...
+ 655057 rendering issues with map plugin
+ 656053 gtk_combo_box_text_remove isn't documented
+ 657186 Recently-used list is not sorted by default
+ 657770 Write to released memory in gtkdnd-quartz.c
+ 658767 Drag and Drop NSEvent capture is racy
+ 658772 Directory paths for resource directories are hard-coded
+ 658841 Ensure native window in gdk_win32_drawable_get_handle()
+ 658842 Fix win32 _gdk_windowing_window_at_pointer - port to gtk3
+ 659907 gdk_quartz_draw_opaque_stippled_pattern crashes
+
+* Translation updates
+ Belarusian
+
+
 Overview of Changes from GTK+ 2.24.5 to 2.24.6
-=============================================
+==============================================
 
 * Filechooser updates:
  - Remove the expander in Save mode
