@@ -1855,6 +1855,12 @@ ensure_stacking_on_activate_app (MSG       *msg,
     }
 }
 
+#define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
+			     GDK_BUTTON2_MASK | \
+			     GDK_BUTTON3_MASK | \
+			     GDK_BUTTON4_MASK | \
+			     GDK_BUTTON5_MASK)
+
 static gboolean
 gdk_event_translate (MSG  *msg,
 		     gint *ret_valp)
@@ -2261,7 +2267,12 @@ gdk_event_translate (MSG  *msg,
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-      /* TODO_CSW? Emulate X11's automatic active grab */
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab == NULL)
+	{
+	  SetCapture (GDK_WINDOW_HWND (window));
+	}
+
       generate_button_event (GDK_BUTTON_PRESS, button,
 			     window, msg);
 
@@ -2300,6 +2311,16 @@ gdk_event_translate (MSG  *msg,
 	  break;
 	}
 #endif
+
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab != NULL && grab->implicit)
+	{
+	  gint state = build_pointer_event_state (msg);
+
+	  /* We keep the implicit grab until no buttons at all are held down */
+	  if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
+	    ReleaseCapture ();
+	}
 
       generate_button_event (GDK_BUTTON_RELEASE, button,
 			     window, msg);
