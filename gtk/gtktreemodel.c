@@ -874,9 +874,9 @@ gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
 
 /**
  * gtk_tree_path_free:
- * @path: a #GtkTreePath
+ * @path: (allow-none): a #GtkTreePath
  *
- * Frees @path.
+ * Frees @path. If @path is %NULL, it simply returns.
  */
 void
 gtk_tree_path_free (GtkTreePath *path)
