@@ -657,7 +657,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   if (!title || !*title)
     title = "";
 
-  private->event_mask = GDK_STRUCTURE_MASK | event_mask;
+  impl->native_event_mask = GDK_STRUCTURE_MASK | event_mask;
       
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
@@ -2636,21 +2636,29 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
 static GdkEventMask  
 gdk_win32_window_get_events (GdkWindow *window)
 {
+  GdkWindowImplWin32 *impl;
+
   if (GDK_WINDOW_DESTROYED (window))
     return 0;
 
-  return GDK_WINDOW_OBJECT (window)->event_mask;
+  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
+  return impl->native_event_mask;
 }
 
 static void          
 gdk_win32_window_set_events (GdkWindow   *window,
-		       GdkEventMask event_mask)
+			     GdkEventMask event_mask)
 {
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
   /* gdk_window_new() always sets the GDK_STRUCTURE_MASK, so better
    * set it here, too. Not that I know or remember why it is
    * necessary, will have to test some day.
    */
-  GDK_WINDOW_OBJECT (window)->event_mask = GDK_STRUCTURE_MASK | event_mask;
+  impl->native_event_mask = GDK_STRUCTURE_MASK | event_mask;
 }
 
 static void
