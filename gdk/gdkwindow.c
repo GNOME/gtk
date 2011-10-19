@@ -9342,12 +9342,12 @@ proxy_button_event (GdkEvent *source_event,
       _gdk_display_add_device_grab  (display,
                                      device,
                                      pointer_window,
-                                     toplevel_window,
+                                     event_window,
                                      GDK_OWNERSHIP_NONE,
                                      FALSE,
                                      gdk_window_get_events (pointer_window),
                                      serial,
-				      time_,
+				     time_,
                                      TRUE);
       _gdk_display_device_grab_update (display, device, source_device, serial);
     }
