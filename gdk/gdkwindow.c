@@ -10745,7 +10745,7 @@ proxy_button_event (GdkEvent *source_event,
 
       _gdk_display_add_pointer_grab  (display,
 				      pointer_window,
-				      toplevel_window,
+				      event_window,
 				      FALSE,
 				      gdk_window_get_events (pointer_window),
 				      serial,
