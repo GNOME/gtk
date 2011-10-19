@@ -112,7 +112,7 @@ static GSourceFuncs event_funcs = {
 
 GPollFD event_poll_fd;
 
-static GdkWindow *current_toplevel = NULL;
+static GdkWindow *mouse_window = NULL;
 static gint current_x, current_y;
 static gint current_root_x, current_root_y;
 static UINT client_message;
@@ -129,13 +129,6 @@ static UINT     modal_timer;
 static UINT     sync_timer = 0;
 
 static int debug_indent = 0;
-
-static void
-synthesize_enter_or_leave_event (GdkWindow    	*window,
-				 MSG          	*msg,
-				 GdkEventType 	 type,
-				 GdkCrossingMode mode,
-				 GdkNotifyType detail);
 
 static void
 assign_object (gpointer lhsp,
@@ -531,45 +524,44 @@ static GdkWindow *
 find_window_for_mouse_event (GdkWindow* reported_window,
 			     MSG*       msg)
 {
-  HWND hwnd;
-  POINTS points;
   POINT pt;
-  GdkWindow* other_window = NULL;
+  GdkWindow *event_window;
+  HWND hwnd;
+  RECT rect;
+  GdkPointerGrabInfo *grab;
 
-  if (!_gdk_display_get_last_pointer_grab (_gdk_display))
+  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+  if (grab == NULL)
     return reported_window;
 
-  points = MAKEPOINTS (msg->lParam);
-  pt.x = points.x;
-  pt.y = points.y;
-  ClientToScreen (msg->hwnd, &pt);
+  pt = msg->pt;
 
-  hwnd = WindowFromPoint (pt);
-
-  if (hwnd != NULL)
+  if (!grab->owner_events)
+    event_window = grab->native_window;
+  else
     {
-      RECT rect;
+      event_window = NULL;
+      hwnd = WindowFromPoint (pt);
+      if (hwnd != NULL)
+	{
+	  POINT client_pt = pt;
 
-      GetClientRect (hwnd, &rect);
-      ScreenToClient (hwnd, &pt);
-      if (!PtInRect (&rect, pt))
-	return _gdk_root;
-
-      other_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
+	  ScreenToClient (hwnd, &client_pt);
+	  GetClientRect (hwnd, &rect);
+	  if (PtInRect (&rect, client_pt))
+	    event_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
+	}
+      if (event_window == NULL)
+	event_window = grab->native_window;
     }
 
-  if (other_window == NULL)
-    return _gdk_root;
-
   /* need to also adjust the coordinates to the new window */
-  pt.x = points.x;
-  pt.y = points.y;
-  ClientToScreen (msg->hwnd, &pt);
-  ScreenToClient (GDK_WINDOW_HWND (other_window), &pt);
+  ScreenToClient (GDK_WINDOW_HWND (event_window), &pt);
+
   /* ATTENTION: need to update client coords */
   msg->lParam = MAKELPARAM (pt.x, pt.y);
 
-  return other_window;
+  return event_window;
 }
 
 GdkGrabStatus
@@ -1205,36 +1197,225 @@ do_show_window (GdkWindow *window, gboolean hide_window)
 }
 
 static void
-synthesize_enter_or_leave_event (GdkWindow    	*window,
-				 MSG          	*msg,
-				 GdkEventType 	 type,
-				 GdkCrossingMode mode,
-				 GdkNotifyType detail)
+send_crossing_event (GdkDisplay                 *display,
+		     GdkWindowObject            *window,
+		     GdkEventType                type,
+		     GdkCrossingMode             mode,
+		     GdkNotifyType               notify_type,
+		     GdkWindow                  *subwindow,
+		     POINT                      *screen_pt,
+		     GdkModifierType             mask,
+		     guint32                     time_)
 {
   GdkEvent *event;
+  GdkPointerGrabInfo *grab;
   POINT pt;
 
-  pt = msg->pt;
+  grab = _gdk_display_has_pointer_grab (display, 0);
+
+  if (grab != NULL &&
+      !grab->owner_events &&
+      mode != GDK_CROSSING_UNGRAB)
+    {
+      /* !owner_event => only report events wrt grab window, ignore rest */
+      if ((GdkWindow *)window != grab->native_window)
+	return;
+    }
+
+  pt = *screen_pt;
   ScreenToClient (GDK_WINDOW_HWND (window), &pt);
   
   event = gdk_event_new (type);
-  event->crossing.window = window;
-  event->crossing.subwindow = NULL;
-  event->crossing.time = _gdk_win32_get_next_tick (msg->time);
+  event->crossing.window = (GdkWindow *)window;
+  event->crossing.subwindow = subwindow;
+  event->crossing.time = _gdk_win32_get_next_tick (time_);
   event->crossing.x = pt.x;
   event->crossing.y = pt.y;
-  event->crossing.x_root = msg->pt.x + _gdk_offset_x;
-  event->crossing.y_root = msg->pt.y + _gdk_offset_y;
+  event->crossing.x_root = screen_pt->x + _gdk_offset_x;
+  event->crossing.y_root = screen_pt->y + _gdk_offset_y;
   event->crossing.mode = mode;
-  event->crossing.detail = detail;
-  event->crossing.focus = TRUE; /* FIXME: Set correctly */
-  event->crossing.state = 0;	/* FIXME: Set correctly */
+  event->crossing.detail = notify_type;
+  event->crossing.mode = mode;
+  event->crossing.detail = notify_type;
+  event->crossing.focus = FALSE;
+  event->crossing.state = mask;
 
   _gdk_win32_append_event (event);
-  
+
   if (type == GDK_ENTER_NOTIFY &&
       ((GdkWindowObject *) window)->extension_events != 0)
-    _gdk_input_enter_event (window);
+    _gdk_input_enter_event ((GdkWindow *)window);
+}
+
+static GdkWindowObject *
+get_native_parent (GdkWindowObject *window)
+{
+  if (window->parent != NULL)
+    return window->parent->impl_window;
+  return NULL;
+}
+
+
+static GdkWindowObject *
+find_common_ancestor (GdkWindowObject *win1,
+		      GdkWindowObject *win2)
+{
+  GdkWindowObject *tmp;
+  GList *path1 = NULL, *path2 = NULL;
+  GList *list1, *list2;
+
+  tmp = win1;
+  while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
+    {
+      path1 = g_list_prepend (path1, tmp);
+      tmp = get_native_parent (tmp);
+    }
+
+  tmp = win2;
+  while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
+    {
+      path2 = g_list_prepend (path2, tmp);
+      tmp = get_native_parent (tmp);
+    }
+
+  list1 = path1;
+  list2 = path2;
+  tmp = NULL;
+  while (list1 && list2 && (list1->data == list2->data))
+    {
+      tmp = (GdkWindowObject *)list1->data;
+      list1 = g_list_next (list1);
+      list2 = g_list_next (list2);
+    }
+  g_list_free (path1);
+  g_list_free (path2);
+
+  return tmp;
+}
+
+void
+synthesize_crossing_events (GdkDisplay                 *display,
+			    GdkWindow                  *src,
+			    GdkWindow                  *dest,
+			    GdkCrossingMode             mode,
+			    POINT                      *screen_pt,
+			    GdkModifierType             mask,
+			    guint32                     time_,
+			    gboolean                    non_linear)
+{
+  GdkWindowObject *c;
+  GdkWindowObject *win, *last, *next;
+  GList *path, *list;
+  GdkWindowObject *a;
+  GdkWindowObject *b;
+  GdkNotifyType notify_type;
+
+  a = (GdkWindowObject *)src;
+  b = (GdkWindowObject *)dest;
+  if (a == b)
+    return; /* No crossings generated between src and dest */
+
+  c = find_common_ancestor (a, b);
+
+  non_linear |= (c != a) && (c != b);
+
+  if (a) /* There might not be a source (i.e. if no previous pointer_in_window) */
+    {
+      /* Traverse up from a to (excluding) c sending leave events */
+      if (non_linear)
+	notify_type = GDK_NOTIFY_NONLINEAR;
+      else if (c == a)
+	notify_type = GDK_NOTIFY_INFERIOR;
+      else
+	notify_type = GDK_NOTIFY_ANCESTOR;
+      send_crossing_event (display,
+			   a, GDK_LEAVE_NOTIFY,
+			   mode,
+			   notify_type,
+			   NULL,
+			   screen_pt,
+			   mask, time_);
+
+      if (c != a)
+	{
+	  if (non_linear)
+	    notify_type = GDK_NOTIFY_NONLINEAR_VIRTUAL;
+	  else
+	    notify_type = GDK_NOTIFY_VIRTUAL;
+
+	  last = a;
+	  win = get_native_parent (a);
+	  while (win != c && win->window_type != GDK_WINDOW_ROOT)
+	    {
+	      send_crossing_event (display,
+				   win, GDK_LEAVE_NOTIFY,
+				   mode,
+				   notify_type,
+				   (GdkWindow *)last,
+				   screen_pt,
+				   mask, time_);
+
+	      last = win;
+	      win = get_native_parent (win);
+	    }
+	}
+    }
+
+  if (b) /* Might not be a dest, e.g. if we're moving out of the window */
+    {
+      /* Traverse down from c to b */
+      if (c != b)
+	{
+	  path = NULL;
+	  win = get_native_parent (b);
+	  while (win != c && win->window_type != GDK_WINDOW_ROOT)
+	    {
+	      path = g_list_prepend (path, win);
+	      win = get_native_parent (win);
+	    }
+
+	  if (non_linear)
+	    notify_type = GDK_NOTIFY_NONLINEAR_VIRTUAL;
+	  else
+	    notify_type = GDK_NOTIFY_VIRTUAL;
+
+	  list = path;
+	  while (list)
+	    {
+	      win = (GdkWindowObject *)list->data;
+	      list = g_list_next (list);
+	      if (list)
+		next = (GdkWindowObject *)list->data;
+	      else
+		next = b;
+
+	      send_crossing_event (display,
+				   win, GDK_ENTER_NOTIFY,
+				   mode,
+				   notify_type,
+				   (GdkWindow *)next,
+				   screen_pt,
+				   mask, time_);
+	    }
+	  g_list_free (path);
+	}
+
+
+      if (non_linear)
+	notify_type = GDK_NOTIFY_NONLINEAR;
+      else if (c == a)
+	notify_type = GDK_NOTIFY_ANCESTOR;
+      else
+	notify_type = GDK_NOTIFY_INFERIOR;
+
+      send_crossing_event (display,
+			   b, GDK_ENTER_NOTIFY,
+			   mode,
+			   notify_type,
+			   NULL,
+			   screen_pt,
+			   mask, time_);
+    }
 }
 			 
 static void
@@ -2319,7 +2500,29 @@ gdk_event_translate (MSG  *msg,
 
 	  /* We keep the implicit grab until no buttons at all are held down */
 	  if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
-	    ReleaseCapture ();
+	    {
+	      ReleaseCapture ();
+
+	      new_window = NULL;
+	      hwnd = WindowFromPoint (msg->pt);
+	      if (hwnd != NULL)
+		{
+		  POINT client_pt = msg->pt;
+
+		  ScreenToClient (hwnd, &client_pt);
+		  GetClientRect (hwnd, &rect);
+		  if (PtInRect (&rect, client_pt))
+		    new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
+		}
+	      synthesize_crossing_events (_gdk_display,
+					  grab->native_window, new_window,
+					  GDK_CROSSING_UNGRAB,
+					  &msg->pt,
+					  0, /* TODO: Set right mask */
+					  msg->time,
+					  FALSE);
+	      assign_object (&mouse_window, new_window);
+	    }
 	}
 
       generate_button_event (GDK_BUTTON_RELEASE, button,
@@ -2334,21 +2537,50 @@ gdk_event_translate (MSG  *msg,
 			 (gpointer) msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      assign_object (&window, find_window_for_mouse_event (window, msg));
-      toplevel = gdk_window_get_toplevel (window);
-      if (current_toplevel != toplevel)
+      new_window = window;
+
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab != NULL)
 	{
-	  GDK_NOTE (EVENTS, g_print (" toplevel %p -> %p", 
-	      current_toplevel ? GDK_WINDOW_HWND (current_toplevel) : NULL, 
-	      toplevel ? GDK_WINDOW_HWND (toplevel) : NULL));
-	  if (current_toplevel)
-	    synthesize_enter_or_leave_event (current_toplevel, msg, 
-					     GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-	  synthesize_enter_or_leave_event (toplevel, msg, 
-					   GDK_ENTER_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-	  assign_object (&current_toplevel, toplevel);
-	  track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (toplevel));
+	  POINT pt;
+	  pt = msg->pt;
+
+	  new_window = NULL;
+	  hwnd = WindowFromPoint (pt);
+	  if (hwnd != NULL)
+	    {
+	      POINT client_pt = pt;
+
+	      ScreenToClient (hwnd, &client_pt);
+	      GetClientRect (hwnd, &rect);
+	      if (PtInRect (&rect, client_pt))
+		new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
+	    }
+
+	  if (!grab->owner_events &&
+	      new_window != NULL &&
+	      new_window != grab->native_window)
+	    new_window = NULL;
 	}
+
+      if (mouse_window != new_window)
+	{
+	  GDK_NOTE (EVENTS, g_print (" mouse_sinwod %p -> %p",
+				     mouse_window ? GDK_WINDOW_HWND (mouse_window) : NULL, 
+				     new_window ? GDK_WINDOW_HWND (new_window) : NULL));
+	  synthesize_crossing_events (_gdk_display,
+				      mouse_window, new_window,
+				      GDK_CROSSING_NORMAL,
+				      &msg->pt,
+				      0, /* TODO: Set right mask */
+				      msg->time,
+				      FALSE);
+	  assign_object (&mouse_window, new_window);
+	  if (new_window != NULL)
+	    track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (new_window));
+	}
+
+      assign_object (&window, find_window_for_mouse_event (window, msg));
 
       /* If we haven't moved, don't create any GDK event. Windows
        * sends WM_MOUSEMOVE messages after a new window is shows under
@@ -2388,21 +2620,26 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %d (%ld,%ld)",
 				 HIWORD (msg->wParam), msg->pt.x, msg->pt.y));
 
-      if (!gdk_win32_handle_table_lookup ((GdkNativeWindow) WindowFromPoint (msg->pt)))
+      new_window = NULL;
+      hwnd = WindowFromPoint (msg->pt);
+      if (hwnd != NULL)
 	{
-	  /* we are only interested if we don't know the new window */
-	  if (current_toplevel)
-	    synthesize_enter_or_leave_event (current_toplevel, msg,
-					     GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-	  assign_object (&current_toplevel, NULL);
+	  POINT client_pt = msg->pt;
+
+	  ScreenToClient (hwnd, &client_pt);
+	  GetClientRect (hwnd, &rect);
+	  if (PtInRect (&rect, client_pt))
+	    new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
 	}
-      else if (window != gdk_window_get_toplevel (window)) /* xxx: only for native child windows? */
-	{
-	  /* XXX: this used to be ignored pre-csw, but I think we need at least some 
-	   * of the leave events */
-	  synthesize_enter_or_leave_event (window, msg,
-					   GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-	}
+
+      synthesize_crossing_events (_gdk_display,
+				  mouse_window, new_window,
+				  GDK_CROSSING_NORMAL,
+				  &msg->pt,
+				  0, /* TODO: Set right mask */
+				  msg->time,
+				  FALSE);
+      assign_object (&mouse_window, new_window);
 
       return_val = TRUE;
       break;
@@ -2592,14 +2829,6 @@ gdk_event_translate (MSG  *msg,
       if (grab != NULL)
 	{
 	  grab_window = grab->window;
-	}
-      else if (window != gdk_window_get_toplevel (window)) /* xxx: only for native child windows? */
-	{
-	  /* when entering a new window we are Windows is always asking for a new cursor
-	   * so this might be a good spot to emmulate  enter-notify events */
-	  synthesize_enter_or_leave_event (window, msg,
-					   GDK_ENTER_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-	  track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (window));
 	}
 
       if (grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
