@@ -3,7 +3,7 @@
   <PropertyGroup Label="UserMacros">
     <GlibEtcInstallRoot>..\..\..\..\..\vs10\$(Platform)</GlibEtcInstallRoot>
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
-    <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj</DefDir>
+    <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
     <GtkApiVersion>2.0</GtkApiVersion>
     <GtkBinaryVersion>2.10.0</GtkBinaryVersion>
     <GtkDummyPrefix>\"/dummy\"</GtkDummyPrefix>
