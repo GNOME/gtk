@@ -2644,21 +2644,25 @@ draw_extension (GtkStyle *style,
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
-      /* Why this differs from gap_side, I have no idea.. */
-      int real_gap_side = gtk_notebook_get_tab_pos (notebook);
+      /* draw_themed_tab_button and draw_tab_button expect to work with tab
+       * position, instead of simply taking the "side of the gap" (gap_side)
+       * which simply said is the side of the tab that touches the notebook
+       * frame and is always the exact opposite of the gap side... */
+      int tab_pos = gtk_notebook_get_tab_pos (notebook);
 
       if (!draw_themed_tab_button (style, window, state_type,
-				   GTK_NOTEBOOK (widget), x, y,
-				   width, height, real_gap_side))
+				   notebook, x, y,
+				   width, height, tab_pos))
 	{
 	  if (!draw_tab_button (style, window, state_type,
 				shadow_type, area, widget,
-				detail, x, y, width, height, real_gap_side))
+				detail, x, y, width, height, tab_pos))
 	    {
+	      /* GtkStyle expects the usual gap_side */
 	      parent_class->draw_extension (style, window, state_type,
 					    shadow_type, area, widget, detail,
 					    x, y, width, height,
-					    real_gap_side);
+					    gap_side);
 	    }
 	}
     }
