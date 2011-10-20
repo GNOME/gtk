@@ -660,8 +660,9 @@ setup_msw_rc_style (void)
 	      btn_face.red, btn_face.green, btn_face.blue);
   gtk_rc_parse_string (buf);
 
-  /* enable coloring for text on buttons TODO: use GetThemeMetric for the
-     border and outside border */
+  /* enable coloring for text on buttons
+   * TODO: use GetThemeMetric for the border and outside border
+   * TODO: child-displacement-x & y should be 0 when XP theme is active */
   g_snprintf (buf, sizeof (buf),
 	      "style \"msw-button\" = \"msw-default\"\n"
 	      "{\n"
