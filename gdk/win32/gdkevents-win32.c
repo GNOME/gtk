@@ -375,10 +375,9 @@ _gdk_events_init (void)
 gboolean
 gdk_events_pending (void)
 {
-  MSG msg;
   return (_gdk_event_queue_find_first (_gdk_display) ||
 	  (modal_win32_dialog == NULL &&
-	   PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
+	   GetQueueStatus (QS_ALLINPUT) != 0));
 }
 
 GdkEvent*
@@ -3563,7 +3562,6 @@ static gboolean
 gdk_event_prepare (GSource *source,
 		   gint    *timeout)
 {
-  MSG msg;
   gboolean retval;
 
   GDK_THREADS_ENTER ();
@@ -3572,7 +3570,7 @@ gdk_event_prepare (GSource *source,
 
   retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	    (modal_win32_dialog == NULL &&
-	     PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
+	     GetQueueStatus (QS_ALLINPUT) != 0));
 
   GDK_THREADS_LEAVE ();
 
@@ -3582,7 +3580,6 @@ gdk_event_prepare (GSource *source,
 static gboolean
 gdk_event_check (GSource *source)
 {
-  MSG msg;
   gboolean retval;
   
   GDK_THREADS_ENTER ();
@@ -3591,7 +3588,7 @@ gdk_event_check (GSource *source)
     {
       retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 		(modal_win32_dialog == NULL &&
-		 PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
+		 GetQueueStatus (QS_ALLINPUT) != 0));
     }
   else
     {
