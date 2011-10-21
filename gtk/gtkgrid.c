@@ -927,8 +927,13 @@ gtk_grid_request_sum (GtkGridRequest *request,
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
 
-  min = (nonempty - 1) * linedata->spacing;
-  nat = (nonempty - 1) * linedata->spacing;
+  min = 0;
+  nat = 0;
+  if (nonempty > 0)
+    {
+      min = (nonempty - 1) * linedata->spacing;
+      nat = (nonempty - 1) * linedata->spacing;
+    }
 
   for (i = 0; i < lines->max - lines->min; i++)
     {
