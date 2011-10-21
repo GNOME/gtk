@@ -36,6 +36,9 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include "gdk/x11/gdkx.h"
+#ifdef XINPUT_2
+#include <X11/extensions/XInput2.h>
+#endif
 #endif
 
 #include "gtkdnd.h"
@@ -396,12 +399,7 @@ gtk_drag_get_ipc_widget (GtkWidget *widget)
   return result;
 }
 
-/* FIXME: modifying the XEvent window as in root_key_filter() isn't
- * going to work with XGE/XI2, since the actual event to handle would
- * be allocated/freed before GDK gets to translate the event.
- * Active grabs on the keyboard are used instead at the moment...
- */
-#if defined (GDK_WINDOWING_X11) && !defined (XINPUT_2)
+#if defined (GDK_WINDOWING_X11)
 
 /*
  * We want to handle a handful of keys during DND, e.g. Escape to abort.
@@ -466,8 +464,34 @@ grab_dnd_keys (GtkWidget *widget,
   guint i;
   GdkWindow *window, *root;
   gint keycode;
+#ifdef XINPUT_2
+  gint deviceid;
+  XIGrabModifiers mods;
+  gint num_mods;
+  XIEventMask evmask;
+  unsigned char mask[(XI_LASTEVENT + 7)/8];
+  gboolean using_xi2;
+
+  deviceid = gdk_x11_device_get_id (device);
+
+  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
+    using_xi2 = TRUE;
+  else
+    using_xi2 = FALSE;
+#endif
 
   window = gtk_widget_get_window (widget);
+  if (!GDK_IS_X11_WINDOW (window))
+    {
+      gdk_device_grab (device,
+                       gtk_widget_get_window (widget),
+                       GDK_OWNERSHIP_APPLICATION, FALSE,
+                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                       NULL, time);
+      return;
+    }
+
+
   root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
   gdk_error_trap_push ();
@@ -477,12 +501,45 @@ grab_dnd_keys (GtkWidget *widget,
       keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (window), grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
-      XGrabKey (GDK_WINDOW_XDISPLAY (window),
-   	        keycode, grab_keys[i].modifiers,
-	        GDK_WINDOW_XID (root),
-	        FALSE,
-	        GrabModeAsync,
-	        GrabModeAsync);
+
+#ifdef XINPUT_2
+      if (using_xi2)
+        {
+          memset (mask, 0, sizeof (mask));
+          XISetMask (mask, XI_KeyPress);
+          XISetMask (mask, XI_KeyRelease);
+
+          evmask.deviceid = deviceid;
+          evmask.mask_len = sizeof (mask);
+          evmask.mask = mask;
+
+          if (grab_keys[i].modifiers != 0)
+            {
+              num_mods = 1;
+              mods.modifiers = grab_keys[i].modifiers;
+            }
+          else
+            num_mods = 0;
+
+          XIGrabKeycode (GDK_WINDOW_XDISPLAY (window),
+                         deviceid,
+                         keycode,
+                         GDK_WINDOW_XID (root),
+                         GrabModeAsync,
+                         GrabModeAsync,
+                         False,
+                         &evmask,
+                         num_mods,
+                         &mods);
+        }
+      else
+#endif
+        XGrabKey (GDK_WINDOW_XDISPLAY (window),
+                  keycode, grab_keys[i].modifiers,
+                  GDK_WINDOW_XID (root),
+                  FALSE,
+                  GrabModeAsync,
+                  GrabModeAsync);
     }
 
   gdk_flush ();
@@ -499,8 +556,26 @@ ungrab_dnd_keys (GtkWidget *widget,
   guint i;
   GdkWindow *window, *root;
   gint keycode;
+#ifdef XINPUT_2
+  XIGrabModifiers mods;
+  gint num_mods;
+  gint deviceid;
+  gboolean using_xi2;
+
+  deviceid = gdk_x11_device_get_id (device);
+  if (GDK_IS_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (gtk_widget_get_display (widget))))
+    using_xi2 = TRUE;
+  else
+    using_xi2 = FALSE;
+#endif
 
   window = gtk_widget_get_window (widget);
+  if (!GDK_IS_X11_WINDOW (window))
+    {
+      gdk_device_ungrab (device, time);
+      return;
+    }
+
   root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
   gdk_window_remove_filter (NULL, root_key_filter, (gpointer) GDK_WINDOW_XID (window));
@@ -512,16 +587,37 @@ ungrab_dnd_keys (GtkWidget *widget,
       keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (window), grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
-      XUngrabKey (GDK_WINDOW_XDISPLAY (window),
-      	          keycode, grab_keys[i].modifiers,
-                  GDK_WINDOW_XID (root));
+
+#ifdef XINPUT_2
+      if (using_xi2)
+        {
+          if (grab_keys[i].modifiers != 0)
+            {
+              num_mods = 1;
+              mods.modifiers = grab_keys[i].modifiers;
+            }
+          else
+            num_mods = 0;
+
+          XIUngrabKeycode (GDK_WINDOW_XDISPLAY (window),
+                           deviceid,
+                           keycode,
+                           GDK_WINDOW_XID (root),
+                           num_mods,
+                           &mods);
+        }
+      else
+#endif
+        XUngrabKey (GDK_WINDOW_XDISPLAY (window),
+                    keycode, grab_keys[i].modifiers,
+                    GDK_WINDOW_XID (root));
     }
 
   gdk_flush ();
   gdk_error_trap_pop_ignored ();
 }
 
-#else /* GDK_WINDOWING_X11 && !XINPUT_2 */
+#else /* !GDK_WINDOWING_X11 */
 
 static void
 grab_dnd_keys (GtkWidget *widget,
@@ -4316,7 +4412,7 @@ gtk_drag_key_cb (GtkWidget         *widget,
   if (event->type == GDK_KEY_PRESS)
     {
       switch (event->keyval)
-{
+        {
         case GDK_KEY_Escape:
           gtk_drag_cancel (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
           return TRUE;
