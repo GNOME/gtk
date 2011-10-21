@@ -12,7 +12,7 @@ DOC_MAIN_SGML_FILE=gdk-docs.sgml
 SCAN_OPTIONS=--deprecated-guards="GDK_ENABLE_BROKEN|GDK_DISABLE_DEPRECATED"
 
 # The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=../../../gdk ../../../gdk/x11
+DOC_SOURCE_DIR=$(top_srcdir)/gdk $(top_srcdir)/gdk/x11
 
 # Used for dependencies
 HFILE_GLOB=$(top_srcdir)/gdk/*.h $(top_srcdir)/gdk/x11/gdkx.h

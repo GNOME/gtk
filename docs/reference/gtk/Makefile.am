@@ -12,7 +12,7 @@ DOC_MAIN_SGML_FILE=gtk-docs.sgml
 SCAN_OPTIONS=--deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED"
 
 # The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=../../../gtk
+DOC_SOURCE_DIR=$(top_srcdir)/gtk
 
 # Used for dependencies
 HFILE_GLOB=$(top_srcdir)/gtk/*.h
