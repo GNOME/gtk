@@ -121,6 +121,7 @@ static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
   TABP_TABITEM,
   TABP_TABITEMLEFTEDGE,
   TABP_TABITEMRIGHTEDGE,
+  TABP_TABITEMBOTHEDGE,
   TABP_PANE,
   SBP_THUMBBTNHORZ,
   SBP_THUMBBTNVERT,
@@ -408,6 +409,7 @@ xp_theme_get_handle_by_element (XpThemeElement element)
     case XP_THEME_ELEMENT_TAB_ITEM:
     case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
     case XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE:
+    case XP_THEME_ELEMENT_TAB_ITEM_BOTH_EDGE:
     case XP_THEME_ELEMENT_TAB_PANE:
       klazz = XP_THEME_CLASS_TAB;
       break;
@@ -536,6 +538,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 
     case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
     case XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE:
+    case XP_THEME_ELEMENT_TAB_ITEM_BOTH_EDGE:
     case XP_THEME_ELEMENT_TAB_ITEM:
       switch (state)
 	{

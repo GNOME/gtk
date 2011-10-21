@@ -41,7 +41,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "gtk/gtk.h"
+#include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
 #ifdef BUILDING_STANDALONE
@@ -2348,230 +2348,289 @@ DrawTab (HDC hdc, const RECT R, gint32 aPosition, gboolean aSelected,
     DrawEdge (hdc, &shadeRect, EDGE_RAISED, BF_SOFT | shadeFlag);
 }
 
+static void
+get_notebook_tab_position (GtkNotebook *notebook,
+                           gboolean *start,
+                           gboolean *end)
+{
+  gboolean found_start = FALSE, found_end = FALSE;
+  gint i, n_pages;
+
+  /* default value */
+  *start = TRUE;
+  *end = FALSE;
+
+  n_pages = gtk_notebook_get_n_pages (notebook);
+  for (i = 0; i < n_pages; i++)
+    {
+      GtkWidget *tab_child;
+      GtkWidget *tab_label;
+      gboolean expand;
+      GtkPackType pack_type;
+      gboolean is_selected;
+
+      tab_child = gtk_notebook_get_nth_page (notebook, i);
+      is_selected = gtk_notebook_get_current_page (notebook) == i;
+
+      /* Skip invisible tabs */
+      tab_label = gtk_notebook_get_tab_label (notebook, tab_child);
+      if (!tab_label || !GTK_WIDGET_VISIBLE (tab_label))
+        continue;
+
+      /* Mimics what the notebook does internally. */
+      if (tab_label && !gtk_widget_get_child_visible (tab_label))
+        {
+          /* One child is hidden because scroll arrows are present.
+           * So both corners are rounded. */
+          *start = FALSE;
+          *end = FALSE;
+          return;
+        }
+
+      gtk_notebook_query_tab_label_packing (notebook, tab_child, &expand,
+                                            NULL, /* don't need fill */
+                                            &pack_type);
+
+      if (pack_type == GTK_PACK_START)
+        {
+          if (!found_start)
+            {
+              /* This is the first tab with PACK_START pack type */
+              found_start = TRUE;
+
+              if (is_selected)
+                {
+                  /* first PACK_START item is selected: set start to TRUE */
+                  *start = TRUE;
+
+                  if (expand && !found_end)
+                    {
+                      /* tentatively set end to TRUE: will be invalidated if we
+                       * find other items */
+                      *end = TRUE;
+                    }
+                }
+              else
+                {
+                  *start = FALSE;
+                }
+            }
+          else if (!found_end && !is_selected)
+            {
+              /* an unselected item exists, and no item with PACK_END pack type */
+              *end = FALSE;
+            }
+        }
+
+      if (pack_type == GTK_PACK_END)
+        {
+          if (!found_end)
+            {
+              /* This is the first tab with PACK_END pack type */
+              found_end = TRUE;
+
+              if (is_selected)
+                {
+                  /* first PACK_END item is selected: set end to TRUE */
+                  *end = TRUE;
+
+                  if (expand && !found_start)
+                    {
+                      /* tentatively set start to TRUE: will be invalidated if
+                       * we find other items */
+                      *start = TRUE;
+                    }
+                }
+              else
+                {
+                *end = FALSE;
+                }
+            }
+          else if (!found_start && !is_selected)
+            {
+              *start = FALSE;
+            }
+        }
+    }
+}
+
 static gboolean
 draw_themed_tab_button (GtkStyle *style,
 			GdkWindow *window,
 			GtkStateType state_type,
 			GtkNotebook *notebook,
-			gint x, gint y,
-			gint width, gint height, gint gap_side)
+			gint x,
+			gint y,
+			gint width,
+			gint height,
+			gint gap_side)
 {
   GdkPixmap *pixmap = NULL;
-  gint border_width =
-    gtk_container_get_border_width (GTK_CONTAINER (notebook));
-  GtkWidget *widget = GTK_WIDGET (notebook);
   GdkRectangle draw_rect, clip_rect;
-  GdkPixbufRotation rotation = GDK_PIXBUF_ROTATE_NONE;
   cairo_t *cr;
+  gboolean start, stop;
+  XpThemeElement element;
+  gint d_w, d_h;
 
-  if (gap_side == GTK_POS_TOP)
+  get_notebook_tab_position (notebook, &start, &stop);
+
+  if (state_type == GTK_STATE_NORMAL)
     {
-      int widget_right;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y;
-	  draw_rect.width = width + 2;
-	  draw_rect.height = height;
-
-	  clip_rect = draw_rect;
-	  clip_rect.height--;
-	}
+      if (start && stop)
+        {
+          /* Both edges of the notebook are covered by the item */
+          element = XP_THEME_ELEMENT_TAB_ITEM_BOTH_EDGE;
+        }
+      else if (start)
+        {
+          /* The start edge is covered by the item */
+          element = XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE;
+        }
+      else if (stop)
+        {
+          /* the stop edge is reached by the item */
+          element = XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE;
+        }
       else
-	{
-	  draw_rect.x = x + 2;
-	  draw_rect.y = y;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
-      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
-
-      if (draw_rect.x + draw_rect.width >= widget_right)
-	{
-	  draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
-	}
-    }
-  if (gap_side == GTK_POS_BOTTOM)
-    {
-      int widget_right;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y;
-	  draw_rect.width = width + 2;
-	  draw_rect.height = height;
-
-	  clip_rect = draw_rect;
-	}
-      else
-	{
-	  draw_rect.x = x + 2;
-	  draw_rect.y = y + 2;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
-      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
-
-      if (draw_rect.x + draw_rect.width >= widget_right)
-	{
-	  draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
-	}
-
-      rotation = GDK_PIXBUF_ROTATE_UPSIDEDOWN;
-    }
-  else if (gap_side == GTK_POS_LEFT)
-    {
-      int widget_bottom;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y;
-	  draw_rect.width = width;
-	  draw_rect.height = height + 2;
-
-	  clip_rect = draw_rect;
-	  clip_rect.width--;
-	}
-      else
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y + 2;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
-      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
-
-      if (draw_rect.y + draw_rect.height >= widget_bottom)
-	{
-	  draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
-	}
-
-      rotation = GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE;
-    }
-  else if (gap_side == GTK_POS_RIGHT)
-    {
-      int widget_bottom;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x + 1;
-	  draw_rect.y = y;
-	  draw_rect.width = width;
-	  draw_rect.height = height + 2;
-
-	  clip_rect = draw_rect;
-	  clip_rect.width--;
-	}
-      else
-	{
-	  draw_rect.x = x + 2;
-	  draw_rect.y = y + 2;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
-      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
-
-      if (draw_rect.y + draw_rect.height >= widget_bottom)
-	{
-	  draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
-	}
-
-      rotation = GDK_PIXBUF_ROTATE_CLOCKWISE;
-    }
-
-  if (gap_side == GTK_POS_TOP)
-    {
-      if (!xp_theme_draw (window, XP_THEME_ELEMENT_TAB_ITEM, style,
-			  draw_rect.x, draw_rect.y,
-			  draw_rect.width, draw_rect.height,
-			  state_type, &clip_rect))
-	{
-	  return FALSE;
-	}
+        {
+          /* no edge should be aligned with the tab */
+          element = XP_THEME_ELEMENT_TAB_ITEM;
+        }
     }
   else
     {
-      GdkPixbuf *pixbuf;
-      GdkPixbuf *rotated;
-
-      if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT)
-	{
-	  pixmap = gdk_pixmap_new (window, clip_rect.height, clip_rect.width, -1);
-
-	  if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
-			      draw_rect.y - clip_rect.y, draw_rect.x - clip_rect.x,
-			      draw_rect.height, draw_rect.width, state_type, 0))
-	    {
-	      g_object_unref (pixmap);
-	      return FALSE;
-	    }
-
-	  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
-						 clip_rect.height, clip_rect.width);
-	  g_object_unref (pixmap);
-	}
-      else
-	{
-	  pixmap = gdk_pixmap_new (window, clip_rect.width, clip_rect.height, -1);
-
-	  if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
-			      draw_rect.x - clip_rect.x, draw_rect.y - clip_rect.y,
-			      draw_rect.width, draw_rect.height, state_type, 0))
-	    {
-	      g_object_unref (pixmap);
-	      return FALSE;
-	    }
-
-	  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
-						 clip_rect.width, clip_rect.height);
-	  g_object_unref (pixmap);
-	}
-
-      rotated = gdk_pixbuf_rotate_simple (pixbuf, rotation);
-      g_object_unref (pixbuf);
-      pixbuf = rotated;
-
-      // XXX - This is really hacky and evil.  When we're drawing the left-most tab
-      //       while it is active on a bottom-oriented notebook, there is one white
-      //       pixel at the top.  There may be a better solution than this if someone
-      //       has time to discover it.
-      if (gap_side == GTK_POS_BOTTOM && state_type == GTK_STATE_NORMAL
-	  && x == widget->allocation.x)
-	{
-	  int rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-	  int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-	  int psub = 0;
-
-	  guchar *pixels = gdk_pixbuf_get_pixels (pixbuf);
-	  guchar *p = pixels + rowstride;
-
-	  for (psub = 0; psub < n_channels; psub++)
-	    {
-	      pixels[psub] = p[psub];
-	    }
-	}
-
-      cr = gdk_cairo_create (window);
-      gdk_cairo_set_source_pixbuf (cr, pixbuf, clip_rect.x, clip_rect.y);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-      g_object_unref (pixbuf);
+      /* Ideally, we should do the same here. Unfortunately, we don't have ways
+       * to determine what tab widget is actually being drawn here, so we can't
+       * determine its position relative to the borders */
+      element = XP_THEME_ELEMENT_TAB_ITEM;
     }
+
+  draw_rect.x = x;
+  draw_rect.y = y;
+  draw_rect.width = width;
+  draw_rect.height = height;
+
+  /* Perform adjustments required to have the theme perfectly aligned */
+  if (state_type == GTK_STATE_ACTIVE)
+    {
+      switch (gap_side)
+        {
+        case GTK_POS_TOP:
+          draw_rect.x += 2;
+          draw_rect.width -= 2;
+          draw_rect.height -= 1;
+          break;
+        case GTK_POS_BOTTOM:
+          draw_rect.x += 2;
+          draw_rect.width -= 2;
+          draw_rect.y += 1;
+          draw_rect.height -= 1;
+          break;
+        case GTK_POS_LEFT:
+          draw_rect.y += 2;
+          draw_rect.height -= 2;
+          draw_rect.width -= 1;
+          break;
+        case GTK_POS_RIGHT:
+          draw_rect.y += 2;
+          draw_rect.height -= 2;
+          draw_rect.x += 1;
+          draw_rect.width -= 1;
+          break;
+        }
+    }
+  else
+    {
+      switch (gap_side)
+        {
+        case GTK_POS_TOP:
+          draw_rect.height += 1;
+          draw_rect.width += 2;
+          break;
+        case GTK_POS_BOTTOM:
+          draw_rect.y -= 1;
+          draw_rect.height += 1;
+          draw_rect.width += 2;
+          break;
+        case GTK_POS_LEFT:
+          draw_rect.width += 1;
+          draw_rect.height += 2;
+          break;
+        case GTK_POS_RIGHT:
+          draw_rect.x -= 1;
+          draw_rect.width += 1;
+          draw_rect.height += 2;
+          break;
+        }
+    }
+
+  clip_rect = draw_rect;
+
+  /* Take care of obvious case where the clipping is an empty region */
+  if (clip_rect.width <= 0 || clip_rect.height <= 0)
+    return TRUE;
+
+  /* Simple case: tabs on top are just drawn as is */
+  if (gap_side == GTK_POS_TOP)
+    {
+       return xp_theme_draw (window, element, style,
+	                     draw_rect.x, draw_rect.y,
+	                     draw_rect.width, draw_rect.height,
+	                     state_type, &clip_rect);
+    }
+
+  /* For other cases, we need to print the tab on a pixmap, and then rotate
+   * it according to the gap side */
+  if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT)
+    {
+      /* pixmap will have width/height inverted as we'll rotate +- PI / 2 */
+      d_w = draw_rect.height;
+      d_h = draw_rect.width;
+    }
+  else
+    {
+      d_w = draw_rect.width;
+      d_h = draw_rect.height;
+    }
+
+  pixmap = gdk_pixmap_new (window, d_w, d_h, -1);
+
+  /* First copy the previously saved window background */
+  cr = gdk_cairo_create (pixmap);
+
+  /* pixmaps unfortunately don't handle the alpha channel. We then
+   * paint it first in white, hoping the actual background is clear */
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  if (!xp_theme_draw (pixmap, element, style, 0, 0, d_w, d_h, state_type, 0))
+    {
+      g_object_unref (pixmap);
+      return FALSE;
+    }
+
+  /* Now we have the pixmap, we need to flip/rotate it according to its
+   * final position. We'll do it using cairo on the dest window */
+  cr = gdk_cairo_create (window);
+  cairo_rectangle (cr, clip_rect.x, clip_rect.y,
+                   clip_rect.width, clip_rect.height);
+  cairo_clip (cr);
+  cairo_translate(cr, draw_rect.x + draw_rect.width * 0.5,
+                  draw_rect.y + draw_rect.height * 0.5);
+
+  if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT) {
+    cairo_rotate (cr, M_PI/2.0);
+  }
+
+  if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_BOTTOM) {
+    cairo_scale (cr, 1, -1);
+  }
+
+  cairo_translate(cr, -d_w * 0.5, -d_h * 0.5);
+  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -2669,46 +2728,43 @@ draw_extension (GtkStyle *style,
 }
 
 static void
-draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
-	      GtkShadowType shadow_type, GdkRectangle *area,
-	      GtkWidget *widget, const gchar *detail, gint x,
-	      gint y, gint width, gint height, GtkPositionType gap_side,
-	      gint gap_x, gint gap_width)
+draw_box_gap (GtkStyle *style,
+              GdkWindow *window,
+              GtkStateType state_type,
+	      GtkShadowType shadow_type,
+	      GdkRectangle *area,
+	      GtkWidget *widget,
+	      const gchar *detail,
+	      gint x,
+	      gint y,
+	      gint width,
+	      gint height,
+	      GtkPositionType gap_side,
+	      gint gap_x,
+	      gint gap_width)
 {
   if (GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "notebook"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-      int side = gtk_notebook_get_tab_pos (notebook);
-      int x2 = x, y2 = y, w2 = width, h2 = height;
 
-      if (side == GTK_POS_TOP)
-	{
-	  x2 = x;
-	  y2 = y - gtk_notebook_get_tab_vborder (notebook);
-	  w2 = width;
-	  h2 = height + gtk_notebook_get_tab_vborder (notebook) * 2;
-	}
-      else if (side == GTK_POS_BOTTOM)
-	{
-	  x2 = x;
-	  y2 = y;
-	  w2 = width;
-	  h2 = height + gtk_notebook_get_tab_vborder (notebook) * 2;
-	}
-      else if (side == GTK_POS_LEFT)
-	{
-	  x2 = x - gtk_notebook_get_tab_hborder (notebook);
-	  y2 = y;
-	  w2 = width + gtk_notebook_get_tab_hborder (notebook);
-	  h2 = height;
-	}
-      else if (side == GTK_POS_RIGHT)
-	{
-	  x2 = x;
-	  y2 = y;
-	  w2 = width + gtk_notebook_get_tab_hborder (notebook) * 2;
-	  h2 = height;
-	}
+      int side = gtk_notebook_get_tab_pos (notebook);
+      int x2 = x, y2 = y;
+      int w2 = width + style->xthickness, h2 = height + style->ythickness;
+
+      switch (side)
+        {
+        case GTK_POS_TOP:
+          y2 -= 1;
+          break;
+        case GTK_POS_BOTTOM:
+          break;
+        case GTK_POS_LEFT:
+          x2 -= 1;
+          break;
+        case GTK_POS_RIGHT:
+          w2 += 1;
+          break;
+        }
 
       if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
 			 x2, y2, w2, h2, state_type, area))
