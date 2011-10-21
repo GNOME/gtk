@@ -1618,7 +1618,7 @@ modify_allocation_for_window_grip (GtkWidget     *widget,
     translated_rect = *allocation;
   else
     {
-      gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
+      gtk_widget_translate_coordinates (parent,
                                         window,
                                         allocation->x, allocation->y,
                                         &x, &y);
