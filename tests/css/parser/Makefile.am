@@ -284,6 +284,7 @@ EXTRA_DIST += \
 	pseudo-classes-unknown.errors \
 	pseudo-classes-unknown.ref.css \
 	selector.css \
+	selector.errors \
 	selector.ref.css \
 	shorthand.css \
 	shorthand.ref.css \
