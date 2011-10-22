@@ -268,7 +268,6 @@ gdk_quartz_device_core_query_state (GdkDevice        *device,
                                     gint             *win_y,
                                     GdkModifierType  *mask)
 {
-  GdkDisplay *display;
   GdkWindow *found_window;
   NSPoint point;
   gint x_tmp, y_tmp;
@@ -276,10 +275,6 @@ gdk_quartz_device_core_query_state (GdkDevice        *device,
   found_window = gdk_quartz_device_core_query_state_helper (window, device,
                                                             win_x, win_y,
                                                             mask);
-  if (!found_window)
-    return FALSE;
-
-  display = gdk_window_get_display (window);
 
   if (root_window)
     *root_window = _gdk_root;
