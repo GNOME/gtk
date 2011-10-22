@@ -159,7 +159,8 @@ static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip,
                                                     cairo_t         *cr);
 static void       gtk_tooltip_realize_window       (GtkTooltip      *tooltip,
                                                     GtkWidget       *widget);
-static void       maybe_update_shape               (GtkTooltip      *tooltip);
+static void       gtk_tooltip_composited_changed   (GtkTooltip      *tooltip,
+                                                    GtkWidget       *widget);
 static void       gtk_tooltip_window_hide          (GtkWidget       *widget,
 						    gpointer         user_data);
 static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
@@ -228,7 +229,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   g_signal_connect_swapped (window, "realize",
                             G_CALLBACK (gtk_tooltip_realize_window), tooltip);
   g_signal_connect_swapped (window, "composited-changed",
-                            G_CALLBACK (maybe_update_shape), tooltip);
+                            G_CALLBACK (gtk_tooltip_composited_changed), tooltip);
 
   /* FIXME: don't hardcode the padding */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -630,6 +631,14 @@ maybe_update_shape (GtkTooltip *tooltip)
 
   cairo_surface_destroy (surface);
   cairo_region_destroy (region);
+}
+
+static void
+gtk_tooltip_composited_changed (GtkTooltip *tooltip,
+                                GtkWidget  *widget)
+{
+  if (gtk_widget_get_realized (tooltip->window))
+    maybe_update_shape (tooltip);
 }
 
 static void
