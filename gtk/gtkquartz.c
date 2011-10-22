@@ -318,24 +318,28 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
  * to test for that and remove the last element.
  */
 
-static gchar *
-get_bundle_path ()
+static const gchar *
+get_bundle_path (void)
 {
   static gchar *path = NULL;
+
   if (path == NULL)
     {
-      gchar *base;
       NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
       gchar *resource_path = g_strdup ([[[NSBundle mainBundle] resourcePath] UTF8String]);
+      gchar *base;
       [pool drain];
+
       base = g_path_get_basename (resource_path);
       if (strcmp (base, "bin") == 0)
 	path = g_path_get_dirname (resource_path);
       else
 	path = strdup (resource_path);
+
       g_free (resource_path);
       g_free (base);
     }
+
   return path;
 }
 
@@ -343,12 +347,10 @@ const gchar *
 _gtk_get_datadir (void)
 {
   static gchar *path = NULL;
+
   if (path == NULL)
-    {
-      gchar *resource_dir = get_bundle_path ();
-      path = g_build_filename (resource_dir, "share", NULL);
-      g_free (resource_dir);
-    }
+    path = g_build_filename (get_bundle_path (), "share", NULL);
+
   return path;
 }
 
@@ -356,12 +358,10 @@ const gchar *
 _gtk_get_libdir (void)
 {
   static gchar *path = NULL;
+
   if (path == NULL)
-    {
-      gchar *resource_dir = get_bundle_path ();
-      path = g_build_filename (resource_dir, "lib", NULL);
-      g_free (resource_dir);
-    }
+    path = g_build_filename (get_bundle_path (), "lib", NULL);
+
   return path;
 }
 
@@ -369,12 +369,10 @@ const gchar *
 _gtk_get_localedir (void)
 {
   static gchar *path = NULL;
+
   if (path == NULL)
-    {
-      gchar *resource_dir = get_bundle_path ();
-      path = g_build_filename (resource_dir, "share", "locale", NULL);
-      g_free (resource_dir);
-    }
+    path = g_build_filename (get_bundle_path (), "share", "locale", NULL);
+
   return path;
 }
 
@@ -382,12 +380,10 @@ const gchar *
 _gtk_get_sysconfdir (void)
 {
   static gchar *path = NULL;
+
   if (path == NULL)
-    {
-      gchar *resource_dir = get_bundle_path ();
-      path = g_build_filename (resource_dir, "etc", NULL);
-      g_free (resource_dir);
-    }
+    path = g_build_filename (get_bundle_path (), "etc", NULL);
+
   return path;
 }
 
@@ -396,4 +392,3 @@ _gtk_get_data_prefix (void)
 {
   return get_bundle_path ();
 }
-
