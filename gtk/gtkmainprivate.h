@@ -23,18 +23,6 @@
 
 G_BEGIN_DECLS
 
-gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
-                                           GValue                *return_accu,
-                                           const GValue          *handler_return,
-                                           gpointer               dummy);
-
-gboolean _gtk_single_string_accumulator (GSignalInvocationHint *ihint,
-					 GValue                *return_accu,
-					 const GValue          *handler_return,
-					 gpointer               dummy);
-
-gchar *_gtk_get_lc_ctype (void);
-
 gboolean _gtk_module_has_mixed_deps (GModule *module);
 
 G_END_DECLS

@@ -27,7 +27,7 @@
 #include "gtkmain.h"
 #include "gtkradiomenuitem.h"
 #include "gtkintl.h"
-#include "gtkprivate.h" /* To get redefinition of GTK_LOCALE_DIR on Win32 */
+#include "gtkprivate.h"
 
 
 /**
@@ -634,7 +634,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 	    {
 	      /* Same translation domain as GTK+ */
 	      if (!(contexts[i]->domain_dirname && contexts[i]->domain_dirname[0]) ||
-		  pathnamecmp (contexts[i]->domain_dirname, GTK_LOCALEDIR) == 0)
+		  pathnamecmp (contexts[i]->domain_dirname, _gtk_get_localedir ()) == 0)
 		{
 		  /* Empty or NULL, domain directory, or same as
 		   * GTK+. Input method may have a name in the GTK+

@@ -3067,7 +3067,7 @@ _gtk_css_provider_get_theme_dir (void)
   if (var)
     path = g_build_filename (var, "share", "themes", NULL);
   else
-    path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
+    path = g_build_filename (_gtk_get_data_prefix (), "share", "themes", NULL);
 
   return path;
 }

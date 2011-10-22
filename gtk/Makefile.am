@@ -422,6 +422,7 @@ gtk_private_h_sources =		\
 	gtkmenushellprivate.h	\
 	gtkmnemonichash.h	\
 	gtkmodifierstyle.h	\
+	gtkmodulesprivate.h	\
 	gtkmountoperationprivate.h \
 	gtknumerableiconprivate.h \
 	gtkorientableprivate.h	\
@@ -618,6 +619,7 @@ gtk_base_c_sources = 		\
 	gtkprintoperationpreview.c \
 	gtkprintsettings.c	\
 	gtkprintutils.c		\
+	gtkprivate.c		\
 	gtkprogressbar.c	\
 	gtkradioaction.c	\
 	gtkradiobutton.c	\
@@ -752,7 +754,8 @@ endif
 
 gtk_os_win32_c_sources = \
 	gtkprint-win32.c		\
-	gtkprintoperation-win32.c
+	gtkprintoperation-win32.c	\
+	gtkwin32.c
 gtk_all_c_sources += $(gtk_os_win32_c_sources)
 if OS_WIN32
 gtk_private_h_sources += gtkprint-win32.h
@@ -771,7 +774,8 @@ gtk_use_win32_c_sources = 	\
 	gtkmountoperation-stub.c
 gtk_use_quartz_c_sources = 	\
 	gtksearchenginequartz.c	\
-	gtkmountoperation-stub.c
+	gtkmountoperation-stub.c \
+	gtkquartz.c
 gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
 gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
@@ -790,7 +794,8 @@ gtk_c_sources += $(gtk_use_win32_c_sources)
 else
 if USE_QUARTZ
 gtk_private_h_sources += 	\
-	gtksearchenginequartz.h
+	gtksearchenginequartz.h	\
+	gtkquartz.h
 gtk_c_sources += $(gtk_use_quartz_c_sources)
 libgtk_3_la_CFLAGS = "-xobjective-c"
 
@@ -803,13 +808,10 @@ endif
 if USE_QUARTZ
 gtk_clipboard_dnd_c_sources = 	\
 	gtkclipboard-quartz.c	\
-	gtkdnd-quartz.c		\
-	gtkquartz.c
-gtk_clipboard_dnd_h_sources = gtkquartz.h
+	gtkdnd-quartz.c
 else
 gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c
 endif
-EXTRA_DIST += gtkquartz.h
 
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
@@ -963,7 +965,7 @@ dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../buil
 	done >libgtk.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtk.vcprojin >$@
 	rm libgtk.sourcefiles
-	
+
 ../build/win32/vs10/gtk.vcxproj: ../build/win32/vs10/gtk.vcxprojin
 	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
 		case $$F in \
@@ -973,7 +975,7 @@ dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../buil
 	done >libgtk.vs10.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk.vcxprojin >$@
 	rm libgtk.vs10.sourcefiles
-	
+
 ../build/win32/vs10/gtk.vcxproj.filters: ../build/win32/vs10/gtk.vcxproj.filtersin
 	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
 		case $$F in \

@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "gtkmodules.h"
+#include "gtkmodulesprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
@@ -292,7 +293,7 @@ gtk_settings_init (GtkSettings *settings)
     }
   g_free (pspecs);
 
-  path = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "settings.ini", NULL);
+  path = g_build_filename (_gtk_get_sysconfdir (), "gtk-3.0", "settings.ini", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);

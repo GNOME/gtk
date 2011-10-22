@@ -33,47 +33,31 @@
 
 G_BEGIN_DECLS
 
-#if defined G_OS_WIN32 \
-  || (defined GDK_WINDOWING_QUARTZ && defined QUARTZ_RELOCATION)
-
-const gchar *_gtk_get_datadir ();
-const gchar *_gtk_get_libdir ();
-const gchar *_gtk_get_sysconfdir ();
-const gchar *_gtk_get_localedir ();
-const gchar *_gtk_get_data_prefix ();
-
-#undef GTK_DATADIR
-#define GTK_DATADIR _gtk_get_datadir ()
-#undef GTK_LIBDIR
-#define GTK_LIBDIR _gtk_get_libdir ()
-#undef GTK_LOCALEDIR
-#define GTK_LOCALEDIR _gtk_get_localedir ()
-#undef GTK_SYSCONFDIR
-#define GTK_SYSCONFDIR _gtk_get_sysconfdir ()
-#undef GTK_DATA_PREFIX
-#define GTK_DATA_PREFIX _gtk_get_data_prefix ()
-
-#endif /* G_OS_WIN32 */
-
 #define GTK_PARAM_READABLE G_PARAM_READABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 #define GTK_PARAM_WRITABLE G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
-gboolean _gtk_fnmatch      (const char *pattern,
-                            const char *string,
-                            gboolean    no_leading_period);
+const gchar * _gtk_get_datadir            (void);
+const gchar * _gtk_get_libdir             (void);
+const gchar * _gtk_get_sysconfdir         (void);
+const gchar * _gtk_get_localedir          (void);
+const gchar * _gtk_get_data_prefix        (void);
 
-gchar   *_gtk_get_lc_ctype (void);
+gboolean      _gtk_fnmatch                (const char *pattern,
+                                           const char *string,
+                                           gboolean    no_leading_period);
 
-gchar * _gtk_find_module              (const gchar  *name,
-                                       const gchar  *type);
-gchar **_gtk_get_module_path          (const gchar  *type);
+gchar       * _gtk_get_lc_ctype           (void);
 
-void    _gtk_modules_init             (gint          *argc,
-                                       gchar       ***argv,
-                                       const gchar   *gtk_modules_args);
-void    _gtk_modules_settings_changed (GtkSettings   *settings,
-                                       const gchar   *modules);
+gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
+                                           GValue                *return_accu,
+                                           const GValue          *handler_return,
+                                           gpointer               dummy);
+
+gboolean _gtk_single_string_accumulator   (GSignalInvocationHint *ihint,
+                                           GValue                *return_accu,
+                                           const GValue          *handler_return,
+                                           gpointer               dummy);
 
 GdkModifierType _gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
                                                 GdkModifierType  modifiers);

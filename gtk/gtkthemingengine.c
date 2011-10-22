@@ -27,6 +27,7 @@
 #include <gtk/gtkintl.h>
 
 #include "gtkprivate.h"
+#include "gtkmodulesprivate.h"
 #include "gtkborderimageprivate.h"
 #include "gtkpango.h"
 #include "gtkshadowprivate.h"

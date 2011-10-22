@@ -39,9 +39,9 @@ GtkSelectionData *_gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *
 
 void _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
 						    GtkSelectionData *selection_data);
-			
+
 NSImage *_gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf);
-			    
+
 G_END_DECLS
 
 #endif /* __GTK_QUARTZ_H__ */

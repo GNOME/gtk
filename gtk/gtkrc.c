@@ -51,6 +51,7 @@
 #include "gtkiconfactory.h"
 #include "gtkmain.h"
 #include "gtkmodules.h"
+#include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkwindow.h"
@@ -905,7 +906,7 @@ gtk_rc_make_default_dir (const gchar *type)
   if (var)
     path = g_build_filename (var, "lib", "gtk-3.0", GTK_BINARY_VERSION, type, NULL);
   else
-    path = g_build_filename (GTK_LIBDIR, "gtk-3.0", GTK_BINARY_VERSION, type, NULL);
+    path = g_build_filename (_gtk_get_libdir (), "gtk-3.0", GTK_BINARY_VERSION, type, NULL);
 
   return path;
 }
@@ -988,7 +989,7 @@ gtk_rc_get_theme_dir (void)
   if (var)
     path = g_build_filename (var, "share", "themes", NULL);
   else
-    path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
+    path = g_build_filename (_gtk_get_data_prefix (), "share", "themes", NULL);
 
   return path;
 }

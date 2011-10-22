@@ -23,9 +23,10 @@
 #include <string.h>
 
 #include "gtkmodules.h"
+#include "gtkmodulesprivate.h"
 #include "gtksettings.h"
 #include "gtkdebug.h"
-#include "gtkprivate.h" /* GTK_LIBDIR */
+#include "gtkprivate.h"
 #include "gtkmainprivate.h"
 #include "gtkintl.h"
 
@@ -74,7 +75,7 @@ get_module_path (void)
   if (exe_prefix)
     default_dir = g_build_filename (exe_prefix, "lib", "gtk-3.0", NULL);
   else
-    default_dir = g_build_filename (GTK_LIBDIR, "gtk-3.0", NULL);
+    default_dir = g_build_filename (_gtk_get_libdir (), "gtk-3.0", NULL);
 
   if (module_path_env && home_gtk_dir)
     module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,

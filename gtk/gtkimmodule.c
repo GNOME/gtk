@@ -36,16 +36,8 @@
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
 #include "gtkmainprivate.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
-
-/* Do *not* include "gtkprivate.h" in this file. If you do, the
- * correct_libdir_prefix() and correct_localedir_prefix() functions
- * below will have to move somewhere else.
- */
-
-#ifdef __GTK_PRIVATE_H__
-#error gtkprivate.h should not be included in this file
-#endif
 
 #define SIMPLE_ID "gtk-im-context-simple"
 
@@ -239,10 +231,7 @@ add_module (GtkIMModule *module, GSList *infos)
 static void
 correct_libdir_prefix (gchar **path)
 {
-  /* GTK_LIBDIR here is supposed to still have the definition from
-   * Makefile.am, i.e. the build-time value. Do *not* include gtkprivate.h
-   * in this file.
-   */
+  /* GTK_LIBDIR is the build-time libdir */
   if (strncmp (*path, GTK_LIBDIR, strlen (GTK_LIBDIR)) == 0)
     {
       /* This is an entry put there by make install on the
@@ -253,7 +242,6 @@ correct_libdir_prefix (gchar **path)
        * builder's machine. Replace the path with the real
        * one on this machine.
        */
-      extern const gchar *_gtk_get_libdir ();
       gchar *tem = *path;
       *path = g_strconcat (_gtk_get_libdir (), tem + strlen (GTK_LIBDIR), NULL);
       g_free (tem);
@@ -263,12 +251,9 @@ correct_libdir_prefix (gchar **path)
 static void
 correct_localedir_prefix (gchar **path)
 {
-  /* As above, but for GTK_LOCALEDIR. Use separate function in case
-   * GTK_LOCALEDIR isn't a subfolder of GTK_LIBDIR.
-   */
+  /* See above */
   if (strncmp (*path, GTK_LOCALEDIR, strlen (GTK_LOCALEDIR)) == 0)
     {
-      extern const gchar *_gtk_get_localedir ();
       gchar *tem = *path;
       *path = g_strconcat (_gtk_get_localedir (), tem + strlen (GTK_LOCALEDIR), NULL);
       g_free (tem);

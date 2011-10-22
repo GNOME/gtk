@@ -120,6 +120,7 @@
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmodules.h"
+#include "gtkmodulesprivate.h"
 #include "gtkrecentmanager.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
@@ -128,82 +129,8 @@
 #include "gtktooltip.h"
 #include "gtkdebug.h"
 #include "gtkmenu.h"
-
-#ifdef G_OS_WIN32
-
-static HMODULE gtk_dll;
-
-BOOL WINAPI
-DllMain (HINSTANCE hinstDLL,
-         DWORD     fdwReason,
-         LPVOID    lpvReserved)
-{
-  switch (fdwReason)
-    {
-    case DLL_PROCESS_ATTACH:
-      gtk_dll = (HMODULE) hinstDLL;
-      break;
-    }
-
-  return TRUE;
-}
-
-/* These here before inclusion of gtkprivate.h so that the original
- * GTK_LIBDIR and GTK_LOCALEDIR definitions are seen. Yeah, this is a
- * bit sucky.
- */
-const gchar *
-_gtk_get_libdir (void)
-{
-  static char *gtk_libdir = NULL;
-  if (gtk_libdir == NULL)
-    {
-      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
-      gchar *slash = strrchr (root, '\\');
-      if (g_ascii_strcasecmp (slash + 1, ".libs") == 0)
-        gtk_libdir = GTK_LIBDIR;
-      else
-        gtk_libdir = g_build_filename (root, "lib", NULL);
-      g_free (root);
-    }
-
-  return gtk_libdir;
-}
-
-const gchar *
-_gtk_get_localedir (void)
-{
-  static char *gtk_localedir = NULL;
-  if (gtk_localedir == NULL)
-    {
-      const gchar *p;
-      gchar *root, *temp;
-      
-      /* GTK_LOCALEDIR ends in either /lib/locale or
-       * /share/locale. Scan for that slash.
-       */
-      p = GTK_LOCALEDIR + strlen (GTK_LOCALEDIR);
-      while (*--p != '/')
-        ;
-      while (*--p != '/')
-        ;
-
-      root = g_win32_get_package_installation_directory_of_module (gtk_dll);
-      temp = g_build_filename (root, p, NULL);
-      g_free (root);
-
-      /* gtk_localedir is passed to bindtextdomain() which isn't
-       * UTF-8-aware.
-       */
-      gtk_localedir = g_win32_locale_filename_from_utf8 (temp);
-      g_free (temp);
-    }
-  return gtk_localedir;
-}
-
-#endif
-
 #include "gtkprivate.h"
+
 
 /* Private type definitions
  */
@@ -446,48 +373,6 @@ check_setugid (void)
 #endif
   return TRUE;
 }
-
-#ifdef G_OS_WIN32
-
-const gchar *
-_gtk_get_datadir (void)
-{
-  static char *gtk_datadir = NULL;
-  if (gtk_datadir == NULL)
-    {
-      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
-      gtk_datadir = g_build_filename (root, "share", NULL);
-      g_free (root);
-    }
-
-  return gtk_datadir;
-}
-
-const gchar *
-_gtk_get_sysconfdir (void)
-{
-  static char *gtk_sysconfdir = NULL;
-  if (gtk_sysconfdir == NULL)
-    {
-      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
-      gtk_sysconfdir = g_build_filename (root, "etc", NULL);
-      g_free (root);
-    }
-
-  return gtk_sysconfdir;
-}
-
-const gchar *
-_gtk_get_data_prefix (void)
-{
-  static char *gtk_data_prefix = NULL;
-  if (gtk_data_prefix == NULL)
-    gtk_data_prefix = g_win32_get_package_installation_directory_of_module (gtk_dll);
-
-  return gtk_data_prefix;
-}
-
-#endif /* G_OS_WIN32 */
 
 static gboolean do_setlocale = TRUE;
 
@@ -802,8 +687,8 @@ gettext_initialization (void)
   setlocale_initialization ();
 
 #ifdef ENABLE_NLS
-  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
-  bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE, _gtk_get_localedir ());
+  bindtextdomain (GETTEXT_PACKAGE "-properties", _gtk_get_localedir ());
 #    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   bind_textdomain_codeset (GETTEXT_PACKAGE "-properties", "UTF-8");
@@ -1256,66 +1141,6 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
 }
 
 #endif
-
-/*
- * _gtk_get_lc_ctype:
- *
- * Return the Unix-style locale string for the language currently in
- * effect. On Unix systems, this is the return value from
- * <literal>setlocale(LC_CTYPE, NULL)</literal>, and the user can
- * affect this through the environment variables LC_ALL, LC_CTYPE or
- * LANG (checked in that order). The locale strings typically is in
- * the form lang_COUNTRY, where lang is an ISO-639 language code, and
- * COUNTRY is an ISO-3166 country code. For instance, sv_FI for
- * Swedish as written in Finland or pt_BR for Portuguese as written in
- * Brazil.
- *
- * On Windows, the C library doesn't use any such environment
- * variables, and setting them won't affect the behaviour of functions
- * like ctime(). The user sets the locale through the Regional Options
- * in the Control Panel. The C library (in the setlocale() function)
- * does not use country and language codes, but country and language
- * names spelled out in English.
- * However, this function does check the above environment
- * variables, and does return a Unix-style locale string based on
- * either said environment variables or the thread's current locale.
- *
- * Return value: a dynamically allocated string, free with g_free().
- */
-
-gchar *
-_gtk_get_lc_ctype (void)
-{
-#ifdef G_OS_WIN32
-  /* Somebody might try to set the locale for this process using the
-   * LANG or LC_ environment variables. The Microsoft C library
-   * doesn't know anything about them. You set the locale in the
-   * Control Panel. Setting these env vars won't have any affect on
-   * locale-dependent C library functions like ctime(). But just for
-   * kicks, do obey LC_ALL, LC_CTYPE and LANG in GTK. (This also makes
-   * it easier to test GTK and Pango in various default languages, you
-   * don't have to clickety-click in the Control Panel, you can simply
-   * start the program with LC_ALL=something on the command line.)
-   */
-  gchar *p;
-
-  p = getenv ("LC_ALL");
-  if (p != NULL)
-    return g_strdup (p);
-
-  p = getenv ("LC_CTYPE");
-  if (p != NULL)
-    return g_strdup (p);
-
-  p = getenv ("LANG");
-  if (p != NULL)
-    return g_strdup (p);
-
-  return g_win32_getlocale ();
-#else
-  return g_strdup (setlocale (LC_CTYPE, NULL));
-#endif
-}
 
 /**
  * gtk_get_default_language:
@@ -2626,83 +2451,4 @@ gtk_propagate_event (GtkWidget *widget,
     }
   else
     g_object_unref (widget);
-}
-
-gboolean
-_gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
-                                  GValue                *return_accu,
-                                  const GValue          *handler_return,
-                                  gpointer               dummy)
-{
-  gboolean continue_emission;
-  gboolean signal_handled;
-
-  signal_handled = g_value_get_boolean (handler_return);
-  g_value_set_boolean (return_accu, signal_handled);
-  continue_emission = !signal_handled;
-
-  return continue_emission;
-}
-
-gboolean
-_gtk_single_string_accumulator (GSignalInvocationHint *ihint,
-				GValue                *return_accu,
-				const GValue          *handler_return,
-				gpointer               dummy)
-{
-  gboolean continue_emission;
-  const gchar *str;
-  
-  str = g_value_get_string (handler_return);
-  g_value_set_string (return_accu, str);
-  continue_emission = str == NULL;
-  
-  return continue_emission;
-}
-
-GdkModifierType
-_gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
-                                GdkModifierType  modifiers)
-{
-  GdkModifierType result = 0;
-  gint            i;
-
-  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
-
-  for (i = 0; i < 8; i++) /* SHIFT...MOD5 */
-    {
-      GdkModifierType real = 1 << i;
-
-      if (modifiers & real)
-        {
-          GdkModifierType virtual = real;
-
-          gdk_keymap_add_virtual_modifiers (keymap, &virtual);
-
-          if (virtual == real)
-            result |= virtual;
-          else
-            result |= virtual & ~real;
-        }
-    }
-
-  return result;
-}
-
-GdkModifierType
-_gtk_get_primary_accel_mod (void)
-{
-  static GdkModifierType primary = 0;
-
-  if (! primary)
-    {
-      GdkDisplay *display = gdk_display_get_default ();
-
-      primary = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
-                                              GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
-      primary = _gtk_replace_virtual_modifiers (gdk_keymap_get_for_display (display),
-                                                primary);
-    }
-
-  return primary;
 }
