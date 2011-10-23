@@ -30,13 +30,9 @@
 
 #include "gtkprivate.h"
 
-#ifdef G_OS_WIN32
 #define STRICT
 #include <windows.h>
 #undef STRICT
-#endif
-
-#ifdef G_OS_WIN32
 
 static HMODULE gtk_dll;
 
