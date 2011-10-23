@@ -35,7 +35,6 @@
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
-#include "gtkmainprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

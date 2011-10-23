@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkorientableprivate.h"
 #include "gtkrange.h"

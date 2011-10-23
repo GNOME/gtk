@@ -42,7 +42,6 @@
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtklabel.h"
-#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitemprivate.h"

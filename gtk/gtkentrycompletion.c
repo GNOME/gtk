@@ -82,7 +82,7 @@
 #include "gtkbox.h"
 #include "gtkwindow.h"
 #include "gtkentry.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"

@@ -41,7 +41,6 @@
 #include "gtkseparator.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
-#include "gtkmainprivate.h"
 #include "gtkprivate.h"
 
 #include <gobject/gvaluecollector.h>

@@ -51,7 +51,6 @@
 
 #include "gtktextattributes.h"
 
-#include "gtkmainprivate.h"
 #include "gtktexttag.h"
 #include "gtktexttypes.h"
 

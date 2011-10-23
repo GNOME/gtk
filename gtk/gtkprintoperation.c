@@ -31,7 +31,6 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkmainprivate.h"
 #include "gtkmessagedialog.h"
 #include "gtktypebuiltins.h"
 

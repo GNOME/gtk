@@ -39,6 +39,8 @@ void     _gtk_modules_init             (gint          *argc,
 void     _gtk_modules_settings_changed (GtkSettings   *settings,
                                         const gchar   *modules);
 
+gboolean _gtk_module_has_mixed_deps    (GModule       *module);
+
 G_END_DECLS
 
 #endif /* __GTK_MODULES_PRIVATE_H__ */

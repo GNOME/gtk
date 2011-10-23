@@ -55,7 +55,7 @@
 #include "gtkdnd.h"
 #include "gtkimagemenuitem.h"
 #include "gtklabel.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"

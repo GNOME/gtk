@@ -27,7 +27,7 @@
 #include "gtksettings.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
-#include "gtkmainprivate.h"
+#include "gtkmodulesprivate.h"
 #include "gtkintl.h"
 
 #include <gmodule.h>
@@ -598,4 +598,30 @@ _gtk_modules_settings_changed (GtkSettings *settings,
 			  I_("gtk-modules"),
 			  new_modules,
 			  settings_destroy_notify);
+}
+
+/* Return TRUE if module_to_check causes version conflicts.
+ * If module_to_check is NULL, check the main module.
+ */
+gboolean
+_gtk_module_has_mixed_deps (GModule *module_to_check)
+{
+  GModule *module;
+  gpointer func;
+  gboolean result;
+
+  if (!module_to_check)
+    module = g_module_open (NULL, 0);
+  else
+    module = module_to_check;
+
+  if (g_module_symbol (module, "gtk_progress_get_type", &func))
+    result = TRUE;
+  else
+    result = FALSE;
+
+  if (!module_to_check)
+    g_module_close (module);
+
+  return result;
 }

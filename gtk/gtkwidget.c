@@ -39,7 +39,6 @@
 #include "gtkclipboard.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
-#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"

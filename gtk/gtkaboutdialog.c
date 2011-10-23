@@ -49,7 +49,7 @@
 #include "gtktextview.h"
 #include "gtkiconfactory.h"
 #include "gtkshow.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmessagedialog.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
