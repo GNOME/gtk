@@ -355,7 +355,7 @@ gtk_cell_renderer_progress_set_property (GObject *object,
       priv->orientation = g_value_get_enum (value);
       break;
     case PROP_INVERTED:
-      priv->orientation = g_value_get_boolean (value);
+      priv->inverted = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
