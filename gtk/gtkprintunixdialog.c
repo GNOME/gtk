@@ -1346,7 +1346,7 @@ setup_page_table (GtkPrinterOptionSet *options,
                                            add_option_to_table,
                                            table);
 
-  nrows = grid_rows (GTK_GRID (page));
+  nrows = grid_rows (GTK_GRID (table));
   if (nrows == 1)
     gtk_widget_hide (page);
   else
