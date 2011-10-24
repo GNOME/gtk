@@ -554,11 +554,14 @@ typedef struct
   guint motion_id;
   guint button_release_id;
   guint drag_begin_id;
+  guint grab_notify_id;
 
   gint start_x;
   gint start_y;
   gint current_x;
   gint current_y;
+
+  GdkDevice *device;
 } PressAndHoldData;
 
 /* --- prototypes --- */
@@ -3102,9 +3105,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * The trigger action is emitted by setting @action to be
    * %GTK_PRESS_AND_HOLD_TRIGGER, the @x and @y coordinates are set to the
    * cursor's current location (this includes any movements made between
-   * the original query and this trigger) and @keyboard_mode is set to
-   * %TRUE if the trigger was initiated by a keyboard action, %FALSE
-   * otherwise.  In this case the return value is ignored.
+   * the original query and this trigger).  In this case the return value
+   * is ignored.
    *
    * When @action is %GTK_WIDGET_PRESS_AND_HOLD_CANCEL, @x and @y are both
    * undefined.  The return value is ignored too as
@@ -6973,6 +6975,16 @@ gtk_widget_press_and_hold_button_release (GtkWidget        *widget,
   return FALSE;
 }
 
+static void
+gtk_widget_press_and_hold_grab_notify (GtkWidget        *widget,
+                                       gboolean          was_grabbed,
+                                       PressAndHoldData *data)
+{
+  if (data->device &&
+      gtk_widget_device_is_shadowed (widget, data->device))
+    gtk_widget_press_and_hold_cancel (widget, NULL, data);
+}
+
 static gboolean
 gtk_widget_press_and_hold_motion_notify (GtkWidget        *widget,
                                          GdkEvent         *_event,
@@ -7218,10 +7230,16 @@ gtk_widget_press_and_hold_button_press_event (GtkWidget      *widget,
                                 G_CALLBACK (gtk_widget_press_and_hold_cancel),
                                 data);
 
+      data->grab_notify_id =
+        g_signal_connect (widget, "grab-notify",
+                          G_CALLBACK (gtk_widget_press_and_hold_grab_notify),
+                          data);
+
       data->press_and_hold_id =
               gdk_threads_add_timeout (timeout,
                                        gtk_widget_press_and_hold_timeout,
                                        widget);
+      data->device = gdk_event_get_device ((GdkEvent *) event);
     }
 
   return FALSE;
