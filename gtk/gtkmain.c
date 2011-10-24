@@ -130,7 +130,8 @@
 #include "gtkwindowprivate.h"
 
 static gboolean gtk_propagate_captured_event (GtkWidget *widget,
-                                              GdkEvent  *event);
+                                              GdkEvent  *event,
+                                              GtkWidget *topmost);
 
 /* Private type definitions
  */
@@ -1471,6 +1472,7 @@ gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;
   GtkWidget *grab_widget = NULL;
+  GtkWidget *topmost_widget = NULL;
   GtkWindowGroup *window_group;
   GdkEvent *rewritten_event = NULL;
   GdkDevice *device;
@@ -1529,6 +1531,14 @@ gtk_main_do_event (GdkEvent *event)
 
   if (!grab_widget)
     grab_widget = gtk_window_group_get_current_grab (window_group);
+
+  /* Find out the topmost widget where captured event propagation
+   * should start, which is the widget holding the GTK+ grab
+   * if any, otherwise it's left NULL and events are emitted
+   * from the toplevel (or topmost parentless parent).
+   */
+  if (grab_widget)
+    topmost_widget = grab_widget;
 
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
@@ -1634,7 +1644,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
-      if (!gtk_propagate_captured_event (grab_widget, event))
+      if (!gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
 
@@ -1687,7 +1697,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_BUTTON_RELEASE:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-      if (!gtk_propagate_captured_event (grab_widget, event))
+      if (!gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
 
@@ -2329,7 +2339,8 @@ gtk_get_event_widget (GdkEvent *event)
 
 static gboolean
 propagate_event_up (GtkWidget *widget,
-                    GdkEvent  *event)
+                    GdkEvent  *event,
+                    GtkWidget *topmost)
 {
   gboolean handled_event = FALSE;
 
@@ -2356,6 +2367,9 @@ propagate_event_up (GtkWidget *widget,
       tmp = gtk_widget_get_parent (widget);
       g_object_unref (widget);
 
+      if (widget == topmost)
+        break;
+
       widget = tmp;
 
       if (handled_event || !widget)
@@ -2367,20 +2381,24 @@ propagate_event_up (GtkWidget *widget,
 
 static gboolean
 propagate_event_down (GtkWidget *widget,
-                      GdkEvent  *event)
+                      GdkEvent  *event,
+                      GtkWidget *topmost)
 {
   gint handled_event = FALSE;
   GList *widgets = NULL;
   GList *l;
 
   widgets = g_list_prepend (widgets, g_object_ref (widget));
-  while (TRUE)
+  while (widget && widget != topmost)
     {
       widget = gtk_widget_get_parent (widget);
       if (!widget)
         break;
 
       widgets = g_list_prepend (widgets, g_object_ref (widget));
+
+      if (widget == topmost)
+        break;
     }
 
   for (l = widgets; l && !handled_event; l = g_list_next (l))
@@ -2400,7 +2418,8 @@ propagate_event_down (GtkWidget *widget,
 static gboolean
 propagate_event (GtkWidget *widget,
                  GdkEvent  *event,
-                 gboolean   captured)
+                 gboolean   captured,
+                 GtkWidget *topmost)
 {
   gboolean handled_event = FALSE;
   gboolean (* propagate_func) (GtkWidget *widget, GdkEvent  *event);
@@ -2442,7 +2461,9 @@ propagate_event (GtkWidget *widget,
     }
 
   /* Other events get propagated up/down the widget tree */
-  return captured ? propagate_event_down (widget, event) : propagate_event_up (widget, event);
+  return captured ?
+    propagate_event_down (widget, event, topmost) :
+    propagate_event_up (widget, event, topmost);
 }
 
 /**
@@ -2476,12 +2497,13 @@ gtk_propagate_event (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (event != NULL);
 
-  propagate_event (widget, event, FALSE);
+  propagate_event (widget, event, FALSE, NULL);
 }
 
 static gboolean
 gtk_propagate_captured_event (GtkWidget *widget,
-                              GdkEvent  *event)
+                              GdkEvent  *event,
+                              GtkWidget *topmost)
 {
-  return propagate_event (widget, event, TRUE);
+  return propagate_event (widget, event, TRUE, topmost);
 }
