@@ -6497,6 +6497,8 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
     }
 
   gtk_notebook_update_tab_states (notebook);
+  gtk_notebook_pages_allocate (notebook);
+
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
   g_object_notify (G_OBJECT (notebook), "page");
 }
@@ -6585,11 +6587,6 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
     return;
 
   page = priv->focus_tab->data;
-  if (gtk_widget_get_mapped (page->tab_label))
-    gtk_notebook_redraw_tabs (notebook);
-  else
-    gtk_notebook_pages_allocate (notebook);
-
   gtk_notebook_switch_page (notebook, page);
 }
 
