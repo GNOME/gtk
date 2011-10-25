@@ -444,6 +444,9 @@ struct _GtkWidgetClass
   gboolean     (* multitouch_event)       (GtkWidget             *widget,
                                            GdkEventMultiTouch    *event);
 
+  void         (* gesture)                (GtkWidget          *widget,
+                                           guint               gesture_id);
+
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
@@ -452,7 +455,6 @@ struct _GtkWidgetClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
 };
 
 struct _GtkWidgetAuxInfo
@@ -910,6 +912,12 @@ GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
 
 void              gtk_widget_release_captured_events (GtkWidget *widget,
                                                       gboolean   emit);
+
+/* Gestures */
+void gtk_widget_enable_gesture (GtkWidget       *widget,
+                                GtkGestureType   gesture);
+void gtk_widget_disable_gesture (GtkWidget      *widget,
+                                 GtkGestureType  gesture);
 
 G_END_DECLS
 

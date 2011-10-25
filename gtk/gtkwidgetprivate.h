@@ -178,6 +178,10 @@ gboolean          _gtk_widget_press_and_hold_check_cancel    (GtkWidget      *wi
 gboolean          _gtk_widget_press_and_hold_check_threshold (GtkWidget      *widget,
                                                               GdkEventMotion *event);
 
+void              _gtk_widget_gesture_stroke                 (GtkWidget      *widget,
+                                                              GdkEvent       *event);
+void              _gtk_widget_gesture_finish                 (GtkWidget      *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

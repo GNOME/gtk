@@ -60,6 +60,7 @@
 #include "gtkcssprovider.h"
 #include "gtkanimationdescription.h"
 #include "gtkmodifierstyle.h"
+#include "gtkgesturesinterpreter.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
 #include "gtkplug.h"
@@ -404,6 +405,7 @@ struct _GtkWidgetPrivate
   GtkWidget *parent;
 
   GSList *captured_events;
+  GArray *gestures;
 
 #ifdef G_ENABLE_DEBUG
   /* Number of gtk_widget_push_verify_invariants () */
@@ -489,6 +491,7 @@ enum {
   CAPTURED_EVENT,
   PRESS_AND_HOLD,
   MULTITOUCH_EVENT,
+  GESTURE,
   LAST_SIGNAL
 };
 
@@ -761,6 +764,7 @@ static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_press_and_hold = 0;
+static GQuark           quark_gestures_interpreter = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -886,6 +890,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_press_and_hold = g_quark_from_static_string ("gtk-widget-press-and-hold");
+  quark_gestures_interpreter = g_quark_from_static_string ("gtk-widget-gestures-interpreter");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -3153,6 +3158,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GTK_TYPE_PRESS_AND_HOLD_ACTION,
 		  G_TYPE_INT,
 		  G_TYPE_INT);
+
+  widget_signals[GESTURE] =
+    g_signal_new (I_("gesture"),
+                  G_TYPE_FROM_CLASS (klass),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, gesture),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__UINT,
+                  G_TYPE_NONE, 1, G_TYPE_UINT);
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
@@ -10757,6 +10771,9 @@ gtk_widget_finalize (GObject *object)
       g_slist_free (priv->captured_events);
     }
 
+  if (priv->gestures)
+    g_array_free (priv->gestures, TRUE);
+
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
                "called g_object_unref() on an object that had only a floating\n"
@@ -14591,4 +14608,101 @@ gtk_widget_release_captured_events (GtkWidget *widget,
   g_slist_foreach (priv->captured_events, (GFunc) gdk_event_free, NULL);
   g_slist_free (priv->captured_events);
   priv->captured_events = NULL;
+}
+
+void
+_gtk_widget_gesture_stroke (GtkWidget *widget,
+                            GdkEvent  *event)
+{
+  GtkGesturesInterpreter *interpreter;
+  GtkWidgetPrivate *priv;
+
+  priv = widget->priv;
+
+  if (!priv->gestures ||
+      priv->gestures->len == 0)
+    return;
+
+  interpreter = g_object_get_qdata (G_OBJECT (widget), quark_gestures_interpreter);
+  g_assert (interpreter != NULL);
+
+  gtk_gestures_interpreter_feed_event (interpreter, event);
+}
+
+void
+_gtk_widget_gesture_finish (GtkWidget *widget)
+{
+  GtkGesturesInterpreter *interpreter;
+  GtkWidgetPrivate *priv;
+  guint gesture;
+
+  priv = widget->priv;
+
+  if (!priv->gestures ||
+      priv->gestures->len == 0)
+    return;
+
+  interpreter = g_object_get_qdata (G_OBJECT (widget), quark_gestures_interpreter);
+  g_assert (interpreter != NULL);
+
+  if (gtk_gestures_interpreter_finish (interpreter, &gesture))
+    g_signal_emit (widget, widget_signals[GESTURE], 0, gesture);
+}
+
+void
+gtk_widget_enable_gesture (GtkWidget *widget,
+                           guint      gesture_id)
+{
+  GtkGesturesInterpreter *interpreter;
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+  interpreter = g_object_get_qdata (G_OBJECT (widget), quark_gestures_interpreter);
+
+  if (!interpreter)
+    {
+      interpreter = gtk_gestures_interpreter_new ();
+      g_object_set_qdata_full (G_OBJECT (widget), quark_gestures_interpreter,
+                               interpreter, (GDestroyNotify) g_object_unref);
+    }
+
+  if (!gtk_gestures_interpreter_add_gesture (interpreter, gesture_id))
+    return;
+
+  if (!priv->gestures)
+    priv->gestures = g_array_new (FALSE, FALSE, sizeof (guint));
+
+  g_array_append_val (priv->gestures, gesture_id);
+}
+
+void
+gtk_widget_disable_gesture (GtkWidget *widget,
+                            guint      gesture_id)
+{
+  GtkGesturesInterpreter *interpreter;
+  GtkWidgetPrivate *priv;
+  guint i;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  if (!priv->gestures ||
+      priv->gestures->len == 0)
+    return;
+
+  interpreter = g_object_get_qdata (G_OBJECT (widget), quark_gestures_interpreter);
+  g_assert (interpreter != NULL);
+
+  for (i = 0; i < priv->gestures->len; i++)
+    {
+      if (gesture_id == g_array_index (priv->gestures, guint, i))
+        {
+          g_array_remove_index (priv->gestures, i);
+          gtk_gestures_interpreter_remove_gesture (interpreter, gesture_id);
+          break;
+        }
+    }
 }

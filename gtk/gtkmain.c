@@ -1781,6 +1781,16 @@ gtk_main_do_event (GdkEvent *event)
       _gtk_tooltip_handle_event (event);
     }
 
+  /* Handle gestures for touch events */
+  if (gdk_event_get_touch_id (event, NULL))
+    {
+      _gtk_widget_gesture_stroke (grab_widget, event);
+
+      if (event->type == GDK_BUTTON_RELEASE ||
+          event->type == GDK_TOUCH_RELEASE)
+        _gtk_widget_gesture_finish (grab_widget);
+    }
+
   tmp_list = current_events;
   current_events = g_list_remove_link (current_events, tmp_list);
   g_list_free_1 (tmp_list);
