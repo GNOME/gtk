@@ -55,6 +55,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testfontchooserdialog 		\
 	testframe			\
 	testgeometry			\
+	testgestures			\
 	testgiconpixbuf			\
 	testgrid			\
 	testgtk				\
@@ -178,6 +179,7 @@ testfontchooser_DEPENDENCIES = $(TEST_DEPS)
 testfontchooserdialog_DEPENDENCIES = $(TEST_DEPS)
 testframe_DEPENDENCIES = $(TEST_DEPS)
 testgeometry_DEPENDENCIES = $(TEST_DEPS)
+testgestures_DEPENDENCIES = $(TEST_DEPS)
 testgiconpixbuf = $(TEST_DEPS)
 testgrid_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -275,6 +277,7 @@ testfontchooser_LDADD = $(LDADDS)
 testfontchooserdialog_LDADD = $(LDADDS)
 testframe_LDADD = $(LDADDS)
 testgeometry_LDADD = $(LDADDS)
+testgestures_LDADD = $(LDADDS)
 testgiconpixbuf_LDADD = $(LDADDS)
 testgrid_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
@@ -449,6 +452,9 @@ testframe_SOURCES = 		\
 
 testgeometry_SOURCES = 		\
 	testgeometry.c
+
+testgestures_SOURCES = 		\
+	testgestures.c
 
 testgiconpixbuf_SOURCES =	\
 	testgiconpixbuf.c
