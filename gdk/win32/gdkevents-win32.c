@@ -2858,7 +2858,16 @@ gdk_event_translate (MSG  *msg,
 
     case WM_EXITSIZEMOVE:
     case WM_EXITMENULOOP:
-      _gdk_win32_end_modal_call ();
+      if (_modal_operation_in_progress)
+	_gdk_win32_end_modal_call ();
+      break;
+
+    case WM_CAPTURECHANGED:
+      /* Sometimes we don't get WM_EXITSIZEMOVE, for instance when you
+	 select move/size in the menu and then click somewhere without
+	 moving/resizing. We work around this using WM_CAPTURECHANGED. */
+      if (_modal_operation_in_progress)
+	_gdk_win32_end_modal_call ();
       break;
 
     case WM_WINDOWPOSCHANGING:
