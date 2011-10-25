@@ -2932,9 +2932,10 @@ gdk_event_translate (MSG  *msg,
 	  _gdk_win32_append_event (event);
 	}
 
-      /* New size or position => configure event */
+      /* Show, New size or position => configure event */
       if (!(windowpos->flags & SWP_NOCLIENTMOVE) ||
-	  !(windowpos->flags & SWP_NOCLIENTSIZE))
+	  !(windowpos->flags & SWP_NOCLIENTSIZE) ||
+	  (windowpos->flags & SWP_SHOWWINDOW))
 	{
 	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	      !IsIconic (msg->hwnd) &&
