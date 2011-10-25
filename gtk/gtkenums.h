@@ -932,6 +932,17 @@ typedef enum {
   GTK_BORDER_STYLE_RIDGE
 } GtkBorderStyle;
 
+/**
+ * GtkGestureType:
+ * @GTK_GESTURE_SWIPE_RIGHT: A swipe from left to right
+ * @GTK_GESTURE_SWIPE_LEFT: A swipe from right to left
+ * @GTK_GESTURE_SWIPE_UP: A swipe from bottom to top
+ * @GTK_GESTURE_SWIPE_DOWN: A swipe from top to bottom
+ * @GTK_GESTURE_CIRCULAR_CLOCKWISE: A circular clockwise movement
+ * @GTK_GESTURE_CIRCULAR_COUNTERCLOCKWISE: A circular counterclockwise movement
+ *
+ * Describes the stock gestures handled by GTK+.
+ */
 typedef enum {
   GTK_CAPTURED_EVENT_NONE    = 0,
   GTK_CAPTURED_EVENT_HANDLED = 1 << 0,
@@ -968,6 +979,16 @@ typedef enum {
   GTK_GESTURE_CIRCULAR_COUNTERCLOCKWISE
 } GtkGestureType;
 
+/**
+ * GtkGestureFlags:
+ * @GTK_GESTURE_FLAG_NONE: Gesture is interpreted as-is.
+ * @GTK_GESTURE_FLAG_IGNORE_INITIAL_ORIENTATION:
+ *   The initial orientation is ignored in comparisons,
+ *   so the gesture doesn't have a sense of direction,
+ *   this is useful for i.e. circular strokes.
+ *
+ * Flags accepted by gtk_gesture_new()
+ */
 typedef enum {
   GTK_GESTURE_FLAG_NONE                       = 0,
   GTK_GESTURE_FLAG_IGNORE_INITIAL_ORIENTATION = 1 << 1

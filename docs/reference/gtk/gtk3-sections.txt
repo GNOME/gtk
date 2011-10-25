@@ -1580,6 +1580,50 @@ gtk_frame_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkgesturesinterpreter</FILE>
+<TITLE>GtkGesturesInterpreter</TITLE>
+GtkGesturesInterpreter
+GtkGestureType
+gtk_gestures_interpreter_new
+gtk_gestures_interpreter_add_gesture
+gtk_gestures_interpreter_remove_gesture
+gtk_gestures_interpreter_feed_event
+gtk_gestures_interpreter_finish
+
+<SUBSECTION Gestures>
+GtkGestureStroke
+gtk_gesture_stroke_new
+gtk_gesture_stroke_copy
+gtk_gesture_stroke_free
+gtk_gesture_stroke_append_vector
+gtk_gesture_stroke_get_n_vectors
+gtk_gesture_stroke_get_vector
+GtkGesture
+GtkGestureFlags
+gtk_gesture_new
+gtk_gesture_copy
+gtk_gesture_free
+gtk_gesture_add_stroke
+gtk_gesture_get_n_strokes
+gtk_gesture_get_stroke
+gtk_gesture_get_flags
+gtk_gesture_register
+gtk_gesture_register_static
+gtk_gesture_lookup
+
+<SUBSECTION Standard>
+GTK_GESTURES_INTERPRETER
+GTK_IS_GESTURES_INTERPRETER
+GTK_TYPE_GESTURES_INTERPRETER
+GTK_IS_GESTURES_INTERPRETER_CLASS
+GTK_GESTURES_INTERPRETER_GET_CLASS
+<SUBSECTION Private>
+gtk_gestures_interpreter_get_type
+gtk_gesture_stroke_get_type
+gtk_gesture_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkhandlebox</FILE>
 <TITLE>GtkHandleBox</TITLE>
 GtkHandleBox

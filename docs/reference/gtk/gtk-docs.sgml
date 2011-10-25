@@ -68,6 +68,11 @@
     <xi:include href="xml/gtkstyle.xml" />
   </part>
 
+  <part id="multitouch">
+    <title>Multitouch</title>
+    <xi:include href="xml/gtkgesturesinterpreter.xml" />
+  </part>
+
   <part id="gtkobjects">
     <title>GTK+ Widgets and Objects</title>
 

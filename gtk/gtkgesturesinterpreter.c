@@ -24,6 +24,32 @@
 #include <gdk/gdk.h>
 #include <math.h>
 
+/**
+ * SECTION:gtkgesturesinterpreter
+ * @Short_description: Gestures interpreter
+ * @Title: GtkGesturesInterpreter
+ * @See_also: #GdkEventMultitouch
+ *
+ * #GtkGesturesInterpreter handles interpretation of input events to check
+ * whether they resemble a handled gesture. If you are using #GtkWidget<!-- -->s
+ * and want only to enable events for devices with source %GDK_SOURCE_TOUCH,
+ * you can use gtk_widget_enable_gesture() and the #GtkWidget::gesture signal
+ * without the need of creating a #GtkGesturesInterpreter.
+ *
+ * A #GtkGesturesInterpreter may be told to handle a gesture through
+ * gtk_gestures_interpreter_add_gesture(), either using a gesture provided
+ * by the GtkGestureType enum, or creating and registering a gesture through
+ * gtk_gesture_register() or gtk_gesture_register_static().
+ *
+ * The #GtkGestureInterpreter can be told to interpret user input events
+ * through gtk_gestures_interpreter_feed_event(), the event is required
+ * to provide coordinates in order to be handled.
+ *
+ * The recognized gesture may be requested through gtk_gestures_interpreter_finish(),
+ * if the gesture drafted by the input events resembles well enough a handled
+ * gesture, this function will provide the gesture ID that was recognized.
+ */
+
 #define N_CIRCULAR_SIDES 12
 #define VECTORIZATION_ANGLE_THRESHOLD (G_PI_2 / 10)
 #define MINIMUM_CONFIDENCE_ALLOWED 0.78
@@ -180,6 +206,15 @@ gtk_gestures_interpreter_class_init (GtkGesturesInterpreterClass *klass)
 
   initialize_gestures_ht ();
 
+  /**
+   * GtkGesturesInterpreter::events-vectorized
+   * @interpreter: the object which received the signal
+   * @gesture: the #GtkGesture holding the user gesture
+   *
+   * This signal is emitted during gtk_gestures_interpreter_finish()
+   * after the events introduced through gtk_gestures_interpreter_feed_event()
+   * are vectorized and transformed into a #GtkGesture.
+   */
   signals[EVENTS_VECTORIZED] =
     g_signal_new (I_("events-vectorized"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -189,6 +224,17 @@ gtk_gestures_interpreter_class_init (GtkGesturesInterpreterClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__BOXED,
                   G_TYPE_NONE, 1, GTK_TYPE_GESTURE);
+
+  /**
+   * GtkGesturesInterpreter::gesture-detected
+   * @interpreter: the object which received the signal
+   * @gesture_id: the gesture ID of the recognized gesture
+   * @confidence: [0..1] measuring the level of confidence on the recognition.
+   *
+   * This signal is emitted when the #GtkGesturesInterpreter
+   * recognizes a gesture out of the events introduced through
+   * gtk_gestures_interpreter_feed_event().
+   */
   signals[GESTURE_DETECTED] =
     g_signal_new (I_("gesture-detected"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -379,6 +425,14 @@ gtk_gestures_interpreter_init (GtkGesturesInterpreter *interpreter)
 }
 
 /* Gesture stroke */
+
+/**
+ * gtk_gesture_stroke_new:
+ *
+ * Creates a new, empty stroke to be used in a gesture.
+ *
+ * Returns: (transfer full): a newly created #GtkGestureStroke
+ **/
 GtkGestureStroke *
 gtk_gesture_stroke_new (void)
 {
@@ -390,6 +444,14 @@ gtk_gesture_stroke_new (void)
   return stroke;
 }
 
+/**
+ * gtk_gesture_stroke_copy:
+ * @stroke: a #GtkGestureStroke
+ *
+ * Copies a #GtkGestureStroke
+ *
+ * Returns: (transfer full): A copy of @stroke
+ **/
 GtkGestureStroke *
 gtk_gesture_stroke_copy (const GtkGestureStroke *stroke)
 {
@@ -406,6 +468,12 @@ gtk_gesture_stroke_copy (const GtkGestureStroke *stroke)
   return copy;
 }
 
+/**
+ * gtk_gesture_stroke_free:
+ * @stroke: a #GtkGestureStroke
+ *
+ * Frees a #GtkGestureStroke and all its contained data
+ **/
 void
 gtk_gesture_stroke_free (GtkGestureStroke *stroke)
 {
@@ -415,6 +483,14 @@ gtk_gesture_stroke_free (GtkGestureStroke *stroke)
   g_slice_free (GtkGestureStroke, stroke);
 }
 
+/**
+ * gtk_gesture_stroke_append_vector:
+ * @stroke: a #GtkGestureStroke
+ * @angle: vector angle
+ * @length: vector length
+ *
+ * Appends a vector to stroke.
+ **/
 void
 gtk_gesture_stroke_append_vector (GtkGestureStroke *stroke,
                                   gdouble           angle,
@@ -431,6 +507,15 @@ gtk_gesture_stroke_append_vector (GtkGestureStroke *stroke,
   stroke->total_length += length;
 }
 
+/**
+ * gtk_gesture_stroke_get_n_vectors:
+ * @stroke: a #GtkGestureStroke
+ *
+ * Returns the number of vectors that @stroke currently
+ * contains.
+ *
+ * Returns: The number of vectors in @stroke
+ **/
 guint
 gtk_gesture_stroke_get_n_vectors (const GtkGestureStroke *stroke)
 {
@@ -439,6 +524,26 @@ gtk_gesture_stroke_get_n_vectors (const GtkGestureStroke *stroke)
   return stroke->gesture_data->len;
 }
 
+/**
+ * gtk_gesture_stroke_get_vector:
+ * @stroke: a #GtkGestureStroke
+ * @n_vector: number of vector to retrieve
+ * @angle: (out) (allow-none): return location for the vector angle, or %NULL
+ * @length: (out) (allow-none): return location for the vector distance, or %NULL
+ * @relative_length: (out) (allow-none): return location for the relative vector
+ *                   length within the stroke, or %NULL
+ *
+ * If @n_vector falls within the range of vectors contained in @stroke,
+ * this function will return %TRUE and respectively fill in @angle and
+ * @length with the vector direction angle and length. Optionally, if
+ * @relative_length is not %NULL, the relative [0..1] length of the vector
+ * within the whole stroke will be returned at that location.
+ *
+ * If @n_vector doesn't represent a vector of the stroke, %FALSE is
+ * returned.
+ *
+ * Returns: %TRUE if @n_vector is a valid vector
+ **/
 gboolean
 gtk_gesture_stroke_get_vector (const GtkGestureStroke *stroke,
                                guint                   n_vector,
@@ -466,6 +571,24 @@ gtk_gesture_stroke_get_vector (const GtkGestureStroke *stroke,
 }
 
 /* Gesture */
+
+/**
+ * gtk_gesture_new:
+ * @stroke: a #GtkGestureStroke
+ * @flags: #GtkGestureFlags applying to the gesture
+ *
+ * Creates a new gesture containing @stroke as its first (or only)
+ * stroke. Use gtk_gesture_add_stroke() to add create gestures with
+ * more than one stroke.
+ *
+ * If @flags contains %GTK_GESTURE_FLAG_IGNORE_INITIAL_ORIENTATION,
+ * the gesture will be loosely compared with respect to the initial
+ * orientation of the gesture, it should be used whenever the
+ * orientation isn't an important matching factor (for example,
+ * circular gestures).
+ *
+ * Returns: (transfer full): A newly created #GtkGesture
+ **/
 GtkGesture *
 gtk_gesture_new (const GtkGestureStroke *stroke,
                  GtkGestureFlags         flags)
@@ -485,6 +608,17 @@ gtk_gesture_new (const GtkGestureStroke *stroke,
   return gesture;
 }
 
+/**
+ * gtk_gesture_add_stroke:
+ * @gesture: a #GtkGesture
+ * @stroke: a #GtkGestureStroke
+ * @dx: X offset with respect to the first stroke
+ * @dy: Y offset with respect to the first stroke
+ *
+ * Adds a further stroke to @gesture, @dx and @dy represent
+ * the offset with the stroke that was added through
+ * gtk_gesture_new().
+ **/
 void
 gtk_gesture_add_stroke (GtkGesture             *gesture,
                         const GtkGestureStroke *stroke,
@@ -504,6 +638,15 @@ gtk_gesture_add_stroke (GtkGesture             *gesture,
   g_ptr_array_add (gesture->strokes, copy);
 }
 
+/**
+ * gtk_gesture_copy:
+ * @gesture: a #GtkGesture
+ *
+ * Copies a #GtkGesture
+ *
+ * Returns: (transfer full): a copy of @gesture. gtk_gesture_free() must be
+ *          called on it when done.
+ **/
 GtkGesture *
 gtk_gesture_copy (const GtkGesture *gesture)
 {
@@ -529,6 +672,12 @@ gtk_gesture_copy (const GtkGesture *gesture)
   return copy;
 }
 
+/**
+ * gtk_gesture_free:
+ * @gesture: a #GtkGesture
+ *
+ * Frees a #GtkGesture
+ **/
 void
 gtk_gesture_free (GtkGesture *gesture)
 {
@@ -538,6 +687,14 @@ gtk_gesture_free (GtkGesture *gesture)
   g_slice_free (GtkGesture, gesture);
 }
 
+/**
+ * gtk_gesture_get_flags:
+ * @gesture: a #GtkGesture
+ *
+ * Returns the #GtkGestureFlags applying to @gesture
+ *
+ * Returns: the gesture flags
+ **/
 GtkGestureFlags
 gtk_gesture_get_flags (const GtkGesture *gesture)
 {
@@ -546,6 +703,14 @@ gtk_gesture_get_flags (const GtkGesture *gesture)
   return gesture->flags;
 }
 
+/**
+ * gtk_gesture_get_n_strokes:
+ * @gesture: a #GtkGesture
+ *
+ * Returns the number of strokes that compose @gesture
+ *
+ * Returns: the number of strokes
+ **/
 guint
 gtk_gesture_get_n_strokes (const GtkGesture *gesture)
 {
@@ -554,6 +719,20 @@ gtk_gesture_get_n_strokes (const GtkGesture *gesture)
   return gesture->strokes->len;
 }
 
+/**
+ * gtk_gesture_get_stroke:
+ * @gesture: a #GtkGesture
+ * @n_stroke: number of stroke to retrieve
+ * @dx: (out) (allow-none): return location for the X offset, or %NULL
+ * @dy: (out) (allow-none): return location for the Y offset, or %NULL
+ *
+ * if @n_stroke falls within the number of strokes that
+ * compose @gesture, this function will return the
+ * #GtkGestureStroke, and fill in @dx and @dy with the
+ * offset with respect to the first stroke.
+ *
+ * Returns: (transfer none): the @GtkGestureStroke, or %NULL
+ **/
 const GtkGestureStroke *
 gtk_gesture_get_stroke (const GtkGesture *gesture,
                         guint             n_stroke,
@@ -579,6 +758,15 @@ gtk_gesture_get_stroke (const GtkGesture *gesture,
   return stroke;
 }
 
+/**
+ * gtk_gesture_register:
+ * @gesture: a #GtkGesture
+ *
+ * Registers a gesture so it can be used in a #GtkGesturesInterpreter.
+ * This function creates an internal copy of @gesture
+ *
+ * Returns: the ID of the just registered gesture
+ **/
 guint
 gtk_gesture_register (const GtkGesture *gesture)
 {
@@ -587,6 +775,16 @@ gtk_gesture_register (const GtkGesture *gesture)
   return gtk_gesture_register_static (gtk_gesture_copy (gesture));
 }
 
+/**
+ * gtk_gesture_register_static:
+ * @gesture: a #GtkGesture
+ *
+ * Registers a gesture so it can be used in a #GtkGesturesInterpreter.
+ * This function assumes @gesture is statically stored, so doesn't
+ * create a copy of it.
+ *
+ * Returns: the ID of the just registered gesture
+ **/
 guint
 gtk_gesture_register_static (const GtkGesture *gesture)
 {
@@ -603,6 +801,15 @@ gtk_gesture_register_static (const GtkGesture *gesture)
   return gesture_id;
 }
 
+/**
+ * gtk_gesture_lookup:
+ * @gesture_id: a gesture ID
+ *
+ * Returns the #GtkGesture corresponding to @gesture_id,
+ * or %NULL if there is no gesture registered with such ID.
+ *
+ * Returns: (transfer none): the #GtkGesture, or %NULL
+ **/
 const GtkGesture *
 gtk_gesture_lookup (guint gesture_id)
 {
@@ -614,12 +821,35 @@ gtk_gesture_lookup (guint gesture_id)
 }
 
 /* Gesture interpreter */
+
+/**
+ * gtk_gestures_interpreter_new:
+ *
+ * Creates a new #GtkGesturesInterpreter
+ *
+ * Returns: (transfer full): the newly created #GtkGesturesInterpreter
+ **/
 GtkGesturesInterpreter *
 gtk_gestures_interpreter_new (void)
 {
   return g_object_new (GTK_TYPE_GESTURES_INTERPRETER, NULL);
 }
 
+/**
+ * gtk_gestures_interpreter_add_gesture:
+ * @interpreter: a #GtkGesturesInterpreter
+ * @gesture_id: gesture ID to enable in interpreter
+ *
+ * Tells @interpreter to handle @gesture_id. @gesture_id may be
+ * either a custom #GtkGesture registered through gtk_gesture_register()
+ * or gtk_gesture_register_static(), or a value from the #GtkGestureType
+ * enum.
+ *
+ * If @gesture_id doesn't represent a registered gesture, or is already
+ * handled by @interpreter, %FALSE will be returned
+ *
+ * Returns: %TRUE if the gesture is now handled
+ **/
 gboolean
 gtk_gestures_interpreter_add_gesture (GtkGesturesInterpreter *interpreter,
                                       guint                   gesture_id)
@@ -643,6 +873,13 @@ gtk_gestures_interpreter_add_gesture (GtkGesturesInterpreter *interpreter,
   return TRUE;
 }
 
+/**
+ * gtk_gestures_interpreter_remove_gesture:
+ * @interpreter: a #GtkGesturesInterpreter
+ * @gesture_id: gesture ID to stop handling
+ *
+ * Removes @gesture_id from being handled by @interpreter.
+ **/
 void
 gtk_gestures_interpreter_remove_gesture (GtkGesturesInterpreter *interpreter,
                                          guint                   gesture_id)
@@ -669,6 +906,20 @@ gtk_gestures_interpreter_remove_gesture (GtkGesturesInterpreter *interpreter,
     }
 }
 
+/**
+ * gtk_gestures_interpreter_feed_event:
+ * @interpreter: a #GtkGesturesInterpreter
+ * @event: a #GdkEvent containing coordinates
+ *
+ * Feeds an input event into @interpreter, the coordinates of @event will
+ * be used to build the user gesture that will be later compared to the
+ * handled gestures.
+ *
+ * If @event doesn't contain coordinates information (gdk_event_get_coords()
+ * returns %FALSE), %FALSE will be returned
+ *
+ * Returns: %TRUE if the event was useful to build the user gesture
+ **/
 gboolean
 gtk_gestures_interpreter_feed_event (GtkGesturesInterpreter *interpreter,
 				     GdkEvent               *event)
@@ -828,6 +1079,20 @@ compare_gestures (const GtkGesture *gesture,
   return TRUE;
 }
 
+/**
+ * gtk_gestures_interpreter_finish:
+ * @interpreter: a #GtkGesturesInterpreter
+ * @gesture_id: (out) (allow-none): return location for the resulting
+ *              gesture ID, or %NULL
+ *
+ * Finishes the user gesture and compares it to the handled gestures,
+ * returning %TRUE and filling in @gesture_id with the resulting gesture
+ * in case of success.
+ *
+ * If %FALSE is returned, no gesture was recognized.
+ *
+ * Returns: %TRUE if the gesture matched
+ **/
 gboolean
 gtk_gestures_interpreter_finish (GtkGesturesInterpreter *interpreter,
                                  guint                  *gesture_id)
