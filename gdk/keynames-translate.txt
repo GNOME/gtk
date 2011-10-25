@@ -1,5 +1,7 @@
 XF86MonBrightnessUp
 XF86MonBrightnessDown
+XF86KbdBrightnessUp
+XF86KbdBrightnessDown
 XF86AudioMute
 XF86AudioLowerVolume
 XF86AudioRaiseVolume
