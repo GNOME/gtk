@@ -467,6 +467,8 @@ extern gint		 _gdk_max_colors;
 /* TRUE while a modal sizing, moving, or dnd operation is in progress */
 extern gboolean		_modal_operation_in_progress;
 
+extern HWND		_modal_move_resize_window;
+
 /* TRUE when we are emptying the clipboard ourselves */
 extern gboolean		_ignore_destroy_clipboard;
 

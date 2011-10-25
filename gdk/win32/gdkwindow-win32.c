@@ -1310,6 +1310,11 @@ gdk_win32_window_move_resize (GdkWindow *window,
 			      gint       width,
 			      gint       height)
 {
+  /* We ignore changes to the window being moved or resized by the 
+     user, as we don't want to fight the user */
+  if (GDK_WINDOW_HWND (window) == _modal_move_resize_window)
+    return;
+
   if (with_move && (width < 0 && height < 0))
     {
       gdk_win32_window_move (window, x, y);

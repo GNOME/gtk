@@ -2853,13 +2853,19 @@ gdk_event_translate (MSG  *msg,
 
     case WM_ENTERSIZEMOVE:
     case WM_ENTERMENULOOP:
+      if (msg->message == WM_ENTERSIZEMOVE)
+	_modal_move_resize_window = msg->hwnd;
+
       _gdk_win32_begin_modal_call ();
       break;
 
     case WM_EXITSIZEMOVE:
     case WM_EXITMENULOOP:
       if (_modal_operation_in_progress)
-	_gdk_win32_end_modal_call ();
+	{
+	  _modal_move_resize_window = NULL;
+	  _gdk_win32_end_modal_call ();
+	}
       break;
 
     case WM_CAPTURECHANGED:
@@ -2867,7 +2873,10 @@ gdk_event_translate (MSG  *msg,
 	 select move/size in the menu and then click somewhere without
 	 moving/resizing. We work around this using WM_CAPTURECHANGED. */
       if (_modal_operation_in_progress)
-	_gdk_win32_end_modal_call ();
+	{
+	  _modal_move_resize_window = NULL;
+	  _gdk_win32_end_modal_call ();
+	}
       break;
 
     case WM_WINDOWPOSCHANGING:
