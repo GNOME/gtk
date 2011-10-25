@@ -914,10 +914,10 @@ void              gtk_widget_release_captured_events (GtkWidget *widget,
                                                       gboolean   emit);
 
 /* Gestures */
-void gtk_widget_enable_gesture (GtkWidget       *widget,
-                                GtkGestureType   gesture);
+void gtk_widget_enable_gesture  (GtkWidget      *widget,
+				 guint           gesture_id);
 void gtk_widget_disable_gesture (GtkWidget      *widget,
-                                 GtkGestureType  gesture);
+				 guint           gesture_id);
 
 G_END_DECLS
 

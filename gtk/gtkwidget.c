@@ -3159,6 +3159,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_INT,
 		  G_TYPE_INT);
 
+  /**
+   * GtkWidget::gesture:
+   * @widget: the object which received the signal
+   * @gesture_id: gesture recognized
+   *
+   * This signal is emitted whenever a device with source
+   * #GDK_SOURCE_TOUCHSCREEN finishes a gesture that resembles
+   * one of those added through gtk_widget_enable_gesture().
+   */
   widget_signals[GESTURE] =
     g_signal_new (I_("gesture"),
                   G_TYPE_FROM_CLASS (klass),
@@ -14649,6 +14658,13 @@ _gtk_widget_gesture_finish (GtkWidget *widget)
     g_signal_emit (widget, widget_signals[GESTURE], 0, gesture);
 }
 
+/**
+ * gtk_widget_enable_gesture:
+ * @widget: a #GtkWidget
+ * @gesture_id: gesture ID to handle
+ *
+ * Enables @gesture_id to be recognized in @widget.
+ **/
 void
 gtk_widget_enable_gesture (GtkWidget *widget,
                            guint      gesture_id)
@@ -14677,6 +14693,13 @@ gtk_widget_enable_gesture (GtkWidget *widget,
   g_array_append_val (priv->gestures, gesture_id);
 }
 
+/**
+ * gtk_widget_disable_gesture:
+ * @widget: a #GtkWidget
+ * @gesture_id: Gesture ID to stop handling
+ *
+ * Disables a gesture previously added through gtk_widget_enable_gesture()
+ **/
 void
 gtk_widget_disable_gesture (GtkWidget *widget,
                             guint      gesture_id)

@@ -5309,6 +5309,10 @@ gtk_widget_set_vexpand_set
 gtk_widget_queue_compute_expand
 gtk_widget_compute_expand
 
+<SUBSECTION Gestures>
+gtk_widget_enable_gesture
+gtk_widget_disable_gesture
+
 <SUBSECTION Standard>
 GTK_WIDGET
 GTK_IS_WIDGET
