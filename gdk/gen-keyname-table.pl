@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
-if (@ARGV != 1) {
-    die "Usage: gen-keyname-table.pl keynames.txt > keyname-table.h\n";
+if (@ARGV != 2) {
+    die "Usage: gen-keyname-table.pl keynames.txt keynames-translate.txt > keyname-table.h\n";
 }
 
 open IN, $ARGV[0] || die "Cannot open $ARGV[0]: $!\n";
@@ -20,6 +20,18 @@ while (defined($_ = <IN>)) {
 	push @translate, $2;
     }
 }
+close IN;
+
+open IN, $ARGV[1] || die "Cannot open $ARGV[1]: $!\n";
+while (defined($_ = <IN>)) {
+    next if /^!/;
+    if (!/^\s*([\w_]*\S)\s+$/) {
+	die "Cannot parse line $_";
+    }
+
+    push @translate, $1;
+}
+close IN;
 
 $offset = 0;
 
@@ -99,13 +111,30 @@ print <<EOT;
 
 #if 0
 
+/*
+ * Translators, the strings in the 'keyboard label' context are
+ * display names for keyboard keys. Some of them have prefixes like
+ * XF86 or ISO_ - these should be removed in the translation. Similarly,
+ * underscores should be replaced by spaces. The prefix 'KP_' stands
+ * for 'key pad' and you may want to include that in your translation.
+ * Here are some examples of English translations:
+ * XF86AudioMute - Audio mute
+ * Scroll_lock   - Scroll lock
+ * KP_Space      - Space (keypad)
+ */
 EOT
 
 for $key (@translate) {
+    if ($key eq 'KP_Space') {
+      print "/* Translators: KP_ means 'key pad' here */\n";
+    }
+    if ($key eq 'XF86MonBrightnessUp') {
+      print "/* Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed */\n";
+    }
     print <<EOT;
-N_("keyboard label|$key")
+NC_("keyboard label", "$key")
 EOT
-} 
+}
 
 print <<EOT;
 

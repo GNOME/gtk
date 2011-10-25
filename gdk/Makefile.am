@@ -17,6 +17,7 @@ CLEANFILES =
 
 EXTRA_DIST += 			\
 	keynames.txt		\
+	keynames-translate.txt	\
 	keyname-table.h		\
 	gdkkeynames.c		\
 	gen-keyname-table.pl	\
