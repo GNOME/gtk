@@ -1,3 +1,77 @@
+Overview of Changes in GTK+ 3.3.2
+=================================
+
+* GtkCellRendererAccel can show virtual modifiers
+
+* Theming improvements:
+ - CSS: 'transparent' can be used a color
+ - Improved notebook tab rendering
+ - Support opacity and rounded corners for tooltips
+
+* OS X improvements:
+ - Disable mnemonics
+ - Make Option work as a modifier
+ - Cleanup of modifiers: Alt/Option is MOD1, Command is MOD2
+ - Fix keyval <> Unicode and lowercase/uppercase mapping
+
+* Improvements of cross-platform key and button event handling:
+ - Support '<Primary>' in accelerator strings
+ - Use approprivate modifiers for extending and modifying
+   selections, depending on the platform
+ - Use the appropriate button for triggering context menus,
+   depending on the platform
+
+* Bugs fixed:
+ 628936 gtk build fails because of objective-c elements
+ 653289 GtkCellRendererText "edited" signal not emitted...
+ 655057 rendering issues with map plugin
+ 657770 Write to released memory in gtkdnd-quartz.c
+ 658767 Drag and Drop NSEvent capture is racy
+ 658772 Directory paths for resource directories are hard-coded
+ 659022 gtk_tree_model_filter_clear_cache_helper: assertion failed
+ 659655 3 errors in Spanish translation of gtk+
+ 660687 roxterm X crashes with accessibility enabled
+ 660730 Use of "struct stat" breaks Windows
+ 659602 Provide an abstraction for the platform's use...
+ 659406 Abstract what triggers a context menu
+ 660619 __SIZEOF_INT__ and __SIZEOF_POINTER__ may not be defined
+ 599617 a modern tooltip look
+ 628936 gtk build fails because of objective-c elements
+ 631167 GtkComboBox with has-entry=true should not require...
+ 651818 Crash in gtk_app_chooser_refresh()
+ 659672 gtk_tree_view_column_dispose() does not remove from tree...
+ 660139 GtkGrid gives Gtk-Warnings about negative sizes...
+ 660833 all: add an 'only-child' pseudo-class selector
+ 661032 out-of-tree builds result in broken gtk-doc documentation
+ 661089 gtkfontbutton.c will not compile on Solaris
+ 661780 GTK_STOCK_INDENT references wrong images
+ 661835 GMountOperation on OpenBSD: remove the need for kvm(3)
+ 662024 tests/css/parser/selector.errors missing from EXTRA_DIST
+ 662132 --sync
+ 662177 Toolbar returns invalid paths for toolbar items
+ 662230 treemodel: document gtk_tree_path_free() as allow-none
+ 662308 Scrollbars seem to unconditionally reserve a space...
+ 662467 tooltip: only update shape if the window is realized
+ 662481 Clean up the gtkprivate directory redefinition mess
+ 662629 notebook: update tab area allocation when switching page
+
+* Translation updates
+ Brazilian Portuguese
+ British English
+ Catalan (Valencian)
+ Czech
+ Dutch
+ Esperanto
+ Japanese
+ Galician
+ Latvian
+ Serbian
+ Spanish
+ Simplified Chinese
+ Traditional Chinese
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.2
 ===============================
 
