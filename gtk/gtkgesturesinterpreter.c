@@ -26,7 +26,7 @@
 
 #define N_CIRCULAR_SIDES 12
 #define VECTORIZATION_ANGLE_THRESHOLD (G_PI_2 / 10)
-#define MINIMUM_CONFIDENCE_ALLOWED 0.8
+#define MINIMUM_CONFIDENCE_ALLOWED 0.78
 
 G_DEFINE_TYPE (GtkGesturesInterpreter, gtk_gestures_interpreter, G_TYPE_OBJECT)
 G_DEFINE_BOXED_TYPE (GtkGestureStroke, gtk_gesture_stroke,
@@ -250,6 +250,119 @@ recorded_gesture_append_coordinate (RecordedGesture *recorded,
   recorded->max_x = MAX (recorded->max_x, x);
   recorded->min_y = MIN (recorded->min_y, y);
   recorded->max_y = MAX (recorded->max_y, y);
+}
+
+static void
+find_angle_and_distance (GdkPoint *point0,
+                         GdkPoint *point1,
+                         gdouble  *angle,
+                         guint    *distance)
+{
+  gdouble ang;
+  gint x, y;
+
+  x = point1->x - point0->x;
+  y = point1->y - point0->y;
+
+  ang = (atan2 (x, y) + G_PI);
+  ang = fmod (ang, 2 * G_PI);
+  *angle = (2 * G_PI) - ang;
+
+  *distance = (guint) sqrt ((x * x) + (y * y));
+
+  if (*distance == 0)
+    *angle = 0;
+}
+
+static GtkGestureStroke *
+recorded_gesture_vectorize (RecordedGesture *recorded)
+{
+  GtkGestureStroke *stroke;
+  GdkPoint *point, *prev = NULL;
+  gdouble acc_angle = -1;
+  gint i, diff, len;
+
+  if (recorded->coordinates->len == 0)
+    return NULL;
+
+  stroke = gtk_gesture_stroke_new ();
+
+  if (recorded->coordinates->len == 1)
+    {
+      /* Append a single 0-distance vector */
+      gtk_gesture_stroke_append_vector (stroke, 0, 0);
+      return stroke;
+    }
+
+  diff = ((recorded->max_x - recorded->min_x) - (recorded->max_y - recorded->min_y));
+
+  if (diff > 0)
+    {
+      /* Sample is more wide than high */
+      recorded->min_y -= diff / 2;
+      recorded->max_y += diff / 2;
+    }
+  else
+    {
+      /* Sample is more high than wide */
+      recorded->min_x -= ABS (diff) / 2;
+      recorded->max_x += ABS (diff) / 2;
+    }
+
+  if (recorded->coordinates->len == 1)
+    {
+      /* Append a single 0-distance vector */
+      gtk_gesture_stroke_append_vector (stroke, 0, 0);
+      return stroke;
+    }
+
+  for (i = 0; i < recorded->coordinates->len; i++)
+    {
+      gdouble angle;
+      guint distance;
+
+      point = &g_array_index (recorded->coordinates, GdkPoint, i);
+
+      if (!prev)
+	{
+	  prev = point;
+	  len = 0;
+	  continue;
+	}
+
+      find_angle_and_distance (prev, point, &angle, &distance);
+      len++;
+
+      if (acc_angle < 0)
+	acc_angle = angle;
+
+      if (i == recorded->coordinates->len - 1 ||
+	  angle > acc_angle + VECTORIZATION_ANGLE_THRESHOLD ||
+	  angle < acc_angle - VECTORIZATION_ANGLE_THRESHOLD)
+	{
+	  /* The last coordinate is falling out of the
+	   * allowed threshold around the accumulated
+	   * angle, save this point and keep calculating
+	   * from here.
+	   */
+          gtk_gesture_stroke_append_vector (stroke, angle, distance);
+
+	  prev = point;
+	  acc_angle = -1;
+	  len = 0;
+	}
+      else
+	{
+	  /* The weight of the accumulated angle is
+	   * directly proportional to the distance
+	   * to prev, so initial angle skews are
+	   * more forgivable than stretched lines.
+	   */
+	  acc_angle = (len * acc_angle + angle) / (len + 1);
+	}
+    }
+
+  return stroke;
 }
 
 static void
@@ -594,11 +707,206 @@ gtk_gestures_interpreter_feed_event (GtkGesturesInterpreter *interpreter,
   return TRUE;
 }
 
+static gdouble
+get_angle_diff (gdouble angle1,
+                gdouble angle2)
+{
+  gdouble diff;
+
+  diff = fabs (angle1 - angle2);
+
+  if (diff > G_PI)
+    diff = (2 * G_PI) - diff;
+
+  return diff;
+}
+
+/* This function "bends" the user gesture so it's equal
+ * to the stock one, the areas resulting from bending the
+ * sections are added up to calculate the weight.
+ *
+ * The max weight stores the worst case where every compared
+ * vector goes in the opposite direction.
+ *
+ * Both weights are then used to determine the level of
+ * confidence about the user gesture resembling the stock
+ * gesture.
+ */
+static gboolean
+compare_gestures (const GtkGesture *gesture,
+                  const GtkGesture *stock,
+                  gdouble          *confidence)
+{
+  const GtkGestureStroke *stroke_gesture, *stroke_stock;
+  gdouble gesture_relative_length, stock_relative_length;
+  gdouble gesture_angle, stock_angle;
+  guint n_vectors_gesture, n_vectors_stock;
+  guint gesture_length, stock_length;
+  guint cur_gesture, cur_stock;
+  gdouble weight = 0, angle_skew = 0;
+  gdouble max_weight = 0;
+  GtkGestureFlags flags;
+
+  cur_gesture = cur_stock = 0;
+
+  /* FIXME: Only the first stroke is compared */
+  stroke_gesture = gtk_gesture_get_stroke (gesture, 0, NULL, NULL);
+  n_vectors_gesture = gtk_gesture_stroke_get_n_vectors (stroke_gesture);
+
+  stroke_stock = gtk_gesture_get_stroke (stock, 0, NULL, NULL);
+  n_vectors_stock = gtk_gesture_stroke_get_n_vectors (stroke_stock);
+
+  if (!gtk_gesture_stroke_get_vector (stroke_gesture, 0, &gesture_angle,
+                                      &gesture_length, &gesture_relative_length))
+    return FALSE;
+
+  if (!gtk_gesture_stroke_get_vector (stroke_stock, 0, &stock_angle,
+                                      &stock_length, &stock_relative_length))
+    return FALSE;
+
+  flags = gtk_gesture_get_flags (stock);
+
+  if ((flags & GTK_GESTURE_FLAG_IGNORE_INITIAL_ORIENTATION) != 0)
+    {
+      /* Find out the angle skew to apply to the whole stock gesture, so
+       * the initial orientation of both gestures is most similar.
+       */
+      angle_skew = gesture_angle - stock_angle;
+    }
+
+  while (cur_stock < n_vectors_stock &&
+         cur_gesture < n_vectors_gesture)
+    {
+      gdouble min_rel_length, angle;
+
+      min_rel_length = MIN (gesture_relative_length, stock_relative_length);
+
+      angle = stock_angle + angle_skew;
+
+      if (angle > 2 * G_PI)
+        angle -= 2 * G_PI;
+
+      /* Add up the area resulting from bending the current vector
+       * in the user gesture so it's shaped like the stock one.
+       */
+      weight +=
+        get_angle_diff (gesture_angle, angle) *
+        sqrt (min_rel_length);
+
+      /* Max weight stores the most disastrous angle difference,
+       * to be used later to determine the confidence of the
+       * result.
+       */
+      max_weight += G_PI * sqrt (min_rel_length);
+
+      gesture_relative_length -= min_rel_length;
+      stock_relative_length -= min_rel_length;
+
+      if (gesture_relative_length <= 0)
+        {
+          cur_gesture++;
+
+          if (cur_gesture < n_vectors_gesture)
+            gtk_gesture_stroke_get_vector (stroke_gesture, cur_gesture,
+                                           &gesture_angle, &gesture_length,
+                                           &gesture_relative_length);
+        }
+
+      if (stock_relative_length <= 0)
+        {
+          cur_stock++;
+
+          if (cur_stock < n_vectors_stock)
+            gtk_gesture_stroke_get_vector (stroke_stock, cur_stock,
+                                           &stock_angle, &stock_length,
+                                           &stock_relative_length);
+        }
+    }
+
+  *confidence = (max_weight - weight) / max_weight;
+
+  return TRUE;
+}
+
 gboolean
 gtk_gestures_interpreter_finish (GtkGesturesInterpreter *interpreter,
                                  guint                  *gesture_id)
 {
+  GtkGesturesInterpreterPrivate *priv;
+  GtkGesture *user_gesture = NULL;
+  GtkGestureStroke *stroke;
+  RecordedGesture *recorded;
+  GHashTableIter iter;
+  gdouble confidence, max_confidence = -1;
+  guint i, gesture_id_found = 0;
+
   g_return_val_if_fail (GTK_IS_GESTURES_INTERPRETER (interpreter), FALSE);
+
+  priv = interpreter->priv;
+
+  if (g_hash_table_size (priv->events) == 0)
+    return FALSE;
+
+  g_hash_table_iter_init (&iter, priv->events);
+
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &recorded))
+    {
+      stroke = recorded_gesture_vectorize (recorded);
+
+      if (!stroke)
+        continue;
+
+      if (!user_gesture)
+        user_gesture = gtk_gesture_new (stroke, 0);
+      else
+        gtk_gesture_add_stroke (user_gesture, stroke,
+                                0, 0); /* FIXME: Relative positions */
+
+      gtk_gesture_stroke_free (stroke);
+      g_hash_table_iter_remove (&iter);
+    }
+
+  if (!user_gesture)
+    return FALSE;
+
+  g_signal_emit (interpreter, signals[EVENTS_VECTORIZED], 0, user_gesture);
+
+  for (i = 0; i < priv->handled_gestures->len; i++)
+    {
+      guint handled_gesture_id;
+      const GtkGesture *handled_gesture;
+
+      handled_gesture_id = g_array_index (priv->handled_gestures, guint, i);
+      handled_gesture = gtk_gesture_lookup (handled_gesture_id);
+      g_assert (handled_gesture != NULL);
+
+      if (gtk_gesture_get_n_strokes (user_gesture) !=
+          gtk_gesture_get_n_strokes (handled_gesture))
+        continue;
+
+      if (!compare_gestures (user_gesture, handled_gesture, &confidence))
+        continue;
+
+      if (confidence > max_confidence)
+        {
+          gesture_id_found = handled_gesture_id;
+	  max_confidence = confidence;
+	}
+    }
+
+  gtk_gesture_free (user_gesture);
+
+  if (gesture_id_found == 0)
+    return FALSE;
+
+  g_signal_emit (interpreter, signals[GESTURE_DETECTED], 0,
+		 gesture_id_found, max_confidence);
+
+  if (max_confidence < MINIMUM_CONFIDENCE_ALLOWED)
+    return FALSE;
+
+  if (gesture_id)
+    *gesture_id = gesture_id_found;
 
   return TRUE;
 }
