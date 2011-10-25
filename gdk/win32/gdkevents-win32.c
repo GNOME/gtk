@@ -1818,7 +1818,7 @@ modal_timer_proc (HWND     hwnd,
 		  UINT_PTR id,
 		  DWORD    time)
 {
-  int arbitrary_limit = 1;
+  int arbitrary_limit = 10;
 
   while (_modal_operation_in_progress &&
 	 g_main_context_pending (NULL) &&
@@ -2899,148 +2899,117 @@ gdk_event_translate (MSG  *msg,
 				      buf))))),
 				 windowpos->cx, windowpos->cy, windowpos->x, windowpos->y));
 
-      if (_modal_operation_in_progress)
+      /* Break grabs on unmap or minimize */
+      if (windowpos->flags & SWP_HIDEWINDOW || 
+	  ((windowpos->flags & SWP_STATECHANGED) && IsIconic (msg->hwnd)))
 	{
-	  /* If position and size haven't changed, don't do anything */
-	  if ((windowpos->flags & SWP_NOMOVE) &&
-	      (windowpos->flags & SWP_NOSIZE))
-	    break;
+	  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+	  if (grab != NULL)
+	    {
+	      if (grab->window == window)
+		gdk_pointer_ungrab (msg->time);
+	    }
 
-	  /* Once we've entered the moving or sizing modal loop, we won't
-	   * return to the main loop until we're done sizing or moving.
-	   */
+	  if (_gdk_display->keyboard_grab.window == window)
+	    gdk_keyboard_ungrab (msg->time);
+	}
+
+      /* Send MAP events  */
+      if ((windowpos->flags & SWP_SHOWWINDOW) &&
+	  !GDK_WINDOW_DESTROYED (window))
+	{
+	  event = gdk_event_new (GDK_MAP);
+	  event->any.window = window;
+	  _gdk_win32_append_event (event);
+	}
+
+      /* New size or position => configure event */
+      if (!(windowpos->flags & SWP_NOCLIENTMOVE) ||
+	  !(windowpos->flags & SWP_NOCLIENTSIZE))
+	{
 	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+	      !IsIconic (msg->hwnd) &&
 	      !GDK_WINDOW_DESTROYED (window))
-	    {
-	      if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
-		{
-		  GDK_NOTE (EVENTS, g_print (" do magic"));
-		  if (((GdkWindowObject *) window)->resize_count > 1)
-		    ((GdkWindowObject *) window)->resize_count -= 1;
+	    handle_configure_event (msg, window);
 
-		  handle_configure_event (msg, window);
-		  g_main_context_iteration (NULL, FALSE);
-#if 0
-		  /* Dispatch main loop - to realize resizes... */
-		  modal_timer_proc (msg->hwnd, msg->message, 0, msg->time);
-#endif
-		  /* Claim as handled, so that WM_SIZE and WM_MOVE are avoided */
-		  return_val = TRUE;
-		  *ret_valp = 1;
-		}
-	    }
+	  if (((GdkWindowObject *) window)->extension_events != 0)
+	    _gdk_input_configure_event (window);
 	}
-      else /* !_modal_operation_in_progress */
+
+      if ((windowpos->flags & SWP_HIDEWINDOW) &&
+	  !GDK_WINDOW_DESTROYED (window))
 	{
-	  /* Break grabs on unmap or minimize */
-	  if (windowpos->flags & SWP_HIDEWINDOW || 
-	      ((windowpos->flags & SWP_STATECHANGED) && IsIconic (msg->hwnd)))
-	    {
-	      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
-	      if (grab != NULL)
-		{
-		  if (grab->window == window)
-		    gdk_pointer_ungrab (msg->time);
-		}
+	  /* Send UNMAP events  */
+	  event = gdk_event_new (GDK_UNMAP);
+	  event->any.window = window;
+	  _gdk_win32_append_event (event);
 
-	      if (_gdk_display->keyboard_grab.window == window)
-		gdk_keyboard_ungrab (msg->time);
-	    }
+	  /* Make transient parent the forground window when window unmaps */
+	  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
 
-	  /* Send MAP events  */
-	  if ((windowpos->flags & SWP_SHOWWINDOW) &&
-	      !GDK_WINDOW_DESTROYED (window))
-	    {
-	      event = gdk_event_new (GDK_MAP);
-	      event->any.window = window;
-	      _gdk_win32_append_event (event);
-	    }
-
-	  /* New size or position => configure event */
-	  if (!(windowpos->flags & SWP_NOCLIENTMOVE) ||
-	      !(windowpos->flags & SWP_NOCLIENTSIZE))
-	    {
-	      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
-		  !IsIconic (msg->hwnd) &&
-		  !GDK_WINDOW_DESTROYED (window))
-		handle_configure_event (msg, window);
-
-	      if (((GdkWindowObject *) window)->extension_events != 0)
-		_gdk_input_configure_event (window);
-	    }
-
-	  if ((windowpos->flags & SWP_HIDEWINDOW) &&
-	      !GDK_WINDOW_DESTROYED (window))
-	    {
-	      /* Send UNMAP events  */
-	      event = gdk_event_new (GDK_UNMAP);
-	      event->any.window = window;
-	      _gdk_win32_append_event (event);
-
-	      /* Make transient parent the forground window when window unmaps */
-	      impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-
-	      if (impl->transient_owner && 
-		  GetForegroundWindow () == GDK_WINDOW_HWND (window))
-		SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
-	    }
-
-	  /* Update window state */
-	  if (windowpos->flags & (SWP_STATECHANGED | SWP_SHOWWINDOW | SWP_HIDEWINDOW))
-	    {
-	      GdkWindowState set_bits, unset_bits, old_state, new_state;
-
-	      old_state = GDK_WINDOW_OBJECT (window)->state;
-
-	      set_bits = 0;
-	      unset_bits = 0;
-
-	      if (IsWindowVisible (msg->hwnd))
-		unset_bits |= GDK_WINDOW_STATE_WITHDRAWN;
-	      else
-		set_bits |= GDK_WINDOW_STATE_WITHDRAWN;
-
-	      if (IsIconic (msg->hwnd))
-		set_bits |= GDK_WINDOW_STATE_ICONIFIED;
-	      else
-		unset_bits |= GDK_WINDOW_STATE_ICONIFIED;
-
-	      if (IsZoomed (msg->hwnd))
-		set_bits |= GDK_WINDOW_STATE_MAXIMIZED;
-	      else
-		unset_bits |= GDK_WINDOW_STATE_MAXIMIZED;
-
-
-	      gdk_synthesize_window_state (window, unset_bits, set_bits);
-
-	      new_state = GDK_WINDOW_OBJECT (window)->state;
-
-	      /* Whenever one window changes iconified state we need to also
-	       * change the iconified state in all transient related windows,
-	       * as windows doesn't give icons for transient childrens. 
-	       */
-	      if ((old_state & GDK_WINDOW_STATE_ICONIFIED) != 
-		  (new_state & GDK_WINDOW_STATE_ICONIFIED))
-		do_show_window (window, (new_state & GDK_WINDOW_STATE_ICONIFIED));
-
-
-	      /* When un-minimizing, make sure we're stacked under any 
-		 transient-type windows. */
-	      if (!(old_state & GDK_WINDOW_STATE_ICONIFIED) &&
-		  (new_state & GDK_WINDOW_STATE_ICONIFIED))
-		ensure_stacking_on_unminimize (msg);
-	    }
-
-	  if (!(windowpos->flags & SWP_NOCLIENTSIZE))
-	    {
-	      if (((GdkWindowObject *) window)->resize_count > 1)
-		((GdkWindowObject *) window)->resize_count -= 1;
-	    }
-
-	  /* Claim as handled, so that WM_SIZE and WM_MOVE are avoided */
-	  return_val = TRUE;
-	  *ret_valp = 0;
+	  if (impl->transient_owner && 
+	      GetForegroundWindow () == GDK_WINDOW_HWND (window))
+	    SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
 	}
+
+      /* Update window state */
+      if (windowpos->flags & (SWP_STATECHANGED | SWP_SHOWWINDOW | SWP_HIDEWINDOW))
+	{
+	  GdkWindowState set_bits, unset_bits, old_state, new_state;
+
+	  old_state = GDK_WINDOW_OBJECT (window)->state;
+
+	  set_bits = 0;
+	  unset_bits = 0;
+
+	  if (IsWindowVisible (msg->hwnd))
+	    unset_bits |= GDK_WINDOW_STATE_WITHDRAWN;
+	  else
+	    set_bits |= GDK_WINDOW_STATE_WITHDRAWN;
+
+	  if (IsIconic (msg->hwnd))
+	    set_bits |= GDK_WINDOW_STATE_ICONIFIED;
+	  else
+	    unset_bits |= GDK_WINDOW_STATE_ICONIFIED;
+
+	  if (IsZoomed (msg->hwnd))
+	    set_bits |= GDK_WINDOW_STATE_MAXIMIZED;
+	  else
+	    unset_bits |= GDK_WINDOW_STATE_MAXIMIZED;
+
+	  gdk_synthesize_window_state (window, unset_bits, set_bits);
+
+	  new_state = GDK_WINDOW_OBJECT (window)->state;
+
+	  /* Whenever one window changes iconified state we need to also
+	   * change the iconified state in all transient related windows,
+	   * as windows doesn't give icons for transient childrens. 
+	   */
+	  if ((old_state & GDK_WINDOW_STATE_ICONIFIED) != 
+	      (new_state & GDK_WINDOW_STATE_ICONIFIED))
+	    do_show_window (window, (new_state & GDK_WINDOW_STATE_ICONIFIED));
+
+
+	  /* When un-minimizing, make sure we're stacked under any 
+	     transient-type windows. */
+	  if (!(old_state & GDK_WINDOW_STATE_ICONIFIED) &&
+	      (new_state & GDK_WINDOW_STATE_ICONIFIED))
+	    ensure_stacking_on_unminimize (msg);
+	}
+
+      if (!(windowpos->flags & SWP_NOCLIENTSIZE))
+	{
+	  if (((GdkWindowObject *) window)->resize_count > 1)
+	    ((GdkWindowObject *) window)->resize_count -= 1;
+	}
+
+      /* Call modal timer immediate so that we repaint faster after a resize. */
+      if (_modal_operation_in_progress)
+	modal_timer_proc (0,0,0,0);
+
+      /* Claim as handled, so that WM_SIZE and WM_MOVE are avoided */
+      return_val = TRUE;
+      *ret_valp = 0;
       break;
 
     case WM_SIZING:
