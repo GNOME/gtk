@@ -249,6 +249,7 @@ gtk_public_h_sources = 		\
 	gtkfontchooserdialog.h  \
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
+	gtkgesturesinterpreter.h \
 	gtkgradient.h		\
 	gtkgrid.h		\
 	gtkiconfactory.h	\
@@ -657,6 +658,7 @@ gtk_base_c_sources = 		\
 	gtkfontchooserutils.c	\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
+	gtkgesturesinterpreter.c \
 	gtkgradient.c		\
 	gtkgrid.c		\
 	gtkiconcache.c		\
