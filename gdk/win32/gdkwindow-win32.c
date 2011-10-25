@@ -985,12 +985,12 @@ adjust_for_gravity_hints (GdkWindow *window,
 
 static void
 show_window_internal (GdkWindow *window,
-                      gboolean   raise,
+                      gboolean   already_mapped,
 		      gboolean   deiconify)
 {
   GdkWindowObject *private;
   HWND old_active_window;
-  gboolean focus_on_map = TRUE;
+  gboolean focus_on_map = FALSE;
   DWORD exstyle;
   HWND top;
 
@@ -999,20 +999,19 @@ show_window_internal (GdkWindow *window,
   if (private->destroyed)
     return;
 
-  GDK_NOTE (MISC, g_print ("show_window_internal: %p: %s%s%s\n",
+  GDK_NOTE (MISC, g_print ("show_window_internal: %p: %s%s\n",
 			   GDK_WINDOW_HWND (window),
 			   _gdk_win32_window_state_to_string (private->state),
-			   (raise ? " raise" : ""),
 			   (deiconify ? " deiconify" : "")));
   
   /* If asked to show (not deiconify) an withdrawn and iconified
    * window, do that.
    */
   if (!deiconify &&
-      !GDK_WINDOW_IS_MAPPED (window) &&
+      !already_mapped &&
       (private->state & GDK_WINDOW_STATE_ICONIFIED))
     {	
-      ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMINNOACTIVE);
       return;
     }
   
@@ -1030,18 +1029,13 @@ show_window_internal (GdkWindow *window,
   /* If asked to show (but not raise) a window that is already
    * visible, do nothing.
    */
-  if (!deiconify && !raise && IsWindowVisible (GDK_WINDOW_HWND (window)))
+  if (!deiconify && !already_mapped && IsWindowVisible (GDK_WINDOW_HWND (window)))
     return;
 
   /* Other cases */
   
-  if (!GDK_WINDOW_IS_MAPPED (window))
-    {
-      gdk_synthesize_window_state (window,
-				   GDK_WINDOW_STATE_WITHDRAWN,
-				   0);
-      focus_on_map = private->focus_on_map;
-    }
+  if (!already_mapped)
+    focus_on_map = private->focus_on_map;
 
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
@@ -1061,19 +1055,15 @@ show_window_internal (GdkWindow *window,
    */
   if (exstyle & WS_EX_TRANSPARENT)
     {
-      UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE;
+      UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER;
 
-      if (!raise)
-	flags |= SWP_NOZORDER;
-      if (!raise || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
+      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
 	flags |= SWP_NOACTIVATE;
 
       SetWindowPos (GDK_WINDOW_HWND (window), top, 0, 0, 0, 0, flags);
 
       return;
     }
-
-  old_active_window = GetActiveWindow ();
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
     {
@@ -1085,7 +1075,10 @@ show_window_internal (GdkWindow *window,
     }
   else if (private->state & GDK_WINDOW_STATE_ICONIFIED)
     {
-      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+      if (focus_on_map)
+	ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+      else
+	ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
     }
   else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
     {
@@ -1094,40 +1087,6 @@ show_window_internal (GdkWindow *window,
   else
     {
       ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
-    }
-
-  if (raise)
-    {
-      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
-        SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST,
-		      0, 0, 0, 0,
-		      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-      else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||
-	       GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
-	{
-          if (focus_on_map && private->accept_focus)
-	    {
-	      SetForegroundWindow (GDK_WINDOW_HWND (window));
-	      if (top == HWND_TOPMOST)
-		SetWindowPos (GDK_WINDOW_HWND (window), top,
-			      0, 0, 0, 0,
-			      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-	    }
-	  else
-	    {
-	      SetWindowPos (GDK_WINDOW_HWND (window), top,
-			    0, 0, 0, 0,
-			    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-	    }
-	}
-      else
-	{
-	  BringWindowToTop (GDK_WINDOW_HWND (window));
-	}
-    }
-  else if (old_active_window != GDK_WINDOW_HWND (window))
-    {
-      SetActiveWindow (old_active_window);
     }
 }
 
@@ -3292,7 +3251,7 @@ gdk_window_deiconify (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {  
-      show_window_internal (window, FALSE, TRUE);
+      show_window_internal (window, GDK_WINDOW_IS_MAPPED (window), TRUE);
     }
   else
     {
