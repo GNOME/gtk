@@ -51,6 +51,14 @@ static gpointer parent_class = NULL;
 static GSList *modal_window_stack = NULL;
 
 static const cairo_user_data_key_t gdk_win32_cairo_key;
+typedef struct _FullscreenInfo FullscreenInfo;
+
+struct _FullscreenInfo
+{
+  RECT  r;
+  guint hint_flags;
+  LONG  style;
+};
 
 static void     update_style_bits         (GdkWindow         *window);
 static gboolean _gdk_window_get_functions (GdkWindow         *window,
@@ -1479,6 +1487,7 @@ gdk_win32_window_set_geometry_hints (GdkWindow         *window,
 			       GdkWindowHints     geom_mask)
 {
   GdkWindowImplWin32 *impl;
+  FullscreenInfo *fi;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1490,7 +1499,11 @@ gdk_win32_window_set_geometry_hints (GdkWindow         *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  impl->hint_flags = geom_mask;
+  fi = g_object_get_data (G_OBJECT (window), "fullscreen-info");
+  if (fi)
+    fi->hint_flags = geom_mask;
+  else
+    impl->hint_flags = geom_mask;
   impl->hints = *geometry;
 
   if (geom_mask & GDK_HINT_POS)
@@ -2236,6 +2249,9 @@ update_style_bits (GdkWindow *window)
   gboolean all;
   RECT rect, before, after;
 
+  if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
+    return;
+
   old_style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
   old_exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
@@ -2431,7 +2447,7 @@ gboolean
 _gdk_window_get_functions (GdkWindow     *window,
 		           GdkWMFunction *functions)
 {
-  GdkWMDecoration* functions_set;
+  GdkWMFunction* functions_set;
   
   functions_set = g_object_get_qdata (G_OBJECT (window), get_functions_quark ());
   if (functions_set)
@@ -2669,15 +2685,6 @@ gdk_win32_window_unmaximize (GdkWindow *window)
 				 0);
 }
 
-typedef struct _FullscreenInfo FullscreenInfo;
-
-struct _FullscreenInfo
-{
-  RECT  r;
-  guint hint_flags;
-  LONG  style;
-};
-
 static void
 gdk_win32_window_fullscreen (GdkWindow *window)
 {
@@ -2753,7 +2760,7 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
       
       g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
       g_free (fi);
-
+      update_style_bits (window);
     }
 }
 
