@@ -3291,6 +3291,9 @@ gdk_event_translate (MSG  *msg,
 				     mmi->ptMaxSize.x, mmi->ptMaxSize.y));
 	  return_val = TRUE;
 	}
+      mmi->ptMaxTrackSize.x = 30000;
+      mmi->ptMaxTrackSize.y = 30000;
+      return_val = TRUE;
       break;
 
     case WM_CLOSE:
