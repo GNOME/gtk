@@ -3312,7 +3312,7 @@ gdk_event_translate (MSG  *msg,
       return_val = TRUE;
       break;
 
-    case WM_DESTROY:
+    case WM_NCDESTROY:
       grab = _gdk_display_get_last_pointer_grab (_gdk_display);
       if (grab != NULL)
 	{
