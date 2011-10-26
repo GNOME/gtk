@@ -752,8 +752,6 @@ gdk_win32_window_destroy (GdkWindow *window,
       window->destroyed = TRUE;
       DestroyWindow (GDK_WINDOW_HWND (window));
     }
-
-  gdk_win32_handle_table_remove (GDK_WINDOW_HWND (window));
 }
 
 static cairo_surface_t *
