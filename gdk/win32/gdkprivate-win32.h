@@ -496,6 +496,7 @@ GdkAtom _gdk_win32_display_manager_atom_intern (GdkDisplayManager *manager,
 gchar *_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager, 
 					         GdkAtom            atom);
 void _gdk_win32_append_event (GdkEvent *event);
+void _gdk_win32_emit_configure_event (GdkWindow *window);
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);
