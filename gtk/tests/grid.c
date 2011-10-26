@@ -39,7 +39,7 @@ test_attach (void)
                            "width", &width,
                            "height", &height,
                            NULL);
-  g_assert_cmpint (left,   ==, 0);
+  g_assert_cmpint (left,   ==, -1);
   g_assert_cmpint (top,    ==, 0);
   g_assert_cmpint (width,  ==, 1);
   g_assert_cmpint (height, ==, 1);
@@ -53,7 +53,7 @@ test_attach (void)
                            "width", &width,
                            "height", &height,
                            NULL);
-  g_assert_cmpint (left,   ==, 1);
+  g_assert_cmpint (left,   ==, 0);
   g_assert_cmpint (top,    ==, 0);
   g_assert_cmpint (width,  ==, 2);
   g_assert_cmpint (height, ==, 2);
@@ -70,7 +70,7 @@ test_attach (void)
                            "width", &width,
                            "height", &height,
                            NULL);
-  g_assert_cmpint (left,   ==, 0);
+  g_assert_cmpint (left,   ==, -1);
   g_assert_cmpint (top,    ==, 1);
   g_assert_cmpint (width,  ==, 3);
   g_assert_cmpint (height, ==, 1);
