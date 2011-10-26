@@ -855,8 +855,6 @@ _gdk_win32_window_destroy (GdkWindow *window,
       private->destroyed = TRUE;
       DestroyWindow (GDK_WINDOW_HWND (window));
     }
-
-  gdk_win32_handle_table_remove (GDK_WINDOW_HWND (window));
 }
 
 void
