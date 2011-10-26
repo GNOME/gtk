@@ -39,6 +39,7 @@ accel_edited_callback (GtkCellRendererText *cell,
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
 		      0, (gint)mask,
 		      1, keyval,
+		      2, hardware_keycode,
 		      -1);
   gtk_tree_path_free (path);
 }
@@ -59,7 +60,7 @@ key_test (void)
 	sw = gtk_scrolled_window_new (NULL, NULL);
 	gtk_container_add (GTK_CONTAINER (window), sw);
 
-	store = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_UINT);
+	store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);
 	tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
 	gtk_container_add (GTK_CONTAINER (sw), tv);
 	column = gtk_tree_view_column_new ();
@@ -78,6 +79,7 @@ key_test (void)
 	gtk_tree_view_column_set_attributes (column, rend,
 					     "accel-mods", 0,
 					     "accel-key", 1,
+					     "keycode", 2,
 					     NULL);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (tv), column);
 
