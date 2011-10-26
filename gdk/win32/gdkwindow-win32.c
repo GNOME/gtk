@@ -992,7 +992,6 @@ show_window_internal (GdkWindow *window,
   HWND old_active_window;
   gboolean focus_on_map = FALSE;
   DWORD exstyle;
-  HWND top;
 
   private = (GdkWindowObject *) window;
 
@@ -1039,17 +1038,6 @@ show_window_internal (GdkWindow *window,
 
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
-  if (private->state & GDK_WINDOW_STATE_BELOW)
-    exstyle &= (~WS_EX_TOPMOST);
-
-  if (private->state & GDK_WINDOW_STATE_ABOVE)
-    exstyle |= WS_EX_TOPMOST;
-
-  if (exstyle & WS_EX_TOPMOST)
-    top = HWND_TOPMOST;
-  else
-    top = HWND_TOP;
-
   /* Use SetWindowPos to show transparent windows so automatic redraws
    * in other windows can be suppressed.
    */
@@ -1060,7 +1048,7 @@ show_window_internal (GdkWindow *window,
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
 	flags |= SWP_NOACTIVATE;
 
-      SetWindowPos (GDK_WINDOW_HWND (window), top, 0, 0, 0, 0, flags);
+      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0, flags);
 
       return;
     }
@@ -1087,6 +1075,18 @@ show_window_internal (GdkWindow *window,
   else
     {
       ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+    }
+
+  /* Sync STATE_ABOVE to TOPMOST */
+  if (((private->state & GDK_WINDOW_STATE_ABOVE) &&
+       !(exstyle & WS_EX_TOPMOST)) ||
+      (!(private->state & GDK_WINDOW_STATE_ABOVE) &&
+       (exstyle & WS_EX_TOPMOST)))
+    {
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
+			       (private->state & GDK_WINDOW_STATE_ABOVE)?HWND_TOPMOST:HWND_NOTOPMOST,
+			       0, 0, 0, 0,
+			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
     }
 }
 
@@ -3438,10 +3438,10 @@ gdk_window_set_keep_above (GdkWindow *window,
 			       0, 0, 0, 0,
 			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
     }
-  else
-    gdk_synthesize_window_state (window,
-    				 setting ? GDK_WINDOW_STATE_BELOW : GDK_WINDOW_STATE_ABOVE,
-				 setting ? GDK_WINDOW_STATE_ABOVE : 0);
+
+  gdk_synthesize_window_state (window,
+			       setting ? GDK_WINDOW_STATE_BELOW : GDK_WINDOW_STATE_ABOVE,
+			       setting ? GDK_WINDOW_STATE_ABOVE : 0);
 }
 
 void
@@ -3464,10 +3464,10 @@ gdk_window_set_keep_below (GdkWindow *window,
 			       0, 0, 0, 0,
 			       SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE));
     }
-  else
-    gdk_synthesize_window_state (window,
-				 setting ? GDK_WINDOW_STATE_ABOVE : GDK_WINDOW_STATE_BELOW,
-				 setting ? GDK_WINDOW_STATE_BELOW : 0);
+
+  gdk_synthesize_window_state (window,
+			       setting ? GDK_WINDOW_STATE_ABOVE : GDK_WINDOW_STATE_BELOW,
+			       setting ? GDK_WINDOW_STATE_BELOW : 0);
 }
 
 void
