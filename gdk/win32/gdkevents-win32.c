@@ -3118,7 +3118,7 @@ gdk_event_translate (MSG  *msg,
       return_val = TRUE;
       break;
 
-    case WM_DESTROY:
+    case WM_NCDESTROY:
       if (pointer_grab != NULL)
 	{
 	  if (pointer_grab->window == window)
