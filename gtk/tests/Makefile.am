@@ -143,6 +143,10 @@ TEST_PROGS			+= regression-tests
 regression_tests_SOURCES	 = regression-tests.c
 regression_tests_LDADD		 = $(progs_ldadd)
 
+TEST_PROGS                      += gestures
+gestures_SOURCES                 = gestures.c
+gestures_LDADD                   = $(progs_ldadd)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
