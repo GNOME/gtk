@@ -826,9 +826,6 @@ _gdk_win32_window_destroy (GdkWindow *window,
   GDK_NOTE (MISC, g_print ("_gdk_win32_window_destroy: %p\n",
 			   GDK_WINDOW_HWND (window)));
 
-  if (private->extension_events != 0)
-    _gdk_input_window_destroy (window);
-
   /* Remove ourself from the modal stack */
   _gdk_remove_modal_window (window);
 
