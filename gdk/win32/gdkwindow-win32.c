@@ -1170,7 +1170,10 @@ gdk_win32_window_move (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
-    return;
+    {
+      _gdk_win32_emit_configure_event (window);
+      return;
+    }
 
   /* Don't check GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD.
    * Foreign windows (another app's windows) might be children of our
@@ -1183,6 +1186,7 @@ gdk_win32_window_move (GdkWindow *window,
   else
     {
       RECT outer_rect;
+      RECT current_rect;
 
       get_outer_rect (window, private->width, private->height, &outer_rect);
 
@@ -1196,6 +1200,14 @@ gdk_win32_window_move (GdkWindow *window,
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
                                x - _gdk_offset_x, y - _gdk_offset_y, 0, 0,
                                SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
+
+      /* Ensure we always send a configure event, and SetWindowPos doesn't if the window
+	 is maximized, or the position/size doesn't change */
+      GetWindowRect (GDK_WINDOW_HWND (window), &current_rect);
+      if (IsZoomed (GDK_WINDOW_HWND (window)) ||
+	  (current_rect.left == x - _gdk_offset_x &&
+	   current_rect.top == y - _gdk_offset_y))
+	_gdk_win32_emit_configure_event (window);
     }
 }
 
@@ -1222,7 +1234,10 @@ gdk_win32_window_resize (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
-    return;
+    {
+      _gdk_win32_emit_configure_event (window);
+      return;
+    }
 
   if (GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) != GetDesktopWindow ())
     {
@@ -1231,6 +1246,7 @@ gdk_win32_window_resize (GdkWindow *window,
   else
     {
       RECT outer_rect;
+      RECT current_rect;
 
       get_outer_rect (window, width, height, &outer_rect);
 
@@ -1246,6 +1262,14 @@ gdk_win32_window_resize (GdkWindow *window,
                                outer_rect.bottom - outer_rect.top,
                                SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
       private->resize_count += 1;
+
+      /* Ensure we always send a configure event, and SetWindowPos doesn't if the window
+	 is maximized, or the position/size doesn't change */
+      GetWindowRect (GDK_WINDOW_HWND (window), &current_rect);
+      if (IsZoomed (GDK_WINDOW_HWND (window)) ||
+	  (current_rect.right - current_rect.left == outer_rect.right - outer_rect.left &&
+	   current_rect.bottom - current_rect.top == outer_rect.bottom - outer_rect.top))
+	_gdk_win32_emit_configure_event (window);
     }
 }
 
@@ -1273,7 +1297,10 @@ gdk_win32_window_move_resize_internal (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
-    return;
+    {
+      _gdk_win32_emit_configure_event (window);
+      return;
+    }
 
   GDK_NOTE (MISC, g_print ("gdk_win32_window_move_resize: %p: %dx%d@%+d%+d\n",
                            GDK_WINDOW_HWND (window),
@@ -1286,6 +1313,7 @@ gdk_win32_window_move_resize_internal (GdkWindow *window,
   else
     {
       RECT outer_rect;
+      RECT current_rect;
 
       get_outer_rect (window, width, height, &outer_rect);
 
@@ -1303,6 +1331,16 @@ gdk_win32_window_move_resize_internal (GdkWindow *window,
                                outer_rect.right - outer_rect.left,
                                outer_rect.bottom - outer_rect.top,
                                SWP_NOACTIVATE | SWP_NOZORDER));
+
+      /* Ensure we always send a configure event, and SetWindowPos doesn't if the window
+	 is maximized, or the position/size doesn't change */
+      GetWindowRect (GDK_WINDOW_HWND (window), &current_rect);
+      if (IsZoomed (GDK_WINDOW_HWND (window)) ||
+	  (current_rect.left == x - _gdk_offset_x &&
+	   current_rect.top == y - _gdk_offset_y &&
+	   current_rect.right - current_rect.left == outer_rect.right - outer_rect.left &&
+	   current_rect.bottom - current_rect.top == outer_rect.bottom - outer_rect.top))
+	_gdk_win32_emit_configure_event (window);
     }
 }
 

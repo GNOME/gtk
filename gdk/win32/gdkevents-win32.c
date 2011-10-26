@@ -1636,22 +1636,24 @@ doesnt_want_char (gint mask,
   return !(mask & (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK));
 }
 
-static void
-handle_configure_event (MSG       *msg,
-			GdkWindow *window)
+void
+_gdk_win32_emit_configure_event (GdkWindow *window)
 {
   RECT client_rect;
   POINT point;
   GdkWindowObject *window_object;
+  HWND hwnd;
 
-  GetClientRect (msg->hwnd, &client_rect);
+  hwnd = GDK_WINDOW_HWND (window);
+
+  GetClientRect (hwnd, &client_rect);
   point.x = client_rect.left; /* always 0 */
   point.y = client_rect.top;
 
   /* top level windows need screen coords */
   if (gdk_window_get_parent (window) == _gdk_root)
     {
-      ClientToScreen (msg->hwnd, &point);
+      ClientToScreen (hwnd, &point);
       point.x += _gdk_offset_x;
       point.y += _gdk_offset_y;
     }
@@ -2985,7 +2987,7 @@ gdk_event_translate (MSG  *msg,
 	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	      !IsIconic (msg->hwnd) &&
 	      !GDK_WINDOW_DESTROYED (window))
-	    handle_configure_event (msg, window);
+	    _gdk_win32_emit_configure_event (window);
 
 	  if (((GdkWindowObject *) window)->extension_events != 0)
 	    _gdk_input_configure_event (window);
