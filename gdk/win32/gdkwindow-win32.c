@@ -2720,14 +2720,15 @@ gdk_win32_window_fullscreen (GdkWindow *window)
       g_object_set_data (G_OBJECT (window), "fullscreen-info", fi);
       fi->style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
 
+      /* Send state change before configure event */
+      gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, 
                      (fi->style & ~WS_OVERLAPPEDWINDOW) | WS_POPUP);
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
 			       x, y, width, height,
 			       SWP_NOCOPYBITS | SWP_SHOWWINDOW));
-
-      gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
     }
 }
 
@@ -2743,6 +2744,8 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
     {
       GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
+      gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+
       impl->hint_flags = fi->hint_flags;
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, fi->style);
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_NOTOPMOST,
@@ -2753,7 +2756,6 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
       g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
       g_free (fi);
 
-      gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
     }
 }
 

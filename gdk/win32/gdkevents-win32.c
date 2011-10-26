@@ -2738,36 +2738,6 @@ gdk_event_translate (MSG  *msg,
 	  _gdk_win32_append_event (event);
 	}
 
-      /* Show, New size or position => configure event */
-      if (!(windowpos->flags & SWP_NOCLIENTMOVE) ||
-	  !(windowpos->flags & SWP_NOCLIENTSIZE) ||
-	  (windowpos->flags & SWP_SHOWWINDOW))
-	{
-	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
-	      !IsIconic (msg->hwnd) &&
-	      !GDK_WINDOW_DESTROYED (window))
-	    handle_configure_event (msg, window);
-
-	  if (window->extension_events != 0)
-	    _gdk_device_wintab_update_window_coords (window);
-	}
-
-      if ((windowpos->flags & SWP_HIDEWINDOW) &&
-	  !GDK_WINDOW_DESTROYED (window))
-	{
-	  /* Send UNMAP events  */
-	  event = gdk_event_new (GDK_UNMAP);
-	  event->any.window = window;
-	  _gdk_win32_append_event (event);
-
-	  /* Make transient parent the forground window when window unmaps */
-	  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-	  if (impl->transient_owner && 
-	      GetForegroundWindow () == GDK_WINDOW_HWND (window))
-	    SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
-	}
-
       /* Update window state */
       if (windowpos->flags & (SWP_STATECHANGED | SWP_SHOWWINDOW | SWP_HIDEWINDOW))
 	{
@@ -2811,6 +2781,36 @@ gdk_event_translate (MSG  *msg,
 	  if (!(old_state & GDK_WINDOW_STATE_ICONIFIED) &&
 	      (new_state & GDK_WINDOW_STATE_ICONIFIED))
 	    ensure_stacking_on_unminimize (msg);
+	}
+
+      /* Show, New size or position => configure event */
+      if (!(windowpos->flags & SWP_NOCLIENTMOVE) ||
+	  !(windowpos->flags & SWP_NOCLIENTSIZE) ||
+	  (windowpos->flags & SWP_SHOWWINDOW))
+	{
+	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+	      !IsIconic (msg->hwnd) &&
+	      !GDK_WINDOW_DESTROYED (window))
+	    handle_configure_event (msg, window);
+
+	  if (window->extension_events != 0)
+	    _gdk_device_wintab_update_window_coords (window);
+	}
+
+      if ((windowpos->flags & SWP_HIDEWINDOW) &&
+	  !GDK_WINDOW_DESTROYED (window))
+	{
+	  /* Send UNMAP events  */
+	  event = gdk_event_new (GDK_UNMAP);
+	  event->any.window = window;
+	  _gdk_win32_append_event (event);
+
+	  /* Make transient parent the forground window when window unmaps */
+	  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+	  if (impl->transient_owner &&
+	      GetForegroundWindow () == GDK_WINDOW_HWND (window))
+	    SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
 	}
 
       if (!(windowpos->flags & SWP_NOCLIENTSIZE))
