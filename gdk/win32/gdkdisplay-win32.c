@@ -586,6 +586,15 @@ gdk_win32_display_flush (GdkDisplay * display)
   GdiFlush ();
 }
 
+
+static void
+gdk_win32_display_sync (GdkDisplay * display)
+{
+  g_return_if_fail (display == _gdk_display);
+
+  GdiFlush ();
+}
+
 static void
 gdk_win32_display_dispose (GObject *object)
 {
@@ -657,7 +666,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->get_screen = gdk_win32_display_get_screen;
   display_class->get_default_screen = gdk_win32_display_get_default_screen;
   display_class->beep = gdk_win32_display_beep;
-  display_class->sync = _gdk_win32_display_sync;
+  display_class->sync = gdk_win32_display_sync;
   display_class->flush = gdk_win32_display_flush;
   display_class->has_pending = _gdk_win32_display_has_pending;
   display_class->queue_events = _gdk_win32_display_queue_events;

@@ -388,7 +388,6 @@ gboolean _gdk_win32_display_supports_cursor_color (GdkDisplay    *display);
 
 GList *_gdk_win32_display_list_devices (GdkDisplay *dpy);
 
-void _gdk_win32_display_sync (GdkDisplay * display);
 gboolean _gdk_win32_display_has_pending (GdkDisplay *display);
 void _gdk_win32_display_queue_events (GdkDisplay *display);
 

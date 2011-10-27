@@ -3415,16 +3415,3 @@ is_modally_blocked (GdkWindow *window)
   GdkWindow *modal_current = _gdk_modal_current ();
   return modal_current != NULL ? gdk_window_get_toplevel (window) != modal_current : FALSE;
 }
-
-void
-_gdk_win32_display_sync (GdkDisplay * display)
-{
-  MSG msg;
-
-  g_return_if_fail (display == _gdk_display);
-
-  /* Process all messages currently available */
-  while (PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
-    DispatchMessageW (&msg);
-}
-
