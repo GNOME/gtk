@@ -3652,18 +3652,7 @@ gdk_screen_broadcast_client_message (GdkScreen *screen,
 void
 gdk_flush (void)
 {
-#if 0
-  MSG msg;
-
-  /* Process all messages currently available */
-  while (PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
-    {
-      TranslateMessage (&msg);
-      DispatchMessageW (&msg);
-    }
-#endif
-
-  GdiFlush ();
+  gdk_display_sync (_gdk_display);
 }
 
 void
@@ -3673,9 +3662,7 @@ gdk_display_sync (GdkDisplay * display)
 
   g_return_if_fail (display == _gdk_display);
 
-  /* Process all messages currently available */
-  while (PeekMessageW (&msg, NULL, 0, 0, PM_REMOVE))
-    DispatchMessageW (&msg);
+  GdiFlush ();
 }
 
 void
@@ -3683,7 +3670,7 @@ gdk_display_flush (GdkDisplay * display)
 {
   g_return_if_fail (display == _gdk_display);
 
-  /* Nothing */
+  GdiFlush ();
 }
 
 gboolean
