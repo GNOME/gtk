@@ -251,6 +251,27 @@ translate_device_classes (GdkDisplay      *display,
   g_object_thaw_notify (G_OBJECT (device));
 }
 
+static gint
+count_device_touches (XIAnyClassInfo **classes,
+                      guint            n_classes)
+{
+#ifdef XINPUT_2_2
+  guint i;
+
+  for (i = 0; i < n_classes; i++)
+    {
+      XITouchClassInfo *valuator_info = (XITouchClassInfo *) classes[i];
+
+      if (valuator_info->type != XITouchClass)
+        continue;
+
+      return valuator_info->num_touches;
+    }
+#endif
+
+  return 0;
+}
+
 static GdkDevice *
 create_device (GdkDeviceManager *device_manager,
                GdkDisplay       *display,
@@ -263,6 +284,9 @@ create_device (GdkDeviceManager *device_manager,
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
+  else if (dev->use == XISlavePointer &&
+           count_device_touches (dev->classes, dev->num_classes) > 0)
+    input_source = GDK_SOURCE_TOUCH;
   else
     {
       gchar *tmp_name;
