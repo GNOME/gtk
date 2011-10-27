@@ -77,6 +77,7 @@ struct _GdkWindowImplWin32
   gboolean   changing_state;
 
   guint no_bg : 1;
+  guint inhibit_configure : 1;
 
   cairo_surface_t *cairo_surface;
   HDC              hdc;

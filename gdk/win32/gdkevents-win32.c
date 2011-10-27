@@ -1478,9 +1478,14 @@ doesnt_want_char (gint mask,
 void
 _gdk_win32_emit_configure_event (GdkWindow *window)
 {
+  GdkWindowImplWin32 *window_impl;
   RECT client_rect;
   POINT point;
   HWND hwnd;
+
+  window_impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  if (window_impl->inhibit_configure)
+    return;
 
   hwnd = GDK_WINDOW_HWND (window);
 
