@@ -92,6 +92,7 @@ struct _GdkWindowImplWin32
   gboolean   changing_state;
 
   guint no_bg : 1;
+  guint inhibit_configure : 1;
 };
  
 struct _GdkWindowImplWin32Class 

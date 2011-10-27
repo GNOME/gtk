@@ -1639,10 +1639,17 @@ doesnt_want_char (gint mask,
 void
 _gdk_win32_emit_configure_event (GdkWindow *window)
 {
+  GdkWindowImplWin32 *window_impl;
   RECT client_rect;
   POINT point;
   GdkWindowObject *window_object;
   HWND hwnd;
+
+  window_object = GDK_WINDOW_OBJECT (window);
+
+  window_impl = GDK_WINDOW_IMPL_WIN32 (window_object->impl);
+  if (window_impl->inhibit_configure)
+    return;
 
   hwnd = GDK_WINDOW_HWND (window);
 
@@ -1657,8 +1664,6 @@ _gdk_win32_emit_configure_event (GdkWindow *window)
       point.x += _gdk_offset_x;
       point.y += _gdk_offset_y;
     }
-
-  window_object = GDK_WINDOW_OBJECT (window);
 
   window_object->width = client_rect.right - client_rect.left;
   window_object->height = client_rect.bottom - client_rect.top;
