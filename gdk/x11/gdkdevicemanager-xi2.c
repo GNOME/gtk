@@ -264,6 +264,28 @@ translate_device_classes (GdkDisplay      *display,
   g_object_thaw_notify (G_OBJECT (device));
 }
 
+static gint
+count_device_touches (XIAnyClassInfo **classes,
+		      guint            n_classes)
+{
+  gint n_touches = 0;
+#ifdef XINPUT_2_1
+  guint i;
+
+  for (i = 0; i < n_classes; i++)
+    {
+      XITouchValuatorClassInfo *valuator_info = (XITouchValuatorClassInfo *) classes[i];
+
+      if (valuator_info->type != XITouchValuatorClass)
+        continue;
+
+      n_touches = MAX (n_touches, valuator_info->number);
+    }
+#endif
+
+  return n_touches;
+}
+
 static GdkDevice *
 create_device (GdkDeviceManager *device_manager,
                GdkDisplay       *display,
@@ -276,6 +298,9 @@ create_device (GdkDeviceManager *device_manager,
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
+  else if (dev->use == XISlavePointer &&
+           count_device_touches (dev->classes, dev->num_classes) > 0)
+    input_source = GDK_SOURCE_TOUCH;
   else
     {
       gchar *tmp_name;
@@ -293,8 +318,6 @@ create_device (GdkDeviceManager *device_manager,
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;
-      else if (strstr (tmp_name, "multitouch"))
-        input_source = GDK_SOURCE_TOUCH;
       else
         input_source = GDK_SOURCE_MOUSE;
 
