@@ -3814,9 +3814,9 @@ gdk_window_set_opacity (GdkWindow *window,
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
   if (!(exstyle & WS_EX_LAYERED))
-    API_CALL (SetWindowLong, (GDK_WINDOW_HWND (window),
-			      GWL_EXSTYLE,
-			      exstyle | WS_EX_LAYERED));
+    SetWindowLong (GDK_WINDOW_HWND (window),
+		    GWL_EXSTYLE,
+		    exstyle | WS_EX_LAYERED);
 
   setLayeredWindowAttributes = 
     (PFN_SetLayeredWindowAttributes)GetProcAddress (GetModuleHandle ("user32.dll"), "SetLayeredWindowAttributes");
