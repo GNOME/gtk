@@ -2135,24 +2135,40 @@ _gdk_remove_modal_window (GdkWindow *window)
     }
 }
 
+gboolean
+_gdk_modal_blocked (GdkWindow *window)
+{
+  GSList *l;
+  gboolean found_any = FALSE;
+
+  for (l = modal_window_stack; l != NULL; l = l->next)
+    {
+      GdkWindow *modal = l->data;
+
+      if (modal == window)
+	return FALSE;
+
+      if (GDK_WINDOW_IS_MAPPED (modal))
+	found_any = TRUE;
+    }
+
+  return found_any;
+}
+
 GdkWindow *
 _gdk_modal_current (void)
 {
-  if (modal_window_stack != NULL)
-    {
-      GSList *tmp = modal_window_stack;
+  GSList *l;
 
-      while (tmp != NULL && !GDK_WINDOW_IS_MAPPED (tmp->data))
-	{
-	  tmp = g_slist_next (tmp);
-	}
-
-      return tmp != NULL ? tmp->data : NULL;
-    }
-  else
+  for (l = modal_window_stack; l != NULL; l = l->next)
     {
-      return NULL;
+      GdkWindow *modal = l->data;
+
+      if (GDK_WINDOW_IS_MAPPED (modal))
+	return modal;
     }
+
+  return NULL;
 }
 
 static void

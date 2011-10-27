@@ -98,8 +98,6 @@ static gboolean gdk_event_dispatch (GSource     *source,
 				    GSourceFunc  callback,
 				    gpointer     user_data);
 
-static gboolean is_modally_blocked (GdkWindow   *window);
-
 /* Private variable declarations
  */
 
@@ -2761,15 +2759,10 @@ gdk_event_translate (MSG  *msg,
 	     return_val = TRUE;
 	   }
 
-	 tmp = _gdk_modal_current ();
-
-	 if (tmp != NULL)
+	 if (_gdk_modal_blocked (gdk_window_get_toplevel (window)))
 	   {
-	     if (gdk_window_get_toplevel (window) != tmp)
-	       {
-		 *ret_valp = MA_NOACTIVATEANDEAT;
-		 return_val = TRUE;
-	       }
+	     *ret_valp = MA_NOACTIVATEANDEAT;
+	     return_val = TRUE;
 	   }
        }
 
@@ -3441,7 +3434,7 @@ gdk_event_translate (MSG  *msg,
        * but we still need to deal with alt-tab, or with SetActiveWindow() type
        * situations.
        */
-      if (is_modally_blocked (window) && LOWORD (msg->wParam) == WA_ACTIVE)
+      if (_gdk_modal_blocked (window) && LOWORD (msg->wParam) == WA_ACTIVE)
 	{
 	  GdkWindow *modal_current = _gdk_modal_current ();
 	  SetActiveWindow (GDK_WINDOW_HWND (modal_current));
@@ -3605,13 +3598,6 @@ void
 gdk_win32_set_modal_dialog_libgtk_only (HWND window)
 {
   modal_win32_dialog = window;
-}
-
-static gboolean
-is_modally_blocked (GdkWindow *window)
-{
-  GdkWindow *modal_current = _gdk_modal_current ();
-  return modal_current != NULL ? gdk_window_get_toplevel (window) != modal_current : FALSE;
 }
 
 static void
