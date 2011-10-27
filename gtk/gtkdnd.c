@@ -513,13 +513,8 @@ grab_dnd_keys (GtkWidget *widget,
           evmask.mask_len = sizeof (mask);
           evmask.mask = mask;
 
-          if (grab_keys[i].modifiers != 0)
-            {
-              num_mods = 1;
-              mods.modifiers = grab_keys[i].modifiers;
-            }
-          else
-            num_mods = 0;
+          num_mods = 1;
+          mods.modifiers = grab_keys[i].modifiers;
 
           XIGrabKeycode (GDK_WINDOW_XDISPLAY (window),
                          deviceid,
@@ -591,13 +586,8 @@ ungrab_dnd_keys (GtkWidget *widget,
 #ifdef XINPUT_2
       if (using_xi2)
         {
-          if (grab_keys[i].modifiers != 0)
-            {
-              num_mods = 1;
-              mods.modifiers = grab_keys[i].modifiers;
-            }
-          else
-            num_mods = 0;
+          num_mods = 1;
+          mods.modifiers = grab_keys[i].modifiers;
 
           XIUngrabKeycode (GDK_WINDOW_XDISPLAY (window),
                            deviceid,
