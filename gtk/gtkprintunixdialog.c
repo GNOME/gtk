@@ -2217,6 +2217,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
                     0, 0);
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, range_tooltip);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   atk_object_set_name (gtk_widget_get_accessible (entry), _("Pages"));
   atk_object_set_description (gtk_widget_get_accessible (entry), range_tooltip);
   priv->page_range_entry = entry;
@@ -2242,6 +2243,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
                     0, 1, 0, 1,  GTK_FILL, 0,
                     0, 0);
   spinbutton = gtk_spin_button_new_with_range (1.0, 100.0, 1.0);
+  gtk_entry_set_activates_default (GTK_ENTRY (spinbutton), TRUE);
   priv->copies_spin = spinbutton;
   gtk_widget_show (spinbutton);
   gtk_table_attach (GTK_TABLE (table), spinbutton,
