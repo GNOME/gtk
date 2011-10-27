@@ -91,8 +91,12 @@ struct _GdkWindowImplWin32
   gint       num_transients;
   gboolean   changing_state;
 
+  gint initial_x;
+  gint initial_y;
+
   guint no_bg : 1;
   guint inhibit_configure : 1;
+  guint override_redirect : 1;
 };
  
 struct _GdkWindowImplWin32Class 

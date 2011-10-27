@@ -506,6 +506,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   GdkDrawableImplWin32 *draw_impl;
   const gchar *title;
   wchar_t *wtitle;
+  gboolean override_redirect;
   gint window_width, window_height;
   gint offset_x = 0, offset_y = 0;
   gint x, y;
@@ -536,8 +537,12 @@ _gdk_window_impl_new (GdkWindow     *window,
       g_assert (attributes->y == private->y);
       remaining_mask &= ~GDK_WA_Y;
     }
+  override_redirect = FALSE;
   if ((attributes_mask & GDK_WA_NOREDIR) != 0)
-    remaining_mask &= ~GDK_WA_NOREDIR;
+    {
+      override_redirect = !!attributes->override_redirect;
+      remaining_mask &= ~GDK_WA_NOREDIR;
+    }
 
   if ((remaining_mask & ~(GDK_WA_WMCLASS|GDK_WA_VISUAL|GDK_WA_CURSOR|GDK_WA_COLORMAP|GDK_WA_TITLE|GDK_WA_TYPE_HINT)) != 0)
     g_warning ("_gdk_window_impl_new: uexpected attribute 0x%X",
@@ -554,6 +559,7 @@ _gdk_window_impl_new (GdkWindow     *window,
     g_assert (visual == attributes->visual);
 
   impl->extension_events_selected = FALSE;
+  impl->override_redirect = override_redirect;
 
   /* wclass is not any longer set always, but if is ... */
   if ((attributes_mask & GDK_WA_WMCLASS) == GDK_WA_WMCLASS)
@@ -710,6 +716,9 @@ _gdk_window_impl_new (GdkWindow     *window,
 # endif
 
     }
+  GetWindowRect (GDK_WINDOW_HWND (window), &rect);
+  impl->initial_x = rect.left;
+  impl->initial_y = rect.top;
 
   g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
@@ -993,6 +1002,7 @@ show_window_internal (GdkWindow *window,
 		      gboolean   deiconify)
 {
   GdkWindowObject *private;
+  GdkWindowImplWin32 *window_impl;
   HWND old_active_window;
   gboolean focus_on_map = FALSE;
   DWORD exstyle;
@@ -1055,6 +1065,77 @@ show_window_internal (GdkWindow *window,
       SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0, flags);
 
       return;
+    }
+
+  /* For initial map of "normal" windows we want to emulate WM window
+   * positioning behaviour, which means: 
+   * + Use user specified position if GDK_HINT_POS or GDK_HINT_USER_POS
+   * otherwise:
+   * + default to the initial CW_USEDEFAULT placement,
+   *   no matter if the user moved the window before showing it.
+   * + Certain window types and hints have more elaborate positioning
+   *   schemes.
+   */
+  window_impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+  if (!already_mapped &&
+      (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||
+       GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG) &&
+      (window_impl->hint_flags & (GDK_HINT_POS | GDK_HINT_USER_POS)) == 0 &&
+      !window_impl->override_redirect)
+    {
+      gboolean center = FALSE;
+      RECT window_rect, center_on_rect;
+      int x, y;
+
+      x = window_impl->initial_x;
+      y = window_impl->initial_y;
+
+      if (window_impl->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
+	{
+	  HMONITOR monitor;
+	  MONITORINFO mi;
+
+	  monitor = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+	  mi.cbSize = sizeof (mi);
+	  if (monitor && GetMonitorInfo (monitor, &mi))
+	    center_on_rect = mi.rcMonitor;
+	  else
+	    {
+	      center_on_rect.left = 0;
+	      center_on_rect.right = 0;
+	      center_on_rect.right = GetSystemMetrics (SM_CXSCREEN);
+	      center_on_rect.bottom = GetSystemMetrics (SM_CYSCREEN);
+	    }
+	  center = TRUE;
+	}
+      else if (window_impl->transient_owner != NULL &&
+	       GDK_WINDOW_IS_MAPPED (window_impl->transient_owner))
+	{
+	  GdkWindowObject *owner = GDK_WINDOW_OBJECT (window_impl->transient_owner);
+	  /* Center on transient parent */
+	  center_on_rect.left = owner->x;
+	  center_on_rect.top = owner->y;
+	  center_on_rect.right = center_on_rect.left + owner->width;
+	  center_on_rect.bottom = center_on_rect.top + owner->height;
+	  _gdk_win32_adjust_client_rect (GDK_WINDOW (owner), &center_on_rect);
+	  center = TRUE;
+	}
+
+      if (center) 
+	{
+	  window_rect.left = 0;
+	  window_rect.top = 0;
+	  window_rect.right = private->width;
+	  window_rect.bottom = private->height;
+	  _gdk_win32_adjust_client_rect (window, &window_rect);
+
+	  x = center_on_rect.left + ((center_on_rect.right - center_on_rect.left) - (window_rect.right - window_rect.left)) / 2;
+	  y = center_on_rect.top + ((center_on_rect.bottom - center_on_rect.top) - (window_rect.bottom - window_rect.top)) / 2;
+	}
+
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+			       x, y, 0, 0,
+			       SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
@@ -2706,9 +2787,15 @@ void
 gdk_window_set_override_redirect (GdkWindow *window,
 				  gboolean   override_redirect)
 {
+  GdkWindowObject *private;
+  GdkWindowImplWin32 *window_impl;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  g_warning ("gdk_window_set_override_redirect not implemented");
+  private = (GdkWindowObject *) window;
+  window_impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+
+  window_impl->override_redirect = !!override_redirect;
 }
 
 void
