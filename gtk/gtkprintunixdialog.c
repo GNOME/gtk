@@ -2312,6 +2312,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_grid_attach (GTK_GRID (table), radio, 0, 3, 1, 1);
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, range_tooltip);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   atk_object_set_name (gtk_widget_get_accessible (entry), _("Pages"));
   atk_object_set_description (gtk_widget_get_accessible (entry), range_tooltip);
   priv->page_range_entry = entry;
@@ -2334,6 +2335,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (label);
   gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
   spinbutton = gtk_spin_button_new_with_range (1.0, 100.0, 1.0);
+  gtk_entry_set_activates_default (GTK_ENTRY (spinbutton), TRUE);
   priv->copies_spin = spinbutton;
   gtk_widget_show (spinbutton);
   gtk_grid_attach (GTK_GRID (table), spinbutton, 1, 0, 1, 1);
