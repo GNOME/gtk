@@ -243,7 +243,7 @@ get_radio_button (GtkRadioToolButton *button)
  *
  * Returns the radio button group @button belongs to.
  *
- * Return value: (transfer none): The group @button belongs to.
+ * Return value: (transfer none) (element-type GtkRadioButton): The group @button belongs to.
  *
  * Since: 2.4
  */
