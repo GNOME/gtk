@@ -126,7 +126,7 @@ scribble_motion_notify_event (GtkWidget      *widget,
    * can cope.
    */
 
-  gdk_window_get_pointer (event->window, &x, &y, &state);
+  gdk_window_get_device_position (event->window, event->device, &x, &y, &state);
 
   if (state & GDK_BUTTON1_MASK)
     draw_brush (widget, x, y);
