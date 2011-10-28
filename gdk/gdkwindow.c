@@ -5184,7 +5184,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       if (!was_mapped)
 	gdk_synthesize_window_state (window,
 				     GDK_WINDOW_STATE_WITHDRAWN,
-				     0);
+				     GDK_WINDOW_STATE_FOCUSED);
     }
   else
     {

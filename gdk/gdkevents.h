@@ -371,6 +371,7 @@ typedef enum
  *   decorations.
  * @GDK_WINDOW_STATE_ABOVE: the window is kept above other windows.
  * @GDK_WINDOW_STATE_BELOW: the window is kept below other windows.
+ * @GDK_WINDOW_STATE_FOCUSED: the window is presented as focused (with active decorations).
  *
  * Specifies the state of a toplevel window.
  */
@@ -382,7 +383,8 @@ typedef enum
   GDK_WINDOW_STATE_STICKY     = 1 << 3,
   GDK_WINDOW_STATE_FULLSCREEN = 1 << 4,
   GDK_WINDOW_STATE_ABOVE      = 1 << 5,
-  GDK_WINDOW_STATE_BELOW      = 1 << 6
+  GDK_WINDOW_STATE_BELOW      = 1 << 6,
+  GDK_WINDOW_STATE_FOCUSED    = 1 << 7
 } GdkWindowState;
 
 /**
