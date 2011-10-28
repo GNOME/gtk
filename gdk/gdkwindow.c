@@ -4981,31 +4981,6 @@ gdk_window_get_device_position (GdkWindow       *window,
 }
 
 /**
- * gdk_window_at_pointer:
- * @win_x: (out) (allow-none): return location for origin of the window under the pointer
- * @win_y: (out) (allow-none): return location for origin of the window under the pointer
- *
- * Obtains the window underneath the mouse pointer, returning the
- * location of that window in @win_x, @win_y. Returns %NULL if the
- * window under the mouse pointer is not known to GDK (if the window
- * belongs to another application and a #GdkWindow hasn't been created
- * for it with gdk_window_foreign_new())
- *
- * NOTE: For multihead-aware widgets or applications use
- * gdk_display_get_window_at_pointer() instead.
- *
- * Return value: (transfer none): window under the mouse pointer
- *
- * Deprecated: 3.0: Use gdk_device_get_window_at_position() instead.
- **/
-GdkWindow*
-gdk_window_at_pointer (gint *win_x,
-		       gint *win_y)
-{
-  return gdk_display_get_window_at_pointer (gdk_display_get_default (), win_x, win_y);
-}
-
-/**
  * gdk_get_default_root_window:
  *
  * Obtains the root window (parent all other windows are inside)

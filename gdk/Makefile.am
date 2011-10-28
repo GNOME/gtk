@@ -113,6 +113,7 @@ gdk_c_sources = 				\
 	gdkcairo.c				\
 	gdkcolor.c				\
 	gdkcursor.c				\
+	gdkdeprecated.c				\
 	gdkdevice.c				\
 	gdkdevicemanager.c			\
 	gdkdisplay.c				\
