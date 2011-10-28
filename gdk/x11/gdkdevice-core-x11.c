@@ -196,7 +196,7 @@ gdk_x11_device_core_get_state (GdkDevice       *device,
 {
   gint x_int, y_int;
 
-  gdk_window_get_pointer (window, &x_int, &y_int, mask);
+  gdk_window_get_device_position (window, device, &x_int, &y_int, mask);
 
   if (axes)
     {
