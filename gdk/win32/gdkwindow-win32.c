@@ -4011,6 +4011,15 @@ gdk_win32_window_is_win32 (GdkWindow *window)
   return GDK_WINDOW_IS_WIN32 (window);
 }
 
+HWND
+gdk_win32_window_get_impl_hwnd (GdkWindow *window)
+{
+  if (GDK_WINDOW_IS_WIN32 (window))
+    return GDK_WINDOW_HWND (window);
+  return NULL;
+}
+
+
 GdkDrawable *
 gdk_win32_begin_direct_draw_libgtk_only (GdkDrawable *drawable,
 					 GdkGC *gc,
