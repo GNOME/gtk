@@ -943,6 +943,7 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
   HDC dc;
   XpDCInfo dc_info;
   int part_state;
+  HWND hwnd;
 
   if (!xp_theme_is_drawable (element))
     return FALSE;
@@ -952,8 +953,9 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
     return FALSE;
 
   /* FIXME: Recheck its function */
-  if (GDK_IS_WINDOW (win) && gdk_win32_window_is_win32 (win))
-  enable_theme_dialog_texture_func (GDK_WINDOW_HWND (win), ETDT_ENABLETAB);
+  hwnd = gdk_win32_window_get_impl_hwnd (win);
+  if (hwnd != NULL)
+    enable_theme_dialog_texture_func (hwnd, ETDT_ENABLETAB);
 
   dc = get_window_dc (style, win, state_type, &dc_info,
 		      x, y, width, height,
@@ -979,7 +981,7 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 
   /* Support transparency */
   if (is_theme_partially_transparent_func (theme, element_part_map[element], part_state))
-    draw_theme_parent_background_func (GDK_WINDOW_HWND (win), dc, pClip);
+    draw_theme_parent_background_func (hwnd, dc, pClip);
 
   draw_theme_background_func (theme, dc, element_part_map[element],
 			      part_state, &rect, pClip);
