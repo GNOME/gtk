@@ -259,7 +259,7 @@ gtk_file_chooser_entry_finalize (GObject *object)
 }
 
 static void
-discard_current_folder (GtkFileChooserEntry *chooser_entry)
+discard_loading_and_current_folder_file (GtkFileChooserEntry *chooser_entry)
 {
   if (chooser_entry->current_folder)
     {
@@ -268,11 +268,6 @@ discard_current_folder (GtkFileChooserEntry *chooser_entry)
       g_object_unref (chooser_entry->current_folder);
       chooser_entry->current_folder = NULL;
     }
-}
-
-static void
-discard_loading_and_current_folder_file (GtkFileChooserEntry *chooser_entry)
-{
   if (chooser_entry->load_folder_cancellable)
     {
       g_cancellable_cancel (chooser_entry->load_folder_cancellable);
@@ -292,7 +287,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
   remove_completion_feedback (chooser_entry);
-  discard_current_folder (chooser_entry);
   discard_loading_and_current_folder_file (chooser_entry);
 
   if (chooser_entry->start_autocompletion_idle_id != 0)
@@ -1441,8 +1435,6 @@ load_directory_get_folder_callback (GCancellable  *cancellable,
 	  beep (chooser_entry);
 	  pop_up_completion_feedback (chooser_entry, error->message);
 	}
-
-      discard_current_folder (chooser_entry);
     }
 
   if (cancelled || error)
@@ -1507,7 +1499,6 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 
   if (chooser_entry->current_folder_file)
     {
-      discard_current_folder (chooser_entry);
       discard_loading_and_current_folder_file (chooser_entry);
     }
   
@@ -1603,7 +1594,6 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
     }
   else
     {
-      discard_current_folder (chooser_entry);
       discard_loading_and_current_folder_file (chooser_entry);
     }
 
