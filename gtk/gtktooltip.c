@@ -1228,6 +1228,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
     }
   else
     {
+      GdkDevice *device;
       gint tx, ty;
 
       window = tooltip->last_window;
@@ -1235,7 +1236,9 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       if (!GDK_IS_WINDOW (window))
         return;
 
-      gdk_window_get_pointer (window, &x, &y, NULL);
+      device = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (display));
+
+      gdk_window_get_device_position (window, device, &x, &y, NULL);
 
       gdk_window_get_root_coords (window, x, y, &tx, &ty);
       tooltip->last_x = tx;
