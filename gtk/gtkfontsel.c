@@ -38,6 +38,7 @@
 #include <atk/atk.h>
 
 #undef GTK_DISABLE_DEPRECATED
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 
 #include "gtkfontsel.h"
 
