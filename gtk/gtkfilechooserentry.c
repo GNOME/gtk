@@ -1469,8 +1469,7 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
   if (chooser_entry->local_only
       && !_gtk_file_has_native_path (chooser_entry->current_folder_file))
     {
-      g_object_unref (chooser_entry->current_folder_file);
-      chooser_entry->current_folder_file = NULL;
+      discard_loading_and_current_folder_file (chooser_entry);
 
       return REFRESH_NOT_LOCAL;
     }
