@@ -1486,15 +1486,13 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 
 static RefreshStatus
 reload_current_folder (GtkFileChooserEntry *chooser_entry,
-		       GFile               *folder_file,
-		       gboolean             force_reload)
+		       GFile               *folder_file)
 {
   g_assert (folder_file != NULL);
 
   if (chooser_entry->current_folder_file
       && g_file_equal (folder_file, chooser_entry->current_folder_file)
-      && chooser_entry->load_folder_cancellable
-      && !force_reload)
+      && chooser_entry->load_folder_cancellable)
     return REFRESH_OK;
 
   if (chooser_entry->current_folder_file)
@@ -1590,7 +1588,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 
   if (result == REFRESH_OK)
     {
-      result = reload_current_folder (chooser_entry, folder_file, file_part_pos == -1);
+      result = reload_current_folder (chooser_entry, folder_file);
     }
   else
     {
