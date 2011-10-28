@@ -7021,8 +7021,8 @@ gtk_widget_press_and_hold_motion_notify (GtkWidget        *widget,
       gint x, y;
       guint cursor_size;
 
-      gdk_window_get_pointer (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
-                              &x, &y, NULL);
+      gdk_window_get_device_position (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
+                                      data->device, &x, &y, NULL);
       cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
       gtk_window_move (GTK_WINDOW (data->popup),
                        x - cursor_size / 2,
@@ -7107,8 +7107,8 @@ gtk_widget_press_and_hold_begin_animation_timeout (gpointer user_data)
     {
       gtk_widget_set_state_flags (GTK_WIDGET (data->popup),
                                   GTK_STATE_FLAG_ACTIVE, FALSE);
-      gdk_window_get_pointer (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
-                              &x, &y, NULL);
+      gdk_window_get_device_position (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
+                                      data->device, &x, &y, NULL);
       cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
       gtk_window_move (GTK_WINDOW (data->popup),
                        x - cursor_size / 2,
