@@ -842,6 +842,7 @@ typedef enum
  * @GTK_STATE_FLAG_INSENSITIVE: Widget is insensitive.
  * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent.
  * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus.
+ * @GTK_STATE_FLAG_WINDOW_UNFOCUSED: Widget's toplevel window is unfocused.
  *
  * Describes a widget state.
  */
@@ -853,7 +854,8 @@ typedef enum
   GTK_STATE_FLAG_SELECTED     = 1 << 2,
   GTK_STATE_FLAG_INSENSITIVE  = 1 << 3,
   GTK_STATE_FLAG_INCONSISTENT = 1 << 4,
-  GTK_STATE_FLAG_FOCUSED      = 1 << 5
+  GTK_STATE_FLAG_FOCUSED      = 1 << 5,
+  GTK_STATE_FLAG_WINDOW_UNFOCUSED = 1 << 6
 } GtkStateFlags;
 
 /**

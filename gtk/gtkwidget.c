@@ -307,13 +307,14 @@
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 
+#define GTK_STATE_FLAGS_BITS 7
+
 struct _GtkWidgetPrivate
 {
-  /* The state of the widget. There are actually only
-   * 5 widget states (defined in "gtkenums.h")
-   * so 3 bits.
+  /* The state of the widget. Needs to be able to hold all GtkStateFlags bits
+   * (defined in "gtkenums.h").
    */
-  guint state_flags : 6;
+  guint state_flags : GTK_STATE_FLAGS_BITS;
 
   guint direction             : 2;
 
@@ -529,7 +530,7 @@ enum {
 
 struct _GtkStateData
 {
-  guint         flags : 6;
+  guint         flags : GTK_STATE_FLAGS_BITS;
   guint         operation : 2;
   guint		use_forall : 1;
 };

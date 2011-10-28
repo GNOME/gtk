@@ -153,7 +153,8 @@ _gtk_css_selector_print (const GtkCssSelector *selector,
         "selected",
         "insensitive",
         "inconsistent",
-        "focus"
+        "focus",
+        "window-unfocused"
       };
       guint i;
 

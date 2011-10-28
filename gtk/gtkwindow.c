@@ -474,6 +474,8 @@ static void gtk_window_get_preferred_height   (GtkWidget           *widget,
 					       gint                *minimum_size,
 					       gint                *natural_size);
 
+static void ensure_state_flag_window_unfocused (GtkWidget *widget);
+
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_window_buildable_interface_init))
@@ -4817,6 +4819,8 @@ gtk_window_map (GtkWidget *widget)
     gtk_window_set_focus_visible (window, gtk_window_get_focus_visible (priv->transient_parent));
   else
     gtk_window_set_focus_visible (window, visible_focus == GTK_POLICY_ALWAYS);
+
+  ensure_state_flag_window_unfocused (widget);
 }
 
 static gboolean
@@ -5462,6 +5466,9 @@ gtk_window_state_event (GtkWidget           *widget,
                         GdkEventWindowState *event)
 {
   update_grip_visibility (GTK_WINDOW (widget));
+
+  if (event->changed_mask & GDK_WINDOW_STATE_FOCUSED)
+    ensure_state_flag_window_unfocused (widget);
 
   return FALSE;
 }
@@ -9617,4 +9624,22 @@ gtk_window_set_has_user_ref_count (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   window->priv->has_user_ref_count = setting;
+}
+
+static void
+ensure_state_flag_window_unfocused (GtkWidget *widget)
+{
+  GdkWindow *window;
+  gboolean window_focused = TRUE;
+
+  window = gtk_widget_get_window (widget);
+
+  window_focused = gdk_window_get_state (window) & GDK_WINDOW_STATE_FOCUSED;
+
+  if (!window_focused)
+    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_WINDOW_UNFOCUSED, FALSE);
+  else
+    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_WINDOW_UNFOCUSED);
+
+  gtk_widget_queue_draw (widget);
 }
