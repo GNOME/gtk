@@ -3962,7 +3962,7 @@ wmspec_moveresize (GdkWindow *window,
   XClientMessageEvent xclient;
 
   /* Release passive grab */
-  gdk_display_pointer_ungrab (display, timestamp);
+  gdk_device_ungrab (display->core_pointer, timestamp);
 
   memset (&xclient, 0, sizeof (xclient));
   xclient.type = ClientMessage;
@@ -4346,13 +4346,13 @@ create_moveresize_window (MoveResizeData *mv_resize,
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 
-  status = gdk_pointer_grab (mv_resize->moveresize_emulation_window,
-                             FALSE,
-                             GDK_BUTTON_RELEASE_MASK |
-                             GDK_POINTER_MOTION_MASK,
-                             NULL,
-                             NULL,
-                             timestamp);
+  status = gdk_device_grab (gdk_window_get_display (mv_resize->moveresize_emulation_window)->core_pointer,
+                            mv_resize->moveresize_emulation_window,
+                            GDK_OWNERSHIP_NONE,
+                            FALSE,
+                            GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK,
+                            NULL,
+                            timestamp);
 
   if (status != GDK_GRAB_SUCCESS)
     {
