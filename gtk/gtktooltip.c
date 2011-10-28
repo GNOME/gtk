@@ -608,7 +608,6 @@ maybe_update_shape (GtkTooltip *tooltip)
   cairo_t *cr;
   cairo_surface_t *surface;
   cairo_region_t *region;
-  gint width, height;
 
   /* fallback to XShape only for non-composited clients */
   if (gtk_widget_is_composited (tooltip->window))
