@@ -3366,6 +3366,14 @@ _gdk_win32_impl_release_dc (GdkWindowImplWin32 *impl)
     }
 }
 
+HWND
+gdk_win32_window_get_impl_hwnd (GdkWindow *window)
+{
+  if (GDK_WINDOW_IS_WIN32 (window))
+    return GDK_WINDOW_HWND (window);
+  return NULL;
+}
+
 static void
 gdk_win32_cairo_surface_destroy (void *data)
 {
