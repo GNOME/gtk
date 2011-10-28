@@ -155,7 +155,8 @@ static const char *const precache_atoms[] = {
   "_NET_WM_WINDOW_TYPE_NORMAL",
   "_NET_WM_USER_TIME",
   "_NET_VIRTUAL_ROOTS",
-  "GDK_SELECTION"
+  "GDK_SELECTION",
+  "_NET_WM_STATE_FOCUSED"
 };
 
 static char *gdk_sm_client_id;
@@ -240,6 +241,21 @@ do_net_wm_state_changes (GdkWindow *window)
                                      0,
                                      GDK_WINDOW_STATE_MAXIMIZED);
     }
+
+  if (old_state & GDK_WINDOW_STATE_FOCUSED)
+    {
+      if (!toplevel->have_focused)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_FOCUSED,
+                                     0);
+    }
+  else
+    {
+      if (toplevel->have_focused)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_FOCUSED);
+    }
 }
 
 static void
@@ -282,6 +298,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  GdkScreen *screen = GDK_WINDOW_SCREEN (window);
 
   Atom type;
   gint format;
@@ -297,6 +314,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   toplevel->have_maxvert = FALSE;
   toplevel->have_maxhorz = FALSE;
   toplevel->have_fullscreen = FALSE;
+  toplevel->have_focused = FALSE;
 
   type = None;
   gdk_x11_display_error_trap_push (display);
@@ -312,6 +330,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
       Atom maxvert_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_VERT");
       Atom maxhorz_atom	= gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_HORZ");
       Atom fullscreen_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FULLSCREEN");
+      Atom focused_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FOCUSED");
 
       atoms = (Atom *)data;
 
@@ -326,12 +345,18 @@ gdk_check_wm_state_changed (GdkWindow *window)
             toplevel->have_maxhorz = TRUE;
           else if (atoms[i] == fullscreen_atom)
             toplevel->have_fullscreen = TRUE;
+          else if (atoms[i] == focused_atom)
+            toplevel->have_focused = TRUE;
 
           ++i;
         }
 
       XFree (atoms);
     }
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_WM_STATE_FOCUSED")))
+    toplevel->have_focused = TRUE;
 
   /* When have_sticky is turned on, we have to check the DESKTOP property
    * as well.

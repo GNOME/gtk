@@ -123,6 +123,10 @@ struct _GdkToplevelX11
   guint have_fullscreen : 1;    /* _NET_WM_STATE_FULLSCREEN */
 
   guint is_leader : 1;
+
+  /* Set if the WM is presenting us as focused, i.e. with active decorations
+   */
+  guint have_focused : 1;
   
   gulong map_serial;	/* Serial of last transition from unmapped */
   
