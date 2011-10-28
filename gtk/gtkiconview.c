@@ -6074,7 +6074,8 @@ remove_scroll_timeout (GtkIconView *icon_view)
 }
 
 static void
-gtk_icon_view_autoscroll (GtkIconView *icon_view)
+gtk_icon_view_autoscroll (GtkIconView *icon_view,
+                          GdkDevice   *device)
 {
   GdkWindow *window;
   gint px, py, x, y, width, height;
@@ -6082,7 +6083,7 @@ gtk_icon_view_autoscroll (GtkIconView *icon_view)
 
   window = gtk_widget_get_window (GTK_WIDGET (icon_view));
 
-  gdk_window_get_pointer (window, &px, &py, NULL);
+  gdk_window_get_device_position (window, device, &px, &py, NULL);
   gdk_window_get_geometry (window, &x, &y, &width, &height);
 
   /* see if we are near the edge. */
@@ -6103,13 +6104,17 @@ gtk_icon_view_autoscroll (GtkIconView *icon_view)
                               gtk_adjustment_get_value (icon_view->priv->hadjustment) + hoffset);
 }
 
+typedef struct {
+  GtkIconView *icon_view;
+  GdkDevice   *device;
+} DragScrollData;
 
 static gboolean
-drag_scroll_timeout (gpointer data)
+drag_scroll_timeout (gpointer datap)
 {
-  GtkIconView *icon_view = GTK_ICON_VIEW (data);
+  DragScrollData *data = datap;
 
-  gtk_icon_view_autoscroll (icon_view);
+  gtk_icon_view_autoscroll (data->icon_view, data->device);
 
   return TRUE;
 }
@@ -6506,8 +6511,12 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
     {
       if (icon_view->priv->scroll_timeout_id == 0)
 	{
+          DragScrollData *data = g_slice_new (DragScrollData);
+          data->icon_view = icon_view;
+          data->device = gdk_drag_context_get_device (context);
+
 	  icon_view->priv->scroll_timeout_id =
-	    gdk_threads_add_timeout (50, drag_scroll_timeout, icon_view);
+	    gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 50, drag_scroll_timeout, data, g_free);
 	}
 
       if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
