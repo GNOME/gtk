@@ -1492,6 +1492,9 @@ if test "x$enable_test_print_backend" != "xno" ; then
 fi
 AM_CONDITIONAL(TEST_PRINT_BACKEND, test "x$enable_test_print_backend" != "xno")
 
+if test "$os_win32" = "yes"; then
+  AC_CHECK_TYPES([IPrintDialogCallback],[],[],[[#include <windows.h>]])
+fi
 
 ################################################################
 # Strip -export-dynamic from the link lines of various libraries
