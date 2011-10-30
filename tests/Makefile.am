@@ -121,7 +121,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpixbuf-save			\
 	testpixbuf-color		\
 	testpixbuf-scale		\
-	widget-factory
+	widget-factory 			\
+	testgmenu
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -237,6 +238,7 @@ testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 widget_factory_DEPENDENCIES = $(TEST_DEPS)
+testgmenu_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -336,6 +338,7 @@ testpixbuf_save_LDADD = $(LDADDS)
 testpixbuf_color_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
 widget_factory_LDADD = $(LDADDS)
+testgmenu_LDADD = $(LDADDS)
 
 
 testboxcss_SOURCES =	\
