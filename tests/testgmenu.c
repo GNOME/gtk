@@ -23,6 +23,19 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+/* TODO
+ *
+ * - Debug initial click problem.
+ *
+ * - Dynamic changes. Add/Remove items, sections, submenus and
+ *   reconstruct the widgetry.
+ *
+ * - Focus changes. Verify that stopping subscriptions works
+ *   as intended.
+ *
+ * - Other attributes. What about icons ?
+ */
+
 /* GtkMenu construction {{{1 */
 
 static void
