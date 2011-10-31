@@ -515,6 +515,9 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
       info->serial_end = 0;
       ReleaseCapture ();
     }
+
+  _gdk_input_ungrab_pointer (time);
+
   /* TODO_CSW: cursor, confines, etc */
 
   _gdk_display_pointer_grab_update (display, 0);
@@ -1242,10 +1245,11 @@ send_crossing_event (GdkDisplay                 *display,
   event->crossing.state = mask;
 
   _gdk_win32_append_event (event);
-
-  if (type == GDK_ENTER_NOTIFY &&
-      ((GdkWindowObject *) window)->extension_events != 0)
-    _gdk_input_enter_event ((GdkWindow *)window);
+  
+  /*
+  if (((GdkWindowObject *) window)->extension_events != 0)
+    _gdk_input_crossing_event ((GdkWindow *)window, type == GDK_ENTER_NOTIFY);
+  */
 }
 
 static GdkWindowObject *
@@ -1526,8 +1530,7 @@ propagate (GdkWindow  **window,
 	   gboolean     grab_owner_events,
 	   gint	        grab_mask,
 	   gboolean   (*doesnt_want_it) (gint mask,
-					 MSG *msg),
-	   gboolean    	check_extended)
+					 MSG *msg))
 {
   if (grab_window != NULL && !grab_owner_events)
     {
@@ -1536,13 +1539,6 @@ propagate (GdkWindow  **window,
       /* See if the event should be ignored because an extended input
        * device is used
        */
-      if (check_extended &&
-	  ((GdkWindowObject *) grab_window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored for grabber)"));
-	  return FALSE;
-	}
       if ((*doesnt_want_it) (grab_mask, msg))
 	{
 	  GDK_NOTE (EVENTS, g_print (" (grabber doesn't want it)"));
@@ -1561,13 +1557,6 @@ propagate (GdkWindow  **window,
    */
   while (TRUE)
     {
-      if (check_extended &&
-	  ((GdkWindowObject *) *window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  return FALSE;
-	}
       if ((*doesnt_want_it) (((GdkWindowObject *) *window)->event_mask, msg))
 	{
 	  /* Owner doesn't want it, propagate to parent. */
@@ -1579,13 +1568,6 @@ propagate (GdkWindow  **window,
 		{
 		  /* Event source is grabbed with owner_events TRUE */
 
-		  if (check_extended &&
-		      ((GdkWindowObject *) grab_window)->extension_events != 0 &&
-		      _gdk_input_ignore_core)
-		    {
-		      GDK_NOTE (EVENTS, g_print (" (ignored for grabber)"));
-		      return FALSE;
-		    }
 		  if ((*doesnt_want_it) (grab_mask, msg))
 		    {
 		      /* Grabber doesn't want it either */
@@ -2267,7 +2249,7 @@ gdk_event_translate (MSG  *msg,
 		      _gdk_display->keyboard_grab.window,
 		      _gdk_display->keyboard_grab.owner_events,
 		      GDK_ALL_EVENTS_MASK,
-		      doesnt_want_key, FALSE))
+		      doesnt_want_key))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2375,7 +2357,7 @@ gdk_event_translate (MSG  *msg,
 		      _gdk_display->keyboard_grab.window,
 		      _gdk_display->keyboard_grab.owner_events,
 		      GDK_ALL_EVENTS_MASK,
-		      doesnt_want_char, FALSE))
+		      doesnt_want_char))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2439,7 +2421,7 @@ gdk_event_translate (MSG  *msg,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
-      /* TODO_CSW?: there used to some synthesize and propagate */
+
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
@@ -2479,15 +2461,6 @@ gdk_event_translate (MSG  *msg,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
-#if 0
-      if (((GdkWindowObject *) window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  break;
-	}
-#endif
-
       grab = _gdk_display_get_last_pointer_grab (_gdk_display);
       if (grab != NULL && grab->implicit)
 	{
@@ -2987,7 +2960,7 @@ gdk_event_translate (MSG  *msg,
 	      !GDK_WINDOW_DESTROYED (window))
 	    _gdk_win32_emit_configure_event (window);
 
-	  if (((GdkWindowObject *) window)->extension_events != 0)
+	  if (((GdkWindowObject *) window)->input_window != NULL)
 	    _gdk_input_configure_event (window);
 	}
 
@@ -3483,8 +3456,7 @@ gdk_event_translate (MSG  *msg,
     wintab:
 
       event = gdk_event_new (GDK_NOTHING);
-      event->any.window = window;
-      g_object_ref (window);
+      event->any.window = NULL;
 
       if (_gdk_input_other_event (event, msg, window))
 	_gdk_win32_append_event (event);

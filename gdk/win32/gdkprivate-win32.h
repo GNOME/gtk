@@ -494,7 +494,8 @@ gboolean _gdk_win32_pixbuf_to_hicon_supports_alpha (void);
 
 void _gdk_win32_append_event (GdkEvent *event);
 void _gdk_win32_emit_configure_event (GdkWindow *window);
-
+GdkWindow *_gdk_win32_find_window_for_mouse_event (GdkWindow* reported_window,
+						   MSG*       msg);
 
 /* Initialization */
 void _gdk_windowing_window_init (GdkScreen *screen);

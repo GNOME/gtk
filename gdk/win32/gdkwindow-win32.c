@@ -125,7 +125,7 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->hicon_small = NULL;
   impl->hint_flags = 0;
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
-  impl->extension_events_selected = FALSE;
+  impl->extension_events_mask = 0;
   impl->transient_owner = NULL;
   impl->transient_children = NULL;
   impl->num_transients = 0;
@@ -558,7 +558,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   if (attributes_mask & GDK_WA_VISUAL)
     g_assert (visual == attributes->visual);
 
-  impl->extension_events_selected = FALSE;
+  impl->extension_events_mask = 0;
   impl->override_redirect = override_redirect;
 
   /* wclass is not any longer set always, but if is ... */
