@@ -495,9 +495,10 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   /**
    * GtkScrolledWindow:kinetic-scrolling:
    *
-   * Whether kinetic scrolling mode is enabled.
+   * Whether kinetic scrolling mode is enabled,
+   * only applies to devices with source %GDK_SOURCE_TOUCH
    *
-   * Since: 3.2
+   * Since: 3.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_KINETIC_SCROLLING,
@@ -3037,9 +3038,16 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
   gint threshold;
   GtkWidget *event_widget;
   GdkEventButton *event;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
+  GdkInputSource source;
 
   if (_event->type != GDK_BUTTON_PRESS)
+    return FALSE;
+
+  source_device = gdk_event_get_source_device (_event);
+  source = gdk_device_get_source (source_device);
+
+  if (source != GDK_SOURCE_TOUCH)
     return FALSE;
 
   event = (GdkEventButton *)_event;
