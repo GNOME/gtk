@@ -2207,6 +2207,9 @@ motion_event_list_last (MotionEventList *motion_events)
 {
   guint n_motions = MIN (motion_events->len, motion_events->buffer->len);
 
+  if (n_motions == 0)
+    return NULL;
+
   return &g_array_index (motion_events->buffer, MotionData, n_motions - 1);
 }
 
@@ -2840,18 +2843,21 @@ gtk_scrolled_window_motion_notify_event (GtkWidget *widget,
 
   motion = motion_event_list_last (&priv->motion_events);
 
-  hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
-  if (hadjustment)
+  if (motion)
     {
-      dx = (motion->x - event->x_root) + gtk_adjustment_get_value (hadjustment);
-      gtk_adjustment_set_value (hadjustment, dx);
-    }
+      hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+      if (hadjustment)
+        {
+          dx = (motion->x - event->x_root) + gtk_adjustment_get_value (hadjustment);
+          gtk_adjustment_set_value (hadjustment, dx);
+        }
 
-  vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
-  if (vadjustment)
-    {
-      dy = (motion->y - event->y_root) + gtk_adjustment_get_value (vadjustment);
-      gtk_adjustment_set_value (vadjustment, dy);
+      vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+      if (vadjustment)
+        {
+          dy = (motion->y - event->y_root) + gtk_adjustment_get_value (vadjustment);
+          gtk_adjustment_set_value (vadjustment, dy);
+        }
     }
 
   motion = motion_event_list_append (&priv->motion_events);
