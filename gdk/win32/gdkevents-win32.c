@@ -84,6 +84,8 @@
  * Private function declarations
  */
 
+#define SYNAPSIS_ICON_WINDOW_CLASS "SynTrackCursorWindowClass"
+
 static gboolean gdk_event_translate (MSG        *msg,
 				     gint       *ret_valp);
 static void     handle_wm_paint     (MSG        *msg,
@@ -115,6 +117,7 @@ static GSourceFuncs event_funcs = {
 GPollFD event_poll_fd;
 
 static GdkWindow *mouse_window = NULL;
+static GdkWindow *mouse_window_ignored_leave = NULL;
 static gint current_x, current_y;
 static gint current_root_x, current_root_y;
 static UINT client_message;
@@ -2044,6 +2047,7 @@ gdk_event_translate (MSG  *msg,
   BYTE key_state[256];
   HIMC himc;
   WINDOWPOS *windowpos;
+  gboolean ignore_leave;
 
   GdkEvent *event;
 
@@ -2490,6 +2494,7 @@ gdk_event_translate (MSG  *msg,
 					  msg->time,
 					  FALSE);
 	      assign_object (&mouse_window, new_window);
+	      mouse_window_ignored_leave = NULL;
 	    }
 	}
 
@@ -2544,8 +2549,18 @@ gdk_event_translate (MSG  *msg,
 				      msg->time,
 				      FALSE);
 	  assign_object (&mouse_window, new_window);
+	  mouse_window_ignored_leave = NULL;
 	  if (new_window != NULL)
 	    track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (new_window));
+	}
+      else if (new_window != NULL && 
+	       new_window == mouse_window_ignored_leave)
+	{
+	  /* If we ignored a leave event for this window and we're now getting
+	     input again we need to re-arm the mouse tracking, as that was
+	     cancelled by the mouseleave. */
+	  mouse_window_ignored_leave = NULL;
+	  track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (new_window));
 	}
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
@@ -2590,9 +2605,20 @@ gdk_event_translate (MSG  *msg,
 
       new_window = NULL;
       hwnd = WindowFromPoint (msg->pt);
+      ignore_leave = FALSE;
       if (hwnd != NULL)
 	{
+	  char classname[64];
+
 	  POINT client_pt = msg->pt;
+
+	  /* The synapitics trackpad drivers have this irritating
+	     feature where it pops up a window right under the pointer
+	     when you scroll. We ignore the leave and enter events for 
+	     this window */
+	  if (GetClassNameA (hwnd, classname, sizeof(classname)) &&
+	      strcmp (classname, SYNAPSIS_ICON_WINDOW_CLASS) == 0)
+	    ignore_leave = TRUE;
 
 	  ScreenToClient (hwnd, &client_pt);
 	  GetClientRect (hwnd, &rect);
@@ -2600,14 +2626,17 @@ gdk_event_translate (MSG  *msg,
 	    new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
 	}
 
-      synthesize_crossing_events (_gdk_display,
-				  mouse_window, new_window,
-				  GDK_CROSSING_NORMAL,
-				  &msg->pt,
-				  0, /* TODO: Set right mask */
-				  msg->time,
-				  FALSE);
+      if (!ignore_leave)
+	synthesize_crossing_events (_gdk_display,
+				    mouse_window, new_window,
+				    GDK_CROSSING_NORMAL,
+				    &msg->pt,
+				    0, /* TODO: Set right mask */
+				    msg->time,
+				    FALSE);
       assign_object (&mouse_window, new_window);
+      mouse_window_ignored_leave = ignore_leave ? new_window : NULL;
+
 
       return_val = TRUE;
       break;
@@ -2625,6 +2654,30 @@ gdk_event_translate (MSG  *msg,
 
       if ((hwnd = WindowFromPoint (point)) == NULL)
 	break;
+      
+      {
+	char classname[64];
+
+	/* The synapitics trackpad drivers have this irritating
+	   feature where it pops up a window right under the pointer
+	   when you scroll. We backtrack and to the toplevel and
+	   find the innermost child instead. */
+	if (GetClassNameA (hwnd, classname, sizeof(classname)) &&
+	    strcmp (classname, SYNAPSIS_ICON_WINDOW_CLASS) == 0)
+	  {
+	    HWND hwndc;
+
+	    /* Find our toplevel window */
+	    hwnd = GetAncestor (msg->hwnd, GA_ROOT);
+
+	    /* Walk back up to the outermost child at the desired point */
+	    do {
+	      ScreenToClient (hwnd, &point);
+	      hwndc = ChildWindowFromPoint (hwnd, point);
+	      ClientToScreen (hwnd, &point);
+	    } while (hwndc != hwnd && (hwnd = hwndc, 1));
+	  }
+      }
 
       msg->hwnd = hwnd;
       if ((new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd)) == NULL)
