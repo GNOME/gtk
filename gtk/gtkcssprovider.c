@@ -3057,6 +3057,12 @@ gtk_css_provider_get_default (void)
         "  border-width: 0;\n"
         "  padding: 2;\n"
         "}\n"
+        "\n"
+        ".press-and-hold {\n"
+        "  background-color: alpha (@bg_color, 0.5);\n"
+        "  color: alpha (lighter (@selected_bg_color), 0.8);\n"
+        "  border-width: 10;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
