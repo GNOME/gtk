@@ -2846,6 +2846,7 @@ gtk_scrolled_window_press_and_hold (GtkWidget             *widget,
         return FALSE;
 
       gdk_device_ungrab (device, GDK_CURRENT_TIME);
+      gtk_device_grab_remove (widget, device);
 
       if (priv->motion_notify_id > 0)
         {
@@ -2891,6 +2892,7 @@ gtk_scrolled_window_button_release_event (GtkWidget *widget,
   GtkWidget *child;
   gdouble distance;
   GdkEventButton *event;
+  GdkDevice *device;
 
   if (_event->type != GDK_BUTTON_RELEASE)
     return FALSE;
@@ -2904,7 +2906,9 @@ gtk_scrolled_window_button_release_event (GtkWidget *widget,
   if (!child)
     return FALSE;
 
-  gdk_device_ungrab (gdk_event_get_device (_event), event->time);
+  device = gdk_event_get_device (_event);
+  gdk_device_ungrab (device, event->time);
+  gtk_device_grab_remove (widget, device);
 
   if (priv->motion_notify_id > 0)
     {
@@ -3031,6 +3035,7 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
   gint threshold;
   GtkWidget *event_widget;
   GdkEventButton *event;
+  GdkDevice *device;
 
   if (_event->type != GDK_BUTTON_PRESS)
     return FALSE;
@@ -3048,13 +3053,15 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
   if (priv->hscrollbar == event_widget || priv->vscrollbar == event_widget)
     return FALSE;
 
-  gdk_device_grab (gdk_event_get_device (_event),
+  device = gdk_event_get_device (_event);
+  gdk_device_grab (device,
                    priv->event_window,
                    GDK_OWNERSHIP_WINDOW,
                    TRUE,
                    GDK_BUTTON_RELEASE_MASK | GDK_BUTTON1_MOTION_MASK,
                    NULL,
                    event->time);
+  gtk_device_grab_add (widget, device, TRUE);
   gdk_window_lower (priv->event_window);
 
   /* Reset motion buffer */
