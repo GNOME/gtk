@@ -6011,7 +6011,9 @@ _gtk_widget_captured_event (GtkWidget *widget,
 
   g_object_ref (widget);
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if ((event->type == GDK_BUTTON_PRESS ||
+       event->type == GDK_TOUCH_PRESS) &&
+      event->button.button == 1)
     {
       /* Handle press and hold */
       gtk_widget_press_and_hold_start (widget,
