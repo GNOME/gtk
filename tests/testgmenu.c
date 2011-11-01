@@ -727,17 +727,6 @@ button_clicked (GtkButton *button, gpointer data)
 }
 
 static void
-items_changed (GMenuModel *model,
-               gint        position,
-               gint        removed,
-               gint        added,
-               GtkButton  *button)
-{
-  g_print ("Received GMenuModel::items-changed\n");
-  g_object_set_data (G_OBJECT (button), "menu", NULL);
-}
-
-static void
 action_added (GActionGroup *group,
               const gchar  *name,
               gpointer      data)
@@ -762,7 +751,11 @@ recursively_connect_to_items_changed (GMenuModel *model,
   GMenuModel *m;
   GMenuLinkIter *iter;
 
-  g_signal_connect (model, "items-changed", callback, data);
+  if (!g_object_get_data (G_OBJECT (model), "handler-connected"))
+    {
+      g_signal_connect (model, "items-changed", callback, data);
+      g_object_set_data (G_OBJECT (model), "handler-connected", GINT_TO_POINTER (1));
+    }
   for (i = 0; i < g_menu_model_get_n_items (model); i++)
     {
       iter = g_menu_model_iterate_item_links (model, i);
@@ -774,6 +767,18 @@ recursively_connect_to_items_changed (GMenuModel *model,
         }
       g_object_unref (iter);
     }
+}
+
+static void
+items_changed (GMenuModel *model,
+               gint        position,
+               gint        removed,
+               gint        added,
+               GtkButton  *button)
+{
+  g_print ("Received GMenuModel::items-changed\n");
+  g_object_set_data (G_OBJECT (button), "menu", NULL);
+  recursively_connect_to_items_changed (model, G_CALLBACK (items_changed), button);
 }
 
 static GtkWidget *
