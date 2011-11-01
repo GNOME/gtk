@@ -2793,6 +2793,63 @@ render_spinner (GtkThemingEngine *engine,
 }
 
 static void
+render_press_and_hold (GtkThemingEngine *engine,
+                       cairo_t          *cr,
+                       gdouble           x,
+                       gdouble           y,
+                       gdouble           width,
+                       gdouble           height)
+{
+  gdouble progress, radius, border_width;
+  GdkRGBA color, bg_color;
+  GtkStateFlags flags;
+  GtkBorder border;
+
+  cairo_save (cr);
+
+  if (!gtk_theming_engine_state_is_running (engine,
+                                            GTK_STATE_FLAG_ACTIVE,
+                                            &progress))
+    progress = 0;
+
+  flags = gtk_theming_engine_get_state (engine);
+  gtk_theming_engine_get_background_color (engine, flags, &bg_color);
+  gtk_theming_engine_get_color (engine, flags, &color);
+  gtk_theming_engine_get_border (engine, flags, &border);
+
+  border_width = (gdouble) MAX (MAX (border.top, border.bottom),
+                                MAX (border.left, border.right));
+
+  radius = MIN (width, height) / 2;
+
+  if (border_width == 0 ||
+      border_width >= radius - border_width)
+    border_width = MAX (1, radius / 4);
+
+  cairo_set_line_width (cr, border_width);
+  radius -= border_width;
+
+  /* Arcs start from the negative Y axis */
+  cairo_arc (cr,
+             width / 2, height / 2,
+             radius,
+             - G_PI_2, - G_PI_2 + (2 * G_PI));
+
+  gdk_cairo_set_source_rgba (cr, &bg_color);
+  cairo_stroke (cr);
+
+  cairo_arc (cr,
+             width / 2, height / 2,
+             radius,
+             - G_PI_2,
+             - G_PI_2 + (2 * G_PI * progress));
+  gdk_cairo_set_source_rgba (cr, &color);
+  cairo_stroke (cr);
+
+  cairo_restore (cr);
+}
+
+static void
 gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     cairo_t          *cr,
                                     gdouble           x,
@@ -2803,6 +2860,10 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER))
     {
       render_spinner (engine, cr, x, y, width, height);
+    }
+  else if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_PRESS_AND_HOLD))
+    {
+      render_press_and_hold (engine, cr, x, y, width, height);
     }
   else
     {

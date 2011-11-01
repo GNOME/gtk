@@ -362,3 +362,9 @@ GtkCalendar.button:hover {
   border-width: 0;
   padding: 2px;
 }
+
+.press-and-hold {
+  background-color: alpha (@bg_color, 0.5);
+  color: alpha (lighter (@selected_bg_color), 0.8);
+  border-width: 10;
+}

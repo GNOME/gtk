@@ -648,6 +648,13 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_RIGHT "right"
 
+/**
+ * GTK_STYLE_CLASS_PRESS_AND_HOLD:
+ *
+ * A CSS class for the press and hold activity indicator.
+ */
+#define GTK_STYLE_CLASS_PRESS_AND_HOLD "press-and-hold"
+
 /* Predefined set of widget regions */
 
 /**
