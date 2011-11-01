@@ -33,6 +33,7 @@
 #include "gtkprivate.h"
 #include "gtkcssproviderprivate.h"
 #include "gtksymboliccolor.h"
+#include "gtkanimationdescription.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 
@@ -96,9 +97,10 @@
  */
 
 
-#define DEFAULT_TIMEOUT_INITIAL 200
-#define DEFAULT_TIMEOUT_REPEAT   20
-#define DEFAULT_TIMEOUT_EXPAND  500
+#define DEFAULT_TIMEOUT_INITIAL        200
+#define DEFAULT_TIMEOUT_REPEAT         20
+#define DEFAULT_TIMEOUT_EXPAND         500
+#define DEFAULT_TIMEOUT_PRESS_AND_HOLD 800
 
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
@@ -1440,6 +1442,33 @@ gtk_settings_get_style (GtkStyleProvider *provider,
   settings = GTK_SETTINGS (provider);
 
   settings_ensure_style (settings);
+
+  /* Set animation for press and hold */
+  if (gtk_widget_path_iter_has_class (path, 0, GTK_STYLE_CLASS_PRESS_AND_HOLD))
+    {
+      GtkAnimationDescription *anim_desc;
+      GtkStyleProperties *copy;
+      gint duration;
+
+      copy = gtk_style_properties_new ();
+      gtk_style_properties_merge (copy, settings->priv->style, TRUE);
+
+      g_object_get (settings,
+                    "gtk-press-and-hold-timeout", &duration,
+                    NULL);
+
+      anim_desc = _gtk_animation_description_new (duration,
+                                                  GTK_TIMELINE_PROGRESS_LINEAR,
+                                                  FALSE);
+      gtk_style_properties_set (copy,
+                                GTK_STATE_FLAG_ACTIVE,
+                                "transition", anim_desc,
+                                NULL);
+
+      _gtk_animation_description_unref (anim_desc);
+
+      return copy;
+    }
 
   return g_object_ref (settings->priv->style);
 }
