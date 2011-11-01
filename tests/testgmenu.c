@@ -733,7 +733,47 @@ items_changed (GMenuModel *model,
                gint        added,
                GtkButton  *button)
 {
+  g_print ("Received GMenuModel::items-changed\n");
   g_object_set_data (G_OBJECT (button), "menu", NULL);
+}
+
+static void
+action_added (GActionGroup *group,
+              const gchar  *name,
+              gpointer      data)
+{
+  g_print ("Received GActionGroup::action-added\n");
+}
+
+static void
+action_removed (GActionGroup *group,
+                const gchar  *name,
+                gpointer      data)
+{
+  g_print ("Received GActionGroup::action-removed\n");
+}
+
+static void
+recursively_connect_to_items_changed (GMenuModel *model,
+                                      GCallback   callback,
+                                      gpointer    data)
+{
+  gint i;
+  GMenuModel *m;
+  GMenuLinkIter *iter;
+
+  g_signal_connect (model, "items-changed", callback, data);
+  for (i = 0; i < g_menu_model_get_n_items (model); i++)
+    {
+      iter = g_menu_model_iterate_item_links (model, i);
+      while (g_menu_link_iter_next (iter))
+        {
+          m = g_menu_link_iter_get_value (iter);
+          recursively_connect_to_items_changed (m, callback, data);
+          g_object_unref (m);
+        }
+      g_object_unref (iter);
+    }
 }
 
 static GtkWidget *
@@ -746,7 +786,9 @@ create_menu_button (GMenuModel *model, GActionGroup *group)
   g_object_set_data (G_OBJECT (button), "group", group);
 
   g_signal_connect (button, "clicked", G_CALLBACK (button_clicked), NULL);
-  g_signal_connect (model, "items-changed", G_CALLBACK (items_changed), button);
+  recursively_connect_to_items_changed (model, G_CALLBACK (items_changed), button);
+  g_signal_connect (group, "action-added", G_CALLBACK (action_added), NULL);
+  g_signal_connect (group, "action-removed", G_CALLBACK (action_removed), NULL);
 
   return button;
 }
