@@ -435,6 +435,7 @@ struct _GtkWidgetClass
   void         (* captured_event)         (GtkWidget *widget,
                                            GdkEvent  *event);
   gboolean     (* press_and_hold)         (GtkWidget             *widget,
+                                           GdkDevice             *device,
                                            GtkPressAndHoldAction  action,
                                            gint                   x,
                                            gint                   y);
