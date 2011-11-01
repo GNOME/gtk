@@ -509,7 +509,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                    g_param_spec_boolean ("kinetic-scrolling",
                                                          P_("Kinetic Scrolling"),
                                                          P_("Enable kinetic scrolling mode."),
-                                                         FALSE,
+                                                         TRUE,
                                                          GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
   /**
    * GtkScrolledWindow::scroll-child:
@@ -613,6 +613,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->deceleration_rate = 1.1f;
   priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
   priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+
+  gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
 }
 
 /**
