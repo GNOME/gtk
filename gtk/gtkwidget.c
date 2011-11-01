@@ -3118,8 +3118,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, press_and_hold),
 		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__ENUM_INT_INT,
-		  G_TYPE_BOOLEAN, 3,
+		  _gtk_marshal_BOOLEAN__OBJECT_ENUM_INT_INT,
+		  G_TYPE_BOOLEAN, 4,
+		  GDK_TYPE_DEVICE,
 		  GTK_TYPE_PRESS_AND_HOLD_ACTION,
 		  G_TYPE_INT,
 		  G_TYPE_INT);
@@ -6949,6 +6950,7 @@ gtk_widget_press_and_hold_cancel (GtkWidget *widget)
 
   g_signal_emit (widget, widget_signals[PRESS_AND_HOLD],
                  0,
+                 data->device,
                  GTK_PRESS_AND_HOLD_CANCEL,
                  -1, -1,
                  &return_value);
@@ -7037,6 +7039,7 @@ gtk_widget_press_and_hold_timeout (gpointer user_data)
   /* Done, clean up and emit the trigger signal */
   g_signal_emit (widget, widget_signals[PRESS_AND_HOLD],
                  0,
+                 data->device,
                  GTK_PRESS_AND_HOLD_TRIGGER,
                  data->current_x, data->current_y,
                  &return_value);
@@ -7135,6 +7138,7 @@ gtk_widget_press_and_hold_begin_animation_timeout (gpointer user_data)
 
 static gboolean
 gtk_widget_press_and_hold_query (GtkWidget *widget,
+                                 GdkDevice *device,
                                  gint       x,
                                  gint       y)
 {
@@ -7142,6 +7146,7 @@ gtk_widget_press_and_hold_query (GtkWidget *widget,
 
   g_signal_emit (widget, widget_signals[PRESS_AND_HOLD],
                  0,
+                 device,
                  GTK_PRESS_AND_HOLD_QUERY,
                  x, y,
                  &return_value);
@@ -7161,7 +7166,7 @@ gtk_widget_press_and_hold_start (GtkWidget      *widget,
 
   data = gtk_widget_get_press_and_hold_data (widget);
 
-  if (gtk_widget_press_and_hold_query (widget, event->x, event->y))
+  if (gtk_widget_press_and_hold_query (widget, data->device, event->x, event->y))
     {
       gint timeout, begin_ani_timeout;
       GdkScreen *screen;

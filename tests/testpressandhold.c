@@ -23,42 +23,12 @@
 
 #include <gtk/gtk.h>
 
-struct CoordData
-{
-  gint x;
-  gint y;
-  GtkWidget *widget;
-};
-
-static void
-popup_position_func (GtkMenu   *menu,
-                     gint      *x,
-                     gint      *y,
-                     gboolean  *push_in,
-                     gpointer   user_data)
-{
-  GtkRequisition req;
-  GdkScreen *screen;
-  struct CoordData *data = user_data;
-
-  screen = gtk_widget_get_screen (data->widget);
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
-
-  *x = data->x;
-  *y = data->y;
-
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (screen) - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
-}
-
 static void
 press_and_hold_show_menu (GtkWidget *widget,
-			  gint       x,
-			  gint       y)
+                          GdkDevice *device)
 {
   GtkWidget *menu;
   GtkWidget *item;
-  struct CoordData data;
 
   menu = gtk_menu_new ();
 
@@ -74,34 +44,29 @@ press_and_hold_show_menu (GtkWidget *widget,
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 
-  data.widget = widget;
-  gdk_window_get_origin (gtk_widget_get_window (widget), &data.x, &data.y);
-  data.x += x;
-  data.y += y;
-
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-		  popup_position_func,
-		  &data,
-		  1,
-		  GDK_CURRENT_TIME);
+  gtk_menu_popup_for_device (GTK_MENU (menu), device,
+                             NULL, NULL, NULL, NULL, NULL,
+                             1,
+                             GDK_CURRENT_TIME);
 }
 
 static gboolean
 press_and_hold (GtkWidget             *widget,
-	        GtkPressAndHoldAction  action,
-	        gint                   x,
-	        gint                   y,
-	        gboolean               keyboard)
+                GdkDevice             *device,
+                GtkPressAndHoldAction  action,
+                gint                   x,
+                gint                   y,
+                gpointer               user_data)
 {
   switch (action)
     {
       case GTK_PRESS_AND_HOLD_QUERY:
 	g_print ("press-and-hold-query on %s\n", gtk_widget_get_name (widget));
-        return TRUE;
+        break;
 
       case GTK_PRESS_AND_HOLD_TRIGGER:
 	g_print ("press-and-hold-trigger on %s\n", gtk_widget_get_name (widget));
-        press_and_hold_show_menu (widget, x, y);
+        press_and_hold_show_menu (widget, device);
         break;
 
       case GTK_PRESS_AND_HOLD_CANCEL:
@@ -109,7 +74,7 @@ press_and_hold (GtkWidget             *widget,
         break;
     }
 
-  return FALSE;
+  return TRUE;
 }
 
 static GtkTreeModel *
