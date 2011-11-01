@@ -142,7 +142,7 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *box;
-  GtkWidget *label, *checkbutton, *tree_view;
+  GtkWidget *label, *checkbutton, *tree_view, *entry;
 
   gtk_init (&argc, &argv);
 
@@ -152,9 +152,8 @@ main (int argc, char **argv)
   g_signal_connect (window, "delete_event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
-  box = gtk_vbox_new (FALSE, 3);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (window), box);
-
 
   label = gtk_button_new_with_label ("Press-n-hold me!");
   g_signal_connect (label, "press-and-hold",
@@ -183,6 +182,12 @@ main (int argc, char **argv)
 		    G_CALLBACK (press_and_hold), NULL);
 
   gtk_box_pack_start (GTK_BOX (box), tree_view, FALSE, FALSE, 0);
+
+  entry = gtk_entry_new ();
+  gtk_entry_set_text (GTK_ENTRY (entry), "Press and hold me");
+  g_signal_connect (entry, "press-and-hold",
+                    G_CALLBACK (press_and_hold), NULL);
+  gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 0);
 
   gtk_widget_show_all (window);
 
