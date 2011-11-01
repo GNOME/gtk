@@ -117,6 +117,9 @@ void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
 GObject * _gtk_builder_construct (GtkBuilder *builder,
                                   ObjectInfo *info,
 				  GError    **error);
+void      _gtk_builder_add_object (GtkBuilder  *builder,
+                                   const gchar *id,
+                                   GObject     *object);
 void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
 void      _gtk_builder_add_signals (GtkBuilder *builder,

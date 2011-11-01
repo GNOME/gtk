@@ -2572,6 +2572,48 @@ test_message_area (void)
   g_object_unref (builder);
 }
 
+static void
+test_gmenu (void)
+{
+  GtkBuilder *builder;
+  GError *error;
+  GObject *obj, *obj1;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "  </object>"
+    "  <menu id='edit-menu'>"
+    "    <section>"
+    "      <item label='Undo' action='undo'/>"
+    "      <item label='Redo' action='redo'/>"
+    "    </section>"
+    "    <section></section>"
+    "    <section label='Copy &amp; Paste'>"
+    "      <item label='Cut' action='cut'/>"
+    "      <item label='Copy' action='copy'/>"
+    "      <item label='Paste' action='paste'/>"
+    "    </section>"
+    "    <section>"
+    "      <item label='Bold' action='bold'/>"
+    "      <submenu label='Language'>"
+    "        <item label='Latin' action='lang' target='latin'/>"
+    "        <item label='Greek' action='lang' target='greek'/>"
+    "        <item label='Urdu'  action='lang' target='urdu'/>"
+    "      </submenu>"
+    "    </section>"
+    "  </menu>"
+    "</interface>";
+
+  error = NULL;
+  builder = builder_new_from_string (buffer, -1, NULL);
+  g_assert (error == NULL);
+  obj = gtk_builder_get_object (builder, "window");
+  g_assert (GTK_IS_WINDOW (obj));
+  obj1 = gtk_builder_get_object (builder, "edit-menu");
+  g_assert (G_IS_MENU_MODEL (obj1));
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2618,6 +2660,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Menus", test_menus);
   g_test_add_func ("/Builder/MessageArea", test_message_area);
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
+  g_test_add_func ("/Builder/GMenu", test_gmenu);
 
   return g_test_run();
 }

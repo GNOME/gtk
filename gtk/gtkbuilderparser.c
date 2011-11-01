@@ -23,6 +23,7 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include <gio/gio.h>
 #include "gtkbuilderprivate.h"
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
@@ -823,6 +824,34 @@ parse_custom (GMarkupParseContext *context,
   return TRUE;
 }
 
+static gboolean
+parse_menu (GMarkupParseContext  *context,
+            const gchar          *element_name,
+            const gchar         **names,
+            const gchar         **values,
+            gpointer              user_data,
+            GError              **error)
+{
+  gchar *id;
+  ParserData *data = user_data;
+  ObjectInfo *object_info;
+
+  if (!g_markup_collect_attributes (element_name, names, values, error,
+                                    G_MARKUP_COLLECT_STRING, "id", &id,
+                                    G_MARKUP_COLLECT_INVALID))
+    return FALSE;
+
+  object_info = g_slice_new0 (ObjectInfo);
+  object_info->class_name = g_strdup ("GMenu");
+  object_info->id = g_strdup (id);
+  object_info->tag.name = element_name;
+  state_push (data, object_info);
+
+  g_menu_markup_parser_start_menu (context, NULL);
+
+  return TRUE;
+}
+
 static void
 start_element (GMarkupParseContext *context,
                const gchar         *element_name,
@@ -883,6 +912,8 @@ start_element (GMarkupParseContext *context,
     parse_signal (data, element_name, names, values, error);
   else if (strcmp (element_name, "interface") == 0)
     parse_interface (data, element_name, names, values, error);
+  else if (strcmp (element_name, "menu") == 0)
+    parse_menu (context, element_name, names, values, data, error);
   else if (strcmp (element_name, "placeholder") == 0)
     {
       /* placeholder has no special treatmeant, but it needs an
@@ -953,6 +984,18 @@ end_element (GMarkupParseContext *context,
     }
   else if (strcmp (element_name, "interface") == 0)
     {
+    }
+  else if (strcmp (element_name, "menu") == 0)
+    {
+      ObjectInfo *object_info;
+      GObject *menu;
+
+      object_info = state_pop_info (data, ObjectInfo);
+      menu = (GObject*)g_menu_markup_parser_end_menu (context);
+      _gtk_builder_add_object (data->builder, object_info->id, menu);
+      g_object_unref (menu);
+
+      free_object_info (object_info);
     }
   else if (data->requested_objects && !data->inside_requested_object)
     {

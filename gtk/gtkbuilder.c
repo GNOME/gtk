@@ -731,6 +731,13 @@ _gtk_builder_construct (GtkBuilder *builder,
   return obj;
 }
 
+void
+_gtk_builder_add_object (GtkBuilder  *builder,
+                         const gchar *id,
+                         GObject     *object)
+{
+  g_hash_table_insert (builder->priv->objects, g_strdup (id), g_object_ref (object));
+}
 
 void
 _gtk_builder_add (GtkBuilder *builder,
