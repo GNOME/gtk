@@ -233,6 +233,7 @@ static gboolean gtk_scrolled_window_scroll_event       (GtkWidget         *widge
 static gboolean gtk_scrolled_window_button_press_event (GtkWidget         *widget,
                                                         GdkEvent          *event);
 static gboolean gtk_scrolled_window_press_and_hold      (GtkWidget        *widget,
+                                                         GdkDevice        *device,
                                                          GtkPressAndHoldAction action,
                                                          gint              x,
                                                          gint              y);
@@ -2820,6 +2821,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window,
 
 static gboolean
 gtk_scrolled_window_press_and_hold (GtkWidget             *widget,
+                                    GdkDevice             *device,
                                     GtkPressAndHoldAction  action,
                                     gint                   x,
                                     gint                   y)
@@ -2835,8 +2837,11 @@ gtk_scrolled_window_press_and_hold (GtkWidget             *widget,
       /* Cancel the scrolling and send the button press
        * event to the child widget
        */
+      if (!priv->button_press_event ||
+	  device != gdk_event_get_device (priv->button_press_event))
+        return FALSE;
 
-      gdk_device_ungrab (gdk_event_get_device (priv->button_press_event), GDK_CURRENT_TIME);
+      gdk_device_ungrab (device, GDK_CURRENT_TIME);
 
       if (priv->motion_notify_id > 0)
         {
