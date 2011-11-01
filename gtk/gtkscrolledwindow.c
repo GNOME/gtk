@@ -124,6 +124,7 @@
  */
 
 #define DEFAULT_SCROLLBAR_SPACING  3
+#define TOUCH_BYPASS_CAPTURED_THRESHOLD 30
 
 /* Kinetic scrolling */
 #define FPS 60
@@ -181,6 +182,9 @@ struct _GtkScrolledWindowPrivate
   gdouble                deceleration_rate;
   gdouble                overshoot;
   guint                  accumulated_delta;
+
+  gdouble                last_button_event_x_root;
+  gdouble                last_button_event_y_root;
 };
 
 enum {
@@ -581,6 +585,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->min_content_width = -1;
   priv->min_content_height = -1;
   priv->deceleration_rate = 1.1f;
+  priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+  priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
 }
 
 /**
@@ -2795,6 +2801,12 @@ gtk_scrolled_window_button_release_event (GtkWidget *widget,
   distance = gtk_scrolled_window_get_deceleration_distance (scrolled_window, event->x_root, event->y_root);
   gtk_scrolled_window_start_deceleration (scrolled_window, distance);
 
+  if (distance == 0)
+    {
+      priv->last_button_event_x_root = event->x_root;
+      priv->last_button_event_y_root = event->y_root;
+    }
+
   /* Reset motion event buffer */
   motion_event_list_reset (&priv->motion_events);
 
@@ -2835,6 +2847,9 @@ gtk_scrolled_window_motion_notify_event (GtkWidget *widget,
       else
         return FALSE;
     }
+
+  priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+  priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
 
   if (priv->button_press_event)
     {
@@ -2893,6 +2908,20 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
     return FALSE;
 
   event = (GdkEventButton *)_event;
+
+  /* Check whether the button press is close to the previous one,
+   * take that as a shortcut to get the child widget handle events
+   */
+  if (ABS (event->x_root - priv->last_button_event_x_root) < TOUCH_BYPASS_CAPTURED_THRESHOLD &&
+      ABS (event->y_root - priv->last_button_event_y_root) < TOUCH_BYPASS_CAPTURED_THRESHOLD)
+    {
+      priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+      priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+      return FALSE;
+    }
+
+  priv->last_button_event_x_root = event->x_root;
+  priv->last_button_event_y_root = event->y_root;
 
   if (event->button != 1)
     return FALSE;
