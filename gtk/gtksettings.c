@@ -32,8 +32,10 @@
 #include "gtkwidget.h"
 #include "gtkprivate.h"
 #include "gtkcssproviderprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtksymboliccolor.h"
+#include "gtkanimationdescription.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 
@@ -97,9 +99,10 @@
  */
 
 
-#define DEFAULT_TIMEOUT_INITIAL 200
-#define DEFAULT_TIMEOUT_REPEAT   20
-#define DEFAULT_TIMEOUT_EXPAND  500
+#define DEFAULT_TIMEOUT_INITIAL        200
+#define DEFAULT_TIMEOUT_REPEAT         20
+#define DEFAULT_TIMEOUT_EXPAND         500
+#define DEFAULT_TIMEOUT_PRESS_AND_HOLD 800
 
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
@@ -1479,6 +1482,34 @@ gtk_settings_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                       path,
                                       state,
                                       lookup);
+
+  /* Set animation for press and hold */
+  if (gtk_widget_path_iter_has_class (path, 0, GTK_STYLE_CLASS_PRESS_AND_HOLD))
+    {
+      GtkAnimationDescription *anim_desc;
+      static GValue anim_value = { 0 };
+      GtkStyleProperty *prop;
+      gint duration;
+
+      if (!G_IS_VALUE (&anim_value))
+        {
+          g_object_get (settings,
+                        "gtk-press-and-hold-timeout", &duration,
+                        NULL);
+
+          anim_desc = _gtk_animation_description_new (duration,
+                                                      GTK_TIMELINE_PROGRESS_LINEAR,
+                                                      FALSE);
+          g_value_init (&anim_value, GTK_TYPE_ANIMATION_DESCRIPTION);
+          g_value_take_boxed (&anim_value, anim_desc);
+        }
+
+      prop = _gtk_style_property_lookup ("transition");
+
+      _gtk_css_lookup_set (lookup,
+                           _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)),
+                           NULL, &anim_value);
+    }
 }
 
 static void
