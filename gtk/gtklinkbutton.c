@@ -307,6 +307,7 @@ set_link_color (GtkLinkButton *link_button)
 {
   GdkColor *link_color = NULL;
   GtkWidget *label;
+  GdkRGBA rgba;
 
   label = gtk_bin_get_child (GTK_BIN (link_button));
   if (!GTK_IS_LABEL (label))
@@ -327,10 +328,14 @@ set_link_color (GtkLinkButton *link_button)
 	link_color = (GdkColor *) &default_link_color;
     }
 
-  gtk_widget_modify_fg (label, GTK_STATE_NORMAL, link_color);
-  gtk_widget_modify_fg (label, GTK_STATE_ACTIVE, link_color);
-  gtk_widget_modify_fg (label, GTK_STATE_PRELIGHT, link_color);
-  gtk_widget_modify_fg (label, GTK_STATE_SELECTED, link_color);
+  rgba.red = link_color->red / 65535.;
+  rgba.green = link_color->green / 65535.;
+  rgba.blue = link_color->blue / 65535.;
+  rgba.alpha = 1;
+  gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &rgba);
+  gtk_widget_override_color (label, GTK_STATE_FLAG_ACTIVE, &rgba);
+  gtk_widget_override_color (label, GTK_STATE_FLAG_PRELIGHT, &rgba);
+  gtk_widget_override_color (label, GTK_STATE_FLAG_SELECTED, &rgba);
 
   if (link_color != &default_link_color &&
       link_color != &default_visited_link_color)

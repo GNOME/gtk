@@ -2113,7 +2113,7 @@ text_view_new (GtkAboutDialog  *about,
   size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
   font_desc = pango_font_description_new ();
   pango_font_description_set_size (font_desc, size * PANGO_SCALE_SMALL);
-  gtk_widget_modify_font (view, font_desc);
+  gtk_widget_override_font (view, font_desc);
   pango_font_description_free (font_desc);
 
   gtk_text_view_set_left_margin (text_view, 8);
