@@ -46,7 +46,7 @@
 #include "gtkmenushellprivate.h"
 #include "gtkprivate.h"
 
-#include "gtktearoffmenuitem.h"
+#include "deprecated/gtktearoffmenuitem.h"
 
 /* GObjectClass */
 static GObject  *gtk_tree_menu_constructor                    (GType                  type,

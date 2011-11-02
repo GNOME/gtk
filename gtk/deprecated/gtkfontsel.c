@@ -37,10 +37,6 @@
 
 #include <atk/atk.h>
 
-#define GDK_DISABLE_DEPRECATION_WARNINGS
-
-#include "gtkfontsel.h"
-
 #include "gtkbutton.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
@@ -58,6 +54,9 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
+#include "gtkfontsel.h"
 
 /**
  * SECTION:gtkfontsel

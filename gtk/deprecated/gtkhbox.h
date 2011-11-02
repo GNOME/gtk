@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -28,43 +28,42 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_HPANED_H__
-#define __GTK_HPANED_H__
+#ifndef __GTK_HBOX_H__
+#define __GTK_HBOX_H__
 
-#ifndef GTK_DISABLE_DEPRECATED
 
-#include <gtk/gtkpaned.h>
+#include <gtk/gtkbox.h>
+
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_HPANED		   (gtk_hpaned_get_type ())
-#define GTK_HPANED(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HPANED, GtkHPaned))
-#define GTK_HPANED_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HPANED, GtkHPanedClass))
-#define GTK_IS_HPANED(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HPANED))
-#define GTK_IS_HPANED_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HPANED))
-#define GTK_HPANED_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HPANED, GtkHPanedClass))
+#define GTK_TYPE_HBOX            (gtk_hbox_get_type ())
+#define GTK_HBOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
+#define GTK_HBOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBOX, GtkHBoxClass))
+#define GTK_IS_HBOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HBOX))
+#define GTK_IS_HBOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBOX))
+#define GTK_HBOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HBOX, GtkHBoxClass))
 
 
-typedef struct _GtkHPaned      GtkHPaned;
-typedef struct _GtkHPanedClass GtkHPanedClass;
+typedef struct _GtkHBox	      GtkHBox;
+typedef struct _GtkHBoxClass  GtkHBoxClass;
 
-struct _GtkHPaned
+struct _GtkHBox
 {
-  GtkPaned paned;
+  GtkBox box;
 };
 
-struct _GtkHPanedClass
+struct _GtkHBoxClass
 {
-  GtkPanedClass parent_class;
+  GtkBoxClass parent_class;
 };
 
 
-GType       gtk_hpaned_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_paned_new)
-GtkWidget * gtk_hpaned_new      (void);
+GType       gtk_hbox_get_type (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_box_new)
+GtkWidget * gtk_hbox_new      (gboolean homogeneous,
+                               gint     spacing);
 
 G_END_DECLS
 
-#endif
-
-#endif /* __GTK_HPANED_H__ */
+#endif /* __GTK_HBOX_H__ */

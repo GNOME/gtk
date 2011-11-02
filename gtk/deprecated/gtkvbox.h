@@ -31,13 +31,9 @@
 #ifndef __GTK_VBOX_H__
 #define __GTK_VBOX_H__
 
-
 #include <gtk/gtkbox.h>
 
-
 G_BEGIN_DECLS
-
-#ifndef GTK_DISABLE_DEPRECATED
 
 #define GTK_TYPE_VBOX		 (gtk_vbox_get_type ())
 #define GTK_VBOX(obj)		 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VBOX, GtkVBox))
@@ -65,8 +61,6 @@ GType       gtk_vbox_get_type (void) G_GNUC_CONST;
 GDK_DEPRECATED_FOR(gtk_box_new)
 GtkWidget * gtk_vbox_new      (gboolean homogeneous,
                                gint     spacing);
-
-#endif
 
 G_END_DECLS
 

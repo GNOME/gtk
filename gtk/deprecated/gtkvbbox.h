@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -28,46 +28,38 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_HBOX_H__
-#define __GTK_HBOX_H__
+#ifndef __GTK_VBBOX_H__
+#define __GTK_VBBOX_H__
 
-
-#include <gtk/gtkbox.h>
-
+#include <gtk/gtkbbox.h>
 
 G_BEGIN_DECLS
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#define GTK_TYPE_HBOX            (gtk_hbox_get_type ())
-#define GTK_HBOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HBOX, GtkHBox))
-#define GTK_HBOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBOX, GtkHBoxClass))
-#define GTK_IS_HBOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HBOX))
-#define GTK_IS_HBOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBOX))
-#define GTK_HBOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HBOX, GtkHBoxClass))
+#define GTK_TYPE_VBUTTON_BOX            (gtk_vbutton_box_get_type ())
+#define GTK_VBUTTON_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBox))
+#define GTK_VBUTTON_BOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
+#define GTK_IS_VBUTTON_BOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VBUTTON_BOX))
+#define GTK_IS_VBUTTON_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBUTTON_BOX))
+#define GTK_VBUTTON_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
 
 
-typedef struct _GtkHBox	      GtkHBox;
-typedef struct _GtkHBoxClass  GtkHBoxClass;
+typedef struct _GtkVButtonBox       GtkVButtonBox;
+typedef struct _GtkVButtonBoxClass  GtkVButtonBoxClass;
 
-struct _GtkHBox
+struct _GtkVButtonBox
 {
-  GtkBox box;
+  GtkButtonBox button_box;
 };
 
-struct _GtkHBoxClass
+struct _GtkVButtonBoxClass
 {
-  GtkBoxClass parent_class;
+  GtkButtonBoxClass parent_class;
 };
 
 
-GType       gtk_hbox_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_box_new)
-GtkWidget * gtk_hbox_new      (gboolean homogeneous,
-                               gint     spacing);
-
-#endif
+GType      gtk_vbutton_box_get_type (void) G_GNUC_CONST;
+GtkWidget *gtk_vbutton_box_new      (void);
 
 G_END_DECLS
 
-#endif /* __GTK_HBOX_H__ */
+#endif /* __GTK_VBBOX_H__ */

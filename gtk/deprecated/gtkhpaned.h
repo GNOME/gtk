@@ -28,50 +28,39 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_VSEPARATOR_H__
-#define __GTK_VSEPARATOR_H__
+#ifndef __GTK_HPANED_H__
+#define __GTK_HPANED_H__
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#include <gtk/gtkseparator.h>
+#include <gtk/gtkpaned.h>
 
 G_BEGIN_DECLS
 
+#define GTK_TYPE_HPANED		   (gtk_hpaned_get_type ())
+#define GTK_HPANED(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HPANED, GtkHPaned))
+#define GTK_HPANED_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HPANED, GtkHPanedClass))
+#define GTK_IS_HPANED(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HPANED))
+#define GTK_IS_HPANED_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HPANED))
+#define GTK_HPANED_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HPANED, GtkHPanedClass))
 
-#define GTK_TYPE_VSEPARATOR                  (gtk_vseparator_get_type ())
-#define GTK_VSEPARATOR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VSEPARATOR, GtkVSeparator))
-#define GTK_VSEPARATOR_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSEPARATOR, GtkVSeparatorClass))
-#define GTK_IS_VSEPARATOR(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VSEPARATOR))
-#define GTK_IS_VSEPARATOR_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSEPARATOR))
-#define GTK_VSEPARATOR_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VSEPARATOR, GtkVSeparatorClass))
 
+typedef struct _GtkHPaned      GtkHPaned;
+typedef struct _GtkHPanedClass GtkHPanedClass;
 
-typedef struct _GtkVSeparator       GtkVSeparator;
-typedef struct _GtkVSeparatorClass  GtkVSeparatorClass;
-
-/**
- * GtkVSeparator:
- *
- * The #GtkVSeparator struct contains private data only, and
- * should be accessed using the functions below.
- */
-struct _GtkVSeparator
+struct _GtkHPaned
 {
-  GtkSeparator separator;
+  GtkPaned paned;
 };
 
-struct _GtkVSeparatorClass
+struct _GtkHPanedClass
 {
-  GtkSeparatorClass parent_class;
+  GtkPanedClass parent_class;
 };
 
 
-GType      gtk_vseparator_get_type (void) G_GNUC_CONST;
-GtkWidget* gtk_vseparator_new      (void);
-
+GType       gtk_hpaned_get_type (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_paned_new)
+GtkWidget * gtk_hpaned_new      (void);
 
 G_END_DECLS
 
-#endif
-
-#endif /* __GTK_VSEPARATOR_H__ */
+#endif /* __GTK_HPANED_H__ */

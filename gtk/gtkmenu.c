@@ -113,7 +113,7 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
-#include "gtktearoffmenuitem.h"
+#include "deprecated/gtktearoffmenuitem.h"
 
 
 #include "a11y/gtkmenuaccessible.h"

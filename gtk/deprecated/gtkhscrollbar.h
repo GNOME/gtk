@@ -28,42 +28,39 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_VPANED_H__
-#define __GTK_VPANED_H__
+#ifndef __GTK_HSCROLLBAR_H__
+#define __GTK_HSCROLLBAR_H__
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#include <gtk/gtkpaned.h>
+#include <gtk/gtkscrollbar.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_VPANED            (gtk_vpaned_get_type ())
-#define GTK_VPANED(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VPANED, GtkVPaned))
-#define GTK_VPANED_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VPANED, GtkVPanedClass))
-#define GTK_IS_VPANED(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VPANED))
-#define GTK_IS_VPANED_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VPANED))
-#define GTK_VPANED_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VPANED, GtkVPanedClass))
+#define GTK_TYPE_HSCROLLBAR            (gtk_hscrollbar_get_type ())
+#define GTK_HSCROLLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HSCROLLBAR, GtkHScrollbar))
+#define GTK_HSCROLLBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSCROLLBAR, GtkHScrollbarClass))
+#define GTK_IS_HSCROLLBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HSCROLLBAR))
+#define GTK_IS_HSCROLLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSCROLLBAR))
+#define GTK_HSCROLLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HSCROLLBAR, GtkHScrollbarClass))
 
 
-typedef struct _GtkVPaned      GtkVPaned;
-typedef struct _GtkVPanedClass GtkVPanedClass;
+typedef struct _GtkHScrollbar       GtkHScrollbar;
+typedef struct _GtkHScrollbarClass  GtkHScrollbarClass;
 
-struct _GtkVPaned
+struct _GtkHScrollbar
 {
-  GtkPaned paned;
+  GtkScrollbar scrollbar;
 };
 
-struct _GtkVPanedClass
+struct _GtkHScrollbarClass
 {
-  GtkPanedClass parent_class;
+  GtkScrollbarClass parent_class;
 };
 
 
-GType       gtk_vpaned_get_type (void) G_GNUC_CONST;
-GtkWidget * gtk_vpaned_new      (void);
+GType      gtk_hscrollbar_get_type (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_scrollbar_new)
+GtkWidget* gtk_hscrollbar_new      (GtkAdjustment *adjustment);
 
 G_END_DECLS
 
-#endif
-
-#endif /* __GTK_VPANED_H__ */
+#endif /* __GTK_HSCROLLBAR_H__ */

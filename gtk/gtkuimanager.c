@@ -48,7 +48,7 @@
 #include "gtkprivate.h"
 
 #include "gtkuimanager.h"
-#include "gtktearoffmenuitem.h"
+#include "deprecated/gtktearoffmenuitem.h"
 
 /**
  * SECTION:gtkuimanager

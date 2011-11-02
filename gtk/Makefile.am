@@ -141,6 +141,25 @@ endif
 
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)
+
+deprecated_h_sources = 			\
+	deprecated/gtkfontsel.h		\
+	deprecated/gtkhandlebox.h	\
+	deprecated/gtkhbbox.h		\
+	deprecated/gtkhbox.h		\
+	deprecated/gtkhpaned.h		\
+	deprecated/gtkhscale.h		\
+	deprecated/gtkhscrollbar.h	\
+	deprecated/gtkhseparator.h	\
+	deprecated/gtktable.h		\
+	deprecated/gtktearoffmenuitem.h	\
+	deprecated/gtkvbbox.h		\
+	deprecated/gtkvbox.h		\
+	deprecated/gtkvscale.h		\
+	deprecated/gtkvscrollbar.h	\
+	deprecated/gtkvseparator.h	\
+	deprecated/gtkvpaned.h
+
 gtk_public_h_sources = 		\
 	gtk.h			\
 	gtkx.h			\
@@ -215,20 +234,12 @@ gtk_public_h_sources = 		\
 	gtkfilefilter.h		\
 	gtkfixed.h		\
 	gtkfontbutton.h		\
-	gtkfontsel.h		\
-	gtkfontchooser.h        \
+	gtkfontchooser.h	\
 	gtkfontchooserdialog.h  \
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
 	gtkgradient.h		\
 	gtkgrid.h		\
-	gtkhandlebox.h		\
-	gtkhbbox.h		\
-	gtkhbox.h		\
-	gtkhpaned.h		\
-	gtkhscale.h		\
-	gtkhscrollbar.h		\
-	gtkhseparator.h		\
 	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
@@ -308,8 +319,6 @@ gtk_public_h_sources = 		\
 	gtkstyle.h		\
 	gtkswitch.h		\
 	gtksymboliccolor.h	\
-	gtktable.h		\
-	gtktearoffmenuitem.h	\
 	gtktestutils.h		\
 	gtktextattributes.h	\
 	gtktextbuffer.h		\
@@ -342,14 +351,8 @@ gtk_public_h_sources = 		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
 	gtkuimanager.h		\
-	gtkvbbox.h		\
-	gtkvbox.h		\
 	gtkviewport.h		\
 	gtkvolumebutton.h	\
-	gtkvpaned.h		\
-	gtkvscale.h		\
-	gtkvscrollbar.h		\
-	gtkvseparator.h		\
 	gtkwidget.h		\
 	gtkwidgetpath.h		\
 	gtkwindow.h
@@ -466,7 +469,26 @@ gtk_private_h_sources =		\
 	$(gtk_appchooser_impl_h_sources)
 
 # GTK+ C sources to build the library from
+deprecated_c_sources = 			\
+	deprecated/gtkfontsel.c		\
+	deprecated/gtkhandlebox.c	\
+	deprecated/gtkhbbox.c		\
+	deprecated/gtkhbox.c		\
+	deprecated/gtkhpaned.c		\
+	deprecated/gtkhscale.c		\
+	deprecated/gtkhscrollbar.c	\
+	deprecated/gtkhseparator.c	\
+	deprecated/gtktable.c		\
+	deprecated/gtktearoffmenuitem.c	\
+	deprecated/gtkvbbox.c		\
+	deprecated/gtkvbox.c		\
+	deprecated/gtkvscale.c		\
+	deprecated/gtkvscrollbar.c	\
+	deprecated/gtkvseparator.c	\
+	deprecated/gtkvpaned.c
+
 gtk_base_c_sources = 		\
+	$(deprecated_c_sources)	\
 	gtkquery.c		\
 	gtksearchengine.c	\
 	gtksearchenginesimple.c	\
@@ -496,7 +518,7 @@ gtk_base_c_sources = 		\
 	gtkbin.c		\
 	gtkbindings.c		\
 	gtkborder.c		\
-	gtkborderimage.c        \
+	gtkborderimage.c	\
 	gtkbox.c		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
@@ -553,21 +575,13 @@ gtk_base_c_sources = 		\
 	gtkfilesystemmodel.c	\
 	gtkfixed.c		\
 	gtkfontbutton.c		\
-	gtkfontsel.c		\
-	gtkfontchooser.c        \
-	gtkfontchooserdialog.c  \
+	gtkfontchooser.c	\
+	gtkfontchooserdialog.c	\
 	gtkfontchooserutils.c	\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
 	gtkgradient.c		\
 	gtkgrid.c		\
-	gtkhandlebox.c		\
-	gtkhbbox.c		\
-	gtkhbox.c		\
-	gtkhpaned.c		\
-	gtkhscale.c		\
-	gtkhscrollbar.c		\
-	gtkhseparator.c		\
 	gtkhsv.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
@@ -661,8 +675,6 @@ gtk_base_c_sources = 		\
 	gtkstyle.c		\
 	gtkswitch.c		\
 	gtksymboliccolor.c	\
-	gtktable.c		\
-	gtktearoffmenuitem.c	\
 	gtktestutils.c		\
 	gtktextattributes.c	\
 	gtktextbtree.c		\
@@ -705,14 +717,8 @@ gtk_base_c_sources = 		\
 	gtktreeviewcolumn.c	\
 	gtktypebuiltins.c	\
 	gtkuimanager.c		\
-	gtkvbbox.c		\
-	gtkvbox.c		\
 	gtkvolumebutton.c	\
 	gtkviewport.c		\
-	gtkvpaned.c		\
-	gtkvscale.c		\
-	gtkvscrollbar.c		\
-	gtkvseparator.c		\
 	gtkwidget.c		\
 	gtkwidgetpath.c		\
 	gtkwindow.c		\
@@ -919,6 +925,9 @@ lib_LTLIBRARIES = libgtk-3.la
 
 gtkincludedir = $(includedir)/gtk-3.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
+
+deprecatedincludedir = $(includedir)/gtk-3.0/gtk/deprecated
+deprecatedinclude_HEADERS= $(deprecated_h_sources)
 
 gtkunixprintincludedir = $(includedir)/gtk-3.0/unix-print/gtk
 gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)

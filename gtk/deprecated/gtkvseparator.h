@@ -28,51 +28,44 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_VSCROLLBAR_H__
-#define __GTK_VSCROLLBAR_H__
+#ifndef __GTK_VSEPARATOR_H__
+#define __GTK_VSEPARATOR_H__
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#include <gtk/gtkscrollbar.h>
-
+#include <gtk/gtkseparator.h>
 
 G_BEGIN_DECLS
 
+#define GTK_TYPE_VSEPARATOR                  (gtk_vseparator_get_type ())
+#define GTK_VSEPARATOR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VSEPARATOR, GtkVSeparator))
+#define GTK_VSEPARATOR_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSEPARATOR, GtkVSeparatorClass))
+#define GTK_IS_VSEPARATOR(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VSEPARATOR))
+#define GTK_IS_VSEPARATOR_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSEPARATOR))
+#define GTK_VSEPARATOR_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VSEPARATOR, GtkVSeparatorClass))
 
-#define GTK_TYPE_VSCROLLBAR            (gtk_vscrollbar_get_type ())
-#define GTK_VSCROLLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VSCROLLBAR, GtkVScrollbar))
-#define GTK_VSCROLLBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSCROLLBAR, GtkVScrollbarClass))
-#define GTK_IS_VSCROLLBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VSCROLLBAR))
-#define GTK_IS_VSCROLLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSCROLLBAR))
-#define GTK_VSCROLLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VSCROLLBAR, GtkVScrollbarClass))
 
-
-typedef struct _GtkVScrollbar       GtkVScrollbar;
-typedef struct _GtkVScrollbarClass  GtkVScrollbarClass;
+typedef struct _GtkVSeparator       GtkVSeparator;
+typedef struct _GtkVSeparatorClass  GtkVSeparatorClass;
 
 /**
- * GtkVScrollbar:
+ * GtkVSeparator:
  *
- * The #GtkVScrollbar struct contains private data and should be accessed
- * using the functions below.
+ * The #GtkVSeparator struct contains private data only, and
+ * should be accessed using the functions below.
  */
-struct _GtkVScrollbar
+struct _GtkVSeparator
 {
-  GtkScrollbar scrollbar;
+  GtkSeparator separator;
 };
 
-struct _GtkVScrollbarClass
+struct _GtkVSeparatorClass
 {
-  GtkScrollbarClass parent_class;
+  GtkSeparatorClass parent_class;
 };
 
 
-GType      gtk_vscrollbar_get_type (void) G_GNUC_CONST;
-GtkWidget* gtk_vscrollbar_new      (GtkAdjustment *adjustment);
-
+GType      gtk_vseparator_get_type (void) G_GNUC_CONST;
+GtkWidget* gtk_vseparator_new      (void);
 
 G_END_DECLS
 
-#endif
-
-#endif /* __GTK_VSCROLLBAR_H__ */
+#endif /* __GTK_VSEPARATOR_H__ */

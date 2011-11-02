@@ -86,7 +86,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
 #include "gtkstock.h"
-#include "gtktearoffmenuitem.h"
+#include "deprecated/gtktearoffmenuitem.h"
 #include "gtktoolbutton.h"
 #include "gtktoolbar.h"
 #include "gtkprivate.h"

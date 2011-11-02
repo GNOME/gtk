@@ -35,7 +35,7 @@
 #include "gtkmenushellprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
-#include "gtktearoffmenuitem.h"
+#include "deprecated/gtktearoffmenuitem.h"
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
 #include "gtkseparator.h"

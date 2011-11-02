@@ -28,44 +28,44 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_VBBOX_H__
-#define __GTK_VBBOX_H__
+#ifndef __GTK_VSCROLLBAR_H__
+#define __GTK_VSCROLLBAR_H__
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#include <gtk/gtkbbox.h>
-
+#include <gtk/gtkscrollbar.h>
 
 G_BEGIN_DECLS
 
+#define GTK_TYPE_VSCROLLBAR            (gtk_vscrollbar_get_type ())
+#define GTK_VSCROLLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VSCROLLBAR, GtkVScrollbar))
+#define GTK_VSCROLLBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VSCROLLBAR, GtkVScrollbarClass))
+#define GTK_IS_VSCROLLBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VSCROLLBAR))
+#define GTK_IS_VSCROLLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VSCROLLBAR))
+#define GTK_VSCROLLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VSCROLLBAR, GtkVScrollbarClass))
 
-#define GTK_TYPE_VBUTTON_BOX            (gtk_vbutton_box_get_type ())
-#define GTK_VBUTTON_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBox))
-#define GTK_VBUTTON_BOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
-#define GTK_IS_VBUTTON_BOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VBUTTON_BOX))
-#define GTK_IS_VBUTTON_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBUTTON_BOX))
-#define GTK_VBUTTON_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
 
+typedef struct _GtkVScrollbar       GtkVScrollbar;
+typedef struct _GtkVScrollbarClass  GtkVScrollbarClass;
 
-typedef struct _GtkVButtonBox       GtkVButtonBox;
-typedef struct _GtkVButtonBoxClass  GtkVButtonBoxClass;
-
-struct _GtkVButtonBox
+/**
+ * GtkVScrollbar:
+ *
+ * The #GtkVScrollbar struct contains private data and should be accessed
+ * using the functions below.
+ */
+struct _GtkVScrollbar
 {
-  GtkButtonBox button_box;
+  GtkScrollbar scrollbar;
 };
 
-struct _GtkVButtonBoxClass
+struct _GtkVScrollbarClass
 {
-  GtkButtonBoxClass parent_class;
+  GtkScrollbarClass parent_class;
 };
 
 
-GType      gtk_vbutton_box_get_type (void) G_GNUC_CONST;
-GtkWidget *gtk_vbutton_box_new      (void);
+GType      gtk_vscrollbar_get_type (void) G_GNUC_CONST;
+GtkWidget* gtk_vscrollbar_new      (GtkAdjustment *adjustment);
 
 G_END_DECLS
 
-#endif
-
-#endif /* __GTK_VBBOX_H__ */
+#endif /* __GTK_VSCROLLBAR_H__ */

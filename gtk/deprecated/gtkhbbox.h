@@ -28,49 +28,40 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_HSCALE_H__
-#define __GTK_HSCALE_H__
+#ifndef __GTK_HBUTTON_BOX_H__
+#define __GTK_HBUTTON_BOX_H__
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#include <gtk/gtkscale.h>
+#include <gtk/gtkbbox.h>
 
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_HSCALE            (gtk_hscale_get_type ())
-#define GTK_HSCALE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HSCALE, GtkHScale))
-#define GTK_HSCALE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSCALE, GtkHScaleClass))
-#define GTK_IS_HSCALE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HSCALE))
-#define GTK_IS_HSCALE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSCALE))
-#define GTK_HSCALE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HSCALE, GtkHScaleClass))
+#define GTK_TYPE_HBUTTON_BOX                  (gtk_hbutton_box_get_type ())
+#define GTK_HBUTTON_BOX(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HBUTTON_BOX, GtkHButtonBox))
+#define GTK_HBUTTON_BOX_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBUTTON_BOX, GtkHButtonBoxClass))
+#define GTK_IS_HBUTTON_BOX(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HBUTTON_BOX))
+#define GTK_IS_HBUTTON_BOX_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBUTTON_BOX))
+#define GTK_HBUTTON_BOX_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HBUTTON_BOX, GtkHButtonBoxClass))
 
 
-typedef struct _GtkHScale       GtkHScale;
-typedef struct _GtkHScaleClass  GtkHScaleClass;
+typedef struct _GtkHButtonBox       GtkHButtonBox;
+typedef struct _GtkHButtonBoxClass  GtkHButtonBoxClass;
 
-struct _GtkHScale
+struct _GtkHButtonBox
 {
-  GtkScale scale;
+  GtkButtonBox button_box;
 };
 
-struct _GtkHScaleClass
+struct _GtkHButtonBoxClass
 {
-  GtkScaleClass parent_class;
+  GtkButtonBoxClass parent_class;
 };
 
 
-GType      gtk_hscale_get_type       (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_scale_new)
-GtkWidget* gtk_hscale_new            (GtkAdjustment *adjustment);
-GDK_DEPRECATED_FOR(gtk_scale_new_with_range)
-GtkWidget* gtk_hscale_new_with_range (gdouble        min,
-                                      gdouble        max,
-                                      gdouble        step);
-
+GType      gtk_hbutton_box_get_type (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_button_box_new)
+GtkWidget* gtk_hbutton_box_new      (void);
 
 G_END_DECLS
 
-#endif
-
-#endif /* __GTK_HSCALE_H__ */
+#endif /* __GTK_HBUTTON_BOX_H__ */

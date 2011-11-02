@@ -36,13 +36,9 @@
 #ifndef __GTK_HANDLE_BOX_H__
 #define __GTK_HANDLE_BOX_H__
 
-
 #include <gtk/gtkbin.h>
 
-
 G_BEGIN_DECLS
-
-#ifndef GTK_DISABLE_DEPRECATED
 
 #define GTK_TYPE_HANDLE_BOX            (gtk_handle_box_get_type ())
 #define GTK_HANDLE_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HANDLE_BOX, GtkHandleBox))
@@ -100,8 +96,6 @@ GDK_DEPRECATED
 GtkPositionType gtk_handle_box_get_snap_edge      (GtkHandleBox    *handle_box);
 GDK_DEPRECATED
 gboolean      gtk_handle_box_get_child_detached   (GtkHandleBox    *handle_box);
-
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

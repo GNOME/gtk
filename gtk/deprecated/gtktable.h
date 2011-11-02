@@ -31,13 +31,9 @@
 #ifndef __GTK_TABLE_H__
 #define __GTK_TABLE_H__
 
-
 #include <gtk/gtkcontainer.h>
 
-
 G_BEGIN_DECLS
-
-#ifndef GTK_DISABLE_DEPRECATED
 
 #define GTK_TYPE_TABLE			(gtk_table_get_type ())
 #define GTK_TABLE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TABLE, GtkTable))
@@ -162,8 +158,6 @@ GDK_DEPRECATED_FOR(GtkGrid)
 void       gtk_table_get_size         (GtkTable        *table,
                                        guint           *rows,
                                        guint           *columns);
-
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

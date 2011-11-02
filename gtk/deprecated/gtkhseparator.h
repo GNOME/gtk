@@ -28,46 +28,39 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_HSCROLLBAR_H__
-#define __GTK_HSCROLLBAR_H__
+#ifndef __GTK_HSEPARATOR_H__
+#define __GTK_HSEPARATOR_H__
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#include <gtk/gtkscrollbar.h>
-
+#include <gtk/gtkseparator.h>
 
 G_BEGIN_DECLS
 
+#define GTK_TYPE_HSEPARATOR                  (gtk_hseparator_get_type ())
+#define GTK_HSEPARATOR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HSEPARATOR, GtkHSeparator))
+#define GTK_HSEPARATOR_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSEPARATOR, GtkHSeparatorClass))
+#define GTK_IS_HSEPARATOR(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HSEPARATOR))
+#define GTK_IS_HSEPARATOR_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSEPARATOR))
+#define GTK_HSEPARATOR_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HSEPARATOR, GtkHSeparatorClass))
 
-#define GTK_TYPE_HSCROLLBAR            (gtk_hscrollbar_get_type ())
-#define GTK_HSCROLLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HSCROLLBAR, GtkHScrollbar))
-#define GTK_HSCROLLBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSCROLLBAR, GtkHScrollbarClass))
-#define GTK_IS_HSCROLLBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HSCROLLBAR))
-#define GTK_IS_HSCROLLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSCROLLBAR))
-#define GTK_HSCROLLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HSCROLLBAR, GtkHScrollbarClass))
 
+typedef struct _GtkHSeparator       GtkHSeparator;
+typedef struct _GtkHSeparatorClass  GtkHSeparatorClass;
 
-typedef struct _GtkHScrollbar       GtkHScrollbar;
-typedef struct _GtkHScrollbarClass  GtkHScrollbarClass;
-
-struct _GtkHScrollbar
+struct _GtkHSeparator
 {
-  GtkScrollbar scrollbar;
+  GtkSeparator separator;
 };
 
-struct _GtkHScrollbarClass
+struct _GtkHSeparatorClass
 {
-  GtkScrollbarClass parent_class;
+  GtkSeparatorClass parent_class;
 };
 
 
-GType      gtk_hscrollbar_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_scrollbar_new)
-GtkWidget* gtk_hscrollbar_new      (GtkAdjustment *adjustment);
-
+GType      gtk_hseparator_get_type (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_separator_new)
+GtkWidget* gtk_hseparator_new      (void);
 
 G_END_DECLS
 
-#endif
-
-#endif /* __GTK_HSCROLLBAR_H__ */
+#endif /* __GTK_HSEPARATOR_H__ */
