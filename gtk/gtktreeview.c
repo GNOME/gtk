@@ -3974,13 +3974,16 @@ gtk_tree_view_motion_resize_column (GtkWidget      *widget,
 
 
 static void
-gtk_tree_view_update_current_reorder (GtkTreeView *tree_view)
+gtk_tree_view_update_current_reorder (GtkTreeView *tree_view,
+                                      GdkEvent    *event)
 {
   GtkTreeViewColumnReorder *reorder = NULL;
   GList *list;
   gint mouse_x;
 
-  gdk_window_get_pointer (tree_view->priv->header_window, &mouse_x, NULL, NULL);
+  gdk_window_get_device_position (tree_view->priv->header_window,
+                                  gdk_event_get_device (event),
+                                  &mouse_x, NULL, NULL);
   for (list = tree_view->priv->column_drag_info; list; list = list->next)
     {
       reorder = (GtkTreeViewColumnReorder *) list->data;
@@ -4022,13 +4025,16 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 }
 
 static gboolean
-gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
+gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view,
+                                     GdkEvent    *event)
 {
   GdkRectangle visible_rect;
   gint x;
   gint offset;
 
-  gdk_window_get_pointer (tree_view->priv->bin_window, &x, NULL, NULL);
+  gdk_window_get_device_position (tree_view->priv->bin_window,
+                                  gdk_event_get_device (event),
+                                  &x, NULL, NULL);
 
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
 
@@ -4075,9 +4081,9 @@ gtk_tree_view_motion_drag_column (GtkWidget      *widget,
   gdk_window_move (tree_view->priv->drag_window, x, y);
   
   /* autoscroll, if needed */
-  gtk_tree_view_horizontal_autoscroll (tree_view);
+  gtk_tree_view_horizontal_autoscroll (tree_view, event);
   /* Update the current reorder position and arrow; */
-  gtk_tree_view_update_current_reorder (tree_view);
+  gtk_tree_view_update_current_reorder (tree_view, event);
 
   return TRUE;
 }
