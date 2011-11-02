@@ -547,7 +547,7 @@ gtk_print_context_create_pango_context (GtkPrintContext *context)
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
   
-  pango_context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (_gtk_print_context_get_fontmap (context)));
+  pango_context = pango_font_map_create_context (_gtk_print_context_get_fontmap (context));
 
   options = cairo_font_options_create ();
   cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
