@@ -444,8 +444,6 @@ if test "x$GCC" = "xyes"; then
 fi
 changequote([,])dnl
 
-CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DATK_DISABLE_SINGLE_INCLUDES"
-
 # Ensure MSVC-compatible struct packing convention is used when
 # compiling for Win32 with gcc.
 # What flag to depends on gcc version: gcc3 uses "-mms-bitfields", while
