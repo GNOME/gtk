@@ -662,10 +662,6 @@ static void     gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                                   guint             time);
 
 /* tree_model signals */
-static void     gtk_tree_view_set_hadjustment             (GtkTreeView     *tree_view,
-                                                           GtkAdjustment   *adjustment);
-static void     gtk_tree_view_set_vadjustment             (GtkTreeView     *tree_view,
-                                                           GtkAdjustment   *adjustment);
 static gboolean gtk_tree_view_real_move_cursor            (GtkTreeView     *tree_view,
 							   GtkMovementStep  step,
 							   gint             count);

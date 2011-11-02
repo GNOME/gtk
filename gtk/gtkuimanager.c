@@ -47,7 +47,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 
-#undef GTK_DISABLE_DEPRECATED
 #include "gtkuimanager.h"
 #include "gtktearoffmenuitem.h"
 

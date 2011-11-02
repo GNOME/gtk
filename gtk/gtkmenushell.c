@@ -53,7 +53,6 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
-#undef GTK_DISABLE_DEPRECATED
 #include "gtktearoffmenuitem.h"
 
 #include "a11y/gtkmenushellaccessible.h"

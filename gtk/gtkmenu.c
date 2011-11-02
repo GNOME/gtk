@@ -113,7 +113,6 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
-#undef GTK_DISABLE_DEPRECATED
 #include "gtktearoffmenuitem.h"
 
 

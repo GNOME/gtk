@@ -48,8 +48,6 @@ AM_CPPFLAGS =						\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
-	-DGDK_DISABLE_DEPRECATED			\
-	-DGTK_DISABLE_DEPRECATED			\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEBUG_FLAGS)				\
@@ -1042,8 +1040,6 @@ endif
 Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtkx.h"
 Gtk_3_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
-		-UGDK_DISABLE_DEPRECATED \
-		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 Gtk_3_0_gir_LIBS = libgtk-3.la
 Gtk_3_0_gir_FILES = $(introspection_files)

@@ -29,7 +29,7 @@
 
 #include "gtkorientable.h"
 #include "gtkscrollbar.h"
-#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkvscrollbar.h"
 #include "gtkintl.h"
 

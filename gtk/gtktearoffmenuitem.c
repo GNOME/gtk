@@ -26,8 +26,6 @@
 
 #include "config.h"
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "gtkmenuprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtktearoffmenuitem.h"

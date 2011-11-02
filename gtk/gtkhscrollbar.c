@@ -28,7 +28,7 @@
 #include "config.h"
 
 #include "gtkscrollbar.h"
-#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkhscrollbar.h"
 #include "gtkorientable.h"
 #include "gtkintl.h"

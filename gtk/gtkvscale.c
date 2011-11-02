@@ -29,7 +29,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#undef GTK_DISABLE_DEPRECATED
 #include "gtkvscale.h"
 #include "gtkorientable.h"
 

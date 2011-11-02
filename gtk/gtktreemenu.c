@@ -46,7 +46,6 @@
 #include "gtkmenushellprivate.h"
 #include "gtkprivate.h"
 
-#undef GTK_DISABLE_DEPRECATED
 #include "gtktearoffmenuitem.h"
 
 /* GObjectClass */

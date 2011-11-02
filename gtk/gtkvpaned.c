@@ -27,7 +27,7 @@
 #include "config.h"
 
 #include "gtkorientable.h"
-#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkvpaned.h"
 
 
