@@ -5,12 +5,10 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I$(top_srcdir) 		\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED 	\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_XIM_FLAGS)		\
 	$(GTK_DEP_CFLAGS)		\
@@ -153,7 +151,7 @@ endif
 endif
 
 multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-2.0"\"
-im_multipress_la_CPPFLAGS = $(multipress_defs)
+im_multipress_la_CPPFLAGS = $(AM_CPPFLAGS) $(multipress_defs)
 libstatic_im_multipress_la_CPPFLAGS = $(im_multipress_la_CPPFLAGS)
 im_multipress_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_multipress_la_SOURCES =	\
