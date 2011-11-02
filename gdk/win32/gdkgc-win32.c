@@ -205,7 +205,9 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 				    GdkGCValuesMask mask,
 				    GdkGCWin32     *win32_gc)
 {				    
+#ifdef G_ENABLE_DEBUG
   char *s = "";
+#endif
 
   GDK_NOTE (GC, g_print ("{"));
 

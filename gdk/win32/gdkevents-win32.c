@@ -2057,7 +2057,7 @@ gdk_event_translate (MSG  *msg,
   GdkWindow *window = NULL;
   GdkWindowImplWin32 *impl;
 
-  GdkWindow *orig_window, *new_window, *toplevel;
+  GdkWindow *orig_window, *new_window;
 
   GdkPointerGrabInfo *grab = NULL;
   GdkWindow *grab_window = NULL;
@@ -2776,8 +2776,6 @@ gdk_event_translate (MSG  *msg,
 
      case WM_MOUSEACTIVATE:
        {
-	 GdkWindow *tmp;
-
 	 if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP 
 	     || !((GdkWindowObject *)window)->accept_focus)
 	   {
@@ -3669,8 +3667,6 @@ gdk_flush (void)
 void
 gdk_display_sync (GdkDisplay * display)
 {
-  MSG msg;
-
   g_return_if_fail (display == _gdk_display);
 
   GdiFlush ();

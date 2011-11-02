@@ -965,7 +965,9 @@ adjust_for_gravity_hints (GdkWindow *window,
 
   if (impl->hint_flags & GDK_HINT_WIN_GRAVITY)
     {
+#ifdef G_ENABLE_DEBUG
       gint orig_x = *x, orig_y = *y;
+#endif
 
       switch (impl->hints.win_gravity)
 	{
@@ -1029,7 +1031,6 @@ show_window_internal (GdkWindow *window,
 {
   GdkWindowObject *private;
   GdkWindowImplWin32 *window_impl;
-  HWND old_active_window;
   gboolean focus_on_map = FALSE;
   DWORD exstyle;
 

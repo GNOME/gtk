@@ -97,8 +97,10 @@ gdk_input_find_dev_from_ctx (HCTX hctx,
   return NULL;
 }
 
+
 #if DEBUG_WINTAB
 
+#ifdef G_ENABLE_DEBUG
 static void
 print_lc(LOGCONTEXT *lc)
 {
@@ -322,6 +324,7 @@ print_cursor (int index)
       g_print ("MINBUTTONS: %d\n", minbuttons);
     }
 }
+#endif
 #endif
 
 void
