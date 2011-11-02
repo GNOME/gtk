@@ -23,6 +23,8 @@
 
 #include <string.h>
 
+#include "gtksettings.h"
+
 #include "gtkmodules.h"
 #include "gtkmodulesprivate.h"
 #include "gtksettingsprivate.h"
@@ -42,6 +44,8 @@
 #ifdef GDK_WINDOWING_QUARTZ
 #include "quartz/gdkquartz.h"
 #endif
+
+#include "deprecated/gtkrc.h"
 
 
 /**

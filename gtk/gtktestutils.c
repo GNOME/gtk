@@ -23,6 +23,12 @@
 
 #include <gtk/gtkx.h>
 #include "gtkspinbutton.h"
+#include "gtkmain.h"
+#include "gtkbox.h"
+#include "gtklabel.h"
+#include "gtkbutton.h"
+#include "gtktextview.h"
+#include "gtkrange.h"
 
 #include <locale.h>
 #include <string.h>

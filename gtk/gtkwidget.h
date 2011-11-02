@@ -34,7 +34,6 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkadjustment.h>
-#include <gtk/gtkstyle.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkstylecontext.h>
@@ -73,7 +72,6 @@ typedef struct _GtkWidgetAuxInfo       GtkWidgetAuxInfo;
 typedef struct _GtkClipboard	       GtkClipboard;
 typedef struct _GtkTooltip             GtkTooltip;
 typedef struct _GtkWindow              GtkWindow;
-
 
 /**
  * GtkAllocation:
@@ -792,7 +790,7 @@ void         gtk_widget_override_cursor           (GtkWidget       *widget,
 
 void       gtk_widget_reset_style       (GtkWidget      *widget);
 
-#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
+#ifndef GTK_DISABLE_DEPRECATED
 
 void        gtk_widget_style_attach               (GtkWidget     *widget);
 

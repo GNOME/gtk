@@ -22,10 +22,11 @@
 
 #include "config.h"
 
+#include "gtkcellrendererspin.h"
+
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkspinbutton.h"
-#include "gtkcellrendererspin.h"
 
 
 /**

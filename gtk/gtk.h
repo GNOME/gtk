@@ -151,7 +151,6 @@
 #include <gtk/gtkradiomenuitem.h>
 #include <gtk/gtkradiotoolbutton.h>
 #include <gtk/gtkrange.h>
-#include <gtk/gtkrc.h>
 #include <gtk/gtkrecentaction.h>
 #include <gtk/gtkrecentchooser.h>
 #include <gtk/gtkrecentchooserdialog.h>
@@ -180,7 +179,6 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleproperties.h>
 #include <gtk/gtkstyleprovider.h>
-#include <gtk/gtkstyle.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktextattributes.h>
@@ -231,6 +229,8 @@
 #include <gtk/deprecated/gtkhscale.h>
 #include <gtk/deprecated/gtkhscrollbar.h>
 #include <gtk/deprecated/gtkhseparator.h>
+#include <gtk/deprecated/gtkrc.h>
+#include <gtk/deprecated/gtkstyle.h>
 #include <gtk/deprecated/gtktable.h>
 #include <gtk/deprecated/gtktearoffmenuitem.h>
 #include <gtk/deprecated/gtkvbbox.h>

@@ -6,8 +6,6 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED	\
 	-DSRCDIR=\""$(abs_srcdir)"\"	\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)

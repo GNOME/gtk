@@ -31,15 +31,12 @@
 #ifndef __GTK_RC_H__
 #define __GTK_RC_H__
 
-
-#include <gtk/gtkstyle.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
 /* Forward declarations */
-typedef struct _GtkIconFactory  GtkIconFactory;
 typedef struct _GtkRcContext    GtkRcContext;
-
 typedef struct _GtkRcStyleClass GtkRcStyleClass;
 
 #define GTK_TYPE_RC_STYLE              (gtk_rc_style_get_type ())
@@ -148,7 +145,6 @@ gboolean  _gtk_rc_match_widget_class     (GSList       *list,
                                           gchar        *path,
                                           gchar        *path_reversed);
 
-#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 GDK_DEPRECATED_FOR(GtkStyleContext)
 void      gtk_rc_add_default_file       (const gchar *filename);
 GDK_DEPRECATED_FOR(GtkStyleContext)
@@ -308,8 +304,6 @@ guint     gtk_rc_parse_state    (GScanner            *scanner,
 GDK_DEPRECATED_FOR(GtkStyleContext)
 guint     gtk_rc_parse_priority (GScanner            *scanner,
                                  GtkPathPriorityType *priority);
-
-#endif
 
 /* rc properties
  * (structure forward declared in gtkstyle.h)

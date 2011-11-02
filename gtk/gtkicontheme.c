@@ -48,6 +48,7 @@
 #include "gtknumerableiconprivate.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
+#include "deprecated/gtkstyle.h"
 
 
 /**

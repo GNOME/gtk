@@ -30,7 +30,8 @@
 #ifndef __GTK_SOCKET_H__
 #define __GTK_SOCKET_H__
 
-#include <gtk/gtk.h>
+#include <gdk/gdk.h>
+#include <gtk/gtkwindow.h>
 
 #ifdef GDK_WINDOWING_X11
 

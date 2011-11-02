@@ -23,7 +23,6 @@
 #include <string.h>
 
 #include "gtkmodules.h"
-#include "gtkmodulesprivate.h"
 #include "gtksettings.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"

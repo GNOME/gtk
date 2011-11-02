@@ -151,6 +151,8 @@ deprecated_h_sources = 			\
 	deprecated/gtkhscale.h		\
 	deprecated/gtkhscrollbar.h	\
 	deprecated/gtkhseparator.h	\
+	deprecated/gtkstyle.h		\
+	deprecated/gtkrc.h		\
 	deprecated/gtktable.h		\
 	deprecated/gtktearoffmenuitem.h	\
 	deprecated/gtkvbbox.h		\
@@ -286,7 +288,6 @@ gtk_public_h_sources = 		\
 	gtkradiomenuitem.h	\
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
-	gtkrc.h			\
 	gtkrecentaction.h	\
 	gtkrecentchooser.h	\
 	gtkrecentchooserdialog.h \
@@ -316,7 +317,6 @@ gtk_public_h_sources = 		\
 	gtkstylecontext.h	\
 	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
-	gtkstyle.h		\
 	gtkswitch.h		\
 	gtksymboliccolor.h	\
 	gtktestutils.h		\
@@ -478,6 +478,8 @@ deprecated_c_sources = 			\
 	deprecated/gtkhscale.c		\
 	deprecated/gtkhscrollbar.c	\
 	deprecated/gtkhseparator.c	\
+	deprecated/gtkrc.c		\
+	deprecated/gtkstyle.c		\
 	deprecated/gtktable.c		\
 	deprecated/gtktearoffmenuitem.c	\
 	deprecated/gtkvbbox.c		\
@@ -638,7 +640,6 @@ gtk_base_c_sources = 		\
 	gtkradiotoolbutton.c	\
 	gtkrange.c		\
 	gtkrbtree.c		\
-	gtkrc.c			\
 	gtkrecentaction.c	\
 	gtkrecentchooserdefault.c \
 	gtkrecentchooserdialog.c \
@@ -672,7 +673,6 @@ gtk_base_c_sources = 		\
 	gtkstyleproperties.c	\
 	gtkstyleproperty.c	\
 	gtkstyleprovider.c	\
-	gtkstyle.c		\
 	gtkswitch.c		\
 	gtksymboliccolor.c	\
 	gtktestutils.c		\

@@ -23,7 +23,7 @@
 #ifndef __GTK_SETTINGS_H__
 #define __GTK_SETTINGS_H__
 
-#include <gtk/gtkrc.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -38,9 +38,15 @@ G_BEGIN_DECLS
 
 
 /* --- typedefs --- */
+typedef struct _GtkSettings GtkSettings;
 typedef struct _GtkSettingsPrivate GtkSettingsPrivate;
 typedef struct _GtkSettingsClass GtkSettingsClass;
 typedef struct _GtkSettingsValue GtkSettingsValue;
+
+
+typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
+                                         const GString    *rc_string,
+                                         GValue           *property_value);
 
 
 /* --- structures --- */

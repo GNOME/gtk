@@ -41,6 +41,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtktypebuiltins.h"
+#include "deprecated/gtkstyle.h"
 
 
 /**

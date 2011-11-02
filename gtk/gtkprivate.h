@@ -27,9 +27,8 @@
 #ifndef __GTK_PRIVATE_H__
 #define __GTK_PRIVATE_H__
 
-#include <glib.h>
-
-#include "gtksettings.h"
+#include <glib-object.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 

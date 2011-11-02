@@ -46,6 +46,7 @@
 
 #include "gtkversion.h"
 #include "gtkrc.h"
+#include "gtkstyle.h"
 #include "gtkbindings.h"
 #include "gtkintl.h"
 #include "gtkiconfactory.h"

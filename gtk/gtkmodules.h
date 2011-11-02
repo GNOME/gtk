@@ -25,8 +25,7 @@
 #ifndef __GTK_MODULES_H__
 #define __GTK_MODULES_H__
 
-#include <gtk/gtksettings.h>
-
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 

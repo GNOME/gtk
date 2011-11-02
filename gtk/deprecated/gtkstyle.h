@@ -49,17 +49,9 @@ G_BEGIN_DECLS
 /* Some forward declarations needed to rationalize the header
  * files.
  */
-typedef struct _GtkStyle       GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
 typedef struct _GtkThemeEngine GtkThemeEngine;
-typedef struct _GtkRcStyle     GtkRcStyle;
-typedef struct _GtkIconSet     GtkIconSet;
-typedef struct _GtkIconSource  GtkIconSource;
 typedef struct _GtkRcProperty  GtkRcProperty;
-typedef struct _GtkSettings    GtkSettings;
-typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
-                                         const GString    *rc_string,
-                                         GValue           *property_value);
 
 /**
  * GTK_STYLE_ATTACHED:
@@ -376,8 +368,6 @@ struct _GtkStyleClass
   void (*_gtk_reserved11) (void);
 };
 
-#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
-
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GDK_DEPRECATED_FOR(GtkStyleContext)
 GtkStyle* gtk_style_new                      (void);
@@ -659,7 +649,6 @@ void gtk_style_get                (GtkStyle    *style,
                                    const gchar *first_property_name,
                                    ...) G_GNUC_NULL_TERMINATED;
 
-#endif
 
 /* --- private API --- */
 GtkStyle*     _gtk_style_new_for_path        (GdkScreen          *screen,
