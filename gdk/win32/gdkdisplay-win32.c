@@ -25,6 +25,7 @@
 #include "gdkwin32display.h"
 #include "gdkwin32screen.h"
 #include "gdkwin32window.h"
+#include "gdkwin32.h"
 
 #define HAVE_MONITOR_INFO
 
@@ -383,7 +384,9 @@ inner_clipboard_window_procedure (HWND   hwnd,
       {
         int success;
         HWND hwndOwner;
+#ifdef G_ENABLE_DEBUG
         UINT nFormat = 0;
+#endif
         GdkEvent *event;
         GdkWindow *owner;
 

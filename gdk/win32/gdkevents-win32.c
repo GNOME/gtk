@@ -2613,8 +2613,6 @@ gdk_event_translate (MSG  *msg,
 
      case WM_MOUSEACTIVATE:
        {
-	 GdkWindow *tmp;
-
 	 if (gdk_window_get_window_type (window) == GDK_WINDOW_TEMP 
 	     || !window->accept_focus)
 	   {

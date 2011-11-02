@@ -874,7 +874,7 @@ _gdk_selection_property_delete (GdkWindow *window)
 
 void
 _gdk_win32_display_send_selection_notify (GdkDisplay   *display,
-					  HWND          requestor,
+					  GdkWindow    *requestor,
 					  GdkAtom     	selection,
 					  GdkAtom     	target,
 					  GdkAtom     	property,

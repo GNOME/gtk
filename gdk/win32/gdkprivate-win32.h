@@ -404,7 +404,7 @@ gboolean   _gdk_win32_display_set_selection_owner   (GdkDisplay *display,
 						     guint32     time,
 						     gboolean    send_event);
 void       _gdk_win32_display_send_selection_notify (GdkDisplay      *display,
-						     HWND             requestor,
+						     GdkWindow       *requestor,
 						     GdkAtom   	      selection,
 						     GdkAtom          target,
 						     GdkAtom          property,
