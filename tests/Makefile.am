@@ -3,12 +3,10 @@ include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = css reftests a11y
 
-INCLUDES =				\
+AM_CPPFLAGS =				\
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED	\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)		\
 	$(GDK_DEP_CFLAGS)
@@ -129,6 +127,9 @@ noinst_PROGRAMS += testerrors
 endif
 
 if HAVE_CXX
+
+AM_CXXFLAGS = $(AM_CPPFLAGS)
+
 noinst_PROGRAMS += autotestkeywords
 TESTS = autotestkeywords
 
