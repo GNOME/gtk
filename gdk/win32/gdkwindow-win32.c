@@ -509,7 +509,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   gboolean override_redirect;
   gint window_width, window_height;
   gint offset_x = 0, offset_y = 0;
-  gint x, y;
+  gint x, y, real_x = 0, real_y = 0;
   /* check consistency of redundant information */
   guint remaining_mask = attributes_mask;
 
@@ -649,8 +649,22 @@ _gdk_window_impl_new (GdkWindow     *window,
 
       AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
 
-      /* non child windows are placed by the OS/window manager */
-      x = y = CW_USEDEFAULT;
+      real_x = private->x - offset_x;
+      real_y = private->y - offset_y;
+
+      if (private->window_type == GDK_WINDOW_TOPLEVEL ||
+	  private->window_type == GDK_WINDOW_DIALOG)
+	{
+	  /* We initially place it at default so that we can get the
+	     default window positioning if we want */
+	  x = y = CW_USEDEFAULT;
+	}
+      else
+	{
+	  /* TEMP, FOREIGN: Put these where requested */
+	  x = real_x;
+	  y = real_y;
+	}
 
       window_width = rect.right - rect.left;
       window_height = rect.bottom - rect.top;
@@ -716,9 +730,21 @@ _gdk_window_impl_new (GdkWindow     *window,
 # endif
 
     }
-  GetWindowRect (GDK_WINDOW_HWND (window), &rect);
-  impl->initial_x = rect.left;
-  impl->initial_y = rect.top;
+
+  if (private->window_type != GDK_WINDOW_CHILD)
+    {
+      GetWindowRect (GDK_WINDOW_HWND (window), &rect);
+      impl->initial_x = rect.left;
+      impl->initial_y = rect.top;
+
+      /* Now we know the initial position, move to actually specified position */
+      if (real_x != x || real_y != y)
+	{
+	  API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+				   real_x, real_y, 0, 0,
+				   SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
+	}
+    }
 
   g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
