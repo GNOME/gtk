@@ -25,6 +25,9 @@
  */
 
 #include "config.h"
+
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
