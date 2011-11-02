@@ -3043,7 +3043,7 @@ _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context)
 
 void
 _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
-					     GtkWidget       *widget)
+                                             GtkWidget       *widget)
 {
   GtkStyleContextPrivate *priv;
   GSList *l;
@@ -3081,9 +3081,9 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
 
           rect = &g_array_index (info->rectangles, cairo_rectangle_int_t, i);
 
-	  /* These are widget relative coordinates,
-	   * so have them inverted to be window relative
-	   */
+          /* These are widget relative coordinates,
+           * so have them inverted to be window relative
+           */
           rect->x -= rel_x;
           rect->y -= rel_y;
 
@@ -4294,7 +4294,7 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
 void
 gtk_render_icon (GtkStyleContext *context,
                  cairo_t         *cr,
-		 GdkPixbuf       *pixbuf,
+                 GdkPixbuf       *pixbuf,
                  gdouble          x,
                  gdouble          y)
 {
@@ -4317,7 +4317,97 @@ gtk_render_icon (GtkStyleContext *context,
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_icon (priv->theming_engine, cr, pixbuf, x, y);
 
-  cairo_restore (cr);  
+  cairo_restore (cr);
+}
+
+/**
+ * gtk_draw_insertion_cursor:
+ * @widget:  a #GtkWidget
+ * @cr: cairo context to draw to
+ * @location: location where to draw the cursor (@location->width is ignored)
+ * @is_primary: if the cursor should be the primary cursor color.
+ * @direction: whether the cursor is left-to-right or
+ *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
+ * @draw_arrow: %TRUE to draw a directional arrow on the
+ *        cursor. Should be %FALSE unless the cursor is split.
+ *
+ * Draws a text caret on @cr at @location. This is not a style function
+ * but merely a convenience function for drawing the standard cursor shape.
+ *
+ * Since: 3.0
+ */
+void
+gtk_draw_insertion_cursor (GtkWidget          *widget,
+                           cairo_t            *cr,
+                           const GdkRectangle *location,
+                           gboolean            is_primary,
+                           GtkTextDirection    direction,
+                           gboolean            draw_arrow)
+{
+  gint stem_width;
+  gint arrow_width;
+  gint x, y;
+  gfloat cursor_aspect_ratio;
+  gint offset;
+  GtkStyleContext *context;
+  GdkRGBA primary_color;
+  GdkRGBA secondary_color;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (location != NULL);
+  g_return_if_fail (direction != GTK_TEXT_DIR_NONE);
+
+  context = gtk_widget_get_style_context (widget);
+
+  _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
+  gdk_cairo_set_source_rgba (cr, is_primary ? &primary_color : &secondary_color);
+
+  /* When changing the shape or size of the cursor here,
+   * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
+   */
+
+  gtk_style_context_get_style (context,
+                               "cursor-aspect-ratio", &cursor_aspect_ratio,
+                               NULL);
+
+  stem_width = location->height * cursor_aspect_ratio + 1;
+  arrow_width = stem_width + 1;
+
+  /* put (stem_width % 2) on the proper side of the cursor */
+  if (direction == GTK_TEXT_DIR_LTR)
+    offset = stem_width / 2;
+  else
+    offset = stem_width - stem_width / 2;
+
+  cairo_rectangle (cr,
+                   location->x - offset, location->y,
+                   stem_width, location->height);
+  cairo_fill (cr);
+
+  if (draw_arrow)
+    {
+      if (direction == GTK_TEXT_DIR_RTL)
+        {
+          x = location->x - offset - 1;
+          y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+
+          cairo_move_to (cr, x, y + 1);
+          cairo_line_to (cr, x - arrow_width, y + arrow_width);
+          cairo_line_to (cr, x, y + 2 * arrow_width);
+          cairo_fill (cr);
+        }
+      else if (direction == GTK_TEXT_DIR_LTR)
+        {
+          x = location->x + stem_width - offset;
+          y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
+
+          cairo_move_to (cr, x, y + 1);
+          cairo_line_to (cr, x + arrow_width, y + arrow_width);
+          cairo_line_to (cr, x, y + 2 * arrow_width);
+          cairo_fill (cr);
+        }
+    }
 }
 
 static AtkAttributeSet *

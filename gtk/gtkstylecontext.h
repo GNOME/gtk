@@ -903,9 +903,16 @@ GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
                                     GtkIconSize          size);
 void        gtk_render_icon        (GtkStyleContext     *context,
                                     cairo_t             *cr,
-				    GdkPixbuf           *pixbuf,
+                                    GdkPixbuf           *pixbuf,
                                     gdouble              x,
                                     gdouble              y);
+
+void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
+                                     cairo_t            *cr,
+                                     const GdkRectangle *location,
+                                     gboolean            is_primary,
+                                     GtkTextDirection    direction,
+                                     gboolean            draw_arrow);
 
 /* Accessibility support */
 AtkAttributeSet *_gtk_style_context_get_attributes (AtkAttributeSet *attributes,
