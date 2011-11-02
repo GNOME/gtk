@@ -30,6 +30,7 @@
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtkwidgetprivate.h"
+#include "deprecated/gtkstyle.h"
 
 
 #ifndef G_DISABLE_CHECKS

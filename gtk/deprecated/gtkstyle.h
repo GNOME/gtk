@@ -651,15 +651,54 @@ void gtk_style_get                (GtkStyle    *style,
 
 
 /* --- private API --- */
-GtkStyle*     _gtk_style_new_for_path        (GdkScreen          *screen,
-                                              GtkWidgetPath      *path);
-void          _gtk_style_shade               (const GdkColor     *a,
-                                              GdkColor           *b,
-                                              gdouble             k);
+GtkStyle*     _gtk_style_new_for_path     (GdkScreen          *screen,
+                                           GtkWidgetPath      *path);
+void          _gtk_style_shade            (const GdkColor     *a,
+                                           GdkColor           *b,
+                                           gdouble             k);
 
-gboolean   gtk_style_has_context    (GtkStyle *style);
+gboolean    gtk_style_has_context         (GtkStyle *style);
 
-
+void        gtk_widget_style_attach       (GtkWidget     *widget);
+gboolean    gtk_widget_has_rc_style       (GtkWidget            *widget);
+void        gtk_widget_set_style          (GtkWidget            *widget,
+                                           GtkStyle             *style);
+void        gtk_widget_ensure_style       (GtkWidget            *widget);
+GtkStyle *  gtk_widget_get_style          (GtkWidget            *widget);
+void        gtk_widget_modify_style       (GtkWidget            *widget,
+                                           GtkRcStyle           *style);
+GtkRcStyle *gtk_widget_get_modifier_style (GtkWidget            *widget);
+void        gtk_widget_modify_fg          (GtkWidget            *widget,
+                                           GtkStateType          state,
+                                           const GdkColor       *color);
+void        gtk_widget_modify_bg          (GtkWidget            *widget,
+                                           GtkStateType          state,
+                                           const GdkColor       *color);
+void        gtk_widget_modify_text        (GtkWidget            *widget,
+                                           GtkStateType          state,
+                                           const GdkColor       *color);
+void        gtk_widget_modify_base        (GtkWidget            *widget,
+                                           GtkStateType          state,
+                                           const GdkColor       *color);
+void        gtk_widget_modify_cursor      (GtkWidget            *widget,
+                                           const GdkColor       *primary,
+                                           const GdkColor       *secondary);
+void        gtk_widget_modify_font        (GtkWidget            *widget,
+                                           PangoFontDescription *font_desc);
+void       gtk_widget_reset_rc_styles     (GtkWidget      *widget);
+GtkStyle*  gtk_widget_get_default_style   (void);
+void       gtk_widget_path                (GtkWidget *widget,
+                                           guint     *path_length,
+                                           gchar    **path,
+                                           gchar    **path_reversed);
+void       gtk_widget_class_path          (GtkWidget *widget,
+                                           guint     *path_length,
+                                           gchar    **path,
+                                           gchar    **path_reversed);
+GdkPixbuf *gtk_widget_render_icon         (GtkWidget   *widget,
+                                           const gchar *stock_id,
+                                           GtkIconSize  size,
+                                           const gchar *detail);
 
 G_END_DECLS
 

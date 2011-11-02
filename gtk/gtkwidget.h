@@ -790,63 +790,6 @@ void         gtk_widget_override_cursor           (GtkWidget       *widget,
 
 void       gtk_widget_reset_style       (GtkWidget      *widget);
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-void        gtk_widget_style_attach               (GtkWidget     *widget);
-
-/* Widget styles.
- */
-gboolean    gtk_widget_has_rc_style       (GtkWidget            *widget);
-void	    gtk_widget_set_style          (GtkWidget            *widget,
-                                           GtkStyle             *style);
-void        gtk_widget_ensure_style       (GtkWidget            *widget);
-GtkStyle *  gtk_widget_get_style          (GtkWidget            *widget);
-
-void        gtk_widget_modify_style       (GtkWidget            *widget,
-					   GtkRcStyle           *style);
-GtkRcStyle *gtk_widget_get_modifier_style (GtkWidget            *widget);
-void        gtk_widget_modify_fg          (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_bg          (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_text        (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_base        (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_cursor      (GtkWidget            *widget,
-					   const GdkColor       *primary,
-					   const GdkColor       *secondary);
-void        gtk_widget_modify_font        (GtkWidget            *widget,
-					   PangoFontDescription *font_desc);
-
-/* Descend recursively and set rc-style on all widgets without user styles */
-void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
-
-/* Set certain default values to be used at widget creation time  */
-GtkStyle*    gtk_widget_get_default_style    (void);
-
-/* Compute a widget's path in the form "GtkWindow.MyLabel", and
- * return newly alocated strings.
- */
-void	     gtk_widget_path		   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
-void	     gtk_widget_class_path	   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
-
-GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
-                                               const gchar *stock_id,
-                                               GtkIconSize  size,
-                                               const gchar *detail);
-#endif  /* GTK_DISABLE_DEPRECATED */
-
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,

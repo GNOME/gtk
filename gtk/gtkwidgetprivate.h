@@ -156,6 +156,10 @@ gpointer          _gtk_widget_peek_request_cache           (GtkWidget *widget);
 void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
                                                             GtkWidget *toplevel,
                                                             gpointer   user_data);
+GtkStyle *        _gtk_widget_get_style                    (GtkWidget *widget);
+void              _gtk_widget_set_style                    (GtkWidget *widget,
+                                                            GtkStyle  *style);
+
 
 G_END_DECLS
 
