@@ -2532,7 +2532,7 @@ gtk_toolbar_forall (GtkContainer *container,
       list = next;
     }
   
-  if (include_internals)
+  if (include_internals && priv->arrow_button)
     callback (priv->arrow_button, callback_data);
 }
 
