@@ -101,7 +101,7 @@ static int gdk_initialized = 0;                     /* 1 if the library is initi
 
 static gchar  *gdk_progclass = NULL;
 
-static GMutex *gdk_threads_mutex = NULL;            /* Global GDK lock */
+static GMutex gdk_threads_mutex;
 
 static GCallback gdk_threads_lock = NULL;
 static GCallback gdk_threads_unlock = NULL;
@@ -668,15 +668,13 @@ gdk_threads_leave (void)
 static void
 gdk_threads_impl_lock (void)
 {
-  if (gdk_threads_mutex)
-    g_mutex_lock (gdk_threads_mutex);
+  g_mutex_lock (&gdk_threads_mutex);
 }
 
 static void
 gdk_threads_impl_unlock (void)
 {
-  if (gdk_threads_mutex)
-    g_mutex_unlock (gdk_threads_mutex);
+  g_mutex_unlock (&gdk_threads_mutex);
 }
 
 /**
@@ -692,10 +690,6 @@ gdk_threads_impl_unlock (void)
 void
 gdk_threads_init (void)
 {
-  if (!g_thread_supported ())
-    g_error ("g_thread_init() must be called before gdk_threads_init()");
-
-  gdk_threads_mutex = g_mutex_new ();
   if (!gdk_threads_lock)
     gdk_threads_lock = gdk_threads_impl_lock;
   if (!gdk_threads_unlock)
