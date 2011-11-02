@@ -1164,6 +1164,58 @@ show_window_internal (GdkWindow *window,
 			       SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
 
+  if (!already_mapped &&
+      (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||
+       GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG) &&
+      !window_impl->override_redirect)
+    {
+      /* Ensure new windows are fully onscreen */
+      RECT window_rect;
+      HMONITOR monitor;
+      MONITORINFO mi;
+      int x, y;
+
+      GetWindowRect (GDK_WINDOW_HWND (window), &window_rect);
+
+      monitor = MonitorFromWindow (GDK_WINDOW_HWND (window), MONITOR_DEFAULTTONEAREST);
+      mi.cbSize = sizeof (mi);
+      if (monitor && GetMonitorInfo (monitor, &mi))
+	{
+	  x = window_rect.left;
+	  y = window_rect.top;
+
+	  if (window_rect.right > mi.rcWork.right)
+	    {
+	      window_rect.left -= (window_rect.right - mi.rcWork.right);
+	      window_rect.right -= (window_rect.right - mi.rcWork.right);
+	    }
+
+	  if (window_rect.bottom > mi.rcWork.bottom)
+	    {
+	      window_rect.top -= (window_rect.bottom - mi.rcWork.bottom);
+	      window_rect.bottom -= (window_rect.bottom - mi.rcWork.bottom);
+	    }
+
+	  if (window_rect.left < mi.rcWork.left)
+	    {
+	      window_rect.right += (mi.rcWork.left - window_rect.left);
+	      window_rect.left += (mi.rcWork.left - window_rect.left);
+	    }
+
+	  if (window_rect.top < mi.rcWork.top)
+	    {
+	      window_rect.bottom += (mi.rcWork.top - window_rect.top);
+	      window_rect.top += (mi.rcWork.top - window_rect.top);
+	    }
+
+	  if (x != window_rect.left || y != window_rect.top)
+	    API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+				     window_rect.left, window_rect.top, 0, 0,
+				     SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
+	}
+    }
+
+
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
     {
       gdk_window_fullscreen (window);
