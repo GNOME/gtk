@@ -3663,6 +3663,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   /* Box for buttons */
 
   toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_ICONS);
   gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_MENU);
 
   context = gtk_widget_get_style_context (toolbar);
