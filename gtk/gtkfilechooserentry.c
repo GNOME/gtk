@@ -86,6 +86,7 @@ struct _GtkFileChooserEntry
   GtkWidget *completion_feedback_label;
   guint completion_feedback_timeout_id;
 
+  guint current_folder_loaded : 1;
   guint has_completion : 1;
   guint in_change      : 1;
   guint eat_tabs       : 1;
@@ -1075,7 +1076,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
   CommonPrefixResult result;
 
   g_assert (chooser_entry->current_folder != NULL);
-  g_assert (_gtk_folder_is_finished_loading (chooser_entry->current_folder));
+  g_assert (chooser_entry->current_folder_loaded);
 
   /* FIXME: see what Emacs does in case there is no common prefix, or there is more than one match:
    *
@@ -1148,7 +1149,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
     case REFRESH_OK:
       g_assert (chooser_entry->current_folder_file != NULL);
 
-      if (chooser_entry->current_folder && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
+      if (chooser_entry->current_folder && chooser_entry->current_folder_loaded)
 	explicitly_complete (chooser_entry);
       else
 	{
@@ -1401,6 +1402,7 @@ finished_loading_cb (GtkFolder *folder,
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
+  chooser_entry->current_folder_loaded = TRUE;
   finish_folder_load (chooser_entry);
 }
 
@@ -1445,7 +1447,8 @@ load_directory_get_folder_callback (GCancellable  *cancellable,
 
   discard_completion_store (chooser_entry);
 
-  if (_gtk_folder_is_finished_loading (chooser_entry->current_folder))
+  chooser_entry->current_folder_loaded = _gtk_folder_is_finished_loading (chooser_entry->current_folder);
+  if (chooser_entry->current_folder_loaded)
     finish_folder_load (chooser_entry);
   else
     g_signal_connect (chooser_entry->current_folder, "finished-loading",
@@ -1616,7 +1619,7 @@ static void
 autocomplete (GtkFileChooserEntry *chooser_entry)
 {
   if (!(chooser_entry->current_folder != NULL
-	&& _gtk_folder_is_finished_loading (chooser_entry->current_folder)
+	&& chooser_entry->current_folder_loaded
 	&& gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == gtk_entry_get_text_length (GTK_ENTRY (chooser_entry))))
     return;
 
@@ -1635,7 +1638,7 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
     case REFRESH_OK:
       g_assert (chooser_entry->current_folder_file != NULL);
 
-      if (chooser_entry->current_folder && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
+      if (chooser_entry->current_folder && chooser_entry->current_folder_loaded)
 	autocomplete (chooser_entry);
       else
 	chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
