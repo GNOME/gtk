@@ -146,10 +146,6 @@ static gboolean completion_match_func     (GtkEntryCompletion  *comp,
 					   const char          *key,
 					   GtkTreeIter         *iter,
 					   gpointer             data);
-static char    *maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
-						GFile               *file,
-						gchar               *display_name,
-						gboolean            *appended);
 
 typedef enum {
   REFRESH_UP_TO_CURSOR_POSITION,
@@ -438,47 +434,6 @@ static void
 beep (GtkFileChooserEntry *chooser_entry)
 {
   gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
-}
-
-/* This function will append a directory separator to paths to
- * display_name iff the path associated with it is a directory.
- * maybe_append_separator_to_file will g_free the display_name and
- * return a new one if needed.  Otherwise, it will return the old one.
- * You should be safe calling
- *
- * display_name = maybe_append_separator_to_file (entry, file, display_name, &appended);
- * ...
- * g_free (display_name);
- */
-static char *
-maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
-				GFile               *file,
-				gchar               *display_name,
-				gboolean            *appended)
-{
-  *appended = FALSE;
-
-  if (!g_str_has_suffix (display_name, G_DIR_SEPARATOR_S) && file)
-    {
-      GFileInfo *info;
-
-      info = _gtk_folder_get_info (chooser_entry->current_folder, file);
-
-      if (info)
-	{
-	  if (_gtk_file_info_consider_as_directory (info))
-	    {
-	      gchar *tmp = display_name;
-	      display_name = g_strconcat (tmp, G_DIR_SEPARATOR_S, NULL);
-	      *appended = TRUE;
-	      g_free (tmp);
-	    }
-
-	  g_object_unref (info);
-	}
-    }
-
-  return display_name;
 }
 
 /* Determines if the completion model has entries with a common prefix relative
@@ -1285,9 +1240,11 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 	{
 	  gchar *display_name = g_strdup (g_file_info_get_display_name (info));
 	  GtkTreeIter iter;
-	  gboolean dummy;
 
-          display_name = maybe_append_separator_to_file (chooser_entry, file, display_name, &dummy);
+          if (_gtk_file_info_consider_as_directory (info))
+            display_name = g_strconcat (g_file_info_get_display_name (info), G_DIR_SEPARATOR_S, NULL);
+          else
+            display_name = g_strdup (g_file_info_get_display_name (info));
 
 	  gtk_list_store_append (chooser_entry->completion_store, &iter);
 	  gtk_list_store_set (chooser_entry->completion_store, &iter,
