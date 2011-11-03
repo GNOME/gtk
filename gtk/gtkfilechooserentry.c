@@ -321,7 +321,6 @@ match_selected_callback (GtkEntryCompletion  *completion,
   char *display_name;
   GFile *file;
   gint pos;
-  gboolean dummy;
   
   gtk_tree_model_get (model, iter,
 		      DISPLAY_NAME_COLUMN, &display_name,
@@ -336,8 +335,6 @@ match_selected_callback (GtkEntryCompletion  *completion,
       g_free (display_name);
       return FALSE;
     }
-
-  display_name = maybe_append_separator_to_file (chooser_entry, file, display_name, &dummy);
 
   pos = chooser_entry->file_part_pos;
 
@@ -617,29 +614,6 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   return TRUE;
 }
 
-static gboolean
-char_after_cursor_is_directory_separator (GtkFileChooserEntry *chooser_entry)
-{
-  int cursor_pos;
-  gboolean result;
-
-  result = FALSE;
-
-  cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
-  if (cursor_pos < gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)))
-    {
-      char *next_char_str;
-
-      next_char_str = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry), cursor_pos, cursor_pos + 1);
-      if (G_IS_DIR_SEPARATOR (*next_char_str))
-	result = TRUE;
-
-      g_free (next_char_str);
-    }
-
-  return result;
-}
-
 typedef enum {
   INVALID_INPUT,		/* what the user typed is bogus */
   NO_MATCH,			/* no matches based on what the user typed */
@@ -694,18 +668,6 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   if (unique_file)
     {
-      if (!char_after_cursor_is_directory_separator (chooser_entry))
-        {
-          gboolean appended;
-
-          common_prefix = maybe_append_separator_to_file (chooser_entry,
-                                                          unique_file,
-                                                          common_prefix,
-                                                          &appended);
-          if (appended)
-            prefix_expands_the_file_part = TRUE;
-        }
-
       g_object_unref (unique_file);
 
       if (prefix_expands_the_file_part)
