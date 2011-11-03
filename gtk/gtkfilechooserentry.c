@@ -1462,9 +1462,6 @@ out:
 static RefreshStatus
 start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 {
-  if (chooser_entry->file_system == NULL)
-    return REFRESH_OK;
-
   g_assert (chooser_entry->current_folder_file != NULL);
   g_assert (chooser_entry->current_folder == NULL);
   g_assert (chooser_entry->load_folder_cancellable == NULL);
@@ -1542,8 +1539,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   text = gtk_editable_get_chars (editable, 0, end_pos);
 
   error = NULL;
-  if (!chooser_entry->file_system ||
-      !_gtk_file_system_parse (chooser_entry->file_system,
+  if (!_gtk_file_system_parse (chooser_entry->file_system,
 			       chooser_entry->base_folder, text,
 			       &folder_file, &file_part, &error))
     {
