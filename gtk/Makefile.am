@@ -1025,7 +1025,7 @@ LDADDS =								\
 
 if HAVE_INTROSPECTION
 introspection_files = \
-    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS)) \
+    $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
     $(gtk_base_c_sources) \
     gtkprintoperation-unix.c \
     gtktypebuiltins.h \
