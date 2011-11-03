@@ -9518,18 +9518,13 @@ keypress_completion_out:
 	   event->keyval == GDK_KP_Tab ||
 	   event->keyval == GDK_ISO_Left_Tab) 
     {
-      GtkDirectionType dir = event->keyval == GDK_ISO_Left_Tab ? 
-	GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
-      
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
 
       g_free (completion->priv->completion_prefix);
       completion->priv->completion_prefix = NULL;
 
-      gtk_widget_child_focus (gtk_widget_get_toplevel (widget), dir);
-
-      return TRUE;
+      return FALSE;
     }
   else if (event->keyval == GDK_ISO_Enter ||
            event->keyval == GDK_KP_Enter ||
