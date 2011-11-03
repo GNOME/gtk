@@ -1460,31 +1460,6 @@ out:
 }
 
 static RefreshStatus
-start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
-{
-  g_assert (chooser_entry->current_folder_file != NULL);
-  g_assert (chooser_entry->current_folder == NULL);
-  g_assert (chooser_entry->load_folder_cancellable == NULL);
-
-  if (chooser_entry->local_only
-      && !g_file_is_native (chooser_entry->current_folder_file))
-    {
-      discard_loading_and_current_folder_file (chooser_entry);
-
-      return REFRESH_NOT_LOCAL;
-    }
-
-  chooser_entry->load_folder_cancellable =
-    _gtk_file_system_get_folder (chooser_entry->file_system,
-			         chooser_entry->current_folder_file,
-			 	"standard::name,standard::display-name,standard::type",
-			         load_directory_get_folder_callback,
-			         g_object_ref (chooser_entry));
-
-  return REFRESH_OK;
-}
-
-static RefreshStatus
 reload_current_folder (GtkFileChooserEntry *chooser_entry,
 		       GFile               *folder_file)
 {
@@ -1500,9 +1475,20 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
       discard_loading_and_current_folder_file (chooser_entry);
     }
   
+  if (chooser_entry->local_only
+      && !g_file_is_native (folder_file))
+    return REFRESH_NOT_LOCAL;
+
   chooser_entry->current_folder_file = g_object_ref (folder_file);
 
-  return start_loading_current_folder (chooser_entry);
+  chooser_entry->load_folder_cancellable =
+    _gtk_file_system_get_folder (chooser_entry->file_system,
+			         chooser_entry->current_folder_file,
+			 	 "standard::name,standard::display-name,standard::type",
+			         load_directory_get_folder_callback,
+			         g_object_ref (chooser_entry));
+
+  return REFRESH_OK;
 }
 
 static RefreshStatus
