@@ -484,18 +484,6 @@ maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
   return display_name;
 }
 
-static char *
-trim_dir_separator_suffix (const char *str)
-{
-  int len;
-
-  len = strlen (str);
-  if (len > 0 && G_IS_DIR_SEPARATOR (str[len - 1]))
-    return g_strndup (str, len - 1);
-  else
-    return g_strdup (str);
-}
-
 /* Determines if the completion model has entries with a common prefix relative
  * to the current contents of the entry.  Also, if there's one and only one such
  * path, stores it in unique_path_ret.
@@ -562,7 +550,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	{
 	  if (!*common_prefix_ret)
 	    {
-	      *common_prefix_ret = trim_dir_separator_suffix (display_name);
+	      *common_prefix_ret = g_strdup (display_name);
 	      *unique_file_ret = g_object_ref (file);
 	    }
 	  else
