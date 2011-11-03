@@ -1165,42 +1165,58 @@ is_primary (const gchar *string)
 	  (string[8] == '>'));
 }
 
+static inline gboolean
+is_keycode (const gchar *string)
+{
+  return (string[0] == '0' &&
+          string[1] == 'x' &&
+          g_ascii_isxdigit (string[2]) &&
+          g_ascii_isxdigit (string[3]));
+}
+
 /**
- * gtk_accelerator_parse:
+ * gtk_accelerator_parse_with_keycode:
  * @accelerator: string representing an accelerator
  * @accelerator_key: (out) (allow-none): return location for accelerator
  *     keyval, or %NULL
+ * @accelerator_codes: (out) (allow-none): return location for accelerator
+ *     keycodes, or %NULL
  * @accelerator_mods: (out) (allow-none): return location for accelerator
  *     modifier mask, %NULL
  *
- * Parses a string representing an accelerator. The
- * format looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1"
- * or "&lt;Release&gt;z" (the last one is for key release).
+ * Parses a string representing an accelerator, similarly to
+ * gtk_accelerator_parse() but handles keycodes as well. This is only
+ * useful for system-level components, applications should use
+ * gtk_accelerator_parse() instead.
  *
- * The parser is fairly liberal and allows lower or upper case,
- * and also abbreviations such as "&lt;Ctl&gt;" and "&lt;Ctrl&gt;".
- * Key names are parsed using gdk_keyval_from_name(). For character
- * keys the name is not the symbol, but the lowercase name, e.g. one
- * would use "&lt;Ctrl&gt;minus" instead of "&lt;Ctrl&gt;-".
+ * If a keycode is present in the accelerator and no @accelerator_codes
+ * is given, the parse will fail.
  *
- * If the parse fails, @accelerator_key and @accelerator_mods will
- * be set to 0 (zero).
+ * If the parse fails, @accelerator_key, @accelerator_mods and
+ * @accelerator_codes will be set to 0 (zero).
+ *
+ * Since: 3.4
  */
 void
-gtk_accelerator_parse (const gchar     *accelerator,
-                       guint           *accelerator_key,
-                       GdkModifierType *accelerator_mods)
+gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
+                                    guint           *accelerator_key,
+                                    guint          **accelerator_codes,
+                                    GdkModifierType *accelerator_mods)
 {
   guint keyval;
   GdkModifierType mods;
   gint len;
+  gboolean error;
 
   if (accelerator_key)
     *accelerator_key = 0;
   if (accelerator_mods)
     *accelerator_mods = 0;
+  if (accelerator_codes)
+    *accelerator_codes = NULL;
   g_return_if_fail (accelerator != NULL);
 
+  error = FALSE;
   keyval = 0;
   mods = 0;
   len = strlen (accelerator);
@@ -1301,16 +1317,172 @@ gtk_accelerator_parse (const gchar     *accelerator,
         }
       else
         {
-          keyval = gdk_keyval_from_name (accelerator);
+          if (len >= 4 && is_keycode (accelerator))
+            {
+               char keystring[5];
+               gchar *endptr;
+               gint tmp_keycode;
+
+               keyval = GDK_KEY_VoidSymbol;
+
+               memcpy (keystring, accelerator, 4);
+               keystring [4] = '\000';
+
+               tmp_keycode = strtol (keystring, &endptr, 16);
+
+               if (endptr == NULL || *endptr != '\000')
+                 {
+                   error = TRUE;
+                   goto out;
+                 }
+               else if (accelerator_codes != NULL)
+                 {
+                   /* 0x00 is an invalid keycode too. */
+                   if (tmp_keycode == 0)
+                     {
+                       error = TRUE;
+                       goto out;
+                     }
+                   else
+                     {
+                       *accelerator_codes = g_new0 (guint, 2);
+                       (*accelerator_codes)[0] = tmp_keycode;
+                     }
+                 }
+               else
+                 {
+                   /* There was a keycode in the string, but
+                    * we cannot store it, so we have an error */
+                   error = TRUE;
+                   goto out;
+                 }
+            }
+	  else
+	    {
+	      keyval = gdk_keyval_from_name (accelerator);
+	      if (keyval == GDK_KEY_VoidSymbol)
+	        {
+	          error = TRUE;
+	          goto out;
+		}
+	    }
+
+          if (keyval != GDK_KEY_VoidSymbol && accelerator_codes != NULL)
+            {
+              GdkKeymapKey *keys;
+              gint n_keys, i, j;
+
+              if (!gdk_keymap_get_entries_for_keyval (gdk_keymap_get_default (), keyval, &keys, &n_keys))
+                {
+                  /* Not in keymap */
+                  error = TRUE;
+                  goto out;
+                }
+              else
+                {
+                  *accelerator_codes = g_new0 (guint, n_keys + 1);
+
+                  for (i = 0, j = 0; i < n_keys; ++i)
+                    {
+                      if (keys[i].level == 0)
+                        (*accelerator_codes)[j++] = keys[i].keycode;
+                    }
+
+                  if (j == 0)
+                    {
+                      g_free (*accelerator_codes);
+                      *accelerator_codes = NULL;
+                      /* Not in keymap */
+                      error = TRUE;
+                      goto out;
+                    }
+                  g_free (keys);
+                }
+            }
+
           accelerator += len;
           len -= len;
         }
     }
 
+out:
+  if (error)
+    keyval = mods = 0;
+
   if (accelerator_key)
     *accelerator_key = gdk_keyval_to_lower (keyval);
   if (accelerator_mods)
     *accelerator_mods = mods;
+}
+
+/**
+ * gtk_accelerator_parse:
+ * @accelerator: string representing an accelerator
+ * @accelerator_key: (out) (allow-none): return location for accelerator
+ *     keyval, or %NULL
+ * @accelerator_mods: (out) (allow-none): return location for accelerator
+ *     modifier mask, %NULL
+ *
+ * Parses a string representing an accelerator. The
+ * format looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1"
+ * or "&lt;Release&gt;z" (the last one is for key release).
+ *
+ * The parser is fairly liberal and allows lower or upper case,
+ * and also abbreviations such as "&lt;Ctl&gt;" and "&lt;Ctrl&gt;".
+ * Key names are parsed using gdk_keyval_from_name(). For character
+ * keys the name is not the symbol, but the lowercase name, e.g. one
+ * would use "&lt;Ctrl&gt;minus" instead of "&lt;Ctrl&gt;-".
+ *
+ * If the parse fails, @accelerator_key and @accelerator_mods will
+ * be set to 0 (zero).
+ */
+void
+gtk_accelerator_parse (const gchar     *accelerator,
+                       guint           *accelerator_key,
+                       GdkModifierType *accelerator_mods)
+{
+  gtk_accelerator_parse_with_keycode (accelerator, accelerator_key, NULL, accelerator_mods);
+}
+
+/**
+ * gtk_accelerator_name_with_keycode:
+ * @display: (allow-none): a #GdkDisplay or %NULL to use the default display
+ * @accelerator_key: accelerator keyval
+ * @accelerator_mods: accelerator modifier mask
+ *
+ * Converts an accelerator keyval and modifier mask
+ * into a string parseable by gtk_accelerator_parse_full(),
+ * similarly to gtk_accelerator_name() but handling keycodes.
+ * This is only useful for system-level components, applications
+ * should use gtk_accelerator_parse() instead.
+ *
+ * Returns: a newly allocated accelerator name.
+ *
+ * Since: 3.4
+ */
+gchar *
+gtk_accelerator_name_with_keycode (GdkDisplay      *display,
+                                   guint            accelerator_key,
+                                   guint            keycode,
+                                   GdkModifierType  accelerator_mods)
+{
+  gchar *gtk_name;
+
+  if (display == NULL)
+    display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
+
+  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accelerator_mods);
+  gtk_name = gtk_accelerator_name (accelerator_key, accelerator_mods);
+
+  if (!accelerator_key)
+    {
+      gchar *name;
+      name = g_strdup_printf ("%s0x%02x", gtk_name, keycode);
+      g_free (gtk_name);
+      return name;
+    }
+
+  return gtk_name;
 }
 
 /**
@@ -1455,6 +1627,49 @@ gtk_accelerator_name (guint           accelerator_key,
   strcpy (accelerator + l, keyval_name);
 
   return accelerator;
+}
+
+/**
+ * gtk_accelerator_get_label_with_keycode:
+ * @display: (allow-none): a #GdkDisplay or %NULL to use the default display
+ * @accelerator_key: accelerator keyval
+ * @accelerator_mods: accelerator modifier mask
+ *
+ * Converts an accelerator keyval and modifier mask
+ * into a (possibly translated) string that can be displayed to
+ * a user, similarly to gtk_accelerator_get_label(), but handling
+ * keycodes.
+ *
+ * This is only useful for system-level components, applications
+ * should use gtk_accelerator_parse() instead.
+ *
+ * Returns: a newly-allocated string representing the accelerator.
+ *
+ * Since: 3.4
+ */
+gchar *
+gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
+                                        guint            accelerator_key,
+                                        guint            keycode,
+                                        GdkModifierType  accelerator_mods)
+{
+  gchar *gtk_label;
+
+  if (display == NULL)
+    display = gdk_display_manager_get_default_display (gdk_display_manager_get ());
+
+  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accelerator_mods);
+  gtk_label = gtk_accelerator_get_label (accelerator_key, accelerator_mods);
+
+  if (!accelerator_key)
+    {
+      gchar *label;
+      label = g_strdup_printf ("%s0x%02x", gtk_label, keycode);
+      g_free (gtk_label);
+      return label;
+    }
+
+  return gtk_label;
 }
 
 /**
