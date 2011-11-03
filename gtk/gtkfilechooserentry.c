@@ -78,7 +78,7 @@ struct _GtkFileChooserEntry
 
   LoadCompleteAction load_complete_action;
 
-  GtkListStore *completion_store;
+  GtkTreeModel *completion_store;
 
   guint start_autocompletion_idle_id;
 
@@ -372,7 +372,7 @@ completion_match_func (GtkEntryCompletion *comp,
       return FALSE;
     }
 
-  gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store), iter, DISPLAY_NAME_COLUMN, &name, -1);
+  gtk_tree_model_get (chooser_entry->completion_store, iter, DISPLAY_NAME_COLUMN, &name, -1);
   if (!name)
     {
       return FALSE; /* Uninitialized row, ugh */
@@ -485,14 +485,14 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   /* First pass: find the common prefix */
 
-  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
+  valid = gtk_tree_model_get_iter_first (chooser_entry->completion_store, &iter);
 
   while (valid)
     {
       gchar *display_name;
       GFile *file;
 
-      gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store),
+      gtk_tree_model_get (chooser_entry->completion_store,
 			  &iter,
 			  DISPLAY_NAME_COLUMN, &display_name,
 			  FILE_COLUMN, &file,
@@ -528,21 +528,21 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 
       g_free (display_name);
       g_object_unref (file);
-      valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
+      valid = gtk_tree_model_iter_next (chooser_entry->completion_store, &iter);
     }
 
   /* Second pass: see if the prefix we found is a complete match */
 
   if (*common_prefix_ret != NULL)
     {
-      valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
+      valid = gtk_tree_model_get_iter_first (chooser_entry->completion_store, &iter);
 
       while (valid)
 	{
 	  gchar *display_name;
 	  int len;
 
-	  gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store),
+	  gtk_tree_model_get (chooser_entry->completion_store,
 			      &iter,
 			      DISPLAY_NAME_COLUMN, &display_name,
 			      -1);
@@ -556,7 +556,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	    *is_complete_not_unique_ret = TRUE;
 
 	  g_free (display_name);
-	  valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (chooser_entry->completion_store), &iter);
+	  valid = gtk_tree_model_iter_next (chooser_entry->completion_store, &iter);
 	}
 
       /* Finally:  Did we generate a new completion, or was the user's input already completed as far as it could go? */
@@ -1223,9 +1223,9 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
   files = _gtk_folder_list_children (chooser_entry->current_folder);
 
-  chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
-							G_TYPE_STRING,
-							G_TYPE_FILE);
+  chooser_entry->completion_store = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS,
+                                                                        G_TYPE_STRING,
+                                                                        G_TYPE_FILE));
 
   for (tmp_list = files; tmp_list; tmp_list = tmp_list->next)
     {
@@ -1246,8 +1246,8 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
           else
             display_name = g_strdup (g_file_info_get_display_name (info));
 
-	  gtk_list_store_append (chooser_entry->completion_store, &iter);
-	  gtk_list_store_set (chooser_entry->completion_store, &iter,
+	  gtk_list_store_append (GTK_LIST_STORE (chooser_entry->completion_store), &iter);
+	  gtk_list_store_set (GTK_LIST_STORE (chooser_entry->completion_store), &iter,
 			      DISPLAY_NAME_COLUMN, display_name,
 			      FILE_COLUMN, file,
 			      -1);
@@ -1264,7 +1264,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)),
-				  GTK_TREE_MODEL (chooser_entry->completion_store));
+				  chooser_entry->completion_store);
 }
 
 /* When we finish loading the current folder, this function should get called to
