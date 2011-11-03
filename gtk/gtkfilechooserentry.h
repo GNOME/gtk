@@ -33,12 +33,11 @@ G_BEGIN_DECLS
 typedef struct _GtkFileChooserEntry      GtkFileChooserEntry;
 
 GType              _gtk_file_chooser_entry_get_type           (void) G_GNUC_CONST;
-GtkWidget *        _gtk_file_chooser_entry_new                (gboolean eat_tab);
+GtkWidget *        _gtk_file_chooser_entry_new                (GtkFileSystem       *file_system,
+                                                               gboolean             eat_tab);
 void               _gtk_file_chooser_entry_set_action         (GtkFileChooserEntry *chooser_entry,
 							       GtkFileChooserAction action);
 GtkFileChooserAction _gtk_file_chooser_entry_get_action       (GtkFileChooserEntry *chooser_entry);
-void               _gtk_file_chooser_entry_set_file_system    (GtkFileChooserEntry *chooser_entry,
-							       GtkFileSystem       *file_system);
 void               _gtk_file_chooser_entry_set_base_folder    (GtkFileChooserEntry *chooser_entry,
 							       GFile               *folder);
 void               _gtk_file_chooser_entry_set_file_part      (GtkFileChooserEntry *chooser_entry,
