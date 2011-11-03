@@ -1746,6 +1746,7 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
 
 /**
  * _gtk_file_chooser_entry_new:
+ * @filesystem: The #GtkFileSystem to use
  * @eat_tabs: If %FALSE, allow focus navigation with the tab key.
  *
  * Creates a new #GtkFileChooserEntry object. #GtkFileChooserEntry
@@ -1756,37 +1757,18 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
  * Return value: the newly created #GtkFileChooserEntry
  **/
 GtkWidget *
-_gtk_file_chooser_entry_new (gboolean eat_tabs)
+_gtk_file_chooser_entry_new (GtkFileSystem *file_system,
+                             gboolean       eat_tabs)
 {
   GtkFileChooserEntry *chooser_entry;
 
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+
   chooser_entry = g_object_new (GTK_TYPE_FILE_CHOOSER_ENTRY, NULL);
+  chooser_entry->file_system = g_object_ref (file_system);
   chooser_entry->eat_tabs = (eat_tabs != FALSE);
 
   return GTK_WIDGET (chooser_entry);
-}
-
-/**
- * _gtk_file_chooser_entry_set_file_system:
- * @chooser_entry: a #GtkFileChooser
- * @file_system: an object implementing #GtkFileSystem
- *
- * Sets the file system for @chooser_entry.
- **/
-void
-_gtk_file_chooser_entry_set_file_system (GtkFileChooserEntry *chooser_entry,
-					 GtkFileSystem       *file_system)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
-  g_return_if_fail (GTK_IS_FILE_SYSTEM (file_system));
-
-  if (file_system != chooser_entry->file_system)
-    {
-      if (chooser_entry->file_system)
-	g_object_unref (chooser_entry->file_system);
-
-      chooser_entry->file_system = g_object_ref (file_system);
-    }
 }
 
 /**
