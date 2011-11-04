@@ -67,7 +67,6 @@ struct _GtkFileChooserEntry
 
   GtkFileChooserAction action;
 
-  GtkFileSystem *file_system;
   GFile *base_folder;
   GFile *current_folder_file;
   gchar *file_part;
@@ -278,12 +277,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
     {
       g_object_unref (chooser_entry->completion_store);
       chooser_entry->completion_store = NULL;
-    }
-
-  if (chooser_entry->file_system)
-    {
-      g_object_unref (chooser_entry->file_system);
-      chooser_entry->file_system = NULL;
     }
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
@@ -1702,7 +1695,6 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
 
 /**
  * _gtk_file_chooser_entry_new:
- * @filesystem: The #GtkFileSystem to use
  * @eat_tabs: If %FALSE, allow focus navigation with the tab key.
  *
  * Creates a new #GtkFileChooserEntry object. #GtkFileChooserEntry
@@ -1713,15 +1705,11 @@ delete_text_callback (GtkFileChooserEntry *chooser_entry,
  * Return value: the newly created #GtkFileChooserEntry
  **/
 GtkWidget *
-_gtk_file_chooser_entry_new (GtkFileSystem *file_system,
-                             gboolean       eat_tabs)
+_gtk_file_chooser_entry_new (gboolean       eat_tabs)
 {
   GtkFileChooserEntry *chooser_entry;
 
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-
   chooser_entry = g_object_new (GTK_TYPE_FILE_CHOOSER_ENTRY, NULL);
-  chooser_entry->file_system = g_object_ref (file_system);
   chooser_entry->eat_tabs = (eat_tabs != FALSE);
 
   return GTK_WIDGET (chooser_entry);
