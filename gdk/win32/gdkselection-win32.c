@@ -718,6 +718,17 @@ gdk_selection_convert (GdkWindow *requestor,
 				       bi->biSize +
 				       bi->biClrUsed * sizeof (RGBQUAD));
 
+		      if (bi->biCompression == BI_BITFIELDS && bi->biBitCount >= 16)
+		        {
+                          /* Screenshots taken with PrintScreen or
+                           * Alt + PrintScreen are found on the clipboard in
+                           * this format. In this case the BITMAPINFOHEADER is
+                           * followed by three DWORD specifying the masks of the
+                           * red green and blue components, so adjust the offset
+                           * accordingly. */
+		          bf->bfOffBits += (3 * sizeof (DWORD));
+		        }
+
 		      memcpy ((char *) data + sizeof (BITMAPFILEHEADER),
 			      bi,
 			      data_length);
