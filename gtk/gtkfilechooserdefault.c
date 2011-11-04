@@ -4424,7 +4424,7 @@ static void
 location_entry_create (GtkFileChooserDefault *impl)
 {
   if (!impl->location_entry)
-    impl->location_entry = _gtk_file_chooser_entry_new (impl->file_system, TRUE);
+    impl->location_entry = _gtk_file_chooser_entry_new (TRUE);
 
   _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
