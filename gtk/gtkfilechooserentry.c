@@ -79,8 +79,6 @@ struct _GtkFileChooserEntry
 
   GtkTreeModel *completion_store;
 
-  guint start_autocompletion_idle_id;
-
   GtkWidget *completion_feedback_window;
   GtkWidget *completion_feedback_label;
   guint completion_feedback_timeout_id;
@@ -157,7 +155,7 @@ static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
-static void install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry);
+static void start_autocompletion (GtkFileChooserEntry *chooser_entry);
 static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
 static void pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
 					const gchar         *feedback);
@@ -281,13 +279,11 @@ gtk_file_chooser_entry_dispose (GObject *object)
   remove_completion_feedback (chooser_entry);
   discard_loading_and_current_folder_file (chooser_entry);
 
-  if (chooser_entry->start_autocompletion_idle_id != 0)
+  if (chooser_entry->completion_store)
     {
-      g_source_remove (chooser_entry->start_autocompletion_idle_id);
-      chooser_entry->start_autocompletion_idle_id = 0;
+      g_object_unref (chooser_entry->completion_store);
+      chooser_entry->completion_store = NULL;
     }
-
-  discard_completion_store (chooser_entry);
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
 }
@@ -835,7 +831,7 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
   if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
        || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
       && insert_pos == old_text_len)
-    install_start_autocompletion_idle (chooser_entry);
+    start_autocompletion (chooser_entry);
 }
 
 static void
@@ -1600,27 +1596,6 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
     default:
       g_assert_not_reached ();
     }
-}
-
-static gboolean
-start_autocompletion_idle_handler (gpointer data)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
-
-  start_autocompletion (chooser_entry);
-
-  chooser_entry->start_autocompletion_idle_id = 0;
-
-  return FALSE;
-}
-
-static void
-install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry)
-{
-  if (chooser_entry->start_autocompletion_idle_id != 0)
-    return;
-
-  chooser_entry->start_autocompletion_idle_id = gdk_threads_add_idle (start_autocompletion_idle_handler, chooser_entry);
 }
 
 #ifdef G_OS_WIN32
