@@ -19,17 +19,16 @@
  */
 
 #include "config.h"
+
+#include "gtkfilechooserentry.h"
+
 #include <string.h>
 
 #include "gtkalignment.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
-<<<<<<< HEAD
-#include "gtkfilechooserentry.h"
-=======
 #include "gtkfilesystemmodel.h"
->>>>>>> a1e0c1e... filechooserentry: Use a GtkFileSystemModel
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkwindow.h"
@@ -426,6 +425,144 @@ static void
 beep (GtkFileChooserEntry *chooser_entry)
 {
   gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
+}
+
+static gboolean
+is_valid_scheme_character (char c)
+{
+  return g_ascii_isalnum (c) || c == '+' || c == '-' || c == '.';
+}
+
+static gboolean
+has_uri_scheme (const char *str)
+{
+  const char *p;
+
+  p = str;
+
+  if (!is_valid_scheme_character (*p))
+    return FALSE;
+
+  do
+    p++;
+  while (is_valid_scheme_character (*p));
+
+  return (strncmp (p, "://", 3) == 0);
+}
+
+static gboolean
+_gtk_file_system_parse (GtkFileSystem     *file_system,
+		        GFile             *base_file,
+		        const gchar       *str,
+		        GFile            **folder,
+		        gchar            **file_part,
+		        GError           **error)
+{
+  GFile *file;
+  gboolean result = FALSE;
+  gboolean is_dir = FALSE;
+  gchar *last_slash = NULL;
+  gboolean is_uri;
+
+  if (str && *str)
+    is_dir = (str [strlen (str) - 1] == G_DIR_SEPARATOR);
+
+  last_slash = strrchr (str, G_DIR_SEPARATOR);
+
+  is_uri = has_uri_scheme (str);
+
+  if (is_uri)
+    {
+      const char *colon;
+      const char *slash_after_hostname;
+
+      colon = strchr (str, ':');
+      g_assert (colon != NULL);
+      g_assert (strncmp (colon, "://", 3) == 0);
+
+      slash_after_hostname = strchr (colon + 3, '/');
+
+      if (slash_after_hostname == NULL)
+	{
+	  /* We don't have a full hostname yet.  So, don't switch the folder
+	   * until we have seen a full hostname.  Otherwise, completion will
+	   * happen for every character the user types for the hostname.
+	   */
+
+	  *folder = NULL;
+	  *file_part = NULL;
+	  g_set_error (error,
+		       GTK_FILE_CHOOSER_ERROR,
+		       GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME,
+		       "Incomplete hostname");
+	  return FALSE;
+	}
+    }
+
+  if (str[0] == '~' || g_path_is_absolute (str) || is_uri)
+    file = g_file_parse_name (str);
+  else
+    {
+      if (base_file)
+	file = g_file_resolve_relative_path (base_file, str);
+      else
+	{
+	  *folder = NULL;
+	  *file_part = NULL;
+	  g_set_error (error,
+		       GTK_FILE_CHOOSER_ERROR,
+		       GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		       _("Invalid path"));
+	  return FALSE;
+	}
+    }
+
+  if (base_file && g_file_equal (base_file, file))
+    {
+      /* this is when user types '.', could be the
+       * beginning of a hidden file, ./ or ../
+       */
+      *folder = g_object_ref (file);
+      *file_part = g_strdup (str);
+      result = TRUE;
+    }
+  else if (is_dir)
+    {
+      /* it's a dir, or at least it ends with the dir separator */
+      *folder = g_object_ref (file);
+      *file_part = g_strdup ("");
+      result = TRUE;
+    }
+  else
+    {
+      GFile *parent_file;
+
+      parent_file = g_file_get_parent (file);
+
+      if (!parent_file)
+	{
+	  g_set_error (error,
+		       GTK_FILE_CHOOSER_ERROR,
+		       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+		       "Could not get parent file");
+	  *folder = NULL;
+	  *file_part = NULL;
+	}
+      else
+	{
+	  *folder = parent_file;
+	  result = TRUE;
+
+	  if (last_slash)
+	    *file_part = g_strdup (last_slash + 1);
+	  else
+	    *file_part = g_strdup (str);
+	}
+    }
+
+  g_object_unref (file);
+
+  return result;
 }
 
 /* Determines if the completion model has entries with a common prefix relative

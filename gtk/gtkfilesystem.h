@@ -100,18 +100,6 @@ GtkFileSystem * _gtk_file_system_new          (void);
 GSList *        _gtk_file_system_list_volumes   (GtkFileSystem *file_system);
 GSList *        _gtk_file_system_list_bookmarks (GtkFileSystem *file_system);
 
-gboolean        _gtk_file_system_parse          (GtkFileSystem     *file_system,
-						 GFile             *base_file,
-						 const gchar       *str,
-						 GFile            **folder,
-						 gchar            **file_part,
-						 GError           **error);
-
-GCancellable *  _gtk_file_system_get_folder             (GtkFileSystem                     *file_system,
-						 	 GFile                             *file,
-							 const gchar                       *attributes,
-							 GtkFileSystemGetFolderCallback     callback,
-							 gpointer                           data);
 GCancellable *  _gtk_file_system_get_info               (GtkFileSystem                     *file_system,
 							 GFile                             *file,
 							 const gchar                       *attributes,
