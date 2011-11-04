@@ -451,12 +451,11 @@ has_uri_scheme (const char *str)
 }
 
 static gboolean
-_gtk_file_system_parse (GtkFileSystem     *file_system,
-		        GFile             *base_file,
-		        const gchar       *str,
-		        GFile            **folder,
-		        gchar            **file_part,
-		        GError           **error)
+gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
+                              const gchar          *str,
+                              GFile               **folder,
+                              gchar               **file_part,
+                              GError              **error)
 {
   GFile *file;
   gboolean result = FALSE;
@@ -503,8 +502,8 @@ _gtk_file_system_parse (GtkFileSystem     *file_system,
     file = g_file_parse_name (str);
   else
     {
-      if (base_file)
-	file = g_file_resolve_relative_path (base_file, str);
+      if (chooser_entry->base_folder)
+	file = g_file_resolve_relative_path (chooser_entry->base_folder, str);
       else
 	{
 	  *folder = NULL;
@@ -517,7 +516,7 @@ _gtk_file_system_parse (GtkFileSystem     *file_system,
 	}
     }
 
-  if (base_file && g_file_equal (base_file, file))
+  if (chooser_entry->base_folder && g_file_equal (chooser_entry->base_folder, file))
     {
       /* this is when user types '.', could be the
        * beginning of a hidden file, ./ or ../
@@ -594,12 +593,11 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   text_up_to_cursor = gtk_editable_get_chars (editable, 0, gtk_editable_get_position (editable));
 
-  parsed = _gtk_file_system_parse (chooser_entry->file_system,
-				   chooser_entry->base_folder,
-				   text_up_to_cursor,
-				   &parsed_folder_file,
-				   &parsed_file_part,
-				   error);
+  parsed = gtk_file_chooser_entry_parse (chooser_entry,
+                                         text_up_to_cursor,
+                                         &parsed_folder_file,
+                                         &parsed_file_part,
+                                         error);
 
   g_free (text_up_to_cursor);
 
@@ -1501,9 +1499,8 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   text = gtk_editable_get_chars (editable, 0, end_pos);
 
   error = NULL;
-  if (!_gtk_file_system_parse (chooser_entry->file_system,
-			       chooser_entry->base_folder, text,
-			       &folder_file, &file_part, &error))
+  if (!gtk_file_chooser_entry_parse (chooser_entry,
+			             text, &folder_file, &file_part, &error))
     {
       if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME))
 	{
