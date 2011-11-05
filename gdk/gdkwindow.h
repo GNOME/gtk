@@ -784,19 +784,32 @@ void          gdk_window_register_dnd    (GdkWindow       *window);
 
 GdkDragProtocol
               gdk_window_get_drag_protocol(GdkWindow      *window,
-                                          GdkWindow      **target);
+                                           GdkWindow     **target);
 
-void gdk_window_begin_resize_drag (GdkWindow     *window,
-                                   GdkWindowEdge  edge,
-                                   gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
-                                   guint32        timestamp);
-void gdk_window_begin_move_drag   (GdkWindow     *window,
-                                   gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
-                                   guint32        timestamp);
+void gdk_window_begin_resize_drag            (GdkWindow     *window,
+                                              GdkWindowEdge  edge,
+                                              gint           button,
+                                              gint           root_x,
+                                              gint           root_y,
+                                              guint32        timestamp);
+void gdk_window_begin_resize_drag_for_device (GdkWindow     *window,
+                                              GdkWindowEdge  edge,
+                                              GdkDevice     *device,
+                                              gint           button,
+                                              gint           root_x,
+                                              gint           root_y,
+                                              guint32        timestamp);
+void gdk_window_begin_move_drag              (GdkWindow     *window,
+                                              gint           button,
+                                              gint           root_x,
+                                              gint           root_y,
+                                              guint32        timestamp);
+void gdk_window_begin_move_drag_for_device   (GdkWindow     *window,
+                                              GdkDevice     *device,
+                                              gint           button,
+                                              gint           root_x,
+                                              gint           root_y,
+                                              guint32        timestamp);
 
 /* Interface for dirty-region queueing */
 void       gdk_window_invalidate_rect           (GdkWindow          *window,

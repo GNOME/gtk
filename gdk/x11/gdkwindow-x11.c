@@ -3953,6 +3953,7 @@ gdk_window_x11_set_static_gravities (GdkWindow *window,
 static void
 wmspec_moveresize (GdkWindow *window,
                    gint       direction,
+                   GdkDevice *device,
                    gint       root_x,
                    gint       root_y,
                    guint32    timestamp)     
@@ -3962,7 +3963,7 @@ wmspec_moveresize (GdkWindow *window,
   XClientMessageEvent xclient;
 
   /* Release passive grab */
-  gdk_device_ungrab (display->core_pointer, timestamp);
+  gdk_device_ungrab (device, timestamp);
 
   memset (&xclient, 0, sizeof (xclient));
   xclient.type = ClientMessage;
@@ -3991,6 +3992,7 @@ struct _MoveResizeData
   GdkWindow *moveresize_emulation_window;
   gboolean is_resize;
   GdkWindowEdge resize_edge;
+  GdkDevice *device;
   gint moveresize_button;
   gint moveresize_x;
   gint moveresize_y;
@@ -4018,6 +4020,7 @@ struct _MoveResizeData
 static void
 wmspec_resize_drag (GdkWindow     *window,
                     GdkWindowEdge  edge,
+                    GdkDevice     *device,
                     gint           button,
                     gint           root_x,
                     gint           root_y,
@@ -4068,7 +4071,7 @@ wmspec_resize_drag (GdkWindow     *window,
       return;
     }
   
-  wmspec_moveresize (window, direction, root_x, root_y, timestamp);
+  wmspec_moveresize (window, direction, device, root_x, root_y, timestamp);
 }
 
 static MoveResizeData *
@@ -4346,7 +4349,7 @@ create_moveresize_window (MoveResizeData *mv_resize,
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 
-  status = gdk_device_grab (gdk_window_get_display (mv_resize->moveresize_emulation_window)->core_pointer,
+  status = gdk_device_grab (mv_resize->device,
                             mv_resize->moveresize_emulation_window,
                             GDK_OWNERSHIP_NONE,
                             FALSE,
@@ -4440,6 +4443,7 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
 static void
 emulate_resize_drag (GdkWindow     *window,
                      GdkWindowEdge  edge,
+                     GdkDevice     *device,
                      gint           button,
                      gint           root_x,
                      gint           root_y,
@@ -4450,6 +4454,7 @@ emulate_resize_drag (GdkWindow     *window,
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
   mv_resize->resize_edge = edge;
+  mv_resize->device = device;
   mv_resize->moveresize_x = root_x;
   mv_resize->moveresize_y = root_y;
   mv_resize->moveresize_window = g_object_ref (window);
@@ -4469,6 +4474,7 @@ emulate_resize_drag (GdkWindow     *window,
 
 static void
 emulate_move_drag (GdkWindow     *window,
+                   GdkDevice     *device,
                    gint           button,
                    gint           root_x,
                    gint           root_y,
@@ -4477,6 +4483,7 @@ emulate_move_drag (GdkWindow     *window,
   MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
   
   mv_resize->is_resize = FALSE;
+  mv_resize->device = device;
   mv_resize->moveresize_button = button;
   mv_resize->moveresize_x = root_x;
   mv_resize->moveresize_y = root_y;
@@ -4490,11 +4497,12 @@ emulate_move_drag (GdkWindow     *window,
 
 static void
 gdk_x11_window_begin_resize_drag (GdkWindow     *window,
-				  GdkWindowEdge  edge,
-				  gint           button,
-				  gint           root_x,
-				  gint           root_y,
-				  guint32        timestamp)
+                                  GdkWindowEdge  edge,
+                                  GdkDevice     *device,
+                                  gint           button,
+                                  gint           root_x,
+                                  gint           root_y,
+                                  guint32        timestamp)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -4502,13 +4510,14 @@ gdk_x11_window_begin_resize_drag (GdkWindow     *window,
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
-    wmspec_resize_drag (window, edge, button, root_x, root_y, timestamp);
+    wmspec_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
   else
-    emulate_resize_drag (window, edge, button, root_x, root_y, timestamp);
+    emulate_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
 }
 
 static void
 gdk_x11_window_begin_move_drag (GdkWindow *window,
+                                GdkDevice *device,
 				gint       button,
 				gint       root_x,
 				gint       root_y,
@@ -4520,10 +4529,10 @@ gdk_x11_window_begin_move_drag (GdkWindow *window,
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
-    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE, root_x, root_y,
+    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE, device, root_x, root_y,
 		       timestamp);
   else
-    emulate_move_drag (window, button, root_x, root_y, timestamp);
+    emulate_move_drag (window, device, button, root_x, root_y, timestamp);
 }
 
 static void

@@ -231,16 +231,18 @@ struct _GdkWindowImplClass
   void         (* set_functions)        (GdkWindow    *window,
 					 GdkWMFunction functions);
   void         (* begin_resize_drag)    (GdkWindow     *window,
-					 GdkWindowEdge  edge,
-					 gint           button,
-					 gint           root_x,
-					 gint           root_y,
-					 guint32        timestamp);
+                                         GdkWindowEdge  edge,
+                                         GdkDevice     *device,
+                                         gint           button,
+                                         gint           root_x,
+                                         gint           root_y,
+                                         guint32        timestamp);
   void         (* begin_move_drag)      (GdkWindow *window,
-					 gint       button,
-					 gint       root_x,
-					 gint       root_y,
-					 guint32    timestamp);
+                                         GdkDevice     *device,
+                                         gint       button,
+                                         gint       root_x,
+                                         gint       root_y,
+                                         guint32    timestamp);
   void         (* enable_synchronized_configure) (GdkWindow *window);
   void         (* configure_finished)   (GdkWindow *window);
   void         (* set_opacity)          (GdkWindow *window,
