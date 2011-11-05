@@ -2441,6 +2441,7 @@ gdk_quartz_window_set_skip_pager_hint (GdkWindow *window,
 static void
 gdk_quartz_window_begin_resize_drag (GdkWindow     *window,
                                      GdkWindowEdge  edge,
+                                     GdkDevice     *device,
                                      gint           button,
                                      gint           root_x,
                                      gint           root_y,
@@ -2472,6 +2473,7 @@ gdk_quartz_window_begin_resize_drag (GdkWindow     *window,
 
 static void
 gdk_quartz_window_begin_move_drag (GdkWindow *window,
+                                   GdkDevice *device,
                                    gint       button,
                                    gint       root_x,
                                    gint       root_y,
