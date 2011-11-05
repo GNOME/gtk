@@ -1717,8 +1717,16 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 const gchar *
 _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
 {
-  commit_completion_and_refresh (chooser_entry);
-  return chooser_entry->file_part;
+  const char *last_slash, *text;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry), NULL);
+
+  text = gtk_entry_get_text (GTK_ENTRY (chooser_entry));
+  last_slash = strrchr (text, G_DIR_SEPARATOR);
+  if (last_slash)
+    return last_slash + 1;
+  else
+    return text;
 }
 
 /**
