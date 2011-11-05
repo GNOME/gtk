@@ -5893,12 +5893,13 @@ gtk_window_button_press_event (GtkWidget *widget,
   if (event->window == priv->grip_window)
     {
       if (get_drag_edge (widget, &edge))
-        gtk_window_begin_resize_drag (GTK_WINDOW (widget),
-                                      edge,
-                                      event->button,
-                                      event->x_root,
-                                      event->y_root,
-                                      event->time);
+        gdk_window_begin_resize_drag_for_device (gtk_widget_get_window (widget),
+                                                 edge,
+                                                 gdk_event_get_device (event),
+                                                 event->button,
+                                                 event->x_root,
+                                                 event->y_root,
+                                                 event->time);
 
       return TRUE;
     }
