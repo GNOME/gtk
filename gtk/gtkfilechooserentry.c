@@ -69,6 +69,7 @@ struct _GtkFileChooserEntry
 
   GFile *base_folder;
   GFile *current_folder_file;
+  gchar *dir_part;
   gchar *file_part;
   gint file_part_pos;
 
@@ -90,6 +91,7 @@ struct _GtkFileChooserEntry
 enum
 {
   DISPLAY_NAME_COLUMN,
+  FULL_PATH_COLUMN,
   FILE_COLUMN,
   N_COLUMNS
 };
@@ -242,6 +244,7 @@ gtk_file_chooser_entry_finalize (GObject *object)
   if (chooser_entry->current_folder_file)
     g_object_unref (chooser_entry->current_folder_file);
 
+  g_free (chooser_entry->dir_part);
   g_free (chooser_entry->file_part);
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->finalize (object);
@@ -1294,16 +1297,28 @@ completion_store_set (GtkFileSystemModel  *model,
                       GValue              *value,
                       gpointer             data)
 {
+  GtkFileChooserEntry *chooser_entry = data;
+
+  const char *prefix = "";
+  const char *suffix = "";
+
   switch (column)
     {
     case FILE_COLUMN:
       g_value_set_object (value, file);
       break;
+    case FULL_PATH_COLUMN:
+      prefix = chooser_entry->dir_part;
+      /* fall through */
     case DISPLAY_NAME_COLUMN:
       if (_gtk_file_info_consider_as_directory (info))
-        g_value_take_string (value, g_strconcat (g_file_info_get_display_name (info), G_DIR_SEPARATOR_S, NULL));
-      else
-        g_value_set_string (value, g_file_info_get_display_name (info));
+        suffix = G_DIR_SEPARATOR_S;
+
+      g_value_take_string (value, g_strconcat (
+              prefix,
+              g_file_info_get_display_name (info),
+              suffix,
+              NULL));
       break;
     default:
       g_assert_not_reached ();
@@ -1325,6 +1340,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
                                                 completion_store_set,
                                                 chooser_entry,
                                                 N_COLUMNS,
+                                                G_TYPE_STRING,
                                                 G_TYPE_STRING,
                                                 G_TYPE_FILE));
   g_signal_connect (chooser_entry->completion_store, "finished-loading",
@@ -1493,12 +1509,14 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
       result = REFRESH_OK;
     }
 
-  g_free (text);
-
   g_free (chooser_entry->file_part);
+  g_free (chooser_entry->dir_part);
 
+  chooser_entry->dir_part = file_part_pos > 0 ? g_strndup (text, file_part_pos) : g_strdup ("");
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;
+
+  g_free (text);
 
   if (result == REFRESH_OK)
     {
