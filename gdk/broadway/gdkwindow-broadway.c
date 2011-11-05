@@ -1467,6 +1467,7 @@ create_moveresize_window (MoveResizeData *mv_resize,
 static void
 gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
 				       GdkWindowEdge  edge,
+                                       GdkDevice     *device,
 				       gint           button,
 				       gint           root_x,
 				       gint           root_y,
@@ -1504,6 +1505,7 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
 
 static void
 gdk_broadway_window_begin_move_drag (GdkWindow *window,
+                                     GdkDevice *device,
 				     gint       button,
 				     gint       root_x,
 				     gint       root_y,
