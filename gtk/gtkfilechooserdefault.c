@@ -7505,7 +7505,7 @@ check_save_entry (GtkFileChooserDefault *impl,
 
   if (!file_part || file_part[0] == '\0')
     {
-      *file_ret = g_object_ref (current_folder);
+      *file_ret = current_folder;
       *is_well_formed_ret = TRUE;
       *is_file_part_empty_ret = TRUE;
       *is_folder = TRUE;
@@ -7517,6 +7517,7 @@ check_save_entry (GtkFileChooserDefault *impl,
 
   error = NULL;
   file = g_file_get_child_for_display_name (current_folder, file_part, &error);
+  g_object_unref (current_folder);
 
   if (!file)
     {
@@ -8816,7 +8817,7 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	  data = g_new0 (struct FileExistsData, 1);
 	  data->impl = g_object_ref (impl);
 	  data->file = g_object_ref (file);
-	  data->parent_file = g_object_ref (_gtk_file_chooser_entry_get_current_folder (entry));
+	  data->parent_file = _gtk_file_chooser_entry_get_current_folder (entry);
 
 	  if (impl->file_exists_get_info_cancellable)
 	    g_cancellable_cancel (impl->file_exists_get_info_cancellable);

@@ -453,6 +453,23 @@ gtk_file_chooser_get_file_for_text (GtkFileChooserEntry *chooser_entry,
   return file;
 }
 
+static GFile *
+gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
+                                         const char *         text)
+{
+  GFile *file, *parent;
+
+  file = gtk_file_chooser_get_file_for_text (chooser_entry, text);
+
+  if (text[0] == 0 || text[strlen (text) - 1] == G_DIR_SEPARATOR)
+    return file;
+
+  parent = g_file_get_parent (file);
+  g_object_unref (file);
+
+  return parent;
+}
+
 static gboolean
 gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
                               const gchar          *str,
@@ -1673,14 +1690,16 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
  * be different.  If the user has entered unparsable text, or text which
  * the entry cannot handle, this will return %NULL.
  *
- * Return value: the file for the current folder - this value is owned by the
- *  chooser entry and must not be modified or freed.
+ * Return value: the file for the current folder - you must g_object_unref()
+ *   the value after use.
  **/
 GFile *
 _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 {
-  commit_completion_and_refresh (chooser_entry);
-  return chooser_entry->current_folder_file;
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry), NULL);
+
+  return gtk_file_chooser_get_directory_for_text (chooser_entry,
+                                                  gtk_entry_get_text (GTK_ENTRY (chooser_entry)));
 }
 
 /**
