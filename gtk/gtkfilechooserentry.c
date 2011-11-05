@@ -439,6 +439,20 @@ has_uri_scheme (const char *str)
   return (strncmp (p, "://", 3) == 0);
 }
 
+static GFile *
+gtk_file_chooser_get_file_for_text (GtkFileChooserEntry *chooser_entry,
+                                    const gchar         *str)
+{
+  GFile *file;
+
+  if (str[0] == '~' || g_path_is_absolute (str) || has_uri_scheme (str))
+    file = g_file_parse_name (str);
+  else
+    file = g_file_resolve_relative_path (chooser_entry->base_folder, str);
+
+  return file;
+}
+
 static gboolean
 gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
                               const gchar          *str,
@@ -456,10 +470,7 @@ gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
 
   last_slash = strrchr (str, G_DIR_SEPARATOR);
 
-  if (str[0] == '~' || g_path_is_absolute (str) || has_uri_scheme (str))
-    file = g_file_parse_name (str);
-  else
-    file = g_file_resolve_relative_path (chooser_entry->base_folder, str);
+  file = gtk_file_chooser_get_file_for_text (chooser_entry, str);
 
   if (g_file_equal (chooser_entry->base_folder, file))
     {
