@@ -323,6 +323,29 @@ get_window_point_from_screen_point (GdkWindow *window,
   *y = window->height - point.y;
 }
 
+static GdkWindow *
+get_toplevel_from_ns_event (NSEvent *nsevent,
+                            NSPoint *screen_point,
+                            gint    *x,
+                            gint    *y)
+{
+  GdkQuartzView *view;
+  GdkWindow *toplevel;
+  NSPoint point;
+
+  view = (GdkQuartzView *)[[nsevent window] contentView];
+
+  toplevel = [view gdkWindow];
+
+  point = [nsevent locationInWindow];
+  *screen_point = [[nsevent window] convertBaseToScreen:point];
+
+  *x = point.x;
+  *y = toplevel->height - point.y;
+
+  return toplevel;
+}
+
 static GdkEvent *
 create_focus_event (GdkWindow *window,
 		    gboolean   in)
@@ -652,20 +675,13 @@ find_window_for_ns_event (NSEvent *nsevent,
                           gint    *y_root)
 {
   GdkQuartzView *view;
-  NSPoint point;
+  GdkWindow *toplevel;
   NSPoint screen_point;
   NSEventType event_type;
-  GdkWindow *toplevel;
 
   view = (GdkQuartzView *)[[nsevent window] contentView];
-  toplevel = [view gdkWindow];
 
-  point = [nsevent locationInWindow];
-  screen_point = [[nsevent window] convertBaseToScreen:point];
-
-  *x = point.x;
-  *y = toplevel->height - point.y;
-
+  toplevel = get_toplevel_from_ns_event (nsevent, &screen_point, x, y);
   _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, x_root, y_root);
 
   event_type = [nsevent type];
