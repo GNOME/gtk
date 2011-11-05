@@ -223,7 +223,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
                               cell, TRUE);
   gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (comp),
                                  cell,
-                                 "text", 0);
+                                 "text", DISPLAY_NAME_COLUMN);
 
   g_signal_connect (comp, "match-selected",
 		    G_CALLBACK (match_selected_callback), chooser_entry);
