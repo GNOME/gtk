@@ -8153,6 +8153,7 @@ typedef struct
   GtkTextView *text_view;
   gint button;
   guint time;
+  GdkDevice *device;
 } PopupInfo;
 
 static gboolean
@@ -8306,9 +8307,9 @@ popup_targets_received (GtkClipboard     *clipboard,
 		     0,
 		     priv->popup_menu);
       
-      if (info->button)
-	gtk_menu_popup (GTK_MENU (priv->popup_menu), NULL, NULL,
-			NULL, NULL,
+      if (info->device)
+	gtk_menu_popup_for_device (GTK_MENU (priv->popup_menu), 
+      info->device, NULL, NULL, NULL, NULL, NULL,
 			info->button, info->time);
       else
 	{
@@ -8339,11 +8340,13 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
     {
       info->button = event->button;
       info->time = event->time;
+      info->device = event->device;
     }
   else
     {
       info->button = 0;
       info->time = gtk_get_current_event_time ();
+      info->device = NULL;
     }
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
