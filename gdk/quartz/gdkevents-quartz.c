@@ -374,11 +374,9 @@ generate_motion_event (GdkWindow *window)
   NSPoint point;
   NSPoint screen_point;
   NSWindow *nswindow;
-  GdkQuartzView *view;
   GdkWindowObject *private;
   GdkEvent *event;
   gint x, y, x_root, y_root;
-  GdkDisplay *display;
 
   event = gdk_event_new (GDK_MOTION_NOTIFY);
   event->any.window = NULL;
@@ -386,9 +384,6 @@ generate_motion_event (GdkWindow *window)
 
   private = (GdkWindowObject *)window;
   nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
-  view = (GdkQuartzView *)[nswindow contentView];
-
-  display = gdk_drawable_get_display (window);
 
   screen_point = [NSEvent mouseLocation];
 
