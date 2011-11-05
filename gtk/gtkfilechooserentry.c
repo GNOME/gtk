@@ -202,6 +202,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkCellRenderer *cell;
 
   chooser_entry->local_only = TRUE;
+  chooser_entry->base_folder = g_file_new_for_path (g_get_home_dir ());
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
@@ -1645,13 +1646,21 @@ void
 _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 					 GFile               *file)
 {
+  if (file)
+    g_object_ref (file);
+  else
+    file = g_file_new_for_path (g_get_home_dir ());
+
+  if (g_file_equal (chooser_entry->base_folder, file))
+    {
+      g_object_unref (file);
+      return;
+    }
+
   if (chooser_entry->base_folder)
     g_object_unref (chooser_entry->base_folder);
 
   chooser_entry->base_folder = file;
-
-  if (chooser_entry->base_folder)
-    g_object_ref (chooser_entry->base_folder);
 
   clear_completions (chooser_entry);
 }
