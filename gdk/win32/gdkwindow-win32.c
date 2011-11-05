@@ -2481,6 +2481,7 @@ gdk_win32_window_set_static_gravities (GdkWindow *window,
 static void
 gdk_win32_window_begin_resize_drag (GdkWindow     *window,
                               GdkWindowEdge  edge,
+                              GdkDevice     *device,
                               gint           button,
                               gint           root_x,
                               gint           root_y,
@@ -2549,6 +2550,7 @@ gdk_win32_window_begin_resize_drag (GdkWindow     *window,
 
 static void
 gdk_win32_window_begin_move_drag (GdkWindow *window,
+                            GdkDevice *device,
                             gint       button,
                             gint       root_x,
                             gint       root_y,
