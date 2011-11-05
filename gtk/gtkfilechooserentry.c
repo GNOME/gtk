@@ -450,44 +450,13 @@ gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
   gboolean result = FALSE;
   gboolean is_dir = FALSE;
   gchar *last_slash = NULL;
-  gboolean is_uri;
 
   if (str && *str)
     is_dir = (str [strlen (str) - 1] == G_DIR_SEPARATOR);
 
   last_slash = strrchr (str, G_DIR_SEPARATOR);
 
-  is_uri = has_uri_scheme (str);
-
-  if (is_uri)
-    {
-      const char *colon;
-      const char *slash_after_hostname;
-
-      colon = strchr (str, ':');
-      g_assert (colon != NULL);
-      g_assert (strncmp (colon, "://", 3) == 0);
-
-      slash_after_hostname = strchr (colon + 3, '/');
-
-      if (slash_after_hostname == NULL)
-	{
-	  /* We don't have a full hostname yet.  So, don't switch the folder
-	   * until we have seen a full hostname.  Otherwise, completion will
-	   * happen for every character the user types for the hostname.
-	   */
-
-	  *folder = NULL;
-	  *file_part = NULL;
-	  g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME,
-		       "Incomplete hostname");
-	  return FALSE;
-	}
-    }
-
-  if (str[0] == '~' || g_path_is_absolute (str) || is_uri)
+  if (str[0] == '~' || g_path_is_absolute (str) || has_uri_scheme (str))
     file = g_file_parse_name (str);
   else
     {
@@ -718,17 +687,6 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   error = NULL;
   if (!find_common_prefix (chooser_entry, &common_prefix, &unique_file, &is_complete_not_unique, &prefix_expands_the_file_part, &error))
     {
-      /* If the user types an incomplete hostname ("http://foo" without
-       * a slash after that), it's not an error.  We just don't want to
-       * pop up a meaningless completion window in that state.
-       */
-      if (!g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME)
-          && show_errors)
-        {
-          beep (chooser_entry);
-          pop_up_completion_feedback (chooser_entry, _("Invalid path"));
-        }
-
       g_error_free (error);
 
       return INVALID_INPUT;
@@ -1491,20 +1449,12 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   if (!gtk_file_chooser_entry_parse (chooser_entry,
 			             text, &folder_file, &file_part, &error))
     {
-      if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME))
-	{
-	  folder_file = NULL;
-	  result = REFRESH_INCOMPLETE_HOSTNAME;
-	}
-      else
-	{
-	  folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
+      folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
 
-	  if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_NONEXISTENT))
-	    result = REFRESH_NONEXISTENT;
-	  else
-	    result = REFRESH_INVALID_INPUT;
-	}
+      if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_NONEXISTENT))
+        result = REFRESH_NONEXISTENT;
+      else
+	result = REFRESH_INVALID_INPUT;
 
       if (error)
 	g_error_free (error);
