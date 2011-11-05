@@ -1105,15 +1105,14 @@ gdk_wayland_window_set_functions (GdkWindow    *window,
 static void
 gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 				      GdkWindowEdge  edge,
+                                      GdkDevice     *device,
 				      gint           button,
 				      gint           root_x,
 				      gint           root_y,
 				      guint32        timestamp)
 {
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *dm;
   GdkWindowImplWayland *impl;
-  GdkDevice *device;
   uint32_t grab_type;
 
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -1161,8 +1160,6 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
     }
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  dm = gdk_display_get_device_manager (display);
-  device = gdk_device_manager_get_client_pointer (dm);
 
   wl_shell_resize(GDK_DISPLAY_WAYLAND (display)->shell, impl->surface,
 		  _gdk_wayland_device_get_device (device),
@@ -1171,24 +1168,20 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 
 static void
 gdk_wayland_window_begin_move_drag (GdkWindow *window,
+                                    GdkDevice *device,
 				    gint       button,
 				    gint       root_x,
 				    gint       root_y,
 				    guint32    timestamp)
 {
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkDeviceManager *dm;
   GdkWindowImplWayland *impl;
-  GdkDevice *device;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  dm = gdk_display_get_device_manager (display);
-  device = gdk_device_manager_get_client_pointer (dm);
 
   wl_shell_move(GDK_DISPLAY_WAYLAND (display)->shell, impl->surface,
 		_gdk_wayland_device_get_device (device), timestamp);
