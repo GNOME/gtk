@@ -240,8 +240,7 @@ gtk_file_chooser_entry_finalize (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
-  if (chooser_entry->base_folder)
-    g_object_unref (chooser_entry->base_folder);
+  g_object_unref (chooser_entry->base_folder);
 
   if (chooser_entry->current_folder_file)
     g_object_unref (chooser_entry->current_folder_file);
@@ -460,22 +459,9 @@ gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
   if (str[0] == '~' || g_path_is_absolute (str) || has_uri_scheme (str))
     file = g_file_parse_name (str);
   else
-    {
-      if (chooser_entry->base_folder)
-	file = g_file_resolve_relative_path (chooser_entry->base_folder, str);
-      else
-	{
-	  *folder = NULL;
-	  *file_part = NULL;
-	  g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		       _("Invalid path"));
-	  return FALSE;
-	}
-    }
+    file = g_file_resolve_relative_path (chooser_entry->base_folder, str);
 
-  if (chooser_entry->base_folder && g_file_equal (chooser_entry->base_folder, file))
+  if (g_file_equal (chooser_entry->base_folder, file))
     {
       /* this is when user types '.', could be the
        * beginning of a hidden file, ./ or ../
@@ -1450,7 +1436,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   if (!gtk_file_chooser_entry_parse (chooser_entry,
 			             text, &folder_file, &file_part, &error))
     {
-      folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
+      folder_file = g_object_ref (chooser_entry->base_folder);
 
       if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_NONEXISTENT))
         result = REFRESH_NONEXISTENT;
