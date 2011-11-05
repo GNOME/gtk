@@ -385,7 +385,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   gboolean return_val;
-  Window xwindow = None;
 
   /* Find the GdkWindow that this event relates to.
    * Basically this means substructure events
@@ -405,7 +404,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       x11_screen = GDK_X11_SCREEN (screen);
       toplevel = _gdk_x11_window_get_toplevel (window);
       window_impl = GDK_WINDOW_IMPL_X11 (window->impl);
-      xwindow = GDK_WINDOW_XID (window);
 
       g_object_ref (window);
     }
@@ -432,7 +430,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           screen = gdk_display_get_screen (display, i);
           x11_screen = GDK_X11_SCREEN (screen);
 
-          if (x11_screen->wmspec_check_window == xwindow)
+          if (x11_screen->wmspec_check_window == xevent->xdestroywindow.window)
             {
               x11_screen->wmspec_check_window = None;
               x11_screen->last_wmspec_check_time = 0;
