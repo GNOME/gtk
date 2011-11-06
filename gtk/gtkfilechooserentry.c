@@ -144,13 +144,8 @@ static gboolean completion_match_func     (GtkEntryCompletion  *comp,
 					   GtkTreeIter         *iter,
 					   gpointer             data);
 
-typedef enum {
-  REFRESH_UP_TO_CURSOR_POSITION,
-  REFRESH_WHOLE_TEXT
-} RefreshMode;
-
 static RefreshStatus refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
-						  RefreshMode refresh_mode);
+						           const char          *text);
 static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
@@ -753,6 +748,7 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       gint        *position)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
+  char *text;
 
   parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
 
@@ -760,7 +756,9 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
     return;
 
   remove_completion_feedback (chooser_entry);
-  refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
+  text = gtk_editable_get_chars (editable, 0, *position);
+  refresh_current_folder_and_file_part (chooser_entry, text);
+  g_free (text);
 }
 
 static void
@@ -1082,9 +1080,12 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
   RefreshStatus status;
   gboolean is_error;
-  char *feedback_msg;
+  char *feedback_msg, *text;
 
-  status = refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
+  text = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry),
+                                 0, gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
+  status = refresh_current_folder_and_file_part (chooser_entry, text);
+  g_free (text);
 
   is_error = FALSE;
 
@@ -1224,7 +1225,7 @@ static void
 commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
 {
   /* Here we ignore the result of refresh_current_folder_and_file_part(); there is nothing we can do with it */
-  refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
+  refresh_current_folder_and_file_part (chooser_entry, gtk_entry_get_text (GTK_ENTRY (chooser_entry)));
 }
 
 static void
@@ -1403,36 +1404,14 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 
 static RefreshStatus
 refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
-				      RefreshMode          refresh_mode)
+				      const gchar *        text)
 {
-  GtkEditable *editable;
-  gint end_pos;
-  gchar *text;
   GFile *folder_file;
   gchar *file_part;
   gsize total_len, file_part_len;
   gint file_part_pos;
   GError *error;
   RefreshStatus result;
-
-  editable = GTK_EDITABLE (chooser_entry);
-
-  switch (refresh_mode)
-    {
-    case REFRESH_UP_TO_CURSOR_POSITION:
-      end_pos = gtk_editable_get_position (editable);
-      break;
-
-    case REFRESH_WHOLE_TEXT:
-      end_pos = gtk_entry_get_text_length (GTK_ENTRY (chooser_entry));
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return REFRESH_INVALID_INPUT;
-    }
-
-  text = gtk_editable_get_chars (editable, 0, end_pos);
 
   error = NULL;
   if (!gtk_file_chooser_entry_parse (chooser_entry,
@@ -1471,8 +1450,6 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   chooser_entry->dir_part = file_part_pos > 0 ? g_strndup (text, file_part_pos) : g_strdup ("");
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;
-
-  g_free (text);
 
   if (result == REFRESH_OK)
     {
