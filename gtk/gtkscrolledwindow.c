@@ -2956,6 +2956,10 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
 
   event = (GdkEventButton *)_event;
 
+  if (!priv->vscrollbar_visible &&
+      !priv->hscrollbar_visible)
+    return FALSE;
+
   /* Check whether the button press is close to the previous one,
    * take that as a shortcut to get the child widget handle events
    */
