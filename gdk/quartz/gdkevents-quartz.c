@@ -1062,11 +1062,12 @@ test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
   GdkWindowObject *toplevel_private;
   GdkWindowImplQuartz *toplevel_impl;
   gboolean lion;
+
   /* Resizing only begins if an NSLeftMouseButton event is received in
    * the resizing area. Handle anything else.
    */
   if ([event type] != NSLeftMouseDown)
-      return FALSE;
+    return FALSE;
 
   toplevel_private = (GdkWindowObject *)toplevel;
   toplevel_impl = (GdkWindowImplQuartz *)toplevel_private->impl;
@@ -1085,14 +1086,13 @@ test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
        * is too important to not make functional.
        */
       frame = [toplevel_impl->view bounds];
-      if (x > frame.size.width - GRIP_WIDTH
-	  && x < frame.size.width
-	  && y > frame.size.height - GRIP_HEIGHT
-	  && y < frame.size.height)
-	{
-	  return TRUE;
-	}
+      if (x > frame.size.width - GRIP_WIDTH &&
+          x < frame.size.width &&
+          y > frame.size.height - GRIP_HEIGHT &&
+          y < frame.size.height)
+        return TRUE;
      }
+
   /* If we're on Lion and within 5 pixels of an edge,
    * then assume that the user wants to resize, and
    * return NULL to let Quartz get on with it. We check
@@ -1100,14 +1100,12 @@ test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
    * This extra check is in case the user starts
    * dragging before GDK recognizes the grab.
    */
-
-  lion = gdk_quartz_osx_version() >= GDK_OSX_LION;
+  lion = gdk_quartz_osx_version () >= GDK_OSX_LION;
   if (lion && (x < GDK_LION_RESIZE ||
-	       x > toplevel_private->width - GDK_LION_RESIZE ||
-	       y > toplevel_private->height - GDK_LION_RESIZE))
-    {
-      return TRUE;
-    }
+               x > toplevel_private->width - GDK_LION_RESIZE ||
+               y > toplevel_private->height - GDK_LION_RESIZE))
+    return TRUE;
+
   return FALSE;
 }
 
@@ -1217,8 +1215,9 @@ gdk_event_translate (GdkEvent *event,
   window = find_window_for_ns_event (nsevent, &x, &y, &x_root, &y_root);
   if (!window)
     return FALSE;
+
   /* Quartz handles resizing on its own, so we want to stay out of the way. */
-  if (test_resize(nsevent, window, x, y))
+  if (test_resize (nsevent, window, x, y))
     return FALSE;
 
   /* Apply any window filters. */
