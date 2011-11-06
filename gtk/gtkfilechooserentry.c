@@ -48,7 +48,6 @@ struct _GtkFileChooserEntryClass
 /* Action to take when the current folder finishes loading (for explicit or automatic completion) */
 typedef enum {
   LOAD_COMPLETE_NOTHING,
-  LOAD_COMPLETE_AUTOCOMPLETE,
   LOAD_COMPLETE_EXPLICIT_COMPLETION
 } LoadCompleteAction;
 
@@ -82,7 +81,6 @@ struct _GtkFileChooserEntry
   guint completion_feedback_timeout_id;
 
   guint current_folder_loaded : 1;
-  guint has_completion : 1;
   guint in_change      : 1;
   guint eat_tabs       : 1;
   guint local_only     : 1;
@@ -153,8 +151,6 @@ static RefreshStatus refresh_current_folder_and_file_part (GtkFileChooserEntry *
 static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
-static void autocomplete (GtkFileChooserEntry *chooser_entry);
-static void start_autocompletion (GtkFileChooserEntry *chooser_entry);
 static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
 static void pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
 					const gchar         *feedback);
@@ -382,7 +378,6 @@ completion_match_func (GtkEntryCompletion *comp,
 static void
 clear_completions (GtkFileChooserEntry *chooser_entry)
 {
-  chooser_entry->has_completion = FALSE;
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 
   remove_completion_feedback (chooser_entry);
@@ -660,9 +655,7 @@ typedef enum {
  * and mandatorily appends it
  */
 static CommonPrefixResult
-append_common_prefix (GtkFileChooserEntry *chooser_entry,
-                      gboolean             highlight,
-                      gboolean             show_errors)
+append_common_prefix (GtkFileChooserEntry *chooser_entry)
 {
   gchar *common_prefix;
   GFile *unique_file;
@@ -726,16 +719,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
                                     &pos);
           chooser_entry->in_change = FALSE;
 
-          if (highlight)
-            {
-              /* equivalent to cursor_pos + common_prefix_len); */
-              gtk_editable_select_region (GTK_EDITABLE (chooser_entry),
-                                          cursor_pos,
-                                          pos);
-              chooser_entry->has_completion = TRUE;
-            }
-          else
-            gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
+          gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
         }
       else if (!have_result)
         {
@@ -766,11 +750,6 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       gint        *position)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-  gint old_text_len;
-  gint insert_pos;
-
-  old_text_len = gtk_entry_get_text_length (GTK_ENTRY (chooser_entry));
-  insert_pos = *position;
 
   parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
 
@@ -778,11 +757,7 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
     return;
 
   remove_completion_feedback (chooser_entry);
-
-  if ((chooser_entry->action == GTK_FILE_CHOOSER_ACTION_OPEN
-       || chooser_entry->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-      && insert_pos == old_text_len)
-    start_autocompletion (chooser_entry);
+  refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 }
 
 static void
@@ -1055,7 +1030,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
    * - If there are no matches at all, beep and bring up a tooltip (done)
    * - If the suggestion window is already up, scroll it
    */
-  result = append_common_prefix (chooser_entry, FALSE, TRUE);
+  result = append_common_prefix (chooser_entry);
 
   switch (result)
     {
@@ -1198,13 +1173,11 @@ gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
 {
   GtkFileChooserEntry *chooser_entry;
   GtkEditable *editable;
-  GtkEntry *entry;
   GdkModifierType state;
   gboolean control_pressed;
 
   chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
-  entry = GTK_ENTRY (widget);
 
   if (!chooser_entry->eat_tabs)
     return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->key_press_event (widget, event);
@@ -1221,8 +1194,12 @@ gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
    * makes it 'safe' for people to hit. */
   if (event->keyval == GDK_KEY_Tab && !control_pressed)
     {
-      if (chooser_entry->has_completion)
-	gtk_editable_set_position (editable, gtk_entry_get_text_length (entry));
+      gint start, end;
+
+      gtk_editable_get_selection_bounds (editable, &start, &end);
+      
+      if (start != end)
+        gtk_editable_set_position (editable, MAX (start, end));
       else
 	start_explicit_completion (chooser_entry);
 
@@ -1247,12 +1224,6 @@ gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
 static void
 commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
 {
-  if (chooser_entry->has_completion)
-    {
-      gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
-				 gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)));
-    }
-
   /* Here we ignore the result of refresh_current_folder_and_file_part(); there is nothing we can do with it */
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
 }
@@ -1273,6 +1244,7 @@ discard_completion_store (GtkFileChooserEntry *chooser_entry)
     return;
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
+  gtk_entry_completion_set_inline_completion (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), FALSE);
   g_object_unref (chooser_entry->completion_store);
   chooser_entry->completion_store = NULL;
 }
@@ -1342,7 +1314,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 }
 
 /* When we finish loading the current folder, this function should get called to
- * perform the deferred autocompletion or explicit completion.
+ * perform the deferred explicit completion.
  */
 static void
 perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
@@ -1350,10 +1322,6 @@ perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
   switch (chooser_entry->load_complete_action)
     {
     case LOAD_COMPLETE_NOTHING:
-      break;
-
-    case LOAD_COMPLETE_AUTOCOMPLETE:
-      autocomplete (chooser_entry);
       break;
 
     case LOAD_COMPLETE_EXPLICIT_COMPLETION:
@@ -1373,6 +1341,8 @@ finished_loading_cb (GtkFileSystemModel  *model,
                      GError              *error,
 		     GtkFileChooserEntry *chooser_entry)
 {
+  GtkEntryCompletion *completion;
+
   chooser_entry->current_folder_loaded = TRUE;
 
   if (error)
@@ -1398,6 +1368,11 @@ finished_loading_cb (GtkFileSystemModel  *model,
   perform_load_complete_action (chooser_entry);
 
   gtk_widget_set_tooltip_text (GTK_WIDGET (chooser_entry), NULL);
+
+  completion = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
+  gtk_entry_completion_set_inline_completion (completion, TRUE);
+  gtk_entry_completion_complete (completion);
+  gtk_entry_completion_insert_prefix (completion);
 }
 
 static RefreshStatus
@@ -1520,49 +1495,6 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 		&& (chooser_entry->current_folder_file == NULL)));
 
   return result;
-}
-
-static void
-autocomplete (GtkFileChooserEntry *chooser_entry)
-{
-  if (!(chooser_entry->current_folder_loaded
-	&& gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == gtk_entry_get_text_length (GTK_ENTRY (chooser_entry))))
-    return;
-
-  append_common_prefix (chooser_entry, TRUE, FALSE);
-}
-
-static void
-start_autocompletion (GtkFileChooserEntry *chooser_entry)
-{
-  RefreshStatus status;
-
-  status = refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
-
-  switch (status)
-    {
-    case REFRESH_OK:
-      g_assert (chooser_entry->current_folder_file != NULL);
-
-      if (chooser_entry->current_folder_loaded)
-	autocomplete (chooser_entry);
-      else
-	chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
-
-      break;
-
-    case REFRESH_INVALID_INPUT:
-    case REFRESH_INCOMPLETE_HOSTNAME:
-    case REFRESH_NONEXISTENT:
-    case REFRESH_NOT_LOCAL:
-      /* We don't beep or anything, since this is autocompletion - the user
-       * didn't request any action explicitly.
-       */
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
 }
 
 #ifdef G_OS_WIN32
