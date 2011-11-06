@@ -168,7 +168,6 @@ struct _GtkScrolledWindowPrivate
   guint    hide_scrollbars_id;
 
   /* Kinetic scrolling */
-  GdkWindow             *event_window;
   GdkEvent              *button_press_event;
   guint                  kinetic_scrolling_enabled : 1;
   guint                  in_drag                   : 1;
@@ -222,10 +221,6 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
                                                         GParamSpec        *pspec);
 
 static void     gtk_scrolled_window_destroy            (GtkWidget         *widget);
-static void     gtk_scrolled_window_realize            (GtkWidget         *widget);
-static void     gtk_scrolled_window_unrealize          (GtkWidget         *widget);
-static void     gtk_scrolled_window_map                (GtkWidget         *widget);
-static void     gtk_scrolled_window_unmap              (GtkWidget         *widget);
 static void     gtk_scrolled_window_screen_changed     (GtkWidget         *widget,
                                                         GdkScreen         *previous_screen);
 static gboolean gtk_scrolled_window_draw               (GtkWidget         *widget,
@@ -335,10 +330,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   gobject_class->get_property = gtk_scrolled_window_get_property;
 
   widget_class->destroy = gtk_scrolled_window_destroy;
-  widget_class->realize = gtk_scrolled_window_realize;
-  widget_class->unrealize = gtk_scrolled_window_unrealize;
-  widget_class->map = gtk_scrolled_window_map;
-  widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->screen_changed = gtk_scrolled_window_screen_changed;
   widget_class->draw = gtk_scrolled_window_draw;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
@@ -1132,8 +1123,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
   priv->kinetic_scrolling_enabled = enable;
   if (priv->kinetic_scrolling_enabled)
     {
-      if (priv->event_window)
-        gdk_window_show (priv->event_window);
       motion_event_list_init (&priv->motion_events, 3);
       priv->button_press_id =
         g_signal_connect (scrolled_window, "captured-event",
@@ -1182,8 +1171,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
           priv->release_timeout_id = 0;
         }
       motion_event_list_clear (&priv->motion_events);
-      if (priv->event_window)
-        gdk_window_hide (priv->event_window);
 
       /* Restore the scrollbars */
       gtk_scrolled_window_auto_hide_scrollbars_stop (scrolled_window);
@@ -1275,83 +1262,6 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
   gtk_scrolled_window_auto_hide_scrollbars_stop (scrolled_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
-}
-
-static void
-gtk_scrolled_window_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
-  gint border_width;
-  GtkScrolledWindowPrivate *priv;
-
-  priv = GTK_SCROLLED_WINDOW (widget)->priv;
-
-  gtk_widget_set_realized (widget, TRUE);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  gtk_widget_get_allocation (widget, &allocation);
-
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x + border_width;
-  attributes.y = allocation.y + border_width;
-  attributes.width = allocation.width - 2 * border_width;
-  attributes.height = allocation.height - 2 * border_width;
-  attributes.wclass = GDK_INPUT_ONLY;
-  attributes.event_mask = gtk_widget_get_events (widget)
-                        | GDK_BUTTON_PRESS_MASK
-                        | GDK_BUTTON_RELEASE_MASK
-                        | GDK_BUTTON1_MOTION_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  priv->event_window = gdk_window_new (window, &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, widget);
-}
-
-static void
-gtk_scrolled_window_unrealize (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-
-  if (priv->event_window)
-    {
-      gdk_window_set_user_data (priv->event_window, NULL);
-      gdk_window_destroy (priv->event_window);
-      priv->event_window = NULL;
-    }
-
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_scrolled_window_map (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-
-  if (priv->kinetic_scrolling_enabled && priv->event_window)
-    gdk_window_show (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
-}
-
-static void
-gtk_scrolled_window_unmap (GtkWidget *widget)
-{
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-
-  if (priv->event_window)
-    gdk_window_hide (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
 }
 
 static void
@@ -2078,16 +1988,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       priv->hscrollbar_visible = priv->hscrollbar_policy == GTK_POLICY_ALWAYS;
       priv->vscrollbar_visible = priv->vscrollbar_policy == GTK_POLICY_ALWAYS;
       gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
-    }
-
-  if (priv->event_window)
-    {
-      gdk_window_move_resize (priv->event_window,
-                              relative_allocation.x + allocation->x,
-                              relative_allocation.y + allocation->y,
-                              relative_allocation.width,
-                              relative_allocation.height);
-
     }
 
   if (priv->hscrollbar_visible)
@@ -3087,14 +2987,13 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
 
   device = gdk_event_get_device (_event);
   gdk_device_grab (device,
-                   priv->event_window,
+                   gtk_widget_get_window (widget),
                    GDK_OWNERSHIP_WINDOW,
                    TRUE,
                    GDK_BUTTON_RELEASE_MASK | GDK_BUTTON1_MOTION_MASK,
                    NULL,
                    event->time);
   gtk_device_grab_add (widget, device, TRUE);
-  gdk_window_lower (priv->event_window);
 
   /* Reset motion buffer */
   motion_event_list_reset (&priv->motion_events);
