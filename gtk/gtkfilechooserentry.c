@@ -298,36 +298,23 @@ match_selected_callback (GtkEntryCompletion  *completion,
 			 GtkTreeIter         *iter,
 			 GtkFileChooserEntry *chooser_entry)
 {
-  char *display_name;
-  GFile *file;
-  gint pos;
+  char *path;
   
   gtk_tree_model_get (model, iter,
-		      DISPLAY_NAME_COLUMN, &display_name,
-		      FILE_COLUMN, &file,
-		      -1);
-
-  if (!display_name || !file)
-    {
-      /* these shouldn't complain if passed NULL */
-      g_object_unref (file);
-      g_free (display_name);
-      return FALSE;
-    }
-
-  pos = chooser_entry->file_part_pos;
+		      FULL_PATH_COLUMN, &path,
+                      -1);
 
   /* We don't set in_change here as we want to update the current_folder
    * variable */
   gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-			    pos, -1);
+			    0,
+                            gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
   gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-			    display_name, -1, 
-			    &pos);
-  gtk_editable_set_position (GTK_EDITABLE (chooser_entry), -1);
+			    path,
+                            0,
+                            NULL); 
 
-  g_object_unref (file);
-  g_free (display_name);
+  g_free (path);
 
   return TRUE;
 }
