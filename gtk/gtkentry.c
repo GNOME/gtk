@@ -2382,6 +2382,8 @@ begin_change (GtkEntry *entry)
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   priv->change_count++;
+
+  g_object_freeze_notify (G_OBJECT (entry));
 }
 
 static void
@@ -2391,6 +2393,8 @@ end_change (GtkEntry *entry)
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
  
   g_return_if_fail (priv->change_count > 0);
+
+  g_object_thaw_notify (G_OBJECT (entry));
 
   priv->change_count--;
 
@@ -4537,7 +4541,11 @@ gtk_entry_real_insert_text (GtkEditable *editable,
    * following signal handlers: buffer_inserted_text(), buffer_notify_display_text(),
    * buffer_notify_text(), buffer_notify_length()
    */
+  begin_change (GTK_ENTRY (editable));
+
   n_inserted = gtk_entry_buffer_insert_text (get_buffer (GTK_ENTRY (editable)), *position, new_text, n_chars);
+
+  end_change (GTK_ENTRY (editable));
 
   if (n_inserted != n_chars)
       gtk_widget_error_bell (GTK_WIDGET (editable));
@@ -4556,7 +4564,11 @@ gtk_entry_real_delete_text (GtkEditable *editable,
    * buffer_notify_text(), buffer_notify_length()
    */
 
+  begin_change (GTK_ENTRY (editable));
+
   gtk_entry_buffer_delete_text (get_buffer (GTK_ENTRY (editable)), start_pos, end_pos - start_pos);
+
+  end_change (GTK_ENTRY (editable));
 }
 
 /* GtkEntryBuffer signal handlers
@@ -6312,14 +6324,12 @@ paste_received (GtkClipboard *clipboard,
 	}
 
       begin_change (entry);
-      g_object_freeze_notify (G_OBJECT (entry));
       if (gtk_editable_get_selection_bounds (editable, &start, &end))
         gtk_editable_delete_text (editable, start, end);
 
       pos = entry->current_pos;
       gtk_editable_insert_text (editable, text, length, &pos);
       gtk_editable_set_position (editable, pos);
-      g_object_thaw_notify (G_OBJECT (entry));
       end_change (entry);
 
       if (completion &&
@@ -6797,11 +6807,9 @@ gtk_entry_set_text (GtkEntry    *entry,
     g_signal_handler_block (entry, completion->priv->changed_id);
 
   begin_change (entry);
-  g_object_freeze_notify (G_OBJECT (entry));
   gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
   tmp_pos = 0;
   gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
-  g_object_thaw_notify (G_OBJECT (entry));
   end_change (entry);
 
   if (completion && completion->priv->changed_id > 0)
@@ -8995,10 +9003,8 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
 	{
 	  /* Replacing selection */
           begin_change (entry);
-          g_object_freeze_notify (G_OBJECT (entry));
 	  gtk_editable_delete_text (editable, sel1, sel2);
 	  gtk_editable_insert_text (editable, str, length, &sel1);
-          g_object_thaw_notify (G_OBJECT (entry));
           end_change (entry);
 	}
       
