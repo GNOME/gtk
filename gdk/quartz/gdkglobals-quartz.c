@@ -31,14 +31,13 @@ GdkOSXVersion
 gdk_quartz_osx_version (void)
 {
   gint minor;
-  OSErr err = Gestalt(gestaltSystemVersionMinor, &minor);
-  g_return_val_if_fail(err == noErr, GDK_OSX_UNSUPPORTED);
+  OSErr err = Gestalt (gestaltSystemVersionMinor, &minor);
+  g_return_val_if_fail (err == noErr, GDK_OSX_UNSUPPORTED);
 
   if (minor < GDK_OSX_MIN)
-      return GDK_OSX_UNSUPPORTED;
+    return GDK_OSX_UNSUPPORTED;
   else if (minor > GDK_OSX_CURRENT)
-      return GDK_OSX_NEW;
+    return GDK_OSX_NEW;
   else
-      return minor;
-
+    return minor;
 }
