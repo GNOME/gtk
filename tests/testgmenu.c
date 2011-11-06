@@ -27,10 +27,7 @@
  *
  * - Labeled sections
  *
- * - More dynamic changes. Add/Remove sections, submenus.
- *
- * - Focus changes. Verify that stopping subscriptions works
- *   as intended.
+ * - Focus changes. Verify that stopping subscriptions works.
  *
  * - Other attributes. What about icons ?
  */
@@ -754,6 +751,36 @@ toggle_sumerian (GtkToggleButton *button, gpointer data)
 }
 
 static void
+action_list_add (GtkTreeModel *store,
+                 const gchar  *action)
+{
+  GtkTreeIter iter;
+
+  gtk_list_store_append (GTK_LIST_STORE (store), &iter);
+  gtk_list_store_set (GTK_LIST_STORE (store), &iter, 0, action, -1);
+}
+
+static void
+action_list_remove (GtkTreeModel *store,
+                    const gchar  *action)
+{
+  GtkTreeIter iter;
+  gchar *text;
+
+  gtk_tree_model_get_iter_first (store, &iter);
+  do {
+    gtk_tree_model_get (store, &iter, 0, &text, -1);
+    if (g_strcmp0 (action, text) == 0)
+      {
+        g_free (text);
+        gtk_list_store_remove (GTK_LIST_STORE (store), &iter);
+        break;
+      }
+    g_free (text);
+  } while (gtk_tree_model_iter_next (store, &iter));
+}
+
+static void
 toggle_italic (GtkToggleButton *button, gpointer data)
 {
   GMenuModel *model;
@@ -763,7 +790,6 @@ toggle_italic (GtkToggleButton *button, gpointer data)
   GMenuModel *m;
   GtkTreeView *tv = data;
   GtkTreeModel *store;
-  GtkTreeIter iter;
 
   model = g_object_get_data (G_OBJECT (button), "model");
   group = g_object_get_data (G_OBJECT (button), "group");
@@ -779,21 +805,68 @@ toggle_italic (GtkToggleButton *button, gpointer data)
       g_simple_action_group_insert (G_SIMPLE_ACTION_GROUP (group), G_ACTION (action));
       g_signal_connect (action, "change-state", G_CALLBACK (toggle_changed), NULL);
       g_object_unref (action);
+      action_list_add (store, "italic");
       g_menu_insert (G_MENU (m), 1, "Italic", "italic");
-      gtk_list_store_prepend (GTK_LIST_STORE (store), &iter);
-      gtk_list_store_set (GTK_LIST_STORE (store), &iter,
-                          0, "italic",
-                          -1);
     }
   else
     {
       g_simple_action_group_remove (G_SIMPLE_ACTION_GROUP (group), "italic");
+      action_list_remove (store, "italic");
       g_menu_remove (G_MENU (m), 1);
-      gtk_tree_model_get_iter_first (store, &iter);
-      gtk_list_store_remove (GTK_LIST_STORE (store), &iter);
     }
 }
 
+static void
+toggle_speed (GtkToggleButton *button, gpointer data)
+{
+  GMenuModel *model;
+  GActionGroup *group;
+  GSimpleAction *action;
+  gboolean adding;
+  GMenuModel *m;
+  GMenu *submenu;
+  GtkTreeView *tv = data;
+  GtkTreeModel *store;
+
+  model = g_object_get_data (G_OBJECT (button), "model");
+  group = g_object_get_data (G_OBJECT (button), "group");
+
+  store = gtk_tree_view_get_model (tv);
+
+  adding = gtk_toggle_button_get_active (button);
+
+  m = g_menu_model_get_item_link (model, 1, G_MENU_LINK_SECTION);
+  if (adding)
+    {
+      action = g_simple_action_new ("faster", NULL);
+      g_simple_action_group_insert (G_SIMPLE_ACTION_GROUP (group), G_ACTION (action));
+      g_signal_connect (action, "activate", G_CALLBACK (activate_action), NULL);
+      g_object_unref (action);
+
+      action = g_simple_action_new ("slower", NULL);
+      g_simple_action_group_insert (G_SIMPLE_ACTION_GROUP (group), G_ACTION (action));
+      g_signal_connect (action, "activate", G_CALLBACK (activate_action), NULL);
+      g_object_unref (action);
+
+      action_list_add (store, "faster");
+      action_list_add (store, "slower");
+
+      submenu = g_menu_new ();
+      g_menu_append (submenu, "Faster", "faster");
+      g_menu_append (submenu, "Slower", "slower");
+      g_menu_append_submenu (G_MENU (m), "Speed", G_MENU_MODEL (submenu));
+    }
+  else
+    {
+      g_simple_action_group_remove (G_SIMPLE_ACTION_GROUP (group), "faster");
+      g_simple_action_group_remove (G_SIMPLE_ACTION_GROUP (group), "slower");
+
+      action_list_remove (store, "faster");
+      action_list_remove (store, "slower");
+
+      g_menu_remove (G_MENU (m), g_menu_model_get_n_items (m) - 1);
+    }
+}
 static GtkWidget *
 create_add_remove_buttons (GActionGroup *group,
                            GMenuModel   *model,
@@ -822,6 +895,14 @@ create_add_remove_buttons (GActionGroup *group,
   g_signal_connect (button, "toggled",
                     G_CALLBACK (toggle_sumerian), NULL);
 
+  button = gtk_check_button_new_with_label ("Add Speed");
+  gtk_container_add (GTK_CONTAINER (box), button);
+
+  g_object_set_data  (G_OBJECT (button), "group", group);
+  g_object_set_data  (G_OBJECT (button), "model", model);
+
+  g_signal_connect (button, "toggled",
+                    G_CALLBACK (toggle_speed), treeview);
   return box;
 }
 
