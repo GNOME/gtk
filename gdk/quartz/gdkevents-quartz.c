@@ -52,6 +52,12 @@ static int          current_button_state;
 static void append_event                        (GdkEvent  *event,
                                                  gboolean   windowing);
 
+static GdkWindow *find_toplevel_under_pointer   (GdkDisplay *display,
+                                                 NSPoint     screen_point,
+                                                 gint       *x,
+                                                 gint       *y);
+
+
 NSEvent *
 gdk_quartz_event_get_nsevent (GdkEvent *event)
 {
@@ -379,21 +385,36 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
                             gint    *x,
                             gint    *y)
 {
-  GdkQuartzView *view;
   GdkWindow *toplevel;
-  GdkWindowObject *private;
-  NSPoint point;
 
-  view = (GdkQuartzView *)[[nsevent window] contentView];
+  if ([nsevent window])
+    {
+      GdkQuartzView *view;
+      GdkWindowObject *private;
+      NSPoint point;
 
-  toplevel = [view gdkWindow];
-  private = GDK_WINDOW_OBJECT (toplevel);
+      view = (GdkQuartzView *)[[nsevent window] contentView];
 
-  point = [nsevent locationInWindow];
-  *screen_point = [[nsevent window] convertBaseToScreen:point];
+      toplevel = [view gdkWindow];
+      private = GDK_WINDOW_OBJECT (toplevel);
 
-  *x = point.x;
-  *y = private->height - point.y;
+      point = [nsevent locationInWindow];
+      *screen_point = [[nsevent window] convertBaseToScreen:point];
+
+      *x = point.x;
+      *y = private->height - point.y;
+    }
+  else
+    {
+      /* Fallback used when no NSWindow set.  This happens e.g. when
+       * we allow motion events without a window set in gdk_event_translate()
+       * that occur immediately after the main menu bar was clicked/used.
+       */
+      *screen_point = [NSEvent mouseLocation];
+      toplevel = find_toplevel_under_pointer (_gdk_display,
+                                              *screen_point,
+                                              x, y);
+    }
 
   return toplevel;
 }
@@ -1153,9 +1174,32 @@ gdk_event_translate (GdkEvent *event,
 
   nswindow = [nsevent window];
 
-  /* Ignore events for no window or ones not created by GDK. */
-  if (!nswindow || ![[nswindow contentView] isKindOfClass:[GdkQuartzView class]])
+  /* Ignore events for windows not created by GDK. */
+  if (nswindow && ![[nswindow contentView] isKindOfClass:[GdkQuartzView class]])
     return FALSE;
+
+  /* Ignore events for ones with no windows */
+  if (!nswindow)
+    {
+      GdkWindow *toplevel = NULL;
+
+      if (event_type == NSMouseMoved)
+        {
+          /* Motion events received after clicking the menu bar do not have the
+           * window field set.  Instead of giving up on the event immediately,
+           * we first check whether this event is within our window bounds.
+           */
+          NSPoint screen_point = [NSEvent mouseLocation];
+          gint x_tmp, y_tmp;
+
+          toplevel = find_toplevel_under_pointer (_gdk_display,
+                                                  screen_point,
+                                                  &x_tmp, &y_tmp);
+        }
+
+      if (!toplevel)
+        return FALSE;
+    }
 
   /* Ignore events and break grabs while the window is being
    * dragged. This is a workaround for the window getting events for
