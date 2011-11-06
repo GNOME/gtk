@@ -124,7 +124,7 @@ static NSAutoreleasePool *autorelease_pool;
  * a run loop iteration, so we need to detect that and avoid triggering
  * our "run the GLib main looop while the run loop is active machinery.
  */
-static gboolean getting_events;
+static gint getting_events = 0;
 
 /************************************************************
  *********              Select Thread               *********
@@ -632,17 +632,18 @@ gdk_event_check (GSource *source)
 
   GDK_THREADS_ENTER ();
 
-/* Refresh the autorelease pool if we're at the base CFRunLoop level
- * (indicated by current_loop_level) and the base g_main_loop level
- * (indicated by g_main_depth()). Messing with the autorelease pool at
- * any level of nesting can cause access to deallocated memory because
- * autorelease_pool is static and releasing a pool will cause all
- * pools allocated inside of it to be released as well.
- */
+  /* Refresh the autorelease pool if we're at the base CFRunLoop level
+   * (indicated by current_loop_level) and the base g_main_loop level
+   * (indicated by g_main_depth()). Messing with the autorelease pool at
+   * any level of nesting can cause access to deallocated memory because
+   * autorelease_pool is static and releasing a pool will cause all pools
+   * allocated inside of it to be released as well.
+   */
   if (current_loop_level == 0 && g_main_depth() == 0)
     {
       if (autorelease_pool)
-	[autorelease_pool release];
+        [autorelease_pool drain];
+
       autorelease_pool = [[NSAutoreleasePool alloc] init];
     }
 
@@ -710,12 +711,12 @@ poll_func (GPollFD *ufds,
   else
     limit_date = [NSDate dateWithTimeIntervalSinceNow:timeout_/1000.0];
 
-  getting_events = TRUE;
+  getting_events++;
   event = [NSApp nextEventMatchingMask: NSAnyEventMask
 	                     untilDate: limit_date
 	                        inMode: NSDefaultRunLoopMode
                                dequeue: YES];
-  getting_events = FALSE;
+  getting_events--;
 
   if (n_ready < 0)
     n_ready = select_thread_collect_poll (ufds, nfds);
@@ -776,8 +777,6 @@ query_main_context (GMainContext *context,
 static void
 run_loop_entry (void)
 {
-  current_loop_level++;
-
   if (acquired_loop_level == -1)
     {
       if (g_main_context_acquire (NULL))
@@ -926,16 +925,13 @@ run_loop_after_waiting (void)
 static void
 run_loop_exit (void)
 {
-  g_return_if_fail (current_loop_level > 0);
-
-  if (current_loop_level == acquired_loop_level)
+  /* + 1 because we decrement current_loop_level separately in observer_callback() */
+  if ((current_loop_level + 1) == acquired_loop_level)
     {
       g_main_context_release (NULL);
       acquired_loop_level = -1;
       GDK_NOTE (EVENTLOOP, g_print ("EventLoop: Ended tracking run loop activity\n"));
     }
-  
-  current_loop_level--;
 }
 
 static void
@@ -943,9 +939,22 @@ run_loop_observer_callback (CFRunLoopObserverRef observer,
 			    CFRunLoopActivity    activity,
 			    void                *info)
 {
-  if (getting_events) /* Activity we triggered */
+  switch (activity)
+    {
+    case kCFRunLoopEntry:
+      current_loop_level++;
+      break;
+    case kCFRunLoopExit:
+      g_return_if_fail (current_loop_level > 0);
+      current_loop_level--;
+      break;
+    default:
+      break;
+    }
+
+  if (getting_events > 0) /* Activity we triggered */
     return;
-  
+
   switch (activity)
     {
     case kCFRunLoopEntry:
