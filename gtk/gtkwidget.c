@@ -545,11 +545,6 @@ typedef struct
   GtkWidget *popup;
   guint delay_animation_id;
 
-  /* signal handlers */
-  guint motion_id;
-  guint button_release_id;
-  guint grab_notify_id;
-
   gint start_x;
   gint start_y;
   gint current_x;
@@ -665,8 +660,6 @@ static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widg
 static void             gtk_widget_real_set_has_tooltip         (GtkWidget *widget,
 								 gboolean   has_tooltip,
 								 gboolean   force);
-static gboolean         gtk_widget_press_and_hold_start         (GtkWidget      *widget,
-                                                                 GdkEventButton *button);
 static void             gtk_widget_buildable_interface_init     (GtkBuildableIface *iface);
 static void             gtk_widget_buildable_set_name           (GtkBuildable     *buildable,
                                                                  const gchar      *name);
@@ -727,6 +720,9 @@ static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
                                                     gboolean   recurse,
                                                     gboolean   enabled);
 static gboolean event_window_is_still_viewable (GdkEvent *event);
+
+static gboolean gtk_widget_press_and_hold_cancel (GtkWidget *widget);
+
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -6011,15 +6007,6 @@ _gtk_widget_captured_event (GtkWidget *widget,
 
   g_object_ref (widget);
 
-  if ((event->type == GDK_BUTTON_PRESS ||
-       event->type == GDK_TOUCH_PRESS) &&
-      event->button.button == 1)
-    {
-      /* Handle press and hold */
-      gtk_widget_press_and_hold_start (widget,
-                                       (GdkEventButton *)event);
-    }
-
   g_signal_emit (widget, widget_signals[CAPTURED_EVENT], 0, event, &return_val);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
@@ -6565,6 +6552,14 @@ void
 _gtk_widget_grab_notify (GtkWidget *widget,
 			 gboolean   was_grabbed)
 {
+  PressAndHoldData *data;
+
+  data = g_object_get_qdata (G_OBJECT (widget), quark_press_and_hold);
+
+  if (data && data->device &&
+      gtk_widget_device_is_shadowed (widget, data->device))
+    gtk_widget_press_and_hold_cancel (widget);
+
   g_signal_emit (widget, widget_signals[GRAB_NOTIFY], 0, was_grabbed);
 }
 
@@ -6896,15 +6891,6 @@ press_and_hold_data_free (PressAndHoldData *data)
   if (data->delay_animation_id)
     g_source_remove (data->delay_animation_id);
 
-  if (data->motion_id)
-    g_signal_handler_disconnect (data->widget, data->motion_id);
-
-  if (data->button_release_id)
-    g_signal_handler_disconnect (data->widget, data->button_release_id);
-
-  if (data->grab_notify_id)
-    g_signal_handler_disconnect (data->widget, data->grab_notify_id);
-
   g_slice_free (PressAndHoldData, data);
 }
 
@@ -6955,43 +6941,43 @@ gtk_widget_press_and_hold_cancel (GtkWidget *widget)
   return FALSE;
 }
 
-static gboolean
-gtk_widget_press_and_hold_button_release (GtkWidget        *widget,
-                                          GdkEvent         *_event,
-                                          PressAndHoldData *data)
+gboolean
+_gtk_widget_press_and_hold_check_cancel (GtkWidget      *widget,
+                                         GdkEventButton *event)
 {
-  if (_event->type != GDK_BUTTON_RELEASE)
+  PressAndHoldData *data;
+
+  if (event->type != GDK_BUTTON_RELEASE)
     return FALSE;
 
-  if (data->device == gdk_event_get_device (_event))
-    gtk_widget_press_and_hold_cancel (widget);
+  data = gtk_widget_peek_press_and_hold_data (widget);
+
+  if (data &&
+      data->device == gdk_event_get_device ((GdkEvent *) event))
+    {
+      gtk_widget_press_and_hold_cancel (widget);
+      return TRUE;
+    }
 
   return FALSE;
 }
 
-static void
-gtk_widget_press_and_hold_grab_notify (GtkWidget        *widget,
-                                       gboolean          was_grabbed,
-                                       PressAndHoldData *data)
+gboolean
+_gtk_widget_press_and_hold_check_threshold (GtkWidget      *widget,
+                                            GdkEventMotion *event)
 {
-  if (data->device &&
-      gtk_widget_device_is_shadowed (widget, data->device))
-    gtk_widget_press_and_hold_cancel (widget);
-}
-
-static gboolean
-gtk_widget_press_and_hold_motion_notify (GtkWidget        *widget,
-                                         GdkEvent         *_event,
-                                         PressAndHoldData *data)
-{
-  GdkEventMotion *event;
+  PressAndHoldData *data;
   GdkDevice *device;
 
-  if (_event->type != GDK_MOTION_NOTIFY)
+  if (event->type != GDK_MOTION_NOTIFY)
     return FALSE;
 
-  event = (GdkEventMotion *)_event;
-  device = gdk_event_get_device (_event);
+  data = gtk_widget_peek_press_and_hold_data (widget);
+
+  if (!data)
+    return FALSE;
+
+  device = gdk_event_get_device ((GdkEvent *) event);
 
   if (data->device != device)
     return FALSE;
@@ -7004,8 +6990,7 @@ gtk_widget_press_and_hold_motion_notify (GtkWidget        *widget,
                                 data->current_x, data->current_y))
     {
       gtk_widget_press_and_hold_cancel (widget);
-
-      return FALSE;
+      return TRUE;
     }
 
   if (data->popup)
@@ -7149,11 +7134,14 @@ gtk_widget_press_and_hold_query (GtkWidget *widget,
   return return_value;
 }
 
-static gboolean
-gtk_widget_press_and_hold_start (GtkWidget      *widget,
-                                 GdkEventButton *event)
+gboolean
+_gtk_widget_press_and_hold_check_start (GtkWidget      *widget,
+                                        GdkEventButton *event)
 {
   PressAndHoldData *data = gtk_widget_peek_press_and_hold_data (widget);
+
+  if (event->type != GDK_BUTTON_PRESS)
+    return FALSE;
 
   /* Press and hold already in process? */
   if (data)
@@ -7161,16 +7149,17 @@ gtk_widget_press_and_hold_start (GtkWidget      *widget,
 
   data = gtk_widget_get_press_and_hold_data (widget);
 
-  if (gtk_widget_press_and_hold_query (widget, data->device, event->x, event->y))
+  if (gtk_widget_press_and_hold_query (widget, data->device,
+                                       event->x, event->y))
     {
-      gint timeout, begin_ani_timeout;
+      gint timeout, begin_ani_timeout, cursor_size;
       GdkScreen *screen;
       GdkVisual *visual;
       GtkStyleContext *context;
       cairo_region_t *region;
-      guint cursor_size;
 
-      _gtk_widget_find_at_coords (event->window, event->x, event->y,
+      _gtk_widget_find_at_coords (event->window,
+                                  event->x, event->y,
                                   &data->start_x, &data->start_y);
 
       data->current_x = data->start_x;
@@ -7210,19 +7199,6 @@ gtk_widget_press_and_hold_start (GtkWidget      *widget,
         gdk_threads_add_timeout (begin_ani_timeout,
                                  gtk_widget_press_and_hold_begin_animation_timeout,
                                  widget);
-
-      data->motion_id =
-        g_signal_connect (widget, "captured-event",
-                          G_CALLBACK (gtk_widget_press_and_hold_motion_notify),
-                          data);
-      data->button_release_id =
-        g_signal_connect (widget, "captured-event",
-                          G_CALLBACK (gtk_widget_press_and_hold_button_release),
-                          data);
-      data->grab_notify_id =
-        g_signal_connect (widget, "grab-notify",
-                          G_CALLBACK (gtk_widget_press_and_hold_grab_notify),
-                          data);
 
       data->device = gdk_event_get_device ((GdkEvent *) event);
     }
