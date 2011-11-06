@@ -1187,6 +1187,7 @@ GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 
 gboolean   gdk_event_get_touch_id       (const GdkEvent  *event,
                                          guint           *touch_id);
+cairo_region_t * gdk_event_get_touch_area (GdkEvent      *event);
 
 void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);
