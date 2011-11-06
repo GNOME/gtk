@@ -137,7 +137,7 @@ typedef struct
 {
   gdouble  x;
   gdouble  y;
-  GTimeVal time;
+  guint32  time;
 } MotionData;
 
 typedef struct
@@ -2223,10 +2223,11 @@ static void
 motion_event_list_average (MotionEventList *motion_events,
                            gdouble         *x_average,
                            gdouble         *y_average,
-                           GTimeVal        *time_average)
+                           guint32         *time_average)
 {
   guint i;
   guint n_motions = MIN (motion_events->len, motion_events->buffer->len);
+  guint64 avg = 0;
 
   for (i = 0; i < n_motions; i++)
     {
@@ -2234,14 +2235,12 @@ motion_event_list_average (MotionEventList *motion_events,
 
       *x_average += motion->x;
       *y_average += motion->y;
-      time_average->tv_sec += motion->time.tv_sec;
-      time_average->tv_usec += motion->time.tv_usec;
+      avg += motion->time;
     }
 
   *x_average /= n_motions;
   *y_average /= n_motions;
-  time_average->tv_sec /= n_motions;
-  time_average->tv_usec /= n_motions;
+  *time_average = avg / n_motions;
 }
 
 typedef struct {
@@ -2550,29 +2549,21 @@ deceleration_frame_cb (GtkTimeline       *timeline,
 static gdouble
 gtk_scrolled_window_get_deceleration_distance (GtkScrolledWindow *scrolled_window,
                                                gdouble            pos_x,
-                                               gdouble            pos_y)
+                                               gdouble            pos_y,
+                                               guint32            release_time)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  GTimeVal release_time, motion_time;
   gdouble x_origin, y_origin;
-  glong time_diff;
+  guint32 motion_time;
   gfloat frac;
   gdouble y, nx, ny;
 
-  g_get_current_time (&release_time);
-
   /* Get average position/time of last x mouse events */
   x_origin = y_origin = 0;
-  motion_time = (GTimeVal){ 0, 0 };
   motion_event_list_average (&priv->motion_events, &x_origin, &y_origin, &motion_time);
 
-  if (motion_time.tv_sec == release_time.tv_sec)
-    time_diff = release_time.tv_usec - motion_time.tv_usec;
-  else
-    time_diff = release_time.tv_usec + (G_USEC_PER_SEC - motion_time.tv_usec);
-
   /* Work out the fraction of 1/60th of a second that has elapsed */
-  frac = (time_diff / 1000.0) / FRAME_INTERVAL (FPS);
+  frac = (release_time - motion_time) / FRAME_INTERVAL (FPS);
 
   /* See how many units to move in 1/60th of a second */
   priv->dx = (x_origin - pos_x) / frac;
@@ -2837,7 +2828,10 @@ gtk_scrolled_window_button_release_event (GtkWidget *widget,
       priv->button_press_event = NULL;
     }
 
-  distance = gtk_scrolled_window_get_deceleration_distance (scrolled_window, event->x_root, event->y_root);
+  distance =
+    gtk_scrolled_window_get_deceleration_distance (scrolled_window,
+                                                   event->x_root, event->y_root,
+                                                   event->time);
   gtk_scrolled_window_start_deceleration (scrolled_window, distance);
 
   if (distance == 0)
@@ -2925,7 +2919,7 @@ gtk_scrolled_window_motion_notify_event (GtkWidget *widget,
   motion = motion_event_list_append (&priv->motion_events);
   motion->x = event->x_root;
   motion->y = event->y_root;
-  g_get_current_time (&motion->time);
+  motion->time = event->time;
 
   return FALSE;
 }
@@ -3000,7 +2994,8 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
   motion = motion_event_list_append (&priv->motion_events);
   motion->x = event->x_root;
   motion->y = event->y_root;
-  g_get_current_time (&motion->time);
+  motion->time = event->time;
+
   if (priv->deceleration_timeline)
     {
       g_object_unref (priv->deceleration_timeline);
