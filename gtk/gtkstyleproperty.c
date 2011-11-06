@@ -1127,6 +1127,53 @@ shadow_value_print (const GValue *value,
 }
 
 static gboolean
+background_repeat_value_parse (GtkCssParser *parser,
+                               GFile *file,
+                               GValue *value)
+{
+  GtkCssBackgroundRepeat repeat;
+  GtkCssBackgroundRepeatStyle style;
+
+  if (_gtk_css_parser_try (parser, "repeat", TRUE))
+    style = GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT;
+  else if (_gtk_css_parser_try (parser, "no-repeat", TRUE))
+    style = GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT;
+  else
+    style = GTK_CSS_BACKGROUND_REPEAT_STYLE_NONE;
+
+  repeat.repeat = style;
+
+  g_value_set_boxed (value, &repeat);
+
+  return TRUE;
+}
+
+static const gchar *
+background_repeat_style_to_string (GtkCssBackgroundRepeatStyle repeat)
+{
+  switch (repeat)
+    {
+    case GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT:
+      return "repeat";
+    case GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT:
+      return "no-repeat";
+    default:
+      return NULL;
+    }
+}
+
+static void
+background_repeat_value_print (const GValue *value,
+                               GString      *string)
+{
+  GtkCssBackgroundRepeat *repeat;
+
+  repeat = g_value_get_boxed (value);
+
+  g_string_append (string, background_repeat_style_to_string (repeat->repeat));
+}
+
+static gboolean
 border_image_repeat_value_parse (GtkCssParser *parser,
                                  GFile *file,
                                  GValue *value)
@@ -2246,6 +2293,9 @@ css_string_funcs_init (void)
   register_conversion_function (G_TYPE_FLAGS,
                                 flags_value_parse,
                                 flags_value_print);
+  register_conversion_function (GTK_TYPE_CSS_BACKGROUND_REPEAT,
+                                background_repeat_value_parse,
+                                background_repeat_value_print);
 }
 
 gboolean
@@ -2912,6 +2962,12 @@ gtk_style_property_init (void)
                                                               "Background Image",
                                                               "Background Image",
                                                               CAIRO_GOBJECT_TYPE_PATTERN, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("background-repeat",
+                                                              "Background repeat",
+                                                              "Background repeat",
+                                                              GTK_TYPE_CSS_BACKGROUND_REPEAT, 0));
+
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boxed ("border-image-source",
                                                               "Border image source",

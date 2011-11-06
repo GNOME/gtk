@@ -148,7 +148,6 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_PROPERTY_BACKGROUND_IMAGE "background-image"
 
-
 /* Predefined set of CSS classes */
 
 /**

@@ -840,6 +840,16 @@
  *         </entry>
  *       </row>
  *       <row>
+ *         <entry>background-repeat</entry>
+ *         <entry>[repeat|no-repeat]</entry>
+ *         <entry>internal</entry>
+ *         <entry><literallayout>background-repeat: no-repeat;</literallayout>
+ *                If not specified, the style doesn't respect the CSS3
+ *                specification, since the background will be
+ *                stretched to fill the area.
+ *         </entry>
+ *       </row>
+ *       <row>
  *         <entry>border-top-width</entry>
  *         <entry>integer</entry>
  *         <entry>#gint</entry>

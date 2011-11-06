@@ -25,15 +25,28 @@
 G_BEGIN_DECLS
 
 typedef enum {
+  GTK_CSS_BACKGROUND_REPEAT_STYLE_NONE,
+  GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT,
+  GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT,
+} GtkCssBackgroundRepeatStyle;
+
+typedef enum {
   GTK_CSS_REPEAT_STYLE_NONE,
   GTK_CSS_REPEAT_STYLE_REPEAT,
   GTK_CSS_REPEAT_STYLE_ROUND,
   GTK_CSS_REPEAT_STYLE_SPACE
 } GtkCssBorderRepeatStyle;
 
+typedef struct _GtkCssBackgroundRepeat GtkCssBackgroundRepeat;
+
 typedef struct _GtkCssBorderCornerRadius GtkCssBorderCornerRadius;
 typedef struct _GtkCssBorderRadius GtkCssBorderRadius;
 typedef struct _GtkCssBorderImageRepeat GtkCssBorderImageRepeat;
+
+struct _GtkCssBackgroundRepeat {
+  /* FIXME: will have vrepeat and hrepeat instead */
+  GtkCssBackgroundRepeatStyle repeat;
+};
 
 struct _GtkCssBorderCornerRadius {
   double horizontal;
@@ -52,9 +65,13 @@ struct _GtkCssBorderImageRepeat {
   GtkCssBorderRepeatStyle hrepeat;
 };
 
+#define GTK_TYPE_CSS_BACKGROUND_REPEAT _gtk_css_background_repeat_get_type ()
+
 #define GTK_TYPE_CSS_BORDER_CORNER_RADIUS _gtk_css_border_corner_radius_get_type ()
 #define GTK_TYPE_CSS_BORDER_RADIUS _gtk_css_border_radius_get_type ()
 #define GTK_TYPE_CSS_BORDER_IMAGE_REPEAT _gtk_css_border_image_repeat_get_type ()
+
+GType           _gtk_css_background_repeat_get_type             (void);
 
 GType           _gtk_css_border_corner_radius_get_type          (void);
 GType           _gtk_css_border_radius_get_type                 (void);

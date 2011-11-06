@@ -1381,6 +1381,7 @@ render_background_internal (GtkThemingEngine *engine,
 {
   GdkRGBA bg_color;
   cairo_pattern_t *pattern;
+  GtkCssBackgroundRepeat *repeat;
   GtkStateFlags flags;
   gboolean running;
   gdouble progress;
@@ -1394,6 +1395,7 @@ render_background_internal (GtkThemingEngine *engine,
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
+                          "background-repeat", &repeat,
                           "box-shadow", &box_shadow,
                           NULL);
 
@@ -1602,9 +1604,31 @@ render_background_internal (GtkThemingEngine *engine,
 
   if (pattern)
     {
-      cairo_scale (cr, width, height);
+      cairo_surface_t *surface;
+      int scale_width, scale_height;
+
+      if (cairo_pattern_get_surface (pattern, &surface) != CAIRO_STATUS_SUCCESS)
+          surface = NULL;
+
+      if (surface && repeat &&
+          repeat->repeat != GTK_CSS_BACKGROUND_REPEAT_STYLE_NONE)
+        {
+          scale_width = cairo_image_surface_get_width (surface);
+          scale_height = cairo_image_surface_get_height (surface);
+          if (repeat->repeat == GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT)
+            cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+          else if (repeat->repeat == GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT)
+            cairo_pattern_set_extend (pattern, CAIRO_EXTEND_NONE);
+        }
+      else
+        {
+          scale_width = width;
+          scale_height = height;
+        }
+
+      cairo_scale (cr, scale_width, scale_height);
       cairo_set_source (cr, pattern);
-      cairo_scale (cr, 1.0 / width, 1.0 / height);
+      cairo_scale (cr, 1.0 / scale_width, 1.0 / scale_height);
     }
   else
     gdk_cairo_set_source_rgba (cr, &bg_color);
@@ -1613,6 +1637,9 @@ render_background_internal (GtkThemingEngine *engine,
 
   if (pattern)
     cairo_pattern_destroy (pattern);
+
+  if (repeat)
+    g_free (repeat);
 
   if (box_shadow != NULL)
     {
