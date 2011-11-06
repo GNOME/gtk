@@ -1366,14 +1366,6 @@ perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 }
 
-static void
-finish_folder_load (GtkFileChooserEntry *chooser_entry)
-{
-  perform_load_complete_action (chooser_entry);
-
-  gtk_widget_set_tooltip_text (GTK_WIDGET (chooser_entry), NULL);
-}
-
 /* Callback when the current folder finishes loading */
 static void
 finished_loading_cb (GtkFileSystemModel  *model,
@@ -1402,7 +1394,9 @@ finished_loading_cb (GtkFileSystemModel  *model,
       return;
     }
 
-  finish_folder_load (chooser_entry);
+  perform_load_complete_action (chooser_entry);
+
+  gtk_widget_set_tooltip_text (GTK_WIDGET (chooser_entry), NULL);
 }
 
 static RefreshStatus
