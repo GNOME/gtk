@@ -1649,6 +1649,16 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
+      if ((event->type == GDK_BUTTON_PRESS) &&
+          event->button.button == 1)
+        {
+          /* Handle press and hold on the grab widget before propagating up,
+           * so a parent capturing events doesn't delay nor prevent a child
+           * from doing the press-and-hold action.
+           */
+          _gtk_widget_press_and_hold_check_start (grab_widget, &event->button);
+        }
+
       if (!gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
@@ -1699,6 +1709,13 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_BUTTON_RELEASE:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
+      if ((event->type == GDK_BUTTON_RELEASE) &&
+          event->button.button == 1)
+        _gtk_widget_press_and_hold_check_cancel (grab_widget, &event->button);
+      else if (event->type == GDK_MOTION_NOTIFY)
+        _gtk_widget_press_and_hold_check_threshold (grab_widget,
+                                                    &event->motion);
+
       if (!gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;

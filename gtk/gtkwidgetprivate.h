@@ -171,6 +171,13 @@ void              _gtk_widget_set_style                    (GtkWidget *widget,
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
                                                             GdkEvent  *event);
 
+gboolean          _gtk_widget_press_and_hold_check_start     (GtkWidget      *widget,
+                                                              GdkEventButton *event);
+gboolean          _gtk_widget_press_and_hold_check_cancel    (GtkWidget      *widget,
+                                                              GdkEventButton *event);
+gboolean          _gtk_widget_press_and_hold_check_threshold (GtkWidget      *widget,
+                                                              GdkEventMotion *event);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */
