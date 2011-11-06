@@ -572,22 +572,17 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
                                gint       *x,
                                gint       *y)
 {
-  NSPoint point;
   NSPoint screen_point;
   NSEventType event_type;
   GdkWindow *toplevel;
-  GdkQuartzView *view;
   GdkDisplay *display;
   GdkDeviceGrabInfo *grab;
 
-  view = (GdkQuartzView *)[[nsevent window] contentView];
-  toplevel = [view gdkWindow];
+  toplevel = get_toplevel_from_ns_event (nsevent, &screen_point, x, y);
 
   display = gdk_window_get_display (toplevel);
 
   event_type = [nsevent type];
-  point = [nsevent locationInWindow];
-  screen_point = [[nsevent window] convertBaseToScreen:point];
 
   /* From the docs for XGrabPointer:
    *
