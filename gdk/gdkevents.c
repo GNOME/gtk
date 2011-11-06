@@ -1762,6 +1762,95 @@ gdk_event_get_touch_id (const GdkEvent *event,
 }
 
 /**
+ * gdk_event_get_touch_area:
+ * @event: a #GdkEvent 
+ *
+ * This function takes a #GdkEvent coming from a touch device
+ * (eg. gdk_event_get_source_device() returns a device of type
+ * %GDK_SOURCE_TOUCH), and returns the area covered by the touch
+ * as a #cairo_region_t. or %NULL if the device doesn't provide
+ * this information, or the touch area information couldn't be
+ * extracted from the event.
+ *
+ * <note><warning>Not all touch capable devices provide this
+ * information, so provide fallbacks to this function returning
+ * %NULL, even if the window receiving events is only meant
+ * to react to touch events.</warning></note>
+ *
+ * Returns: (transfer full): the touch region, or %NULL if unavailable
+ **/
+cairo_region_t *
+gdk_event_get_touch_area (GdkEvent *event)
+{
+  gdouble *axes, minor_axis, major_axis, orientation_axis;
+  GdkAtom major, minor, orientation;
+  GdkDevice *device;
+
+  g_return_val_if_fail (event != NULL, NULL);
+
+  device = gdk_event_get_source_device (event);
+
+  if (!device)
+    return NULL;
+
+  if (event->type == GDK_MOTION_NOTIFY ||
+      event->type == GDK_TOUCH_MOTION)
+    axes = event->motion.axes;
+  else if (event->type == GDK_BUTTON_PRESS ||
+           event->type == GDK_2BUTTON_PRESS ||
+           event->type == GDK_3BUTTON_PRESS ||
+           event->type == GDK_BUTTON_RELEASE)
+    axes = event->button.axes;
+  else
+    return NULL;
+
+  major = gdk_atom_intern_static_string ("Abs MT Touch Major");
+  minor = gdk_atom_intern_static_string ("Abs MT Touch Minor");
+  orientation = gdk_atom_intern_static_string ("Abs MT Orientation");
+
+  if (gdk_device_get_axis_value (device, axes, major, &major_axis) &&
+      gdk_device_get_axis_value (device, axes, minor, &minor_axis) &&
+      gdk_device_get_axis_value (device, axes, orientation, &orientation_axis))
+    {
+      cairo_rectangle_int_t rect;
+      GdkScreen *screen;
+      gdouble x, y;
+
+      /* FIXME: We're assuming the device is mapped to a single screen,
+       * could lead to stretched/shrinked shapes in multimonitor, although
+       * that'd be an unusual setup for touchscreens.
+       */
+      screen = gdk_window_get_screen (event->any.window);
+      gdk_event_get_coords (event, &x, &y);
+
+      if (orientation_axis == 0)
+        {
+          /* Orientation is horizontal */
+          rect.width = (gint) gdk_screen_get_width (screen) * major_axis;
+          rect.height = (gint) gdk_screen_get_height (screen) * minor_axis;
+        }
+      else
+        {
+          /* Orientation is vertical */
+          rect.height = (gint) gdk_screen_get_height (screen) * major_axis;
+          rect.width = (gint) gdk_screen_get_width (screen) * minor_axis;
+        }
+
+      /* Something is wrong here */
+      if (rect.width == 0 ||
+          rect.height == 0)
+        return NULL;
+
+      rect.x = x - rect.width / 2;
+      rect.y = y - rect.height / 2;
+
+      return cairo_region_create_rectangle (&rect);
+    }
+
+  return NULL;
+}
+
+/**
  * gdk_set_show_events:
  * @show_events:  %TRUE to output event debugging information.
  * 
