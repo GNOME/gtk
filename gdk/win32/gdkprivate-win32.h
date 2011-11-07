@@ -305,7 +305,7 @@ void    _gdk_wchar_text_handle    (GdkFont       *font,
 void       _gdk_push_modal_window   (GdkWindow *window);
 void       _gdk_remove_modal_window (GdkWindow *window);
 GdkWindow *_gdk_modal_current       (void);
-
+gboolean   _gdk_modal_blocked       (GdkWindow *window);
 
 #ifdef G_ENABLE_DEBUG
 gchar *_gdk_win32_color_to_string      (const GdkColor *color);
@@ -467,6 +467,8 @@ extern gint		 _gdk_max_colors;
 /* TRUE while a modal sizing, moving, or dnd operation is in progress */
 extern gboolean		_modal_operation_in_progress;
 
+extern HWND		_modal_move_resize_window;
+
 /* TRUE when we are emptying the clipboard ourselves */
 extern gboolean		_ignore_destroy_clipboard;
 
@@ -491,7 +493,9 @@ HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 gboolean _gdk_win32_pixbuf_to_hicon_supports_alpha (void);
 
 void _gdk_win32_append_event (GdkEvent *event);
-
+void _gdk_win32_emit_configure_event (GdkWindow *window);
+GdkWindow *_gdk_win32_find_window_for_mouse_event (GdkWindow* reported_window,
+						   MSG*       msg);
 
 /* Initialization */
 void _gdk_windowing_window_init (GdkScreen *screen);

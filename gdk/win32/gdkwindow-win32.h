@@ -80,16 +80,23 @@ struct _GdkWindowImplWin32
   gint hint_flags;
   GdkGeometry hints;
 
+  GdkEventMask native_event_mask;
+
   GdkWindowTypeHint type_hint;
 
-  gboolean extension_events_selected;
+  GdkEventMask extension_events_mask;
 
   GdkWindow *transient_owner;
   GSList    *transient_children;
   gint       num_transients;
   gboolean   changing_state;
 
+  gint initial_x;
+  gint initial_y;
+
   guint no_bg : 1;
+  guint inhibit_configure : 1;
+  guint override_redirect : 1;
 };
  
 struct _GdkWindowImplWin32Class 

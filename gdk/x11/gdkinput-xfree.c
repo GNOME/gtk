@@ -266,6 +266,8 @@ _gdk_input_other_event (GdkEvent *event,
   else
     window = _gdk_window_get_input_window_for_event (event_window,
                                                      event_type,
+						     /* TODO: Seems wrong, but the code used to ignore button motion handling here... */
+						     0, 
                                                      x, y,
                                                      xevent->xany.serial);
   priv = (GdkWindowObject *)window;

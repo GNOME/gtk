@@ -114,6 +114,7 @@ struct _GtkStatusIconPrivate
 #ifdef GDK_WINDOWING_WIN32
   GtkWidget     *dummy_widget;
   NOTIFYICONDATAW nid;
+  gint          taskbar_top;
   gint		last_click_x, last_click_y;
   GtkOrientation orientation;
   gchar         *tooltip_text;
@@ -889,6 +890,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
       priv->orientation = GTK_ORIENTATION_VERTICAL;
     else
       priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+
+    priv->taskbar_top = abd.rc.top;
   }
 
   priv->last_click_x = priv->last_click_y = 0;
@@ -2568,6 +2571,7 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 #ifdef GDK_WINDOWING_WIN32
   GtkStatusIcon *status_icon;
   GtkStatusIconPrivate *priv;
+  GtkRequisition menu_req;
   
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_STATUS_ICON (user_data));
@@ -2575,8 +2579,11 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
   status_icon = GTK_STATUS_ICON (user_data);
   priv = status_icon->priv;
 
+  gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+
   *x = priv->last_click_x;
-  *y = priv->last_click_y;
+  *y = priv->taskbar_top - menu_req.height;
+
   *push_in = TRUE;
 #endif
 }
