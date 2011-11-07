@@ -1087,7 +1087,7 @@ gtk_drag_begin_idle (gpointer arg)
       return point;
     }
 
-  FALSE.x -= info->hot_x;
+  point.x -= info->hot_x;
   point.y -= info->hot_y;
 
   [nswindow dragImage:drag_image
