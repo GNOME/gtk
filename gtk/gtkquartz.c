@@ -35,9 +35,11 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   int rowstride, pixbuf_width, pixbuf_height;
   gboolean has_alpha;
   NSImage *nsimage;
+  NSSize nsimage_size;
 
   pixbuf_width = gdk_pixbuf_get_width (pixbuf);
   pixbuf_height = gdk_pixbuf_get_height (pixbuf);
+  g_return_val_if_fail (pixbuf_width == 0 && pixbuf_height == 0, NULL);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
 
@@ -57,6 +59,12 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   CGColorSpaceRelease (colorspace);
 
   nsimage = [[NSImage alloc] initWithSize:NSMakeSize (pixbuf_width, pixbuf_height)];
+  nsimage_size = [nsimage size];
+  if (nsimage_size.width == 0.0 && nsimage_size.height == 0.0)
+    {
+      [nsimage release];
+      g_return_val_if_fail (FALSE, NULL);
+    }
   [nsimage lockFocus];
 
   context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
