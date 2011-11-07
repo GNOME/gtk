@@ -99,8 +99,6 @@ enum
 
 #define COMPLETION_FEEDBACK_TIMEOUT_MS 2000
 
-static void     gtk_file_chooser_entry_iface_init     (GtkEditableClass *iface);
-
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
@@ -110,18 +108,6 @@ static gboolean gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
 static gboolean gtk_file_chooser_entry_focus_out_event (GtkWidget       *widget,
 							GdkEventFocus   *event);
 static void     gtk_file_chooser_entry_activate       (GtkEntry         *entry);
-static void     gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
-						       const gchar *new_text,
-						       gint         new_text_length,
-						       gint        *position);
-static void     gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
-						       gint         start_pos,
-						       gint         end_pos);
-static void     gtk_file_chooser_entry_set_position (GtkEditable *editable,
-						     gint         position);
-static void     gtk_file_chooser_entry_set_selection_bounds (GtkEditable *editable,
-							     gint         start_pos,
-							     gint         end_pos);
 
 #ifdef G_OS_WIN32
 static gint     insert_text_callback      (GtkFileChooserEntry *widget,
@@ -153,11 +139,46 @@ static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
 static void pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
 					const gchar         *feedback);
 
-static GtkEditableClass *parent_editable_iface;
+G_DEFINE_TYPE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY)
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-						gtk_file_chooser_entry_iface_init))
+static void
+gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
+                                                    guint        n_pspecs,
+                                                    GParamSpec **pspecs)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
+  GtkEditable *editable = GTK_EDITABLE (object);
+  guint i;
+
+  G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispatch_properties_changed (object, n_pspecs, pspecs);
+
+  /* What we are after: The text in front of the cursor was modified.
+   * Unfortunately, there's no other way to catch this. */
+
+  if (chooser_entry->in_change)
+    return;
+
+  for (i = 0; i < n_pspecs; i++)
+    {
+      if (pspecs[i]->name == I_("cursor-position") ||
+          pspecs[i]->name == I_("selection-bound") ||
+          pspecs[i]->name == I_("text"))
+        {
+          char *text;
+          int start, end;
+
+          chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+
+          remove_completion_feedback (chooser_entry);
+          gtk_editable_get_selection_bounds (editable, &start, &end);
+          text = gtk_editable_get_chars (editable, 0, MIN (start, end));
+          refresh_current_folder_and_file_part (chooser_entry, text);
+          g_free (text);
+
+          break;
+        }
+    }
+}
 
 static void
 _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
@@ -168,6 +189,7 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
 
   gobject_class->finalize = gtk_file_chooser_entry_finalize;
   gobject_class->dispose = gtk_file_chooser_entry_dispose;
+  gobject_class->dispatch_properties_changed = gtk_file_chooser_entry_dispatch_properties_changed;
 
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
   widget_class->unmap = gtk_file_chooser_entry_unmap;
@@ -175,17 +197,6 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   widget_class->focus_out_event = gtk_file_chooser_entry_focus_out_event;
 
   entry_class->activate = gtk_file_chooser_entry_activate;
-}
-
-static void
-gtk_file_chooser_entry_iface_init (GtkEditableClass *iface)
-{
-  parent_editable_iface = g_type_interface_peek_parent (iface);
-
-  iface->do_insert_text = gtk_file_chooser_entry_do_insert_text;
-  iface->do_delete_text = gtk_file_chooser_entry_do_delete_text;
-  iface->set_position = gtk_file_chooser_entry_set_position;
-  iface->set_selection_bounds = gtk_file_chooser_entry_set_selection_bounds;
 }
 
 static void
@@ -742,70 +753,6 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry)
 }
 
 static void
-gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
-				       const gchar *new_text,
-				       gint         new_text_length,
-				       gint        *position)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-  char *text;
-
-  parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
-
-  if (chooser_entry->in_change)
-    return;
-
-  remove_completion_feedback (chooser_entry);
-  text = gtk_editable_get_chars (editable, 0, *position);
-  refresh_current_folder_and_file_part (chooser_entry, text);
-  g_free (text);
-}
-
-static void
-clear_completions_if_not_in_change (GtkFileChooserEntry *chooser_entry)
-{
-  if (chooser_entry->in_change)
-    return;
-
-  clear_completions (chooser_entry);
-}
-
-static void
-gtk_file_chooser_entry_do_delete_text (GtkEditable *editable,
-				       gint         start_pos,
-				       gint         end_pos)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-
-  parent_editable_iface->do_delete_text (editable, start_pos, end_pos);
-
-  clear_completions_if_not_in_change (chooser_entry);
-}
-
-static void
-gtk_file_chooser_entry_set_position (GtkEditable *editable,
-				     gint         position)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-
-  parent_editable_iface->set_position (editable, position);
-
-  clear_completions_if_not_in_change (chooser_entry);
-}
-
-static void
-gtk_file_chooser_entry_set_selection_bounds (GtkEditable *editable,
-					     gint         start_pos,
-					     gint         end_pos)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
-
-  parent_editable_iface->set_selection_bounds (editable, start_pos, end_pos);
-
-  clear_completions_if_not_in_change (chooser_entry);
-}
-
-static void
 gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->grab_focus (widget);
@@ -1332,7 +1279,6 @@ perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
       g_assert_not_reached ();
     }
 
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 }
 
 /* Callback when the current folder finishes loading */
