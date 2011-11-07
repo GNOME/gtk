@@ -1489,13 +1489,12 @@ _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_X11_KEYMAP (keymap);
 
-  for (i = 3; i < 8; i++)
+  /* See comment in add_virtual_modifiers() */
+  for (i = 4; i < 8; i++)
     {
       if ((1 << i) & *modifiers)
         {
-          if (keymap_x11->modmap[i] & GDK_MOD1_MASK)
-            *modifiers |= GDK_MOD1_MASK;
-          else if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
+          if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
             *modifiers |= GDK_SUPER_MASK;
           else if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
             *modifiers |= GDK_HYPER_MASK;
@@ -1515,12 +1514,16 @@ gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_X11_KEYMAP (keymap);
 
-  for (i = 3; i < 8; i++)
+  /*  This loop used to start at 3, which included MOD1 in the
+   *  virtual mapping. However, all of GTK+ treats MOD1 as a
+   *  synonym for Alt, and does not expect it to be mapped around,
+   *  therefore it's more sane to simply treat MOD1 like SHIFT and
+   *  CONTROL, which are not mappable either.
+   */
+  for (i = 4; i < 8; i++)
     {
       if ((1 << i) & *state)
         {
-          if (keymap_x11->modmap[i] & GDK_MOD1_MASK)
-            *state |= GDK_MOD1_MASK;
           if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
             *state |= GDK_SUPER_MASK;
           if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
@@ -1589,7 +1592,8 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
     {
       if (*state & vmods[j])
         {
-          for (i = 3; i < 8; i++)
+          /* See comment in add_virtual_modifiers() */
+          for (i = 4; i < 8; i++)
             {
               if (keymap_x11->modmap[i] & vmods[j])
                 {
