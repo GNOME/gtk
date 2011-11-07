@@ -54,15 +54,6 @@ typedef enum {
   LOAD_COMPLETE_EXPLICIT_COMPLETION
 } LoadCompleteAction;
 
-typedef enum
-{
-  REFRESH_OK,
-  REFRESH_INVALID_INPUT,
-  REFRESH_INCOMPLETE_HOSTNAME,
-  REFRESH_NONEXISTENT,
-  REFRESH_NOT_LOCAL
-} RefreshStatus;
-
 struct _GtkFileChooserEntry
 {
   GtkEntry parent_instance;
@@ -73,7 +64,6 @@ struct _GtkFileChooserEntry
   GFile *current_folder_file;
   gchar *dir_part;
   gchar *file_part;
-  gint file_part_pos;
 
   LoadCompleteAction load_complete_action;
 
@@ -416,73 +406,6 @@ gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
   return parent;
 }
 
-static gboolean
-gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
-                              const gchar          *str,
-                              GFile               **folder,
-                              gchar               **file_part,
-                              GError              **error)
-{
-  GFile *file;
-  gboolean result = FALSE;
-  gboolean is_dir = FALSE;
-  gchar *last_slash = NULL;
-
-  if (str && *str)
-    is_dir = (str [strlen (str) - 1] == G_DIR_SEPARATOR);
-
-  last_slash = strrchr (str, G_DIR_SEPARATOR);
-
-  file = gtk_file_chooser_get_file_for_text (chooser_entry, str);
-
-  if (g_file_equal (chooser_entry->base_folder, file))
-    {
-      /* this is when user types '.', could be the
-       * beginning of a hidden file, ./ or ../
-       */
-      *folder = g_object_ref (file);
-      *file_part = g_strdup (str);
-      result = TRUE;
-    }
-  else if (is_dir)
-    {
-      /* it's a dir, or at least it ends with the dir separator */
-      *folder = g_object_ref (file);
-      *file_part = g_strdup ("");
-      result = TRUE;
-    }
-  else
-    {
-      GFile *parent_file;
-
-      parent_file = g_file_get_parent (file);
-
-      if (!parent_file)
-	{
-	  g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		       "Could not get parent file");
-	  *folder = NULL;
-	  *file_part = NULL;
-	}
-      else
-	{
-	  *folder = parent_file;
-	  result = TRUE;
-
-	  if (last_slash)
-	    *file_part = g_strdup (last_slash + 1);
-	  else
-	    *file_part = g_strdup (str);
-	}
-    }
-
-  g_object_unref (file);
-
-  return result;
-}
-
 /* Finds a common prefix based on the contents of the entry
  * and mandatorily appends it
  */
@@ -758,62 +681,27 @@ static void
 refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 {
   GFile *folder_file;
-  gchar *file_part;
-  gsize total_len, file_part_len;
-  gint file_part_pos;
-  GError *error;
-  RefreshStatus result;
-  char *text;
-
-  text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
-
-  error = NULL;
-  if (!gtk_file_chooser_entry_parse (chooser_entry,
-			             text, &folder_file, &file_part, &error))
-    {
-      folder_file = g_object_ref (chooser_entry->base_folder);
-
-      if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_NONEXISTENT))
-        result = REFRESH_NONEXISTENT;
-      else
-	result = REFRESH_INVALID_INPUT;
-
-      if (error)
-	g_error_free (error);
-
-      file_part = g_strdup ("");
-      file_part_pos = -1;
-    }
-  else
-    {
-      g_assert (folder_file != NULL);
-
-      file_part_len = strlen (file_part);
-      total_len = strlen (text);
-      if (total_len > file_part_len)
-	file_part_pos = g_utf8_strlen (text, total_len - file_part_len);
-      else
-	file_part_pos = 0;
-
-      result = REFRESH_OK;
-    }
+  char *text, *last_slash;
 
   g_free (chooser_entry->file_part);
   g_free (chooser_entry->dir_part);
 
-  chooser_entry->dir_part = file_part_pos > 0 ? g_strndup (text, file_part_pos) : g_strdup ("");
-  chooser_entry->file_part = file_part;
-  chooser_entry->file_part_pos = file_part_pos;
+  text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
 
-  if (result == REFRESH_OK)
+  last_slash = strrchr (text, G_DIR_SEPARATOR);
+  if (last_slash)
     {
-      set_completion_folder (chooser_entry, folder_file);
+      chooser_entry->dir_part = g_strndup (text, last_slash - text + 1);
+      chooser_entry->file_part = g_strdup (last_slash + 1);
     }
   else
     {
-      set_completion_folder (chooser_entry, NULL);
+      chooser_entry->dir_part = g_strdup ("");
+      chooser_entry->file_part = g_strdup (text);
     }
 
+  folder_file = gtk_file_chooser_get_directory_for_text (chooser_entry, text);
+  set_completion_folder (chooser_entry, folder_file);
   if (folder_file)
     g_object_unref (folder_file);
 
