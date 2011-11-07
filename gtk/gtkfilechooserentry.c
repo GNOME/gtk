@@ -65,11 +65,10 @@ struct _GtkFileChooserEntry
   gchar *dir_part;
   gchar *file_part;
 
-  LoadCompleteAction load_complete_action;
-
   GtkTreeModel *completion_store;
 
   guint current_folder_loaded : 1;
+  guint complete_on_load : 1;
   guint eat_tabs       : 1;
   guint local_only     : 1;
 };
@@ -106,6 +105,8 @@ static gboolean match_selected_callback   (GtkEntryCompletion  *completion,
 					   GtkTreeIter         *iter,
 					   GtkFileChooserEntry *chooser_entry);
 
+static void set_complete_on_load (GtkFileChooserEntry *chooser_entry,
+                                  gboolean             complete_on_load);
 static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
 static void set_completion_folder (GtkFileChooserEntry *chooser_entry,
                                    GFile               *folder);
@@ -144,10 +145,8 @@ gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
           pspecs[i]->name == I_("selection-bound") ||
           pspecs[i]->name == I_("text"))
         {
-          chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
-
+          set_complete_on_load (chooser_entry, FALSE);
           refresh_current_folder_and_file_part (chooser_entry);
-
           break;
         }
     }
@@ -266,15 +265,21 @@ match_selected_callback (GtkEntryCompletion  *completion,
 }
 
 static void
-clear_completions (GtkFileChooserEntry *chooser_entry)
-{
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
-}
-
-static void
 beep (GtkFileChooserEntry *chooser_entry)
 {
   gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
+}
+
+static void
+set_complete_on_load (GtkFileChooserEntry *chooser_entry,
+                      gboolean             complete_on_load)
+{
+  /* a completion was triggered, but we couldn't do it.
+   * So no text was inserted when pressing tab, so we beep */
+  if (chooser_entry->complete_on_load && !complete_on_load)
+    beep (chooser_entry);
+
+  chooser_entry->complete_on_load = complete_on_load;
 }
 
 static gboolean
@@ -337,7 +342,7 @@ gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
 static void
 explicitly_complete (GtkFileChooserEntry *chooser_entry)
 {
-  clear_completions (chooser_entry);
+  chooser_entry->complete_on_load = FALSE;
 
   if (chooser_entry->completion_store)
     {
@@ -379,7 +384,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
   if (chooser_entry->current_folder_loaded)
     explicitly_complete (chooser_entry);
   else
-    chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
+    set_complete_on_load (chooser_entry, TRUE);
 }
 
 static gboolean
@@ -431,7 +436,7 @@ gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
 
-  chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+  set_complete_on_load (chooser_entry, FALSE);
  
   return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus_out_event (widget, event);
 }
@@ -508,27 +513,6 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 				  chooser_entry->completion_store);
 }
 
-/* When we finish loading the current folder, this function should get called to
- * perform the deferred explicit completion.
- */
-static void
-perform_load_complete_action (GtkFileChooserEntry *chooser_entry)
-{
-  switch (chooser_entry->load_complete_action)
-    {
-    case LOAD_COMPLETE_NOTHING:
-      break;
-
-    case LOAD_COMPLETE_EXPLICIT_COMPLETION:
-      explicitly_complete (chooser_entry);
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-}
-
 /* Callback when the current folder finishes loading */
 static void
 finished_loading_cb (GtkFileSystemModel  *model,
@@ -541,24 +525,13 @@ finished_loading_cb (GtkFileSystemModel  *model,
 
   if (error)
     {
-      LoadCompleteAction old_load_complete_action;
-
-      old_load_complete_action = chooser_entry->load_complete_action;
-
       discard_completion_store (chooser_entry);
-      clear_completions (chooser_entry);
-
-      if (old_load_complete_action == LOAD_COMPLETE_EXPLICIT_COMPLETION)
-	{
-	  /* Since this came from explicit user action (Tab completion), we'll present errors visually */
-
-	  beep (chooser_entry);
-	}
-
+      set_complete_on_load (chooser_entry, FALSE);
       return;
     }
 
-  perform_load_complete_action (chooser_entry);
+  if (chooser_entry->complete_on_load)
+    explicitly_complete (chooser_entry);
 
   gtk_widget_set_tooltip_text (GTK_WIDGET (chooser_entry), NULL);
 
@@ -762,7 +735,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 
   chooser_entry->base_folder = file;
 
-  clear_completions (chooser_entry);
+  refresh_current_folder_and_file_part (chooser_entry);
 }
 
 /**
@@ -921,7 +894,7 @@ _gtk_file_chooser_entry_set_local_only (GtkFileChooserEntry *chooser_entry,
                                         gboolean             local_only)
 {
   chooser_entry->local_only = local_only;
-  clear_completions (chooser_entry);
+  refresh_current_folder_and_file_part (chooser_entry);
 }
 
 gboolean
