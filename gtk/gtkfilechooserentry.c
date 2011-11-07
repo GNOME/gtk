@@ -80,7 +80,6 @@ struct _GtkFileChooserEntry
   GtkTreeModel *completion_store;
 
   guint current_folder_loaded : 1;
-  guint in_change      : 1;
   guint eat_tabs       : 1;
   guint local_only     : 1;
 };
@@ -152,9 +151,6 @@ gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
 
   /* What we are after: The text in front of the cursor was modified.
    * Unfortunately, there's no other way to catch this. */
-
-  if (chooser_entry->in_change)
-    return;
 
   for (i = 0; i < n_pspecs; i++)
     {
@@ -287,8 +283,6 @@ match_selected_callback (GtkEntryCompletion  *completion,
 		      FULL_PATH_COLUMN, &path,
                       -1);
 
-  /* We don't set in_change here as we want to update the current_folder
-   * variable */
   gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
 			    0,
                             gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
