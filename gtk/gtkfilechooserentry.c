@@ -105,10 +105,6 @@ static gboolean match_selected_callback   (GtkEntryCompletion  *completion,
 					   GtkTreeModel        *model,
 					   GtkTreeIter         *iter,
 					   GtkFileChooserEntry *chooser_entry);
-static gboolean completion_match_func     (GtkEntryCompletion  *comp,
-					   const char          *key,
-					   GtkTreeIter         *iter,
-					   gpointer             data);
 
 static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
 static void set_completion_folder (GtkFileChooserEntry *chooser_entry,
@@ -189,8 +185,10 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   /* see docs for gtk_entry_completion_set_text_column() */
   g_object_set (comp, "text-column", FULL_PATH_COLUMN, NULL);
 
+  /* Need a match func here or entry completion uses a wrong one.
+   * We do our own filtering after all. */
   gtk_entry_completion_set_match_func (comp,
-				       completion_match_func,
+				       (GtkEntryCompletionMatchFunc) gtk_true,
 				       chooser_entry,
 				       NULL);
 
@@ -265,78 +263,6 @@ match_selected_callback (GtkEntryCompletion  *completion,
   g_free (path);
 
   return TRUE;
-}
-
-/* Match function for the GtkEntryCompletion */
-static gboolean
-completion_match_func (GtkEntryCompletion *comp,
-		       const char         *key_unused,
-		       GtkTreeIter        *iter,
-		       gpointer            data)
-{
-  GtkFileChooserEntry *chooser_entry;
-  char *name;
-  gboolean result;
-  char *norm_file_part;
-  char *norm_name;
-
-  chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
-
-  /* We ignore the key because it is the contents of the entry.  Instead, we
-   * just use our precomputed file_part.
-   */
-  if (!chooser_entry->file_part)
-    {
-      return FALSE;
-    }
-
-  gtk_tree_model_get (chooser_entry->completion_store, iter, DISPLAY_NAME_COLUMN, &name, -1);
-  if (!name)
-    {
-      return FALSE; /* Uninitialized row, ugh */
-    }
-
-  /* If we have an empty file_part, then we're at the root of a directory.  In
-   * that case, we want to match all non-dot files.  We might want to match
-   * dot_files too if show_hidden is TRUE on the fileselector in the future.
-   */
-  /* Additionally, support for gnome .hidden files would be sweet, too */
-  if (chooser_entry->file_part[0] == '\000')
-    {
-      if (name[0] == '.')
-	result = FALSE;
-      else
-	result = TRUE;
-      g_free (name);
-
-      return result;
-    }
-
-
-  norm_file_part = g_utf8_normalize (chooser_entry->file_part, -1, G_NORMALIZE_ALL);
-  norm_name = g_utf8_normalize (name, -1, G_NORMALIZE_ALL);
-
-#ifdef G_PLATFORM_WIN32
-  {
-    gchar *temp;
-
-    temp = norm_file_part;
-    norm_file_part = g_utf8_casefold (norm_file_part, -1);
-    g_free (temp);
-
-    temp = norm_name;
-    norm_name = g_utf8_casefold (norm_name, -1);
-    g_free (temp);
-  }
-#endif
-
-  result = (strncmp (norm_file_part, norm_name, strlen (norm_file_part)) == 0);
-
-  g_free (norm_file_part);
-  g_free (norm_name);
-  g_free (name);
-  
-  return result;
 }
 
 static void
@@ -573,6 +499,8 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
   g_signal_connect (chooser_entry->completion_store, "finished-loading",
 		    G_CALLBACK (finished_loading_cb), chooser_entry);
 
+  _gtk_file_system_model_set_filter_folders (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
+                                             TRUE);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
 					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
 
@@ -676,9 +604,9 @@ static void
 refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 {
   GFile *folder_file;
-  char *text, *last_slash;
+  char *text, *last_slash, *old_file_part;
 
-  g_free (chooser_entry->file_part);
+  old_file_part = chooser_entry->file_part;
   g_free (chooser_entry->dir_part);
 
   text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
@@ -700,7 +628,25 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
   if (folder_file)
     g_object_unref (folder_file);
 
+  if (chooser_entry->completion_store &&
+      (g_strcmp0 (old_file_part, chooser_entry->file_part) != 0))
+    {
+      GtkFileFilter *filter;
+      char *pattern;
+
+      filter = gtk_file_filter_new ();
+      pattern = g_strconcat (chooser_entry->file_part, "*", NULL);
+      gtk_file_filter_add_pattern (filter, pattern);
+
+      _gtk_file_system_model_set_filter (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
+                                         filter);
+
+      g_free (pattern);
+      g_object_unref (filter);
+    }
+
   g_free (text);
+  g_free (old_file_part);
 }
 
 #ifdef G_OS_WIN32
