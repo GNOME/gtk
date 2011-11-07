@@ -265,19 +265,13 @@ match_selected_callback (GtkEntryCompletion  *completion,
 }
 
 static void
-beep (GtkFileChooserEntry *chooser_entry)
-{
-  gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
-}
-
-static void
 set_complete_on_load (GtkFileChooserEntry *chooser_entry,
                       gboolean             complete_on_load)
 {
   /* a completion was triggered, but we couldn't do it.
    * So no text was inserted when pressing tab, so we beep */
   if (chooser_entry->complete_on_load && !complete_on_load)
-    beep (chooser_entry);
+    gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
 
   chooser_entry->complete_on_load = complete_on_load;
 }
@@ -368,7 +362,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
         }
     }
 
-  beep (chooser_entry);
+  gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
 }
 
 static void
