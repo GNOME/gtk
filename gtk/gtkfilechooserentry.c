@@ -122,6 +122,8 @@ static gboolean completion_match_func     (GtkEntryCompletion  *comp,
 					   gpointer             data);
 
 static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
+static void set_completion_folder (GtkFileChooserEntry *chooser_entry,
+                                   GFile               *folder);
 static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
@@ -241,27 +243,11 @@ gtk_file_chooser_entry_finalize (GObject *object)
 }
 
 static void
-discard_loading_and_current_folder_file (GtkFileChooserEntry *chooser_entry)
-{
-  if (chooser_entry->current_folder_file)
-    {
-      g_object_unref (chooser_entry->current_folder_file);
-      chooser_entry->current_folder_file = NULL;
-    }
-}
-
-static void
 gtk_file_chooser_entry_dispose (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
-  discard_loading_and_current_folder_file (chooser_entry);
-
-  if (chooser_entry->completion_store)
-    {
-      g_object_unref (chooser_entry->completion_store);
-      chooser_entry->completion_store = NULL;
-    }
+  set_completion_folder (chooser_entry, NULL);
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispose (object);
 }
@@ -657,8 +643,6 @@ completion_store_set (GtkFileSystemModel  *model,
 static void
 populate_completion_store (GtkFileChooserEntry *chooser_entry)
 {
-  discard_completion_store (chooser_entry);
-
   chooser_entry->completion_store = GTK_TREE_MODEL (
       _gtk_file_system_model_new_for_directory (chooser_entry->current_folder_file,
                                                 "standard::name,standard::display-name,standard::type",
@@ -738,31 +722,36 @@ finished_loading_cb (GtkFileSystemModel  *model,
   gtk_entry_completion_insert_prefix (completion);
 }
 
-static RefreshStatus
-reload_current_folder (GtkFileChooserEntry *chooser_entry,
-		       GFile               *folder_file)
+static void
+set_completion_folder (GtkFileChooserEntry *chooser_entry,
+                       GFile               *folder_file)
 {
-  g_assert (folder_file != NULL);
+  if (folder_file &&
+      chooser_entry->local_only
+      && !g_file_is_native (folder_file))
+    folder_file = NULL;
 
-  if (chooser_entry->current_folder_file
-      && g_file_equal (folder_file, chooser_entry->current_folder_file))
-    return REFRESH_OK;
+  if ((chooser_entry->current_folder_file
+       && folder_file
+       && g_file_equal (folder_file, chooser_entry->current_folder_file))
+      || chooser_entry->current_folder_file == folder_file)
+    return;
 
   if (chooser_entry->current_folder_file)
     {
-      discard_loading_and_current_folder_file (chooser_entry);
+      g_object_unref (chooser_entry->current_folder_file);
+      chooser_entry->current_folder_file = NULL;
     }
   
-  if (chooser_entry->local_only
-      && !g_file_is_native (folder_file))
-    return REFRESH_NOT_LOCAL;
-
-  chooser_entry->current_folder_file = g_object_ref (folder_file);
   chooser_entry->current_folder_loaded = FALSE;
 
-  populate_completion_store (chooser_entry);
+  discard_completion_store (chooser_entry);
 
-  return REFRESH_OK;
+  if (folder_file)
+    {
+      chooser_entry->current_folder_file = g_object_ref (folder_file);
+      populate_completion_store (chooser_entry);
+    }
 }
 
 static void
@@ -818,11 +807,11 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 
   if (result == REFRESH_OK)
     {
-      reload_current_folder (chooser_entry, folder_file);
+      set_completion_folder (chooser_entry, folder_file);
     }
   else
     {
-      discard_loading_and_current_folder_file (chooser_entry);
+      set_completion_folder (chooser_entry, NULL);
     }
 
   if (folder_file)
