@@ -194,6 +194,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 
   comp = gtk_entry_completion_new ();
   gtk_entry_completion_set_popup_single_match (comp, FALSE);
+  gtk_entry_completion_set_minimum_key_length (comp, 0);
   /* see docs for gtk_entry_completion_set_text_column() */
   g_object_set (comp, "text-column", FULL_PATH_COLUMN, NULL);
 
