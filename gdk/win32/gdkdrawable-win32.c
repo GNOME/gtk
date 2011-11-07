@@ -1540,20 +1540,50 @@ blit_from_pixmap (gboolean              use_fg_bg,
 }
 
 static void
-blit_inside_drawable (HDC      	hdc,
-		      GdkGCWin32 *gcwin32,
-		      gint     	xsrc,
-		      gint     	ysrc,
-		      gint     	xdest,
-		      gint     	ydest,
-		      gint     	width,
-		      gint     	height)
+blit_inside_drawable (HDC                   hdc,
+                      GdkGCWin32           *gcwin32,
+                      GdkDrawableImplWin32 *src,
+                      gint                  xsrc,
+                      gint                  ysrc,
+                      gint                  xdest,
+                      gint                  ydest,
+                      gint                  width,
+                      gint                  height)
 
 {
   GDK_NOTE (DRAW, g_print ("blit_inside_drawable\n"));
 
-  GDI_CALL (BitBlt, (hdc, xdest, ydest, width, height,
-		     hdc, xsrc, ysrc, rop2_to_rop3 (gcwin32->rop2)));
+  if GDK_IS_WINDOW_IMPL_WIN32 (src)
+    {
+      /* Simply calling BitBlt() instead of these ScrollDC() gymnastics might
+       * seem tempting, but we need to do this to prevent blitting garbage when
+       * scrolling a window that is partially obscured by another window. For
+       * example, GIMP's toolbox being over the editor window. */
+
+      RECT scrollRect, emptyRect;
+      HRGN updateRgn;
+
+      scrollRect.left = MIN (xsrc, xdest);
+      scrollRect.top = MIN (ysrc, ydest);
+      scrollRect.right = MAX (xsrc + width + 1, xdest + width + 1);
+      scrollRect.bottom = MAX (ysrc + height + 1, ydest + height + 1);
+
+      SetRectEmpty (&emptyRect);
+      updateRgn = CreateRectRgnIndirect (&emptyRect);
+
+      if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc, &scrollRect, NULL, updateRgn, NULL))
+        WIN32_GDI_FAILED ("ScrollDC");
+      else if (!InvalidateRgn (src->handle, updateRgn, FALSE))
+        WIN32_GDI_FAILED ("InvalidateRgn");
+
+      if (!DeleteObject (updateRgn))
+        WIN32_GDI_FAILED ("DeleteObject");
+    }
+  else
+    {
+      GDI_CALL (BitBlt, (hdc, xdest, ydest, width, height,
+                         hdc, xsrc, ysrc, rop2_to_rop3 (gcwin32->rop2)));
+    }
 }
 
 static void
@@ -1743,13 +1773,15 @@ _gdk_win32_blit (gboolean              use_fg_bg,
     }
 
   if (draw_impl->handle == src_impl->handle)
-    blit_inside_drawable (hdc, GDK_GC_WIN32 (gc), xsrc, ysrc, xdest, ydest, width, height);
+    blit_inside_drawable (hdc, GDK_GC_WIN32 (gc), src_impl,
+                          xsrc, ysrc, xdest, ydest, width, height);
   else if (GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
     blit_from_pixmap (use_fg_bg, draw_impl, hdc,
 		      (GdkPixmapImplWin32 *) src_impl, gc,
 		      xsrc, ysrc, xdest, ydest, width, height);
   else
-    blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl, xsrc, ysrc, xdest, ydest, width, height);
+    blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl,
+                      xsrc, ysrc, xdest, ydest, width, height);
 
   gdk_win32_hdc_release (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 }
