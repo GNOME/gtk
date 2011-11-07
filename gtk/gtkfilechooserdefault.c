@@ -6944,7 +6944,7 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
           if (change_entry)
             {
-              _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->browse_files_last_selected_name);
+              gtk_entry_set_text (GTK_ENTRY (impl->location_entry), impl->browse_files_last_selected_name);
 
               if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
                 _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (impl->location_entry));
@@ -6976,7 +6976,7 @@ update_chooser_entry (GtkFileChooserDefault *impl)
       g_free (impl->browse_files_last_selected_name);
       impl->browse_files_last_selected_name = NULL;
 
-      _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
+      gtk_entry_set_text (GTK_ENTRY (impl->location_entry), "");
       return;
     }
 
@@ -7011,7 +7011,7 @@ update_chooser_entry (GtkFileChooserDefault *impl)
         clear_entry = FALSE;
 
       if (clear_entry)
-        _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
+        gtk_entry_set_text (GTK_ENTRY (impl->location_entry), "");
     }
 }
 
@@ -7208,7 +7208,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 					       impl->current_folder);
 
       if (data->clear_entry)
-	_gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
+        gtk_entry_set_text (GTK_ENTRY (impl->location_entry), "");
     }
 
   /* Create a new list model.  This is slightly evil; we store the result value
@@ -7313,7 +7313,7 @@ gtk_file_chooser_default_set_current_name (GtkFileChooser *chooser,
 		    impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
   pending_select_files_free (impl);
-  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), name);
+  gtk_entry_set_text (GTK_ENTRY (impl->location_entry), name);
 }
 
 static gboolean
@@ -9779,7 +9779,7 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
   if (impl->location_entry
       && !(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
-    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
+    gtk_entry_set_text (GTK_ENTRY (impl->location_entry), "");
 
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), iter,
 		      SHORTCUTS_COL_DATA, &col_data,
@@ -10096,7 +10096,7 @@ static void
 location_set_user_text (GtkFileChooserDefault *impl,
 			const gchar           *path)
 {
-  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), path);
+  gtk_entry_set_text (GTK_ENTRY (impl->location_entry), path);
   gtk_editable_set_position (GTK_EDITABLE (impl->location_entry), -1);
 }
 

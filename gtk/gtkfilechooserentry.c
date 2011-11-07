@@ -1013,26 +1013,6 @@ _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
 }
 
 /**
- * _gtk_file_chooser_entry_set_file_part:
- * @chooser_entry: a #GtkFileChooserEntry
- * @file_part: text to display in the entry, in UTF-8
- *
- * Sets the current text shown in the file chooser entry.
- **/
-void
-_gtk_file_chooser_entry_set_file_part (GtkFileChooserEntry *chooser_entry,
-				       const gchar         *file_part)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
-
-  chooser_entry->in_change = TRUE;
-  clear_completions (chooser_entry);
-  gtk_entry_set_text (GTK_ENTRY (chooser_entry), file_part);
-  chooser_entry->in_change = FALSE;
-}
-
-
-/**
  * _gtk_file_chooser_entry_set_action:
  * @chooser_entry: a #GtkFileChooserEntry
  * @action: the action which is performed by the file selector using this entry
