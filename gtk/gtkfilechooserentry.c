@@ -507,170 +507,39 @@ gtk_file_chooser_entry_parse (GtkFileChooserEntry  *chooser_entry,
   return result;
 }
 
-/* Determines if the completion model has entries with a common prefix relative
- * to the current contents of the entry.  Also, if there's one and only one such
- * path, stores it in unique_path_ret.
- */
-static gboolean
-find_common_prefix (GtkFileChooserEntry *chooser_entry,
-		    gchar               **common_prefix_ret,
-		    GFile               **unique_file_ret,
-		    gboolean             *is_complete_not_unique_ret,
-		    gboolean             *prefix_expands_the_file_part_ret,
-		    GError              **error)
-{
-  GtkTreeIter iter;
-  gboolean parsed;
-  gboolean valid;
-  char *text_up_to_cursor;
-  GFile *parsed_folder_file;
-  char *parsed_file_part;
-
-  *common_prefix_ret = NULL;
-  *unique_file_ret = NULL;
-  *is_complete_not_unique_ret = FALSE;
-  *prefix_expands_the_file_part_ret = FALSE;
-
-  text_up_to_cursor = gtk_file_chooser_entry_get_completion_text (chooser_entry);
-
-  parsed = gtk_file_chooser_entry_parse (chooser_entry,
-                                         text_up_to_cursor,
-                                         &parsed_folder_file,
-                                         &parsed_file_part,
-                                         error);
-
-  g_free (text_up_to_cursor);
-
-  if (!parsed)
-    return FALSE;
-
-  g_assert (parsed_folder_file != NULL
-	    && g_file_equal (parsed_folder_file, chooser_entry->current_folder_file));
-
-  g_object_unref (parsed_folder_file);
-
-  /* First pass: find the common prefix */
-
-  valid = gtk_tree_model_get_iter_first (chooser_entry->completion_store, &iter);
-
-  while (valid)
-    {
-      gchar *display_name;
-      GFile *file;
-
-      gtk_tree_model_get (chooser_entry->completion_store,
-			  &iter,
-			  DISPLAY_NAME_COLUMN, &display_name,
-			  FILE_COLUMN, &file,
-			  -1);
-
-      if (g_str_has_prefix (display_name, parsed_file_part))
-	{
-	  if (!*common_prefix_ret)
-	    {
-	      *common_prefix_ret = g_strdup (display_name);
-	      *unique_file_ret = g_object_ref (file);
-	    }
-	  else
-	    {
-	      gchar *p = *common_prefix_ret;
-	      const gchar *q = display_name;
-
-	      while (*p && *p == *q)
-		{
-		  p++;
-		  q++;
-		}
-
-	      *p = '\0';
-
-	      if (*unique_file_ret)
-		{
-		  g_object_unref (*unique_file_ret);
-		  *unique_file_ret = NULL;
-		}
-	    }
-	}
-
-      g_free (display_name);
-      g_object_unref (file);
-      valid = gtk_tree_model_iter_next (chooser_entry->completion_store, &iter);
-    }
-
-  /* Second pass: see if the prefix we found is a complete match */
-
-  if (*common_prefix_ret != NULL)
-    {
-      valid = gtk_tree_model_get_iter_first (chooser_entry->completion_store, &iter);
-
-      while (valid)
-	{
-	  gchar *display_name;
-	  int len;
-
-	  gtk_tree_model_get (chooser_entry->completion_store,
-			      &iter,
-			      DISPLAY_NAME_COLUMN, &display_name,
-			      -1);
-	  len = strlen (display_name);
-	  g_assert (len > 0);
-
-	  if (G_IS_DIR_SEPARATOR (display_name[len - 1]))
-	    len--;
-
-	  if (*unique_file_ret == NULL && strncmp (*common_prefix_ret, display_name, len) == 0)
-	    *is_complete_not_unique_ret = TRUE;
-
-	  g_free (display_name);
-	  valid = gtk_tree_model_iter_next (chooser_entry->completion_store, &iter);
-	}
-
-      /* Finally:  Did we generate a new completion, or was the user's input already completed as far as it could go? */
-
-      *prefix_expands_the_file_part_ret = g_utf8_strlen (*common_prefix_ret, -1) > g_utf8_strlen (parsed_file_part, -1);
-    }
-
-  g_free (parsed_file_part);
-
-  return TRUE;
-}
-
 /* Finds a common prefix based on the contents of the entry
  * and mandatorily appends it
  */
 static void
 explicitly_complete (GtkFileChooserEntry *chooser_entry)
 {
-  gchar *common_prefix;
-  GFile *unique_file;
-  gboolean is_complete_not_unique;
-  gboolean prefix_expands_the_file_part;
-  gint cursor_pos;
-  gint pos;
-
   clear_completions (chooser_entry);
 
-  if (chooser_entry->completion_store == NULL
-      || !find_common_prefix (chooser_entry, &common_prefix, &unique_file, &is_complete_not_unique, &prefix_expands_the_file_part, NULL)
-      || !common_prefix
-      || !prefix_expands_the_file_part)
+  if (chooser_entry->completion_store)
     {
-      beep (chooser_entry);
-      return;
+      char *completion, *text;
+      gsize completion_len, text_len;
+      
+      text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
+      text_len = strlen (text);
+      completion = gtk_entry_completion_compute_prefix (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), text);
+      completion_len = completion ? strlen (completion) : 0;
+
+      if (completion_len > text_len)
+        {
+          GtkEditable *editable = GTK_EDITABLE (chooser_entry);
+          int pos = gtk_editable_get_position (editable);
+
+          gtk_editable_insert_text (editable,
+                                    completion + text_len,
+                                    completion_len - text_len,
+                                    &pos);
+          gtk_editable_set_position (editable, pos);
+          return;
+        }
     }
 
-  cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
-  pos = chooser_entry->file_part_pos;
-
-  chooser_entry->in_change = TRUE;
-  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-                            pos, cursor_pos);
-  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-                            common_prefix, -1,
-                            &pos);
-  chooser_entry->in_change = FALSE;
-
-  gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
+  beep (chooser_entry);
 }
 
 static void
