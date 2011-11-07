@@ -504,5 +504,6 @@ void _gdk_visual_init (void);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);
 void _gdk_input_init  (GdkDisplay *display);
+void _gdk_input_wintab_init_check (GdkDeviceManager *device_manager);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */
