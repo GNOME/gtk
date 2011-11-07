@@ -29,7 +29,7 @@ typedef enum {
   GTK_CSS_REPEAT_STYLE_REPEAT,
   GTK_CSS_REPEAT_STYLE_ROUND,
   GTK_CSS_REPEAT_STYLE_SPACE
-} GtkCssRepeatStyle;
+} GtkCssBorderRepeatStyle;
 
 typedef struct _GtkCssBorderCornerRadius GtkCssBorderCornerRadius;
 typedef struct _GtkCssBorderRadius GtkCssBorderRadius;
@@ -48,8 +48,8 @@ struct _GtkCssBorderRadius {
 };
 
 struct _GtkCssBorderImageRepeat {
-  GtkCssRepeatStyle vrepeat;
-  GtkCssRepeatStyle hrepeat;
+  GtkCssBorderRepeatStyle vrepeat;
+  GtkCssBorderRepeatStyle hrepeat;
 };
 
 #define GTK_TYPE_CSS_BORDER_CORNER_RADIUS _gtk_css_border_corner_radius_get_type ()

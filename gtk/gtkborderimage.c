@@ -258,8 +258,8 @@ gtk_border_image_render_slice (cairo_t           *cr,
                                double             y,
                                double             width,
                                double             height,
-                               GtkCssRepeatStyle  hrepeat,
-                               GtkCssRepeatStyle  vrepeat)
+                               GtkCssBorderRepeatStyle  hrepeat,
+                               GtkCssBorderRepeatStyle  vrepeat)
 {
   double hscale, vscale;
   double xstep, ystep;

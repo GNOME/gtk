@@ -1132,7 +1132,7 @@ border_image_repeat_value_parse (GtkCssParser *parser,
                                  GValue *value)
 {
   GtkCssBorderImageRepeat image_repeat;
-  GtkCssRepeatStyle styles[2];
+  GtkCssBorderRepeatStyle styles[2];
   gint i;
 
   for (i = 0; i < 2; i++)
@@ -1163,7 +1163,7 @@ border_image_repeat_value_parse (GtkCssParser *parser,
 }
 
 static const gchar *
-border_image_repeat_style_to_string (GtkCssRepeatStyle repeat)
+border_image_repeat_style_to_string (GtkCssBorderRepeatStyle repeat)
 {
   switch (repeat)
     {
