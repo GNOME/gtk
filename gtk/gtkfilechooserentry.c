@@ -100,7 +100,6 @@ static gboolean gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
 							GdkEventKey *event);
 static gboolean gtk_file_chooser_entry_focus_out_event (GtkWidget       *widget,
 							GdkEventFocus   *event);
-static void     gtk_file_chooser_entry_activate       (GtkEntry         *entry);
 
 #ifdef G_OS_WIN32
 static gint     insert_text_callback      (GtkFileChooserEntry *widget,
@@ -174,7 +173,6 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkEntryClass *entry_class = GTK_ENTRY_CLASS (class);
 
   gobject_class->finalize = gtk_file_chooser_entry_finalize;
   gobject_class->dispose = gtk_file_chooser_entry_dispose;
@@ -183,8 +181,6 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
   widget_class->key_press_event = gtk_file_chooser_entry_key_press_event;
   widget_class->focus_out_event = gtk_file_chooser_entry_focus_out_event;
-
-  entry_class->activate = gtk_file_chooser_entry_activate;
 }
 
 static void
@@ -790,22 +786,6 @@ gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
  
   return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus_out_event (widget, event);
-}
-
-static void
-commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
-{
-  /* Here we ignore the result of refresh_current_folder_and_file_part(); there is nothing we can do with it */
-  refresh_current_folder_and_file_part (chooser_entry, gtk_entry_get_text (GTK_ENTRY (chooser_entry)));
-}
-
-static void
-gtk_file_chooser_entry_activate (GtkEntry *entry)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (entry);
-
-  commit_completion_and_refresh (chooser_entry);
-  GTK_ENTRY_CLASS (_gtk_file_chooser_entry_parent_class)->activate (entry);
 }
 
 static void
