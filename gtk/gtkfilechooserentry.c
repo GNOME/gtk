@@ -130,13 +130,22 @@ static void finished_loading_cb (GtkFileSystemModel  *model,
 
 G_DEFINE_TYPE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY)
 
+static char *
+gtk_file_chooser_entry_get_completion_text (GtkFileChooserEntry *chooser_entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (chooser_entry);
+  int start, end;
+
+  gtk_editable_get_selection_bounds (editable, &start, &end);
+  return gtk_editable_get_chars (editable, 0, MIN (start, end));
+}
+
 static void
 gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
                                                     guint        n_pspecs,
                                                     GParamSpec **pspecs)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
-  GtkEditable *editable = GTK_EDITABLE (object);
   guint i;
 
   G_OBJECT_CLASS (_gtk_file_chooser_entry_parent_class)->dispatch_properties_changed (object, n_pspecs, pspecs);
@@ -154,12 +163,10 @@ gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
           pspecs[i]->name == I_("text"))
         {
           char *text;
-          int start, end;
 
           chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 
-          gtk_editable_get_selection_bounds (editable, &start, &end);
-          text = gtk_editable_get_chars (editable, 0, MIN (start, end));
+          text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
           refresh_current_folder_and_file_part (chooser_entry, text);
           g_free (text);
 
@@ -512,7 +519,6 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 		    gboolean             *prefix_expands_the_file_part_ret,
 		    GError              **error)
 {
-  GtkEditable *editable;
   GtkTreeIter iter;
   gboolean parsed;
   gboolean valid;
@@ -525,9 +531,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   *is_complete_not_unique_ret = FALSE;
   *prefix_expands_the_file_part_ret = FALSE;
 
-  editable = GTK_EDITABLE (chooser_entry);
-
-  text_up_to_cursor = gtk_editable_get_chars (editable, 0, gtk_editable_get_position (editable));
+  text_up_to_cursor = gtk_file_chooser_entry_get_completion_text (chooser_entry);
 
   parsed = gtk_file_chooser_entry_parse (chooser_entry,
                                          text_up_to_cursor,
